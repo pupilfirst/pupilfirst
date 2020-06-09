@@ -70,9 +70,7 @@ module Courses
       team = find_or_create_team(student)
 
       # Finally, create a student profile for the user and tag it.
-      founder = Founder.create!(user: user, startup: team)
-      founder.tag_list << student.tags
-      founder.save!
+      Founder.create!(user: user, startup: team)
     end
 
     def unpersisted_students(students)
@@ -85,15 +83,11 @@ module Courses
     end
 
     def find_or_create_team(student)
-      team_id = @team_name_translation[student.team_name]
-
-      if team_id.present?
-        Startup.find(team_id)
-      else
-        startup = Startup.create!(name: student.team_name.presence || student.name, level: first_level)
-        @team_name_translation[startup.name] = startup.id
-        startup
-      end
+      @team_name_translation[student.team_name] ||= Startup.create!(
+        name: student.team_name.presence || student.name,
+        level: first_level,
+        tag_list: student.tags
+      )
     end
 
     def school

@@ -8,15 +8,15 @@ describe CourseExports::PrepareTeamsExportService do
   let(:level_1) { create :level, :one }
   let(:level_2) { create :level, :two, course: level_1.course }
 
-  let(:team_1) { create :startup, level: level_2 }
+  let(:team_1) { create :startup, level: level_2, tag_list: ['tag 1', 'tag 2'] }
   let(:team_2) { create :startup, level: level_1 }
   let(:team_3) { create :team, level: level_1 }
 
   let(:user_t3) { create :user }
 
-  let(:student_1) { team_1.founders.first }
-  let(:student_2) { team_2.founders.first }
-  let!(:student_3) { create :student, startup: team_3, user: user_t3 } # A lone student, who should not show up in reports.
+  let!(:student_1) { team_1.founders.first }
+  let!(:student_2) { team_2.founders.first }
+  let!(:student_3) { create :student, startup: team_3, user: user_t3 } # A student who is alone in a team; should also be included.
 
   let(:target_group_l1_non_milestone) { create :target_group, level: level_1, sort_index: 0 }
   let(:target_group_l1_milestone) { create :target_group, level: level_1, milestone: true, sort_index: 1 }
@@ -63,6 +63,9 @@ describe CourseExports::PrepareTeamsExportService do
     # Second student is still on L1.
     submission = submit_target target_l1_quiz, student_2
     submission.update!(quiz_score: '1/2')
+
+    # Third student (alone in team) has only completed one target.
+    submit_target target_l1_mark_as_complete, student_3
   end
 
   def sorted_student_names(team)
@@ -92,26 +95,28 @@ describe CourseExports::PrepareTeamsExportService do
           ['Name', target_l1_mark_as_complete.title, target_l1_quiz.title, target_l1_evaluated.title, target_l2_evaluated.title],
           ['Completion Method', 'Mark as Complete', 'Take Quiz', 'Graded', 'Graded'],
           ['Milestone?', 'No', 'Yes', 'Yes', 'Yes'],
-          ['Teams with submissions', 1, 2, 2, 1],
-          ['Teams pending review', 0, 0, 0, 1]
-        ]
+          ['Teams with submissions', 2, 2, 2, 1],
+          ['Teams pending review', 0, 0, 0, 1],
+        ],
       },
       {
         title: 'Teams',
         rows: [
-          ['ID', 'Team Name', 'Students', 'Coaches'],
-          [team_1.id, team_1.name, sorted_student_names(team_1), sorted_coach_names],
-          [team_2.id, team_2.name, sorted_student_names(team_2), '']
-        ]
+          ['ID', 'Team Name', 'Level', 'Students', 'Coaches', 'Tags'],
+          [team_1.id, team_1.name, 2, sorted_student_names(team_1), sorted_coach_names, 'tag 1, tag 2'],
+          [team_2.id, team_2.name, 1, sorted_student_names(team_2), '', ''],
+          [team_3.id, team_3.name, 1, sorted_student_names(team_3), '', ''],
+        ],
       },
       {
         title: 'Submissions',
         rows: [
           ['Team ID', 'Team Name', "L1T#{target_l1_mark_as_complete.id}", "L1T#{target_l1_quiz.id}", "L1T#{target_l1_evaluated.id}", "L2T#{target_l2_evaluated.id}"],
           [team_1.id, team_1.name, '✓', '2/2', { 'value' => "#{submission_grading(team_1_reviewed_submission_1)};#{submission_grading(team_1_reviewed_submission_2)}", 'style' => 'passing-grade' }, { 'value' => 'RP', 'style' => 'pending-grade' }],
-          [team_2.id, team_2.name, nil, '1/2', { 'value' => submission_grading(team_2_reviewed_submission), 'style' => 'failing-grade' }, nil]
-        ]
-      }
+          [team_2.id, team_2.name, nil, '1/2', { 'value' => submission_grading(team_2_reviewed_submission), 'style' => 'failing-grade' }, nil],
+          [team_3.id, team_3.name, '✓', nil, nil, nil],
+        ],
+      },
     ]
   end
 
@@ -128,11 +133,10 @@ describe CourseExports::PrepareTeamsExportService do
     end
 
     context 'when course export data is restricted using options' do
-      let(:course_export) { create :course_export, :teams, course: course, user: school_admin.user, reviewed_only: true }
+      let(:course_export) { create :course_export, :teams, course: course, user: school_admin.user, reviewed_only: true, tag_list: ['tag 1'] }
 
       before do
         submit_target target_l1_evaluated, student_1
-        course_export.save!
       end
 
       let(:restricted_data) do
@@ -145,26 +149,24 @@ describe CourseExports::PrepareTeamsExportService do
               ['Name', target_l1_evaluated.title, target_l2_evaluated.title],
               ['Completion Method', 'Graded', 'Graded'],
               ['Milestone?', 'Yes', 'Yes'],
-              ['Teams with submissions', 2, 1],
-              ['Teams pending review', 1, 1]
-            ]
+              ['Teams with submissions', 1, 1],
+              ['Teams pending review', 1, 1],
+            ],
           },
           {
             title: 'Teams',
             rows: [
-              ['ID', 'Team Name', 'Students', 'Coaches'],
-              [team_1.id, team_1.name, sorted_student_names(team_1), sorted_coach_names],
-              [team_2.id, team_2.name, sorted_student_names(team_2), '']
-            ]
+              ['ID', 'Team Name', 'Level', 'Students', 'Coaches', 'Tags'],
+              [team_1.id, team_1.name, 2, sorted_student_names(team_1), sorted_coach_names, 'tag 1, tag 2'],
+            ],
           },
           {
             title: 'Submissions',
             rows: [
               ['Team ID', 'Team Name', "L1T#{target_l1_evaluated.id}", "L2T#{target_l2_evaluated.id}"],
               [team_1.id, team_1.name, { 'value' => "#{submission_grading(team_1_reviewed_submission_1)};#{submission_grading(team_1_reviewed_submission_2)};RP", 'style' => 'pending-grade' }, { 'value' => 'RP', 'style' => 'pending-grade' }],
-              [team_2.id, team_2.name, { 'value' => submission_grading(team_2_reviewed_submission), 'style' => 'failing-grade' }, nil]
-            ]
-          }
+            ],
+          },
         ]
       end
 

@@ -22,8 +22,8 @@ feature 'School students index', js: true do
     let!(:startup_2) { create :startup, level: level_2 }
     let(:team_in_different_course) { create :team }
 
-    let(:team_with_lone_student) { create :team, level: level_2 }
-    let!(:lone_student) { create :founder, startup: team_with_lone_student, tag_list: tags }
+    let(:team_with_lone_student) { create :team, level: level_2, tag_list: tags }
+    let!(:lone_student) { create :founder, startup: team_with_lone_student }
 
     let(:name_1) { Faker::Name.name }
     let(:email_1) { Faker::Internet.email(name: name_1) }
@@ -155,8 +155,8 @@ feature 'School students index', js: true do
       expect(student_4.startup.name).to eq(new_team_name)
       expect(student_3.startup.id).to eq(student_4.startup.id)
 
-      expect(student_1.tag_list).to contain_exactly('Abc', 'Def')
-      expect(student_2.tag_list).to contain_exactly('Abc', 'Def', 'GHI JKL')
+      expect(student_1.startup.tag_list).to contain_exactly('Abc', 'Def')
+      expect(student_2.startup.tag_list).to contain_exactly('Abc', 'Def', 'GHI JKL')
     end
 
     context 'when adding a student who is already a user of another type' do

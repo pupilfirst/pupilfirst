@@ -15,6 +15,7 @@ type filter = {
   coachNotes: coachNoteFilter,
   level: option(Level.t),
   coach: option(Coach.t),
+  tags: Belt.Set.String.t,
 };
 
 type loading =
@@ -38,6 +39,8 @@ type action =
   | SetNameOrEmail(string)
   | UnsetNameOrEmail
   | SetCoachNotes(coachNoteFilter)
+  | SelectTag(string)
+  | DeselectTag(string)
   | UpdateFilterString(string)
   | LoadTeams(option(string), bool, array(TeamInfo.t))
   | BeginLoadingMore
@@ -106,6 +109,21 @@ let reducer = (state, action) =>
       },
       filterString,
     };
+  | SelectTag(tag) => {
+      ...state,
+      filter: {
+        ...state.filter,
+        tags: state.filter.tags->Belt.Set.String.add(tag),
+      },
+      filterString: "",
+    }
+  | DeselectTag(tag) => {
+      ...state,
+      filter: {
+        ...state.filter,
+        tags: state.filter.tags->Belt.Set.String.remove(tag),
+      },
+    }
   | UpdateFilterString(filterString) => {...state, filterString}
   | LoadTeams(endCursor, hasNextPage, newTeams) =>
     let updatedTeams =
@@ -135,11 +153,12 @@ let reducer = (state, action) =>
 
 module TeamsQuery = [%graphql
   {|
-    query TeamsFromCoursesStudentsRootQuery($courseId: ID!, $coachNotes: CoachNoteFilter!, $levelId: ID, $coachId: ID, $search: String, $after: String) {
-      teams(courseId: $courseId, coachNotes: $coachNotes, levelId: $levelId, coachId: $coachId, search: $search, first: 10, after: $after) {
+    query TeamsFromCoursesStudentsRootQuery($courseId: ID!, $coachNotes: CoachNoteFilter!, $levelId: ID, $coachId: ID, $search: String, $after: String, $tags: [String!]!) {
+      teams(courseId: $courseId, coachNotes: $coachNotes, levelId: $levelId, coachId: $coachId, search: $search, first: 10, after: $after, tags: $tags) {
         nodes {
           id,
           name,
+          tags,
           levelId,
           students {
             id,
@@ -162,6 +181,7 @@ module TeamsQuery = [%graphql
 let getTeams = (send, courseId, cursor, filter) => {
   let levelId = filter.level |> OptionUtils.map(Level.id);
   let coachId = filter.coach |> OptionUtils.map(Coach.id);
+  let tags = filter.tags |> Belt.Set.String.toArray;
 
   TeamsQuery.make(
     ~courseId,
@@ -170,6 +190,7 @@ let getTeams = (send, courseId, cursor, filter) => {
     ~levelId?,
     ~coachId?,
     ~search=?filter.nameOrEmail,
+    ~tags,
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -202,7 +223,8 @@ module Selectable = {
     | Level(Level.t)
     | AssignedToCoach(Coach.t, string)
     | NameOrEmail(string)
-    | CoachNotes(bool);
+    | CoachNotes(bool)
+    | Tag(string);
 
   let label = t =>
     switch (t) {
@@ -211,6 +233,7 @@ module Selectable = {
     | AssignedToCoach(_) => Some("Assigned to")
     | NameOrEmail(_) => Some("Name or Email")
     | CoachNotes(_) => Some("Coach Notes")
+    | Tag(_) => Some("Tagged with")
     };
 
   let value = t =>
@@ -220,6 +243,7 @@ module Selectable = {
       coach |> Coach.id == currentCoachId ? "Me" : coach |> Coach.name
     | NameOrEmail(search) => search
     | CoachNotes(on) => on ? "Has notes" : "Does not have notes"
+    | Tag(tag) => tag
     };
 
   let searchString = t =>
@@ -237,6 +261,7 @@ module Selectable = {
       }
     | NameOrEmail(search) => search
     | CoachNotes(_) => "does not have notes has notes coach notes"
+    | Tag(tag) => "tag " ++ tag
     };
 
   let color = _t => "gray";
@@ -245,11 +270,12 @@ module Selectable = {
     AssignedToCoach(coach, currentCoachId);
   let nameOrEmail = search => NameOrEmail(search);
   let coachNotes = on => CoachNotes(on);
+  let tag = tagString => Tag(tagString);
 };
 
 module Multiselect = MultiselectDropdown.Make(Selectable);
 
-let unselected = (levels, coaches, currentCoachId, state) => {
+let unselected = (levels, coaches, tags, currentCoachId, state) => {
   let unselectedLevels =
     levels
     |> Js.Array.filter(level =>
@@ -289,10 +315,15 @@ let unselected = (levels, coaches, currentCoachId, state) => {
       |]
     };
 
+  let unselectedTags =
+    Belt.Set.String.diff(tags, state.filter.tags)->Belt.Set.String.toArray
+    |> Js.Array.map(Selectable.tag);
+
   unselectedLevels
   |> Array.append(unselectedCoaches)
   |> Array.append(nameOrEmail)
-  |> Array.append(coachNotes);
+  |> Array.append(coachNotes)
+  |> Array.append(unselectedTags);
 };
 
 let selected = (state, currentCoachId) => {
@@ -326,10 +357,16 @@ let selected = (state, currentCoachId) => {
     | `IgnoreCoachNotes => [||]
     };
 
+  let selectedTags =
+    state.filter.tags
+    |> Belt.Set.String.toArray
+    |> Js.Array.map(Selectable.tag);
+
   selectedLevel
   |> Array.append(selectedCoach)
   |> Array.append(selectedSearchString)
-  |> Array.append(selectedCoachNotesFilter);
+  |> Array.append(selectedCoachNotesFilter)
+  |> Array.append(selectedTags);
 };
 
 let onSelectFilter = (send, selectable) =>
@@ -341,6 +378,7 @@ let onSelectFilter = (send, selectable) =>
   | CoachNotes(onOrOff) =>
     let filter = onOrOff ? `WithCoachNotes : `WithoutCoachNotes;
     send(SetCoachNotes(filter));
+  | Tag(tag) => send(SelectTag(tag))
   };
 
 let onDeselectFilter = (send, selectable) =>
@@ -349,6 +387,7 @@ let onDeselectFilter = (send, selectable) =>
   | Level(_) => send(DeselectLevel)
   | NameOrEmail(_) => send(UnsetNameOrEmail)
   | CoachNotes(_onOrOff) => send(SetCoachNotes(`IgnoreCoachNotes))
+  | Tag(tag) => send(DeselectTag(tag))
   };
 
 let filterPlaceholder = state => {
@@ -405,6 +444,7 @@ let computeInitialState = currentTeamCoach => {
     level: None,
     coach: currentTeamCoach,
     coachNotes: `IgnoreCoachNotes,
+    tags: Belt.Set.String.empty,
   },
   reloadDistributionAt: None,
 };
@@ -435,7 +475,7 @@ let onAddCoachNote = (courseId, state, send, ()) => {
 };
 
 [@react.component]
-let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
+let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~tags) => {
   let (currentTeamCoach, _) =
     React.useState(() =>
       teamCoaches->Belt.Array.some(coach =>
@@ -482,6 +522,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
         courseId
         filterCoach={state.filter.coach}
         filterCoachNotes={state.filter.coachNotes}
+        filterTags={state.filter.tags}
         reloadAt={state.reloadDistributionAt}
       />
       <div
@@ -493,6 +534,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach) => {
             unselected={unselected(
               levels,
               teamCoaches,
+              tags,
               currentCoach |> Coach.id,
               state,
             )}

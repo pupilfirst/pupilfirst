@@ -6,17 +6,13 @@ module CourseExports
       tables = [
         { title: 'Targets', rows: target_rows },
         { title: 'Students', rows: student_rows },
-        { title: 'Submissions', rows: submission_rows }
+        { title: 'Submissions', rows: submission_rows },
       ]
 
       finalize(tables)
     end
 
     private
-
-    def tags
-      @course_export.tags.pluck(:name)
-    end
 
     def target_rows
       values = targets.map do |target|
@@ -29,18 +25,18 @@ module CourseExports
           target_type(target),
           milestone,
           students_with_submissions(target),
-          submissions_pending_review(target)
+          submissions_pending_review(target),
         ] + average_grades_for_target(target)
       end
 
       ([
-        ['ID', 'Level', 'Name', 'Completion Method', 'Milestone?', 'Students with submissions', 'Submissions pending review'] + evaluation_criteria_names
+        ['ID', 'Level', 'Name', 'Completion Method', 'Milestone?', 'Students with submissions', 'Submissions pending review'] + evaluation_criteria_names,
       ] + values).transpose
     end
 
     def evaluation_criteria_names
       @evaluation_criteria_names ||= EvaluationCriterion.where(id: evaluation_criteria_ids).order(:name).map do |ec|
-        ec.display_name + " - Average"
+        ec.display_name + ' - Average'
       end
     end
 
@@ -58,7 +54,7 @@ module CourseExports
           .where(
             timeline_event_owners: { latest: true, founder_id: students.pluck(:id) },
             timeline_events: { target_id: target.id },
-            evaluation_criterion_id: evaluation_criterion_id
+            evaluation_criterion_id: evaluation_criterion_id,
           ).distinct.average(:grade)&.round(2)
 
         grades[evaluation_criteria_ids.index(evaluation_criterion_id)] = average_grade
@@ -70,7 +66,7 @@ module CourseExports
         TimelineEventGrade.joins(timeline_event: :timeline_event_owners)
           .where(
             timeline_event_owners: { latest: true, founder_id: student.id },
-            evaluation_criterion_id: evaluation_criterion_id
+            evaluation_criterion_id: evaluation_criterion_id,
           ).distinct.average(:grade)&.round(2)
       end
     end
@@ -85,9 +81,9 @@ module CourseExports
 
     def report_path(student)
       @report_path_prefix ||= begin
-        school = @course_export.user.school
-        "https://#{school.domains.primary.fqdn}/students"
-      end
+          school = @course_export.user.school
+          "https://#{school.domains.primary.fqdn}/students"
+        end
 
       "#{@report_path_prefix}/#{student.id}/report"
     end
@@ -106,7 +102,7 @@ module CourseExports
           user.name,
           user.title,
           user.affiliation,
-          student.tags.order(:name).pluck(:name).join(', ')
+          student.startup.tags.order(:name).pluck(:name).join(', '),
         ] + average_grades_for_student(student)
       end
 
@@ -145,7 +141,7 @@ module CourseExports
       @students ||= begin
         # Only scan 'active' students. Also filter by tag, if applicable.
         scope = course.founders.active.includes(:user)
-        tags.present? ? scope.tagged_with(tags, any: true) : scope
+        tags.present? ? scope.joins(:startup).merge(Startup.tagged_with(tags, any: true)) : scope
       end.order('users.email')
     end
   end

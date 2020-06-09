@@ -4,6 +4,7 @@ type t = {
   coachIds: array(string),
   levelId: string,
   accessEndsAt: option(Js.Date.t),
+  tags: array(string),
   students: array(StudentsEditor__Student.t),
 };
 
@@ -17,13 +18,16 @@ let accessEndsAt = t => t.accessEndsAt;
 
 let levelId = t => t.levelId;
 
+let tags = t => t.tags;
+
 let students = t => t.students;
 
 let isSingleStudent = t => t.students |> Array.length == 1;
 
-let make = (~id, ~name, ~students, ~coachIds, ~levelId, ~accessEndsAt) => {
+let make = (~id, ~name, ~tags, ~students, ~coachIds, ~levelId, ~accessEndsAt) => {
   id,
   name,
+  tags,
   students,
   coachIds,
   levelId,
@@ -45,6 +49,7 @@ let makeFromJS = teamDetails => {
            make(
              ~id=team##id,
              ~name=team##name,
+             ~tags=team##tags,
              ~levelId=team##levelId,
              ~students,
              ~coachIds,
@@ -57,7 +62,7 @@ let makeFromJS = teamDetails => {
      );
 };
 
-let update = (~name, ~student, ~coachIds, ~accessEndsAt, ~team) => {
+let update = (~name, ~tags, ~student, ~coachIds, ~accessEndsAt, ~team) => {
   let students =
     team.students
     |> Array.map(s =>
@@ -67,7 +72,7 @@ let update = (~name, ~student, ~coachIds, ~accessEndsAt, ~team) => {
            ? student : s
        );
 
-  {...team, name, coachIds, accessEndsAt, students};
+  {...team, name, tags, coachIds, accessEndsAt, students};
 };
 
 let replaceTeam = (team, teams) => {

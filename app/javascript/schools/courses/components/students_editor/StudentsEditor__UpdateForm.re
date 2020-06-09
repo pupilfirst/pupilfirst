@@ -22,7 +22,7 @@ let make =
     (
       ~student,
       ~team,
-      ~studentTags,
+      ~teamTags,
       ~courseCoaches,
       ~updateFormCB,
       ~reloadTeamsCB,
@@ -74,7 +74,7 @@ let make =
         <StudentsEditor__UpdateDetailsForm
           student
           team
-          studentTags
+          teamTags
           courseCoaches
           updateFormCB
         />

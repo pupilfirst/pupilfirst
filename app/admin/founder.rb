@@ -1,21 +1,7 @@
 ActiveAdmin.register Founder do
   actions :index, :show
 
-  permit_params :name, :avatar, :startup_id, :about, :college_id, :excluded_from_leaderboard, roles: [], tag_list: []
-
-  controller do
-    def scoped_collection
-      if request.format == 'text/csv'
-        super.includes(:startup, { college: :state }, :tag_taggings, :tags, :active_admin_comments)
-      else
-        super.includes :startup, college: :state
-      end
-    end
-
-    def find_resource
-      scoped_collection.find(params[:id])
-    end
-  end
+  permit_params :name, :avatar, :startup_id, :about, :college_id, :excluded_from_leaderboard, roles: []
 
   collection_action :search_founder do
     render json: Founders::Select2SearchService.search_for_founder(params[:q])
@@ -26,26 +12,11 @@ ActiveAdmin.register Founder do
   filter :user_email, as: :string
   filter :name
 
-  filter :ransack_tagged_with,
-    as: :select,
-    multiple: true,
-    label: 'Tags',
-    collection: -> { Founder.tag_counts_on(:tags).pluck(:name).sort }
-
   filter :startup_level_id, as: :select, collection: -> { Level.all.order(number: :asc) }
   filter :startup_id_null, as: :boolean, label: 'Without Startup'
   filter :roles_cont, as: :select, collection: -> { Founder.valid_roles }, label: 'Role'
   filter :college_name_contains
   filter :created_at, label: 'Registered on'
-
-  batch_action :tag, form: proc { { tag: Founder.tag_counts_on(:tags).pluck(:name) } } do |ids, inputs|
-    Founder.where(id: ids).each do |founder|
-      founder.tag_list.add inputs[:tag]
-      founder.save!
-    end
-
-    redirect_to collection_path, alert: 'Tag added!'
-  end
 
   # Customize the index. Let's show only a small subset of the tons of fields.
   index do
@@ -95,10 +66,6 @@ ActiveAdmin.register Founder do
     attributes_table do
       row :email
       row :name
-
-      row :tags do |founder|
-        linked_tags(founder.tags)
-      end
 
       row :roles do |founder|
         founder.roles.map do |role|

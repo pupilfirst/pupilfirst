@@ -36,6 +36,11 @@ let flatten = t => {
   t |> Array.to_list |> List.flatten |> Array.of_list;
 };
 
+let flattenV2 = a => {
+  a
+  |> Js.Array.reduce((flat, next) => {flat |> Js.Array.concat(next)}, [||]);
+};
+
 let distinct = t => t |> Array.to_list |> ListUtils.distinct |> Array.of_list;
 
 let sort_uniq = (f, t) =>

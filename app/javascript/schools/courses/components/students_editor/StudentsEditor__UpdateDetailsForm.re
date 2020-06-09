@@ -84,7 +84,6 @@ let handleResponseCB = (updateFormCB, state, student, oldTeam, _json) => {
   let newStudent =
     Student.update(
       ~name=state.name,
-      ~tags=state.tagsToApply,
       ~excludedFromLeaderboard=state.excludedFromLeaderboard,
       ~title=state.title,
       ~affiliation,
@@ -93,6 +92,7 @@ let handleResponseCB = (updateFormCB, state, student, oldTeam, _json) => {
   let newTeam =
     Team.update(
       ~name=state.teamName,
+      ~tags=state.tagsToApply,
       ~student=newStudent,
       ~coachIds=state.teamCoaches,
       ~accessEndsAt=state.accessEndsAt,
@@ -235,7 +235,7 @@ let initialState = (student, team) => {
   {
     name: student |> Student.name,
     teamName: team |> Team.name,
-    tagsToApply: student |> Student.tags,
+    tagsToApply: team |> Team.tags,
     teamCoaches: team |> Team.coachIds,
     teamCoachSearchInput: "",
     excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
@@ -274,7 +274,7 @@ let reducer = (state, action) =>
   };
 
 [@react.component]
-let make = (~student, ~team, ~studentTags, ~courseCoaches, ~updateFormCB) => {
+let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
   let (state, send) =
     React.useReducer(reducer, initialState(student, team));
 
@@ -376,11 +376,11 @@ let make = (~student, ~team, ~studentTags, ~courseCoaches, ~updateFormCB) => {
       </div>
       <div className="mt-5">
         <div className="mb-2 text-xs font-semibold">
-          {"Tags applied:" |> str}
+          {(isSingleStudent ? "Tags applied:" : "Tags applied to team:") |> str}
         </div>
         <StudentsEditor__SearchableTagList
           unselectedTags={
-            studentTags
+            teamTags
             |> Js.Array.filter(tag => !(state.tagsToApply |> Array.mem(tag)))
           }
           selectedTags={state.tagsToApply}

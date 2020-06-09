@@ -5,13 +5,13 @@ describe Founders::MarkAsDroppedOutService do
 
   describe '#execute' do
     context 'when the student is in a team of more than one'
-    let(:student) { create :founder }
+    let(:original_team) { create :startup, tag_list: %w[tag_a tag_b] }
+    let(:student) { original_team.founders.first }
 
     it 'creates a new startup in the same level and mark the founder as exited' do
-      old_startup = student.startup
-
       expect { subject.execute }.to change { student.reload.startup.dropped_out_at }.from(nil)
-      expect(student.startup.id).not_to eq(old_startup.id)
+      expect(student.startup.id).not_to eq(original_team.id)
+      expect(student.startup.tag_list).to match_array(%w[tag_a tag_b])
     end
   end
 

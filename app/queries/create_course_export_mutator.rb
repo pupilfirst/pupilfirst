@@ -12,25 +12,26 @@ class CreateCourseExportMutator < ApplicationQuery
   def require_valid_course
     return if course.present?
 
-    errors[:base] << 'InvalidCourseId'
+    errors[:base] << 'Could not find a course with the given ID'
   end
 
   def require_valid_tags
     return if tag_ids.count == tags.count
 
-    errors[:base] << 'InvalidTagsIds'
+    errors[:base] << 'Could not find tags with the given IDs'
   end
 
   def create_course_export
     CourseExport.transaction do
-      export = CourseExport.new(export_type: export_type, course: course, user: current_user, reviewed_only: !!reviewed_only)
+      tag_list = tags.present? ? tags.pluck(:name) : []
 
-      if tags.present?
-        tag_names = tags.pluck(:name)
-        export.tag_list.add(*tag_names)
-      end
-
-      export.save!
+      export = CourseExport.create!(
+        export_type: export_type,
+        course: course,
+        user: current_user,
+        reviewed_only: !!reviewed_only,
+        tag_list: tag_list,
+      )
 
       # Queue a job to prepare the report.
       CourseExports::PrepareJob.perform_later(export)
@@ -43,7 +44,7 @@ class CreateCourseExportMutator < ApplicationQuery
   private
 
   def tags
-    @tags ||= export_type == CourseExport::EXPORT_TYPE_STUDENTS ? current_school.founder_tags.where(id: tag_ids) : []
+    @tags ||= current_school.founder_tags.where(id: tag_ids)
   end
 
   def resource_school

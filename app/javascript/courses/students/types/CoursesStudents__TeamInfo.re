@@ -8,6 +8,7 @@ type student = {
 type t = {
   id: string,
   name: string,
+  tags: array(string),
   levelId: string,
   students: array(student),
   coachUserIds: array(string),
@@ -19,6 +20,8 @@ let id = t => t.id;
 let levelId = t => t.levelId;
 
 let name = t => t.name;
+
+let tags = t => t.tags;
 
 let title = t => t.title;
 
@@ -59,6 +62,7 @@ let make =
     (
       ~id,
       ~name,
+      ~tags,
       ~levelId,
       ~students,
       ~coachUserIds,
@@ -67,6 +71,7 @@ let make =
     ) => {
   id,
   name,
+  tags,
   levelId,
   students,
   coachUserIds,
@@ -89,6 +94,7 @@ let makeFromJS = teamDetails => {
   make(
     ~id=teamDetails##id,
     ~name=teamDetails##name,
+    ~tags=teamDetails##tags,
     ~levelId=teamDetails##levelId,
     ~students,
     ~coachUserIds=teamDetails##coachUserIds,

@@ -37,6 +37,7 @@ module StudentDetailsQuery = [%graphql
         team {
           id
           name
+          tags
           levelId
           droppedOutAt
           accessEndsAt

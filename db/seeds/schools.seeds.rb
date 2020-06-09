@@ -1,3 +1,5 @@
-puts "Seeding schools (production, idempotent)"
+puts 'Seeding schools (production, idempotent)'
 
-School.where(name: 'Test School').first_or_create!
+tags = (1..10).map { Faker::Lorem.words(number: 2).join(' ') }
+
+school = School.where(name: 'Test School').first_or_create!(founder_tag_list: tags)

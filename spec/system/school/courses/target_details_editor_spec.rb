@@ -370,4 +370,22 @@ feature 'Target Details Editor', js: true do
       expect(target.timeline_events.where(id: submission_for_quiz_target_without_grades.id)).to eq([])
     end
   end
+
+  scenario 'school admin modifies target group for a target' do
+    sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+
+    # Open the details editor for the target.
+    find("a[title='Edit details of target #{target_1_l2.title}']").click
+    expect(page).to have_text('Title')
+
+    fill_in 'title', with: new_target_title, fill_options: { clear: :backspace }
+    fill_in 'completion-instructions', with: completion_instructions
+
+    click_button 'Update Target'
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    expect(target_1_l2.reload.title).to eq(new_target_title)
+    expect(target_1_l2.completion_instructions).to eq(completion_instructions)
+  end
 end

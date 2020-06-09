@@ -571,7 +571,7 @@ let targetGroupEditor = (state, targetGroups, levels, send) => {
       className="block tracking-wide text-sm font-semibold mr-6 mb-2"
       htmlFor="target_group_id">
       <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-      {"Change Target Group" |> str}
+      {"Target Group" |> str}
     </label>
     <div className="ml-6">
       <TargetGroupSelector

@@ -21,6 +21,7 @@ class User < ApplicationRecord
   has_many :course_exports, dependent: :nullify
   has_many :created_posts, class_name: 'Post', foreign_key: 'creator_id', inverse_of: :creator, dependent: :nullify
   has_many :edited_posts, class_name: 'Post', foreign_key: 'editor_id', inverse_of: :editor, dependent: :nullify
+  has_many :coach_notes, class_name: 'CoachNote', foreign_key: 'author_id', inverse_of: :author, dependent: :nullify
 
   has_secure_token :login_token
   has_secure_token :reset_password_token

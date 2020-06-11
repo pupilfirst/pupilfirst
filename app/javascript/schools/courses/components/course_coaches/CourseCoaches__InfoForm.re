@@ -32,7 +32,7 @@ let reducer = (state, action) => {
 module CoachInfoQuery = [%graphql
   {|
     query CoachInfoQuery($courseId: ID!, $coachId: ID!, $coachNotes: CoachNoteFilter!) {
-      teams(courseId: $courseId, coachNotes: $coachNotes, coachId: $coachId, first: 100) {
+      teams(courseId: $courseId, coachNotes: $coachNotes, coachId: $coachId, first: 100, tags: []) {
         nodes {
           id,
           name,

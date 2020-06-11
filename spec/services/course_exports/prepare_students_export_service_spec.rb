@@ -7,7 +7,7 @@ describe CourseExports::PrepareStudentsExportService do
 
   let(:level_1) { create :level, :one }
   let(:level_2) { create :level, :two, course: level_1.course }
-  let(:team_1) { create :team, level: level_2 }
+  let(:team_1) { create :team, level: level_2, tag_list: ['tag 1', 'tag 2'] }
   let(:team_2) { create :team, level: level_1 }
   let(:user_1) { create :user, email: 'a@example.com' }
   let(:user_2) { create :user, email: 'b@example.com' }
@@ -32,10 +32,6 @@ describe CourseExports::PrepareStudentsExportService do
   let!(:student_2_reviewed_submission) { fail_target target_l1_evaluated, student_2 }
 
   before do
-    # Tag the first student.
-    student_1.tag_list.add('tag 1', 'tag 2')
-    student_1.save!
-
     # First student has completed everything, but has a pending submission in L2.
     submit_target target_l1_mark_as_complete, student_1
     submission = submit_target target_l1_quiz, student_1
@@ -71,25 +67,25 @@ describe CourseExports::PrepareStudentsExportService do
           ['Students with submissions', 1, 2, 2, 1],
           ['Submissions pending review', 0, 0, 0, 1],
           ['Criterion A (2,3) - Average', nil, nil, (evaluation_criterion_1.timeline_event_grades.pluck(:grade).sum / 2.0).round(2).to_s, nil],
-          ['Criterion B (2,3) - Average', nil, nil, (evaluation_criterion_2.timeline_event_grades.pluck(:grade).sum / 2.0).round(2).to_s, nil]
-        ]
+          ['Criterion B (2,3) - Average', nil, nil, (evaluation_criterion_2.timeline_event_grades.pluck(:grade).sum / 2.0).round(2).to_s, nil],
+        ],
       },
       {
         title: 'Students',
         rows: [
           ['ID', 'Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
           [report_link_formula(student_1), student_1.email, student_1.name, student_1.title, student_1.affiliation, 'tag 1, tag 2', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s],
-          [report_link_formula(student_2), student_2.email, student_2.name, student_2.title, student_2.affiliation, '', student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s]
-        ]
+          [report_link_formula(student_2), student_2.email, student_2.name, student_2.title, student_2.affiliation, '', student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s],
+        ],
       },
       {
         title: 'Submissions',
         rows: [
           ['Student Email / Target ID', "L1T#{target_l1_mark_as_complete.id}", "L1T#{target_l1_quiz.id}", "L1T#{target_l1_evaluated.id}", "L2T#{target_l2_evaluated.id}"],
           [student_1.email, '✓', '2/2', { 'value' => submission_grading(student_1_reviewed_submission), 'style' => 'passing-grade' }, { 'value' => 'RP', 'style' => 'pending-grade' }],
-          [student_2.email, nil, '1/2', { 'value' => submission_grading(student_2_reviewed_submission), 'style' => 'failing-grade' }]
-        ]
-      }
+          [student_2.email, nil, '1/2', { 'value' => submission_grading(student_2_reviewed_submission), 'style' => 'failing-grade' }],
+        ],
+      },
     ]
   end
 
@@ -106,12 +102,10 @@ describe CourseExports::PrepareStudentsExportService do
     end
 
     context 'when course export data is restricted using options' do
-      let(:course_export) { create :course_export, :students, course: course, user: school_admin.user, reviewed_only: true }
+      let(:course_export) { create :course_export, :students, course: course, user: school_admin.user, reviewed_only: true, tag_list: ['tag 1'] }
 
       before do
         submit_target target_l1_evaluated, student_1
-        course_export.tag_list.add('tag 1')
-        course_export.save!
       end
 
       let(:restricted_data) do
@@ -127,23 +121,23 @@ describe CourseExports::PrepareStudentsExportService do
               ['Students with submissions', 1, 1],
               ['Submissions pending review', 1, 1],
               ['Criterion A (2,3) - Average', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, nil],
-              ['Criterion B (2,3) - Average', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s, nil]
-            ]
+              ['Criterion B (2,3) - Average', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s, nil],
+            ],
           },
           {
             title: 'Students',
             rows: [
               ['ID', 'Email Address', 'Name', 'Title', 'Affiliation', 'Tags', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
-              [report_link_formula(student_1), student_1.email, student_1.name, student_1.title, student_1.affiliation, 'tag 1, tag 2', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s]
-            ]
+              [report_link_formula(student_1), student_1.email, student_1.name, student_1.title, student_1.affiliation, 'tag 1, tag 2', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s],
+            ],
           },
           {
             title: 'Submissions',
             rows: [
               ['Student Email / Target ID', "L1T#{target_l1_evaluated.id}", "L2T#{target_l2_evaluated.id}"],
-              [student_1.email, { 'value' => "#{submission_grading(student_1_reviewed_submission)};RP", 'style' => 'pending-grade' }, { 'value' => 'RP', 'style' => 'pending-grade' }]
-            ]
-          }
+              [student_1.email, { 'value' => "#{submission_grading(student_1_reviewed_submission)};RP", 'style' => 'pending-grade' }, { 'value' => 'RP', 'style' => 'pending-grade' }],
+            ],
+          },
         ]
       end
 

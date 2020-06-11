@@ -10,18 +10,21 @@ module CourseTeamsQuery = [%graphql
     query CourseTeamsQuery($courseId: ID!, $levelId: ID, $search: String, $after: String, $tags: [String!], $sortBy: String!) {
       courseTeams(courseId: $courseId, levelId: $levelId, search: $search, first: 20, after: $after, tags: $tags, sortBy: $sortBy) {
         nodes {
-        id,
-        name,
-        levelId,
-        coachIds,
-        levelId,
-        accessEndsAt
-        students {
           id,
           name,
-          title,
-          avatarUrl,
-          email, tags, excludedFromLeaderboard, affiliation
+          tags,
+          levelId,
+          coachIds,
+          levelId,
+          accessEndsAt
+          students {
+            id,
+            name,
+            title,
+            avatarUrl,
+            email,
+            excludedFromLeaderboard,
+            affiliation
           }
         }
         pageInfo {
@@ -145,6 +148,20 @@ let levelInfo = (levels, team) =>
     </div>
   </span>;
 
+let teamTags = team =>
+  <div className="flex flex-wrap">
+    {team
+     |> Team.tags
+     |> Array.map(tag =>
+          <div
+            key=tag
+            className="bg-gray-300 rounded mt-1 mr-1 py-px px-2 text-xs text-gray-900">
+            {tag |> str}
+          </div>
+        )
+     |> React.array}
+  </div>;
+
 let teamCard =
     (
       team,
@@ -205,18 +222,7 @@ let teamCard =
                         <p className="text-black font-semibold inline-block ">
                           {student |> Student.name |> str}
                         </p>
-                        <div className="flex flex-wrap">
-                          {student
-                           |> Student.tags
-                           |> Array.map(tag =>
-                                <div
-                                  key=tag
-                                  className="bg-gray-300 rounded mt-1 mr-1 py-px px-2 text-xs text-gray-900">
-                                  {tag |> str}
-                                </div>
-                              )
-                           |> React.array}
-                        </div>
+                        {isSingleStudent ? teamTags(team) : React.null}
                       </div>
                     </div>
                     {isSingleStudent ? team |> levelInfo(levels) : React.null}
@@ -237,6 +243,7 @@ let teamCard =
                  {"Team" |> str}
                </p>
                <h4> {team |> Team.name |> str} </h4>
+               {teamTags(team)}
              </div>
            </div>
            <div className="w-2/6 text-right pr-4">

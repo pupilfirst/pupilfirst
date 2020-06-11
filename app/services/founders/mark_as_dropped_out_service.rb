@@ -11,7 +11,8 @@ module Founders
           startup = Startup.create!(
             name: @student.name,
             level: @student.startup.level,
-            dropped_out_at: Time.zone.now
+            dropped_out_at: Time.zone.now,
+            tag_list: @student.startup.tag_list
           )
 
           # Mark the student as exited and set him into the new startup (which doesn't have any coach enrollments).

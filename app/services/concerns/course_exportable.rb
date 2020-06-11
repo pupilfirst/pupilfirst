@@ -27,15 +27,15 @@ module CourseExportable
 
   def add_custom_styles
     spreadsheet.office_style 'passing-grade', family: :cell do
-      property :cell, 'background-color' => "#9AE6B4"
+      property :cell, 'background-color' => '#9AE6B4'
     end
 
     spreadsheet.office_style 'failing-grade', family: :cell do
-      property :cell, 'background-color' => "#FEB2B2"
+      property :cell, 'background-color' => '#FEB2B2'
     end
 
     spreadsheet.office_style 'pending-grade', family: :cell do
-      property :cell, 'background-color' => "#FAF089"
+      property :cell, 'background-color' => '#FAF089'
     end
   end
 
@@ -60,7 +60,7 @@ module CourseExportable
         %w[RP pending-grade]
       when [false, false]
         [evaluation_grade, 'failing-grade']
-    end
+      end
 
     append_grade(grading, grade_index, grade, style)
   end
@@ -69,44 +69,44 @@ module CourseExportable
   def append_grade(grading, grade_index, grade, style)
     # Store the grade as a number if we're not dealing with a complex grade.
     parsed_grade = begin
-      integer_grade = grade.to_i
-      integer_grade.to_s == grade ? integer_grade : grade
-    end
+        integer_grade = grade.to_i
+        integer_grade.to_s == grade ? integer_grade : grade
+      end
 
     value = if grading[grade_index].present?
-      "#{grading[grade_index][:value]};#{parsed_grade}"
-    else
-      parsed_grade
-    end
+        "#{grading[grade_index][:value]};#{parsed_grade}"
+      else
+        parsed_grade
+      end
 
     grading[grade_index] = if style.present?
-      { value: value, style: style }
-    else
-      value
-    end
+        { value: value, style: style }
+      else
+        value
+      end
 
     grading
   end
 
   def targets(role: nil)
     @targets ||= begin
-      scope = course.targets.live
-        .joins(:level)
-        .includes(:level, :evaluation_criteria, :quiz, :target_group)
+        scope = course.targets.live
+          .joins(:level)
+          .includes(:level, :evaluation_criteria, :quiz, :target_group)
 
-      scope = case role
-        when Target::ROLE_STUDENT
-          scope.student
-        when Target::ROLE_TEAM
-          scope.team
-        else
-          scope
+        scope = case role
+          when Target::ROLE_STUDENT
+            scope.student
+          when Target::ROLE_TEAM
+            scope.team
+          else
+            scope
+          end
+
+        scope = @course_export.reviewed_only ? scope.joins(:evaluation_criteria) : scope
+
+        scope.order('levels.number ASC, target_groups.sort_index ASC, targets.sort_index ASC').load
       end
-
-      scope = @course_export.reviewed_only ? scope.joins(:evaluation_criteria) : scope
-
-      scope.order('levels.number ASC, target_groups.sort_index ASC, targets.sort_index ASC').load
-    end
   end
 
   def target_id(target)
@@ -123,5 +123,9 @@ module CourseExportable
     else
       'Mark as Complete'
     end
+  end
+
+  def tags
+    @course_export.tags.pluck(:name)
   end
 end

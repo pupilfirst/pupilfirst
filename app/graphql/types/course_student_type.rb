@@ -7,6 +7,5 @@ module Types
     field :affiliation, String, null: true
     field :avatar_url, String, null: true
     field :excluded_from_leaderboard, Boolean, null: false
-    field :tags, [String], null: false
   end
 end

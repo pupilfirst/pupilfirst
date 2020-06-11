@@ -30,11 +30,11 @@ describe Startups::TeamUpService do
     it 'forms a new team with specified founders and updates faculty enrollments' do
       expect { subject.new(founders_in_same_level).team_up(team_name) }.to(change { Startup.count }.from(3).to(2))
 
-      last_startup = Startup.last
+      last_team = Startup.last
 
       # New startup has expected properties.
-      expect(last_startup.founders.pluck(:id)).to match_array(founders_in_same_level.pluck(:id))
-      expect(last_startup.name).to eq(team_name)
+      expect(last_team.founders.pluck(:id)).to match_array(founders_in_same_level.pluck(:id))
+      expect(last_team.name).to eq(team_name)
 
       expect(founder_1.reload.startup.founders.count).to eq(4)
       expect(founder_1.startup.faculty.pluck(:id)).to match_array([faculty_1.id, faculty_2.id])
@@ -42,6 +42,28 @@ describe Startups::TeamUpService do
 
     it 'raises an exception when founders belong to different levels' do
       expect { subject.new(founders_in_different_levels).team_up(team_name) }.to raise_error(RuntimeError, 'Students must belong to the same level for teaming up')
+    end
+
+    context 'when teams have some tags' do
+      let(:startup_1) { create :startup, level: level_1, tag_list: %w[tag_a tag_b] }
+      let(:startup_2) { create :startup, level: level_1, tag_list: %w[tag_c] }
+
+      it 'copies the tags to a student who moves out' do
+        expect { subject.new(Founder.where(id: founder_1.id)).team_up('foo') }.to(change { Startup.count }.from(3).to(4))
+
+        new_team = founder_1.reload.startup
+
+        expect(new_team.name).to eq('foo')
+        expect(new_team.tag_list).to match_array(%w[tag_a tag_b])
+      end
+
+      it 'merges tags when two or more students join to form a team' do
+        expect { subject.new(founders_in_same_level).team_up(team_name) }.to(change { Startup.count }.from(3).to(2))
+
+        last_team = Startup.last
+
+        expect(last_team.tag_list).to match_array(%w[tag_a tag_b tag_c])
+      end
     end
   end
 end

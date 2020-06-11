@@ -187,7 +187,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
          <StudentsEditor__CreateForm
            courseId
            submitFormCB={submitForm(send)}
-           studentTags={state.tags}
+           teamTags={state.tags}
          />
        </SchoolAdmin__EditorDrawer>
 
@@ -204,7 +204,7 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
          <StudentsEditor__UpdateForm
            student
            team
-           studentTags={state.tags}
+           teamTags={state.tags}
            courseCoaches
            updateFormCB={updateForm(send)}
            reloadTeamsCB={reloadTeams(send)}

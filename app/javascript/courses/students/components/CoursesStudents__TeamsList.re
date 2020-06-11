@@ -42,8 +42,24 @@ let showStudent = (team, levels, teamCoaches) => {
             {student |> TeamInfo.studentName |> str}
           </p>
           <p
-            className="text-gray-600 font-semibold text-xs mt-px leading-snug">
-            {student |> TeamInfo.studentTitle |> str}
+            className="text-gray-700 font-semibold text-xs leading-snug flex items-start">
+            <span className="leading-normal pt-px">
+              {student |> TeamInfo.studentTitle |> str}
+            </span>
+            {team |> TeamInfo.tags |> ArrayUtils.isNotEmpty
+               ? <div className="hidden md:flex flex-wrap ml-2 font-normal">
+                   {team
+                    |> TeamInfo.tags
+                    |> Js.Array.map(tag =>
+                         <div
+                           className="bg-gray-300 rounded mr-1 mt-1 py-px px-1 text-tiny text-gray-900"
+                           key="tag">
+                           {str(tag)}
+                         </div>
+                       )
+                    |> React.array}
+                 </div>
+               : React.null}
           </p>
         </div>
       </div>
@@ -52,7 +68,12 @@ let showStudent = (team, levels, teamCoaches) => {
       ariaLabel={"team-level-info-" ++ (team |> TeamInfo.id)}
       className="w-2/5 flex items-center justify-end md:justify-between p-3 md:p-4">
       <CoursesStudents__TeamCoaches
-        title={<div className="mb-1"> {"Personal Coaches" |> str} </div>}
+        title={
+          <div
+            className="mb-1 font-semibold text-gray-800 text-tiny uppercase">
+            {"Personal Coaches" |> str}
+          </div>
+        }
         className="hidden md:inline-block"
         coaches=teamCoaches
       />
@@ -87,7 +108,7 @@ let showTeam = (team, levels, teamCoaches) => {
                     {student |> TeamInfo.studentName |> str}
                   </p>
                   <p
-                    className="text-gray-600 font-semibold text-xs mt-px leading-snug ">
+                    className="text-gray-700 font-semibold text-xs mt-px leading-snug ">
                     {student |> TeamInfo.studentTitle |> str}
                   </p>
                 </div>
@@ -100,15 +121,35 @@ let showTeam = (team, levels, teamCoaches) => {
       className="flex w-full md:w-2/5 items-center bg-gray-200 md:bg-white border-l py-2 md:py-0 px-3 md:px-4">
       <div className="flex-1 pb-3 md:py-3 pr-3">
         <div>
-          <p className="text-xs inline-block leading-tight">
+          <p
+            className="inline-block leading-tight font-semibold text-gray-800 text-tiny uppercase">
             {"Team" |> str}
           </p>
-          <h3 className="text-base font-semibold leading-snug">
+          <h3 className="text-sm font-semibold leading-snug">
             {team |> TeamInfo.name |> str}
           </h3>
+          {team |> TeamInfo.tags |> ArrayUtils.isNotEmpty
+             ? <div className="hidden md:flex flex-wrap mt-1">
+                 {team
+                  |> TeamInfo.tags
+                  |> Js.Array.map(tag =>
+                       <div
+                         className="bg-gray-300 rounded mr-1 mt-1 py-px px-1 text-tiny text-gray-900"
+                         key="tag">
+                         {str(tag)}
+                       </div>
+                     )
+                  |> React.array}
+               </div>
+             : React.null}
           <CoursesStudents__TeamCoaches
-            title={<div className="mb-1"> {"Team Coaches" |> str} </div>}
-            className="hidden md:inline-block mt-3"
+            title={
+              <div
+                className="font-semibold text-gray-800 text-tiny uppercase pb-1 ">
+                {"Team Coaches" |> str}
+              </div>
+            }
+            className="hidden md:inline-block mt-6"
             coaches=teamCoaches
           />
         </div>

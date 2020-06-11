@@ -5,8 +5,8 @@ feature 'Course Exports', js: true do
   include NotificationHelper
 
   let(:level) { create :level }
-  let(:team_1) { create :team, level: level }
-  let(:team_2) { create :team, level: level }
+  let(:team_1) { create :team, level: level, tag_list: ['tag 1', 'tag 2'] }
+  let(:team_2) { create :team, level: level, tag_list: ['tag 3'] }
   let(:student_1) { create :student, startup: team_1 }
   let(:student_2) { create :student, startup: team_2 }
   let(:school) { student_1.school }
@@ -16,13 +16,7 @@ feature 'Course Exports', js: true do
   let!(:target) { create :target, target_group: target_group }
 
   before do
-    # Tag both students.
-    student_1.tag_list.add('tag 1', 'tag 2')
-    student_1.save!
-    student_2.tag_list.add('tag 3')
-    student_2.save!
-
-    # Add those tags to school student tags.
+    # Add those tags to school's list of team tags.
     school.founder_tag_list.add('tag 1', 'tag 2', 'tag 3')
     school.save!
   end
@@ -76,11 +70,6 @@ feature 'Course Exports', js: true do
     find('h5', text: 'Create a new export').click
 
     click_button('Teams')
-
-    # Tags shouldn't be visible now.
-    expect(page).not_to have_selector('div[title="Select tag 1"]')
-
-    # It should still be possible to switch between "All targets" and "Reviewed targets"
     click_button('Only targets with reviewed submissions')
     click_button('Create Export')
 
@@ -114,6 +103,19 @@ feature 'Course Exports', js: true do
 
     expect(page).to have_text('tag 1')
     expect(page).to have_text('tag 2')
+  end
+
+  scenario 'school admin creates a teams export for specific tags' do
+    sign_in_user school_admin.user, referer: exports_school_course_path(course)
+
+    find('h5', text: 'Create a new export').click
+    click_button('Teams')
+    find('div[title="Select tag 1"]').click
+    click_button('Create Export')
+
+    expect(page).to have_text('Your export is being processed')
+    expect(CourseExport.last.tag_list).to contain_exactly('tag 1')
+    expect(page).to have_text('tag 1')
   end
 
   scenario 'school admin creates a student export with only reviewed submissions' do

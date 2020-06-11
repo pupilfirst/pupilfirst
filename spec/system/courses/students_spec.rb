@@ -14,8 +14,8 @@ feature 'Course students list', js: true do
   let(:team_coach) { create :faculty, school: school }
 
   # Create few teams
-  let!(:team_1) { create :startup, level: level_1, name: 'Zucchini' } # This will always be around the bottom of the list.
-  let!(:team_2) { create :startup, level: level_2, name: 'Apple' } # This will always be around the top.
+  let!(:team_1) { create :startup, level: level_1, name: 'Zucchini', tag_list: ['starts with z', 'vegetable'] } # This will always be around the bottom of the list.
+  let!(:team_2) { create :startup, level: level_2, name: 'Asparagus', tag_list: ['vegetable'] } # This will always be around the top.
   let!(:team_3) { create :startup, level: level_2, name: 'Banana' }
   let!(:team_4) { create :startup, level: level_3, name: 'Blueberry' }
   let!(:team_5) { create :startup, level: level_3, name: 'Cherry' }
@@ -410,5 +410,61 @@ feature 'Course students list', js: true do
 
       expect(page).not_to have_text(remaining_student.name)
     end
+  end
+
+  scenario 'coach filters students by tags applied to their team' do
+    sign_in_user course_coach.user, referer: students_course_path(course)
+
+    team_in_first_page = course.startups.where.not(id: team_2.id).order(:name).first
+
+    expect(page).to have_text(team_in_first_page.name)
+
+    within("div[aria-label='Students in level 1']") do
+      expect(page).to have_text('1')
+    end
+
+    within("div[aria-label='Students in level 2']") do
+      expect(page).to have_text('2')
+    end
+
+    within("div[aria-label='Students in level 3']") do
+      expect(page).to have_text('3')
+    end
+
+    fill_in 'filter', with: 'vegetable'
+    click_button 'Tagged with: vegetable'
+
+    # The filter should affect the distribution...
+    within("div[aria-label='Students in level 2']") do
+      expect(page).to have_text('1')
+    end
+
+    within("div[aria-label='Students in level 1']") do
+      expect(page).to have_text('1')
+    end
+
+    within("div[aria-label='Students in level 3']") do
+      expect(page).to have_text('0')
+    end
+
+    # ...and the students listed below.
+    expect(page).not_to have_text(team_in_first_page.name)
+    expect(page).to have_text('Asparagus')
+    expect(page).to have_text('Zucchini')
+
+    fill_in 'filter', with: 'z'
+    click_button 'Tagged with: starts with z'
+
+    within("div[aria-label='Students in level 2']") do
+      expect(page).to have_text('0')
+    end
+
+    within("div[aria-label='Students in level 1']") do
+      expect(page).to have_text('1')
+    end
+
+    expect(page).not_to have_text('Asparagus')
+    expect(page).not_to have_text(team_in_first_page.name)
+    expect(page).to have_text('Zucchini')
   end
 end

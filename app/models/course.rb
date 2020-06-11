@@ -32,7 +32,7 @@ class Course < ApplicationRecord
   VALID_PROGRESSION_BEHAVIORS = [
     PROGRESSION_BEHAVIOR_LIMITED,
     PROGRESSION_BEHAVIOR_UNLIMITED,
-    PROGRESSION_BEHAVIOR_STRICT
+    PROGRESSION_BEHAVIOR_STRICT,
   ].freeze
 
   validates :progression_behavior, inclusion: VALID_PROGRESSION_BEHAVIORS
@@ -60,5 +60,9 @@ class Course < ApplicationRecord
     if thumbnail.attached?
       Rails.application.routes.url_helpers.rails_blob_path(thumbnail, only_path: true)
     end
+  end
+
+  def team_tags
+    startups.active.joins(:tags).distinct('tags.name').pluck('tags.name')
   end
 end

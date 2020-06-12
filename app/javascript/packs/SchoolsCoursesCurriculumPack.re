@@ -6,7 +6,6 @@ type props = {
   levels: list(Level.t),
   targetGroups: list(TargetGroup.t),
   targets: list(Target.t),
-  authenticityToken: string,
 };
 
 let decodeProps = json =>
@@ -17,7 +16,6 @@ let decodeProps = json =>
     levels: json |> field("levels", list(Level.decode)),
     targetGroups: json |> field("targetGroups", list(TargetGroup.decode)),
     targets: json |> field("targets", list(Target.decode)),
-    authenticityToken: json |> field("authenticityToken", string),
   };
 
 let props =
@@ -35,7 +33,6 @@ ReactDOMRe.renderToElementWithId(
     levels={props.levels}
     targetGroups={props.targetGroups}
     targets={props.targets}
-    authenticityToken={props.authenticityToken}
   />,
   "curriculum-editor",
 );

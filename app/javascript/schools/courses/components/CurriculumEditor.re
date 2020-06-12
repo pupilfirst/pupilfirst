@@ -134,15 +134,7 @@ let computeIntialState = ((levels, targetGroups, targets, path)) => {
 };
 
 [@react.component]
-let make =
-    (
-      ~course,
-      ~evaluationCriteria,
-      ~levels,
-      ~targetGroups,
-      ~targets,
-      ~authenticityToken,
-    ) => {
+let make = (~course, ~evaluationCriteria, ~levels, ~targetGroups, ~targets) => {
   let path = ReasonReactRouter.useUrl().path;
   let (state, send) =
     React.useReducerWithMapState(
@@ -229,8 +221,8 @@ let make =
      | ShowTargetGroupEditor(targetGroup) =>
        <CurriculumEditor__TargetGroupEditor
          targetGroup
+         levels={Array.of_list(state.levels)}
          currentLevelId
-         authenticityToken
          updateTargetGroupsCB
          hideEditorActionCB
        />

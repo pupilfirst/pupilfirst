@@ -48,7 +48,7 @@ module Targets
       @target.sort_index = new_target_group.targets.maximum(:sort_index) + 1
 
       if @target.target_group.level_id != new_target_group.level_id
-        Targets::DetachFromPrerequisitesService.new(@target).execute
+        Targets::DetachFromPrerequisitesService.new([@target]).execute
       end
     end
 

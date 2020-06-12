@@ -3,6 +3,8 @@ open CurriculumEditor__Types;
 let str = ReasonReact.string;
 type state = {
   name: string,
+  levelId: string,
+  levelSearchInput: string,
   description: string,
   milestone: bool,
   hasNameError: bool,
@@ -16,6 +18,8 @@ type action =
   | UpdateDescription(string)
   | UpdateMilestone(bool)
   | UpdateIsArchived(bool)
+  | UpdateLevel(string)
+  | UpdatelevelSearchInput(string)
   | UpdateSaving;
 
 let reducer = (state, action) => {
@@ -29,6 +33,17 @@ let reducer = (state, action) => {
   | UpdateDescription(description) => {...state, description, dirty: true}
   | UpdateMilestone(milestone) => {...state, milestone, dirty: true}
   | UpdateIsArchived(isArchived) => {...state, isArchived, dirty: true}
+  | UpdateLevel(levelId) => {
+      ...state,
+      levelId,
+      levelSearchInput: "",
+      dirty: true,
+    }
+  | UpdatelevelSearchInput(levelSearchInput) => {
+      ...state,
+      levelSearchInput,
+      dirty: true,
+    }
   | UpdateSaving => {...state, saving: !state.saving}
   };
 };
@@ -38,21 +53,74 @@ let updateName = (send, name) => {
   send(UpdateName(name, hasError));
 };
 
-let saveDisabled = state => state.hasNameError || !state.dirty || state.saving;
+let saveDisabled = state =>
+  state.hasNameError || !state.dirty || state.saving || state.levelId == "";
 
-let setPayload = (authenticityToken, state) => {
+let setPayload = state => {
   let payload = Js.Dict.empty();
   let milestone = state.milestone == true ? "true" : "false";
   Js.Dict.set(
     payload,
     "authenticity_token",
-    authenticityToken |> Js.Json.string,
+    AuthenticityToken.fromHead() |> Js.Json.string,
   );
   Js.Dict.set(payload, "archived", state.isArchived |> Js.Json.boolean);
+  Js.Dict.set(payload, "level_id", state.levelId |> Js.Json.string);
   Js.Dict.set(payload, "name", state.name |> Js.Json.string);
   Js.Dict.set(payload, "description", state.description |> Js.Json.string);
   Js.Dict.set(payload, "milestone", milestone |> Js.Json.string);
   payload;
+};
+
+module SelectableLevel = {
+  type t = Level.t;
+
+  let label = _t => None;
+
+  let value = t => t |> Level.levelNumberWithName;
+
+  let searchString = t => t |> value;
+
+  let color = _t => "orange";
+};
+
+module LevelSelector = MultiselectDropdown.Make(SelectableLevel);
+
+let unselectedlevels = (levels, levelId) => {
+  levels |> Js.Array.filter(l => l |> Level.id != levelId);
+};
+
+let selectedLevel = (levels, levelId) =>
+  if (levelId |> Js.String.length == 0) {
+    [||];
+  } else {
+    [|
+      levelId
+      |> Level.unsafeFind(levels, "TargetGroupEditor.selectedTargetGroup"),
+    |];
+  };
+
+let levelEditor = (state, levels, send) => {
+  <div id="level_id" className="mt-5">
+    <label
+      className="inline-block tracking-wide text-xs font-semibold"
+      htmlFor="level_id">
+      {"Level" |> str}
+    </label>
+    <LevelSelector
+      id="level_id"
+      unselected={unselectedlevels(levels, state.levelId)}
+      selected={selectedLevel(levels, state.levelId)}
+      onSelect={selectable => {send(UpdateLevel(selectable |> Level.id))}}
+      onDeselect={_ => send(UpdateLevel(""))}
+      value={state.levelSearchInput}
+      onChange={searchString => send(UpdatelevelSearchInput(searchString))}
+    />
+    <School__InputGroupError
+      message="Choose a level"
+      active={state.levelId == ""}
+    />
+  </div>;
 };
 
 let booleanButtonClasses = selected => {
@@ -62,7 +130,7 @@ let booleanButtonClasses = selected => {
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
-let computeInitialState = targetGroup => {
+let computeInitialState = (currentLevelId, targetGroup) => {
   switch (targetGroup) {
   | Some(targetGroup) => {
       name: targetGroup |> TargetGroup.name,
@@ -71,6 +139,8 @@ let computeInitialState = targetGroup => {
         | Some(description) => description
         | None => ""
         },
+      levelId: targetGroup |> TargetGroup.levelId,
+      levelSearchInput: "",
       milestone: targetGroup |> TargetGroup.milestone,
       hasNameError: false,
       dirty: false,
@@ -80,6 +150,8 @@ let computeInitialState = targetGroup => {
   | None => {
       name: "",
       description: "",
+      levelId: currentLevelId,
+      levelSearchInput: "",
       milestone: true,
       hasNameError: false,
       dirty: false,
@@ -94,12 +166,16 @@ let make =
     (
       ~targetGroup,
       ~currentLevelId,
-      ~authenticityToken,
+      ~levels,
       ~updateTargetGroupsCB,
       ~hideEditorActionCB,
     ) => {
   let (state, send) =
-    React.useReducerWithMapState(reducer, targetGroup, computeInitialState);
+    React.useReducerWithMapState(
+      reducer,
+      targetGroup,
+      computeInitialState(currentLevelId),
+    );
   let handleErrorCB = () => send(UpdateSaving);
   let handleResponseCB = json => {
     let id = json |> Json.Decode.(field("id", string));
@@ -110,7 +186,7 @@ let make =
         state.name,
         Some(state.description),
         state.milestone,
-        currentLevelId,
+        state.levelId,
         sortIndex,
         state.isArchived,
       );
@@ -125,15 +201,14 @@ let make =
 
   let createTargetGroup = () => {
     send(UpdateSaving);
-    let level_id = currentLevelId;
-    let payload = setPayload(authenticityToken, state);
-    let url = "/school/levels/" ++ level_id ++ "/target_groups";
+    let payload = setPayload(state);
+    let url = "/school/levels/" ++ state.levelId ++ "/target_groups";
     Api.create(url, payload, handleResponseCB, handleErrorCB);
   };
 
   let updateTargetGroup = targetGroupId => {
     send(UpdateSaving);
-    let payload = setPayload(authenticityToken, state);
+    let payload = setPayload(state);
     let url = "/school/target_groups/" ++ targetGroupId;
     Api.update(url, payload, handleResponseCB, handleErrorCB);
   };
@@ -204,6 +279,7 @@ let make =
                   cols=33
                 />
               </div>
+              {levelEditor(state, levels, send)}
               <div className="mt-5">
                 <div className="flex items-center flex-shrink-0">
                   <label

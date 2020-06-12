@@ -275,12 +275,12 @@ let eligiblePrerequisiteTargets = (targetId, targets, targetGroups) => {
        )
     |> Target.targetGroupId;
   let targetGroup =
-    targetGroups
-    |> Array.of_list
-    |> ArrayUtils.unsafeFind(
-         tg => TargetGroup.id(tg) == targetGroupId,
-         "Cannot find target group with ID: " ++ targetGroupId,
+    targetGroupId
+    |> TargetGroup.unsafeFind(
+         targetGroups |> Array.of_list,
+         "TargetDetailsEditor.eligiblePrerequisiteTargets",
        );
+
   let levelId = targetGroup |> TargetGroup.levelId;
   let targetGroupsInSameLevel =
     targetGroups
@@ -557,7 +557,10 @@ let selectedTargetGroup = (levels, targetGroups, targetGroupId) =>
   } else {
     let targetGroup =
       targetGroupId
-      |> TargetGroup.unsafeFind(targetGroups, "TargetDetailsEditor");
+      |> TargetGroup.unsafeFind(
+           targetGroups,
+           "TargetDetailsEditor.selectedTargetGroup",
+         );
     [|
       SelectableTargetGroup.make(
         targetGroup |> TargetGroup.id,

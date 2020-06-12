@@ -33,17 +33,20 @@ let updateList = (levels, level) => {
 
 let sort = levels => levels |> List.sort((x, y) => x.number - y.number);
 
+let unsafeFind = (levels, componentName, levelId) => {
+  levels
+  |> ArrayUtils.unsafeFind(
+       l => l.id == levelId,
+       "Unable to find level with id: "
+       ++ levelId
+       ++ "in CurriculumEditor__"
+       ++ componentName,
+     );
+};
+
+let levelNumberWithName = t =>
+  "Level " ++ (t.number |> string_of_int) ++ ": " ++ t.name;
+
 let unsafeLevelNumber = (levels, componentName, levelId) =>
   "Level "
-  ++ (
-    levels
-    |> ArrayUtils.unsafeFind(
-         l => l.id == levelId,
-         "Unable to find level with id: "
-         ++ levelId
-         ++ "in CurriculumEditor__"
-         ++ componentName,
-       )
-    |> number
-    |> string_of_int
-  );
+  ++ (unsafeFind(levels, componentName, levelId) |> number |> string_of_int);

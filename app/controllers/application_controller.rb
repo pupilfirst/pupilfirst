@@ -14,7 +14,6 @@ class ApplicationController < ActionController::Base
   around_action :set_time_zone, if: :current_user
 
   helper_method :current_host
-  helper_method :current_domain
   helper_method :current_school
   helper_method :current_founder
   helper_method :current_startup
@@ -70,15 +69,16 @@ class ApplicationController < ActionController::Base
     @current_domain ||= Domain.find_by(fqdn: current_host)
   end
 
-  # Returns nil, if on a Pupilfirst page, or a School, if on a school domain. Raises an error if request is from an
-  # unknown domain.
+  # Returns the "resolved" school for a request.
   def current_school
-    @current_school ||= begin
+    @current_school ||= if Rails.application.secrets.multitenancy
       resolved_school = current_domain&.school
 
       raise RequestFromUnknownDomain if resolved_school.blank?
 
       resolved_school
+    else
+      School.first
     end
   end
 

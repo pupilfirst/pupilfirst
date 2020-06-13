@@ -18,7 +18,6 @@ class ApplicationPresenter
     :pundit_user,
     :current_user,
     :current_host,
-    :current_domain,
     :current_school,
     :current_founder,
     :current_startup,

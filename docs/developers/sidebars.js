@@ -1,6 +1,14 @@
 module.exports = {
   someSidebar: {
-    Docusaurus: ['doc1', 'doc2', 'doc3'],
-    Features: ['mdx'],
-  },
+    Development: [
+      "intro",
+      "development_setup",
+      "testing",
+      "graphql",
+      "background_jobs",
+      "lerna",
+      "documentation"
+    ],
+    Deployment: ["before_deploying", "heroku", "upgrading"]
+  }
 };

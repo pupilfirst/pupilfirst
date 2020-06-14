@@ -9,7 +9,6 @@ import styles from "./styles.module.css";
 const features = [
   {
     title: <>Easy to Use</>,
-    imageUrl: "img/undraw_docusaurus_mountain.svg",
     description: (
       <>
         Docusaurus was designed from the ground up to be easily installed and
@@ -19,7 +18,6 @@ const features = [
   },
   {
     title: <>Focus on What Matters</>,
-    imageUrl: "img/undraw_docusaurus_tree.svg",
     description: (
       <>
         Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
@@ -28,12 +26,11 @@ const features = [
     )
   },
   {
-    title: <>Powered by React</>,
-    imageUrl: "img/undraw_docusaurus_react.svg",
+    title: <>Powered by Rails & ReasonML</>,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Pupilfirst LMS is a monorepo with Ruby on Rails serving a mix of
+        server-rendered markup and client-side JS generated using ReasonML.
       </>
     )
   }
@@ -42,7 +39,7 @@ const features = [
 function Feature({ imageUrl, title, description }) {
   const imgUrl = useBaseUrl(imageUrl);
   return (
-    <div className={classnames("col col--4", styles.feature)}>
+    <div className={classnames("col col--4 text--center", styles.feature)}>
       {imgUrl && (
         <div className="text--center">
           <img className={styles.featureImage} src={imgUrl} alt={title} />

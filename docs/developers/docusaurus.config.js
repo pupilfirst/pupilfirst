@@ -1,9 +1,9 @@
 module.exports = {
   title: "Pupilfirst Developers",
-  tagline: "The tagline of my site",
+  tagline: "Focus on your students.",
   url: "https://developers.pupilfirst.com",
   baseUrl: "/",
-  favicon: "img/favicon.ico",
+  favicon: "https://school.sv.co/favicon.png",
   organizationName: "pupilfirst", // Usually your GitHub org/user name.
   projectName: "pupilfirst", // Usually your repo name.
   themeConfig: {
@@ -11,7 +11,7 @@ module.exports = {
       title: "Pupilfirst Developers",
       logo: {
         alt: "Pupilfirst Logo",
-        src: "img/logo.svg"
+        src: "https://school.sv.co/favicon.png"
       },
       links: [
         {
@@ -21,8 +21,8 @@ module.exports = {
           position: "left"
         },
         {
-          href: "https://docs.pupilfirst.com",
-          label: "Feature Documentation",
+          href: "https://pupilfirst.com",
+          label: "Home",
           position: "right"
         },
         {
@@ -52,16 +52,12 @@ module.exports = {
           title: "Community",
           items: [
             {
-              label: "Stack Overflow",
-              href: "https://stackoverflow.com/questions/tagged/docusaurus"
-            },
-            {
               label: "Discord",
-              href: "https://discordapp.com/invite/docusaurus"
+              href: "https://discord.gg/Sh67Tca"
             },
             {
               label: "Twitter",
-              href: "https://twitter.com/docusaurus"
+              href: "https://twitter.com/pupilfirstlms"
             }
           ]
         },
@@ -79,7 +75,10 @@ module.exports = {
           ]
         }
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`
+      copyright: `Copyright © ${new Date().getFullYear()} Pupilfirst Ltd. Built with Docusaurus.`
+    },
+    prism: {
+      additionalLanguages: ["ruby", "bash"]
     }
   },
   presets: [
@@ -88,16 +87,11 @@ module.exports = {
       {
         docs: {
           // It is recommended to set document id as docs home page (`docs/` path).
-          homePageId: "doc1",
+          homePageId: "intro",
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
-          editUrl: "https://github.com/facebook/docusaurus/edit/master/website/"
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
           editUrl:
-            "https://github.com/facebook/docusaurus/edit/master/website/blog/"
+            "https://github.com/pupilfirst/pupilfirst/edit/improve-developer-docs/docs/developers/"
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css")

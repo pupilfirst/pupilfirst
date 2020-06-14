@@ -9,13 +9,21 @@
 
 [![Screenshots](https://public-assets.sv.co/random/201909/pupilfirst-screenshots.png)](https://www.pupilfirst.com)
 
-## Changelog
+Pupilfirst LMS is a feature-rich open-source Learning Management System (LMS) that is built around the philosophy that
+true learning cannot happen by just consuming information; it happens when:
 
-Visit [pupilfirst.com/changelog](https://www.pupilfirst.com/changelog) to view the full changelog.
+- Students attempt relevant tasks.
+- Get personalised feedback from domain experts.
+- Reflect on their work and make improvements.
+- And finally, get involved in the learning process by answering questions from their peers.
 
 ## Features
 
 Visit [docs.pupilfirst.com](https://docs.pupilfirst.com) for a detailed explanation of Pupilfirst's features.
+
+## Changelog
+
+Visit [pupilfirst.com/changelog](https://www.pupilfirst.com/changelog) to view the full changelog.
 
 ## Development
 

@@ -8,20 +8,20 @@ import styles from "./styles.module.css";
 
 const features = [
   {
-    title: <>Easy to Use</>,
+    title: <>Build an Online School</>,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Build a community of students and teachers based around your area of
+        expertise. Build a school, not just a course.
       </>
     )
   },
   {
-    title: <>Focus on What Matters</>,
+    title: <>Outcome-driven Teaching</>,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Coach your students through an intensive learn-by-doing process, and
+        give targeted feedback for improvement.
       </>
     )
   },

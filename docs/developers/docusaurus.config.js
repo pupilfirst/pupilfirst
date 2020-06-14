@@ -39,12 +39,12 @@ module.exports = {
           title: "Docs",
           items: [
             {
-              label: "Style Guide",
+              label: "Introduction",
               to: "docs/"
             },
             {
-              label: "Second Doc",
-              to: "docs/doc2/"
+              label: "Development Setup",
+              to: "docs/development_setup/"
             }
           ]
         },
@@ -66,7 +66,7 @@ module.exports = {
           items: [
             {
               label: "Blog",
-              to: "blog"
+              to: "https://blog.pupilfirst.com/"
             },
             {
               label: "GitHub",

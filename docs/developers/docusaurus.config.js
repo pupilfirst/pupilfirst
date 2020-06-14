@@ -11,26 +11,26 @@ module.exports = {
       title: "Pupilfirst Developers",
       logo: {
         alt: "Pupilfirst Logo",
-        src: "https://school.sv.co/favicon.png"
+        src: "https://school.sv.co/favicon.png",
       },
       links: [
         {
           to: "docs/",
           activeBasePath: "docs",
           label: "Docs",
-          position: "left"
+          position: "left",
         },
         {
           href: "https://pupilfirst.com",
           label: "Home",
-          position: "right"
+          position: "right",
         },
         {
           href: "https://github.com/pupilfirst/pupilfirst",
           label: "GitHub",
-          position: "right"
-        }
-      ]
+          position: "right",
+        },
+      ],
     },
     footer: {
       style: "dark",
@@ -40,46 +40,46 @@ module.exports = {
           items: [
             {
               label: "Introduction",
-              to: "docs/"
+              to: "docs/",
             },
             {
               label: "Development Setup",
-              to: "docs/development_setup/"
-            }
-          ]
+              to: "docs/development_setup/",
+            },
+          ],
         },
         {
           title: "Community",
           items: [
             {
               label: "Discord",
-              href: "https://discord.gg/Sh67Tca"
+              href: "https://discord.gg/Sh67Tca",
             },
             {
               label: "Twitter",
-              href: "https://twitter.com/pupilfirstlms"
-            }
-          ]
+              href: "https://twitter.com/pupilfirstlms",
+            },
+          ],
         },
         {
           title: "More",
           items: [
             {
               label: "Blog",
-              to: "https://blog.pupilfirst.com/"
+              to: "https://blog.pupilfirst.com/",
             },
             {
               label: "GitHub",
-              href: "https://github.com/facebook/docusaurus"
-            }
-          ]
-        }
+              href: "https://github.com/pupilfirst/pupilfirst",
+            },
+          ],
+        },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Pupilfirst Ltd. Built with Docusaurus.`
+      copyright: `Copyright © ${new Date().getFullYear()} Pupilfirst Ltd. Built with Docusaurus.`,
     },
     prism: {
-      additionalLanguages: ["ruby", "bash"]
-    }
+      additionalLanguages: ["ruby", "bash"],
+    },
   },
   presets: [
     [
@@ -91,12 +91,12 @@ module.exports = {
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
           editUrl:
-            "https://github.com/pupilfirst/pupilfirst/edit/improve-developer-docs/docs/developers/"
+            "https://github.com/pupilfirst/pupilfirst/edit/improve-developer-docs/docs/developers/",
         },
         theme: {
-          customCss: require.resolve("./src/css/custom.css")
-        }
-      }
-    ]
-  ]
+          customCss: require.resolve("./src/css/custom.css"),
+        },
+      },
+    ],
+  ],
 };

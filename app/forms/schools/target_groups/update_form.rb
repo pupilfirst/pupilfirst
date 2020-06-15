@@ -32,7 +32,7 @@ module Schools
           target_group.description = description
 
           if target_group.level_id != level_id
-            target_group.sort_index = level.target_groups.maximum(:sort_index) + 1
+            target_group.sort_index = level.target_groups.maximum(:sort_index).to_i + 1
             target_group.level_id = level_id
             ::Targets::DetachFromPrerequisitesService.new(target_group.targets).execute
           end

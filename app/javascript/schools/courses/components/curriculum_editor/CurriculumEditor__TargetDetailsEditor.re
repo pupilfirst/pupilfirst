@@ -35,6 +35,7 @@ type state = {
   visibility: TargetDetails.visibility,
   checklist: array(ChecklistItem.t),
   completionInstructions: string,
+  targetDetails: option(TargetDetails.t),
 };
 
 type action =
@@ -47,6 +48,7 @@ type action =
   | UpdateEvaluationCriteriaSearchInput(string)
   | UpdateTargetGroupSearchInput(string)
   | UpdateTargetGroup(string)
+  | UpdateTargetGroupAndClearPrerequisiteTargets(string)
   | UpdateLinkToComplete(string)
   | UpdateCompletionInstructions(string)
   | UpdateTargetRole(TargetDetails.role)
@@ -159,6 +161,7 @@ let reducer = (state, action) =>
       visibility: targetDetails.visibility,
       checklist,
       loading: false,
+      targetDetails: Some(targetDetails),
     };
   | UpdateTitle(title) => {...state, title, dirty: true}
   | UpdatePrerequisiteTargets(prerequisiteTargets) => {
@@ -259,6 +262,13 @@ let reducer = (state, action) =>
       dirty: true,
       targetGroupSearchInput: "",
     }
+  | UpdateTargetGroupAndClearPrerequisiteTargets(targetGroupId) => {
+      ...state,
+      targetGroupId,
+      dirty: true,
+      targetGroupSearchInput: "",
+      prerequisiteTargets: [||],
+    }
   };
 
 let updateTitle = (send, event) => {
@@ -266,14 +276,8 @@ let updateTitle = (send, event) => {
   send(UpdateTitle(title));
 };
 
-let eligiblePrerequisiteTargets = (targetId, targets, targetGroups) => {
-  let targetGroupId =
-    targets
-    |> ListUtils.unsafeFind(
-         target => targetId == Target.id(target),
-         "Unable to find target with ID: " ++ targetId,
-       )
-    |> Target.targetGroupId;
+let eligiblePrerequisiteTargets =
+    (targetId, targetGroupId, targets, targetGroups) => {
   let targetGroup =
     targetGroupId
     |> TargetGroup.unsafeFind(
@@ -509,35 +513,33 @@ let linkEditor = (state, send) => {
 
 module SelectableTargetGroup = {
   type t = {
-    id,
-    name,
-  }
-  and name = string
-  and id = string;
+    level: Level.t,
+    targetGroup: TargetGroup.t,
+  };
 
-  let id = t => t.id;
+  let id = t => t.targetGroup |> TargetGroup.id;
 
   let label = _t => None;
 
-  let value = t => t.name;
+  let value = t =>
+    "Level "
+    ++ (t.level |> Level.number |> string_of_int)
+    ++ ": "
+    ++ (t.targetGroup |> TargetGroup.name);
 
   let searchString = t => t |> value;
 
   let color = _t => "orange";
 
-  let make = (id, name) => {id, name};
+  let level = t => t.level;
+
+  let make = (level, targetGroup) => {level, targetGroup};
 };
 
 module TargetGroupSelector = MultiselectDropdown.Make(SelectableTargetGroup);
 
-let selectableTargetGroupName = (levels, targetGroup) => {
-  (
-    targetGroup
-    |> TargetGroup.levelId
-    |> Level.unsafeLevelNumber(levels, "TargetDetailsEditor")
-  )
-  ++ ": "
-  ++ (targetGroup |> TargetGroup.name);
+let findLevel = (levels, targetGroupId) => {
+  Level.unsafeFind(levels, "TargetDetailsEditor", targetGroupId);
 };
 
 let unselectedTargetGroups = (levels, targetGroups, targetGroupId) => {
@@ -547,8 +549,8 @@ let unselectedTargetGroups = (levels, targetGroups, targetGroupId) => {
      )
   |> Array.map(t =>
        SelectableTargetGroup.make(
-         t |> TargetGroup.id,
-         selectableTargetGroupName(levels, t),
+         findLevel(levels, t |> TargetGroup.levelId),
+         t,
        )
      );
 };
@@ -565,11 +567,35 @@ let selectedTargetGroup = (levels, targetGroups, targetGroupId) =>
          );
     [|
       SelectableTargetGroup.make(
-        targetGroup |> TargetGroup.id,
-        selectableTargetGroupName(levels, targetGroup),
+        findLevel(levels, targetGroup |> TargetGroup.levelId),
+        targetGroup,
       ),
     |];
   };
+
+let targetGroupOnSelect = (state, send, targetGroups, selectable) => {
+  let newTargetGroupId = selectable |> SelectableTargetGroup.id;
+
+  switch (state.targetDetails) {
+  | Some(details) =>
+    let oldTargetGroup =
+      TargetGroup.unsafeFind(
+        targetGroups,
+        "TargetDetailsEditors.targetGroupOnSelect",
+        details |> TargetDetails.targetGroupId,
+      );
+
+    if (selectable
+        |> SelectableTargetGroup.level
+        |> Level.id == (oldTargetGroup |> TargetGroup.levelId)) {
+      send(UpdateTargetGroup(newTargetGroupId));
+    } else {
+      send(UpdateTargetGroupAndClearPrerequisiteTargets(newTargetGroupId));
+    };
+  | None => send(UpdateTargetGroup(newTargetGroupId))
+  };
+};
+
 let targetGroupEditor = (state, targetGroups, levels, send) => {
   <div id="target_group_id" className="mb-6">
     <label
@@ -591,9 +617,7 @@ let targetGroupEditor = (state, targetGroups, levels, send) => {
           targetGroups,
           state.targetGroupId,
         )}
-        onSelect={selectable => {
-          send(UpdateTargetGroup(selectable |> SelectableTargetGroup.id))
-        }}
+        onSelect={targetGroupOnSelect(state, send, targetGroups)}
         onDeselect={_ => send(UpdateTargetGroup(""))}
         value={state.targetGroupSearchInput}
         onChange={searchString =>
@@ -896,6 +920,7 @@ let make =
         visibility: TargetDetails.Draft,
         completionInstructions: "",
         targetGroupSearchInput: "",
+        targetDetails: None,
       },
     );
   let targetId = target |> Target.id;
@@ -965,6 +990,7 @@ let make =
                   send,
                   eligiblePrerequisiteTargets(
                     targetId,
+                    state.targetGroupId,
                     targets,
                     targetGroups,
                   ),

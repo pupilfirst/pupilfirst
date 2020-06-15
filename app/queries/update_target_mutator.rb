@@ -121,7 +121,7 @@ class UpdateTargetMutator < ApplicationQuery
   end
 
   def level
-    @level ||= target.level
+    @level ||= target_group.level
   end
 
   def target_params

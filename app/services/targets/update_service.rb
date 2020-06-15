@@ -9,7 +9,6 @@ module Targets
         @target.role = target_params[:role]
         @target.title = target_params[:title]
         @target.target_action_type = Target::TYPE_TODO
-        @target.prerequisite_target_ids = target_params[:prerequisite_target_ids]
         @target.link_to_complete = target_params[:link_to_complete]
         @target.resubmittable = target_params[:evaluation_criterion_ids].present?
         @target.link_to_complete = target_params[:link_to_complete]
@@ -18,6 +17,7 @@ module Targets
 
         handle_target_group_change(target_params[:target_group_id]) if target_params[:target_group_id] != @target.target_group_id
         handle_change_of_evaluation_criteria(target_params[:evaluation_criterion_ids])
+        @target.prerequisite_target_ids = target_params[:prerequisite_target_ids]
 
         @target.save!
 

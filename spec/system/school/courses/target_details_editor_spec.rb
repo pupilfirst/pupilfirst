@@ -371,21 +371,53 @@ feature 'Target Details Editor', js: true do
     end
   end
 
-  scenario 'school admin modifies target group for a target' do
-    sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+  context 'school admin modifies target group for a target' do
+    let!(:target_group_l1) { create :target_group, level: level_1 }
+    let!(:target_group_l2_1) { create :target_group, level: level_2 }
+    let!(:target_group_l2_2) { create :target_group, level: level_2 }
+    let!(:target_l2_1) { create :target, target_group: target_group_l2_1 }
+    let!(:target_l2_2) { create :target, target_group: target_group_l2_1, prerequisite_targets: [target_l2_1] }
+    let!(:target_l2_3) { create :target, target_group: target_group_l2_1, prerequisite_targets: [target_l2_2] }
 
-    # Open the details editor for the target.
-    find("a[title='Edit details of target #{target_1_l2.title}']").click
-    expect(page).to have_text('Title')
+    scenario 'when the new target group is the same level' do
+      sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
-    fill_in 'title', with: new_target_title, fill_options: { clear: :backspace }
-    fill_in 'completion-instructions', with: completion_instructions
+      # Open the details editor for the target.
+      find("a[title='Edit details of target #{target_l2_2.title}']").click
+      expect(page).to have_text('Title')
 
-    click_button 'Update Target'
-    expect(page).to have_text("Target updated successfully")
-    dismiss_notification
+      expect(page).to have_text("Level #{target_l2_2.level.number}: #{target_l2_2.target_group.name}")
 
-    expect(target_1_l2.reload.title).to eq(new_target_title)
-    expect(target_1_l2.completion_instructions).to eq(completion_instructions)
+      fill_in 'target_group', with: target_group_l2_2.name
+      click_button "Pick Level #{target_group_l2_2.level.number}: #{target_group_l2_2.name}"
+
+      click_button 'Update Target'
+      expect(page).to have_text("Target updated successfully")
+      dismiss_notification
+
+      expect(target_l2_2.reload.target_group).to eq(target_group_l2_2)
+      expect(target_l2_2.reload.prerequisite_targets).to eq([target_l2_1])
+    end
+
+    scenario 'when the new target group if from a different level' do
+      sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+
+      # Open the details editor for the target.
+      find("a[title='Edit details of target #{target_l2_2.title}']").click
+      expect(page).to have_text('Title')
+
+      expect(page).to have_text("Level #{target_l2_2.level.number}: #{target_l2_2.target_group.name}")
+
+      fill_in 'target_group', with: target_group_l1.name
+      click_button "Pick Level #{target_group_l1.level.number}: #{target_group_l1.name}"
+
+      click_button 'Update Target'
+      expect(page).to have_text("Target updated successfully")
+      dismiss_notification
+
+      expect(target_l2_2.reload.target_group).to eq(target_group_l1)
+      expect(target_l2_2.reload.prerequisite_targets).to eq([])
+      expect(target_l2_3.reload.prerequisite_targets).to eq([])
+    end
   end
 end

@@ -45,11 +45,13 @@ module Targets
 
     def handle_target_group_change(new_target_group_id)
       new_target_group = TargetGroup.find(new_target_group_id)
-      @target.sort_index = new_target_group.targets.maximum(:sort_index) + 1
+      @target.sort_index = (new_target_group.targets.maximum(:sort_index).to_i + 1)
 
       if @target.target_group.level_id != new_target_group.level_id
         Targets::DetachFromPrerequisitesService.new([@target]).execute
       end
+
+      @target.target_group = new_target_group
     end
 
     def recreate_quiz(quiz)

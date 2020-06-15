@@ -572,12 +572,13 @@ let targetGroupEditor = (state, targetGroups, levels, send) => {
   <div id="target_group_id" className="mb-6">
     <label
       className="block tracking-wide text-sm font-semibold mr-6 mb-2"
-      htmlFor="target_group_id">
+      htmlFor="target_group">
       <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
       {"Target Group" |> str}
     </label>
     <div className="ml-6">
       <TargetGroupSelector
+        id="target_group"
         unselected={unselectedTargetGroups(
           levels,
           targetGroups,

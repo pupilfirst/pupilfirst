@@ -371,15 +371,16 @@ feature 'Target Details Editor', js: true do
     end
   end
 
-  context 'school admin modifies target group for a target' do
+  context 'school admin modifies the target group for a target' do
     let!(:target_group_l1) { create :target_group, level: level_1 }
     let!(:target_group_l2_1) { create :target_group, level: level_2 }
     let!(:target_group_l2_2) { create :target_group, level: level_2 }
+    let!(:target_group_archived) { create :target_group, :archived, level: level_2 }
     let!(:target_l2_1) { create :target, target_group: target_group_l2_1 }
     let!(:target_l2_2) { create :target, target_group: target_group_l2_1, prerequisite_targets: [target_l2_1] }
     let!(:target_l2_3) { create :target, target_group: target_group_l2_1, prerequisite_targets: [target_l2_2] }
 
-    scenario 'when the new target group is the same level' do
+    scenario 'when the new target group is of the same level' do
       sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
 
       # Open the details editor for the target.
@@ -387,6 +388,10 @@ feature 'Target Details Editor', js: true do
       expect(page).to have_text('Title')
 
       expect(page).to have_text("Level #{target_l2_2.level.number}: #{target_l2_2.target_group.name}")
+
+      # archived target groups should not be listed
+      fill_in 'target_group', with: target_group_archived.name
+      expect(page).not_to have_selector(:link_or_button, "Pick Level #{target_group_archived.level.number}: #{target_group_archived.name}")
 
       fill_in 'target_group', with: target_group_l2_2.name
       click_button "Pick Level #{target_group_l2_2.level.number}: #{target_group_l2_2.name}"

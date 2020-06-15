@@ -542,7 +542,9 @@ let selectableTargetGroupName = (levels, targetGroup) => {
 
 let unselectedTargetGroups = (levels, targetGroups, targetGroupId) => {
   targetGroups
-  |> Js.Array.filter(t => t |> TargetGroup.id != targetGroupId)
+  |> Js.Array.filter(t =>
+       t |> TargetGroup.id != targetGroupId && !(t |> TargetGroup.archived)
+     )
   |> Array.map(t =>
        SelectableTargetGroup.make(
          t |> TargetGroup.id,

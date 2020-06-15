@@ -49,7 +49,7 @@ module Layouts
     end
 
     def report
-      if current_user.present? && current_user.courses.where(id: @course).exists?
+      if current_user.present? && current_user.startups.not_dropped_out.joins(:level).where(levels: { course_id: @course.id }).exists?
         "report"
       end
     end

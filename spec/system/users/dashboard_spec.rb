@@ -192,4 +192,22 @@ feature 'User Dashboard', js: true do
       expect(page).to have_link('View Certificate', href: "/c/#{issued_certificate_2.serial_number}")
     end
   end
+
+  context "when coach has a student profile that's dropped out" do
+    let(:coach) { create :faculty, school: school, user: founder.user }
+
+    before do
+      create :faculty_course_enrollment, faculty: coach, course: course_4
+    end
+
+    scenario "dashboard doesn't show the dropped out warning for the course and shows relevant links" do
+      sign_in_user(founder.user, referer: dashboard_path)
+
+      # Course from which student has dropped out.
+      within("div[aria-label=\"#{course_4.name}\"]") do
+        expect(page).to have_link("View Curriculum", href: curriculum_course_path(course_4))
+        expect(page).to_not have_text("Your student profile for this course is locked, and cannot be updated")
+      end
+    end
+  end
 end

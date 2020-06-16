@@ -567,7 +567,7 @@ feature 'Submissions review' do
       target_1.evaluation_criteria << [evaluation_criterion_1]
     end
 
-    scenario 'coach visits a submission', js: true do
+    scenario 'coach visits a submission and grades pending submission', js: true do
       sign_in_user coach.user, referer: review_timeline_event_path(submission_reviewed)
 
       within("div[aria-label='submissions-overlay-card-#{submission_reviewed.id}']") do
@@ -587,7 +587,15 @@ feature 'Submissions review' do
         # New list of evaluation criteria are shown for pending submissions
         expect(page).to have_text(evaluation_criterion_1.name)
         expect(page).not_to have_text(evaluation_criterion_2.name)
+
+        # grades the pending submission
+        within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
+          find("div[title='Good']").click
+        end
       end
+
+      click_button 'Save grades'
+      dismiss_notification
     end
   end
 

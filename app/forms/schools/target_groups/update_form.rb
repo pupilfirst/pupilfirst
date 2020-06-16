@@ -27,21 +27,21 @@ module Schools
 
       def save
         TargetGroup.transaction do
-          target_group.name = name
-          target_group.milestone = milestone
-          target_group.description = description
+          model.name = name
+          model.milestone = milestone
+          model.description = description
 
-          if target_group.level_id != level_id
-            target_group.sort_index = level.target_groups.maximum(:sort_index).to_i + 1
-            target_group.level_id = level_id
-            ::Targets::DetachFromPrerequisitesService.new(target_group.targets).execute
+          if model.level_id != level_id
+            model.sort_index = level.target_groups.maximum(:sort_index).to_i + 1
+            model.level_id = level_id
+            ::Targets::DetachFromPrerequisitesService.new(model.targets).execute
           end
 
-          target_group.save!
+          model.save!
 
-          archive_target_group(target_group, archived)
+          archive_target_group(model, archived)
 
-          target_group
+          model
         end
       end
 
@@ -51,12 +51,8 @@ module Schools
         archived ? ::TargetGroups::ArchivalService.new(target_group).archive : ::TargetGroups::ArchivalService.new(target_group).unarchive
       end
 
-      def target_group
-        @target_group ||= TargetGroup.find_by(id: id)
-      end
-
       def level
-        @level ||= target_group.school.levels.find_by(id: level_id)
+        @level ||= model.course.levels.find_by(id: level_id)
       end
     end
   end

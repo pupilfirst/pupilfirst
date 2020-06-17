@@ -3,7 +3,7 @@ open CurriculumEditor__Types;
 let str = ReasonReact.string;
 type state = {
   name: string,
-  levelId: string,
+  levelId: option(string),
   levelSearchInput: string,
   description: string,
   milestone: bool,
@@ -18,7 +18,8 @@ type action =
   | UpdateDescription(string)
   | UpdateMilestone(bool)
   | UpdateIsArchived(bool)
-  | UpdateLevel(string)
+  | SetLevel(string)
+  | ClearLevel
   | UpdatelevelSearchInput(string)
   | UpdateSaving;
 
@@ -33,12 +34,13 @@ let reducer = (state, action) => {
   | UpdateDescription(description) => {...state, description, dirty: true}
   | UpdateMilestone(milestone) => {...state, milestone, dirty: true}
   | UpdateIsArchived(isArchived) => {...state, isArchived, dirty: true}
-  | UpdateLevel(levelId) => {
+  | SetLevel(levelId) => {
       ...state,
-      levelId,
+      levelId: Some(levelId),
       levelSearchInput: "",
       dirty: true,
     }
+  | ClearLevel => {...state, levelId: None, levelSearchInput: "", dirty: true}
   | UpdatelevelSearchInput(levelSearchInput) => {
       ...state,
       levelSearchInput,
@@ -53,10 +55,9 @@ let updateName = (send, name) => {
   send(UpdateName(name, hasError));
 };
 
-let saveDisabled = state =>
-  state.hasNameError || !state.dirty || state.saving || state.levelId == "";
+let saveDisabled = state => state.hasNameError || !state.dirty || state.saving;
 
-let setPayload = state => {
+let setPayload = (state, levelId) => {
   let payload = Js.Dict.empty();
   let milestone = state.milestone == true ? "true" : "false";
   Js.Dict.set(
@@ -65,7 +66,7 @@ let setPayload = state => {
     AuthenticityToken.fromHead() |> Js.Json.string,
   );
   Js.Dict.set(payload, "archived", state.isArchived |> Js.Json.boolean);
-  Js.Dict.set(payload, "level_id", state.levelId |> Js.Json.string);
+  Js.Dict.set(payload, "level_id", levelId |> Js.Json.string);
   Js.Dict.set(payload, "name", state.name |> Js.Json.string);
   Js.Dict.set(payload, "description", state.description |> Js.Json.string);
   Js.Dict.set(payload, "milestone", milestone |> Js.Json.string);
@@ -87,18 +88,18 @@ module SelectableLevel = {
 module LevelSelector = MultiselectDropdown.Make(SelectableLevel);
 
 let unselectedlevels = (levels, levelId) => {
-  levels |> Js.Array.filter(l => l |> Level.id != levelId);
+  levelId->Belt.Option.mapWithDefault(levels, levelId =>
+    levels |> Js.Array.filter(l => l |> Level.id != levelId)
+  );
 };
 
 let selectedLevel = (levels, levelId) =>
-  if (levelId |> Js.String.length == 0) {
-    [||];
-  } else {
+  levelId->Belt.Option.mapWithDefault([||], levelId =>
     [|
       levelId
       |> Level.unsafeFind(levels, "TargetGroupEditor.selectedTargetGroup"),
-    |];
-  };
+    |]
+  );
 
 let levelEditor = (state, levels, send) => {
   <div id="level_id" className="mt-5">
@@ -111,15 +112,15 @@ let levelEditor = (state, levels, send) => {
       id="level_id"
       unselected={unselectedlevels(levels, state.levelId)}
       selected={selectedLevel(levels, state.levelId)}
-      onSelect={selectable => {send(UpdateLevel(selectable |> Level.id))}}
-      onDeselect={_ => send(UpdateLevel(""))}
+      onSelect={selectable => {send(SetLevel(selectable |> Level.id))}}
+      onDeselect={_ => send(ClearLevel)}
       value={state.levelSearchInput}
       onChange={searchString => send(UpdatelevelSearchInput(searchString))}
     />
-    <School__InputGroupError
-      message="Choose a level"
-      active={state.levelId == ""}
-    />
+    {state.levelId
+     ->Belt.Option.mapWithDefault(React.null, _ =>
+         <School__InputGroupError message="Choose a level" active=true />
+       )}
   </div>;
 };
 
@@ -130,6 +131,57 @@ let booleanButtonClasses = selected => {
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
+let handleErrorCB = send => send(UpdateSaving);
+
+let handleResponseCB =
+    (state, levelId, targetGroup, updateTargetGroupsCB, json) => {
+  let id = json |> Json.Decode.(field("id", string));
+  let sortIndex = json |> Json.Decode.(field("sortIndex", int));
+  let newTargetGroup =
+    TargetGroup.create(
+      id,
+      state.name,
+      Some(state.description),
+      state.milestone,
+      levelId,
+      sortIndex,
+      state.isArchived,
+    );
+  switch (targetGroup) {
+  | Some(_) =>
+    Notification.success("Success", "Target Group updated successfully")
+  | None =>
+    Notification.success("Success", "Target Group created successfully")
+  };
+  updateTargetGroupsCB(newTargetGroup);
+};
+
+let createTargetGroup =
+    (state, send, targetGroup, updateTargetGroupsCB, levelId) => {
+  send(UpdateSaving);
+  let payload = setPayload(state, levelId);
+  let url = "/school/levels/" ++ levelId ++ "/target_groups";
+  Api.create(
+    url,
+    payload,
+    handleResponseCB(state, levelId, targetGroup, updateTargetGroupsCB),
+    handleErrorCB(send),
+  );
+};
+
+let updateTargetGroup =
+    (state, send, targetGroup, updateTargetGroupsCB, levelId, targetGroupId) => {
+  send(UpdateSaving);
+  let payload = setPayload(state, levelId);
+  let url = "/school/target_groups/" ++ targetGroupId;
+  Api.update(
+    url,
+    payload,
+    handleResponseCB(state, levelId, targetGroup, updateTargetGroupsCB),
+    handleErrorCB(send),
+  );
+};
+
 let computeInitialState = (currentLevelId, targetGroup) => {
   switch (targetGroup) {
   | Some(targetGroup) => {
@@ -139,7 +191,7 @@ let computeInitialState = (currentLevelId, targetGroup) => {
         | Some(description) => description
         | None => ""
         },
-      levelId: targetGroup |> TargetGroup.levelId,
+      levelId: Some(targetGroup |> TargetGroup.levelId),
       levelSearchInput: "",
       milestone: targetGroup |> TargetGroup.milestone,
       hasNameError: false,
@@ -150,7 +202,7 @@ let computeInitialState = (currentLevelId, targetGroup) => {
   | None => {
       name: "",
       description: "",
-      levelId: currentLevelId,
+      levelId: Some(currentLevelId),
       levelSearchInput: "",
       milestone: true,
       hasNameError: false,
@@ -176,42 +228,6 @@ let make =
       targetGroup,
       computeInitialState(currentLevelId),
     );
-  let handleErrorCB = () => send(UpdateSaving);
-  let handleResponseCB = json => {
-    let id = json |> Json.Decode.(field("id", string));
-    let sortIndex = json |> Json.Decode.(field("sortIndex", int));
-    let newTargetGroup =
-      TargetGroup.create(
-        id,
-        state.name,
-        Some(state.description),
-        state.milestone,
-        state.levelId,
-        sortIndex,
-        state.isArchived,
-      );
-    switch (targetGroup) {
-    | Some(_) =>
-      Notification.success("Success", "Target Group updated successfully")
-    | None =>
-      Notification.success("Success", "Target Group created successfully")
-    };
-    updateTargetGroupsCB(newTargetGroup);
-  };
-
-  let createTargetGroup = () => {
-    send(UpdateSaving);
-    let payload = setPayload(state);
-    let url = "/school/levels/" ++ state.levelId ++ "/target_groups";
-    Api.create(url, payload, handleResponseCB, handleErrorCB);
-  };
-
-  let updateTargetGroup = targetGroupId => {
-    send(UpdateSaving);
-    let payload = setPayload(state);
-    let url = "/school/target_groups/" ++ targetGroupId;
-    Api.update(url, payload, handleResponseCB, handleErrorCB);
-  };
   <div>
     <div className="blanket" />
     <div className="drawer-right">
@@ -348,8 +364,8 @@ let make =
                    </div>
                  | None => ReasonReact.null
                  }}
-                {switch (targetGroup) {
-                 | Some(targetGroup) =>
+                {switch (targetGroup, state.levelId) {
+                 | (Some(targetGroup), Some(levelId)) =>
                    let id = targetGroup |> TargetGroup.id;
                    <div className="w-auto">
                      <button
@@ -360,7 +376,7 @@ let make =
                      </button>
                    </div>;
 
-                 | None =>
+                 | (None, Some(levelId)) =>
                    <div className="w-full">
                      <button
                        disabled={saveDisabled(state)}

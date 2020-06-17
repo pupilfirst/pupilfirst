@@ -53,7 +53,3 @@ let unsafeFind = (levels, componentName, levelId) => {
 
 let levelNumberWithName = t =>
   "Level " ++ (t.number |> string_of_int) ++ ": " ++ t.name;
-
-let unsafeLevelNumber = (levels, componentName, levelId) =>
-  "Level "
-  ++ (unsafeFind(levels, componentName, levelId) |> number |> string_of_int);

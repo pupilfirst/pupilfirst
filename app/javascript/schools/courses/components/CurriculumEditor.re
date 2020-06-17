@@ -10,7 +10,7 @@ type editorAction =
 type state = {
   selectedLevel: Level.t,
   editorAction,
-  levels: list(Level.t),
+  levels: array(Level.t),
   targetGroups: list(TargetGroup.t),
   targets: list(Target.t),
   showArchived: bool,
@@ -100,20 +100,22 @@ let levelOfTarget = (targetId, targets, levels, targetGroups) => {
          ++ Target.targetGroupId(target)
          ++ " in CurriculumEditor",
        );
-  levels
-  |> ListUtils.unsafeFind(
-       level => Level.id(level) == TargetGroup.levelId(targetGroup),
-       "Unable to find level with ID:"
-       ++ TargetGroup.levelId(targetGroup)
-       ++ " in CurriculumEditor",
-     );
+
+  Level.unsafeFind(
+    levels,
+    "CurriculumEditor",
+    TargetGroup.levelId(targetGroup),
+  );
 };
 
 let computeIntialState = ((levels, targetGroups, targets, path)) => {
-  let maxLevel =
+  let sortedLevels =
     levels
-    |> List.sort((l1, l2) => (l2 |> Level.number) - (l1 |> Level.number))
-    |> List.hd;
+    |> ArrayUtils.copyAndSort((l1, l2) =>
+         (l1 |> Level.number) - (l2 |> Level.number)
+       );
+
+  let maxLevel = sortedLevels[(levels |> Array.length) - 1];
 
   let selectedLevel =
     switch (path) {
@@ -221,14 +223,14 @@ let make = (~course, ~evaluationCriteria, ~levels, ~targetGroups, ~targets) => {
      | ShowTargetGroupEditor(targetGroup) =>
        <CurriculumEditor__TargetGroupEditor
          targetGroup
-         levels={Array.of_list(state.levels)}
+         levels={state.levels}
          currentLevelId
          updateTargetGroupsCB
          hideEditorActionCB
        />
      | ShowLevelEditor(level) =>
        <CurriculumEditor__LevelEditor
-         levels={Array.of_list(state.levels)}
+         levels={state.levels}
          level
          course
          hideEditorActionCB
@@ -252,7 +254,7 @@ let make = (~course, ~evaluationCriteria, ~levels, ~targetGroups, ~targets) => {
                 className="block appearance-none w-full bg-white border text-sm border-gray-400 hover:border-gray-500 px-4 py-3 pr-8 rounded-r-none leading-tight focus:outline-none">
                 {state.levels
                  |> Level.sort
-                 |> List.map(level =>
+                 |> Array.map(level =>
                       <option
                         key={Level.id(level)} value={level |> Level.name}>
                         {"Level "
@@ -262,7 +264,6 @@ let make = (~course, ~evaluationCriteria, ~levels, ~targetGroups, ~targets) => {
                          |> str}
                       </option>
                     )
-                 |> Array.of_list
                  |> ReasonReact.array}
               </select>
               <div

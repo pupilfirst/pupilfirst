@@ -983,7 +983,7 @@ let make =
                {targetGroupEditor(
                   state,
                   targetGroups |> Array.of_list,
-                  levels |> Array.of_list,
+                  levels,
                   send,
                 )}
                {prerequisiteTargetEditor(

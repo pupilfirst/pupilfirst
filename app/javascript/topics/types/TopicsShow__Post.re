@@ -24,6 +24,7 @@ let body = t => t.body;
 let replies = t => t.replies;
 
 let createdAt = t => t.createdAt;
+
 let updatedAt = t => t.updatedAt;
 
 let likedByUser = t => t.likedByUser;
@@ -36,14 +37,12 @@ let solution = t => t.solution;
 
 let user = (users, t) => {
   t.creatorId
-  ->Belt.Option.flatMap(creatorId =>
-      Some(
-        users
-        |> ArrayUtils.unsafeFind(
-             user => User.id(user) == creatorId,
-             "Unable to user with id: " ++ creatorId ++ " in TopicsShow__Post",
-           ),
-      )
+  ->Belt.Option.map(creatorId =>
+      users
+      |> ArrayUtils.unsafeFind(
+           user => User.id(user) == creatorId,
+           "Unable to user with id: " ++ creatorId ++ " in TopicsShow__Post",
+         )
     );
 };
 
@@ -130,7 +129,7 @@ let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
     body: json |> field("body", string),
-    creatorId: json |> field("creatorId", optional(string)),
+    creatorId: json |> optional(field("creatorId", string)),
     editorId: json |> optional(field("editorId", string)),
     postNumber: json |> field("postNumber", int),
     createdAt: json |> field("createdAt", DateFns.decodeISO),

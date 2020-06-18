@@ -81,7 +81,7 @@ describe Users::DeleteAccountService do
         expect(submission_reviewed_by_user.reload.evaluator_id).to eq(nil)
         expect(post.reload.creator_id).to eq(nil)
         expect(post_like.reload.user_id).to eq(nil)
-        expect(post.text_versions.reload.first.user_id).to eq(nil)
+        expect(post.text_versions.first.user_id).to eq(nil)
         expect(issued_certificate_for_user.reload.user_id).to eq(nil)
         expect(markdown_attachment_by_user.reload.user_id).to eq(nil)
         expect(course_export.reload.user_id).to eq(nil)

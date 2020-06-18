@@ -18,10 +18,8 @@ let solutionIcon = {
   </div>;
 };
 
-let findUser = (users, userId) => {
-  userId->Belt.Option.flatMap(userId =>
-    Some(users |> Array.to_list |> User.findById(userId))
-  );
+let findUser = (userId, users) => {
+  userId->Belt.Option.map(userId => users |> User.findById(userId));
 };
 
 module MarkPostAsSolutionQuery = [%graphql
@@ -211,12 +209,13 @@ let make =
       ~markPostAsSolutionCB,
       ~archivePostCB,
     ) => {
-  let user = findUser(users);
+  let creator = Post.creatorId(post)->findUser(users);
+  let editor = Post.editorId(post)->findUser(users);
   let isPostCreator =
-    switch (Post.creatorId(post)) {
-    | Some(creatorId) => currentUserId == creatorId
-    | None => false
-    };
+    Post.creatorId(post)
+    ->Belt.Option.mapWithDefault(false, creatorId =>
+        currentUserId == creatorId
+      );
   let isFirstPost = Post.postNumber(post) == 1;
   let repliesToPost = isFirstPost ? [||] : post |> Post.repliesToPost(posts);
   let (showPostEdit, toggleShowPostEdit) = React.useState(() => false);
@@ -234,7 +233,7 @@ let make =
 
             <div className="flex justify-between lg:hidden">
               <TopicsShow__UserShow
-                user={user(post |> Post.creatorId)}
+                user=creator
                 createdAt={post |> Post.createdAt}
               />
               <div className="flex-shrink-0 mt-1">
@@ -280,9 +279,9 @@ let make =
                               <span> {"Last edited by " |> str} </span>
                               <span className="font-semibold">
                                 {(
-                                   switch (user(Post.editorId(post))) {
+                                   switch (editor) {
                                    | Some(user) => user |> User.name
-                                   | None => "Unknown"
+                                   | None => "Deleted User"
                                    }
                                  )
                                  |> str}
@@ -318,7 +317,7 @@ let make =
           <div className="flex-1 lg:flex-initial mr-3">
             <div className="hidden lg:block">
               <TopicsShow__UserShow
-                user={user(post |> Post.creatorId)}
+                user=creator
                 createdAt={post |> Post.createdAt}
               />
             </div>

@@ -65,7 +65,7 @@ let make =
               onConfirm();
             }}
             type_="button"
-            className=buttonClasses>
+            className={buttonClasses ++ " w-full"}>
             {confirmButtonText |> str}
           </button>
         </span>

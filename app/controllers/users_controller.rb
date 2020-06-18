@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: :delete_account
   layout 'student'
 
   # GET /dashboard/
@@ -13,7 +13,7 @@ class UsersController < ApplicationController
 
   # GET /users/delete_account
   def delete_account
-    user = Users::ValidateDeletionTokenService.new(params[:token], current_user).authenticate
+    user = Users::ValidateDeletionTokenService.new(params[:token], current_school).authenticate
     if user.present?
       @token = params[:token]
     else
@@ -22,10 +22,11 @@ class UsersController < ApplicationController
     end
   end
 
+  # POST /user/upload_avatar
   def upload_avatar
     @form = Users::UploadAvatarForm.new(current_user)
     if @form.validate(params[:user])
-      avatar_url = @form.save!
+      avatar_url = @form.save
       render json: { avatarUrl: avatar_url }
     else
       render 'edit'

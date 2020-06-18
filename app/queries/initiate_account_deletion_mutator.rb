@@ -1,8 +1,6 @@
 class InitiateAccountDeletionMutator < ApplicationQuery
-  property :id, validates: { presence: true }
-  property :password, validates: { presence: true }
+  property :email, validates: { presence: true }
 
-  validate :password_must_be_valid
   validate :user_must_not_be_admin
 
   def execute
@@ -12,19 +10,19 @@ class InitiateAccountDeletionMutator < ApplicationQuery
   private
 
   def authorized?
-    current_user.present? && current_user == user
+    current_user.present? && current_user.email == email
   end
 
   def password_must_be_valid
     return if current_user.valid_password?(password)
 
-    errors[:base] << 'not a valid password'
+    errors[:base] << 'The password you supplied is not valid'
   end
 
   def user_must_not_be_admin
     return if current_school_admin.blank?
 
-    errors[:base] << 'admin rights in school not revoked'
+    errors[:base] << 'You are an admin; please delete your admin access before retrying'
   end
 
   def user

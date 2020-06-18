@@ -6,11 +6,7 @@ let str = React.string;
 let avatarClasses = "w-6 h-6 md:w-8 md:h-8 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover";
 
 let avatar = user => {
-  let avatarUrl =
-    switch (user) {
-    | Some(user) => User.avatarUrl(user)
-    | None => None
-    };
+  let avatarUrl = Belt.Option.flatMap(user, User.avatarUrl);
   let name = user->Belt.Option.mapWithDefault("?", user => User.name(user));
   switch (avatarUrl) {
   | Some(avatarUrl) => <img className=avatarClasses src=avatarUrl />

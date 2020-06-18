@@ -1,7 +1,6 @@
 module Mutations
   class InitiateAccountDeletion < GraphQL::Schema::Mutation
-    argument :id, ID, required: true
-    argument :password, String, required: true
+    argument :email, String, required: true
 
     description "Delete user account"
 

@@ -8,7 +8,7 @@ type state = {
   newPassword: string,
   confirmPassword: string,
   dailyDigest: bool,
-  passwordForAccountDeletion: string,
+  emailForAccountDeletion: string,
   showDeleteAccountForm: bool,
   hasCurrentPassword: bool,
   deletingAccount: bool,
@@ -23,12 +23,13 @@ type action =
   | UpdateCurrentPassword(string)
   | UpdateNewPassword(string)
   | UpdateNewPassWordConfirm(string)
-  | UpdatePasswordForDeletion(string)
+  | UpdateEmailForDeletion(string)
   | UpdateDailyDigest(bool)
   | UpdateAvatarUrl(option(string))
   | ChangeDeleteAccountFormVisibility(bool)
   | SetAvatarUploadError(option(string))
   | StartSaving
+  | ResetSaving
   | FinishSaving(bool)
   | StartDeletingAccount
   | FinishAccountDeletion;
@@ -48,16 +49,16 @@ let reducer = (state, action) => {
       confirmPassword,
       dirty: true,
     }
-  | UpdatePasswordForDeletion(passwordForAccountDeletion) => {
+  | UpdateEmailForDeletion(emailForAccountDeletion) => {
       ...state,
-      passwordForAccountDeletion,
+      emailForAccountDeletion,
     }
   | UpdateDailyDigest(dailyDigest) => {...state, dailyDigest, dirty: true}
   | StartSaving => {...state, saving: true}
   | ChangeDeleteAccountFormVisibility(showDeleteAccountForm) => {
       ...state,
       showDeleteAccountForm,
-      passwordForAccountDeletion: "",
+      emailForAccountDeletion: "",
     }
   | SetAvatarUploadError(avatarUploadError) => {...state, avatarUploadError}
   | UpdateAvatarUrl(avatarUrl) => {
@@ -74,20 +75,21 @@ let reducer = (state, action) => {
       confirmPassword: "",
       hasCurrentPassword,
     }
+  | ResetSaving => {...state, saving: false}
   | StartDeletingAccount => {...state, deletingAccount: true}
   | FinishAccountDeletion => {
       ...state,
       showDeleteAccountForm: false,
       deletingAccount: false,
-      passwordForAccountDeletion: "",
+      emailForAccountDeletion: "",
     }
   };
 };
 
 module UpdateUserQuery = [%graphql
   {|
-   mutation UpdateUserMutation($id: ID!, $name: String!, $about: String, $currentPassword: String, $newPassword: String, $confirmPassword: String, $dailyDigest: Boolean! ) {
-     updateUser(id: $id, name: $name, about: $about, currentPassword: $currentPassword, newPassword: $newPassword, confirmNewPassword: $confirmPassword, dailyDigest: $dailyDigest  ) {
+   mutation UpdateUserMutation($name: String!, $about: String, $currentPassword: String, $newPassword: String, $confirmPassword: String, $dailyDigest: Boolean! ) {
+     updateUser(name: $name, about: $about, currentPassword: $currentPassword, newPassword: $newPassword, confirmNewPassword: $confirmPassword, dailyDigest: $dailyDigest  ) {
         success
        }
      }
@@ -96,8 +98,8 @@ module UpdateUserQuery = [%graphql
 
 module InitiateAccountDeletionQuery = [%graphql
   {|
-   mutation InitiateAccountDeletionMutation($id: ID!, $password: String! ) {
-     initiateAccountDeletion(id: $id, password: $password ) {
+   mutation InitiateAccountDeletionMutation($email: String! ) {
+     initiateAccountDeletion(email: $email ) {
         success
        }
      }
@@ -166,7 +168,6 @@ let updateUser = (state, send, id, event) => {
   send(StartSaving);
 
   UpdateUserQuery.make(
-    ~id,
     ~name=state.name,
     ~about=state.about,
     ~currentPassword=state.currentPassword,
@@ -186,7 +187,7 @@ let updateUser = (state, send, id, event) => {
        Js.Promise.resolve();
      })
   |> Js.Promise.catch(_ => {
-       send(FinishSaving(state.hasCurrentPassword));
+       send(ResetSaving);
        Js.Promise.resolve();
      })
   |> ignore;
@@ -196,11 +197,7 @@ let updateUser = (state, send, id, event) => {
 let initiateAccountDeletion = (state, send, id) => {
   send(StartDeletingAccount);
 
-  InitiateAccountDeletionQuery.make(
-    ~id,
-    ~password=state.passwordForAccountDeletion,
-    (),
-  )
+  InitiateAccountDeletionQuery.make(~email=state.emailForAccountDeletion, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
        result##initiateAccountDeletion##success
@@ -231,7 +228,7 @@ let saveDisabled = state => {
   hasInvalidPassword(state)
   || state.name
   |> String.trim
-  |> String.length < 2
+  |> String.length == 0
   || !state.dirty;
 };
 
@@ -241,27 +238,27 @@ let confirmDeletionWindow = (state, send, currentUserId) => {
       let body =
         <div ariaLabel="Confirm dialog for account deletion">
           <p className="text-sm text-center sm:text-left text-gray-700">
-            {"Are you sure you want to delete your account? All of your data will be permanently removed from our servers forever. This action cannot be undone."
+            {"Are you sure you want to delete your account? This will initiate the process to permanently remove your data from our servers."
              |> str}
           </p>
           <div className="mt-3">
-            <label htmlFor="password" className="block text-sm font-semibold">
-              {"Password" |> str}
+            <label htmlFor="email" className="block text-sm font-semibold">
+              {"Confirm your email" |> str}
             </label>
             <input
-              type_="password"
-              value={state.passwordForAccountDeletion}
+              type_="email"
+              value={state.emailForAccountDeletion}
               onChange={event =>
                 send(
-                  UpdatePasswordForDeletion(
+                  UpdateEmailForDeletion(
                     ReactEvent.Form.target(event)##value,
                   ),
                 )
               }
-              id="password"
+              id="email"
               autoComplete="off"
               className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-gray-500"
-              placeholder="Type your password"
+              placeholder="Type your email"
             />
           </div>
         </div>;
@@ -269,7 +266,7 @@ let confirmDeletionWindow = (state, send, currentUserId) => {
       <ConfirmWindow
         title="Delete account"
         body
-        confirmButtonText="Confirm Deletion"
+        confirmButtonText="Initiate Deletion"
         cancelButtonText="Cancel"
         onConfirm={() => initiateAccountDeletion(state, send, currentUserId)}
         onCancel={() => send(ChangeDeleteAccountFormVisibility(false))}
@@ -299,7 +296,7 @@ let make =
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
-    passwordForAccountDeletion: "",
+    emailForAccountDeletion: "",
     showDeleteAccountForm: false,
     hasCurrentPassword,
     deletingAccount: false,
@@ -420,7 +417,12 @@ let make =
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
             <p className="font-semibold">
-              {"Change your current password" |> str}
+              {(
+                 state.hasCurrentPassword
+                   ? "Change your current password"
+                   : "Set password for your account"
+               )
+               |> str}
             </p>
             {state.hasCurrentPassword
                ? <div className="mt-6">
@@ -449,7 +451,7 @@ let make =
             <div className="mt-6">
               <label
                 htmlFor="new_password" className="block text-sm font-semibold">
-                {"New Password" |> str}
+                {"New password" |> str}
               </label>
               <input
                 autoComplete="off"
@@ -488,7 +490,7 @@ let make =
                 placeholder="Confirm new password"
               />
               <School__InputGroupError
-                message="New password and confirmation should match and must be atleast 8 characters"
+                message="New password and confirmation should match and must have atleast 8 characters"
                 active={hasInvalidPassword(state)}
               />
             </div>

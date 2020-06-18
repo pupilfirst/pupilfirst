@@ -121,10 +121,8 @@ let saveReply = (send, replyToPostId, reply) => {
 };
 
 let isTopicCreator = (firstPost, currentUserId) => {
-  switch (Post.creatorId(firstPost)) {
-  | Some(id) => id == currentUserId
-  | None => false
-  };
+  Post.creatorId(firstPost)
+  ->Belt.Option.mapWithDefault(false, id => id == currentUserId);
 };
 
 let archiveTopic = community => {

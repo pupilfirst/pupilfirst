@@ -3,8 +3,6 @@ module Users
     queue_as :default
 
     def perform(user)
-      return if user.blank?
-
       Users::DeleteAccountService.new(user).execute
     end
   end

@@ -1,6 +1,5 @@
 module Mutations
   class UpdateUser < GraphQL::Schema::Mutation
-    argument :id, ID, required: true
     argument :name, String, required: true
     argument :about, String, required: false
     argument :current_password, String, required: false

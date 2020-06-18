@@ -153,11 +153,7 @@ let onBorderAnimationEnd = event => {
 };
 
 let replyToUserInfo = user => {
-  let avatarUrl =
-    switch (user) {
-    | Some(user) => User.avatarUrl(user)
-    | None => None
-    };
+  let avatarUrl = Belt.Option.flatMap(user, User.avatarUrl);
   let name = user->Belt.Option.mapWithDefault("?", user => User.name(user));
   <div className="flex items-center border bg-white px-2 py-1 rounded-lg">
     {switch (avatarUrl) {

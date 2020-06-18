@@ -101,7 +101,7 @@ feature 'User Edit' do
 
       click_button 'Save Changes'
 
-      expect(page).to have_text('current password is incorrect')
+      expect(page).to have_text('Current password is incorrect')
       dismiss_notification
 
       expect(user.reload.valid_password?(current_password)).to eq(true)

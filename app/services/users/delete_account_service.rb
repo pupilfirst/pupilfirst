@@ -19,30 +19,28 @@ module Users
     private
 
     def delete_founder_data
-      # Clear timeline events that are owned just by the user
-      timeline_event_owners = TimelineEventOwner.where(founder: @user.founders)
-
-      tes = TimelineEvent.joins(:timeline_event_owners)
-        .where(timeline_event_owners: { id: timeline_event_owners.select(:id) })
-        .select { |event| event.timeline_event_owners.count == 1 }
-
-      TimelineEvent.where(id: tes).destroy_all
-
-      timeline_event_owners.destroy_all
+      # Clear links with all submissions, and delete submissions owned just by this user.
+      TimelineEventOwner.includes(:timeline_event).where(founder: @user.founders)
+        .find_each do |submission_ownership|
+        submission = submission_ownership.timeline_event
+        only_one_owner = submission.timeline_event_owners.one?
+        submission_ownership.destroy!
+        submission.destroy! if only_one_owner
+      end
 
       # Cache teams with only the current user as member
       team_ids = Startup.joins(:founders).group(:id).having('count(founders.id) = 1').where(id: @user.founders.distinct(:startup_id).select(:startup_id)).pluck(:id)
 
-      @user.founders.destroy_all
-      Startup.where(id: team_ids).destroy_all
+      @user.founders.each(&:destroy!)
+      Startup.where(id: team_ids).each(&:destroy!)
     end
 
     def delete_coach_profile
-      @user.faculty.destroy
+      @user.faculty.destroy!
     end
 
     def delete_course_authors
-      @user.course_authors.destroy_all
+      @user.course_authors.each(&:destroy!)
     end
   end
 end

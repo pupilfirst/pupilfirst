@@ -117,7 +117,7 @@ Rails.application.routes.draw do
 
   get 'dashboard', controller: 'users', action: 'dashboard', as: 'dashboard'
 
-  resource :user, only: %i[edit update] do
+  resource :user, only: %i[edit] do
     post 'upload_avatar'
   end
 

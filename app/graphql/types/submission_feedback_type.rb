@@ -8,7 +8,7 @@ module Types
     field :coach_title, String, null: false
 
     def coach_name
-      object&.faculty&.user&.name
+      object.faculty&.user&.name
     end
 
     def coach_title

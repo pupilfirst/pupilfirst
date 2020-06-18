@@ -27,6 +27,7 @@ class User < ApplicationRecord
   has_secure_token :reset_password_token
   has_secure_token :delete_account_token
 
+
   # database_authenticable is required by devise_for to generate the session routes
   devise :database_authenticatable, :trackable, :rememberable, :omniauthable, :recoverable,
     omniauth_providers: %i[google_oauth2 facebook github]
@@ -48,6 +49,17 @@ class User < ApplicationRecord
       name_fragment[0] = name_fragment[0].capitalize
       name_fragment
     end.join(' ')
+  end
+
+  attr_reader :delete_account_token_original
+
+  def regenerate_delete_account_token
+    @delete_account_token_original = SecureRandom.urlsafe_base64
+    update!(delete_account_token: Digest::SHA2.hexdigest(@delete_account_token_original))
+  end
+
+  def self.find_by_hashed_delete_account_token(delete_account_token)
+    find_by(delete_account_token: Digest::SHA2.hexdigest(delete_account_token))
   end
 
   def email_bounced?

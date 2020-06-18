@@ -11,11 +11,11 @@ class DeleteAccountMutator < ApplicationQuery
   private
 
   def authorized?
-    current_user.present? && current_user == user
+    user.present? && user.school == current_school
   end
 
   def user
-    @user ||= User.find_by(delete_account_token: token)
+    @user ||= User.find_by_hashed_delete_account_token(token) # rubocop:disable Rails/DynamicFindBy
   end
 
   def create_audit_record(user)

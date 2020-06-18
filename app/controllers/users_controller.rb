@@ -15,6 +15,7 @@ class UsersController < ApplicationController
   def delete_account
     user = Users::ValidateDeletionTokenService.new(params[:token], current_school).authenticate
     if user.present?
+      sign_in user
       @token = params[:token]
     else
       flash[:error] = "That link has expired or is invalid. Please try again."

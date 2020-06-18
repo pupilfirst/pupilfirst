@@ -14,7 +14,7 @@ module Users
       host = @user.school.domains.where(primary: true).first
 
       url_options = {
-        token: @user.delete_account_token,
+        token: @user.delete_account_token_original,
         host: host.fqdn,
         protocol: 'https'
       }

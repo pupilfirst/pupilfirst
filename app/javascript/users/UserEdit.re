@@ -163,7 +163,7 @@ let handleAvatarInputChange = (send, formId, event) => {
   };
 };
 
-let updateUser = (state, send, id, event) => {
+let updateUser = (state, send, event) => {
   ReactEvent.Mouse.preventDefault(event);
   send(StartSaving);
 
@@ -194,7 +194,7 @@ let updateUser = (state, send, id, event) => {
   ();
 };
 
-let initiateAccountDeletion = (state, send, id) => {
+let initiateAccountDeletion = (state, send) => {
   send(StartDeletingAccount);
 
   InitiateAccountDeletionQuery.make(~email=state.emailForAccountDeletion, ())
@@ -232,7 +232,7 @@ let saveDisabled = state => {
   || !state.dirty;
 };
 
-let confirmDeletionWindow = (state, send, currentUserId) => {
+let confirmDeletionWindow = (state, send) => {
   state.showDeleteAccountForm
     ? {
       let body =
@@ -268,7 +268,7 @@ let confirmDeletionWindow = (state, send, currentUserId) => {
         body
         confirmButtonText="Initiate Deletion"
         cancelButtonText="Cancel"
-        onConfirm={() => initiateAccountDeletion(state, send, currentUserId)}
+        onConfirm={() => initiateAccountDeletion(state, send)}
         onCancel={() => send(ChangeDeleteAccountFormVisibility(false))}
         disableConfirm={state.deletingAccount}
         alertType=`Critical
@@ -280,12 +280,13 @@ let confirmDeletionWindow = (state, send, currentUserId) => {
 [@react.component]
 let make =
     (
-      ~currentUserId,
       ~name,
       ~hasCurrentPassword,
       ~about,
       ~avatarUrl,
       ~dailyDigest,
+      ~isSchoolAdmin,
+      ~hasValidDeleteAccountToken,
     ) => {
   let initialState = {
     name,
@@ -306,7 +307,7 @@ let make =
 
   let (state, send) = React.useReducer(reducer, initialState);
   <div className="container mx-auto px-3 py-8 max-w-5xl">
-    {confirmDeletionWindow(state, send, currentUserId)}
+    {confirmDeletionWindow(state, send)}
     <div className="bg-white shadow sm:rounded-lg">
       <div className="px-4 py-5 sm:p-6">
         <div className="flex flex-col md:flex-row">
@@ -548,7 +549,7 @@ let make =
         className="bg-gray-100 px-4 py-5 sm:p-6 flex rounded-b-lg justify-end">
         <button
           disabled={saveDisabled(state)}
-          onClick={updateUser(state, send, currentUserId)}
+          onClick={updateUser(state, send)}
           className="btn btn-primary">
           {"Save Changes" |> str}
         </button>

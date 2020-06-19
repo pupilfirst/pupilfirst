@@ -55,7 +55,11 @@ let updateName = (send, name) => {
   send(UpdateName(name, hasError));
 };
 
-let saveDisabled = state => state.hasNameError || !state.dirty || state.saving;
+let saveDisabled = state =>
+  state.hasNameError
+  || !state.dirty
+  || state.saving
+  || state.levelId->Belt.Option.mapWithDefault(true, _ => false);
 
 let setPayload = (state, levelId) => {
   let payload = Js.Dict.empty();
@@ -118,8 +122,9 @@ let levelEditor = (state, levels, send) => {
       onChange={searchString => send(UpdatelevelSearchInput(searchString))}
     />
     {state.levelId
-     ->Belt.Option.mapWithDefault(React.null, _ =>
-         <School__InputGroupError message="Choose a level" active=true />
+     ->Belt.Option.mapWithDefault(
+         <School__InputGroupError message="Choose a level" active=true />, _ =>
+         React.null
        )}
   </div>;
 };
@@ -131,7 +136,7 @@ let booleanButtonClasses = selected => {
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
-let handleErrorCB = send => send(UpdateSaving);
+let handleErrorCB = (send, _) => send(UpdateSaving);
 
 let handleResponseCB =
     (state, levelId, targetGroup, updateTargetGroupsCB, json) => {
@@ -157,8 +162,10 @@ let handleResponseCB =
 };
 
 let createTargetGroup =
-    (state, send, targetGroup, updateTargetGroupsCB, levelId) => {
+    (state, send, targetGroup, updateTargetGroupsCB, currentLevelId) => {
   send(UpdateSaving);
+  let levelId =
+    state.levelId->Belt.Option.mapWithDefault(currentLevelId, l => l);
   let payload = setPayload(state, levelId);
   let url = "/school/levels/" ++ levelId ++ "/target_groups";
   Api.create(
@@ -170,8 +177,17 @@ let createTargetGroup =
 };
 
 let updateTargetGroup =
-    (state, send, targetGroup, updateTargetGroupsCB, levelId, targetGroupId) => {
+    (
+      state,
+      send,
+      targetGroup,
+      updateTargetGroupsCB,
+      currentLevelId,
+      targetGroupId,
+    ) => {
   send(UpdateSaving);
+  let levelId =
+    state.levelId->Belt.Option.mapWithDefault(currentLevelId, l => l);
   let payload = setPayload(state, levelId);
   let url = "/school/target_groups/" ++ targetGroupId;
   Api.update(
@@ -364,23 +380,40 @@ let make =
                    </div>
                  | None => ReasonReact.null
                  }}
-                {switch (targetGroup, state.levelId) {
-                 | (Some(targetGroup), Some(levelId)) =>
+                {switch (targetGroup) {
+                 | Some(targetGroup) =>
                    let id = targetGroup |> TargetGroup.id;
                    <div className="w-auto">
                      <button
                        disabled={saveDisabled(state)}
-                       onClick={_e => updateTargetGroup(id)}
+                       onClick={_e =>
+                         updateTargetGroup(
+                           state,
+                           send,
+                           Some(targetGroup),
+                           updateTargetGroupsCB,
+                           currentLevelId,
+                           id,
+                         )
+                       }
                        className="btn btn-primary btn-large">
                        {"Update Target Group" |> str}
                      </button>
                    </div>;
 
-                 | (None, Some(levelId)) =>
+                 | None =>
                    <div className="w-full">
                      <button
                        disabled={saveDisabled(state)}
-                       onClick={_e => createTargetGroup()}
+                       onClick={_e =>
+                         createTargetGroup(
+                           state,
+                           send,
+                           targetGroup,
+                           updateTargetGroupsCB,
+                           currentLevelId,
+                         )
+                       }
                        className="w-full btn btn-primary btn-large">
                        {"Create Target Group" |> str}
                      </button>

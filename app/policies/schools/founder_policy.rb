@@ -13,7 +13,7 @@ module Schools
     end
 
     # All school admins can team up founders.
-    alias team_up? update?
+    alias team_up? index?
 
     class Scope < Scope
       def resolve

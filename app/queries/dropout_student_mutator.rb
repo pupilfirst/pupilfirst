@@ -6,7 +6,7 @@ class DropoutStudentMutator < ApplicationQuery
   validate :active_student_must_exist
 
   def execute
-    ::Founders::MarkAsDroppedOutService.new(student).execute
+    ::Founders::MarkAsDroppedOutService.new(student, current_user).execute
   end
 
   private

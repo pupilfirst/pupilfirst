@@ -15,16 +15,16 @@ class UpdateUserMutator < ApplicationQuery
 
       return if new_password.blank?
 
-      user.password = new_password
-      user.password_confirmation = confirm_new_password
-      user.save!
+      current_user.password = new_password
+      current_user.password_confirmation = confirm_new_password
+      current_user.save!
     end
   end
 
   private
 
   def current_password_must_be_valid
-    return if new_password.blank? || user.encrypted_password.blank? || user.valid_password?(current_password)
+    return if new_password.blank? || current_user.encrypted_password.blank? || current_user.valid_password?(current_password)
 
     errors[:base] << 'Current password is incorrect'
   end

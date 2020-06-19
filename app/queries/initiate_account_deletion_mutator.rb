@@ -14,12 +14,6 @@ class InitiateAccountDeletionMutator < ApplicationQuery
     current_user.present? && current_user.email == email
   end
 
-  def password_must_be_valid
-    return if current_user.valid_password?(password)
-
-    errors[:base] << 'The password you supplied is not valid'
-  end
-
   def user_must_not_be_admin
     return if current_school_admin.blank?
 

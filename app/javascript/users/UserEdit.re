@@ -430,7 +430,7 @@ let make =
                    <label
                      htmlFor="current_password"
                      className="block text-sm font-semibold">
-                     {"Current Password" |> str}
+                     {"Current password" |> str}
                    </label>
                    <input
                      value={state.currentPassword}
@@ -573,11 +573,32 @@ let make =
                |> str}
             </p>
             <div className="mt-4">
-              <button
-                onClick={_ => send(ChangeDeleteAccountFormVisibility(true))}
-                className="py-2 px-3 border border-red-500 text-red-600 rounded text-xs font-semibold hover:bg-red-600 hover:text-white focus:outline-none active:bg-red-700 active:text-white">
-                {"Delete your account" |> str}
-              </button>
+              {isSchoolAdmin || hasValidDeleteAccountToken
+                 ? <div
+                     className="bg-orange-100 border-l-4 border-orange-400 p-4">
+                     <div className="flex">
+                       <FaIcon
+                         classes="fas fa-exclamation-triangle text-orange-400"
+                       />
+                       <div className="ml-3">
+                         <p className="text-sm text-orange-900">
+                           {(
+                              isSchoolAdmin
+                                ? "You are currently an admin of this school. Please delete your admin access to enable account deletion."
+                                : "You have already initiated account deletion. Please check your inbox for further steps to delete your account."
+                            )
+                            |> str}
+                         </p>
+                       </div>
+                     </div>
+                   </div>
+                 : <button
+                     onClick={_ =>
+                       send(ChangeDeleteAccountFormVisibility(true))
+                     }
+                     className="py-2 px-3 border border-red-500 text-red-600 rounded text-xs font-semibold hover:bg-red-600 hover:text-white focus:outline-none active:bg-red-700 active:text-white">
+                     {"Delete your account" |> str}
+                   </button>}
             </div>
           </div>
         </div>

@@ -55,7 +55,7 @@ class User < ApplicationRecord
 
   def regenerate_delete_account_token
     @delete_account_token_original = SecureRandom.urlsafe_base64
-    update!(delete_account_token: Digest::SHA2.hexdigest(@delete_account_token_original))
+    update!(delete_account_token: Digest::SHA2.hexdigest(@delete_account_token_original), )
   end
 
   def self.find_by_hashed_delete_account_token(delete_account_token)

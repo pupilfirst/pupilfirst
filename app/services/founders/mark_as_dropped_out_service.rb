@@ -1,8 +1,9 @@
 module Founders
   class MarkAsDroppedOutService
     # @param student [Student] mark as dropped out
-    def initialize(student)
+    def initialize(student, current_user)
       @student = student
+      @current_user = current_user
     end
 
     def execute
@@ -35,7 +36,7 @@ module Founders
     end
 
     def create_audit_record(student)
-      AuditRecord.create!(data: { 'type' => AuditRecord::TYPE_DROPOUT_STUDENT, 'log' => "Student email: #{student.email}; Course ID: #{student.course.id}" })
+      AuditRecord.create!(audit_type: AuditRecord::TYPE_DROPOUT_STUDENT, school_id: @current_user.school_id, metadata: { user_id: @current_user.id, email: student.email })
     end
   end
 end

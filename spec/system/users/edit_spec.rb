@@ -58,22 +58,22 @@ feature 'User Edit' do
   scenario 'User sets a new password', js: true do
     sign_in_user(user, referer: edit_user_path)
 
-    expect(page).to have_text('Change your current password')
+    expect(page).to have_text('Set password for your account')
     expect(user.encrypted_password).to be_blank
 
     # Check a failure path.
-    fill_in 'New Password', with: 'short'
+    fill_in 'New password', with: 'short'
     fill_in 'Confirm password', with: 'short'
 
-    expect(page).to have_text('New password and confirmation should match and must be atleast 8 characters')
+    expect(page).to have_text('New password and confirmation should match and must have atleast 8 characters')
 
-    fill_in 'New Password', with: 'long_enough'
+    fill_in 'New password', with: 'long_enough'
     fill_in 'Confirm password', with: 'but_not_the_same'
 
-    expect(page).to have_text('New password and confirmation should match and must be atleast 8 characters')
+    expect(page).to have_text('New password and confirmation should match and must have atleast 8 characters')
 
     # Check basic success.
-    fill_in 'New Password', with: new_password
+    fill_in 'New password', with: new_password
     fill_in 'Confirm password', with: new_password
 
     click_button 'Save Changes'
@@ -95,8 +95,8 @@ feature 'User Edit' do
       expect(page).to have_text('Change your current password')
 
       # Check a failure path.
-      fill_in 'Current Password', with: 'not the current password'
-      fill_in 'New Password', with: 'long_enough'
+      fill_in 'Current password', with: 'not the current password'
+      fill_in 'New password', with: 'long_enough'
       fill_in 'Confirm password', with: 'long_enough'
 
       click_button 'Save Changes'
@@ -107,8 +107,8 @@ feature 'User Edit' do
       expect(user.reload.valid_password?(current_password)).to eq(true)
 
       # Check success path.
-      fill_in 'Current Password', with: current_password
-      fill_in 'New Password', with: new_password
+      fill_in 'Current password', with: current_password
+      fill_in 'New password', with: new_password
       fill_in 'Confirm password', with: new_password
 
       click_button 'Save Changes'

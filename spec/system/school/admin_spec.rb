@@ -48,6 +48,13 @@ feature 'School admins Editor', js: true do
     # New admin shouldn't receive that notification.
     open_email(email)
     expect(current_email).to be_blank
+
+    # Check audit records
+    audit_record = AuditRecord.last
+    expect(audit_record.audit_type).to eq(AuditRecord::TYPE_ADD_SCHOOL_ADMIN)
+    expect(audit_record.school_id).to eq(school.id)
+    expect(audit_record.metadata['user_id']).to eq(school_admin_1.user.id)
+    expect(audit_record.metadata['email']).to eq(email)
   end
 
   scenario "school admin edits another admin's details" do
@@ -110,6 +117,13 @@ feature 'School admins Editor', js: true do
     # The current admin should no longer have the delete option.
     expect(page).to have_text(school_admin_1.name)
     expect(page).not_to have_selector("div[title='Delete #{school_admin_1.name}'")
+
+    # Check audit records
+    audit_record = AuditRecord.last
+    expect(audit_record.audit_type).to eq(AuditRecord::TYPE_REMOVE_SCHOOL_ADMIN)
+    expect(audit_record.school_id).to eq(school.id)
+    expect(audit_record.metadata['user_id']).to eq(school_admin_1.user.id)
+    expect(audit_record.metadata['email']).to eq(school_admin_2.user.email)
   end
 
   scenario 'school admins deletes her own admin access' do

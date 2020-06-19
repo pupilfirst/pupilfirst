@@ -40,6 +40,6 @@ class CreateSchoolAdminMutator < ApplicationQuery
   end
 
   def create_audit_record(user)
-    AuditRecord.create!(data: { 'type' => AuditRecord::TYPE_ADD_SCHOOL_ADMIN, 'log' => "Admin email: #{user.email}; School ID: #{current_school.id}" })
+    AuditRecord.create!(audit_type: AuditRecord::TYPE_ADD_SCHOOL_ADMIN, school_id: current_school.id, metadata: { user_id: current_user.id, email: user.email })
   end
 end

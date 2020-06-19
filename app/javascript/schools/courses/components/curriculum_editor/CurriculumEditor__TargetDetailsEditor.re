@@ -834,7 +834,7 @@ module UpdateTargetQuery = [%graphql
   {|
    mutation UpdateTargetMutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: JSON! ) {
      updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility, checklist: $checklist  ) {
-        success
+        sortIndex
        }
      }
    |}
@@ -854,7 +854,6 @@ let updateTarget = (target, targetGroupId, state, send, updateTargetCB, event) =
   ReactEvent.Mouse.preventDefault(event);
   send(UpdateSaving);
   let id = target |> Target.id;
-  let sortIndex = target |> Target.sortIndex;
   let role = state.role |> TargetDetails.roleAsString;
   let visibilityAsString =
     state.visibility |> TargetDetails.visibilityAsString;
@@ -880,15 +879,6 @@ let updateTarget = (target, targetGroupId, state, send, updateTargetCB, event) =
     | Draft => Draft
     };
 
-  let newTarget =
-    Target.create(
-      ~id,
-      ~targetGroupId,
-      ~title=state.title,
-      ~sortIndex,
-      ~visibility,
-    );
-
   UpdateTargetQuery.make(
     ~id,
     ~targetGroupId,
@@ -907,12 +897,21 @@ let updateTarget = (target, targetGroupId, state, send, updateTargetCB, event) =
   )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
-       result##updateTarget##success
-         ? {
-           send(ResetEditor);
-           updateTargetCB(newTarget);
-         }
-         : send(UpdateSaving);
+       switch (result##updateTarget##sortIndex) {
+       | Some(sortIndex) =>
+         send(ResetEditor);
+         updateTargetCB(
+           Target.create(
+             ~id,
+             ~targetGroupId,
+             ~title=state.title,
+             ~sortIndex,
+             ~visibility,
+           ),
+         );
+       | None => send(UpdateSaving)
+       };
+
        Js.Promise.resolve();
      })
   |> ignore;

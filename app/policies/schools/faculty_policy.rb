@@ -5,9 +5,15 @@ module Schools
       user&.school_admin.present?
     end
 
-    alias create? school_index?
+    def create?
+      # record should belong to current school
+      return false unless record.school == current_school
+
+      school_index?
+    end
+
     alias course_index? school_index?
-    alias update? school_index?
+    alias update? create?
 
     class Scope < Scope
       def resolve

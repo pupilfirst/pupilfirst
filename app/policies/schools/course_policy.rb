@@ -1,20 +1,22 @@
 module Schools
   class CoursePolicy < ApplicationPolicy
     def index?
-      # Can be shown only to school admins.
+      # Can be shown to all school admins.
       user&.school_admin.present?
     end
 
     def show?
-      # Can be shown to all school admins.
-      user&.school_admin.present?
+      # record should belong to current school
+      return false unless record.school == current_school
+
+      index?
     end
 
     def curriculum?
       return false if user.blank?
 
       # All school admins can view the curricula
-      return true if user.school_admin.present?
+      return true if show?
 
       # All course authors can view the curricula
       user.course_authors.where(course: record).present?

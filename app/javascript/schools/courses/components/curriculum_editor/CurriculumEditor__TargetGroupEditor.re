@@ -20,7 +20,7 @@ type action =
   | UpdateIsArchived(bool)
   | SetLevel(string)
   | ClearLevel
-  | UpdatelevelSearchInput(string)
+  | UpdateLevelSearchInput(string)
   | UpdateSaving;
 
 let reducer = (state, action) => {
@@ -41,7 +41,7 @@ let reducer = (state, action) => {
       dirty: true,
     }
   | ClearLevel => {...state, levelId: None, levelSearchInput: "", dirty: true}
-  | UpdatelevelSearchInput(levelSearchInput) => {
+  | UpdateLevelSearchInput(levelSearchInput) => {
       ...state,
       levelSearchInput,
       dirty: true,
@@ -119,7 +119,7 @@ let levelEditor = (state, levels, send) => {
       onSelect={selectable => {send(SetLevel(selectable |> Level.id))}}
       onDeselect={_ => send(ClearLevel)}
       value={state.levelSearchInput}
-      onChange={searchString => send(UpdatelevelSearchInput(searchString))}
+      onChange={searchString => send(UpdateLevelSearchInput(searchString))}
     />
     {state.levelId
      ->Belt.Option.mapWithDefault(

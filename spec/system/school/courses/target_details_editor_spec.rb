@@ -380,12 +380,8 @@ feature 'Target Details Editor', js: true do
     let!(:target_l2_2) { create :target, target_group: target_group_l2_1, prerequisite_targets: [target_l2_1] }
     let!(:target_l2_3) { create :target, target_group: target_group_l1, sort_index: 1, prerequisite_targets: [target_l2_2] }
 
-    scenario 'when the new target group is of the same level' do
-      sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
-
-      # Open the details editor for the target.
-      find("a[title='Edit details of target #{target_l2_2.title}']").click
-      expect(page).to have_text('Title')
+    scenario 'author moves a target to another group in the same level' do
+      sign_in_user school_admin.user, referer: details_school_course_target_path(course_id: course.id, id: target_l2_2.id)
 
       expect(page).to have_text("Level #{target_l2_2.level.number}: #{target_l2_2.target_group.name}")
 
@@ -405,12 +401,8 @@ feature 'Target Details Editor', js: true do
       expect(target_l2_2.prerequisite_targets).to eq([target_l2_1])
     end
 
-    scenario 'when the new target group if from a different level' do
-      sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
-
-      # Open the details editor for the target.
-      find("a[title='Edit details of target #{target_l2_2.title}']").click
-      expect(page).to have_text('Title')
+    scenario 'author moves a target to another group on a different level' do
+      sign_in_user school_admin.user, referer: details_school_course_target_path(course_id: course.id, id: target_l2_2.id)
 
       expect(page).to have_text("Level #{target_l2_2.level.number}: #{target_l2_2.target_group.name}")
 

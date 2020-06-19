@@ -53,8 +53,6 @@ let sort = targetGroups =>
 
 let unarchive = t => {...t, archived: false};
 
-let find = (id, targetGroups) => targetGroups |> List.find(tg => tg.id == id);
-
 let unsafeFind = (targetGroups, componentName, id) =>
   targetGroups
   |> ArrayUtils.unsafeFind(

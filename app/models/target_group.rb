@@ -5,7 +5,6 @@ class TargetGroup < ApplicationRecord
   has_many :targets, dependent: :restrict_with_error
   belongs_to :level
   has_one :course, through: :level
-  has_one :school, through: :course
 
   validates :name, presence: true
   validates :sort_index, presence: true

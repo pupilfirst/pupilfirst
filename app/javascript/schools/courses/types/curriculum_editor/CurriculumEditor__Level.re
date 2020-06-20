@@ -32,7 +32,7 @@ let selectLevel = (levels, level_name) =>
 
 let create = (id, name, number, unlockOn) => {id, name, number, unlockOn};
 
-let updateList = (levels, level) => {
+let updateArray = (levels, level) => {
   let oldLevels = levels |> Js.Array.filter(l => l.id !== level.id);
   oldLevels |> Array.append([|level|]);
 };
@@ -46,7 +46,7 @@ let unsafeFind = (levels, componentName, levelId) => {
        l => l.id == levelId,
        "Unable to find level with id: "
        ++ levelId
-       ++ "in CurriculumEditor__"
+       ++ " in CurriculumEditor__"
        ++ componentName,
      );
 };

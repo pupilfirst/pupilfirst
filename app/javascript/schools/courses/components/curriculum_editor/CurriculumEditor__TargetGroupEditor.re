@@ -40,7 +40,7 @@ let reducer = (state, action) => {
       levelSearchInput: "",
       dirty: true,
     }
-  | ClearLevel => {...state, levelId: None, levelSearchInput: "", dirty: true}
+  | ClearLevel => {...state, levelId: None, dirty: true}
   | UpdateLevelSearchInput(levelSearchInput) => {
       ...state,
       levelSearchInput,

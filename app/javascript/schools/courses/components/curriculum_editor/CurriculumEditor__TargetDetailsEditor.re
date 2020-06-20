@@ -270,12 +270,7 @@ let reducer = (state, action) =>
       targetGroupSearchInput: "",
       prerequisiteTargets: [||],
     }
-  | ClearTargetGroupId => {
-      ...state,
-      targetGroupId: None,
-      dirty: true,
-      targetGroupSearchInput: "",
-    }
+  | ClearTargetGroupId => {...state, targetGroupId: None, dirty: true}
   };
 
 let updateTitle = (send, event) => {
@@ -285,32 +280,30 @@ let updateTitle = (send, event) => {
 
 let eligiblePrerequisiteTargets =
     (targetId, targetGroupId, targets, targetGroups) => {
-  targetGroupId
-  |> OptionUtils.mapWithDefault(
-       targetGroupId => {
-         let targetGroup =
-           targetGroupId
-           |> TargetGroup.unsafeFind(
-                targetGroups |> Array.of_list,
-                "TargetDetailsEditor.eligiblePrerequisiteTargets",
-              );
+  targetGroupId->Belt.Option.mapWithDefault(
+    [||],
+    targetGroupId => {
+      let targetGroup =
+        targetGroupId
+        |> TargetGroup.unsafeFind(
+             targetGroups |> Array.of_list,
+             "TargetDetailsEditor.eligiblePrerequisiteTargets",
+           );
 
-         let levelId = targetGroup |> TargetGroup.levelId;
-         let targetGroupsInSameLevel =
-           targetGroups
-           |> List.filter(tg => TargetGroup.levelId(tg) == levelId)
-           |> List.map(tg => TargetGroup.id(tg));
-         targets
-         |> List.filter(target => !(target |> Target.archived))
-         |> List.filter(target =>
-              targetGroupsInSameLevel
-              |> List.mem(Target.targetGroupId(target))
-            )
-         |> List.filter(target => Target.id(target) != targetId)
-         |> Array.of_list;
-       },
-       [||],
-     );
+      let levelId = targetGroup |> TargetGroup.levelId;
+      let targetGroupsInSameLevel =
+        targetGroups
+        |> List.filter(tg => TargetGroup.levelId(tg) == levelId)
+        |> List.map(tg => TargetGroup.id(tg));
+      targets
+      |> List.filter(target => !(target |> Target.archived))
+      |> List.filter(target =>
+           targetGroupsInSameLevel |> List.mem(Target.targetGroupId(target))
+         )
+      |> List.filter(target => Target.id(target) != targetId)
+      |> Array.of_list;
+    },
+  );
 };
 
 let setPrerequisiteSearch = (send, value) => {
@@ -557,15 +550,12 @@ let findLevel = (levels, targetGroupId) => {
 };
 
 let unselectedTargetGroups = (levels, targetGroups, targetGroupId) => {
-  targetGroupId
-  |> OptionUtils.mapWithDefault(
-       tgId =>
-         targetGroups
-         |> Js.Array.filter(t =>
-              t |> TargetGroup.id != tgId && !(t |> TargetGroup.archived)
-            ),
-       targetGroups,
-     )
+  targetGroupId->Belt.Option.mapWithDefault(targetGroups, tgId =>
+    targetGroups
+    |> Js.Array.filter(t =>
+         t |> TargetGroup.id != tgId && !(t |> TargetGroup.archived)
+       )
+  )
   |> Array.map(t =>
        SelectableTargetGroup.make(
          findLevel(levels, t |> TargetGroup.levelId),
@@ -840,17 +830,33 @@ module UpdateTargetQuery = [%graphql
    |}
 ];
 
-let updateTargetButton = (onClick, disabled) => {
+let updateTargetButton =
+    (
+      ~callback,
+      ~state,
+      ~hasValidTitle,
+      ~hasValidMethodOfCompletion,
+      ~requiredStepsHaveUniqueTitles,
+    ) => {
+  let onClick = Belt.Option.map(state.targetGroupId, callback);
+  let disabled =
+    !requiredStepsHaveUniqueTitles
+    || !hasValidTitle
+    || !hasValidMethodOfCompletion
+    || !state.dirty
+    || state.saving
+    || onClick == None;
+
   <button
     key="target-actions-step"
-    onClick
+    ?onClick
     disabled
     className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
     {"Update Target" |> str}
   </button>;
 };
 
-let updateTarget = (target, targetGroupId, state, send, updateTargetCB, event) => {
+let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) => {
   ReactEvent.Mouse.preventDefault(event);
   send(UpdateSaving);
   let id = target |> Target.id;
@@ -1289,28 +1295,14 @@ let make =
                    </div>
                  </div>
                  <div className="w-auto">
-                   {state.targetGroupId
-                    |> OptionUtils.mapWithDefault(
-                         targetGroupId => {
-                           updateTargetButton(
-                             updateTarget(
-                               target,
-                               targetGroupId,
-                               state,
-                               send,
-                               updateTargetCB,
-                             ),
-                             saveDisabled(
-                               ~hasValidTitle,
-                               ~hasValidMethodOfCompletion,
-                               ~requiredStepsHaveUniqueTitles,
-                               ~dirty=state.dirty,
-                               ~saving=state.saving,
-                             ),
-                           )
-                         },
-                         updateTargetButton(_ => (), true),
-                       )}
+                   {updateTargetButton(
+                      ~callback=
+                        updateTarget(target, state, send, updateTargetCB),
+                      ~state,
+                      ~hasValidTitle,
+                      ~hasValidMethodOfCompletion,
+                      ~requiredStepsHaveUniqueTitles,
+                    )}
                  </div>
                </div>
              </div>

@@ -31,7 +31,7 @@ let reducer = (state, action) =>
   | SelectLevel(selectedLevel) => {...state, selectedLevel}
   | UpdateEditorAction(editorAction) => {...state, editorAction}
   | UpdateLevels(level) =>
-    let newLevels = level |> Level.updateList(state.levels);
+    let newLevels = level |> Level.updateArray(state.levels);
     {...state, levels: newLevels, editorAction: Hidden, selectedLevel: level};
   | UpdateTargetGroup(targetGroup) =>
     let newtargetGroups =
@@ -109,13 +109,14 @@ let levelOfTarget = (targetId, targets, levels, targetGroups) => {
 };
 
 let computeIntialState = ((levels, targetGroups, targets, path)) => {
-  let sortedLevels =
-    levels
-    |> ArrayUtils.copyAndSort((l1, l2) =>
-         (l1 |> Level.number) - (l2 |> Level.number)
-       );
-
-  let maxLevel = sortedLevels[(levels |> Array.length) - 1];
+  let maxLevel =
+    Js.Array2.reduce(
+      levels,
+      (max, level) => {
+        Level.number(level) > Level.number(max) ? level : max
+      },
+      Js.Array2.unsafe_get(levels, 0),
+    );
 
   let selectedLevel =
     switch (path) {

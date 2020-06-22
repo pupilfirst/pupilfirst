@@ -18,12 +18,10 @@ describe Admin::CoreStatsService do
 
     # One founder was active on Slack yesterday and on web last week.
     create :public_slack_message, founder: founder, created_at: 1.day.ago
-    create :visit, user: founder.user, started_at: 4.days.ago
 
     # A second founder was active on Slack last week and on web last month.
     founder = admitted_startups.first.founders.second
     create :public_slack_message, founder: founder, created_at: 5.days.ago
-    create :visit, user: founder.user, started_at: 20.days.ago
 
     # Another founder was active on Slack last month and never on web.
     founder = admitted_startups.second.founders.first
@@ -42,8 +40,6 @@ describe Admin::CoreStatsService do
       nps: 50.0,
       nps_count: 4,
       slack: expected_slack_stats,
-      web: expected_web_stats,
-      total: expected_total_stats
     }
   end
 
@@ -56,30 +52,6 @@ describe Admin::CoreStatsService do
       mau: 3,
       percentage_mau: 75.0,
       wau_trend: [0, 0, 0, 0, 0, 1, 0, 2]
-    }
-  end
-
-  def expected_web_stats
-    {
-      dau: 0,
-      percentage_dau: 0.0,
-      wau: 1,
-      percentage_wau: 25.0,
-      mau: 2,
-      percentage_mau: 50.0,
-      wau_trend: [0, 0, 0, 0, 0, 1, 0, 1]
-    }
-  end
-
-  def expected_total_stats
-    {
-      dau: 1,
-      percentage_dau: 25.0,
-      wau: 2,
-      percentage_wau: 50.0,
-      mau: 3,
-      percentage_mau: 75.0,
-      wau_trend: [0, 0, 0, 0, 0, 2, 0, 2]
     }
   end
 end

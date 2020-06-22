@@ -11,8 +11,6 @@ module Admin
         nps: nps,
         nps_count: nps_count,
         slack: active_user_stats(:slack),
-        web: active_user_stats(:web),
-        total: active_user_stats(:total)
       }
     end
 
@@ -70,24 +68,9 @@ module Admin
       active_user_on_slack(start_time, end_time).distinct.count
     end
 
-    # Count of admitted founders active on web from a specified period, until yesterday.
-    def web_active_user_count(start_time, end_time = 1.day.ago.end_of_day)
-      active_user_on_web(start_time, end_time).distinct.count
-    end
-
-    # Admitted founders active on Public Slack OR web in a specified window.
-    def total_active_user_count(start_time, end_time = 1.day.ago.end_of_day)
-      (active_user_on_slack(start_time, end_time) + active_user_on_web(start_time, end_time)).compact.uniq.count
-    end
-
     # Admitted founders active on Public Slack in a specified window.
     def active_user_on_slack(start_time, end_time = 1.day.ago.end_of_day)
       Founder.active_on_slack(start_time, end_time)
-    end
-
-    # Admitted founders active on web in a specified window.
-    def active_user_on_web(start_time, end_time = 1.day.ago.end_of_day)
-      Founder.active_on_web(start_time, end_time)
     end
 
     # Weekly Active User trend for the last 7 weeks for a specified platform.

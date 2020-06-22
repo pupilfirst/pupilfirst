@@ -59,20 +59,6 @@ en:
 
           Kindly help us improve our sessions with some quick feedback: https://svlabs.typeform.com/to/h7g9Om?faculty=%{faculty_name_escaped}&session=%{session_title}&date=%{session_date}
 
-  libs:
-    lita:
-      handlers:
-        leaderboard:
-          help: Get the last published leaderboard for all levels in the collective.
-        targets:
-          help: Get a list of targets recently assigned to you and your team.
-          help_info: Get detailed information about a target from list.
-          choice_error: "I couldn't find your choice in my list of targets. It should be one of: `%{choices}`."
-          more_info: "Reply with `targets info [NUMBER]` for more information about a target."
-          unknown_username: |
-            I'm sorry, but your slack mention name `@%{slack_username}` isn't known to me.
-            Please update your slack mention name on your SV.CO profile, and try asking me again.
-
   models:
     faculty:
       commitment:

@@ -2,7 +2,8 @@
   "name": "pupil-first",
   "private": true,
   "workspaces": [
-    "app/javascript/packages/*"
+    "app/javascript/packages/*",
+    "docs/developers"
   ],
   "dependencies": {
     "@babel/preset-react": "^7.7.4",

@@ -366,7 +366,7 @@ let previewContainerClasses = mode =>
 
 let previewClasses = mode =>
   switch (mode) {
-  | Fullscreen(`Split | `Preview) => "absolute max-h-full overflow-auto w-full px-4 pb-8"
+  | Fullscreen(`Split | `Preview) => "markdown-editor__fullscreen-preview-wrapper absolute max-h-full overflow-auto w-full px-4 pb-8"
   | Fullscreen(`Editor)
   | Windowed(_) => ""
   };
@@ -748,7 +748,7 @@ let make =
              <MarkdownBlock
                markdown=value
                profile
-               className="max-w-3xl mx-auto"
+               className="markdown-editor__fullscreen-preview-editor"
              />
            </div>
          </div>

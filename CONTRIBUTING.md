@@ -3,7 +3,8 @@
 ### Did you find a bug?
 
 - **Do not open up a GitHub issue if the bug is a security vulnerability in Pupilfirst**. Instead, please send [our
-  development team an email](mailto:dev@pupilfirst.com) detailing the security issue.
+  development team an email](mailto:security@pupilfirst.org) detailing the security issue. Please check the [security
+  policy](SECURITY.md) for more details.
 
 - **Ensure the bug was not already reported** by searching on GitHub under
   [Issues](https://github.com/pupilfirst/pupilfirst/issues).
@@ -30,7 +31,7 @@
 
 ### Do you have questions about the source code?
 
-Send [the developer group an email](mailto:dev@pupilfirst.com)!
+Send [the developer group an email](mailto:dev@pupilfirst.org)!
 
 Thank you for your interest!
 

@@ -9,14 +9,15 @@ module Targets
         @target.role = target_params[:role]
         @target.title = target_params[:title]
         @target.target_action_type = Target::TYPE_TODO
-        @target.prerequisite_target_ids = target_params[:prerequisite_target_ids]
         @target.link_to_complete = target_params[:link_to_complete]
         @target.resubmittable = target_params[:evaluation_criterion_ids].present?
         @target.link_to_complete = target_params[:link_to_complete]
         @target.completion_instructions = target_params[:completion_instructions] if target_params[:completion_instructions].present?
         @target.checklist = target_params[:checklist]
 
+        handle_target_group_change(target_params[:target_group_id]) if target_params[:target_group_id] != @target.target_group_id
         handle_change_of_evaluation_criteria(target_params[:evaluation_criterion_ids])
+        @target.prerequisite_target_ids = target_params[:prerequisite_target_ids]
 
         @target.save!
 
@@ -40,6 +41,17 @@ module Targets
           .destroy_all
       end
       @target.evaluation_criterion_ids = evaluation_criteria_ids
+    end
+
+    def handle_target_group_change(new_target_group_id)
+      new_target_group = TargetGroup.find(new_target_group_id)
+      @target.sort_index = (new_target_group.targets.maximum(:sort_index).to_i + 1)
+
+      if @target.target_group.level_id != new_target_group.level_id
+        Targets::DetachFromPrerequisitesService.new([@target]).execute
+      end
+
+      @target.target_group = new_target_group
     end
 
     def recreate_quiz(quiz)

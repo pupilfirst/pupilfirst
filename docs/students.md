@@ -67,13 +67,9 @@ To group two or more students as a team, select them using the checkboxes next t
 
 When you first team up a group of students, the platform will give them a randomly generated name. To edit the team's name, you can click on any of the students to edit their details. There'll be a new _field_ in the form called _Team Name_, which you can edit to change their team's name. When students are displayed anywhere in the interface, they'll always be grouped together with their team.
 
-### Working on targets together
-
-In the second step of the target editor, _Method of Completion_, there is the question: _Should a team of students work on this target together?_. If the answer for this question is _Yes_, then only student in a team needs to complete the target. This applies to both reviewed and non-reviewed targets.
-
-For reviewed targets, when one student submits any work, the coach's review interface will list the names of all students in the team as the _authors_ of the submission. The grade that is then given to the submission will apply to all students in the team at the time of submission.
-
-!> This toggle isn't available in the school administration interface right now, but will be released in December, 2019. See [the related Github issue](https://github.com/SVdotCO/pupilfirst/issues/100) for latest updates.
+?> **How do I set it up so that students in a team submit work on a target together?**\
+   When editing the details of a target, you are asked the question
+   _[How should teams tackle this target?](/curriculum_editor?id=setting-the-method-of-completion)_.
 
 ### Removing a student from a team
 

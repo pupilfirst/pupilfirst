@@ -1,6 +1,7 @@
 open TopicsShow__Types;
 
 let str = React.string;
+[%bs.raw {|require("./TopicsShow__PostEditor.css")|}];
 
 type state = {
   body: string,
@@ -224,7 +225,7 @@ let make =
              )
            ->Belt.Option.mapWithDefault(React.null, reply =>
                <div
-                 className="max-w-md rounded border border-primary-200 p-3 bg-gray-200 mb-3">
+                 className="topics-post-editor__reply-to-preview max-w-md rounded border border-primary-200 p-3 bg-gray-200 mb-3 overflow-hidden">
                  <div className="flex justify-between">
                    {replyToUserInfo(reply |> Post.user(users))}
                    <div
@@ -236,13 +237,16 @@ let make =
                      <PfIcon className="if i-times-regular text-base" />
                    </div>
                  </div>
-                 <p className="text-sm pt-2 max-w-sm">
+                 <p className="text-sm pt-2">
                    <MarkdownBlock
                      markdown={reply |> Post.body}
-                     className="leading-normal text-sm truncate"
+                     className="leading-normal text-sm"
                      profile=Markdown.QuestionAndAnswer
                    />
                  </p>
+                 <div
+                   className="topics-post-editor__reply-to-preview-bottom-fadeout"
+                 />
                </div>
              )}
           <div>

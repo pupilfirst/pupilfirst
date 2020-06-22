@@ -14,18 +14,18 @@ module Mutations
 
     description "Update a target"
 
-    field :success, Boolean, null: false
+    field :sort_index, Integer, null: true
 
     def resolve(params)
       mutator = UpdateTargetMutator.new(context, params)
 
       if mutator.valid?
         mutator.notify(:success, 'Done!', 'Target updated successfully!')
-        mutator.update
-        { success: true }
+        target = mutator.update
+        { sort_index: target.sort_index }
       else
         mutator.notify_errors
-        { success: false }
+        { sort_index: nil }
       end
     end
   end

@@ -61,7 +61,13 @@ let allTargetsComplete = (targetCache, targetIds) =>
   targetIds
   |> List.for_all(targetId => {
        let cachedTarget =
-         targetCache |> List.find(ct => ct.targetId == targetId);
+         targetCache
+         |> ListUtils.unsafeFind(
+              ct => ct.targetId == targetId,
+              "Could not find prerequisite target with ID "
+              ++ targetId
+              ++ " in list of cached targets",
+            );
        cachedTarget.submissionStatus == SubmissionPassed;
      });
 
@@ -78,7 +84,10 @@ let compute =
     /* Cache level number of the student. */
     let studentLevelNumber =
       levels
-      |> List.find(l => l |> Level.id == (team |> Team.levelId))
+      |> ListUtils.unsafeFind(
+           l => l |> Level.id == Team.levelId(team),
+           "Could not student's level with ID " ++ Team.levelId(team),
+         )
       |> Level.number;
 
     /* Cache level number, milestone boolean, and submission status for all targets. */
@@ -89,16 +98,22 @@ let compute =
 
            let targetGroup =
              targetGroups
-             |> List.find(tg =>
-                  tg |> TargetGroup.id == (target |> Target.targetGroupId)
+             |> ListUtils.unsafeFind(
+                  tg => tg |> TargetGroup.id == Target.targetGroupId(target),
+                  "Could not find target group with ID "
+                  ++ Target.targetGroupId(target)
+                  ++ " to create target cache",
                 );
 
            let milestone = targetGroup |> TargetGroup.milestone;
 
            let levelNumber =
              levels
-             |> List.find(l =>
-                  l |> Level.id == (targetGroup |> TargetGroup.levelId)
+             |> ListUtils.unsafeFind(
+                  l => l |> Level.id == (targetGroup |> TargetGroup.levelId),
+                  "Could not find level with ID "
+                  ++ Team.levelId(team)
+                  ++ " to create target cache",
                 )
              |> Level.number;
 

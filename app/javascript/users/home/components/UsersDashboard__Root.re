@@ -250,7 +250,10 @@ let coursesSection = (courses, communities, currentSchoolAdmin) => {
                     className="user-dashboard-course__description text-sm px-6 pt-4 w-full leading-relaxed">
                     {course |> Course.description |> str}
                   </div>
-                  {if (course |> Course.exited) {
+                  {if (course
+                       |> Course.exited
+                       && !(course |> Course.review)
+                       && !(course |> Course.author)) {
                      <div
                        className="text-sm py-4 bg-red-100 rounded mt-2 px-6">
                        {"Your student profile for this course is locked, and cannot be updated."

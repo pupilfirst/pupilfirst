@@ -458,7 +458,19 @@ let reviewButtonDisabled = status =>
   | Ungraded => true
   };
 
-let computeStatus = (overlaySubmission, selectedGrades, evaluationCriteria) =>
+let computeStatus =
+    (
+      overlaySubmission,
+      selectedGrades,
+      evaluationCriteria,
+      targetEvaluationCriteriaIds,
+    ) => {
+  let currentGradingCriteria =
+    evaluationCriteria
+    |> Js.Array.filter(criterion =>
+         targetEvaluationCriteriaIds
+         |> Array.mem(EvaluationCriterion.id(criterion))
+       );
   switch (
     overlaySubmission |> OverlaySubmission.passedAt,
     overlaySubmission |> OverlaySubmission.grades |> ArrayUtils.isNotEmpty,
@@ -469,12 +481,13 @@ let computeStatus = (overlaySubmission, selectedGrades, evaluationCriteria) =>
     if (selectedGrades == [||]) {
       Ungraded;
     } else if (selectedGrades
-               |> Array.length != (evaluationCriteria |> Array.length)) {
+               |> Array.length != (currentGradingCriteria |> Array.length)) {
       Grading;
     } else {
-      Graded(passed(selectedGrades, evaluationCriteria));
+      Graded(passed(selectedGrades, currentGradingCriteria));
     }
   };
+};
 
 let submitButtonText = (feedback, grades) =>
   switch (feedback != "", grades |> ArrayUtils.isNotEmpty) {
@@ -579,7 +592,12 @@ let make =
     );
 
   let status =
-    computeStatus(overlaySubmission, state.grades, evaluationCriteria);
+    computeStatus(
+      overlaySubmission,
+      state.grades,
+      evaluationCriteria,
+      targetEvaluationCriteriaIds,
+    );
 
   let updateChecklistCB =
     switch (overlaySubmission |> OverlaySubmission.grades) {

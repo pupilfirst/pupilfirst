@@ -16,7 +16,6 @@
 //= require video
 //= require jquery.scrollTo
 //= require jquery-stickit
-//= require ahoy
 //= require jspdf
 //= require lodash
 

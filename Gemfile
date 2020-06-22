@@ -53,8 +53,6 @@ gem 'motion-markdown-it-plugins', '~> 8.4.2' # Plugins for motion-markdown-it.
 gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
 gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.
-gem 'ahoy_matey', '~> 2.0' # Analytics for Rails.
-gem 'uuidtools', '~>2.1' # Required by ahoy_matey for ActiveRecord stores.
 gem 'acts-as-taggable-on', github: 'spark-solutions/acts-as-taggable-on', branch: 'fix/rails-6-and-failing-specs' # Tag a single model on several contexts. TODO: remove tracking branch when gem is updated for Rails 6 issues
 gem 'email_inquire', '~> 0.6' # Validate email for format, common typos and one-time email providers
 gem 'titleize', '~> 1.4' # better titleizing, modifies Inflector.titleize from default rails

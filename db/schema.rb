@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_07_110209) do
+ActiveRecord::Schema.define(version: 2020_06_22_104911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -61,18 +61,6 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.integer "user_id"
     t.string "email"
     t.index ["user_id"], name: "index_admin_users_on_user_id"
-  end
-
-  create_table "ahoy_events", id: :uuid, default: nil, force: :cascade do |t|
-    t.uuid "visit_id"
-    t.integer "user_id"
-    t.string "user_type"
-    t.string "name"
-    t.jsonb "properties"
-    t.datetime "time"
-    t.index ["time"], name: "index_ahoy_events_on_time"
-    t.index ["user_id", "user_type"], name: "index_ahoy_events_on_user_id_and_user_type"
-    t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
   end
 
   create_table "answer_options", force: :cascade do |t|
@@ -776,36 +764,6 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"
-  end
-
-  create_table "visits", id: :uuid, default: nil, force: :cascade do |t|
-    t.uuid "visitor_id"
-    t.string "ip"
-    t.text "user_agent"
-    t.text "referrer"
-    t.text "landing_page"
-    t.integer "user_id"
-    t.string "user_type"
-    t.string "referring_domain"
-    t.string "search_keyword"
-    t.string "browser"
-    t.string "os"
-    t.string "device_type"
-    t.integer "screen_height"
-    t.integer "screen_width"
-    t.string "country"
-    t.string "region"
-    t.string "city"
-    t.string "postal_code"
-    t.decimal "latitude"
-    t.decimal "longitude"
-    t.string "utm_source"
-    t.string "utm_medium"
-    t.string "utm_term"
-    t.string "utm_content"
-    t.string "utm_campaign"
-    t.datetime "started_at"
-    t.index ["user_id", "user_type"], name: "index_visits_on_user_id_and_user_type"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

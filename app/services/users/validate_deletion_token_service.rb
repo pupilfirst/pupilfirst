@@ -9,6 +9,7 @@ module Users
     # return user with token or nil if invalid
     def authenticate
       if @token.present? && valid_request?
+        user.update!(delete_account_token: nil, delete_account_sent_at: nil)
         user
       end
     end

@@ -61,11 +61,16 @@ let make = (~token) => {
              {"Please click the button below to permanently delete your account in this school"
               |> str}
            </p>
-           <button
-             onClick={deleteAccount(token, setAccountDeleted)}
-             className="btn btn-danger mt-4">
-             {"Delete Account" |> str}
-           </button>
+           <div className="flex mt-4 justify-center">
+             <a href="/dashboard" className="btn btn-default mr-2">
+               {"Cancel" |> str}
+             </a>
+             <button
+               onClick={deleteAccount(token, setAccountDeleted)}
+               className="btn btn-danger">
+               {"Delete Account" |> str}
+             </button>
+           </div>
          </div>}
   </div>;
 };

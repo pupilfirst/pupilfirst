@@ -370,4 +370,53 @@ feature 'Target Details Editor', js: true do
       expect(target.timeline_events.where(id: submission_for_quiz_target_without_grades.id)).to eq([])
     end
   end
+
+  context 'school admin modifies the target group for a target' do
+    let!(:target_group_l1) { create :target_group, level: level_1 }
+    let!(:target_group_l2_1) { create :target_group, level: level_2 }
+    let!(:target_group_l2_2) { create :target_group, level: level_2 }
+    let!(:target_group_archived) { create :target_group, :archived, level: level_2 }
+    let!(:target_l2_1) { create :target, target_group: target_group_l2_1, sort_index: 1 }
+    let!(:target_l2_2) { create :target, target_group: target_group_l2_1, prerequisite_targets: [target_l2_1] }
+    let!(:target_l2_3) { create :target, target_group: target_group_l1, sort_index: 1, prerequisite_targets: [target_l2_2] }
+
+    scenario 'author moves a target to another group in the same level' do
+      sign_in_user school_admin.user, referer: details_school_course_target_path(course_id: course.id, id: target_l2_2.id)
+
+      expect(page).to have_text("Level #{target_l2_2.level.number}: #{target_l2_2.target_group.name}")
+
+      # archived target groups should not be listed
+      fill_in 'target_group', with: target_group_archived.name
+      expect(page).not_to have_selector(:link_or_button, "Pick Level #{target_group_archived.level.number}: #{target_group_archived.name}")
+
+      fill_in 'target_group', with: target_group_l2_2.name
+      click_button "Pick Level #{target_group_l2_2.level.number}: #{target_group_l2_2.name}"
+
+      click_button 'Update Target'
+      expect(page).to have_text("Target updated successfully")
+      dismiss_notification
+
+      expect(target_l2_2.reload.sort_index).to eq(1)
+      expect(target_l2_2.target_group).to eq(target_group_l2_2)
+      expect(target_l2_2.prerequisite_targets).to eq([target_l2_1])
+    end
+
+    scenario 'author moves a target to another group on a different level' do
+      sign_in_user school_admin.user, referer: details_school_course_target_path(course_id: course.id, id: target_l2_2.id)
+
+      expect(page).to have_text("Level #{target_l2_2.level.number}: #{target_l2_2.target_group.name}")
+
+      fill_in 'target_group', with: target_group_l1.name
+      click_button "Pick Level #{target_group_l1.level.number}: #{target_group_l1.name}"
+
+      click_button 'Update Target'
+      expect(page).to have_text("Target updated successfully")
+      dismiss_notification
+
+      expect(target_l2_2.reload.sort_index).to eq(2)
+      expect(target_l2_2.target_group).to eq(target_group_l1)
+      expect(target_l2_2.prerequisite_targets).to eq([])
+      expect(target_l2_3.reload.prerequisite_targets).to eq([])
+    end
+  end
 end

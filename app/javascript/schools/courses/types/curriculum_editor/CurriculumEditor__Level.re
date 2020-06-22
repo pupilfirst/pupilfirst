@@ -22,13 +22,34 @@ let decode = json =>
   };
 
 let selectLevel = (levels, level_name) =>
-  levels |> List.find(q => q.name == level_name);
+  levels
+  |> ArrayUtils.unsafeFind(
+       q => q.name == level_name,
+       "Unable to find level with name: "
+       ++ level_name
+       ++ "in CurriculumEditor",
+     );
 
 let create = (id, name, number, unlockOn) => {id, name, number, unlockOn};
 
-let updateList = (levels, level) => {
-  let oldLevels = levels |> List.filter(l => l.id !== level.id);
-  oldLevels |> List.rev |> List.append([level]) |> List.rev;
+let updateArray = (levels, level) => {
+  let oldLevels = levels |> Js.Array.filter(l => l.id !== level.id);
+  oldLevels |> Array.append([|level|]);
 };
 
-let sort = levels => levels |> List.sort((x, y) => x.number - y.number);
+let sort = levels =>
+  levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number);
+
+let unsafeFind = (levels, componentName, levelId) => {
+  levels
+  |> ArrayUtils.unsafeFind(
+       l => l.id == levelId,
+       "Unable to find level with id: "
+       ++ levelId
+       ++ " in CurriculumEditor__"
+       ++ componentName,
+     );
+};
+
+let levelNumberWithName = t =>
+  "Level " ++ (t.number |> string_of_int) ++ ": " ++ t.name;

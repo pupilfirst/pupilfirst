@@ -17,12 +17,12 @@ feature 'Curriculum Editor', js: true do
   let!(:course_author_2) { create :course_author, course: course_2, user: faculty.user }
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }
-  let!(:target_group_1) { create :target_group, level: level_1 }
-  let!(:target_group_2) { create :target_group, level: level_2 }
+  let!(:target_group_1) { create :target_group, level: level_1, sort_index: 1 }
+  let!(:target_group_2) { create :target_group, level: level_2, sort_index: 1 }
   let!(:target_1) { create :target, target_group: target_group_1 }
-  let!(:target_2) { create :target, target_group: target_group_1 }
+  let!(:target_2) { create :target, target_group: target_group_1, prerequisite_targets: [target_5] }
   let!(:target_3) { create :target, target_group: target_group_2 }
-  let!(:target_4) { create :target, target_group: target_group_2 }
+  let!(:target_4) { create :target, target_group: target_group_2, prerequisite_targets: [target_3] }
   # Target with contents
   let!(:target_5) { create :target, :with_content, target_group: target_group_2 }
 
@@ -235,6 +235,25 @@ feature 'Curriculum Editor', js: true do
       click_button 'Actions'
       expect(page).not_to have_text("L0: #{level_0.name}")
     end
+  end
+
+  scenario 'admin moves a target group from one level to another' do
+    sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+    find('.target-group__header', text: target_group_2.name).click
+
+    expect(page).to have_text("Level #{target_group_2.level.number}: #{target_group_2.level.name}")
+
+    fill_in 'level_id', with: level_1.name
+    click_button "Pick Level 1: #{level_1.name}"
+
+    click_button 'Update Target Group'
+    expect(page).to have_text('Target Group updated successfully')
+    dismiss_notification
+
+    expect(target_group_2.reload.level).to eq(level_1)
+    expect(target_group_2.sort_index).to eq(2)
+    expect(target_2.reload.prerequisite_targets).to eq([])
+    expect(target_4.reload.prerequisite_targets).to eq([])
   end
 
   scenario 'user who is not logged in gets redirected to sign in page' do

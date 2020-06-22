@@ -2,7 +2,7 @@ module Schools
   class TargetGroupsController < SchoolsController
     # POST /school/levels/:level_id/target_groups(.:format)
     def create
-      level = Level.find(params[:level_id])
+      level = current_school.levels.find(params[:level_id])
       target_group = authorize(TargetGroup.new(level: level), policy_class: Schools::TargetGroupPolicy)
       form = ::Schools::TargetGroups::CreateForm.new(target_group)
       if form.validate(params[:target_group])

@@ -19,12 +19,13 @@ type evaluationCriterion = (int, string, bool);
 
 type state = {
   title: string,
-  targetGroupId: string,
+  targetGroupId: option(string),
   role: TargetDetails.role,
   evaluationCriteria: array(string),
   prerequisiteTargets: array(string),
   prerequisiteSearchInput: string,
   evaluationCriteriaSearchInput: string,
+  targetGroupSearchInput: string,
   methodOfCompletion,
   quiz: array(QuizQuestion.t),
   linkToComplete: string,
@@ -34,6 +35,7 @@ type state = {
   visibility: TargetDetails.visibility,
   checklist: array(ChecklistItem.t),
   completionInstructions: string,
+  targetDetails: option(TargetDetails.t),
 };
 
 type action =
@@ -44,6 +46,9 @@ type action =
   | UpdateEvaluationCriteria(array(string))
   | UpdatePrerequisiteSearchInput(string)
   | UpdateEvaluationCriteriaSearchInput(string)
+  | UpdateTargetGroupSearchInput(string)
+  | UpdateTargetGroup(string)
+  | UpdateTargetGroupAndClearPrerequisiteTargets(string)
   | UpdateLinkToComplete(string)
   | UpdateCompletionInstructions(string)
   | UpdateTargetRole(TargetDetails.role)
@@ -58,6 +63,7 @@ type action =
   | MoveChecklistItemDown(int)
   | CopyChecklistItem(int)
   | UpdateSaving
+  | ClearTargetGroupId
   | ResetEditor;
 
 module TargetDetailsQuery = [%graphql
@@ -138,7 +144,7 @@ let reducer = (state, action) =>
       ...state,
       title: targetDetails.title,
       role: targetDetails.role,
-      targetGroupId: targetDetails.targetGroupId,
+      targetGroupId: Some(targetDetails.targetGroupId),
       evaluationCriteria: targetDetails.evaluationCriteria,
       prerequisiteTargets: targetDetails.prerequisiteTargets,
       methodOfCompletion,
@@ -156,6 +162,7 @@ let reducer = (state, action) =>
       visibility: targetDetails.visibility,
       checklist,
       loading: false,
+      targetDetails: Some(targetDetails),
     };
   | UpdateTitle(title) => {...state, title, dirty: true}
   | UpdatePrerequisiteTargets(prerequisiteTargets) => {
@@ -246,6 +253,24 @@ let reducer = (state, action) =>
     }
   | UpdateSaving => {...state, saving: !state.saving}
   | ResetEditor => {...state, saving: false, dirty: false}
+  | UpdateTargetGroupSearchInput(targetGroupSearchInput) => {
+      ...state,
+      targetGroupSearchInput,
+    }
+  | UpdateTargetGroup(targetGroupId) => {
+      ...state,
+      targetGroupId: Some(targetGroupId),
+      dirty: true,
+      targetGroupSearchInput: "",
+    }
+  | UpdateTargetGroupAndClearPrerequisiteTargets(targetGroupId) => {
+      ...state,
+      targetGroupId: Some(targetGroupId),
+      dirty: true,
+      targetGroupSearchInput: "",
+      prerequisiteTargets: [||],
+    }
+  | ClearTargetGroupId => {...state, targetGroupId: None, dirty: true}
   };
 
 let updateTitle = (send, event) => {
@@ -253,33 +278,32 @@ let updateTitle = (send, event) => {
   send(UpdateTitle(title));
 };
 
-let eligiblePrerequisiteTargets = (targetId, targets, targetGroups) => {
-  let targetGroupId =
-    targets
-    |> ListUtils.unsafeFind(
-         target => targetId == Target.id(target),
-         "Unable to find target with ID: " ++ targetId,
-       )
-    |> Target.targetGroupId;
-  let targetGroup =
-    targetGroups
-    |> Array.of_list
-    |> ArrayUtils.unsafeFind(
-         tg => TargetGroup.id(tg) == targetGroupId,
-         "Cannot find target group with ID: " ++ targetGroupId,
-       );
-  let levelId = targetGroup |> TargetGroup.levelId;
-  let targetGroupsInSameLevel =
-    targetGroups
-    |> List.filter(tg => TargetGroup.levelId(tg) == levelId)
-    |> List.map(tg => TargetGroup.id(tg));
-  targets
-  |> List.filter(target => !(target |> Target.archived))
-  |> List.filter(target =>
-       targetGroupsInSameLevel |> List.mem(Target.targetGroupId(target))
-     )
-  |> List.filter(target => Target.id(target) != targetId)
-  |> Array.of_list;
+let eligiblePrerequisiteTargets =
+    (targetId, targetGroupId, targets, targetGroups) => {
+  targetGroupId->Belt.Option.mapWithDefault(
+    [||],
+    targetGroupId => {
+      let targetGroup =
+        targetGroupId
+        |> TargetGroup.unsafeFind(
+             targetGroups |> Array.of_list,
+             "TargetDetailsEditor.eligiblePrerequisiteTargets",
+           );
+
+      let levelId = targetGroup |> TargetGroup.levelId;
+      let targetGroupsInSameLevel =
+        targetGroups
+        |> List.filter(tg => TargetGroup.levelId(tg) == levelId)
+        |> List.map(tg => TargetGroup.id(tg));
+      targets
+      |> List.filter(target => !(target |> Target.archived))
+      |> List.filter(target =>
+           targetGroupsInSameLevel |> List.mem(Target.targetGroupId(target))
+         )
+      |> List.filter(target => Target.id(target) != targetId)
+      |> Array.of_list;
+    },
+  );
 };
 
 let setPrerequisiteSearch = (send, value) => {
@@ -494,6 +518,133 @@ let linkEditor = (state, send) => {
   </div>;
 };
 
+module SelectableTargetGroup = {
+  type t = {
+    level: Level.t,
+    targetGroup: TargetGroup.t,
+  };
+
+  let id = t => t.targetGroup |> TargetGroup.id;
+
+  let label = _t => None;
+
+  let value = t =>
+    "Level "
+    ++ (t.level |> Level.number |> string_of_int)
+    ++ ": "
+    ++ (t.targetGroup |> TargetGroup.name);
+
+  let searchString = t => t |> value;
+
+  let color = _t => "orange";
+
+  let level = t => t.level;
+
+  let make = (level, targetGroup) => {level, targetGroup};
+};
+
+module TargetGroupSelector = MultiselectDropdown.Make(SelectableTargetGroup);
+
+let findLevel = (levels, targetGroupId) => {
+  Level.unsafeFind(levels, "TargetDetailsEditor", targetGroupId);
+};
+
+let unselectedTargetGroups = (levels, targetGroups, targetGroupId) => {
+  targetGroupId->Belt.Option.mapWithDefault(targetGroups, tgId =>
+    targetGroups
+    |> Js.Array.filter(t =>
+         t |> TargetGroup.id != tgId && !(t |> TargetGroup.archived)
+       )
+  )
+  |> Array.map(t =>
+       SelectableTargetGroup.make(
+         findLevel(levels, t |> TargetGroup.levelId),
+         t,
+       )
+     );
+};
+
+let selectedTargetGroup = (levels, targetGroups, targetGroupId) =>
+  switch (targetGroupId) {
+  | Some(targetGroupId) =>
+    let targetGroup =
+      targetGroupId
+      |> TargetGroup.unsafeFind(
+           targetGroups,
+           "TargetDetailsEditor.selectedTargetGroup",
+         );
+    [|
+      SelectableTargetGroup.make(
+        findLevel(levels, targetGroup |> TargetGroup.levelId),
+        targetGroup,
+      ),
+    |];
+  | None => [||]
+  };
+
+let targetGroupOnSelect = (state, send, targetGroups, selectable) => {
+  let newTargetGroupId = selectable |> SelectableTargetGroup.id;
+
+  switch (state.targetDetails) {
+  | Some(details) =>
+    let oldTargetGroup =
+      TargetGroup.unsafeFind(
+        targetGroups,
+        "TargetDetailsEditors.targetGroupOnSelect",
+        details |> TargetDetails.targetGroupId,
+      );
+
+    if (selectable
+        |> SelectableTargetGroup.level
+        |> Level.id == (oldTargetGroup |> TargetGroup.levelId)) {
+      send(UpdateTargetGroup(newTargetGroupId));
+    } else {
+      send(UpdateTargetGroupAndClearPrerequisiteTargets(newTargetGroupId));
+    };
+  | None => send(UpdateTargetGroup(newTargetGroupId))
+  };
+};
+
+let targetGroupEditor = (state, targetGroups, levels, send) => {
+  <div id="target_group_id" className="mb-6">
+    <label
+      className="block tracking-wide text-sm font-semibold mr-6 mb-2"
+      htmlFor="target_group">
+      <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
+      {"Target Group" |> str}
+    </label>
+    <div className="ml-6">
+      <TargetGroupSelector
+        id="target_group"
+        unselected={unselectedTargetGroups(
+          levels,
+          targetGroups,
+          state.targetGroupId,
+        )}
+        selected={selectedTargetGroup(
+          levels,
+          targetGroups,
+          state.targetGroupId,
+        )}
+        onSelect={targetGroupOnSelect(state, send, targetGroups)}
+        onDeselect={_ => send(ClearTargetGroupId)}
+        value={state.targetGroupSearchInput}
+        onChange={searchString =>
+          send(UpdateTargetGroupSearchInput(searchString))
+        }
+      />
+      {switch (state.targetGroupId) {
+       | Some(_) => React.null
+       | None =>
+         <School__InputGroupError
+           message="Choose a target group"
+           active=true
+         />
+       }}
+    </div>
+  </div>;
+};
+
 let methodOfCompletionButtonClasses = value => {
   let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4";
   value
@@ -673,17 +824,42 @@ module UpdateTargetQuery = [%graphql
   {|
    mutation UpdateTargetMutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: JSON! ) {
      updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility, checklist: $checklist  ) {
-        success
+        sortIndex
        }
      }
    |}
 ];
 
-let updateTarget = (target, state, send, updateTargetCB, event) => {
+let updateTargetButton =
+    (
+      ~callback,
+      ~state,
+      ~hasValidTitle,
+      ~hasValidMethodOfCompletion,
+      ~requiredStepsHaveUniqueTitles,
+    ) => {
+  let onClick = Belt.Option.map(state.targetGroupId, callback);
+  let disabled =
+    !requiredStepsHaveUniqueTitles
+    || !hasValidTitle
+    || !hasValidMethodOfCompletion
+    || !state.dirty
+    || state.saving
+    || onClick == None;
+
+  <button
+    key="target-actions-step"
+    ?onClick
+    disabled
+    className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
+    {"Update Target" |> str}
+  </button>;
+};
+
+let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) => {
   ReactEvent.Mouse.preventDefault(event);
   send(UpdateSaving);
   let id = target |> Target.id;
-  let sortIndex = target |> Target.sortIndex;
   let role = state.role |> TargetDetails.roleAsString;
   let visibilityAsString =
     state.visibility |> TargetDetails.visibilityAsString;
@@ -709,18 +885,9 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
     | Draft => Draft
     };
 
-  let newTarget =
-    Target.create(
-      ~id,
-      ~targetGroupId=state.targetGroupId,
-      ~title=state.title,
-      ~sortIndex,
-      ~visibility,
-    );
-
   UpdateTargetQuery.make(
     ~id,
-    ~targetGroupId=state.targetGroupId,
+    ~targetGroupId,
     ~title=state.title,
     ~role,
     ~evaluationCriteria,
@@ -736,12 +903,21 @@ let updateTarget = (target, state, send, updateTargetCB, event) => {
   )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
-       result##updateTarget##success
-         ? {
-           send(ResetEditor);
-           updateTargetCB(newTarget);
-         }
-         : send(UpdateSaving);
+       switch (result##updateTarget##sortIndex) {
+       | Some(sortIndex) =>
+         send(ResetEditor);
+         updateTargetCB(
+           Target.create(
+             ~id,
+             ~targetGroupId,
+             ~title=state.title,
+             ~sortIndex,
+             ~visibility,
+           ),
+         );
+       | None => send(UpdateSaving)
+       };
+
        Js.Promise.resolve();
      })
   |> ignore;
@@ -754,6 +930,7 @@ let make =
       ~target,
       ~targets,
       ~targetGroups,
+      ~levels,
       ~evaluationCriteria,
       ~updateTargetCB,
       ~setDirtyCB,
@@ -763,7 +940,7 @@ let make =
       reducer,
       {
         title: "",
-        targetGroupId: "",
+        targetGroupId: None,
         role: TargetDetails.Student,
         evaluationCriteria: [||],
         evaluationCriteriaSearchInput: "",
@@ -778,6 +955,8 @@ let make =
         checklist: [||],
         visibility: TargetDetails.Draft,
         completionInstructions: "",
+        targetGroupSearchInput: "",
+        targetDetails: None,
       },
     );
   let targetId = target |> Target.id;
@@ -837,10 +1016,17 @@ let make =
                    />
                  </div>
                </div>
+               {targetGroupEditor(
+                  state,
+                  targetGroups |> Array.of_list,
+                  levels,
+                  send,
+                )}
                {prerequisiteTargetEditor(
                   send,
                   eligiblePrerequisiteTargets(
                     targetId,
+                    state.targetGroupId,
                     targets,
                     targetGroups,
                   ),
@@ -1109,24 +1295,14 @@ let make =
                    </div>
                  </div>
                  <div className="w-auto">
-                   <button
-                     key="target-actions-step"
-                     disabled={saveDisabled(
-                       ~hasValidTitle,
-                       ~hasValidMethodOfCompletion,
-                       ~requiredStepsHaveUniqueTitles,
-                       ~dirty=state.dirty,
-                       ~saving=state.saving,
-                     )}
-                     onClick={updateTarget(
-                       target,
-                       state,
-                       send,
-                       updateTargetCB,
-                     )}
-                     className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-                     {"Update Target" |> str}
-                   </button>
+                   {updateTargetButton(
+                      ~callback=
+                        updateTarget(target, state, send, updateTargetCB),
+                      ~state,
+                      ~hasValidTitle,
+                      ~hasValidMethodOfCompletion,
+                      ~requiredStepsHaveUniqueTitles,
+                    )}
                  </div>
                </div>
              </div>

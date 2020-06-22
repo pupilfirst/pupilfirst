@@ -36,7 +36,7 @@ let handlePostCreateResponse =
     Post.make(
       id,
       body,
-      currentUserId,
+      Some(currentUserId),
       None,
       postNumber,
       dateTime,
@@ -154,8 +154,10 @@ let onBorderAnimationEnd = event => {
 };
 
 let replyToUserInfo = user => {
+  let avatarUrl = Belt.Option.flatMap(user, User.avatarUrl);
+  let name = user->Belt.Option.mapWithDefault("?", user => User.name(user));
   <div className="flex items-center border bg-white px-2 py-1 rounded-lg">
-    {switch (user |> User.avatarUrl) {
+    {switch (avatarUrl) {
      | Some(avatarUrl) =>
        <img
          className="w-6 h-6 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
@@ -163,13 +165,11 @@ let replyToUserInfo = user => {
        />
      | None =>
        <Avatar
-         name={user |> User.name}
+         name
          className="w-6 h-6 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
        />
      }}
-    <span className="text-xs font-semibold ml-2">
-      {user |> User.name |> str}
-    </span>
+    <span className="text-xs font-semibold ml-2"> {name |> str} </span>
   </div>;
 };
 

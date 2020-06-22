@@ -19,7 +19,7 @@ module StudentSubmissionsQuery = [%graphql
         levelId
         passedAt
         title
-        evaluatorId
+        evaluatedAt
        }
        pageInfo {
          hasNextPage
@@ -94,8 +94,8 @@ let getStudentSubmissions =
 };
 
 let showSubmissionStatus = submission =>
-  switch (submission |> Submission.evaluatorId) {
-  | Some(_id) =>
+  switch (submission |> Submission.evaluatedAt) {
+  | Some(_datetime) =>
     submission |> Submission.failed
       ? <div
           className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
@@ -116,8 +116,8 @@ let showSubmissionStatus = submission =>
 let submissionCardClasses = submission =>
   "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md "
   ++ (
-    switch (submission |> Submission.evaluatorId) {
-    | Some(_id) =>
+    switch (submission |> Submission.evaluatedAt) {
+    | Some(_datetime) =>
       submission |> Submission.failed ? "border-red-500" : "border-green-500"
     | None => "border-orange-400"
     }

@@ -25,7 +25,6 @@ class Founder < ApplicationRecord
   has_one :level, through: :startup
   has_one :course, through: :level
   has_many :communities, through: :course
-  has_many :coach_notes, foreign_key: 'student_id', class_name: 'CoachNote', dependent: :destroy, inverse_of: :student
   has_many :visits, as: :user, dependent: :nullify, inverse_of: :user
   has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user, dependent: :nullify, inverse_of: :user
   has_many :platform_feedback, dependent: :nullify
@@ -36,7 +35,7 @@ class Founder < ApplicationRecord
   has_many :timeline_event_owners, dependent: :destroy
   has_many :timeline_events, through: :timeline_event_owners
   has_many :leaderboard_entries, dependent: :destroy
-  has_many :coach_notes, foreign_key: 'student_id', inverse_of: :student, dependent: :restrict_with_error
+  has_many :coach_notes, foreign_key: 'student_id', inverse_of: :student, dependent: :destroy
 
   has_one_attached :avatar
 

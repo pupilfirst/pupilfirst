@@ -1,7 +1,7 @@
 type t = {
   id,
   body: string,
-  creatorId: string,
+  creatorId: option(string),
   editorId: option(string),
   postNumber: int,
   createdAt: Js.Date.t,
@@ -24,6 +24,7 @@ let body = t => t.body;
 let replies = t => t.replies;
 
 let createdAt = t => t.createdAt;
+
 let updatedAt = t => t.updatedAt;
 
 let likedByUser = t => t.likedByUser;
@@ -35,11 +36,14 @@ let totalLikes = t => t.totalLikes;
 let solution = t => t.solution;
 
 let user = (users, t) => {
-  users
-  |> ArrayUtils.unsafeFind(
-       user => User.id(user) == t.creatorId,
-       "Unable to user with id: " ++ t.creatorId ++ " in TopicsShow__Post",
-     );
+  t.creatorId
+  ->Belt.Option.map(creatorId =>
+      users
+      |> ArrayUtils.unsafeFind(
+           user => User.id(user) == creatorId,
+           "Unable to user with id: " ++ creatorId ++ " in TopicsShow__Post",
+         )
+    );
 };
 
 let sort = posts => {
@@ -87,6 +91,10 @@ let highestPostNumber = posts => {
      );
 };
 
+let edited = t => {
+  t.createdAt != t.updatedAt;
+};
+
 let make =
     (
       id,
@@ -121,7 +129,7 @@ let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
     body: json |> field("body", string),
-    creatorId: json |> field("creatorId", string),
+    creatorId: json |> optional(field("creatorId", string)),
     editorId: json |> optional(field("editorId", string)),
     postNumber: json |> field("postNumber", int),
     createdAt: json |> field("createdAt", DateFns.decodeISO),

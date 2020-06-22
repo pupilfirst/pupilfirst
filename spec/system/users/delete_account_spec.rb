@@ -62,7 +62,7 @@ feature 'User Delete Account' do
 
       expect(page).to have_text("Account deletion is in progress", wait: 10)
 
-      expect(page).to have_link(href: "/users/sign_in", wait: 5)
+      expect(page).to have_text('Hello, welcome', wait: 5)
 
       open_email(user.email)
       subject = current_email.subject

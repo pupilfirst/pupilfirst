@@ -85,6 +85,15 @@ ActiveRecord::Schema.define(version: 2020_06_22_104911) do
     t.index ["login_token"], name: "index_applicants_on_login_token", unique: true
   end
 
+  create_table "audit_records", force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.string "audit_type", null: false
+    t.jsonb "metadata", default: {}
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["school_id"], name: "index_audit_records_on_school_id"
+  end
+
   create_table "bounce_reports", force: :cascade do |t|
     t.citext "email", null: false
     t.string "bounce_type", null: false
@@ -332,7 +341,7 @@ ActiveRecord::Schema.define(version: 2020_06_22_104911) do
 
   create_table "issued_certificates", force: :cascade do |t|
     t.bigint "certificate_id", null: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.string "name", null: false
     t.citext "serial_number", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -371,6 +380,8 @@ ActiveRecord::Schema.define(version: 2020_06_22_104911) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "school_id"
+    t.index ["school_id"], name: "index_markdown_attachments_on_school_id"
     t.index ["user_id"], name: "index_markdown_attachments_on_user_id"
   end
 
@@ -761,6 +772,9 @@ ActiveRecord::Schema.define(version: 2020_06_22_104911) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "time_zone", default: "Asia/Kolkata", null: false
+    t.string "delete_account_token"
+    t.datetime "delete_account_sent_at"
+    t.index ["delete_account_token"], name: "index_users_on_delete_account_token", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"

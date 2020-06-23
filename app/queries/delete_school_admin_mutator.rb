@@ -7,7 +7,10 @@ class DeleteSchoolAdminMutator < ApplicationQuery
   validate :at_least_one_admin_must_exist
 
   def delete_school_admin
-    school_admin.destroy!
+    SchoolAdmin.transaction do
+      create_audit_record(school_admin)
+      school_admin.destroy!
+    end
   end
 
   private
@@ -30,5 +33,9 @@ class DeleteSchoolAdminMutator < ApplicationQuery
 
   def school_admin
     @school_admin ||= SchoolAdmin.find_by(id: id)
+  end
+
+  def create_audit_record(school_admin)
+    AuditRecord.create!(audit_type: AuditRecord::TYPE_REMOVE_SCHOOL_ADMIN, school_id: current_school.id, metadata: { user_id: current_user.id, email: school_admin.email })
   end
 end

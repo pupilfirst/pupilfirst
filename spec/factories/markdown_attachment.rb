@@ -3,5 +3,6 @@ FactoryBot.define do
     file { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/uploads/resources/pdf-sample.pdf')) }
     token { SecureRandom.urlsafe_base64 }
     user
+    school { School.find_by(name: 'test') || create(:school, :current) }
   end
 end

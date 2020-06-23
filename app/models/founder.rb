@@ -25,8 +25,7 @@ class Founder < ApplicationRecord
   has_one :level, through: :startup
   has_one :course, through: :level
   has_many :communities, through: :course
-  has_many :visits, as: :user, dependent: :nullify, inverse_of: :user
-  has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user, dependent: :nullify, inverse_of: :user
+  has_many :coach_notes, foreign_key: 'student_id', class_name: 'CoachNote', dependent: :destroy, inverse_of: :student
   has_many :platform_feedback, dependent: :nullify
   belongs_to :college, optional: true
   has_one :university, through: :college
@@ -43,8 +42,6 @@ class Founder < ApplicationRecord
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
-  scope :active_on_slack, ->(from, to) { joins(:public_slack_messages).where(public_slack_messages: { created_at: from..to }) }
-  scope :active_on_web, ->(from, to) { joins(user: :visits).where(visits: { started_at: from..to }) }
   scope :not_dropped_out, -> { joins(:startup).where(startups: { dropped_out_at: nil }) }
   scope :access_active, -> { joins(:startup).where('startups.access_ends_at > ?', Time.zone.now).or(joins(:startup).where(startups: { access_ends_at: nil })) }
   scope :active, -> { not_dropped_out.access_active }

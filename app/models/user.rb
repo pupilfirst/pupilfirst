@@ -12,7 +12,6 @@ class User < ApplicationRecord
   has_many :courses, through: :founders
   has_one :faculty, dependent: :restrict_with_error
   has_many :user_activities, dependent: :destroy
-  has_many :visits, as: :user, dependent: :destroy, inverse_of: :user
   has_one :school_admin, dependent: :restrict_with_error
   has_many :markdown_attachments, dependent: :nullify
   has_many :issued_certificates, dependent: :nullify

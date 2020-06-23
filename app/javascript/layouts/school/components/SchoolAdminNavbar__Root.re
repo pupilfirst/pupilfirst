@@ -14,6 +14,7 @@ type courseSelection =
 
 type settingsSelection =
   | Customization
+  | Configuration
   | Admins;
 
 type userRole =
@@ -107,6 +108,12 @@ let secondaryNav = (courses, userRole, selectedOption) =>
            "Customization",
          )}
         {secondaryNavOption(
+           "/school/configuration",
+           settingsSelection,
+           Configuration,
+           "Configuration",
+         )}
+        {secondaryNavOption(
            "/school/admins",
            settingsSelection,
            Admins,
@@ -180,6 +187,8 @@ let make =
     | ["school"] => (Overview, false)
     | ["school", "coaches"] => (SchoolCoaches, false)
     | ["school", "customize"] => (Settings(Customization), true)
+    | ["school", "configuration"] => (Settings(Configuration), true)
+    | ["school", "admins"] => (Settings(Admins), true)
     | ["school", "courses"] => (Courses, false)
     | ["school", "courses", courseId, "students"]
     | ["school", "courses", courseId, "inactive_students"] => (
@@ -222,7 +231,6 @@ let make =
         true,
       )
     | ["school", "communities"] => (Communities, false)
-    | ["school", "admins"] => (Settings(Admins), true)
     | _ =>
       Rollbar.critical(
         "Unknown path encountered by SA navbar: "

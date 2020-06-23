@@ -1,0 +1,16 @@
+<% content_for(:head) do %>
+  <title><%= current_school.name %> | Configuration</title>
+  <%= stylesheet_pack_tag 'SchoolsConfigurationPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'SchoolsConfigurationPack', nonce: true %>
+<% end %>
+
+<% presenter = Schools::ConfigurationPresenter.new(self) %>
+
+<script type="application/json" id="schools-configuration-data">
+  <%= presenter.props_to_json.html_safe %>
+</script>
+
+<div id="schools-configuration-root" class="w-full overflow-y-auto"></div>

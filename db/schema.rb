@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_22_104911) do
+ActiveRecord::Schema.define(version: 2020_06_23_124042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -516,6 +516,7 @@ ActiveRecord::Schema.define(version: 2020_06_22_104911) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "about"
+    t.jsonb "configuration", default: {}, null: false
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|

@@ -21,7 +21,7 @@ let decode = json => {
     | "confirmationPending" =>
       let lastCheckedAt =
         json
-        |> Json.Decode.(optional(field("confirmedAt", DateFns.decodeISO)));
+        |> Json.Decode.(optional(field("lastCheckedAt", DateFns.decodeISO)));
       ConfirmationPending(lastCheckedAt);
     | otherStatus =>
       Rollbar.error(

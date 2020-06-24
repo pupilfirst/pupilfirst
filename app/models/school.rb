@@ -1,3 +1,13 @@
+# JSON fields schema:
+#
+# configuration: {
+#   fromAddress: {
+#     email - string, required
+#     status - confirmed / confirmationPending
+#     confirmedAt - ISO8601, optional
+#     lastCheckedAt - ISO8601, optional
+#   }
+# }
 class School < ApplicationRecord
   has_many :users, dependent: :destroy
   has_many :courses, dependent: :restrict_with_error

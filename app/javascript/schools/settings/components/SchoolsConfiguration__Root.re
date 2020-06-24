@@ -35,6 +35,13 @@ let emailAddressValue = emailAddress => {
   };
 };
 
+let emailAddressDisabled = emailAddress => {
+  switch (emailAddress) {
+  | UnconfiguredFromAddress(_) => false
+  | ConfiguredFromAddress(_) => true
+  };
+};
+
 [@react.component]
 let make = (~fromAddress) => {
   let (state, send) =
@@ -59,6 +66,7 @@ let make = (~fromAddress) => {
          )}
       </HelpIcon>
       <input
+        disabled={emailAddressDisabled(state.emailAddress)}
         value=emailAddress
         onChange={event =>
           send(UpdateEmailAddress(ReactEvent.Form.target(event)##value))

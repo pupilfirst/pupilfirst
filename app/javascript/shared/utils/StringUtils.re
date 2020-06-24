@@ -10,3 +10,7 @@ let paramToId = param => {
   ->Belt.Option.map(Js.Re.captures)
   ->Belt.Option.map(Js.Array.joinWith(""));
 };
+
+let blank = t => Js.String.trim(t)->Js.String.length == 0;
+
+let present = t => !blank(t);

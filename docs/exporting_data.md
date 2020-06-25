@@ -10,7 +10,7 @@ To prepare a new export, visit the _Exports_ sub-menu within a course, and click
 You need to choose between _Students_ and _Teams_. This changes the resulting export to focus on either teams of students, or on the individual students within a course. These changes are highlighted in the documentation for the individual sheets, below.
 
 **Export only students with the following tags:**\
-When preparing a _Students_ export, you can limit the results to a select group of students by picking one or more tags that's associated with them.
+You can limit the results to a select group of students (or teams) by picking one or more tags that's associated with them.
 
 **Which targets should the export include?**\
 This defaults to _All targets_, but you can change it to _Only targets with reviewed submissions_, which will restrict the exported data to targets with submissions that are reviewed and graded by coaches.

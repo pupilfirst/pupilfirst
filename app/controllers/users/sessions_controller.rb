@@ -41,7 +41,7 @@ module Users
 
     # GET /user/token - link to sign_in user with token in params
     def token
-      user = Users::AuthenticationService.new(params[:token]).authenticate
+      user = Users::AuthenticationService.new(current_school, params[:token]).authenticate
 
       if user.present?
         sign_in user

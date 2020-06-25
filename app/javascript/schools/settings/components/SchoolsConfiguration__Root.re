@@ -2,74 +2,125 @@ open SchoolsConfiguration__Types;
 
 let str = React.string;
 
-type emailAddress =
-  | UnconfiguredFromAddress(string)
-  | ConfiguredFromAddress(FromAddress.t);
+type emailSender =
+  | UnconfiguredEmailSenderSignature(string, string)
+  | ConfiguredEmailSenderSignature(EmailSenderSignature.t);
 
-type state = {emailAddress};
+type state = {emailSender};
 
 type action =
-  | UpdateEmailAddress(string);
+  | UpdateSenderAddress(string)
+  | UpdateSenderName(string);
 
 let reducer = (state, action) =>
   switch (action) {
-  | UpdateEmailAddress(address) => {
+  | UpdateSenderAddress(address) => {
       ...state,
-      emailAddress: UnconfiguredFromAddress(address),
+      emailSender:
+        switch (state.emailSender) {
+        | UnconfiguredEmailSenderSignature(name, _) =>
+          UnconfiguredEmailSenderSignature(name, address)
+        | ConfiguredEmailSenderSignature(emailSenderSignature) =>
+          ConfiguredEmailSenderSignature(emailSenderSignature)
+        },
+    }
+  | UpdateSenderName(name) => {
+      ...state,
+      emailSender:
+        switch (state.emailSender) {
+        | UnconfiguredEmailSenderSignature(_, address) =>
+          UnconfiguredEmailSenderSignature(name, address)
+        | ConfiguredEmailSenderSignature(emailSenderSignature) =>
+          ConfiguredEmailSenderSignature(emailSenderSignature)
+        },
     }
   };
 
-let computeInitialState = fromAddress => {
-  let emailAddress =
-    fromAddress->Belt.Option.mapWithDefault(UnconfiguredFromAddress(""), fa =>
-      ConfiguredFromAddress(fa)
+let computeInitialState = emailSenderSignature => {
+  let emailSender =
+    emailSenderSignature->Belt.Option.mapWithDefault(
+      UnconfiguredEmailSenderSignature("", ""), fa =>
+      ConfiguredEmailSenderSignature(fa)
     );
 
-  {emailAddress: emailAddress};
+  {emailSender: emailSender};
 };
 
-let emailAddressValue = emailAddress => {
-  switch (emailAddress) {
-  | UnconfiguredFromAddress(fromAddress) => fromAddress
-  | ConfiguredFromAddress(fromAddress) => FromAddress.email(fromAddress)
+let senderAddressValue = emailSender => {
+  switch (emailSender) {
+  | UnconfiguredEmailSenderSignature(_, address) => address
+  | ConfiguredEmailSenderSignature(emailSenderSignature) =>
+    EmailSenderSignature.email(emailSenderSignature)
   };
 };
 
-let emailAddressDisabled = emailAddress => {
-  switch (emailAddress) {
-  | UnconfiguredFromAddress(_) => false
-  | ConfiguredFromAddress(_) => true
+let senderNameValue = emailSender => {
+  switch (emailSender) {
+  | UnconfiguredEmailSenderSignature(name, _) => name
+  | ConfiguredEmailSenderSignature(emailSenderSignature) =>
+    EmailSenderSignature.name(emailSenderSignature)
+  };
+};
+
+let emailSenderDisabled = emailSender => {
+  switch (emailSender) {
+  | UnconfiguredEmailSenderSignature(_) => false
+  | ConfiguredEmailSenderSignature(_) => true
   };
 };
 
 [@react.component]
-let make = (~fromAddress) => {
+let make = (~schoolName, ~emailSenderSignature) => {
   let (state, send) =
-    React.useReducerWithMapState(reducer, fromAddress, computeInitialState);
+    React.useReducerWithMapState(
+      reducer,
+      emailSenderSignature,
+      computeInitialState,
+    );
 
-  let emailAddress = emailAddressValue(state.emailAddress);
+  let senderAddress = senderAddressValue(state.emailSender);
+  let senderName = senderNameValue(state.emailSender);
 
-  let emailAddressInvalid = EmailUtils.isInvalid(false, emailAddress);
+  let senderAddressInvalid = EmailUtils.isInvalid(false, senderAddress);
 
   <div className="px-6 mt-6 max-w-3xl mx-auto">
     <div className="mt-5">
+      <div>
+        <h4 className="inline-block"> {str("Email Sender Signature")} </h4>
+        <HelpIcon className="ml-2">
+          {str("This is the value of ")}
+          <em> {str("from")} </em>
+          {str(
+             " that will be displayed in emails sent to users in your school. You will need to confirm this email address before it becomes active.",
+           )}
+        </HelpIcon>
+      </div>
       <label
-        className="inline-block tracking-wide text-sm font-semibold mb-2 leading-tight"
+        className="inline-block tracking-wide text-sm font-semibold mt-1 mb-2 leading-tight"
         htmlFor="title">
-        {str("\"From\" Email Address")}
+        {str("Name")}
       </label>
-      <HelpIcon className="ml-2">
-        {str("This is the value of ")}
-        <em> {str("from")} </em>
-        {str(
-           " that will be displayed in emails sent to users in your school. You will need to confirm this email address before it becomes active.",
-         )}
-      </HelpIcon>
       <input
-        disabled={emailAddressDisabled(state.emailAddress)}
-        value=emailAddress
+        disabled={emailSenderDisabled(state.emailSender)}
+        value=senderName
         onChange={event =>
-          send(UpdateEmailAddress(ReactEvent.Form.target(event)##value))
+          send(UpdateSenderName(ReactEvent.Form.target(event)##value))
+        }
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
+        id="title"
+        type_="text"
+        placeholder=schoolName
+      />
+      <label
+        className="inline-block tracking-wide text-sm font-semibold mt-1 mb-2 leading-tight"
+        htmlFor="title">
+        {str("Email Address")}
+      </label>
+      <input
+        disabled={emailSenderDisabled(state.emailSender)}
+        value=senderAddress
+        onChange={event =>
+          send(UpdateSenderAddress(ReactEvent.Form.target(event)##value))
         }
         className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
         id="title"
@@ -78,7 +129,7 @@ let make = (~fromAddress) => {
       />
       <School__InputGroupError
         message="This doesn't look like a valid email address."
-        active={emailAddressInvalid && StringUtils.present(emailAddress)}
+        active={senderAddressInvalid && StringUtils.present(senderAddress)}
       />
     </div>
     <div className="mt-3 w-auto">

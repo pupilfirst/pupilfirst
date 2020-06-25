@@ -108,10 +108,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_school_admin
-    @current_school_admin ||= begin
-      if current_user.present? && current_school.present?
-        current_user.school_admin
-      end
+    @current_school_admin ||= if current_user.present? && current_user.school == current_school
+      current_user.school_admin
     end
   end
 

@@ -1,7 +1,7 @@
 module Users
   class PostmarkWebhookController < ApplicationController
     skip_before_action :verify_authenticity_token
-    http_basic_authenticate_with name: ENV['POSTMARK_HOOK_ID'], password: ENV['POSTMARK_HOOK_SECRET']
+    http_basic_authenticate_with name: Rails.application.secrets.postmark[:hook_id], password: Rails.application.secrets.postmark[:hook_secret]
 
     # POST /users/email_bounce
     def email_bounce

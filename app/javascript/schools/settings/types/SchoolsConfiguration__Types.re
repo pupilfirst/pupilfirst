@@ -1,1 +1,1 @@
-module FromAddress = SchoolsConfiguration__FromAddress;
+module EmailSenderSignature = SchoolsConfiguration__EmailSenderSignature;

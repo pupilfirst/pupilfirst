@@ -1,24 +1,24 @@
 module Mutations
-  class AddFromAddress < GraphQL::Schema::Mutation
+  class AddEmailSenderSignature < GraphQL::Schema::Mutation
     argument :name, String, required: true
     argument :email_address, String, required: true
 
     description "Register a new 'from' email address for a school."
 
-    field :from_address, Types::FromAddress, null: true
+    field :email_sender_signature, Types::EmailSenderSignature, null: true
 
     def resolve(params)
-      mutator = AddFromAddressMutator.new(context, params)
+      mutator = AddEmailSenderSignatureMutator.new(context, params)
 
-      from_address = if mutator.valid?
+      email_sender_signature = if mutator.valid?
         mutator.notify(:success, 'Done!', 'Please check your inform for a confirmation email.')
-        mutator.add_from_address
+        mutator.add_email_sender_signature
       else
         mutator.notify_errors
         nil
       end
 
-      { from_address: from_address }
+      { email_sender_signature: email_sender_signature }
     end
   end
 end

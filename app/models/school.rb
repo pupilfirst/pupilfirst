@@ -1,9 +1,10 @@
 # JSON fields schema:
 #
 # configuration: {
-#   fromAddress: {
+#   emailSenderSignature: {
+#     name - string, required
 #     email - string, required
-#     status - confirmed / confirmationPending
+#     senderSignatureId - Postmark ID, required
 #     confirmedAt - ISO8601, optional
 #     lastCheckedAt - ISO8601, optional
 #   }

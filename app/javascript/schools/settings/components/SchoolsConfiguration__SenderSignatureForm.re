@@ -2,58 +2,114 @@ open SchoolsConfiguration__Types;
 
 let str = React.string;
 
-type state =
-  | UnconfiguredEmailSenderSignature(string, string)
-  | ConfiguredEmailSenderSignature(EmailSenderSignature.t);
+type sender =
+  | Unconfigured(string, string)
+  | Configured(EmailSenderSignature.t);
+
+type state = {
+  sender,
+  saving: bool,
+};
 
 type action =
-  | UpdateSenderAddress(string)
-  | UpdateSenderName(string);
+  | UpdateEmailAddress(string)
+  | UpdateName(string)
+  | BeginSaving
+  | FailSaving
+  | FinishSaving(EmailSenderSignature.t);
 
 let reducer = (state, action) =>
   switch (action) {
-  | UpdateSenderAddress(address) =>
-    switch (state) {
-    | UnconfiguredEmailSenderSignature(name, _) =>
-      UnconfiguredEmailSenderSignature(name, address)
-    | ConfiguredEmailSenderSignature(emailSenderSignature) =>
-      ConfiguredEmailSenderSignature(emailSenderSignature)
+  | UpdateEmailAddress(address) => {
+      ...state,
+      sender:
+        switch (state.sender) {
+        | Unconfigured(name, _) => Unconfigured(name, address)
+        | Configured(emailSenderSignature) =>
+          Configured(emailSenderSignature)
+        },
     }
-  | UpdateSenderName(name) =>
-    switch (state) {
-    | UnconfiguredEmailSenderSignature(_, address) =>
-      UnconfiguredEmailSenderSignature(name, address)
-    | ConfiguredEmailSenderSignature(emailSenderSignature) =>
-      ConfiguredEmailSenderSignature(emailSenderSignature)
+  | UpdateName(name) => {
+      ...state,
+      sender:
+        switch (state.sender) {
+        | Unconfigured(_, address) => Unconfigured(name, address)
+        | Configured(emailSenderSignature) =>
+          Configured(emailSenderSignature)
+        },
+    }
+  | BeginSaving => {...state, saving: true}
+  | FailSaving => {...state, saving: false}
+  | FinishSaving(emailSenderSignature) => {
+      sender: Configured(emailSenderSignature),
+      saving: false,
     }
   };
 
-let computeInitialState = emailSenderSignature =>
-  emailSenderSignature->Belt.Option.mapWithDefault(
-    UnconfiguredEmailSenderSignature("", ""), fa =>
-    ConfiguredEmailSenderSignature(fa)
-  );
+let computeInitialState = emailSenderSignature => {
+  let sender =
+    emailSenderSignature->Belt.Option.mapWithDefault(Unconfigured("", ""), fa =>
+      Configured(fa)
+    );
 
-let senderAddressValue = state => {
-  switch (state) {
-  | UnconfiguredEmailSenderSignature(_, address) => address
-  | ConfiguredEmailSenderSignature(emailSenderSignature) =>
+  {sender, saving: false};
+};
+
+let senderEmailAddress = sender => {
+  switch (sender) {
+  | Unconfigured(_, address) => address
+  | Configured(emailSenderSignature) =>
     EmailSenderSignature.email(emailSenderSignature)
   };
 };
 
-let senderNameValue = state =>
-  switch (state) {
-  | UnconfiguredEmailSenderSignature(name, _) => name
-  | ConfiguredEmailSenderSignature(emailSenderSignature) =>
+let senderName = sender =>
+  switch (sender) {
+  | Unconfigured(name, _) => name
+  | Configured(emailSenderSignature) =>
     EmailSenderSignature.name(emailSenderSignature)
   };
 
-let emailSenderDisabled = state =>
-  switch (state) {
-  | UnconfiguredEmailSenderSignature(_) => false
-  | ConfiguredEmailSenderSignature(_) => true
-  };
+module AddEmailSenderSignatureMutation = [%graphql
+  {|
+  mutation AddEmailSenderSignatureMutation($name: String!, $emailAddress: String!) {
+    addEmailSenderSignature(name: $name, emailAddress: $emailAddress) {
+      emailSenderSignature {
+        name
+        email
+        confirmedAt
+        lastCheckedAt
+      }
+    }
+  }
+  |}
+];
+
+let addEmailSenderSignature = ({sender}, send, _event) => {
+  send(BeginSaving);
+
+  AddEmailSenderSignatureMutation.make(
+    ~name=senderName(sender),
+    ~emailAddress=senderEmailAddress(sender),
+    (),
+  )
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+       switch (response##addEmailSenderSignature##emailSenderSignature) {
+       | Some(signature) =>
+         let emailSenderSignature =
+           EmailSenderSignature.fromJsObject(signature);
+         send(FinishSaving(emailSenderSignature));
+       | None => send(FailSaving)
+       };
+       Js.Promise.resolve();
+     })
+  |> Js.Promise.catch(error => {
+       Js.log(error);
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
 
 [@react.component]
 let make = (~schoolName, ~emailSenderSignature) => {
@@ -64,9 +120,15 @@ let make = (~schoolName, ~emailSenderSignature) => {
       computeInitialState,
     );
 
-  let senderAddress = senderAddressValue(state);
-  let senderName = senderNameValue(state);
+  let senderAddress = senderEmailAddress(state.sender);
+  let senderName = senderName(state.sender);
   let senderAddressInvalid = EmailUtils.isInvalid(false, senderAddress);
+
+  let inputsDisabled =
+    switch (state.sender) {
+    | Unconfigured(_) => false
+    | Configured(_) => true
+    };
 
   <div>
     <div className="mt-5">
@@ -86,10 +148,10 @@ let make = (~schoolName, ~emailSenderSignature) => {
         {str("Name")}
       </label>
       <input
-        disabled={emailSenderDisabled(state)}
+        disabled=inputsDisabled
         value=senderName
         onChange={event =>
-          send(UpdateSenderName(ReactEvent.Form.target(event)##value))
+          send(UpdateName(ReactEvent.Form.target(event)##value))
         }
         className="mt-1 appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
         id="title"
@@ -103,10 +165,10 @@ let make = (~schoolName, ~emailSenderSignature) => {
         {str("Email Address")}
       </label>
       <input
-        disabled={emailSenderDisabled(state)}
+        disabled=inputsDisabled
         value=senderAddress
         onChange={event =>
-          send(UpdateSenderAddress(ReactEvent.Form.target(event)##value))
+          send(UpdateEmailAddress(ReactEvent.Form.target(event)##value))
         }
         className="mt-1 appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
         id="title"
@@ -119,7 +181,10 @@ let make = (~schoolName, ~emailSenderSignature) => {
       />
     </div>
     <div className="mt-3 w-auto">
-      <button disabled=false className="w-full btn btn-large btn-primary">
+      <button
+        onClick={addEmailSenderSignature(state, send)}
+        disabled=false
+        className="w-full btn btn-large btn-primary">
         {"Send Confirmation Email" |> str}
       </button>
     </div>

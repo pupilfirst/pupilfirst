@@ -11,7 +11,7 @@ module Mutations
       mutator = AddEmailSenderSignatureMutator.new(context, params)
 
       email_sender_signature = if mutator.valid?
-        mutator.notify(:success, 'Done!', 'Please check your inform for a confirmation email.')
+        mutator.notify(:success, 'Done!', 'Please check your inbox for a confirmation email.')
         mutator.add_email_sender_signature
       else
         mutator.notify_errors

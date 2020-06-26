@@ -17,3 +17,10 @@ let decode = json => {
       json |> optional(field("lastCheckedAt", DateFns.decodeISO)),
   };
 };
+
+let fromJsObject = js => {
+  name: js##name,
+  email: js##email,
+  confirmedAt: js##confirmedAt->Belt.Option.map(DateFns.decodeISO),
+  lastCheckedAt: js##lastCheckedAt->Belt.Option.map(DateFns.decodeISO),
+};

@@ -18,8 +18,15 @@ describe EmailValidator do
     it { is_expected.to be_valid }
   end
 
-  context 'when email is invalid' do
+  context 'when email has invalid format' do
     let(:email) { 'foobar' }
+
+    it { is_expected.to_not be_valid }
+  end
+
+  context 'when the email is too long' do
+    let(:seed) { 'abcdefghijklmnopqrstuvwxyz' }
+    let(:email) { "#{seed * 9}@#{seed}.com" }
 
     it { is_expected.to_not be_valid }
   end

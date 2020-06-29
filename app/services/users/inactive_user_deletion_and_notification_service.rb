@@ -51,7 +51,7 @@ module Users
         next if user.last_sign_in_at.blank? || (Time.zone.now - user.last_sign_in_at) < (inactivity_duration_for_user_deletion(user).months - 1.month)
 
         user
-      end - [nil]
+      end.compact
     end
 
     def users_to_delete
@@ -60,7 +60,7 @@ module Users
         next if (Time.zone.now - user.last_sign_in_at) < (inactivity_duration_for_user_deletion(user).months) || user.school_admin.present?
 
         user
-      end - [nil]
+      end.compact
     end
 
     def login_url(school)

@@ -1,5 +1,5 @@
 module Users
-  class InactiveUserDeletionAndNotificationService
+  class InactivityNotificationAndDeletionService
     include RoutesResolvable
 
     def initialize(debug: false)
@@ -45,10 +45,11 @@ module Users
     end
 
     def users_to_notify_deletion
-      User.where(school: applicable_schools)
-        .where(account_expiry_notification_sent_at: nil).includes(:school).map do |user|
+      User.where(school: applicable_schools).includes(:school).map do |user|
 
         next if user.last_sign_in_at.blank? || (Time.zone.now - user.last_sign_in_at) < (inactivity_duration_for_user_deletion(user).months - 1.month)
+
+        next if user.account_expiry_notification_sent_at.present? && (user.account_expiry_notification_sent_at > inactivity_duration_for_user_deletion(user).months.ago)
 
         user
       end.compact

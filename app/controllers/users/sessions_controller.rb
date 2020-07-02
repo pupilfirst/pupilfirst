@@ -47,6 +47,7 @@ module Users
         sign_in user
         remember_me(user) unless params[:shared_device] == 'true'
         Users::ConfirmationService.new(user).execute
+        user.update!(account_deletion_notification_sent_at: nil)
 
         redirect_to after_sign_in_path_for(user)
       else
@@ -89,6 +90,7 @@ module Users
 
       if @form.validate(params[:session])
         sign_in @form.user
+        user.update!(account_deletion_notification_sent_at: nil)
         remember_me(@form.user) unless @form.shared_device?
         render json: { error: nil, path: after_sign_in_path_for(current_user) }
       else

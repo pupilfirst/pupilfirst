@@ -32,8 +32,8 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.confirm_account_deletion('test@xyz.com', School.first)
   end
 
-  def notify_account_deletion
-    UserMailer.notify_account_deletion(User.last, 'https://test.school.com', 24)
+  def account_deletion_notification
+    UserMailer.account_deletion_notification(User.last, 'https://test.school.com', 24)
   end
 
   private

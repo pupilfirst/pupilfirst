@@ -2,70 +2,65 @@ module Users
   class InactivityNotificationAndDeletionService
     include RoutesResolvable
 
-    def initialize(debug: false)
-      @debug = debug
-      @debug_value = {}
+    def initialize(dry_run: false)
+      @dry_run = dry_run
     end
 
     def execute
       notify_users_of_deletion
       delete_inactive_users
-      @debug_value
+      results if @dry_run
     end
 
     private
 
     def notify_users_of_deletion
-      if @debug
-        @debug_value[:users_to_notify] = users_to_notify_deletion.map(&:id)
-      else
-        users_to_notify_deletion.each do |user|
-          UserMailer.notify_account_deletion(user, login_url(user.school), inactivity_duration_for_user_deletion(user) - 1).deliver_later
-          user.update!(account_expiry_notification_sent_at: Time.zone.now)
-        end
+      User.where(id: users_to_notify_deletion).each do |user|
+        UserMailer.account_deletion_notification(user, login_url(user.school), deletion_period(user.school) - 1).deliver_later
+        user.update!(account_deletion_notification_sent_at: Time.zone.now)
       end
     end
 
+    def results
+      { users_to_notify_deletion: users_to_notify_deletion, users_to_delete: users_to_delete }
+    end
+
     def delete_inactive_users
-      if @debug
-        @debug_value[:users_to_delete] = users_to_delete.map(&:id)
-      else
-        users_to_delete.each do |user|
-          Users::DeleteAccountJob.perform_later(user)
-        end
+      User.where(id: users_to_delete).each do |user|
+        Users::DeleteAccountJob.perform_later(user)
       end
     end
 
     def applicable_schools
-      if ENV['DELETE_INACTIVE_USERS_AFTER'].present? && ENV['DELETE_INACTIVE_USERS_AFTER'].to_i != 0
+      if Rails.application.secrets.delete_inactive_users_after.positive?
         School.all
       else
-        School.where("configuration ? :key", :key => 'deleteInactiveUsersAfter')
+        School.where("configuration ? :key", :key => 'delete_inactive_users_after')
       end
     end
 
     def users_to_notify_deletion
-      User.where(school: applicable_schools).includes(:school).map do |user|
-
-        next if user.last_sign_in_at.blank? || (Time.zone.now - user.last_sign_in_at) < (inactivity_duration_for_user_deletion(user).months - 1.month)
-
-        next if user.account_expiry_notification_sent_at.present? && (user.account_expiry_notification_sent_at > inactivity_duration_for_user_deletion(user).months.ago)
-
-        user
-      end.compact
+      @users_to_notify_deletion ||= applicable_schools.map do |school|
+        notify_after = deletion_period(school) - 1
+        school.users
+          .where('last_sign_in_at < ?', notify_after.months.ago)
+          .where(account_deletion_notification_sent_at: nil)
+          .pluck(:id)
+      end.flatten
     end
 
     def users_to_delete
-      User.where(school: applicable_schools).where('account_expiry_notification_sent_at < ?', 1.month.ago).map do |user|
-
-        next if (Time.zone.now - user.last_sign_in_at) < (inactivity_duration_for_user_deletion(user).months) || user.school_admin.present?
-
-        user
-      end.compact
+      @users_to_delete ||= applicable_schools.map do |school|
+        delete_after = deletion_period(school)
+        school.users
+          .where('last_sign_in_at < ?', delete_after.months.ago)
+          .where('account_deletion_notification_sent_at < ?', 1.month.ago)
+          .pluck(:id)
+      end.flatten
     end
 
     def login_url(school)
-      host = school.domains.where(primary: true).first
+      host = school.domains.primary
 
       url_options = {
         host: host.fqdn,
@@ -75,8 +70,8 @@ module Users
       url_helpers.new_user_session_url(url_options)
     end
 
-    def inactivity_duration_for_user_deletion(user)
-      user.school.configuration['deleteInactiveUsersAfter'].presence || ENV['DELETE_INACTIVE_USERS_AFTER'].to_i
+    def deletion_period(school)
+      school.configuration['delete_inactive_users_after'].presence || Rails.application.secrets.delete_inactive_users_after
     end
   end
 end

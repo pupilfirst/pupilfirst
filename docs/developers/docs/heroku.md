@@ -86,6 +86,22 @@ $ heroku ps:scale web=1 worker=1
 
 Now, if you visit the web address for your Heroku app, you should see the homepage for your school. You should also be able to sign in as `admin@example.com` to start working on your school.
 
+### Scheduling periodic tasks
+
+Schedule two tasks (`cleanup` & `daily_digest`) using the [Scheduler](https://devcenter.heroku.com/articles/scheduler) add-on available in Heroku. The `cleanup` task is used to perform general database cleanup for orphaned entries and `daily_digest` task sends a daily digest via email to all users in the school.
+
+1. Add the _Scheduler_ add-on on Heroku
+    ```bash
+    $ heroku addons:create scheduler:standard
+    ```
+2. Open the _Scheduler_ dashboard for your app
+    ```bash
+    $ heroku addons:open scheduler
+    ```
+3. Add the two jobs using the _Add Job_ option in the dashboard. Schedule both tasks to run everyday at following time: `daily_digest` at 3:30 PM UTC and `cleanup` at 6:30 PM UTC.
+Use `rake daily_digest` and `rake cleanup` in the _Run Command_ input of the form, for scheduling `cleanup` and `daily_digest` respectively.
+
+
 ## File storage using AWS
 
 To allow users to upload files, and to retrieve them, we'll use AWS's S3. The service [has extensive documentation](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html).

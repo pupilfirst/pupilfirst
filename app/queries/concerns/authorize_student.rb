@@ -2,6 +2,8 @@ module AuthorizeStudent
   include ActiveSupport::Concern
 
   def authorized?
+    return false if current_user.blank?
+
     # Has access to school
     return false unless course&.school == current_school && founder.present?
 

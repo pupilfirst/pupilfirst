@@ -56,6 +56,12 @@ let closeDrawer = course =>
     "/school/courses/" ++ (course |> Course.id) ++ "/curriculum",
   );
 
+let onWindowBeforeUnload = event =>
+  DomUtils.Event.setReturnValue(
+    event,
+    "There are unsaved changes! Are you sure to leave?",
+  );
+
 [@react.component]
 let make =
     (
@@ -68,6 +74,30 @@ let make =
     ) => {
   let url = ReasonReactRouter.useUrl();
   let (dirty, setDirty) = React.useState(() => false);
+
+  React.useEffect1(
+    () => {
+      let window = Webapi.Dom.window;
+
+      let removeEventListener = () =>
+        Webapi.Dom.Window.removeEventListener(
+          "beforeunload",
+          onWindowBeforeUnload,
+          window,
+        );
+      if (dirty) {
+        Webapi.Dom.Window.addEventListener(
+          "beforeunload",
+          onWindowBeforeUnload,
+          window,
+        );
+      } else {
+        removeEventListener();
+      };
+      Some(removeEventListener);
+    },
+    [|dirty|],
+  );
 
   switch (url.path) {
   | ["school", "courses", _courseId, "targets", targetId, pageName] =>

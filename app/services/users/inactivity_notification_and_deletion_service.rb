@@ -15,19 +15,29 @@ module Users
     private
 
     def notify_users_of_deletion
+      @user_ids_to_notify = []
       User.where(id: users_to_notify_deletion).each do |user|
-        UserMailer.account_deletion_notification(user, login_url(user.school), deletion_period(user.school) - 1).deliver_later
-        user.update!(account_deletion_notification_sent_at: Time.zone.now)
+        if @dry_run
+          @user_ids_to_notify << user.id
+        else
+          UserMailer.account_deletion_notification(user, login_url(user.school), deletion_period(user.school) - 1).deliver_later
+          user.update!(account_deletion_notification_sent_at: Time.zone.now)
+        end
       end
     end
 
     def results
-      { users_to_notify_deletion: users_to_notify_deletion, users_to_delete: users_to_delete }
+      { user_ids_to_notify: @user_ids_to_notify, user_ids_to_delete: @user_ids_to_delete }
     end
 
     def delete_inactive_users
+      @user_ids_to_delete = []
       User.where(id: users_to_delete).each do |user|
-        Users::DeleteAccountJob.perform_later(user)
+        if @dry_run
+          @user_ids_to_delete << user.id
+        else
+          Users::DeleteAccountJob.perform_later(user)
+        end
       end
     end
 

@@ -75,6 +75,7 @@ module Users
         @form = Users::Sessions::ResetPasswordForm.new(Reform::OpenForm.new)
         if @form.validate(params[:session])
           @form.save
+          @form.user.update!(account_deletion_notification_sent_at: nil)
           sign_in @form.user
           render json: { error: nil, path: after_sign_in_path_for(current_user) }
         else

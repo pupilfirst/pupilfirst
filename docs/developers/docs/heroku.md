@@ -98,8 +98,7 @@ Schedule two tasks (`cleanup` & `daily_digest`) using the [Scheduler](https://de
     ```bash
     $ heroku addons:open scheduler
     ```
-3. Add the two jobs using the _Add Job_ option in the dashboard. Schedule both tasks to run everyday at following time: `daily_digest` at 3:30 PM UTC and `cleanup` at 6:30 PM UTC.
-Use `rake daily_digest` and `rake cleanup` in the _Run Command_ input of the form, for scheduling `cleanup` and `daily_digest` respectively.
+3. Add the two jobs using the _Add Job_ option in the dashboard. Schedule both tasks to run everyday at an appropriate time.
 
 
 ## File storage using AWS

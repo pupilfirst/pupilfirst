@@ -55,8 +55,6 @@ module Users
         # Regenerate the login token.
         user.regenerate_login_token
 
-        user.update!(account_deletion_notification_sent_at: nil)
-
         token_url_options = {
           token: user.login_token,
           host: oauth_origin[:fqdn]

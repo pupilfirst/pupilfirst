@@ -1,0 +1,31 @@
+<% content_for :title do %>
+  <% "Account inactive in #{@school.name}" %>
+<% end %>
+
+<% content_for :title_button_text do %>
+  Sign in to keep your account
+<% end %>
+
+<% content_for(:title_button_link, @sign_in_url) %>
+
+<% content_for :salutation do %>
+  Hello <%= @user.name %>,
+<% end %>
+
+<% content_for :body do %>
+  <p>We noticed that you haven't used your account in
+    <%= @school.name %> for over <%= @inactivity_months %> months.</p>
+  <p> We will automatically delete your account after one month. Once your account is deleted, all your personal
+    information will be removed and you will no longer have access to the school.</p>
+
+  <p> If you would like to keep your account, please sign into the school using the link above
+    before <%= 1.month.from_now.strftime("%b %d,%Y") %>. </p>
+
+  <p>
+    If you&rsquo;re unable to click the link above, please copy and paste the following link into your browser&rsquo;s
+    address bar:
+  </p>
+
+  <%= render 'mailers/link_fallback', url: @sign_in_url %>
+<% end %>
+

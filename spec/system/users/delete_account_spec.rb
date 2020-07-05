@@ -70,7 +70,7 @@ feature 'User Delete Account' do
 
       body = current_email.body
       expect(body).to include("Account Deleted Successfully")
-      expect(body).to include("Your request to delete account in #{user.school.name} has been successfully processed.")
+      expect(body).to include("Your account in #{user.school.name} has been successfully deleted.")
 
       # Check audit records
       audit_record = AuditRecord.last

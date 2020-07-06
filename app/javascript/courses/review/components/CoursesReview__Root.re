@@ -1,11 +1,21 @@
 [%bs.raw {|require("./CoursesReview__Root.css")|}];
 
+exception InvalidSubmissionSortCriterion(string);
+
 open CoursesReview__Types;
 let str = React.string;
 
 type sortBy = {
   criterion: string,
   criterionType: [ | `String | `Number],
+};
+
+let sortCriterion = sortBy => {
+  switch (sortBy.criterion) {
+  | "Submitted At" => `SubmittedAt
+  | "Evaluated At" => `EvaluatedAt
+  | string => raise(InvalidSubmissionSortCriterion(string))
+  };
 };
 
 type selectedTab = [ | `Reviewed | `Pending];
@@ -40,6 +50,7 @@ type action =
   | DeselectCoach
   | UpdateFilterString(string)
   | UpdateSortDirection([ | `Ascending | `Descending])
+  | UpdateSortCriterion(sortBy)
   | SyncSubmissionStatus(OverlaySubmission.t);
 
 let reducer = (state, action) =>
@@ -74,6 +85,7 @@ let reducer = (state, action) =>
           ~submissions,
           ~filter,
           ~sortDirection=state.sortDirection,
+          ~sortBy=sortCriterion(state.sortBy),
           ~totalCount,
         )
       | (true, Some(cursor)) =>
@@ -81,6 +93,7 @@ let reducer = (state, action) =>
           ~submissions,
           ~filter,
           ~sortDirection=state.sortDirection,
+          ~sortBy=sortCriterion(state.sortBy),
           ~totalCount,
           ~cursor,
         )
@@ -104,6 +117,7 @@ let reducer = (state, action) =>
             ~submissions=submissions |> IndexSubmission.replace(submission),
             ~filter,
             ~sortDirection=state.sortDirection,
+            ~sortBy=sortCriterion(state.sortBy),
             ~totalCount,
             ~cursor,
           )
@@ -113,6 +127,7 @@ let reducer = (state, action) =>
             ~filter,
             ~totalCount,
             ~sortDirection=state.sortDirection,
+            ~sortBy=sortCriterion(state.sortBy),
           )
         },
     };
@@ -126,6 +141,7 @@ let reducer = (state, action) =>
   | DeselectCoach => {...state, selectedCoach: None}
   | UpdateFilterString(filterString) => {...state, filterString}
   | UpdateSortDirection(sortDirection) => {...state, sortDirection}
+  | UpdateSortCriterion(sortBy) => {...state, sortBy}
   | SyncSubmissionStatus(overlaySubmission) =>
     let skipReload =
       state.pendingSubmissions
@@ -372,7 +388,19 @@ module Sortable = {
 module SubmissionsSorter = Sorter.Make(Sortable);
 
 let submissionsSorter = (state, send) => {
-  let criteria = [|{criterion: "Submitted At", criterionType: `Number}|];
+  let defaultCriteria = [|
+    {criterion: "Submitted At", criterionType: `Number},
+  |];
+
+  let criteria =
+    switch (state.selectedTab) {
+    | `Pending => defaultCriteria
+    | `Reviewed =>
+      defaultCriteria
+      |> Array.append([|
+           {criterion: "Evaluated At", criterionType: `Number},
+         |])
+    };
   <div
     ariaLabel="Change submissions sorting"
     className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
@@ -386,7 +414,7 @@ let submissionsSorter = (state, send) => {
       onDirectionChange={sortDirection => {
         send(UpdateSortDirection(sortDirection))
       }}
-      onCriterionChange={_ => ()}
+      onCriterionChange={sortBy => send(UpdateSortCriterion(sortBy))}
     />
   </div>;
 };
@@ -504,6 +532,7 @@ let make = (~levels, ~courseId, ~teamCoaches, ~currentCoach) => {
           selectedLevel={state.selectedLevel}
           selectedCoach={state.selectedCoach}
           sortDirection={state.sortDirection}
+          sortBy={sortCriterion(state.sortBy)}
           levels
           submissions={displayedSubmissions(state)}
           reloadAt={state.reloadAt}

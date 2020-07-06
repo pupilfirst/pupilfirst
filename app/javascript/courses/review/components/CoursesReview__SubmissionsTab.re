@@ -15,8 +15,8 @@ type state =
 
 module SubmissionsQuery = [%graphql
   {|
-    query SubmissionsQuery($courseId: ID!, $status: SubmissionStatus!, $sortDirection: SortDirection!, $levelId: ID, $coachId: ID, $after: String) {
-      submissions(courseId: $courseId, status: $status, sortDirection: $sortDirection, levelId: $levelId, coachId: $coachId, first: 20, after: $after) {
+    query SubmissionsQuery($courseId: ID!, $status: SubmissionStatus!, $sortDirection: SortDirection!,$sortBy: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $after: String) {
+      submissions(courseId: $courseId, status: $status, sortDirection: $sortDirection, sortBy: $sortBy, levelId: $levelId, coachId: $coachId, first: 20, after: $after) {
         nodes {
           id,
           title,
@@ -83,6 +83,7 @@ let getSubmissions =
       selectedLevel,
       selectedCoach,
       sortDirection,
+      sortBy,
       selectedTab,
       submissions,
       updateSubmissionsCB,
@@ -102,6 +103,7 @@ let getSubmissions =
     ~courseId,
     ~status=selectedTab,
     ~sortDirection,
+    ~sortBy,
     ~levelId?,
     ~coachId?,
     ~after=?cursor,
@@ -239,6 +241,11 @@ let showSubmissions = (submissions, selectedTab, levels, sortDirection) => {
     : showSubmission(submissions, levels, sortDirection);
 };
 
+type sortData = {
+  sortDirection: [ | `Ascending | `Descending],
+  sortCriterion: [ | `EvaluatedAt | `SubmittedAt],
+};
+
 [@react.component]
 let make =
     (
@@ -247,20 +254,27 @@ let make =
       ~selectedLevel,
       ~selectedCoach,
       ~sortDirection,
+      ~sortBy,
       ~levels,
       ~submissions,
       ~updateSubmissionsCB,
       ~reloadAt,
     ) => {
   let (state, setState) = React.useState(() => Loading);
+
+  let sortData = {sortDirection, sortCriterion: sortBy};
   React.useEffect5(
     () => {
-      if (submissions
-          |> Submissions.needsReloading(
-               selectedLevel,
-               selectedCoach,
-               sortDirection,
-             )) {
+      let needsReloading =
+        submissions
+        |> Submissions.needsReloading(
+             selectedLevel,
+             selectedCoach,
+             sortDirection,
+             sortBy,
+           );
+      Js.log(needsReloading);
+      if (needsReloading) {
         setState(_ => Reloading);
 
         getSubmissions(
@@ -270,6 +284,7 @@ let make =
           selectedLevel,
           selectedCoach,
           sortDirection,
+          sortBy,
           selectedTab,
           [||],
           updateSubmissionsCB,
@@ -278,7 +293,7 @@ let make =
 
       None;
     },
-    (selectedLevel, selectedCoach, sortDirection, selectedTab, reloadAt),
+    (selectedLevel, selectedCoach, sortData, selectedTab, reloadAt),
   );
 
   <div>
@@ -305,6 +320,7 @@ let make =
                     selectedLevel,
                     selectedCoach,
                     sortDirection,
+                    sortBy,
                     selectedTab,
                     submissions,
                     updateSubmissionsCB,

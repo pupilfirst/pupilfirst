@@ -59,7 +59,7 @@ module Startups
     end
 
     def next_level_unlock_date
-      @next_level_unlock_date ||= next_level.unlock_on
+      @next_level_unlock_date ||= next_level.unlock_at&.to_date
     end
 
     private

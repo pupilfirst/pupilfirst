@@ -18,7 +18,7 @@ feature "Student's view of Course Curriculum", js: true do
   let!(:level_3) { create :level, :three, course: course }
   let!(:level_4) { create :level, :four, course: course }
   let!(:level_5) { create :level, :five, course: course }
-  let!(:locked_level_6) { create :level, :six, course: course, unlock_on: 1.month.from_now }
+  let!(:locked_level_6) { create :level, :six, course: course, unlock_at: 1.month.from_now }
 
   # Target group we're interested in. Create milestone
   let!(:target_group_l1) { create :target_group, level: level_1, milestone: true }
@@ -343,7 +343,7 @@ feature "Student's view of Course Curriculum", js: true do
       click_button "L6: #{locked_level_6.name}"
 
       # Being an admin, level 6 should be open, but there should be a notice saying when the level will open for 'regular' students.
-      expect(page).to have_content("This level is still locked for students, and will be unlocked on #{locked_level_6.unlock_on.strftime('%b %-d')}")
+      expect(page).to have_content("This level is still locked for students, and will be unlocked on #{locked_level_6.unlock_at.strftime('%b %-d')}")
       expect(page).to have_content(target_group_l6.name)
       expect(page).to have_content(target_group_l6.description)
       expect(page).to have_content(level_6_target.title)
@@ -385,7 +385,7 @@ feature "Student's view of Course Curriculum", js: true do
       click_button "L6: #{locked_level_6.name}"
 
       # Being a coach, level 6 should be accessible, but there should be a notice saying when the level will open for 'regular' students.
-      expect(page).to have_content("This level is still locked for students, and will be unlocked on #{locked_level_6.unlock_on.strftime('%b %-d')}")
+      expect(page).to have_content("This level is still locked for students, and will be unlocked on #{locked_level_6.unlock_at.strftime('%b %-d')}")
       expect(page).to have_content(target_group_l6.name)
       expect(page).to have_content(target_group_l6.description)
       expect(page).to have_content(level_6_target.title)

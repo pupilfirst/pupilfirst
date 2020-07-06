@@ -224,7 +224,7 @@ feature "Student levelling up", js: true do
   end
 
   context 'when a student is in level 1 and has completed all milestone targets there, but level 2 is locked' do
-    let(:level_2) { create :level, :two, course: course, unlock_on: 1.week.from_now }
+    let(:level_2) { create :level, :two, course: course, unlock_at: 1.week.from_now }
 
     before do
       complete_target target_l1, student

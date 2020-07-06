@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_24_180258) do
+ActiveRecord::Schema.define(version: 2020_07_06_101820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -368,7 +368,7 @@ ActiveRecord::Schema.define(version: 2020_06_24_180258) do
     t.integer "number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.date "unlock_on"
+    t.datetime "unlock_at"
     t.bigint "course_id"
     t.index ["course_id"], name: "index_levels_on_course_id"
     t.index ["number", "course_id"], name: "index_levels_on_number_and_course_id", unique: true

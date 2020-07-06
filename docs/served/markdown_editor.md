@@ -88,7 +88,7 @@ parenthesis. For example:
 
 ![This school's icon](/favicon.ico)
 
-You can also control the sizing of the image:
+You can also control the size of the image:
 
 ```markdown
 ![This school's icon](/favicon.ico =50x50)

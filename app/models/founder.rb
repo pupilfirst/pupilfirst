@@ -1,20 +1,7 @@
 # frozen_string_literal: true
 
 class Founder < ApplicationRecord
-  include PrivateFilenameRetrievable
-
   acts_as_taggable
-
-  COFOUNDER_PENDING = 'pending'
-  COFOUNDER_ACCEPTED = 'accepted'
-  COFOUNDER_REJECTED = 'rejected'
-
-  # Monthly fee amount for founders.
-  FEE = 4000
-
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  # devise :invitable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable
 
   serialize :roles
 
@@ -35,8 +22,6 @@ class Founder < ApplicationRecord
   has_many :timeline_events, through: :timeline_event_owners
   has_many :leaderboard_entries, dependent: :destroy
   has_many :coach_notes, foreign_key: 'student_id', inverse_of: :student, dependent: :destroy
-
-  has_one_attached :avatar
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }

@@ -2,7 +2,7 @@
 
 class Startup < ApplicationRecord
   include FriendlyId
-  include PrivateFilenameRetrievable
+
   acts_as_taggable
 
   COURSE_FEE = 50_000

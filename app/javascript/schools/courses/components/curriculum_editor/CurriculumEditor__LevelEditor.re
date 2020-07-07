@@ -20,7 +20,7 @@ type state = {
 
 type action =
   | UpdateName(string, bool)
-  | UpdateUnlockOn(option(Js.Date.t))
+  | UpdateUnlockAt(option(Js.Date.t))
   | BeginSaving
   | FailSaving
   | UpdateTab(tab)
@@ -34,7 +34,7 @@ let reducer = (state, action) => {
       hasNameError,
       dirty: true,
     }
-  | UpdateUnlockOn(date) => {...state, unlockAt: date, dirty: true}
+  | UpdateUnlockAt(date) => {...state, unlockAt: date, dirty: true}
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
   | UpdateTab(tab) => {...state, tab}
@@ -177,7 +177,7 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
       <DatePicker
         id="unlock-on-input"
         selected=?{state.unlockAt}
-        onChange={date => send(UpdateUnlockOn(date))}
+        onChange={date => send(UpdateUnlockAt(date))}
       />
     </div>
     <div className="flex mt-5">

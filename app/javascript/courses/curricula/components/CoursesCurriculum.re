@@ -107,8 +107,7 @@ let handleLockedLevel = level =>
     <img className="max-w-sm mx-auto" src=levelLockedImage />
     {switch (level |> Level.unlockAt) {
      | Some(date) =>
-       let dateString =
-         date->DateFns.parseISO->DateFns.format("MMMM d, yyyy");
+       let dateString = date->DateFns.format("MMMM d, yyyy");
        <div className="font-semibold text-md px-3">
          <p> {"The level is currently locked!" |> str} </p>
          <p>

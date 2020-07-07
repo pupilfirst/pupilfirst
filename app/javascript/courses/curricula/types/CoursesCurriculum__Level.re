@@ -2,7 +2,7 @@ type t = {
   id: string,
   name: string,
   number: int,
-  unlockAt: option(string),
+  unlockAt: option(Js.Date.t),
 };
 
 let decode = json =>
@@ -10,8 +10,7 @@ let decode = json =>
     id: json |> field("id", string),
     name: json |> field("name", string),
     number: json |> field("number", int),
-    unlockAt:
-      json |> field("unlockAt", nullable(string)) |> Js.Null.toOption,
+    unlockAt: json |> optional(field("unlockAt", DateFns.decodeISO)),
   };
 
 let id = t => t.id;
@@ -21,7 +20,7 @@ let unlockAt = t => t.unlockAt;
 
 let isUnlocked = t =>
   switch (t.unlockAt) {
-  | Some(date) => date->DateFns.parseISO->DateFns.isPast
+  | Some(date) => DateFns.isPast(date)
   | None => true
   };
 
@@ -44,7 +43,7 @@ let unlockDateString = t =>
       "unlockDateString was called for a CoursesCurriculum__Level without unlockAt",
     );
     "";
-  | Some(unlockAt) => unlockAt->DateFns.parseISO->DateFns.format("MMM d")
+  | Some(unlockAt) => DateFns.format(unlockAt, "MMM d")
   };
 
 let findByLevelNumber = (levels, levelNumber) =>

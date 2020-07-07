@@ -27,6 +27,6 @@ class Level < ApplicationRecord
   end
 
   def unlocked?
-    !unlock_at&.future?
+    unlock_at.blank? || unlock_at.past?
   end
 end

@@ -10,7 +10,7 @@ type tab =
 
 type state = {
   name: string,
-  unlockOn: option(Js.Date.t),
+  unlockAt: option(Js.Date.t),
   hasNameError: bool,
   dirty: bool,
   saving: bool,
@@ -20,7 +20,7 @@ type state = {
 
 type action =
   | UpdateName(string, bool)
-  | UpdateUnlockOn(option(Js.Date.t))
+  | UpdateUnlockAt(option(Js.Date.t))
   | BeginSaving
   | FailSaving
   | UpdateTab(tab)
@@ -34,7 +34,7 @@ let reducer = (state, action) => {
       hasNameError,
       dirty: true,
     }
-  | UpdateUnlockOn(date) => {...state, unlockOn: date, dirty: true}
+  | UpdateUnlockAt(date) => {...state, unlockAt: date, dirty: true}
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
   | UpdateTab(tab) => {...state, tab}
@@ -62,8 +62,8 @@ let setPayload = (authenticityToken, state) => {
 
   Js.Dict.set(
     payload,
-    "unlock_on",
-    state.unlockOn
+    "unlock_at",
+    state.unlockAt
     ->Belt.Option.mapWithDefault(Js.Json.string(""), DateFns.encodeISO),
   );
 
@@ -73,15 +73,15 @@ let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full";
 
 let computeInitialState = level => {
-  let (name, unlockOn) =
+  let (name, unlockAt) =
     switch (level) {
-    | Some(level) => (level |> Level.name, level |> Level.unlockOn)
+    | Some(level) => (level |> Level.name, level |> Level.unlockAt)
     | None => ("", None)
     };
 
   {
     name,
-    unlockOn,
+    unlockAt,
     hasNameError: false,
     dirty: false,
     saving: false,
@@ -99,7 +99,7 @@ let drawerTitle = level =>
 let handleResponseCB = (level, updateLevelsCB, state, json) => {
   let id = json |> Json.Decode.(field("id", string));
   let number = json |> Json.Decode.(field("number", int));
-  let newLevel = Level.create(id, state.name, number, state.unlockOn);
+  let newLevel = Level.create(id, state.name, number, state.unlockAt);
 
   switch (level) {
   | Some(_) => Notification.success("Success", "Level updated successfully")
@@ -176,8 +176,8 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
       <span className="text-xs"> {str(" (optional)")} </span>
       <DatePicker
         id="unlock-on-input"
-        selected=?{state.unlockOn}
-        onChange={date => send(UpdateUnlockOn(date))}
+        selected=?{state.unlockAt}
+        onChange={date => send(UpdateUnlockAt(date))}
       />
     </div>
     <div className="flex mt-5">

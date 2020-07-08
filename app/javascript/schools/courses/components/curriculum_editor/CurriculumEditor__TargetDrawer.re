@@ -56,11 +56,10 @@ let closeDrawer = course =>
     "/school/courses/" ++ (course |> Course.id) ++ "/curriculum",
   );
 
-let onWindowBeforeUnload = event =>
-  DomUtils.Event.setReturnValue(
-    event,
-    "There are unsaved changes! Are you sure to leave?",
-  );
+let beforeWindowUnload = event => {
+  event |> Webapi.Dom.Event.preventDefault;
+  DomUtils.Event.setReturnValue(event, "");
+};
 
 [@react.component]
 let make =
@@ -82,13 +81,13 @@ let make =
       let removeEventListener = () =>
         Webapi.Dom.Window.removeEventListener(
           "beforeunload",
-          onWindowBeforeUnload,
+          beforeWindowUnload,
           window,
         );
       if (dirty) {
         Webapi.Dom.Window.addEventListener(
           "beforeunload",
-          onWindowBeforeUnload,
+          beforeWindowUnload,
           window,
         );
       } else {

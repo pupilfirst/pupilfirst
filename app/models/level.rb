@@ -7,11 +7,11 @@ class Level < ApplicationRecord
   has_many :targets, through: :target_groups
   has_many :timeline_events, through: :targets
 
-  scope :unlocked, -> { where(unlock_on: nil).or(where('unlock_on <= ?', Time.zone.today)) }
+  scope :unlocked, -> { where(unlock_at: nil).or(where('unlock_at <= ?', Time.zone.now)) }
 
   belongs_to :course
 
-  normalize_attribute :unlock_on
+  normalize_attribute :unlock_at
 
   def display_name
     "#{course.short_name}##{number}: #{name}"
@@ -27,6 +27,6 @@ class Level < ApplicationRecord
   end
 
   def unlocked?
-    !unlock_on&.future?
+    unlock_at.blank? || unlock_at.past?
   end
 end

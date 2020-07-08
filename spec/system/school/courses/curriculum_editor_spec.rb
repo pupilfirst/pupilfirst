@@ -72,7 +72,7 @@ feature 'Curriculum Editor', js: true do
 
     level = course.reload.levels.last
     expect(level.name).to eq(new_level_name)
-    expect(level.unlock_on).to eq(date)
+    expect(level.unlock_at).to eq(date)
 
     # he should be able to edit the level
     find('button[title="Edit selected level"').click
@@ -83,7 +83,7 @@ feature 'Curriculum Editor', js: true do
     expect(page).to have_text('Level updated successfully')
     dismiss_notification
 
-    expect(level.reload.unlock_on).to eq(nil)
+    expect(level.reload.unlock_at).to eq(nil)
 
     # he should be able to create a new target group
     find('.target-group__create').click
@@ -201,7 +201,7 @@ feature 'Curriculum Editor', js: true do
     click_button 'Update Level'
 
     expect(page).to have_text('Level updated successfully')
-    expect(level_2.reload.unlock_on).to eq(Date.current)
+    expect(level_2.reload.unlock_at).to eq(Date.current)
   end
 
   context 'when there is a level zero and three other levels' do

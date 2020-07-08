@@ -64,6 +64,8 @@ module Schools
     end
 
     def delete_users
+      UserActivity.joins(user: :school).where(schools: { id: @school.id }).delete_all
+      Faculty.joins(user: :school).where(schools: { id: @school.id }).delete_all
       @school.users.each(&:destroy!)
     end
   end

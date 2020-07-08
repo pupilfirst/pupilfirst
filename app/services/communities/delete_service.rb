@@ -10,7 +10,7 @@ module Communities
         delete_community_course_connections
         delete_topics
 
-        @community.destroy!
+        @community.reload.destroy!
       end
     end
 

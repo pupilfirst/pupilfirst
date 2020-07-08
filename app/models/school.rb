@@ -13,6 +13,8 @@ class School < ApplicationRecord
   has_many :target_groups, through: :levels
   has_many :targets, through: :target_groups
   has_many :timeline_events, through: :founders
+  has_many :markdown_attachments, dependent: :destroy
+  has_many :audit_records, dependent: :destroy
 
   acts_as_taggable_on :founder_tags
 

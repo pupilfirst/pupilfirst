@@ -16,7 +16,7 @@ module Courses
         delete_faculty_course_enrollments
         delete_levels
 
-        @course.destroy!
+        @course.reload.destroy!
       end
     end
 

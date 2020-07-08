@@ -6,7 +6,7 @@ module Communities
     end
 
     def execute
-      Community.transcation do
+      Community.transaction do
         delete_community_course_connections
         delete_topics
 
@@ -28,7 +28,7 @@ module Communities
       TextVersion.where(versionable_type: 'Post', versionable_id: post_ids).delete_all
       posts.delete_all
 
-      @community.topics.delete_all
+      Topic.where(community: @community).delete_all
     end
   end
 end

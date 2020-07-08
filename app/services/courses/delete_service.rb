@@ -23,7 +23,7 @@ module Courses
     private
 
     def delete_applicants
-      @course.applicants.delete_all
+      Applicant.where(course_id: @course.id).delete_all
     end
 
     def delete_certificates
@@ -32,11 +32,11 @@ module Courses
     end
 
     def delete_community_course_connections
-      @course.community_course_connections.delete_all
+      CommunityCourseConnection.where(course_id: @course.id).delete_all
     end
 
     def delete_course_authors
-      @course.course_authors.delete_all
+      CourseAuthor.joins(:course).where(courses: { id: @course.id }).delete_all
     end
 
     def delete_course_exports
@@ -47,7 +47,7 @@ module Courses
     def delete_evaluation_criteria
       TargetEvaluationCriterion.where(evaluation_criteria: @course.evaluation_criteria).delete_all
       TimelineEventGrade.where(evaluation_criteria: @course.evaluation_criteria).delete_all
-      @course.evaluation_criteria.delete_all
+      EvaluationCriterion.where(course_id: @course.id).delete_all
     end
 
     def delete_faculty_course_enrollments
@@ -59,11 +59,11 @@ module Courses
       delete_teams
       delete_content
 
-      @course.levels.delete_all
+      Level.where(course_id: @course.id).delete_all
     end
 
     def delete_submissions
-      submissions = TimelineEvent.joins(founder: :course).where(course: @course)
+      submissions = TimelineEvent.joins(founder: :course).where(courses: { id: @course.id })
 
       TimelineEventFile.where(timeline_event_id: submissions).delete_all
       TimelineEventOwner.where(timeline_event_id: submissions).delete_all
@@ -72,16 +72,15 @@ module Courses
     end
 
     def delete_content
-      AnswerOption.joins(quiz_question: { quiz: { target: :course } }).where(course: @course).delete_all
-      QuizQuestion.joins(quiz: { target: :course }).where(course: @course).delete_all
-      Quiz.joins(target: :course).where(course: @course).delete_all
-      ContentBlock.joins(target_version: { target: :course }).where(course: @course).delete_all
-      TargetVersion.joins(target: :course).where(course: @course).delete_all
-      TargetPrerequisite.joins(target: :course).where(course: @course).delete_all
+      AnswerOption.joins(quiz_question: { quiz: { target: :course } }).where(courses: { id: @course.id }).delete_all
+      QuizQuestion.joins(quiz: { target: :course }).where(courses: { id: @course.id }).delete_all
+      Quiz.joins(target: :course).where(courses: { id: @course.id }).delete_all
+      ContentBlock.joins(target_version: { target: :course }).where(courses: { id: @course.id }).delete_all
+      TargetVersion.joins(target: :course).where(courses: { id: @course.id }).delete_all
+      TargetPrerequisite.joins(target: :course).where(courses: { id: @course.id }).delete_all
       ResourceVersion.where(versionable_type: 'Target', versionable_id: @course.targets.select(:id)).delete_all
-
-      @course.targets.delete_all
-      @course.target_groups.delete_all
+      Target.joins(:course).where(courses: { id: @course.id }).delete_all
+      TargetGroup.joins(:course).where(courses: { id: @course.id }).delete_all
     end
 
     def delete_teams
@@ -93,8 +92,7 @@ module Courses
       LeaderboardEntry.joins(founder: :startup).where(startups: { id: startup_ids }).delete_all
       Founder.where(startup_id: startup_ids).delete_all
       StartupFeedback.where(startup_id: startup_ids).delete_all
-
-      @course.startups.delete_all
+      Startup.where(id: startup_ids).delete_all
     end
   end
 end

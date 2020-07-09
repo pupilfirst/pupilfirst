@@ -268,8 +268,8 @@ feature 'Course students list', js: true do
   end
 
   context 'when there are locked levels in course' do
-    let!(:locked_level_4) { create :level, :four, course: course, unlock_on: 5.days.from_now }
-    let!(:locked_level_5) { create :level, :five, course: course, unlock_on: 5.days.from_now }
+    let!(:locked_level_4) { create :level, :four, course: course, unlock_at: 5.days.from_now }
+    let!(:locked_level_5) { create :level, :five, course: course, unlock_at: 5.days.from_now }
 
     scenario 'it is shown as locked in student level wise distribution' do
       sign_in_user course_coach.user, referer: students_course_path(course)

@@ -10425,12 +10425,16 @@ markdown-escapes@^1.0.0:
   resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.4.tgz#c95415ef451499d7602b91095f3c8e8975f78535"
   integrity sha512-8z4efJYk43E0upd0NbVXwgSTQs6cT3T06etieCMEg7dRbzCbxUCK/GHlX8mhHRDcp+OLlHkPKsvqQTCvsRl2cg==
 
-markdown-it-linkify-images@^1.1.1:
+markdown-it-imsize@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/markdown-it-imsize/-/markdown-it-imsize-2.0.1.tgz#cca0427905d05338a247cb9ca9d968c5cddd5170"
+  integrity sha1-zKBCeQXQUziiR8ucqdloxc3dUXA=
+
+"markdown-it-linkify-images@https://github.com/harigopal/markdown-it-linkify-images":
   version "1.1.1"
-  resolved "https://registry.yarnpkg.com/markdown-it-linkify-images/-/markdown-it-linkify-images-1.1.1.tgz#1d98bc8219c61ae2f2bf9d258295e74d8a45864c"
-  integrity sha512-1IEmAaAjIgAwY+tZI0sxDXdy9QKHutj5cN0lH2JBiSZt+2NYKrWRJj0cloQW3OFIfP2MLFA1E+6OLJhXPiLgNw==
+  resolved "https://github.com/harigopal/markdown-it-linkify-images#71a2b5a07bfc903c4c029a485566b05351b240df"
   dependencies:
-    markdown-it "^8.4.2"
+    markdown-it "^10.0.0"
 
 markdown-it-multimd-table@^4.0.0:
   version "4.0.1"

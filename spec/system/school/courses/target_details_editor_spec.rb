@@ -185,6 +185,20 @@ feature 'Target Details Editor', js: true do
     expect(target.prerequisite_targets.first).to eq(target_2_l2)
   end
 
+  scenario 'user is notified on reloading window if target editor has unsaved changes' do
+    sign_in_user course_author.user, referer: details_school_course_target_path(course_id: course.id, id: target_1_l2.id)
+
+    expect(page).to have_text('Are there any prerequisite targets?')
+    # Can refresh the page without any confirm dialog
+    visit current_path
+
+    fill_in 'title', with: new_target_title, fill_options: { clear: :backspace }
+
+    visit current_path
+    # Need to confirm if page is refreshed with unsaved data.
+    accept_confirm
+  end
+
   context 'when targets have an existing checklist' do
     let!(:target_2_l2) { create :target, :with_default_checklist, target_group: target_group_2, evaluation_criteria: [evaluation_criterion] }
     let(:checklist_with_multiple_items) { [{ 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => "Write something about your submission", 'optional' => false }, { 'kind' => Target::CHECKLIST_KIND_SHORT_TEXT, 'title' => "Write something short about your submission", 'optional' => true }, { 'kind' => Target::CHECKLIST_KIND_LINK, 'title' => "Attach link for your submission", 'optional' => true }] }

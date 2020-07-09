@@ -88,18 +88,21 @@ Now, if you visit the web address for your Heroku app, you should see the homepa
 
 ### Scheduling periodic tasks
 
-Schedule two tasks (`cleanup` & `daily_digest`) using the [Scheduler](https://devcenter.heroku.com/articles/scheduler) add-on available in Heroku. The `cleanup` task is used to perform general database cleanup for orphaned entries and `daily_digest` task sends a daily digest via email to all users in the school.
+There are a few tasks that must be run scheduled to run periodically; this can be done using Heroku's [Scheduler](https://devcenter.heroku.com/articles/scheduler) add-on.
 
-1. Add the _Scheduler_ add-on on Heroku
+- `cleanup` (daily) - used to perform general database cleanup of orphaned entries.
+- `daily_digest` (daily) - sends a daily digest of updates via email to all users in the school.
+- `notify_and_delete_inactive_users` (daily) - checks for inactive users, notifies those who are a month away from deletion, and deletes notified users after the configured time.
+
+1. Add the _Scheduler_ add-on on Heroku.
     ```bash
     $ heroku addons:create scheduler:standard
     ```
-2. Open the _Scheduler_ dashboard for your app
+2. Open the _Scheduler_ dashboard for your app.
     ```bash
     $ heroku addons:open scheduler
     ```
-3. Add the two jobs using the _Add Job_ option in the dashboard. Schedule both tasks to run everyday at an appropriate time.
-
+3. Add the the jobs using the _Add Job_ option in the dashboard. Schedule both tasks to run as per the requirements noted above.
 
 ## File storage using AWS
 

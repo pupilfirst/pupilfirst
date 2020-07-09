@@ -2,7 +2,7 @@ type t = {
   id: string,
   name: string,
   number: int,
-  unlockOn: option(Js.Date.t),
+  unlockAt: option(Js.Date.t),
 };
 
 let id = t => t.id;
@@ -11,14 +11,14 @@ let name = t => t.name;
 
 let number = t => t.number;
 
-let unlockOn = t => t.unlockOn;
+let unlockAt = t => t.unlockAt;
 
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
     name: json |> field("name", string),
     number: json |> field("number", int),
-    unlockOn: json |> optional(field("unlockOn", DateFns.decodeISO)),
+    unlockAt: json |> optional(field("unlockAt", DateFns.decodeISO)),
   };
 
 let selectLevel = (levels, level_name) =>
@@ -30,7 +30,7 @@ let selectLevel = (levels, level_name) =>
        ++ "in CurriculumEditor",
      );
 
-let create = (id, name, number, unlockOn) => {id, name, number, unlockOn};
+let create = (id, name, number, unlockAt) => {id, name, number, unlockAt};
 
 let updateArray = (levels, level) => {
   let oldLevels = levels |> Js.Array.filter(l => l.id !== level.id);

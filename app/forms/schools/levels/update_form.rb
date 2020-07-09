@@ -2,11 +2,11 @@ module Schools
   module Levels
     class UpdateForm < Reform::Form
       property :name, validates: { presence: true, length: { maximum: 250 } }
-      property :unlock_on
+      property :unlock_at
 
       def save
         level.name = name
-        level.unlock_on = unlock_on_date
+        level.unlock_at = unlock_at_time
         level.save!
 
         level
@@ -14,10 +14,10 @@ module Schools
 
       private
 
-      def unlock_on_date
-        return if unlock_on.blank?
+      def unlock_at_time
+        return if unlock_at.blank?
 
-        Time.zone.parse(unlock_on).to_date
+        Time.zone.parse(unlock_at)
       end
 
       def level

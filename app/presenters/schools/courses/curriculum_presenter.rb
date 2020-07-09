@@ -40,7 +40,7 @@ module Schools
             id: level.id,
             name: level.name,
             number: level.number,
-            unlockOn: level.unlock_on
+            unlockAt: level.unlock_at
           }
         end
       end

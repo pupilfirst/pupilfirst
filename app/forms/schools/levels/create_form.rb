@@ -3,7 +3,7 @@ module Schools
     class CreateForm < Reform::Form
       property :name, validates: { presence: true, length: { maximum: 250 } }
       property :course_id, validates: { presence: true }
-      property :unlock_on
+      property :unlock_at
 
       validate :course_exists
 
@@ -12,7 +12,7 @@ module Schools
           course: course,
           name: name,
           number: next_level_number,
-          unlock_on: unlock_on_date
+          unlock_at: unlock_at_time
         )
         level.save
         level
@@ -20,10 +20,10 @@ module Schools
 
       private
 
-      def unlock_on_date
-        return if unlock_on.blank?
+      def unlock_at_time
+        return if unlock_at.blank?
 
-        Time.zone.parse(unlock_on).to_date
+        Time.zone.parse(unlock_at)
       end
 
       def next_level_number

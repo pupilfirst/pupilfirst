@@ -25,12 +25,13 @@ describe Courses::DeleteService do
   let!(:coach_note_c1) { create :coach_note, author: coach_c1.user, student: student_c1 }
   let(:evaluation_criterion_c1) { create :evaluation_criterion, course: course_1 }
   let(:target_reviewed_c1) { create :target, :with_content, :with_group, :with_default_checklist, level: level_c1, evaluation_criteria: [evaluation_criterion_c1] }
+  let!(:topic_c1) { create :topic, :with_first_post, target: target_reviewed_c1, community: community_course_connection_c1.community }
   let!(:resource_version_c1) { create :resource_version, versionable: target_reviewed_c1 }
   let(:target_with_quiz_c1) { create :target, :with_content, target_group: target_reviewed_c1.target_group, prerequisite_targets: [target_reviewed_c1] }
   let!(:quiz_c1) { create :quiz, :with_question_and_answers, target: target_with_quiz_c1 }
   let!(:submission_c1) { complete_target(target_reviewed_c1, student_c1, evaluator: common_coach) }
-  let!(:feedback_c1) { create :startup_feedback, startup: team_c1, faculty: common_coach, timeline_event: submission_c1 }
   let!(:submission_file_c1) { create :timeline_event_file, timeline_event: submission_c1 }
+  let!(:feedback_c1) { create :startup_feedback, startup: team_c1, faculty: common_coach, timeline_event: submission_c1 }
 
   # Course 2 - should be left untouched.
   let(:course_2) { create :course, name: 'Course to preserve' }
@@ -48,12 +49,13 @@ describe Courses::DeleteService do
   let!(:coach_note_c2) { create :coach_note, author: coach_c2.user, student: student_c2 }
   let(:evaluation_criterion_c2) { create :evaluation_criterion, course: course_2 }
   let(:target_reviewed_c2) { create :target, :with_content, :with_group, :with_default_checklist, level: level_c2, evaluation_criteria: [evaluation_criterion_c2] }
+  let!(:topic_c2) { create :topic, :with_first_post, target: target_reviewed_c2, community: community_course_connection_c2.community }
   let!(:resource_version_c2) { create :resource_version, versionable: target_reviewed_c2 }
   let(:target_with_quiz_c2) { create :target, :with_content, target_group: target_reviewed_c2.target_group, prerequisite_targets: [target_reviewed_c2] }
   let!(:quiz_c2) { create :quiz, :with_question_and_answers, target: target_with_quiz_c2 }
   let!(:submission_c2) { complete_target(target_reviewed_c2, student_c2, evaluator: common_coach) }
-  let!(:feedback_c2) { create :startup_feedback, startup: team_c2, faculty: common_coach, timeline_event: submission_c2 }
   let!(:submission_file_c2) { create :timeline_event_file, timeline_event: submission_c2 }
+  let!(:feedback_c2) { create :startup_feedback, startup: team_c2, faculty: common_coach, timeline_event: submission_c2 }
 
   before do
     # Tag the course exports.
@@ -69,15 +71,79 @@ describe Courses::DeleteService do
     team_c2.save!
   end
 
+  let(:expectations) {
+    [
+      [Proc.new { Faculty.count }, 3, 3],
+      [Proc.new { Course.count }, 2, 1],
+      [Proc.new { Level.count }, 2, 1],
+      [Proc.new { Startup.count }, 2, 1],
+      [Proc.new { Founder.count }, 2, 1],
+      [Proc.new { Applicant.count }, 2, 1],
+      [Proc.new { Certificate.count }, 2, 1],
+      [Proc.new { IssuedCertificate.count }, 2, 1],
+      [Proc.new { CommunityCourseConnection.count }, 2, 1],
+      [Proc.new { CourseAuthor.count }, 2, 1],
+      [Proc.new { CourseExport.count }, 2, 1],
+      [Proc.new { FacultyCourseEnrollment.count }, 4, 2],
+      [Proc.new { FacultyStartupEnrollment.count }, 2, 1],
+      [Proc.new { CoachNote.count }, 2, 1],
+      [Proc.new { EvaluationCriterion.count }, 2, 1],
+      [Proc.new { TimelineEventGrade.count }, 2, 1],
+      [Proc.new { TargetEvaluationCriterion.count }, 2, 1],
+      [Proc.new { TargetGroup.count }, 2, 1],
+      [Proc.new { Target.count }, 4, 2],
+      [Proc.new { TargetPrerequisite.count }, 2, 1],
+      [Proc.new { TargetVersion.count }, 4, 2],
+      [Proc.new { ContentBlock.count }, 16, 8],
+      [Proc.new { ResourceVersion.count }, 2, 1],
+      [Proc.new { Quiz.count }, 2, 1],
+      [Proc.new { QuizQuestion.count }, 2, 1],
+      [Proc.new { AnswerOption.count }, 8, 4],
+      [Proc.new { TimelineEvent.count }, 2, 1],
+      [Proc.new { TimelineEventOwner.count }, 2, 1],
+      [Proc.new { TimelineEventFile.count }, 2, 1],
+      [Proc.new { StartupFeedback.count }, 2, 1],
+      [Proc.new { ActsAsTaggableOn::Tagging.count }, 4, 2],
+    ]
+  }
+
   describe '#execute' do
     it 'deletes all data related to the course and the course itself' do
-      expect { subject.execute }.to change {
-        [
-          Faculty.count,
-          Course.count,
-          Level.count,
-        ]
-      }.from([3, 2, 2]).to([3, 1, 1])
+      expect { subject.execute }.to(
+        change {
+          expectations.map { |e| e[0].call }
+        }.from(
+          expectations.map { |e| e[1] }
+        ).to(
+          expectations.map { |e| e[2] }
+        )
+      )
+
+      expect { course_2.reload }.not_to raise_error
+      expect { level_c2.reload }.not_to raise_error
+      expect { team_c2.reload }.not_to raise_error
+      expect { student_c2.reload }.not_to raise_error
+      expect { applicant_c2.reload }.not_to raise_error
+      expect { certificate_c2.reload }.not_to raise_error
+      expect { issued_certificate_c2.reload }.not_to raise_error
+      expect { community_course_connection_c2.reload }.not_to raise_error
+      expect { course_author_c2.reload }.not_to raise_error
+      expect { course_export_c2.reload }.not_to raise_error
+      expect { faculty_course_enrollment_c2.reload }.not_to raise_error
+      expect { faculty_startup_enrollment_c2.reload }.not_to raise_error
+      expect { coach_note_c2.reload }.not_to raise_error
+      expect { evaluation_criterion_c2.reload }.not_to raise_error
+      expect { target_reviewed_c2.reload }.not_to raise_error
+      expect { topic_c2.reload }.not_to raise_error
+      expect { resource_version_c2.reload }.not_to raise_error
+      expect { target_with_quiz_c2.reload }.not_to raise_error
+      expect { quiz_c2.reload }.not_to raise_error
+      expect { submission_c2.reload }.not_to raise_error
+      expect { submission_file_c2.reload }.not_to raise_error
+      expect { feedback_c2.reload }.not_to raise_error
+
+      expect(topic_c1.reload.target_id).to eq(nil)
+      expect(topic_c2.reload.target_id).to eq(target_reviewed_c2.id)
     end
   end
 end

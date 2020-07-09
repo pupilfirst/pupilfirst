@@ -65,15 +65,19 @@ module Courses
     end
 
     def delete_submissions
-      submission_ids = TimelineEvent.joins(founders: :course).where(courses: { id: @course.id }).distinct(:id).select(:id)
+      timeline_event_owners = TimelineEventOwner.joins(founder: :course).where(courses: { id: @course.id })
+      submission_ids = timeline_event_owners.distinct(:timeline_event_id).pluck(:timeline_event_id)
 
-      TimelineEventFile.where(timeline_event_id: submission_ids).delete_all
-      TimelineEventOwner.where(timeline_event_id: submission_ids).delete_all
+      TimelineEventFile.joins(timeline_event: { founders: :course }).where(courses: { id: @course.id }).delete_all
+      timeline_event_owners.delete_all
+      StartupFeedback.where(timeline_event_id: submission_ids).update_all(timeline_event_id: nil) # rubocop:disable Rails/SkipsModelValidations
       TimelineEvent.where(id: submission_ids).delete_all
     end
 
     def delete_content
       quiz_questions = QuizQuestion.joins(quiz: { target: :course }).where(courses: { id: @course.id })
+      target_ids = Target.joins(:course).where(courses: { id: @course.id }).select(:id)
+
       quiz_questions.update_all(correct_answer_id: nil) # rubocop:disable Rails/SkipsModelValidations
       AnswerOption.joins(quiz_question: { quiz: { target: :course } }).where(courses: { id: @course.id }).delete_all
       quiz_questions.delete_all
@@ -82,6 +86,7 @@ module Courses
       TargetVersion.joins(target: :course).where(courses: { id: @course.id }).delete_all
       TargetPrerequisite.joins(target: :course).where(courses: { id: @course.id }).delete_all
       ResourceVersion.where(versionable_type: 'Target', versionable_id: @course.targets.select(:id)).delete_all
+      Topic.where(target_id: target_ids).update_all(target_id: nil) # rubocop:disable Rails/SkipsModelValidations
       Target.joins(:course).where(courses: { id: @course.id }).delete_all
       TargetGroup.joins(:course).where(courses: { id: @course.id }).delete_all
     end

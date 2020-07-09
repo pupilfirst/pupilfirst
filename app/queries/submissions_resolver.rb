@@ -2,7 +2,7 @@ class SubmissionsResolver < ApplicationQuery
   property :course_id
   property :status
   property :sort_direction
-  property :sort_by
+  property :sort_criterion
   property :level_id
   property :coach_id
 
@@ -31,13 +31,13 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def sort_criterion_string
-    case sort_by
+    case sort_criterion
     when 'SubmittedAt'
       'created_at'
     when 'EvaluatedAt'
       'evaluated_at'
     else
-      raise "#{sort_by} is not a valid sort criterion"
+      raise "#{sort_criterion} is not a valid sort criterion"
     end
   end
 

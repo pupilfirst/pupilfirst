@@ -15,8 +15,8 @@ type state =
 
 module SubmissionsQuery = [%graphql
   {|
-    query SubmissionsQuery($courseId: ID!, $status: SubmissionStatus!, $sortDirection: SortDirection!,$sortBy: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $after: String) {
-      submissions(courseId: $courseId, status: $status, sortDirection: $sortDirection, sortBy: $sortBy, levelId: $levelId, coachId: $coachId, first: 20, after: $after) {
+    query SubmissionsQuery($courseId: ID!, $status: SubmissionStatus!, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $after: String) {
+      submissions(courseId: $courseId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, levelId: $levelId, coachId: $coachId, first: 20, after: $after) {
         nodes {
           id,
           title,
@@ -82,7 +82,6 @@ let getSubmissions =
       setState,
       selectedLevel,
       selectedCoach,
-      sortDirection,
       sortBy,
       selectedTab,
       submissions,
@@ -98,12 +97,13 @@ let getSubmissions =
 
   let levelId = selectedLevel |> OptionUtils.map(level => level |> Level.id);
   let coachId = selectedCoach |> OptionUtils.map(coach => coach |> Coach.id);
-
+  let sortDirection = sortBy |> SubmissionsSorting.sortDirection;
+  let sortCriterion = sortBy |> SubmissionsSorting.sortCriterion;
   SubmissionsQuery.make(
     ~courseId,
     ~status=selectedTab,
     ~sortDirection,
-    ~sortBy,
+    ~sortCriterion,
     ~levelId?,
     ~coachId?,
     ~after=?cursor,
@@ -124,6 +124,7 @@ let getSubmissions =
        Js.Promise.resolve();
      })
   |> ignore;
+  ();
 };
 
 let submissionStatus = submission => {
@@ -223,12 +224,14 @@ let showSubmission = (submissions, levels, sortDirection) =>
      |> React.array}
   </div>;
 
-let showSubmissions = (submissions, selectedTab, levels, sortDirection) => {
+let showSubmissions = (submissions, selectedTab, levels, sortBy) => {
   let imageSrc =
     switch (selectedTab) {
     | `Pending => pendingEmptyImage
     | `Reviewed => reviewedEmptyImage
     };
+
+  let sortDirection = sortBy |> SubmissionsSorting.sortDirection;
 
   submissions |> ArrayUtils.isEmpty
     ? <div
@@ -246,6 +249,11 @@ type sortData = {
   sortCriterion: [ | `EvaluatedAt | `SubmittedAt],
 };
 
+let sortData = (sortDirection, sortCriterion) => {
+  sortDirection,
+  sortCriterion,
+};
+
 [@react.component]
 let make =
     (
@@ -253,7 +261,6 @@ let make =
       ~selectedTab,
       ~selectedLevel,
       ~selectedCoach,
-      ~sortDirection,
       ~sortBy,
       ~levels,
       ~submissions,
@@ -262,18 +269,11 @@ let make =
     ) => {
   let (state, setState) = React.useState(() => Loading);
 
-  let sortData = {sortDirection, sortCriterion: sortBy};
   React.useEffect5(
     () => {
       let needsReloading =
         submissions
-        |> Submissions.needsReloading(
-             selectedLevel,
-             selectedCoach,
-             sortDirection,
-             sortBy,
-           );
-      Js.log(needsReloading);
+        |> Submissions.needsReloading(selectedLevel, selectedCoach, sortBy);
       if (needsReloading) {
         setState(_ => Reloading);
 
@@ -283,7 +283,6 @@ let make =
           setState,
           selectedLevel,
           selectedCoach,
-          sortDirection,
           sortBy,
           selectedTab,
           [||],
@@ -293,7 +292,7 @@ let make =
 
       None;
     },
-    (selectedLevel, selectedCoach, sortData, selectedTab, reloadAt),
+    (selectedLevel, selectedCoach, sortBy, selectedTab, reloadAt),
   );
 
   <div>
@@ -303,7 +302,7 @@ let make =
        SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
      | PartiallyLoaded({submissions}, cursor) =>
        <div>
-         {showSubmissions(submissions, selectedTab, levels, sortDirection)}
+         {showSubmissions(submissions, selectedTab, levels, sortBy)}
          {state == Loading
             ? SkeletonLoading.multiple(
                 ~count=3,
@@ -319,7 +318,6 @@ let make =
                     setState,
                     selectedLevel,
                     selectedCoach,
-                    sortDirection,
                     sortBy,
                     selectedTab,
                     submissions,
@@ -330,7 +328,7 @@ let make =
               </button>}
        </div>
      | FullyLoaded({submissions}) =>
-       showSubmissions(submissions, selectedTab, levels, sortDirection)
+       showSubmissions(submissions, selectedTab, levels, sortBy)
      }}
   </div>;
 };

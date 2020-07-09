@@ -27,8 +27,8 @@ module Courses
     end
 
     def delete_certificates
-      IssuedCertificate.where(course: @course.certificates).delete_all
-      @course.certificates.destroy_all
+      IssuedCertificate.where(certificate_id: @course.certificates.select(:id)).delete_all
+      @course.certificates.find_each(&:destroy!)
     end
 
     def delete_community_course_connections
@@ -41,13 +41,15 @@ module Courses
 
     def delete_course_exports
       ActsAsTaggableOn::Tagging.where(taggable_type: 'CourseExport', taggable_id: @course.course_exports.select(:id)).delete_all
-      @course.course_exports.destroy_all
+      @course.course_exports.find_each(&:destroy!)
     end
 
     def delete_evaluation_criteria
-      TargetEvaluationCriterion.where(evaluation_criteria: @course.evaluation_criteria).delete_all
-      TimelineEventGrade.where(evaluation_criteria: @course.evaluation_criteria).delete_all
-      EvaluationCriterion.where(course_id: @course.id).delete_all
+      evaluation_criteria = EvaluationCriterion.where(course_id: @course.id)
+
+      TargetEvaluationCriterion.where(evaluation_criterion_id: evaluation_criteria).delete_all
+      TimelineEventGrade.where(evaluation_criterion_id: evaluation_criteria).delete_all
+      evaluation_criteria.delete_all
     end
 
     def delete_faculty_course_enrollments
@@ -63,17 +65,18 @@ module Courses
     end
 
     def delete_submissions
-      submissions = TimelineEvent.joins(founder: :course).where(courses: { id: @course.id })
+      submission_ids = TimelineEvent.joins(founders: :course).where(courses: { id: @course.id }).distinct(:id).select(:id)
 
-      TimelineEventFile.where(timeline_event_id: submissions).delete_all
-      TimelineEventOwner.where(timeline_event_id: submissions).delete_all
-
-      submissions.delete_all
+      TimelineEventFile.where(timeline_event_id: submission_ids).delete_all
+      TimelineEventOwner.where(timeline_event_id: submission_ids).delete_all
+      TimelineEvent.where(id: submission_ids).delete_all
     end
 
     def delete_content
+      quiz_questions = QuizQuestion.joins(quiz: { target: :course }).where(courses: { id: @course.id })
+      quiz_questions.update_all(correct_answer_id: nil) # rubocop:disable Rails/SkipsModelValidations
       AnswerOption.joins(quiz_question: { quiz: { target: :course } }).where(courses: { id: @course.id }).delete_all
-      QuizQuestion.joins(quiz: { target: :course }).where(courses: { id: @course.id }).delete_all
+      quiz_questions.delete_all
       Quiz.joins(target: :course).where(courses: { id: @course.id }).delete_all
       ContentBlock.joins(target_version: { target: :course }).where(courses: { id: @course.id }).delete_all
       TargetVersion.joins(target: :course).where(courses: { id: @course.id }).delete_all
@@ -89,7 +92,6 @@ module Courses
       ActsAsTaggableOn::Tagging.where(taggable_type: 'Startup', taggable_id: startup_ids).delete_all
       FacultyStartupEnrollment.where(startup_id: startup_ids).delete_all
       CoachNote.joins(student: :startup).where(startups: { id: startup_ids }).delete_all
-      LeaderboardEntry.joins(founder: :startup).where(startups: { id: startup_ids }).delete_all
       Founder.where(startup_id: startup_ids).delete_all
       StartupFeedback.where(startup_id: startup_ids).delete_all
       Startup.where(id: startup_ids).delete_all

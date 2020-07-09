@@ -1,8 +1,7 @@
 [%bs.raw {|require("./CoursesReview__Root.css")|}];
 
-exception InvalidSubmissionSortCriterion(string);
-
 open CoursesReview__Types;
+
 let str = React.string;
 
 type selectedTab = [ | `Reviewed | `Pending];

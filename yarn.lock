@@ -4938,20 +4938,20 @@ browserslist@^4.12.0:
     node-releases "^1.1.53"
     pkg-up "^2.0.0"
 
-bs-fetch@^0.5.0:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/bs-fetch/-/bs-fetch-0.5.2.tgz#a9f4582ddb1414d3467b900305c738813481988c"
-  integrity sha512-CYweTJcgLeLOqzR3vNsB+NmyEFhWThnPNdZmmF28nkFmo0CQEf+20eSHZJDO6EuAhhoRqJ0qp2VgxtH6zBB5xA==
+bs-fetch@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/bs-fetch/-/bs-fetch-0.6.1.tgz#f25c4690d1976c07dfb0b6f72753271cbbabcc33"
+  integrity sha512-meXUuqTu6quq0X7dW7DmxW8RGiKiONW3n1A9wgXx0KcWHSZuq/PA6C1NoByDiUA5VeE8tYGZ7YXh/uVAl+8pDQ==
 
-bs-platform@7.2.2:
-  version "7.2.2"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.2.2.tgz#76fdc63e4889458ae3d257a0132107a792f2309c"
-  integrity sha512-PWcFfN+jCTtT/rMaHDhKh+W9RUTpaRunmSF9vbLYcrJbpgCNW6aFKAY33u0P3mLxwuhshN3b4FxqGUBPj6exZQ==
+bs-platform@8.0.3:
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-8.0.3.tgz#574e41ec04fee381d4c400dac547735368caa48f"
+  integrity sha512-I7wulOPM0/NGamwm9CDh9rGjW1oIKltPwwEIOJrL8DBFRXI8OFSACtWGlpaoOw76Xpf+KcVokr00keS2NlzA3A==
 
-bs-webapi@^0.15.2:
-  version "0.15.9"
-  resolved "https://registry.yarnpkg.com/bs-webapi/-/bs-webapi-0.15.9.tgz#d1dcfbd40499a3b0914daacc4ceef47a0f3c906f"
-  integrity sha512-bmzO6na2HmK01a34qB7afMwfVSrPxkP3EGzUslWObuxbHIlLC0PAMDu4lA8ZL5NasBUctlwnA1QZxox+1aNWWw==
+bs-webapi@^0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/bs-webapi/-/bs-webapi-0.17.1.tgz#352ea1f203457e5a082b7f350c00e0d165063464"
+  integrity sha512-vM61ubFvJbZyNVRTZpKNLOSMxggHW+2BVtYNMAGgecCToythRiwweFc0/3MCei1k7gZRNbLRwotifS8RyCmZDA==
 
 bsb-js@^1.1.7:
   version "1.1.7"

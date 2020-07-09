@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module ChecklistItem = SubmissionChecklistItem;
 
 let str = React.string;

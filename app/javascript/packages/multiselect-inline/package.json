@@ -34,7 +34,7 @@
   "dependencies": {
     "@pupilfirst/pf-icon": "^0.1.11",
     "bs-webapi": "^0.17.1",
-    "reason-react": ">=0.7.0"
+    "reason-react": ">=0.9.1"
   },
   "scripts": {
     "dev": "parcel index.html",

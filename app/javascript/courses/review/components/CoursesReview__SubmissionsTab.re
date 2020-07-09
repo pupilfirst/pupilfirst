@@ -165,10 +165,9 @@ let submissionCardClasses = submission =>
     }
   );
 
-let showSubmission = (submissions, levels, sortDirection) =>
+let showSubmission = (submissions, levels) =>
   <div id="submissions">
     {submissions
-     |> IndexSubmission.sortArray(sortDirection)
      |> Array.map(submission =>
           <Link
             href={
@@ -224,14 +223,13 @@ let showSubmission = (submissions, levels, sortDirection) =>
      |> React.array}
   </div>;
 
-let showSubmissions = (submissions, selectedTab, levels, sortBy) => {
+let showSubmissions = (submissions, selectedTab, levels) => {
   let imageSrc =
     switch (selectedTab) {
     | `Pending => pendingEmptyImage
     | `Reviewed => reviewedEmptyImage
     };
 
-  let sortDirection = sortBy |> SubmissionsSorting.sortDirection;
 
   submissions |> ArrayUtils.isEmpty
     ? <div
@@ -241,7 +239,7 @@ let showSubmissions = (submissions, selectedTab, levels, sortBy) => {
         </h5>
         <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=imageSrc />
       </div>
-    : showSubmission(submissions, levels, sortDirection);
+    : showSubmission(submissions, levels);
 };
 
 type sortData = {
@@ -302,7 +300,7 @@ let make =
        SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
      | PartiallyLoaded({submissions}, cursor) =>
        <div>
-         {showSubmissions(submissions, selectedTab, levels, sortBy)}
+         {showSubmissions(submissions, selectedTab, levels)}
          {state == Loading
             ? SkeletonLoading.multiple(
                 ~count=3,
@@ -328,7 +326,7 @@ let make =
               </button>}
        </div>
      | FullyLoaded({submissions}) =>
-       showSubmissions(submissions, selectedTab, levels, sortBy)
+       showSubmissions(submissions, selectedTab, levels)
      }}
   </div>;
 };

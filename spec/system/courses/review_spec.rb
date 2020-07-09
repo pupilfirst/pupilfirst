@@ -40,13 +40,13 @@ feature 'Course review' do
 
   context 'with multiple submissions' do
     # Create a couple of passed submissions for the team 3.
-    let!(:submission_l1_t3) { create(:timeline_event, :with_owners, latest: true, owners: [team_l3.founders.first], target: target_l1, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
-    let!(:submission_l2_t3) { create(:timeline_event, :with_owners, latest: true, owners: [team_l3.founders.first], target: target_l2, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: nil, created_at: 1.day.ago) }
+    let!(:submission_l1_t3) { create(:timeline_event, :with_owners, latest: true, owners: [team_l3.founders.first], target: target_l1, evaluator_id: course_coach.id, evaluated_at: 4.days.ago, passed_at: 1.day.ago) }
+    let!(:submission_l2_t3) { create(:timeline_event, :with_owners, latest: true, owners: [team_l3.founders.first], target: target_l2, evaluator_id: course_coach.id, evaluated_at: 2.days.ago, passed_at: nil, created_at: 1.day.ago) }
     let!(:team_submission) { create(:timeline_event, :with_owners, latest: true, owners: team_l3.founders, target: team_target, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: nil, created_at: 2.days.ago) }
     let!(:auto_verified_submission) { create(:timeline_event, :with_owners, latest: true, owners: team_l3.founders, target: auto_verify_target, passed_at: 1.day.ago) }
 
     # And one passed submission for team 2.
-    let!(:submission_l1_t2) { create(:timeline_event, :with_owners, latest: true, owners: [team_l2.founders.first], target: target_l1, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago, created_at: 4.days.ago) }
+    let!(:submission_l1_t2) { create(:timeline_event, :with_owners, latest: true, owners: [team_l2.founders.first], target: target_l1, evaluator_id: course_coach.id, evaluated_at: 3.days.ago, passed_at: 3.days.ago, created_at: 4.days.ago) }
 
     # Create a couple of pending submissions for the teams.
     let!(:submission_l1_t1) { create(:timeline_event, :with_owners, latest: true, target: target_l1, owners: [team_l1.founders.first]) }
@@ -271,6 +271,18 @@ feature 'Course review' do
 
       expect(find("#submissions a:nth-child(1)")).to have_content(submission_l1_t3.title)
       expect(find("#submissions a:nth-child(2)")).to have_content(submission_l2_t3.title)
+
+      # Change sorting criterion in reviewed tab
+      click_button 'Submitted At'
+      click_button 'Evaluated At'
+
+      expect(find("#submissions a:nth-child(1)")).to have_content(team_submission.title)
+      expect(find("#submissions a:nth-child(2)")).to have_content(submission_l2_t3.title)
+
+      click_button('toggle-sort-order')
+
+      expect(find("#submissions a:nth-child(1)")).to have_content(submission_l1_t3.title)
+      expect(find("#submissions a:nth-child(2)")).to have_content(submission_l1_t2.title)
     end
 
     scenario 'coach can access submissions from review dashboard', js: true do

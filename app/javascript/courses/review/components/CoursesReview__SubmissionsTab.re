@@ -230,7 +230,6 @@ let showSubmissions = (submissions, selectedTab, levels) => {
     | `Reviewed => reviewedEmptyImage
     };
 
-
   submissions |> ArrayUtils.isEmpty
     ? <div
         className="course-review__submissions-empty text-lg font-semibold text-center py-4">
@@ -240,16 +239,6 @@ let showSubmissions = (submissions, selectedTab, levels) => {
         <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=imageSrc />
       </div>
     : showSubmission(submissions, levels);
-};
-
-type sortData = {
-  sortDirection: [ | `Ascending | `Descending],
-  sortCriterion: [ | `EvaluatedAt | `SubmittedAt],
-};
-
-let sortData = (sortDirection, sortCriterion) => {
-  sortDirection,
-  sortCriterion,
 };
 
 [@react.component]

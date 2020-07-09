@@ -115,7 +115,7 @@ let submissions =
   let curriedGradeBar = gradeBar(evaluationCriteria);
 
   let submissions = targetDetails |> TargetDetails.submissions;
-
+  let totalSubmissions = submissions |> List.length;
   submissions
   |> Submission.sort
   |> List.mapi((index, submission) => {
@@ -130,16 +130,18 @@ let submissions =
            ++ (submission |> Submission.createdAtPretty)
          }>
          <div className="flex justify-between items-end">
-           <h2 className="ml-2 mb-2 font-semibold text-sm lg:text-base leading-tight">
+           <h2
+             className="ml-2 mb-2 font-semibold text-sm lg:text-base leading-tight">
              {"Submission #"
-              ++ (List.length(submissions) - index |> string_of_int)
+              ++ (totalSubmissions - index |> string_of_int)
               |> str}
            </h2>
            <div
              className="text-xs font-semibold bg-gray-100 inline-block px-3 py-1 mr-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
-             {"Submitted on "
-              ++ (submission |> Submission.createdAtPretty)
-              |> str}
+             <span className="hidden md:inline">
+               {str("Submitted on ")}
+             </span>
+             {submission |> Submission.createdAtPretty |> str}
            </div>
          </div>
          <div

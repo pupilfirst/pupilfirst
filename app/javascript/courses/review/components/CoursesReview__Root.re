@@ -375,7 +375,7 @@ module Sortable = {
   let criterion = t =>
     switch (t) {
     | `SubmittedAt => "Submitted At"
-    | `EvaluatedAt => "Evaluated At"
+    | `EvaluatedAt => "Reviewed At"
     };
   let criterionType = _t => `Number;
 };

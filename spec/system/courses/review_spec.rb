@@ -274,7 +274,7 @@ feature 'Course review' do
 
       # Change sorting criterion in reviewed tab
       click_button 'Submitted At'
-      click_button 'Evaluated At'
+      click_button 'Reviewed At'
 
       expect(find("#submissions a:nth-child(1)")).to have_content(team_submission.title)
       expect(find("#submissions a:nth-child(2)")).to have_content(submission_l2_t3.title)

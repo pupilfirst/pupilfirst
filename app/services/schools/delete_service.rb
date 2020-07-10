@@ -37,13 +37,13 @@ module Schools
 
     def delete_courses
       @school.courses.each do |course|
-        Courses::DeleteService.new(course).execute
+        ::Courses::DeleteService.new(course).execute
       end
     end
 
     def delete_communities
       @school.communities.each do |community|
-        Communities::DeleteService.new(community).execute
+        ::Communities::DeleteService.new(community).execute
       end
     end
 
@@ -64,7 +64,6 @@ module Schools
     end
 
     def delete_users
-      UserActivity.joins(user: :school).where(schools: { id: @school.id }).delete_all
       Faculty.joins(user: :school).where(schools: { id: @school.id }).delete_all
       @school.users.each(&:destroy!)
     end

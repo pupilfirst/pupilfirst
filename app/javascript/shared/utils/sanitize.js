@@ -92,7 +92,7 @@ const sanitize = (profile, dirtyHtml) => {
     allowedTags: sanitizationProfile(profile),
     allowedAttributes: {
       a: ["href", "name", "target"],
-      img: ["src", "title", "alt", "width", "height"],
+      img: ["src", "title", "alt", "width", "height", "align"],
       td: ["rowspan", "colspan"],
     },
     allowedClasses: {

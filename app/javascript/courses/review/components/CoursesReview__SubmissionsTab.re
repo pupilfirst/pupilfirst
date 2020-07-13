@@ -97,8 +97,8 @@ let getSubmissions =
 
   let levelId = selectedLevel |> OptionUtils.map(level => level |> Level.id);
   let coachId = selectedCoach |> OptionUtils.map(coach => coach |> Coach.id);
-  let sortDirection = sortBy |> SubmissionsSorting.sortDirection;
-  let sortCriterion = sortBy |> SubmissionsSorting.sortCriterion;
+  let sortDirection = SubmissionsSorting.sortDirection(sortBy);
+  let sortCriterion = SubmissionsSorting.sortCriterion(sortBy);
   SubmissionsQuery.make(
     ~courseId,
     ~status=selectedTab,
@@ -124,7 +124,6 @@ let getSubmissions =
        Js.Promise.resolve();
      })
   |> ignore;
-  ();
 };
 
 let submissionStatus = submission => {

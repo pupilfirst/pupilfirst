@@ -21,6 +21,8 @@ module Schools
       end
     end
 
+    alias perform execute
+
     private
 
     def delete_school_strings

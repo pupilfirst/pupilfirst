@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_06_101820) do
+ActiveRecord::Schema.define(version: 2020_07_14_135140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -383,17 +383,6 @@ ActiveRecord::Schema.define(version: 2020_07_06_101820) do
     t.bigint "school_id"
     t.index ["school_id"], name: "index_markdown_attachments_on_school_id"
     t.index ["user_id"], name: "index_markdown_attachments_on_user_id"
-  end
-
-  create_table "platform_feedback", id: :serial, force: :cascade do |t|
-    t.string "feedback_type"
-    t.text "description"
-    t.integer "promoter_score"
-    t.integer "founder_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text "notes"
-    t.index ["founder_id"], name: "index_platform_feedback_on_founder_id"
   end
 
   create_table "post_likes", force: :cascade do |t|

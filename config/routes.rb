@@ -168,8 +168,6 @@ Rails.application.routes.draw do
 
   resources :colleges, only: :index
 
-  resource :platform_feedback, only: %i[create]
-
   # Founder show
   scope 'students', controller: 'founders' do
     get '/:id/report', action: 'report', as: 'student_report'

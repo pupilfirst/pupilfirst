@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_14_135140) do
+ActiveRecord::Schema.define(version: 2020_07_14_142841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -125,19 +125,6 @@ ActiveRecord::Schema.define(version: 2020_07_14_135140) do
     t.index ["archived_at"], name: "index_coach_notes_on_archived_at"
     t.index ["author_id"], name: "index_coach_notes_on_author_id"
     t.index ["student_id"], name: "index_coach_notes_on_student_id"
-  end
-
-  create_table "colleges", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.string "also_known_as"
-    t.string "city"
-    t.integer "state_id"
-    t.string "established_year"
-    t.string "website"
-    t.string "contact_numbers"
-    t.integer "university_id"
-    t.index ["state_id"], name: "index_colleges_on_state_id"
-    t.index ["university_id"], name: "index_colleges_on_university_id"
   end
 
   create_table "communities", force: :cascade do |t|
@@ -324,18 +311,13 @@ ActiveRecord::Schema.define(version: 2020_07_14_135140) do
     t.integer "startup_id"
     t.string "auth_token"
     t.string "slack_username"
-    t.integer "university_id"
     t.string "roles"
     t.string "slack_user_id"
     t.integer "user_id"
-    t.integer "college_id"
     t.boolean "dashboard_toured"
-    t.string "college_text"
     t.integer "resume_file_id"
     t.string "slack_access_token"
     t.boolean "excluded_from_leaderboard", default: false
-    t.index ["college_id"], name: "index_founders_on_college_id"
-    t.index ["university_id"], name: "index_founders_on_university_id"
     t.index ["user_id"], name: "index_founders_on_user_id"
   end
 
@@ -549,12 +531,6 @@ ActiveRecord::Schema.define(version: 2020_07_14_135140) do
     t.index ["slug"], name: "index_startups_on_slug", unique: true
   end
 
-  create_table "states", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "taggings", id: :serial, force: :cascade do |t|
     t.integer "tag_id"
     t.integer "taggable_id"
@@ -720,14 +696,6 @@ ActiveRecord::Schema.define(version: 2020_07_14_135140) do
     t.index ["target_id"], name: "index_topics_on_target_id"
   end
 
-  create_table "universities", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.integer "state_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["state_id"], name: "index_universities_on_state_id"
-  end
-
   create_table "user_activities", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "activity_type"
@@ -792,7 +760,6 @@ ActiveRecord::Schema.define(version: 2020_07_14_135140) do
   add_foreign_key "faculty_course_enrollments", "faculty"
   add_foreign_key "faculty_startup_enrollments", "faculty"
   add_foreign_key "faculty_startup_enrollments", "startups"
-  add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
   add_foreign_key "issued_certificates", "certificates"
   add_foreign_key "issued_certificates", "users"

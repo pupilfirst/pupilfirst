@@ -166,8 +166,6 @@ Rails.application.routes.draw do
     patch ':id/feedback/comment/:token', action: 'comment_submit', as: 'comment_submit'
   end
 
-  resources :colleges, only: :index
-
   # Founder show
   scope 'students', controller: 'founders' do
     get '/:id/report', action: 'report', as: 'student_report'

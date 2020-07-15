@@ -15,7 +15,7 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
   end
 
   def from_options(enable_reply)
-    options = { from: "#{school_name} <#{Rails.application.secrets.default_sender_email_address}>" }
+    options = { from: sender_signature }
     reply_to = SchoolString::EmailAddress.for(@school)
     options[:reply_to] = reply_to if reply_to.present? && enable_reply
     options
@@ -47,5 +47,15 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
   def school_name
     # sanitize school name to remove special characters
     @school.name.gsub(/[^0-9A-Za-z ]/, '')
+  end
+
+  def sender_signature
+    custom_signature = @school.configuration['email_sender_signature']
+
+    if custom_signature.present? && custom_signature['confirmed_at'].present?
+      "#{custom_signature['name']} <#{custom_signature['email']}>"
+    else
+      "#{school_name} <#{Rails.application.secrets.default_sender_email_address}>"
+    end
   end
 end

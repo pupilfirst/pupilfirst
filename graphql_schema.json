@@ -755,6 +755,20 @@
                 "defaultValue": null
               },
               {
+                "name": "sortCriterion",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "SubmissionSortCriterion",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
                 "name": "levelId",
                 "description": "",
                 "type": {
@@ -4221,6 +4235,29 @@
           },
           {
             "name": "Reviewed",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "SubmissionSortCriterion",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "SubmittedAt",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EvaluatedAt",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null

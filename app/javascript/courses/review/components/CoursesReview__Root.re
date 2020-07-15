@@ -1,12 +1,10 @@
 [%bs.raw {|require("./CoursesReview__Root.css")|}];
 
 open CoursesReview__Types;
-let str = React.string;
 
-type sortBy = {
-  criterion: string,
-  criterionType: [ | `String | `Number],
-};
+type reviewedTabSortCriterion = [ | `EvaluatedAt | `SubmittedAt];
+
+let str = React.string;
 
 type selectedTab = [ | `Reviewed | `Pending];
 
@@ -17,7 +15,7 @@ type state = {
   selectedLevel: option(Level.t),
   selectedCoach: option(Coach.t),
   filterString: string,
-  sortBy,
+  reviewedTabSortCriterion,
   sortDirection: [ | `Ascending | `Descending],
   reloadAt: Js.Date.t,
 };
@@ -40,7 +38,23 @@ type action =
   | DeselectCoach
   | UpdateFilterString(string)
   | UpdateSortDirection([ | `Ascending | `Descending])
+  | UpdateSortCriterion(selectedTab, [ | `EvaluatedAt | `SubmittedAt])
   | SyncSubmissionStatus(OverlaySubmission.t);
+
+let makeSortBy = state => {
+  switch (state.selectedTab) {
+  | `Pending =>
+    SubmissionsSorting.make(
+      ~sortCriterion=`SubmittedAt,
+      ~sortDirection=state.sortDirection,
+    )
+  | `Reviewed =>
+    SubmissionsSorting.make(
+      ~sortCriterion=state.reviewedTabSortCriterion,
+      ~sortDirection=state.sortDirection,
+    )
+  };
+};
 
 let reducer = (state, action) =>
   switch (action) {
@@ -73,14 +87,14 @@ let reducer = (state, action) =>
         Submissions.fullyLoaded(
           ~submissions,
           ~filter,
-          ~sortDirection=state.sortDirection,
+          ~sortBy=makeSortBy(state),
           ~totalCount,
         )
       | (true, Some(cursor)) =>
         Submissions.partiallyLoaded(
           ~submissions,
           ~filter,
-          ~sortDirection=state.sortDirection,
+          ~sortBy=makeSortBy(state),
           ~totalCount,
           ~cursor,
         )
@@ -103,7 +117,7 @@ let reducer = (state, action) =>
           Submissions.partiallyLoaded(
             ~submissions=submissions |> IndexSubmission.replace(submission),
             ~filter,
-            ~sortDirection=state.sortDirection,
+            ~sortBy=makeSortBy(state),
             ~totalCount,
             ~cursor,
           )
@@ -112,7 +126,7 @@ let reducer = (state, action) =>
             ~submissions=submissions |> IndexSubmission.replace(submission),
             ~filter,
             ~totalCount,
-            ~sortDirection=state.sortDirection,
+            ~sortBy=makeSortBy(state),
           )
         },
     };
@@ -126,6 +140,11 @@ let reducer = (state, action) =>
   | DeselectCoach => {...state, selectedCoach: None}
   | UpdateFilterString(filterString) => {...state, filterString}
   | UpdateSortDirection(sortDirection) => {...state, sortDirection}
+  | UpdateSortCriterion(selectedTab, criterion) =>
+    switch (selectedTab) {
+    | `Pending => state
+    | `Reviewed => {...state, reviewedTabSortCriterion: criterion}
+    }
   | SyncSubmissionStatus(overlaySubmission) =>
     let skipReload =
       state.pendingSubmissions
@@ -157,11 +176,8 @@ let computeInitialState = currentTeamCoach => {
   selectedTab: `Pending,
   selectedLevel: None,
   selectedCoach: currentTeamCoach,
+  reviewedTabSortCriterion: `SubmittedAt,
   filterString: "",
-  sortBy: {
-    criterion: "Submitted At",
-    criterionType: `Number,
-  },
   sortDirection: `Descending,
   reloadAt: Js.Date.make(),
 };
@@ -306,7 +322,7 @@ let restoreFilterNotice = (send, currentCoach, message) =>
     className="mb-4 text-sm italic flex flex-col md:flex-row items-center justify-between p-3 border border-gray-300 bg-white rounded-lg">
     <span> {message |> str} </span>
     <button
-      className="px-2 py-1 rounded text-xs overflow-hidden border border-gray-300 bg-gray-200 text-gray-800 border-gray-300 bg-gray-200 hover:bg-gray-300 mt-1 md:mt-0"
+      className="px-2 py-1 rounded text-xs overflow-hidden border text-gray-800 border-gray-300 bg-gray-200 hover:bg-gray-300 mt-1 md:mt-0"
       onClick={_ => send(SelectCoach(currentCoach))}>
       {"Assigned to: Me" |> str}
       <i className="fas fa-level-up-alt ml-2" />
@@ -363,16 +379,30 @@ let filterSubmissions = (selectedLevel, selectedCoach, submissions) => {
 };
 
 module Sortable = {
-  type t = sortBy;
+  type t = [ | `EvaluatedAt | `SubmittedAt];
 
-  let criterion = t => t.criterion;
-  let criterionType = t => t.criterionType;
+  let criterion = t =>
+    switch (t) {
+    | `SubmittedAt => "Submitted At"
+    | `EvaluatedAt => "Reviewed At"
+    };
+  let criterionType = _t => `Number;
 };
 
 module SubmissionsSorter = Sorter.Make(Sortable);
 
 let submissionsSorter = (state, send) => {
-  let criteria = [|{criterion: "Submitted At", criterionType: `Number}|];
+  let criteria =
+    switch (state.selectedTab) {
+    | `Pending => [|`SubmittedAt|]
+    | `Reviewed => [|`SubmittedAt, `EvaluatedAt|]
+    };
+
+  let selectedCriterion =
+    switch (state.selectedTab) {
+    | `Pending => `SubmittedAt
+    | `Reviewed => state.reviewedTabSortCriterion
+    };
   <div
     ariaLabel="Change submissions sorting"
     className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
@@ -381,12 +411,14 @@ let submissionsSorter = (state, send) => {
     </label>
     <SubmissionsSorter
       criteria
-      selectedCriterion={state.sortBy}
+      selectedCriterion
       direction={state.sortDirection}
       onDirectionChange={sortDirection => {
         send(UpdateSortDirection(sortDirection))
       }}
-      onCriterionChange={_ => ()}
+      onCriterionChange={sortCriterion =>
+        send(UpdateSortCriterion(state.selectedTab, sortCriterion))
+      }
     />
   </div>;
 };
@@ -503,7 +535,7 @@ let make = (~levels, ~courseId, ~teamCoaches, ~currentCoach) => {
           selectedTab={state.selectedTab}
           selectedLevel={state.selectedLevel}
           selectedCoach={state.selectedCoach}
-          sortDirection={state.sortDirection}
+          sortBy={makeSortBy(state)}
           levels
           submissions={displayedSubmissions(state)}
           reloadAt={state.reloadAt}

@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :founder do
     user
-    college
     startup
     dashboard_toured { true }
 

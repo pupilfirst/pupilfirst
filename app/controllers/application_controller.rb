@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
   # Activate pretender.
   impersonates :user
 
-  before_action :prepare_platform_feedback
   before_action :sign_out_if_required
   before_action :pretender
 
@@ -52,13 +51,6 @@ class ApplicationController < ActionController::Base
     else
       Users::AfterSignInPathResolverService.new(resource, current_school).after_sign_in_path
     end
-  end
-
-  # If a user is signed in, prepare a platform_feedback object to be used with its form
-  def prepare_platform_feedback
-    return unless current_founder
-
-    @platform_feedback_for_form = PlatformFeedback.new(founder_id: current_founder.id)
   end
 
   def current_host

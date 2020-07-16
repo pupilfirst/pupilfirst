@@ -44,7 +44,7 @@
           </h2>
         </div>
         <div class="mx-auto">
-          <div class="flex flex-wrap flex-1 lg:-mx-5">
+          <div class="flex flex-wrap flex-1 lg:-mx-5 <%= presenter.courses.one? ? 'justify-center' : '' %>">
             <% presenter.courses.map do |course| %>
               <div class="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
                 <div class="flex overflow-hidden shadow bg-white rounded-lg flex flex-col h-full" aria-label="<%= course.name %>">

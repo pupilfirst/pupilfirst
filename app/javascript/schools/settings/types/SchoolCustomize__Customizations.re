@@ -4,7 +4,7 @@ type schoolStrings = {
   address: option(string),
   emailAddress: option(string),
   privacyPolicy: option(string),
-  termsOfUse: option(string),
+  termsAndConditions: option(string),
 };
 
 type file = {
@@ -43,7 +43,7 @@ let filename = file => file.filename;
 let address = t => t.schoolStrings.address;
 let emailAddress = t => t.schoolStrings.emailAddress;
 let privacyPolicy = t => t.schoolStrings.privacyPolicy;
-let termsOfUse = t => t.schoolStrings.termsOfUse;
+let termsAndConditions = t => t.schoolStrings.termsAndConditions;
 
 let headerLinks = t =>
   t.links
@@ -114,11 +114,11 @@ let updatePrivacyPolicy = (privacyPolicy, t) => {
   },
 };
 
-let updateTermsOfUse = (termsOfUse, t) => {
+let updateTermsAndConditions = (termsAndConditions, t) => {
   ...t,
   schoolStrings: {
     ...t.schoolStrings,
-    termsOfUse: termsOfUse |> optionalString,
+    termsAndConditions: termsAndConditions |> optionalString,
   },
 };
 
@@ -158,7 +158,8 @@ let decodeStrings = json =>
     address: json |> field("address", optional(string)),
     emailAddress: json |> field("emailAddress", optional(string)),
     privacyPolicy: json |> field("privacyPolicy", optional(string)),
-    termsOfUse: json |> field("termsOfUse", optional(string)),
+    termsAndConditions:
+      json |> field("termsAndConditions", optional(string)),
   };
 
 let decodeLink = json => {

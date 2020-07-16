@@ -175,11 +175,10 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-  get 'agreements/:agreement_type', as: 'agreement', controller: 'home', action: 'agreement'
+  # TODO: Remove this backwards-compatibility path after Jan 2021.
+  get 'agreements/terms-of-use', to: redirect('/agreements/terms-and-conditions')
 
-  # TODO: Remove the backwards-compatibility paths after a while.
-  get 'policies/privacy', to: redirect('/agreements/privacy-policy')
-  get 'policies/terms', to: redirect('/agreements/terms-of-use')
+  get 'agreements/:agreement_type', as: 'agreement', controller: 'home', action: 'agreement'
 
   resources :targets, only: %i[show] do
     member do

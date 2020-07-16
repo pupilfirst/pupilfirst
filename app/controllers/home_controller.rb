@@ -15,8 +15,8 @@ class HomeController < ApplicationController
     klass = case params[:agreement_type]
       when 'privacy-policy'
         SchoolString::PrivacyPolicy
-      when 'terms-of-use'
-        SchoolString::TermsOfUse
+      when 'terms-and-conditions'
+        SchoolString::TermsAndConditions
       else
         raise_not_found
     end

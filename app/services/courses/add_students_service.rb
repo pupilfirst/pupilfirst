@@ -14,8 +14,12 @@ module Courses
       new_students = sanitize_students(unpersisted_students(student_list))
 
       Course.transaction do
-        new_students.map do |student|
-          create_new_student(student)
+        students = new_students.map do |student_data|
+          create_new_student(student_data)
+        end
+
+        students.each do |student|
+          FounderMailer.enrollment(student).deliver_later
         end
 
         # Add the tags to the school's list of founder tags. This is useful for retrieval in the school admin interface.
@@ -69,7 +73,7 @@ module Courses
 
       team = find_or_create_team(student)
 
-      # Finally, create a student profile for the user and tag it.
+      # Finally, create a student profile for the user.
       Founder.create!(user: user, startup: team)
     end
 

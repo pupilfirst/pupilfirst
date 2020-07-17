@@ -161,8 +161,7 @@ feature 'School students index', js: true do
       open_email(student_1_user.email)
 
       expect(current_email.subject).to include("You have been added as a student in #{school.name}")
-      expect(current_email.body).to have_link('Sign In')
-      expect(current_email.body).not_to have_link('View Course')
+      expect(current_email.body).to have_link('Sign in to View Course')
 
       open_email(student_2_user.email)
 
@@ -171,12 +170,12 @@ feature 'School students index', js: true do
       open_email(student_3_user.email)
 
       expect(current_email.subject).to include("You have been added as a student in #{school.name}")
-      expect(current_email.body).to include("You have also been teamed up with #{student_user_4.name}")
+      expect(current_email.body).to include("You have also been teamed up with #{student_4_user.name}")
 
       open_email(student_4_user.email)
 
       expect(current_email.subject).to include("You have been added as a student in #{school.name}")
-      expect(current_email.body).to include("You have also been teamed up with #{student_user_3.name}")
+      expect(current_email.body).to include("You have also been teamed up with #{student_3_user.name}")
     end
 
     context 'when adding a student who is already a user of another type' do
@@ -214,8 +213,7 @@ feature 'School students index', js: true do
         open_email(coach_user.email)
 
         expect(current_email.subject).to include("You have been added as a student in #{school.name}")
-        expect(current_email.body).not_to have_link('Sign In')
-        expect(current_email.body).to have_link('View Course')
+        expect(current_email.body).to have_link('Sign in to View Course')
       end
     end
 

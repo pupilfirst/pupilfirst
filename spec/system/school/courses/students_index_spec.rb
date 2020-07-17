@@ -157,6 +157,26 @@ feature 'School students index', js: true do
 
       expect(student_1.startup.tag_list).to contain_exactly('Abc', 'Def')
       expect(student_2.startup.tag_list).to contain_exactly('Abc', 'Def', 'GHI JKL')
+
+      open_email(student_1_user.email)
+
+      expect(current_email.subject).to include("You have been added as a student in #{school.name}")
+      expect(current_email.body).to have_link('Sign In')
+      expect(current_email.body).not_to have_link('View Course')
+
+      open_email(student_2_user.email)
+
+      expect(current_email.subject).to include("You have been added as a student in #{school.name}")
+
+      open_email(student_3_user.email)
+
+      expect(current_email.subject).to include("You have been added as a student in #{school.name}")
+      expect(current_email.body).to include("You have also been teamed up with #{student_user_4.name}")
+
+      open_email(student_4_user.email)
+
+      expect(current_email.subject).to include("You have been added as a student in #{school.name}")
+      expect(current_email.body).to include("You have also been teamed up with #{student_user_3.name}")
     end
 
     context 'when adding a student who is already a user of another type' do
@@ -190,6 +210,12 @@ feature 'School students index', js: true do
         expect(coach_user.name).to eq(original_name)
         expect(coach_user.title).to eq(title)
         expect(coach_user.affiliation).to eq(affiliation)
+
+        open_email(coach_user.email)
+
+        expect(current_email.subject).to include("You have been added as a student in #{school.name}")
+        expect(current_email.body).not_to have_link('Sign In')
+        expect(current_email.body).to have_link('View Course')
       end
     end
 
@@ -233,6 +259,10 @@ feature 'School students index', js: true do
         # The title and affiliation of existing user should not be modified.
         expect(existing_user.reload.title).to eq(original_title)
         expect(existing_user.affiliation).to eq(original_affiliation)
+
+        # The existing student should not have received any email.
+        open_email(email_1)
+        expect(current_email).to eq(nil)
       end
     end
 

@@ -24,7 +24,7 @@ module Users
         school: @user.school,
         category: Faculty::CATEGORY_VISITING_COACHES
       )
-      Courses::AssignReviewerService.new(course).assign(coach)
+      Courses::AssignReviewerService.new(course, notify: false).assign(coach)
     end
 
     def create_student(course)

@@ -16,6 +16,9 @@ module Courses
           course: @course
         )
       end
+
+      faculty.user.regenerate_login_token if faculty.user.login_token.blank?
+      CoachMailer.course_enrollment(faculty, @course).deliver_later
     end
   end
 end

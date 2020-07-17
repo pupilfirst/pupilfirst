@@ -28,7 +28,7 @@ class UpdateSchoolStringMutator < ApplicationQuery
   end
 
   def agreement?
-    key.in?([SchoolString::PrivacyPolicy.key, SchoolString::TermsOfUse.key])
+    key.in?([SchoolString::PrivacyPolicy.key, SchoolString::TermsAndConditions.key])
   end
 
   def address?

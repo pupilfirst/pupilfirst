@@ -5,7 +5,7 @@ type props = {
   email: option(string),
   name: option(string),
   privacyPolicy: bool,
-  termsOfUse: bool,
+  termsAndConditions: bool,
 };
 
 let decodeProps = json =>
@@ -16,7 +16,7 @@ let decodeProps = json =>
     email: json |> field("email", optional(string)),
     name: json |> field("name", optional(string)),
     privacyPolicy: json |> field("privacyPolicy", bool),
-    termsOfUse: json |> field("termsOfUse", bool),
+    termsAndConditions: json |> field("termsAndConditions", bool),
   };
 
 let props = DomUtils.parseJSONTag() |> decodeProps;
@@ -29,7 +29,7 @@ ReactDOMRe.renderToElementWithId(
     email={props.email}
     name={props.name}
     privacyPolicy={props.privacyPolicy}
-    termsOfUse={props.termsOfUse}
+    termsAndConditions={props.termsAndConditions}
   />,
   "react-root",
 );

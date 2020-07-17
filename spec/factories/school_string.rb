@@ -7,8 +7,8 @@ FactoryBot.define do
       key { SchoolString::PrivacyPolicy.key }
     end
 
-    trait(:terms_of_use) do
-      key { SchoolString::TermsOfUse.key }
+    trait(:terms_and_conditions) do
+      key { SchoolString::TermsAndConditions.key }
     end
   end
 end

@@ -86,10 +86,10 @@ module Layouts
       SchoolString::PrivacyPolicy.saved?(current_school)
     end
 
-    def terms_of_use?
+    def terms_and_conditions?
       return true if current_school.blank?
 
-      SchoolString::TermsOfUse.saved?(current_school)
+      SchoolString::TermsAndConditions.saved?(current_school)
     end
   end
 end

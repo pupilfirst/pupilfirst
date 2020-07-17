@@ -9,7 +9,8 @@ feature 'School students index', js: true do
   let(:tags) { [tag_1, tag_2] }
 
   # Setup a course with a single founder target, ...
-  let!(:school) { create :school, :current, founder_tag_list: tags }
+  let(:school) { create :school, :current, founder_tag_list: tags }
+  let!(:domain) { create :domain, :primary, school: school }
   let!(:course) { create :course, school: school }
 
   let!(:school_admin) { create :school_admin, school: school }

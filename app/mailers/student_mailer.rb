@@ -1,4 +1,4 @@
-class FounderMailer < SchoolMailer
+class StudentMailer < SchoolMailer
   def enrollment(student)
     @school = student.course.school
     @course = student.course

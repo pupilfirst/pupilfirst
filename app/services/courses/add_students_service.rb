@@ -19,7 +19,7 @@ module Courses
         end
 
         students.each do |student|
-          FounderMailer.enrollment(student).deliver_later
+          StudentMailer.enrollment(student).deliver_later
         end
 
         # Add the tags to the school's list of founder tags. This is useful for retrieval in the school admin interface.

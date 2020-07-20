@@ -1,6 +1,6 @@
 module Courses
   class AssignReviewerService
-    def initialize(course, notify: true)
+    def initialize(course, notify: false)
       @course = course
       @notify = notify
     end

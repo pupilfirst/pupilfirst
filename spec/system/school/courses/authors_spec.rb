@@ -38,6 +38,11 @@ feature 'Course authors editor', js: true do
     expect(new_author_user.title).to eq('Author')
     expect(CourseAuthor.where(user_id: new_author_user.id).exists?).to eq(true)
 
+    open_email(new_author_user.email)
+
+    expect(current_email.subject).to include("You have been added as an author in #{course.name}")
+    expect(current_email.body).to have_link("Sign in to Edit Course")
+
     # The new author should be immediately editable.
     click_link(new_author_user.name)
 

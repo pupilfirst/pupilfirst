@@ -179,6 +179,21 @@ feature 'School students index', js: true do
       expect(current_email.body).to include("You have also been teamed up with #{student_3_user.name}")
     end
 
+    scenario 'school admin adds a student after disabling the notify option' do
+      sign_in_user school_admin.user, referer: school_course_students_path(course)
+
+      click_button 'Add New Students'
+      fill_in 'Name', with: name_1
+      fill_in 'Email', with: email_1
+      click_button 'Add to List'
+      page.find('label', text: 'Notify students, and send them a link to sign into this school.').click
+      click_button 'Save List'
+
+      expect(page).to have_text("All students were created successfully")
+      open_email(email_1)
+      expect(current_email).to eq(nil)
+    end
+
     context 'when adding a student who is already a user of another type' do
       let(:title) { Faker::Job.title }
       let(:affiliation) { Faker::Company.name }

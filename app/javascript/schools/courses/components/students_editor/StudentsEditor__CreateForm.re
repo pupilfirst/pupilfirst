@@ -2,12 +2,14 @@ open StudentsEditor__Types;
 
 type state = {
   teamsToAdd: array(TeamInfo.t),
+  notifyStudents: bool,
   saving: bool,
 };
 
 type action =
   | AddStudentInfo(StudentInfo.t, option(string), array(string))
   | RemoveStudentInfo(StudentInfo.t)
+  | ToggleNotifyStudents
   | SetSaving(bool);
 
 let str = React.string;
@@ -58,11 +60,19 @@ let saveStudents = (state, send, courseId, responseCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   send(SetSaving(true));
   let payload = Js.Dict.empty();
+
   Js.Dict.set(
     payload,
     "authenticity_token",
     AuthenticityToken.fromHead() |> Js.Json.string,
   );
+
+  Js.Dict.set(
+    payload,
+    "notify",
+    (state.notifyStudents ? "true" : "false") |> Js.Json.string,
+  );
+
   Js.Dict.set(payload, "students", state.teamsToAdd |> TeamInfo.encodeArray);
 
   let url = "/school/courses/" ++ courseId ++ "/students";
@@ -101,7 +111,11 @@ let renderTitleAndAffiliation = (title, affiliation) => {
   };
 };
 
-let initialState = () => {teamsToAdd: [||], saving: false};
+let initialState = () => {
+  teamsToAdd: [||],
+  notifyStudents: true,
+  saving: false,
+};
 
 let reducer = (state, action) =>
   switch (action) {
@@ -117,6 +131,7 @@ let reducer = (state, action) =>
         state.teamsToAdd->TeamInfo.removeStudentFromArray(studentInfo),
     }
   | SetSaving(saving) => {...state, saving}
+  | ToggleNotifyStudents => {...state, notifyStudents: !state.notifyStudents}
   };
 
 let tagBoxes = tags => {
@@ -225,6 +240,27 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
              |> React.array
            }}
         </div>
+      </div>
+      <div className="mt-4">
+        <input
+          onChange={_event => send(ToggleNotifyStudents)}
+          checked={state.notifyStudents}
+          className="hidden checkbox-input"
+          id="notify-new-students"
+          type_="checkbox"
+        />
+        <label className="checkbox-label" htmlFor="notify-new-students">
+          <span>
+            <svg width="12px" height="10px" viewBox="0 0 12 10">
+              <polyline points="1.5 6 4.5 9 10.5 1" />
+            </svg>
+          </span>
+          <span className="text-sm">
+            {str(
+               "Notify students, and send them a link to sign into this school.",
+             )}
+          </span>
+        </label>
       </div>
       <div className="flex mt-4">
         <button

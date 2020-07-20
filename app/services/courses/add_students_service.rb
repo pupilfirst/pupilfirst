@@ -1,8 +1,9 @@
 module Courses
   # Adds a list of new students to a course.
   class AddStudentsService
-    def initialize(course)
+    def initialize(course, notify: false)
       @course = course
+      @notify = notify
       @team_name_translation = {}
     end
 
@@ -18,9 +19,7 @@ module Courses
           create_new_student(student_data)
         end
 
-        students.each do |student|
-          StudentMailer.enrollment(student).deliver_later
-        end
+        notify_students(students)
 
         # Add the tags to the school's list of founder tags. This is useful for retrieval in the school admin interface.
         new_student_tags = new_students.map { |student| student.tags || [] }.flatten.uniq
@@ -32,6 +31,14 @@ module Courses
     end
 
     private
+
+    def notify_students(students)
+      return unless @notify
+
+      students.each do |student|
+        StudentMailer.enrollment(student).deliver_later
+      end
+    end
 
     def sanitize_students(students)
       team_sizes = {}

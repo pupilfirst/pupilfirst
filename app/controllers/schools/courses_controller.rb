@@ -40,7 +40,7 @@ module Schools
       coaches = current_school.faculty.where(id: params[:coach_ids]).includes(:school)
 
       coaches.each do |coach|
-        ::Courses::AssignReviewerService.new(course).assign(coach)
+        ::Courses::AssignReviewerService.new(course, notify: true).assign(coach)
       end
 
       course_coaches = coaches.map do |coach|

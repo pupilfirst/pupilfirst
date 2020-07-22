@@ -57,6 +57,11 @@ feature 'Course Coaches Index', js: true do
     end
 
     expect(course_1.reload.faculty.count).to eq(3)
+
+    open_email(coach_4.email)
+
+    expect(current_email.subject).to include("You have been added as a coach in #{course_1.name}")
+    expect(current_email.body).to have_link("Sign in to Review Course")
   end
 
   scenario 'school admin removes a course coach' do

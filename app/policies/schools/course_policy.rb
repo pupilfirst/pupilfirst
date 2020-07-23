@@ -8,6 +8,16 @@ module Schools
       user&.school_admin.present? && user.school == current_school
     end
 
+    alias attach_images? authors?
+    alias delete_coach_enrollment? authors?
+    alias update_coach_enrollments? authors?
+    alias students? authors?
+    alias inactive_students? authors?
+    alias create_students? authors?
+    alias mark_teams_active? authors?
+    alias exports? authors?
+    alias certificates? authors?
+
     def curriculum?
       return false if user.blank?
 
@@ -19,15 +29,6 @@ module Schools
     end
 
     alias evaluation_criteria? curriculum?
-    alias attach_images? authors?
-    alias delete_coach_enrollment? authors?
-    alias update_coach_enrollments? authors?
-    alias students? authors?
-    alias inactive_students? authors?
-    alias create_students? authors?
-    alias mark_teams_active? authors?
-    alias exports? authors?
-    alias certificates? authors?
 
     class Scope < ::CoursePolicy::Scope
     end

@@ -5,7 +5,7 @@ class UpdateSchoolStringMutator < ApplicationQuery
   property :value
 
   # 'value' has different validations for different school string types.
-  validates :value, length: { maximum: 10_000, message: 'InvalidLengthValue' }, allow_blank: true, if: :agreement?
+  validates :value, length: { maximum: 20_000, message: 'InvalidLengthValue' }, allow_blank: true, if: :agreement?
   validates :value, length: { maximum: 1000, message: 'InvalidLengthValue' }, allow_blank: true, if: :address?
   validates :value, email: { message: 'InvalidValue' }, allow_blank: true, if: :email_address?
 

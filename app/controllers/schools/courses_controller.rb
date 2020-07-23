@@ -112,6 +112,11 @@ module Schools
       @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
     end
 
+    # GET /school/courses/:id/certificates
+    def certificates
+      @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+    end
+
     # GET /school/courses/:id/evaluation_criteria
     def evaluation_criteria
       @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)

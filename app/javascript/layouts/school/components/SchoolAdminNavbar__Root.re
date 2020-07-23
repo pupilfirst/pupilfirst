@@ -10,7 +10,8 @@ type courseSelection =
   | Curriculum
   | EvaluationCriteria
   | CourseExports
-  | Authors;
+  | Authors
+  | Certificates;
 
 type settingsSelection =
   | Customization
@@ -153,6 +154,12 @@ let secondaryNav = (courses, userRole, selectedOption) =>
                Authors,
                "Authors",
              ),
+             secondaryNavOption(
+               "/school/courses/" ++ courseId ++ "/certificates",
+               courseSelection,
+               Certificates,
+               "Certificates",
+             ),
            |]
            |> React.array
          | CourseAuthor => React.null
@@ -215,6 +222,10 @@ let make =
       )
     | ["school", "courses", courseId, "authors", _authorId] => (
         SelectedCourse(courseId, Authors),
+        true,
+      )
+    | ["school", "courses", courseId, "certificates"] => (
+        SelectedCourse(courseId, Certificates),
         true,
       )
     | ["school", "courses", courseId, "evaluation_criteria"] => (

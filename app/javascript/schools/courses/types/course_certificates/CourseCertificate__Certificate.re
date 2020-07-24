@@ -19,6 +19,7 @@ type t = {
   active: bool,
   createdAt: Js.Date.t,
   updatedAt: Js.Date.t,
+  issuedCertificates: int,
 };
 
 let id = t => t.id;
@@ -32,6 +33,7 @@ let qrScale = t => t.qrScale;
 let active = t => t.active;
 let createdAt = t => t.createdAt;
 let updatedAt = t => t.updatedAt;
+let issuedCertificates = t => t.issuedCertificates;
 
 let decode = json =>
   Json.Decode.{
@@ -66,4 +68,5 @@ let decode = json =>
     active: json |> field("active", bool),
     createdAt: json |> field("createdAt", DateFns.decodeISO),
     updatedAt: json |> field("updatedAt", DateFns.decodeISO),
+    issuedCertificates: json |> field("issuedCertificatesCount", int),
   };

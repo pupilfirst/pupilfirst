@@ -117,17 +117,41 @@ let make = (~course, ~certificates) => {
                                  </p>
                                  <p
                                    className="text-gray-600 font-semibold text-xs mt-px">
-                                   {str("Issued certificate count")}
+                                   {str(
+                                      "Issued "
+                                      ++ Inflector.pluralize(
+                                           "time",
+                                           ~count=
+                                             Certificate.issuedCertificates(
+                                               certificate,
+                                             ),
+                                           ~inclusive=true,
+                                           (),
+                                         ),
+                                    )}
                                  </p>
                                </div>
-                               <div
-                                 className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
-                                 <span
-                                   className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
-                                   {"Active" |> str}
-                                 </span>
-                               </div>
+                               {Certificate.active(certificate)
+                                  ? <div
+                                      className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
+                                      <span
+                                        className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
+                                        {"Active" |> str}
+                                      </span>
+                                    </div>
+                                  : React.null}
                              </div>
+                             {Certificate.issuedCertificates(certificate) == 0
+                                ? <a
+                                    ariaLabel={
+                                      "Delete Certificate "
+                                      ++ Certificate.id(certificate)
+                                    }
+                                    className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
+                                    href="#">
+                                    <i className="fas fa-trash-alt" />
+                                  </a>
+                                : React.null}
                            </div>
                          </div>
                        </div>

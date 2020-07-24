@@ -8,10 +8,10 @@ type state = {
   certificates: array(Certificate.t),
 };
 
-let computeInitialState = () => {
+let computeInitialState = certificates => {
   drawerOpen: false,
   saving: false,
-  certificates: [||],
+  certificates,
 };
 
 type action =
@@ -31,9 +31,9 @@ let reducer = (state, action) =>
   };
 
 [@react.component]
-let make = (~course) => {
+let make = (~course, ~certificates) => {
   let (state, send) =
-    React.useReducerWithMapState(reducer, (), computeInitialState);
+    React.useReducerWithMapState(reducer, certificates, computeInitialState);
 
   <div className="flex flex-1 h-screen overflow-y-scroll">
     {state.drawerOpen
@@ -90,13 +90,13 @@ let make = (~course) => {
            </div>
          : <div className="px-6 pb-4 mt-5 flex flex-1 bg-gray-100">
              <div className="max-w-2xl w-full mx-auto relative">
-               <h4 className="mt-5 w-full"> {"Exports" |> str} </h4>
+               <h4 className="mt-5 w-full"> {"Certificates" |> str} </h4>
                <div className="flex mt-4 -mx-3 items-start flex-wrap">
                  {state.certificates
                   |> ArrayUtils.copyAndSort((x, y) =>
                        DateFns.differenceInSeconds(
-                         y |> Certificate.createdAt,
-                         x |> Certificate.createdAt,
+                         y |> Certificate.updatedAt,
+                         x |> Certificate.updatedAt,
                        )
                      )
                   |> Array.map(certificate =>

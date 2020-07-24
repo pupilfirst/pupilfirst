@@ -38,6 +38,7 @@ let make = (~course, ~certificates) => {
   <div className="flex flex-1 h-screen overflow-y-scroll">
     {state.drawerOpen
        ? <SchoolAdmin__EditorDrawer
+           size=SchoolAdmin__EditorDrawer.Large
            closeDrawerCB={() => send(CloseDrawer)}
            closeButtonTitle="Close Certificate Form">
            <div className="mx-auto bg-white">
@@ -112,7 +113,7 @@ let make = (~course, ~certificates) => {
                              <div className="pt-4 pb-3 px-4">
                                <div className="text-sm">
                                  <p className="text-black font-semibold">
-                                   {str("Certificate Title")}
+                                   {Certificate.name(certificate)->str}
                                  </p>
                                  <p
                                    className="text-gray-600 font-semibold text-xs mt-px">

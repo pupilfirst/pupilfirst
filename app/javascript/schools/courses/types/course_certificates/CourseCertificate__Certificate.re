@@ -9,6 +9,7 @@ type id = string;
 
 type t = {
   id,
+  name: string,
   imageUrl: string,
   margin: int,
   fontSize: int,
@@ -21,6 +22,7 @@ type t = {
 };
 
 let id = t => t.id;
+let name = t => t.name;
 let imageUrl = t => t.imageUrl;
 let margin = t => t.margin;
 let nameOffsetTop = t => t.nameOffsetTop;
@@ -34,6 +36,7 @@ let updatedAt = t => t.updatedAt;
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
+    name: json |> field("name", string),
     imageUrl: json |> field("imageUrl", string),
     margin: json |> field("margin", int),
     fontSize: json |> field("fontSize", int),

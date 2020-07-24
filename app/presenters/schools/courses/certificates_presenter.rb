@@ -31,7 +31,7 @@ module Schools
 
       def certificate_details(certificate)
         certificate.attributes.slice(
-          'id', 'qr_corner', 'qr_scale', 'name_offset_top', 'font_size', 'margin', 'active', 'created_at', 'updated_at'
+          'id', 'name', 'qr_corner', 'qr_scale', 'name_offset_top', 'font_size', 'margin', 'active', 'created_at', 'updated_at'
         ).merge(
           image_url: certificate.image_path
         )

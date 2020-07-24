@@ -4,6 +4,7 @@ after 'development:courses' do
   course = Course.first
 
   certificate = course.certificates.create!(
+    name: 'Version 1',
     qr_corner: 'TopRight',
     qr_scale: 100,
     name_offset_top: 59,

@@ -77,7 +77,7 @@ let make = (~course, ~certificates) => {
       <div className="flex px-6 py-2 items-center justify-between">
         <button
           onClick={_ => {send(OpenDrawer)}}
-          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-20 cursor-pointer">
+          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-file-export text-lg" />
           <h5 className="font-semibold ml-2">
             {"Create a new certificate" |> str}
@@ -141,17 +141,29 @@ let make = (~course, ~certificates) => {
                                     </div>
                                   : React.null}
                              </div>
-                             {Certificate.issuedCertificates(certificate) == 0
-                                ? <a
-                                    ariaLabel={
-                                      "Delete Certificate "
-                                      ++ Certificate.id(certificate)
-                                    }
-                                    className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
-                                    href="#">
-                                    <i className="fas fa-trash-alt" />
-                                  </a>
-                                : React.null}
+                             <div className="flex">
+                               <a
+                                 ariaLabel={
+                                   "Edit Certificate "
+                                   ++ Certificate.id(certificate)
+                                 }
+                                 className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
+                                 href="#">
+                                 <i className="fas fa-edit" />
+                               </a>
+                               {Certificate.issuedCertificates(certificate)
+                                == 0
+                                  ? <a
+                                      ariaLabel={
+                                        "Delete Certificate "
+                                        ++ Certificate.id(certificate)
+                                      }
+                                      className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
+                                      href="#">
+                                      <i className="fas fa-trash-alt" />
+                                    </a>
+                                  : React.null}
+                             </div>
                            </div>
                          </div>
                        </div>

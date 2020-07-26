@@ -80,6 +80,11 @@ Make sure that the PostgreSQL server is running. Once that's done, run the follo
     # Quit.
     \q
 
+### On Ubuntu:
+
+Postgres maps internal roles to Linux system accounts. Follow [this guide](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-20-04) to set a password.
+
+
 Feel free to alter these steps if you're familiar with setting up PostgreSQL.
 
 ## Configure application environment variables
@@ -154,6 +159,12 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
    127.0.0.1       www.school.localhost
    127.0.0.1       sso.school.localhost
    ```
+
+## Install Javascript dependencies
+
+Install Javascript dependencies using the `yarn` package manager.
+
+    $ yarn install
 
 ## Compile ReasonML code
 

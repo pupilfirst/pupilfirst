@@ -8,6 +8,7 @@
   "dependencies": {
     "@babel/preset-react": "^7.7.4",
     "@baransu/graphql_ppx_re": "^0.7.1",
+    "@centerforopenscience/markdown-it-imsize": "https://github.com/harigopal/markdown-it-imsize#preserve-content",
     "@fortawesome/fontawesome-free": "^5.10.1",
     "@glennsl/bs-json": "^5.0.1",
     "@rails/ujs": "^6.0.0",
@@ -27,7 +28,6 @@
     "date-fns-tz": "^1.0.10",
     "dotenv": "^8.0.0",
     "markdown-it": "^10.0.0",
-    "markdown-it-imsize": "^2.0.1",
     "markdown-it-linkify-images": "https://github.com/harigopal/markdown-it-linkify-images",
     "markdown-it-multimd-table": "^4.0.0",
     "markdown-it-sub": "^1.0.0",

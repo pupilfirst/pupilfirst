@@ -1,11 +1,12 @@
 module Schools
   class CoursePolicy < ApplicationPolicy
-    def authors?
-      # Record should belong to current school
-      return false unless record.school == current_school
-
+    def index?
       # Can be shown to all school admins.
       user&.school_admin.present? && user.school == current_school
+    end
+
+    def authors?
+      record.school == current_school && index?
     end
 
     alias attach_images? authors?

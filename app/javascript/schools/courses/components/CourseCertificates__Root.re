@@ -45,7 +45,7 @@ let make = (~course, ~certificates) => {
              <div className="max-w-2xl pt-6 px-6 mx-auto">
                <h5
                  className="uppercase text-center border-b border-gray-400 pb-2">
-                 {"Add new certificate" |> str}
+                 {"Create new certificate" |> str}
                </h5>
                <div className="mt-4">
                  <label
@@ -78,9 +78,9 @@ let make = (~course, ~certificates) => {
         <button
           onClick={_ => {send(OpenDrawer)}}
           className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
-          <i className="fas fa-file-export text-lg" />
+          <i className="fas fa-plus-circle" />
           <h5 className="font-semibold ml-2">
-            {"Create a new certificate" |> str}
+            {"Create New Certificate" |> str}
           </h5>
         </button>
       </div>

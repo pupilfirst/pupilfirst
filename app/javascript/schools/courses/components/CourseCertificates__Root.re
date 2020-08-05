@@ -3,12 +3,16 @@ open CourseCertificates__Types;
 let str = React.string;
 
 type state = {
+  name: string,
+  imageFilename: option(string),
   drawerOpen: bool,
   saving: bool,
   certificates: array(Certificate.t),
 };
 
 let computeInitialState = certificates => {
+  name: "",
+  imageFilename: None,
   drawerOpen: false,
   saving: false,
   certificates,
@@ -16,19 +20,81 @@ let computeInitialState = certificates => {
 
 type action =
   | OpenDrawer
+  | UpdateName(string)
+  | UpdateImageFilename(string)
+  | RemoveFilename
   | CloseDrawer
   | BeginSaving
-  | FinishSaving
+  | FinishSaving(array(Certificate.t))
   | FailSaving;
 
 let reducer = (state, action) =>
   switch (action) {
   | OpenDrawer => {...state, drawerOpen: true}
+  | UpdateName(name) => {...state, name}
+  | UpdateImageFilename(filename) => {
+      ...state,
+      imageFilename: Some(filename),
+    }
+  | RemoveFilename => {...state, imageFilename: None}
   | CloseDrawer => {...state, drawerOpen: false}
   | BeginSaving => {...state, saving: true}
-  | FinishSaving => {...state, saving: false, drawerOpen: false}
+  | FinishSaving(certificates) => {
+      ...state,
+      saving: false,
+      drawerOpen: false,
+      certificates,
+    }
   | FailSaving => {...state, saving: false}
   };
+
+let saveDisabled = state => {
+  state.imageFilename == None || state.saving;
+};
+
+let submitForm = (course, send, event) => {
+  ReactEvent.Form.preventDefault(event);
+  send(BeginSaving);
+
+  let formData =
+    ReactEvent.Form.target(event)
+    ->DomUtils.EventTarget.unsafeToElement
+    ->DomUtils.FormData.create;
+
+  let url = "/school/courses/" ++ Course.id(course) ++ "/certificates";
+
+  Api.sendFormData(
+    url,
+    formData,
+    json => {
+      Notification.success("Uploaded!", "You can now edit this certificate.");
+
+      let certificates =
+        json
+        |> Json.Decode.(field("certificates", array(Certificate.decode)));
+
+      send(FinishSaving(certificates));
+    },
+    () => send(FailSaving),
+  );
+};
+
+let imageInputText = imageFilename =>
+  imageFilename->Belt.Option.getWithDefault(
+    "Select a base image for certificate",
+  );
+
+let selectFile = (send, event) => {
+  let files = ReactEvent.Form.target(event)##files;
+
+  // The user can cancel the selection, which can result in files being an empty array.
+  if (ArrayUtils.isEmpty(files)) {
+    send(RemoveFilename);
+  } else {
+    let file = Js.Array.unsafe_get(files, 0);
+    send(UpdateImageFilename(file##name));
+  };
+};
 
 [@react.component]
 let make = (~course, ~certificates) => {
@@ -38,39 +104,93 @@ let make = (~course, ~certificates) => {
   <div className="flex flex-1 h-screen overflow-y-scroll">
     {state.drawerOpen
        ? <SchoolAdmin__EditorDrawer
-           size=SchoolAdmin__EditorDrawer.Large
            closeDrawerCB={() => send(CloseDrawer)}
            closeButtonTitle="Close Certificate Form">
-           <div className="mx-auto bg-white">
-             <div className="max-w-2xl pt-6 px-6 mx-auto">
-               <h5
-                 className="uppercase text-center border-b border-gray-400 pb-2">
-                 {"Create new certificate" |> str}
-               </h5>
-               <div className="mt-4">
-                 <label
-                   className="block tracking-wide text-xs font-semibold mr-6 mb-2">
-                   {"Please begin by uploading a base image:" |> str}
-                 </label>
+           <form onSubmit={submitForm(course, send)}>
+             <input
+               name="authenticity_token"
+               type_="hidden"
+               value={AuthenticityToken.fromHead()}
+             />
+             <div className="flex flex-col min-h-screen">
+               <div className="bg-white flex-grow-0">
+                 <div className="max-w-2xl px-6 pt-5 mx-auto">
+                   <h5
+                     className="uppercase text-center border-b border-gray-400 pb-2">
+                     {str("Create new certificate")}
+                   </h5>
+                 </div>
+                 <div className="max-w-2xl pt-6 px-6 mx-auto">
+                   <div className="max-w-2xl px-6 pb-6 mx-auto">
+                     <div className="mt-5">
+                       <label
+                         className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
+                         htmlFor="name">
+                         {"Name" |> str}
+                       </label>
+                       <span className="text-xs">
+                         {" (optional)" |> str}
+                       </span>
+                       <input
+                         className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                         id="name"
+                         type_="text"
+                         name="name"
+                         placeholder="Certificate Name"
+                         value={state.name}
+                         onChange={event =>
+                           send(
+                             UpdateName(
+                               ReactEvent.Form.target(event)##value,
+                             ),
+                           )
+                         }
+                       />
+                     </div>
+                     <div className="mt-5">
+                       <label
+                         className="block tracking-wide text-xs font-semibold"
+                         htmlFor="certificate-file-input">
+                         {"Certificate Base Image" |> str}
+                       </label>
+                       <input
+                         disabled={state.saving}
+                         className="hidden"
+                         name="image"
+                         type_="file"
+                         id="certificate-file-input"
+                         required=false
+                         multiple=false
+                         onChange={selectFile(send)}
+                       />
+                       <label
+                         className="file-input-label mt-2"
+                         htmlFor="certificate-file-input">
+                         <i
+                           className="fas fa-upload mr-2 text-gray-600 text-lg"
+                         />
+                         <span className="truncate">
+                           {imageInputText(state.imageFilename)->str}
+                         </span>
+                       </label>
+                     </div>
+                   </div>
+                 </div>
                </div>
-               <div className="flex max-w-2xl w-full mt-5 pb-5 mx-auto">
-                 <button
-                   disabled={state.saving}
-                   className="w-full btn btn-primary btn-large">
-                   {if (state.saving) {
-                      <span>
-                        <FaIcon classes="fas fa-spinner fa-pulse" />
-                        <span className="ml-2">
-                          {"Creating certificate..." |> str}
-                        </span>
-                      </span>;
-                    } else {
-                      "Create certificate" |> str;
-                    }}
-                 </button>
+               <div className="bg-gray-100 flex-grow">
+                 <div className="max-w-2xl p-6 mx-auto">
+                   <div
+                     className="flex max-w-2xl w-full justify-between items-center mx-auto">
+                     <button
+                       disabled={saveDisabled(state)}
+                       className="w-auto btn btn-large btn-primary">
+                       {str("Create New Certificate")}
+                     </button>
+                   </div>
+                 </div>
                </div>
              </div>
-           </div>
+           </form>
          </SchoolAdmin__EditorDrawer>
        : React.null}
     <div className="flex-1 flex flex-col bg-gray-100">

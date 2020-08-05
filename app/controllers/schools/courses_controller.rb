@@ -1,5 +1,8 @@
 module Schools
   class CoursesController < SchoolsController
+    include CamelizeKeys
+    include StringifyIds
+
     layout 'school'
 
     def index
@@ -115,6 +118,26 @@ module Schools
     # GET /school/courses/:id/certificates
     def certificates
       @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+    end
+
+    # POST /school/courses/:id/certificates
+    def create_certificate
+      @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+
+      form = ::Courses::CreateCertificateForm.new(@course)
+
+      props = if form.validate(params)
+        form.save
+
+        {
+          error: nil,
+          certificates: Schools::Courses::CertificatesPresenter.new(view_context, @course).certificates
+        }
+      else
+        { error: form.errors.full_messages.join(", ") }
+      end
+
+      render json: camelize_keys(stringify_ids(props))
     end
 
     # GET /school/courses/:id/evaluation_criteria

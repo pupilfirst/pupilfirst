@@ -18,6 +18,7 @@ module Schools
     alias mark_teams_active? authors?
     alias exports? authors?
     alias certificates? authors?
+    alias create_certificate? authors?
 
     def curriculum?
       return false if user.blank?

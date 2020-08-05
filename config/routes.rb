@@ -60,6 +60,7 @@ Rails.application.routes.draw do
         get 'exports'
         get 'authors'
         get 'certificates'
+        post 'certificates', action: 'create_certificate'
         get 'evaluation_criteria'
         post 'attach_images'
       end

@@ -27,9 +27,9 @@ en:
     done_exclamation: Done!
   components:
     CourseCertificates__Root:
-      active: Active
+      active_tag: Active
       no_certificates: You haven't created any certificates yet!
-      create_button: Create New Certificate
+      create_action: Create New Certificate
       heading: Certificates
       issued_count_zero: "Never issued"
       issued_count_one: "Issued only once"

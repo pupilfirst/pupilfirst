@@ -133,7 +133,7 @@ let make = (~course, ~certificates) => {
                  <div className="max-w-2xl px-6 pt-5 mx-auto">
                    <h5
                      className="uppercase text-center border-b border-gray-400 pb-2">
-                     {T.ts(tc, "create_button")}
+                     {T.ts(tc, "create_action")}
                    </h5>
                  </div>
                  <div className="max-w-2xl pt-6 px-6 mx-auto">
@@ -200,7 +200,7 @@ let make = (~course, ~certificates) => {
                      <button
                        disabled={saveDisabled(state)}
                        className="w-auto btn btn-large btn-primary">
-                       {T.ts(tc, "create_button")}
+                       {T.ts(tc, "create_action")}
                      </button>
                    </div>
                  </div>
@@ -216,7 +216,7 @@ let make = (~course, ~certificates) => {
           className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-plus-circle" />
           <h5 className="font-semibold ml-2">
-            {T.ts(tc, "create_button")}
+            {T.ts(tc, "create_action")}
           </h5>
         </button>
       </div>
@@ -264,7 +264,7 @@ let make = (~course, ~certificates) => {
                                       className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
                                       <span
                                         className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
-                                        {T.ts(tc, "active")}
+                                        {T.ts(tc, "active_tag")}
                                       </span>
                                     </div>
                                   : React.null}

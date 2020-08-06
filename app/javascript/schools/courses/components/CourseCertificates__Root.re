@@ -1,6 +1,8 @@
 open CourseCertificates__Types;
 
 let str = React.string;
+let tc = T.make("components.CourseCertificates__Root");
+let ts = T.make("shared");
 
 type state = {
   name: string,
@@ -67,7 +69,10 @@ let submitForm = (course, send, event) => {
     url,
     formData,
     json => {
-      Notification.success("Uploaded!", "You can now edit this certificate.");
+      Notification.success(
+        T.t(ts, "done_exclamation"),
+        T.t(tc, "success_notification"),
+      );
 
       let certificates =
         json
@@ -81,19 +86,30 @@ let submitForm = (course, send, event) => {
 
 let imageInputText = imageFilename =>
   imageFilename->Belt.Option.getWithDefault(
-    "Select a base image for certificate",
+    T.t(tc, "certificate_base_image_placeholder"),
   );
 
 let selectFile = (send, event) => {
   let files = ReactEvent.Form.target(event)##files;
 
-  // The user can cancel the selection, which can result in files being an empty array.
+  // The user can cancel the selection, which will result in files being an empty array.
   if (ArrayUtils.isEmpty(files)) {
     send(RemoveFilename);
   } else {
     let file = Js.Array.unsafe_get(files, 0);
     send(UpdateImageFilename(file##name));
   };
+};
+
+let issuedCountMessage = count => {
+  let identifier =
+    switch (count) {
+    | 0 => "issued_count_zero"
+    | 1 => "issued_count_one"
+    | _other => "issued_count_multiple"
+    };
+
+  T.tsOpt(tc, identifier, {"count": count});
 };
 
 [@react.component]
@@ -105,7 +121,7 @@ let make = (~course, ~certificates) => {
     {state.drawerOpen
        ? <SchoolAdmin__EditorDrawer
            closeDrawerCB={() => send(CloseDrawer)}
-           closeButtonTitle="Close Certificate Form">
+           closeButtonTitle={T.t(tc, "drawer_close_title")}>
            <form onSubmit={submitForm(course, send)}>
              <input
                name="authenticity_token"
@@ -117,7 +133,7 @@ let make = (~course, ~certificates) => {
                  <div className="max-w-2xl px-6 pt-5 mx-auto">
                    <h5
                      className="uppercase text-center border-b border-gray-400 pb-2">
-                     {str("Create new certificate")}
+                     {T.ts(tc, "create_button")}
                    </h5>
                  </div>
                  <div className="max-w-2xl pt-6 px-6 mx-auto">
@@ -126,17 +142,17 @@ let make = (~course, ~certificates) => {
                        <label
                          className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
                          htmlFor="name">
-                         {"Name" |> str}
+                         {T.ts(tc, "name_label")}
                        </label>
                        <span className="text-xs">
-                         {" (optional)" |> str}
+                         {" (" ++ T.t(ts, "optional") ++ ")" |> str}
                        </span>
                        <input
                          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                          id="name"
                          type_="text"
                          name="name"
-                         placeholder="A name to identify this certificate"
+                         placeholder={T.t(tc, "name_placeholder")}
                          value={state.name}
                          onChange={event =>
                            send(
@@ -151,7 +167,7 @@ let make = (~course, ~certificates) => {
                        <label
                          className="block tracking-wide text-xs font-semibold"
                          htmlFor="certificate-file-input">
-                         {"Certificate Base Image" |> str}
+                         {T.ts(tc, "certificate_base_image_label")}
                        </label>
                        <input
                          disabled={state.saving}
@@ -184,7 +200,7 @@ let make = (~course, ~certificates) => {
                      <button
                        disabled={saveDisabled(state)}
                        className="w-auto btn btn-large btn-primary">
-                       {str("Create New Certificate")}
+                       {T.ts(tc, "create_button")}
                      </button>
                    </div>
                  </div>
@@ -200,18 +216,18 @@ let make = (~course, ~certificates) => {
           className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-plus-circle" />
           <h5 className="font-semibold ml-2">
-            {"Create New Certificate" |> str}
+            {T.ts(tc, "create_button")}
           </h5>
         </button>
       </div>
       {state.certificates |> ArrayUtils.isEmpty
          ? <div
              className="flex justify-center bg-gray-100 border rounded p-3 italic mx-auto max-w-2xl w-full">
-             {"You haven't created any certificates yet!" |> str}
+             {T.ts(tc, "no_certificates")}
            </div>
          : <div className="px-6 pb-4 mt-5 flex flex-1 bg-gray-100">
              <div className="max-w-2xl w-full mx-auto relative">
-               <h4 className="mt-5 w-full"> {"Certificates" |> str} </h4>
+               <h4 className="mt-5 w-full"> {T.ts(tc, "heading")} </h4>
                <div className="flex mt-4 -mx-3 items-start flex-wrap">
                  {state.certificates
                   |> ArrayUtils.copyAndSort((x, y) =>
@@ -237,18 +253,10 @@ let make = (~course, ~certificates) => {
                                  </p>
                                  <p
                                    className="text-gray-600 font-semibold text-xs mt-px">
-                                   {str(
-                                      "Issued "
-                                      ++ Inflector.pluralize(
-                                           "time",
-                                           ~count=
-                                             Certificate.issuedCertificates(
-                                               certificate,
-                                             ),
-                                           ~inclusive=true,
-                                           (),
-                                         ),
-                                    )}
+                                   {Certificate.issuedCertificates(
+                                      certificate,
+                                    )
+                                    ->issuedCountMessage}
                                  </p>
                                </div>
                                {Certificate.active(certificate)
@@ -256,7 +264,7 @@ let make = (~course, ~certificates) => {
                                       className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
                                       <span
                                         className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
-                                        {"Active" |> str}
+                                        {T.ts(tc, "active")}
                                       </span>
                                     </div>
                                   : React.null}

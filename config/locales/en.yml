@@ -22,6 +22,24 @@
 # forget what the strings were for.
 
 en:
+  shared:
+    optional: optional
+    done_exclamation: Done!
+  components:
+    CourseCertificates__Root:
+      active: Active
+      no_certificates: You haven't created any certificates yet!
+      create_button: Create New Certificate
+      heading: Certificates
+      issued_count_zero: "Never issued"
+      issued_count_one: "Issued only once"
+      issued_count_multiple: "Issued %{count} times"
+      name_label: Name
+      name_placeholder: A name to identify this certificate
+      certificate_base_image_label: Certificate Base Image
+      certificate_base_image_placeholder: Select a base image for certificate
+      success_notification: You can now edit this certificate.
+      drawer_close_title: Close certificate form
   jobs:
     timeline_events:
       verification_notification:

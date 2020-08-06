@@ -25,6 +25,13 @@
   <!-- Scripts -->
   <%= javascript_pack_tag 'layouts/tailwind', nonce: true %>
 
+  <%= javascript_tag(nonce: true) do %>
+    I18n.defaultLocale = "<%= I18n.default_locale %>";
+    I18n.locale = "<%= I18n.locale %>";
+  <% end %>
+
+  <%= javascript_pack_tag "translations/#{I18n.locale}", nonce: true %>
+
   <%= csrf_meta_tags %>
 
   <% if presenter.meta_description.present? %>

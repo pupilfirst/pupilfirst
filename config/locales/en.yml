@@ -2,13 +2,12 @@
 # Organization of en.yml
 # ----------------------
 #
-# application.*.key = display_value
-# jobs.[MODULE].JOB.*.key = display_value
-# libs.MODULE.*.key = display_value
-# models.MODEL.COLUMN = { key: display_value, ... }
-# services.MODULE.SERVICE.*.key = display_value
-# presenters.MODULE.PRESENTER.*.key = display_value
-# CONTROLLER.ACTION.*.key = display_value
+# shared.* - shared strings
+# components.COMPONENT.key - component-specific strings
+# jobs.[MODULE].JOB.* - strings used by jobs
+# models.MODEL.COLUMN.* = translation of database values to display values
+# presenters.MODULE.PRESENTER.* = display_value
+# CONTROLLER.ACTION.* = display_value
 #
 # CONTROLLER is always the plural version. For example: FoundersController#edit = founders.edit.*
 #
@@ -25,11 +24,13 @@ en:
   shared:
     optional: optional
     done_exclamation: Done!
+    cancel: Cancel
   components:
     CourseCertificates__Root:
       active_tag: Active
       no_certificates: You haven't created any certificates yet!
       create_action: Create New Certificate
+      edit_action: Edit Certificate
       heading: Certificates
       issued_count_zero: "Never issued"
       issued_count_one: "Issued only once"
@@ -39,7 +40,6 @@ en:
       certificate_base_image_label: Certificate Base Image
       certificate_base_image_placeholder: Select a base image for certificate
       success_notification: You can now edit this certificate.
-      drawer_close_title: Close certificate form
   jobs:
     timeline_events:
       verification_notification:

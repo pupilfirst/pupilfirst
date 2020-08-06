@@ -4,10 +4,15 @@ let str = React.string;
 let tc = T.make("components.CourseCertificates__Root");
 let ts = T.make("shared");
 
+type drawer =
+  | NewCertificate
+  | EditCertificate(Certificate.t)
+  | Closed;
+
 type state = {
   name: string,
   imageFilename: option(string),
-  drawerOpen: bool,
+  drawer,
   saving: bool,
   certificates: array(Certificate.t),
 };
@@ -15,36 +20,41 @@ type state = {
 let computeInitialState = certificates => {
   name: "",
   imageFilename: None,
-  drawerOpen: false,
+  drawer: Closed,
   saving: false,
   certificates,
 };
 
 type action =
-  | OpenDrawer
+  | OpenNewCertificateDrawer
+  | OpenEditCertificateDrawer(Certificate.t)
   | UpdateName(string)
   | UpdateImageFilename(string)
   | RemoveFilename
   | CloseDrawer
   | BeginSaving
-  | FinishSaving(array(Certificate.t))
+  | FinishCreating(array(Certificate.t))
   | FailSaving;
 
 let reducer = (state, action) =>
   switch (action) {
-  | OpenDrawer => {...state, drawerOpen: true}
+  | OpenNewCertificateDrawer => {...state, drawer: NewCertificate}
+  | OpenEditCertificateDrawer(certificate) => {
+      ...state,
+      drawer: EditCertificate(certificate),
+    }
   | UpdateName(name) => {...state, name}
   | UpdateImageFilename(filename) => {
       ...state,
       imageFilename: Some(filename),
     }
   | RemoveFilename => {...state, imageFilename: None}
-  | CloseDrawer => {...state, drawerOpen: false}
+  | CloseDrawer => {...state, drawer: Closed}
   | BeginSaving => {...state, saving: true}
-  | FinishSaving(certificates) => {
+  | FinishCreating(certificates) => {
       ...state,
       saving: false,
-      drawerOpen: false,
+      drawer: Closed,
       certificates,
     }
   | FailSaving => {...state, saving: false}
@@ -78,7 +88,7 @@ let submitForm = (course, send, event) => {
         json
         |> Json.Decode.(field("certificates", array(Certificate.decode)));
 
-      send(FinishSaving(certificates));
+      send(FinishCreating(certificates));
     },
     () => send(FailSaving),
   );
@@ -112,107 +122,124 @@ let issuedCountMessage = count => {
   T.tsOpt(tc, identifier, {"count": count});
 };
 
+let newCertificateDrawer = (course, state, send) =>
+  <SchoolAdmin__EditorDrawer
+    closeDrawerCB={() => send(CloseDrawer)}
+    closeButtonTitle={T.t(ts, "cancel")}>
+    <form onSubmit={submitForm(course, send)}>
+      <input
+        name="authenticity_token"
+        type_="hidden"
+        value={AuthenticityToken.fromHead()}
+      />
+      <div className="flex flex-col min-h-screen">
+        <div className="bg-white flex-grow-0">
+          <div className="max-w-2xl px-6 pt-5 mx-auto">
+            <h5
+              className="uppercase text-center border-b border-gray-400 pb-2">
+              {T.ts(tc, "create_action")}
+            </h5>
+          </div>
+          <div className="max-w-2xl pt-6 px-6 mx-auto">
+            <div className="max-w-2xl pb-6 mx-auto">
+              <div className="mt-5">
+                <label
+                  className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
+                  htmlFor="name">
+                  {T.ts(tc, "name_label")}
+                </label>
+                <span className="text-xs">
+                  {" (" ++ T.t(ts, "optional") ++ ")" |> str}
+                </span>
+                <input
+                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  id="name"
+                  type_="text"
+                  name="name"
+                  placeholder={T.t(tc, "name_placeholder")}
+                  value={state.name}
+                  onChange={event =>
+                    send(UpdateName(ReactEvent.Form.target(event)##value))
+                  }
+                />
+              </div>
+              <div className="mt-5">
+                <label
+                  className="block tracking-wide text-xs font-semibold"
+                  htmlFor="certificate-file-input">
+                  {T.ts(tc, "certificate_base_image_label")}
+                </label>
+                <input
+                  disabled={state.saving}
+                  className="hidden"
+                  name="image"
+                  type_="file"
+                  id="certificate-file-input"
+                  required=false
+                  multiple=false
+                  onChange={selectFile(send)}
+                />
+                <label
+                  className="file-input-label mt-2"
+                  htmlFor="certificate-file-input">
+                  <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+                  <span className="truncate">
+                    {imageInputText(state.imageFilename)->str}
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="bg-gray-100 flex-grow">
+          <div className="max-w-2xl p-6 mx-auto">
+            <div
+              className="flex max-w-2xl w-full justify-between items-center mx-auto">
+              <button
+                disabled={saveDisabled(state)}
+                className="w-auto btn btn-large btn-primary">
+                {T.ts(tc, "create_action")}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </SchoolAdmin__EditorDrawer>;
+
+let editCertificateDrawer = (course, state, send, certificate) => {
+  <SchoolAdmin__EditorDrawer
+    closeDrawerCB={() => send(CloseDrawer)}
+    closeButtonTitle={T.t(ts, "cancel")}
+    size=SchoolAdmin__EditorDrawer.Large>
+    <div className="flex flex-col min-h-screen">
+      <div className="bg-white flex-grow-0">
+        <div className="max-w-4xl px-6 pt-5 mx-auto">
+          <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+            {T.ts(tc, "edit_action")}
+          </h5>
+        </div>
+      </div>
+    </div>
+  </SchoolAdmin__EditorDrawer>;
+};
+
 [@react.component]
 let make = (~course, ~certificates) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, certificates, computeInitialState);
 
   <div className="flex flex-1 h-screen overflow-y-scroll">
-    {state.drawerOpen
-       ? <SchoolAdmin__EditorDrawer
-           closeDrawerCB={() => send(CloseDrawer)}
-           closeButtonTitle={T.t(tc, "drawer_close_title")}>
-           <form onSubmit={submitForm(course, send)}>
-             <input
-               name="authenticity_token"
-               type_="hidden"
-               value={AuthenticityToken.fromHead()}
-             />
-             <div className="flex flex-col min-h-screen">
-               <div className="bg-white flex-grow-0">
-                 <div className="max-w-2xl px-6 pt-5 mx-auto">
-                   <h5
-                     className="uppercase text-center border-b border-gray-400 pb-2">
-                     {T.ts(tc, "create_action")}
-                   </h5>
-                 </div>
-                 <div className="max-w-2xl pt-6 px-6 mx-auto">
-                   <div className="max-w-2xl pb-6 mx-auto">
-                     <div className="mt-5">
-                       <label
-                         className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
-                         htmlFor="name">
-                         {T.ts(tc, "name_label")}
-                       </label>
-                       <span className="text-xs">
-                         {" (" ++ T.t(ts, "optional") ++ ")" |> str}
-                       </span>
-                       <input
-                         className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                         id="name"
-                         type_="text"
-                         name="name"
-                         placeholder={T.t(tc, "name_placeholder")}
-                         value={state.name}
-                         onChange={event =>
-                           send(
-                             UpdateName(
-                               ReactEvent.Form.target(event)##value,
-                             ),
-                           )
-                         }
-                       />
-                     </div>
-                     <div className="mt-5">
-                       <label
-                         className="block tracking-wide text-xs font-semibold"
-                         htmlFor="certificate-file-input">
-                         {T.ts(tc, "certificate_base_image_label")}
-                       </label>
-                       <input
-                         disabled={state.saving}
-                         className="hidden"
-                         name="image"
-                         type_="file"
-                         id="certificate-file-input"
-                         required=false
-                         multiple=false
-                         onChange={selectFile(send)}
-                       />
-                       <label
-                         className="file-input-label mt-2"
-                         htmlFor="certificate-file-input">
-                         <i
-                           className="fas fa-upload mr-2 text-gray-600 text-lg"
-                         />
-                         <span className="truncate">
-                           {imageInputText(state.imageFilename)->str}
-                         </span>
-                       </label>
-                     </div>
-                   </div>
-                 </div>
-               </div>
-               <div className="bg-gray-100 flex-grow">
-                 <div className="max-w-2xl p-6 mx-auto">
-                   <div
-                     className="flex max-w-2xl w-full justify-between items-center mx-auto">
-                     <button
-                       disabled={saveDisabled(state)}
-                       className="w-auto btn btn-large btn-primary">
-                       {T.ts(tc, "create_action")}
-                     </button>
-                   </div>
-                 </div>
-               </div>
-             </div>
-           </form>
-         </SchoolAdmin__EditorDrawer>
-       : React.null}
+    {switch (state.drawer) {
+     | NewCertificate => newCertificateDrawer(course, state, send)
+     | EditCertificate(certificate) =>
+       editCertificateDrawer(course, state, send, certificate)
+     | Closed => React.null
+     }}
     <div className="flex-1 flex flex-col bg-gray-100">
       <div className="flex px-6 py-2 items-center justify-between">
         <button
-          onClick={_ => {send(OpenDrawer)}}
+          onClick={_ => {send(OpenNewCertificateDrawer)}}
           className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-plus-circle" />
           <h5 className="font-semibold ml-2">
@@ -276,7 +303,11 @@ let make = (~course, ~certificates) => {
                                    ++ Certificate.id(certificate)
                                  }
                                  className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
-                                 href="#">
+                                 onClick={_ =>
+                                   send(
+                                     OpenEditCertificateDrawer(certificate),
+                                   )
+                                 }>
                                  <i className="fas fa-edit" />
                                </a>
                                {Certificate.issuedCertificates(certificate)

@@ -2,44 +2,37 @@
 # Organization of en.yml
 # ----------------------
 #
-# shared.* - shared strings
 # components.COMPONENT.key - component-specific strings
 # jobs.[MODULE].JOB.* - strings used by jobs
 # models.MODEL.COLUMN.* = translation of database values to display values
-# presenters.MODULE.PRESENTER.* = display_value
+# shared.* - shared strings
 # CONTROLLER.ACTION.* = display_value
 #
 # CONTROLLER is always the plural version. For example: FoundersController#edit = founders.edit.*
 #
 # Order alphabetically where possible.
 #
-# Third-party customizations follow their own format. Record these at the end of the file. For example:
-#
-# activecord.* = Refer Activerecord documentation.
-#
-# Make sure you include links to documentation related to such third-party customizations for when we (undoubtedly)
-# forget what the strings were for.
+# Third-party library translations are at the end of this file, and they follow their own format.
+# Make sure you include links to documentation related to such third-party translations for when
+# we (undoubtedly) forget what the strings were for.
 
 en:
-  shared:
-    optional: optional
-    done_exclamation: Done!
-    cancel: Cancel
   components:
     CourseCertificates__Root:
       active_tag: Active
-      no_certificates: You haven't created any certificates yet!
+      certificate_base_image_label: Certificate Base Image
+      certificate_base_image_placeholder: Select a base image for certificate
       create_action: Create New Certificate
       edit_action: Edit Certificate
-      heading: Certificates
       issued_count_zero: "Never issued"
       issued_count_one: "Issued only once"
       issued_count_multiple: "Issued %{count} times"
+      heading: Certificates
+      no_certificates: You haven't created any certificates yet!
       name_label: Name
       name_placeholder: A name to identify this certificate
-      certificate_base_image_label: Certificate Base Image
-      certificate_base_image_placeholder: Select a base image for certificate
       success_notification: You can now edit this certificate.
+
   jobs:
     timeline_events:
       verification_notification:
@@ -88,15 +81,10 @@ en:
         team: Team
         founder: All Founders
 
-  presenters:
-    layouts:
-      footer:
-        address_html: "#360, 6th Main Road<br/>1<sup>st</sup> Block, Koramangala,<br/>Bengaluru &mdash; 560034"
-        email_address: support@pupilfirst.com
-
-  admissions:
-    register:
-      email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
+  shared:
+    optional: optional
+    done_exclamation: Done!
+    cancel: Cancel
 
   dashboard:
     dashboard:
@@ -113,6 +101,10 @@ en:
       zero_results: There are no public resources in this library. You may need to be signed in to see private resources.
       filter_zero_results: There are no resources with the current filter conditions. Try changing or clearing the filter.
       filter_notice: Now showing resources that match the current filter. Clear the filter to see all available resources.
+
+  ####################################
+  # THIRD-PARTY LIBRARY TRANSLATIONS #
+  ####################################
 
   # These are custom error messages for the active_storage_validations gem.
   errors:

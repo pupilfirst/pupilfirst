@@ -121,7 +121,7 @@ let make = (~course, ~certificates) => {
                    </h5>
                  </div>
                  <div className="max-w-2xl pt-6 px-6 mx-auto">
-                   <div className="max-w-2xl px-6 pb-6 mx-auto">
+                   <div className="max-w-2xl pb-6 mx-auto">
                      <div className="mt-5">
                        <label
                          className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
@@ -136,7 +136,7 @@ let make = (~course, ~certificates) => {
                          id="name"
                          type_="text"
                          name="name"
-                         placeholder="Certificate Name"
+                         placeholder="A name to identify this certificate"
                          value={state.name}
                          onChange={event =>
                            send(

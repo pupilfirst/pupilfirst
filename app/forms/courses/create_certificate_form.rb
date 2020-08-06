@@ -19,7 +19,11 @@ module Courses
     private
 
     def normalized_name
-      name.strip if name.present?
+      if name.present?
+        name.strip
+      else
+        Time.zone.now.strftime('%B %-d, %Y, %l:%M %p')
+      end
     end
   end
 end

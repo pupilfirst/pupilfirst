@@ -11,9 +11,6 @@ type value = string;
 [@bs.scope "I18n"] [@bs.val]
 external translate: (string, Js.Dict.t('a)) => string = "translate";
 
-let t2 = (~scope="", ~options, identifier) =>
-  translate(scope ++ "." ++ identifier, options);
-
 let arrayToJsOptions = options => {
   let dict = Js.Dict.empty();
 
@@ -24,8 +21,17 @@ let arrayToJsOptions = options => {
   dict;
 };
 
-let t = (~scope=?, ~options: array((key, value))=[||], identifier) => {
-  let jsOptions = arrayToJsOptions(options);
+let addCount = (jsDict, count) => {
+  Belt.Option.forEach(count, count =>
+    Js.Dict.set(jsDict, "count", count->string_of_int)
+  );
+
+  jsDict;
+};
+
+let t =
+    (~scope=?, ~variables: array((key, value))=[||], ~count=?, identifier) => {
+  let jsOptions = arrayToJsOptions(variables)->addCount(count);
 
   let fullIdentifier =
     switch (scope) {

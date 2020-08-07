@@ -24,9 +24,10 @@ en:
       certificate_base_image_placeholder: Select a base image for certificate
       create_action: Create New Certificate
       edit_action: Edit Certificate
-      issued_count_zero: "Never issued"
-      issued_count_one: "Issued only once"
-      issued_count_multiple: "Issued %{count} times"
+      issued_count:
+        zero: "Never issued"
+        one: "Issued only once"
+        other: "Issued %{count} times"
       heading: Certificates
       no_certificates: You haven't created any certificates yet!
       name_label: Name

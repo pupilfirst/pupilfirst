@@ -119,7 +119,7 @@ let issuedCountMessage = count => {
     | _other => "issued_count_multiple"
     };
 
-  tc(~options=[|("count", count->string_of_int)|], identifier)->str;
+  tc(~count, identifier)->str;
 };
 
 let newCertificateDrawer = (course, state, send) =>

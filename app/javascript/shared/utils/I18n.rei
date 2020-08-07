@@ -1,4 +1,11 @@
 type key = string;
 type value = string;
 
-let t: (~scope: string=?, ~options: array((key, value))=?, string) => string;
+let t:
+  (
+    ~scope: string=?,
+    ~variables: array((key, value))=?,
+    ~count: int=?,
+    string
+  ) =>
+  string;

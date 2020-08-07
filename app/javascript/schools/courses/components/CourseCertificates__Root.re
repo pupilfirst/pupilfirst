@@ -111,17 +111,6 @@ let selectFile = (send, event) => {
   };
 };
 
-let issuedCountMessage = count => {
-  let identifier =
-    switch (count) {
-    | 0 => "issued_count_zero"
-    | 1 => "issued_count_one"
-    | _other => "issued_count_multiple"
-    };
-
-  tc(~count, identifier)->str;
-};
-
 let newCertificateDrawer = (course, state, send) =>
   <SchoolAdmin__EditorDrawer
     closeDrawerCB={() => send(CloseDrawer)} closeButtonTitle={ts("cancel")}>
@@ -277,10 +266,14 @@ let make = (~course, ~certificates) => {
                                  </p>
                                  <p
                                    className="text-gray-600 font-semibold text-xs mt-px">
-                                   {Certificate.issuedCertificates(
-                                      certificate,
+                                   {tc(
+                                      ~count=
+                                        Certificate.issuedCertificates(
+                                          certificate,
+                                        ),
+                                      "issued_count",
                                     )
-                                    ->issuedCountMessage}
+                                    ->str}
                                  </p>
                                </div>
                                {Certificate.active(certificate)

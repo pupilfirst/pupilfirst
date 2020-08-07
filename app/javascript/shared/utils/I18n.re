@@ -1,6 +1,8 @@
 /*
  * let tc = I18n.t(~scope="components.CourseCertificates__Root")
+ * let ts = I18n.t(~scope="shared")
  * let label = tc("create_button")
+ * let cancel = ts("cancel")
  */
 
 type key = string;
@@ -22,7 +24,14 @@ let arrayToJsOptions = options => {
   dict;
 };
 
-let t = (~scope="", ~options: array((key, value))=[||], identifier) => {
+let t = (~scope=?, ~options: array((key, value))=[||], identifier) => {
   let jsOptions = arrayToJsOptions(options);
-  translate(scope ++ "." ++ identifier, jsOptions);
+
+  let fullIdentifier =
+    switch (scope) {
+    | Some(scope) => scope ++ "." ++ identifier
+    | None => identifier
+    };
+
+  translate(fullIdentifier, jsOptions);
 };

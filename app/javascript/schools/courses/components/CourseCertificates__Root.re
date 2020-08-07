@@ -136,7 +136,7 @@ let newCertificateDrawer = (course, state, send) =>
           <div className="max-w-2xl px-6 pt-5 mx-auto">
             <h5
               className="uppercase text-center border-b border-gray-400 pb-2">
-              {ts("create_action")->str}
+              {tc("create_action")->str}
             </h5>
           </div>
           <div className="max-w-2xl pt-6 px-6 mx-auto">

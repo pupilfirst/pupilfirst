@@ -1,8 +1,7 @@
 open CourseCertificates__Types;
 
 let str = React.string;
-let tc = I18n.t(~scope="components.CourseCertificates__Root");
-let ts = I18n.t(~scope="shared");
+let t = I18n.t(~scope="components.CourseCertificates__Root");
 
 type drawer =
   | NewCertificate
@@ -80,8 +79,8 @@ let submitForm = (course, send, event) => {
     formData,
     json => {
       Notification.success(
-        ts("done_exclamation"),
-        tc("success_notification"),
+        t("done_exclamation"),
+        t("success_notification"),
       );
 
       let certificates =
@@ -96,7 +95,7 @@ let submitForm = (course, send, event) => {
 
 let imageInputText = imageFilename =>
   imageFilename->Belt.Option.getWithDefault(
-    tc("certificate_base_image_placeholder"),
+    t("certificate_base_image_placeholder"),
   );
 
 let selectFile = (send, event) => {
@@ -113,7 +112,7 @@ let selectFile = (send, event) => {
 
 let newCertificateDrawer = (course, state, send) =>
   <SchoolAdmin__EditorDrawer
-    closeDrawerCB={() => send(CloseDrawer)} closeButtonTitle={ts("cancel")}>
+    closeDrawerCB={() => send(CloseDrawer)} closeButtonTitle={t("cancel")}>
     <form onSubmit={submitForm(course, send)}>
       <input
         name="authenticity_token"
@@ -125,7 +124,7 @@ let newCertificateDrawer = (course, state, send) =>
           <div className="max-w-2xl px-6 pt-5 mx-auto">
             <h5
               className="uppercase text-center border-b border-gray-400 pb-2">
-              {tc("create_action")->str}
+              {t("create_action")->str}
             </h5>
           </div>
           <div className="max-w-2xl pt-6 px-6 mx-auto">
@@ -134,17 +133,17 @@ let newCertificateDrawer = (course, state, send) =>
                 <label
                   className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
                   htmlFor="name">
-                  {tc("name_label")->str}
+                  {t("name_label")->str}
                 </label>
                 <span className="text-xs">
-                  {" (" ++ ts("optional") ++ ")" |> str}
+                  {" (" ++ t("optional") ++ ")" |> str}
                 </span>
                 <input
                   className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="name"
                   type_="text"
                   name="name"
-                  placeholder={tc("name_placeholder")}
+                  placeholder={t("name_placeholder")}
                   value={state.name}
                   onChange={event =>
                     send(UpdateName(ReactEvent.Form.target(event)##value))
@@ -155,7 +154,7 @@ let newCertificateDrawer = (course, state, send) =>
                 <label
                   className="block tracking-wide text-xs font-semibold"
                   htmlFor="certificate-file-input">
-                  {tc("certificate_base_image_label")->str}
+                  {t("certificate_base_image_label")->str}
                 </label>
                 <input
                   disabled={state.saving}
@@ -186,7 +185,7 @@ let newCertificateDrawer = (course, state, send) =>
               <button
                 disabled={saveDisabled(state)}
                 className="w-auto btn btn-large btn-primary">
-                {tc("create_action")->str}
+                {t("create_action")->str}
               </button>
             </div>
           </div>
@@ -198,13 +197,13 @@ let newCertificateDrawer = (course, state, send) =>
 let editCertificateDrawer = (course, state, send, certificate) => {
   <SchoolAdmin__EditorDrawer
     closeDrawerCB={() => send(CloseDrawer)}
-    closeButtonTitle={ts("cancel")}
+    closeButtonTitle={t("cancel")}
     size=SchoolAdmin__EditorDrawer.Large>
     <div className="flex flex-col min-h-screen">
       <div className="bg-white flex-grow-0">
         <div className="max-w-4xl px-6 pt-5 mx-auto">
           <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-            {tc("edit_action")->str}
+            {t("edit_action")->str}
           </h5>
         </div>
       </div>
@@ -230,17 +229,17 @@ let make = (~course, ~certificates) => {
           onClick={_ => {send(OpenNewCertificateDrawer)}}
           className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-plus-circle" />
-          <h5 className="font-semibold ml-2"> {tc("create_action")->str} </h5>
+          <h5 className="font-semibold ml-2"> {t("create_action")->str} </h5>
         </button>
       </div>
       {state.certificates |> ArrayUtils.isEmpty
          ? <div
              className="flex justify-center bg-gray-100 border rounded p-3 italic mx-auto max-w-2xl w-full">
-             {tc("no_certificates")->str}
+             {t("no_certificates")->str}
            </div>
          : <div className="px-6 pb-4 mt-5 flex flex-1 bg-gray-100">
              <div className="max-w-2xl w-full mx-auto relative">
-               <h4 className="mt-5 w-full"> {tc("heading")->str} </h4>
+               <h4 className="mt-5 w-full"> {t("heading")->str} </h4>
                <div className="flex mt-4 -mx-3 items-start flex-wrap">
                  {state.certificates
                   |> ArrayUtils.copyAndSort((x, y) =>
@@ -266,7 +265,7 @@ let make = (~course, ~certificates) => {
                                  </p>
                                  <p
                                    className="text-gray-600 font-semibold text-xs mt-px">
-                                   {tc(
+                                   {t(
                                       ~count=
                                         Certificate.issuedCertificates(
                                           certificate,
@@ -281,7 +280,7 @@ let make = (~course, ~certificates) => {
                                       className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
                                       <span
                                         className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
-                                        {tc("active_tag")->str}
+                                        {t("active_tag")->str}
                                       </span>
                                     </div>
                                   : React.null}

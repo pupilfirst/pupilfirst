@@ -8,7 +8,10 @@
 type key = string;
 type value = string;
 
-type options = {count: option(int)};
+type options = {
+  count: option(int),
+  defaults: array(Js.Dict.t(string)),
+};
 
 [@bs.scope "I18n"] [@bs.val]
 external translate: (string, Js.t('a)) => string = "translate";
@@ -22,10 +25,20 @@ let mergeOptionsAndVariables = (options, variables) => {
 
   Js.Obj.assign(optionsObject, variablesObject);
 };
+
+let options = (~count, identifier) => {
+  let defaultScope =
+    Js.Dict.fromArray([|("scope", "shared." ++ identifier)|]);
+  {count, defaults: [|defaultScope|]};
+};
+
 let t =
     (~scope=?, ~variables: array((key, value))=[||], ~count=?, identifier) => {
   let fullOptions =
-    mergeOptionsAndVariables({count: count}, Js.Dict.fromArray(variables));
+    mergeOptionsAndVariables(
+      options(~count, identifier),
+      Js.Dict.fromArray(variables),
+    );
 
   let fullIdentifier =
     switch (scope) {

@@ -8,30 +8,24 @@
 type key = string;
 type value = string;
 
+type options = {count: option(int)};
+
 [@bs.scope "I18n"] [@bs.val]
-external translate: (string, Js.Dict.t('a)) => string = "translate";
+external translate: (string, Js.t('a)) => string = "translate";
 
-let arrayToJsOptions = options => {
-  let dict = Js.Dict.empty();
+external optionsToJsObject: options => Js.t('a) = "%identity";
+external variablesToJsObject: Js.Dict.t(string) => Js.t('a) = "%identity";
 
-  Belt.Array.forEach(options, ((key, value)) => {
-    Js.Dict.set(dict, key, value)
-  });
+let mergeOptionsAndVariables = (options, variables) => {
+  let optionsObject = optionsToJsObject(options);
+  let variablesObject = variablesToJsObject(variables);
 
-  dict;
+  Js.Obj.assign(optionsObject, variablesObject);
 };
-
-let addCount = (jsDict, count) => {
-  Belt.Option.forEach(count, count =>
-    Js.Dict.set(jsDict, "count", count->string_of_int)
-  );
-
-  jsDict;
-};
-
 let t =
     (~scope=?, ~variables: array((key, value))=[||], ~count=?, identifier) => {
-  let jsOptions = arrayToJsOptions(variables)->addCount(count);
+  let fullOptions =
+    mergeOptionsAndVariables({count: count}, Js.Dict.fromArray(variables));
 
   let fullIdentifier =
     switch (scope) {
@@ -39,5 +33,5 @@ let t =
     | None => identifier
     };
 
-  translate(fullIdentifier, jsOptions);
+  translate(fullIdentifier, fullOptions);
 };

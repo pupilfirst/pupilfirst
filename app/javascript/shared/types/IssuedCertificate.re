@@ -1,9 +1,10 @@
-type qrCorner =
-  | Hidden
-  | TopLeft
-  | TopRight
-  | BottomRight
-  | BottomLeft;
+type qrCorner = [
+  | `Hidden
+  | `TopLeft
+  | `TopRight
+  | `BottomRight
+  | `BottomLeft
+];
 
 type t = {
   serialNumber: string,
@@ -29,36 +30,62 @@ let fontSize = t => t.fontSize;
 let qrCorner = t => t.qrCorner;
 let qrScale = t => t.qrScale;
 
+let make =
+    (
+      ~serialNumber,
+      ~issuedTo,
+      ~issuedAt,
+      ~courseName,
+      ~imageUrl,
+      ~margin,
+      ~fontSize,
+      ~nameOffsetTop,
+      ~qrCorner,
+      ~qrScale,
+    ) => {
+  serialNumber,
+  issuedTo,
+  issuedAt,
+  courseName,
+  imageUrl,
+  margin,
+  fontSize,
+  nameOffsetTop,
+  qrCorner,
+  qrScale,
+};
+
 let decode = json =>
-  Json.Decode.{
-    serialNumber: json |> field("serialNumber", string),
-    issuedTo: json |> field("issuedTo", string),
-    issuedAt: json |> field("issuedAt", DateFns.decodeISO),
-    courseName: json |> field("courseName", string),
-    imageUrl: json |> field("imageUrl", string),
-    margin: json |> field("margin", int),
-    fontSize: json |> field("fontSize", int),
-    nameOffsetTop: json |> field("nameOffsetTop", int),
-    qrCorner:
-      json
-      |> optional(field("qrCorner", string))
-      |> OptionUtils.mapWithDefault(
-           corner =>
-             switch (corner) {
-             | "TopLeft" => TopLeft
-             | "TopRight" => TopRight
-             | "BottomRight" => BottomRight
-             | "BottomLeft" => BottomLeft
-             | "Hidden" => Hidden
-             | somethingElse =>
-               Rollbar.warning(
-                 "Encountered unknown value for qrCorder: "
-                 ++ somethingElse
-                 ++ " while decoding props.",
-               );
-               Hidden;
-             },
-           Hidden,
-         ),
-    qrScale: json |> field("qrScale", int),
-  };
+  Json.Decode.(
+    make(
+      ~serialNumber=field("serialNumber", string, json),
+      ~issuedTo=field("issuedTo", string, json),
+      ~issuedAt=field("issuedAt", DateFns.decodeISO, json),
+      ~courseName=field("courseName", string, json),
+      ~imageUrl=field("imageUrl", string, json),
+      ~margin=field("margin", int, json),
+      ~fontSize=field("fontSize", int, json),
+      ~nameOffsetTop=field("nameOffsetTop", int, json),
+      ~qrCorner=
+        optional(field("qrCorner", string), json)
+        |> OptionUtils.mapWithDefault(
+             corner =>
+               switch (corner) {
+               | "TopLeft" => `TopLeft
+               | "TopRight" => `TopRight
+               | "BottomRight" => `BottomRight
+               | "BottomLeft" => `BottomLeft
+               | "Hidden" => `Hidden
+               | somethingElse =>
+                 Rollbar.warning(
+                   "Encountered unknown value for qrCorder: "
+                   ++ somethingElse
+                   ++ " while decoding props.",
+                 );
+                 `Hidden;
+               },
+             `Hidden,
+           ),
+      ~qrScale=field("qrScale", int, json),
+    )
+  );

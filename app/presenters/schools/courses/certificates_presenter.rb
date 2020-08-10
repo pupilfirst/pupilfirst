@@ -11,6 +11,7 @@ module Schools
         {
           course: course_details,
           certificates: certificates,
+          verify_image_url: view.image_path('issued_certificates/verify.png')
         }
       end
 

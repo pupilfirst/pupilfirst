@@ -1,9 +1,10 @@
-type qrCorner =
-  | Hidden
-  | TopLeft
-  | TopRight
-  | BottomRight
-  | BottomLeft;
+type qrCorner = [
+  | `Hidden
+  | `TopLeft
+  | `TopRight
+  | `BottomRight
+  | `BottomLeft
+];
 
 type id = string;
 
@@ -49,20 +50,20 @@ let decode = json =>
       |> OptionUtils.mapWithDefault(
            corner =>
              switch (corner) {
-             | "TopLeft" => TopLeft
-             | "TopRight" => TopRight
-             | "BottomRight" => BottomRight
-             | "BottomLeft" => BottomLeft
-             | "Hidden" => Hidden
+             | "TopLeft" => `TopLeft
+             | "TopRight" => `TopRight
+             | "BottomRight" => `BottomRight
+             | "BottomLeft" => `BottomLeft
+             | "Hidden" => `Hidden
              | somethingElse =>
                Rollbar.warning(
                  "Encountered unknown value for qrCorder: "
                  ++ somethingElse
                  ++ " while decoding props.",
                );
-               Hidden;
+               `Hidden;
              },
-           Hidden,
+           `Hidden,
          ),
     qrScale: json |> field("qrScale", int),
     active: json |> field("active", bool),

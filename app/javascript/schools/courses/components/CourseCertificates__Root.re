@@ -194,7 +194,21 @@ let newCertificateDrawer = (course, state, send) =>
     </form>
   </SchoolAdmin__EditorDrawer>;
 
-let editCertificateDrawer = (course, state, send, certificate) => {
+let editCertificateDrawer = (course, state, send, certificate, verifyImageUrl) => {
+  let demoCertificate =
+    IssuedCertificate.make(
+      ~serialNumber="A1B2C3",
+      ~issuedTo="Rosalind Wilton Oberbrunner",
+      ~issuedAt=Js.Date.make(),
+      ~courseName="Test Course",
+      ~imageUrl=Certificate.imageUrl(certificate),
+      ~margin=6,
+      ~fontSize=Certificate.fontSize(certificate),
+      ~nameOffsetTop=Certificate.nameOffsetTop(certificate),
+      ~qrCorner=`TopRight,
+      ~qrScale=Certificate.qrScale(certificate),
+    );
+
   <SchoolAdmin__EditorDrawer
     closeDrawerCB={() => send(CloseDrawer)}
     closeButtonTitle={t("cancel")}
@@ -206,13 +220,24 @@ let editCertificateDrawer = (course, state, send, certificate) => {
             {t("edit_action")->str}
           </h5>
         </div>
+        <div className="max-w-4xl px-6 py-6 mx-auto">
+          <div className="flex">
+            <div className="w-2/3">
+              <IssuedCertificate__Root
+                issuedCertificate=demoCertificate
+                verifyImageUrl
+              />
+            </div>
+            <div className="w-1/3"> {str("Controls go here")} </div>
+          </div>
+        </div>
       </div>
     </div>
   </SchoolAdmin__EditorDrawer>;
 };
 
 [@react.component]
-let make = (~course, ~certificates) => {
+let make = (~course, ~certificates, ~verifyImageUrl) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, certificates, computeInitialState);
 
@@ -220,7 +245,7 @@ let make = (~course, ~certificates) => {
     {switch (state.drawer) {
      | NewCertificate => newCertificateDrawer(course, state, send)
      | EditCertificate(certificate) =>
-       editCertificateDrawer(course, state, send, certificate)
+       editCertificateDrawer(course, state, send, certificate, verifyImageUrl)
      | Closed => React.null
      }}
     <div className="flex-1 flex flex-col bg-gray-100">

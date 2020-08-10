@@ -180,61 +180,16 @@ let newCertificateDrawer = (course, state, send) =>
         </div>
         <div className="bg-gray-100 flex-grow">
           <div className="max-w-2xl p-6 mx-auto">
-            <div
-              className="flex max-w-2xl w-full justify-between items-center mx-auto">
-              <button
-                disabled={saveDisabled(state)}
-                className="w-auto btn btn-large btn-primary">
-                {t("create_action")->str}
-              </button>
-            </div>
+            <button
+              disabled={saveDisabled(state)}
+              className="w-auto btn btn-large btn-primary">
+              {t("create_action")->str}
+            </button>
           </div>
         </div>
       </div>
     </form>
   </SchoolAdmin__EditorDrawer>;
-
-let editCertificateDrawer = (course, state, send, certificate, verifyImageUrl) => {
-  let demoCertificate =
-    IssuedCertificate.make(
-      ~serialNumber="A1B2C3",
-      ~issuedTo="Rosalind Wilton Oberbrunner",
-      ~issuedAt=Js.Date.make(),
-      ~courseName="Test Course",
-      ~imageUrl=Certificate.imageUrl(certificate),
-      ~margin=6,
-      ~fontSize=Certificate.fontSize(certificate),
-      ~nameOffsetTop=Certificate.nameOffsetTop(certificate),
-      ~qrCorner=`TopRight,
-      ~qrScale=Certificate.qrScale(certificate),
-    );
-
-  <SchoolAdmin__EditorDrawer
-    closeDrawerCB={() => send(CloseDrawer)}
-    closeButtonTitle={t("cancel")}
-    size=SchoolAdmin__EditorDrawer.Large>
-    <div className="flex flex-col min-h-screen">
-      <div className="bg-white flex-grow-0">
-        <div className="max-w-4xl px-6 pt-5 mx-auto">
-          <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-            {t("edit_action")->str}
-          </h5>
-        </div>
-        <div className="max-w-4xl px-6 py-6 mx-auto">
-          <div className="flex">
-            <div className="w-2/3">
-              <IssuedCertificate__Root
-                issuedCertificate=demoCertificate
-                verifyImageUrl
-              />
-            </div>
-            <div className="w-1/3"> {str("Controls go here")} </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </SchoolAdmin__EditorDrawer>;
-};
 
 [@react.component]
 let make = (~course, ~certificates, ~verifyImageUrl) => {
@@ -245,7 +200,12 @@ let make = (~course, ~certificates, ~verifyImageUrl) => {
     {switch (state.drawer) {
      | NewCertificate => newCertificateDrawer(course, state, send)
      | EditCertificate(certificate) =>
-       editCertificateDrawer(course, state, send, certificate, verifyImageUrl)
+       <CourseCertificates__Editor
+         course
+         certificate
+         verifyImageUrl
+         closeDrawerCB={() => send(CloseDrawer)}
+       />
      | Closed => React.null
      }}
     <div className="flex-1 flex flex-col bg-gray-100">

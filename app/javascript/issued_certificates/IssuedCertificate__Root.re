@@ -89,14 +89,18 @@ external getContextWithAlpha:
 let drawName = issuedCertificate => {
   let canvasId = nameCanvasId(issuedCertificate);
 
+  let canvasElement =
+    Webapi.(Dom.document |> Dom.Document.getElementById(canvasId));
+
   let ctx =
-    Webapi.(
-      Dom.document
-      |> Dom.Document.getElementById(canvasId)
-      |> OptionUtils.map(el =>
-           getContextWithAlpha(el, "2d", {"alpha": true})
-         )
+    Belt.Option.map(canvasElement, el =>
+      getContextWithAlpha(el, "2d", {"alpha": true})
     );
+
+  // Begin by clearing the canvas.
+  Belt.Option.forEach(ctx, ctx =>
+    Webapi.Canvas.Canvas2d.clearRect(~x=0.0, ~y=0.0, ~w=2000.0, ~h=100.0, ctx)
+  );
 
   let fontSize =
     50.0
@@ -138,10 +142,13 @@ let drawName = issuedCertificate => {
 
 [@react.component]
 let make = (~issuedCertificate, ~verifyImageUrl) => {
-  React.useEffect0(() => {
-    drawName(issuedCertificate);
-    None;
-  });
+  React.useEffect1(
+    () => {
+      drawName(issuedCertificate);
+      None;
+    },
+    [|IssuedCertificate.fontSize(issuedCertificate)|],
+  );
 
   <div className="relative">
     <img

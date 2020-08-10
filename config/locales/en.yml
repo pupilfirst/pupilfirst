@@ -23,7 +23,6 @@ en:
       certificate_base_image_label: Certificate Base Image
       certificate_base_image_placeholder: Select a base image for certificate
       create_action: Create New Certificate
-      edit_action: Edit Certificate
       issued_count:
         zero: "Never issued"
         one: "Issued only once"
@@ -33,6 +32,18 @@ en:
       name_label: Name
       name_placeholder: A name to identify this certificate
       success_notification: You can now edit this certificate.
+    CourseCertificates__Editor:
+      edit_action: Edit Certificate
+      margin_label: Margin
+      name_offset_top_label: Name Offset (from top)
+      font_size_label: Font Size
+      qr_visibility_label: QR Code Position
+      qr_scale_label: QR Code Scale
+      qr_hidden_label: Hidden
+      qr_top_left_label: Top Left
+      qr_top_right_label: Top Right
+      qr_bottom_left_label: Bottom Left
+      qr_bottom_right_label: Bottom Right
 
   jobs:
     timeline_events:
@@ -86,6 +97,7 @@ en:
     optional: optional
     done_exclamation: Done!
     cancel: Cancel
+    save_changes: Save Changes
 
   dashboard:
     dashboard:

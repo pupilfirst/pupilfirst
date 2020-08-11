@@ -153,6 +153,8 @@ let make =
     );
 
   let validName = isValidName(state.name);
+  let issuedCount = Certificate.issuedCertificates(certificate);
+  let saveButtonDisabled = state.saving || !(state.dirty && validName);
 
   <SchoolAdmin__EditorDrawer
     closeDrawerCB
@@ -406,24 +408,43 @@ let make =
       </DisablingCover>
       <div className="bg-gray-100 flex-grow">
         <div className="max-w-4xl p-6 mx-auto">
-          <button
-            onClick={saveChanges(
-              certificate,
-              updateCertificateCB,
-              state,
-              send,
-            )}
-            disabled={state.saving || !(state.dirty && validName)}
-            className="w-auto btn btn-large btn-primary">
-            <FaIcon
-              classes={
-                "fas " ++ (state.saving ? "fa-spinner fa-pulse" : "fa-check")
-              }
-            />
-            <span className="ml-2">
-              {t(state.saving ? "saving" : "save_changes")->str}
-            </span>
-          </button>
+          <div className="flex items-center">
+            <button
+              onClick={saveChanges(
+                certificate,
+                updateCertificateCB,
+                state,
+                send,
+              )}
+              disabled=saveButtonDisabled
+              className="w-auto btn btn-large btn-primary">
+              <FaIcon
+                classes={
+                  "fas " ++ (state.saving ? "fa-spinner fa-pulse" : "fa-check")
+                }
+              />
+              <span className="ml-2">
+                {t(state.saving ? "saving" : "save_changes")->str}
+              </span>
+            </button>
+            {issuedCount > 0 && !saveButtonDisabled
+               ? <div className="flex items-center ml-4">
+                   <div className="text-red-700 text-2xl">
+                     <i className="fas fa-exclamation-triangle" />
+                   </div>
+                   <div
+                     className="ml-2 text-xs font-semibold"
+                     dangerouslySetInnerHTML={
+                       "__html":
+                         t(
+                           ~count=issuedCount,
+                           "update_issued_certificates_warning",
+                         ),
+                     }
+                   />
+                 </div>
+               : React.null}
+          </div>
         </div>
       </div>
     </div>

@@ -46,6 +46,9 @@ en:
       qr_top_right_label: Top Right
       qr_bottom_left_label: Bottom Left
       qr_bottom_right_label: Bottom Right
+      update_issued_certificates_warning:
+        one: "This certificate has been issued once.<br/>These changes will also be applied the the issued certificate."
+        other: "This certificate has been issued %{count} times.<br/>These changes will also be applied to all issued certificates."
 
   jobs:
     timeline_events:

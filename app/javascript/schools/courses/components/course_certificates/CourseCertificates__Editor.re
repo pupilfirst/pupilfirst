@@ -4,6 +4,7 @@ let str = React.string;
 let t = I18n.t(~scope="components.CourseCertificates__Editor");
 
 type state = {
+  name: string,
   active: bool,
   margin: int,
   fontSize: int,
@@ -14,6 +15,7 @@ type state = {
 };
 
 type action =
+  | UpdateName(string)
   | UpdateActive(bool)
   | UpdateMargin(int)
   | UpdateFontSize(int)
@@ -22,6 +24,7 @@ type action =
   | UpdateQrScale(int);
 
 let computeInitialState = certificate => {
+  name: Certificate.name(certificate),
   active: Certificate.active(certificate),
   margin: Certificate.margin(certificate),
   fontSize: Certificate.fontSize(certificate),
@@ -33,6 +36,7 @@ let computeInitialState = certificate => {
 
 let reducer = (state, action) =>
   switch (action) {
+  | UpdateName(name) => {...state, name, dirty: true}
   | UpdateActive(active) => {...state, active, dirty: true}
   | UpdateMargin(margin) => {...state, margin, dirty: true}
   | UpdateFontSize(fontSize) => {...state, fontSize, dirty: true}
@@ -56,6 +60,11 @@ let activeButtonClasses = (stateActive, active) => {
   baseClasses ++ additionalClasses;
 };
 
+let isValidName = name => {
+  let length = Js.String.trim(name)->Js.String.length;
+  length >= 1 && length <= 30;
+};
+
 [@react.component]
 let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
   let (state, send) =
@@ -74,6 +83,8 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
       ~qrCorner=state.qrCorner,
       ~qrScale=state.qrScale,
     );
+
+  let validName = isValidName(state.name);
 
   <SchoolAdmin__EditorDrawer
     closeDrawerCB
@@ -247,6 +258,31 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
                    />
                  </div>
                }}
+            </div>
+          </div>
+          <div className="mt-4">
+            <label
+              className="flex items-center tracking-wide text-sm font-semibold"
+              htmlFor="title">
+              <i className="fas fa-list text-base" />
+              <span className="ml-2"> {str("Title")} </span>
+            </label>
+            <div className="ml-6">
+              <input
+                className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
+                maxLength=30
+                id="name"
+                type_="text"
+                placeholder="A short name for this certificate"
+                onChange={event =>
+                  send(UpdateName(ReactEvent.Form.target(event)##value))
+                }
+                value={state.name}
+              />
+              <School__InputGroupError
+                message="Name can't be blank"
+                active={!validName}
+              />
             </div>
           </div>
           <div className="mt-4">

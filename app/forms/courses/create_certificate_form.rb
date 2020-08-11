@@ -22,7 +22,7 @@ module Courses
       if name.present?
         name.strip
       else
-        Time.zone.now.strftime('%B %-d, %Y, %l:%M %p')
+        Time.zone.now.strftime('%-d %b %Y %-l:%M %p')
       end
     end
   end

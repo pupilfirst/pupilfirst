@@ -55,6 +55,7 @@ let reducer = (state, action) =>
       saving: false,
       drawer: Closed,
       certificates,
+      imageFilename: None,
     }
   | FailSaving => {...state, saving: false}
   };
@@ -265,7 +266,7 @@ let make = (~course, ~certificates, ~verifyImageUrl) => {
                                       className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
                                       <span
                                         className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
-                                        {t("active_tag")->str}
+                                        {t("auto_issue_tag")->str}
                                       </span>
                                     </div>
                                   : React.null}

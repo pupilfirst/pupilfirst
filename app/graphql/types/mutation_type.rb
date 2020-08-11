@@ -54,5 +54,7 @@ module Types
     field :initiate_account_deletion, mutation: Mutations::InitiateAccountDeletion, null: false
     field :delete_account, mutation: Mutations::DeleteAccount, null: false
     field :update_user, mutation: Mutations::UpdateUser, null: false
+    field :update_certificate, mutation: Mutations::UpdateCertificate, null: false
+    field :delete_certificate, mutation: Mutations::DeleteCertificate, null: false
   end
 end

@@ -2,9 +2,11 @@
 # Organization of en.yml
 # ----------------------
 #
-# components.COMPONENT.key - component-specific strings
+# components.COMPONENT.* - component-specific strings
 # jobs.[MODULE].JOB.* - strings used by jobs
 # models.MODEL.COLUMN.* = translation of database values to display values
+# mutations.MUTATION.* = strings used by mutations
+# queries.QUERY.* = strings used by resolvers and mutators
 # shared.* - shared strings
 # CONTROLLER.ACTION.* = display_value
 #
@@ -19,7 +21,7 @@
 en:
   components:
     CourseCertificates__Root:
-      active_tag: Active
+      auto_issue_tag: Auto-issue
       certificate_base_image_label: Certificate Base Image
       certificate_base_image_placeholder: Select a base image for certificate
       create_action: Create New Certificate
@@ -92,6 +94,16 @@ en:
       role:
         team: Team
         founder: All Founders
+
+  mutations:
+    update_certificate:
+      success_notification: Certificate details have been updated.
+    delete_certificate:
+      success_notification: Certificate has been deleted.
+
+  queries:
+    delete_certificate_mutator:
+      issued_error: This certificate has been issued to one or more students - it cannot be deleted.
 
   shared:
     optional: optional

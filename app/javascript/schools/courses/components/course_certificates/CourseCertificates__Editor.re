@@ -4,14 +4,17 @@ let str = React.string;
 let t = I18n.t(~scope="components.CourseCertificates__Editor");
 
 type state = {
+  active: bool,
   margin: int,
   fontSize: int,
   nameOffsetTop: int,
   qrCorner: IssuedCertificate.qrCorner,
   qrScale: int,
+  dirty: bool,
 };
 
 type action =
+  | UpdateActive(bool)
   | UpdateMargin(int)
   | UpdateFontSize(int)
   | UpdateNameOffsetTop(int)
@@ -19,24 +22,38 @@ type action =
   | UpdateQrScale(int);
 
 let computeInitialState = certificate => {
+  active: Certificate.active(certificate),
   margin: Certificate.margin(certificate),
   fontSize: Certificate.fontSize(certificate),
   nameOffsetTop: Certificate.nameOffsetTop(certificate),
   qrCorner: Certificate.qrCorner(certificate),
   qrScale: Certificate.qrScale(certificate),
+  dirty: false,
 };
 
 let reducer = (state, action) =>
   switch (action) {
-  | UpdateMargin(margin) => {...state, margin}
-  | UpdateFontSize(fontSize) => {...state, fontSize}
-  | UpdateNameOffsetTop(nameOffsetTop) => {...state, nameOffsetTop}
-  | UpdateQrCorner(qrCorner) => {...state, qrCorner}
-  | UpdateQrScale(qrScale) => {...state, qrScale}
+  | UpdateActive(active) => {...state, active, dirty: true}
+  | UpdateMargin(margin) => {...state, margin, dirty: true}
+  | UpdateFontSize(fontSize) => {...state, fontSize, dirty: true}
+  | UpdateNameOffsetTop(nameOffsetTop) => {
+      ...state,
+      nameOffsetTop,
+      dirty: true,
+    }
+  | UpdateQrCorner(qrCorner) => {...state, qrCorner, dirty: true}
+  | UpdateQrScale(qrScale) => {...state, qrScale, dirty: true}
   };
 
 let buttonTypeClass = (stateQrCorner, qrCorner) => {
   stateQrCorner == qrCorner ? "btn-primary" : "btn-default";
+};
+
+let activeButtonClasses = (stateActive, active) => {
+  let baseClasses = "toggle-button__button";
+  let additionalClasses =
+    stateActive == active ? " toggle-button__button--active" : "";
+  baseClasses ++ additionalClasses;
 };
 
 [@react.component]
@@ -99,7 +116,7 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
                   }
                 />
               </div>
-              <div className="mt-3">
+              <div className="mt-2">
                 <div>
                   <label
                     className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
@@ -124,7 +141,7 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
                   }
                 />
               </div>
-              <div className="mt-3">
+              <div className="mt-2">
                 <div>
                   <label
                     className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
@@ -147,7 +164,7 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
                   }
                 />
               </div>
-              <div className="mt-3">
+              <div className="mt-2">
                 <div>
                   <label
                     className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
@@ -206,7 +223,7 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
                | `TopRight
                | `BottomLeft
                | `BottomRight =>
-                 <div className="mt-3">
+                 <div className="mt-2">
                    <div>
                      <label
                        className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
@@ -219,7 +236,7 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
                      className="w-full mt-1"
                      type_="range"
                      name="qr_scale"
-                     min="75"
+                     min="50"
                      max="150"
                      value={string_of_int(state.qrScale)}
                      onChange={event =>
@@ -230,6 +247,42 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
                    />
                  </div>
                }}
+            </div>
+          </div>
+          <div className="mt-4">
+            <label
+              className="tracking-wide text-sm font-semibold" htmlFor="active">
+              <span className="mr-2">
+                <i className="fas fa-list text-base" />
+              </span>
+              {str(
+                 "Should students be automatically issued this certificate?",
+               )}
+            </label>
+            <HelpIcon
+              className="ml-1"
+              link="https://docs.pupilfirst.com/#/certificates">
+              <span>
+                {str(
+                   "While you can have multiple certificates, only one can be automatically issued; it will be issued when a student ",
+                 )}
+                <em> {str("completes")} </em>
+                {str(" a course.")}
+              </span>
+            </HelpIcon>
+            <div
+              className="ml-6 inline-flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden"
+              id="active">
+              <button
+                className={activeButtonClasses(state.active, true)}
+                onClick={_ => send(UpdateActive(true))}>
+                {str("Yes")}
+              </button>
+              <button
+                className={activeButtonClasses(state.active, false)}
+                onClick={_ => send(UpdateActive(false))}>
+                {str("No")}
+              </button>
             </div>
           </div>
         </div>

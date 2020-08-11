@@ -110,6 +110,7 @@ en:
     done_exclamation: Done!
     cancel: Cancel
     save_changes: Save Changes
+    saving: Saving...
 
   dashboard:
     dashboard:

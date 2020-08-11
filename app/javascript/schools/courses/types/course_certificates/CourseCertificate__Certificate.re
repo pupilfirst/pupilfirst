@@ -71,3 +71,24 @@ let decode = json =>
     updatedAt: json |> field("updatedAt", DateFns.decodeISO),
     issuedCertificates: json |> field("issuedCertificatesCount", int),
   };
+
+let update =
+    (
+      t,
+      ~name,
+      ~margin,
+      ~nameOffsetTop,
+      ~fontSize,
+      ~qrCorner,
+      ~qrScale,
+      ~active,
+    ) => {
+  ...t,
+  name,
+  margin,
+  nameOffsetTop,
+  fontSize,
+  qrCorner,
+  qrScale,
+  active,
+};

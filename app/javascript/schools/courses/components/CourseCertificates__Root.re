@@ -33,6 +33,7 @@ type action =
   | CloseDrawer
   | BeginSaving
   | FinishCreating(array(Certificate.t))
+  | UpdateCertificates(array(Certificate.t))
   | FailSaving;
 
 let reducer = (state, action) =>
@@ -58,6 +59,7 @@ let reducer = (state, action) =>
       imageFilename: None,
     }
   | FailSaving => {...state, saving: false}
+  | UpdateCertificates(certificates) => {...state, certificates}
   };
 
 let saveDisabled = state => {
@@ -192,6 +194,17 @@ let newCertificateDrawer = (course, state, send) =>
     </form>
   </SchoolAdmin__EditorDrawer>;
 
+let updateCertificate = (state, send, certificate) => {
+  let newCertificates =
+    Js.Array.map(
+      c =>
+        Certificate.id(c) == Certificate.id(certificate) ? certificate : c,
+      state.certificates,
+    );
+
+  send(UpdateCertificates(newCertificates));
+};
+
 [@react.component]
 let make = (~course, ~certificates, ~verifyImageUrl) => {
   let (state, send) =
@@ -202,10 +215,10 @@ let make = (~course, ~certificates, ~verifyImageUrl) => {
      | NewCertificate => newCertificateDrawer(course, state, send)
      | EditCertificate(certificate) =>
        <CourseCertificates__Editor
-         course
          certificate
          verifyImageUrl
          closeDrawerCB={() => send(CloseDrawer)}
+         updateCertificateCB={updateCertificate(state, send)}
        />
      | Closed => React.null
      }}

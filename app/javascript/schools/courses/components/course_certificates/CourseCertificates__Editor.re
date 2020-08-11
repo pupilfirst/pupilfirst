@@ -12,6 +12,7 @@ type state = {
   qrCorner: IssuedCertificate.qrCorner,
   qrScale: int,
   dirty: bool,
+  saving: bool,
 };
 
 type action =
@@ -21,7 +22,10 @@ type action =
   | UpdateFontSize(int)
   | UpdateNameOffsetTop(int)
   | UpdateQrCorner(IssuedCertificate.qrCorner)
-  | UpdateQrScale(int);
+  | UpdateQrScale(int)
+  | BeginSaving
+  | FinishSaving
+  | FailSaving;
 
 let computeInitialState = certificate => {
   name: Certificate.name(certificate),
@@ -32,6 +36,7 @@ let computeInitialState = certificate => {
   qrCorner: Certificate.qrCorner(certificate),
   qrScale: Certificate.qrScale(certificate),
   dirty: false,
+  saving: false,
 };
 
 let reducer = (state, action) =>
@@ -47,6 +52,9 @@ let reducer = (state, action) =>
     }
   | UpdateQrCorner(qrCorner) => {...state, qrCorner, dirty: true}
   | UpdateQrScale(qrScale) => {...state, qrScale, dirty: true}
+  | BeginSaving => {...state, saving: true}
+  | FailSaving => {...state, saving: false}
+  | FinishSaving => {...state, saving: false, dirty: false}
   };
 
 let buttonTypeClass = (stateQrCorner, qrCorner) => {
@@ -65,8 +73,68 @@ let isValidName = name => {
   length >= 1 && length <= 30;
 };
 
+module UpdateCertificateMutation = [%graphql
+  {|
+  mutation UpdateCertificateMutation($id: ID!, $name: String!, $margin: Int!, $nameOffsetTop: Int!, $fontSize: Int!, $qrCorner: QrCorner!, $qrScale: Int!, $active: Boolean!) {
+    updateCertificate(id: $id, name: $name, margin: $margin, nameOffsetTop: $nameOffsetTop, fontSize: $fontSize, qrCorner: $qrCorner, qrScale: $qrScale, active: $active) {
+      success
+    }
+  }
+  |}
+];
+
+let saveChanges = (certificate, updateCertificateCB, state, send, _event) => {
+  send(BeginSaving);
+
+  let name = Js.String.trim(state.name);
+  let {margin, nameOffsetTop, fontSize, qrCorner, qrScale, active} = state;
+
+  Js.log((margin, nameOffsetTop, fontSize, qrCorner, qrScale, active));
+
+  UpdateCertificateMutation.make(
+    ~id=Certificate.id(certificate),
+    ~name,
+    ~margin,
+    ~nameOffsetTop,
+    ~fontSize,
+    ~qrCorner,
+    ~qrScale,
+    ~active,
+    (),
+  )
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result => {
+       if (result##updateCertificate##success) {
+         Certificate.update(
+           certificate,
+           ~name,
+           ~margin,
+           ~nameOffsetTop,
+           ~fontSize,
+           ~qrCorner,
+           ~qrScale,
+           ~active,
+         )
+         ->updateCertificateCB;
+
+         send(FinishSaving);
+       } else {
+         send(FailSaving);
+       };
+
+       Js.Promise.resolve();
+     })
+  |> Js.Promise.catch(error => {
+       Js.log(error);
+       send(FailSaving);
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
 [@react.component]
-let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
+let make =
+    (~certificate, ~verifyImageUrl, ~closeDrawerCB, ~updateCertificateCB) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, certificate, computeInitialState);
 
@@ -91,14 +159,79 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
     closeButtonTitle={t("cancel")}
     size=SchoolAdmin__EditorDrawer.Large>
     <div className="flex flex-col min-h-screen">
-      <div className="bg-white flex-grow-0">
+      <DisablingCover
+        disabled={state.saving}
+        message="Saving changes..."
+        containerClasses="bg-white flex-grow-0">
         <div className="max-w-4xl px-6 pt-5 mx-auto">
           <h5 className="uppercase text-center border-b border-gray-400 pb-2">
             {t("edit_action")->str}
           </h5>
         </div>
         <div className="max-w-4xl px-6 py-6 mx-auto">
-          <div className="flex">
+          <div>
+            <label
+              className="flex items-center tracking-wide text-sm font-semibold"
+              htmlFor="title">
+              <i className="fas fa-list text-base" />
+              <span className="ml-2"> {str("Title")} </span>
+            </label>
+            <div className="ml-6">
+              <input
+                className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
+                maxLength=30
+                id="name"
+                type_="text"
+                placeholder="A short name for this certificate"
+                onChange={event =>
+                  send(UpdateName(ReactEvent.Form.target(event)##value))
+                }
+                value={state.name}
+              />
+              <School__InputGroupError
+                message="Name can't be blank"
+                active={!validName}
+              />
+            </div>
+          </div>
+          <div className="mt-4">
+            <label
+              className="tracking-wide text-sm font-semibold" htmlFor="active">
+              <span className="mr-2">
+                <i className="fas fa-list text-base" />
+              </span>
+              {str(
+                 "Should students be automatically issued this certificate?",
+               )}
+            </label>
+            <HelpIcon
+              className="ml-1"
+              link="https://docs.pupilfirst.com/#/certificates">
+              <span>
+                {str(
+                   "While you can have multiple certificates, only one can be automatically issued; it will be issued when a student ",
+                 )}
+                <em> {str("completes")} </em>
+                {str(" a course.")}
+              </span>
+            </HelpIcon>
+            <div
+              className="ml-6 inline-flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden"
+              id="active">
+              <button
+                className={activeButtonClasses(state.active, true)}
+                onClick={_ => send(UpdateActive(true))}>
+                {str("Yes")}
+              </button>
+              <button
+                className={activeButtonClasses(state.active, false)}
+                onClick={_ => send(UpdateActive(false))}>
+                {str("No")}
+              </button>
+            </div>
+          </div>
+          <h5 className="mt-4"> {str("Design")} </h5>
+          <div className="flex mt-4">
             <div className="w-2/3">
               <IssuedCertificate__Root
                 issuedCertificate=demoCertificate
@@ -123,7 +256,11 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
                   max="20"
                   value={string_of_int(state.margin)}
                   onChange={event =>
-                    send(UpdateMargin(ReactEvent.Form.target(event)##value))
+                    send(
+                      UpdateMargin(
+                        ReactEvent.Form.target(event)##value->int_of_string,
+                      ),
+                    )
                   }
                 />
               </div>
@@ -146,7 +283,7 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
                   onChange={event =>
                     send(
                       UpdateNameOffsetTop(
-                        ReactEvent.Form.target(event)##value,
+                        ReactEvent.Form.target(event)##value->int_of_string,
                       ),
                     )
                   }
@@ -170,7 +307,9 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
                   value={string_of_int(state.fontSize)}
                   onChange={event =>
                     send(
-                      UpdateFontSize(ReactEvent.Form.target(event)##value),
+                      UpdateFontSize(
+                        ReactEvent.Form.target(event)##value->int_of_string,
+                      ),
                     )
                   }
                 />
@@ -252,7 +391,10 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
                      value={string_of_int(state.qrScale)}
                      onChange={event =>
                        send(
-                         UpdateQrScale(ReactEvent.Form.target(event)##value),
+                         UpdateQrScale(
+                           ReactEvent.Form.target(event)##value
+                           ->int_of_string,
+                         ),
                        )
                      }
                    />
@@ -260,73 +402,27 @@ let make = (~course, ~certificate, ~verifyImageUrl, ~closeDrawerCB) => {
                }}
             </div>
           </div>
-          <div className="mt-4">
-            <label
-              className="flex items-center tracking-wide text-sm font-semibold"
-              htmlFor="title">
-              <i className="fas fa-list text-base" />
-              <span className="ml-2"> {str("Title")} </span>
-            </label>
-            <div className="ml-6">
-              <input
-                className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
-                maxLength=30
-                id="name"
-                type_="text"
-                placeholder="A short name for this certificate"
-                onChange={event =>
-                  send(UpdateName(ReactEvent.Form.target(event)##value))
-                }
-                value={state.name}
-              />
-              <School__InputGroupError
-                message="Name can't be blank"
-                active={!validName}
-              />
-            </div>
-          </div>
-          <div className="mt-4">
-            <label
-              className="tracking-wide text-sm font-semibold" htmlFor="active">
-              <span className="mr-2">
-                <i className="fas fa-list text-base" />
-              </span>
-              {str(
-                 "Should students be automatically issued this certificate?",
-               )}
-            </label>
-            <HelpIcon
-              className="ml-1"
-              link="https://docs.pupilfirst.com/#/certificates">
-              <span>
-                {str(
-                   "While you can have multiple certificates, only one can be automatically issued; it will be issued when a student ",
-                 )}
-                <em> {str("completes")} </em>
-                {str(" a course.")}
-              </span>
-            </HelpIcon>
-            <div
-              className="ml-6 inline-flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden"
-              id="active">
-              <button
-                className={activeButtonClasses(state.active, true)}
-                onClick={_ => send(UpdateActive(true))}>
-                {str("Yes")}
-              </button>
-              <button
-                className={activeButtonClasses(state.active, false)}
-                onClick={_ => send(UpdateActive(false))}>
-                {str("No")}
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
+      </DisablingCover>
       <div className="bg-gray-100 flex-grow">
         <div className="max-w-4xl p-6 mx-auto">
-          <button disabled=true className="w-auto btn btn-large btn-primary">
-            {t("save_changes")->str}
+          <button
+            onClick={saveChanges(
+              certificate,
+              updateCertificateCB,
+              state,
+              send,
+            )}
+            disabled={state.saving || !(state.dirty && validName)}
+            className="w-auto btn btn-large btn-primary">
+            <FaIcon
+              classes={
+                "fas " ++ (state.saving ? "fa-spinner fa-pulse" : "fa-check")
+              }
+            />
+            <span className="ml-2">
+              {t(state.saving ? "saving" : "save_changes")->str}
+            </span>
           </button>
         </div>
       </div>

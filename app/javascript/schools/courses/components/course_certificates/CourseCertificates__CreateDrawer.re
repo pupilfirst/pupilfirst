@@ -124,6 +124,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                     className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="name"
                     type_="text"
+                    maxLength=30
                     name="name"
                     placeholder={t("name_placeholder")}
                     value={state.name}
@@ -133,11 +134,20 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                   />
                 </div>
                 <div className="mt-5">
-                  <label
-                    className="block tracking-wide text-xs font-semibold"
-                    htmlFor="certificate-file-input">
-                    {t("certificate_base_image_label")->str}
-                  </label>
+                  <div>
+                    <label
+                      className="tracking-wide text-xs font-semibold"
+                      htmlFor="certificate-file-input">
+                      {t("certificate_base_image_label")->str}
+                    </label>
+                    <HelpIcon
+                      className="ml-2"
+                      link="https://docs.pupilfirst.com//#/certificates">
+                      {str(
+                         "This base image must include a full line's space to insert a student's name.",
+                       )}
+                    </HelpIcon>
+                  </div>
                   <input
                     disabled={state.saving}
                     className="hidden"

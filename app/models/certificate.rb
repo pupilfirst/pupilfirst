@@ -5,6 +5,7 @@ class Certificate < ApplicationRecord
 
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
+  scope :includes_image, -> { includes(image_attachment: :blob) }
 
   has_one_attached :image
 

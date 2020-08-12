@@ -26,14 +26,16 @@ en:
       certificate_base_image_placeholder: Select a base image for certificate
       create_action: Create New Certificate
       issued_count:
-        zero: "Never issued"
-        one: "Issued only once"
+        zero: Never issued
+        one: Issued only once
         other: "Issued %{count} times"
       heading: Certificates
       no_certificates: You haven't created any certificates yet!
       name_label: Name
       name_placeholder: A name to identify this certificate
       success_notification: You can now edit this certificate.
+      edit_button_title: "Edit Certificate %{name}"
+      delete_button_title: "Delete Certificate %{name}"
     CourseCertificates__Editor:
       edit_action: Edit Certificate
       margin_label: Margin

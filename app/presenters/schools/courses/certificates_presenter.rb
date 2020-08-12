@@ -16,10 +16,10 @@ module Schools
       end
 
       def certificates
-        active_certificate = @course.certificates.active.limit(1)
+        active_certificate = @course.certificates.active.includes_image.limit(1)
         ActiveRecord::Precounter.new(active_certificate).precount(:issued_certificates)
 
-        inactive_certificates = @course.certificates.inactive.order(updated_at: :desc).limit(9)
+        inactive_certificates = @course.certificates.inactive.includes_image.order(updated_at: :desc).limit(9)
         ActiveRecord::Precounter.new(inactive_certificates).precount(:issued_certificates)
 
         latest_certificates = active_certificate.to_a + inactive_certificates.to_a

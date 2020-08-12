@@ -127,11 +127,12 @@ module Schools
       form = ::Courses::CreateCertificateForm.new(@course)
 
       props = if form.validate(params)
-        form.save
+        scope = Certificate.where(id: form.save.id)
+        ActiveRecord::Precounter.new(scope).precount(:issued_certificates)
 
         {
           error: nil,
-          certificates: Schools::Courses::CertificatesPresenter.new(view_context, @course).certificates
+          certificate: Schools::Courses::CertificatesPresenter.certificate_details(scope.first)
         }
       else
         { error: form.errors.full_messages.join(", ") }

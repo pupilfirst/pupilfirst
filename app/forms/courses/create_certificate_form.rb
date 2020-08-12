@@ -1,7 +1,7 @@
 module Courses
   class CreateCertificateForm < Reform::Form
     property :image, virtual: true, validates: { presence: true, file_size: { less_than: 5.megabytes }, image: true }
-    property :name, virtual: true
+    property :name, virtual: true, validates: { length: { maximum: 30, blank: true } }
 
     def save
       model.certificates.create!(

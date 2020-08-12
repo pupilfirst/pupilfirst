@@ -1,7 +1,7 @@
 open CourseCertificates__Types;
 
 let str = React.string;
-let t = I18n.t(~scope="components.CourseCertificates__Editor");
+let t = I18n.t(~scope="components.CourseCertificates__EditDrawer");
 
 type state = {
   name: string,

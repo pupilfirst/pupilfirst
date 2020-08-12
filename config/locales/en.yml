@@ -22,21 +22,23 @@ en:
   components:
     CourseCertificates__Root:
       auto_issue_tag: Auto-issue
-      certificate_base_image_label: Certificate Base Image
-      certificate_base_image_placeholder: Select a base image for certificate
-      create_action: Create New Certificate
+      create_action: &certificate_create_action Create New Certificate
       issued_count:
         zero: Never issued
         one: Issued only once
         other: "Issued %{count} times"
       heading: Certificates
       no_certificates: You haven't created any certificates yet!
-      name_label: Name
-      name_placeholder: A name to identify this certificate
-      success_notification: You can now edit this certificate.
       edit_button_title: "Edit Certificate %{name}"
       delete_button_title: "Delete Certificate %{name}"
-    CourseCertificates__Editor:
+    CourseCertificates__CreateDrawer:
+      create_action: *certificate_create_action
+      name_label: Name
+      name_placeholder: A name to identify this certificate
+      certificate_base_image_label: Certificate Base Image
+      certificate_base_image_placeholder: Select a base image for certificate
+      success_notification: You can now edit this certificate.
+    CourseCertificates__EditDrawer:
       edit_action: Edit Certificate
       margin_label: Margin
       name_offset_top_label: Name Offset (from top)

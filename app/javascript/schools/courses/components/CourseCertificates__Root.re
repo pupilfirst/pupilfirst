@@ -9,19 +9,13 @@ type drawer =
   | Closed;
 
 type state = {
-  name: string,
-  imageFilename: option(string),
   drawer,
-  saving: bool,
   deleting: bool,
   certificates: array(Certificate.t),
 };
 
 let computeInitialState = certificates => {
-  name: "",
-  imageFilename: None,
   drawer: Closed,
-  saving: false,
   deleting: false,
   certificates,
 };
@@ -29,14 +23,9 @@ let computeInitialState = certificates => {
 type action =
   | OpenNewCertificateDrawer
   | OpenEditCertificateDrawer(Certificate.t)
-  | UpdateName(string)
-  | UpdateImageFilename(string)
-  | RemoveFilename
   | CloseDrawer
-  | BeginSaving
-  | FinishCreating(array(Certificate.t))
   | UpdateCertificates(array(Certificate.t))
-  | FailSaving
+  | FinishCreating(array(Certificate.t))
   | BeginDeleting
   | FinishDeleting(Certificate.t)
   | FailDeleting;
@@ -48,23 +37,10 @@ let reducer = (state, action) =>
       ...state,
       drawer: EditCertificate(certificate),
     }
-  | UpdateName(name) => {...state, name}
-  | UpdateImageFilename(filename) => {
-      ...state,
-      imageFilename: Some(filename),
-    }
-  | RemoveFilename => {...state, imageFilename: None}
+
   | CloseDrawer => {...state, drawer: Closed}
-  | BeginSaving => {...state, saving: true}
-  | FinishCreating(certificates) => {
-      ...state,
-      saving: false,
-      drawer: Closed,
-      certificates,
-      imageFilename: None,
-    }
-  | FailSaving => {...state, saving: false}
   | UpdateCertificates(certificates) => {...state, certificates}
+  | FinishCreating(certificates) => {...state, certificates, drawer: Closed}
   | BeginDeleting => {...state, deleting: true}
   | FinishDeleting(certificate) => {
       ...state,
@@ -78,137 +54,10 @@ let reducer = (state, action) =>
   | FailDeleting => {...state, deleting: false}
   };
 
-let saveDisabled = state => {
-  state.imageFilename == None || state.saving;
+let addCertificate = (state, send, certificate) => {
+  let newCertificates = Js.Array.concat([|certificate|], state.certificates);
+  send(FinishCreating(newCertificates));
 };
-
-let submitForm = (course, send, event) => {
-  ReactEvent.Form.preventDefault(event);
-  send(BeginSaving);
-
-  let formData =
-    ReactEvent.Form.target(event)
-    ->DomUtils.EventTarget.unsafeToElement
-    ->DomUtils.FormData.create;
-
-  let url = "/school/courses/" ++ Course.id(course) ++ "/certificates";
-
-  Api.sendFormData(
-    url,
-    formData,
-    json => {
-      Notification.success(
-        t("done_exclamation"),
-        t("success_notification"),
-      );
-
-      let certificates =
-        json
-        |> Json.Decode.(field("certificates", array(Certificate.decode)));
-
-      send(FinishCreating(certificates));
-    },
-    () => send(FailSaving),
-  );
-};
-
-let imageInputText = imageFilename =>
-  imageFilename->Belt.Option.getWithDefault(
-    t("certificate_base_image_placeholder"),
-  );
-
-let selectFile = (send, event) => {
-  let files = ReactEvent.Form.target(event)##files;
-
-  // The user can cancel the selection, which will result in files being an empty array.
-  if (ArrayUtils.isEmpty(files)) {
-    send(RemoveFilename);
-  } else {
-    let file = Js.Array.unsafe_get(files, 0);
-    send(UpdateImageFilename(file##name));
-  };
-};
-
-let newCertificateDrawer = (course, state, send) =>
-  <SchoolAdmin__EditorDrawer
-    closeDrawerCB={() => send(CloseDrawer)} closeButtonTitle={t("cancel")}>
-    <form onSubmit={submitForm(course, send)}>
-      <input
-        name="authenticity_token"
-        type_="hidden"
-        value={AuthenticityToken.fromHead()}
-      />
-      <div className="flex flex-col min-h-screen">
-        <div className="bg-white flex-grow-0">
-          <div className="max-w-2xl px-6 pt-5 mx-auto">
-            <h5
-              className="uppercase text-center border-b border-gray-400 pb-2">
-              {t("create_action")->str}
-            </h5>
-          </div>
-          <div className="max-w-2xl pt-6 px-6 mx-auto">
-            <div className="max-w-2xl pb-6 mx-auto">
-              <div className="mt-5">
-                <label
-                  className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
-                  htmlFor="name">
-                  {t("name_label")->str}
-                </label>
-                <span className="text-xs">
-                  {" (" ++ t("optional") ++ ")" |> str}
-                </span>
-                <input
-                  className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="name"
-                  type_="text"
-                  name="name"
-                  placeholder={t("name_placeholder")}
-                  value={state.name}
-                  onChange={event =>
-                    send(UpdateName(ReactEvent.Form.target(event)##value))
-                  }
-                />
-              </div>
-              <div className="mt-5">
-                <label
-                  className="block tracking-wide text-xs font-semibold"
-                  htmlFor="certificate-file-input">
-                  {t("certificate_base_image_label")->str}
-                </label>
-                <input
-                  disabled={state.saving}
-                  className="hidden"
-                  name="image"
-                  type_="file"
-                  id="certificate-file-input"
-                  required=false
-                  multiple=false
-                  onChange={selectFile(send)}
-                />
-                <label
-                  className="file-input-label mt-2"
-                  htmlFor="certificate-file-input">
-                  <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
-                  <span className="truncate">
-                    {imageInputText(state.imageFilename)->str}
-                  </span>
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-gray-100 flex-grow">
-          <div className="max-w-2xl p-6 mx-auto">
-            <button
-              disabled={saveDisabled(state)}
-              className="w-auto btn btn-large btn-primary">
-              {t("create_action")->str}
-            </button>
-          </div>
-        </div>
-      </div>
-    </form>
-  </SchoolAdmin__EditorDrawer>;
 
 let updateCertificate = (state, send, certificate) => {
   let newCertificates =
@@ -262,9 +111,14 @@ let make = (~course, ~certificates, ~verifyImageUrl) => {
     containerClasses="w-full" disabled={state.deleting} message="Deleting...">
     <div className="flex flex-1 h-screen overflow-y-scroll">
       {switch (state.drawer) {
-       | NewCertificate => newCertificateDrawer(course, state, send)
+       | NewCertificate =>
+         <CourseCertificates__CreateDrawer
+           course
+           closeDrawerCB={() => send(CloseDrawer)}
+           addCertificateCB={addCertificate(state, send)}
+         />
        | EditCertificate(certificate) =>
-         <CourseCertificates__Editor
+         <CourseCertificates__EditDrawer
            certificate
            verifyImageUrl
            closeDrawerCB={() => send(CloseDrawer)}

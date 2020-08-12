@@ -7,13 +7,19 @@ type state = {
   name: string,
   imageFilename: option(string),
   saving: bool,
+  fileInvalid: bool,
 };
 
-let initialState = {name: "", imageFilename: None, saving: false};
+let initialState = {
+  name: "",
+  imageFilename: None,
+  saving: false,
+  fileInvalid: false,
+};
 
 type action =
   | UpdateName(string)
-  | UpdateImageFilename(string)
+  | UpdateImageFilename(string, bool)
   | RemoveFilename
   | BeginSaving
   | FailSaving;
@@ -21,9 +27,10 @@ type action =
 let reducer = (state, action) =>
   switch (action) {
   | UpdateName(name) => {...state, name}
-  | UpdateImageFilename(imageFilename) => {
+  | UpdateImageFilename(imageFilename, fileInvalid) => {
       ...state,
       imageFilename: Some(imageFilename),
+      fileInvalid,
     }
   | RemoveFilename => {...state, imageFilename: None}
   | BeginSaving => {...state, saving: true}
@@ -31,7 +38,7 @@ let reducer = (state, action) =>
   };
 
 let saveDisabled = state => {
-  state.imageFilename == None || state.saving;
+  state.imageFilename == None || state.fileInvalid || state.saving;
 };
 
 let submitForm = (course, addCertificateCB, send, event) => {
@@ -74,7 +81,8 @@ let selectFile = (send, event) => {
     send(RemoveFilename);
   } else {
     let file = Js.Array.unsafe_get(files, 0);
-    send(UpdateImageFilename(file##name));
+    let invalid = FileUtils.isInvalid(~image=true, file);
+    send(UpdateImageFilename(file##name, invalid));
   };
 };
 
@@ -148,6 +156,10 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                       {imageInputText(state.imageFilename)->str}
                     </span>
                   </label>
+                  <School__InputGroupError
+                    message={t("image_file_invalid")}
+                    active={state.fileInvalid}
+                  />
                 </div>
               </div>
             </div>

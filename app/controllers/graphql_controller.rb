@@ -1,5 +1,5 @@
 class GraphqlController < ApplicationController
-  skip_forgery_protection if: :introspection?
+  skip_forgery_protection if: :skip_csrf_protection?
 
   def execute
     variables = ensure_hash(params[:variables])
@@ -31,6 +31,10 @@ class GraphqlController < ApplicationController
 
   def introspection?
     Rails.env.development? && params[:introspection] == 'true'
+  end
+
+  def skip_csrf_protection?
+    introspection? || auth_header.present?
   end
 
   # Handle form data, JSON body, or a blank value

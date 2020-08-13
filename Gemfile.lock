@@ -774,6 +774,7 @@ DEPENDENCIES
   jbuilder (~> 2.6)
   jquery-rails (~> 4.3)
   jspdf-rails (~> 1.0)
+  jwt
   kaminari (~> 1.2)
   kramdown (~> 2.3)
   letter_opener_web (~> 1.3)

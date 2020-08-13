@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_16_125836) do
+ActiveRecord::Schema.define(version: 2020_08_12_054052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 2020_07_16_125836) do
     t.boolean "active", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "name", null: false
     t.index ["course_id"], name: "index_certificates_on_course_id"
   end
 
@@ -733,6 +734,8 @@ ActiveRecord::Schema.define(version: 2020_07_16_125836) do
     t.string "delete_account_token"
     t.datetime "delete_account_sent_at"
     t.datetime "account_deletion_notification_sent_at"
+    t.string "api_token"
+    t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["delete_account_token"], name: "index_users_on_delete_account_token", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

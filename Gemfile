@@ -69,6 +69,9 @@ gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' #
 gem 'kaminari', '~> 1.2' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
 gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstrap4-kaminari-views' # Bootstrap 4 styling for Kaminari gem
 
+# JSON Web Token
+gem 'jwt'
+
 # Omniauth providers
 gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google
 gem 'omniauth-facebook', '~> 6.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook

@@ -25,6 +25,7 @@ class User < ApplicationRecord
   has_secure_token :login_token
   has_secure_token :reset_password_token
   has_secure_token :delete_account_token
+  has_secure_token :api_token
 
 
   # database_authenticable is required by devise_for to generate the session routes
@@ -54,11 +55,15 @@ class User < ApplicationRecord
 
   def regenerate_delete_account_token
     @delete_account_token_original = SecureRandom.urlsafe_base64
-    update!(delete_account_token: Digest::SHA2.hexdigest(@delete_account_token_original), )
+    update!(delete_account_token: Digest::SHA2.hexdigest(@delete_account_token_original),)
   end
 
   def self.find_by_hashed_delete_account_token(delete_account_token)
     find_by(delete_account_token: Digest::SHA2.hexdigest(delete_account_token))
+  end
+
+  def regenerate_api_token
+    update!(api_token: Digest::SHA2.hexdigest(SecureRandom.urlsafe_base64))
   end
 
   def email_bounced?
@@ -133,5 +138,9 @@ class User < ApplicationRecord
     else
       title.presence || affiliation.presence
     end
+  end
+
+  def encoded_api_token
+    JWT.encode({ api_token: api_token }, ENV.fetch('API_JWT_SECRET_KEY'))
   end
 end

@@ -91,4 +91,7 @@ let update =
   qrCorner,
   qrScale,
   active,
+  updatedAt: Js.Date.make(),
 };
+
+let markInactive = t => {...t, active: false};

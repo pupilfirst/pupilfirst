@@ -160,7 +160,7 @@ let make =
 
   <SchoolAdmin__EditorDrawer
     closeDrawerCB
-    closeButtonTitle={t("cancel")}
+    closeButtonTitle={t("close")}
     size=SchoolAdmin__EditorDrawer.Large>
     <div className="flex flex-col min-h-screen">
       <DisablingCover
@@ -179,8 +179,9 @@ let make =
           <div className="mt-4">
             <label
               className="flex items-center tracking-wide text-sm font-semibold"
-              htmlFor="title">
-              <span> {str("Title")} </span>
+              htmlFor="name">
+              <i className="fas fa-list text-base" />
+              <span className="ml-2"> {t("name_label")->str} </span>
             </label>
             <div>
               <input
@@ -200,16 +201,18 @@ let make =
               />
             </div>
           </div>
-          <div className="mt-6">
-            <label
-              className="tracking-wide text-sm font-semibold" htmlFor="active">
+          <div className="mt-4" ariaLabel="auto_issue">
+            <label className="tracking-wide text-sm font-semibold">
+              <span className="mr-2">
+                <i className="fas fa-list text-base" />
+              </span>
               {str(
                  "Should students be automatically issued this certificate?",
                )}
             </label>
             <HelpIcon
               className="ml-1"
-              link="https://docs.pupilfirst.com/#/certificates">
+              link="https://docs.pupilfirst.com/#/certificates?id=automatically-issuing-certificates">
               <span>
                 {str(
                    "While you can have multiple certificates, only one can be automatically issued; it will be issued when a student ",
@@ -219,8 +222,7 @@ let make =
               </span>
             </HelpIcon>
             <div
-              className="ml-6 inline-flex toggle-button__group flex-shrink-0"
-              id="active">
+              className="ml-6 inline-flex toggle-button__group flex-shrink-0">
               <button
                 className={activeButtonClasses(state.active, true)}
                 onClick={_ => send(UpdateActive(true))}>

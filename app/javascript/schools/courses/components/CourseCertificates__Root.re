@@ -63,7 +63,13 @@ let updateCertificate = (state, send, certificate) => {
   let newCertificates =
     Js.Array.map(
       c =>
-        Certificate.id(c) == Certificate.id(certificate) ? certificate : c,
+        if (Certificate.id(c) == Certificate.id(certificate)) {
+          certificate;
+        } else if (Certificate.active(certificate)) {
+          Certificate.markInactive(c);
+        } else {
+          c;
+        },
       state.certificates,
     );
 
@@ -169,7 +175,7 @@ let make = (~course, ~certificates, ~verifyImageUrl) => {
                            }
                            className="flex w-1/2 items-center mb-4 px-3">
                            <div
-                             className="course-faculty__list-item shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">
+                             className="shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">
                              <div className="flex flex-1 justify-between">
                                <div className="pt-4 pb-3 px-4">
                                  <div className="text-sm">

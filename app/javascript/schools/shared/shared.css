@@ -260,28 +260,36 @@
 }
 
 .toggle-button__group {
-  @apply relative border border-gray-400;
+  @apply relative leading-relaxed rounded bg-white;
 }
 
 .toggle-button__button {
-  @apply w-1/2 bg-white text-sm font-semibold py-1 px-6 text-gray-600;
+  @apply w-1/2 text-sm font-semibold py-1 px-6 text-gray-700 border border-gray-400;
   transition: 0.3s cubic-bezier(0, 0, 0, 1);
 }
 
+.toggle-button__button:first-child {
+  @apply rounded-l;
+}
+
+.toggle-button__button:last-child {
+  @apply rounded-r;
+}
+
 .toggle-button__button:nth-child(n + 2) {
-  @apply border-l;
+  @apply -ml-px border-gray-400;
 }
 
 .toggle-button__button:hover {
-  @apply bg-primary-100 text-primary-600 shadow-inner;
+  @apply bg-gray-100 text-gray-900;
 }
 
 .toggle-button__button:focus {
-  @apply outline-none shadow-inner;
+  @apply outline-none text-gray-900 shadow-outline;
 }
 
 .toggle-button__button--active {
-  @apply bg-primary-600 text-white shadow-inner;
+  @apply bg-primary-100 text-primary-600;
 }
 
 .toggle-button__button--active:hover {

@@ -58,7 +58,9 @@ let reducer = (state, action) =>
   };
 
 let buttonTypeClass = (stateQrCorner, qrCorner) => {
-  stateQrCorner == qrCorner ? "btn-primary" : "btn-default";
+  stateQrCorner == qrCorner
+    ? "border-primary-500 bg-primary-100 text-primary-600"
+    : "border-gray-400 bg-gray-200 text-gray-800";
 };
 
 let activeButtonClasses = (stateActive, active) => {
@@ -165,20 +167,22 @@ let make =
         disabled={state.saving}
         message="Saving changes..."
         containerClasses="bg-white flex-grow-0">
-        <div className="max-w-4xl px-6 pt-5 mx-auto">
-          <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-            {t("edit_action")->str}
-          </h5>
+        <div className="bg-gray-100 pt-6 pb-4 border-b">
+          <div className="max-w-4xl mx-auto">
+            <h5 className="uppercase"> {t("edit_action")->str} </h5>
+          </div>
         </div>
-        <div className="max-w-4xl px-6 py-6 mx-auto">
-          <div>
+        <div className="max-w-4xl py-6 mx-auto">
+          <h5 className="text-sm uppercase font-bold pb-1 border-b">
+            {str("Details")}
+          </h5>
+          <div className="mt-4">
             <label
               className="flex items-center tracking-wide text-sm font-semibold"
               htmlFor="title">
-              <i className="fas fa-list text-base" />
-              <span className="ml-2"> {str("Title")} </span>
+              <span> {str("Title")} </span>
             </label>
-            <div className="ml-6">
+            <div>
               <input
                 className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
                 maxLength=30
@@ -196,12 +200,9 @@ let make =
               />
             </div>
           </div>
-          <div className="mt-4">
+          <div className="mt-6">
             <label
               className="tracking-wide text-sm font-semibold" htmlFor="active">
-              <span className="mr-2">
-                <i className="fas fa-list text-base" />
-              </span>
               {str(
                  "Should students be automatically issued this certificate?",
                )}
@@ -218,7 +219,7 @@ let make =
               </span>
             </HelpIcon>
             <div
-              className="ml-6 inline-flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden"
+              className="ml-6 inline-flex toggle-button__group flex-shrink-0"
               id="active">
               <button
                 className={activeButtonClasses(state.active, true)}
@@ -232,15 +233,19 @@ let make =
               </button>
             </div>
           </div>
-          <h5 className="mt-4"> {str("Design")} </h5>
+          <h5 className="mt-6 text-sm uppercase font-bold pb-1 border-b">
+            {str("Design")}
+          </h5>
           <div className="flex mt-4">
-            <div className="w-2/3">
-              <IssuedCertificate__Root
-                issuedCertificate=demoCertificate
-                verifyImageUrl
-              />
+            <div className="w-3/5">
+              <div className="rounded border-6 border-white shadow-md">
+                <IssuedCertificate__Root
+                  issuedCertificate=demoCertificate
+                  verifyImageUrl
+                />
+              </div>
             </div>
-            <div className="w-1/3 ml-4">
+            <div className="w-2/5 pl-5">
               <div>
                 <div>
                   <label
@@ -266,7 +271,7 @@ let make =
                   }
                 />
               </div>
-              <div className="mt-2">
+              <div className="mt-4">
                 <div>
                   <label
                     className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
@@ -291,7 +296,7 @@ let make =
                   }
                 />
               </div>
-              <div className="mt-2">
+              <div className="mt-4">
                 <div>
                   <label
                     className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
@@ -316,7 +321,28 @@ let make =
                   }
                 />
               </div>
-              <div className="mt-2">
+              <div className="mt-4">
+                <label
+                  className="tracking-wide text-xs font-semibold"
+                  htmlFor="active">
+                  {str("Do you want to add QR Code?")}
+                </label>
+                <div
+                  className="ml-2 mt-1 inline-flex toggle-button__group flex-shrink-0"
+                  id="active">
+                  <button
+                    className={activeButtonClasses(state.active, true)}
+                    onClick={_ => send(UpdateActive(true))}>
+                    {str("Yes")}
+                  </button>
+                  <button
+                    className={activeButtonClasses(state.active, false)}
+                    onClick={_ => send(UpdateActive(false))}>
+                    {str("No")}
+                  </button>
+                </div>
+              </div>
+              <div className="mt-4">
                 <div>
                   <label
                     className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
@@ -335,37 +361,49 @@ let make =
                 <div className="flex mt-2">
                   <button
                     className={
-                      "btn w-1/2 mr-1 "
+                      "w-1/2 mr-2 rounded border pt-3 px-3 pb-5 text-sm font-semibold focus:shadow-outline hover:bg-gray-300 hover:text-gray-900 "
                       ++ buttonTypeClass(state.qrCorner, `TopLeft)
                     }
                     onClick={_ => send(UpdateQrCorner(`TopLeft))}>
+                    <div className="flex">
+                      <Icon className="if i-qr-code-regular" />
+                    </div>
                     {t("qr_top_left_label")->str}
                   </button>
                   <button
                     className={
-                      "btn w-1/2 ml-1 "
+                      "w-1/2 rounded border pt-3 px-3 pb-5 text-sm font-semibold focus:shadow-outline hover:bg-gray-300 hover:text-gray-900 "
                       ++ buttonTypeClass(state.qrCorner, `TopRight)
                     }
                     onClick={_ => send(UpdateQrCorner(`TopRight))}>
+                    <div className="flex justify-end">
+                      <Icon className="if i-qr-code-regular" />
+                    </div>
                     {t("qr_top_right_label")->str}
                   </button>
                 </div>
                 <div className="flex mt-2">
                   <button
                     className={
-                      "btn w-1/2 mr-1 "
+                      "w-1/2 mr-2 rounded border pt-5 px-3 pb-3 text-sm font-semibold focus:shadow-outline hover:bg-gray-300 hover:text-gray-900 "
                       ++ buttonTypeClass(state.qrCorner, `BottomLeft)
                     }
                     onClick={_ => send(UpdateQrCorner(`BottomLeft))}>
                     {t("qr_bottom_left_label")->str}
+                    <div className="flex">
+                      <Icon className="if i-qr-code-regular" />
+                    </div>
                   </button>
                   <button
                     className={
-                      "btn w-1/2 ml-1 "
+                      "w-1/2 rounded border pt-5 px-3 pb-3 text-sm font-semibold focus:shadow-outline hover:bg-gray-300 hover:text-gray-900 "
                       ++ buttonTypeClass(state.qrCorner, `BottomRight)
                     }
                     onClick={_ => send(UpdateQrCorner(`BottomRight))}>
                     {t("qr_bottom_right_label")->str}
+                    <div className="flex justify-end">
+                      <Icon className="if i-qr-code-regular" />
+                    </div>
                   </button>
                 </div>
               </div>
@@ -375,7 +413,7 @@ let make =
                | `TopRight
                | `BottomLeft
                | `BottomRight =>
-                 <div className="mt-2">
+                 <div className="mt-4">
                    <div>
                      <label
                        className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
@@ -407,43 +445,49 @@ let make =
         </div>
       </DisablingCover>
       <div className="bg-gray-100 flex-grow">
-        <div className="max-w-4xl p-6 mx-auto">
-          <div className="flex items-center">
-            <button
-              onClick={saveChanges(
-                certificate,
-                updateCertificateCB,
-                state,
-                send,
-              )}
-              disabled=saveButtonDisabled
-              className="w-auto btn btn-large btn-primary">
-              <FaIcon
-                classes={
-                  "fas " ++ (state.saving ? "fa-spinner fa-pulse" : "fa-check")
-                }
-              />
-              <span className="ml-2">
-                {t(state.saving ? "saving" : "save_changes")->str}
-              </span>
-            </button>
-            {issuedCount > 0 && !saveButtonDisabled
-               ? <div className="flex items-center ml-4">
-                   <div className="text-red-700 text-2xl">
-                     <i className="fas fa-exclamation-triangle" />
+        <div className="max-w-4xl py-6 mx-auto">
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              {issuedCount > 0 && !saveButtonDisabled
+                 ? <div
+                     className="inline-flex bg-orange-100 mr-2 p-2 rounded-r border border-l-4 border-orange-500 items-center">
+                     <div className="text-orange-500 text-2xl">
+                       <i className="fas fa-exclamation-triangle" />
+                     </div>
+                     <div
+                       className="ml-2 text-xs font-semibold"
+                       dangerouslySetInnerHTML={
+                         "__html":
+                           t(
+                             ~count=issuedCount,
+                             "update_issued_certificates_warning",
+                           ),
+                       }
+                     />
                    </div>
-                   <div
-                     className="ml-2 text-xs font-semibold"
-                     dangerouslySetInnerHTML={
-                       "__html":
-                         t(
-                           ~count=issuedCount,
-                           "update_issued_certificates_warning",
-                         ),
-                     }
-                   />
-                 </div>
-               : React.null}
+                 : React.null}
+            </div>
+            <div className="flex-shrink-0">
+              <button
+                onClick={saveChanges(
+                  certificate,
+                  updateCertificateCB,
+                  state,
+                  send,
+                )}
+                disabled=saveButtonDisabled
+                className="w-auto btn btn-success">
+                <FaIcon
+                  classes={
+                    "fas "
+                    ++ (state.saving ? "fa-spinner fa-pulse" : "fa-check")
+                  }
+                />
+                <span className="ml-2">
+                  {t(state.saving ? "saving" : "save_changes")->str}
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

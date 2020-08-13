@@ -179,7 +179,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
               <button
                 disabled={saveDisabled(state)}
                 className="w-auto btn btn-large btn-primary">
-                {t("create_action")->str}
+                {t("create_button_text")->str}
               </button>
             </div>
           </div>

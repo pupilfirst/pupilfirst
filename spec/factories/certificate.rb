@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :certificate do
     course
-    name { |i| Faker::Lorem.words(number: 2).join('') + " #{i}" }
+    sequence(:name) { |i| Faker::Lorem.words(number: 2).join(' ') + " #{i}" }
     qr_corner { %w[TopLeft TopRight BottomRight BottomLeft Hidden].sample }
     qr_scale { 100 }
     name_offset_top { 50 }

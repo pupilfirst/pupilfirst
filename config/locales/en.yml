@@ -38,8 +38,10 @@ en:
       certificate_base_image_label: Certificate Base Image
       certificate_base_image_placeholder: Select a base image for certificate
       success_notification: You can now edit this certificate.
+      create_button_text: Create Certificate
     CourseCertificates__EditDrawer:
       edit_action: Edit Certificate
+      name_label: Name
       margin_label: Margin
       name_offset_top_label: Name Offset (from top)
       font_size_label: Font Size
@@ -116,6 +118,7 @@ en:
     optional: optional
     done_exclamation: Done!
     cancel: Cancel
+    close: Close
     save_changes: Save Changes
     saving: Saving...
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.

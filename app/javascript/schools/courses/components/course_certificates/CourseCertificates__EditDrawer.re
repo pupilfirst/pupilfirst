@@ -168,11 +168,11 @@ let make =
         message="Saving changes..."
         containerClasses="bg-white flex-grow-0">
         <div className="bg-gray-100 pt-6 pb-4 border-b">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl px-4 mx-auto">
             <h5 className="uppercase"> {t("edit_action")->str} </h5>
           </div>
         </div>
-        <div className="max-w-4xl py-6 mx-auto">
+        <div className="max-w-4xl px-4 py-6 mx-auto">
           <h5 className="text-sm uppercase font-bold pb-1 border-b">
             {str("Details")}
           </h5>
@@ -254,7 +254,7 @@ let make =
                 </div>
                 <input
                   id="margin"
-                  className="w-full mt-1"
+                  className="form-input__range"
                   type_="range"
                   name="margin"
                   min="0"
@@ -279,7 +279,7 @@ let make =
                 </div>
                 <input
                   id="name_offset_top"
-                  className="w-full mt-1"
+                  className="form-input__range"
                   type_="range"
                   name="name_offset_top"
                   min="0"
@@ -304,7 +304,7 @@ let make =
                 </div>
                 <input
                   id="font_size"
-                  className="w-full mt-1"
+                  className="form-input__range"
                   type_="range"
                   name="font_size"
                   min="75"
@@ -400,7 +400,7 @@ let make =
                    </div>
                    <input
                      id="qr_scale"
-                     className="w-full mt-1"
+                     className="form-input__range"
                      type_="range"
                      name="qr_scale"
                      min="50"
@@ -422,7 +422,7 @@ let make =
         </div>
       </DisablingCover>
       <div className="bg-gray-100 flex-grow">
-        <div className="max-w-4xl py-6 mx-auto">
+        <div className="max-w-4xl px-4 py-6 mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex-1">
               {issuedCount > 0 && !saveButtonDisabled

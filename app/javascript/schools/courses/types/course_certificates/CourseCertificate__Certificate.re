@@ -92,3 +92,5 @@ let update =
   qrScale,
   active,
 };
+
+let markInactive = t => {...t, active: false};

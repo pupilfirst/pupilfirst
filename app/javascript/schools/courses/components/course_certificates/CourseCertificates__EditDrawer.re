@@ -320,27 +320,6 @@ let make =
                 />
               </div>
               <div className="mt-4">
-                <label
-                  className="tracking-wide text-xs font-semibold"
-                  htmlFor="active">
-                  {str("Do you want to add QR Code?")}
-                </label>
-                <div
-                  className="ml-2 mt-1 inline-flex toggle-button__group flex-shrink-0"
-                  id="active">
-                  <button
-                    className={activeButtonClasses(state.active, true)}
-                    onClick={_ => send(UpdateActive(true))}>
-                    {str("Yes")}
-                  </button>
-                  <button
-                    className={activeButtonClasses(state.active, false)}
-                    onClick={_ => send(UpdateActive(false))}>
-                    {str("No")}
-                  </button>
-                </div>
-              </div>
-              <div className="mt-4">
                 <div>
                   <label
                     className="inline-block tracking-wide text-gray-900 text-xs font-semibold"

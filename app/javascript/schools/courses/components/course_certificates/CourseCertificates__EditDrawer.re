@@ -208,7 +208,7 @@ let make =
             </label>
             <HelpIcon
               className="ml-1"
-              link="https://docs.pupilfirst.com/#/certificates">
+              link="https://docs.pupilfirst.com/#/certificates?id=automatically-issuing-certificates">
               <span>
                 {str(
                    "While you can have multiple certificates, only one can be automatically issued; it will be issued when a student ",

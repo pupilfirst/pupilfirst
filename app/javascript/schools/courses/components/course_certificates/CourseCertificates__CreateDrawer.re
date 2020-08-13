@@ -142,7 +142,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                     </label>
                     <HelpIcon
                       className="ml-2"
-                      link="https://docs.pupilfirst.com//#/certificates">
+                      link="https://docs.pupilfirst.com/#/certificates?id=uploading-a-new-certificate">
                       {str(
                          "This base image must include a full line's space to insert a student's name.",
                        )}

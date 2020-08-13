@@ -180,8 +180,7 @@ let make =
             <label
               className="flex items-center tracking-wide text-sm font-semibold"
               htmlFor="name">
-              <i className="fas fa-list text-base" />
-              <span className="ml-2"> {t("name_label")->str} </span>
+              <span> {t("name_label")->str} </span>
             </label>
             <div>
               <input
@@ -201,11 +200,8 @@ let make =
               />
             </div>
           </div>
-          <div className="mt-4" ariaLabel="auto_issue">
+          <div className="mt-6" ariaLabel="auto_issue">
             <label className="tracking-wide text-sm font-semibold">
-              <span className="mr-2">
-                <i className="fas fa-list text-base" />
-              </span>
               {str(
                  "Should students be automatically issued this certificate?",
                )}
@@ -222,7 +218,7 @@ let make =
               </span>
             </HelpIcon>
             <div
-              className="ml-6 inline-flex toggle-button__group flex-shrink-0">
+              className="ml-4 inline-flex toggle-button__group flex-shrink-0">
               <button
                 className={activeButtonClasses(state.active, true)}
                 onClick={_ => send(UpdateActive(true))}>

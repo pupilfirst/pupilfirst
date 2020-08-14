@@ -103,13 +103,12 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
         message="Uploading...">
         <div className="flex flex-col min-h-screen">
           <div className="bg-white flex-grow-0">
-            <div className="max-w-2xl px-6 pt-5 mx-auto">
-              <h5
-                className="uppercase text-center border-b border-gray-400 pb-2">
-                {t("create_action")->str}
-              </h5>
+            <div className="bg-gray-100 pt-6 pb-4 border-b">
+              <div className="max-w-2xl px-4 mx-auto">
+                <h5 className="uppercase"> {t("create_action")->str} </h5>
+              </div>
             </div>
-            <div className="max-w-2xl pt-6 px-6 mx-auto">
+            <div className="max-w-2xl pt-6 px-4 mx-auto">
               <div className="max-w-2xl pb-6 mx-auto">
                 <div className="mt-5">
                   <label

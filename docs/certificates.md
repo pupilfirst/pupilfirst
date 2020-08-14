@@ -12,7 +12,7 @@ The list of available certificates in a course can be edited from the _Certifica
 
 To add a new certificate, use the _Create New Certificate_ option from the _Certificates_ page.
 
-![Screenshot of certificate creation form](https://res.cloudinary.com/sv-co/image/upload/v1597244776/pupilfirst_documentation/certificates/create_new_certificate_alagii.png)
+![Screenshot of certificate creation form](https://res.cloudinary.com/sv-co/image/upload/v1597417562/pupilfirst_documentation/certificates/create_certificate_zs1k38.png)
 
 When creating a new certificate, you can give it a name (option), and then upload a _base image_. This base image must be optimized to work with Pupilfirst, and has a few requirements:
 
@@ -21,7 +21,7 @@ When creating a new certificate, you can give it a name (option), and then uploa
 
 Here's an example base image:
 
-![Coaches page in school administration interface](https://raw.githubusercontent.com/pupilfirst/pupilfirst/master/spec/support/uploads/certificates/sample.png)
+![An example base certificate image](https://raw.githubusercontent.com/pupilfirst/pupilfirst/master/spec/support/uploads/certificates/sample.png)
 
 Notice how this image leaves an empty space where a student's name will be placed, and clear areas in the corners where a QR code could be placed.
 
@@ -31,7 +31,7 @@ Once a base image has been uploaded, you can edit the certificate to set it up t
 
 To edit a certificate, click the edit icon on any of the certificates listed on the _index_.
 
-![Screenshot of the certificate editor](https://res.cloudinary.com/sv-co/image/upload/v1597244776/pupilfirst_documentation/certificates/edit_certificate_pafath.png)
+![Screenshot of the certificate editor](https://res.cloudinary.com/sv-co/image/upload/v1597417562/pupilfirst_documentation/certificates/edit_certificate_pe7yz9.png)
 
 Besides editing the name of the certificate, this interface allows you to designate a certificate to be automatically issued, and to update where and how dynamic elements are placed when it's issued.
 

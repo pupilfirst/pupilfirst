@@ -46,7 +46,7 @@ Pupilfirst determines a student to have _completed_ a course when one the follow
 
 ### Editing the certificate's design
 
-The controls on the form allow you position the student's name, and the size of the font. The preview image will show a random sample of long names so that you can verify that the size and position looks right.
+The controls on the form allow you position the student's name, and the size of the font.
 
 If you opt to show a QR code, you must pick which corner it is displayed at. You can control its size, and you may also want to set a margin so that the QR code clears any _border_ in your certificate's design.
 

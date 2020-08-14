@@ -42,10 +42,16 @@ en:
     CourseCertificates__EditDrawer:
       edit_action: Edit Certificate
       name_label: Name
+      name_placeholder: A short name for this certificate
+      name_error: Name can't be blank
       margin_label: Margin
+      active_label: Should students be automatically issued this certificate?
+      active_help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
       name_offset_top_label: Name Offset (from top)
       font_size_label: Font Size
-      qr_visibility_label: QR Code Position
+      qr_visibility_label: Add QR Code?
+      qr_visibility_help: It will contain a link to a page on your school that anyone can visit to verify an issued certificate.
+      qr_position_label: QR Code Position
       qr_scale_label: QR Code Scale
       qr_hidden_label: Hidden
       qr_top_left_label: Top Left

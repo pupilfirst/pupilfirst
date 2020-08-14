@@ -70,6 +70,21 @@ let activeButtonClasses = (stateActive, active) => {
   baseClasses ++ additionalClasses;
 };
 
+let qrVisiblityClasses = (qrCorner, visible) => {
+  let selected =
+    switch (qrCorner, visible) {
+    | (`Hidden, true) => false
+    | (`TopLeft | `TopRight | `BottomLeft | `BottomRight, true) => true
+    | (`Hidden, false) => true
+    | (`TopLeft | `TopRight | `BottomLeft | `BottomRight, false) => false
+    };
+
+  let baseClasses = "toggle-button__button";
+  let additionalClasses = selected ? " toggle-button__button--active" : "";
+
+  baseClasses ++ additionalClasses;
+};
+
 let isValidName = name => {
   let length = Js.String.trim(name)->Js.String.length;
   length >= 1 && length <= 30;
@@ -134,6 +149,15 @@ let saveChanges = (certificate, updateCertificateCB, state, send, _event) => {
   |> ignore;
 };
 
+let activateQrCode = (state, send, _event) =>
+  switch (state.qrCorner) {
+  | `Hidden => send(UpdateQrCorner(`TopRight))
+  | `TopLeft
+  | `TopRight
+  | `BottomLeft
+  | `BottomRight => ()
+  };
+
 [@react.component]
 let make =
     (~certificate, ~verifyImageUrl, ~closeDrawerCB, ~updateCertificateCB) => {
@@ -188,34 +212,26 @@ let make =
                 maxLength=30
                 id="name"
                 type_="text"
-                placeholder="A short name for this certificate"
+                placeholder={t("name_placeholder")}
                 onChange={event =>
                   send(UpdateName(ReactEvent.Form.target(event)##value))
                 }
                 value={state.name}
               />
               <School__InputGroupError
-                message="Name can't be blank"
+                message={t("name_error")}
                 active={!validName}
               />
             </div>
           </div>
           <div className="mt-6" ariaLabel="auto_issue">
             <label className="tracking-wide text-sm font-semibold">
-              {str(
-                 "Should students be automatically issued this certificate?",
-               )}
+              {t("active_label")->str}
             </label>
             <HelpIcon
               className="ml-1"
               link="https://docs.pupilfirst.com/#/certificates?id=automatically-issuing-certificates">
-              <span>
-                {str(
-                   "While you can have multiple certificates, only one can be automatically issued; it will be issued when a student ",
-                 )}
-                <em> {str("completes")} </em>
-                {str(" a course.")}
-              </span>
+              <span dangerouslySetInnerHTML={"__html": t("active_help")} />
             </HelpIcon>
             <div
               className="ml-4 inline-flex toggle-button__group flex-shrink-0">
@@ -319,68 +335,31 @@ let make =
                   }
                 />
               </div>
-              <div className="mt-4">
-                <div>
-                  <label
-                    className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
-                    htmlFor="qr_visibility">
-                    {t("qr_visibility_label")->str}
-                  </label>
-                </div>
-                <button
-                  className={
-                    "block btn mt-1 w-full "
-                    ++ buttonTypeClass(state.qrCorner, `Hidden)
-                  }
-                  onClick={_ => send(UpdateQrCorner(`Hidden))}>
-                  {t("qr_hidden_label")->str}
-                </button>
-                <div className="flex mt-2">
-                  <button
-                    className={
-                      "w-1/2 mr-2 rounded border pt-3 px-3 pb-5 text-sm font-semibold focus:shadow-outline hover:bg-gray-300 hover:text-gray-900 "
-                      ++ buttonTypeClass(state.qrCorner, `TopLeft)
+              <div className="mt-4" ariaLabel="add_qr_code">
+                <label
+                  className="tracking-wide text-gray-900 text-xs font-semibold">
+                  {t("qr_visibility_label")->str}
+                </label>
+                <HelpIcon
+                  className="ml-1"
+                  link="https://docs.pupilfirst.com/#/certificates?id=automatically-issuing-certificates">
+                  <span
+                    dangerouslySetInnerHTML={
+                      "__html": t("qr_visibility_help"),
                     }
-                    onClick={_ => send(UpdateQrCorner(`TopLeft))}>
-                    <div className="flex">
-                      <Icon className="if i-qr-code-regular" />
-                    </div>
-                    {t("qr_top_left_label")->str}
+                  />
+                </HelpIcon>
+                <div
+                  className="ml-4 inline-flex toggle-button__group flex-shrink-0">
+                  <button
+                    className={qrVisiblityClasses(state.qrCorner, true)}
+                    onClick={activateQrCode(state, send)}>
+                    {str("Yes")}
                   </button>
                   <button
-                    className={
-                      "w-1/2 rounded border pt-3 px-3 pb-5 text-sm font-semibold focus:shadow-outline hover:bg-gray-300 hover:text-gray-900 "
-                      ++ buttonTypeClass(state.qrCorner, `TopRight)
-                    }
-                    onClick={_ => send(UpdateQrCorner(`TopRight))}>
-                    <div className="flex justify-end">
-                      <Icon className="if i-qr-code-regular" />
-                    </div>
-                    {t("qr_top_right_label")->str}
-                  </button>
-                </div>
-                <div className="flex mt-2">
-                  <button
-                    className={
-                      "w-1/2 mr-2 rounded border pt-5 px-3 pb-3 text-sm font-semibold focus:shadow-outline hover:bg-gray-300 hover:text-gray-900 "
-                      ++ buttonTypeClass(state.qrCorner, `BottomLeft)
-                    }
-                    onClick={_ => send(UpdateQrCorner(`BottomLeft))}>
-                    {t("qr_bottom_left_label")->str}
-                    <div className="flex">
-                      <Icon className="if i-qr-code-regular" />
-                    </div>
-                  </button>
-                  <button
-                    className={
-                      "w-1/2 rounded border pt-5 px-3 pb-3 text-sm font-semibold focus:shadow-outline hover:bg-gray-300 hover:text-gray-900 "
-                      ++ buttonTypeClass(state.qrCorner, `BottomRight)
-                    }
-                    onClick={_ => send(UpdateQrCorner(`BottomRight))}>
-                    {t("qr_bottom_right_label")->str}
-                    <div className="flex justify-end">
-                      <Icon className="if i-qr-code-regular" />
-                    </div>
+                    className={qrVisiblityClasses(state.qrCorner, false)}
+                    onClick={_ => send(UpdateQrCorner(`Hidden))}>
+                    {str("No")}
                   </button>
                 </div>
               </div>
@@ -390,32 +369,91 @@ let make =
                | `TopRight
                | `BottomLeft
                | `BottomRight =>
-                 <div className="mt-4">
-                   <div>
-                     <label
-                       className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
-                       htmlFor="qr_scale">
-                       {t("qr_scale_label")->str}
-                     </label>
-                   </div>
-                   <input
-                     id="qr_scale"
-                     className="form-input__range"
-                     type_="range"
-                     name="qr_scale"
-                     min="50"
-                     max="150"
-                     value={string_of_int(state.qrScale)}
-                     onChange={event =>
-                       send(
-                         UpdateQrScale(
-                           ReactEvent.Form.target(event)##value
-                           ->int_of_string,
-                         ),
-                       )
-                     }
-                   />
-                 </div>
+                 [|
+                   <div className="mt-4" key="position">
+                     <div>
+                       <label
+                         className="inline-block tracking-wide text-gray-900 text-xs font-semibold">
+                         {t("qr_position_label")->str}
+                       </label>
+                     </div>
+                     <div className="flex mt-2">
+                       <button
+                         className={
+                           "w-1/2 mr-2 rounded border pt-3 px-3 pb-5 text-sm font-semibold focus:shadow-outline hover:bg-gray-300 hover:text-gray-900 "
+                           ++ buttonTypeClass(state.qrCorner, `TopLeft)
+                         }
+                         onClick={_ => send(UpdateQrCorner(`TopLeft))}>
+                         <div className="flex">
+                           <Icon className="if i-qr-code-regular" />
+                         </div>
+                         {t("qr_top_left_label")->str}
+                       </button>
+                       <button
+                         className={
+                           "w-1/2 rounded border pt-3 px-3 pb-5 text-sm font-semibold focus:shadow-outline hover:bg-gray-300 hover:text-gray-900 "
+                           ++ buttonTypeClass(state.qrCorner, `TopRight)
+                         }
+                         onClick={_ => send(UpdateQrCorner(`TopRight))}>
+                         <div className="flex justify-end">
+                           <Icon className="if i-qr-code-regular" />
+                         </div>
+                         {t("qr_top_right_label")->str}
+                       </button>
+                     </div>
+                     <div className="flex mt-2">
+                       <button
+                         className={
+                           "w-1/2 mr-2 rounded border pt-5 px-3 pb-3 text-sm font-semibold focus:shadow-outline hover:bg-gray-300 hover:text-gray-900 "
+                           ++ buttonTypeClass(state.qrCorner, `BottomLeft)
+                         }
+                         onClick={_ => send(UpdateQrCorner(`BottomLeft))}>
+                         {t("qr_bottom_left_label")->str}
+                         <div className="flex">
+                           <Icon className="if i-qr-code-regular" />
+                         </div>
+                       </button>
+                       <button
+                         className={
+                           "w-1/2 rounded border pt-5 px-3 pb-3 text-sm font-semibold focus:shadow-outline hover:bg-gray-300 hover:text-gray-900 "
+                           ++ buttonTypeClass(state.qrCorner, `BottomRight)
+                         }
+                         onClick={_ => send(UpdateQrCorner(`BottomRight))}>
+                         {t("qr_bottom_right_label")->str}
+                         <div className="flex justify-end">
+                           <Icon className="if i-qr-code-regular" />
+                         </div>
+                       </button>
+                     </div>
+                   </div>,
+                   <div className="mt-4" key="scale">
+                     <div>
+                       <label
+                         className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
+                         htmlFor="qr_scale">
+                         {t("qr_scale_label")->str}
+                       </label>
+                     </div>
+                     <input
+                       id="qr_scale"
+                       className="form-input__range"
+                       type_="range"
+                       name="qr_scale"
+                       min="50"
+                       max="150"
+                       value={string_of_int(state.qrScale)}
+                       onChange={event =>
+                         send(
+                           UpdateQrScale(
+                             ReactEvent.Form.target(event)##value
+                             ->int_of_string,
+                           ),
+                         )
+                       }
+                     />
+                   </div>,
+                 |]
+                 |> React.array
                }}
             </div>
           </div>

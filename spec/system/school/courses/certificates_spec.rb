@@ -97,6 +97,11 @@ feature 'Certificates', js: true do
       select_from_range self, 'margin', 10
       select_from_range self, 'name_offset_top', 50
       select_from_range self, 'font_size', 125
+
+      within('div[aria-label="add_qr_code"]') do
+        click_button 'Yes'
+      end
+
       click_button 'Top Right'
       click_button 'Save Changes'
 

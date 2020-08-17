@@ -63,9 +63,7 @@ class ApplicationController < ActionController::Base
 
   # Returns the "resolved" school for a request.
   def current_school
-    @current_school ||= if decoded_api_token.present?
-      current_user.school
-    elsif Rails.application.secrets.multitenancy
+    @current_school ||= if Rails.application.secrets.multitenancy
       resolved_school = current_domain&.school
 
       raise RequestFromUnknownDomain if resolved_school.blank?

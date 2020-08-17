@@ -28,7 +28,7 @@
     "date-fns-tz": "^1.0.10",
     "dotenv": "^8.0.0",
     "markdown-it": "^10.0.0",
-    "markdown-it-linkify-images": "https://github.com/harigopal/markdown-it-linkify-images",
+    "markdown-it-linkify-images": "^2.0.0",
     "markdown-it-multimd-table": "^4.0.0",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",

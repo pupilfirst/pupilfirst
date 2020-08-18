@@ -12,6 +12,7 @@ class CreateGradingMutator < ApplicationQuery
   validate :valid_evaluation_criteria
   validate :valid_grading
   validate :right_shape_for_checklist
+  validate :checklist_data_is_not_mutated
 
   def grade
     TimelineEvent.transaction do
@@ -48,6 +49,20 @@ class CreateGradingMutator < ApplicationQuery
     return if checklist.respond_to?(:all?) && checklist.all? do |item|
       item['title'].is_a?(String) && item['kind'].in?(Target.valid_checklist_kind_types) && item['status'].in?([TimelineEvent::CHECKLIST_STATUS_FAILED, TimelineEvent::CHECKLIST_STATUS_NO_ANSWER]) && item['result'].is_a?(String)
     end
+
+    errors[:base] << 'Invalid checklist'
+  end
+
+  def checklist_data_is_not_mutated
+    old_checklist = submission.checklist.map do |c|
+      [c['title'], c['kind'], c['result']]
+    end
+
+    new_checklist = checklist.map do |c|
+      [c['title'], c['kind'], c['result']]
+    end
+
+    return if (old_checklist - new_checklist).empty? && old_checklist.count == new_checklist.count
 
     errors[:base] << 'Invalid checklist'
   end

@@ -286,6 +286,8 @@ feature 'Submissions review' do
 
       click_button 'Save grades'
 
+      expect(page).to have_text('The submission has been marked as reviewed')
+
       dismiss_notification
 
       within("div[aria-label='#{submission_pending.checklist.second['title']}']") do

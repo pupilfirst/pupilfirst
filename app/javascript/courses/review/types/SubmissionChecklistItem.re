@@ -127,7 +127,7 @@ let encodeResult = t =>
   | ShortText(t)
   | LongText(t)
   | Link(t) => t
-  | MultiChoice(_)
+  | MultiChoice(t) => t
   | Files(_) => "files"
   };
 

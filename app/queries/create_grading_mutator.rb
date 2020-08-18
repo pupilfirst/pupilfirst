@@ -55,11 +55,11 @@ class CreateGradingMutator < ApplicationQuery
 
   def checklist_data_is_not_mutated
     old_checklist = submission.checklist.map do |c|
-      [c['item'], c['kind'], c['result']]
+      [c['title'], c['kind'], c['result']]
     end
 
     new_checklist = checklist.map do |c|
-      [c['item'], c['kind'], c['result']]
+      [c['title'], c['kind'], c['result']]
     end
 
     return if (old_checklist - new_checklist).empty? && old_checklist.count == new_checklist.count

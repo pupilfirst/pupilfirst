@@ -94,11 +94,18 @@ module Courses
     end
 
     def find_or_create_team(student)
-      @team_name_translation[student.team_name] ||= Startup.create!(
+      team = @team_name_translation[student.team_name]
+
+      return team if team.present?
+
+      team = Startup.create!(
         name: student.team_name.presence || student.name,
-        level: first_level,
+        level_id: first_level.id,
         tag_list: student.tags
       )
+
+      @team_name_translation[team.name] = team
+      team
     end
 
     def school

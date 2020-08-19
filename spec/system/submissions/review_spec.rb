@@ -231,10 +231,18 @@ feature 'Submissions review' do
     scenario 'coach evaluates a pending submission and mark a checklist as incorrect', js: true do
       question_1 = Faker::Lorem.sentence
       question_2 = Faker::Lorem.sentence
+      question_3 = Faker::Lorem.sentence
+      question_4 = Faker::Lorem.sentence
       answer_1 = Faker::Lorem.sentence
       answer_2 = "https://example.org/invalidLink"
-      checklist = [{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }, { "kind" => Target::CHECKLIST_KIND_LINK, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }]
-      submission_pending.update!(checklist: checklist)
+      answer_3 = Faker::Lorem.sentence
+      answer_4 = Faker::Lorem.sentence
+      submission_checklist_long_text = { "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }
+      submission_checklist_link = { "kind" => Target::CHECKLIST_KIND_LINK, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }
+      submission_checklist_choice = { "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE, "title" => question_3, "result" => answer_3, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }
+      submission_checklist_short_text = { "kind" => Target::CHECKLIST_KIND_SHORT_TEXT, "title" => question_4, "result" => answer_4, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }
+      submission_checklist = [submission_checklist_long_text, submission_checklist_link, submission_checklist_choice, submission_checklist_short_text]
+      submission_pending.update!(checklist: submission_checklist)
 
       sign_in_user coach.user, referer: review_timeline_event_path(submission_pending)
 
@@ -243,9 +251,16 @@ feature 'Submissions review' do
         expect(page).to have_content(answer_1)
       end
 
-      within("div[aria-label='#{submission_pending.checklist.last['title']}']") do
+      within("div[aria-label='#{submission_pending.checklist.second['title']}']") do
         expect(page).to have_content(question_2)
         expect(page).to have_content(answer_2)
+        click_button 'Mark as incorrect'
+        expect(page).to have_content('Incorrect')
+      end
+
+      within("div[aria-label='#{submission_pending.checklist.third['title']}']") do
+        expect(page).to have_content(question_3)
+        expect(page).to have_content(answer_3)
         click_button 'Mark as incorrect'
         expect(page).to have_content('Incorrect')
       end
@@ -271,19 +286,51 @@ feature 'Submissions review' do
 
       click_button 'Save grades'
 
+      expect(page).to have_text('The submission has been marked as reviewed')
+
       dismiss_notification
 
-      within("div[aria-label='#{submission_pending.checklist.last['title']}']") do
+      within("div[aria-label='#{submission_pending.checklist.second['title']}']") do
         expect(page).to have_content('Incorrect')
       end
 
-      expect(submission_pending.reload.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }, { "kind" => Target::CHECKLIST_KIND_LINK, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_FAILED }])
+      new_checklist = [
+        submission_checklist_long_text,
+        { "kind" => Target::CHECKLIST_KIND_LINK, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_FAILED },
+        { "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE, "title" => question_3, "result" => answer_3, "status" => TimelineEvent::CHECKLIST_STATUS_FAILED },
+        submission_checklist_short_text
+      ]
+
+      expect(submission_pending.reload.checklist).to eq(new_checklist)
+
+      # Reload page
+      visit review_timeline_event_path(submission_pending)
+
+      within("div[aria-label='#{submission_pending.checklist.first['title']}']") do
+        find('p', text: question_1).click
+        expect(page).to have_content(answer_1)
+      end
+
+      within("div[aria-label='#{submission_pending.checklist.second['title']}']") do
+        expect(page).to have_content(question_2)
+        expect(page).to have_content(answer_2)
+        expect(page).to have_content('Incorrect')
+      end
+
+      within("div[aria-label='#{submission_pending.checklist.third['title']}']") do
+        expect(page).to have_content(question_3)
+        expect(page).to have_content(answer_3)
+        expect(page).to have_content('Incorrect')
+      end
+
+      within("div[aria-label='#{submission_pending.checklist.last['title']}']") do
+        find('p', text: question_4).click
+        expect(page).to have_content(answer_4)
+      end
 
       click_button('Undo Grading')
-
       expect(page).to have_text("Add Your Feedback")
-
-      expect(submission_pending.reload.checklist).to eq(checklist)
+      expect(submission_pending.reload.checklist).to eq(submission_checklist)
     end
 
     scenario 'coach evaluates a pending submission without giving a feedback', js: true do

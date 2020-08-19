@@ -17,13 +17,12 @@ for Ubuntu also apply to Windows, except where special instructions are noted.
 We'll use [Homebrew](https://brew.sh/) to fetch most of the packages on macOS:
 
 - imagemagick - `brew install imagemagick`
-- redis - `brew install redis`. Start Redis server after installation.
 - nginx - `brew install nginx`. Start Nginx server after installation.
 - postgresql - Install [Postgres.app](http://postgresapp.com) and follow its
   [instructions](https://postgresapp.com/documentation/install.html), **including** the part about setting up
   command-line tools.
 
-**Important**: Make sure that you start both Nginx and Redis after you install them. Instructions on how to do that will
+**Important**: Make sure that you start Nginx after you install them. Instructions on how to do that will
 be printed to the command-line after they're successfully installed.
 
 #### On Ubuntu
@@ -31,7 +30,7 @@ be printed to the command-line after they're successfully installed.
 The following command should install all required dependencies on Ubuntu. If you're using another _flavour_ of Linux,
 adapt the command to work with the package manager available with your distribution.
 
-    $ sudo apt-get install imagemagick redis-server postgresql postgresql-contrib autoconf libtool nginx
+    $ sudo apt-get install imagemagick postgresql postgresql-contrib autoconf libtool nginx
 
 ### Install Ruby and Rubygems
 

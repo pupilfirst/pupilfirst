@@ -4,4 +4,8 @@ class CoursesResolver < ApplicationQuery
   def authorized?
     current_school_admin.present?
   end
+
+  def public?
+    true
+  end
 end

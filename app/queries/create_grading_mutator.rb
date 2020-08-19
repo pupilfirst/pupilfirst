@@ -138,4 +138,8 @@ class CreateGradingMutator < ApplicationQuery
   def failed?
     grade_hash.any? { |ec_id, grade| grade < pass_grades[ec_id] }
   end
+
+  def public?
+    true
+  end
 end

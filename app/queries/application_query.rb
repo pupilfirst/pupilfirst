@@ -11,7 +11,7 @@ class ApplicationQuery
   def initialize(context, attributes = {})
     @context = context
     assign_attributes(attributes)
-    raise UnauthorizedQueryException unless authorized?
+    raise UnauthorizedQueryException if !authorized? || @context[:session].blank? && !public?
   end
 
   def respond_to_missing?(name, *args)
@@ -39,5 +39,9 @@ class ApplicationQuery
 
   def authorized?
     raise 'Please implement the "authorized?" method in the query class.'
+  end
+
+  def public?
+    false
   end
 end

@@ -134,4 +134,19 @@ Rails.application.configure do
 
   # Add the GraphQL probe for Skylight.
   config.skylight.probes << "graphql"
+
+  # Add throttling to application
+  rules = [
+    { method: "POST", limit: 10 },
+    { method: "POST", path: "/graphql", limit: 10 }]
+
+  require 'dalli'
+
+  cache = if ENV["MEMCACHIER_SERVERS"].present?
+    Dalli::Client.new((ENV["MEMCACHIER_SERVERS"] || "").split(","),
+      { :username => ENV["MEMCACHIER_USERNAME"],
+        :password => ENV["MEMCACHIER_PASSWORD"] })
+  end
+
+  config.middleware.use Rack::Throttle::Rules, rules: rules, cache: cache, :key_prefix => :throttle
 end

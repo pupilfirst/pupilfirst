@@ -36,13 +36,5 @@ module Pupilfirst
     %w[presenters services forms/concerns].each do |folder|
       config.autoload_paths.push(Rails.root.join('app', folder))
     end
-
-    # Add throttling to application
-    rules = [
-      { method: "POST", limit: 10 },
-      { method: "POST", path: "/graphql", limit: 10 }]
-    default = 20
-
-    config.middleware.use Rack::Throttle::Rules, rules: rules, default: default
   end
 end

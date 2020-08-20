@@ -142,10 +142,10 @@ Rails.application.configure do
 
   require 'dalli'
 
-  cache = if ENV["MEMCACHIER_SERVERS"].present?
-    Dalli::Client.new((ENV["MEMCACHIER_SERVERS"] || "").split(","),
-      { :username => ENV["MEMCACHIER_USERNAME"],
-        :password => ENV["MEMCACHIER_PASSWORD"] })
+  cache = if ENV['MEMCACHEDCLOUD_SERVERS'].present?
+    Dalli::Client.new((ENV['MEMCACHEDCLOUD_SERVERS']).split(","),
+      { :username => ENV['MEMCACHEDCLOUD_USERNAME'],
+        :password => ENV['MEMCACHEDCLOUD_PASSWORD'] })
   end
 
   config.middleware.use Rack::Throttle::Rules, rules: rules, cache: cache, :key_prefix => :throttle

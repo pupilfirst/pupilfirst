@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_12_054052) do
+ActiveRecord::Schema.define(version: 2020_08_20_130014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -489,6 +489,7 @@ ActiveRecord::Schema.define(version: 2020_08_12_054052) do
     t.datetime "updated_at", null: false
     t.text "about"
     t.jsonb "configuration", default: {}, null: false
+    t.string "webhook_url"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -740,6 +741,17 @@ ActiveRecord::Schema.define(version: 2020_08_12_054052) do
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"
+  end
+
+  create_table "webhook_entries", force: :cascade do |t|
+    t.string "event", null: false
+    t.string "status", null: false
+    t.jsonb "payload", default: {}
+    t.string "webhook_url", null: false
+    t.bigint "school_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["school_id"], name: "index_webhook_entries_on_school_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

@@ -106,8 +106,6 @@ let saveChanges = (certificate, updateCertificateCB, state, send, _event) => {
   let name = Js.String.trim(state.name);
   let {margin, nameOffsetTop, fontSize, qrCorner, qrScale, active} = state;
 
-  Js.log((margin, nameOffsetTop, fontSize, qrCorner, qrScale, active));
-
   UpdateCertificateMutation.make(
     ~id=Certificate.id(certificate),
     ~name,

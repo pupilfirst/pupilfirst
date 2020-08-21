@@ -488,7 +488,6 @@ ActiveRecord::Schema.define(version: 2020_08_20_130014) do
     t.datetime "updated_at", null: false
     t.text "about"
     t.jsonb "configuration", default: {}, null: false
-    t.string "webhook_url"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -742,6 +741,14 @@ ActiveRecord::Schema.define(version: 2020_08_20_130014) do
     t.index ["school_id"], name: "index_users_on_school_id"
   end
 
+  create_table "webhook_endpoints", force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.string "webhook_url", null: false
+    t.boolean "active", default: true
+    t.text "enabled_events", default: [], array: true
+    t.index ["school_id"], name: "index_webhook_endpoints_on_school_id", unique: true
+  end
+
   create_table "webhook_entries", force: :cascade do |t|
     t.string "event", null: false
     t.string "status", null: false
@@ -804,4 +811,5 @@ ActiveRecord::Schema.define(version: 2020_08_20_130014) do
   add_foreign_key "topics", "communities"
   add_foreign_key "user_activities", "users"
   add_foreign_key "users", "schools"
+  add_foreign_key "webhook_endpoints", "schools"
 end

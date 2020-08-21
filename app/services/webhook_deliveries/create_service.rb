@@ -1,4 +1,4 @@
-module WebhookEntries
+module WebhookDeliveries
   class CreateService
     def initialize(school, event_type)
       @school = school
@@ -8,10 +8,10 @@ module WebhookEntries
     def execute(data)
       return if webhook_endpoint.blank?
 
-      return unless @event_type.in? webhook_endpoint.enabled_events
+      return unless @event_type.in? webhook_endpoint.events
 
-      entry = WebhookEntry.create!(event: @event_type, payload: payload(data), school: @school, webhook_url: webhook_endpoint.webhook_url)
-      WebhookEntries::DeliverJob.perform_later(entry)
+      entry = WebhookDelivery.create!(event: @event_type, payload: payload(data), school: @school, webhook_url: webhook_endpoint.webhook_url)
+      WebhookDeliveries::DeliverJob.perform_later(entry)
     end
 
     private

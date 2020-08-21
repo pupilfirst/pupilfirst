@@ -1,4 +1,4 @@
-class WebhookEntry < ApplicationRecord
+class WebhookDelivery < ApplicationRecord
   belongs_to :school
 
   scope :pending, -> { where.not(sent_at: nil) }

@@ -11,7 +11,7 @@ module TimelineEvents
         TimelineEvent.create!(@params).tap do |te|
           @founder.timeline_event_owners.create!(timeline_event: te, latest: true)
           create_team_entries(te) if @params[:target].team_target?
-          WebhookEntries::CreateService.new(@founder.school, WebhookEntry::SUBMISSION_CREATED_EVENT).execute(payload_for_webhook(te))
+          WebhookDeliveries::CreateService.new(@founder.school, WebhookDelivery::SUBMISSION_CREATED_EVENT).execute(payload_for_webhook(te))
           update_latest_flag(te)
         end
       end

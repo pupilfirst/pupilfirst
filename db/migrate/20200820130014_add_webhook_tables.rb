@@ -4,12 +4,14 @@ class AddWebhookTables < ActiveRecord::Migration[6.0]
       t.references :school, null: false, index: { unique: true }, foreign_key: true
       t.string :webhook_url, null: false
       t.boolean :active, default: true
-      t.text :enabled_events, array: true, default: []
+      t.jsonb :events, array: true
     end
 
-    create_table :webhook_entries do |t|
+    create_table :webhook_deliveries do |t|
       t.string :event, null: false
       t.string :status
+      t.jsonb :response_header
+      t.text :response_body
       t.jsonb :payload, default: {}
       t.string :webhook_url, null: false
       t.datetime :sent_at

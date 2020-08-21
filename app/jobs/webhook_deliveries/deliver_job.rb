@@ -1,4 +1,4 @@
-module WebhookEntries
+module WebhookDeliveries
   class DeliverJob < ApplicationJob
     queue_as :default
 
@@ -10,7 +10,7 @@ module WebhookEntries
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = (uri.scheme == 'https')
       response = http.request(request)
-      webhook_entry.update!(sent_at: Time.now, status: response.code)
+      webhook_entry.update!(sent_at: Time.now, status: response.code, response_header: response.header, response_body: response.body)
     end
   end
 end

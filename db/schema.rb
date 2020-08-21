@@ -747,6 +747,7 @@ ActiveRecord::Schema.define(version: 2020_08_20_130014) do
     t.string "status", null: false
     t.jsonb "payload", default: {}
     t.string "webhook_url", null: false
+    t.datetime "sent_at"
     t.bigint "school_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

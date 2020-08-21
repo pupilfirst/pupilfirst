@@ -7,6 +7,7 @@ class AddWebhookTables < ActiveRecord::Migration[6.0]
       t.string :status, null: false
       t.jsonb :payload, default: {}
       t.string :webhook_url, null: false
+      t.datetime :sent_at
       t.references :school, null: false
       t.timestamps
     end

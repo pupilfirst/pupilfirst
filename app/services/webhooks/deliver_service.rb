@@ -1,8 +1,6 @@
 module Webhooks
-  class DeliverJob < ApplicationJob
-    queue_as :default
-
-    def perform
+  class DeliverService
+    def execute
       WebhookEntry.pending.each do |entry|
         uri = URI.parse(entry.webhook_url)
         request = Net::HTTP::Post.new(uri.request_uri)

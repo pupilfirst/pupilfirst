@@ -1,5 +1,5 @@
 module WebhookEntries
-  class DeliverService
+  class DeliverJob
     def perform(webhook_entry)
       uri = URI.parse(webhook_entry.webhook_url)
       request = Net::HTTP::Post.new(uri.request_uri)

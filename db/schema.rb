@@ -744,23 +744,23 @@ ActiveRecord::Schema.define(version: 2020_08_20_130014) do
   create_table "webhook_deliveries", force: :cascade do |t|
     t.string "event", null: false
     t.string "status"
-    t.jsonb "response_header"
+    t.jsonb "response_headers"
     t.text "response_body"
     t.jsonb "payload", default: {}
     t.string "webhook_url", null: false
     t.datetime "sent_at"
-    t.bigint "school_id", null: false
+    t.bigint "course_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["school_id"], name: "index_webhook_deliveries_on_school_id"
+    t.index ["course_id"], name: "index_webhook_deliveries_on_course_id"
   end
 
   create_table "webhook_endpoints", force: :cascade do |t|
-    t.bigint "school_id", null: false
+    t.bigint "course_id", null: false
     t.string "webhook_url", null: false
     t.boolean "active", default: true
     t.jsonb "events", array: true
-    t.index ["school_id"], name: "index_webhook_endpoints_on_school_id", unique: true
+    t.index ["course_id"], name: "index_webhook_endpoints_on_course_id", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -813,5 +813,5 @@ ActiveRecord::Schema.define(version: 2020_08_20_130014) do
   add_foreign_key "topics", "communities"
   add_foreign_key "user_activities", "users"
   add_foreign_key "users", "schools"
-  add_foreign_key "webhook_endpoints", "schools"
+  add_foreign_key "webhook_endpoints", "courses"
 end

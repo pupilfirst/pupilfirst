@@ -9,7 +9,7 @@ class AddWebhookTables < ActiveRecord::Migration[6.0]
 
     create_table :webhook_entries do |t|
       t.string :event, null: false
-      t.string :status, null: false
+      t.string :status
       t.jsonb :payload, default: {}
       t.string :webhook_url, null: false
       t.datetime :sent_at

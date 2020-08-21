@@ -1,11 +1,7 @@
 class WebhookDelivery < ApplicationRecord
-  belongs_to :school
+  belongs_to :course
 
   scope :pending, -> { where.not(sent_at: nil) }
 
-  SUBMISSION_CREATED_EVENT = 'submission.created'
-
-  def self.valid_event_types
-    [SUBMISSION_CREATED_EVENT].freeze
-  end
+  enum event: { submission_created: "submission.created" }
 end

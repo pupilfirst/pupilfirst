@@ -11,7 +11,7 @@ module TimelineEvents
         TimelineEvent.create!(@params).tap do |te|
           @founder.timeline_event_owners.create!(timeline_event: te, latest: true)
           create_team_entries(te) if @params[:target].team_target?
-          WebhookDeliveries::CreateService.new(@founder.school, WebhookDelivery::SUBMISSION_CREATED_EVENT).execute(payload_for_webhook(te))
+          WebhookDeliveries::CreateService.new(@founder.course, WebhookDelivery.events[:submission_created]).execute(te)
           update_latest_flag(te)
         end
       end
@@ -43,32 +43,6 @@ module TimelineEvents
 
     def team_members
       @founder.startup.founders - [@founder]
-    end
-
-    def payload_for_webhook(submission)
-      {
-        id: submission.id,
-        created_at: submission.created_at,
-        updated_at: submission.updated_at,
-        target_id: submission.target_id,
-        checklist: submission.checklist,
-        target: {
-          id: submission.target.id,
-          title: submission.target.title,
-          evaluation_criteria: evaluation_criteria(submission.target)
-        }
-      }
-    end
-
-    def evaluation_criteria(submission)
-      submission.evaluation_criteria.map do |ec|
-        {
-          name: ec.name,
-          max_grade: ec.max_grade,
-          pass_grade: ec.pass_grade,
-          grade_labels: ec.grade_labels
-        }
-      end
     end
   end
 end

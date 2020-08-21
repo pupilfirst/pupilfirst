@@ -2,38 +2,34 @@ module Schools
   class CoursePolicy < ApplicationPolicy
     def index?
       # Can be shown to all school admins.
-      user&.school_admin.present?
+      user&.school_admin.present? && user.school == current_school
     end
 
-    def show?
-      # record should belong to current school
-      return false unless record.school == current_school
-
-      index?
+    def authors?
+      record.school == current_school && index?
     end
+
+    alias attach_images? authors?
+    alias delete_coach_enrollment? authors?
+    alias update_coach_enrollments? authors?
+    alias students? authors?
+    alias inactive_students? authors?
+    alias create_students? authors?
+    alias mark_teams_active? authors?
+    alias exports? authors?
+    alias certificates? authors?
+    alias create_certificate? authors?
 
     def curriculum?
       return false if user.blank?
 
-      # All school admins can view the curricula
-      return true if show?
+      # All school admins can manage course curriculum.
+      return true if authors?
 
-      # All course authors can view the curricula
+      # All course authors can manage course curriculum.
       user.course_authors.where(course: record).present?
     end
 
-    def attach_images?
-      show? && record.present?
-    end
-
-    alias delete_coach_enrollment? attach_images?
-    alias update_coach_enrollments? attach_images?
-    alias students? show?
-    alias inactive_students? show?
-    alias create_students? attach_images?
-    alias mark_teams_active? attach_images?
-    alias exports? show?
-    alias authors? show?
     alias evaluation_criteria? curriculum?
 
     class Scope < ::CoursePolicy::Scope

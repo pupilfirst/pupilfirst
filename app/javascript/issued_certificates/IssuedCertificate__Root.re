@@ -1,25 +1,22 @@
 let str = React.string;
 
 let paddingPercentage = issuedCertificate =>
-  (issuedCertificate |> IssuedCertificate.margin |> string_of_int) ++ "%";
+  (IssuedCertificate.margin(issuedCertificate) |> string_of_int) ++ "%";
 
 let certificateContainerStyle = issuedCertificate =>
-  ReactDOMRe.Style.make(~padding=issuedCertificate |> paddingPercentage, ());
+  ReactDOMRe.Style.make(~padding=paddingPercentage(issuedCertificate), ());
 
 let issuedToStyle = issuedCertificate => {
   ReactDOMRe.Style.make(
     ~top=
-      (issuedCertificate |> IssuedCertificate.nameOffsetTop |> string_of_int)
+      (IssuedCertificate.nameOffsetTop(issuedCertificate) |> string_of_int)
       ++ "%",
     (),
   );
 };
 
-let qrCodeStyle = issuedCertificate => {
-  let padding = issuedCertificate |> paddingPercentage;
-
-  ReactDOMRe.Style.make(~padding, ());
-};
+let qrCodeStyle = issuedCertificate =>
+  ReactDOMRe.Style.make(~padding=paddingPercentage(issuedCertificate), ());
 
 let nameCanvasId = issuedCertificate =>
   "name-canvas-" ++ IssuedCertificate.serialNumber(issuedCertificate);
@@ -35,11 +32,11 @@ let nameCanvas = issuedCertificate =>
 
 let qrPositionClasses = issuedCertificate =>
   switch (issuedCertificate |> IssuedCertificate.qrCorner) {
-  | IssuedCertificate.Hidden => "hidden"
-  | TopLeft => "top-0 left-0"
-  | TopRight => "top-0 right-0"
-  | BottomRight => "bottom-0 right-0"
-  | BottomLeft => "bottom-0 left-0"
+  | `Hidden => "hidden"
+  | `TopLeft => "top-0 left-0"
+  | `TopRight => "top-0 right-0"
+  | `BottomRight => "bottom-0 right-0"
+  | `BottomLeft => "bottom-0 left-0"
   };
 
 let qrContainerStyle = issuedCertificate => {
@@ -48,20 +45,20 @@ let qrContainerStyle = issuedCertificate => {
     /. 100.0
     *. 10.0;
   ReactDOMRe.Style.make(
-    ~width=(widthPercentage |> Js.Float.toString) ++ "%",
+    ~width=Js.Float.toString(widthPercentage) ++ "%",
     (),
   );
 };
 
 let certificateUrl = issuedCertificate => {
   let prefix = Webapi.Dom.(location |> Webapi.Dom.Location.origin);
-  let suffix = "/c/" ++ (issuedCertificate |> IssuedCertificate.serialNumber);
+  let suffix = "/c/" ++ IssuedCertificate.serialNumber(issuedCertificate);
   prefix ++ suffix;
 };
 
 let qrCode = (issuedCertificate, verifyImageUrl) =>
   switch (issuedCertificate |> IssuedCertificate.qrCorner) {
-  | IssuedCertificate.Hidden => React.null
+  | `Hidden => React.null
   | _ =>
     <div
       className={"absolute " ++ qrPositionClasses(issuedCertificate)}
@@ -92,20 +89,23 @@ external getContextWithAlpha:
 let drawName = issuedCertificate => {
   let canvasId = nameCanvasId(issuedCertificate);
 
+  let canvasElement =
+    Webapi.(Dom.document |> Dom.Document.getElementById(canvasId));
+
   let ctx =
-    Webapi.(
-      Dom.document
-      |> Dom.Document.getElementById(canvasId)
-      |> OptionUtils.map(el =>
-           getContextWithAlpha(el, "2d", {"alpha": true})
-         )
+    Belt.Option.map(canvasElement, el =>
+      getContextWithAlpha(el, "2d", {"alpha": true})
     );
+
+  // Begin by clearing the canvas.
+  Belt.Option.forEach(ctx, ctx =>
+    Webapi.Canvas.Canvas2d.clearRect(~x=0.0, ~y=0.0, ~w=2000.0, ~h=100.0, ctx)
+  );
 
   let fontSize =
     50.0
     *. (
-      (issuedCertificate |> IssuedCertificate.fontSize |> float_of_int)
-      /. 100.0
+      (IssuedCertificate.fontSize(issuedCertificate) |> float_of_int) /. 100.0
     );
 
   ctx
@@ -142,13 +142,19 @@ let drawName = issuedCertificate => {
 
 [@react.component]
 let make = (~issuedCertificate, ~verifyImageUrl) => {
-  React.useEffect0(() => {
-    drawName(issuedCertificate);
-    None;
-  });
+  React.useEffect1(
+    () => {
+      drawName(issuedCertificate);
+      None;
+    },
+    [|IssuedCertificate.fontSize(issuedCertificate)|],
+  );
 
   <div className="relative">
-    <img src={issuedCertificate |> IssuedCertificate.imageUrl} />
+    <img
+      className="w-full"
+      src={IssuedCertificate.imageUrl(issuedCertificate)}
+    />
     <div
       className="absolute top-0 left-0 w-full h-full"
       style={certificateContainerStyle(issuedCertificate)}>

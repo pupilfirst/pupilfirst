@@ -9,6 +9,7 @@
   - [Targets](targets.md)
   - [Evaluation Criteria](evaluation_criteria.md)
   - [Communities](/communities.md)
+  - [Certificates](/certificates.md)
   - [Exporting data](/exporting_data.md)
   - [School Customization](/school_customization.md)
   - [School Admins](/school_admins.md)

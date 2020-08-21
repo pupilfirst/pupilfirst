@@ -67,7 +67,8 @@
     "lodash": "^4.17.13",
     "lodash.template": "^4.5.0",
     "sshpk": "^1.13.2",
-    "serialize-javascript": "^4.0.0"
+    "serialize-javascript": "^4.0.0",
+    "dot-prop": "^5.2.0"
   },
   "scripts": {
     "postinstall": "test -n \"$NOYARNPOSTINSTALL\" || yarn run re:build",

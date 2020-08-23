@@ -8,7 +8,6 @@ module WebhookDeliveries
         data: data(event_type, resource),
         event: event_type
       }
-
       uri = URI.parse(webhook_endpoint.webhook_url)
       request = Net::HTTP::Post.new(uri.request_uri)
       request['Content-Type'] = 'application/json'

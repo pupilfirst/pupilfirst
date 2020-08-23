@@ -8,6 +8,8 @@ module WebhookDeliveries
     def execute(resource)
       return if webhook_endpoint.blank?
 
+      return unless webhook_endpoint.active
+
       return unless @event_type.in? webhook_endpoint.events
 
       WebhookDeliveries::DeliverJob.perform_later(@event_type, @course, resource)

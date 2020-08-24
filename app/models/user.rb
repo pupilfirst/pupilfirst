@@ -139,8 +139,4 @@ class User < ApplicationRecord
       title.presence || affiliation.presence
     end
   end
-
-  def encoded_api_token
-    JWT.encode({ api_token: api_token }, ENV.fetch('API_JWT_SECRET_KEY'))
-  end
 end

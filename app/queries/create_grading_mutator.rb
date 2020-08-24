@@ -154,7 +154,7 @@ class CreateGradingMutator < ApplicationQuery
     grade_hash.any? { |ec_id, grade| grade < pass_grades[ec_id] }
   end
 
-  def public?
+  def allow_token_auth?
     true
   end
 end

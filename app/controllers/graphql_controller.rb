@@ -13,6 +13,7 @@ class GraphqlController < ApplicationController
       current_school_admin: current_school_admin,
       session: session,
       notifications: [],
+      token_auth: api_token.present?
     }
 
     result = PupilfirstSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
@@ -34,7 +35,7 @@ class GraphqlController < ApplicationController
   end
 
   def skip_csrf_protection?
-    introspection? || auth_header.present?
+    introspection? || (api_token.present? && current_user.present?)
   end
 
   # Handle form data, JSON body, or a blank value

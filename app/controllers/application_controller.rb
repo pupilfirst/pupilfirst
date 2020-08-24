@@ -145,29 +145,19 @@ class ApplicationController < ActionController::Base
 
   helper_method :pundit_user
 
-  def auth_header
-    request.headers['Authorization']
-  end
+  def api_token
+    @api_token ||= begin
+      header = request.headers['Authorization']&.strip
 
-  def decoded_api_token
-    @decoded_api_token ||=
-      if auth_header
-        token = auth_header.split(' ')[1]
-        begin
-          JWT.decode(token, ENV.fetch('API_JWT_SECRET_KEY'), true, algorithm: 'HS256')
-        rescue JWT::DecodeError
-          render json: "Not a valid API token"
-        end
-      end
+      # Authorization headers are of format "Authorization: <type> <credentials>".
+      # We only care about the supplied credentials.
+      header.split(' ')[-1] if header.present?
+    end
   end
 
   def current_user
-    @current_user ||= if auth_header.present?
-      user = User.find_by(api_token: decoded_api_token[0]['api_token'])
-
-      raise 'User does not exist' if user.blank?
-
-      user
+    if api_token.present?
+      @current_user ||= Users::FindByApiTokenService.new(api_token, current_school).find
     else
       super
     end

@@ -1,4 +1,5 @@
 # JSON fields schema:
+# JSON fields schema:
 #
 # preferences: {
 #   daily_digest: bool - default true. There may be users without this key.
@@ -25,8 +26,6 @@ class User < ApplicationRecord
   has_secure_token :login_token
   has_secure_token :reset_password_token
   has_secure_token :delete_account_token
-  has_secure_token :api_token
-
 
   # database_authenticable is required by devise_for to generate the session routes
   devise :database_authenticatable, :trackable, :rememberable, :omniauthable, :recoverable,
@@ -52,10 +51,11 @@ class User < ApplicationRecord
   end
 
   attr_reader :delete_account_token_original
+  attr_reader :api_token
 
   def regenerate_delete_account_token
     @delete_account_token_original = SecureRandom.urlsafe_base64
-    update!(delete_account_token: Digest::SHA2.hexdigest(@delete_account_token_original),)
+    update!(delete_account_token: Digest::SHA2.hexdigest(@delete_account_token_original))
   end
 
   def self.find_by_hashed_delete_account_token(delete_account_token)
@@ -63,7 +63,8 @@ class User < ApplicationRecord
   end
 
   def regenerate_api_token
-    update!(api_token: Digest::SHA2.hexdigest(SecureRandom.urlsafe_base64))
+    @api_token = SecureRandom.urlsafe_base64
+    update!(api_token_digest: Digest::SHA2.base64digest(@api_token))
   end
 
   def email_bounced?
@@ -138,9 +139,5 @@ class User < ApplicationRecord
     else
       title.presence || affiliation.presence
     end
-  end
-
-  def encoded_api_token
-    JWT.encode({ api_token: api_token }, ENV.fetch('API_JWT_SECRET_KEY'))
   end
 end

@@ -5,7 +5,7 @@ class CoursesResolver < ApplicationQuery
     current_school_admin.present?
   end
 
-  def public?
+  def allow_token_auth?
     true
   end
 end

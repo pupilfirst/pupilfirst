@@ -68,12 +68,7 @@ gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identi
 gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
 gem 'kaminari', '~> 1.2' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
 gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstrap4-kaminari-views' # Bootstrap 4 styling for Kaminari gem
-
-# JSON Web Token
-gem 'jwt'
-
-# API Rate limiting
-gem 'rack-throttle'
+gem 'rack-throttle', '~> 0.7' # API Rate limiting
 
 # Omniauth providers
 gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google

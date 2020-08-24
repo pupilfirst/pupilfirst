@@ -4,16 +4,16 @@ class FacultyController < ApplicationController
   # GET /faculty, GET /coaches
   def index
     @active_tab = params[:active_tab].presence || 'vr-coaches'
-    @skip_container = true
     @faculty = policy_scope(Faculty)
 
     raise_not_found unless @faculty.exists?
+    render layout: 'student'
   end
 
   # GET /faculty/:id, GET /coaches/:id
   def show
-    @skip_container = true
     @faculty = authorize(policy_scope(Faculty).find(params[:id]))
+    render layout: 'student'
   end
 
   # POST /faculty/:id/connect

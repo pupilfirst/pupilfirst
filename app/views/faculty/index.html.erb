@@ -1,0 +1,31 @@
+<%  presenter = FacultyModule::IndexPresenter.new(self) %>
+
+<%# - content_for :head
+  title Coaches | #{current_school.name}
+  meta property="og:title" content="Coaches at #{current_school.name}"
+  meta property="og:type" content="website"
+  meta property="og:url" content=coaches_index_url %>
+
+<% content_for(:head) do %>
+  <title><%= presenter.current_school.name %></title>
+<% end %>
+
+<div id="faculty__index"></div>
+
+<div id="faculty">
+  <div class="max-w-5xl mx-auto px-4">
+    <h1 class="text-4xl text-center mt-3">Coaches</h1>
+    <div>
+      <% if presenter.coaches_subheading.present? %>
+        <p class="text-center">
+          <%= presenter.coaches_subheading %>
+        </p>
+      <% end %>
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 py-8">
+        <% @faculty.each do |coach| %>
+          <%= render 'faculty_card', coach: coach %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

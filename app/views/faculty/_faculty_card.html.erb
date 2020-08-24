@@ -1,0 +1,27 @@
+<% presenter = FacultyModule::FacultyCardPresenter.new(self, coach) %>
+
+<div class="flex flex-col justify-between bg-white rounded-lg shadow-md pt-8">
+  <div class="px-6">
+    <%= image_tag coach.user.image_or_avatar_url(background_shape: :square), class: "mx-auto w-40 h-40 border-4 border-gray-200 rounded-full object-cover", alt: '' %>
+    <div class="py-3">
+      <% if presenter.show? %>
+        <%= link_to coach.name, coach_url(coach, slug: coach.name.parameterize), class:"block text-sm text-center font-semibold" %>
+      <% else %>
+        <p class="text-sm text-center font-semibold"><%= coach.name %></p>
+      <% end %>
+      <p class="text-center text-xs text-gray-700 pt-1">
+        <%= coach.title %>
+      </p>
+    </div>
+  </div>
+  <div class="flex justify-between divide-x border-t divide-gray-400 border-gray-400 rounded-b-lg overflow-hidden">
+    <% if presenter.show? %>
+      <%= link_to coach_url(coach, slug: coach.name.parameterize), class:"flex-1 p-2 text-center text-sm font-semibold hover:bg-gray-100 hover:text-primary-500" do %>
+        Profile
+      <% end %>
+      <% end %>
+    <% if presenter.can_connect? %>
+      <%=  render 'connect_button', faculty: coach %>
+    <% end %>
+  </div>
+</div>

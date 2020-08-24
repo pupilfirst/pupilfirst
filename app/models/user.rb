@@ -1,5 +1,4 @@
 # JSON fields schema:
-# JSON fields schema:
 #
 # preferences: {
 #   daily_digest: bool - default true. There may be users without this key.

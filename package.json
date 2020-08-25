@@ -27,6 +27,7 @@
     "date-fns": "^2.12.0",
     "date-fns-tz": "^1.0.10",
     "dotenv": "^8.0.0",
+    "i18n-js": "^3.7.1",
     "markdown-it": "^10.0.0",
     "markdown-it-linkify-images": "^2.0.0",
     "markdown-it-multimd-table": "^4.0.0",
@@ -39,6 +40,7 @@
     "prismjs": "^1.19.0",
     "prop-types": "^15.7.2",
     "qrcode.react": "^1.0.0",
+    "rails-erb-loader": "^5.5.2",
     "react": "^16.8.6",
     "react-datepicker": "^2.9.6",
     "react-dom": "^16.8.6",
@@ -67,7 +69,8 @@
     "lodash": "^4.17.13",
     "lodash.template": "^4.5.0",
     "sshpk": "^1.13.2",
-    "serialize-javascript": "^4.0.0"
+    "serialize-javascript": "^4.0.0",
+    "dot-prop": "^5.2.0"
   },
   "scripts": {
     "postinstall": "test -n \"$NOYARNPOSTINSTALL\" || yarn run re:build",

@@ -82,6 +82,7 @@ gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling C
 gem 'chartkick', '~> 3.4' # Create beautiful charts with one line of JavaScript.
 gem 'graphql', '~> 1.10' # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
+gem 'i18n-js', '~> 3.7' # Provide Rails I18n translations on Javascript.
 
 # Rails assets!
 source 'https://rails-assets.org' do

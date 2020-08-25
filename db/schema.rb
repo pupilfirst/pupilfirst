@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 2020_08_20_130014) do
     t.boolean "active", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "name", null: false
     t.index ["course_id"], name: "index_certificates_on_course_id"
   end
 

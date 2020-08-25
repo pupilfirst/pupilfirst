@@ -13,7 +13,8 @@ module WebhookDeliveries
       request['Content-Type'] = 'application/json'
       request.body = payload.to_json
       http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = (uri.scheme == 'https')
+      http.read_timeout = Rails.application.secrets.webhook_read_timeout
+      http.use_ssl = (uri.scheme == 'https' && !Rails.env.development?)
       response = http.request(request)
 
       WebhookDelivery.create!(
@@ -21,11 +22,23 @@ module WebhookDeliveries
         payload: payload,
         course: course,
         webhook_url: webhook_endpoint.webhook_url,
-        sent_at: Time.now,
+        sent_at: Time.zone.now,
         status: response.code,
         response_headers: response.header,
         response_body: response.body
       )
+
+    rescue => e
+      if event_type.in? course.webhook_endpoint.events
+        WebhookDelivery.create!(
+          error_class: e.class.name,
+          event: event_type,
+          payload: payload,
+          course: course,
+          webhook_url: webhook_endpoint.webhook_url,
+          sent_at: Time.zone.now,
+        )
+      end
     end
 
     def data(event_type, resource)

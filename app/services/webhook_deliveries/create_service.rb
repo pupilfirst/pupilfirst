@@ -6,9 +6,7 @@ module WebhookDeliveries
     end
 
     def execute(resource)
-      return if webhook_endpoint.blank?
-
-      return unless webhook_endpoint.active
+      return unless webhook_endpoint&.active?
 
       return unless @event_type.in? webhook_endpoint.events
 

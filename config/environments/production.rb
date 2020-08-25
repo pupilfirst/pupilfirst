@@ -63,7 +63,7 @@ Rails.application.configure do
   # Use a different cache store in production.
   config.cache_store = if ENV['MEMCACHEDCLOUD_SERVERS']
     [
-      :mem_cache_store,
+      :dalli_store,
       ENV['MEMCACHEDCLOUD_SERVERS'].split(','),
       {
         username: ENV['MEMCACHEDCLOUD_USERNAME'],

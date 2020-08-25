@@ -751,7 +751,7 @@ DEPENDENCIES
   coderay (~> 1.1)
   coffee-rails (~> 5.0.0)
   cuprite (~> 0.5)
-  dalli (~> 2.7)
+  dalli (~> 2.7.10)
   delayed-web (~> 0.4)
   delayed_job_active_record (~> 4.1)
   derailed_benchmarks (~> 1.3)

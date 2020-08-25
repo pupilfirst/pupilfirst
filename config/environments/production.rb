@@ -137,8 +137,8 @@ Rails.application.configure do
 
   # Add throttling to application
   rules = [
-    { method: "POST", limit: 10 },
-    { method: "POST", path: "/graphql", limit: 10 }]
+    { method: "POST", limit: ENV['GRAPH_API_RATE_LIMIT'] },
+    { method: "POST", path: "/graphql", limit: ENV['GRAPH_API_RATE_LIMIT'] }]
 
   require 'dalli'
 

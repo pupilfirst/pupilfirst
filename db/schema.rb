@@ -733,8 +733,8 @@ ActiveRecord::Schema.define(version: 2020_08_20_130014) do
     t.string "delete_account_token"
     t.datetime "delete_account_sent_at"
     t.datetime "account_deletion_notification_sent_at"
-    t.string "api_token"
-    t.index ["api_token"], name: "index_users_on_api_token", unique: true
+    t.string "api_token_digest"
+    t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
     t.index ["delete_account_token"], name: "index_users_on_delete_account_token", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

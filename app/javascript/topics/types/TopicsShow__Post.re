@@ -5,7 +5,7 @@ type t = {
   editorId: option(string),
   postNumber: int,
   createdAt: Js.Date.t,
-  updatedAt: Js.Date.t,
+  editedAt: option(Js.Date.t),
   totalLikes: int,
   likedByUser: bool,
   replies: array(string),
@@ -25,7 +25,7 @@ let replies = t => t.replies;
 
 let createdAt = t => t.createdAt;
 
-let updatedAt = t => t.updatedAt;
+let editedAt = t => t.editedAt;
 
 let likedByUser = t => t.likedByUser;
 
@@ -91,10 +91,6 @@ let highestPostNumber = posts => {
      );
 };
 
-let edited = t => {
-  t.createdAt != t.updatedAt;
-};
-
 let make =
     (
       id,
@@ -103,7 +99,7 @@ let make =
       editorId,
       postNumber,
       createdAt,
-      updatedAt,
+      editedAt,
       totalLikes,
       likedByUser,
       replies,
@@ -115,7 +111,7 @@ let make =
   editorId,
   postNumber,
   createdAt,
-  updatedAt,
+  editedAt,
   totalLikes,
   likedByUser,
   replies,
@@ -133,7 +129,7 @@ let decode = json =>
     editorId: json |> optional(field("editorId", string)),
     postNumber: json |> field("postNumber", int),
     createdAt: json |> field("createdAt", DateFns.decodeISO),
-    updatedAt: json |> field("updatedAt", DateFns.decodeISO),
+    editedAt: json |> optional(field("editedAt", DateFns.decodeISO)),
     totalLikes: json |> field("totalLikes", int),
     likedByUser: json |> field("likedByUser", bool),
     replies: json |> field("replies", array(decodeReplyId)),

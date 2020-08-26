@@ -1,0 +1,40 @@
+<% content_for(:head) do %>
+  <title>SV.CO Coach: | <%= @faculty.name %></title>
+  <%= stylesheet_pack_tag 'faculty/show', media: 'all' %>
+<% end %>
+
+<div class="fixed z-30 inset-0 overflow-y-auto">
+  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0">
+      <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
+    </div>
+
+    <!-- This element is to centering the modal contents. -->
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
+
+    <div class="inline-block relative bg-white rounded-lg shadow-lg align-bottom mt-16 sm:mb-8  sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+      <div class="block absolute top-0 left-0 -mt-12">
+        <button type="button" class="flex justify-center items-center bg-gray-900 rounded-full p-2 w-10 h-10 text-gray-400 hover:opacity-75 hover:text-gray-500 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150" aria-label="Close">
+          <i class="if i-times-regular if-fw text-2xl"></i>
+        </button>
+      </div>
+      <div>
+        <div class="facultycard__avatar-container bg-gray-200 px-2 py-10 rounded-t-lg">
+          <%= image_tag @faculty.user.image_or_avatar_url(background_shape: :square), class: "mx-auto w-40 h-40 -mb-18 border-4 border-gray-400 rounded-full object-cover", alt: '' %>
+        </div>
+        <div class="py-3 mt-8">
+          <p class="text-sm text-center font-semibold"><%= @faculty.name %></p>
+          <p class="text-center text-xs text-gray-800 pt-1">
+            <%= @faculty.title %>
+          </p>
+        </div>
+        <p class="text-center text-sm px-6"> <%= @faculty.about%> </p>
+        <div class="mt-3 text-center px-4 pb-4 sm:px-6 sm:pb-6">
+          <div class="inline-flex overflow-hidden border rounded border-primary-500 text-primary-500">
+            <%=  render 'connect_button', faculty: @faculty %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

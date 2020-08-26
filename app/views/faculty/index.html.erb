@@ -1,13 +1,10 @@
 <%  presenter = FacultyModule::IndexPresenter.new(self) %>
 
-<%# - content_for :head
-  title Coaches | #{current_school.name}
-  meta property="og:title" content="Coaches at #{current_school.name}"
-  meta property="og:type" content="website"
-  meta property="og:url" content=coaches_index_url %>
-
 <% content_for(:head) do %>
-  <title><%= presenter.current_school.name %></title>
+  <title>Coaches | <%= current_school.name %></title>
+  <meta property="og:title" content="Coaches at <%= current_school.name %>"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="<%= coaches_index_url %>"/>
 <% end %>
 
 <div id="faculty__index"></div>

@@ -1,0 +1,1 @@
+import "../../faculty/show.css";

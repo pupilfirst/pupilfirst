@@ -140,8 +140,6 @@ Rails.application.configure do
     { method: "POST", limit: ENV['GRAPH_API_RATE_LIMIT'] },
     { method: "POST", path: "/graphql", limit: ENV['GRAPH_API_RATE_LIMIT'] }]
 
-  require 'dalli'
-
   cache = if ENV['MEMCACHEDCLOUD_SERVERS'].present?
     Dalli::Client.new((ENV['MEMCACHEDCLOUD_SERVERS']).split(","),
       { :username => ENV['MEMCACHEDCLOUD_USERNAME'],

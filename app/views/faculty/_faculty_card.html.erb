@@ -9,19 +9,23 @@
       <% else %>
         <p class="text-sm text-center font-semibold"><%= coach.name %></p>
       <% end %>
-      <p class="text-center text-xs text-gray-700 pt-1">
+      <p class="text-center text-xs text-gray-800 pt-1">
         <%= coach.title %>
       </p>
     </div>
   </div>
   <div class="flex justify-between divide-x border-t divide-gray-400 border-gray-400 rounded-b-lg overflow-hidden">
     <% if presenter.show? %>
-      <%= link_to coach_url(coach, slug: coach.name.parameterize), class:"flex-1 p-2 text-center text-sm font-semibold hover:bg-gray-100 hover:text-primary-500" do %>
-        Profile
-      <% end %>
-      <% end %>
+      <div class="block flex-1">
+        <%= link_to coach_url(coach, slug: coach.name.parameterize), class:"block w-full px-3 py-2 text-center text-sm font-semibold hover:bg-gray-200 hover:text-primary-500" do %>
+          Profile
+        <% end %>
+      </div>
+    <% end %>
     <% if presenter.can_connect? %>
-      <%=  render 'connect_button', faculty: coach %>
+      <div class="flex-1">
+        <%=  render 'connect_button', faculty: coach %>
+      </div>
     <% end %>
   </div>
 </div>

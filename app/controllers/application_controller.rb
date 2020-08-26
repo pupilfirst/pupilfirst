@@ -145,6 +145,24 @@ class ApplicationController < ActionController::Base
 
   helper_method :pundit_user
 
+  def api_token
+    @api_token ||= begin
+      header = request.headers['Authorization']&.strip
+
+      # Authorization headers are of format "Authorization: <type> <credentials>".
+      # We only care about the supplied credentials.
+      header.split(' ')[-1] if header.present?
+    end
+  end
+
+  def current_user
+    if api_token.present?
+      @current_user ||= Users::FindByApiTokenService.new(api_token, current_school).find
+    else
+      super
+    end
+  end
+
   private
 
   def set_time_zone(&block) # rubocop:disable Naming/AccessorMethodName

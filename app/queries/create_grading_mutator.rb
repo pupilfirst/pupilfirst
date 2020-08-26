@@ -153,4 +153,8 @@ class CreateGradingMutator < ApplicationQuery
   def failed?
     grade_hash.any? { |ec_id, grade| grade < pass_grades[ec_id] }
   end
+
+  def allow_token_auth?
+    true
+  end
 end

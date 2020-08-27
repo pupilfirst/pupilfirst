@@ -272,29 +272,32 @@ let make =
                        className="leading-normal text-sm "
                        profile=Markdown.QuestionAndAnswer
                      />
-                     {post |> Post.edited
-                        ? <div>
-                            <div
-                              className="text-xs mt-1 inline-block px-2 py-1 rounded bg-gray-100 text-xs text-gray-800 ">
-                              <span> {"Last edited by " |> str} </span>
-                              <span className="font-semibold">
-                                {(
-                                   switch (editor) {
-                                   | Some(user) => user |> User.name
-                                   | None => "Deleted User"
-                                   }
-                                 )
-                                 |> str}
-                              </span>
-                              <span>
-                                {" on "
-                                 ++ Post.updatedAt(post)
-                                    ->DateFns.format("do MMMM, yyyy HH:mm")
-                                 |> str}
-                              </span>
-                            </div>
+                     {switch (Post.editedAt(post)) {
+                      | Some(editedAt) =>
+                        <div>
+                          <div
+                            className="mt-1 inline-block px-2 py-1 rounded bg-gray-100 text-xs text-gray-800 ">
+                            <span> {"Last edited by " |> str} </span>
+                            <span className="font-semibold">
+                              {(
+                                 switch (editor) {
+                                 | Some(user) => user |> User.name
+                                 | None => "Deleted User"
+                                 }
+                               )
+                               |> str}
+                            </span>
+                            <span>
+                              {" on "
+                               ++ editedAt->DateFns.format(
+                                    "do MMMM, yyyy HH:mm",
+                                  )
+                               |> str}
+                            </span>
                           </div>
-                        : React.null}
+                        </div>
+                      | None => React.null
+                      }}
                    </div>
                    <div className="hidden lg:block flex-shrink-0 ml-3">
                      {isPostCreator || isCoach || isTopicCreator

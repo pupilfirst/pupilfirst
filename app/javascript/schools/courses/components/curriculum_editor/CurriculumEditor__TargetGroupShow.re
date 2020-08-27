@@ -139,7 +139,7 @@ let make =
              };
 
            <MarkdownBlock
-             className="text-sm py-px"
+             className="text-sm pt-px"
              markdown=description
              profile=Markdown.AreaOfText
            />}

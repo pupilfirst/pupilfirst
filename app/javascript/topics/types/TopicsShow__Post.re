@@ -93,17 +93,17 @@ let highestPostNumber = posts => {
 
 let make =
     (
-      id,
-      body,
-      creatorId,
-      editorId,
-      postNumber,
-      createdAt,
-      editedAt,
-      totalLikes,
-      likedByUser,
-      replies,
-      solution,
+      ~id,
+      ~body,
+      ~creatorId,
+      ~editorId,
+      ~postNumber,
+      ~createdAt,
+      ~editedAt,
+      ~totalLikes,
+      ~likedByUser,
+      ~replies,
+      ~solution,
     ) => {
   id,
   body,

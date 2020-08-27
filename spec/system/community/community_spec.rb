@@ -297,6 +297,10 @@ feature 'Community', js: true do
     find("div[aria-label='Options for post #{reply_1.id}']").click
     click_button 'Mark as solution'
 
+    within("div#post-show-#{reply_1.id}") do
+      expect(page).to have_selector("div[aria-label='Marked as solution icon']")
+    end
+
     # Refresh page and check that marking solution doesn't update last edited info
     visit current_path
 

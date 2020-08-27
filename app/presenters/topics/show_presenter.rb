@@ -57,7 +57,7 @@ module Topics
     end
 
     def details_of_replies
-      replies.map { |reply| reply.as_json(POST_FIELDS).merge(like_data(reply).as_json).merge({ edited_at: reply.text_versions&.last&.updated_at }.as_json) }
+      replies.map { |reply| reply.as_json(POST_FIELDS).merge(like_data(reply).as_json).merge({ edited_at: reply.text_versions.last&.updated_at }.as_json) }
     end
 
     def like_data(post)

@@ -290,4 +290,32 @@ feature 'Community', js: true do
     expect(page).to have_text(topic_1.first_post.body)
     expect(page).to have_text(reply_1.body)
   end
+
+  scenario 'coach marks a post as solution, edits content, and checks last edited info' do
+    sign_in_user(coach.user, referer: topic_path(topic_1))
+
+    find("div[aria-label='Options for post #{reply_1.id}']").click
+    click_button 'Mark as solution'
+
+    # Refresh page and check that marking solution doesn't update last edited info
+    visit current_path
+
+    within("div#post-show-#{reply_1.id}") do
+      expect(page).to_not have_text("Last edited by")
+    end
+
+    # Edits the content of the post
+    find("div[aria-label='Options for post #{reply_1.id}']").click
+    click_button 'Edit Reply'
+
+    within("div#post-show-#{reply_1.id}") do
+      replace_markdown topic_body_for_edit
+      click_button 'Update Reply'
+    end
+
+    # Check for correct last edited message
+    within("div#post-show-#{reply_1.id}") do
+      expect(page).to have_text("Last edited by #{coach.name}")
+    end
+  end
 end

@@ -448,7 +448,7 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
   };
 
 let footerContainerClasses = mode =>
-  "markdown-editor__footer-container border bg-gray-100 flex justify-between items-center "
+  "markdown-editor__footer-container border bg-gray-100 flex justify-end items-center "
   ++ (
     switch (mode) {
     | Windowed(_) => "rounded-b border-gray-400"
@@ -456,7 +456,7 @@ let footerContainerClasses = mode =>
     }
   );
 
-let footer = (oldValue, state, send, onChange) => {
+let footer = (fileUpload, oldValue, state, send, onChange) => {
   let {id} = state;
   let fileFormId = id ++ "-file-form";
   let fileInputId = id ++ "-file-input";
@@ -467,47 +467,55 @@ let footer = (oldValue, state, send, onChange) => {
   | Windowed(`Editor)
   | Fullscreen(`Editor | `Split) =>
     <div className={footerContainerClasses(state.mode)}>
-      <form
-        className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-300 hover:text-primary-500"
-        id=fileFormId>
-        <input
-          name="authenticity_token"
-          type_="hidden"
-          value={AuthenticityToken.fromHead()}
-        />
-        <input
-          className="hidden"
-          type_="file"
-          name="markdown_attachment[file]"
-          id=fileInputId
-          multiple=false
-          onChange={attachFile(fileFormId, oldValue, state, send, onChange)}
-        />
-        {switch (state.uploadState) {
-         | ReadyToUpload(error) =>
-           <label
-             className="text-xs px-3 py-2 flex-grow cursor-pointer"
-             htmlFor=fileInputId>
-             {switch (error) {
-              | Some(error) =>
-                <span className="text-red-500">
-                  <i className="fas fa-exclamation-triangle mr-2" />
-                  {error |> str}
-                </span>
-              | None =>
-                <span>
-                  <i className="far fa-file-image mr-2" />
-                  {"Click here to attach a file." |> str}
+      {fileUpload
+         ? <form
+             className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-300 hover:text-primary-500"
+             id=fileFormId>
+             <input
+               name="authenticity_token"
+               type_="hidden"
+               value={AuthenticityToken.fromHead()}
+             />
+             <input
+               className="hidden"
+               type_="file"
+               name="markdown_attachment[file]"
+               id=fileInputId
+               multiple=false
+               onChange={attachFile(
+                 fileFormId,
+                 oldValue,
+                 state,
+                 send,
+                 onChange,
+               )}
+             />
+             {switch (state.uploadState) {
+              | ReadyToUpload(error) =>
+                <label
+                  className="text-xs px-3 py-2 flex-grow cursor-pointer"
+                  htmlFor=fileInputId>
+                  {switch (error) {
+                   | Some(error) =>
+                     <span className="text-red-500">
+                       <i className="fas fa-exclamation-triangle mr-2" />
+                       {error |> str}
+                     </span>
+                   | None =>
+                     <span>
+                       <i className="far fa-file-image mr-2" />
+                       {"Click here to attach a file." |> str}
+                     </span>
+                   }}
+                </label>
+              | Uploading =>
+                <span className="text-xs px-3 py-2 flex-grow cursor-wait">
+                  <i className="fas fa-spinner fa-pulse mr-2" />
+                  {"Please wait for the file to upload..." |> str}
                 </span>
               }}
-           </label>
-         | Uploading =>
-           <span className="text-xs px-3 py-2 flex-grow cursor-wait">
-             <i className="fas fa-spinner fa-pulse mr-2" />
-             {"Please wait for the file to upload..." |> str}
-           </span>
-         }}
-      </form>
+           </form>
+         : React.null}
       <a
         href="/help/markdown_editor"
         target="_blank"
@@ -610,6 +618,7 @@ let make =
       ~defaultMode=Windowed(`Editor),
       ~placeholder=?,
       ~tabIndex=?,
+      ~fileUpload=true,
     ) => {
   let (state, send) =
     React.useReducerWithMapState(
@@ -754,6 +763,6 @@ let make =
          </div>
        }}
     </div>
-    {footer(value, state, send, onChange)}
+    {footer(fileUpload, value, state, send, onChange)}
   </div>;
 };

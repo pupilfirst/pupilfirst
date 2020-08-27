@@ -132,15 +132,17 @@ let make =
           <h4> {targetGroup |> TargetGroup.name |> str} </h4>
         </div>
         <div className="target-group__description">
-          <p className="pt-px text-sm">
-            {(
-               switch (targetGroup |> TargetGroup.description) {
-               | Some(description) => description
-               | None => ""
-               }
-             )
-             |> str}
-          </p>
+          {let description =
+             switch (targetGroup |> TargetGroup.description) {
+             | Some(description) => description
+             | None => ""
+             };
+
+           <MarkdownBlock
+             className="text-sm py-px"
+             markdown=description
+             profile=Markdown.AreaOfText
+           />}
         </div>
       </div>
       {targetGroups |> List.length == 1
@@ -217,7 +219,7 @@ let make =
                send(UpdateTargetTitle(ReactEvent.Form.target(event)##value))
              }
              placeholder="Create a target"
-             className="target-create__input text-xs text-left bg-gray-100 pr-5 pl-12 py-6 rounded-b appearance-none block w-full text-sm text-gray-900 font-semibold leading-tight hover:bg-gray-100 focus:outline-none focus:bg-white focus:border-gray-500"
+             className="target-create__input text-left bg-gray-100 pr-5 pl-12 py-6 rounded-b appearance-none block w-full text-sm text-gray-900 font-semibold leading-tight hover:bg-gray-100 focus:outline-none focus:bg-white focus:border-gray-500"
            />
            {state.validTargetTitle
               ? <button

@@ -467,55 +467,48 @@ let footer = (fileUpload, oldValue, state, send, onChange) => {
   | Windowed(`Editor)
   | Fullscreen(`Editor | `Split) =>
     <div className={footerContainerClasses(state.mode)}>
-      {fileUpload
-         ? <form
-             className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-300 hover:text-primary-500"
-             id=fileFormId>
-             <input
-               name="authenticity_token"
-               type_="hidden"
-               value={AuthenticityToken.fromHead()}
-             />
-             <input
-               className="hidden"
-               type_="file"
-               name="markdown_attachment[file]"
-               id=fileInputId
-               multiple=false
-               onChange={attachFile(
-                 fileFormId,
-                 oldValue,
-                 state,
-                 send,
-                 onChange,
-               )}
-             />
-             {switch (state.uploadState) {
-              | ReadyToUpload(error) =>
-                <label
-                  className="text-xs px-3 py-2 flex-grow cursor-pointer"
-                  htmlFor=fileInputId>
-                  {switch (error) {
-                   | Some(error) =>
-                     <span className="text-red-500">
-                       <i className="fas fa-exclamation-triangle mr-2" />
-                       {error |> str}
-                     </span>
-                   | None =>
-                     <span>
-                       <i className="far fa-file-image mr-2" />
-                       {"Click here to attach a file." |> str}
-                     </span>
-                   }}
-                </label>
-              | Uploading =>
-                <span className="text-xs px-3 py-2 flex-grow cursor-wait">
-                  <i className="fas fa-spinner fa-pulse mr-2" />
-                  {"Please wait for the file to upload..." |> str}
-                </span>
-              }}
-           </form>
-         : React.null}
+      {<form
+         className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-300 hover:text-primary-500"
+         id=fileFormId>
+         <input
+           name="authenticity_token"
+           type_="hidden"
+           value={AuthenticityToken.fromHead()}
+         />
+         <input
+           className="hidden"
+           type_="file"
+           name="markdown_attachment[file]"
+           id=fileInputId
+           multiple=false
+           onChange={attachFile(fileFormId, oldValue, state, send, onChange)}
+         />
+         {switch (state.uploadState) {
+          | ReadyToUpload(error) =>
+            <label
+              className="text-xs px-3 py-2 flex-grow cursor-pointer"
+              htmlFor=fileInputId>
+              {switch (error) {
+               | Some(error) =>
+                 <span className="text-red-500">
+                   <i className="fas fa-exclamation-triangle mr-2" />
+                   {error |> str}
+                 </span>
+               | None =>
+                 <span>
+                   <i className="far fa-file-image mr-2" />
+                   {"Click here to attach a file." |> str}
+                 </span>
+               }}
+            </label>
+          | Uploading =>
+            <span className="text-xs px-3 py-2 flex-grow cursor-wait">
+              <i className="fas fa-spinner fa-pulse mr-2" />
+              {"Please wait for the file to upload..." |> str}
+            </span>
+          }}
+       </form>
+       ->ReactUtils.nullUnless(fileUpload)}
       <a
         href="/help/markdown_editor"
         target="_blank"

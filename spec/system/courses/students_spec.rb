@@ -467,4 +467,26 @@ feature 'Course students list', js: true do
     expect(page).not_to have_text(team_in_first_page.name)
     expect(page).to have_text('Zucchini')
   end
+
+  scenario 'coach searches student by email' do
+    sign_in_user course_coach.user, referer: students_course_path(course)
+
+    teams_sorted_by_name = course.startups.order('name')
+    team_of_student_to_search = teams_sorted_by_name[5]
+    another_team = teams_sorted_by_name.first
+
+    expect(page).to have_text(another_team.name)
+
+    # Apply search by email filter
+    student_email = team_of_student_to_search.founders.first.email
+    fill_in 'filter', with: student_email
+    click_button "Name or Email: #{student_email}"
+
+    expect(page).not_to have_text(another_team.name)
+    expect(page).to have_text(team_of_student_to_search.name)
+
+    # Clear the filter
+    find("button[title='Remove selection: #{student_email}']").click
+    expect(page).to have_text(another_team.name)
+  end
 end

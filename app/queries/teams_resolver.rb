@@ -59,9 +59,7 @@ class TeamsResolver < ApplicationQuery
 
   def filter_by_search(teams)
     if search.present?
-      teams.where('users.name ILIKE ?', "%#{search}%").or(
-        teams.where('startups.name ILIKE ?', "%#{search}%")
-      )
+      teams.where('users.name ILIKE ?', "%#{search}%").or(teams.where('users.email ILIKE ?', "%#{search}%")).or(teams.where('startups.name ILIKE ?', "%#{search}%"))
     else
       teams
     end

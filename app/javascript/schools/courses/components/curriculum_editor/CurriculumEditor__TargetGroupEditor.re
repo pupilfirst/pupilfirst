@@ -295,20 +295,15 @@ let make =
                   htmlFor="description">
                   {" Description" |> str}
                 </label>
-                <textarea
-                  className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="description"
-                  placeholder="Type target group description"
+                <MarkdownEditor
+                  tabIndex=2
+                  textareaId="description"
+                  onChange={markdown => send(UpdateDescription(markdown))}
                   value={state.description}
-                  onChange={event =>
-                    send(
-                      UpdateDescription(
-                        ReactEvent.Form.target(event)##value,
-                      ),
-                    )
-                  }
-                  rows=5
-                  cols=33
+                  placeholder="Type target group description"
+                  profile=Markdown.AreaOfText
+                  maxLength=10000
+                  fileUpload=false
                 />
               </div>
               {levelEditor(state, levels, send)}

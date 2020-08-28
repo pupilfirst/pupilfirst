@@ -131,19 +131,17 @@ let make =
         <div className="target-group__title pt-6">
           <h4> {targetGroup |> TargetGroup.name |> str} </h4>
         </div>
-        <div className="target-group__description">
-          {let description =
-             switch (targetGroup |> TargetGroup.description) {
-             | Some(description) => description
-             | None => ""
-             };
-
-           <MarkdownBlock
-             className="text-sm pt-px"
-             markdown=description
-             profile=Markdown.AreaOfText
-           />}
-        </div>
+        {switch (TargetGroup.description(targetGroup)) {
+         | Some(description) =>
+           <div className="target-group__description">
+             <MarkdownBlock
+               className="text-sm pt-px"
+               markdown=description
+               profile=Markdown.AreaOfText
+             />
+           </div>
+         | None => React.null
+         }}
       </div>
       {targetGroups |> List.length == 1
          ? React.null

@@ -15,7 +15,8 @@ module TimelineEvents
           id: target.id,
           title: target.title,
           evaluation_criteria: evaluation_criteria
-        }
+        },
+        files: files
       }
     end
 
@@ -34,6 +35,25 @@ module TimelineEvents
           grade_labels: ec.grade_labels
         }
       end
+    end
+
+    def files
+      @submission.timeline_event_files.map do |timeline_event_file|
+        file = timeline_event_file.file
+        file_path = Rails.application.routes.url_helpers.rails_blob_path(file, only_path: true)
+
+        {
+          filename: file.filename.to_s,
+          content_type: file.content_type,
+          byte_size: file.byte_size,
+          checksum: file.checksum,
+          url: "https://#{school.domains.primary.fqdn}#{file_path}"
+        }
+      end
+    end
+
+    def school
+      @school ||= @submission.course.school
     end
   end
 end

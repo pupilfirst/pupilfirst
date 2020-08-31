@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Course review' do
+feature "Coach's review interface" do
   include UserSpecHelper
 
   let(:school) { create :school, :current }
@@ -340,13 +340,18 @@ feature 'Course review' do
   end
 
   context 'when there are over 25 submissions' do
+    let(:student_l1) { team_l1.founders.first }
+    let(:student_l3) { team_l3.founders.first }
+    let(:earliest_submitted) { student_l1.timeline_events.order(created_at: :ASC).first }
+    let(:earliest_reviewed) { student_l3.timeline_events.order(evaluated_at: :ASC).first }
+
     before do
       (1..30).each do |n|
         # Passed submissions
-        create(:timeline_event, :with_owners, owners: [team_l3.founders.first], latest: n == 1, target: target_l1, evaluator_id: course_coach.id, evaluated_at: n.days.ago, passed_at: n.days.ago, created_at: n.days.ago)
+        create(:timeline_event, :with_owners, owners: [student_l3], latest: n == 1, target: target_l1, evaluator_id: course_coach.id, evaluated_at: n.days.ago, passed_at: n.days.ago, created_at: n.days.ago)
 
         # Pending submissions
-        create(:timeline_event, :with_owners, latest: true, target: target_l1, owners: [team_l1.founders.first], created_at: n.days.ago)
+        create(:timeline_event, :with_owners, latest: true, target: target_l1, owners: [student_l1], created_at: n.days.ago)
       end
     end
 
@@ -365,6 +370,7 @@ feature 'Course review' do
 
       expect(page).to have_text(target_l1.title, count: 30)
       expect(page).not_to have_button('Load more...')
+      expect(find("#submissions a:last-child")['href']).to end_with("/submissions/#{earliest_submitted.id}/review")
 
       click_button 'Reviewed'
 
@@ -374,6 +380,7 @@ feature 'Course review' do
 
       expect(page).to have_text(target_l1.title, count: 30)
       expect(page).not_to have_button('Load more...')
+      expect(find("#submissions a:last-child")['href']).to end_with("/submissions/#{earliest_reviewed.id}/review")
     end
   end
 

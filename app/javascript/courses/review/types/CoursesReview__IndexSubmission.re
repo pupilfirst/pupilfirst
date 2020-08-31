@@ -65,36 +65,27 @@ let make =
 
 let makeStatus = (~passedAt, ~feedbackSent) => {passedAt, feedbackSent};
 
-let decodeJs = details =>
-  details
-  |> Js.Array.map(s =>
-       switch (s) {
-       | Some(submission) =>
-         let status =
-           submission##evaluatedAt
-           ->Belt.Option.map(_ =>
-               makeStatus(
-                 ~passedAt=
-                   submission##passedAt->Belt.Option.map(DateFns.decodeISO),
-                 ~feedbackSent=submission##feedbackSent,
-               )
-             );
+let decodeJs = submission => {
+  let status =
+    submission##evaluatedAt
+    ->Belt.Option.map(_ =>
+        makeStatus(
+          ~passedAt=submission##passedAt->Belt.Option.map(DateFns.decodeISO),
+          ~feedbackSent=submission##feedbackSent,
+        )
+      );
 
-         [
-           make(
-             ~id=submission##id,
-             ~title=submission##title,
-             ~createdAt=DateFns.decodeISO(submission##createdAt),
-             ~levelId=submission##levelId,
-             ~userNames=submission##userNames,
-             ~status,
-             ~coachIds=submission##coachIds,
-             ~teamName=submission##teamName,
-           ),
-         ];
-       | None => []
-       }
-     );
+  make(
+    ~id=submission##id,
+    ~title=submission##title,
+    ~createdAt=DateFns.decodeISO(submission##createdAt),
+    ~levelId=submission##levelId,
+    ~userNames=submission##userNames,
+    ~status,
+    ~coachIds=submission##coachIds,
+    ~teamName=submission##teamName,
+  );
+};
 
 let replace = (e, l) => l |> Array.map(s => s.id == e.id ? e : s);
 

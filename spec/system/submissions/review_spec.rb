@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Submissions review' do
+feature 'Submission review overlay' do
   include UserSpecHelper
   include MarkdownEditorHelper
   include NotificationHelper

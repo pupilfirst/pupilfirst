@@ -7,6 +7,7 @@ class Topic < ApplicationRecord
   has_many :posts, dependent: :restrict_with_error
   has_one :first_post, -> { where post_number: 1 }, class_name: 'Post', inverse_of: :topic
   has_many :replies, -> { where('post_number > ?', 1) }, class_name: 'Post', inverse_of: :topic
+  has_many :live_replies, -> { where('post_number > ?', 1).merge(Post.live) }, class_name: 'Post', inverse_of: :topic
   has_many :post_likes, through: :posts
 
   scope :live, -> { where(archived: false) }

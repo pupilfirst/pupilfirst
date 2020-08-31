@@ -18,7 +18,7 @@ feature 'Community', js: true do
   let(:student_2) { create :student, startup: team }
   let(:coach) { create :faculty, school: school }
   let(:school_admin) { create :school_admin }
-  let!(:topic_1) { create :topic, :with_first_post, community: community, creator: student_1.user }
+  let!(:topic_1) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 1.second.ago }
   let!(:topic_2) { create :topic, :with_first_post, community: community, creator: student_1.user }
   let!(:topic_3) { create :topic, :with_first_post, community: community, target: target, creator: student_1.user }
   let!(:reply_1) { create :post, topic: topic_1, creator: student_1.user, post_number: 2 }
@@ -320,6 +320,33 @@ feature 'Community', js: true do
     # Check for correct last edited message
     within("div#post-show-#{reply_1.id}") do
       expect(page).to have_text("Last edited by #{coach.name}")
+    end
+  end
+
+  context 'when a topic has a archived replies and likes on its posts' do
+    let(:archived_reply) { create :post, topic: topic_1, creator: student_1.user, post_number: 3, archiver: student_1.user, archived_at: Time.zone.now }
+
+    before do
+      # A like on an archived post or a reply should not be counted.
+      create :post_like, post: archived_reply
+      create :post_like, post: reply_1
+
+      # Likes on the first post and replies should be counted.
+      create_list :post_like, 3, post: topic_1.first_post
+    end
+
+    scenario 'user views likes and replies on the index page' do
+      sign_in_user(student_2.user, referer: community_path(community))
+
+      within(find("div[aria-label='Topic #{topic_1.id}']")) do
+        within(find('span[aria-label="Likes"]')) do
+          expect(page).to have_text(3)
+        end
+
+        within(find('span[aria-label="Replies"]')) do
+          expect(page).to have_text(1)
+        end
+      end
     end
   end
 end

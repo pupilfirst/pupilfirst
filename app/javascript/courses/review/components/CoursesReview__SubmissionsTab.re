@@ -51,21 +51,12 @@ let updateSubmissions =
       updateSubmissionsCB,
       nodes,
     ) => {
+  let newSubmissionsList =
+    Js.Array.map(IndexSubmission.decodeJs, nodes)
+    ->Js.Array.concat(submissions);
+
   updateSubmissionsCB(
-    ~submissions=
-      submissions
-      |> Array.append(
-           (
-             switch (nodes) {
-             | None => [||]
-             | Some(submissionsArray) =>
-               submissionsArray |> IndexSubmission.decodeJs
-             }
-           )
-           |> Array.to_list
-           |> List.flatten
-           |> Array.of_list,
-         ),
+    ~submissions=newSubmissionsList,
     ~selectedTab,
     ~hasNextPage,
     ~totalCount,

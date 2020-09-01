@@ -104,10 +104,11 @@ module CourseExports
           user.title,
           user.affiliation,
           student.startup.tags.order(:name).pluck(:name).join(', '),
+          last_sign_in_at(user)
         ] + average_grades_for_student(student)
       end
 
-      [['ID', 'Email Address', 'Name', 'Level', 'Title', 'Affiliation', 'Tags'] + evaluation_criteria_names] + rows
+      [['ID', 'Email Address', 'Name', 'Level', 'Title', 'Affiliation', 'Tags', 'Last Sign In At'] + evaluation_criteria_names] + rows
     end
 
     def submission_rows
@@ -144,6 +145,10 @@ module CourseExports
         scope = course.founders.active.includes(:user, :level)
         tags.present? ? scope.joins(:startup).merge(Startup.tagged_with(tags, any: true)) : scope
       end.order('users.email')
+    end
+
+    def last_sign_in_at(user)
+      user.last_sign_in_at&.iso8601 || ''
     end
   end
 end

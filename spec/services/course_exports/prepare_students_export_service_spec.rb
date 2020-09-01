@@ -9,7 +9,7 @@ describe CourseExports::PrepareStudentsExportService do
   let(:level_2) { create :level, :two, course: level_1.course }
   let(:team_1) { create :team, level: level_2, tag_list: ['tag 1', 'tag 2'] }
   let(:team_2) { create :team, level: level_1 }
-  let(:user_1) { create :user, email: 'a@example.com' }
+  let(:user_1) { create :user, email: 'a@example.com', last_sign_in_at: 2.days.ago }
   let(:user_2) { create :user, email: 'b@example.com' }
   let(:student_1) { create :student, startup: team_1, user: user_1 }
   let!(:student_2) { create :student, startup: team_2, user: user_2 }
@@ -54,6 +54,10 @@ describe CourseExports::PrepareStudentsExportService do
     { 'formula' => "oooc:=HYPERLINK(\"https://test.host/students/#{student.id}/report\"; \"#{student.id}\")" }
   end
 
+  def last_sign_in_at(student)
+    student.user.last_sign_in_at&.iso8601 || ''
+  end
+
   let(:expected_data) do
     [
       {
@@ -73,9 +77,9 @@ describe CourseExports::PrepareStudentsExportService do
       {
         title: 'Students',
         rows: [
-          ['ID', 'Email Address', 'Name', 'Level', 'Title', 'Affiliation', 'Tags', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
-          [report_link_formula(student_1), student_1.email, student_1.name, student_1.level.number, student_1.title, student_1.affiliation, 'tag 1, tag 2', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s],
-          [report_link_formula(student_2), student_2.email, student_2.name, student_2.level.number, student_2.title, student_2.affiliation, '', student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s],
+          ['ID', 'Email Address', 'Name', 'Level', 'Title', 'Affiliation', 'Tags', 'Last Sign In At', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
+          [report_link_formula(student_1), student_1.email, student_1.name, student_1.level.number, student_1.title, student_1.affiliation, 'tag 1, tag 2', last_sign_in_at(student_1), student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s],
+          [report_link_formula(student_2), student_2.email, student_2.name, student_2.level.number, student_2.title, student_2.affiliation, '', last_sign_in_at(student_2), student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_2_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s],
         ],
       },
       {
@@ -127,8 +131,8 @@ describe CourseExports::PrepareStudentsExportService do
           {
             title: 'Students',
             rows: [
-              ['ID', 'Email Address', 'Name', 'Level', 'Title', 'Affiliation', 'Tags', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
-              [report_link_formula(student_1), student_1.email, student_1.name, student_1.level.number, student_1.title, student_1.affiliation, 'tag 1, tag 2', student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s],
+              ['ID', 'Email Address', 'Name', 'Level', 'Title', 'Affiliation', 'Tags', 'Last Sign In At', 'Criterion A (2,3) - Average', 'Criterion B (2,3) - Average'],
+              [report_link_formula(student_1), student_1.email, student_1.name, student_1.level.number, student_1.title, student_1.affiliation, 'tag 1, tag 2', last_sign_in_at(student_1), student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_1).grade.to_f.to_s, student_1_reviewed_submission.timeline_event_grades.find_by(evaluation_criterion: evaluation_criterion_2).grade.to_f.to_s],
             ],
           },
           {

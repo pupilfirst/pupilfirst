@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_20_130014) do
+ActiveRecord::Schema.define(version: 2020_09_01_104722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -762,6 +762,7 @@ ActiveRecord::Schema.define(version: 2020_08_20_130014) do
     t.string "webhook_url", null: false
     t.boolean "active", default: true
     t.jsonb "events", array: true
+    t.string "hmac_key", null: false
     t.index ["course_id"], name: "index_webhook_endpoints_on_course_id", unique: true
   end
 

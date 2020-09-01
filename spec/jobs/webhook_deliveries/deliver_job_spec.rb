@@ -8,15 +8,24 @@ describe WebhookDeliveries::DeliverJob do
   let(:submission) { create :timeline_event }
   let!(:webhook_endpoint) { create :webhook_endpoint, course: course }
 
+  let(:payload) do
+    {
+      data: TimelineEvents::CreateWebhookDataService.new(submission).data,
+      event: event_type
+    }.to_json
+  end
+
+  let(:response_headers) { { 'header' => ['Header-Value'] } }
+  let(:response_body) { Faker::Lorem.word }
+
   describe '#perform' do
-    it 'delivers the data for a valid event' do
-      payload = {
-        data: TimelineEvents::CreateWebhookDataService.new(submission).data,
-        event: event_type
-      }
-      response_headers = { 'header' => ['Header-Value'] }
-      response_body = "body"
-      stub_request(:post, webhook_endpoint.webhook_url).with(body: payload.to_json).to_return(headers: response_headers, body: response_body, status: :ok)
+    it 'delivers the data for valid events as an authenticated request' do
+      expected_hmac = OpenSSL::HMAC.hexdigest('SHA256', webhook_endpoint.hmac_key, payload)
+
+      stub_request(:post, webhook_endpoint.webhook_url).with(
+        body: payload,
+        headers: { Authorization: "PF-HMAC-SHA256 #{expected_hmac}" }
+      ).to_return(headers: response_headers, body: response_body, status: :ok)
 
       expect { subject.perform_now(event_type, course, submission) }.to change { WebhookDelivery.count }.by(1)
 
@@ -30,11 +39,7 @@ describe WebhookDeliveries::DeliverJob do
     end
 
     it 'record the error class when the request fails' do
-      payload = {
-        data: TimelineEvents::CreateWebhookDataService.new(submission).data,
-        event: event_type
-      }
-      stub_request(:post, webhook_endpoint.webhook_url).with(body: payload.to_json).to_timeout
+      stub_request(:post, webhook_endpoint.webhook_url).with(body: payload).to_timeout
 
       expect { subject.perform_now(event_type, course, submission) }.to change { WebhookDelivery.count }.by(1)
 
@@ -46,10 +51,11 @@ describe WebhookDeliveries::DeliverJob do
       expect(last_delivery.course_id).to eq(course.id)
     end
 
-    context 'for random events' do
+    context 'for invalid events' do
       let!(:event_type) { Faker::Lorem.word }
+
       it 'will not deliver the event' do
-        expect { subject.perform_now(event_type, course, submission) }.not_to change { WebhookDelivery.count } # rubocop:disable Lint/AmbiguousBlockAssociation
+        expect { subject.perform_now(event_type, course, submission) }.to raise_error("Unknown webhook event type: #{event_type}")
       end
     end
   end

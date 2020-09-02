@@ -5,7 +5,7 @@ class StudentDetailsResolver < ApplicationQuery
     {
       email: student.email,
       targets_completed: targets_completed,
-      total_targets: total_targets,
+      total_targets: current_course_targets.count,
       level_id: level.id,
       evaluation_criteria: evaluation_criteria,
       quiz_scores: quiz_scores,
@@ -39,8 +39,8 @@ class StudentDetailsResolver < ApplicationQuery
     submissions.passed.distinct(:target_id).count(:target_id)
   end
 
-  def total_targets
-    course.targets.live.count
+  def current_course_targets
+    @current_course_targets ||= course.targets.live.joins(:level).where.not(levels: { number: 0 })
   end
 
   def quiz_scores
@@ -78,7 +78,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def submissions
-    @submissions ||= student.timeline_events
+    @submissions ||= student.timeline_events.joins(target: :level).where(targets: { id: current_course_targets }).where.not(levels: { number: 0 })
   end
 
   def submissions_for_grades

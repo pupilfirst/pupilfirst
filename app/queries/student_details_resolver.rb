@@ -78,7 +78,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def submissions
-    @submissions ||= student.timeline_events.joins(target: :level).where(targets: { id: current_course_targets }).where.not(levels: { number: 0 })
+    @submissions ||= student.timeline_events.joins(target: :level).where(targets: { id: current_course_targets })
   end
 
   def submissions_for_grades

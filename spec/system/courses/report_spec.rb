@@ -185,4 +185,36 @@ feature 'Students view performance report and submissions overview', js: true do
       end
     end
   end
+
+  context 'course has targets in level zero' do
+    let!(:level_0) { create :level, :zero, course: course }
+    let!(:target_group_l0) { create :target_group, level: level_0 }
+    let!(:target_l0) { create :target, :for_founders, target_group: target_group_l0 }
+
+    scenario 'checks status of total targets completed in report' do
+      sign_in_user student.user, referer: report_course_path(course)
+
+      # Check that level zero targets are not counted in the targets overview
+      within("div[aria-label='target-completion-status']") do
+        expect(page).to have_content('83%')
+        expect(page).to have_content('5/6 Targets')
+      end
+    end
+  end
+
+  context 'course has archived targets' do
+    let!(:target_4) { create :target, :for_founders, :archived, target_group: target_group_l3 }
+    # Archive target with verified submission for the student
+    let(:target_l3) { create :target, :for_founders, :archived, target_group: target_group_l3 }
+
+    scenario 'checks status of total targets completed in report' do
+      sign_in_user student.user, referer: report_course_path(course)
+
+      # Check that level zero targets are not counted in the targets overview
+      within("div[aria-label='target-completion-status']") do
+        expect(page).to have_content('100%')
+        expect(page).to have_content('4/4 Targets')
+      end
+    end
+  end
 end

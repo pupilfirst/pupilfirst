@@ -432,5 +432,46 @@ feature 'Target Details Editor', js: true do
       expect(target_l2_2.prerequisite_targets).to eq([])
       expect(target_l2_3.reload.prerequisite_targets).to eq([])
     end
+
+    context 'admin modifies target that currently has submissions' do
+      # let!(:student) { create :founder, course: course }
+      let!(:submission_for_auto_verified_target) { create :timeline_event, target: target_1_l1, passed_at: 1.day.ago }
+
+      scenario 'admin updates target title' do
+        sign_in_user school_admin.user, referer: details_school_course_target_path(course_id: course.id, id: target_1_l1.id)
+
+        expect(page).to have_text('Title')
+
+        fill_in 'title', with: new_target_title, fill_options: { clear: :backspace }
+
+        click_button 'Update Target'
+        expect(page).to have_text("Target updated successfully")
+        dismiss_notification
+
+        expect(target_1_l1.reload.timeline_events.count).to eq(1)
+      end
+
+      scenario 'admin changes target from auto-verified to evaluated' do
+        sign_in_user school_admin.user, referer: details_school_course_target_path(course_id: course.id, id: target_1_l1.id)
+
+        expect(page).to have_text('Title')
+
+        within("div#evaluated") do
+          click_button 'Yes'
+        end
+
+        find("div[title='Select #{evaluation_criterion.display_name}']").click
+
+        within("div#visibility") do
+          click_button 'Live'
+        end
+
+        click_button 'Update Target'
+        expect(page).to have_text("Target updated successfully")
+        dismiss_notification
+
+        expect(target_1_l1.reload.timeline_events.count).to eq(0)
+      end
+    end
   end
 end

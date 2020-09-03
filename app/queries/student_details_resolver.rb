@@ -40,7 +40,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def current_course_targets
-    @current_course_targets ||= course.targets.live.joins(:level).where.not(levels: { number: 0 })
+    course.targets.live.joins(:level).where.not(levels: { number: 0 })
   end
 
   def quiz_scores

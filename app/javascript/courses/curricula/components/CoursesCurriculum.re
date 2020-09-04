@@ -569,17 +569,19 @@ let make =
               </div>
             : React.null}
          {currentLevel |> Level.isUnlocked || accessLockedLevels
-            ? targetGroupsInLevel
-              |> TargetGroup.sort
-              |> List.map(targetGroup =>
-                   renderTargetGroup(
-                     targetGroup,
-                     targets,
-                     state.statusOfTargets,
-                   )
-                 )
-              |> Array.of_list
-              |> React.array
+            ? ListUtils.isEmpty(targetGroupsInLevel)
+                ? <div> {"Content for empty level" |> str} </div>
+                : targetGroupsInLevel
+                  |> TargetGroup.sort
+                  |> List.map(targetGroup =>
+                       renderTargetGroup(
+                         targetGroup,
+                         targets,
+                         state.statusOfTargets,
+                       )
+                     )
+                  |> Array.of_list
+                  |> React.array
             : handleLockedLevel(currentLevel)}
        </div>
      }}

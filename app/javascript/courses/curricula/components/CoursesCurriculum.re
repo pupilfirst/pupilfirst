@@ -2,6 +2,8 @@
 
 [@bs.module "../images/level-lock.svg"]
 external levelLockedImage: string = "default";
+[@bs.module "../images/level-empty.svg"]
+external levelEmptyImage: string = "default";
 
 open CoursesCurriculum__Types;
 
@@ -103,9 +105,7 @@ let addSubmission = (setState, latestSubmission) =>
 
 let handleLockedLevel = level =>
   <div className="max-w-xl mx-auto text-center mt-4">
-    <div className="font-semibold text-2xl font-bold px-3">
-      {"Level Locked" |> str}
-    </div>
+    <div className="text-2xl font-bold px-3"> {"Level Locked" |> str} </div>
     <img className="max-w-sm mx-auto" src=levelLockedImage />
     {switch (level |> Level.unlockAt) {
      | Some(date) =>
@@ -570,7 +570,12 @@ let make =
             : React.null}
          {currentLevel |> Level.isUnlocked || accessLockedLevels
             ? ListUtils.isEmpty(targetGroupsInLevel)
-                ? <div> {"Content for empty level" |> str} </div>
+                ? <div className="mx-auto py-10">
+                    <img className="max-w-sm mx-auto" src=levelEmptyImage />
+                    <p className="text-center font-semibold text-lg mt-1">
+                      {"There's no content for you to see yet." |> str}
+                    </p>
+                  </div>
                 : targetGroupsInLevel
                   |> TargetGroup.sort
                   |> List.map(targetGroup =>

@@ -11,7 +11,7 @@ feature 'Certificate verification', js: true do
   end
 
   scenario 'user verifies certificate' do
-    sign_in_user user, referer: issued_certificate_path(serial_number: issued_certificate.serial_number)
+    sign_in_user user, referrer: issued_certificate_path(serial_number: issued_certificate.serial_number)
 
     expect(page).to have_text(user.name)
     expect(page).to have_text(issued_certificate.certificate.course.name)

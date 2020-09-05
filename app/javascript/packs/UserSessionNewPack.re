@@ -1,15 +1,14 @@
 let decodeProps = json =>
   Json.Decode.(
     json |> field("schoolName", string),
-    json |> field("referer", optional(string)),
     json |> field("fqdn", string),
     json |> optional(field("oauthHost", string)),
   );
 
-let (schoolName, referer, fqdn, oauthHost) =
+let (schoolName, fqdn, oauthHost) =
   DomUtils.parseJSONTag(~id="user-session-new-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <UserSessionNew schoolName referer fqdn oauthHost />,
+  <UserSessionNew schoolName fqdn oauthHost />,
   "user-session-new",
 );

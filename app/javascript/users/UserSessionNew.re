@@ -39,17 +39,12 @@ let handleSignInWithPasswordCB = response => {
 };
 let handleSignInWithEmailCB = (setView, _) => setView(_ => SignInEmailSent);
 
-let signInWithPassword = (referer, email, password, setSaving, sharedDevice) => {
+let signInWithPassword = (email, password, setSaving, sharedDevice) => {
   let payload = Js.Dict.empty();
   Js.Dict.set(
     payload,
     "authenticity_token",
     AuthenticityToken.fromHead() |> Js.Json.string,
-  );
-  Js.Dict.set(
-    payload,
-    "referer",
-    Belt.Option.getWithDefault(referer, "") |> Js.Json.string,
   );
   Js.Dict.set(payload, "email", email |> Js.Json.string);
   Js.Dict.set(
@@ -69,7 +64,7 @@ let signInWithPassword = (referer, email, password, setSaving, sharedDevice) => 
   );
 };
 
-let sendSignInEmail = (email, referer, setView, setSaving, sharedDevice) => {
+let sendSignInEmail = (email, setView, setSaving, sharedDevice) => {
   let payload = Js.Dict.empty();
   Js.Dict.set(
     payload,
@@ -77,11 +72,7 @@ let sendSignInEmail = (email, referer, setView, setSaving, sharedDevice) => {
     AuthenticityToken.fromHead() |> Js.Json.string,
   );
   Js.Dict.set(payload, "email", email |> Js.Json.string);
-  Js.Dict.set(
-    payload,
-    "referer",
-    Belt.Option.getWithDefault(referer, "") |> Js.Json.string,
-  );
+
   Js.Dict.set(
     payload,
     "shared_device",
@@ -138,7 +129,7 @@ let headerText = (view, schoolName) =>
   | ForgotPassword => "Reset password"
   };
 
-let federatedLoginUrl = (oauthHost, fqdn, provider, referer) =>
+let federatedLoginUrl = (oauthHost, fqdn, provider) =>
   "//"
   ++ oauthHost
   ++ "/oauth/"
@@ -151,8 +142,7 @@ let federatedLoginUrl = (oauthHost, fqdn, provider, referer) =>
     }
   )
   ++ "?fqdn="
-  ++ fqdn
-  ++ referer->Belt.Option.mapWithDefault("", r => "&referer=" ++ r);
+  ++ fqdn;
 
 let buttonText = provider =>
   "Continue "
@@ -189,14 +179,14 @@ let providers = () => {
   DomUtils.isDevelopment()
     ? defaultProvides |> Array.append([|Developer|]) : defaultProvides;
 };
-let renderFederatedlogin = (fqdn, oauthHost, referer) =>
+let renderFederatedlogin = (fqdn, oauthHost) =>
   <div className="flex flex-col pb-5 md:px-9 items-center max-w-sm mx-auto">
     {providers()
      |> Array.map(provider =>
           <a
             key={buttonText(provider)}
             className={buttonClasses(provider)}
-            href={federatedLoginUrl(oauthHost, fqdn, provider, referer)}>
+            href={federatedLoginUrl(oauthHost, fqdn, provider)}>
             <span className="w-1/5 text-right text-lg">
               <FaIcon classes={iconClasses(provider)} />
             </span>
@@ -214,7 +204,6 @@ let validEmail = email => email |> EmailUtils.isInvalid(false);
 
 let renderSignInWithEmail =
     (
-      referer,
       email,
       setEmail,
       password,
@@ -288,13 +277,7 @@ let renderSignInWithEmail =
          ? <button
              disabled={saving || validEmail(email)}
              onClick={_ =>
-               signInWithPassword(
-                 referer,
-                 email,
-                 password,
-                 setSaving,
-                 sharedDevice,
-               )
+               signInWithPassword(email, password, setSaving, sharedDevice)
              }
              className="btn btn-success btn-large text-center w-full">
              {saving
@@ -307,13 +290,7 @@ let renderSignInWithEmail =
          : <button
              disabled={saving || validEmail(email)}
              onClick={_ =>
-               sendSignInEmail(
-                 email,
-                 referer,
-                 setView,
-                 setSaving,
-                 sharedDevice,
-               )
+               sendSignInEmail(email, setView, setSaving, sharedDevice)
              }
              className="btn btn-primary btn-large text-center w-full">
              {saving
@@ -364,7 +341,7 @@ let renderForgotPassword = (email, saving, setEmail, setSaving, setView) =>
   </div>;
 
 [@react.component]
-let make = (~schoolName, ~referer, ~fqdn, ~oauthHost) => {
+let make = (~schoolName, ~fqdn, ~oauthHost) => {
   let (view, setView) =
     React.useState(() =>
       oauthHost
@@ -386,11 +363,10 @@ let make = (~schoolName, ~referer, ~fqdn, ~oauthHost) => {
       </div>
       {switch (oauthHost, view) {
        | (Some(oauthHost), FederatedSignIn) =>
-         renderFederatedlogin(fqdn, oauthHost, referer)
+         renderFederatedlogin(fqdn, oauthHost)
        | (None, FederatedSignIn)
        | (_, SignInWithPassword) =>
          renderSignInWithEmail(
-           referer,
            email,
            setEmail,
            password,

@@ -45,7 +45,7 @@ feature 'School students index', js: true do
     end
 
     scenario 'School admin adds new students and a team' do
-      sign_in_user school_admin.user, referer: school_course_students_path(course)
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       expect(page).to have_text(startup_1.founders.first.name)
       expect(page).to have_text(startup_2.founders.last.name)
@@ -180,7 +180,7 @@ feature 'School students index', js: true do
     end
 
     scenario 'school admin adds a student after disabling the notify option' do
-      sign_in_user school_admin.user, referer: school_course_students_path(course)
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       click_button 'Add New Students'
       fill_in 'Name', with: name_1
@@ -202,7 +202,7 @@ feature 'School students index', js: true do
       let(:faculty) { create :faculty, user: coach_user }
 
       scenario 'School admin adds a coach as a student' do
-        sign_in_user school_admin.user, referer: school_course_students_path(course)
+        sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
         click_button 'Add New Students'
 
@@ -244,7 +244,7 @@ feature 'School students index', js: true do
       end
 
       scenario 'School admin tries to add the existing student alongside a new student' do
-        sign_in_user school_admin.user, referer: school_course_students_path(course)
+        sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
         click_button 'Add New Students'
 
@@ -293,7 +293,7 @@ feature 'School students index', js: true do
       let(:new_title) { Faker::Job.title }
 
       scenario 'School admin edits student details' do
-        sign_in_user school_admin.user, referer: school_course_students_path(course)
+        sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
         # Update a student
         find("a", text: name_1).click
@@ -376,7 +376,7 @@ feature 'School students index', js: true do
       let(:access_ends_at) { 1.day.from_now }
 
       scenario 'School admin updates access end date' do
-        sign_in_user school_admin.user, referer: school_course_students_path(course)
+        sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
         expect(page).to have_link("Inactive Students", href: school_course_inactive_students_path(course))
 
@@ -414,7 +414,7 @@ feature 'School students index', js: true do
       create :faculty_startup_enrollment, :with_course_enrollment, faculty: course_coach, startup: startup_2
       create :faculty_startup_enrollment, :with_course_enrollment, faculty: course_coach, startup: team_with_lone_student
 
-      sign_in_user school_admin.user, referer: school_course_students_path(course)
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       # Mark a student in a team of more than one students as dropped out.
       founder = startup_2.founders.last
@@ -471,7 +471,7 @@ feature 'School students index', js: true do
     end
 
     scenario 'school admin tries to add the same email twice' do
-      sign_in_user school_admin.user, referer: school_course_students_path(course)
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       # Add a student
       click_button 'Add New Students'
@@ -496,7 +496,7 @@ feature 'School students index', js: true do
     end
 
     scenario 'school admin tries to filter students' do
-      sign_in_user school_admin.user, referer: school_course_students_path(course)
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       # filter by level
       fill_in "search", with: "level"
@@ -567,7 +567,7 @@ feature 'School students index', js: true do
     end
 
     scenario 'school admin can order students' do
-      sign_in_user school_admin.user, referer: school_course_students_path(course)
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       click_button "Order by Name"
       click_button "Order by Last Created"

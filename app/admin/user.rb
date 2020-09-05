@@ -93,7 +93,7 @@ ActiveAdmin.register User do
       flash[:error] = 'You may not impersonate another admin user!'
     else
       impersonate_user(user)
-      redirect_to params[:referer] || root_url
+      redirect_to params[:referrer] || root_url
       return
     end
 

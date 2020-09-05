@@ -78,7 +78,7 @@ feature 'Index spec', js: true do
     let(:student) { create :student, startup: team }
 
     scenario 'students can jump directly into the course curriculum' do
-      sign_in_user student.user, referer: root_path
+      sign_in_user student.user, referrer: root_path
 
       expect(page).to have_link('View Course', href: curriculum_course_path(course_1))
     end

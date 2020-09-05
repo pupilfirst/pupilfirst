@@ -13,7 +13,6 @@ module Users
 
       def props
         {
-          referer: view.params[:referer],
           school_name: school_name,
           fqdn: view.current_host,
           oauth_host: oauth_host

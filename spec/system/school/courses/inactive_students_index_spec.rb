@@ -16,7 +16,7 @@ feature 'Inactive students index', js: true do
   let!(:active_team) { create :startup, level: level_1 }
 
   scenario 'School admin manipulates inactive teams' do
-    sign_in_user school_admin.user, referer: school_course_inactive_students_path(course)
+    sign_in_user school_admin.user, referrer: school_course_inactive_students_path(course)
 
     expect(page).not_to have_text(active_team.founders.first.name)
 
@@ -52,7 +52,7 @@ feature 'Inactive students index', js: true do
   end
 
   scenario 'School can filter teams and students' do
-    sign_in_user school_admin.user, referer: school_course_inactive_students_path(course)
+    sign_in_user school_admin.user, referrer: school_course_inactive_students_path(course)
 
     fill_in 'search', with: access_ended_team.name
     click_link 'Search'

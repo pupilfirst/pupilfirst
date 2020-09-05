@@ -20,7 +20,7 @@ feature 'Certificate link on curriculum', js: true do
   end
 
   scenario 'user sees link to certificate on curriculum page' do
-    sign_in_user user, referer: curriculum_course_path(course)
+    sign_in_user user, referrer: curriculum_course_path(course)
 
     expect(page).to have_text('You have been issued a certificate')
     expect(page).to have_link('View Certificate', href: issued_certificate_path(serial_number: issued_certificate.serial_number))

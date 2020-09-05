@@ -5,8 +5,10 @@ module Users
     before_action :must_have_current_school
     layout 'student'
 
-    # GET /user/sign_in
+    # GET /user/sign_in?referrer
     def new
+      store_location_for(:user, params[:referrer]) if params[:referrer].present?
+
       if current_user.present?
         flash[:notice] = 'You are already signed in.'
         redirect_to after_sign_in_path_for(current_user)

@@ -69,7 +69,7 @@ feature 'Students view performance report and submissions overview', js: true do
   end
 
   scenario 'student visits course report link' do
-    sign_in_user student.user, referer: report_course_path(course)
+    sign_in_user student.user, referrer: report_course_path(course)
 
     expect(page).to have_text('Level Progress')
     expect(page).to have_selector('.courses-report-overview__student-level', count: course.levels.where.not(number: 0).count)
@@ -138,7 +138,7 @@ feature 'Students view performance report and submissions overview', js: true do
       submission.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
     end
 
-    sign_in_user student.user, referer: report_course_path(course)
+    sign_in_user student.user, referrer: report_course_path(course)
     expect(page).to have_text('Targets Overview')
     click_button 'Submissions'
     expect(page).to have_button('Load More...')
@@ -169,7 +169,7 @@ feature 'Students view performance report and submissions overview', js: true do
     end
 
     scenario 'submissions by old team has info on effect of team change' do
-      sign_in_user student.user, referer: report_course_path(course)
+      sign_in_user student.user, referrer: report_course_path(course)
 
       # Switch to submissions tab
       click_button 'Submissions'
@@ -192,7 +192,7 @@ feature 'Students view performance report and submissions overview', js: true do
     let!(:target_l0) { create :target, :for_founders, target_group: target_group_l0 }
 
     scenario 'checks status of total targets completed in report' do
-      sign_in_user student.user, referer: report_course_path(course)
+      sign_in_user student.user, referrer: report_course_path(course)
 
       # Check that level zero targets are not counted in the targets overview
       within("div[aria-label='target-completion-status']") do
@@ -208,7 +208,7 @@ feature 'Students view performance report and submissions overview', js: true do
     let(:target_l3) { create :target, :for_founders, :archived, target_group: target_group_l3 }
 
     scenario 'checks status of total targets completed in report' do
-      sign_in_user student.user, referer: report_course_path(course)
+      sign_in_user student.user, referrer: report_course_path(course)
 
       # Check that level zero targets are not counted in the targets overview
       within("div[aria-label='target-completion-status']") do

@@ -13,7 +13,7 @@ module Users
 
       def props
         {
-          authenticity_token: view.form_authenticity_token,
+          referer: view.params[:referer],
           school_name: school_name,
           fqdn: view.current_host,
           oauth_host: oauth_host

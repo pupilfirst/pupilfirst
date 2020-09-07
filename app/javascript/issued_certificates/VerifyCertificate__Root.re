@@ -32,6 +32,21 @@ let heading = (currentUser, issuedCertificate) =>
 
 let handleCancelPrint = (setViewMode, _event) => setViewMode(_ => Screen);
 
+let issuedToName = issuedCertificate => {
+  let issuedTo = IssuedCertificate.issuedTo(issuedCertificate);
+  let profileName = IssuedCertificate.profileName(issuedCertificate);
+
+  if (issuedTo == profileName) {
+    str(profileName);
+  } else {
+    <a
+      href="#name-change-notice" className="text-blue-500 hover:text-blue-600">
+      {str(profileName)}
+      <i className="ml-1 fas fa-exclamation-circle" />
+    </a>;
+  };
+};
+
 [@react.component]
 let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
   let (viewMode, setViewMode) = React.useState(() => Screen);
@@ -48,9 +63,7 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
           </h3>
           <div className="text-sm mt-4">
             <span> {"This certificate was issued to " |> str} </span>
-            <strong>
-              {issuedCertificate |> IssuedCertificate.issuedTo |> str}
-            </strong>
+            <strong> {issuedToName(issuedCertificate)} </strong>
             <span> {" on " |> str} </span>
             <strong>
               {issuedCertificate
@@ -86,6 +99,27 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
           <IssuedCertificate__Root issuedCertificate verifyImageUrl />
         </div>
       </div>
+      {IssuedCertificate.profileName(issuedCertificate)
+       != IssuedCertificate.issuedTo(issuedCertificate)
+         ? <div
+             id="name-change-notice"
+             className="border border-blue-200 rounded-lg shadow-lg bg-blue-100 p-3 md:p-6 mt-6 flex items-center">
+             <div>
+               <i
+                 className="fas fa-exclamation-circle text-2xl text-blue-500"
+               />
+             </div>
+             <div className="ml-4 text-sm">
+               {str(
+                  "This student's name was updated after the certificate was issued. This certificate was originally issued to ",
+                )}
+               <strong>
+                 {IssuedCertificate.issuedTo(issuedCertificate)->str}
+               </strong>
+               {str(".")}
+             </div>
+           </div>
+         : React.null}
     </div>
   | Print =>
     <div className="flex flex-col items-center">

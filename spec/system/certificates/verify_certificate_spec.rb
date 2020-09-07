@@ -16,6 +16,7 @@ feature 'Certificate verification', js: true do
     expect(page).to have_text(user.name)
     expect(page).to have_text(issued_certificate.certificate.course.name)
     expect(page).to have_text(issued_certificate.created_at.strftime('%b %-d, %Y'))
+    expect(page).not_to have_text("This student's name was updated after the certificate was issued.")
   end
 
   scenario 'a member of the public verifies the certificate' do
@@ -32,6 +33,7 @@ feature 'Certificate verification', js: true do
     scenario 'both the name at the time of issuance and current name are shown on verification page' do
       visit issued_certificate_path(serial_number: issued_certificate.serial_number)
 
+      expect(page).to have_text("This student's name was updated after the certificate was issued.")
       expect(page).to have_text(user.name)
       expect(page).to have_text(issued_certificate.name)
     end

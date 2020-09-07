@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource_or_scope)
     referrer = params[:referrer] || session[:referrer]
-    stored_location_for(resource_or_scope) || referrer || dashboard_path
+    referrer || stored_location_for(resource_or_scope) || dashboard_path
   end
 
   def current_host
@@ -178,12 +178,11 @@ class ApplicationController < ActionController::Base
     redirect_to root_path
   end
 
-  def non_storable_location?
-    devise_controller? || request.path == "/favicon.ico"
-  end
-
   def storable_location?
-    request.get? && is_navigational_format? && !request.xhr? && !non_storable_location?
+    non_html_response = destroy_user_session_path || is_a?(::TargetsController) && params[:action] == "details_v2"
+    public_page = _process_action_callbacks.find { |p| p.filter == :authenticate_user! }.blank?
+
+    request.get? && is_navigational_format? && !request.xhr? && !public_page && !non_html_response
   end
 
   def store_user_location!

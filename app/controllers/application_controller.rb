@@ -178,8 +178,12 @@ class ApplicationController < ActionController::Base
     redirect_to root_path
   end
 
+  def non_storable_location?
+    devise_controller? || request.path == "/favicon.ico"
+  end
+
   def storable_location?
-    request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
+    request.get? && is_navigational_format? && !request.xhr? && !non_storable_location?
   end
 
   def store_user_location!

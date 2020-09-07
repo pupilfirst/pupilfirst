@@ -20,7 +20,7 @@ module Users
       @form = Users::Sessions::SignInWithEmailForm.new(Reform::OpenForm.new)
       @form.current_school = current_school
 
-      if @form.validate(params[:session])
+      if @form.validate(params[:session].merge(referrer: stored_location_for(:user)))
         @form.save
         render json: { error: nil }
       else

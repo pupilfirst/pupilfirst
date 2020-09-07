@@ -18,16 +18,16 @@ let printCertificate = (setViewMode, _event) => {
 let heading = (currentUser, issuedCertificate) =>
   if (currentUser) {
     <span>
-      {"Congratulations " |> str}
+      {str("Congratulations ")}
       <strong>
-        {issuedCertificate |> IssuedCertificate.issuedTo |> str}
+        {IssuedCertificate.profileName(issuedCertificate)->str}
       </strong>
       {"!" |> str}
       <br />
-      {"You've earned it." |> str}
+      {str("You've earned it.")}
     </span>;
   } else {
-    issuedCertificate |> IssuedCertificate.serialNumber |> str;
+    IssuedCertificate.serialNumber(issuedCertificate)->str;
   };
 
 let handleCancelPrint = (setViewMode, _event) => setViewMode(_ => Screen);

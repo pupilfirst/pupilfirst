@@ -24,7 +24,7 @@ feature 'Courses Index', js: true do
   end
 
   scenario 'School admin creates a course' do
-    sign_in_user school_admin.user, referer: school_courses_path
+    sign_in_user school_admin.user, referrer: school_courses_path
 
     # list all courses
     expect(page).to have_text("Add New Course")
@@ -66,7 +66,7 @@ feature 'Courses Index', js: true do
     let(:course_end_date) { Time.zone.today }
 
     scenario 'School admin edits an existing course' do
-      sign_in_user school_admin.user, referer: school_courses_path
+      sign_in_user school_admin.user, referrer: school_courses_path
 
       find("a[title='Edit #{course_1.name}']").click
 
@@ -94,7 +94,7 @@ feature 'Courses Index', js: true do
     end
 
     scenario 'School admin sets other progression behaviors on existing course' do
-      sign_in_user school_admin.user, referer: school_courses_path
+      sign_in_user school_admin.user, referrer: school_courses_path
 
       find("a[title='Edit #{course_1.name}']").click
 
@@ -117,7 +117,7 @@ feature 'Courses Index', js: true do
     end
 
     scenario 'School admin edits images associated with the course' do
-      sign_in_user school_admin.user, referer: school_courses_path
+      sign_in_user school_admin.user, referrer: school_courses_path
 
       find("a[title='Edit images for #{course_1.name}']").click
 

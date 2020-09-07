@@ -21,7 +21,7 @@ feature 'User Edit' do
   end
 
   scenario 'User tries to submit a blank form', js: true do
-    sign_in_user(user, referer: edit_user_path)
+    sign_in_user(user, referrer: edit_user_path)
 
     expect(page).to have_text('Edit your profile')
 
@@ -31,7 +31,7 @@ feature 'User Edit' do
   end
 
   scenario 'User fills in all fields and submits', js: true do
-    sign_in_user(user, referer: edit_user_path)
+    sign_in_user(user, referrer: edit_user_path)
     expect(page).to have_text('Edit').and have_text('profile')
 
     fill_in 'user_name', with: student_name
@@ -56,7 +56,7 @@ feature 'User Edit' do
   end
 
   scenario 'User sets a new password', js: true do
-    sign_in_user(user, referer: edit_user_path)
+    sign_in_user(user, referrer: edit_user_path)
 
     expect(page).to have_text('Set password for your account')
     expect(user.encrypted_password).to be_blank
@@ -90,7 +90,7 @@ feature 'User Edit' do
     end
 
     scenario 'user changes her password', js: true do
-      sign_in_user(user, referer: edit_user_path)
+      sign_in_user(user, referrer: edit_user_path)
 
       expect(page).to have_text('Change your current password')
 

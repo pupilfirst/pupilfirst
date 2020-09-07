@@ -61,7 +61,7 @@ feature "Student's view of Course Curriculum", js: true do
 
   scenario "student who has dropped out attempts to view a course's curriculum" do
     student.startup.update!(dropped_out_at: 1.day.ago)
-    sign_in_user student.user, referer: curriculum_course_path(course)
+    sign_in_user student.user, referrer: curriculum_course_path(course)
     expect(page).to have_content("The page you were looking for doesn't exist!")
   end
 
@@ -69,7 +69,7 @@ feature "Student's view of Course Curriculum", js: true do
     let(:course) { create :course, ends_at: 1.day.ago }
 
     scenario 'student visits the course curriculum page' do
-      sign_in_user student.user, referer: curriculum_course_path(course)
+      sign_in_user student.user, referrer: curriculum_course_path(course)
       expect(page).to have_text('The course has ended and submissions are disabled for all targets!')
     end
   end
@@ -78,13 +78,13 @@ feature "Student's view of Course Curriculum", js: true do
     let!(:team) { create :startup, level: level_4, access_ends_at: 1.day.ago }
 
     scenario 'student visits the course curriculum page' do
-      sign_in_user student.user, referer: curriculum_course_path(course)
+      sign_in_user student.user, referrer: curriculum_course_path(course)
       expect(page).to have_text('Your access to this course has ended.')
     end
   end
 
   scenario 'student visits the course curriculum page' do
-    sign_in_user student.user, referer: curriculum_course_path(course)
+    sign_in_user student.user, referrer: curriculum_course_path(course)
 
     # Course name should be displayed.
     expect(page).to have_content(course.name)
@@ -156,7 +156,7 @@ feature "Student's view of Course Curriculum", js: true do
   end
 
   scenario 'student browses a level she has not reached' do
-    sign_in_user student.user, referer: curriculum_course_path(course)
+    sign_in_user student.user, referrer: curriculum_course_path(course)
 
     # Switch to Level 5.
     click_button "L4: #{level_4.name}"
@@ -204,7 +204,7 @@ feature "Student's view of Course Curriculum", js: true do
   end
 
   scenario 'student opens a locked level' do
-    sign_in_user student.user, referer: curriculum_course_path(course)
+    sign_in_user student.user, referrer: curriculum_course_path(course)
 
     # Switch to the locked Level 6.
     click_button "L4: #{level_4.name}"
@@ -219,7 +219,7 @@ feature "Student's view of Course Curriculum", js: true do
   end
 
   scenario 'student navigates between levels using the quick navigation links' do
-    sign_in_user student.user, referer: curriculum_course_path(course)
+    sign_in_user student.user, referrer: curriculum_course_path(course)
 
     expect(page).to have_button("L4: #{level_4.name}")
 
@@ -247,7 +247,7 @@ feature "Student's view of Course Curriculum", js: true do
     let!(:level_0_target) { create :target, target_group: target_group_l0, role: Target::ROLE_TEAM }
 
     scenario 'student visits the dashboard' do
-      sign_in_user student.user, referer: curriculum_course_path(course)
+      sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_button(level_0.name)
 
@@ -269,7 +269,7 @@ feature "Student's view of Course Curriculum", js: true do
     let!(:target_group_l4_archived) { create :target_group, :archived, level: level_4, milestone: true, description: Faker::Lorem.sentence }
 
     scenario 'archived target groups are not displayed' do
-      sign_in_user student.user, referer: curriculum_course_path(course)
+      sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_content(target_group_l4_1.name)
       expect(page).not_to have_content(target_group_l4_archived.name)
@@ -288,7 +288,7 @@ feature "Student's view of Course Curriculum", js: true do
 
       scenario 'student switches to another course' do
         # Sign into the first course.
-        sign_in_user c2_student.user, referer: curriculum_course_path(course)
+        sign_in_user c2_student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_content(target_group_l4_1.name)
 
@@ -310,7 +310,7 @@ feature "Student's view of Course Curriculum", js: true do
 
       scenario 'courses in other schools are not displayed' do
         # Sign into the first course.
-        sign_in_user c2_student.user, referer: curriculum_course_path(course)
+        sign_in_user c2_student.user, referrer: curriculum_course_path(course)
 
         # There should be no option to switch to course in second school.
         expect(page).not_to have_selector('button.student-course__dropdown-btn')
@@ -326,7 +326,7 @@ feature "Student's view of Course Curriculum", js: true do
     let(:school_admin) { create :school_admin }
 
     scenario 'preview contents in the curriculum' do
-      sign_in_user school_admin.user, referer: curriculum_course_path(course)
+      sign_in_user school_admin.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_text('Preview Mode')
 
@@ -379,7 +379,7 @@ feature "Student's view of Course Curriculum", js: true do
     end
 
     scenario 'coach accesses content in locked levels' do
-      sign_in_user student.user, referer: curriculum_course_path(course)
+      sign_in_user student.user, referrer: curriculum_course_path(course)
 
       click_button "L4: #{level_4.name}"
       click_button "L6: #{locked_level_6.name}"
@@ -399,7 +399,7 @@ feature "Student's view of Course Curriculum", js: true do
     let!(:pending_target_g1) { create :target, :draft, target_group: target_group_l4_1, role: Target::ROLE_TEAM }
 
     scenario 'student can complete target with draft prerequisite' do
-      sign_in_user student.user, referer: curriculum_course_path(course)
+      sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_content(target_with_prerequisites.title)
 

@@ -23,14 +23,14 @@ feature 'Evaluation criteria index spec', js: true do
   end
 
   scenario 'school admin visits the evaluation criteria index for the course' do
-    sign_in_user school_admin.user, referer: evaluation_criteria_school_course_path(course)
+    sign_in_user school_admin.user, referrer: evaluation_criteria_school_course_path(course)
 
     expect(page).to have_text(evaluation_criterion_1.name)
     expect(page).to have_text(evaluation_criterion_2.name)
   end
 
   scenario 'school admin adds a new criterion with labels' do
-    sign_in_user school_admin.user, referer: evaluation_criteria_school_course_path(course)
+    sign_in_user school_admin.user, referrer: evaluation_criteria_school_course_path(course)
 
     find('h5', text: 'Add New Evaluation Criterion').click
     expect(page).to have_text('Maximum grade is')
@@ -71,7 +71,7 @@ feature 'Evaluation criteria index spec', js: true do
   end
 
   scenario 'school admin adds a new criterion without labels' do
-    sign_in_user school_admin.user, referer: evaluation_criteria_school_course_path(course)
+    sign_in_user school_admin.user, referrer: evaluation_criteria_school_course_path(course)
 
     find('h5', text: 'Add New Evaluation Criterion').click
     expect(page).to have_text('Maximum grade is')
@@ -94,7 +94,7 @@ feature 'Evaluation criteria index spec', js: true do
   end
 
   scenario 'school admin updates an evaluation criterion' do
-    sign_in_user school_admin.user, referer: evaluation_criteria_school_course_path(course)
+    sign_in_user school_admin.user, referrer: evaluation_criteria_school_course_path(course)
 
     find("a[title='Edit #{evaluation_criterion_1.name}']").click
 
@@ -113,7 +113,7 @@ feature 'Evaluation criteria index spec', js: true do
   end
 
   scenario 'school admin attempts to create a duplicate criterion' do
-    sign_in_user school_admin.user, referer: evaluation_criteria_school_course_path(course)
+    sign_in_user school_admin.user, referrer: evaluation_criteria_school_course_path(course)
 
     find('h5', text: 'Add New Evaluation Criterion').click
 
@@ -127,7 +127,7 @@ feature 'Evaluation criteria index spec', js: true do
   end
 
   scenario 'course author creates and edits a criterion' do
-    sign_in_user author.user, referer: evaluation_criteria_school_course_path(course)
+    sign_in_user author.user, referrer: evaluation_criteria_school_course_path(course)
     find('h5', text: 'Add New Evaluation Criterion').click
     fill_in 'Name', with: new_ec_name
     click_button 'Create Criterion'
@@ -153,7 +153,7 @@ feature 'Evaluation criteria index spec', js: true do
 
   scenario 'user who is an author in another course will see a 404' do
     author_in_another_course = create :course_author
-    sign_in_user author_in_another_course.user, referer: evaluation_criteria_school_course_path(course)
+    sign_in_user author_in_another_course.user, referrer: evaluation_criteria_school_course_path(course)
     expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 

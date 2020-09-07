@@ -45,7 +45,7 @@ feature 'Curriculum Editor', js: true do
   end
 
   scenario 'admin creates a basic course framework by adding level, target group and targets' do
-    sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
 
     # he should be on the last level
     expect(page).to have_text('Level 2: ' + level_2.name)
@@ -161,7 +161,7 @@ feature 'Curriculum Editor', js: true do
   end
 
   scenario 'course author can navigate only to assigned courses and modify content of those courses' do
-    sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+    sign_in_user course_author.user, referrer: curriculum_school_course_path(course)
 
     click_button course.name
 
@@ -194,7 +194,7 @@ feature 'Curriculum Editor', js: true do
   end
 
   scenario "author sets unlock date for a level that previously didn't have one" do
-    sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+    sign_in_user course_author.user, referrer: curriculum_school_course_path(course)
 
     find('button[title="Edit selected level"').click
     fill_in 'Unlock level on', with: date.iso8601
@@ -212,7 +212,7 @@ feature 'Curriculum Editor', js: true do
     let!(:team_l3) { create :startup, level: level_3 }
 
     scenario 'author merges third level into the first' do
-      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+      sign_in_user course_author.user, referrer: curriculum_school_course_path(course)
 
       find('button[title="Edit selected level"').click
       click_button 'Actions'
@@ -229,7 +229,7 @@ feature 'Curriculum Editor', js: true do
     end
 
     scenario 'author is not allowed to merge third level into level zero' do
-      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+      sign_in_user course_author.user, referrer: curriculum_school_course_path(course)
 
       find('button[title="Edit selected level"').click
       click_button 'Actions'
@@ -238,7 +238,7 @@ feature 'Curriculum Editor', js: true do
   end
 
   scenario 'admin moves a target group from one level to another' do
-    sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
     find('.target-group__header', text: target_group_2.name).click
 
     expect(page).to have_text("Level #{target_group_2.level.number}: #{target_group_2.level.name}")

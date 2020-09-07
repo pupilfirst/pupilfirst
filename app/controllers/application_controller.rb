@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
 
   before_action :sign_out_if_required
   before_action :pretender
+  before_action :store_user_location, if: :storable_location?
 
   around_action :set_time_zone, if: :current_user
 
@@ -41,16 +42,8 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError, 'Not Found'
   end
 
-  def after_sign_in_path_for(resource)
-    referer = params[:referer] || session[:referer]
-
-    if referer.present?
-      referer
-    elsif resource.is_a?(AdminUser)
-      super
-    else
-      Users::AfterSignInPathResolverService.new(resource, current_school).after_sign_in_path
-    end
+  def after_sign_in_path_for(resource_or_scope)
+    stored_location_for(resource_or_scope) || dashboard_path
   end
 
   def current_host
@@ -184,12 +177,15 @@ class ApplicationController < ActionController::Base
     redirect_to root_path
   end
 
-  def authenticate_school_admin!
-    authenticate_user!
-    return if current_school_admin.present?
+  def storable_location?
+    non_html_response = destroy_user_session_path || is_a?(::TargetsController) && params[:action] == "details_v2"
+    public_page = _process_action_callbacks.none? { |p| p.filter == :authenticate_user! }
 
-    flash[:error] = 'You are not an admin of this school.'
-    redirect_to root_path
+    request.get? && is_navigational_format? && !request.xhr? && !public_page && !non_html_response
+  end
+
+  def store_user_location
+    store_location_for(:user, request.fullpath)
   end
 
   def pretender

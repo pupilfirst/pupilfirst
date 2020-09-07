@@ -25,13 +25,13 @@ feature 'Certificates', js: true do
     let!(:course_author) { create :course_author, course: course }
 
     scenario 'course author tries to access certificates interface' do
-      sign_in_user course_author.user, referer: certificates_school_course_path(course)
+      sign_in_user course_author.user, referrer: certificates_school_course_path(course)
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end
   end
 
   scenario 'school admin uploads new certificates to the course' do
-    sign_in_user school_admin.user, referer: certificates_school_course_path(course)
+    sign_in_user school_admin.user, referrer: certificates_school_course_path(course)
 
     expect(page).to have_text("You haven't created any certificates yet!")
 
@@ -75,7 +75,7 @@ feature 'Certificates', js: true do
     end
 
     scenario 'school admin edits an unissued certificate' do
-      sign_in_user school_admin.user, referer: certificates_school_course_path(course)
+      sign_in_user school_admin.user, referrer: certificates_school_course_path(course)
 
       within("div[aria-label='Certificate #{certificate_issued.id}'") do
         expect(page).to have_text('Auto-issue')
@@ -128,7 +128,7 @@ feature 'Certificates', js: true do
     end
 
     scenario 'school admin edits an issued certificate' do
-      sign_in_user school_admin.user, referer: certificates_school_course_path(course)
+      sign_in_user school_admin.user, referrer: certificates_school_course_path(course)
 
       find("a[title='Edit Certificate #{certificate_issued.name}'").click
       fill_in 'Name', with: name
@@ -137,7 +137,7 @@ feature 'Certificates', js: true do
     end
 
     scenario 'school admin deletes an unissued certificate' do
-      sign_in_user school_admin.user, referer: certificates_school_course_path(course)
+      sign_in_user school_admin.user, referrer: certificates_school_course_path(course)
 
       expect(page).not_to have_selector("a[title='Delete Certificate #{certificate_issued.name}']")
 

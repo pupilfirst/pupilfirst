@@ -43,7 +43,7 @@ feature 'Target Overlay', js: true do
   end
 
   scenario 'student selects a target to view its content' do
-    sign_in_user student.user, referer: curriculum_course_path(course)
+    sign_in_user student.user, referrer: curriculum_course_path(course)
 
     # The target should be listed as part of the curriculum.
     expect(page).to have_content(target_group_l1.name)
@@ -78,7 +78,7 @@ feature 'Target Overlay', js: true do
   end
 
   scenario 'student submits work on a target' do
-    sign_in_user student.user, referer: target_path(target_l1)
+    sign_in_user student.user, referrer: target_path(target_l1)
 
     # This target should have a 'Complete' section.
     find('.course-overlay__body-tab-item', text: 'Complete').click
@@ -142,7 +142,7 @@ feature 'Target Overlay', js: true do
   end
 
   scenario "student visits the target's link with a mangled ID" do
-    sign_in_user student.user, referer: target_path(id: "#{target_l1.id}*")
+    sign_in_user student.user, referrer: target_path(id: "#{target_l1.id}*")
 
     expect(page).to have_selector('h1', text: target_l1.title)
   end
@@ -151,7 +151,7 @@ feature 'Target Overlay', js: true do
     let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, completion_instructions: Faker::Lorem.sentence }
 
     scenario 'student completes an auto-verified target' do
-      sign_in_user student.user, referer: target_path(target_l1)
+      sign_in_user student.user, referrer: target_path(target_l1)
 
       # There should be a mark as complete button on the learn page.
       expect(page).to have_button('Mark As Complete')
@@ -187,7 +187,7 @@ feature 'Target Overlay', js: true do
       let!(:target_with_link) { create :target, :with_content, target_group: target_group_l1, link_to_complete: link_to_complete, completion_instructions: Faker::Lorem.sentence }
 
       scenario 'student completes a target by visiting a link' do
-        sign_in_user student.user, referer: target_path(target_with_link)
+        sign_in_user student.user, referrer: target_path(target_with_link)
 
         # There should be a un-highligted button on the learn page that lets student complete the target.
         expect(page).to have_button('Visit Link To Complete')
@@ -219,7 +219,7 @@ feature 'Target Overlay', js: true do
     end
 
     scenario 'student completes a target by taking a quiz' do
-      sign_in_user student.user, referer: target_path(quiz_target)
+      sign_in_user student.user, referrer: target_path(quiz_target)
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(quiz_target.title)
@@ -298,7 +298,7 @@ feature 'Target Overlay', js: true do
     end
 
     scenario 'student sees feedback for a reviewed submission' do
-      sign_in_user student.user, referer: target_path(target_l1)
+      sign_in_user student.user, referrer: target_path(target_l1)
 
       find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
 
@@ -351,7 +351,7 @@ feature 'Target Overlay', js: true do
       end
 
       scenario 'student cannot resubmit non-resubmittable passed target' do
-        sign_in_user student.user, referer: target_path(target_l1)
+        sign_in_user student.user, referrer: target_path(target_l1)
 
         find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
 
@@ -364,7 +364,7 @@ feature 'Target Overlay', js: true do
 
         submission_1.timeline_event_owners.update_all(latest: true) # rubocop:disable Rails/SkipsModelValidations
 
-        sign_in_user student.user, referer: target_path(target_l1)
+        sign_in_user student.user, referrer: target_path(target_l1)
 
         find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
 
@@ -378,7 +378,7 @@ feature 'Target Overlay', js: true do
     let!(:timeline_event) { create :timeline_event, :with_owners, latest: true, target: target_l1, owners: [student], passed_at: 2.days.ago }
 
     scenario 'student is shown pending team members on individual targets' do
-      sign_in_user student.user, referer: target_path(target_l1)
+      sign_in_user student.user, referrer: target_path(target_l1)
 
       other_students = team.founders.where.not(id: student)
 
@@ -400,7 +400,7 @@ feature 'Target Overlay', js: true do
     end
 
     scenario 'student navigates to a prerequisite target' do
-      sign_in_user student.user, referer: target_path(target_l1)
+      sign_in_user student.user, referrer: target_path(target_l1)
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content('Locked')
@@ -428,7 +428,7 @@ feature 'Target Overlay', js: true do
     end
 
     scenario 'student visits a pending target' do
-      sign_in_user student.user, referer: target_path(target_l1)
+      sign_in_user student.user, referrer: target_path(target_l1)
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(target_l1.title)
@@ -442,7 +442,7 @@ feature 'Target Overlay', js: true do
     scenario 'student views a submitted target' do
       create :timeline_event, :with_owners, latest: true, target: target_l1, owners: team.founders
 
-      sign_in_user student.user, referer: target_path(target_l1)
+      sign_in_user student.user, referrer: target_path(target_l1)
 
       # The status should read locked.
       within('.course-overlay__header-title-card') do
@@ -467,7 +467,7 @@ feature 'Target Overlay', js: true do
     end
 
     scenario 'student visits a target in a course where their access has ended' do
-      sign_in_user student.user, referer: target_path(target_l1)
+      sign_in_user student.user, referrer: target_path(target_l1)
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(target_l1.title)
@@ -490,7 +490,7 @@ feature 'Target Overlay', js: true do
     let(:topic_body) { Faker::Lorem.paragraph }
 
     scenario 'student uses the discuss feature' do
-      sign_in_user student.user, referer: target_path(target_l1)
+      sign_in_user student.user, referrer: target_path(target_l1)
 
       # Overlay should have a discuss tab that lists linked communities.
       find('.course-overlay__body-tab-item', text: 'Discuss').click
@@ -550,7 +550,7 @@ feature 'Target Overlay', js: true do
 
   scenario "student visits a target's page directly" do
     # The level selected in the curriculum list underneath should always match the target.
-    sign_in_user student.user, referer: target_path(target_l0)
+    sign_in_user student.user, referrer: target_path(target_l0)
 
     click_button('Close')
 
@@ -571,7 +571,7 @@ feature 'Target Overlay', js: true do
       let!(:target_l1) { create :target, :with_content, checklist: checklist, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
 
       scenario 'admin views the target in preview mode' do
-        sign_in_user school_admin.user, referer: target_path(target_l1)
+        sign_in_user school_admin.user, referrer: target_path(target_l1)
 
         expect(page).to have_content('You are currently looking at a preview of this course.')
 
@@ -603,7 +603,7 @@ feature 'Target Overlay', js: true do
       let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, completion_instructions: Faker::Lorem.sentence }
 
       scenario 'tries to completes an auto-verified target' do
-        sign_in_user school_admin.user, referer: target_path(target_l1)
+        sign_in_user school_admin.user, referrer: target_path(target_l1)
 
         # There should be a mark as complete button on the learn page.
         expect(page).to have_button('Mark As Complete', disabled: true)
@@ -615,7 +615,7 @@ feature 'Target Overlay', js: true do
       let!(:target_with_link) { create :target, :with_content, target_group: target_group_l1, link_to_complete: link_to_complete, completion_instructions: Faker::Lorem.sentence }
 
       scenario 'link to complete is shown to the user' do
-        sign_in_user school_admin.user, referer: target_path(target_with_link)
+        sign_in_user school_admin.user, referrer: target_path(target_with_link)
 
         expect(page).to have_link('Visit Link', href: link_to_complete)
       end
@@ -623,7 +623,7 @@ feature 'Target Overlay', js: true do
 
     context 'when the target requires user to take a quiz to complete it ' do
       scenario 'user can view all the questions' do
-        sign_in_user school_admin.user, referer: target_path(quiz_target)
+        sign_in_user school_admin.user, referrer: target_path(quiz_target)
 
         within('.course-overlay__header-title-card') do
           expect(page).to have_content(quiz_target.title)
@@ -648,7 +648,7 @@ feature 'Target Overlay', js: true do
   end
 
   scenario 'student navigates between targets using quick navigation bar' do
-    sign_in_user student.user, referer: target_path(target_l1)
+    sign_in_user student.user, referrer: target_path(target_l1)
 
     expect(page).to have_text(target_l1.title)
 
@@ -672,13 +672,13 @@ feature 'Target Overlay', js: true do
   end
 
   scenario "student visits a draft target page directly" do
-    sign_in_user student.user, referer: target_path(target_draft)
+    sign_in_user student.user, referrer: target_path(target_draft)
 
     expect(page).to have_text("The page you were looking for doesn't exist")
   end
 
   scenario "student visits a archived target page directly" do
-    sign_in_user student.user, referer: target_path(target_archived)
+    sign_in_user student.user, referrer: target_path(target_archived)
 
     expect(page).to have_text("The page you were looking for doesn't exist")
   end
@@ -707,7 +707,7 @@ feature 'Target Overlay', js: true do
 
     scenario 'latest flag is updated correctly on deleting the latest submission for all concerned students' do
       # Delete Submission A
-      sign_in_user student_a.user, referer: target_path(target_l1)
+      sign_in_user student_a.user, referrer: target_path(target_l1)
       find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
 
       accept_confirm do
@@ -742,7 +742,7 @@ feature 'Target Overlay', js: true do
     end
 
     scenario 'latest flag is updated correctly for all students' do
-      sign_in_user student_1.user, referer: target_path(target_l1)
+      sign_in_user student_1.user, referrer: target_path(target_l1)
       find('.course-overlay__body-tab-item', text: 'Complete').click
       replace_markdown Faker::Lorem.sentence
       click_button 'Submit'

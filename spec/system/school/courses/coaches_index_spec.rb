@@ -37,7 +37,7 @@ feature 'Course Coaches Index', js: true do
   end
 
   scenario 'school admin assigns faculty to a course' do
-    sign_in_user school_admin.user, referer: school_course_coaches_path(course_1)
+    sign_in_user school_admin.user, referrer: school_course_coaches_path(course_1)
 
     # list all coaches
     expect(page).to have_text(coach_1.name)
@@ -65,7 +65,7 @@ feature 'Course Coaches Index', js: true do
   end
 
   scenario 'school admin removes a course coach' do
-    sign_in_user school_admin.user, referer: school_course_coaches_path(course_1)
+    sign_in_user school_admin.user, referrer: school_course_coaches_path(course_1)
 
     expect(page).to have_text(coach_1.name)
     expect(coach_2.startups.count).to eq(1)
@@ -82,7 +82,7 @@ feature 'Course Coaches Index', js: true do
   end
 
   scenario 'school admin checks teams assigned to a coach and deletes them' do
-    sign_in_user school_admin.user, referer: school_course_coaches_path(course_2)
+    sign_in_user school_admin.user, referrer: school_course_coaches_path(course_2)
 
     expect(page).to have_text(coach_3.name)
     find("div[aria-label='coach-card-#{coach_3.id}']").click
@@ -129,7 +129,7 @@ feature 'Course Coaches Index', js: true do
     end
 
     scenario 'user sees team assignments for coaches in the list' do
-      sign_in_user school_admin.user, referer: school_course_coaches_path(course_2)
+      sign_in_user school_admin.user, referrer: school_course_coaches_path(course_2)
 
       # Check teams assigned to coach_3 in course 2
       find("div[aria-label='coach-card-#{coach_3.id}']").click
@@ -186,7 +186,7 @@ feature 'Course Coaches Index', js: true do
     end
 
     scenario 'admin checks the counts of pending and reviewed submissions on an assigned coach' do
-      sign_in_user school_admin.user, referer: school_course_coaches_path(course_1)
+      sign_in_user school_admin.user, referrer: school_course_coaches_path(course_1)
 
       # Check teams assigned to coach_3 in course 2
       find("div[aria-label='coach-card-#{coach_1.id}']").click

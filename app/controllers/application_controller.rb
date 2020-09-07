@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
   before_action :sign_out_if_required
   before_action :pretender
-  before_action :store_user_location!, if: :storable_location?
+  before_action :store_user_location, if: :storable_location?
 
   around_action :set_time_zone, if: :current_user
 
@@ -43,8 +43,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource_or_scope)
-    referrer = params[:referrer] || session[:referrer]
-    referrer || stored_location_for(resource_or_scope) || dashboard_path
+    stored_location_for(resource_or_scope) || dashboard_path
   end
 
   def current_host
@@ -180,12 +179,12 @@ class ApplicationController < ActionController::Base
 
   def storable_location?
     non_html_response = destroy_user_session_path || is_a?(::TargetsController) && params[:action] == "details_v2"
-    public_page = _process_action_callbacks.find { |p| p.filter == :authenticate_user! }.blank?
+    public_page = _process_action_callbacks.none? { |p| p.filter == :authenticate_user! }
 
     request.get? && is_navigational_format? && !request.xhr? && !public_page && !non_html_response
   end
 
-  def store_user_location!
+  def store_user_location
     store_location_for(:user, request.fullpath)
   end
 

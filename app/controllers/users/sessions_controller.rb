@@ -41,9 +41,10 @@ module Users
       end
     end
 
-    # GET /user/token - link to sign_in user with token in params
+    # GET /user/token?referrer - link to sign_in user with token in params
     def token
       user = Users::AuthenticationService.new(current_school, params[:token]).authenticate
+      store_location_for(:user, params[:referrer]) if params[:referrer].present?
 
       if user.present?
         sign_in user

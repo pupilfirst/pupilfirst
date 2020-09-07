@@ -59,9 +59,6 @@ module Users
           token: user.login_token,
           host: oauth_origin[:fqdn]
         }
-
-        token_url_options[:referrer] = oauth_origin[:referrer] if oauth_origin[:referrer].present?
-
         # Redirect user to sign in at the origin domain with newly generated token.
         redirect_to user_token_url(token_url_options)
       else

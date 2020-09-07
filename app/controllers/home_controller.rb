@@ -37,8 +37,7 @@ class HomeController < ApplicationController
 
     set_cookie(:oauth_origin, {
       provider: params[:provider],
-      fqdn: params[:fqdn],
-      referrer: params[:referrer]
+      fqdn: params[:fqdn]
     }.to_json)
 
     redirect_to OmniauthProviderUrlService.new(params[:provider], current_host).oauth_url

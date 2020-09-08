@@ -21,7 +21,7 @@ feature 'Markdown editor', js: true do
   let(:intro_sentence) { Faker::Lorem.sentence }
 
   scenario 'user uploads an image and a PDF' do
-    sign_in_user(student.user, referer: new_topic_community_path(community))
+    sign_in_user(student.user, referrer: new_topic_community_path(community))
 
     expect(page).to have_text('Create a new topic')
 
@@ -87,7 +87,7 @@ feature 'Markdown editor', js: true do
     end
 
     scenario 'user exceeds daily attachment limit' do
-      sign_in_user(student.user, referer: new_topic_community_path(community))
+      sign_in_user(student.user, referrer: new_topic_community_path(community))
       fill_in 'Title', with: 'This is a title.'
 
       attach_file("Click here to attach a file.", sample_file_path('logo_lipsum_on_light_bg.png'), visible: false)

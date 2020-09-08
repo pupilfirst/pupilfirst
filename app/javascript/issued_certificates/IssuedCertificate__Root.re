@@ -131,7 +131,7 @@ let drawName = issuedCertificate => {
   ctx
   |> OptionUtils.map(ctx =>
        Webapi.Canvas.Canvas2d.fillText(
-         IssuedCertificate.issuedTo(issuedCertificate),
+         IssuedCertificate.profileName(issuedCertificate),
          ~x=1000.0,
          ~y=50.0,
          ctx,

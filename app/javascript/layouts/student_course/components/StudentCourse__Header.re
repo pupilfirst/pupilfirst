@@ -70,7 +70,7 @@ let renderCourseSelector =
   let otherCourses =
     courses |> List.filter(c => c |> Course.id != currentCourseId);
   <div className="relative bg-primary-900">
-    <div className="relative pb-1/2 md:pb-1/5 2xl:pb-1/6">
+    <div className="relative pb-1/2 md:pb-1/4 2xl:pb-1/5">
       {switch (coverImage) {
        | Some(src) =>
          <img className="absolute h-full w-full object-cover" src />

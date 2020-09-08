@@ -81,9 +81,9 @@ module CourseExports
 
     def report_path(student)
       @report_path_prefix ||= begin
-          school = @course_export.user.school
-          "https://#{school.domains.primary.fqdn}/students"
-        end
+        school = @course_export.user.school
+        "https://#{school.domains.primary.fqdn}/students"
+      end
 
       "#{@report_path_prefix}/#{student.id}/report"
     end
@@ -100,13 +100,15 @@ module CourseExports
           { formula: student_report_link(student) },
           user.email,
           user.name,
+          student.level.number,
           user.title,
           user.affiliation,
           student.startup.tags.order(:name).pluck(:name).join(', '),
+          last_sign_in_at(user)
         ] + average_grades_for_student(student)
       end
 
-      [['ID', 'Email Address', 'Name', 'Title', 'Affiliation', 'Tags'] + evaluation_criteria_names] + rows
+      [['ID', 'Email Address', 'Name', 'Level', 'Title', 'Affiliation', 'Tags', 'Last Sign In At'] + evaluation_criteria_names] + rows
     end
 
     def submission_rows
@@ -140,9 +142,13 @@ module CourseExports
     def students
       @students ||= begin
         # Only scan 'active' students. Also filter by tag, if applicable.
-        scope = course.founders.active.includes(:user)
+        scope = course.founders.active.includes(:user, :level)
         tags.present? ? scope.joins(:startup).merge(Startup.tagged_with(tags, any: true)) : scope
       end.order('users.email')
+    end
+
+    def last_sign_in_at(user)
+      user.last_sign_in_at&.iso8601 || ''
     end
   end
 end

@@ -1,0 +1,2 @@
+class UnavailableQueryException < StandardError
+end

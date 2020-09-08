@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Course review' do
+feature "Coach's review interface" do
   include UserSpecHelper
 
   let(:school) { create :school, :current }
@@ -60,7 +60,7 @@ feature 'Course review' do
     end
 
     scenario 'course coach visits review dashboard', js: true do
-      sign_in_user course_coach.user, referer: review_course_path(course)
+      sign_in_user course_coach.user, referrer: review_course_path(course)
 
       # Ensure coach is on the review dashboard.
       within("div[aria-label='status-tab']") do
@@ -115,7 +115,7 @@ feature 'Course review' do
     end
 
     scenario 'course coach uses the level filter', js: true do
-      sign_in_user course_coach.user, referer: review_course_path(course)
+      sign_in_user course_coach.user, referrer: review_course_path(course)
 
       # Ensure coach is on the review dashboard.
       within("div[aria-label='status-tab']") do
@@ -176,7 +176,7 @@ feature 'Course review' do
     end
 
     scenario 'team coach visits the review dashboard', js: true do
-      sign_in_user team_coach.user, referer: review_course_path(course)
+      sign_in_user team_coach.user, referrer: review_course_path(course)
 
       expect(page).to have_text('Assigned to: Me')
 
@@ -243,7 +243,7 @@ feature 'Course review' do
     end
 
     scenario 'coach changes the sort order of submissions', js: true do
-      sign_in_user course_coach.user, referer: review_course_path(course)
+      sign_in_user course_coach.user, referrer: review_course_path(course)
 
       within("div[aria-label='Change submissions sorting']") do
         expect(page).to have_content("Submitted At")
@@ -286,7 +286,7 @@ feature 'Course review' do
     end
 
     scenario 'coach can access submissions from review dashboard', js: true do
-      sign_in_user course_coach.user, referer: review_course_path(course)
+      sign_in_user course_coach.user, referrer: review_course_path(course)
 
       within("a[aria-label='Submission #{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
@@ -306,7 +306,7 @@ feature 'Course review' do
       end
 
       scenario 'one team coach uses filter to see submissions assigned to another coach', js: true do
-        sign_in_user team_coach.user, referer: review_course_path(course)
+        sign_in_user team_coach.user, referrer: review_course_path(course)
 
         expect(page).to have_text('Assigned to: Me')
 
@@ -340,18 +340,23 @@ feature 'Course review' do
   end
 
   context 'when there are over 25 submissions' do
+    let(:student_l1) { team_l1.founders.first }
+    let(:student_l3) { team_l3.founders.first }
+    let(:earliest_submitted) { student_l1.timeline_events.order(created_at: :ASC).first }
+    let(:earliest_reviewed) { student_l3.timeline_events.order(evaluated_at: :ASC).first }
+
     before do
       (1..30).each do |n|
         # Passed submissions
-        create(:timeline_event, :with_owners, owners: [team_l3.founders.first], latest: n == 1, target: target_l1, evaluator_id: course_coach.id, evaluated_at: n.days.ago, passed_at: n.days.ago, created_at: n.days.ago)
+        create(:timeline_event, :with_owners, owners: [student_l3], latest: n == 1, target: target_l1, evaluator_id: course_coach.id, evaluated_at: n.days.ago, passed_at: n.days.ago, created_at: n.days.ago)
 
         # Pending submissions
-        create(:timeline_event, :with_owners, latest: true, target: target_l1, owners: [team_l1.founders.first], created_at: n.days.ago)
+        create(:timeline_event, :with_owners, latest: true, target: target_l1, owners: [student_l1], created_at: n.days.ago)
       end
     end
 
     scenario 'coach browses paginated pending and reviewed submissions list', js: true do
-      sign_in_user course_coach.user, referer: review_course_path(course)
+      sign_in_user course_coach.user, referrer: review_course_path(course)
 
       # Ensure coach is on the review dashboard.
       within("div[aria-label='status-tab']") do
@@ -365,6 +370,7 @@ feature 'Course review' do
 
       expect(page).to have_text(target_l1.title, count: 30)
       expect(page).not_to have_button('Load more...')
+      expect(find("#submissions a:last-child")['href']).to end_with("/submissions/#{earliest_submitted.id}/review")
 
       click_button 'Reviewed'
 
@@ -374,11 +380,12 @@ feature 'Course review' do
 
       expect(page).to have_text(target_l1.title, count: 30)
       expect(page).not_to have_button('Load more...')
+      expect(find("#submissions a:last-child")['href']).to end_with("/submissions/#{earliest_reviewed.id}/review")
     end
   end
 
   scenario 'coach visits completely empty review dashboard', js: true do
-    sign_in_user course_coach.user, referer: review_course_path(course)
+    sign_in_user course_coach.user, referrer: review_course_path(course)
 
     # Ensure coach is on the review dashboard.
     within("div[aria-label='status-tab']") do
@@ -396,14 +403,14 @@ feature 'Course review' do
   end
 
   scenario 'student tries to access the review dashboard' do
-    sign_in_user team_l1.founders.first.user, referer: review_course_path(course)
+    sign_in_user team_l1.founders.first.user, referrer: review_course_path(course)
 
     expect(page).to have_text("The page you were looking for doesn't exist!")
     expect(page).not_to have_content(course.name)
   end
 
   scenario 'school admin tries to access the review dashboard' do
-    sign_in_user school_admin.user, referer: review_course_path(course)
+    sign_in_user school_admin.user, referrer: review_course_path(course)
 
     expect(page).to have_text("The page you were looking for doesn't exist!")
     expect(page).not_to have_content(course.name)

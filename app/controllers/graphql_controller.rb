@@ -1,5 +1,5 @@
 class GraphqlController < ApplicationController
-  skip_forgery_protection if: :introspection?
+  skip_forgery_protection if: :skip_csrf_protection?
 
   def execute
     variables = ensure_hash(params[:variables])
@@ -13,6 +13,7 @@ class GraphqlController < ApplicationController
       current_school_admin: current_school_admin,
       session: session,
       notifications: [],
+      token_auth: api_token.present?
     }
 
     result = PupilfirstSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
@@ -31,6 +32,10 @@ class GraphqlController < ApplicationController
 
   def introspection?
     Rails.env.development? && params[:introspection] == 'true'
+  end
+
+  def skip_csrf_protection?
+    introspection? || (api_token.present? && current_user.present?)
   end
 
   # Handle form data, JSON body, or a blank value

@@ -18,7 +18,7 @@ feature 'Student Navbar', js: true do
 
   context 'when the user is a coach in one course and a student in another' do
     scenario 'user can switch between the two courses' do
-      sign_in_user(student.user, referer: curriculum_course_path(coached_course))
+      sign_in_user(student.user, referrer: curriculum_course_path(coached_course))
 
       find('span', text: coached_course.name).click
       click_link(student.course.name)

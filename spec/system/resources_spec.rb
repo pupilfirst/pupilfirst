@@ -72,7 +72,7 @@ feature 'Resources' do
 
   context 'user is a logged-in student' do
     scenario 'Student visits resources page' do
-      visit user_token_path(token: founder.user.login_token, referer: resources_path)
+      visit user_token_path(token: founder.user.login_token, referrer: resources_path)
 
       # Public resources in school + private resources in course targets should be visible.
       expect(page).to have_selector('.resource-box', count: 2)

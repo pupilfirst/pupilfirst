@@ -9,6 +9,7 @@ type qrCorner = [
 type t = {
   serialNumber: string,
   issuedTo: string,
+  profileName: string,
   issuedAt: Js.Date.t,
   courseName: string,
   imageUrl: string,
@@ -21,6 +22,7 @@ type t = {
 
 let serialNumber = t => t.serialNumber;
 let issuedTo = t => t.issuedTo;
+let profileName = t => t.profileName;
 let issuedAt = t => t.issuedAt;
 let courseName = t => t.courseName;
 let imageUrl = t => t.imageUrl;
@@ -34,6 +36,7 @@ let make =
     (
       ~serialNumber,
       ~issuedTo,
+      ~profileName,
       ~issuedAt,
       ~courseName,
       ~imageUrl,
@@ -45,6 +48,7 @@ let make =
     ) => {
   serialNumber,
   issuedTo,
+  profileName,
   issuedAt,
   courseName,
   imageUrl,
@@ -60,6 +64,7 @@ let decode = json =>
     make(
       ~serialNumber=field("serialNumber", string, json),
       ~issuedTo=field("issuedTo", string, json),
+      ~profileName=field("profileName", string, json),
       ~issuedAt=field("issuedAt", DateFns.decodeISO, json),
       ~courseName=field("courseName", string, json),
       ~imageUrl=field("imageUrl", string, json),

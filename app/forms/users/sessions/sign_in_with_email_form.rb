@@ -6,7 +6,7 @@ module Users
       property :email, validates: { presence: true, length: { maximum: 250 }, email: true }
       # Honeypot field. See validation `detect_honeypot` below.
       property :username
-      property :referer
+      property :referrer
       property :shared_device
 
       validate :user_with_email_must_exist
@@ -15,7 +15,7 @@ module Users
       validate :email_should_not_have_bounced
 
       def save
-        MailLoginTokenService.new(user, referer, shared_device?).execute
+        MailLoginTokenService.new(user, referrer, shared_device?).execute
       end
 
       private

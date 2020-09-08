@@ -166,6 +166,7 @@ let make =
     IssuedCertificate.make(
       ~serialNumber="20201231-A1B2C3",
       ~issuedTo="Lillian Schowalter Runolfsdottir",
+      ~profileName="Lillian Schowalter Runolfsdottir",
       ~issuedAt=Js.Date.make(),
       ~courseName="Test Course",
       ~imageUrl=Certificate.imageUrl(certificate),

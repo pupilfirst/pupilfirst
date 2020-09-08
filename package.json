@@ -46,6 +46,7 @@
     "react-dom": "^16.8.6",
     "react_ujs": "^2.5.0",
     "sanitize-html": "^1.20.1",
+    "tailwindcss": "^1.7.3",
     "webpack-merge": "^4.2.1"
   },
   "devDependencies": {
@@ -60,7 +61,6 @@
     "sass-loader": "^8.0.2",
     "stylelint": "^13.0.0",
     "stylelint-config-recommended": "^3.0.0",
-    "tailwindcss": "^1.7.3",
     "webpack-dev-server": "^3.10.1"
   },
   "resolutions": {

@@ -1,4 +1,4 @@
-<%  presenter = FacultyModule::IndexPresenter.new(self) %>
+<%  presenter = FacultyModule::IndexPresenter.new(@coaches, self) %>
 
 <% content_for(:head) do %>
   <title>Coaches | <%= current_school.name %></title>
@@ -7,22 +7,10 @@
   <meta property="og:url" content="<%= coaches_index_url %>"/>
 <% end %>
 
-<div id="faculty__index"></div>
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'CoachesIndexPack', nonce: true %>
+<% end %>
 
-<div id="faculty">
-  <div class="max-w-5xl mx-auto px-4">
-    <h1 class="text-4xl text-center mt-3">Coaches</h1>
-    <div>
-      <% if presenter.coaches_subheading.present? %>
-        <p class="text-center">
-          <%= presenter.coaches_subheading %>
-        </p>
-      <% end %>
-      <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 py-8">
-        <% @faculty.each do |coach| %>
-          <%= render 'faculty_card', coach: coach %>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>
+<script id="react-root-data" type="application/json"><%== presenter.props_to_json %></script>
+
+<div id="react-root"></div>

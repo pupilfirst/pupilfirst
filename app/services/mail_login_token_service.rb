@@ -1,9 +1,9 @@
 class MailLoginTokenService
-  # @param referer [String, nil] Referer, if any.
+  # @param referrer [String, nil] referrer, if any.
   # @param shared_device [true, false] If the user is logging in from a shared device.
-  def initialize(user, referer = nil, shared_device = false)
+  def initialize(user, referrer = nil, shared_device = false)
     @user = user
-    @referer = referer
+    @referrer = referrer
     @shared_device = shared_device
   end
 
@@ -17,7 +17,7 @@ class MailLoginTokenService
       token: @user.login_token,
       shared_device: @shared_device
     }
-    url_options[:referer] = @referer if @referer.present?
+    url_options[:referrer] = @referrer if @referrer.present?
     UserSessionMailer.send_login_token(@user, url_options).deliver_now
   end
 end

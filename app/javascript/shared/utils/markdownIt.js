@@ -17,7 +17,7 @@ const subscriptPlugin = require("markdown-it-sub");
 const superscriptPlugin = require("markdown-it-sup");
 const tablePlugin = require("markdown-it-multimd-table");
 const linkifyImagesPlugin = require("markdown-it-linkify-images");
-const imageSizePlugin = require("markdown-it-imsize");
+const imageSizePlugin = require('@centerforopenscience/markdown-it-imsize');
 
 md.use(subscriptPlugin)
   .use(superscriptPlugin)

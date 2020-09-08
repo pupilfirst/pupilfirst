@@ -69,7 +69,7 @@ feature "Course students report", js: true do
   end
 
   scenario 'coach opens the student report and checks performance' do
-    sign_in_user course_coach.user, referer: students_course_path(course)
+    sign_in_user course_coach.user, referrer: students_course_path(course)
 
     expect(page).to have_text(team.name)
 
@@ -130,7 +130,7 @@ feature "Course students report", js: true do
       submission.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
     end
 
-    sign_in_user course_coach.user, referer: student_report_path(student)
+    sign_in_user course_coach.user, referrer: student_report_path(student)
     expect(page).to have_text(student.name)
     find('li', text: 'Submissions').click
     expect(page).to have_button('Load More...')
@@ -150,7 +150,7 @@ feature "Course students report", js: true do
   end
 
   scenario 'team coach accesses student report' do
-    sign_in_user team_coach.user, referer: student_report_path(student)
+    sign_in_user team_coach.user, referrer: student_report_path(student)
 
     # Check a student parameter
     within("div[aria-label='target-completion-status']") do
@@ -187,7 +187,7 @@ feature "Course students report", js: true do
   end
 
   scenario 'coach adds few notes for a student' do
-    sign_in_user course_coach.user, referer: student_report_path(student)
+    sign_in_user course_coach.user, referrer: student_report_path(student)
 
     find('li', text: 'Notes').click
     note_1 = Faker::Markdown.sandwich(sentences: 2)
@@ -210,7 +210,7 @@ feature "Course students report", js: true do
 
   context 'when a coach sees existing notes on the report page' do
     scenario 'coach can archive her own notes' do
-      sign_in_user team_coach.user, referer: student_report_path(student)
+      sign_in_user team_coach.user, referrer: student_report_path(student)
 
       expect(page).to have_text(coach_note_1.note)
       expect(page).to have_text(coach_note_2.note)
@@ -227,7 +227,7 @@ feature "Course students report", js: true do
     end
 
     scenario "coach cannot archive others' notes" do
-      sign_in_user team_coach.user, referer: student_report_path(student)
+      sign_in_user team_coach.user, referrer: student_report_path(student)
 
       within("div[aria-label='Note #{coach_note_1.id}']") do
         expect(page).not_to have_selector('.fa-trash-alt')
@@ -236,13 +236,13 @@ feature "Course students report", js: true do
 
     scenario 'coach is indicated if there are no notes' do
       another_student = team.founders.last
-      sign_in_user team_coach.user, referer: student_report_path(another_student)
+      sign_in_user team_coach.user, referrer: student_report_path(another_student)
       expect(page).to have_text('No notes here!')
     end
   end
 
   scenario 'unauthorized coach attempts to access student report' do
-    sign_in_user coach_without_access.user, referer: student_report_path(student)
+    sign_in_user coach_without_access.user, referrer: student_report_path(student)
     expect(page).to have_content("The page you were looking for doesn't exist")
   end
 
@@ -254,7 +254,7 @@ feature "Course students report", js: true do
     end
 
     scenario 'coach checks list of directly assigned team coaches' do
-      sign_in_user course_coach.user, referer: student_report_path(student)
+      sign_in_user course_coach.user, referrer: student_report_path(student)
 
       expect(page).to have_text(team_coach.name)
       expect(page).to have_text(team_coach_2.name)
@@ -262,7 +262,7 @@ feature "Course students report", js: true do
   end
 
   scenario 'coach can navigate to other team members in the team' do
-    sign_in_user course_coach.user, referer: student_report_path(student)
+    sign_in_user course_coach.user, referrer: student_report_path(student)
 
     team.founders.where.not(id: student).each do |teammate|
       expect(page).to have_link(teammate.name, href: "/students/#{teammate.id}/report")
@@ -273,7 +273,7 @@ feature "Course students report", js: true do
     time = 1.day.ago
     team.update!(dropped_out_at: time)
 
-    sign_in_user course_coach.user, referer: student_report_path(student)
+    sign_in_user course_coach.user, referrer: student_report_path(student)
 
     expect(page).to have_text("This student dropped out of the course on #{time.strftime('%b %-d, %Y')}.")
   end
@@ -281,7 +281,7 @@ feature "Course students report", js: true do
   scenario "coach is shown a warning about a student's access to a course having ended" do
     time = 1.day.ago
     team.update!(access_ends_at: time)
-    sign_in_user course_coach.user, referer: student_report_path(student)
+    sign_in_user course_coach.user, referrer: student_report_path(student)
 
     expect(page).to have_text("This student's access to the course ended on #{time.strftime('%b %-d, %Y')}.")
   end

@@ -2,26 +2,66 @@
 # Organization of en.yml
 # ----------------------
 #
-# application.*.key = display_value
-# jobs.[MODULE].JOB.*.key = display_value
-# libs.MODULE.*.key = display_value
-# models.MODEL.COLUMN = { key: display_value, ... }
-# services.MODULE.SERVICE.*.key = display_value
-# presenters.MODULE.PRESENTER.*.key = display_value
-# CONTROLLER.ACTION.*.key = display_value
+# components.COMPONENT.* - component-specific strings
+# jobs.[MODULE].JOB.* - strings used by jobs
+# models.MODEL.COLUMN.* = translation of database values to display values
+# mutations.MUTATION.* = strings used by mutations
+# queries.QUERY.* = strings used by resolvers and mutators
+# shared.* - shared strings
+# CONTROLLER.ACTION.* = display_value
 #
 # CONTROLLER is always the plural version. For example: FoundersController#edit = founders.edit.*
 #
 # Order alphabetically where possible.
 #
-# Third-party customizations follow their own format. Record these at the end of the file. For example:
-#
-# activecord.* = Refer Activerecord documentation.
-#
-# Make sure you include links to documentation related to such third-party customizations for when we (undoubtedly)
-# forget what the strings were for.
+# Third-party library translations are at the end of this file, and they follow their own format.
+# Make sure you include links to documentation related to such third-party translations for when
+# we (undoubtedly) forget what the strings were for.
 
 en:
+  components:
+    CourseCertificates__Root:
+      auto_issue_tag: Auto-issue
+      create_action: &certificate_create_action Create New Certificate
+      issued_count:
+        zero: Never issued
+        one: Issued only once
+        other: "Issued %{count} times"
+      heading: Certificates
+      no_certificates: You haven't created any certificates yet!
+      edit_button_title: "Edit Certificate %{name}"
+      delete_button_title: "Delete Certificate %{name}"
+    CourseCertificates__CreateDrawer:
+      create_action: *certificate_create_action
+      name_label: Name
+      name_placeholder: A name to identify this certificate
+      certificate_base_image_label: Certificate Base Image
+      certificate_base_image_placeholder: Select a base image for certificate
+      success_notification: You can now edit this certificate.
+      create_button_text: Create Certificate
+    CourseCertificates__EditDrawer:
+      edit_action: Edit Certificate
+      name_label: Name
+      name_placeholder: A short name for this certificate
+      name_error: Name can't be blank
+      margin_label: Margin
+      active_label: Should students be automatically issued this certificate?
+      active_help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
+      name_offset_top_label: Name Offset (from top)
+      font_size_label: Font Size
+      qr_visibility_label: Add QR Code?
+      qr_visibility_help: It will contain a link to a page on your school that anyone can visit to verify an issued certificate.
+      qr_position_label: QR Code Position
+      qr_scale_label: QR Code Scale
+      qr_hidden_label: Hidden
+      qr_top_left_label: Top Left
+      qr_top_right_label: Top Right
+      qr_bottom_left_label: Bottom Left
+      qr_bottom_right_label: Bottom Right
+      update_issued_certificates_warning:
+        one: "This certificate has been issued once.<br/>These changes will also be applied to the issued certificate."
+        other: "This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates."
+
   jobs:
     timeline_events:
       verification_notification:
@@ -70,15 +110,25 @@ en:
         team: Team
         founder: All Founders
 
-  presenters:
-    layouts:
-      footer:
-        address_html: "#360, 6th Main Road<br/>1<sup>st</sup> Block, Koramangala,<br/>Bengaluru &mdash; 560034"
-        email_address: support@pupilfirst.com
+  mutations:
+    update_certificate:
+      success_notification: Certificate details have been updated.
+    delete_certificate:
+      success_notification: Certificate has been deleted.
 
-  admissions:
-    register:
-      email_error: "Our email delivery service refused to accept the supplied address. Please ensure that it is a valid email address. If you're still having issues, please contact us using live chat or at help@sv.co"
+  queries:
+    delete_certificate_mutator:
+      issued_error: This certificate has been issued to one or more students - it cannot be deleted.
+
+  shared:
+    optional: optional
+    done_exclamation: Done!
+    cancel: Cancel
+    close: Close
+    save_changes: Save Changes
+    saving: Saving...
+    image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
+    file_invalid: Please select a file with a size less than 5 MB.
 
   dashboard:
     dashboard:
@@ -95,6 +145,10 @@ en:
       zero_results: There are no public resources in this library. You may need to be signed in to see private resources.
       filter_zero_results: There are no resources with the current filter conditions. Try changing or clearing the filter.
       filter_notice: Now showing resources that match the current filter. Clear the filter to see all available resources.
+
+  ####################################
+  # THIRD-PARTY LIBRARY TRANSLATIONS #
+  ####################################
 
   # These are custom error messages for the active_storage_validations gem.
   errors:

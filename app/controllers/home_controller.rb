@@ -15,8 +15,8 @@ class HomeController < ApplicationController
     klass = case params[:agreement_type]
       when 'privacy-policy'
         SchoolString::PrivacyPolicy
-      when 'terms-of-use'
-        SchoolString::TermsOfUse
+      when 'terms-and-conditions'
+        SchoolString::TermsAndConditions
       else
         raise_not_found
     end
@@ -30,15 +30,14 @@ class HomeController < ApplicationController
     render layout: 'student'
   end
 
-  # GET /oauth/:provider?fqdn=FQDN&referer=
+  # GET /oauth/:provider?fqdn=FQDN&referrer=
   def oauth
     # Disallow routing OAuth results to unknown domains.
     raise_not_found if Domain.find_by(fqdn: params[:fqdn]).blank?
 
     set_cookie(:oauth_origin, {
       provider: params[:provider],
-      fqdn: params[:fqdn],
-      referer: params[:referer]
+      fqdn: params[:fqdn]
     }.to_json)
 
     redirect_to OmniauthProviderUrlService.new(params[:provider], current_host).oauth_url

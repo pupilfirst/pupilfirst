@@ -65,9 +65,11 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
         <div className="text-2xl font-bold leading-snug">
           {targetGroup |> TargetGroup.name |> str}
         </div>
-        <div className="text-sm max-w-md mx-auto leading-snug mt-1">
-          {targetGroup |> TargetGroup.description |> str}
-        </div>
+        {<MarkdownBlock
+           className="text-sm max-w-md mx-auto leading-snug"
+           markdown={TargetGroup.description(targetGroup)}
+           profile=Markdown.AreaOfText
+         />}
       </div>
       {targets
        |> List.sort((t1, t2) =>

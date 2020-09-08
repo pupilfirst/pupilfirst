@@ -1,0 +1,13 @@
+<% presenter = Schools::Courses::CertificatesPresenter.new(self, @course) %>
+
+<% content_for(:head) do %>
+  <title><%= @course.name %> | Certificates</title>
+  <%= stylesheet_pack_tag 'SchoolsCoursesCertificatesPack' %>
+<% end %>
+
+<%= content_for(:tail) do %>
+  <%= javascript_pack_tag 'SchoolsCoursesCertificatesPack', nonce: true %>
+<% end %>
+
+<script id="schools-courses-certificates__props" type="application/json"><%= presenter.props_to_json.html_safe %></script>
+<div id="schools-courses-certificates__root" class="flex flex-1 h-screen bg-gray-100"></div>

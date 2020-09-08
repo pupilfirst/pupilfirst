@@ -13,9 +13,6 @@ class Founder < ApplicationRecord
   has_one :course, through: :level
   has_many :communities, through: :course
   has_many :coach_notes, foreign_key: 'student_id', class_name: 'CoachNote', dependent: :destroy, inverse_of: :student
-  has_many :platform_feedback, dependent: :nullify
-  belongs_to :college, optional: true
-  has_one :university, through: :college
   belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
   has_many :active_admin_comments, as: :resource, class_name: 'ActiveAdmin::Comment', dependent: :destroy, inverse_of: :resource
   has_many :timeline_event_owners, dependent: :destroy

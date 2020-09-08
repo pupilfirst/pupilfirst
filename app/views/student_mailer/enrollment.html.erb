@@ -1,0 +1,39 @@
+<%
+  team_members = @student.startup.founders.where.not(id: @student.id).map(&:name).to_sentence
+  sign_in_link = user_token_url(token: @student.user.login_token)
+%>
+
+<% content_for :title do %>
+  <%= @course.name %>
+<% end %>
+
+<% content_for :subtitle do %>
+  You have been enrolled to a course on <%= @school.name %>.
+<% end %>
+
+<% content_for :title_button_text do %>
+  Sign in to View Course
+<% end %>
+
+<% content_for(:title_button_link, sign_in_link) %>
+
+<% content_for :salutation do %>
+  Hello <%= @student.name %>,
+<% end %>
+
+<% content_for :body do %>
+  <p>
+    You have been enrolled as a student in the course <strong><%= @course.name %></strong>, on <%= @school.name %>.
+
+    You can now sign into <%= @school.name %> and start working on this course.
+  </p>
+
+  <% if team_members.present? %>
+    <p>
+      You have also been teamed up with <%= team_members %>; this means that you will be expected to work together to
+      progress in this course.
+    </p>
+  <% end %>
+
+  <%= render 'mailers/link_fallback', url: sign_in_link %>
+<% end %>

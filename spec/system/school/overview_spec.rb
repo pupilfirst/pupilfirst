@@ -44,7 +44,7 @@ feature 'School Overview', js: true do
   let!(:c2_timeline_event_4) { create :timeline_event, :passed, evaluator_id: c2_coach_1.id, evaluated_at: 1.day.ago, founders: c2_startup_3.founders, target: c2_target_1 }
 
   scenario 'school admin visit the school overview' do
-    sign_in_user school_admin.user, referer: school_path
+    sign_in_user school_admin.user, referrer: school_path
     expect(page).to have_text(school.name)
 
     # gets the overall students count in school

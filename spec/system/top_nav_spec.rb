@@ -34,7 +34,7 @@ feature 'Top navigation bar' do
     end
 
     it 'displays all main links on the navbar and puts custom links in the dropdown', js: true do
-      sign_in_user student.user, referer: leaderboard_course_path(student.course)
+      sign_in_user student.user, referrer: leaderboard_course_path(student.course)
 
       expect(page).to have_link('Admin', href: '/school')
       expect(page).to have_link('Dashboard', href: "/dashboard")
@@ -58,7 +58,7 @@ feature 'Top navigation bar' do
 
   context 'when the user is a student' do
     it 'displays dashboard link on the navbar', js: true do
-      sign_in_user student.user, referer: leaderboard_course_path(student.course)
+      sign_in_user student.user, referrer: leaderboard_course_path(student.course)
 
       expect(page).not_to have_link('Admin', href: '/school')
       expect(page).to have_link('Dashboard', href: "/dashboard")

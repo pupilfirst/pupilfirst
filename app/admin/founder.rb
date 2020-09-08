@@ -1,7 +1,7 @@
 ActiveAdmin.register Founder do
   actions :index, :show
 
-  permit_params :name, :avatar, :startup_id, :about, :college_id, :excluded_from_leaderboard, roles: []
+  permit_params :name, :avatar, :startup_id, :about, :excluded_from_leaderboard, roles: []
 
   collection_action :search_founder do
     render json: Founders::Select2SearchService.search_for_founder(params[:q])
@@ -15,7 +15,6 @@ ActiveAdmin.register Founder do
   filter :startup_level_id, as: :select, collection: -> { Level.all.order(number: :asc) }
   filter :startup_id_null, as: :boolean, label: 'Without Startup'
   filter :roles_cont, as: :select, collection: -> { Founder.valid_roles }, label: 'Role'
-  filter :college_name_contains
   filter :created_at, label: 'Registered on'
 
   # Customize the index. Let's show only a small subset of the tons of fields.
@@ -51,14 +50,6 @@ ActiveAdmin.register Founder do
 
     column :about
 
-    column :college do |founder|
-      founder.college&.name
-    end
-
-    column :university do |founder|
-      founder.college&.university&.name
-    end
-
     column :slack_username
   end
 
@@ -86,22 +77,6 @@ ActiveAdmin.register Founder do
       row :about
       row :slack_username
       row :slack_user_id
-
-      row :college do |founder|
-        if founder.college.present?
-          founder.college.name
-        elsif founder.college_text.present?
-          founder.college_text
-        end
-      end
-
-      row :university do |founder|
-        university = founder.college&.university
-
-        if university.present?
-          university.name
-        end
-      end
 
       row :avatar do
         if founder.avatar.attached?

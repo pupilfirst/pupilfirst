@@ -19,7 +19,7 @@ feature 'Topic creator', js: true do
   end
 
   scenario 'user is shown suggestions when creating a new topic' do
-    sign_in_user(student.user, referer: new_topic_community_path(community))
+    sign_in_user(student.user, referrer: new_topic_community_path(community))
     fill_in('Title', with: 'foo')
 
     expect(page).to have_link(topic_1.title, href: "/topics/#{topic_1.id}/foo-bar")

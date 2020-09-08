@@ -35,7 +35,7 @@ feature 'Target Details Editor', js: true do
   let(:quiz_question_2_answer_option_2) { Faker::Lorem.sentence }
 
   scenario 'school admin modifies title and adds completion instruction to target' do
-    sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
 
     # Open the details editor for the target.
     find("a[title='Edit details of target #{target_1_l2.title}']").click
@@ -53,7 +53,7 @@ feature 'Target Details Editor', js: true do
   end
 
   scenario 'school admin updates a target as reviewed by faculty' do
-    sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
 
     # Open the details editor for the target.
     find("a[title='Edit details of target #{target_1_l2.title}']").click
@@ -85,7 +85,7 @@ feature 'Target Details Editor', js: true do
   end
 
   scenario 'school admin updates a target to one with link to complete' do
-    sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
 
     # Open the details editor for the target.
     find("a[title='Edit details of target #{target_2_l2.title}']").click
@@ -112,7 +112,7 @@ feature 'Target Details Editor', js: true do
   end
 
   scenario 'school admin updates a target to one with quiz' do
-    sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
 
     # Open the details editor for the target.
     find("a[title='Edit details of target #{target_2_l2.title}']").click
@@ -161,7 +161,7 @@ feature 'Target Details Editor', js: true do
   end
 
   scenario 'course author modifies target role and prerequisite targets' do
-    sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+    sign_in_user course_author.user, referrer: curriculum_school_course_path(course)
 
     # Open the details editor for the target.
     find("a[title='Edit details of target #{target_1_l2.title}']").click
@@ -186,7 +186,7 @@ feature 'Target Details Editor', js: true do
   end
 
   scenario 'user is notified on reloading window if target editor has unsaved changes' do
-    sign_in_user course_author.user, referer: details_school_course_target_path(course_id: course.id, id: target_1_l2.id)
+    sign_in_user course_author.user, referrer: details_school_course_target_path(course_id: course.id, id: target_1_l2.id)
 
     expect(page).to have_text('Are there any prerequisite targets?')
     # Can refresh the page without any confirm dialog
@@ -211,7 +211,7 @@ feature 'Target Details Editor', js: true do
     let!(:submission_for_quiz_target_without_grades) { create(:timeline_event, target: quiz_target, evaluated_at: nil, passed_at: 1.day.ago) }
 
     scenario 'admin expands the existing checklist in an evaluated target' do
-      sign_in_user course_author.user, referer: details_school_course_target_path(course_id: course.id, id: target_2_l2.id)
+      sign_in_user course_author.user, referrer: details_school_course_target_path(course_id: course.id, id: target_2_l2.id)
       expect(page).to have_text('What steps should the student take to complete this target?')
 
       # Change the existing item
@@ -302,7 +302,7 @@ feature 'Target Details Editor', js: true do
     end
 
     scenario 'admin uses controls in checklist to remove, copy and move checklist items' do
-      sign_in_user course_author.user, referer: details_school_course_target_path(course_id: course.id, id: target_3_l2.id)
+      sign_in_user course_author.user, referrer: details_school_course_target_path(course_id: course.id, id: target_3_l2.id)
 
       expect(page).to have_text('What steps should the student take to complete this target?')
 
@@ -349,7 +349,7 @@ feature 'Target Details Editor', js: true do
     end
 
     scenario 'admin changes target from quiz target to evaluated and adds a new checklist' do
-      sign_in_user course_author.user, referer: details_school_course_target_path(course_id: course.id, id: quiz_target.id)
+      sign_in_user course_author.user, referrer: details_school_course_target_path(course_id: course.id, id: quiz_target.id)
       expect(page).to_not have_text('What steps should the student take to complete this target?')
 
       # Change target into an evaluated target with checklist
@@ -395,7 +395,7 @@ feature 'Target Details Editor', js: true do
     let!(:target_l2_3) { create :target, target_group: target_group_l1, sort_index: 1, prerequisite_targets: [target_l2_2] }
 
     scenario 'author moves a target to another group in the same level' do
-      sign_in_user school_admin.user, referer: details_school_course_target_path(course_id: course.id, id: target_l2_2.id)
+      sign_in_user school_admin.user, referrer: details_school_course_target_path(course_id: course.id, id: target_l2_2.id)
 
       expect(page).to have_text("Level #{target_l2_2.level.number}: #{target_l2_2.target_group.name}")
 
@@ -416,7 +416,7 @@ feature 'Target Details Editor', js: true do
     end
 
     scenario 'author moves a target to another group on a different level' do
-      sign_in_user school_admin.user, referer: details_school_course_target_path(course_id: course.id, id: target_l2_2.id)
+      sign_in_user school_admin.user, referrer: details_school_course_target_path(course_id: course.id, id: target_l2_2.id)
 
       expect(page).to have_text("Level #{target_l2_2.level.number}: #{target_l2_2.target_group.name}")
 
@@ -431,6 +431,47 @@ feature 'Target Details Editor', js: true do
       expect(target_l2_2.target_group).to eq(target_group_l1)
       expect(target_l2_2.prerequisite_targets).to eq([])
       expect(target_l2_3.reload.prerequisite_targets).to eq([])
+    end
+
+    context 'admin modifies target that currently has submissions' do
+      # let!(:student) { create :founder, course: course }
+      let!(:submission_for_auto_verified_target) { create :timeline_event, target: target_1_l1, passed_at: 1.day.ago }
+
+      scenario 'admin updates target title' do
+        sign_in_user school_admin.user, referrer: details_school_course_target_path(course_id: course.id, id: target_1_l1.id)
+
+        expect(page).to have_text('Title')
+
+        fill_in 'title', with: new_target_title, fill_options: { clear: :backspace }
+
+        click_button 'Update Target'
+        expect(page).to have_text("Target updated successfully")
+        dismiss_notification
+
+        expect(target_1_l1.reload.timeline_events.count).to eq(1)
+      end
+
+      scenario 'admin changes target from auto-verified to evaluated' do
+        sign_in_user school_admin.user, referrer: details_school_course_target_path(course_id: course.id, id: target_1_l1.id)
+
+        expect(page).to have_text('Title')
+
+        within("div#evaluated") do
+          click_button 'Yes'
+        end
+
+        find("div[title='Select #{evaluation_criterion.display_name}']").click
+
+        within("div#visibility") do
+          click_button 'Live'
+        end
+
+        click_button 'Update Target'
+        expect(page).to have_text("Target updated successfully")
+        dismiss_notification
+
+        expect(target_1_l1.reload.timeline_events.count).to eq(0)
+      end
     end
   end
 end

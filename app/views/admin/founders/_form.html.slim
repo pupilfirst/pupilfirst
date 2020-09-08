@@ -12,7 +12,6 @@
     = f.input :about
     = f.input :startup, label: 'Product'
     = f.input :avatar, as: :file
-    = f.input :college_id, as: :select, input_html: { 'data-search-url' => colleges_url }, collection: f.object.college.present? ? [f.object.college] : []
     = f.input :excluded_from_leaderboard
 
   = f.submit

@@ -8,7 +8,15 @@
 }
 
 .policy-body ol {
-  @apply ml-4 mt-4 list-decimal;
+  @apply pl-6 mt-4 list-decimal;
+}
+
+.policy-body ol[type="a"] {
+  list-style-type: lower-alpha;
+}
+
+.policy-body ol[type="i"] {
+  list-style-type: lower-roman;
 }
 
 .policy-body li {

@@ -7,7 +7,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   # inflect.plural /^(ox)$/i, '\1en'
   # inflect.singular /^(ox)en/i, '\1'
   # inflect.irregular 'person', 'people'
-  inflect.uncountable %w[startup_feedback faculty platform_feedback]
+  inflect.uncountable %w[startup_feedback faculty feedback]
   inflect.irregular 'is', 'are'
   inflect.irregular 'was', 'were'
   inflect.irregular 'criterion', 'criteria' # this is required for our migration history to work.

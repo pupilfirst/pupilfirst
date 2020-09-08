@@ -274,7 +274,7 @@ let make = (~course, ~evaluationCriteria, ~levels, ~targetGroups, ~targets) => {
             </div>
             <button
               title="Edit selected level"
-              className="flex text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-400 border-l-0 py-1 px-2 rounded-r focus:outline-none"
+              className="flex items-center text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-400 border-l-0 py-1 px-2 rounded-r focus:outline-none"
               onClick={_ =>
                 send(
                   UpdateEditorAction(

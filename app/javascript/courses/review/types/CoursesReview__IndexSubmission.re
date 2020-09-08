@@ -42,19 +42,17 @@ let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy");
 let timeDistance = t =>
   t.createdAt->DateFns.formatDistanceToNowStrict(~addSuffix=true, ());
 
-let sortArray = (sortDirection, submissions) => {
-  let sortDescending =
-    submissions
-    |> ArrayUtils.copyAndSort((x, y) =>
-         DateFns.differenceInSeconds(y.createdAt, x.createdAt)
-       );
-  switch (sortDirection) {
-  | `Descending => sortDescending
-  | `Ascending => sortDescending |> Js.Array.reverseInPlace
-  };
-};
-
-let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~status, ~coachIds, ~teamName) => {
+let make =
+    (
+      ~id,
+      ~title,
+      ~createdAt,
+      ~levelId,
+      ~userNames,
+      ~status,
+      ~coachIds,
+      ~teamName,
+    ) => {
   id,
   title,
   createdAt,
@@ -62,41 +60,32 @@ let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~status, ~coachIds, ~
   userNames,
   status,
   coachIds,
-  teamName
+  teamName,
 };
 
 let makeStatus = (~passedAt, ~feedbackSent) => {passedAt, feedbackSent};
 
-let decodeJs = details =>
-  details
-  |> Js.Array.map(s =>
-       switch (s) {
-       | Some(submission) =>
-         let status =
-           submission##evaluatedAt
-           ->Belt.Option.map(_ =>
-               makeStatus(
-                 ~passedAt=
-                   submission##passedAt->Belt.Option.map(DateFns.decodeISO),
-                 ~feedbackSent=submission##feedbackSent,
-               )
-             );
+let decodeJs = submission => {
+  let status =
+    submission##evaluatedAt
+    ->Belt.Option.map(_ =>
+        makeStatus(
+          ~passedAt=submission##passedAt->Belt.Option.map(DateFns.decodeISO),
+          ~feedbackSent=submission##feedbackSent,
+        )
+      );
 
-         [
-           make(
-             ~id=submission##id,
-             ~title=submission##title,
-             ~createdAt=DateFns.decodeISO(submission##createdAt),
-             ~levelId=submission##levelId,
-             ~userNames=submission##userNames,
-             ~status,
-             ~coachIds=submission##coachIds,
-             ~teamName=submission##teamName,
-           ),
-         ];
-       | None => []
-       }
-     );
+  make(
+    ~id=submission##id,
+    ~title=submission##title,
+    ~createdAt=DateFns.decodeISO(submission##createdAt),
+    ~levelId=submission##levelId,
+    ~userNames=submission##userNames,
+    ~status,
+    ~coachIds=submission##coachIds,
+    ~teamName=submission##teamName,
+  );
+};
 
 let replace = (e, l) => l |> Array.map(s => s.id == e.id ? e : s);
 

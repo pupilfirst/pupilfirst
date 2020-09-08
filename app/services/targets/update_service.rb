@@ -34,7 +34,7 @@ module Targets
     private
 
     def handle_change_of_evaluation_criteria(evaluation_criteria_ids)
-      if @target.evaluation_criterion_ids.blank?
+      if @target.evaluation_criterion_ids.blank? && evaluation_criteria_ids.present?
         # Clear submissions without grades when target changes from auto-verified to evaluated.
         TimelineEvent.left_joins(:timeline_event_grades)
           .where(target: @target, timeline_event_grades: { id: nil })

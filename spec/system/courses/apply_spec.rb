@@ -169,42 +169,42 @@ feature "Apply for public courses", js: true do
   context 'when school has privacy policy' do
     before do
       create :school_string, :privacy_policy, school: school
-      create :school_string, :terms_of_use, school: school_2
+      create :school_string, :terms_and_conditions, school: school_2
     end
 
     scenario 'applicant can only see link to the privacy policy' do
       visit apply_course_path(public_course)
 
       expect(page).to have_link('Privacy Policy', href: '/agreements/privacy-policy')
-      expect(page).not_to have_link('Terms of Use', href: '/agreements/terms-of-use')
+      expect(page).not_to have_link('Terms & Conditions', href: '/agreements/terms-and-conditions')
     end
   end
 
-  context 'when school has terms of use' do
+  context 'when school has terms and conditions' do
     before do
       create :school_string, :privacy_policy, school: school_2
-      create :school_string, :terms_of_use, school: school
+      create :school_string, :terms_and_conditions, school: school
     end
 
-    scenario 'applicant can only see link to the terms of use' do
+    scenario 'applicant can only see link to the terms and conditions' do
       visit apply_course_path(public_course)
 
       expect(page).not_to have_link('Privacy Policy', href: '/agreements/privacy-policy')
-      expect(page).to have_link('Terms of Use', href: '/agreements/terms-of-use')
+      expect(page).to have_link('Terms & Conditions', href: '/agreements/terms-and-conditions')
     end
   end
 
   context 'when school has both agreements' do
     before do
       create :school_string, :privacy_policy, school: school
-      create :school_string, :terms_of_use, school: school
+      create :school_string, :terms_and_conditions, school: school
     end
 
     scenario 'applicant can see links to both agreements' do
       visit apply_course_path(public_course)
 
       expect(page).to have_link('Privacy Policy', href: '/agreements/privacy-policy')
-      expect(page).to have_link('Terms of Use', href: '/agreements/terms-of-use')
+      expect(page).to have_link('Terms & Conditions', href: '/agreements/terms-and-conditions')
     end
   end
 end

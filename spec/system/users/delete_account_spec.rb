@@ -11,7 +11,7 @@ feature 'User Delete Account' do
 
   context 'user is a not an admin' do
     scenario 'user initiates account deletion', js: true do
-      sign_in_user(user, referer: edit_user_path)
+      sign_in_user(user, referrer: edit_user_path)
 
       expect(page).to have_text('Delete account')
 
@@ -45,7 +45,7 @@ feature 'User Delete Account' do
       user.regenerate_delete_account_token
       user.update!(delete_account_sent_at: 25.minutes.ago)
 
-      sign_in_user(user, referer: edit_user_path)
+      sign_in_user(user, referrer: edit_user_path)
 
       expect(page).to have_text('You have already initiated account deletion. Please check your inbox for further steps to delete your account')
       expect(page).to_not have_button('Delete Account')
@@ -80,7 +80,7 @@ feature 'User Delete Account' do
     end
 
     scenario 'user visits the delete account page with invalid token', js: true do
-      sign_in_user(user, referer: delete_account_path(token: 'test_token'))
+      sign_in_user(user, referrer: delete_account_path(token: 'test_token'))
 
       expect(page).to have_text("That link has expired or is invalid. Please try again")
     end
@@ -99,7 +99,7 @@ feature 'User Delete Account' do
 
   context 'user is a school admin' do
     scenario 'user visits user edit page to delete account', js: true do
-      sign_in_user(admin_user, referer: edit_user_path)
+      sign_in_user(admin_user, referrer: edit_user_path)
 
       expect(page).to have_text('You are currently an admin of this school. Please delete your admin access to enable account deletion')
       expect(page).to_not have_button('Delete Account')

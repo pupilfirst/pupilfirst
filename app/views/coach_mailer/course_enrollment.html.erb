@@ -1,0 +1,34 @@
+<%
+  sign_in_link = user_token_url(token: @coach.user.login_token)
+%>
+
+<% content_for :title do %>
+  <%= @course.name %>
+<% end %>
+
+<% content_for :subtitle do %>
+  You have been added as a coach on <%= @school.name %>.
+<% end %>
+
+<% content_for :title_button_text do %>
+  Sign in to Review Course
+<% end %>
+
+<% content_for(:title_button_link, sign_in_link) %>
+
+<% content_for :salutation do %>
+  Hello <%= @coach.name %>,
+<% end %>
+
+<% content_for :body do %>
+  <p>
+    You have been added as a coach in the course <strong><%= @course.name %></strong>, on <%= @school.name %>. This
+    gives you the ability to review submissions from students, assign grades, and give them feedback on their work.
+  </p>
+
+  <p>
+    Use the link above to sign into <%= @school.name %> and view your students' submissions.
+  </p>
+
+  <%= render 'mailers/link_fallback', url: sign_in_link %>
+<% end %>

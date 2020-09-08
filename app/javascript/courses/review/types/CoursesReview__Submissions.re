@@ -18,12 +18,10 @@ let filterEq = (level, coach, filter) =>
   && filter.coach
   |> filterCoachId == filterCoachId(coach);
 
-type sortDirection = [ | `Ascending | `Descending];
-
 type data = {
   submissions: array(CoursesReview__IndexSubmission.t),
   filter,
-  sortDirection,
+  sortBy: CoursesReview__SubmissionsSorting.t,
   totalCount: int,
 };
 
@@ -43,14 +41,13 @@ let totalCount = t =>
 
 let unloaded = Unloaded;
 
-let partiallyLoaded =
-    (~submissions, ~filter, ~sortDirection, ~totalCount, ~cursor) =>
-  PartiallyLoaded({submissions, filter, sortDirection, totalCount}, cursor);
+let partiallyLoaded = (~submissions, ~filter, ~sortBy, ~totalCount, ~cursor) =>
+  PartiallyLoaded({submissions, filter, sortBy, totalCount}, cursor);
 
-let fullyLoaded = (~submissions, ~filter, ~sortDirection, ~totalCount) =>
-  FullyLoaded({submissions, filter, sortDirection, totalCount});
+let fullyLoaded = (~submissions, ~filter, ~sortBy, ~totalCount) =>
+  FullyLoaded({submissions, filter, sortBy, totalCount});
 
-let needsReloading = (selectedLevel, selectedCoach, sortDirection, t) =>
+let needsReloading = (selectedLevel, selectedCoach, sortBy, t) =>
   switch (t) {
   | Unloaded => true
   | FullyLoaded(data)
@@ -58,7 +55,7 @@ let needsReloading = (selectedLevel, selectedCoach, sortDirection, t) =>
     !(
       data.filter
       |> filterEq(selectedLevel, selectedCoach)
-      && data.sortDirection == sortDirection
+      && data.sortBy == sortBy
     )
   };
 

@@ -9,7 +9,8 @@ feature 'School students index', js: true do
   let(:tags) { [tag_1, tag_2] }
 
   # Setup a course with a single founder target, ...
-  let!(:school) { create :school, :current, founder_tag_list: tags }
+  let(:school) { create :school, :current, founder_tag_list: tags }
+  let!(:domain) { create :domain, :primary, school: school }
   let!(:course) { create :course, school: school }
 
   let!(:school_admin) { create :school_admin, school: school }
@@ -44,7 +45,7 @@ feature 'School students index', js: true do
     end
 
     scenario 'School admin adds new students and a team' do
-      sign_in_user school_admin.user, referer: school_course_students_path(course)
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       expect(page).to have_text(startup_1.founders.first.name)
       expect(page).to have_text(startup_2.founders.last.name)
@@ -157,6 +158,40 @@ feature 'School students index', js: true do
 
       expect(student_1.startup.tag_list).to contain_exactly('Abc', 'Def')
       expect(student_2.startup.tag_list).to contain_exactly('Abc', 'Def', 'GHI JKL')
+
+      open_email(student_1_user.email)
+
+      expect(current_email.subject).to include("You have been added as a student in #{school.name}")
+      expect(current_email.body).to have_link('Sign in to View Course')
+
+      open_email(student_2_user.email)
+
+      expect(current_email.subject).to include("You have been added as a student in #{school.name}")
+
+      open_email(student_3_user.email)
+
+      expect(current_email.subject).to include("You have been added as a student in #{school.name}")
+      expect(current_email.body).to include("You have also been teamed up with #{student_4_user.name}")
+
+      open_email(student_4_user.email)
+
+      expect(current_email.subject).to include("You have been added as a student in #{school.name}")
+      expect(current_email.body).to include("You have also been teamed up with #{student_3_user.name}")
+    end
+
+    scenario 'school admin adds a student after disabling the notify option' do
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+
+      click_button 'Add New Students'
+      fill_in 'Name', with: name_1
+      fill_in 'Email', with: email_1
+      click_button 'Add to List'
+      page.find('label', text: 'Notify students, and send them a link to sign into this school.').click
+      click_button 'Save List'
+
+      expect(page).to have_text("All students were created successfully")
+      open_email(email_1)
+      expect(current_email).to eq(nil)
     end
 
     context 'when adding a student who is already a user of another type' do
@@ -167,7 +202,7 @@ feature 'School students index', js: true do
       let(:faculty) { create :faculty, user: coach_user }
 
       scenario 'School admin adds a coach as a student' do
-        sign_in_user school_admin.user, referer: school_course_students_path(course)
+        sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
         click_button 'Add New Students'
 
@@ -190,6 +225,11 @@ feature 'School students index', js: true do
         expect(coach_user.name).to eq(original_name)
         expect(coach_user.title).to eq(title)
         expect(coach_user.affiliation).to eq(affiliation)
+
+        open_email(coach_user.email)
+
+        expect(current_email.subject).to include("You have been added as a student in #{school.name}")
+        expect(current_email.body).to have_link('Sign in to View Course')
       end
     end
 
@@ -204,7 +244,7 @@ feature 'School students index', js: true do
       end
 
       scenario 'School admin tries to add the existing student alongside a new student' do
-        sign_in_user school_admin.user, referer: school_course_students_path(course)
+        sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
         click_button 'Add New Students'
 
@@ -233,6 +273,10 @@ feature 'School students index', js: true do
         # The title and affiliation of existing user should not be modified.
         expect(existing_user.reload.title).to eq(original_title)
         expect(existing_user.affiliation).to eq(original_affiliation)
+
+        # The existing student should not have received any email.
+        open_email(email_1)
+        expect(current_email).to eq(nil)
       end
     end
 
@@ -249,7 +293,7 @@ feature 'School students index', js: true do
       let(:new_title) { Faker::Job.title }
 
       scenario 'School admin edits student details' do
-        sign_in_user school_admin.user, referer: school_course_students_path(course)
+        sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
         # Update a student
         find("a", text: name_1).click
@@ -332,7 +376,7 @@ feature 'School students index', js: true do
       let(:access_ends_at) { 1.day.from_now }
 
       scenario 'School admin updates access end date' do
-        sign_in_user school_admin.user, referer: school_course_students_path(course)
+        sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
         expect(page).to have_link("Inactive Students", href: school_course_inactive_students_path(course))
 
@@ -370,7 +414,7 @@ feature 'School students index', js: true do
       create :faculty_startup_enrollment, :with_course_enrollment, faculty: course_coach, startup: startup_2
       create :faculty_startup_enrollment, :with_course_enrollment, faculty: course_coach, startup: team_with_lone_student
 
-      sign_in_user school_admin.user, referer: school_course_students_path(course)
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       # Mark a student in a team of more than one students as dropped out.
       founder = startup_2.founders.last
@@ -427,7 +471,7 @@ feature 'School students index', js: true do
     end
 
     scenario 'school admin tries to add the same email twice' do
-      sign_in_user school_admin.user, referer: school_course_students_path(course)
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       # Add a student
       click_button 'Add New Students'
@@ -452,7 +496,7 @@ feature 'School students index', js: true do
     end
 
     scenario 'school admin tries to filter students' do
-      sign_in_user school_admin.user, referer: school_course_students_path(course)
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       # filter by level
       fill_in "search", with: "level"
@@ -523,7 +567,7 @@ feature 'School students index', js: true do
     end
 
     scenario 'school admin can order students' do
-      sign_in_user school_admin.user, referer: school_course_students_path(course)
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       click_button "Order by Name"
       click_button "Order by Last Created"

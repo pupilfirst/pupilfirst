@@ -1,5 +1,8 @@
 module Schools
   class CoursesController < SchoolsController
+    include CamelizeKeys
+    include StringifyIds
+
     layout 'school'
 
     def index
@@ -40,7 +43,7 @@ module Schools
       coaches = current_school.faculty.where(id: params[:coach_ids]).includes(:school)
 
       coaches.each do |coach|
-        ::Courses::AssignReviewerService.new(course).assign(coach)
+        ::Courses::AssignReviewerService.new(course, notify: true).assign(coach)
       end
 
       course_coaches = coaches.map do |coach|
@@ -110,6 +113,32 @@ module Schools
     # GET /school/courses/:id/authors
     def authors
       @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+    end
+
+    # GET /school/courses/:id/certificates
+    def certificates
+      @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+    end
+
+    # POST /school/courses/:id/certificates
+    def create_certificate
+      @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+
+      form = ::Courses::CreateCertificateForm.new(@course)
+
+      props = if form.validate(params)
+        scope = Certificate.where(id: form.save.id)
+        ActiveRecord::Precounter.new(scope).precount(:issued_certificates)
+
+        {
+          error: nil,
+          certificate: Schools::Courses::CertificatesPresenter.certificate_details(scope.first)
+        }
+      else
+        { error: form.errors.full_messages.join(", ") }
+      end
+
+      render json: camelize_keys(stringify_ids(props))
     end
 
     # GET /school/courses/:id/evaluation_criteria

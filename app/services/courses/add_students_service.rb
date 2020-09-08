@@ -1,8 +1,9 @@
 module Courses
   # Adds a list of new students to a course.
   class AddStudentsService
-    def initialize(course)
+    def initialize(course, notify: false)
       @course = course
+      @notify = notify
       @team_name_translation = {}
     end
 
@@ -14,9 +15,11 @@ module Courses
       new_students = sanitize_students(unpersisted_students(student_list))
 
       Course.transaction do
-        new_students.map do |student|
-          create_new_student(student)
+        students = new_students.map do |student_data|
+          create_new_student(student_data)
         end
+
+        notify_students(students)
 
         # Add the tags to the school's list of founder tags. This is useful for retrieval in the school admin interface.
         new_student_tags = new_students.map { |student| student.tags || [] }.flatten.uniq
@@ -28,6 +31,14 @@ module Courses
     end
 
     private
+
+    def notify_students(students)
+      return unless @notify
+
+      students.each do |student|
+        StudentMailer.enrollment(student).deliver_later
+      end
+    end
 
     def sanitize_students(students)
       team_sizes = {}
@@ -69,7 +80,7 @@ module Courses
 
       team = find_or_create_team(student)
 
-      # Finally, create a student profile for the user and tag it.
+      # Finally, create a student profile for the user.
       Founder.create!(user: user, startup: team)
     end
 
@@ -83,11 +94,18 @@ module Courses
     end
 
     def find_or_create_team(student)
-      @team_name_translation[student.team_name] ||= Startup.create!(
+      team = @team_name_translation[student.team_name]
+
+      return team if team.present?
+
+      team = Startup.create!(
         name: student.team_name.presence || student.name,
-        level: first_level,
+        level_id: first_level.id,
         tag_list: student.tags
       )
+
+      @team_name_translation[team.name] = team
+      team
     end
 
     def school

@@ -1,0 +1,35 @@
+<%
+  sign_in_link = user_token_url(token: @user.login_token)
+%>
+
+<% content_for :title do %>
+  <%= @course.name %>
+<% end %>
+
+<% content_for :subtitle do %>
+  You have been added as an author on <%= @school.name %>.
+<% end %>
+
+<% content_for :title_button_text do %>
+  Sign in to Edit Course
+<% end %>
+
+<% content_for(:title_button_link, sign_in_link) %>
+
+<% content_for :salutation do %>
+  Hello <%= @user.name %>,
+<% end %>
+
+<% content_for :body do %>
+  <p>
+    You have been added as an author in the course <strong><%= @course.name %></strong>, on <%= @school.name %>. This
+    gives you the ability to use the school administration interface to edit the contents of the course, and to
+    <em>preview</em> the course as a student.
+  </p>
+
+  <p>
+    Use the link above to sign into <%= @school.name %> and view the course.
+  </p>
+
+  <%= render 'mailers/link_fallback', url: sign_in_link %>
+<% end %>

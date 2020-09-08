@@ -61,7 +61,6 @@ user.update!(password: 'a secure password', password_confirmation: 'a secure pas
 You **should** discard this user, later, via the school administration interface once you've enrolled yourself as a school
 admin.
 
-
 ### Set a primary domain
 
 Let's inform the application about its domain address. On the Heroku console, run:
@@ -95,13 +94,13 @@ There are a few tasks that must be run scheduled to run periodically; this can b
 - `notify_and_delete_inactive_users` (daily) - checks for inactive users, notifies those who are a month away from deletion, and deletes notified users after the configured time.
 
 1. Add the _Scheduler_ add-on on Heroku.
-    ```bash
-    $ heroku addons:create scheduler:standard
-    ```
+   ```bash
+   $ heroku addons:create scheduler:standard
+   ```
 2. Open the _Scheduler_ dashboard for your app.
-    ```bash
-    $ heroku addons:open scheduler
-    ```
+   ```bash
+   $ heroku addons:open scheduler
+   ```
 3. Add the the jobs using the _Add Job_ option in the dashboard. Schedule both tasks to run as per the requirements noted above.
 
 ## File storage using AWS
@@ -132,6 +131,16 @@ You can configure Pupilfirst to block sending of emails to user addresses that a
 ## Performance monitoring with Skylight
 
 To enable performance monitoring with [Skylight](https://www.skylight.io/), sign up for a Skylight account and configure its credentials using the `SKYLIGHT_AUTHENTICATION` key.
+
+## Adding Memcached Cloud as cache store for API rate limiting
+
+You need to add a cache store to handle API rate limiting in the application.
+
+1. Add the _Memcached Cloud_ add-on on Heroku.
+   ```bash
+   $ heroku addons:create memcachedcloud
+   ```
+2. Configure the `GRAPH_API_RATE_LIMIT` environment variable on Heroku to the permitted requests per second.
 
 ## Signing in with OAuth
 

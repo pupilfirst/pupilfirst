@@ -408,4 +408,17 @@ feature "Student's view of Course Curriculum", js: true do
       end
     end
   end
+
+  context 'when a level has no live targets' do
+    let!(:level_without_targets) { create :level, number: 7, course: course }
+
+    scenario 'level empty message is displayed' do
+      sign_in_user student.user, referer: curriculum_course_path(course)
+
+      click_button "L4: #{level_4.name}"
+      click_button "L7: #{level_without_targets.name}"
+
+      expect(page).to have_content("There's no content for you to see yet")
+    end
+  end
 end

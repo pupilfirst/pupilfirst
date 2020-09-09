@@ -7,13 +7,12 @@ class FacultyController < ApplicationController
 
     raise_not_found unless @coaches.exists?
 
-    render layout: 'student'
+    render 'index', layout: 'student'
   end
 
-  # GET /faculty/:id, GET /coaches/:id
+  # GET /coaches/:id
   def show
-    @faculty = authorize(policy_scope(Faculty).find(params[:id]))
-    render layout: 'student'
+    index
   end
 
   # POST /faculty/:id/connect

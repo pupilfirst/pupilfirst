@@ -145,7 +145,7 @@ let fileInputId = aboveContentBlock =>
 let imageInputId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-image-input-");
 let videoInputId = aboveContentBlock =>
-  aboveContentBlock |> elementId("markdown-block-video-input-");
+  aboveContentBlock |> elementId("markdown-block-vimeo-input-");
 let fileFormId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-file-form-");
 let imageFormId = aboveContentBlock =>
@@ -179,7 +179,7 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
     | `File => ("far fa-file-alt", "File", Some(fileId))
     | `Image => ("far fa-image", "Image", Some(imageId))
     | `Embed => ("fas fa-code", "Embed", None)
-    | `VideoEmbed => ("fas fa-video", "Video", Some(videoId))
+    | `VideoEmbed => ("fab fa-vimeo-v", "Video", Some(videoId))
     };
 
   <label

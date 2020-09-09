@@ -1,7 +1,6 @@
 module Mutations
   class CreateVimeoVideo < GraphQL::Schema::Mutation
     argument :size, Integer, required: true
-    argument :target_id, ID, required: true
 
     description "Create vimeo upload uri"
     

@@ -1,19 +1,60 @@
 module Vimeo
   class ApiService
-    def initialize(path, current_school)
-      @path = path
+    def initialize(current_school)
       @current_school = current_school
     end
 
-    def post(data)
-      uri = URI(full_url(@path))
+    def create_video(size)
+      response = create_video_resource(size)
+      raise "Encountered error with code #{response[:error_code]} when trying to create a Vimeo video." if response[:error_code].present?
+      video_id = response[:uri].split('/')[-1]
+      add_whitelist_urls(video_id)
+      response
+    end
+
+    private 
+
+    def create_video_resource(size)
+      data = {
+        upload: {
+          approach: 'tus',
+          size: size
+        },
+        privacy: {
+          embed: 'whitelist'
+        }
+      }
+      
+      post('/me/videos', data)
+    end
+
+    def add_whitelist_urls(video_id)
+      data = {
+        privacy: {
+          embed: 'whitelist'
+        }
+      }
+
+      @current_school.domains.pluck(:fqdn).map do |fqdn|
+        put("/videos/#{video_id}/privacy/domains/#{fqdn}", data)
+      end
+    end
+
+
+    def put(path, data)
+      uri = URI(full_url(path))
+      request = Net::HTTP::PUT.new(uri)
+      request.body = data.to_json
+      execute(uri, request)
+    end
+
+    def post(path, data)
+      uri = URI(full_url(path))
       request = Net::HTTP::Post.new(uri)
       request.body = data.to_json
       execute(uri, request)
     end
 
-    private
-    
     def execute(uri, request)
       add_headers(request)
 

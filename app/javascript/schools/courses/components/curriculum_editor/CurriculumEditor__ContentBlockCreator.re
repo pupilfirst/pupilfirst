@@ -144,6 +144,8 @@ let fileInputId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-file-input-");
 let imageInputId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-image-input-");
+let videoInputId = aboveContentBlock =>
+  aboveContentBlock |> elementId("markdown-block-video-input-");
 let fileFormId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-file-form-");
 let imageFormId = aboveContentBlock =>
@@ -162,12 +164,14 @@ let onBlockTypeSelect =
   | `File => ()
   | `Image => ()
   | `Embed => send(ShowEmbedForm)
+  | `VideoEmbed => ()
   };
 };
 
 let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
   let fileId = aboveContentBlock |> fileInputId;
   let imageId = aboveContentBlock |> imageInputId;
+  let videoId = aboveContentBlock |> videoInputId;
 
   let (faIcon, buttonText, htmlFor) =
     switch (blockType) {
@@ -175,6 +179,7 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
     | `File => ("far fa-file-alt", "File", Some(fileId))
     | `Image => ("far fa-image", "Image", Some(imageId))
     | `Embed => ("fas fa-code", "Embed", None)
+    | `VideoEmbed => ("fas fa-video", "Video", Some(videoId))
     };
 
   <label
@@ -460,7 +465,7 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
          | BlockSelector =>
            <div
              className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
-             {[|`Markdown, `Image, `Embed, `File|]
+             {[|`Markdown, `Image, `Embed, `VideoEmbed, `File|]
               |> Array.map(
                    button(target, aboveContentBlock, send, addContentBlockCB),
                  )

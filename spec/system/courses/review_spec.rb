@@ -60,7 +60,7 @@ feature "Coach's review interface" do
     end
 
     scenario 'course coach visits review dashboard', js: true do
-      sign_in_user course_coach.user, referer: review_course_path(course)
+      sign_in_user course_coach.user, referrer: review_course_path(course)
 
       # Ensure coach is on the review dashboard.
       within("div[aria-label='status-tab']") do
@@ -115,7 +115,7 @@ feature "Coach's review interface" do
     end
 
     scenario 'course coach uses the level filter', js: true do
-      sign_in_user course_coach.user, referer: review_course_path(course)
+      sign_in_user course_coach.user, referrer: review_course_path(course)
 
       # Ensure coach is on the review dashboard.
       within("div[aria-label='status-tab']") do
@@ -176,7 +176,7 @@ feature "Coach's review interface" do
     end
 
     scenario 'team coach visits the review dashboard', js: true do
-      sign_in_user team_coach.user, referer: review_course_path(course)
+      sign_in_user team_coach.user, referrer: review_course_path(course)
 
       expect(page).to have_text('Assigned to: Me')
 
@@ -243,7 +243,7 @@ feature "Coach's review interface" do
     end
 
     scenario 'coach changes the sort order of submissions', js: true do
-      sign_in_user course_coach.user, referer: review_course_path(course)
+      sign_in_user course_coach.user, referrer: review_course_path(course)
 
       within("div[aria-label='Change submissions sorting']") do
         expect(page).to have_content("Submitted At")
@@ -286,7 +286,7 @@ feature "Coach's review interface" do
     end
 
     scenario 'coach can access submissions from review dashboard', js: true do
-      sign_in_user course_coach.user, referer: review_course_path(course)
+      sign_in_user course_coach.user, referrer: review_course_path(course)
 
       within("a[aria-label='Submission #{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
@@ -306,7 +306,7 @@ feature "Coach's review interface" do
       end
 
       scenario 'one team coach uses filter to see submissions assigned to another coach', js: true do
-        sign_in_user team_coach.user, referer: review_course_path(course)
+        sign_in_user team_coach.user, referrer: review_course_path(course)
 
         expect(page).to have_text('Assigned to: Me')
 
@@ -356,7 +356,7 @@ feature "Coach's review interface" do
     end
 
     scenario 'coach browses paginated pending and reviewed submissions list', js: true do
-      sign_in_user course_coach.user, referer: review_course_path(course)
+      sign_in_user course_coach.user, referrer: review_course_path(course)
 
       # Ensure coach is on the review dashboard.
       within("div[aria-label='status-tab']") do
@@ -385,7 +385,7 @@ feature "Coach's review interface" do
   end
 
   scenario 'coach visits completely empty review dashboard', js: true do
-    sign_in_user course_coach.user, referer: review_course_path(course)
+    sign_in_user course_coach.user, referrer: review_course_path(course)
 
     # Ensure coach is on the review dashboard.
     within("div[aria-label='status-tab']") do
@@ -403,14 +403,14 @@ feature "Coach's review interface" do
   end
 
   scenario 'student tries to access the review dashboard' do
-    sign_in_user team_l1.founders.first.user, referer: review_course_path(course)
+    sign_in_user team_l1.founders.first.user, referrer: review_course_path(course)
 
     expect(page).to have_text("The page you were looking for doesn't exist!")
     expect(page).not_to have_content(course.name)
   end
 
   scenario 'school admin tries to access the review dashboard' do
-    sign_in_user school_admin.user, referer: review_course_path(course)
+    sign_in_user school_admin.user, referrer: review_course_path(course)
 
     expect(page).to have_text("The page you were looking for doesn't exist!")
     expect(page).not_to have_content(course.name)

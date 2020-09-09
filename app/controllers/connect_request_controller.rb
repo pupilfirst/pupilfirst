@@ -70,7 +70,7 @@ class ConnectRequestController < ApplicationController
   def authenticate_and_return
     return if current_founder.present?
 
-    session[:referer] = connect_request_join_session_path(params[:id])
+    session[:referrer] = connect_request_join_session_path(params[:id])
     authenticate_founder!
   end
 end

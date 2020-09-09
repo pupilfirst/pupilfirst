@@ -13,7 +13,7 @@ feature 'School admins Editor', js: true do
   let(:coach) { create :faculty, school: school }
 
   scenario 'school admin adds a new user as an admin' do
-    sign_in_user school_admin_1.user, referer: admins_school_path
+    sign_in_user school_admin_1.user, referrer: admins_school_path
 
     # list all school admins
     expect(page).to have_text("Add New School Admin")
@@ -58,7 +58,7 @@ feature 'School admins Editor', js: true do
   end
 
   scenario "school admin edits another admin's details" do
-    sign_in_user school_admin_1.user, referer: admins_school_path
+    sign_in_user school_admin_1.user, referrer: admins_school_path
 
     # Edit school admin
     find("a", text: school_admin_2.name).click
@@ -80,7 +80,7 @@ feature 'School admins Editor', js: true do
   end
 
   scenario 'school admin adds an existing user as an admin', js: true do
-    sign_in_user school_admin_1.user, referer: admins_school_path
+    sign_in_user school_admin_1.user, referrer: admins_school_path
 
     original_title = user.title
     altered_name = Faker::Name.name
@@ -100,7 +100,7 @@ feature 'School admins Editor', js: true do
   end
 
   scenario 'school admin deletes another admin' do
-    sign_in_user school_admin_1.user, referer: admins_school_path
+    sign_in_user school_admin_1.user, referrer: admins_school_path
 
     # Both admins should be deletable.
     expect(page).to have_selector("div[title='Delete #{school_admin_1.name}'")
@@ -127,7 +127,7 @@ feature 'School admins Editor', js: true do
   end
 
   scenario 'school admins deletes her own admin access' do
-    sign_in_user school_admin_1.user, referer: admins_school_path
+    sign_in_user school_admin_1.user, referrer: admins_school_path
 
     accept_confirm do
       find("div[title='Delete #{school_admin_1.name}'").click
@@ -145,7 +145,7 @@ feature 'School admins Editor', js: true do
   end
 
   scenario 'logged in user who not a school admin tries to access school admin editor interface' do
-    sign_in_user coach.user, referer: admins_school_path
+    sign_in_user coach.user, referrer: admins_school_path
     expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 end

@@ -13,7 +13,7 @@ feature 'School Customization', js: true do
   end
 
   scenario 'school admin sets custom images' do
-    sign_in_user school_admin.user, referer: customize_school_path
+    sign_in_user school_admin.user, referrer: customize_school_path
 
     find('div[title="Edit logo (on light backgrounds)"]').click
 
@@ -39,7 +39,7 @@ feature 'School Customization', js: true do
   end
 
   scenario 'school admin sets custom links' do
-    sign_in_user school_admin.user, referer: customize_school_path
+    sign_in_user school_admin.user, referrer: customize_school_path
 
     expect(page).to have_content("You can customize links on the header.")
 
@@ -131,7 +131,7 @@ feature 'School Customization', js: true do
   end
 
   scenario 'school admin customizes strings' do
-    sign_in_user school_admin.user, referer: customize_school_path
+    sign_in_user school_admin.user, referrer: customize_school_path
 
     expect(page).to have_content("Add an address?")
     expect(page).to have_content("Add a contact email?")
@@ -184,7 +184,7 @@ feature 'School Customization', js: true do
   end
 
   scenario 'school admin customizes school name and about' do
-    sign_in_user school_admin.user, referer: customize_school_path
+    sign_in_user school_admin.user, referrer: customize_school_path
 
     expect(page).to have_content(school.name)
     expect(page).to have_content('Add more details about the school')

@@ -15,7 +15,7 @@ feature 'School Admin Navbar', js: true do
   let!(:course_3) { create :course, school: school_2 }
 
   scenario 'school admin visits the admin interface' do
-    sign_in_user school_admin.user, referer: school_path
+    sign_in_user school_admin.user, referrer: school_path
 
     # User should be on the school admin overview page.
     expect(current_path).to eq('/school')

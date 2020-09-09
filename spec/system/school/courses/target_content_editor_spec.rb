@@ -20,7 +20,7 @@ feature 'Target Content Editor', js: true do
   end
 
   scenario 'school admin adds and edits a markdown block' do
-    sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
 
     # Open the content editor for the target.
     find("a[title='Edit content of target #{target.title}']").click
@@ -79,7 +79,7 @@ feature 'Target Content Editor', js: true do
   end
 
   scenario 'school admin adds and edits an image block' do
-    sign_in_user school_admin.user, referer: content_school_course_target_path(course, target)
+    sign_in_user school_admin.user, referrer: content_school_course_target_path(course, target)
 
     expect(target.current_target_version.content_blocks.count).to eq(1)
 
@@ -127,7 +127,7 @@ feature 'Target Content Editor', js: true do
   end
 
   scenario 'school admin adds and edits a file block' do
-    sign_in_user school_admin.user, referer: content_school_course_target_path(course, target)
+    sign_in_user school_admin.user, referrer: content_school_course_target_path(course, target)
 
     expect(target.current_target_version.content_blocks.count).to eq(1)
 
@@ -178,7 +178,7 @@ feature 'Target Content Editor', js: true do
   end
 
   scenario 'school admin adds an embed block' do
-    sign_in_user school_admin.user, referer: content_school_course_target_path(course, target)
+    sign_in_user school_admin.user, referrer: content_school_course_target_path(course, target)
 
     expect(target.current_target_version.content_blocks.count).to eq(1)
     expect(page).to have_selector('button[title="Delete"]', count: 0) # There is only one block - so the button should be hidden.
@@ -213,7 +213,7 @@ feature 'Target Content Editor', js: true do
     let!(:fourth_block) { create(:content_block, :file, target_version: target_version, sort_index: 3) }
 
     scenario 'school admin changes the sort order of existing content blocks' do
-      sign_in_user school_admin.user, referer: content_school_course_target_path(course, target)
+      sign_in_user school_admin.user, referrer: content_school_course_target_path(course, target)
 
       # The first block should only have the "move down" button.
       within("div[aria-label='Editor for content block #{first_block.id}'") do
@@ -258,7 +258,7 @@ feature 'Target Content Editor', js: true do
     end
 
     scenario 'admin deletes an existing content block' do
-      sign_in_user school_admin.user, referer: content_school_course_target_path(course, target)
+      sign_in_user school_admin.user, referrer: content_school_course_target_path(course, target)
 
       expect(page).to have_selector('button[title="Delete"]', count: 4)
 
@@ -280,7 +280,7 @@ feature 'Target Content Editor', js: true do
 
   scenario 'course author edits the content of a target' do
     # This is a quick and incomplete test that checks access to this interface.
-    sign_in_user course_author.user, referer: content_school_course_target_path(course, target)
+    sign_in_user course_author.user, referrer: content_school_course_target_path(course, target)
 
     first_block = ContentBlock.first
 
@@ -311,7 +311,7 @@ feature 'Target Content Editor', js: true do
   end
 
   scenario 'admin is warned before switching tabs or closing the editor when there are unsaved changes' do
-    sign_in_user school_admin.user, referer: content_school_course_target_path(course, target)
+    sign_in_user school_admin.user, referrer: content_school_course_target_path(course, target)
 
     first_block = ContentBlock.first
     new_title = Faker::Lorem.words(number: 3).join(' ')

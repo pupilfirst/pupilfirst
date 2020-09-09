@@ -17,7 +17,7 @@ feature 'Target Content Version Management', js: true do
 
   # rubocop:disable Rails/SkipsModelValidations
   scenario 'school admin visits target version page and creates a target version' do
-    sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
 
     # Open the versions editor for the target.
     find("a[title='Edit versions of target #{target_1.title}']").click
@@ -36,7 +36,7 @@ feature 'Target Content Version Management', js: true do
   end
 
   scenario 'school admin visits target version page and creates multiple target versions' do
-    sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
 
     # Open the versions editor for the target.
     find("a[title='Edit versions of target #{target_1.title}']").click
@@ -70,7 +70,7 @@ feature 'Target Content Version Management', js: true do
   end
 
   scenario 'school admin visits target version page to restore an old target version' do
-    sign_in_user school_admin.user, referer: versions_school_course_target_path(course_id: course.id, id: target_1.id)
+    sign_in_user school_admin.user, referrer: versions_school_course_target_path(course_id: course.id, id: target_1.id)
 
     expect(page).to have_text(target_1.title)
 
@@ -98,7 +98,7 @@ feature 'Target Content Version Management', js: true do
   end
 
   scenario 'course author saves the current version of a target' do
-    sign_in_user course_author.user, referer: versions_school_course_target_path(course_id: course.id, id: target_1.id)
+    sign_in_user course_author.user, referrer: versions_school_course_target_path(course_id: course.id, id: target_1.id)
 
     expect(page).to have_text(target_1.title)
 

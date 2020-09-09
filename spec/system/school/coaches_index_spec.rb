@@ -22,7 +22,7 @@ feature 'Coaches Index', js: true do
   let!(:school_admin) { create :school_admin, school: school }
 
   scenario 'school admin adds a new coach and edits details' do
-    sign_in_user school_admin.user, referer: school_coaches_path
+    sign_in_user school_admin.user, referrer: school_coaches_path
 
     # list all coaches
     expect(page).to have_text('Add New Coach')

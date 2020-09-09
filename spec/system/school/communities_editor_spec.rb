@@ -15,7 +15,7 @@ feature 'SA Communities Editor', js: true do
   let!(:new_community_name_for_edit) { Faker::Lorem.words(number: 2).join ' ' }
 
   scenario 'school admin visits a community editor' do
-    sign_in_user school_admin.user, referer: school_communities_path
+    sign_in_user school_admin.user, referrer: school_communities_path
 
     # list all communities
     expect(page).to have_text("Add New Community")

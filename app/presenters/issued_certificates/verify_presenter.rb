@@ -9,7 +9,7 @@ module IssuedCertificates
       {
         issued_certificate: issued_certificate_details,
         verify_image_url: view.image_path('issued_certificates/verify.png'),
-        current_user: @issued_certificate.user == current_user
+        current_user: user.present? && user == current_user
       }
     end
 
@@ -19,10 +19,15 @@ module IssuedCertificates
 
     private
 
+    def user
+      @issued_certificate.user
+    end
+
     def issued_certificate_details
       certificate.attributes.slice('margin', 'font_size', 'name_offset_top', 'qr_corner', 'qr_scale').merge(
         serial_number: serial_number,
         issued_to: @issued_certificate.name,
+        profile_name: user&.name || @issued_certificate.name,
         issued_at: @issued_certificate.created_at,
         course_name: certificate.course.name,
         image_url: view.url_for(certificate.image)

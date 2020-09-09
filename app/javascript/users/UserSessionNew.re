@@ -39,13 +39,12 @@ let handleSignInWithPasswordCB = response => {
 };
 let handleSignInWithEmailCB = (setView, _) => setView(_ => SignInEmailSent);
 
-let signInWithPassword =
-    (authenticityToken, email, password, setSaving, sharedDevice) => {
+let signInWithPassword = (email, password, setSaving, sharedDevice) => {
   let payload = Js.Dict.empty();
   Js.Dict.set(
     payload,
     "authenticity_token",
-    authenticityToken |> Js.Json.string,
+    AuthenticityToken.fromHead() |> Js.Json.string,
   );
   Js.Dict.set(payload, "email", email |> Js.Json.string);
   Js.Dict.set(
@@ -65,16 +64,15 @@ let signInWithPassword =
   );
 };
 
-let sendSignInEmail =
-    (authenticityToken, email, setView, setSaving, sharedDevice) => {
+let sendSignInEmail = (email, setView, setSaving, sharedDevice) => {
   let payload = Js.Dict.empty();
   Js.Dict.set(
     payload,
     "authenticity_token",
-    authenticityToken |> Js.Json.string,
+    AuthenticityToken.fromHead() |> Js.Json.string,
   );
   Js.Dict.set(payload, "email", email |> Js.Json.string);
-  Js.Dict.set(payload, "referer", "" |> Js.Json.string);
+
   Js.Dict.set(
     payload,
     "shared_device",
@@ -92,12 +90,12 @@ let sendSignInEmail =
   );
 };
 
-let sendResetPasswordEmail = (authenticityToken, email, setView, setSaving) => {
+let sendResetPasswordEmail = (email, setView, setSaving) => {
   let payload = Js.Dict.empty();
   Js.Dict.set(
     payload,
     "authenticity_token",
-    authenticityToken |> Js.Json.string,
+    AuthenticityToken.fromHead() |> Js.Json.string,
   );
   Js.Dict.set(payload, "email", email |> Js.Json.string);
   Js.Dict.set(payload, "username", "" |> Js.Json.string);
@@ -210,7 +208,6 @@ let renderSignInWithEmail =
       setEmail,
       password,
       setPassword,
-      authenticityToken,
       setView,
       saving,
       setSaving,
@@ -280,13 +277,7 @@ let renderSignInWithEmail =
          ? <button
              disabled={saving || validEmail(email)}
              onClick={_ =>
-               signInWithPassword(
-                 authenticityToken,
-                 email,
-                 password,
-                 setSaving,
-                 sharedDevice,
-               )
+               signInWithPassword(email, password, setSaving, sharedDevice)
              }
              className="btn btn-success btn-large text-center w-full">
              {saving
@@ -299,13 +290,7 @@ let renderSignInWithEmail =
          : <button
              disabled={saving || validEmail(email)}
              onClick={_ =>
-               sendSignInEmail(
-                 authenticityToken,
-                 email,
-                 setView,
-                 setSaving,
-                 sharedDevice,
-               )
+               sendSignInEmail(email, setView, setSaving, sharedDevice)
              }
              className="btn btn-primary btn-large text-center w-full">
              {saving
@@ -326,8 +311,7 @@ let renderSignInEmailSent = () =>
     </p>
   </div>;
 
-let renderForgotPassword =
-    (authenticityToken, email, saving, setEmail, setSaving, setView) =>
+let renderForgotPassword = (email, saving, setEmail, setSaving, setView) =>
   <div className="max-w-sm mx-auto md:px-9 pb-4">
     <div className="text-sm mt-2 text-center pb-3">
       {"Enter your email for password recovery" |> str}
@@ -348,9 +332,7 @@ let renderForgotPassword =
     />
     <button
       disabled={saving || validEmail(email)}
-      onClick={_ =>
-        sendResetPasswordEmail(authenticityToken, email, setView, setSaving)
-      }
+      onClick={_ => sendResetPasswordEmail(email, setView, setSaving)}
       className="btn btn-primary btn-large text-center w-full mt-4 mr-2">
       {saving
          ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null}
@@ -359,7 +341,7 @@ let renderForgotPassword =
   </div>;
 
 [@react.component]
-let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
+let make = (~schoolName, ~fqdn, ~oauthHost) => {
   let (view, setView) =
     React.useState(() =>
       oauthHost
@@ -389,7 +371,6 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
            setEmail,
            password,
            setPassword,
-           authenticityToken,
            setView,
            saving,
            setSaving,
@@ -398,14 +379,7 @@ let make = (~schoolName, ~authenticityToken, ~fqdn, ~oauthHost) => {
          )
        | (_, SignInEmailSent) => renderSignInEmailSent()
        | (_, ForgotPassword) =>
-         renderForgotPassword(
-           authenticityToken,
-           email,
-           saving,
-           setEmail,
-           setSaving,
-           setView,
-         )
+         renderForgotPassword(email, saving, setEmail, setSaving, setView)
        }}
       {switch (oauthHost, view) {
        | (_, FederatedSignIn) =>

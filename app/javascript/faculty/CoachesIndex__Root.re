@@ -2,7 +2,7 @@
 
 let str = React.string;
 
-module Coach = CoachesIndex__Coach;
+open CoachesIndex__Types;
 
 let connectLink = href =>
   <a
@@ -130,7 +130,7 @@ let card = coach => {
 };
 
 [@react.component]
-let make = (~subheading, ~coaches, ~studentInCourseIds) => {
+let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
   let url = ReasonReactRouter.useUrl();
 
   let selectedCoachOverlay =
@@ -154,16 +154,14 @@ let make = (~subheading, ~coaches, ~studentInCourseIds) => {
     selectedCoachOverlay
     <div className="max-w-5xl mx-auto px-4">
       <h1 className="text-4xl text-center mt-3"> {str("Coaches")} </h1>
-      <div>
-        {switch (subheading) {
-         | Some(subheading) =>
-           <p className="text-center"> {str(subheading)} </p>
-         | None => React.null
-         }}
-        <div
-          className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 py-8">
-          {Js.Array.map(card, coaches)->React.array}
-        </div>
+      {switch (subheading) {
+       | Some(subheading) =>
+         <p className="text-center"> {str(subheading)} </p>
+       | None => React.null
+       }}
+      <div
+        className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 py-8">
+        {Js.Array.map(card, coaches)->React.array}
       </div>
     </div>
   </div>;

@@ -1,14 +1,17 @@
+open CoachesIndex__Types;
+
 let decodeProps = json =>
   Json.Decode.(
     optional(field("subheading", string), json),
-    field("coaches", array(CoachesIndex__Coach.decode), json),
+    field("coaches", array(Coach.decode), json),
+    field("courses", array(Course.decode), json),
     field("studentInCourseIds", array(string), json),
   );
 
-let (subheading, coaches, studentInCourseIds) =
+let (subheading, coaches, courses, studentInCourseIds) =
   DomUtils.parseJSONTag() |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <CoachesIndex__Root subheading coaches studentInCourseIds />,
+  <CoachesIndex__Root subheading coaches courses studentInCourseIds />,
   "react-root",
 );

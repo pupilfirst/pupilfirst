@@ -9,6 +9,7 @@ module FacultyModule
       {
         subheading: SchoolString::CoachesIndexSubheading.for(current_school),
         coaches: coaches,
+        courses: courses,
         student_in_course_ids: course_ids
       }
     end
@@ -19,6 +20,12 @@ module FacultyModule
       return [] if current_user.blank?
 
       current_user.founders.includes(:course).map { |student| student.course.id }
+    end
+
+    def courses
+      current_school.courses.featured
+        .or(current_school.courses.where(id: course_ids))
+        .distinct.as_json(only: %w[id name])
     end
 
     def coaches

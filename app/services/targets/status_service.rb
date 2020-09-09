@@ -34,7 +34,7 @@ module Targets
       return if linked_event.blank?
       return STATUS_PASSED if linked_event.passed_at?
 
-      linked_event.evaluator_id? ? STATUS_FAILED : STATUS_SUBMITTED
+      linked_event.evaluated_at ? STATUS_FAILED : STATUS_SUBMITTED
     end
 
     def reason_to_lock

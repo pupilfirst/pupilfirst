@@ -65,9 +65,11 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
         <div className="text-2xl font-bold leading-snug">
           {targetGroup |> TargetGroup.name |> str}
         </div>
-        <div className="text-sm max-w-md mx-auto leading-snug mt-1">
-          {targetGroup |> TargetGroup.description |> str}
-        </div>
+        {<MarkdownBlock
+           className="text-sm max-w-md mx-auto leading-snug"
+           markdown={TargetGroup.description(targetGroup)}
+           profile=Markdown.AreaOfText
+         />}
       </div>
       {targets
        |> List.sort((t1, t2) =>
@@ -105,10 +107,9 @@ let handleLockedLevel = level =>
       {"Level Locked" |> str}
     </div>
     <img className="max-w-sm mx-auto" src=levelLockedImage />
-    {switch (level |> Level.unlockOn) {
+    {switch (level |> Level.unlockAt) {
      | Some(date) =>
-       let dateString =
-         date->DateFns.parseISO->DateFns.format("MMMM d, yyyy");
+       let dateString = date->DateFns.format("MMMM d, yyyy");
        <div className="font-semibold text-md px-3">
          <p> {"The level is currently locked!" |> str} </p>
          <p>
@@ -479,8 +480,8 @@ let make =
 
   React.useEffect1(
     () => {
-      if (initialRender |> React.Ref.current) {
-        initialRender->React.Ref.setCurrent(false);
+      if (initialRender.current) {
+        initialRender.current = false;
       } else {
         let newStatusOfTargets = computeTargetStatus(state.latestSubmissions);
 

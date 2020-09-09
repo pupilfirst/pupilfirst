@@ -17,12 +17,12 @@ feature 'Curriculum Editor', js: true do
   let!(:course_author_2) { create :course_author, course: course_2, user: faculty.user }
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }
-  let!(:target_group_1) { create :target_group, level: level_1 }
-  let!(:target_group_2) { create :target_group, level: level_2 }
+  let!(:target_group_1) { create :target_group, level: level_1, sort_index: 1 }
+  let!(:target_group_2) { create :target_group, level: level_2, sort_index: 1 }
   let!(:target_1) { create :target, target_group: target_group_1 }
-  let!(:target_2) { create :target, target_group: target_group_1 }
+  let!(:target_2) { create :target, target_group: target_group_1, prerequisite_targets: [target_5] }
   let!(:target_3) { create :target, target_group: target_group_2 }
-  let!(:target_4) { create :target, target_group: target_group_2 }
+  let!(:target_4) { create :target, target_group: target_group_2, prerequisite_targets: [target_3] }
   # Target with contents
   let!(:target_5) { create :target, :with_content, target_group: target_group_2 }
 
@@ -45,7 +45,7 @@ feature 'Curriculum Editor', js: true do
   end
 
   scenario 'admin creates a basic course framework by adding level, target group and targets' do
-    sign_in_user school_admin.user, referer: curriculum_school_course_path(course)
+    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
 
     # he should be on the last level
     expect(page).to have_text('Level 2: ' + level_2.name)
@@ -72,7 +72,7 @@ feature 'Curriculum Editor', js: true do
 
     level = course.reload.levels.last
     expect(level.name).to eq(new_level_name)
-    expect(level.unlock_on).to eq(date)
+    expect(level.unlock_at).to eq(Time.zone.now.beginning_of_day)
 
     # he should be able to edit the level
     find('button[title="Edit selected level"').click
@@ -83,13 +83,13 @@ feature 'Curriculum Editor', js: true do
     expect(page).to have_text('Level updated successfully')
     dismiss_notification
 
-    expect(level.reload.unlock_on).to eq(nil)
+    expect(level.reload.unlock_at).to eq(nil)
 
     # he should be able to create a new target group
     find('.target-group__create').click
     expect(page).to have_text('TARGET GROUP DETAILS')
     fill_in 'Title', with: new_target_group_name
-    fill_in 'Description', with: new_target_group_description
+    replace_markdown(new_target_group_description, id: 'description')
     click_button 'Yes'
     click_button 'Create Target Group'
 
@@ -161,7 +161,7 @@ feature 'Curriculum Editor', js: true do
   end
 
   scenario 'course author can navigate only to assigned courses and modify content of those courses' do
-    sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+    sign_in_user course_author.user, referrer: curriculum_school_course_path(course)
 
     click_button course.name
 
@@ -194,14 +194,14 @@ feature 'Curriculum Editor', js: true do
   end
 
   scenario "author sets unlock date for a level that previously didn't have one" do
-    sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+    sign_in_user course_author.user, referrer: curriculum_school_course_path(course)
 
     find('button[title="Edit selected level"').click
     fill_in 'Unlock level on', with: date.iso8601
     click_button 'Update Level'
 
     expect(page).to have_text('Level updated successfully')
-    expect(level_2.reload.unlock_on).to eq(Date.current)
+    expect(level_2.reload.unlock_at).to eq(Time.zone.now.beginning_of_day)
   end
 
   context 'when there is a level zero and three other levels' do
@@ -212,7 +212,7 @@ feature 'Curriculum Editor', js: true do
     let!(:team_l3) { create :startup, level: level_3 }
 
     scenario 'author merges third level into the first' do
-      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+      sign_in_user course_author.user, referrer: curriculum_school_course_path(course)
 
       find('button[title="Edit selected level"').click
       click_button 'Actions'
@@ -229,12 +229,31 @@ feature 'Curriculum Editor', js: true do
     end
 
     scenario 'author is not allowed to merge third level into level zero' do
-      sign_in_user course_author.user, referer: curriculum_school_course_path(course)
+      sign_in_user course_author.user, referrer: curriculum_school_course_path(course)
 
       find('button[title="Edit selected level"').click
       click_button 'Actions'
       expect(page).not_to have_text("L0: #{level_0.name}")
     end
+  end
+
+  scenario 'admin moves a target group from one level to another' do
+    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
+    find('.target-group__header', text: target_group_2.name).click
+
+    expect(page).to have_text("Level #{target_group_2.level.number}: #{target_group_2.level.name}")
+
+    fill_in 'level_id', with: level_1.name
+    click_button "Pick Level 1: #{level_1.name}"
+
+    click_button 'Update Target Group'
+    expect(page).to have_text('Target Group updated successfully')
+    dismiss_notification
+
+    expect(target_group_2.reload.level).to eq(level_1)
+    expect(target_group_2.sort_index).to eq(2)
+    expect(target_2.reload.prerequisite_targets).to eq([])
+    expect(target_4.reload.prerequisite_targets).to eq([])
   end
 
   scenario 'user who is not logged in gets redirected to sign in page' do

@@ -52,7 +52,7 @@ module StudentSubmissionsQuery = [%graphql
         targetId
         passedAt
         title
-        evaluatorId
+        evaluatedAt
         studentIds
         teamTarget
        }

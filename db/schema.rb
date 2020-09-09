@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_07_110209) do
+ActiveRecord::Schema.define(version: 2020_09_01_104722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -63,18 +63,6 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.index ["user_id"], name: "index_admin_users_on_user_id"
   end
 
-  create_table "ahoy_events", id: :uuid, default: nil, force: :cascade do |t|
-    t.uuid "visit_id"
-    t.integer "user_id"
-    t.string "user_type"
-    t.string "name"
-    t.jsonb "properties"
-    t.datetime "time"
-    t.index ["time"], name: "index_ahoy_events_on_time"
-    t.index ["user_id", "user_type"], name: "index_ahoy_events_on_user_id_and_user_type"
-    t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
-  end
-
   create_table "answer_options", force: :cascade do |t|
     t.bigint "quiz_question_id"
     t.text "value"
@@ -97,6 +85,15 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.index ["login_token"], name: "index_applicants_on_login_token", unique: true
   end
 
+  create_table "audit_records", force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.string "audit_type", null: false
+    t.jsonb "metadata", default: {}
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["school_id"], name: "index_audit_records_on_school_id"
+  end
+
   create_table "bounce_reports", force: :cascade do |t|
     t.citext "email", null: false
     t.string "bounce_type", null: false
@@ -115,6 +112,7 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.boolean "active", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "name", null: false
     t.index ["course_id"], name: "index_certificates_on_course_id"
   end
 
@@ -128,19 +126,6 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.index ["archived_at"], name: "index_coach_notes_on_archived_at"
     t.index ["author_id"], name: "index_coach_notes_on_author_id"
     t.index ["student_id"], name: "index_coach_notes_on_student_id"
-  end
-
-  create_table "colleges", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.string "also_known_as"
-    t.string "city"
-    t.integer "state_id"
-    t.string "established_year"
-    t.string "website"
-    t.string "contact_numbers"
-    t.integer "university_id"
-    t.index ["state_id"], name: "index_colleges_on_state_id"
-    t.index ["university_id"], name: "index_colleges_on_university_id"
   end
 
   create_table "communities", force: :cascade do |t|
@@ -327,24 +312,19 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.integer "startup_id"
     t.string "auth_token"
     t.string "slack_username"
-    t.integer "university_id"
     t.string "roles"
     t.string "slack_user_id"
     t.integer "user_id"
-    t.integer "college_id"
     t.boolean "dashboard_toured"
-    t.string "college_text"
     t.integer "resume_file_id"
     t.string "slack_access_token"
     t.boolean "excluded_from_leaderboard", default: false
-    t.index ["college_id"], name: "index_founders_on_college_id"
-    t.index ["university_id"], name: "index_founders_on_university_id"
     t.index ["user_id"], name: "index_founders_on_user_id"
   end
 
   create_table "issued_certificates", force: :cascade do |t|
     t.bigint "certificate_id", null: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.string "name", null: false
     t.citext "serial_number", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -371,7 +351,7 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.integer "number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.date "unlock_on"
+    t.datetime "unlock_at"
     t.bigint "course_id"
     t.index ["course_id"], name: "index_levels_on_course_id"
     t.index ["number", "course_id"], name: "index_levels_on_number_and_course_id", unique: true
@@ -383,18 +363,9 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "school_id"
+    t.index ["school_id"], name: "index_markdown_attachments_on_school_id"
     t.index ["user_id"], name: "index_markdown_attachments_on_user_id"
-  end
-
-  create_table "platform_feedback", id: :serial, force: :cascade do |t|
-    t.string "feedback_type"
-    t.text "description"
-    t.integer "promoter_score"
-    t.integer "founder_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text "notes"
-    t.index ["founder_id"], name: "index_platform_feedback_on_founder_id"
   end
 
   create_table "post_likes", force: :cascade do |t|
@@ -517,6 +488,7 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "about"
+    t.jsonb "configuration", default: {}, null: false
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|
@@ -558,12 +530,6 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.datetime "dropped_out_at"
     t.index ["level_id"], name: "index_startups_on_level_id"
     t.index ["slug"], name: "index_startups_on_slug", unique: true
-  end
-
-  create_table "states", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
@@ -731,14 +697,6 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.index ["target_id"], name: "index_topics_on_target_id"
   end
 
-  create_table "universities", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.integer "state_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["state_id"], name: "index_universities_on_state_id"
-  end
-
   create_table "user_activities", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "activity_type"
@@ -773,39 +731,39 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "time_zone", default: "Asia/Kolkata", null: false
+    t.string "delete_account_token"
+    t.datetime "delete_account_sent_at"
+    t.datetime "account_deletion_notification_sent_at"
+    t.string "api_token_digest"
+    t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
+    t.index ["delete_account_token"], name: "index_users_on_delete_account_token", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"
   end
 
-  create_table "visits", id: :uuid, default: nil, force: :cascade do |t|
-    t.uuid "visitor_id"
-    t.string "ip"
-    t.text "user_agent"
-    t.text "referrer"
-    t.text "landing_page"
-    t.integer "user_id"
-    t.string "user_type"
-    t.string "referring_domain"
-    t.string "search_keyword"
-    t.string "browser"
-    t.string "os"
-    t.string "device_type"
-    t.integer "screen_height"
-    t.integer "screen_width"
-    t.string "country"
-    t.string "region"
-    t.string "city"
-    t.string "postal_code"
-    t.decimal "latitude"
-    t.decimal "longitude"
-    t.string "utm_source"
-    t.string "utm_medium"
-    t.string "utm_term"
-    t.string "utm_content"
-    t.string "utm_campaign"
-    t.datetime "started_at"
-    t.index ["user_id", "user_type"], name: "index_visits_on_user_id_and_user_type"
+  create_table "webhook_deliveries", force: :cascade do |t|
+    t.string "event", null: false
+    t.string "status"
+    t.jsonb "response_headers"
+    t.text "response_body"
+    t.jsonb "payload", default: {}
+    t.string "webhook_url", null: false
+    t.datetime "sent_at"
+    t.string "error_class"
+    t.bigint "course_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_webhook_deliveries_on_course_id"
+  end
+
+  create_table "webhook_endpoints", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.string "webhook_url", null: false
+    t.boolean "active", default: true
+    t.jsonb "events", array: true
+    t.string "hmac_key", null: false
+    t.index ["course_id"], name: "index_webhook_endpoints_on_course_id", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -829,7 +787,6 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
   add_foreign_key "faculty_course_enrollments", "faculty"
   add_foreign_key "faculty_startup_enrollments", "faculty"
   add_foreign_key "faculty_startup_enrollments", "startups"
-  add_foreign_key "founders", "colleges"
   add_foreign_key "founders", "users"
   add_foreign_key "issued_certificates", "certificates"
   add_foreign_key "issued_certificates", "users"
@@ -859,4 +816,5 @@ ActiveRecord::Schema.define(version: 2020_06_07_110209) do
   add_foreign_key "topics", "communities"
   add_foreign_key "user_activities", "users"
   add_foreign_key "users", "schools"
+  add_foreign_key "webhook_endpoints", "courses"
 end

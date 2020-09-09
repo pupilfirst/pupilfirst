@@ -17,7 +17,7 @@ class UndoGradingMutator < ApplicationQuery
   private
 
   def must_be_graded
-    return if submission&.evaluator_id?
+    return if submission&.evaluated_at?
 
     errors[:base] << 'Could not find a graded submission with the given ID'
   end

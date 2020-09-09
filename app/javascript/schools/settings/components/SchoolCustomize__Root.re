@@ -23,7 +23,7 @@ type action =
   | CloseEditor
   | AddLink(Customizations.link)
   | RemoveLink(Customizations.linkId)
-  | UpdateTermsOfUse(string)
+  | UpdateTermsAndConditions(string)
   | UpdatePrivacyPolicy(string)
   | UpdateAddress(string)
   | UpdateEmailAddress(string)
@@ -181,8 +181,8 @@ let editor = (state, send, authenticityToken) =>
            updatePrivacyPolicyCB={agreement =>
              send(UpdatePrivacyPolicy(agreement))
            }
-           updateTermsOfUseCB={agreement =>
-             send(UpdateTermsOfUse(agreement))
+           updateTermsAndConditionsCB={agreement =>
+             send(UpdateTermsAndConditions(agreement))
            }
          />
        | ContactsEditor =>
@@ -240,10 +240,11 @@ let reducer = (state, action) =>
       customizations:
         state.customizations |> Customizations.updatePrivacyPolicy(agreement),
     }
-  | UpdateTermsOfUse(agreement) => {
+  | UpdateTermsAndConditions(agreement) => {
       ...state,
       customizations:
-        state.customizations |> Customizations.updateTermsOfUse(agreement),
+        state.customizations
+        |> Customizations.updateTermsAndConditions(agreement),
     }
   | UpdateAddress(address) => {
       ...state,
@@ -497,16 +498,16 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             </div>
             <div
               className="flex items-center bg-gray-300 border border-dashed border-gray-500 rounded p-2 ml-6 text-xs">
-              <div> {"Terms of Use" |> str} </div>
+              <div> {"Terms & Conditions" |> str} </div>
               {editIcon(
                  "ml-3",
                  showEditor(
                    AgreementsEditor(
-                     SchoolCustomize__AgreementsEditor.TermsOfUse,
+                     SchoolCustomize__AgreementsEditor.TermsAndConditions,
                    ),
                    send,
                  ),
-                 "Edit terms of use",
+                 "Edit Terms & Conditions",
                )}
             </div>
             <div className="ml-6 flex items-center text-xs text-gray-600">

@@ -56,11 +56,47 @@ let closeDrawer = course =>
     "/school/courses/" ++ (course |> Course.id) ++ "/curriculum",
   );
 
+let beforeWindowUnload = event => {
+  event |> Webapi.Dom.Event.preventDefault;
+  DomUtils.Event.setReturnValue(event, "");
+};
+
 [@react.component]
 let make =
-    (~targets, ~targetGroups, ~evaluationCriteria, ~course, ~updateTargetCB) => {
+    (
+      ~targets,
+      ~targetGroups,
+      ~levels,
+      ~evaluationCriteria,
+      ~course,
+      ~updateTargetCB,
+    ) => {
   let url = ReasonReactRouter.useUrl();
   let (dirty, setDirty) = React.useState(() => false);
+
+  React.useEffect1(
+    () => {
+      let window = Webapi.Dom.window;
+
+      let removeEventListener = () =>
+        Webapi.Dom.Window.removeEventListener(
+          "beforeunload",
+          beforeWindowUnload,
+          window,
+        );
+      if (dirty) {
+        Webapi.Dom.Window.addEventListener(
+          "beforeunload",
+          beforeWindowUnload,
+          window,
+        );
+      } else {
+        removeEventListener();
+      };
+      Some(removeEventListener);
+    },
+    [|dirty|],
+  );
 
   switch (url.path) {
   | ["school", "courses", _courseId, "targets", targetId, pageName] =>
@@ -92,6 +128,7 @@ let make =
             target
             targets
             targetGroups
+            levels
             evaluationCriteria
             updateTargetCB
             setDirtyCB={dirty => setDirty(_ => dirty)}

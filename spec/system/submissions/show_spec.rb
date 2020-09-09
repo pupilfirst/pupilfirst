@@ -24,7 +24,7 @@ feature 'Submissions show' do
     end
 
     scenario 'student visits show page of submission he is linked to', js: true do
-      sign_in_user student.user, referer: timeline_event_path(submission)
+      sign_in_user student.user, referrer: timeline_event_path(submission)
 
       expect(page).to have_content(submission.title)
       expect(page).to have_content(submission.checklist.first['title'])
@@ -32,7 +32,7 @@ feature 'Submissions show' do
     end
 
     scenario 'student visits show page of submission he is not linked to', js: true do
-      sign_in_user student.user, referer: timeline_event_path(submission_2)
+      sign_in_user student.user, referrer: timeline_event_path(submission_2)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end
@@ -44,7 +44,7 @@ feature 'Submissions show' do
     end
 
     scenario 'student visits show page of submission', js: true do
-      sign_in_user student.user, referer: timeline_event_path(submission)
+      sign_in_user student.user, referrer: timeline_event_path(submission)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end

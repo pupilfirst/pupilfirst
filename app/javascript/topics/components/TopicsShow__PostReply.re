@@ -5,7 +5,9 @@ let str = React.string;
 
 let avatarClasses = "w-6 h-6 md:w-8 md:h-8 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover";
 
-let avatar = (avatarUrl, name) => {
+let avatar = user => {
+  let avatarUrl = Belt.Option.flatMap(user, User.avatarUrl);
+  let name = user->Belt.Option.mapWithDefault("?", user => User.name(user));
   switch (avatarUrl) {
   | Some(avatarUrl) => <img className=avatarClasses src=avatarUrl />
   | None => <Avatar name className=avatarClasses />
@@ -32,22 +34,18 @@ let navigateToPost = postId => {
 
 [@react.component]
 let make = (~post, ~users) => {
-  let user =
-    users
-    |> ArrayUtils.unsafeFind(
-         user => Post.creatorId(post) == User.id(user),
-         "Unable to find user with ID: "
-         ++ Post.creatorId(post)
-         ++ " in TopicsShow__PostReplyShow",
-       );
+  let user = Post.user(users, post);
   let tip = <div className="text-left"> {"Jump to reply" |> str} </div>;
   <div
     className="topics-post-reply-show__replies flex flex-col border bg-gray-100 rounded-lg mb-2 p-4">
     <div className="flex justify-between">
       <div className="flex items-center">
-        {avatar(user |> User.avatarUrl, user |> User.name)}
+        {avatar(user)}
         <span className="text-xs font-semibold ml-2">
-          {user |> User.name |> str}
+          {user->Belt.Option.mapWithDefault("Unknown", user =>
+             User.name(user)
+           )
+           |> str}
         </span>
       </div>
       <Tooltip tip position=`Left>

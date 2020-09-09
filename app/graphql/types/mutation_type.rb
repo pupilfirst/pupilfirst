@@ -52,5 +52,10 @@ module Types
     field :archive_post, mutation: Mutations::ArchivePost, null: false
     field :merge_levels, mutation: Mutations::MergeLevels, null: false
     field :create_vimeo_video, mutation: Mutations::CreateVimeoVideo, null: false
+    field :initiate_account_deletion, mutation: Mutations::InitiateAccountDeletion, null: false
+    field :delete_account, mutation: Mutations::DeleteAccount, null: false
+    field :update_user, mutation: Mutations::UpdateUser, null: false
+    field :update_certificate, mutation: Mutations::UpdateCertificate, null: false
+    field :delete_certificate, mutation: Mutations::DeleteCertificate, null: false
   end
 end

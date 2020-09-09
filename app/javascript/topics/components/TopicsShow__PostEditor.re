@@ -34,17 +34,17 @@ let handlePostCreateResponse =
     (id, body, postNumber, currentUserId, setState, handlePostCB) => {
   let post =
     Post.make(
-      id,
-      body,
-      currentUserId,
-      None,
-      postNumber,
-      dateTime,
-      dateTime,
-      0,
-      false,
-      [||],
-      false,
+      ~id,
+      ~body,
+      ~creatorId=Some(currentUserId),
+      ~editorId=None,
+      ~postNumber,
+      ~createdAt=dateTime,
+      ~editedAt=None,
+      ~totalLikes=0,
+      ~likedByUser=false,
+      ~replies=[||],
+      ~solution=false,
     );
   setState(_ => {body: "", saving: false});
   handlePostCB(post);
@@ -54,17 +54,17 @@ let handlePostUpdateResponse =
     (id, body, currentUserId, setState, handleCloseCB, handlePostCB, post) => {
   let updatedPost =
     Post.make(
-      id,
-      body,
-      post |> Post.creatorId,
-      Some(currentUserId),
-      post |> Post.postNumber,
-      post |> Post.createdAt,
-      dateTime,
-      post |> Post.totalLikes,
-      post |> Post.likedByUser,
-      post |> Post.replies,
-      post |> Post.solution,
+      ~id,
+      ~body,
+      ~creatorId=post |> Post.creatorId,
+      ~editorId=Some(currentUserId),
+      ~postNumber=post |> Post.postNumber,
+      ~createdAt=post |> Post.createdAt,
+      ~editedAt=Some(dateTime),
+      ~totalLikes=post |> Post.totalLikes,
+      ~likedByUser=post |> Post.likedByUser,
+      ~replies=post |> Post.replies,
+      ~solution=post |> Post.solution,
     );
 
   setState(_ => {body: "", saving: false});
@@ -154,8 +154,10 @@ let onBorderAnimationEnd = event => {
 };
 
 let replyToUserInfo = user => {
+  let avatarUrl = Belt.Option.flatMap(user, User.avatarUrl);
+  let name = user->Belt.Option.mapWithDefault("?", user => User.name(user));
   <div className="flex items-center border bg-white px-2 py-1 rounded-lg">
-    {switch (user |> User.avatarUrl) {
+    {switch (avatarUrl) {
      | Some(avatarUrl) =>
        <img
          className="w-6 h-6 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
@@ -163,13 +165,11 @@ let replyToUserInfo = user => {
        />
      | None =>
        <Avatar
-         name={user |> User.name}
+         name
          className="w-6 h-6 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
        />
      }}
-    <span className="text-xs font-semibold ml-2">
-      {user |> User.name |> str}
-    </span>
+    <span className="text-xs font-semibold ml-2"> {name |> str} </span>
   </div>;
 };
 

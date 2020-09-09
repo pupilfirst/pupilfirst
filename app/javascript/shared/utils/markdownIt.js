@@ -10,22 +10,24 @@ const md = require("markdown-it")({
       md.utils.escapeHtml(str) +
       "</code></pre>"
     );
-  }
+  },
 });
 
 const subscriptPlugin = require("markdown-it-sub");
 const superscriptPlugin = require("markdown-it-sup");
 const tablePlugin = require("markdown-it-multimd-table");
 const linkifyImagesPlugin = require("markdown-it-linkify-images");
+const imageSizePlugin = require('@centerforopenscience/markdown-it-imsize');
 
 md.use(subscriptPlugin)
   .use(superscriptPlugin)
   .use(tablePlugin)
+  .use(imageSizePlugin)
   .use(linkifyImagesPlugin, {
-    target: "_blank"
+    target: "_blank",
   });
 
-const parse = markdown => {
+const parse = (markdown) => {
   return md.render(markdown);
 };
 

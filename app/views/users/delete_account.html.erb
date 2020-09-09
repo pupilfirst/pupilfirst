@@ -1,0 +1,13 @@
+<% presenter = Users::DeleteAccountPresenter.new(self, @token) %>
+
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %> | Edit User</title>
+  <%= stylesheet_pack_tag 'UsersDeleteAccountPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'UsersDeleteAccountPack', nonce: true %>
+<% end %>
+
+<script id="user-delete-account__props" type="application/json"><%= presenter.props_to_json.html_safe %></script>
+<div id="react-root"></div>

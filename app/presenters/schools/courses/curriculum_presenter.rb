@@ -15,8 +15,7 @@ module Schools
           evaluationCriteria: evaluation_criteria,
           levels: levels,
           targetGroups: target_groups,
-          targets: targets,
-          authenticityToken: view.form_authenticity_token
+          targets: targets
         }
       end
 
@@ -41,7 +40,7 @@ module Schools
             id: level.id,
             name: level.name,
             number: level.number,
-            unlockOn: level.unlock_on
+            unlockAt: level.unlock_at
           }
         end
       end

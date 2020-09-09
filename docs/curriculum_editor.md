@@ -24,11 +24,17 @@ To create a new level, click the _Create Level_ button next to the level selecto
 ?> **What purpose does a level's _unlock date_ serve?**\
 Locked levels are still _visible_ to a student, but it's content (targets) are not. This can be used to communicate to the student about the _path_ they're expected to follow, but to deliberately hide the exact content they'll get access to. For example, this can be useful if the content for a level is still a work-in-progress, but the overall organization of the course is fixed.
 
+### Level actions
+
+In addition to editing the name of the level and its unlock date, you can switch to the _Actions_ tab wherein you have the possibility to merge the current level to another level. Please note that merging levels will move all the students and targets from the current level to the level you are merging into.
+
 ## What's a target group?
 
 Similar targets can be grouped together into target groups. This allow you to organize content into discrete chunks in a way that makes sense for what you're trying to teach. To create a target group, just click the _Create a target group_ button within a level.
 
 When creating and editing a target group, you can decide whether it's a _milestone_ target group or not. Milestone targets control a student's progression in the course. To learn more, [check out the documentation for milestone targets](/targets?id=milestone-targets).
+
+The editor for a target group also allows you to change the level it belongs to and to archive it. Archiving will have a target group along with its targets removed from the student curriculum.
 
 ## Creating targets
 

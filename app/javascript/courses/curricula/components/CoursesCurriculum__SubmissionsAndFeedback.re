@@ -114,10 +114,11 @@ let submissions =
     (target, targetStatus, targetDetails, evaluationCriteria, coaches, users) => {
   let curriedGradeBar = gradeBar(evaluationCriteria);
 
-  targetDetails
-  |> TargetDetails.submissions
+  let submissions = targetDetails |> TargetDetails.submissions;
+  let totalSubmissions = submissions |> List.length;
+  submissions
   |> Submission.sort
-  |> List.map(submission => {
+  |> List.mapi((index, submission) => {
        let grades =
          targetDetails |> TargetDetails.grades(submission |> Submission.id);
 
@@ -128,11 +129,20 @@ let submissions =
            "Details about your submission on "
            ++ (submission |> Submission.createdAtPretty)
          }>
-         <div
-           className="text-xs font-semibold bg-gray-100 inline-block px-3 py-1 ml-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
-           {"Submitted on "
-            ++ (submission |> Submission.createdAtPretty)
-            |> str}
+         <div className="flex justify-between items-end">
+           <h2
+             className="ml-2 mb-2 font-semibold text-sm lg:text-base leading-tight">
+             {"Submission #"
+              ++ (totalSubmissions - index |> string_of_int)
+              |> str}
+           </h2>
+           <div
+             className="text-xs font-semibold bg-gray-100 inline-block px-3 py-1 mr-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
+             <span className="hidden md:inline">
+               {str("Submitted on ")}
+             </span>
+             {submission |> Submission.createdAtPretty |> str}
+           </div>
          </div>
          <div
            className="rounded-lg bg-gray-100 border shadow-md overflow-hidden">
@@ -196,10 +206,10 @@ let submissions =
                )
             |> List.map(feedback => {
                  let coach =
-                   coaches
-                   |> ListUtils.findOpt(c =>
-                        c |> Coach.id == (feedback |> Feedback.coachId)
-                      );
+                   Feedback.coachId(feedback)
+                   ->Belt.Option.flatMap(id =>
+                       coaches |> ListUtils.findOpt(c => c |> Coach.id == id)
+                     );
 
                  let user =
                    switch (coach) {

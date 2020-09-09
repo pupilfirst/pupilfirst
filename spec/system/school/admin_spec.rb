@@ -13,7 +13,7 @@ feature 'School admins Editor', js: true do
   let(:coach) { create :faculty, school: school }
 
   scenario 'school admin adds a new user as an admin' do
-    sign_in_user school_admin_1.user, referer: admins_school_path
+    sign_in_user school_admin_1.user, referrer: admins_school_path
 
     # list all school admins
     expect(page).to have_text("Add New School Admin")
@@ -48,10 +48,17 @@ feature 'School admins Editor', js: true do
     # New admin shouldn't receive that notification.
     open_email(email)
     expect(current_email).to be_blank
+
+    # Check audit records
+    audit_record = AuditRecord.last
+    expect(audit_record.audit_type).to eq(AuditRecord::TYPE_ADD_SCHOOL_ADMIN)
+    expect(audit_record.school_id).to eq(school.id)
+    expect(audit_record.metadata['user_id']).to eq(school_admin_1.user.id)
+    expect(audit_record.metadata['email']).to eq(email)
   end
 
   scenario "school admin edits another admin's details" do
-    sign_in_user school_admin_1.user, referer: admins_school_path
+    sign_in_user school_admin_1.user, referrer: admins_school_path
 
     # Edit school admin
     find("a", text: school_admin_2.name).click
@@ -73,7 +80,7 @@ feature 'School admins Editor', js: true do
   end
 
   scenario 'school admin adds an existing user as an admin', js: true do
-    sign_in_user school_admin_1.user, referer: admins_school_path
+    sign_in_user school_admin_1.user, referrer: admins_school_path
 
     original_title = user.title
     altered_name = Faker::Name.name
@@ -93,7 +100,7 @@ feature 'School admins Editor', js: true do
   end
 
   scenario 'school admin deletes another admin' do
-    sign_in_user school_admin_1.user, referer: admins_school_path
+    sign_in_user school_admin_1.user, referrer: admins_school_path
 
     # Both admins should be deletable.
     expect(page).to have_selector("div[title='Delete #{school_admin_1.name}'")
@@ -110,10 +117,17 @@ feature 'School admins Editor', js: true do
     # The current admin should no longer have the delete option.
     expect(page).to have_text(school_admin_1.name)
     expect(page).not_to have_selector("div[title='Delete #{school_admin_1.name}'")
+
+    # Check audit records
+    audit_record = AuditRecord.last
+    expect(audit_record.audit_type).to eq(AuditRecord::TYPE_REMOVE_SCHOOL_ADMIN)
+    expect(audit_record.school_id).to eq(school.id)
+    expect(audit_record.metadata['user_id']).to eq(school_admin_1.user.id)
+    expect(audit_record.metadata['email']).to eq(school_admin_2.user.email)
   end
 
   scenario 'school admins deletes her own admin access' do
-    sign_in_user school_admin_1.user, referer: admins_school_path
+    sign_in_user school_admin_1.user, referrer: admins_school_path
 
     accept_confirm do
       find("div[title='Delete #{school_admin_1.name}'").click
@@ -131,7 +145,7 @@ feature 'School admins Editor', js: true do
   end
 
   scenario 'logged in user who not a school admin tries to access school admin editor interface' do
-    sign_in_user coach.user, referer: admins_school_path
+    sign_in_user coach.user, referrer: admins_school_path
     expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 end

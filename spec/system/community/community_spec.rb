@@ -18,7 +18,7 @@ feature 'Community', js: true do
   let(:student_2) { create :student, startup: team }
   let(:coach) { create :faculty, school: school }
   let(:school_admin) { create :school_admin }
-  let!(:topic_1) { create :topic, :with_first_post, community: community, creator: student_1.user }
+  let!(:topic_1) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 1.second.ago }
   let!(:topic_2) { create :topic, :with_first_post, community: community, creator: student_1.user }
   let!(:topic_3) { create :topic, :with_first_post, community: community, target: target, creator: student_1.user }
   let!(:reply_1) { create :post, topic: topic_1, creator: student_1.user, post_number: 2 }
@@ -46,7 +46,7 @@ feature 'Community', js: true do
   end
 
   scenario 'an active student visits his community' do
-    sign_in_user(student_1.user, referer: community_path(community))
+    sign_in_user(student_1.user, referrer: community_path(community))
 
     # All questions should be visible.
     expect(page).to have_text(community.name)
@@ -56,7 +56,7 @@ feature 'Community', js: true do
   end
 
   scenario 'an active student creates a post in his community' do
-    sign_in_user(student_1.user, referer: community_path(community))
+    sign_in_user(student_1.user, referrer: community_path(community))
     expect(page).to have_text(community.name)
 
     click_link 'Create a new topic'
@@ -72,7 +72,7 @@ feature 'Community', js: true do
   end
 
   scenario 'an active student participates in a topic thread' do
-    sign_in_user(student_2.user, referer: community_path(community))
+    sign_in_user(student_2.user, referrer: community_path(community))
     expect(page).to have_text(community.name)
 
     click_link topic_1.title
@@ -169,7 +169,7 @@ feature 'Community', js: true do
   end
 
   scenario 'an active faculty visits community' do
-    sign_in_user(coach.user, referer: community_path(community))
+    sign_in_user(coach.user, referrer: community_path(community))
     expect(page).to have_text(community.name)
 
     click_link topic_1.title
@@ -227,7 +227,7 @@ feature 'Community', js: true do
   end
 
   scenario 'topic creator can mark a post as solution' do
-    sign_in_user(student_1.user, referer: topic_path(topic_1))
+    sign_in_user(student_1.user, referrer: topic_path(topic_1))
 
     find("div[aria-label='Options for post #{reply_1.id}']").click
     click_button 'Mark as solution'
@@ -237,7 +237,7 @@ feature 'Community', js: true do
   end
 
   scenario "topic creator can delete a topic when it doesn't have unarchived replies" do
-    sign_in_user(student_1.user, referer: topic_path(topic_1))
+    sign_in_user(student_1.user, referrer: topic_path(topic_1))
 
     # When the topic has a reply, the first post won't have the delete option.
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
@@ -264,7 +264,7 @@ feature 'Community', js: true do
 
   scenario 'a target-linked question is viewed by student with access to target' do
     # The target should be mentioned and linked on the question page.
-    sign_in_user(student_1.user, referer: topic_path(topic_3))
+    sign_in_user(student_1.user, referrer: topic_path(topic_3))
 
     expect(page).to have_text(target.title)
     expect(page).to have_link('View Target', href: target_path(target))
@@ -272,7 +272,7 @@ feature 'Community', js: true do
 
   scenario 'a target-linked question is viewed by student without access to target' do
     # The target should be mentioned...
-    sign_in_user(student_c2.user, referer: topic_path(topic_3))
+    sign_in_user(student_c2.user, referrer: topic_path(topic_3))
 
     expect(page).to have_text(target.title)
 
@@ -281,7 +281,7 @@ feature 'Community', js: true do
   end
 
   scenario 'school admin visits community' do
-    sign_in_user(school_admin.user, referer: community_path(community))
+    sign_in_user(school_admin.user, referrer: community_path(community))
     expect(page).to have_text(community.name)
 
     click_link topic_1.title
@@ -289,5 +289,64 @@ feature 'Community', js: true do
     # Question and answers are visible
     expect(page).to have_text(topic_1.first_post.body)
     expect(page).to have_text(reply_1.body)
+  end
+
+  scenario 'coach marks a post as solution, edits content, and checks last edited info' do
+    sign_in_user(coach.user, referrer: topic_path(topic_1))
+
+    find("div[aria-label='Options for post #{reply_1.id}']").click
+    click_button 'Mark as solution'
+
+    within("div#post-show-#{reply_1.id}") do
+      expect(page).to have_selector("div[aria-label='Marked as solution icon']")
+    end
+
+    # Refresh page and check that marking solution doesn't update last edited info
+    visit current_path
+
+    within("div#post-show-#{reply_1.id}") do
+      expect(page).to_not have_text("Last edited by")
+    end
+
+    # Edits the content of the post
+    find("div[aria-label='Options for post #{reply_1.id}']").click
+    click_button 'Edit Reply'
+
+    within("div#post-show-#{reply_1.id}") do
+      replace_markdown topic_body_for_edit
+      click_button 'Update Reply'
+    end
+
+    # Check for correct last edited message
+    within("div#post-show-#{reply_1.id}") do
+      expect(page).to have_text("Last edited by #{coach.name}")
+    end
+  end
+
+  context 'when a topic has a archived replies and likes on its posts' do
+    let(:archived_reply) { create :post, topic: topic_1, creator: student_1.user, post_number: 3, archiver: student_1.user, archived_at: Time.zone.now }
+
+    before do
+      # A like on an archived post or a reply should not be counted.
+      create :post_like, post: archived_reply
+      create :post_like, post: reply_1
+
+      # Likes on the first post and replies should be counted.
+      create_list :post_like, 3, post: topic_1.first_post
+    end
+
+    scenario 'user views likes and replies on the index page' do
+      sign_in_user(student_2.user, referrer: community_path(community))
+
+      within(find("div[aria-label='Topic #{topic_1.id}']")) do
+        within(find('span[aria-label="Likes"]')) do
+          expect(page).to have_text(3)
+        end
+
+        within(find('span[aria-label="Replies"]')) do
+          expect(page).to have_text(1)
+        end
+      end
+    end
   end
 end

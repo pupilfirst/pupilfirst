@@ -1,12 +1,16 @@
 type t = {
   createdAt: Js.Date.t,
   value: string,
-  coachName: string,
+  coachName: option(string),
   coachAvatarUrl: option(string),
   coachTitle: string,
 };
 let value = t => t.value;
-let coachName = t => t.coachName;
+let coachName = t =>
+  switch (t.coachName) {
+  | Some(name) => name
+  | None => "Deleted Coach"
+  };
 let coachAvatarUrl = t => t.coachAvatarUrl;
 let coachTitle = t => t.coachTitle;
 let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy");

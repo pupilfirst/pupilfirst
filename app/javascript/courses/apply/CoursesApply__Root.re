@@ -33,7 +33,7 @@ let make =
       ~email,
       ~name,
       ~privacyPolicy,
-      ~termsOfUse,
+      ~termsAndConditions,
     ) => {
   let (view, setView) = React.useState(() => Apply);
 
@@ -71,14 +71,14 @@ let make =
           </div>
         </div>
         <div className="text-center mt-4 text-gray-700">
-          {termsOfUse
+          {termsAndConditions
              ? <a
-                 href="/agreements/terms-of-use"
+                 href="/agreements/terms-and-conditions"
                  className="text-xs cursor-pointer hover:text-primary-500">
-                 {"Terms of Use" |> str}
+                 {"Terms & Conditions" |> str}
                </a>
              : React.null}
-          {termsOfUse && privacyPolicy
+          {termsAndConditions && privacyPolicy
              ? <span
                  className="px-4 text-gray-500"
                  dangerouslySetInnerHTML={"__html": "&vert;"}

@@ -198,21 +198,6 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
   </label>;
 };
 
-let maxAllowedFileSize = 5 * 1024 * 1024;
-let isInvalidFile = file => file##size > maxAllowedFileSize;
-
-let isInvalidImageFile = image =>
-  (
-    switch (image##_type) {
-    | "image/jpeg"
-    | "image/gif"
-    | "image/png" => false
-    | _ => true
-    }
-  )
-  || image
-  |> isInvalidFile;
-
 let uploadFile =
     (target, send, addContentBlockCB, isAboveContentBlock, formData) =>
   Api.sendFormData(
@@ -261,10 +246,10 @@ let handleFileInputChange =
     let error =
       switch (blockType) {
       | `File =>
-        file |> isInvalidFile
+        FileUtils.isInvalid(file)
           ? Some("Please select a file with a size less than 5 MB.") : None
       | `Image =>
-        file |> isInvalidImageFile
+        FileUtils.isInvalid(~image=true, file)
           ? Some(
               "Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.",
             )

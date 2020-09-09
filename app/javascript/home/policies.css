@@ -8,15 +8,19 @@
 }
 
 .policy-body ol {
-  @apply ml-4 mt-4 list-decimal;
+  @apply pl-6 mt-4 list-decimal;
+}
+
+.policy-body ol[type="a"] {
+  list-style-type: lower-alpha;
+}
+
+.policy-body ol[type="i"] {
+  list-style-type: lower-roman;
 }
 
 .policy-body li {
   @apply pb-2;
-}
-
-.policy-body strong {
-  @apply text-lg font-bold;
 }
 
 .policy-body p {
@@ -27,4 +31,20 @@
   .policy-body ul {
     @apply ml-6;
   }
+}
+
+.policy-body h1,.policy-body h2, .policy-body h3, .policy-body h4, .policy-body h5, .policy-body h6 {
+  @apply mt-4 mb-2;
+}
+
+.policy-body a {
+  @apply underline text-blue-600;
+}
+
+.policy-body a:hover {
+  @apply text-blue-700;
+}
+
+.policy-body hr {
+  @apply my-4;
 }

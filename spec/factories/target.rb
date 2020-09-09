@@ -38,7 +38,7 @@ FactoryBot.define do
     end
 
     trait :with_default_checklist do
-      checklist { [{ kind: Target::CHECKLIST_KIND_LONG_TEXT, title: "Write something about your submission", optional: false }] }
+      checklist { [{ kind: Target::CHECKLIST_KIND_LONG_TEXT, title: 'Write something about your submission', optional: false }] }
     end
 
     trait :with_markdown do
@@ -66,6 +66,8 @@ FactoryBot.define do
     end
 
     trait :with_group do
+      target_group { nil } # We'll add it later.
+
       transient do
         milestone { false }
         level { create :level }

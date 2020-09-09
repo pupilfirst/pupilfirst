@@ -43,6 +43,7 @@ module Types
       argument :course_id, ID, required: true
       argument :status, Types::SubmissionStatusType, required: true
       argument :sort_direction, Types::SortDirectionType, required: true
+      argument :sort_criterion, Types::SubmissionSortCriterionType, required: true
       argument :level_id, ID, required: false
       argument :coach_id, ID, required: false
     end

@@ -68,7 +68,7 @@ let updateSubmission =
           |> OverlaySubmission.feedback
           |> Array.append([|
                Feedback.make(
-                 ~coachName=currentCoach |> Coach.name,
+                 ~coachName=Some(currentCoach |> Coach.name),
                  ~coachAvatarUrl=currentCoach |> Coach.avatarUrl,
                  ~coachTitle=currentCoach |> Coach.title,
                  ~createdAt=Js.Date.make(),
@@ -119,7 +119,7 @@ let updateFeedbackArray = (currentCoach, overlaySubmission, newFeedback) => {
       |> OverlaySubmission.feedback
       |> Array.append([|
            Feedback.make(
-             ~coachName=currentCoach |> Coach.name,
+             ~coachName=Some(currentCoach |> Coach.name),
              ~coachAvatarUrl=currentCoach |> Coach.avatarUrl,
              ~coachTitle=currentCoach |> Coach.title,
              ~createdAt=Js.Date.make(),

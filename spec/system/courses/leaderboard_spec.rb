@@ -40,7 +40,7 @@ feature 'Course leaderboard' do
   end
 
   scenario 'School admin visits leaderboard' do
-    sign_in_user(school_admin.user, referer: leaderboard_course_path(student.course))
+    sign_in_user(school_admin.user, referrer: leaderboard_course_path(student.course))
 
     expect(page).to have_content("This leaderboard shows students who have improved the most compared to the previous leaderboard.")
   end
@@ -48,7 +48,7 @@ feature 'Course leaderboard' do
   scenario 'Student visits leaderboard' do
     skip 'The leaderboard feature is currently inactive, and needs to be re-built.'
 
-    sign_in_user(student.user, referer: leaderboard_course_path(student.course))
+    sign_in_user(student.user, referrer: leaderboard_course_path(student.course))
 
     expect(page).to have_content('You are at the top of the leaderboard')
 

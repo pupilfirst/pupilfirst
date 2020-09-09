@@ -18,7 +18,7 @@ Here's a list of things you can edit:
   - In the header: These will be placed in the header after required links, and will be visible to the public.
   - In the footer: These will be placed in the footer after the link to the _Home_ page, and will be visible to the public.
   - Social media: You can add a list of social media links that will be automatically converted to icons placed in the footer.
-4. **User Agreements:** You can create a custom _Privacy Policy_ and _Terms of Use_ for your students.
+4. **User Agreements:** You can create a custom _Privacy Policy_ and _Terms & Conditions_ for your students.
 5. **Contact Details:**
   - Your physical address, to display in the footer.
   - An email address - Besides being displayed, this will be used in all external emails as the `reply-to`.

@@ -52,7 +52,7 @@ feature 'User Dashboard', js: true do
   end
 
   scenario 'student visits the dashboard page' do
-    sign_in_user(founder.user, referer: dashboard_path)
+    sign_in_user(founder.user, referrer: dashboard_path)
 
     # A new course.
     within("div[aria-label=\"#{course_1.name}\"]") do
@@ -100,7 +100,7 @@ feature 'User Dashboard', js: true do
   end
 
   scenario 'course coach visits dashboard page' do
-    sign_in_user(course_coach.user, referer: dashboard_path)
+    sign_in_user(course_coach.user, referrer: dashboard_path)
 
     expect(page).to have_text(course_1.name)
     expect(page).to have_text(course_1.description)
@@ -122,7 +122,7 @@ feature 'User Dashboard', js: true do
   end
 
   scenario 'student coach visits dashboard page' do
-    sign_in_user(team_coach.user, referer: dashboard_path)
+    sign_in_user(team_coach.user, referrer: dashboard_path)
 
     expect(page).to have_text(course_2.name)
     expect(page).to have_text(course_2.description)
@@ -144,7 +144,7 @@ feature 'User Dashboard', js: true do
   end
 
   scenario 'school admin visits dashboard page' do
-    sign_in_user(school_admin.user, referer: dashboard_path)
+    sign_in_user(school_admin.user, referrer: dashboard_path)
 
     expect(page).to have_text(course_1.name)
     expect(page).to have_text(course_2.name)
@@ -166,7 +166,7 @@ feature 'User Dashboard', js: true do
   end
 
   scenario 'course author visits the dashboard page' do
-    sign_in_user(course_author.user, referer: dashboard_path)
+    sign_in_user(course_author.user, referrer: dashboard_path)
 
     expect(page).to have_text(course_1.name)
     expect(page).not_to have_text(course_2.name)
@@ -184,7 +184,7 @@ feature 'User Dashboard', js: true do
     let!(:issued_certificate_2) { create :issued_certificate, certificate: certificate_2, user: founder.user }
 
     scenario 'student browses certificates on the dashboard page' do
-      sign_in_user(founder.user, referer: dashboard_path)
+      sign_in_user(founder.user, referrer: dashboard_path)
 
       # Switch to certificates tab and see if there are two links.
       click_button 'Certificates'
@@ -201,7 +201,7 @@ feature 'User Dashboard', js: true do
     end
 
     scenario "dashboard doesn't show the dropped out warning for the course and shows relevant links" do
-      sign_in_user(founder.user, referer: dashboard_path)
+      sign_in_user(founder.user, referrer: dashboard_path)
 
       # Course from which student has dropped out.
       within("div[aria-label=\"#{course_4.name}\"]") do

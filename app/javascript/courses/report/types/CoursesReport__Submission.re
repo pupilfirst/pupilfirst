@@ -50,8 +50,8 @@ let makeFromJs = submissions => {
            switch (submission##passedAt) {
            | Some(_passedAt) => `Passed
            | None =>
-             switch (submission##evaluatorId) {
-             | Some(_id) => `Failed
+             switch (submission##evaluatedAt) {
+             | Some(_time) => `Failed
              | None => `Submitted
              }
            };

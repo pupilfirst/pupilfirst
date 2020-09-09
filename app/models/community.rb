@@ -1,6 +1,6 @@
 class Community < ApplicationRecord
   belongs_to :school
-  has_many :courses, dependent: :restrict_with_error
+
   has_many :topics, dependent: :restrict_with_error
   has_many :posts, through: :topics
   has_many :community_course_connections, dependent: :restrict_with_error

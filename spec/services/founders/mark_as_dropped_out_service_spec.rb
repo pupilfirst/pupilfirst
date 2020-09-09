@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 describe Founders::MarkAsDroppedOutService do
-  subject { described_class.new(student) }
+  subject { described_class.new(student, user) }
+
+  let(:user) { create :user }
 
   describe '#execute' do
     context 'when the student is in a team of more than one'
@@ -12,6 +14,13 @@ describe Founders::MarkAsDroppedOutService do
       expect { subject.execute }.to change { student.reload.startup.dropped_out_at }.from(nil)
       expect(student.startup.id).not_to eq(original_team.id)
       expect(student.startup.tag_list).to match_array(%w[tag_a tag_b])
+
+      # Check audit records
+      audit_record = AuditRecord.last
+      expect(audit_record.audit_type).to eq(AuditRecord::TYPE_DROPOUT_STUDENT)
+      expect(audit_record.school_id).to eq(user.school.id)
+      expect(audit_record.metadata['user_id']).to eq(user.id)
+      expect(audit_record.metadata['email']).to eq(student.email)
     end
   end
 

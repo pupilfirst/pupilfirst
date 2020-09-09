@@ -19,6 +19,8 @@ class Course < ApplicationRecord
   has_many :course_exports, dependent: :destroy
   has_many :content_blocks, through: :targets
   has_many :course_authors, dependent: :restrict_with_error
+  has_many :webhook_deliveries, dependent: :destroy
+  has_one :webhook_endpoint, dependent: :destroy
 
   has_one_attached :thumbnail
   has_one_attached :cover

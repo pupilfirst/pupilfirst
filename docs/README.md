@@ -12,13 +12,13 @@ When you sign up for the hosted Pupilfirst service, you can take the course _"Ho
 
 ## Open-Source Project
 
-Pupilfirst is an open-source project. You can find the [platform's codebase on Github](https://git.pupilfirst.com). The project’s overall goal is to make modern tooling available in the field of education, and to do so in a manner that promotes effective techniques for improving student outcome.
+Pupilfirst is an open-source project. You can find the [platform's codebase on Github](https://github.com/pupilfirst/pupilfirst). The project’s overall goal is to make modern tooling available in the field of education, and to do so in a manner that promotes effective techniques for improving student outcome.
 
-We also [track active work on the platform](https://github.com/SVdotCO/pupilfirst/projects/1) using the Github projects feature. The _In Progress_ list keeps track of what our team is working on at any given point of time, and the _Up Next_ list contains features and other issues that we're prioritizing for the near-future.
+We also [track active work on the platform](https://github.com/pupilfirst/pupilfirst/projects/1) using the Github projects feature. The _In Progress_ list keeps track of what our team is working on at any given point of time, and the _Up Next_ list contains features and other issues that we're prioritizing for the near-future.
 
 ### Improving this documentation
 
-This documentation is [a part of the open-source repository](https://github.com/SVdotCO/pupilfirst/tree/master/docs). If you spot any mistakes, or think that some topics could be expanded or improved, please post an issue on the Github repo. Better yet, send us a pull-request!
+This documentation is [a part of the open-source repository](https://github.com/pupilfirst/pupilfirst/tree/master/docs). If you spot any mistakes, or think that some topics could be expanded or improved, please post an issue on the Github repo. Better yet, send us a pull-request!
 
 ## Changelog
 

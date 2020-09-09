@@ -16,6 +16,7 @@ class CreateSchoolAdminMutator < ApplicationQuery
         SchoolAdminMailer.school_admin_added(admin, new_school_admin).deliver_later
       end
 
+      create_audit_record(user)
       new_school_admin
     end
   end
@@ -36,5 +37,9 @@ class CreateSchoolAdminMutator < ApplicationQuery
 
   def persisted_user
     @persisted_user ||= current_school.users.with_email(email).first
+  end
+
+  def create_audit_record(user)
+    AuditRecord.create!(audit_type: AuditRecord::TYPE_ADD_SCHOOL_ADMIN, school_id: current_school.id, metadata: { user_id: current_user.id, email: user.email })
   end
 end

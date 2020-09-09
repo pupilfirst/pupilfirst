@@ -10,7 +10,7 @@ class CommunitiesController < ApplicationController
       .order("last_activity_at DESC NULLs FIRST").page(page).per(10)
 
     # Pre-load the counts of replies on each post.
-    ActiveRecord::Precounter.new(@topics).precount(:replies)
+    ActiveRecord::Precounter.new(@topics).precount(:live_replies)
   end
 
   # GET /community/:community_id/new_topic

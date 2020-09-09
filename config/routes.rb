@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'users/delete_account', controller: 'users', action: 'delete_account', as: 'delete_account'
+
   post 'users/email_bounce', controller: 'users/postmark_webhook', action: 'email_bounce'
 
   authenticate :user, ->(u) { AdminUser.where(email: u.email).present? } do
@@ -57,6 +59,8 @@ Rails.application.routes.draw do
         get 'curriculum'
         get 'exports'
         get 'authors'
+        get 'certificates'
+        post 'certificates', action: 'create_certificate'
         get 'evaluation_criteria'
         post 'attach_images'
       end
@@ -115,7 +119,9 @@ Rails.application.routes.draw do
 
   get 'dashboard', controller: 'users', action: 'dashboard', as: 'dashboard'
 
-  resource :user, only: %i[edit update]
+  resource :user, only: %i[edit] do
+    post 'upload_avatar'
+  end
 
   resources :timeline_event_files, only: %i[create] do
     member do
@@ -162,10 +168,6 @@ Rails.application.routes.draw do
     patch ':id/feedback/comment/:token', action: 'comment_submit', as: 'comment_submit'
   end
 
-  resources :colleges, only: :index
-
-  resource :platform_feedback, only: %i[create]
-
   # Founder show
   scope 'students', controller: 'founders' do
     get '/:id/report', action: 'report', as: 'student_report'
@@ -175,11 +177,10 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-  get 'agreements/:agreement_type', as: 'agreement', controller: 'home', action: 'agreement'
+  # TODO: Remove this backwards-compatibility path after Jan 2021.
+  get 'agreements/terms-of-use', to: redirect('/agreements/terms-and-conditions')
 
-  # TODO: Remove the backwards-compatibility paths after a while.
-  get 'policies/privacy', to: redirect('/agreements/privacy-policy')
-  get 'policies/terms', to: redirect('/agreements/terms-of-use')
+  get 'agreements/:agreement_type', as: 'agreement', controller: 'home', action: 'agreement'
 
   resources :targets, only: %i[show] do
     member do

@@ -3,12 +3,12 @@ module Types
     field :id, ID, null: false
     field :value, String, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :coach_name, String, null: false
+    field :coach_name, String, null: true
     field :coach_avatar_url, String, null: true
     field :coach_title, String, null: false
 
     def coach_name
-      object.faculty.user.name
+      object.faculty&.user&.name
     end
 
     def coach_title

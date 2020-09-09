@@ -76,7 +76,7 @@ module Courses
 
     def levels_details
       levels.map do |level|
-        level.attributes.slice('id', 'name', 'number', 'unlock_on')
+        level.attributes.slice('id', 'name', 'number', 'unlock_at')
       end
     end
 
@@ -108,7 +108,7 @@ module Courses
     def submissions
       current_student.latest_submissions.includes(:target).map do |submission|
         if submission.target.individual_target? || submission.founder_ids.sort == current_student.team_student_ids
-          submission.attributes.slice('target_id', 'passed_at', 'evaluator_id')
+          submission.attributes.slice('target_id', 'passed_at', 'evaluated_at')
         end
       end - [nil]
     end
@@ -155,7 +155,7 @@ module Courses
         if access_locked_levels
           scope
         else
-          scope.where(unlock_on: nil).or(@course.levels.where('unlock_on <= ?', Time.zone.today))
+          scope.where(unlock_at: nil).or(@course.levels.where('unlock_at <= ?', Time.zone.now))
         end.pluck(:id)
       end
     end

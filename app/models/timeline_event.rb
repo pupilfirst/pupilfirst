@@ -33,9 +33,9 @@ class TimelineEvent < ApplicationRecord
   scope :not_auto_verified, -> { joins(:target_evaluation_criteria).distinct }
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
   scope :passed, -> { where.not(passed_at: nil) }
-  scope :failed, -> { where(passed_at: nil).where.not(evaluator_id: nil) }
-  scope :pending_review, -> { not_auto_verified.where(evaluator_id: nil) }
-  scope :evaluated_by_faculty, -> { where.not(evaluator_id: nil) }
+  scope :failed, -> { where(passed_at: nil).where.not(evaluated_at: nil) }
+  scope :pending_review, -> { not_auto_verified.where(evaluated_at: nil) }
+  scope :evaluated_by_faculty, -> { where.not(evaluated_at: nil) }
   scope :from_founders, ->(founders) { joins(:timeline_event_owners).where(timeline_event_owners: { founder: founders }) }
 
   CHECKLIST_STATUS_NO_ANSWER = 'noAnswer'
@@ -83,14 +83,14 @@ class TimelineEvent < ApplicationRecord
   end
 
   def pending_review?
-    passed_at.blank? && evaluator_id.blank?
+    passed_at.blank? && evaluated_at.blank?
   end
 
   def status
     if passed_at.blank?
-      evaluator_id.present? ? :failed : :pending
+      evaluated_at.present? ? :failed : :pending
     else
-      evaluator_id.present? ? :passed : :marked_as_complete
+      evaluated_at.present? ? :passed : :marked_as_complete
     end
   end
 end

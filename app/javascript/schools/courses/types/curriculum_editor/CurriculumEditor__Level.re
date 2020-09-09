@@ -2,7 +2,7 @@ type t = {
   id: string,
   name: string,
   number: int,
-  unlockOn: option(Js.Date.t),
+  unlockAt: option(Js.Date.t),
 };
 
 let id = t => t.id;
@@ -11,24 +11,45 @@ let name = t => t.name;
 
 let number = t => t.number;
 
-let unlockOn = t => t.unlockOn;
+let unlockAt = t => t.unlockAt;
 
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
     name: json |> field("name", string),
     number: json |> field("number", int),
-    unlockOn: json |> optional(field("unlockOn", DateFns.decodeISO)),
+    unlockAt: json |> optional(field("unlockAt", DateFns.decodeISO)),
   };
 
 let selectLevel = (levels, level_name) =>
-  levels |> List.find(q => q.name == level_name);
+  levels
+  |> ArrayUtils.unsafeFind(
+       q => q.name == level_name,
+       "Unable to find level with name: "
+       ++ level_name
+       ++ "in CurriculumEditor",
+     );
 
-let create = (id, name, number, unlockOn) => {id, name, number, unlockOn};
+let create = (id, name, number, unlockAt) => {id, name, number, unlockAt};
 
-let updateList = (levels, level) => {
-  let oldLevels = levels |> List.filter(l => l.id !== level.id);
-  oldLevels |> List.rev |> List.append([level]) |> List.rev;
+let updateArray = (levels, level) => {
+  let oldLevels = levels |> Js.Array.filter(l => l.id !== level.id);
+  oldLevels |> Array.append([|level|]);
 };
 
-let sort = levels => levels |> List.sort((x, y) => x.number - y.number);
+let sort = levels =>
+  levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number);
+
+let unsafeFind = (levels, componentName, levelId) => {
+  levels
+  |> ArrayUtils.unsafeFind(
+       l => l.id == levelId,
+       "Unable to find level with id: "
+       ++ levelId
+       ++ " in CurriculumEditor__"
+       ++ componentName,
+     );
+};
+
+let levelNumberWithName = t =>
+  "Level " ++ (t.number |> string_of_int) ++ ": " ++ t.name;

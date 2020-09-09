@@ -4,4 +4,8 @@ class CoursesResolver < ApplicationQuery
   def authorized?
     current_school_admin.present?
   end
+
+  def allow_token_auth?
+    true
+  end
 end

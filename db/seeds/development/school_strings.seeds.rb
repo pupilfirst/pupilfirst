@@ -30,5 +30,5 @@ after 'development:schools' do
     .first_or_create!(value: Faker::Lorem.sentence)
 
   school.school_strings.where(key: 'privacy_policy').first_or_create!(value: agreement_text)
-  school.school_strings.where(key: 'terms_of_use').first_or_create!(value: agreement_text)
+  school.school_strings.where(key: 'terms_and_conditions').first_or_create!(value: agreement_text)
 end

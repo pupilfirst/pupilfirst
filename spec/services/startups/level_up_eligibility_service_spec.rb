@@ -9,8 +9,8 @@ describe Startups::LevelUpEligibilityService do
   let!(:course_2) { create :course }
   let(:evaluation_criterion) { create :evaluation_criterion, course: course_1 }
   let(:level_1) { create :level, :one, course: course_1 }
-  let!(:level_2) { create :level, :two, unlock_on: 5.days.ago, course: course_1 }
-  let!(:level_2_c2) { create :level, :two, unlock_on: 2.days.from_now, course: course_2 }
+  let!(:level_2) { create :level, :two, unlock_at: 5.days.ago, course: course_1 }
+  let!(:level_2_c2) { create :level, :two, unlock_at: 2.days.from_now, course: course_2 }
   let(:startup) { create :startup, level: level_1 }
   let(:student) { startup.founders.first }
   let(:students) { startup.founders }
@@ -39,7 +39,7 @@ describe Startups::LevelUpEligibilityService do
 
         context 'when the next level is locked' do
           before do
-            level_2.update!(unlock_on: 5.days.from_now)
+            level_2.update!(unlock_at: 5.days.from_now)
           end
 
           it "returns 'date_locked'" do
@@ -47,7 +47,7 @@ describe Startups::LevelUpEligibilityService do
           end
 
           after do
-            level_2.update!(unlock_on: 5.days.ago)
+            level_2.update!(unlock_at: 5.days.ago)
           end
         end
       end
@@ -316,12 +316,6 @@ describe Startups::LevelUpEligibilityService do
           expect(subject.eligible?).to eq(false)
         end
       end
-    end
-  end
-
-  describe '#next_level_unlock_date' do
-    it 'returns the next levels unlock date' do
-      expect(subject.next_level_unlock_date).to eq(5.days.ago.to_date)
     end
   end
 end

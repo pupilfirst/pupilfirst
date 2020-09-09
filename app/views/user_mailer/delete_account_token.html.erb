@@ -1,0 +1,34 @@
+<% content_for :title do %>
+  <% "Delete Account from #{@school.name}" %>
+<% end %>
+
+<% content_for :subtitle do %>
+  This is a one-time link to delete your account.
+<% end %>
+
+<% content_for :title_button_text do %>
+  Delete Account
+<% end %>
+
+<% content_for(:title_button_link, @delete_account_url) %>
+
+<% content_for :salutation do %>
+  Hello <%= @user.name %>,
+<% end %>
+
+<% content_for :body do %>
+  <p>We received a request to delete your account in
+    <%= @school.name %>.</p>
+  <p> Please click the link above to confirm account deletion. The link is valid for 30 minutes only.</p>
+
+  <p>
+    If you&rsquo;re unable to click the link above, please copy and paste the following link into your browser&rsquo;s
+    address bar:
+  </p>
+
+  <p class="monospace">
+    <%= @delete_account_url %></p>
+
+  <p> This action is irreversible, and will permanently remove your access to the school.</p>
+<% end %>
+

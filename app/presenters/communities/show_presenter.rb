@@ -18,7 +18,7 @@ module Communities
     end
 
     def creator_name(topic)
-      topic.first_post.creator.name
+      topic.first_post.creator&.name || 'Unknown'
     end
 
     def activity(topic)

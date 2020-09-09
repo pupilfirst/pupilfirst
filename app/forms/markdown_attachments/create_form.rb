@@ -15,7 +15,8 @@ module MarkdownAttachments
     def save
       current_user.markdown_attachments.create!(
         file: file,
-        token: SecureRandom.urlsafe_base64
+        token: SecureRandom.urlsafe_base64,
+        school: current_user.school
       )
     end
   end

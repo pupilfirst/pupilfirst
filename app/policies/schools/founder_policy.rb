@@ -6,8 +6,10 @@ module Schools
     end
 
     def update?
+      # record should belong to current school
+      return false unless record&.school == current_school
       # School admins can edit details of students.
-      index? && record.present?
+      index?
     end
 
     # All school admins can team up founders.

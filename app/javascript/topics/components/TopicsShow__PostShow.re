@@ -18,8 +18,8 @@ let solutionIcon = {
   </div>;
 };
 
-let findUser = (users, userId) => {
-  users |> Array.to_list |> User.findById(userId);
+let findUser = (userId, users) => {
+  userId->Belt.Option.map(userId => users |> User.findById(userId));
 };
 
 module MarkPostAsSolutionQuery = [%graphql
@@ -209,8 +209,13 @@ let make =
       ~markPostAsSolutionCB,
       ~archivePostCB,
     ) => {
-  let user = findUser(users);
-  let isPostCreator = currentUserId == Post.creatorId(post);
+  let creator = Post.creatorId(post)->findUser(users);
+  let editor = Post.editorId(post)->findUser(users);
+  let isPostCreator =
+    Post.creatorId(post)
+    ->Belt.Option.mapWithDefault(false, creatorId =>
+        currentUserId == creatorId
+      );
   let isFirstPost = Post.postNumber(post) == 1;
   let repliesToPost = isFirstPost ? [||] : post |> Post.repliesToPost(posts);
   let (showPostEdit, toggleShowPostEdit) = React.useState(() => false);
@@ -228,7 +233,7 @@ let make =
 
             <div className="flex justify-between lg:hidden">
               <TopicsShow__UserShow
-                user={user(post |> Post.creatorId)}
+                user=creator
                 createdAt={post |> Post.createdAt}
               />
               <div className="flex-shrink-0 mt-1">
@@ -267,19 +272,26 @@ let make =
                        className="leading-normal text-sm "
                        profile=Markdown.QuestionAndAnswer
                      />
-                     {switch (post |> Post.editorId) {
-                      | Some(editorId) =>
+                     {switch (Post.editedAt(post)) {
+                      | Some(editedAt) =>
                         <div>
                           <div
-                            className="text-xs mt-1 inline-block px-2 py-1 rounded bg-gray-100 text-xs text-gray-800 ">
+                            className="mt-1 inline-block px-2 py-1 rounded bg-gray-100 text-xs text-gray-800 ">
                             <span> {"Last edited by " |> str} </span>
                             <span className="font-semibold">
-                              {user(editorId) |> User.name |> str}
+                              {(
+                                 switch (editor) {
+                                 | Some(user) => user |> User.name
+                                 | None => "Deleted User"
+                                 }
+                               )
+                               |> str}
                             </span>
                             <span>
                               {" on "
-                               ++ Post.updatedAt(post)
-                                  ->DateFns.format("do MMMM, yyyy HH:mm")
+                               ++ editedAt->DateFns.format(
+                                    "do MMMM, yyyy HH:mm",
+                                  )
                                |> str}
                             </span>
                           </div>
@@ -308,7 +320,7 @@ let make =
           <div className="flex-1 lg:flex-initial mr-3">
             <div className="hidden lg:block">
               <TopicsShow__UserShow
-                user={user(post |> Post.creatorId)}
+                user=creator
                 createdAt={post |> Post.createdAt}
               />
             </div>

@@ -16,7 +16,6 @@ class UpdateTargetMutator < ApplicationQuery
   validate :target_group_exists
   validate :target_exists
   validate :only_one_method_of_completion
-  validate :target_and_target_group_in_same_course
   validate :target_and_evaluation_criteria_have_same_course
   validate :prerequisite_targets_in_same_level
   validate :checklist_has_valid_data
@@ -50,12 +49,6 @@ class UpdateTargetMutator < ApplicationQuery
     return if completion_criteria.one? || completion_criteria.none?
 
     errors[:base] << 'More than one method of completion'
-  end
-
-  def target_and_target_group_in_same_course
-    return if target.course.id == target_group.course.id
-
-    errors[:base] << 'target and target group not from the same course'
   end
 
   def valid_string(string)
@@ -109,7 +102,7 @@ class UpdateTargetMutator < ApplicationQuery
   end
 
   def target_group
-    @target_group ||= current_school.target_groups.where(id: target_group_id).first
+    @target_group ||= course.target_groups.where(id: target_group_id).first
   end
 
   def target
@@ -121,7 +114,7 @@ class UpdateTargetMutator < ApplicationQuery
   end
 
   def level
-    @level ||= target.level
+    @level ||= target_group.level
   end
 
   def target_params

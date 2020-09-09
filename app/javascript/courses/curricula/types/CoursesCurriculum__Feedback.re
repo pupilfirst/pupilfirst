@@ -2,7 +2,7 @@ type id = string;
 
 type t = {
   id,
-  coachId: string,
+  coachId: option(string),
   submissionId: string,
   feedback: string,
 };
@@ -15,7 +15,7 @@ let feedback = t => t.feedback;
 let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
-    coachId: json |> field("coachId", string),
+    coachId: json |> field("coachId", optional(string)),
     submissionId: json |> field("submissionId", string),
     feedback: json |> field("feedback", string),
   };

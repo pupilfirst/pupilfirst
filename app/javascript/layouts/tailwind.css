@@ -72,6 +72,28 @@ input:disabled, .disabled {
   @apply cursor-not-allowed bg-gray-200 text-gray-700;
 }
 
+/* Accessible File Input */
+
+.form-input__file-sr-only {
+  position: absolute;
+  margin: -1px;
+  width: 1px;
+  height: 1px;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+}
+
+.form-input__file-label {
+  cursor: pointer;
+}
+
+.form-input__file-sr-only:focus+.form-input__file-label {
+  outline: none;
+  box-shadow: 0 0 0 3px theme(colors.primary.100);
+  border-color: theme(colors.primary.300);
+}
+
 /* Button */
 
 button:focus {

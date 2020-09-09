@@ -32,7 +32,7 @@ feature "Automatic issuance of certificates", js: true do
   end
 
   def complete_first_target
-    sign_in_user student_1.user, referer: target_path(target_l2)
+    sign_in_user student_1.user, referrer: target_path(target_l2)
 
     click_button 'Mark As Complete'
 
@@ -48,7 +48,7 @@ feature "Automatic issuance of certificates", js: true do
 
   context 'when the student is not in the final level' do
     scenario 'student completes the last milestone target' do
-      sign_in_user student_1.user, referer: target_path(target_l1)
+      sign_in_user student_1.user, referrer: target_path(target_l1)
 
       click_button 'Mark As Complete'
 
@@ -63,7 +63,7 @@ feature "Automatic issuance of certificates", js: true do
     let!(:team) { create :team, level: level_2 }
 
     scenario 'student receives certificate upon completion of sole milestone target' do
-      sign_in_user student_1.user, referer: target_path(target_l2)
+      sign_in_user student_1.user, referrer: target_path(target_l2)
 
       click_button 'Mark As Complete'
 
@@ -187,7 +187,7 @@ feature "Automatic issuance of certificates", js: true do
       let!(:target_l2) { create :target, :with_markdown, :student, target_group: target_group_l2 }
 
       scenario 'each student completes the last target' do
-        sign_in_user student_1.user, referer: target_path(target_l2)
+        sign_in_user student_1.user, referrer: target_path(target_l2)
 
         click_button 'Mark As Complete'
 
@@ -196,7 +196,7 @@ feature "Automatic issuance of certificates", js: true do
         # No certificate should be issued, yet.
         expect(IssuedCertificate.count).to eq(0)
 
-        sign_in_user student_2.user, referer: target_path(target_l2)
+        sign_in_user student_2.user, referrer: target_path(target_l2)
 
         click_button 'Mark As Complete'
 
@@ -211,7 +211,7 @@ feature "Automatic issuance of certificates", js: true do
       let!(:certificate) { create :certificate, course: course }
 
       scenario 'students never receive certificates upon completion' do
-        sign_in_user student_1.user, referer: target_path(target_l2)
+        sign_in_user student_1.user, referrer: target_path(target_l2)
 
         click_button 'Mark As Complete'
 
@@ -226,7 +226,7 @@ feature "Automatic issuance of certificates", js: true do
       let(:target_group_l2) { create :target_group, level: level_2 }
 
       scenario 'students never receive certificates' do
-        sign_in_user student_1.user, referer: target_path(target_l2)
+        sign_in_user student_1.user, referrer: target_path(target_l2)
 
         click_button 'Mark As Complete'
 
@@ -257,7 +257,7 @@ feature "Automatic issuance of certificates", js: true do
       end
 
       scenario 'student resubmits the final target' do
-        sign_in_user coach.user, referer: review_timeline_event_path(@resubmission)
+        sign_in_user coach.user, referrer: review_timeline_event_path(@resubmission)
 
         within("div[aria-label='submissions-overlay-card-#{@resubmission.id}']") do
           find("div[title='Good']").click

@@ -32,7 +32,7 @@ feature 'Course students list', js: true do
   end
 
   scenario 'coach checks the complete list of students' do
-    sign_in_user course_coach.user, referer: students_course_path(course)
+    sign_in_user course_coach.user, referrer: students_course_path(course)
 
     teams_sorted_by_name = course.startups.order(:name).to_a
 
@@ -100,7 +100,7 @@ feature 'Course students list', js: true do
   end
 
   scenario 'coach searches for and filters students by level' do
-    sign_in_user course_coach.user, referer: students_course_path(course)
+    sign_in_user course_coach.user, referrer: students_course_path(course)
 
     expect(page).to have_text(course.startups.order('name').first.name)
 
@@ -162,7 +162,7 @@ feature 'Course students list', js: true do
   end
 
   scenario 'team coach only has assigned teams in the students list' do
-    sign_in_user team_coach.user, referer: students_course_path(course)
+    sign_in_user team_coach.user, referrer: students_course_path(course)
 
     expect(page).to have_text(team_6.name)
     expect(page).to_not have_text(team_3.name)
@@ -185,7 +185,7 @@ feature 'Course students list', js: true do
     end
 
     scenario "one team coach can use the filter to see another coach's students" do
-      sign_in_user team_coach.user, referer: students_course_path(course)
+      sign_in_user team_coach.user, referrer: students_course_path(course)
 
       expect(page).to have_text(team_6.name)
       expect(page).to_not have_text(team_2.name)
@@ -199,7 +199,7 @@ feature 'Course students list', js: true do
   end
 
   scenario 'course coach checks list of directly assigned coaches' do
-    sign_in_user course_coach.user, referer: students_course_path(course)
+    sign_in_user course_coach.user, referrer: students_course_path(course)
 
     click_button('Load More...')
 
@@ -230,7 +230,7 @@ feature 'Course students list', js: true do
     scenario 'course coach checks names of coaches hidden from main list' do
       possible_names = [team_coach.name, team_coach_2.name, team_coach_3.name, team_coach_4.name, team_coach_5.name]
 
-      sign_in_user course_coach.user, referer: students_course_path(course)
+      sign_in_user course_coach.user, referrer: students_course_path(course)
 
       click_button('Load More...')
 
@@ -254,7 +254,7 @@ feature 'Course students list', js: true do
     end
 
     scenario 'level shows completed icon instead of number of students' do
-      sign_in_user course_coach.user, referer: students_course_path(course)
+      sign_in_user course_coach.user, referrer: students_course_path(course)
 
       within("div[aria-label='Students in level 1']") do
         expect(page).to_not have_text('0')
@@ -268,11 +268,11 @@ feature 'Course students list', js: true do
   end
 
   context 'when there are locked levels in course' do
-    let!(:locked_level_4) { create :level, :four, course: course, unlock_on: 5.days.from_now }
-    let!(:locked_level_5) { create :level, :five, course: course, unlock_on: 5.days.from_now }
+    let!(:locked_level_4) { create :level, :four, course: course, unlock_at: 5.days.from_now }
+    let!(:locked_level_5) { create :level, :five, course: course, unlock_at: 5.days.from_now }
 
     scenario 'it is shown as locked in student level wise distribution' do
-      sign_in_user course_coach.user, referer: students_course_path(course)
+      sign_in_user course_coach.user, referrer: students_course_path(course)
 
       within("div[aria-label='Students in level 2']") do
         expect(page).to_not have_selector('.student-distribution__pill--locked')
@@ -286,7 +286,7 @@ feature 'Course students list', js: true do
   end
 
   scenario 'filtering by coach updates the student distribution data' do
-    sign_in_user course_coach.user, referer: students_course_path(course)
+    sign_in_user course_coach.user, referrer: students_course_path(course)
 
     within("div[aria-label='Students in level 1']") do
       expect(page).to have_text('1')
@@ -326,7 +326,7 @@ feature 'Course students list', js: true do
     end
 
     scenario 'filtering by coach notes updates list of students and distribution bar' do
-      sign_in_user course_coach.user, referer: students_course_path(course)
+      sign_in_user course_coach.user, referrer: students_course_path(course)
 
       expect(page).to have_text(team_2.name)
       expect(page).to have_text(team_3.name)
@@ -388,7 +388,7 @@ feature 'Course students list', js: true do
         create :coach_note, author: author, student: student
       end
 
-      sign_in_user course_coach.user, referer: students_course_path(course)
+      sign_in_user course_coach.user, referrer: students_course_path(course)
       fill_in 'filter', with: 'does not have notes'
       click_button 'Coach Notes: Does not have notes'
 
@@ -413,7 +413,7 @@ feature 'Course students list', js: true do
   end
 
   scenario 'coach filters students by tags applied to their team' do
-    sign_in_user course_coach.user, referer: students_course_path(course)
+    sign_in_user course_coach.user, referrer: students_course_path(course)
 
     team_in_first_page = course.startups.where.not(id: team_2.id).order(:name).first
 
@@ -466,5 +466,27 @@ feature 'Course students list', js: true do
     expect(page).not_to have_text('Asparagus')
     expect(page).not_to have_text(team_in_first_page.name)
     expect(page).to have_text('Zucchini')
+  end
+
+  scenario 'coach searches student by email' do
+    sign_in_user course_coach.user, referrer: students_course_path(course)
+
+    teams_sorted_by_name = course.startups.order('name')
+    team_of_student_to_search = teams_sorted_by_name[5]
+    another_team = teams_sorted_by_name.first
+
+    expect(page).to have_text(another_team.name)
+
+    # Apply search by email filter
+    student_email = team_of_student_to_search.founders.first.email
+    fill_in 'filter', with: student_email
+    click_button "Name or Email: #{student_email}"
+
+    expect(page).not_to have_text(another_team.name)
+    expect(page).to have_text(team_of_student_to_search.name)
+
+    # Clear the filter
+    find("button[title='Remove selection: #{student_email}']").click
+    expect(page).to have_text(another_team.name)
   end
 end

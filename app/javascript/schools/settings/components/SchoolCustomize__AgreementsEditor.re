@@ -6,7 +6,7 @@ let str = ReasonReact.string;
 
 type kind =
   | PrivacyPolicy
-  | TermsOfUse;
+  | TermsAndConditions;
 
 type action =
   | UpdateAgreement(string)
@@ -23,13 +23,13 @@ type state = {
 let kindToString = kind =>
   switch (kind) {
   | PrivacyPolicy => "Privacy Policy"
-  | TermsOfUse => "Terms of Use"
+  | TermsAndConditions => "Terms & Conditions"
   };
 
 let kindToKey = kind =>
   switch (kind) {
   | PrivacyPolicy => "privacy_policy"
-  | TermsOfUse => "terms_of_use"
+  | TermsAndConditions => "terms_and_conditions"
   };
 
 let handleAgreementChange = (send, event) => {
@@ -54,7 +54,14 @@ module UpdateSchoolStringErrorHandler =
   GraphqlErrorHandler.Make(SchoolCustomize__UpdateSchoolStringError);
 
 let handleUpdateAgreement =
-    (state, send, kind, updatePrivacyPolicyCB, updateTermsOfUseCB, event) => {
+    (
+      state,
+      send,
+      kind,
+      updatePrivacyPolicyCB,
+      updateTermsAndConditionsCB,
+      event,
+    ) => {
   event |> ReactEvent.Mouse.preventDefault;
   send(BeginUpdate);
 
@@ -73,7 +80,7 @@ let handleUpdateAgreement =
          );
          switch (kind) {
          | PrivacyPolicy => updatePrivacyPolicyCB(state.agreement)
-         | TermsOfUse => updateTermsOfUseCB(state.agreement)
+         | TermsAndConditions => updateTermsAndConditionsCB(state.agreement)
          };
          send(DoneUpdating);
          Js.Promise.resolve();
@@ -92,7 +99,7 @@ let initialState = (kind, customizations) => {
   let agreement =
     switch (kind) {
     | PrivacyPolicy => customizations |> Customizations.privacyPolicy
-    | TermsOfUse => customizations |> Customizations.termsOfUse
+    | TermsAndConditions => customizations |> Customizations.termsAndConditions
     };
 
   {
@@ -116,7 +123,12 @@ let reducer = (state, action) =>
 
 [@react.component]
 let make =
-    (~kind, ~customizations, ~updatePrivacyPolicyCB, ~updateTermsOfUseCB) => {
+    (
+      ~kind,
+      ~customizations,
+      ~updatePrivacyPolicyCB,
+      ~updateTermsAndConditionsCB,
+    ) => {
   let (state, send) =
     React.useReducer(reducer, initialState(kind, customizations));
   <div className="mx-8 pt-8 flex flex-col agreements-editor__container">
@@ -135,7 +147,7 @@ let make =
           <i className="fab fa-markdown text-base" />
         </label>
         <textarea
-          maxLength=10000
+          maxLength=20000
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 flex-1"
           id="agreements-editor__value"
           placeholder="Leave the agreement body empty to hide the footer link."
@@ -151,7 +163,7 @@ let make =
           send,
           kind,
           updatePrivacyPolicyCB,
-          updateTermsOfUseCB,
+          updateTermsAndConditionsCB,
         )}
         className="w-full btn btn-large btn-primary mt-4">
         {updateAgreementText(state.updating, kind) |> str}

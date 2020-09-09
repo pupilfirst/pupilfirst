@@ -121,7 +121,8 @@ let saveReply = (send, replyToPostId, reply) => {
 };
 
 let isTopicCreator = (firstPost, currentUserId) => {
-  Post.creatorId(firstPost) == currentUserId;
+  Post.creatorId(firstPost)
+  ->Belt.Option.mapWithDefault(false, id => id == currentUserId);
 };
 
 let archiveTopic = community => {
@@ -265,7 +266,7 @@ let make =
                     className="leading-snug lg:pl-14 text-base lg:text-2xl w-5/6">
                     {state.topic |> Topic.title |> str}
                   </h3>
-                  {isCoach || currentUserId == (firstPost |> Post.creatorId)
+                  {isCoach || isTopicCreator(firstPost, currentUserId)
                      ? <button
                          onClick={_ => send(ShowTopicEditor(true))}
                          className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3 lg:invisible">

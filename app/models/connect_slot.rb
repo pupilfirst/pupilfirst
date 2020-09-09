@@ -1,6 +1,6 @@
 class ConnectSlot < ApplicationRecord
   belongs_to :faculty
-  has_one :connect_request, dependent: :restrict_with_error
+  has_one :connect_request, dependent: :destroy
 
   scope :next_week, -> { where('slot_at > ? AND slot_at < ?', next_week_start, next_week_end) }
   scope :upcoming, -> { where('slot_at > ?', Time.zone.now) }

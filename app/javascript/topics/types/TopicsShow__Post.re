@@ -1,11 +1,11 @@
 type t = {
   id,
   body: string,
-  creatorId: string,
+  creatorId: option(string),
   editorId: option(string),
   postNumber: int,
   createdAt: Js.Date.t,
-  updatedAt: Js.Date.t,
+  editedAt: option(Js.Date.t),
   totalLikes: int,
   likedByUser: bool,
   replies: array(string),
@@ -24,7 +24,8 @@ let body = t => t.body;
 let replies = t => t.replies;
 
 let createdAt = t => t.createdAt;
-let updatedAt = t => t.updatedAt;
+
+let editedAt = t => t.editedAt;
 
 let likedByUser = t => t.likedByUser;
 
@@ -35,11 +36,14 @@ let totalLikes = t => t.totalLikes;
 let solution = t => t.solution;
 
 let user = (users, t) => {
-  users
-  |> ArrayUtils.unsafeFind(
-       user => User.id(user) == t.creatorId,
-       "Unable to user with id: " ++ t.creatorId ++ " in TopicsShow__Post",
-     );
+  t.creatorId
+  ->Belt.Option.map(creatorId =>
+      users
+      |> ArrayUtils.unsafeFind(
+           user => User.id(user) == creatorId,
+           "Unable to user with id: " ++ creatorId ++ " in TopicsShow__Post",
+         )
+    );
 };
 
 let sort = posts => {
@@ -89,17 +93,17 @@ let highestPostNumber = posts => {
 
 let make =
     (
-      id,
-      body,
-      creatorId,
-      editorId,
-      postNumber,
-      createdAt,
-      updatedAt,
-      totalLikes,
-      likedByUser,
-      replies,
-      solution,
+      ~id,
+      ~body,
+      ~creatorId,
+      ~editorId,
+      ~postNumber,
+      ~createdAt,
+      ~editedAt,
+      ~totalLikes,
+      ~likedByUser,
+      ~replies,
+      ~solution,
     ) => {
   id,
   body,
@@ -107,7 +111,7 @@ let make =
   editorId,
   postNumber,
   createdAt,
-  updatedAt,
+  editedAt,
   totalLikes,
   likedByUser,
   replies,
@@ -121,11 +125,11 @@ let decode = json =>
   Json.Decode.{
     id: json |> field("id", string),
     body: json |> field("body", string),
-    creatorId: json |> field("creatorId", string),
+    creatorId: json |> optional(field("creatorId", string)),
     editorId: json |> optional(field("editorId", string)),
     postNumber: json |> field("postNumber", int),
     createdAt: json |> field("createdAt", DateFns.decodeISO),
-    updatedAt: json |> field("updatedAt", DateFns.decodeISO),
+    editedAt: json |> optional(field("editedAt", DateFns.decodeISO)),
     totalLikes: json |> field("totalLikes", int),
     likedByUser: json |> field("likedByUser", bool),
     replies: json |> field("replies", array(decodeReplyId)),

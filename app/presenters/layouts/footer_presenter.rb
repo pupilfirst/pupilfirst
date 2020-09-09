@@ -5,9 +5,7 @@ module Layouts
     end
 
     def nav_links
-      footer_links = current_user.present? ? [{ title: 'Home', url: '/' },{ title: 'Dashboard', url: '/dashboard' }] : []
-
-      return footer_links if current_school.blank?
+      footer_links = current_user.present? ? [{ title: 'Home', url: '/' }, { title: 'Dashboard', url: '/dashboard' }] : []
 
       custom_links = SchoolLink.where(
         school: current_school,
@@ -25,21 +23,15 @@ module Layouts
     end
 
     def school_name
-      @school_name ||= current_school.present? ? current_school.name : 'Pupilfirst'
+      current_school.name
     end
 
     def logo?
-      return true if current_school.blank?
-
       current_school.logo_on_dark_bg.attached?
     end
 
     def logo_url
-      if current_school.present?
-        view.url_for(current_school.logo_variant(:mid, background: :light))
-      else
-        view.image_url('shared/pupilfirst-logo.svg')
-      end
+      view.url_for(current_school.logo_variant(:mid, background: :light))
     end
 
     def social_icon(title)
@@ -54,42 +46,28 @@ module Layouts
 
     def address
       @address ||= begin
-        if current_school.present?
-          raw_address = SchoolString::Address.for(current_school)
+        raw_address = SchoolString::Address.for(current_school)
 
-          if raw_address.present?
-            parser = MarkdownIt::Parser.new(:commonmark)
-              .use(MotionMarkdownItPlugins::Sub)
-              .use(MotionMarkdownItPlugins::Sup)
+        if raw_address.present?
+          parser = MarkdownIt::Parser.new(:commonmark)
+            .use(MotionMarkdownItPlugins::Sub)
+            .use(MotionMarkdownItPlugins::Sup)
 
-            parser.render(raw_address)
-          end
-        else
-          view.t('presenters.layouts.footer.address_html')
+          parser.render(raw_address)
         end
       end
     end
 
     def email_address
-      @email_address ||= begin
-        if current_school.present?
-          SchoolString::EmailAddress.for(current_school)
-        else
-          view.t('presenters.layouts.footer.email_address')
-        end
-      end
+      @email_address ||= SchoolString::EmailAddress.for(current_school)
     end
 
     def privacy_policy?
-      return true if current_school.blank?
-
       SchoolString::PrivacyPolicy.saved?(current_school)
     end
 
-    def terms_of_use?
-      return true if current_school.blank?
-
-      SchoolString::TermsOfUse.saved?(current_school)
+    def terms_and_conditions?
+      SchoolString::TermsAndConditions.saved?(current_school)
     end
   end
 end

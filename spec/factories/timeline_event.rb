@@ -7,6 +7,11 @@ FactoryBot.define do
       passed_at { 1.day.ago }
     end
 
+    trait :evaluated do
+      evaluated_at { 1.day.ago }
+      evaluator { create :faculty }
+    end
+
     trait :with_owners do
       transient do
         owners { Founder.none }

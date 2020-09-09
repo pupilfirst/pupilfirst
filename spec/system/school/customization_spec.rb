@@ -13,7 +13,7 @@ feature 'School Customization', js: true do
   end
 
   scenario 'school admin sets custom images' do
-    sign_in_user school_admin.user, referer: customize_school_path
+    sign_in_user school_admin.user, referrer: customize_school_path
 
     find('div[title="Edit logo (on light backgrounds)"]').click
 
@@ -39,7 +39,7 @@ feature 'School Customization', js: true do
   end
 
   scenario 'school admin sets custom links' do
-    sign_in_user school_admin.user, referer: customize_school_path
+    sign_in_user school_admin.user, referrer: customize_school_path
 
     expect(page).to have_content("You can customize links on the header.")
 
@@ -131,7 +131,7 @@ feature 'School Customization', js: true do
   end
 
   scenario 'school admin customizes strings' do
-    sign_in_user school_admin.user, referer: customize_school_path
+    sign_in_user school_admin.user, referrer: customize_school_path
 
     expect(page).to have_content("Add an address?")
     expect(page).to have_content("Add a contact email?")
@@ -170,21 +170,21 @@ feature 'School Customization', js: true do
 
     find('button[title="Close Editor"]').click
 
-    # Edit terms of use.
-    find('div[title="Edit terms of use"]').click
+    # Edit terms & conditions.
+    find('div[title="Edit Terms & Conditions"]').click
 
-    terms_of_use = Faker::Lorem.paragraphs(number: 2).join("\n\n")
+    terms_and_conditions = Faker::Lorem.paragraphs(number: 2).join("\n\n")
 
-    fill_in('Body of Agreement', with: terms_of_use)
-    click_button 'Update Terms of Use'
-    expect(page).to have_content('Terms of Use has been updated')
+    fill_in('Body of Agreement', with: terms_and_conditions)
+    click_button 'Update Terms & Conditions'
+    expect(page).to have_content('Terms & Conditions has been updated')
 
     expect(SchoolString::PrivacyPolicy.for(school)).to eq(privacy_policy)
-    expect(SchoolString::TermsOfUse.for(school)).to eq(terms_of_use)
+    expect(SchoolString::TermsAndConditions.for(school)).to eq(terms_and_conditions)
   end
 
   scenario 'school admin customizes school name and about' do
-    sign_in_user school_admin.user, referer: customize_school_path
+    sign_in_user school_admin.user, referrer: customize_school_path
 
     expect(page).to have_content(school.name)
     expect(page).to have_content('Add more details about the school')

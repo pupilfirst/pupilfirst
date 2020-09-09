@@ -1,20 +1,7 @@
 # frozen_string_literal: true
 
 class Founder < ApplicationRecord
-  include PrivateFilenameRetrievable
-
   acts_as_taggable
-
-  COFOUNDER_PENDING = 'pending'
-  COFOUNDER_ACCEPTED = 'accepted'
-  COFOUNDER_REJECTED = 'rejected'
-
-  # Monthly fee amount for founders.
-  FEE = 4000
-
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  # devise :invitable, :database_authenticatable, :confirmable, :recoverable, :rememberable, :trackable, :validatable
 
   serialize :roles
 
@@ -26,26 +13,17 @@ class Founder < ApplicationRecord
   has_one :course, through: :level
   has_many :communities, through: :course
   has_many :coach_notes, foreign_key: 'student_id', class_name: 'CoachNote', dependent: :destroy, inverse_of: :student
-  has_many :visits, as: :user, dependent: :nullify, inverse_of: :user
-  has_many :ahoy_events, class_name: 'Ahoy::Event', as: :user, dependent: :nullify, inverse_of: :user
-  has_many :platform_feedback, dependent: :nullify
-  belongs_to :college, optional: true
-  has_one :university, through: :college
   belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
   has_many :active_admin_comments, as: :resource, class_name: 'ActiveAdmin::Comment', dependent: :destroy, inverse_of: :resource
   has_many :timeline_event_owners, dependent: :destroy
   has_many :timeline_events, through: :timeline_event_owners
   has_many :leaderboard_entries, dependent: :destroy
-  has_many :coach_notes, foreign_key: 'student_id', inverse_of: :student, dependent: :restrict_with_error
-
-  has_one_attached :avatar
+  has_many :coach_notes, foreign_key: 'student_id', inverse_of: :student, dependent: :destroy
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :startup_members, -> { where 'startup_id IS NOT NULL' }
   scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
-  scope :active_on_slack, ->(from, to) { joins(:public_slack_messages).where(public_slack_messages: { created_at: from..to }) }
-  scope :active_on_web, ->(from, to) { joins(user: :visits).where(visits: { started_at: from..to }) }
   scope :not_dropped_out, -> { joins(:startup).where(startups: { dropped_out_at: nil }) }
   scope :access_active, -> { joins(:startup).where('startups.access_ends_at > ?', Time.zone.now).or(joins(:startup).where(startups: { access_ends_at: nil })) }
   scope :active, -> { not_dropped_out.access_active }

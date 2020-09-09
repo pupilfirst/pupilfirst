@@ -10,7 +10,7 @@ type editorAction =
 type state = {
   selectedLevel: Level.t,
   editorAction,
-  levels: list(Level.t),
+  levels: array(Level.t),
   targetGroups: list(TargetGroup.t),
   targets: list(Target.t),
   showArchived: bool,
@@ -31,7 +31,7 @@ let reducer = (state, action) =>
   | SelectLevel(selectedLevel) => {...state, selectedLevel}
   | UpdateEditorAction(editorAction) => {...state, editorAction}
   | UpdateLevels(level) =>
-    let newLevels = level |> Level.updateList(state.levels);
+    let newLevels = level |> Level.updateArray(state.levels);
     {...state, levels: newLevels, editorAction: Hidden, selectedLevel: level};
   | UpdateTargetGroup(targetGroup) =>
     let newtargetGroups =
@@ -100,20 +100,23 @@ let levelOfTarget = (targetId, targets, levels, targetGroups) => {
          ++ Target.targetGroupId(target)
          ++ " in CurriculumEditor",
        );
-  levels
-  |> ListUtils.unsafeFind(
-       level => Level.id(level) == TargetGroup.levelId(targetGroup),
-       "Unable to find level with ID:"
-       ++ TargetGroup.levelId(targetGroup)
-       ++ " in CurriculumEditor",
-     );
+
+  Level.unsafeFind(
+    levels,
+    "CurriculumEditor",
+    TargetGroup.levelId(targetGroup),
+  );
 };
 
 let computeIntialState = ((levels, targetGroups, targets, path)) => {
   let maxLevel =
-    levels
-    |> List.sort((l1, l2) => (l2 |> Level.number) - (l1 |> Level.number))
-    |> List.hd;
+    Js.Array2.reduce(
+      levels,
+      (max, level) => {
+        Level.number(level) > Level.number(max) ? level : max
+      },
+      Js.Array2.unsafe_get(levels, 0),
+    );
 
   let selectedLevel =
     switch (path) {
@@ -134,15 +137,7 @@ let computeIntialState = ((levels, targetGroups, targets, path)) => {
 };
 
 [@react.component]
-let make =
-    (
-      ~course,
-      ~evaluationCriteria,
-      ~levels,
-      ~targetGroups,
-      ~targets,
-      ~authenticityToken,
-    ) => {
+let make = (~course, ~evaluationCriteria, ~levels, ~targetGroups, ~targets) => {
   let path = ReasonReactRouter.useUrl().path;
   let (state, send) =
     React.useReducerWithMapState(
@@ -218,7 +213,8 @@ let make =
     </div>
     <CurriculumEditor__TargetDrawer
       targets={state.targets}
-      targetGroups
+      levels={state.levels}
+      targetGroups={state.targetGroups}
       evaluationCriteria
       course
       updateTargetCB
@@ -228,14 +224,14 @@ let make =
      | ShowTargetGroupEditor(targetGroup) =>
        <CurriculumEditor__TargetGroupEditor
          targetGroup
+         levels={state.levels}
          currentLevelId
-         authenticityToken
          updateTargetGroupsCB
          hideEditorActionCB
        />
      | ShowLevelEditor(level) =>
        <CurriculumEditor__LevelEditor
-         levels={Array.of_list(state.levels)}
+         levels={state.levels}
          level
          course
          hideEditorActionCB
@@ -259,7 +255,7 @@ let make =
                 className="block appearance-none w-full bg-white border text-sm border-gray-400 hover:border-gray-500 px-4 py-3 pr-8 rounded-r-none leading-tight focus:outline-none">
                 {state.levels
                  |> Level.sort
-                 |> List.map(level =>
+                 |> Array.map(level =>
                       <option
                         key={Level.id(level)} value={level |> Level.name}>
                         {"Level "
@@ -269,7 +265,6 @@ let make =
                          |> str}
                       </option>
                     )
-                 |> Array.of_list
                  |> ReasonReact.array}
               </select>
               <div
@@ -279,7 +274,7 @@ let make =
             </div>
             <button
               title="Edit selected level"
-              className="flex text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-400 border-l-0 py-1 px-2 rounded-r focus:outline-none"
+              className="flex items-center text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-400 border-l-0 py-1 px-2 rounded-r focus:outline-none"
               onClick={_ =>
                 send(
                   UpdateEditorAction(

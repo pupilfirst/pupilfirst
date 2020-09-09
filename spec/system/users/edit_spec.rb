@@ -20,28 +20,28 @@ feature 'User Edit' do
     startup.founders << student
   end
 
-  scenario 'User tries to submit a blank form' do
-    sign_in_user(user, referer: edit_user_path)
+  scenario 'User tries to submit a blank form', js: true do
+    sign_in_user(user, referrer: edit_user_path)
 
     expect(page).to have_text('Edit your profile')
 
-    fill_in 'users_edit_name', with: ''
-    click_button 'Save Changes'
+    fill_in 'user_name', with: ''
 
     expect(page).to have_content("Name can't be blank")
   end
 
   scenario 'User fills in all fields and submits', js: true do
-    sign_in_user(user, referer: edit_user_path)
+    sign_in_user(user, referrer: edit_user_path)
     expect(page).to have_text('Edit').and have_text('profile')
 
-    fill_in 'users_edit_name', with: student_name
-    attach_file 'Avatar', upload_path('faculty/donald_duck.jpg'), visible: false
-    fill_in 'users_edit_about', with: about
-    select 'Send me a daily email', from: 'Community Digest'
+    fill_in 'user_name', with: student_name
+    attach_file 'user-edit__avatar-input', upload_path('faculty/donald_duck.jpg'), visible: false
+    dismiss_notification
+    fill_in 'about', with: about
+    find('span', text: 'Send me a daily email').click
     click_button 'Save Changes'
 
-    expect(page).to have_text('Your profile has been updated')
+    expect(page).to have_text('Profile updated successfully!')
 
     dismiss_notification
 
@@ -56,34 +56,29 @@ feature 'User Edit' do
   end
 
   scenario 'User sets a new password', js: true do
-    sign_in_user(user, referer: edit_user_path)
+    sign_in_user(user, referrer: edit_user_path)
 
-    expect(page).to have_text('Set a password for signing in')
+    expect(page).to have_text('Set password for your account')
+    expect(user.encrypted_password).to be_blank
 
     # Check a failure path.
-    fill_in 'New Password', with: 'short'
-    fill_in 'Confirm your New Password', with: 'short'
+    fill_in 'New password', with: 'short'
+    fill_in 'Confirm password', with: 'short'
 
-    click_button 'Save Changes'
+    expect(page).to have_text('New password and confirmation should match and must have atleast 8 characters')
 
-    expect(page).to have_text('New password should be at least 8 characters long')
-    expect(user.reload.encrypted_password).to be_blank
+    fill_in 'New password', with: 'long_enough'
+    fill_in 'Confirm password', with: 'but_not_the_same'
 
-    fill_in 'New Password', with: 'long_enough'
-    fill_in 'Confirm your New Password', with: 'but_not_the_same'
-
-    click_button 'Save Changes'
-
-    expect(page).to have_text('New password confirmation does not match')
-    expect(user.reload.encrypted_password).to be_blank
+    expect(page).to have_text('New password and confirmation should match and must have atleast 8 characters')
 
     # Check basic success.
-    fill_in 'New Password', with: new_password
-    fill_in 'Confirm your New Password', with: new_password
+    fill_in 'New password', with: new_password
+    fill_in 'Confirm password', with: new_password
 
     click_button 'Save Changes'
 
-    expect(page).to have_text('Your profile has been updated')
+    expect(page).to have_text('Profile updated successfully!')
     expect(user.reload.valid_password?(new_password)).to eq(true)
   end
 
@@ -95,28 +90,30 @@ feature 'User Edit' do
     end
 
     scenario 'user changes her password', js: true do
-      sign_in_user(user, referer: edit_user_path)
+      sign_in_user(user, referrer: edit_user_path)
 
       expect(page).to have_text('Change your current password')
 
       # Check a failure path.
-      fill_in 'Current Password', with: 'not the current password'
-      fill_in 'New Password', with: 'long_enough'
-      fill_in 'Confirm your New Password', with: 'long_enough'
+      fill_in 'Current password', with: 'not the current password'
+      fill_in 'New password', with: 'long_enough'
+      fill_in 'Confirm password', with: 'long_enough'
 
       click_button 'Save Changes'
 
       expect(page).to have_text('Current password is incorrect')
+      dismiss_notification
+
       expect(user.reload.valid_password?(current_password)).to eq(true)
 
       # Check success path.
-      fill_in 'Current Password', with: current_password
-      fill_in 'New Password', with: new_password
-      fill_in 'Confirm your New Password', with: new_password
+      fill_in 'Current password', with: current_password
+      fill_in 'New password', with: new_password
+      fill_in 'Confirm password', with: new_password
 
       click_button 'Save Changes'
 
-      expect(page).to have_text('Your profile has been updated')
+      expect(page).to have_text('Profile updated successfully!')
       expect(user.reload.valid_password?(new_password)).to eq(true)
     end
   end

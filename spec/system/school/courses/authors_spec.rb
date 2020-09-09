@@ -17,7 +17,7 @@ feature 'Course authors editor', js: true do
   let(:coach) { create :faculty, school: school }
 
   scenario 'school admin adds a new author to the course' do
-    sign_in_user school_admin.user, referer: authors_school_course_path(course)
+    sign_in_user school_admin.user, referrer: authors_school_course_path(course)
 
     # Interface should show existing coaches
     expect(page).to have_text(course_author.user.name)
@@ -38,6 +38,11 @@ feature 'Course authors editor', js: true do
     expect(new_author_user.title).to eq('Author')
     expect(CourseAuthor.where(user_id: new_author_user.id).exists?).to eq(true)
 
+    open_email(new_author_user.email)
+
+    expect(current_email.subject).to include("You have been added as an author in #{course.name}")
+    expect(current_email.body).to have_link("Sign in to Edit Course")
+
     # The new author should be immediately editable.
     click_link(new_author_user.name)
 
@@ -45,7 +50,7 @@ feature 'Course authors editor', js: true do
   end
 
   scenario 'school admin edits an author' do
-    sign_in_user school_admin.user, referer: school_course_author_path(course, course_author)
+    sign_in_user school_admin.user, referrer: school_course_author_path(course, course_author)
 
     # Edit the author's name.
     fill_in 'name', with: name_for_edit
@@ -59,7 +64,7 @@ feature 'Course authors editor', js: true do
   end
 
   scenario 'school admin adds an existing user as an author', js: true do
-    sign_in_user school_admin.user, referer: authors_school_course_path(course)
+    sign_in_user school_admin.user, referrer: authors_school_course_path(course)
     original_title = user.title
 
     click_button 'Add New Author'
@@ -77,7 +82,7 @@ feature 'Course authors editor', js: true do
   end
 
   scenario 'school admin deletes an author' do
-    sign_in_user school_admin.user, referer: authors_school_course_path(course)
+    sign_in_user school_admin.user, referrer: authors_school_course_path(course)
 
     accept_confirm do
       find("div[title='Delete #{course_author.user.name}'").click
@@ -88,7 +93,7 @@ feature 'Course authors editor', js: true do
   end
 
   scenario 'school admin attempts to add an admin as an author' do
-    sign_in_user school_admin.user, referer: new_school_course_author_path(course)
+    sign_in_user school_admin.user, referrer: new_school_course_author_path(course)
 
     fill_in 'email', with: school_admin.user.email
     fill_in 'name', with: name_for_user
@@ -104,7 +109,7 @@ feature 'Course authors editor', js: true do
   end
 
   scenario 'logged in user who not a school admin to access course author editor interface' do
-    sign_in_user coach.user, referer: authors_school_course_path(course)
+    sign_in_user coach.user, referrer: authors_school_course_path(course)
     expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 end

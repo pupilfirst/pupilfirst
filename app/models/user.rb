@@ -12,13 +12,19 @@ class User < ApplicationRecord
   has_many :courses, through: :founders
   has_one :faculty, dependent: :restrict_with_error
   has_many :user_activities, dependent: :destroy
-  has_many :visits, as: :user, dependent: :destroy, inverse_of: :user
   has_one :school_admin, dependent: :restrict_with_error
-  has_many :markdown_attachments, dependent: :restrict_with_error
-  has_many :issued_certificates, dependent: :restrict_with_error
+  has_many :markdown_attachments, dependent: :nullify
+  has_many :issued_certificates, dependent: :nullify
+  has_many :post_likes, dependent: :nullify
+  has_many :text_versions, dependent: :nullify
+  has_many :course_exports, dependent: :nullify
+  has_many :created_posts, class_name: 'Post', foreign_key: 'creator_id', inverse_of: :creator, dependent: :nullify
+  has_many :edited_posts, class_name: 'Post', foreign_key: 'editor_id', inverse_of: :editor, dependent: :nullify
+  has_many :coach_notes, class_name: 'CoachNote', foreign_key: 'author_id', inverse_of: :author, dependent: :nullify
 
   has_secure_token :login_token
   has_secure_token :reset_password_token
+  has_secure_token :delete_account_token
 
   # database_authenticable is required by devise_for to generate the session routes
   devise :database_authenticatable, :trackable, :rememberable, :omniauthable, :recoverable,
@@ -43,6 +49,23 @@ class User < ApplicationRecord
     end.join(' ')
   end
 
+  attr_reader :delete_account_token_original
+  attr_reader :api_token
+
+  def regenerate_delete_account_token
+    @delete_account_token_original = SecureRandom.urlsafe_base64
+    update!(delete_account_token: Digest::SHA2.hexdigest(@delete_account_token_original))
+  end
+
+  def self.find_by_hashed_delete_account_token(delete_account_token)
+    find_by(delete_account_token: Digest::SHA2.hexdigest(delete_account_token))
+  end
+
+  def regenerate_api_token
+    @api_token = SecureRandom.urlsafe_base64
+    update!(api_token_digest: Digest::SHA2.base64digest(@api_token))
+  end
+
   def email_bounced?
     BounceReport.where(email: email).exists?
   end
@@ -58,24 +81,24 @@ class User < ApplicationRecord
 
   def avatar_variant(version)
     case version
-      when :mid
-        avatar.variant(combine_options:
-          {
-            auto_orient: true,
-            gravity: "center",
-            resize: '200x200^',
-            crop: '200x200+0+0'
-          })
-      when :thumb
-        avatar.variant(combine_options:
-          {
-            auto_orient: true,
-            gravity: 'center',
-            resize: '50x50^',
-            crop: '50x50+0+0'
-          })
-      else
-        avatar
+    when :mid
+      avatar.variant(combine_options:
+        {
+          auto_orient: true,
+          gravity: "center",
+          resize: '200x200^',
+          crop: '200x200+0+0'
+        })
+    when :thumb
+      avatar.variant(combine_options:
+        {
+          auto_orient: true,
+          gravity: 'center',
+          resize: '50x50^',
+          crop: '50x50+0+0'
+        })
+    else
+      avatar
     end
   end
 

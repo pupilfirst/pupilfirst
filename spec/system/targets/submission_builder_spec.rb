@@ -15,7 +15,7 @@ feature 'Submission Builder', js: true do
   let!(:target) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1] }
 
   scenario 'student submits a target with no checklist' do
-    sign_in_user student.user, referer: target_path(target)
+    sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
     find('.course-overlay__body-tab-item', text: 'Complete').click
@@ -38,7 +38,7 @@ feature 'Submission Builder', js: true do
     target.update!(checklist: [{ title: question, kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }])
     long_answer = Faker::Lorem.sentence
 
-    sign_in_user student.user, referer: target_path(target)
+    sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
     find('.course-overlay__body-tab-item', text: 'Complete').click
@@ -71,7 +71,7 @@ feature 'Submission Builder', js: true do
     target.update!(checklist: [{ title: question, kind: Target::CHECKLIST_KIND_SHORT_TEXT, optional: false }])
     short_answer = Faker::Lorem.words.join(' ')
 
-    sign_in_user student.user, referer: target_path(target)
+    sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
     find('.course-overlay__body-tab-item', text: 'Complete').click
@@ -104,7 +104,7 @@ feature 'Submission Builder', js: true do
     target.update!(checklist: [{ title: question, kind: Target::CHECKLIST_KIND_LINK, optional: false }])
     link = 'https://example.com?q=1'
 
-    sign_in_user student.user, referer: target_path(target)
+    sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
     find('.course-overlay__body-tab-item', text: 'Complete').click
@@ -139,7 +139,7 @@ feature 'Submission Builder', js: true do
     question = Faker::Lorem.sentence
     target.update!(checklist: [{ title: question, kind: Target::CHECKLIST_KIND_FILES, optional: false }])
 
-    sign_in_user student.user, referer: target_path(target)
+    sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
     find('.course-overlay__body-tab-item', text: 'Complete').click
@@ -192,7 +192,7 @@ feature 'Submission Builder', js: true do
     target.update!(checklist: [{ title: question, kind: Target::CHECKLIST_KIND_MULTI_CHOICE, optional: false, metadata: { choices: choices } }])
     answer = choices.last
 
-    sign_in_user student.user, referer: target_path(target)
+    sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
     find('.course-overlay__body-tab-item', text: 'Complete').click
@@ -224,7 +224,7 @@ feature 'Submission Builder', js: true do
     target.update!(checklist: [{ title: question_1, kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }, { title: question_2, kind: Target::CHECKLIST_KIND_LINK, optional: true }])
     long_answer = Faker::Lorem.sentence
 
-    sign_in_user student.user, referer: target_path(target)
+    sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
     find('.course-overlay__body-tab-item', text: 'Complete').click

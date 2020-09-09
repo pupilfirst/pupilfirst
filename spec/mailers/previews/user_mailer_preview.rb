@@ -20,6 +20,22 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.daily_digest(user, updates)
   end
 
+  def delete_account_token
+    school = School.first
+    user = school.users.first
+    host = school.domains.primary.fqdn
+    delete_account_url = Rails.application.routes.url_helpers.delete_account_url(token: 'DELETE_ACCOUNT_TOKEN', host: host, protocol: 'https')
+    UserMailer.delete_account_token(user, delete_account_url)
+  end
+
+  def confirm_account_deletion
+    UserMailer.confirm_account_deletion('test@xyz.com', School.first)
+  end
+
+  def account_deletion_notification
+    UserMailer.account_deletion_notification(User.last, 'https://test.school.com', 24)
+  end
+
   private
 
   def community_digest(count, starting_id = 1, no_activity = false)

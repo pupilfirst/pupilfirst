@@ -7,9 +7,9 @@ class ApplicationController < ActionController::Base
   # Activate pretender.
   impersonates :user
 
-  before_action :prepare_platform_feedback
   before_action :sign_out_if_required
   before_action :pretender
+  before_action :store_user_location, if: :storable_location?
 
   around_action :set_time_zone, if: :current_user
 
@@ -42,23 +42,8 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError, 'Not Found'
   end
 
-  def after_sign_in_path_for(resource)
-    referer = params[:referer] || session[:referer]
-
-    if referer.present?
-      referer
-    elsif resource.is_a?(AdminUser)
-      super
-    else
-      Users::AfterSignInPathResolverService.new(resource, current_school).after_sign_in_path
-    end
-  end
-
-  # If a user is signed in, prepare a platform_feedback object to be used with its form
-  def prepare_platform_feedback
-    return unless current_founder
-
-    @platform_feedback_for_form = PlatformFeedback.new(founder_id: current_founder.id)
+  def after_sign_in_path_for(resource_or_scope)
+    stored_location_for(resource_or_scope) || dashboard_path
   end
 
   def current_host
@@ -153,6 +138,24 @@ class ApplicationController < ActionController::Base
 
   helper_method :pundit_user
 
+  def api_token
+    @api_token ||= begin
+      header = request.headers['Authorization']&.strip
+
+      # Authorization headers are of format "Authorization: <type> <credentials>".
+      # We only care about the supplied credentials.
+      header.split(' ')[-1] if header.present?
+    end
+  end
+
+  def current_user
+    if api_token.present?
+      @current_user ||= Users::FindByApiTokenService.new(api_token, current_school).find
+    else
+      super
+    end
+  end
+
   private
 
   def set_time_zone(&block) # rubocop:disable Naming/AccessorMethodName
@@ -174,12 +177,15 @@ class ApplicationController < ActionController::Base
     redirect_to root_path
   end
 
-  def authenticate_school_admin!
-    authenticate_user!
-    return if current_school_admin.present?
+  def storable_location?
+    non_html_response = destroy_user_session_path || is_a?(::TargetsController) && params[:action] == "details_v2"
+    public_page = _process_action_callbacks.none? { |p| p.filter == :authenticate_user! }
 
-    flash[:error] = 'You are not an admin of this school.'
-    redirect_to root_path
+    request.get? && is_navigational_format? && !request.xhr? && !public_page && !non_html_response
+  end
+
+  def store_user_location
+    store_location_for(:user, request.fullpath)
   end
 
   def pretender

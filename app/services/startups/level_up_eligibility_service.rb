@@ -32,7 +32,7 @@ module Startups
       @eligibility ||= begin
         if next_level.blank?
           ELIGIBILITY_NOT_ELIGIBLE
-        elsif next_level_unlock_date&.future? && regular_student?
+        elsif next_level.unlock_at&.future? && regular_student?
           ELIGIBILITY_DATE_LOCKED
         elsif current_level_milestone_targets.any?
           current_level_targets_attempted = current_level_milestone_targets.all? do |target|
@@ -58,10 +58,6 @@ module Startups
       @next_level ||= current_level.course.levels.find_by(number: current_level.number + 1)
     end
 
-    def next_level_unlock_date
-      @next_level_unlock_date ||= next_level.unlock_on
-    end
-
     private
 
     def current_level_eligible_statuses
@@ -85,22 +81,22 @@ module Startups
 
     def minimum_required_level_milestone_targets
       case course.progression_behavior
-        when Course::PROGRESSION_BEHAVIOR_LIMITED
-          if current_level.number > course.progression_limit
-            minimum_required_level_number = current_level.number - course.progression_limit
-            minimum_required_level = current_level.course.levels.find_by(number: minimum_required_level_number)
+      when Course::PROGRESSION_BEHAVIOR_LIMITED
+        if current_level.number > course.progression_limit
+          minimum_required_level_number = current_level.number - course.progression_limit
+          minimum_required_level = current_level.course.levels.find_by(number: minimum_required_level_number)
 
-            raise 'Could not find minimum required level for computing level up eligibility' if minimum_required_level.blank?
+          raise 'Could not find minimum required level for computing level up eligibility' if minimum_required_level.blank?
 
-            milestone_groups = minimum_required_level.target_groups.where(milestone: true)
-            Target.where(target_group: milestone_groups).live
-          else
-            Target.none
-          end
-        when Course::PROGRESSION_BEHAVIOR_UNLIMITED, Course::PROGRESSION_BEHAVIOR_STRICT
-          Target.none
+          milestone_groups = minimum_required_level.target_groups.where(milestone: true)
+          Target.where(target_group: milestone_groups).live
         else
-          raise "Unexpected progression behavior #{course.progression_behavior}"
+          Target.none
+        end
+      when Course::PROGRESSION_BEHAVIOR_UNLIMITED, Course::PROGRESSION_BEHAVIOR_STRICT
+        Target.none
+      else
+        raise "Unexpected progression behavior #{course.progression_behavior}"
       end
     end
 

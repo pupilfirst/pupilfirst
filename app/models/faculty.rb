@@ -5,7 +5,8 @@ class Faculty < ApplicationRecord
 
   belongs_to :user
   has_one :school, through: :user
-  has_many :startup_feedback, dependent: :restrict_with_error
+  has_many :startup_feedback, dependent: :nullify
+  has_many :evaluated_events, class_name: 'TimelineEvent', foreign_key: 'evaluator_id', inverse_of: :evaluator, dependent: :nullify
   has_many :targets, dependent: :restrict_with_error
   has_many :connect_slots, dependent: :destroy
   has_many :connect_requests, through: :connect_slots

@@ -28,7 +28,7 @@ feature 'Connect Link' do
   end
 
   scenario 'Student visits coaches page' do
-    sign_in_user(founder.user, referer: coaches_index_path)
+    sign_in_user(founder.user, referrer: coaches_index_path)
 
     # There should be  two coach cards.
     expect(page).to have_selector('.faculty-card', count: 2)
@@ -40,7 +40,7 @@ feature 'Connect Link' do
   end
 
   scenario 'Coach visits coaches page' do
-    sign_in_user(coach.user, referer: coaches_index_path)
+    sign_in_user(coach.user, referrer: coaches_index_path)
 
     # There should be a two coach cards.
     expect(page).to have_selector('.faculty-card', count: 2)
@@ -52,7 +52,7 @@ feature 'Connect Link' do
   end
 
   scenario 'school admin visits coaches page' do
-    sign_in_user(school_admin.user, referer: coaches_index_path)
+    sign_in_user(school_admin.user, referrer: coaches_index_path)
 
     # Both cards should have connect links.
     expect(page).to have_link('Connect', href: coach.connect_link)
@@ -66,7 +66,7 @@ feature 'Connect Link' do
     end
 
     scenario 'student visits coaches page' do
-      sign_in_user(founder.user, referer: coaches_index_path)
+      sign_in_user(founder.user, referrer: coaches_index_path)
 
       expect(page).to have_selector('.faculty-card', count: 2)
 
@@ -75,7 +75,7 @@ feature 'Connect Link' do
     end
 
     scenario 'admin visits coaches page' do
-      sign_in_user(school_admin.user, referer: coaches_index_path)
+      sign_in_user(school_admin.user, referrer: coaches_index_path)
 
       # ...connect link for coach will be displayed
       expect(page).to have_link('Connect', href: coach.connect_link)
@@ -94,7 +94,7 @@ feature 'Connect Link' do
     end
 
     scenario 'student visits the coaches page ' do
-      sign_in_user(founder.user, referer: coaches_index_path)
+      sign_in_user(founder.user, referrer: coaches_index_path)
 
       # There should be  two coach cards.
       expect(page).to have_selector('.faculty-card', count: 3)

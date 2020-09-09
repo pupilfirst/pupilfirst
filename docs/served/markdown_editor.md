@@ -88,6 +88,23 @@ parenthesis. For example:
 
 ![This school's icon](/favicon.ico)
 
+You can also control the size of the image:
+
+```markdown
+![This school's icon](/favicon.ico =50x50)
+![This school's icon](/favicon.ico =5%)
+![This school's icon](/favicon.ico =25x)
+```
+
+![This school's icon](/favicon.ico =50x50)
+![This school's icon](/favicon.ico =5%)
+![This school's icon](/favicon.ico =25x)
+
+The dimensions are in the format: `WxH`. The height is optional, and is used
+only to assign vertical space for the image before it's loaded. The image will
+always fit within the specified width, and will maintain its proportions
+regardless of the specified height. The width can also be a percentage.
+
 ### Headings
 
 You can have up to six levels of headings, marked by a number of _hash_

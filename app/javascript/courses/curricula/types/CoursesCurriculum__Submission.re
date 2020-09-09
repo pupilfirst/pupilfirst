@@ -31,7 +31,7 @@ let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy");
 
 let sort = ts =>
   ts->Belt.List.sort((t1, t2) => {
-    t1.createdAt->DateFns.differenceInSeconds(t2.createdAt)
+    t2.createdAt->DateFns.differenceInSeconds(t1.createdAt)
   });
 
 let decode = json =>

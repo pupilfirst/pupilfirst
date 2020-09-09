@@ -17,8 +17,8 @@ let make = (~loading, ~message="Loading...") => {
   let initialRender = React.useRef(true);
   React.useEffect1(
     () => {
-      if (initialRender |> React.Ref.current) {
-        initialRender->React.Ref.setCurrent(false);
+      if (initialRender.current) {
+        initialRender.current = false;
       } else if (loading) {
         setRender(_ => true);
       };

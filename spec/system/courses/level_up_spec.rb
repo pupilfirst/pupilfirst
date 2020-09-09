@@ -20,7 +20,7 @@ feature "Student levelling up", js: true do
 
   Rspec.shared_examples 'student is limited to current level' do
     scenario 'student cannot level up' do
-      sign_in_user student.user, referer: curriculum_course_path(course)
+      sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_text(target.title)
       expect(page).to have_text("You're at Level #{target.level.number}, but you have targets in the Level 1 that are failed, or are pending review by a coach.")
@@ -31,7 +31,7 @@ feature "Student levelling up", js: true do
 
   context 'when the course has progression limited to one level' do
     scenario 'student on level 1 can level up immediately after submitting the milestone targets, except when previous level milestones are incomplete' do
-      sign_in_user student.user, referer: curriculum_course_path(course)
+      sign_in_user student.user, referrer: curriculum_course_path(course)
 
       # Student cannot level up yet.
       expect(page).to have_text(target_l1.title)
@@ -101,7 +101,7 @@ feature "Student levelling up", js: true do
         end
 
         scenario 'student is shown the option to level up again' do
-          sign_in_user student.user, referer: curriculum_course_path(course)
+          sign_in_user student.user, referrer: curriculum_course_path(course)
 
           expect(page).to have_button('Level Up')
         end
@@ -126,7 +126,7 @@ feature "Student levelling up", js: true do
       end
 
       scenario 'student levels up' do
-        sign_in_user student.user, referer: curriculum_course_path(course)
+        sign_in_user student.user, referrer: curriculum_course_path(course)
 
         click_button('Level Up')
 
@@ -167,7 +167,7 @@ feature "Student levelling up", js: true do
     end
 
     scenario 'student levels up' do
-      sign_in_user student.user, referer: curriculum_course_path(course)
+      sign_in_user student.user, referrer: curriculum_course_path(course)
 
       click_button('Level Up')
 
@@ -185,7 +185,7 @@ feature "Student levelling up", js: true do
       end
 
       scenario 'student is locked in current level' do
-        sign_in_user student.user, referer: curriculum_course_path(course)
+        sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text("You have submitted all milestone targets in level 1, but one or more submissions are pending review by a coach.")
@@ -200,7 +200,7 @@ feature "Student levelling up", js: true do
       end
 
       scenario 'student cannot level up' do
-        sign_in_user student.user, referer: curriculum_course_path(course)
+        sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text('Failed')
         expect(page).not_to have_button('Level Up')
@@ -213,7 +213,7 @@ feature "Student levelling up", js: true do
       end
 
       scenario 'student levels up' do
-        sign_in_user student.user, referer: curriculum_course_path(course)
+        sign_in_user student.user, referrer: curriculum_course_path(course)
 
         click_button('Level Up')
 
@@ -224,14 +224,14 @@ feature "Student levelling up", js: true do
   end
 
   context 'when a student is in level 1 and has completed all milestone targets there, but level 2 is locked' do
-    let(:level_2) { create :level, :two, course: course, unlock_on: 1.week.from_now }
+    let(:level_2) { create :level, :two, course: course, unlock_at: 1.week.from_now }
 
     before do
       complete_target target_l1, student
     end
 
     scenario 'regular student cannot level up' do
-      sign_in_user student.user, referer: curriculum_course_path(course)
+      sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_text(target_l1.title)
       expect(page).not_to have_button('Level Up')
@@ -243,7 +243,7 @@ feature "Student levelling up", js: true do
       end
 
       scenario 'school admin levels up to locked level' do
-        sign_in_user student.user, referer: curriculum_course_path(course)
+        sign_in_user student.user, referrer: curriculum_course_path(course)
         click_button('Level Up')
 
         expect(page).to have_link(target_l2.title)
@@ -258,7 +258,7 @@ feature "Student levelling up", js: true do
       end
 
       scenario 'coach levels up to locked level' do
-        sign_in_user student.user, referer: curriculum_course_path(course)
+        sign_in_user student.user, referrer: curriculum_course_path(course)
         click_button('Level Up')
 
         expect(page).to have_link(target_l2.title)
@@ -274,7 +274,7 @@ feature "Student levelling up", js: true do
     end
 
     scenario 'student cannot level up' do
-      sign_in_user student.user, referer: curriculum_course_path(course)
+      sign_in_user student.user, referrer: curriculum_course_path(course)
 
       # Student should be on shown level 1.
       expect(page).to have_text(target_l1.title)

@@ -22,11 +22,11 @@ feature 'Course Exports', js: true do
   end
 
   scenario 'school admin creates a students export' do
-    sign_in_user school_admin.user, referer: exports_school_course_path(course)
+    sign_in_user school_admin.user, referrer: exports_school_course_path(course)
 
     expect(page).to have_text("You haven't exported anything yet!")
 
-    find('h5', text: 'Create a new export').click
+    find('h5', text: 'Create New Export').click
 
     click_button('Create Export')
 
@@ -63,11 +63,11 @@ feature 'Course Exports', js: true do
   end
 
   scenario 'school admin creates a teams export' do
-    sign_in_user school_admin.user, referer: exports_school_course_path(course)
+    sign_in_user school_admin.user, referrer: exports_school_course_path(course)
 
     expect(page).to have_text("You haven't exported anything yet!")
 
-    find('h5', text: 'Create a new export').click
+    find('h5', text: 'Create New Export').click
 
     click_button('Teams')
     click_button('Only targets with reviewed submissions')
@@ -84,9 +84,9 @@ feature 'Course Exports', js: true do
   end
 
   scenario 'school admin creates a students export for specific tags' do
-    sign_in_user school_admin.user, referer: exports_school_course_path(course)
+    sign_in_user school_admin.user, referrer: exports_school_course_path(course)
 
-    find('h5', text: 'Create a new export').click
+    find('h5', text: 'Create New Export').click
     find('div[title="Select tag 1"]').click
     find('div[title="Select tag 2"]').click
 
@@ -106,9 +106,9 @@ feature 'Course Exports', js: true do
   end
 
   scenario 'school admin creates a teams export for specific tags' do
-    sign_in_user school_admin.user, referer: exports_school_course_path(course)
+    sign_in_user school_admin.user, referrer: exports_school_course_path(course)
 
-    find('h5', text: 'Create a new export').click
+    find('h5', text: 'Create New Export').click
     click_button('Teams')
     find('div[title="Select tag 1"]').click
     click_button('Create Export')
@@ -119,9 +119,9 @@ feature 'Course Exports', js: true do
   end
 
   scenario 'school admin creates a student export with only reviewed submissions' do
-    sign_in_user school_admin.user, referer: exports_school_course_path(course)
+    sign_in_user school_admin.user, referrer: exports_school_course_path(course)
 
-    find('h5', text: 'Create a new export').click
+    find('h5', text: 'Create New Export').click
     click_button('Only targets with reviewed submissions')
 
     click_button('Create Export')

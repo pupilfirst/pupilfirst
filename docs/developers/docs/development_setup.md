@@ -17,13 +17,12 @@ for Ubuntu also apply to Windows, except where special instructions are noted.
 We'll use [Homebrew](https://brew.sh/) to fetch most of the packages on macOS:
 
 - imagemagick - `brew install imagemagick`
-- redis - `brew install redis`. Start Redis server after installation.
 - nginx - `brew install nginx`. Start Nginx server after installation.
 - postgresql - Install [Postgres.app](http://postgresapp.com) and follow its
   [instructions](https://postgresapp.com/documentation/install.html), **including** the part about setting up
   command-line tools.
 
-**Important**: Make sure that you start both Nginx and Redis after you install them. Instructions on how to do that will
+**Important**: Make sure that you start Nginx after you install them. Instructions on how to do that will
 be printed to the command-line after they're successfully installed.
 
 #### On Ubuntu
@@ -31,7 +30,7 @@ be printed to the command-line after they're successfully installed.
 The following command should install all required dependencies on Ubuntu. If you're using another _flavour_ of Linux,
 adapt the command to work with the package manager available with your distribution.
 
-    $ sudo apt-get install imagemagick redis-server postgresql postgresql-contrib autoconf libtool nginx
+    $ sudo apt-get install imagemagick postgresql postgresql-contrib autoconf libtool nginx
 
 ### Install Ruby and Rubygems
 
@@ -69,16 +68,22 @@ If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem
 
 We'll now set a password for the `postgres` database username.
 
-Make sure that the PostgreSQL server is running. Once that's done, run the following commands:
+Make sure that the PostgreSQL server is running. Once that's done, we'll set a password for the
+default database user. Open the `psql` CLI:
 
-    # Run psql for the postgres database username.
+    # macOS
     $ psql -U postgres
 
+    # Ubuntu
+    $ sudo -u postgres psql
+
+Then set a new password and quit.
+
     # Set a password for this username.
-    \password postgres
+    postgres=# \password postgres
 
     # Quit.
-    \q
+    postgres=# \q
 
 Feel free to alter these steps if you're familiar with setting up PostgreSQL.
 
@@ -118,6 +123,7 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
 (the default Rails server port). Use following server configuration as an example:
 
 1. Create a new Nginx server configuration file...
+
    - `/usr/local/etc/nginx/servers/pupilfirst` (macOS)
    - `/etc/nginx/sites-enabled/pupilfirst` (Linux)
 
@@ -157,19 +163,24 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
 
 ## Compile ReasonML code
 
-Compile and watch ReasonML files for changes:
+If you've used the `yarn` command to install JS dependencies, then ReasonML code should already be compiled at this
+point. To compile ReasonML code again (if you've made changes), you can either do a one-time build, or set up a watcher.
 
+    # One-time recompilation
+    $ yarn run re:build
+
+    # Recompile, and then watch for changes
     $ yarn run re:watch
 
 ## Run Webpack Dev Server
 
-Once the ReasonML compilation is complete, start the Webpack Dev Server on another tab or window:
+Start the Webpack Dev Server on another tab or window:
 
     $ bin/webpack-dev-server
 
 ## Start the Rails server
 
-With `webpack-dev-server` running, on a third tab or window, run the Rails server:
+With `webpack-dev-server` running, start the Rails server:
 
     $ bundle exec rails server
 

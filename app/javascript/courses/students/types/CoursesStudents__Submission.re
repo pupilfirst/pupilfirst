@@ -3,17 +3,17 @@ type t = {
   title: string,
   createdAt: Js.Date.t,
   passedAt: option(Js.Date.t),
-  evaluatorId: option(string),
+  evaluatedAt: option(Js.Date.t),
   levelId: string,
 };
 
-let make = (~id, ~title, ~createdAt, ~passedAt, ~levelId, ~evaluatorId) => {
+let make = (~id, ~title, ~createdAt, ~passedAt, ~levelId, ~evaluatedAt) => {
   id,
   title,
   createdAt,
   passedAt,
   levelId,
-  evaluatorId,
+  evaluatedAt,
 };
 
 let id = t => t.id;
@@ -22,7 +22,7 @@ let levelId = t => t.levelId;
 
 let title = t => t.title;
 
-let evaluatorId = t => t.evaluatorId;
+let evaluatedAt = t => t.evaluatedAt;
 
 let sort = submissions =>
   submissions
@@ -52,6 +52,9 @@ let makeFromJs = submissions => {
          let passedAt =
            submission##passedAt->Belt.Option.map(DateFns.decodeISO);
 
+         let evaluatedAt =
+           submission##evaluatedAt->Belt.Option.map(DateFns.decodeISO);
+
          [
            make(
              ~id=submission##id,
@@ -59,7 +62,7 @@ let makeFromJs = submissions => {
              ~createdAt,
              ~passedAt,
              ~levelId=submission##levelId,
-             ~evaluatorId=submission##evaluatorId,
+             ~evaluatedAt,
            ),
          ];
        | None => []

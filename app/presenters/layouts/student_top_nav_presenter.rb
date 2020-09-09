@@ -18,7 +18,7 @@ module Layouts
       if current_school.blank?
         view.image_url('mailer/pupilfirst-logo.png')
       elsif current_school.logo_on_light_bg.attached?
-        view.url_for(current_school.logo_variant(:mid))
+        view.url_for(current_school.logo_variant(:high))
       end
     end
 

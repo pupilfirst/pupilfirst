@@ -1,0 +1,13 @@
+<% content_for :title do %>
+  Account Deleted Successfully
+<% end %>
+
+<% content_for :salutation do %>
+  Hello,
+<% end %>
+
+<% content_for :body do %>
+  <p> Your account in <%= @school.name %> has been successfully deleted. </p>
+
+  <p> All your personal information has been removed and you will no longer have access to this school.</p>
+<% end %>

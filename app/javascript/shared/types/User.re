@@ -20,7 +20,7 @@ let decode = json =>
 
 let findById = (id, proxies) =>
   proxies
-  |> ListUtils.unsafeFind(
+  |> ArrayUtils.unsafeFind(
        proxy => proxy.id == id,
        "Unable to find a User with ID " ++ id,
      );

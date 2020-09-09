@@ -70,6 +70,12 @@ module EventTarget = {
   external unsafeToHtmlInputElement: t => Dom.htmlInputElement = "%identity";
 };
 
+module Event = {
+  type t = Dom.event;
+
+  [@bs.set] external setReturnValue: (t, string) => unit = "returnValue";
+};
+
 module Element = {
   type t = Dom.element;
 

@@ -98,6 +98,9 @@ module.exports = {
       fontSize: {
         'tiny': '.625rem',
       },
+      boxShadow: {
+        outline: '0 0 0 2px rgba(96, 37, 192, 0.4)',
+      },
       screens: {
         '2xl': '1824px',
         // => @media (min-width: 1824px) { ... }

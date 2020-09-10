@@ -3,6 +3,7 @@ class Topic < ApplicationRecord
 
   belongs_to :community
   belongs_to :target, optional: true
+  belongs_to :community_topic_category, optional: true
 
   has_many :posts, dependent: :restrict_with_error
   has_one :first_post, -> { where post_number: 1 }, class_name: 'Post', inverse_of: :topic

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_01_104722) do
+ActiveRecord::Schema.define(version: 2020_09_10_172304) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -142,6 +142,12 @@ ActiveRecord::Schema.define(version: 2020_09_01_104722) do
     t.bigint "course_id"
     t.index ["community_id"], name: "index_community_course_connections_on_community_id"
     t.index ["course_id", "community_id"], name: "index_community_course_connection_on_course_id_and_community_id", unique: true
+  end
+
+  create_table "community_topic_categories", force: :cascade do |t|
+    t.bigint "community_id", null: false
+    t.string "name", null: false
+    t.index ["community_id"], name: "index_community_topic_categories_on_community_id"
   end
 
   create_table "connect_requests", id: :serial, force: :cascade do |t|
@@ -693,6 +699,8 @@ ActiveRecord::Schema.define(version: 2020_09_01_104722) do
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_topics_on_category_id"
     t.index ["community_id"], name: "index_topics_on_community_id"
     t.index ["target_id"], name: "index_topics_on_target_id"
   end
@@ -774,6 +782,7 @@ ActiveRecord::Schema.define(version: 2020_09_01_104722) do
   add_foreign_key "communities", "schools"
   add_foreign_key "community_course_connections", "communities"
   add_foreign_key "community_course_connections", "courses"
+  add_foreign_key "community_topic_categories", "communities"
   add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "connect_requests", "startups"
   add_foreign_key "connect_slots", "faculty"

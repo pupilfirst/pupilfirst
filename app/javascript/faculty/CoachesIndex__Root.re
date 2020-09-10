@@ -211,6 +211,21 @@ let card = coach => {
   </div>;
 };
 
+let applyFilter = (coaches, filter) =>
+  switch (filter) {
+  | Selectable.Search(input) =>
+    Js.Array.filter(
+      coach => {Coach.name(coach) |> StringUtils.includes(input)},
+      coaches,
+    )
+  | Selectable.Course(course) =>
+    Js.Array.filter(
+      coach =>
+        Coach.courseIds(coach) |> Js.Array.includes(Course.id(course)),
+      coaches,
+    )
+  };
+
 [@react.component]
 let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
   let (state, send) =
@@ -235,6 +250,12 @@ let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
     | _otherPaths => React.null
     };
 
+  let filteredCoaches =
+    Belt.Option.mapWithDefault(state.filter, coaches, applyFilter(coaches));
+
+  let coachesToShow =
+    ArrayUtils.isEmpty(filteredCoaches) ? coaches : filteredCoaches;
+
   <div>
     selectedCoachOverlay
     <div className="max-w-5xl mx-auto px-4">
@@ -244,6 +265,11 @@ let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
          <p className="text-center"> {str(subheading)} </p>
        | None => React.null
        }}
+      <label
+        htmlFor="filter"
+        className="block text-xs font-semibold uppercase mt-4">
+        {str("Filter by")}
+      </label>
       <Multiselect
         id="filter"
         unselected={unselected(state.filterInput, state.filter, courses)}
@@ -256,9 +282,16 @@ let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
         onChange={filterInput => send(UpdateFilterInput(filterInput))}
         placeholder="Search by name, or select a course"
       />
+      {ArrayUtils.isEmpty(filteredCoaches)
+         ? <div className="text-xs border rounded bg-blue-100 p-2 mt-2">
+             {str(
+                "The filter you've applied does not match any coaches. Please change the filter and try again.",
+              )}
+           </div>
+         : React.null}
       <div
-        className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 py-8">
-        {Js.Array.map(card, coaches)->React.array}
+        className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 pt-6 pb-8">
+        {coachesToShow |> Js.Array.map(card) |> React.array}
       </div>
     </div>
   </div>;

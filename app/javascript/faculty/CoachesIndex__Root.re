@@ -27,7 +27,7 @@ module Selectable = {
 
   let searchString = t =>
     switch (t) {
-    | Course(course) => "course " ++ Course.name(course)
+    | Course(course) => "teaches course " ++ Course.name(course)
     | Search(input) => input
     };
 
@@ -40,8 +40,50 @@ module Selectable = {
 module Multiselect = MultiselectDropdown.Make(Selectable);
 
 type state = {
-  searchInput: string,
-  filter: Selectable.t,
+  filterInput: string,
+  filter: option(Selectable.t),
+};
+
+type action =
+  | SelectFilter(Selectable.t)
+  | DeselectFilter
+  | UpdateFilterInput(string);
+
+let reducer = (state, action) =>
+  switch (action) {
+  | SelectFilter(selectable) => {filterInput: "", filter: Some(selectable)}
+  | DeselectFilter => {...state, filter: None}
+  | UpdateFilterInput(filterInput) => {...state, filterInput}
+  };
+
+let unselected = (input, filter, courses) => {
+  let unselectedCourses =
+    Belt.Option.mapWithDefault(filter, courses, filter =>
+      switch (filter) {
+      | Selectable.Search(_) => courses
+      | Selectable.Course(selectedCourse) =>
+        Js.Array.filter(
+          course => Course.id(course) != Course.id(selectedCourse),
+          courses,
+        )
+      }
+    )
+    |> Js.Array.map(Selectable.makeCourse);
+
+  let trimmedInput = Js.String.trim(input);
+  let searchSelectable =
+    Js.String.length(trimmedInput) > 0
+      ? [|Selectable.makeSearch(trimmedInput)|] : [||];
+
+  let search =
+    Belt.Option.mapWithDefault(filter, searchSelectable, filter =>
+      switch (filter) {
+      | Selectable.Search(_) => [||]
+      | Selectable.Course(_) => searchSelectable
+      }
+    );
+
+  Js.Array.concat(search, unselectedCourses);
 };
 
 let connectLink = href =>
@@ -171,6 +213,9 @@ let card = coach => {
 
 [@react.component]
 let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
+  let (state, send) =
+    React.useReducer(reducer, {filter: None, filterInput: ""});
+
   let url = ReasonReactRouter.useUrl();
 
   let selectedCoachOverlay =
@@ -199,6 +244,18 @@ let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
          <p className="text-center"> {str(subheading)} </p>
        | None => React.null
        }}
+      <Multiselect
+        id="filter"
+        unselected={unselected(state.filterInput, state.filter, courses)}
+        selected={Belt.Option.mapWithDefault(state.filter, [||], filter =>
+          [|filter|]
+        )}
+        onSelect={selectable => send(SelectFilter(selectable))}
+        onDeselect={_ => send(DeselectFilter)}
+        value={state.filterInput}
+        onChange={filterInput => send(UpdateFilterInput(filterInput))}
+        placeholder="Search by name, or select a course"
+      />
       <div
         className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 py-8">
         {Js.Array.map(card, coaches)->React.array}

@@ -4,6 +4,46 @@ let str = React.string;
 
 open CoachesIndex__Types;
 
+module Selectable = {
+  type t =
+    | Course(Course.t)
+    | Search(string);
+
+  let label = t => {
+    let l =
+      switch (t) {
+      | Course(_) => "Teaches Course"
+      | Search(_) => "Name Like"
+      };
+
+    Some(l);
+  };
+
+  let value = t =>
+    switch (t) {
+    | Course(course) => Course.name(course)
+    | Search(input) => input
+    };
+
+  let searchString = t =>
+    switch (t) {
+    | Course(course) => "course " ++ Course.name(course)
+    | Search(input) => input
+    };
+
+  let color = _t => "gray";
+
+  let makeCourse = course => Course(course);
+  let makeSearch = input => Search(input);
+};
+
+module Multiselect = MultiselectDropdown.Make(Selectable);
+
+type state = {
+  searchInput: string,
+  filter: Selectable.t,
+};
+
 let connectLink = href =>
   <a
     href

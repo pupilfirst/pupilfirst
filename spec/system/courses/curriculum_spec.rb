@@ -59,6 +59,10 @@ feature "Student's view of Course Curriculum", js: true do
     create(:timeline_event_grade, timeline_event: submission_failed_target, evaluation_criterion: evaluation_criterion, grade: 1)
   end
 
+  around do |example|
+    Time.use_zone(student.user.time_zone) { example.run }
+  end
+
   scenario "student who has dropped out attempts to view a course's curriculum" do
     student.startup.update!(dropped_out_at: 1.day.ago)
     sign_in_user student.user, referrer: curriculum_course_path(course)
@@ -277,7 +281,7 @@ feature "Student's view of Course Curriculum", js: true do
     end
   end
 
-  context "when a user has more than one student profile" do
+  context 'when a user has more than one student profile' do
     context 'when the profile is in the same school' do
       let(:course_2) { create :course }
       let(:c2_level_1) { create :level, :one, course: course_2 }

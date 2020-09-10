@@ -2,6 +2,7 @@ type props = {
   communities: list(SchoolCommunities__Community.t),
   courses: list(SchoolCommunities__Course.t),
   connections: list(SchoolCommunities__Connection.t),
+  categories: array(SchoolCommunities__Category.t),
 };
 
 let decodeProps = json =>
@@ -13,6 +14,8 @@ let decodeProps = json =>
     connections:
       json
       |> field("connections", list(SchoolCommunities__Connection.decode)),
+    categories:
+      json |> field("categories", array(SchoolCommunities__Category.decode)),
   };
 
 let props =
@@ -28,6 +31,7 @@ ReactDOMRe.renderToElementWithId(
     communities={props.communities}
     courses={props.courses}
     connections={props.connections}
+    categories={props.categories}
   />,
   "school-communities",
 );

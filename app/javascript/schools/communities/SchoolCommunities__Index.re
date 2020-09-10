@@ -7,7 +7,7 @@ type editorAction =
   | Hidden;
 
 [@react.component]
-let make = (~communities, ~courses, ~connections) => {
+let make = (~communities, ~courses, ~connections, ~categories) => {
   let (editorAction, setEditorAction) = React.useState(() => Hidden);
   let (stateConnections, setStateConnections) =
     React.useState(() => connections);
@@ -38,6 +38,16 @@ let make = (~communities, ~courses, ~connections) => {
            community
            connections=stateConnections
            addCommunityCB
+           categories={
+             switch (community) {
+             | Some(community) =>
+               categories
+               |> Js.Array.filter(c =>
+                    Category.communityId(c) == Community.id(community)
+                  )
+             | None => [||]
+             }
+           }
            updateCommunitiesCB
          />
        </SchoolAdmin__EditorDrawer>

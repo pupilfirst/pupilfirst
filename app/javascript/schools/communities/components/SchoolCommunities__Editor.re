@@ -265,6 +265,28 @@ let onSelectCourse = (send, course) =>
 let onDeselectCourse = (send, course) =>
   send(DeselectCourse(course |> Course.id));
 
+let categoryList = categories => {
+  categories
+  |> Js.Array.map(category =>
+       <div
+         key={category |> Category.id}
+         className="flex justify-between bg-white-100 border shadow rounded-lg mt-2 px-2">
+         <div className="flex flex-col flex-1 flex-wrap p-3">
+           <div className="flex items-center">
+             <div className="mr-1 font-semibold">
+               {category |> Category.name |> str}
+             </div>
+           </div>
+         </div>
+         <button
+           className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+           <i className="fas fa-trash-alt" />
+         </button>
+       </div>
+     )
+  |> React.array;
+};
+
 [@react.component]
 let make =
     (
@@ -272,6 +294,7 @@ let make =
       ~community,
       ~connections,
       ~addCommunityCB,
+      ~categories,
       ~updateCommunitiesCB,
     ) => {
   let (state, send) =
@@ -348,6 +371,14 @@ let make =
             onSelect={onSelectCourse(send)}
             onDeselect={onDeselectCourse(send)}
           />
+        </div>
+        <div className="mt-4">
+          <label
+            className="inline-block tracking-wide text-gray-700 text-xs font-semibold mb-2"
+            htmlFor="communities-editor__course-targetLinkable">
+            {"Add Topic Categories:" |> str}
+          </label>
+          {categoryList(categories)}
         </div>
       </div>
       <button

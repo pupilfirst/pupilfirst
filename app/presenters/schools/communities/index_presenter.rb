@@ -7,12 +7,13 @@ module Schools
         @school = school
       end
 
-      def react_props
+      def props
         {
           communities: communities,
           courses: courses,
-          connections: connections
-        }.to_json
+          connections: connections,
+          categories: categories
+        }
       end
 
       def communities
@@ -42,6 +43,10 @@ module Schools
             courseId: connection.course_id.to_s
           }
         end
+      end
+
+      def categories
+        CommunityTopicCategory.where(community: @school.communities).map { |category| category.attributes.slice('id', 'name', 'community_id') }
       end
     end
   end

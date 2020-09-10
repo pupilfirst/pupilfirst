@@ -45,6 +45,21 @@ type state = {
   filterCourseIds: Belt.Set.String.t,
 };
 
+let computeInitialState = (courses, studentInCourseIds) => {
+  let filterCourseIds =
+    Js.Array.filter(
+      course => studentInCourseIds |> Js.Array.includes(Course.id(course)),
+      courses,
+    )
+    |> Js.Array.map(Course.id);
+
+  {
+    filterInput: "",
+    filterSearch: "",
+    filterCourseIds: Belt.Set.String.fromArray(filterCourseIds),
+  };
+};
+
 type action =
   | SelectFilter(Selectable.t)
   | DeselectFilter(Selectable.t)
@@ -260,13 +275,10 @@ let selected = (courses, filterSearch, filterCourseIds) => {
 [@react.component]
 let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
   let (state, send) =
-    React.useReducer(
+    React.useReducerWithMapState(
       reducer,
-      {
-        filterInput: "",
-        filterSearch: "",
-        filterCourseIds: Belt.Set.String.empty,
-      },
+      studentInCourseIds,
+      computeInitialState(courses),
     );
 
   let url = ReasonReactRouter.useUrl();

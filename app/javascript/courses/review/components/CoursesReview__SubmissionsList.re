@@ -8,16 +8,16 @@ let showSubmissionStatus = overlaySubmission => {
       overlaySubmission |> OverlaySubmission.evaluatorName,
     ) {
     | (None, None) => (
-        "Pending",
+        "Pending Review",
         "bg-orange-100 border border-orange-500 text-orange-800 ",
       )
     | (None, Some(_)) => (
-        "Failed",
+        "Rejected",
         "bg-red-100 border border-red-500 text-red-700",
       )
     | (Some(_), None)
     | (Some(_), Some(_)) => (
-        "Passed",
+        "Completed",
         "bg-green-100 border border-green-500 text-green-800",
       )
     };

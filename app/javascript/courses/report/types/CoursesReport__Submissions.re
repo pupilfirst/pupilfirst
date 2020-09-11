@@ -1,4 +1,4 @@
-type targetStatus = [ | `Submitted | `Failed | `Passed];
+type targetStatus = [ | `PendingReview | `Rejected | `Completed];
 
 type sortDirection = [ | `Ascending | `Descending];
 

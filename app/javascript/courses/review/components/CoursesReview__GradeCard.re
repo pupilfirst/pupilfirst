@@ -304,7 +304,7 @@ let renderGradePills =
      })
   |> React.array;
 let gradeStatusClasses = (color, status) =>
-  "w-12 h-10 p-1 mr-2 md:mr-0 md:w-24 md:h-20 rounded md:rounded-lg border flex justify-center items-center bg-"
+  "w-12 h-10 p-1 mr-2 md:mr-0 md:w-26 md:h-22 rounded md:rounded-lg border flex justify-center items-center bg-"
   ++ color
   ++ "-100 "
   ++ "border-"
@@ -321,9 +321,10 @@ let gradeStatusClasses = (color, status) =>
 let submissionStatusIcon = (status, overlaySubmission, send) => {
   let (text, color) =
     switch (status) {
-    | Graded(passed) => passed ? ("Passed", "green") : ("Failed", "red")
+    | Graded(passed) =>
+      passed ? ("Completed", "green") : ("Rejected", "red")
     | Grading => ("Reviewing", "orange")
-    | Ungraded => ("Not Reviewed", "gray")
+    | Ungraded => ("Pending Review", "gray")
     };
 
   <div
@@ -354,7 +355,7 @@ let submissionStatusIcon = (status, overlaySubmission, send) => {
        | (_, Ungraded) => React.null
        }}
       <div
-        className="w-full md:w-24 flex flex-row md:flex-col md:items-center justify-center">
+        className="w-full md:w-26 flex flex-row md:flex-col md:items-center justify-center">
         <div className={gradeStatusClasses(color, status)}>
           {switch (status) {
            | Graded(passed) =>

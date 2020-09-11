@@ -12,10 +12,6 @@
   @apply flex items-center text-xs font-semibold rounded border;
 }
 
-.curriculum__target-status--pending {
-  @apply bg-orange-100 text-orange-800 border-orange-500;
-}
-
 .curriculum__target-status--submitted {
   @apply bg-blue-100 text-blue-800 border-blue-500;
 }

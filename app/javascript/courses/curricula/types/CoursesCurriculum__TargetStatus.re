@@ -23,9 +23,9 @@ type lockReason =
 
 type status =
   | Pending
-  | Submitted
-  | Passed
-  | Failed
+  | PendingReview
+  | Completed
+  | Rejected
   | Locked(lockReason);
 
 type t = {
@@ -36,8 +36,8 @@ type t = {
 type submissionStatus =
   | SubmissionMissing
   | SubmissionPendingReview
-  | SubmissionPassed
-  | SubmissionFailed;
+  | SubmissionCompleted
+  | SubmissionRejected;
 
 type cachedTarget = {
   targetId: string,
@@ -68,7 +68,7 @@ let allTargetsComplete = (targetCache, targetIds) =>
               ++ targetId
               ++ " in list of cached targets",
             );
-       cachedTarget.submissionStatus == SubmissionPassed;
+       cachedTarget.submissionStatus == SubmissionCompleted;
      });
 
 let compute =
@@ -127,9 +127,9 @@ let compute =
              switch (submission) {
              | Some(s) =>
                if (s |> LatestSubmission.hasPassed) {
-                 SubmissionPassed;
+                 SubmissionCompleted;
                } else if (s |> LatestSubmission.hasBeenEvaluated) {
-                 SubmissionFailed;
+                 SubmissionRejected;
                } else {
                  SubmissionPendingReview;
                }
@@ -151,9 +151,9 @@ let compute =
     |> List.map(ct => {
          let status =
            switch (ct.submissionStatus) {
-           | SubmissionPendingReview => Submitted
-           | SubmissionPassed => Passed
-           | SubmissionFailed => Failed
+           | SubmissionPendingReview => PendingReview
+           | SubmissionCompleted => Completed
+           | SubmissionRejected => Rejected
            | SubmissionMissing =>
              if (ct.levelNumber > studentLevelNumber && ct.targetReviewed) {
                Locked(LevelLocked);
@@ -174,6 +174,8 @@ let compute =
 let targetId = (t: t) => t.targetId;
 let status = t => t.status;
 
+let isPending = t => t.status == Pending;
+
 let lockReasonToString = lr =>
   switch (lr) {
   | CourseLocked => "The course has ended and submissions are disabled for all targets!"
@@ -185,29 +187,38 @@ let lockReasonToString = lr =>
 let statusToString = t =>
   switch (t.status) {
   | Pending => "Pending"
-  | Submitted => "Submitted"
-  | Passed => "Passed"
-  | Failed => "Failed"
+  | PendingReview => "Pending Review"
+  | Completed => "Completed"
+  | Rejected => "Rejected"
+  | Locked(_) => "Locked"
+  };
+
+let statusClassesSufix = t =>
+  switch (t.status) {
+  | Pending => "Pending"
+  | PendingReview => "pending-review"
+  | Completed => "completed"
+  | Rejected => "Rejected"
   | Locked(_) => "Locked"
   };
 
 let canSubmit = (~resubmittable, t) =>
   switch (resubmittable, t.status) {
-  | (true, Passed)
+  | (true, Completed)
   | (_, Pending)
-  | (_, Failed) => true
-  | (false, Passed)
-  | (_, Submitted)
+  | (_, Rejected) => true
+  | (false, Completed)
+  | (_, PendingReview)
   | (_, Locked(_)) => false
   };
 
 let currentLevelStatuses = progressionBehavior =>
   switch (progressionBehavior) {
   | `Limited(_)
-  | `Unlimited => [Submitted, Passed]
-  | `Strict => [Passed]
+  | `Unlimited => [PendingReview, Completed]
+  | `Strict => [Completed]
   };
-let minimumRequiredLevelStatuses = [Passed];
+let minimumRequiredLevelStatuses = [Completed];
 
 let matchesStatuses = (statuses, ts) => {
   let matchedTargetStatuses =

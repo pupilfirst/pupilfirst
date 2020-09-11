@@ -171,26 +171,26 @@ let submissions =
                   {"Review pending" |> str}
                 </div>
                 {switch (targetStatus |> TargetStatus.status) {
-                 | Submitted =>
+                 | PendingReview =>
                    <CoursesCurriculum__UndoButton
                      undoSubmissionCB
                      targetId={target |> Target.id}
                    />
 
                  | Pending
-                 | Passed
-                 | Failed
+                 | Completed
+                 | Rejected
                  | Locked(_) => React.null
                  }}
               </div>
-            | Passed =>
+            | Completed =>
               gradingSection(
                 ~grades,
                 ~evaluationCriteria,
                 ~passed=true,
                 ~gradeBar=curriedGradeBar,
               )
-            | Failed =>
+            | Rejected =>
               gradingSection(
                 ~grades,
                 ~evaluationCriteria,

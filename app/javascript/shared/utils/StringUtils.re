@@ -24,3 +24,5 @@ let includes = (~caseInsensitive=true, source, target) => {
 
   Js.String.includes(finalSource, finalTarget);
 };
+
+let isPresent = t => Js.String.trim(t) != "";

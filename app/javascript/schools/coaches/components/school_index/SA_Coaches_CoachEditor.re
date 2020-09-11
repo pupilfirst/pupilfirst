@@ -427,8 +427,17 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     message="is not a valid connect url"
                     active={state.hasConnectLinkError}
                   />
+                  <School__InputGroupError
+                    warn=true
+                    message="is unused, since the coach profile isn't public"
+                    active={
+                      StringUtils.isPresent(state.connectLink)
+                      && !state.hasConnectLinkError
+                      && !state.public
+                    }
+                  />
                 </div>
-                <div className="mt-5">
+                <div className="mt-5" ariaLabel="public-profile-selector">
                   <div className="flex items-center flex-shrink-0">
                     <label
                       className="block tracking-wide text-xs font-semibold mr-3"

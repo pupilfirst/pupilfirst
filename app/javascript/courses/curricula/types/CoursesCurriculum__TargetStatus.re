@@ -195,11 +195,11 @@ let statusToString = t =>
 
 let statusClassesSufix = t =>
   switch (t.status) {
-  | Pending => "Pending"
+  | Pending => "pending"
   | PendingReview => "pending-review"
   | Completed => "completed"
-  | Rejected => "Rejected"
-  | Locked(_) => "Locked"
+  | Rejected => "rejected"
+  | Locked(_) => "locked"
   };
 
 let canSubmit = (~resubmittable, t) =>

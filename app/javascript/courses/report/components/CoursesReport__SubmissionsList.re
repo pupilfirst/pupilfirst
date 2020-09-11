@@ -35,7 +35,7 @@ type action =
 
 let statusString = targetStatus => {
   switch (targetStatus) {
-  | `PendingReview => "PendingReview"
+  | `PendingReview => "Pending Review"
   | `Rejected => "Rejected"
   | `Completed => "Completed"
   };

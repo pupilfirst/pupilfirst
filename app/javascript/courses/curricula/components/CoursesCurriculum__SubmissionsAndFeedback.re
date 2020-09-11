@@ -168,7 +168,7 @@ let submissions =
                       className="fas fa-hourglass-half fa-stack-1x fa-inverse"
                     />
                   </span>
-                  {"Review pending" |> str}
+                  {"Pending Review" |> str}
                 </div>
                 {switch (targetStatus |> TargetStatus.status) {
                  | PendingReview =>

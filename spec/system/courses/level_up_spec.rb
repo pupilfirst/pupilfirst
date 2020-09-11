@@ -23,7 +23,7 @@ feature "Student levelling up", js: true do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_text(target.title)
-      expect(page).to have_text("You're at Level #{target.level.number}, but you have targets in the Level 1 that are failed, or are pending review by a coach.")
+      expect(page).to have_text("You're at Level #{target.level.number}, but you have targets in the Level 1 that are rejected, or are pending review by a coach.")
       expect(page).to have_text("You'll need to pass all milestone targets in Level 1 to continue leveling up.")
       expect(page).not_to have_button('Level Up')
     end
@@ -202,7 +202,7 @@ feature "Student levelling up", js: true do
       scenario 'student cannot level up' do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
-        expect(page).to have_text('Failed')
+        expect(page).to have_text('Rejected')
         expect(page).not_to have_button('Level Up')
       end
     end
@@ -280,7 +280,7 @@ feature "Student levelling up", js: true do
       expect(page).to have_text(target_l1.title)
 
       # The target should be passed...
-      expect(page).to have_text('Passed', count: 1)
+      expect(page).to have_text('Completed', count: 1)
 
       # ...but there shouldn't be any option to level up.
       expect(page).not_to have_text('You have successfully completed all milestone targets required to level up.')

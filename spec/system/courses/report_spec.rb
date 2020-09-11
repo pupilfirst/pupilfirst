@@ -125,7 +125,7 @@ feature 'Students view performance report and submissions overview', js: true do
 
     # Filter submissions by target status
     fill_in 'filter', with: 'status'
-    click_button 'Status: Submitted'
+    click_button 'Status: Pending Review'
 
     expect(page).not_to have_text(target_l1.title)
     expect(page).to have_link(target_l3.title, href: "/targets/#{target_l3.id}")

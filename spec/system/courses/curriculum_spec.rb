@@ -103,19 +103,19 @@ feature "Student's view of Course Curriculum", js: true do
 
     # All targets should have the right status written next to their titles.
     within("a[aria-label='Select Target #{completed_target_l4.id}']") do
-      expect(page).to have_content('Passed')
+      expect(page).to have_content('Completed')
     end
 
     within("a[aria-label='Select Target #{pending_target_g1.id}']") do
-      expect(page).to have_content('Pending')
+      expect(page).not_to have_content('Pending')
     end
 
     within("a[aria-label='Select Target #{submitted_target.id}']") do
-      expect(page).to have_content('Submitted')
+      expect(page).to have_content('Pending Review')
     end
 
     within("a[aria-label='Select Target #{failed_target.id}']") do
-      expect(page).to have_content('Failed')
+      expect(page).to have_content('Rejected')
     end
 
     within("a[aria-label='Select Target #{target_with_prerequisites.id}']") do
@@ -123,7 +123,7 @@ feature "Student's view of Course Curriculum", js: true do
     end
 
     within("a[aria-label='Select Target #{pending_target_g2.id}']") do
-      expect(page).to have_content('Pending')
+      expect(page).not_to have_content('Pending')
     end
 
     expect(page).to have_content(target_group_l4_1.name)
@@ -151,7 +151,7 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_content(completed_target_l2.title)
 
     within("a[aria-label='Select Target #{completed_target_l2.id}']") do
-      expect(page).to have_content('Passed')
+      expect(page).to have_content('Completed')
     end
   end
 
@@ -260,7 +260,7 @@ feature "Student's view of Course Curriculum", js: true do
       expect(page).to have_content(level_0_target.title)
 
       within("a[aria-label='Select Target #{level_0_target.id}']") do
-        expect(page).to have_content('Pending')
+        expect(page).not_to have_content('Pending')
       end
     end
   end
@@ -361,7 +361,7 @@ feature "Student's view of Course Curriculum", js: true do
 
       # Targets should have the right status written next to their titles.
       within("a[aria-label='Select Target #{l5_reviewed_target.id}']") do
-        expect(page).to have_content('Pending')
+        expect(page).not_to have_content('Pending')
       end
 
       click_link l5_reviewed_target.title
@@ -404,7 +404,7 @@ feature "Student's view of Course Curriculum", js: true do
       expect(page).to have_content(target_with_prerequisites.title)
 
       within("a[aria-label='Select Target #{target_with_prerequisites.id}']") do
-        expect(page).to have_content('Pending')
+        expect(page).not_to have_content('Pending')
       end
     end
   end

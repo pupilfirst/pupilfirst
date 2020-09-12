@@ -107,7 +107,7 @@ let levelUpLimitedMessage = (currentLevelNumber, minimumRequiredLevelNumber) => 
     ++ currentLevel
     ++ ", but you have targets in the Level "
     ++ minimumRequiredLevel
-    ++ " that are rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level "
+    ++ " that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level "
     ++ minimumRequiredLevel
     ++ " to continue leveling up.";
 

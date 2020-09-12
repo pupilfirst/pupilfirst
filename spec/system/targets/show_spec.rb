@@ -64,7 +64,6 @@ feature 'Target Overlay', js: true do
     # Header should have the title and the status of the current status of the target.
     within('.course-overlay__header-title-card') do
       expect(page).to have_content(target_l1.title)
-      expect(page).not_to have_content('Pending')
     end
 
     # Learning content should include an embed, a markdown block, an image, and a file to download.
@@ -223,7 +222,6 @@ feature 'Target Overlay', js: true do
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(quiz_target.title)
-        expect(page).not_to have_content('Pending')
       end
 
       find('.course-overlay__body-tab-item', text: 'Take Quiz').click
@@ -415,7 +413,6 @@ feature 'Target Overlay', js: true do
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(prerequisite_target.title)
-        expect(page).not_to have_content('Pending')
       end
 
       expect(page).to have_current_path("/targets/#{prerequisite_target.id}")
@@ -627,7 +624,6 @@ feature 'Target Overlay', js: true do
 
         within('.course-overlay__header-title-card') do
           expect(page).to have_content(quiz_target.title)
-          expect(page).not_to have_content('Pending')
         end
 
         find('.course-overlay__body-tab-item', text: 'Take Quiz').click

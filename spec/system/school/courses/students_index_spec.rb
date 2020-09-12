@@ -4,8 +4,8 @@ feature 'School students index', js: true do
   include UserSpecHelper
   include NotificationHelper
 
-  let(:tag_1) { "Single Student" }
-  let(:tag_2) { "Another Tag" }
+  let(:tag_1) { 'Single Student' }
+  let(:tag_2) { 'Another Tag' }
   let(:tags) { [tag_1, tag_2] }
 
   # Setup a course with a single founder target, ...
@@ -18,6 +18,10 @@ feature 'School students index', js: true do
   let!(:level_1) { create :level, :one, course: course }
   let!(:level_2) { create :level, :two, course: course }
 
+  around do |example|
+    Time.use_zone(school_admin.user.time_zone) { example.run }
+  end
+
   context 'with some students' do
     let!(:startup_1) { create :startup, level: level_1 }
     let!(:startup_2) { create :startup, level: level_2 }
@@ -28,8 +32,8 @@ feature 'School students index', js: true do
 
     let(:name_1) { Faker::Name.name }
     let(:email_1) { Faker::Internet.email(name: name_1) }
-    let(:title_1) { Faker::Lorem.words(number: 2).join(" ") }
-    let(:affiliation_1) { Faker::Lorem.words(number: 2).join(" ") }
+    let(:title_1) { Faker::Lorem.words(number: 2).join(' ') }
+    let(:affiliation_1) { Faker::Lorem.words(number: 2).join(' ') }
 
     let(:name_2) { Faker::Name.name }
     let(:email_2) { Faker::Internet.email(name: name_2) }
@@ -70,8 +74,8 @@ feature 'School students index', js: true do
       fill_in 'Team Name', with: 'some team name'
 
       # title and affiliation should have persisted values
-      expect(page.find_field("title").value).to eq(title_1)
-      expect(page.find_field("affiliation").value).to eq(affiliation_1)
+      expect(page.find_field('title').value).to eq(title_1)
+      expect(page.find_field('affiliation').value).to eq(affiliation_1)
 
       # Clear the title.
       fill_in 'Title', with: ''
@@ -120,7 +124,7 @@ feature 'School students index', js: true do
 
       click_button 'Save List'
 
-      expect(page).to have_text("All students were created successfully")
+      expect(page).to have_text('All students were created successfully')
       dismiss_notification
 
       expect(page).to have_text(name_1)
@@ -189,7 +193,7 @@ feature 'School students index', js: true do
       page.find('label', text: 'Notify students, and send them a link to sign into this school.').click
       click_button 'Save List'
 
-      expect(page).to have_text("All students were created successfully")
+      expect(page).to have_text('All students were created successfully')
       open_email(email_1)
       expect(current_email).to eq(nil)
     end
@@ -215,7 +219,7 @@ feature 'School students index', js: true do
           click_button 'Add to List'
           click_button 'Save List'
 
-          expect(page).to have_text("All students were created successfully")
+          expect(page).to have_text('All students were created successfully')
           dismiss_notification
         end.to change { Founder.count }.by(1)
 
@@ -264,7 +268,7 @@ feature 'School students index', js: true do
           # Try to save both.
           click_button 'Save List'
 
-          expect(page).to have_text("1 of 2 students were added. Remaining students are already a part of the course")
+          expect(page).to have_text('1 of 2 students were added. Remaining students are already a part of the course')
           dismiss_notification
         end.to change { Founder.count }.by(1)
 
@@ -296,20 +300,20 @@ feature 'School students index', js: true do
         sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
         # Update a student
-        find("a", text: name_1).click
+        find('a', text: name_1).click
 
         expect(page).to have_text(user_1.name)
-        expect(page.find_field("title").value).to eq(user_1.title)
-        expect(page.find_field("affiliation").value).to eq(user_1.affiliation)
+        expect(page.find_field('title').value).to eq(user_1.title)
+        expect(page.find_field('affiliation').value).to eq(user_1.affiliation)
 
-        fill_in 'Name', with: user_1.name + " Jr."
+        fill_in 'Name', with: user_1.name + ' Jr.'
         expect(page).not_to have_field('Team Name')
         fill_in 'Title', with: new_title
         fill_in 'Affiliation', with: ''
         find('button[title="Exclude this student from the leaderboard"]').click
         click_button 'Update Student'
 
-        expect(page).to have_text("Student updated successfully")
+        expect(page).to have_text('Student updated successfully')
         dismiss_notification
 
         expect(user_1.reload.name).to end_with('Jr.')
@@ -322,21 +326,21 @@ feature 'School students index', js: true do
         check "select-student-#{student_1.id}"
         check "select-student-#{student_2.id}"
         click_button 'Group as Team'
-        expect(page).to have_text("Teams updated successfully")
+        expect(page).to have_text('Teams updated successfully')
         dismiss_notification
 
         expect(student_1.reload.startup).to eq(student_2.reload.startup)
         expect(page).to have_text(student_1.startup.name)
 
         # Try editing the team name for the newly formed team.
-        find("a", text: user_1.name).click
+        find('a', text: user_1.name).click
 
         expect(page).to have_text(student_1.startup.name)
 
         fill_in 'Team Name', with: new_team_name
         click_button 'Update Student'
 
-        expect(page).to have_text("Student updated successfully")
+        expect(page).to have_text('Student updated successfully')
         dismiss_notification
 
         expect(student_1.reload.startup.name).to eq(new_team_name)
@@ -344,7 +348,7 @@ feature 'School students index', js: true do
         # Move out from a team
         check "select-student-#{student_1.id}"
         click_button 'Move out from Team'
-        expect(page).to have_text("Teams updated successfully")
+        expect(page).to have_text('Teams updated successfully')
         dismiss_notification
         student_1.reload
         student_2.reload
@@ -352,7 +356,7 @@ feature 'School students index', js: true do
 
         # Assign a coach to a team
         founder = startup_2.founders.last
-        find("a", text: founder.user.name).click
+        find('a', text: founder.user.name).click
 
         # Coach in a different course must not be listed.
         expect(page).to have_text('Team Coaches')
@@ -363,7 +367,7 @@ feature 'School students index', js: true do
 
         click_button 'Update Student'
 
-        expect(page).to have_text("Student updated successfully")
+        expect(page).to have_text('Student updated successfully')
 
         dismiss_notification
 
@@ -378,29 +382,29 @@ feature 'School students index', js: true do
       scenario 'School admin updates access end date' do
         sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
-        expect(page).to have_link("Inactive Students", href: school_course_inactive_students_path(course))
+        expect(page).to have_link('Inactive Students', href: school_course_inactive_students_path(course))
 
         founder = inactive_team_1.founders.first
         expect(page).to have_text(founder.name)
 
-        find("a", text: founder.name).click
+        find('a', text: founder.name).click
 
         expect(page).to have_text(founder.startup.name)
         fill_in "Team's Access Ends On", with: access_ends_at.to_date.iso8601
         click_button 'Update Student'
 
-        expect(page).to have_text("Student updated successfully")
+        expect(page).to have_text('Student updated successfully')
         dismiss_notification
 
         expect(
           founder.reload.startup.access_ends_at.in_time_zone(founder.user.time_zone).to_date
         ).to eq(access_ends_at.to_date)
 
-        find("a", text: founder.name).click
+        find('a', text: founder.name).click
         fill_in "Team's Access Ends On", with: 1.day.ago.iso8601
         click_button 'Update Student'
 
-        expect(page).to have_text("Team has been updated, and moved to list of inactive students")
+        expect(page).to have_text('Team has been updated, and moved to list of inactive students')
         dismiss_notification
 
         expect(founder.reload.startup.access_ends_at.to_date).to eq(1.day.ago.to_date)
@@ -420,7 +424,7 @@ feature 'School students index', js: true do
       founder = startup_2.founders.last
       founder_user = founder.user
 
-      find("a", text: founder_user.name).click
+      find('a', text: founder_user.name).click
 
       expect(page).to have_text(founder_user.name)
       expect(page).to have_text(founder.startup.name)
@@ -448,7 +452,7 @@ feature 'School students index', js: true do
       # Mark a student who is alone in a team as dropped out.
       expect(team_with_lone_student.faculty.count).to eq(1)
 
-      find("a", text: lone_student.name).click
+      find('a', text: lone_student.name).click
 
       click_button 'Actions'
       click_button 'Dropout Student'
@@ -467,7 +471,7 @@ feature 'School students index', js: true do
 
     scenario 'user who is not logged in gets redirected to sign in page' do
       visit school_course_students_path(course)
-      expect(page).to have_text("Please sign in to continue.")
+      expect(page).to have_text('Please sign in to continue.')
     end
 
     scenario 'school admin tries to add the same email twice' do
@@ -499,31 +503,31 @@ feature 'School students index', js: true do
       sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       # filter by level
-      fill_in "search", with: "level"
+      fill_in 'search', with: 'level'
       click_button level_2.name
       expect(page).to have_text(startup_2.name)
       expect(page).not_to have_text(startup_1.name)
       click_button "Remove selection: #{level_2.name}"
 
       # filter by tag
-      fill_in "search", with: tag_1
-      click_button "Pick Tag: Single Student"
+      fill_in 'search', with: tag_1
+      click_button 'Pick Tag: Single Student'
       expect(page).to have_text(lone_student.name)
       expect(page).to have_text(tag_2)
       expect(page).not_to have_text(startup_1.name)
       expect(page).not_to have_text(startup_2.name)
-      click_button "Remove selection: Single Student"
+      click_button 'Remove selection: Single Student'
 
       # filter by name
       name = startup_1.founders.first.name
-      fill_in "search", with: name
+      fill_in 'search', with: name
       click_button name
       expect(page).to have_text(startup_1.name)
       click_button "Remove selection: #{name}"
 
       # filter by team name
       team_name = startup_2.name
-      fill_in "search", with: team_name
+      fill_in 'search', with: team_name
       click_button team_name
       expect(page).to have_text(startup_2.founders.first.name)
       expect(page).not_to have_text(lone_student.name)
@@ -531,7 +535,7 @@ feature 'School students index', js: true do
 
       # filter by email
       email = startup_1.founders.first.email
-      fill_in "search", with: email
+      fill_in 'search', with: email
       click_button email
       expect(page).to have_text(startup_1.name)
       expect(page).not_to have_text(startup_2.name)
@@ -569,32 +573,32 @@ feature 'School students index', js: true do
     scenario 'school admin can order students' do
       sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
-      click_button "Order by Name"
-      click_button "Order by Last Created"
+      click_button 'Order by Name'
+      click_button 'Order by Last Created'
 
-      expect(find(".student-team-container:first-child")).to have_text(newest_created.name)
-
-      click_button('Load More')
-
-      expect(find(".student-team-container:last-child")).to have_text(oldest_created.name)
-
-      click_button "Order by Last Created"
-      click_button "Order by Last Updated"
-
-      expect(find(".student-team-container:first-child")).to have_text(newest_updated.name)
+      expect(find('.student-team-container:first-child')).to have_text(newest_created.name)
 
       click_button('Load More')
 
-      expect(find(".student-team-container:last-child")).to have_text(oldest_updated.name)
+      expect(find('.student-team-container:last-child')).to have_text(oldest_created.name)
 
-      click_button "Order by Last Updated"
-      click_button "Order by Name"
+      click_button 'Order by Last Created'
+      click_button 'Order by Last Updated'
 
-      expect(find(".student-team-container:first-child")).to have_text(team_aaa.name)
+      expect(find('.student-team-container:first-child')).to have_text(newest_updated.name)
 
       click_button('Load More')
 
-      expect(find(".student-team-container:last-child")).to have_text(team_zzz.name)
+      expect(find('.student-team-container:last-child')).to have_text(oldest_updated.name)
+
+      click_button 'Order by Last Updated'
+      click_button 'Order by Name'
+
+      expect(find('.student-team-container:first-child')).to have_text(team_aaa.name)
+
+      click_button('Load More')
+
+      expect(find('.student-team-container:last-child')).to have_text(team_zzz.name)
     end
   end
 end

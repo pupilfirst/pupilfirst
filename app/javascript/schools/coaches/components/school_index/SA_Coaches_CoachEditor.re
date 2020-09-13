@@ -78,7 +78,7 @@ let reducer = (state, action) =>
 
 let str = React.string;
 
-let nameOrTitleInvalid = name => name |> String.length < 2;
+let nameOrTitleInvalid = name => Js.String.trim(name) |> Js.String.length < 2;
 
 let updateName = (send, name) => {
   send(UpdateName(name, name |> nameOrTitleInvalid));
@@ -324,7 +324,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     }
                   />
                   <School__InputGroupError
-                    message="is not a valid name"
+                    message="Must have at least two characters"
                     active={state.hasNameError}
                   />
                 </div>
@@ -353,7 +353,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                        }
                      />
                      <School__InputGroupError
-                       message="is not a valid email address"
+                       message="Please enter a valid email address"
                        active={state.hasEmailError}
                      />
                    </div>
@@ -377,7 +377,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     }
                   />
                   <School__InputGroupError
-                    message="is not a valid title"
+                    message="Must have at least two characters"
                     active={state.hasTitleError}
                   />
                 </div>
@@ -424,12 +424,12 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     }
                   />
                   <School__InputGroupError
-                    message="is not a valid connect url"
+                    message="This doesn't look like a valid URL"
                     active={state.hasConnectLinkError}
                   />
                   <School__InputGroupError
                     warn=true
-                    message="is unused, since the coach profile isn't public"
+                    message="Since the coach profile isn't public, this won't be shown anywhere"
                     active={
                       StringUtils.isPresent(state.connectLink)
                       && !state.hasConnectLinkError

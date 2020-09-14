@@ -96,14 +96,14 @@ feature "Coach's review interface" do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text("Level 1")
         expect(page).to have_text("Submitted by: #{team_l3.founders.first.user.name}")
-        expect(page).to have_text("Passed")
+        expect(page).to have_text("Completed")
       end
 
       within("a[aria-label='Submission #{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text("Level 2")
         expect(page).to have_text("Submitted by: #{team_l3.founders.first.user.name}")
-        expect(page).to have_text("Failed")
+        expect(page).to have_text("Rejected")
         expect(page).to have_text("Feedback Sent")
       end
 

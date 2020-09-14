@@ -68,7 +68,6 @@ feature 'Target Overlay', js: true do
     # Header should have the title and the status of the current status of the target.
     within('.course-overlay__header-title-card') do
       expect(page).to have_content(target_l1.title)
-      expect(page).to have_content('Pending')
     end
 
     # Learning content should include an embed, a markdown block, an image, and a file to download.
@@ -100,11 +99,11 @@ feature 'Target Overlay', js: true do
 
     # The state of the target should change.
     within('.course-overlay__header-title-card') do
-      expect(page).to have_content('Submitted')
+      expect(page).to have_content('Pending Review')
     end
 
     # The submissions should mention that review is pending.
-    expect(page).to have_content('Review pending')
+    expect(page).to have_content('Pending Review')
 
     # The student should be able to undo the submission at this point.
     expect(page).to have_button('Undo submission')
@@ -120,7 +119,7 @@ feature 'Target Overlay', js: true do
     click_button 'Close'
 
     within("a[aria-label='Select Target #{target_l1.id}'") do
-      expect(page).to have_content('Submitted')
+      expect(page).to have_content('Pending Review')
     end
 
     # Return to the submissions & feedback tab on the target overlay.
@@ -177,7 +176,7 @@ feature 'Target Overlay', js: true do
       expect(page).to have_selector('.complete-button-selected', text: 'Completed')
 
       # The target should be marked as passed.
-      expect(page).to have_selector('.course-overlay__header-title-card', text: 'Passed')
+      expect(page).to have_selector('.course-overlay__header-title-card', text: 'Completed')
 
       # Since this is a team target, other students shouldn't be listed as pending.
       expect(page).not_to have_content('You have team members who are yet to complete this target')
@@ -215,7 +214,7 @@ feature 'Target Overlay', js: true do
         end
 
         # Target should now be complete for the user.
-        expect(page).to have_selector('.course-overlay__header-title-card', text: 'Passed')
+        expect(page).to have_selector('.course-overlay__header-title-card', text: 'Completed')
 
         # Target should have been marked as passed in the database.
         expect(target_with_link.status(student)).to eq(Targets::StatusService::STATUS_PASSED)
@@ -227,7 +226,6 @@ feature 'Target Overlay', js: true do
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(quiz_target.title)
-        expect(page).to have_content('Pending')
       end
 
       find('.course-overlay__body-tab-item', text: 'Take Quiz').click
@@ -252,7 +250,7 @@ feature 'Target Overlay', js: true do
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(quiz_target.title)
-        expect(page).to have_content('Passed')
+        expect(page).to have_content('Completed')
       end
 
       # The quiz result should be visible.
@@ -419,7 +417,6 @@ feature 'Target Overlay', js: true do
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(prerequisite_target.title)
-        expect(page).to have_content('Pending')
       end
 
       expect(page).to have_current_path("/targets/#{prerequisite_target.id}")
@@ -458,7 +455,7 @@ feature 'Target Overlay', js: true do
       find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
 
       # The submissions should mention that review is pending.
-      expect(page).to have_content('Review pending')
+      expect(page).to have_content('Pending Review')
 
       # The student should NOT be able to undo the submission at this point.
       expect(page).not_to have_button('Undo submission')
@@ -631,7 +628,6 @@ feature 'Target Overlay', js: true do
 
         within('.course-overlay__header-title-card') do
           expect(page).to have_content(quiz_target.title)
-          expect(page).to have_content('Pending')
         end
 
         find('.course-overlay__body-tab-item', text: 'Take Quiz').click

@@ -12,19 +12,15 @@
   @apply flex items-center text-xs font-semibold rounded border;
 }
 
-.curriculum__target-status--pending {
-  @apply bg-orange-100 text-orange-800 border-orange-500;
-}
-
-.curriculum__target-status--submitted {
+.curriculum__target-status--pending-review {
   @apply bg-blue-100 text-blue-800 border-blue-500;
 }
 
-.curriculum__target-status--passed {
+.curriculum__target-status--completed {
   @apply bg-green-100 text-green-800 border-green-500;
 }
 
-.curriculum__target-status--failed {
+.curriculum__target-status--rejected {
   @apply bg-red-100 text-red-800 border-red-500;
 }
 

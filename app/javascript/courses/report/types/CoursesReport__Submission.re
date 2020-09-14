@@ -7,7 +7,7 @@ type t = {
   id: string,
   title: string,
   createdAt: Js.Date.t,
-  status: [ | `Submitted | `Failed | `Passed],
+  status: [ | `PendingReview | `Rejected | `Completed],
   levelId: string,
   targetId: string,
   targetRole,
@@ -48,11 +48,11 @@ let makeFromJs = submissions => {
          let createdAt = submission##createdAt |> DateFns.decodeISO;
          let status =
            switch (submission##passedAt) {
-           | Some(_passedAt) => `Passed
+           | Some(_passedAt) => `Completed
            | None =>
              switch (submission##evaluatedAt) {
-             | Some(_time) => `Failed
-             | None => `Submitted
+             | Some(_time) => `Rejected
+             | None => `PendingReview
              }
            };
          let targetRole =

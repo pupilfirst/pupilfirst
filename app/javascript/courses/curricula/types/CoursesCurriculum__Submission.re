@@ -3,8 +3,8 @@ exception UnexpectedStatusValue(string);
 type status =
   | MarkedAsComplete
   | Pending
-  | Passed
-  | Failed;
+  | Completed
+  | Rejected;
 
 type t = {
   id: string,
@@ -22,8 +22,8 @@ let pending = t => {
   switch (t.status) {
   | Pending => true
   | MarkedAsComplete
-  | Passed
-  | Failed => false
+  | Completed
+  | Rejected => false
   };
 };
 
@@ -42,8 +42,8 @@ let decode = json =>
       switch (json |> field("status", string)) {
       | "marked_as_complete" => MarkedAsComplete
       | "pending" => Pending
-      | "passed" => Passed
-      | "failed" => Failed
+      | "passed" => Completed
+      | "failed" => Rejected
       | unknownValue => raise(UnexpectedStatusValue(unknownValue))
       },
     checklist:

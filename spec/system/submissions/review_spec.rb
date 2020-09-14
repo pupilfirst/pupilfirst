@@ -86,18 +86,18 @@ feature 'Submission review overlay' do
         find("div[title='Bad']").click
       end
 
-      # the status should be failed
+      # the status should be Rejected
       within("div[aria-label='submission-status']") do
-        expect(page).to have_text('Failed')
+        expect(page).to have_text('Rejected')
       end
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
         find("div[title='Good']").click
       end
 
-      # the status should be failed
+      # the status should be Rejected
       within("div[aria-label='submission-status']") do
-        expect(page).to have_text('Failed')
+        expect(page).to have_text('Rejected')
       end
 
       click_button 'Save grades & send feedback'
@@ -279,9 +279,9 @@ feature 'Submission review overlay' do
         find("div[title='Good']").click
       end
 
-      # the status should be failed
+      # the status should be Rejected
       within("div[aria-label='submission-status']") do
-        expect(page).to have_text('Passed')
+        expect(page).to have_text('Completed')
       end
 
       click_button 'Save grades'
@@ -350,9 +350,9 @@ feature 'Submission review overlay' do
         find("div[title='Good']").click
       end
 
-      # the status should be failed
+      # the status should be completed
       within("div[aria-label='submission-status']") do
-        expect(page).to have_text('Passed')
+        expect(page).to have_text('Completed')
       end
 
       click_button 'Save grades'
@@ -475,9 +475,9 @@ feature 'Submission review overlay' do
       # Open the overlay.
       find("a[aria-label='Submission #{submission_pending.id}']").click
 
-      # It should show passed.
+      # It should show Completed.
       within("div[aria-label='submission-status']") do
-        expect(page).to have_text('Passed')
+        expect(page).to have_text('Completed')
       end
 
       find("div[aria-label='submissions-overlay-close']").click
@@ -500,7 +500,7 @@ feature 'Submission review overlay' do
 
       # The overlay should show pending review status.
       within("div[aria-label='submission-status']") do
-        expect(page).to have_text('Not Reviewed')
+        expect(page).to have_text('Pending Review')
       end
 
       find("div[aria-label='submissions-overlay-close']").click
@@ -530,10 +530,10 @@ feature 'Submission review overlay' do
       end
 
       expect(page).to have_content('Submission #1')
-      expect(page).to have_content('Passed')
+      expect(page).to have_content('Completed')
 
       within("div[aria-label='submission-status']") do
-        expect(page).to have_text('Passed')
+        expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
         expect(page).to have_button("Undo Grading")
@@ -551,7 +551,7 @@ feature 'Submission review overlay' do
       sign_in_user coach.user, referrer: review_timeline_event_path(submission_reviewed)
 
       within("div[aria-label='submission-status']") do
-        expect(page).to have_text('Passed')
+        expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
         expect(page).to have_button("Undo Grading")
@@ -585,7 +585,7 @@ feature 'Submission review overlay' do
       sign_in_user coach.user, referrer: review_timeline_event_path(submission_reviewed)
 
       within("div[aria-label='submission-status']") do
-        expect(page).to have_text('Passed')
+        expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
         expect(page).to have_button("Undo Grading")
@@ -657,7 +657,7 @@ feature 'Submission review overlay' do
     scenario 'team coach add his feedback', js: true do
       sign_in_user team_coach.user, referrer: review_timeline_event_path(submission_reviewed)
       within("div[aria-label='submission-status']") do
-        expect(page).to have_text('Passed')
+        expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
         expect(page).to have_button("Undo Grading")
@@ -688,7 +688,7 @@ feature 'Submission review overlay' do
       sign_in_user team_coach.user, referrer: review_timeline_event_path(submission_reviewed)
 
       within("div[aria-label='submission-status']") do
-        expect(page).to have_text('Passed')
+        expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
         expect(page).to have_button("Undo Grading")

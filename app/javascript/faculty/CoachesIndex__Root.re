@@ -4,6 +4,8 @@ let str = React.string;
 
 open CoachesIndex__Types;
 
+let tr = I18n.t(~scope="components.CoachesIndex__Root");
+
 module Selectable = {
   type t =
     | Course(Course.t)
@@ -12,8 +14,8 @@ module Selectable = {
   let label = t => {
     let l =
       switch (t) {
-      | Course(_) => "Teaches Course"
-      | Search(_) => "Name Like"
+      | Course(_) => tr("filter_label_teaches_course")
+      | Search(_) => tr("filter_label_name_like")
       };
 
     Some(l);
@@ -27,7 +29,11 @@ module Selectable = {
 
   let searchString = t =>
     switch (t) {
-    | Course(course) => "teaches course " ++ Course.name(course)
+    | Course(course) =>
+      tr(
+        ~variables=[|("name", Course.name(course))|],
+        "filter_search_string_course",
+      )
     | Search(input) => input
     };
 
@@ -114,7 +120,7 @@ let connectLink = href =>
     href
     target="_blank"
     className="block flex-1 px-3 py-2 text-center text-sm font-semibold hover:bg-gray-200 hover:text-primary-500">
-    {str("Connect")}
+    {tr("button_connect")->str}
   </a>;
 
 let overlay = (coach, about) => {
@@ -222,7 +228,7 @@ let card = coach => {
                ++ Coach.name(coach)->StringUtils.parameterize
              }
              className="block w-full px-3 py-2 text-center text-sm font-semibold hover:bg-gray-200 hover:text-primary-500">
-             {str("About")}
+             {tr("button_about")->str}
            </Link>
          </div>
        | None => React.null
@@ -309,7 +315,7 @@ let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
   <div>
     selectedCoachOverlay
     <div className="max-w-5xl mx-auto px-4">
-      <h1 className="text-4xl text-center mt-3"> {str("Coaches")} </h1>
+      <h1 className="text-4xl text-center mt-3"> {tr("heading")->str} </h1>
       {switch (subheading) {
        | Some(subheading) =>
          <p className="text-center"> {str(subheading)} </p>
@@ -318,7 +324,7 @@ let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
       <label
         htmlFor="filter"
         className="block text-xs font-semibold uppercase mt-4">
-        {str("Filter by")}
+        {tr("filter_input_label")->str}
       </label>
       <Multiselect
         id="filter"
@@ -336,13 +342,11 @@ let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
         onDeselect={selectable => send(DeselectFilter(selectable))}
         value={state.filterInput}
         onChange={filterInput => send(UpdateFilterInput(filterInput))}
-        placeholder="Search by name, or select a course"
+        placeholder={tr("filter_input_placeholder")}
       />
       {ArrayUtils.isEmpty(filteredCoaches)
          ? <div className="text-xs border rounded bg-blue-100 p-2 mt-2">
-             {str(
-                "The filter you've applied does not match any coaches. Please change the filter and try again.",
-              )}
+             {tr("filter_result_empty")->str}
            </div>
          : React.null}
       <div

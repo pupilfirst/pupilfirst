@@ -12,6 +12,10 @@ module Vimeo
       response
     end
 
+    def create_embed_link(link)
+      put(link, {})
+    end
+
     private 
 
     def create_video_resource(size)
@@ -29,21 +33,13 @@ module Vimeo
     end
 
     def add_whitelist_urls(video_id)
-      data = {
-        privacy: {
-          embed: 'whitelist'
-        }
-      }
-
-      @current_school.domains.pluck(:fqdn).map do |fqdn|
-        put("/videos/#{video_id}/privacy/domains/#{fqdn}", data)
-      end
+      Vimeo::SetEmbedLinks.perform_later(@current_school, video_id)
     end
 
 
     def put(path, data)
       uri = URI(full_url(path))
-      request = Net::HTTP::PUT.new(uri)
+      request = Net::HTTP::Put.new(uri)
       request.body = data.to_json
       execute(uri, request)
     end
@@ -62,7 +58,7 @@ module Vimeo
       net_http.use_ssl = true
       raw_response = net_http.request(request)
 
-      JSON.parse(raw_response.body).with_indifferent_access
+      JSON.parse(raw_response.body).with_indifferent_access unless raw_response.body.nil?
     end
 
     def add_headers(request)

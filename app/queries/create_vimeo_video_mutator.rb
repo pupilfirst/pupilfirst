@@ -1,5 +1,5 @@
 class CreateVimeoVideoMutator < ApplicationQuery
-  include AuthorizeAuthor
+  #include AuthorizeAuthor
   
   property :size, validates: { presence: true }
   
@@ -14,6 +14,10 @@ class CreateVimeoVideoMutator < ApplicationQuery
   end
 
   private 
+
+  def authorized?
+    true
+  end
 
   def resource_school
     current_school

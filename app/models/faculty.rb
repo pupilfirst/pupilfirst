@@ -53,7 +53,9 @@ class Faculty < ApplicationRecord
   scope :advisory_board, -> { where(category: CATEGORY_ADVISORY_BOARD).order('sort_index ASC') }
   scope :available_for_connect, -> { where(category: [CATEGORY_TEAM, CATEGORY_VISITING_COACHES, CATEGORY_ALUMNI, CATEGORY_VR_COACHES]) }
 
-  delegate :email, :name, :title, :about, :avatar, to: :user
+  delegate :email, :name, :title, :affiliation, :about, :avatar, to: :user
+
+  normalize_attribute :connect_link
 
   # This method sets the label used for object by Active Admin.
   def display_name

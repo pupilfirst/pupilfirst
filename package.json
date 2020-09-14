@@ -46,7 +46,7 @@
     "react-dom": "^16.8.6",
     "react_ujs": "^2.5.0",
     "sanitize-html": "^1.20.1",
-    "tailwindcss": "^1.0.5",
+    "tailwindcss": "^1.7.3",
     "webpack-merge": "^4.2.1"
   },
   "devDependencies": {

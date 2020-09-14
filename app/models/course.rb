@@ -25,6 +25,8 @@ class Course < ApplicationRecord
   has_one_attached :thumbnail
   has_one_attached :cover
 
+  scope :featured, -> { where(featured: true) }
+
   normalize_attribute :about
 
   PROGRESSION_BEHAVIOR_LIMITED = -'Limited'

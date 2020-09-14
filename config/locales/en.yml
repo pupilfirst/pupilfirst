@@ -20,6 +20,16 @@
 
 en:
   components:
+    CoachesIndex__Root:
+      heading: Coaches
+      filter_input_label: Filter by
+      filter_input_placeholder: Search by name, or select a course
+      filter_label_teaches_course: Teaches Course
+      filter_label_name_like: Name Like
+      filter_search_string_course: "teaches course %{name}"
+      filter_result_empty: "The filters you've applied does not match any coach. Please change the filter and try again."
+      button_connect: Connect
+      button_about: About
     CourseCertificates__Root:
       auto_issue_tag: Auto-issue
       create_action: &certificate_create_action Create New Certificate

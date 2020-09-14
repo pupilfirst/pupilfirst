@@ -181,7 +181,7 @@ let make =
       ~replies,
       ~users,
       ~currentUserId,
-      ~isCoach,
+      ~moderator,
       ~community,
       ~target,
     ) => {
@@ -266,7 +266,7 @@ let make =
                     className="leading-snug lg:pl-14 text-base lg:text-2xl w-5/6">
                     {state.topic |> Topic.title |> str}
                   </h3>
-                  {isCoach || isTopicCreator(firstPost, currentUserId)
+                  {moderator || isTopicCreator(firstPost, currentUserId)
                      ? <button
                          onClick={_ => send(ShowTopicEditor(true))}
                          className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3 lg:invisible">
@@ -284,7 +284,7 @@ let make =
              users
              posts={state.replies}
              currentUserId
-             isCoach
+             moderator
              isTopicCreator={isTopicCreator(firstPost, currentUserId)}
              updatePostCB={updateFirstPost(send)}
              addNewReplyCB={addNewReply(send, None)}
@@ -314,7 +314,7 @@ let make =
                   users
                   posts={state.replies}
                   currentUserId
-                  isCoach
+                  moderator
                   isTopicCreator={isTopicCreator(firstPost, currentUserId)}
                   updatePostCB={updateReply(send)}
                   addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}

@@ -9,9 +9,6 @@ class CommunityPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      # Pupilfirst doesn't have community.
-      return scope.none if current_school.blank?
-
       # School admin and Coach has access to all communities in a school.
       return scope.where(school: current_school) if current_school_admin.present? || current_coach.present?
 

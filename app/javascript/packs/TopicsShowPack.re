@@ -7,7 +7,7 @@ let decodeProps = json =>
     json |> field("replies", array(Post.decode)),
     json |> field("users", array(User.decode)),
     json |> field("currentUserId", string),
-    json |> field("isCoach", bool),
+    json |> field("moderator", bool),
     json |> field("community", Community.decode),
     json |> optional(field("target", LinkedTarget.decode)),
   );
@@ -18,7 +18,7 @@ let (
   replies,
   users,
   currentUserId,
-  isCoach,
+  moderator,
   community,
   target,
 ) =
@@ -31,7 +31,7 @@ ReactDOMRe.renderToElementWithId(
     replies
     users
     currentUserId
-    isCoach
+    moderator
     community
     target
   />,

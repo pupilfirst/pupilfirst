@@ -518,7 +518,7 @@ feature 'Target Overlay', js: true do
 
       fill_in 'Title', with: topic_title
       replace_markdown(topic_body)
-      click_button 'Create Post'
+      click_button 'Create Topic'
 
       expect(page).to have_text(topic_title)
       expect(page).to have_text(topic_body)

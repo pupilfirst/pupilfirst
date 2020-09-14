@@ -355,6 +355,20 @@ feature 'Community', js: true do
       find("div[aria-label='Like post #{topic_1.first_post.id}']").click
       expect(page).to have_selector("div[aria-label='Unlike post #{topic_1.first_post.id}']")
 
+      # Edit a post.
+      find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
+      click_button 'Edit Post'
+      old_description = topic_1.first_post.body
+
+      within("div#post-show-#{topic_1.first_post.id}") do
+        replace_markdown topic_body_for_edit
+        click_button 'Update Post'
+      end
+
+      dismiss_notification
+
+      expect(page).not_to have_text(old_description)
+
       # Archive a post.
       find("div[aria-label='Options for post #{reply_1.id}']").click
       accept_confirm { click_button('Delete Reply') }
@@ -369,7 +383,7 @@ feature 'Community', js: true do
       dismiss_notification
 
       # Create a new topic.
-      visit community_path(community)
+      click_link community.name
       click_link 'Create a new topic'
       fill_in 'Title', with: topic_title
       replace_markdown topic_body

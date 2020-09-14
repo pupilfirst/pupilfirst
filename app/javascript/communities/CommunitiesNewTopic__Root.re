@@ -350,7 +350,7 @@ let make = (~communityId, ~target) => {
                         target,
                       )}
                       className="btn btn-primary border border-transparent w-full md:w-auto">
-                      {"Create Post" |> str}
+                      {"Create Topic" |> str}
                     </button>
                   </div>
                 </div>

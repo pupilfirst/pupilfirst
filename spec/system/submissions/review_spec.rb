@@ -102,6 +102,8 @@ feature 'Submission review overlay' do
 
       click_button 'Save grades & send feedback'
 
+      expect(page).to have_text('The submission has been marked as reviewed')
+
       dismiss_notification
 
       expect(page).to have_button('Undo Grading')
@@ -357,6 +359,8 @@ feature 'Submission review overlay' do
 
       click_button 'Save grades'
 
+      expect(page).to have_text('The submission has been marked as reviewed')
+
       dismiss_notification
 
       expect(page).to have_button('Undo Grading')
@@ -428,6 +432,9 @@ feature 'Submission review overlay' do
       end
 
       click_button 'Save grades'
+
+      expect(page).to have_text('The submission has been marked as reviewed')
+
       dismiss_notification
       new_notes = CoachNote.where(note: note)
 
@@ -454,6 +461,9 @@ feature 'Submission review overlay' do
       end
 
       click_button 'Save grades'
+
+      expect(page).to have_text('The submission has been marked as reviewed')
+
       dismiss_notification
       new_notes = CoachNote.where(note: note)
 
@@ -568,6 +578,8 @@ feature 'Submission review overlay' do
       add_markdown(feedback)
       click_button 'Share Feedback'
 
+      expect(page).to have_text('Your feedback will be e-mailed to the student')
+
       dismiss_notification
 
       expect(page).to have_button('Add another feedback')
@@ -642,6 +654,9 @@ feature 'Submission review overlay' do
       end
 
       click_button 'Save grades'
+
+      expect(page).to have_text('The submission has been marked as reviewed')
+
       dismiss_notification
     end
   end
@@ -674,6 +689,8 @@ feature 'Submission review overlay' do
       feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)
       click_button 'Share Feedback'
+
+      expect(page).to have_text('Your feedback will be e-mailed to the student')
 
       dismiss_notification
 

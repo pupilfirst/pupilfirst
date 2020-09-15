@@ -38,6 +38,7 @@ type state = {
   targetLinkable: bool,
   selectedCourseIds: Belt.Set.String.t,
   courseSearch: string,
+  newCategories: array(string),
 };
 
 let computeInitialState = ((community, connections)) => {
@@ -65,6 +66,7 @@ let computeInitialState = ((community, connections)) => {
     targetLinkable,
     selectedCourseIds,
     courseSearch: "",
+    newCategories: [||],
   };
 };
 
@@ -73,6 +75,8 @@ type action =
   | SetTargetLinkable(bool)
   | SelectCourse(string)
   | DeselectCourse(string)
+  | AddNewCategory
+  | UpdateNewCategoryName(string, int)
   | BeginSaving
   | FailSaving
   | FinishSaving
@@ -101,7 +105,17 @@ let reducer = (state, action) =>
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
   | FinishSaving => {...state, saving: false, dirty: false}
+  | AddNewCategory => {
+      ...state,
+      newCategories: state.newCategories->Array.append([|""|]),
+    }
   | UpdateCourseSearch(courseSearch) => {...state, courseSearch}
+  | UpdateNewCategoryName(newName, index) => {
+      ...state,
+      newCategories:
+        state.newCategories
+        |> Js.Array.mapi((c, i) => i == index ? newName : c),
+    }
   };
 
 let handleConnections = (communityId, connections, courseIds) => {
@@ -166,7 +180,7 @@ let handleQuery =
         ~name,
         ~targetLinkable,
         ~courseIds,
-        ~topicCategories=[|"test category"|],
+        ~topicCategories=state.newCategories,
         (),
       )
       |> GraphqlQuery.sendQuery
@@ -232,30 +246,30 @@ let onDeselectCourse = (send, course) =>
   send(DeselectCourse(course |> Course.id));
 
 let categoryList = categories => {
-  categories
-  |> Js.Array.map(category =>
-       <div
-         key={category |> Category.id}
-         className="flex justify-between bg-white-100 border shadow rounded-lg mt-2 px-2">
-         <div className="flex flex-col flex-1 flex-wrap p-3">
-           <div className="flex items-center">
-             <div className="mr-1 font-semibold">
-               {category |> Category.name |> str}
-             </div>
-           </div>
-         </div>
-         <div>
-           <span className="bg-gray-300 py-1 px-2">
-             {category |> Category.topicsCount |> string_of_int |> str}
-           </span>
-           <button
-             className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100">
-             <i className="fas fa-trash-alt" />
-           </button>
-         </div>
-       </div>
-     )
-  |> React.array;
+  <div className="p-6 bg-gray-100 border rounded">
+    {categories
+     |> Js.Array.map(category =>
+          <div
+            key={category |> Category.id}
+            className="flex justify-between bg-white-100 border shadow rounded-lg mt-2 px-2">
+            <div className="flex items-center">
+              <div className="mr-1 font-semibold">
+                {category |> Category.name |> str}
+              </div>
+            </div>
+            <div>
+              <span className="bg-gray-300 py-1 px-2">
+                {category |> Category.topicsCount |> string_of_int |> str}
+              </span>
+              <button
+                className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+                <i className="fas fa-trash-alt" />
+              </button>
+            </div>
+          </div>
+        )
+     |> React.array}
+  </div>;
 };
 
 [@react.component]
@@ -350,7 +364,25 @@ let make =
             {"Manage Topic Categories:" |> str}
           </label>
           {categoryList(categories)}
+          {state.newCategories
+           |> Array.mapi((i, c) =>
+                <input
+                  value=c
+                  onChange={event => {
+                    let categoryName = ReactEvent.Form.target(event)##value;
+                    send(UpdateNewCategoryName(categoryName, i));
+                  }}
+                  className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
+                />
+              )
+           |> React.array}
         </div>
+        <button
+          onClick={_ => send(AddNewCategory)}
+          className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-1 rounded-lg mt-2 cursor-pointer">
+          <i className="fas fa-plus-circle" />
+          <h5 className="font-semibold ml-2"> {"Add New Category" |> str} </h5>
+        </button>
       </div>
       <button
         disabled=saveDisabled

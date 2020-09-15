@@ -22,7 +22,7 @@ module Schools
               id: community.id.to_s,
               name: community.name,
               targetLinkable: community.target_linkable,
-              topicCategories: topic_categories
+              topicCategories: topic_categories(community)
             }
           end
       end
@@ -45,8 +45,8 @@ module Schools
         end
       end
 
-      def topic_categories
-        topic_categories = ActiveRecord::Precounter.new(TopicCategory.where(community: @school.communities)).precount(:topics)
+      def topic_categories(community)
+        topic_categories = ActiveRecord::Precounter.new(TopicCategory.where(community: community)).precount(:topics)
         topic_categories.map { |category| category.attributes.slice('id', 'name', 'community_id').merge({ topics_count: category.topics_count }) }
       end
     end

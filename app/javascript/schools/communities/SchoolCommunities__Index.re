@@ -7,7 +7,7 @@ type editorAction =
   | Hidden;
 
 [@react.component]
-let make = (~communities, ~courses, ~connections, ~categories) => {
+let make = (~communities, ~courses, ~connections) => {
   let (editorAction, setEditorAction) = React.useState(() => Hidden);
   let (stateConnections, setStateConnections) =
     React.useState(() => connections);
@@ -40,11 +40,7 @@ let make = (~communities, ~courses, ~connections, ~categories) => {
            addCommunityCB
            categories={
              switch (community) {
-             | Some(community) =>
-               categories
-               |> Js.Array.filter(c =>
-                    Category.communityId(c) == Community.id(community)
-                  )
+             | Some(community) => Community.topicCategories(community)
              | None => [||]
              }
            }

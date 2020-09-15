@@ -4,10 +4,18 @@ open SchoolCommunities__IndexTypes;
 
 module CreateCommunityQuery = [%graphql
   {|
-  mutation CreateCommunityMutation($name: String!, $targetLinkable: Boolean!, $courseIds: [ID!]!) {
-    createCommunity(name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds) @bsVariant {
-      communityId
-      errors
+  mutation CreateCommunityMutation($name: String!, $targetLinkable: Boolean!, $courseIds: [ID!]!, $topicCategories: [String!]!) {
+    createCommunity(name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds, topicCategories: $topicCategories ) {
+      community {
+        id
+        name
+        targetLinkable
+        topicCategories {
+          id
+          name
+          topicsCount
+        }
+      }
     }
   }
 |}
@@ -16,59 +24,12 @@ module CreateCommunityQuery = [%graphql
 module UpdateCommunityQuery = [%graphql
   {|
   mutation UpdateCommunityMutation($id: ID!, $name: String!, $targetLinkable: Boolean!, $courseIds: [ID!]!) {
-    updateCommunity(id: $id, name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds) @bsVariant {
+    updateCommunity(id: $id, name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds)  {
       communityId
-      errors
     }
   }
 |}
 ];
-
-module CreateCommunityError = {
-  type t = [ | `InvalidLengthName | `IncorrectCourseIds];
-
-  let notification = error =>
-    switch (error) {
-    | `InvalidLengthName => (
-        "InvalidLengthName",
-        "Course name should be between 1 and 50 characters long.",
-      )
-    | `IncorrectCourseIds => (
-        "IncorrectCourseIds",
-        "Could not find courses with the supplied IDs.",
-      )
-    };
-};
-
-module UpdateCommunityError = {
-  type t = [
-    | `InvalidLengthName
-    | `IncorrectCourseIds
-    | `IncorrectCommunityId
-  ];
-
-  let notification = error =>
-    switch (error) {
-    | `InvalidLengthName => (
-        "InvalidLengthName",
-        "Course name should be between 1 and 50 characters long.",
-      )
-    | `IncorrectCourseIds => (
-        "IncorrectCourseIds",
-        "Could not find courses with the supplied IDs.",
-      )
-    | `IncorrectCommunityId => (
-        "IncorrectCommunityId",
-        "Community does not exist.",
-      )
-    };
-};
-
-module CreateCommunityErrorHandler =
-  GraphqlErrorHandler.Make(CreateCommunityError);
-
-module UpdateCommunityErrorHandler =
-  GraphqlErrorHandler.Make(UpdateCommunityError);
 
 type state = {
   saving: bool,
@@ -184,46 +145,51 @@ let handleQuery =
         (),
       )
       |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response =>
-           switch (response##updateCommunity) {
-           | `CommunityId(communityId) =>
-             send(FinishSaving);
+      |> Js.Promise.then_(response => {
+           let communityId = response##updateCommunity##communityId;
+           switch (communityId) {
+           | Some(id) =>
              updateCommunitiesCB(
-               Community.create(communityId, name, targetLinkable),
-               handleConnections(communityId, connections, courseIds),
+               Community.create(id, name, targetLinkable, [||]),
+               handleConnections(id, connections, courseIds),
              );
-             Notification.success(
-               "Success",
-               "Community updated successfully.",
-             );
-             Js.Promise.resolve();
-           | `Errors(errors) =>
-             Js.Promise.reject(UpdateCommunityErrorHandler.Errors(errors))
-           }
-         )
-      |> UpdateCommunityErrorHandler.catch(() => send(FailSaving))
+             send(FinishSaving);
+           | None => send(FinishSaving)
+           };
+
+           Notification.success("Success", "Community updated successfully.");
+           Js.Promise.resolve();
+         })
       |> ignore
     | None =>
-      CreateCommunityQuery.make(~name, ~targetLinkable, ~courseIds, ())
+      CreateCommunityQuery.make(
+        ~name,
+        ~targetLinkable,
+        ~courseIds,
+        ~topicCategories=[|"test category"|],
+        (),
+      )
       |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response =>
-           switch (response##createCommunity) {
-           | `CommunityId(communityId) =>
-             send(FinishSaving);
+      |> Js.Promise.then_(response => {
+           switch (response##createCommunity##community) {
+           | Some(community) =>
              addCommunityCB(
-               Community.create(communityId, name, targetLinkable),
-               handleConnections(communityId, connections, courseIds),
+               Community.makeFromJs(community),
+               handleConnections(community##id, connections, courseIds),
              );
-             Notification.success(
-               "Success",
-               "Community created successfully.",
-             );
-             Js.Promise.resolve();
-           | `Errors(errors) =>
-             Js.Promise.reject(CreateCommunityErrorHandler.Errors(errors))
-           }
-         )
-      |> CreateCommunityErrorHandler.catch(() => send(FailSaving))
+             send(FinishSaving);
+           | None => send(FinishSaving)
+           };
+           Js.Promise.resolve();
+         })
+      |> Js.Promise.catch(error => {
+           Js.log(error);
+           Notification.error(
+             "Unexpected Error!",
+             "Please reload the page before trying to post again.",
+           );
+           Js.Promise.resolve();
+         })
       |> ignore
     };
   } else {
@@ -278,10 +244,15 @@ let categoryList = categories => {
              </div>
            </div>
          </div>
-         <button
-           className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100">
-           <i className="fas fa-trash-alt" />
-         </button>
+         <div>
+           <span className="bg-gray-300 py-1 px-2">
+             {category |> Category.topicsCount |> string_of_int |> str}
+           </span>
+           <button
+             className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+             <i className="fas fa-trash-alt" />
+           </button>
+         </div>
        </div>
      )
   |> React.array;
@@ -376,7 +347,7 @@ let make =
           <label
             className="inline-block tracking-wide text-gray-700 text-xs font-semibold mb-2"
             htmlFor="communities-editor__course-targetLinkable">
-            {"Add Topic Categories:" |> str}
+            {"Manage Topic Categories:" |> str}
           </label>
           {categoryList(categories)}
         </div>

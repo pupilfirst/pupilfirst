@@ -1,4 +1,4 @@
-class CommunityTopicCategory < ApplicationRecord
+class TopicCategory < ApplicationRecord
   belongs_to :community
   has_many :topics, dependent: :restrict_with_error
 

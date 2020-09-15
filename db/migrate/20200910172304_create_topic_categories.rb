@@ -5,6 +5,6 @@ class CreateCommunityTopicCategories < ActiveRecord::Migration[6.0]
       t.string :name, null: false
     end
 
-    add_reference :topics, :category, index: true
+    add_reference :topics, :community_topic_category, index: true
   end
 end

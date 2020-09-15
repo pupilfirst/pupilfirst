@@ -401,7 +401,7 @@ let submissionStatusIcon = (status, overlaySubmission, send) => {
              WindowUtils.confirm(
                "Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.",
                () =>
-               undoGrading(overlaySubmission |> OverlaySubmission.id, send)
+               OverlaySubmission.id(overlaySubmission)->undoGrading(send)
              )
            }
            className="btn btn-danger btn-small">

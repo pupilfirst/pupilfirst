@@ -7,8 +7,8 @@ class DailyDigestService
 
   def execute
     debug_value = {}
-    updates = topics_from_today
-    updates = add_topics_with_no_activity(updates)
+    community_updates = new_and_popular_topics_from_today
+    community_updates = older_topics_with_activity_today(community_updates)
 
     students = User.joins(:communities).distinct.select(:id)
     coaches = User.joins(:faculty).select(:id)
@@ -16,7 +16,7 @@ class DailyDigestService
       .where('preferences @> ?', { daily_digest: true }.to_json).each do |user|
       next if user.email_bounced?
 
-      updates_for_user = create_updates(updates, user)
+      updates_for_user = create_updates(community_updates, user)
 
       next if updates_for_user[:community_updates].blank? && updates_for_user[:updates_for_coach].blank?
 
@@ -32,14 +32,14 @@ class DailyDigestService
 
   private
 
-  def create_updates(updates, user)
+  def create_updates(all_community_updates, user)
     {
-      community_updates: add_community_updates(user, updates),
-      updates_for_coach: add_updates_for_coach(user)
+      community_updates: add_filtered_community_updates(user, all_community_updates),
+      updates_for_coach: add_updates_for_coach(user),
     }
   end
 
-  def add_community_updates(user, updates)
+  def add_filtered_community_updates(user, updates)
     communities = communities_for_user(user)
 
     return [] if communities.blank?
@@ -75,7 +75,7 @@ class DailyDigestService
           course_name: course.name,
           pending_submissions: pending_submissions_in_course,
           pending_submissions_for_coach: pending_submissions.from_founders(students).count,
-          is_team_coach: students.any?
+          is_team_coach: students.any?,
         }
       end
     end.flatten
@@ -106,7 +106,7 @@ class DailyDigestService
   def add_updates(community, topic, updates, from, type)
     updates[community.id] ||= {
       community_name: community.name,
-      topics: []
+      topics: [],
     }
 
     # Increment the number of topics
@@ -114,8 +114,8 @@ class DailyDigestService
       id: topic.id,
       title: topic.title,
       days_ago: (from - topic.created_at.to_date).to_i,
-      author: topic.creator&.name || "a user",
-      type: type
+      author: topic.creator&.name || 'a user',
+      type: type,
     }
   end
 end

@@ -58,7 +58,7 @@ feature 'Submission review overlay' do
       expect(page).to have_content('Grade Card')
       expect(page).to have_content(evaluation_criterion_1.name)
       expect(page).to have_content(evaluation_criterion_2.name)
-      expect(page).to have_button("Save grades", disabled: true)
+      expect(page).to have_button('Save grades', disabled: true)
     end
 
     scenario 'coach evaluates a pending submission and gives a feedback', js: true do
@@ -101,6 +101,8 @@ feature 'Submission review overlay' do
       end
 
       click_button 'Save grades & send feedback'
+
+      expect(page).to have_text('The submission has been marked as reviewed')
 
       dismiss_notification
 
@@ -176,12 +178,12 @@ feature 'Submission review overlay' do
 
         within("div[aria-label='result-item-0']") do
           expect(page).to have_content(c1_result_0_title)
-          find("label", text: c1_result_0_title).click
+          find('label', text: c1_result_0_title).click
         end
 
         within("div[aria-label='result-item-1']") do
           expect(page).to have_content(c1_result_1_title)
-          find("label", text: c1_result_1_title).click
+          find('label', text: c1_result_1_title).click
         end
       end
 
@@ -189,12 +191,12 @@ feature 'Submission review overlay' do
         expect(page).to have_content(checklist_title_2)
         within("div[aria-label='result-item-0']") do
           expect(page).to have_content(c2_result_0_title)
-          find("label", text: c2_result_0_title).click
+          find('label', text: c2_result_0_title).click
         end
 
         within("div[aria-label='result-item-1']") do
           expect(page).to have_content(c2_result_1_title)
-          find("label", text: c2_result_1_title).click
+          find('label', text: c2_result_1_title).click
         end
       end
 
@@ -234,13 +236,13 @@ feature 'Submission review overlay' do
       question_3 = Faker::Lorem.sentence
       question_4 = Faker::Lorem.sentence
       answer_1 = Faker::Lorem.sentence
-      answer_2 = "https://example.org/invalidLink"
+      answer_2 = 'https://example.org/invalidLink'
       answer_3 = Faker::Lorem.sentence
       answer_4 = Faker::Lorem.sentence
-      submission_checklist_long_text = { "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => question_1, "result" => answer_1, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }
-      submission_checklist_link = { "kind" => Target::CHECKLIST_KIND_LINK, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }
-      submission_checklist_choice = { "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE, "title" => question_3, "result" => answer_3, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }
-      submission_checklist_short_text = { "kind" => Target::CHECKLIST_KIND_SHORT_TEXT, "title" => question_4, "result" => answer_4, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }
+      submission_checklist_long_text = { 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => question_1, 'result' => answer_1, 'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }
+      submission_checklist_link = { 'kind' => Target::CHECKLIST_KIND_LINK, 'title' => question_2, 'result' => answer_2, 'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }
+      submission_checklist_choice = { 'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE, 'title' => question_3, 'result' => answer_3, 'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }
+      submission_checklist_short_text = { 'kind' => Target::CHECKLIST_KIND_SHORT_TEXT, 'title' => question_4, 'result' => answer_4, 'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }
       submission_checklist = [submission_checklist_long_text, submission_checklist_link, submission_checklist_choice, submission_checklist_short_text]
       submission_pending.update!(checklist: submission_checklist)
 
@@ -296,9 +298,9 @@ feature 'Submission review overlay' do
 
       new_checklist = [
         submission_checklist_long_text,
-        { "kind" => Target::CHECKLIST_KIND_LINK, "title" => question_2, "result" => answer_2, "status" => TimelineEvent::CHECKLIST_STATUS_FAILED },
-        { "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE, "title" => question_3, "result" => answer_3, "status" => TimelineEvent::CHECKLIST_STATUS_FAILED },
-        submission_checklist_short_text
+        { 'kind' => Target::CHECKLIST_KIND_LINK, 'title' => question_2, 'result' => answer_2, 'status' => TimelineEvent::CHECKLIST_STATUS_FAILED },
+        { 'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE, 'title' => question_3, 'result' => answer_3, 'status' => TimelineEvent::CHECKLIST_STATUS_FAILED },
+        submission_checklist_short_text,
       ]
 
       expect(submission_pending.reload.checklist).to eq(new_checklist)
@@ -328,8 +330,8 @@ feature 'Submission review overlay' do
         expect(page).to have_content(answer_4)
       end
 
-      click_button('Undo Grading')
-      expect(page).to have_text("Add Your Feedback")
+      accept_confirm { click_button('Undo Grading') }
+      expect(page).to have_text('Add Your Feedback')
       expect(submission_pending.reload.checklist).to eq(submission_checklist)
     end
 
@@ -356,6 +358,8 @@ feature 'Submission review overlay' do
       end
 
       click_button 'Save grades'
+
+      expect(page).to have_text('The submission has been marked as reviewed')
 
       dismiss_notification
 
@@ -428,6 +432,9 @@ feature 'Submission review overlay' do
       end
 
       click_button 'Save grades'
+
+      expect(page).to have_text('The submission has been marked as reviewed')
+
       dismiss_notification
       new_notes = CoachNote.where(note: note)
 
@@ -454,6 +461,9 @@ feature 'Submission review overlay' do
       end
 
       click_button 'Save grades'
+
+      expect(page).to have_text('The submission has been marked as reviewed')
+
       dismiss_notification
       new_notes = CoachNote.where(note: note)
 
@@ -519,7 +529,7 @@ feature 'Submission review overlay' do
 
       within("div[aria-label='submissions-overlay-header']") do
         expect(page).to have_content('Level 1')
-        expect(page).to have_content("Submitted by")
+        expect(page).to have_content('Submitted by')
 
         # Each name should be linked to the report page.
         team.founders.each do |student|
@@ -536,7 +546,7 @@ feature 'Submission review overlay' do
         expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
-        expect(page).to have_button("Undo Grading")
+        expect(page).to have_button('Undo Grading')
       end
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
@@ -544,7 +554,7 @@ feature 'Submission review overlay' do
         expect(page).to have_text("#{timeline_event_grade.grade}/#{evaluation_criterion_1.max_grade}")
       end
 
-      expect(page).to have_button("Add feedback")
+      expect(page).to have_button('Add feedback')
     end
 
     scenario 'coach add his feedback', js: true do
@@ -554,19 +564,21 @@ feature 'Submission review overlay' do
         expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
-        expect(page).to have_button("Undo Grading")
+        expect(page).to have_button('Undo Grading')
       end
 
-      expect(page).to have_button("Add feedback")
+      expect(page).to have_button('Add feedback')
 
-      click_button "Add feedback"
+      click_button 'Add feedback'
 
-      expect(page).not_to have_button("Add feedback")
-      expect(page).to have_button("Share Feedback", disabled: true)
+      expect(page).not_to have_button('Add feedback')
+      expect(page).to have_button('Share Feedback', disabled: true)
 
       feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)
-      click_button "Share Feedback"
+      click_button 'Share Feedback'
+
+      expect(page).to have_text('Your feedback will be e-mailed to the student')
 
       dismiss_notification
 
@@ -588,12 +600,12 @@ feature 'Submission review overlay' do
         expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
-        expect(page).to have_button("Undo Grading")
+        expect(page).to have_button('Undo Grading')
       end
 
-      click_button "Undo Grading"
+      accept_confirm { click_button 'Undo Grading' }
 
-      expect(page).to have_text("Add Your Feedback")
+      expect(page).to have_text('Add Your Feedback')
 
       submission = submission_reviewed.reload
       expect(submission.evaluator_id).to eq(nil)
@@ -642,6 +654,9 @@ feature 'Submission review overlay' do
       end
 
       click_button 'Save grades'
+
+      expect(page).to have_text('The submission has been marked as reviewed')
+
       dismiss_notification
     end
   end
@@ -660,20 +675,22 @@ feature 'Submission review overlay' do
         expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
-        expect(page).to have_button("Undo Grading")
+        expect(page).to have_button('Undo Grading')
       end
       within("div[aria-label='feedback-section']") do
         expect(page).to have_text(coach.name)
       end
 
-      expect(page).to have_button("Add another feedback")
-      click_button "Add another feedback"
-      expect(page).not_to have_button("Add feedback")
-      expect(page).to have_button("Share Feedback", disabled: true)
+      expect(page).to have_button('Add another feedback')
+      click_button 'Add another feedback'
+      expect(page).not_to have_button('Add feedback')
+      expect(page).to have_button('Share Feedback', disabled: true)
 
       feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)
-      click_button "Share Feedback"
+      click_button 'Share Feedback'
+
+      expect(page).to have_text('Your feedback will be e-mailed to the student')
 
       dismiss_notification
 
@@ -691,11 +708,12 @@ feature 'Submission review overlay' do
         expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
-        expect(page).to have_button("Undo Grading")
+        expect(page).to have_button('Undo Grading')
       end
-      click_button "Undo Grading"
 
-      expect(page).to have_text("Add Your Feedback")
+      accept_confirm { click_button 'Undo Grading' }
+
+      expect(page).to have_text('Add Your Feedback')
 
       submission = submission_reviewed.reload
       expect(submission.evaluator_id).to eq(nil)

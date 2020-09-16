@@ -17,7 +17,7 @@ module Topics
         replies: details_of_replies,
         users: users,
         current_user_id: current_user.id,
-        is_coach: current_coach.present?,
+        moderator: current_coach.present? || current_school_admin.present?,
         community: community_details,
         target: linked_target
       }

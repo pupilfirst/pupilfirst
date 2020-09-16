@@ -98,7 +98,7 @@ let make = (~post, ~addPostLikeCB, ~removePostLikeCB) => {
   let liked = Post.likedByUser(post);
   <div className="text-center pr-3 md:pr-4">
     <div
-      ariaLabel={(liked ? "Unlike" : "Like") ++ " reply " ++ Post.id(post)}
+      ariaLabel={(liked ? "Unlike" : "Like") ++ " post " ++ Post.id(post)}
       className="cursor-pointer"
       onClick={handlePostLike(
         saving,

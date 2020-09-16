@@ -18,7 +18,7 @@ type state = {
 let targetStatusClasses = targetStatus => {
   let statusClasses =
     "curriculum__target-status--"
-    ++ (targetStatus |> TargetStatus.statusToString |> Js.String.toLowerCase);
+    ++ (targetStatus |> TargetStatus.statusClassesSufix);
   "curriculum__target-status px-3 py-px ml-4 h-6 " ++ statusClasses;
 };
 
@@ -39,9 +39,12 @@ let rendertarget = (target, statusOfTargets) => {
     <span className="font-semibold text-left leading-snug">
       {target |> Target.title |> str}
     </span>
-    <span className={targetStatusClasses(targetStatus)}>
-      {targetStatus |> TargetStatus.statusToString |> str}
-    </span>
+    {ReactUtils.nullIf(
+       <span className={targetStatusClasses(targetStatus)}>
+         {targetStatus |> TargetStatus.statusToString |> str}
+       </span>,
+       TargetStatus.isPending(targetStatus),
+     )}
   </Link>;
 };
 
@@ -236,7 +239,7 @@ let computeLevelUp =
           let currentLevelSubmitted =
             isLevelComplete(
               statusOfCurrentMilestoneTargets,
-              [TargetStatus.Submitted, Passed],
+              [TargetStatus.PendingReview, Completed],
             );
 
           currentLevelSubmitted

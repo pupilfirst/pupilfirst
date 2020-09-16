@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Student Navbar', js: true do
+feature 'Student Inner Navbar', js: true do
   include UserSpecHelper
 
   let(:student) { create :founder }

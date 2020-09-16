@@ -10,3 +10,19 @@ let paramToId = param => {
   ->Belt.Option.map(Js.Re.captures)
   ->Belt.Option.map(Js.Array.joinWith(""));
 };
+
+let includes = (~caseInsensitive=true, source, target) => {
+  let (finalSource, finalTarget) =
+    if (caseInsensitive) {
+      (
+        Js.String.toLocaleLowerCase(source),
+        Js.String.toLocaleLowerCase(target),
+      );
+    } else {
+      (source, target);
+    };
+
+  Js.String.includes(finalSource, finalTarget);
+};
+
+let isPresent = t => Js.String.trim(t) != "";

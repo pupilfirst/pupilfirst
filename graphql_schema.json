@@ -3033,19 +3033,19 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "Submitted",
+            "name": "PendingReview",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Passed",
+            "name": "Completed",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Failed",
+            "name": "Rejected",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null

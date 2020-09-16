@@ -53,7 +53,7 @@ let statusBar = (~color, ~text) => {
 };
 
 let submissionStatusIcon = (~passed) => {
-  let text = passed ? "Passed" : "Failed";
+  let text = passed ? "Completed" : "Rejected";
   let color = passed ? "green" : "red";
 
   <div className="max-w-fc">
@@ -83,7 +83,7 @@ let gradingSection = (~grades, ~evaluationCriteria, ~gradeBar, ~passed) =>
     <div className="w-full md:hidden">
       {statusBar(
          ~color=passed ? "green" : "red",
-         ~text=passed ? "Passed" : "Failed",
+         ~text=passed ? "Completed" : "Rejected",
        )}
     </div>
     <div className="bg-white flex border-t flex-wrap items-center py-4">
@@ -168,29 +168,29 @@ let submissions =
                       className="fas fa-hourglass-half fa-stack-1x fa-inverse"
                     />
                   </span>
-                  {"Review pending" |> str}
+                  {"Pending Review" |> str}
                 </div>
                 {switch (targetStatus |> TargetStatus.status) {
-                 | Submitted =>
+                 | PendingReview =>
                    <CoursesCurriculum__UndoButton
                      undoSubmissionCB
                      targetId={target |> Target.id}
                    />
 
                  | Pending
-                 | Passed
-                 | Failed
+                 | Completed
+                 | Rejected
                  | Locked(_) => React.null
                  }}
               </div>
-            | Passed =>
+            | Completed =>
               gradingSection(
                 ~grades,
                 ~evaluationCriteria,
                 ~passed=true,
                 ~gradeBar=curriedGradeBar,
               )
-            | Failed =>
+            | Rejected =>
               gradingSection(
                 ~grades,
                 ~evaluationCriteria,

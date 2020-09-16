@@ -84,7 +84,7 @@ let accessEndedMessage = () => {
 };
 
 let levelUpBlockedMessage = currentLevelNumber => {
-  let title = "Review Pending";
+  let title = "Pending Review";
   let description =
     "You have submitted all milestone targets in level "
     ++ string_of_int(currentLevelNumber)
@@ -107,7 +107,7 @@ let levelUpLimitedMessage = (currentLevelNumber, minimumRequiredLevelNumber) => 
     ++ currentLevel
     ++ ", but you have targets in the Level "
     ++ minimumRequiredLevel
-    ++ " that are failed, or are pending review by a coach. You'll need to pass all milestone targets in Level "
+    ++ " that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level "
     ++ minimumRequiredLevel
     ++ " to continue leveling up.";
 

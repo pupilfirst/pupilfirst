@@ -76,6 +76,7 @@ type action =
   | SelectCourse(string)
   | DeselectCourse(string)
   | AddNewCategory
+  | RemoveNewCategory(int)
   | UpdateNewCategoryName(string, int)
   | BeginSaving
   | FailSaving
@@ -115,6 +116,11 @@ let reducer = (state, action) =>
       newCategories:
         state.newCategories
         |> Js.Array.mapi((c, i) => i == index ? newName : c),
+    }
+  | RemoveNewCategory(index) => {
+      ...state,
+      newCategories:
+        state.newCategories |> Js.Array.filteri((_c, i) => i != index),
     }
   };
 
@@ -246,30 +252,33 @@ let onDeselectCourse = (send, course) =>
   send(DeselectCourse(course |> Course.id));
 
 let categoryList = categories => {
-  <div className="p-6 bg-gray-100 border rounded">
-    {categories
-     |> Js.Array.map(category =>
-          <div
-            key={category |> Category.id}
-            className="flex justify-between bg-white-100 border shadow rounded-lg mt-2 px-2">
-            <div className="flex items-center">
-              <div className="mr-1 font-semibold">
-                {category |> Category.name |> str}
+  ReactUtils.nullIf(
+    <div>
+      {categories
+       |> Js.Array.map(category =>
+            <div
+              key={category |> Category.id}
+              className="flex justify-between bg-white-100 border shadow rounded-lg mt-2 px-2">
+              <div className="flex items-center">
+                <div className="mr-1 font-semibold">
+                  {category |> Category.name |> str}
+                </div>
+              </div>
+              <div>
+                <span className="bg-gray-300 py-1 px-2">
+                  {category |> Category.topicsCount |> string_of_int |> str}
+                </span>
+                <button
+                  className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+                  <i className="fas fa-trash-alt" />
+                </button>
               </div>
             </div>
-            <div>
-              <span className="bg-gray-300 py-1 px-2">
-                {category |> Category.topicsCount |> string_of_int |> str}
-              </span>
-              <button
-                className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100">
-                <i className="fas fa-trash-alt" />
-              </button>
-            </div>
-          </div>
-        )
-     |> React.array}
-  </div>;
+          )
+       |> React.array}
+    </div>,
+    ArrayUtils.isEmpty(categories),
+  );
 };
 
 [@react.component]
@@ -363,26 +372,39 @@ let make =
             htmlFor="communities-editor__course-targetLinkable">
             {"Manage Topic Categories:" |> str}
           </label>
-          {categoryList(categories)}
-          {state.newCategories
-           |> Array.mapi((i, c) =>
-                <input
-                  value=c
-                  onChange={event => {
-                    let categoryName = ReactEvent.Form.target(event)##value;
-                    send(UpdateNewCategoryName(categoryName, i));
-                  }}
-                  className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
-                />
-              )
-           |> React.array}
+          <div className="p-6 bg-gray-100 border rounded">
+            {categoryList(categories)}
+            {state.newCategories
+             |> Array.mapi((i, c) =>
+                  <div
+                    className="flex justify-between border border-gray-400 rounded mt-2">
+                    <input
+                      value=c
+                      onChange={event => {
+                        let categoryName =
+                          ReactEvent.Form.target(event)##value;
+                        send(UpdateNewCategoryName(categoryName, i));
+                      }}
+                      className="appearance-none h-10 block w-full text-gray-700   py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
+                    />
+                    <button
+                      onClick={_ => send(RemoveNewCategory(i))}
+                      className="py-1 px-2 h-10 text-gray-700 hover:text-gray-900 hover:bg-gray-100 border-l border-gray-400">
+                      <i className="fas fa-trash-alt" />
+                    </button>
+                  </div>
+                )
+             |> React.array}
+            <button
+              onClick={_ => send(AddNewCategory)}
+              className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-1 rounded-lg mt-3 cursor-pointer">
+              <i className="fas fa-plus-circle" />
+              <span className="text-xs font-semibold ml-2">
+                {"Add New Category" |> str}
+              </span>
+            </button>
+          </div>
         </div>
-        <button
-          onClick={_ => send(AddNewCategory)}
-          className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-1 rounded-lg mt-2 cursor-pointer">
-          <i className="fas fa-plus-circle" />
-          <h5 className="font-semibold ml-2"> {"Add New Category" |> str} </h5>
-        </button>
       </div>
       <button
         disabled=saveDisabled

@@ -7,8 +7,8 @@ class DailyDigestService
 
   def execute
     debug_value = {}
-    community_updates = new_and_popular_topics_from_today
-    community_updates = older_topics_with_activity_today(community_updates)
+    cache_new_and_popular_topics
+    cache_older_topics_with_recent_activity
 
     students = User.joins(:communities).distinct.select(:id)
     coaches = User.joins(:faculty).select(:id)
@@ -31,6 +31,52 @@ class DailyDigestService
   end
 
   private
+
+  def cache_new_and_popular_topics
+    Topic.live.where('topics.created_at >= ?', recent_time)
+      .includes(:community, :creator).sort(views: :DESC).each do |topic|
+      cache_topic_details(topic, :new)
+    end
+  end
+
+  def cache_older_topics_with_recent_activity
+    sorted_recently_active_topic_ids = Topic.live.where('topics.created_at < ?', recent_time)
+      .joins(:posts).merge(Post.live).where('posts.created_at > ?', recent_time)
+      .group('topics.id').order('count_posts_id DESC, views DESC').count('posts.id').keys
+
+    Topic.where(id: sorted_recently_active_topic_ids).each do |topic|
+      cache_topic_details(topic, :recently_active)
+    end
+
+    sort_cached_recently_active_topics(sorted_recently_active_topic_ids)
+  end
+
+  def sort_cached_recently_active_topics(sorted_topic_ids)
+    @topic_details_cache[:recently_active].sort_by! do |topic_details|
+      sorted_topic_ids.index(topic_details[:id])
+    end
+  end
+
+  def recent_time
+    @recent_time ||= 1.day.ago
+  end
+
+  def cache_topic_details(topic, update_type)
+    @topic_details_cache[update_type] ||= []
+
+    days_ago = update_type == :new ? 0 : (Date.zone.today - topic.created_at.to_date).to_i
+
+    @topic_details_cache[update_type] << {
+      id: topic.id,
+      title: topic.title,
+      views: topic.views,
+      replies: topic.live_replies.count,
+      days_ago: days_ago,
+      author: topic.creator&.name || 'a user',
+      type: type,
+      community_id: community.id,
+    }
+  end
 
   def create_updates(all_community_updates, user)
     {
@@ -84,7 +130,7 @@ class DailyDigestService
   # Returns the new topics asked today.
   def topics_from_today
     Topic.live.where('topics.created_at > ?', 1.day.ago)
-      .includes(:community, first_post: :creator).each_with_object({}) do |topic, updates|
+      .includes(:community, :creator).each_with_object({}) do |topic, updates|
       community = topic.community
 
       add_updates(community, topic, updates, topic.created_at.to_date, 'new')
@@ -96,7 +142,7 @@ class DailyDigestService
     Topic.live.where('topics.created_at > ?', 1.week.ago).where('topics.created_at < ?', 1.day.ago)
       .includes(:replies).where(posts: { id: nil })
       .order('topics.created_at DESC').limit(5)
-      .includes(:community, first_post: :creator).each_with_object(updates) do |topic, updates|
+      .includes(:community, :creator).each_with_object(updates) do |topic, updates|
       community = topic.community
 
       add_updates(community, topic, updates, Time.zone.today, 'no_activity')

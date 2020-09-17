@@ -7,13 +7,12 @@ module Vimeo
     def create_video(size)
       response = create_video_resource(size)
       raise "Encountered error with code #{response[:error_code]} when trying to create a Vimeo video." if response[:error_code].present?
-      video_id = response[:uri].split('/')[-1]
-      add_whitelist_urls(video_id)
       response
     end
 
-    def create_embed_link(link)
-      put(link, {})
+    def add_allowed_domain_to_video(domain, video_id)
+      path = "/videos/#{video_id}/privacy/domains/#{domain}"
+      put(path, {})
     end
 
     private 
@@ -31,11 +30,6 @@ module Vimeo
       
       post('/me/videos', data)
     end
-
-    def add_whitelist_urls(video_id)
-      Vimeo::SetEmbedLinks.perform_later(@current_school, video_id)
-    end
-
 
     def put(path, data)
       uri = URI(full_url(path))
@@ -58,7 +52,11 @@ module Vimeo
       net_http.use_ssl = true
       raw_response = net_http.request(request)
 
-      JSON.parse(raw_response.body).with_indifferent_access unless raw_response.body.nil?
+      if raw_response.body.present?
+        JSON.parse(raw_response.body)
+      else
+        {}
+      end.with_indifferent_access
     end
 
     def add_headers(request)

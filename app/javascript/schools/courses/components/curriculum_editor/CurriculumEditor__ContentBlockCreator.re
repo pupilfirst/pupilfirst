@@ -30,6 +30,19 @@ module CreateEmbedContentBlock = [%graphql
   |}
 ];
 
+module CreateVimeoVideo = [%graphql
+  {|
+    mutation CreateVimeoVideo($size: Int!) {
+      createVimeoVideo(size: $size) {
+        vimeoVideo {
+          uri
+          uploadLink
+        }
+      }
+    }
+  |}
+];
+
 type ui =
   | Hidden
   | BlockSelector
@@ -146,6 +159,8 @@ let imageInputId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-image-input-");
 let videoInputId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-vimeo-input-");
+let videoFormId = aboveContentBlock =>
+  aboveContentBlock |> elementId("markdown-block-vimeo-form-");
 let fileFormId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-file-form-");
 let imageFormId = aboveContentBlock =>
@@ -198,26 +213,67 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
   </label>;
 };
 
+let handleVimeoVideoUpload = (file, vimeo_video) => {
+  Js.log(vimeo_video)
+  let uploadUrl = vimeo_video##uploadUrl
+
+  tusUpload(file, ~uploadUrl)
+  Js.Promise.resolve()
+};
+
 let uploadFile =
-    (target, send, addContentBlockCB, isAboveContentBlock, formData) =>
-  Api.sendFormData(
-    "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
-    formData,
-    json => {
-      Notification.success("Done!", "File uploaded successfully.");
-      let contentBlock = json |> ContentBlock.decode;
-      addContentBlockCB(contentBlock);
-      send(FinishSaving(isAboveContentBlock));
-    },
-    () => send(FailToUpload),
-  );
+    (target, send, addContentBlockCB, aboveContentBlock, blockType, file, formData) => {
+    let isAboveContentBlock = aboveContentBlock != None
+    switch (blockType) {
+    |`File
+    |`Image =>
+      Api.sendFormData(
+        "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
+        formData,
+        json => {
+          Notification.success("Done!", "File uploaded successfully.");
+          let contentBlock = json |> ContentBlock.decode;
+          addContentBlockCB(contentBlock);
+          send(FinishSaving(isAboveContentBlock));
+        },
+        () => send(FailToUpload),
+      );
+    |`VideoEmbed =>
+      let size = file##size
+      CreateVimeoVideo.make(~size, ())
+      |> GraphqlQuery.sendQuery
+      |> Js.Promise.then_(result => {
+	   let vimeo_video = result##createVimeoVideo##vimeoVideo
+           handleVimeoVideoUpload(file, vimeo_video)
+	 })
+      |> Js.Promise.catch(_ => {
+	   send(FailedToCreate);
+	   Js.Promise.resolve();
+      })
+      |> ignore;
+
+      Api.sendFormData(
+        "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
+        formData,
+        json => {
+          Notification.success("Done!", "File uploaded successfully.");
+          let contentBlock = json |> ContentBlock.decode;
+          addContentBlockCB(contentBlock);
+          send(FinishSaving(isAboveContentBlock));
+        },
+        () => send(FailToUpload),
+      );
+   };
+ };
+
 
 let submitForm =
-    (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
+    (target, aboveContentBlock, send, addContentBlockCB, blockType, file) => {
   let formId =
     switch (blockType) {
     | `File => fileFormId(aboveContentBlock)
     | `Image => imageFormId(aboveContentBlock)
+    | `VideoEmbed => videoFormId(aboveContentBlock)
     };
 
   let element = ReactDOMRe._getElementById(formId);
@@ -225,7 +281,7 @@ let submitForm =
   switch (element) {
   | Some(element) =>
     DomUtils.FormData.create(element)
-    |> uploadFile(target, send, addContentBlockCB, aboveContentBlock != None)
+    |> uploadFile(target, send, addContentBlockCB, aboveContentBlock, blockType, file)
   | None =>
     Rollbar.error(
       "Could not find form to upload file for content block: " ++ formId,
@@ -254,6 +310,12 @@ let handleFileInputChange =
               "Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.",
             )
           : None
+      | `VideoEmbed =>
+         FileUtils.isInvalid(~video=true, file)
+	 ? Some(
+	     "Please select a video with a size less than 500 MB"
+	   )
+	 : None
       };
 
     switch (error) {
@@ -267,6 +329,7 @@ let handleFileInputChange =
         send,
         addContentBlockCB,
         blockType,
+	file,
       );
     };
   };
@@ -290,6 +353,12 @@ let uploadForm =
         imageFormId(aboveContentBlock),
         fileSelectionHandler(`Image),
         "image",
+      )
+    | `VideoEmbed => (
+       videoInputId(aboveContentBlock),
+       videoFormId(aboveContentBlock),
+       fileSelectionHandler(`VideoEmbed),
+       "video"
       )
     };
 
@@ -442,6 +511,7 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
   <DisablingCover disabled={state.saving} message="Creating...">
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `File)}
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `Image)}
+    {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `VideoEmbed)}
     <div className={containerClasses(state |> visible, isAboveContentBlock)}>
       {buttonAboveContentBlock(state, send, aboveContentBlock)}
       <div className="content-block-creator__inner-container">

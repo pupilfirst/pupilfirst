@@ -47,6 +47,7 @@
     "react_ujs": "^2.5.0",
     "sanitize-html": "^1.20.1",
     "tailwindcss": "^1.0.5",
+    "tus-js-client": "^2.2.0",
     "webpack-merge": "^4.2.1"
   },
   "devDependencies": {

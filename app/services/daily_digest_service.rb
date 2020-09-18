@@ -3,6 +3,7 @@
 class DailyDigestService
   def initialize(debug: false)
     @debug = debug
+    @topic_details_cache = { new: [], recently_active: [] }
   end
 
   def execute
@@ -12,18 +13,19 @@ class DailyDigestService
 
     students = User.joins(:communities).distinct.select(:id)
     coaches = User.joins(:faculty).select(:id)
+
     User.where(id: coaches).or(User.where(id: students))
-      .where('preferences @> ?', { daily_digest: true }.to_json).each do |user|
+      .where('preferences @> ?', { daily_digest: true }.to_json).find_each do |user|
       next if user.email_bounced?
 
-      updates_for_user = create_updates(community_updates, user)
+      updates = create_updates(user)
 
-      next if updates_for_user[:community_updates].blank? && updates_for_user[:updates_for_coach].blank?
+      next if updates.values.all?(&:blank?)
 
       if @debug
-        debug_value[user.id] = updates_for_user
+        debug_value[user.id] = updates
       else
-        UserMailer.daily_digest(user, updates_for_user).deliver_later
+        UserMailer.daily_digest(user, updates).deliver_later
       end
     end
 
@@ -62,8 +64,6 @@ class DailyDigestService
   end
 
   def cache_topic_details(topic, update_type)
-    @topic_details_cache[update_type] ||= []
-
     days_ago = update_type == :new ? 0 : (Date.zone.today - topic.created_at.to_date).to_i
 
     @topic_details_cache[update_type] << {
@@ -75,24 +75,37 @@ class DailyDigestService
       author: topic.creator&.name || 'a user',
       type: type,
       community_id: community.id,
+      community_name: community.name
     }
   end
 
-  def create_updates(all_community_updates, user)
-    {
-      community_updates: add_filtered_community_updates(user, all_community_updates),
-      updates_for_coach: add_updates_for_coach(user),
-    }
+  def create_updates(user)
+    add_filtered_community_updates(user).merge(coach: add_updates_for_coach(user))
   end
 
-  def add_filtered_community_updates(user, updates)
+  def first_five_topics_from_cache(update_type, community_ids)
+    let topics = []
+
+    @topic_details_cache[update_type].each do |topic|
+      next unless topic[:community_id].in?(community_ids)
+
+      topics << topic
+
+      break if topics.length >= 5
+    end
+  end
+
+  def add_filtered_community_updates(user)
     communities = communities_for_user(user)
 
-    return [] if communities.blank?
+    return {} if communities.blank?
 
-    communities.pluck(:id).each_with_object({}) do |community_id, updates_for_user|
-      updates_for_user[community_id.to_s] = updates[community_id].dup if updates.include?(community_id)
-    end
+    community_ids = communities.pluck(:id)
+
+    {
+      community_new: first_five_topics_from_cache(:new, community_ids),
+      community_recently_active: first_five_topics_from_cache(:recently_active, community_ids)
+    }
   end
 
   def communities_for_user(user)

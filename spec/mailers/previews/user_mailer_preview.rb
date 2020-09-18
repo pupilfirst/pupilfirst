@@ -6,15 +6,10 @@ class UserMailerPreview < ActionMailer::Preview
   def daily_digest
     user = Founder.last.user
 
-    community_updates = {
-      1 => community_digest(2),
-      2 => community_digest(1, 3),
-      3 => community_digest(3, 4, true)
-    }
-
     updates = {
-      community_updates: community_updates,
-      updates_for_coach: updates_for_coach
+      community_new: new_topics,
+      community_recently_active: recently_active_topics,
+      coach: updates_for_coach
     }
 
     UserMailer.daily_digest(user, updates)
@@ -38,19 +33,28 @@ class UserMailerPreview < ActionMailer::Preview
 
   private
 
-  def community_digest(count, starting_id = 1, no_activity = false)
-    {
-      community_name: Faker::Lorem.words(number: 2).join(' ').titleize,
-      topics: (1..count).map do |id|
-        {
-          id: starting_id + id - 1,
-          title: Faker::Lorem.sentence,
-          author: Faker::Name.name,
-          days_ago: no_activity ? rand(1..6) : 0,
-          type: no_activity ? 'no_activity' : 'new'
-        }
-      end
-    }
+  def new_topics
+    community_topics(5, 10, :new)
+  end
+
+  def recently_active_topics
+    community_topics(5, 1, :recently_active)
+  end
+
+  def community_topics(count, starting_id, update_type)
+    (0..(count - 1)).map do |index|
+      {
+        id: starting_id + index,
+        title: Faker::Lorem.sentence,
+        views: rand(100),
+        replies: update_type == :new ? rand(4) : rand(1..5),
+        days_ago: update_type == :new ? 0 : rand(1..6),
+        author: Faker::Name.name,
+        type: update_type,
+        community_id: rand(10),
+        community_name: Faker::Lorem.words(number: 2).join(' ').titleize
+      }
+    end
   end
 
   def updates_for_coach

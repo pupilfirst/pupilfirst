@@ -13,6 +13,8 @@ let make = (~communities, ~courses, ~connections) => {
     React.useState(() => connections);
   let (stateCommunities, setStateCommunities) =
     React.useState(() => communities);
+  let (showCategoryEditor, setShowCategoryEditor) =
+    React.useState(() => false);
 
   let updateCommunitiesCB = (community, connections) => {
     setStateCommunities(_ =>
@@ -31,13 +33,15 @@ let make = (~communities, ~courses, ~connections) => {
     {switch (editorAction) {
      | Hidden => React.null
      | ShowEditor(community) =>
-       <SchoolAdmin__EditorDrawer
-         closeDrawerCB={() => setEditorAction(_ => Hidden)}>
+       let level = showCategoryEditor ? 1 : 0;
+       <SchoolAdmin__EditorDrawer2
+         level closeDrawerCB={() => setEditorAction(_ => Hidden)}>
          <SchoolCommunities__Editor
            courses
            community
            connections=stateConnections
            addCommunityCB
+           showCategoryEditorCB={() => setShowCategoryEditor(_ => true)}
            categories={
              switch (community) {
              | Some(community) => Community.topicCategories(community)
@@ -46,7 +50,21 @@ let make = (~communities, ~courses, ~connections) => {
            }
            updateCommunitiesCB
          />
-       </SchoolAdmin__EditorDrawer>
+         {showCategoryEditor
+            ? <SchoolAdmin__EditorDrawer2
+                closeIconClassName="fas fa-arrow-left"
+                closeDrawerCB={() => setShowCategoryEditor(_ => false)}>
+                <SchoolCommunities__CategoryEditor
+                  categories={
+                    switch (community) {
+                    | Some(community) => Community.topicCategories(community)
+                    | None => [||]
+                    }
+                  }
+                />
+              </SchoolAdmin__EditorDrawer2>
+            : React.null}
+       </SchoolAdmin__EditorDrawer2>;
      }}
     <div className="flex px-6 py-2 items-center justify-between">
       <button

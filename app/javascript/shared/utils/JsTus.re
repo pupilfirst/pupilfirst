@@ -1,20 +1,19 @@
 [@bs.deriving abstract]
 type uploadOptions = {
   uploadUrl: string,
-  onError: (string) => string,
-  onSuccess: (string) => string,
+  onError: (string) => Js.nullable(string),
+  onSuccess: (unit) => Js.nullable(string)
 };
 
-[@bs.deriving abstract]
-type uploadObject = {
-  start: int
-};
+type uO;
+[@bs.module "tus-js-client"] [@bs.new]
+external jsTusUpload: (Js.Json.t, uploadOptions) => uO = "Upload";
 
-[@bs.module "tus-js-client"]
-external jsTusUpload: (Js.Json.t, uploadOptions) => uploadObject = "Upload";
-
+[@bs.send.pipe : uO]
+external start: unit => uO = "start";
 
 let tusUpload = (file, uploadUrl, onSuccess, onError) => {
   let options = uploadOptions(~uploadUrl, ~onSuccess, ~onError)
-  jsTusUpload(file, options);
+  jsTusUpload(file, options)
+  |> start();
 }

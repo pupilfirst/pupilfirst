@@ -213,11 +213,63 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
   </label>;
 };
 
-let handleVimeoVideoUpload = (file, vimeo_video) => {
-  Js.log(vimeo_video)
-  let uploadUrl = vimeo_video##uploadUrl
+let embedUrlRegexes = [|
+  [%bs.re "/https:\\/\\/.*slideshare\\.net/"],
+  [%bs.re "/https:\\/\\/.*vimeo\\.com/"],
+  [%bs.re "/https:\\/\\/.*youtube\\.com/"],
+  [%bs.re "/https:\\/\\/.*youtu\\.be/"],
+|];
 
-  tusUpload(file, ~uploadUrl)
+let validEmbedUrl = url =>
+  Belt.Array.some(embedUrlRegexes, regex => regex->Js.Re.test_(url));
+
+let handleCreateEmbedContentBlock = 
+    (target, aboveContentBlock, url, send, addContentBlockCB) => {
+   
+  if (url |> validEmbedUrl) {
+    send(ToggleSaving);
+
+    let aboveContentBlockId =
+      aboveContentBlock |> OptionUtils.map(ContentBlock.id);
+
+    let targetId = target |> Target.id;
+
+    CreateEmbedContentBlock.make(~targetId, ~aboveContentBlockId?, ~url, ())
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(result =>
+         handleGraphqlCreateResponse(
+           aboveContentBlock,
+           send,
+           addContentBlockCB,
+           result##createEmbedContentBlock##contentBlock,
+         )
+       )
+    |> Js.Promise.catch(_ => {
+         send(FailedToCreate);
+         Js.Promise.resolve();
+       })
+    |> ignore;
+  } else {
+    send(
+      SetError(
+        "The URL doesn't look valid. Please make sure that it starts with 'https://' and that it's one of the accepted websites.",
+      ),
+    );
+  };
+}
+
+let handleVimeoVideoUpload = (file, vimeoVideo, send, target, aboveContentBlock, addContentBlockCB) => {
+  Js.log(vimeoVideo)
+  let url = vimeoVideo##uri
+  let uploadUrl = vimeoVideo##uploadLink
+
+  JsTus.tusUpload(file, uploadUrl, (error) => {
+    send(FailToUpload);
+  }, 
+
+  (success) => {
+    handleCreateEmbedContentBlock(target, aboveContentBlock, url, send, addContentBlockCB);
+  })
   Js.Promise.resolve()
 };
 
@@ -243,26 +295,14 @@ let uploadFile =
       CreateVimeoVideo.make(~size, ())
       |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(result => {
-	   let vimeo_video = result##createVimeoVideo##vimeoVideo
-           handleVimeoVideoUpload(file, vimeo_video)
+	   let vimeoVideo = result##createVimeoVideo##vimeoVideo
+           handleVimeoVideoUpload(file, vimeoVideo, send, target, aboveContentBlock, addContentBlockCB)
 	 })
       |> Js.Promise.catch(_ => {
 	   send(FailedToCreate);
 	   Js.Promise.resolve();
       })
       |> ignore;
-
-      Api.sendFormData(
-        "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
-        formData,
-        json => {
-          Notification.success("Done!", "File uploaded successfully.");
-          let contentBlock = json |> ContentBlock.decode;
-          addContentBlockCB(contentBlock);
-          send(FinishSaving(isAboveContentBlock));
-        },
-        () => send(FailToUpload),
-      );
    };
  };
 
@@ -401,51 +441,13 @@ let updateEmbedUrl = (send, event) => {
   send(UpdateEmbedUrl(value));
 };
 
-let embedUrlRegexes = [|
-  [%bs.re "/https:\\/\\/.*slideshare\\.net/"],
-  [%bs.re "/https:\\/\\/.*vimeo\\.com/"],
-  [%bs.re "/https:\\/\\/.*youtube\\.com/"],
-  [%bs.re "/https:\\/\\/.*youtu\\.be/"],
-|];
-
-let validEmbedUrl = url =>
-  Belt.Array.some(embedUrlRegexes, regex => regex->Js.Re.test_(url));
 
 let onEmbedFormSave =
     (target, aboveContentBlock, url, send, addContentBlockCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
-
-  if (url |> validEmbedUrl) {
-    send(ToggleSaving);
-
-    let aboveContentBlockId =
-      aboveContentBlock |> OptionUtils.map(ContentBlock.id);
-
-    let targetId = target |> Target.id;
-
-    CreateEmbedContentBlock.make(~targetId, ~aboveContentBlockId?, ~url, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(result =>
-         handleGraphqlCreateResponse(
-           aboveContentBlock,
-           send,
-           addContentBlockCB,
-           result##createEmbedContentBlock##contentBlock,
-         )
-       )
-    |> Js.Promise.catch(_ => {
-         send(FailedToCreate);
-         Js.Promise.resolve();
-       })
-    |> ignore;
-  } else {
-    send(
-      SetError(
-        "The URL doesn't look valid. Please make sure that it starts with 'https://' and that it's one of the accepted websites.",
-      ),
-    );
-  };
+  handleCreateEmbedContentBlock(target, aboveContentBlock, url, send, addContentBlockCB);
 };
+
 
 let topButton = (handler, id, title, icon) =>
   <div

@@ -25,13 +25,13 @@ let isVideo = file => {
 };
 
 let isValid = (~maxSize=defaultMaxSize, ~image=false, ~video=false, file) => {
-  let maxSize = video === true ? defaultVideoMaxSize : maxSize
+  let maxSize = video ? defaultVideoMaxSize : maxSize
   let sizeValid = hasValidSize(~maxSize, file)
 
   let imageValid = image ? isImage(file) : true;
   let videoValid = video ? isVideo(file) : true;
 
-  sizeValid && (imageValid || videoValid);
+  sizeValid && imageValid && videoValid;
 };
 
 let isInvalid = (~maxSize=defaultMaxSize, ~image=false, ~video=false, file) =>

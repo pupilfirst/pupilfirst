@@ -21,7 +21,7 @@ let updateName = (name, t) => {
   {...t, name};
 };
 
-let make = (id, ~name, ~topicsCount) => {id, name, topicsCount};
+let make = (~id, ~name, ~topicsCount) => {id, name, topicsCount};
 
 let makeFromJs = data => {
   id: data##id,

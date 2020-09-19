@@ -50,20 +50,20 @@ let make = (~communities, ~courses, ~connections) => {
            }
            updateCommunitiesCB
          />
-         {showCategoryEditor
-            ? <SchoolAdmin__EditorDrawer2
-                closeIconClassName="fas fa-arrow-left"
-                closeDrawerCB={() => setShowCategoryEditor(_ => false)}>
-                <SchoolCommunities__CategoryEditor
-                  categories={
-                    switch (community) {
-                    | Some(community) => Community.topicCategories(community)
-                    | None => [||]
-                    }
-                  }
-                />
-              </SchoolAdmin__EditorDrawer2>
-            : React.null}
+         {switch (community) {
+          | Some(community) =>
+            showCategoryEditor
+              ? <SchoolAdmin__EditorDrawer2
+                  closeIconClassName="fas fa-arrow-left"
+                  closeDrawerCB={() => setShowCategoryEditor(_ => false)}>
+                  <SchoolCommunities__CategoryManager
+                    categories={Community.topicCategories(community)}
+                    community
+                  />
+                </SchoolAdmin__EditorDrawer2>
+              : React.null
+          | None => React.null
+          }}
        </SchoolAdmin__EditorDrawer2>;
      }}
     <div className="flex px-6 py-2 items-center justify-between">

@@ -1,5 +1,7 @@
 [%bs.raw {|require("./SchoolAdmin__EditorDrawer2.css")|}];
 
+open React;
+
 let drawerClasses = (size, level, previousLevel) => {
   let defaultClasses = "editor-drawer-2";
 
@@ -9,7 +11,7 @@ let drawerClasses = (size, level, previousLevel) => {
     | Large => " editor-drawer-2--large"
     };
 
-  let pLevel = React.Ref.current(previousLevel);
+  let pLevel = previousLevel.current;
 
   let animationClass =
     switch (level, pLevel) {
@@ -20,7 +22,7 @@ let drawerClasses = (size, level, previousLevel) => {
     | _ => " editor-drawer-2--l0"
     };
 
-  React.Ref.setCurrent(previousLevel, level);
+  previousLevel.current = level;
 
   defaultClasses ++ sizeClass ++ animationClass;
 };

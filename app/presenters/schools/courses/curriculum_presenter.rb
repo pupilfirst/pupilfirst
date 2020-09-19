@@ -15,7 +15,8 @@ module Schools
           evaluationCriteria: evaluation_criteria,
           levels: levels,
           targetGroups: target_groups,
-          targets: targets
+          targets: targets,
+          vimeoAccessToken: vimeo_access_token
         }
       end
 
@@ -69,6 +70,12 @@ module Schools
             visibility: target.visibility
           }
         end
+      end
+
+      def vimeo_access_token?
+        token = @course.school.configuration['vimeo_access_token'] || 
+          Rails.application.secrets.vimeo_access_token
+        token.present? ? true : false
       end
     end
   end

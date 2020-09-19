@@ -61,6 +61,7 @@ module Vimeo
 
     def add_headers(request)
       request['Authorization'] = "bearer #{access_token}"
+      request['Content-Type'] = 'application/json'
       request['Accept'] = 'application/vnd.vimeo.*+json;version=3.4'
     end
 

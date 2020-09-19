@@ -14,12 +14,13 @@ let isImage = file => {
 };
 
 let isVideo = file => {
+  Js.log(file##_type);
   switch (file##_type) {
   | "video/mp4"
   | "video/mov"
   | "video/wmv"
   | "video/avi"
-  | "video/flv"
+  | "video/flv" => true
   | _ => false
   };
 };

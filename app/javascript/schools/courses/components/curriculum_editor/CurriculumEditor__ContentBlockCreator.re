@@ -69,6 +69,8 @@ let computeInitialState = isAboveTarget => {
   {ui: isAboveTarget ? Hidden : BlockSelector, saving: false, error: None};
 };
 
+let showVimeoVideoButton = true;
+
 let reducer = (state, action) =>
   switch (action) {
   | ToggleVisibility =>
@@ -197,10 +199,25 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
     | `VideoEmbed => ("fab fa-vimeo-v", "Video", Some(videoId))
     };
 
+  let baseClassName = "content-block-creator__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200";
+
+  let className =
+    switch (blockType) {
+    | `Markdown
+    | `File 
+    | `Image
+    | `Embed => baseClassName
+    | `VideoEmbed =>
+      switch (showVimeoVideoButton) {
+      | true => baseClassName
+      | false => baseClassName ++ " hidden"
+      };
+    };
+
   <label
     ?htmlFor
     key=buttonText
-    className="content-block-creator__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
+    className={className}
     onClick={onBlockTypeSelect(
       target,
       aboveContentBlock,
@@ -260,11 +277,11 @@ let handleVimeoVideoUpload =
     (file, vimeoVideo, send, target, aboveContentBlock, addContentBlockCB) => {
   Js.log(vimeoVideo);
   let url = vimeoVideo##uri;
-  let endpoint = vimeoVideo##uploadLink;
+  let uploadUrl = vimeoVideo##uploadLink;
 
   Tus.upload(
     ~file=Tus.makeFile(file),
-    ~endpoint,
+    ~uploadUrl,
     ~onError=
       error => {
         Js.log(error);
@@ -549,13 +566,16 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
   <DisablingCover disabled={state.saving} message="Creating...">
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `File)}
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `Image)}
-    {uploadForm(
-       target,
-       aboveContentBlock,
-       send,
-       addContentBlockCB,
-       `VideoEmbed,
-     )}
+    {switch (showVimeoVideoButton) {
+     |true =>  uploadForm(
+         target,
+         aboveContentBlock,
+         send,
+         addContentBlockCB,
+         `VideoEmbed,
+       )
+     |false => React.null
+    }}
     <div className={containerClasses(state |> visible, isAboveContentBlock)}>
       {buttonAboveContentBlock(state, send, aboveContentBlock)}
       <div className="content-block-creator__inner-container">

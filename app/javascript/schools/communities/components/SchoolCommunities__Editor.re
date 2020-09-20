@@ -305,36 +305,43 @@ let make =
             onDeselect={onDeselectCourse(send)}
           />
         </div>
-        {switch (community) {
-         | Some(_community) =>
-           <div className="mt-4 px-6 py-2 bg-gray-100 border rounded">
-             <div className="flex justify-between items-center mb-4">
-               <label
-                 className="inline-block tracking-wide text-gray-700 text-xs font-semibold uppercase">
-                 {"Topic Categories" |> str}
-               </label>
-               <button
-                 onClick={_ => showCategoryEditorCB()}
-                 className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
-                 <i className="fas fa-pencil-alt" />
-                 <span className="text-xs font-semibold ml-2">
-                   {(
-                      ArrayUtils.isEmpty(categories)
-                        ? "Add Categories" : "Edit Categories"
-                    )
-                    |> str}
-                 </span>
-               </button>
-             </div>
-             {categories |> ArrayUtils.isEmpty
+        {<div className="mt-4 px-6 py-2 bg-gray-100 border rounded">
+           <div className="flex justify-between items-center mb-4">
+             <label
+               className="inline-block tracking-wide text-gray-700 text-xs font-semibold uppercase">
+               {"Topic Categories" |> str}
+             </label>
+             {switch (community) {
+              | Some(_community) =>
+                <button
+                  onClick={_ => showCategoryEditorCB()}
+                  className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
+                  <i className="fas fa-pencil-alt" />
+                  <span className="text-xs font-semibold ml-2">
+                    {(
+                       ArrayUtils.isEmpty(categories)
+                         ? "Add Categories" : "Edit Categories"
+                     )
+                     |> str}
+                  </span>
+                </button>
+              | None => React.null
+              }}
+           </div>
+           {switch (community) {
+            | Some(_community) =>
+              categories |> ArrayUtils.isEmpty
                 ? <p className="text-xs text-gray-800">
                     {"There are currently no topic categories in this community!"
                      |> str}
                   </p>
-                : categoryList(categories)}
-           </div>
-         | None => React.null
-         }}
+                : categoryList(categories)
+            | None =>
+              <p className="text-xs text-gray-800">
+                {"Please save the community to add topic categories!" |> str}
+              </p>
+            }}
+         </div>}
       </div>
       <button
         disabled=saveDisabled
@@ -350,7 +357,7 @@ let make =
         {(
            switch (community) {
            | Some(_) => "Update Community"
-           | None => "Create a new community"
+           | None => "Create Community"
            }
          )
          |> str}

@@ -89,11 +89,11 @@ let make = (~communities, ~courses) => {
   let updateCommunitiesCB = community => {
     let communities = state.communities |> Community.updateList(community);
 
-    send(SaveCommunityChanges(communities));
+    send(UpdateCommunities(communities));
   };
 
   let addCommunityCB = community => {
-    let communities = communities |> List.append([community]);
+    let communities = state.communities |> List.append([community]);
     send(SaveCommunityChanges(communities));
   };
   <div className="flex-1 flex flex-col overflow-y-scroll bg-gray-200">

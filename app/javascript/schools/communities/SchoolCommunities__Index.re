@@ -16,7 +16,10 @@ type action =
   | UpdateShowCategoryEditor(bool)
   | UpdateEditorAction(editorAction)
   | UpdateCommunities(list(Community.t))
-  | SaveCommunityChanges(list(Community.t));
+  | SaveCommunityChanges(list(Community.t))
+  | DeleteCategory(Community.t, string)
+  | AddCategory(Community.t, Category.t)
+  | UpdateCategory(Community.t, Category.t);
 
 let reducer = (state, action) => {
   switch (action) {
@@ -31,6 +34,47 @@ let reducer = (state, action) => {
       communities,
       editorAction: Hidden,
     }
+  | DeleteCategory(community, categoryId) =>
+    let updatedCommunity = Community.removeCategory(community, categoryId);
+
+    {
+      ...state,
+      communities:
+        state.communities
+        |> List.map(c =>
+             Community.id(c) == Community.id(community)
+               ? updatedCommunity : c
+           ),
+      editorAction: ShowEditor(Some(updatedCommunity)),
+    };
+
+  | AddCategory(community, category) =>
+    let updatedCommunity = Community.addCategory(community, category);
+
+    {
+      ...state,
+      communities:
+        state.communities
+        |> List.map(c =>
+             Community.id(c) == Community.id(community)
+               ? updatedCommunity : c
+           ),
+      editorAction: ShowEditor(Some(updatedCommunity)),
+    };
+
+  | UpdateCategory(community, category) =>
+    let updatedCommunity = Community.updateCategory(community, category);
+
+    {
+      ...state,
+      communities:
+        state.communities
+        |> List.map(c =>
+             Community.id(c) == Community.id(community)
+               ? updatedCommunity : c
+           ),
+      editorAction: ShowEditor(Some(updatedCommunity)),
+    };
   };
 };
 
@@ -78,7 +122,18 @@ let make = (~communities, ~courses) => {
               ? <SchoolAdmin__EditorDrawer2
                   closeIconClassName="fas fa-arrow-left"
                   closeDrawerCB={() => send(UpdateShowCategoryEditor(false))}>
-                  <SchoolCommunities__CategoryManager community />
+                  <SchoolCommunities__CategoryManager
+                    community
+                    deleteCategoryCB={categoryId =>
+                      send(DeleteCategory(community, categoryId))
+                    }
+                    createCategoryCB={category =>
+                      send(AddCategory(community, category))
+                    }
+                    updateCategoryCB={category =>
+                      send(UpdateCategory(community, category))
+                    }
+                  />
                 </SchoolAdmin__EditorDrawer2>
               : React.null
           | None => React.null

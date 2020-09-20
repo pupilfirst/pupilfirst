@@ -9,11 +9,21 @@ type state = {
 };
 
 type action =
-  | UpdateCategoryName(string);
+  | UpdateCategoryName(string)
+  | StartSaving
+  | FinishSaving(string)
+  | FailSaving
+  | StartDeleting
+  | FailDeleting;
 
 let reducer = (state, action) => {
   switch (action) {
   | UpdateCategoryName(categoryName) => {...state, categoryName}
+  | StartSaving => {...state, saving: true}
+  | FinishSaving(categoryName) => {...state, saving: false, categoryName}
+  | FailSaving => {...state, saving: false}
+  | StartDeleting => {...state, deleting: true}
+  | FailDeleting => {...state, deleting: false}
   };
 };
 
@@ -52,18 +62,21 @@ let topicsCountPillClass = category => {
   "bg-" ++ color ++ "-200 text-" ++ color ++ "-900";
 };
 
-let deleteCategory = (categoryId, event) => {
+let deleteCategory = (categoryId, deleteCategoryCB, send, event) => {
   ReactEvent.Mouse.preventDefault(event);
+
+  send(StartDeleting);
 
   DeleteCategoryQuery.make(~id=categoryId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##deleteTopicCategory##success
-         ? Js.log("success") : Js.log("failure");
+         ? deleteCategoryCB(categoryId) : send(FailDeleting);
        Js.Promise.resolve();
      })
   |> Js.Promise.catch(error => {
        Js.log(error);
+       send(FailDeleting);
        Notification.error(
          "Unexpected Error!",
          "Please reload the page and try again.",
@@ -73,17 +86,24 @@ let deleteCategory = (categoryId, event) => {
   |> ignore;
 };
 
-let updateCategory = (categoryId, newName, event) => {
+let updateCategory = (category, newName, updateCategoryCB, send, event) => {
   ReactEvent.Mouse.preventDefault(event);
 
-  UpdateCategoryQuery.make(~id=categoryId, ~name=newName, ())
+  send(StartSaving);
+
+  UpdateCategoryQuery.make(~id=Category.id(category), ~name=newName, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##updateTopicCategory##success
-         ? Js.log("success") : Js.log("failure");
+         ? {
+           updateCategoryCB(Category.updateName(newName, category));
+           send(FinishSaving(newName));
+         }
+         : send(FailSaving);
        Js.Promise.resolve();
      })
   |> Js.Promise.catch(error => {
+       send(FailSaving);
        Js.log(error);
        Notification.error(
          "Unexpected Error!",
@@ -94,21 +114,27 @@ let updateCategory = (categoryId, newName, event) => {
   |> ignore;
 };
 
-let createCategory = (communityId, name, event) => {
+let createCategory = (communityId, name, createCategoryCB, send, event) => {
   ReactEvent.Mouse.preventDefault(event);
+
+  send(StartSaving);
 
   CreateCategoryQuery.make(~communityId, ~name, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        switch (response##createTopicCategory##id) {
-       | Some(id) => Js.log(id)
-       | None => Js.log("error")
+       | Some(id) =>
+         let newCategory = Category.make(~id, ~name, ~topicsCount=0);
+         createCategoryCB(newCategory);
+         send(FinishSaving(""));
+       | None => send(FailSaving)
        };
 
        Js.Promise.resolve();
      })
   |> Js.Promise.catch(error => {
        Js.log(error);
+       send(FailSaving);
        Notification.error(
          "Unexpected Error!",
          "Please reload the page and try again.",
@@ -118,12 +144,19 @@ let createCategory = (communityId, name, event) => {
   |> ignore;
 };
 
-let saveDisabled = name => {
-  String.trim(name) == "";
+let saveDisabled = (name, saving) => {
+  String.trim(name) == "" || saving;
 };
 
 [@react.component]
-let make = (~category, ~communityId) => {
+let make =
+    (
+      ~category=?,
+      ~communityId,
+      ~deleteCategoryCB,
+      ~createCategoryCB,
+      ~updateCategoryCB,
+    ) => {
   let (state, send) =
     React.useReducer(
       reducer,
@@ -165,15 +198,24 @@ let make = (~category, ~communityId) => {
                 |> str}
              </span>
            : <button
-               disabled={saveDisabled(state.categoryName)}
-               onClick={updateCategory(categoryId, state.categoryName)}
+               disabled={saveDisabled(state.categoryName, state.saving)}
+               onClick={updateCategory(
+                 category,
+                 state.categoryName,
+                 updateCategoryCB,
+                 send,
+               )}
                className="btn btn-success mr-2 text-xs">
                {"Update Category" |> str}
              </button>}
         <button
-          onClick={deleteCategory(categoryId)}
+          onClick={deleteCategory(categoryId, deleteCategoryCB, send)}
           className="text-xs py-1 px-2 h-8 text-gray-700 hover:text-gray-900 hover:bg-gray-100 border-l border-gray-400">
-          <i className="fas fa-trash-alt" />
+          <FaIcon
+            classes={
+              state.deleting ? "fas fa-spinner fa-spin" : "fas fa-trash-alt"
+            }
+          />
         </button>
       </div>
     </div>;
@@ -191,8 +233,13 @@ let make = (~category, ~communityId) => {
       {let showButton = state.categoryName |> String.trim != "";
        showButton
          ? <button
-             disabled={saveDisabled(state.categoryName)}
-             onClick={createCategory(communityId, state.categoryName)}
+             disabled={saveDisabled(state.categoryName, state.saving)}
+             onClick={createCategory(
+               communityId,
+               state.categoryName,
+               createCategoryCB,
+               send,
+             )}
              className="btn btn-success ml-2 text-sm">
              {"Save Category" |> str}
            </button>

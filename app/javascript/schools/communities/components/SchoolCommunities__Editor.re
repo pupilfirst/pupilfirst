@@ -29,10 +29,9 @@ type state = {
   targetLinkable: bool,
   selectedCourseIds: Belt.Set.String.t,
   courseSearch: string,
-  categories: array(Category.t),
 };
 
-let computeInitialState = ((community, categories)) => {
+let computeInitialState = community => {
   let (name, targetLinkable, selectedCourseIds) =
     switch (community) {
     | Some(community) => (
@@ -50,7 +49,6 @@ let computeInitialState = ((community, categories)) => {
     targetLinkable,
     selectedCourseIds,
     courseSearch: "",
-    categories,
   };
 };
 
@@ -237,11 +235,7 @@ let make =
       ~updateCommunitiesCB,
     ) => {
   let (state, send) =
-    React.useReducerWithMapState(
-      reducer,
-      (community, categories),
-      computeInitialState,
-    );
+    React.useReducerWithMapState(reducer, community, computeInitialState);
 
   let saveDisabled = state.name |> String.trim == "" || !state.dirty;
 
@@ -325,19 +319,19 @@ let make =
                  <i className="fas fa-pencil-alt" />
                  <span className="text-xs font-semibold ml-2">
                    {(
-                      ArrayUtils.isEmpty(state.categories)
+                      ArrayUtils.isEmpty(categories)
                         ? "Add Categories" : "Edit Categories"
                     )
                     |> str}
                  </span>
                </button>
              </div>
-             {state.categories |> ArrayUtils.isEmpty
+             {categories |> ArrayUtils.isEmpty
                 ? <p className="text-xs text-gray-800">
                     {"There are currently no topic categories in this community!"
                      |> str}
                   </p>
-                : categoryList(state.categories)}
+                : categoryList(categories)}
            </div>
          | None => React.null
          }}

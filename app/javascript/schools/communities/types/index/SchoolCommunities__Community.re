@@ -37,3 +37,30 @@ let create = (~id, ~name, ~targetLinkable, ~topicCategories, ~courseIds) => {
 
 let updateList = (community, communities) =>
   communities |> List.map(c => c.id == community.id ? community : c);
+
+let removeCategory = (community, categoryId) => {
+  let updatedCategories =
+    community.topicCategories
+    |> Js.Array.filter(category =>
+         SchoolCommunities__Category.id(category) != categoryId
+       );
+  {...community, topicCategories: updatedCategories};
+};
+
+let addCategory = (community, category) => {
+  {
+    ...community,
+    topicCategories: Array.append(community.topicCategories, [|category|]),
+  };
+};
+
+let updateCategory = (community, category) => {
+  let updatedCategories =
+    community.topicCategories
+    |> Array.map(c =>
+         SchoolCommunities__Category.id(c)
+         == SchoolCommunities__Category.id(category)
+           ? category : c
+       );
+  {...community, topicCategories: updatedCategories};
+};

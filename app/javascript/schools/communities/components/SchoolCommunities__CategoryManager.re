@@ -13,7 +13,8 @@ let topicsCountPillClass = category => {
 };
 
 [@react.component]
-let make = (~community) => {
+let make =
+    (~community, ~deleteCategoryCB, ~createCategoryCB, ~updateCategoryCB) => {
   let categories = Community.topicCategories(community);
   <div className="mx-8 pt-8">
     <h5 className="uppercase text-center border-b border-gray-400 pb-2">
@@ -25,8 +26,11 @@ let make = (~community) => {
           |> Js.Array.map(category => {
                <SchoolCommunities__CategoryEditor
                  key={Category.id(category)}
-                 category={Some(category)}
+                 category
                  communityId={Community.id(community)}
+                 deleteCategoryCB
+                 createCategoryCB
+                 updateCategoryCB
                />
              })
           |> React.array}
@@ -34,8 +38,10 @@ let make = (~community) => {
        ArrayUtils.isEmpty(categories),
      )}
     {<SchoolCommunities__CategoryEditor
-       category=None
        communityId={Community.id(community)}
+       deleteCategoryCB
+       createCategoryCB
+       updateCategoryCB
      />}
   </div>;
 };

@@ -4,18 +4,9 @@ open SchoolCommunities__IndexTypes;
 
 module CreateCommunityQuery = [%graphql
   {|
-  mutation CreateCommunityMutation($name: String!, $targetLinkable: Boolean!, $courseIds: [ID!]!, $topicCategories: [String!]!) {
-    createCommunity(name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds, topicCategories: $topicCategories ) {
-      community {
-        id
-        name
-        targetLinkable
-        topicCategories {
-          id
-          name
-          topicsCount
-        }
-      }
+  mutation CreateCommunityMutation($name: String!, $targetLinkable: Boolean!, $courseIds: [ID!]!) {
+    createCommunity(name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds ) {
+      id
     }
   }
 |}
@@ -41,20 +32,13 @@ type state = {
   categories: array(Category.t),
 };
 
-let computeInitialState = ((community, connections, categories)) => {
+let computeInitialState = ((community, categories)) => {
   let (name, targetLinkable, selectedCourseIds) =
     switch (community) {
     | Some(community) => (
         community |> Community.name,
         community |> Community.targetLinkable,
-        connections
-        |> List.filter(connection =>
-             connection
-             |> Connection.communityId == (community |> Community.id)
-           )
-        |> List.map(connection => connection |> Connection.courseId)
-        |> Array.of_list
-        |> Belt.Set.String.fromArray,
+        Community.courseIds(community) |> Belt.Set.String.fromArray,
       )
     | None => ("", false, Belt.Set.String.empty)
     };
@@ -106,29 +90,8 @@ let reducer = (state, action) =>
   | UpdateCourseSearch(courseSearch) => {...state, courseSearch}
   };
 
-let handleConnections = (communityId, connections, courseIds) => {
-  let oldConnections =
-    connections
-    |> List.filter(connection =>
-         connection |> Connection.communityId != communityId
-       );
-  let newConnectionsForCommunity =
-    courseIds
-    |> Array.map(courseId => Connection.create(communityId, courseId))
-    |> Array.to_list;
-  oldConnections |> List.append(newConnectionsForCommunity);
-};
-
 let handleQuery =
-    (
-      community,
-      connections,
-      state,
-      send,
-      addCommunityCB,
-      updateCommunitiesCB,
-      event,
-    ) => {
+    (community, state, send, addCommunityCB, updateCommunitiesCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   let {name, targetLinkable} = state;
@@ -149,11 +112,17 @@ let handleQuery =
       |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response => {
            let communityId = response##updateCommunity##communityId;
+           let topicCategories = Community.topicCategories(community);
            switch (communityId) {
            | Some(id) =>
              updateCommunitiesCB(
-               Community.create(id, name, targetLinkable, [||]),
-               handleConnections(id, connections, courseIds),
+               Community.create(
+                 ~id,
+                 ~name,
+                 ~targetLinkable,
+                 ~topicCategories,
+                 ~courseIds,
+               ),
              );
              send(FinishSaving);
            | None => send(FinishSaving)
@@ -164,21 +133,20 @@ let handleQuery =
          })
       |> ignore
     | None =>
-      CreateCommunityQuery.make(
-        ~name,
-        ~targetLinkable,
-        ~courseIds,
-        ~topicCategories=[||],
-        (),
-      )
+      CreateCommunityQuery.make(~name, ~targetLinkable, ~courseIds, ())
       |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response => {
-           switch (response##createCommunity##community) {
-           | Some(community) =>
-             addCommunityCB(
-               Community.makeFromJs(community),
-               handleConnections(community##id, connections, courseIds),
-             );
+           switch (response##createCommunity##id) {
+           | Some(id) =>
+             let newCommunity =
+               Community.create(
+                 ~id,
+                 ~name,
+                 ~targetLinkable,
+                 ~topicCategories=[||],
+                 ~courseIds,
+               );
+             addCommunityCB(newCommunity);
              send(FinishSaving);
            | None => send(FinishSaving)
            };
@@ -263,7 +231,6 @@ let make =
     (
       ~courses,
       ~community,
-      ~connections,
       ~addCommunityCB,
       ~showCategoryEditorCB,
       ~categories,
@@ -272,7 +239,7 @@ let make =
   let (state, send) =
     React.useReducerWithMapState(
       reducer,
-      (community, connections, categories),
+      (community, categories),
       computeInitialState,
     );
 
@@ -379,7 +346,6 @@ let make =
         disabled=saveDisabled
         onClick={handleQuery(
           community,
-          connections,
           state,
           send,
           addCommunityCB,

@@ -11,7 +11,6 @@ module Schools
         {
           communities: communities,
           courses: courses,
-          connections: connections,
         }
       end
 
@@ -22,7 +21,8 @@ module Schools
               id: community.id.to_s,
               name: community.name,
               targetLinkable: community.target_linkable,
-              topicCategories: topic_categories(community)
+              topicCategories: topic_categories(community),
+              course_ids:  community.course_ids.map(&:to_s)
             }
           end
       end
@@ -32,15 +32,6 @@ module Schools
           {
             id: course.id.to_s,
             name: course.name
-          }
-        end
-      end
-
-      def connections
-        CommunityCourseConnection.where(community: communities.pluck(:id)).map do |connection|
-          {
-            communityId: connection.community_id.to_s,
-            courseId: connection.course_id.to_s
           }
         end
       end

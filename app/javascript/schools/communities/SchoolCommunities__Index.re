@@ -6,42 +6,64 @@ type editorAction =
   | ShowEditor(option(Community.t))
   | Hidden;
 
-[@react.component]
-let make = (~communities, ~courses, ~connections) => {
-  let (editorAction, setEditorAction) = React.useState(() => Hidden);
-  let (stateConnections, setStateConnections) =
-    React.useState(() => connections);
-  let (stateCommunities, setStateCommunities) =
-    React.useState(() => communities);
-  let (showCategoryEditor, setShowCategoryEditor) =
-    React.useState(() => false);
+type state = {
+  editorAction,
+  communities: list(Community.t),
+  showCategoryEditor: bool,
+};
 
-  let updateCommunitiesCB = (community, connections) => {
-    setStateCommunities(_ =>
-      stateCommunities |> Community.updateList(community)
+type action =
+  | UpdateShowCategoryEditor(bool)
+  | UpdateEditorAction(editorAction)
+  | UpdateCommunities(list(Community.t))
+  | SaveCommunityChanges(list(Community.t));
+
+let reducer = (state, action) => {
+  switch (action) {
+  | UpdateShowCategoryEditor(showCategoryEditor) => {
+      ...state,
+      showCategoryEditor,
+    }
+  | UpdateEditorAction(editorAction) => {...state, editorAction}
+  | UpdateCommunities(communities) => {...state, communities}
+  | SaveCommunityChanges(communities) => {
+      ...state,
+      communities,
+      editorAction: Hidden,
+    }
+  };
+};
+
+[@react.component]
+let make = (~communities, ~courses) => {
+  let (state, send) =
+    React.useReducer(
+      reducer,
+      {editorAction: Hidden, communities, showCategoryEditor: false},
     );
-    setStateConnections(_ => connections);
-    setEditorAction(_ => Hidden);
+
+  let updateCommunitiesCB = community => {
+    let communities = state.communities |> Community.updateList(community);
+
+    send(SaveCommunityChanges(communities));
   };
 
-  let addCommunityCB = (community, connections) => {
-    setStateCommunities(_ => communities |> List.append([community]));
-    setStateConnections(_ => connections);
-    setEditorAction(_ => Hidden);
+  let addCommunityCB = community => {
+    let communities = communities |> List.append([community]);
+    send(SaveCommunityChanges(communities));
   };
   <div className="flex-1 flex flex-col overflow-y-scroll bg-gray-200">
-    {switch (editorAction) {
+    {switch (state.editorAction) {
      | Hidden => React.null
      | ShowEditor(community) =>
-       let level = showCategoryEditor ? 1 : 0;
+       let level = state.showCategoryEditor ? 1 : 0;
        <SchoolAdmin__EditorDrawer2
-         level closeDrawerCB={() => setEditorAction(_ => Hidden)}>
+         level closeDrawerCB={() => send(UpdateEditorAction(Hidden))}>
          <SchoolCommunities__Editor
            courses
            community
-           connections=stateConnections
            addCommunityCB
-           showCategoryEditorCB={() => setShowCategoryEditor(_ => true)}
+           showCategoryEditorCB={() => send(UpdateShowCategoryEditor(true))}
            categories={
              switch (community) {
              | Some(community) => Community.topicCategories(community)
@@ -52,14 +74,11 @@ let make = (~communities, ~courses, ~connections) => {
          />
          {switch (community) {
           | Some(community) =>
-            showCategoryEditor
+            state.showCategoryEditor
               ? <SchoolAdmin__EditorDrawer2
                   closeIconClassName="fas fa-arrow-left"
-                  closeDrawerCB={() => setShowCategoryEditor(_ => false)}>
-                  <SchoolCommunities__CategoryManager
-                    categories={Community.topicCategories(community)}
-                    community
-                  />
+                  closeDrawerCB={() => send(UpdateShowCategoryEditor(false))}>
+                  <SchoolCommunities__CategoryManager community />
                 </SchoolAdmin__EditorDrawer2>
               : React.null
           | None => React.null
@@ -68,7 +87,7 @@ let make = (~communities, ~courses, ~connections) => {
      }}
     <div className="flex px-6 py-2 items-center justify-between">
       <button
-        onClick={_ => setEditorAction(_ => ShowEditor(None))}
+        onClick={_ => send(UpdateEditorAction(ShowEditor(None)))}
         className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
         <i className="fas fa-plus-circle" />
         <h5 className="font-semibold ml-2"> {"Add New Community" |> str} </h5>
@@ -76,7 +95,7 @@ let make = (~communities, ~courses, ~connections) => {
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">
       <div className="max-w-2xl w-full mx-auto relative">
-        {stateCommunities
+        {state.communities
          |> List.map(community =>
               <div
                 key={community |> Community.id}
@@ -86,7 +105,9 @@ let make = (~communities, ~courses, ~connections) => {
                   <a
                     onClick={_event => {
                       ReactEvent.Mouse.preventDefault(_event);
-                      setEditorAction(_ => ShowEditor(Some(community)));
+                      send(
+                        UpdateEditorAction(ShowEditor(Some(community))),
+                      );
                     }}
                     className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-l-lg hover:bg-gray-100 hover:text-primary-500 hover:border-primary-400">
                     <div className="flex w-full text-sm justify-between">

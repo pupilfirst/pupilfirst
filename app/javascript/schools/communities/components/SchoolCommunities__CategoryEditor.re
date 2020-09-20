@@ -118,6 +118,10 @@ let createCategory = (communityId, name, event) => {
   |> ignore;
 };
 
+let saveDisabled = name => {
+  String.trim(name) == "";
+};
+
 [@react.component]
 let make = (~category, ~communityId) => {
   let (state, send) =
@@ -161,6 +165,7 @@ let make = (~category, ~communityId) => {
                 |> str}
              </span>
            : <button
+               disabled={saveDisabled(state.categoryName)}
                onClick={updateCategory(categoryId, state.categoryName)}
                className="btn btn-success mr-2 text-xs">
                {"Update Category" |> str}
@@ -186,6 +191,7 @@ let make = (~category, ~communityId) => {
       {let showButton = state.categoryName |> String.trim != "";
        showButton
          ? <button
+             disabled={saveDisabled(state.categoryName)}
              onClick={createCategory(communityId, state.categoryName)}
              className="btn btn-success ml-2 text-sm">
              {"Save Category" |> str}

@@ -36,7 +36,7 @@ class DailyDigestService
 
   def cache_new_and_popular_topics
     Topic.live.where('topics.created_at >= ?', recent_time)
-      .includes(:community, :creator).sort(views: :DESC).each do |topic|
+      .includes(:community, :creator).order(views: :DESC).each do |topic|
       cache_topic_details(topic, :new)
     end
   end
@@ -64,7 +64,7 @@ class DailyDigestService
   end
 
   def cache_topic_details(topic, update_type)
-    days_ago = update_type == :new ? 0 : (Date.zone.today - topic.created_at.to_date).to_i
+    days_ago = update_type == :new ? 0 : (Time.zone.today - topic.created_at.to_date).to_i
 
     @topic_details_cache[update_type] << {
       id: topic.id,
@@ -73,18 +73,20 @@ class DailyDigestService
       replies: topic.live_replies.count,
       days_ago: days_ago,
       author: topic.creator&.name || 'a user',
-      type: type,
-      community_id: community.id,
-      community_name: community.name
+      type: update_type,
+      community_id: topic.community.id,
+      community_name: topic.community.name
     }
   end
 
   def create_updates(user)
-    add_filtered_community_updates(user).merge(coach: add_updates_for_coach(user))
+    filtered_community_updates(user).merge(
+      coach: add_updates_for_coach(user)
+    )
   end
 
   def first_five_topics_from_cache(update_type, community_ids)
-    let topics = []
+    topics = []
 
     @topic_details_cache[update_type].each do |topic|
       next unless topic[:community_id].in?(community_ids)
@@ -95,7 +97,7 @@ class DailyDigestService
     end
   end
 
-  def add_filtered_community_updates(user)
+  def filtered_community_updates(user)
     communities = communities_for_user(user)
 
     return {} if communities.blank?

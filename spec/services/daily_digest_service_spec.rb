@@ -158,7 +158,7 @@ describe DailyDigestService do
       end
     end
 
-    context 'when the user is a faculty' do
+    context 'when the user is a coach' do
       let(:course_1) { create :course, school: school }
       let(:level_1) { create :level, :one, course: course_1 }
       let(:target_group_1) { create :target_group, level: level_1 }
@@ -203,6 +203,7 @@ describe DailyDigestService do
         create :faculty_course_enrollment, faculty: coach_2, course: course_3
         create :topic, :with_first_post, community: community_1, creator: t1_user
         create :topic, :with_first_post, community: community_2, creator: t3_user
+
         target_1.evaluation_criteria << evaluation_criterion_1
         target_2.evaluation_criteria << evaluation_criterion_2
       end
@@ -211,15 +212,16 @@ describe DailyDigestService do
         subject.execute
 
         open_email(coach.user.email)
-
         b = sanitize_html(current_email.body)
+
         expect(b).to include(course_1.name)
         expect(b).to include(course_2.name)
         expect(b).to include("There are 3")
         expect(b).to include("new submissions to review")
         expect(b).to include("in 2 courses")
 
-        # The email should include community updates
+        # The email should include community updates, but only
+        # from the courses where the coach is enrolled.
         expect(b).to include(community_1.name)
         expect(b).not_to include(community_2.name)
       end

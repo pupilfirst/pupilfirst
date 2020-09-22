@@ -3,7 +3,7 @@
 class DailyDigestService
   def initialize(debug: false)
     @debug = debug
-    @topic_details_cache = { new: [], recently_active: [] }
+    @topic_details_cache = { new: [], reactivated: [] }
   end
 
   def execute
@@ -11,7 +11,7 @@ class DailyDigestService
     cache_new_and_popular_topics
     cache_older_topics_with_recent_activity
 
-    students = User.joins(:communities).distinct.select(:id)
+    students = User.joins(founders: :communities).merge(Founder.not_dropped_out).distinct.select(:id)
     coaches = User.joins(:faculty).select(:id)
 
     User.where(id: coaches).or(User.where(id: students))
@@ -42,19 +42,19 @@ class DailyDigestService
   end
 
   def cache_older_topics_with_recent_activity
-    sorted_recently_active_topic_ids = Topic.live.where('topics.created_at < ?', recent_time)
+    sorted_reactivated_topic_ids = Topic.live.where('topics.created_at < ?', recent_time)
       .joins(:posts).merge(Post.live).where('posts.created_at > ?', recent_time)
       .group('topics.id').order('count_posts_id DESC, views DESC').count('posts.id').keys
 
-    Topic.where(id: sorted_recently_active_topic_ids).each do |topic|
-      cache_topic_details(topic, :recently_active)
+    Topic.where(id: sorted_reactivated_topic_ids).each do |topic|
+      cache_topic_details(topic, :reactivated)
     end
 
-    sort_cached_recently_active_topics(sorted_recently_active_topic_ids)
+    sort_cached_reactivated_topics(sorted_reactivated_topic_ids)
   end
 
-  def sort_cached_recently_active_topics(sorted_topic_ids)
-    @topic_details_cache[:recently_active].sort_by! do |topic_details|
+  def sort_cached_reactivated_topics(sorted_topic_ids)
+    @topic_details_cache[:reactivated].sort_by! do |topic_details|
       sorted_topic_ids.index(topic_details[:id])
     end
   end
@@ -106,7 +106,7 @@ class DailyDigestService
 
     {
       community_new: first_five_topics_from_cache(:new, community_ids),
-      community_recently_active: first_five_topics_from_cache(:recently_active, community_ids)
+      community_reactivated: first_five_topics_from_cache(:reactivated, community_ids)
     }
   end
 

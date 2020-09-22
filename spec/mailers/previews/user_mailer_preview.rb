@@ -8,7 +8,7 @@ class UserMailerPreview < ActionMailer::Preview
 
     updates = {
       community_new: new_topics,
-      community_recently_active: recently_active_topics,
+      community_reactivated: reactivated_topics,
       coach: updates_for_coach
     }
 
@@ -37,8 +37,8 @@ class UserMailerPreview < ActionMailer::Preview
     community_topics(5, 10, :new)
   end
 
-  def recently_active_topics
-    community_topics(5, 1, :recently_active)
+  def reactivated_topics
+    community_topics(5, 1, :reactivated)
   end
 
   def community_topics(count, starting_id, update_type)

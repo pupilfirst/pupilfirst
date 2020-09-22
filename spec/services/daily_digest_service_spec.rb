@@ -16,38 +16,100 @@ describe DailyDigestService do
   let(:school) { create :school, :current }
 
   describe '#execute' do
-    context 'when there are more than 5 topics with no activity in the past seven days' do
-      let(:team_1) { create :startup }
+    context 'when there are more than 5 new topics and 5 "re-activated" older topics' do
+      let(:team_1) { create :team }
       let(:team_2) { create :team }
-      let(:team_3) { create :startup }
 
-      let(:t2_student_regular) { create :founder, startup: team_2 }
-      let(:t2_student_digest_inactive) { create :founder, startup: team_2 }
-      let(:t2_student_bounced) { create :founder, startup: team_2 }
+      let(:t1_student) { create :founder, startup: team_1 }
+      let(:t2_student) { create :founder, startup: team_2 }
 
-      let(:community_1) { create :community, school: school, courses: [team_1.course] }
-      let(:community_2) { create :community, school: school, courses: [team_1.course, team_2.course] }
-      let(:community_3) { create :community, school: school, courses: [team_1.course, team_2.course, team_3.course] }
+      let(:community_1) { create :community, name: 'First Community', school: school, courses: [team_1.course, team_2.course] }
+      let(:community_2) { create :community, name: 'Second Community', school: school, courses: [team_2.course] }
 
-      let(:t1_user) { team_1.founders.first.user }
-      let(:t2_user_1) { t2_student_regular.user }
-      let(:t2_user_2) { t2_student_digest_inactive.user }
-      let(:t2_user_3) { t2_student_bounced.user }
-      let(:t3_user) { team_3.founders.first.user }
+      let(:t1_user) { t1_student.user }
+      let(:t2_user) { t2_student.user }
 
-      let!(:topic_c1) { create :topic, :with_first_post, community: community_1, creator: t1_user }
-      let!(:topic_c2_1) { create :topic, :with_first_post, community: community_2, creator: t2_user_1 }
-      let!(:topic_c2_2) { create :topic, :with_first_post, community: community_2, creator: t2_user_2 }
-      let!(:topic_c3_1) { create :topic, :with_first_post, community: community_3, created_at: 2.days.ago, creator: t3_user, archived: true }
-      let!(:topic_c3_2) { create :topic, :with_first_post, community: community_3, created_at: 3.days.ago, creator: t3_user }
-      let!(:topic_c3_3) { create :topic, :with_first_post, community: community_3, created_at: 8.days.ago, creator: t3_user }
+      let!(:topic_c1_new_1) { create :topic, :with_first_post, community: community_1, creator: t1_user, views: 10 }
+      let!(:topic_c1_new_2) { create :topic, :with_first_post, community: community_1, creator: t1_user, views: 20 }
+      let!(:topic_c1_new_archived) { create :topic, :with_first_post, community: community_1, creator: t1_user, views: 100, archived: true }
+      let!(:topic_c1_reactivated_1) { create :topic, :with_first_post, community: community_1, creator: t1_user, created_at: 2.days.ago, views: 10 }
+      let!(:topic_c1_reactivated_2) { create :topic, :with_first_post, community: community_1, creator: t1_user, created_at: 3.days.ago, views: 20 }
+      let!(:topic_c1_reactivated_archived) { create :topic, :with_first_post, community: community_1, creator: t1_user, created_at: 4.days.ago, views: 100, archived: true }
+      let!(:topic_c1_old) { create :topic, :with_first_post, community: community_1, creator: t1_user, created_at: 5.days.ago, views: 100 }
+      let!(:topic_c2_new_1) { create :topic, :with_first_post, community: community_2, creator: t2_user, views: 30 }
+      let!(:topic_c2_new_2) { create :topic, :with_first_post, community: community_2, creator: t2_user, views: 40 }
+      let!(:topic_c2_new_3) { create :topic, :with_first_post, community: community_2, creator: t2_user, views: 50 }
+      let!(:topic_c2_new_4) { create :topic, :with_first_post, community: community_2, creator: t2_user, views: 60 }
+      let!(:topic_c2_reactivated_1) { create :topic, :with_first_post, community: community_2, creator: t2_user, created_at: 2.days.ago, views: 30 }
+      let!(:topic_c2_reactivated_2) { create :topic, :with_first_post, community: community_2, creator: t2_user, created_at: 3.days.ago, views: 40 }
+      let!(:topic_c2_reactivated_3) { create :topic, :with_first_post, community: community_2, creator: t2_user, created_at: 4.days.ago, views: 50 }
+      let!(:topic_c2_reactivated_4) { create :topic, :with_first_post, community: community_2, creator: t2_user, created_at: 5.days.ago, views: 60 }
 
       before do
-        # Turn off daily digest for the disabled user.
-        t2_user_2.update!(preferences: { daily_digest: false })
+        # Add a second post for all the "re-activated" topics.
+        create :post, creator: t1_user, topic: topic_c1_reactivated_1, post_number: 2, created_at: 1.hour.ago
+        create :post, creator: t1_user, topic: topic_c1_reactivated_2, post_number: 2, created_at: 1.hour.ago
+        create :post, creator: t1_user, topic: topic_c1_reactivated_archived, post_number: 2, created_at: 1.hour.ago
+        create :post, creator: t2_user, topic: topic_c2_reactivated_1, post_number: 2, created_at: 1.hour.ago
+        create :post, creator: t2_user, topic: topic_c2_reactivated_2, post_number: 2, created_at: 1.hour.ago
+        create :post, creator: t2_user, topic: topic_c2_reactivated_3, post_number: 2, created_at: 1.hour.ago
+        create :post, creator: t2_user, topic: topic_c2_reactivated_4, post_number: 2, created_at: 1.hour.ago
+      end
 
-        # Create bounce report for t2_student_bounced.
-        BounceReport.create!(email: t2_student_bounced.email, bounce_type: 'HardBounce')
+      it 'sends digest emails containing 5 most popular newly posted topics and older topics with new activity' do
+        subject.execute
+
+        open_email(t1_user.email)
+
+        subject_1 = current_email.subject
+        expect(subject_1).to include(school.name)
+        expect(subject_1).to include('Daily Digest')
+        expect(subject_1).to include('Jul 16, 2019')
+
+        body_1 = sanitize_html(current_email.body)
+
+        expect(body_1).to include(t1_user.name)
+
+        # This email should only mention the first community.
+        expect(body_1).to include(community_1.name)
+        expect(body_1).not_to include(community_2.name)
+
+        # It should include all topics in first community except the archived ones.
+        expect(body_1).to include(topic_c1_new_1.title)
+        expect(body_1).to include(topic_c1_new_2.title)
+        expect(body_1).not_to include(topic_c1_new_archived.title)
+        expect(body_1).to include(topic_c1_reactivated_1.title)
+        expect(body_1).to include(topic_c1_reactivated_2.title)
+        expect(body_1).not_to include(topic_c1_reactivated_archived.title)
+
+        # It should not include any topics from second community.
+        expect(body_1).not_to include(topic_c2_new_1.title)
+        expect(body_1).not_to include(topic_c2_new_4.title)
+        expect(body_1).not_to include(topic_c2_reactivated_1.title)
+        expect(body_1).not_to include(topic_c2_reactivated_4.title)
+
+        open_email(t2_user.email)
+
+        subject_2 = current_email.subject
+
+        # Subject should be identical to first.
+        expect(subject_2).to eq(subject_1)
+
+        body_2 = sanitize_html(current_email.body)
+
+        # It should have only 5 of the most popular topics from both communities.
+        expect(body_2).not_to include(topic_c1_new_1.title)
+        expect(body_2).to include(topic_c1_new_2.title)
+        expect(body_2).to include(topic_c2_new_1.title)
+        expect(body_2).to include(topic_c2_new_2.title)
+        expect(body_2).to include(topic_c2_new_3.title)
+        expect(body_2).to include(topic_c2_new_4.title)
+        expect(body_2).not_to include(topic_c1_reactivated_1.title)
+        expect(body_2).to include(topic_c1_reactivated_2.title)
+        expect(body_2).to include(topic_c2_reactivated_1.title)
+        expect(body_2).to include(topic_c2_reactivated_2.title)
+        expect(body_2).to include(topic_c2_reactivated_3.title)
+        expect(body_2).to include(topic_c2_reactivated_4.title)
       end
 
       context 'when there is a dropped out student' do
@@ -56,113 +118,41 @@ describe DailyDigestService do
         let!(:user_dropped_out) { student_dropped_out.user }
         let(:community_1) { create :community, school: school, courses: [team_dropped_out.course] }
         let(:community_2) { create :community, school: school, courses: [team_dropped_out.course] }
-        let(:community_3) { create :community, school: school, courses: [team_dropped_out.course] }
 
         it 'does not send digest to dropped out student' do
           subject.execute
           open_email(user_dropped_out.email)
-
           expect(current_email).to eq(nil)
         end
       end
 
-      it 'sends digest emails containing details about new topics and one without responses' do
-        subject.execute
+      context 'when a student has opted-out of the daily digest' do
+        let(:student_opt_out) { create :founder, startup: team_2 }
+        let!(:user_opt_out) { student_opt_out.user }
 
-        open_email(t1_user.email)
+        before do
+          user_opt_out.update!(preferences: { daily_digest: false })
+        end
 
-        s1 = current_email.subject
-        expect(s1).to include(school.name)
-        expect(s1).to include('Daily Digest')
-        expect(s1).to include('Jul 16, 2019')
-
-        b1 = sanitize_html(current_email.body)
-
-        # The email should link to all three communities.
-        expect(b1).to include(community_1.name)
-        expect(b1).to include(community_2.name)
-        expect(b1).to include(community_3.name)
-
-        # It should include all topics except the archived one and the one from 8 days ago.
-        expect(b1).to include(topic_c1.title)
-        expect(b1).to include(topic_c2_1.title)
-        expect(b1).to include(topic_c2_2.title)
-        expect(b1).to include(topic_c3_2.title)
-        expect(b1).not_to include(topic_c3_1.title)
-        expect(b1).not_to include(topic_c3_3.title)
-
-        open_email(t2_user_1.email)
-
-        s2 = current_email.subject
-
-        # Subject should be identical to first.
-        expect(s2).to eq(s1)
-
-        b2 = sanitize_html(current_email.body)
-
-        # It should not have topics from the first community and one from 8 days ago.
-        expect(b2).not_to include(topic_c1.title)
-        expect(b2).to include(topic_c2_1.title)
-        expect(b2).to include(topic_c2_2.title)
-        expect(b2).to include(topic_c3_2.title)
-        expect(b2).not_to include(topic_c3_1.title)
-        expect(b2).not_to include(topic_c3_3.title)
-
-        # User from team 2 with daily digest turned off shouldn't receive the mail.
-        open_email(t2_user_2.email)
-        expect(current_email).to eq(nil)
-
-        # User from team 2 whose email bounced shouldn't receive email.
-        open_email(t2_user_3.email)
-        expect(current_email).to eq(nil)
-
-        open_email(t3_user.email)
-
-        s3 = current_email.subject
-
-        # Subject should be identical to first.
-        expect(s3).to eq(s1)
-
-        b3 = sanitize_html(current_email.body)
-
-        # It should only have the one topic from third community.
-        expect(b3).not_to include(topic_c1.title)
-        expect(b3).not_to include(topic_c2_1.title)
-        expect(b3).not_to include(topic_c2_2.title)
-        expect(b3).to include(topic_c3_2.title)
-        expect(b3).not_to include(topic_c3_1.title)
-        expect(b3).not_to include(topic_c3_3.title)
+        it 'does not send daily digest' do
+          subject.execute
+          open_email(user_opt_out.email)
+          expect(current_email).to eq(nil)
+        end
       end
 
-      context 'when there are more than 5 topics with no activity in the past seven days' do
-        let!(:topic_c3_3) { create :topic, :with_first_post, community: community_3, created_at: 2.days.ago, creator: t1_user }
-        let!(:topic_c3_archived) { create :topic, :with_first_post, community: community_3, created_at: 3.days.ago, archived: true, creator: t2_user_1 }
-        let!(:topic_c3_4) { create :topic, :with_first_post, community: community_3, created_at: 3.days.ago, creator: t2_user_1 }
-        let!(:topic_c3_5) { create :topic, :with_first_post, community: community_3, created_at: 4.days.ago, creator: t2_user_2 }
-        let!(:topic_c3_6) { create :topic, :with_first_post, community: community_3, created_at: 5.days.ago, creator: t3_user }
-        let!(:topic_c3_7) { create :topic, :with_first_post, community: community_3, created_at: 6.days.ago, creator: t1_user }
-        let!(:topic_c3_8) { create :topic, :with_first_post, community: community_3, created_at: 6.days.ago, creator: t2_user_1 }
-        let!(:reply) { create :post, topic: topic_c3_6, creator: t3_user, post_number: 2 }
+      context 'when a user has a bounced email address' do
+        let(:student_bounced) { create :founder, startup: team_2 }
+        let!(:user_bounced) { student_bounced.user }
 
-        it 'only mails up to 5 such topics' do
+        before do
+          BounceReport.create!(email: user_bounced.email, bounce_type: 'HardBounce')
+        end
+
+        it 'does not send daily digest' do
           subject.execute
-
-          open_email(t3_user.email)
-
-          b = sanitize_html(current_email.body)
-
-          expect(b).not_to include(topic_c1.title)
-          expect(b).not_to include(topic_c2_1.title)
-          expect(b).not_to include(topic_c2_2.title)
-          expect(b).to include(topic_c3_2.title)
-          expect(b).not_to include(topic_c3_archived.title) # topic was archived.
-          expect(b).to include(topic_c3_3.title)
-          expect(b).not_to include(topic_c3_8.title)
-          expect(b).to include(topic_c3_4.title)
-          expect(b).to include(topic_c3_5.title)
-          expect(b).not_to include(topic_c3_6.title) # topic was commented on.
-          expect(b).to include(topic_c3_7.title)
-          expect(b).not_to include(topic_c3_8.title)
+          open_email(user_bounced.email)
+          expect(current_email).to eq(nil)
         end
       end
     end

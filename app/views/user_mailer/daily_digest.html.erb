@@ -66,12 +66,12 @@
     <% end %>
   <% end %>
 
-  <% if @updates[:community_recently_active].present? %>
+  <% if @updates[:community_reactivated].present? %>
     <p style="margin-top: 15px;">
       Older, popular topics that have seen new activity:
     </p>
 
-    <% @updates[:community_recently_active].each do |topic| %>
+    <% @updates[:community_reactivated].each do |topic| %>
       <div>
         <%= link_to topic[:title], topic_url(topic[:id]) %>
         <span style="font-size: 75%;">

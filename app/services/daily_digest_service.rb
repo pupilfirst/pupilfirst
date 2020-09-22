@@ -95,14 +95,14 @@ class DailyDigestService
 
       break if topics.length >= 5
     end
+
+    topics
   end
 
   def filtered_community_updates(user)
-    communities = communities_for_user(user)
+    community_ids = communities_for_user(user).pluck(:id)
 
-    return {} if communities.blank?
-
-    community_ids = communities.pluck(:id)
+    return {} if community_ids.empty?
 
     {
       community_new: first_five_topics_from_cache(:new, community_ids),
@@ -140,43 +140,5 @@ class DailyDigestService
         }
       end
     end.flatten
-  end
-
-  # Returns the new topics asked today.
-  def topics_from_today
-    Topic.live.where('topics.created_at > ?', 1.day.ago)
-      .includes(:community, :creator).each_with_object({}) do |topic, updates|
-      community = topic.community
-
-      add_updates(community, topic, updates, topic.created_at.to_date, 'new')
-    end
-  end
-
-  # Return up to 5 additional, most recent, topics with no activity from communities.
-  def add_topics_with_no_activity(updates)
-    Topic.live.where('topics.created_at > ?', 1.week.ago).where('topics.created_at < ?', 1.day.ago)
-      .includes(:replies).where(posts: { id: nil })
-      .order('topics.created_at DESC').limit(5)
-      .includes(:community, :creator).each_with_object(updates) do |topic, updates|
-      community = topic.community
-
-      add_updates(community, topic, updates, Time.zone.today, 'no_activity')
-    end
-  end
-
-  def add_updates(community, topic, updates, from, type)
-    updates[community.id] ||= {
-      community_name: community.name,
-      topics: [],
-    }
-
-    # Increment the number of topics
-    updates[community.id][:topics] << {
-      id: topic.id,
-      title: topic.title,
-      days_ago: (from - topic.created_at.to_date).to_i,
-      author: topic.creator&.name || 'a user',
-      type: type,
-    }
   end
 end

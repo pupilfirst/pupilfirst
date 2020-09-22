@@ -20,23 +20,20 @@ describe DailyDigestService do
       let(:team_1) { create :startup }
       let(:team_2) { create :team }
       let(:team_3) { create :startup }
-      let(:team_4) { create :team, dropped_out_at: 1.day.ago }
 
       let(:t2_student_regular) { create :founder, startup: team_2 }
       let(:t2_student_digest_inactive) { create :founder, startup: team_2 }
       let(:t2_student_bounced) { create :founder, startup: team_2 }
-      let(:t4_student_dropped_out) { create :founder, startup: team_4 }
 
       let(:community_1) { create :community, school: school, courses: [team_1.course] }
       let(:community_2) { create :community, school: school, courses: [team_1.course, team_2.course] }
-      let(:community_3) { create :community, school: school, courses: [team_1.course, team_2.course, team_3.course, team_4.course] }
+      let(:community_3) { create :community, school: school, courses: [team_1.course, team_2.course, team_3.course] }
 
       let(:t1_user) { team_1.founders.first.user }
       let(:t2_user_1) { t2_student_regular.user }
       let(:t2_user_2) { t2_student_digest_inactive.user }
       let(:t2_user_3) { t2_student_bounced.user }
       let(:t3_user) { team_3.founders.first.user }
-      let(:t4_user) { t4_student_dropped_out.user }
 
       let!(:topic_c1) { create :topic, :with_first_post, community: community_1, creator: t1_user }
       let!(:topic_c2_1) { create :topic, :with_first_post, community: community_2, creator: t2_user_1 }
@@ -51,6 +48,22 @@ describe DailyDigestService do
 
         # Create bounce report for t2_student_bounced.
         BounceReport.create!(email: t2_student_bounced.email, bounce_type: 'HardBounce')
+      end
+
+      context 'when there is a dropped out student' do
+        let(:team_dropped_out) { create :team, dropped_out_at: 1.day.ago }
+        let(:student_dropped_out) { create :founder, startup: team_dropped_out }
+        let!(:user_dropped_out) { student_dropped_out.user }
+        let(:community_1) { create :community, school: school, courses: [team_dropped_out.course] }
+        let(:community_2) { create :community, school: school, courses: [team_dropped_out.course] }
+        let(:community_3) { create :community, school: school, courses: [team_dropped_out.course] }
+
+        it 'does not send digest to dropped out student' do
+          subject.execute
+          open_email(user_dropped_out.email)
+
+          expect(current_email).to eq(nil)
+        end
       end
 
       it 'sends digest emails containing details about new topics and one without responses' do
@@ -101,10 +114,6 @@ describe DailyDigestService do
 
         # User from team 2 whose email bounced shouldn't receive email.
         open_email(t2_user_3.email)
-        expect(current_email).to eq(nil)
-
-        # Dropped out user shouldn't receive email.
-        open_email(t4_user.email)
         expect(current_email).to eq(nil)
 
         open_email(t3_user.email)
@@ -208,7 +217,7 @@ describe DailyDigestService do
         target_2.evaluation_criteria << evaluation_criterion_2
       end
 
-      it 'When the user is a course coach' do
+      it 'sends coaches info about submissions to review and community updates' do
         subject.execute
 
         open_email(coach.user.email)
@@ -226,7 +235,7 @@ describe DailyDigestService do
         expect(b).not_to include(community_2.name)
       end
 
-      it 'When the user is a team coach' do
+      it 'sends team coaches the number submissions of those assigned to them for review' do
         subject.execute
 
         open_email(team_coach.user.email)
@@ -239,7 +248,7 @@ describe DailyDigestService do
         expect(b).not_to include("(none of which are assigned to you)")
       end
 
-      it "when the coach doesn't have review access to all courses" do
+      it "only sends community updates where coach is enrolled to a linked course" do
         subject.execute
 
         open_email(coach_2.user.email)
@@ -251,31 +260,31 @@ describe DailyDigestService do
         expect(b).to include(community_2.name)
       end
     end
-  end
 
-  context 'when there are no updates' do
-    let(:school_2) { create :school }
-    let(:course_1) { create :course, school: school_2 }
-    let(:level_1) { create :level, :one, course: course_1 }
-    let(:target_group_1) { create :target_group, level: level_1 }
-    let!(:target_1) { create :target, :for_founders, target_group: target_group_1 }
-    let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
-    let(:evaluation_criterion_1) { create :evaluation_criterion, course: course_1, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
+    context 'when there are no updates' do
+      let(:school_2) { create :school }
+      let(:course_1) { create :course, school: school_2 }
+      let(:level_1) { create :level, :one, course: course_1 }
+      let(:target_group_1) { create :target_group, level: level_1 }
+      let!(:target_1) { create :target, :for_founders, target_group: target_group_1 }
+      let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
+      let(:evaluation_criterion_1) { create :evaluation_criterion, course: course_1, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
 
-    let(:team_1) { create :startup, level: level_1 }
-    let(:coach) { create :faculty, school: school_2 }
-    let(:team_coach) { create :faculty, school: school_2 }
+      let(:team_1) { create :startup, level: level_1 }
+      let(:coach) { create :faculty, school: school_2 }
+      let(:team_coach) { create :faculty, school: school_2 }
 
-    before do
-      create :domain, school: school_2
-      create :faculty_course_enrollment, faculty: coach, course: course_1
-    end
+      before do
+        create :domain, school: school_2
+        create :faculty_course_enrollment, faculty: coach, course: course_1
+      end
 
-    it 'should not trigger email' do
-      subject.execute
+      it 'should not trigger email' do
+        subject.execute
 
-      open_email(coach.user.email)
-      expect(current_email).to eq(nil)
+        open_email(coach.user.email)
+        expect(current_email).to eq(nil)
+      end
     end
   end
 end

@@ -247,7 +247,7 @@ let topicsList = topics => {
 };
 
 [@react.component]
-let make = (~communityId, ~target, ~showPrevPage, ~showNextPage) => {
+let make = (~communityId, ~target) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, target, computeInitialState);
 
@@ -276,19 +276,6 @@ let make = (~communityId, ~target, ~showPrevPage, ~showNextPage) => {
        </div>
      | None => React.null
      }}
-    <div
-      className="community-ask-button-container flex max-w-3xl mx-auto px-6 mt-10 items-center justify-center w-full relative">
-      <div className="bg-gray-100 px-1 z-10">
-        <a
-          className="no-underline btn btn-primary btn-large"
-          href="new_topic_path">
-          <i className="fas fa-plus-circle text-lg" />
-          <span className="font-semibold ml-2">
-            {"Create a new topic" |> str}
-          </span>
-        </a>
-      </div>
-    </div>
     <div className="px-3 md:px-6 pb-4 mt-5 flex flex-1">
       <div className="max-w-3xl w-full mx-auto relative">
         <div

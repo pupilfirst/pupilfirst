@@ -17,8 +17,6 @@ ReactDOMRe.renderToElementWithId(
   <CommunitiesShow__Root
     communityId={props.communityId}
     target={props.target}
-    showPrevPage=true
-    showNextPage=true
   />,
   "react-root",
 );

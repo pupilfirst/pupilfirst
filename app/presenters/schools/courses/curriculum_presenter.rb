@@ -16,7 +16,7 @@ module Schools
           levels: levels,
           targetGroups: target_groups,
           targets: targets,
-          vimeoAccessToken: vimeo_access_token
+          vimeoAccessToken: vimeo_access_token?
         }
       end
 

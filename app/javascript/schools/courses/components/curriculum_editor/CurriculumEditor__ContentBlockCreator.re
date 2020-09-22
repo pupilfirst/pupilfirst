@@ -69,8 +69,6 @@ let computeInitialState = isAboveTarget => {
   {ui: isAboveTarget ? Hidden : BlockSelector, saving: false, error: None};
 };
 
-let showVimeoVideoButton = true;
-
 let reducer = (state, action) =>
   switch (action) {
   | ToggleVisibility =>
@@ -185,7 +183,7 @@ let onBlockTypeSelect =
   };
 };
 
-let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
+let button = (target, aboveContentBlock, send, addContentBlockCB, vimeoAccessToken, blockType) => {
   let fileId = aboveContentBlock |> fileInputId;
   let imageId = aboveContentBlock |> imageInputId;
   let videoId = aboveContentBlock |> videoInputId;
@@ -208,7 +206,7 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
     | `Image
     | `Embed => baseClassName
     | `VideoEmbed =>
-      switch (showVimeoVideoButton) {
+      switch (vimeoAccessToken) {
       | true => baseClassName
       | false => baseClassName ++ " hidden"
       };
@@ -275,7 +273,6 @@ let handleCreateEmbedContentBlock =
 
 let handleVimeoVideoUpload =
     (file, vimeoVideo, send, target, aboveContentBlock, addContentBlockCB) => {
-  Js.log(vimeoVideo);
   let url = vimeoVideo##uri;
   let uploadUrl = vimeoVideo##uploadLink;
 
@@ -547,7 +544,7 @@ let buttonAboveContentBlock = (state, send, aboveContentBlock) =>
   };
 
 [@react.component]
-let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
+let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~vimeoAccessToken) => {
   let (embedInputId, isAboveContentBlock) =
     switch (aboveContentBlock) {
     | Some(contentBlock) =>
@@ -563,10 +560,11 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
       computeInitialState,
     );
 
+
   <DisablingCover disabled={state.saving} message="Creating...">
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `File)}
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `Image)}
-    {switch (showVimeoVideoButton) {
+    {switch (vimeoAccessToken) {
      |true =>  uploadForm(
          target,
          aboveContentBlock,
@@ -586,7 +584,7 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
              className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
              {[|`Markdown, `Image, `Embed, `VideoEmbed, `File|]
               |> Array.map(
-                   button(target, aboveContentBlock, send, addContentBlockCB),
+                   button(target, aboveContentBlock, send, addContentBlockCB, vimeoAccessToken),
                  )
               |> React.array}
            </div>

@@ -5,7 +5,7 @@ external makeFile: Js.t('a) => file = "%identity";
 [@bs.deriving abstract]
 type uploadOptions = {
   uploadUrl: string,
-  headers: {. "Accept": string, "Upload-Offset": int, "Content-Type": string },
+  headers: {. "Accept": string },
   onError: string => unit,
   onSuccess: unit => unit,
 };
@@ -18,9 +18,7 @@ external jsUpload: (file, uploadOptions) => uploader = "Upload";
 
 let upload = (~file, ~uploadUrl, ~onSuccess, ~onError) => {
   let headers = { 
-    "Accept": "application/vnd.vimeo.*+json;version=3.4" ,
-    "Upload-Offset": 0,
-    "Content-Type": "application/offset+octet-stream"
+    "Accept": "application/vnd.vimeo.*+json;version=3.4"
   }
   let options = uploadOptions(~uploadUrl, ~headers,  ~onSuccess, ~onError);
   jsUpload(file, options)->start;

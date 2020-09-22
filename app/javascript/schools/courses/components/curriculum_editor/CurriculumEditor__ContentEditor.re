@@ -118,7 +118,7 @@ let updateContentBlock = (send, contentBlock) => {
   send(UpdateContentBlock(contentBlock));
 };
 
-let editor = (target, state, send) => {
+let editor = (target, vimeoAccessToken, state, send) => {
   let currentVersion =
     switch (state.versions) {
     | [||] => <span className="italic"> {"Not Versioned" |> str} </span>
@@ -175,6 +175,7 @@ let editor = (target, state, send) => {
           <div key={contentBlock |> ContentBlock.id}>
             <CurriculumEditor__ContentBlockCreator
               target
+	      vimeoAccessToken=vimeoAccessToken
               aboveContentBlock=contentBlock
               addContentBlockCB={addContentBlock(send)}
             />
@@ -191,13 +192,14 @@ let editor = (target, state, send) => {
      |> React.array}
     <CurriculumEditor__ContentBlockCreator
       target
+      vimeoAccessToken=vimeoAccessToken
       addContentBlockCB={addContentBlock(send)}
     />
   </div>;
 };
 
 [@react.component]
-let make = (~target, ~setDirtyCB) => {
+let make = (~target, ~vimeoAccessToken, ~setDirtyCB) => {
   let (state, send) =
     React.useReducer(
       reducer,
@@ -229,6 +231,6 @@ let make = (~target, ~setDirtyCB) => {
            ~count=2,
            ~element=SkeletonLoading.contents(),
          )
-       : editor(target, state, send)}
+       : editor(target, vimeoAccessToken, state, send)}
   </div>;
 };

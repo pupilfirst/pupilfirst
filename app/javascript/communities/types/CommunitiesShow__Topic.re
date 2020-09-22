@@ -1,12 +1,12 @@
 type t = {
   id: string,
   title: string,
-  lastActivityAt: option(string),
+  lastActivityAt: option(Js.Date.t),
   liveRepliesCount: int,
   likesCount: int,
-  categoryId: option(string),
+  topicCategoryId: option(string),
   creatorName: option(string),
-  time: string,
+  createdAt: Js.Date.t,
 };
 
 let id = t => t.id;
@@ -19,21 +19,47 @@ let liveRepliesCount = t => t.liveRepliesCount;
 
 let likesCount = t => t.likesCount;
 
-let categoryId = t => t.categoryId;
+let topicCategoryId = t => t.topicCategoryId;
 
 let creatorName = t => t.creatorName;
 
-let time = t => t.time;
+let createdAt = t => t.createdAt;
 
-let decode = json => {
-  Json.Decode.{
-    id: json |> field("id", string),
-    title: json |> field("title", string),
-    lastActivityAt: json |> optional(field("lastActivityAt", string)),
-    liveRepliesCount: json |> field("liveRepliesCount", int),
-    likesCount: json |> field("likesCount", int),
-    categoryId: json |> optional(field("categoryId", string)),
-    creatorName: json |> optional(field("creatorName", string)),
-    time: json |> field("time", string),
-  };
+let make =
+    (
+      ~id,
+      ~title,
+      ~lastActivityAt,
+      ~liveRepliesCount,
+      ~likesCount,
+      ~topicCategoryId,
+      ~creatorName,
+      ~createdAt,
+    ) => {
+  id,
+  title,
+  lastActivityAt,
+  liveRepliesCount,
+  likesCount,
+  topicCategoryId,
+  creatorName,
+  createdAt,
+};
+
+let makeFromJS = topicData => {
+  make(
+    ~id=topicData##id,
+    ~title=topicData##title,
+    ~lastActivityAt=
+      topicData##lastActivityAt->Belt.Option.map(DateFns.decodeISO),
+    ~liveRepliesCount=topicData##liveRepliesCount,
+    ~likesCount=topicData##likesCount,
+    ~topicCategoryId=topicData##topicCategoryId,
+    ~creatorName=topicData##creatorName,
+    ~createdAt=topicData##createdAt->DateFns.decodeISO,
+  );
+};
+
+let makeArrayFromJs = detailsOfTopics => {
+  detailsOfTopics->Belt.Array.keepMap(OptionUtils.map(makeFromJS));
 };

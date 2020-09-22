@@ -116,6 +116,7 @@ module Types
     resolved_field :community_topics, Types::TopicDetailsType.connection_type, null: false do
       argument :community_id, ID, required: true
       argument :topic_category_id, ID, required: false
+      argument :target_id, ID, required: false
       argument :search, String, required: false
     end
   end

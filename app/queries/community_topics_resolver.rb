@@ -1,6 +1,7 @@
 class CommunityTopicsResolver < ApplicationQuery
   property :community_id
   property :topic_category_id
+  property :target_id
   property :search
 
   def community_topics
@@ -24,10 +25,18 @@ class CommunityTopicsResolver < ApplicationQuery
   end
 
   def applicable_topics
-    if topic_category_id.present?
-      community.topics.live.where(topic_category_id: topic_category_id)
+    by_category =
+      if topic_category_id.present?
+        community.topics.live.where(topic_category_id: topic_category_id)
+      else
+        community.topics.live
+      end
+
+    by_category_and_target = if target_id.present?
+      by_category.where(target_id: target_id)
     else
-      community.topics.live
+      by_category
     end
+    by_category_and_target.includes(:first_post)
   end
 end

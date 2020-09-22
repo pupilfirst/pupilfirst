@@ -8,11 +8,18 @@ module Types
     field :topic_category_id, ID, null: true
     field :creator_name, String, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :active_users_count, Int, null: false
-  end
 
-  def creator_name
-    object.first_post.creator&.name
+    def creator_name
+      object.first_post.creator&.name
+    end
+
+    def likes_count
+      object.first_post.post_likes.count
+    end
+
+    def live_replies_count
+      object.live_replies_count || 0
+    end
   end
 end
 

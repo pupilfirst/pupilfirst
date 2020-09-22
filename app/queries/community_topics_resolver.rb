@@ -37,6 +37,6 @@ class CommunityTopicsResolver < ApplicationQuery
     else
       by_category
     end
-    by_category_and_target.includes(:first_post)
+    by_category_and_target.includes(first_post: :creator)
   end
 end

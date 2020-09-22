@@ -5,13 +5,15 @@ class CreateTopicMutator < ApplicationQuery
   property :body, validates: { length: { minimum: 1, maximum: 15_000 }, allow_nil: false }
   property :community_id, validates: { presence: true }
   property :target_id
+  property :topic_category_id
 
   def create_topic
     Topic.transaction do
       topic = Topic.create!(
         title: title,
         community: community,
-        target_id: target&.id
+        target_id: target&.id,
+        topic_category: topic_category
       )
 
       topic.posts.create!(
@@ -30,6 +32,10 @@ class CreateTopicMutator < ApplicationQuery
 
   def community
     @community ||= Community.find_by(id: community_id)
+  end
+
+  def topic_category
+    TopicCategory.find_by(id: topic_category_id) if topic_category_id.present?
   end
 
   def target

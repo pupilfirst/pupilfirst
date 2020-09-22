@@ -6,11 +6,6 @@ class CommunitiesController < ApplicationController
   def show
     @community = authorize(Community.find(params[:id]))
     @search = params[:search]
-    @topics = scoped_topics.live.includes([first_post: :creator])
-      .order("last_activity_at DESC NULLs FIRST").page(page).per(10)
-
-    # Pre-load the counts of replies on each post.
-    ActiveRecord::Precounter.new(@topics).precount(:live_replies)
   end
 
   # GET /community/:community_id/new_topic

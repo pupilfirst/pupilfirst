@@ -5,11 +5,13 @@ class CommunityTopicsResolver < ApplicationQuery
   property :search
 
   def community_topics
-    if search.present?
+    community_topics = if search.present?
       applicable_topics.where('topics.title ILIKE ?', "%#{search}%")
     else
       applicable_topics
     end
+
+    ActiveRecord::Precounter.new(community_topics).precount(:live_replies)
   end
 
   private

@@ -184,7 +184,7 @@ let make =
             send(UpdateCategoryName(newName));
           }}
           value={state.categoryName}
-          className="text-sm mr-1 font-semibold px-2 py-1 w-full"
+          className="text-sm mr-1 font-semibold px-2 py-1 w-full outline-none"
         />
       </div>
       <div>

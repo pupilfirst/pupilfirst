@@ -5,13 +5,11 @@ class CommunityTopicsResolver < ApplicationQuery
   property :search
 
   def community_topics
-    community_topics = if search.present?
+    if search.present?
       applicable_topics.where('topics.title ILIKE ?', "%#{search}%")
     else
       applicable_topics
-    end
-
-    ActiveRecord::Precounter.new(community_topics).precount(:live_replies)
+    end.includes(first_post: :creator)
   end
 
   private
@@ -34,11 +32,10 @@ class CommunityTopicsResolver < ApplicationQuery
         community.topics.live
       end
 
-    by_category_and_target = if target_id.present?
+    if target_id.present?
       by_category.where(target_id: target_id)
     else
       by_category
     end
-    by_category_and_target.includes(first_post: :creator)
   end
 end

@@ -16,6 +16,10 @@ module Types
     def likes_count
       object.first_post.post_likes.count
     end
+
+    def live_replies_count
+      object.live_replies.count
+    end
   end
 end
 

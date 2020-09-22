@@ -159,7 +159,12 @@ let computeInitialState = target => {
   },
 };
 
-let topicsList = topics => {
+let categoryPillClass = category => {
+  let color = TopicCategory.color(category);
+  "bg-" ++ color ++ "-200 text-" ++ color ++ "-900";
+};
+
+let topicsList = (topicCategories, topics) => {
   topics |> ArrayUtils.isEmpty
     ? <div
         className="flex flex-col mx-auto bg-white p-6 justify-center items-center">
@@ -172,10 +177,10 @@ let topicsList = topics => {
       |> Array.map(topic =>
            <div
              className="flex items-center border-b"
-             ariaLabel="Topic <%= topic.id %>">
+             ariaLabel={"Topic " ++ Topic.id(topic)}>
              <div className="flex w-full">
                <a
-                 className="cursor-pointer no-underline flex flex-1 justify-between items-center p-4 md:p-6 hover:bg-gray-100 hover:text-primary-500 border border-transparent hover:border-primary-400"
+                 className="cursor-pointer no-underline flex flex-col p-4 md:p-6 hover:bg-gray-100 hover:text-primary-500 border border-transparent hover:border-primary-400"
                  href={"/topics/" ++ Topic.id(topic)}>
                  <span className="block">
                    <span
@@ -183,7 +188,7 @@ let topicsList = topics => {
                      {Topic.title(topic) |> str}
                    </span>
                    <span className="block text-xs mt-1">
-                     <span> {"Asked by " |> str} </span>
+                     <span> {"Posted by " |> str} </span>
                      <span className="font-semibold">
                        {(
                           switch (Topic.creatorName(topic)) {
@@ -205,7 +210,7 @@ let topicsList = topics => {
                         | Some(date) =>
                           <span>
                             <span className="hidden md:inline-block">
-                              {"updated" |> str}
+                              {"Last updated" |> str}
                             </span>
                             <i className="fas fa-history mr-1 md:hidden" />
                             {" "
@@ -214,30 +219,58 @@ let topicsList = topics => {
                                   ~addSuffix=true,
                                   (),
                                 )
-                             ++ " "
                              |> str}
-                            <span> {"ago" |> str} </span>
                           </span>
                         | None => React.null
                         }}
                      </span>
                    </span>
                  </span>
-                 <span className="flex flex-row ml-2">
-                   <span className="px-4 text-center" ariaLabel="Likes">
-                     <i className="far fa-thumbs-up text-xl text-gray-600" />
-                     <p className="text-xs pt-1">
-                       {Topic.likesCount(topic) |> string_of_int |> str}
-                     </p>
-                   </span>
-                   <span className="px-2 text-center" ariaLabel="Replies">
+                 <span className="flex flex-row mt-2">
+                   <span
+                     className="flex text-center items-center mr-2 px-2 py-1 bg-gray-200"
+                     ariaLabel="Likes">
                      <i
-                       className="far fa-comment-dots text-xl text-gray-600"
+                       className="far fa-thumbs-up text-xs text-gray-600 mr-1"
                      />
-                     <p className="text-xs pt-1">
-                       {Topic.liveRepliesCount(topic) |> string_of_int |> str}
+                     <p className="text-xs font-semibold">
+                       {(Topic.likesCount(topic) |> string_of_int)
+                        ++ " Likes"
+                        |> str}
                      </p>
                    </span>
+                   <span
+                     className="flex justify-between text-center items-center mr-2 px-2 py-1 bg-gray-200"
+                     ariaLabel="Replies">
+                     <i
+                       className="far fa-comment-dots text-xs text-gray-600 mr-1"
+                     />
+                     <p className="text-xs font-semibold">
+                       {(Topic.liveRepliesCount(topic) |> string_of_int)
+                        ++ " Replies"
+                        |> str}
+                     </p>
+                   </span>
+                   {switch (Topic.topicCategoryId(topic)) {
+                    | Some(id) =>
+                      let topicCategory =
+                        topicCategories
+                        |> ArrayUtils.unsafeFind(
+                             c => TopicCategory.id(c) == id,
+                             "Unable to find topic category with ID: " ++ id,
+                           );
+                      <span
+                        className={
+                          "text-center items-center mr-2 px-2 py-1 bg-gray-200 "
+                          ++ categoryPillClass(topicCategory)
+                        }
+                        ariaLabel="Topic Category">
+                        <p className="text-xs font-semibold">
+                          {TopicCategory.name(topicCategory) |> str}
+                        </p>
+                      </span>;
+                    | None => React.null
+                    }}
                  </span>
                </a>
              </div>
@@ -247,7 +280,7 @@ let topicsList = topics => {
 };
 
 [@react.component]
-let make = (~communityId, ~target) => {
+let make = (~communityId, ~target, ~topicCategories) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, target, computeInitialState);
 
@@ -284,11 +317,11 @@ let make = (~communityId, ~target) => {
            | Unloaded =>
              SkeletonLoading.multiple(
                ~count=10,
-               ~element=SkeletonLoading.userCard(),
+               ~element=SkeletonLoading.card(),
              )
            | PartiallyLoaded(topics, cursor) =>
              <div>
-               {topicsList(topics)}
+               {topicsList(topicCategories, topics)}
                {switch (state.loading) {
                 | LoadingMore =>
                   SkeletonLoading.multiple(
@@ -312,7 +345,7 @@ let make = (~communityId, ~target) => {
                 | Reloading => React.null
                 }}
              </div>
-           | FullyLoaded(topics) => topicsList(topics)
+           | FullyLoaded(topics) => topicsList(topicCategories, topics)
            }}
         </div>
       </div>

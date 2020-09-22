@@ -175,104 +175,106 @@ let topicsList = (topicCategories, topics) => {
       </div>
     : topics
       |> Array.map(topic =>
-           <div
-             className="flex items-center border-b"
-             ariaLabel={"Topic " ++ Topic.id(topic)}>
-             <div className="flex w-full">
-               <a
-                 className="cursor-pointer no-underline flex flex-col p-4 md:p-6 hover:bg-gray-100 hover:text-primary-500 border border-transparent hover:border-primary-400"
-                 href={"/topics/" ++ Topic.id(topic)}>
-                 <span className="block">
-                   <span
-                     className="community-question__title text-sm md:text-base font-semibold inline-block break-words leading-snug">
-                     {Topic.title(topic) |> str}
-                   </span>
-                   <span className="block text-xs mt-1">
-                     <span> {"Posted by " |> str} </span>
-                     <span className="font-semibold">
-                       {(
-                          switch (Topic.creatorName(topic)) {
-                          | Some(name) => name ++ " "
-                          | None => "Unknown "
-                          }
-                        )
-                        |> str}
+           <div className="border-b" ariaLabel={"Topic " ++ Topic.id(topic)}>
+             <div
+               className="flex items-center border border-transparent hover:bg-gray-100 hover:text-primary-500  hover:border-primary-400">
+               <div className="flex-1 w-full">
+                 <a
+                   className="cursor-pointer no-underline flex flex-col p-4 md:p-6"
+                   href={"/topics/" ++ Topic.id(topic)}>
+                   <span className="block">
+                     <span
+                       className="community-question__title text-sm md:text-base font-semibold inline-block break-words leading-snug">
+                       {Topic.title(topic) |> str}
                      </span>
-                     <span className="hidden md:inline-block md:mr-2">
-                       {"on "
-                        ++ Topic.createdAt(topic)
-                           ->DateFns.formatPreset(~year=true, ())
-                        |> str}
+                     <span className="block text-xs mt-1">
+                       <span> {"Posted by " |> str} </span>
+                       <span className="font-semibold">
+                         {(
+                            switch (Topic.creatorName(topic)) {
+                            | Some(name) => name ++ " "
+                            | None => "Unknown "
+                            }
+                          )
+                          |> str}
+                       </span>
+                       <span className="hidden md:inline-block md:mr-2">
+                         {"on "
+                          ++ Topic.createdAt(topic)
+                             ->DateFns.formatPreset(~year=true, ())
+                          |> str}
+                       </span>
+                       <span
+                         className="block md:inline-block mt-1 md:mt-0 md:px-2 bg-gray-100 md:border-l border-gray-400">
+                         {switch (Topic.lastActivityAt(topic)) {
+                          | Some(date) =>
+                            <span>
+                              <span className="hidden md:inline-block">
+                                {"Last updated" |> str}
+                              </span>
+                              <i className="fas fa-history mr-1 md:hidden" />
+                              {" "
+                               ++ DateFns.formatDistanceToNowStrict(
+                                    date,
+                                    ~addSuffix=true,
+                                    (),
+                                  )
+                               |> str}
+                            </span>
+                          | None => React.null
+                          }}
+                       </span>
+                     </span>
+                   </span>
+                   <span className="flex flex-row mt-2">
+                     <span
+                       className="flex text-center items-center mr-2 px-2 py-1 bg-gray-200"
+                       ariaLabel="Likes">
+                       <i
+                         className="far fa-thumbs-up text-xs text-gray-600 mr-1"
+                       />
+                       <p className="text-xs font-semibold">
+                         {(Topic.likesCount(topic) |> string_of_int)
+                          ++ " Likes"
+                          |> str}
+                       </p>
                      </span>
                      <span
-                       className="block md:inline-block mt-1 md:mt-0 md:px-2 bg-gray-100 md:border-l border-gray-400">
-                       {switch (Topic.lastActivityAt(topic)) {
-                        | Some(date) =>
-                          <span>
-                            <span className="hidden md:inline-block">
-                              {"Last updated" |> str}
-                            </span>
-                            <i className="fas fa-history mr-1 md:hidden" />
-                            {" "
-                             ++ DateFns.formatDistanceToNowStrict(
-                                  date,
-                                  ~addSuffix=true,
-                                  (),
-                                )
-                             |> str}
-                          </span>
-                        | None => React.null
-                        }}
+                       className="flex justify-between text-center items-center mr-2 px-2 py-1 bg-gray-200"
+                       ariaLabel="Replies">
+                       <i
+                         className="far fa-comment-dots text-xs text-gray-600 mr-1"
+                       />
+                       <p className="text-xs font-semibold">
+                         {(Topic.liveRepliesCount(topic) |> string_of_int)
+                          ++ " Replies"
+                          |> str}
+                       </p>
                      </span>
+                     {switch (Topic.topicCategoryId(topic)) {
+                      | Some(id) =>
+                        let topicCategory =
+                          topicCategories
+                          |> ArrayUtils.unsafeFind(
+                               c => TopicCategory.id(c) == id,
+                               "Unable to find topic category with ID: " ++ id,
+                             );
+                        <span
+                          className={
+                            "text-center items-center mr-2 px-2 py-1 bg-gray-200 "
+                            ++ categoryPillClass(topicCategory)
+                          }
+                          ariaLabel="Topic Category">
+                          <p className="text-xs font-semibold">
+                            {TopicCategory.name(topicCategory) |> str}
+                          </p>
+                        </span>;
+                      | None => React.null
+                      }}
                    </span>
-                 </span>
-                 <span className="flex flex-row mt-2">
-                   <span
-                     className="flex text-center items-center mr-2 px-2 py-1 bg-gray-200"
-                     ariaLabel="Likes">
-                     <i
-                       className="far fa-thumbs-up text-xs text-gray-600 mr-1"
-                     />
-                     <p className="text-xs font-semibold">
-                       {(Topic.likesCount(topic) |> string_of_int)
-                        ++ " Likes"
-                        |> str}
-                     </p>
-                   </span>
-                   <span
-                     className="flex justify-between text-center items-center mr-2 px-2 py-1 bg-gray-200"
-                     ariaLabel="Replies">
-                     <i
-                       className="far fa-comment-dots text-xs text-gray-600 mr-1"
-                     />
-                     <p className="text-xs font-semibold">
-                       {(Topic.liveRepliesCount(topic) |> string_of_int)
-                        ++ " Replies"
-                        |> str}
-                     </p>
-                   </span>
-                   {switch (Topic.topicCategoryId(topic)) {
-                    | Some(id) =>
-                      let topicCategory =
-                        topicCategories
-                        |> ArrayUtils.unsafeFind(
-                             c => TopicCategory.id(c) == id,
-                             "Unable to find topic category with ID: " ++ id,
-                           );
-                      <span
-                        className={
-                          "text-center items-center mr-2 px-2 py-1 bg-gray-200 "
-                          ++ categoryPillClass(topicCategory)
-                        }
-                        ariaLabel="Topic Category">
-                        <p className="text-xs font-semibold">
-                          {TopicCategory.name(topicCategory) |> str}
-                        </p>
-                      </span>;
-                    | None => React.null
-                    }}
-                 </span>
-               </a>
+                 </a>
+               </div>
+               <div className="w-1/5" />
              </div>
            </div>
          )

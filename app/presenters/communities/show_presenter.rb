@@ -7,10 +7,6 @@ module Communities
       @target = target
     end
 
-    def time(topic)
-      topic.created_at.to_formatted_s(:long)
-    end
-
     def props
       {
         target: @target.present? ? @target.attributes.slice('id', 'title') : nil,
@@ -19,16 +15,14 @@ module Communities
       }
     end
 
-    def topic_categories
-      @community.topic_categories.map { |category| { id: category.id, name: category.name } }
-    end
-
     def page_title
       "#{@community.name} Community | #{current_school.name}"
     end
 
-    def new_topic?(topic)
-      topic.last_activity_at.blank?
+    private
+
+    def topic_categories
+      @community.topic_categories.map { |category| { id: category.id, name: category.name } }
     end
   end
 end

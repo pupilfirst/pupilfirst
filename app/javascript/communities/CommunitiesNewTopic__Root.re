@@ -161,8 +161,6 @@ let handleCreateTopic =
            Some(CommunitiesShow__TopicCategory.id(tc))
          );
 
-    Js.log(topicCategoryId);
-
     CreateTopicQuery.make(
       ~body=state.body,
       ~title=state.title,

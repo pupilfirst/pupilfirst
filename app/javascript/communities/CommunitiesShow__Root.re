@@ -165,11 +165,6 @@ let computeInitialState = target => {
   totalTopicsCount: 0,
 };
 
-let categoryPillClass = category => {
-  let color = TopicCategory.color(category);
-  "bg-" ++ color ++ "-200 text-" ++ color ++ "-900";
-};
-
 let topicsList = (topicCategories, topics) => {
   topics |> ArrayUtils.isEmpty
     ? <div
@@ -265,11 +260,17 @@ let topicsList = (topicCategories, topics) => {
                                c => TopicCategory.id(c) == id,
                                "Unable to find topic category with ID: " ++ id,
                              );
+                        let (backgroundColor, color) =
+                          StringUtils.toColor(
+                            TopicCategory.name(topicCategory),
+                          );
                         <span
-                          className={
-                            "text-center items-center mr-2 px-2 py-1 bg-gray-200 "
-                            ++ categoryPillClass(topicCategory)
-                          }
+                          className="text-center items-center mr-2 px-2 py-1"
+                          style={ReactDOMRe.Style.make(
+                            ~backgroundColor,
+                            ~color,
+                            (),
+                          )}
                           ariaLabel="Topic Category">
                           <p className="text-xs font-semibold">
                             {TopicCategory.name(topicCategory) |> str}
@@ -327,7 +328,7 @@ module Selectable = {
 
   let color = t => {
     switch (t) {
-    | TopicCategory(category) => TopicCategory.color(category)
+    | TopicCategory(_category) => "orange"
     | Title(_search) => "gray"
     };
   };

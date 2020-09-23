@@ -29,19 +29,6 @@ let makeFromJs = data => {
   topicsCount: data##topicsCount,
 };
 
-let colors = [|
-  "red",
-  "orange",
-  "yellow",
-  "green",
-  "teal",
-  "blue",
-  "indigo",
-  "purple",
-  "pink",
-  "gray",
-|];
-
 let stringToInt = name => {
   let rec aux = (sum, remains) =>
     switch (remains) {
@@ -55,11 +42,6 @@ let stringToInt = name => {
   aux(0.0, name) |> int_of_float;
 };
 
-let computeColors = name => {
-  let index = (name |> stringToInt) mod 10;
-  colors[index];
-};
-
 let color = t => {
-  computeColors(t.name);
+  StringUtils.toColor(t.name);
 };

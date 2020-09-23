@@ -199,25 +199,19 @@ let onSelectCourse = (send, course) =>
 let onDeselectCourse = (send, course) =>
   send(DeselectCourse(course |> Course.id));
 
-let categoryPillClass = category => {
-  let color = Category.color(category);
-  "bg-" ++ color ++ "-200 text-" ++ color ++ "-900";
-};
-
 let categoryList = categories => {
   ReactUtils.nullIf(
     <div className="mb-2 flex">
       {categories
-       |> Js.Array.map(category =>
+       |> Js.Array.map(category => {
+            let (backgroundColor, color) = Category.color(category);
             <span
               key={category |> Category.id}
-              className={
-                "border rounded mr-2 px-2 py-1 text-xs font-semibold "
-                ++ categoryPillClass(category)
-              }>
+              className="border rounded mr-2 px-2 py-1 text-xs font-semibold"
+              style={ReactDOMRe.Style.make(~backgroundColor, ~color, ())}>
               {Category.name(category) |> str}
-            </span>
-          )
+            </span>;
+          })
        |> React.array}
     </div>,
     ArrayUtils.isEmpty(categories),

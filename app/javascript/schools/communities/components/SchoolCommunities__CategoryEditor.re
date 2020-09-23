@@ -57,11 +57,6 @@ module UpdateCategoryQuery = [%graphql
 |}
 ];
 
-let topicsCountPillClass = category => {
-  let color = Category.color(category);
-  "bg-" ++ color ++ "-200 text-" ++ color ++ "-900";
-};
-
 let deleteCategory = (categoryId, deleteCategoryCB, send, event) => {
   ReactEvent.Mouse.preventDefault(event);
 
@@ -174,6 +169,7 @@ let make =
   | Some(category) =>
     let categoryId = Category.id(category);
     let presentCategoryName = Category.name(category);
+    let (backgroundColor, color) = Category.color(category);
     <div
       key=categoryId
       className="flex justify-between items-center bg-gray-100 border-gray-400 shadow rounded mt-3 px-2 py-1">
@@ -191,8 +187,9 @@ let make =
         {presentCategoryName == state.categoryName
            ? <span
                className={
-                 "text-xs py-1 px-2 mr-2 " ++ topicsCountPillClass(category)
-               }>
+                 "text-xs py-1 px-2 mr-2"
+               }
+               style={ReactDOMRe.Style.make(~backgroundColor, ~color, ())}>
                {string_of_int(Category.topicsCount(category))
                 ++ " topics"
                 |> str}

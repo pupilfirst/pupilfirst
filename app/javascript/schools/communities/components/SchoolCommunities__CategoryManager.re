@@ -7,11 +7,6 @@ type action =
   | UpdateCategoryName(string, string)
   | RemoveCategory(string);
 
-let topicsCountPillClass = category => {
-  let color = Category.color(category);
-  "bg-" ++ color ++ "-200 text-" ++ color ++ "-900";
-};
-
 [@react.component]
 let make =
     (~community, ~deleteCategoryCB, ~createCategoryCB, ~updateCategoryCB) => {

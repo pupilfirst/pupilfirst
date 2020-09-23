@@ -170,6 +170,7 @@ let make =
       ~deleteCategoryCB,
       ~createCategoryCB,
       ~updateCategoryCB,
+      ~setDirtyCB,
     ) => {
   let (state, send) =
     React.useReducer(
@@ -184,6 +185,23 @@ let make =
         deleting: false,
       },
     );
+  let dirty =
+    switch (category) {
+    | Some(category) => Category.name(category) != state.categoryName
+    | None => String.trim(state.categoryName) != ""
+    };
+
+  React.useEffect1(
+    () => {
+      let categoryId =
+        Belt.Option.flatMap(category, category =>
+          Some(Category.id(category))
+        );
+      setDirtyCB(categoryId, dirty);
+      None;
+    },
+    [|dirty|],
+  );
   switch (category) {
   | Some(category) =>
     let categoryId = Category.id(category);

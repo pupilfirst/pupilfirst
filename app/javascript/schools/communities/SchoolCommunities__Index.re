@@ -10,6 +10,8 @@ type state = {
   editorAction,
   communities: list(Community.t),
   showCategoryEditor: bool,
+  dirtyTopicCategoryIds: Belt.Set.String.t,
+  newCategoryInputDirty: bool,
 };
 
 type action =
@@ -19,7 +21,9 @@ type action =
   | SaveCommunityChanges(list(Community.t))
   | DeleteCategory(Community.t, string)
   | AddCategory(Community.t, Category.t)
-  | UpdateCategory(Community.t, Category.t);
+  | UpdateCategory(Community.t, Category.t)
+  | UpdateDirtyTopicCategoryIds(string, bool)
+  | UpdateNewCategoryInputDirty(bool);
 
 let reducer = (state, action) => {
   switch (action) {
@@ -75,7 +79,46 @@ let reducer = (state, action) => {
            ),
       editorAction: ShowEditor(Some(updatedCommunity)),
     };
+
+  | UpdateDirtyTopicCategoryIds(id, dirty) => {
+      ...state,
+      dirtyTopicCategoryIds:
+        dirty
+          ? Belt.Set.String.add(state.dirtyTopicCategoryIds, id)
+          : Belt.Set.String.remove(state.dirtyTopicCategoryIds, id),
+    }
+  | UpdateNewCategoryInputDirty(newCategoryInputDirty) => {
+      ...state,
+      newCategoryInputDirty,
+    }
   };
+};
+
+let setDirtyCategory = (send, categoryId, dirty) => {
+  switch (categoryId) {
+  | Some(id) => send(UpdateDirtyTopicCategoryIds(id, dirty))
+  | None => send(UpdateNewCategoryInputDirty(dirty))
+  };
+};
+
+let categoryEditorDirty = state => {
+  !Belt.Set.String.isEmpty(state.dirtyTopicCategoryIds)
+  || state.newCategoryInputDirty;
+};
+
+let handleCloseCategoryManager = (send, state) => {
+  categoryEditorDirty(state)
+    ? if (Webapi.Dom.(
+            window
+            |> Window.confirm(
+                 "There are unsaved changes! Are you sure you want to close?",
+               )
+          )) {
+        send(UpdateShowCategoryEditor(false));
+      } else {
+        ();
+      }
+    : send(UpdateShowCategoryEditor(false));
 };
 
 [@react.component]
@@ -83,7 +126,13 @@ let make = (~communities, ~courses) => {
   let (state, send) =
     React.useReducer(
       reducer,
-      {editorAction: Hidden, communities, showCategoryEditor: false},
+      {
+        editorAction: Hidden,
+        communities,
+        showCategoryEditor: false,
+        dirtyTopicCategoryIds: Belt.Set.String.empty,
+        newCategoryInputDirty: false,
+      },
     );
 
   let updateCommunitiesCB = community => {
@@ -121,7 +170,9 @@ let make = (~communities, ~courses) => {
             state.showCategoryEditor
               ? <SchoolAdmin__EditorDrawer2
                   closeIconClassName="fas fa-arrow-left"
-                  closeDrawerCB={() => send(UpdateShowCategoryEditor(false))}>
+                  closeDrawerCB={() =>
+                    handleCloseCategoryManager(send, state)
+                  }>
                   <SchoolCommunities__CategoryManager
                     community
                     deleteCategoryCB={categoryId =>
@@ -132,6 +183,9 @@ let make = (~communities, ~courses) => {
                     }
                     updateCategoryCB={category =>
                       send(UpdateCategory(community, category))
+                    }
+                    setDirtyCB={(categoryId, dirty) =>
+                      setDirtyCategory(send, categoryId, dirty)
                     }
                   />
                 </SchoolAdmin__EditorDrawer2>

@@ -2,14 +2,15 @@ let str = React.string;
 
 open SchoolCommunities__IndexTypes;
 
-type action =
-  | UpdateNewCategoryName(string)
-  | UpdateCategoryName(string, string)
-  | RemoveCategory(string);
-
 [@react.component]
 let make =
-    (~community, ~deleteCategoryCB, ~createCategoryCB, ~updateCategoryCB) => {
+    (
+      ~community,
+      ~deleteCategoryCB,
+      ~createCategoryCB,
+      ~updateCategoryCB,
+      ~setDirtyCB,
+    ) => {
   let categories = Community.topicCategories(community);
   <div className="mx-8 pt-8">
     <h5 className="uppercase text-center border-b border-gray-400 pb-2">
@@ -26,6 +27,7 @@ let make =
                  deleteCategoryCB
                  createCategoryCB
                  updateCategoryCB
+                 setDirtyCB
                />
              })
           |> React.array}
@@ -37,6 +39,7 @@ let make =
        deleteCategoryCB
        createCategoryCB
        updateCategoryCB
+       setDirtyCB
      />}
   </div>;
 };

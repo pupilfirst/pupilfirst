@@ -60,22 +60,30 @@ let doughnutChart = (color, percentage) => {
     </text>
   </svg>;
 };
-let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
+let targetsCompletionStatus = overview => {
+  let targetsCompleted = overview |> StudentOverview.targetsCompleted;
+  let totalTargets = overview |> StudentOverview.totalTargets;
+  let targetsPendingReview = overview |> StudentOverview.targetsPendingReview;
+  let targetsNotAttempted =
+    int_of_float(totalTargets)
+    - int_of_float(targetsCompleted)
+    - targetsPendingReview;
   let targetCompletionPercent =
     targetsCompleted /. totalTargets *. 100.0 |> int_of_float |> string_of_int;
   <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
     <div
-      className="courses-report-overview__doughnut-chart-container bg-white">
+      className="courses-report-overview__doughnut-chart-container bg-white flex items-center">
       <div> {doughnutChart("purple", targetCompletionPercent)} </div>
       <div className="ml-4">
-        <p className="text-sm font-semibold mt-3">
-          {"Total Targets Completed" |> str}
+        <p className="text-sm text-gray-700 font-semibold mt-1">
+          {"Incomplete: " ++ string_of_int(targetsNotAttempted) |> str}
         </p>
         <p className="text-sm text-gray-700 font-semibold mt-1">
-          {(targetsCompleted |> int_of_float |> string_of_int)
-           ++ "/"
-           ++ (totalTargets |> int_of_float |> string_of_int)
-           ++ " Targets"
+          {"Pending Review: " ++ string_of_int(targetsPendingReview) |> str}
+        </p>
+        <p className="text-sm text-gray-700 font-semibold mt-1">
+          {"Completed: "
+           ++ string_of_int(int_of_float(targetsCompleted))
            |> str}
         </p>
       </div>
@@ -277,10 +285,7 @@ let make = (~overviewData, ~levels, ~coaches) => {
            <div className="mb-8">
              <h6 className="font-semibold"> {"Targets Overview" |> str} </h6>
              <div className="flex -mx-2 flex-wrap mt-2">
-               {targetsCompletionStatus(
-                  overview |> StudentOverview.targetsCompleted,
-                  overview |> StudentOverview.totalTargets,
-                )}
+               {targetsCompletionStatus(overview)}
                {quizPerformanceChart(
                   overview |> StudentOverview.averageQuizScore,
                   overview |> StudentOverview.quizzesAttempted,

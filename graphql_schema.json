@@ -2588,6 +2588,22 @@
             "deprecationReason": null
           },
           {
+            "name": "targetsPendingReview",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "team",
             "description": "",
             "args": [],

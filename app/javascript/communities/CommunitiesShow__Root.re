@@ -18,6 +18,7 @@ type state = {
   topics: Topics.t,
   filterString: string,
   filter,
+  totalTopicsCount: int,
 };
 
 type action =
@@ -26,7 +27,7 @@ type action =
   | SetSearchString(string)
   | UnsetSearchString
   | UpdateFilterString(string)
-  | LoadTopics(option(string), bool, array(Topic.t))
+  | LoadTopics(option(string), bool, array(Topic.t), int)
   | BeginLoadingMore
   | BeginReloading;
 
@@ -62,7 +63,7 @@ let reducer = (state, action) => {
       },
     }
   | UpdateFilterString(filterString) => {...state, filterString}
-  | LoadTopics(endCursor, hasNextPage, newTopics) =>
+  | LoadTopics(endCursor, hasNextPage, newTopics, totalTopicsCount) =>
     let updatedTopics =
       switch (state.loading) {
       | LoadingMore =>
@@ -80,6 +81,7 @@ let reducer = (state, action) => {
         | (true, Some(cursor)) => PartiallyLoaded(updatedTopics, cursor)
         },
       loading: NotLoading,
+      totalTopicsCount,
     };
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
@@ -103,6 +105,7 @@ module TopicsQuery = [%graphql
         pageInfo{
           endCursor,hasNextPage
         }
+        totalCount
       }
     }
   |}
@@ -135,6 +138,7 @@ let getTopics = (send, communityId, cursor, filter) => {
            response##communityTopics##pageInfo##endCursor,
            response##communityTopics##pageInfo##hasNextPage,
            newTopics,
+           response##communityTopics##totalCount,
          ),
        );
 
@@ -157,6 +161,7 @@ let computeInitialState = target => {
     topicCategory: None,
     target,
   },
+  totalTopicsCount: 0,
 };
 
 let categoryPillClass = category => {
@@ -281,6 +286,17 @@ let topicsList = (topicCategories, topics) => {
       |> React.array;
 };
 
+let topicsLoadedData = (totalTopicsCount, loadedTopicsCount) => {
+  <div className="mt-4 bg-gray-200 text-gray-900 text-sm py-1 text-center">
+    {"Showing "
+     ++ string_of_int(loadedTopicsCount)
+     ++ " of "
+     ++ string_of_int(totalTopicsCount)
+     ++ " topics"
+     |> str}
+  </div>;
+};
+
 [@react.component]
 let make = (~communityId, ~target, ~topicCategories) => {
   let (state, send) =
@@ -350,6 +366,26 @@ let make = (~communityId, ~target, ~topicCategories) => {
            | FullyLoaded(topics) => topicsList(topicCategories, topics)
            }}
         </div>
+        {ReactUtils.nullIf(
+           switch (state.topics) {
+           | Unloaded => React.null
+           | PartiallyLoaded(topics, _cursor) =>
+             <div>
+               {switch (state.loading) {
+                | LoadingMore => React.null
+                | NotLoading =>
+                  topicsLoadedData(
+                    state.totalTopicsCount,
+                    Array.length(topics),
+                  )
+                | Reloading => React.null
+                }}
+             </div>
+           | FullyLoaded(topics) =>
+             topicsLoadedData(state.totalTopicsCount, Array.length(topics))
+           },
+           state.totalTopicsCount == 0,
+         )}
       </div>
     </div>
   </div>;

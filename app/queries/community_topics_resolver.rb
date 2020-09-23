@@ -36,6 +36,6 @@ class CommunityTopicsResolver < ApplicationQuery
       by_category.where(target_id: target_id)
     else
       by_category
-    end
+    end.order('created_at DESC')
   end
 end

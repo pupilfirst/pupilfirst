@@ -289,11 +289,15 @@ let topicsList = (topicCategories, topics) => {
 
 let topicsLoadedData = (totalTopicsCount, loadedTopicsCount) => {
   <div className="mt-4 bg-gray-200 text-gray-900 text-sm py-1 text-center">
-    {"Showing "
-     ++ string_of_int(loadedTopicsCount)
-     ++ " of "
-     ++ string_of_int(totalTopicsCount)
-     ++ " topics"
+    {(
+       totalTopicsCount == loadedTopicsCount
+         ? "Showing all " ++ string_of_int(totalTopicsCount) ++ " topics"
+         : "Showing "
+           ++ string_of_int(loadedTopicsCount)
+           ++ " of "
+           ++ string_of_int(totalTopicsCount)
+           ++ " topics"
+     )
      |> str}
   </div>;
 };

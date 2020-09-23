@@ -4,7 +4,6 @@ let defaultVideoMaxSize = 500 * 1024 * 1024
 let hasValidSize = (~maxSize, file) => file##size <= maxSize;
 
 let isImage = file => {
-  Js.log(file##_type);
   switch (file##_type) {
   | "image/jpeg"
   | "image/gif"
@@ -14,7 +13,6 @@ let isImage = file => {
 };
 
 let isVideo = file => {
-  Js.log(file##_type);
   switch (file##_type) {
   | "video/mp4"
   | "video/mov"

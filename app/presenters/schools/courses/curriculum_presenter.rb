@@ -16,7 +16,7 @@ module Schools
           levels: levels,
           targetGroups: target_groups,
           targets: targets,
-          vimeoAccessToken: vimeo_access_token?
+          hasVimeoAccessToken: vimeo_access_token?
         }
       end
 
@@ -75,7 +75,7 @@ module Schools
       def vimeo_access_token?
         token = @course.school.configuration['vimeo_access_token'] || 
           Rails.application.secrets.vimeo_access_token
-        token.present? ? true : false
+        token.present?
       end
     end
   end

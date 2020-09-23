@@ -64,7 +64,7 @@ let beforeWindowUnload = event => {
 [@react.component]
 let make =
     (
-      ~vimeoAccessToken,
+      ~hasVimeoAccessToken,
       ~targets,
       ~targetGroups,
       ~levels,
@@ -120,7 +120,7 @@ let make =
       | "content" => (
           <CurriculumEditor__ContentEditor
             target
-	    vimeoAccessToken
+	    hasVimeoAccessToken
             setDirtyCB={dirty => setDirty(_ => dirty)}
           />,
           Content,

@@ -11,7 +11,7 @@ class CreateVimeoVideoMutator < ApplicationQuery
 
     { 
       upload_link: response[:upload][:upload_link],
-      uri: response[:uri]
+      link: response[:link]
     }
   end
 

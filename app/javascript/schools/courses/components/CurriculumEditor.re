@@ -137,7 +137,7 @@ let computeIntialState = ((levels, targetGroups, targets, path)) => {
 };
 
 [@react.component]
-let make = (~course, ~evaluationCriteria, ~levels, ~targetGroups, ~targets, ~vimeoAccessToken) => {
+let make = (~course, ~evaluationCriteria, ~levels, ~targetGroups, ~targets, ~hasVimeoAccessToken) => {
   let path = ReasonReactRouter.useUrl().path;
   let (state, send) =
     React.useReducerWithMapState(
@@ -212,7 +212,7 @@ let make = (~course, ~evaluationCriteria, ~levels, ~targetGroups, ~targets, ~vim
       </button>
     </div>
     <CurriculumEditor__TargetDrawer
-      vimeoAccessToken=vimeoAccessToken
+      hasVimeoAccessToken=hasVimeoAccessToken
       targets={state.targets}
       levels={state.levels}
       targetGroups={state.targetGroups}

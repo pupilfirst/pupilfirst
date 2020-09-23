@@ -35,7 +35,7 @@ module CreateVimeoVideo = [%graphql
     mutation CreateVimeoVideo($size: Int!) {
       createVimeoVideo(size: $size) {
         vimeoVideo {
-          uri
+          link
           uploadLink
         }
       }
@@ -183,7 +183,7 @@ let onBlockTypeSelect =
   };
 };
 
-let button = (target, aboveContentBlock, send, addContentBlockCB, vimeoAccessToken, blockType) => {
+let button = (target, aboveContentBlock, send, addContentBlockCB, hasVimeoAccessToken, blockType) => {
   let fileId = aboveContentBlock |> fileInputId;
   let imageId = aboveContentBlock |> imageInputId;
   let videoId = aboveContentBlock |> videoInputId;
@@ -206,7 +206,7 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, vimeoAccessTok
     | `Image
     | `Embed => baseClassName
     | `VideoEmbed =>
-      switch (vimeoAccessToken) {
+      switch (hasVimeoAccessToken) {
       | true => baseClassName
       | false => baseClassName ++ " hidden"
       };
@@ -264,6 +264,7 @@ let handleCreateEmbedContentBlock =
        })
     |> ignore;
   } else {
+    Js.log(url ++ " File get error");
     send(
       SetError(
         "The URL doesn't look valid. Please make sure that it starts with 'https://' and that it's one of the accepted websites.",
@@ -273,7 +274,7 @@ let handleCreateEmbedContentBlock =
 
 let handleVimeoVideoUpload =
     (file, vimeoVideo, send, target, aboveContentBlock, addContentBlockCB) => {
-  let url = vimeoVideo##uri;
+  let url = vimeoVideo##link;
   let uploadUrl = vimeoVideo##uploadLink;
 
   Tus.upload(
@@ -544,7 +545,7 @@ let buttonAboveContentBlock = (state, send, aboveContentBlock) =>
   };
 
 [@react.component]
-let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~vimeoAccessToken) => {
+let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessToken) => {
   let (embedInputId, isAboveContentBlock) =
     switch (aboveContentBlock) {
     | Some(contentBlock) =>
@@ -564,7 +565,7 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~vimeoAccessToken
   <DisablingCover disabled={state.saving} message="Creating...">
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `File)}
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `Image)}
-    {switch (vimeoAccessToken) {
+    {switch (hasVimeoAccessToken) {
      |true =>  uploadForm(
          target,
          aboveContentBlock,
@@ -584,7 +585,7 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~vimeoAccessToken
              className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
              {[|`Markdown, `Image, `Embed, `VideoEmbed, `File|]
               |> Array.map(
-                   button(target, aboveContentBlock, send, addContentBlockCB, vimeoAccessToken),
+                   button(target, aboveContentBlock, send, addContentBlockCB, hasVimeoAccessToken),
                  )
               |> React.array}
            </div>

@@ -9020,7 +9020,7 @@
         "description": "",
         "fields": [
           {
-            "name": "uploadLink",
+            "name": "link",
             "description": "",
             "args": [],
             "type": {
@@ -9036,7 +9036,7 @@
             "deprecationReason": null
           },
           {
-            "name": "uri",
+            "name": "uploadLink",
             "description": "",
             "args": [],
             "type": {

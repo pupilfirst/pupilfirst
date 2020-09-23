@@ -54,6 +54,7 @@ let reducer = (state, action) => {
         ...state.filter,
         title: Some(string),
       },
+      filterString: "",
     }
   | UnsetSearchString => {
       ...state,
@@ -297,6 +298,102 @@ let topicsLoadedData = (totalTopicsCount, loadedTopicsCount) => {
   </div>;
 };
 
+module Selectable = {
+  type t =
+    | TopicCategory(TopicCategory.t)
+    | Title(string);
+
+  let label = t =>
+    switch (t) {
+    | TopicCategory(_category) => Some("Category")
+    | Title(_) => Some("Topic Title")
+    };
+
+  let value = t =>
+    switch (t) {
+    | TopicCategory(category) => TopicCategory.name(category)
+    | Title(search) => search
+    };
+
+  let searchString = t =>
+    switch (t) {
+    | TopicCategory(category) => "category " ++ TopicCategory.name(category)
+    | Title(search) => search
+    };
+
+  let color = t => {
+    switch (t) {
+    | TopicCategory(category) => TopicCategory.color(category)
+    | Title(_search) => "gray"
+    };
+  };
+  let topicCategory = topicCategory => TopicCategory(topicCategory);
+  let title = search => Title(search);
+};
+
+module Multiselect = MultiselectDropdown.Make(Selectable);
+
+let unselected = (topicCategories, state) => {
+  let unselectedCategories =
+    topicCategories
+    |> Js.Array.filter(category =>
+         state.filter.topicCategory
+         |> OptionUtils.mapWithDefault(
+              selectedCategory =>
+                category->TopicCategory.id
+                != selectedCategory->TopicCategory.id,
+              true,
+            )
+       )
+    |> Array.map(Selectable.topicCategory);
+
+  let trimmedFilterString = state.filterString |> String.trim;
+
+  let title =
+    trimmedFilterString == ""
+      ? [||] : [|Selectable.title(trimmedFilterString)|];
+
+  unselectedCategories |> Array.append(title);
+};
+
+let selected = state => {
+  let selectedCategory =
+    state.filter.topicCategory
+    |> OptionUtils.mapWithDefault(
+         selectedCategory => [|Selectable.topicCategory(selectedCategory)|],
+         [||],
+       );
+
+  let selectedSearchString =
+    state.filter.title
+    |> OptionUtils.mapWithDefault(
+         title => {[|Selectable.title(title)|]},
+         [||],
+       );
+
+  selectedCategory |> Array.append(selectedSearchString);
+};
+
+let onSelectFilter = (send, selectable) =>
+  switch (selectable) {
+  | Selectable.TopicCategory(topicCategory) =>
+    send(SelectTopicCategory(topicCategory))
+  | Title(title) => send(SetSearchString(title))
+  };
+
+let onDeselectFilter = (send, selectable) =>
+  switch (selectable) {
+  | Selectable.TopicCategory(_topicCategory) => send(DeselectTopicCategory)
+  | Title(_title) => send(UnsetSearchString)
+  };
+
+let filterPlaceholder = state => {
+  switch (state.filter.topicCategory, state.filter.title) {
+  | (None, None) => "Filter by category, or search by topic title.."
+  | _ => ""
+  };
+};
+
 [@react.component]
 let make = (~communityId, ~target, ~topicCategories) => {
   let (state, send) =
@@ -330,7 +427,20 @@ let make = (~communityId, ~target, ~topicCategories) => {
     <div className="px-3 md:px-6 pb-4 mt-5 flex flex-1">
       <div className="max-w-3xl w-full mx-auto relative">
         <div
-          className="community-question__list-container shadow bg-white rounded-lg mb-4">
+          className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
+          <Multiselect
+            id="filter"
+            unselected={unselected(topicCategories, state)}
+            selected={selected(state)}
+            onSelect={onSelectFilter(send)}
+            onDeselect={onDeselectFilter(send)}
+            value={state.filterString}
+            onChange={filterString => send(UpdateFilterString(filterString))}
+            placeholder={filterPlaceholder(state)}
+          />
+        </div>
+        <div
+          className="community-question__list-container shadow bg-white rounded-lg mb-4 mt-10">
           {switch (state.topics) {
            | Unloaded =>
              SkeletonLoading.multiple(

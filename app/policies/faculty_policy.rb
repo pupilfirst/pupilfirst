@@ -3,10 +3,6 @@ class FacultyPolicy < ApplicationPolicy
     scope.exists?
   end
 
-  def show?
-    record.about.present?
-  end
-
   def connect?
     # Cannot connect if connect link is blank.
     return false if record.connect_link.blank?

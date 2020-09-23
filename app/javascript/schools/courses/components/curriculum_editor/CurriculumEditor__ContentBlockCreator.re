@@ -565,16 +565,16 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessTo
   <DisablingCover disabled={state.saving} message="Creating...">
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `File)}
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `Image)}
-    {switch (hasVimeoAccessToken) {
-     |true =>  uploadForm(
+    {ReactUtils.nullIf(
+       uploadForm(
          target,
          aboveContentBlock,
          send,
          addContentBlockCB,
          `VideoEmbed,
-       )
-     |false => React.null
-    }}
+       ),
+       vimeoAccessToken,
+     )}
     <div className={containerClasses(state |> visible, isAboveContentBlock)}>
       {buttonAboveContentBlock(state, send, aboveContentBlock)}
       <div className="content-block-creator__inner-container">

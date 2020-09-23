@@ -99,11 +99,11 @@ let showSubmissionStatus = submission =>
     submission |> Submission.failed
       ? <div
           className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
-          {"Failed" |> str}
+          {"Rejected" |> str}
         </div>
       : <div
           className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
-          {"Passed" |> str}
+          {"Completed" |> str}
         </div>
 
   | None =>

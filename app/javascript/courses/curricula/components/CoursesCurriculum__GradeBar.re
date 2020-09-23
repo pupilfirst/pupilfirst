@@ -29,7 +29,7 @@ let gradePillClasses = (gradeReceived, passGrade, pillGrade, callBack) => {
     | Some(grade) when pillGrade > grade => ""
     | Some(grade) =>
       grade < passGrade
-        ? " grade-bar__grade-pill--failed" : " grade-bar__grade-pill--passed"
+        ? " grade-bar__grade-pill--rejected" : " grade-bar__grade-pill--completed"
     };
   let selectableModifier =
     switch (callBack) {

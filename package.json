@@ -33,7 +33,7 @@
     "markdown-it-multimd-table": "^4.0.0",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.14.1",
     "pluralize": "^8.0.0",
     "pnotify": "^4.0.0",
     "postcss-scss": "^2.0.0",
@@ -46,8 +46,8 @@
     "react-dom": "^16.8.6",
     "react_ujs": "^2.5.0",
     "sanitize-html": "^1.20.1",
-    "tailwindcss": "^1.0.5",
     "tus-js-client": "^2.2.0",
+    "tailwindcss": "^1.7.3",
     "webpack-merge": "^4.2.1"
   },
   "devDependencies": {

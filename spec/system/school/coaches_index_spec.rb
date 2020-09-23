@@ -52,11 +52,16 @@ feature 'Coaches Index', js: true do
     expect(user.title).to eq(new_coach_title)
     expect(user.email).to eq(new_coach_email)
     expect(user.affiliation).to eq(new_coach_affiliation)
+    expect(coach.connect_link).to eq(nil)
+    expect(coach.public).to eq(false)
 
     # Edit the coach to add remaining fields.
     find('p', text: new_coach_name).click
 
     fill_in 'Connect Link', with: 'https://www.connect.com/xyz'
+    expect(page).to have_text("Since the coach profile isn't public, this won't be shown anywhere")
+    within('div[aria-label="public-profile-selector"]') { click_button 'Yes' } # Should the coach profile be public?
+    expect(page).not_to have_text("Since the coach profile isn't public, this won't be shown anywhere")
     attach_file 'faculty[image]', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
     fill_in 'Name', with: updated_coach_name
     expect(page).not_to have_field('Email')
@@ -67,6 +72,7 @@ feature 'Coaches Index', js: true do
     expect(page).to have_text('Coach updated successfully')
 
     expect(coach.reload.connect_link).to eq('https://www.connect.com/xyz')
+    expect(coach.public).to eq(true)
     expect(user.avatar.attached?).to eq(true)
     expect(user.avatar.filename).to eq('human.png')
     expect(user.reload.name).to eq(updated_coach_name)

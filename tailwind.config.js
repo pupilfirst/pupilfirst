@@ -106,5 +106,11 @@ module.exports = {
         // => @media (min-width: 1824px) { ... }
       }
     }
+  },
+  purge: {
+    content: ["./app/**/*.html.erb", "./app/**/*.re"],
+    options: {
+      whitelistPatterns: [/^bg-/, /^text-/, /^border-/, /^hover:/],
+    },
   }
 };

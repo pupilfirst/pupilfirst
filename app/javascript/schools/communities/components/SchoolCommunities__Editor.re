@@ -201,13 +201,13 @@ let onDeselectCourse = (send, course) =>
 
 let categoryList = categories => {
   ReactUtils.nullIf(
-    <div className="mb-2 flex">
+    <div className="mb-2 flex flex-wrap">
       {categories
        |> Js.Array.map(category => {
             let (backgroundColor, color) = Category.color(category);
             <span
               key={category |> Category.id}
-              className="border rounded mr-2 px-2 py-1 text-xs font-semibold"
+              className="border rounded mt-2 mr-2 px-2 py-1 text-xs font-semibold"
               style={ReactDOMRe.Style.make(~backgroundColor, ~color, ())}>
               {Category.name(category) |> str}
             </span>;

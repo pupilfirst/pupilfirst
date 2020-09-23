@@ -57,11 +57,8 @@ module UpdateCategoryQuery = [%graphql
 |}
 ];
 
-let deleteCategory = (categoryId, deleteCategoryCB, send, event) => {
-  ReactEvent.Mouse.preventDefault(event);
-
+let makeDeleteCategoryQuery = (categoryId, deleteCategoryCB, send) => {
   send(StartDeleting);
-
   DeleteCategoryQuery.make(~id=categoryId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
@@ -79,6 +76,28 @@ let deleteCategory = (categoryId, deleteCategoryCB, send, event) => {
        Js.Promise.resolve();
      })
   |> ignore;
+};
+
+let deleteCategory = (category, deleteCategoryCB, send, event) => {
+  ReactEvent.Mouse.preventDefault(event);
+
+  let categoryId = Category.id(category);
+  let topicsCount = Category.topicsCount(category);
+
+  topicsCount > 0
+    ? if (Webapi.Dom.(
+            window
+            |> Window.confirm(
+                 "There are topics assigned to this category! Are you sure you want to delete this category?",
+               )
+          )) {
+        makeDeleteCategoryQuery(categoryId, deleteCategoryCB, send);
+      } else {
+        ();
+      }
+    : {
+      makeDeleteCategoryQuery(categoryId, deleteCategoryCB, send);
+    };
 };
 
 let updateCategory = (category, newName, updateCategoryCB, send, event) => {
@@ -186,9 +205,7 @@ let make =
       <div>
         {presentCategoryName == state.categoryName
            ? <span
-               className={
-                 "text-xs py-1 px-2 mr-2"
-               }
+               className="text-xs py-1 px-2 mr-2"
                style={ReactDOMRe.Style.make(~backgroundColor, ~color, ())}>
                {string_of_int(Category.topicsCount(category))
                 ++ " topics"
@@ -206,7 +223,7 @@ let make =
                {"Update Category" |> str}
              </button>}
         <button
-          onClick={deleteCategory(categoryId, deleteCategoryCB, send)}
+          onClick={deleteCategory(category, deleteCategoryCB, send)}
           className="text-xs py-1 px-2 h-8 text-gray-700 hover:text-gray-900 hover:bg-gray-100 border-l border-gray-400">
           <FaIcon
             classes={

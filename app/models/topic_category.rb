@@ -1,6 +1,6 @@
 class TopicCategory < ApplicationRecord
   belongs_to :community
-  has_many :topics, dependent: :restrict_with_error
+  has_many :topics, dependent: :nullify
 
   validates :name, presence: true
 end

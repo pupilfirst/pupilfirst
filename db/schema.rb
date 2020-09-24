@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_10_172304) do
+ActiveRecord::Schema.define(version: 2020_09_17_094317) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -701,6 +701,7 @@ ActiveRecord::Schema.define(version: 2020_09_10_172304) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "topic_category_id"
+    t.integer "views", default: 0
     t.index ["community_id"], name: "index_topics_on_community_id"
     t.index ["target_id"], name: "index_topics_on_target_id"
     t.index ["topic_category_id"], name: "index_topics_on_topic_category_id"

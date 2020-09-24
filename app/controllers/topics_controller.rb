@@ -4,5 +4,6 @@ class TopicsController < ApplicationController
 
   def show
     @topic = authorize(Topic.live.find(params[:id]))
+    Topics::IncrementViewsService.new(@topic).execute(current_user)
   end
 end

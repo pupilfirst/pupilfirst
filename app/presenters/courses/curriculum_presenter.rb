@@ -99,7 +99,7 @@ module Courses
 
       scope.select(*attributes).map do |target|
         details = target.attributes.slice(*attributes)
-        details[:prerequisite_target_ids] = target.prerequisite_targets.live.pluck(:id)
+        details[:prerequisite_target_ids] = target.target_prerequisites.pluck(:prerequisite_target_id)
         details[:reviewed] = target.evaluation_criteria.present?
         details
       end

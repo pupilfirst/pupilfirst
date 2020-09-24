@@ -425,7 +425,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                         state.selectedCategory,
                       )}
                       className="btn btn-primary border border-transparent w-full md:w-auto">
-                      {"Create Post" |> str}
+                      {"Create Topic" |> str}
                     </button>
                   </div>
                 </div>

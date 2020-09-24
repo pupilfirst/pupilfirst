@@ -78,9 +78,10 @@ feature 'Students view performance report and submissions overview', js: true do
     expect(page).to have_text('Targets Overview')
 
     within("div[aria-label='target-completion-status']") do
-      expect(page).to have_content('Total Targets Completed')
-      expect(page).to have_content('83%')
-      expect(page).to have_content('5/6 Targets')
+      expect(page).to have_content('Incomplete: 1')
+      expect(page).to have_content('Pending Review: 1')
+      expect(page).to have_content('Completed: 4')
+      expect(page).to have_content('66%')
     end
 
     within("div[aria-label='quiz-performance-chart']") do
@@ -196,8 +197,10 @@ feature 'Students view performance report and submissions overview', js: true do
 
       # Check that level zero targets are not counted in the targets overview
       within("div[aria-label='target-completion-status']") do
-        expect(page).to have_content('83%')
-        expect(page).to have_content('5/6 Targets')
+        expect(page).to have_content('66%')
+        expect(page).to have_content('Incomplete: 1')
+        expect(page).to have_content('Pending Review: 1')
+        expect(page).to have_content('Completed: 4')
       end
     end
   end
@@ -213,7 +216,9 @@ feature 'Students view performance report and submissions overview', js: true do
       # Check that level zero targets are not counted in the targets overview
       within("div[aria-label='target-completion-status']") do
         expect(page).to have_content('100%')
-        expect(page).to have_content('4/4 Targets')
+        expect(page).to have_content('Incomplete: 0')
+        expect(page).to have_content('Pending Review: 0')
+        expect(page).to have_content('Completed: 4')
       end
     end
   end

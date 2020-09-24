@@ -4,6 +4,7 @@ feature 'Community', js: true do
   include UserSpecHelper
   include NotificationHelper
   include MarkdownEditorHelper
+  include ActiveSupport::Testing::TimeHelpers
 
   # Setup a course with students and target for community.
   let(:school) { create :school, :current }
@@ -17,7 +18,6 @@ feature 'Community', js: true do
   let(:student_1) { create :student, startup: team }
   let(:student_2) { create :student, startup: team }
   let(:coach) { create :faculty, school: school }
-  let(:school_admin) { create :school_admin }
   let!(:topic_1) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 1.second.ago }
   let!(:topic_2) { create :topic, :with_first_post, community: community, creator: student_1.user }
   let!(:topic_3) { create :topic, :with_first_post, community: community, target: target, creator: student_1.user }
@@ -63,7 +63,7 @@ feature 'Community', js: true do
     expect(page).to have_text("Create a new topic of discussion")
     fill_in 'Title', with: topic_title
     replace_markdown topic_body
-    click_button 'Create Post'
+    click_button 'Create Topic'
 
     expect(page).not_to have_text("Create a new topic of discussion")
     expect(page).to have_text(topic_title)
@@ -159,13 +159,42 @@ feature 'Community', js: true do
     expect(page).to have_text('This is a reply to another post', count: 2)
 
     # can like and unlike a reply
-    find("div[aria-label='Like reply #{reply_1.id}']").click
-    expect(page).to have_selector("div[aria-label='Unlike reply #{reply_1.id}']")
+    find("div[aria-label='Like post #{reply_1.id}']").click
+    expect(page).to have_selector("div[aria-label='Unlike post #{reply_1.id}']")
     expect(reply_1.post_likes.where(user: student_2.user).count).to eq(1)
 
-    find("div[aria-label='Unlike reply #{reply_1.id}']").click
-    expect(page).to have_selector("div[aria-label='Like reply #{reply_1.id}']")
+    find("div[aria-label='Unlike post #{reply_1.id}']").click
+    expect(page).to have_selector("div[aria-label='Like post #{reply_1.id}']")
     expect(reply_1.post_likes.where(user: student_2.user).count).to eq(0)
+  end
+
+  scenario 'a user visiting a topic affects its view count' do
+    original_views = topic_1.views
+
+    sign_in_user(student_2.user, referrer: topic_path(topic_1))
+
+    expect(page).to have_text(topic_1.first_post.body)
+
+    # Views should have been incremented by 1.
+    expect(topic_1.reload.views).to eq(original_views + 1)
+
+    # Revisiting the page "soon" should not increase the count.
+    click_link community.name
+    expect(page).to have_link('Create a new topic')
+    click_link topic_1.title
+
+    expect(page).to have_text(topic_1.first_post.body)
+    expect(topic_1.reload.views).to eq(original_views + 1)
+
+    # Revisiting after a "long while" should increase the count again.
+    travel_to(90.minutes.from_now) do
+      click_link community.name
+      expect(page).to have_link('Create a new topic')
+      click_link topic_1.title
+
+      expect(page).to have_text(topic_1.first_post.body)
+      expect(topic_1.reload.views).to eq(original_views + 2)
+    end
   end
 
   scenario 'an active faculty visits community' do
@@ -280,17 +309,6 @@ feature 'Community', js: true do
     expect(page).not_to have_link('View Target')
   end
 
-  scenario 'school admin visits community' do
-    sign_in_user(school_admin.user, referrer: community_path(community))
-    expect(page).to have_text(community.name)
-
-    click_link topic_1.title
-
-    # Question and answers are visible
-    expect(page).to have_text(topic_1.first_post.body)
-    expect(page).to have_text(reply_1.body)
-  end
-
   scenario 'coach marks a post as solution, edits content, and checks last edited info' do
     sign_in_user(coach.user, referrer: topic_path(topic_1))
 
@@ -347,6 +365,62 @@ feature 'Community', js: true do
           expect(page).to have_text(1)
         end
       end
+    end
+  end
+
+  context 'when a user is a school admin' do
+    let(:school_admin) { create :school_admin }
+
+    scenario 'school admin interacts with the community' do
+      sign_in_user(school_admin.user, referrer: community_path(community))
+      expect(page).to have_text(community.name)
+
+      click_link topic_1.title
+
+      # Question and answers are visible
+      expect(page).to have_text(topic_1.first_post.body)
+      expect(page).to have_text(reply_1.body)
+
+      # Like a post.
+      find("div[aria-label='Like post #{topic_1.first_post.id}']").click
+      expect(page).to have_selector("div[aria-label='Unlike post #{topic_1.first_post.id}']")
+
+      # Edit a post.
+      find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
+      click_button 'Edit Post'
+      old_description = topic_1.first_post.body
+
+      within("div#post-show-#{topic_1.first_post.id}") do
+        replace_markdown topic_body_for_edit
+        click_button 'Update Post'
+      end
+
+      dismiss_notification
+
+      expect(page).not_to have_text(old_description)
+
+      # Archive a post.
+      find("div[aria-label='Options for post #{reply_1.id}']").click
+      accept_confirm { click_button('Delete Reply') }
+
+      expect(page).to have_text('Post archived successfully')
+
+      dismiss_notification
+
+      # Post a reply.
+      replace_markdown reply_body
+      expect { click_button 'Post Your Reply' }.to change { Post.count }.by(1)
+      dismiss_notification
+
+      # Create a new topic.
+      click_link community.name
+      click_link 'Create a new topic'
+      fill_in 'Title', with: topic_title
+      replace_markdown topic_body
+      click_button 'Create Topic'
+
+      expect(page).to have_text('0 Replies')
+      expect(community.topics.reload.find_by(title: topic_title).first_post.body).to eq(topic_body)
     end
   end
 end

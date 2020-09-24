@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature "Automatic issuance of certificates", js: true do
+feature 'Automatic issuance of certificates', js: true do
   include UserSpecHelper
   include NotificationHelper
   include MarkdownEditorHelper
@@ -171,7 +171,7 @@ feature "Automatic issuance of certificates", js: true do
           expect(IssuedCertificate.count).to eq(0)
 
           # Undo the grading and set a pass grade.
-          click_button('Undo Grading')
+          accept_confirm { click_button('Undo Grading') }
           find("div[title='Good']").click
           click_button 'Save grades'
 

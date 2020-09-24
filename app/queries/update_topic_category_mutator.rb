@@ -1,7 +1,7 @@
 class UpdateTopicCategoryMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
   property :id, validates: { presence: true }
-  property :name, validates: { presence: true }
+  property :name, validates: { presence: true, length: { maximum: 50 } }
 
   validate :name_is_unique
 

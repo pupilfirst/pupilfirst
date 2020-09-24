@@ -17,7 +17,7 @@ class CommunityTopicsResolver < ApplicationQuery
   def authorized?
     return false if current_user.blank?
 
-    (current_user.courses & community.courses).present?
+    (current_user.courses & community.courses).present? || (current_user.school_admin.present? && current_user.school_id == community.school_id)
   end
 
   def community

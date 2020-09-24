@@ -1,6 +1,6 @@
 class CreateTopicCategoryMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
-  property :name, validates: { presence: true }
+  property :name, validates: { presence: true, length: { maximum: 50 } }
   property :community_id, validates: { presence: true }
 
   validate :name_is_unique

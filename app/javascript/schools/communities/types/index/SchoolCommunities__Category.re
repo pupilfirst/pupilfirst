@@ -29,19 +29,6 @@ let makeFromJs = data => {
   topicsCount: data##topicsCount,
 };
 
-let stringToInt = name => {
-  let rec aux = (sum, remains) =>
-    switch (remains) {
-    | "" => sum
-    | remains =>
-      let firstCharacter = remains |> Js.String.slice(~from=0, ~to_=1);
-      let remains = remains |> Js.String.sliceToEnd(~from=1);
-      aux(sum +. (firstCharacter |> Js.String.charCodeAt(0)), remains);
-    };
-
-  aux(0.0, name) |> int_of_float;
-};
-
 let color = t => {
   StringUtils.toColor(t.name);
 };

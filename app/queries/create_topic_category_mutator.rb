@@ -3,6 +3,8 @@ class CreateTopicCategoryMutator < ApplicationQuery
   property :name, validates: { presence: true }
   property :community_id, validates: { presence: true }
 
+  validate :name_is_unique
+
   def create_topic_category
     category = community.topic_categories.create!(name: name) if community.present?
     category
@@ -16,5 +18,11 @@ class CreateTopicCategoryMutator < ApplicationQuery
 
   def community
     @community ||= Community.find_by(id: community_id)
+  end
+
+  def name_is_unique
+    return if community.topic_categories.where(name: name).blank?
+
+    errors[:base] << "Category already exists in community with name: #{name}"
   end
 end

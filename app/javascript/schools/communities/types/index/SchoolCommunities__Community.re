@@ -50,14 +50,15 @@ let removeCategory = (community, categoryId) => {
 let addCategory = (community, category) => {
   {
     ...community,
-    topicCategories: Array.append(community.topicCategories, [|category|]),
+    topicCategories:
+      Js.Array.concat(community.topicCategories, [|category|]),
   };
 };
 
 let updateCategory = (community, category) => {
   let updatedCategories =
     community.topicCategories
-    |> Array.map(c =>
+    |> Js.Array.map(c =>
          SchoolCommunities__Category.id(c)
          == SchoolCommunities__Category.id(category)
            ? category : c

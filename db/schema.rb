@@ -689,6 +689,7 @@ ActiveRecord::Schema.define(version: 2020_09_10_172304) do
     t.bigint "community_id", null: false
     t.string "name", null: false
     t.index ["community_id"], name: "index_topic_categories_on_community_id"
+    t.index ["name", "community_id"], name: "index_topic_categories_on_name_and_community_id", unique: true
   end
 
   create_table "topics", force: :cascade do |t|

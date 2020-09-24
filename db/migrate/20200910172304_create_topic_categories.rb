@@ -6,5 +6,6 @@ class CreateTopicCategories < ActiveRecord::Migration[6.0]
     end
 
     add_reference :topics, :topic_category, index: true
+    add_index :topic_categories, %i[name community_id], unique: true
   end
 end

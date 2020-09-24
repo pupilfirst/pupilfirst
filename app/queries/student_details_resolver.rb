@@ -37,11 +37,11 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def targets_completed
-    latest_submission.passed.distinct(:target_id).count(:target_id)
+    latest_submissions.passed.distinct(:target_id).count(:target_id)
   end
 
   def targets_pending_review
-    latest_submission.pending_review.distinct(:target_id).count(:target_id)
+    latest_submissions.pending_review.distinct(:target_id).count(:target_id)
   end
 
   def current_course_targets
@@ -86,12 +86,12 @@ class StudentDetailsResolver < ApplicationQuery
     @submissions ||= student.timeline_events.joins(:target).where(targets: { id: current_course_targets })
   end
 
-  def latest_submission
-    @latest_submission ||= submissions.where(timeline_event_owners: { latest: true })
+  def latest_submissions
+    submissions.where(timeline_event_owners: { latest: true })
   end
 
   def submissions_for_grades
-    latest_submission.includes(:founders, :target).select { |submission| submission.target.individual_target? || (submission.founder_ids.sort == student.team_student_ids) }
+    latest_submissions.includes(:founders, :target).select { |submission| submission.target.individual_target? || (submission.founder_ids.sort == student.team_student_ids) }
   end
 
   def evaluation_criteria

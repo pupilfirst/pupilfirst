@@ -64,7 +64,7 @@ let targetsCompletionStatus = overview => {
   let targetsCompleted = overview |> StudentOverview.targetsCompleted;
   let totalTargets = overview |> StudentOverview.totalTargets;
   let targetsPendingReview = overview |> StudentOverview.targetsPendingReview;
-  let targetsNotAttempted =
+  let incompleteTargets =
     int_of_float(totalTargets)
     - int_of_float(targetsCompleted)
     - targetsPendingReview;
@@ -76,7 +76,7 @@ let targetsCompletionStatus = overview => {
       <div> {doughnutChart("purple", targetCompletionPercent)} </div>
       <div className="ml-4">
         <p className="text-sm text-gray-700 font-semibold mt-1">
-          {"Incomplete: " ++ string_of_int(targetsNotAttempted) |> str}
+          {"Incomplete: " ++ string_of_int(incompleteTargets) |> str}
         </p>
         <p className="text-sm text-gray-700 font-semibold mt-1">
           {"Pending Review: " ++ string_of_int(targetsPendingReview) |> str}

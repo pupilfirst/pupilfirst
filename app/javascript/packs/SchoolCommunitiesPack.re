@@ -12,9 +12,7 @@ let decodeProps = json =>
   };
 
 let props =
-  DomUtils.parseJSONAttribute(
-    ~id="school-communities",
-    ~attribute="data-json-props",
+  DomUtils.parseJSONTag(
     (),
   )
   |> decodeProps;

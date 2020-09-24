@@ -8,5 +8,8 @@
 <% end %>
 
 <% presenter = Schools::Communities::IndexPresenter.new(self, @school) %>
-<div id="school-communities" class="flex flex-1 h-full" data-json-props="<%= presenter.props_to_json %>"></div>
+
+<script type="application/json" id="react-root-data"><%= presenter.props_to_json.html_safe %></script>
+
+<div id="school-communities" class="flex flex-1 h-full"></div>
 

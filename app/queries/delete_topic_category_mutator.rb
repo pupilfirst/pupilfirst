@@ -3,7 +3,7 @@ class DeleteTopicCategoryMutator < ApplicationQuery
   property :id, validates: { presence: true }
 
   def delete_topic_category
-    topic_category.destroy! if topic_category.present?
+    topic_category.destroy!
   end
 
   private

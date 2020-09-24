@@ -13,7 +13,7 @@ type state = {
   similar,
   searching: bool,
   body: string,
-  selectedCategory: option(CommunitiesShow__TopicCategory.t),
+  selectedCategory: option(TopicCategory.t),
   saving: bool,
 };
 
@@ -34,7 +34,7 @@ type action =
   | UpdateTitle(string)
   | UpdateTitleAndTimeout(string, Js.Global.timeoutId)
   | UpdateBody(string)
-  | SelectCategory(option(CommunitiesShow__TopicCategory.t))
+  | SelectCategory(option(TopicCategory.t))
   | BeginSaving
   | FailSaving
   | BeginSearching
@@ -77,7 +77,7 @@ module SimilarTopicsQuery = [%graphql
         id
         title
         createdAt
-        repliesCount
+        liveRepliesCount
       }
     }
   |}
@@ -156,10 +156,7 @@ let handleCreateTopic =
     let targetId = target |> OptionUtils.flatMap(TopicsShow__LinkedTarget.id);
 
     let topicCategoryId =
-      topicCategory
-      |> OptionUtils.flatMap(tc =>
-           Some(CommunitiesShow__TopicCategory.id(tc))
-         );
+      topicCategory |> OptionUtils.flatMap(tc => Some(TopicCategory.id(tc)));
 
     CreateTopicQuery.make(
       ~body=state.body,
@@ -284,9 +281,7 @@ let handleSelectTopicCategory = (send, topicCategories, event) => {
       Some(
         topicCategories
         |> ArrayUtils.unsafeFind(
-             category =>
-               CommunitiesShow__TopicCategory.id(category)
-               == selectedCategoryId,
+             category => TopicCategory.id(category) == selectedCategoryId,
              "Unable to find category with ID: " ++ selectedCategoryId,
            ),
       )
@@ -372,8 +367,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                        id="topic_category"
                        value={
                          switch (state.selectedCategory) {
-                         | Some(category) =>
-                           CommunitiesShow__TopicCategory.id(category)
+                         | Some(category) => TopicCategory.id(category)
                          | None => ""
                          }
                        }
@@ -384,12 +378,8 @@ let make = (~communityId, ~target, ~topicCategories) => {
                        )}>
                        {topicCategories
                         |> Array.map(category =>
-                             <option
-                               value={CommunitiesShow__TopicCategory.id(
-                                 category,
-                               )}>
-                               {CommunitiesShow__TopicCategory.name(category)
-                                |> str}
+                             <option value={TopicCategory.id(category)}>
+                               {TopicCategory.name(category) |> str}
                              </option>
                            )
                         |> Array.append([|

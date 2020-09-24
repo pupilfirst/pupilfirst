@@ -20,8 +20,8 @@ module Schools
             {
               id: community.id.to_s,
               name: community.name,
-              targetLinkable: community.target_linkable,
-              topicCategories: topic_categories(community),
+              target_linkable: community.target_linkable,
+              topic_categories: topic_categories(community),
               course_ids:  community.course_ids.map(&:to_s)
             }
           end

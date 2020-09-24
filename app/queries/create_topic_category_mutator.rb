@@ -6,8 +6,7 @@ class CreateTopicCategoryMutator < ApplicationQuery
   validate :name_is_unique
 
   def create_topic_category
-    category = community.topic_categories.create!(name: name) if community.present?
-    category
+    community.topic_categories.create!(name: name)
   end
 
   private

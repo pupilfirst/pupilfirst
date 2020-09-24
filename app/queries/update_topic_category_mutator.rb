@@ -6,7 +6,7 @@ class UpdateTopicCategoryMutator < ApplicationQuery
   validate :name_is_unique
 
   def update_topic_category
-    topic_category.update!(name: name) if topic_category.present?
+    topic_category.update!(name: name)
   end
 
   private

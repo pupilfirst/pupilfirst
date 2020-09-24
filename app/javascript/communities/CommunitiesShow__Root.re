@@ -92,7 +92,7 @@ let reducer = (state, action) => {
 module TopicsQuery = [%graphql
   {|
     query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $search: String, $after: String) {
-      communityTopics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, first: 10, after: $after) {
+      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, first: 10, after: $after) {
         nodes {
           id
           lastActivityAt
@@ -129,17 +129,15 @@ let getTopics = (send, communityId, cursor, filter) => {
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        let newTopics =
-         switch (response##communityTopics##nodes) {
-         | None => [||]
-         | Some(topicsArray) => topicsArray |> Topic.makeArrayFromJs
-         };
+         response##topics##nodes
+         |> Js.Array.map(topicData => Topic.makeFromJS(topicData));
 
        send(
          LoadTopics(
-           response##communityTopics##pageInfo##endCursor,
-           response##communityTopics##pageInfo##hasNextPage,
+           response##topics##pageInfo##endCursor,
+           response##topics##pageInfo##hasNextPage,
            newTopics,
-           response##communityTopics##totalCount,
+           response##topics##totalCount,
          ),
        );
 

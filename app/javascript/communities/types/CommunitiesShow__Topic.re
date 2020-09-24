@@ -59,7 +59,3 @@ let makeFromJS = topicData => {
     ~createdAt=topicData##createdAt->DateFns.decodeISO,
   );
 };
-
-let makeArrayFromJs = detailsOfTopics => {
-  detailsOfTopics->Belt.Array.keepMap(OptionUtils.map(makeFromJS));
-};

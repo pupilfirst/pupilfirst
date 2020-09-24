@@ -103,9 +103,11 @@ let deleteCategory = (category, deleteCategoryCB, send, event) => {
 let updateCategory = (category, newName, updateCategoryCB, send, event) => {
   ReactEvent.Mouse.preventDefault(event);
 
+  let trimmedName = String.trim(newName);
+
   send(StartSaving);
 
-  UpdateCategoryQuery.make(~id=Category.id(category), ~name=newName, ())
+  UpdateCategoryQuery.make(~id=Category.id(category), ~name=trimmedName, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##updateTopicCategory##success
@@ -131,9 +133,11 @@ let updateCategory = (category, newName, updateCategoryCB, send, event) => {
 let createCategory = (communityId, name, createCategoryCB, send, event) => {
   ReactEvent.Mouse.preventDefault(event);
 
+  let trimmedName = String.trim(name);
+
   send(StartSaving);
 
-  CreateCategoryQuery.make(~communityId, ~name, ())
+  CreateCategoryQuery.make(~communityId, ~name=trimmedName, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        switch (response##createTopicCategory##id) {

@@ -824,6 +824,7 @@ ActiveRecord::Schema.define(version: 2020_09_10_172304) do
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "topic_categories", "communities"
   add_foreign_key "topics", "communities"
+  add_foreign_key "topics", "topic_categories"
   add_foreign_key "user_activities", "users"
   add_foreign_key "users", "schools"
   add_foreign_key "webhook_endpoints", "courses"

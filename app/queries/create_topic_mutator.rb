@@ -35,7 +35,9 @@ class CreateTopicMutator < ApplicationQuery
   end
 
   def topic_category
-    TopicCategory.find_by(id: topic_category_id) if topic_category_id.present?
+    return if topic_category_id.blank?
+
+    community.topic_categories.find_by(id: topic_category_id)
   end
 
   def target

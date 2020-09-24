@@ -14,5 +14,5 @@ let makeFromJs = jsObject => {
   id: jsObject##id,
   title: jsObject##title,
   createdAt: jsObject##createdAt |> DateFns.decodeISO,
-  repliesCount: jsObject##repliesCount,
+  repliesCount: jsObject##liveRepliesCount,
 };

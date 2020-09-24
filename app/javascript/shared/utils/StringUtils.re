@@ -85,12 +85,6 @@ let stringToInt = name => {
   aux(0.0, name) |> int_of_float;
 };
 
-let computeColors = name => {
-  let index = (name |> stringToInt) mod 42;
-  let (backgroundColor, blackText) = colors[index];
-  (backgroundColor, blackText ? "#000000" : "#FFFFFF");
-};
-
 let toColor = t => {
   let index = (t |> stringToInt) mod 42;
   let (backgroundColor, blackText) = colors[index];

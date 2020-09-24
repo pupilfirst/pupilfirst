@@ -100,6 +100,7 @@ module TopicsQuery = [%graphql
           creatorName
           likesCount
           liveRepliesCount
+          views
           title
           topicCategoryId
         }
@@ -233,9 +234,10 @@ let topicsList = (topicCategories, topics) => {
                          className="far fa-thumbs-up text-xs text-gray-600 mr-1"
                        />
                        <p className="text-xs font-semibold">
-                         {(Topic.likesCount(topic) |> string_of_int)
-                          ++ " Likes"
-                          |> str}
+                         {Topic.likesCount(topic) |> string_of_int |> str}
+                         <span className="ml-1 hidden md:inline">
+                           {"Likes" |> str}
+                         </span>
                        </p>
                      </span>
                      <span
@@ -245,9 +247,23 @@ let topicsList = (topicCategories, topics) => {
                          className="far fa-comment-dots text-xs text-gray-600 mr-1"
                        />
                        <p className="text-xs font-semibold">
-                         {(Topic.liveRepliesCount(topic) |> string_of_int)
-                          ++ " Replies"
+                         {Topic.liveRepliesCount(topic)
+                          |> string_of_int
                           |> str}
+                         <span className="ml-1 hidden md:inline">
+                           {"Replies" |> str}
+                         </span>
+                       </p>
+                     </span>
+                     <span
+                       className="flex justify-between text-center items-center mr-2 px-2 py-1 bg-gray-200"
+                       ariaLabel="Views">
+                       <i className="far fa-eye text-xs text-gray-600 mr-1" />
+                       <p className="text-xs font-semibold">
+                         {Topic.views(topic) |> string_of_int |> str}
+                         <span className="ml-1 hidden md:inline">
+                           {"Views" |> str}
+                         </span>
                        </p>
                      </span>
                      {switch (Topic.topicCategoryId(topic)) {

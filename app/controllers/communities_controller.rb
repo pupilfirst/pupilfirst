@@ -5,7 +5,6 @@ class CommunitiesController < ApplicationController
   # GET /communities/:id
   def show
     @community = authorize(Community.find(params[:id]))
-    @search = params[:search]
   end
 
   # GET /community/:community_id/new_topic

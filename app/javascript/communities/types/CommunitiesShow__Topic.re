@@ -4,6 +4,7 @@ type t = {
   lastActivityAt: option(Js.Date.t),
   liveRepliesCount: int,
   likesCount: int,
+  views: int,
   topicCategoryId: option(string),
   creatorName: option(string),
   createdAt: Js.Date.t,
@@ -12,6 +13,8 @@ type t = {
 let id = t => t.id;
 
 let title = t => t.title;
+
+let views = t => t.views;
 
 let lastActivityAt = t => t.lastActivityAt;
 
@@ -32,6 +35,7 @@ let make =
       ~lastActivityAt,
       ~liveRepliesCount,
       ~likesCount,
+      ~views,
       ~topicCategoryId,
       ~creatorName,
       ~createdAt,
@@ -41,6 +45,7 @@ let make =
   lastActivityAt,
   liveRepliesCount,
   likesCount,
+  views,
   topicCategoryId,
   creatorName,
   createdAt,
@@ -54,6 +59,7 @@ let makeFromJS = topicData => {
       topicData##lastActivityAt->Belt.Option.map(DateFns.decodeISO),
     ~liveRepliesCount=topicData##liveRepliesCount,
     ~likesCount=topicData##likesCount,
+    ~views=topicData##views,
     ~topicCategoryId=topicData##topicCategoryId,
     ~creatorName=topicData##creatorName,
     ~createdAt=topicData##createdAt->DateFns.decodeISO,

@@ -9,7 +9,7 @@ class TopicsResolver < ApplicationQuery
       applicable_topics.search_by_title(title_for_search)
     else
       applicable_topics
-    end.includes(first_post: %i[creator post_likes])
+    end.includes(first_post: %i[creator])
   end
 
   private

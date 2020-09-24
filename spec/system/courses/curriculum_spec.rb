@@ -381,18 +381,4 @@ feature "Student's view of Course Curriculum", js: true do
       expect(page).not_to have_content(level_6_draft_target.title)
     end
   end
-
-  context 'when a target has a prerequisite that is in draft mode' do
-    let!(:pending_target_g1) { create :target, :draft, target_group: target_group_l4_1, role: Target::ROLE_TEAM }
-
-    scenario 'student can complete target with draft prerequisite' do
-      sign_in_user student.user, referrer: curriculum_course_path(course)
-
-      expect(page).to have_content(target_with_prerequisites.title)
-
-      within("a[aria-label='Select Target #{target_with_prerequisites.id}']") do
-        expect(page).to have_content(target_with_prerequisites.title)
-      end
-    end
-  end
 end

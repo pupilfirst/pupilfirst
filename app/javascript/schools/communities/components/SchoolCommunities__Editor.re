@@ -332,7 +332,8 @@ let make =
                 : categoryList(categories)
             | None =>
               <p className="text-xs text-gray-800">
-                {"Please save the community to add topic categories!" |> str}
+                {"You can add topic categories after creating this community!"
+                 |> str}
               </p>
             }}
          </div>}

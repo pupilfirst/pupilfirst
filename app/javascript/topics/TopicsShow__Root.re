@@ -396,7 +396,7 @@ let make =
                      let style =
                        ReactDOMRe.Style.make(~backgroundColor=color, ());
                      <div
-                       className="py-2 font-normal flex items-center lg:pl-14">
+                       className="py-2 flex items-center lg:pl-14 text-xs font-semibold">
                        <div className="w-4 h-4 border" style />
                        <span className="ml-2">
                          {TopicCategory.name(topicCategory)->str}

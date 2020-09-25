@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_17_094317) do
+ActiveRecord::Schema.define(version: 2020_09_25_101600) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -489,6 +489,7 @@ ActiveRecord::Schema.define(version: 2020_09_17_094317) do
     t.datetime "updated_at", null: false
     t.text "about"
     t.jsonb "configuration", default: {}, null: false
+    t.string "vimeo_access_token"
   end
 
   create_table "shortened_urls", id: :serial, force: :cascade do |t|

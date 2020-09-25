@@ -168,14 +168,17 @@ let topicsList = (topicCategories, topics) => {
   topics |> ArrayUtils.isEmpty
     ? <div
         className="flex flex-col mx-auto bg-white p-6 justify-center items-center">
-        <i className="fas fa-comments text-5xl text-gray-400" />
+        <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
         <h4 className="mt-3 font-semibold">
           {"There's no discussion here yet." |> str}
         </h4>
       </div>
     : topics
       |> Array.map(topic =>
-           <div className="border-b" ariaLabel={"Topic " ++ Topic.id(topic)}>
+           <div
+             className="border-b"
+             key={Topic.id(topic)}
+             ariaLabel={"Topic " ++ Topic.id(topic)}>
              <div
                className="flex items-center border border-transparent hover:bg-gray-100 hover:text-primary-500  hover:border-primary-400">
                <div className="flex-1 w-full">

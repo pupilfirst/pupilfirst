@@ -416,6 +416,57 @@ let filterPlaceholder = state => {
   };
 };
 
+let categoryDropdownSelected = topicCategory => {
+  <div
+    className="text-sm bg-gray-100 border border-gray-400 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
+    {switch (topicCategory) {
+     | Some(topicCategory) =>
+       let (color, _) = TopicCategory.color(topicCategory);
+       let style = ReactDOMRe.Style.make(~backgroundColor=color, ());
+
+       <div className="inline-flex items-center">
+         <div className="h-3 w-3 border" style />
+         <span className="ml-2">
+           {TopicCategory.name(topicCategory)->str}
+         </span>
+       </div>;
+     | None => str("All Categories")
+     }}
+    <FaIcon classes="ml-4 fas fa-caret-down" />
+  </div>;
+};
+
+let categoryDropdownContents =
+    (availableTopicCategories, selectedTopicCategory, send) => {
+  let selectableTopicCategories =
+    Belt.Option.mapWithDefault(
+      selectedTopicCategory, availableTopicCategories, topicCategory => {
+      Js.Array.filter(
+        availableTopicCategory =>
+          TopicCategory.id(availableTopicCategory)
+          != TopicCategory.id(topicCategory),
+        availableTopicCategories,
+      )
+    });
+
+  Js.Array.map(
+    topicCategory => {
+      let (color, _) = TopicCategory.color(topicCategory);
+      let style = ReactDOMRe.Style.make(~backgroundColor=color, ());
+
+      <div
+        className="pl-3 pr-4 py-2 font-normal flex items-center"
+        onClick={_ => send(SelectTopicCategory(topicCategory))}>
+        <div className="w-4 h-4 border" style />
+        <span className="ml-2">
+          {TopicCategory.name(topicCategory)->str}
+        </span>
+      </div>;
+    },
+    selectableTopicCategories,
+  );
+};
+
 [@react.component]
 let make = (~communityId, ~target, ~topicCategories) => {
   let (state, send) =
@@ -448,6 +499,21 @@ let make = (~communityId, ~target, ~topicCategories) => {
      }}
     <div className="px-3 md:px-6 pb-4 mt-5 flex flex-1">
       <div className="max-w-3xl w-full mx-auto relative">
+        <div className="mb-4 flex justify-between">
+          <Dropdown
+            selected={categoryDropdownSelected(state.filter.topicCategory)}
+            contents={categoryDropdownContents(
+              topicCategories,
+              state.filter.topicCategory,
+              send,
+            )}
+            className=""
+          />
+          <div
+            className=""
+            // Other controls go here.
+          />
+        </div>
         <div
           className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
           <Multiselect

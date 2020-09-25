@@ -8196,6 +8196,16 @@
                   }
                 },
                 "defaultValue": null
+              },
+              {
+                "name": "topicCategoryId",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null
               }
             ],
             "type": {

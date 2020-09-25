@@ -10,6 +10,7 @@ let decodeProps = json =>
     json |> field("moderator", bool),
     json |> field("community", Community.decode),
     json |> optional(field("target", LinkedTarget.decode)),
+    json |> field("topicCategories", array(TopicCategory.decode)),
   );
 
 let (
@@ -21,6 +22,7 @@ let (
   moderator,
   community,
   target,
+  topicCategories,
 ) =
   DomUtils.parseJSONTag() |> decodeProps;
 
@@ -34,6 +36,7 @@ ReactDOMRe.renderToElementWithId(
     moderator
     community
     target
+    topicCategories
   />,
   "react-root",
 );

@@ -3,10 +3,11 @@ class UpdateTopicMutator < ApplicationQuery
 
   property :id
   property :title, validates: { length: { minimum: 1, maximum: 250 }, allow_nil: false }
+  property :topic_category_id
 
   def update_topic
     Topic.transaction do
-      topic.update!(title: title)
+      topic.update!(title: title, topic_category_id: topic_category_id)
       topic.first_post.update!(editor: current_user)
       topic
     end

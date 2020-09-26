@@ -337,10 +337,10 @@ let make =
                       className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       type_="text"
                     />
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center">
+                    <div className="flex justify-between items-end">
+                      <div className="flex flex-col items-left">
                         <span
-                          className="inline-block text-gray-700 text-xs font-semibold mr-2 pl-2 py-2">
+                          className="inline-block text-gray-700 text-tiny font-semibold mr-2">
                           {"Topic Category: " |> str}
                         </span>
                         <Dropdown

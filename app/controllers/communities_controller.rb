@@ -5,6 +5,7 @@ class CommunitiesController < ApplicationController
   # GET /communities/:id
   def show
     @community = authorize(Community.find(params[:id]))
+    target
   end
 
   # GET /community/:community_id/new_topic
@@ -19,22 +20,6 @@ class CommunitiesController < ApplicationController
     @page ||= begin
       page = params[:page].to_i
       page.zero? ? 1 : page
-    end
-  end
-
-  def scoped_topics
-    if params[:search].present?
-      filtered_topics.where('title ILIKE ?', "%#{@search}%")
-    else
-      filtered_topics
-    end
-  end
-
-  def filtered_topics
-    if target.present?
-      @community.topics.where(target_id: target.id)
-    else
-      @community.topics
     end
   end
 

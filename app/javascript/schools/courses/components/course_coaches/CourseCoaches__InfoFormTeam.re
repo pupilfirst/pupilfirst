@@ -25,12 +25,13 @@ let deleteTeamEnrollment =
     ++ " from the list of assigned teams?",
     () => {
       setDeleting(_ => true);
-      DeleteCoachTeamEnrollmentQuery.make(
-        ~teamId=Team.id(team),
-        ~coachId=CourseCoach.id(coach),
-        (),
-      )
-      |> GraphqlQuery.sendQuery
+      let variables =
+        DeleteCoachTeamEnrollmentQuery.makeVariables(
+          ~teamId=Team.id(team),
+          ~coachId=CourseCoach.id(coach),
+          (),
+        );
+      DeleteCoachTeamEnrollmentQuery.GraphqlQuery.sendQuery
       |> Js.Promise.then_(response => {
            if (response##deleteCoachTeamEnrollment##success) {
              removeTeamEnrollmentCB(Team.id(team));

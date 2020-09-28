@@ -20,9 +20,10 @@
     "@glennsl/bs-json",
     "bs-fetch",
     "bs-webapi",
+    "@reasonml-community/graphql-ppx"
   ],
   "refmt": 3,
-  "ppx-flags": ["@baransu/graphql_ppx_re/ppx6"],
+  "ppx-flags": ["@reasonml-community/graphql-ppx/ppx"],
   "warnings": {
     "number": "-48",
     "error": "+8"

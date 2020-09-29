@@ -183,7 +183,15 @@ let onBlockTypeSelect =
   };
 };
 
-let button = (target, aboveContentBlock, send, addContentBlockCB, hasVimeoAccessToken, blockType) => {
+let button =
+    (
+      target,
+      aboveContentBlock,
+      send,
+      addContentBlockCB,
+      hasVimeoAccessToken,
+      blockType,
+    ) => {
   let fileId = aboveContentBlock |> fileInputId;
   let imageId = aboveContentBlock |> imageInputId;
   let videoId = aboveContentBlock |> videoInputId;
@@ -202,20 +210,17 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, hasVimeoAccess
   let className =
     switch (blockType) {
     | `Markdown
-    | `File 
+    | `File
     | `Image
     | `Embed => baseClassName
     | `VideoEmbed =>
-      switch (hasVimeoAccessToken) {
-      | true => baseClassName
-      | false => baseClassName ++ " hidden"
-      };
+      hasVimeoAccessToken ? baseClassName : baseClassName ++ " hidden"
     };
 
   <label
     ?htmlFor
     key=buttonText
-    className={className}
+    className
     onClick={onBlockTypeSelect(
       target,
       aboveContentBlock,
@@ -545,7 +550,8 @@ let buttonAboveContentBlock = (state, send, aboveContentBlock) =>
   };
 
 [@react.component]
-let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessToken) => {
+let make =
+    (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessToken) => {
   let (embedInputId, isAboveContentBlock) =
     switch (aboveContentBlock) {
     | Some(contentBlock) =>
@@ -561,7 +567,6 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessTo
       computeInitialState,
     );
 
-
   <DisablingCover disabled={state.saving} message="Creating...">
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `File)}
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `Image)}
@@ -573,7 +578,7 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessTo
          addContentBlockCB,
          `VideoEmbed,
        ),
-       vimeoAccessToken,
+       hasVimeoAccessToken,
      )}
     <div className={containerClasses(state |> visible, isAboveContentBlock)}>
       {buttonAboveContentBlock(state, send, aboveContentBlock)}
@@ -585,7 +590,13 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessTo
              className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
              {[|`Markdown, `Image, `Embed, `VideoEmbed, `File|]
               |> Array.map(
-                   button(target, aboveContentBlock, send, addContentBlockCB, hasVimeoAccessToken),
+                   button(
+                     target,
+                     aboveContentBlock,
+                     send,
+                     addContentBlockCB,
+                     hasVimeoAccessToken,
+                   ),
                  )
               |> React.array}
            </div>

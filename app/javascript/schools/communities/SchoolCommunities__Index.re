@@ -151,7 +151,9 @@ let make = (~communities, ~courses) => {
      | ShowEditor(community) =>
        let level = state.showCategoryEditor ? 1 : 0;
        <SchoolAdmin__EditorDrawer2
-         level closeDrawerCB={() => send(UpdateEditorAction(Hidden))}>
+         closeButtonTitle="Close Community Editor"
+         level
+         closeDrawerCB={() => send(UpdateEditorAction(Hidden))}>
          <SchoolCommunities__Editor
            courses
            community
@@ -169,6 +171,7 @@ let make = (~communities, ~courses) => {
           | Some(community) =>
             state.showCategoryEditor
               ? <SchoolAdmin__EditorDrawer2
+                  closeButtonTitle="Close Category Editor"
                   closeIconClassName="fas fa-arrow-left"
                   closeDrawerCB={() =>
                     handleCloseCategoryManager(send, state)

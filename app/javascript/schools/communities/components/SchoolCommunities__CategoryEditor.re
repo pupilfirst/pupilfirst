@@ -213,9 +213,11 @@ let make =
     let (backgroundColor, color) = Category.color(category);
     <div
       key=categoryId
-      className="flex justify-between items-center bg-gray-100 border-gray-400 shadow rounded mt-3 px-2 py-1">
+      ariaLabel={"Editor for category " ++ categoryId}
+      className="flex justify-between items-center bg-gray-100 border-gray-400 shadow rounded mt-3 px-2 py-1 topic-category-editor">
       <div className="flex-1 items-center mr-2">
         <input
+          id="category-name"
           onChange={event => {
             let newName = ReactEvent.Form.target(event)##value;
             send(UpdateCategoryName(newName));
@@ -229,11 +231,16 @@ let make =
            ? <span
                className="text-xs py-1 px-2 mr-2"
                style={ReactDOMRe.Style.make(~backgroundColor, ~color, ())}>
-               {string_of_int(Category.topicsCount(category))
-                ++ " topics"
+               {Inflector.pluralize(
+                  "topic",
+                  ~count=Category.topicsCount(category),
+                  ~inclusive=true,
+                  (),
+                )
                 |> str}
              </span>
            : <button
+               title="Update Category"
                disabled={saveDisabled(state.categoryName, state.saving)}
                onClick={updateCategory(
                  category,
@@ -245,6 +252,7 @@ let make =
                {"Update Category" |> str}
              </button>}
         <button
+          title="Delete Category"
           onClick={deleteCategory(category, deleteCategoryCB, send)}
           className="text-xs py-1 px-2 h-8 text-gray-700 hover:text-gray-900 hover:bg-gray-100 border-l border-gray-400">
           <FaIcon
@@ -258,6 +266,7 @@ let make =
   | None =>
     <div className="flex mt-2">
       <input
+        id="add-new-category"
         onChange={event => {
           let name = ReactEvent.Form.target(event)##value;
           send(UpdateCategoryName(name));

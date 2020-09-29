@@ -239,7 +239,7 @@ let topicsList = (topicCategories, topics) => {
                    </span>
                    <span className="flex flex-row mt-2">
                      <span
-                       className="flex text-center items-center mr-2 px-2 py-1 bg-gray-200"
+                       className="flex text-center items-center mr-2 px-2 bg-gray-200"
                        ariaLabel="Likes">
                        <i
                          className="far fa-thumbs-up text-xs text-gray-600 mr-1"
@@ -252,7 +252,7 @@ let topicsList = (topicCategories, topics) => {
                        </p>
                      </span>
                      <span
-                       className="flex justify-between text-center items-center mr-2 px-2 py-1 bg-gray-200"
+                       className="flex justify-between text-center items-center mr-2 px-2 bg-gray-200"
                        ariaLabel="Replies">
                        <i
                          className="far fa-comment-dots text-xs text-gray-600 mr-1"
@@ -267,7 +267,7 @@ let topicsList = (topicCategories, topics) => {
                        </p>
                      </span>
                      <span
-                       className="flex justify-between text-center items-center mr-2 px-2 py-1 bg-gray-200"
+                       className="flex justify-between text-center items-center mr-2 px-2 bg-gray-200"
                        ariaLabel="Views">
                        <i className="far fa-eye text-xs text-gray-600 mr-1" />
                        <p className="text-xs font-semibold">
@@ -285,21 +285,18 @@ let topicsList = (topicCategories, topics) => {
                                c => TopicCategory.id(c) == id,
                                "Unable to find topic category with ID: " ++ id,
                              );
-                        let (backgroundColor, color) =
+                        let (color, _) =
                           StringUtils.toColor(
                             TopicCategory.name(topicCategory),
                           );
+                        let style =
+                          ReactDOMRe.Style.make(~backgroundColor=color, ());
                         <span
-                          className="text-center items-center mr-2 px-2 py-1"
-                          style={ReactDOMRe.Style.make(
-                            ~backgroundColor,
-                            ~color,
-                            (),
-                          )}
-                          ariaLabel="Topic Category">
-                          <p className="text-xs font-semibold">
-                            {TopicCategory.name(topicCategory) |> str}
-                          </p>
+                          className="flex items-center text-xs font-semibold py-1">
+                          <div className="w-3 h-3 border rounded-sm" style />
+                          <span className="ml-2">
+                            {TopicCategory.name(topicCategory)->str}
+                          </span>
                         </span>;
                       | None => React.null
                       }}

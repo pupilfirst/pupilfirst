@@ -25,9 +25,7 @@ module Types
     def participants
       creator = object.first_post.creator
 
-      limit = creator.present? ? 2 : 3
-
-      User.where(id: creator).or(User.where(id: object.replies.pluck(:creator_id).uniq)).includes(:avatar_attachment).limit(limit)
+      User.where(id: creator).or(User.where(id: object.replies.pluck(:creator_id).uniq)).limit(3).includes(:avatar_attachment)
     end
 
     def participants_count

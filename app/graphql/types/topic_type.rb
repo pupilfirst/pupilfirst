@@ -9,13 +9,13 @@ module Types
     field :likes_count, Int, null: false
     field :views, Int, null: false
     field :topic_category_id, ID, null: true
-    field :creator_name, String, null: true
+    field :creator, Types::UserType, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :participants, [Types::TopicParticipantType], null: false
+    field :participants, [Types::UserType], null: false
     field :participants_count, Int, null: false
 
-    def creator_name
-      object.first_post.creator&.name
+    def creator
+      object.first_post.creator
     end
 
     def likes_count
@@ -23,13 +23,13 @@ module Types
     end
 
     def participants
-      creator = object.first_post.creator
+      creator_id = object.first_post.creator_id
 
-      User.where(id: creator).or(User.where(id: object.replies.pluck(:creator_id).uniq)).limit(3).includes(:avatar_attachment)
+      User.where(id: object.replies.pluck(:creator_id).uniq - [creator_id]).limit(2).includes(:avatar_attachment)
     end
 
     def participants_count
-      object.posts.pluck(:creator_id).uniq.count
+      object.posts.live.pluck(:creator_id).uniq.count
     end
 
     def live_replies_count

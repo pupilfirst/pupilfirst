@@ -99,7 +99,11 @@ module TopicsQuery = [%graphql
           id
           lastActivityAt
           createdAt
-          creatorName
+          creator {
+            id
+            name
+            avatarUrl
+          }
           likesCount
           liveRepliesCount
           views
@@ -202,8 +206,9 @@ let topicsList = (topicCategories, topics) => {
                        <span> {"Posted by " |> str} </span>
                        <span className="font-semibold">
                          {(
-                            switch (Topic.creatorName(topic)) {
-                            | Some(name) => name ++ " "
+                            switch (Topic.creator(topic)) {
+                            | Some(creator) =>
+                              TopicParticipant.name(creator) ++ " "
                             | None => "Unknown "
                             }
                           )
@@ -307,6 +312,7 @@ let topicsList = (topicCategories, topics) => {
                  <CommunitiesShow__Participants
                    title=React.null
                    className="hidden md:inline-block mt-6"
+                   creator={Topic.creator(topic)}
                    participants={Topic.participants(topic)}
                    participantsCount={Topic.participantsCount(topic)}
                  />

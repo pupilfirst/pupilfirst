@@ -252,7 +252,13 @@ let topicsList = (topicCategories, topics) => {
                        <p className="text-xs font-semibold">
                          {Topic.likesCount(topic) |> string_of_int |> str}
                          <span className="ml-1 hidden md:inline">
-                           {"Likes" |> str}
+                           {Inflector.pluralize(
+                              "Like",
+                              ~count=Topic.likesCount(topic),
+                              ~inclusive=false,
+                              (),
+                            )
+                            |> str}
                          </span>
                        </p>
                      </span>
@@ -267,7 +273,13 @@ let topicsList = (topicCategories, topics) => {
                           |> string_of_int
                           |> str}
                          <span className="ml-1 hidden md:inline">
-                           {"Replies" |> str}
+                           {Inflector.pluralize(
+                              "Reply",
+                              ~count=Topic.liveRepliesCount(topic),
+                              ~inclusive=false,
+                              (),
+                            )
+                            |> str}
                          </span>
                        </p>
                      </span>
@@ -278,7 +290,13 @@ let topicsList = (topicCategories, topics) => {
                        <p className="text-xs font-semibold">
                          {Topic.views(topic) |> string_of_int |> str}
                          <span className="ml-1 hidden md:inline">
-                           {"Views" |> str}
+                           {Inflector.pluralize(
+                              "View",
+                              ~count=Topic.views(topic),
+                              ~inclusive=false,
+                              (),
+                            )
+                            |> str}
                          </span>
                        </p>
                      </span>

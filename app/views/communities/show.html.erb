@@ -79,13 +79,17 @@
                     <% if presenter.new_topic?(topic) %>
                       <div class="bg-green-600 text-white px-2 py-1 text-xs font-semibold rounded-sm">New!</div>
                     <% else %>
-                      <span class="px-4 text-center" aria-label="Likes">
+                      <span class="pr-2 text-center" aria-label="Likes">
                         <i class="far fa-thumbs-up text-xl text-gray-600"></i>
                         <p class="text-xs pt-1"><%= topic.first_post.post_likes.count %></p>
                       </span>
                       <span class="px-2 text-center" aria-label="Replies">
                         <i class="far fa-comment-dots text-xl text-gray-600"></i>
                         <p class="text-xs pt-1"><%= topic.live_replies_count %></p>
+                      </span>
+                      <span class="pl-2 text-center" aria-label="Views">
+                        <i class="far fa-eye text-xl text-gray-600"></i>
+                        <p class="text-xs pt-1"><%= topic.views %></p>
                       </span>
                     <% end %>
                   </span>

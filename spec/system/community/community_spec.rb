@@ -4,6 +4,7 @@ feature 'Community', js: true do
   include UserSpecHelper
   include NotificationHelper
   include MarkdownEditorHelper
+  include ActiveSupport::Testing::TimeHelpers
 
   # Setup a course with students and target for community.
   let(:school) { create :school, :current }
@@ -165,6 +166,35 @@ feature 'Community', js: true do
     find("div[aria-label='Unlike post #{reply_1.id}']").click
     expect(page).to have_selector("div[aria-label='Like post #{reply_1.id}']")
     expect(reply_1.post_likes.where(user: student_2.user).count).to eq(0)
+  end
+
+  scenario 'a user visiting a topic affects its view count' do
+    original_views = topic_1.views
+
+    sign_in_user(student_2.user, referrer: topic_path(topic_1))
+
+    expect(page).to have_text(topic_1.first_post.body)
+
+    # Views should have been incremented by 1.
+    expect(topic_1.reload.views).to eq(original_views + 1)
+
+    # Revisiting the page "soon" should not increase the count.
+    click_link community.name
+    expect(page).to have_link('Create a new topic')
+    click_link topic_1.title
+
+    expect(page).to have_text(topic_1.first_post.body)
+    expect(topic_1.reload.views).to eq(original_views + 1)
+
+    # Revisiting after a "long while" should increase the count again.
+    travel_to(90.minutes.from_now) do
+      click_link community.name
+      expect(page).to have_link('Create a new topic')
+      click_link topic_1.title
+
+      expect(page).to have_text(topic_1.first_post.body)
+      expect(topic_1.reload.views).to eq(original_views + 2)
+    end
   end
 
   scenario 'an active faculty visits community' do

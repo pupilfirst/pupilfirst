@@ -1,3 +1,5 @@
+[%bs.raw {|require("./CommunitiesShow__Root.css")|}];
+
 open CommunitiesShow__Types;
 
 let str = React.string;
@@ -193,7 +195,7 @@ let topicsList = (topicCategories, topics) => {
                    href={"/topics/" ++ Topic.id(topic)}>
                    <span className="block">
                      <span
-                       className="community-question__title text-sm md:text-base font-semibold inline-block break-words leading-snug">
+                       className="community-topic__title text-sm md:text-base font-semibold inline-block break-words leading-snug">
                        {Topic.title(topic) |> str}
                      </span>
                      <span className="block text-xs mt-1">
@@ -541,7 +543,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
           />
         </div>
         <div
-          className="community-question__list-container shadow bg-white rounded-lg mb-4 mt-10">
+          className="community-topic__list-container shadow bg-white rounded-lg mb-4 mt-10">
           {switch (state.topics) {
            | Unloaded =>
              SkeletonLoading.multiple(

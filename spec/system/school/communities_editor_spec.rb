@@ -25,7 +25,7 @@ feature 'SA Communities Editor', js: true do
     # Add a new Community
     click_button 'Add New Community'
     fill_in 'What do you want to call this community?', with: new_community_name
-    click_button 'Create a new community'
+    click_button 'Create community'
 
     expect(page).to have_text("Community created successfully")
 

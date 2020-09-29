@@ -103,6 +103,12 @@ module TopicsQuery = [%graphql
           views
           title
           topicCategoryId
+          participantsCount
+          participants {
+            id
+            name
+            avatarUrl
+          }
         }
         pageInfo{
           endCursor,hasNextPage
@@ -298,7 +304,14 @@ let topicsList = (topicCategories, topics) => {
                    </span>
                  </a>
                </div>
-               <div className="w-1/5" />
+               <div className="w-1/5">
+                 <CommunitiesShow__Participants
+                   title=React.null
+                   className="hidden md:inline-block mt-6"
+                   participants={Topic.participants(topic)}
+                   participantsCount={Topic.participantsCount(topic)}
+                 />
+               </div>
              </div>
            </div>
          )

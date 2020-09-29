@@ -8,6 +8,8 @@ type t = {
   topicCategoryId: option(string),
   creatorName: option(string),
   createdAt: Js.Date.t,
+  participantsCount: int,
+  participants: array(CommunitiesShow__TopicParticipant.t),
 };
 
 let id = t => t.id;
@@ -28,6 +30,10 @@ let creatorName = t => t.creatorName;
 
 let createdAt = t => t.createdAt;
 
+let participants = t => t.participants;
+
+let participantsCount = t => t.participantsCount;
+
 let make =
     (
       ~id,
@@ -39,6 +45,8 @@ let make =
       ~topicCategoryId,
       ~creatorName,
       ~createdAt,
+      ~participantsCount,
+      ~participants,
     ) => {
   id,
   title,
@@ -49,6 +57,8 @@ let make =
   topicCategoryId,
   creatorName,
   createdAt,
+  participantsCount,
+  participants,
 };
 
 let makeFromJS = topicData => {
@@ -63,5 +73,11 @@ let makeFromJS = topicData => {
     ~topicCategoryId=topicData##topicCategoryId,
     ~creatorName=topicData##creatorName,
     ~createdAt=topicData##createdAt->DateFns.decodeISO,
+    ~participantsCount=topicData##participantsCount,
+    ~participants=
+      topicData##participants
+      |> Js.Array.map(participant =>
+           CommunitiesShow__TopicParticipant.makeFromJs(participant)
+         ),
   );
 };

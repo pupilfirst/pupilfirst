@@ -20,8 +20,8 @@ module CreateMarkdownContentBlock = [%graphql
 
 module CreateEmbedContentBlock = [%graphql
   {|
-    mutation CreateEmbedContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $url: String!) {
-      createEmbedContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId, url: $url) {
+    mutation CreateEmbedContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $url: String!, $requestSource: String!) {
+      createEmbedContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId, url: $url, requestSource: $requestSource) {
         contentBlock {
           ...ContentBlock.Fragments.AllFields
         }
@@ -244,7 +244,7 @@ let validEmbedUrl = url =>
   Belt.Array.some(embedUrlRegexes, regex => regex->Js.Re.test_(url));
 
 let handleCreateEmbedContentBlock =
-    (target, aboveContentBlock, url, send, addContentBlockCB) =>
+    (target, aboveContentBlock, url, send, addContentBlockCB, requestSource) =>
   if (url |> validEmbedUrl) {
     send(ToggleSaving);
 
@@ -253,7 +253,13 @@ let handleCreateEmbedContentBlock =
 
     let targetId = target |> Target.id;
 
-    CreateEmbedContentBlock.make(~targetId, ~aboveContentBlockId?, ~url, ())
+    CreateEmbedContentBlock.make(
+      ~targetId,
+      ~aboveContentBlockId?,
+      ~url,
+      ~requestSource,
+      (),
+    )
     |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(result =>
          handleGraphqlCreateResponse(
@@ -298,6 +304,7 @@ let handleVimeoVideoUpload =
           url,
           send,
           addContentBlockCB,
+          "vimeo_upload",
         )
       },
   );
@@ -502,6 +509,7 @@ let onEmbedFormSave =
     url,
     send,
     addContentBlockCB,
+    "default",
   );
 };
 

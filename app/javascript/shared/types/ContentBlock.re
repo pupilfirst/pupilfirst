@@ -4,13 +4,15 @@ type markdown = string;
 type url = string;
 type title = string;
 type caption = string;
+type embedCode = option(string);
 type filename = string;
+type requestSource = option(string);
 
 type blockType =
   | Markdown(markdown)
   | File(url, title, filename)
   | Image(url, caption)
-  | Embed(url);
+  | Embed(url, embedCode, requestSource);
 
 type t = {
   id,
@@ -24,7 +26,12 @@ let decodeMarkdownContent = json =>
 let decodeFileContent = json => Json.Decode.(json |> field("title", string));
 let decodeImageContent = json =>
   Json.Decode.(json |> field("caption", string));
-let decodeEmbedContent = json => Json.Decode.(json |> field("url", string));
+let decodeEmbedContent = json =>
+  Json.Decode.(
+    json |> field("url", string),
+    json |> optional(field("embedCode", string)),
+    json |> optional(field("requestSource", string)),
+  );
 
 let decode = json => {
   open Json.Decode;
@@ -42,8 +49,9 @@ let decode = json => {
       let url = json |> field("fileUrl", string);
       Image(url, caption);
     | "embed" =>
-      let url = json |> field("content", decodeEmbedContent);
-      Embed(url);
+      let (url, embedCode, requestSource) =
+        json |> field("content", decodeEmbedContent);
+      Embed(url, embedCode, requestSource);
     | unknownBlockType => raise(UnexpectedBlockType(unknownBlockType))
     };
 
@@ -65,7 +73,8 @@ let makeMarkdownBlock = markdown => Markdown(markdown);
 let makeImageBlock = (fileUrl, caption) => Image(fileUrl, caption);
 let makeFileBlock = (fileUrl, title, fileName) =>
   File(fileUrl, title, fileName);
-let makeEmbedBlock = (url, embedCode) => Embed(url);
+let makeEmbedBlock = (url, embedCode, requestSource) =>
+  Embed(url, embedCode, requestSource);
 
 let make = (id, blockType, sortIndex) => {id, blockType, sortIndex};
 
@@ -78,7 +87,8 @@ let makeFromJs = js => {
     | `FileBlock(content) =>
       File(content##url, content##title, content##filename)
     | `ImageBlock(content) => Image(content##url, content##caption)
-    | `EmbedBlock(content) => Embed(content##url)
+    | `EmbedBlock(content) =>
+      Embed(content##url, content##embedCode, content##requestSource)
     };
 
   make(id, blockType, sortIndex);
@@ -89,7 +99,7 @@ let blockTypeAsString = blockType =>
   | Markdown(_markdown) => "markdown"
   | File(_url, _title, _filename) => "file"
   | Image(_url, _caption) => "image"
-  | Embed(_url) => "embed"
+  | Embed(_url, _embedCode, _requestSource) => "embed"
   };
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1};
@@ -158,6 +168,8 @@ module Fragments = [%graphql
       }
       ... on EmbedBlock {
         url
+        embedCode
+        requestSource
       }
     }
   }
@@ -187,6 +199,8 @@ module Query = [%graphql
           }
           ... on EmbedBlock {
             url
+            embedCode
+            requestSource
           }
         }
       }

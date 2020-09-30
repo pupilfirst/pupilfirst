@@ -34,7 +34,7 @@ let imageContentBlock = (url, caption) =>
     <div className="px-4 py-2 text-sm italic"> {caption |> str} </div>
   </div>;
 
-let embedContentBlock = _url =>
+let embedContentBlock = (url, embed, requestType) =>
   // Resolve EmbedCode
   <div
     className="learn-content-block__embed"
@@ -53,7 +53,8 @@ let make = (~contentBlocks) =>
             | File(url, title, filename) =>
               fileContentBlock(url, title, filename)
             | Image(url, caption) => imageContentBlock(url, caption)
-            | Embed(url) => embedContentBlock(url)
+            | Embed(url, embedCode, requestType) =>
+              embedContentBlock(url, embedCode, requestType)
             };
 
           <div

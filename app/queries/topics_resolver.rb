@@ -19,7 +19,9 @@ class TopicsResolver < ApplicationQuery
 
     return false if community.school_id != current_school.id
 
-    (current_user.course_ids & community.course_ids).present? || current_school_admin.present?
+    course_ids = ([current_user.faculty&.course_ids] + [current_user.course_ids]).flatten
+
+    (course_ids & community.course_ids).present? || current_school_admin.present?
   end
 
   def title_for_search

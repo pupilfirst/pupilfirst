@@ -4,14 +4,13 @@ type markdown = string;
 type url = string;
 type title = string;
 type caption = string;
-type embedCode = string;
 type filename = string;
 
 type blockType =
   | Markdown(markdown)
   | File(url, title, filename)
   | Image(url, caption)
-  | Embed(url, embedCode);
+  | Embed(url);
 
 type t = {
   id,
@@ -25,11 +24,7 @@ let decodeMarkdownContent = json =>
 let decodeFileContent = json => Json.Decode.(json |> field("title", string));
 let decodeImageContent = json =>
   Json.Decode.(json |> field("caption", string));
-let decodeEmbedContent = json =>
-  Json.Decode.(
-    json |> field("url", string),
-    json |> field("embedCode", string),
-  );
+let decodeEmbedContent = json => Json.Decode.(json |> field("url", string));
 
 let decode = json => {
   open Json.Decode;
@@ -47,8 +42,8 @@ let decode = json => {
       let url = json |> field("fileUrl", string);
       Image(url, caption);
     | "embed" =>
-      let (url, embedCode) = json |> field("content", decodeEmbedContent);
-      Embed(url, embedCode);
+      let url = json |> field("content", decodeEmbedContent);
+      Embed(url);
     | unknownBlockType => raise(UnexpectedBlockType(unknownBlockType))
     };
 
@@ -70,7 +65,7 @@ let makeMarkdownBlock = markdown => Markdown(markdown);
 let makeImageBlock = (fileUrl, caption) => Image(fileUrl, caption);
 let makeFileBlock = (fileUrl, title, fileName) =>
   File(fileUrl, title, fileName);
-let makeEmbedBlock = (url, embedCode) => Embed(url, embedCode);
+let makeEmbedBlock = (url, embedCode) => Embed(url);
 
 let make = (id, blockType, sortIndex) => {id, blockType, sortIndex};
 
@@ -83,7 +78,7 @@ let makeFromJs = js => {
     | `FileBlock(content) =>
       File(content##url, content##title, content##filename)
     | `ImageBlock(content) => Image(content##url, content##caption)
-    | `EmbedBlock(content) => Embed(content##url, content##embedCode)
+    | `EmbedBlock(content) => Embed(content##url)
     };
 
   make(id, blockType, sortIndex);
@@ -94,7 +89,7 @@ let blockTypeAsString = blockType =>
   | Markdown(_markdown) => "markdown"
   | File(_url, _title, _filename) => "file"
   | Image(_url, _caption) => "image"
-  | Embed(_url, _embedCode) => "embed"
+  | Embed(_url) => "embed"
   };
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1};
@@ -163,7 +158,6 @@ module Fragments = [%graphql
       }
       ... on EmbedBlock {
         url
-        embedCode
       }
     }
   }
@@ -193,7 +187,6 @@ module Query = [%graphql
           }
           ... on EmbedBlock {
             url
-            embedCode
           }
         }
       }

@@ -570,7 +570,7 @@ let make =
   <DisablingCover disabled={state.saving} message="Creating...">
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `File)}
     {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `Image)}
-    {ReactUtils.nullIf(
+    {ReactUtils.nullUnless(
        uploadForm(
          target,
          aboveContentBlock,

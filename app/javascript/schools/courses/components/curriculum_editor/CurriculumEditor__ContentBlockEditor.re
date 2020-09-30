@@ -238,8 +238,7 @@ let innerEditor =
     updateContentBlockCB(originalContentBlock, setDirtyCB, state, send);
 
   switch (contentBlock |> ContentBlock.blockType) {
-  | ContentBlock.Embed(_url, embedCode) =>
-    TargetContentView.embedContentBlock("", embedCode)
+  | ContentBlock.Embed(url) => TargetContentView.embedContentBlock(url)
   | Markdown(markdown) =>
     <CurriculumEditor__MarkdownBlockEditor
       markdown

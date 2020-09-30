@@ -34,10 +34,11 @@ let imageContentBlock = (url, caption) =>
     <div className="px-4 py-2 text-sm italic"> {caption |> str} </div>
   </div>;
 
-let embedContentBlock = (_url, embedCode) =>
+let embedContentBlock = _url =>
+  // Resolve EmbedCode
   <div
     className="learn-content-block__embed"
-    dangerouslySetInnerHTML={"__html": embedCode}
+    dangerouslySetInnerHTML={"__html": "embedCode"}
   />;
 
 [@react.component]
@@ -52,7 +53,7 @@ let make = (~contentBlocks) =>
             | File(url, title, filename) =>
               fileContentBlock(url, title, filename)
             | Image(url, caption) => imageContentBlock(url, caption)
-            | Embed(url, embedCode) => embedContentBlock(url, embedCode)
+            | Embed(url) => embedContentBlock(url)
             };
 
           <div

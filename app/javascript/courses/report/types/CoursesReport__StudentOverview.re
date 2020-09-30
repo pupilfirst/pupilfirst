@@ -25,7 +25,7 @@ let targetsPendingReview = t => t.targetsPendingReview;
 
 let targetsCompleted = t => t.targetsCompleted |> float_of_int;
 
-let quizzesAttempted = t => t.quizScores |> Array.length |> string_of_int;
+let quizzesAttempted = t => t.quizScores |> Array.length;
 
 let quizScores = t => t.quizScores;
 let averageGrades = t => t.averageGrades;

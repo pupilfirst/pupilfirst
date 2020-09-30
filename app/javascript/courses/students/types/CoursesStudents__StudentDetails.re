@@ -61,7 +61,7 @@ let gradeAsPercentage =
 
 let targetsCompleted = t => t.targetsCompleted |> float_of_int;
 
-let quizzesAttempted = t => t.quizScores |> Array.length |> string_of_int;
+let quizzesAttempted = t => t.quizScores |> Array.length;
 
 let evaluationCriteria = t => t.evaluationCriteria;
 

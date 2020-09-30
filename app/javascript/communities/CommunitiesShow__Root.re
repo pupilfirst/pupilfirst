@@ -445,9 +445,12 @@ let onDeselectFilter = (send, selectable) =>
   | Title(_title) => send(UnsetSearchString)
   };
 
-let filterPlaceholder = state => {
+let filterPlaceholder = (state, topicCategories) => {
   switch (state.filter.topicCategory, state.filter.title) {
-  | (None, None) => "Filter by category, or search by topic title.."
+  | (None, None) =>
+    ArrayUtils.isEmpty(topicCategories)
+      ? "Search by topic title.."
+      : "Filter by category, or search by topic title.."
   | _ => ""
   };
 };
@@ -537,15 +540,18 @@ let make = (~communityId, ~target, ~topicCategories) => {
     <div className="px-3 md:px-6 pb-4 mt-5 flex flex-1">
       <div className="max-w-3xl w-full mx-auto relative">
         <div className="mb-4 flex justify-between">
-          <Dropdown
-            selected={categoryDropdownSelected(state.filter.topicCategory)}
-            contents={categoryDropdownContents(
-              topicCategories,
-              state.filter.topicCategory,
-              send,
-            )}
-            className=""
-          />
+          {ReactUtils.nullIf(
+             <Dropdown
+               selected={categoryDropdownSelected(state.filter.topicCategory)}
+               contents={categoryDropdownContents(
+                 topicCategories,
+                 state.filter.topicCategory,
+                 send,
+               )}
+               className=""
+             />,
+             ArrayUtils.isEmpty(topicCategories),
+           )}
           <div
             className=""
             // Other controls go here.
@@ -561,7 +567,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
             onDeselect={onDeselectFilter(send)}
             value={state.filterString}
             onChange={filterString => send(UpdateFilterString(filterString))}
-            placeholder={filterPlaceholder(state)}
+            placeholder={filterPlaceholder(state, topicCategories)}
           />
         </div>
         <div

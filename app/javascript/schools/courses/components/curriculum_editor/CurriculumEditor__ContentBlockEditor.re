@@ -239,7 +239,11 @@ let innerEditor =
 
   switch (contentBlock |> ContentBlock.blockType) {
   | ContentBlock.Embed(url, embed, requestSource) =>
-    TargetContentView.embedContentBlock(url, embed, requestSource)
+    embed->Belt.Option.mapWithDefault(
+      <CurriculumEditor__EmbedBlockResolver url />, code =>
+      TargetContentView.embedContentBlock(code)
+    )
+
   | Markdown(markdown) =>
     <CurriculumEditor__MarkdownBlockEditor
       markdown

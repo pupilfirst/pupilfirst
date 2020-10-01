@@ -38,7 +38,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def vimeo_csp
-    { connect: %w[*.cloud.vimeo.com *.tus.vimeo.com], frame: 'https://player.vimeo.com' }
+    { connect: %w[*.cloud.vimeo.com *.tus.vimeo.com vimeo.com], frame: 'https://player.vimeo.com' }
   end
 
   def rollbar_csp

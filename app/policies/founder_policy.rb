@@ -3,7 +3,7 @@ class FounderPolicy < ApplicationPolicy
     return false if user.blank?
 
     # School admins can view student profiles.
-    return true if user.school_admin.present?
+    return true if user.school_admin.present? && user.faculty.courses.exists?
 
     # Coaches who review submissions from this student can view their profile.
     faculty = user.faculty

@@ -18,7 +18,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def slideshare_csp
-    { frame: %w[slideshare.net *.slideshare.net] }
+    { connect: %w[www.slideshare.net], frame: %w[slideshare.net *.slideshare.net] }
   end
 
   def speakerdeck_csp
@@ -34,7 +34,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def youtube_csp
-    { frame: 'https://www.youtube.com' }
+    { connect: %w[www.youtube.com], frame: 'https://www.youtube.com' }
   end
 
   def vimeo_csp

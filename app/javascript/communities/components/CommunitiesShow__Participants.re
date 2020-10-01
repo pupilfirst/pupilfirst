@@ -59,7 +59,7 @@ let make =
   <div className>
     <div className="text-xs"> title </div>
     <div className="inline-flex">
-      {Js.Array.concat(
+      {
          participants
          |> Array.map(participant => {
               <Tooltip
@@ -73,19 +73,10 @@ let make =
                    participant |> TopicParticipant.name,
                  )}
               </Tooltip>
-            }),
-         [|
-           creatorAvatar(
-             creator,
-             tooltipPosition,
-             defaultAvatarSize,
-             mdAvatarSize,
-           ),
-         |],
-       )
+            })
        |> React.array}
       {let otherParticipantsCount =
-         participantsCount - Js.Array.length(participants) - 1;
+         participantsCount - Js.Array.length(participants);
 
        otherParticipantsCount > 0
          ? <Avatar

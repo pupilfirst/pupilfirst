@@ -4,6 +4,16 @@ type provider =
   | Vimeo
   | UnknownProvider;
 
+module ResolveEmbedCodeMutator = [%graphql
+  {|
+  mutation ResolveEmbedCodeMutation($contentBlockId: ID!) {
+    resolveEmbedCode(contentBlockId: $contentBlockId) {
+      success
+    }
+  }
+  |}
+];
+
 type state = {
   loading: bool,
   embedCode: option(string),
@@ -43,8 +53,6 @@ let findProvider = url => {
   };
 };
 
-// let getEmbedCode = (provider, url) => Api.get();
-
 let reducer = (state, action) =>
   switch (action) {
   | SetLoading => {...state, loading: true}
@@ -66,16 +74,38 @@ let reducer = (state, action) =>
     }
   };
 
-let updateEmbedCodeCB = (send, json) => {
+let updateEmbedCodeCB = (send, contentBlockId, json) => {
   let html = json |> Json.Decode.field("html", Json.Decode.string);
   send(SetEmbedCode(html));
+
+  ResolveEmbedCodeMutator.make(~contentBlockId, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+       if (response##resolveEmbedCode##success) {
+         ();
+       } else {
+         Notification.notice(
+           "Unable to save embed block",
+           "Please reload the page.",
+         );
+       };
+       Js.Promise.resolve();
+     })
+  |> Js.Promise.catch(_ => {
+       Notification.error(
+         "Unexpected Error",
+         "An unexpected error occured, and our team has been notified about this. Please reload the page before trying again.",
+       );
+       Js.Promise.resolve();
+     })
+  |> ignore;
 };
 
 let errorCB = (send, _json) => {
   send(ToggleRelaod);
 };
 
-let resolveEmbedCode = (state, send, url, ()) => {
+let resolveEmbedCode = (state, contentBlockId, send, url, ()) => {
   state.timeoutId->Belt.Option.forEach(Js.Global.clearTimeout);
   send(SetLoading);
   switch (findProvider(url)) {
@@ -85,25 +115,20 @@ let resolveEmbedCode = (state, send, url, ()) => {
 
     Api.get(
       ~url=requestUrl,
-      ~responseCB=updateEmbedCodeCB(send),
+      ~responseCB=updateEmbedCodeCB(send, contentBlockId),
       ~errorCB=errorCB(send),
       ~notify=false,
     );
   };
 };
 
-let loadEmbedBlock = (state, send, url, ()) => {
-  resolveEmbedCode(state, send, url, ());
-  None;
-};
-
-let setTimeout = (state, send, url, ()) => {
+let getEmbedCode = (state, contentBlockId, send, url, ()) => {
   switch (state.embedCode) {
   | Some(_c) => ()
   | None =>
     let timeoutId =
       Js.Global.setTimeout(
-        resolveEmbedCode(state, send, url),
+        resolveEmbedCode(state, contentBlockId, send, url),
         state.timeoutId->Belt.Option.mapWithDefault(0, _ => 60000),
       );
     send(SetTimeout(timeoutId));
@@ -113,7 +138,7 @@ let setTimeout = (state, send, url, ()) => {
 };
 
 [@react.component]
-let make = (~url) => {
+let make = (~url, ~requestSource, ~contentBlockId) => {
   let (state, send) =
     React.useReducer(
       reducer,
@@ -126,7 +151,10 @@ let make = (~url) => {
       },
     );
 
-  React.useEffect1(setTimeout(state, send, url), [|state.reload|]);
+  React.useEffect1(
+    getEmbedCode(state, contentBlockId, send, url),
+    [|state.reload|],
+  );
 
   <div className="max-w-3xl py-6 px-3 mx-auto">
     {state.embedCode

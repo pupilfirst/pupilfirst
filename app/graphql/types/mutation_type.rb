@@ -57,5 +57,6 @@ module Types
     field :update_user, mutation: Mutations::UpdateUser, null: false
     field :update_certificate, mutation: Mutations::UpdateCertificate, null: false
     field :delete_certificate, mutation: Mutations::DeleteCertificate, null: false
+    field :resolve_embed_code, mutation: Mutations::ResolveEmbedCode, null: false
   end
 end

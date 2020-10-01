@@ -6,13 +6,6 @@ class CreateEmbedContentBlockMutator < ApplicationQuery
   property :url, validates: { presence: true, length: { maximum: 2048 } }
   property :above_content_block_id
   property :request_source, validates: { inclusion: { in: %w[vimeo_upload default] } }
-  # validate :embed_code_must_be_available
-  #
-  # def embed_code_must_be_available
-  #   return if embed_code.present?
-  #
-  #   errors[:base] << "Failed to embed the given URL. Please check if this is a supported website and try again."
-  # end
 
   def create_embed_content_block
     ContentBlock.transaction do
@@ -24,12 +17,6 @@ class CreateEmbedContentBlockMutator < ApplicationQuery
   end
 
   private
-
-  # def embed_code
-  #   @embed_code ||= ::Oembed::Resolver.new(url).embed_code
-  # rescue ::Oembed::Resolver::ProviderNotSupported
-  #   nil
-  # end
 
   def create_embed_block
     target_version.content_blocks.create!(

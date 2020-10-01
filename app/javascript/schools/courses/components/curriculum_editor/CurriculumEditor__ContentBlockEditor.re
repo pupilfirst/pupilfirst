@@ -240,7 +240,12 @@ let innerEditor =
   switch (contentBlock |> ContentBlock.blockType) {
   | ContentBlock.Embed(url, embed, requestSource) =>
     embed->Belt.Option.mapWithDefault(
-      <CurriculumEditor__EmbedBlockResolver url />, code =>
+      <CurriculumEditor__EmbedBlockResolver
+        url
+        requestSource
+        contentBlockId={ContentBlock.id(contentBlock)}
+      />,
+      code =>
       TargetContentView.embedContentBlock(code)
     )
 

@@ -132,8 +132,8 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
    ```
    server {
      listen 80;
+     listen [::]:80 default_server;
      server_name school.localhost www.school.localhost sso.school.localhost;
-
      location / {
        proxy_pass http://localhost:3000/;
        proxy_set_header Host $host;

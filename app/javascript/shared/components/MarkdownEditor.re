@@ -228,7 +228,7 @@ let finalizeChange = (~oldValue, ~newValue, ~state, ~send, ~onChange) => {
   let (_, selectionEnd) = state.selection;
 
   // The cursor needs to be bumped to account for changed value.
-  send(BumpSelection(offset / 2));
+  send(BumpSelection(offset));
 
   // Report the modified value to the parent.
   onChange(newValue);

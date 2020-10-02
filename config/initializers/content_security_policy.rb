@@ -77,7 +77,11 @@ Rails.application.config.content_security_policy do |policy|
 
   policy.default_src :none
   policy.img_src '*', :data, :blob
-  policy.script_src :unsafe_eval, :unsafe_inline, :strict_dynamic, 'https:', 'http:'
+  if Rails.env.development?
+    policy.script_src :unsafe_eval, :unsafe_inline, 'https:', 'http:'
+  else
+    policy.script_src :unsafe_eval, :unsafe_inline, :strict_dynamic, 'https:', 'http:'
+  end
   policy.style_src :self, :unsafe_inline, *style_sources
   policy.connect_src :self, *connect_sources
   policy.font_src :self, *font_sources

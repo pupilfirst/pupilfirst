@@ -35,7 +35,7 @@
           </div>
           <% if @post.edit_reason? %>
             <div class="mt-4 text-xs">
-              <span>Reason: 
+              <span>Edit reason:
                 <%= @post.edit_reason %>
               </span>
             </div>
@@ -51,7 +51,6 @@
           <div data-json-props="<%= presenter.markdown_prop(version.value) %>" class="convert-markdown">
             <%= version.value %>
           </div>
-           
           <div class="mt-4 text-xs">
             <span>Edited by</span>
             <span class="font-semibold"><%= version.user&.name || 'Unknown' %></span>
@@ -59,7 +58,7 @@
           </div>
           <% if version.reason? %>
             <div class="mt-4 text-xs">
-              <span>Reason: 
+              <span>Edit reason:
                 <%= version.reason %>
               </span>
             </div>

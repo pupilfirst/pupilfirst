@@ -20,8 +20,8 @@ module CreatePostQuery = [%graphql
 
 module UpdatePostQuery = [%graphql
   {|
-  mutation UpdatePostMutation($id: ID!, $body: String!) {
-    updatePost(id: $id, body: $body)  {
+  mutation UpdatePostMutation($id: ID!, $body: String!,$editReason:String) {
+    updatePost(id: $id, body: $body,editReason:$editReason)  {
       success
     }
   }
@@ -73,6 +73,7 @@ let handlePostUpdateResponse =
 };
 let savePost =
     (
+      ~editReason,
       body,
       topic,
       setState,
@@ -92,7 +93,7 @@ let savePost =
     | Some(post) =>
       let postId = post |> Post.id;
 
-      UpdatePostQuery.make(~id=postId, ~body, ())
+      UpdatePostQuery.make(~id=postId, ~body, ~editReason?, ())
       |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response => {
            response##updatePost##success
@@ -176,6 +177,7 @@ let replyToUserInfo = user => {
 [@react.component]
 let make =
     (
+      ~editing=false,
       ~id,
       ~topic,
       ~currentUserId,
@@ -199,6 +201,7 @@ let make =
       }
     );
   let updateMarkdownCB = body => setState(state => {...state, body});
+  let (editReason, setEditReason) = React.useState(() => None);
   <DisablingCover disabled={state.saving}>
     <div
       ariaLabel="Add new reply"
@@ -258,6 +261,24 @@ let make =
               profile=Markdown.QuestionAndAnswer
               maxLength=10000
             />
+            {editing
+               ? <input
+                   onChange={event => {
+                     let reason = ReactEvent.Form.target(event)##value;
+                     switch (reason) {
+                     | "" => setEditReason(_ => None)
+                     | reason => setEditReason(_ => Some(reason))
+                     };
+                   }}
+                   placeholder="Edit Reason(optional)"
+                   value={
+                     switch (editReason) {
+                     | None => ""
+                     | Some(editReason) => editReason
+                     }
+                   }
+                 />
+               : React.null}
           </div>
           <div className="flex justify-end pt-3">
             {switch (handleCloseCB) {
@@ -276,6 +297,7 @@ let make =
              <button
                disabled={state.saving || state.body |> String.trim == ""}
                onClick={savePost(
+                 ~editReason,
                  state.body,
                  topic,
                  setState,

@@ -109,14 +109,15 @@ module InitiateAccountDeletionQuery = [%graphql
 let uploadAvatar = (send, formData) => {
   Json.Decode.(
     Api.sendFormData(
-      "/user/upload_avatar",
-      formData,
-      json => {
-        Notification.success("Done!", "Avatar uploaded successfully.");
-        let avatarUrl = json |> field("avatarUrl", string);
-        send(UpdateAvatarUrl(Some(avatarUrl)));
-      },
-      () => send(SetAvatarUploadError(Some("Failed to upload"))),
+      ~url="/user/upload_avatar",
+      ~formData,
+      ~responseCB=
+        json => {
+          Notification.success("Done!", "Avatar uploaded successfully.");
+          let avatarUrl = json |> field("avatarUrl", string);
+          send(UpdateAvatarUrl(Some(avatarUrl)));
+        },
+      ~errorCB=() => send(SetAvatarUploadError(Some("Failed to upload"))),
     )
   );
 };

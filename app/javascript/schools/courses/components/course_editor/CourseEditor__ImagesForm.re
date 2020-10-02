@@ -51,17 +51,18 @@ let handleUpdateImages = (send, state, course, updateCourseCB, event) => {
   switch (element) {
   | Some(element) =>
     Api.sendFormData(
-      "/school/courses/" ++ (course |> Course.id) ++ "/attach_images",
-      DomUtils.FormData.create(element),
-      json => {
-        Notification.success(
-          "Done!",
-          "Images have been updated successfully.",
-        );
-        handleUpdateCB(json, state, course, updateCourseCB);
-        send(DoneUpdating);
-      },
-      () => send(ErrorOccured),
+      ~url="/school/courses/" ++ (course |> Course.id) ++ "/attach_images",
+      ~formData=DomUtils.FormData.create(element),
+      ~responseCB=
+        json => {
+          Notification.success(
+            "Done!",
+            "Images have been updated successfully.",
+          );
+          handleUpdateCB(json, state, course, updateCourseCB);
+          send(DoneUpdating);
+        },
+      ~errorCB=() => send(ErrorOccured),
     )
   | None => ()
   };

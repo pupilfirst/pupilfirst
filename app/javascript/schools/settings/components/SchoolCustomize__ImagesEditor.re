@@ -33,17 +33,18 @@ let handleUpdateImages = (send, updateImagesCB, event) => {
   switch (element) {
   | Some(element) =>
     Api.sendFormData(
-      "/school/images",
-      DomUtils.FormData.create(element),
-      json => {
-        Notification.success(
-          "Done!",
-          "Images have been updated successfully.",
-        );
-        updateImagesCB(json);
-        send(DoneUpdating);
-      },
-      () => send(ErrorOccured),
+      ~url="/school/images",
+      ~formData=DomUtils.FormData.create(element),
+      ~responseCB=
+        json => {
+          Notification.success(
+            "Done!",
+            "Images have been updated successfully.",
+          );
+          updateImagesCB(json);
+          send(DoneUpdating);
+        },
+      ~errorCB=() => send(ErrorOccured),
     )
   | None => ()
   };

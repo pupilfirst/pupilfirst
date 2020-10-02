@@ -410,10 +410,11 @@ let submitForm = (formId, oldValue, state, send, onChange) => {
          let formData = DomUtils.FormData.create(element);
 
          Api.sendFormData(
-           "/markdown_attachments/",
-           formData,
-           handleUploadFileResponse(oldValue, state, send, onChange),
-           () =>
+           ~url="/markdown_attachments/",
+           ~formData,
+           ~responseCB=
+             handleUploadFileResponse(oldValue, state, send, onChange),
+           ~errorCB=() =>
            send(
              SetUploadError(
                Some(

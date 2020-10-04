@@ -223,12 +223,11 @@ let updateTextareaAfterDelay = (state, cursorPosition) => {
   );
 };
 
-let finalizeChange = (~oldValue, ~newValue, ~state, ~send, ~onChange) => {
-  let offset = (newValue |> String.length) - (oldValue |> String.length);
+let finalizeChange = (~newValue, ~state, ~send, ~onChange, ~offset) => {
   let (_, selectionEnd) = state.selection;
 
   // The cursor needs to be bumped to account for changed value.
-  send(BumpSelection(offset / 2));
+  send(BumpSelection(offset));
 
   // Report the modified value to the parent.
   onChange(newValue);
@@ -260,7 +259,13 @@ let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
       oldValue |> wrapWith(wrapper, selectionStart, selectionEnd);
     };
 
-  finalizeChange(~oldValue, ~newValue, ~state, ~send, ~onChange);
+  finalizeChange(
+    ~newValue,
+    ~state,
+    ~send,
+    ~onChange,
+    ~offset=String.(length(newValue) - length(oldValue)) / 2,
+  );
 };
 
 let controlsContainerClasses = mode =>
@@ -390,7 +395,13 @@ let handleUploadFileResponse = (oldValue, state, send, onChange, json) => {
     let insert = "\n" ++ markdownEmbedCode ++ "\n";
     let (_, selectionEnd) = state.selection;
     let newValue = oldValue |> insertAt(insert, selectionEnd);
-    finalizeChange(~oldValue, ~newValue, ~state, ~send, ~onChange);
+    finalizeChange(
+      ~newValue,
+      ~state,
+      ~send,
+      ~onChange,
+      ~offset=String.(length(newValue) - length(oldValue)),
+    );
     send(FinishUploading);
   } else {
     send(

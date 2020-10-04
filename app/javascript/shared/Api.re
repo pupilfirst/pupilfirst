@@ -63,7 +63,7 @@ let sendPayload = (url, payload, responseCB, errorCB, method) =>
   )
   |> handleResponse(responseCB, errorCB);
 
-let sendFormData = (~url, ~formData, ~responseCB, ~errorCB) =>
+let sendFormData = (url, formData, responseCB, errorCB) =>
   Fetch.fetchWithInit(
     url,
     Fetch.RequestInit.make(

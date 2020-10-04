@@ -53,19 +53,17 @@ let submitForm = (course, addCertificateCB, send, event) => {
   let url = "/school/courses/" ++ Course.id(course) ++ "/certificates";
 
   Api.sendFormData(
-    ~url,
-    ~formData,
-    ~responseCB=
-      json => {
-        Notification.success(
-          t("done_exclamation"),
-          t("success_notification"),
-        );
-
-        Json.Decode.field("certificate", Certificate.decode, json)
-        |> addCertificateCB;
-      },
-    ~errorCB=() => send(FailSaving),
+    url,
+    formData,
+    json => {
+      Notification.success(
+        t("done_exclamation"),
+        t("success_notification"),
+      );
+      Json.Decode.field("certificate", Certificate.decode, json)
+      |> addCertificateCB;
+    },
+    () => send(FailSaving),
   );
 };
 

@@ -196,16 +196,15 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
 let uploadFile =
     (target, send, addContentBlockCB, isAboveContentBlock, formData) =>
   Api.sendFormData(
-    ~url="/school/targets/" ++ (target |> Target.id) ++ "/content_block",
-    ~formData,
-    ~responseCB=
-      json => {
-        Notification.success("Done!", "File uploaded successfully.");
-        let contentBlock = json |> ContentBlock.decode;
-        addContentBlockCB(contentBlock);
-        send(FinishSaving(isAboveContentBlock));
-      },
-    ~errorCB=() => send(FailToUpload),
+    "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
+    formData,
+    json => {
+      Notification.success("Done!", "File uploaded successfully.");
+      let contentBlock = json |> ContentBlock.decode;
+      addContentBlockCB(contentBlock);
+      send(FinishSaving(isAboveContentBlock));
+    },
+    () => send(FailToUpload),
   );
 
 let submitForm =

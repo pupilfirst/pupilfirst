@@ -7403,6 +7403,16 @@
                   }
                 },
                 "defaultValue": null
+              },
+              {
+                "name": "editReason",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
               }
             ],
             "type": {

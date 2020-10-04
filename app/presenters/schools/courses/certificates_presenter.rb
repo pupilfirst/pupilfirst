@@ -11,7 +11,8 @@ module Schools
         {
           course: course_details,
           certificates: certificates,
-          verify_image_url: view.image_path('issued_certificates/verify.png')
+          verify_image_url: view.image_path('issued_certificates/verify.png'),
+          can_be_auto_issued: can_be_auto_issued,
         }
       end
 
@@ -25,6 +26,11 @@ module Schools
       end
 
       private
+
+      def can_be_auto_issued
+        top_level = @course.levels.order(number: :desc).first.id
+        @course.target_groups.where(level_id:top_level,milestone:true).exists?
+      end
 
       def certificates
         active_certificate = @course.certificates.active.includes_image.limit(1)

@@ -223,17 +223,26 @@ let updateTextareaAfterDelay = (state, cursorPosition) => {
   );
 };
 
-let finalizeChange = (~newValue, ~state, ~send, ~onChange, ~offset) => {
+let finalizeChange = (~newValue, ~state, ~send, ~onChange, ~offsetChange) => {
   let (_, selectionEnd) = state.selection;
 
   // The cursor needs to be bumped to account for changed value.
-  send(BumpSelection(offset));
-
+  send(
+    switch (offsetChange) {
+    | `BumpSelection(offset) => BumpSelection(offset)
+    | `SetSelection(selection) => SetSelection(selection)
+    },
+  );
+  let finalSelectionEnd =
+    switch (offsetChange) {
+    | `BumpSelection(offset) => selectionEnd + offset
+    | `SetSelection(_, selectionEnd) => selectionEnd
+    };
   // Report the modified value to the parent.
   onChange(newValue);
 
   // Update the textarea after state changes are applied. Read more in function's documentation.
-  updateTextareaAfterDelay(state, selectionEnd + offset);
+  updateTextareaAfterDelay(state, finalSelectionEnd);
 };
 
 type phraseModifer =
@@ -264,7 +273,13 @@ let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
     ~state,
     ~send,
     ~onChange,
-    ~offset=String.(length(newValue) - length(oldValue)) / 2,
+    ~offsetChange=
+      selectionStart === selectionEnd
+        ? `SetSelection((
+            selectionStart + String.length(wrapper),
+            selectionStart + String.length(insert) - String.length(wrapper),
+          ))
+        : `BumpSelection(String.length(wrapper)),
   );
 };
 
@@ -400,7 +415,8 @@ let handleUploadFileResponse = (oldValue, state, send, onChange, json) => {
       ~state,
       ~send,
       ~onChange,
-      ~offset=String.(length(newValue) - length(oldValue)),
+      ~offsetChange=
+        `BumpSelection(String.(length(newValue) - length(oldValue))),
     );
     send(FinishUploading);
   } else {

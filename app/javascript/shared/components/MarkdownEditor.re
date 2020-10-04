@@ -191,7 +191,7 @@ let wrapWith = (wrapper, selectionStart, selectionEnd, sourceText) => {
   * The need for these manual adjustments can be visibly seen by increasing the
   * renderDelay to something like 1000ms.
  **/
-let updateTextareaAfterDelay = (state, cursorPosition) => {
+let updateTextareaAfterDelay = (state, (startPosition, endPosition)) => {
   let renderDelay = 25; //ms
 
   switch (state.mode) {
@@ -208,13 +208,21 @@ let updateTextareaAfterDelay = (state, cursorPosition) => {
     switch (document |> Document.getElementById(state.id)) {
     | Some(element) =>
       Js.Global.setTimeout(
-        () =>
+        () => {
           element
           |> DomUtils.Element.unsafeToHtmlInputElement
-          |> HtmlInputElement.setSelectionRange(
-               cursorPosition,
-               cursorPosition,
-             ),
+          |> HtmlInputElement.setSelectionRange(startPosition, endPosition);
+          switch (
+            Webapi.Dom.Document.getElementById(state.id, Webapi.Dom.document)
+          ) {
+          | None => ()
+          | Some(element) =>
+            switch (Webapi.Dom.Element.asHtmlElement(element)) {
+            | None => ()
+            | Some(h) => Webapi.Dom.HtmlElement.focus(h)
+            }
+          };
+        },
         renderDelay,
       )
       |> ignore
@@ -224,7 +232,7 @@ let updateTextareaAfterDelay = (state, cursorPosition) => {
 };
 
 let finalizeChange = (~newValue, ~state, ~send, ~onChange, ~offsetChange) => {
-  let (_, selectionEnd) = state.selection;
+  let (selectionStart, selectionEnd) = state.selection;
 
   // The cursor needs to be bumped to account for changed value.
   send(
@@ -233,16 +241,19 @@ let finalizeChange = (~newValue, ~state, ~send, ~onChange, ~offsetChange) => {
     | `SetSelection(selection) => SetSelection(selection)
     },
   );
-  let finalSelectionEnd =
+  let (finalSelectionStart, finalSelectionEnd) =
     switch (offsetChange) {
-    | `BumpSelection(offset) => selectionEnd + offset
-    | `SetSelection(_, selectionEnd) => selectionEnd
+    | `BumpSelection(offset) => (
+        selectionStart + offset,
+        selectionEnd + offset,
+      )
+    | `SetSelection(start, selectionEnd) => (start, selectionEnd)
     };
   // Report the modified value to the parent.
   onChange(newValue);
 
   // Update the textarea after state changes are applied. Read more in function's documentation.
-  updateTextareaAfterDelay(state, finalSelectionEnd);
+  updateTextareaAfterDelay(state, (finalSelectionStart, finalSelectionEnd));
 };
 
 type phraseModifer =
@@ -741,7 +752,6 @@ let make =
     },
     [|state.mode|],
   );
-
   <div className={containerClasses(state.mode)}>
     {controls(value, state, send, onChange)}
     <div className={modeClasses(state.mode)}>

@@ -10,7 +10,7 @@ class TopicsResolver < ApplicationQuery
       applicable_topics.search_by_title(title_for_search)
     else
       applicable_topics
-    end.includes(first_post: { creator: :avatar_attachment })
+    end
   end
 
   private

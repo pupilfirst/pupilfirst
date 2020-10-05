@@ -43,7 +43,7 @@ feature 'Topic creator', js: true do
     let!(:category_1) { create :topic_category, community: community }
     let!(:category_2) { create :topic_category, community: community }
 
-    scenario 'user is show a list of category to pick from while creating a topic' do
+    scenario 'users selects a category while creating a topi' do
       sign_in_user(student.user, referrer: new_topic_community_path(community))
 
       fill_in('Title', with: 'a new title')

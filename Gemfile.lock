@@ -130,6 +130,7 @@ GEM
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
+    batch-loader (1.5.0)
     bcrypt (3.1.13)
     benchmark-ips (2.7.2)
     bindex (0.8.1)
@@ -741,6 +742,7 @@ DEPENDENCIES
   attribute_normalizer (~> 1.2.0.b)
   autoprefixer-rails (~> 9.4)
   aws-sdk-s3 (~> 1.35)
+  batch-loader (~> 1.5)
   bootstrap (>= 4.3.1)
   bootstrap4-kaminari-views (= 1.0.0)!
   bootstrap_form (~> 4.0)

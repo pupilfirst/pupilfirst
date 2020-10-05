@@ -57,7 +57,7 @@ feature 'SA Communities Editor', js: true do
     expect(page).to have_text("Please sign in to continue.")
   end
 
-  context 'user adds/modifies topic categories in communities' do
+  context 'when some communities have existing topic categories' do
     let!(:category_1) { create :topic_category, community: community_2 }
     let!(:category_2) { create :topic_category, community: community_2 }
     let!(:category_3) { create :topic_category, community: community_2 }

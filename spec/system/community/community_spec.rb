@@ -59,7 +59,7 @@ feature 'Community', js: true do
     sign_in_user(student_1.user, referrer: community_path(community))
     expect(page).to have_text(community.name)
 
-    click_link 'Create a new topic'
+    click_link 'New Topic'
     expect(page).to have_text("Create a new topic of discussion")
     fill_in 'Title', with: topic_title
     replace_markdown topic_body
@@ -180,7 +180,7 @@ feature 'Community', js: true do
 
     # Revisiting the page "soon" should not increase the count.
     click_link community.name
-    expect(page).to have_link('Create a new topic')
+    expect(page).to have_link('New Topic')
     click_link topic_1.title
 
     expect(page).to have_text(topic_1.first_post.body)
@@ -189,7 +189,7 @@ feature 'Community', js: true do
     # Revisiting after a "long while" should increase the count again.
     travel_to(90.minutes.from_now) do
       click_link community.name
-      expect(page).to have_link('Create a new topic')
+      expect(page).to have_link('New Topic')
       click_link topic_1.title
 
       expect(page).to have_text(topic_1.first_post.body)
@@ -209,7 +209,7 @@ feature 'Community', js: true do
 
     # Faculty can edit or delete a topic
     find("h3[aria-label='Topic Title']").hover
-    expect(page).to have_text("Edit Title")
+    expect(page).to have_text("Edit Topic")
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
     expect(page).to have_text("Edit Post")
     expect(page).to have_text("Delete Post")
@@ -414,13 +414,92 @@ feature 'Community', js: true do
 
       # Create a new topic.
       click_link community.name
-      click_link 'Create a new topic'
+      click_link 'New Topic'
       fill_in 'Title', with: topic_title
       replace_markdown topic_body
       click_button 'Create Topic'
 
       expect(page).to have_text('0 Replies')
       expect(community.topics.reload.find_by(title: topic_title).first_post.body).to eq(topic_body)
+    end
+  end
+
+  context 'community has topic categories' do
+    let!(:category_1) { create :topic_category, community: community }
+    let!(:category_2) { create :topic_category, community: community }
+
+    before do
+      topic_1.update!(topic_category: category_1)
+      topic_2.update!(topic_category: category_2)
+    end
+
+    scenario 'user checks category of topic in community index' do
+      sign_in_user(student_1.user, referrer: community_path(community))
+
+      within("div[aria-label='Topic #{topic_1.id}']") do
+        expect(page).to have_text(category_1.name)
+      end
+
+      within("div[aria-label='Topic #{topic_2.id}']") do
+        expect(page).to have_text(category_2.name)
+      end
+    end
+
+    scenario 'user filters topics by category' do
+      sign_in_user(student_1.user, referrer: community_path(community))
+
+      fill_in 'filter', with: 'category'
+
+      click_button "Category: #{category_1.name}"
+
+      expect(page).to_not have_text(topic_2.title)
+      expect(page).to have_text(topic_1.title)
+
+      # Clear the filter
+      find("button[title='Remove selection: #{category_1.name}']").click
+
+      # Use the dropdown shortcut to filter topics
+      find("div[aria-label='Selected category filter']").click
+
+      find("div[aria-label='Select category #{category_2.name}']").click
+
+      expect(page).to_not have_text(topic_1.title)
+      expect(page).to have_text(topic_2.title)
+    end
+
+    scenario 'moderator updates category of a topic' do
+      sign_in_user(coach.user, referrer: topic_path(topic_1))
+
+      # Change category
+      find("h3[aria-label='Topic Title']").hover
+      click_button 'Edit Topic'
+
+      find("div[aria-label='Selected category']").click
+      find("div[aria-label='Select category #{category_2.name}']").click
+
+      click_button 'Update Topic'
+
+      dismiss_notification
+
+      within("div[aria-label='Topic Details']") do
+        expect(page).to have_text(category_2.name)
+      end
+
+      expect(topic_1.reload.topic_category).to eq(category_2)
+
+      # Assign no category
+
+      find("h3[aria-label='Topic Title']").hover
+      click_button 'Edit Topic'
+
+      find("div[aria-label='Selected category']").click
+      find("div[aria-label='Select no category']").click
+
+      click_button 'Update Topic'
+
+      dismiss_notification
+
+      expect(topic_1.reload.topic_category).to eq(nil)
     end
   end
 end

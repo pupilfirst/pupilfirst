@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'Topic creator', js: true do
   include UserSpecHelper
+  include MarkdownEditorHelper
 
   # Setup a course with students and target for community.
   let(:school) { create :school, :current }
@@ -36,5 +37,28 @@ feature 'Topic creator', js: true do
     expect(page).to have_link(topic_3.title, href: "/topics/#{topic_3.id}/baz-bar")
     expect(page).not_to have_text(topic_1.title)
     expect(page).not_to have_text(topic_2.title)
+  end
+
+  context 'community has topic categories' do
+    let!(:category_1) { create :topic_category, community: community }
+    let!(:category_2) { create :topic_category, community: community }
+
+    scenario 'users selects a category while creating a topi' do
+      sign_in_user(student.user, referrer: new_topic_community_path(community))
+
+      fill_in('Title', with: 'a new title')
+      select category_2.name, from: 'topic_category'
+      add_markdown 'topic body'
+
+      click_button 'Create Topic'
+
+      within("div[aria-label='Topic Details']") do
+        expect(page).to have_text(category_2.name)
+      end
+
+      new_topic = community.topics.reload.last
+
+      expect(new_topic.topic_category).to eq(category_2)
+    end
   end
 end

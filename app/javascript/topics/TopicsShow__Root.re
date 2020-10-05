@@ -12,6 +12,7 @@ type state = {
   topicTitle: string,
   savingTopic: bool,
   showTopicEditor: bool,
+  topicCategory: option(TopicCategory.t),
 };
 
 type action =
@@ -29,7 +30,8 @@ type action =
   | SaveTopic(Topic.t)
   | ShowTopicEditor(bool)
   | UpdateSavingTopic(bool)
-  | MarkReplyAsSolution(string);
+  | MarkReplyAsSolution(string)
+  | UpdateTopicCategory(option(TopicCategory.t));
 
 let reducer = (state, action) => {
   switch (action) {
@@ -101,6 +103,7 @@ let reducer = (state, action) => {
       ...state,
       replies: state.replies |> Post.markAsSolution(postId),
     }
+  | UpdateTopicCategory(topicCategory) => {...state, topicCategory}
   };
 };
 
@@ -133,8 +136,8 @@ let archiveTopic = community => {
 
 module UpdateTopicQuery = [%graphql
   {|
-  mutation UpdateTopicMutation($id: ID!, $title: String!) {
-    updateTopic(id: $id, title: $title)  {
+  mutation UpdateTopicMutation($id: ID!, $title: String!, $topicCategoryId: ID) {
+    updateTopic(id: $id, title: $title, topicCategoryId: $topicCategoryId)  {
       success
     }
   }
@@ -144,9 +147,14 @@ module UpdateTopicQuery = [%graphql
 let updateTopic = (state, send, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   send(UpdateSavingTopic(true));
+  let topicCategoryId =
+    Belt.Option.flatMap(state.topicCategory, category =>
+      Some(TopicCategory.id(category))
+    );
   UpdateTopicQuery.make(
     ~id=state.topic |> Topic.id,
     ~title=state.topicTitle,
+    ~topicCategoryId?,
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -173,6 +181,90 @@ let communityLink = community => {
   </a>;
 };
 
+let topicCategory = (topicCategories, topicCategoryId) => {
+  switch (topicCategoryId) {
+  | Some(id) =>
+    Some(
+      ArrayUtils.unsafeFind(
+        category => TopicCategory.id(category) == id,
+        "Unable to find topic category with ID: " ++ id,
+        topicCategories,
+      ),
+    )
+  | None => None
+  };
+};
+
+let categoryDropdownSelected = topicCategory => {
+  <div
+    ariaLabel="Selected category"
+    className="text-sm bg-gray-100 border border-gray-400 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
+    {switch (topicCategory) {
+     | Some(topicCategory) =>
+       let (color, _) = TopicCategory.color(topicCategory);
+       let style = ReactDOMRe.Style.make(~backgroundColor=color, ());
+
+       <div className="inline-flex items-center">
+         <div className="h-3 w-3 border" style />
+         <span className="ml-2">
+           {TopicCategory.name(topicCategory)->str}
+         </span>
+       </div>;
+     | None => str("None")
+     }}
+    <FaIcon classes="ml-4 fas fa-caret-down" />
+  </div>;
+};
+
+let topicCategorySelector =
+    (send, selectedTopicCategory, availableTopicCategories) => {
+  let selectableTopicCategories =
+    Belt.Option.mapWithDefault(
+      selectedTopicCategory, availableTopicCategories, topicCategory => {
+      Js.Array.filter(
+        availableTopicCategory =>
+          TopicCategory.id(availableTopicCategory)
+          != TopicCategory.id(topicCategory),
+        availableTopicCategories,
+      )
+    });
+
+  let topicCategoryList =
+    Js.Array.map(
+      topicCategory => {
+        let (color, _) = TopicCategory.color(topicCategory);
+        let style = ReactDOMRe.Style.make(~backgroundColor=color, ());
+        let categoryName = TopicCategory.name(topicCategory);
+
+        <div
+          ariaLabel={"Select category " ++ categoryName}
+          className="pl-3 pr-4 py-2 font-normal flex items-center"
+          onClick={_ => send(UpdateTopicCategory(Some(topicCategory)))}>
+          <div className="w-4 h-4 border" style />
+          <span className="ml-2"> categoryName->str </span>
+        </div>;
+      },
+      selectableTopicCategories,
+    );
+
+  switch (selectedTopicCategory) {
+  | None => topicCategoryList
+  | Some(_category) =>
+    Js.Array.concat(
+      topicCategoryList,
+      [|
+        <div
+          ariaLabel="Select no category"
+          className="pl-3 pr-4 py-2 font-normal flex items-center"
+          onClick={_ => send(UpdateTopicCategory(None))}>
+          <div className="w-4 h-4" />
+          <span className="ml-2"> "None"->str </span>
+        </div>,
+      |],
+    )
+  };
+};
+
 [@react.component]
 let make =
     (
@@ -184,6 +276,7 @@ let make =
       ~moderator,
       ~community,
       ~target,
+      ~topicCategories,
     ) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, topic, topic =>
@@ -195,6 +288,8 @@ let make =
         topicTitle: topic |> Topic.title,
         savingTopic: false,
         showTopicEditor: false,
+        topicCategory:
+          topicCategory(topicCategories, Topic.topicCategoryId(topic)),
       }
     );
 
@@ -227,7 +322,7 @@ let make =
        }}
       <div
         className="max-w-4xl w-full mx-auto bg-white p-4 lg:p-8 my-4 border-t border-b md:border-0 lg:rounded-lg lg:shadow">
-        {<div>
+        {<div ariaLabel="Topic Details">
            {state.showTopicEditor
               ? <DisablingCover disabled={state.savingTopic}>
                   <div
@@ -244,38 +339,73 @@ let make =
                       className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       type_="text"
                     />
-                    <div className="flex justify-end">
-                      <button
-                        onClick={_ => send(ShowTopicEditor(false))}
-                        className="btn btn-subtle btn-small mr-2">
-                        {"Cancel" |> str}
-                      </button>
-                      <button
-                        onClick={updateTopic(state, send)}
-                        disabled={state.topicTitle |> Js.String.trim == ""}
-                        className="btn btn-primary btn-small">
-                        {"Update Topic" |> str}
-                      </button>
+                    <div className="flex justify-between items-end">
+                      <div className="flex flex-col items-left">
+                        <span
+                          className="inline-block text-gray-700 text-tiny font-semibold mr-2">
+                          {"Topic Category: " |> str}
+                        </span>
+                        <Dropdown
+                          selected={categoryDropdownSelected(
+                            state.topicCategory,
+                          )}
+                          contents={topicCategorySelector(
+                            send,
+                            state.topicCategory,
+                            topicCategories,
+                          )}
+                          className=""
+                        />
+                      </div>
+                      <div>
+                        <button
+                          onClick={_ => send(ShowTopicEditor(false))}
+                          className="btn btn-subtle btn-small mr-2">
+                          {"Cancel" |> str}
+                        </button>
+                        <button
+                          onClick={updateTopic(state, send)}
+                          disabled={state.topicTitle |> Js.String.trim == ""}
+                          className="btn btn-primary btn-small">
+                          {"Update Topic" |> str}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </DisablingCover>
-              : <div
-                  className="topics-show__title-container flex items-start justify-between">
-                  <h3
-                    ariaLabel="Topic Title"
-                    className="leading-snug lg:pl-14 text-base lg:text-2xl w-5/6">
-                    {state.topic |> Topic.title |> str}
-                  </h3>
-                  {moderator || isTopicCreator(firstPost, currentUserId)
-                     ? <button
-                         onClick={_ => send(ShowTopicEditor(true))}
-                         className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3 lg:invisible">
-                         <i className="far fa-edit" />
-                         <span className="hidden md:inline-block ml-1">
-                           {"Edit Title" |> str}
-                         </span>
-                       </button>
-                     : React.null}
+              : <div className="flex flex-col ">
+                  <div
+                    className="topics-show__title-container flex items-start justify-between mb-2">
+                    <h3
+                      ariaLabel="Topic Title"
+                      className="leading-snug lg:pl-14 text-base lg:text-2xl w-5/6">
+                      {state.topic |> Topic.title |> str}
+                    </h3>
+                    {moderator || isTopicCreator(firstPost, currentUserId)
+                       ? <button
+                           onClick={_ => send(ShowTopicEditor(true))}
+                           className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3 lg:invisible">
+                           <i className="far fa-edit" />
+                           <span className="hidden md:inline-block ml-1">
+                             {"Edit Topic" |> str}
+                           </span>
+                         </button>
+                       : React.null}
+                  </div>
+                  {switch (state.topicCategory) {
+                   | Some(topicCategory) =>
+                     let (color, _) = TopicCategory.color(topicCategory);
+                     let style =
+                       ReactDOMRe.Style.make(~backgroundColor=color, ());
+                     <div
+                       className="py-2 flex items-center lg:pl-14 text-xs font-semibold">
+                       <div className="w-4 h-4 border" style />
+                       <span className="ml-2">
+                         {TopicCategory.name(topicCategory)->str}
+                       </span>
+                     </div>;
+                   | None => React.null
+                   }}
                 </div>}
            <TopicsShow__PostShow
              key={Post.id(state.firstPost)}

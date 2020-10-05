@@ -6,9 +6,18 @@ module Types
     field :avatar_url, String, null: true
 
     def avatar_url
-      if object.avatar.attached?
-        Rails.application.routes.url_helpers.rails_representation_path(object.avatar_variant(:thumb), only_path: true)
+      BatchLoader::GraphQL.for(object.id).batch do |user_ids, loader|
+        User.includes(avatar_attachment: :blob).where(id: user_ids).each do |user|
+          if user.avatar.attached?
+            url = Rails.application.routes.url_helpers.rails_representation_path(user.avatar_variant(:thumb), only_path: true)
+            loader.call(user.id, url)
+          end
+        end
       end
+
+      # if object.avatar.attached?
+      #   Rails.application.routes.url_helpers.rails_representation_path(object.avatar_variant(:thumb), only_path: true)
+      # end
     end
 
     def title

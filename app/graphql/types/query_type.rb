@@ -112,5 +112,12 @@ module Types
       argument :tags, [String], required: true
       argument :coach_id, ID, required: false
     end
+
+    resolved_field :topics, Types::TopicType.connection_type, null: false do
+      argument :community_id, ID, required: true
+      argument :topic_category_id, ID, required: false
+      argument :target_id, ID, required: false
+      argument :search, String, required: false
+    end
   end
 end

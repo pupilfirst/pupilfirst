@@ -4,6 +4,7 @@ module Mutations
     argument :body, String, required: true
     argument :community_id, ID, required: true
     argument :target_id, ID, required: false
+    argument :topic_category_id, ID, required: false
 
     description 'Create a new topic of discussion in a community'
 

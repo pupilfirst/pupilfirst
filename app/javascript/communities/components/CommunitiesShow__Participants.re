@@ -22,28 +22,6 @@ let avatar = (~size=("8", "10"), avatarUrl, name) => {
   };
 };
 
-let creatorAvatar =
-    (creator, tooltipPosition, defaultAvatarSize, mdAvatarSize) => {
-  let creatorName =
-    Belt.Option.mapWithDefault(creator, "Unknown", TopicParticipant.name);
-
-  let avatarUrl =
-    Belt.Option.mapWithDefault(creator, None, TopicParticipant.avatarUrl);
-
-  let key =
-    Belt.Option.mapWithDefault(creator, "unknown", TopicParticipant.id);
-  <Tooltip
-    position=tooltipPosition
-    tip={
-      creator->Belt.Option.mapWithDefault("Unknown", TopicParticipant.name)
-      |> str
-    }
-    className="-mr-1"
-    key>
-    {avatar(~size=(defaultAvatarSize, mdAvatarSize), avatarUrl, creatorName)}
-  </Tooltip>;
-};
-
 [@react.component]
 let make =
     (
@@ -53,27 +31,25 @@ let make =
       ~title,
       ~className,
       ~participants,
-      ~creator,
       ~participantsCount,
     ) => {
   <div className>
     <div className="text-xs"> title </div>
     <div className="inline-flex">
-      {
-         participants
-         |> Array.map(participant => {
-              <Tooltip
-                position=tooltipPosition
-                tip={participant |> TopicParticipant.name |> str}
-                className="-mr-1"
-                key={participant |> TopicParticipant.id}>
-                {avatar(
-                   ~size=(defaultAvatarSize, mdAvatarSize),
-                   participant |> TopicParticipant.avatarUrl,
-                   participant |> TopicParticipant.name,
-                 )}
-              </Tooltip>
-            })
+      {participants
+       |> Array.map(participant => {
+            <Tooltip
+              position=tooltipPosition
+              tip={participant |> TopicParticipant.name |> str}
+              className="-mr-1"
+              key={participant |> TopicParticipant.id}>
+              {avatar(
+                 ~size=(defaultAvatarSize, mdAvatarSize),
+                 participant |> TopicParticipant.avatarUrl,
+                 participant |> TopicParticipant.name,
+               )}
+            </Tooltip>
+          })
        |> React.array}
       {let otherParticipantsCount =
          participantsCount - Js.Array.length(participants);

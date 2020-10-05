@@ -7,7 +7,7 @@ class UpdateTopicMutator < ApplicationQuery
 
   def update_topic
     Topic.transaction do
-      topic.update!(title: title, topic_category_id: topic_category_id)
+      topic.update!(title: title, topic_category: topic_category)
       topic.first_post.update!(editor: current_user)
       topic
     end
@@ -27,5 +27,11 @@ class UpdateTopicMutator < ApplicationQuery
 
   def topic
     @topic ||= Topic.find_by(id: id)
+  end
+
+  def topic_category
+    return if topic_category_id.blank?
+
+    community.topic_categories.find_by(id: topic_category_id)
   end
 end

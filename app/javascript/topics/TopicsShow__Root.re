@@ -197,6 +197,7 @@ let topicCategory = (topicCategories, topicCategoryId) => {
 
 let categoryDropdownSelected = topicCategory => {
   <div
+    ariaLabel="Selected category"
     className="text-sm bg-gray-100 border border-gray-400 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
     {switch (topicCategory) {
      | Some(topicCategory) =>
@@ -233,14 +234,14 @@ let topicCategorySelector =
       topicCategory => {
         let (color, _) = TopicCategory.color(topicCategory);
         let style = ReactDOMRe.Style.make(~backgroundColor=color, ());
+        let categoryName = TopicCategory.name(topicCategory);
 
         <div
+          ariaLabel={"Select category " ++ categoryName}
           className="pl-3 pr-4 py-2 font-normal flex items-center"
           onClick={_ => send(UpdateTopicCategory(Some(topicCategory)))}>
           <div className="w-4 h-4 border" style />
-          <span className="ml-2">
-            {TopicCategory.name(topicCategory)->str}
-          </span>
+          <span className="ml-2"> categoryName->str </span>
         </div>;
       },
       selectableTopicCategories,
@@ -253,6 +254,7 @@ let topicCategorySelector =
       topicCategoryList,
       [|
         <div
+          ariaLabel="Select no category"
           className="pl-3 pr-4 py-2 font-normal flex items-center"
           onClick={_ => send(UpdateTopicCategory(None))}>
           <div className="w-4 h-4" />
@@ -320,7 +322,7 @@ let make =
        }}
       <div
         className="max-w-4xl w-full mx-auto bg-white p-4 lg:p-8 my-4 border-t border-b md:border-0 lg:rounded-lg lg:shadow">
-        {<div>
+        {<div ariaLabel="Topic Details">
            {state.showTopicEditor
               ? <DisablingCover disabled={state.savingTopic}>
                   <div

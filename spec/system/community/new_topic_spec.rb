@@ -52,7 +52,9 @@ feature 'Topic creator', js: true do
 
       click_button 'Create Topic'
 
-      expect(page).to have_text('0 Replies')
+      within("div[aria-label='Topic Details']") do
+        expect(page).to have_text(category_2.name)
+      end
 
       new_topic = community.topics.reload.last
 

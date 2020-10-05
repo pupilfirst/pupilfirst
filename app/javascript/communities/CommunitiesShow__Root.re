@@ -445,15 +445,19 @@ let onDeselectFilter = (send, selectable) =>
   | Title(_title) => send(UnsetSearchString)
   };
 
-let filterPlaceholder = state => {
+let filterPlaceholder = (state, topicCategories) => {
   switch (state.filter.topicCategory, state.filter.title) {
-  | (None, None) => "Filter by category, or search by topic title.."
+  | (None, None) =>
+    ArrayUtils.isEmpty(topicCategories)
+      ? "Search by topic title.."
+      : "Filter by category, or search by topic title.."
   | _ => ""
   };
 };
 
 let categoryDropdownSelected = topicCategory => {
   <div
+    ariaLabel="Selected category filter"
     className="text-sm bg-gray-100 border border-gray-400 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
     {switch (topicCategory) {
      | Some(topicCategory) =>
@@ -489,14 +493,14 @@ let categoryDropdownContents =
     topicCategory => {
       let (color, _) = TopicCategory.color(topicCategory);
       let style = ReactDOMRe.Style.make(~backgroundColor=color, ());
+      let categoryName = TopicCategory.name(topicCategory);
 
       <div
+        ariaLabel={"Select category " ++ categoryName}
         className="pl-3 pr-4 py-2 font-normal flex items-center"
         onClick={_ => send(SelectTopicCategory(topicCategory))}>
         <div className="w-4 h-4 border" style />
-        <span className="ml-2">
-          {TopicCategory.name(topicCategory)->str}
-        </span>
+        <span className="ml-2"> categoryName->str </span>
       </div>;
     },
     selectableTopicCategories,
@@ -536,15 +540,18 @@ let make = (~communityId, ~target, ~topicCategories) => {
     <div className="px-3 md:px-6 pb-4 mt-5 flex flex-1">
       <div className="max-w-3xl w-full mx-auto relative">
         <div className="mb-4 flex justify-between">
-          <Dropdown
-            selected={categoryDropdownSelected(state.filter.topicCategory)}
-            contents={categoryDropdownContents(
-              topicCategories,
-              state.filter.topicCategory,
-              send,
-            )}
-            className=""
-          />
+          {ReactUtils.nullIf(
+             <Dropdown
+               selected={categoryDropdownSelected(state.filter.topicCategory)}
+               contents={categoryDropdownContents(
+                 topicCategories,
+                 state.filter.topicCategory,
+                 send,
+               )}
+               className=""
+             />,
+             ArrayUtils.isEmpty(topicCategories),
+           )}
           <div
             className=""
             // Other controls go here.
@@ -560,7 +567,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
             onDeselect={onDeselectFilter(send)}
             value={state.filterString}
             onChange={filterString => send(UpdateFilterString(filterString))}
-            placeholder={filterPlaceholder(state)}
+            placeholder={filterPlaceholder(state, topicCategories)}
           />
         </div>
         <div

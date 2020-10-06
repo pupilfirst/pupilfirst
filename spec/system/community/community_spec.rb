@@ -502,4 +502,33 @@ feature 'Community', js: true do
       expect(topic_1.reload.topic_category).to eq(nil)
     end
   end
+
+  context 'community has a mix of solved and unsolved topics' do
+    let!(:reply_marked_as_solution) { create :post, topic: topic_1, creator: student_1.user, post_number: 3, solution: true }
+    let!(:reply_2) { create :post, topic: topic_2, creator: student_1.user, post_number: 2 }
+
+    scenario 'user filters topics with or without solution' do
+      sign_in_user(coach.user, referrer: community_path(community))
+
+      fill_in 'filter', with: 'solution'
+
+      click_button "Solution: Solved"
+
+      expect(page).to_not have_text(topic_2.title)
+      expect(page).to have_text(topic_1.title)
+
+      # Clear the filter
+      find("button[title='Remove selection: Solved']").click
+
+      expect(page).to have_text(topic_2.title)
+      expect(page).to have_text(topic_1.title)
+
+      fill_in 'filter', with: 'solution'
+
+      click_button "Solution: Unsolved"
+
+      expect(page).to_not have_text(topic_1.title)
+      expect(page).to have_text(topic_2.title)
+    end
+  end
 end

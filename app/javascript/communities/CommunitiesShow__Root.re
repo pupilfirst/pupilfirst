@@ -4,6 +4,8 @@ open CommunitiesShow__Types;
 
 let str = React.string;
 
+type solution = [ | `Solved | `Unsolved | `Unselected];
+
 type loading =
   | NotLoading
   | Reloading
@@ -11,6 +13,7 @@ type loading =
 
 type filter = {
   topicCategory: option(TopicCategory.t),
+  solution,
   title: option(string),
   target: option(Target.t),
 };
@@ -31,7 +34,8 @@ type action =
   | UpdateFilterString(string)
   | LoadTopics(option(string), bool, array(Topic.t), int)
   | BeginLoadingMore
-  | BeginReloading;
+  | BeginReloading
+  | SetSolutionFilter(solution);
 
 let reducer = (state, action) => {
   switch (action) {
@@ -65,6 +69,14 @@ let reducer = (state, action) => {
         title: None,
       },
     }
+  | SetSolutionFilter(solution) => {
+      ...state,
+      filter: {
+        ...state.filter,
+        solution,
+      },
+      filterString: "",
+    }
   | UpdateFilterString(filterString) => {...state, filterString}
   | LoadTopics(endCursor, hasNextPage, newTopics, totalTopicsCount) =>
     let updatedTopics =
@@ -93,8 +105,8 @@ let reducer = (state, action) => {
 
 module TopicsQuery = [%graphql
   {|
-    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $search: String, $after: String) {
-      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, first: 10, after: $after) {
+    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $resolution: TopicResolutionFilter!, $search: String, $after: String) {
+      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, resolution: $resolution, first: 10, after: $after) {
         nodes {
           id
           lastActivityAt
@@ -135,6 +147,7 @@ let getTopics = (send, communityId, cursor, filter) => {
     ~topicCategoryId?,
     ~targetId?,
     ~search=?filter.title,
+    ~resolution=filter.solution,
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -170,6 +183,7 @@ let computeInitialState = target => {
     title: None,
     topicCategory: None,
     target,
+    solution: `Unselected,
   },
   totalTopicsCount: 0,
 };
@@ -355,34 +369,40 @@ let topicsLoadedData = (totalTopicsCount, loadedTopicsCount) => {
 module Selectable = {
   type t =
     | TopicCategory(TopicCategory.t)
+    | Solution(bool)
     | Title(string);
 
   let label = t =>
     switch (t) {
     | TopicCategory(_category) => Some("Category")
     | Title(_) => Some("Topic Title")
+    | Solution(_) => Some("Solution")
     };
 
   let value = t =>
     switch (t) {
     | TopicCategory(category) => TopicCategory.name(category)
     | Title(search) => search
+    | Solution(solution) => solution ? "Solved" : "Unsolved"
     };
 
   let searchString = t =>
     switch (t) {
     | TopicCategory(category) => "category " ++ TopicCategory.name(category)
     | Title(search) => search
+    | Solution(_solution) => "solution solved unsolved"
     };
 
   let color = t => {
     switch (t) {
     | TopicCategory(_category) => "orange"
     | Title(_search) => "gray"
+    | Solution(_solution) => "green"
     };
   };
   let topicCategory = topicCategory => TopicCategory(topicCategory);
   let title = search => Title(search);
+  let solution = on => Solution(on);
 };
 
 module Multiselect = MultiselectDropdown.Make(Selectable);
@@ -407,7 +427,19 @@ let unselected = (topicCategories, state) => {
     trimmedFilterString == ""
       ? [||] : [|Selectable.title(trimmedFilterString)|];
 
-  unselectedCategories |> Array.append(title);
+  let hasSolution =
+    switch (state.filter.solution) {
+    | `Solved => [|Selectable.solution(false)|]
+    | `Unsolved => [|Selectable.solution(true)|]
+    | `Unselected => [|
+        Selectable.solution(true),
+        Selectable.solution(false),
+      |]
+    };
+
+  unselectedCategories
+  |> Js.Array.concat(title)
+  |> Js.Array.concat(hasSolution);
 };
 
 let selected = state => {
@@ -425,7 +457,16 @@ let selected = state => {
          [||],
        );
 
-  selectedCategory |> Array.append(selectedSearchString);
+  let selectedSolutionFilter =
+    switch (state.filter.solution) {
+    | `Solved => [|Selectable.solution(true)|]
+    | `Unsolved => [|Selectable.solution(false)|]
+    | `Unselected => [||]
+    };
+
+  selectedCategory
+  |> Js.Array.concat(selectedSearchString)
+  |> Js.Array.concat(selectedSolutionFilter);
 };
 
 let onSelectFilter = (send, selectable) =>
@@ -433,12 +474,16 @@ let onSelectFilter = (send, selectable) =>
   | Selectable.TopicCategory(topicCategory) =>
     send(SelectTopicCategory(topicCategory))
   | Title(title) => send(SetSearchString(title))
+  | Solution(onOrOff) =>
+    let filter = onOrOff ? `Solved : `Unsolved;
+    send(SetSolutionFilter(filter));
   };
 
 let onDeselectFilter = (send, selectable) =>
   switch (selectable) {
   | Selectable.TopicCategory(_topicCategory) => send(DeselectTopicCategory)
   | Title(_title) => send(UnsetSearchString)
+  | Solution(_) => send(SetSolutionFilter(`Unselected))
   };
 
 let filterPlaceholder = (state, topicCategories) => {
@@ -624,6 +669,18 @@ let make = (~communityId, ~target, ~topicCategories) => {
            state.totalTopicsCount == 0,
          )}
       </div>
+      {switch (state.topics) {
+       | Unloaded => React.null
+
+       | _ =>
+         let loading =
+           switch (state.loading) {
+           | NotLoading => false
+           | Reloading => true
+           | LoadingMore => false
+           };
+         <LoadingSpinner loading />;
+       }}
     </div>
   </div>;
 };

@@ -1067,14 +1067,14 @@
                 "defaultValue": null
               },
               {
-                "name": "solution",
+                "name": "resolution",
                 "description": "",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "ENUM",
-                    "name": "TopicSolutionFilter",
+                    "name": "TopicResolutionFilter",
                     "ofType": null
                   }
                 },
@@ -5134,26 +5134,26 @@
       },
       {
         "kind": "ENUM",
-        "name": "TopicSolutionFilter",
+        "name": "TopicResolutionFilter",
         "description": "",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
           {
-            "name": "HasSolution",
+            "name": "Solved",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "WithoutSolution",
+            "name": "Unsolved",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "IgnoreSolution",
+            "name": "Unselected",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null

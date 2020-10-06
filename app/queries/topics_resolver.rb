@@ -3,7 +3,7 @@ class TopicsResolver < ApplicationQuery
   property :topic_category_id
   property :target_id
   property :search
-  property :solution
+  property :resolution
 
   def topics
     if search.present?
@@ -37,12 +37,12 @@ class TopicsResolver < ApplicationQuery
     @community ||= Community.find_by(id: community_id)
   end
 
-  def filter_by_solution(topics, solution)
+  def filter_by_solution(topics, resolution)
     topics_with_solution = topics.joins(:posts).where(posts: { solution: true })
-    case solution
-    when 'HasSolution'
+    case resolution
+    when 'Solved'
       topics_with_solution
-    when 'WithoutSolution'
+    when 'Unsolved'
       topics.where.not(id: topics_with_solution)
     else
       topics
@@ -50,7 +50,7 @@ class TopicsResolver < ApplicationQuery
   end
 
   def applicable_topics
-    by_solution = filter_by_solution(community.topics.live, solution)
+    by_solution = filter_by_solution(community.topics.live, resolution)
 
     by_category =
       if topic_category_id.present?

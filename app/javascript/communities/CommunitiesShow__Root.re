@@ -4,7 +4,7 @@ open CommunitiesShow__Types;
 
 let str = React.string;
 
-type solution = [ | `HasSolution | `WithoutSolution | `IgnoreSolution];
+type solution = [ | `Solved | `Unsolved | `Unselected];
 
 type loading =
   | NotLoading
@@ -105,8 +105,8 @@ let reducer = (state, action) => {
 
 module TopicsQuery = [%graphql
   {|
-    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $solution: TopicSolutionFilter!, $search: String, $after: String) {
-      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, solution: $solution, first: 10, after: $after) {
+    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $resolution: TopicResolutionFilter!, $search: String, $after: String) {
+      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, resolution: $resolution, first: 10, after: $after) {
         nodes {
           id
           lastActivityAt
@@ -147,7 +147,7 @@ let getTopics = (send, communityId, cursor, filter) => {
     ~topicCategoryId?,
     ~targetId?,
     ~search=?filter.title,
-    ~solution=filter.solution,
+    ~resolution=filter.solution,
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -183,7 +183,7 @@ let computeInitialState = target => {
     title: None,
     topicCategory: None,
     target,
-    solution: `IgnoreSolution,
+    solution: `Unselected,
   },
   totalTopicsCount: 0,
 };
@@ -383,15 +383,14 @@ module Selectable = {
     switch (t) {
     | TopicCategory(category) => TopicCategory.name(category)
     | Title(search) => search
-    | Solution(solution) =>
-      solution ? "Has solution" : "Does not have solution"
+    | Solution(solution) => solution ? "Solved" : "Unsolved"
     };
 
   let searchString = t =>
     switch (t) {
     | TopicCategory(category) => "category " ++ TopicCategory.name(category)
     | Title(search) => search
-    | Solution(_solution) => "does not have solution has solution"
+    | Solution(_solution) => "solution solved unsolved"
     };
 
   let color = t => {
@@ -430,15 +429,17 @@ let unselected = (topicCategories, state) => {
 
   let hasSolution =
     switch (state.filter.solution) {
-    | `HasSolution => [|Selectable.solution(false)|]
-    | `WithoutSolution => [|Selectable.solution(true)|]
-    | `IgnoreSolution => [|
+    | `Solved => [|Selectable.solution(false)|]
+    | `Unsolved => [|Selectable.solution(true)|]
+    | `Unselected => [|
         Selectable.solution(true),
         Selectable.solution(false),
       |]
     };
 
-  unselectedCategories |> Array.append(title) |> Array.append(hasSolution);
+  unselectedCategories
+  |> Js.Array.concat(title)
+  |> Js.Array.concat(hasSolution);
 };
 
 let selected = state => {
@@ -458,14 +459,14 @@ let selected = state => {
 
   let selectedSolutionFilter =
     switch (state.filter.solution) {
-    | `HasSolution => [|Selectable.solution(true)|]
-    | `WithoutSolution => [|Selectable.solution(false)|]
-    | `IgnoreSolution => [||]
+    | `Solved => [|Selectable.solution(true)|]
+    | `Unsolved => [|Selectable.solution(false)|]
+    | `Unselected => [||]
     };
 
   selectedCategory
-  |> Array.append(selectedSearchString)
-  |> Array.append(selectedSolutionFilter);
+  |> Js.Array.concat(selectedSearchString)
+  |> Js.Array.concat(selectedSolutionFilter);
 };
 
 let onSelectFilter = (send, selectable) =>
@@ -474,7 +475,7 @@ let onSelectFilter = (send, selectable) =>
     send(SelectTopicCategory(topicCategory))
   | Title(title) => send(SetSearchString(title))
   | Solution(onOrOff) =>
-    let filter = onOrOff ? `HasSolution : `WithoutSolution;
+    let filter = onOrOff ? `Solved : `Unsolved;
     send(SetSolutionFilter(filter));
   };
 
@@ -482,7 +483,7 @@ let onDeselectFilter = (send, selectable) =>
   switch (selectable) {
   | Selectable.TopicCategory(_topicCategory) => send(DeselectTopicCategory)
   | Title(_title) => send(UnsetSearchString)
-  | Solution(_) => send(SetSolutionFilter(`IgnoreSolution))
+  | Solution(_) => send(SetSolutionFilter(`Unselected))
   };
 
 let filterPlaceholder = (state, topicCategories) => {

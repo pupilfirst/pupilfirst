@@ -341,6 +341,21 @@ feature 'Community', js: true do
     end
   end
 
+  scenario 'user searches for topics in community' do
+    sign_in_user(coach.user, referrer: community_path(community))
+
+    expect(page).to have_text(topic_2.title)
+
+    search_string = topic_1.title[0..9].strip
+
+    fill_in 'filter', with: search_string
+
+    click_button "Pick Topic Title: #{search_string}"
+
+    expect(page).to_not have_text(topic_2.title)
+    expect(page).to have_text(topic_1.title)
+  end
+
   context 'when a topic has a archived replies and likes on its posts' do
     let(:archived_reply) { create :post, topic: topic_1, creator: student_1.user, post_number: 3, archiver: student_1.user, archived_at: Time.zone.now }
 

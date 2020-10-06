@@ -63,6 +63,6 @@ class TopicsResolver < ApplicationQuery
       by_category.where(target_id: target_id)
     else
       by_category
-    end.distinct.order('topics.created_at DESC')
+    end.order('topics.created_at DESC')
   end
 end

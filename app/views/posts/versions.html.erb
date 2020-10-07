@@ -34,10 +34,9 @@
             <span><%= presenter.updated_at(@post) %></span>
           </div>
           <% if @post.edit_reason? %>
-            <div class="mt-4 text-xs">
-              <span>Edit reason:
-                <%= @post.edit_reason %>
-              </span>
+            <div class="mt-1 text-xs">
+              <span class="font-semibold">Reason:</span>
+              <span><%= @post.edit_reason %></span>
             </div>
           <% end %>
         </div>
@@ -57,10 +56,9 @@
             <span><%= presenter.updated_at(version) %></span>
           </div>
           <% if version.reason? %>
-            <div class="mt-4 text-xs">
-              <span>Edit reason:
-                <%= version.reason %>
-              </span>
+            <div class="mt-1 text-xs">
+              <span class="font-semibold">Reason:</span>
+              <span><%= @post.edit_reason %></span>
             </div>
           <% end %>
         </div>

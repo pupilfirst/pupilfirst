@@ -8,7 +8,7 @@ class UpdatePostMutator < ApplicationQuery
   def update_post
     Post.transaction do
       post.text_versions.create!(value: post.body, user: post.creator, edited_at: post.updated_at, reason: post.edit_reason)
-      post.update!(body: body, editor: current_user, edit_reason: edit_reason)
+      post.update!(body: body, editor: current_user, edit_reason: sanitized_edit_reason)
       post
     end
   end
@@ -28,4 +28,9 @@ class UpdatePostMutator < ApplicationQuery
   def post
     @post ||= Post.find_by(id: id)
   end
+
+  def sanitized_edit_reason
+    edit_reason&.strip.presence
+  end
+
 end

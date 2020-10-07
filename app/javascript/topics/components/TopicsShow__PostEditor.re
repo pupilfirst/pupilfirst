@@ -74,15 +74,15 @@ let handlePostUpdateResponse =
 let savePost =
     (
       ~editReason,
-      body,
-      topic,
-      setState,
-      currentUserId,
-      replyToPostId,
-      handlePostCB,
-      post,
-      postNumber,
-      handleCloseCB,
+      ~body,
+      ~topic,
+      ~setState,
+      ~currentUserId,
+      ~replyToPostId,
+      ~handlePostCB,
+      ~post,
+      ~postNumber,
+      ~handleCloseCB,
       event,
     ) => {
   event |> ReactEvent.Mouse.preventDefault;
@@ -300,15 +300,15 @@ let make =
                disabled={state.saving || state.body |> String.trim == ""}
                onClick={savePost(
                  ~editReason,
-                 state.body,
-                 topic,
-                 setState,
-                 currentUserId,
-                 replyToPostId,
-                 handlePostCB,
-                 post,
-                 newPostNumber,
-                 handleCloseCB,
+                 ~body=state.body,
+                 ~topic,
+                 ~setState,
+                 ~currentUserId,
+                 ~replyToPostId,
+                 ~handlePostCB,
+                 ~post,
+                 ~postNumber=newPostNumber,
+                 ~handleCloseCB,
                )}
                className="btn btn-primary">
                {(

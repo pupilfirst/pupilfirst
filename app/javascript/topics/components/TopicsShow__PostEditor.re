@@ -266,6 +266,7 @@ let make =
             />
             {editing
                ? <input
+                   id="edit-reason"
                    className="mt-2 appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                    onChange={event => {
                      let reason = ReactEvent.Form.target(event)##value;

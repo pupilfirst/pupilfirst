@@ -278,6 +278,7 @@ let make =
                      | Some(editReason) => editReason
                      }
                    }
+                   maxLength=500
                  />
                : React.null}
           </div>

@@ -3,7 +3,7 @@ class UpdatePostMutator < ApplicationQuery
 
   property :id
   property :body, validates: { length: { minimum: 1, maximum: 10_000 }, presence: true }
-  property :edit_reason
+  property :edit_reason, validates: { length: { maximum: 500, allow_blank: true } }
 
   def update_post
     Post.transaction do

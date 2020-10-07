@@ -212,16 +212,9 @@ let updateTextareaAfterDelay = (state, (startPosition, endPosition)) => {
           element
           |> DomUtils.Element.unsafeToHtmlInputElement
           |> HtmlInputElement.setSelectionRange(startPosition, endPosition);
-          switch (
-            Webapi.Dom.Document.getElementById(state.id, Webapi.Dom.document)
-          ) {
-          | None => ()
-          | Some(element) =>
-            switch (Webapi.Dom.Element.asHtmlElement(element)) {
-            | None => ()
-            | Some(h) => Webapi.Dom.HtmlElement.focus(h)
-            }
-          };
+          Webapi.Dom.Document.getElementById(state.id, Webapi.Dom.document)
+          ->Belt.Option.flatMap(Webapi.Dom.Element.asHtmlElement)
+          ->Belt.Option.mapWithDefault((), Webapi.Dom.HtmlElement.focus);
         },
         renderDelay,
       )

@@ -136,9 +136,12 @@ Rails.application.configure do
   config.skylight.probes << "graphql"
 
   # Add throttling to application
+  require_relative '../../lib/rack_throttle/rules'
+
   rules = [
     { method: "POST", limit: ENV['GRAPH_API_RATE_LIMIT'] },
-    { method: "POST", path: "/graphql", limit: ENV['GRAPH_API_RATE_LIMIT'] }]
+    { method: "POST", path: "/graphql", limit: ENV['GRAPH_API_RATE_LIMIT'] },
+    { method: "GET", whitelisted: true }]
 
   cache = if ENV['MEMCACHEDCLOUD_SERVERS'].present?
     Dalli::Client.new((ENV['MEMCACHEDCLOUD_SERVERS']).split(","),
@@ -146,5 +149,5 @@ Rails.application.configure do
         :password => ENV['MEMCACHEDCLOUD_PASSWORD'] })
   end
 
-  config.middleware.use Rack::Throttle::Rules, rules: rules, cache: cache, :key_prefix => :throttle
+  config.middleware.use RackThrottle::Rules, rules: rules, cache: cache, :key_prefix => :throttle, default: 20
 end

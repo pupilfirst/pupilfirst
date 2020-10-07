@@ -20,8 +20,8 @@ module CreatePostQuery = [%graphql
 
 module UpdatePostQuery = [%graphql
   {|
-  mutation UpdatePostMutation($id: ID!, $body: String!,$editReason:String) {
-    updatePost(id: $id, body: $body,editReason:$editReason)  {
+  mutation UpdatePostMutation($id: ID!, $body: String!, $editReason: String) {
+    updatePost(id: $id, body: $body, editReason: $editReason)  {
       success
     }
   }

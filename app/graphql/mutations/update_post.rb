@@ -2,7 +2,7 @@ module Mutations
   class UpdatePost < GraphQL::Schema::Mutation
     argument :id, ID, required: true
     argument :body, String, required: true
-    argument :edit_reason, String, required:false
+    argument :edit_reason, String, required: false
     description "Update community post"
 
     field :success, Boolean, null: false

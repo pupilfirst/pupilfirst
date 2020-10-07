@@ -256,7 +256,7 @@ let make =
                    className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3 my-1">
                    <i className="fas fa-exclamation-triangle" />
                    <span className="ml-2">
-                     "Create a milestone target in the last level to auto-issue the certificate"
+                     "Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target."
                      ->React.string
                    </span>
                  </div>

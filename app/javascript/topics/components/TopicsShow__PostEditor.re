@@ -6,6 +6,7 @@ let str = React.string;
 type state = {
   body: string,
   saving: bool,
+  editReason: option(string),
 };
 
 module CreatePostQuery = [%graphql
@@ -46,7 +47,7 @@ let handlePostCreateResponse =
       ~replies=[||],
       ~solution=false,
     );
-  setState(_ => {body: "", saving: false});
+  setState(_ => {body: "", saving: false, editReason: None});
   handlePostCB(post);
 };
 
@@ -67,7 +68,7 @@ let handlePostUpdateResponse =
       ~solution=post |> Post.solution,
     );
 
-  setState(_ => {body: "", saving: false});
+  setState(_ => {body: "", saving: false, editReason: None});
   handleCloseCB |> OptionUtils.mapWithDefault(cb => cb(), ());
   handlePostCB(updatedPost);
 };
@@ -198,10 +199,12 @@ let make =
           | None => ""
           },
         saving: false,
+        editReason: None,
       }
     );
   let updateMarkdownCB = body => setState(state => {...state, body});
-  let (editReason, setEditReason) = React.useState(() => None);
+  let editReason = state.editReason;
+  let setEditReason = editReason => setState(state => {...state, editReason});
   <DisablingCover disabled={state.saving}>
     <div
       ariaLabel="Add new reply"
@@ -267,8 +270,8 @@ let make =
                    onChange={event => {
                      let reason = ReactEvent.Form.target(event)##value;
                      switch (reason) {
-                     | "" => setEditReason(_ => None)
-                     | reason => setEditReason(_ => Some(reason))
+                     | "" => setEditReason(None)
+                     | reason => setEditReason(Some(reason))
                      };
                    }}
                    placeholder="Reason for this edit (optional)"

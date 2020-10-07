@@ -158,13 +158,7 @@ let activateQrCode = (state, send, _event) =>
 
 [@react.component]
 let make =
-    (
-      ~certificate,
-      ~verifyImageUrl,
-      ~closeDrawerCB,
-      ~updateCertificateCB,
-      ~canBeAutoIssued,
-    ) => {
+    (~certificate, ~verifyImageUrl, ~closeDrawerCB, ~updateCertificateCB) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, certificate, computeInitialState);
 
@@ -251,16 +245,6 @@ let make =
                 {str("No")}
               </button>
             </div>
-            {!canBeAutoIssued
-               ? <div
-                   className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3 my-1">
-                   <i className="fas fa-exclamation-triangle" />
-                   <span className="ml-2">
-                     "Create a milestone target in the last level to auto-issue the certificate"
-                     ->React.string
-                   </span>
-                 </div>
-               : React.null}
           </div>
           <h5 className="mt-6 text-sm uppercase font-bold pb-1 border-b">
             {str("Design")}

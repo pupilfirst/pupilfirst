@@ -109,7 +109,7 @@ let deleteCertificate = (certificate, send) => {
 };
 
 [@react.component]
-let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
+let make = (~course, ~certificates, ~verifyImageUrl) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, certificates, computeInitialState);
 
@@ -129,7 +129,6 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
            verifyImageUrl
            closeDrawerCB={() => send(CloseDrawer)}
            updateCertificateCB={updateCertificate(state, send)}
-           canBeAutoIssued
          />
        | Closed => React.null
        }}

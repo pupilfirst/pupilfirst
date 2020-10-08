@@ -221,16 +221,15 @@ let topicsList = (topicCategories, topics) => {
       </div>
     : topics
       |> Array.map(topic =>
-           <div
-             className="border-b"
+           <a
+             className="block border-b cursor-pointer"
              key={Topic.id(topic)}
+             href={"/topics/" ++ Topic.id(topic)}
              ariaLabel={"Topic " ++ Topic.id(topic)}>
              <div
                className="flex items-center border border-transparent hover:bg-gray-100 hover:text-primary-500  hover:border-primary-400">
                <div className="flex-1 w-full">
-                 <a
-                   className="cursor-pointer no-underline flex flex-col p-4 md:p-6"
-                   href={"/topics/" ++ Topic.id(topic)}>
+                 <div className="no-underline flex flex-col p-4 md:p-6">
                    <span className="block">
                      <span
                        className="community-topic__title text-sm md:text-base font-semibold inline-block break-words leading-snug">
@@ -357,7 +356,7 @@ let topicsList = (topicCategories, topics) => {
                       | None => React.null
                       }}
                    </span>
-                 </a>
+                 </div>
                </div>
                <div className="w-1/5">
                  <CommunitiesShow__Participants
@@ -368,7 +367,7 @@ let topicsList = (topicCategories, topics) => {
                  />
                </div>
              </div>
-           </div>
+           </a>
          )
       |> React.array;
 };
@@ -677,6 +676,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
           {topicsSorter(state, send)}
         </div>
         <div
+          id="topics"
           className="community-topic__list-container shadow bg-white rounded-lg mb-4 mt-10">
           {switch (state.topics) {
            | Unloaded =>
@@ -704,7 +704,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                         Some(cursor),
                         state.filter,
                         state.sortCriterion,
-                        state.sortDirection
+                        state.sortDirection,
                       );
                     }}>
                     {"Load More..." |> str}

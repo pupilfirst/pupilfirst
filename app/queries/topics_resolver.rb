@@ -89,6 +89,6 @@ class TopicsResolver < ApplicationQuery
       by_category.where(target_id: target_id)
     else
       by_category
-    end.order("#{sort_criterion_string} #{sort_direction_string}")
+    end.order("topics.#{sort_criterion_string} #{sort_direction_string}")
   end
 end

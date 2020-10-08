@@ -371,7 +371,7 @@ feature 'Community', js: true do
     scenario 'user views likes and replies on the index page' do
       sign_in_user(student_2.user, referrer: community_path(community))
 
-      within(find("div[aria-label='Topic #{topic_1.id}']")) do
+      within(find("a[aria-label='Topic #{topic_1.id}']")) do
         within(find('span[aria-label="Likes"]')) do
           expect(page).to have_text(3)
         end
@@ -451,11 +451,11 @@ feature 'Community', js: true do
     scenario 'user checks category of topic in community index' do
       sign_in_user(student_1.user, referrer: community_path(community))
 
-      within("div[aria-label='Topic #{topic_1.id}']") do
+      within("a[aria-label='Topic #{topic_1.id}']") do
         expect(page).to have_text(category_1.name)
       end
 
-      within("div[aria-label='Topic #{topic_2.id}']") do
+      within("a[aria-label='Topic #{topic_2.id}']") do
         expect(page).to have_text(category_2.name)
       end
     end

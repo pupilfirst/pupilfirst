@@ -326,8 +326,8 @@ let topicsList = (topicCategories, topics) => {
                           ReactDOMRe.Style.make(~backgroundColor=color, ());
                         <span
                           className="flex items-center text-xs font-semibold py-1">
-                          <div className="w-3 h-3 border rounded-sm" style />
-                          <span className="ml-2">
+                          <div className="w-3 h-3 rounded" style />
+                          <span className="ml-1">
                             {TopicCategory.name(topicCategory)->str}
                           </span>
                         </span>;
@@ -541,7 +541,7 @@ let categoryDropdownContents =
         className="pl-3 pr-4 py-2 font-normal flex items-center"
         onClick={_ => send(SelectTopicCategory(topicCategory))}>
         <div className="w-3 h-3 rounded" style />
-        <span className="ml-2"> categoryName->str </span>
+        <span className="ml-1"> categoryName->str </span>
       </div>;
     },
     selectableTopicCategories,

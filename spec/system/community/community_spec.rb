@@ -342,6 +342,10 @@ feature 'Community', js: true do
   end
 
   scenario 'user searches for topics in community' do
+    # Let's set the titles for both topics to completely different sentences to avoid confusing the fuzzy search algo.
+    topic_1.update!(title: 'Hello World')
+    topic_2.update!(title: 'Completely Different Sentence')
+
     sign_in_user(coach.user, referrer: community_path(community))
 
     expect(page).to have_text(topic_2.title)

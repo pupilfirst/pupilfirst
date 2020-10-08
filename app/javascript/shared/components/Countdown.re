@@ -26,8 +26,9 @@ let percentage = (current, total) => {
   int_of_float(float_of_int(current) /. float_of_int(total) *. 100.00);
 };
 
-let doughnutChart = (color, current, total) => {
-  <svg viewBox="0 0 36 36" className={"countdown__doughnut-chart " ++ color}>
+let doughnutChart = (current, total) => {
+  <svg
+    viewBox="0 0 36 36" className="countdown__doughnut-chart purple mx-auto">
     <path
       className="countdown__doughnut-chart-bg"
       d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -60,9 +61,9 @@ let reload = (seconds, state, send, ()) => {
 };
 
 [@react.component]
-let make = (~seconds, ~color="white") => {
+let make = (~seconds) => {
   let (state, send) =
     React.useReducer(reducer, {seconds, timeoutId: None, reload: false});
   React.useEffect1(reload(seconds, state, send), [|state.reload|]);
-  <div> {doughnutChart("pink", state.seconds, seconds)} </div>;
+  <div> {doughnutChart(state.seconds, seconds)} </div>;
 };

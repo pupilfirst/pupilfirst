@@ -133,8 +133,18 @@ let getEmbedCode = (state, contentBlockId, send, url, ()) => {
       );
     send(SetTimeout(timeoutId));
   };
-  Js.log("Foo");
   None;
+};
+
+let embedCodeErrorText = (loading, requestSource) => {
+  switch (loading, requestSource) {
+  | (true, _)
+  | (false, None) => "Unable to resolve, retrying in 1 minute"
+  | (false, Some(requestSource)) =>
+    requestSource == "vimeo_upload"
+      ? "Upload under progress, resolving in 1 minute"
+      : "Unable to resolve, retrying in 1 minute"
+  };
 };
 
 [@react.component]
@@ -161,14 +171,16 @@ let make = (~url, ~requestSource, ~contentBlockId) => {
      ->Belt.Option.mapWithDefault(
          <div
            className="max-w-3xl py-6 px-3 mx-auto bg-primary-100 rounded-lg shadow">
-           <div className="py-40">
+           <div className="py-28">
              <div>
-               <Countdown seconds=60 />
                {state.loading
-                  ? React.string("Resolving Embed Block...!")
-                  : React.string(
-                      "We are unable to resolve the embed block, retrying in 1 minute",
-                    )}
+                  ? <div className="h-20" /> : <Countdown seconds=60 />}
+               <div
+                 className="text-center font-semibold text-primary-800 mt-2">
+                 {React.string(
+                    embedCodeErrorText(state.loading, requestSource),
+                  )}
+               </div>
              </div>
            </div>
          </div>,

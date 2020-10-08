@@ -2,10 +2,6 @@
   @apply shadow rounded-lg p-4 h-full flex;
 }
 
-.countdown__pie-chart-container {
-  @apply bg-gray-200 w-full rounded-lg overflow-hidden;
-}
-
 .countdown__doughnut-chart {
   display: block;
   max-width: 100%;

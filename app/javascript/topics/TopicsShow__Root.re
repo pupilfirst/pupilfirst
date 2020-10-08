@@ -198,14 +198,14 @@ let topicCategory = (topicCategories, topicCategoryId) => {
 let categoryDropdownSelected = topicCategory => {
   <div
     ariaLabel="Selected category"
-    className="text-sm bg-gray-100 border border-gray-400 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
+    className="flex justify-between text-sm bg-white border border-gray-400 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
     {switch (topicCategory) {
      | Some(topicCategory) =>
        let (color, _) = TopicCategory.color(topicCategory);
        let style = ReactDOMRe.Style.make(~backgroundColor=color, ());
 
        <div className="inline-flex items-center">
-         <div className="h-3 w-3 border" style />
+         <div className="h-3 w-3 rounded mt-px" style />
          <span className="ml-2">
            {TopicCategory.name(topicCategory)->str}
          </span>
@@ -238,9 +238,9 @@ let topicCategorySelector =
 
         <div
           ariaLabel={"Select category " ++ categoryName}
-          className="pl-3 pr-4 py-2 font-normal flex items-center"
+          className="px-3 py-2 font-normal flex items-center"
           onClick={_ => send(UpdateTopicCategory(Some(topicCategory)))}>
-          <div className="w-4 h-4 border" style />
+          <div className="w-3 h-3 rounded mt-px" style />
           <span className="ml-2"> categoryName->str </span>
         </div>;
       },
@@ -255,9 +255,9 @@ let topicCategorySelector =
       [|
         <div
           ariaLabel="Select no category"
-          className="pl-3 pr-4 py-2 font-normal flex items-center"
+          className="px-3 py-2 font-normal flex items-center"
           onClick={_ => send(UpdateTopicCategory(None))}>
-          <div className="w-4 h-4" />
+          <div className="w-3 h-3 rounded bg-gray-300 mt-px" />
           <span className="ml-2"> "None"->str </span>
         </div>,
       |],
@@ -339,8 +339,9 @@ let make =
                       className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       type_="text"
                     />
-                    <div className="flex justify-between items-end">
-                      <div className="flex flex-col items-left">
+                    <div
+                      className="flex flex-col md:flex-row md:justify-between md:items-end">
+                      <div className="flex flex-col items-left flex-shrink-0">
                         <span
                           className="inline-block text-gray-700 text-tiny font-semibold mr-2">
                           {"Topic Category: " |> str}
@@ -357,16 +358,16 @@ let make =
                           className=""
                         />
                       </div>
-                      <div>
+                      <div className="flex justify-end pt-4 md:pt-0">
                         <button
                           onClick={_ => send(ShowTopicEditor(false))}
-                          className="btn btn-subtle btn-small mr-2">
+                          className="btn btn-subtle mr-3">
                           {"Cancel" |> str}
                         </button>
                         <button
                           onClick={updateTopic(state, send)}
                           disabled={state.topicTitle |> Js.String.trim == ""}
-                          className="btn btn-primary btn-small">
+                          className="btn btn-primary">
                           {"Update Topic" |> str}
                         </button>
                       </div>
@@ -375,7 +376,7 @@ let make =
                 </DisablingCover>
               : <div className="flex flex-col ">
                   <div
-                    className="topics-show__title-container flex items-start justify-between mb-2">
+                    className="topics-show__title-container flex items-center md:items-start justify-between mb-2">
                     <h3
                       ariaLabel="Topic Title"
                       className="leading-snug lg:pl-14 text-base lg:text-2xl w-5/6">
@@ -384,7 +385,7 @@ let make =
                     {moderator || isTopicCreator(firstPost, currentUserId)
                        ? <button
                            onClick={_ => send(ShowTopicEditor(true))}
-                           className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3 lg:invisible">
+                           className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3">
                            <i className="far fa-edit" />
                            <span className="hidden md:inline-block ml-1">
                              {"Edit Topic" |> str}
@@ -399,7 +400,7 @@ let make =
                        ReactDOMRe.Style.make(~backgroundColor=color, ());
                      <div
                        className="py-2 flex items-center lg:pl-14 text-xs font-semibold">
-                       <div className="w-4 h-4 border" style />
+                       <div className="w-3 h-3 rounded" style />
                        <span className="ml-2">
                          {TopicCategory.name(topicCategory)->str}
                        </span>

@@ -4,6 +4,8 @@ class TopicsResolver < ApplicationQuery
   property :target_id
   property :search
   property :resolution
+  property :sort_direction
+  property :sort_criterion
 
   def topics
     if search.present?
@@ -37,6 +39,30 @@ class TopicsResolver < ApplicationQuery
     @community ||= Community.find_by(id: community_id)
   end
 
+  def sort_direction_string
+    case sort_direction
+    when 'Ascending'
+      'ASC'
+    when 'Descending'
+      'DESC'
+    else
+      raise "#{sort_direction} is not a valid sort direction"
+    end
+  end
+
+  def sort_criterion_string
+    case sort_criterion
+    when 'CreatedAt'
+      'created_at'
+    when 'LastActivityAt'
+      'last_activity_at'
+    when 'Views'
+      'views'
+    else
+      raise "#{sort_criterion} is not a valid sort criterion"
+    end
+  end
+
   def filter_by_solution(topics, resolution)
     topics_with_solution = topics.joins(:posts).where(posts: { solution: true })
     case resolution
@@ -63,6 +89,6 @@ class TopicsResolver < ApplicationQuery
       by_category.where(target_id: target_id)
     else
       by_category
-    end.order('topics.created_at DESC')
+    end.order("#{sort_criterion_string} #{sort_direction_string}")
   end
 end

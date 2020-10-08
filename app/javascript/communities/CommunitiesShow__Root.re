@@ -6,6 +6,10 @@ let str = React.string;
 
 type solution = [ | `Solved | `Unsolved | `Unselected];
 
+type sortCriterion = [ | `CreatedAt | `LastActivityAt | `Views];
+
+type sortDirection = [ | `Ascending | `Descending];
+
 type loading =
   | NotLoading
   | Reloading
@@ -24,6 +28,8 @@ type state = {
   filterString: string,
   filter,
   totalTopicsCount: int,
+  sortCriterion,
+  sortDirection,
 };
 
 type action =
@@ -35,7 +41,9 @@ type action =
   | LoadTopics(option(string), bool, array(Topic.t), int)
   | BeginLoadingMore
   | BeginReloading
-  | SetSolutionFilter(solution);
+  | SetSolutionFilter(solution)
+  | UpdateSortDirection(sortDirection)
+  | UpdateSortCriterion(sortCriterion);
 
 let reducer = (state, action) => {
   switch (action) {
@@ -78,6 +86,8 @@ let reducer = (state, action) => {
       filterString: "",
     }
   | UpdateFilterString(filterString) => {...state, filterString}
+  | UpdateSortCriterion(sortCriterion) => {...state, sortCriterion}
+  | UpdateSortDirection(sortDirection) => {...state, sortDirection}
   | LoadTopics(endCursor, hasNextPage, newTopics, totalTopicsCount) =>
     let updatedTopics =
       switch (state.loading) {
@@ -105,8 +115,8 @@ let reducer = (state, action) => {
 
 module TopicsQuery = [%graphql
   {|
-    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $resolution: TopicResolutionFilter!, $search: String, $after: String) {
-      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, resolution: $resolution, first: 10, after: $after) {
+    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $resolution: TopicResolutionFilter!, $search: String, $after: String, $sortCriterion: TopicSortCriterion!, $sortDirection: SortDirection!) {
+      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, resolution: $resolution, sortDirection: $sortDirection, sortCriterion: $sortCriterion, first: 10, after: $after) {
         nodes {
           id
           lastActivityAt
@@ -135,7 +145,8 @@ module TopicsQuery = [%graphql
   |}
 ];
 
-let getTopics = (send, communityId, cursor, filter) => {
+let getTopics =
+    (send, communityId, cursor, filter, sortCriterion, sortDirection) => {
   let topicCategoryId =
     filter.topicCategory |> OptionUtils.map(TopicCategory.id);
 
@@ -148,6 +159,8 @@ let getTopics = (send, communityId, cursor, filter) => {
     ~targetId?,
     ~search=?filter.title,
     ~resolution=filter.solution,
+    ~sortCriterion,
+    ~sortDirection,
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -172,7 +185,14 @@ let getTopics = (send, communityId, cursor, filter) => {
 
 let reloadTopics = (communityId, state, send) => {
   send(BeginReloading);
-  getTopics(send, communityId, None, state.filter);
+  getTopics(
+    send,
+    communityId,
+    None,
+    state.filter,
+    state.sortCriterion,
+    state.sortDirection,
+  );
 };
 
 let computeInitialState = target => {
@@ -186,6 +206,8 @@ let computeInitialState = target => {
     solution: `Unselected,
   },
   totalTopicsCount: 0,
+  sortDirection: `Descending,
+  sortCriterion: `CreatedAt,
 };
 
 let topicsList = (topicCategories, topics) => {
@@ -548,17 +570,53 @@ let categoryDropdownContents =
   );
 };
 
+module Sortable = {
+  type t = sortCriterion;
+
+  let criterion = t =>
+    switch (t) {
+    | `CreatedAt => "Posted At"
+    | `LastActivityAt => "Last Activity"
+    | `Views => "Views"
+    };
+
+  let criterionType = _t => `Number;
+};
+
+module TopicsSorter = Sorter.Make(Sortable);
+
+let topicsSorter = (state, send) => {
+  <div
+    ariaLabel="Change topics sorting"
+    className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
+    <label className="block text-tiny font-semibold uppercase">
+      {"Sort by:" |> str}
+    </label>
+    <TopicsSorter
+      criteria=[|`CreatedAt, `LastActivityAt, `Views|]
+      selectedCriterion={state.sortCriterion}
+      direction={state.sortDirection}
+      onDirectionChange={sortDirection => {
+        send(UpdateSortDirection(sortDirection))
+      }}
+      onCriterionChange={sortCriterion =>
+        send(UpdateSortCriterion(sortCriterion))
+      }
+    />
+  </div>;
+};
+
 [@react.component]
 let make = (~communityId, ~target, ~topicCategories) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, target, computeInitialState);
 
-  React.useEffect1(
+  React.useEffect3(
     () => {
       reloadTopics(communityId, state, send);
       None;
     },
-    [|state.filter|],
+    (state.filter, state.sortDirection, state.sortCriterion),
   );
   <div className="flex-1 flex flex-col">
     {switch (target) {
@@ -598,18 +656,25 @@ let make = (~communityId, ~target, ~topicCategories) => {
             // Other controls go here.
           />
         </div>
-        <div
-          className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
-          <Multiselect
-            id="filter"
-            unselected={unselected(topicCategories, state)}
-            selected={selected(state)}
-            onSelect={onSelectFilter(send)}
-            onDeselect={onDeselectFilter(send)}
-            value={state.filterString}
-            onChange={filterString => send(UpdateFilterString(filterString))}
-            placeholder={filterPlaceholder(state, topicCategories)}
-          />
+        <div className="md:flex w-full items-start pb-4">
+          <div className="flex-1">
+            <label className="block text-tiny font-semibold uppercase">
+              {"Filter by:" |> str}
+            </label>
+            <Multiselect
+              id="filter"
+              unselected={unselected(topicCategories, state)}
+              selected={selected(state)}
+              onSelect={onSelectFilter(send)}
+              onDeselect={onDeselectFilter(send)}
+              value={state.filterString}
+              onChange={filterString =>
+                send(UpdateFilterString(filterString))
+              }
+              placeholder={filterPlaceholder(state, topicCategories)}
+            />
+          </div>
+          {topicsSorter(state, send)}
         </div>
         <div
           className="community-topic__list-container shadow bg-white rounded-lg mb-4 mt-10">
@@ -638,6 +703,8 @@ let make = (~communityId, ~target, ~topicCategories) => {
                         communityId,
                         Some(cursor),
                         state.filter,
+                        state.sortCriterion,
+                        state.sortDirection
                       );
                     }}>
                     {"Load More..." |> str}

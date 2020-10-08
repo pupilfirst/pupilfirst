@@ -191,32 +191,32 @@ let computeInitialState = target => {
 let topicsList = (topicCategories, topics) => {
   topics |> ArrayUtils.isEmpty
     ? <div
-        className="flex flex-col mx-auto bg-white p-6 justify-center items-center">
+        className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
         <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
-        <h4 className="mt-3 font-semibold">
+        <h4 className="mt-3 text-base md:text-lg text-center font-semibold">
           {"There's no discussion here yet." |> str}
         </h4>
       </div>
     : topics
       |> Array.map(topic =>
-           <div
-             className="border-b"
+           <a
+             href={"/topics/" ++ Topic.id(topic)}
+             className="block"
              key={Topic.id(topic)}
              ariaLabel={"Topic " ++ Topic.id(topic)}>
              <div
                className="flex items-center border border-transparent hover:bg-gray-100 hover:text-primary-500  hover:border-primary-400">
                <div className="flex-1 w-full">
-                 <a
-                   className="cursor-pointer no-underline flex flex-col p-4 md:p-6"
-                   href={"/topics/" ++ Topic.id(topic)}>
+                 <div
+                   className="cursor-pointer no-underline flex flex-col p-4 md:px-6 md:py-5">
                    <span className="block">
-                     <span
-                       className="community-topic__title text-sm md:text-base font-semibold inline-block break-words leading-snug">
+                     <h4
+                       className="community-topic__title text-base font-semibold inline-block break-words leading-snug">
                        {Topic.title(topic) |> str}
-                     </span>
-                     <span className="block text-xs mt-1">
+                     </h4>
+                     <span className="block text-xs text-gray-800 pt-1">
                        <span> {"Posted by " |> str} </span>
-                       <span className="font-semibold">
+                       <span className="font-semibold mr-2">
                          {(
                             switch (Topic.creatorName(topic)) {
                             | Some(name) => name ++ " "
@@ -232,14 +232,13 @@ let topicsList = (topicCategories, topics) => {
                           |> str}
                        </span>
                        <span
-                         className="block md:inline-block mt-1 md:mt-0 md:px-2 bg-gray-100 md:border-l border-gray-400">
+                         className="inline-block md:mt-0 md:px-2 md:border-l border-gray-400">
                          {switch (Topic.lastActivityAt(topic)) {
                           | Some(date) =>
                             <span>
                               <span className="hidden md:inline-block">
                                 {"Last updated" |> str}
                               </span>
-                              <i className="fas fa-history mr-1 md:hidden" />
                               {" "
                                ++ DateFns.formatDistanceToNowStrict(
                                     date,
@@ -255,10 +254,10 @@ let topicsList = (topicCategories, topics) => {
                    </span>
                    <span className="flex flex-row mt-2">
                      <span
-                       className="flex text-center items-center mr-2 px-2 bg-gray-200"
+                       className="flex text-center items-center mr-2 py-1 px-2 rounded bg-gray-200"
                        ariaLabel="Likes">
                        <i
-                         className="far fa-thumbs-up text-xs text-gray-600 mr-1"
+                         className="far fa-thumbs-up text-sm text-gray-600 mr-1"
                        />
                        <p className="text-xs font-semibold">
                          {Topic.likesCount(topic) |> string_of_int |> str}
@@ -274,10 +273,10 @@ let topicsList = (topicCategories, topics) => {
                        </p>
                      </span>
                      <span
-                       className="flex justify-between text-center items-center mr-2 px-2 bg-gray-200"
+                       className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-200"
                        ariaLabel="Replies">
                        <i
-                         className="far fa-comment-dots text-xs text-gray-600 mr-1"
+                         className="far fa-comment-dots text-sm text-gray-600 mr-1"
                        />
                        <p className="text-xs font-semibold">
                          {Topic.liveRepliesCount(topic)
@@ -295,9 +294,9 @@ let topicsList = (topicCategories, topics) => {
                        </p>
                      </span>
                      <span
-                       className="flex justify-between text-center items-center mr-2 px-2 bg-gray-200"
+                       className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-200"
                        ariaLabel="Views">
-                       <i className="far fa-eye text-xs text-gray-600 mr-1" />
+                       <i className="far fa-eye text-sm text-gray-600 mr-1" />
                        <p className="text-xs font-semibold">
                          {Topic.views(topic) |> string_of_int |> str}
                          <span className="ml-1 hidden md:inline">
@@ -335,24 +334,25 @@ let topicsList = (topicCategories, topics) => {
                       | None => React.null
                       }}
                    </span>
-                 </a>
+                 </div>
                </div>
-               <div className="w-1/5">
+               <div className="md:w-1/5">
                  <CommunitiesShow__Participants
                    title=React.null
-                   className="hidden md:inline-block mt-6"
+                   className="flex flex-shrink-0 items-center justify-end pr-4 md:pr-6"
                    participants={Topic.participants(topic)}
                    participantsCount={Topic.participantsCount(topic)}
                  />
                </div>
              </div>
-           </div>
+           </a>
          )
       |> React.array;
 };
 
 let topicsLoadedData = (totalTopicsCount, loadedTopicsCount) => {
-  <div className="mt-4 bg-gray-200 text-gray-900 text-sm py-1 text-center">
+  <div
+    className="inline-block mt-2 mx-auto bg-gray-200 text-gray-800 text-xs p-2 text-center rounded font-semibold">
     {(
        totalTopicsCount == loadedTopicsCount
          ? "Showing all " ++ string_of_int(totalTopicsCount) ++ " topics"
@@ -499,7 +499,7 @@ let filterPlaceholder = (state, topicCategories) => {
 let categoryDropdownSelected = topicCategory => {
   <div
     ariaLabel="Selected category filter"
-    className="text-sm bg-gray-100 border border-gray-400 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
+    className="text-sm bg-white border border-gray-400 rounded py-1 md:py-2 px-3 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
     {switch (topicCategory) {
      | Some(topicCategory) =>
        let (color, _) = TopicCategory.color(topicCategory);
@@ -540,7 +540,7 @@ let categoryDropdownContents =
         ariaLabel={"Select category " ++ categoryName}
         className="pl-3 pr-4 py-2 font-normal flex items-center"
         onClick={_ => send(SelectTopicCategory(topicCategory))}>
-        <div className="w-4 h-4 border" style />
+        <div className="w-3 h-3 rounded" style />
         <span className="ml-2"> categoryName->str </span>
       </div>;
     },
@@ -578,41 +578,47 @@ let make = (~communityId, ~target, ~topicCategories) => {
        </div>
      | None => React.null
      }}
-    <div className="px-3 md:px-6 pb-4 mt-5 flex flex-1">
-      <div className="max-w-3xl w-full mx-auto relative">
-        <div className="mb-4 flex justify-between">
-          {ReactUtils.nullIf(
-             <Dropdown
-               selected={categoryDropdownSelected(state.filter.topicCategory)}
-               contents={categoryDropdownContents(
-                 topicCategories,
-                 state.filter.topicCategory,
-                 send,
-               )}
-               className=""
-             />,
-             ArrayUtils.isEmpty(topicCategories),
-           )}
-          <div
-            className=""
-            // Other controls go here.
-          />
+    <div className="mt-5 flex flex-col flex-1 ">
+      <div className="w-full sticky top-0 z-30 bg-gray-100 py-2">
+        <div className="max-w-3xl w-full mx-auto relative px-3 md:px-6">
+          <div className="mb-2 flex justify-between">
+            {ReactUtils.nullIf(
+               <Dropdown
+                 selected={categoryDropdownSelected(
+                   state.filter.topicCategory,
+                 )}
+                 contents={categoryDropdownContents(
+                   topicCategories,
+                   state.filter.topicCategory,
+                   send,
+                 )}
+                 className=""
+               />,
+               ArrayUtils.isEmpty(topicCategories),
+             )}
+            <div
+              className=""
+              // Other controls go here.
+            />
+          </div>
+          <div className="max-w-3xl mx-auto bg-gray-100">
+            <Multiselect
+              id="filter"
+              unselected={unselected(topicCategories, state)}
+              selected={selected(state)}
+              onSelect={onSelectFilter(send)}
+              onDeselect={onDeselectFilter(send)}
+              value={state.filterString}
+              onChange={filterString =>
+                send(UpdateFilterString(filterString))
+              }
+              placeholder={filterPlaceholder(state, topicCategories)}
+            />
+          </div>
         </div>
-        <div
-          className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
-          <Multiselect
-            id="filter"
-            unselected={unselected(topicCategories, state)}
-            selected={selected(state)}
-            onSelect={onSelectFilter(send)}
-            onDeselect={onDeselectFilter(send)}
-            value={state.filterString}
-            onChange={filterString => send(UpdateFilterString(filterString))}
-            placeholder={filterPlaceholder(state, topicCategories)}
-          />
-        </div>
-        <div
-          className="community-topic__list-container shadow bg-white rounded-lg mb-4 mt-10">
+      </div>
+      <div className="max-w-3xl w-full mx-auto relative px-3 md:px-6 pb-4">
+        <div className="community-topic__list-container my-4">
           {switch (state.topics) {
            | Unloaded =>
              SkeletonLoading.multiple(
@@ -621,7 +627,9 @@ let make = (~communityId, ~target, ~topicCategories) => {
              )
            | PartiallyLoaded(topics, cursor) =>
              <div>
-               {topicsList(topicCategories, topics)}
+               <div className="shadow bg-white rounded-lg divide-y">
+                 {topicsList(topicCategories, topics)}
+               </div>
                {switch (state.loading) {
                 | LoadingMore =>
                   SkeletonLoading.multiple(
@@ -652,7 +660,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
            switch (state.topics) {
            | Unloaded => React.null
            | PartiallyLoaded(topics, _cursor) =>
-             <div>
+             <div className="text-center">
                {switch (state.loading) {
                 | LoadingMore => React.null
                 | NotLoading =>

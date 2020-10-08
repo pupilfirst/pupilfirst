@@ -142,7 +142,7 @@ let embedCodeErrorText = (loading, requestSource) => {
   | (false, None) => "Unable to resolve, retrying in 1 minute"
   | (false, Some(requestSource)) =>
     requestSource == "vimeo_upload"
-      ? "Upload under progress, resolving in 1 minute"
+      ? "Processing Video, retrying in 1 minute"
       : "Unable to resolve, retrying in 1 minute"
   };
 };

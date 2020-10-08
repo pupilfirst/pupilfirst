@@ -140,7 +140,6 @@ Rails.application.configure do
 
   rules = [
     { method: "POST", limit: ENV['GRAPH_API_RATE_LIMIT'] },
-    { method: "POST", path: "/graphql", limit: ENV['GRAPH_API_RATE_LIMIT'] },
     { method: "GET", whitelisted: true }]
 
   cache = if ENV['MEMCACHEDCLOUD_SERVERS'].present?

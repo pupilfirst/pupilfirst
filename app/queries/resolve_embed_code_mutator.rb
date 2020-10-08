@@ -2,6 +2,8 @@ class ResolveEmbedCodeMutator < ApplicationQuery
   include AuthorizeAuthor
   property :content_block_id, validates: { presence: true }
 
+  # add last_resolved_at
+  # validate 1 min
   def resolve
     content_block.update!(
       content: { url: content_block.content['url'], request_source: content_block.content['request_source'], embed_code: embed_code },

@@ -18,7 +18,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def slideshare_csp
-    { connect: %w[www.slideshare.net], frame: %w[slideshare.net *.slideshare.net] }
+    { connect: %w[www.slideshare.net/api/oembed/2], frame: %w[slideshare.net *.slideshare.net] }
   end
 
   def speakerdeck_csp
@@ -34,11 +34,11 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def youtube_csp
-    { connect: %w[www.youtube.com], frame: 'https://www.youtube.com' }
+    { connect: %w[www.youtube.com/oembed], frame: 'https://www.youtube.com' }
   end
 
   def vimeo_csp
-    { connect: %w[*.cloud.vimeo.com *.tus.vimeo.com vimeo.com], frame: 'https://player.vimeo.com' }
+    { connect: %w[*.cloud.vimeo.com *.tus.vimeo.com vimeo.com/api/oembed.json], frame: 'https://player.vimeo.com' }
   end
 
   def rollbar_csp

@@ -156,17 +156,20 @@ let make = (~url, ~requestSource, ~contentBlockId) => {
     [|state.reload|],
   );
 
-  <div className="max-w-3xl py-6 px-3 mx-auto">
+  <div>
     {state.embedCode
      ->Belt.Option.mapWithDefault(
-         <div>
-           {SkeletonLoading.userCard()}
-           <div>
-             {state.loading
-                ? React.string("Resolving Embed Block...!")
-                : React.string(
-                    "We are unable to resolve the embed block, retrying in 1 minute",
-                  )}
+         <div
+           className="max-w-3xl py-6 px-3 mx-auto bg-primary-100 rounded-lg shadow">
+           <div className="py-40">
+             <div>
+               <Countdown seconds=60 />
+               {state.loading
+                  ? React.string("Resolving Embed Block...!")
+                  : React.string(
+                      "We are unable to resolve the embed block, retrying in 1 minute",
+                    )}
+             </div>
            </div>
          </div>,
          code =>

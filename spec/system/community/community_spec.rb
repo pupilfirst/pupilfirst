@@ -72,37 +72,39 @@ feature 'Community', js: true do
   end
 
   scenario 'a student edits her post and leaves a reason' do
-    sign_in_user(student_2.user, referrer: community_path(community))
-    click_link topic_1.title
-    replace_markdown reply_body
-    click_button 'Post Your Reply'
-    dismiss_notification
-    new_reply = topic_1.reload.replies.last
+    sign_in_user(student_1.user, referrer: topic_path(topic_1))
+
+    first_reason = Faker::Lorem.unique.sentence
+    second_reason = Faker::Lorem.unique.sentence
 
     # Edit a reply and set reason first time.
-    find("div[aria-label='Options for post #{new_reply.id}']").click
+    find("div[aria-label='Options for post #{reply_1.id}']").click
     click_button 'Edit Reply'
-    within("div#post-show-#{new_reply.id}") do
+
+    within("div#post-show-#{reply_1.id}") do
       replace_markdown reply_body_for_edit
     end
-    fill_in 'edit-reason', with: 'Test Edit Reason'
+
+    fill_in 'edit-reason', with: first_reason
     click_button 'Update Reply'
 
     # Edit a reply and set reason second time.
-    find("div[aria-label='Options for post #{new_reply.id}']").click
+    find("div[aria-label='Options for post #{reply_1.id}']").click
     click_button 'Edit Reply'
-    within("div#post-show-#{new_reply.id}") do
+
+    within("div#post-show-#{reply_1.id}") do
       replace_markdown reply_body_for_edit
     end
-    fill_in 'edit-reason', with: 'Test Edit Reason second time'
+
+    fill_in 'edit-reason', with: second_reason
     click_button 'Update Reply'
 
     # Go to the history page history - the reason should be there.
-    find("div[aria-label='Options for post #{new_reply.id}']").click
+    find("div[aria-label='Options for post #{reply_1.id}']").click
     click_link 'History'
 
-    expect(page).to have_text('Test Edit Reason')
-    expect(page).to have_text('Test Edit Reason second time')
+    expect(page).to have_text(first_reason)
+    expect(page).to have_text(second_reason)
   end
 
   scenario 'an active student participates in a topic thread' do

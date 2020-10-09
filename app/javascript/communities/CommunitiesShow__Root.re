@@ -222,7 +222,7 @@ let topicsList = (topicCategories, topics) => {
         </h4>
       </div>
     : topics
-      |> Array.map(topic =>
+      |> Js.Array.map(topic =>
            <a
              className="block"
              key={Topic.id(topic)}
@@ -243,7 +243,7 @@ let topicsList = (topicCategories, topics) => {
                        <span className="font-semibold mr-2">
                          {(
                             switch (Topic.creatorName(topic)) {
-                            | Some(name) => name ++ " "
+                            | Some(name) => " " ++ name ++ " "
                             | None => "Unknown "
                             }
                           )
@@ -703,6 +703,12 @@ let make = (~communityId, ~target, ~topicCategories) => {
                <div className="shadow bg-white rounded-lg divide-y">
                  {topicsList(topicCategories, topics)}
                </div>
+               <div className="text-center">
+                 {topicsLoadedData(
+                    state.totalTopicsCount,
+                    Array.length(topics),
+                  )}
+               </div>
                {switch (state.loading) {
                 | LoadingMore =>
                   SkeletonLoading.multiple(
@@ -728,34 +734,20 @@ let make = (~communityId, ~target, ~topicCategories) => {
                 | Reloading => React.null
                 }}
              </div>
-           | FullyLoaded(topics) => topicsList(topicCategories, topics)
-           }}
-        </div>
-        {ReactUtils.nullIf(
-           switch (state.topics) {
-           | Unloaded => React.null
-           | PartiallyLoaded(topics, _cursor) =>
-             <div className="text-center">
-               {switch (state.loading) {
-                | LoadingMore => React.null
-                | NotLoading =>
-                  topicsLoadedData(
+           | FullyLoaded(topics) =>
+             <div>
+               <div className="shadow bg-white rounded-lg divide-y">
+                 {topicsList(topicCategories, topics)}
+               </div>
+               <div className="text-center">
+                 {topicsLoadedData(
                     state.totalTopicsCount,
                     Array.length(topics),
-                  )
-                | Reloading => React.null
-                }}
+                  )}
+               </div>
              </div>
-           | FullyLoaded(topics) =>
-             <div className="text-center">
-               {topicsLoadedData(
-                  state.totalTopicsCount,
-                  Array.length(topics),
-                )}
-             </div>
-           },
-           state.totalTopicsCount == 0,
-         )}
+           }}
+        </div>
       </div>
       {switch (state.topics) {
        | Unloaded => React.null

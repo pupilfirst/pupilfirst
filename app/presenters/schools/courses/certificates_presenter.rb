@@ -11,7 +11,7 @@ module Schools
         {
           course: course_details,
           certificates: certificates,
-          verify_image_url: view.image_path('issued_certificates/verify.png')
+          verify_image_url: view.image_path('issued_certificates/verify.png'),
         }
       end
 
@@ -20,7 +20,7 @@ module Schools
           'id', 'name', 'qr_corner', 'qr_scale', 'name_offset_top', 'font_size', 'margin', 'active', 'created_at', 'updated_at'
         ).merge(
           image_url: certificate.image_path,
-          issued_certificates_count: certificate.issued_certificates_count
+          issued_certificates_count: certificate.issued_certificates_count,
         )
       end
 
@@ -40,7 +40,7 @@ module Schools
       def course_details
         {
           id: @course.id,
-          name: @course.name
+          name: @course.name,
         }
       end
     end

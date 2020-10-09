@@ -255,6 +255,7 @@ let make =
             {showPostEdit
                ? <div className="flex-1">
                    <TopicsShow__PostEditor
+                     editing=true
                      id={"edit-post-" ++ Post.id(post)}
                      topic
                      currentUserId

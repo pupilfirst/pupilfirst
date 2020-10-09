@@ -6,6 +6,7 @@ let str = React.string;
 type state = {
   body: string,
   saving: bool,
+  editReason: option(string),
 };
 
 module CreatePostQuery = [%graphql
@@ -20,8 +21,8 @@ module CreatePostQuery = [%graphql
 
 module UpdatePostQuery = [%graphql
   {|
-  mutation UpdatePostMutation($id: ID!, $body: String!) {
-    updatePost(id: $id, body: $body)  {
+  mutation UpdatePostMutation($id: ID!, $body: String!, $editReason: String) {
+    updatePost(id: $id, body: $body, editReason: $editReason)  {
       success
     }
   }
@@ -46,7 +47,7 @@ let handlePostCreateResponse =
       ~replies=[||],
       ~solution=false,
     );
-  setState(_ => {body: "", saving: false});
+  setState(_ => {body: "", saving: false, editReason: None});
   handlePostCB(post);
 };
 
@@ -67,21 +68,22 @@ let handlePostUpdateResponse =
       ~solution=post |> Post.solution,
     );
 
-  setState(_ => {body: "", saving: false});
+  setState(_ => {body: "", saving: false, editReason: None});
   handleCloseCB |> OptionUtils.mapWithDefault(cb => cb(), ());
   handlePostCB(updatedPost);
 };
 let savePost =
     (
-      body,
-      topic,
-      setState,
-      currentUserId,
-      replyToPostId,
-      handlePostCB,
-      post,
-      postNumber,
-      handleCloseCB,
+      ~editReason,
+      ~body,
+      ~topic,
+      ~setState,
+      ~currentUserId,
+      ~replyToPostId,
+      ~handlePostCB,
+      ~post,
+      ~postNumber,
+      ~handleCloseCB,
       event,
     ) => {
   event |> ReactEvent.Mouse.preventDefault;
@@ -92,7 +94,7 @@ let savePost =
     | Some(post) =>
       let postId = post |> Post.id;
 
-      UpdatePostQuery.make(~id=postId, ~body, ())
+      UpdatePostQuery.make(~id=postId, ~body, ~editReason?, ())
       |> GraphqlQuery.sendQuery
       |> Js.Promise.then_(response => {
            response##updatePost##success
@@ -176,6 +178,7 @@ let replyToUserInfo = user => {
 [@react.component]
 let make =
     (
+      ~editing=false,
       ~id,
       ~topic,
       ~currentUserId,
@@ -196,9 +199,12 @@ let make =
           | None => ""
           },
         saving: false,
+        editReason: None,
       }
     );
   let updateMarkdownCB = body => setState(state => {...state, body});
+  let editReason = state.editReason;
+  let setEditReason = editReason => setState(state => {...state, editReason});
   <DisablingCover disabled={state.saving}>
     <div
       ariaLabel="Add new reply"
@@ -258,6 +264,27 @@ let make =
               profile=Markdown.QuestionAndAnswer
               maxLength=10000
             />
+            {editing
+               ? <input
+                   id="edit-reason"
+                   className="mt-2 appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                   onChange={event => {
+                     let reason = ReactEvent.Form.target(event)##value;
+                     switch (reason) {
+                     | "" => setEditReason(None)
+                     | reason => setEditReason(Some(reason))
+                     };
+                   }}
+                   placeholder="Reason for this edit (optional)"
+                   value={
+                     switch (editReason) {
+                     | None => ""
+                     | Some(editReason) => editReason
+                     }
+                   }
+                   maxLength=500
+                 />
+               : React.null}
           </div>
           <div className="flex justify-end pt-3">
             {switch (handleCloseCB) {
@@ -276,15 +303,16 @@ let make =
              <button
                disabled={state.saving || state.body |> String.trim == ""}
                onClick={savePost(
-                 state.body,
-                 topic,
-                 setState,
-                 currentUserId,
-                 replyToPostId,
-                 handlePostCB,
-                 post,
-                 newPostNumber,
-                 handleCloseCB,
+                 ~editReason,
+                 ~body=state.body,
+                 ~topic,
+                 ~setState,
+                 ~currentUserId,
+                 ~replyToPostId,
+                 ~handlePostCB,
+                 ~post,
+                 ~postNumber=newPostNumber,
+                 ~handleCloseCB,
                )}
                className="btn btn-primary">
                {(

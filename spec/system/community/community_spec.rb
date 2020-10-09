@@ -42,7 +42,7 @@ feature 'Community', js: true do
 
   scenario 'user who is not logged in tries to visit community' do
     visit community_path(community)
-    expect(page).to have_text("Please sign in to continue.")
+    expect(page).to have_text('Please sign in to continue.')
   end
 
   scenario 'an active student visits his community' do
@@ -60,15 +60,51 @@ feature 'Community', js: true do
     expect(page).to have_text(community.name)
 
     click_link 'New Topic'
-    expect(page).to have_text("Create a new topic of discussion")
+    expect(page).to have_text('Create a new topic of discussion')
     fill_in 'Title', with: topic_title
     replace_markdown topic_body
     click_button 'Create Topic'
 
-    expect(page).not_to have_text("Create a new topic of discussion")
+    expect(page).not_to have_text('Create a new topic of discussion')
     expect(page).to have_text(topic_title)
     expect(page).to have_text(topic_body)
     expect(community.topics.reload.find_by(title: topic_title).first_post.body).to eq(topic_body)
+  end
+
+  scenario 'a student edits her post and leaves a reason' do
+    sign_in_user(student_1.user, referrer: topic_path(topic_1))
+
+    first_reason = Faker::Lorem.unique.sentence
+    second_reason = Faker::Lorem.unique.sentence
+
+    # Edit a reply and set reason first time.
+    find("div[aria-label='Options for post #{reply_1.id}']").click
+    click_button 'Edit Reply'
+
+    within("div#post-show-#{reply_1.id}") do
+      replace_markdown reply_body_for_edit
+    end
+
+    fill_in 'edit-reason', with: first_reason
+    click_button 'Update Reply'
+
+    # Edit a reply and set reason second time.
+    find("div[aria-label='Options for post #{reply_1.id}']").click
+    click_button 'Edit Reply'
+
+    within("div#post-show-#{reply_1.id}") do
+      replace_markdown reply_body_for_edit
+    end
+
+    fill_in 'edit-reason', with: second_reason
+    click_button 'Update Reply'
+
+    # Go to the history page history - the reason should be there.
+    find("div[aria-label='Options for post #{reply_1.id}']").click
+    click_link 'History'
+
+    expect(page).to have_text(first_reason)
+    expect(page).to have_text(second_reason)
   end
 
   scenario 'an active student participates in a topic thread' do
@@ -83,7 +119,7 @@ feature 'Community', js: true do
 
     # Only a faculty or the creator can edit or delete a topic
     within("div#post-show-#{topic_1.first_post.id}") do
-      expect(page).not_to have_text("Edit Title")
+      expect(page).not_to have_text('Edit Title')
       expect(page).not_to have_selector("div[aria-label='Options for post #{topic_1.first_post.id}']")
     end
 
@@ -98,7 +134,7 @@ feature 'Community', js: true do
     expect(current_email.body).to include("#{student_2.user.name} has posted a reply to something you said on the #{community.name} community")
     expect(current_email.body).to include("/topics/#{topic_1.id}")
 
-    expect(page).to have_text("2 Replies")
+    expect(page).to have_text('2 Replies')
     new_reply = topic_1.reload.replies.last
     expect(new_reply.body).to eq(reply_body)
 
@@ -136,7 +172,7 @@ feature 'Community', js: true do
     find("button[aria-label='Add reply to post #{reply_1.id}']").click
     replace_markdown 'This is a reply to another post'
     within("div[aria-label='Add new reply']") do
-      expect(page).to have_text("Reply To")
+      expect(page).to have_text('Reply To')
       expect(page).to have_text(reply_1.creator.name)
     end
     click_button 'Post Your Reply'
@@ -146,7 +182,7 @@ feature 'Community', js: true do
     # A mail should have been sent to post author.
     open_email(reply_1.creator.email)
     expect(current_email.subject).to eq('New reply for your post')
-    expect(current_email.body).to include("New reply for your post")
+    expect(current_email.body).to include('New reply for your post')
     expect(current_email.body).to include("#{student_2.user.name} has posted a reply to something you said on the #{community.name} community")
     expect(current_email.body).to include("/topics/#{topic_1.id}")
 
@@ -209,16 +245,16 @@ feature 'Community', js: true do
 
     # Faculty can edit or delete a topic
     find("h3[aria-label='Topic Title']").hover
-    expect(page).to have_text("Edit Topic")
+    expect(page).to have_text('Edit Topic')
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
-    expect(page).to have_text("Edit Post")
-    expect(page).to have_text("Delete Post")
+    expect(page).to have_text('Edit Post')
+    expect(page).to have_text('Delete Post')
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
 
     # Faculty can edit or delete replies
     find("div[aria-label='Options for post #{reply_1.id}']").click
-    expect(page).to have_text("Edit Reply")
-    expect(page).to have_text("Delete Reply")
+    expect(page).to have_text('Edit Reply')
+    expect(page).to have_text('Delete Reply')
     find("div[aria-label='Options for post #{reply_1.id}']").click
 
     # Faculty edits a topic body
@@ -323,7 +359,7 @@ feature 'Community', js: true do
     visit current_path
 
     within("div#post-show-#{reply_1.id}") do
-      expect(page).to_not have_text("Last edited by")
+      expect(page).to_not have_text('Last edited by')
     end
 
     # Edits the content of the post
@@ -531,7 +567,7 @@ feature 'Community', js: true do
 
       fill_in 'filter', with: 'solution'
 
-      click_button "Solution: Solved"
+      click_button 'Solution: Solved'
 
       expect(page).to_not have_text(topic_2.title)
       expect(page).to have_text(topic_1.title)
@@ -544,7 +580,7 @@ feature 'Community', js: true do
 
       fill_in 'filter', with: 'solution'
 
-      click_button "Solution: Unsolved"
+      click_button 'Solution: Unsolved'
 
       expect(page).to_not have_text(topic_1.title)
       expect(page).to have_text(topic_2.title)

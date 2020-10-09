@@ -13,6 +13,7 @@ type state = {
   similar,
   searching: bool,
   body: string,
+  selectedCategory: option(TopicCategory.t),
   saving: bool,
 };
 
@@ -25,6 +26,7 @@ let initialState = {
     suggestions: [||],
   },
   searching: false,
+  selectedCategory: None,
   saving: false,
 };
 
@@ -32,6 +34,7 @@ type action =
   | UpdateTitle(string)
   | UpdateTitleAndTimeout(string, Js.Global.timeoutId)
   | UpdateBody(string)
+  | SelectCategory(option(TopicCategory.t))
   | BeginSaving
   | FailSaving
   | BeginSearching
@@ -64,6 +67,7 @@ let reducer = (state, action) =>
       },
     }
   | FailSearching => {...state, searching: false}
+  | SelectCategory(selectedCategory) => {...state, selectedCategory}
   };
 
 module SimilarTopicsQuery = [%graphql
@@ -73,7 +77,7 @@ module SimilarTopicsQuery = [%graphql
         id
         title
         createdAt
-        repliesCount
+        liveRepliesCount
       }
     }
   |}
@@ -126,8 +130,8 @@ let updateTitleAndSearch = (state, send, communityId, title) => {
 
 module CreateTopicQuery = [%graphql
   {|
-  mutation CreateTopicQuery($title: String!, $body: String!, $communityId: ID!, $targetId: ID) {
-    createTopic(body: $body, title: $title, communityId: $communityId, targetId: $targetId) {
+  mutation CreateTopicQuery($title: String!, $body: String!, $communityId: ID!, $targetId: ID, $topicCategoryId: ID) {
+    createTopic(body: $body, title: $title, communityId: $communityId, targetId: $targetId, topicCategoryId: $topicCategoryId) {
       topicId
     }
   }
@@ -143,18 +147,23 @@ let redirectToNewTopic = (id, title) => {
 let saveDisabled = state =>
   state.body |> isInvalidString || state.title |> isInvalidString;
 
-let handleCreateTopic = (state, send, communityId, target, event) => {
+let handleCreateTopic =
+    (state, send, communityId, target, topicCategory, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   if (!saveDisabled(state)) {
     send(BeginSaving);
     let targetId = target |> OptionUtils.flatMap(TopicsShow__LinkedTarget.id);
 
+    let topicCategoryId =
+      topicCategory |> OptionUtils.flatMap(tc => Some(TopicCategory.id(tc)));
+
     CreateTopicQuery.make(
       ~body=state.body,
       ~title=state.title,
       ~communityId,
       ~targetId?,
+      ~topicCategoryId?,
       (),
     )
     |> GraphqlQuery.sendQuery
@@ -262,8 +271,27 @@ let searchingIndicator = state =>
       </div>
     : React.null;
 
+let handleSelectTopicCategory = (send, topicCategories, event) => {
+  let target = event |> ReactEvent.Form.target;
+
+  let selectedCategory =
+    switch (target##value) {
+    | "not_selected" => None
+    | selectedCategoryId =>
+      Some(
+        topicCategories
+        |> ArrayUtils.unsafeFind(
+             category => TopicCategory.id(category) == selectedCategoryId,
+             "Unable to find category with ID: " ++ selectedCategoryId,
+           ),
+      )
+    };
+
+  send(SelectCategory(selectedCategory));
+};
+
 [@react.component]
-let make = (~communityId, ~target) => {
+let make = (~communityId, ~target, ~topicCategories) => {
   let (state, send) = React.useReducer(reducer, initialState);
 
   <DisablingCover disabled={state.saving}>
@@ -304,22 +332,68 @@ let make = (~communityId, ~target) => {
           <div
             className="mb-8 max-w-3xl w-full mx-auto relative border-t border-b md:border-0 bg-white md:shadow md:rounded-lg">
             <div className="flex w-full flex-col p-3 md:p-6">
-              <label
-                className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
-                htmlFor="title">
-                {"Title" |> str}
-              </label>
-              <input
-                id="title"
-                tabIndex=1
-                value={state.title}
-                className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                onChange={event => {
-                  let newTitle = ReactEvent.Form.target(event)##value;
-                  updateTitleAndSearch(state, send, communityId, newTitle);
-                }}
-                placeholder="Title for the new topic"
-              />
+              <div className="flex">
+                <div className="flex-1 mr-2">
+                  <label
+                    className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
+                    htmlFor="title">
+                    {"Title" |> str}
+                  </label>
+                  <input
+                    id="title"
+                    tabIndex=1
+                    value={state.title}
+                    className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    onChange={event => {
+                      let newTitle = ReactEvent.Form.target(event)##value;
+                      updateTitleAndSearch(
+                        state,
+                        send,
+                        communityId,
+                        newTitle,
+                      );
+                    }}
+                    placeholder="Title for the new topic"
+                  />
+                </div>
+                {ReactUtils.nullIf(
+                   <div className="w-1/4">
+                     <label
+                       className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
+                       htmlFor="topic_category">
+                       {"Select Category" |> str}
+                     </label>
+                     <select
+                       id="topic_category"
+                       value={
+                         switch (state.selectedCategory) {
+                         | Some(category) => TopicCategory.id(category)
+                         | None => ""
+                         }
+                       }
+                       className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                       onChange={handleSelectTopicCategory(
+                         send,
+                         topicCategories,
+                       )}>
+                       {topicCategories
+                        |> Array.map(category =>
+                             <option value={TopicCategory.id(category)}>
+                               {TopicCategory.name(category) |> str}
+                             </option>
+                           )
+                        |> Array.append([|
+                             <option value="not_selected">
+                               {"Not Selected" |> str}
+                             </option>,
+                           |])
+                        |> React.array}
+                     </select>
+                   </div>,
+                   ArrayUtils.isEmpty(topicCategories),
+                 )}
+                <div />
+              </div>
               <label
                 className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
                 htmlFor="body">
@@ -348,6 +422,7 @@ let make = (~communityId, ~target) => {
                         send,
                         communityId,
                         target,
+                        state.selectedCategory,
                       )}
                       className="btn btn-primary border border-transparent w-full md:w-auto">
                       {"Create Topic" |> str}

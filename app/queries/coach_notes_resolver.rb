@@ -2,7 +2,7 @@ class CoachNotesResolver < ApplicationQuery
   property :student_id
 
   def coach_notes
-    student.coach_notes.not_archived.includes(author: { avatar_attachment: :blob }).order('created_at DESC').limit(20)
+    student.coach_notes.not_archived.order('created_at DESC').limit(20)
   end
 
   def authorized?

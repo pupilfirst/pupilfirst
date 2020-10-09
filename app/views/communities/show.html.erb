@@ -1,128 +1,33 @@
-<% presenter = Communities::ShowPresenter.new(self, @community, @topics, @search, @target) %>
+<% presenter = Communities::ShowPresenter.new(self, @community, @target) %>
 
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
   <%= stylesheet_pack_tag 'communities/show', media: 'all' %>
+  <%= stylesheet_pack_tag 'CommunitiesShowPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'CommunitiesShowPack', nonce: true %>
 <% end %>
 
 <div class="bg-gray-100">
   <div class="community-hero__container flex bg-white border-b border-primary-200 py-8">
     <div class="max-w-3xl w-full flex flex-col items-center justify-center mx-auto px-3 md:px-0">
-      <h1 class="text-center font-normal text-2xl md:text-4xl leading-tight">
+      <h1 class="text-center font-normal text-2xl md:text-3xl leading-tight">
         Welcome to the
-        <span class="block font-bold text-3xl md:text-5xl"><%= @community.name %> Community</span>
+        <span class="block font-bold text-3xl md:text-4xl"><%= @community.name %> Community</span>
       </h1>
-      <div class="max-w-lg flex w-full mt-3">
-
-        <%= form_tag community_path(@community), method: 'get', class: "w-full flex flex-row justify-between items-center relative" do %>
-          <% if @target.present? %>
-            <%= hidden_field_tag "target_id", @target.id %>
-          <% end %>
-          <%= text_field_tag :search, @search, placeholder: "Search...", class: "appearance-none block w-full shadow bg-white text-gray-700 border border-primary-200 rounded py-3 pl-4 pr-12 leading-tight focus:outline-none focus:bg-white focus:border-primary-400 focus:shadow-md" %>
-          <%= button_tag(type: "submit", class: "absolute right-0 w-8 h-8 mr-3 rounded-full bg-gray-200 text-gray-600 hover:bg-primary-100 hover:text-primary-500 flex items-center justify-center focus:outline-none focus:text-primary-500") do %>
-            <i title="Search" class="fas fa-search text-lg"></i>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-  </div>
-  <div class="flex-1 flex flex-col">
-    <% if @target.present? %>
-      <div class="max-w-3xl w-full mt-5 mx-auto px-3 md:px-0">
-        <div class="flex py-4 px-4 md:px-6 w-full bg-yellow-100 border border-dashed border-yellow-400 rounded justify-between items-center">
-          <p class="w-3/5 md:w-4/5 font-semibold text-sm"> Target:  <%= @target.title %></p>
-          <a class="no-underline bg-yellow-100 border border-yellow-400 px-3 py-2 hover:bg-yellow-200 rounded-lg cursor-pointer text-xs font-semibold"
-             href=<%= community_path(@community) %>
-          >Clear Filter </a>
-        </div>
-      </div>
-    <% end %>
-    <div class="community-ask-button-container flex max-w-3xl mx-auto px-6 mt-10 items-center justify-center w-full relative">
-      <div class="bg-gray-100 px-1 z-10">
-        <a class="no-underline btn btn-primary btn-large"
-           href=<%= new_topic_community_path(@community) %>
-        >
+      <div class="max-w-lg flex w-full mt-3 justify-center">
+        <a class="no-underline btn btn-primary relative" href=<%= new_topic_community_path(@community) %>>
           <i class="fas fa-plus-circle text-lg"></i>
           <span class="font-semibold ml-2">
-            Create a new topic
+            New Topic
           </span>
         </a>
       </div>
     </div>
-    <div class="px-3 md:px-6 pb-4 mt-5 flex flex-1">
-      <div class="max-w-3xl w-full mx-auto relative">
-        <div class="community-question__list-container shadow bg-white rounded-lg mb-4">
-          <% @topics.map do |topic| %>
-            <div class="flex items-center border-b" aria-label="Topic <%= topic.id %>">
-              <div class="flex w-full">
-                <a class="cursor-pointer no-underline flex flex-1 justify-between items-center p-4 md:p-6 hover:bg-gray-100 hover:text-primary-500 border border-transparent hover:border-primary-400"
-                   href=<%= topic_path(id: topic.id, title: topic.title.parameterize) %>>
-                  <span class="block">
-                    <span class="community-question__title text-sm md:text-base font-semibold inline-block break-words leading-snug">
-                      <%= topic.title %>
-                    </span>
-                    <span class="block text-xs mt-1">
-                      <span>Asked by</span>
-                      <span class="font-semibold"><%= presenter.creator_name(topic) %> </span>
-                      <span class="hidden md:inline-block md:mr-2">on <%= presenter.time(topic) %> </span>
-                      <span class="block md:inline-block mt-1 md:mt-0 md:px-2 bg-gray-100 md:border-l border-gray-400">
-                        <% if topic.last_activity_at.present? %>
-                        <span class='hidden md:inline-block'>updated </span>
-                          <i class='fas fa-history mr-1 md:hidden'></i>
-                          <%= presenter.activity(topic) %>
-                          <span> ago </span>
-                        <% end %>
-                      </span>
-                    </span>
-                  </span>
-                  <span class="flex flex-row ml-2">
-                    <% if presenter.new_topic?(topic) %>
-                      <div class="bg-green-600 text-white px-2 py-1 text-xs font-semibold rounded-sm">New!</div>
-                    <% else %>
-                      <span class="pr-2 text-center" aria-label="Likes">
-                        <i class="far fa-thumbs-up text-xl text-gray-600"></i>
-                        <p class="text-xs pt-1"><%= topic.first_post.post_likes.count %></p>
-                      </span>
-                      <span class="px-2 text-center" aria-label="Replies">
-                        <i class="far fa-comment-dots text-xl text-gray-600"></i>
-                        <p class="text-xs pt-1"><%= topic.live_replies_count %></p>
-                      </span>
-                      <span class="pl-2 text-center" aria-label="Views">
-                        <i class="far fa-eye text-xl text-gray-600"></i>
-                        <p class="text-xs pt-1"><%= topic.views %></p>
-                      </span>
-                    <% end %>
-                  </span>
-                </a>
-              </div>
-            </div>
-          <% end %>
-          <% if @topics.blank? %>
-            <div class="flex flex-col mx-auto bg-white p-6 justify-center items-center">
-              <i class="fas fa-comments text-5xl text-gray-400"></i>
-              <h4 class="mt-3 font-semibold">There's no discussion here yet.</h4>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
-    <div class="max-w-3xl w-full flex flex-row mx-auto justify-center pb-8">
-      <% if presenter.show_prev_page? %>
-        <a class="block btn btn-default no-underline border shadow mx-2" href=<%= presenter.prev_page_path %>>
-          <i class="fas fa-arrow-left"></i>
-          <span class="ml-2">
-          Prev
-        </span>
-        </a>
-      <% end %>
-      <% if presenter.show_next_page? %>
-        <a class="block btn btn-default no-underline border shadow mx-2" href=<%= presenter.next_page_path %>>
-        <span class="mr-2">
-          Next
-        </span>
-          <i class="fas fa-arrow-right"></i>
-        </a>
-      <% end %>
-    </div>
+  </div>
+  <script type="application/json" id="react-root-data"><%= presenter.props_to_json.html_safe %></script>
+  <div id="react-root">
   </div>
 </div>

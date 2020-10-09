@@ -2,6 +2,7 @@ module Mutations
   class UpdateTopic < GraphQL::Schema::Mutation
     argument :id, ID, required: true
     argument :title, String, required: true
+    argument :topic_category_id, ID, required: false
 
     description "Update a topic"
 

@@ -1,0 +1,4 @@
+.community-topic__title {
+  /* Only for -webkit- browsers  */
+  word-break: break-word;
+}

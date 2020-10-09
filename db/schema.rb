@@ -687,6 +687,13 @@ ActiveRecord::Schema.define(version: 2020_10_02_192842) do
     t.jsonb "checklist", default: []
   end
 
+  create_table "topic_categories", force: :cascade do |t|
+    t.bigint "community_id", null: false
+    t.string "name", null: false
+    t.index ["community_id"], name: "index_topic_categories_on_community_id"
+    t.index ["name", "community_id"], name: "index_topic_categories_on_name_and_community_id", unique: true
+  end
+
   create_table "topics", force: :cascade do |t|
     t.bigint "community_id"
     t.bigint "target_id"
@@ -695,9 +702,11 @@ ActiveRecord::Schema.define(version: 2020_10_02_192842) do
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "topic_category_id"
     t.integer "views", default: 0
     t.index ["community_id"], name: "index_topics_on_community_id"
     t.index ["target_id"], name: "index_topics_on_target_id"
+    t.index ["topic_category_id"], name: "index_topics_on_topic_category_id"
   end
 
   create_table "user_activities", id: :serial, force: :cascade do |t|
@@ -816,7 +825,9 @@ ActiveRecord::Schema.define(version: 2020_10_02_192842) do
   add_foreign_key "target_versions", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
+  add_foreign_key "topic_categories", "communities"
   add_foreign_key "topics", "communities"
+  add_foreign_key "topics", "topic_categories"
   add_foreign_key "user_activities", "users"
   add_foreign_key "users", "schools"
   add_foreign_key "webhook_endpoints", "courses"

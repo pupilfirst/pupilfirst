@@ -4,6 +4,8 @@ open CommunitiesShow__Types;
 
 let str = React.string;
 
+let t = I18n.t(~scope="components.CommunitiesShow__Root");
+
 type solution = [ | `Solved | `Unsolved | `Unselected];
 
 type sortCriterion = [ | `CreatedAt | `LastActivityAt | `Views];
@@ -216,7 +218,7 @@ let topicsList = (topicCategories, topics) => {
         className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
         <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
         <h4 className="mt-3 text-base md:text-lg text-center font-semibold">
-          {"There's no discussion here yet." |> str}
+          {t("empty_topics")->str}
         </h4>
       </div>
     : topics
@@ -237,7 +239,7 @@ let topicsList = (topicCategories, topics) => {
                        {Topic.title(topic) |> str}
                      </h4>
                      <span className="block text-xs text-gray-800 pt-1">
-                       <span> {"Posted by " |> str} </span>
+                       <span> {t("topic_posted_by_text")->str} </span>
                        <span className="font-semibold mr-2">
                          {(
                             switch (Topic.creatorName(topic)) {
@@ -259,7 +261,7 @@ let topicsList = (topicCategories, topics) => {
                           | Some(date) =>
                             <span>
                               <span className="hidden md:inline-block">
-                                {"Last updated" |> str}
+                                {t("topic_last_updated_text")->str}
                               </span>
                               {" "
                                ++ DateFns.formatDistanceToNowStrict(
@@ -285,7 +287,7 @@ let topicsList = (topicCategories, topics) => {
                          {Topic.likesCount(topic) |> string_of_int |> str}
                          <span className="ml-1 hidden md:inline">
                            {Inflector.pluralize(
-                              "Like",
+                              t("topic_stats_likes"),
                               ~count=Topic.likesCount(topic),
                               ~inclusive=false,
                               (),
@@ -306,7 +308,7 @@ let topicsList = (topicCategories, topics) => {
                           |> str}
                          <span className="ml-1 hidden md:inline">
                            {Inflector.pluralize(
-                              "Reply",
+                              t("topic_stats_replies"),
                               ~count=Topic.liveRepliesCount(topic),
                               ~inclusive=false,
                               (),
@@ -323,7 +325,7 @@ let topicsList = (topicCategories, topics) => {
                          {Topic.views(topic) |> string_of_int |> str}
                          <span className="ml-1 hidden md:inline">
                            {Inflector.pluralize(
-                              "View",
+                              t("topic_stats_views"),
                               ~count=Topic.views(topic),
                               ~inclusive=false,
                               (),
@@ -377,12 +379,19 @@ let topicsLoadedData = (totalTopicsCount, loadedTopicsCount) => {
     className="inline-block mt-2 mx-auto bg-gray-200 text-gray-800 text-xs p-2 text-center rounded font-semibold">
     {(
        totalTopicsCount == loadedTopicsCount
-         ? "Showing all " ++ string_of_int(totalTopicsCount) ++ " topics"
-         : "Showing "
-           ++ string_of_int(loadedTopicsCount)
-           ++ " of "
-           ++ string_of_int(totalTopicsCount)
-           ++ " topics"
+         ? t(
+             ~variables=[|
+               ("total_topics", string_of_int(totalTopicsCount)),
+             |],
+             "topics_fully_loaded_text",
+           )
+         : t(
+             ~variables=[|
+               ("total_topics", string_of_int(totalTopicsCount)),
+               ("loaded_topics_count", string_of_int(loadedTopicsCount)),
+             |],
+             "topics_partially_loaded_text",
+           )
      )
      |> str}
   </div>;
@@ -512,8 +521,8 @@ let filterPlaceholder = (state, topicCategories) => {
   switch (state.filter.topicCategory, state.filter.title) {
   | (None, None) =>
     ArrayUtils.isEmpty(topicCategories)
-      ? "Search by topic title.."
-      : "Filter by category, or search by topic title.."
+      ? t("filter_input_placeholder_default")
+      : t("filter_input_placeholder_categories")
   | _ => ""
   };
 };
@@ -533,7 +542,7 @@ let categoryDropdownSelected = topicCategory => {
            {TopicCategory.name(topicCategory)->str}
          </span>
        </div>;
-     | None => str("All Categories")
+     | None => t("all_categories_button")->str
      }}
     <FaIcon classes="ml-4 fas fa-caret-down" />
   </div>;
@@ -573,11 +582,11 @@ let categoryDropdownContents =
 module Sortable = {
   type t = sortCriterion;
 
-  let criterion = t =>
-    switch (t) {
-    | `CreatedAt => "Posted At"
-    | `LastActivityAt => "Last Activity"
-    | `Views => "Views"
+  let criterion = c =>
+    switch (c) {
+    | `CreatedAt => t("sort_criterion_posted_at")
+    | `LastActivityAt => t("sort_criterion_last_activity")
+    | `Views => t("sort_criterion_views")
     };
 
   let criterionType = _t => `Number;
@@ -590,7 +599,7 @@ let topicsSorter = (state, send) => {
     ariaLabel="Change topics sorting"
     className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
     <label className="block text-tiny font-semibold uppercase">
-      {"Sort by:" |> str}
+      {t("sort_criterion_input_label")->str}
     </label>
     <TopicsSorter
       criteria=[|`CreatedAt, `LastActivityAt, `Views|]
@@ -662,22 +671,22 @@ let make = (~communityId, ~target, ~topicCategories) => {
           <div className="md:flex w-full items-start pb-4">
             <div className="flex-1">
               <label className="block text-tiny font-semibold uppercase">
-              {"Filter by:" |> str}
+                {t("filter_input_label")->str}
               </label>
               <Multiselect
-              id="filter"
-              unselected={unselected(topicCategories, state)}
-              selected={selected(state)}
-              onSelect={onSelectFilter(send)}
-              onDeselect={onDeselectFilter(send)}
-              value={state.filterString}
-              onChange={filterString =>
-                send(UpdateFilterString(filterString))
-              }
-              placeholder={filterPlaceholder(state, topicCategories)}
-            />
-          </div>
-          {topicsSorter(state, send)}
+                id="filter"
+                unselected={unselected(topicCategories, state)}
+                selected={selected(state)}
+                onSelect={onSelectFilter(send)}
+                onDeselect={onDeselectFilter(send)}
+                value={state.filterString}
+                onChange={filterString =>
+                  send(UpdateFilterString(filterString))
+                }
+                placeholder={filterPlaceholder(state, topicCategories)}
+              />
+            </div>
+            {topicsSorter(state, send)}
           </div>
         </div>
       </div>
@@ -714,7 +723,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                         state.sortDirection,
                       );
                     }}>
-                    {"Load More..." |> str}
+                    {t("button_load_more") |> str}
                   </button>
                 | Reloading => React.null
                 }}
@@ -738,7 +747,12 @@ let make = (~communityId, ~target, ~topicCategories) => {
                 }}
              </div>
            | FullyLoaded(topics) =>
-             topicsLoadedData(state.totalTopicsCount, Array.length(topics))
+             <div className="text-center">
+               {topicsLoadedData(
+                  state.totalTopicsCount,
+                  Array.length(topics),
+                )}
+             </div>
            },
            state.totalTopicsCount == 0,
          )}

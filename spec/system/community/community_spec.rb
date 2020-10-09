@@ -71,6 +71,40 @@ feature 'Community', js: true do
     expect(community.topics.reload.find_by(title: topic_title).first_post.body).to eq(topic_body)
   end
 
+  scenario 'a student edits her post and leaves a reason' do
+    sign_in_user(student_2.user, referrer: community_path(community))
+    click_link topic_1.title
+    replace_markdown reply_body
+    click_button 'Post Your Reply'
+    dismiss_notification
+    new_reply = topic_1.reload.replies.last
+
+    # Edit a reply and set reason first time.
+    find("div[aria-label='Options for post #{new_reply.id}']").click
+    click_button 'Edit Reply'
+    within("div#post-show-#{new_reply.id}") do
+      replace_markdown reply_body_for_edit
+    end
+    fill_in 'edit-reason', with: 'Test Edit Reason'
+    click_button 'Update Reply'
+
+    # Edit a reply and set reason second time.
+    find("div[aria-label='Options for post #{new_reply.id}']").click
+    click_button 'Edit Reply'
+    within("div#post-show-#{new_reply.id}") do
+      replace_markdown reply_body_for_edit
+    end
+    fill_in 'edit-reason', with: 'Test Edit Reason second time'
+    click_button 'Update Reply'
+
+    # Go to the history page history - the reason should be there.
+    find("div[aria-label='Options for post #{new_reply.id}']").click
+    click_link 'History'
+
+    expect(page).to have_text('Test Edit Reason')
+    expect(page).to have_text('Test Edit Reason second time')
+  end
+
   scenario 'an active student participates in a topic thread' do
     sign_in_user(student_2.user, referrer: community_path(community))
     expect(page).to have_text(community.name)
@@ -108,7 +142,6 @@ feature 'Community', js: true do
     within("div#post-show-#{new_reply.id}") do
       replace_markdown reply_body_for_edit
     end
-    fill_in 'edit-reason', with: 'Test Edit Reason'
     click_button 'Update Reply'
 
     expect(page).not_to have_text(reply_body)
@@ -121,7 +154,6 @@ feature 'Community', js: true do
     expect(page).to have_text('Post Edit History')
     expect(page).to have_text(reply_body)
     expect(page).to have_text(reply_body_for_edit)
-    expect(page).to have_text('Test Edit Reason')
     click_link 'Back to Post'
 
     # can archive his reply

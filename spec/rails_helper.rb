@@ -101,6 +101,11 @@ RSpec.configure do |config|
     Capybara.page.driver.browser.manage.window.maximize unless Capybara.javascript_driver == :cuprite
   end
 
+  # Faker clear store for unique generator after run
+  config.before(:each) do
+    Faker::UniqueGenerator.clear
+  end
+
   include AnObjectLikeMatcher
 end
 

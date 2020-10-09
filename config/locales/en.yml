@@ -30,6 +30,24 @@ en:
       filter_result_empty: "The filters you've applied does not match any coach. Please change the filter and try again."
       button_connect: Connect
       button_about: About
+    CommunitiesShow__Root:
+      all_categories_button: All Categories
+      empty_topics: There's no discussion here yet.
+      filter_input_label: "Filter by:"
+      filter_input_placeholder_default: Search by topic title or filter by solution
+      filter_input_placeholder_categories: Filter by category, solution or search by topic title
+      sort_criterion_input_label: "Sort by:"
+      sort_criterion_posted_at: Posted At
+      sort_criterion_last_activity: Last Activity
+      sort_criterion_views: Views
+      topic_stats_likes: Like
+      topic_stats_replies: Reply
+      topic_stats_views: View
+      button_load_more: Load More...
+      topics_fully_loaded_text: "Showing all %{total_topics} topics"
+      topics_partially_loaded_text: "Showing %{loaded_topics_count} of %{total_topics} topics"
+      topic_posted_by_text: Posted by
+      topic_last_updated_text: Last updated
     CourseCertificates__Root:
       auto_issue_tag: Auto-issue
       create_action: &certificate_create_action Create New Certificate

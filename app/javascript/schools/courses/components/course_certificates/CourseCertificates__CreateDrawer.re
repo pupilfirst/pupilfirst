@@ -60,7 +60,6 @@ let submitForm = (course, addCertificateCB, send, event) => {
         t("done_exclamation"),
         t("success_notification"),
       );
-
       Json.Decode.field("certificate", Certificate.decode, json)
       |> addCertificateCB;
     },

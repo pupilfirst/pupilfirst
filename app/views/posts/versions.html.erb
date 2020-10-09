@@ -33,6 +33,12 @@
             <span class="font-semibold"><%= presenter.editor_name_for_answer %></span>
             <span><%= presenter.updated_at(@post) %></span>
           </div>
+          <% if @post.edit_reason? %>
+            <div class="mt-1 text-xs">
+              <span class="font-semibold">Reason:</span>
+              <span><%= @post.edit_reason %></span>
+            </div>
+          <% end %>
         </div>
       </div>
 
@@ -49,6 +55,12 @@
             <span class="font-semibold"><%= version.user&.name || 'Unknown' %></span>
             <span><%= presenter.updated_at(version) %></span>
           </div>
+          <% if version.reason? %>
+            <div class="mt-1 text-xs">
+              <span class="font-semibold">Reason:</span>
+              <span><%= version.reason %></span>
+            </div>
+          <% end %>
         </div>
       </div>
     <% end %>

@@ -4,7 +4,13 @@ open CommunitiesShow__Types;
 
 let str = React.string;
 
+let t = I18n.t(~scope="components.CommunitiesShow__Root");
+
 type solution = [ | `Solved | `Unsolved | `Unselected];
+
+type sortCriterion = [ | `CreatedAt | `LastActivityAt | `Views];
+
+type sortDirection = [ | `Ascending | `Descending];
 
 type loading =
   | NotLoading
@@ -24,6 +30,8 @@ type state = {
   filterString: string,
   filter,
   totalTopicsCount: int,
+  sortCriterion,
+  sortDirection,
 };
 
 type action =
@@ -35,7 +43,9 @@ type action =
   | LoadTopics(option(string), bool, array(Topic.t), int)
   | BeginLoadingMore
   | BeginReloading
-  | SetSolutionFilter(solution);
+  | SetSolutionFilter(solution)
+  | UpdateSortDirection(sortDirection)
+  | UpdateSortCriterion(sortCriterion);
 
 let reducer = (state, action) => {
   switch (action) {
@@ -78,6 +88,8 @@ let reducer = (state, action) => {
       filterString: "",
     }
   | UpdateFilterString(filterString) => {...state, filterString}
+  | UpdateSortCriterion(sortCriterion) => {...state, sortCriterion}
+  | UpdateSortDirection(sortDirection) => {...state, sortDirection}
   | LoadTopics(endCursor, hasNextPage, newTopics, totalTopicsCount) =>
     let updatedTopics =
       switch (state.loading) {
@@ -105,8 +117,8 @@ let reducer = (state, action) => {
 
 module TopicsQuery = [%graphql
   {|
-    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $resolution: TopicResolutionFilter!, $search: String, $after: String) {
-      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, resolution: $resolution, first: 10, after: $after) {
+    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $resolution: TopicResolutionFilter!, $search: String, $after: String, $sortCriterion: TopicSortCriterion!, $sortDirection: SortDirection!) {
+      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, resolution: $resolution, sortDirection: $sortDirection, sortCriterion: $sortCriterion, first: 10, after: $after) {
         nodes {
           id
           lastActivityAt
@@ -135,7 +147,8 @@ module TopicsQuery = [%graphql
   |}
 ];
 
-let getTopics = (send, communityId, cursor, filter) => {
+let getTopics =
+    (send, communityId, cursor, filter, sortCriterion, sortDirection) => {
   let topicCategoryId =
     filter.topicCategory |> OptionUtils.map(TopicCategory.id);
 
@@ -148,6 +161,8 @@ let getTopics = (send, communityId, cursor, filter) => {
     ~targetId?,
     ~search=?filter.title,
     ~resolution=filter.solution,
+    ~sortCriterion,
+    ~sortDirection,
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -172,7 +187,14 @@ let getTopics = (send, communityId, cursor, filter) => {
 
 let reloadTopics = (communityId, state, send) => {
   send(BeginReloading);
-  getTopics(send, communityId, None, state.filter);
+  getTopics(
+    send,
+    communityId,
+    None,
+    state.filter,
+    state.sortCriterion,
+    state.sortDirection,
+  );
 };
 
 let computeInitialState = target => {
@@ -186,6 +208,8 @@ let computeInitialState = target => {
     solution: `Unselected,
   },
   totalTopicsCount: 0,
+  sortDirection: `Descending,
+  sortCriterion: `CreatedAt,
 };
 
 let topicsList = (topicCategories, topics) => {
@@ -194,15 +218,15 @@ let topicsList = (topicCategories, topics) => {
         className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
         <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
         <h4 className="mt-3 text-base md:text-lg text-center font-semibold">
-          {"There's no discussion here yet." |> str}
+          {t("empty_topics")->str}
         </h4>
       </div>
     : topics
-      |> Array.map(topic =>
+      |> Js.Array.map(topic =>
            <a
-             href={"/topics/" ++ Topic.id(topic)}
              className="block"
              key={Topic.id(topic)}
+             href={"/topics/" ++ Topic.id(topic)}
              ariaLabel={"Topic " ++ Topic.id(topic)}>
              <div
                className="flex items-center border border-transparent hover:bg-gray-100 hover:text-primary-500  hover:border-primary-400">
@@ -215,11 +239,11 @@ let topicsList = (topicCategories, topics) => {
                        {Topic.title(topic) |> str}
                      </h4>
                      <span className="block text-xs text-gray-800 pt-1">
-                       <span> {"Posted by " |> str} </span>
+                       <span> {t("topic_posted_by_text")->str} </span>
                        <span className="font-semibold mr-2">
                          {(
                             switch (Topic.creatorName(topic)) {
-                            | Some(name) => name ++ " "
+                            | Some(name) => " " ++ name ++ " "
                             | None => "Unknown "
                             }
                           )
@@ -237,7 +261,7 @@ let topicsList = (topicCategories, topics) => {
                           | Some(date) =>
                             <span>
                               <span className="hidden md:inline-block">
-                                {"Last updated" |> str}
+                                {t("topic_last_updated_text")->str}
                               </span>
                               {" "
                                ++ DateFns.formatDistanceToNowStrict(
@@ -263,7 +287,7 @@ let topicsList = (topicCategories, topics) => {
                          {Topic.likesCount(topic) |> string_of_int |> str}
                          <span className="ml-1 hidden md:inline">
                            {Inflector.pluralize(
-                              "Like",
+                              t("topic_stats_likes"),
                               ~count=Topic.likesCount(topic),
                               ~inclusive=false,
                               (),
@@ -284,7 +308,7 @@ let topicsList = (topicCategories, topics) => {
                           |> str}
                          <span className="ml-1 hidden md:inline">
                            {Inflector.pluralize(
-                              "Reply",
+                              t("topic_stats_replies"),
                               ~count=Topic.liveRepliesCount(topic),
                               ~inclusive=false,
                               (),
@@ -301,7 +325,7 @@ let topicsList = (topicCategories, topics) => {
                          {Topic.views(topic) |> string_of_int |> str}
                          <span className="ml-1 hidden md:inline">
                            {Inflector.pluralize(
-                              "View",
+                              t("topic_stats_views"),
                               ~count=Topic.views(topic),
                               ~inclusive=false,
                               (),
@@ -355,12 +379,19 @@ let topicsLoadedData = (totalTopicsCount, loadedTopicsCount) => {
     className="inline-block mt-2 mx-auto bg-gray-200 text-gray-800 text-xs p-2 text-center rounded font-semibold">
     {(
        totalTopicsCount == loadedTopicsCount
-         ? "Showing all " ++ string_of_int(totalTopicsCount) ++ " topics"
-         : "Showing "
-           ++ string_of_int(loadedTopicsCount)
-           ++ " of "
-           ++ string_of_int(totalTopicsCount)
-           ++ " topics"
+         ? t(
+             ~variables=[|
+               ("total_topics", string_of_int(totalTopicsCount)),
+             |],
+             "topics_fully_loaded_text",
+           )
+         : t(
+             ~variables=[|
+               ("total_topics", string_of_int(totalTopicsCount)),
+               ("loaded_topics_count", string_of_int(loadedTopicsCount)),
+             |],
+             "topics_partially_loaded_text",
+           )
      )
      |> str}
   </div>;
@@ -490,8 +521,8 @@ let filterPlaceholder = (state, topicCategories) => {
   switch (state.filter.topicCategory, state.filter.title) {
   | (None, None) =>
     ArrayUtils.isEmpty(topicCategories)
-      ? "Search by topic title.."
-      : "Filter by category, or search by topic title.."
+      ? t("filter_input_placeholder_default")
+      : t("filter_input_placeholder_categories")
   | _ => ""
   };
 };
@@ -511,7 +542,7 @@ let categoryDropdownSelected = topicCategory => {
            {TopicCategory.name(topicCategory)->str}
          </span>
        </div>;
-     | None => str("All Categories")
+     | None => t("all_categories_button")->str
      }}
     <FaIcon classes="ml-4 fas fa-caret-down" />
   </div>;
@@ -548,17 +579,53 @@ let categoryDropdownContents =
   );
 };
 
+module Sortable = {
+  type t = sortCriterion;
+
+  let criterion = c =>
+    switch (c) {
+    | `CreatedAt => t("sort_criterion_posted_at")
+    | `LastActivityAt => t("sort_criterion_last_activity")
+    | `Views => t("sort_criterion_views")
+    };
+
+  let criterionType = _t => `Number;
+};
+
+module TopicsSorter = Sorter.Make(Sortable);
+
+let topicsSorter = (state, send) => {
+  <div
+    ariaLabel="Change topics sorting"
+    className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
+    <label className="block text-tiny font-semibold uppercase">
+      {t("sort_criterion_input_label")->str}
+    </label>
+    <TopicsSorter
+      criteria=[|`CreatedAt, `LastActivityAt, `Views|]
+      selectedCriterion={state.sortCriterion}
+      direction={state.sortDirection}
+      onDirectionChange={sortDirection => {
+        send(UpdateSortDirection(sortDirection))
+      }}
+      onCriterionChange={sortCriterion =>
+        send(UpdateSortCriterion(sortCriterion))
+      }
+    />
+  </div>;
+};
+
 [@react.component]
 let make = (~communityId, ~target, ~topicCategories) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, target, computeInitialState);
 
-  React.useEffect1(
+  React.useEffect3(
     () => {
       reloadTopics(communityId, state, send);
       None;
     },
-    [|state.filter|],
+    (state.filter, state.sortDirection, state.sortCriterion),
   );
   <div className="flex-1 flex flex-col">
     {switch (target) {
@@ -601,24 +668,30 @@ let make = (~communityId, ~target, ~topicCategories) => {
               // Other controls go here.
             />
           </div>
-          <div className="max-w-3xl mx-auto bg-gray-100">
-            <Multiselect
-              id="filter"
-              unselected={unselected(topicCategories, state)}
-              selected={selected(state)}
-              onSelect={onSelectFilter(send)}
-              onDeselect={onDeselectFilter(send)}
-              value={state.filterString}
-              onChange={filterString =>
-                send(UpdateFilterString(filterString))
-              }
-              placeholder={filterPlaceholder(state, topicCategories)}
-            />
+          <div className="md:flex w-full items-start pb-4">
+            <div className="flex-1">
+              <label className="block text-tiny font-semibold uppercase">
+                {t("filter_input_label")->str}
+              </label>
+              <Multiselect
+                id="filter"
+                unselected={unselected(topicCategories, state)}
+                selected={selected(state)}
+                onSelect={onSelectFilter(send)}
+                onDeselect={onDeselectFilter(send)}
+                value={state.filterString}
+                onChange={filterString =>
+                  send(UpdateFilterString(filterString))
+                }
+                placeholder={filterPlaceholder(state, topicCategories)}
+              />
+            </div>
+            {topicsSorter(state, send)}
           </div>
         </div>
       </div>
       <div className="max-w-3xl w-full mx-auto relative px-3 md:px-6 pb-4">
-        <div className="community-topic__list-container my-4">
+        <div id="topics" className="community-topic__list-container my-4">
           {switch (state.topics) {
            | Unloaded =>
              SkeletonLoading.multiple(
@@ -629,6 +702,12 @@ let make = (~communityId, ~target, ~topicCategories) => {
              <div>
                <div className="shadow bg-white rounded-lg divide-y">
                  {topicsList(topicCategories, topics)}
+               </div>
+               <div className="text-center">
+                 {topicsLoadedData(
+                    state.totalTopicsCount,
+                    Array.length(topics),
+                  )}
                </div>
                {switch (state.loading) {
                 | LoadingMore =>
@@ -646,36 +725,29 @@ let make = (~communityId, ~target, ~topicCategories) => {
                         communityId,
                         Some(cursor),
                         state.filter,
+                        state.sortCriterion,
+                        state.sortDirection,
                       );
                     }}>
-                    {"Load More..." |> str}
+                    {t("button_load_more") |> str}
                   </button>
                 | Reloading => React.null
                 }}
              </div>
-           | FullyLoaded(topics) => topicsList(topicCategories, topics)
-           }}
-        </div>
-        {ReactUtils.nullIf(
-           switch (state.topics) {
-           | Unloaded => React.null
-           | PartiallyLoaded(topics, _cursor) =>
-             <div className="text-center">
-               {switch (state.loading) {
-                | LoadingMore => React.null
-                | NotLoading =>
-                  topicsLoadedData(
+           | FullyLoaded(topics) =>
+             <div>
+               <div className="shadow bg-white rounded-lg divide-y">
+                 {topicsList(topicCategories, topics)}
+               </div>
+               <div className="text-center">
+                 {topicsLoadedData(
                     state.totalTopicsCount,
                     Array.length(topics),
-                  )
-                | Reloading => React.null
-                }}
+                  )}
+               </div>
              </div>
-           | FullyLoaded(topics) =>
-             topicsLoadedData(state.totalTopicsCount, Array.length(topics))
-           },
-           state.totalTopicsCount == 0,
-         )}
+           }}
+        </div>
       </div>
       {switch (state.topics) {
        | Unloaded => React.null

@@ -405,7 +405,7 @@ feature 'Community', js: true do
     scenario 'user views likes and replies on the index page' do
       sign_in_user(student_2.user, referrer: community_path(community))
 
-      within(find("div[aria-label='Topic #{topic_1.id}']")) do
+      within(find("a[aria-label='Topic #{topic_1.id}']")) do
         within(find('span[aria-label="Likes"]')) do
           expect(page).to have_text(3)
         end
@@ -485,11 +485,11 @@ feature 'Community', js: true do
     scenario 'user checks category of topic in community index' do
       sign_in_user(student_1.user, referrer: community_path(community))
 
-      within("div[aria-label='Topic #{topic_1.id}']") do
+      within("a[aria-label='Topic #{topic_1.id}']") do
         expect(page).to have_text(category_1.name)
       end
 
-      within("div[aria-label='Topic #{topic_2.id}']") do
+      within("a[aria-label='Topic #{topic_2.id}']") do
         expect(page).to have_text(category_2.name)
       end
     end
@@ -578,6 +578,61 @@ feature 'Community', js: true do
 
       expect(page).to_not have_text(topic_1.title)
       expect(page).to have_text(topic_2.title)
+    end
+  end
+
+  context 'topics have different views, creation date and last activity time' do
+    let!(:topic_1) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 1.second.ago, created_at: 2.days.ago, views: 9 }
+    let!(:topic_2) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 3.days.ago, created_at: 4.days.ago, views: 1 }
+    let!(:topic_3) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 2.days.ago, created_at: 1.day.ago, views: 20 }
+
+    scenario 'user sorts topics based on views, creation date and last activity' do
+      sign_in_user(coach.user, referrer: community_path(community))
+
+      within("div[aria-label='Change topics sorting']") do
+        expect(page).to have_content("Posted At")
+      end
+
+      # Check current ordering of topics
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_2.title)
+
+      #  Swap the ordering of topics
+      click_button('toggle-sort-order')
+
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
+
+      # Change sorting criterion to last activity
+      click_button 'Posted At'
+      click_button 'Last Activity'
+
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
+
+      #  Swap the ordering of topics
+      click_button('toggle-sort-order')
+
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_2.title)
+
+      # Change sorting criterion to views
+      click_button 'Last Activity'
+      click_button 'Views'
+
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_2.title)
+
+      click_button('toggle-sort-order')
+
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
     end
   end
 end

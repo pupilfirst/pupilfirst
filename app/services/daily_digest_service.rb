@@ -11,7 +11,7 @@ class DailyDigestService
     cache_new_and_popular_topics
     cache_older_topics_with_recent_activity
 
-    students = User.joins(founders: :communities).merge(Founder.not_dropped_out).distinct.select(:id)
+    students = User.joins(founders: :communities).merge(Founder.active).distinct.select(:id)
     coaches = User.joins(:faculty).select(:id)
 
     User.where(id: coaches).or(User.where(id: students))

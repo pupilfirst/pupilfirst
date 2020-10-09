@@ -243,7 +243,7 @@ feature 'Community', js: true do
 
     # Faculty can edit or delete a topic
     find("h3[aria-label='Topic Title']").hover
-    expect(page).to have_text('Edit Title')
+    expect(page).to have_text('Edit Topic')
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
     expect(page).to have_text('Edit Post')
     expect(page).to have_text('Delete Post')

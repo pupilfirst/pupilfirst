@@ -230,7 +230,7 @@ let topicsList = (topicCategories, topics) => {
              ariaLabel={"Topic " ++ Topic.id(topic)}>
              <div
                className="flex items-center border border-transparent hover:bg-gray-100 hover:text-primary-500  hover:border-primary-400">
-               <div className="flex-1 w-full">
+               <div className="flex-1">
                  <div
                    className="cursor-pointer no-underline flex flex-col p-4 md:px-6 md:py-5">
                    <span className="block">
@@ -276,7 +276,7 @@ let topicsList = (topicCategories, topics) => {
                        </span>
                      </span>
                    </span>
-                   <span className="flex flex-row mt-2">
+                   <span className="flex flex-row flex-wrap mt-2">
                      <span
                        className="flex text-center items-center mr-2 py-1 px-2 rounded bg-gray-200"
                        ariaLabel="Likes">
@@ -595,9 +595,7 @@ module Sortable = {
 module TopicsSorter = Sorter.Make(Sortable);
 
 let topicsSorter = (state, send) => {
-  <div
-    ariaLabel="Change topics sorting"
-    className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
+  <div ariaLabel="Change topics sorting" className="flex-shrink-0">
     <label className="block text-tiny font-semibold uppercase">
       {t("sort_criterion_input_label")->str}
     </label>
@@ -648,7 +646,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
     <div className="mt-5 flex flex-col flex-1 ">
       <div className="w-full sticky top-0 z-30 bg-gray-100 py-2">
         <div className="max-w-3xl w-full mx-auto relative px-3 md:px-6">
-          <div className="mb-2 flex justify-between">
+          <div className="pb-3 flex justify-between">
             {ReactUtils.nullIf(
                <Dropdown
                  selected={categoryDropdownSelected(
@@ -668,9 +666,9 @@ let make = (~communityId, ~target, ~topicCategories) => {
               // Other controls go here.
             />
           </div>
-          <div className="md:flex w-full items-start pb-4">
-            <div className="flex-1">
-              <label className="block text-tiny font-semibold uppercase">
+          <div className="flex w-full items-start flex-wrap">
+            <div className="flex-1 pr-2">
+              <label className="block text-tiny font-semibold uppercase pl-px">
                 {t("filter_input_label")->str}
               </label>
               <Multiselect

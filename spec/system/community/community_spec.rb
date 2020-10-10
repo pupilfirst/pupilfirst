@@ -45,6 +45,14 @@ feature 'Community', js: true do
     expect(page).to have_text('Please sign in to continue.')
   end
 
+  scenario 'student from an unlinked course attempts to visit community' do
+    CommunityCourseConnection.where(course: course).destroy_all
+
+    sign_in_user(student_1.user, referrer: community_path(community))
+
+    expect(page).to have_text("The page you were looking for doesn't exist")
+  end
+
   scenario 'an active student visits his community' do
     sign_in_user(student_1.user, referrer: community_path(community))
 
@@ -639,6 +647,26 @@ feature 'Community', js: true do
       expect(find("#topics a:nth-child(3)")).to have_content(topic_3.title)
       expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
       expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
+    end
+  end
+
+  context "when the user is a coach who isn't enrolled in one of the community's connected courses" do
+    before do
+      CommunityCourseConnection.destroy_all
+    end
+
+    scenario "a coach from a different course can still moderate on unlinked communities" do
+      sign_in_user(coach.user, referrer: community_path(community))
+
+      click_link topic_1.title
+
+      # Can mark a reply as solution.
+      find("div[aria-label='Options for post #{reply_1.id}']").click
+      click_button 'Mark as solution'
+
+      within("div#post-show-#{reply_1.id}") do
+        expect(page).to have_selector("div[aria-label='Marked as solution icon']")
+      end
     end
   end
 end

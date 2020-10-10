@@ -50,6 +50,15 @@ feature 'Target Details Editor', js: true do
 
     expect(target_1_l2.reload.title).to eq(new_target_title)
     expect(target_1_l2.completion_instructions).to eq(completion_instructions)
+
+    # Clears the completion instructions
+
+    fill_in 'completion-instructions', with: '', fill_options: { clear: :backspace }
+
+    click_button 'Update Target'
+    dismiss_notification
+
+    expect(target_1_l2.reload.completion_instructions).to eq(nil)
   end
 
   scenario 'school admin updates a target as reviewed by faculty' do

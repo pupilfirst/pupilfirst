@@ -1,59 +1,28 @@
 module Communities
   class ShowPresenter < ApplicationPresenter
-    def initialize(view_context, community, topics, search, target)
+    def initialize(view_context, community, target)
       super(view_context)
 
       @community = community
-      @topics = topics
-      @search = search
       @target = target
     end
 
-    def time(topic)
-      topic.created_at.to_formatted_s(:long)
+    def props
+      {
+        target: @target.present? ? @target.attributes.slice('id', 'title') : nil,
+        community_id: @community.id,
+        topic_categories: topic_categories
+      }
     end
 
     def page_title
       "#{@community.name} Community | #{current_school.name}"
     end
 
-    def creator_name(topic)
-      topic.first_post.creator&.name || 'Unknown'
-    end
+    private
 
-    def activity(topic)
-      view.time_ago_in_words(topic.last_activity_at)
-    end
-
-    def show_prev_page?
-      !@topics.first_page?
-    end
-
-    def show_next_page?
-      return false if @topics.blank?
-
-      !@topics.last_page?
-    end
-
-    def next_page_path
-      view.community_path(@community.id, **page_params(:next))
-    end
-
-    def prev_page_path
-      view.community_path(@community.id, **page_params(:previous))
-    end
-
-    def new_topic?(topic)
-      topic.last_activity_at.blank?
-    end
-
-    def page_params(direction)
-      page = direction == :next ? @topics.next_page : @topics.prev_page
-
-      kwargs = { page: page }
-      kwargs[:search] = @search if @search.present?
-      kwargs[:target_id] = @target.id if @target.present?
-      kwargs
+    def topic_categories
+      @community.topic_categories.map { |category| { id: category.id, name: category.name } }
     end
   end
 end

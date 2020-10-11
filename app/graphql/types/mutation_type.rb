@@ -56,5 +56,8 @@ module Types
     field :update_user, mutation: Mutations::UpdateUser, null: false
     field :update_certificate, mutation: Mutations::UpdateCertificate, null: false
     field :delete_certificate, mutation: Mutations::DeleteCertificate, null: false
+    field :create_topic_category, mutation: Mutations::CreateTopicCategory, null: false
+    field :delete_topic_category, mutation: Mutations::DeleteTopicCategory, null: false
+    field :update_topic_category, mutation: Mutations::UpdateTopicCategory, null: false
   end
 end

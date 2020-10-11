@@ -8,26 +8,6 @@
 
 @screen md {
   .community-hero__container {
-    height: 22rem;
+    height: 18rem;
   }
-}
-
-.community-question__list-container>:last-child {
-  border: none;
-}
-
-.community-question__title {
-  /* Only for -webkit- browsers  */
-  word-break: break-word;
-}
-
-.community-ask-button-container:before {
-  @apply absolute;
-  content: '';
-  height: 2px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgb(255, 255, 255);
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(191, 184, 204, 1) 50%, rgba(255, 255, 255, 0) 100%);
-  width: 100%;
 }

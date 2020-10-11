@@ -7,12 +7,11 @@ module Schools
         @school = school
       end
 
-      def react_props
+      def props
         {
           communities: communities,
           courses: courses,
-          connections: connections
-        }.to_json
+        }
       end
 
       def communities
@@ -21,7 +20,9 @@ module Schools
             {
               id: community.id.to_s,
               name: community.name,
-              targetLinkable: community.target_linkable
+              target_linkable: community.target_linkable,
+              topic_categories: topic_categories(community),
+              course_ids:  community.course_ids.map(&:to_s)
             }
           end
       end
@@ -35,13 +36,9 @@ module Schools
         end
       end
 
-      def connections
-        CommunityCourseConnection.where(community: communities.pluck(:id)).map do |connection|
-          {
-            communityId: connection.community_id.to_s,
-            courseId: connection.course_id.to_s
-          }
-        end
+      def topic_categories(community)
+        topic_categories = ActiveRecord::Precounter.new(TopicCategory.where(community: community)).precount(:topics)
+        topic_categories.map { |category| category.attributes.slice('id', 'name', 'community_id').merge({ topics_count: category.topics_count }) }
       end
     end
   end

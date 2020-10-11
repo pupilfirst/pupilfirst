@@ -36,5 +36,8 @@ module Pupilfirst
     %w[presenters services forms/concerns].each do |folder|
       config.autoload_paths.push(Rails.root.join('app', folder))
     end
+
+    # Ensure BatchLoader's cache is purged between requests.
+    config.middleware.use BatchLoader::Middleware
   end
 end

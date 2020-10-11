@@ -5,9 +5,8 @@ open SchoolCommunities__IndexTypes;
 module CreateCommunityQuery = [%graphql
   {|
   mutation CreateCommunityMutation($name: String!, $targetLinkable: Boolean!, $courseIds: [ID!]!) {
-    createCommunity(name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds) @bsVariant {
-      communityId
-      errors
+    createCommunity(name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds ) {
+      id
     }
   }
 |}
@@ -16,59 +15,12 @@ module CreateCommunityQuery = [%graphql
 module UpdateCommunityQuery = [%graphql
   {|
   mutation UpdateCommunityMutation($id: ID!, $name: String!, $targetLinkable: Boolean!, $courseIds: [ID!]!) {
-    updateCommunity(id: $id, name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds) @bsVariant {
+    updateCommunity(id: $id, name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds)  {
       communityId
-      errors
     }
   }
 |}
 ];
-
-module CreateCommunityError = {
-  type t = [ | `InvalidLengthName | `IncorrectCourseIds];
-
-  let notification = error =>
-    switch (error) {
-    | `InvalidLengthName => (
-        "InvalidLengthName",
-        "Course name should be between 1 and 50 characters long.",
-      )
-    | `IncorrectCourseIds => (
-        "IncorrectCourseIds",
-        "Could not find courses with the supplied IDs.",
-      )
-    };
-};
-
-module UpdateCommunityError = {
-  type t = [
-    | `InvalidLengthName
-    | `IncorrectCourseIds
-    | `IncorrectCommunityId
-  ];
-
-  let notification = error =>
-    switch (error) {
-    | `InvalidLengthName => (
-        "InvalidLengthName",
-        "Course name should be between 1 and 50 characters long.",
-      )
-    | `IncorrectCourseIds => (
-        "IncorrectCourseIds",
-        "Could not find courses with the supplied IDs.",
-      )
-    | `IncorrectCommunityId => (
-        "IncorrectCommunityId",
-        "Community does not exist.",
-      )
-    };
-};
-
-module CreateCommunityErrorHandler =
-  GraphqlErrorHandler.Make(CreateCommunityError);
-
-module UpdateCommunityErrorHandler =
-  GraphqlErrorHandler.Make(UpdateCommunityError);
 
 type state = {
   saving: bool,
@@ -79,20 +31,13 @@ type state = {
   courseSearch: string,
 };
 
-let computeInitialState = ((community, connections)) => {
+let computeInitialState = community => {
   let (name, targetLinkable, selectedCourseIds) =
     switch (community) {
     | Some(community) => (
         community |> Community.name,
         community |> Community.targetLinkable,
-        connections
-        |> List.filter(connection =>
-             connection
-             |> Connection.communityId == (community |> Community.id)
-           )
-        |> List.map(connection => connection |> Connection.courseId)
-        |> Array.of_list
-        |> Belt.Set.String.fromArray,
+        Community.courseIds(community) |> Belt.Set.String.fromArray,
       )
     | None => ("", false, Belt.Set.String.empty)
     };
@@ -143,29 +88,8 @@ let reducer = (state, action) =>
   | UpdateCourseSearch(courseSearch) => {...state, courseSearch}
   };
 
-let handleConnections = (communityId, connections, courseIds) => {
-  let oldConnections =
-    connections
-    |> List.filter(connection =>
-         connection |> Connection.communityId != communityId
-       );
-  let newConnectionsForCommunity =
-    courseIds
-    |> Array.map(courseId => Connection.create(communityId, courseId))
-    |> Array.to_list;
-  oldConnections |> List.append(newConnectionsForCommunity);
-};
-
 let handleQuery =
-    (
-      community,
-      connections,
-      state,
-      send,
-      addCommunityCB,
-      updateCommunitiesCB,
-      event,
-    ) => {
+    (community, state, send, addCommunityCB, updateCommunitiesCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
   let {name, targetLinkable} = state;
@@ -184,46 +108,56 @@ let handleQuery =
         (),
       )
       |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response =>
-           switch (response##updateCommunity) {
-           | `CommunityId(communityId) =>
-             send(FinishSaving);
+      |> Js.Promise.then_(response => {
+           let communityId = response##updateCommunity##communityId;
+           let topicCategories = Community.topicCategories(community);
+           switch (communityId) {
+           | Some(id) =>
              updateCommunitiesCB(
-               Community.create(communityId, name, targetLinkable),
-               handleConnections(communityId, connections, courseIds),
+               Community.create(
+                 ~id,
+                 ~name,
+                 ~targetLinkable,
+                 ~topicCategories,
+                 ~courseIds,
+               ),
              );
-             Notification.success(
-               "Success",
-               "Community updated successfully.",
-             );
-             Js.Promise.resolve();
-           | `Errors(errors) =>
-             Js.Promise.reject(UpdateCommunityErrorHandler.Errors(errors))
-           }
-         )
-      |> UpdateCommunityErrorHandler.catch(() => send(FailSaving))
+             send(FinishSaving);
+           | None => send(FinishSaving)
+           };
+
+           Notification.success("Success", "Community updated successfully.");
+           Js.Promise.resolve();
+         })
       |> ignore
     | None =>
       CreateCommunityQuery.make(~name, ~targetLinkable, ~courseIds, ())
       |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response =>
-           switch (response##createCommunity) {
-           | `CommunityId(communityId) =>
+      |> Js.Promise.then_(response => {
+           switch (response##createCommunity##id) {
+           | Some(id) =>
+             let newCommunity =
+               Community.create(
+                 ~id,
+                 ~name,
+                 ~targetLinkable,
+                 ~topicCategories=[||],
+                 ~courseIds,
+               );
+             addCommunityCB(newCommunity);
              send(FinishSaving);
-             addCommunityCB(
-               Community.create(communityId, name, targetLinkable),
-               handleConnections(communityId, connections, courseIds),
-             );
-             Notification.success(
-               "Success",
-               "Community created successfully.",
-             );
-             Js.Promise.resolve();
-           | `Errors(errors) =>
-             Js.Promise.reject(CreateCommunityErrorHandler.Errors(errors))
-           }
-         )
-      |> CreateCommunityErrorHandler.catch(() => send(FailSaving))
+           | None => send(FinishSaving)
+           };
+           Js.Promise.resolve();
+         })
+      |> Js.Promise.catch(error => {
+           Js.log(error);
+           Notification.error(
+             "Unexpected Error!",
+             "Please reload the page before trying to post again.",
+           );
+           Js.Promise.resolve();
+         })
       |> ignore
     };
   } else {
@@ -265,21 +199,37 @@ let onSelectCourse = (send, course) =>
 let onDeselectCourse = (send, course) =>
   send(DeselectCourse(course |> Course.id));
 
+let categoryList = categories => {
+  ReactUtils.nullIf(
+    <div className="mb-2 flex flex-wrap">
+      {categories
+       |> Js.Array.map(category => {
+            let (backgroundColor, color) = Category.color(category);
+            <span
+              key={category |> Category.id}
+              className="border rounded mt-2 mr-2 px-2 py-1 text-xs font-semibold"
+              style={ReactDOMRe.Style.make(~backgroundColor, ~color, ())}>
+              {Category.name(category) |> str}
+            </span>;
+          })
+       |> React.array}
+    </div>,
+    ArrayUtils.isEmpty(categories),
+  );
+};
+
 [@react.component]
 let make =
     (
       ~courses,
       ~community,
-      ~connections,
       ~addCommunityCB,
+      ~showCategoryEditorCB,
+      ~categories,
       ~updateCommunitiesCB,
     ) => {
   let (state, send) =
-    React.useReducerWithMapState(
-      reducer,
-      (community, connections),
-      computeInitialState,
-    );
+    React.useReducerWithMapState(reducer, community, computeInitialState);
 
   let saveDisabled = state.name |> String.trim == "" || !state.dirty;
 
@@ -349,12 +299,49 @@ let make =
             onDeselect={onDeselectCourse(send)}
           />
         </div>
+        {<div className="mt-4 px-6 py-2 bg-gray-100 border rounded">
+           <div className="flex justify-between items-center mb-4">
+             <label
+               className="inline-block tracking-wide text-gray-700 text-xs font-semibold uppercase">
+               {"Topic Categories" |> str}
+             </label>
+             {switch (community) {
+              | Some(_community) =>
+                <button
+                  onClick={_ => showCategoryEditorCB()}
+                  className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
+                  <i className="fas fa-pencil-alt" />
+                  <span className="text-xs font-semibold ml-2">
+                    {(
+                       ArrayUtils.isEmpty(categories)
+                         ? "Add Categories" : "Edit Categories"
+                     )
+                     |> str}
+                  </span>
+                </button>
+              | None => React.null
+              }}
+           </div>
+           {switch (community) {
+            | Some(_community) =>
+              categories |> ArrayUtils.isEmpty
+                ? <p className="text-xs text-gray-800">
+                    {"There are currently no topic categories in this community!"
+                     |> str}
+                  </p>
+                : categoryList(categories)
+            | None =>
+              <p className="text-xs text-gray-800">
+                {"You can add topic categories after creating this community!"
+                 |> str}
+              </p>
+            }}
+         </div>}
       </div>
       <button
         disabled=saveDisabled
         onClick={handleQuery(
           community,
-          connections,
           state,
           send,
           addCommunityCB,
@@ -365,7 +352,7 @@ let make =
         {(
            switch (community) {
            | Some(_) => "Update Community"
-           | None => "Create a new community"
+           | None => "Create Community"
            }
          )
          |> str}

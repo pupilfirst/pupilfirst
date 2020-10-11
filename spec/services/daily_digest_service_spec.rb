@@ -112,6 +112,20 @@ describe DailyDigestService do
         expect(body_2).to include(topic_c2_reactivated_4.title)
       end
 
+      context 'when there is a student whose access has ended' do
+        let(:team_access_ended) { create :team, access_ends_at: 1.day.ago }
+        let(:student_access_ended) { create :founder, startup: team_access_ended }
+        let!(:user_access_ended) { student_access_ended.user }
+        let(:community_1) { create :community, school: school, courses: [team_access_ended.course] }
+        let(:community_2) { create :community, school: school, courses: [team_access_ended.course] }
+
+        it 'does not send digest to student whose access has ended' do
+          subject.execute
+          open_email(user_access_ended.email)
+          expect(current_email).to eq(nil)
+        end
+      end
+
       context 'when there is a dropped out student' do
         let(:team_dropped_out) { create :team, dropped_out_at: 1.day.ago }
         let(:student_dropped_out) { create :founder, startup: team_dropped_out }

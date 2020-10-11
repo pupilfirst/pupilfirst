@@ -12,7 +12,7 @@ module Targets
         @target.link_to_complete = target_params[:link_to_complete]
         @target.resubmittable = target_params[:evaluation_criterion_ids].present?
         @target.link_to_complete = target_params[:link_to_complete]
-        @target.completion_instructions = target_params[:completion_instructions] if target_params[:completion_instructions].present?
+        @target.completion_instructions = target_params[:completion_instructions]
         @target.checklist = target_params[:checklist]
 
         handle_target_group_change(target_params[:target_group_id]) if target_params[:target_group_id] != @target.target_group_id

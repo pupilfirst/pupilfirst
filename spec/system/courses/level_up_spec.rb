@@ -184,7 +184,7 @@ feature "Student levelling up", js: true do
         submit_target target_l1, student
       end
 
-      scenario 'student is blocked from leveling up' do
+      scenario 'student with a submission pending review is blocked from leveling up' do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text('Pending Review')
@@ -199,7 +199,7 @@ feature "Student levelling up", js: true do
         fail_target target_l1, student
       end
 
-      scenario 'student cannot level up' do
+      scenario 'student with a rejected submission is blocked from leveling up' do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text('Level Up Blocked')
@@ -222,6 +222,22 @@ feature "Student levelling up", js: true do
         expect(page).to have_link(target_l2.title)
         expect(team.reload.level).to eq(level_2)
       end
+    end
+  end
+
+  context "when a teammate hasn't completed all milestone targets" do
+    let!(:target_l1) { create :target, :with_content, :student, target_group: target_group_l1 }
+
+    before do
+      complete_target target_l1, student
+    end
+
+    scenario 'student is blocked from leveling up' do
+      sign_in_user student.user, referrer: curriculum_course_path(course)
+
+      expect(page).to have_text('Level Up Blocked')
+      expect(page).to have_text("You have completed all milestone targets in level 1, but one or more of your team-mates haven't.")
+      expect(page).not_to have_button('Level Up')
     end
   end
 

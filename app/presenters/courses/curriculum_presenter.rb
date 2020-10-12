@@ -20,6 +20,7 @@ module Courses
           users: users,
           evaluation_criteria: evaluation_criteria,
           preview: false,
+          team_members_pending: team_members_pending,
           **default_props
         }
       else
@@ -30,11 +31,48 @@ module Courses
           users: [],
           evaluation_criteria: [],
           preview: true,
+          team_members_pending: false,
           **default_props
         }
       end
     end
 
+    def team_members_pending
+      team_member_ids = current_student.startup.founders.where.not(id: current_student.id).pluck(:id)
+
+      milestone_target_ids = Target.joins(target_group: :level).live
+        .where(target_groups: { milestone: true, level_id: current_student.startup.level_id })
+        .pluck(:id)
+
+      milestone_target_attempted = TimelineEventOwner.joins(:timeline_event).where(
+        timeline_events: { target_id: milestone_target_ids },
+        founder_id: team_member_ids,
+        latest: true
+      )
+
+      # When the course has 'strict' progression, we need only consider submissions
+      # that have a 'passing' grade. Otherwise, an attempt is considered sufficient.
+      scope = if @course.strict?
+        milestone_target_attempted.where.not(
+          timeline_events: { passed_at: nil }
+        )
+      else
+        milestone_target_attempted
+      end
+
+      milestone_target_completion = scope.pluck('timeline_events.target_id', :founder_id)
+        .each_with_object({}) do |ids, hash|
+        hash[ids[0]] ||= []
+        hash[ids[0]] << ids[1]
+      end
+
+      all_complete = milestone_target_ids.all? do |target_id|
+        completed_founders_ids = milestone_target_completion[target_id] || []
+        (team_member_ids - completed_founders_ids).blank?
+      end
+
+      !all_complete
+    end
 
     def default_props
       {

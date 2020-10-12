@@ -161,6 +161,7 @@ let computeLevelUp =
       targets,
       statusOfTargets,
       accessLockedLevels,
+      teamMembersPending,
     ) => {
   let progressionBehavior = course |> Course.progressionBehavior;
   let currentLevelNumber = teamLevel |> Level.number;
@@ -225,16 +226,21 @@ let computeLevelUp =
       switch (progressionBehavior) {
       | `Limited(limit) =>
         switch (currentLevelComplete, minimumRequiredLevelComplete) {
-        | (true, true) => LevelUp
+        | (true, true) => teamMembersPending ? TeamMembersPending : LevelUp
         | (true, false) =>
           LevelUpLimited(currentLevelNumber, currentLevelNumber - limit)
         | (false, false)
         | (false, true) => Nothing
         }
-      | `Unlimited => currentLevelComplete ? LevelUp : Nothing
+      | `Unlimited =>
+        if (currentLevelComplete) {
+          teamMembersPending ? TeamMembersPending : LevelUp;
+        } else {
+          Nothing;
+        }
       | `Strict =>
         if (currentLevelComplete) {
-          LevelUp;
+          teamMembersPending ? TeamMembersPending : LevelUp;
         } else {
           let currentLevelSubmitted =
             isLevelComplete(
@@ -273,6 +279,7 @@ let computeNotice =
       team,
       preview,
       accessLockedLevels,
+      teamMembersPending,
     ) =>
   switch (preview, course |> Course.hasEnded, team |> Team.accessEnded) {
   | (true, _, _) => Notice.Preview
@@ -287,6 +294,7 @@ let computeNotice =
       targets,
       statusOfTargets,
       accessLockedLevels,
+      teamMembersPending,
     )
   };
 
@@ -366,6 +374,7 @@ let make =
       ~evaluationCriteria,
       ~preview,
       ~accessLockedLevels,
+      ~teamMembersPending,
     ) => {
   let url = ReasonReactRouter.useUrl();
 
@@ -466,6 +475,7 @@ let make =
             team,
             preview,
             accessLockedLevels,
+            teamMembersPending,
           ),
       };
     });
@@ -513,6 +523,7 @@ let make =
                 team,
                 preview,
                 accessLockedLevels,
+                teamMembersPending,
               ),
           }
         );

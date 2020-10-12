@@ -83,6 +83,12 @@ let accessEndedMessage = () => {
   showNotice(~title, ~description, ~notice=Notice.AccessEnded, ());
 };
 
+let teamMembersPendingMessage = () => {
+  let title = "Check With Your Team";
+  let description = "You have completed all milestone targets in level 1, but one or more of your team-mates haven't. Your team can level up once everyone on your team has completed all milestone targets.";
+  showNotice(~title, ~description, ~notice=Notice.TeamMembersPending, ());
+};
+
 let levelUpBlockedMessage = (currentLevelNumber, someSubmissionsRjected) => {
   let title = someSubmissionsRjected ? "Level Up Blocked" : "Pending Review";
 
@@ -147,6 +153,7 @@ let make = (~notice, ~course) => {
     levelUpLimitedMessage(currentLevelNumber, minimumRequiredLevelNumber)
   | LevelUpBlocked(currentLevelNumber, someSubmissionsRejected) =>
     levelUpBlockedMessage(currentLevelNumber, someSubmissionsRejected)
+  | TeamMembersPending => teamMembersPendingMessage()
   | Nothing => React.null
   };
 };

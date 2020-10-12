@@ -176,19 +176,19 @@ feature "Student levelling up", js: true do
     end
   end
 
-  context 'when the course has locked progression' do
-    let(:course) { create :course, :locked }
+  context 'when the course has strict progression' do
+    let(:course) { create :course, :strict }
 
     context 'when the student has submitted all milestone targets' do
       before do
         submit_target target_l1, student
       end
 
-      scenario 'student is locked in current level' do
+      scenario 'student is blocked from leveling up' do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
-        expect(page).to have_text(target_l1.title)
-        expect(page).to have_text("You have submitted all milestone targets in level 1, but one or more submissions are pending review by a coach.")
+        expect(page).to have_text('Pending Review')
+        expect(page).to have_text("You have submitted all milestone targets in level 1, but one or more submissions are pending review by a coach")
         expect(page).to have_text("You need to get a passing grade on all milestone targets to level up.")
         expect(page).not_to have_button('Level Up')
       end
@@ -202,7 +202,9 @@ feature "Student levelling up", js: true do
       scenario 'student cannot level up' do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
-        expect(page).to have_text('Rejected')
+        expect(page).to have_text('Level Up Blocked')
+        expect(page).to have_text("You have submitted all milestone targets in level 1, but one or more submissions have been rejected")
+        expect(page).to have_text("You need to get a passing grade on all milestone targets to level up.")
         expect(page).not_to have_button('Level Up')
       end
     end

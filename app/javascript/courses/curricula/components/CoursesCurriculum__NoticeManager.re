@@ -83,17 +83,22 @@ let accessEndedMessage = () => {
   showNotice(~title, ~description, ~notice=Notice.AccessEnded, ());
 };
 
-let levelUpBlockedMessage = currentLevelNumber => {
-  let title = "Pending Review";
-  let description =
+let levelUpBlockedMessage = (currentLevelNumber, someSubmissionsRjected) => {
+  let title = someSubmissionsRjected ? "Level Up Blocked" : "Pending Review";
+
+  let prefix =
     "You have submitted all milestone targets in level "
     ++ string_of_int(currentLevelNumber)
-    ++ ", but one or more submissions are pending review by a coach. You need to get a passing grade on all milestone targets to level up.";
+    ++ ", but one or more submissions ";
+  let body =
+    someSubmissionsRjected
+      ? "have been rejected. " : "are pending review by a coach. ";
+  let suffix = "You need to get a passing grade on all milestone targets to level up.";
 
   showNotice(
     ~title,
-    ~description,
-    ~notice=Notice.LevelUpBlocked(currentLevelNumber),
+    ~description=prefix ++ body ++ suffix,
+    ~notice=Notice.LevelUpBlocked(currentLevelNumber, someSubmissionsRjected),
     (),
   );
 };
@@ -140,8 +145,8 @@ let make = (~notice, ~course) => {
   | LevelUp => renderLevelUp(course)
   | LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber) =>
     levelUpLimitedMessage(currentLevelNumber, minimumRequiredLevelNumber)
-  | LevelUpBlocked(currentLevelNumber) =>
-    levelUpBlockedMessage(currentLevelNumber)
+  | LevelUpBlocked(currentLevelNumber, someSubmissionsRejected) =>
+    levelUpBlockedMessage(currentLevelNumber, someSubmissionsRejected)
   | Nothing => React.null
   };
 };

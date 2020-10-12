@@ -264,8 +264,8 @@ describe Startups::LevelUpEligibilityService do
       end
     end
 
-    context 'when the course has locked progression' do
-      let(:course_1) { create :course, :locked }
+    context 'when the course has strict progression' do
+      let(:course_1) { create :course, :strict }
       let(:team_target) { create :target, :for_team, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
 
       context 'when the student has submitted all milestone targets' do

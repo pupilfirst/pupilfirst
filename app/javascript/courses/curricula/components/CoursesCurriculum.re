@@ -242,8 +242,18 @@ let computeLevelUp =
               [TargetStatus.PendingReview, Completed],
             );
 
-          currentLevelSubmitted
-            ? Notice.LevelUpBlocked(currentLevelNumber) : Nothing;
+          if (currentLevelSubmitted) {
+            Notice.LevelUpBlocked(currentLevelNumber, false);
+          } else {
+            let currentLevelRejected =
+              isLevelComplete(
+                statusOfCurrentMilestoneTargets,
+                [TargetStatus.PendingReview, Completed, Rejected],
+              );
+
+            currentLevelRejected
+              ? Notice.LevelUpBlocked(currentLevelNumber, true) : Nothing;
+          };
         }
       };
     } else {

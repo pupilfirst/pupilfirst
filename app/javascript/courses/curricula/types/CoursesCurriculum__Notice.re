@@ -5,10 +5,11 @@ type t =
   | AccessEnded
   | LevelUp
   | LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber)
-  | LevelUpBlocked(currentLevelNumber) // For when the Strict progression behavior applies.
+  | LevelUpBlocked(currentLevelNumber, someSubmissionsRejected) // For when the Strict progression behavior applies.
   | Nothing
 and currentLevelNumber = int
-and minimumRequiredLevelNumber = int;
+and minimumRequiredLevelNumber = int
+and someSubmissionsRejected = bool;
 
 [@bs.module "../images/course-ended.svg"]
 external courseEndedImage: string = "default";

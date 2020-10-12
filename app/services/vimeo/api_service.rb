@@ -4,8 +4,8 @@ module Vimeo
       @current_school = current_school
     end
 
-    def create_video(size)
-      response = create_video_resource(size)
+    def create_video(size, name, description)
+      response = create_video_resource(size, name, description)
       raise "Encountered error with code #{response[:error_code]} when trying to create a Vimeo video." if response[:error_code].present?
       response
     end
@@ -15,9 +15,9 @@ module Vimeo
       put(path, {})
     end
 
-    private 
+    private
 
-    def create_video_resource(size)
+    def create_video_resource(size, name, description)
       data = {
         upload: {
           approach: 'tus',
@@ -25,9 +25,11 @@ module Vimeo
         },
         privacy: {
           embed: 'whitelist'
-        }
+        },
+        name: name,
+        description: description
       }
-      
+
       post('/me/videos', data)
     end
 
@@ -72,7 +74,7 @@ module Vimeo
     end
 
     def access_token
-      @current_school.configuration['vimeo_access_token'] || 
+      @current_school.configuration['vimeo_access_token'] ||
         Rails.application.secrets.vimeo_access_token
     end
 

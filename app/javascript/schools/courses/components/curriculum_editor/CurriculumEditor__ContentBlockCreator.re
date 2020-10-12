@@ -32,8 +32,8 @@ module CreateEmbedContentBlock = [%graphql
 
 module CreateVimeoVideo = [%graphql
   {|
-    mutation CreateVimeoVideo($size: Int!) {
-      createVimeoVideo(size: $size) {
+    mutation CreateVimeoVideo($size: Int!,$title: String, $description: String) {
+      createVimeoVideo(size: $size, title: $title, description: $description) {
         vimeoVideo {
           link
           uploadLink
@@ -331,6 +331,7 @@ let uploadFile =
       aboveContentBlock,
       blockType,
       file,
+      state,
       formData,
     ) => {
   let isAboveContentBlock = aboveContentBlock != None;
@@ -350,7 +351,12 @@ let uploadFile =
     )
   | `VideoEmbed =>
     let size = file##size;
-    CreateVimeoVideo.make(~size, ())
+    let title =
+      String.trim(state.videoTitle) == "" ? None : Some(state.videoTitle);
+    let description =
+      String.trim(state.videoDescription) == ""
+        ? None : Some(state.videoDescription);
+    CreateVimeoVideo.make(~size, ~title?, ~description?, ())
     |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(result => {
          switch (result##createVimeoVideo##vimeoVideo) {
@@ -376,7 +382,15 @@ let uploadFile =
 };
 
 let submitForm =
-    (target, aboveContentBlock, send, addContentBlockCB, blockType, file) => {
+    (
+      target,
+      aboveContentBlock,
+      state,
+      send,
+      addContentBlockCB,
+      blockType,
+      file,
+    ) => {
   let formId =
     switch (blockType) {
     | `File => fileFormId(aboveContentBlock)
@@ -396,6 +410,7 @@ let submitForm =
          aboveContentBlock,
          blockType,
          file,
+         state,
        )
   | None =>
     Rollbar.error(
@@ -406,7 +421,15 @@ let submitForm =
 };
 
 let handleFileInputChange =
-    (target, aboveContentBlock, send, addContentBlockCB, blockType, event) => {
+    (
+      target,
+      aboveContentBlock,
+      state,
+      send,
+      addContentBlockCB,
+      blockType,
+      event,
+    ) => {
   event |> ReactEvent.Form.preventDefault;
 
   switch (ReactEvent.Form.target(event)##files) {
@@ -438,6 +461,7 @@ let handleFileInputChange =
       submitForm(
         target,
         aboveContentBlock,
+        state,
         send,
         addContentBlockCB,
         blockType,
@@ -448,9 +472,15 @@ let handleFileInputChange =
 };
 
 let uploadForm =
-    (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
+    (target, aboveContentBlock, state, send, addContentBlockCB, blockType) => {
   let fileSelectionHandler =
-    handleFileInputChange(target, aboveContentBlock, send, addContentBlockCB);
+    handleFileInputChange(
+      target,
+      aboveContentBlock,
+      state,
+      send,
+      addContentBlockCB,
+    );
 
   let (fileId, formId, onChange, fileType) =
     switch (blockType) {
@@ -595,6 +625,47 @@ let buttonAboveContentBlock = (state, send, aboveContentBlock) =>
     toggleVisibilityButton(send, contentBlock)
   };
 
+let uploadVideoForm = (videoInputId, state, send) => {
+  <div>
+    <div className="mt-1">
+      <label
+        htmlFor={videoInputId ++ "-title"} className="text-xs font-semibold">
+        {"Title" |> str}
+      </label>
+      <input
+        id={videoInputId ++ "-title"}
+        placeholder="Titile for your video "
+        className="w-full py-1 px-2 border rounded"
+        type_="text"
+        value={state.videoTitle}
+        onChange={updateVideoTitle(send)}
+      />
+    </div>
+    <div className="mt-1">
+      <label
+        htmlFor={videoInputId ++ "-description"}
+        className="text-xs font-semibold">
+        {"Description" |> str}
+      </label>
+      <textarea
+        id={videoInputId ++ "-description"}
+        placeholder="Description for your video"
+        className="w-full py-1 px-2 border rounded"
+        type_="text"
+        value={state.videoDescription}
+        onChange={updateVideoDescription(send)}
+      />
+    </div>
+    <label htmlFor=videoInputId className="mt-2 btn btn-success">
+      {"Select File and Upload" |> str}
+    </label>
+  </div>;
+};
+
+let disablingCoverDisabled = (saving, uploadProgress) => {
+  uploadProgress->Belt.Option.mapWithDefault(saving, _u => false);
+};
+
 [@react.component]
 let make =
     (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessToken) => {
@@ -615,9 +686,21 @@ let make =
       computeInitialState,
     );
 
-  <DisablingCover disabled={state.saving} message="Creating...">
-    {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `File)}
-    {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `Image)}
+  let uploadFormCurried = uploadType =>
+    uploadForm(
+      target,
+      aboveContentBlock,
+      state,
+      send,
+      addContentBlockCB,
+      uploadType,
+    );
+
+  <DisablingCover
+    disabled={disablingCoverDisabled(state.saving, state.uploadProgress)}
+    message="Creating...">
+    {uploadFormCurried(`File)}
+    {uploadFormCurried(`Image)}
     <div className={containerClasses(state |> visible, isAboveContentBlock)}>
       {buttonAboveContentBlock(state, send, aboveContentBlock)}
       <div className="content-block-creator__inner-container">
@@ -639,46 +722,18 @@ let make =
          | UploadVideo =>
            <div
              className="clearfix border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
-             {uploadForm(
-                target,
-                aboveContentBlock,
-                send,
-                addContentBlockCB,
-                `VideoEmbed,
-              )}
-             <div className="mt-1">
-               <label
-                 htmlFor={videoInputId ++ "-title"}
-                 className="text-xs font-semibold">
-                 {"Title" |> str}
-               </label>
-               <input
-                 id={videoInputId ++ "-title"}
-                 placeholder="Titile for your video "
-                 className="w-full py-1 px-2 border rounded"
-                 type_="text"
-                 value={state.videoTitle}
-                 onChange={updateEmbedUrl(send)}
-               />
-             </div>
-             <div className="mt-1">
-               <label
-                 htmlFor={videoInputId ++ "-description"}
-                 className="text-xs font-semibold">
-                 {"Description" |> str}
-               </label>
-               <textarea
-                 id={videoInputId ++ "-description"}
-                 placeholder="Description for your video"
-                 className="w-full py-1 px-2 border rounded"
-                 type_="text"
-                 value={state.videoTitle}
-                 onChange={updateEmbedUrl(send)}
-               />
-             </div>
-             <label htmlFor=videoInputId className="mt-2 btn btn-success">
-               {"Select File and Upload" |> str}
-             </label>
+             {uploadFormCurried(`VideoEmbed)}
+             {state.uploadProgress
+              ->Belt.Option.mapWithDefault(
+                  uploadVideoForm(videoInputId, state, send), percentage =>
+                  <div className="max-w-xs mx-auto">
+                    <DoughnutChart percentage />
+                    <div
+                      className="text-center font-semibold text-primary-800 mt-2">
+                      {"Uploading" |> str}
+                    </div>
+                  </div>
+                )}
            </div>
          | EmbedForm(url) =>
            <div
@@ -715,21 +770,6 @@ let make =
              </div>
            </div>
          }}
-        {state.uploadProgress
-         ->Belt.Option.mapWithDefault(React.null, percentage =>
-             <div
-               className="max-w-3xl py-6 px-3 mx-auto bg-primary-100 rounded-lg shadow">
-               <div className="py-28">
-                 <div>
-                   <DoughnutChart percentage />
-                   <div
-                     className="text-center font-semibold text-primary-800 mt-2">
-                     {"Uploading" |> str}
-                   </div>
-                 </div>
-               </div>
-             </div>
-           )}
       </div>
       {switch (state.error) {
        | Some(error) =>

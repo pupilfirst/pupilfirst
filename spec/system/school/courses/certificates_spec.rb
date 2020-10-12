@@ -20,41 +20,6 @@ feature 'Certificates', js: true do
     visit certificates_school_course_path(course)
     expect(page).to have_text('Please sign in to continue.')
   end
-  context 'Displaying warning for auto certificate issue option' do
-    #  course with no target milestone
-    let(:notargetcourse) { create :course, school: school }
-    let!(:no_target_certificate_issued) { create :certificate, :active, course: notargetcourse }
-
-    # course with target milestone
-    let(:targetcourse) { create :course, school: school }
-    let!(:level_1) { create :level, :one, course: targetcourse }
-    let!(:target_group_l1) { create :target_group, level: level_1, milestone: true }
-    let!(:target_certificate_issued) { create :certificate, :active, course: targetcourse }
-
-    # course with archived target milestone
-    let(:ar_targetcourse) { create :course, school: school }
-    let!(:ar_level_1) { create :level, :one, course: targetcourse }
-    let!(:ar_target_group_l1) { create :target_group, level: level_1, milestone: true, archived: true, safe_to_archive: true }
-    let!(:ar_target_certificate_issued) { create :certificate, :active, course: ar_targetcourse }
-
-    scenario 'Auto issue without a target milestone ' do
-      sign_in_user school_admin.user, referrer: certificates_school_course_path(notargetcourse)
-      find("a[title='Edit Certificate #{no_target_certificate_issued.name}'").click
-      expect(page).to have_text('Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.')
-    end
-
-    scenario 'Auto issue with a target milestone ' do
-      sign_in_user school_admin.user, referrer: certificates_school_course_path(targetcourse)
-      find("a[title='Edit Certificate #{target_certificate_issued.name}'").click
-      expect(page).not_to have_text('Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.')
-    end
-
-    scenario 'Auto issue with an archived target milestone ' do
-      sign_in_user school_admin.user, referrer: certificates_school_course_path(ar_targetcourse)
-      find("a[title='Edit Certificate #{ar_target_certificate_issued.name}'").click
-      expect(page).to have_text('Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.')
-    end
-  end
 
   context 'when the user is a course author' do
     let!(:course_author) { create :course_author, course: course }
@@ -186,6 +151,48 @@ feature 'Certificates', js: true do
 
       expect(Certificate.count).to eq(1)
       expect(Certificate.first).to eq(certificate_issued)
+    end
+  end
+
+  context 'school has courses with/without milestone targets in highest level' do
+    #  course without milestone target group
+    let(:course_without_targets) { create :course, school: school }
+    let!(:certificate_c1) { create :certificate, :active, course: course_without_targets }
+
+    # course with milestone target group
+    let(:course_with_milestone_target) { create :course, school: school }
+    let!(:level_c2) { create :level, :one, course: course_with_milestone_target }
+    let!(:target_group_c2) { create :target_group, level: level_c2, milestone: true }
+    let!(:certificate_c2) { create :certificate, :active, course: course_with_milestone_target }
+
+    # course with only archived target milestone group
+    let(:course_with_archived_milestone) { create :course, school: school }
+    let!(:level_c3) { create :level, :one, course: course_with_archived_milestone }
+    let!(:target_group_c3) { create :target_group, level: level_c3, milestone: true, archived: true, safe_to_archive: true }
+    let!(:certificate_c3) { create :certificate, :active, course: course_with_archived_milestone }
+
+    scenario 'user visits certificate editor for course without milestone targets in highest level' do
+      sign_in_user school_admin.user, referrer: certificates_school_course_path(course_without_targets)
+
+      find("a[title='Edit Certificate #{certificate_c1.name}'").click
+
+      expect(page).to have_text('Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.')
+    end
+
+    scenario 'user visits certificate editor for course with milestone targets in highest level' do
+      sign_in_user school_admin.user, referrer: certificates_school_course_path(course_with_milestone_target)
+
+      find("a[title='Edit Certificate #{certificate_c2.name}'").click
+
+      expect(page).not_to have_text('Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.')
+    end
+
+    scenario 'user visits certificate editor for course with no live milestone target groups' do
+      sign_in_user school_admin.user, referrer: certificates_school_course_path(course_with_archived_milestone)
+
+      find("a[title='Edit Certificate #{certificate_c3.name}'").click
+
+      expect(page).to have_text('Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.')
     end
   end
 end

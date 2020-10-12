@@ -51,6 +51,7 @@ type ui =
 type state = {
   ui,
   saving: bool,
+  uploadProgress: option(int),
   error: option(string),
 };
 
@@ -63,10 +64,16 @@ type action =
   | FailToUpload
   | ShowEmbedForm
   | HideEmbedForm
+  | UpdateUploadProgress(int)
   | UpdateEmbedUrl(string);
 
 let computeInitialState = isAboveTarget => {
-  {ui: isAboveTarget ? Hidden : BlockSelector, saving: false, error: None};
+  {
+    ui: isAboveTarget ? Hidden : BlockSelector,
+    saving: false,
+    error: None,
+    uploadProgress: None,
+  };
 };
 
 let reducer = (state, action) =>
@@ -102,6 +109,10 @@ let reducer = (state, action) =>
   | ShowEmbedForm => {...state, ui: EmbedForm("")}
   | HideEmbedForm => {...state, ui: BlockSelector}
   | UpdateEmbedUrl(url) => {...state, ui: EmbedForm(url)}
+  | UpdateUploadProgress(uploadProgress) => {
+      ...state,
+      uploadProgress: Some(uploadProgress),
+    }
   };
 
 let containerClasses = (visible, isAboveTarget) => {
@@ -283,6 +294,13 @@ let handleCreateEmbedContentBlock =
     );
   };
 
+let uploadOnProgress = (send, current, total) => {
+  let progress =
+    int_of_float(float_of_int(current) /. float_of_int(total) *. 100.00);
+
+  send(UpdateUploadProgress(progress));
+};
+
 let handleVimeoVideoUpload =
     (file, vimeoVideo, send, target, aboveContentBlock, addContentBlockCB) => {
   let url = vimeoVideo##link;
@@ -307,6 +325,7 @@ let handleVimeoVideoUpload =
           "vimeo_upload",
         )
       },
+    ~onProgress=uploadOnProgress(send),
   );
 };
 
@@ -643,6 +662,21 @@ let make =
              </div>
            </div>
          }}
+        {state.uploadProgress
+         ->Belt.Option.mapWithDefault(React.null, percentage =>
+             <div
+               className="max-w-3xl py-6 px-3 mx-auto bg-primary-100 rounded-lg shadow">
+               <div className="py-28">
+                 <div>
+                   <DoughnutChart percentage />
+                   <div
+                     className="text-center font-semibold text-primary-800 mt-2">
+                     {"Uploading" |> str}
+                   </div>
+                 </div>
+               </div>
+             </div>
+           )}
       </div>
       {switch (state.error) {
        | Some(error) =>

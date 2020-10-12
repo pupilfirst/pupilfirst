@@ -253,8 +253,10 @@ let make =
             </div>
             {!canBeAutoIssued
                ? <div
-                   className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3 my-1">
-                   <i className="fas fa-exclamation-triangle" />
+                   className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-l-4 rounded-r-md mt-2">
+                   <div className="w-6 h-6 text-yellow-500 flex-shrink-0">
+                     <i className="fas fa-exclamation-triangle" />
+                   </div>
                    <span className="ml-2">
                      "Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target."
                      ->React.string

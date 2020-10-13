@@ -2,11 +2,11 @@ class ResolveEmbedCodeMutator < ApplicationQuery
   include AuthorizeAuthor
   property :content_block_id, validates: { presence: true }
 
-  # add last_resolved_at
-  # validate 1 min
+  validate :ensure_time_between_requests
+
   def resolve
     content_block.update!(
-      content: { url: content_block.content['url'], request_source: content_block.content['request_source'], embed_code: embed_code },
+      content: { url: content_block.content['url'], request_source: content_block.content['request_source'], embed_code: embed_code, last_resolved_at: Time.zone.now },
     )
   end
 
@@ -16,6 +16,18 @@ class ResolveEmbedCodeMutator < ApplicationQuery
     @embed_code ||= ::Oembed::Resolver.new(origin_url).embed_code
   rescue ::Oembed::Resolver::ProviderNotSupported
     nil
+  end
+
+  def ensure_time_between_requests
+    last_resolved_at = content_block&.content['last_resolved_at'] # rubocop:disable Lint/SafeNavigationChain
+
+    return if last_resolved_at.blank?
+
+    time_since_last_resolved = Time.zone.now - token_generated_at
+
+    return if time_since_last_resolved > 2.minutes
+
+    errors[:base] << 'URL was was resolved less than two minutes ago. Please wait for a few minutes before trying again.'
   end
 
   def origin_url

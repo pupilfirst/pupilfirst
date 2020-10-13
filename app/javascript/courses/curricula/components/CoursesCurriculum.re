@@ -161,7 +161,7 @@ let computeLevelUp =
       targets,
       statusOfTargets,
       accessLockedLevels,
-      teamMembersPending,
+      levelUpEligibility,
     ) => {
   let progressionBehavior = course |> Course.progressionBehavior;
   let currentLevelNumber = teamLevel |> Level.number;
@@ -268,6 +268,49 @@ let computeLevelUp =
   };
 };
 
+let computeLevelUp2 = levelUpEligibility => {
+  let progressionBehavior = course |> Course.progressionBehavior;
+  let currentLevelNumber = teamLevel |> Level.number;
+
+  let minimumRequiredLevel =
+    switch (progressionBehavior) {
+    | `Strict
+    | `Unlimited => None
+    | `Limited(progressionLimit) =>
+      let minimumLevelNumber = currentLevelNumber - progressionLimit;
+
+      if (minimumLevelNumber >= 1) {
+        levels
+        |> ListUtils.findOpt(l => l |> Level.number == minimumLevelNumber);
+      } else {
+        None;
+      };
+    };
+
+  let statusOfCurrentMilestoneTargets =
+    statusOfMilestoneTargets(
+      targetGroups,
+      targets,
+      teamLevel,
+      statusOfTargets,
+    );
+
+  switch (levelUpEligibility) {
+  | LevelUpEligibility.Eligible => Notice.LevelUp
+  | AtMaxLevel
+  | NoMilestonesInLevel => Nothing
+  | CurrentLevelIncomplete =>
+    switch (progressionBehavior) {
+    | `Strict => LevelUpBlocked(currentLevelNumber, currentLevelComplete)
+    | `Unlimited => Nothing
+    | `Limited(progressionLimit) => Nothing
+    }
+  | PreviousLevelIncomplete
+  | TeamMembersPending
+  | DateLocked => Nothing
+  };
+};
+
 let computeNotice =
     (
       levels,
@@ -279,7 +322,7 @@ let computeNotice =
       team,
       preview,
       accessLockedLevels,
-      teamMembersPending,
+      levelUpEligibility,
     ) =>
   switch (preview, course |> Course.hasEnded, team |> Team.accessEnded) {
   | (true, _, _) => Notice.Preview
@@ -294,7 +337,7 @@ let computeNotice =
       targets,
       statusOfTargets,
       accessLockedLevels,
-      teamMembersPending,
+      levelUpEligibility,
     )
   };
 

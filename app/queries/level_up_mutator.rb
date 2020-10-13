@@ -1,7 +1,6 @@
 class LevelUpMutator < ApplicationQuery
   property :course_id, validates: { presence: true }
 
-  validate :must_have_next_level
   validate :must_be_eligible
 
   def execute
@@ -10,12 +9,6 @@ class LevelUpMutator < ApplicationQuery
 
   private
 
-  def must_have_next_level
-    return if next_level.present?
-
-    errors[:base] << 'Maximum level reached - cannot level up.'
-  end
-
   def must_be_eligible
     return if level_up_eligibility_service.eligible?
 
@@ -23,30 +16,26 @@ class LevelUpMutator < ApplicationQuery
   end
 
   def level_up_eligibility_service
-    @level_up_eligibility_service ||= Startups::LevelUpEligibilityService.new(startup, founder)
+    @level_up_eligibility_service ||= Students::LevelUpEligibilityService.new(student)
   end
 
   def course
     @course ||= Course.find_by(id: course_id)
   end
 
-  def startup
-    @startup ||= founder.startup
+  def team
+    @team ||= student.startup
   end
 
-  def founder
-    @founder ||= current_user.founders.joins(:level).find_by(levels: { course_id: course_id })
+  def student
+    @student ||= current_user.founders.joins(:level).find_by(levels: { course_id: course_id })
   end
 
   def authorized?
-    course&.school == current_school && founder.present?
-  end
-
-  def next_level
-    @next_level ||= course.levels.find_by(number: startup.level.number + 1)
+    course&.school == current_school && student.present?
   end
 
   def level_up
-    startup.update!(level: next_level)
+    team.update!(level: next_level)
   end
 end

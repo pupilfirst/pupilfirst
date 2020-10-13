@@ -5,16 +5,17 @@ module Mutations
     description "Auto verify target"
 
     field :submission, Types::SubmissionType, null: true
+    field :level_up_eligibility, Types::LevelUpEligibility, null: true
 
     def resolve(params)
       mutator = AutoVerifySubmissionMutator.new(context, params)
 
       if mutator.valid?
         mutator.notify(:success, "Done!", "Target has been marked as complete.")
-        { submission: mutator.create_submission }
+        { submission: mutator.create_submission, level_up_eligibility: mutator.level_up_eligibility }
       else
         mutator.notify_errors
-        { submission: nil }
+        { submission: nil, level_up_eligibility: nil }
       end
     end
   end

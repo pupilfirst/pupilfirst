@@ -26,6 +26,20 @@ module Vimeo
         privacy: {
           embed: 'whitelist'
         },
+        embed: {
+          buttons: {
+            like: false,
+            watchlater: false,
+            share: false
+          },
+          logos: {
+            vimeo: false
+          },
+          title: {
+            owner: 'hide',
+            portrait: 'hide'
+          }
+        },
         name: name,
         description: description
       }

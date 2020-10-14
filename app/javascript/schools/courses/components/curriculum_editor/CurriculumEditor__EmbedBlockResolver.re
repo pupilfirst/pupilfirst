@@ -1,14 +1,8 @@
-type provider =
-  | SlideShare
-  | Youtube
-  | Vimeo
-  | UnknownProvider;
-
 module ResolveEmbedCodeMutator = [%graphql
   {|
   mutation ResolveEmbedCodeMutation($contentBlockId: ID!) {
     resolveEmbedCode(contentBlockId: $contentBlockId) {
-      success
+      embedCode
     }
   }
   |}
@@ -29,29 +23,6 @@ type action =
   | SetTimeout(Js.Global.timeoutId)
   | ToggleRelaod
   | SetEmbedCode(string);
-
-let originUrl = provider => {
-  switch (provider) {
-  | SlideShare => "https://www.slideshare.net/api/oembed/2?format=json&url="
-  | Youtube => "https://www.youtube.com/oembed?format=json&url="
-  | Vimeo => "https://vimeo.com/api/oembed.json?url="
-  | UnknownProvider => ""
-  };
-};
-
-let test = (value, url) => {
-  let tester = Js.Re.fromString(value);
-  url |> Js.Re.test_(tester);
-};
-
-let findProvider = url => {
-  switch (url) {
-  | url when url |> test("slideshare") => SlideShare
-  | url when url |> test("vimeo") => Vimeo
-  | url when url |> test("youtu") => Youtube
-  | _unknownUrl => UnknownProvider
-  };
-};
 
 let reducer = (state, action) =>
   switch (action) {
@@ -74,21 +45,18 @@ let reducer = (state, action) =>
     }
   };
 
-let updateEmbedCodeCB = (send, contentBlockId, json) => {
-  let html = json |> Json.Decode.field("html", Json.Decode.string);
-  send(SetEmbedCode(html));
+let resolveEmbedCode = (state, contentBlockId, send, ()) => {
+  state.timeoutId->Belt.Option.forEach(Js.Global.clearTimeout);
+  send(SetLoading);
 
   ResolveEmbedCodeMutator.make(~contentBlockId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-       if (response##resolveEmbedCode##success) {
-         ();
-       } else {
-         Notification.notice(
-           "Unable to save embed block",
-           "Please reload the page.",
+       response##resolveEmbedCode##embedCode
+       ->Belt.Option.mapWithDefault(send(ToggleRelaod), embedCode =>
+           send(SetEmbedCode(embedCode))
          );
-       };
+
        Js.Promise.resolve();
      })
   |> Js.Promise.catch(_ => {
@@ -101,34 +69,13 @@ let updateEmbedCodeCB = (send, contentBlockId, json) => {
   |> ignore;
 };
 
-let errorCB = (send, _json) => {
-  send(ToggleRelaod);
-};
-
-let resolveEmbedCode = (state, contentBlockId, send, url, ()) => {
-  state.timeoutId->Belt.Option.forEach(Js.Global.clearTimeout);
-  send(SetLoading);
-  switch (findProvider(url)) {
-  | UnknownProvider => ()
-  | provider =>
-    let requestUrl = originUrl(provider) ++ url;
-
-    Api.get(
-      ~url=requestUrl,
-      ~responseCB=updateEmbedCodeCB(send, contentBlockId),
-      ~errorCB=errorCB(send),
-      ~notify=false,
-    );
-  };
-};
-
-let getEmbedCode = (state, contentBlockId, send, url, ()) => {
+let getEmbedCode = (state, contentBlockId, send, ()) => {
   switch (state.embedCode) {
   | Some(_c) => ()
   | None =>
     let timeoutId =
       Js.Global.setTimeout(
-        resolveEmbedCode(state, contentBlockId, send, url),
+        resolveEmbedCode(state, contentBlockId, send),
         state.timeoutId->Belt.Option.mapWithDefault(0, _ => 60000),
       );
     send(SetTimeout(timeoutId));
@@ -162,7 +109,7 @@ let make = (~url, ~requestSource, ~contentBlockId) => {
     );
 
   React.useEffect1(
-    getEmbedCode(state, contentBlockId, send, url),
+    getEmbedCode(state, contentBlockId, send),
     [|state.reload|],
   );
 
@@ -180,6 +127,9 @@ let make = (~url, ~requestSource, ~contentBlockId) => {
                  {React.string(
                     embedCodeErrorText(state.loading, requestSource),
                   )}
+               </div>
+               <div className="text-xs text-center">
+                 {React.string(url)}
                </div>
              </div>
            </div>

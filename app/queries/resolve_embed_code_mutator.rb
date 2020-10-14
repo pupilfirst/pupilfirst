@@ -8,6 +8,7 @@ class ResolveEmbedCodeMutator < ApplicationQuery
     content_block.update!(
       content: { url: content_block.content['url'], request_source: content_block.content['request_source'], embed_code: embed_code, last_resolved_at: Time.zone.now },
     )
+    embed_code
   end
 
   private
@@ -23,11 +24,11 @@ class ResolveEmbedCodeMutator < ApplicationQuery
 
     return if last_resolved_at.blank?
 
-    time_since_last_resolved = Time.zone.now - token_generated_at
+    time_since_last_resolved = Time.zone.now - Time.parse(last_resolved_at)
 
-    return if time_since_last_resolved > 2.minutes
+    return if time_since_last_resolved > 1.minute
 
-    errors[:base] << 'URL was was resolved less than two minutes ago. Please wait for a few minutes before trying again.'
+    errors[:base] << 'URL was was resolved less than a minute ago. Please wait for a few minutes before trying again.'
   end
 
   def origin_url

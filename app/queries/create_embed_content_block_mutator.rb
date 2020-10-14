@@ -18,10 +18,16 @@ class CreateEmbedContentBlockMutator < ApplicationQuery
 
   private
 
+  def embed_code
+    @embed_code ||= ::Oembed::Resolver.new(url).embed_code
+  rescue ::Oembed::Resolver::ProviderNotSupported
+    nil
+  end
+
   def create_embed_block
     target_version.content_blocks.create!(
       block_type: ContentBlock::BLOCK_TYPE_EMBED,
-      content: { url: url, request_source: request_source },
+      content: { url: url, request_source: request_source, embed_code: embed_code },
       sort_index: sort_index
     )
   end

@@ -9,14 +9,18 @@ module Oembed
     end
 
     def embed_code
-      # Hit the endpoint and get raw response.
-      response = RestClient.get(url + @resource_url)
+      begin
+        # Hit the endpoint and get raw response.
+        response = RestClient.get(url + @resource_url)
 
-      # Parse the reponse as JSON.
-      parsed_response = JSON.parse(response)
+        # Parse the reponse as JSON.
+        parsed_response = JSON.parse(response)
 
-      # Return the 'html' key from the response.
-      parsed_response['html']
+        # Return the 'html' key from the response.
+        parsed_response['html']
+      rescue => _e
+        nil
+      end
     end
   end
 end

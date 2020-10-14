@@ -2,7 +2,7 @@
   @apply shadow rounded-lg p-4 h-full flex;
 }
 
-.countdown__doughnut-chart {
+.doughnut-chart {
   display: block;
   max-width: 100%;
   height: 72px;

@@ -11,49 +11,33 @@ module ResolveEmbedCodeMutator = [%graphql
 type state = {
   loading: bool,
   embedCode: option(string),
-  timeoutId: option(Js.Global.timeoutId),
-  errorMessage: option(string),
-  reload: bool,
+  reloadsIn: int,
 };
 
 type action =
   | SetLoading
-  | ClearLoading
-  | SetUnknownProvider
-  | SetTimeout(Js.Global.timeoutId)
-  | ToggleRelaod
+  | Reset
   | SetEmbedCode(string);
 
 let reducer = (state, action) =>
   switch (action) {
   | SetLoading => {...state, loading: true}
-  | ClearLoading => {...state, loading: false}
-  | ToggleRelaod => {...state, reload: !state.reload, loading: false}
+  | Reset => {...state, loading: false, reloadsIn: 60}
   | SetEmbedCode(embedCode) => {
-      ...state,
       embedCode: Some(embedCode),
       loading: false,
-      errorMessage: None,
-    }
-  | SetTimeout(timeoutId) => {...state, timeoutId: Some(timeoutId)}
-  | SetUnknownProvider => {
-      ...state,
-      errorMessage:
-        Some(
-          "You can only use Youtube / Vimeo / Slide Share links in embed block",
-        ),
+      reloadsIn: 0,
     }
   };
 
-let resolveEmbedCode = (state, contentBlockId, send, ()) => {
-  state.timeoutId->Belt.Option.forEach(Js.Global.clearTimeout);
+let resolveEmbedCode = (contentBlockId, send) => {
   send(SetLoading);
 
   ResolveEmbedCodeMutator.make(~contentBlockId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##resolveEmbedCode##embedCode
-       ->Belt.Option.mapWithDefault(send(ToggleRelaod), embedCode =>
+       ->Belt.Option.mapWithDefault(send(Reset), embedCode =>
            send(SetEmbedCode(embedCode))
          );
 
@@ -69,20 +53,6 @@ let resolveEmbedCode = (state, contentBlockId, send, ()) => {
   |> ignore;
 };
 
-let getEmbedCode = (state, contentBlockId, send, ()) => {
-  switch (state.embedCode) {
-  | Some(_c) => ()
-  | None =>
-    let timeoutId =
-      Js.Global.setTimeout(
-        resolveEmbedCode(state, contentBlockId, send),
-        state.timeoutId->Belt.Option.mapWithDefault(0, _ => 60000),
-      );
-    send(SetTimeout(timeoutId));
-  };
-  None;
-};
-
 let embedCodeErrorText = (loading, requestSource) => {
   switch (loading, requestSource) {
   | (true, _)
@@ -94,23 +64,35 @@ let embedCodeErrorText = (loading, requestSource) => {
   };
 };
 
+let onTimeout = (contentBlockId, send, ()) => {
+  resolveEmbedCode(contentBlockId, send);
+};
+
+let computeReloadsIn = lastResolvedAt => {
+  let difference =
+    lastResolvedAt->Belt.Option.mapWithDefault(0, l =>
+      DateFns.differenceInSeconds(Js.Date.make(), l)
+    );
+
+  difference < 60 ? 60 - difference : 60;
+};
+
 [@react.component]
-let make = (~url, ~requestSource, ~contentBlockId) => {
+let make = (~url, ~requestSource, ~contentBlockId, ~lastResolvedAt) => {
   let (state, send) =
     React.useReducer(
       reducer,
       {
-        loading: true,
+        loading: false,
         embedCode: None,
-        timeoutId: None,
-        errorMessage: None,
-        reload: false,
+        reloadsIn: computeReloadsIn(lastResolvedAt),
       },
     );
 
-  React.useEffect1(
-    getEmbedCode(state, contentBlockId, send),
-    [|state.reload|],
+  Js.log(
+    lastResolvedAt->Belt.Option.mapWithDefault(0, l =>
+      DateFns.differenceInSeconds(Js.Date.make(), l)
+    ),
   );
 
   <div>
@@ -121,7 +103,15 @@ let make = (~url, ~requestSource, ~contentBlockId) => {
            <div className="py-28">
              <div>
                {state.loading
-                  ? <div className="h-20" /> : <Countdown seconds=60 />}
+                  ? <DoughnutChart
+                      percentage=0
+                      className="mx-auto"
+                      pulse=true
+                    />
+                  : <Countdown
+                      seconds={state.reloadsIn}
+                      timeoutCB={onTimeout(contentBlockId, send)}
+                    />}
                <div
                  className="text-center font-semibold text-primary-800 mt-2">
                  {React.string(

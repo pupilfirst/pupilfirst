@@ -238,12 +238,13 @@ let innerEditor =
     updateContentBlockCB(originalContentBlock, setDirtyCB, state, send);
 
   switch (contentBlock |> ContentBlock.blockType) {
-  | ContentBlock.Embed(url, embed, requestSource) =>
+  | ContentBlock.Embed(url, embed, requestSource, lastResolvedAt) =>
     embed->Belt.Option.mapWithDefault(
       <CurriculumEditor__EmbedBlockResolver
         url
         requestSource
         contentBlockId={ContentBlock.id(contentBlock)}
+        lastResolvedAt
       />,
       code =>
       TargetContentView.embedContentBlock(code)

@@ -7,12 +7,13 @@ type caption = string;
 type embedCode = option(string);
 type filename = string;
 type requestSource = option(string);
+type lastResolvedAt = option(Js.Date.t);
 
 type blockType =
   | Markdown(markdown)
   | File(url, title, filename)
   | Image(url, caption)
-  | Embed(url, embedCode, requestSource);
+  | Embed(url, embedCode, requestSource, lastResolvedAt);
 
 type t = {
   id,
@@ -31,6 +32,7 @@ let decodeEmbedContent = json =>
     json |> field("url", string),
     json |> optional(field("embedCode", string)),
     json |> optional(field("requestSource", string)),
+    json |> optional(field("lastResolvedAt", DateFns.decodeISO)),
   );
 
 let decode = json => {
@@ -49,9 +51,9 @@ let decode = json => {
       let url = json |> field("fileUrl", string);
       Image(url, caption);
     | "embed" =>
-      let (url, embedCode, requestSource) =
+      let (url, embedCode, requestSource, lastResolvedAt) =
         json |> field("content", decodeEmbedContent);
-      Embed(url, embedCode, requestSource);
+      Embed(url, embedCode, requestSource, lastResolvedAt);
     | unknownBlockType => raise(UnexpectedBlockType(unknownBlockType))
     };
 
@@ -73,8 +75,8 @@ let makeMarkdownBlock = markdown => Markdown(markdown);
 let makeImageBlock = (fileUrl, caption) => Image(fileUrl, caption);
 let makeFileBlock = (fileUrl, title, fileName) =>
   File(fileUrl, title, fileName);
-let makeEmbedBlock = (url, embedCode, requestSource) =>
-  Embed(url, embedCode, requestSource);
+let makeEmbedBlock = (url, embedCode, requestSource, lastResolvedAt) =>
+  Embed(url, embedCode, requestSource, lastResolvedAt);
 
 let make = (id, blockType, sortIndex) => {id, blockType, sortIndex};
 
@@ -88,7 +90,12 @@ let makeFromJs = js => {
       File(content##url, content##title, content##filename)
     | `ImageBlock(content) => Image(content##url, content##caption)
     | `EmbedBlock(content) =>
-      Embed(content##url, content##embedCode, content##requestSource)
+      Embed(
+        content##url,
+        content##embedCode,
+        content##requestSource,
+        content##lastResolvedAt->Belt.Option.map(DateFns.decodeISO),
+      )
     };
 
   make(id, blockType, sortIndex);
@@ -99,7 +106,7 @@ let blockTypeAsString = blockType =>
   | Markdown(_markdown) => "markdown"
   | File(_url, _title, _filename) => "file"
   | Image(_url, _caption) => "image"
-  | Embed(_url, _embedCode, _requestSource) => "embed"
+  | Embed(_url, _embedCode, _requestSource, _lastResolvedAt) => "embed"
   };
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1};
@@ -170,6 +177,7 @@ module Fragments = [%graphql
         url
         embedCode
         requestSource
+        lastResolvedAt
       }
     }
   }
@@ -201,6 +209,7 @@ module Query = [%graphql
             url
             embedCode
             requestSource
+            lastResolvedAt
           }
         }
       }

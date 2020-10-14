@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_02_192842) do
+ActiveRecord::Schema.define(version: 2020_10_14_122811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -329,7 +329,12 @@ ActiveRecord::Schema.define(version: 2020_10_02_192842) do
     t.citext "serial_number", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "issuer_id"
+    t.bigint "revoked_by_id"
+    t.datetime "revoked_at"
     t.index ["certificate_id"], name: "index_issued_certificates_on_certificate_id"
+    t.index ["issuer_id"], name: "index_issued_certificates_on_issuer_id"
+    t.index ["revoked_by_id"], name: "index_issued_certificates_on_revoked_by_id"
     t.index ["serial_number"], name: "index_issued_certificates_on_serial_number", unique: true
     t.index ["user_id"], name: "index_issued_certificates_on_user_id"
   end
@@ -702,8 +707,8 @@ ActiveRecord::Schema.define(version: 2020_10_02_192842) do
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "topic_category_id"
     t.integer "views", default: 0
+    t.bigint "topic_category_id"
     t.index ["community_id"], name: "index_topics_on_community_id"
     t.index ["target_id"], name: "index_topics_on_target_id"
     t.index ["topic_category_id"], name: "index_topics_on_topic_category_id"

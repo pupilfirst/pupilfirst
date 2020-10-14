@@ -105,6 +105,7 @@ let make = (~url, ~requestSource, ~contentBlockId, ~lastResolvedAt) => {
                {state.loading
                   ? <DoughnutChart
                       percentage=0
+                      text="0"
                       className="mx-auto"
                       pulse=true
                     />

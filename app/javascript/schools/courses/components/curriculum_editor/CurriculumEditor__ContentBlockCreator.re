@@ -727,7 +727,11 @@ let make =
               ->Belt.Option.mapWithDefault(
                   uploadVideoForm(videoInputId, state, send), percentage =>
                   <div className="max-w-xs mx-auto">
-                    <DoughnutChart percentage />
+                    <DoughnutChart
+                      percentage
+                      className="mx-auto my-20"
+                      pulse={percentage == 100}
+                    />
                     <div
                       className="text-center font-semibold text-primary-800 mt-2">
                       {"Uploading" |> str}

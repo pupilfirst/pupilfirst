@@ -29,3 +29,16 @@ let isEligible = t =>
   | Eligible => true
   | _ => false
   };
+
+let makeOptionFromJs = js =>
+  Belt.Option.map(js, eligibility =>
+    switch (eligibility) {
+    | `Eligible => Eligible
+    | `AtMaxLevel => AtMaxLevel
+    | `NoMilestonesInLevel => NoMilestonesInLevel
+    | `CurrentLevelIncomplete => CurrentLevelIncomplete
+    | `PreviousLevelIncomplete => PreviousLevelIncomplete
+    | `TeamMembersPending => TeamMembersPending
+    | `DateLocked => DateLocked
+    }
+  );

@@ -36,6 +36,7 @@ class LevelUpMutator < ApplicationQuery
   end
 
   def level_up
+    next_level = course.levels.find_by(number: team.level.number + 1)
     team.update!(level: next_level)
   end
 end

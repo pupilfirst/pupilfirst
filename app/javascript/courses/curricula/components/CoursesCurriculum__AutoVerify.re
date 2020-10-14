@@ -11,6 +11,7 @@ module AutoVerifySubmissionQuery = [%graphql
         id
         createdAt
       }
+      levelUpEligibility
      }
    }
  |}
@@ -24,7 +25,8 @@ let redirect = link => {
   |> ignore;
 };
 
-let handleSuccess = (submission, linkToComplete, addSubmissionCB) => {
+let handleSuccess =
+    (submission, levelUpEligibility, linkToComplete, addSubmissionCB) => {
   addSubmissionCB(
     Submission.make(
       ~id=submission##id,
@@ -32,7 +34,9 @@ let handleSuccess = (submission, linkToComplete, addSubmissionCB) => {
       ~status=Submission.MarkedAsComplete,
       ~checklist=[||],
     ),
+    levelUpEligibility,
   );
+
   switch (linkToComplete) {
   | Some(link) => redirect(link)
   | None => ()
@@ -49,7 +53,17 @@ let createAutoVerifySubmission =
   |> Js.Promise.then_(response => {
        switch (response##autoVerifySubmission##submission) {
        | Some(details) =>
-         handleSuccess(details, linkToComplete, addSubmissionCB)
+         let levelUpEligibility =
+           LevelUpEligibility.makeOptionFromJs(
+             response##autoVerifySubmission##levelUpEligibility,
+           );
+
+         handleSuccess(
+           details,
+           levelUpEligibility,
+           linkToComplete,
+           addSubmissionCB,
+         );
        | None => setSaving(_ => false)
        };
        Js.Promise.resolve();

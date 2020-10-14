@@ -34,7 +34,6 @@ module Students
           end
 
           return ELIGIBILITY_CURRENT_LEVEL_INCOMPLETE unless current_level_targets_attempted
-          return ELIGIBILITY_TEAM_MEMBERS_PENDING if @team_members_pending
 
           minimum_required_level_completed = minimum_required_level_milestone_targets.all? do |target|
             target_eligible?(target, MINIMUM_REQUIRED_LEVEL_ELIGIBLE_STATUSES)

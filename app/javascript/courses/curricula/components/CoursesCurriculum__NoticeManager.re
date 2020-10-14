@@ -85,7 +85,7 @@ let accessEndedMessage = () => {
 
 let teamMembersPendingMessage = () => {
   let title = "Check With Your Team";
-  let description = "You have completed all milestone targets in level 1, but one or more of your team-mates haven't. Your team can level up once everyone on your team has completed all milestone targets.";
+  let description = "You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.";
   showNotice(~title, ~description, ~notice=Notice.TeamMembersPending, ());
 };
 

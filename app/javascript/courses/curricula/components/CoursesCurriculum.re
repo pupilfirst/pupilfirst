@@ -151,6 +151,23 @@ let statusOfMilestoneTargets = (targetGroups, targets, level, statusOfTargets) =
      );
 };
 
+let issuedCertificate = course => {
+  switch (Course.certificateSerialNumber(course)) {
+  | Some(csn) =>
+    <div
+      className="max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8">
+      <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight">
+        {str("Congratulations! You have been issued a certificate.")}
+      </div>
+      <a href={"/c/" ++ csn} className="mt-4 mb-2 btn btn-primary">
+        <FaIcon classes="fas fa-certificate" />
+        <span className="ml-2"> {str("View Certificate")} </span>
+      </a>
+    </div>
+  | None => React.null
+  };
+};
+
 let computeLevelUp =
     (
       levelUpEligibility,
@@ -221,11 +238,13 @@ let computeNotice =
       preview,
       levelUpEligibility,
     ) =>
-  switch (preview, course |> Course.hasEnded, team |> Team.accessEnded) {
-  | (true, _, _) => Notice.Preview
-  | (false, true, true | false) => CourseEnded
-  | (false, false, true) => AccessEnded
-  | (false, false, false) =>
+  if (preview) {
+    Notice.Preview;
+  } else if (Course.hasEnded(course)) {
+    CourseEnded;
+  } else if (Team.accessEnded(team)) {
+    AccessEnded;
+  } else {
     computeLevelUp(
       levelUpEligibility,
       course,
@@ -233,7 +252,7 @@ let computeNotice =
       targetGroups,
       targets,
       statusOfTargets,
-    )
+    );
   };
 
 let navigationLink = (direction, level, setState) => {
@@ -498,6 +517,7 @@ let make =
 
      | None => React.null
      }}
+    {issuedCertificate(course)}
     <CoursesCurriculum__NoticeManager notice={state.notice} course />
     {switch (state.notice) {
      | LevelUp => React.null

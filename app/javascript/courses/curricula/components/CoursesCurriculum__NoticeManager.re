@@ -2,18 +2,11 @@ open CoursesCurriculum__Types;
 
 let str = React.string;
 
-type noticeLink = {
-  icon: string,
-  title: string,
-  href: string,
-};
-
 let showNotice =
     (
       ~title,
       ~description,
       ~notice,
-      ~link=None,
       ~classes="max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8",
       (),
     ) =>
@@ -22,39 +15,14 @@ let showNotice =
     <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight">
       {title |> str}
     </div>
-    {switch (link) {
-     | Some(link) =>
-       <a href={link.href} className="mt-4 mb-2 btn btn-primary">
-         <FaIcon classes={link.icon} />
-         <span className="ml-2"> {link.title |> str} </span>
-       </a>
-     | None => React.null
-     }}
     <div className="text-sm max-w-lg mx-auto mt-2"> {description |> str} </div>
   </div>;
 
-let courseCompletedMessage = course => {
-  let csn = course |> Course.certificateSerialNumber;
-
-  let title =
-    switch (csn) {
-    | Some(_csn) => "Congratulations! You have been issued a certificate."
-    | None => "Congratulations! You have completed all milestone targets in this course."
-    };
-
+let courseCompletedMessage = () => {
+  let title = "Congratulations! You have completed all milestone targets in this course.";
   let description = "You've completed our coursework. Feel free to complete targets that you might have left out, and read up on attached links and resources.";
 
-  let link =
-    csn
-    |> OptionUtils.map(csn =>
-         {
-           icon: "fas fa-certificate",
-           title: "View Certificate",
-           href: "/c/" ++ csn,
-         }
-       );
-
-  showNotice(~title, ~description, ~link, ~notice=Notice.CourseComplete, ());
+  showNotice(~title, ~description, ~notice=Notice.CourseComplete, ());
 };
 
 let courseEndedMessage = () => {
@@ -134,6 +102,7 @@ let levelUpLimitedMessage = (currentLevelNumber, minimumRequiredLevelNumber) => 
 let renderLevelUp = course => {
   let title = "Ready to Level Up!";
   let description = "Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!";
+
   <div
     className="max-w-3xl mx-3 lg:mx-auto text-center mt-4 bg-white rounded-lg shadow px-6 pt-4 pb-8">
     {showNotice(~title, ~description, ~notice=Notice.LevelUp, ~classes="", ())}
@@ -146,7 +115,7 @@ let make = (~notice, ~course) => {
   switch (notice) {
   | Notice.Preview => showPreviewMessage()
   | CourseEnded => courseEndedMessage()
-  | CourseComplete => courseCompletedMessage(course)
+  | CourseComplete => courseCompletedMessage()
   | AccessEnded => accessEndedMessage()
   | LevelUp => renderLevelUp(course)
   | LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber) =>

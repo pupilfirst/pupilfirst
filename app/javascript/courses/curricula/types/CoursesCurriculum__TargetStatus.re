@@ -218,6 +218,10 @@ let allAttempted = ts => {
   );
 };
 
+let allComplete = ts => {
+  Belt.Array.every(ts, t => t.status == Completed);
+};
+
 let anyRejected = ts => {
   Belt.Array.some(ts, t => t.status == Rejected);
 };

@@ -1,6 +1,7 @@
 open CoursesCurriculum__Types;
 
 let str = React.string;
+let t = I18n.t(~scope="components.CoursesCurriculum__NoticeManager");
 
 let showNotice =
     (
@@ -18,17 +19,22 @@ let showNotice =
     <div className="text-sm max-w-lg mx-auto mt-2"> {description |> str} </div>
   </div>;
 
-let courseCompletedMessage = () => {
-  let title = "Congratulations! You have completed all milestone targets in the final level.";
-  let description = "You've completed our coursework. Feel free to complete targets that you might have left out, and read up on attached links and resources.";
-
-  showNotice(~title, ~description, ~notice=Notice.CourseComplete, ());
+let courseCompleteMessage = () => {
+  showNotice(
+    ~title=t("course_complete_title"),
+    ~description=t("course_complete_description"),
+    ~notice=Notice.CourseComplete,
+    (),
+  );
 };
 
 let courseEndedMessage = () => {
-  let title = "Course Ended";
-  let description = "The course has ended and submissions are disabled for all targets!";
-  showNotice(~title, ~description, ~notice=Notice.CourseEnded, ());
+  showNotice(
+    ~title=t("course_ended_title"),
+    ~description=t("course_ended_description"),
+    ~notice=Notice.CourseEnded,
+    (),
+  );
 };
 
 let showPreviewMessage = () =>
@@ -37,61 +43,72 @@ let showPreviewMessage = () =>
     <img className="w-20 md:w-22 flex-no-shrink" src=Notice.previewModeImage />
     <div className="flex-1 text-left ml-4">
       <h4 className="font-bold text-lg leading-tight">
-        {"Preview Mode" |> str}
+        {t("preview_mode_title")->str}
       </h4>
-      <p className="text-sm mt-1">
-        {"You are accessing the preview mode for this course" |> str}
-      </p>
+      <p className="text-sm mt-1"> {t("preview_mode_description")->str} </p>
     </div>
   </div>;
 
 let accessEndedMessage = () => {
-  let title = "Access Ended";
-  let description = "Your access to this course has ended.";
-  showNotice(~title, ~description, ~notice=Notice.AccessEnded, ());
+  showNotice(
+    ~title=t("access_ended_title"),
+    ~description=t("access_ended_description"),
+    ~notice=Notice.AccessEnded,
+    (),
+  );
 };
 
 let teamMembersPendingMessage = () => {
-  let title = "Check With Your Team";
-  let description = "You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.";
-  showNotice(~title, ~description, ~notice=Notice.TeamMembersPending, ());
+  showNotice(
+    ~title=t("team_members_pending_title"),
+    ~description=t("team_members_pending_description"),
+    ~notice=Notice.TeamMembersPending,
+    (),
+  );
 };
 
-let levelUpBlockedMessage = (currentLevelNumber, someSubmissionsRjected) => {
-  let title = someSubmissionsRjected ? "Level Up Blocked" : "Pending Review";
+let levelUpBlockedMessage = (currentLevelNumber, someSubmissionsRejected) => {
+  let titleKey =
+    someSubmissionsRejected
+      ? "level_up_blocked.title_rejected"
+      : "level_up_blocked.title_pending_review";
 
   let prefix =
-    "You have submitted all milestone targets in level "
-    ++ string_of_int(currentLevelNumber)
-    ++ ", but one or more submissions ";
+    t(
+      ~variables=[|("number", string_of_int(currentLevelNumber))|],
+      "level_up_blocked.body_prefix",
+    );
+
   let body =
-    someSubmissionsRjected
-      ? "have been rejected. " : "are pending review by a coach. ";
-  let suffix = "You need to get a passing grade on all milestone targets to level up.";
+    t(
+      someSubmissionsRejected
+        ? "level_up_blocked.body_middle_rejected"
+        : "level_up_blocked.body_middle_pending_review",
+    );
+
+  let suffix = t("level_up_blocked.body_suffix");
 
   showNotice(
-    ~title,
+    ~title=t(titleKey),
     ~description=prefix ++ body ++ suffix,
-    ~notice=Notice.LevelUpBlocked(currentLevelNumber, someSubmissionsRjected),
+    ~notice=
+      Notice.LevelUpBlocked(currentLevelNumber, someSubmissionsRejected),
     (),
   );
 };
 
 let levelUpLimitedMessage = (currentLevelNumber, minimumRequiredLevelNumber) => {
-  let title = "Level Up Blocked";
-  let currentLevel = currentLevelNumber |> string_of_int;
-  let minimumRequiredLevel = minimumRequiredLevelNumber |> string_of_int;
   let description =
-    "You're at Level "
-    ++ currentLevel
-    ++ ", but you have targets in the Level "
-    ++ minimumRequiredLevel
-    ++ " that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level "
-    ++ minimumRequiredLevel
-    ++ " to continue leveling up.";
+    t(
+      ~variables=[|
+        ("currentLevel", string_of_int(currentLevelNumber)),
+        ("minimumRequiredLevel", string_of_int(minimumRequiredLevelNumber)),
+      |],
+      "level_up_limited_description",
+    );
 
   showNotice(
-    ~title,
+    ~title=t("level_up_limited_title"),
     ~description,
     ~notice=
       Notice.LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber),
@@ -100,12 +117,15 @@ let levelUpLimitedMessage = (currentLevelNumber, minimumRequiredLevelNumber) => 
 };
 
 let renderLevelUp = course => {
-  let title = "Ready to Level Up!";
-  let description = "Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!";
-
   <div
     className="max-w-3xl mx-3 lg:mx-auto text-center mt-4 bg-white rounded-lg shadow px-6 pt-4 pb-8">
-    {showNotice(~title, ~description, ~notice=Notice.LevelUp, ~classes="", ())}
+    {showNotice(
+       ~title=t("level_up_title"),
+       ~description=t("level_up_description"),
+       ~notice=Notice.LevelUp,
+       ~classes="",
+       (),
+     )}
     <CoursesCurriculum__LevelUpButton course />
   </div>;
 };
@@ -115,7 +135,7 @@ let make = (~notice, ~course) => {
   switch (notice) {
   | Notice.Preview => showPreviewMessage()
   | CourseEnded => courseEndedMessage()
-  | CourseComplete => courseCompletedMessage()
+  | CourseComplete => courseCompleteMessage()
   | AccessEnded => accessEndedMessage()
   | LevelUp => renderLevelUp(course)
   | LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber) =>

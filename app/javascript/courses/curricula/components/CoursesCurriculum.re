@@ -6,6 +6,7 @@ external levelLockedImage: string = "default";
 open CoursesCurriculum__Types;
 
 let str = React.string;
+let t = I18n.t(~scope="components.CoursesCurriculum");
 
 type state = {
   selectedLevelId: string,
@@ -157,11 +158,11 @@ let issuedCertificate = course => {
     <div
       className="max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8">
       <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight">
-        {str("Congratulations! You have been issued a certificate.")}
+        {t("issued_certificate_heading")->str}
       </div>
       <a href={"/c/" ++ csn} className="mt-4 mb-2 btn btn-primary">
         <FaIcon classes="fas fa-certificate" />
-        <span className="ml-2"> {str("View Certificate")} </span>
+        <span className="ml-2"> {t("issued_certificate_button")->str} </span>
       </a>
     </div>
   | None => React.null

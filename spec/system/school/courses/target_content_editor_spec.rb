@@ -204,6 +204,31 @@ feature 'Target Content Editor', js: true do
     expect(cb.content['embed_code']).to be_present
   end
 
+  scenario 'school admin adds an invalid embed block' do
+    sign_in_user school_admin.user, referrer: content_school_course_target_path(course, target)
+
+    embed_url = 'https://www.youtube.com/watch?v=INVALID_ID'
+
+    stub_request(:get, "https://www.youtube.com/oembed?format=json&url=#{embed_url}")
+      .to_return(body: '')
+
+    # Try adding a new file block.
+    within('.content-block-creator--open') do
+      find('p', text: 'Embed').click
+      fill_in('URL to Embed', with: embed_url)
+      click_button('Save')
+    end
+
+    expect(page).to have_text("Unable to embed, retrying in 1 minute")
+
+    cb = ContentBlock.last
+    expect(cb.block_type).to eq(ContentBlock::BLOCK_TYPE_EMBED)
+    expect(cb.content['url']).to eq(embed_url)
+    expect(cb.content['embed_code']).to eq(nil)
+    expect(cb.content['last_resolved_at']).to be_present
+    expect(cb.content['request_source']).to eq('default')
+  end
+
   context 'when a target has many content blocks' do
     let!(:target) { create :target, target_group: target_group_1 }
     let!(:target_version) { create(:target_version, target: target) }

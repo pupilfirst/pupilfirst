@@ -111,9 +111,11 @@ let make = (~url, ~requestSource, ~contentBlockId, ~lastResolvedAt) => {
                     embedCodeErrorText(state.loading, requestSource),
                   )}
                </div>
-               <a className="text-xs text-center" href=url target="_blank">
-                 {React.string(url)}
-               </a>
+               <div className="mx-auto text-center">
+                 <a className="text-xs" href=url target="_blank">
+                   {React.string(url)}
+                 </a>
+               </div>
              </div>
            </div>
          </div>,

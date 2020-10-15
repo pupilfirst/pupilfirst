@@ -55,7 +55,7 @@ let make = (~mode, ~color=Purple, ~className="", ~hideSymbol=false) => {
     <text x="50%" y="58%" className="doughnut-chart__text font-semibold">
       {switch (mode) {
        | Determinate(current, _) =>
-         str(string_of_int(current) ++ (hideSymbol ? "$" : ""))
+         str(string_of_int(current) ++ (hideSymbol ? "" : "$"))
        | Indeterminate => React.null
        }}
     </text>

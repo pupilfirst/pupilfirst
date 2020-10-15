@@ -175,7 +175,15 @@ let reloadTeams = (send, ()) => send(RefreshData([||]));
 let setLoading = (send, loading) => send(SetLoading(loading));
 
 [@react.component]
-let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) => {
+let make =
+    (
+      ~courseId,
+      ~courseCoachIds,
+      ~schoolCoaches,
+      ~levels,
+      ~studentTags,
+      ~certificates,
+    ) => {
   let (state, send) = React.useReducer(reducer, initialState(studentTags));
 
   <div className="flex flex-1 flex-col">

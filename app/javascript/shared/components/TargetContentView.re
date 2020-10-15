@@ -52,7 +52,7 @@ let make = (~contentBlocks) =>
             | File(url, title, filename) =>
               fileContentBlock(url, title, filename)
             | Image(url, caption) => imageContentBlock(url, caption)
-            | Embed(url, embedCode, requestType, _lastResolvedAt) =>
+            | Embed(_url, embedCode, _requestType, _lastResolvedAt) =>
               embedCode->Belt.Option.mapWithDefault(React.null, code =>
                 embedContentBlock(code)
               )

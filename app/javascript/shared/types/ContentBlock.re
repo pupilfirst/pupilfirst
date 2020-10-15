@@ -94,7 +94,7 @@ let makeFromJs = js => {
         content##url,
         content##embedCode,
         content##requestSource,
-        content##lastResolvedAt->Belt.Option.map(DateFns.decodeISO),
+        content##lastResolvedAt->Belt.Option.map(DateFns.parseISO),
       )
     };
 

@@ -60,7 +60,7 @@ let embedCodeErrorText = (loading, requestSource) => {
   | (false, Some(requestSource)) =>
     requestSource == "vimeo_upload"
       ? "Processing Video, retrying in 1 minute"
-      : "Unable to resolve, retrying in 1 minute"
+      : "Unable to embed, retrying in 1 minute"
   };
 };
 
@@ -89,12 +89,6 @@ let make = (~url, ~requestSource, ~contentBlockId, ~lastResolvedAt) => {
       },
     );
 
-  Js.log(
-    lastResolvedAt->Belt.Option.mapWithDefault(0, l =>
-      DateFns.differenceInSeconds(Js.Date.make(), l)
-    ),
-  );
-
   <div>
     {state.embedCode
      ->Belt.Option.mapWithDefault(
@@ -104,10 +98,8 @@ let make = (~url, ~requestSource, ~contentBlockId, ~lastResolvedAt) => {
              <div>
                {state.loading
                   ? <DoughnutChart
-                      percentage=0
-                      text="0"
+                      mode=DoughnutChart.Indeterminate
                       className="mx-auto"
-                      pulse=true
                     />
                   : <Countdown
                       seconds={state.reloadsIn}
@@ -119,9 +111,9 @@ let make = (~url, ~requestSource, ~contentBlockId, ~lastResolvedAt) => {
                     embedCodeErrorText(state.loading, requestSource),
                   )}
                </div>
-               <div className="text-xs text-center">
+               <a className="text-xs text-center" href=url target="_blank">
                  {React.string(url)}
-               </div>
+               </a>
              </div>
            </div>
          </div>,

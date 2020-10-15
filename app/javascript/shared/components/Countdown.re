@@ -44,10 +44,13 @@ let make = (~seconds, ~timeoutCB) => {
   React.useEffect1(reload(timeoutCB, state, send), [|state.reload|]);
   <div>
     <DoughnutChart
-      percentage={percentage(state.seconds, seconds)}
+      mode={
+        state.seconds == 0
+          ? DoughnutChart.Indeterminate
+          : DoughnutChart.Determinate(state.seconds, seconds)
+      }
+      hideSymbol=true
       className="mx-auto"
-      text={string_of_int(state.seconds)}
-      pulse={state.seconds == 0}
     />
   </div>;
 };

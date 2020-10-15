@@ -698,7 +698,14 @@ let make =
 
   <DisablingCover
     disabled={disablingCoverDisabled(state.saving, state.uploadProgress)}
-    message="Creating...">
+    message={
+      switch (state.ui) {
+      | UploadVideo => "Preparing to Upload…"
+      | BlockSelector
+      | EmbedForm(_)
+      | Hidden => "Creating..."
+      }
+    }>
     {uploadFormCurried(`File)}
     {uploadFormCurried(`Image)}
     <div className={containerClasses(state |> visible, isAboveContentBlock)}>
@@ -725,12 +732,15 @@ let make =
              {uploadFormCurried(`VideoEmbed)}
              {state.uploadProgress
               ->Belt.Option.mapWithDefault(
-                  uploadVideoForm(videoInputId, state, send), percentage =>
+                  uploadVideoForm(videoInputId, state, send), current =>
                   <div className="max-w-xs mx-auto">
                     <DoughnutChart
-                      percentage
+                      mode={
+                        current == 100
+                          ? DoughnutChart.Indeterminate
+                          : DoughnutChart.Determinate(current, 100)
+                      }
                       className="mx-auto my-20"
-                      pulse={percentage == 100}
                     />
                     <div
                       className="text-center font-semibold text-primary-800 mt-2">

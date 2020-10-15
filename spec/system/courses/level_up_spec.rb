@@ -323,4 +323,20 @@ feature "Student levelling up", js: true do
       expect(page).not_to have_button('Level Up')
     end
   end
+
+  context 'when a student is at the last level with all milestone targets in that level completed' do
+    let(:team) { create :startup, level: level_3 }
+    let(:target_l3) { create :target, :with_content, :with_group, level: level_3, milestone: true, role: Target::ROLE_TEAM }
+
+    before do
+      complete_target target_l3, student
+    end
+
+    scenario "student sees a notice that they've completed the course" do
+      sign_in_user student.user, referrer: curriculum_course_path(course)
+
+      expect(page).to have_text('You have completed all milestone targets in the final level')
+      expect(page).to have_text("You've completed our coursework")
+    end
+  end
 end

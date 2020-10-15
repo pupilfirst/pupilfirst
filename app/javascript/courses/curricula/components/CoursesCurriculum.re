@@ -191,7 +191,9 @@ let computeLevelUp =
 
   switch (levelUpEligibility) {
   | LevelUpEligibility.Eligible => Notice.LevelUp
-  | AtMaxLevel
+  | AtMaxLevel =>
+    TargetStatus.allComplete(statusOfCurrentMilestoneTargets)
+      ? CourseComplete : Nothing
   | NoMilestonesInLevel => Nothing
   | CurrentLevelIncomplete =>
     switch (progressionBehavior) {

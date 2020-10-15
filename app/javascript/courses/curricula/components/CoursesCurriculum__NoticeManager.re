@@ -19,7 +19,7 @@ let showNotice =
   </div>;
 
 let courseCompletedMessage = () => {
-  let title = "Congratulations! You have completed all milestone targets in this course.";
+  let title = "Congratulations! You have completed all milestone targets in the final level.";
   let description = "You've completed our coursework. Feel free to complete targets that you might have left out, and read up on attached links and resources.";
 
   showNotice(~title, ~description, ~notice=Notice.CourseComplete, ());

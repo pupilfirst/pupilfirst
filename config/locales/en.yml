@@ -147,7 +147,8 @@ en:
   queries:
     delete_certificate_mutator:
       issued_error: This certificate has been issued to one or more students - it cannot be deleted.
-
+    issue_certificate_mutator:
+      issued_error: This certificate is already issued to the student
   shared:
     optional: optional
     done_exclamation: Done!

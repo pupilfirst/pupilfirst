@@ -6,6 +6,7 @@ type t = {
   excludedFromLeaderboard: bool,
   title: string,
   affiliation: option(string),
+  issuedCertificates: array(StudentsEditor__IssuedCertificate.t),
 };
 
 let name = t => t.name;
@@ -21,6 +22,8 @@ let affiliation = t => t.affiliation;
 let email = t => t.email;
 
 let excludedFromLeaderboard = t => t.excludedFromLeaderboard;
+
+let issuedCertificates = t => t.issuedCertificates;
 
 let updateInfo =
     (~name, ~excludedFromLeaderboard, ~title, ~affiliation, ~student) => {
@@ -40,6 +43,7 @@ let make =
       ~excludedFromLeaderboard,
       ~title,
       ~affiliation,
+      ~issuedCertificates,
     ) => {
   id,
   name,
@@ -48,6 +52,7 @@ let make =
   excludedFromLeaderboard,
   title,
   affiliation,
+  issuedCertificates,
 };
 
 let makeFromJS = studentDetails => {
@@ -59,6 +64,9 @@ let makeFromJS = studentDetails => {
     ~excludedFromLeaderboard=studentDetails##excludedFromLeaderboard,
     ~title=studentDetails##title,
     ~affiliation=studentDetails##affiliation,
+    ~issuedCertificates=
+      studentDetails##issuedCertificates
+      |> Js.Array.map(ic => StudentsEditor__IssuedCertificate.makeFromJS(ic)),
   );
 };
 

@@ -25,6 +25,14 @@ let excludedFromLeaderboard = t => t.excludedFromLeaderboard;
 
 let issuedCertificates = t => t.issuedCertificates;
 
+let hasActiveCertificate = t => {
+  Js.Array.find(
+    ic => StudentsEditor__IssuedCertificate.revokedAt(ic)->Belt.Option.isNone,
+    t.issuedCertificates,
+  )
+  -> Belt.Option.isSome;
+};
+
 let updateInfo =
     (~name, ~excludedFromLeaderboard, ~title, ~affiliation, ~student) => {
   ...student,

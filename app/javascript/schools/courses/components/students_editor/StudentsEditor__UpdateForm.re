@@ -24,6 +24,7 @@ let make =
       ~team,
       ~teamTags,
       ~courseCoaches,
+      ~certificates,
       ~updateFormCB,
       ~reloadTeamsCB,
     ) => {
@@ -80,7 +81,7 @@ let make =
         />
       </div>
       <div className={tabItemsClasses(view == ActionsTab)}>
-        <StudentsEditor__ActionsForm student reloadTeamsCB />
+        <StudentsEditor__ActionsForm student reloadTeamsCB certificates />
       </div>
     </div>
   </div>;

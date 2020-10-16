@@ -31,6 +31,8 @@ module CourseTeamsQuery = [%graphql
               serialNumber
               revokedBy
               revokedAt
+              createdAt
+              issuedBy
             }
           }
         }

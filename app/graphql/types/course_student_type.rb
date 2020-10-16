@@ -12,7 +12,7 @@ module Types
     def issued_certificates
       BatchLoader::GraphQL.for(object.user_id).batch(default_value: []) do |user_ids, loader|
         certificates = Certificate.where(course_id: object.course)
-        IssuedCertificate.where(user_id: user_ids, certificate: certificates).each do |issued_certificate|
+        IssuedCertificate.where(user_id: user_ids, certificate: certificates).order('created_at DESC').each do |issued_certificate|
           loader.call(issued_certificate.user_id) { |memo| memo |= [issued_certificate] } # rubocop:disable Lint/UselessAssignment
         end
       end

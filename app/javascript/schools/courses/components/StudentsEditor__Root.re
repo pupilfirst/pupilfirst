@@ -214,6 +214,7 @@ let make =
            team
            teamTags={state.tags}
            courseCoaches
+           certificates
            updateFormCB={updateForm(send)}
            reloadTeamsCB={reloadTeams(send)}
          />

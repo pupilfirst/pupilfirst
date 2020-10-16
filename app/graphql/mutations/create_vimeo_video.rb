@@ -4,7 +4,7 @@ module Mutations
     argument :title, String, required: false
     argument :description, String, required: false
 
-    description "Create vimeo upload uri"
+    description "Create Vimeo upload URI"
 
     field :vimeo_video, Types::VimeoVideo, null: true
 

@@ -69,5 +69,10 @@ module Layouts
     def terms_and_conditions?
       SchoolString::TermsAndConditions.saved?(current_school)
     end
+
+    def add_target_blank?(title)
+      return {} if title == "Home" || title == "Dashboard"
+      { target: '_blank', rel: 'noopener' }
+    end
   end
 end

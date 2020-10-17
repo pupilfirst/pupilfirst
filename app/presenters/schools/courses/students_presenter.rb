@@ -14,7 +14,8 @@ module Schools
           school_coaches: school_coaches,
           levels: levels,
           student_tags: student_tags,
-          certificates: certificates
+          certificates: certificates,
+          current_user_name: current_user.name,
         }
       end
 

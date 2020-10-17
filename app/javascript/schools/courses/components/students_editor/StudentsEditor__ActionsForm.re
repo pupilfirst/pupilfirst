@@ -14,10 +14,7 @@ module RevokeCertificateQuery = [%graphql
   {|
    mutation RevokeCertificateMutation($issuedCertificateId: ID!) {
     revokeIssuedCertificate(issuedCertificateId: $issuedCertificateId){
-      issuedCertificate {
-        revokedAt
-        revokedBy
-      }
+      success
      }
    }
  |}
@@ -30,7 +27,6 @@ module IssueCertificateQuery = [%graphql
       issuedCertificate {
         id
         serialNumber
-        issuedBy
       }
      }
    }
@@ -52,7 +48,14 @@ let dropoutStudent = (id, setSaving, reloadTeamsCB, event) => {
 };
 
 let revokeIssuedCertificate =
-    (issuedCertificate, setRevoking, updateStudentCB, student, event) => {
+    (
+      issuedCertificate,
+      setRevoking,
+      updateStudentCertificationCB,
+      student,
+      currentUserName,
+      event,
+    ) => {
   event |> ReactEvent.Mouse.preventDefault;
   setRevoking(_ => true);
 
@@ -62,29 +65,33 @@ let revokeIssuedCertificate =
   RevokeCertificateQuery.make(~issuedCertificateId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-       let data = response##revokeIssuedCertificate##issuedCertificate;
-       switch (data) {
-       | Some(data) =>
-         let revokedAt = data##revokedAt->Belt.Option.map(DateFns.decodeISO);
-         let updatedCertificate =
-           issuedCertificate->StudentsEditor__IssuedCertificate.revoke(
-             data##revokedBy,
-             revokedAt,
-           );
-         let updatedStudent =
-           student->Student.updateCertificate(updatedCertificate);
-         updateStudentCB(updatedStudent);
-         setRevoking(_ => false);
-
-       | None => setRevoking(_ => false)
-       };
+       response##revokeIssuedCertificate##success
+         ? {
+           let updatedCertificate =
+             issuedCertificate->StudentsEditor__IssuedCertificate.revoke(
+               Some(currentUserName),
+               Some(Js.Date.make()),
+             );
+           let updatedStudent =
+             student->Student.updateCertificate(updatedCertificate);
+           updateStudentCertificationCB(updatedStudent);
+           setRevoking(_ => false);
+         }
+         : setRevoking(_ => false);
        Js.Promise.resolve();
      })
   |> ignore;
 };
 
 let issueNewCertificate =
-    (setIssuing, certificateId, student, updateStudentCB, event) => {
+    (
+      setIssuing,
+      certificateId,
+      student,
+      updateStudentCertificationCB,
+      currentUserName,
+      event,
+    ) => {
   event |> ReactEvent.Mouse.preventDefault;
   setIssuing(_ => true);
 
@@ -103,12 +110,12 @@ let issueNewCertificate =
              ~serialNumber=data##serialNumber,
              ~revokedAt=None,
              ~revokedBy=None,
-             ~issuedBy=data##issuedBy,
+             ~issuedBy=currentUserName,
              ~createdAt=Js.Date.make(),
            );
          let updatedStudent =
            student->Student.addNewCertificate(newCertifcate);
-         updateStudentCB(updatedStudent);
+         updateStudentCertificationCB(updatedStudent);
          setIssuing(_ => false);
 
        | None => setIssuing(_ => false)
@@ -136,7 +143,14 @@ let certificateStatusPillColour = revokedAt => {
 };
 
 let showIssuedCertificates =
-    (student, certificates, revoking, setRevoking, updateStudentCB) => {
+    (
+      student,
+      certificates,
+      revoking,
+      setRevoking,
+      updateStudentCB,
+      currentUserName,
+    ) => {
   let issuedCertificates =
     StudentsEditor__Student.issuedCertificates(student);
   issuedCertificates->ArrayUtils.isEmpty
@@ -232,6 +246,7 @@ let showIssuedCertificates =
                          setRevoking,
                          updateStudentCB,
                          student,
+                         currentUserName,
                        )}
                        className="btn btn-danger btn-small">
                        "Revoke Certificate"->str
@@ -247,7 +262,13 @@ let showIssuedCertificates =
 
 [@react.component]
 let make =
-    (~student, ~reloadTeamsCB, ~certificates, ~updateStudentCertificationCB) => {
+    (
+      ~student,
+      ~reloadTeamsCB,
+      ~certificates,
+      ~updateStudentCertificationCB,
+      ~currentUserName,
+    ) => {
   let (saving, setSaving) = React.useState(() => false);
 
   let (issuing, setIssuing) = React.useState(() => false);
@@ -271,6 +292,7 @@ let make =
                 revoking,
                 setRevoking,
                 updateStudentCertificationCB,
+                currentUserName,
               )}
              {<div className="flex flex-col mt-2">
                 <label className="tracking-wide text-sm font-semibold mb-2">
@@ -311,6 +333,7 @@ let make =
                            selectedCertificateId,
                            student,
                            updateStudentCertificationCB,
+                           currentUserName,
                          )}
                          disabled={issuing || selectedCertificateId == "0"}
                          className="btn btn-success ml-2 text-sm h-10">

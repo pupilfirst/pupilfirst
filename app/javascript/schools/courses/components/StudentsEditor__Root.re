@@ -189,6 +189,7 @@ let make =
       ~levels,
       ~studentTags,
       ~certificates,
+      ~currentUserName,
     ) => {
   let (state, send) = React.useReducer(reducer, initialState(studentTags));
 
@@ -219,6 +220,7 @@ let make =
            student
            team
            teamTags={state.tags}
+           currentUserName
            courseCoaches
            certificates
            updateFormCB={updateForm(send)}

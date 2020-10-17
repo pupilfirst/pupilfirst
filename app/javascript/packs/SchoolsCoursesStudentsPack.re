@@ -8,6 +8,7 @@ let decodeProps = json =>
     json |> field("levels", array(Level.decode)),
     json |> field("studentTags", array(string)),
     json |> field("certificates", array(Certificate.decode)),
+    json |> field("currentUserName", string),
   );
 
 let (
@@ -17,6 +18,7 @@ let (
   levels,
   studentTags,
   certificates,
+  currentUserName,
 ) =
   DomUtils.parseJSONTag(~id="sa-students-panel-data", ()) |> decodeProps;
 
@@ -28,6 +30,7 @@ ReactDOMRe.renderToElementWithId(
     levels
     studentTags
     certificates
+    currentUserName
   />,
   "sa-students-panel",
 );

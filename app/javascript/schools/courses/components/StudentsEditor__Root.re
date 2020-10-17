@@ -25,6 +25,7 @@ type action =
   | SelectStudent(SelectedStudent.t)
   | DeselectStudent(string)
   | UpdateFormVisible(formVisible)
+  | UpdateStudentCertification(Student.t, Team.t)
   | UpdateTeams(Page.t)
   | UpdateFilter(Filter.t)
   | RefreshData(tags)
@@ -109,6 +110,11 @@ let reducer = (state, action) =>
       selectedStudents: [||],
     }
   | SetLoading(loading) => {...state, loading}
+  | UpdateStudentCertification(updatedStudent, team) =>
+    let updatedTeam = Team.updateStudent(team, updatedStudent);
+    let pagedTeams = Page.updateTeam(updatedTeam, state.pagedTeams);
+    let teamId = Team.id(team);
+    {...state, pagedTeams, formVisible: UpdateForm(updatedStudent, teamId)};
   };
 
 let selectStudent = (send, student, team) => {
@@ -174,15 +180,6 @@ let reloadTeams = (send, ()) => send(RefreshData([||]));
 
 let setLoading = (send, loading) => send(SetLoading(loading));
 
-let updateStudent = (team, state, send, student) => {
-  let updatedTeam = Team.updateStudent(team, student);
-  let updatedTeams = Page.updateTeam(updatedTeam, state.pagedTeams);
-  let teamId = Team.id(team);
-
-  send(UpdateTeams(updatedTeams));
-  send(UpdateFormVisible(UpdateForm(student, teamId)));
-};
-
 [@react.component]
 let make =
     (
@@ -226,7 +223,9 @@ let make =
            certificates
            updateFormCB={updateForm(send)}
            reloadTeamsCB={reloadTeams(send)}
-           updateStudentCB={updateStudent(team, state, send)}
+           updateStudentCertificationCB={updatedStudent =>
+             send(UpdateStudentCertification(updatedStudent, team))
+           }
          />
        </SchoolAdmin__EditorDrawer>;
      }}

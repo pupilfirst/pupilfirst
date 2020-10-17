@@ -246,7 +246,8 @@ let showIssuedCertificates =
 };
 
 [@react.component]
-let make = (~student, ~reloadTeamsCB, ~certificates, ~updateStudentCB) => {
+let make =
+    (~student, ~reloadTeamsCB, ~certificates, ~updateStudentCertificationCB) => {
   let (saving, setSaving) = React.useState(() => false);
 
   let (issuing, setIssuing) = React.useState(() => false);
@@ -269,7 +270,7 @@ let make = (~student, ~reloadTeamsCB, ~certificates, ~updateStudentCB) => {
                 certificates,
                 revoking,
                 setRevoking,
-                updateStudentCB,
+                updateStudentCertificationCB,
               )}
              {<div className="flex flex-col mt-2">
                 <label className="tracking-wide text-sm font-semibold mb-2">
@@ -309,7 +310,7 @@ let make = (~student, ~reloadTeamsCB, ~certificates, ~updateStudentCB) => {
                            setIssuing,
                            selectedCertificateId,
                            student,
-                           updateStudentCB,
+                           updateStudentCertificationCB,
                          )}
                          disabled={issuing || selectedCertificateId == "0"}
                          className="btn btn-success ml-2 text-sm h-10">

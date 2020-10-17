@@ -27,7 +27,7 @@ let make =
       ~certificates,
       ~updateFormCB,
       ~reloadTeamsCB,
-      ~updateStudentCB,
+      ~updateStudentCertificationCB,
     ) => {
   let (view, setView) = React.useState(() => DetailsTab);
   <div className="mx-auto bg-white">
@@ -86,7 +86,7 @@ let make =
           student
           reloadTeamsCB
           certificates
-          updateStudentCB
+          updateStudentCertificationCB
         />
       </div>
     </div>

@@ -4,21 +4,20 @@ module Mutations
 
     description "Revoke a certificate issued to a student for a course"
 
-    field :success, Boolean, null: false
+    field :issued_certificate, Types::IssuedCertificateType, null: true
 
     def resolve(params)
       mutator = RevokeIssuedCertificateMutator.new(context, params)
 
-      success = if mutator.valid?
+      issued_certificate = if mutator.valid?
         mutator.notify(:success, 'Done', 'Certificate revoked successfully!')
         mutator.execute
-        true
       else
         mutator.notify_errors
-        false
+        nil
       end
 
-      { success: success }
+      { issued_certificate: issued_certificate }
     end
   end
 end

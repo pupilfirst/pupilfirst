@@ -19,6 +19,7 @@ module Students
         issued_certificate = certificate_to_issue.issued_certificates.create!(
           user: user,
           name: user.name,
+          issuer: @issuer,
           serial_number: IssuedCertificates::SerialNumberService.generate
         )
       rescue ActiveRecord::RecordNotUnique
@@ -39,7 +40,7 @@ module Students
     end
 
     def issued_certificate_exists?
-      certificate_to_issue.issued_certificates.where(user: user, revoked_at: nil).exists?
+      user.issued_certificates.where(certificate: course.certificates, revoked_at: nil).exists?
     end
 
     def active_certificate

@@ -174,6 +174,15 @@ let reloadTeams = (send, ()) => send(RefreshData([||]));
 
 let setLoading = (send, loading) => send(SetLoading(loading));
 
+let updateStudent = (team, state, send, student) => {
+  let updatedTeam = Team.updateStudent(team, student);
+  let updatedTeams = Page.updateTeam(updatedTeam, state.pagedTeams);
+  let teamId = Team.id(team);
+
+  send(UpdateTeams(updatedTeams));
+  send(UpdateFormVisible(UpdateForm(student, teamId)));
+};
+
 [@react.component]
 let make =
     (
@@ -217,6 +226,7 @@ let make =
            certificates
            updateFormCB={updateForm(send)}
            reloadTeamsCB={reloadTeams(send)}
+           updateStudentCB={updateStudent(team, state, send)}
          />
        </SchoolAdmin__EditorDrawer>;
      }}

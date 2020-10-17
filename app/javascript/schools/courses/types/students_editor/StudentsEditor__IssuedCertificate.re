@@ -59,3 +59,7 @@ let certificate = (t, certificates) => {
     certificates,
   );
 };
+
+let revoke = (issuedCertificate, revokedBy, revokedAt) => {
+  {...issuedCertificate, revokedBy, revokedAt};
+};

@@ -25,12 +25,34 @@ let excludedFromLeaderboard = t => t.excludedFromLeaderboard;
 
 let issuedCertificates = t => t.issuedCertificates;
 
+let addNewCertificate = (t, certificate) => {
+  {
+    ...t,
+    issuedCertificates:
+      Js.Array.concat(t.issuedCertificates, [|certificate|]),
+  };
+};
+
+let updateCertificate = (t, certificate) => {
+  {
+    ...t,
+    issuedCertificates:
+      Js.Array.map(
+        ic =>
+          StudentsEditor__IssuedCertificate.id(certificate)
+          == StudentsEditor__IssuedCertificate.id(ic)
+            ? certificate : ic,
+        t.issuedCertificates,
+      ),
+  };
+};
+
 let hasActiveCertificate = t => {
   Js.Array.find(
     ic => StudentsEditor__IssuedCertificate.revokedAt(ic)->Belt.Option.isNone,
     t.issuedCertificates,
   )
-  -> Belt.Option.isSome;
+  ->Belt.Option.isSome;
 };
 
 let updateInfo =

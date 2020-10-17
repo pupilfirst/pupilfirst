@@ -9,6 +9,8 @@ module Students
       return if @issued_certificate.revoked_at.present?
 
       @issued_certificate.update!(revoked_at: Time.zone.now, revoked_by: @revoked_by)
+
+      @issued_certificate
     end
   end
 end

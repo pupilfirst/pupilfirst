@@ -27,6 +27,7 @@ let make =
       ~certificates,
       ~updateFormCB,
       ~reloadTeamsCB,
+      ~updateStudentCB,
     ) => {
   let (view, setView) = React.useState(() => DetailsTab);
   <div className="mx-auto bg-white">
@@ -81,7 +82,12 @@ let make =
         />
       </div>
       <div className={tabItemsClasses(view == ActionsTab)}>
-        <StudentsEditor__ActionsForm student reloadTeamsCB certificates />
+        <StudentsEditor__ActionsForm
+          student
+          reloadTeamsCB
+          certificates
+          updateStudentCB
+        />
       </div>
     </div>
   </div>;

@@ -89,7 +89,24 @@ en:
       update_issued_certificates_warning:
         one: "This certificate has been issued once.<br/>These changes will also be applied to the issued certificate."
         other: "This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates."
-
+    StudentsEditor__ActionsForm:
+      certificates_label: Course Certificates
+      empty_course_certificates_text: This course has currently no certificates to issue!
+      empty_issued_certificates_text: The student has currently no certificate issued for this course!
+      issued_certificates_label: "Issued certificates:"
+      issued_date_label: "Issued on:"
+      issued_by_label: "Issued by:"
+      revoked_date_label: "Revoked on:"
+      revoked_by_label: "Revoked by:"
+      revoked_status_label: Revoked
+      active_status_label: Active
+      new_certificate_label: "Issue new certificate:"
+      select_certificate_input_label: Select a certificate to issue
+      issue_certificate_button: Issue Certificate
+      revoke_certificate_button: Revoke Certificate
+      active_certificate_info: The student already has an active certificate issued for this course. Please revoke the current certificate to issue a new one.
+      dropout_student_label: Has this student dropped out?
+      dropout_button: Dropout Student
   jobs:
     timeline_events:
       verification_notification:

@@ -1,5 +1,7 @@
 open StudentsEditor__Types;
 
+let t = I18n.t(~scope="components.StudentsEditor__ActionsForm");
+
 module DropoutStudentQuery = [%graphql
   {|
    mutation DropoutStudentMutation($id: ID!) {
@@ -155,12 +157,12 @@ let showIssuedCertificates =
     StudentsEditor__Student.issuedCertificates(student);
   issuedCertificates->ArrayUtils.isEmpty
     ? <p className="text-xs text-gray-800">
-        "The student has currently no certificate issued for this course!"->str
+        {t("empty_issued_certificates_text")->str}
       </p>
     : {
       <div className="flex flex-col">
         <label className="tracking-wide text-sm font-semibold mb-2">
-          "Issued certificates:"->str
+          {t("issued_certificates_label")->str}
         </label>
         {issuedCertificates
          |> Js.Array.map(ic =>
@@ -185,8 +187,8 @@ let showIssuedCertificates =
                      }>
                      (
                        switch (revokedAt) {
-                       | Some(_) => "Revoked"
-                       | None => "Active"
+                       | Some(_) => t("revoked_status_label")
+                       | None => t("active_status_label")
                        }
                      )
                      ->str
@@ -199,9 +201,9 @@ let showIssuedCertificates =
                   <div className="flex flex-col">
                     <div>
                       <span className="font font-semibold text-xs">
-                        "Issued on: "->str
+                        {t("issued_date_label")->str}
                       </span>
-                      <span className="text-xs">
+                      <span className="text-xs ml-2">
                         {StudentsEditor__IssuedCertificate.createdAt(ic)
                          ->DateFns.format("MMMM d, yyyy")
                          ->str}
@@ -209,9 +211,9 @@ let showIssuedCertificates =
                     </div>
                     <div>
                       <span className="font font-semibold text-xs">
-                        "Issued by: "->str
+                        {t("issued_by_label")->str}
                       </span>
-                      <span className="text-xs">
+                      <span className="text-xs ml-2">
                         {StudentsEditor__IssuedCertificate.issuedBy(ic)->str}
                       </span>
                     </div>
@@ -221,17 +223,17 @@ let showIssuedCertificates =
                      <div className="flex flex-col">
                        <div>
                          <span className="font font-semibold text-xs">
-                           "Revoked on: "->str
+                           {t("revoked_date_label")->str}
                          </span>
-                         <span className="text-xs">
+                         <span className="text-xs ml-2">
                            {revokedAt->DateFns.format("MMMM d, yyyy")->str}
                          </span>
                        </div>
                        <div>
                          <span className="font font-semibold text-xs">
-                           "Revoked by: "->str
+                           {t("revoked_by_label")->str}
                          </span>
-                         <span className="text-xs">
+                         <span className="text-xs ml-2">
                            {StudentsEditor__IssuedCertificate.revokedBy(ic)
                             ->Belt.Option.mapWithDefault("Unknown", r => r)
                             ->str}
@@ -249,7 +251,7 @@ let showIssuedCertificates =
                          currentUserName,
                        )}
                        className="btn btn-danger btn-small">
-                       "Revoke Certificate"->str
+                       {t("revoke_certificate_button")->str}
                      </button>
                    }}
                 </div>
@@ -280,10 +282,10 @@ let make =
 
   <div className="mt-5">
     <div className="mb-4" ariaLabel="Manage student certificates">
-      <h5 className="mb-2"> "Course Certificates"->str </h5>
+      <h5 className="mb-2"> {t("certificates_label")->str} </h5>
       {certificates |> ArrayUtils.isEmpty
          ? <p className="text-xs text-gray-800">
-             "This course has currently no certificates to issue!"->str
+             {t("empty_course_certificates_text")->str}
            </p>
          : <div>
              {showIssuedCertificates(
@@ -296,13 +298,12 @@ let make =
               )}
              {<div className="flex flex-col mt-2">
                 <label className="tracking-wide text-sm font-semibold mb-2">
-                  "Issue new certificate:"->str
+                  {t("new_certificate_label")->str}
                 </label>
                 {Student.hasActiveCertificate(student)
                    ? <div
                        className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-l-4 rounded-r-md mt-2">
-                       "The student already has an active certificate issued for this course. Please revoke the current certificate to issue a new one."
-                       ->React.string
+                       {t("active_certificate_info")->str}
                      </div>
                    : <div className="flex items-end mt-2">
                        <select
@@ -315,7 +316,7 @@ let make =
                          }}
                          value=selectedCertificateId>
                          <option key="0" value="0">
-                           {str("Select a certificate to issue")}
+                           {t("select_certificate_input_label")->str}
                          </option>
                          {certificates
                           |> Array.map(certificate =>
@@ -339,7 +340,7 @@ let make =
                          className="btn btn-success ml-2 text-sm h-10">
                          <FaIcon classes={issueButtonIcons(issuing)} />
                          <span className="ml-2">
-                           "Issue Certificate"->str
+                           {t("issue_certificate_button")->str}
                          </span>
                        </button>
                      </div>}
@@ -349,7 +350,7 @@ let make =
     <label
       className="tracking-wide text-xs font-semibold"
       htmlFor="access-ends-at-input">
-      {"Has this student dropped out?" |> str}
+      {t("dropout_student_label")->str}
     </label>
     <HelpIcon
       className="ml-2"
@@ -367,7 +368,7 @@ let make =
           reloadTeamsCB,
         )}>
         <FaIcon classes={submitButtonIcons(saving)} />
-        <span className="ml-2"> {"Dropout Student" |> str} </span>
+        <span className="ml-2"> {t("dropout_button")->str} </span>
       </button>
     </div>
   </div>;

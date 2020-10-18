@@ -601,4 +601,110 @@ feature 'School students index', js: true do
       expect(find('.student-team-container:last-child')).to have_text(team_zzz.name)
     end
   end
+
+  context 'course has no certificates' do
+    let!(:team_1) { create :startup, level: level_1 }
+    scenario 'admin visits student editor to issue certificates' do
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+
+      student = team_1.founders.last
+
+      find('a', text: student.name).click
+
+      click_button 'Actions'
+
+      expect(page).to have_text("This course has currently no certificates to issue!")
+    end
+  end
+
+  context 'course has certificates' do
+    let!(:team_1) { create :startup, level: level_1 }
+    let(:student_without_certificate) { team_1.founders.first }
+    let(:student_with_certificate) { team_1.founders.last }
+    let!(:certificate_1) { create :certificate, course: course }
+    let!(:certificate_2) { create :certificate, course: course }
+
+    before do
+      create :issued_certificate, user: student_with_certificate.user, issuer: school_admin.user, certificate: certificate_1, created_at: 1.day.ago
+    end
+
+    scenario 'admin visits editor of student without certificates' do
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+
+      find('a', text: student_without_certificate.name).click
+
+      click_button 'Actions'
+
+      expect(page).to have_text(I18n.t('components.StudentsEditor__ActionsForm.empty_issued_certificates_text'))
+
+      # Issue new certificate
+
+      select certificate_2.name, from: 'issue-certificate'
+
+      click_button('Issue Certificate')
+
+      expect(page).to have_text('Done!')
+      dismiss_notification
+
+      issued_certificate = student_without_certificate.user.issued_certificates.reload.last
+
+      expect(issued_certificate.certificate).to eq(certificate_2)
+      expect(issued_certificate.issuer).to eq(school_admin.user)
+
+      within("div[aria-label='Details of issued certificate #{issued_certificate.id}']") do
+        expect(page).to have_text(issued_certificate.serial_number)
+        expect(page).to have_text(school_admin.user.name)
+        expect(page).to have_text(certificate_2.name)
+        expect(page).to have_text('Active')
+        expect(page).to have_text(issued_certificate.created_at.strftime('%B %-d, %Y'))
+        expect(page).to have_button('Revoke Certificate')
+      end
+
+      expect(page).to have_text(I18n.t('components.StudentsEditor__ActionsForm.active_certificate_info'))
+    end
+
+    scenario 'admin visits editor of student with issued certificates' do
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+
+      find('a', text: student_with_certificate.name).click
+
+      click_button 'Actions'
+
+      expect(page).to have_text(certificate_1.name)
+      expect(page).to have_text(I18n.t('components.StudentsEditor__ActionsForm.active_certificate_info'))
+
+      issued_certificate = student_with_certificate.user.issued_certificates.last
+
+      # Revoke the issued certificate
+
+      within("div[aria-label='Details of issued certificate #{issued_certificate.id}']") do
+        accept_confirm do
+          click_button('Revoke Certificate')
+        end
+      end
+
+      expect(page).to have_text('Done')
+      dismiss_notification
+
+      expect(page).to_not have_text(I18n.t('components.StudentsEditor__ActionsForm.active_certificate_info'))
+
+      expect(issued_certificate.reload.revoked_at).to_not eq(nil)
+      expect(issued_certificate.revoked_by).to eq(school_admin.user)
+
+      within("div[aria-label='Details of issued certificate #{issued_certificate.id}']") do
+        expect(page).to have_text(school_admin.user.name, count: 2)
+        expect(page).to have_text(issued_certificate.revoked_at.strftime('%B %-d, %Y'))
+      end
+
+      # Can issue new certificate
+
+      select certificate_2.name, from: 'issue-certificate'
+
+      click_button('Issue Certificate')
+
+      expect(page).to have_text('Done!')
+      expect(student_with_certificate.user.reload.issued_certificates.count).to eq(2)
+    end
+  end
 end
+

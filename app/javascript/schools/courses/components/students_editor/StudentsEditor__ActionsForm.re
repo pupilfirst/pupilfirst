@@ -56,33 +56,34 @@ let revokeIssuedCertificate =
       updateStudentCertificationCB,
       student,
       currentUserName,
-      event,
+      _event,
     ) => {
-  event |> ReactEvent.Mouse.preventDefault;
-  setRevoking(_ => true);
+  WindowUtils.confirm("Are you sure? This action cannot be undone.", () => {
+    setRevoking(_ => true);
 
-  let issuedCertificateId =
-    StudentsEditor__IssuedCertificate.id(issuedCertificate);
+    let issuedCertificateId =
+      StudentsEditor__IssuedCertificate.id(issuedCertificate);
 
-  RevokeCertificateQuery.make(~issuedCertificateId, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-       response##revokeIssuedCertificate##success
-         ? {
-           let updatedCertificate =
-             issuedCertificate->StudentsEditor__IssuedCertificate.revoke(
-               Some(currentUserName),
-               Some(Js.Date.make()),
-             );
-           let updatedStudent =
-             student->Student.updateCertificate(updatedCertificate);
-           updateStudentCertificationCB(updatedStudent);
-           setRevoking(_ => false);
-         }
-         : setRevoking(_ => false);
-       Js.Promise.resolve();
-     })
-  |> ignore;
+    RevokeCertificateQuery.make(~issuedCertificateId, ())
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(response => {
+         response##revokeIssuedCertificate##success
+           ? {
+             let updatedCertificate =
+               issuedCertificate->StudentsEditor__IssuedCertificate.revoke(
+                 Some(currentUserName),
+                 Some(Js.Date.make()),
+               );
+             let updatedStudent =
+               student->Student.updateCertificate(updatedCertificate);
+             updateStudentCertificationCB(updatedStudent);
+             setRevoking(_ => false);
+           }
+           : setRevoking(_ => false);
+         Js.Promise.resolve();
+       })
+    |> ignore;
+  });
 };
 
 let issueNewCertificate =
@@ -167,6 +168,10 @@ let showIssuedCertificates =
         {issuedCertificates
          |> Js.Array.map(ic =>
               <div
+                ariaLabel={
+                  "Details of issued certificate "
+                  ++ StudentsEditor__IssuedCertificate.id(ic)
+                }
                 key={StudentsEditor__IssuedCertificate.id(ic)}
                 className="flex flex-col mt-2 p-2 border rounded border-gray-400">
                 <div className="flex justify-between">

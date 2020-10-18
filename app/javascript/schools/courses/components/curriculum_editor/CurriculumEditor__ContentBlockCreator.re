@@ -299,28 +299,29 @@ let handleVimeoVideoUpload =
     (file, vimeoVideo, send, target, aboveContentBlock, addContentBlockCB) => {
   let url = vimeoVideo##link;
   let uploadUrl = vimeoVideo##uploadLink;
+  let onSuccess = () =>
+    handleCreateEmbedContentBlock(
+      target,
+      aboveContentBlock,
+      url,
+      send,
+      addContentBlockCB,
+      "vimeo_upload",
+    );
 
-  Tus.upload(
-    ~file=Tus.makeFile(file),
-    ~uploadUrl,
-    ~onError=
-      error => {
-        Js.log(error);
-        send(FailToUpload);
-      },
-    ~onSuccess=
-      () => {
-        handleCreateEmbedContentBlock(
-          target,
-          aboveContentBlock,
-          url,
-          send,
-          addContentBlockCB,
-          "vimeo_upload",
-        )
-      },
-    ~onProgress=uploadOnProgress(send),
-  );
+  EnvUtils.isTest()
+    ? onSuccess()
+    : Tus.upload(
+        ~file=Tus.makeFile(file),
+        ~uploadUrl,
+        ~onError=
+          error => {
+            Js.log(error);
+            send(FailToUpload);
+          },
+        ~onSuccess,
+        ~onProgress=uploadOnProgress(send),
+      );
 };
 
 let uploadFile =
@@ -449,8 +450,19 @@ let handleFileInputChange =
             )
           : None
       | `VideoEmbed =>
-        FileUtils.isInvalid(~video=true, file)
-          ? Some("Please select a video with a size less than 500 MB") : None
+        switch (
+          FileUtils.isVideo(file),
+          FileUtils.hasValidSize(
+            ~maxSize=FileUtils.defaultVideoMaxSize,
+            file,
+          ),
+        ) {
+        | (false, true | false) =>
+          Some("Invalid file format, we support mp4, mov, wmv, avi and flv")
+        | (true, false) =>
+          Some("Please select a video with a size less than 500 MB")
+        | (true, true) => None
+        }
       };
 
     switch (error) {
@@ -700,7 +712,7 @@ let make =
     disabled={disablingCoverDisabled(state.saving, state.uploadProgress)}
     message={
       switch (state.ui) {
-      | UploadVideo => "Preparing to Upload…"
+      | UploadVideo => "Preparing to Upload..."
       | BlockSelector
       | EmbedForm(_)
       | Hidden => "Creating..."

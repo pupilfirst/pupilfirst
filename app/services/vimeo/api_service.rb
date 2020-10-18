@@ -5,9 +5,7 @@ module Vimeo
     end
 
     def create_video(size, name, description)
-      response = create_video_resource(size, name, description)
-      raise "Encountered error with code #{response[:error_code]} when trying to create a Vimeo video." if response[:error_code].present?
-      response
+      create_video_resource(size, name, description)
     end
 
     def add_allowed_domain_to_video(domain, video_id)

@@ -14,9 +14,11 @@ module Mutations
       vimeo_video = if mutator.valid?
         mutator.create_vimeo_video
       else
-        mutator.notify_errors
         nil
       end
+
+      mutator.notify_errors if vimeo_video.blank?
+
       { vimeo_video: vimeo_video }
     end
   end

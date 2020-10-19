@@ -51,7 +51,7 @@ let make = (~contentBlocks) =>
             | Markdown(markdown) => markdownContentBlock(markdown)
             | File(url, title, filename) =>
               fileContentBlock(url, title, filename)
-            | Image(url, caption) => imageContentBlock(url, caption)
+            | Image(url, caption, width) => imageContentBlock(url, caption)
             | Embed(url, embedCode) => embedContentBlock(url, embedCode)
             };
 

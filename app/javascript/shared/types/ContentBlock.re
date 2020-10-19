@@ -6,11 +6,18 @@ type title = string;
 type caption = string;
 type embedCode = string;
 type filename = string;
-
+type width =
+  | Xs
+  | Sm
+  | Md
+  | Lg
+  | Xl
+  | Xl2
+  | Auto;
 type blockType =
   | Markdown(markdown)
   | File(url, title, filename)
-  | Image(url, caption)
+  | Image(url, caption, width)
   | Embed(url, embedCode);
 
 type t = {
@@ -45,7 +52,7 @@ let decode = json => {
     | "image" =>
       let caption = json |> field("content", decodeImageContent);
       let url = json |> field("fileUrl", string);
-      Image(url, caption);
+      Image(url, caption, Auto);
     | "embed" =>
       let (url, embedCode) = json |> field("content", decodeEmbedContent);
       Embed(url, embedCode);
@@ -67,7 +74,8 @@ let blockType = t => t.blockType;
 let sortIndex = t => t.sortIndex;
 
 let makeMarkdownBlock = markdown => Markdown(markdown);
-let makeImageBlock = (fileUrl, caption) => Image(fileUrl, caption);
+let makeImageBlock = (fileUrl, caption, width) =>
+  Image(fileUrl, caption, width);
 let makeFileBlock = (fileUrl, title, fileName) =>
   File(fileUrl, title, fileName);
 let makeEmbedBlock = (url, embedCode) => Embed(url, embedCode);
@@ -82,7 +90,7 @@ let makeFromJs = js => {
     | `MarkdownBlock(content) => Markdown(content##markdown)
     | `FileBlock(content) =>
       File(content##url, content##title, content##filename)
-    | `ImageBlock(content) => Image(content##url, content##caption)
+    | `ImageBlock(content) => Image(content##url, content##caption, Auto)
     | `EmbedBlock(content) => Embed(content##url, content##embedCode)
     };
 
@@ -93,7 +101,7 @@ let blockTypeAsString = blockType =>
   switch (blockType) {
   | Markdown(_markdown) => "markdown"
   | File(_url, _title, _filename) => "file"
-  | Image(_url, _caption) => "image"
+  | Image(_url, _caption, _width) => "image"
   | Embed(_url, _embedCode) => "embed"
   };
 
@@ -127,7 +135,7 @@ let updateFile = (title, t) =>
 
 let updateImage = (caption, t) =>
   switch (t.blockType) {
-  | Image(url, _) => {...t, blockType: Image(url, caption)}
+  | Image(url, _, width) => {...t, blockType: Image(url, caption, width)}
   | Markdown(_)
   | File(_)
   | Embed(_) => t

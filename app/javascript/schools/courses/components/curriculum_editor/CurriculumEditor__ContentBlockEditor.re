@@ -207,7 +207,7 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
       setDirtyCB,
       send,
     );
-  | Image(_url, caption) =>
+  | Image(_url, caption, _width) =>
     let mutation = UpdateImageBlockMutation.make(~id, ~caption, ());
     let extractor = result => result##updateImageBlock##contentBlock;
     updateContentBlockBlock(
@@ -254,8 +254,9 @@ let innerEditor =
       contentBlock
       updateContentBlockCB
     />
-  | Image(url, caption) =>
+  | Image(url, caption, width) =>
     <CurriculumEditor__ImageBlockEditor
+      width
       url
       caption
       contentBlock

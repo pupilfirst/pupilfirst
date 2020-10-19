@@ -17,18 +17,9 @@ let make =
       ~width: ContentBlock.width,
     ) => {
   let captionInputId = "caption-" ++ (contentBlock |> ContentBlock.id);
+  let widthInputId = "width-" ++ contentBlock.id;
 
-  let widthToString = width =>
-    switch (width) {
-    | `auto => "auto"
-    | `xs => "xs"
-    | `sm => "sm"
-    | `md => "md"
-    | `lg => "lg"
-    | `xl => "xl"
-    | `xl2 => "2xl"
-    };
-  let widthString = widthToString(width);
+  let widthString = ContentBlock.widthToString(width);
   <div className="relative border border-gray-400 rounded-lg">
     <div
       className={
@@ -68,38 +59,43 @@ let make =
         />
       </div>
     </div>
-    <label>
-      "Width : "->React.string
-      <select
-        value=widthString
-        onChange={_event => {
-          _event |> ReactEvent.Form.preventDefault;
+    <div className="flex border-t justify-end">
+      <div className="flex-1 content-block__action-bar-input p-3">
+        <label htmlFor=widthInputId className="text-sm font-semibold">
+          "Width : "->React.string
+          <select
+            id=widthInputId
+            value=widthString
+            onChange={_event => {
+              _event |> ReactEvent.Form.preventDefault;
 
-          let value: string = ReactEvent.Synthetic.target(_event)##value;
-          let width =
-            switch (value) {
-            | "xs" => `xs
-            | "sm" => `sm
-            | "md" => `md
-            | "lg" => `lg
-            | "xl" => `xl
-            | "2xl" => `xl2
-            | _ => `auto
-            };
-          updateContentBlockCB({
-            ...contentBlock,
-            blockType: Image(url, caption, width),
-          });
-          ();
-        }}>
-        <option value="auto"> "auto"->React.string </option>
-        <option value="xs"> "xs"->React.string </option>
-        <option value="sm"> "sm"->React.string </option>
-        <option value="md"> "md"->React.string </option>
-        <option value="lg"> "lg"->React.string </option>
-        <option value="xl"> "xl"->React.string </option>
-        <option value="2xl"> "2xl"->React.string </option>
-      </select>
-    </label>
+              let value: string = ReactEvent.Synthetic.target(_event)##value;
+              let width =
+                switch (value) {
+                | "xs" => `xs
+                | "sm" => `sm
+                | "md" => `md
+                | "lg" => `lg
+                | "xl" => `xl
+                | "2xl" => `xl2
+                | _ => `auto
+                };
+              updateContentBlockCB({
+                ...contentBlock,
+                blockType: Image(url, caption, width),
+              });
+              ();
+            }}>
+            <option value="auto"> "auto"->React.string </option>
+            <option value="xs"> "xs"->React.string </option>
+            <option value="sm"> "sm"->React.string </option>
+            <option value="md"> "md"->React.string </option>
+            <option value="lg"> "lg"->React.string </option>
+            <option value="xl"> "xl"->React.string </option>
+            <option value="2xl"> "2xl"->React.string </option>
+          </select>
+        </label>
+      </div>
+    </div>
   </div>;
 };

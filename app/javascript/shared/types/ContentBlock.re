@@ -7,6 +7,16 @@ type caption = string;
 type embedCode = string;
 type filename = string;
 type width = [ | `auto | `lg | `md | `sm | `xl | `xl2 | `xs];
+let widthToString = width =>
+  switch (width) {
+  | `auto => "auto"
+  | `xs => "xs"
+  | `sm => "sm"
+  | `md => "md"
+  | `lg => "lg"
+  | `xl => "xl"
+  | `xl2 => "2xl"
+  };
 type blockType =
   | Markdown(markdown)
   | File(url, title, filename)
@@ -24,7 +34,7 @@ let decodeMarkdownContent = json =>
   Json.Decode.(json |> field("markdown", string));
 let decodeFileContent = json => Json.Decode.(json |> field("title", string));
 let decodeImageContent = json => {
-  let widthString = Json.Decode.(json |> field("width", optional(string)));
+  let widthString = Json.Decode.(json |> optional(field("width", string)));
   let width: width =
     switch (widthString) {
     | None => `auto

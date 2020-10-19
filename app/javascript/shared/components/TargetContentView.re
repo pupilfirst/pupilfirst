@@ -28,8 +28,14 @@ let fileContentBlock = (url, title, filename) =>
     <div> <FaIcon classes="text-2xl fas fa-download" /> </div>
   </a>;
 
-let imageContentBlock = (url, caption) =>
-  <div className="rounded-lg bg-white text-center">
+let imageContentBlock = (url, caption, width: ContentBlock.width) =>
+  <div
+    className={
+      "rounded-lg bg-white text-center "
+      ++ "max-w-"
+      ++ ContentBlock.widthToString(width)
+      ++ " mx-auto"
+    }>
     <img className="mx-auto" src=url alt=caption />
     <div className="px-4 py-2 text-sm italic"> {caption |> str} </div>
   </div>;
@@ -51,7 +57,8 @@ let make = (~contentBlocks) =>
             | Markdown(markdown) => markdownContentBlock(markdown)
             | File(url, title, filename) =>
               fileContentBlock(url, title, filename)
-            | Image(url, caption, width) => imageContentBlock(url, caption)
+            | Image(url, caption, width) =>
+              imageContentBlock(url, caption, width)
             | Embed(url, embedCode) => embedContentBlock(url, embedCode)
             };
 

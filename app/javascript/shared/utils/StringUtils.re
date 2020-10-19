@@ -1,8 +1,12 @@
-let parameterize = t =>
+let parameterize = (~allowSpace=false, t) => {
   t
   |> Js.String.toLowerCase
-  |> Js.String.replaceByRe([%re "/[^0-9a-zA-Z ]+/gi"], "-")
+  |> Js.String.replaceByRe(
+       allowSpace ? [%re "/[^0-9a-zA-Z ]+/gi"] : [%re "/[^0-9a-zA-Z]+/gi"],
+       "-",
+     )
   |> Js.String.replaceByRe([%re "/^-|-$/gmi"], "");
+};
 
 let paramToId = param => {
   [%re "/^\\d+/g"]

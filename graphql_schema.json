@@ -8566,6 +8566,18 @@
         "description": "",
         "fields": [
           {
+            "name": "levelUpEligibility",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "LevelUpEligibility",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "submission",
             "description": "",
             "args": [],
@@ -8581,6 +8593,59 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "LevelUpEligibility",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "Eligible",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "AtMaxLevel",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NoMilestonesInLevel",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CurrentLevelIncomplete",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PreviousLevelIncomplete",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TeamMembersPending",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DateLocked",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -9191,6 +9256,18 @@
         "description": "",
         "fields": [
           {
+            "name": "levelUpEligibility",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "LevelUpEligibility",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "submission",
             "description": "",
             "args": [],
@@ -9373,6 +9450,18 @@
         "name": "CreateSubmissionPayload",
         "description": "",
         "fields": [
+          {
+            "name": "levelUpEligibility",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "LevelUpEligibility",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "submission",
             "description": "",

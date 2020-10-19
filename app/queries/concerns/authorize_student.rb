@@ -5,10 +5,10 @@ module AuthorizeStudent
     return false if current_user.blank?
 
     # Has access to school
-    return false unless course&.school == current_school && founder.present?
+    return false unless course&.school == current_school && student.present?
 
     # Founder has access to the course
-    return false unless !course.ends_at&.past? && !startup.access_ends_at&.past?
+    return false unless !course.ends_at&.past? && !team.access_ends_at&.past?
 
     # Level must be accessible.
     return false unless LevelPolicy.new(pundit_user, target.level).accessible?
@@ -18,15 +18,15 @@ module AuthorizeStudent
 
   # Students can complete a live target if they're non-reviewed, or if they've reached the target's level for reviewed targets.
   def target_can_be_completed?
-    target.live? && (target.evaluation_criteria.empty? || target.level.number <= startup.level.number)
+    target.live? && (target.evaluation_criteria.empty? || target.level.number <= team.level.number)
   end
 
-  def founder
-    @founder ||= current_user.founders.joins(:level).where(levels: { course_id: course }).first
+  def student
+    @student ||= current_user.founders.joins(:level).where(levels: { course_id: course }).first
   end
 
-  def startup
-    @startup ||= founder.startup
+  def team
+    @team ||= student.startup
   end
 
   def course
@@ -37,11 +37,11 @@ module AuthorizeStudent
     @target ||= Target.find_by(id: target_id)
   end
 
-  def founders
+  def students
     if target.individual_target?
-      [founder]
+      [student]
     else
-      founder.startup.founders
+      student.startup.founders
     end
   end
 
@@ -52,6 +52,6 @@ module AuthorizeStudent
   end
 
   def target_status
-    @target_status ||= Targets::StatusService.new(target, founder).status
+    @target_status ||= Targets::StatusService.new(target, student).status
   end
 end

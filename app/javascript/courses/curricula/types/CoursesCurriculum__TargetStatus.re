@@ -212,17 +212,16 @@ let canSubmit = (~resubmittable, t) =>
   | (_, Locked(_)) => false
   };
 
-let currentLevelStatuses = progressionBehavior =>
-  switch (progressionBehavior) {
-  | `Limited(_)
-  | `Unlimited => [PendingReview, Completed]
-  | `Strict => [Completed]
-  };
-let minimumRequiredLevelStatuses = [Completed];
+let allAttempted = ts => {
+  Belt.Array.every(ts, t =>
+    Js.Array.includes(t.status, [|PendingReview, Completed, Rejected|])
+  );
+};
 
-let matchesStatuses = (statuses, ts) => {
-  let matchedTargetStatuses =
-    ts |> List.filter(t => t.status->List.mem(statuses));
+let allComplete = ts => {
+  Belt.Array.every(ts, t => t.status == Completed);
+};
 
-  ts == matchedTargetStatuses;
+let anyRejected = ts => {
+  Belt.Array.some(ts, t => t.status == Rejected);
 };

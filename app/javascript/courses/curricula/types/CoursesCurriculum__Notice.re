@@ -5,10 +5,12 @@ type t =
   | AccessEnded
   | LevelUp
   | LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber)
-  | LevelUpBlocked(currentLevelNumber) // For when the Strict progression behavior applies.
+  | LevelUpBlocked(currentLevelNumber, someSubmissionsRejected) // For when the Strict progression behavior applies.
+  | TeamMembersPending
   | Nothing
 and currentLevelNumber = int
-and minimumRequiredLevelNumber = int;
+and minimumRequiredLevelNumber = int
+and someSubmissionsRejected = bool;
 
 [@bs.module "../images/course-ended.svg"]
 external courseEndedImage: string = "default";
@@ -30,7 +32,8 @@ let icon = t =>
   | CourseComplete => courseCompleteImage
   | AccessEnded => accessEndedImage
   | LevelUp => levelUpImage
-  | LevelUpLimited(_) => levelUpBlockedImage
-  | LevelUpBlocked(_) => levelUpBlockedImage
+  | LevelUpLimited(_)
+  | LevelUpBlocked(_)
+  | TeamMembersPending => levelUpBlockedImage
   | Nothing => ""
   };

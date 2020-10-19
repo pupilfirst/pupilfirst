@@ -648,6 +648,15 @@ feature 'Community', js: true do
       expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
       expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
     end
+
+    scenario 'user visits a community with filters applied' do
+      sign_in_user(coach.user, referrer: community_path(community, sortDirection: 'Ascending', sortCriterion: 'Views', solution: 'Unsolved'))
+      expect(page).to have_button('Order by Views')
+      expect(page).to have_button('Remove selection: Unsolved')
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
+    end
   end
 
   context "when the user is a coach who isn't enrolled in one of the community's connected courses" do

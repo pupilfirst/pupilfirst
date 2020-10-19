@@ -10,7 +10,7 @@
           <div class="row">
             <% presenter.nav_links.each do |nav_link| %>
               <div class="col-md-4">
-                <%= link_to nav_link[:title], nav_link[:url], { class: 'footer-column__link' }.merge(presenter.add_target_blank?(nav_link[:title])) %>
+                <%= link_to nav_link[:title], nav_link[:url], { class: 'footer-column__link' }.merge(nav_link[:target_blank] || {} ) %>
               </div>
             <% end %>
           </div>

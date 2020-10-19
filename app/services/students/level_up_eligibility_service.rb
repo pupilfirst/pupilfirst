@@ -59,7 +59,7 @@ module Students
       return false if @student.user.school_admin.present?
 
       coach = @student.user.faculty
-      return false if coach.present? && startup.course.in?(coach.courses)
+      return false if coach.present? && team.course.in?(coach.courses)
 
       true
     end
@@ -106,15 +106,15 @@ module Students
 
     def target_eligible?(target, eligibility)
       if target.individual_target?
-        completed_founders = startup.founders.all.select do |startup_founder|
-          target.status(startup_founder).in?(eligibility)
+        completed_students = team.founders.all.select do |student|
+          target.status(student).in?(eligibility)
         end
 
-        if @student.in?(completed_founders)
-          # Mark that some co-founders haven't yet completed target if applicable.
-          @team_members_pending ||= completed_founders.count != startup.founders.count
+        if @student.in?(completed_students)
+          # Mark that some teammates haven't yet completed target if applicable.
+          @team_members_pending ||= completed_students.count != team.founders.count
 
-          # Founder has completed this target.
+          # Student has completed this target.
           true
         else
           false
@@ -124,16 +124,16 @@ module Students
       end
     end
 
-    def startup
-      @startup ||= @student.startup
+    def team
+      @team ||= @student.startup
     end
 
     def current_level
-      @current_level ||= startup.level
+      @current_level ||= team.level
     end
 
     def course
-      @course ||= startup.course
+      @course ||= team.course
     end
   end
 end

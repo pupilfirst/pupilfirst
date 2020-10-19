@@ -20,14 +20,21 @@ let decode = json => {
   | "PreviousLevelIncomplete" => PreviousLevelIncomplete
   | "TeamMembersPending" => TeamMembersPending
   | "DateLocked" => DateLocked
-  | otherValue => raise(UnexpectedEligibilityString(otherValue))
+  | otherValue =>
+    Rollbar.error("Unexpected eligibility encountered: " ++ otherValue);
+    raise(UnexpectedEligibilityString(otherValue));
   };
 };
 
 let isEligible = t =>
   switch (t) {
   | Eligible => true
-  | _ => false
+  | AtMaxLevel
+  | NoMilestonesInLevel
+  | CurrentLevelIncomplete
+  | PreviousLevelIncomplete
+  | TeamMembersPending
+  | DateLocked => false
   };
 
 let makeOptionFromJs = js =>

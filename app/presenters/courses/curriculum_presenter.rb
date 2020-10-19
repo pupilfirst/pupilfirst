@@ -31,7 +31,6 @@ module Courses
           users: [],
           evaluation_criteria: [],
           preview: true,
-          team_members_pending: false,
           level_up_eligibility: Students::LevelUpEligibilityService::ELIGIBILITY_CURRENT_LEVEL_INCOMPLETE,
           **default_props
         }

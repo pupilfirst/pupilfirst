@@ -100,7 +100,7 @@ feature 'Target Content Editor', js: true do
 
     cb = ContentBlock.last
     expect(cb.block_type).to eq(ContentBlock::BLOCK_TYPE_IMAGE)
-    expect(cb.content).to eq('caption' => filename)
+    expect(cb.content['caption']).to eq(filename)
 
     # Try changing the caption.
     new_caption = Faker::Lorem.sentence
@@ -113,7 +113,7 @@ feature 'Target Content Editor', js: true do
     find("button[title='Save Changes']").click
 
     expect(page).not_to have_selector("button[title='Save Changes']")
-    expect(cb.reload.content).to eq('caption' => new_caption)
+    expect(cb.reload.content['caption']).to eq(new_caption)
 
     # Try the undo button.
     fill_in 'Caption', with: Faker::Lorem.sentence

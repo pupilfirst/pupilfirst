@@ -20,19 +20,19 @@ let make =
 
   let widthToString = width =>
     switch (width) {
-    | ContentBlock.Auto => "auto"
-    | Xs => "xs"
-    | Sm => "sm"
-    | Md => "md"
-    | Lg => "lg"
-    | Xl => "xl"
-    | Xl2 => "2xl"
+    | `auto => "auto"
+    | `xs => "xs"
+    | `sm => "sm"
+    | `md => "md"
+    | `lg => "lg"
+    | `xl => "xl"
+    | `xl2 => "2xl"
     };
   let widthString = widthToString(width);
   <div className="relative border border-gray-400 rounded-lg">
     <div
       className={
-        width === Auto
+        width === `auto
           ? ""
           : ("max-w-" ++ widthString ++ " mx-auto ")
             ++ "content-block__content text-base bg-gray-200 flex justify-center items-center rounded-t-lg"
@@ -78,13 +78,13 @@ let make =
           let value: string = ReactEvent.Synthetic.target(_event)##value;
           let width =
             switch (value) {
-            | "xs" => ContentBlock.Xs
-            | "sm" => Sm
-            | "md" => Md
-            | "lg" => Lg
-            | "xl" => Xl
-            | "2xl" => Xl2
-            | _ => Auto
+            | "xs" => `xs
+            | "sm" => `sm
+            | "md" => `md
+            | "lg" => `lg
+            | "xl" => `xl
+            | "2xl" => `xl2
+            | _ => `auto
             };
           updateContentBlockCB({
             ...contentBlock,

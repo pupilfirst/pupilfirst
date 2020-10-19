@@ -27,7 +27,7 @@ let button = (sortIndex, newContentBlockCB, kindOfButton) => {
     | ImageButton => (
         "far fa-image",
         "Image",
-        (() => ContentBlock.makeImageBlock("", "", Auto)),
+        (() => ContentBlock.makeImageBlock("", "", `auto)),
       )
     | EmbedButton => (
         "fas fa-code",

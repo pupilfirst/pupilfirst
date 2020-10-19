@@ -6,14 +6,7 @@ type title = string;
 type caption = string;
 type embedCode = string;
 type filename = string;
-type width =
-  | Xs
-  | Sm
-  | Md
-  | Lg
-  | Xl
-  | Xl2
-  | Auto;
+type width = [ | `auto | `lg | `md | `sm | `xl | `xl2 | `xs];
 type blockType =
   | Markdown(markdown)
   | File(url, title, filename)
@@ -30,8 +23,21 @@ and id = string;
 let decodeMarkdownContent = json =>
   Json.Decode.(json |> field("markdown", string));
 let decodeFileContent = json => Json.Decode.(json |> field("title", string));
-let decodeImageContent = json =>
-  Json.Decode.(json |> field("caption", string));
+let decodeImageContent = json => {
+  let widthString = Json.Decode.(json |> field("width", optional(string)));
+  let width: width =
+    switch (widthString) {
+    | None => `auto
+    | Some("md") => `md
+    | Some("lg") => `lg
+    | Some("xl") => `xl
+    | Some("sm") => `sm
+    | Some("xs") => `xs
+    | Some("xl2") => `xl2
+    | Some(_) => `auto
+    };
+  (Json.Decode.(json |> field("caption", string)), width);
+};
 let decodeEmbedContent = json =>
   Json.Decode.(
     json |> field("url", string),
@@ -50,9 +56,10 @@ let decode = json => {
       let filename = json |> field("filename", string);
       File(url, title, filename);
     | "image" =>
-      let caption = json |> field("content", decodeImageContent);
+      let (caption, width) = json |> field("content", decodeImageContent);
       let url = json |> field("fileUrl", string);
-      Image(url, caption, Auto);
+      Js.log(("block", json));
+      Image(url, caption, width);
     | "embed" =>
       let (url, embedCode) = json |> field("content", decodeEmbedContent);
       Embed(url, embedCode);
@@ -90,7 +97,15 @@ let makeFromJs = js => {
     | `MarkdownBlock(content) => Markdown(content##markdown)
     | `FileBlock(content) =>
       File(content##url, content##title, content##filename)
-    | `ImageBlock(content) => Image(content##url, content##caption, Auto)
+    | `ImageBlock(content) =>
+      Image(
+        content##url,
+        content##caption,
+        switch (content##width) {
+        | None => `auto
+        | Some(width) => width
+        },
+      )
     | `EmbedBlock(content) => Embed(content##url, content##embedCode)
     };
 
@@ -160,6 +175,7 @@ module Fragments = [%graphql
         caption
         url
         filename
+        width
       }
       ... on FileBlock {
         title
@@ -190,6 +206,7 @@ module Query = [%graphql
             caption
             url
             filename
+            width
           }
           ... on FileBlock {
             title

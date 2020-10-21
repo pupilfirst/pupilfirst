@@ -3,7 +3,7 @@ module Mutations
     argument :id, ID, required: true
     argument :caption, String, required: false
     argument :width, Types::ImageWidthType, required: true
-    description 'Updates the caption of an image block.'
+    description 'Updates the caption and the width of an image block.'
 
     field :content_block, Types::ContentBlockType, null: true
 

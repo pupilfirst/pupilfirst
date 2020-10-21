@@ -79,7 +79,7 @@ module UpdateMarkdownBlockMutation = [%graphql
 module UpdateImageBlockMutation = [%graphql
   {|
     mutation UpdateImageBlockMutation($id: ID!, $caption: String!, $width:ImageWidth! ) {
-      updateImageBlock(id: $id, caption: $caption,width:$width) {
+      updateImageBlock(id: $id, caption: $caption, width:$width) {
         contentBlock {
           ...ContentBlock.Fragments.AllFields
         }

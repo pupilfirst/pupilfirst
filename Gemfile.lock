@@ -289,6 +289,7 @@ GEM
       mime-types (>= 1.0)
     font-awesome-rails (4.7.0.5)
       railties (>= 3.2, < 6.1)
+    foreman (0.87.2)
     formtastic (3.1.5)
       actionpack (>= 3.2.13)
     formtastic_i18n (0.6.0)
@@ -770,6 +771,7 @@ DEPENDENCIES
   fastimage (~> 2.1)
   file_validators (~> 2.1)
   font-awesome-rails (~> 4.7)
+  foreman
   friendly_id (~> 5.3.0)
   fuubar (~> 2.5)
   gaffe (~> 1.2)

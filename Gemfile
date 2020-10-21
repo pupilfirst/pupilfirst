@@ -119,6 +119,7 @@ group :development do
   gem 'oink', '~> 0.10' # Log parser to identify actions which significantly increase VM heap size
   gem 'meta_request', '~> 0.4' # Chrome extension for Rails development. https://github.com/dejan/rails_panel
   gem 'graphiql-rails', '~> 1.7'
+  gem 'foreman'
 end
 
 group :test do

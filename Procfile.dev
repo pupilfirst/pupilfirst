@@ -1,0 +1,4 @@
+web:     bundle exec puma -C config/puma.rb
+webpack: ./bin/webpack-dev-server --watch --colors --progress
+redis:   redis-server
+worker: rake jobs:work

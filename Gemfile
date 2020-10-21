@@ -113,6 +113,7 @@ group :development do
   gem 'web-console', '~> 4.0' # Rails Console on the Browser.
   gem 'listen', '~> 3.2' # The Listen gem listens to file modifications and notifies you about the changes.
   gem 'graphiql-rails', '~> 1.7'
+  gem 'foreman'
 end
 
 group :test do

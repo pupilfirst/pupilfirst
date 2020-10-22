@@ -154,7 +154,7 @@ let stringOfFilter = filter => {
     [|
       filter.title
       ->Belt.Option.mapWithDefault([||], title =>
-          [|"title=" ++ StringUtils.parameterize(title, ~allowSpace=true)|]
+          [|"title=" ++ Js.Global.encodeURI(title)|]
         ),
       filter.topicCategory
       ->Belt.Option.mapWithDefault([||], t =>

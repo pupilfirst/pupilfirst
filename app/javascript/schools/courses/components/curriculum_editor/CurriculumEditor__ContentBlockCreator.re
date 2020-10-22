@@ -32,7 +32,7 @@ module CreateEmbedContentBlock = [%graphql
 
 module CreateVimeoVideo = [%graphql
   {|
-    mutation CreateVimeoVideo($size: Int!,$title: String, $description: String) {
+    mutation CreateVimeoVideo($size: Int!, $title: String, $description: String) {
       createVimeoVideo(size: $size, title: $title, description: $description) {
         vimeoVideo {
           link
@@ -459,9 +459,11 @@ let handleFileInputChange =
           ),
         ) {
         | (false, true | false) =>
-          Some("Invalid file format, we support mp4, mov, wmv, avi and flv")
+          Some(
+            "Invalid file format, please select an MP4, MOV, WMV, AVI or FLV file.",
+          )
         | (true, false) =>
-          Some("Please select a video with a size less than 500 MB")
+          Some("Please select a file less than 500 MB in size.")
         | (true, true) => None
         }
       };
@@ -648,11 +650,12 @@ let uploadVideoForm = (videoInputId, state, send) => {
       </label>
       <input
         id={videoInputId ++ "-title"}
-        placeholder="Titile for your video "
+        placeholder="Title of your video"
         className="w-full py-1 px-2 border rounded"
         type_="text"
         value={state.videoTitle}
         onChange={updateVideoTitle(send)}
+        maxLength=120
       />
     </div>
     <div className="mt-1">
@@ -668,6 +671,8 @@ let uploadVideoForm = (videoInputId, state, send) => {
         type_="text"
         value={state.videoDescription}
         onChange={updateVideoDescription(send)}
+        maxLength=4000
+        rows=4
       />
     </div>
     <label htmlFor=videoInputId className="mt-2 btn btn-success">

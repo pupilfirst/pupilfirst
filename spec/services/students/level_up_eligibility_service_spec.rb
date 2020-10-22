@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-describe Startups::LevelUpEligibilityService do
+describe Students::LevelUpEligibilityService do
   include SubmissionsHelper
 
-  subject { described_class.new(startup, student) }
+  subject { described_class.new(student) }
 
   let(:course_1) { create :course }
   let!(:course_2) { create :course }
@@ -32,8 +32,8 @@ describe Startups::LevelUpEligibilityService do
         end
 
         context 'when the next level is open' do
-          it "returns 'eligible'" do
-            expect(subject.eligibility).to eq('eligible')
+          it "returns 'Eligible'" do
+            expect(subject.eligibility).to eq('Eligible')
           end
         end
 
@@ -42,8 +42,8 @@ describe Startups::LevelUpEligibilityService do
             level_2.update!(unlock_at: 5.days.from_now)
           end
 
-          it "returns 'date_locked'" do
-            expect(subject.eligibility).to eq('date_locked')
+          it "returns 'DateLocked'" do
+            expect(subject.eligibility).to eq('DateLocked')
           end
 
           after do
@@ -66,8 +66,8 @@ describe Startups::LevelUpEligibilityService do
             submit_target individual_target, student
           end
 
-          it "returns 'team_members_pending'" do
-            expect(subject.eligibility).to eq('team_members_pending')
+          it "returns 'TeamMembersPending'" do
+            expect(subject.eligibility).to eq('TeamMembersPending')
           end
         end
 
@@ -77,25 +77,25 @@ describe Startups::LevelUpEligibilityService do
             students.each { |s| submit_target individual_target, s }
           end
 
-          it "returns 'eligible'" do
-            expect(subject.eligibility).to eq('eligible')
+          it "returns 'Eligible'" do
+            expect(subject.eligibility).to eq('Eligible')
           end
         end
       end
 
       context 'when milestone targets are incomplete' do
-        it "returns 'not_eligible'" do
+        it "returns 'CurrentLevelIncomplete'" do
           submit_target non_milestone_team_target, student
 
-          expect(subject.eligibility).to eq('not_eligible')
+          expect(subject.eligibility).to eq('CurrentLevelIncomplete')
         end
       end
 
       context 'where there are no milestone target groups' do
         let!(:milestone_targets) { create :target_group, level: level_1, milestone: false }
 
-        it "returns 'not_eligible'" do
-          expect(subject.eligibility).to eq('not_eligible')
+        it "returns 'NoMilestonesInLevel'" do
+          expect(subject.eligibility).to eq('NoMilestonesInLevel')
         end
       end
 
@@ -108,8 +108,8 @@ describe Startups::LevelUpEligibilityService do
         end
 
         context 'when the second milestone target group contains incomplete targets' do
-          it "returns 'not_eligible'" do
-            expect(subject.eligibility).to eq('not_eligible')
+          it "returns 'CurrentLevelIncomplete'" do
+            expect(subject.eligibility).to eq('CurrentLevelIncomplete')
           end
         end
 
@@ -119,8 +119,8 @@ describe Startups::LevelUpEligibilityService do
             submit_target milestone_team_target_g2, student
           end
 
-          it "returns 'eligible'" do
-            expect(subject.eligibility).to eq('eligible')
+          it "returns 'Eligible'" do
+            expect(subject.eligibility).to eq('Eligible')
           end
         end
       end
@@ -140,8 +140,8 @@ describe Startups::LevelUpEligibilityService do
             submit_target team_target, student
           end
 
-          it "returns 'not_eligible'" do
-            expect(subject.eligibility).to eq('not_eligible')
+          it "returns 'PreviousLevelIncomplete'" do
+            expect(subject.eligibility).to eq('PreviousLevelIncomplete')
           end
         end
 
@@ -150,8 +150,8 @@ describe Startups::LevelUpEligibilityService do
             submit_target team_target, student, grade: SubmissionsHelper::GRADE_FAIL
           end
 
-          it "returns 'not_eligible'" do
-            expect(subject.eligibility).to eq('not_eligible')
+          it "returns 'PreviousLevelIncomplete'" do
+            expect(subject.eligibility).to eq('PreviousLevelIncomplete')
           end
         end
 
@@ -170,8 +170,8 @@ describe Startups::LevelUpEligibilityService do
               end
             end
 
-            it "returns 'team_members_pending'" do
-              expect(subject.eligibility).to eq('team_members_pending')
+            it "returns 'TeamMembersPending'" do
+              expect(subject.eligibility).to eq('TeamMembersPending')
             end
           end
 
@@ -182,20 +182,20 @@ describe Startups::LevelUpEligibilityService do
               end
             end
 
-            it "returns 'team_members_pending'" do
-              expect(subject.eligibility).to eq('team_members_pending')
+            it "returns 'TeamMembersPending'" do
+              expect(subject.eligibility).to eq('TeamMembersPending')
             end
           end
 
-          context 'when student has a team-mate with a failed submission in level 1' do
+          context "when student's team-mates have completed the target in level 1" do
             before do
               startup.founders.where.not(id: student).each do |other_student|
                 complete_target individual_target, other_student
               end
             end
 
-            it "returns 'team_members_pending'" do
-              expect(subject.eligibility).to eq('eligible')
+            it "returns 'Eligible'" do
+              expect(subject.eligibility).to eq('Eligible')
             end
           end
         end
@@ -219,8 +219,8 @@ describe Startups::LevelUpEligibilityService do
           submit_target milestone_target_l3, student
         end
 
-        it "returns 'eligible'" do
-          expect(subject.eligibility).to eq('eligible')
+        it "returns 'Eligible'" do
+          expect(subject.eligibility).to eq('Eligible')
         end
       end
 
@@ -235,8 +235,8 @@ describe Startups::LevelUpEligibilityService do
           submit_target milestone_target_l4, student
         end
 
-        it "returns 'not_eligible'" do
-          expect(subject.eligibility).to eq('not_eligible')
+        it "returns 'AtMaxLevel'" do
+          expect(subject.eligibility).to eq('AtMaxLevel')
         end
       end
     end
@@ -259,13 +259,13 @@ describe Startups::LevelUpEligibilityService do
         submit_target milestone_target_l4, student
       end
 
-      it "returns 'eligible'" do
-        expect(subject.eligibility).to eq('eligible')
+      it "returns 'Eligible'" do
+        expect(subject.eligibility).to eq('Eligible')
       end
     end
 
-    context 'when the course has locked progression' do
-      let(:course_1) { create :course, :locked }
+    context 'when the course has strict progression' do
+      let(:course_1) { create :course, :strict }
       let(:team_target) { create :target, :for_team, target_group: milestone_targets, evaluation_criteria: [evaluation_criterion] }
 
       context 'when the student has submitted all milestone targets' do
@@ -274,8 +274,8 @@ describe Startups::LevelUpEligibilityService do
           submit_target non_milestone_team_target, student
         end
 
-        it "returns 'not_eligible'" do
-          expect(subject.eligibility).to eq('not_eligible')
+        it "returns 'CurrentLevelIncomplete'" do
+          expect(subject.eligibility).to eq('CurrentLevelIncomplete')
         end
       end
 
@@ -284,8 +284,8 @@ describe Startups::LevelUpEligibilityService do
           fail_target team_target, student
         end
 
-        it "returns 'not_eligible'" do
-          expect(subject.eligibility).to eq('not_eligible')
+        it "returns 'CurrentLevelIncomplete'" do
+          expect(subject.eligibility).to eq('CurrentLevelIncomplete')
         end
       end
 
@@ -294,24 +294,24 @@ describe Startups::LevelUpEligibilityService do
           complete_target team_target, student
         end
 
-        it "returns 'eligible'" do
-          expect(subject.eligibility).to eq('eligible')
+        it "returns 'Eligible'" do
+          expect(subject.eligibility).to eq('Eligible')
         end
       end
     end
   end
 
   describe '#eligible?' do
-    context 'when eligibility is "eligible"' do
+    context 'when eligibility is "Eligible"' do
       it 'returns true' do
-        allow(subject).to receive(:eligibility).and_return('eligible')
+        allow(subject).to receive(:eligibility).and_return('Eligible')
         expect(subject.eligible?).to eq(true)
       end
     end
 
-    context 'when eligibility is not "eligible"' do
+    context 'when eligibility is not "Eligible"' do
       it 'returns false' do
-        %w[not_eligible team_members_pending date_locked].each do |ineligible_marker|
+        %w[AtMaxLevel NoMilestonesInLevel CurrentLevelIncomplete PreviousLevelIncomplete TeamMembersPending DateLocked].each do |ineligible_marker|
           allow(subject).to receive(:eligibility).and_return(ineligible_marker)
           expect(subject.eligible?).to eq(false)
         end

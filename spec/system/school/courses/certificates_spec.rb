@@ -39,15 +39,15 @@ feature 'Certificates', js: true do
     attach_file 'Certificate Base Image', File.absolute_path(Rails.root.join('spec/support/uploads/certificates/sample.png')), visible: false
     click_button 'Create Certificate'
 
-    expect(page).to have_text("Done!")
+    expect(page).to have_text('Done!')
 
     dismiss_notification
 
-    expect(page).to have_text("Never issued")
+    expect(page).to have_text('Never issued')
 
     certificate = Certificate.last
 
-    expect(certificate.name).to include(Time.zone.now.strftime("%-d %b %Y %-l"))
+    expect(certificate.name).to include(Time.zone.now.strftime('%-d %b %Y %-l'))
     expect(certificate.course).to eq(course)
     expect(certificate.image.attached?).to eq(true)
     expect(certificate.active).to eq(false)
@@ -151,6 +151,48 @@ feature 'Certificates', js: true do
 
       expect(Certificate.count).to eq(1)
       expect(Certificate.first).to eq(certificate_issued)
+    end
+  end
+
+  context 'school has courses with/without milestone targets in highest level' do
+    #  course without milestone target group
+    let(:course_without_targets) { create :course, school: school }
+    let!(:certificate_c1) { create :certificate, :active, course: course_without_targets }
+
+    # course with milestone target group
+    let(:course_with_milestone_target) { create :course, school: school }
+    let!(:level_c2) { create :level, :one, course: course_with_milestone_target }
+    let!(:target_group_c2) { create :target_group, level: level_c2, milestone: true }
+    let!(:certificate_c2) { create :certificate, :active, course: course_with_milestone_target }
+
+    # course with only archived target milestone group
+    let(:course_with_archived_milestone) { create :course, school: school }
+    let!(:level_c3) { create :level, :one, course: course_with_archived_milestone }
+    let!(:target_group_c3) { create :target_group, level: level_c3, milestone: true, archived: true, safe_to_archive: true }
+    let!(:certificate_c3) { create :certificate, :active, course: course_with_archived_milestone }
+
+    scenario 'user visits certificate editor for course without milestone targets in highest level' do
+      sign_in_user school_admin.user, referrer: certificates_school_course_path(course_without_targets)
+
+      find("a[title='Edit Certificate #{certificate_c1.name}'").click
+
+      expect(page).to have_text('Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.')
+    end
+
+    scenario 'user visits certificate editor for course with milestone targets in highest level' do
+      sign_in_user school_admin.user, referrer: certificates_school_course_path(course_with_milestone_target)
+
+      find("a[title='Edit Certificate #{certificate_c2.name}'").click
+
+      expect(page).not_to have_text('Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.')
+    end
+
+    scenario 'user visits certificate editor for course with no live milestone target groups' do
+      sign_in_user school_admin.user, referrer: certificates_school_course_path(course_with_archived_milestone)
+
+      find("a[title='Edit Certificate #{certificate_c3.name}'").click
+
+      expect(page).to have_text('Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.')
     end
   end
 end

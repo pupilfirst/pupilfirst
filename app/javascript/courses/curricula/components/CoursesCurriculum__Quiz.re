@@ -13,6 +13,7 @@ module CreateQuizSubmissionQuery = [%graphql
         createdAt
         checklist
       }
+      levelUpEligibility
      }
    }
  |}
@@ -33,6 +34,12 @@ let createQuizSubmission =
          let checklist =
            submission##checklist
            |> Json.Decode.array(SubmissionChecklistItem.decode([||]));
+
+         let levelUpEligibility =
+           LevelUpEligibility.makeOptionFromJs(
+             response##createQuizSubmission##levelUpEligibility,
+           );
+
          addSubmissionCB(
            Submission.make(
              ~id=submission##id,
@@ -40,6 +47,7 @@ let createQuizSubmission =
              ~status=Submission.MarkedAsComplete,
              ~checklist,
            ),
+           levelUpEligibility,
          );
        | None => setSaving(_ => false)
        };

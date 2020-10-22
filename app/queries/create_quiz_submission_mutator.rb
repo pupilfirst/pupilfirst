@@ -1,5 +1,6 @@
 class CreateQuizSubmissionMutator < ApplicationQuery
   include AuthorizeStudent
+  include LevelUpEligibilityComputable
 
   property :target_id, validates: { presence: { message: 'Blank Target Id' } }
   property :answer_ids
@@ -16,7 +17,7 @@ class CreateQuizSubmissionMutator < ApplicationQuery
         passed_at: Time.zone.now
       )
 
-      founders.map do |student|
+      students.map do |student|
         student.timeline_event_owners.create!(timeline_event: submission, latest: true)
       end
 

@@ -21,6 +21,8 @@ class User < ApplicationRecord
   has_many :created_posts, class_name: 'Post', foreign_key: 'creator_id', inverse_of: :creator, dependent: :nullify
   has_many :edited_posts, class_name: 'Post', foreign_key: 'editor_id', inverse_of: :editor, dependent: :nullify
   has_many :coach_notes, class_name: 'CoachNote', foreign_key: 'author_id', inverse_of: :author, dependent: :nullify
+  has_many :topic_subscription, dependent: :destroy
+  has_many :notifications, foreign_key: :recipient_id, inverse_of: :recipient, dependent: :destroy
 
   has_secure_token :login_token
   has_secure_token :reset_password_token
@@ -81,24 +83,24 @@ class User < ApplicationRecord
 
   def avatar_variant(version)
     case version
-    when :mid
-      avatar.variant(combine_options:
-        {
-          auto_orient: true,
-          gravity: "center",
-          resize: '320x320^',
-          crop: '320x320+0+0'
-        })
-    when :thumb
-      avatar.variant(combine_options:
-        {
-          auto_orient: true,
-          gravity: 'center',
-          resize: '100x100^',
-          crop: '100x100+0+0'
-        })
-    else
-      avatar
+      when :mid
+        avatar.variant(combine_options:
+          {
+            auto_orient: true,
+            gravity: "center",
+            resize: '320x320^',
+            crop: '320x320+0+0'
+          })
+      when :thumb
+        avatar.variant(combine_options:
+          {
+            auto_orient: true,
+            gravity: 'center',
+            resize: '100x100^',
+            crop: '100x100+0+0'
+          })
+      else
+        avatar
     end
   end
 

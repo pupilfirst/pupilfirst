@@ -1,4 +1,5 @@
 exception UnexpectedBlockType(string);
+exception UnexpectedRequestSource(string);
 
 type markdown = string;
 type url = string;
@@ -6,7 +7,7 @@ type title = string;
 type caption = string;
 type embedCode = option(string);
 type filename = string;
-type requestSource = option(string);
+type requestSource = [ | `User | `VimeoUpload];
 type lastResolvedAt = option(Js.Date.t);
 
 type blockType =
@@ -25,15 +26,33 @@ and id = string;
 let decodeMarkdownContent = json =>
   Json.Decode.(json |> field("markdown", string));
 let decodeFileContent = json => Json.Decode.(json |> field("title", string));
+
 let decodeImageContent = json =>
   Json.Decode.(json |> field("caption", string));
-let decodeEmbedContent = json =>
+
+let decodeEmbedContent = json => {
+  let requestSourceString =
+    Json.Decode.(field("requestSource", string, json));
+
+  let requestSource =
+    switch (requestSourceString) {
+    | "User" => `User
+    | "VimeoUpload" => `VimeoUpload
+    | otherRequestSource =>
+      Rollbar.error(
+        "Unexpected requestSource encountered in ContentBlock.re: "
+        ++ otherRequestSource,
+      );
+      raise(UnexpectedRequestSource(otherRequestSource));
+    };
+
   Json.Decode.(
     json |> field("url", string),
     json |> optional(field("embedCode", string)),
-    json |> optional(field("requestSource", string)),
+    requestSource,
     json |> optional(field("lastResolvedAt", DateFns.decodeISO)),
   );
+};
 
 let decode = json => {
   open Json.Decode;

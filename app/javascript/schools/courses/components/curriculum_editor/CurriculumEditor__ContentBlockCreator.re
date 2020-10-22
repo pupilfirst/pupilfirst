@@ -20,7 +20,7 @@ module CreateMarkdownContentBlock = [%graphql
 
 module CreateEmbedContentBlock = [%graphql
   {|
-    mutation CreateEmbedContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $url: String!, $requestSource: String!) {
+    mutation CreateEmbedContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $url: String!, $requestSource: EmbedRequestSource!) {
       createEmbedContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId, url: $url, requestSource: $requestSource) {
         contentBlock {
           ...ContentBlock.Fragments.AllFields
@@ -299,6 +299,7 @@ let handleVimeoVideoUpload =
     (file, vimeoVideo, send, target, aboveContentBlock, addContentBlockCB) => {
   let url = vimeoVideo##link;
   let uploadUrl = vimeoVideo##uploadLink;
+
   let onSuccess = () =>
     handleCreateEmbedContentBlock(
       target,
@@ -306,7 +307,7 @@ let handleVimeoVideoUpload =
       url,
       send,
       addContentBlockCB,
-      "vimeo_upload",
+      `VimeoUpload,
     );
 
   EnvUtils.isTest()
@@ -569,13 +570,14 @@ let updateVideoDescription = (send, event) => {
 let onEmbedFormSave =
     (target, aboveContentBlock, url, send, addContentBlockCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
+
   handleCreateEmbedContentBlock(
     target,
     aboveContentBlock,
     url,
     send,
     addContentBlockCB,
-    "default",
+    `User,
   );
 };
 

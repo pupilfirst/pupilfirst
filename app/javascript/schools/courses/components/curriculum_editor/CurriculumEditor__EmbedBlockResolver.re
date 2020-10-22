@@ -53,16 +53,12 @@ let resolveEmbedCode = (contentBlockId, send) => {
   |> ignore;
 };
 
-let embedCodeErrorText = (loading, requestSource) => {
+let embedCodeErrorText = (loading, requestSource) =>
   switch (loading, requestSource) {
-  | (true, _)
-  | (false, None) => "Unable to resolve, retrying in 1 minute"
-  | (false, Some(requestSource)) =>
-    requestSource == "vimeo_upload"
-      ? "Processing Video, retrying in 1 minute"
-      : "Unable to embed, retrying in 1 minute"
+  | (true, _) => "Trying to embed URL..."
+  | (false, `VimeoUpload) => "Video is being processed, retrying in 1 minute..."
+  | (false, `User) => "Unable to embed, retrying in 1 minute..."
   };
-};
 
 let onTimeout = (contentBlockId, send, ()) => {
   resolveEmbedCode(contentBlockId, send);

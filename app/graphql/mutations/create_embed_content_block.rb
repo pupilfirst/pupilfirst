@@ -3,7 +3,7 @@ module Mutations
     argument :target_id, ID, required: true
     argument :above_content_block_id, ID, required: false
     argument :url, String, required: true
-    argument :request_source, String, required: true
+    argument :request_source, Types::EmbedRequestSource, required: true
 
     description "Creates an embed content block."
 

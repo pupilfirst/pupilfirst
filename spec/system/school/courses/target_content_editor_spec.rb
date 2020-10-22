@@ -227,7 +227,7 @@ feature 'Target Content Editor', js: true do
     expect(cb.content['url']).to eq(embed_url)
     expect(cb.content['embed_code']).to eq(nil)
     expect(cb.content['last_resolved_at']).to be_present
-    expect(cb.content['request_source']).to eq('default')
+    expect(cb.content['request_source']).to eq('User')
   end
 
   context 'when video upload is enabled for a school' do
@@ -300,7 +300,7 @@ feature 'Target Content Editor', js: true do
       expect(cb.block_type).to eq(ContentBlock::BLOCK_TYPE_EMBED)
       expect(cb.content['embed_code']).to eq(nil)
       expect(cb.content['last_resolved_at']).to be_present
-      expect(cb.content['request_source']).to eq('vimeo_upload')
+      expect(cb.content['request_source']).to eq('VimeoUpload')
     end
   end
 

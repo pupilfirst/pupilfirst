@@ -3,9 +3,9 @@ class CreateEmbedContentBlockMutator < ApplicationQuery
   include ContentBlockCreatable
 
   property :target_id, validates: { presence: true }
-  property :url, validates: { presence: true, length: { maximum: 2048 } }
+  property :url, validates: { presence: true, url: true }
   property :above_content_block_id
-  property :request_source, validates: { inclusion: { in: %w[vimeo_upload default] } }
+  property :request_source, validates: { presence: true }
 
   def create_embed_content_block
     ContentBlock.transaction do

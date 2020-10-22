@@ -190,6 +190,7 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
   | ContentBlock.File(_url, title, _filename) =>
     let mutation = UpdateFileBlockMutation.make(~id, ~title, ());
     let extractor = result => result##updateFileBlock##contentBlock;
+
     updateContentBlockBlock(
       mutation,
       extractor,
@@ -210,6 +211,7 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
   | Image(_url, caption) =>
     let mutation = UpdateImageBlockMutation.make(~id, ~caption, ());
     let extractor = result => result##updateImageBlock##contentBlock;
+
     updateContentBlockBlock(
       mutation,
       extractor,

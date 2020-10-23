@@ -8,13 +8,9 @@ module Mutations
 
     def resolve(params)
       mutator = ResolveEmbedCodeMutator.new(context, params)
-
-      if mutator.valid?
-        { embed_code: mutator.resolve }
-      else
-        mutator.notify_errors
-        { success: false }
-      end
+      embed_code = mutator.valid? ? mutator.resolve : nil
+      mutator.notify_errors if embed_code.blank?
+      { embed_code: embed_code }
     end
   end
 end

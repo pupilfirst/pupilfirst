@@ -4,7 +4,7 @@ class Notification < ApplicationRecord
   belongs_to :actor, class_name: 'User', optional: true
   belongs_to :notifiable, polymorphic: true, optional: true
 
-  enum :object => { topic_created: "topic.created", topic_edited: "topic.edited" }
+  enum :object_type => { topic_created: "topic.created", topic_edited: "topic.edited" }
 
   scope :unread, -> { where(read_at: nil) }
   scope :read, -> { where.not(read_at: nil) }

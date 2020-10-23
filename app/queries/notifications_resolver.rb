@@ -1,7 +1,7 @@
 class NotificationsResolver < ApplicationQuery
   property :search
   property :unread
-  property :object, validates: { inclusion: { in: Notification.objects.keys } }, allow_blank: true
+  property :object_type, validates: { inclusion: { in: Notification.objects.keys } }, allow_blank: true
   property :sort_direction
 
   def notifications
@@ -45,7 +45,7 @@ class NotificationsResolver < ApplicationQuery
   end
 
   def filter_by_object_type
-    object.present? ? filter_by_read.where(object: object) : filter_by_read
+    object.present? ? filter_by_read.where(object_type: object_type) : filter_by_read
   end
 
   def applicable_notifications

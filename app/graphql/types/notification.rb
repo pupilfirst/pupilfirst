@@ -7,6 +7,6 @@ module Types
     field :read_at, GraphQL::Types::ISO8601DateTime, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :message, String, null: false
-    # field :object, Types::NotificationObject, null: false
+    field :object_type, Types::NotificationObjectType, null: false
   end
 end

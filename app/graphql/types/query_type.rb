@@ -126,7 +126,7 @@ module Types
     resolved_field :notifications, Types::Notification.connection_type, null: false do
       argument :search, String, required: false
       argument :unread, Boolean, required: false
-      argument :object, Types::NotificationObject, required: false
+      argument :object_type, Types::NotificationObjectType, required: false
       argument :sort_direction, Types::SortDirectionType, required: false
     end
   end

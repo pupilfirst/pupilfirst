@@ -35,6 +35,7 @@ module Vimeo
             vimeo: false
           },
           title: {
+            name: 'hide',
             owner: 'hide',
             portrait: 'hide'
           }

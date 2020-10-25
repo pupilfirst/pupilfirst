@@ -7,11 +7,10 @@ module Layouts
     def nav_links
       footer_links = current_user.present? ? [{ title: 'Home', url: '/' }, { title: 'Dashboard', url: '/dashboard' }] : []
 
-      target_blank = { target_blank: { target: '_blank', rel: 'noopener' } }
       custom_links = SchoolLink.where(
         school: current_school,
         kind: SchoolLink::KIND_FOOTER
-      ).map { |sl| { title: sl.title, url: sl.url }.merge(target_blank) }
+      ).map { |sl| { title: sl.title, url: sl.url, custom: true } }
 
       footer_links + custom_links
     end

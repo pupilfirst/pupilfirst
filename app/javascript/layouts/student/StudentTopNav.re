@@ -3,7 +3,6 @@
 let str = React.string;
 
 open StudentTopNav__Types;
-let targetBlank(navTitle) = { navTitle === "Admin" || navTitle === "Dashboard" }
 
 let headerLink = (key, link) =>
   <div
@@ -12,9 +11,8 @@ let headerLink = (key, link) =>
     <a
       className="no-underline bg-gray-100 md:bg-white text-black hover:text-primary-500 w-full p-4 md:p-2"
       href={link |> NavLink.url}
-      target={targetBlank(NavLink.title(link)) ? "" : "_blank"}
-      rel={targetBlank(NavLink.title(link)) ? "" : "noopener"}
-    >
+      target=?{NavLink.local(link) ? None : Some("_blank")}
+      rel=?{NavLink.local(link) ? None : Some("noopener")}>
       {link |> NavLink.title |> str}
     </a>
   </div>;

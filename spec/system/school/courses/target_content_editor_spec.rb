@@ -4,7 +4,6 @@ feature 'Target Content Editor', js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
   include NotificationHelper
-  include WithEnvHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
@@ -213,7 +212,7 @@ feature 'Target Content Editor', js: true do
     stub_request(:get, "https://www.youtube.com/oembed?format=json&url=#{embed_url}")
       .to_return(body: '')
 
-    # Try adding a new file block.
+    # Try adding a new embed block.
     within('.content-block-creator--open') do
       find('p', text: 'Embed').click
       fill_in('URL to Embed', with: embed_url)
@@ -231,15 +230,15 @@ feature 'Target Content Editor', js: true do
   end
 
   context 'when video upload is enabled for a school' do
-    let(:env) { { VIMEO_ACCESS_TOKEN: 'vimeo_access_token' } }
-    let(:vimeo_access_token) { 'vimeo_access_token' }
+    let(:vimeo_access_token) { SecureRandom.hex }
     let(:title) { Faker::Lorem.words(number: 3).join(' ') }
     let(:description) { Faker::Lorem.words(number: 10).join(' ') }
+
     let!(:request_headers) do
       {
         'Accept' => 'application/vnd.vimeo.*+json;version=3.4',
         'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-        'Authorization' => 'bearer vimeo_access_token',
+        'Authorization' => "Bearer #{vimeo_access_token}",
         'Content-Type' => 'application/json',
         'Host' => 'api.vimeo.com',
         'User-Agent' => 'Ruby'
@@ -255,13 +254,12 @@ feature 'Target Content Editor', js: true do
     end
 
     before do
-      config = school.configuration
-      config['vimeo_access_token'] = vimeo_access_token
-      school.update!(configuration: config)
+      school.configuration['vimeo_access_token'] = vimeo_access_token
+      school.save!
 
       stub_request(:post, 'https://api.vimeo.com/me/videos/')
         .with(
-          body: "{\"upload\":{\"approach\":\"tus\",\"size\":588563},\"privacy\":{\"embed\":\"whitelist\"},\"embed\":{\"buttons\":{\"like\":false,\"watchlater\":false,\"share\":false},\"logos\":{\"vimeo\":false},\"title\":{\"owner\":\"hide\",\"portrait\":\"hide\"}},\"name\":\"#{title}\",\"description\":\"#{description}\"}",
+          body: "{\"upload\":{\"approach\":\"tus\",\"size\":588563},\"privacy\":{\"embed\":\"whitelist\",\"view\":\"disable\"},\"embed\":{\"buttons\":{\"like\":false,\"watchlater\":false,\"share\":false},\"logos\":{\"vimeo\":false},\"title\":{\"name\":\"show\",\"owner\":\"hide\",\"portrait\":\"hide\"}},\"name\":\"#{title}\",\"description\":\"#{description}\"}",
           headers: request_headers
         ).to_return(status: 200, body: request_body.to_json, headers: {})
 
@@ -281,7 +279,7 @@ feature 'Target Content Editor', js: true do
           find('label', text: 'Select File and Upload').click
         end
 
-        expect(page).to have_text('Invalid file format, we support mp4, mov, wmv, avi and flv')
+        expect(page).to have_text('Invalid file format, please select an MP4, MOV, WMV, AVI or FLV file')
 
         # Upload a video
         fill_in 'Title', with: title
@@ -393,7 +391,7 @@ feature 'Target Content Editor', js: true do
     end
 
     expect(page).not_to have_selector("button[title='Save Changes']")
-    expect(ContentBlock.first.content).to eq('title' => new_title)
+    expect(first_block.reload.content).to eq('title' => new_title)
 
     # Try adding a new markdown block.
     within('.content-block-creator--open') do
@@ -401,7 +399,7 @@ feature 'Target Content Editor', js: true do
     end
 
     expect(page).to have_selector('textarea[aria-label="Markdown editor"]')
-    expect(ContentBlock.last.content).to eq('markdown' => '')
+    expect(ContentBlock.order(created_at: :desc).first.content).to eq('markdown' => '')
 
     window = window_opened_by { click_link 'View as Student' }
 

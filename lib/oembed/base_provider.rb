@@ -9,18 +9,22 @@ module Oembed
     end
 
     def embed_code
-      begin
-        # Hit the endpoint and get raw response.
-        response = RestClient.get(url + @resource_url)
+      # Hit the endpoint and get raw response.
+      response = RestClient.get(url + @resource_url)
 
-        # Parse the reponse as JSON.
-        parsed_response = JSON.parse(response)
+      # Parse the reponse as JSON.
+      parsed_response = JSON.parse(response)
 
-        # Return the 'html' key from the response.
-        parsed_response['html']
-      rescue => _e
-        nil
+      # Return the 'html' key from the response.
+      parsed_response['html']
+    rescue => e
+      Rails.logger.error "Oembed::BaseProvider resolve failed: #{e.message}"
+
+      if e.backtrace.respond_to?(:join)
+        Rails.logger.error(e.backtrace.join("\n"))
       end
+
+      nil
     end
   end
 end

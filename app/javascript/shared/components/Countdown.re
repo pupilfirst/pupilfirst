@@ -9,11 +9,11 @@ type state = {
 type action =
   | SetTimeout(Js.Global.timeoutId)
   | Decrement
-  | ToggleRelaod;
+  | ToggleReload;
 
 let reducer = (state, action) =>
   switch (action) {
-  | ToggleRelaod => {...state, reload: !state.reload}
+  | ToggleReload => {...state, reload: !state.reload}
   | SetTimeout(timeoutId) => {...state, timeoutId: Some(timeoutId)}
   | Decrement => {...state, seconds: state.seconds - 1, reload: !state.reload}
   };

@@ -6,7 +6,7 @@ class AddNotificationsTable < ActiveRecord::Migration[6.0]
       t.references :notifiable, polymorphic: true, index: true
       t.datetime :read_at
       t.text :message
-      t.string :object_type
+      t.string :event
 
       t.timestamps
     end

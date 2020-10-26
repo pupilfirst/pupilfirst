@@ -1,7 +1,7 @@
 class NotificationsResolver < ApplicationQuery
   property :search
   property :unread
-  property :object_type, validates: { inclusion: { in: Notification.objects.keys } }, allow_blank: true
+  property :event, validates: { inclusion: { in: Notification.events.keys } }, allow_blank: true
   property :sort_direction
 
   def notifications
@@ -44,11 +44,11 @@ class NotificationsResolver < ApplicationQuery
     unread ? notifications.unread : notifications.read
   end
 
-  def filter_by_object_type
-    object.present? ? filter_by_read.where(object_type: object_type) : filter_by_read
+  def filter_by_event
+    event.present? ? filter_by_read.where(event: event) : filter_by_read
   end
 
   def applicable_notifications
-    filter_by_object_type.order("notifications.created_at #{sort_direction_string}")
+    filter_by_event.order("notifications.created_at #{sort_direction_string}")
   end
 end

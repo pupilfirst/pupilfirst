@@ -9,7 +9,7 @@ describe Vimeo::ApiService do
   let(:vimeo_access_token) { SecureRandom.hex }
 
   describe '#create_video' do
-    let(:size) { rand(1000..100_000) }
+    let(:size) { Faker::Number.number(digits: 9) }
     let(:name) { Faker::Lorem.words(number: 4).join(' ') }
     let(:description) { Faker::Lorem.paragraph }
 
@@ -33,6 +33,7 @@ describe Vimeo::ApiService do
             vimeo: false
           },
           title: {
+            name: 'show',
             owner: 'hide',
             portrait: 'hide'
           }
@@ -76,11 +77,34 @@ describe Vimeo::ApiService do
       expect(response['link']).to eq('https://vimeo.com/1234567890')
       expect(response['upload']['upload_link']).to eq(upload_link)
     end
+
+    context 'when the video is uploaded without a name' do
+      let(:name) { '' }
+
+      it 'creates a new video with hidden title' do
+        data = expected_data.dup
+        data[:embed][:title][:name] = 'hide'
+
+        stub_request(:post, "https://api.vimeo.com/me/videos/").
+          with(
+            body: data.to_json,
+            headers: {
+              'Accept' => 'application/vnd.vimeo.*+json;version=3.4',
+              'Authorization' => "Bearer #{vimeo_access_token}",
+              'Content-Type' => 'application/json',
+            }).
+          to_return(status: 200, body: response_body)
+
+        response = subject.create_video(size, name, description)
+
+        expect(response['uri']).to eq('/videos/1234567890')
+      end
+    end
   end
 
   describe '#add_allowed_domain_to_video' do
     let(:domain) { school.domains.first.fqdn }
-    let(:video_id) { rand(100_000_000..999_999_999).to_s }
+    let(:video_id) { Faker::Number.number(digits: 10).to_s }
 
     before do
 

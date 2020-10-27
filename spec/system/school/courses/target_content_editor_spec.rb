@@ -204,6 +204,104 @@ feature 'Target Content Editor', js: true do
     expect(cb.content['embed_code']).to be_present
   end
 
+  scenario 'school admin adds an invalid embed block' do
+    sign_in_user school_admin.user, referrer: content_school_course_target_path(course, target)
+
+    embed_url = 'https://www.youtube.com/watch?v=INVALID_ID'
+
+    stub_request(:get, "https://www.youtube.com/oembed?format=json&url=#{embed_url}")
+      .to_return(body: '')
+
+    # Try adding a new embed block.
+    within('.content-block-creator--open') do
+      find('p', text: 'Embed').click
+      fill_in('URL to Embed', with: embed_url)
+      click_button('Save')
+    end
+
+    expect(page).to have_text("Unable to embed, retrying in 1 minute")
+
+    cb = ContentBlock.last
+    expect(cb.block_type).to eq(ContentBlock::BLOCK_TYPE_EMBED)
+    expect(cb.content['url']).to eq(embed_url)
+    expect(cb.content['embed_code']).to eq(nil)
+    expect(cb.content['last_resolved_at']).to be_present
+    expect(cb.content['request_source']).to eq('User')
+  end
+
+  context 'when video upload is enabled for a school' do
+    let(:vimeo_access_token) { SecureRandom.hex }
+    let(:title) { Faker::Lorem.words(number: 3).join(' ') }
+    let(:description) { Faker::Lorem.words(number: 10).join(' ') }
+
+    let!(:request_headers) do
+      {
+        'Accept' => 'application/vnd.vimeo.*+json;version=3.4',
+        'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Authorization' => "Bearer #{vimeo_access_token}",
+        'Content-Type' => 'application/json',
+        'Host' => 'api.vimeo.com',
+        'User-Agent' => 'Ruby'
+      }
+    end
+
+    let!(:request_body) do
+      {
+        'uri' => '/videos/123456789',
+        'link' => 'https://vimeo.com/123456789',
+        'upload' => { 'upload_link' => 'https://vimeo.com/123456789/upload' }
+      }
+    end
+
+    before do
+      school.configuration['vimeo_access_token'] = vimeo_access_token
+      school.save!
+
+      stub_request(:post, 'https://api.vimeo.com/me/videos/')
+        .with(
+          body: "{\"upload\":{\"approach\":\"tus\",\"size\":588563},\"privacy\":{\"embed\":\"whitelist\",\"view\":\"disable\"},\"embed\":{\"buttons\":{\"like\":false,\"watchlater\":false,\"share\":false},\"logos\":{\"vimeo\":false},\"title\":{\"name\":\"show\",\"owner\":\"hide\",\"portrait\":\"hide\"}},\"name\":\"#{title}\",\"description\":\"#{description}\"}",
+          headers: request_headers
+        ).to_return(status: 200, body: request_body.to_json, headers: {})
+
+      stub_request(:put, "https://api.vimeo.com/videos/123456789/privacy/domains/test.host/").with(body: "{}", headers: request_headers).to_return(status: 200, body: "", headers: {})
+      stub_request(:get, "https://vimeo.com/api/oembed.json?url=https://vimeo.com/123456789").to_return(body: '')
+    end
+
+    scenario 'school admin uploads a video' do
+      sign_in_user school_admin.user, referrer: content_school_course_target_path(course, target)
+
+      within('.content-block-creator--open') do
+        find('p', text: 'Video').click
+
+        # Try uploading an image
+        filename_image = 'pdf-sample.pdf'
+        page.attach_file(file_path(filename_image)) do
+          find('label', text: 'Select File and Upload').click
+        end
+
+        expect(page).to have_text('Invalid file format, please select an MP4, MOV, WMV, AVI or FLV file')
+
+        # Upload a video
+        fill_in 'Title', with: title
+        fill_in 'Description', with: description
+
+        filename_video = 'pupilfirst-logo.mp4'
+        page.attach_file(file_path(filename_video)) do
+          find('label', text: 'Select File and Upload').click
+        end
+      end
+
+      expect(page).to have_text("https://vimeo.com/123456789")
+      expect(target.current_target_version.content_blocks.count).to eq(2)
+
+      cb = ContentBlock.last
+      expect(cb.block_type).to eq(ContentBlock::BLOCK_TYPE_EMBED)
+      expect(cb.content['embed_code']).to eq(nil)
+      expect(cb.content['last_resolved_at']).to be_present
+      expect(cb.content['request_source']).to eq('VimeoUpload')
+    end
+  end
+
   context 'when a target has many content blocks' do
     let!(:target) { create :target, target_group: target_group_1 }
     let!(:target_version) { create(:target_version, target: target) }
@@ -293,7 +391,7 @@ feature 'Target Content Editor', js: true do
     end
 
     expect(page).not_to have_selector("button[title='Save Changes']")
-    expect(ContentBlock.first.content).to eq('title' => new_title)
+    expect(first_block.reload.content).to eq('title' => new_title)
 
     # Try adding a new markdown block.
     within('.content-block-creator--open') do
@@ -301,7 +399,7 @@ feature 'Target Content Editor', js: true do
     end
 
     expect(page).to have_selector('textarea[aria-label="Markdown editor"]')
-    expect(ContentBlock.last.content).to eq('markdown' => '')
+    expect(ContentBlock.order(created_at: :desc).first.content).to eq('markdown' => '')
 
     window = window_opened_by { click_link 'View as Student' }
 

@@ -150,6 +150,18 @@ You need to add a cache store to handle API rate limiting in the application.
 2. Set credentials for OAuth apps using environment variables (find required keys in `example.env`).
 3. Set the `SSO_DOMAIN` environment variable to your fully qualified domain name (`your.school.domain`, for example).
 
+## Direct Upload to Vimeo
+
+To enable direct uploads to a Vimeo account from the curriculum editor, add the `VIMEO_ACCESS_TOKEN` environment variable.
+
+Make sure that the access token has the following scopes enabled:
+
+- `private`
+- `create`
+- `edit`
+- `upload`
+- `video_files`
+
 ## Troubleshooting
 
 If you're encountering crashes or errors, the first thing you should do is check the server logs. You can watch the Rails `production.log` file on Heroku by using the `logs` command:

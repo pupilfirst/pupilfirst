@@ -3,16 +3,9 @@ class CreateEmbedContentBlockMutator < ApplicationQuery
   include ContentBlockCreatable
 
   property :target_id, validates: { presence: true }
-  property :url, validates: { presence: true, length: { maximum: 2048 } }
+  property :url, validates: { presence: true, url: true }
   property :above_content_block_id
-
-  validate :embed_code_must_be_available
-
-  def embed_code_must_be_available
-    return if embed_code.present?
-
-    errors[:base] << "Failed to embed the given URL. Please check if this is a supported website and try again."
-  end
+  property :request_source, validates: { presence: true }
 
   def create_embed_content_block
     ContentBlock.transaction do
@@ -34,7 +27,7 @@ class CreateEmbedContentBlockMutator < ApplicationQuery
   def create_embed_block
     target_version.content_blocks.create!(
       block_type: ContentBlock::BLOCK_TYPE_EMBED,
-      content: { url: url, embed_code: embed_code },
+      content: { url: url, request_source: request_source, embed_code: embed_code, last_resolved_at: Time.zone.now },
       sort_index: sort_index
     )
   end

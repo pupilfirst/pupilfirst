@@ -114,6 +114,7 @@ group :development do
   gem 'listen', '~> 3.2' # The Listen gem listens to file modifications and notifies you about the changes.
   gem 'graphiql-rails', '~> 1.7'
   gem 'foreman'
+  gem 'rails-erd'
 end
 
 group :test do

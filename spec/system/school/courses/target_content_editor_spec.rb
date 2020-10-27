@@ -253,13 +253,15 @@ feature 'Target Content Editor', js: true do
       }
     end
 
+    let!(:account_type) { %w[basic pro].sample }
+
     before do
-      school.configuration['vimeo_access_token'] = vimeo_access_token
+      school.configuration['vimeo'] = { vimeo_access_token: vimeo_access_token, account_type: account_type }
       school.save!
 
       stub_request(:post, 'https://api.vimeo.com/me/videos/')
         .with(
-          body: "{\"upload\":{\"approach\":\"tus\",\"size\":588563},\"privacy\":{\"embed\":\"whitelist\",\"view\":\"disable\"},\"embed\":{\"buttons\":{\"like\":false,\"watchlater\":false,\"share\":false},\"logos\":{\"vimeo\":false},\"title\":{\"name\":\"show\",\"owner\":\"hide\",\"portrait\":\"hide\"}},\"name\":\"#{title}\",\"description\":\"#{description}\"}",
+          body: "{\"upload\":{\"approach\":\"tus\",\"size\":588563},\"privacy\":{\"embed\":\"whitelist\",\"view\":\"#{account_type == 'basic' ? 'anybody' : 'disable'}\"},\"embed\":{\"buttons\":{\"like\":false,\"watchlater\":false,\"share\":false},\"logos\":{\"vimeo\":false},\"title\":{\"name\":\"show\",\"owner\":\"hide\",\"portrait\":\"hide\"}},\"name\":\"#{title}\",\"description\":\"#{description}\"}",
           headers: request_headers
         ).to_return(status: 200, body: request_body.to_json, headers: {})
 

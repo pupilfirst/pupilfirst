@@ -23,7 +23,7 @@ module Vimeo
         },
         privacy: {
           embed: 'whitelist',
-          view: 'disable'
+          view: account_type == 'basic' ? 'anybody' : 'disable'
         },
         embed: {
           buttons: {
@@ -88,8 +88,13 @@ module Vimeo
     end
 
     def access_token
-      @current_school.configuration['vimeo_access_token'] ||
+      (@current_school.configuration['vimeo'] && @current_school.configuration['vimeo']['vimeo_access_token']) ||
         Rails.application.secrets.vimeo_access_token
+    end
+
+    def account_type
+      (@current_school.configuration['vimeo'] && @current_school.configuration['vimeo']['account_type']) ||
+        Rails.application.secrets.vimeo_account_type || 'basic'
     end
 
     def base_url

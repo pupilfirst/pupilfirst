@@ -73,7 +73,7 @@ module Schools
       end
 
       def vimeo_access_token?
-        token = @course.school.configuration['vimeo_access_token'] || 
+        token = @course.school.configuration['vimeo'] && @course.school.configuration['vimeo']['vimeo_access_token'] ||
           Rails.application.secrets.vimeo_access_token
         token.present?
       end

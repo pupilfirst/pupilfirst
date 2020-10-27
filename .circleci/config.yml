@@ -7,7 +7,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/ruby:2.7-node
+      - image: cimg/ruby:2.7.1-node
     steps:
       - checkout
       - ruby/install-deps
@@ -17,7 +17,7 @@ jobs:
   test:
     parallelism: 1
     docker:
-      - image: cimg/ruby:2.7-node
+      - image: cimg/ruby:2.7.1-node
       - image: circleci/postgres:12
         environment:
           POSTGRES_USER: postgres
@@ -58,7 +58,7 @@ jobs:
 
   coverage:
     docker:
-      - image: cimg/ruby:2.6-node
+      - image: cimg/ruby:2.7.1-node
     steps:
       - checkout
       - ruby/install-deps

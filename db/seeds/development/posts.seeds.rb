@@ -1,15 +1,17 @@
-after 'development:communities', 'development:users' do
+after 'development:communities', 'development:topic_categories', 'development:users' do
   puts 'Seeding topics and posts...'
 
   community = Community.first
   community_users = community.users.first(5)
+  topic_categories = community.topic_categories.all + [nil]
 
   # Let's add a few topics and posts so that the resulting topics paginates the community index.
   3.times do
     community_users.each do |topic_author|
       topic = Topic.create!(
         title: Faker::Lorem.sentence,
-        community: community
+        community: community,
+        topic_category: topic_categories.sample
       )
 
       topic.posts.create!(

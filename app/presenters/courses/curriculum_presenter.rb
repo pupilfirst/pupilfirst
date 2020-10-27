@@ -20,6 +20,7 @@ module Courses
           users: users,
           evaluation_criteria: evaluation_criteria,
           preview: false,
+          level_up_eligibility: level_up_eligibility,
           **default_props
         }
       else
@@ -30,11 +31,15 @@ module Courses
           users: [],
           evaluation_criteria: [],
           preview: true,
+          level_up_eligibility: Students::LevelUpEligibilityService::ELIGIBILITY_CURRENT_LEVEL_INCOMPLETE,
           **default_props
         }
       end
     end
 
+    def level_up_eligibility
+      Students::LevelUpEligibilityService.new(current_student).eligibility
+    end
 
     def default_props
       {
@@ -99,7 +104,7 @@ module Courses
 
       scope.select(*attributes).map do |target|
         details = target.attributes.slice(*attributes)
-        details[:prerequisite_target_ids] = target.prerequisite_targets.live.pluck(:id)
+        details[:prerequisite_target_ids] = target.target_prerequisites.pluck(:prerequisite_target_id)
         details[:reviewed] = target.evaluation_criteria.present?
         details
       end

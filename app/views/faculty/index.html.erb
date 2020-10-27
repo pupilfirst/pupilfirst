@@ -1,0 +1,17 @@
+<%  presenter = FacultyModule::IndexPresenter.new(@coaches, self) %>
+
+<% content_for(:head) do %>
+  <title>Coaches | <%= current_school.name %></title>
+  <meta property="og:title" content="Coaches at <%= current_school.name %>"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="<%= coaches_index_url %>"/>
+  <%= stylesheet_pack_tag 'CoachesIndexPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'CoachesIndexPack', nonce: true %>
+<% end %>
+
+<script id="react-root-data" type="application/json"><%== presenter.props_to_json %></script>
+
+<div id="react-root"></div>

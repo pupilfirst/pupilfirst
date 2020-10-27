@@ -73,10 +73,11 @@ let completionTypeToString = (completionType, targetStatus) =>
   | (Pending, LinkToComplete) => "Visit Link to Complete"
   | (Pending, MarkAsComplete) => "Mark as Complete"
   | (
-      Submitted | Passed | Failed | Locked(CourseLocked | AccessLocked),
+      PendingReview | Completed | Rejected |
+      Locked(CourseLocked | AccessLocked),
       Evaluated | TakeQuiz,
     ) => "Submissions & Feedback"
-  | (Submitted | Passed | Failed, LinkToComplete | MarkAsComplete) => "Completed"
+  | (PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) => "Completed"
   | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete) => "Locked"
   };
 
@@ -148,14 +149,14 @@ let tabOptions = (state, send, targetDetails, targetStatus) => {
      |> Array.of_list
      |> React.array}
     {switch (targetStatus |> TargetStatus.status, completionType) {
-     | (Pending | Submitted | Passed | Failed, Evaluated | TakeQuiz) =>
+     | (Pending | PendingReview | Completed | Rejected, Evaluated | TakeQuiz) =>
        tabButton(Complete(completionType), state, send, targetStatus)
      | (Locked(CourseLocked | AccessLocked), Evaluated | TakeQuiz) =>
        targetDetails |> TargetDetails.submissions |> ListUtils.isNotEmpty
          ? tabButton(Complete(completionType), state, send, targetStatus)
          : React.null
      | (
-         Pending | Submitted | Passed | Failed,
+         Pending | PendingReview | Completed | Rejected,
          LinkToComplete | MarkAsComplete,
        ) =>
        tabLink(Complete(completionType), state, send, targetStatus)
@@ -164,7 +165,8 @@ let tabOptions = (state, send, targetDetails, targetStatus) => {
   </div>;
 };
 
-let addSubmission = (target, state, send, addSubmissionCB, submission) => {
+let addSubmission =
+    (target, state, send, addSubmissionCB, submission, levelUpEligibility) => {
   switch (state.targetDetails) {
   | Some(targetDetails) =>
     let newTargetDetails =
@@ -178,27 +180,30 @@ let addSubmission = (target, state, send, addSubmissionCB, submission) => {
   | MarkedAsComplete =>
     addSubmissionCB(
       LatestSubmission.make(~pending=false, ~targetId=target |> Target.id),
+      levelUpEligibility,
     )
   | Pending =>
     addSubmissionCB(
       LatestSubmission.make(~pending=true, ~targetId=target |> Target.id),
+      levelUpEligibility,
     )
-  | Passed =>
+  | Completed =>
     raise(
       UnexpectedSubmissionStatus(
-        "CoursesCurriculum__Overlay.addSubmission cannot handle a submsision with status Passed",
+        "CoursesCurriculum__Overlay.addSubmission cannot handle a submsision with status Completed",
       ),
     )
-  | Failed =>
+  | Rejected =>
     raise(
       UnexpectedSubmissionStatus(
-        "CoursesCurriculum__Overlay.addSubmission cannot handle a submsision with status Failed",
+        "CoursesCurriculum__Overlay.addSubmission cannot handle a submsision with status Rejected",
       ),
     )
   };
 };
 
-let addVerifiedSubmission = (target, state, send, addSubmissionCB, submission) => {
+let addVerifiedSubmission =
+    (target, state, send, addSubmissionCB, submission, levelUpEligibility) => {
   switch (state.targetDetails) {
   | Some(targetDetails) =>
     let newTargetDetails =
@@ -209,16 +214,25 @@ let addVerifiedSubmission = (target, state, send, addSubmissionCB, submission) =
 
   addSubmissionCB(
     LatestSubmission.make(~pending=false, ~targetId=target |> Target.id),
+    levelUpEligibility,
   );
 };
 
 let targetStatusClass = (prefix, targetStatus) =>
-  prefix
-  ++ (targetStatus |> TargetStatus.statusToString |> Js.String.toLowerCase);
+  prefix ++ (targetStatus |> TargetStatus.statusClassesSufix);
 
-let targetStatusClasses = targetStatus =>
-  "curriculum__target-status bg-white text-xs mt-2 md:mt-0 py-1 px-2 md:px-4 "
-  ++ targetStatusClass("curriculum__target-status--", targetStatus);
+let renderTargetStatus = targetStatus => {
+  let className =
+    "curriculum__target-status bg-white text-xs mt-2 md:mt-0 py-1 px-2 md:px-4 "
+    ++ targetStatusClass("curriculum__target-status--", targetStatus);
+
+  ReactUtils.nullIf(
+    <div className>
+      {targetStatus |> TargetStatus.statusToString |> str}
+    </div>,
+    TargetStatus.isPending(targetStatus),
+  );
+};
 
 let overlayHeaderTitleCardClasses = targetStatus =>
   "course-overlay__header-title-card relative flex justify-between items-center px-3 py-5 md:p-6 "
@@ -251,9 +265,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
         <h1 className="text-base leading-snug md:mr-6 md:text-xl">
           {target |> Target.title |> str}
         </h1>
-        <div className={targetStatusClasses(targetStatus)}>
-          {targetStatus |> TargetStatus.statusToString |> str}
-        </div>
+        {renderTargetStatus(targetStatus)}
       </div>
     </div>
     {preview
@@ -295,9 +307,7 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets) => {
               <span className="font-semibold text-left leading-snug">
                 {target |> Target.title |> str}
               </span>
-              <span className={targetStatusClasses(targetStatus)}>
-                {targetStatus |> TargetStatus.statusToString |> str}
-              </span>
+              {renderTargetStatus(targetStatus)}
             </Link>;
           })
        |> Array.of_list
@@ -317,9 +327,9 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets) =>
     | LevelLocked => renderLockReason(reason)
     }
   | Pending
-  | Submitted
-  | Passed
-  | Failed => React.null
+  | PendingReview
+  | Completed
+  | Rejected => React.null
   };
 
 let overlayContentClasses = bool => bool ? "" : "hidden";
@@ -405,7 +415,8 @@ let completeSection =
        |> React.array
 
      | (
-         Submitted | Passed | Failed | Locked(CourseLocked | AccessLocked),
+         PendingReview | Completed | Rejected |
+         Locked(CourseLocked | AccessLocked),
          Evaluated | TakeQuiz,
        ) =>
        <CoursesCurriculum__SubmissionsAndFeedback
@@ -420,7 +431,7 @@ let completeSection =
          checklist={targetDetails |> TargetDetails.checklist}
        />
      | (
-         Pending | Submitted | Passed | Failed,
+         Pending | PendingReview | Completed | Rejected,
          LinkToComplete | MarkAsComplete,
        ) =>
        <CoursesCurriculum__AutoVerify
@@ -466,11 +477,14 @@ let renderPendingStudents = (pendingUserIds, users) =>
 
 let handlePendingStudents = (targetStatus, targetDetails, users) =>
   switch (targetDetails, targetStatus |> TargetStatus.status) {
-  | (Some(targetDetails), Submitted | Passed) =>
+  | (Some(targetDetails), PendingReview | Completed) =>
     let pendingUserIds = targetDetails |> TargetDetails.pendingUserIds;
     pendingUserIds |> ListUtils.isNotEmpty
       ? renderPendingStudents(pendingUserIds, users) : React.null;
-  | (Some(_) | None, Locked(_) | Pending | Submitted | Passed | Failed) => React.null
+  | (
+      Some(_) | None,
+      Locked(_) | Pending | PendingReview | Completed | Rejected,
+    ) => React.null
   };
 
 let performQuickNavigation = (send, _event) => {
@@ -549,9 +563,9 @@ let quickNavigationLinks = (targetDetails, send) => {
 };
 
 let updatePendingUserIdsWhenAddingSubmission =
-    (send, target, addSubmissionCB, submission) => {
+    (send, target, addSubmissionCB, submission, levelUpEligibility) => {
   send(AddSubmission(target |> Target.role));
-  addSubmissionCB(submission);
+  addSubmissionCB(submission, levelUpEligibility);
 };
 
 [@react.component]

@@ -12,3 +12,7 @@ let decode = json =>
     title: json |> field("title", string),
     url: json |> field("url", string),
   };
+
+let local = t => {
+  Js.Array.includes(t.title, [|"Admin", "Dashboard", "Coaches"|]);
+};

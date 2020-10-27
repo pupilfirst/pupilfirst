@@ -6,16 +6,17 @@ module Mutations
 
     description "Create a new community"
 
-    field :community_id, ID, null: true
-    field :errors, [Types::CreateCommunityErrors], null: true
+    field :id, String, null: true
 
     def resolve(params)
       mutator = CreateCommunityMutator.new(context, params)
 
       if mutator.valid?
-        { community_id: mutator.create_community, errors: nil }
+        mutator.notify(:success, "Success", "Community created successfully.")
+        { id: mutator.create_community.id }
       else
-        { community_id: nil, errors: mutator.error_messages }
+        mutator.notify_errors
+        { id: nil }
       end
     end
   end

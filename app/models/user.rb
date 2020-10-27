@@ -86,16 +86,16 @@ class User < ApplicationRecord
         {
           auto_orient: true,
           gravity: "center",
-          resize: '200x200^',
-          crop: '200x200+0+0'
+          resize: '320x320^',
+          crop: '320x320+0+0'
         })
     when :thumb
       avatar.variant(combine_options:
         {
           auto_orient: true,
           gravity: 'center',
-          resize: '50x50^',
-          crop: '50x50+0+0'
+          resize: '100x100^',
+          crop: '100x100+0+0'
         })
     else
       avatar

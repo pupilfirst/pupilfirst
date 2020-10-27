@@ -1,7 +1,7 @@
 open CoursesReport__Types;
 let str = React.string;
 
-type targetStatus = [ | `Submitted | `Failed | `Passed];
+type targetStatus = [ | `PendingReview | `Rejected | `Completed];
 
 type sortDirection = [ | `Ascending | `Descending];
 
@@ -35,9 +35,9 @@ type action =
 
 let statusString = targetStatus => {
   switch (targetStatus) {
-  | `Submitted => "Submitted"
-  | `Failed => "Failed"
-  | `Passed => "Passed"
+  | `PendingReview => "Pending Review"
+  | `Rejected => "Rejected"
+  | `Completed => "Completed"
   };
 };
 
@@ -98,9 +98,9 @@ module Selectable = {
     | Level(_level) => "gray"
     | TargetStatus(status) =>
       switch (status) {
-      | `Submitted => "blue"
-      | `Passed => "green"
-      | `Failed => "red"
+      | `PendingReview => "blue"
+      | `Completed => "green"
+      | `Rejected => "red"
       }
     };
   let level = level => Level(level);
@@ -124,7 +124,7 @@ let unselected = (levels, selectedLevel, selectedStatus) => {
     |> Array.map(Selectable.level);
 
   let unselectedStatus =
-    [|`Submitted, `Failed, `Passed|]
+    [|`PendingReview, `Rejected, `Completed|]
     |> Js.Array.filter(status =>
          selectedStatus
          |> OptionUtils.mapWithDefault(
@@ -316,22 +316,22 @@ let getStudentSubmissions =
 
 let showSubmissionStatus = submission =>
   switch (submission |> Submission.status) {
-  | `Failed =>
+  | `Rejected =>
     <div
       className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
-      {"Failed" |> str}
+      {"Rejected" |> str}
     </div>
 
-  | `Passed =>
+  | `Completed =>
     <div
       className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
-      {"Passed" |> str}
+      {"Completed" |> str}
     </div>
 
-  | `Submitted =>
+  | `PendingReview =>
     <div
       className="bg-blue-100 border border-blue-500 flex-shrink-0 leading-normal text-blue-800 font-semibold px-3 py-px rounded">
-      {"Submitted" |> str}
+      {"Pending Review" |> str}
     </div>
   };
 
@@ -339,9 +339,9 @@ let submissionCardClasses = submission =>
   "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md "
   ++ (
     switch (submission |> Submission.status) {
-    | `Failed => "border-red-500"
-    | `Passed => "border-green-500"
-    | `Submitted => "border-blue-500"
+    | `Rejected => "border-red-500"
+    | `Completed => "border-green-500"
+    | `PendingReview => "border-blue-500"
     }
   );
 

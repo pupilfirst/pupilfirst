@@ -42,6 +42,10 @@ feature 'Target Overlay', js: true do
     quiz_question_2.update!(correct_answer: q2_answer_4)
   end
 
+  around do |example|
+    Time.use_zone(student.user.time_zone) { example.run }
+  end
+
   scenario 'student selects a target to view its content' do
     sign_in_user student.user, referrer: curriculum_course_path(course)
 
@@ -64,7 +68,6 @@ feature 'Target Overlay', js: true do
     # Header should have the title and the status of the current status of the target.
     within('.course-overlay__header-title-card') do
       expect(page).to have_content(target_l1.title)
-      expect(page).to have_content('Pending')
     end
 
     # Learning content should include an embed, a markdown block, an image, and a file to download.
@@ -96,11 +99,11 @@ feature 'Target Overlay', js: true do
 
     # The state of the target should change.
     within('.course-overlay__header-title-card') do
-      expect(page).to have_content('Submitted')
+      expect(page).to have_content('Pending Review')
     end
 
     # The submissions should mention that review is pending.
-    expect(page).to have_content('Review pending')
+    expect(page).to have_content('Pending Review')
 
     # The student should be able to undo the submission at this point.
     expect(page).to have_button('Undo submission')
@@ -110,13 +113,13 @@ feature 'Target Overlay', js: true do
 
     # Let's check the database to make sure the submission was created correctly
     last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_LONG_TEXT, "title" => "Write something about your submission", "result" => long_answer, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
+    expect(last_submission.checklist).to eq([{ 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => 'Write something about your submission', 'result' => long_answer, 'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
     # The status should also be updated on the dashboard page.
     click_button 'Close'
 
     within("a[aria-label='Select Target #{target_l1.id}'") do
-      expect(page).to have_content('Submitted')
+      expect(page).to have_content('Pending Review')
     end
 
     # Return to the submissions & feedback tab on the target overlay.
@@ -157,7 +160,7 @@ feature 'Target Overlay', js: true do
       expect(page).to have_button('Mark As Complete')
 
       # Completion instructions should be show on learn section for auto-verified targets
-      expect(page).to have_text("Before marking as complete")
+      expect(page).to have_text('Before marking as complete')
       expect(page).to have_text(target_l1.completion_instructions)
 
       # The complete button should not be highlighted.
@@ -173,7 +176,7 @@ feature 'Target Overlay', js: true do
       expect(page).to have_selector('.complete-button-selected', text: 'Completed')
 
       # The target should be marked as passed.
-      expect(page).to have_selector('.course-overlay__header-title-card', text: 'Passed')
+      expect(page).to have_selector('.course-overlay__header-title-card', text: 'Completed')
 
       # Since this is a team target, other students shouldn't be listed as pending.
       expect(page).not_to have_content('You have team members who are yet to complete this target')
@@ -194,7 +197,7 @@ feature 'Target Overlay', js: true do
         expect(page).not_to have_selector('.complete-button-selected')
 
         # Completion instructions should be show on learn section for targets with link to complete
-        expect(page).to have_text("Before visiting the link")
+        expect(page).to have_text('Before visiting the link')
         expect(page).to have_text(target_with_link.completion_instructions)
 
         # Clicking the tab should highlight the button.
@@ -211,7 +214,7 @@ feature 'Target Overlay', js: true do
         end
 
         # Target should now be complete for the user.
-        expect(page).to have_selector('.course-overlay__header-title-card', text: 'Passed')
+        expect(page).to have_selector('.course-overlay__header-title-card', text: 'Completed')
 
         # Target should have been marked as passed in the database.
         expect(target_with_link.status(student)).to eq(Targets::StatusService::STATUS_PASSED)
@@ -223,13 +226,12 @@ feature 'Target Overlay', js: true do
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(quiz_target.title)
-        expect(page).to have_content('Pending')
       end
 
       find('.course-overlay__body-tab-item', text: 'Take Quiz').click
 
       # Completion instructions should be show on Take Quiz section for targets with quiz
-      expect(page).to have_text("Instructions")
+      expect(page).to have_text('Instructions')
       expect(page).to have_text(quiz_target.completion_instructions)
 
       # Question one
@@ -248,12 +250,12 @@ feature 'Target Overlay', js: true do
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(quiz_target.title)
-        expect(page).to have_content('Passed')
+        expect(page).to have_content('Completed')
       end
 
       # The quiz result should be visible.
       within("div[aria-label='Question 1") do
-        expect(page).to have_content("Incorrect")
+        expect(page).to have_content('Incorrect')
       end
 
       expect(page).to have_content("Your Answer: #{q1_answer_1.value}")
@@ -262,7 +264,7 @@ feature 'Target Overlay', js: true do
       find("div[aria-label='Question 2']").click
 
       within("div[aria-label='Question 2") do
-        expect(page).to have_content("Correct")
+        expect(page).to have_content('Correct')
       end
 
       expect(page).to have_content("Your Correct Answer: #{q2_answer_4.value}")
@@ -316,7 +318,7 @@ feature 'Target Overlay', js: true do
 
         expect(page).not_to have_content(coach_2.name)
         expect(page).not_to have_content(coach_2.title)
-        expect(page).to have_content("Unknown Coach")
+        expect(page).to have_content('Unknown Coach')
         expect(page).to have_content(feedback_2.feedback)
       end
 
@@ -415,7 +417,6 @@ feature 'Target Overlay', js: true do
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(prerequisite_target.title)
-        expect(page).to have_content('Pending')
       end
 
       expect(page).to have_current_path("/targets/#{prerequisite_target.id}")
@@ -454,7 +455,7 @@ feature 'Target Overlay', js: true do
       find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
 
       # The submissions should mention that review is pending.
-      expect(page).to have_content('Review pending')
+      expect(page).to have_content('Pending Review')
 
       # The student should NOT be able to undo the submission at this point.
       expect(page).not_to have_button('Undo submission')
@@ -496,32 +497,32 @@ feature 'Target Overlay', js: true do
       find('.course-overlay__body-tab-item', text: 'Discuss').click
       expect(page).to have_text(community_1.name)
       expect(page).to have_text(community_2.name)
-      expect(page).to have_link("Go to community", count: 2)
-      expect(page).to have_link("Create a topic", count: 2)
+      expect(page).to have_link('Go to community', count: 2)
+      expect(page).to have_link('Create a topic', count: 2)
       expect(page).to have_text("There's been no recent discussion about this target.", count: 2)
 
       # Student can ask a question related to the target in community from target overlay.
       find("a[title='Create a topic in the #{community_1.name} community'").click
 
       expect(page).to have_text(target_l1.title)
-      expect(page).to have_text("Create a new topic of discussion")
+      expect(page).to have_text('Create a new topic of discussion')
 
       # Try clearing the linking.
       click_link 'Clear'
 
       expect(page).not_to have_text(target_l1.title)
-      expect(page).to have_text("Create a new topic of discussion")
+      expect(page).to have_text('Create a new topic of discussion')
 
       # Let's go back to linked state and try creating a linked question.
       visit(new_topic_community_path(community_1, target_id: target_l1.id))
 
       fill_in 'Title', with: topic_title
       replace_markdown(topic_body)
-      click_button 'Create Post'
+      click_button 'Create Topic'
 
       expect(page).to have_text(topic_title)
       expect(page).to have_text(topic_body)
-      expect(page).not_to have_text("Create a new topic of discussion")
+      expect(page).not_to have_text('Create a new topic of discussion')
 
       # The question should have been linked to the target.
       expect(Topic.where(title: topic_title).first.target).to eq(target_l1)
@@ -567,7 +568,7 @@ feature 'Target Overlay', js: true do
     let(:school_admin) { create :school_admin }
 
     context 'when the target has a checklist' do
-      let(:checklist) { [{ title: "Describe your submission", kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }, { title: "Attach link", kind: Target::CHECKLIST_KIND_LINK, optional: true }, { title: "Attach files", kind: Target::CHECKLIST_KIND_FILES, optional: true }] }
+      let(:checklist) { [{ title: 'Describe your submission', kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }, { title: 'Attach link', kind: Target::CHECKLIST_KIND_LINK, optional: true }, { title: 'Attach files', kind: Target::CHECKLIST_KIND_FILES, optional: true }] }
       let!(:target_l1) { create :target, :with_content, checklist: checklist, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
 
       scenario 'admin views the target in preview mode' do
@@ -627,7 +628,6 @@ feature 'Target Overlay', js: true do
 
         within('.course-overlay__header-title-card') do
           expect(page).to have_content(quiz_target.title)
-          expect(page).to have_content('Pending')
         end
 
         find('.course-overlay__body-tab-item', text: 'Take Quiz').click
@@ -671,13 +671,13 @@ feature 'Target Overlay', js: true do
     expect(page).to have_text(target_l1.title)
   end
 
-  scenario "student visits a draft target page directly" do
+  scenario 'student visits a draft target page directly' do
     sign_in_user student.user, referrer: target_path(target_draft)
 
     expect(page).to have_text("The page you were looking for doesn't exist")
   end
 
-  scenario "student visits a archived target page directly" do
+  scenario 'student visits a archived target page directly' do
     sign_in_user student.user, referrer: target_path(target_archived)
 
     expect(page).to have_text("The page you were looking for doesn't exist")

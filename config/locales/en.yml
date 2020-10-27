@@ -20,6 +20,34 @@
 
 en:
   components:
+    CoachesIndex__Root:
+      heading: Coaches
+      filter_input_label: Filter by
+      filter_input_placeholder: Search by name, or select a course
+      filter_label_teaches_course: Teaches Course
+      filter_label_name_like: Name Like
+      filter_search_string_course: "teaches course %{name}"
+      filter_result_empty: "The filters you've applied does not match any coach. Please change the filter and try again."
+      button_connect: Connect
+      button_about: About
+    CommunitiesShow__Root:
+      all_categories_button: All Categories
+      empty_topics: There's no discussion here yet.
+      filter_input_label: "Filter by:"
+      filter_input_placeholder_default: Search by topic title or filter by solution
+      filter_input_placeholder_categories: Filter by category, solution or search by topic title
+      sort_criterion_input_label: "Sort by:"
+      sort_criterion_posted_at: Posted At
+      sort_criterion_last_activity: Last Activity
+      sort_criterion_views: Views
+      topic_stats_likes: Like
+      topic_stats_replies: Reply
+      topic_stats_views: View
+      button_load_more: Load More...
+      topics_fully_loaded_text: "Showing all %{total_topics} topics"
+      topics_partially_loaded_text: "Showing %{loaded_topics_count} of %{total_topics} topics"
+      topic_posted_by_text: Posted by
+      topic_last_updated_text: Last updated
     CourseCertificates__Root:
       auto_issue_tag: Auto-issue
       create_action: &certificate_create_action Create New Certificate
@@ -61,6 +89,31 @@ en:
       update_issued_certificates_warning:
         one: "This certificate has been issued once.<br/>These changes will also be applied to the issued certificate."
         other: "This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates."
+    CoursesCurriculum:
+      issued_certificate_heading: Congratulations! You have been issued a certificate.
+      issued_certificate_button: View Certificate
+    CoursesCurriculum__NoticeManager:
+      course_complete_title: Congratulations! You have completed all milestone targets in the final level.
+      course_complete_description: You've completed our coursework. Feel free to complete targets that you might have left out, and read up on attached links and resources.
+      course_ended_title: Course Ended
+      course_ended_description: The course has ended and submissions are disabled for all targets!
+      preview_mode_title: Preview Mode
+      preview_mode_description: You are accessing the preview mode for this course
+      access_ended_title: Access Ended
+      access_ended_description: Your access to this course has ended.
+      team_members_pending_title: Check With Your Team
+      team_members_pending_description: You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.
+      level_up_blocked:
+        title_pending_review: Pending Review
+        title_rejected: Level Up Blocked
+        body_prefix: "You have submitted all milestone targets in level %{number}, but one or more submissions "
+        body_middle_pending_review: "are pending review by a coach. "
+        body_middle_rejected: "have been rejected. "
+        body_suffix: You need to get a passing grade on all milestone targets to level up.
+      level_up_limited_title: Level Up Blocked
+      level_up_limited_description: "You're at Level %{currentLevel}, but you have targets in the Level %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up."
+      level_up_title: Ready to Level Up!
+      level_up_description: Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!
 
   jobs:
     timeline_events:

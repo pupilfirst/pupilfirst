@@ -8,6 +8,7 @@ type t = {
   evaluationCriteria: array(CoursesReport__EvaluationCriterion.t),
   levelId: string,
   totalTargets: int,
+  targetsPendingReview: int,
   targetsCompleted: int,
   quizScores: array(string),
   averageGrades: array(averageGrade),
@@ -20,9 +21,11 @@ let evaluationCriteria = t => t.evaluationCriteria;
 
 let totalTargets = t => t.totalTargets |> float_of_int;
 
+let targetsPendingReview = t => t.targetsPendingReview;
+
 let targetsCompleted = t => t.targetsCompleted |> float_of_int;
 
-let quizzesAttempted = t => t.quizScores |> Array.length |> string_of_int;
+let quizzesAttempted = t => t.quizScores |> Array.length;
 
 let quizScores = t => t.quizScores;
 let averageGrades = t => t.averageGrades;
@@ -96,4 +99,5 @@ let makeFromJs = (id, studentData) => {
   quizScores: studentData##quizScores,
   averageGrades: studentData##averageGrades |> makeAverageGrade,
   completedLevelIds: studentData##completedLevelIds,
+  targetsPendingReview: studentData##targetsPendingReview,
 };

@@ -6,7 +6,7 @@ module Layouts
         logo_url: logo_url,
         links: nav_links,
         authenticity_token: view.form_authenticity_token,
-        is_logged_in: current_user.present?
+        is_logged_in: current_user.present?,
       }
     end
 
@@ -26,14 +26,14 @@ module Layouts
 
     def nav_links
       @nav_links ||= begin
-        # ...and the custom links.
-        custom_links = SchoolLink.where(school: current_school, kind: SchoolLink::KIND_HEADER).order(created_at: :DESC).map do |school_link|
-          { title: school_link.title, url: school_link.url }
-        end
+          # ...and the custom links.
+          custom_links = SchoolLink.where(school: current_school, kind: SchoolLink::KIND_HEADER).order(created_at: :DESC).map do |school_link|
+            { title: school_link.title, url: school_link.url }
+          end
 
-        # Both, with the user-based links at the front.
-        admin_link + dashboard_link + custom_links
-      end
+          # Both, with the user-based links at the front.
+          admin_link + dashboard_link + coaches_link + custom_links
+        end
     end
 
     def admin_link
@@ -56,6 +56,14 @@ module Layouts
 
     def course_authors
       @course_authors ||= current_user.course_authors.where(course: current_school.courses)
+    end
+
+    def coaches_link
+      if current_school.users.joins(:faculty).where(faculty: { public: true }).exists?
+        [{ title: 'Coaches', url: '/coaches' }]
+      else
+        []
+      end
     end
   end
 end

@@ -3,7 +3,7 @@ ruby '2.7.1'
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.0.3', '>= 6.0.3.2'
+gem 'rails', '~> 6.0.3', '>= 6.0.3.3'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
@@ -14,7 +14,7 @@ gem 'fastimage', '~> 2.1'
 gem 'image_processing', '~> 1.2' # Gem to support variants in ActiveStorage
 
 # Use Webpack to manage app-like JavaScript modules in Rails.
-gem 'webpacker', '~> 5.0'
+gem 'webpacker', '~> 5.2'
 
 gem 'coffee-rails', '~> 5.0.0' # Coffeescript on Rails.
 gem 'devise', '~> 4.7', '>= 4.7.1' # User auth library.
@@ -83,6 +83,7 @@ gem 'chartkick', '~> 3.4' # Create beautiful charts with one line of JavaScript.
 gem 'graphql', '~> 1.10' # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
 gem 'i18n-js', '~> 3.7' # Provide Rails I18n translations on Javascript.
+gem 'batch-loader', '~> 1.5' # Generic lazy batching mechanism to avoid N+1 DB queries.
 
 # Rails assets!
 source 'https://rails-assets.org' do

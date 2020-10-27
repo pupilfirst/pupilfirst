@@ -17,9 +17,10 @@ module Topics
         replies: details_of_replies,
         users: users,
         current_user_id: current_user.id,
-        is_coach: current_coach.present?,
+        moderator: current_coach.present? || current_school_admin.present?,
         community: community_details,
-        target: linked_target
+        target: linked_target,
+        topic_categories: topic_categories
       }
     end
 
@@ -30,7 +31,11 @@ module Topics
     private
 
     def topic_details
-      @topic.attributes.slice('id', 'title')
+      @topic.attributes.slice('id', 'title', 'topic_category_id')
+    end
+
+    def topic_categories
+      @community.topic_categories.map { |category| { id: category.id, name: category.name } }
     end
 
     def linked_target
@@ -85,7 +90,7 @@ module Topics
     end
 
     def community
-      @topic.community
+      @community ||= @topic.community
     end
 
     def community_details

@@ -4,6 +4,7 @@ feature 'Community', js: true do
   include UserSpecHelper
   include NotificationHelper
   include MarkdownEditorHelper
+  include ActiveSupport::Testing::TimeHelpers
 
   # Setup a course with students and target for community.
   let(:school) { create :school, :current }
@@ -17,7 +18,6 @@ feature 'Community', js: true do
   let(:student_1) { create :student, startup: team }
   let(:student_2) { create :student, startup: team }
   let(:coach) { create :faculty, school: school }
-  let(:school_admin) { create :school_admin }
   let!(:topic_1) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 1.second.ago }
   let!(:topic_2) { create :topic, :with_first_post, community: community, creator: student_1.user }
   let!(:topic_3) { create :topic, :with_first_post, community: community, target: target, creator: student_1.user }
@@ -42,7 +42,15 @@ feature 'Community', js: true do
 
   scenario 'user who is not logged in tries to visit community' do
     visit community_path(community)
-    expect(page).to have_text("Please sign in to continue.")
+    expect(page).to have_text('Please sign in to continue.')
+  end
+
+  scenario 'student from an unlinked course attempts to visit community' do
+    CommunityCourseConnection.where(course: course).destroy_all
+
+    sign_in_user(student_1.user, referrer: community_path(community))
+
+    expect(page).to have_text("The page you were looking for doesn't exist")
   end
 
   scenario 'an active student visits his community' do
@@ -59,16 +67,52 @@ feature 'Community', js: true do
     sign_in_user(student_1.user, referrer: community_path(community))
     expect(page).to have_text(community.name)
 
-    click_link 'Create a new topic'
-    expect(page).to have_text("Create a new topic of discussion")
+    click_link 'New Topic'
+    expect(page).to have_text('Create a new topic of discussion')
     fill_in 'Title', with: topic_title
     replace_markdown topic_body
-    click_button 'Create Post'
+    click_button 'Create Topic'
 
-    expect(page).not_to have_text("Create a new topic of discussion")
+    expect(page).not_to have_text('Create a new topic of discussion')
     expect(page).to have_text(topic_title)
     expect(page).to have_text(topic_body)
     expect(community.topics.reload.find_by(title: topic_title).first_post.body).to eq(topic_body)
+  end
+
+  scenario 'a student edits her post and leaves a reason' do
+    sign_in_user(student_1.user, referrer: topic_path(topic_1))
+
+    first_reason = Faker::Lorem.unique.sentence
+    second_reason = Faker::Lorem.unique.sentence
+
+    # Edit a reply and set reason first time.
+    find("div[aria-label='Options for post #{reply_1.id}']").click
+    click_button 'Edit Reply'
+
+    within("div#post-show-#{reply_1.id}") do
+      replace_markdown reply_body_for_edit
+    end
+
+    fill_in 'edit-reason', with: first_reason
+    click_button 'Update Reply'
+
+    # Edit a reply and set reason second time.
+    find("div[aria-label='Options for post #{reply_1.id}']").click
+    click_button 'Edit Reply'
+
+    within("div#post-show-#{reply_1.id}") do
+      replace_markdown reply_body_for_edit
+    end
+
+    fill_in 'edit-reason', with: second_reason
+    click_button 'Update Reply'
+
+    # Go to the history page history - the reason should be there.
+    find("div[aria-label='Options for post #{reply_1.id}']").click
+    click_link 'History'
+
+    expect(page).to have_text(first_reason)
+    expect(page).to have_text(second_reason)
   end
 
   scenario 'an active student participates in a topic thread' do
@@ -83,13 +127,15 @@ feature 'Community', js: true do
 
     # Only a faculty or the creator can edit or delete a topic
     within("div#post-show-#{topic_1.first_post.id}") do
-      expect(page).not_to have_text("Edit Title")
+      expect(page).not_to have_text('Edit Title')
       expect(page).not_to have_selector("div[aria-label='Options for post #{topic_1.first_post.id}']")
     end
 
     # any one with access to the community can reply to a topic
     replace_markdown reply_body
     click_button 'Post Your Reply'
+
+    expect(page).to have_text('Reply added successfully')
     dismiss_notification
 
     # A notification should have been mailed to the question author.
@@ -98,16 +144,18 @@ feature 'Community', js: true do
     expect(current_email.body).to include("#{student_2.user.name} has posted a reply to something you said on the #{community.name} community")
     expect(current_email.body).to include("/topics/#{topic_1.id}")
 
-    expect(page).to have_text("2 Replies")
-    new_reply = topic_1.reload.replies.last
+    expect(page).to have_text('2 Replies')
+    new_reply = topic_1.replies.find_by(post_number: 3)
     expect(new_reply.body).to eq(reply_body)
 
     # can edit his reply
     find("div[aria-label='Options for post #{new_reply.id}']").click
     click_button 'Edit Reply'
+
     within("div#post-show-#{new_reply.id}") do
       replace_markdown reply_body_for_edit
     end
+
     click_button 'Update Reply'
 
     expect(page).not_to have_text(reply_body)
@@ -136,7 +184,7 @@ feature 'Community', js: true do
     find("button[aria-label='Add reply to post #{reply_1.id}']").click
     replace_markdown 'This is a reply to another post'
     within("div[aria-label='Add new reply']") do
-      expect(page).to have_text("Reply To")
+      expect(page).to have_text('Reply To')
       expect(page).to have_text(reply_1.creator.name)
     end
     click_button 'Post Your Reply'
@@ -146,26 +194,56 @@ feature 'Community', js: true do
     # A mail should have been sent to post author.
     open_email(reply_1.creator.email)
     expect(current_email.subject).to eq('New reply for your post')
-    expect(current_email.body).to include("New reply for your post")
+    expect(current_email.body).to include('New reply for your post')
     expect(current_email.body).to include("#{student_2.user.name} has posted a reply to something you said on the #{community.name} community")
     expect(current_email.body).to include("/topics/#{topic_1.id}")
 
     # check saved reply
-    expect(topic_1.replies.reload.last.body).to eq('This is a reply to another post')
-    expect(topic_1.replies.last.reply_to_post_id).to eq(reply_1.id)
+    last_reply = topic_1.replies.find_by(post_number: 4)
+    expect(last_reply.body).to eq('This is a reply to another post')
+    expect(last_reply.reply_to_post_id).to eq(reply_1.id)
 
     # Reply appears in the main list and as a thread to it's parent post
     find("button[aria-label='Show replies of post #{reply_1.id}']").click
     expect(page).to have_text('This is a reply to another post', count: 2)
 
     # can like and unlike a reply
-    find("div[aria-label='Like reply #{reply_1.id}']").click
-    expect(page).to have_selector("div[aria-label='Unlike reply #{reply_1.id}']")
+    find("div[aria-label='Like post #{reply_1.id}']").click
+    expect(page).to have_selector("div[aria-label='Unlike post #{reply_1.id}']")
     expect(reply_1.post_likes.where(user: student_2.user).count).to eq(1)
 
-    find("div[aria-label='Unlike reply #{reply_1.id}']").click
-    expect(page).to have_selector("div[aria-label='Like reply #{reply_1.id}']")
+    find("div[aria-label='Unlike post #{reply_1.id}']").click
+    expect(page).to have_selector("div[aria-label='Like post #{reply_1.id}']")
     expect(reply_1.post_likes.where(user: student_2.user).count).to eq(0)
+  end
+
+  scenario 'a user visiting a topic affects its view count' do
+    original_views = topic_1.views
+
+    sign_in_user(student_2.user, referrer: topic_path(topic_1))
+
+    expect(page).to have_text(topic_1.first_post.body)
+
+    # Views should have been incremented by 1.
+    expect(topic_1.reload.views).to eq(original_views + 1)
+
+    # Revisiting the page "soon" should not increase the count.
+    click_link community.name
+    expect(page).to have_link('New Topic')
+    click_link topic_1.title
+
+    expect(page).to have_text(topic_1.first_post.body)
+    expect(topic_1.reload.views).to eq(original_views + 1)
+
+    # Revisiting after a "long while" should increase the count again.
+    travel_to(90.minutes.from_now) do
+      click_link community.name
+      expect(page).to have_link('New Topic')
+      click_link topic_1.title
+
+      expect(page).to have_text(topic_1.first_post.body)
+      expect(topic_1.reload.views).to eq(original_views + 2)
+    end
   end
 
   scenario 'an active faculty visits community' do
@@ -180,16 +258,16 @@ feature 'Community', js: true do
 
     # Faculty can edit or delete a topic
     find("h3[aria-label='Topic Title']").hover
-    expect(page).to have_text("Edit Title")
+    expect(page).to have_text('Edit Topic')
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
-    expect(page).to have_text("Edit Post")
-    expect(page).to have_text("Delete Post")
+    expect(page).to have_text('Edit Post')
+    expect(page).to have_text('Delete Post')
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
 
     # Faculty can edit or delete replies
     find("div[aria-label='Options for post #{reply_1.id}']").click
-    expect(page).to have_text("Edit Reply")
-    expect(page).to have_text("Delete Reply")
+    expect(page).to have_text('Edit Reply')
+    expect(page).to have_text('Delete Reply')
     find("div[aria-label='Options for post #{reply_1.id}']").click
 
     # Faculty edits a topic body
@@ -280,17 +358,6 @@ feature 'Community', js: true do
     expect(page).not_to have_link('View Target')
   end
 
-  scenario 'school admin visits community' do
-    sign_in_user(school_admin.user, referrer: community_path(community))
-    expect(page).to have_text(community.name)
-
-    click_link topic_1.title
-
-    # Question and answers are visible
-    expect(page).to have_text(topic_1.first_post.body)
-    expect(page).to have_text(reply_1.body)
-  end
-
   scenario 'coach marks a post as solution, edits content, and checks last edited info' do
     sign_in_user(coach.user, referrer: topic_path(topic_1))
 
@@ -305,7 +372,7 @@ feature 'Community', js: true do
     visit current_path
 
     within("div#post-show-#{reply_1.id}") do
-      expect(page).to_not have_text("Last edited by")
+      expect(page).to_not have_text('Last edited by')
     end
 
     # Edits the content of the post
@@ -323,6 +390,25 @@ feature 'Community', js: true do
     end
   end
 
+  scenario 'user searches for topics in community' do
+    # Let's set the titles for both topics to completely different sentences to avoid confusing the fuzzy search algo.
+    topic_1.update!(title: 'Hello World')
+    topic_2.update!(title: 'Completely Different Sentence')
+
+    sign_in_user(coach.user, referrer: community_path(community))
+
+    expect(page).to have_text(topic_2.title)
+
+    search_string = topic_1.title[0..9].strip
+
+    fill_in 'filter', with: search_string
+
+    click_button "Pick Topic Title: #{search_string}"
+
+    expect(page).to_not have_text(topic_2.title)
+    expect(page).to have_text(topic_1.title)
+  end
+
   context 'when a topic has a archived replies and likes on its posts' do
     let(:archived_reply) { create :post, topic: topic_1, creator: student_1.user, post_number: 3, archiver: student_1.user, archived_at: Time.zone.now }
 
@@ -338,7 +424,7 @@ feature 'Community', js: true do
     scenario 'user views likes and replies on the index page' do
       sign_in_user(student_2.user, referrer: community_path(community))
 
-      within(find("div[aria-label='Topic #{topic_1.id}']")) do
+      within(find("a[aria-label='Topic #{topic_1.id}']")) do
         within(find('span[aria-label="Likes"]')) do
           expect(page).to have_text(3)
         end
@@ -346,6 +432,245 @@ feature 'Community', js: true do
         within(find('span[aria-label="Replies"]')) do
           expect(page).to have_text(1)
         end
+      end
+    end
+  end
+
+  context 'when a user is a school admin' do
+    let(:school_admin) { create :school_admin }
+
+    scenario 'school admin interacts with the community' do
+      sign_in_user(school_admin.user, referrer: community_path(community))
+      expect(page).to have_text(community.name)
+
+      click_link topic_1.title
+
+      # Question and answers are visible
+      expect(page).to have_text(topic_1.first_post.body)
+      expect(page).to have_text(reply_1.body)
+
+      # Like a post.
+      find("div[aria-label='Like post #{topic_1.first_post.id}']").click
+      expect(page).to have_selector("div[aria-label='Unlike post #{topic_1.first_post.id}']")
+
+      # Edit a post.
+      find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
+      click_button 'Edit Post'
+      old_description = topic_1.first_post.body
+
+      within("div#post-show-#{topic_1.first_post.id}") do
+        replace_markdown topic_body_for_edit
+        click_button 'Update Post'
+      end
+
+      dismiss_notification
+
+      expect(page).not_to have_text(old_description)
+
+      # Archive a post.
+      find("div[aria-label='Options for post #{reply_1.id}']").click
+      accept_confirm { click_button('Delete Reply') }
+
+      expect(page).to have_text('Post archived successfully')
+
+      dismiss_notification
+
+      # Post a reply.
+      replace_markdown reply_body
+      expect { click_button 'Post Your Reply' }.to change { Post.count }.by(1)
+      dismiss_notification
+
+      # Create a new topic.
+      click_link community.name
+      click_link 'New Topic'
+      fill_in 'Title', with: topic_title
+      replace_markdown topic_body
+      click_button 'Create Topic'
+
+      expect(page).to have_text('0 Replies')
+      expect(community.topics.reload.find_by(title: topic_title).first_post.body).to eq(topic_body)
+    end
+  end
+
+  context 'community has topic categories' do
+    let!(:category_1) { create :topic_category, community: community }
+    let!(:category_2) { create :topic_category, community: community }
+
+    before do
+      topic_1.update!(topic_category: category_1)
+      topic_2.update!(topic_category: category_2)
+    end
+
+    scenario 'user checks category of topic in community index' do
+      sign_in_user(student_1.user, referrer: community_path(community))
+
+      within("a[aria-label='Topic #{topic_1.id}']") do
+        expect(page).to have_text(category_1.name)
+      end
+
+      within("a[aria-label='Topic #{topic_2.id}']") do
+        expect(page).to have_text(category_2.name)
+      end
+    end
+
+    scenario 'user filters topics by category' do
+      sign_in_user(student_1.user, referrer: community_path(community))
+
+      fill_in 'filter', with: 'category'
+
+      click_button "Category: #{category_1.name}"
+
+      expect(page).to_not have_text(topic_2.title)
+      expect(page).to have_text(topic_1.title)
+
+      # Clear the filter
+      find("button[title='Remove selection: #{category_1.name}']").click
+
+      # Use the dropdown shortcut to filter topics
+      find("div[aria-label='Selected category filter']").click
+
+      find("div[aria-label='Select category #{category_2.name}']").click
+
+      expect(page).to_not have_text(topic_1.title)
+      expect(page).to have_text(topic_2.title)
+    end
+
+    scenario 'moderator updates category of a topic' do
+      sign_in_user(coach.user, referrer: topic_path(topic_1))
+
+      # Change category
+      find("h3[aria-label='Topic Title']").hover
+      click_button 'Edit Topic'
+
+      find("div[aria-label='Selected category']").click
+      find("div[aria-label='Select category #{category_2.name}']").click
+
+      click_button 'Update Topic'
+
+      dismiss_notification
+
+      within("div[aria-label='Topic Details']") do
+        expect(page).to have_text(category_2.name)
+      end
+
+      expect(topic_1.reload.topic_category).to eq(category_2)
+
+      # Assign no category
+
+      find("h3[aria-label='Topic Title']").hover
+      click_button 'Edit Topic'
+
+      find("div[aria-label='Selected category']").click
+      find("div[aria-label='Select no category']").click
+
+      click_button 'Update Topic'
+
+      dismiss_notification
+
+      expect(topic_1.reload.topic_category).to eq(nil)
+    end
+  end
+
+  context 'community has a mix of solved and unsolved topics' do
+    let!(:reply_marked_as_solution) { create :post, topic: topic_1, creator: student_1.user, post_number: 3, solution: true }
+    let!(:reply_2) { create :post, topic: topic_2, creator: student_1.user, post_number: 2 }
+
+    scenario 'user filters topics with or without solution' do
+      sign_in_user(coach.user, referrer: community_path(community))
+
+      fill_in 'filter', with: 'solution'
+
+      click_button 'Solution: Solved'
+
+      expect(page).to_not have_text(topic_2.title)
+      expect(page).to have_text(topic_1.title)
+
+      # Clear the filter
+      find("button[title='Remove selection: Solved']").click
+
+      expect(page).to have_text(topic_2.title)
+      expect(page).to have_text(topic_1.title)
+
+      fill_in 'filter', with: 'solution'
+
+      click_button 'Solution: Unsolved'
+
+      expect(page).to_not have_text(topic_1.title)
+      expect(page).to have_text(topic_2.title)
+    end
+  end
+
+  context 'topics have different views, creation date and last activity time' do
+    let!(:topic_1) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 1.second.ago, created_at: 2.days.ago, views: 9 }
+    let!(:topic_2) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 3.days.ago, created_at: 4.days.ago, views: 1 }
+    let!(:topic_3) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 2.days.ago, created_at: 1.day.ago, views: 20 }
+
+    scenario 'user sorts topics based on views, creation date and last activity' do
+      sign_in_user(coach.user, referrer: community_path(community))
+
+      within("div[aria-label='Change topics sorting']") do
+        expect(page).to have_content("Posted At")
+      end
+
+      # Check current ordering of topics
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_2.title)
+
+      #  Swap the ordering of topics
+      click_button('toggle-sort-order')
+
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
+
+      # Change sorting criterion to last activity
+      click_button 'Posted At'
+      click_button 'Last Activity'
+
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
+
+      #  Swap the ordering of topics
+      click_button('toggle-sort-order')
+
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_2.title)
+
+      # Change sorting criterion to views
+      click_button 'Last Activity'
+      click_button 'Views'
+
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_2.title)
+
+      click_button('toggle-sort-order')
+
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
+    end
+  end
+
+  context "when the user is a coach who isn't enrolled in one of the community's connected courses" do
+    before do
+      CommunityCourseConnection.destroy_all
+    end
+
+    scenario "a coach from a different course can still moderate on unlinked communities" do
+      sign_in_user(coach.user, referrer: community_path(community))
+
+      click_link topic_1.title
+
+      # Can mark a reply as solution.
+      find("div[aria-label='Options for post #{reply_1.id}']").click
+      click_button 'Mark as solution'
+
+      within("div#post-show-#{reply_1.id}") do
+        expect(page).to have_selector("div[aria-label='Marked as solution icon']")
       end
     end
   end

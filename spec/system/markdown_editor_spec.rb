@@ -41,7 +41,7 @@ feature 'Markdown editor', js: true do
     # Both attachments should not have been accessed at this point.
     expect(MarkdownAttachment.where(last_accessed_at: nil).count).to eq(2)
 
-    click_button('Create Post')
+    click_button('Create Topic')
     expect(page).to have_text('0 Replies')
 
     # Let's check if the saved markdown is what we expect...
@@ -94,7 +94,7 @@ feature 'Markdown editor', js: true do
 
       expect(page).to have_text('logo_lipsum_on_light_bg.png')
 
-      click_button('Create Post')
+      click_button('Create Topic')
       expect(page).to have_text('0 Replies')
 
       # Let's try filling in an reply with an attachment.

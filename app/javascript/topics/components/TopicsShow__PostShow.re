@@ -79,7 +79,7 @@ let optionsDropdown =
       post,
       isPostCreator,
       isTopicCreator,
-      isCoach,
+      moderator,
       isFirstPost,
       replies,
       toggleShowPostEdit,
@@ -113,8 +113,8 @@ let optionsDropdown =
         </button>;
   let showDelete =
     isFirstPost
-      ? isCoach || isPostCreator && replies |> ArrayUtils.isEmpty
-      : isCoach || isPostCreator;
+      ? moderator || isPostCreator && replies |> ArrayUtils.isEmpty
+      : moderator || isPostCreator;
   let deletePostButton =
     showDelete
       ? <button
@@ -139,7 +139,7 @@ let optionsDropdown =
     };
 
   let contents =
-    switch (isCoach, isTopicCreator, isPostCreator) {
+    switch (moderator, isTopicCreator, isPostCreator) {
     | (true, _, _) => [|
         editPostButton,
         markAsSolutionButton,
@@ -200,7 +200,7 @@ let make =
       ~users,
       ~posts,
       ~currentUserId,
-      ~isCoach,
+      ~moderator,
       ~isTopicCreator,
       ~updatePostCB,
       ~addNewReplyCB,
@@ -237,12 +237,12 @@ let make =
                 createdAt={post |> Post.createdAt}
               />
               <div className="flex-shrink-0 mt-1">
-                {isPostCreator || isCoach || isTopicCreator
+                {isPostCreator || moderator || isTopicCreator
                    ? optionsDropdown(
                        post,
                        isPostCreator,
                        isTopicCreator,
-                       isCoach,
+                       moderator,
                        isFirstPost,
                        posts,
                        toggleShowPostEdit,
@@ -255,6 +255,7 @@ let make =
             {showPostEdit
                ? <div className="flex-1">
                    <TopicsShow__PostEditor
+                     editing=true
                      id={"edit-post-" ++ Post.id(post)}
                      topic
                      currentUserId
@@ -300,12 +301,12 @@ let make =
                       }}
                    </div>
                    <div className="hidden lg:block flex-shrink-0 ml-3">
-                     {isPostCreator || isCoach || isTopicCreator
+                     {isPostCreator || moderator || isTopicCreator
                         ? optionsDropdown(
                             post,
                             isPostCreator,
                             isTopicCreator,
-                            isCoach,
+                            moderator,
                             isFirstPost,
                             posts,
                             toggleShowPostEdit,

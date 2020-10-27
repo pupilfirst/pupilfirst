@@ -2,12 +2,6 @@
   display: none;
 }
 
-@screen lg {
-  .topics-show__title-container:hover .topics-show__title-edit-button {
-    @apply visible;
-  }
-}
-
 .topics-show__highlighted-item {
   animation: topicPostGlowing 3s 1;
   -webkit-animation: topicPostGlowing 3s 1;

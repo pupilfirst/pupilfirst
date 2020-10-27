@@ -114,7 +114,7 @@ feature "Course students report", js: true do
     expect(page).to_not have_content(target_4.title)
 
     within("div[aria-label='student-submission-card-#{submission_target_l1_2.id}']") do
-      expect(page).to have_content('Failed')
+      expect(page).to have_content('Rejected')
     end
 
     within("div[aria-label='student-submissions']") do
@@ -164,7 +164,7 @@ feature "Course students report", js: true do
     expect(page).to have_content(target_l1.title)
     expect(page).to_not have_content(target_4.title)
     within("div[aria-label='student-submission-card-#{submission_target_l1_2.id}']") do
-      expect(page).to have_content('Failed')
+      expect(page).to have_content('Rejected')
     end
 
     # Check notes

@@ -1,0 +1,54 @@
+.editor-drawer-2 {
+  background-color: white;
+  display: flex;
+  height: 100vh;
+  position: fixed;
+  right: -48rem;
+  top: 0px;
+  width: 100%;
+  z-index: 501;
+}
+
+.editor-drawer-2--l0-to-l1 {
+  right: 0;
+  animation: slide-l1 0.25s ease 0s 1 normal forwards;
+}
+
+.editor-drawer-2--l1-to-l0 {
+  right: 0;
+}
+
+.editor-drawer-2--l0 {
+  animation: slide-l0 0.25s ease 0s 1 normal forwards;
+}
+
+.editor-drawer-2--l1 {
+  right: 16rem;
+}
+
+@keyframes slide-l0 {
+  100% {
+    right: 0;
+  }
+}
+
+@keyframes slide-l1 {
+  100% {
+    right: 16rem;
+  }
+}
+
+@screen xl {
+  .editor-drawer-2 {
+    width: 48rem;
+  }
+
+  .editor-drawer-2--large {
+    width: 64rem;
+  }
+}
+
+.editor-drawer-2__close {
+  left: -52px;
+  z-index: -1;
+}

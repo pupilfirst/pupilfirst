@@ -24,15 +24,15 @@
   @apply bg-orange-100 border-orange-400;
 }
 
-.course-overlay__header-title-card--submitted {
+.course-overlay__header-title-card--pending-review {
   @apply bg-blue-100 border-blue-400;
 }
 
-.course-overlay__header-title-card--passed {
+.course-overlay__header-title-card--completed {
   @apply bg-green-100 border-green-400;
 }
 
-.course-overlay__header-title-card--failed {
+.course-overlay__header-title-card--rejected {
   @apply bg-red-100 border-red-400;
 }
 
@@ -86,15 +86,11 @@
 }
 
 .course-overlay__body-tab-item {
-  @apply border border-gray-400;
+  @apply border border-gray-400 rounded-t-lg;
 }
 
 .course-overlay__body-tab-item:not(:last-child) {
   @apply mr-1;
-}
-
-.course-overlay__body-tab-item {
-  @apply rounded-t-lg;
 }
 
 .course-overlay__body-tab-item--selected {
@@ -129,7 +125,7 @@
 
 .skeleton-animate {
   animation: skeletonShimmer 3s infinite linear;
-  background: linear-gradient(to right, #F5F3F7 10%, #FBFAFC 40%, #F5F3F7 70%);
+  background: linear-gradient(to right, #f5f3f7 10%, #fbfafc 40%, #f5f3f7 70%);
   background-size: 1000px 100%;
 }
 

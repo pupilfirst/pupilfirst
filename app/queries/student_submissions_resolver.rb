@@ -44,11 +44,11 @@ class StudentSubmissionsResolver < ApplicationQuery
 
   def filter_by_status(status, submissions)
     case status
-    when 'Submitted'
+    when 'PendingReview'
       submissions.where(evaluated_at: nil)
-    when 'Passed'
+    when 'Completed'
       submissions.passed
-    when 'Failed'
+    when 'Rejected'
       submissions.failed
     else
       raise "Unexpected status '#{status}' encountered when resolving submissions"

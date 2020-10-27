@@ -59,6 +59,10 @@ feature "Student's view of Course Curriculum", js: true do
     create(:timeline_event_grade, timeline_event: submission_failed_target, evaluation_criterion: evaluation_criterion, grade: 1)
   end
 
+  around do |example|
+    Time.use_zone(student.user.time_zone) { example.run }
+  end
+
   scenario "student who has dropped out attempts to view a course's curriculum" do
     student.startup.update!(dropped_out_at: 1.day.ago)
     sign_in_user student.user, referrer: curriculum_course_path(course)
@@ -103,27 +107,19 @@ feature "Student's view of Course Curriculum", js: true do
 
     # All targets should have the right status written next to their titles.
     within("a[aria-label='Select Target #{completed_target_l4.id}']") do
-      expect(page).to have_content('Passed')
-    end
-
-    within("a[aria-label='Select Target #{pending_target_g1.id}']") do
-      expect(page).to have_content('Pending')
+      expect(page).to have_content('Completed')
     end
 
     within("a[aria-label='Select Target #{submitted_target.id}']") do
-      expect(page).to have_content('Submitted')
+      expect(page).to have_content('Pending Review')
     end
 
     within("a[aria-label='Select Target #{failed_target.id}']") do
-      expect(page).to have_content('Failed')
+      expect(page).to have_content('Rejected')
     end
 
     within("a[aria-label='Select Target #{target_with_prerequisites.id}']") do
       expect(page).to have_content('Locked')
-    end
-
-    within("a[aria-label='Select Target #{pending_target_g2.id}']") do
-      expect(page).to have_content('Pending')
     end
 
     expect(page).to have_content(target_group_l4_1.name)
@@ -151,7 +147,7 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_content(completed_target_l2.title)
 
     within("a[aria-label='Select Target #{completed_target_l2.id}']") do
-      expect(page).to have_content('Passed')
+      expect(page).to have_content('Completed')
     end
   end
 
@@ -258,10 +254,6 @@ feature "Student's view of Course Curriculum", js: true do
       expect(page).to have_content(target_group_l0.name)
       expect(page).to have_content(target_group_l0.description)
       expect(page).to have_content(level_0_target.title)
-
-      within("a[aria-label='Select Target #{level_0_target.id}']") do
-        expect(page).to have_content('Pending')
-      end
     end
   end
 
@@ -277,7 +269,7 @@ feature "Student's view of Course Curriculum", js: true do
     end
   end
 
-  context "when a user has more than one student profile" do
+  context 'when a user has more than one student profile' do
     context 'when the profile is in the same school' do
       let(:course_2) { create :course }
       let(:c2_level_1) { create :level, :one, course: course_2 }
@@ -359,11 +351,6 @@ feature "Student's view of Course Curriculum", js: true do
       expect(page).to have_content(target_group_l5.description)
       expect(page).to have_content(l5_reviewed_target.title)
 
-      # Targets should have the right status written next to their titles.
-      within("a[aria-label='Select Target #{l5_reviewed_target.id}']") do
-        expect(page).to have_content('Pending')
-      end
-
       click_link l5_reviewed_target.title
 
       expect(page).to have_content('You are currently looking at a preview of this course.')
@@ -395,25 +382,11 @@ feature "Student's view of Course Curriculum", js: true do
     end
   end
 
-  context 'when a target has a prerequisite that is in draft mode' do
-    let!(:pending_target_g1) { create :target, :draft, target_group: target_group_l4_1, role: Target::ROLE_TEAM }
-
-    scenario 'student can complete target with draft prerequisite' do
-      sign_in_user student.user, referrer: curriculum_course_path(course)
-
-      expect(page).to have_content(target_with_prerequisites.title)
-
-      within("a[aria-label='Select Target #{target_with_prerequisites.id}']") do
-        expect(page).to have_content('Pending')
-      end
-    end
-  end
-
   context 'when a level has no live targets' do
     let!(:level_without_targets) { create :level, number: 7, course: course }
 
     scenario 'level empty message is displayed' do
-      sign_in_user student.user, referer: curriculum_course_path(course)
+      sign_in_user student.user, referrer: curriculum_course_path(course)
 
       click_button "L4: #{level_4.name}"
       click_button "L7: #{level_without_targets.name}"

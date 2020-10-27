@@ -1,6 +1,7 @@
 <%
   school_name = @user.school.name
   recipient_name = @user.name
+
   def article(count)
     count > 1 ? 'are' : 'is'
   end
@@ -21,18 +22,18 @@
 <% end %>
 
 <% content_for :body do %>
-  <% if @updates[:updates_for_coach].present? %>
-    <% pending_submissions_count = @updates[:updates_for_coach].map { |s| s[:pending_submissions] }.sum %>
+  <% if @updates[:coach].present? %>
+    <% pending_submissions_count = @updates[:coach].map { |s| s[:pending_submissions] }.sum %>
     <p style="margin-top: 10px;">
 
       There <%= article(pending_submissions_count) %> <strong><%= pending_submissions_count %></strong>
       new <%= 'submission'.pluralize(pending_submissions_count) %> to review
-      in <%= pluralize(@updates[:updates_for_coach].length, 'course') %>
+      in <%= pluralize(@updates[:coach].length, 'course') %>
       that you are a coach in:
     </p>
 
     <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">
-      <% @updates[:updates_for_coach].each do |stats| %>
+      <% @updates[:coach].each do |stats| %>
         <li style="padding: 2px 0px;">
           <%= link_to "#{stats[:course_name]}:", review_course_url(stats[:course_id]), style: 'color: #6025C0; border-radius: 8px; padding: 0px;' %>
           <span><strong><%= stats[:pending_submissions] %></strong>
@@ -45,33 +46,48 @@
     </ul>
   <% end %>
 
-  <% if @updates[:community_updates].present? %>
-    <% topics_count = @updates[:community_updates].values.map { |v| v[:topics].length }.sum %>
-    <p style="margin-top: 10px;">
-      There <%= article(topics_count) %> <strong><%= topics_count %></strong> new
-      <%= 'topic'.pluralize(topics_count) %> in <%= pluralize(@updates[:community_updates].length, 'community') %>
-      that you are a
-      part of.
+  <% if @updates[:community_new].present? %>
+    <p style="margin-top: 15px;">
+      Latest topics posted on your communities:
     </p>
 
-    <% @updates[:community_updates].each do |community_id, community_updates| %>
-      <%= link_to community_updates[:community_name], community_url(community_id), style: 'font-size: 120%; color: #6025C0; border-radius: 8px; padding: 0px 4px;' %>
-
-      <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">
-        <% community_updates[:topics].each do |topic| %>
-          <li style="padding: 2px 0px;">
-            <%= link_to topic[:title], topic_url(topic[:id]) %>
-            <span style="font-size: 75%;">
-            &mdash; <strong><%= topic[:author] %></strong>
-              <%= topic[:type] == 'new' ? '' : "(no activity, asked #{pluralize(topic[:days_ago], 'day')} ago)" %>
-          </span>
-          </li>
-        <% end %>
-      </ul>
+    <% @updates[:community_new].each do |topic| %>
+      <div>
+        <%= link_to topic[:title], topic_url(topic[:id]) %>
+        <span style="font-size: 75%;">
+          &mdash; <strong><%= topic[:author] %></strong>
+        </span>
+      </div>
+      <div style="font-size: 75%; border-bottom: 1px solid lightgray; margin-bottom: 4px; padding-bottom: 4px;">
+        <%= link_to topic[:community_name], community_url(topic[:community_id]) %>,
+        <%= pluralize(topic[:views], 'view') %>,
+        <%= pluralize(topic[:replies], 'reply') %>.
+      </div>
     <% end %>
   <% end %>
 
-  <p style="font-size: 75%;">
+  <% if @updates[:community_reactivated].present? %>
+    <p style="margin-top: 15px;">
+      Older, popular topics that have seen new activity:
+    </p>
+
+    <% @updates[:community_reactivated].each do |topic| %>
+      <div>
+        <%= link_to topic[:title], topic_url(topic[:id]) %>
+        <span style="font-size: 75%;">
+          &mdash; <strong><%= topic[:author] %></strong>
+        </span>
+      </div>
+      <div style="font-size: 75%; border-bottom: 1px solid lightgray; margin-bottom: 4px; padding-bottom: 4px;">
+        <%= link_to topic[:community_name], community_url(topic[:community_id]) %>,
+        <%= pluralize(topic[:views], 'view') %>,
+        <%= pluralize(topic[:replies], 'reply') %>,
+        asked <%= pluralize(topic[:days_ago], 'day') %> ago.
+      </div>
+    <% end %>
+  <% end %>
+
+  <p style="font-size: 75%; text-align: center; margin-top: 15px;">
     You can control these emails from <%= link_to "your profile edit page", edit_user_url %>.
   </p>
 <% end %>

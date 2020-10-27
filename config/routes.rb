@@ -129,7 +129,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :faculty, only: %i[index show] do
+  resources :faculty, only: %i[] do
     post 'connect', on: :member
     # get 'dashboard', to: 'faculty/dashboard#index'
     collection do
@@ -144,8 +144,6 @@ Rails.application.routes.draw do
     #   get '/', action: 'index'
     # end
   end
-
-  # TODO: Remove these faculty routes as we no longer have 'faculty'. Always use the corresponding 'coaches' routes below.
 
   scope 'coaches', controller: 'faculty' do
     get '/', action: 'index', as: 'coaches_index'

@@ -120,6 +120,7 @@ group :development do
   gem 'meta_request', '~> 0.4' # Chrome extension for Rails development. https://github.com/dejan/rails_panel
   gem 'graphiql-rails', '~> 1.7'
   gem 'foreman'
+  gem 'rails-erd'
 end
 
 group :test do

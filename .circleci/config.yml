@@ -1,0 +1,85 @@
+version: 2.1
+
+orbs:
+  ruby: circleci/ruby@1.1.1
+  node: circleci/node@4.0.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/ruby:2.7-node
+    steps:
+      - checkout
+      - ruby/install-deps
+      - node/install-packages:
+          pkg-manager: yarn
+
+  test:
+    parallelism: 1
+    docker:
+      - image: cimg/ruby:2.7-node
+      - image: circleci/postgres:12
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: gt_pupilfirst_test
+          POSTGRES_PASSWORD: password
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      PGHOST: 127.0.0.1
+      PGUSER: postgres
+      PGPASSWORD: password
+      RAILS_ENV: test
+    steps:
+      - checkout
+      - ruby/install-deps
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Database setup
+          command: bin/rails db:schema:load --trace
+          environment:
+            DATABASE_URL: "postgres://postgres:password@localhost:5432/gt_pupilfirst_test"
+      - ruby/rspec-test
+      - run:
+          name: Stash Coverage Results
+          command: |
+            mkdir coverage_results
+            cp -R coverage/.resultset.json coverage_results/.resultset-${CIRCLE_NODE_INDEX}.json
+      - store_artifacts:
+          path: coverage_results
+      - persist_to_workspace:
+          root: .
+          paths:
+            - coverage_results
+
+  coverage:
+    docker:
+      - image: cimg/ruby:2.6-node
+    steps:
+      - checkout
+      - ruby/install-deps
+      - node/install-packages:
+          pkg-manager: yarn
+      - attach_workspace:
+          at: .
+      - run:
+          name: Merge and check coverage
+          command: bin/rake coverage:report
+      - store_artifacts:
+          path: coverage
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - coverage:
+          requires:
+            - test

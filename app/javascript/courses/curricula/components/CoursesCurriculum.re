@@ -1,7 +1,6 @@
 [%bs.raw {|require("./CoursesCurriculum.css")|}];
 
-[@bs.module "../images/level-lock.svg"]
-external levelLockedImage: string = "default";
+[@bs.module] external levelLockedImage: string = "../images/level-lock.svg";
 
 open CoursesCurriculum__Types;
 

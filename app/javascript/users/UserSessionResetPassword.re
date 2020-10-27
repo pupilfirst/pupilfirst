@@ -1,5 +1,5 @@
-[@bs.module "./images/set-new-password-icon.svg"]
-external resetPasswordIcon: string = "default";
+[@bs.module]
+external resetPasswordIcon: string = "./images/set-new-password-icon.svg";
 
 let str = React.string;
 

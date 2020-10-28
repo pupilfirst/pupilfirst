@@ -141,6 +141,7 @@ group :development, :test do
 
   # TODO: Simplecov has to be locked to < 0.18 until an issue with cc-test-reporter is fixed: https://github.com/codeclimate/test-reporter/issues/413
   gem 'simplecov', '< 0.18', require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov
+  gem "rspec_junit_formatter" # formatter to provide nice output from test & allows splitting them by time across the jobs
 end
 
 group :production do

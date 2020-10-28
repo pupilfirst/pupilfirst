@@ -152,7 +152,7 @@ You need to add a cache store to handle API rate limiting in the application.
 
 ## Direct Upload to Vimeo
 
-To enable direct uploads to a Vimeo account from the curriculum editor, add the `VIMEO_ACCESS_TOKEN` and `VIMEO_ACCOUNT_TYPE` environment variable.
+To enable direct uploads to a Vimeo account from the curriculum editor, add the `VIMEO_ACCESS_TOKEN` and `VIMEO_ACCOUNT_TYPE` (`basic`, `plus`, `pro`, `business`, `premium`) environment variables.
 
 Make sure that the access token has the following scopes enabled:
 
@@ -162,7 +162,7 @@ Make sure that the access token has the following scopes enabled:
 - `upload`
 - `video_files`
 
-> Note: You cannot upload private videos if your Vimeo account type is `basic`
+> Note: You cannot upload private videos if your Vimeo account type is `basic`.
 
 ## Troubleshooting
 

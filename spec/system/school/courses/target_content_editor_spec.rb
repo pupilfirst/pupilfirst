@@ -256,7 +256,7 @@ feature 'Target Content Editor', js: true do
     let!(:account_type) { %w[basic pro].sample }
 
     before do
-      school.configuration['vimeo'] = { vimeo_access_token: vimeo_access_token, account_type: account_type }
+      school.configuration['vimeo'] = { access_token: vimeo_access_token, account_type: account_type }
       school.save!
 
       stub_request(:post, 'https://api.vimeo.com/me/videos/')

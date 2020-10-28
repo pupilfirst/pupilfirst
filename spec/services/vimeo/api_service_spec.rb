@@ -22,7 +22,7 @@ describe Vimeo::ApiService do
         },
         privacy: {
           embed: 'whitelist',
-          view: 'disable'
+          view: account_type == 'basic' ? 'anybody' : 'disable'
         },
         embed: {
           buttons: {
@@ -57,16 +57,14 @@ describe Vimeo::ApiService do
     end
 
     before do
-      school.configuration['vimeo'] = { vimeo_access_token: vimeo_access_token, account_type: account_type }
+      school.configuration['vimeo'] = { access_token: vimeo_access_token, account_type: account_type }
       school.save!
     end
 
     it 'creates a new video' do
-      data = expected_data.dup
-      data[:privacy][:view] = 'anybody' if account_type == 'basic'
       stub_request(:post, "https://api.vimeo.com/me/videos/").
         with(
-          body: data.to_json,
+          body: expected_data.to_json,
           headers: {
             'Accept' => 'application/vnd.vimeo.*+json;version=3.4',
             'Authorization' => "Bearer #{vimeo_access_token}",
@@ -87,7 +85,6 @@ describe Vimeo::ApiService do
       it 'creates a new video with hidden title' do
         data = expected_data.dup
         data[:embed][:title][:name] = 'hide'
-        data[:privacy][:view] = 'anybody' if account_type == 'basic'
 
         stub_request(:post, "https://api.vimeo.com/me/videos/").
           with(

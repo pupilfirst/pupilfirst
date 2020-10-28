@@ -12,6 +12,7 @@ describe Vimeo::ApiService do
     let(:size) { Faker::Number.number(digits: 9) }
     let(:name) { Faker::Lorem.words(number: 4).join(' ') }
     let(:description) { Faker::Lorem.paragraph }
+    let(:account_type) { %w[basic pro].sample }
 
     let(:expected_data) do
       {
@@ -21,7 +22,7 @@ describe Vimeo::ApiService do
         },
         privacy: {
           embed: 'whitelist',
-          view: 'disable'
+          view: account_type == 'basic' ? 'anybody' : 'disable'
         },
         embed: {
           buttons: {
@@ -56,7 +57,7 @@ describe Vimeo::ApiService do
     end
 
     before do
-      school.configuration['vimeo_access_token'] = vimeo_access_token
+      school.configuration['vimeo'] = { access_token: vimeo_access_token, account_type: account_type }
       school.save!
     end
 

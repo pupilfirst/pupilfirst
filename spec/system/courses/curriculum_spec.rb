@@ -391,7 +391,7 @@ feature "Student's view of Course Curriculum", js: true do
       click_button "L4: #{level_4.name}"
       click_button "L7: #{level_without_targets.name}"
 
-      expect(page).to have_content("There's no content for you to see yet")
+      expect(page).to have_content("There's no published content on this level")
     end
   end
 end

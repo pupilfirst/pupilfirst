@@ -554,8 +554,8 @@ let make =
             ? ListUtils.isEmpty(targetGroupsInLevel)
                 ? <div className="mx-auto py-10">
                     <img className="max-w-sm mx-auto" src=levelEmptyImage />
-                    <p className="text-center font-semibold text-lg mt-1">
-                      {"There's no content for you to see yet." |> str}
+                    <p className="text-center font-semibold text-lg mt-4">
+                      {"There's no published content on this level." |> str}
                     </p>
                   </div>
                 : targetGroupsInLevel

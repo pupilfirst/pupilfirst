@@ -31,7 +31,7 @@ after 'development:targets' do
         filename: 'pdf-sample.pdf'
       )
 
-      target_version.content_blocks.create!(block_type: 'embed', content: { url: embed[:url], embed_code: embed[:code] }, sort_index: 4)
+      target_version.content_blocks.create!(block_type: 'embed', content: { url: embed[:url], embed_code: embed[:code], request_source: 'User' }, sort_index: 4)
     end
   end
 end

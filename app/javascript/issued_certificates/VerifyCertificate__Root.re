@@ -1,7 +1,6 @@
 [%bs.raw {|require("./VerifyCertificate__Root.css")|}];
 
-[@bs.module "./images/graduate-icon.svg"]
-external graduateIcon: string = "default";
+[@bs.module] external graduateIcon: string = "./images/graduate-icon.svg";
 
 let str = React.string;
 

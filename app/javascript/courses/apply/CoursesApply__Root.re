@@ -1,8 +1,7 @@
 [%bs.raw {|require("../shared/background_patterns.css")|}];
 [%bs.raw {|require("./CoursesApply__Root.css")|}];
 
-[@bs.module "./images/email-sent-icon.svg"]
-external emailSentIcon: string = "default";
+[@bs.module] external emailSentIcon: string = "./images/email-sent-icon.svg";
 
 let str = React.string;
 

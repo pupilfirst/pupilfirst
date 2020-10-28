@@ -1,5 +1,5 @@
-[@bs.module "./images/permanent-delete.svg"]
-external permanentDeleteIcon: string = "default";
+[@bs.module]
+external permanentDeleteIcon: string = "./images/permanent-delete.svg";
 
 let str = React.string;
 

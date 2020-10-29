@@ -28,7 +28,7 @@ class User < ApplicationRecord
 
   # database_authenticable is required by devise_for to generate the session routes
   devise :database_authenticatable, :trackable, :rememberable, :omniauthable, :recoverable,
-    omniauth_providers: %i[google_oauth2 facebook github]
+    omniauth_providers: %i[google_oauth2 facebook github keycloakopenid]
 
   normalize_attribute :name, :about, :affiliation
 

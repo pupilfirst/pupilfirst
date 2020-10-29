@@ -20,7 +20,9 @@ module Users
       end
 
       def oauth_host
-        @oauth_host ||= Rails.application.secrets.sso_domain
+        return @oauth_host if @oauth_host
+
+        @oauth_host = Rails.application.secrets.sso_domain
       end
     end
   end

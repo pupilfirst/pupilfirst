@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_21_175226) do
+ActiveRecord::Schema.define(version: 2020_10_22_093240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -760,7 +760,7 @@ ActiveRecord::Schema.define(version: 2020_10_21_175226) do
     t.string "title"
     t.text "about"
     t.bigint "school_id"
-    t.jsonb "preferences", default: {"daily_digest"=>true}, null: false
+    t.jsonb "preferences", default: { "daily_digest" => true }, null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.string "affiliation"

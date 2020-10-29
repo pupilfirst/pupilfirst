@@ -2,6 +2,7 @@
 id: intro
 title: Introduction
 sidebar_label: Introduction
+slug: /
 ---
 
 Pupilfirst LMS is a [Ruby on Rails](https://rubyonrails.org/) application. Rails follows a

@@ -14,7 +14,10 @@ let additionalLinks = (linksVisible, links) =>
               <div key={index |> string_of_int} className="">
                 <a
                   className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200"
-                  href={link |> NavLink.url}>
+                  href={link |> NavLink.url}
+                  target="_blank"
+                  rel="noopener"
+                >
                   {link |> NavLink.title |> str}
                 </a>
               </div>

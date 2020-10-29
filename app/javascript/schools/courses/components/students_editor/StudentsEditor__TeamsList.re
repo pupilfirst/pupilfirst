@@ -1,5 +1,4 @@
-[@bs.module "./images/no-students-found.svg"]
-external notFoundIcon: string = "default";
+[@bs.module] external notFoundIcon: string = "./images/no-students-found.svg";
 
 let str = React.string;
 

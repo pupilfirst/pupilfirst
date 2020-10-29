@@ -31,7 +31,14 @@ class ApplicationController < ActionController::Base
   end
 
   # Pundit authorization error should cause a 404.
-  rescue_from Pundit::NotAuthorizedError, with: :raise_not_found
+  rescue_from Pundit::NotAuthorizedError do |exception|
+    if Rails.env.development?
+      logger.error "Pundit::NotAuthorizedError: #{exception.message}"
+      logger.error exception.backtrace.join("\n")
+    end
+
+    raise_not_found
+  end
 
   # Redirect all requests from unknown domains to service homepage.
   rescue_from RequestFromUnknownDomain do

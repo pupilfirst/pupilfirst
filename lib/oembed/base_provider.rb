@@ -17,6 +17,14 @@ module Oembed
 
       # Return the 'html' key from the response.
       parsed_response['html']
+    rescue => e
+      Rails.logger.error "Oembed::BaseProvider resolve failed: #{e.message}"
+
+      if e.backtrace.respond_to?(:join)
+        Rails.logger.error(e.backtrace.join("\n"))
+      end
+
+      nil
     end
   end
 end

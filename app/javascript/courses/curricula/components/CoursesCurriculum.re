@@ -1,7 +1,7 @@
 [%bs.raw {|require("./CoursesCurriculum.css")|}];
 
-[@bs.module "../images/level-lock.svg"]
-external levelLockedImage: string = "default";
+[@bs.module] external levelLockedImage: string = "../images/level-lock.svg";
+[@bs.module] external levelEmptyImage: string = "../images/level-empty.svg";
 
 open CoursesCurriculum__Types;
 
@@ -551,17 +551,24 @@ let make =
               </div>
             : React.null}
          {currentLevel |> Level.isUnlocked || accessLockedLevels
-            ? targetGroupsInLevel
-              |> TargetGroup.sort
-              |> List.map(targetGroup =>
-                   renderTargetGroup(
-                     targetGroup,
-                     targets,
-                     state.statusOfTargets,
-                   )
-                 )
-              |> Array.of_list
-              |> React.array
+            ? ListUtils.isEmpty(targetGroupsInLevel)
+                ? <div className="mx-auto py-10">
+                    <img className="max-w-sm mx-auto" src=levelEmptyImage />
+                    <p className="text-center font-semibold text-lg mt-4">
+                      {"There's no published content on this level." |> str}
+                    </p>
+                  </div>
+                : targetGroupsInLevel
+                  |> TargetGroup.sort
+                  |> List.map(targetGroup =>
+                       renderTargetGroup(
+                         targetGroup,
+                         targets,
+                         state.statusOfTargets,
+                       )
+                     )
+                  |> Array.of_list
+                  |> React.array
             : handleLockedLevel(currentLevel)}
        </div>
      }}

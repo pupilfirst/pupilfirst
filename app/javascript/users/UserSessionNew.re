@@ -1,16 +1,17 @@
 [%bs.raw {|require("./UserSessionNew.css")|}];
 
-[@bs.module "./images/federated-sign-in-icon.svg"]
-external federatedSignInIcon: string = "default";
+[@bs.module]
+external federatedSignInIcon: string = "./images/federated-sign-in-icon.svg";
 
-[@bs.module "./images/continue-with-email-icon.svg"]
-external signInWithPasswordIcon: string = "default";
+[@bs.module]
+external signInWithPasswordIcon: string =
+  "./images/continue-with-email-icon.svg";
 
-[@bs.module "./images/email-sent-icon.svg"]
-external signInEmailSentIcon: string = "default";
+[@bs.module]
+external signInEmailSentIcon: string = "./images/email-sent-icon.svg";
 
-[@bs.module "./images/reset-password-icon.svg"]
-external forgotPasswordIcon: string = "default";
+[@bs.module]
+external forgotPasswordIcon: string = "./images/reset-password-icon.svg";
 
 let str = React.string;
 

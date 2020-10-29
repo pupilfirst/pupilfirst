@@ -23,28 +23,28 @@ let handleResponseError = error => {
   };
 };
 
-let handleResponseJSON = (json, responseCB, errorCB) => {
+let handleResponseJSON = (json, responseCB, errorCB, notify) => {
   let error = json |> Json.Decode.(optional(field("error", string)));
 
   switch (error) {
   | Some(error) =>
-    Notification.error("Something went wrong!", error);
+    notify ? Notification.error("Something went wrong!", error) : ();
     errorCB();
   | None => responseCB(json)
   };
 };
 
-let handleResponse = (responseCB, errorCB, promise) =>
+let handleResponse = (~responseCB, ~errorCB, ~notify=true, promise) =>
   Js.Promise.(
     promise
     |> then_(response => acceptOrRejectResponse(response))
     |> then_(json =>
-         handleResponseJSON(json, responseCB, errorCB) |> resolve
+         handleResponseJSON(json, responseCB, errorCB, notify) |> resolve
        )
     |> catch(error => {
          errorCB();
          Js.log(error);
-         handleResponseError(error |> handleApiError) |> resolve;
+         resolve(notify ? handleResponseError(handleApiError(error)) : ());
        })
     |> ignore
   );
@@ -61,7 +61,7 @@ let sendPayload = (url, payload, responseCB, errorCB, method) =>
       (),
     ),
   )
-  |> handleResponse(responseCB, errorCB);
+  |> handleResponse(~responseCB, ~errorCB);
 
 let sendFormData = (url, formData, responseCB, errorCB) =>
   Fetch.fetchWithInit(
@@ -73,7 +73,10 @@ let sendFormData = (url, formData, responseCB, errorCB) =>
       (),
     ),
   )
-  |> handleResponse(responseCB, errorCB);
+  |> handleResponse(~responseCB, ~errorCB);
+
+let get = (~url, ~responseCB, ~errorCB, ~notify) =>
+  Fetch.fetch(url) |> handleResponse(~responseCB, ~errorCB, ~notify);
 
 let create = (url, payload, responseCB, errorCB) =>
   sendPayload(url, payload, responseCB, errorCB, Post);

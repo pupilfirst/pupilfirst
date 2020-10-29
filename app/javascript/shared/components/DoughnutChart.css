@@ -1,0 +1,44 @@
+.doughnut-chart__container {
+  @apply shadow rounded-lg p-4 h-full flex;
+}
+
+.doughnut-chart {
+  display: block;
+  max-width: 100%;
+  height: 72px;
+}
+
+.doughnut-chart__bg {
+  fill: none;
+  stroke-width: 2;
+}
+
+.doughnut-chart__stroke {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: butt;
+  animation: progress 0.5s ease-out forwards;
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}
+
+.doughnut-chart.purple .doughnut-chart__bg {
+  stroke: #d3bff3;
+}
+
+.doughnut-chart.purple .doughnut-chart__stroke {
+  stroke: #6025c0;
+}
+
+.doughnut-chart__text {
+  font-size: 0.45rem;
+  text-anchor: middle;
+}
+
+.doughnut-chart.purple .doughnut-chart__text {
+  fill: #6025c0;
+}

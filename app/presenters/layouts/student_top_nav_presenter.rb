@@ -32,7 +32,7 @@ module Layouts
           end
 
           # Both, with the user-based links at the front.
-          admin_link + dashboard_link + custom_links + coaches_link
+          admin_link + dashboard_link + coaches_link + custom_links
         end
     end
 

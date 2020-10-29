@@ -56,7 +56,9 @@ jobs:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: Database setup
-          command: bin/rails db:schema:load --trace
+          command: |
+            bin/rails db:schema:load --trace
+            bin/rails db:migrate --trace
           environment:
             DATABASE_URL: "postgres://postgres:password@localhost:5432/gt_pupilfirst_test"
       - ruby/rspec-test

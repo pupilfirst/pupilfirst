@@ -3,12 +3,20 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@1.1.1
   node: circleci/node@4.0.1
+  browser-tools: circleci/browser-tools@1.1.0
 
 jobs:
   build:
     docker:
-      - image: cimg/ruby:2.7.1-node
+      - image: cimg/ruby:2.7-browsers
     steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - run:
+          command: |
+            google-chrome --version
+            chromedriver --version
+          name: Check install
       - checkout
       - ruby/install-deps
       - node/install-packages:
@@ -17,7 +25,7 @@ jobs:
   test:
     parallelism: 1
     docker:
-      - image: cimg/ruby:2.7.1-node
+      - image: cimg/ruby:2.7-browsers
       - image: circleci/postgres:12
         environment:
           POSTGRES_USER: postgres
@@ -30,7 +38,15 @@ jobs:
       PGUSER: postgres
       PGPASSWORD: password
       RAILS_ENV: test
+      JAVASCRIPT_DRIVER: headless_chrome
     steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - run:
+          command: |
+            google-chrome --version
+            chromedriver --version
+          name: Check install
       - checkout
       - ruby/install-deps
       - node/install-packages:
@@ -58,7 +74,7 @@ jobs:
 
   coverage:
     docker:
-      - image: cimg/ruby:2.7.1-node
+      - image: cimg/ruby:2.7-browsers
     steps:
       - checkout
       - ruby/install-deps

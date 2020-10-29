@@ -24,6 +24,18 @@ module Users
     alias github oauth_callback
     alias developer oauth_callback
 
+    def keycloakopenid
+      Rails.logger.debug(request.env["omniauth.auth"])
+      @email = request.env['omniauth.auth']['info']['email']
+      @user = User.find_by email: @email
+      if @email.blank?
+        redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: email_blank_flash)
+        nil
+      else
+        sign_in_at_oauth_origin
+      end
+    end
+
     def failure
       if oauth_origin.present?
         message = "Authentication was denied by #{oauth_origin[:provider].capitalize}. Please try again."

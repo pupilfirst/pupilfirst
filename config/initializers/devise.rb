@@ -247,6 +247,7 @@ Devise.setup do |config|
   config.omniauth :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
   config.omniauth :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
   config.omniauth :developer, fields: %i[email] if Rails.env.development?
+  config.omniauth :keycloak_openid, 'pupilfirst', '13732bd2-9ceb-45f9-8ea0-cc94f7f9d724', client_options: { site: 'http://localhost:8080', realm: 'Playground' }, :strategy_class => OmniAuth::Strategies::KeycloakOpenId
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

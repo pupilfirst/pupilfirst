@@ -18,6 +18,8 @@ class OmniauthProviderUrlService
         url_helpers.user_facebook_omniauth_authorize_url(url_opts)
       when 'github'
         url_helpers.user_github_omniauth_authorize_url(url_opts)
+      when 'keycloakopenid'
+        url_helpers.user_keycloakopenid_omniauth_authorize_url(url_opts)
       else
         raise "Invalid provider #{@provider} supplied to oauth redirection route."
     end

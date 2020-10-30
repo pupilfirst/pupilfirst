@@ -27,6 +27,7 @@ module Users
     def keycloakopenid
       Rails.logger.debug(request.env["omniauth.auth"])
       @email = request.env['omniauth.auth']['info']['email']
+      @refresh_token = request.env['omniauth.auth']['credentials']['refresh_token']
       if @email.blank?
         redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: email_blank_flash)
         nil
@@ -68,6 +69,7 @@ module Users
 
         token_url_options = {
           token: user.login_token,
+          keycloak_refresh_token: @refresh_token,
           host: oauth_origin[:fqdn]
         }
         # Redirect user to sign in at the origin domain with newly generated token.

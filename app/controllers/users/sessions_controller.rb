@@ -45,6 +45,7 @@ module Users
     def token
       user = Users::AuthenticationService.new(current_school, params[:token]).authenticate
       store_location_for(:user, params[:referrer]) if params[:referrer].present?
+      cookies['keycloak_refresh_token'] = params[:keycloak_refresh_token] if params[:keycloak_refresh_token].present?
 
       if user.present?
         sign_in user

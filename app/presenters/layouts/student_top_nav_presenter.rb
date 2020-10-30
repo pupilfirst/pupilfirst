@@ -7,6 +7,7 @@ module Layouts
         links: nav_links,
         authenticity_token: view.form_authenticity_token,
         is_logged_in: current_user.present?,
+        auth_link: auth_link
       }
     end
 
@@ -20,6 +21,11 @@ module Layouts
       elsif current_school.logo_on_light_bg.attached?
         view.url_for(current_school.logo_variant(:high))
       end
+    end
+
+    def auth_link
+      host = Rails.application.secrets.sso_domain
+      @view.oauth_url(:keycloakopenid, host: host, fqdn: @view.request.host)
     end
 
     private

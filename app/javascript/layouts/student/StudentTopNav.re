@@ -30,22 +30,23 @@ let signOutLink = () =>
     </div>
   </div>;
 
-let signInLink = () =>
+let signInLink = (authLink) =>
   <div
     key="SignIn-button"
     className="md:ml-6 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
     <div className="flex items-center justify-center">
       <a
         className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black"
-        href="/users/sign_in">
+        href={authLink}>
         <FaIcon classes="fas fa-power-off" />
         <span className="ml-2"> {"Sign In" |> str} </span>
       </a>
     </div>
+
   </div>;
 let isMobile = () => Webapi.Dom.window |> Webapi.Dom.Window.innerWidth < 768;
 
-let headerLinks = (links, isLoggedIn) => {
+let headerLinks = (links, isLoggedIn, authLink) => {
   let (visibleLinks, dropdownLinks) =
     switch (links, isMobile()) {
     | (links, true) => (links, [])
@@ -65,14 +66,14 @@ let headerLinks = (links, isLoggedIn) => {
     ->List.append([
         <StudentTopNav__DropDown links=dropdownLinks key="more-links" />,
       ])
-    ->List.append([isLoggedIn ? signOutLink() : signInLink()])
+    ->List.append([isLoggedIn ? signOutLink() : signInLink(authLink)])
     |> Array.of_list
     |> ReasonReact.array
   };
 };
 
 [@react.component]
-let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn) => {
+let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~authLink) => {
   let (menuHidden, toggleMenuHidden) = React.useState(() => isMobile());
 
   React.useEffect(() => {
@@ -120,7 +121,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn) => {
         {!menuHidden && !isMobile()
            ? <div
                className="student-navbar__links-container flex justify-end items-center w-3/5 lg:w-3/4 flex-no-wrap flex-shrink-0">
-               {headerLinks(links, isLoggedIn)}
+               {headerLinks(links, isLoggedIn, authLink)}
              </div>
            : React.null}
       </nav>
@@ -128,7 +129,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn) => {
     {isMobile() && !menuHidden
        ? <div
            className="student-navbar__links-container flex flex-row border-t w-full flex-wrap shadow-lg">
-           {headerLinks(links, isLoggedIn)}
+           {headerLinks(links, isLoggedIn, authLink)}
          </div>
        : React.null}
   </div>;

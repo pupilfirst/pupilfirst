@@ -9,6 +9,10 @@ class OmniauthProviderUrlService
   def oauth_url
     url_opts = { host: @host }
 
+    if Rails.env.development?
+      url_opts.merge! port: 3000
+    end
+
     case @provider.to_s
       when 'developer'
         url_helpers.user_developer_omniauth_authorize_url(url_opts)

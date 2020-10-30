@@ -12,7 +12,7 @@ feature 'Top navigation bar' do
   let!(:custom_link_4) { create :school_link, :header, school: student.school }
 
   it 'displays custom links on the navbar', js: true do
-    visit new_user_session_path
+    visit root_path
 
     # All four links should be visible.
     expect(page).to have_link(custom_link_4.title, href: custom_link_4.url)
@@ -69,7 +69,7 @@ feature 'Top navigation bar' do
     let!(:custom_link_5) { create :school_link, :header, school: student.school }
 
     it 'displays additional links in a "More" dropdown', js: true do
-      visit new_user_session_path
+      visit root_path
 
       # Three links should be visible.
       expect(page).to have_link(custom_link_5.title, href: custom_link_5.url)

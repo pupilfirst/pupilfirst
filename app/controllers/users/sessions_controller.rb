@@ -1,6 +1,7 @@
 module Users
   class SessionsController < Devise::SessionsController
     include Devise::Controllers::Rememberable
+
     before_action :skip_container, only: %i[new send_login_email]
     before_action :must_have_current_school
     layout 'student'
@@ -13,6 +14,9 @@ module Users
         flash[:notice] = 'You are already signed in.'
         redirect_to after_sign_in_path_for(current_user)
       end
+
+      # Bypass Devise sign_in page.
+      redirect_to oauth_path(:keycloakopenid)
     end
 
     # POST /user/send_email - find or create user from email received
@@ -111,6 +115,13 @@ module Users
 
     def must_have_current_school
       raise_not_found if current_school.blank?
+    end
+
+    # Revoke keycloak's token.
+    def sign_out(resource_or_scope = nil)
+      super(resource_or_scope)
+      KeycloakHelper.sign_out(cookies['keycloak_refresh_token'])
+      cookies.delete('keycloak_refresh_token')
     end
   end
 end

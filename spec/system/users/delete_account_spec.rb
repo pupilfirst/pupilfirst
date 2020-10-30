@@ -62,7 +62,11 @@ feature 'User Delete Account' do
 
       expect(page).to have_text("Account deletion is in progress", wait: 10)
 
-      expect(page).to have_link(href: "/users/sign_in", wait: 10)
+      host = Rails.application.secrets.sso_domain
+      port = page.current_url.split(':').last.split('/').first
+      domain = page.current_host.gsub('http://','')
+      expected_sign_in_path = oauth_url(:keycloakopenid, host: host, fqdn: domain, port: port)
+      expect(page).to have_link(href: expected_sign_in_path, wait: 10)
 
       open_email(user.email)
       subject = current_email.subject

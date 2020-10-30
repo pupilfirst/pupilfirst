@@ -38,12 +38,26 @@ let make =
       ~children,
     ) => {
   let previousLevel = React.useRef(level);
-
+  React.useEffect(() => {
+    ScrollLock.activate();
+    Some(() => ScrollLock.deactivate());
+  });
   <div>
     <div className="blanket" />
     // <div className="editor-drawer__background" />
     <div className={drawerClasses(size, level, previousLevel)}>
-      <div className="_editor-drawer__close -px-52 -z-1 absolute">
+      <div className="editor-drawer__close hidden md:block absolute">
+        <button
+          onClick={e => {
+            e |> ReactEvent.Mouse.preventDefault;
+            closeDrawerCB();
+          }}
+          title=closeButtonTitle
+          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
+          <i className={closeIconClassName ++ " text-xl"} />
+        </button>
+      </div>
+      <div className="md:hidden absolute right-0">
         <button
           onClick={e => {
             e |> ReactEvent.Mouse.preventDefault;

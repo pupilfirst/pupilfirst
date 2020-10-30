@@ -346,6 +346,12 @@ let make =
            </ul>
          | CourseAuthor => React.null
          }}
+        <Notifications__Root
+          wrapperClasses="w-full"
+          buttonClasses="flex text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center w-full"
+          title=?{shrunk ? None : Some("Notifications")}
+          icon="fas fa-bell fa-fw text-lg mr-2"
+        />
       </div>
       <ul>
         {bottomLink("/dashboard", shrunk, "fas fa-home", "Dashboard")}

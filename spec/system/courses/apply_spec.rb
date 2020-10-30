@@ -150,8 +150,7 @@ feature "Apply for public courses", js: true do
   scenario 'user tries to access enrollment page without a valid token' do
     visit enroll_applicants_path(token)
 
-    expect(page).to have_text("Sign in")
-    expect(page).to have_text('That one-time link has expired, or is invalid')
+    expect(page).to have_current_path(oauth_path(:keycloakopenid))
   end
 
   scenario 'applicant with bounced email attempts enrollment in a public course' do

@@ -2,12 +2,16 @@
 
 open React;
 
+type size =
+  | Normal
+  | Large;
+
 let drawerClasses = (size, level, previousLevel) => {
   let defaultClasses = "editor-drawer";
 
   let sizeClass =
     switch (size) {
-    | SchoolAdmin__EditorDrawer.Normal => ""
+    | Normal => ""
     | Large => " editor-drawer--large"
     };
 
@@ -32,7 +36,7 @@ let make =
     (
       ~closeDrawerCB,
       ~closeButtonTitle="Close Editor",
-      ~size=SchoolAdmin__EditorDrawer.Normal,
+      ~size=Normal,
       ~closeIconClassName="fas fa-times",
       ~level=0,
       ~children,

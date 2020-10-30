@@ -114,6 +114,20 @@ en:
       level_up_limited_description: "You're at Level %{currentLevel}, but you have targets in the Level %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up."
       level_up_title: Ready to Level Up!
       level_up_description: Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!
+    Notifications__List:
+      empty_notifications: "You don't have any notifications!"
+      notifications_fully_loaded_text: "Showing all %{total_notifications} notifications"
+      notifications_partially_loaded_text: "Showing %{loaded_notifications_count} of %{total_notifications} notifications"
+      filter:
+        input_placeholder: Search by title, event, read and unread
+        input_label: Show topics created
+        unread: Unread
+        read: Read
+        event: Event
+        events:
+          topic_created_text: Topic Created
+          topic_edited_text: Topic Edited
+      button_load_more: Load More Notifications...
 
   jobs:
     timeline_events:

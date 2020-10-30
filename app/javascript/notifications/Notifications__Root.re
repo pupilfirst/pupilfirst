@@ -7,7 +7,8 @@ let make = (~wrapperClasses, ~buttonClasses, ~title=?, ~icon=?) => {
     {<EditorDrawer
        closeButtonTitle={"Close " ++ title->Belt.Option.getWithDefault("")}
        closeDrawerCB={() => setShowNotifications(_ => false)}>
-       <div> {str("Halo")} </div>
+       <div> {str("Notification")} </div>
+       <Notifications__List />
      </EditorDrawer>
      ->ReactUtils.nullUnless(showNotifications)}
     <button

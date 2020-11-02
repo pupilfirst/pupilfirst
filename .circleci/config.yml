@@ -23,7 +23,7 @@ jobs:
           pkg-manager: yarn
 
   test:
-    parallelism: 1
+    parallelism: 4
     docker:
       - image: cimg/ruby:2.7-browsers
       - image: circleci/postgres:12

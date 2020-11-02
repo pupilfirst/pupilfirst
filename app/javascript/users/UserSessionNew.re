@@ -187,7 +187,8 @@ let renderFederatedlogin = (fqdn, oauthHost) =>
           <a
             key={buttonText(provider)}
             className={buttonClasses(provider)}
-            href={federatedLoginUrl(oauthHost, fqdn, provider)}>
+            href={federatedLoginUrl(oauthHost, fqdn, provider)}
+            rel="nofollow">
             <span className="w-1/5 text-right text-lg">
               <FaIcon classes={iconClasses(provider)} />
             </span>

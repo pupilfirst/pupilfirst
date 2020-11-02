@@ -629,7 +629,7 @@ feature 'School students index', js: true do
       create :issued_certificate, user: student_with_certificate.user, issuer: school_admin.user, certificate: certificate_1, created_at: 1.day.ago
     end
 
-    scenario 'admin visits editor of student without certificates' do
+    scenario 'admin manually issues a certificate to a student' do
       sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       find('a', text: student_without_certificate.name).click
@@ -639,7 +639,6 @@ feature 'School students index', js: true do
       expect(page).to have_text('This student has not been issued any certificates')
 
       # Issue new certificate
-
       select certificate_2.name, from: 'issue-certificate'
 
       click_button('Issue Certificate')
@@ -664,7 +663,7 @@ feature 'School students index', js: true do
       expect(page).to have_text('This student has already been issued a certificate for this course')
     end
 
-    scenario 'admin visits editor of student with issued certificates' do
+    scenario 'admin revokes issued certificate and then issues another one' do
       sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       find('a', text: student_with_certificate.name).click
@@ -677,7 +676,6 @@ feature 'School students index', js: true do
       issued_certificate = student_with_certificate.user.issued_certificates.last
 
       # Revoke the issued certificate
-
       within("div[aria-label='Details of issued certificate #{issued_certificate.id}']") do
         accept_confirm do
           click_button('Revoke Certificate')
@@ -698,7 +696,6 @@ feature 'School students index', js: true do
       end
 
       # Can issue new certificate
-
       select certificate_2.name, from: 'issue-certificate'
 
       click_button('Issue Certificate')

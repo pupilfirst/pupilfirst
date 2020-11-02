@@ -165,7 +165,8 @@ let tabOptions = (state, send, targetDetails, targetStatus) => {
   </div>;
 };
 
-let addSubmission = (target, state, send, addSubmissionCB, submission) => {
+let addSubmission =
+    (target, state, send, addSubmissionCB, submission, levelUpEligibility) => {
   switch (state.targetDetails) {
   | Some(targetDetails) =>
     let newTargetDetails =
@@ -179,10 +180,12 @@ let addSubmission = (target, state, send, addSubmissionCB, submission) => {
   | MarkedAsComplete =>
     addSubmissionCB(
       LatestSubmission.make(~pending=false, ~targetId=target |> Target.id),
+      levelUpEligibility,
     )
   | Pending =>
     addSubmissionCB(
       LatestSubmission.make(~pending=true, ~targetId=target |> Target.id),
+      levelUpEligibility,
     )
   | Completed =>
     raise(
@@ -199,7 +202,8 @@ let addSubmission = (target, state, send, addSubmissionCB, submission) => {
   };
 };
 
-let addVerifiedSubmission = (target, state, send, addSubmissionCB, submission) => {
+let addVerifiedSubmission =
+    (target, state, send, addSubmissionCB, submission, levelUpEligibility) => {
   switch (state.targetDetails) {
   | Some(targetDetails) =>
     let newTargetDetails =
@@ -210,6 +214,7 @@ let addVerifiedSubmission = (target, state, send, addSubmissionCB, submission) =
 
   addSubmissionCB(
     LatestSubmission.make(~pending=false, ~targetId=target |> Target.id),
+    levelUpEligibility,
   );
 };
 
@@ -558,9 +563,9 @@ let quickNavigationLinks = (targetDetails, send) => {
 };
 
 let updatePendingUserIdsWhenAddingSubmission =
-    (send, target, addSubmissionCB, submission) => {
+    (send, target, addSubmissionCB, submission, levelUpEligibility) => {
   send(AddSubmission(target |> Target.role));
-  addSubmissionCB(submission);
+  addSubmissionCB(submission, levelUpEligibility);
 };
 
 [@react.component]

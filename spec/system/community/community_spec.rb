@@ -134,6 +134,8 @@ feature 'Community', js: true do
     # any one with access to the community can reply to a topic
     replace_markdown reply_body
     click_button 'Post Your Reply'
+
+    expect(page).to have_text('Reply added successfully')
     dismiss_notification
 
     # A notification should have been mailed to the question author.
@@ -143,15 +145,17 @@ feature 'Community', js: true do
     expect(current_email.body).to include("/topics/#{topic_1.id}")
 
     expect(page).to have_text('2 Replies')
-    new_reply = topic_1.reload.replies.last
+    new_reply = topic_1.replies.find_by(post_number: 3)
     expect(new_reply.body).to eq(reply_body)
 
     # can edit his reply
     find("div[aria-label='Options for post #{new_reply.id}']").click
     click_button 'Edit Reply'
+
     within("div#post-show-#{new_reply.id}") do
       replace_markdown reply_body_for_edit
     end
+
     click_button 'Update Reply'
 
     expect(page).not_to have_text(reply_body)
@@ -195,8 +199,9 @@ feature 'Community', js: true do
     expect(current_email.body).to include("/topics/#{topic_1.id}")
 
     # check saved reply
-    expect(topic_1.replies.reload.last.body).to eq('This is a reply to another post')
-    expect(topic_1.replies.last.reply_to_post_id).to eq(reply_1.id)
+    last_reply = topic_1.replies.find_by(post_number: 4)
+    expect(last_reply.body).to eq('This is a reply to another post')
+    expect(last_reply.reply_to_post_id).to eq(reply_1.id)
 
     # Reply appears in the main list and as a thread to it's parent post
     find("button[aria-label='Show replies of post #{reply_1.id}']").click

@@ -40,7 +40,7 @@ module Types
     def participants
       BatchLoader::GraphQL.for(object.id).batch(default_value: []) do |topic_ids, loader|
         Post.includes(:creator).where(topic_id: topic_ids).where('post_number < ?', 4).each do |post|
-          loader.call(post.topic_id) { |memo| memo |= [post.creator] } # rubocop:disable Lint/UselessAssignment
+          loader.call(post.topic_id) { |memo| memo |= [post.creator].compact } # rubocop:disable Lint/UselessAssignment
         end
       end
 

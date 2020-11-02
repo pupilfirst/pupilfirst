@@ -10,7 +10,7 @@ module Layouts
       custom_links = SchoolLink.where(
         school: current_school,
         kind: SchoolLink::KIND_FOOTER
-      ).map { |sl| { title: sl.title, url: sl.url } }
+      ).map { |sl| { title: sl.title, url: sl.url, custom: true } }
 
       footer_links + custom_links
     end

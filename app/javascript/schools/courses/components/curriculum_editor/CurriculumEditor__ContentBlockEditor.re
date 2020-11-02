@@ -190,6 +190,7 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
   | ContentBlock.File(_url, title, _filename) =>
     let mutation = UpdateFileBlockMutation.make(~id, ~title, ());
     let extractor = result => result##updateFileBlock##contentBlock;
+
     updateContentBlockBlock(
       mutation,
       extractor,
@@ -210,6 +211,7 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
   | Image(_url, caption) =>
     let mutation = UpdateImageBlockMutation.make(~id, ~caption, ());
     let extractor = result => result##updateImageBlock##contentBlock;
+
     updateContentBlockBlock(
       mutation,
       extractor,
@@ -238,8 +240,18 @@ let innerEditor =
     updateContentBlockCB(originalContentBlock, setDirtyCB, state, send);
 
   switch (contentBlock |> ContentBlock.blockType) {
-  | ContentBlock.Embed(_url, embedCode) =>
-    TargetContentView.embedContentBlock("", embedCode)
+  | ContentBlock.Embed(url, embed, requestSource, lastResolvedAt) =>
+    embed->Belt.Option.mapWithDefault(
+      <CurriculumEditor__EmbedBlockResolver
+        url
+        requestSource
+        contentBlockId={ContentBlock.id(contentBlock)}
+        lastResolvedAt
+      />,
+      code =>
+      TargetContentView.embedContentBlock(code)
+    )
+
   | Markdown(markdown) =>
     <CurriculumEditor__MarkdownBlockEditor
       markdown

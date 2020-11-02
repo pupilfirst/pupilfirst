@@ -381,4 +381,17 @@ feature "Student's view of Course Curriculum", js: true do
       expect(page).not_to have_content(level_6_draft_target.title)
     end
   end
+
+  context 'when a level has no live targets' do
+    let!(:level_without_targets) { create :level, number: 7, course: course }
+
+    scenario 'level empty message is displayed' do
+      sign_in_user student.user, referrer: curriculum_course_path(course)
+
+      click_button "L4: #{level_4.name}"
+      click_button "L7: #{level_without_targets.name}"
+
+      expect(page).to have_content("There's no published content on this level")
+    end
+  end
 end

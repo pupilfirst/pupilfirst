@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_14_122811) do
+ActiveRecord::Schema.define(version: 2020_10_22_093240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -707,8 +707,8 @@ ActiveRecord::Schema.define(version: 2020_10_14_122811) do
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "views", default: 0
     t.bigint "topic_category_id"
+    t.integer "views", default: 0
     t.index ["community_id"], name: "index_topics_on_community_id"
     t.index ["target_id"], name: "index_topics_on_target_id"
     t.index ["topic_category_id"], name: "index_topics_on_topic_category_id"
@@ -807,6 +807,8 @@ ActiveRecord::Schema.define(version: 2020_10_14_122811) do
   add_foreign_key "founders", "users"
   add_foreign_key "issued_certificates", "certificates"
   add_foreign_key "issued_certificates", "users"
+  add_foreign_key "issued_certificates", "users", column: "issuer_id"
+  add_foreign_key "issued_certificates", "users", column: "revoked_by_id"
   add_foreign_key "leaderboard_entries", "founders"
   add_foreign_key "levels", "courses"
   add_foreign_key "markdown_attachments", "users"

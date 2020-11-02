@@ -1,11 +1,12 @@
 [%bs.raw {|require("./CoursesCurriculum.css")|}];
 
-[@bs.module "../images/level-lock.svg"]
-external levelLockedImage: string = "default";
+[@bs.module] external levelLockedImage: string = "../images/level-lock.svg";
+[@bs.module] external levelEmptyImage: string = "../images/level-empty.svg";
 
 open CoursesCurriculum__Types;
 
 let str = React.string;
+let t = I18n.t(~scope="components.CoursesCurriculum");
 
 type state = {
   selectedLevelId: string,
@@ -13,6 +14,7 @@ type state = {
   latestSubmissions: list(LatestSubmission.t),
   statusOfTargets: list(TargetStatus.t),
   notice: Notice.t,
+  levelUpEligibility: LevelUpEligibility.t,
 };
 
 let targetStatusClasses = targetStatus => {
@@ -85,7 +87,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
   </div>;
 };
 
-let addSubmission = (setState, latestSubmission) =>
+let addSubmission = (setState, latestSubmission, levelUpEligibility) =>
   setState(state => {
     let withoutSubmissionForThisTarget =
       state.latestSubmissions
@@ -95,20 +97,25 @@ let addSubmission = (setState, latestSubmission) =>
            != (latestSubmission |> LatestSubmission.targetId)
          );
 
+    let eligibility =
+      Belt.Option.getWithDefault(
+        levelUpEligibility,
+        state.levelUpEligibility,
+      );
+
     {
       ...state,
       latestSubmissions: [
         latestSubmission,
         ...withoutSubmissionForThisTarget,
       ],
+      levelUpEligibility: eligibility,
     };
   });
 
 let handleLockedLevel = level =>
   <div className="max-w-xl mx-auto text-center mt-4">
-    <div className="font-semibold text-2xl font-bold px-3">
-      {"Level Locked" |> str}
-    </div>
+    <div className="text-2xl font-bold px-3"> {"Level Locked" |> str} </div>
     <img className="max-w-sm mx-auto" src=levelLockedImage />
     {switch (level |> Level.unlockAt) {
      | Some(date) =>
@@ -145,40 +152,34 @@ let statusOfMilestoneTargets = (targetGroups, targets, level, statusOfTargets) =
      );
 };
 
-let isLevelComplete = (targetStatuses, eligibleStatuses) => {
-  targetStatuses
-  |> ListUtils.isNotEmpty
-  && targetStatuses
-  |> TargetStatus.matchesStatuses(eligibleStatuses);
+let issuedCertificate = course => {
+  switch (Course.certificateSerialNumber(course)) {
+  | Some(csn) =>
+    <div
+      className="max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8">
+      <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight">
+        {t("issued_certificate_heading")->str}
+      </div>
+      <a href={"/c/" ++ csn} className="mt-4 mb-2 btn btn-primary">
+        <FaIcon classes="fas fa-certificate" />
+        <span className="ml-2"> {t("issued_certificate_button")->str} </span>
+      </a>
+    </div>
+  | None => React.null
+  };
 };
 
 let computeLevelUp =
     (
+      levelUpEligibility,
       course,
-      levels,
       teamLevel,
       targetGroups,
       targets,
       statusOfTargets,
-      accessLockedLevels,
     ) => {
   let progressionBehavior = course |> Course.progressionBehavior;
   let currentLevelNumber = teamLevel |> Level.number;
-
-  let minimumRequiredLevel =
-    switch (progressionBehavior) {
-    | `Strict
-    | `Unlimited => None
-    | `Limited(progressionLimit) =>
-      let minimumLevelNumber = currentLevelNumber - progressionLimit;
-
-      if (minimumLevelNumber >= 1) {
-        levels
-        |> ListUtils.findOpt(l => l |> Level.number == minimumLevelNumber);
-      } else {
-        None;
-      };
-    };
 
   let statusOfCurrentMilestoneTargets =
     statusOfMilestoneTargets(
@@ -186,75 +187,51 @@ let computeLevelUp =
       targets,
       teamLevel,
       statusOfTargets,
-    );
+    )
+    ->Array.of_list;
 
-  let currentLevelComplete =
-    isLevelComplete(
-      statusOfCurrentMilestoneTargets,
-      TargetStatus.currentLevelStatuses(progressionBehavior),
-    );
+  switch (levelUpEligibility) {
+  | LevelUpEligibility.Eligible => Notice.LevelUp
+  | AtMaxLevel =>
+    TargetStatus.allComplete(statusOfCurrentMilestoneTargets)
+      ? CourseComplete : Nothing
+  | NoMilestonesInLevel => Nothing
+  | CurrentLevelIncomplete =>
+    switch (progressionBehavior) {
+    | `Strict =>
+      let currentLevelAttempted =
+        TargetStatus.allAttempted(statusOfCurrentMilestoneTargets);
 
-  let minimumRequiredLevelComplete =
-    switch (minimumRequiredLevel) {
-    | None => true
-    | Some(level) =>
-      let statusOfMinimumRequiredLevelMilestoneTargets =
-        statusOfMilestoneTargets(
-          targetGroups,
-          targets,
-          level,
-          statusOfTargets,
-        );
-
-      isLevelComplete(
-        statusOfMinimumRequiredLevelMilestoneTargets,
-        TargetStatus.minimumRequiredLevelStatuses,
-      );
-    };
-
-  let nextLevel =
-    levels
-    |> ListUtils.findOpt(l =>
-         l |> Level.number == (teamLevel |> Level.number) + 1
-       );
-
-  switch (nextLevel) {
-  | None => currentLevelComplete ? Notice.CourseComplete : Nothing
-  | Some(nextLevel) =>
-    if (Level.isUnlocked(nextLevel) || accessLockedLevels) {
-      switch (progressionBehavior) {
-      | `Limited(limit) =>
-        switch (currentLevelComplete, minimumRequiredLevelComplete) {
-        | (true, true) => LevelUp
-        | (true, false) =>
-          LevelUpLimited(currentLevelNumber, currentLevelNumber - limit)
-        | (false, false)
-        | (false, true) => Nothing
-        }
-      | `Unlimited => currentLevelComplete ? LevelUp : Nothing
-      | `Strict =>
-        if (currentLevelComplete) {
-          LevelUp;
-        } else {
-          let currentLevelSubmitted =
-            isLevelComplete(
-              statusOfCurrentMilestoneTargets,
-              [TargetStatus.PendingReview, Completed],
-            );
-
-          currentLevelSubmitted
-            ? Notice.LevelUpBlocked(currentLevelNumber) : Nothing;
-        }
+      if (currentLevelAttempted) {
+        let hasRejectedSubmissions =
+          TargetStatus.anyRejected(statusOfCurrentMilestoneTargets);
+        LevelUpBlocked(currentLevelNumber, hasRejectedSubmissions);
+      } else {
+        Nothing;
       };
-    } else {
-      Nothing;
+    | `Unlimited => Nothing
+    | `Limited(_progressionLimit) => Nothing
     }
+  | PreviousLevelIncomplete =>
+    switch (progressionBehavior) {
+    | `Strict
+    | `Unlimited => Nothing
+    | `Limited(progressionLimit) =>
+      let minimumLevelNumber = currentLevelNumber - progressionLimit;
+
+      if (minimumLevelNumber >= 1) {
+        LevelUpLimited(currentLevelNumber, minimumLevelNumber);
+      } else {
+        Nothing;
+      };
+    }
+  | TeamMembersPending => TeamMembersPending
+  | DateLocked => Nothing
   };
 };
 
 let computeNotice =
     (
-      levels,
       teamLevel,
       targetGroups,
       targets,
@@ -262,22 +239,23 @@ let computeNotice =
       course,
       team,
       preview,
-      accessLockedLevels,
+      levelUpEligibility,
     ) =>
-  switch (preview, course |> Course.hasEnded, team |> Team.accessEnded) {
-  | (true, _, _) => Notice.Preview
-  | (false, true, true | false) => CourseEnded
-  | (false, false, true) => AccessEnded
-  | (false, false, false) =>
+  if (preview) {
+    Notice.Preview;
+  } else if (Course.hasEnded(course)) {
+    CourseEnded;
+  } else if (Team.accessEnded(team)) {
+    AccessEnded;
+  } else {
     computeLevelUp(
+      levelUpEligibility,
       course,
-      levels,
       teamLevel,
       targetGroups,
       targets,
       statusOfTargets,
-      accessLockedLevels,
-    )
+    );
   };
 
 let navigationLink = (direction, level, setState) => {
@@ -356,6 +334,7 @@ let make =
       ~evaluationCriteria,
       ~preview,
       ~accessLockedLevels,
+      ~levelUpEligibility,
     ) => {
   let url = ReasonReactRouter.useUrl();
 
@@ -447,7 +426,6 @@ let make =
         statusOfTargets,
         notice:
           computeNotice(
-            levels,
             teamLevel,
             targetGroups,
             targets,
@@ -455,8 +433,9 @@ let make =
             course,
             team,
             preview,
-            accessLockedLevels,
+            levelUpEligibility,
           ),
+        levelUpEligibility,
       };
     });
 
@@ -494,7 +473,6 @@ let make =
             statusOfTargets: newStatusOfTargets,
             notice:
               computeNotice(
-                levels,
                 teamLevel,
                 targetGroups,
                 targets,
@@ -502,7 +480,7 @@ let make =
                 course,
                 team,
                 preview,
-                accessLockedLevels,
+                state.levelUpEligibility,
               ),
           }
         );
@@ -542,6 +520,7 @@ let make =
 
      | None => React.null
      }}
+    {issuedCertificate(course)}
     <CoursesCurriculum__NoticeManager notice={state.notice} course />
     {switch (state.notice) {
      | LevelUp => React.null
@@ -572,17 +551,24 @@ let make =
               </div>
             : React.null}
          {currentLevel |> Level.isUnlocked || accessLockedLevels
-            ? targetGroupsInLevel
-              |> TargetGroup.sort
-              |> List.map(targetGroup =>
-                   renderTargetGroup(
-                     targetGroup,
-                     targets,
-                     state.statusOfTargets,
-                   )
-                 )
-              |> Array.of_list
-              |> React.array
+            ? ListUtils.isEmpty(targetGroupsInLevel)
+                ? <div className="mx-auto py-10">
+                    <img className="max-w-sm mx-auto" src=levelEmptyImage />
+                    <p className="text-center font-semibold text-lg mt-4">
+                      {"There's no published content on this level." |> str}
+                    </p>
+                  </div>
+                : targetGroupsInLevel
+                  |> TargetGroup.sort
+                  |> List.map(targetGroup =>
+                       renderTargetGroup(
+                         targetGroup,
+                         targets,
+                         state.statusOfTargets,
+                       )
+                     )
+                  |> Array.of_list
+                  |> React.array
             : handleLockedLevel(currentLevel)}
        </div>
      }}

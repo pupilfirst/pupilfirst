@@ -1,17 +1,20 @@
 exception UnexpectedBlockType(string);
+exception UnexpectedRequestSource(string);
 
 type markdown = string;
 type url = string;
 type title = string;
 type caption = string;
-type embedCode = string;
+type embedCode = option(string);
 type filename = string;
+type requestSource = [ | `User | `VimeoUpload];
+type lastResolvedAt = option(Js.Date.t);
 
 type blockType =
   | Markdown(markdown)
   | File(url, title, filename)
   | Image(url, caption)
-  | Embed(url, embedCode);
+  | Embed(url, embedCode, requestSource, lastResolvedAt);
 
 type t = {
   id,
@@ -23,13 +26,33 @@ and id = string;
 let decodeMarkdownContent = json =>
   Json.Decode.(json |> field("markdown", string));
 let decodeFileContent = json => Json.Decode.(json |> field("title", string));
+
 let decodeImageContent = json =>
   Json.Decode.(json |> field("caption", string));
-let decodeEmbedContent = json =>
+
+let decodeEmbedContent = json => {
+  let requestSourceString =
+    Json.Decode.(field("requestSource", string, json));
+
+  let requestSource =
+    switch (requestSourceString) {
+    | "User" => `User
+    | "VimeoUpload" => `VimeoUpload
+    | otherRequestSource =>
+      Rollbar.error(
+        "Unexpected requestSource encountered in ContentBlock.re: "
+        ++ otherRequestSource,
+      );
+      raise(UnexpectedRequestSource(otherRequestSource));
+    };
+
   Json.Decode.(
     json |> field("url", string),
-    json |> field("embedCode", string),
+    json |> optional(field("embedCode", string)),
+    requestSource,
+    json |> optional(field("lastResolvedAt", DateFns.decodeISO)),
   );
+};
 
 let decode = json => {
   open Json.Decode;
@@ -47,8 +70,9 @@ let decode = json => {
       let url = json |> field("fileUrl", string);
       Image(url, caption);
     | "embed" =>
-      let (url, embedCode) = json |> field("content", decodeEmbedContent);
-      Embed(url, embedCode);
+      let (url, embedCode, requestSource, lastResolvedAt) =
+        json |> field("content", decodeEmbedContent);
+      Embed(url, embedCode, requestSource, lastResolvedAt);
     | unknownBlockType => raise(UnexpectedBlockType(unknownBlockType))
     };
 
@@ -70,7 +94,8 @@ let makeMarkdownBlock = markdown => Markdown(markdown);
 let makeImageBlock = (fileUrl, caption) => Image(fileUrl, caption);
 let makeFileBlock = (fileUrl, title, fileName) =>
   File(fileUrl, title, fileName);
-let makeEmbedBlock = (url, embedCode) => Embed(url, embedCode);
+let makeEmbedBlock = (url, embedCode, requestSource, lastResolvedAt) =>
+  Embed(url, embedCode, requestSource, lastResolvedAt);
 
 let make = (id, blockType, sortIndex) => {id, blockType, sortIndex};
 
@@ -83,7 +108,13 @@ let makeFromJs = js => {
     | `FileBlock(content) =>
       File(content##url, content##title, content##filename)
     | `ImageBlock(content) => Image(content##url, content##caption)
-    | `EmbedBlock(content) => Embed(content##url, content##embedCode)
+    | `EmbedBlock(content) =>
+      Embed(
+        content##url,
+        content##embedCode,
+        content##requestSource,
+        content##lastResolvedAt->Belt.Option.map(DateFns.parseISO),
+      )
     };
 
   make(id, blockType, sortIndex);
@@ -94,7 +125,7 @@ let blockTypeAsString = blockType =>
   | Markdown(_markdown) => "markdown"
   | File(_url, _title, _filename) => "file"
   | Image(_url, _caption) => "image"
-  | Embed(_url, _embedCode) => "embed"
+  | Embed(_url, _embedCode, _requestSource, _lastResolvedAt) => "embed"
   };
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1};
@@ -164,6 +195,8 @@ module Fragments = [%graphql
       ... on EmbedBlock {
         url
         embedCode
+        requestSource
+        lastResolvedAt
       }
     }
   }
@@ -194,6 +227,8 @@ module Query = [%graphql
           ... on EmbedBlock {
             url
             embedCode
+            requestSource
+            lastResolvedAt
           }
         }
       }

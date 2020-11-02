@@ -1,11 +1,11 @@
 open CurriculumEditor__Types;
 
-[@bs.module "./images/target-complete-mark-icon.svg"]
-external markIcon: string = "default";
-[@bs.module "./images/target-complete-link-icon.svg"]
-external linkIcon: string = "default";
-[@bs.module "./images/target-complete-quiz-icon.svg"]
-external quizIcon: string = "default";
+[@bs.module]
+external markIcon: string = "./images/target-complete-mark-icon.svg";
+[@bs.module]
+external linkIcon: string = "./images/target-complete-link-icon.svg";
+[@bs.module]
+external quizIcon: string = "./images/target-complete-quiz-icon.svg";
 
 let str = React.string;
 

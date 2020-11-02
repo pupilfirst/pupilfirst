@@ -1,5 +1,6 @@
 class CreateSubmissionMutator < ApplicationQuery
   include AuthorizeStudent
+  include LevelUpEligibilityComputable
 
   property :target_id, validates: { presence: { message: 'BlankTargetId' } }
   property :checklist
@@ -40,7 +41,7 @@ class CreateSubmissionMutator < ApplicationQuery
         checklist: checklist
       }
 
-      timeline_event = TimelineEvents::CreateService.new(params, founder).execute
+      timeline_event = TimelineEvents::CreateService.new(params, student).execute
 
       timeline_event_files.each do |timeline_event_file|
         timeline_event_file.update!(timeline_event: timeline_event) if file_ids.any?

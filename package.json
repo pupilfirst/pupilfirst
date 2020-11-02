@@ -12,7 +12,7 @@
     "@fortawesome/fontawesome-free": "^5.10.1",
     "@glennsl/bs-json": "^5.0.1",
     "@rails/ujs": "^6.0.0",
-    "@rails/webpacker": "^5.0.1",
+    "@rails/webpacker": "^5.2.1",
     "autosize": "^4.0.2",
     "babel-plugin-prismjs": "^2.0.0",
     "babel-plugin-react-css-modules": "^3.3.2",
@@ -47,6 +47,7 @@
     "react_ujs": "^2.5.0",
     "sanitize-html": "^1.20.1",
     "tailwindcss": "^1.7.3",
+    "tus-js-client": "^2.2.0",
     "webpack-merge": "^4.2.1"
   },
   "devDependencies": {
@@ -61,6 +62,7 @@
     "sass-loader": "^8.0.2",
     "stylelint": "^13.0.0",
     "stylelint-config-recommended": "^3.0.0",
+    "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.10.1"
   },
   "resolutions": {

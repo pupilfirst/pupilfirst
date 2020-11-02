@@ -82,6 +82,11 @@ let revokeIssuedCertificate =
            : setRevoking(_ => false);
          Js.Promise.resolve();
        })
+    |> Js.Promise.catch(error => {
+         Js.log(error);
+         setRevoking(_ => false);
+         Js.Promise.resolve();
+       })
     |> ignore;
   });
 };
@@ -123,6 +128,11 @@ let issueNewCertificate =
 
        | None => setIssuing(_ => false)
        };
+       Js.Promise.resolve();
+     })
+  |> Js.Promise.catch(error => {
+       Js.log(error);
+       setIssuing(_ => false);
        Js.Promise.resolve();
      })
   |> ignore;

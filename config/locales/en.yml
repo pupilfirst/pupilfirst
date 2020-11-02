@@ -116,8 +116,8 @@ en:
       level_up_description: Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!
     StudentsEditor__ActionsForm:
       certificates_label: Course Certificates
-      empty_course_certificates_text: This course has currently no certificates to issue!
-      empty_issued_certificates_text: The student has currently no certificate issued for this course!
+      empty_course_certificates_text: This course does not have any certificates to issue.
+      empty_issued_certificates_text: This student has not been issued any certificates.
       issued_certificates_label: "Issued certificates:"
       issued_date_label: "Issued on:"
       issued_by_label: "Issued by:"

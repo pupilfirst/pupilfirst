@@ -14,7 +14,7 @@ class IssueCertificateMutator < ApplicationQuery
   private
 
   def issued_certificate_not_present
-    return unless student.user.issued_certificates.where(certificate: course.certificates, revoked_at: nil).exists?
+    return if student.user.issued_certificates.where(certificate: course.certificates, revoked_at: nil).empty?
 
     errors[:base] << I18n.t('queries.issue_certificate_mutator.issued_error')
   end

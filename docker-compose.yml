@@ -1,0 +1,37 @@
+version: '3'
+
+volumes:
+  postgres_data:
+    driver: local
+
+services:
+  postgres:
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
+  redis:
+    image: redis:6
+    ports:
+      - "6379:6379"
+  keycloak:
+    image: jboss/keycloak:10.0.2
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - KEYCLOAK_IMPORT=/tmp/keycloak_realms/realm.json
+      - DB_VENDOR=POSTGRES
+      - DB_ADDR=postgres
+      - DB_USER=keycloak
+      - DB_PASSWORD=password
+    volumes:
+      - './keycloak/realm.json:/tmp/keycloak_realms/realm.json'
+    depends_on:
+      - postgres

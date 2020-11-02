@@ -61,6 +61,11 @@ jobs:
             bin/rails db:migrate --trace
           environment:
             DATABASE_URL: "postgres://postgres:password@localhost:5432/gt_pupilfirst_test"
+      - run:
+          command: bin/rails db:version
+          name: Check database
+          environment:
+            DATABASE_URL: "postgres://postgres:password@localhost:5432/gt_pupilfirst_test"
       - ruby/rspec-test
       - run:
           name: Stash Coverage Results

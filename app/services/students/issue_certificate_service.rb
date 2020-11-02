@@ -4,13 +4,13 @@ module Students
   # for the `current` certificate, and creates an `issued_certificate` saving the current `name` of the student and
   # generating a `uuid` for the certificate.
   class IssueCertificateService
-    def initialize(student, certificate = nil, issuer = nil)
+    def initialize(student)
       @student = student
-      @certificate = certificate
-      @issuer = issuer
     end
 
-    def issue
+    def issue(certificate: nil, issuer: nil)
+      certificate_to_issue = certificate || active_certificate
+
       return if certificate_to_issue.blank? || issued_certificate_exists?
 
       collisions = 0
@@ -19,7 +19,7 @@ module Students
         issued_certificate = certificate_to_issue.issued_certificates.create!(
           user: user,
           name: user.name,
-          issuer: @issuer,
+          issuer: issuer,
           serial_number: IssuedCertificates::SerialNumberService.generate
         )
       rescue ActiveRecord::RecordNotUnique
@@ -45,10 +45,6 @@ module Students
 
     def active_certificate
       course.certificates.active.first
-    end
-
-    def certificate_to_issue
-      @certificate_to_issue ||= @certificate || active_certificate
     end
 
     def course

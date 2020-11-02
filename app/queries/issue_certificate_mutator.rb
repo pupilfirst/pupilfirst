@@ -7,7 +7,7 @@ class IssueCertificateMutator < ApplicationQuery
 
   def execute
     Certificate.transaction do
-      Students::IssueCertificateService.new(student, certificate, current_user).issue
+      Students::IssueCertificateService.new(student).issue(certificate: certificate, issuer: current_user)
     end
   end
 

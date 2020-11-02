@@ -67,6 +67,10 @@ jobs:
             bin/rspec $TESTFILES --profile 10 --format RspecJunitFormatter --out /tmp/test-results/rspec/results.xml --format progress
           environment:
             DATABASE_URL: "postgres://postgres:password@localhost:5432/gt_pupilfirst_test"
+      - store_test_results:
+          path: /tmp/test-results
+      - store_artifacts:
+          path: /tmp/capybara
       - run:
           name: Stash Coverage Results
           command: |

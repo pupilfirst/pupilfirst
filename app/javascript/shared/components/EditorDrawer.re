@@ -3,6 +3,7 @@
 open React;
 
 type size =
+  | Small
   | Normal
   | Large;
 
@@ -11,6 +12,7 @@ let drawerClasses = (size, level, previousLevel) => {
 
   let sizeClass =
     switch (size) {
+      | Small => " editor-drawer--small"
     | Normal => ""
     | Large => " editor-drawer--large"
     };

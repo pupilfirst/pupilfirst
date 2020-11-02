@@ -46,6 +46,10 @@
   .editor-drawer--large {
     width: 64rem;
   }
+
+  .editor-drawer--small {
+    width: 32rem;
+  }
 }
 
 .editor-drawer__close {

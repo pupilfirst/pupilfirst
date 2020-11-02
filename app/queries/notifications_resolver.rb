@@ -6,7 +6,7 @@ class NotificationsResolver < ApplicationQuery
 
   def notifications
     if search.present?
-      applicable_notifications.search_by_title(title_for_search)
+      applicable_notifications.search_by_message(message_for_search)
     else
       applicable_notifications
     end

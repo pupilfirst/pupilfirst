@@ -204,6 +204,26 @@ let computeInitialState = () => {
   totalEntriesCount: 0,
 };
 
+let avatarClasses = size => {
+  let (defaultSize, mdSize) = size;
+  "w-"
+  ++ defaultSize
+  ++ " h-"
+  ++ defaultSize
+  ++ " md:w-"
+  ++ mdSize
+  ++ " md:h-"
+  ++ mdSize
+  ++ " text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover";
+};
+
+let avatar = (~size=("10", "10"), avatarUrl, name) => {
+  switch (avatarUrl) {
+  | Some(avatarUrl) => <img className={avatarClasses(size)} src=avatarUrl />
+  | None => <Avatar name className={avatarClasses(size)} />
+  };
+};
+
 let entriesList = entries => {
   entries |> ArrayUtils.isEmpty
     ? <div
@@ -216,29 +236,35 @@ let entriesList = entries => {
     : entries
       |> Js.Array.map(entry =>
            <div
-             className="block"
+             className={
+               "bg-white cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md border-l-3 py-4 px-2 "
+               ++ (
+                 switch (Entry.readAt(entry)) {
+                 | Some(_readAt) => "border-gray-500"
+                 | None => "border-green-500"
+                 }
+               )
+             }
              key={Entry.id(entry)}
              ariaLabel={"Notification " ++ Entry.id(entry)}>
-             <div
-               className="flex items-center border border-transparent hover:bg-gray-100 hover:text-primary-500  hover:border-primary-400">
-               <div className="flex-1">
-                 <div
-                   className="cursor-pointer no-underline flex flex-col p-4 md:px-6 md:py-5">
-                   <span className="block">
-                     <h4
-                       className="text-base font-semibold inline-block break-words leading-snug">
-                       {Entry.message(entry) |> str}
-                     </h4>
-                     <span className="block text-xs text-gray-800 pt-1">
-                       <span className="hidden md:inline-block md:mr-2">
-                         {"on "
-                          ++ Entry.createdAt(entry)
-                             ->DateFns.formatPreset(~year=true, ())
-                          |> str}
-                       </span>
-                     </span>
+             <div className="flex">
+               <div className="w-1/3 md:w-1/6 md:mr-0 mr-2">
+                 {switch (Entry.actor(entry)) {
+                  | Some(actor) =>
+                    avatar(User.avatarUrl(actor), User.name(actor))
+                  | None => React.null
+                  }}
+               </div>
+               <div>
+                 <div> {str(Entry.message(entry))} </div>
+                 <span className="block text-xs text-gray-800 pt-1">
+                   <span className="hidden md:inline-block md:mr-2">
+                     {"on "
+                      ++ Entry.createdAt(entry)
+                         ->DateFns.formatPreset(~year=true, ())
+                      |> str}
                    </span>
-                 </div>
+                 </span>
                </div>
              </div>
            </div>
@@ -385,95 +411,81 @@ let make = () => {
     },
     [|state.filter|],
   );
-  <div className="flex-1 flex flex-col">
-    <div className="mt-5 flex flex-col flex-1 ">
-      <div className="w-full sticky top-0 z-30 bg-gray-100 py-2">
-        <div className="max-w-3xl w-full mx-auto relative px-3 md:px-6">
-          <div className="flex w-full items-start flex-wrap">
-            <div className="flex-1 pr-2">
-              <label className="block text-tiny font-semibold uppercase pl-px">
-                {t("filter.input_label")->str}
-              </label>
-              <Multiselect
-                id="filter"
-                unselected={unselected(state)}
-                selected={selected(state)}
-                onSelect={onSelectFilter(send)}
-                onDeselect={onDeselectFilter(send)}
-                value={state.filterString}
-                onChange={filterString =>
-                  send(UpdateFilterString(filterString))
-                }
-                placeholder={t("filter.input_placeholder")}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="max-w-3xl w-full mx-auto relative px-3 md:px-6 pb-4">
-        <div id="entries" className="my-4">
-          {switch (state.entries) {
-           | Unloaded =>
-             SkeletonLoading.multiple(
-               ~count=10,
-               ~element=SkeletonLoading.card(),
-             )
-           | PartiallyLoaded(entries, cursor) =>
-             <div>
-               <div className="shadow bg-white rounded-lg divide-y">
-                 {entriesList(entries)}
-               </div>
-               <div className="text-center">
-                 {entriesLoadedData(
-                    state.totalEntriesCount,
-                    Array.length(entries),
-                  )}
-               </div>
-               {switch (state.loading) {
-                | LoadingMore =>
-                  SkeletonLoading.multiple(
-                    ~count=3,
-                    ~element=SkeletonLoading.card(),
-                  )
-                | NotLoading =>
-                  <button
-                    className="btn btn-primary-ghost cursor-pointer w-full mt-4"
-                    onClick={_ => {
-                      send(BeginLoadingMore);
-                      getEntries(send, Some(cursor), state.filter);
-                    }}>
-                    {t("button_load_more") |> str}
-                  </button>
-                | Reloading => React.null
-                }}
-             </div>
-           | FullyLoaded(entries) =>
-             <div>
-               <div className="shadow bg-white rounded-lg divide-y">
-                 {entriesList(entries)}
-               </div>
-               <div className="text-center">
-                 {entriesLoadedData(
-                    state.totalEntriesCount,
-                    Array.length(entries),
-                  )}
-               </div>
-             </div>
-           }}
-        </div>
-      </div>
-      {switch (state.entries) {
-       | Unloaded => React.null
 
-       | _ =>
-         let loading =
-           switch (state.loading) {
-           | NotLoading => false
-           | Reloading => true
-           | LoadingMore => false
-           };
-         <LoadingSpinner loading />;
+  <div>
+    <div className="mt-4 px-6">
+      <div className="font-bold text-2xl"> {str("Notification")} </div>
+    </div>
+    <div className="w-full sticky top-0 z-30 mt-2 px-6 bg-white py-2">
+      <label
+        className="block text-tiny font-semibold uppercase pl-px text-left">
+        {t("filter.input_label")->str}
+      </label>
+      <Multiselect
+        id="filter"
+        unselected={unselected(state)}
+        selected={selected(state)}
+        onSelect={onSelectFilter(send)}
+        onDeselect={onDeselectFilter(send)}
+        value={state.filterString}
+        onChange={filterString => send(UpdateFilterString(filterString))}
+        placeholder={t("filter.input_placeholder")}
+      />
+    </div>
+    <div id="entries" className="mt-4 px-6">
+      {switch (state.entries) {
+       | Unloaded =>
+         SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
+       | PartiallyLoaded(entries, cursor) =>
+         <div>
+           <div className="space-y-2"> {entriesList(entries)} </div>
+           <div className="text-center">
+             {entriesLoadedData(
+                state.totalEntriesCount,
+                Array.length(entries),
+              )}
+           </div>
+           {switch (state.loading) {
+            | LoadingMore =>
+              SkeletonLoading.multiple(
+                ~count=3,
+                ~element=SkeletonLoading.card(),
+              )
+            | NotLoading =>
+              <button
+                className="btn btn-primary-ghost cursor-pointer w-full mt-4"
+                onClick={_ => {
+                  send(BeginLoadingMore);
+                  getEntries(send, Some(cursor), state.filter);
+                }}>
+                {t("button_load_more") |> str}
+              </button>
+            | Reloading => React.null
+            }}
+         </div>
+       | FullyLoaded(entries) =>
+         <div>
+           <div className="space-y-2"> {entriesList(entries)} </div>
+           <div className="text-center">
+             {entriesLoadedData(
+                state.totalEntriesCount,
+                Array.length(entries),
+              )}
+           </div>
+         </div>
        }}
     </div>
+    {switch (state.entries) {
+     | Unloaded => React.null
+
+     | _ =>
+       let loading =
+         switch (state.loading) {
+         | NotLoading => false
+         | Reloading => true
+         | LoadingMore => false
+         };
+       <LoadingSpinner loading />;
+     }}
   </div>;
 };

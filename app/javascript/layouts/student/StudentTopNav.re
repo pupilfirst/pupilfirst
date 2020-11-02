@@ -66,7 +66,8 @@ let headerLinks = (links, isLoggedIn) => {
     )
     ->List.append([
         <Notifications__Root
-          wrapperClasses="md:ml-5 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0"
+          key="notifications"
+          wrapperClasses="md:ml-5 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0"
           buttonClasses="font-semibold bg-gray-100 md:bg-white text-black hover:text-primary-500 w-full p-4 md:p-2"
           title="Notifications"
         />,

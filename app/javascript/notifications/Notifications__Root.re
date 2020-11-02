@@ -2,12 +2,12 @@ let str = React.string;
 
 [@react.component]
 let make = (~wrapperClasses, ~buttonClasses, ~title=?, ~icon=?) => {
-  let (showNotifications, setShowNotifications) = React.useState(() => false);
+  let (showNotifications, setShowNotifications) = React.useState(() => true);
   <div className=wrapperClasses>
     {<EditorDrawer
+       size=EditorDrawer.Small
        closeButtonTitle={"Close " ++ title->Belt.Option.getWithDefault("")}
        closeDrawerCB={() => setShowNotifications(_ => false)}>
-       <div> {str("Notification")} </div>
        <Notifications__List />
      </EditorDrawer>
      ->ReactUtils.nullUnless(showNotifications)}

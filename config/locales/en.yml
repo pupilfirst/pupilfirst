@@ -119,8 +119,9 @@ en:
       notifications_fully_loaded_text: "Showing all %{total_notifications} notifications"
       notifications_partially_loaded_text: "Showing %{loaded_notifications_count} of %{total_notifications} notifications"
       filter:
-        input_placeholder: Search by title, event, read and unread
-        input_label: Show topics created
+        input_label: Search by title, event, read and unread
+        input_placeholder: Show topics created
+        title: Search by title
         unread: Unread
         read: Read
         event: Event

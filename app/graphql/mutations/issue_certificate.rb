@@ -3,7 +3,7 @@ module Mutations
     argument :student_id, ID, required: true
     argument :certificate_id, ID, required: true
 
-    description "Issue course certificate to a student"
+    description "Issue a certificate to a student"
 
     field :issued_certificate, Types::IssuedCertificateType, null: true
 

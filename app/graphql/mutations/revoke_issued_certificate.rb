@@ -2,7 +2,7 @@ module Mutations
   class RevokeIssuedCertificate < GraphQL::Schema::Mutation
     argument :issued_certificate_id, ID, required: true
 
-    description "Revoke a certificate issued to a student for a course"
+    description "Revoke an issued certificate"
 
     field :success, Boolean, null: false
 

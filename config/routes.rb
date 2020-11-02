@@ -37,6 +37,8 @@ Rails.application.routes.draw do
     get '/:token/enroll', action: 'enroll', as: 'enroll'
   end
 
+  resources :notifications, only: %i[show]
+
   resource :school, only: %i[show update] do
     get 'customize'
     get 'admins'

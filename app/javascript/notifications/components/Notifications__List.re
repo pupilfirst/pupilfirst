@@ -237,7 +237,7 @@ let entriesList = entries => {
       |> Js.Array.map(entry =>
            <div
              className={
-               "bg-white cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md border-l-3 py-4 px-2 "
+               "bg-white cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:shadow-md border-l-3 py-4 px-2 "
                ++ (
                  switch (Entry.readAt(entry)) {
                  | Some(_readAt) => "border-gray-500"
@@ -265,6 +265,19 @@ let entriesList = entries => {
                       |> str}
                    </span>
                  </span>
+                 <div className="flex justify-between mt-4">
+                   <a
+                     href={"/notifications/" ++ Entry.id(entry)}
+                     className="btn border shadow  hover:text-primary-500">
+                     <i className="fas fa-eye mr-2" />
+                     {str("Visit")}
+                   </a>
+                   <button
+                     className="btn border shadow  hover:text-primary-500">
+                     <i className="fas fa-check mr-2" />
+                     {str("Mark as Read")}
+                   </button>
+                 </div>
                </div>
              </div>
            </div>

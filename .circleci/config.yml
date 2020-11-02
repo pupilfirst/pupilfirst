@@ -56,17 +56,17 @@ jobs:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: Database setup
-          command: |
-            bin/rails db:schema:load --trace
-            bin/rails db:migrate --trace
+          command: bin/rails db:schema:load
           environment:
             DATABASE_URL: "postgres://postgres:password@localhost:5432/gt_pupilfirst_test"
       - run:
-          command: bin/rails db:version
-          name: Check database
+          name: Test
+          command: |
+            mkdir -p /tmp/test-results/rspec
+            TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+            bin/rspec $TESTFILES --profile 10 --format RspecJunitFormatter --out /tmp/test-results/rspec/results.xml --format progress
           environment:
             DATABASE_URL: "postgres://postgres:password@localhost:5432/gt_pupilfirst_test"
-      - ruby/rspec-test
       - run:
           name: Stash Coverage Results
           command: |

@@ -129,7 +129,7 @@ en:
       select_certificate_input_label: Select a certificate to issue
       issue_certificate_button: Issue Certificate
       revoke_certificate_button: Revoke Certificate
-      active_certificate_info: The student already has an active certificate issued for this course. Please revoke the current certificate to issue a new one.
+      active_certificate_info: This student has already been issued a certificate for this course. Please revoke this certificate to issue a new one.
       dropout_student_label: Has this student dropped out?
       dropout_button: Dropout Student
   jobs:
@@ -190,7 +190,7 @@ en:
     delete_certificate_mutator:
       issued_error: This certificate has been issued to one or more students - it cannot be deleted.
     issue_certificate_mutator:
-      issued_error: The student already has an active certificate in this course
+      issued_error: This student has already been issued a certificate for this course.
   shared:
     optional: optional
     done_exclamation: Done!

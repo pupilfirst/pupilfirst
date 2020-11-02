@@ -602,8 +602,9 @@ feature 'School students index', js: true do
     end
   end
 
-  context 'course has no certificates' do
+  context 'when a course has no certificates' do
     let!(:team_1) { create :startup, level: level_1 }
+
     scenario 'admin visits student editor to issue certificates' do
       sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
@@ -613,11 +614,11 @@ feature 'School students index', js: true do
 
       click_button 'Actions'
 
-      expect(page).to have_text("This course has currently no certificates to issue!")
+      expect(page).to have_text("This course does not have any certificates to issue")
     end
   end
 
-  context 'course has certificates' do
+  context 'when a course has certificates' do
     let!(:team_1) { create :startup, level: level_1 }
     let(:student_without_certificate) { team_1.founders.first }
     let(:student_with_certificate) { team_1.founders.last }
@@ -635,7 +636,7 @@ feature 'School students index', js: true do
 
       click_button 'Actions'
 
-      expect(page).to have_text(I18n.t('components.StudentsEditor__ActionsForm.empty_issued_certificates_text'))
+      expect(page).to have_text('This student has not been issued any certificates')
 
       # Issue new certificate
 
@@ -660,7 +661,7 @@ feature 'School students index', js: true do
         expect(page).to have_button('Revoke Certificate')
       end
 
-      expect(page).to have_text(I18n.t('components.StudentsEditor__ActionsForm.active_certificate_info'))
+      expect(page).to have_text('This student has already been issued a certificate for this course')
     end
 
     scenario 'admin visits editor of student with issued certificates' do
@@ -671,7 +672,7 @@ feature 'School students index', js: true do
       click_button 'Actions'
 
       expect(page).to have_text(certificate_1.name)
-      expect(page).to have_text(I18n.t('components.StudentsEditor__ActionsForm.active_certificate_info'))
+      expect(page).to have_text('This student has already been issued a certificate for this course')
 
       issued_certificate = student_with_certificate.user.issued_certificates.last
 
@@ -686,7 +687,7 @@ feature 'School students index', js: true do
       expect(page).to have_text('Done')
       dismiss_notification
 
-      expect(page).to_not have_text(I18n.t('components.StudentsEditor__ActionsForm.active_certificate_info'))
+      expect(page).to_not have_text('This student has already been issued a certificate for this course')
 
       expect(issued_certificate.reload.revoked_at).to_not eq(nil)
       expect(issued_certificate.revoked_by).to eq(school_admin.user)

@@ -191,6 +191,7 @@ en:
       issued_error: This certificate has been issued to one or more students - it cannot be deleted.
     issue_certificate_mutator:
       issued_error: This student has already been issued a certificate for this course.
+      certificate_error: The specified certificate could not be found.
   shared:
     optional: optional
     done_exclamation: Done!

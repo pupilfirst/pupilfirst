@@ -668,7 +668,6 @@ feature 'School students index', js: true do
       click_button 'Actions'
 
       expect(page).to have_text(certificate_1.name)
-      expect(page).to have_text('This student has already been issued a certificate for this course')
 
       issued_certificate = student_with_certificate.user.issued_certificates.last
 
@@ -680,9 +679,8 @@ feature 'School students index', js: true do
       end
 
       expect(page).to have_text('Done')
-      dismiss_notification
 
-      expect(page).to_not have_text('This student has already been issued a certificate for this course')
+      dismiss_notification
 
       expect(issued_certificate.reload.revoked_at).to_not eq(nil)
       expect(issued_certificate.revoker).to eq(school_admin.user)

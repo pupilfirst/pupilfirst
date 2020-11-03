@@ -320,7 +320,12 @@ let make =
                             <option
                               key={Certificate.id(certificate)}
                               value={Certificate.id(certificate)}>
-                              {Certificate.name(certificate)->str}
+                              {let name = Certificate.name(certificate);
+                               (
+                                 Certificate.active(certificate)
+                                   ? name ++ " (Active)" : name
+                               )
+                               ->str}
                             </option>
                           )
                        |> React.array}

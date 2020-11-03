@@ -1,8 +1,7 @@
-[@bs.module "../../shared/images/reviewed-empty.svg"]
-external reviewedEmptyImage: string = "default";
-
-[@bs.module "../images/pending-empty.svg"]
-external pendingEmptyImage: string = "default";
+[@bs.module]
+external reviewedEmptyImage: string = "../../shared/images/reviewed-empty.svg";
+[@bs.module]
+external pendingEmptyImage: string = "../images/pending-empty.svg";
 
 open CoursesReview__Types;
 

@@ -1,5 +1,6 @@
 class AutoVerifySubmissionMutator < ApplicationQuery
   include AuthorizeStudent
+  include LevelUpEligibilityComputable
 
   property :target_id, validates: { presence: { message: 'Blank Target Id' } }
 
@@ -9,7 +10,8 @@ class AutoVerifySubmissionMutator < ApplicationQuery
   def create_submission
     TimelineEvent.transaction do
       submission = TimelineEvent.create!(target: target, passed_at: Time.zone.now)
-      founders.map do |student|
+
+      students.map do |student|
         student.timeline_event_owners.create!(timeline_event: submission, latest: true)
       end
 

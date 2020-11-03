@@ -40,7 +40,7 @@ let imageContentBlock = (url, caption, width: ContentBlock.width) =>
     <div className="px-4 py-2 text-sm italic"> {caption |> str} </div>
   </div>;
 
-let embedContentBlock = (_url, embedCode) =>
+let embedContentBlock = embedCode =>
   <div
     className="learn-content-block__embed"
     dangerouslySetInnerHTML={"__html": embedCode}
@@ -59,7 +59,10 @@ let make = (~contentBlocks) =>
               fileContentBlock(url, title, filename)
             | Image(url, caption, width) =>
               imageContentBlock(url, caption, width)
-            | Embed(url, embedCode) => embedContentBlock(url, embedCode)
+            | Embed(_url, embedCode, _requestType, _lastResolvedAt) =>
+              embedCode->Belt.Option.mapWithDefault(React.null, code =>
+                embedContentBlock(code)
+              )
             };
 
           <div

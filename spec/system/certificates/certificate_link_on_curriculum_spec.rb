@@ -15,11 +15,7 @@ feature 'Certificate link on curriculum', js: true do
   let(:target_group) { create :target_group, level: level_1, milestone: true }
   let!(:target) { create :target, :with_markdown, :team, target_group: target_group }
 
-  before do
-    complete_target target, student
-  end
-
-  scenario 'user sees link to certificate on curriculum page' do
+  scenario 'user sees link to issued certificate on curriculum page' do
     sign_in_user user, referrer: curriculum_course_path(course)
 
     expect(page).to have_text('You have been issued a certificate')

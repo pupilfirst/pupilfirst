@@ -1,12 +1,29 @@
 exception UnexpectedBlockType(string);
+exception UnexpectedRequestSource(string);
 
 type markdown = string;
 type url = string;
 type title = string;
 type caption = string;
-type embedCode = string;
+type embedCode = option(string);
 type filename = string;
+type requestSource = [ | `User | `VimeoUpload];
+type lastResolvedAt = option(Js.Date.t);
 type width = [ | `auto | `lg | `md | `sm | `xl | `xl2 | `xs];
+
+type blockType =
+  | Markdown(markdown)
+  | File(url, title, filename)
+  | Image(url, caption, width)
+  | Embed(url, embedCode, requestSource, lastResolvedAt);
+
+type t = {
+  id,
+  blockType,
+  sortIndex: int,
+}
+and id = string;
+
 let widthToString = width =>
   switch (width) {
   | `auto => "auto"
@@ -17,22 +34,11 @@ let widthToString = width =>
   | `xl => "xl"
   | `xl2 => "2xl"
   };
-type blockType =
-  | Markdown(markdown)
-  | File(url, title, filename)
-  | Image(url, caption, width)
-  | Embed(url, embedCode);
-
-type t = {
-  id,
-  blockType,
-  sortIndex: int,
-}
-and id = string;
 
 let decodeMarkdownContent = json =>
   Json.Decode.(json |> field("markdown", string));
 let decodeFileContent = json => Json.Decode.(json |> field("title", string));
+
 let decodeImageContent = json => {
   let widthString = Json.Decode.(json |> optional(field("width", string)));
   let width: width =
@@ -48,11 +54,30 @@ let decodeImageContent = json => {
     };
   (Json.Decode.(json |> field("caption", string)), width);
 };
-let decodeEmbedContent = json =>
+
+let decodeEmbedContent = json => {
+  let requestSourceString =
+    Json.Decode.(field("requestSource", string, json));
+
+  let requestSource =
+    switch (requestSourceString) {
+    | "User" => `User
+    | "VimeoUpload" => `VimeoUpload
+    | otherRequestSource =>
+      Rollbar.error(
+        "Unexpected requestSource encountered in ContentBlock.re: "
+        ++ otherRequestSource,
+      );
+      raise(UnexpectedRequestSource(otherRequestSource));
+    };
+
   Json.Decode.(
     json |> field("url", string),
-    json |> field("embedCode", string),
+    json |> optional(field("embedCode", string)),
+    requestSource,
+    json |> optional(field("lastResolvedAt", DateFns.decodeISO)),
   );
+};
 
 let decode = json => {
   open Json.Decode;
@@ -71,8 +96,9 @@ let decode = json => {
       Js.log(("block", json));
       Image(url, caption, width);
     | "embed" =>
-      let (url, embedCode) = json |> field("content", decodeEmbedContent);
-      Embed(url, embedCode);
+      let (url, embedCode, requestSource, lastResolvedAt) =
+        json |> field("content", decodeEmbedContent);
+      Embed(url, embedCode, requestSource, lastResolvedAt);
     | unknownBlockType => raise(UnexpectedBlockType(unknownBlockType))
     };
 
@@ -95,7 +121,8 @@ let makeImageBlock = (fileUrl, caption, width) =>
   Image(fileUrl, caption, width);
 let makeFileBlock = (fileUrl, title, fileName) =>
   File(fileUrl, title, fileName);
-let makeEmbedBlock = (url, embedCode) => Embed(url, embedCode);
+let makeEmbedBlock = (url, embedCode, requestSource, lastResolvedAt) =>
+  Embed(url, embedCode, requestSource, lastResolvedAt);
 
 let make = (id, blockType, sortIndex) => {id, blockType, sortIndex};
 
@@ -116,7 +143,13 @@ let makeFromJs = js => {
         | Some(width) => width
         },
       )
-    | `EmbedBlock(content) => Embed(content##url, content##embedCode)
+    | `EmbedBlock(content) =>
+      Embed(
+        content##url,
+        content##embedCode,
+        content##requestSource,
+        content##lastResolvedAt->Belt.Option.map(DateFns.parseISO),
+      )
     };
 
   make(id, blockType, sortIndex);
@@ -127,7 +160,7 @@ let blockTypeAsString = blockType =>
   | Markdown(_markdown) => "markdown"
   | File(_url, _title, _filename) => "file"
   | Image(_url, _caption, _width) => "image"
-  | Embed(_url, _embedCode) => "embed"
+  | Embed(_url, _embedCode, _requestSource, _lastResolvedAt) => "embed"
   };
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1};
@@ -198,6 +231,8 @@ module Fragments = [%graphql
       ... on EmbedBlock {
         url
         embedCode
+        requestSource
+        lastResolvedAt
       }
     }
   }
@@ -229,6 +264,8 @@ module Query = [%graphql
           ... on EmbedBlock {
             url
             embedCode
+            requestSource
+            lastResolvedAt
           }
         }
       }

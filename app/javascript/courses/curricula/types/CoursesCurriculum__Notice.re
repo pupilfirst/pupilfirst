@@ -5,23 +5,21 @@ type t =
   | AccessEnded
   | LevelUp
   | LevelUpLimited(currentLevelNumber, minimumRequiredLevelNumber)
-  | LevelUpBlocked(currentLevelNumber) // For when the Strict progression behavior applies.
+  | LevelUpBlocked(currentLevelNumber, someSubmissionsRejected) // For when the Strict progression behavior applies.
+  | TeamMembersPending
   | Nothing
 and currentLevelNumber = int
-and minimumRequiredLevelNumber = int;
+and minimumRequiredLevelNumber = int
+and someSubmissionsRejected = bool;
 
-[@bs.module "../images/course-ended.svg"]
-external courseEndedImage: string = "default";
-[@bs.module "../images/course-complete.svg"]
-external courseCompleteImage: string = "default";
-[@bs.module "../images/access-ended.svg"]
-external accessEndedImage: string = "default";
-[@bs.module "../images/level-up.svg"]
-external levelUpImage: string = "default";
-[@bs.module "../images/preview-mode.svg"]
-external previewModeImage: string = "default";
-[@bs.module "../images/level-up-blocked.svg"]
-external levelUpBlockedImage: string = "default";
+[@bs.module] external courseEndedImage: string = "../images/course-ended.svg";
+[@bs.module]
+external courseCompleteImage: string = "../images/course-complete.svg";
+[@bs.module] external accessEndedImage: string = "../images/access-ended.svg";
+[@bs.module] external levelUpImage: string = "../images/level-up.svg";
+[@bs.module] external previewModeImage: string = "../images/preview-mode.svg";
+[@bs.module]
+external levelUpBlockedImage: string = "../images/level-up-blocked.svg";
 
 let icon = t =>
   switch (t) {
@@ -30,7 +28,8 @@ let icon = t =>
   | CourseComplete => courseCompleteImage
   | AccessEnded => accessEndedImage
   | LevelUp => levelUpImage
-  | LevelUpLimited(_) => levelUpBlockedImage
-  | LevelUpBlocked(_) => levelUpBlockedImage
+  | LevelUpLimited(_)
+  | LevelUpBlocked(_)
+  | TeamMembersPending => levelUpBlockedImage
   | Nothing => ""
   };

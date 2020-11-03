@@ -6,6 +6,7 @@ type props = {
   levels: array(Level.t),
   targetGroups: list(TargetGroup.t),
   targets: list(Target.t),
+  hasVimeoAccessToken: bool
 };
 
 let decodeProps = json =>
@@ -16,6 +17,7 @@ let decodeProps = json =>
     levels: json |> field("levels", array(Level.decode)),
     targetGroups: json |> field("targetGroups", list(TargetGroup.decode)),
     targets: json |> field("targets", list(Target.decode)),
+    hasVimeoAccessToken: json |> field("hasVimeoAccessToken", bool)
   };
 
 let props =
@@ -33,6 +35,7 @@ ReactDOMRe.renderToElementWithId(
     levels={props.levels}
     targetGroups={props.targetGroups}
     targets={props.targets}
+    hasVimeoAccessToken={props.hasVimeoAccessToken}
   />,
   "curriculum-editor",
 );

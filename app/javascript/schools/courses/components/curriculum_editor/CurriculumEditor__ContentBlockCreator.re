@@ -20,10 +20,23 @@ module CreateMarkdownContentBlock = [%graphql
 
 module CreateEmbedContentBlock = [%graphql
   {|
-    mutation CreateEmbedContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $url: String!) {
-      createEmbedContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId, url: $url) {
+    mutation CreateEmbedContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $url: String!, $requestSource: EmbedRequestSource!) {
+      createEmbedContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId, url: $url, requestSource: $requestSource) {
         contentBlock {
           ...ContentBlock.Fragments.AllFields
+        }
+      }
+    }
+  |}
+];
+
+module CreateVimeoVideo = [%graphql
+  {|
+    mutation CreateVimeoVideo($size: Int!, $title: String, $description: String) {
+      createVimeoVideo(size: $size, title: $title, description: $description) {
+        vimeoVideo {
+          link
+          uploadLink
         }
       }
     }
@@ -33,11 +46,15 @@ module CreateEmbedContentBlock = [%graphql
 type ui =
   | Hidden
   | BlockSelector
-  | EmbedForm(string);
+  | EmbedForm(string)
+  | UploadVideo;
 
 type state = {
   ui,
   saving: bool,
+  uploadProgress: option(int),
+  videoTitle: string,
+  videoDescription: string,
   error: option(string),
 };
 
@@ -49,11 +66,23 @@ type action =
   | FailedToCreate
   | FailToUpload
   | ShowEmbedForm
+  | UpdateVideoTitle(string)
+  | UpdateVideoDescription(string)
   | HideEmbedForm
+  | HideUploadVideoForm
+  | ShowUploadVideoForm
+  | UpdateUploadProgress(int)
   | UpdateEmbedUrl(string);
 
 let computeInitialState = isAboveTarget => {
-  {ui: isAboveTarget ? Hidden : BlockSelector, saving: false, error: None};
+  {
+    ui: isAboveTarget ? Hidden : BlockSelector,
+    saving: false,
+    error: None,
+    uploadProgress: None,
+    videoTitle: "",
+    videoDescription: "",
+  };
 };
 
 let reducer = (state, action) =>
@@ -63,6 +92,7 @@ let reducer = (state, action) =>
       switch (state.ui) {
       | Hidden => BlockSelector
       | BlockSelector
+      | UploadVideo
       | EmbedForm(_) => Hidden
       };
 
@@ -88,7 +118,15 @@ let reducer = (state, action) =>
     }
   | ShowEmbedForm => {...state, ui: EmbedForm("")}
   | HideEmbedForm => {...state, ui: BlockSelector}
+  | ShowUploadVideoForm => {...state, ui: UploadVideo}
+  | HideUploadVideoForm => {...state, ui: BlockSelector}
   | UpdateEmbedUrl(url) => {...state, ui: EmbedForm(url)}
+  | UpdateVideoTitle(videoTitle) => {...state, videoTitle}
+  | UpdateVideoDescription(videoDescription) => {...state, videoDescription}
+  | UpdateUploadProgress(uploadProgress) => {
+      ...state,
+      uploadProgress: Some(uploadProgress),
+    }
   };
 
 let containerClasses = (visible, isAboveTarget) => {
@@ -144,6 +182,10 @@ let fileInputId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-file-input-");
 let imageInputId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-image-input-");
+let videoInputId = aboveContentBlock =>
+  aboveContentBlock |> elementId("markdown-block-vimeo-input-");
+let videoFormId = aboveContentBlock =>
+  aboveContentBlock |> elementId("markdown-block-vimeo-form-");
 let fileFormId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-file-form-");
 let imageFormId = aboveContentBlock =>
@@ -159,15 +201,17 @@ let onBlockTypeSelect =
       send,
       addContentBlockCB,
     )
-  | `File => ()
+  | `File
   | `Image => ()
   | `Embed => send(ShowEmbedForm)
+  | `VideoEmbed => send(ShowUploadVideoForm)
   };
 };
 
 let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
   let fileId = aboveContentBlock |> fileInputId;
   let imageId = aboveContentBlock |> imageInputId;
+  let videoId = aboveContentBlock |> videoInputId;
 
   let (faIcon, buttonText, htmlFor) =
     switch (blockType) {
@@ -175,6 +219,7 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
     | `File => ("far fa-file-alt", "File", Some(fileId))
     | `Image => ("far fa-image", "Image", Some(imageId))
     | `Embed => ("fas fa-code", "Embed", None)
+    | `VideoEmbed => ("fab fa-vimeo-v", "Video", Some(videoId))
     };
 
   <label
@@ -193,26 +238,166 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
   </label>;
 };
 
+let embedUrlRegexes = [|
+  [%bs.re "/https:\\/\\/.*slideshare\\.net/"],
+  [%bs.re "/https:\\/\\/.*vimeo\\.com/"],
+  [%bs.re "/https:\\/\\/.*youtube\\.com/"],
+  [%bs.re "/https:\\/\\/.*youtu\\.be/"],
+|];
+
+let validEmbedUrl = url =>
+  Belt.Array.some(embedUrlRegexes, regex => regex->Js.Re.test_(url));
+
+let handleCreateEmbedContentBlock =
+    (target, aboveContentBlock, url, send, addContentBlockCB, requestSource) =>
+  if (url |> validEmbedUrl) {
+    send(ToggleSaving);
+
+    let aboveContentBlockId =
+      aboveContentBlock |> OptionUtils.map(ContentBlock.id);
+
+    let targetId = target |> Target.id;
+
+    CreateEmbedContentBlock.make(
+      ~targetId,
+      ~aboveContentBlockId?,
+      ~url,
+      ~requestSource,
+      (),
+    )
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(result =>
+         handleGraphqlCreateResponse(
+           aboveContentBlock,
+           send,
+           addContentBlockCB,
+           result##createEmbedContentBlock##contentBlock,
+         )
+       )
+    |> Js.Promise.catch(_ => {
+         send(FailedToCreate);
+         Js.Promise.resolve();
+       })
+    |> ignore;
+  } else {
+    Js.log(url ++ " File get error");
+    send(
+      SetError(
+        "The URL doesn't look valid. Please make sure that it starts with 'https://' and that it's one of the accepted websites.",
+      ),
+    );
+  };
+
+let uploadOnProgress = (send, current, total) => {
+  let progress =
+    int_of_float(float_of_int(current) /. float_of_int(total) *. 100.00);
+
+  send(UpdateUploadProgress(progress));
+};
+
+let handleVimeoVideoUpload =
+    (file, vimeoVideo, send, target, aboveContentBlock, addContentBlockCB) => {
+  let url = vimeoVideo##link;
+  let uploadUrl = vimeoVideo##uploadLink;
+
+  let onSuccess = () =>
+    handleCreateEmbedContentBlock(
+      target,
+      aboveContentBlock,
+      url,
+      send,
+      addContentBlockCB,
+      `VimeoUpload,
+    );
+
+  EnvUtils.isTest()
+    ? onSuccess()
+    : Tus.upload(
+        ~file=Tus.makeFile(file),
+        ~uploadUrl,
+        ~onError=
+          error => {
+            Js.log(error);
+            send(FailToUpload);
+          },
+        ~onSuccess,
+        ~onProgress=uploadOnProgress(send),
+      );
+};
+
 let uploadFile =
-    (target, send, addContentBlockCB, isAboveContentBlock, formData) =>
-  Api.sendFormData(
-    "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
-    formData,
-    json => {
-      Notification.success("Done!", "File uploaded successfully.");
-      let contentBlock = json |> ContentBlock.decode;
-      addContentBlockCB(contentBlock);
-      send(FinishSaving(isAboveContentBlock));
-    },
-    () => send(FailToUpload),
-  );
+    (
+      target,
+      send,
+      addContentBlockCB,
+      aboveContentBlock,
+      blockType,
+      file,
+      state,
+      formData,
+    ) => {
+  let isAboveContentBlock = aboveContentBlock != None;
+  switch (blockType) {
+  | `File
+  | `Image =>
+    Api.sendFormData(
+      "/school/targets/" ++ (target |> Target.id) ++ "/content_block",
+      formData,
+      json => {
+        Notification.success("Done!", "File uploaded successfully.");
+        let contentBlock = json |> ContentBlock.decode;
+        addContentBlockCB(contentBlock);
+        send(FinishSaving(isAboveContentBlock));
+      },
+      () => send(FailToUpload),
+    )
+  | `VideoEmbed =>
+    let size = file##size;
+    let title =
+      String.trim(state.videoTitle) == "" ? None : Some(state.videoTitle);
+    let description =
+      String.trim(state.videoDescription) == ""
+        ? None : Some(state.videoDescription);
+    CreateVimeoVideo.make(~size, ~title?, ~description?, ())
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(result => {
+         switch (result##createVimeoVideo##vimeoVideo) {
+         | Some(vimeoVideo) =>
+           handleVimeoVideoUpload(
+             file,
+             vimeoVideo,
+             send,
+             target,
+             aboveContentBlock,
+             addContentBlockCB,
+           )
+         | None => send(FailedToCreate)
+         };
+         Js.Promise.resolve();
+       })
+    |> Js.Promise.catch(_ => {
+         send(FailedToCreate);
+         Js.Promise.resolve();
+       })
+    |> ignore;
+  };
+};
 
 let submitForm =
-    (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
+    (
+      target,
+      aboveContentBlock,
+      state,
+      send,
+      addContentBlockCB,
+      blockType,
+      file,
+    ) => {
   let formId =
     switch (blockType) {
     | `File => fileFormId(aboveContentBlock)
     | `Image => imageFormId(aboveContentBlock)
+    | `VideoEmbed => videoFormId(aboveContentBlock)
     };
 
   let element = ReactDOMRe._getElementById(formId);
@@ -220,7 +405,15 @@ let submitForm =
   switch (element) {
   | Some(element) =>
     DomUtils.FormData.create(element)
-    |> uploadFile(target, send, addContentBlockCB, aboveContentBlock != None)
+    |> uploadFile(
+         target,
+         send,
+         addContentBlockCB,
+         aboveContentBlock,
+         blockType,
+         file,
+         state,
+       )
   | None =>
     Rollbar.error(
       "Could not find form to upload file for content block: " ++ formId,
@@ -230,7 +423,15 @@ let submitForm =
 };
 
 let handleFileInputChange =
-    (target, aboveContentBlock, send, addContentBlockCB, blockType, event) => {
+    (
+      target,
+      aboveContentBlock,
+      state,
+      send,
+      addContentBlockCB,
+      blockType,
+      event,
+    ) => {
   event |> ReactEvent.Form.preventDefault;
 
   switch (ReactEvent.Form.target(event)##files) {
@@ -249,6 +450,22 @@ let handleFileInputChange =
               "Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.",
             )
           : None
+      | `VideoEmbed =>
+        switch (
+          FileUtils.isVideo(file),
+          FileUtils.hasValidSize(
+            ~maxSize=FileUtils.defaultVideoMaxSize,
+            file,
+          ),
+        ) {
+        | (false, true | false) =>
+          Some(
+            "Invalid file format, please select an MP4, MOV, WMV, AVI or FLV file.",
+          )
+        | (true, false) =>
+          Some("Please select a file less than 500 MB in size.")
+        | (true, true) => None
+        }
       };
 
     switch (error) {
@@ -259,18 +476,26 @@ let handleFileInputChange =
       submitForm(
         target,
         aboveContentBlock,
+        state,
         send,
         addContentBlockCB,
         blockType,
+        file,
       );
     };
   };
 };
 
 let uploadForm =
-    (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
+    (target, aboveContentBlock, state, send, addContentBlockCB, blockType) => {
   let fileSelectionHandler =
-    handleFileInputChange(target, aboveContentBlock, send, addContentBlockCB);
+    handleFileInputChange(
+      target,
+      aboveContentBlock,
+      state,
+      send,
+      addContentBlockCB,
+    );
 
   let (fileId, formId, onChange, fileType) =
     switch (blockType) {
@@ -285,6 +510,12 @@ let uploadForm =
         imageFormId(aboveContentBlock),
         fileSelectionHandler(`Image),
         "image",
+      )
+    | `VideoEmbed => (
+        videoInputId(aboveContentBlock),
+        videoFormId(aboveContentBlock),
+        fileSelectionHandler(`VideoEmbed),
+        "video",
       )
     };
 
@@ -319,6 +550,7 @@ let visible = state =>
   switch (state.ui) {
   | Hidden => false
   | BlockSelector
+  | UploadVideo
   | EmbedForm(_) => true
   };
 
@@ -327,50 +559,28 @@ let updateEmbedUrl = (send, event) => {
   send(UpdateEmbedUrl(value));
 };
 
-let embedUrlRegexes = [|
-  [%bs.re "/https:\\/\\/.*slideshare\\.net/"],
-  [%bs.re "/https:\\/\\/.*vimeo\\.com/"],
-  [%bs.re "/https:\\/\\/.*youtube\\.com/"],
-  [%bs.re "/https:\\/\\/.*youtu\\.be/"],
-|];
+let updateVideoTitle = (send, event) => {
+  let value = ReactEvent.Form.target(event)##value;
+  send(UpdateVideoTitle(value));
+};
 
-let validEmbedUrl = url =>
-  Belt.Array.some(embedUrlRegexes, regex => regex->Js.Re.test_(url));
+let updateVideoDescription = (send, event) => {
+  let value = ReactEvent.Form.target(event)##value;
+  send(UpdateVideoDescription(value));
+};
 
 let onEmbedFormSave =
     (target, aboveContentBlock, url, send, addContentBlockCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
 
-  if (url |> validEmbedUrl) {
-    send(ToggleSaving);
-
-    let aboveContentBlockId =
-      aboveContentBlock |> OptionUtils.map(ContentBlock.id);
-
-    let targetId = target |> Target.id;
-
-    CreateEmbedContentBlock.make(~targetId, ~aboveContentBlockId?, ~url, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(result =>
-         handleGraphqlCreateResponse(
-           aboveContentBlock,
-           send,
-           addContentBlockCB,
-           result##createEmbedContentBlock##contentBlock,
-         )
-       )
-    |> Js.Promise.catch(_ => {
-         send(FailedToCreate);
-         Js.Promise.resolve();
-       })
-    |> ignore;
-  } else {
-    send(
-      SetError(
-        "The URL doesn't look valid. Please make sure that it starts with 'https://' and that it's one of the accepted websites.",
-      ),
-    );
-  };
+  handleCreateEmbedContentBlock(
+    target,
+    aboveContentBlock,
+    url,
+    send,
+    addContentBlockCB,
+    `User,
+  );
 };
 
 let topButton = (handler, id, title, icon) =>
@@ -399,6 +609,18 @@ let closeEmbedFormButton = (send, aboveContentBlock) => {
   );
 };
 
+let closeUploadFormButton = (send, aboveContentBlock) => {
+  let id =
+    aboveContentBlock->Belt.Option.mapWithDefault("button", ContentBlock.id);
+
+  topButton(
+    _e => send(HideUploadVideoForm),
+    id,
+    "Close Embed Form",
+    "fa-level-up-alt",
+  );
+};
+
 let toggleVisibilityButton = (send, contentBlock) =>
   topButton(
     _e => send(ToggleVisibility),
@@ -411,14 +633,61 @@ let buttonAboveContentBlock = (state, send, aboveContentBlock) =>
   switch (state.ui, aboveContentBlock) {
   | (EmbedForm(_), Some(_) | None) =>
     closeEmbedFormButton(send, aboveContentBlock)
+  | (UploadVideo, Some(_) | None) =>
+    closeUploadFormButton(send, aboveContentBlock)
   | (Hidden, None)
   | (BlockSelector, None) => <div className="h-10" /> // Spacer.
   | (Hidden | BlockSelector, Some(contentBlock)) =>
     toggleVisibilityButton(send, contentBlock)
   };
 
+let uploadVideoForm = (videoInputId, state, send) => {
+  <div>
+    <div className="mt-1">
+      <label
+        htmlFor={videoInputId ++ "-title"} className="text-xs font-semibold">
+        {"Title" |> str}
+      </label>
+      <input
+        id={videoInputId ++ "-title"}
+        placeholder="Title of your video"
+        className="w-full py-1 px-2 border rounded"
+        type_="text"
+        value={state.videoTitle}
+        onChange={updateVideoTitle(send)}
+        maxLength=120
+      />
+    </div>
+    <div className="mt-1">
+      <label
+        htmlFor={videoInputId ++ "-description"}
+        className="text-xs font-semibold">
+        {"Description" |> str}
+      </label>
+      <textarea
+        id={videoInputId ++ "-description"}
+        placeholder="Description for your video"
+        className="w-full py-1 px-2 border rounded"
+        type_="text"
+        value={state.videoDescription}
+        onChange={updateVideoDescription(send)}
+        maxLength=4000
+        rows=4
+      />
+    </div>
+    <label htmlFor=videoInputId className="mt-2 btn btn-success">
+      {"Select File and Upload" |> str}
+    </label>
+  </div>;
+};
+
+let disablingCoverDisabled = (saving, uploadProgress) => {
+  uploadProgress->Belt.Option.mapWithDefault(saving, _u => false);
+};
+
 [@react.component]
-let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
+let make =
+    (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessToken) => {
   let (embedInputId, isAboveContentBlock) =
     switch (aboveContentBlock) {
     | Some(contentBlock) =>
@@ -427,6 +696,8 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
     | None => ("embed-bottom", false)
     };
 
+  let videoInputId = videoInputId(aboveContentBlock);
+
   let (state, send) =
     React.useReducerWithMapState(
       reducer,
@@ -434,9 +705,28 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
       computeInitialState,
     );
 
-  <DisablingCover disabled={state.saving} message="Creating...">
-    {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `File)}
-    {uploadForm(target, aboveContentBlock, send, addContentBlockCB, `Image)}
+  let uploadFormCurried = uploadType =>
+    uploadForm(
+      target,
+      aboveContentBlock,
+      state,
+      send,
+      addContentBlockCB,
+      uploadType,
+    );
+
+  <DisablingCover
+    disabled={disablingCoverDisabled(state.saving, state.uploadProgress)}
+    message={
+      switch (state.ui) {
+      | UploadVideo => "Preparing to Upload..."
+      | BlockSelector
+      | EmbedForm(_)
+      | Hidden => "Creating..."
+      }
+    }>
+    {uploadFormCurried(`File)}
+    {uploadFormCurried(`Image)}
     <div className={containerClasses(state |> visible, isAboveContentBlock)}>
       {buttonAboveContentBlock(state, send, aboveContentBlock)}
       <div className="content-block-creator__inner-container">
@@ -445,11 +735,38 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB) => {
          | BlockSelector =>
            <div
              className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
-             {[|`Markdown, `Image, `Embed, `File|]
+             {(
+                hasVimeoAccessToken
+                  ? [|`Markdown, `Image, `Embed, `VideoEmbed, `File|]
+                  : [|`Markdown, `Image, `Embed, `File|]
+              )
               |> Array.map(
                    button(target, aboveContentBlock, send, addContentBlockCB),
                  )
               |> React.array}
+           </div>
+         | UploadVideo =>
+           <div
+             className="clearfix border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
+             {uploadFormCurried(`VideoEmbed)}
+             {state.uploadProgress
+              ->Belt.Option.mapWithDefault(
+                  uploadVideoForm(videoInputId, state, send), current =>
+                  <div className="max-w-xs mx-auto">
+                    <DoughnutChart
+                      mode={
+                        current == 100
+                          ? DoughnutChart.Indeterminate
+                          : DoughnutChart.Determinate(current, 100)
+                      }
+                      className="mx-auto my-20"
+                    />
+                    <div
+                      className="text-center font-semibold text-primary-800 mt-2">
+                      {"Uploading" |> str}
+                    </div>
+                  </div>
+                )}
            </div>
          | EmbedForm(url) =>
            <div

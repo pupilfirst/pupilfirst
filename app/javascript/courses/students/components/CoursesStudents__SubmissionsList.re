@@ -1,7 +1,7 @@
 [%bs.raw {|require("./CoursesStudents__StudentOverlay.css")|}];
 
-[@bs.module "../../shared/images/reviewed-empty.svg"]
-external reviewedEmptyImage: string = "default";
+[@bs.module]
+external reviewedEmptyImage: string = "../../shared/images/reviewed-empty.svg";
 
 open CoursesStudents__Types;
 

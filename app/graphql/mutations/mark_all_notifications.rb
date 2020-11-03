@@ -6,10 +6,15 @@ module Mutations
 
     def resolve(params)
       mutator = MarkAllNotificationsMutator.new(context, params)
-
-
+      success = if mutator.valid?
         mutator.mark_all
+        true
+      else
+        mutator.notify_errors
+        false
+      end
 
+      { success: success }
     end
   end
 end

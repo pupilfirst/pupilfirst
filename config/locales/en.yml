@@ -183,6 +183,8 @@ en:
       success_notification: Certificate details have been updated.
     delete_certificate:
       success_notification: Certificate has been deleted.
+    create_topic_subscription:
+      success_notification: You will be notified about all the updates.
 
   queries:
     delete_certificate_mutator:

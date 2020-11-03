@@ -63,5 +63,6 @@ module Types
     field :update_topic_category, mutation: Mutations::UpdateTopicCategory, null: false
     field :mark_notification, mutation: Mutations::MarkNotification, null: false
     field :mark_all_notifications, mutation: Mutations::MarkAllNotifications, null: false
+    field :create_topic_subscription, mutation: Mutations::CreateTopicSubscription, null: false
   end
 end

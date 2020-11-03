@@ -39,6 +39,7 @@ jobs:
       PGPASSWORD: password
       RAILS_ENV: test
       JAVASCRIPT_DRIVER: headless_chrome
+      COVERAGE: true
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver

@@ -72,7 +72,7 @@ jobs:
       - store_test_results:
           path: /tmp/test-results
       - store_artifacts:
-          path: /tmp/capybara
+          path: ./tmp/capybara
       - run:
           name: Stash Coverage Results
           command: |

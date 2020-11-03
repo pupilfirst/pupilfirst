@@ -330,11 +330,11 @@ ActiveRecord::Schema.define(version: 2020_10_22_093240) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "issuer_id"
-    t.bigint "revoked_by_id"
+    t.bigint "revoker_id"
     t.datetime "revoked_at"
     t.index ["certificate_id"], name: "index_issued_certificates_on_certificate_id"
     t.index ["issuer_id"], name: "index_issued_certificates_on_issuer_id"
-    t.index ["revoked_by_id"], name: "index_issued_certificates_on_revoked_by_id"
+    t.index ["revoker_id"], name: "index_issued_certificates_on_revoker_id"
     t.index ["serial_number"], name: "index_issued_certificates_on_serial_number", unique: true
     t.index ["user_id"], name: "index_issued_certificates_on_user_id"
   end
@@ -808,7 +808,7 @@ ActiveRecord::Schema.define(version: 2020_10_22_093240) do
   add_foreign_key "issued_certificates", "certificates"
   add_foreign_key "issued_certificates", "users"
   add_foreign_key "issued_certificates", "users", column: "issuer_id"
-  add_foreign_key "issued_certificates", "users", column: "revoked_by_id"
+  add_foreign_key "issued_certificates", "users", column: "revoker_id"
   add_foreign_key "leaderboard_entries", "founders"
   add_foreign_key "levels", "courses"
   add_foreign_key "markdown_attachments", "users"

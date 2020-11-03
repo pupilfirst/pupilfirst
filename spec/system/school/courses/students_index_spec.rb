@@ -688,7 +688,7 @@ feature 'School students index', js: true do
       expect(page).to_not have_text('This student has already been issued a certificate for this course')
 
       expect(issued_certificate.reload.revoked_at).to_not eq(nil)
-      expect(issued_certificate.revoked_by).to eq(school_admin.user)
+      expect(issued_certificate.revoker).to eq(school_admin.user)
 
       within("div[aria-label='Details of issued certificate #{issued_certificate.id}']") do
         expect(page).to have_text(school_admin.user.name, count: 2)

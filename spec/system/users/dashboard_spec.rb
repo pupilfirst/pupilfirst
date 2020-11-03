@@ -183,7 +183,7 @@ feature 'User Dashboard', js: true do
     let(:certificate_3) { create :certificate, course: course_2 }
     let!(:issued_certificate_1) { create :issued_certificate, certificate: certificate_1, user: founder.user }
     let!(:issued_certificate_2) { create :issued_certificate, certificate: certificate_2, user: founder.user }
-    let!(:revoked_certificate) { create :issued_certificate, certificate: certificate_3, user: founder.user, revoked_by: school_admin.user, revoked_at: Time.zone.now }
+    let!(:revoked_certificate) { create :issued_certificate, certificate: certificate_3, user: founder.user, revoker: school_admin.user, revoked_at: Time.zone.now }
 
     scenario 'student browses certificates on the dashboard page' do
       sign_in_user(founder.user, referrer: dashboard_path)

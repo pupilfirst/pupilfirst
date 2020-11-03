@@ -24,7 +24,7 @@ feature 'Certificate link on curriculum', js: true do
 
   context 'when the issued certificate has been revoked' do
     let(:school_admin) { create :school_admin }
-    let!(:issued_certificate) { create :issued_certificate, certificate: certificate, user: user, revoked_by: school_admin.user, revoked_at: Time.zone.now }
+    let!(:issued_certificate) { create :issued_certificate, certificate: certificate, user: user, revoker: school_admin.user, revoked_at: Time.zone.now }
 
     scenario 'user is now shown link to revoked certificate' do
       sign_in_user user, referrer: curriculum_course_path(course)

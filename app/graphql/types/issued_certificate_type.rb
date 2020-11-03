@@ -9,7 +9,7 @@ module Types
     field :serial_number, String, null: false
 
     def revoked_by
-      BatchLoader::GraphQL.for(object.revoked_by_id).batch do |user_ids, loader|
+      BatchLoader::GraphQL.for(object.revoker_id).batch do |user_ids, loader|
         User.where(id: user_ids).each do |user|
           loader.call(user.id, user.name)
         end

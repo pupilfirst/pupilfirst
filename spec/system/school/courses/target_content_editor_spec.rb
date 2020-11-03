@@ -102,9 +102,11 @@ feature 'Target Content Editor', js: true do
     expect(cb.block_type).to eq(ContentBlock::BLOCK_TYPE_IMAGE)
     expect(cb.content['caption']).to eq(filename)
 
-    # Try changing the caption.
+    # Try changing the caption and width.
     new_caption = Faker::Lorem.sentence
+    new_width = %w[xs sm md lg xl 2xl].sample
     fill_in 'Caption', with: new_caption
+    select new_width, from: 'Width'
 
     # Changing view should be confirmed.
     dismiss_confirm { find('button[title="Close Editor"').click }
@@ -114,6 +116,7 @@ feature 'Target Content Editor', js: true do
 
     expect(page).not_to have_selector("button[title='Save Changes']")
     expect(cb.reload.content['caption']).to eq(new_caption)
+    expect(cb.content['width']).to eq(new_width)
 
     # Try the undo button.
     fill_in 'Caption', with: Faker::Lorem.sentence

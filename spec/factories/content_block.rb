@@ -16,7 +16,7 @@ FactoryBot.define do
     trait :image do
       block_type { ContentBlock::BLOCK_TYPE_IMAGE }
       file { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/uploads/resources/pdf-thumbnail.png'), 'image/png') }
-      content { { caption: Faker::Lorem.sentence } }
+      content { { caption: Faker::Lorem.sentence, size: 'auto' } }
     end
 
     trait :file do

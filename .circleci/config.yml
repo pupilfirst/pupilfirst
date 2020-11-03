@@ -40,6 +40,7 @@ jobs:
       RAILS_ENV: test
       JAVASCRIPT_DRIVER: headless_chrome
       COVERAGE: true
+      SPEC_USER_TIME_ZONE: Etc/UTC
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver

@@ -7,4 +7,6 @@ class IssuedCertificate < ApplicationRecord
 
   validates :name, presence: true
   validates :serial_number, presence: true, uniqueness: true
+
+  scope :live, -> { where(revoked_at: nil) }
 end

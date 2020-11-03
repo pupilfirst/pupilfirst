@@ -180,8 +180,10 @@ feature 'User Dashboard', js: true do
   context 'when the student has been issued some certificates' do
     let(:certificate_1) { create :certificate, course: course_1 }
     let(:certificate_2) { create :certificate, course: course_2 }
+    let(:certificate_3) { create :certificate, course: course_2 }
     let!(:issued_certificate_1) { create :issued_certificate, certificate: certificate_1, user: founder.user }
     let!(:issued_certificate_2) { create :issued_certificate, certificate: certificate_2, user: founder.user }
+    let!(:revoked_certificate) { create :issued_certificate, certificate: certificate_3, user: founder.user, revoked_by: school_admin.user, revoked_at: Time.zone.now }
 
     scenario 'student browses certificates on the dashboard page' do
       sign_in_user(founder.user, referrer: dashboard_path)
@@ -190,6 +192,7 @@ feature 'User Dashboard', js: true do
       click_button 'Certificates'
       expect(page).to have_link('View Certificate', href: "/c/#{issued_certificate_1.serial_number}")
       expect(page).to have_link('View Certificate', href: "/c/#{issued_certificate_2.serial_number}")
+      expect(page).not_to have_link('View Certificate', href: "/c/#{revoked_certificate.serial_number}")
     end
   end
 

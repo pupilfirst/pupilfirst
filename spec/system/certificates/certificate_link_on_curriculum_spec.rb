@@ -21,4 +21,16 @@ feature 'Certificate link on curriculum', js: true do
     expect(page).to have_text('You have been issued a certificate')
     expect(page).to have_link('View Certificate', href: issued_certificate_path(serial_number: issued_certificate.serial_number))
   end
+
+  context 'when the issued certificate has been revoked' do
+    let(:school_admin) { create :school_admin }
+    let!(:issued_certificate) { create :issued_certificate, certificate: certificate, user: user, revoked_by: school_admin.user, revoked_at: Time.zone.now }
+
+    scenario 'user is now shown link to revoked certificate' do
+      sign_in_user user, referrer: curriculum_course_path(course)
+
+      expect(page).not_to have_text('You have been issued a certificate')
+      expect(page).not_to have_link('View Certificate', href: issued_certificate_path(serial_number: issued_certificate.serial_number))
+    end
+  end
 end

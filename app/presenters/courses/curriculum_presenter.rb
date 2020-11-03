@@ -71,7 +71,7 @@ module Courses
 
     def course_details
       @course.attributes.slice('id', 'ends_at', 'progression_behavior', 'progression_limit').merge(
-        certificate_serial_number: current_user.issued_certificates.joins(:course).find_by(courses: { id: @course.id })&.serial_number
+        certificate_serial_number: current_user.issued_certificates.live.joins(:course).find_by(courses: { id: @course.id })&.serial_number
       )
     end
 

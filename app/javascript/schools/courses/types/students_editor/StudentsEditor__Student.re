@@ -47,7 +47,7 @@ let updateCertificate = (t, certificate) => {
   };
 };
 
-let hasActiveCertificate = t => {
+let hasLiveCertificate = t => {
   Js.Array.find(
     ic => StudentsEditor__IssuedCertificate.revokedAt(ic)->Belt.Option.isNone,
     t.issuedCertificates,

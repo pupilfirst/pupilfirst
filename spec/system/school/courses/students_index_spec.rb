@@ -655,12 +655,9 @@ feature 'School students index', js: true do
         expect(page).to have_text(issued_certificate.serial_number)
         expect(page).to have_text(school_admin.user.name)
         expect(page).to have_text(certificate_2.name)
-        expect(page).to have_text('Active')
         expect(page).to have_text(issued_certificate.created_at.strftime('%B %-d, %Y'))
         expect(page).to have_button('Revoke Certificate')
       end
-
-      expect(page).to have_text('This student has already been issued a certificate for this course')
     end
 
     scenario 'admin revokes issued certificate and then issues another one' do

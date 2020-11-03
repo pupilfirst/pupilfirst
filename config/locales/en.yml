@@ -124,12 +124,10 @@ en:
       revoked_date_label: "Revoked on:"
       revoked_by_label: "Revoked by:"
       revoked_status_label: Revoked
-      active_status_label: Active
       new_certificate_label: "Issue new certificate:"
       select_certificate_input_label: Select a certificate to issue
       issue_certificate_button: Issue Certificate
       revoke_certificate_button: Revoke Certificate
-      active_certificate_info: This student has already been issued a certificate for this course. Please revoke this certificate to issue a new one.
       dropout_student_label: Has this student dropped out?
       dropout_button: Dropout Student
   jobs:

@@ -148,13 +148,6 @@ let issueButtonIcons = issuing => {
   issuing ? "fas fa-spinner fa-spin" : "fas fa-certificate";
 };
 
-let certificateStatusPillColour = revokedAt => {
-  switch (revokedAt) {
-  | Some(_) => "bg-red-200 border-red-800"
-  | None => "bg-green-200 border-green-800"
-  };
-};
-
 let showIssuedCertificates =
     (
       student,
@@ -193,21 +186,14 @@ let showIssuedCertificates =
                      ->Certificate.name
                      ->str}
                   </span>
-                  {let revokedAt =
-                     StudentsEditor__IssuedCertificate.revokedAt(ic);
-                   <div
-                     className={
-                       "w-16 p-1 text-xs leading-tight rounded text-center "
-                       ++ certificateStatusPillColour(revokedAt)
-                     }>
-                     (
-                       switch (revokedAt) {
-                       | Some(_) => t("revoked_status_label")
-                       | None => t("active_status_label")
-                       }
-                     )
-                     ->str
-                   </div>}
+                  {StudentsEditor__IssuedCertificate.revokedAt(ic)
+                   ->Belt.Option.isSome
+                   |> ReactUtils.nullUnless(
+                        <div
+                          className="w-16 p-1 text-xs leading-tight rounded text-center bg-red-200 border-red-800">
+                          {t("revoked_status_label")->str}
+                        </div>,
+                      )}
                 </div>
                 <div className="text-xs text-gray-700">
                   {StudentsEditor__IssuedCertificate.serialNumber(ic)->str}
@@ -311,55 +297,53 @@ let make =
                 updateStudentCertificationCB,
                 currentUserName,
               )}
-             {<div className="flex flex-col mt-2">
-                <label className="tracking-wide text-sm font-semibold mb-2">
-                  {t("new_certificate_label")->str}
-                </label>
-                {Student.hasActiveCertificate(student)
-                   ? <div
-                       className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-l-4 rounded-r-md mt-2">
-                       {t("active_certificate_info")->str}
-                     </div>
-                   : <div className="flex items-end mt-2">
-                       <select
-                         className="cursor-pointer appearance-none block w-full bg-white border border-gray-400 rounded h-10 py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                         id="issue-certificate"
-                         onChange={event => {
-                           let selectedValue =
-                             ReactEvent.Form.target(event)##value;
-                           setSelectedCertificateId(_ => selectedValue);
-                         }}
-                         value=selectedCertificateId>
-                         <option key="0" value="0">
-                           {t("select_certificate_input_label")->str}
-                         </option>
-                         {certificates
-                          |> Array.map(certificate =>
-                               <option
-                                 key={Certificate.id(certificate)}
-                                 value={Certificate.id(certificate)}>
-                                 {Certificate.name(certificate)->str}
-                               </option>
-                             )
-                          |> React.array}
-                       </select>
-                       <button
-                         onClick={issueNewCertificate(
-                           setIssuing,
-                           selectedCertificateId,
-                           student,
-                           updateStudentCertificationCB,
-                           currentUserName,
-                         )}
-                         disabled={issuing || selectedCertificateId == "0"}
-                         className="btn btn-success ml-2 text-sm h-10">
-                         <FaIcon classes={issueButtonIcons(issuing)} />
-                         <span className="ml-2">
-                           {t("issue_certificate_button")->str}
-                         </span>
-                       </button>
-                     </div>}
-              </div>}
+             {ReactUtils.nullIf(
+                <div className="flex flex-col mt-2">
+                  <label className="tracking-wide text-sm font-semibold mb-2">
+                    {t("new_certificate_label")->str}
+                  </label>
+                  <div className="flex items-end mt-2">
+                    <select
+                      className="cursor-pointer appearance-none block w-full bg-white border border-gray-400 rounded h-10 py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="issue-certificate"
+                      onChange={event => {
+                        let selectedValue =
+                          ReactEvent.Form.target(event)##value;
+                        setSelectedCertificateId(_ => selectedValue);
+                      }}
+                      value=selectedCertificateId>
+                      <option key="0" value="0">
+                        {t("select_certificate_input_label")->str}
+                      </option>
+                      {certificates
+                       |> Array.map(certificate =>
+                            <option
+                              key={Certificate.id(certificate)}
+                              value={Certificate.id(certificate)}>
+                              {Certificate.name(certificate)->str}
+                            </option>
+                          )
+                       |> React.array}
+                    </select>
+                    <button
+                      onClick={issueNewCertificate(
+                        setIssuing,
+                        selectedCertificateId,
+                        student,
+                        updateStudentCertificationCB,
+                        currentUserName,
+                      )}
+                      disabled={issuing || selectedCertificateId == "0"}
+                      className="btn btn-success ml-2 text-sm h-10">
+                      <FaIcon classes={issueButtonIcons(issuing)} />
+                      <span className="ml-2">
+                        {t("issue_certificate_button")->str}
+                      </span>
+                    </button>
+                  </div>
+                </div>,
+                Student.hasLiveCertificate(student),
+              )}
            </div>}
     </div>
     <label

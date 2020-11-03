@@ -39,7 +39,6 @@ jobs:
       PGPASSWORD: password
       RAILS_ENV: test
       JAVASCRIPT_DRIVER: headless_chrome
-      COVERAGE: true
       SPEC_USER_TIME_ZONE: Etc/UTC
     steps:
       - browser-tools/install-chrome
@@ -73,33 +72,6 @@ jobs:
           path: /tmp/test-results
       - store_artifacts:
           path: ./tmp/capybara
-      - run:
-          name: Stash Coverage Results
-          command: |
-            mkdir coverage_results
-            cp -R coverage/.resultset.json coverage_results/.resultset-${CIRCLE_NODE_INDEX}.json
-      - store_artifacts:
-          path: coverage_results
-      - persist_to_workspace:
-          root: .
-          paths:
-            - coverage_results
-
-  coverage:
-    docker:
-      - image: cimg/ruby:2.7-browsers
-    steps:
-      - checkout
-      - ruby/install-deps
-      - node/install-packages:
-          pkg-manager: yarn
-      - attach_workspace:
-          at: .
-      - run:
-          name: Merge and check coverage
-          command: bin/rake coverage:report
-      - store_artifacts:
-          path: coverage
 
 workflows:
   version: 2
@@ -109,6 +81,3 @@ workflows:
       - test:
           requires:
             - build
-      - coverage:
-          requires:
-            - test

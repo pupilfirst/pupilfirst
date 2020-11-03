@@ -1,0 +1,19 @@
+name: Sync from upstream
+
+on:
+  schedule:
+    - cron: '*/30 * * * *' # every 30 minutes
+  workflow_dispatch: # on button click
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: tgymnich/fork-sync@v1.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          owner: pupilfirst
+          base: master
+          head: master
+          pr_title: Sync changes from Pupilfirst
+          pr_message: This PR contains recent changes merged into pupilfirst repository master branch

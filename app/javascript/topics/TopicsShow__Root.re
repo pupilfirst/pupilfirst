@@ -12,6 +12,7 @@ type state = {
   topicTitle: string,
   savingTopic: bool,
   showTopicEditor: bool,
+  subscribed: bool,
   topicCategory: option(TopicCategory.t),
 };
 
@@ -31,6 +32,8 @@ type action =
   | ShowTopicEditor(bool)
   | UpdateSavingTopic(bool)
   | MarkReplyAsSolution(string)
+  | Subscribe
+  | Unsubscribe
   | UpdateTopicCategory(option(TopicCategory.t));
 
 let reducer = (state, action) => {
@@ -104,6 +107,8 @@ let reducer = (state, action) => {
       replies: state.replies |> Post.markAsSolution(postId),
     }
   | UpdateTopicCategory(topicCategory) => {...state, topicCategory}
+  | Subscribe => {...state, subscribed: true}
+  | Unsubscribe => {...state, subscribed: false}
   };
 };
 
@@ -117,6 +122,14 @@ let updateReply = (send, reply) => {
 
 let updateFirstPost = (send, post) => {
   send(UpdateFirstPost(post));
+};
+
+let subscribe = (send, ()) => {
+  send(Subscribe);
+};
+
+let unsubscribe = (send, ()) => {
+  send(Unsubscribe);
 };
 
 let saveReply = (send, replyToPostId, reply) => {
@@ -277,6 +290,7 @@ let make =
       ~community,
       ~target,
       ~topicCategories,
+      ~subscribed,
     ) => {
   let (state, send) =
     React.useReducerWithMapState(reducer, topic, topic =>
@@ -288,6 +302,7 @@ let make =
         topicTitle: topic |> Topic.title,
         savingTopic: false,
         showTopicEditor: false,
+        subscribed,
         topicCategory:
           topicCategory(topicCategories, Topic.topicCategoryId(topic)),
       }
@@ -407,6 +422,14 @@ let make =
                      </div>;
                    | None => React.null
                    }}
+                  <div className="lg:pl-14">
+                    <TopicsShow__SubscriptionManager
+                      subscribed={state.subscribed}
+                      topicId={Topic.id(topic)}
+                      subscribeCB={subscribe(send)}
+                      unsubscribeCB={unsubscribe(send)}
+                    />
+                  </div>
                 </div>}
            <TopicsShow__PostShow
              key={Post.id(state.firstPost)}

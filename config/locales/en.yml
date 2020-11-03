@@ -129,6 +129,10 @@ en:
           topic_created_text: Topic Created
           topic_edited_text: Topic Edited
       button_load_more: Load More Notifications...
+    TopicsShow__SubscriptionManager:
+      subscribe: Subscribe
+      unsubscribe: Unsubscribe
+
 
   jobs:
     timeline_events:

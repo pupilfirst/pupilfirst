@@ -3,7 +3,7 @@ class CreateTopicSubscriptionMutator < ApplicationQuery
   property :topic_id, validates: { presence: true }
 
   def subscribe
-    TopicSubscription.create!(user: current_user, topic: topic_id)
+    TopicSubscription.create!(user: current_user, topic: topic)
   end
 
   private

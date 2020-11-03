@@ -268,12 +268,12 @@ let entriesList = entries => {
                  <div className="flex justify-between mt-4">
                    <a
                      href={"/notifications/" ++ Entry.id(entry)}
-                     className="btn border shadow  hover:text-primary-500">
+                     className="inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0">
                      <i className="fas fa-eye mr-2" />
                      {str("Visit")}
                    </a>
                    <button
-                     className="btn border shadow  hover:text-primary-500">
+                     className="inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0">
                      <i className="fas fa-check mr-2" />
                      {str("Mark as Read")}
                    </button>

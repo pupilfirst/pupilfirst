@@ -2,7 +2,7 @@ class DeleteTopicSubscriptionMutator < ApplicationQuery
   property :topic_id, validates: { presence: true }
 
   def delete_subscription
-    topic_subscription
+    topic_subscription.destroy
   end
 
   def authorized?

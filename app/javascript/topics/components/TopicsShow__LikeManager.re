@@ -23,7 +23,7 @@ module DeletePostLikeQuery = [%graphql
 ];
 
 let iconClasses = (liked, saving) => {
-  let classes = "text-lg";
+  let classes = "text-lg fw";
   classes
   ++ (
     if (saving) {

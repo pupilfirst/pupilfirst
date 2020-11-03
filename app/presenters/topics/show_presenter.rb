@@ -20,7 +20,8 @@ module Topics
         moderator: current_coach.present? || current_school_admin.present?,
         community: community_details,
         target: linked_target,
-        topic_categories: topic_categories
+        topic_categories: topic_categories,
+        subscribed: subscribed?
       }
     end
 
@@ -87,6 +88,10 @@ module Topics
           title: user.full_title
         )
       end
+    end
+
+    def subscribed?
+      @topic.topic_subscription.where(user: current_user).exists?
     end
 
     def community

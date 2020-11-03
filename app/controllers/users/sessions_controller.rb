@@ -8,11 +8,15 @@ module Users
     # GET /user/sign_in?referrer
     def new
       store_location_for(:user, params[:referrer]) if params[:referrer].present?
+      set_cookie(:oauth_origin, {fqdn: request.host}.to_json)
 
       if current_user.present?
         flash[:notice] = 'You are already signed in.'
         redirect_to after_sign_in_path_for(current_user)
       end
+
+      # Bypass Devise sign_in page. Send direct to keycloak sign in page.
+      redirect_to user_keycloakopenid_omniauth_authorize_path
     end
 
     # POST /user/send_email - find or create user from email received

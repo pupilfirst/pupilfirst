@@ -61,5 +61,7 @@ module Types
     field :create_topic_category, mutation: Mutations::CreateTopicCategory, null: false
     field :delete_topic_category, mutation: Mutations::DeleteTopicCategory, null: false
     field :update_topic_category, mutation: Mutations::UpdateTopicCategory, null: false
+    field :mark_notification, mutation: Mutations::MarkNotification, null: false
+    field :mark_all_notifications, mutation: Mutations::MarkAllNotifications, null: false
   end
 end

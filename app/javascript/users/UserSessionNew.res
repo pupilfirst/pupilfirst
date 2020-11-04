@@ -25,6 +25,7 @@ type omniauthProvider =
   | Facebook
   | Github
   | Developer
+  | Keycloak
 
 let handleErrorCB = (setSaving, ()) => setSaving(_ => false)
 let handleSignInWithPasswordCB = response => {
@@ -104,6 +105,7 @@ let federatedLoginUrl = (oauthHost, fqdn, provider) =>
   | Facebook => "facebook"
   | Github => "github"
   | Developer => "developer"
+  | Keycloak => "keycloakopenid"
   } ++
   ("?fqdn=" ++ fqdn))))
 
@@ -114,6 +116,7 @@ let buttonText = provider =>
   | Facebook => "with Facebook"
   | Github => "with Github"
   | Developer => "as Developer"
+  | Keycloak => "with Keycloak"
   }
 
 let buttonClasses = provider =>
@@ -123,6 +126,7 @@ let buttonClasses = provider =>
   | Github => "federated-sigin-in__github-btn hover:bg-black text-white"
   | Google => "federated-sigin-in__google-btn hover:bg-red-600 text-white"
   | Developer => "bg-green-100 border-green-400 text-green-800 hover:bg-green-200"
+  | Keycloak => "federated-sigin-in__github-btn hover:bg-black text-white"
   }
 
 let iconClasses = provider =>
@@ -131,10 +135,11 @@ let iconClasses = provider =>
   | Facebook => "fab fa-facebook-f mr-1"
   | Github => "fab fa-github"
   | Developer => "fas fa-laptop-code"
+  | Keycloak => "fas fa-key"
   }
 
 let providers = () => {
-  let defaultProvides = [Google, Facebook, Github]
+  let defaultProvides = [Google, Facebook, Github, Keycloak]
   DomUtils.isDevelopment() ? defaultProvides |> Array.append([Developer]) : defaultProvides
 }
 let renderFederatedlogin = (fqdn, oauthHost) =>

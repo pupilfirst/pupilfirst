@@ -302,6 +302,22 @@ feature 'Target Content Editor', js: true do
       expect(cb.content['last_resolved_at']).to be_present
       expect(cb.content['request_source']).to eq('VimeoUpload')
     end
+
+    scenario 'course author uploads a video' do
+      sign_in_user course_author.user, referrer: content_school_course_target_path(course, target)
+
+      within('.content-block-creator--open') do
+        find('p', text: 'Video').click
+        fill_in 'Title', with: title
+        fill_in 'Description', with: description
+
+        page.attach_file(file_path('pupilfirst-logo.mp4')) do
+          find('label', text: 'Select File and Upload').click
+        end
+      end
+
+      expect(page).to have_text("https://vimeo.com/123456789")
+    end
   end
 
   context 'when a target has many content blocks' do

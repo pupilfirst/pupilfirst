@@ -1,5 +1,6 @@
 module Mutations
   class CreateVimeoVideo < GraphQL::Schema::Mutation
+    argument :target_id, ID, required: true
     argument :size, Integer, required: true
     argument :title, String, required: false
     argument :description, String, required: false

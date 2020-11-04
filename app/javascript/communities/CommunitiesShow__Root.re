@@ -148,54 +148,47 @@ let computeInitialState = () => {
   totalTopicsCount: 0,
 };
 
-let stringOfFilter = filter => {
-  Js.Array.joinWith(
-    "&",
-    [|
-      filter.title
-      ->Belt.Option.mapWithDefault([||], title =>
-          [|"title=" ++ Js.Global.encodeURI(title)|]
-        ),
-      filter.topicCategory
-      ->Belt.Option.mapWithDefault([||], t =>
-          [|"topicCategory=" ++ TopicCategory.id(t)|]
-        ),
-      [|
-        "solution="
-        ++ (
-          switch (filter.solution) {
-          | `Solved => "Solved"
-          | `Unsolved => "Unsolved"
-          | `Unselected => "Unselected"
-          }
-        ),
-      |],
-      [|
-        "sortCriterion="
-        ++ (
-          switch (filter.sortCriterion) {
-          | `LastActivityAt => "LastActivityAt"
-          | `Views => "Views"
-          | `CreatedAt => "CreatedAt"
-          }
-        ),
-      |],
-      [|
-        "sortDirection="
-        ++ (
-          switch (filter.sortDirection) {
-          | `Descending => "Descending"
-          | `Ascending => "Ascending"
-          }
-        ),
-      |],
-    |]
-    ->ArrayUtils.flattenV2,
+let filterToQueryString = filter => {
+  let sortCriterion =
+    switch (filter.sortCriterion) {
+    | `LastActivityAt => "LastActivityAt"
+    | `Views => "Views"
+    | `CreatedAt => "CreatedAt"
+    };
+
+  let sortDirection =
+    switch (filter.sortDirection) {
+    | `Descending => "Descending"
+    | `Ascending => "Ascending"
+    };
+
+  let filterDict =
+    Js.Dict.fromArray([|
+      ("sortCriterion", sortCriterion),
+      ("sortDirection", sortDirection),
+    |]);
+
+  Belt.Option.forEach(filter.title, title =>
+    Js.Dict.set(filterDict, "title", title)
+  );
+
+  Belt.Option.forEach(filter.topicCategory, tc =>
+    Js.Dict.set(filterDict, "topicCategory", TopicCategory.id(tc))
+  );
+
+  switch (filter.solution) {
+  | `Solved => Js.Dict.set(filterDict, "solution", "Solved")
+  | `Unsolved => Js.Dict.set(filterDict, "solution", "Unsolved")
+  | `Unselected => ()
+  };
+
+  Webapi.Url.(
+    URLSearchParams.makeWithDict(filterDict)->URLSearchParams.toString
   );
 };
 
 let updateParams = filter => {
-  ReasonReactRouter.push("?" ++ stringOfFilter(filter));
+  ReasonReactRouter.push("?" ++ filterToQueryString(filter));
 };
 
 let topicsList = (topicCategories, topics) => {
@@ -603,14 +596,10 @@ let topicsSorter = filter => {
   </div>;
 };
 
-[@react.component]
-let make = (~communityId, ~target, ~topicCategories) => {
-  let (state, send) = React.useReducer(reducer, computeInitialState());
+let filterFromQueryParams = (search, target, topicCategories) => {
+  let params = Webapi.Url.URLSearchParams.make(search);
 
-  let url = ReasonReactRouter.useUrl();
-  let params = Webapi.Url.URLSearchParams.make(url.search);
-  let get = Webapi.Url.URLSearchParams.get;
-  let filter = {
+  Webapi.Url.URLSearchParams.{
     title: get("title", params),
     topicCategory:
       get("topicCategory", params)
@@ -622,7 +611,6 @@ let make = (~communityId, ~target, ~topicCategories) => {
       switch (get("solution", params)) {
       | Some(criterion) when criterion == "Solved" => `Solved
       | Some(criterion) when criterion == "Unsolved" => `Unsolved
-      | Some(criterion) when criterion == "Unselected" => `Unselected
       | _ => `Unselected
       },
     sortCriterion:
@@ -639,6 +627,14 @@ let make = (~communityId, ~target, ~topicCategories) => {
       | _ => `Descending
       },
   };
+};
+
+[@react.component]
+let make = (~communityId, ~target, ~topicCategories) => {
+  let (state, send) = React.useReducer(reducer, computeInitialState());
+
+  let url = ReasonReactRouter.useUrl();
+  let filter = filterFromQueryParams(url.search, target, topicCategories);
 
   React.useEffect1(
     () => {

@@ -32,8 +32,8 @@ module CreateEmbedContentBlock = [%graphql
 
 module CreateVimeoVideo = [%graphql
   {|
-    mutation CreateVimeoVideo($size: Int!, $title: String, $description: String) {
-      createVimeoVideo(size: $size, title: $title, description: $description) {
+    mutation CreateVimeoVideo($targetId: ID!, $size: Int!, $title: String, $description: String) {
+      createVimeoVideo(targetId: $targetId, size: $size, title: $title, description: $description) {
         vimeoVideo {
           link
           uploadLink
@@ -353,12 +353,21 @@ let uploadFile =
     )
   | `VideoEmbed =>
     let size = file##size;
+
     let title =
       String.trim(state.videoTitle) == "" ? None : Some(state.videoTitle);
+
     let description =
       String.trim(state.videoDescription) == ""
         ? None : Some(state.videoDescription);
-    CreateVimeoVideo.make(~size, ~title?, ~description?, ())
+
+    CreateVimeoVideo.make(
+      ~targetId=Target.id(target),
+      ~size,
+      ~title?,
+      ~description?,
+      (),
+    )
     |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(result => {
          switch (result##createVimeoVideo##vimeoVideo) {

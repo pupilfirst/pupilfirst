@@ -1,6 +1,7 @@
 class CreateVimeoVideoMutator < ApplicationQuery
   include AuthorizeAuthor
 
+  property :target_id, validates: { presence: true }
   property :size, validates: { presence: true }
   property :title, validates: { length: { maximum: 120 } }
   property :description, validates: { length: { maximum: 4000 } }
@@ -31,6 +32,14 @@ class CreateVimeoVideoMutator < ApplicationQuery
   private
 
   def resource_school
-    current_school
+    course.school
+  end
+
+  def course
+    target&.course
+  end
+
+  def target
+    Target.find_by(id: target_id)
   end
 end

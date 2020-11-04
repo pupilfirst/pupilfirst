@@ -25,6 +25,14 @@ module Oembed
 
       return klass if klass.present?
 
+      fallback_klass = fallback_providers.find do |fallback_provider_klass|
+        fallback_provider_klass.domains.any? do |domain_regex|
+          host_name.match?(domain_regex)
+        end
+      end
+
+      return fallback_klass if fallback_klass.present?
+
       raise ProviderNotSupported, "The hostname '#{host_name}' could not be resolved to any known provider."
     end
 
@@ -32,7 +40,13 @@ module Oembed
       [
         Oembed::YoutubeProvider,
         Oembed::VimeoProvider,
-        Oembed::SlideshareProvider
+        Oembed::SlideshareProvider,
+      ]
+    end
+
+    def fallback_providers
+      [
+        Oembed::GSlideFallbackProvider
       ]
     end
   end

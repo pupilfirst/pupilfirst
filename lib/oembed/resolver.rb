@@ -32,7 +32,8 @@ module Oembed
       [
         Oembed::YoutubeProvider,
         Oembed::VimeoProvider,
-        Oembed::SlideshareProvider
+        Oembed::SlideshareProvider,
+        Oembed::GoogleSlideProvider
       ]
     end
   end

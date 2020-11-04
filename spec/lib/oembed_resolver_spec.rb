@@ -42,6 +42,15 @@ describe Oembed::Resolver do
       end
     end
 
+    context 'when supplied a Google Slide URL' do
+      let(:pasted_link) { 'https://docs.google.com/presentation/d/e/2PACX-1vSEEzfWytpa8lMbyCYSHDec3_mLuJAhXWt_gaST6JOoNN0zGfBHToiA45ZoCUIR7cwCzRsn3Hj6YNl7/pub?start=false&loop=false&delayms=3000' }
+      let(:expected_embed_code) { "<iframe src=\"#{pasted_link.gsub('pub', 'embed')}\" frameborder=\"0\" width=\"960\" height=\"569\" allowfullscreen=\"true\" mozallowfullscreen=\"true\" webkitallowfullscreen=\"true\"></iframe>" }
+
+      it 'returns embed code for Google Slides' do
+        expect(subject.new(pasted_link).embed_code).to eq(expected_embed_code)
+      end
+    end
+
     context 'when supplied an unknown URL' do
       it 'returns embed code for YouTube' do
         expected_error_message = "The hostname 'speakerdeck.com' could not be resolved to any known provider."

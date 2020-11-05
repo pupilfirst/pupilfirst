@@ -130,6 +130,8 @@ en:
       revoke_certificate_button: Revoke Certificate
       dropout_student_label: Has this student dropped out?
       dropout_button: Dropout Student
+      revoke_certificate_confirmation: Are you sure? This action cannot be undone.
+      active_label: Active
   jobs:
     timeline_events:
       verification_notification:
@@ -183,6 +185,10 @@ en:
       success_notification: Certificate details have been updated.
     delete_certificate:
       success_notification: Certificate has been deleted.
+    revoke_issued_certificate:
+      success_notification: Certificate revoked!
+    issue_certificate:
+      success_notification: Certificate issued successfully!
 
   queries:
     delete_certificate_mutator:

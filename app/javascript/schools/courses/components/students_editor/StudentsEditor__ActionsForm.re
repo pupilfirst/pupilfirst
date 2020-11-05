@@ -58,37 +58,40 @@ let revokeIssuedCertificate =
       currentUserName,
       _event,
     ) => {
-  WindowUtils.confirm("Are you sure? This action cannot be undone.", () => {
-    setRevoking(_ => true);
+  WindowUtils.confirm(
+    t("revoke_certificate_confirmation"),
+    () => {
+      setRevoking(_ => true);
 
-    let issuedCertificateId =
-      StudentsEditor__IssuedCertificate.id(issuedCertificate);
+      let issuedCertificateId =
+        StudentsEditor__IssuedCertificate.id(issuedCertificate);
 
-    RevokeCertificateQuery.make(~issuedCertificateId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-         response##revokeIssuedCertificate##success
-           ? {
-             let updatedCertificate =
-               issuedCertificate->StudentsEditor__IssuedCertificate.revoke(
-                 Some(currentUserName),
-                 Some(Js.Date.make()),
-               );
-             let updatedStudent =
-               student->Student.updateCertificate(updatedCertificate);
-             updateStudentCertificationCB(updatedStudent);
-             setRevoking(_ => false);
-           }
-           : setRevoking(_ => false);
-         Js.Promise.resolve();
-       })
-    |> Js.Promise.catch(error => {
-         Js.log(error);
-         setRevoking(_ => false);
-         Js.Promise.resolve();
-       })
-    |> ignore;
-  });
+      RevokeCertificateQuery.make(~issuedCertificateId, ())
+      |> GraphqlQuery.sendQuery
+      |> Js.Promise.then_(response => {
+           response##revokeIssuedCertificate##success
+             ? {
+               let updatedCertificate =
+                 issuedCertificate->StudentsEditor__IssuedCertificate.revoke(
+                   Some(currentUserName),
+                   Some(Js.Date.make()),
+                 );
+               let updatedStudent =
+                 student->Student.updateCertificate(updatedCertificate);
+               updateStudentCertificationCB(updatedStudent);
+               setRevoking(_ => false);
+             }
+             : setRevoking(_ => false);
+           Js.Promise.resolve();
+         })
+      |> Js.Promise.catch(error => {
+           Js.log(error);
+           setRevoking(_ => false);
+           Js.Promise.resolve();
+         })
+      |> ignore;
+    },
+  );
 };
 
 let issueNewCertificate =
@@ -323,7 +326,8 @@ let make =
                               {let name = Certificate.name(certificate);
                                (
                                  Certificate.active(certificate)
-                                   ? name ++ " (Active)" : name
+                                   ? name ++ " (" ++ t("active_label") ++ ")"
+                                   : name
                                )
                                ->str}
                             </option>

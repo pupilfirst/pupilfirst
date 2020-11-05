@@ -17,23 +17,7 @@ module Types
     end
 
     def students
-      object.founders.map do |student|
-        student_props = {
-          id: student.id,
-          name: student.user.name,
-          email: student.user.email,
-          team_id: student.startup_id,
-          excluded_from_leaderboard: student.excluded_from_leaderboard,
-          title: student.user.title,
-          affiliation: student.user.affiliation
-        }
-
-        if student.user.avatar.attached?
-          student_props[:avatar_url] = Rails.application.routes.url_helpers.rails_representation_path(student.user.avatar_variant(:thumb), only_path: true)
-        end
-
-        student_props
-      end
+      object.founders
     end
   end
 end

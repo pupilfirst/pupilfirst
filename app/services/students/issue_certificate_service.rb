@@ -8,22 +8,29 @@ module Students
       @student = student
     end
 
-    def issue
-      return if certificate.blank? || issued_certificate_exists?
+    def issue(certificate: nil, issuer: nil)
+      certificate_to_issue = certificate || active_certificate
+
+      return if certificate_to_issue.blank? || issued_certificate_exists?
 
       collisions = 0
 
-      issued_certificate = certificate.issued_certificates.create!(
-        user: user,
-        name: user.name,
-        serial_number: IssuedCertificates::SerialNumberService.generate
-      )
+      begin
+        issued_certificate = certificate_to_issue.issued_certificates.create!(
+          user: user,
+          name: user.name,
+          issuer: issuer,
+          serial_number: IssuedCertificates::SerialNumberService.generate
+        )
+      rescue ActiveRecord::RecordNotUnique
+        collisions += 1
+        retry if collisions <= 5
+        raise 'Number of certificate serial number collisions exceeded 5'
+      end
 
       IssuedCertificateMailer.issued(issued_certificate).deliver_later
-    rescue ActiveRecord::RecordNotUnique
-      collisions += 1
-      retry if collisions <= 5
-      raise 'Number of certificate serial number collisions exceeded 5'
+
+      issued_certificate
     end
 
     private
@@ -33,11 +40,11 @@ module Students
     end
 
     def issued_certificate_exists?
-      certificate.issued_certificates.where(user: user).exists?
+      user.issued_certificates.where(certificate: course.certificates, revoked_at: nil).exists?
     end
 
-    def certificate
-      @certificate ||= course.certificates.active.first
+    def active_certificate
+      course.certificates.active.first
     end
 
     def course

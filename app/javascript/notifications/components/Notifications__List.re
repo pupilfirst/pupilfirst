@@ -266,17 +266,20 @@ let entriesList = entries => {
                    </span>
                  </span>
                  <div className="flex justify-between mt-4">
-                   <a
-                     href={"/notifications/" ++ Entry.id(entry)}
-                     className="inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0">
-                     <i className="fas fa-eye mr-2" />
-                     {str("Visit")}
-                   </a>
                    <button
                      className="inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0">
                      <i className="fas fa-check mr-2" />
                      {str("Mark as Read")}
                    </button>
+                   {ReactUtils.nullIf(
+                      <a
+                        href={"/notifications/" ++ Entry.id(entry)}
+                        className="inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0">
+                        <i className="fas fa-eye mr-2" />
+                        {str("Visit")}
+                      </a>,
+                      Entry.notifiableId(entry)->Belt.Option.isNone,
+                    )}
                  </div>
                </div>
              </div>

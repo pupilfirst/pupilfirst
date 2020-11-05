@@ -402,7 +402,6 @@ let make =
             </button>
           </div>
         </div>
-        <div> {str("hola")} </div>
         {showReplies
            ? <div
                ariaLabel={"Replies to post " ++ Post.id(post)}

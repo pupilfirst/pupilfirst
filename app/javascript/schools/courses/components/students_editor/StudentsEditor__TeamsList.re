@@ -24,6 +24,15 @@ module CourseTeamsQuery = [%graphql
             email,
             excludedFromLeaderboard,
             affiliation
+            issuedCertificates {
+              id
+              certificateId
+              serialNumber
+              revokedBy
+              revokedAt
+              createdAt
+              issuedBy
+            }
           }
         }
         pageInfo {

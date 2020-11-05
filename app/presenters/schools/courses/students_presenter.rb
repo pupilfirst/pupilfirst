@@ -13,7 +13,9 @@ module Schools
           course_coach_ids: @course.faculty.pluck(:id),
           school_coaches: school_coaches,
           levels: levels,
-          student_tags: student_tags
+          student_tags: student_tags,
+          certificates: certificates,
+          current_user_name: current_user.name,
         }
       end
 
@@ -40,6 +42,16 @@ module Schools
 
       def student_tags
         @student_tags ||= current_school.founder_tag_list
+      end
+
+      def certificates
+        @course.certificates.map do |certificate|
+          {
+            id: certificate.id,
+            name: certificate.name,
+            active: certificate.active,
+          }
+        end
       end
     end
   end

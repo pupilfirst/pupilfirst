@@ -22,74 +22,26 @@ type filter = {
   solution,
   title: option(string),
   target: option(Target.t),
+  sortCriterion,
+  sortDirection,
 };
 
 type state = {
   loading,
   topics: Topics.t,
   filterString: string,
-  filter,
   totalTopicsCount: int,
-  sortCriterion,
-  sortDirection,
 };
 
 type action =
-  | SelectTopicCategory(TopicCategory.t)
-  | DeselectTopicCategory
-  | SetSearchString(string)
-  | UnsetSearchString
   | UpdateFilterString(string)
   | LoadTopics(option(string), bool, array(Topic.t), int)
   | BeginLoadingMore
-  | BeginReloading
-  | SetSolutionFilter(solution)
-  | UpdateSortDirection(sortDirection)
-  | UpdateSortCriterion(sortCriterion);
+  | BeginReloading;
 
 let reducer = (state, action) => {
   switch (action) {
-  | SelectTopicCategory(topicCategory) => {
-      ...state,
-      filter: {
-        ...state.filter,
-        topicCategory: Some(topicCategory),
-      },
-      filterString: "",
-    }
-  | DeselectTopicCategory => {
-      ...state,
-      filter: {
-        ...state.filter,
-        topicCategory: None,
-      },
-    }
-  | SetSearchString(string) => {
-      ...state,
-      filter: {
-        ...state.filter,
-        title: Some(string),
-      },
-      filterString: "",
-    }
-  | UnsetSearchString => {
-      ...state,
-      filter: {
-        ...state.filter,
-        title: None,
-      },
-    }
-  | SetSolutionFilter(solution) => {
-      ...state,
-      filter: {
-        ...state.filter,
-        solution,
-      },
-      filterString: "",
-    }
   | UpdateFilterString(filterString) => {...state, filterString}
-  | UpdateSortCriterion(sortCriterion) => {...state, sortCriterion}
-  | UpdateSortDirection(sortDirection) => {...state, sortDirection}
   | LoadTopics(endCursor, hasNextPage, newTopics, totalTopicsCount) =>
     let updatedTopics =
       switch (state.loading) {
@@ -147,8 +99,7 @@ module TopicsQuery = [%graphql
   |}
 ];
 
-let getTopics =
-    (send, communityId, cursor, filter, sortCriterion, sortDirection) => {
+let getTopics = (send, communityId, cursor, filter) => {
   let topicCategoryId =
     filter.topicCategory |> OptionUtils.map(TopicCategory.id);
 
@@ -161,8 +112,8 @@ let getTopics =
     ~targetId?,
     ~search=?filter.title,
     ~resolution=filter.solution,
-    ~sortCriterion,
-    ~sortDirection,
+    ~sortCriterion=filter.sortCriterion,
+    ~sortDirection=filter.sortDirection,
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -185,31 +136,59 @@ let getTopics =
   |> ignore;
 };
 
-let reloadTopics = (communityId, state, send) => {
+let reloadTopics = (communityId, filter, send) => {
   send(BeginReloading);
-  getTopics(
-    send,
-    communityId,
-    None,
-    state.filter,
-    state.sortCriterion,
-    state.sortDirection,
-  );
+  getTopics(send, communityId, None, filter);
 };
 
-let computeInitialState = target => {
+let computeInitialState = () => {
   loading: NotLoading,
   topics: Unloaded,
   filterString: "",
-  filter: {
-    title: None,
-    topicCategory: None,
-    target,
-    solution: `Unselected,
-  },
   totalTopicsCount: 0,
-  sortDirection: `Descending,
-  sortCriterion: `CreatedAt,
+};
+
+let filterToQueryString = filter => {
+  let sortCriterion =
+    switch (filter.sortCriterion) {
+    | `LastActivityAt => "LastActivityAt"
+    | `Views => "Views"
+    | `CreatedAt => "CreatedAt"
+    };
+
+  let sortDirection =
+    switch (filter.sortDirection) {
+    | `Descending => "Descending"
+    | `Ascending => "Ascending"
+    };
+
+  let filterDict =
+    Js.Dict.fromArray([|
+      ("sortCriterion", sortCriterion),
+      ("sortDirection", sortDirection),
+    |]);
+
+  Belt.Option.forEach(filter.title, title =>
+    Js.Dict.set(filterDict, "title", title)
+  );
+
+  Belt.Option.forEach(filter.topicCategory, tc =>
+    Js.Dict.set(filterDict, "topicCategory", TopicCategory.id(tc))
+  );
+
+  switch (filter.solution) {
+  | `Solved => Js.Dict.set(filterDict, "solution", "Solved")
+  | `Unsolved => Js.Dict.set(filterDict, "solution", "Unsolved")
+  | `Unselected => ()
+  };
+
+  Webapi.Url.(
+    URLSearchParams.makeWithDict(filterDict)->URLSearchParams.toString
+  );
+};
+
+let updateParams = filter => {
+  ReasonReactRouter.push("?" ++ filterToQueryString(filter));
 };
 
 let topicsList = (topicCategories, topics) => {
@@ -438,11 +417,11 @@ module Selectable = {
 
 module Multiselect = MultiselectDropdown.Make(Selectable);
 
-let unselected = (topicCategories, state) => {
+let unselected = (topicCategories, filter, state) => {
   let unselectedCategories =
     topicCategories
     |> Js.Array.filter(category =>
-         state.filter.topicCategory
+         filter.topicCategory
          |> OptionUtils.mapWithDefault(
               selectedCategory =>
                 category->TopicCategory.id
@@ -459,7 +438,7 @@ let unselected = (topicCategories, state) => {
       ? [||] : [|Selectable.title(trimmedFilterString)|];
 
   let hasSolution =
-    switch (state.filter.solution) {
+    switch (filter.solution) {
     | `Solved => [|Selectable.solution(false)|]
     | `Unsolved => [|Selectable.solution(true)|]
     | `Unselected => [|
@@ -473,23 +452,23 @@ let unselected = (topicCategories, state) => {
   |> Js.Array.concat(hasSolution);
 };
 
-let selected = state => {
+let selected = filter => {
   let selectedCategory =
-    state.filter.topicCategory
+    filter.topicCategory
     |> OptionUtils.mapWithDefault(
          selectedCategory => [|Selectable.topicCategory(selectedCategory)|],
          [||],
        );
 
   let selectedSearchString =
-    state.filter.title
+    filter.title
     |> OptionUtils.mapWithDefault(
          title => {[|Selectable.title(title)|]},
          [||],
        );
 
   let selectedSolutionFilter =
-    switch (state.filter.solution) {
+    switch (filter.solution) {
     | `Solved => [|Selectable.solution(true)|]
     | `Unsolved => [|Selectable.solution(false)|]
     | `Unselected => [||]
@@ -500,25 +479,28 @@ let selected = state => {
   |> Js.Array.concat(selectedSolutionFilter);
 };
 
-let onSelectFilter = (send, selectable) =>
+let onSelectFilter = (filter, send, selectable) => {
   switch (selectable) {
   | Selectable.TopicCategory(topicCategory) =>
-    send(SelectTopicCategory(topicCategory))
-  | Title(title) => send(SetSearchString(title))
+    updateParams({...filter, topicCategory: Some(topicCategory)})
+  | Title(title) => updateParams({...filter, title: Some(title)})
   | Solution(onOrOff) =>
-    let filter = onOrOff ? `Solved : `Unsolved;
-    send(SetSolutionFilter(filter));
+    let solution = onOrOff ? `Solved : `Unsolved;
+    updateParams({...filter, solution});
   };
+  send(UpdateFilterString(""));
+};
 
-let onDeselectFilter = (send, selectable) =>
+let onDeselectFilter = (filter, selectable) =>
   switch (selectable) {
-  | Selectable.TopicCategory(_topicCategory) => send(DeselectTopicCategory)
-  | Title(_title) => send(UnsetSearchString)
-  | Solution(_) => send(SetSolutionFilter(`Unselected))
+  | Selectable.TopicCategory(_topicCategory) =>
+    updateParams({...filter, topicCategory: None})
+  | Title(_title) => updateParams({...filter, title: None})
+  | Solution(_) => updateParams({...filter, solution: `Unselected})
   };
 
-let filterPlaceholder = (state, topicCategories) => {
-  switch (state.filter.topicCategory, state.filter.title) {
+let filterPlaceholder = (filter, topicCategories) => {
+  switch (filter.topicCategory, filter.title) {
   | (None, None) =>
     ArrayUtils.isEmpty(topicCategories)
       ? t("filter_input_placeholder_default")
@@ -548,11 +530,10 @@ let categoryDropdownSelected = topicCategory => {
   </div>;
 };
 
-let categoryDropdownContents =
-    (availableTopicCategories, selectedTopicCategory, send) => {
+let categoryDropdownContents = (availableTopicCategories, filter) => {
   let selectableTopicCategories =
     Belt.Option.mapWithDefault(
-      selectedTopicCategory, availableTopicCategories, topicCategory => {
+      filter.topicCategory, availableTopicCategories, topicCategory => {
       Js.Array.filter(
         availableTopicCategory =>
           TopicCategory.id(availableTopicCategory)
@@ -570,7 +551,9 @@ let categoryDropdownContents =
       <div
         ariaLabel={"Select category " ++ categoryName}
         className="pl-3 pr-4 py-2 font-normal flex items-center"
-        onClick={_ => send(SelectTopicCategory(topicCategory))}>
+        onClick={_ =>
+          updateParams({...filter, topicCategory: Some(topicCategory)})
+        }>
         <div className="w-3 h-3 rounded" style />
         <span className="ml-1"> categoryName->str </span>
       </div>;
@@ -594,36 +577,71 @@ module Sortable = {
 
 module TopicsSorter = Sorter.Make(Sortable);
 
-let topicsSorter = (state, send) => {
+let topicsSorter = filter => {
   <div ariaLabel="Change topics sorting" className="flex-shrink-0">
     <label className="block text-tiny font-semibold uppercase">
       {t("sort_criterion_input_label")->str}
     </label>
     <TopicsSorter
       criteria=[|`CreatedAt, `LastActivityAt, `Views|]
-      selectedCriterion={state.sortCriterion}
-      direction={state.sortDirection}
+      selectedCriterion={filter.sortCriterion}
+      direction={filter.sortDirection}
       onDirectionChange={sortDirection => {
-        send(UpdateSortDirection(sortDirection))
+        updateParams({...filter, sortDirection})
       }}
       onCriterionChange={sortCriterion =>
-        send(UpdateSortCriterion(sortCriterion))
+        updateParams({...filter, sortCriterion})
       }
     />
   </div>;
 };
 
+let filterFromQueryParams = (search, target, topicCategories) => {
+  let params = Webapi.Url.URLSearchParams.make(search);
+
+  Webapi.Url.URLSearchParams.{
+    title: get("title", params),
+    topicCategory:
+      get("topicCategory", params)
+      ->Belt.Option.flatMap(cat =>
+          Js.Array.find(c => TopicCategory.id(c) == cat, topicCategories)
+        ),
+    target,
+    solution:
+      switch (get("solution", params)) {
+      | Some(criterion) when criterion == "Solved" => `Solved
+      | Some(criterion) when criterion == "Unsolved" => `Unsolved
+      | _ => `Unselected
+      },
+    sortCriterion:
+      switch (get("sortCriterion", params)) {
+      | Some(criterion) when criterion == "LastActivityAt" => `LastActivityAt
+      | Some(criterion) when criterion == "Views" => `Views
+      | Some(criterion) when criterion == "CreatedAt" => `CreatedAt
+      | _ => `CreatedAt
+      },
+    sortDirection:
+      switch (get("sortDirection", params)) {
+      | Some(direction) when direction == "Descending" => `Descending
+      | Some(direction) when direction == "Ascending" => `Ascending
+      | _ => `Descending
+      },
+  };
+};
+
 [@react.component]
 let make = (~communityId, ~target, ~topicCategories) => {
-  let (state, send) =
-    React.useReducerWithMapState(reducer, target, computeInitialState);
+  let (state, send) = React.useReducer(reducer, computeInitialState());
 
-  React.useEffect3(
+  let url = ReasonReactRouter.useUrl();
+  let filter = filterFromQueryParams(url.search, target, topicCategories);
+
+  React.useEffect1(
     () => {
-      reloadTopics(communityId, state, send);
+      reloadTopics(communityId, filter, send);
       None;
     },
-    (state.filter, state.sortDirection, state.sortCriterion),
+    [|url|],
   );
   <div className="flex-1 flex flex-col">
     {switch (target) {
@@ -649,14 +667,8 @@ let make = (~communityId, ~target, ~topicCategories) => {
           <div className="pb-3 flex justify-between">
             {ReactUtils.nullIf(
                <Dropdown
-                 selected={categoryDropdownSelected(
-                   state.filter.topicCategory,
-                 )}
-                 contents={categoryDropdownContents(
-                   topicCategories,
-                   state.filter.topicCategory,
-                   send,
-                 )}
+                 selected={categoryDropdownSelected(filter.topicCategory)}
+                 contents={categoryDropdownContents(topicCategories, filter)}
                  className=""
                />,
                ArrayUtils.isEmpty(topicCategories),
@@ -673,18 +685,18 @@ let make = (~communityId, ~target, ~topicCategories) => {
               </label>
               <Multiselect
                 id="filter"
-                unselected={unselected(topicCategories, state)}
-                selected={selected(state)}
-                onSelect={onSelectFilter(send)}
-                onDeselect={onDeselectFilter(send)}
+                unselected={unselected(topicCategories, filter, state)}
+                selected={selected(filter)}
+                onSelect={onSelectFilter(filter, send)}
+                onDeselect={onDeselectFilter(filter)}
                 value={state.filterString}
                 onChange={filterString =>
                   send(UpdateFilterString(filterString))
                 }
-                placeholder={filterPlaceholder(state, topicCategories)}
+                placeholder={filterPlaceholder(filter, topicCategories)}
               />
             </div>
-            {topicsSorter(state, send)}
+            {topicsSorter(filter)}
           </div>
         </div>
       </div>
@@ -718,14 +730,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                     className="btn btn-primary-ghost cursor-pointer w-full mt-4"
                     onClick={_ => {
                       send(BeginLoadingMore);
-                      getTopics(
-                        send,
-                        communityId,
-                        Some(cursor),
-                        state.filter,
-                        state.sortCriterion,
-                        state.sortDirection,
-                      );
+                      getTopics(send, communityId, Some(cursor), filter);
                     }}>
                     {t("button_load_more") |> str}
                   </button>

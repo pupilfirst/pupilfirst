@@ -13,6 +13,16 @@ let eventName = event => {
   };
 };
 
+module MarkNotificationQuery = [%graphql
+  {|
+  mutation MarkNotificationMutation($notificationId: ID!) {
+    markNotification(notificationId: $notificationId)  {
+      success
+    }
+  }
+|}
+];
+
 type sortDirection = [ | `Ascending | `Descending];
 
 type filter = {
@@ -42,7 +52,15 @@ type action =
   | SetShowRead
   | SetEvent(event)
   | ClearEvent
+  | MarkNotification(string)
   | UpdateSortDirection(sortDirection);
+
+let updateNotification = (id, notifications) => {
+  notifications
+  |> Js.Array.map(entry =>
+       Entry.id(entry) == id ? Entry.markAsRead(entry) : entry
+     );
+};
 
 let reducer = (state, action) => {
   switch (action) {
@@ -91,6 +109,17 @@ let reducer = (state, action) => {
     };
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
+  | MarkNotification(id) => {
+      ...state,
+      entries:
+        switch (state.entries) {
+        | Unloaded => Unloaded
+        | PartiallyLoaded(entries, cursor) =>
+          PartiallyLoaded(updateNotification(id, entries), cursor)
+        | FullyLoaded(entries) =>
+          FullyLoaded(updateNotification(id, entries))
+        },
+    }
   | SetShowUnread => {
       ...state,
       filter: {
@@ -186,6 +215,10 @@ let getEntries = (send, cursor, filter) => {
   |> ignore;
 };
 
+let markNotification = (send, notificationId) => {
+  send(MarkNotification(notificationId));
+};
+
 let reloadEntries = (state, send) => {
   send(BeginReloading);
   getEntries(send, None, state.filter);
@@ -204,27 +237,7 @@ let computeInitialState = () => {
   totalEntriesCount: 0,
 };
 
-let avatarClasses = size => {
-  let (defaultSize, mdSize) = size;
-  "w-"
-  ++ defaultSize
-  ++ " h-"
-  ++ defaultSize
-  ++ " md:w-"
-  ++ mdSize
-  ++ " md:h-"
-  ++ mdSize
-  ++ " text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover";
-};
-
-let avatar = (~size=("10", "10"), avatarUrl, name) => {
-  switch (avatarUrl) {
-  | Some(avatarUrl) => <img className={avatarClasses(size)} src=avatarUrl />
-  | None => <Avatar name className={avatarClasses(size)} />
-  };
-};
-
-let entriesList = entries => {
+let entriesList = (entries, send) => {
   entries |> ArrayUtils.isEmpty
     ? <div
         className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
@@ -235,55 +248,10 @@ let entriesList = entries => {
       </div>
     : entries
       |> Js.Array.map(entry =>
-           <div
-             className={
-               "bg-white cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:shadow-md border-l-3 py-4 px-2 "
-               ++ (
-                 switch (Entry.readAt(entry)) {
-                 | Some(_readAt) => "border-gray-500"
-                 | None => "border-green-500"
-                 }
-               )
-             }
-             key={Entry.id(entry)}
-             ariaLabel={"Notification " ++ Entry.id(entry)}>
-             <div className="flex">
-               <div className="w-1/3 md:w-1/6 md:mr-0 mr-2">
-                 {switch (Entry.actor(entry)) {
-                  | Some(actor) =>
-                    avatar(User.avatarUrl(actor), User.name(actor))
-                  | None => React.null
-                  }}
-               </div>
-               <div>
-                 <div> {str(Entry.message(entry))} </div>
-                 <span className="block text-xs text-gray-800 pt-1">
-                   <span className="hidden md:inline-block md:mr-2">
-                     {"on "
-                      ++ Entry.createdAt(entry)
-                         ->DateFns.formatPreset(~year=true, ())
-                      |> str}
-                   </span>
-                 </span>
-                 <div className="flex justify-between mt-4">
-                   <button
-                     className="inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0">
-                     <i className="fas fa-check mr-2" />
-                     {str("Mark as Read")}
-                   </button>
-                   {ReactUtils.nullIf(
-                      <a
-                        href={"/notifications/" ++ Entry.id(entry)}
-                        className="inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0">
-                        <i className="fas fa-eye mr-2" />
-                        {str("Visit")}
-                      </a>,
-                      Entry.notifiableId(entry)->Belt.Option.isNone,
-                    )}
-                 </div>
-               </div>
-             </div>
-           </div>
+           <Notifications__EntryCard
+             entry
+             markNotificationCB={markNotification(send)}
+           />
          )
       |> React.array;
 };
@@ -454,7 +422,7 @@ let make = () => {
          SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
        | PartiallyLoaded(entries, cursor) =>
          <div>
-           <div className="space-y-2"> {entriesList(entries)} </div>
+           <div className="space-y-2"> {entriesList(entries, send)} </div>
            <div className="text-center">
              {entriesLoadedData(
                 state.totalEntriesCount,
@@ -481,7 +449,7 @@ let make = () => {
          </div>
        | FullyLoaded(entries) =>
          <div>
-           <div className="space-y-2"> {entriesList(entries)} </div>
+           <div className="space-y-2"> {entriesList(entries, send)} </div>
            <div className="text-center">
              {entriesLoadedData(
                 state.totalEntriesCount,

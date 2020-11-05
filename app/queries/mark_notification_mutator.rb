@@ -10,7 +10,7 @@ class MarkNotificationMutator < ApplicationQuery
   private
 
   def must_not_be_marked_as_read
-    return if submission&.evaluated_at?
+    return unless notification&.read_at?
 
     errors[:base] << 'Notification is already marked as read'
   end
@@ -19,7 +19,7 @@ class MarkNotificationMutator < ApplicationQuery
     @notification ||= current_user.notifications.find_by(id: notification_id)
   end
 
-  def authorized_create?
+  def authorized?
     notification.present?
   end
 end

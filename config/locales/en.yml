@@ -133,7 +133,6 @@ en:
       subscribe: Subscribe
       unsubscribe: Unsubscribe
 
-
   jobs:
     timeline_events:
       verification_notification:

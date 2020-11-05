@@ -62,3 +62,10 @@ let makeFromJS = entry => {
     ~message=entry##message,
   );
 };
+
+let markAsRead = entry => {
+  {
+    ...entry,
+    readAt: Some(Js.Float.toString(Js.Date.now())->DateFns.parseISO),
+  };
+};

@@ -180,14 +180,31 @@ let iconClasses = provider =>
   | Keycloak => "fas fa-key"
   };
 
+let deviseOauthProviders = provider =>
+  switch (provider) {
+  | Google => "google_oauth2"
+  | Facebook => "facebook"
+  | Github => "github"
+  | Developer => "developer"
+  | Keycloak => "keycloak_openid"
+  };
+
 let providers = () => {
   let defaultProvides = [|Google, Facebook, Github, Keycloak|];
   DomUtils.isDevelopment()
     ? defaultProvides |> Array.append([|Developer|]) : defaultProvides;
 };
-let renderFederatedlogin = (fqdn, oauthHost) =>
+
+let selectAvailableOauthProviders = (providers : array(omniauthProvider), availableOauthProviders) => {
+  let filterFunc = p => p -> deviseOauthProviders -> Js.Array.includes(availableOauthProviders);
+  Js.Array.forEach(p => deviseOauthProviders(p) -> Js.log, providers);
+  Js.Array.filter(filterFunc, providers);
+};
+
+let renderFederatedlogin = (fqdn, oauthHost, availableOauthProviders : array(string)) =>
   <div className="flex flex-col pb-5 md:px-9 items-center max-w-sm mx-auto">
     {providers()
+     -> selectAvailableOauthProviders(availableOauthProviders)
      |> Array.map(provider =>
           <a
             key={buttonText(provider)}
@@ -370,7 +387,7 @@ let make = (~schoolName, ~fqdn, ~oauthHost) => {
       </div>
       {switch (oauthHost, view) {
        | (Some(oauthHost), FederatedSignIn) =>
-         renderFederatedlogin(fqdn, oauthHost)
+         renderFederatedlogin(fqdn, oauthHost, availableOauthProviders)
        | (None, FederatedSignIn)
        | (_, SignInWithPassword) =>
          renderSignInWithEmail(

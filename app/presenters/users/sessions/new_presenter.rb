@@ -11,7 +11,8 @@ module Users
         {
           school_name: school_name,
           fqdn: view.current_host,
-          oauth_host: oauth_host
+          oauth_host: oauth_host,
+          available_oauth_providers: Devise.omniauth_providers
         }
       end
 

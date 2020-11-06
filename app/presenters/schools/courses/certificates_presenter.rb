@@ -29,7 +29,7 @@ module Schools
 
       def can_be_auto_issued
         highest_level_id = @course.levels.order(number: :desc).pick(:id)
-        TargetGroup.where(level_id: highest_level_id, milestone: true, archived: false).exists?
+        TargetGroup.exists?(level_id: highest_level_id, milestone: true, archived: false)
       end
 
       def certificates

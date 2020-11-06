@@ -19,7 +19,7 @@ class SimilarTopicsResolver < ApplicationQuery
     return false if community.blank?
 
     courses_as_student = current_user.founders.not_dropped_out.joins(:course).select(:course_id)
-    return true if community.courses.where(id: courses_as_student).exists?
+    return true if community.courses.exists?(id: courses_as_student)
 
     # Coaches and school admins have access to all communities..
     return true if current_user.faculty.present? || current_user.school_admin.present?

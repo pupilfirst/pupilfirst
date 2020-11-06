@@ -13,7 +13,7 @@ module Startups
         FacultyStartupEnrollment.where(startup: @startup).destroy_all
 
         faculty_to_assign.each do |faculty|
-          next if faculty.startups.where(id: @startup.id).exists?
+          next if faculty.startups.exists?(id: @startup.id)
 
           FacultyStartupEnrollment.create!(
             safe_to_create: true,

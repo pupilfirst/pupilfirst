@@ -2,7 +2,7 @@ class CommunityPolicy < ApplicationPolicy
   def show?
     return false if scope.blank?
 
-    scope.where(id: record.id).exists?
+    scope.exists?(id: record.id)
   end
 
   alias new_topic? show?

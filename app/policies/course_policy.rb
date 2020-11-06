@@ -18,7 +18,7 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def review?
-    record.present? && reviewable_courses.present? && reviewable_courses.where(id: record).exists?
+    record.present? && reviewable_courses.present? && reviewable_courses.exists?(id: record)
   end
 
   def report?

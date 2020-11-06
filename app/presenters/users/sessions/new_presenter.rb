@@ -1,10 +1,6 @@
 module Users
   module Sessions
     class NewPresenter < ApplicationPresenter
-      def initialize(view_context)
-        super(view_context)
-      end
-
       def page_title
         "Sign In | #{school_name}"
       end

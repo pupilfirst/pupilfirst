@@ -3,6 +3,7 @@ module Admin
     class FormPresenter < ApplicationPresenter
       def initialize(target)
         @target = target
+        super
       end
 
       def valid_prerequisites

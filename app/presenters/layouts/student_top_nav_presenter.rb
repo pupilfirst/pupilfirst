@@ -59,7 +59,7 @@ module Layouts
     end
 
     def coaches_link
-      if current_school.users.joins(:faculty).where(faculty: { public: true }).exists?
+      if current_school.users.joins(:faculty).exists?(faculty: { public: true })
         [{ title: 'Coaches', url: '/coaches' }]
       else
         []

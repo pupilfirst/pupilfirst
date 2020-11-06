@@ -29,7 +29,7 @@ class CreateTargetMutator < ApplicationQuery
   def authorized?
     return false if target_group&.course&.school != current_school
 
-    current_school_admin.present? || current_user.course_authors.where(course: target_group.course).exists?
+    current_school_admin.present? || current_user.course_authors.exists?(course: target_group.course)
   end
 
   def target_group

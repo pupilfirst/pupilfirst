@@ -37,7 +37,7 @@ module Layouts
     end
 
     def current_user_is_a_course_author?
-      current_user.course_authors.where(course: current_school.courses).exists? && current_user.school_admin.blank?
+      current_user.course_authors.exists?(course: current_school.courses) && current_user.school_admin.blank?
     end
   end
 end

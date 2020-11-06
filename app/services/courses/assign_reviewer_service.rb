@@ -8,7 +8,7 @@ module Courses
     def assign(faculty)
       raise 'Faculty must in same school as course' if faculty.school != @course.school
 
-      return if faculty.courses.where(id: @course).exists?
+      return if faculty.courses.exists?(id: @course)
 
       enrollment = FacultyStartupEnrollment.transaction do
         FacultyCourseEnrollment.create!(

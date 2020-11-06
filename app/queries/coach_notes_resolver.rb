@@ -8,7 +8,7 @@ class CoachNotesResolver < ApplicationQuery
   def authorized?
     return false if current_user.blank?
 
-    current_user.faculty.courses.where(id: student&.course).exists?
+    current_user.faculty.courses.exists?(id: student&.course)
   end
 
   def student

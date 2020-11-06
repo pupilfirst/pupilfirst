@@ -11,7 +11,7 @@ class FacultyPolicy < ApplicationPolicy
       connectable_courses_of_user = Course.joins(:startups).where(startups: { id: user.founders.select(:startup_id) }).where(can_connect: true)
 
       # Coach must be assigned to one of the connectable courses of the user
-      return true if record.courses.where(id: connectable_courses_of_user).exists?
+      return true if record.courses.exists?(id: connectable_courses_of_user)
     end
 
     # Coaches and admins can view all connect links.

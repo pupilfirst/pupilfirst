@@ -22,11 +22,7 @@ module Users
       def oauth_host
         return @oauth_host if @oauth_host
 
-        if Rails.env.development?
-          @oauth_host = Rails.application.secrets.sso_domain + ':3000'
-        else
-          @oauth_host = Rails.application.secrets.sso_domain
-        end
+        @oauth_host = Rails.application.secrets.sso_domain
       end
     end
   end

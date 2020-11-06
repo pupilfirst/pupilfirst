@@ -4,7 +4,7 @@ module Types
     field :export_type, Types::ExportType, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :tags, [String], null: false
-    field :reviewedOnly, Boolean, null: false
+    field :reviewed_only, Boolean, null: false
 
     def tags
       object.tag_list

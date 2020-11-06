@@ -9,9 +9,9 @@ gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
 gem 'activeadmin', '~> 2.3.1' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
-gem 'active_storage_validations', '~> 0.8' # Better validations for active_storage.
+gem 'active_storage_validations', '~> 0.9' # Better validations for active_storage.
 gem 'fastimage', '~> 2.1'
-gem 'image_processing', '~> 1.2' # Gem to support variants in ActiveStorage
+gem 'image_processing', '~> 1.12' # Gem to support variants in ActiveStorage
 
 # Use Webpack to manage app-like JavaScript modules in Rails.
 gem 'webpacker', '~> 5.2'
@@ -22,7 +22,7 @@ gem 'jbuilder', '~> 2.6' # Standard part of Rails, but unused, since we don't ha
 gem 'jquery-rails', '~> 4.3' # JQuery on Rails.
 gem 'pg', '~> 1.0' # PostgreSQL support.
 gem 'pg_search', '~> 2.3' # builds ActiveRecord named scopes that take advantage of PostgreSQL's full text search.
-gem 'activerecord-precounter', '~> 0.3' # N+1 count query optimizer for ActiveRecord.
+gem 'activerecord-precounter', '~> 0.4' # N+1 count query optimizer for ActiveRecord.
 gem 'sass-rails', '>= 6'
 gem 'slim', '~> 4.0' # Slim templating.
 gem 'turbolinks', '~> 5.0' # Quicker page navigation. https://github.com/turbolinks/turbolinks
@@ -31,20 +31,20 @@ gem 'rest-client', '~> 2.0' # Used to contact Fast Alerts' API.
 gem 'select2-rails', '~> 4.0' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
 
 gem 'bootstrap', '>= 4.3.1' # Official Sass port of Bootstrap.
-gem 'autoprefixer-rails', '~> 9.4' # Autoprefixer for Ruby and Ruby on Rails.
+gem 'autoprefixer-rails', '~> 10.0' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'bootstrap_form', '~> 4.0' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
 
 # TODO: The zones list in the gem was outdated.
 # Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until it's merged.
 gem 'valid_url', '= 0.0.4', github: 'mahesh-krishnakumar/valid_url', branch: 'patch-1' # New url validataion gem
 gem 'roadie-rails', '~> 2.0' # CSS management for e-mails.
-gem 'puma', '~> 4.3' # The Puma ruby web server.
+gem 'puma', '< 6' # The Puma ruby web server.
 gem 'slowpoke', '~> 0.3' # Rack::Timeout enhancements for Rails. https://github.com/ankane/slowpoke
 gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.
 gem 'delayed-web', '~> 0.4' # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.
 gem 'seedbank', '~> 0.4' # Better organized seed data.
 gem 'font-awesome-rails', '~> 4.7' # Icons from font-awesome!
-gem 'friendly_id', '~> 5.3.0' # Slugs for links. http://norman.github.io/friendly_id
+gem 'friendly_id', '~> 5.4' # Slugs for links. http://norman.github.io/friendly_id
 gem 'kramdown', '~> 2.3' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
 gem 'motion-markdown-it', '~> 8.4.1' # Ruby version of Markdown-it (a CommonMark compliant extensible parser).
 gem 'motion-markdown-it-plugins', '~> 8.4.2' # Plugins for motion-markdown-it.
@@ -62,7 +62,7 @@ gem 'dry-validation', '~> 0.10' # There seems to be a dependency bug in reform's
 gem 'postmark-rails', '~> 0.19' # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
 gem 'jspdf-rails', '~> 1.0' # HTML5 client-side pdf generation - for certificates
 gem 'responders', '~> 3.0' # A set of Rails responders to dry up your application (respond_to / with)
-gem 'rollbar', '~> 2.14' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
+gem 'rollbar', '~> 3.0' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem 'humanize', '~> 2.1' # Convert numbers to english words
 gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.
 gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' # Used to calculate basic stat measures such as std. deviation (eg: To calculate relative performance of startups)
@@ -72,7 +72,7 @@ gem 'rack-throttle', '~> 0.7' # API Rate limiting
 
 # Omniauth providers
 gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google
-gem 'omniauth-facebook', '~> 6.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
+gem 'omniauth-facebook', '~> 8.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
 gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
 
 gem 'pretender', '~> 0.3.4' # Log in as another user in Rails
@@ -112,23 +112,16 @@ group :development do
   gem 'bullet', '~> 6.1' # Detect N+1 queries.
   gem 'web-console', '~> 4.0' # Rails Console on the Browser.
   gem 'listen', '~> 3.2' # The Listen gem listens to file modifications and notifies you about the changes.
-
-  # Go faster, off the Rails - Benchmarks for your whole Rails app
-  gem 'derailed_benchmarks', '~> 1.3'
-  gem 'stackprof', '~> 0.2' # Required by derailed_benchmarks.
-  gem 'oink', '~> 0.10' # Log parser to identify actions which significantly increase VM heap size
-  gem 'meta_request', '~> 0.4' # Chrome extension for Rails development. https://github.com/dejan/rails_panel
   gem 'graphiql-rails', '~> 1.7'
 end
 
 group :test do
   gem 'rspec-retry', '~> 0.5' # Retry randomly failing rspec example. https://github.com/NoRedInk/rspec-retry
-  gem 'factory_bot_rails', '~> 5.0' # A library for setting up Ruby objects as test data.
+  gem 'factory_bot_rails', '~> 6.1' # A library for setting up Ruby objects as test data.
   gem 'capybara', '~> 3.0' # For RSpec feature tests.
   gem 'capybara-email', '~> 3.0' # Test ActionMailer and Mailer messages with Capybara
   gem 'webdrivers', '~> 4.0' # Keep your Selenium WebDrivers updated automatically.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
-  gem "cuprite", '~> 0.5', require: false # Headless Chrome driver for Capybara.
   gem 'rspec-eventually', '~> 0.2.2' # Rspec helper to match eventually
   gem 'diffy', '~> 3.3' # Easy Diffing in Ruby. https://github.com/samg/diffy
 end
@@ -139,9 +132,8 @@ group :development, :test do
   gem 'coderay', '~> 1.1' # Pretty syntax highlighting on rspec failure snippets.
   gem 'pry-rails', '~> 0.3.5' # Pry debugger.
   gem 'webmock', '~> 3.5' # Mocking web requests.
-  gem 'rubocop', '~> 0.82', require: false # Ruby Style Guide.
-  gem 'rubocop-rails', '~> 2.4', require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
-  gem 'bundler-audit', '~> 0.5', require: false # Audit gems in gemfile.lock for reported vulnerabilities
+  gem 'rubocop', '~> 1.2', require: false # Ruby Style Guide.
+  gem 'rubocop-rails', '~> 2.8', require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
   gem 'overcommit', '~> 0.38', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.5' # The instafailing RSpec progress bar formatter.
 

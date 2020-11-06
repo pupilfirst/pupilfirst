@@ -21,8 +21,8 @@ class Founder < ApplicationRecord
   has_many :coach_notes, foreign_key: 'student_id', inverse_of: :student, dependent: :destroy
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
-  scope :startup_members, -> { where 'startup_id IS NOT NULL' }
-  scope :missing_startups, -> { where('startup_id NOT IN (?)', Startup.pluck(:id)) }
+  scope :startup_members, -> { where.not(startup_id: nil) }
+  scope :missing_startups, -> { where.not(startup_id: Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
   scope :not_dropped_out, -> { joins(:startup).where(startups: { dropped_out_at: nil }) }
   scope :access_active, -> { joins(:startup).where('startups.access_ends_at > ?', Time.zone.now).or(joins(:startup).where(startups: { access_ends_at: nil })) }
@@ -86,7 +86,7 @@ class Founder < ApplicationRecord
   end
 
   def pending_connect_request_for?(faculty)
-    startup.connect_requests.joins(:connect_slot).where(connect_slots: { faculty_id: faculty.id }, status: ConnectRequest::STATUS_REQUESTED).exists?
+    startup.connect_requests.joins(:connect_slot).exists?(connect_slots: { faculty_id: faculty.id }, status: ConnectRequest::STATUS_REQUESTED)
   end
 
   def latest_submissions

@@ -36,7 +36,7 @@ feature 'Course authors editor', js: true do
 
     expect(new_author_user.name).to eq(name)
     expect(new_author_user.title).to eq('Author')
-    expect(CourseAuthor.where(user_id: new_author_user.id).exists?).to eq(true)
+    expect(CourseAuthor.exists?(user_id: new_author_user.id)).to eq(true)
 
     open_email(new_author_user.email)
 

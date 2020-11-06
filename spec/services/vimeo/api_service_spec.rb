@@ -107,10 +107,6 @@ describe Vimeo::ApiService do
     let(:domain) { school.domains.first.fqdn }
     let(:video_id) { Faker::Number.number(digits: 10).to_s }
 
-    before do
-
-    end
-
     around do |example|
       original_value = Rails.application.secrets.vimeo_access_token
       Rails.application.secrets.vimeo_access_token = vimeo_access_token

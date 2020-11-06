@@ -68,7 +68,7 @@ module Topics
     def like_data(post)
       {
         total_likes: post.post_likes.count,
-        liked_by_user: post.post_likes.where(user_id: current_user.id).exists?
+        liked_by_user: post.post_likes.exists?(user_id: current_user.id)
       }
     end
 

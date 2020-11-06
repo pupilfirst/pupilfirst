@@ -8,7 +8,7 @@ module AuthorizeReviewer
 
     return false if faculty.blank?
 
-    faculty.courses.where(id: course_id).exists?
+    faculty.courses.exists?(id: course_id)
   end
 
   def faculty

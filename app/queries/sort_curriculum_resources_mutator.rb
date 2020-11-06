@@ -53,6 +53,6 @@ class SortCurriculumResourcesMutator < ApplicationQuery
   def authorized?
     return false if course&.school != current_school
 
-    current_school_admin.present? || current_user.course_authors.where(course: course).exists?
+    current_school_admin.present? || current_user.course_authors.exists?(course: course)
   end
 end

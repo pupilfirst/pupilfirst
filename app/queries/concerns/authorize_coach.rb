@@ -7,6 +7,6 @@ module AuthorizeCoach
 
     return false if course&.school != current_school
 
-    current_user.faculty.courses.where(id: course).exists?
+    current_user.faculty.courses.exists?(id: course)
   end
 end

@@ -17,7 +17,7 @@ class CreateTargetVersionMutator < ApplicationQuery
 
     return false if target&.course&.school != current_school
 
-    current_school_admin.present? || current_user.course_authors.where(course: target.course).exists?
+    current_school_admin.present? || current_user.course_authors.exists?(course: target.course)
   end
 
   def target_version_must_be_valid

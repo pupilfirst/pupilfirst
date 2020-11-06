@@ -1,9 +1,5 @@
 module Users
   class EditPresenter < ApplicationPresenter
-    def initialize(view_context)
-      super(view_context)
-    end
-
     def page_title
       "User Profile | #{current_school.name}"
     end

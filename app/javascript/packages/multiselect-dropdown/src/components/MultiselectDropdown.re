@@ -1,11 +1,11 @@
 [%bs.raw {|require("./MultiselectDropdown.css")|}];
 
+open Webapi.Dom;
+
 let str = React.string;
 
 module DomUtils = {
   exception RootElementMissing(string);
-
-  open Webapi.Dom;
 
   let focus = id => {
     (
@@ -87,32 +87,32 @@ module Make = (Selectable: Selectable) => {
          );
     };
 
-    switch (normalizedString) {
-    | "" => [||]
-    | searchString =>
-      let matchingSelections = unselected |> search(searchString);
+    let options =
+      switch (normalizedString) {
+      | "" => unselected
+      | searchString => search(searchString, unselected)
+      };
 
-      matchingSelections
-      |> Array.mapi((index, selection) =>
-           <button
-             key={index |> string_of_int}
-             title={selectionTitle(selection)}
-             className="flex text-xs py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
-             onClick={applyFilter(selection, onSelect, id)}>
-             {switch (selection |> Selectable.label) {
-              | Some(label) =>
-                <span className="mr-2 flex-shrink-0 md:w-1/6 text-right">
-                  {label ++ labelSuffix |> str}
-                </span>
-              | None => React.null
-              }}
-             <span
-               className={tagPillClasses(selection |> Selectable.color, true)}>
-               {selection |> Selectable.value |> str}
-             </span>
-           </button>
-         );
-    };
+    options
+    |> Array.mapi((index, selection) =>
+         <button
+           key={index |> string_of_int}
+           title={selectionTitle(selection)}
+           className="flex text-xs py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
+           onClick={applyFilter(selection, onSelect, id)}>
+           {switch (selection |> Selectable.label) {
+            | Some(label) =>
+              <span className="mr-2 flex-shrink-0 md:w-1/6 text-right">
+                {label ++ labelSuffix |> str}
+              </span>
+            | None => React.null
+            }}
+           <span
+             className={tagPillClasses(selection |> Selectable.color, true)}>
+             {selection |> Selectable.value |> str}
+           </span>
+         </button>
+       );
   };
 
   let removeSelection = (onDeselect, selection, event) => {
@@ -148,6 +148,18 @@ module Make = (Selectable: Selectable) => {
        });
   };
 
+  let onWindowClick = (showDropdown, setShowDropdown, _event) =>
+    if (showDropdown) {
+      setShowDropdown(_ => false);
+    } else {
+      ();
+    };
+
+  let toggleDropdown = (setShowDropdown, event) => {
+    event |> ReactEvent.Mouse.stopPropagation;
+    setShowDropdown(showDropdown => !showDropdown);
+  };
+
   [@react.component]
   let make =
       (
@@ -174,6 +186,26 @@ module Make = (Selectable: Selectable) => {
         }
       );
 
+    let (showDropdown, setShowDropdown) = React.useState(() => false);
+
+    React.useEffect1(
+      () => {
+        let curriedFunction = onWindowClick(showDropdown, setShowDropdown);
+
+        let removeEventListener = () =>
+          Window.removeEventListener("click", curriedFunction, window);
+
+        if (showDropdown) {
+          Window.addEventListener("click", curriedFunction, window);
+          Some(removeEventListener);
+        } else {
+          removeEventListener();
+          None;
+        };
+      },
+      [|showDropdown|],
+    );
+
     let results =
       searchResult(value, unselected, labelSuffix, inputId, onSelect);
     <div className="w-full relative">
@@ -182,6 +214,7 @@ module Make = (Selectable: Selectable) => {
           className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
           {selected |> showSelected(onDeselect, labelSuffix) |> React.array}
           <input
+            onClick={_ => setShowDropdown(s => !s)}
             autoComplete="off"
             value
             onChange={e => onChange(ReactEvent.Form.target(e)##value)}
@@ -193,7 +226,7 @@ module Make = (Selectable: Selectable) => {
         </div>
       </div>
       <div />
-      {if (value |> String.trim != "") {
+      {if (showDropdown) {
          <div
            className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2 z-50">
            {switch (results) {

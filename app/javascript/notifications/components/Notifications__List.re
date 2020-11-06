@@ -74,6 +74,7 @@ let reducer = (state, action) => {
     }
   | UnsetSearchString => {
       ...state,
+      filterString: "",
       filter: {
         ...state.filter,
         title: None,
@@ -122,6 +123,7 @@ let reducer = (state, action) => {
     }
   | SetShowUnread => {
       ...state,
+      filterString: "",
       filter: {
         ...state.filter,
         unread: Some(true),
@@ -129,6 +131,7 @@ let reducer = (state, action) => {
     }
   | ClearUnread => {
       ...state,
+      filterString: "",
       filter: {
         ...state.filter,
         unread: None,
@@ -136,6 +139,7 @@ let reducer = (state, action) => {
     }
   | SetShowRead => {
       ...state,
+      filterString: "",
       filter: {
         ...state.filter,
         unread: Some(false),
@@ -143,6 +147,7 @@ let reducer = (state, action) => {
     }
   | SetEvent(event) => {
       ...state,
+      filterString: "",
       filter: {
         ...state.filter,
         event: Some(event),
@@ -150,6 +155,7 @@ let reducer = (state, action) => {
     }
   | ClearEvent => {
       ...state,
+      filterString: "",
       filter: {
         ...state.filter,
         event: None,
@@ -298,7 +304,7 @@ module Selectable = {
     switch (s) {
     | Event(_event) => Some(t("filter.event"))
     | Title(_) => Some(t("filter.title"))
-    | Unread(_) => Some(t("filter.unread"))
+    | Unread(_) => Some(t("filter.status"))
     };
 
   let value = s =>

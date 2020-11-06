@@ -1,7 +1,11 @@
 module Oembed
   class GoogleSlideProvider < BaseProvider
     def initialize(resource_url)
-      embed_resource_url = resource_url.gsub('pub', 'embed')
+      full_path, query = resource_url.split('?')
+      splited_full_path = full_path.split('/')
+      splited_full_path.pop # remove 'pub' action
+      splited_full_path.push('embed')
+      embed_resource_url = splited_full_path.join('/') + "?#{query}"
       @resource_url = embed_resource_url
     end
 

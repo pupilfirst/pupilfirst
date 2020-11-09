@@ -138,6 +138,9 @@ en:
       unsubscribe: Unsubscribe
 
   jobs:
+    topics:
+      topic_created_notification_job:
+        topic_created: "%{user_name} has created a new topic in %{community_name} community"
     timeline_events:
       verification_notification:
         founder:

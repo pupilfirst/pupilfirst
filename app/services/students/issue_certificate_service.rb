@@ -40,7 +40,7 @@ module Students
     end
 
     def issued_certificate_exists?
-      user.issued_certificates.where(certificate: course.certificates, revoked_at: nil).exists?
+      user.issued_certificates.exists?(certificate: course.certificates, revoked_at: nil)
     end
 
     def active_certificate

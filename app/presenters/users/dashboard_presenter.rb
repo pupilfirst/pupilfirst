@@ -1,9 +1,5 @@
 module Users
   class DashboardPresenter < ApplicationPresenter
-    def initialize(view_context)
-      super(view_context)
-    end
-
     def page_title
       "Dashboard | #{current_school.name}"
     end

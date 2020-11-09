@@ -30,7 +30,7 @@ class CommunitiesController < ApplicationController
       t = Target.find_by(id: params[:target_id])
 
       # Only return the target if the target is in a course that is linked to this community.
-      @community.courses.where(id: t&.course).exists? ? t : nil
+      @community.courses.exists?(id: t&.course) ? t : nil
     end
   end
 end

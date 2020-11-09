@@ -11,7 +11,7 @@ class CreateCoachNoteMutator < ApplicationQuery
   private
 
   def authorized?
-    coach.present? && coach.courses.where(id: course.id).exists?
+    coach.present? && coach.courses.exists?(id: course.id)
   end
 
   def course

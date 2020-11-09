@@ -39,11 +39,15 @@ module Targets
 
     def reason_to_lock
       @reason_to_lock ||= begin
-        return STATUS_COURSE_LOCKED if @target.course.ends_at&.past?
-        return STATUS_ACCESS_LOCKED if @founder.startup.access_ends_at&.past?
-        return STATUS_LEVEL_LOCKED if target_level_number > founder_level_number && target_reviewed?
-
-        prerequisites_incomplete? ? STATUS_PREREQUISITE_LOCKED : nil
+        if @target.course.ends_at&.past?
+          STATUS_COURSE_LOCKED
+        elsif @founder.startup.access_ends_at&.past?
+          STATUS_ACCESS_LOCKED
+        elsif target_level_number > founder_level_number && target_reviewed?
+          STATUS_LEVEL_LOCKED
+        else
+          prerequisites_incomplete? ? STATUS_PREREQUISITE_LOCKED : nil
+        end
       end
     end
 

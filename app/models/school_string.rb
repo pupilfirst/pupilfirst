@@ -10,7 +10,7 @@ class SchoolString < ApplicationRecord
       end
 
       def saved?(school)
-        SchoolString.where(school: school, key: key).exists?
+        SchoolString.exists?(school: school, key: key)
       end
     end
   end

@@ -89,7 +89,7 @@ ActiveAdmin.register User do
     # clear any previous impersonations
     stop_impersonating_user
 
-    if AdminUser.where(email: user.email).exists?
+    if AdminUser.exists?(email: user.email)
       flash[:error] = 'You may not impersonate another admin user!'
     else
       impersonate_user(user)

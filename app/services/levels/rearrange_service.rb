@@ -10,6 +10,9 @@ module Levels
 
       return if target_level.number == @level.number
 
+      original_level_number = @level.number
+      target_level_number = target_level.number
+
       Level.transaction do
         case target_level.number
           when 0
@@ -23,14 +26,13 @@ module Levels
             # In this case, we need to shift everything above the selected level down by one, and then move selected level
             # to the end.
 
-            original_level_number = @level.number
             displace_level
             move_down_levels_above(original_level_number)
           else
             if @level.number > target_level.number
               displace_level
-              target_level_number = target_level.number
-              move_up_levels((target_level.number..(@level.number - 1)))
+
+              move_up_levels((target_level.number..(original_level_number - 1)))
               @level.update(number: target_level_number)
             else
               # Move down levels.

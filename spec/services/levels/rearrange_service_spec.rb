@@ -11,7 +11,7 @@ describe Levels::RearrangeService do
       let!(:level_3) { create :level, :three, course: level_0.course }
       let!(:level_4) { create :level, :four, course: level_0.course }
 
-      it 'can move a level down' do
+      it 'can move the max level down' do
         subject.new(level_4).move_to(level_2)
 
         expect(level_0.reload.number).to eq(0)
@@ -19,6 +19,16 @@ describe Levels::RearrangeService do
         expect(level_4.reload.number).to eq(2)
         expect(level_2.reload.number).to eq(3)
         expect(level_3.reload.number).to eq(4)
+      end
+
+      it 'can move a non-max level down' do
+        subject.new(level_3).move_to(level_2)
+
+        expect(level_0.reload.number).to eq(0)
+        expect(level_1.reload.number).to eq(1)
+        expect(level_3.reload.number).to eq(2)
+        expect(level_2.reload.number).to eq(3)
+        expect(level_4.reload.number).to eq(4)
       end
     end
   end

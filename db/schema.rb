@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_22_093240) do
+ActiveRecord::Schema.define(version: 2020_11_09_205227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -329,7 +329,12 @@ ActiveRecord::Schema.define(version: 2020_10_22_093240) do
     t.citext "serial_number", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "issuer_id"
+    t.bigint "revoker_id"
+    t.datetime "revoked_at"
     t.index ["certificate_id"], name: "index_issued_certificates_on_certificate_id"
+    t.index ["issuer_id"], name: "index_issued_certificates_on_issuer_id"
+    t.index ["revoker_id"], name: "index_issued_certificates_on_revoker_id"
     t.index ["serial_number"], name: "index_issued_certificates_on_serial_number", unique: true
     t.index ["user_id"], name: "index_issued_certificates_on_user_id"
   end
@@ -760,7 +765,7 @@ ActiveRecord::Schema.define(version: 2020_10_22_093240) do
     t.string "title"
     t.text "about"
     t.bigint "school_id"
-    t.jsonb "preferences", default: { "daily_digest" => true }, null: false
+    t.jsonb "preferences", default: {"daily_digest"=>true}, null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.string "affiliation"
@@ -771,6 +776,7 @@ ActiveRecord::Schema.define(version: 2020_10_22_093240) do
     t.datetime "delete_account_sent_at"
     t.datetime "account_deletion_notification_sent_at"
     t.string "api_token_digest"
+    t.string "locale", default: "en"
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
     t.index ["delete_account_token"], name: "index_users_on_delete_account_token", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
@@ -826,6 +832,8 @@ ActiveRecord::Schema.define(version: 2020_10_22_093240) do
   add_foreign_key "founders", "users"
   add_foreign_key "issued_certificates", "certificates"
   add_foreign_key "issued_certificates", "users"
+  add_foreign_key "issued_certificates", "users", column: "issuer_id"
+  add_foreign_key "issued_certificates", "users", column: "revoker_id"
   add_foreign_key "leaderboard_entries", "founders"
   add_foreign_key "levels", "courses"
   add_foreign_key "markdown_attachments", "users"

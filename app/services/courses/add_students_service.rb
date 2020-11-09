@@ -1,3 +1,5 @@
+require 'keycloak'
+
 module Courses
   # Adds a list of new students to a course.
   class AddStudentsService
@@ -16,7 +18,9 @@ module Courses
 
       Course.transaction do
         students = new_students.map do |student_data|
-          create_new_student(student_data)
+          student = create_new_student(student_data)
+          create_keycloak_user(student_data.email,student_data.name)
+          student
         end
 
         notify_students(students)
@@ -108,12 +112,23 @@ module Courses
       team
     end
 
+    def create_keycloak_user(email, name)
+      names = name.split(' ')
+      first_name = names.pop
+      last_name = names.join(' ') || ''
+      keycloak_client.create_user(email, first_name, last_name)
+    end
+
     def school
       @school ||= @course.school
     end
 
     def first_level
       @first_level ||= @course.levels.find_by(number: 1)
+    end
+
+    def keycloak_client
+      @keycloak_client ||= Keycloak::Client.new
     end
   end
 end

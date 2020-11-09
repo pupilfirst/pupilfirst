@@ -2,7 +2,7 @@ name: Sync from upstream
 
 on:
   schedule:
-    - cron: '* */4 * * *' # every 4 hours
+    - cron: '0 5 */1 * *' # every day at 5am
   workflow_dispatch: # on button click
 
 jobs:

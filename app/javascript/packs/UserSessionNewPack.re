@@ -4,12 +4,13 @@ let decodeProps = json =>
     json |> field("fqdn", string),
     json |> optional(field("oauthHost", string)),
     json |> field("availableOauthProviders", array(string)),
+    json |> field("allowEmailSignIn", bool),
   );
 
-let (schoolName, fqdn, oauthHost, availableOauthProviders) =
+let (schoolName, fqdn, oauthHost, availableOauthProviders, allowEmailSignIn) =
   DomUtils.parseJSONTag(~id="user-session-new-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <UserSessionNew schoolName fqdn oauthHost availableOauthProviders />,
+  <UserSessionNew schoolName fqdn oauthHost availableOauthProviders allowEmailSignIn />,
   "user-session-new",
 );

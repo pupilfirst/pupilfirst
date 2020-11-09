@@ -197,7 +197,6 @@ let providers = () => {
 
 let selectAvailableOauthProviders = (providers : array(omniauthProvider), availableOauthProviders) => {
   let filterFunc = p => p -> deviseOauthProviders -> Js.Array.includes(availableOauthProviders);
-  Js.Array.forEach(p => deviseOauthProviders(p) -> Js.log, providers);
   Js.Array.filter(filterFunc, providers);
 };
 
@@ -365,7 +364,7 @@ let renderForgotPassword = (email, saving, setEmail, setSaving, setView) =>
   </div>;
 
 [@react.component]
-let make = (~schoolName, ~fqdn, ~oauthHost) => {
+let make = (~schoolName, ~fqdn, ~oauthHost, ~availableOauthProviders, ~allowEmailSignIn) => {
   let (view, setView) =
     React.useState(() =>
       oauthHost
@@ -385,11 +384,11 @@ let make = (~schoolName, ~fqdn, ~oauthHost) => {
         className="max-w-sm mx-auto text-lg sm:text-2xl font-bold text-center mt-4">
         {headerText(view, schoolName) |> str}
       </div>
-      {switch (oauthHost, view) {
-       | (Some(oauthHost), FederatedSignIn) =>
+      {switch (oauthHost, view, allowEmailSignIn) {
+       | (Some(oauthHost), FederatedSignIn, _) =>
          renderFederatedlogin(fqdn, oauthHost, availableOauthProviders)
-       | (None, FederatedSignIn)
-       | (_, SignInWithPassword) =>
+       | (None, FederatedSignIn, true)
+       | (_, SignInWithPassword, true) =>
          renderSignInWithEmail(
            email,
            setEmail,
@@ -401,12 +400,13 @@ let make = (~schoolName, ~fqdn, ~oauthHost) => {
            sharedDevice,
            setSharedDevice,
          )
-       | (_, SignInEmailSent) => renderSignInEmailSent()
-       | (_, ForgotPassword) =>
+       | (_, SignInEmailSent, true) => renderSignInEmailSent()
+       | (_, ForgotPassword, true) =>
          renderForgotPassword(email, saving, setEmail, setSaving, setView)
+       | (_, _, _) => React.null
        }}
-      {switch (oauthHost, view) {
-       | (_, FederatedSignIn) =>
+      {switch (oauthHost, view, allowEmailSignIn) {
+       | (_, FederatedSignIn, true) =>
          <div className="max-w-sm mx-auto md:px-9">
            <span
              className="federated-signin-in__seperator block relative z-10 text-center text-xs text-gray-600 font-semibold">
@@ -420,12 +420,12 @@ let make = (~schoolName, ~fqdn, ~oauthHost) => {
                <FaIcon classes="fas fa-envelope" />
              </span>
              <span className="w-4/5 pl-3 text-left">
-               {"Continue with email" |> str}
+               {"Continue with Email" |> str}
              </span>
            </button>
          </div>
-       | (Some(_), SignInWithPassword)
-       | (Some(_), ForgotPassword) =>
+       | (Some(_), SignInWithPassword, true)
+       | (Some(_), ForgotPassword, true) =>
          <div className="max-w-sm mx-auto md:px-9">
            <button
              disabled=saving
@@ -434,9 +434,10 @@ let make = (~schoolName, ~fqdn, ~oauthHost) => {
              {"Sign in with Google, Facebook, or Github" |> str}
            </button>
          </div>
-       | (None, SignInWithPassword)
-       | (None, ForgotPassword)
-       | (_, SignInEmailSent) => React.null
+       | (None, SignInWithPassword, _)
+       | (None, ForgotPassword, _)
+       | (_, SignInEmailSent, _) => React.null
+       | (_, _, _) => React.null
        }}
     </div>
   </div>;

@@ -14,13 +14,14 @@ let (schoolName, fqdn, oauthHost) =
 ReactDOMRe.renderToElementWithId(<UserSessionNew schoolName fqdn oauthHost />, "user-session-new")
 =======
     json |> field("availableOauthProviders", array(string)),
+    json |> field("allowEmailSignIn", bool),
   );
 
-let (schoolName, fqdn, oauthHost, availableOauthProviders) =
+let (schoolName, fqdn, oauthHost, availableOauthProviders, allowEmailSignIn) =
   DomUtils.parseJSONTag(~id="user-session-new-data", ()) |> decodeProps;
 
 ReactDOMRe.renderToElementWithId(
-  <UserSessionNew schoolName fqdn oauthHost availableOauthProviders />,
+  <UserSessionNew schoolName fqdn oauthHost availableOauthProviders allowEmailSignIn />,
   "user-session-new",
 );
 >>>>>>> b38307314 (feat: Select federated sign-in buttons):app/javascript/packs/UserSessionNewPack.re

@@ -121,10 +121,14 @@ en:
       filter:
         input_label: Search by title, event, read and unread
         input_placeholder: Show topics created
-        title: Search by title
-        unread: Unread
-        read: Read
-        event: Event
+        label:
+          title: Search by title
+          status: Status
+          event: Event
+        status:
+          all: All
+          read: Read
+          unread: Unread
         events:
           topic_created_text: Topic Created
           topic_edited_text: Topic Edited

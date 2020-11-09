@@ -1,6 +1,6 @@
 class NotificationsResolver < ApplicationQuery
   property :search
-  property :unread
+  property :status, validates: { inclusion: { in: Notification::VALID_STATUS_TYPES } }, allow_blank: true
   property :event, validates: { inclusion: { in: Notification.events.keys } }, allow_blank: true
   property :sort_direction
 
@@ -37,15 +37,22 @@ class NotificationsResolver < ApplicationQuery
     end
   end
 
-  def filter_by_read
+  def filter_by_status
     notifications = current_user.notifications
-    return notifications if unread.blank?
+    return notifications if status.blank?
 
-    unread ? notifications.unread : notifications.read
+    case status
+      when Notification::NOTIFICATION_UNREAD.to_s
+        notifications.unread
+      when Notification::NOTIFICATION_READ.to_s
+        notifications.read
+      else
+        notifications
+    end
   end
 
   def filter_by_event
-    event.present? ? filter_by_read.where(event: event) : filter_by_read
+    event.present? ? filter_by_status.where(event: event) : filter_by_status
   end
 
   def applicable_notifications

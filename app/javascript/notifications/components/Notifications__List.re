@@ -6,6 +6,8 @@ let t = I18n.t(~scope="components.Notifications__List");
 
 type event = [ | `topic_created | `topic_edited];
 
+type status = [ | `all | `unread | `read];
+
 let eventName = event => {
   switch (event) {
   | `topic_created => t("filter.events.topic_created_text")
@@ -29,7 +31,7 @@ type filter = {
   sortDirection,
   event: option(event),
   title: option(string),
-  unread: option(bool),
+  status: option(status),
 };
 
 type state = {
@@ -47,9 +49,8 @@ type action =
   | LoadNotifications(option(string), bool, array(Entry.t), int)
   | BeginLoadingMore
   | BeginReloading
-  | SetShowUnread
-  | ClearUnread
-  | SetShowRead
+  | ClearStatus
+  | SetStatus(status)
   | SetEvent(event)
   | ClearEvent
   | MarkNotification(string)
@@ -121,28 +122,20 @@ let reducer = (state, action) => {
           FullyLoaded(updateNotification(id, entries))
         },
     }
-  | SetShowUnread => {
+  | SetStatus(status) => {
       ...state,
       filterString: "",
       filter: {
         ...state.filter,
-        unread: Some(true),
+        status: Some(status),
       },
     }
-  | ClearUnread => {
+  | ClearStatus => {
       ...state,
       filterString: "",
       filter: {
         ...state.filter,
-        unread: None,
-      },
-    }
-  | SetShowRead => {
-      ...state,
-      filterString: "",
-      filter: {
-        ...state.filter,
-        unread: Some(false),
+        status: None,
       },
     }
   | SetEvent(event) => {
@@ -166,8 +159,8 @@ let reducer = (state, action) => {
 
 module NotificationsQuery = [%graphql
   {|
-    query NotificationsFromNotificationsListQuery($search: String, $after: String, $event: NotificationEvent, $sortDirection: SortDirection!, $unread: Boolean) {
-      notifications(event: $event, search: $search, sortDirection: $sortDirection, first: 10, after: $after, unread: $unread) {
+    query NotificationsFromNotificationsListQuery($search: String, $after: String, $event: NotificationEvent, $sortDirection: SortDirection!, $status: NotificationStatus) {
+      notifications(event: $event, search: $search, sortDirection: $sortDirection, first: 10, after: $after, status: $status) {
         nodes {
           actor {
             id
@@ -194,7 +187,7 @@ module NotificationsQuery = [%graphql
 
 let getEntries = (send, cursor, filter) => {
   NotificationsQuery.make(
-    ~unread=?filter.unread,
+    ~status=?filter.status,
     ~after=?cursor,
     ~search=?filter.title,
     ~event=?filter.event,
@@ -238,7 +231,7 @@ let computeInitialState = () => {
     title: None,
     sortDirection: `Ascending,
     event: None,
-    unread: None,
+    status: None,
   },
   totalEntriesCount: 0,
 };
@@ -297,41 +290,59 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) => {
 module Selectable = {
   type t =
     | Event(event)
-    | Unread(bool)
+    | Status(status)
     | Title(string);
 
   let label = s =>
     switch (s) {
-    | Event(_event) => Some(t("filter.event"))
-    | Title(_) => Some(t("filter.title"))
-    | Unread(_) => Some(t("filter.status"))
+    | Event(_event) => Some(t("filter.label.event"))
+    | Title(_) => Some(t("filter.label.title"))
+    | Status(_) => Some(t("filter.label.status"))
     };
 
   let value = s =>
     switch (s) {
     | Event(event) => eventName(event)
     | Title(search) => search
-    | Unread(unread) => unread ? t("filter.unread") : t("filter.read")
+    | Status(status) =>
+      let key =
+        switch (status) {
+        | `all => "all"
+        | `read => "read"
+        | `unread => "unread"
+        };
+
+      t("filter.status." ++ key);
     };
 
   let searchString = s =>
     switch (s) {
     | Event(event) => t("filter.event") ++ " " ++ eventName(event)
     | Title(search) => search
-    | Unread(_unread) => t("filter.unread") ++ " " ++ t("filter.read")
+    | Status(_unread) =>
+      t("filter.status.read")
+      ++ " "
+      ++ t("filter.status.unread")
+      ++ " "
+      ++ t("filter.status.all")
     };
 
   let color = t => {
     switch (t) {
     | Event(_event) => "blue"
     | Title(_search) => "gray"
-    | Unread(unread) => unread ? "orange" : "green"
+    | Status(status) =>
+      switch (status) {
+      | `all => "yellow"
+      | `read => "green"
+      | `unread => "orange"
+      }
     };
   };
 
   let event = event => Event(event);
   let title = search => Title(search);
-  let unread = unread => Unread(unread);
+  let status = status => Status(status);
 };
 
 module Multiselect = MultiselectDropdown.Make(Selectable);
@@ -345,14 +356,18 @@ let unselected = state => {
     trimmedFilterString == ""
       ? [||] : [|Selectable.title(trimmedFilterString)|];
 
-  let unread =
-    state.filter.unread
-    ->Belt.Option.mapWithDefault(
-        [|Selectable.unread(true), Selectable.unread(false)|], u =>
-        u ? [|Selectable.unread(false)|] : [|Selectable.unread(true)|]
-      );
+  let status =
+    state.filter.status
+    ->Belt.Option.mapWithDefault([|`all, `read, `unread|], u =>
+        switch (u) {
+        | `all => [|`read, `unread|]
+        | `read => [|`all, `unread|]
+        | `unread => [|`all, `read|]
+        }
+      )
+    |> Array.map(s => Selectable.status(s));
 
-  eventFilters |> Js.Array.concat(title) |> Js.Array.concat(unread);
+  eventFilters |> Js.Array.concat(title) |> Js.Array.concat(status);
 };
 
 let selected = state => {
@@ -367,27 +382,27 @@ let selected = state => {
          [||],
        );
 
-  let unread =
-    state.filter.unread
-    ->Belt.Option.mapWithDefault([||], u => [|Selectable.unread(u)|]);
+  let status =
+    state.filter.status
+    ->Belt.Option.mapWithDefault([||], u => [|Selectable.status(u)|]);
 
   selectedEventFilters
   |> Js.Array.concat(selectedSearchString)
-  |> Js.Array.concat(unread);
+  |> Js.Array.concat(status);
 };
 
 let onSelectFilter = (send, selectable) =>
   switch (selectable) {
   | Selectable.Event(event) => send(SetEvent(event))
   | Title(title) => send(SetSearchString(title))
-  | Unread(unread) => send(unread ? SetShowUnread : SetShowRead)
+  | Status(s) => send(SetStatus(s))
   };
 
 let onDeselectFilter = (send, selectable) =>
   switch (selectable) {
   | Selectable.Event(_e) => send(ClearEvent)
   | Title(_title) => send(UnsetSearchString)
-  | Unread(_) => send(ClearUnread)
+  | Status(_) => send(ClearStatus)
   };
 
 [@react.component]

@@ -418,11 +418,11 @@
                 "defaultValue": null
               },
               {
-                "name": "unread",
+                "name": "status",
                 "description": "",
                 "type": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
+                  "kind": "ENUM",
+                  "name": "NotificationStatus",
                   "ofType": null
                 },
                 "defaultValue": null
@@ -2664,6 +2664,35 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "NotificationStatus",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "all",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "read",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "unread",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -7501,7 +7530,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "CreateTopicSubscriptionPayload",
+                "name": "DeleteTopicSubscriptionPayload",
                 "ofType": null
               }
             },
@@ -10545,6 +10574,33 @@
       {
         "kind": "OBJECT",
         "name": "DeleteTopicCategoryPayload",
+        "description": "",
+        "fields": [
+          {
+            "name": "success",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "DeleteTopicSubscriptionPayload",
         "description": "",
         "fields": [
           {

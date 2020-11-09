@@ -420,7 +420,7 @@ let make = (~schoolName, ~fqdn, ~oauthHost, ~availableOauthProviders, ~allowEmai
                <FaIcon classes="fas fa-envelope" />
              </span>
              <span className="w-4/5 pl-3 text-left">
-               {"Continue with Email" |> str}
+               {"Continue with email" |> str}
              </span>
            </button>
          </div>

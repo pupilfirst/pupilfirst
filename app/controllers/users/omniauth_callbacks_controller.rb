@@ -26,7 +26,6 @@ module Users
 
     def keycloakopenid
       @email = request.env['omniauth.auth']['info']['email']
-      @user = User.find_by email: @email
       if @email.blank?
         redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: email_blank_flash)
         nil

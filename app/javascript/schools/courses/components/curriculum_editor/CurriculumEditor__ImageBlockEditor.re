@@ -33,38 +33,38 @@ let make =
       <div className="w-full">
         <div className="rounded-t-lg bg-white relative">
           <div
-            className="image-block-editor__image-resize-panel absolute w-full top-0 opacity-0 transform translate-y-0 transition duration-500 ease-in-out">
+            className="image-block-editor__image-resize-panel flex justify-center absolute w-full top-0 opacity-0 transform translate-y-0 transition duration-500 ease-in-out">
             <div
-              className="image-block-editor__image-resize-panel-box mx-auto w-full rounded shadow-lg h-full max-w-xs">
+              className="image-block-editor__image-resize-panel-box mx-auto rounded shadow-lg h-full">
               <ul
                 className="grid grid-cols-5 place-items-center text-white text-center">
                 <li>
                   <button
-                    className="rounded-l flex justify-center items-center p-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
-                    <Icon className="if i-image-fill-width text-xl" />
+                    className="rounded-l flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
+                    <Icon className="if i-image-fill-width text-lg" />
                   </button>
                 </li>
                 <li>
                   <button
-                    className="flex justify-center items-center p-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
-                    <Icon className="if i-image-inset-80 text-xl" />
+                    className="flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
+                    <Icon className="if i-image-inset-80 text-lg" />
                   </button>
                 </li>
                 <li>
                   <button
-                    className="flex justify-center items-center p-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
-                    <Icon className="if i-image-auto text-xl" />
+                    className="flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
+                    <Icon className="if i-image-auto text-lg" />
                   </button>
                 </li>
                 <li>
                   <button
-                    className="flex justify-center items-center p-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
-                    <Icon className="if i-image-inset-60 text-xl" />
+                    className="flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
+                    <Icon className="if i-image-inset-60 text-lg" />
                   </button>
                 </li>
                 <li>
                   <button
-                    className="rounded-r flex justify-center items-center p-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
+                    className="rounded-r flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
                     <Icon className="if i-image-inset-40 text-xl" />
                   </button>
                 </li>

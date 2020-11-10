@@ -6,6 +6,8 @@ module Keycloak
     domain: ENV['KEYCLOAK_SITE'],
   }.freeze
 
+  class FailedRequestError < StandardError; end
+
   class Endpoints
     attr_reader :domain, :realm, :client_id, :client_secret
     def initialize
@@ -28,7 +30,7 @@ module Keycloak
       if res.status == 200
         @openid_config = MultiJson.load(res.body)
       else
-        raise 'Failed to fetch Keycloak\'s openid config'
+        raise FailedRequestError.new 'Failed to fetch Keycloak\'s openid config'
       end
     end
 
@@ -63,10 +65,9 @@ module Keycloak
 
       if res.status == 200
         tokens = MultiJson.load(res.body)
-        @refresh_token = tokens['refresh_token']
         {access_token: tokens['access_token'], refresh_token: tokens['refresh_token']}
       else
-        raise 'Failed to sign-in as Keycloak\'s service account'
+        raise FailedRequestError.new 'Failed to sign-in as Keycloak\'s service account'
       end
     end
   end
@@ -86,9 +87,14 @@ module Keycloak
       headers = { 'Authorization' => "Bearer #{service_account.access_token}" }
       res = Faraday.get(uri, nil, headers)
       if res.status == 200
-        MultiJson.load(res.body).first
+        user = MultiJson.load(res.body).first
+        if user.present?
+          user
+        else
+          raise FailedRequestError.new "Failed to find user by email: #{email}"
+        end
       else
-        raise "Failed to find user by email: #{email}"
+        raise FailedRequestError.new "Failed to find user by email: #{email}"
       end
     end
 
@@ -112,30 +118,28 @@ module Keycloak
         Rails.logger.info(body['errorMessage'])
         nil
       else
-        raise 'Failed to create_user'
+        raise FailedRequestError.new 'Failed to create_user'
       end
     end
 
-    def update_user_password(email, password)
-      user_rep = {
-        credentials: [{
-          type: "password",
-          temporary: false,
-          value: password
-        }]
+    def set_user_password(email, password)
+      creds_rep = {
+        type: "password",
+        temporary: false,
+        value: password
       }
       headers = {
         'Authorization' => "Bearer #{service_account.access_token}",
         'Content-Type' => 'application/json'
       }
       user = fetch_user(email)
-      user_update_uri = endpoints.admin_users
-      user_update_uri.join(user['id'])
-      res = Faraday.put(user_update_uri, user_rep.to_json, headers)
-      if res.status == 200
-        MultiJson.load(res.body)
+      reset_password_uri = endpoints.admin_users
+      reset_password_uri.path = reset_password_uri.path.concat("/#{user['id']}", '/reset-password')
+      res = Faraday.put(reset_password_uri, creds_rep.to_json, headers)
+      if res.status == 204
+        nil
       else
-        raise 'Failed to create_user'
+        raise FailedRequestError.new 'Failed to set user password'
       end
     end
   end

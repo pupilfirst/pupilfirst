@@ -24,10 +24,10 @@ module Users
         protocol: 'https'
       }
 
-      login_url = url_helpers.reset_password_url(url_options)
+      reset_password_url = url_helpers.reset_password_url(url_options)
 
-      # Send the email with link to sign in.
-      UserSessionMailer.send_reset_password_token(@user.email, @school, login_url).deliver_now
+      # Send the email with link to reset password.
+      UserSessionMailer.send_reset_password_token(@user.email, @school, reset_password_url).deliver_now
     end
   end
 end

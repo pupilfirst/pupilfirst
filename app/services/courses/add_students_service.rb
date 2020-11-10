@@ -40,7 +40,11 @@ module Courses
       return unless @notify
 
       students.each do |student|
-        StudentMailer.enrollment(student).deliver_later
+        if student.user.password.blank?
+          Users::MailFirstPasswordTokenService.new(student.school, student.user).execute
+        else
+          StudentMailer.enrollment(student).deliver_later
+        end
       end
     end
 

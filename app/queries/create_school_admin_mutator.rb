@@ -1,5 +1,6 @@
 class CreateSchoolAdminMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
+  include KeycloakHelper
 
   property :email, validates: { presence: true, length: { maximum: 128 }, email: true }
   property :name, validates: { presence: true, length: { maximum: 128 } }
@@ -11,6 +12,7 @@ class CreateSchoolAdminMutator < ApplicationQuery
       user = persisted_user || current_school.users.create!(email: email, title: 'School Admin')
       user.update!(name: name)
       new_school_admin = current_school.school_admins.create!(user: user)
+      create_keycloak_user(user.email, user.name)
 
       current_school.school_admins.where.not(user_id: user.id).each do |admin|
         SchoolAdminMailer.school_admin_added(admin, new_school_admin).deliver_later

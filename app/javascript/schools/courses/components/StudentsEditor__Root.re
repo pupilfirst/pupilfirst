@@ -62,7 +62,7 @@ let teamUp = (selectedStudents, responseCB) => {
 let initialState = tags => {
   pagedTeams: Unloaded,
   selectedStudents: [||],
-  filter: Filter.empty(),
+  filter: Filter.initialize(),
   formVisible: None,
   tags,
   loading: Loading.NotLoading,
@@ -160,6 +160,47 @@ let dropDownSelected = filter => {
     <span className="ml-2"> {title |> str} </span>
     <i className="fas fa-caret-down ml-3" />
   </button>;
+};
+
+module Sortable = {
+  type t = Filter.sortBy;
+
+  let criterion = c =>
+    switch (c) {
+    | Filter.Name => "Name"
+    | CreatedAt => "Created At"
+    | UpdatedAt => "Updated At"
+    };
+
+  let criterionType = c =>
+    switch (c) {
+    | Filter.Name => `String
+    | CreatedAt
+    | UpdatedAt => `Number
+    };
+};
+
+module StudentsSorter = Sorter.Make(Sortable);
+
+let studentsSorter = (send, filter) => {
+  <div className="ml-2 flex-shrink-0">
+    <label className="block text-tiny uppercase font-semibold">
+      {"Sort by:" |> str}
+    </label>
+    <div className="mt-1">
+      {<StudentsSorter
+         criteria=[|Filter.Name, CreatedAt, UpdatedAt|]
+         selectedCriterion={Filter.sortBy(filter)}
+         direction={Filter.sortDirection(filter)}
+         onDirectionChange={sortDirection => {
+           updateFilter(send, {...filter, sortDirection})
+         }}
+         onCriterionChange={sortBy =>
+           updateFilter(send, {...filter, sortBy})
+         }
+       />}
+    </div>
+  </div>;
 };
 
 let updateTeams = (send, pagedTeams) => send(UpdateTeams(pagedTeams));
@@ -267,21 +308,7 @@ let make =
                 tags={state.tags}
                 levels
               />
-              <div className="ml-2 flex-shrink-0">
-                <label className="block text-tiny uppercase font-semibold">
-                  {"Sort by:" |> str}
-                </label>
-                <div className="mt-1">
-                  {<Dropdown
-                     right=true
-                     selected={dropDownSelected(state.filter)}
-                     contents={dropDownContents(
-                       updateFilter(send),
-                       state.filter,
-                     )}
-                   />}
-                </div>
-              </div>
+              {studentsSorter(send, state.filter)}
             </div>
             {state.selectedStudents |> ArrayUtils.isEmpty
                ? React.null

@@ -3,11 +3,14 @@ type sortBy =
   | CreatedAt
   | UpdatedAt;
 
+type sortDirection = [ | `Ascending | `Descending];
+
 type t = {
   searchString: option(string),
   tags: array(string),
   levelId: option(string),
   sortBy,
+  sortDirection,
 };
 
 let searchString = t => t.searchString;
@@ -18,11 +21,14 @@ let levelId = t => t.levelId;
 
 let sortBy = t => t.sortBy;
 
-let empty = () => {
+let sortDirection = t => t.sortDirection;
+
+let initialize = () => {
   searchString: None,
   tags: [||],
   levelId: None,
   sortBy: Name,
+  sortDirection: `Ascending,
 };
 
 let addTag = (tag, t) => {...t, tags: t.tags |> Array.append([|tag|])};

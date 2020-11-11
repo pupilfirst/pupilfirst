@@ -171,7 +171,7 @@ feature 'School students index', js: true do
       open_email(student_1_user.email)
 
       expect(current_email.subject).to include("You have been added as a student in #{school.name}")
-      expect(current_email.body).to have_link('Sign in to View Course')
+      expect(current_email.body).to have_link('Set first password')
 
       open_email(student_2_user.email)
 
@@ -180,12 +180,10 @@ feature 'School students index', js: true do
       open_email(student_3_user.email)
 
       expect(current_email.subject).to include("You have been added as a student in #{school.name}")
-      expect(current_email.body).to include("You have also been teamed up with #{student_4_user.name}")
 
       open_email(student_4_user.email)
 
       expect(current_email.subject).to include("You have been added as a student in #{school.name}")
-      expect(current_email.body).to include("You have also been teamed up with #{student_3_user.name}")
     end
 
     scenario 'school admin adds a student after disabling the notify option' do
@@ -238,7 +236,7 @@ feature 'School students index', js: true do
         open_email(coach_user.email)
 
         expect(current_email.subject).to include("You have been added as a student in #{school.name}")
-        expect(current_email.body).to have_link('Sign in to View Course')
+        expect(current_email.body).to have_link('Set first password')
       end
     end
 

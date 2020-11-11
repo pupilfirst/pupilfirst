@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'keycloak'
 
 feature 'School students index', js: true do
   include UserSpecHelper
@@ -46,6 +47,10 @@ feature 'School students index', js: true do
     before do
       create :faculty_course_enrollment, faculty: course_coach, course: course
       create :faculty_course_enrollment, faculty: coach_in_different_course, course: team_in_different_course.course
+
+      mocked_keycloak = double :keycloak_client
+      allow(mocked_keycloak).to receive(:create_user)
+      allow(Keycloak::Client).to receive(:new) { mocked_keycloak }
     end
 
     scenario 'School admin adds new students and a team' do
@@ -248,6 +253,10 @@ feature 'School students index', js: true do
       end
 
       scenario 'School admin tries to add the existing student alongside a new student' do
+        mocked_keycloak = double :keycloak_client
+        allow(mocked_keycloak).to receive(:create_user)
+        allow(Keycloak::Client).to receive(:new) { mocked_keycloak }
+
         sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
         click_button 'Add New Students'

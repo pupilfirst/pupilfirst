@@ -1695,9 +1695,13 @@
             "description": "",
             "args": [],
             "type": {
-              "kind": "ENUM",
-              "name": "ImageWidth",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "ImageWidth",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -1717,43 +1721,31 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "auto",
+            "name": "Auto",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "xs",
+            "name": "Full",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "sm",
+            "name": "FourFifths",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "md",
+            "name": "ThreeFifths",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "lg",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "xl",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "xl2",
+            "name": "TwoFifths",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null

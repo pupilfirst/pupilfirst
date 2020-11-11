@@ -28,15 +28,13 @@ let fileContentBlock = (url, title, filename) =>
     <div> <FaIcon classes="text-2xl fas fa-download" /> </div>
   </a>;
 
-let imageContentBlock = (url, caption, width: ContentBlock.width) =>
-  <div
-    className={
-      "rounded-lg bg-white text-center "
-      ++ "max-w-"
-      ++ ContentBlock.widthToString(width)
-      ++ " mx-auto"
-    }>
-    <img className="mx-auto" src=url alt=caption />
+let imageContentBlock = (url, caption, width) =>
+  <div className="rounded-lg bg-white text-center">
+    <img
+      className={"mx-auto w-auto md:" ++ ContentBlock.widthToClass(width)}
+      src=url
+      alt=caption
+    />
     <div className="px-4 py-2 text-sm italic"> {caption |> str} </div>
   </div>;
 

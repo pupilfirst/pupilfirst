@@ -9,7 +9,13 @@ type embedCode = option(string);
 type filename = string;
 type requestSource = [ | `User | `VimeoUpload];
 type lastResolvedAt = option(Js.Date.t);
-type width = [ | `auto | `lg | `md | `sm | `xl | `xl2 | `xs];
+
+type width =
+  | Auto
+  | Full
+  | FourFifths
+  | ThreeFifths
+  | TwoFifths;
 
 type blockType =
   | Markdown(markdown)
@@ -24,15 +30,23 @@ type t = {
 }
 and id = string;
 
-let widthToString = width =>
+let widthToClass = width =>
   switch (width) {
-  | `auto => "auto"
-  | `xs => "xs"
-  | `sm => "sm"
-  | `md => "md"
-  | `lg => "lg"
-  | `xl => "xl"
-  | `xl2 => "2xl"
+  | Auto => "w-auto"
+  | Full => "w-full"
+  | FourFifths => "w-4/5"
+  | ThreeFifths => "w-3/5"
+  | TwoFifths => "w-2/5"
+  };
+
+let widthFromClass = widthClass =>
+  switch (widthClass) {
+  | "w-auto" => Auto
+  | "w-full" => Full
+  | "w-4/5" => FourFifths
+  | "w-3/5" => ThreeFifths
+  | "w-2/5" => TwoFifths
+  | _ => Auto
   };
 
 let decodeMarkdownContent = json =>
@@ -40,18 +54,22 @@ let decodeMarkdownContent = json =>
 let decodeFileContent = json => Json.Decode.(json |> field("title", string));
 
 let decodeImageContent = json => {
-  let widthString = Json.Decode.(json |> optional(field("width", string)));
-  let width: width =
+  let widthString = Json.Decode.(field("width", string, json));
+
+  let width =
     switch (widthString) {
-    | None => `auto
-    | Some("md") => `md
-    | Some("lg") => `lg
-    | Some("xl") => `xl
-    | Some("sm") => `sm
-    | Some("xs") => `xs
-    | Some("xl2") => `xl2
-    | Some(_) => `auto
+    | "Auto" => Auto
+    | "Full" => Full
+    | "FourFifths" => FourFifths
+    | "ThreeFifths" => ThreeFifths
+    | "TwoFifths" => TwoFifths
+    | otherWidth =>
+      Rollbar.error(
+        "Encountered unexpected width for image content block: " ++ otherWidth,
+      );
+      Auto;
     };
+
   (Json.Decode.(json |> field("caption", string)), width);
 };
 
@@ -139,8 +157,11 @@ let makeFromJs = js => {
         content##url,
         content##caption,
         switch (content##width) {
-        | None => `auto
-        | Some(width) => width
+        | `Auto => Auto
+        | `Full => Full
+        | `FourFifths => FourFifths
+        | `ThreeFifths => ThreeFifths
+        | `TwoFifths => TwoFifths
         },
       )
     | `EmbedBlock(content) =>
@@ -191,9 +212,17 @@ let updateFile = (title, t) =>
   | Embed(_) => t
   };
 
-let updateImage = (caption, t) =>
+let updateImageCaption = (t, caption) =>
   switch (t.blockType) {
   | Image(url, _, width) => {...t, blockType: Image(url, caption, width)}
+  | Markdown(_)
+  | File(_)
+  | Embed(_) => t
+  };
+
+let updateImageWidth = (t, width) =>
+  switch (t.blockType) {
+  | Image(url, caption, _) => {...t, blockType: Image(url, caption, width)}
   | Markdown(_)
   | File(_)
   | Embed(_) => t

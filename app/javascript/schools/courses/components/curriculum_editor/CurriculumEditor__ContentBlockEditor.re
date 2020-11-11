@@ -208,7 +208,16 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
       setDirtyCB,
       send,
     );
-  | Image(_url, caption, width) =>
+  | Image(_url, caption, imageWidth) =>
+    let width =
+      switch (imageWidth) {
+      | ContentBlock.Auto => `Auto
+      | Full => `Full
+      | FourFifths => `FourFifths
+      | ThreeFifths => `ThreeFifths
+      | TwoFifths => `TwoFifths
+      };
+
     let mutation = UpdateImageBlockMutation.make(~id, ~caption, ~width, ());
     let extractor = result => result##updateImageBlock##contentBlock;
 

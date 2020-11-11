@@ -33,7 +33,7 @@ module Schools
 
         case block_type
         when 'image'
-          { caption: filename, width: :auto }
+          { caption: filename, width: 'Auto' }
         when 'file'
           { title: filename }
         else

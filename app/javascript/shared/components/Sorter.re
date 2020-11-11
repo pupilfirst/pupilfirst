@@ -39,8 +39,8 @@ module Make = (Sortable: Sortable) => {
 
   let directionIconClasses = (criterionType, direction) => {
     switch (criterionType, direction) {
-    | (`String, `Ascending) => "if i-sort-alpha-down-regular w-4 if-fw"
-    | (`String, `Descending) => "if i-sort-alpha-up-regular w-4 if-fw"
+    | (`String, `Ascending) => "if i-sort-alpha-up-regular w-4 if-fw"
+    | (`String, `Descending) => "if i-sort-alpha-down-regular w-4 if-fw"
     | (`Number, `Ascending) => "if i-sort-numeric-up-regular w-4 if-fw"
     | (`Number, `Descending) => "if i-sort-numeric-down-regular w-4 if-fw"
     };

@@ -573,8 +573,20 @@ feature 'School students index', js: true do
     scenario 'school admin can order students' do
       sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
+      expect(find('.student-team-container:first-child')).to have_text(team_aaa.name)
+
+      # Check ordering by last created
       click_button 'Order by Name'
       click_button 'Order by Last Created'
+
+      expect(find('.student-team-container:first-child')).to have_text(oldest_created.name)
+
+      click_button('Load More')
+
+      expect(find('.student-team-container:last-child')).to have_text(newest_created.name)
+
+      # Reverse sorting
+      click_button('toggle-sort-order')
 
       expect(find('.student-team-container:first-child')).to have_text(newest_created.name)
 
@@ -582,6 +594,7 @@ feature 'School students index', js: true do
 
       expect(find('.student-team-container:last-child')).to have_text(oldest_created.name)
 
+      # Check ordering by last updated
       click_button 'Order by Last Created'
       click_button 'Order by Last Updated'
 
@@ -591,6 +604,16 @@ feature 'School students index', js: true do
 
       expect(find('.student-team-container:last-child')).to have_text(oldest_updated.name)
 
+      # Reverse sorting
+      click_button('toggle-sort-order')
+
+      expect(find('.student-team-container:first-child')).to have_text(oldest_updated.name)
+
+      click_button('Load More')
+
+      expect(find('.student-team-container:last-child')).to have_text(newest_updated.name)
+
+      # Check ordering by name
       click_button 'Order by Last Updated'
       click_button 'Order by Name'
 
@@ -599,6 +622,15 @@ feature 'School students index', js: true do
       click_button('Load More')
 
       expect(find('.student-team-container:last-child')).to have_text(team_zzz.name)
+
+      # Reverse sorting
+      click_button('toggle-sort-order')
+
+      expect(find('.student-team-container:first-child')).to have_text(team_zzz.name)
+
+      click_button('Load More')
+
+      expect(find('.student-team-container:last-child')).to have_text(team_aaa.name)
     end
   end
 

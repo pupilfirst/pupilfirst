@@ -135,41 +135,14 @@ let deselectStudent = (send, studentId) => send(DeselectStudent(studentId));
 
 let updateFilter = (send, filter) => send(UpdateFilter(filter));
 
-let dropDownContents = (updateFilterCB, filter) => {
-  filter
-  |> Filter.dropdownOptionsForSortBy
-  |> Array.map(sortBy => {
-       let title = sortBy |> Filter.sortByTitle;
-       <button
-         key=title
-         title={"Order by " ++ title}
-         onClick={_ => updateFilterCB(filter |> Filter.updateSortBy(sortBy))}
-         className="inline-flex items-center w-full font-semibold text-xs p-3 text-left focus:outline-none ">
-         <Icon className={sortBy |> Filter.sortByIcon} />
-         <span className="ml-2"> {title |> str} </span>
-       </button>;
-     });
-};
-
-let dropDownSelected = filter => {
-  let title = filter |> Filter.sortBy |> Filter.sortByTitle;
-  <button
-    title={"Order by " ++ title}
-    className="inline-flex items-center bg-white leading-relaxed font-semibold border border-gray-400 rounded focus:outline-none focus:bg-white focus:border-gray-500 px-3 py-2 text-xs ">
-    <Icon className={filter |> Filter.sortBy |> Filter.sortByIcon} />
-    <span className="ml-2"> {title |> str} </span>
-    <i className="fas fa-caret-down ml-3" />
-  </button>;
-};
-
 module Sortable = {
   type t = Filter.sortBy;
 
   let criterion = c =>
     switch (c) {
     | Filter.Name => "Name"
-    | CreatedAt => "Created At"
-    | UpdatedAt => "Updated At"
+    | CreatedAt => "Last Created"
+    | UpdatedAt => "Last Updated"
     };
 
   let criterionType = c =>

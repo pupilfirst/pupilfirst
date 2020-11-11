@@ -436,16 +436,6 @@
                   "ofType": null
                 },
                 "defaultValue": null
-              },
-              {
-                "name": "sortDirection",
-                "description": "",
-                "type": {
-                  "kind": "ENUM",
-                  "name": "SortDirection",
-                  "ofType": null
-                },
-                "defaultValue": null
               }
             ],
             "type": {
@@ -2719,29 +2709,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "ENUM",
-        "name": "SortDirection",
-        "description": "",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "Ascending",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "Descending",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
         "kind": "OBJECT",
         "name": "NotificationConnection",
         "description": "",
@@ -3785,6 +3752,29 @@
           },
           {
             "name": "Rejected",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "SortDirection",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "Ascending",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Descending",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null

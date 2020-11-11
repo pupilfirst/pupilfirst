@@ -25,10 +25,7 @@ module MarkNotificationQuery = [%graphql
 |}
 ];
 
-type sortDirection = [ | `Ascending | `Descending];
-
 type filter = {
-  sortDirection,
   event: option(event),
   title: option(string),
   status: option(status),
@@ -53,8 +50,7 @@ type action =
   | SetStatus(status)
   | SetEvent(event)
   | ClearEvent
-  | MarkNotification(string)
-  | UpdateSortDirection(sortDirection);
+  | MarkNotification(string);
 
 let updateNotification = (id, notifications) => {
   notifications
@@ -82,13 +78,6 @@ let reducer = (state, action) => {
       },
     }
   | UpdateFilterString(filterString) => {...state, filterString}
-  | UpdateSortDirection(sortDirection) => {
-      ...state,
-      filter: {
-        ...state.filter,
-        sortDirection,
-      },
-    }
   | LoadNotifications(endCursor, hasNextPage, newTopics, totalEntriesCount) =>
     let updatedTopics =
       switch (state.loading) {
@@ -159,8 +148,8 @@ let reducer = (state, action) => {
 
 module NotificationsQuery = [%graphql
   {|
-    query NotificationsFromNotificationsListQuery($search: String, $after: String, $event: NotificationEvent, $sortDirection: SortDirection!, $status: NotificationStatus) {
-      notifications(event: $event, search: $search, sortDirection: $sortDirection, first: 10, after: $after, status: $status) {
+    query NotificationsFromNotificationsListQuery($search: String, $after: String, $event: NotificationEvent, $status: NotificationStatus) {
+      notifications(event: $event, search: $search, first: 10, after: $after, status: $status) {
         nodes {
           actor {
             id
@@ -191,7 +180,6 @@ let getEntries = (send, cursor, filter) => {
     ~after=?cursor,
     ~search=?filter.title,
     ~event=?filter.event,
-    ~sortDirection=filter.sortDirection,
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -229,7 +217,6 @@ let computeInitialState = () => {
   filterString: "",
   filter: {
     title: None,
-    sortDirection: `Ascending,
     event: None,
     status: None,
   },

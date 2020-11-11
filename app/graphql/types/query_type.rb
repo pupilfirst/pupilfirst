@@ -127,7 +127,6 @@ module Types
       argument :search, String, required: false
       argument :status, Types::NotificationStatusType, required: false
       argument :event, Types::NotificationEventType, required: false
-      argument :sort_direction, Types::SortDirectionType, required: false
     end
   end
 end

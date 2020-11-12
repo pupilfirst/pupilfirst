@@ -115,6 +115,14 @@ module DetailedExample = {
     setState(s => {...s, searchInput});
   };
 
+  let defaultOptions = () => {
+    [|
+      Selectable.makeCountry("India"),
+      Selectable.makeState("Kerala"),
+      Selectable.makeCity("Bangalore"),
+    |];
+  };
+
   [@react.component]
   let make = () => {
     let (state, setState) =
@@ -136,6 +144,8 @@ module DetailedExample = {
         value={state.searchInput}
         onChange={updateSearchInput(setState)}
         placeholder="Type city, state or country"
+        defaultMessage="Enter your city name"
+        defaultOptions={defaultOptions()}
       />
     </div>;
   };
@@ -212,6 +222,7 @@ module MinimalExample = {
         onDeselect={deselect(state.selected, setState)}
         value={state.searchString}
         onChange={searchString => setState(s => {...s, searchString})}
+        defaultMessage="Enter your city name"
       />
     </div>;
   };

@@ -226,7 +226,7 @@ let computeInitialState = () => {
 let entriesList = (caption, entries, send) => {
   <div>
     <div className="font-bold text-xl"> {str(caption)} </div>
-    <div className="space-y-2">
+    <div className="space-y-2 mt-2">
       {entries |> ArrayUtils.isEmpty
          ? <div
              className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">

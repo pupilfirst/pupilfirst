@@ -1,12 +1,10 @@
 [%bs.raw {|require("./MultiselectDropdown.css")|}];
 
-open Webapi.Dom;
-
 let str = React.string;
 
 module DomUtils = {
   exception RootElementMissing(string);
-
+  open Webapi.Dom;
   let focus = id => {
     (
       (
@@ -76,7 +74,8 @@ module Make = (Selectable: Selectable) => {
     DomUtils.focus(id);
   };
 
-  let searchResult = (searchInput, unselected, labelSuffix, id, onSelect) => {
+  let searchResult =
+      (searchInput, unselected, defaultOptions, labelSuffix, id, onSelect) => {
     // Remove all excess space characters from the user input.
     let normalizedString = {
       searchInput
@@ -89,7 +88,7 @@ module Make = (Selectable: Selectable) => {
 
     let options =
       switch (normalizedString) {
-      | "" => unselected
+      | "" => defaultOptions
       | searchString => search(searchString, unselected)
       };
 
@@ -173,6 +172,8 @@ module Make = (Selectable: Selectable) => {
         ~onDeselect,
         ~labelSuffix=": ",
         ~emptyMessage="No results found",
+        ~hint="Start typing to see the options",
+        ~defaultOptions=[||],
       ) => {
     let (inputId, _setId) =
       React.useState(() =>
@@ -193,10 +194,18 @@ module Make = (Selectable: Selectable) => {
         let curriedFunction = onWindowClick(showDropdown, setShowDropdown);
 
         let removeEventListener = () =>
-          Window.removeEventListener("click", curriedFunction, window);
+          Webapi.Dom.Window.removeEventListener(
+            "click",
+            curriedFunction,
+            Webapi.Dom.window,
+          );
 
         if (showDropdown) {
-          Window.addEventListener("click", curriedFunction, window);
+          Webapi.Dom.Window.addEventListener(
+            "click",
+            curriedFunction,
+            Webapi.Dom.window,
+          );
           Some(removeEventListener);
         } else {
           removeEventListener();
@@ -207,7 +216,14 @@ module Make = (Selectable: Selectable) => {
     );
 
     let results =
-      searchResult(value, unselected, labelSuffix, inputId, onSelect);
+      searchResult(
+        value,
+        unselected,
+        defaultOptions,
+        labelSuffix,
+        inputId,
+        onSelect,
+      );
     <div className="w-full relative">
       <div>
         <div
@@ -230,7 +246,7 @@ module Make = (Selectable: Selectable) => {
          <div
            className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2 z-50">
            {switch (results) {
-            | [||] => <div> {emptyMessage |> str} </div>
+            | [||] => <div> {(value == "" ? hint : emptyMessage) |> str} </div>
             | results => results |> React.array
             }}
          </div>;

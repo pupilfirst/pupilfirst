@@ -132,6 +132,17 @@ en:
       dropout_button: Dropout Student
       revoke_certificate_confirmation: Are you sure? This action cannot be undone.
       active_label: Active
+    StudentsEditor__Root:
+      sort_criterion_label: "Sort by:"
+      sort_criterion_name: Name
+      sort_criterion_last_created: Last Created
+      sort_criterion_last_updated: Last Updated
+      button_all_students: All Students
+      button_inactive_students: Inactive Students
+      button_add_new_students: Add New Students
+    StudentsEditor__Search:
+      filter_input_label: "Filter by:"
+      filter_input_placeholder: Type name, tag or level
   jobs:
     timeline_events:
       verification_notification:

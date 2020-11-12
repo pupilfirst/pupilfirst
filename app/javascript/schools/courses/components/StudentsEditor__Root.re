@@ -1,5 +1,7 @@
 open StudentsEditor__Types;
 
+let t = I18n.t(~scope="components.StudentsEditor__Root");
+
 let str = React.string;
 
 type teamId = string;
@@ -140,9 +142,9 @@ module Sortable = {
 
   let criterion = c =>
     switch (c) {
-    | Filter.Name => "Name"
-    | CreatedAt => "Last Created"
-    | UpdatedAt => "Last Updated"
+    | Filter.Name => t("sort_criterion_name")
+    | CreatedAt => t("sort_criterion_last_created")
+    | UpdatedAt => t("sort_criterion_last_updated")
     };
 
   let criterionType = c =>
@@ -158,7 +160,7 @@ module StudentsSorter = Sorter.Make(Sortable);
 let studentsSorter = (send, filter) => {
   <div className="ml-2 flex-shrink-0">
     <label className="block text-tiny uppercase font-semibold">
-      {"Sort by:" |> str}
+      {t("sort_criterion_label") |> str}
     </label>
     <div className="mt-1">
       {<StudentsSorter
@@ -251,14 +253,14 @@ let make =
         <ul className="flex font-semibold text-sm">
           <li
             className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
-            <span> {"All Students" |> str} </span>
+            <span> {t("button_all_students") |> str} </span>
           </li>
           <li
             className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-200 hover:text-gray-900">
             <a
               className="block px-3 py-3 md:py-2 text-gray-800"
               href={"/school/courses/" ++ courseId ++ "/inactive_students"}>
-              {"Inactive Students" |> str}
+              {t("button_inactive_students") |> str}
             </a>
           </li>
         </ul>
@@ -268,7 +270,7 @@ let make =
                onClick={_e => send(UpdateFormVisible(CreateForm))}
                className="btn btn-primary ml-4">
                <i className="fas fa-user-plus mr-2" />
-               <span> {"Add New Students" |> str} </span>
+               <span> {t("button_add_new_students") |> str} </span>
              </button>}
       </div>
       <div className="bg-gray-100 sticky top-0 py-3">

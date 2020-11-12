@@ -143,7 +143,6 @@ module DetailedExample = {
         onDeselect={deselect(state.selected, setState)}
         value={state.searchInput}
         onChange={updateSearchInput(setState)}
-        placeholder="Type city, state or country"
         defaultOptions={defaultOptions()}
         hint="Select from the above list or search by city name"
       />

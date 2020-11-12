@@ -243,13 +243,19 @@ module Make = (Selectable: Selectable) => {
             onChange={e => onChange(ReactEvent.Form.target(e)##value)}
             className="flex-grow appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 leading-snug focus:outline-none"
             id=inputId
-            type_="text"
+            type_="search"
             placeholder
           />
         </div>
       </div>
       <div />
       {switch (showDropdown, results, defaultOptions, hint) {
+       | (false, results, [||], None) =>
+         switch (value, results) {
+         | ("", _) => React.null
+         | (_value, [||]) => wrapper(str(emptyMessage))
+         | (_value, results) => wrapper(React.array(results))
+         }
        | (false, _result, _options, _hint) => React.null
        | (true, [||], [||], None) =>
          value == "" ? React.null : wrapper(str(emptyMessage))

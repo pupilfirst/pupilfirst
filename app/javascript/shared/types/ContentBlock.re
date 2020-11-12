@@ -101,7 +101,6 @@ let decode = json => {
     | "image" =>
       let (caption, width) = json |> field("content", decodeImageContent);
       let url = json |> field("fileUrl", string);
-      Js.log(("block", json));
       Image(url, caption, width);
     | "embed" =>
       let (url, embedCode, requestSource, lastResolvedAt) =

@@ -223,23 +223,29 @@ let computeInitialState = () => {
   totalEntriesCount: 0,
 };
 
-let entriesList = (entries, send) => {
-  entries |> ArrayUtils.isEmpty
-    ? <div
-        className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
-        <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
-        <h4 className="mt-3 text-base md:text-lg text-center font-semibold">
-          {t("empty_notifications")->str}
-        </h4>
-      </div>
-    : entries
-      |> Js.Array.map(entry =>
-           <Notifications__EntryCard
-             entry
-             markNotificationCB={markNotification(send)}
-           />
-         )
-      |> React.array;
+let entriesList = (caption, entries, send) => {
+  <div>
+    <div className="font-bold text-xl"> {str(caption)} </div>
+    <div className="space-y-2">
+      {entries |> ArrayUtils.isEmpty
+         ? <div
+             className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
+             <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
+             <h4
+               className="mt-3 text-base md:text-lg text-center font-semibold">
+               {t("empty_notifications")->str}
+             </h4>
+           </div>
+         : entries
+           |> Js.Array.map(entry =>
+                <Notifications__EntryCard
+                  entry
+                  markNotificationCB={markNotification(send)}
+                />
+              )
+           |> React.array}
+    </div>
+  </div>;
 };
 
 let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) => {
@@ -392,6 +398,38 @@ let onDeselectFilter = (send, selectable) =>
   | Status(_) => send(ClearStatus)
   };
 
+let showEntries = (entries, state, send) => {
+  let now = Js.Date.make();
+  let entriesToday =
+    Js.Array.filter(
+      e =>
+        Js.Date.toDateString(Entry.createdAt(e))
+        == Js.Date.toDateString(now),
+      entries,
+    );
+  let entriesEarlier =
+    Js.Array.filter(
+      e =>
+        Js.Date.toDateString(Entry.createdAt(e))
+        != Js.Date.toDateString(now),
+      entries,
+    );
+
+  <div>
+    {ReactUtils.nullIf(
+       entriesList("Today", entriesToday, send),
+       ArrayUtils.isEmpty(entriesToday),
+     )}
+    {ReactUtils.nullIf(
+       entriesList("Earlier", entriesToday, send),
+       ArrayUtils.isEmpty(entriesEarlier),
+     )}
+    <div className="text-center">
+      {entriesLoadedData(state.totalEntriesCount, Array.length(entries))}
+    </div>
+  </div>;
+};
+
 [@react.component]
 let make = () => {
   let (state, send) = React.useReducer(reducer, computeInitialState());
@@ -430,13 +468,7 @@ let make = () => {
          SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
        | PartiallyLoaded(entries, cursor) =>
          <div>
-           <div className="space-y-2"> {entriesList(entries, send)} </div>
-           <div className="text-center">
-             {entriesLoadedData(
-                state.totalEntriesCount,
-                Array.length(entries),
-              )}
-           </div>
+           {showEntries(entries, state, send)}
            {switch (state.loading) {
             | LoadingMore =>
               SkeletonLoading.multiple(
@@ -456,15 +488,7 @@ let make = () => {
             }}
          </div>
        | FullyLoaded(entries) =>
-         <div>
-           <div className="space-y-2"> {entriesList(entries, send)} </div>
-           <div className="text-center">
-             {entriesLoadedData(
-                state.totalEntriesCount,
-                Array.length(entries),
-              )}
-           </div>
-         </div>
+         <div> {showEntries(entries, state, send)} </div>
        }}
     </div>
     {switch (state.entries) {

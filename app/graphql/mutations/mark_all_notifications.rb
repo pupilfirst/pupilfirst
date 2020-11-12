@@ -4,8 +4,8 @@ module Mutations
 
     field :success, Boolean, null: false
 
-    def resolve(params)
-      mutator = MarkAllNotificationsMutator.new(context, params)
+    def resolve
+      mutator = MarkAllNotificationsMutator.new(context, {})
       success = if mutator.valid?
         mutator.mark_all
         true

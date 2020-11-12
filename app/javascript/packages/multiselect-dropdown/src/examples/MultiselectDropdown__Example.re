@@ -144,8 +144,8 @@ module DetailedExample = {
         value={state.searchInput}
         onChange={updateSearchInput(setState)}
         placeholder="Type city, state or country"
-        defaultMessage="Enter your city name"
         defaultOptions={defaultOptions()}
+        hint="Select from the above list or search by city name"
       />
     </div>;
   };
@@ -222,7 +222,7 @@ module MinimalExample = {
         onDeselect={deselect(state.selected, setState)}
         value={state.searchString}
         onChange={searchString => setState(s => {...s, searchString})}
-        defaultMessage="Enter your city name"
+        hint="Enter your city name"
       />
     </div>;
   };

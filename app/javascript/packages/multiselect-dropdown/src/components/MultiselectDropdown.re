@@ -74,24 +74,7 @@ module Make = (Selectable: Selectable) => {
     DomUtils.focus(id);
   };
 
-  let searchResult =
-      (searchInput, unselected, defaultOptions, labelSuffix, id, onSelect) => {
-    // Remove all excess space characters from the user input.
-    let normalizedString = {
-      searchInput
-      |> Js.String.trim
-      |> Js.String.replaceByRe(
-           Js.Re.fromStringWithFlags("\\s+", ~flags="g"),
-           " ",
-         );
-    };
-
-    let options =
-      switch (normalizedString) {
-      | "" => defaultOptions
-      | searchString => search(searchString, unselected)
-      };
-
+  let showOptions = (options, onSelect, id, labelSuffix) => {
     options
     |> Array.mapi((index, selection) =>
          <button
@@ -112,6 +95,26 @@ module Make = (Selectable: Selectable) => {
            </span>
          </button>
        );
+  };
+
+  let searchResult = (searchInput, unselected, labelSuffix, id, onSelect) => {
+    // Remove all excess space characters from the user input.
+    let normalizedString = {
+      searchInput
+      |> Js.String.trim
+      |> Js.String.replaceByRe(
+           Js.Re.fromStringWithFlags("\\s+", ~flags="g"),
+           " ",
+         );
+    };
+
+    let options =
+      switch (normalizedString) {
+      | "" => [||]
+      | searchString => search(searchString, unselected)
+      };
+
+    showOptions(options, onSelect, id, labelSuffix);
   };
 
   let removeSelection = (onDeselect, selection, event) => {
@@ -159,6 +162,17 @@ module Make = (Selectable: Selectable) => {
     setShowDropdown(showDropdown => !showDropdown);
   };
 
+  let wrapper = children => {
+    <div
+      className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2 z-50">
+      children
+    </div>;
+  };
+
+  let showHint = hint => {
+    <div className="text-xs"> {str(hint)} </div>;
+  };
+
   [@react.component]
   let make =
       (
@@ -172,7 +186,7 @@ module Make = (Selectable: Selectable) => {
         ~onDeselect,
         ~labelSuffix=": ",
         ~emptyMessage="No results found",
-        ~hint="Start typing to see the options",
+        ~hint=?,
         ~defaultOptions=[||],
       ) => {
     let (inputId, _setId) =
@@ -216,14 +230,7 @@ module Make = (Selectable: Selectable) => {
     );
 
     let results =
-      searchResult(
-        value,
-        unselected,
-        defaultOptions,
-        labelSuffix,
-        inputId,
-        onSelect,
-      );
+      searchResult(value, unselected, labelSuffix, inputId, onSelect);
     <div className="w-full relative">
       <div>
         <div
@@ -242,16 +249,25 @@ module Make = (Selectable: Selectable) => {
         </div>
       </div>
       <div />
-      {if (showDropdown) {
-         <div
-           className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2 z-50">
-           {switch (results) {
-            | [||] => <div> {(value == "" ? hint : emptyMessage) |> str} </div>
-            | results => results |> React.array
-            }}
-         </div>;
-       } else {
-         React.null;
+      {switch (showDropdown, results, defaultOptions, hint) {
+       | (false, _result, _options, _hint) => React.null
+       | (true, [||], [||], None) =>
+         value == "" ? React.null : wrapper(str(emptyMessage))
+       | (true, [||], [||], Some(hint)) => wrapper(showHint(hint))
+       | (true, [||], options, None) =>
+         wrapper(
+           React.array(showOptions(options, onSelect, inputId, labelSuffix)),
+         )
+       | (true, [||], options, Some(hint)) =>
+         wrapper(
+           <div>
+             {React.array(
+                showOptions(options, onSelect, inputId, labelSuffix),
+              )}
+             {showHint(hint)}
+           </div>,
+         )
+       | (true, results, _options, _hint) => wrapper(React.array(results))
        }}
     </div>;
   };

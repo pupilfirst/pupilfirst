@@ -1,6 +1,7 @@
 [%bs.raw {|require("./CurriculumEditor__ImageBlockEditor.css")|}];
 
 let str = React.string;
+let t = I18n.t(~scope="components.CurriculumEditor__ImageBlockEditor");
 
 let onChangeCaption = (contentBlock, updateContentBlockCB, event) => {
   ReactEvent.Form.preventDefault(event);
@@ -36,11 +37,11 @@ let imageResizeButton =
 
   let title =
     switch (width) {
-    | ContentBlock.Auto => "Automatic width"
-    | Full => "Full width"
-    | FourFifths => "Four-fifths width"
-    | ThreeFifths => "Three-fifths width"
-    | TwoFifths => "Two-fifths width"
+    | ContentBlock.Auto => t("resize_panel_button_title.auto")
+    | Full => t("resize_panel_button_title.full")
+    | FourFifths => t("resize_panel_button_title.four_fifths")
+    | ThreeFifths => t("resize_panel_button_title.three_fifths")
+    | TwoFifths => t("resize_panel_button_title.two_fifths")
     };
 
   <button

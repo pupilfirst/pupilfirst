@@ -1,5 +1,7 @@
 open StudentsEditor__Types;
 
+let t = I18n.t(~scope="components.StudentsEditor__Search");
+
 let str = React.string;
 
 module Selectable = {
@@ -128,7 +130,7 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
   let id = "search";
   <div className="inline-block w-full">
     <label className="block text-tiny font-semibold uppercase" htmlFor=id>
-      {"Filter by:" |> str}
+      {t("filter_input_label") |> str}
     </label>
     <MultiselectDropdown
       unselected={unselected(tags, levels, filter, searchInput)}
@@ -138,7 +140,7 @@ let make = (~filter, ~updateFilterCB, ~tags, ~levels) => {
       value=searchInput
       onChange={updateSearchInput(setSearchInput)}
       id
-      placeholder="Type name, tag or level"
+      placeholder={t("filter_input_placeholder")}
     />
   </div>;
 };

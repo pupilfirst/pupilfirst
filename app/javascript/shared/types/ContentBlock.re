@@ -168,10 +168,10 @@ let makeFromJs = js => {
 
 let blockTypeAsString = blockType =>
   switch (blockType) {
-  | Markdown(_markdown) => "markdown"
-  | File(_url, _title, _filename) => "file"
-  | Image(_url, _caption, _width) => "image"
-  | Embed(_url, _embedCode, _requestSource, _lastResolvedAt) => "embed"
+  | Markdown(_) => "markdown"
+  | File(_) => "file"
+  | Image(_) => "image"
+  | Embed(_) => "embed"
   };
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1};

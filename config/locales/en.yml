@@ -114,7 +114,24 @@ en:
       level_up_limited_description: "You're at Level %{currentLevel}, but you have targets in the Level %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up."
       level_up_title: Ready to Level Up!
       level_up_description: Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!
-
+    StudentsEditor__ActionsForm:
+      certificates_label: Course Certificates
+      empty_course_certificates_text: This course does not have any certificates to issue.
+      empty_issued_certificates_text: This student has not been issued any certificates.
+      issued_certificates_label: "Issued certificates:"
+      issued_date_label: "Issued on:"
+      issued_by_label: "Issued by:"
+      revoked_date_label: "Revoked on:"
+      revoked_by_label: "Revoked by:"
+      revoked_status_label: Revoked
+      new_certificate_label: "Issue new certificate:"
+      select_certificate_input_label: Select a certificate to issue
+      issue_certificate_button: Issue Certificate
+      revoke_certificate_button: Revoke Certificate
+      dropout_student_label: Has this student dropped out?
+      dropout_button: Dropout Student
+      revoke_certificate_confirmation: Are you sure? This action cannot be undone.
+      active_label: Active
   jobs:
     timeline_events:
       verification_notification:
@@ -168,11 +185,17 @@ en:
       success_notification: Certificate details have been updated.
     delete_certificate:
       success_notification: Certificate has been deleted.
+    revoke_issued_certificate:
+      success_notification: Certificate revoked!
+    issue_certificate:
+      success_notification: Certificate issued successfully!
 
   queries:
     delete_certificate_mutator:
       issued_error: This certificate has been issued to one or more students - it cannot be deleted.
-
+    issue_certificate_mutator:
+      issued_error: This student has already been issued a certificate for this course.
+      certificate_error: The specified certificate could not be found.
   shared:
     optional: optional
     done_exclamation: Done!

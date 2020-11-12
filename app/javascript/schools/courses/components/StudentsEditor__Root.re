@@ -25,6 +25,7 @@ type action =
   | SelectStudent(SelectedStudent.t)
   | DeselectStudent(string)
   | UpdateFormVisible(formVisible)
+  | UpdateStudentCertification(Student.t, Team.t)
   | UpdateTeams(Page.t)
   | UpdateFilter(Filter.t)
   | RefreshData(tags)
@@ -109,6 +110,11 @@ let reducer = (state, action) =>
       selectedStudents: [||],
     }
   | SetLoading(loading) => {...state, loading}
+  | UpdateStudentCertification(updatedStudent, team) =>
+    let updatedTeam = Team.updateStudent(team, updatedStudent);
+    let pagedTeams = Page.updateTeam(updatedTeam, state.pagedTeams);
+    let teamId = Team.id(team);
+    {...state, pagedTeams, formVisible: UpdateForm(updatedStudent, teamId)};
   };
 
 let selectStudent = (send, student, team) => {
@@ -175,7 +181,16 @@ let reloadTeams = (send, ()) => send(RefreshData([||]));
 let setLoading = (send, loading) => send(SetLoading(loading));
 
 [@react.component]
-let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) => {
+let make =
+    (
+      ~courseId,
+      ~courseCoachIds,
+      ~schoolCoaches,
+      ~levels,
+      ~studentTags,
+      ~certificates,
+      ~currentUserName,
+    ) => {
   let (state, send) = React.useReducer(reducer, initialState(studentTags));
 
   <div className="flex flex-1 flex-col">
@@ -205,9 +220,14 @@ let make = (~courseId, ~courseCoachIds, ~schoolCoaches, ~levels, ~studentTags) =
            student
            team
            teamTags={state.tags}
+           currentUserName
            courseCoaches
+           certificates
            updateFormCB={updateForm(send)}
            reloadTeamsCB={reloadTeams(send)}
+           updateStudentCertificationCB={updatedStudent =>
+             send(UpdateStudentCertification(updatedStudent, team))
+           }
          />
        </SchoolAdmin__EditorDrawer>;
      }}

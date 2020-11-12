@@ -16,7 +16,7 @@ class SubmissionsResolver < ApplicationQuery
   def authorized?
     return false if current_user.faculty.blank?
 
-    current_user.faculty.courses.where(id: course).exists?
+    current_user.faculty.courses.exists?(id: course)
   end
 
   def sort_direction_string

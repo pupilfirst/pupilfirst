@@ -92,3 +92,17 @@ let unsafeFind = (teams, componentName, teamId) => {
 
 let active = t =>
   t.accessEndsAt->Belt.Option.mapWithDefault(true, DateFns.isFuture);
+
+let updateStudent = (t, student) => {
+  {
+    ...t,
+    students:
+      Js.Array.map(
+        s =>
+          StudentsEditor__Student.id(student)
+          == StudentsEditor__Student.id(s)
+            ? student : s,
+        t.students,
+      ),
+  };
+};

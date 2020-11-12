@@ -63,7 +63,7 @@ class StudentDetailsResolver < ApplicationQuery
 
     return true if current_user.id == student.user_id
 
-    current_user.faculty.present? && current_user.faculty.courses.where(id: student.course).exists?
+    current_user.faculty.present? && current_user.faculty.courses.exists?(id: student.course)
   end
 
   def levels

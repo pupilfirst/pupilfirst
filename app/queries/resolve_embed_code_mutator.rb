@@ -56,6 +56,10 @@ class ResolveEmbedCodeMutator < ApplicationQuery
   end
 
   def resource_school
-    content_block&.target_version&.target&.course&.school
+    course&.school
+  end
+
+  def course
+    content_block&.target_version&.target&.course
   end
 end

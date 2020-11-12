@@ -2,7 +2,7 @@ class HasArchivedCoachNotesResolver < ApplicationQuery
   property :student_id
 
   def has_archived_coach_notes # rubocop:disable Naming/PredicateName
-    CoachNote.archived.where(student_id: student.id).exists?
+    CoachNote.archived.exists?(student_id: student.id)
   end
 
   private
@@ -10,7 +10,7 @@ class HasArchivedCoachNotesResolver < ApplicationQuery
   def authorized?
     return false if current_user.blank?
 
-    current_user.faculty.courses.where(id: student&.course).exists?
+    current_user.faculty.courses.exists?(id: student&.course)
   end
 
   def student

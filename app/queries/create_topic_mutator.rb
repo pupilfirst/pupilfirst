@@ -53,6 +53,6 @@ class CreateTopicMutator < ApplicationQuery
   def target_accessible?(some_target)
     current_school_admin.present? ||
       current_user.faculty.present? ||
-      current_user.founders.joins(:course).where(courses: { id: some_target.course.id }).exists?
+      current_user.founders.joins(:course).exists?(courses: { id: some_target.course.id })
   end
 end

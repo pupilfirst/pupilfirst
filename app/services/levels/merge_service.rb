@@ -25,7 +25,7 @@ module Levels
     end
 
     def minimum_level_number
-      course.levels.where(number: 0).exists? ? 0 : 1
+      course.levels.exists?(number: 0) ? 0 : 1
     end
 
     def course

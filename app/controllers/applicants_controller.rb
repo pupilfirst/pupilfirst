@@ -18,6 +18,6 @@ class ApplicantsController < ApplicationController
 
   def valid_applicant?
     public_courses = current_school.courses.where(public_signup: true)
-    @applicant.present? && public_courses.where(id: @applicant.course_id).exists?
+    @applicant.present? && public_courses.exists?(id: @applicant.course_id)
   end
 end

@@ -14,7 +14,7 @@ class TimelineEventFilePolicy < ApplicationPolicy
     return true if current_user_coaches?(timeline_event.target.course, students)
 
     # Team members linked directly to the submission can access attached files.
-    students.where(user_id: user&.id).exists?
+    students.exists?(user_id: user&.id)
   end
 
   def create?
@@ -33,12 +33,12 @@ class TimelineEventFilePolicy < ApplicationPolicy
     return false if current_coach.blank?
 
     # Current user is a coach if zhe has been linked as reviewer to entire course holding this TEF.
-    return true if current_coach.courses.where(id: course).exists?
+    return true if current_coach.courses.exists?(id: course)
 
     startups = Startup.joins(:founders).where(founders: { id: founders })
 
     # Current user is a coach if zhe has been linked as reviewer directly to any startup that TE founders are currently
     # a part of.
-    current_coach.startups.where(id: startups).exists?
+    current_coach.startups.exists?(id: startups)
   end
 end

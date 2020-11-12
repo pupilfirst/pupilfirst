@@ -39,16 +39,6 @@ let widthToClass = width =>
   | TwoFifths => "w-2/5"
   };
 
-let widthFromClass = widthClass =>
-  switch (widthClass) {
-  | "w-auto" => Auto
-  | "w-full" => Full
-  | "w-4/5" => FourFifths
-  | "w-3/5" => ThreeFifths
-  | "w-2/5" => TwoFifths
-  | _ => Auto
-  };
-
 let decodeMarkdownContent = json =>
   Json.Decode.(json |> field("markdown", string));
 let decodeFileContent = json => Json.Decode.(json |> field("title", string));

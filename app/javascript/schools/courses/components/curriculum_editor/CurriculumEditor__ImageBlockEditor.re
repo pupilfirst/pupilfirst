@@ -18,6 +18,44 @@ let onChangeWidth = (contentBlock, updateContentBlockCB, event) => {
   updateContentBlockCB(newContentBlock);
 };
 
+let imageResizeButton = (~width, ~currentWidth) => {
+  let active = width == currentWidth;
+
+  let defaultClasses = "rounded-l flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 hover:text-green-400 transition duration-500 ease-in-out";
+
+  let classes =
+    defaultClasses ++ (active ? " bg-primary-900 text-green-500" : "");
+
+  let iconClass =
+    switch (width) {
+    | ContentBlock.Auto => "i-image-auto"
+    | Full => "i-image-fill-width"
+    | FourFifths => "i-image-inset-80"
+    | ThreeFifths => "i-image-inset-60"
+    | TwoFifths => "i-image-inset-40"
+    };
+
+  <button className=classes>
+    <Icon className={"if text-lg " ++ iconClass} />
+  </button>;
+};
+
+let imageResizePanel = currentWidth =>
+  <div
+    className="image-block-editor__image-resize-panel flex justify-center absolute w-full top-0 opacity-0 transform translate-y-0 transition duration-500 ease-in-out">
+    <div
+      className="image-block-editor__image-resize-panel-box mx-auto rounded shadow-lg h-full">
+      <div
+        className="grid grid-cols-5 place-items-center text-white text-center">
+        {imageResizeButton(~width=ContentBlock.Full, ~currentWidth)}
+        {imageResizeButton(~width=ContentBlock.FourFifths, ~currentWidth)}
+        {imageResizeButton(~width=ContentBlock.Auto, ~currentWidth)}
+        {imageResizeButton(~width=ContentBlock.ThreeFifths, ~currentWidth)}
+        {imageResizeButton(~width=ContentBlock.TwoFifths, ~currentWidth)}
+      </div>
+    </div>
+  </div>;
+
 [@react.component]
 let make = (~url, ~caption, ~contentBlock, ~updateContentBlockCB, ~width) => {
   let captionInputId = "caption-" ++ (contentBlock |> ContentBlock.id);
@@ -29,45 +67,7 @@ let make = (~url, ~caption, ~contentBlock, ~updateContentBlockCB, ~width) => {
       className="content-block__content text-base bg-gray-200 flex justify-center items-center rounded-t-lg">
       <div className="w-full">
         <div className="rounded-t-lg bg-white relative">
-          <div
-            className="image-block-editor__image-resize-panel flex justify-center absolute w-full top-0 opacity-0 transform translate-y-0 transition duration-500 ease-in-out">
-            <div
-              className="image-block-editor__image-resize-panel-box mx-auto rounded shadow-lg h-full">
-              <ul
-                className="grid grid-cols-5 place-items-center text-white text-center">
-                <li>
-                  <button
-                    className="rounded-l flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
-                    <Icon className="if i-image-fill-width text-lg" />
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
-                    <Icon className="if i-image-inset-80 text-lg" />
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
-                    <Icon className="if i-image-auto text-lg" />
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
-                    <Icon className="if i-image-inset-60 text-lg" />
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="rounded-r flex justify-center items-center px-4 py-2 h-full w-full hover:bg-primary-900 focus:bg-primary-900 active:bg-primary-900 hover:text-green-400 focus:text-green-400 active:text-green-500 transition duration-500 ease-in-out">
-                    <Icon className="if i-image-inset-40 text-xl" />
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
+          {imageResizePanel(width)}
           <img
             className={"mx-auto w-auto md:" ++ widthClass}
             src=url

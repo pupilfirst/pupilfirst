@@ -339,6 +339,7 @@ let topicsList = (topicCategories, topics) => {
                       }}
                      {ReactUtils.nullUnless(
                         <span
+                          ariaLabel="Solved status icon"
                           className="flex items-center justify-center w-5 h-5 bg-green-200 text-green-800 rounded-full">
                           <PfIcon className="if i-check-solid text-xs" />
                         </span>,

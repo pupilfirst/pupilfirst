@@ -82,6 +82,7 @@ module TopicsQuery = [%graphql
           liveRepliesCount
           views
           title
+          solved
           topicCategoryId
           participantsCount
           participants {
@@ -255,7 +256,7 @@ let topicsList = (topicCategories, topics) => {
                        </span>
                      </span>
                    </span>
-                   <span className="flex flex-row flex-wrap mt-2">
+                   <span className="flex flex-row flex-wrap mt-2 items-center">
                      <span
                        className="flex text-center items-center mr-2 py-1 px-2 rounded bg-gray-200"
                        ariaLabel="Likes">
@@ -336,6 +337,13 @@ let topicsList = (topicCategories, topics) => {
                         </span>;
                       | None => React.null
                       }}
+                     {ReactUtils.nullUnless(
+                        <span
+                          className="flex items-center justify-center w-5 h-5 bg-green-200 text-green-800 rounded-full">
+                          <PfIcon className="if i-check-solid text-xs" />
+                        </span>,
+                        Topic.solved(topic),
+                      )}
                    </span>
                  </div>
                </div>

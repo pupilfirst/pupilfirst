@@ -66,9 +66,7 @@ To see a live preview of the content you're creating in the editor, choose the s
 If you're unfamiliar with the Markdown format, or to brush up on how to use Markdown to quickly and effectively format text, click on the _Need help?_ link at the bottom right of the editor. It'll take you to documentation served within the platform which details everything you can do with Markdown.
 
 **Image**\
-The image block accepts an image file and a caption and displays it, center with the other content.
-
-?> We're working on improving this feature to let you to decide sizing of the image.
+The image block accepts an image file and a caption and displays it, centered with the other content. You can also customize the width of the displayed image by hovering over the image and choosing one of the available options.
 
 **Embed**\
 The embed function allows you to embed content from third-party websites - all you need to do is supply the full link of the resource that you're trying to embed, and it'll get converted into its embedded format automatically.

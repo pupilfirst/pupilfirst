@@ -28,9 +28,13 @@ let fileContentBlock = (url, title, filename) =>
     <div> <FaIcon classes="text-2xl fas fa-download" /> </div>
   </a>;
 
-let imageContentBlock = (url, caption) =>
+let imageContentBlock = (url, caption, width) =>
   <div className="rounded-lg bg-white text-center">
-    <img className="mx-auto" src=url alt=caption />
+    <img
+      className={"mx-auto w-auto md:" ++ ContentBlock.widthToClass(width)}
+      src=url
+      alt=caption
+    />
     <div className="px-4 py-2 text-sm italic"> {caption |> str} </div>
   </div>;
 
@@ -51,7 +55,8 @@ let make = (~contentBlocks) =>
             | Markdown(markdown) => markdownContentBlock(markdown)
             | File(url, title, filename) =>
               fileContentBlock(url, title, filename)
-            | Image(url, caption) => imageContentBlock(url, caption)
+            | Image(url, caption, width) =>
+              imageContentBlock(url, caption, width)
             | Embed(_url, embedCode, _requestType, _lastResolvedAt) =>
               embedCode->Belt.Option.mapWithDefault(React.null, code =>
                 embedContentBlock(code)

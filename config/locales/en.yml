@@ -114,6 +114,13 @@ en:
       level_up_limited_description: "You're at Level %{currentLevel}, but you have targets in the Level %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up."
       level_up_title: Ready to Level Up!
       level_up_description: Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!
+    CurriculumEditor__ImageBlockEditor:
+      resize_panel_button_title:
+        auto: Automatic width
+        full: Full width
+        four_fifths: Four-fifths width
+        three_fifths: Three-fifths width
+        two_fifths: Two-fifths width
     StudentsEditor__ActionsForm:
       certificates_label: Course Certificates
       empty_course_certificates_text: This course does not have any certificates to issue.

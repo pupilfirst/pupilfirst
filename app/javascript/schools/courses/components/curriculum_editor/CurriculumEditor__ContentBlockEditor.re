@@ -78,8 +78,8 @@ module UpdateMarkdownBlockMutation = [%graphql
 
 module UpdateImageBlockMutation = [%graphql
   {|
-    mutation UpdateImageBlockMutation($id: ID!, $caption: String!) {
-      updateImageBlock(id: $id, caption: $caption) {
+    mutation UpdateImageBlockMutation($id: ID!, $caption: String!, $width:ImageWidth! ) {
+      updateImageBlock(id: $id, caption: $caption, width:$width) {
         contentBlock {
           ...ContentBlock.Fragments.AllFields
         }
@@ -208,8 +208,17 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
       setDirtyCB,
       send,
     );
-  | Image(_url, caption) =>
-    let mutation = UpdateImageBlockMutation.make(~id, ~caption, ());
+  | Image(_url, caption, imageWidth) =>
+    let width =
+      switch (imageWidth) {
+      | ContentBlock.Auto => `Auto
+      | Full => `Full
+      | FourFifths => `FourFifths
+      | ThreeFifths => `ThreeFifths
+      | TwoFifths => `TwoFifths
+      };
+
+    let mutation = UpdateImageBlockMutation.make(~id, ~caption, ~width, ());
     let extractor = result => result##updateImageBlock##contentBlock;
 
     updateContentBlockBlock(
@@ -266,8 +275,9 @@ let innerEditor =
       contentBlock
       updateContentBlockCB
     />
-  | Image(url, caption) =>
+  | Image(url, caption, width) =>
     <CurriculumEditor__ImageBlockEditor
+      width
       url
       caption
       contentBlock

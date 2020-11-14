@@ -57,11 +57,6 @@ class Faculty < ApplicationRecord
 
   normalize_attribute :connect_link
 
-  # This method sets the label used for object by Active Admin.
-  def display_name
-    name
-  end
-
   # Returns completed connect requests.
   def past_connect_requests
     connect_requests.completed.order('connect_slots.slot_at DESC')

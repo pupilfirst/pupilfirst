@@ -12,7 +12,6 @@
 //= require xdan_datetimepicker
 
 //= require moment
-//= require select2-full
 //= require video
 //= require jquery.scrollTo
 //= require jquery-stickit
@@ -37,4 +36,3 @@
 
 // Controller-specific
 //= require faculty
-//= require resources

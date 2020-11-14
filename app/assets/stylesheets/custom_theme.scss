@@ -361,71 +361,6 @@ p {
   padding-bottom: 10px;
 }
 
-form {
-  .form-group {
-    .form-control-label {
-      padding-top: 7px;
-      display: block;
-    }
-
-    select {
-      appearance: none;
-      position: relative;
-      background: asset-url("shared/arrow-down.svg") no-repeat calc(100% - 12px);
-      background-color: white;
-      background-size: 10px 10px;
-      color: $light-grey-text;
-      font-weight: $font-regular;
-      text-shadow: 0 0 0 #000;
-    }
-
-    .select2-selection {
-      border-color: $gray-border;
-      min-height: 2rem;
-    }
-
-    .radio,
-    .radio-inline {
-      padding-top: 7px;
-      margin-right: 20px;
-
-      input {
-        margin-right: 8px;
-      }
-    }
-    .form-control {
-      font-size: 0.875rem;
-      padding: 0.5rem 0.75rem;
-      line-height: normal;
-
-      &:focus {
-        border-color: lighten($light-secondary, 20%);
-      }
-    }
-    &:before,
-    &:after {
-      content: " ";
-      display: table;
-    }
-    &:after {
-      clear: both;
-    }
-    @include media-breakpoint-down(xs) {
-      margin-bottom: 1rem;
-    }
-  }
-  .simple-form-submit {
-    margin-left: 15px;
-
-    @include media-breakpoint-down(sm) {
-      margin-left: 0;
-    }
-  }
-  abbr[title="required"] {
-    display: none;
-  }
-}
-
 .content-head {
   position: relative;
   padding-top: 40px;
@@ -509,9 +444,7 @@ form {
 .read-more-link {
   text-transform: uppercase;
   font-weight: $font-semibold;
-  text-align: center;
   display: inline-block;
-  position: relative;
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0) 0%,
@@ -593,7 +526,7 @@ form {
   align-items: center;
 
   &:before {
-    font-family: "FontAwesome";
+    font-family: "FontAwesome", sans-serif;
     font-size: 2.125rem;
     margin-right: 15px;
   }

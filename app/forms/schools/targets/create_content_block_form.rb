@@ -24,7 +24,7 @@ module Schools
           block_type: block_type,
           content: content(block_type),
           file: file,
-          sort_index: sort_index
+          sort_index: sort_index,
         )
       end
 
@@ -32,12 +32,12 @@ module Schools
         filename = file.original_filename
 
         case block_type
-          when 'image'
-            { caption: filename }
-          when 'file'
-            { title: filename }
-          else
-            raise "Unexpected block type #{block_type} encountered when creating file-based content block for target with ID #{target_id}"
+        when 'image'
+          { caption: filename, width: 'Auto' }
+        when 'file'
+          { title: filename }
+        else
+          raise "Unexpected block type #{block_type} encountered when creating file-based content block for target with ID #{target_id}"
         end
       end
 
@@ -59,20 +59,20 @@ module Schools
 
       def above_content_block
         @above_content_block ||= begin
-          target.content_blocks.find_by(id: above_content_block_id) if above_content_block_id.present?
-        end
+            target.content_blocks.find_by(id: above_content_block_id) if above_content_block_id.present?
+          end
       end
 
       def sort_index
         @sort_index ||= begin
-          if above_content_block.present?
-            # Put at the same position as 'above_content_block'.
-            above_content_block.sort_index
-          else
-            # Put at the bottom.
-            content_blocks.maximum(:sort_index) + 1
+            if above_content_block.present?
+              # Put at the same position as 'above_content_block'.
+              above_content_block.sort_index
+            else
+              # Put at the bottom.
+              content_blocks.maximum(:sort_index) + 1
+            end
           end
-        end
       end
 
       def content_blocks
@@ -92,7 +92,7 @@ module Schools
         if content_block.file.attached?
           attributes.merge(
             fileUrl: Rails.application.routes.url_helpers.rails_blob_path(content_block.file, only_path: true),
-            filename: content_block.file.filename.to_s
+            filename: content_block.file.filename.to_s,
           )
         else
           attributes

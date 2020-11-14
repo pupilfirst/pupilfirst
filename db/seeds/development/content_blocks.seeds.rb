@@ -17,7 +17,7 @@ after 'development:targets' do
       target_version = target.target_versions.create!
       embed = embed_codes.sample
       target_version.content_blocks.create!(block_type: 'markdown', content: { markdown: Faker::Markdown.sandwich(sentences: 6, repeat: 3) }, sort_index: 1)
-      image_cb = target_version.content_blocks.create!(block_type: 'image', content: { caption: Faker::Lorem.sentence(word_count: 3) }, sort_index: 2)
+      image_cb = target_version.content_blocks.create!(block_type: 'image', content: { caption: Faker::Lorem.sentence(word_count: 3), width: 'Auto' }, sort_index: 2)
 
       image_cb.file.attach(
         io: File.open(Rails.root.join('spec', 'support', 'uploads', 'faculty', 'jack_sparrow.png')),

@@ -43,10 +43,11 @@ feature 'Topic creator', js: true do
     let!(:category_1) { create :topic_category, community: community }
     let!(:category_2) { create :topic_category, community: community }
 
-    scenario 'users selects a category while creating a topi' do
+    scenario 'users selects a category while creating a topic' do
       sign_in_user(student.user, referrer: new_topic_community_path(community))
 
-      fill_in('Title', with: 'a new title')
+      topic_title = Faker::Lorem.sentence
+      fill_in('Title', with: topic_title)
       select category_2.name, from: 'topic_category'
       add_markdown 'topic body'
 
@@ -56,7 +57,7 @@ feature 'Topic creator', js: true do
         expect(page).to have_text(category_2.name)
       end
 
-      new_topic = community.topics.reload.last
+      new_topic = community.topics.find_by(title: topic_title)
 
       expect(new_topic.topic_category).to eq(category_2)
     end

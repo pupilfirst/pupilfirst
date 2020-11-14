@@ -10,10 +10,17 @@ type filename = string;
 type requestSource = [ | `User | `VimeoUpload];
 type lastResolvedAt = option(Js.Date.t);
 
+type width =
+  | Auto
+  | Full
+  | FourFifths
+  | ThreeFifths
+  | TwoFifths;
+
 type blockType =
   | Markdown(markdown)
   | File(url, title, filename)
-  | Image(url, caption)
+  | Image(url, caption, width)
   | Embed(url, embedCode, requestSource, lastResolvedAt);
 
 type t = {
@@ -23,12 +30,38 @@ type t = {
 }
 and id = string;
 
+let widthToClass = width =>
+  switch (width) {
+  | Auto => "w-auto"
+  | Full => "w-full"
+  | FourFifths => "w-4/5"
+  | ThreeFifths => "w-3/5"
+  | TwoFifths => "w-2/5"
+  };
+
 let decodeMarkdownContent = json =>
   Json.Decode.(json |> field("markdown", string));
 let decodeFileContent = json => Json.Decode.(json |> field("title", string));
 
-let decodeImageContent = json =>
-  Json.Decode.(json |> field("caption", string));
+let decodeImageContent = json => {
+  let widthString = Json.Decode.(field("width", string, json));
+
+  let width =
+    switch (widthString) {
+    | "Auto" => Auto
+    | "Full" => Full
+    | "FourFifths" => FourFifths
+    | "ThreeFifths" => ThreeFifths
+    | "TwoFifths" => TwoFifths
+    | otherWidth =>
+      Rollbar.error(
+        "Encountered unexpected width for image content block: " ++ otherWidth,
+      );
+      Auto;
+    };
+
+  (Json.Decode.(json |> field("caption", string)), width);
+};
 
 let decodeEmbedContent = json => {
   let requestSourceString =
@@ -66,9 +99,9 @@ let decode = json => {
       let filename = json |> field("filename", string);
       File(url, title, filename);
     | "image" =>
-      let caption = json |> field("content", decodeImageContent);
+      let (caption, width) = json |> field("content", decodeImageContent);
       let url = json |> field("fileUrl", string);
-      Image(url, caption);
+      Image(url, caption, width);
     | "embed" =>
       let (url, embedCode, requestSource, lastResolvedAt) =
         json |> field("content", decodeEmbedContent);
@@ -91,7 +124,8 @@ let blockType = t => t.blockType;
 let sortIndex = t => t.sortIndex;
 
 let makeMarkdownBlock = markdown => Markdown(markdown);
-let makeImageBlock = (fileUrl, caption) => Image(fileUrl, caption);
+let makeImageBlock = (fileUrl, caption, width) =>
+  Image(fileUrl, caption, width);
 let makeFileBlock = (fileUrl, title, fileName) =>
   File(fileUrl, title, fileName);
 let makeEmbedBlock = (url, embedCode, requestSource, lastResolvedAt) =>
@@ -107,7 +141,18 @@ let makeFromJs = js => {
     | `MarkdownBlock(content) => Markdown(content##markdown)
     | `FileBlock(content) =>
       File(content##url, content##title, content##filename)
-    | `ImageBlock(content) => Image(content##url, content##caption)
+    | `ImageBlock(content) =>
+      Image(
+        content##url,
+        content##caption,
+        switch (content##width) {
+        | `Auto => Auto
+        | `Full => Full
+        | `FourFifths => FourFifths
+        | `ThreeFifths => ThreeFifths
+        | `TwoFifths => TwoFifths
+        },
+      )
     | `EmbedBlock(content) =>
       Embed(
         content##url,
@@ -122,10 +167,10 @@ let makeFromJs = js => {
 
 let blockTypeAsString = blockType =>
   switch (blockType) {
-  | Markdown(_markdown) => "markdown"
-  | File(_url, _title, _filename) => "file"
-  | Image(_url, _caption) => "image"
-  | Embed(_url, _embedCode, _requestSource, _lastResolvedAt) => "embed"
+  | Markdown(_) => "markdown"
+  | File(_) => "file"
+  | Image(_) => "image"
+  | Embed(_) => "embed"
   };
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1};
@@ -156,9 +201,17 @@ let updateFile = (title, t) =>
   | Embed(_) => t
   };
 
-let updateImage = (caption, t) =>
+let updateImageCaption = (t, caption) =>
   switch (t.blockType) {
-  | Image(url, _) => {...t, blockType: Image(url, caption)}
+  | Image(url, _, width) => {...t, blockType: Image(url, caption, width)}
+  | Markdown(_)
+  | File(_)
+  | Embed(_) => t
+  };
+
+let updateImageWidth = (t, width) =>
+  switch (t.blockType) {
+  | Image(url, caption, _) => {...t, blockType: Image(url, caption, width)}
   | Markdown(_)
   | File(_)
   | Embed(_) => t
@@ -183,6 +236,7 @@ module Fragments = [%graphql
         caption
         url
         filename
+        width
       }
       ... on FileBlock {
         title
@@ -215,6 +269,7 @@ module Query = [%graphql
             caption
             url
             filename
+            width
           }
           ... on FileBlock {
             title

@@ -1,0 +1,11 @@
+.image-block-editor__container {
+  @apply relative border border-gray-400 rounded-lg;
+}
+
+.image-block-editor__container:hover .image-block-editor__image-resize-panel, .image-block-editor__conatiner:active .image-block-editor__image-resize-panel {
+  @apply opacity-100 translate-y-3;
+}
+
+.image-block-editor__image-resize-panel-box {
+  background-color: rgba(31, 13, 66, 0.75);
+}

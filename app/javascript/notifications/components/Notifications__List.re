@@ -225,8 +225,8 @@ let computeInitialState = () => {
 
 let entriesList = (caption, entries, send) => {
   <div>
-    <div className="font-bold text-xl"> {str(caption)} </div>
-    <div className="space-y-2 mt-2">
+    <div className="text-xs text-gray-800 px-4 lg:px-8"> {str(caption)} </div>
+    <div>
       {entries |> ArrayUtils.isEmpty
          ? <div
              className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
@@ -421,7 +421,7 @@ let showEntries = (entries, state, send) => {
        ArrayUtils.isEmpty(entriesToday),
      )}
     {ReactUtils.nullIf(
-       entriesList("Earlier", entriesToday, send),
+       entriesList("Earlier", entriesEarlier, send),
        ArrayUtils.isEmpty(entriesEarlier),
      )}
     <div className="text-center">
@@ -443,10 +443,11 @@ let make = () => {
   );
 
   <div>
-    <div className="mt-4 px-6">
-      <div className="font-bold text-2xl"> {str("Notification")} </div>
+    <div className="pt-4 px-4 lg:px-8 bg-gray-100">
+      <div className="font-bold text-xl"> {str("Notifications")} </div>
     </div>
-    <div className="w-full sticky top-0 z-30 mt-2 px-6 bg-white py-2">
+    <div
+      className="w-full bg-gray-100 border-b sticky top-0 z-30 px-4 lg:px-8 py-3">
       <label
         className="block text-tiny font-semibold uppercase pl-px text-left">
         {t("filter.input_label")->str}
@@ -462,28 +463,37 @@ let make = () => {
         placeholder={t("filter.input_placeholder")}
       />
     </div>
-    <div id="entries" className="mt-4 px-6">
+    <div id="entries" className="mt-4">
       {switch (state.entries) {
        | Unloaded =>
-         SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())
+         <div className="px-2 lg:px-8">
+           {SkeletonLoading.multiple(
+              ~count=10,
+              ~element=SkeletonLoading.card(),
+            )}
+         </div>
        | PartiallyLoaded(entries, cursor) =>
          <div>
            {showEntries(entries, state, send)}
            {switch (state.loading) {
             | LoadingMore =>
-              SkeletonLoading.multiple(
-                ~count=3,
-                ~element=SkeletonLoading.card(),
-              )
+              <div className="px-2 lg:px-8">
+                {SkeletonLoading.multiple(
+                   ~count=3,
+                   ~element=SkeletonLoading.card(),
+                 )}
+              </div>
             | NotLoading =>
-              <button
-                className="btn btn-primary-ghost cursor-pointer w-full mt-4"
-                onClick={_ => {
-                  send(BeginLoadingMore);
-                  getEntries(send, Some(cursor), state.filter);
-                }}>
-                {t("button_load_more") |> str}
-              </button>
+              <div className="px-4 lg:px-8 pb-6 mt-2">
+                <button
+                  className="btn btn-primary-ghost cursor-pointer w-full"
+                  onClick={_ => {
+                    send(BeginLoadingMore);
+                    getEntries(send, Some(cursor), state.filter);
+                  }}>
+                  {t("button_load_more") |> str}
+                </button>
+              </div>
             | Reloading => React.null
             }}
          </div>

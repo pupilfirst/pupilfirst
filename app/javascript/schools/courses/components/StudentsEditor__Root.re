@@ -64,7 +64,7 @@ let teamUp = (selectedStudents, responseCB) => {
 let initialState = tags => {
   pagedTeams: Unloaded,
   selectedStudents: [||],
-  filter: Filter.initialize(),
+  filter: Filter.make(),
   formVisible: None,
   tags,
   loading: Loading.NotLoading,

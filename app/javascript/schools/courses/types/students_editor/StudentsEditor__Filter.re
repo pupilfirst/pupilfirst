@@ -23,7 +23,7 @@ let sortBy = t => t.sortBy;
 
 let sortDirection = t => t.sortDirection;
 
-let initialize = () => {
+let make = () => {
   searchString: None,
   tags: [||],
   levelId: None,
@@ -68,14 +68,6 @@ let sortByTitle = sortBy => {
   | Name => "Name"
   | CreatedAt => "Last Created"
   | UpdatedAt => "Last Updated"
-  };
-};
-
-let sortByIcon = sortBy => {
-  switch (sortBy) {
-  | Name => "if i-sort-alpha-down-solid text-sm if-fw text-gray-700"
-  | CreatedAt => "if i-clock-regular text-sm if-fw text-gray-700"
-  | UpdatedAt => "if i-user-check-regular text-sm if-fw text-gray-700"
   };
 };
 

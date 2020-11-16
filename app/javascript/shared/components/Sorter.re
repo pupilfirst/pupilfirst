@@ -41,8 +41,8 @@ module Make = (Sortable: Sortable) => {
     switch (criterionType, direction) {
     | (`String, `Ascending) => "if i-sort-alpha-ascending-regular w-4 if-fw"
     | (`String, `Descending) => "if i-sort-alpha-descending-regular w-4 if-fw"
-    | (`Number, `Ascending) => "if i-sort-numeric-up-regular w-4 if-fw"
-    | (`Number, `Descending) => "if i-sort-numeric-down-regular w-4 if-fw"
+    | (`Number, `Ascending) => "if i-sort-numeric-ascending-regular w-4 if-fw"
+    | (`Number, `Descending) => "if i-sort-numeric-descending-regular w-4 if-fw"
     };
   };
 

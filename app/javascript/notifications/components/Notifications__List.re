@@ -223,7 +223,7 @@ let computeInitialState = () => {
   totalEntriesCount: 0,
 };
 
-let entriesList = (caption, entries, send) => {
+let entriesList = (caption, entries, showTime, send) => {
   <div>
     <div className="text-xs text-gray-800 px-4 lg:px-8"> {str(caption)} </div>
     <div>
@@ -239,8 +239,10 @@ let entriesList = (caption, entries, send) => {
          : entries
            |> Js.Array.map(entry =>
                 <Notifications__EntryCard
+                  key={Entry.id(entry)}
                   entry
                   markNotificationCB={markNotification(send)}
+                  showTime
                 />
               )
            |> React.array}
@@ -417,11 +419,11 @@ let showEntries = (entries, state, send) => {
 
   <div>
     {ReactUtils.nullIf(
-       entriesList("Today", entriesToday, send),
+       entriesList("Today", entriesToday, true, send),
        ArrayUtils.isEmpty(entriesToday),
      )}
     {ReactUtils.nullIf(
-       entriesList("Earlier", entriesEarlier, send),
+       entriesList("Earlier", entriesEarlier, false, send),
        ArrayUtils.isEmpty(entriesEarlier),
      )}
     <div className="text-center">

@@ -6,8 +6,8 @@ open StudentsEditor__Types;
 
 module CourseTeamsQuery = [%graphql
   {|
-    query CourseTeamsQuery($courseId: ID!, $levelId: ID, $search: String, $after: String, $tags: [String!], $sortBy: String!) {
-      courseTeams(courseId: $courseId, levelId: $levelId, search: $search, first: 20, after: $after, tags: $tags, sortBy: $sortBy) {
+    query CourseTeamsQuery($courseId: ID!, $levelId: ID, $search: String, $after: String, $tags: [String!], $sortBy: String!, $sortDirection: SortDirection!) {
+      courseTeams(courseId: $courseId, levelId: $levelId, search: $search, first: 20, after: $after, tags: $tags, sortBy: $sortBy, sortDirection: $sortDirection) {
         nodes {
           id,
           name,
@@ -66,10 +66,11 @@ let updateTeams = (updateTeamsCB, endCursor, hasNextPage, teams, nodes) => {
 
 let getTeams =
     (courseId, cursor, updateTeamsCB, teams, filter, setLoadingCB, loading) => {
-  let tags = filter |> Filter.tags;
-  let selectedLevelId = filter |> Filter.levelId;
-  let search = filter |> Filter.searchString;
-  let sortBy = filter |> Filter.sortByToString;
+  let tags = filter->Filter.tags;
+  let selectedLevelId = filter->Filter.levelId;
+  let search = filter->Filter.searchString;
+  let sortBy = filter->Filter.sortByToString;
+  let sortDirection = filter->Filter.sortDirection;
   setLoadingCB(loading);
   (
     switch (selectedLevelId, search, cursor) {
@@ -81,10 +82,19 @@ let getTeams =
         ~after=cursor,
         ~tags,
         ~sortBy,
+        ~sortDirection,
         (),
       )
     | (Some(levelId), Some(search), None) =>
-      CourseTeamsQuery.make(~courseId, ~levelId, ~search, ~tags, ~sortBy, ())
+      CourseTeamsQuery.make(
+        ~courseId,
+        ~levelId,
+        ~search,
+        ~tags,
+        ~sortBy,
+        ~sortDirection,
+        (),
+      )
     | (None, Some(search), Some(cursor)) =>
       CourseTeamsQuery.make(
         ~courseId,
@@ -92,6 +102,7 @@ let getTeams =
         ~after=cursor,
         ~tags,
         ~sortBy,
+        ~sortDirection,
         (),
       )
     | (Some(levelId), None, Some(cursor)) =>
@@ -101,16 +112,38 @@ let getTeams =
         ~after=cursor,
         ~tags,
         ~sortBy,
+        ~sortDirection,
         (),
       )
     | (Some(levelId), None, None) =>
-      CourseTeamsQuery.make(~courseId, ~levelId, ~tags, ~sortBy, ())
+      CourseTeamsQuery.make(
+        ~courseId,
+        ~levelId,
+        ~tags,
+        ~sortBy,
+        ~sortDirection,
+        (),
+      )
     | (None, Some(search), None) =>
-      CourseTeamsQuery.make(~courseId, ~search, ~tags, ~sortBy, ())
+      CourseTeamsQuery.make(
+        ~courseId,
+        ~search,
+        ~tags,
+        ~sortBy,
+        ~sortDirection,
+        (),
+      )
     | (None, None, Some(cursor)) =>
-      CourseTeamsQuery.make(~courseId, ~after=cursor, ~tags, ~sortBy, ())
+      CourseTeamsQuery.make(
+        ~courseId,
+        ~after=cursor,
+        ~tags,
+        ~sortBy,
+        ~sortDirection,
+        (),
+      )
     | (None, None, None) =>
-      CourseTeamsQuery.make(~courseId, ~tags, ~sortBy, ())
+      CourseTeamsQuery.make(~courseId, ~tags, ~sortBy, ~sortDirection, ())
     }
   )
   |> GraphqlQuery.sendQuery

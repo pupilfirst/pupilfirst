@@ -13,6 +13,7 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :participants, [Types::UserType], null: false
     field :participants_count, Int, null: false
+    field :solved, Boolean, null: false
 
     def creator
       BatchLoader::GraphQL.for(object.id).batch do |topic_ids, loader|
@@ -22,6 +23,16 @@ module Types
       end
 
       # object.first_post.creator
+    end
+
+    def solved
+      BatchLoader::GraphQL.for(object.id).batch(default_value: false) do |topic_ids, loader|
+        Post.where(topic_id: topic_ids, solution: true).each do |post|
+          loader.call(post.topic_id, true)
+        end
+      end
+
+      # object.posts.where(solution: true).exists?
     end
 
     def likes_count

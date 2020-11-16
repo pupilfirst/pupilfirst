@@ -15,10 +15,10 @@ let eventName = event => {
   };
 };
 
-module MarkNotificationQuery = [%graphql
+module MarkAllNotificationsQuery = [%graphql
   {|
-  mutation MarkNotificationMutation($notificationId: ID!) {
-    markNotification(notificationId: $notificationId)  {
+  mutation MarkAllNotificationsMutation {
+    markAllNotifications {
       success
     }
   }
@@ -36,6 +36,7 @@ type state = {
   entries: Entries.t,
   filterString: string,
   filter,
+  saving: bool,
   totalEntriesCount: int,
 };
 
@@ -50,12 +51,23 @@ type action =
   | SetStatus(status)
   | SetEvent(event)
   | ClearEvent
+  | SetSaving
+  | ClearSaving
+  | MarkAllNotifications
   | MarkNotification(string);
 
 let updateNotification = (id, notifications) => {
   notifications
   |> Js.Array.map(entry =>
        Entry.id(entry) == id ? Entry.markAsRead(entry) : entry
+     );
+};
+
+let markAllNotifications = notifications => {
+  notifications
+  |> Js.Array.map(entry =>
+       Entry.readAt(entry)->Belt.Option.isNone
+         ? Entry.markAsRead(entry) : entry
      );
 };
 
@@ -100,6 +112,8 @@ let reducer = (state, action) => {
     };
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
+  | SetSaving => {...state, saving: true}
+  | ClearSaving => {...state, saving: false}
   | MarkNotification(id) => {
       ...state,
       entries:
@@ -113,6 +127,20 @@ let reducer = (state, action) => {
       totalEntriesCount:
         state.filter.status->Belt.Option.isSome
           ? state.totalEntriesCount - 1 : state.totalEntriesCount,
+    }
+
+  | MarkAllNotifications => {
+      ...state,
+      entries:
+        switch (state.entries) {
+        | Unloaded => Unloaded
+        | PartiallyLoaded(entries, cursor) =>
+          PartiallyLoaded(markAllNotifications(entries), cursor)
+        | FullyLoaded(entries) => FullyLoaded(markAllNotifications(entries))
+        },
+      totalEntriesCount:
+        state.filter.status->Belt.Option.isSome ? 0 : state.totalEntriesCount,
+      saving: false,
     }
   | SetStatus(status) => {
       ...state,
@@ -177,6 +205,26 @@ module NotificationsQuery = [%graphql
   |}
 ];
 
+let markAllNotifications = (send, event) => {
+  event |> ReactEvent.Mouse.preventDefault;
+  send(SetSaving);
+  MarkAllNotificationsQuery.make()
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+       response##markAllNotifications##success
+         ? {
+           send(MarkAllNotifications);
+         }
+         : send(ClearSaving);
+       Js.Promise.resolve();
+     })
+  |> Js.Promise.catch(_ => {
+       send(ClearSaving);
+       Js.Promise.resolve();
+     })
+  |> ignore;
+};
+
 let getEntries = (send, cursor, filter) => {
   NotificationsQuery.make(
     ~status=?filter.status,
@@ -224,6 +272,7 @@ let computeInitialState = () => {
     status: None,
   },
   totalEntriesCount: 0,
+  saving: false,
 };
 
 let entriesList = (caption, entries, showTime, send) => {
@@ -450,6 +499,21 @@ let showEntries = (entries, state, send) => {
   </div>;
 };
 
+let markAllNotificationsButton = (state, send, entries) => {
+  let disabled =
+    Belt.Array.every(entries, e => Entry.readAt(e)->Belt.Option.isSome);
+
+  <div className="flex w-full justify-end px-4 lg:px-8 -mb-4">
+    <button
+      disabled={disabled || state.saving}
+      onClick={markAllNotifications(send)}
+      className="inline-flex items-center font-semibold p-2 md:py-1 bg-white hover:bg-gray-300 border rounded text-xs flex-shrink-0">
+      {str(t("Mark All as Read"))}
+    </button>
+  </div>
+  ->ReactUtils.nullIf(ArrayUtils.isEmpty(entries));
+};
+
 [@react.component]
 let make = () => {
   let (state, send) = React.useReducer(reducer, computeInitialState());
@@ -496,6 +560,7 @@ let make = () => {
          </div>
        | PartiallyLoaded(entries, cursor) =>
          <div>
+           {markAllNotificationsButton(state, send, entries)}
            {showEntries(entries, state, send)}
            {switch (state.loading) {
             | LoadingMore =>
@@ -520,7 +585,10 @@ let make = () => {
             }}
          </div>
        | FullyLoaded(entries) =>
-         <div> {showEntries(entries, state, send)} </div>
+         <div>
+           {markAllNotificationsButton(state, send, entries)}
+           {showEntries(entries, state, send)}
+         </div>
        }}
     </div>
     {switch (state.entries) {

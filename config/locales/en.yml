@@ -118,6 +118,7 @@ en:
       empty_notifications: "You don't have any notifications!"
       notifications_fully_loaded_text: "Showing all %{total_notifications} notifications"
       notifications_partially_loaded_text: "Showing %{loaded_notifications_count} of %{total_notifications} notifications"
+      mark_all_as_read_button: "Mark All as Read"
       filter:
         input_label: Search by title, event, read and unread
         input_placeholder: Show topics created

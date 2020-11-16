@@ -329,7 +329,7 @@ let topicsList = (topicCategories, topics) => {
                         let style =
                           ReactDOMRe.Style.make(~backgroundColor=color, ());
                         <span
-                          className="flex items-center text-xs font-semibold py-1">
+                          className="flex items-center text-xs font-semibold py-1 mr-2">
                           <div className="w-3 h-3 rounded" style />
                           <span className="ml-1">
                             {TopicCategory.name(topicCategory)->str}

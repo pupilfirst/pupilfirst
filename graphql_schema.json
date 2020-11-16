@@ -2665,12 +2665,6 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "all",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "read",
             "description": "",
             "isDeprecated": false,

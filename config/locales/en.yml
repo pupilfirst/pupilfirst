@@ -121,6 +121,7 @@ en:
       filter:
         input_label: Search by title, event, read and unread
         input_placeholder: Show topics created
+        input_hint: Search by title, event, read and unread
         label:
           title: Search by title
           status: Status

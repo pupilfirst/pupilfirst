@@ -6,7 +6,7 @@ let t = I18n.t(~scope="components.Notifications__List");
 
 type event = [ | `topic_created | `topic_edited];
 
-type status = [ | `all | `unread | `read];
+type status = [ | `unread | `read];
 
 let eventName = event => {
   switch (event) {
@@ -110,6 +110,9 @@ let reducer = (state, action) => {
         | FullyLoaded(entries) =>
           FullyLoaded(updateNotification(id, entries))
         },
+      totalEntriesCount:
+        state.filter.status->Belt.Option.isSome
+          ? state.totalEntriesCount - 1 : state.totalEntriesCount,
     }
   | SetStatus(status) => {
       ...state,
@@ -302,7 +305,6 @@ module Selectable = {
     | Status(status) =>
       let key =
         switch (status) {
-        | `all => "all"
         | `read => "read"
         | `unread => "unread"
         };
@@ -328,7 +330,6 @@ module Selectable = {
     | Title(_search) => "gray"
     | Status(status) =>
       switch (status) {
-      | `all => "yellow"
       | `read => "green"
       | `unread => "orange"
       }
@@ -353,16 +354,19 @@ let unselected = state => {
 
   let status =
     state.filter.status
-    ->Belt.Option.mapWithDefault([|`all, `read, `unread|], u =>
+    ->Belt.Option.mapWithDefault([|`read, `unread|], u =>
         switch (u) {
-        | `all => [|`read, `unread|]
-        | `read => [|`all, `unread|]
-        | `unread => [|`all, `read|]
+        | `read => [|`unread|]
+        | `unread => [|`read|]
         }
       )
     |> Array.map(s => Selectable.status(s));
 
   eventFilters |> Js.Array.concat(title) |> Js.Array.concat(status);
+};
+
+let defaultOptions = () => {
+  [|`read, `unread|] |> Array.map(s => Selectable.status(s));
 };
 
 let selected = state => {
@@ -401,20 +405,31 @@ let onDeselectFilter = (send, selectable) =>
   };
 
 let showEntries = (entries, state, send) => {
+  let filteredEntries =
+    state.filter.status
+    ->Belt.Option.mapWithDefault(entries, u =>
+        switch (u) {
+        | `read =>
+          Js.Array.filter(e => Entry.readAt(e)->Belt.Option.isSome, entries)
+        | `unread =>
+          Js.Array.filter(e => Entry.readAt(e)->Belt.Option.isNone, entries)
+        }
+      );
+
   let now = Js.Date.make();
   let entriesToday =
     Js.Array.filter(
       e =>
         Js.Date.toDateString(Entry.createdAt(e))
         == Js.Date.toDateString(now),
-      entries,
+      filteredEntries,
     );
   let entriesEarlier =
     Js.Array.filter(
       e =>
         Js.Date.toDateString(Entry.createdAt(e))
         != Js.Date.toDateString(now),
-      entries,
+      filteredEntries,
     );
 
   <div>
@@ -427,7 +442,10 @@ let showEntries = (entries, state, send) => {
        ArrayUtils.isEmpty(entriesEarlier),
      )}
     <div className="text-center">
-      {entriesLoadedData(state.totalEntriesCount, Array.length(entries))}
+      {entriesLoadedData(
+         state.totalEntriesCount,
+         Array.length(filteredEntries),
+       )}
     </div>
   </div>;
 };
@@ -463,6 +481,8 @@ let make = () => {
         value={state.filterString}
         onChange={filterString => send(UpdateFilterString(filterString))}
         placeholder={t("filter.input_placeholder")}
+        hint={t("filter.input_hint")}
+        defaultOptions={defaultOptions()}
       />
     </div>
     <div id="entries" className="mt-4">

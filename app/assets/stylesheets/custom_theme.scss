@@ -472,46 +472,6 @@ p {
   padding-top: 85px;
 }
 
-.video-modal {
-  .modal-dialog {
-    @include media-breakpoint-down(md) {
-      max-width: 720px;
-    }
-    .modal-content {
-      background-color: transparent;
-      border: 0;
-
-      .modal-header {
-        border: 0;
-        padding: 0;
-
-        .close {
-          color: #fff;
-          opacity: 0.5;
-          text-shadow: 0;
-        }
-      }
-      .modal-body {
-        background-color: rgba(0, 0, 0, 1);
-        padding: 10px 10px 0;
-        @include border-radius(5px);
-      }
-    }
-  }
-  .video-frame {
-    width: 100%;
-    height: 500px;
-
-    @include media-breakpoint-down(md) {
-      width: 100%;
-      max-height: 100%;
-    }
-    @include media-breakpoint-down(sm) {
-      height: 300px;
-    }
-  }
-}
-
 .success-box,
 .alert-box {
   padding: 15px;
@@ -553,18 +513,6 @@ p {
 .tooltip {
   @include media-breakpoint-down(sm) {
     display: none;
-  }
-}
-
-.video-box {
-  width: 100%;
-  height: 315px;
-  border: 1px solid $gray-border;
-  @include border-radius(5px);
-
-  @include media-breakpoint-down(md) {
-    width: 100%;
-    max-height: 100%;
   }
 }
 

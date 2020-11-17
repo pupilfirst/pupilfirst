@@ -210,12 +210,7 @@ Rails.application.routes.draw do
   end
 
   get '/c/:serial_number', to: 'issued_certificates#verify', as: :issued_certificate
-
   get '/help/:document', to: 'help#show'
-
-  # Handle redirects of short URLs.
-  get 'r/:unique_key', to: 'shortened_urls#redirect', as: 'short_redirect'
-
   get '/oauth/:provider', to: 'home#oauth', as: 'oauth', constraints: SsoConstraint.new
   get '/oauth_error', to: 'home#oauth_error', as: 'oauth_error'
 

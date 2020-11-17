@@ -1,6 +1,0 @@
-= semantic_form_for form, url: admin_short_urls_shorten_path, method: :post, html: { novalidate: false } do |f|
-  = f.inputs 'Supply a URL to shorten'
-    = f.input :url, label: 'URL', placeholder: 'http[s]://alonghostname.com/some/long/url', input_html: { required: true }
-    = f.input :unique_key, label: 'Short key (optional)', placeholder: 'custom_short-key', required: false
-    = f.input :expires_at, label: 'Expires at (optional)', required: false, input_html: { class: 'date-time-picker', data: { format: 'Y-m-d H:i O' } }, placeholder: 'YYYY-MM-DD HH:MM'
-  = f.submit 'Shorten'

@@ -575,6 +575,18 @@ feature 'Community', js: true do
     let!(:reply_marked_as_solution) { create :post, topic: topic_1, creator: student_1.user, post_number: 3, solution: true }
     let!(:reply_2) { create :post, topic: topic_2, creator: student_1.user, post_number: 2 }
 
+    scenario 'user checks solved status in topics list' do
+      sign_in_user(coach.user, referrer: community_path(community))
+
+      within("a[aria-label='Topic #{topic_1.id}']") do
+        expect(page).to have_selector("span[aria-label='Solved status icon']")
+      end
+
+      within("a[aria-label='Topic #{topic_2.id}']") do
+        expect(page).to_not have_selector("span[aria-label='Solved status icon']")
+      end
+    end
+
     scenario 'user filters topics with or without solution' do
       sign_in_user(coach.user, referrer: community_path(community))
 

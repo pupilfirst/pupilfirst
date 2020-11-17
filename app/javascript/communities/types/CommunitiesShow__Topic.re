@@ -8,6 +8,7 @@ type t = {
   topicCategoryId: option(string),
   creatorName: option(string),
   createdAt: Js.Date.t,
+  solved: bool,
   participantsCount: int,
   participants: array(CommunitiesShow__TopicParticipant.t),
 };
@@ -15,6 +16,8 @@ type t = {
 let id = t => t.id;
 
 let title = t => t.title;
+
+let solved = t => t.solved;
 
 let views = t => t.views;
 
@@ -45,6 +48,7 @@ let make =
       ~topicCategoryId,
       ~creatorName,
       ~createdAt,
+      ~solved,
       ~participantsCount,
       ~participants,
     ) => {
@@ -57,6 +61,7 @@ let make =
   topicCategoryId,
   creatorName,
   createdAt,
+  solved,
   participantsCount,
   participants,
 };
@@ -73,6 +78,7 @@ let makeFromJS = topicData => {
     ~topicCategoryId=topicData##topicCategoryId,
     ~creatorName=Belt.Option.map(topicData##creator, creator => creator##name),
     ~createdAt=topicData##createdAt->DateFns.decodeISO,
+    ~solved=topicData##solved,
     ~participantsCount=topicData##participantsCount,
     ~participants=
       topicData##participants

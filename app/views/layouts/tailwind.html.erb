@@ -1,10 +1,12 @@
 <% presenter = ::Layouts::TailwindPresenter.new(self) %>
 
 <!DOCTYPE html>
-<html lang='en' data-user-id="<%= current_user&.id %>" data-flash="<%= presenter.flash_messages %>" data-env="<%= Rails.env %>">
+<html lang='en' data-user-id="<%= current_user&.id %>" data-flash="<%= presenter.flash_messages %>" data-env="<%= Rails.env %>"
+      data-vapid-public-key="<%= Base64.urlsafe_decode64(Rails.application.secrets.vapid_public_key).bytes %>">
 <head>
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <link rel="manifest" id="app-manifest">
 
   <% if content_for?(:viewport) %>
     <%= yield :viewport %>
@@ -47,6 +49,9 @@
 <section class="min-h-full flex flex-col items-stretch">
   <%= yield :nav %>
   <main class="flex-grow bg-gray-100">
+    <div id="btn-enable">
+      Subscribe
+    </div>
     <% if content_for?(:wrapper) %>
       <%= yield :wrapper %>
     <% else %>

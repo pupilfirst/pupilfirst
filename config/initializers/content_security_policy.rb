@@ -85,6 +85,8 @@ Rails.application.config.content_security_policy do |policy|
   policy.frame_src :data, *frame_sources
   policy.media_src :self, *media_sources
   policy.object_src :self
+  policy.worker_src :self
+  policy.manifest_src :blob
 end
 
 # If you are using UJS then enable automatic nonce generation

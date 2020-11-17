@@ -656,7 +656,6 @@ DEPENDENCIES
   active_storage_validations (~> 0.9)
   activerecord-precounter (~> 0.4)
   acts-as-taggable-on!
-  addressable (~> 2.5)
   attribute_normalizer (~> 1.2.0.b)
   autoprefixer-rails (~> 10.0)
   aws-sdk-s3 (~> 1.35)

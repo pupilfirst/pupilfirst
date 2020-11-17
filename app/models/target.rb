@@ -27,8 +27,6 @@ class Target < ApplicationRecord
   has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group
-  has_many :target_resources, dependent: :destroy
-  has_many :resources, through: :target_resources
   has_many :target_evaluation_criteria, dependent: :destroy
   has_many :evaluation_criteria, through: :target_evaluation_criteria
   has_one :level, through: :target_group

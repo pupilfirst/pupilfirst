@@ -443,23 +443,6 @@ ActiveRecord::Schema.define(version: 2020_11_17_075015) do
     t.index ["versionable_type", "versionable_id"], name: "index_resource_versions_on_versionable_type_and_versionable_id"
   end
 
-  create_table "resources", id: :serial, force: :cascade do |t|
-    t.string "title"
-    t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "downloads", default: 0
-    t.string "slug"
-    t.text "video_embed"
-    t.string "link"
-    t.boolean "archived", default: false
-    t.boolean "public", default: false
-    t.bigint "school_id"
-    t.index ["archived"], name: "index_resources_on_archived"
-    t.index ["school_id"], name: "index_resources_on_school_id"
-    t.index ["slug"], name: "index_resources_on_slug"
-  end
-
   create_table "school_admins", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "school_id"
@@ -516,12 +499,10 @@ ActiveRecord::Schema.define(version: 2020_11_17_075015) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "name"
-    t.string "slug"
     t.integer "level_id"
     t.datetime "access_ends_at"
     t.datetime "dropped_out_at"
     t.index ["level_id"], name: "index_startups_on_level_id"
-    t.index ["slug"], name: "index_startups_on_slug", unique: true
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
@@ -576,13 +557,6 @@ ActiveRecord::Schema.define(version: 2020_11_17_075015) do
     t.integer "prerequisite_target_id"
     t.index ["prerequisite_target_id"], name: "index_target_prerequisites_on_prerequisite_target_id"
     t.index ["target_id"], name: "index_target_prerequisites_on_target_id"
-  end
-
-  create_table "target_resources", force: :cascade do |t|
-    t.bigint "target_id", null: false
-    t.bigint "resource_id", null: false
-    t.index ["resource_id"], name: "index_target_resources_on_resource_id"
-    t.index ["target_id", "resource_id"], name: "index_target_resources_on_target_id_and_resource_id", unique: true
   end
 
   create_table "target_versions", force: :cascade do |t|
@@ -813,8 +787,6 @@ ActiveRecord::Schema.define(version: 2020_11_17_075015) do
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
-  add_foreign_key "target_resources", "resources"
-  add_foreign_key "target_resources", "targets"
   add_foreign_key "target_versions", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"

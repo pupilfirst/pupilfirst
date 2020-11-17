@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Startup < ApplicationRecord
-  include FriendlyId
-
   acts_as_taggable
 
   COURSE_FEE = 50_000
@@ -32,12 +30,7 @@ class Startup < ApplicationRecord
   has_many :faculty_startup_enrollments, dependent: :destroy
   has_many :faculty, through: :faculty_startup_enrollments
 
-  # Friendly ID!
-  friendly_id :slug_candidates, use: :slugged
-
-  validates :slug, format: { with: /\A[a-z0-9\-_]+\z/i }, allow_nil: true
   validates :name, presence: true
-
   validates :level, presence: true
 
   validate :not_assigned_to_level_zero
@@ -56,8 +49,6 @@ class Startup < ApplicationRecord
     Founder.where(startup_id: id).update_all(startup_id: nil) # rubocop:disable Rails/SkipsModelValidations
   end
 
-  after_create :regenerate_slug
-
   def founder_ids=(list_of_ids)
     founders_list = Founder.find(list_of_ids.map(&:to_i).select { |e| e.is_a?(Integer) && e.positive? })
     founders_list.each { |u| founders << u }
@@ -75,25 +66,6 @@ class Startup < ApplicationRecord
 
   def cofounders(founder)
     founders - [founder]
-  end
-
-  def regenerate_slug
-    update_attribute(:slug, nil) # rubocop:disable Rails/SkipsModelValidations
-    save!
-  end
-
-  def should_generate_new_friendly_id?
-    new_record? || slug.nil?
-  end
-
-  # Try building a slug based on the following fields in
-  # increasing order of specificity.
-  def slug_candidates
-    parameterized_name = name.parameterize
-    [
-      parameterized_name,
-      [parameterized_name, :id]
-    ]
   end
 
   # returns the date of the earliest verified timeline entry

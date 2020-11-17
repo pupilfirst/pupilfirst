@@ -1,4 +1,4 @@
-class RemoveShortenedUrlsSlugsAndResources < ActiveRecord::Migration[6.0]
+class RemoveShortenedUrlsAndOtherTables < ActiveRecord::Migration[6.0]
   class Tagging < ApplicationRecord
   end
 
@@ -10,6 +10,8 @@ class RemoveShortenedUrlsSlugsAndResources < ActiveRecord::Migration[6.0]
     remove_column :startups, :slug
     drop_table :target_resources
     drop_table :resources
+    drop_table :active_admin_comments
+    drop_table :user_activities
   end
 
   def down

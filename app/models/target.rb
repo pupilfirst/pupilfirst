@@ -46,13 +46,6 @@ class Target < ApplicationRecord
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
 
-  # Custom scope to allow AA to filter by intersection of tags.
-  scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
-
-  def self.ransackable_scopes(_auth)
-    %i[ransack_tagged_with]
-  end
-
   ROLE_STUDENT = 'student'
   ROLE_TEAM = 'team'
 

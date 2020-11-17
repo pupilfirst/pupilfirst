@@ -11,24 +11,15 @@ class Startup < ApplicationRecord
   scope :access_active, -> { where('access_ends_at > ?', Time.now).or(where(access_ends_at: nil)) }
   scope :active, -> { not_dropped_out.access_active }
 
-  # Custom scope to allow AA to filter by intersection of tags.
-  scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
-
-  def self.ransackable_scopes(_auth)
-    %i[ransack_tagged_with]
-  end
+  belongs_to :level
 
   has_many :founders, dependent: :restrict_with_error
   has_many :startup_feedback, dependent: :destroy
   has_many :connect_requests, dependent: :destroy
-
-  belongs_to :level
-  has_one :course, through: :level
-  has_one :school, through: :course
-
-  # Faculty who can review this startup's timeline events.
   has_many :faculty_startup_enrollments, dependent: :destroy
   has_many :faculty, through: :faculty_startup_enrollments
+  has_one :course, through: :level
+  has_one :school, through: :course
 
   validates :name, presence: true
   validates :level, presence: true

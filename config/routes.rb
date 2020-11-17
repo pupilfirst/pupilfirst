@@ -209,8 +209,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :impersonation, only: %i[destroy]
-
   get '/c/:serial_number', to: 'issued_certificates#verify', as: :issued_certificate
 
   get '/help/:document', to: 'help#show'

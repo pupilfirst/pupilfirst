@@ -508,7 +508,7 @@ let markAllNotificationsButton = (state, send, entries) => {
       disabled={disabled || state.saving}
       onClick={markAllNotifications(send)}
       className="inline-flex items-center font-semibold p-2 md:py-1 bg-white hover:bg-gray-300 border rounded text-xs flex-shrink-0">
-      {str(t("Mark All as Read"))}
+      {str(t("mark_all_as_read_button"))}
     </button>
   </div>
   ->ReactUtils.nullIf(ArrayUtils.isEmpty(entries));

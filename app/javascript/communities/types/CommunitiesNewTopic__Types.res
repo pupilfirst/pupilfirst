@@ -1,0 +1,1 @@
+module TopicSuggestion = CommunitiesNewTopic__TopicSuggestion

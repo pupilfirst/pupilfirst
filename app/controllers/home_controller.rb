@@ -58,6 +58,10 @@ class HomeController < ApplicationController
     end
   end
 
+  def manifest
+
+  end
+
   protected
 
   def background_image_number

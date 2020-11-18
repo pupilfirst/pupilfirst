@@ -1,9 +1,6 @@
 window.addEventListener('load', () => {
   navigator.serviceWorker.register('/service-worker.js').then(registration => {
     console.log('ServiceWorker registered: ', registration);
-
-
-
     var serviceWorker;
     if (registration.installing) {
       serviceWorker = registration.installing;
@@ -14,13 +11,16 @@ window.addEventListener('load', () => {
     } else if (registration.active) {
       serviceWorker = registration.active;
       console.log('Service worker active.');
+
+
     }
+
 
     showWebPushData()
 
     document.getElementById('btn-enable').addEventListener('click', async () => {
       const sw = await navigator.serviceWorker.ready
-      const s = new Uint8Array(JSON.parse(document.documentElement.getAttribute("data-vapid-public-key")))
+      const s = urlBase64ToUint8Array(document.documentElement.getAttribute("data-vapid-public-key"))
       await sw.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: s
@@ -29,10 +29,12 @@ window.addEventListener('load', () => {
     })
 
 
+
   }).catch(registrationError => {
     console.log('Service worker registration failed: ', registrationError);
   });
 });
+
 
 
 async function getWebPushData() {

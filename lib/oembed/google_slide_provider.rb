@@ -1,6 +1,8 @@
 module Oembed
   class GoogleSlideProvider < BaseProvider
     def initialize(resource_url)
+      super(resource_url)
+
       full_path, query = resource_url.split('?')
       splited_full_path = full_path.split('/')
       splited_full_path.pop # remove 'pub' action

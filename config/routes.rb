@@ -34,6 +34,8 @@ Rails.application.routes.draw do
 
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
+  draw(:api)
+
   resource :applicants, only: [] do
     get '/:token', action: 'enroll' # TODO: Legacy route - remove after a few weeks.
     get '/:token/enroll', action: 'enroll', as: 'enroll'

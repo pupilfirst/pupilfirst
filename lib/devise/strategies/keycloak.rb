@@ -5,10 +5,11 @@ module Devise
     class Keycloak < Base
       def authenticate!
         return fail if request.headers['Authorization'].blank?
-        token = request.headers['Authorization'].split(' ').last
 
+        token = request.headers['Authorization'].split(' ').last
         user_info = keycloak_client.user_info(token)
         course = Course.find(request.params['course_id'])
+
         if user_info['active']
           school_admins = course.school.school_admins
           user = school_admins.joins(:user)

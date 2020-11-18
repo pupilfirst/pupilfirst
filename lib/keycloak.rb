@@ -38,6 +38,10 @@ module Keycloak
       openid_config['token_endpoint'] 
     end
 
+    def token_introspection
+      openid_config['token_introspection_endpoint']
+    end
+
     def admin_users
       uri = URI(domain)
       uri.path = "/auth/admin/realms/#{realm}/users"
@@ -138,6 +142,44 @@ module Keycloak
       res = Faraday.put(reset_password_uri, creds_rep.to_json, headers)
       if res.status == 204
         nil
+      else
+        raise FailedRequestError.new 'Failed to set user password'
+      end
+    end
+
+    def user_info(access_token)
+      client_id = CONFIG[:client_id]
+      client_secret = CONFIG[:client_secret]
+      auth = Base64.strict_encode64("#{client_id}:#{client_secret}")
+      headers = {
+        'Authorization' => "Basic #{auth}",
+        'Content-Type' => 'application/x-www-form-urlencoded'
+      }
+      payload = { 'token' => access_token }
+      res = Faraday.post(endpoints.token_introspection, payload, headers)
+      if res.status == 200
+        MultiJson.load(res.body)
+      else
+        raise FailedRequestError.new 'Failed to set user password'
+      end
+    end
+
+    def user_signed_in?(access_token)
+      user_info(access_token)['active']
+    end
+
+    def user_token(uname_email, password)
+      headers = { 'Content-Type' => 'application/x-www-form-urlencoded' }
+      payload = {
+        'client_id' => CONFIG[:client_id],
+        'client_secret' => CONFIG[:client_secret],
+        'username' => uname_email,
+        'password' => password,
+        'grant_type' => 'password'
+      }
+      res = Faraday.post(endpoints.token, payload, headers)
+      if res.status == 200
+        MultiJson.load(res.body)
       else
         raise FailedRequestError.new 'Failed to set user password'
       end

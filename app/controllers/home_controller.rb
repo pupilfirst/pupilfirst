@@ -59,7 +59,11 @@ class HomeController < ApplicationController
   end
 
   def manifest
+    render json: GenerateManifestService.new(current_school).json
+  end
 
+  def offline
+    render layout: false
   end
 
   protected

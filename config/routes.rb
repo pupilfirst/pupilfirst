@@ -175,6 +175,8 @@ Rails.application.routes.draw do
 
   get 'styleguide', to: 'home#styleguide', constraints: DevelopmentConstraint.new
 
+  get 'manifest', to: 'home#manifest'
+  get 'offline', to: 'home#offline'
   root 'home#index'
 
   # TODO: Remove this backwards-compatibility path after Jan 2021.

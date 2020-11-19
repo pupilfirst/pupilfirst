@@ -2,7 +2,7 @@ name: Continuous Integration
 
 on:
   push:
-    branches: ['*']
+    branches: [ master ]
     paths-ignore:
       - 'docs/**'
   pull_request:
@@ -110,11 +110,11 @@ jobs:
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-          COVERAGE=true bundle exec rspec --format progress
+          COVERAGE=true bundle exec rspec -fd
           ./cc-test-reporter after-build -t simplecov --exit-code $?
       - name: Specs (On non-master branches)
         if: env.GIT_BRANCH != 'master'
-        run: bundle exec rspec --format progress
+        run: bundle exec rspec -fd
       - uses: actions/upload-artifact@v1
         if: failure()
         with:

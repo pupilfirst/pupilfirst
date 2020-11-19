@@ -106,4 +106,12 @@ feature 'User signing in by supplying email address', js: true do
       expect(page).to have_content("Could not find user with this email. Please check the email that you entered")
     end
   end
+
+  context 'when ALLOW_EMAIL_SIGN_IN is false' do
+    scenario 'it dont show sign-in with email option' do
+      allow(ENV).to receive(:fetch).with('ALLOW_EMAIL_SIGN_IN') { 'false' }
+      visit new_user_session_path
+      expect(page).not_to have_content('Continue with email')
+    end
+  end
 end

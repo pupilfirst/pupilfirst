@@ -32,9 +32,10 @@ let handleResponseJSON = (filename, send, attachFileCB, json) => {
   send(ResetForm)
 }
 
-let handleApiError = x =>
+let apiErrorTitle = x =>
   switch x {
-  | UnexpectedResponse(code) => code
+  | UnexpectedResponse(code) => "Error " ++ (code |> string_of_int)
+  | _ => "Something went wrong!"
   }
 
 let uploadFile = (filename, send, attachFileCB, formData) => {
@@ -56,20 +57,11 @@ let uploadFile = (filename, send, attachFileCB, formData) => {
     }
   )
   |> then_(json => handleResponseJSON(filename, send, attachFileCB, json) |> resolve)
-  |> catch(error =>
-    switch error |> handleApiError {
-    | Some(code) =>
-      Notification.error(
-        "Error " ++ (code |> string_of_int),
-        "Please reload the page and try again.",
-      )
-    | None =>
-      Notification.error(
-        "Something went wrong!",
-        "Our team has been notified of this error. Please reload the page and try again.",
-      )
-    } |> resolve
-  )
+  |> catch(error => {
+    let title = PromiseUtils.errorToExn(error)->apiErrorTitle
+    Notification.error(title, "Please reload the page and try again.")
+    Js.Promise.resolve()
+  })
   |> ignore
 }
 

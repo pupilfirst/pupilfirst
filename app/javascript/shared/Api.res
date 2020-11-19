@@ -1,8 +1,9 @@
 exception UnexpectedResponse(int)
 
-let handleApiError = x =>
+let apiErrorTitle = x =>
   switch x {
-  | UnexpectedResponse(code) => code
+  | UnexpectedResponse(code) => string_of_int(code)
+  | _ => "An unexpected error occurred"
   }
 
 let acceptOrRejectResponse = response =>
@@ -13,12 +14,12 @@ let acceptOrRejectResponse = response =>
   }
 
 let handleResponseError = error => {
-  let message = "Our team has been notified of this error. Please reload the page and try again."
+  let title = PromiseUtils.errorToExn(error)->apiErrorTitle
 
-  switch error |> handleApiError {
-  | Some(code) => Notification.error(code |> string_of_int, message)
-  | None => Notification.error("An unexpected error occurred", message)
-  }
+  Notification.error(
+    title,
+    "Our team has been notified of this error. Please reload the page and try again.",
+  )
 }
 
 let handleResponseJSON = (json, responseCB, errorCB, notify) => {
@@ -43,7 +44,7 @@ let handleResponse = (~responseCB, ~errorCB, ~notify=true, promise) => {
   |> catch(error => {
     errorCB()
     Js.log(error)
-    resolve(notify ? handleResponseError(handleApiError(error)) : ())
+    resolve(notify ? handleResponseError(error) : ())
   })
   |> ignore
 }

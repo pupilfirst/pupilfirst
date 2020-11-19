@@ -2,9 +2,10 @@ open CoachesSchoolIndex__Types
 
 exception UnexpectedResponse(int)
 
-let handleApiError = x =>
+let apiErrorTitle = x =>
   switch x {
-  | UnexpectedResponse(code) => code
+  | UnexpectedResponse(code) => code |> string_of_int
+  | _ => "Something went wrong!"
   }
 
 type state = {
@@ -224,16 +225,12 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
       }
     )
     |> then_(json => handleResponseJSON(json) |> resolve)
-    |> catch(error =>
-      switch error |> handleApiError {
-      | Some(code) =>
-        send(UpdateSaving)
-        Notification.error(code |> string_of_int, "Please try again")
-      | None =>
-        send(UpdateSaving)
-        Notification.error("Something went wrong!", "Please try again")
-      } |> resolve
-    )
+    |> catch(error => {
+      let title = PromiseUtils.errorToExn(error)->apiErrorTitle
+      send(UpdateSaving)
+      Notification.error(title, "Please try again")
+      Js.Promise.resolve()
+    })
     |> ignore
   }
   let submitForm = event => {

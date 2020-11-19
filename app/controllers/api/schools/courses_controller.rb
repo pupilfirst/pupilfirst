@@ -1,7 +1,8 @@
 module Api
   module Schools
     class CoursesController < SchoolsController
-      before_action :set_course, only: [:students, :register_students]
+      skip_before_action :verify_authenticity_token
+      before_action :set_course, only: [:students, :create_students]
       def index
         authorize(current_school, policy_class: Schools::CoursePolicy)
       end
@@ -10,10 +11,20 @@ module Api
         students = @course.users.map do |u|
           { name: u.name, email: u.email }
         end
-        render json: students.to_json, status: :ok
+        render json: { students: students.to_json }
       end
 
-      def register_students
+      def create_students 
+        form = ::Schools::Founders::CreateForm.new(Reform::OpenForm.new)
+
+        response = if form.validate(params)
+          student_count = form.save
+          { error: nil, studentCount: student_count }
+        else
+          { error: form.errors.full_messages.join(', ') }
+        end
+
+        render json: response
       end
 
       private

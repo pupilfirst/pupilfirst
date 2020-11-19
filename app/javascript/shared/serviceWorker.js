@@ -20,7 +20,7 @@ window.addEventListener('load', () => {
 
     document.getElementById('btn-enable').addEventListener('click', async () => {
       const sw = await navigator.serviceWorker.ready
-      const s = urlBase64ToUint8Array(document.documentElement.getAttribute("data-vapid-public-key"))
+      const s = new Uint8Array(JSON.parse(document.documentElement.getAttribute("data-vapid-public-key")))
       await sw.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: s

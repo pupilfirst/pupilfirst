@@ -1,4 +1,3 @@
-import "shared/manifest.js"
 import "layouts/tailwind.css";
 import "shared/utils/rollbar.js"
 import "@fortawesome/fontawesome-free/js/all.js"

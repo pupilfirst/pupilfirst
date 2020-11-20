@@ -75,8 +75,13 @@ let completionTypeToString = (completionType, targetStatus) =>
   | (
       PendingReview | Completed | Rejected |
       Locked(CourseLocked | AccessLocked),
-      Evaluated | TakeQuiz,
+      Evaluated,
     ) => "Submissions & Feedback"
+  | (
+      PendingReview | Completed | Rejected |
+      Locked(CourseLocked | AccessLocked),
+      TakeQuiz,
+    ) => "Quiz Responses"
   | (PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) => "Completed"
   | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete) => "Locked"
   };

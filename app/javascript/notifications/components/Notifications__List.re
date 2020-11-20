@@ -304,7 +304,7 @@ let entriesList = (caption, entries, showTime, send) => {
 
 let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) => {
   <div
-    className="inline-block mt-2 pb-6 mx-auto bg-gray-200 text-gray-800 text-xs p-2 text-center rounded font-semibold">
+    className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
     {(
        totoalNotificationsCount == loadedNotificaionsCount
          ? t(
@@ -490,7 +490,7 @@ let showEntries = (entries, state, send) => {
        entriesList("Earlier", entriesEarlier, false, send),
        ArrayUtils.isEmpty(entriesEarlier),
      )}
-    <div className="text-center">
+    <div className="text-center pb-4">
       {entriesLoadedData(
          state.totalEntriesCount,
          Array.length(filteredEntries),
@@ -503,11 +503,11 @@ let markAllNotificationsButton = (state, send, entries) => {
   let disabled =
     Belt.Array.every(entries, e => Entry.readAt(e)->Belt.Option.isSome);
 
-  <div className="flex w-full justify-end px-4 lg:px-8 -mb-4">
+  <div className="flex w-full justify-end px-4 lg:px-8 -mb-5">
     <button
       disabled={disabled || state.saving}
       onClick={markAllNotifications(send)}
-      className="inline-flex items-center font-semibold p-2 md:py-1 bg-white hover:bg-gray-300 border rounded text-xs flex-shrink-0">
+      className="font-semibold text-xs underline px-2 py-1 rounded text-gray-800 hover:text-primary-500 hover:bg-gray-200 transition ease-in-out duration-150">
       {str(t("mark_all_as_read_button"))}
     </button>
   </div>
@@ -530,10 +530,6 @@ let make = () => {
     <div
       className="flex justify-between items-center pt-4 px-4 lg:px-8 bg-gray-100">
       <div className="font-bold text-xl"> {str("Notifications")} </div>
-      <button
-        className="font-semibold text-xs underline px-2 py-1 rounded text-gray-800 hover:text-primary-500 hover:bg-gray-200 transition ease-in-out duration-150">
-        {str("Mark All as Read")}
-      </button>
     </div>
     <div
       className="w-full bg-gray-100 border-b sticky top-0 z-30 px-4 lg:px-8 py-3">
@@ -576,7 +572,7 @@ let make = () => {
                  )}
               </div>
             | NotLoading =>
-              <div className="px-4 lg:px-8 pb-6 pt-2">
+              <div className="px-4 lg:px-8 pb-6">
                 <button
                   className="btn btn-primary-ghost cursor-pointer w-full"
                   onClick={_ => {

@@ -117,16 +117,18 @@ let make = (~entry, ~markNotificationCB, ~showTime) => {
           //  )}
 
             {ReactUtils.nullIf(
-               <button
-                 disabled=saving
-                 onClick={markNotification(
-                   Entry.id(entry),
-                   setSaving,
-                   markNotificationCB,
-                 )}
-                 className="flex justify-center items-center w-8 h-8 font-semibold p-2 md:py-1 border border-gray-400 rounded text-sm bg-white text-gray-700 hover:text-primary-500 hover:border-primary-400 hover:bg-gray-200 hover:shadow-md transition ease-in-out duration-150">
-                 <Icon className="if i-check-solid" />
-               </button>,
+               <Tooltip tip={str("Mark as Read")} position=`Left>
+                 <button
+                   disabled=saving
+                   onClick={markNotification(
+                     Entry.id(entry),
+                     setSaving,
+                     markNotificationCB,
+                   )}
+                   className="flex justify-center items-center w-8 h-8 font-semibold p-2 md:py-1 border border-gray-400 rounded text-sm bg-white text-gray-700 hover:text-primary-500 hover:border-primary-400 hover:bg-gray-200 hover:shadow-md transition ease-in-out duration-150">
+                   <Icon className="if i-check-solid" />
+                 </button>
+               </Tooltip>,
                Entry.readAt(entry)->Belt.Option.isSome,
              )}
           </div>

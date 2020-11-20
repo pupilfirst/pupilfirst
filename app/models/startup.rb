@@ -3,8 +3,6 @@
 class Startup < ApplicationRecord
   acts_as_taggable
 
-  COURSE_FEE = 50_000
-
   scope :admitted, -> { joins(:level).where('levels.number > ?', 0) }
   scope :inactive, -> { where('access_ends_at < ?', Time.now).or(where.not(dropped_out_at: nil)) }
   scope :not_dropped_out, -> { where(dropped_out_at: nil) }

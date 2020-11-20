@@ -64,14 +64,14 @@ let make = (~entry, ~markNotificationCB, ~showTime) => {
       "notifications__entry-card relative py-5 px-4 lg:px-8 hover:bg-gray-200 focus:bg-gray-200 transition ease-in-out duration-150 "
       ++ (
         switch (Entry.readAt(entry)) {
-        | Some(_readAt) => "border-gray-500"
-        | None => "border-green-500"
+        | Some(_readAt) => "notifications__entry-card--read text-gray-700"
+        | None => "notifications__entry-card--unread"
         }
       )
     }
     key={Entry.id(entry)}
     ariaLabel={"Notification " ++ Entry.id(entry)}>
-    <div className="flex justify-between">
+    <div className="flex justify-between items-center">
       <div className="flex-1 flex items-center relative">
         <div className="flex-shrink-0 inline-block relative">
           {switch (Entry.actor(entry)) {
@@ -95,8 +95,9 @@ let make = (~entry, ~markNotificationCB, ~showTime) => {
            : <div className="ml-4"> {str(Entry.message(entry))} </div>}
       </div>
       <div className="flex-shrink-0">
-        <span className="block text-xs text-gray-800 pt-1">
-          <span className="hidden md:inline-block md:mr-2">
+        <span
+          className="notifications__entry-card-time block text-xs text-gray-800">
+          <span className="hidden md:inline-block md:pl-4">
             {(showTime ? "" : "on ")
              ++ Entry.createdAt(entry)
                 ->DateFns.format(showTime ? "HH:mm" : "MMM d")
@@ -104,31 +105,31 @@ let make = (~entry, ~markNotificationCB, ~showTime) => {
           </span>
         </span>
         <div
-          className="opacity-0 notifications__entry-card-buttons absolute top-0 bottom-0 right-0 flex pl-4 pr-3 justify-between space-x-2 items-center transition ease-in-out duration-150">
-          {ReactUtils.nullIf(
-             <a
-               href={"/notifications/" ++ Entry.id(entry)}
-               className="inline-flex items-center font-semibold p-2 md:py-1 bg-white hover:bg-gray-300 border rounded text-xs flex-shrink-0">
-               <i className="fas fa-eye mr-2 text-primary-500" />
-               {str("Visit Link")}
-             </a>,
-             Entry.notifiableId(entry)->Belt.Option.isNone,
-           )}
-          {ReactUtils.nullIf(
-             <button
-               disabled=saving
-               onClick={markNotification(
-                 Entry.id(entry),
-                 setSaving,
-                 markNotificationCB,
-               )}
-               className="inline-flex items-center font-semibold p-2 md:py-1 bg-white hover:bg-gray-300 border rounded text-xs flex-shrink-0">
-               <Icon className="if i-circle-regular mr-2 text-primary-500" />
-               {str("Mark as Read")}
-             </button>,
-             Entry.readAt(entry)->Belt.Option.isSome,
-           )}
-        </div>
+          className="opacity-0 notifications__entry-card-buttons absolute top-0 bottom-0 right-0 flex items-center pl-4 pr-4 md:pr-8 transition ease-in-out duration-150">
+          // {ReactUtils.nullIf(
+          //    <a
+          //      href={"/notifications/" ++ Entry.id(entry)}
+          //      className="inline-flex items-center font-semibold p-2 md:py-1 bg-white hover:bg-gray-300 border rounded text-xs flex-shrink-0">
+          //      <i className="fas fa-eye mr-2 text-primary-500" />
+          //      {str("Visit Link")}
+          //    </a>,
+          //    Entry.notifiableId(entry)->Belt.Option.isNone,
+          //  )}
+
+            {ReactUtils.nullIf(
+               <button
+                 disabled=saving
+                 onClick={markNotification(
+                   Entry.id(entry),
+                   setSaving,
+                   markNotificationCB,
+                 )}
+                 className="flex justify-center items-center w-8 h-8 font-semibold p-2 md:py-1 border border-gray-400 rounded text-sm bg-white text-gray-700 hover:text-primary-500 hover:border-primary-400 hover:bg-gray-200 hover:shadow-md transition ease-in-out duration-150">
+                 <Icon className="if i-check-solid" />
+               </button>,
+               Entry.readAt(entry)->Belt.Option.isSome,
+             )}
+          </div>
       </div>
     </div>
   </div>;

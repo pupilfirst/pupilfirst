@@ -304,7 +304,7 @@ let entriesList = (caption, entries, showTime, send) => {
 
 let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) => {
   <div
-    className="inline-block mt-2 mx-auto bg-gray-200 text-gray-800 text-xs p-2 text-center rounded font-semibold">
+    className="inline-block mt-2 pb-6 mx-auto bg-gray-200 text-gray-800 text-xs p-2 text-center rounded font-semibold">
     {(
        totoalNotificationsCount == loadedNotificaionsCount
          ? t(
@@ -527,8 +527,13 @@ let make = () => {
   );
 
   <div>
-    <div className="pt-4 px-4 lg:px-8 bg-gray-100">
+    <div
+      className="flex justify-between items-center pt-4 px-4 lg:px-8 bg-gray-100">
       <div className="font-bold text-xl"> {str("Notifications")} </div>
+      <button
+        className="font-semibold text-xs underline px-2 py-1 rounded text-gray-800 hover:text-primary-500 hover:bg-gray-200 transition ease-in-out duration-150">
+        {str("Mark All as Read")}
+      </button>
     </div>
     <div
       className="w-full bg-gray-100 border-b sticky top-0 z-30 px-4 lg:px-8 py-3">
@@ -571,7 +576,7 @@ let make = () => {
                  )}
               </div>
             | NotLoading =>
-              <div className="px-4 lg:px-8 pb-6 mt-2">
+              <div className="px-4 lg:px-8 pb-6 pt-2">
                 <button
                   className="btn btn-primary-ghost cursor-pointer w-full"
                   onClick={_ => {

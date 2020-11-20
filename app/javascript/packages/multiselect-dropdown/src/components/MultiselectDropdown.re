@@ -80,7 +80,7 @@ module Make = (Selectable: Selectable) => {
          <button
            key={index |> string_of_int}
            title={selectionTitle(selection)}
-           className="flex text-xs py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
+           className="flex text-xs px-4 py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
            onClick={applyFilter(selection, onSelect, id)}>
            {switch (selection |> Selectable.label) {
             | Some(label) =>
@@ -164,13 +164,16 @@ module Make = (Selectable: Selectable) => {
 
   let wrapper = children => {
     <div
-      className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2 z-50">
+      className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg py-2 z-50">
       children
     </div>;
   };
 
   let showHint = hint => {
-    <div className="text-xs"> {str(hint)} </div>;
+    <p
+      className="font-normal text-xs px-4 py-2 -mb-2 rounded-b-lg bg-gray-100 mt-2 text-left border-t">
+      {str(hint)}
+    </p>;
   };
 
   [@react.component]

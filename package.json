@@ -29,6 +29,7 @@
     "dotenv": "^8.0.0",
     "i18n-js": "^3.7.1",
     "markdown-it": "^10.0.0",
+    "markdown-it-link-attributes": "^3.0.0",
     "markdown-it-linkify-images": "^2.0.0",
     "markdown-it-multimd-table": "^4.0.0",
     "markdown-it-sub": "^1.0.0",

@@ -2,7 +2,7 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [ * ]
+    branches: ['*']
     paths-ignore:
       - 'docs/**'
   pull_request:

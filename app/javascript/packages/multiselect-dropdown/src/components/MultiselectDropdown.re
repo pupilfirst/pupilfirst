@@ -165,6 +165,9 @@ module Make = (Selectable: Selectable) => {
   let wrapper = children => {
     <div
       className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg py-2 z-50">
+      <p className="text-gray-700 italic mx-4 text-xs border-b pb-1 mb-2">
+        {str("Suggestions:")}
+      </p>
       children
     </div>;
   };

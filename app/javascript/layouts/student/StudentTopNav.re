@@ -25,7 +25,7 @@ let signOutLink = () =>
       <a
         href="/users/sign_out"
         rel="nofollow"
-        className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black">
+        className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold">
         <FaIcon classes="fas fa-power-off" />
         <span className="ml-2"> {"Sign Out" |> str} </span>
       </a>
@@ -38,7 +38,7 @@ let signInLink = () =>
     className="md:ml-6 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
     <div className="flex items-center justify-center">
       <a
-        className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black"
+        className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold"
         href="/users/sign_in">
         <FaIcon classes="fas fa-power-off" />
         <span className="ml-2"> {"Sign In" |> str} </span>
@@ -65,17 +65,17 @@ let headerLinks = (links, isLoggedIn) => {
       |> List.mapi((index, l) => headerLink(index |> string_of_int, l))
     )
     ->List.append([
+        <StudentTopNav__DropDown links=dropdownLinks key="more-links" />,
+      ])
+    ->List.append([
         isLoggedIn
           ? <Notifications__Root
               key="notifications"
               wrapperClasses="md:ml-5 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0"
-              buttonClasses="font-semibold bg-gray-100 md:bg-white text-black hover:text-primary-500 w-full p-4 md:p-2"
-              title="Notifications"
+              buttonClasses="font-semibold bg-gray-100 md:bg-white text-black hover:text-primary-500 w-full flex justify-center p-4 md:p-2"
+              icon="if i-bell-regular text-xl"
             />
           : React.null,
-      ])
-    ->List.append([
-        <StudentTopNav__DropDown links=dropdownLinks key="more-links" />,
       ])
     ->List.append([isLoggedIn ? signOutLink() : signInLink()])
     |> Array.of_list

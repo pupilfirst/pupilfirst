@@ -82,6 +82,15 @@ jobs:
       - name: Setup Database
         run: |
           bundle exec rake db:schema:load
+      - name: Restore Assets
+        uses: actions/cache@master
+        with:
+          path: |
+            public/assets
+            public/packs-test
+          key: ${{ runner.os }}-assets-${{ env.GIT_BRANCH }}
+          restore-keys: |
+            ${{ runner.os }}-assets-
       - name: Restore Lerna
         uses: actions/cache@master
         with:

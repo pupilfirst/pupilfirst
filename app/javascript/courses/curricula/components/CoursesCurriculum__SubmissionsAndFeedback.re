@@ -154,8 +154,7 @@ let submissions =
              />
            </div>
            {switch (submission |> Submission.status) {
-            | MarkedAsComplete =>
-              statusBar(~color="green", ~text="Marked as complete")
+            | MarkedAsComplete => statusBar(~color="green", ~text="Completed")
             | Pending =>
               <div
                 className="bg-white p-3 md:px-6 md:py-4 flex border-t justify-between items-center w-full">

@@ -94,7 +94,7 @@ en:
       issued_certificate_button: View Certificate
     CoursesCurriculum__NoticeManager:
       course_complete_title: Congratulations! You have completed all milestone targets in the final level.
-      course_complete_description: You've completed our coursework. Feel free to complete targets that you might have left out, and read up on attached links and resources.
+      course_complete_description: You've completed our coursework. Feel free to complete targets that you might have left out, and read up at attached links.
       course_ended_title: Course Ended
       course_ended_description: The course has ended and submissions are disabled for all targets!
       preview_mode_title: Preview Mode
@@ -233,12 +233,6 @@ en:
         target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, the status and the target submission button.
         target_status: This indicates the present status of the target.
         final_message: That&rsquo;s it for now. If you have any doubts, don&rsquo;t hesitate to reach out to us for help.<br/><br/>Have fun!
-
-  resources:
-    index:
-      zero_results: There are no public resources in this library. You may need to be signed in to see private resources.
-      filter_zero_results: There are no resources with the current filter conditions. Try changing or clearing the filter.
-      filter_notice: Now showing resources that match the current filter. Clear the filter to see all available resources.
 
   ####################################
   # THIRD-PARTY LIBRARY TRANSLATIONS #

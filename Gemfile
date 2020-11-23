@@ -7,7 +7,6 @@ gem 'rails', '~> 6.0.3', '>= 6.0.3.3'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
-gem 'activeadmin', '~> 2.3.1' # The administration framework for Ruby on Rails applications. https://activeadmin.info
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'active_storage_validations', '~> 0.9' # Better validations for active_storage.
 gem 'fastimage', '~> 2.1'
@@ -28,15 +27,10 @@ gem 'slim', '~> 4.0' # Slim templating.
 gem 'turbolinks', '~> 5.0' # Quicker page navigation. https://github.com/turbolinks/turbolinks
 gem 'uglifier', '~> 4.1' # JavaScript compressor.
 gem 'rest-client', '~> 2.0' # Used to contact Fast Alerts' API.
-gem 'select2-rails', '~> 4.0' # Select2 javascript select box improvement library, using in ActiveAdmin interface.
-
 gem 'bootstrap', '>= 4.3.1' # Official Sass port of Bootstrap.
 gem 'autoprefixer-rails', '~> 10.0' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'bootstrap_form', '~> 4.0' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
-
-# TODO: The zones list in the gem was outdated.
-# Have updated and submitted a PR (https://github.com/ralovets/valid_url/pull/10). Using a personal fork until it's merged.
-gem 'valid_url', '= 0.0.4', github: 'mahesh-krishnakumar/valid_url', branch: 'patch-1' # New url validataion gem
+gem 'valid_url', '= 0.0.4', github: 'ralovets/valid_url' # URL validation: https://github.com/ralovets/valid_url
 gem 'roadie-rails', '~> 2.0' # CSS management for e-mails.
 gem 'puma', '< 6' # The Puma ruby web server.
 gem 'slowpoke', '~> 0.3' # Rack::Timeout enhancements for Rails. https://github.com/ankane/slowpoke
@@ -44,17 +38,14 @@ gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.
 gem 'delayed-web', '~> 0.4' # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.
 gem 'seedbank', '~> 0.4' # Better organized seed data.
 gem 'font-awesome-rails', '~> 4.7' # Icons from font-awesome!
-gem 'friendly_id', '~> 5.4' # Slugs for links. http://norman.github.io/friendly_id
 gem 'kramdown', '~> 2.3' # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions. http://kramdown.gettalong.org
 gem 'motion-markdown-it', '~> 8.4.1' # Ruby version of Markdown-it (a CommonMark compliant extensible parser).
 gem 'motion-markdown-it-plugins', '~> 8.4.2' # Plugins for motion-markdown-it.
 gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
-gem 'videojs_rails', '~> 4.12' # Video JS for Rails 3.1+ Asset Pipeline. https://github.com/seanbehan/videojs_rails
 gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.
 gem 'acts-as-taggable-on', github: 'spark-solutions/acts-as-taggable-on', branch: 'fix/rails-6-and-failing-specs' # Tag a single model on several contexts. TODO: remove tracking branch when gem is updated for Rails 6 issues
 gem 'email_inquire', '~> 0.6' # Validate email for format, common typos and one-time email providers
 gem 'titleize', '~> 1.4' # better titleizing, modifies Inflector.titleize from default rails
-gem 'addressable', '~> 2.5' # Addressable is a replacement for the URI implementation that is part of Ruby's standard library. https://github.com/sporkmonger/addressable
 gem 'reform', '~> 2.2' # Form objects decoupled from models. http://www.trailblazer.to/gems/reform
 gem 'reform-rails', '~> 0.1'
 gem 'virtus', '~> 1.0' # Required for reform coercion. Attributes on Steroids for Plain Old Ruby Objects
@@ -75,7 +66,6 @@ gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google
 gem 'omniauth-facebook', '~> 8.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
 gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
 
-gem 'pretender', '~> 0.3.4' # Log in as another user in Rails
 gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
 gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
@@ -88,7 +78,6 @@ gem 'batch-loader', '~> 1.5' # Generic lazy batching mechanism to avoid N+1 DB q
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-bootstrap-tabcollapse', '~> 0.2' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.
-  gem 'rails-assets-masonry', '~> 4.1' # Masonry works by placing elements in optimal position based on available vertical space.
   gem 'rails-assets-jquery-stickit', '~> 0.2' # A jQuery plugin provides a sticky header, sidebar or else when scrolling.
   gem 'rails-assets-jquery.scrollTo', '~> 2.1' # Lightweight, cross-browser and highly customizable animated scrolling with jQuery
   gem 'rails-assets-intro.js', '~> 2.4' # A better way for new feature introduction and step-by-step users guide for your website and project.
@@ -98,13 +87,9 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-readmore', '~> 2.2' # A lightweight jQuery plugin for collapsing and expanding long blocks of text with "Read more" and "Close" links.
   gem 'rails-assets-waypoints', '~> 4.0' # Waypoints is a library that makes it easy to execute a function whenever you scroll to an element.
   gem 'rails-assets-gemini-scrollbar', '~> 1.5' # Custom overlay-scrollbars with native scrolling mechanism for web applications
-  gem 'rails-assets-datetimepicker', '~> 2.5' # jQuery Plugin Date and Time Picker
   gem 'rails-assets-moment', '~> 2.18' # Parse, validate, manipulate, and display dates in javascript. http://momentjs.com
   gem 'rails-assets-jquery', '~> 3.3' # TODO: Lock down jquery to v2 because v3 doesn't work well with AA.
   gem 'rails-assets-lodash', '~> 4.17' # A modern JavaScript utility library delivering modularity, performance, & extras.
-  gem 'rails-assets-typedjs', '~> 2.0' # A JavaScript Typing Animation Library.
-  gem 'rails-assets-jquery.counterup', '~> 2.1' # Lightweight jQuery plugin that counts up to a targeted number when the number becomes visible.
-  gem 'rails-assets-jquery-sparkline', '= 2.1.3' # Generates sparklines (small inline charts) directly in the browser.
 end
 
 group :development do

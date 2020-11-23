@@ -361,71 +361,6 @@ p {
   padding-bottom: 10px;
 }
 
-form {
-  .form-group {
-    .form-control-label {
-      padding-top: 7px;
-      display: block;
-    }
-
-    select {
-      appearance: none;
-      position: relative;
-      background: asset-url("shared/arrow-down.svg") no-repeat calc(100% - 12px);
-      background-color: white;
-      background-size: 10px 10px;
-      color: $light-grey-text;
-      font-weight: $font-regular;
-      text-shadow: 0 0 0 #000;
-    }
-
-    .select2-selection {
-      border-color: $gray-border;
-      min-height: 2rem;
-    }
-
-    .radio,
-    .radio-inline {
-      padding-top: 7px;
-      margin-right: 20px;
-
-      input {
-        margin-right: 8px;
-      }
-    }
-    .form-control {
-      font-size: 0.875rem;
-      padding: 0.5rem 0.75rem;
-      line-height: normal;
-
-      &:focus {
-        border-color: lighten($light-secondary, 20%);
-      }
-    }
-    &:before,
-    &:after {
-      content: " ";
-      display: table;
-    }
-    &:after {
-      clear: both;
-    }
-    @include media-breakpoint-down(xs) {
-      margin-bottom: 1rem;
-    }
-  }
-  .simple-form-submit {
-    margin-left: 15px;
-
-    @include media-breakpoint-down(sm) {
-      margin-left: 0;
-    }
-  }
-  abbr[title="required"] {
-    display: none;
-  }
-}
-
 .content-head {
   position: relative;
   padding-top: 40px;
@@ -509,9 +444,7 @@ form {
 .read-more-link {
   text-transform: uppercase;
   font-weight: $font-semibold;
-  text-align: center;
   display: inline-block;
-  position: relative;
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0) 0%,
@@ -539,46 +472,6 @@ form {
   padding-top: 85px;
 }
 
-.video-modal {
-  .modal-dialog {
-    @include media-breakpoint-down(md) {
-      max-width: 720px;
-    }
-    .modal-content {
-      background-color: transparent;
-      border: 0;
-
-      .modal-header {
-        border: 0;
-        padding: 0;
-
-        .close {
-          color: #fff;
-          opacity: 0.5;
-          text-shadow: 0;
-        }
-      }
-      .modal-body {
-        background-color: rgba(0, 0, 0, 1);
-        padding: 10px 10px 0;
-        @include border-radius(5px);
-      }
-    }
-  }
-  .video-frame {
-    width: 100%;
-    height: 500px;
-
-    @include media-breakpoint-down(md) {
-      width: 100%;
-      max-height: 100%;
-    }
-    @include media-breakpoint-down(sm) {
-      height: 300px;
-    }
-  }
-}
-
 .success-box,
 .alert-box {
   padding: 15px;
@@ -593,7 +486,7 @@ form {
   align-items: center;
 
   &:before {
-    font-family: "FontAwesome";
+    font-family: "FontAwesome", sans-serif;
     font-size: 2.125rem;
     margin-right: 15px;
   }
@@ -620,18 +513,6 @@ form {
 .tooltip {
   @include media-breakpoint-down(sm) {
     display: none;
-  }
-}
-
-.video-box {
-  width: 100%;
-  height: 315px;
-  border: 1px solid $gray-border;
-  @include border-radius(5px);
-
-  @include media-breakpoint-down(md) {
-    width: 100%;
-    max-height: 100%;
   }
 }
 

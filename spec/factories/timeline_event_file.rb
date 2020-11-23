@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :timeline_event_file do
     transient do
-      file_path { 'resources/pdf-sample.pdf' }
+      file_path { 'files/pdf-sample.pdf' }
     end
 
     sequence(:title) { |i| [Faker::Lorem.word, i].join ' ' }

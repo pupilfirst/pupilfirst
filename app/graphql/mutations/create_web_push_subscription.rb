@@ -12,7 +12,7 @@ module Mutations
       mutator = CreateWebPushSubscriptionMutator.new(context, params)
 
       if mutator.valid?
-        mutator.execute
+        mutator.create_subscription
         { success: true }
       else
         mutator.notify_errors

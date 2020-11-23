@@ -5,6 +5,20 @@ class HomeController < ApplicationController
   end
 
   def styleguide
+    Webpush.payload_send(
+      message: JSON.generate({ title: "Holas", body: "lalal" }),
+      endpoint: current_user.web_push_subscription['endpoint'],
+      p256dh: current_user.web_push_subscription['p256dh'],
+      auth: current_user.web_push_subscription['auth'],
+      vapid: {
+        subject: 'mailto:sender@example.com',
+        public_key: Rails.application.secrets.vapid_public_key,
+        private_key: Rails.application.secrets.vapid_private_key
+      },
+      ssl_timeout: 5,
+      open_timeout: 5,
+      read_timeout: 5
+    )
     @skip_container = true
     @hide_layout_header = true
     render layout: 'tailwind'

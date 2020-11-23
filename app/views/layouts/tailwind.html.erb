@@ -2,7 +2,9 @@
 
 <!DOCTYPE html>
 <html lang='en' data-user-id="<%= current_user&.id %>" data-flash="<%= presenter.flash_messages %>" data-env="<%= Rails.env %>"
-      data-vapid-public-key="<%= Base64.urlsafe_decode64(Rails.application.secrets.vapid_public_key).bytes %>">
+      data-vapid-public-key="<%= Base64.urlsafe_decode64(Rails.application.secrets.vapid_public_key).bytes %>"
+      data-subscription-endpoint="<%= current_user.web_push_subscription['endpoint'] %>"
+>
 <head>
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>

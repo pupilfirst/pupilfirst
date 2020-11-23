@@ -4,7 +4,7 @@ class CreateWebPushSubscriptionMutator < ApplicationQuery
   property :auth, validates: { presence: true }
 
   def create_subscription
-    current_user.update!(web_push_subscription: subscription)
+    current_user.update!(web_push_subscription: web_push_subscription)
   end
 
   private

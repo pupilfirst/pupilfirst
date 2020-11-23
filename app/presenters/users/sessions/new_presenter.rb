@@ -8,12 +8,14 @@ module Users
       private
 
       def props
+        allow_email = ENV.fetch('ALLOW_EMAIL_SIGN_IN') { 'false' }
+        allow_email = allow_email == 'true' ? true : false
         {
           school_name: school_name,
           fqdn: view.current_host,
           oauth_host: oauth_host,
           available_oauth_providers: Devise.omniauth_providers,
-          allow_email_sign_in: ENV.fetch('ALLOW_EMAIL_SIGN_IN') { false }
+          allow_email_sign_in: allow_email
         }
       end
 

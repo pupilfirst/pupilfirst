@@ -3,9 +3,12 @@ exception UnexpectedSubmissionStatus(string);
 [%bs.raw {|require("./CoursesCurriculum__Overlay.css")|}];
 
 open CoursesCurriculum__Types;
+
 module TargetStatus = CoursesCurriculum__TargetStatus;
 
 let str = React.string;
+
+let t = I18n.t(~scope="components.CoursesCurriculum__Overlay");
 
 type tab =
   | Learn
@@ -68,28 +71,32 @@ let completionTypeToString = (completionType, targetStatus) =>
     targetStatus |> TargetStatus.status,
     completionType: TargetDetails.completionType,
   ) {
-  | (Pending, Evaluated) => "Complete"
-  | (Pending, TakeQuiz) => "Take Quiz"
-  | (Pending, LinkToComplete) => "Visit Link to Complete"
-  | (Pending, MarkAsComplete) => "Mark as Complete"
+  | (Pending, Evaluated) => t("completion_tab_complete")
+  | (Pending, TakeQuiz) => t("completion_tab_take_quiz")
+  | (Pending, LinkToComplete) => t("completion_tab_visit_link")
+  | (Pending, MarkAsComplete) => t("completion_tab_mark_complete")
   | (
       PendingReview | Completed | Rejected |
       Locked(CourseLocked | AccessLocked),
       Evaluated,
-    ) => "Submissions & Feedback"
+    ) =>
+    t("completion_tab_submissions")
   | (
       PendingReview | Completed | Rejected |
       Locked(CourseLocked | AccessLocked),
       TakeQuiz,
-    ) => "Quiz Responses"
-  | (PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) => "Completed"
-  | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete) => "Locked"
+    ) =>
+    t("completion_tab_quiz_responses")
+  | (PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) =>
+    t("completion_tab_completed")
+  | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete) =>
+    t("completion_tab_locked")
   };
 
 let tabToString = (targetStatus, tab) =>
   switch (tab) {
-  | Learn => "Learn"
-  | Discuss => "Discuss"
+  | Learn => t("learn_tab")
+  | Discuss => t("discuss_tab")
   | Complete(completionType) =>
     completionTypeToString(completionType, targetStatus)
   };
@@ -262,7 +269,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
           className="if i-times-regular text-xl lg:text-2xl mt-1 lg:mt-0"
         />
         <span className="text-xs hidden lg:inline-block mt-px">
-          {"Close" |> str}
+          {t("close_button") |> str}
         </span>
       </button>
       <div
@@ -274,12 +281,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
       </div>
     </div>
     {preview
-       ? <div>
-           {renderLocked(
-              "You are currently looking at a preview of this course.",
-            )}
-         </div>
-       : React.null}
+       ? <div> {renderLocked(t("preview_mode_text"))} </div> : React.null}
   </div>;
 
 let renderLockReason = reason =>
@@ -454,7 +456,7 @@ let completeSection =
 let renderPendingStudents = (pendingUserIds, users) =>
   <div className="max-w-3xl mx-auto text-center mt-4">
     <div className="font-semibold text-md">
-      {"You have team members who are yet to complete this target:" |> str}
+      {t("pending_team_members_notice") |> str}
     </div>
     <div className="flex justify-center flex-wrap">
       {pendingUserIds
@@ -508,8 +510,12 @@ let performQuickNavigation = (send, _event) => {
 let navigationLink = (direction, url, send) => {
   let (leftIcon, text, rightIcon) =
     switch (direction) {
-    | `Previous => (Some("fa-arrow-left"), "Previous Target", None)
-    | `Next => (None, "Next Target", Some("fa-arrow-right"))
+    | `Previous => (
+        Some("fa-arrow-left"),
+        t("previous_target_button"),
+        None,
+      )
+    | `Next => (None, t("next_target_button"), Some("fa-arrow-right"))
     };
 
   let arrow = icon =>
@@ -551,7 +557,7 @@ let quickNavigationLinks = (targetDetails, send) => {
           onClick=scrollOverlayToTop
           className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
           <span className="mx-2 hidden md:inline">
-            {"Scroll to Top" |> str}
+            {t("scroll_to_top") |> str}
           </span>
           <span className="mx-2 md:hidden">
             <i className="fas fa-arrow-up" />

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_09_205227) do
+ActiveRecord::Schema.define(version: 2020_11_23_190246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -777,6 +777,7 @@ ActiveRecord::Schema.define(version: 2020_11_09_205227) do
     t.datetime "account_deletion_notification_sent_at"
     t.string "api_token_digest"
     t.string "locale", default: "en"
+    t.jsonb "web_push_subscription", default: {}
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
     t.index ["delete_account_token"], name: "index_users_on_delete_account_token", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true

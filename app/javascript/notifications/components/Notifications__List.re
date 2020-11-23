@@ -526,6 +526,8 @@ let make = () => {
     [|state.filter|],
   );
 
+  WebpushSubscription.create();
+
   <div>
     <div className="pt-4 px-4 lg:px-8 bg-gray-100">
       <div className="font-bold text-xl"> {str("Notifications")} </div>

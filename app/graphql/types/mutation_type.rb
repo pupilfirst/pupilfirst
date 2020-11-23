@@ -65,5 +65,7 @@ module Types
     field :mark_all_notifications, mutation: Mutations::MarkAllNotifications, null: false
     field :create_topic_subscription, mutation: Mutations::CreateTopicSubscription, null: false
     field :delete_topic_subscription, mutation: Mutations::DeleteTopicSubscription, null: false
+    field :create_web_push_subscription, mutation: Mutations::CreateWebPushSubscription, null: false
+    field :delete_web_push_subscription, mutation: Mutations::DeleteWebPushSubscription, null: false
   end
 end

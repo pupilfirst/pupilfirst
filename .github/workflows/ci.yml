@@ -48,8 +48,8 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.7'
-      - name: Set ENV for CodeClimate
-        uses: actions/github-script@0.9.0
+      - name: Set branch name & commit SHA in env
+        uses: actions/github-script@v3
         with:
           script: |
             console.log(`Event: ${context.eventName}`);
@@ -57,21 +57,15 @@ jobs:
 
             if (context.eventName === "push") {
               // Pushes have a '/ref/heads/' prefixed to the branch name.
-              branchName = context.payload.ref.replace("refs/heads/", "");
+              branchName = process.env.GITHUB_REF.replace("refs/heads/", "");
             } else {
-              console.log(`Cancelling, because of event: ${context.eventName}`);
-              return;
+              branchName = process.env.GITHUB_HEAD_REF;
             }
 
-            if (branchName === "master") {
-              console.log(`Setting GIT_BRANCH=${branchName}`);
-              core.exportVariable("GIT_BRANCH", branchName);
-              console.log(`Setting GIT_COMMIT_SHA=${context.sha}`);
-              core.exportVariable("GIT_COMMIT_SHA", context.sha);
-            } else {
-              console.log(`Cancelling, because of branch: ${branchName}`);
-              return;
-            }
+            console.log(`Setting GIT_BRANCH=${branchName}`);
+            core.exportVariable("GIT_BRANCH", branchName);
+            console.log(`Setting GIT_COMMIT_SHA=${context.sha}`);
+            core.exportVariable("GIT_COMMIT_SHA", context.sha);
       - name: Restore Bundle
         uses: actions/cache@master
         with:
@@ -88,15 +82,6 @@ jobs:
       - name: Setup Database
         run: |
           bundle exec rake db:schema:load
-      - name: Restore Assets
-        uses: actions/cache@master
-        with:
-          path: |
-            public/assets
-            public/packs-test
-          key: ${{ runner.os }}-assets-$GIT_BRANCH
-          restore-keys: |
-            ${{ runner.os }}-assets-
       - name: Restore Lerna
         uses: actions/cache@master
         with:
@@ -116,11 +101,11 @@ jobs:
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-          COVERAGE=true bundle exec rspec --format progress
+          COVERAGE=true bundle exec rspec -fd
           ./cc-test-reporter after-build -t simplecov --exit-code $?
       - name: Specs (On non-master branches)
         if: env.GIT_BRANCH != 'master'
-        run: bundle exec rspec --format progress
+        run: bundle exec rspec -fd
       - uses: actions/upload-artifact@v1
         if: failure()
         with:

@@ -115,9 +115,17 @@ Rails.application.configure do
   # Store files on Amazon S3.
   config.active_storage.service = :amazon
 
+  config.action_mailer.smtp_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: 'smtp.mandrillapp.com',
+    port: '587',
+    user_name: 'Growthtribe',
+    password: ENV['MAILCHIMP_API_KEY']
+  }
+
   # Postmark
-  config.action_mailer.delivery_method = :postmark
-  config.action_mailer.postmark_settings = { api_token: ENV['POSTMARK_API_TOKEN'] }
+  # config.action_mailer.delivery_method = :postmark
+  # config.action_mailer.postmark_settings = { api_token: ENV['POSTMARK_API_TOKEN'] }
 
   # Add the rack-cors middleware to serve CORS header for static assets
   config.middleware.insert_before 0, Rack::Cors do

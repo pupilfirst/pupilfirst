@@ -9,8 +9,10 @@ external createSubscription: unit => Js.Promise.t(subscription) =
   "createSubscription";
 
 [@bs.module "./webpushSubscription"]
-external getWebPushData: unit => Js.Promise.t(option(subscription)) =
+external getWebPushData: unit => Js.Promise.t(Js.Nullable.t(subscription)) =
   "getWebPushData";
+
+// @bs.module(“MyConstant”) external myId: Js.Nullable.t<string> = “myId”
 
 let str = React.string;
 
@@ -134,28 +136,18 @@ let loadStatus = (status, send) => {
   | Subscribed
   | SubscribedOnAnotherDevice =>
     getWebPushData()
-    |> Js.Promise.then_(response => {
-         //  Js.log(response->Belt.Option.mapWithDefault("a", b => b.endpoint));
-
-         switch (response) {
-         | Some(x) => Js.log(x)
-         | None => Js.log("q")
+    |> Js.Promise.then_(r => {
+         let response = Js.Nullable.toOption(r);
+         switch (webPushEndpoint, response) {
+         | (None, _) => send(SetStatusUnSubscribed)
+         | (Some(_endpoint), None) =>
+           send(SetStatusSubscribedOnAnotherDevice)
+         | (Some(endpoint1), Some(subscription)) =>
+           send(
+             endpoint1 == subscription.endpoint
+               ? SetStatusSubscribed : SetStatusSubscribedOnAnotherDevice,
+           )
          };
-
-         //  switch (webPushEndpoint, response) {
-         //  | (None, _) => send(SetStatusUnSubscribed)
-         //  | (Some(_endpoint), None) =>
-         //    send(SetStatusSubscribedOnAnotherDevice)
-         //  | (Some(endpoint1), Some(subscription)) =>
-         //    Js.log("here");
-         //    Js.log(endpoint1);
-         //    Js.log(subscription.endpoint);
-         //    Js.log(endpoint1 === subscription.endpoint);
-         //    send(
-         //      endpoint1 == subscription.endpoint
-         //        ? SetStatusSubscribed : SetStatusSubscribedOnAnotherDevice,
-         //    );
-         //  };
 
          Js.Promise.resolve();
        })

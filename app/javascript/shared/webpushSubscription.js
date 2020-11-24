@@ -5,7 +5,7 @@ function subscriptionDetails(data){
 export async function getWebPushData() {
   const sw = await navigator.serviceWorker.ready
   const subscription = await sw.pushManager.getSubscription()
-  return subscription ? subscriptionDetails(subscription.toJSON()) : null
+  return subscription === null ? null : subscriptionDetails(subscription.toJSON())
 }
 
 export async function createSubscription() {

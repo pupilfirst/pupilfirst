@@ -120,7 +120,8 @@ Rails.application.configure do
     address: 'smtp.mandrillapp.com',
     port: '587',
     user_name: 'Growthtribe',
-    password: ENV['MAILCHIMP_API_KEY']
+    password: ENV['MAILCHIMP_API_KEY'],
+    domain: ENV['MANDRILL_DOMAIN']
   }
 
   # Postmark

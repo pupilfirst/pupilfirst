@@ -27,7 +27,7 @@ after 'development:targets' do
       file_cb = target_version.content_blocks.create!(block_type: 'file', content: { title: Faker::Lorem.sentence(word_count: 3) }, sort_index: 3)
 
       file_cb.file.attach(
-        io: File.open(Rails.root.join('spec', 'support', 'uploads', 'resources', 'pdf-sample.pdf')),
+        io: File.open(Rails.root.join('spec', 'support', 'uploads', 'files', 'pdf-sample.pdf')),
         filename: 'pdf-sample.pdf'
       )
 

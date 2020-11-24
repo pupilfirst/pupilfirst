@@ -1,4 +1,0 @@
-.resource-tags.my-2 class="#{fade ? 'resource-tags-fade' : ''}"
-  - resource.tags.each do |tag|
-    = link_to resources_path('resources_filter[tags][]' => tag.name), class: 'badge badge-pill badge-secondary font-regular resource-tags__badge' do
-      = tag.name

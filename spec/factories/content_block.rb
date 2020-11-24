@@ -15,13 +15,13 @@ FactoryBot.define do
 
     trait :image do
       block_type { ContentBlock::BLOCK_TYPE_IMAGE }
-      file { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/uploads/resources/pdf-thumbnail.png'), 'image/png') }
+      file { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/uploads/files/icon_pupilfirst.png'), 'image/png') }
       content { { caption: Faker::Lorem.sentence, width: 'Auto' } }
     end
 
     trait :file do
       block_type { ContentBlock::BLOCK_TYPE_FILE }
-      file { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/uploads/resources/pdf-sample.pdf'), 'application/pdf') }
+      file { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/uploads/files/pdf-sample.pdf'), 'application/pdf') }
       content { { title: Faker::Lorem.words(number: 3).join(" ").titleize } }
     end
 

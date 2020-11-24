@@ -9,7 +9,9 @@
           "apply",
           "variants",
           "responsive",
-          "screen"
+          "screen",
+          "include",
+          "extend"
         ]
       }
     ],

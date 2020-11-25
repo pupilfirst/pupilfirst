@@ -1,9 +1,0 @@
-- if user.founders.count > 1
-  ul
-    - user.founders.each do |founder|
-      li
-        ' #{link_to(founder.name, admin_founder_path(founder))}
-        | (#{founder.startup.course.name} Course)
-- else
-  - founder = user.founders.first
-  == link_to(founder.name, admin_founder_path(founder))

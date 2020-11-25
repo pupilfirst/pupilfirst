@@ -1,9 +1,0 @@
-.col-lg-4.col-md-6
-  .resource-box.content-box.pb-0
-    .resource-content
-      h4.mb-3
-        = link_to truncate( resource.title, length: 50, separator: ' ' ), resource
-      .description
-        = simple_format resource.description
-      = render 'tags', resource: resource, fade: true
-    == render 'links', resource: resource, playing: false

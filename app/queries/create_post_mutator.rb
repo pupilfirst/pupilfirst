@@ -15,6 +15,14 @@ class CreatePostMutator < ApplicationQuery
     errors[:base] << 'cannot add reply to topic body'
   end
 
+  validate :topic_is_not_locked
+
+  def topic_is_not_locked
+    return if topic.locked_at.blank?
+
+    errors[:base] << 'cannot add reply to a locked topic'
+  end
+
   def create_post
     Post.transaction do
       post = Post.create!(

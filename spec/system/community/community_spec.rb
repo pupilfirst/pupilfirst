@@ -519,14 +519,14 @@ feature 'Community', js: true do
     end
   end
 
-  scenario 'student attempts to lock/unlock a topic' do
+  scenario 'student attempts to lock a topic' do
     sign_in_user(student_1.user, referrer: topic_path(topic_1))
 
     expect(page).to have_text(topic_1.title)
     expect(page).to_not have_button('Lock Topic')
   end
 
-  scenario 'coach attempts to lock a topic' do
+  scenario 'coach attempts to lock/unlock a topic' do
     sign_in_user(coach.user, referrer: topic_path(topic_1))
 
     accept_confirm { click_button('Lock Topic') }

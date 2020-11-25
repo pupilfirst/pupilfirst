@@ -106,8 +106,7 @@ RSpec.configure do |config|
     Faker::UniqueGenerator.clear
   end
 
-  #
-  config.after(:each) do
+  config.after(:each, type: :system, js: true) do
     errors = page.driver.browser.manage.logs.get(:browser)
     if errors.present?
       message = errors.map(&:message).join("\n")

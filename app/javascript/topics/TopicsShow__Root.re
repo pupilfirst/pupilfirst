@@ -483,16 +483,30 @@ let make =
          |> React.array}
       </div>
       <div className="mt-4 px-4">
-        <TopicsShow__PostEditor
-          id="add-reply-to-topic"
-          topic
-          currentUserId
-          handlePostCB={saveReply(send, state.replyToPostId)}
-          replyToPostId=?{state.replyToPostId}
-          replies={state.replies}
-          users
-          removeReplyToPostCB={() => send(RemoveReplyToPost)}
-        />
+        {switch (Topic.lockedAt(state.topic)) {
+         | Some(_lockedAt) =>
+           <div
+             className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-l-4 rounded-r-md mt-2 mx-auto w-full max-w-4xl mb-4">
+             <div className="w-6 h-6 text-yellow-500 flex-shrink-0">
+               <i className="fa fa-lock" />
+             </div>
+             <span className="ml-2">
+               "The thread is locked for any further posts."->React.string
+             </span>
+           </div>
+
+         | None =>
+           <TopicsShow__PostEditor
+             id="add-reply-to-topic"
+             topic
+             currentUserId
+             handlePostCB={saveReply(send, state.replyToPostId)}
+             replyToPostId=?{state.replyToPostId}
+             replies={state.replies}
+             users
+             removeReplyToPostCB={() => send(RemoveReplyToPost)}
+           />
+         }}
       </div>
     </div>
   </div>;

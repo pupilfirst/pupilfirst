@@ -106,6 +106,15 @@ RSpec.configure do |config|
     Faker::UniqueGenerator.clear
   end
 
+  #
+  config.after(:each) do
+    errors = page.driver.browser.manage.logs.get(:browser)
+    if errors.present?
+      message = errors.map(&:message).join("\n")
+      puts message
+    end
+  end
+
   include AnObjectLikeMatcher
 end
 

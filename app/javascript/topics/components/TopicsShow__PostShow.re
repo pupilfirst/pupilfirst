@@ -42,26 +42,6 @@ module ArchivePostQuery = [%graphql
 |}
 ];
 
-module LockTopicQuery = [%graphql
-  {|
-  mutation LockTopicMutation($id: ID!) {
-    lockTopic(id: $id)  {
-      success
-    }
-  }
-|}
-];
-
-module UnlockTopicQuery = [%graphql
-  {|
-  mutation UnlockTopicMutation($id: ID!) {
-    unlockTopic(id: $id)  {
-      success
-    }
-  }
-|}
-];
-
 let markPostAsSolution = (postId, markPostAsSolutionCB) => {
   MarkPostAsSolutionQuery.make(~id=postId, ())
   |> GraphqlQuery.sendQuery
@@ -94,39 +74,8 @@ let archivePost = (isFirstPost, postId, archivePostCB) => {
     : ();
 };
 
-let lockTopic = (topicId, lockTopicCB) => {
-  Webapi.Dom.window
-  |> Webapi.Dom.Window.confirm("Are you sure you want to lock this thread?")
-    ? {
-      LockTopicQuery.make(~id=topicId, ())
-      |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response => {
-           response##lockTopic##success ? lockTopicCB() : ();
-           Js.Promise.resolve();
-         })
-      |> ignore;
-    }
-    : ();
-};
-
-let unlockTopic = (topicId, unlockTopicCB) => {
-  Webapi.Dom.window
-  |> Webapi.Dom.Window.confirm("Are you sure you want to unlock this thread?")
-    ? {
-      UnlockTopicQuery.make(~id=topicId, ())
-      |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response => {
-           response##unlockTopic##success ? unlockTopicCB() : ();
-           Js.Promise.resolve();
-         })
-      |> ignore;
-    }
-    : ();
-};
-
 let optionsDropdown =
     (
-      topic,
       post,
       isPostCreator,
       isTopicCreator,
@@ -136,8 +85,6 @@ let optionsDropdown =
       toggleShowPostEdit,
       markPostAsSolutionCB,
       archivePostCB,
-      lockTopicCB,
-      unlockTopicCB,
     ) => {
   let selected =
     <div
@@ -191,37 +138,6 @@ let optionsDropdown =
     | None => React.null
     };
 
-  let showLock = isFirstPost ? moderator : false;
-
-  let isLocked = Belt.Option.isSome(Topic.lockedAt(topic));
-
-  let lockButton =
-    showLock
-      ? <button
-          onClick={_ => {
-            let topicId = Topic.id(topic);
-            isLocked
-              ? unlockTopic(topicId, unlockTopicCB)
-              : lockTopic(topicId, lockTopicCB);
-          }}
-          className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
-          <FaIcon
-            classes={
-              (
-                "fa "
-                ++ {
-                  isLocked ? "fa-unlock" : "fa-lock";
-                }
-              )
-              ++ " fa-fw text-base"
-            }
-          />
-          <span className="ml-2">
-            {(isLocked ? "Unlock Topic" : "Lock Topic") |> str}
-          </span>
-        </button>
-      : React.null;
-
   let contents =
     switch (moderator, isTopicCreator, isPostCreator) {
     | (true, _, _) => [|
@@ -229,7 +145,6 @@ let optionsDropdown =
         markAsSolutionButton,
         historyButton,
         deletePostButton,
-        lockButton,
       |]
     | (false, true, false) => [|markAsSolutionButton, historyButton|]
     | (false, true, true) => [|
@@ -293,8 +208,6 @@ let make =
       ~removePostLikeCB,
       ~markPostAsSolutionCB,
       ~archivePostCB,
-      ~lockTopicCB,
-      ~unlockTopicCB,
     ) => {
   let creator = Post.creatorId(post)->findUser(users);
   let editor = Post.editorId(post)->findUser(users);
@@ -326,7 +239,6 @@ let make =
               <div className="flex-shrink-0 mt-1">
                 {isPostCreator || moderator || isTopicCreator
                    ? optionsDropdown(
-                       topic,
                        post,
                        isPostCreator,
                        isTopicCreator,
@@ -336,8 +248,6 @@ let make =
                        toggleShowPostEdit,
                        markPostAsSolutionCB,
                        archivePostCB,
-                       lockTopicCB,
-                       unlockTopicCB,
                      )
                    : React.null}
               </div>
@@ -393,7 +303,6 @@ let make =
                    <div className="hidden lg:block flex-shrink-0 ml-3">
                      {isPostCreator || moderator || isTopicCreator
                         ? optionsDropdown(
-                            topic,
                             post,
                             isPostCreator,
                             isTopicCreator,
@@ -403,8 +312,6 @@ let make =
                             toggleShowPostEdit,
                             markPostAsSolutionCB,
                             archivePostCB,
-                            lockTopicCB,
-                            unlockTopicCB,
                           )
                         : React.null}
                    </div>

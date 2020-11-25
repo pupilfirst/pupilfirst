@@ -11,6 +11,7 @@ type state = {
   replyToPostId: option(string),
   topicTitle: string,
   savingTopic: bool,
+  changingLockedStatus: bool,
   showTopicEditor: bool,
   topicCategory: option(TopicCategory.t),
 };
@@ -31,8 +32,9 @@ type action =
   | ShowTopicEditor(bool)
   | UpdateSavingTopic(bool)
   | MarkReplyAsSolution(string)
-  | LockTopic(string)
-  | UnlockTopic
+  | StartChangingLockStatus
+  | FinishLockingTopic(string)
+  | FinishUnlockingTopic
   | UpdateTopicCategory(option(TopicCategory.t));
 
 let reducer = (state, action) => {
@@ -106,16 +108,19 @@ let reducer = (state, action) => {
       replies: state.replies |> Post.markAsSolution(postId),
     }
   | UpdateTopicCategory(topicCategory) => {...state, topicCategory}
-  | LockTopic(currentUserId) => {
+  | StartChangingLockStatus => {...state, changingLockedStatus: true}
+  | FinishLockingTopic(currentUserId) => {
       ...state,
+      changingLockedStatus: false,
       topic: {
         ...state.topic,
         lockedAt: Some(Js.Date.make()),
         lockedById: Some(currentUserId),
       },
     }
-  | UnlockTopic => {
+  | FinishUnlockingTopic => {
       ...state,
+      changingLockedStatus: false,
       topic: {
         ...state.topic,
         lockedAt: None,
@@ -190,6 +195,59 @@ let updateTopic = (state, send, event) => {
        Js.Promise.resolve();
      })
   |> ignore;
+};
+
+module LockTopicQuery = [%graphql
+  {|
+  mutation LockTopicMutation($id: ID!) {
+    lockTopic(id: $id)  {
+      success
+    }
+  }
+|}
+];
+
+module UnlockTopicQuery = [%graphql
+  {|
+  mutation UnlockTopicMutation($id: ID!) {
+    unlockTopic(id: $id)  {
+      success
+    }
+  }
+|}
+];
+
+let lockTopic = (topicId, currentUserId, send) => {
+  Webapi.Dom.window
+  |> Webapi.Dom.Window.confirm("Are you sure you want to lock this topic?")
+    ? {
+      send(StartChangingLockStatus);
+      LockTopicQuery.make(~id=topicId, ())
+      |> GraphqlQuery.sendQuery
+      |> Js.Promise.then_(response => {
+           response##lockTopic##success
+             ? send(FinishLockingTopic(currentUserId)) : ();
+           Js.Promise.resolve();
+         })
+      |> ignore;
+    }
+    : ();
+};
+
+let unlockTopic = (topicId, send) => {
+  Webapi.Dom.window
+  |> Webapi.Dom.Window.confirm("Are you sure you want to unlock this topic?")
+    ? {
+      send(StartChangingLockStatus);
+      UnlockTopicQuery.make(~id=topicId, ())
+      |> GraphqlQuery.sendQuery
+      |> Js.Promise.then_(response => {
+           response##unlockTopic##success ? send(FinishUnlockingTopic) : ();
+           Js.Promise.resolve();
+         })
+      |> ignore;
+    }
+    : ();
 };
 
 let communityLink = community => {
@@ -306,6 +364,7 @@ let make =
         topicTitle: topic |> Topic.title,
         savingTopic: false,
         showTopicEditor: false,
+        changingLockedStatus: false,
         topicCategory:
           topicCategory(topicCategories, Topic.topicCategoryId(topic)),
       }
@@ -397,19 +456,44 @@ let make =
                     className="topics-show__title-container flex items-center md:items-start justify-between mb-2">
                     <h3
                       ariaLabel="Topic Title"
-                      className="leading-snug lg:pl-14 text-base lg:text-2xl w-5/6">
+                      className="leading-snug lg:pl-14 text-base lg:text-2xl w-9/12">
                       {state.topic |> Topic.title |> str}
                     </h3>
-                    {moderator || isTopicCreator(firstPost, currentUserId)
-                       ? <button
-                           onClick={_ => send(ShowTopicEditor(true))}
-                           className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3">
-                           <i className="far fa-edit" />
-                           <span className="hidden md:inline-block ml-1">
-                             {"Edit Topic" |> str}
-                           </span>
-                         </button>
-                       : React.null}
+                    {<span className="flex">
+                       {moderator || isTopicCreator(firstPost, currentUserId)
+                          ? <button
+                              onClick={_ => send(ShowTopicEditor(true))}
+                              className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3">
+                              <i className="far fa-edit" />
+                              <span className="hidden md:inline-block ml-1">
+                                {"Edit Topic" |> str}
+                              </span>
+                            </button>
+                          : React.null}
+                       {let isLocked =
+                          Topic.lockedAt(state.topic)->Belt.Option.isSome;
+                        let topicId = state.topic->Topic.id;
+                        moderator
+                          ? <button
+                              disabled={state.changingLockedStatus}
+                              onClick={_ =>
+                                isLocked
+                                  ? unlockTopic(topicId, send)
+                                  : lockTopic(topicId, currentUserId, send)
+                              }
+                              className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-2">
+                              <PfIcon
+                                className={
+                                  "fa fa-" ++ (isLocked ? "unlock" : "lock")
+                                }
+                              />
+                              <span className="hidden md:inline-block ml-1">
+                                {(isLocked ? "Unlock Topic" : "Lock Topic")
+                                 |> str}
+                              </span>
+                            </button>
+                          : React.null}
+                     </span>}
                   </div>
                   {switch (state.topicCategory) {
                    | Some(topicCategory) =>
@@ -441,8 +525,6 @@ let make =
              removePostLikeCB={() => send(RemoveLikeFromFirstPost)}
              markPostAsSolutionCB={() => ()}
              archivePostCB={() => archiveTopic(community)}
-             lockTopicCB={() => send(LockTopic(currentUserId))}
-             unlockTopicCB={() => send(UnlockTopic)}
            />
          </div>}
         {<h5 className="pt-4 pb-2 lg:ml-14 border-b">
@@ -475,8 +557,6 @@ let make =
                   removePostLikeCB={() => send(RemoveLikeFromReply(reply))}
                   addPostLikeCB={() => send(LikeReply(reply))}
                   archivePostCB={() => send(ArchivePost(Post.id(reply)))}
-                  lockTopicCB={() => send(LockTopic(currentUserId))}
-                  unlockTopicCB={() => send(UnlockTopic)}
                 />
               </div>
             )
@@ -486,12 +566,13 @@ let make =
         {switch (Topic.lockedAt(state.topic)) {
          | Some(_lockedAt) =>
            <div
-             className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-l-4 rounded-r-md mt-2 mx-auto w-full max-w-4xl mb-4">
+             className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-l-4 rounded-r-md mt-2 mx-auto w-full max-w-4xl mb-4 text-sm justify-center items-center">
              <div className="w-6 h-6 text-yellow-500 flex-shrink-0">
                <i className="fa fa-lock" />
              </div>
              <span className="ml-2">
-               "The thread is locked for any further posts."->React.string
+               "This thread is locked by moderator for any further posts"
+               ->React.string
              </span>
            </div>
 

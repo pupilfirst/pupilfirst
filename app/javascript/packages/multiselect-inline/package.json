@@ -26,14 +26,13 @@
     "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/multiselect-inline"
   },
   "devDependencies": {
-    "bs-platform": "8.0.3",
-    "bsb-js": "^1.1.7",
+    "bs-platform": "8.3.3",
     "parcel-bundler": "^1.12.4",
     "tailwindcss": "^1.1.4"
   },
   "dependencies": {
     "@pupilfirst/pf-icon": "^1.0.1",
-    "bs-webapi": "^0.17.1",
+    "bs-webapi": "^0.19.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "reason-react": ">=0.9.1"

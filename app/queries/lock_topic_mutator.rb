@@ -3,7 +3,7 @@ class LockTopicMutator < ApplicationQuery
   property :id, validates: { presence: true }
 
   def lock_topic
-    topic.update(locked_at: Time.zone.now, locked_by: current_user)
+    topic.update!(locked_at: Time.zone.now, locked_by: current_user)
   end
 
   private

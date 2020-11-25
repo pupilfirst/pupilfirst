@@ -11,6 +11,7 @@ module Mutations
 
       if mutator.valid?
         mutator.unlock_topic
+        mutator.notify(:success, "Done!", "Topic unlocked successfully!")
         { success: true }
       else
         mutator.notify_errors

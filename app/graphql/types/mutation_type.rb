@@ -63,5 +63,7 @@ module Types
     field :update_topic_category, mutation: Mutations::UpdateTopicCategory, null: false
     field :issue_certificate, mutation: Mutations::IssueCertificate, null: false
     field :revoke_issued_certificate, mutation: Mutations::RevokeIssuedCertificate, null: false
+    field :lock_topic, mutation: Mutations::LockTopic, null: false
+    field :unlock_topic, mutation: Mutations::UnlockTopic, null: false
   end
 end

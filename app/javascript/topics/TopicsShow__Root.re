@@ -31,6 +31,8 @@ type action =
   | ShowTopicEditor(bool)
   | UpdateSavingTopic(bool)
   | MarkReplyAsSolution(string)
+  | LockTopic(string)
+  | UnlockTopic
   | UpdateTopicCategory(option(TopicCategory.t));
 
 let reducer = (state, action) => {
@@ -104,6 +106,22 @@ let reducer = (state, action) => {
       replies: state.replies |> Post.markAsSolution(postId),
     }
   | UpdateTopicCategory(topicCategory) => {...state, topicCategory}
+  | LockTopic(currentUserId) => {
+      ...state,
+      topic: {
+        ...state.topic,
+        lockedAt: Some(Js.Date.make()),
+        lockedById: Some(currentUserId),
+      },
+    }
+  | UnlockTopic => {
+      ...state,
+      topic: {
+        ...state.topic,
+        lockedAt: None,
+        lockedById: None,
+      },
+    }
   };
 };
 
@@ -411,7 +429,7 @@ let make =
            <TopicsShow__PostShow
              key={Post.id(state.firstPost)}
              post={state.firstPost}
-             topic
+             topic={state.topic}
              users
              posts={state.replies}
              currentUserId
@@ -423,6 +441,8 @@ let make =
              removePostLikeCB={() => send(RemoveLikeFromFirstPost)}
              markPostAsSolutionCB={() => ()}
              archivePostCB={() => archiveTopic(community)}
+             lockTopicCB={() => send(LockTopic(currentUserId))}
+             unlockTopicCB={() => send(UnlockTopic)}
            />
          </div>}
         {<h5 className="pt-4 pb-2 lg:ml-14 border-b">
@@ -441,7 +461,7 @@ let make =
                 key={Post.id(reply)} className="topics-show__replies-wrapper">
                 <TopicsShow__PostShow
                   post=reply
-                  topic
+                  topic={state.topic}
                   users
                   posts={state.replies}
                   currentUserId
@@ -455,6 +475,8 @@ let make =
                   removePostLikeCB={() => send(RemoveLikeFromReply(reply))}
                   addPostLikeCB={() => send(LikeReply(reply))}
                   archivePostCB={() => send(ArchivePost(Post.id(reply)))}
+                  lockTopicCB={() => send(LockTopic(currentUserId))}
+                  unlockTopicCB={() => send(UnlockTopic)}
                 />
               </div>
             )

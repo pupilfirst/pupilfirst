@@ -108,7 +108,7 @@ module.exports = {
     }
   },
   purge: {
-    content: ["./app/**/*.html.erb", "./app/**/*.re"],
+    content: ["./app/**/*.html.erb", "./app/**/*.res"],
     options: {
       whitelistPatterns: [/^bg-/, /^text-/, /^border-/, /^hover:/],
     },

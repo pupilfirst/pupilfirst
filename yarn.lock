@@ -3142,7 +3142,7 @@
     postcss "7.0.32"
     purgecss "^2.3.0"
 
-"@glennsl/bs-json@^5.0.1":
+"@glennsl/bs-json@^5.0.2":
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/@glennsl/bs-json/-/bs-json-5.0.2.tgz#cfb85d94d370ec6dc17849e0ddb1a51eee08cfcc"
   integrity sha512-vVlHJNrhmwvhyea14YiV4L5pDLjqw1edE3GzvMxlbPPQZVhzgO3sTWrUxCpQd2gV+CkMfk4FHBYunx9nWtBoDg==
@@ -6058,25 +6058,22 @@ browserslist@^4.12.0:
     node-releases "^1.1.53"
     pkg-up "^2.0.0"
 
-bs-fetch@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/bs-fetch/-/bs-fetch-0.6.1.tgz#f25c4690d1976c07dfb0b6f72753271cbbabcc33"
-  integrity sha512-meXUuqTu6quq0X7dW7DmxW8RGiKiONW3n1A9wgXx0KcWHSZuq/PA6C1NoByDiUA5VeE8tYGZ7YXh/uVAl+8pDQ==
+bs-fetch@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/bs-fetch/-/bs-fetch-0.6.2.tgz#37d982e9f79b9bc44c23e87ae78ccbee1f869adf"
+  integrity sha512-VXEjp8kY3vHPckaoy3d96Bx0KYjJAPLNISBwfpwMN26K6DtuZYwI2HKhx7zeHBajz1bRArfx7O8OOLcdtujMvg==
 
-bs-platform@8.0.3:
-  version "8.0.3"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-8.0.3.tgz#574e41ec04fee381d4c400dac547735368caa48f"
-  integrity sha512-I7wulOPM0/NGamwm9CDh9rGjW1oIKltPwwEIOJrL8DBFRXI8OFSACtWGlpaoOw76Xpf+KcVokr00keS2NlzA3A==
+bs-platform@8.3.3:
+  version "8.3.3"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-8.3.3.tgz#68e3796ad0607c55da0f45fe14c0ce0aaf69682c"
+  integrity sha512-ayS5wdvrOX6PxU2wX7O2rLllzsQDzmGq582NNDFwfM6b9HQu7ki242Pc46o2/CnGHHumKVarpX0IZzjC2Llgcg==
 
-bs-webapi@^0.17.1:
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/bs-webapi/-/bs-webapi-0.17.1.tgz#352ea1f203457e5a082b7f350c00e0d165063464"
-  integrity sha512-vM61ubFvJbZyNVRTZpKNLOSMxggHW+2BVtYNMAGgecCToythRiwweFc0/3MCei1k7gZRNbLRwotifS8RyCmZDA==
-
-bsb-js@^1.1.7:
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/bsb-js/-/bsb-js-1.1.7.tgz#12cc91e974f5896b3a2aa8358419d24e56f552c3"
-  integrity sha512-FSR7d5Kb6KfVI5sLz9bEeD9pbA9F4Zbkk1xa6R9CJtyd+dJ7mIkxoXqv7cw7HWcuee+VpIhmjYzrplnFd/5Qgg==
+bs-webapi@^0.19.1:
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/bs-webapi/-/bs-webapi-0.19.1.tgz#cae7d65fc43795376becc44b56f46d85e5b8e878"
+  integrity sha512-sRhkNdHFBxzoiLH+r8rhlW9XSafBbbGCkvsxtTJ1QMABEaHKj8TejwA7TuBZH2ZYL2ur3sk291ukkge5qFm3Uw==
+  dependencies:
+    bs-fetch "^0.6.2"
 
 btoa-lite@^1.0.0:
   version "1.0.0"

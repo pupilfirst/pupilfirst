@@ -2,10 +2,8 @@ module Api
   module Schools
     class CoursesController < SchoolsController
       skip_before_action :verify_authenticity_token
+      before_action :authenticate_user!
       before_action :set_course, only: [:students, :create_students]
-      def index
-        authorize(current_school, policy_class: Schools::CoursePolicy)
-      end
 
       def students
         students = @course.users.map do |u|

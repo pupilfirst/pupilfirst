@@ -8,17 +8,21 @@ module Devise
 
         token = request.headers['Authorization'].split(' ').last
         user_info = keycloak_client.user_info(token)
-        course = Course.find(request.params['course_id'])
 
+        school = School.joins(:domains).where(domains: { fqdn: request.host }).first
         if user_info['active']
-          school_admins = course.school.school_admins
-          user = school_admins.joins(:user)
+          school_admins = school.school_admins
+          school_admin = school_admins.joins(:user)
             .where(users: { email: user_info['email'] })
             .limit(1).first
-          success!(user)
+          success!(school_admin.user)
         else
-          fail
+          fail!
         end
+      end
+
+      def store?
+        false
       end
 
       def keycloak_client

@@ -263,6 +263,7 @@ Devise.setup do |config|
   #
   config.warden do |manager|
     Warden::Strategies.add(:keycloak, Devise::Strategies::Keycloak)
+    manager.default_strategies(:scope => :user).unshift :keycloak
   end
 
   # ==> Mountable engine configurations

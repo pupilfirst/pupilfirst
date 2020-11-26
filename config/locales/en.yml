@@ -220,7 +220,7 @@ en:
     lock_topic:
       success_notification: Topic locked successfully!
     unlock_topic:
-      success_notification: Topic unlocked succesfully!
+      success_notification: Topic unlocked successfully!
 
   queries:
     delete_certificate_mutator:

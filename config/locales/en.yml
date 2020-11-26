@@ -150,6 +150,16 @@ en:
     StudentsEditor__Search:
       filter_input_label: "Filter by:"
       filter_input_placeholder: Type name, tag or level
+    TopicsShow__Root:
+      linked_target_label: "Linked Target: "
+      view_target_button: View Target
+      topic_category_label: "Topic Category: "
+      topic_editor_cancel_button: "Cancel"
+      update_topic_button: Update Topic
+      edit_topic_button: Edit Topic
+      unlock_topic_button: Unlock Topic
+      lock_topic_button: Lock Topic
+      locked_topic_notice: This thread is locked by moderator for any further posts
   jobs:
     timeline_events:
       verification_notification:

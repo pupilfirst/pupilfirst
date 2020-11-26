@@ -1,5 +1,7 @@
 %bs.raw(`require("./TopicsShow__Root.css")`)
 
+let t = I18n.t(~scope="components.TopicsShow__Root")
+
 open TopicsShow__Types
 
 let str = React.string
@@ -336,12 +338,16 @@ let make = (
           <div
             className="flex py-4 px-4 md:px-5 mx-3 lg:mx-0 bg-white border border-primary-500 shadow-md rounded-lg justify-between items-center">
             <p className="w-3/5 md:w-4/5 text-sm">
-              <span className="font-semibold block text-xs"> {"Linked Target: " |> str} </span>
+              <span className="font-semibold block text-xs">
+                {t("linked_target_label") |> str}
+              </span>
               <span> {target |> LinkedTarget.title |> str} </span>
             </p>
             {switch target |> LinkedTarget.id {
             | Some(id) =>
-              <a href={"/targets/" ++ id} className="btn btn-default"> {"View Target" |> str} </a>
+              <a href={"/targets/" ++ id} className="btn btn-default">
+                {t("view_target_button") |> str}
+              </a>
             | None => React.null
             }}
           </div>
@@ -365,7 +371,7 @@ let make = (
                   <div className="flex flex-col md:flex-row md:justify-between md:items-end">
                     <div className="flex flex-col items-left flex-shrink-0">
                       <span className="inline-block text-gray-700 text-tiny font-semibold mr-2">
-                        {"Topic Category: " |> str}
+                        {t("topic_category_label") |> str}
                       </span>
                       <Dropdown
                         selected={categoryDropdownSelected(state.topicCategory)}
@@ -376,13 +382,13 @@ let make = (
                     <div className="flex justify-end pt-4 md:pt-0">
                       <button
                         onClick={_ => send(ShowTopicEditor(false))} className="btn btn-subtle mr-3">
-                        {"Cancel" |> str}
+                        {t("topic_editor_cancel_button") |> str}
                       </button>
                       <button
                         onClick={updateTopic(state, send)}
                         disabled={state.topicTitle |> Js.String.trim == ""}
                         className="btn btn-primary">
-                        {"Update Topic" |> str}
+                        {t("update_topic_button") |> str}
                       </button>
                     </div>
                   </div>
@@ -403,7 +409,7 @@ let make = (
                           className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3">
                           <i className="far fa-edit" />
                           <span className="hidden md:inline-block ml-1">
-                            {"Edit Topic" |> str}
+                            {t("edit_topic_button") |> str}
                           </span>
                         </button>
                       : React.null}
@@ -420,7 +426,9 @@ let make = (
                             className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-2">
                             <PfIcon className={"fa fa-" ++ (isLocked ? "unlock" : "lock")} />
                             <span className="hidden md:inline-block ml-1">
-                              {(isLocked ? "Unlock Topic" : "Lock Topic") |> str}
+                              {(
+                                isLocked ? t("unlock_topic_button") : t("lock_topic_button")
+                              ) |> str}
                             </span>
                           </button>
                         : React.null
@@ -494,9 +502,7 @@ let make = (
             <div className="w-6 h-6 text-yellow-500 flex-shrink-0">
               <i className="fa fa-lock" />
             </div>
-            <span className="ml-2">
-              {"This thread is locked by moderator for any further posts"->React.string}
-            </span>
+            <span className="ml-2"> {t("locked_topic_notice")->React.string} </span>
           </div>
 
         | None =>

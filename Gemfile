@@ -28,7 +28,7 @@ gem 'turbolinks', '~> 5.0' # Quicker page navigation. https://github.com/turboli
 gem 'uglifier', '~> 4.1' # JavaScript compressor.
 gem 'rest-client', '~> 2.0' # Used to contact Fast Alerts' API.
 gem 'bootstrap', '>= 4.3.1' # Official Sass port of Bootstrap.
-gem 'autoprefixer-rails', '~> 10.0' # Autoprefixer for Ruby and Ruby on Rails.
+gem 'autoprefixer-rails', '~> 10.0.2' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'bootstrap_form', '~> 4.0' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
 gem 'valid_url', '= 0.0.4', github: 'ralovets/valid_url' # URL validation: https://github.com/ralovets/valid_url
 gem 'roadie-rails', '~> 2.0' # CSS management for e-mails.

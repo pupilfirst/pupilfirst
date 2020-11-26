@@ -217,6 +217,10 @@ en:
       success_notification: Certificate revoked!
     issue_certificate:
       success_notification: Certificate issued successfully!
+    lock_topic:
+      success_notification: Topic locked successfully!
+    unlock_topic:
+      success_notification: Topic unlocked succesfully!
 
   queries:
     delete_certificate_mutator:

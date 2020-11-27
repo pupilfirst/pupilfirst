@@ -15,6 +15,8 @@ module Devise
           school_admin = school_admins.joins(:user)
             .where(users: { email: user_info['email'] })
             .limit(1).first
+          user = school_admin.user
+          user.update!(api_token_digest: digested_token(token, school))
           success!(school_admin.user)
         else
           fail!
@@ -27,6 +29,10 @@ module Devise
 
       def keycloak_client
         @keycloak_client ||= ::Keycloak::Client.new
+      end
+
+      def digested_token(token, school)
+        Users::FindByApiTokenService.new(token, school).api_token_digest
       end
     end
   end

@@ -1,6 +1,6 @@
 module Users
   # Send a single-use URL to a user that allows them to log into any Pupilfirst-hosted domain.
-  class MailResetPasswordTokenService
+  class MailFirstPasswordTokenService
     include RoutesResolvable
 
     # @param school [School] The current school.
@@ -23,11 +23,12 @@ module Users
         host: @domain.fqdn,
         protocol: 'https'
       }
+      url_options.merge!(referrer: url_helpers.school_url(@school, **url_options))
 
       reset_password_url = url_helpers.reset_password_url(url_options)
 
       # Send the email with link to reset password.
-      UserSessionMailer.send_reset_password_token(@user.email, @school, reset_password_url).deliver_now
+      UserSessionMailer.set_first_password_token(@user, @school, reset_password_url).deliver_now
     end
   end
 end

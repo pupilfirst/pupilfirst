@@ -13,6 +13,10 @@ module Users
         flash[:notice] = 'You are already signed in.'
         redirect_to after_sign_in_path_for(current_user)
       end
+
+      if only_keycloak_sign_in?
+        redirect_to oauth_path(:keycloakopenid, fqdn: current_school.domains.first.fqdn)
+      end
     end
 
     # POST /user/send_email - find or create user from email received
@@ -72,18 +76,14 @@ module Users
 
     # Post /users/update_password
     def update_password
-      if current_user.present?
-        redirect_to after_sign_in_path_for(current_user)
+      @form = Users::Sessions::ResetPasswordForm.new(Reform::OpenForm.new)
+      if @form.validate(params[:session])
+        @form.save
+        @form.user.update!(account_deletion_notification_sent_at: nil)
+        sign_in @form.user
+        render json: { error: nil, path: after_sign_in_path_for(current_user) }
       else
-        @form = Users::Sessions::ResetPasswordForm.new(Reform::OpenForm.new)
-        if @form.validate(params[:session])
-          @form.save
-          @form.user.update!(account_deletion_notification_sent_at: nil)
-          sign_in @form.user
-          render json: { error: nil, path: after_sign_in_path_for(current_user) }
-        else
-          render json: { error: @form.errors.full_messages.join(', '), path: nil }
-        end
+        render json: { error: @form.errors.full_messages.join(', '), path: nil }
       end
     end
 
@@ -110,6 +110,11 @@ module Users
 
     def must_have_current_school
       raise_not_found if current_school.blank?
+    end
+
+    def only_keycloak_sign_in?
+      only_kc = ENV.fetch('ONLY_KEYCLOAK') { 'false' }
+      only_kc == 'true' ? true : false
     end
   end
 end

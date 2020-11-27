@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'keycloak'
 
 feature 'User signing in by supplying email address', js: true do
   let!(:school) { create :school, :current }
@@ -56,7 +57,16 @@ feature 'User signing in by supplying email address', js: true do
       before do
         create :founder, user: user
       end
+
       scenario 'allow to change password with a valid token' do
+        mocked_client = double :keycloak_client
+        allow(Keycloak::Client).to receive(:new) { mocked_client }
+        allow(mocked_client).to receive(:fetch_user)
+        allow(mocked_client).to receive(:set_user_password)
+
+        expect(mocked_client).to receive(:fetch_user).with(user.email)
+        expect(mocked_client).to receive(:set_user_password).with(user.email, "MyNewPassword@123")
+
         user.regenerate_reset_password_token
         user.update!(reset_password_sent_at: Time.zone.now)
         visit reset_password_path(token: user.reset_password_token)

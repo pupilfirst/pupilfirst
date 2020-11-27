@@ -3,6 +3,10 @@ Rails.application.routes.draw do
     mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql'
   end
 
+  def draw(routes_name)
+    instance_eval(File.read(Rails.root.join("config/routes/#{routes_name}.rb")))
+  end
+
   post '/graphql', to: 'graphql#execute'
 
   devise_for :users, only: %i[sessions omniauth_callbacks], controllers: { sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks' }
@@ -29,6 +33,8 @@ Rails.application.routes.draw do
   end
 
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
+
+  draw(:api)
 
   resource :applicants, only: [] do
     get '/:token', action: 'enroll' # TODO: Legacy route - remove after a few weeks.

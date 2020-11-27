@@ -1,5 +1,6 @@
 module FacultyModule
   class CreateService
+    include KeycloakHelper
     def initialize(faculty_params)
       @faculty_params = faculty_params
     end
@@ -20,6 +21,8 @@ module FacultyModule
           connect_link: @faculty_params[:connect_link],
           public: @faculty_params[:public]
         )
+
+        create_keycloak_user(user.email, user.name)
         faculty
       end
     end

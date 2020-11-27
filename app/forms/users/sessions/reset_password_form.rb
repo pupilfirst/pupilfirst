@@ -1,3 +1,5 @@
+require 'keycloak'
+
 module Users
   module Sessions
     class ResetPasswordForm < Reform::Form
@@ -10,6 +12,9 @@ module Users
 
       def save
         @user.update!(password: new_password, reset_password_token: nil)
+        if keycloak_user?
+          set_keycloak_password(new_password)
+        end
       end
 
       def user
@@ -28,6 +33,23 @@ module Users
         return if new_password == confirm_password
 
         errors[:base] << 'Your password and confirmation password do not match. Please try again.'
+      end
+
+      def keycloak_user?
+        keycloak_client.fetch_user(@user.email)
+        true
+      rescue Keycloak::FailedRequestError => e
+        Rails.logger.debug("Keycloak user dont exist for email #{@user.email} - #{e.message}")
+        false
+      end
+      # rubocop:disable Naming/AccessorMethodName
+      def set_keycloak_password(password)
+        keycloak_client.set_user_password(@user.email, password)
+      end
+      # rubocop:enable Naming/AccessorMethodName
+
+      def keycloak_client
+        @keycloak_client ||= Keycloak::Client.new
       end
     end
   end

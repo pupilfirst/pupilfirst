@@ -15,4 +15,13 @@ class UserSessionMailer < SchoolMailer
 
     simple_roadie_mail(email, "#{@school_name} account recovery", enable_reply: false)
   end
+
+  def set_first_password_token(user, school, first_password_url)
+    @school = school
+    @user = user
+
+    @first_password_url = first_password_url
+
+    simple_roadie_mail(@user.email, "You have been added as a student in #{@school.name}")
+  end
 end

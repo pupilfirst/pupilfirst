@@ -10,27 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_11_160951) do
+ActiveRecord::Schema.define(version: 2020_11_17_075015) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
-
-  create_table "active_admin_comments", id: :serial, force: :cascade do |t|
-    t.string "namespace"
-    t.text "body"
-    t.string "resource_type", null: false
-    t.integer "author_id"
-    t.string "author_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer "resource_id", null: false
-    t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id"
-    t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
-    t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
-  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -443,23 +429,6 @@ ActiveRecord::Schema.define(version: 2020_11_11_160951) do
     t.index ["versionable_type", "versionable_id"], name: "index_resource_versions_on_versionable_type_and_versionable_id"
   end
 
-  create_table "resources", id: :serial, force: :cascade do |t|
-    t.string "title"
-    t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "downloads", default: 0
-    t.string "slug"
-    t.text "video_embed"
-    t.string "link"
-    t.boolean "archived", default: false
-    t.boolean "public", default: false
-    t.bigint "school_id"
-    t.index ["archived"], name: "index_resources_on_archived"
-    t.index ["school_id"], name: "index_resources_on_school_id"
-    t.index ["slug"], name: "index_resources_on_slug"
-  end
-
   create_table "school_admins", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "school_id"
@@ -497,20 +466,6 @@ ActiveRecord::Schema.define(version: 2020_11_11_160951) do
     t.jsonb "configuration", default: {}, null: false
   end
 
-  create_table "shortened_urls", id: :serial, force: :cascade do |t|
-    t.integer "owner_id"
-    t.string "owner_type", limit: 20
-    t.text "url", null: false
-    t.string "unique_key", limit: 100, null: false
-    t.integer "use_count", default: 0, null: false
-    t.datetime "expires_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["owner_id", "owner_type"], name: "index_shortened_urls_on_owner_id_and_owner_type"
-    t.index ["unique_key"], name: "index_shortened_urls_on_unique_key", unique: true
-    t.index ["url"], name: "index_shortened_urls_on_url"
-  end
-
   create_table "startup_feedback", id: :serial, force: :cascade do |t|
     t.text "feedback"
     t.string "reference_url"
@@ -530,12 +485,10 @@ ActiveRecord::Schema.define(version: 2020_11_11_160951) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "name"
-    t.string "slug"
     t.integer "level_id"
     t.datetime "access_ends_at"
     t.datetime "dropped_out_at"
     t.index ["level_id"], name: "index_startups_on_level_id"
-    t.index ["slug"], name: "index_startups_on_slug", unique: true
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
@@ -590,13 +543,6 @@ ActiveRecord::Schema.define(version: 2020_11_11_160951) do
     t.integer "prerequisite_target_id"
     t.index ["prerequisite_target_id"], name: "index_target_prerequisites_on_prerequisite_target_id"
     t.index ["target_id"], name: "index_target_prerequisites_on_target_id"
-  end
-
-  create_table "target_resources", force: :cascade do |t|
-    t.bigint "target_id", null: false
-    t.bigint "resource_id", null: false
-    t.index ["resource_id"], name: "index_target_resources_on_resource_id"
-    t.index ["target_id", "resource_id"], name: "index_target_resources_on_target_id_and_resource_id", unique: true
   end
 
   create_table "target_versions", force: :cascade do |t|
@@ -714,15 +660,6 @@ ActiveRecord::Schema.define(version: 2020_11_11_160951) do
     t.index ["topic_category_id"], name: "index_topics_on_topic_category_id"
   end
 
-  create_table "user_activities", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
-    t.string "activity_type"
-    t.json "metadata"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_user_activities_on_user_id"
-  end
-
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "email"
     t.string "login_token"
@@ -827,15 +764,12 @@ ActiveRecord::Schema.define(version: 2020_11_11_160951) do
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
-  add_foreign_key "target_resources", "resources"
-  add_foreign_key "target_resources", "targets"
   add_foreign_key "target_versions", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "topic_categories", "communities"
   add_foreign_key "topics", "communities"
   add_foreign_key "topics", "topic_categories"
-  add_foreign_key "user_activities", "users"
   add_foreign_key "users", "schools"
   add_foreign_key "webhook_endpoints", "courses"
 end

@@ -15,24 +15,6 @@ class FacultyController < ApplicationController
     index
   end
 
-  # POST /faculty/:id/connect
-  def connect
-    faculty = authorize(policy_scope(Faculty).find(params[:id]))
-
-    questions = params[:connect_request][:questions]
-    connect_slot = faculty.connect_slots.find(params[:connect_request][:connect_slot])
-    connect_request = connect_slot.build_connect_request(startup: current_founder.startup, questions: questions)
-
-    if connect_request.save
-      flash[:success] = "An office hour request has been submitted. You will receive an email once it's confirmed."
-      Users::ActivityService.new(current_founder.user).create(UserActivity::ACTIVITY_TYPE_FACULTY_CONNECT_REQUEST, 'connect_request_id' => connect_request.id)
-    else
-      flash[:error] = 'Something went wrong while attempting to request an office hour! :('
-    end
-
-    redirect_to coaches_index_path
-  end
-
   # GET /faculty/weekly_slots/:token
   def weekly_slots
     @slot_list = create_slot_list_for @faculty

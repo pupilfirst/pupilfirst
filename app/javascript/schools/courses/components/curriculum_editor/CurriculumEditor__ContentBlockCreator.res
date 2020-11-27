@@ -210,6 +210,10 @@ let embedUrlRegexes = [
   %bs.re("/https:\\/\\/.*vimeo\\.com/"),
   %bs.re("/https:\\/\\/.*youtube\\.com/"),
   %bs.re("/https:\\/\\/.*youtu\\.be/"),
+  %bs.re("/https:\\/\\/docs\\.google\\.com\\/presentation/"),
+  %bs.re("/https:\\/\\/docs\\.google\\.com\\/document/"),
+  %bs.re("/https:\\/\\/docs\\.google\\.com\\/spreadsheets/"),
+  %bs.re("/https:\\/\\/docs\\.google\\.com\\/forms/"),
 ]
 
 let validEmbedUrl = url => Belt.Array.some(embedUrlRegexes, regex => regex->Js.Re.test_(url))

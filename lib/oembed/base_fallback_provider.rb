@@ -15,7 +15,7 @@ module Oembed
     end
 
     def embed_code
-      "<iframe src='#{resource_url}' frameborder='0' width='960' height='570' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true'></iframe>"
+      "<iframe src='#{resource_url}' frameborder='0' width='960' height='572' allowfullscreen='true' mozallowfullscreen='true' webkitallowfullscreen='true'></iframe>"
     end
   end
 end

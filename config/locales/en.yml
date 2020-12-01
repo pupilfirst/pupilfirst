@@ -159,7 +159,7 @@ en:
       edit_topic_button: Edit Topic
       unlock_topic_button: Unlock Topic
       lock_topic_button: Lock Topic
-      locked_topic_notice: This thread is locked by moderator for any further posts
+      locked_topic_notice: This thread has been locked; no new replies can be posted.
   jobs:
     timeline_events:
       verification_notification:

@@ -8,8 +8,10 @@ class UnlockTopicMutator < ApplicationQuery
 
   private
 
-  def authorized?
-    moderator? && topic&.community&.school == current_school
+  alias authorized? authorized_moderate?
+
+  def community
+    topic&.community
   end
 
   def topic

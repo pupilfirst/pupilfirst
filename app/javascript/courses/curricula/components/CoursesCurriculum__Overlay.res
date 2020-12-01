@@ -81,7 +81,7 @@ let completionTypeToString = (completionType, targetStatus) =>
       | Locked(CourseLocked | AccessLocked),
       TakeQuiz,
     ) =>
-    t("completion_tab_quiz_responses")
+    t("completion_tab_quiz_result")
   | (PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) =>
     t("completion_tab_completed")
   | (Locked(_), Evaluated | TakeQuiz | LinkToComplete | MarkAsComplete) =>

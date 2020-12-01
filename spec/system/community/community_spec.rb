@@ -540,6 +540,19 @@ feature 'Community', js: true do
     dismiss_notification
   end
 
+  scenario 'student attempts to post reply to a locked topic' do
+    sign_in_user(student_1.user, referrer: topic_path(topic_1))
+
+    replace_markdown reply_body
+
+    # Before posting reply, let's lock the topic.
+    topic_1.update!(locked_at: Time.zone.now, locked_by: coach.user)
+
+    click_button 'Post Your Reply'
+
+    expect(page).to have_text('Cannot add reply to a locked topic')
+  end
+
   context 'community has topic categories' do
     let!(:category_1) { create :topic_category, community: community }
     let!(:category_2) { create :topic_category, community: community }

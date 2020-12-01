@@ -12,7 +12,7 @@ class CreatePostMutator < ApplicationQuery
 
     return if reply_to_post_id.present? && reply_to_post_id != topic.first_post.id
 
-    errors[:base] << 'cannot add reply to topic body'
+    errors[:base] << 'Cannot add reply to first post'
   end
 
   validate :topic_is_not_locked
@@ -20,7 +20,7 @@ class CreatePostMutator < ApplicationQuery
   def topic_is_not_locked
     return if topic.locked_at.blank?
 
-    errors[:base] << 'cannot add reply to a locked topic'
+    errors[:base] << 'Cannot add reply to a locked topic'
   end
 
   def create_post

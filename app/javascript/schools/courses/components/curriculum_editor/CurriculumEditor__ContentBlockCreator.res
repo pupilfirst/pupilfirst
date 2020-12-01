@@ -5,6 +5,7 @@ exception FormNotFound(string)
 open CurriculumEditor__Types
 
 let str = React.string
+let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockCreator")
 
 module CreateMarkdownContentBlock = %graphql(
   `
@@ -189,11 +190,11 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
   let videoId = aboveContentBlock |> videoInputId
 
   let (faIcon, buttonText, htmlFor) = switch blockType {
-  | #Markdown => ("fab fa-markdown", "Markdown", None)
-  | #File => ("far fa-file-alt", "File", Some(fileId))
-  | #Image => ("far fa-image", "Image", Some(imageId))
-  | #Embed => ("fas fa-code", "Embed", None)
-  | #VideoEmbed => ("fab fa-vimeo-v", "Video", Some(videoId))
+  | #Markdown => ("fab fa-markdown", t("button_labels.markdown"), None)
+  | #File => ("far fa-file-alt", t("button_labels.file"), Some(fileId))
+  | #Image => ("far fa-image", t("button_labels.image"), Some(imageId))
+  | #Embed => ("fas fa-code", t("button_labels.embed"), None)
+  | #VideoEmbed => ("fab fa-vimeo-v", t("button_labels.video"), Some(videoId))
   }
 
   <label
@@ -201,7 +202,7 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
     key=buttonText
     className="content-block-creator__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
     onClick={onBlockTypeSelect(target, aboveContentBlock, send, addContentBlockCB, blockType)}>
-    <i className={faIcon ++ " text-2xl"} /> <p className="font-semibold"> {buttonText |> str} </p>
+    <i className={faIcon ++ " text-2xl"} /> <p className="font-semibold"> {str(buttonText)} </p>
   </label>
 }
 
@@ -210,7 +211,10 @@ let embedUrlRegexes = [
   %bs.re("/https:\\/\\/.*vimeo\\.com/"),
   %bs.re("/https:\\/\\/.*youtube\\.com/"),
   %bs.re("/https:\\/\\/.*youtu\\.be/"),
-  %bs.re("/https:\\/\\/.*google\\.com\\/presentation/")
+  %bs.re("/https:\\/\\/docs\\.google\\.com\\/presentation/"),
+  %bs.re("/https:\\/\\/docs\\.google\\.com\\/document/"),
+  %bs.re("/https:\\/\\/docs\\.google\\.com\\/spreadsheets/"),
+  %bs.re("/https:\\/\\/docs\\.google\\.com\\/forms/"),
 ]
 
 let validEmbedUrl = url => Belt.Array.some(embedUrlRegexes, regex => regex->Js.Re.test_(url))
@@ -535,7 +539,7 @@ let uploadVideoForm = (videoInputId, state, send) =>
   <div>
     <div className="mt-1">
       <label htmlFor={videoInputId ++ "-title"} className="text-xs font-semibold">
-        {"Title" |> str}
+        {t("video.title_label")->str}
       </label>
       <input
         id={videoInputId ++ "-title"}
@@ -549,7 +553,7 @@ let uploadVideoForm = (videoInputId, state, send) =>
     </div>
     <div className="mt-1">
       <label htmlFor={videoInputId ++ "-description"} className="text-xs font-semibold">
-        {"Description" |> str}
+        {t("video.description_label")->str}
       </label>
       <textarea
         id={videoInputId ++ "-description"}
@@ -563,7 +567,7 @@ let uploadVideoForm = (videoInputId, state, send) =>
       />
     </div>
     <label htmlFor=videoInputId className="mt-2 btn btn-success">
-      {"Select File and Upload" |> str}
+      {t("video.select_file_button")->str}
     </label>
   </div>
 
@@ -631,7 +635,7 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessTo
                     className="mx-auto my-20"
                   />
                   <div className="text-center font-semibold text-primary-800 mt-2">
-                    {"Uploading" |> str}
+                    {t("video.uploading")->str}
                   </div>
                 </div>,
             )}
@@ -640,12 +644,12 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessTo
           <div
             className="clearfix border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
             <label htmlFor=embedInputId className="text-xs font-semibold">
-              {"URL to Embed" |> str}
+              {t("embed.url_label")->str}
             </label>
             <HelpIcon
               className="ml-2 text-xs"
               link="https://docs.pupilfirst.com/#/curriculum_editor?id=content-block-types">
-              {"We support YouTube, Vimeo, and Slideshare URLs. Just copy & paste the full URL to the page that contains the resource that you'd like to embed." |> str}
+              {t("embed.url_help")->str}
             </HelpIcon>
             <div className="flex mt-1">
               <input
@@ -659,7 +663,7 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessTo
               <button
                 className="ml-2 btn btn-success"
                 onClick={onEmbedFormSave(target, aboveContentBlock, url, send, addContentBlockCB)}>
-                {"Save" |> str}
+                {t("embed.save_button")->str}
               </button>
             </div>
           </div>

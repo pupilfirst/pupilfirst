@@ -24,6 +24,8 @@ let affiliation: t => option<string>
 
 let imageFileName: t => option<string>
 
+let coachingSessionCalendlyLink: t => option<string>
+
 let make: (
   ~id: int,
   ~name: string,
@@ -35,4 +37,5 @@ let make: (
   ~exited: bool,
   ~imageFileName: option<string>,
   ~affiliation: option<string>,
+  ~coachingSessionCalendlyLink: option<string>
 ) => t

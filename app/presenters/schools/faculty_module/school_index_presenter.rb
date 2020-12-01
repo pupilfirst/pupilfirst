@@ -27,6 +27,7 @@ module Schools
             imageUrl: faculty.user.image_or_avatar_url,
             public: faculty.public,
             connectLink: faculty.connect_link,
+            coachingSessionCalendlyLink: faculty.coaching_session_calendly_link,
             exited: faculty.exited,
             imageFileName: faculty.image_filename,
             affiliation: faculty.user.affiliation,

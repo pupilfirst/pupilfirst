@@ -35,7 +35,7 @@ module Keycloak
     end
 
     def token
-      openid_config['token_endpoint'] 
+      openid_config['token_endpoint']
     end
 
     def token_introspection
@@ -65,7 +65,7 @@ module Keycloak
         'grant_type' => 'client_credentials',
       }
       headers = { 'Content-Type' => 'application/x-www-form-urlencoded' }
-      res = Faraday.post(endpoints.token, params, headers) 
+      res = Faraday.post(endpoints.token, params, headers)
 
       if res.status == 200
         tokens = MultiJson.load(res.body)
@@ -92,11 +92,7 @@ module Keycloak
       res = Faraday.get(uri, nil, headers)
       if res.status == 200
         user = MultiJson.load(res.body).first
-        if user.present?
-          user
-        else
-          raise FailedRequestError.new "Failed to find user by email: #{email}"
-        end
+        user.presence || raise(FailedRequestError.new "Failed to find user by email: #{email}")
       else
         raise FailedRequestError.new "Failed to find user by email: #{email}"
       end

@@ -12,7 +12,7 @@ module Api
         render json: { students: students.to_json }
       end
 
-      def create_students 
+      def create_students
         form = ::Schools::Founders::CreateForm.new(Reform::OpenForm.new)
 
         response = if form.validate(params)
@@ -26,7 +26,7 @@ module Api
       end
 
       private
-      
+
       def set_course
         @course = authorize(scope.find(params[:course_id]),
                             policy_class: ::Schools::CoursePolicy)

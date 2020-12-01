@@ -83,7 +83,7 @@ describe Courses::CloneService do
       # evaluation_criterion should have been cloned
       expect(new_course.evaluation_criteria.pluck(:name)).to match_array(course.evaluation_criteria.pluck(:name))
 
-      # Levels, target groups, targets, and resources should have been cloned.
+      # Levels, target groups, and targets should have been cloned.
       expect(new_course.levels.pluck(:name)).to match_array(original_level_names)
       expect(new_course.target_groups.pluck(:name)).to match_array(original_group_names)
       expect(new_course.targets.pluck(:title, :description)).to match_array(original_targets)

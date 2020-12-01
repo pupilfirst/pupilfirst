@@ -43,7 +43,7 @@ after "development:targets" do
         end
 
         puts foo("1", "1")
-        ```ruby
+        ```
       MARKDOWN
     )
 
@@ -55,7 +55,7 @@ after "development:targets" do
         end
 
         puts foo(1, 1)
-        ```ruby
+        ```
     MARKDOWN
     )
 

@@ -4,11 +4,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception. Note that this is different from the default of :null_session.
   protect_from_forgery with: :exception
 
-  # Activate pretender.
-  impersonates :user
-
   before_action :sign_out_if_required
-  before_action :pretender
   before_action :store_user_location, if: :storable_location?
 
   around_action :set_time_zone, if: :current_user
@@ -193,10 +189,6 @@ class ApplicationController < ActionController::Base
 
   def store_user_location
     store_location_for(:user, request.fullpath)
-  end
-
-  def pretender
-    @pretender = (current_user != true_user)
   end
 
   def avatar(name, founder: nil, faculty: nil, version: :mid, background_shape: :circle)

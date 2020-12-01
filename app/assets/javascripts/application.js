@@ -7,13 +7,7 @@
 //= require turbolinks
 //= require turbolinks_compatibility
 
-// XDAN's datetimepicker
-//= require datetimepicker
-//= require xdan_datetimepicker
-
 //= require moment
-//= require select2-full
-//= require video
 //= require jquery.scrollTo
 //= require jquery-stickit
 //= require jspdf
@@ -25,8 +19,6 @@
 //= require slick-carousel/slick.js
 //= require waypoints/jquery.waypoints.js
 //= require waypoints
-//= require typedjs
-//= require jquery.counterup
 
 // Environment specific
 //= require test
@@ -37,4 +29,3 @@
 
 // Controller-specific
 //= require faculty
-//= require resources

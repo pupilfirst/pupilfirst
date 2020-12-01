@@ -18,11 +18,17 @@ const superscriptPlugin = require("markdown-it-sup");
 const tablePlugin = require("markdown-it-multimd-table");
 const linkifyImagesPlugin = require("markdown-it-linkify-images");
 const imageSizePlugin = require('@centerforopenscience/markdown-it-imsize');
+const linkAttributesPlugin = require('markdown-it-link-attributes')
 
 md.use(subscriptPlugin)
   .use(superscriptPlugin)
   .use(tablePlugin)
   .use(imageSizePlugin)
+  .use(linkAttributesPlugin, {
+    attrs: {
+      target: '_blank',
+    }
+  })
   .use(linkifyImagesPlugin, {
     target: "_blank",
   });

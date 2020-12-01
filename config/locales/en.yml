@@ -159,7 +159,7 @@ en:
       edit_topic_button: Edit Topic
       unlock_topic_button: Unlock Topic
       lock_topic_button: Lock Topic
-      locked_topic_notice: This thread has been locked; no new replies can be posted.
+      locked_topic_notice: This topic thread has been locked; no new replies can be posted.
   jobs:
     timeline_events:
       verification_notification:
@@ -218,9 +218,9 @@ en:
     issue_certificate:
       success_notification: Certificate issued successfully!
     lock_topic:
-      success_notification: Topic locked successfully!
+      success_notification: This topic has been locked. No new replies will be accepted.
     unlock_topic:
-      success_notification: Topic unlocked successfully!
+      success_notification: This topic has been unlocked. Community members can now post replies again.
 
   queries:
     delete_certificate_mutator:

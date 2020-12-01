@@ -495,24 +495,24 @@ feature 'Community', js: true do
       sign_in_user(school_admin.user, referrer: topic_path(topic_1))
 
       expect(page).to have_text(topic_1.title)
-      expect(page).to_not have_text('This thread has been locked')
+      expect(page).to_not have_text('This topic thread has been locked')
 
       accept_confirm { click_button('Lock Topic') }
 
-      expect(page).to have_text('Topic locked successfully')
+      expect(page).to have_text('This topic has been locked')
       dismiss_notification
 
-      expect(page).to have_text('This thread has been locked')
+      expect(page).to have_text('This topic thread has been locked')
 
       expect(topic_1.reload.locked_at).to_not eq(nil)
       expect(topic_1.locked_by).to eq(school_admin.user)
 
       accept_confirm { click_button('Unlock Topic') }
 
-      expect(page).to have_text('Topic unlocked successfully')
+      expect(page).to have_text('This topic has been unlocked')
       dismiss_notification
 
-      expect(page).to_not have_text('This thread has been locked')
+      expect(page).to_not have_text('This topic thread has been locked')
 
       expect(topic_1.reload.locked_at).to eq(nil)
       expect(topic_1.locked_by).to eq(nil)
@@ -531,12 +531,12 @@ feature 'Community', js: true do
 
     accept_confirm { click_button('Lock Topic') }
 
-    expect(page).to have_text('Topic locked successfully')
+    expect(page).to have_text('This topic has been locked')
     dismiss_notification
 
     accept_confirm { click_button('Unlock Topic') }
 
-    expect(page).to have_text('Topic unlocked successfully')
+    expect(page).to have_text('This topic has been unlocked')
     dismiss_notification
   end
 

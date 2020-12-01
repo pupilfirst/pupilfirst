@@ -15,24 +15,43 @@ module Oembed
     private
 
     def provider
-      host_name = URI.parse(@url).hostname
+      uri = URI.parse(@url)
 
       klass = providers.find do |provider_klass|
-        provider_klass.domains.any? do |domain_regex|
-          host_name.match?(domain_regex)
-        end
+        string_matches_any?(uri.host, provider_klass.domains) &&
+          string_matches_any?(uri.path, provider_klass.paths)
       end
 
       return klass if klass.present?
 
-      raise ProviderNotSupported, "The hostname '#{host_name}' could not be resolved to any known provider."
+      fallback_klass = fallback_providers.find do |fallback_provider_klass|
+        string_matches_any?(uri.host, fallback_provider_klass.domains) &&
+          string_matches_any?(uri.path, fallback_provider_klass.paths)
+      end
+
+      return fallback_klass if fallback_klass.present?
+
+      raise ProviderNotSupported, "The hostname '#{uri.host}' could not be resolved to any known provider."
+    end
+
+    def string_matches_any?(string, regexes)
+      regexes.any? { |regex| string.match?(regex) }
     end
 
     def providers
       [
         Oembed::YoutubeProvider,
         Oembed::VimeoProvider,
-        Oembed::SlideshareProvider
+        Oembed::SlideshareProvider,
+      ]
+    end
+
+    def fallback_providers
+      [
+        Oembed::GoogleDocumentsFallbackProvider,
+        Oembed::GoogleSlidesFallbackProvider,
+        Oembed::GoogleSpreadsheetsFallbackProvider,
+        Oembed::GoogleFormsFallbackProvider
       ]
     end
   end

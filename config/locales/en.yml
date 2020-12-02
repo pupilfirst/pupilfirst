@@ -166,6 +166,23 @@ en:
     StudentsEditor__Search:
       filter_input_label: "Filter by:"
       filter_input_placeholder: Type name, tag or level
+    CoursesCurriculum__Overlay:
+      completion_tab_complete: Complete
+      completion_tab_completed: Completed
+      completion_tab_take_quiz: Take Quiz
+      completion_tab_visit_link: Visit Link to Complete
+      completion_tab_mark_complete: Mark as Complete
+      completion_tab_submissions: Submissions & Feedback
+      completion_tab_quiz_result: Quiz Result
+      completion_tab_locked: Locked
+      learn_tab: Learn
+      discuss_tab: Discuss
+      close_button: Close
+      preview_mode_text: "You are currently looking at a preview of this course."
+      pending_team_members_notice: "You have team members who are yet to complete this target:"
+      previous_target_button: Previous Target
+      next_target_button: Next Target
+      scroll_to_top: Scroll to Top
   jobs:
     timeline_events:
       verification_notification:

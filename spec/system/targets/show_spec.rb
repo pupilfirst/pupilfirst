@@ -253,6 +253,7 @@ feature 'Target Overlay', js: true do
       click_button('Submit Quiz')
 
       expect(page).to have_content('Your responses have been saved')
+      expect(page).to have_selector('.course-overlay__body-tab-item', text: 'Quiz Result')
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(quiz_target.title)

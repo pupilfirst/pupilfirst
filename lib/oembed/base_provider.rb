@@ -4,6 +4,14 @@ module Oembed
       @resource_url = resource_url
     end
 
+    def self.domains
+      raise 'Not implemented in BaseProvider'
+    end
+
+    def self.paths
+      [/.*/]
+    end
+
     def url
       raise 'Not implemented in BaseProvider'
     end

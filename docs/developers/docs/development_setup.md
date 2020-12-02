@@ -43,7 +43,7 @@ Once Ruby is installed, fetch all gems using Bundler:
 You may need to install the `bundler` gem if the version of Ruby you have installed comes with a different `bundler`
 version. Simply follow the instructions in the error message, if this occurs.
 
-If installation of of `pg` gem crashes, asking for `libpq-fe.h`, install the gem with:
+If installation of the `pg` gem crashes, asking for `libpq-fe.h`, run the following commands, and then run `bundle install` again:
 
 #### On macOS:
 

@@ -76,8 +76,9 @@ Currently supported web services:
 - YouTube
 - Slideshare
 - Vimeo
+- Google (Docs, Slides, Spreadsheets, Forms)
 
-If there's a specific website you'd like us to include, [please let us know](mailto:support@pupilfirst.com). We can include any web service that supports the Open Embed standard (oEmbed).
+If there's a specific website you'd like us to include, [please let us know](mailto:support@pupilfirst.com). We can include any well-known service that supports the Open Embed (oEmbed) standard, or if it supports being embedded using an `iframe` tag.
 
 **File**\
 The file block accepts the file and a caption and displays it as a distinctly styled block in the content of the target.

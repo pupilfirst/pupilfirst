@@ -114,6 +114,22 @@ en:
       level_up_limited_description: "You're at Level %{currentLevel}, but you have targets in the Level %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up."
       level_up_title: Ready to Level Up!
       level_up_description: Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!
+    CurriculumEditor__ContentBlockCreator:
+      button_labels:
+        markdown: Markdown
+        file: File
+        image: Image
+        embed: Embed
+        video: Video
+      video:
+        title_label: Title
+        description_label: Description
+        uploading: Uploading
+        select_file_button: Select File and Upload
+      embed:
+        url_label: URL to Embed
+        url_help: We support a number of third-party services (check link below). Just copy & paste the full URL to the page that contains the resource that you'd like to embed.
+        save_button: Save
     CurriculumEditor__ImageBlockEditor:
       resize_panel_button_title:
         auto: Automatic width
@@ -160,6 +176,23 @@ en:
       unlock_topic_button: Unlock Topic
       lock_topic_button: Lock Topic
       locked_topic_notice: This topic thread has been locked; no new replies can be posted.
+    CoursesCurriculum__Overlay:
+      completion_tab_complete: Complete
+      completion_tab_completed: Completed
+      completion_tab_take_quiz: Take Quiz
+      completion_tab_visit_link: Visit Link to Complete
+      completion_tab_mark_complete: Mark as Complete
+      completion_tab_submissions: Submissions & Feedback
+      completion_tab_quiz_result: Quiz Result
+      completion_tab_locked: Locked
+      learn_tab: Learn
+      discuss_tab: Discuss
+      close_button: Close
+      preview_mode_text: "You are currently looking at a preview of this course."
+      pending_team_members_notice: "You have team members who are yet to complete this target:"
+      previous_target_button: Previous Target
+      next_target_button: Next Target
+      scroll_to_top: Scroll to Top
   jobs:
     timeline_events:
       verification_notification:
@@ -178,7 +211,8 @@ en:
           needs_improvement: "Your team <%{startup_url}|%{startup_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
           not_accepted: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your team <%{startup_url}|%{startup_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
         public:
-          verified: &jobs-timeline_events-verification_notification-public-verified |
+          verified:
+            &jobs-timeline_events-verification_notification-public-verified |
             <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>
             *Description:* %{event_description}
             %{links_attached_notice}

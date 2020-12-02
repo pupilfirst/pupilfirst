@@ -22,6 +22,18 @@ let updateTitle = (title, t) => {
   title: title,
 }
 
+let lock = (lockedById, t) => {
+  ...t,
+  lockedAt: Some(Js.Date.make()),
+  lockedById: Some(lockedById),
+}
+
+let unlock = t => {
+  ...t,
+  lockedAt: None,
+  lockedById: None,
+}
+
 let decode = json => {
   open Json.Decode
   {

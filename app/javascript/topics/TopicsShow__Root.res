@@ -109,20 +109,12 @@ let reducer = (state, action) =>
   | FinishLockingTopic(currentUserId) => {
       ...state,
       changingLockedStatus: false,
-      topic: {
-        ...state.topic,
-        lockedAt: Some(Js.Date.make()),
-        lockedById: Some(currentUserId),
-      },
+      topic: Topic.lock(currentUserId, state.topic),
     }
   | FinishUnlockingTopic => {
       ...state,
       changingLockedStatus: false,
-      topic: {
-        ...state.topic,
-        lockedAt: None,
-        lockedById: None,
-      },
+      topic: Topic.unlock(state.topic),
     }
   }
 
@@ -195,32 +187,25 @@ module UnlockTopicQuery = %graphql(
 )
 
 let lockTopic = (topicId, currentUserId, send) =>
-  Webapi.Dom.window |> Webapi.Dom.Window.confirm("Are you sure you want to lock this topic?")
-    ? {
-        send(StartChangingLockStatus)
-        LockTopicQuery.make(~id=topicId, ())
-        |> GraphqlQuery.sendQuery
-        |> Js.Promise.then_(response => {
-          response["lockTopic"]["success"] ? send(FinishLockingTopic(currentUserId)) : ()
-          Js.Promise.resolve()
-        })
-        |> ignore
-      }
-    : ()
+  WindowUtils.confirm("Are you sure you want to lock this topic?", () => {
+    send(StartChangingLockStatus)
+    LockTopicQuery.make(~id=topicId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
+      response["lockTopic"]["success"] ? send(FinishLockingTopic(currentUserId)) : ()
+      Js.Promise.resolve()
+    }) |> ignore
+  })
 
 let unlockTopic = (topicId, send) =>
-  Webapi.Dom.window |> Webapi.Dom.Window.confirm("Are you sure you want to unlock this topic?")
-    ? {
-        send(StartChangingLockStatus)
-        UnlockTopicQuery.make(~id=topicId, ())
-        |> GraphqlQuery.sendQuery
-        |> Js.Promise.then_(response => {
-          response["unlockTopic"]["success"] ? send(FinishUnlockingTopic) : ()
-          Js.Promise.resolve()
-        })
-        |> ignore
-      }
-    : ()
+  WindowUtils.confirm("Are you sure you want to unlock this topic?", () => {
+    send(StartChangingLockStatus)
+    UnlockTopicQuery.make(~id=topicId, ())
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(response => {
+      response["unlockTopic"]["success"] ? send(FinishUnlockingTopic) : ()
+      Js.Promise.resolve()
+    })
+    |> ignore
+  })
 
 let communityLink = community =>
   <a href={Community.path(community)} className="btn btn-subtle">

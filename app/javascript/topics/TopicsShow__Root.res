@@ -1,5 +1,7 @@
 %bs.raw(`require("./TopicsShow__Root.css")`)
 
+let t = I18n.t(~scope="components.TopicsShow__Root")
+
 open TopicsShow__Types
 
 let str = React.string
@@ -11,6 +13,7 @@ type state = {
   replyToPostId: option<string>,
   topicTitle: string,
   savingTopic: bool,
+  changingLockedStatus: bool,
   showTopicEditor: bool,
   topicCategory: option<TopicCategory.t>,
 }
@@ -31,6 +34,9 @@ type action =
   | ShowTopicEditor(bool)
   | UpdateSavingTopic(bool)
   | MarkReplyAsSolution(string)
+  | StartChangingLockStatus
+  | FinishLockingTopic(string)
+  | FinishUnlockingTopic
   | UpdateTopicCategory(option<TopicCategory.t>)
 
 let reducer = (state, action) =>
@@ -99,6 +105,17 @@ let reducer = (state, action) =>
       replies: state.replies |> Post.markAsSolution(postId),
     }
   | UpdateTopicCategory(topicCategory) => {...state, topicCategory: topicCategory}
+  | StartChangingLockStatus => {...state, changingLockedStatus: true}
+  | FinishLockingTopic(currentUserId) => {
+      ...state,
+      changingLockedStatus: false,
+      topic: Topic.lock(currentUserId, state.topic),
+    }
+  | FinishUnlockingTopic => {
+      ...state,
+      changingLockedStatus: false,
+      topic: Topic.unlock(state.topic),
+    }
   }
 
 let addNewReply = (send, replyToPostId, ()) => send(AddNewReply(replyToPostId))
@@ -148,6 +165,47 @@ let updateTopic = (state, send, event) => {
   })
   |> ignore
 }
+
+module LockTopicQuery = %graphql(
+  `
+  mutation LockTopicMutation($id: ID!) {
+    lockTopic(id: $id)  {
+      success
+    }
+  }
+`
+)
+
+module UnlockTopicQuery = %graphql(
+  `
+  mutation UnlockTopicMutation($id: ID!) {
+    unlockTopic(id: $id)  {
+      success
+    }
+  }
+`
+)
+
+let lockTopic = (topicId, currentUserId, send) =>
+  WindowUtils.confirm("Are you sure you want to lock this topic?", () => {
+    send(StartChangingLockStatus)
+    LockTopicQuery.make(~id=topicId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
+      response["lockTopic"]["success"] ? send(FinishLockingTopic(currentUserId)) : ()
+      Js.Promise.resolve()
+    }) |> ignore
+  })
+
+let unlockTopic = (topicId, send) =>
+  WindowUtils.confirm("Are you sure you want to unlock this topic?", () => {
+    send(StartChangingLockStatus)
+    UnlockTopicQuery.make(~id=topicId, ())
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(response => {
+      response["unlockTopic"]["success"] ? send(FinishUnlockingTopic) : ()
+      Js.Promise.resolve()
+    })
+    |> ignore
+  })
 
 let communityLink = community =>
   <a href={Community.path(community)} className="btn btn-subtle">
@@ -250,6 +308,7 @@ let make = (
     topicTitle: topic |> Topic.title,
     savingTopic: false,
     showTopicEditor: false,
+    changingLockedStatus: false,
     topicCategory: topicCategory(topicCategories, Topic.topicCategoryId(topic)),
   })
 
@@ -264,12 +323,16 @@ let make = (
           <div
             className="flex py-4 px-4 md:px-5 mx-3 lg:mx-0 bg-white border border-primary-500 shadow-md rounded-lg justify-between items-center">
             <p className="w-3/5 md:w-4/5 text-sm">
-              <span className="font-semibold block text-xs"> {"Linked Target: " |> str} </span>
+              <span className="font-semibold block text-xs">
+                {t("linked_target_label") |> str}
+              </span>
               <span> {target |> LinkedTarget.title |> str} </span>
             </p>
             {switch target |> LinkedTarget.id {
             | Some(id) =>
-              <a href={"/targets/" ++ id} className="btn btn-default"> {"View Target" |> str} </a>
+              <a href={"/targets/" ++ id} className="btn btn-default">
+                {t("view_target_button") |> str}
+              </a>
             | None => React.null
             }}
           </div>
@@ -293,7 +356,7 @@ let make = (
                   <div className="flex flex-col md:flex-row md:justify-between md:items-end">
                     <div className="flex flex-col items-left flex-shrink-0">
                       <span className="inline-block text-gray-700 text-tiny font-semibold mr-2">
-                        {"Topic Category: " |> str}
+                        {t("topic_category_label") |> str}
                       </span>
                       <Dropdown
                         selected={categoryDropdownSelected(state.topicCategory)}
@@ -304,13 +367,13 @@ let make = (
                     <div className="flex justify-end pt-4 md:pt-0">
                       <button
                         onClick={_ => send(ShowTopicEditor(false))} className="btn btn-subtle mr-3">
-                        {"Cancel" |> str}
+                        {t("topic_editor_cancel_button") |> str}
                       </button>
                       <button
                         onClick={updateTopic(state, send)}
                         disabled={state.topicTitle |> Js.String.trim == ""}
                         className="btn btn-primary">
-                        {"Update Topic" |> str}
+                        {t("update_topic_button") |> str}
                       </button>
                     </div>
                   </div>
@@ -321,17 +384,41 @@ let make = (
                   className="topics-show__title-container flex items-center md:items-start justify-between mb-2">
                   <h3
                     ariaLabel="Topic Title"
-                    className="leading-snug lg:pl-14 text-base lg:text-2xl w-5/6">
+                    className="leading-snug lg:pl-14 text-base lg:text-2xl w-9/12">
                     {state.topic |> Topic.title |> str}
                   </h3>
-                  {moderator || isTopicCreator(firstPost, currentUserId)
-                    ? <button
-                        onClick={_ => send(ShowTopicEditor(true))}
-                        className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3">
-                        <i className="far fa-edit" />
-                        <span className="hidden md:inline-block ml-1"> {"Edit Topic" |> str} </span>
-                      </button>
-                    : React.null}
+                  <span className="flex">
+                    {moderator || isTopicCreator(firstPost, currentUserId)
+                      ? <button
+                          onClick={_ => send(ShowTopicEditor(true))}
+                          className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3">
+                          <i className="far fa-edit" />
+                          <span className="hidden md:inline-block ml-1">
+                            {t("edit_topic_button") |> str}
+                          </span>
+                        </button>
+                      : React.null}
+                    {
+                      let isLocked = Topic.lockedAt(state.topic)->Belt.Option.isSome
+                      let topicId = state.topic->Topic.id
+                      moderator
+                        ? <button
+                            disabled=state.changingLockedStatus
+                            onClick={_ =>
+                              isLocked
+                                ? unlockTopic(topicId, send)
+                                : lockTopic(topicId, currentUserId, send)}
+                            className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-2">
+                            <PfIcon className={"fa fa-" ++ (isLocked ? "unlock" : "lock")} />
+                            <span className="hidden md:inline-block ml-1">
+                              {(
+                                isLocked ? t("unlock_topic_button") : t("lock_topic_button")
+                              ) |> str}
+                            </span>
+                          </button>
+                        : React.null
+                    }
+                  </span>
                 </div>
                 {switch state.topicCategory {
                 | Some(topicCategory) =>
@@ -347,7 +434,7 @@ let make = (
           <TopicsShow__PostShow
             key={Post.id(state.firstPost)}
             post=state.firstPost
-            topic
+            topic=state.topic
             users
             posts=state.replies
             currentUserId
@@ -375,7 +462,7 @@ let make = (
           <div key={Post.id(reply)} className="topics-show__replies-wrapper">
             <TopicsShow__PostShow
               post=reply
-              topic
+              topic=state.topic
               users
               posts=state.replies
               currentUserId
@@ -393,16 +480,28 @@ let make = (
         |> React.array}
       </div>
       <div className="mt-4 px-4">
-        <TopicsShow__PostEditor
-          id="add-reply-to-topic"
-          topic
-          currentUserId
-          handlePostCB={saveReply(send, state.replyToPostId)}
-          replyToPostId=?state.replyToPostId
-          replies=state.replies
-          users
-          removeReplyToPostCB={() => send(RemoveReplyToPost)}
-        />
+        {switch Topic.lockedAt(state.topic) {
+        | Some(_lockedAt) =>
+          <div
+            className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-l-4 rounded-r-md mt-2 mx-auto w-full max-w-4xl mb-4 text-sm justify-center items-center">
+            <div className="w-6 h-6 text-yellow-500 flex-shrink-0">
+              <i className="fa fa-lock" />
+            </div>
+            <span className="ml-2"> {t("locked_topic_notice")->React.string} </span>
+          </div>
+
+        | None =>
+          <TopicsShow__PostEditor
+            id="add-reply-to-topic"
+            topic
+            currentUserId
+            handlePostCB={saveReply(send, state.replyToPostId)}
+            replyToPostId=?state.replyToPostId
+            replies=state.replies
+            users
+            removeReplyToPostCB={() => send(RemoveReplyToPost)}
+          />
+        }}
       </div>
     </div>
   </div>

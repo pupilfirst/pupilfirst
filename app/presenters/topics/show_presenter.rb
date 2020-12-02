@@ -31,7 +31,7 @@ module Topics
     private
 
     def topic_details
-      @topic.attributes.slice('id', 'title', 'topic_category_id')
+      @topic.attributes.slice('id', 'title', 'topic_category_id', 'locked_at', 'locked_by_id')
     end
 
     def topic_categories
@@ -76,6 +76,7 @@ module Topics
       user_ids = [
         first_post.creator_id,
         first_post.editor_id,
+        @topic.locked_by_id,
         replies.pluck(:creator_id),
         replies.pluck(:editor_id),
         current_user.id

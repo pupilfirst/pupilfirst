@@ -96,8 +96,8 @@ en:
       issued_certificate_button: View Certificate
       level_locked: Level locked
       level_locked_desc: "The level is currently locked!"
-      nav_prev_level: Previous level
-      nav_next_level: Next level
+      nav_prev_level: "Previous Level"
+      nav_next_level: "Next Level"
       no_published_content_level: "There's no published content on this level."
       milestone_targets: Milestone targets
     CoursesCurriculum__NoticeManager:
@@ -123,10 +123,10 @@ en:
       level_up_title: Ready to Level Up!
       level_up_description: Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!
     CurriculumEditor:
-      level: level
+      level: Level
       unable_to_find_target_group: "Unable to find target group with ID: "
       create_target_group: Create target group
-      create_level: Create level
+      create_level: Create Level
       edit_selected_level: Edit selected level
     CurriculumEditor__TargetGroupShow:
       create_target: Create a target

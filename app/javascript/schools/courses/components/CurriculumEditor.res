@@ -225,7 +225,7 @@ let make = (
                 |> Level.sort
                 |> Array.map(level =>
                   <option key={Level.id(level)} value={level |> Level.name}>
-                    {t("level") ++
+                    {t("level") ++ " " ++
                     ((level |> Level.number |> string_of_int) ++
                     (": " ++ (level |> Level.name))) |> str}
                   </option>

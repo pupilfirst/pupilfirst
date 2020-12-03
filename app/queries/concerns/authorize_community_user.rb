@@ -24,6 +24,10 @@ module AuthorizeCommunityUser
     end
   end
 
+  def authorized_moderate?
+    moderator? && community&.school == current_school
+  end
+
   def current_coach
     current_user.faculty
   end

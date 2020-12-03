@@ -48,7 +48,7 @@ feature 'Curriculum Editor', js: true do
     sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
 
     # he should be on the last level
-    expect(page).to have_text('Level 2: ' + level_2.name)
+    expect(page).to have_text('Chapter 2: ' + level_2.name)
 
     # all targets and target groups on that level should be visible
     expect(page).to have_text(target_group_2.name)
@@ -61,13 +61,13 @@ feature 'Curriculum Editor', js: true do
     expect(page).not_to have_text(target_2.title)
 
     # he should be able to create a new level
-    click_button 'Create Level'
-    expect(page).to have_text('Level Name')
-    fill_in 'Level Name', with: new_level_name
-    fill_in 'Unlock level on', with: date.iso8601
-    click_button 'Create New Level'
+    click_button 'Create Chapter'
+    expect(page).to have_text('Chapter Name')
+    fill_in 'Chapter Name', with: new_level_name
+    fill_in 'Unlock chapter on', with: date.iso8601
+    click_button 'Create New Chapter'
 
-    expect(page).to have_text('Level created successfully')
+    expect(page).to have_text('Chapter created successfully')
     dismiss_notification
 
     level = course.reload.levels.last
@@ -75,25 +75,25 @@ feature 'Curriculum Editor', js: true do
     expect(level.unlock_at).to eq(Time.zone.now.beginning_of_day)
 
     # he should be able to edit the level
-    find('button[title="Edit selected level"').click
+    find('button[title="Edit selected chapter"').click
     expect(page).to have_text(new_level_name)
-    fill_in 'Unlock level on', with: '', fill_options: { clear: :backspace }
-    click_button 'Update Level'
+    fill_in 'Unlock chapter on', with: '', fill_options: { clear: :backspace }
+    click_button 'Update Chapter'
 
-    expect(page).to have_text('Level updated successfully')
+    expect(page).to have_text('Chapter updated successfully')
     dismiss_notification
 
     expect(level.reload.unlock_at).to eq(nil)
 
     # he should be able to create a new target group
     find('.target-group__create').click
-    expect(page).to have_text('TARGET GROUP DETAILS')
+    expect(page).to have_text('SESSION DETAILS')
     fill_in 'Title', with: new_target_group_name
     replace_markdown(new_target_group_description, id: 'description')
     click_button 'Yes'
-    click_button 'Create Target Group'
+    click_button 'Create Session'
 
-    expect(page).to have_text('Target Group created successfully')
+    expect(page).to have_text('Session created successfully')
     dismiss_notification
 
     level.reload
@@ -196,11 +196,11 @@ feature 'Curriculum Editor', js: true do
   scenario "author sets unlock date for a level that previously didn't have one" do
     sign_in_user course_author.user, referrer: curriculum_school_course_path(course)
 
-    find('button[title="Edit selected level"').click
-    fill_in 'Unlock level on', with: date.iso8601
-    click_button 'Update Level'
+    find('button[title="Edit selected chapter"').click
+    fill_in 'Unlock chapter on', with: date.iso8601
+    click_button 'Update Chapter'
 
-    expect(page).to have_text('Level updated successfully')
+    expect(page).to have_text('Chapter updated successfully')
     expect(level_2.reload.unlock_at).to eq(Time.zone.now.beginning_of_day)
   end
 
@@ -214,7 +214,7 @@ feature 'Curriculum Editor', js: true do
     scenario 'author merges third level into the first' do
       sign_in_user course_author.user, referrer: curriculum_school_course_path(course)
 
-      find('button[title="Edit selected level"').click
+      find('button[title="Edit selected chapter"').click
       click_button 'Actions'
       select "L1: #{level_1.name}", from: 'Delete & Merge Into'
 

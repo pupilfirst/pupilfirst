@@ -415,7 +415,7 @@ feature 'Target Overlay', js: true do
         expect(page).to have_content('Locked')
       end
 
-      expect(page).to have_content('This target has pre-requisites that are incomplete.')
+      expect(page).to have_content('This lesson has pre-requisites that are incomplete.')
 
       # It should be possible to navigate to the prerequisite target.
       within('.course-overlay__prerequisite-targets') do
@@ -443,7 +443,7 @@ feature 'Target Overlay', js: true do
         expect(page).to have_content('Locked')
       end
 
-      expect(page).to have_content('The course has ended and submissions are disabled for all targets!')
+      expect(page).to have_content('The course has ended and submissions are disabled for all lessons!')
       expect(page).not_to have_selector('.course-overlay__body-tab-item', text: 'Complete')
     end
 

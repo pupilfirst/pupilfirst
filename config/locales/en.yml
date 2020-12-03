@@ -117,11 +117,11 @@ en:
         body_prefix: "You have submitted all milestone lessons in chapter %{number}, but one or more submissions "
         body_middle_pending_review: "are pending review by a coach. "
         body_middle_rejected: "have been rejected. "
-        body_suffix: You need to get a passing grade on all milestone lessons to chapter up.
+        body_suffix: You need to get a passing grade on all milestone lessons to level up.
       level_up_limited_title: Level Up Blocked
-      level_up_limited_description: "You're at Level %{currentLevel}, but you have lessons in the Level %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone lessons in Level %{minimumRequiredLevel} to continue leveling up."
+      level_up_limited_description: "You're at Chapter %{currentLevel}, but you have lessons in the Chapter %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone lessons in Chapter %{minimumRequiredLevel} to continue leveling up."
       level_up_title: Ready to Level Up!
-      level_up_description: Congratulations! You have successfully completed all milestone lessons required to chapter up. Click the button below to proceed to the next chapter. New challenges await!
+      level_up_description: Congratulations! You have successfully completed all milestone lessons required to level up. Click the button below to proceed to the next chapter. New challenges await!
     CurriculumEditor:
       level: Chapter
       unable_to_find_target_group: "Unable to find section with ID: "
@@ -211,10 +211,10 @@ en:
       button_add_new_students: Add New Students
     StudentsEditor__Search:
       filter_input_label: "Filter by:"
-      filter_input_placeholder: Type name, tag or level
+      filter_input_placeholder: Type name, tag or chapter
     TopicsShow__Root:
-      linked_target_label: "Linked Target: "
-      view_target_button: View Target
+      linked_target_label: "Linked Lesson: "
+      view_target_button: View Lesson
       topic_category_label: "Topic Category: "
       topic_editor_cancel_button: "Cancel"
       update_topic_button: Update Topic
@@ -236,8 +236,8 @@ en:
       close_button: Close
       preview_mode_text: "You are currently looking at a preview of this course."
       pending_team_members_notice: "You have team members who are yet to complete this target:"
-      previous_target_button: Previous Target
-      next_target_button: Next Target
+      previous_target_button: Previous Lesson
+      next_target_button: Next Lesson
       scroll_to_top: Scroll to Top
   jobs:
     timeline_events:

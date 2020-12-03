@@ -2,6 +2,8 @@ open CurriculumEditor__Types
 
 let str = ReasonReact.string
 
+let t = I18n.t(~scope="components.CurriculumEditor__TargetGroupShow")
+
 type state = {
   targetTitle: string,
   savingNewTarget: bool,
@@ -115,7 +117,7 @@ let make = (
         {milestone
           ? <div
               className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
-              {"Milestone Targets" |> str}
+              {t("milestone_targets") |> str}
             </div>
           : ReasonReact.null}
         <div className="target-group__title pt-6">
@@ -182,7 +184,7 @@ let make = (
             title="Create target"
             value=state.targetTitle
             onChange={event => send(UpdateTargetTitle(ReactEvent.Form.target(event)["value"]))}
-            placeholder="Create a target"
+            placeholder=t("create_target")
             className="target-create__input text-left bg-gray-100 pr-5 pl-12 py-6 rounded-b appearance-none block w-full text-sm text-gray-900 font-semibold leading-tight hover:bg-gray-100 focus:outline-none focus:bg-white focus:border-gray-500"
           />
           {state.validTargetTitle

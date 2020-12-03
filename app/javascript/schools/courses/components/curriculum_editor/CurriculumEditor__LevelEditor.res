@@ -4,6 +4,8 @@ open CurriculumEditor__Types
 
 let str = ReasonReact.string
 
+let t = I18n.t(~scope="components.CurriculumEditor__LevelEditor")
+
 type tab =
   | Details
   | Actions
@@ -161,7 +163,7 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
     </div>
     <div className="mt-5">
       <label className="tracking-wide text-xs font-semibold" htmlFor="unlock-on-input">
-        {"Unlock level on" |> str}
+        {t("unlock_level_on") |> str}
       </label>
       <span className="text-xs"> {str(" (optional)")} </span>
       <DatePicker

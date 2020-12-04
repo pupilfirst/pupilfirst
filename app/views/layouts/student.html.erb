@@ -13,11 +13,6 @@
     <noscript><iframe src="<%= presenter.body_google_tag_manager %>"
                       height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <% end %>
-  <% if presenter.current_user_email.present? %>
-    <%= javascript_tag nonce: true do %>
-      heap.identify('<%= presenter.current_user_email %>')
-    <% end %>
-  <% end %>
 
   <%= render 'layouts/student_top_nav' %>
 <% end %>
@@ -28,4 +23,9 @@
 
 <%= render template: 'layouts/tailwind' %>
 
+<% if presenter.current_user_email.present? %>
+  <%= javascript_tag nonce: true do %>
+    heap.identify('<%= presenter.current_user_email %>')
+  <% end %>
+<% end %>
 

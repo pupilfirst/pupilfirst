@@ -15,7 +15,7 @@
   <% end %>
   <% if presenter.current_user_email.present? %>
     <%= javascript_tag nonce: true do %>
-      heap.identity('<%= presenter.current_user_email %>')
+      heap.identify('<%= presenter.current_user_email %>')
     <% end %>
   <% end %>
 

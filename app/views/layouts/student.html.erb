@@ -1,4 +1,22 @@
+<% presenter = ::Layouts::StudentPresenter.new(self, current_user) %>
+
+<% if presenter.head_google_tag_manager.present? %>
+  <% content_for(:head) do %>
+      <script>
+        <%= presenter.head_google_tag_manager.html_safe %>
+      </script>
+  <% end %>
+<% end %>
+
 <% content_for(:nav) do %>
+  <% if presenter.body_google_tag_manager.present? %>
+    <noscript><iframe src="<%= presenter.body_google_tag_manager %>"
+                      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <% end %>
+  <% if presenter.current_user_email.present? %>
+    <script>heap.identity('<%= presenter.current_user_email %>')</script>
+  <% end %>
+
   <%= render 'layouts/student_top_nav' %>
 <% end %>
 
@@ -7,3 +25,5 @@
 <% end %>
 
 <%= render template: 'layouts/tailwind' %>
+
+

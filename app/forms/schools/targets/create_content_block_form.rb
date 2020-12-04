@@ -6,8 +6,8 @@ module Schools
       property :file, virtual: true
       property :above_content_block_id, virtual: true
 
-      validates :file, presence: true, image: true, file_size: { less_than: 5.megabytes }, if: :image_block?
-      validates :file, presence: true, file_size: { less_than: 10.megabytes }, if: :file_block?
+      validates :file, presence: true, image: true, file_size: { less_than: 100.megabytes }, if: :image_block?
+      validates :file, presence: true, file_size: { less_than: 100.megabytes }, if: :file_block?
 
       def save
         ContentBlock.transaction do

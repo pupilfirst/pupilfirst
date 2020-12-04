@@ -394,11 +394,11 @@ let handleFileInputChange = (
 
     let error = switch blockType {
     | #File =>
-      FileUtils.isInvalid(file) ? Some("Please select a file with a size less than 5 MB.") : None
+      FileUtils.isInvalid(file) ? Some("Please select a file with a size less than 100 MB.") : None
     | #Image =>
       FileUtils.isInvalid(~image=true, file)
         ? Some(
-            "Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.",
+            "Please select an image (PNG, JPEG, GIF) with a size less than 100 MB, and less than 4096px wide or high.",
           )
         : None
     | #VideoEmbed =>
@@ -408,7 +408,7 @@ let handleFileInputChange = (
       ) {
       | (false, true | false) =>
         Some("Invalid file format, please select an MP4, MOV, WMV, AVI or FLV file.")
-      | (true, false) => Some("Please select a file less than 500 MB in size.")
+      | (true, false) => Some("Please select a file less than 1 GB in size.")
       | (true, true) => None
       }
     }

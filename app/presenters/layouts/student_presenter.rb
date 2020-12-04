@@ -6,7 +6,7 @@ module Layouts
     end
 
     def head_google_tag_manager
-      return unless Rails.env.production?
+      #return unless Rails.env.production?
       ENV['GTM_HEAD']
     end
 

@@ -2,9 +2,9 @@
 
 <% if presenter.head_google_tag_manager.present? %>
   <% content_for(:head) do %>
-      <script>
-        <%= presenter.head_google_tag_manager.html_safe %>
-      </script>
+    <%= javascript_tag nonce: true do %>
+      <%= presenter.head_google_tag_manager.html_safe %>
+    <% end %>
   <% end %>
 <% end %>
 
@@ -14,7 +14,9 @@
                       height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <% end %>
   <% if presenter.current_user_email.present? %>
-    <script>heap.identity('<%= presenter.current_user_email %>')</script>
+    <%= javascript_tag nonce: true do %>
+      heap.identity('<%= presenter.current_user_email %>')
+    <% end %>
   <% end %>
 
   <%= render 'layouts/student_top_nav' %>

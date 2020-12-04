@@ -50,7 +50,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def connect_sources
-    sources = [rollbar_csp[:connect], *vimeo_csp[:connect]]
+    sources = [rollbar_csp[:connect], *vimeo_csp[:connect], *hotjar_form_csp, *fullstory_csp]
     sources += %w[http://localhost:3035 ws://localhost:3035] if Rails.env.development?
     sources
   end
@@ -63,11 +63,19 @@ Rails.application.config.content_security_policy do |policy|
     ['https://www.youtube.com']
   end
 
+  def hotjar_form_csp
+    %w[hotjar.com *.hotjar.com wss://*.hotjar.com]
+  end
+
+  def fullstory_csp
+    %w[fullstory.com *.fullstory.com]
+  end
+
   def frame_sources
     [
       'https://sv-co-public-slackin.herokuapp.com', 'https://www.google.com',
       typeform_csp[:frame], youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame],
-      *google_form_csp[:frame], facebook_csp[:frame]
+      *google_form_csp[:frame], facebook_csp[:frame], *hotjar_form_csp
     ]
   end
 

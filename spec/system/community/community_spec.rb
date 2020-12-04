@@ -490,6 +490,67 @@ feature 'Community', js: true do
       expect(page).to have_text('0 Replies')
       expect(community.topics.reload.find_by(title: topic_title).first_post.body).to eq(topic_body)
     end
+
+    scenario 'admin locks/unlocks a topic in community' do
+      sign_in_user(school_admin.user, referrer: topic_path(topic_1))
+
+      expect(page).to have_text(topic_1.title)
+      expect(page).to_not have_text('This topic thread has been locked')
+
+      accept_confirm { click_button('Lock Topic') }
+
+      expect(page).to have_text('This topic has been locked')
+      dismiss_notification
+
+      expect(page).to have_text('This topic thread has been locked')
+
+      expect(topic_1.reload.locked_at).to_not eq(nil)
+      expect(topic_1.locked_by).to eq(school_admin.user)
+
+      accept_confirm { click_button('Unlock Topic') }
+
+      expect(page).to have_text('This topic has been unlocked')
+      dismiss_notification
+
+      expect(page).to_not have_text('This topic thread has been locked')
+
+      expect(topic_1.reload.locked_at).to eq(nil)
+      expect(topic_1.locked_by).to eq(nil)
+    end
+  end
+
+  scenario 'student attempts to lock a topic' do
+    sign_in_user(student_1.user, referrer: topic_path(topic_1))
+
+    expect(page).to have_text(topic_1.title)
+    expect(page).to_not have_button('Lock Topic')
+  end
+
+  scenario 'coach attempts to lock/unlock a topic' do
+    sign_in_user(coach.user, referrer: topic_path(topic_1))
+
+    accept_confirm { click_button('Lock Topic') }
+
+    expect(page).to have_text('This topic has been locked')
+    dismiss_notification
+
+    accept_confirm { click_button('Unlock Topic') }
+
+    expect(page).to have_text('This topic has been unlocked')
+    dismiss_notification
+  end
+
+  scenario 'student attempts to post reply to a locked topic' do
+    sign_in_user(student_1.user, referrer: topic_path(topic_1))
+
+    replace_markdown reply_body
+
+    # Before posting reply, let's lock the topic.
+    topic_1.update!(locked_at: Time.zone.now, locked_by: coach.user)
+
+    click_button 'Post Your Reply'
+
+    expect(page).to have_text('Cannot add reply to a locked topic')
   end
 
   context 'community has topic categories' do

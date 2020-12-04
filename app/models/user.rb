@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_one :school_admin, dependent: :restrict_with_error
   has_many :markdown_attachments, dependent: :nullify
   has_many :issued_certificates, dependent: :nullify
+  has_many :locked_topics, class_name: 'Topic', foreign_key: 'locked_by_id', inverse_of: :locked_by, dependent: :nullify
   has_many :post_likes, dependent: :nullify
   has_many :text_versions, dependent: :nullify
   has_many :course_exports, dependent: :nullify

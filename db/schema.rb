@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_17_075015) do
+ActiveRecord::Schema.define(version: 2020_11_23_180238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -653,9 +653,12 @@ ActiveRecord::Schema.define(version: 2020_11_17_075015) do
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "topic_category_id"
     t.integer "views", default: 0
+    t.bigint "topic_category_id"
+    t.datetime "locked_at"
+    t.bigint "locked_by_id"
     t.index ["community_id"], name: "index_topics_on_community_id"
+    t.index ["locked_by_id"], name: "index_topics_on_locked_by_id"
     t.index ["target_id"], name: "index_topics_on_target_id"
     t.index ["topic_category_id"], name: "index_topics_on_topic_category_id"
   end
@@ -770,6 +773,7 @@ ActiveRecord::Schema.define(version: 2020_11_17_075015) do
   add_foreign_key "topic_categories", "communities"
   add_foreign_key "topics", "communities"
   add_foreign_key "topics", "topic_categories"
+  add_foreign_key "topics", "users", column: "locked_by_id"
   add_foreign_key "users", "schools"
   add_foreign_key "webhook_endpoints", "courses"
 end

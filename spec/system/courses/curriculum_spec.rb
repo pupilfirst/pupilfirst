@@ -194,7 +194,7 @@ feature "Student's view of Course Curriculum", js: true do
     # Reviewed targets, even those without prerequisites, must be locked.
     click_link l5_reviewed_target.title
 
-    expect(page).to have_content('You must level up to complete this target')
+    expect(page).to have_content('You must level up to complete this lesson')
 
     click_button 'Close'
   end

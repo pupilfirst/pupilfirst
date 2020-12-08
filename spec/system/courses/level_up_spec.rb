@@ -23,7 +23,7 @@ feature "Student levelling up", js: true do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_text(target.title)
-      expect(page).to have_text("You're at Level #{target.level.number}, but you have lessons in the Chapter 1 that have been rejected, or are pending review by a coach.")
+      expect(page).to have_text("You're at Chapter #{target.level.number}, but you have lessons in the Chapter 1 that have been rejected, or are pending review by a coach.")
       expect(page).to have_text("You'll need to pass all milestone lessons in Chapter 1 to continue leveling up.")
       expect(page).not_to have_button('Level Up')
     end

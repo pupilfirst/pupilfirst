@@ -231,7 +231,7 @@ feature 'Curriculum Editor', js: true do
     scenario 'author is not allowed to merge third level into level zero' do
       sign_in_user course_author.user, referrer: curriculum_school_course_path(course)
 
-      find('button[title="Edit selected level"').click
+      find('button[title="Edit selected chapter"').click
       click_button 'Actions'
       expect(page).not_to have_text("L0: #{level_0.name}")
     end

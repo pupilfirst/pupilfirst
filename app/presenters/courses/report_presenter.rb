@@ -39,7 +39,8 @@ module Courses
         {
           name: coach.name,
           title: coach.title,
-          avatar_url: coach.avatar.attached? ? view.rails_representation_path(coach.user.avatar_variant(:thumb), only_path: true) : nil
+          avatar_url: coach.avatar.attached? ? view.rails_representation_path(coach.user.avatar_variant(:thumb), only_path: true) : nil,
+          coaching_session_calendly_link: coach.coaching_session_calendly_link
         }
       end
     end

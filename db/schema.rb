@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_23_180238) do
+ActiveRecord::Schema.define(version: 2020_11_30_185214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -263,6 +263,7 @@ ActiveRecord::Schema.define(version: 2020_11_23_180238) do
     t.string "connect_link"
     t.boolean "notify_for_submission", default: false
     t.boolean "exited", default: false
+    t.string "coaching_session_calendly_link"
     t.index ["category"], name: "index_faculty_on_category"
     t.index ["user_id"], name: "index_faculty_on_user_id"
   end
@@ -653,8 +654,8 @@ ActiveRecord::Schema.define(version: 2020_11_23_180238) do
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "views", default: 0
     t.bigint "topic_category_id"
+    t.integer "views", default: 0
     t.datetime "locked_at"
     t.bigint "locked_by_id"
     t.index ["community_id"], name: "index_topics_on_community_id"

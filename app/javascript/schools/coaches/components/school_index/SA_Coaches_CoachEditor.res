@@ -15,6 +15,7 @@ type state = {
   public: bool,
   exited: bool,
   connectLink: string,
+  coachingSessionCalendlyLink: string,
   imageFileName: string,
   dirty: bool,
   saving: bool,
@@ -23,6 +24,7 @@ type state = {
   hasEmailError: bool,
   hasLinkedInUrlError: bool,
   hasConnectLinkError: bool,
+  hasCoachingSessionCalendlyLinkError: bool,
   affiliation: string,
 }
 
@@ -31,6 +33,7 @@ type action =
   | UpdateEmail(string, bool)
   | UpdateTitle(string, bool)
   | UpdateConnectLink(string, bool)
+  | UpdateCoachingSessionCalendlyLink(string, bool)
   | UpdatePublic(bool)
   | UpdateImageFileName(string)
   | UpdateExited(bool)
@@ -64,6 +67,12 @@ let reducer = (state, action) =>
       hasConnectLinkError: hasConnectLinkError,
       dirty: true,
     }
+  | UpdateCoachingSessionCalendlyLink(coachingSessionCalendlyLink, hasCoachingSessionCalendlyLinkError) => {
+      ...state,
+      coachingSessionCalendlyLink: coachingSessionCalendlyLink,
+      hasCoachingSessionCalendlyLinkError: hasCoachingSessionCalendlyLinkError,
+      dirty: true
+    }
   | UpdatePublic(public) => {...state, public: public, dirty: true}
   | UpdateSaving => {...state, saving: !state.saving}
   | UpdateImageFileName(imageFileName) => {
@@ -90,6 +99,10 @@ let updateTitle = (send, title) => send(UpdateTitle(title, title |> nameOrTitleI
 let updateConnectLink = (send, connectLink) =>
   send(UpdateConnectLink(connectLink, connectLink |> UrlUtils.isInvalid(true)))
 
+let updateCoachingSessionCalendlyLink = (send, coachingSessionCalendlyLink) => {
+  send(UpdateCoachingSessionCalendlyLink(coachingSessionCalendlyLink, coachingSessionCalendlyLink |> UrlUtils.isInvalid(true)))
+}
+
 let booleanButtonClasses = selected => {
   let classes = "toggle-button__button"
   classes ++ (selected ? " toggle-button__button--active" : "")
@@ -110,6 +123,7 @@ let computeInitialState = coach =>
       title: "",
       public: false,
       connectLink: "",
+      coachingSessionCalendlyLink: "",
       exited: false,
       dirty: false,
       saving: false,
@@ -118,6 +132,7 @@ let computeInitialState = coach =>
       hasTitleError: false,
       hasLinkedInUrlError: false,
       hasConnectLinkError: false,
+      hasCoachingSessionCalendlyLinkError: false,
       imageFileName: "",
       affiliation: "",
     }
@@ -130,6 +145,10 @@ let computeInitialState = coach =>
       | Some(connectLink) => connectLink
       | None => ""
       },
+      coachingSessionCalendlyLink: switch coach |> Coach.coachingSessionCalendlyLink {
+      | Some(coachingSessionCalendlyLink) => coachingSessionCalendlyLink
+      | None => ""
+      },
       exited: coach |> Coach.exited,
       dirty: false,
       saving: false,
@@ -138,6 +157,7 @@ let computeInitialState = coach =>
       hasTitleError: false,
       hasLinkedInUrlError: false,
       hasConnectLinkError: false,
+      hasCoachingSessionCalendlyLinkError: false,
       imageFileName: switch coach |> Coach.imageFileName {
       | Some(imageFileName) => imageFileName
       | None => ""
@@ -168,6 +188,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
       ~title=state.title,
       ~public=state.public,
       ~connectLink=Some(state.connectLink),
+      ~coachingSessionCalendlyLink=Some(state.coachingSessionCalendlyLink),
       ~exited=state.exited,
       ~imageFileName=Some(state.imageFileName),
       ~affiliation=Some(state.affiliation),
@@ -427,6 +448,25 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
                     <span className="truncate"> {avatarUploaderText() |> str} </span>
                   </label>
+                </div>
+                <div className="mt-5">
+                  <label
+                    className="block tracking-wide text-xs font-semibold" htmlFor="coachingSessionCalendlyLink">
+                    {"Coaching session Calendly link" |> str}
+                  </label>
+                  <input
+                    value=state.coachingSessionCalendlyLink
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="coachingSessionCalendlyLink"
+                    name="faculty[coaching_session_calendly_link]"
+                    onChange={event =>
+                      updateCoachingSessionCalendlyLink(send, ReactEvent.Form.target(event)["value"])}
+                    type_="text"
+                    placeholder="Calendly share link"
+                  />
+                  <School__InputGroupError
+                    message="This doesn't look like a valid URL" active=state.hasCoachingSessionCalendlyLinkError
+                  />
                 </div>
               </div>
               <div className="p-6 bg-gray-200">

@@ -126,10 +126,20 @@ en:
       level: Chapter
       unable_to_find_target_group: "Unable to find section with ID: "
       create_target_group: Create section
-      create_level: Create chapter
+      create_level: Create Chapter
       edit_selected_level: Edit selected chapter
     CurriculumEditor__LevelEditor:
       unlock_level_on: 'Unlock chapter on'
+      update_level: Update Chapter
+      create_new_level: Create New Chapter
+      level_name: Chapter Name
+      level_name_placeholder: Type level name here
+      drawer_title:
+        edit_level: 'Edit Level '
+        create_new_level: Create New Level
+      notifications:
+        update_success: Chapter updated successfully
+        create_success: Chapter created successfully
     CurriculumEditor__TargetGroupShow:
       create_target: Create a lesson
       milestone_targets: Milestone Lessons

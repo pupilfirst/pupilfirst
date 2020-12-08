@@ -549,7 +549,7 @@ let make = () => {
         defaultOptions={defaultOptions()}
       />
     </div>
-    <div> <WebpushSubscription /> </div>
+    <div> <WebPushSubscriptionManager /> </div>
     <div id="entries" className="mt-4">
       {switch (state.entries) {
        | Unloaded =>

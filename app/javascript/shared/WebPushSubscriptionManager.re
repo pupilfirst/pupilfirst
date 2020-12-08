@@ -4,15 +4,14 @@ type subscription = {
   auth: string,
 };
 
-[@bs.module "./webpushSubscription"]
-external createSubscription: unit => Js.Promise.t(subscription) =
+[@bs.module "./webPushSubscription"]
+external createSubscription:
+  unit => Js.Promise.t(Js.Nullable.t(subscription)) =
   "createSubscription";
 
-[@bs.module "./webpushSubscription"]
+[@bs.module "./webPushSubscription"]
 external getWebPushData: unit => Js.Promise.t(Js.Nullable.t(subscription)) =
   "getWebPushData";
-
-// @bs.module(“MyConstant”) external myId: Js.Nullable.t<string> = “myId”
 
 let str = React.string;
 
@@ -97,10 +96,7 @@ let saveSubscription = (subscription, send) => {
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
        response##createWebPushSubscription##success
-         ? {
-           send(SetStatusSubscribed);
-         }
-         : send(ClearSaving);
+         ? send(SetStatusSubscribed) : send(ClearSaving);
        Js.Promise.resolve();
      })
   |> Js.Promise.catch(_ => {
@@ -111,15 +107,23 @@ let saveSubscription = (subscription, send) => {
   |> ignore;
 };
 
+let handleNotificationBlock = () => {
+  Notification.error("Unable to Subscribe", "tada");
+};
+
 let createSubscription = (send, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   createSubscription()
-  |> Js.Promise.then_(response => {
-       saveSubscription(response, send);
+  |> Js.Promise.then_(r => {
+       switch (Js.Nullable.toOption(r)) {
+       | Some(response) => saveSubscription(response, send)
+       | None => handleNotificationBlock()
+       };
        Js.Promise.resolve();
      })
   |> Js.Promise.catch(_ => {
        send(ClearSaving);
+       handleNotificationBlock();
        Js.Promise.resolve();
      })
   |> ignore;
@@ -130,7 +134,7 @@ let webPushEndpoint =
   |> Webapi.Dom.Document.documentElement
   |> Webapi.Dom.Element.getAttribute("data-subscription-endpoint");
 
-let loadStatus = (status, send) => {
+let loadStatus = (status, send, ()) => {
   switch (status) {
   | UnSubscribed => ()
   | Subscribed
@@ -140,6 +144,7 @@ let loadStatus = (status, send) => {
          let response = Js.Nullable.toOption(r);
          switch (webPushEndpoint, response) {
          | (None, _) => send(SetStatusUnSubscribed)
+         | (Some(""), _) => send(SetStatusUnSubscribed)
          | (Some(_endpoint), None) =>
            send(SetStatusSubscribedOnAnotherDevice)
          | (Some(endpoint1), Some(subscription)) =>
@@ -151,12 +156,10 @@ let loadStatus = (status, send) => {
 
          Js.Promise.resolve();
        })
-    |> Js.Promise.catch(_ => {
-         Js.log("catch");
-         Js.Promise.resolve();
-       })
+    |> Js.Promise.catch(_ => {Js.Promise.resolve()})
     |> ignore
   };
+  None;
 };
 
 let computeInitialState = () => {
@@ -167,12 +170,14 @@ let computeInitialState = () => {
   saving: false,
 };
 
-let button = (disabled, onClick, icon, text) => {
+let button = (saving, onClick, icon, text) => {
   <button
     onClick
-    disabled
+    disabled=saving
     className="inline-flex items-center font-semibold p-2 md:py-1 bg-white hover:bg-gray-300 border rounded text-xs flex-shrink-0">
-    <FaIcon classes={"mr-2 fas fa-" ++ icon} />
+    <FaIcon
+      classes={"mr-2 fa-fw fas fa-" ++ (saving ? "spinner fa-spin" : icon)}
+    />
     {str(text)}
   </button>;
 };
@@ -181,10 +186,7 @@ let button = (disabled, onClick, icon, text) => {
 let make = () => {
   let (state, send) = React.useReducer(reducer, computeInitialState());
 
-  React.useEffect(() => {
-    loadStatus(state.status, send);
-    None;
-  });
+  React.useEffect1(loadStatus(state.status, send), [||]);
 
   <div>
     {switch (state.status) {

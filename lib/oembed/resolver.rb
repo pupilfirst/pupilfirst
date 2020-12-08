@@ -51,7 +51,8 @@ module Oembed
         Oembed::GoogleDocumentsFallbackProvider,
         Oembed::GoogleSlidesFallbackProvider,
         Oembed::GoogleSpreadsheetsFallbackProvider,
-        Oembed::GoogleFormsFallbackProvider
+        Oembed::GoogleFormsFallbackProvider,
+        Oembed::TypeformFallbackProvider
       ]
     end
   end

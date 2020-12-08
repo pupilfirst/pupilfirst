@@ -14,7 +14,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def typeform_csp
-    { frame: 'https://svlabs.typeform.com' }
+    { frame: ['https://svlabs.typeform.com', 'https://form.typeform.com'] }
   end
 
   def slideshare_csp
@@ -74,7 +74,7 @@ Rails.application.config.content_security_policy do |policy|
   def frame_sources
     [
       'https://sv-co-public-slackin.herokuapp.com', 'https://www.google.com',
-      typeform_csp[:frame], youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame],
+      *typeform_csp[:frame], youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame],
       *google_form_csp[:frame], facebook_csp[:frame], *hotjar_form_csp
     ]
   end

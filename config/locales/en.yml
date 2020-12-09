@@ -140,6 +140,22 @@ en:
       notifications:
         update_success: Chapter updated successfully
         create_success: Chapter created successfully
+    CurriculumEditor__TargetGroupEditor:
+      level: Chapter
+      target_group_details: Section Detail
+      title: Title
+      name_placeholder: Type section name here
+      description: ' Description'
+      description_placeholder: Type section description
+      milestone_target_group: Is this a milestone section?
+      target_group_archived: Is this section archived?
+      update_target_group: Update Section
+      create_target_group: Create Section
+      input_error:
+        choose_level: Choose a chapter
+        title_not_valid: not a valid title
+      notifications:
+        update_success: Section updated successfully
     CurriculumEditor__TargetGroupShow:
       create_target: Create a lesson
       milestone_targets: Milestone Lessons
@@ -329,6 +345,8 @@ en:
     saving: Saving...
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
     file_invalid: Please select a file with a size less than 5 MB.
+    'yes': 'Yes'
+    'no': 'No'
 
   dashboard:
     dashboard:

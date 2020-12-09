@@ -439,7 +439,7 @@ feature 'Target Content Editor', js: true do
 
     # Without changes, closing editor or changing tab should not be confirmed.
     click_link 'Details'
-    expect(page).to have_text('Will a coach review submissions on this target?')
+    expect(page).to have_text('Will a coach review submissions on this lesson?')
     click_link 'Content'
     expect(page).to have_selector("div[aria-label='Editor for content block #{first_block.id}']")
     find('button[title="Close Editor"').click
@@ -455,7 +455,7 @@ feature 'Target Content Editor', js: true do
       click_link 'Details'
     end
 
-    expect(page).to have_text('Will a coach review submissions on this target?')
+    expect(page).to have_text('Will a coach review submissions on this lesson?')
 
     click_link 'Content'
 

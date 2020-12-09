@@ -20,7 +20,7 @@ module Mutations
       mutator = UpdateTargetMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, 'Done!', 'Target updated successfully!')
+        mutator.notify(:success, 'Done!', I18n.t('mutations.update_target.success_notification'))
         target = mutator.update
         { sort_index: target.sort_index }
       else

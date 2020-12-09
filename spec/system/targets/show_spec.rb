@@ -415,7 +415,7 @@ feature 'Target Overlay', js: true do
         expect(page).to have_content('Locked')
       end
 
-      expect(page).to have_content('This target has pre-requisites that are incomplete.')
+      expect(page).to have_content('This lesson has pre-requisites that are incomplete.')
 
       # It should be possible to navigate to the prerequisite target.
       within('.course-overlay__prerequisite-targets') do
@@ -443,7 +443,7 @@ feature 'Target Overlay', js: true do
         expect(page).to have_content('Locked')
       end
 
-      expect(page).to have_content('The course has ended and submissions are disabled for all targets!')
+      expect(page).to have_content('The course has ended and submissions are disabled for all lessons!')
       expect(page).not_to have_selector('.course-overlay__body-tab-item', text: 'Complete')
     end
 
@@ -660,20 +660,20 @@ feature 'Target Overlay', js: true do
     expect(page).to have_text(target_l1.title)
 
     expect(page).not_to have_link('Previous Target')
-    click_link 'Next Target'
+    click_link 'Next Lesson'
 
     expect(page).to have_text(prerequisite_target.title)
 
-    click_link 'Next Target'
+    click_link 'Next Lesson'
 
     expect(page).to have_text(quiz_target.title)
     expect(page).not_to have_link('Next Target')
 
-    click_link 'Previous Target'
+    click_link 'Previous Lesson'
 
     expect(page).to have_text(prerequisite_target.title)
 
-    click_link 'Previous Target'
+    click_link 'Previous Lesson'
 
     expect(page).to have_text(target_l1.title)
   end

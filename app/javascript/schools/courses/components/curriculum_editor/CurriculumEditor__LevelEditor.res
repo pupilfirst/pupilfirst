@@ -4,6 +4,8 @@ open CurriculumEditor__Types
 
 let str = ReasonReact.string
 
+let t = I18n.t(~scope="components.CurriculumEditor__LevelEditor")
+
 type tab =
   | Details
   | Actions
@@ -85,8 +87,8 @@ let computeInitialState = level => {
 
 let drawerTitle = level =>
   switch level {
-  | Some(level) => "Edit Level " ++ Level.number(level)->string_of_int
-  | None => "Create New Level"
+  | Some(level) => t("drawer_title.edit_level") ++ Level.number(level)->string_of_int
+  | None => t("drawer_title.create_new_level")
   }
 
 let handleResponseCB = (level, updateLevelsCB, state, json) => {
@@ -101,8 +103,8 @@ let handleResponseCB = (level, updateLevelsCB, state, json) => {
   let newLevel = Level.create(id, state.name, number, state.unlockAt)
 
   switch level {
-  | Some(_) => Notification.success("Success", "Level updated successfully")
-  | None => Notification.success("Success", "Level created successfully")
+  | Some(_) => Notification.success("Success", t("notifications.update_success"))
+  | None => Notification.success("Success", t("notifications.create_success"))
   }
 
   updateLevelsCB(newLevel)
@@ -145,13 +147,13 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
   <div className=?visibiltyClass>
     <div className="mt-5">
       <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="name">
-        {"Level Name" |> str}
+        {t("level_name") |> str}
       </label>
       <input
         className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
         id="name"
         type_="text"
-        placeholder="Type level name here"
+        placeholder={t("level_name_placeholder")}
         value=state.name
         onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
       />
@@ -161,7 +163,7 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
     </div>
     <div className="mt-5">
       <label className="tracking-wide text-xs font-semibold" htmlFor="unlock-on-input">
-        {"Unlock level on" |> str}
+        {t("unlock_level_on") |> str}
       </label>
       <span className="text-xs"> {str(" (optional)")} </span>
       <DatePicker
@@ -175,7 +177,7 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
           disabled={saveDisabled(state)}
           onClick={_event => updateLevel(level, updateLevelsCB, state, send)}
           className="w-full btn btn-large btn-primary">
-          {"Update Level" |> str}
+          {t("update_level") |> str}
         </button>
 
       | None =>
@@ -183,7 +185,7 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
           disabled={saveDisabled(state)}
           onClick={_event => createLevel(course, updateLevelsCB, state, send)}
           className="w-full btn btn-large btn-primary">
-          {"Create New Level" |> str}
+          {t("create_new_level") |> str}
         </button>
       }}
     </div>

@@ -74,7 +74,7 @@ feature "Student's view of Course Curriculum", js: true do
 
     scenario 'student visits the course curriculum page' do
       sign_in_user student.user, referrer: curriculum_course_path(course)
-      expect(page).to have_text('The course has ended and submissions are disabled for all targets!')
+      expect(page).to have_text('The course has ended and submissions are disabled for all lessons!')
     end
   end
 
@@ -129,7 +129,7 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_selector('.curriculum__target-group', count: 2)
 
     # ...and only one of thoese should be a milestone target group.
-    expect(page).to have_selector('.curriculum__target-group', text: 'MILESTONE TARGETS', count: 1)
+    expect(page).to have_selector('.curriculum__target-group', text: 'MILESTONE LESSONS', count: 1)
 
     # Open the level selector dropdown.
     click_button "L4: #{level_4.name}"
@@ -167,7 +167,7 @@ feature "Student's view of Course Curriculum", js: true do
     # Non-reviewed targets that have prerequisites must be locked.
     click_link l5_non_reviewed_target_with_prerequisite.title
 
-    expect(page).to have_text('This target has pre-requisites that are incomplete.')
+    expect(page).to have_text('This lesson has pre-requisites that are incomplete.')
     expect(page).to have_link(l5_non_reviewed_target.title)
 
     click_button 'Close'
@@ -194,7 +194,7 @@ feature "Student's view of Course Curriculum", js: true do
     # Reviewed targets, even those without prerequisites, must be locked.
     click_link l5_reviewed_target.title
 
-    expect(page).to have_content('You must level up to complete this target')
+    expect(page).to have_content('You must level up to complete this lesson')
 
     click_button 'Close'
   end
@@ -207,7 +207,7 @@ feature "Student's view of Course Curriculum", js: true do
     click_button "L6: #{locked_level_6.name}"
 
     # Ensure level 6 is displayed as locked. - the content should not be visible.
-    expect(page).to have_text('The level is currently locked!')
+    expect(page).to have_text('The chapter is currently locked!')
     expect(page).to have_text('You can access the content on')
     expect(page).not_to have_text(target_group_l6.name)
     expect(page).not_to have_text(target_group_l6.description)
@@ -219,22 +219,22 @@ feature "Student's view of Course Curriculum", js: true do
 
     expect(page).to have_button("L4: #{level_4.name}")
 
-    click_button 'Next Level'
+    click_button 'Next Chapter'
 
     expect(page).to have_button("L5: #{level_5.name}")
 
-    click_button 'Next Level'
+    click_button 'Next Chapter'
 
     expect(page).to have_button("L6: #{locked_level_6.name}")
     expect(page).not_to have_button('Next Level')
 
-    click_button 'Previous Level'
+    click_button 'Previous Chapter'
     click_button "L5: #{level_5.name}"
     click_button "L2: #{level_2.name}"
-    click_button 'Previous Level'
+    click_button 'Previous Chapter'
 
     expect(page).to have_button("L1: #{level_1.name}")
-    expect(page).not_to have_button('Previous Level')
+    expect(page).not_to have_button('Previous Chapter')
   end
 
   context "when the students's course has a level 0 in it" do
@@ -391,7 +391,7 @@ feature "Student's view of Course Curriculum", js: true do
       click_button "L4: #{level_4.name}"
       click_button "L7: #{level_without_targets.name}"
 
-      expect(page).to have_content("There's no published content on this level")
+      expect(page).to have_content("There's no published content on this chapter")
     end
   end
 end

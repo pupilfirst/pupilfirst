@@ -51,6 +51,21 @@ puma:
 	@mkdir -p ~/.puma-dev
 	@ln -sf "${PWD}" ~/.puma-dev/school
 
+upstream-remotes:
+	@git remote add upstream git@github.com:pupilfirst/pupilfirst.git
+
+fork-sync: upstream-remotes ## Manualy fetch upstream/master, build a fork-sync branch and try to merge it into master
+	@git fetch upstream
+	@git checkout upstream/master
+	@git switch -c fork-sync
+	@git checkout master
+	@git merge fork-sync
+
+fork-sync-cleanup: ## Clean-up after manuall fork sync resolution
+	@git checkout master
+	@git branch -d fork-sync
+
+
 .PHONY: help db
 
 help:

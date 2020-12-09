@@ -527,8 +527,10 @@ let make = () => {
   );
 
   <div>
-    <div className="pt-4 px-4 lg:px-8 bg-gray-100">
+    <div
+      className="flex justify-between items-end bg-gray-100 pt-4 px-4 lg:px-8">
       <div className="font-bold text-xl"> {str("Notifications")} </div>
+      <WebPushSubscriptionManager />
     </div>
     <div
       className="w-full bg-gray-100 border-b sticky top-0 z-30 px-4 lg:px-8 py-3">
@@ -549,7 +551,6 @@ let make = () => {
         defaultOptions={defaultOptions()}
       />
     </div>
-    <div> <WebPushSubscriptionManager /> </div>
     <div id="entries" className="mt-4">
       {switch (state.entries) {
        | Unloaded =>

@@ -108,7 +108,10 @@ let saveSubscription = (subscription, send) => {
 };
 
 let handleNotificationBlock = () => {
-  Notification.error("Unable to Subscribe", "tada");
+  Notification.error(
+    "Permission Rejected",
+    "If you change your mind, click the lock icon to give Chrome permission to send you desktop notifications.",
+  );
 };
 
 let createSubscription = (send, event) => {
@@ -188,28 +191,25 @@ let make = () => {
 
   React.useEffect1(loadStatus(state.status, send), [||]);
 
-  <div>
-    {switch (state.status) {
-     | Subscribed =>
-       button(
-         state.saving,
-         deleteSubscription(send),
-         "bell-slash",
-         "unsubscribe",
-       )
-     | UnSubscribed =>
-       button(state.saving, createSubscription(send), "bell", "Subscribe")
+  switch (state.status) {
+  | Subscribed =>
+    button(
+      state.saving,
+      deleteSubscription(send),
+      "bell-slash",
+      "unsubscribe",
+    )
+  | UnSubscribed =>
+    button(state.saving, createSubscription(send), "bell", "Subscribe")
 
-     | SubscribedOnAnotherDevice =>
-       <div>
-         {str("subscribed on another device")}
-         {button(
-            state.saving,
-            createSubscription(send),
-            "bell",
-            "Subscribe on this Device",
-          )}
-       </div>
-     }}
-  </div>;
+  | SubscribedOnAnotherDevice =>
+    <div>
+      {button(
+         state.saving,
+         createSubscription(send),
+         "bell",
+         "Subscribe on this Device",
+       )}
+    </div>
+  };
 };

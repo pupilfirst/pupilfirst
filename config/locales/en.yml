@@ -89,9 +89,17 @@ en:
       update_issued_certificates_warning:
         one: "This certificate has been issued once.<br/>These changes will also be applied to the issued certificate."
         other: "This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates."
+    CoursesReport__Level:
+      level: level
     CoursesCurriculum:
       issued_certificate_heading: Congratulations! You have been issued a certificate.
       issued_certificate_button: View Certificate
+      level_locked: Level locked
+      level_locked_desc: "The level is currently locked!"
+      nav_prev_level: "Previous Level"
+      nav_next_level: "Next Level"
+      no_published_content_level: "There's no published content on this level."
+      milestone_targets: Milestone targets
     CoursesCurriculum__NoticeManager:
       course_complete_title: Congratulations! You have completed all milestone targets in the final level.
       course_complete_description: You've completed our coursework. Feel free to complete targets that you might have left out, and read up at attached links.
@@ -114,6 +122,42 @@ en:
       level_up_limited_description: "You're at Level %{currentLevel}, but you have targets in the Level %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up."
       level_up_title: Ready to Level Up!
       level_up_description: Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!
+    CurriculumEditor:
+      level: Level
+      unable_to_find_target_group: "Unable to find target group with ID: "
+      create_target_group: Create target group
+      create_level: Create Level
+      edit_selected_level: Edit selected level
+    CurriculumEditor__TargetGroupShow:
+      create_target: Create a target
+      milestone_targets: Milestone Targets
+    CurriculumEditor__TargetDetailsEditor:
+      level: Level
+      target_group: Target Group
+      any_prereq_targets: Are there any prerequisite targets?
+      search_targets: Search targets
+      no_targets_selected: 'No targets selected'
+      choose_target_group: Choose a target group
+      selected_all_targets: You have selected all targets
+      take_quiz: Take a quiz to complete the target.
+      visit_link: Visit a link to complete the target.
+      mark_as_complete: Simply mark the target as completed.
+      std_complete_target: How do you want the student to complete the target?
+      target_title_placeholder: Type target title here
+      update_target: Update Target
+      coach_review_sub_target: 'Will a coach review submissions on this target?'
+      steps_std_complete_target_short: What steps should the student take to complete this target?
+      steps_std_complete_target_long: 'These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.'
+      target_has_no_steps: 'This target has no steps. Students will be able to submit target without any action!'
+      should_team_tackle_target: How should teams tackle this target?
+      sub_team_std_target: Should students in a team submit work on a target individually, or together?
+      help_std_target_reminder: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
+      target_visibility: Target Visibility
+    CoursesCurriculum__TargetStatus:
+      course_locked: The course has ended and submissions are disabled for all target!
+      access_locked: Your access to this course has ended.
+      level_locked: You must level up to complete this target.
+      prerequisites_incomplete: This target has pre-requisites that are incomplete.
     CurriculumEditor__ContentBlockCreator:
       button_labels:
         markdown: Markdown

@@ -1,4 +1,5 @@
 let str = ReasonReact.string
+let t = I18n.t(~scope="components.CurriculumEditor")
 
 open CurriculumEditor__Types
 
@@ -76,12 +77,12 @@ let levelOfTarget = (targetId, targets, levels, targetGroups) => {
   let target =
     targets |> ListUtils.unsafeFind(
       target => Target.id(target) == targetId,
-      "Unable to find target with ID:" ++ (targetId ++ " in CurriculumEditor"),
+      t("unable_to_find_target_group") ++ (targetId ++ " in CurriculumEditor"),
     )
   let targetGroup =
     targetGroups |> ListUtils.unsafeFind(
       tg => TargetGroup.id(tg) == Target.targetGroupId(target),
-      "Unable to find target group with ID:" ++
+      t("unable_to_find_target_group") ++
       (Target.targetGroupId(target) ++
       " in CurriculumEditor"),
     )
@@ -147,7 +148,7 @@ let make = (
     let targetGroup =
       state.targetGroups |> ListUtils.unsafeFind(
         tg => TargetGroup.id(tg) == Target.targetGroupId(target),
-        "Unabltge to find target group with ID: " ++ Target.targetGroupId(target),
+        t("unable_to_find_target_group") ++ Target.targetGroupId(target),
       )
 
     let updatedTargetGroup = switch target |> Target.visibility {
@@ -224,7 +225,7 @@ let make = (
                 |> Level.sort
                 |> Array.map(level =>
                   <option key={Level.id(level)} value={level |> Level.name}>
-                    {"Level " ++
+                    {t("level") ++ " " ++
                     ((level |> Level.number |> string_of_int) ++
                     (": " ++ (level |> Level.name))) |> str}
                   </option>
@@ -237,7 +238,7 @@ let make = (
               </div>
             </div>
             <button
-              title="Edit selected level"
+              title={t("edit_selected_level")}
               className="flex items-center text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-400 border-l-0 py-1 px-2 rounded-r focus:outline-none"
               onClick={_ => send(UpdateEditorAction(ShowLevelEditor(Some(state.selectedLevel))))}>
               <i className="fas fa-pencil-alt" />
@@ -246,7 +247,7 @@ let make = (
               className="btn btn-primary ml-4"
               onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
               <i className="fas fa-plus-square mr-2 text-lg" />
-              <span> {"Create Level" |> str} </span>
+              <span> {t("create_level") |> str} </span>
             </button>
           </div>
           {showArchivedButton(targetGroupsInLevel, state.targets)
@@ -281,7 +282,7 @@ let make = (
           <span className="flex bg-gray-200 p-2 rounded-full">
             <i className="fas fa-plus-circle text-2xl" />
           </span>
-          <h4 className="font-semibold ml-2"> {"Create a target group" |> str} </h4>
+          <h4 className="font-semibold ml-2"> { t("create_target_group") |> str} </h4>
         </div>
       </div>
     </div>

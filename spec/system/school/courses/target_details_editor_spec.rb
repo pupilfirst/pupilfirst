@@ -44,8 +44,8 @@ feature 'Target Details Editor', js: true do
     fill_in 'title', with: new_target_title, fill_options: { clear: :backspace }
     fill_in 'completion-instructions', with: completion_instructions
 
-    click_button 'Update Target'
-    expect(page).to have_text("Target updated successfully")
+    click_button 'Update Lesson'
+    expect(page).to have_text("Lesson updated successfully")
     dismiss_notification
 
     expect(target_1_l2.reload.title).to eq(new_target_title)
@@ -55,7 +55,7 @@ feature 'Target Details Editor', js: true do
 
     fill_in 'completion-instructions', with: '', fill_options: { clear: :backspace }
 
-    click_button 'Update Target'
+    click_button 'Update Lesson'
     dismiss_notification
 
     expect(target_1_l2.reload.completion_instructions).to eq(nil)
@@ -75,7 +75,7 @@ feature 'Target Details Editor', js: true do
     end
 
     expect(page).to_not have_button('Visit a link to complete the target.')
-    expect(page).to have_text('Atleast one has to be selected')
+    expect(page).to have_text('At least one has to be selected')
 
     find("div[title='Select #{evaluation_criterion.display_name}']").click
 
@@ -83,8 +83,8 @@ feature 'Target Details Editor', js: true do
       click_button 'Live'
     end
 
-    click_button 'Update Target'
-    expect(page).to have_text("Target updated successfully")
+    click_button 'Update Lesson'
+    expect(page).to have_text("Lesson updated successfully")
     dismiss_notification
 
     expect(target_1_l2.reload.title).to eq(new_target_title)
@@ -99,20 +99,20 @@ feature 'Target Details Editor', js: true do
     # Open the details editor for the target.
     find("a[title='Edit details of target #{target_2_l2.title}']").click
 
-    expect(page).to have_text('Will a coach review submissions on this target?')
+    expect(page).to have_text('Will a coach review submissions on this lesson?')
 
     within("div#evaluated") do
       click_button 'No'
     end
 
     within("div#method_of_completion") do
-      click_button 'Visit a link to complete the target.'
+      click_button 'Visit a link to complete the lesson.'
     end
 
     fill_in 'Link to complete', with: link_to_complete
 
-    click_button 'Update Target'
-    expect(page).to have_text("Target updated successfully")
+    click_button 'Update Lesson'
+    expect(page).to have_text("Lesson updated successfully")
     dismiss_notification
 
     expect(target_2_l2.reload.link_to_complete).to eq(link_to_complete)
@@ -132,7 +132,7 @@ feature 'Target Details Editor', js: true do
     end
 
     within("div#method_of_completion") do
-      click_button 'Take a quiz to complete the target.'
+      click_button 'Take a quiz to complete the lesson.'
     end
 
     # Quiz Question 1
@@ -152,9 +152,9 @@ feature 'Target Details Editor', js: true do
     fill_in 'quiz-question-2-answer-option-1', with: quiz_question_2_answer_option_1
     fill_in 'quiz-question-2-answer-option-2', with: quiz_question_2_answer_option_2
 
-    click_button 'Update Target'
+    click_button 'Update Lesson'
 
-    expect(page).to have_text("Target updated successfully")
+    expect(page).to have_text("Lesson updated successfully")
 
     dismiss_notification
 
@@ -174,7 +174,7 @@ feature 'Target Details Editor', js: true do
 
     # Open the details editor for the target.
     find("a[title='Edit details of target #{target_1_l2.title}']").click
-    expect(page).to have_text('Are there any prerequisite targets?')
+    expect(page).to have_text('Are there any prerequisite lessons?')
 
     within("div#prerequisite_targets") do
       expect(page).to have_text(target_2_l2.title)
@@ -184,8 +184,8 @@ feature 'Target Details Editor', js: true do
 
     click_button 'Only one student in a team needs to submit.'
 
-    click_button 'Update Target'
-    expect(page).to have_text("Target updated successfully")
+    click_button 'Update Lesson'
+    expect(page).to have_text("Lesson updated successfully")
     dismiss_notification
 
     target = target_1_l2.reload
@@ -197,7 +197,7 @@ feature 'Target Details Editor', js: true do
   scenario 'user is notified on reloading window if target editor has unsaved changes' do
     sign_in_user course_author.user, referrer: details_school_course_target_path(course_id: course.id, id: target_1_l2.id)
 
-    expect(page).to have_text('Are there any prerequisite targets?')
+    expect(page).to have_text('Are there any prerequisite lessons?')
     # Can refresh the page without any confirm dialog
     visit current_path
 
@@ -221,7 +221,7 @@ feature 'Target Details Editor', js: true do
 
     scenario 'admin expands the existing checklist in an evaluated target' do
       sign_in_user course_author.user, referrer: details_school_course_target_path(course_id: course.id, id: target_2_l2.id)
-      expect(page).to have_text('What steps should the student take to complete this target?')
+      expect(page).to have_text('What steps should the student take to complete this lesson?')
 
       # Change the existing item
       within("div[aria-label='Editor for checklist item 1'") do
@@ -283,7 +283,7 @@ feature 'Target Details Editor', js: true do
         expect(page).to have_text('required steps must be unique')
       end
 
-      expect(page).to have_button('Update Target', disabled: true)
+      expect(page).to have_button('Update Lesson', disabled: true)
 
       # The warning should disappear when we make the step optional.
       within("div[aria-label='Editor for checklist item 4'") do
@@ -294,9 +294,9 @@ feature 'Target Details Editor', js: true do
         fill_in 'checklist-item-4-title', with: 'Attach a link for the submission', fill_options: { clear: :backspace }
       end
 
-      click_button 'Update Target'
+      click_button 'Update Lesson'
 
-      expect(page).to have_text("Target updated successfully")
+      expect(page).to have_text("Lesson updated successfully")
 
       dismiss_notification
 
@@ -313,7 +313,7 @@ feature 'Target Details Editor', js: true do
     scenario 'admin uses controls in checklist to remove, copy and move checklist items' do
       sign_in_user course_author.user, referrer: details_school_course_target_path(course_id: course.id, id: target_3_l2.id)
 
-      expect(page).to have_text('What steps should the student take to complete this target?')
+      expect(page).to have_text('What steps should the student take to complete this lesson?')
 
       # Move checklist item 1 down
       within("div[aria-label='Controls for checklist item 1'") do
@@ -344,8 +344,8 @@ feature 'Target Details Editor', js: true do
         check 'Optional'
       end
 
-      click_button 'Update Target'
-      expect(page).to have_text("Target updated successfully")
+      click_button 'Update Lesson'
+      expect(page).to have_text("Lesson updated successfully")
       dismiss_notification
 
       expected_checklist = [
@@ -366,19 +366,19 @@ feature 'Target Details Editor', js: true do
         click_button 'Yes'
       end
 
-      expect(page).to have_text('What steps should the student take to complete this target?')
+      expect(page).to have_text('What steps should the student take to complete this lesson?')
 
       # Remove the default checklist item
       within("div[aria-label='Controls for checklist item 1'") do
         click_button 'Delete'
       end
 
-      expect(page).to have_text('This target has no steps. Students will be able to submit target without any action!')
+      expect(page).to have_text('This lesson has no steps. Students will be able to submit lesson without any action!')
 
       find("div[title='Select #{evaluation_criterion.display_name}']").click
 
-      click_button 'Update Target'
-      expect(page).to have_text("Target updated successfully")
+      click_button 'Update Lesson'
+      expect(page).to have_text("Lesson updated successfully")
       dismiss_notification
 
       target = quiz_target.reload
@@ -406,17 +406,17 @@ feature 'Target Details Editor', js: true do
     scenario 'author moves a target to another group in the same level' do
       sign_in_user school_admin.user, referrer: details_school_course_target_path(course_id: course.id, id: target_l2_2.id)
 
-      expect(page).to have_text("Level #{target_l2_2.level.number}: #{target_l2_2.target_group.name}")
+      expect(page).to have_text("Chapter #{target_l2_2.level.number}: #{target_l2_2.target_group.name}")
 
       # archived target groups should not be listed
       fill_in 'target_group', with: target_group_archived.name
-      expect(page).not_to have_selector(:link_or_button, "Pick Level #{target_group_archived.level.number}: #{target_group_archived.name}")
+      expect(page).not_to have_selector(:link_or_button, "Pick Chapter #{target_group_archived.level.number}: #{target_group_archived.name}")
 
       fill_in 'target_group', with: target_group_l2_2.name
-      click_button "Pick Level #{target_group_l2_2.level.number}: #{target_group_l2_2.name}"
+      click_button "Pick Chapter #{target_group_l2_2.level.number}: #{target_group_l2_2.name}"
 
-      click_button 'Update Target'
-      expect(page).to have_text("Target updated successfully")
+      click_button 'Update Lesson'
+      expect(page).to have_text("Lesson updated successfully")
       dismiss_notification
 
       expect(target_l2_2.reload.sort_index).to eq(1)
@@ -427,13 +427,13 @@ feature 'Target Details Editor', js: true do
     scenario 'author moves a target to another group on a different level' do
       sign_in_user school_admin.user, referrer: details_school_course_target_path(course_id: course.id, id: target_l2_2.id)
 
-      expect(page).to have_text("Level #{target_l2_2.level.number}: #{target_l2_2.target_group.name}")
+      expect(page).to have_text("Chapter #{target_l2_2.level.number}: #{target_l2_2.target_group.name}")
 
       fill_in 'target_group', with: target_group_l1.name
-      click_button "Pick Level #{target_group_l1.level.number}: #{target_group_l1.name}"
+      click_button "Pick Chapter #{target_group_l1.level.number}: #{target_group_l1.name}"
 
-      click_button 'Update Target'
-      expect(page).to have_text("Target updated successfully")
+      click_button 'Update Lesson'
+      expect(page).to have_text("Lesson updated successfully")
       dismiss_notification
 
       expect(target_l2_2.reload.sort_index).to eq(2)
@@ -453,8 +453,8 @@ feature 'Target Details Editor', js: true do
 
         fill_in 'title', with: new_target_title, fill_options: { clear: :backspace }
 
-        click_button 'Update Target'
-        expect(page).to have_text("Target updated successfully")
+        click_button 'Update Lesson'
+        expect(page).to have_text("Lesson updated successfully")
         dismiss_notification
 
         expect(target_1_l1.reload.timeline_events.count).to eq(1)
@@ -475,8 +475,8 @@ feature 'Target Details Editor', js: true do
           click_button 'Live'
         end
 
-        click_button 'Update Target'
-        expect(page).to have_text("Target updated successfully")
+        click_button 'Update Lesson'
+        expect(page).to have_text("Lesson updated successfully")
         dismiss_notification
 
         expect(target_1_l1.reload.timeline_events.count).to eq(0)

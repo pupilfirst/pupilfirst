@@ -33,6 +33,8 @@ type t = {
   status: status,
 }
 
+let tc = I18n.t(~scope="components.CoursesCurriculum__TargetStatus")
+
 type submissionStatus =
   | SubmissionMissing
   | SubmissionPendingReview
@@ -156,10 +158,10 @@ let isPending = t => t.status == Pending
 
 let lockReasonToString = lr =>
   switch lr {
-  | CourseLocked => "The course has ended and submissions are disabled for all targets!"
-  | AccessLocked => "Your access to this course has ended."
-  | LevelLocked => "You must level up to complete this target."
-  | PrerequisitesIncomplete => "This target has pre-requisites that are incomplete."
+  | CourseLocked => tc("course_locked")
+  | AccessLocked => tc("access_locked")
+  | LevelLocked => tc("level_locked")
+  | PrerequisitesIncomplete => tc("prerequisites_incomplete")
   }
 
 let statusToString = t =>

@@ -23,8 +23,8 @@ feature "Student levelling up", js: true do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_text(target.title)
-      expect(page).to have_text("You're at Level #{target.level.number}, but you have targets in the Level 1 that have been rejected, or are pending review by a coach.")
-      expect(page).to have_text("You'll need to pass all milestone targets in Level 1 to continue leveling up.")
+      expect(page).to have_text("You're at Chapter #{target.level.number}, but you have lessons in the Chapter 1 that have been rejected, or are pending review by a coach.")
+      expect(page).to have_text("You'll need to pass all milestone lessons in Chapter 1 to continue leveling up.")
       expect(page).not_to have_button('Level Up')
     end
   end
@@ -53,12 +53,12 @@ feature "Student levelling up", js: true do
       expect(page).not_to have_text(target_l1.title)
       expect(page).not_to have_text(target_group_l1.name)
 
-      expect(page).to have_text('You have successfully completed all milestone targets required to level up.')
+      expect(page).to have_text('You have successfully completed all milestone lessons required to level up.')
 
       # Reload the page, it should still remain the same.
       visit curriculum_course_path(course)
 
-      expect(page).to have_text('You have successfully completed all milestone targets required to level up.')
+      expect(page).to have_text('You have successfully completed all milestone lessons required to level up.')
       expect(page).not_to have_text(target_l1.title)
       expect(page).not_to have_text(target_group_l1.name)
 
@@ -188,8 +188,8 @@ feature "Student levelling up", js: true do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text('Pending Review')
-        expect(page).to have_text("You have submitted all milestone targets in level 1, but one or more submissions are pending review by a coach")
-        expect(page).to have_text("You need to get a passing grade on all milestone targets to level up.")
+        expect(page).to have_text("You have submitted all milestone lessons in chapter 1, but one or more submissions are pending review by a coach")
+        expect(page).to have_text("You need to get a passing grade on all milestone lessons to level up.")
         expect(page).not_to have_button('Level Up')
       end
     end
@@ -203,8 +203,8 @@ feature "Student levelling up", js: true do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text('Level Up Blocked')
-        expect(page).to have_text("You have submitted all milestone targets in level 1, but one or more submissions have been rejected")
-        expect(page).to have_text("You need to get a passing grade on all milestone targets to level up.")
+        expect(page).to have_text("You have submitted all milestone lessons in chapter 1, but one or more submissions have been rejected")
+        expect(page).to have_text("You need to get a passing grade on all milestone lessons to level up.")
         expect(page).not_to have_button('Level Up')
       end
     end
@@ -236,7 +236,7 @@ feature "Student levelling up", js: true do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_text('Check With Your Team')
-      expect(page).to have_text("You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.")
+      expect(page).to have_text("You have completed all required milestone lessons, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone lessons.")
       expect(page).not_to have_button('Level Up')
 
       team.founders.where.not(id: student.id).each do |other_student|
@@ -267,7 +267,7 @@ feature "Student levelling up", js: true do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text('Check With Your Team')
-        expect(page).to have_text("You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.")
+        expect(page).to have_text("You have completed all required milestone lessons, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone lessons.")
         expect(page).not_to have_button('Level Up')
       end
     end
@@ -284,7 +284,7 @@ feature "Student levelling up", js: true do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text('Check With Your Team')
-        expect(page).to have_text("You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.")
+        expect(page).to have_text("You have completed all required milestone lessons, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone lessons.")
         expect(page).not_to have_button('Level Up')
 
         # Submitting the targets should not result in any change.
@@ -322,7 +322,7 @@ feature "Student levelling up", js: true do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text('Check With Your Team')
-        expect(page).to have_text("You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.")
+        expect(page).to have_text("You have completed all required milestone lessons, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone lessons.")
         expect(page).not_to have_button('Level Up')
 
         # Submitting the targets should result in allowing the team to level up.
@@ -339,7 +339,7 @@ feature "Student levelling up", js: true do
     end
   end
 
-  context 'when a student is in level 1 and has completed all milestone targets there, but level 2 is locked' do
+  context 'when a student is in chapter 1 and has completed all milestone lessons there, but chapter 2 is locked' do
     let(:level_2) { create :level, :two, course: course, unlock_at: 1.week.from_now }
 
     before do
@@ -399,12 +399,12 @@ feature "Student levelling up", js: true do
       expect(page).to have_text('Completed', count: 1)
 
       # ...but there shouldn't be any option to level up.
-      expect(page).not_to have_text('You have successfully completed all milestone targets required to level up.')
+      expect(page).not_to have_text('You have successfully completed all milestone lessons required to level up.')
       expect(page).not_to have_button('Level Up')
     end
   end
 
-  context 'when a student is at the last level with all milestone targets in that level completed' do
+  context 'when a student is at the last level with all milestone lesson in that chapter completed' do
     let(:team) { create :startup, level: level_3 }
     let(:target_l3) { create :target, :with_content, :with_group, level: level_3, milestone: true, role: Target::ROLE_TEAM }
 
@@ -415,7 +415,7 @@ feature "Student levelling up", js: true do
     scenario "student sees a notice that they've completed the course" do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
-      expect(page).to have_text('You have completed all milestone targets in the final level')
+      expect(page).to have_text('You have completed all milestone lessons in the final chapter')
       expect(page).to have_text("You've completed our coursework")
     end
   end

@@ -9,6 +9,8 @@ external quizIcon: string = "./images/target-complete-quiz-icon.svg"
 
 let str = React.string
 
+let t = I18n.t(~scope="components.CurriculumEditor__TargetDetailsEditor")
+
 type methodOfCompletion =
   | Evaluated
   | VisitLink
@@ -312,13 +314,13 @@ let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
         <label
           className="block tracking-wide text-sm font-semibold mb-2" htmlFor="prerequisite_targets">
           <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-          {"Are there any prerequisite targets?" |> str}
+          {t("any_prereq_targets") |> str}
         </label>
         <div id="prerequisite_targets" className="mb-6 ml-6">
           <MultiSelectForPrerequisiteTargets
-            placeholder="Search targets"
-            emptySelectionMessage="No targets selected"
-            allItemsSelectedMessage="You have selected all targets!"
+            placeholder=t("search_targets")
+            emptySelectionMessage=t("no_targets_selected")
+            allItemsSelectedMessage=t("selected_all_targets")
             selected
             unselected
             onChange={setPrerequisiteSearch(send)}
@@ -398,7 +400,7 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
       {validNumberOfEvaluationCriteria(state)
         ? React.null
         : <div className="drawer-right-form__error-msg mb-2">
-            {"Atleast one has to be selected" |> str}
+            {"At least one has to be selected" |> str}
           </div>}
       <MultiSelectForEvaluationCriteria
         placeholder="Search evaluation criteria"
@@ -467,8 +469,9 @@ module SelectableTargetGroup = {
 
   let label = _t => None
 
+  let tc = t
   let value = t =>
-    "Level " ++
+    tc("level") ++ " " ++
     ((t.level |> Level.number |> string_of_int) ++
     (": " ++ (t.targetGroup |> TargetGroup.name)))
 
@@ -533,7 +536,7 @@ let targetGroupEditor = (state, targetGroups, levels, send) =>
   <div id="target_group_id" className="mb-6">
     <label className="block tracking-wide text-sm font-semibold mr-6 mb-2" htmlFor="target_group">
       <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-      {"Target Group" |> str}
+      {t("target_group") |> str}
     </label>
     <div className="ml-6">
       <TargetGroupSelector
@@ -547,7 +550,7 @@ let targetGroupEditor = (state, targetGroups, levels, send) =>
       />
       {switch state.targetGroupId {
       | Some(_) => React.null
-      | None => <School__InputGroupError message="Choose a target group" active=true />
+      | None => <School__InputGroupError message=t("choose_target_group") active=true />
       }}
     </div>
   </div>
@@ -568,9 +571,9 @@ let methodOfCompletionSelection = polyMethodOfCompletion =>
 
 let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
   let buttonString = switch methodOfCompletion {
-  | #TakeQuiz => "Take a quiz to complete the target."
-  | #VisitLink => "Visit a link to complete the target."
-  | #MarkAsComplete => "Simply mark the target as completed."
+  | #TakeQuiz => t("take_quiz")
+  | #VisitLink => t("visit_link")
+  | #MarkAsComplete => t("mark_as_complete")
   }
 
   let selected = switch (state.methodOfCompletion, methodOfCompletion) {
@@ -602,7 +605,7 @@ let methodOfCompletionSelector = (state, send) =>
         className="block tracking-wide text-sm font-semibold mr-6 mb-3"
         htmlFor="method_of_completion">
         <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-        {"How do you want the student to complete the target?" |> str}
+        {t("std_complete_target") |> str}
       </label>
       <div id="method_of_completion" className="flex -mx-2 pl-6">
         {[#MarkAsComplete, #VisitLink, #TakeQuiz]
@@ -728,7 +731,7 @@ let updateTargetButton = (
     ?onClick
     disabled
     className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-    {"Update Target" |> str}
+    {t("update_target") |> str}
   </button>
 }
 
@@ -855,7 +858,7 @@ let make = (
                     className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
                     id="title"
                     type_="text"
-                    placeholder="Type target title here"
+                    placeholder=t("target_title_placeholder")
                     onChange={updateTitle(send)}
                     value=state.title
                   />
@@ -872,7 +875,7 @@ let make = (
                 <label
                   className="block tracking-wide text-sm font-semibold mr-6" htmlFor="evaluated">
                   <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                  {"Will a coach review submissions on this target?" |> str}
+                  {t("coach_review_sub_target") |> str}
                 </label>
                 <div
                   id="evaluated"
@@ -894,12 +897,12 @@ let make = (
                 <div className="mb-6">
                   <label className="tracking-wide text-sm font-semibold" htmlFor="target_checklist">
                     <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                    {"What steps should the student take to complete this target?" |> str}
+                    {t("steps_std_complete_target_short") |> str}
                   </label>
                   <HelpIcon
                     className="ml-1"
                     link="https://docs.pupilfirst.com/#/curriculum_editor?id=defining-steps-to-complete-a-target">
-                    {"These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review." |> str}
+                    {t("steps_std_complete_target_long") |> str}
                   </HelpIcon>
                   <div className="ml-6 mb-6">
                     {
@@ -935,7 +938,7 @@ let make = (
                       ? <div
                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
                           <i className="fas fa-info-circle mr-2" />
-                          {"This target has no steps. Students will be able to submit target without any action!" |> str}
+                          {t("target_has_no_steps") |> str}
                         </div>
                       : React.null}
                     {state.checklist |> Array.length >= 15
@@ -971,12 +974,12 @@ let make = (
               <div className="mb-6">
                 <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="role">
                   <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                  {"How should teams tackle this target?" |> str}
+                  {t("should_team_tackle_target") |> str}
                 </label>
                 <HelpIcon
                   className="ml-1"
                   link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion">
-                  {"Should students in a team submit work on a target individually, or together?" |> str}
+                  {t("sub_team_std_target") |> str}
                 </HelpIcon>
                 <div id="role" className="flex mt-4 ml-6">
                   <button
@@ -1022,7 +1025,7 @@ let make = (
                 <HelpIcon
                   link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion"
                   className="ml-1">
-                  {"Use this to remind the student about something important. These instructions will be displayed close to where students complete the target." |> str}
+                  {t("help_std_target_reminder") |> str}
                 </HelpIcon>
                 <div className="ml-6">
                   <input
@@ -1042,7 +1045,7 @@ let make = (
                   <label
                     className="block tracking-wide text-sm font-semibold mr-3" htmlFor="archived">
                     <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                    {"Target Visibility" |> str}
+                    {t("target_visibility") |> str}
                   </label>
                   <div
                     id="visibility"

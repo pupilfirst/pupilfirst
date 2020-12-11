@@ -376,12 +376,36 @@ let submitForm = (target, aboveContentBlock, state, send, addContentBlockCB, blo
   }
 }
 
+let maxVideoSize = vimeoAccountPlan => {
+  switch vimeoAccountPlan {
+  | "basic" => 500 * 1024 * 1024
+  | "plus" => 5000 * 1024 * 1024
+  | "pro"
+  | "business"
+  | "premium" =>
+    20000 * 1024 * 1024
+  | _ => FileUtils.defaultVideoMaxSize
+  }
+}
+
+let maxVideoSizeString = vimeoAccountPlan => {
+  switch vimeoAccountPlan {
+  | "basic" => "500 MB"
+  | "plus" => "5 GB"
+  | "pro"
+  | "business"
+  | "premium" => "20 GB"
+  | _ => "500 MB"
+  }
+}
+
 let handleFileInputChange = (
   target,
   aboveContentBlock,
   state,
   send,
   addContentBlockCB,
+  vimeoAccountPlan,
   blockType,
   event,
 ) => {
@@ -402,13 +426,14 @@ let handleFileInputChange = (
           )
         : None
     | #VideoEmbed =>
-      switch (
-        FileUtils.isVideo(file),
-        FileUtils.hasValidSize(~maxSize=FileUtils.defaultVideoMaxSize, file),
-      ) {
+      let maxVideoSize = maxVideoSize(vimeoAccountPlan)
+      switch (FileUtils.isVideo(file), FileUtils.hasValidSize(~maxSize=maxVideoSize, file)) {
       | (false, true | false) =>
         Some("Invalid file format, please select an MP4, MOV, WMV, AVI or FLV file.")
-      | (true, false) => Some("Please select a file less than 500 MB in size.")
+      | (true, false) =>
+        Some({
+          "Please select a file less than " ++ maxVideoSizeString(vimeoAccountPlan) ++ " in size."
+        })
       | (true, true) => None
       }
     }
@@ -423,13 +448,22 @@ let handleFileInputChange = (
   }
 }
 
-let uploadForm = (target, aboveContentBlock, state, send, addContentBlockCB, blockType) => {
+let uploadForm = (
+  target,
+  aboveContentBlock,
+  state,
+  send,
+  addContentBlockCB,
+  blockType,
+  vimeoAccountPlan,
+) => {
   let fileSelectionHandler = handleFileInputChange(
     target,
     aboveContentBlock,
     state,
     send,
     addContentBlockCB,
+    vimeoAccountPlan,
   )
 
   let (fileId, formId, onChange, fileType) = switch blockType {
@@ -575,7 +609,13 @@ let disablingCoverDisabled = (saving, uploadProgress) =>
   uploadProgress->Belt.Option.mapWithDefault(saving, _u => false)
 
 @react.component
-let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessToken) => {
+let make = (
+  ~target,
+  ~aboveContentBlock=?,
+  ~addContentBlockCB,
+  ~hasVimeoAccessToken,
+  ~vimeoAccountPlan,
+) => {
   let (embedInputId, isAboveContentBlock) = switch aboveContentBlock {
   | Some(contentBlock) =>
     let id = "embed-" ++ (contentBlock |> ContentBlock.id)
@@ -592,7 +632,15 @@ let make = (~target, ~aboveContentBlock=?, ~addContentBlockCB, ~hasVimeoAccessTo
   )
 
   let uploadFormCurried = uploadType =>
-    uploadForm(target, aboveContentBlock, state, send, addContentBlockCB, uploadType)
+    uploadForm(
+      target,
+      aboveContentBlock,
+      state,
+      send,
+      addContentBlockCB,
+      uploadType,
+      vimeoAccountPlan,
+    )
 
   <DisablingCover
     disabled={disablingCoverDisabled(state.saving, state.uploadProgress)}

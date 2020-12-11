@@ -60,6 +60,7 @@ let make = (
   ~evaluationCriteria,
   ~course,
   ~updateTargetCB,
+  ~vimeoAccountPlan,
 ) => {
   let url = ReasonReactRouter.useUrl()
   let (dirty, setDirty) = React.useState(() => false)
@@ -91,7 +92,7 @@ let make = (
     let (innerComponent, selectedPage) = switch pageName {
     | "content" => (
         <CurriculumEditor__ContentEditor
-          target hasVimeoAccessToken setDirtyCB={dirty => setDirty(_ => dirty)}
+          target hasVimeoAccessToken vimeoAccountPlan setDirtyCB={dirty => setDirty(_ => dirty)}
         />,
         Content,
       )

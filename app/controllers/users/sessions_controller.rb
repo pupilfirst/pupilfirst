@@ -16,7 +16,7 @@ module Users
       end
 
       if only_keycloak_sign_in?
-        redirect_to oauth_path(:keycloakopenid, fqdn: current_school.domains.first.fqdn)
+        redirect_to oauth_path(:keycloakopenid, fqdn: current_school.domains.where(primary: true).first.fqdn)
       end
     end
 

@@ -42,6 +42,10 @@ module Keycloak
       openid_config['token_introspection_endpoint']
     end
 
+    def end_session
+      openid_config['end_session_endpoint']
+    end
+
     def admin_users
       uri = URI(domain)
       uri.path = "/auth/admin/realms/#{realm}/users"
@@ -178,6 +182,22 @@ module Keycloak
         MultiJson.load(res.body)
       else
         raise FailedRequestError.new 'Failed to set user password'
+      end
+    end
+
+    def user_sign_out(refresh_token)
+      headers = { 'Content-Type' => 'application/x-www-form-urlencoded' }
+      payload = {
+        'client_id' => CONFIG[:client_id],
+        'client_secret' => CONFIG[:client_secret],
+        'refresh_token' => refresh_token
+      }
+
+      res = Faraday.post(endpoints.end_session, payload, headers)
+      if res.status == 204
+        true
+      else
+        raise FailedRequestError.new 'Failed to sign out user'
       end
     end
   end

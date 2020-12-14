@@ -1,6 +1,7 @@
 module Users
   class SessionsController < Devise::SessionsController
     include Devise::Controllers::Rememberable
+    include KeycloakHelper
     before_action :skip_container, only: %i[new send_login_email]
     before_action :must_have_current_school
     layout 'student'
@@ -100,6 +101,17 @@ module Users
       else
         render json: { error: @form.errors.full_messages.join(', '), path: nil }
       end
+    end
+
+    def destroy
+      begin
+        rt = cookies[KeycloakHelper::RT_COOKIE_KEY]
+        keycloak_client.user_sign_out(rt)
+        cookies.delete(KeycloakHelper::RT_COOKIE_KEY)
+      rescue Keycloak::FailedRequestError => e
+        logger.warn "Failed to sign out user at keycloak - #{e}"
+      end
+      super
     end
 
     private

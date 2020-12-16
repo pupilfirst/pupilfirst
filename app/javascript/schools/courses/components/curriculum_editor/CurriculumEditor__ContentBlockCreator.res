@@ -379,11 +379,11 @@ let submitForm = (target, aboveContentBlock, state, send, addContentBlockCB, blo
 let maxVideoSize = vimeoAccountPlan => {
   switch vimeoAccountPlan {
   | "basic" => 500 * 1024 * 1024
-  | "plus" => 5000 * 1024 * 1024
+  | "plus"
   | "pro"
   | "business"
   | "premium" =>
-    20000 * 1024 * 1024
+    5000 * 1024 * 1024
   | _ => FileUtils.defaultVideoMaxSize
   }
 }
@@ -391,10 +391,10 @@ let maxVideoSize = vimeoAccountPlan => {
 let maxVideoSizeString = vimeoAccountPlan => {
   switch vimeoAccountPlan {
   | "basic" => "500 MB"
-  | "plus" => "5 GB"
+  | "plus"
   | "pro"
   | "business"
-  | "premium" => "20 GB"
+  | "premium" => "5 GB"
   | _ => "500 MB"
   }
 }

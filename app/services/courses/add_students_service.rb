@@ -40,6 +40,7 @@ module Courses
       end
     end
 
+    # Remove team name from students who aren't teamed up with anyone else.
     def sanitize_students(students)
       team_sizes = {}
 

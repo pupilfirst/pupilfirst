@@ -28,7 +28,7 @@ module Schools
       private
 
       def notify?
-        notify == 'true'
+        notify.to_s == 'true'
       end
 
       def course

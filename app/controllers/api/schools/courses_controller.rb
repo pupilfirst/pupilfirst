@@ -5,6 +5,11 @@ module Api
       before_action :authenticate_user!
       before_action :set_course, only: [:students, :create_students]
 
+      def index
+        skip_authorization
+        render json: scope.to_json
+      end
+
       def students
         students = @course.users.map do |u|
           { name: u.name, email: u.email }

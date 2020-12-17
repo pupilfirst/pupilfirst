@@ -14,7 +14,7 @@ module Api
         students = @course.users.map do |u|
           { name: u.name, email: u.email }
         end
-        render json: { students: students.to_json }
+        render json: { students: students }
       end
 
       def create_students

@@ -47,7 +47,34 @@ describe Courses::AddStudentsService do
         students_data = [student_1_data, student_2_data, data_with_existing_student_email]
 
         expect { subject.add(students_data) }.to change { course.founders.count }.by(2)
-        expect(student.name).to_not eq(data_with_existing_student_email.name)
+        expect(student.reload.startup).to eq(persisted_team)
+      end
+    end
+
+    context 'when a student being added is already a registered user' do
+      let(:name) { Faker::Name.name }
+      let(:title) { Faker::Job.title }
+      let(:affiliation) { Faker::Company.name }
+      let!(:user) { create :user, name: name, title: title, affiliation: affiliation }
+
+      it 'onboards the student without altering their name, title or affiliation' do
+        students_data = [OpenStruct.new(name: Faker::Name.name, email: user.email)]
+
+        expect { subject.add(students_data) }.to change { course.founders.count }.by(1)
+        expect(user.reload.name).to eq(name)
+        expect(user.title).to eq(title)
+        expect(user.affiliation).to eq(affiliation)
+      end
+    end
+
+    context 'when the data includes a student alone in a team' do
+      let!(:student_data) { OpenStruct.new(name: Faker::Name.name, email: Faker::Internet.email, team_name: 'Alone in this team') }
+
+      it 'onboards the student as a "standard" student' do
+        expect { subject.add([student_data]) }.to change { course.founders.count }.by(1)
+
+        student_user = User.find_by(email: student_data.email)
+        expect(student_user.founders.first.startup.name).to eq(student_user.name)
       end
     end
 

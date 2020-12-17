@@ -4,7 +4,7 @@ title: Development Setup
 sidebar_label: Setup
 ---
 
-These instructions covers three platforms: **macOS** (10.15), **Ubuntu** (20.04), and **Windows 10**
+These instructions covers three platforms: **macOS** (11.0), **Ubuntu** (20.04), and **Windows 10**
 ([WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10#update-to-wsl-2), with Ubuntu 20.04). Instructions
 for Ubuntu also apply to Windows, except where special instructions are noted.
 
@@ -23,7 +23,7 @@ We'll use [Homebrew](https://brew.sh/) to fetch most of the packages on macOS:
   command-line tools.
 
 **Important**: Make sure that you start Nginx after you install them. Instructions on how to do that will
-be printed to the command-line after they're successfully installed.
+be printed to the command-line after it's successfully installed.
 
 #### On Ubuntu
 
@@ -32,9 +32,11 @@ adapt the command to work with the package manager available with your distribut
 
     $ sudo apt-get install imagemagick postgresql postgresql-contrib autoconf libtool nginx
 
-### Install Ruby and Rubygems
+### Install Ruby & Node.js
 
-Use [rbenv](https://github.com/rbenv/rbenv) to install the version of Ruby specified in the `.ruby-version` file.
+Use [asdf](https://asdf-vm.com/) to install Ruby and Node.js. You can find the required versions in the `.tool-versions` file.
+
+### Install Rubygems
 
 Once Ruby is installed, fetch all gems using Bundler:
 
@@ -57,12 +59,10 @@ If installation of the `pg` gem crashes, asking for `libpq-fe.h`, run the follow
 
     $ sudo apt-get install libpq-dev
 
-### Setup ReasonML & Javascript environment
+### Setup ReasonML & fetch JS dependencies
 
-1. Install NVM following instructions on the [offical repository.](https://github.com/creationix/nvm)
-2. Install the LTS version of NodeJS: `nvm install --lts`
-3. Install Yarn following [offical instructions.](https://yarnpkg.com/en/docs/install).
-4. From the root of the repository, run the `yarn` command to install all node modules.
+1. Install Yarn following [offical instructions](https://yarnpkg.com/en/docs/install).
+2. From the root of the repository, run the `yarn` command to install all node modules.
 
 ## Set credentials for local database
 
@@ -97,11 +97,9 @@ Feel free to alter these steps if you're familiar with setting up PostgreSQL.
 
 2. Update the values of `DB_USERNAME` and `DB_PASSWORD` in the new `.env` file.
 
-   Use the same values from the previous step. The username should be `postgres`, and the password will be whatever
-   value you've set.
+   Use the same values from the previous step. The username should be `postgres`, and the password will be whatever value you've set.
 
-The `.env` file contains environment variables that are used to configure the application. The file contains
-documentation explaining where you should source its values from.
+The `.env` file contains environment variables that are used to configure the application. The file contains documentation explaining where you should source its values from. If you're just starting out, you shouldn't have to change any variables other than the ones listed above.
 
 ## Setup Overcommit
 
@@ -110,6 +108,8 @@ committing changes.
 
     $ overcommit --install
     $ overcommit --sign
+
+**Note:** You may need to run `asdf reshim` to update paths, if you've just finished running Ruby's `bundle install` command.
 
 ## Seed local database
 

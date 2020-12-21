@@ -7,7 +7,7 @@ module Devise
         return fail if request.headers['Authorization'].blank?
 
         token = request.headers['Authorization'].split(' ').last
-        user_info = keycloak_client.user_info(token)
+        user_info = Rails.configuration.keycloak_client.user_info(token)
 
         school = School.joins(:domains).where(domains: { fqdn: request.host }).first
         if user_info['active']
@@ -25,10 +25,6 @@ module Devise
 
       def store?
         false
-      end
-
-      def keycloak_client
-        @keycloak_client ||= ::Keycloak::Client.new
       end
 
       def digested_token(token, school)

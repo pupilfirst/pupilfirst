@@ -65,4 +65,7 @@ Rails.application.configure do
 
   # In development , let's have ActiveStorage store everything on local disk
   config.active_storage.service = :local
+
+  # Keycloak client
+  config.keycloak_client = Keycloak::Client.new
 end

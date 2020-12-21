@@ -16,8 +16,7 @@ let additionalLinks = (linksVisible, links) =>
                   className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200"
                   href={link |> NavLink.url}
                   target="_blank"
-                  rel="noopener"
-                >
+                  rel="noopener">
                   {link |> NavLink.title |> str}
                 </a>
               </div>
@@ -35,11 +34,11 @@ let make = (~links) => {
   | moreLinks =>
     <div
       title="Show more links"
-      className="ml-6 font-semibold text-sm cursor-pointer relative text-black"
+      className="ml-2 font-semibold text-sm p-4 md:px-3 md:py-2 cursor-pointer relative rounded-lg text-gray-900 hover:bg-gray-200 hover:text-primary-500"
       onClick={handleToggle(setLinksVisible)}
       key="more-links">
       <span> {"More" |> str} </span>
-      <i className="fas fa-caret-down ml-1" />
+      <i className="fas fa-caret-down ml-2" />
       {additionalLinks(linksVisible, moreLinks)}
     </div>
   };

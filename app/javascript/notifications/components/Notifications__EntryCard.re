@@ -59,9 +59,10 @@ let avatar = (~size=("10", "10"), avatarUrl, name) => {
 let make = (~entry, ~markNotificationCB, ~showTime) => {
   let (saving, setSaving) = React.useState(() => false);
 
-  <div
+  <a
+    href={"/notifications/" ++ Entry.id(entry)}
     className={
-      "notifications__entry-card relative py-5 px-4 lg:px-8 hover:bg-gray-200 focus:bg-gray-200 transition ease-in-out duration-150 "
+      "notifications__entry-card block relative py-5 px-4 lg:px-8 hover:bg-gray-200 focus:bg-gray-200 transition ease-in-out duration-150 "
       ++ (
         switch (Entry.readAt(entry)) {
         | Some(_readAt) => "notifications__entry-card--read text-gray-700"
@@ -87,11 +88,9 @@ let make = (~entry, ~markNotificationCB, ~showTime) => {
            ->ReactUtils.nullUnless(Entry.readAt(entry)->Belt.Option.isNone)}
         </div>
         {Entry.notifiableId(entry)->Belt.Option.isSome
-           ? <a
-               href={"/notifications/" ++ Entry.id(entry)}
-               className="ml-4 hover:underline cursor-pointer">
+           ? <p className="ml-4">
                {str(Entry.message(entry))}
-             </a>
+             </p>
            : <div className="ml-4"> {str(Entry.message(entry))} </div>}
       </div>
       <div className="flex-shrink-0">
@@ -134,5 +133,5 @@ let make = (~entry, ~markNotificationCB, ~showTime) => {
           </div>
       </div>
     </div>
-  </div>;
+  </a>;
 };

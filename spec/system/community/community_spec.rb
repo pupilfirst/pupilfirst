@@ -345,7 +345,7 @@ feature 'Community', js: true do
     sign_in_user(student_1.user, referrer: topic_path(topic_3))
 
     expect(page).to have_text(target.title)
-    expect(page).to have_link('View Target', href: target_path(target))
+    expect(page).to have_link('View Lesson', href: target_path(target))
   end
 
   scenario 'a target-linked question is viewed by student without access to target' do

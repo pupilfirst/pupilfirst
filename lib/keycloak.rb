@@ -225,8 +225,9 @@ module Keycloak
         firstName: first_name,
         lastName: last_name,
         enabled: true,
+        active: true,
         credentials: {},
-      }
+      }.with_indifferent_access
       nil
     end
 
@@ -249,7 +250,7 @@ module Keycloak
 
     def user_signed_in?(access_token)
       user = user_by_token(access_token)
-      user && user[:enabled]
+      user && user[:active]
     end
 
     def user_token(uname_email, password)

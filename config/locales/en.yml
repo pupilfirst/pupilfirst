@@ -142,7 +142,7 @@ en:
         create_success: Chapter created successfully
     CurriculumEditor__TargetGroupEditor:
       level: Chapter
-      target_group_details: Section Detail
+      target_group_details: Section Details
       title: Title
       name_placeholder: Type section name here
       description: ' Description'

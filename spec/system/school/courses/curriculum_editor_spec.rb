@@ -87,7 +87,7 @@ feature 'Curriculum Editor', js: true do
 
     # he should be able to create a new target group
     find('.target-group__create').click
-    expect(page).to have_text('SECTION DETAIL')
+    expect(page).to have_text('SECTION DETAILS')
     fill_in 'Title', with: new_target_group_name
     replace_markdown(new_target_group_description, id: 'description')
     click_button 'Yes'

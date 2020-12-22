@@ -2,7 +2,7 @@ require 'keycloak'
 
 module Devise
   module Strategies
-    class Keycloak < Base
+    class Keycloak < Authenticatable
       def authenticate!
         return fail if request.headers['Authorization'].blank?
 

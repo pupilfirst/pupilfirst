@@ -156,6 +156,7 @@ en:
         title_not_valid: not a valid title
       notifications:
         update_success: Section updated successfully
+        create_success: Section created successfully
     CurriculumEditor__TargetGroupShow:
       create_target: Create a lesson
       milestone_targets: Milestone Lessons

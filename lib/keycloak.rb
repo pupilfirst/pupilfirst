@@ -205,6 +205,10 @@ module Keycloak
 
   class FakeClient
     def initialize
+      reset!
+    end
+
+    def reset!
       @users = {}
     end
 

@@ -6,7 +6,7 @@ let str = React.string
 let solutionIcon =
   <div
     ariaLabel="Marked as solution icon"
-    className="flex lg:flex-col items-center px-2 lg:pl-0 py-1 lg:pr-1 lg:pr-4 lg:pb-4 lg:pt-2 bg-green-200 lg:bg-transparent rounded">
+    className="flex lg:flex-col items-center px-2 lg:pl-0 py-1 lg:pr-4 lg:pb-4 lg:pt-2 bg-green-200 lg:bg-transparent rounded">
     <div
       className="flex items-center justify-center lg:w-8 lg:h-8 bg-green-200 text-green-800 rounded-full">
       <PfIcon className="if i-check-solid text-sm lg:text-base" />
@@ -177,8 +177,25 @@ let make = (
 
   <div id={"post-show-" ++ Post.id(post)} onAnimationEnd=onBorderAnimationEnd>
     <div className="flex pt-4" key={post |> Post.id}>
-      <div className="hidden lg:flex flex-col">
+      <div className="hidden lg:flex flex-col md:mt-2">
         {post |> Post.solution ? solutionIcon : React.null}
+        <div className="hidden md:flex md:flex-col items-center text-center md:w-14 pr-3 md:pr-4">
+          <label
+            htmlFor="remember_me"
+            className="bg-gray-100 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-200">
+            <input
+              id="remember_me"
+              name="remember_me"
+              type_="checkbox"
+              className="input-checkbox h-5 w-5 bg-white text-green-600 border border-gray-500 hover:border-primary-400 rounded-md active:outline-none"
+            />
+          </label>
+          <label
+            htmlFor="remember_me"
+            className="ml-1 md:ml-0 md:mt-1 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
+            {"Mark as solution" |> str}
+          </label>
+        </div>
         <TopicsShow__LikeManager post addPostLikeCB removePostLikeCB />
       </div>
       <div className="flex-1 pb-6 lg:pb-8 topics-post-show__post-body min-w-0">
@@ -267,21 +284,37 @@ let make = (
             // Showing Like, replies and solution for mobile
             <div className="flex items-center lg:items-start justify-between lg:hidden">
               <div className="flex">
-                <TopicsShow__LikeManager post addPostLikeCB removePostLikeCB />
-                <div>
-                  {repliesToPost |> ArrayUtils.isNotEmpty
-                    ? <button
-                        onClick={_ => toggleShowReplies(showReplies => !showReplies)}
-                        className="cursor-pointer flex flex-col items-center justify-center">
-                        <span
-                          className="flex items-center justify-center rounded-lg lg:bg-gray-100 hover:bg-gray-300 text-gray-700 hover:text-gray-900 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2 mx-auto">
-                          <FaIcon classes="far fa-comment-alt" />
-                        </span>
-                        <span className="text-tiny lg:text-xs font-semibold">
-                          {post |> Post.replies |> Array.length |> string_of_int |> str}
-                        </span>
-                      </button>
-                    : React.null}
+                <div className="flex">
+                  <TopicsShow__LikeManager post addPostLikeCB removePostLikeCB />
+                  <div>
+                    {repliesToPost |> ArrayUtils.isNotEmpty
+                      ? <button
+                          onClick={_ => toggleShowReplies(showReplies => !showReplies)}
+                          className="cursor-pointer flex flex-col items-center justify-center">
+                          <span
+                            className="flex items-center justify-center rounded-lg lg:bg-gray-100 hover:bg-gray-300 text-gray-700 hover:text-gray-900 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2 mx-auto">
+                            <FaIcon classes="far fa-comment-alt" />
+                          </span>
+                          <span className="text-tiny lg:text-xs font-semibold">
+                            {post |> Post.replies |> Array.length |> string_of_int |> str}
+                          </span>
+                        </button>
+                      : React.null}
+                  </div>
+                </div>
+                <div
+                  className="flex md:hidden items-center bg-gray-100 px-3 rounded-md ml-3 md:ml-4">
+                  <input
+                    id="remember_me"
+                    name="remember_me"
+                    type_="checkbox"
+                    className="input-checkbox h-5 w-5 flex-shrink-0 bg-white text-green-600 border border-gray-500 hover:border-primary-400 rounded-md active:outline-none"
+                  />
+                  <label
+                    htmlFor="remember_me"
+                    className="ml-2 md:ml-0 md:mt-1 leading-tight cursor-pointer text-sm md:text-tiny font-semibold block text-gray-900">
+                    {"Mark as solution" |> str}
+                  </label>
                 </div>
               </div>
               {post |> Post.solution ? solutionIcon : React.null}

@@ -218,6 +218,6 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_to_primary_domain
-    redirect_to "#{request.ssl? ? 'https' : 'http'}://#{current_school.domains.primary.fqdn}#{request.path}"
+    observable_redirect_to "#{request.ssl? ? 'https' : 'http'}://#{current_school.domains.primary.fqdn}#{request.path}"
   end
 end

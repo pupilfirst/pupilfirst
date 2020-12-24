@@ -6,9 +6,11 @@ class ApplicationController < ActionController::Base
 
   before_action :sign_out_if_required
   before_action :store_user_location, if: :storable_location?
+  before_action :redirect_to_primary_domain, if: :domain_redirection_required?
 
   around_action :set_time_zone, if: :current_user
 
+  helper_method :avatar
   helper_method :current_host
   helper_method :current_school
   helper_method :current_founder
@@ -207,5 +209,14 @@ class ApplicationController < ActionController::Base
     ).svg.html_safe
   end
 
-  helper_method :avatar
+  def domain_redirection_required?
+    return false if current_domain.primary? || current_school.domains.one?
+
+    !!current_school.configuration['redirect_to_primary_domain']
+  end
+
+  def redirect_to_primary_domain
+    redirection_path = "https://#{current_school.domains.primary.fqdn}/#{request.path}"
+    Rails.logger.info "Redirect to: #{redirection_path}"
+  end
 end

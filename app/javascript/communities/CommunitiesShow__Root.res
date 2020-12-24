@@ -231,7 +231,7 @@ let topicsList = (topicCategories, topics) =>
                 </span>
                 <span className="flex flex-row flex-wrap mt-2 items-center">
                   <span
-                    className="flex text-center items-center mr-2 py-1 px-2 rounded bg-gray-200"
+                    className="flex text-center items-center mr-2 py-1 px-2 rounded bg-gray-100"
                     ariaLabel="Likes">
                     <i className="far fa-thumbs-up text-sm text-gray-600 mr-1" />
                     <p className="text-xs font-semibold">

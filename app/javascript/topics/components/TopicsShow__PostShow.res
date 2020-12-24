@@ -303,7 +303,7 @@ let make = (
                   </div>
                 </div>
                 <div
-                  className="flex md:hidden items-center bg-gray-100 px-3 rounded-md ml-3 md:ml-4">
+                  className="flex md:hidden items-center bg-gray-100 px-2 md:px-3 rounded-md ml-2">
                   <input
                     id="remember_me"
                     name="remember_me"
@@ -312,7 +312,7 @@ let make = (
                   />
                   <label
                     htmlFor="remember_me"
-                    className="ml-2 md:ml-0 md:mt-1 leading-tight cursor-pointer text-sm md:text-tiny font-semibold block text-gray-900">
+                    className="ml-2 md:ml-0 md:mt-1 leading-tight cursor-pointer text-xs md:text-tiny font-semibold block text-gray-900">
                     {"Mark as solution" |> str}
                   </label>
                 </div>
@@ -321,13 +321,18 @@ let make = (
             </div>
           </div>
           <div className="flex items-center text-sm font-semibold lg:mb-1">
+            <button
+              className="flex items-center px-3 py-2 bg-green-200 text-green-900 border border-transparent rounded mr-3 text-left focus:border-primary-400 hover:border-green-500 hover:bg-green-300">
+              <PfIcon className="if i-arrow-down-circle-regular text-sm lg:text-base" />
+              <div className="text-xs font-semibold pl-2"> {"Go to solution" |> str} </div>
+            </button>
             <div className="hidden lg:block">
               {repliesToPost |> ArrayUtils.isNotEmpty
                 ? <button
                     id={"show-replies-" ++ Post.id(post)}
                     ariaLabel={"Show replies of post " ++ Post.id(post)}
                     onClick={_ => toggleShowReplies(showReplies => !showReplies)}
-                    className="border bg-white mr-3 p-2 rounded text-xs font-semibold">
+                    className="border bg-white mr-3 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-100">
                     {Inflector.pluralize(
                       "Reply",
                       ~count=post |> Post.replies |> Array.length,
@@ -345,7 +350,7 @@ let make = (
               }}
               id={"reply-button-" ++ Post.id(post)}
               ariaLabel={isFirstPost ? "Add reply to topic" : "Add reply to post " ++ Post.id(post)}
-              className="bg-gray-100 lg:border lg:bg-gray-200 p-2 rounded text-xs font-semibold">
+              className="bg-gray-100 lg:border lg:bg-gray-200 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-300">
               <FaIcon classes="fas fa-reply mr-2" /> {"Reply" |> str}
             </button>
           </div>

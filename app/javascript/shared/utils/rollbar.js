@@ -5,6 +5,12 @@ var _rollbarConfig = {
     process.env.ROLLBAR_CAPTURE_UNHANDLED_REJECTIONS === "true",
   payload: {
     environment: process.env.RAILS_ENV
+  },
+  checkIgnore: (_isUncaught, _args, _payload) => {
+    const currentHost = window.location.host;
+    const expectedHost = document.getElementsByTagName('body')[0].dataset.host;
+
+    return currentHost !== expectedHost;
   }
 };
 

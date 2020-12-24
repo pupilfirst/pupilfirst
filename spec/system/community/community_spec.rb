@@ -295,8 +295,9 @@ feature 'Community', js: true do
 
     # can mark a reply as solution
     find("div[aria-label='Options for post #{reply_1.id}']").click
-    click_button 'Mark as solution'
+
     within("div#post-show-#{reply_1.id}") do
+      check 'Mark as solution'
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
     end
 
@@ -307,9 +308,8 @@ feature 'Community', js: true do
   scenario 'topic creator can mark a post as solution' do
     sign_in_user(student_1.user, referrer: topic_path(topic_1))
 
-    find("div[aria-label='Options for post #{reply_1.id}']").click
-    click_button 'Mark as solution'
     within("div#post-show-#{reply_1.id}") do
+      check 'Mark as solution'
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
     end
   end
@@ -362,9 +362,9 @@ feature 'Community', js: true do
     sign_in_user(coach.user, referrer: topic_path(topic_1))
 
     find("div[aria-label='Options for post #{reply_1.id}']").click
-    click_button 'Mark as solution'
 
     within("div#post-show-#{reply_1.id}") do
+      check 'Mark as solution'
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
     end
 
@@ -749,9 +749,9 @@ feature 'Community', js: true do
 
       # Can mark a reply as solution.
       find("div[aria-label='Options for post #{reply_1.id}']").click
-      click_button 'Mark as solution'
 
       within("div#post-show-#{reply_1.id}") do
+        check 'Mark as solution'
         expect(page).to have_selector("div[aria-label='Marked as solution icon']")
       end
     end

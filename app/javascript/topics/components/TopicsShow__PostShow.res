@@ -72,7 +72,6 @@ let optionsDropdown = (
   isFirstPost,
   replies,
   toggleShowPostEdit,
-  markPostAsSolutionCB,
   archivePostCB,
 ) => {
   let selected =
@@ -89,15 +88,6 @@ let optionsDropdown = (
       <FaIcon classes="fas fa-edit fa-fw text-base" />
       <span className="ml-2"> {"Edit " ++ postTypeString |> str} </span>
     </button>
-  let markAsSolutionButton =
-    isFirstPost || Post.solution(post)
-      ? React.null
-      : <button
-          onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
-          className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
-          <PfIcon className="if i-check-circle-alt-regular if-fw text-base" />
-          <span className="ml-2"> {"Mark as solution" |> str} </span>
-        </button>
   let showDelete = isFirstPost
     ? moderator || (isPostCreator && replies |> ArrayUtils.isEmpty)
     : moderator || isPostCreator
@@ -121,9 +111,9 @@ let optionsDropdown = (
   }
 
   let contents = switch (moderator, isTopicCreator, isPostCreator) {
-  | (true, _, _) => [editPostButton, markAsSolutionButton, historyButton, deletePostButton]
-  | (false, true, false) => [markAsSolutionButton, historyButton]
-  | (false, true, true) => [editPostButton, markAsSolutionButton, historyButton, deletePostButton]
+  | (true, _, _) => [editPostButton, historyButton, deletePostButton]
+  | (false, true, false) => [historyButton]
+  | (false, true, true) => [editPostButton, historyButton, deletePostButton]
   | (false, false, true) => [editPostButton, historyButton, deletePostButton]
   | _ => []
   }
@@ -179,23 +169,27 @@ let make = (
     <div className="flex pt-4" key={post |> Post.id}>
       <div className="hidden lg:flex flex-col md:mt-2">
         {post |> Post.solution ? solutionIcon : React.null}
-        <div className="hidden md:flex md:flex-col items-center text-center md:w-14 pr-3 md:pr-4">
-          <label
-            htmlFor="remember_me"
-            className="bg-gray-100 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-200">
-            <input
-              id="remember_me"
-              name="remember_me"
-              type_="checkbox"
-              className="input-checkbox h-5 w-5 bg-white text-green-600 border border-gray-500 hover:border-primary-400 rounded-md active:outline-none"
-            />
-          </label>
-          <label
-            htmlFor="remember_me"
-            className="ml-1 md:ml-0 md:mt-1 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
-            {"Mark as solution" |> str}
-          </label>
-        </div>
+        {ReactUtils.nullUnless(
+          <div className="hidden md:flex md:flex-col items-center text-center md:w-14 pr-3 md:pr-4">
+            <label
+              htmlFor="mark-as-solution"
+              className="bg-gray-100 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-200">
+              <input
+                onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
+                id="mark-as-solution"
+                name="mark-as-solution"
+                type_="checkbox"
+                className="input-checkbox h-5 w-5 bg-white text-green-600 border border-gray-500 hover:border-primary-400 rounded-md active:outline-none"
+              />
+            </label>
+            <label
+              htmlFor="mark-as-solution"
+              className="ml-1 md:ml-0 md:mt-1 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
+              {"Mark as solution" |> str}
+            </label>
+          </div>,
+          {(moderator || isTopicCreator) && !(isFirstPost || Post.solution(post))},
+        )}
         <TopicsShow__LikeManager post addPostLikeCB removePostLikeCB />
       </div>
       <div className="flex-1 pb-6 lg:pb-8 topics-post-show__post-body min-w-0">
@@ -212,7 +206,6 @@ let make = (
                     isFirstPost,
                     posts,
                     toggleShowPostEdit,
-                    markPostAsSolutionCB,
                     archivePostCB,
                   )
                 : React.null}
@@ -269,7 +262,6 @@ let make = (
                         isFirstPost,
                         posts,
                         toggleShowPostEdit,
-                        markPostAsSolutionCB,
                         archivePostCB,
                       )
                     : React.null}

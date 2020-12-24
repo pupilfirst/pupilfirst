@@ -210,13 +210,14 @@ class ApplicationController < ActionController::Base
   end
 
   def domain_redirection_required?
+    return false if current_domain.blank?
+
     return false if current_domain.primary? || current_school.domains.one?
 
     !!current_school.configuration['redirect_to_primary_domain']
   end
 
   def redirect_to_primary_domain
-    redirection_path = "https://#{current_school.domains.primary.fqdn}/#{request.path}"
-    Rails.logger.info "Redirect to: #{redirection_path}"
+    redirect_to "#{request.ssl? ? 'https' : 'http'}://#{current_school.domains.primary.fqdn}#{request.path}"
   end
 end

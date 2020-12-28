@@ -214,7 +214,7 @@ class ApplicationController < ActionController::Base
 
     return false if current_domain.primary? || current_school.domains.one?
 
-    !!current_school.configuration['redirect_to_primary_domain']
+    !current_school.configuration['disable_primary_domain_redirection']
   end
 
   def redirect_to_primary_domain

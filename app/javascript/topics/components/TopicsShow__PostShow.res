@@ -3,6 +3,8 @@ open TopicsShow__Types
 let str = React.string
 %bs.raw(`require("./TopicsShow__PostShow.css")`)
 
+let t = I18n.t(~scope="components.TopicsShow__PostShow")
+
 let solutionIcon =
   <div
     ariaLabel="Marked as solution icon"
@@ -12,7 +14,7 @@ let solutionIcon =
       <PfIcon className="if i-check-solid text-sm lg:text-base" />
     </div>
     <div className="text-xs lg:text-tiny font-semibold text-green-800 pl-2 lg:pl-0 lg:pt-1">
-      {"Solution" |> str}
+      {t("solution_icon_label") |> str}
     </div>
   </div>
 
@@ -49,11 +51,7 @@ let markPostAsSolution = (postId, markPostAsSolutionCB) =>
 
 let archivePost = (isFirstPost, postId, archivePostCB) =>
   Webapi.Dom.window |> Webapi.Dom.Window.confirm(
-    (
-      isFirstPost
-        ? "Are you sure you want to delete the topic? "
-        : "Are you sure you want to delete the post? "
-    ) ++ "This cannot be undone.",
+    isFirstPost ? t("delete_topic_confirm_dialog") : t("delete_post_confirm_dialog"),
   )
     ? ArchivePostQuery.make(~id=postId, ())
       |> GraphqlQuery.sendQuery
@@ -80,13 +78,14 @@ let optionsDropdown = (
       className="flex items-center justify-center w-8 h-8 rounded leading-tight border bg-gray-100 text-gray-800 cursor-pointer hover:bg-gray-200">
       <PfIcon className="if i-ellipsis-h-regular text-base" />
     </div>
-  let postTypeString = isFirstPost ? "Post" : "Reply"
   let editPostButton =
     <button
       onClick={_ => toggleShowPostEdit(_ => true)}
       className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
       <FaIcon classes="fas fa-edit fa-fw text-base" />
-      <span className="ml-2"> {"Edit " ++ postTypeString |> str} </span>
+      <span className="ml-2">
+        {(isFirstPost ? t("edit_post_string") : t("edit_reply_string")) |> str}
+      </span>
     </button>
   let showDelete = isFirstPost
     ? moderator || (isPostCreator && replies |> ArrayUtils.isEmpty)
@@ -96,7 +95,9 @@ let optionsDropdown = (
         onClick={_ => archivePost(isFirstPost, post |> Post.id, archivePostCB)}
         className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
         <FaIcon classes="fas fa-trash-alt fa-fw text-base" />
-        <span className="ml-2"> {"Delete " ++ postTypeString |> str} </span>
+        <span className="ml-2">
+          {(isFirstPost ? t("delete_post_string") : t("delete_reply_string")) |> str}
+        </span>
       </button>
     : React.null
   let historyButton = switch post |> Post.editorId {
@@ -105,7 +106,7 @@ let optionsDropdown = (
       href={"/posts/" ++ (Post.id(post) ++ "/versions")}
       className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
       <FaIcon classes="fas fa-history fa-fw text-base" />
-      <span className="ml-2"> {"History" |> str} </span>
+      <span className="ml-2"> {t("history_button_text") |> str} </span>
     </a>
   | None => React.null
   }
@@ -185,7 +186,7 @@ let make = (
             <label
               htmlFor="mark-as-solution"
               className="ml-1 md:ml-0 md:mt-1 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
-              {"Mark as solution" |> str}
+              {t("mark_as_solution_label") |> str}
             </label>
           </div>,
           {(moderator || isTopicCreator) && !(isFirstPost || Post.solution(post))},
@@ -241,7 +242,7 @@ let make = (
                         <span className="font-semibold">
                           {switch editor {
                           | Some(user) => user |> User.name
-                          | None => "Deleted User"
+                          | None => t("deleted_user_name")
                           } |> str}
                         </span>
                         <span>
@@ -297,15 +298,15 @@ let make = (
                 <div
                   className="flex md:hidden items-center bg-gray-100 px-2 md:px-3 rounded-md ml-2">
                   <input
-                    id="remember_me"
-                    name="remember_me"
+                    id="mark-as-solution"
+                    name="mark-as-solution"
                     type_="checkbox"
                     className="input-checkbox h-5 w-5 flex-shrink-0 bg-white text-green-600 border border-gray-500 hover:border-primary-400 rounded-md active:outline-none"
                   />
                   <label
-                    htmlFor="remember_me"
+                    htmlFor="mark-as-solution"
                     className="ml-2 md:ml-0 md:mt-1 leading-tight cursor-pointer text-xs md:text-tiny font-semibold block text-gray-900">
-                    {"Mark as solution" |> str}
+                    {t("mark_as_solution_label") |> str}
                   </label>
                 </div>
               </div>
@@ -326,7 +327,7 @@ let make = (
                     onClick={_ => toggleShowReplies(showReplies => !showReplies)}
                     className="border bg-white mr-3 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-100">
                     {Inflector.pluralize(
-                      "Reply",
+                      t("new_reply_button"),
                       ~count=post |> Post.replies |> Array.length,
                       ~inclusive=true,
                       (),

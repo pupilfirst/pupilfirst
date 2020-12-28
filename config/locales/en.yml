@@ -205,6 +205,8 @@ en:
       mark_as_solution_label: Mark as solution
       deleted_user_name: Deleted User
       new_reply_button: Reply
+      go_to_solution_button: Go to solution
+      last_edited_by_label: "Last edited by "
   jobs:
     timeline_events:
       verification_notification:

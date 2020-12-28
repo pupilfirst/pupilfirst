@@ -294,8 +294,6 @@ feature 'Community', js: true do
     click_link 'Back to Post'
 
     # can mark a reply as solution
-    find("div[aria-label='Options for post #{reply_1.id}']").click
-
     within("div#post-show-#{reply_1.id}") do
       check 'Mark as solution'
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
@@ -670,6 +668,22 @@ feature 'Community', js: true do
 
       expect(page).to_not have_text(topic_1.title)
       expect(page).to have_text(topic_2.title)
+    end
+
+    scenario 'user visits show page of topic with solution and checks for solution navigation button' do
+      sign_in_user(coach.user, referrer: topic_path(topic_1))
+
+      within("div#post-show-#{topic_1.first_post.id}") do
+        expect(page).to have_link('Go to solution', href: "#post-show-#{reply_marked_as_solution.id}")
+      end
+    end
+
+    scenario 'user visits show page of topic without solution and checks for solution navigation button' do
+      sign_in_user(coach.user, referrer: topic_path(topic_2))
+
+      within("div#post-show-#{topic_2.first_post.id}") do
+        expect(page).to_not have_link('Go to solution')
+      end
     end
   end
 

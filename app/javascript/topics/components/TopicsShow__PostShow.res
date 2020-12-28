@@ -156,6 +156,8 @@ let make = (
   ~removePostLikeCB,
   ~markPostAsSolutionCB,
   ~archivePostCB,
+  ~topicSolutionId,
+  (),
 ) => {
   let creator = Post.creatorId(post)->findUser(users)
   let editor = Post.editorId(post)->findUser(users)
@@ -238,7 +240,7 @@ let make = (
                     <div>
                       <div
                         className="mt-1 inline-block px-2 py-1 rounded bg-gray-100 text-xs text-gray-800 ">
-                        <span> {"Last edited by " |> str} </span>
+                        <span> {t("last_edited_by_label") |> str} </span>
                         <span className="font-semibold">
                           {switch editor {
                           | Some(user) => user |> User.name
@@ -314,11 +316,18 @@ let make = (
             </div>
           </div>
           <div className="flex items-center text-sm font-semibold lg:mb-1">
-            <button
-              className="flex items-center px-3 py-2 bg-green-200 text-green-900 border border-transparent rounded mr-3 text-left focus:border-primary-400 hover:border-green-500 hover:bg-green-300">
-              <PfIcon className="if i-arrow-down-circle-regular text-sm lg:text-base" />
-              <div className="text-xs font-semibold pl-2"> {"Go to solution" |> str} </div>
-            </button>
+            {switch topicSolutionId {
+            | Some(id) =>
+              <a
+                href={"#post-show-" ++ id}
+                className="flex items-center px-3 py-2 bg-green-200 text-green-900 border border-transparent rounded mr-3 text-left focus:border-primary-400 hover:border-green-500 hover:bg-green-300">
+                <PfIcon className="if i-arrow-down-circle-regular text-sm lg:text-base" />
+                <div className="text-xs font-semibold pl-2">
+                  {t("go_to_solution_button") |> str}
+                </div>
+              </a>
+            | None => React.null
+            }}
             <div className="hidden lg:block">
               {repliesToPost |> ArrayUtils.isNotEmpty
                 ? <button

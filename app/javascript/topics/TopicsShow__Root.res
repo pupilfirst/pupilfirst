@@ -431,22 +431,28 @@ let make = (
                 | None => React.null
                 }}
               </div>}
-          <TopicsShow__PostShow
-            key={Post.id(state.firstPost)}
-            post=state.firstPost
-            topic=state.topic
-            users
-            posts=state.replies
-            currentUserId
-            moderator
-            isTopicCreator={isTopicCreator(firstPost, currentUserId)}
-            updatePostCB={updateFirstPost(send)}
-            addNewReplyCB={addNewReply(send, None)}
-            addPostLikeCB={() => send(LikeFirstPost)}
-            removePostLikeCB={() => send(RemoveLikeFromFirstPost)}
-            markPostAsSolutionCB={() => ()}
-            archivePostCB={() => archiveTopic(community)}
-          />
+          {
+            let topicSolution = state.replies |> Js.Array.filter(reply => Post.solution(reply))
+            let topicSolutionId =
+              topicSolution |> ArrayUtils.isNotEmpty ? Some(topicSolution[0]->Post.id) : None
+            <TopicsShow__PostShow
+              key={Post.id(state.firstPost)}
+              post=state.firstPost
+              topic=state.topic
+              users
+              posts=state.replies
+              currentUserId
+              moderator
+              isTopicCreator={isTopicCreator(firstPost, currentUserId)}
+              updatePostCB={updateFirstPost(send)}
+              addNewReplyCB={addNewReply(send, None)}
+              addPostLikeCB={() => send(LikeFirstPost)}
+              removePostLikeCB={() => send(RemoveLikeFromFirstPost)}
+              markPostAsSolutionCB={() => ()}
+              archivePostCB={() => archiveTopic(community)}
+              topicSolutionId
+            />
+          }
         </div>
         <h5 className="pt-4 pb-2 lg:ml-14 border-b">
           {Inflector.pluralize(
@@ -474,6 +480,7 @@ let make = (
               removePostLikeCB={() => send(RemoveLikeFromReply(reply))}
               addPostLikeCB={() => send(LikeReply(reply))}
               archivePostCB={() => send(ArchivePost(Post.id(reply)))}
+              topicSolutionId=None
             />
           </div>
         )

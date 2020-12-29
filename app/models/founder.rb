@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Founder < ApplicationRecord
-  acts_as_taggable
-
   serialize :roles
 
   belongs_to :user

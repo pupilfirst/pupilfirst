@@ -26,7 +26,7 @@ module Schools
 
       def students
         @students ||=
-          founders.includes(user: { avatar_attachment: :blob }, taggings: :tag).map do |student|
+          founders.includes(user: { avatar_attachment: :blob }).map do |student|
             {
               id: student.id,
               team_id: student.startup_id,

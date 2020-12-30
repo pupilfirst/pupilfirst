@@ -247,7 +247,7 @@ let topicsList = (topicCategories, topics) =>
                     </p>
                   </span>
                   <span
-                    className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-200"
+                    className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-100"
                     ariaLabel="Replies">
                     <i className="far fa-comment-dots text-sm text-gray-600 mr-1" />
                     <p className="text-xs font-semibold">
@@ -263,7 +263,7 @@ let topicsList = (topicCategories, topics) =>
                     </p>
                   </span>
                   <span
-                    className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-200"
+                    className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-100"
                     ariaLabel="Views">
                     <i className="far fa-eye text-sm text-gray-600 mr-1" />
                     <p className="text-xs font-semibold">

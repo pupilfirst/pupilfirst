@@ -93,7 +93,7 @@ let make = (~post, ~addPostLikeCB, ~removePostLikeCB) => {
   let (saving, setSaving) = React.useState(() => false)
   let liked = Post.likedByUser(post)
   <div className="flex flex-row-reverse md:flex-row">
-    <div className="text-center pr-3 md:pr-4 md:mt-6">
+    <div className="text-center pr-3 md:pr-4">
       <div
         ariaLabel={(liked ? "Unlike" : "Like") ++ (" post " ++ Post.id(post))}
         className="cursor-pointer"

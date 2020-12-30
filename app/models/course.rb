@@ -26,6 +26,8 @@ class Course < ApplicationRecord
   has_one_attached :cover
 
   scope :featured, -> { where(featured: true) }
+  scope :live, -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
 
   normalize_attribute :about
 

@@ -103,7 +103,7 @@ let handleLockedLevel = level =>
     | Some(date) =>
       let dateString = date->DateFns.format("MMMM d, yyyy")
       <div className="font-semibold text-md px-3">
-        <p> {t("level_locked_desc") |> str} </p>
+        <p> {t("level_locked_notice") |> str} </p>
         <p> {"You can access the content on " ++ (dateString ++ ".") |> str} </p>
       </div>
     | None => React.null
@@ -467,7 +467,7 @@ let make = (
               <div className="mx-auto py-10">
                 <img className="max-w-sm mx-auto" src=levelEmptyImage />
                 <p className="text-center font-semibold text-lg mt-4">
-                  {t("no_published_content_level") |> str}
+                  {t("empty_level_content_notice") |> str}
                 </p>
               </div>
             | false =>

@@ -31,7 +31,7 @@ describe Applicants::CreateStudentService do
       expect(startup.level).to eq(level_one)
 
       # Founder should have tag "Public Signup"
-      expect(student.tag_list).to eq([tag])
+      expect(startup.tag_list).to eq([tag])
 
       # Applicant should be destroyed
       expect(Applicant.where(email: applicant.email).count).to eq(0)

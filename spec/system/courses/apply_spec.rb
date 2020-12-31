@@ -53,8 +53,11 @@ feature "Apply for public courses", js: true do
     expect(page).to have_content("Welcome to #{school.name}!")
     expect(page).to have_content(applicant.name)
     expect(page).to have_content(public_course.name)
-    expect(Founder.last.tag_list).to include(saved_tag)
-    expect(Founder.last.tag_list).not_to include('Public Signup')
+
+    team = User.with_email(applicant.email).first.founders.first.startup
+
+    expect(team.tag_list).to include(saved_tag)
+    expect(team.tag_list).not_to include('Public Signup')
   end
 
   scenario 'applicant tries to sign up multiple times in quick succession' do
@@ -88,7 +91,7 @@ feature "Apply for public courses", js: true do
     visit enroll_applicants_path(Applicant.last.login_token)
 
     expect(page).to have_content("Welcome to #{school.name}!")
-    expect(Founder.last.tag_list).to include('Public Signup')
+    expect(Startup.last.tag_list).to include('Public Signup')
   end
 
   scenario 'applicant signing up with an unknown tag is given the default tag' do
@@ -100,8 +103,11 @@ feature "Apply for public courses", js: true do
     visit enroll_applicants_path(Applicant.last.login_token)
 
     expect(page).to have_content("Welcome to #{school.name}!")
-    expect(Founder.last.tag_list).to include('Public Signup')
-    expect(Founder.last.tag_list).not_to include('An unknown tag')
+
+    team = Startup.last
+
+    expect(team.tag_list).to include('Public Signup')
+    expect(team.tag_list).not_to include('An unknown tag')
   end
 
   scenario 'applicant tag is remembered even if user navigates away before returning and applying' do
@@ -119,7 +125,8 @@ feature "Apply for public courses", js: true do
     expect(page).to have_content("We've sent you a verification mail")
 
     visit enroll_applicants_path(Applicant.last.login_token)
-    expect(Founder.last.tag_list).to include(saved_tag)
+
+    expect(Startup.last.tag_list).to include(saved_tag)
   end
 
   scenario "user visits a public course in other school" do

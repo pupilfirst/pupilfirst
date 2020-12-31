@@ -75,4 +75,12 @@ class Course < ApplicationRecord
   def strict?
     progression_behavior == PROGRESSION_BEHAVIOR_STRICT
   end
+
+  def archived?
+    archived_at.present?
+  end
+
+  def live?
+    archived_at.blank?
+  end
 end

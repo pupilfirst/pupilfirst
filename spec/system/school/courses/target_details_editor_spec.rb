@@ -41,6 +41,9 @@ feature 'Target Details Editor', js: true do
     find("a[title='Edit details of target #{target_1_l2.title}']").click
     expect(page).to have_text('Title')
 
+    # Cache current sort index
+    current_sort_index = target_1_l2.sort_index
+
     fill_in 'title', with: new_target_title, fill_options: { clear: :backspace }
     fill_in 'completion-instructions', with: completion_instructions
 
@@ -50,6 +53,9 @@ feature 'Target Details Editor', js: true do
 
     expect(target_1_l2.reload.title).to eq(new_target_title)
     expect(target_1_l2.completion_instructions).to eq(completion_instructions)
+
+    # Check sort index is unaffected
+    expect(target_1_l2.sort_index).to eq(current_sort_index)
 
     # Clears the completion instructions
 
@@ -480,28 +486,6 @@ feature 'Target Details Editor', js: true do
         dismiss_notification
 
         expect(target_1_l1.reload.timeline_events.count).to eq(0)
-      end
-    end
-
-    context 'target group has targets with different sort indices' do
-      before do
-        target_1_l2.update!(sort_index: 1)
-        target_2_l2.update!(sort_index: 2)
-        target_3_l2.update!(sort_index: 3)
-      end
-
-      scenario 'admin makes a trivial change in target details' do
-        sign_in_user school_admin.user, referrer: details_school_course_target_path(course_id: course.id, id: target_1_l2.id)
-
-        expect(page).to have_text('Title')
-
-        fill_in 'title', with: new_target_title, fill_options: { clear: :backspace }
-
-        click_button 'Update Target'
-        dismiss_notification
-
-        # Check if sort index is not affected.
-        expect(target_1_l2.reload.sort_index).to eq(1)
       end
     end
   end

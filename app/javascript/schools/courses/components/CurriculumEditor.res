@@ -77,12 +77,12 @@ let levelOfTarget = (targetId, targets, levels, targetGroups) => {
   let target =
     targets |> ListUtils.unsafeFind(
       target => Target.id(target) == targetId,
-      t("unable_to_find_target_group") ++ (targetId ++ " in CurriculumEditor"),
+      "Unable to find target with ID:" ++ (targetId ++ " in CurriculumEditor"),
     )
   let targetGroup =
     targetGroups |> ListUtils.unsafeFind(
       tg => TargetGroup.id(tg) == Target.targetGroupId(target),
-      t("unable_to_find_target_group") ++
+      "Unable to find target group with ID:" ++
       (Target.targetGroupId(target) ++
       " in CurriculumEditor"),
     )
@@ -148,7 +148,7 @@ let make = (
     let targetGroup =
       state.targetGroups |> ListUtils.unsafeFind(
         tg => TargetGroup.id(tg) == Target.targetGroupId(target),
-        t("unable_to_find_target_group") ++ Target.targetGroupId(target),
+        "Unable to find target group with ID:" ++ Target.targetGroupId(target),
       )
 
     let updatedTargetGroup = switch target |> Target.visibility {
@@ -225,7 +225,8 @@ let make = (
                 |> Level.sort
                 |> Array.map(level =>
                   <option key={Level.id(level)} value={level |> Level.name}>
-                    {t("level") ++ " " ++
+                    {t("level") ++
+                    " " ++
                     ((level |> Level.number |> string_of_int) ++
                     (": " ++ (level |> Level.name))) |> str}
                   </option>
@@ -282,7 +283,7 @@ let make = (
           <span className="flex bg-gray-200 p-2 rounded-full">
             <i className="fas fa-plus-circle text-2xl" />
           </span>
-          <h4 className="font-semibold ml-2"> { t("create_target_group") |> str} </h4>
+          <h4 className="font-semibold ml-2"> {t("create_target_group") |> str} </h4>
         </div>
       </div>
     </div>

@@ -877,7 +877,7 @@ let make = (
                 <label
                   className="block tracking-wide text-sm font-semibold mr-6" htmlFor="evaluated">
                   <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                  {t("coach_review_sub_target") |> str}
+                  {t("target_reviewed_by_coach") |> str}
                 </label>
                 <div
                   id="evaluated"
@@ -940,7 +940,7 @@ let make = (
                       ? <div
                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
                           <i className="fas fa-info-circle mr-2" />
-                          {t("target_has_no_steps") |> str}
+                          {t("empty_checklist_warning") |> str}
                         </div>
                       : React.null}
                     {state.checklist |> Array.length >= 15

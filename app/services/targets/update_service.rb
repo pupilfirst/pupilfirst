@@ -15,7 +15,7 @@ module Targets
         @target.completion_instructions = target_params[:completion_instructions]
         @target.checklist = target_params[:checklist]
 
-        handle_target_group_change(target_params[:target_group_id]) if target_params[:target_group_id] != @target.target_group_id
+        handle_target_group_change(target_params[:target_group_id]) if target_params[:target_group_id].to_i != @target.target_group_id
         handle_change_of_evaluation_criteria(target_params[:evaluation_criterion_ids])
         @target.prerequisite_target_ids = target_params[:prerequisite_target_ids]
 

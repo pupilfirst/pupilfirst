@@ -216,7 +216,7 @@ let computeNotice = (
 
 let navigationLink = (direction, level, setState) => {
   let (leftIcon, longText, shortText, rightIcon) = switch direction {
-  | #Previous => (Some("fa-arrow-left"), t("nav_prev_level"), "Previous", None)
+  | #Previous => (Some("fa-arrow-left"), t("nav_previous_level"), "Previous", None)
   | #Next => (None, t("nav_next_level"), "Next", Some("fa-arrow-right"))
   }
 

@@ -423,19 +423,13 @@ let handleFileInputChange = (
     let file = files[0]
 
     let error = switch blockType {
-    | #File =>
-      FileUtils.isInvalid(file) ? Some("Please select a file with a size less than 5 MB.") : None
+    | #File => FileUtils.isInvalid(file) ? Some(t("file.upload_size_warning")) : None
     | #Image =>
-      FileUtils.isInvalid(~image=true, file)
-        ? Some(
-            "Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.",
-          )
-        : None
+      FileUtils.isInvalid(~image=true, file) ? Some(t("image.invalid_image_warning")) : None
     | #VideoEmbed =>
       let maxVideoSize = maxVideoSize(vimeoAccountPlan)
       switch (FileUtils.isVideo(file), FileUtils.hasValidSize(~maxSize=maxVideoSize, file)) {
-      | (false, true | false) =>
-        Some("Invalid file format, please select an MP4, MOV, WMV or AVI file.")
+      | (false, true | false) => Some(t("video.invalid_format_warning"))
       | (true, false) =>
         Some(
           t(

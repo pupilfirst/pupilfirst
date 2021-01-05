@@ -121,11 +121,16 @@ en:
         image: Image
         embed: Embed
         video: Video
+      file:
+        upload_size_warning: "Please select a file with a size less than 5 MB."
+      image:
+        invalid_image_warning: "Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high."
       video:
         title_label: Title
         description_label: Description
         uploading: Uploading
         select_file_button: Select File and Upload
+        invalid_format_warning: "Invalid file format, please select an MP4, MOV, WMV or AVI file."
         upload_limit_warning: "Please select a file less than %{maximumVideoSize} in size."
       embed:
         url_label: URL to Embed

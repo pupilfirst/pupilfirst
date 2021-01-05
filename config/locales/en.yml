@@ -133,7 +133,7 @@ en:
     CurriculumEditor__TargetDetailsEditor:
       level: Level
       target_group: Target Group
-      any_prereq_targets: Are there any prerequisite targets?
+      prerequisite_targets_label: Are there any prerequisite targets?
       search_targets: Search targets
       no_targets_selected: "No targets selected"
       choose_target_group: Choose a target group

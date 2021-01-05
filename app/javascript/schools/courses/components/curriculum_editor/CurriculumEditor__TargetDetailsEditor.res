@@ -314,7 +314,7 @@ let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
         <label
           className="block tracking-wide text-sm font-semibold mb-2" htmlFor="prerequisite_targets">
           <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-          {t("any_prereq_targets") |> str}
+          {t("prerequisite_targets_label") |> str}
         </label>
         <div id="prerequisite_targets" className="mb-6 ml-6">
           <MultiSelectForPrerequisiteTargets

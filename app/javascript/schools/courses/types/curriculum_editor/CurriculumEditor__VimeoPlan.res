@@ -1,4 +1,4 @@
-exception UnknowPlanName(string)
+exception UnknownPlanName(string)
 
 type t = Basic | Plus | Pro | Business | Premium
 
@@ -9,6 +9,6 @@ let decode = planName => {
   | "pro" => Pro
   | "business" => Business
   | "premium" => Premium
-  | unknownPlan => raise(UnknowPlanName(unknownPlan))
+  | unknownPlan => raise(UnknownPlanName(unknownPlan))
   }
 }

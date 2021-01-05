@@ -47,23 +47,22 @@ type cachedTarget = {
   levelNumber: int,
   milestone: bool,
   submissionStatus: submissionStatus,
-  prerequisiteTargetIds: list<string>,
+  prerequisiteTargetIds: array<string>,
 }
 
 let isPast = date => date->Belt.Option.mapWithDefault(false, DateFns.isPast)
 
-let makePending = targets => targets |> List.map(t => {targetId: t |> Target.id, status: Pending})
+let makePending = targets =>
+  targets |> Js.Array.map(t => {targetId: t |> Target.id, status: Pending})
 
 let lockTargets = (targets, reason) =>
-  targets |> List.map(t => {targetId: t |> Target.id, status: Locked(reason)})
+  targets |> Js.Array.map(t => {targetId: t |> Target.id, status: Locked(reason)})
 
-let allTargetsComplete = (targetCache, targetIds) => targetIds |> List.for_all(targetId => {
-    let cachedTarget =
-      targetCache |> ListUtils.unsafeFind(
-        ct => ct.targetId == targetId,
-        "Could not find prerequisite target with ID " ++ (targetId ++ " in list of cached targets"),
-      )
-    cachedTarget.submissionStatus == SubmissionCompleted
+let allTargetsComplete = (targetCache, targetIds) => targetIds->Belt.Array.every(targetId => {
+    Js.Array.find(ct => ct.targetId == targetId, targetCache)->Belt.Option.mapWithDefault(
+      true,
+      target => target.submissionStatus == SubmissionCompleted,
+    )
   })
 
 let compute = (preview, team, course, levels, targetGroups, targets, submissions) =>
@@ -78,18 +77,18 @@ let compute = (preview, team, course, levels, targetGroups, targets, submissions
     /* Cache level number of the student. */
     let studentLevelNumber =
       levels
-      |> ListUtils.unsafeFind(
+      |> ArrayUtils.unsafeFind(
         l => l |> Level.id == Team.levelId(team),
         "Could not student's level with ID " ++ Team.levelId(team),
       )
       |> Level.number
 
     /* Cache level number, milestone boolean, and submission status for all targets. */
-    let targetsCache = targets |> List.map(target => {
+    let targetCache = targets |> Js.Array.map(target => {
       let targetId = target |> Target.id
 
       let targetGroup =
-        targetGroups |> ListUtils.unsafeFind(
+        targetGroups |> ArrayUtils.unsafeFind(
           tg => tg |> TargetGroup.id == Target.targetGroupId(target),
           "Could not find target group with ID " ++
           (Target.targetGroupId(target) ++
@@ -100,14 +99,13 @@ let compute = (preview, team, course, levels, targetGroups, targets, submissions
 
       let levelNumber =
         levels
-        |> ListUtils.unsafeFind(
+        |> ArrayUtils.unsafeFind(
           l => l |> Level.id == (targetGroup |> TargetGroup.levelId),
           "Could not find level with ID " ++ (Team.levelId(team) ++ " to create target cache"),
         )
         |> Level.number
 
-      let submission =
-        submissions |> ListUtils.findOpt(s => s |> LatestSubmission.targetId == targetId)
+      let submission = submissions |> Js.Array.find(s => s |> LatestSubmission.targetId == targetId)
 
       let submissionStatus = switch submission {
       | Some(s) =>
@@ -127,12 +125,12 @@ let compute = (preview, team, course, levels, targetGroups, targets, submissions
         levelNumber: levelNumber,
         milestone: milestone,
         submissionStatus: submissionStatus,
-        prerequisiteTargetIds: target |> Target.prerequisiteTargetIds,
+        prerequisiteTargetIds: Target.prerequisiteTargetIds(target),
       }
     })
 
     /* Scan the targets cache again to form final list of target statuses. */
-    targetsCache |> List.map(ct => {
+    targetCache |> Js.Array.map(ct => {
       let status = switch ct.submissionStatus {
       | SubmissionPendingReview => PendingReview
       | SubmissionCompleted => Completed
@@ -140,7 +138,7 @@ let compute = (preview, team, course, levels, targetGroups, targets, submissions
       | SubmissionMissing =>
         if ct.levelNumber > studentLevelNumber && ct.targetReviewed {
           Locked(LevelLocked)
-        } else if !(ct.prerequisiteTargetIds |> allTargetsComplete(targetsCache)) {
+        } else if !(ct.prerequisiteTargetIds |> allTargetsComplete(targetCache)) {
           Locked(PrerequisitesIncomplete)
         } else {
           Pending

@@ -19,7 +19,8 @@ let decode = json => {
   }
 }
 
-let sort = targetGroups => targetGroups |> List.sort((x, y) => x.sortIndex - y.sortIndex)
+let sort = targetGroups =>
+  targetGroups |> ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex)
 
 let id = t => t.id
 let name = t => t.name

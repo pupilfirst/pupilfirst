@@ -6,7 +6,7 @@ open CoursesCurriculum__Types
 
 let gradeBar = (evaluationCriteria, grade) => {
   let criterion =
-    evaluationCriteria |> ListUtils.findOpt(c =>
+    evaluationCriteria |> Js.Array.find(c =>
       c |> EvaluationCriterion.id == (grade |> Grade.evaluationCriterionId)
     )
 
@@ -81,8 +81,7 @@ let gradingSection = (~grades, ~evaluationCriteria, ~gradeBar, ~passed) =>
         <div className="mt-3">
           {grades
           |> Grade.sort(evaluationCriteria)
-          |> List.map(grade => gradeBar(grade))
-          |> Array.of_list
+          |> Js.Array.map(grade => gradeBar(grade))
           |> React.array}
         </div>
       </div>
@@ -97,9 +96,10 @@ let handleAddAnotherSubmission = (setShowSubmissionForm, event) => {
 let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coaches, users) => {
   let curriedGradeBar = gradeBar(evaluationCriteria)
 
-  let submissions = targetDetails |> TargetDetails.submissions
-  let totalSubmissions = submissions |> List.length
-  submissions |> Submission.sort |> List.mapi((index, submission) => {
+  let submissions = TargetDetails.submissions(targetDetails)
+  let totalSubmissions = Js.Array.length(submissions)
+
+  Submission.sort(submissions) |> Js.Array.mapi((submission, index) => {
     let grades = targetDetails |> TargetDetails.grades(submission |> Submission.id)
 
     <div
@@ -154,18 +154,17 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
         }}
         {targetDetails
         |> TargetDetails.feedback
-        |> List.filter(feedback =>
+        |> Js.Array.filter(feedback =>
           feedback |> Feedback.submissionId == (submission |> Submission.id)
         )
-        |> List.map(feedback => {
+        |> Js.Array.map(feedback => {
           let coach =
             Feedback.coachId(feedback)->Belt.Option.flatMap(id =>
-              coaches |> ListUtils.findOpt(c => c |> Coach.id == id)
+              coaches |> Js.Array.find(c => c |> Coach.id == id)
             )
 
           let user = switch coach {
-          | Some(coach) =>
-            users |> ListUtils.findOpt(up => up |> User.id == (coach |> Coach.userId))
+          | Some(coach) => users |> Js.Array.find(up => up |> User.id == (coach |> Coach.userId))
           | None => None
           }
 
@@ -212,11 +211,10 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
             />
           </div>
         })
-        |> Array.of_list
         |> React.array}
       </div>
     </div>
-  }) |> Array.of_list |> React.array
+  }) |> React.array
 }
 
 let addSubmission = (setShowSubmissionForm, addSubmissionCB, submission) => {

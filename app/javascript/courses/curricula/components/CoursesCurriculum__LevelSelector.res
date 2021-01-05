@@ -14,7 +14,8 @@ let levelName = level =>
 
 let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId) => {
   let teamLevelNumber = teamLevel |> Level.number
-  orderedLevels |> List.map(level => {
+
+  orderedLevels |> Js.Array.map(level => {
     let levelNumber = level |> Level.number
 
     let icon = if levelNumber < teamLevelNumber {
@@ -34,7 +35,7 @@ let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId) => {
       <span className="mr-2"> <FaIcon classes={"fa-fw " ++ icon} /> </span>
       {levelName(level) |> str}
     </button>
-  }) |> Array.of_list
+  })
 }
 
 let untabbedLevelSelector = (selectedLevel, orderedLevels, teamLevel, setSelectedLevelId) => {
@@ -106,7 +107,7 @@ let make = (
   ~setShowLevelZero,
   ~levelZero,
 ) => {
-  let orderedLevels = levels |> List.filter(l => l |> Level.number != 0) |> Level.sort
+  let orderedLevels = levels |> Js.Array.filter(l => l |> Level.number != 0) |> Level.sort
 
   <div className="bg-gray-100 px-3 py-2 mt-3 md:px-0 sticky top-0 z-20">
     <div

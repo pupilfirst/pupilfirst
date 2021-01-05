@@ -5,6 +5,8 @@ type t = {
   unlocked: bool,
 }
 
+let t = I18n.t(~scope="components.CoursesReport__Level")
+
 let id = t => t.id
 let name = t => t.name
 
@@ -25,7 +27,7 @@ let decode = json => {
 let shortName = t => "L" ++ (t.number |> string_of_int)
 
 let levelLabel = (levels, id) =>
-  "Level " ++
+  t("level") ++ " " ++
   (levels
   |> ArrayUtils.unsafeFind(
     level => level.id == id,

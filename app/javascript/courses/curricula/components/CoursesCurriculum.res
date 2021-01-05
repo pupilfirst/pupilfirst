@@ -58,7 +58,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
       {targetGroup |> TargetGroup.milestone
         ? <div
             className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
-            {"Milestone targets" |> str}
+            {t("milestone_targets") |> str}
           </div>
         : React.null}
       <div className="p-6 pt-5">
@@ -97,13 +97,13 @@ let addSubmission = (setState, latestSubmission, levelUpEligibility) => setState
 
 let handleLockedLevel = level =>
   <div className="max-w-xl mx-auto text-center mt-4">
-    <div className="text-2xl font-bold px-3"> {"Level Locked" |> str} </div>
+    <div className="text-2xl font-bold px-3"> {t("level_locked") |> str} </div>
     <img className="max-w-sm mx-auto" src=levelLockedImage />
     {switch level |> Level.unlockAt {
     | Some(date) =>
       let dateString = date->DateFns.format("MMMM d, yyyy")
       <div className="font-semibold text-md px-3">
-        <p> {"The level is currently locked!" |> str} </p>
+        <p> {t("level_locked_notice") |> str} </p>
         <p> {"You can access the content on " ++ (dateString ++ ".") |> str} </p>
       </div>
     | None => React.null
@@ -216,8 +216,8 @@ let computeNotice = (
 
 let navigationLink = (direction, level, setState) => {
   let (leftIcon, longText, shortText, rightIcon) = switch direction {
-  | #Previous => (Some("fa-arrow-left"), "Previous Level", "Previous", None)
-  | #Next => (None, "Next Level", "Next", Some("fa-arrow-right"))
+  | #Previous => (Some("fa-arrow-left"), t("nav_previous_level"), "Previous", None)
+  | #Next => (None, t("nav_next_level"), "Next", Some("fa-arrow-right"))
   }
 
   let arrow = icon =>
@@ -467,7 +467,7 @@ let make = (
               <div className="mx-auto py-10">
                 <img className="max-w-sm mx-auto" src=levelEmptyImage />
                 <p className="text-center font-semibold text-lg mt-4">
-                  {"There's no published content on this level." |> str}
+                  {t("empty_level_content_notice") |> str}
                 </p>
               </div>
             | false =>

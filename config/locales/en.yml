@@ -126,6 +126,7 @@ en:
         description_label: Description
         uploading: Uploading
         select_file_button: Select File and Upload
+        upload_limit_warning: "Please select a file less than %{maximumVideoSize} in size."
       embed:
         url_label: URL to Embed
         url_help: We support a number of third-party services (check link below). Just copy & paste the full URL to the page that contains the resource that you'd like to embed.

@@ -378,24 +378,30 @@ let submitForm = (target, aboveContentBlock, state, send, addContentBlockCB, blo
 
 let maxVideoSize = vimeoAccountPlan => {
   switch vimeoAccountPlan {
-  | "basic" => 500 * 1024 * 1024
-  | "plus"
-  | "pro"
-  | "business"
-  | "premium" =>
-    5000 * 1024 * 1024
-  | _ => FileUtils.defaultVideoMaxSize
+  | Some(plan) =>
+    switch plan {
+    | VimeoPlan.Basic => 500 * 1024 * 1024
+    | Plus
+    | Pro
+    | Business
+    | Premium =>
+      5000 * 1024 * 1024
+    }
+  | None => FileUtils.defaultVideoMaxSize
   }
 }
 
 let maxVideoSizeString = vimeoAccountPlan => {
   switch vimeoAccountPlan {
-  | "basic" => "500 MB"
-  | "plus"
-  | "pro"
-  | "business"
-  | "premium" => "5 GB"
-  | _ => "500 MB"
+  | Some(plan) =>
+    switch plan {
+    | VimeoPlan.Basic => "500 MB"
+    | Plus
+    | Pro
+    | Business
+    | Premium => "5 GB"
+    }
+  | None => "500 MB"
   }
 }
 
@@ -429,11 +435,14 @@ let handleFileInputChange = (
       let maxVideoSize = maxVideoSize(vimeoAccountPlan)
       switch (FileUtils.isVideo(file), FileUtils.hasValidSize(~maxSize=maxVideoSize, file)) {
       | (false, true | false) =>
-        Some("Invalid file format, please select an MP4, MOV, WMV, AVI or FLV file.")
+        Some("Invalid file format, please select an MP4, MOV, WMV or AVI file.")
       | (true, false) =>
-        Some({
-          "Please select a file less than " ++ maxVideoSizeString(vimeoAccountPlan) ++ " in size."
-        })
+        Some(
+          t(
+            ~variables=[("maximumVideoSize", maxVideoSizeString(vimeoAccountPlan))],
+            "video.upload_limit_warning",
+          ),
+        )
       | (true, true) => None
       }
     }

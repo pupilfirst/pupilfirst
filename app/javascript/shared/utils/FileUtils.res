@@ -16,8 +16,7 @@ let isVideo = file =>
   | "video/mp4"
   | "video/mov"
   | "video/wmv"
-  | "video/avi"
-  | "video/flv" => true
+  | "video/avi" => true
   | _ => false
   }
 

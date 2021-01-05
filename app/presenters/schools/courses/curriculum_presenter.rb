@@ -74,15 +74,13 @@ module Schools
       end
 
       def vimeo_access_token?
-        @vimeo_access_token ||= begin
-          token = @course.school.configuration['vimeo'] && @course.school.configuration['vimeo']['access_token'] ||
-            Rails.application.secrets.vimeo_access_token
-          token.present?
-        end
+        return @vimeo_access_token if instance_variable_defined?(:@vimeo_access_token)
+
+        @vimeo_access_token = @course.school.configuration.dig('vimeo', 'access_token').present? || Rails.application.secrets.vimeo_access_token.present?
       end
 
       def vimeo_account_plan
-        return '' unless vimeo_access_token?
+        return unless vimeo_access_token?
 
         @course.school.configuration['vimeo']['account_type']
       end

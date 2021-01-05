@@ -874,9 +874,7 @@ let make = (
                   <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
                   {"Will a coach review submissions on this target?" |> str}
                 </label>
-                <div
-                  id="evaluated"
-                  className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
+                <div id="evaluated" className="flex toggle-button__group flex-shrink-0 rounded-lg">
                   <button
                     onClick={updateMethodOfCompletion(Evaluated, send)}
                     className={booleanButtonClasses(targetEvaluated(state.methodOfCompletion))}>
@@ -1045,8 +1043,7 @@ let make = (
                     {"Target Visibility" |> str}
                   </label>
                   <div
-                    id="visibility"
-                    className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
+                    id="visibility" className="flex toggle-button__group flex-shrink-0 rounded-lg">
                     {[TargetDetails.Live, Archived, Draft] |> Array.mapi((index, visibility) =>
                       <button
                         key={index |> string_of_int}

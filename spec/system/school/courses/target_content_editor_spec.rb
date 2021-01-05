@@ -284,7 +284,7 @@ feature 'Target Content Editor', js: true do
           find('label', text: 'Select File and Upload').click
         end
 
-        expect(page).to have_text('Invalid file format, please select an MP4, MOV, WMV, AVI or FLV file')
+        expect(page).to have_text('Invalid file format, please select an MP4, MOV, WMV or AVI file')
 
         # Upload a video
         fill_in 'Title', with: title

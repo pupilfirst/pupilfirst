@@ -81,7 +81,7 @@ feature 'Target Details Editor', js: true do
     end
 
     expect(page).to_not have_button('Visit a link to complete the target.')
-    expect(page).to have_text('Atleast one has to be selected')
+    expect(page).to have_text('At least one has to be selected')
 
     find("div[title='Select #{evaluation_criterion.display_name}']").click
 

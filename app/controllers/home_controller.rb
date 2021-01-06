@@ -5,8 +5,6 @@ class HomeController < ApplicationController
   end
 
   def styleguide
-    notification = Notification.find(5)
-    Notifications::FireService.new(notification).fire
     @skip_container = true
     @hide_layout_header = true
     render layout: 'tailwind'

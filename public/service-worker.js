@@ -1,3 +1,5 @@
+// https://developers.google.com/web/updates/2015/03/push-notifications-on-the-open-web
+
 self.addEventListener('push', function(event) {
   var data = event.data.json();
   event.waitUntil(
@@ -9,7 +11,6 @@ self.addEventListener('push', function(event) {
 });
 
 self.addEventListener('notificationclick', function(event) {
-  console.log('On notification click: ', event.notification.tag);
   // Android doesn't close the notification when you click on it
   // See: http://crbug.com/463146
   event.notification.close();
@@ -23,11 +24,11 @@ self.addEventListener('notificationclick', function(event) {
     .then(function(clientList) {
       for (var i = 0; i < clientList.length; i++) {
         var client = clientList[i];
-        if (client.url == '/' && 'focus' in client)
+        if (client.url == "/notifications/".concat(event.notification.tag)  && 'focus' in client)
           return client.focus();
       }
       if (clients.openWindow) {
-        return clients.openWindow('/');
+        return clients.openWindow("/notifications/".concat(event.notification.tag));
       }
     })
   );

@@ -38,7 +38,7 @@ module Notifications
     def message
       { title: @notification.message,
         icon: "/favicon.ico",
-        tag: @notification.event
+        tag: @notification.id,
       }
     end
   end

@@ -17,7 +17,7 @@ module Schools
           target_groups: target_groups,
           targets: targets,
           has_vimeo_access_token: vimeo_access_token?,
-          vimeo_account_plan: vimeo_account_plan
+          vimeo_plan: vimeo_plan
         }
       end
 
@@ -79,7 +79,7 @@ module Schools
         @vimeo_access_token = @course.school.configuration.dig('vimeo', 'access_token').present? || Rails.application.secrets.vimeo_access_token.present?
       end
 
-      def vimeo_account_plan
+      def vimeo_plan
         return unless vimeo_access_token?
 
         @course.school.configuration['vimeo']['account_type']

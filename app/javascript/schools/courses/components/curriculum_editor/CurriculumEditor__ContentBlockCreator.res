@@ -376,8 +376,8 @@ let submitForm = (target, aboveContentBlock, state, send, addContentBlockCB, blo
   }
 }
 
-let maxVideoSize = vimeoAccountPlan => {
-  switch vimeoAccountPlan {
+let maxVideoSize = vimeoPlan => {
+  switch vimeoPlan {
   | Some(plan) =>
     switch plan {
     | VimeoPlan.Basic => 500 * 1024 * 1024
@@ -391,8 +391,8 @@ let maxVideoSize = vimeoAccountPlan => {
   }
 }
 
-let maxVideoSizeString = vimeoAccountPlan => {
-  switch vimeoAccountPlan {
+let maxVideoSizeString = vimeoPlan => {
+  switch vimeoPlan {
   | Some(plan) =>
     switch plan {
     | VimeoPlan.Basic => "500 MB"
@@ -411,7 +411,7 @@ let handleFileInputChange = (
   state,
   send,
   addContentBlockCB,
-  vimeoAccountPlan,
+  vimeoPlan,
   blockType,
   event,
 ) => {
@@ -427,13 +427,13 @@ let handleFileInputChange = (
     | #Image =>
       FileUtils.isInvalid(~image=true, file) ? Some(t("image.invalid_image_warning")) : None
     | #VideoEmbed =>
-      let maxVideoSize = maxVideoSize(vimeoAccountPlan)
+      let maxVideoSize = maxVideoSize(vimeoPlan)
       switch (FileUtils.isVideo(file), FileUtils.hasValidSize(~maxSize=maxVideoSize, file)) {
       | (false, true | false) => Some(t("video.invalid_format_warning"))
       | (true, false) =>
         Some(
           t(
-            ~variables=[("maximumVideoSize", maxVideoSizeString(vimeoAccountPlan))],
+            ~variables=[("maximumVideoSize", maxVideoSizeString(vimeoPlan))],
             "video.upload_limit_warning",
           ),
         )
@@ -458,7 +458,7 @@ let uploadForm = (
   send,
   addContentBlockCB,
   blockType,
-  vimeoAccountPlan,
+  vimeoPlan,
 ) => {
   let fileSelectionHandler = handleFileInputChange(
     target,
@@ -466,7 +466,7 @@ let uploadForm = (
     state,
     send,
     addContentBlockCB,
-    vimeoAccountPlan,
+    vimeoPlan,
   )
 
   let (fileId, formId, onChange, fileType) = switch blockType {
@@ -617,7 +617,7 @@ let make = (
   ~aboveContentBlock=?,
   ~addContentBlockCB,
   ~hasVimeoAccessToken,
-  ~vimeoAccountPlan,
+  ~vimeoPlan,
 ) => {
   let (embedInputId, isAboveContentBlock) = switch aboveContentBlock {
   | Some(contentBlock) =>
@@ -635,15 +635,7 @@ let make = (
   )
 
   let uploadFormCurried = uploadType =>
-    uploadForm(
-      target,
-      aboveContentBlock,
-      state,
-      send,
-      addContentBlockCB,
-      uploadType,
-      vimeoAccountPlan,
-    )
+    uploadForm(target, aboveContentBlock, state, send, addContentBlockCB, uploadType, vimeoPlan)
 
   <DisablingCover
     disabled={disablingCoverDisabled(state.saving, state.uploadProgress)}

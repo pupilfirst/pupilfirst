@@ -99,7 +99,7 @@ let setDirty = (contentBlockId, send, dirty) => send(SetDirty(contentBlockId, di
 
 let updateContentBlock = (send, contentBlock) => send(UpdateContentBlock(contentBlock))
 
-let editor = (target, hasVimeoAccessToken, vimeoAccountPlan, state, send) => {
+let editor = (target, hasVimeoAccessToken, vimeoPlan, state, send) => {
   let currentVersion = switch state.versions {
   | [] => <span className="italic"> {"Not Versioned" |> str} </span>
   | versions =>
@@ -144,7 +144,7 @@ let editor = (target, hasVimeoAccessToken, vimeoAccountPlan, state, send) => {
         <CurriculumEditor__ContentBlockCreator
           target
           hasVimeoAccessToken
-          vimeoAccountPlan
+          vimeoPlan
           aboveContentBlock=contentBlock
           addContentBlockCB={addContentBlock(send)}
         />
@@ -159,13 +159,13 @@ let editor = (target, hasVimeoAccessToken, vimeoAccountPlan, state, send) => {
       </div>
     }) |> React.array}
     <CurriculumEditor__ContentBlockCreator
-      target hasVimeoAccessToken vimeoAccountPlan addContentBlockCB={addContentBlock(send)}
+      target hasVimeoAccessToken vimeoPlan addContentBlockCB={addContentBlock(send)}
     />
   </div>
 }
 
 @react.component
-let make = (~target, ~hasVimeoAccessToken, ~vimeoAccountPlan, ~setDirtyCB) => {
+let make = (~target, ~hasVimeoAccessToken, ~vimeoPlan, ~setDirtyCB) => {
   let (state, send) = React.useReducer(
     reducer,
     {
@@ -190,6 +190,6 @@ let make = (~target, ~hasVimeoAccessToken, ~vimeoAccountPlan, ~setDirtyCB) => {
   <div className="max-w-3xl py-6 px-3 mx-auto">
     {state.loading
       ? SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.contents())
-      : editor(target, hasVimeoAccessToken, vimeoAccountPlan, state, send)}
+      : editor(target, hasVimeoAccessToken, vimeoPlan, state, send)}
   </div>
 }

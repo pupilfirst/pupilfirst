@@ -7,7 +7,7 @@ type props = {
   targetGroups: list<TargetGroup.t>,
   targets: list<Target.t>,
   hasVimeoAccessToken: bool,
-  vimeoAccountPlan: option<VimeoPlan.t>,
+  vimeoPlan: option<VimeoPlan.t>,
 }
 
 let decodeProps = json => {
@@ -19,10 +19,7 @@ let decodeProps = json => {
     targetGroups: json |> field("targetGroups", list(TargetGroup.decode)),
     targets: json |> field("targets", list(Target.decode)),
     hasVimeoAccessToken: json |> field("hasVimeoAccessToken", bool),
-    vimeoAccountPlan: Belt.Option.map(
-      json |> optional(field("vimeoAccountPlan", string)),
-      VimeoPlan.decode,
-    ),
+    vimeoPlan: Belt.Option.map(json |> optional(field("vimeoPlan", string)), VimeoPlan.decode),
   }
 }
 
@@ -37,7 +34,7 @@ ReactDOMRe.renderToElementWithId(
     targetGroups=props.targetGroups
     targets=props.targets
     hasVimeoAccessToken=props.hasVimeoAccessToken
-    vimeoAccountPlan=props.vimeoAccountPlan
+    vimeoPlan=props.vimeoPlan
   />,
   "curriculum-editor",
 )

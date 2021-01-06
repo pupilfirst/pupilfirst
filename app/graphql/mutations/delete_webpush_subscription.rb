@@ -1,11 +1,11 @@
 module Mutations
-  class DeleteWebPushSubscription < GraphQL::Schema::Mutation
+  class DeleteWebpushSubscription < GraphQL::Schema::Mutation
     description "Delete web push subscription"
 
     field :success, Boolean, null: false
 
     def resolve
-      mutator = DeleteWebPushSubscriptionMutator.new(context, {})
+      mutator = DeleteWebpushSubscriptionMutator.new(context, {})
       success = if mutator.valid?
         mutator.delete_subscription
         true

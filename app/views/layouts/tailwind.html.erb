@@ -1,14 +1,14 @@
 <% presenter = ::Layouts::TailwindPresenter.new(self) %>
 
 <%
-  def web_push_subscription_endpoint
-    return if current_user&.web_push_subscription.blank?
+  def webpush_subscription_endpoint
+    return if current_user&.webpush_subscription.blank?
 
-    current_user&.web_push_subscription['endpoint']
+    current_user&.webpush_subscription['endpoint']
   end
 %>
 <!DOCTYPE html>
-<html lang='en' data-user-id="<%= current_user&.id %>" data-flash="<%= presenter.flash_messages %>" data-env="<%= Rails.env %>" data-vapid-public-key="<%= Base64.urlsafe_decode64(Rails.application.secrets.vapid_public_key).bytes %>" data-subscription-endpoint="<%= web_push_subscription_endpoint %>">
+<html lang='en' data-user-id="<%= current_user&.id %>" data-flash="<%= presenter.flash_messages %>" data-env="<%= Rails.env %>" data-vapid-public-key="<%= Base64.urlsafe_decode64(Rails.application.secrets.vapid_public_key).bytes %>" data-subscription-endpoint="<%= webpush_subscription_endpoint %>">
 
 <head>
   <meta charset="utf-8"/>

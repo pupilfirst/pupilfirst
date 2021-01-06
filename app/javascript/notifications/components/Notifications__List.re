@@ -530,7 +530,7 @@ let make = () => {
     <div
       className="flex justify-between items-end bg-gray-100 pt-4 px-4 lg:px-8">
       <div className="font-bold text-xl"> {str("Notifications")} </div>
-      <WebPushSubscriptionManager />
+      <WebpushSubscriptionManager />
     </div>
     <div
       className="w-full bg-gray-100 border-b sticky top-0 z-30 px-4 lg:px-8 py-3">

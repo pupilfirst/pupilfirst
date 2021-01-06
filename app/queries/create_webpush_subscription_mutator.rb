@@ -1,15 +1,15 @@
-class CreateWebPushSubscriptionMutator < ApplicationQuery
+class CreateWebpushSubscriptionMutator < ApplicationQuery
   property :endpoint, validates: { presence: true }
   property :p256dh, validates: { presence: true }
   property :auth, validates: { presence: true }
 
   def create_subscription
-    current_user.update!(web_push_subscription: web_push_subscription)
+    current_user.update!(webpush_subscription: webpush_subscription)
   end
 
   private
 
-  def web_push_subscription
+  def webpush_subscription
     {
       endpoint: endpoint,
       p256dh: p256dh,

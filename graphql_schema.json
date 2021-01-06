@@ -7229,7 +7229,7 @@
             "deprecationReason": null
           },
           {
-            "name": "createWebPushSubscription",
+            "name": "createWebpushSubscription",
             "description": "",
             "args": [
               {
@@ -7280,7 +7280,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "CreateWebPushSubscriptionPayload",
+                "name": "CreateWebpushSubscriptionPayload",
                 "ofType": null
               }
             },
@@ -7581,7 +7581,7 @@
             "deprecationReason": null
           },
           {
-            "name": "deleteWebPushSubscription",
+            "name": "deleteWebpushSubscription",
             "description": "",
             "args": [],
             "type": {
@@ -7589,7 +7589,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "DeleteWebPushSubscriptionPayload",
+                "name": "DeleteWebpushSubscriptionPayload",
                 "ofType": null
               }
             },
@@ -10443,7 +10443,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "CreateWebPushSubscriptionPayload",
+        "name": "CreateWebpushSubscriptionPayload",
         "description": "",
         "fields": [
           {
@@ -10713,7 +10713,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "DeleteWebPushSubscriptionPayload",
+        "name": "DeleteWebpushSubscriptionPayload",
         "description": "",
         "fields": [
           {

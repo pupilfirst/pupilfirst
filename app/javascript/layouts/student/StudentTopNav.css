@@ -85,3 +85,7 @@
 .student-navbar__menu-icon .student-navbar__menu-icon-bar:after {
   top: -6px;
 }
+.student-navbar__notifications-unread-bullet {
+  top: 4px;
+  right: 8px;
+}

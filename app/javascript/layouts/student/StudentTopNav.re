@@ -7,9 +7,9 @@ open StudentTopNav__Types;
 let headerLink = (key, link) =>
   <div
     key
-    className="md:ml-5 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ml-2 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
     <a
-      className="no-underline bg-gray-100 md:bg-white text-black hover:text-primary-500 w-full p-4 md:p-2"
+      className="no-underline bg-gray-100 md:bg-white hover:bg-gray-200 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2"
       href={link |> NavLink.url}
       target=?{NavLink.local(link) ? None : Some("_blank")}
       rel=?{NavLink.local(link) ? None : Some("noopener")}>
@@ -20,12 +20,12 @@ let headerLink = (key, link) =>
 let signOutLink = () =>
   <div
     key="Logout-button"
-    className="md:ml-6 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ml-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
     <div className="flex items-center justify-center">
       <a
         href="/users/sign_out"
         rel="nofollow"
-        className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black">
+        className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold">
         <FaIcon classes="fas fa-power-off" />
         <span className="ml-2"> {"Sign Out" |> str} </span>
       </a>
@@ -35,10 +35,10 @@ let signOutLink = () =>
 let signInLink = () =>
   <div
     key="SignIn-button"
-    className="md:ml-6 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ml-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
     <div className="flex items-center justify-center">
       <a
-        className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold text-black"
+        className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold"
         href="/users/sign_in">
         <FaIcon classes="fas fa-power-off" />
         <span className="ml-2"> {"Sign In" |> str} </span>
@@ -65,17 +65,32 @@ let headerLinks = (links, isLoggedIn) => {
       |> List.mapi((index, l) => headerLink(index |> string_of_int, l))
     )
     ->List.append([
-        isLoggedIn
-          ? <Notifications__Root
-              key="notifications"
-              wrapperClasses="md:ml-5 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0"
-              buttonClasses="font-semibold bg-gray-100 md:bg-white text-black hover:text-primary-500 w-full p-4 md:p-2"
-              title="Notifications"
-            />
-          : React.null,
+        <StudentTopNav__DropDown links=dropdownLinks key="more-links" />,
       ])
     ->List.append([
-        <StudentTopNav__DropDown links=dropdownLinks key="more-links" />,
+        isLoggedIn
+          ? <div className="flex items-center">
+              <div className="relative flex">
+                <Notifications__Root
+                  key="notifications"
+                  wrapperClasses="md:ml-1 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0 rounded-lg hover:bg-gray-200"
+                  buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center p-4 md:px-3 md:py-2"
+                  icon="if i-bell-regular text-xl"
+                />
+                <span
+                  className="student-navbar__notifications-unread-bullet absolute block h-3 w-3 rounded-full border-2 border-white bg-red-500"
+                />
+              </div>
+              <button
+                className="md:ml-2 h-10 w-10 rounded-full border border-gray-300 hover:border-primary-500">
+                <img
+                  className="inline-block object-contain rounded-full"
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  alt="user_name"
+                />
+              </button>
+            </div>
+          : React.null,
       ])
     ->List.append([isLoggedIn ? signOutLink() : signInLink()])
     |> Array.of_list

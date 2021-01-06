@@ -12,7 +12,7 @@ let drawerClasses = (size, level, previousLevel) => {
 
   let sizeClass =
     switch (size) {
-      | Small => " editor-drawer--small"
+    | Small => " editor-drawer--small"
     | Normal => ""
     | Large => " editor-drawer--large"
     };
@@ -39,7 +39,7 @@ let make =
       ~closeDrawerCB,
       ~closeButtonTitle="Close Editor",
       ~size=Normal,
-      ~closeIconClassName="fas fa-times",
+      ~closeIconClassName="if i-times-regular",
       ~level=0,
       ~children,
     ) => {
@@ -60,21 +60,23 @@ let make =
           }}
           title=closeButtonTitle
           className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
-          <i className={closeIconClassName ++ " text-xl"} />
+          <Icon className={closeIconClassName ++ " text-xl"} />
         </button>
       </div>
-      <div className="md:hidden absolute right-0">
-        <button
-          onClick={e => {
-            e |> ReactEvent.Mouse.preventDefault;
-            closeDrawerCB();
-          }}
-          title=closeButtonTitle
-          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
-          <i className={closeIconClassName ++ " text-xl"} />
-        </button>
+      <div className="w-full relative overflow-y-scroll">
+        <div className="md:hidden absolute right-0 pt-3 pr-4 z-50">
+          <button
+            onClick={e => {
+              e |> ReactEvent.Mouse.preventDefault;
+              closeDrawerCB();
+            }}
+            title=closeButtonTitle
+            className="flex items-center justify-center w-10 h-10 bg-gray-300 text-gray-800 font-bold p-3 rounded-full hover:bg-gray-100 hover:text-gray-900 focus:outline">
+            <Icon className={closeIconClassName ++ " text-xl"} />
+          </button>
+        </div>
+        children
       </div>
-      <div className="w-full overflow-y-scroll"> children </div>
     </div>
   </div>;
 };

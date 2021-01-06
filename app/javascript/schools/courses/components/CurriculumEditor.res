@@ -122,6 +122,7 @@ let make = (
   ~targetGroups,
   ~targets,
   ~hasVimeoAccessToken,
+  ~vimeoPlan,
 ) => {
   let path = ReasonReactRouter.useUrl().path
   let (state, send) = React.useReducerWithMapState(
@@ -197,6 +198,7 @@ let make = (
       evaluationCriteria
       course
       updateTargetCB
+      vimeoPlan
     />
     {switch state.editorAction {
     | Hidden => ReasonReact.null

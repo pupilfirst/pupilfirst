@@ -69,6 +69,7 @@ gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' #
 gem 'kaminari', '~> 1.2' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
 gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstrap4-kaminari-views' # Bootstrap 4 styling for Kaminari gem
 gem 'rack-throttle', '~> 0.7' # API Rate limiting
+gem 'webpush', '~> 1.1.0' # Encryption Utilities for Web Push protocol
 
 # Omniauth providers
 gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google

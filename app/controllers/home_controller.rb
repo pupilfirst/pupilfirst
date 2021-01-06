@@ -58,6 +58,14 @@ class HomeController < ApplicationController
     end
   end
 
+  def manifest
+    render json: GenerateManifestService.new(current_school).json
+  end
+
+  def offline
+    render layout: false
+  end
+
   protected
 
   def background_image_number

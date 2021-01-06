@@ -14,6 +14,7 @@ module MarkNotificationQuery = [%graphql
   }
 |}
 ];
+
 let markNotification = (notificationId, setSaving, markNotificationCB, event) => {
   event |> ReactEvent.Mouse.preventDefault;
   setSaving(_ => true);

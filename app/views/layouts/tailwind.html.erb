@@ -1,10 +1,19 @@
 <% presenter = ::Layouts::TailwindPresenter.new(self) %>
 
+<%
+  def webpush_subscription_endpoint
+    return if current_user&.webpush_subscription.blank?
+
+    current_user&.webpush_subscription['endpoint']
+  end
+%>
 <!DOCTYPE html>
-<html lang='en' data-user-id="<%= current_user&.id %>" data-flash="<%= presenter.flash_messages %>" data-env="<%= Rails.env %>">
+<html lang='en' data-user-id="<%= current_user&.id %>" data-flash="<%= presenter.flash_messages %>" data-env="<%= Rails.env %>" data-vapid-public-key="<%= Base64.urlsafe_decode64(Rails.application.secrets.vapid_public_key).bytes %>" data-subscription-endpoint="<%= webpush_subscription_endpoint %>">
+
 <head>
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <link rel="manifest" href="./manifest.json">
 
   <% if content_for?(:viewport) %>
     <%= yield :viewport %>
@@ -60,4 +69,5 @@
 <!-- Scripts -->
 <%= javascript_pack_tag 'IconFirstPack', nonce: true %>
 </body>
+
 </html>

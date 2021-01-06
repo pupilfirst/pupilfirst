@@ -10,7 +10,7 @@ module Topics
 
       topic.users.where.not(id: actor_id).each do |recipient|
         I18n.with_locale(recipient.locale) do
-          Notification.create!(
+          notification = Notification.create!(
             actor_id: actor_id,
             notifiable: topic,
             event: Notification.events[:topic_created],
@@ -23,6 +23,7 @@ module Topics
 
               )
           )
+          Notifications::FireService.new(notification).fire
         end
       end
     end

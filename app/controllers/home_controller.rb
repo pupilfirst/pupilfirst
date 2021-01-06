@@ -6,7 +6,7 @@ class HomeController < ApplicationController
 
   def styleguide
     Webpush.payload_send(
-      message: JSON.generate({ title: "Holas", body: "lalal" }),
+      message: JSON.generate({ title: "Holas", body: "lalal", icon: "/favicon.ico", tag: "hola" }),
       endpoint: current_user.web_push_subscription['endpoint'],
       p256dh: current_user.web_push_subscription['p256dh'],
       auth: current_user.web_push_subscription['auth'],

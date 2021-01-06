@@ -45,7 +45,7 @@ class CreateTopicMutator < ApplicationQuery
   end
 
   def create_subscribers(topic)
-    users = User.joins([faculty: :startups]).where(startups: { id: User.first.startups }).distinct + [current_user]
+    users = User.joins([faculty: :startups]).where(startups: { id: current_user.startups }).distinct + [current_user]
 
     users.each do |user|
       TopicSubscription.create!(user: user, topic: topic)

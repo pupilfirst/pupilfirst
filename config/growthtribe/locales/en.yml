@@ -60,7 +60,6 @@ en:
       linked_target_label: "Linked Lesson: "
       view_target_button: View Lesson
     CoursesCurriculum__Overlay:
-      pending_team_members_notice: "You have team members who are yet to complete this lesson:"
       previous_target_button: Previous Lesson
       next_target_button: Next Lesson
     CurriculumEditor__LevelEditor:

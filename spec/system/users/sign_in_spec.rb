@@ -59,13 +59,10 @@ feature 'User signing in by supplying email address', js: true do
       end
 
       scenario 'allow to change password with a valid token' do
-        mocked_client = double :keycloak_client
-        allow(Keycloak::Client).to receive(:new) { mocked_client }
-        allow(mocked_client).to receive(:fetch_user)
-        allow(mocked_client).to receive(:set_user_password)
+        keycloak_client = Rails.configuration.keycloak_client
 
-        expect(mocked_client).to receive(:fetch_user).with(user.email)
-        expect(mocked_client).to receive(:set_user_password).with(user.email, "MyNewPassword@123")
+        expect(keycloak_client).to receive(:fetch_user).with(user.email).and_call_original
+        expect(keycloak_client).to receive(:set_user_password).with(user.email, "MyNewPassword@123").and_call_original
 
         user.regenerate_reset_password_token
         user.update!(reset_password_sent_at: Time.zone.now)

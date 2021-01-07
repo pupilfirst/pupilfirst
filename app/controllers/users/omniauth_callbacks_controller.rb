@@ -27,7 +27,7 @@ module Users
     def keycloakopenid
       @email = request.env['omniauth.auth']['info']['email']
 
-      cookies[KeycloakHelper::RT_COOKIE_KEY] = request.env['omniauth.auth']['credentials']['refresh_token']
+      cookies[Keycloak::RT_COOKIE_KEY] = request.env['omniauth.auth']['credentials']['refresh_token']
 
       if @email.blank?
         redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: email_blank_flash)

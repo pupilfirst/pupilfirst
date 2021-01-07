@@ -105,9 +105,9 @@ module Users
 
     def destroy
       begin
-        rt = cookies[KeycloakHelper::RT_COOKIE_KEY]
-        keycloak_client.user_sign_out(rt)
-        cookies.delete(KeycloakHelper::RT_COOKIE_KEY)
+        rt = cookies[Keycloak::RT_COOKIE_KEY]
+        Rails.configuration.keycloak_client.user_sign_out(rt)
+        cookies.delete(Keycloak::RT_COOKIE_KEY)
       rescue Keycloak::FailedRequestError => e
         logger.warn "Failed to sign out user at keycloak - #{e}"
       end

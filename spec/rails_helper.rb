@@ -104,6 +104,7 @@ RSpec.configure do |config|
   # Faker clear store for unique generator after run
   config.before(:each) do
     Faker::UniqueGenerator.clear
+    Rails.configuration.keycloak_client.reset!
   end
 
   include AnObjectLikeMatcher

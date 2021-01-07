@@ -79,9 +79,9 @@ describe Oembed::Resolver do
     end
 
     context 'when supplied a TypeForm share  URL' do
-      let(:pasted_link) { 'https://arthurstomp.typeform.com/to/kMYPtOC' }
+      let(:pasted_link) { 'https://form.typeform.com/to/kMYPtOC' }
 
-      let(:expected_embed_code) { "<iframe id=\"typeform-full\" width=\"100%\" height=\"100%\" frameborder=\"0\" allow=\"camera; microphone; autoplay; encrypted-media;\" src=\"https://arthurstomp.typeform.com/to/kMYPtOC\"></iframe>" }
+      let(:expected_embed_code) { "<iframe id=\"typeform-full\" width=\"100%\" height=\"100%\" frameborder=\"0\" allow=\"camera; microphone; autoplay; encrypted-media;\" src=\"https://form.typeform.com/to/kMYPtOC\"></iframe>" }
 
       it 'returns embed code for Google Slides' do
         expect(subject.new(pasted_link).embed_code).to eq(expected_embed_code)

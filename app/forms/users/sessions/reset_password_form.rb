@@ -36,7 +36,7 @@ module Users
       end
 
       def keycloak_user?
-        keycloak_client.fetch_user(@user.email)
+        Rails.configuration.keycloak_client.fetch_user(@user.email)
         true
       rescue Keycloak::FailedRequestError => e
         Rails.logger.debug("Keycloak user dont exist for email #{@user.email} - #{e.message}")
@@ -44,13 +44,9 @@ module Users
       end
       # rubocop:disable Naming/AccessorMethodName
       def set_keycloak_password(password)
-        keycloak_client.set_user_password(@user.email, password)
+        Rails.configuration.keycloak_client.set_user_password(@user.email, password)
       end
       # rubocop:enable Naming/AccessorMethodName
-
-      def keycloak_client
-        @keycloak_client ||= Keycloak::Client.new
-      end
     end
   end
 end

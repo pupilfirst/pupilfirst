@@ -121,7 +121,7 @@ module Courses
       names = name.split(' ')
       first_name = names.pop
       last_name = names.join(' ') || ''
-      keycloak_client.create_user(email, first_name, last_name)
+      Rails.configuration.keycloak_client.create_user(email, first_name, last_name)
     end
 
     def school
@@ -130,10 +130,6 @@ module Courses
 
     def first_level
       @first_level ||= @course.levels.find_by(number: 1)
-    end
-
-    def keycloak_client
-      @keycloak_client ||= Keycloak::Client.new
     end
   end
 end

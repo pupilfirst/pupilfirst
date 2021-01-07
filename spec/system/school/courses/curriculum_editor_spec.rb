@@ -87,13 +87,13 @@ feature 'Curriculum Editor', js: true do
 
     # he should be able to create a new target group
     find('.target-group__create').click
-    expect(page).to have_text('SESSION DETAILS')
+    expect(page).to have_text('SECTION DETAILS')
     fill_in 'Title', with: new_target_group_name
     replace_markdown(new_target_group_description, id: 'description')
     click_button 'Yes'
-    click_button 'Create Session'
+    click_button 'Create Section'
 
-    expect(page).to have_text('Session created successfully')
+    expect(page).to have_text('Section created successfully')
     dismiss_notification
 
     level.reload
@@ -112,9 +112,9 @@ feature 'Curriculum Editor', js: true do
       click_button 'No'
     end
 
-    click_button 'Update Target Group'
+    click_button 'Update Section'
 
-    expect(page).to have_text('Target Group updated successfully')
+    expect(page).to have_text('Section updated successfully')
     dismiss_notification
 
     target_group.reload
@@ -123,12 +123,12 @@ feature 'Curriculum Editor', js: true do
 
     # he should be able to create another target group
     find('.target-group__create').click
-    expect(page).to have_text('TARGET GROUP DETAILS')
+    expect(page).to have_text('SECTION DETAILS')
     fill_in 'Title', with: new_target_group_name_2
     click_button 'Yes'
-    click_button 'Create Target Group'
+    click_button 'Create Section'
 
-    expect(page).to have_text('Target Group created successfully')
+    expect(page).to have_text('Section created successfully')
     dismiss_notification
 
     # Update sort index
@@ -246,8 +246,8 @@ feature 'Curriculum Editor', js: true do
     fill_in 'level_id', with: level_1.name
     click_button "Pick Level 1: #{level_1.name}"
 
-    click_button 'Update Target Group'
-    expect(page).to have_text('Target Group updated successfully')
+    click_button 'Update Section'
+    expect(page).to have_text('Section updated successfully')
     dismiss_notification
 
     expect(target_group_2.reload.level).to eq(level_1)

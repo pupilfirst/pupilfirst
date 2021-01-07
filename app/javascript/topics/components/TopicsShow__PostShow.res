@@ -8,7 +8,7 @@ let t = I18n.t(~scope="components.TopicsShow__PostShow")
 let solutionIcon =
   <div
     ariaLabel="Marked as solution icon"
-    className="flex lg:flex-col items-center px-2 lg:pl-0 lg:pr-4 lg:pb-4 bg-green-200 lg:bg-transparent rounded md:mt-4">
+    className="flex lg:flex-col items-center px-2 lg:pl-0 lg:pr-4 bg-green-200 lg:bg-transparent rounded md:mt-4">
     <div
       className="flex items-center justify-center pr-2 pl-0 py-2 md:p-3 bg-green-200 text-green-800 rounded-full">
       <PfIcon className="if i-check-solid text-sm lg:text-base" />
@@ -167,6 +167,7 @@ let make = (
   let repliesToPost = isFirstPost ? [] : post |> Post.repliesToPost(posts)
   let (showPostEdit, toggleShowPostEdit) = React.useState(() => false)
   let (showReplies, toggleShowReplies) = React.useState(() => false)
+  let tip = <div className="text-center"> {"Mark as Solution" |> str} </div>
 
   <div id={"post-show-" ++ Post.id(post)} onAnimationEnd=onBorderAnimationEnd>
     <div className="flex pt-4" key={post |> Post.id}>
@@ -176,27 +177,13 @@ let make = (
         {ReactUtils.nullUnless(
           <div
             className="hidden md:flex md:flex-col items-center text-center md:w-14 pr-3 md:pr-4 md:mt-4">
-            // <label
-            //   htmlFor="mark-as-solution"
-            //   className="bg-gray-100 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-200">
-            //   <input
-            //     onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
-            //     id="mark-as-solution"
-            //     name="mark-as-solution"
-            //     type_="checkbox"
-            //     className="input-checkbox h-5 w-5 bg-white text-green-600 border border-gray-500 hover:border-primary-400 rounded-md active:outline-none"
-            //   />
-            // </label>
-            <button
-              onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
-              className="bg-gray-100 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-200 text-gray-700">
-              <PfIcon className="if i-check-solid text-sm lg:text-base" />
-            </button>
-            <label
-              htmlFor="mark-as-solution"
-              className="ml-1 md:ml-0 md:mt-1 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
-              {t("mark_as_solution_label") |> str}
-            </label>
+            <Tooltip tip position=#Bottom>
+              <button
+                onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
+                className="mark-as-solution__button bg-gray-100 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-200 text-gray-700">
+                <PfIcon className="if i-check-solid text-sm lg:text-base" />
+              </button>
+            </Tooltip>
           </div>,
           {(moderator || isTopicCreator) && !(isFirstPost || Post.solution(post))},
         )}

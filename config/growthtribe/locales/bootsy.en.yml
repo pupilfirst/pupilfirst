@@ -1,0 +1,27 @@
+en:
+  bootsy:
+    action:
+      refresh: Refresh
+      destroy: Delete
+      close: Close
+      load: Load
+      upload: Upload New Image
+    image_gallery: Image Gallery
+    image:
+      s: Image
+      p: Images
+      size: Size
+      large: Large
+      medium: Medium
+      small: Small
+      original: Original
+      new: New image
+      confirm:
+        destroy: Are you sure you want to delete this image?
+      position:
+        left: Left
+        right: Right
+        inline: Inline
+    no_images_uploaded: There are currently no uploaded images.
+    js:
+      alert_unsaved: You have unsaved changes.

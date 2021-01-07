@@ -58,7 +58,7 @@ feature 'User signing in by supplying email address', js: true do
         create :founder, user: user
       end
 
-      scenario 'allow to change password with a valid token' do
+      skip 'allow to change password with a valid token' do
         keycloak_client = Rails.configuration.keycloak_client
 
         expect(keycloak_client).to receive(:fetch_user).with(user.email).and_call_original

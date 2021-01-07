@@ -40,7 +40,7 @@ let fromTargetChecklistItem = targetChecklist => targetChecklist |> Array.map(tc
   })
 
 let updateResultAtIndex = (index, result, checklist) =>
-  checklist |> Array.mapi((i, c) => i == index ? {...c, result: result} : c)
+  checklist |> Js.Array.mapi((c, i) => i == index ? {...c, result: result} : c)
 
 let makeFile = (id, name) => {id: id, name: name}
 
@@ -48,12 +48,12 @@ let filename = file => file.name
 
 let fileId = file => file.id
 
-let fileIds = checklist => checklist |> Array.map(c =>
+let fileIds = checklist => checklist |> Js.Array.map(c =>
     switch c.result {
-    | Files(files) => files |> Array.map(a => a.id) |> Array.to_list
-    | _anyOtherResult => list{}
+    | Files(files) => files |> Js.Array.map(a => a.id)
+    | _anyOtherResult => []
     }
-  ) |> ArrayUtils.flatten
+  ) |> ArrayUtils.flattenV2
 
 let kindAsString = t =>
   switch t.result {
@@ -75,7 +75,8 @@ let resultAsString = t =>
   }
 
 let validString = (s, maxLength) => {
-  let length = s |> String.trim |> String.length
+  let length = Js.String.trim(s) |> Js.String.length
+
   length >= 1 && length <= maxLength
 }
 
@@ -107,7 +108,7 @@ let validResponse = (response, allowBlank) => {
 
 let validChecklist = checklist =>
   checklist
-  |> Array.map(c => validResponse(c, true))
+  |> Js.Array.map(c => validResponse(c, true))
   |> Js.Array.filter(c => !c)
   |> ArrayUtils.isEmpty
 

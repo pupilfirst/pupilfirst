@@ -43,12 +43,12 @@ let create = (id, name, description, milestone, levelId, sortIndex, archived) =>
   archived: archived,
 }
 
-let updateList = (targetGroups, targetGroup) => {
-  let oldTargetGroups = targetGroups |> List.filter(tg => tg.id !== targetGroup.id)
-  oldTargetGroups |> List.rev |> List.append(list{targetGroup}) |> List.rev
+let updateArray = (targetGroups, targetGroup) => {
+  targetGroups |> Js.Array.filter(tg => tg.id != targetGroup.id) |> Js.Array.concat([targetGroup])
 }
 
-let sort = targetGroups => targetGroups |> List.sort((x, y) => x.sortIndex - y.sortIndex)
+let sort = targetGroups =>
+  targetGroups |> ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex)
 
 let unarchive = t => {...t, archived: false}
 
@@ -59,6 +59,6 @@ let unsafeFind = (targetGroups, componentName, id) =>
   )
 
 let updateSortIndex = sortedTargetGroups =>
-  sortedTargetGroups |> List.mapi((sortIndex, t) =>
+  sortedTargetGroups |> Js.Array.mapi((t, sortIndex) =>
     create(t.id, t.name, t.description, t.milestone, t.levelId, sortIndex, t.archived)
   )

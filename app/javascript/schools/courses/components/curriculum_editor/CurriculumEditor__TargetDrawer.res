@@ -80,7 +80,7 @@ let make = (
   switch url.path {
   | list{"school", "courses", _courseId, "targets", targetId, pageName} =>
     let target =
-      targets |> ListUtils.unsafeFind(
+      targets |> ArrayUtils.unsafeFind(
         t => t |> Target.id == targetId,
         "Could not find target for editor drawer with the ID " ++ targetId,
       )

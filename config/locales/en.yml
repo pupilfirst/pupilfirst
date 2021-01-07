@@ -90,15 +90,15 @@ en:
         one: "This certificate has been issued once.<br/>These changes will also be applied to the issued certificate."
         other: "This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates."
     CoursesReport__Level:
-      level: Level
+      level: Chapter
     CoursesCurriculum:
       issued_certificate_heading: Congratulations! You have been issued a certificate.
       issued_certificate_button: View Certificate
-      level_locked: Level locked
-      level_locked_notice: "The level is currently locked!"
-      nav_previous_level: Previous Level
-      nav_next_level: Next Level
-      empty_level_content_notice: "There's no published content on this level."
+      level_locked: Chapter locked
+      level_locked_notice: "The chapter is currently locked!"
+      nav_previous_level: Previous Chapter
+      nav_next_level: Next Chapter
+      empty_level_content_notice: "There's no published content on this chapter."
       milestone_targets: Milestone targets
     CoursesCurriculum__NoticeManager:
       course_complete_title: Congratulations! You have completed all milestone lessons in the final chapter.

@@ -187,9 +187,7 @@ let enablePublicSignupButton = (publicSignup, send) =>
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-signup">
       {"Enable public signup for this course?" |> str}
     </label>
-    <div
-      id="public-signup"
-      className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
+    <div id="public-signup" className="flex toggle-button__group flex-shrink-0 rounded-lg">
       <button
         className={booleanButtonClasses(publicSignup)}
         onClick={_ => send(UpdatePublicSignup(true))}>
@@ -208,8 +206,7 @@ let featuredButton = (featured, send) =>
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="featured">
       {"Feature course in school homepage?" |> str}
     </label>
-    <div
-      id="featured" className="flex toggle-button__group flex-shrink-0 rounded-lg overflow-hidden">
+    <div id="featured" className="flex toggle-button__group flex-shrink-0 rounded-lg">
       <button className={booleanButtonClasses(featured)} onClick={_ => send(UpdateFeatured(true))}>
         {"Yes" |> str}
       </button>

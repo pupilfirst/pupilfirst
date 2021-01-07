@@ -122,6 +122,7 @@ let make = (
   ~targetGroups,
   ~targets,
   ~hasVimeoAccessToken,
+  ~vimeoPlan,
 ) => {
   let path = ReasonReactRouter.useUrl().path
   let (state, send) = React.useReducerWithMapState(
@@ -197,6 +198,7 @@ let make = (
       evaluationCriteria
       course
       updateTargetCB
+      vimeoPlan
     />
     {switch state.editorAction {
     | Hidden => ReasonReact.null
@@ -225,7 +227,8 @@ let make = (
                 |> Level.sort
                 |> Array.map(level =>
                   <option key={Level.id(level)} value={level |> Level.name}>
-                    {t("level") ++ " " ++
+                    {t("level") ++
+                    " " ++
                     ((level |> Level.number |> string_of_int) ++
                     (": " ++ (level |> Level.name))) |> str}
                   </option>
@@ -282,7 +285,7 @@ let make = (
           <span className="flex bg-gray-200 p-2 rounded-full">
             <i className="fas fa-plus-circle text-2xl" />
           </span>
-          <h4 className="font-semibold ml-2"> { t("create_target_group") |> str} </h4>
+          <h4 className="font-semibold ml-2"> {t("create_target_group") |> str} </h4>
         </div>
       </div>
     </div>

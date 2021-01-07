@@ -162,7 +162,7 @@ en:
     CurriculumEditor__TargetDetailsEditor:
       level: Chapter
       target_group: Section
-      any_prereq_targets: Are there any prerequisite lessons?
+      prerequisite_targets_label: Are there any prerequisite lessons?
       search_targets: Search lessons
       no_targets_selected: 'No lessons selected'
       choose_target_group: Choose a lesson group
@@ -170,7 +170,6 @@ en:
       take_quiz: Take a quiz to complete the lesson.
       visit_link: Visit a link to complete the lesson.
       mark_as_complete: Simply mark the lesson as completed.
-      std_complete_target: How do you want the student to complete the lesson?
       target_title_placeholder: Type lesson title here
       target_method_of_completion_label: How do you want the student to complete the lesson?
       select_criterion_label: Choose evaluation criteria from your list
@@ -185,13 +184,6 @@ en:
       completion_instructions_label: "Do you have any completion instructions for the student?"
       completion_instructions_help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the lesson.
       update_target: Update Lesson
-      coach_review_sub_target: 'Will a coach review submissions on this lesson?'
-      steps_std_complete_target_short: What steps should the student take to complete this lesson?
-      steps_std_complete_target_long: 'These are the steps that a student must complete to submit work on a lesson. This information will be shown to the coach for review.'
-      target_has_no_steps: 'This lesson has no steps. Students will be able to submit lesson without any action!'
-      should_team_tackle_target: How should teams tackle this lesson?
-      sub_team_std_target: Should students in a team submit work on a lesson individually, or together?
-      help_std_target_reminder: Use this to remind the student about something important. These instructions will be displayed close to where students complete the lesson.
       target_visibility: Lesson Visibility
     CoursesCurriculum__TargetStatus:
       course_locked: The course has ended and submissions are disabled for all lesson!

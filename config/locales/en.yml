@@ -99,7 +99,7 @@ en:
       nav_previous_level: Previous Chapter
       nav_next_level: Next Chapter
       empty_level_content_notice: "There's no published content on this chapter."
-      milestone_targets: Milestone targets
+      milestone_targets: Milestone lessons
     CoursesCurriculum__NoticeManager:
       course_complete_title: Congratulations! You have completed all milestone lessons in the final chapter.
       course_complete_description: You've completed our coursework. Feel free to complete lessons that you might have left out, and read up at attached links.

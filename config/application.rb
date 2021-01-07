@@ -1,5 +1,6 @@
 require_relative 'boot'
 require 'rails/all'
+require_relative '../lib/i18n/backend/files'
 
 if Rails.env.development?
   require 'dotenv'
@@ -25,6 +26,13 @@ module Pupilfirst
     # -- all .rb files in that directory are automatically loaded.
 
     config.i18n.enforce_available_locales = true
+
+    config.i18n.backend = I18n::Backend::Chain.new(
+      I18n::Backend::Files.new(
+        Dir[Rails.root.join('config/growthtribe/locales/**/*.yml')]
+      ),
+      I18n::Backend::Simple.new
+    )
 
     # include nested directories inside locale
     config.i18n.load_path += Dir[Rails.root.join('config/locales/**/*.yml')]

@@ -1,99 +1,8 @@
-# ----------------------
-# Organization of en.yml
-# ----------------------
-#
-# components.COMPONENT.* - component-specific strings
-# jobs.[MODULE].JOB.* - strings used by jobs
-# models.MODEL.COLUMN.* = translation of database values to display values
-# mutations.MUTATION.* = strings used by mutations
-# queries.QUERY.* = strings used by resolvers and mutators
-# shared.* - shared strings
-# CONTROLLER.ACTION.* = display_value
-#
-# CONTROLLER is always the plural version. For example: FoundersController#edit = founders.edit.*
-#
-# Order alphabetically where possible.
-#
-# Third-party library translations are at the end of this file, and they follow their own format.
-# Make sure you include links to documentation related to such third-party translations for when
-# we (undoubtedly) forget what the strings were for.
-
 en:
   components:
-    CoachesIndex__Root:
-      heading: Coaches
-      filter_input_label: Filter by
-      filter_input_placeholder: Search by name, or select a course
-      filter_label_teaches_course: Teaches Course
-      filter_label_name_like: Name Like
-      filter_search_string_course: "teaches course %{name}"
-      filter_result_empty: "The filters you've applied does not match any coach. Please change the filter and try again."
-      button_connect: Connect
-      button_about: About
-    CommunitiesShow__Root:
-      all_categories_button: All Categories
-      empty_topics: There's no discussion here yet.
-      filter_input_label: "Filter by:"
-      filter_input_placeholder_default: Search by topic title or filter by solution
-      filter_input_placeholder_categories: Filter by category, solution or search by topic title
-      sort_criterion_input_label: "Sort by:"
-      sort_criterion_posted_at: Posted At
-      sort_criterion_last_activity: Last Activity
-      sort_criterion_views: Views
-      topic_stats_likes: Like
-      topic_stats_replies: Reply
-      topic_stats_views: View
-      button_load_more: Load More...
-      topics_fully_loaded_text: "Showing all %{total_topics} topics"
-      topics_partially_loaded_text: "Showing %{loaded_topics_count} of %{total_topics} topics"
-      topic_posted_by_text: Posted by
-      topic_last_updated_text: Last updated
-    CourseCertificates__Root:
-      auto_issue_tag: Auto-issue
-      create_action: &certificate_create_action Create New Certificate
-      issued_count:
-        zero: Never issued
-        one: Issued only once
-        other: "Issued %{count} times"
-      heading: Certificates
-      no_certificates: You haven't created any certificates yet!
-      edit_button_title: "Edit Certificate %{name}"
-      delete_button_title: "Delete Certificate %{name}"
-    CourseCertificates__CreateDrawer:
-      create_action: *certificate_create_action
-      name_label: Name
-      name_placeholder: A name to identify this certificate
-      certificate_base_image_label: Certificate Base Image
-      certificate_base_image_placeholder: Select a base image for certificate
-      success_notification: You can now edit this certificate.
-      create_button_text: Create Certificate
-    CourseCertificates__EditDrawer:
-      edit_action: Edit Certificate
-      name_label: Name
-      name_placeholder: A short name for this certificate
-      name_error: Name can't be blank
-      margin_label: Margin
-      active_label: Should students be automatically issued this certificate?
-      active_help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
-      name_offset_top_label: Name Offset (from top)
-      font_size_label: Font Size
-      qr_visibility_label: Add QR Code?
-      qr_visibility_help: It will contain a link to a page on your school that anyone can visit to verify an issued certificate.
-      qr_position_label: QR Code Position
-      qr_scale_label: QR Code Scale
-      qr_hidden_label: Hidden
-      qr_top_left_label: Top Left
-      qr_top_right_label: Top Right
-      qr_bottom_left_label: Bottom Left
-      qr_bottom_right_label: Bottom Right
-      update_issued_certificates_warning:
-        one: "This certificate has been issued once.<br/>These changes will also be applied to the issued certificate."
-        other: "This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates."
     CoursesReport__Level:
       level: Chapter
     CoursesCurriculum:
-      issued_certificate_heading: Congratulations! You have been issued a certificate.
-      issued_certificate_button: View Certificate
       level_locked: Chapter locked
       level_locked_notice: "The chapter is currently locked!"
       nav_previous_level: Previous Chapter
@@ -103,31 +12,57 @@ en:
     CoursesCurriculum__NoticeManager:
       course_complete_title: Congratulations! You have completed all milestone lessons in the final chapter.
       course_complete_description: You've completed our coursework. Feel free to complete lessons that you might have left out, and read up at attached links.
-      course_ended_title: Course Ended
       course_ended_description: The course has ended and submissions are disabled for all lessons!
-      preview_mode_title: Preview Mode
-      preview_mode_description: You are accessing the preview mode for this course
-      access_ended_title: Access Ended
-      access_ended_description: Your access to this course has ended.
-      team_members_pending_title: Check With Your Team
       team_members_pending_description: You have completed all required milestone lessons, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone lessons.
       level_up_blocked:
-        title_pending_review: Pending Review
-        title_rejected: Level Up Blocked
         body_prefix: "You have submitted all milestone lessons in chapter %{number}, but one or more submissions "
-        body_middle_pending_review: "are pending review by a coach. "
-        body_middle_rejected: "have been rejected. "
         body_suffix: You need to get a passing grade on all milestone lessons to level up.
-      level_up_limited_title: Level Up Blocked
       level_up_limited_description: "You're at Chapter %{currentLevel}, but you have lessons in the Chapter %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone lessons in Chapter %{minimumRequiredLevel} to continue leveling up."
-      level_up_title: Ready to Level Up!
       level_up_description: Congratulations! You have successfully completed all milestone lessons required to level up. Click the button below to proceed to the next chapter. New challenges await!
     CurriculumEditor:
       level: Chapter
-      unable_to_find_target_group: "Unable to find section with ID: "
       create_target_group: Create section
       create_level: Create Chapter
       edit_selected_level: Edit selected chapter
+      unable_to_find_target_group: "Unable to find section with ID: "
+    CurriculumEditor__TargetGroupShow:
+      create_target: Create a lesson
+      milestone_targets: Milestone Lessons
+    CurriculumEditor__TargetDetailsEditor:
+      level: Chapter
+      target_group: Section
+      prerequisite_targets_label: Are there any prerequisite lessons?
+      search_targets: Search lessons
+      no_targets_selected: 'No lessons selected'
+      choose_target_group: Choose a lesson group
+      selected_all_targets: You have selected all lessons
+      take_quiz: Take a quiz to complete the lesson.
+      visit_link: Visit a link to complete the lesson.
+      mark_as_complete: Simply mark the lesson as completed.
+      target_method_of_completion_label: How do you want the student to complete the lesson?
+      target_title_placeholder: Type lesson title here
+      update_target: Update Lesson
+      target_reviewed_by_coach: "Will a coach review submissions on this lesson?"
+      target_checklist_label: What steps should the student take to complete this lesson?
+      target_checklist_help_text: "These are the steps that a student must complete to submit work on a lesson. This information will be shown to the coach for review."
+      empty_checklist_warning: "This lesson has no steps. Students will be able to submit lesson without any action!"
+      target_role_label: How should teams tackle this lesson?
+      target_role_help: Should students in a team submit work on a lesson individually, or together?
+      completion_instructions_help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the lesson.
+      target_visibility: Lesson Visibility
+    CoursesCurriculum__TargetStatus:
+      course_locked: The course has ended and submissions are disabled for all lesson!
+      level_locked: You must level up to complete this lesson.
+      prerequisites_incomplete: This lesson has pre-requisites that are incomplete.
+    StudentsEditor__Search:
+      filter_input_placeholder: Type name, tag or chapter
+    TopicsShow__Root:
+      linked_target_label: "Linked Lesson: "
+      view_target_button: View Lesson
+    CoursesCurriculum__Overlay:
+      pending_team_members_notice: "You have team members who are yet to complete this lesson:"
+      previous_target_button: Previous Lesson
+      next_target_button: Next Lesson
     CurriculumEditor__LevelEditor:
       unlock_level_on: 'Unlock chapter on'
       update_level: Update Chapter
@@ -157,224 +92,19 @@ en:
       notifications:
         update_success: Section updated successfully
         create_success: Section created successfully
-    CurriculumEditor__TargetGroupShow:
-      create_target: Create a lesson
-      milestone_targets: Milestone Lessons
-    CurriculumEditor__TargetDetailsEditor:
-      level: Chapter
-      target_group: Section
-      prerequisite_targets_label: Are there any prerequisite lessons?
-      search_targets: Search lessons
-      no_targets_selected: 'No lessons selected'
-      choose_target_group: Choose a lesson group
-      selected_all_targets: You have selected all lessons
-      take_quiz: Take a quiz to complete the lesson.
-      visit_link: Visit a link to complete the lesson.
-      mark_as_complete: Simply mark the lesson as completed.
-      target_title_placeholder: Type lesson title here
-      target_method_of_completion_label: How do you want the student to complete the lesson?
-      select_criterion_label: Choose evaluation criteria from your list
-      select_criterion_warning: At least one has to be selected
-      target_reviewed_by_coach: "Will a coach review submissions on this lesson?"
-      target_checklist_label: What steps should the student take to complete this lesson?
-      target_checklist_help_text: "These are the steps that a student must complete to submit work on a lesson. This information will be shown to the coach for review."
-      target_checklist_limit_warning: Maximum allowed checklist items is 15!
-      empty_checklist_warning: "This lesson has no steps. Students will be able to submit lesson without any action!"
-      target_role_label: How should teams tackle this lesson?
-      target_role_help: Should students in a team submit work on a lesson individually, or together?
-      completion_instructions_label: "Do you have any completion instructions for the student?"
-      completion_instructions_help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the lesson.
-      update_target: Update Lesson
-      target_visibility: Lesson Visibility
-    CoursesCurriculum__TargetStatus:
-      course_locked: The course has ended and submissions are disabled for all lesson!
-      access_locked: Your access to this course has ended.
-      level_locked: You must level up to complete this lesson.
-      prerequisites_incomplete: This lesson has pre-requisites that are incomplete.
-    CurriculumEditor__ContentBlockCreator:
-      button_labels:
-        markdown: Markdown
-        file: File
-        image: Image
-        embed: Embed
-        video: Video
-      file:
-        upload_size_warning: "Please select a file with a size less than 5 MB."
-      image:
-        invalid_image_warning: "Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high."
-      video:
-        title_label: Title
-        description_label: Description
-        uploading: Uploading
-        select_file_button: Select File and Upload
-        invalid_format_warning: "Invalid file format, please select an MP4, MOV, WMV or AVI file."
-        upload_limit_warning: "Please select a file less than %{maximumVideoSize} in size."
-      embed:
-        url_label: URL to Embed
-        url_help: We support a number of third-party services (check link below). Just copy & paste the full URL to the page that contains the resource that you'd like to embed.
-        save_button: Save
-    CurriculumEditor__ImageBlockEditor:
-      resize_panel_button_title:
-        auto: Automatic width
-        full: Full width
-        four_fifths: Four-fifths width
-        three_fifths: Three-fifths width
-        two_fifths: Two-fifths width
-    StudentsEditor__ActionsForm:
-      certificates_label: Course Certificates
-      empty_course_certificates_text: This course does not have any certificates to issue.
-      empty_issued_certificates_text: This student has not been issued any certificates.
-      issued_certificates_label: "Issued certificates:"
-      issued_date_label: "Issued on:"
-      issued_by_label: "Issued by:"
-      revoked_date_label: "Revoked on:"
-      revoked_by_label: "Revoked by:"
-      revoked_status_label: Revoked
-      new_certificate_label: "Issue new certificate:"
-      select_certificate_input_label: Select a certificate to issue
-      issue_certificate_button: Issue Certificate
-      revoke_certificate_button: Revoke Certificate
-      dropout_student_label: Has this student dropped out?
-      dropout_button: Dropout Student
-      revoke_certificate_confirmation: Are you sure? This action cannot be undone.
-      active_label: Active
-    StudentsEditor__Root:
-      sort_criterion_label: "Sort by:"
-      sort_criterion_name: Name
-      sort_criterion_last_created: Last Created
-      sort_criterion_last_updated: Last Updated
-      button_all_students: All Students
-      button_inactive_students: Inactive Students
-      button_add_new_students: Add New Students
-    StudentsEditor__Search:
-      filter_input_label: "Filter by:"
-      filter_input_placeholder: Type name, tag or chapter
-    TopicsShow__Root:
-      linked_target_label: "Linked Lesson: "
-      view_target_button: View Lesson
-      topic_category_label: "Topic Category: "
-      topic_editor_cancel_button: "Cancel"
-      update_topic_button: Update Topic
-      edit_topic_button: Edit Topic
-      unlock_topic_button: Unlock Topic
-      lock_topic_button: Lock Topic
-      locked_topic_notice: This topic thread has been locked; no new replies can be posted.
-    CoursesCurriculum__Overlay:
-      completion_tab_complete: Complete
-      completion_tab_completed: Completed
-      completion_tab_take_quiz: Take Quiz
-      completion_tab_visit_link: Visit Link to Complete
-      completion_tab_mark_complete: Mark as Complete
-      completion_tab_submissions: Submissions & Feedback
-      completion_tab_quiz_result: Quiz Result
-      completion_tab_locked: Locked
-      learn_tab: Learn
-      discuss_tab: Discuss
-      close_button: Close
-      preview_mode_text: "You are currently looking at a preview of this course."
-      pending_team_members_notice: "You have team members who are yet to complete this target:"
-      previous_target_button: Previous Lesson
-      next_target_button: Next Lesson
-      scroll_to_top: Scroll to Top
-  jobs:
-    timeline_events:
-      verification_notification:
-        founder:
-          verified:
-            founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been verified by SV.CO"
-            startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_name}> has been verified by SV.CO"
-          needs_improvement:
-            founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-            startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_name}> has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-          not_accepted:
-            founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
-            startup_event: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by you for <%{startup_url}|%{startup_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
-        team:
-          verified: "Your team <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
-          needs_improvement: "Your team <%{startup_url}|%{startup_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-          not_accepted: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your team <%{startup_url}|%{startup_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
-        public:
-          verified:
-            &jobs-timeline_events-verification_notification-public-verified |
-            <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>
-            *Description:* %{event_description}
-            %{links_attached_notice}
-          needs_improvement: *jobs-timeline_events-verification_notification-public-verified
-
-    targets:
-      send_session_reminders:
-        message: 'Reminder: "%{title}" will start in %{time_delta} (at %{time_exact}). Please check the Slack collective channel for the link to join session.'
-      send_session_feedback_notification:
-        message: |
-          Hello there! Thank you to all who attended today's live session by %{faculty_name}.
-
-          We hope that you found the session informative and worthwhile.
-
-          If you missed watching it live, we will have it up on the dashboard in a couple of days.
-
-          Kindly help us improve our sessions with some quick feedback: https://svlabs.typeform.com/to/h7g9Om?faculty=%{faculty_name_escaped}&session=%{session_title}&date=%{session_date}
-
-  models:
-    faculty:
-      commitment:
-        part_time: Part-Time
-        full_time: Full-Time
-
-    target:
-      role:
-        team: Team
-        founder: All Founders
 
   mutations:
     update_target:
       success_notification: Lesson updated successfully!
-    update_certificate:
-      success_notification: Certificate details have been updated.
-    delete_certificate:
-      success_notification: Certificate has been deleted.
-    revoke_issued_certificate:
-      success_notification: Certificate revoked!
-    issue_certificate:
-      success_notification: Certificate issued successfully!
-    lock_topic:
-      success_notification: This topic has been locked. No new replies will be accepted.
-    unlock_topic:
-      success_notification: This topic has been unlocked. Community members can now post replies again.
 
-  queries:
-    delete_certificate_mutator:
-      issued_error: This certificate has been issued to one or more students - it cannot be deleted.
-    issue_certificate_mutator:
-      issued_error: This student has already been issued a certificate for this course.
-      certificate_error: The specified certificate could not be found.
   shared:
-    optional: optional
-    done_exclamation: Done!
-    cancel: Cancel
-    close: Close
-    save_changes: Save Changes
-    saving: Saving...
-    image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
-    file_invalid: Please select a file with a size less than 5 MB.
     'yes': 'Yes'
     'no': 'No'
 
   dashboard:
     dashboard:
       tour:
-        intro: Welcome to your personal dashboard! Your team's journey through this program will be showcased here.
         level_select: The program is split into multiple chapters, containing lessons. New chapters are unlocked when you complete <em>milestone</em> lessons in each chapter.<br/><br/>You can go back to complete optional lessons in previous chapters, and you can also check out lessons in future chapters, but you can't submit work for those until they are unlocked.
         target_group: Your sections will have all the lessons listed along with its completion status.
         target: The lesson pane will have the name of the lesson and its completion status. On clicking the lesson, you will get detailed information on the lesson, the status and the lesson submission button.
         target_status: This indicates the present status of the lesson.
-        final_message: That&rsquo;s it for now. If you have any doubts, don&rsquo;t hesitate to reach out to us for help.<br/><br/>Have fun!
-
-  ####################################
-  # THIRD-PARTY LIBRARY TRANSLATIONS #
-  ####################################
-
-  # These are custom error messages for the active_storage_validations gem.
-  errors:
-    messages:
-      content_type_invalid: "has an invalid content type"
-      limit_out_of_range: "total number is out of range"

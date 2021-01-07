@@ -2,7 +2,7 @@ function subscriptionDetails(data){
   return { endpoint: data.endpoint, p256dh: data.keys.p256dh, auth: data.keys.auth }
 };
 
-export async function getWebPushData() {
+export async function getWebpushData() {
   const sw = await navigator.serviceWorker.ready
   const subscription = await sw.pushManager.getSubscription()
   return subscription === null ? null : subscriptionDetails(subscription.toJSON())
@@ -18,5 +18,5 @@ export async function createSubscription() {
     })
   }
 
-  return getWebPushData()
+  return getWebpushData()
 }

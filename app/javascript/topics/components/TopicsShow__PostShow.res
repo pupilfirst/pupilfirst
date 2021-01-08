@@ -167,7 +167,7 @@ let make = (
   let repliesToPost = isFirstPost ? [] : post |> Post.repliesToPost(posts)
   let (showPostEdit, toggleShowPostEdit) = React.useState(() => false)
   let (showReplies, toggleShowReplies) = React.useState(() => false)
-  let tip = <div className="text-center"> {"Mark as Solution" |> str} </div>
+  let tip = <div className="text-center"> {"Mark as solution" |> str} </div>
 
   <div id={"post-show-" ++ Post.id(post)} onAnimationEnd=onBorderAnimationEnd>
     <div className="flex pt-4" key={post |> Post.id}>
@@ -177,7 +177,7 @@ let make = (
         {ReactUtils.nullUnless(
           <div
             className="hidden md:flex md:flex-col items-center text-center md:w-14 pr-3 md:pr-4 md:mt-4">
-            <Tooltip tip position=#Bottom>
+            <Tooltip tip position=#Top>
               <button
                 onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
                 className="mark-as-solution__button bg-gray-100 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-200 text-gray-700">
@@ -274,11 +274,11 @@ let make = (
               <div className="flex">
                 <div className="flex">
                   <TopicsShow__LikeManager post addPostLikeCB removePostLikeCB />
-                  <div>
+                  <div className="pr-3">
                     {repliesToPost |> ArrayUtils.isNotEmpty
                       ? <button
                           onClick={_ => toggleShowReplies(showReplies => !showReplies)}
-                          className="cursor-pointer flex flex-col items-center justify-center">
+                          className="cursor-pointer flex items-center justify-center">
                           <span
                             className="flex items-center justify-center rounded-lg lg:bg-gray-100 hover:bg-gray-300 text-gray-700 hover:text-gray-900 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2 mx-auto">
                             <FaIcon classes="far fa-comment-alt" />
@@ -298,7 +298,7 @@ let make = (
                   <PfIcon className="if i-check-solid text-sm lg:text-base" />
                   <span
                     className="ml-2 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
-                    {t("mark_as_solution_label") |> str}
+                    {"Solution" |> str}
                   </span>
                 </button>
                 {post |> Post.solution ? solutionIcon : React.null}

@@ -22,6 +22,8 @@ jobs:
       - ruby/install-deps
       - node/install-packages:
           pkg-manager: yarn
+      - slack/status:
+          fail_only: true
 
   test:
     parallelism: 4

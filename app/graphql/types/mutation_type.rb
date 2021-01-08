@@ -49,6 +49,7 @@ module Types
     field :create_post_like, mutation: Mutations::CreatePostLike, null: false
     field :delete_post_like, mutation: Mutations::DeletePostLike, null: false
     field :mark_post_as_solution, mutation: Mutations::MarkPostAsSolution, null: false
+    field :unmark_post_as_solution, mutation: Mutations::UnmarkPostAsSolution, null: false
     field :archive_post, mutation: Mutations::ArchivePost, null: false
     field :merge_levels, mutation: Mutations::MergeLevels, null: false
     field :create_vimeo_video, mutation: Mutations::CreateVimeoVideo, null: false

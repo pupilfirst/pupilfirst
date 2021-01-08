@@ -4,6 +4,7 @@ orbs:
   ruby: circleci/ruby@1.1.1
   node: circleci/node@4.0.1
   browser-tools: circleci/browser-tools@1.1.0
+  slack: circleci/slack@3.4.2
 
 jobs:
   build:
@@ -73,6 +74,8 @@ jobs:
           path: /tmp/test-results
       - store_artifacts:
           path: ./tmp/capybara
+      - slack/status:
+          fail_only: true
 
 workflows:
   version: 2

@@ -211,6 +211,7 @@ let make = (
             className="hidden md:flex md:flex-col items-center text-center md:w-14 pr-3 md:pr-4 md:mt-4">
             <Tooltip tip position=#Top>
               <button
+                ariaLabel="Mark as solution"
                 onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
                 className="mark-as-solution__button bg-gray-100 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-200 text-gray-700">
                 <PfIcon className="if i-check-solid text-sm lg:text-base" />

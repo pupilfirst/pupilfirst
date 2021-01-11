@@ -295,7 +295,7 @@ feature 'Community', js: true do
 
     # can mark a reply as solution
     within("div#post-show-#{reply_1.id}") do
-      check 'Mark as solution'
+      accept_confirm { find("button[aria-label='Mark as solution']").click }
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
     end
 
@@ -307,7 +307,7 @@ feature 'Community', js: true do
     sign_in_user(student_1.user, referrer: topic_path(topic_1))
 
     within("div#post-show-#{reply_1.id}") do
-      check 'Mark as solution'
+      accept_confirm { find("button[aria-label='Mark as solution']").click }
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
     end
   end
@@ -362,7 +362,7 @@ feature 'Community', js: true do
     find("div[aria-label='Options for post #{reply_1.id}']").click
 
     within("div#post-show-#{reply_1.id}") do
-      check 'Mark as solution'
+      accept_confirm { find("button[aria-label='Mark as solution']").click }
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
     end
 
@@ -751,6 +751,40 @@ feature 'Community', js: true do
     end
   end
 
+  context 'solution exists for a topic' do
+    let!(:reply_1) { create :post, topic: topic_1, creator: student_1.user, post_number: 2 }
+    let!(:reply_2) { create :post, topic: topic_1, creator: student_2.user, post_number: 3, solution: true }
+
+    scenario "a moderator can unmark the current post as solution and mark a new solution" do
+      sign_in_user(coach.user, referrer: community_path(community))
+
+      click_link topic_1.title
+
+      within("div#post-show-#{reply_1.id}") do
+        expect(page).to_not have_selector("button[aria-label='Mark as solution']")
+      end
+
+      within("div#post-show-#{reply_2.id}") do
+        accept_confirm { find("div[aria-label='Marked as solution icon']").click }
+      end
+
+      expect(page).to have_text('Reply unmarked as solution')
+      dismiss_notification
+
+      expect(reply_2.reload.solution).to eq(false)
+
+      # change the marked solution
+
+      within("div#post-show-#{reply_1.id}") do
+        accept_confirm { find("button[aria-label='Mark as solution']").click }
+      end
+
+      dismiss_notification
+
+      expect(reply_1.reload.solution).to eq(true)
+    end
+  end
+
   context "when the user is a coach who isn't enrolled in one of the community's connected courses" do
     before do
       CommunityCourseConnection.destroy_all
@@ -762,10 +796,8 @@ feature 'Community', js: true do
       click_link topic_1.title
 
       # Can mark a reply as solution.
-      find("div[aria-label='Options for post #{reply_1.id}']").click
-
       within("div#post-show-#{reply_1.id}") do
-        check 'Mark as solution'
+        accept_confirm { find("button[aria-label='Mark as solution']").click }
         expect(page).to have_selector("div[aria-label='Marked as solution icon']")
       end
     end

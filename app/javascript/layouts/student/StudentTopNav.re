@@ -81,18 +81,11 @@ let headerLinks = (links, isLoggedIn) => {
                   className="student-navbar__notifications-unread-bullet absolute block h-3 w-3 rounded-full border-2 border-white bg-red-500"
                 />
               </div>
-              <button
-                className="md:ml-2 h-10 w-10 rounded-full border border-gray-300 hover:border-primary-500">
-                <img
-                  className="inline-block object-contain rounded-full"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt="user_name"
-                />
-              </button>
+              <StudentTopNav__UserControls />
             </div>
           : React.null,
       ])
-    ->List.append([isLoggedIn ? signOutLink() : signInLink()])
+    ->List.append([ReactUtils.nullIf(signInLink(), isLoggedIn)])
     |> Array.of_list
     |> ReasonReact.array
   };

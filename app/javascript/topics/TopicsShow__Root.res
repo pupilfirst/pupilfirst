@@ -34,6 +34,7 @@ type action =
   | ShowTopicEditor(bool)
   | UpdateSavingTopic(bool)
   | MarkReplyAsSolution(string)
+  | UnmarkReplyAsSolution
   | StartChangingLockStatus
   | FinishLockingTopic(string)
   | FinishUnlockingTopic
@@ -103,6 +104,10 @@ let reducer = (state, action) =>
   | MarkReplyAsSolution(postId) => {
       ...state,
       replies: state.replies |> Post.markAsSolution(postId),
+    }
+  | UnmarkReplyAsSolution => {
+      ...state,
+      replies: state.replies->Post.unmarkSolution,
     }
   | UpdateTopicCategory(topicCategory) => {...state, topicCategory: topicCategory}
   | StartChangingLockStatus => {...state, changingLockedStatus: true}
@@ -288,6 +293,11 @@ let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategori
   }
 }
 
+let topicSolutionId = replies => {
+  let topicSolution = replies |> Js.Array.filter(reply => Post.solution(reply))
+  topicSolution |> ArrayUtils.isNotEmpty ? Some(topicSolution[0]->Post.id) : None
+}
+
 @react.component
 let make = (
   ~topic,
@@ -431,28 +441,24 @@ let make = (
                 | None => React.null
                 }}
               </div>}
-          {
-            let topicSolution = state.replies |> Js.Array.filter(reply => Post.solution(reply))
-            let topicSolutionId =
-              topicSolution |> ArrayUtils.isNotEmpty ? Some(topicSolution[0]->Post.id) : None
-            <TopicsShow__PostShow
-              key={Post.id(state.firstPost)}
-              post=state.firstPost
-              topic=state.topic
-              users
-              posts=state.replies
-              currentUserId
-              moderator
-              isTopicCreator={isTopicCreator(firstPost, currentUserId)}
-              updatePostCB={updateFirstPost(send)}
-              addNewReplyCB={addNewReply(send, None)}
-              addPostLikeCB={() => send(LikeFirstPost)}
-              removePostLikeCB={() => send(RemoveLikeFromFirstPost)}
-              markPostAsSolutionCB={() => ()}
-              archivePostCB={() => archiveTopic(community)}
-              topicSolutionId
-            />
-          }
+          {<TopicsShow__PostShow
+            key={Post.id(state.firstPost)}
+            post=state.firstPost
+            topic=state.topic
+            users
+            posts=state.replies
+            currentUserId
+            moderator
+            isTopicCreator={isTopicCreator(firstPost, currentUserId)}
+            updatePostCB={updateFirstPost(send)}
+            addNewReplyCB={addNewReply(send, None)}
+            addPostLikeCB={() => send(LikeFirstPost)}
+            removePostLikeCB={() => send(RemoveLikeFromFirstPost)}
+            markPostAsSolutionCB={() => ()}
+            unmarkPostAsSolutionCB={() => ()}
+            archivePostCB={() => archiveTopic(community)}
+            topicSolutionId={topicSolutionId(state.replies)}
+          />}
         </div>
         <h5 className="pt-4 pb-2 lg:ml-14 border-b">
           {Inflector.pluralize(
@@ -477,10 +483,11 @@ let make = (
               updatePostCB={updateReply(send)}
               addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
               markPostAsSolutionCB={() => send(MarkReplyAsSolution(Post.id(reply)))}
+              unmarkPostAsSolutionCB={() => send(UnmarkReplyAsSolution)}
               removePostLikeCB={() => send(RemoveLikeFromReply(reply))}
               addPostLikeCB={() => send(LikeReply(reply))}
               archivePostCB={() => send(ArchivePost(Post.id(reply)))}
-              topicSolutionId=None
+              topicSolutionId={topicSolutionId(state.replies)}
             />
           </div>
         )

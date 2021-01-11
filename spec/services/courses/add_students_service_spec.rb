@@ -55,10 +55,10 @@ describe Courses::AddStudentsService do
       let(:name) { Faker::Name.name }
       let(:title) { Faker::Job.title }
       let(:affiliation) { Faker::Company.name }
-      let!(:user) { create :user, name: name, title: title, affiliation: affiliation }
+      let!(:user) { create :user, name: name, email: 'user@example.com', title: title, affiliation: affiliation }
 
       it 'onboards the student without altering their name, title or affiliation' do
-        students_data = [OpenStruct.new(name: Faker::Name.name, email: user.email)]
+        students_data = [OpenStruct.new(name: Faker::Name.name, email: 'User@example.com')]
 
         expect { subject.add(students_data) }.to change { course.founders.count }.by(1)
         expect(user.reload.name).to eq(name)

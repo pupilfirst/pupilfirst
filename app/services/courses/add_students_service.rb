@@ -68,7 +68,8 @@ module Courses
 
     def create_new_student(student)
       # Create a user and generate a login token.
-      user = User.where(email: student.email, school: school).first_or_create!
+      user = school.users.with_email(student.email).first
+      user = school.users.create!(email: student.email) if user.blank?
 
       user.regenerate_login_token if user.login_token.blank?
 

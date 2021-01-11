@@ -69,9 +69,8 @@ let headerLinks = (links, isLoggedIn, user) => {
       ])
     ->List.append([
         isLoggedIn
-          ? <div className="relative flex" key="user-controls">
+          ? <div className="relative flex" key="notifications">
               <Notifications__Root
-                key="notifications"
                 wrapperClasses="md:ml-1 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0 rounded-lg hover:bg-gray-200"
                 buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center p-4 md:px-3 md:py-2"
                 icon="if i-bell-regular text-xl"
@@ -83,7 +82,9 @@ let headerLinks = (links, isLoggedIn, user) => {
           : React.null,
       ])
     ->List.append([
-        isLoggedIn ? <StudentTopNav__UserControls user /> : signInLink(),
+        isLoggedIn
+          ? <StudentTopNav__UserControls user key="user-controls" />
+          : signInLink(),
       ])
     |> Array.of_list
     |> ReasonReact.array

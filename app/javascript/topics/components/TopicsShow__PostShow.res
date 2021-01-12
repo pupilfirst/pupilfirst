@@ -73,26 +73,28 @@ let archivePost = (isFirstPost, postId, archivePostCB) =>
     : ()
 
 let solutionIcon = (userCanUnmarkSolution, unmarkPostAsSolutionCB, postId) => {
-  let icon =
-    <div
-      ariaLabel="Marked as solution icon"
-      onClick={_ =>
-        userCanUnmarkSolution ? unmarkPostAsSolution(postId, unmarkPostAsSolutionCB) : ()}
-      className={"flex lg:flex-col items-center px-2 lg:pl-0 lg:pr-4 bg-green-200 lg:bg-transparent rounded md:mt-4 " ++ (
-        userCanUnmarkSolution ? "cursor-pointer" : ""
-      )}>
-      <div
-        className={"flex items-center justify-center pr-2 pl-0 py-2 md:p-3 bg-green-200 text-green-800 rounded-full " ++ (
-          userCanUnmarkSolution ? "hover:bg-gray-200 hover:text-gray-700" : ""
-        )}>
-        <PfIcon className="if i-check-solid text-sm lg:text-base" />
-      </div>
-      <div className={"text-xs lg:text-tiny font-semibold text-green-800 lg:pt-1 "}>
-        {t("solution_icon_label") |> str}
-      </div>
-    </div>
   let tip = <div className="text-center"> {"Unmark as solution" |> str} </div>
-  userCanUnmarkSolution ? <Tooltip tip position=#Top> icon </Tooltip> : icon
+  let solutionIcon =
+    <div
+      className={"flex items-center justify-center pr-2 pl-0 py-2 md:p-3 bg-green-200 text-green-800 rounded-full " ++ (
+        userCanUnmarkSolution ? "hover:bg-gray-200 hover:text-gray-700" : ""
+      )}>
+      <PfIcon className="if i-check-solid text-sm lg:text-base" />
+    </div>
+  let iconWithTip = userCanUnmarkSolution
+    ? <Tooltip tip position=#Top> solutionIcon </Tooltip>
+    : solutionIcon
+  <div
+    ariaLabel="Marked as solution icon"
+    onClick={_ => userCanUnmarkSolution ? unmarkPostAsSolution(postId, unmarkPostAsSolutionCB) : ()}
+    className={"flex lg:flex-col items-center px-2 lg:pl-0 lg:pr-4 bg-green-200 lg:bg-transparent rounded md:mt-4 " ++ (
+      userCanUnmarkSolution ? "cursor-pointer" : ""
+    )}>
+    {iconWithTip}
+    <div className={"text-xs lg:text-tiny font-semibold text-green-800 lg:pt-1 "}>
+      {t("solution_icon_label") |> str}
+    </div>
+  </div>
 }
 
 let optionsDropdown = (

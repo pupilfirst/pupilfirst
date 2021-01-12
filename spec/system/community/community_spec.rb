@@ -208,12 +208,12 @@ feature 'Community', js: true do
     expect(page).to have_text('This is a reply to another post', count: 2)
 
     # can like and unlike a reply
-    find("div[aria-label='Like post #{reply_1.id}']").click
-    expect(page).to have_selector("div[aria-label='Unlike post #{reply_1.id}']")
+    find("button[aria-label='Like post #{reply_1.id}']").click
+    expect(page).to have_selector("button[aria-label='Unlike post #{reply_1.id}']")
     expect(reply_1.post_likes.where(user: student_2.user).count).to eq(1)
 
-    find("div[aria-label='Unlike post #{reply_1.id}']").click
-    expect(page).to have_selector("div[aria-label='Like post #{reply_1.id}']")
+    find("button[aria-label='Unlike post #{reply_1.id}']").click
+    expect(page).to have_selector("button[aria-label='Like post #{reply_1.id}']")
     expect(reply_1.post_likes.where(user: student_2.user).count).to eq(0)
   end
 
@@ -448,8 +448,8 @@ feature 'Community', js: true do
       expect(page).to have_text(reply_1.body)
 
       # Like a post.
-      find("div[aria-label='Like post #{topic_1.first_post.id}']").click
-      expect(page).to have_selector("div[aria-label='Unlike post #{topic_1.first_post.id}']")
+      find("button[aria-label='Like post #{topic_1.first_post.id}']").click
+      expect(page).to have_selector("button[aria-label='Unlike post #{topic_1.first_post.id}']")
 
       # Edit a post.
       find("div[aria-label='Options for post #{topic_1.first_post.id}']").click

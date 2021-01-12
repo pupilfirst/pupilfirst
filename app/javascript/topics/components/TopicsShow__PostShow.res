@@ -72,23 +72,28 @@ let archivePost = (isFirstPost, postId, archivePostCB) =>
       |> ignore
     : ()
 
-let solutionIcon = (userCanUnmarkSolution, unmarkPostAsSolutionCB, postId) =>
-  <div
-    ariaLabel="Marked as solution icon"
-    onClick={_ => userCanUnmarkSolution ? unmarkPostAsSolution(postId, unmarkPostAsSolutionCB) : ()}
-    className={"flex lg:flex-col items-center px-2 lg:pl-0 lg:pr-4 bg-green-200 lg:bg-transparent rounded md:mt-4 " ++ (
-      userCanUnmarkSolution ? "cursor-pointer" : ""
-    )}>
+let solutionIcon = (userCanUnmarkSolution, unmarkPostAsSolutionCB, postId) => {
+  let icon =
     <div
-      className={"flex items-center justify-center pr-2 pl-0 py-2 md:p-3 bg-green-200 text-green-800 rounded-full " ++ (
-        userCanUnmarkSolution ? "hover:bg-gray-200 hover:text-gray-700" : ""
+      ariaLabel="Marked as solution icon"
+      onClick={_ =>
+        userCanUnmarkSolution ? unmarkPostAsSolution(postId, unmarkPostAsSolutionCB) : ()}
+      className={"flex lg:flex-col items-center px-2 lg:pl-0 lg:pr-4 bg-green-200 lg:bg-transparent rounded md:mt-4 " ++ (
+        userCanUnmarkSolution ? "cursor-pointer" : ""
       )}>
-      <PfIcon className="if i-check-solid text-sm lg:text-base" />
+      <div
+        className={"flex items-center justify-center pr-2 pl-0 py-2 md:p-3 bg-green-200 text-green-800 rounded-full " ++ (
+          userCanUnmarkSolution ? "hover:bg-gray-200 hover:text-gray-700" : ""
+        )}>
+        <PfIcon className="if i-check-solid text-sm lg:text-base" />
+      </div>
+      <div className={"text-xs lg:text-tiny font-semibold text-green-800 lg:pt-1 "}>
+        {t("solution_icon_label") |> str}
+      </div>
     </div>
-    <div className={"text-xs lg:text-tiny font-semibold text-green-800 lg:pt-1 "}>
-      {t("solution_icon_label") |> str}
-    </div>
-  </div>
+  let tip = <div className="text-center"> {"Unmark as solution" |> str} </div>
+  userCanUnmarkSolution ? <Tooltip tip position=#Top> icon </Tooltip> : icon
+}
 
 let optionsDropdown = (
   post,
@@ -197,7 +202,6 @@ let make = (
   let (showPostEdit, toggleShowPostEdit) = React.useState(() => false)
   let (showReplies, toggleShowReplies) = React.useState(() => false)
   let userCanUnmarkSolution = moderator || isTopicCreator
-  let tip = <div className="text-center"> {"Mark as solution" |> str} </div>
 
   <div id={"post-show-" ++ Post.id(post)} onAnimationEnd=onBorderAnimationEnd>
     <div className="flex pt-4" key={post |> Post.id}>
@@ -207,17 +211,20 @@ let make = (
           ? solutionIcon(userCanUnmarkSolution, unmarkPostAsSolutionCB, Post.id(post))
           : React.null}
         {ReactUtils.nullUnless(
-          <div
-            className="hidden md:flex md:flex-col items-center text-center md:w-14 pr-3 md:pr-4 md:mt-4">
-            <Tooltip tip position=#Top>
-              <button
-                ariaLabel="Mark as solution"
-                onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
-                className="mark-as-solution__button bg-gray-100 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-200 text-gray-700">
-                <PfIcon className="if i-check-solid text-sm lg:text-base" />
-              </button>
-            </Tooltip>
-          </div>,
+          {
+            let tip = <div className="text-center"> {"Mark as solution" |> str} </div>
+            <div
+              className="hidden md:flex md:flex-col items-center text-center md:w-14 pr-3 md:pr-4 md:mt-4">
+              <Tooltip tip position=#Top>
+                <button
+                  ariaLabel="Mark as solution"
+                  onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
+                  className="mark-as-solution__button bg-gray-100 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-200 text-gray-700">
+                  <PfIcon className="if i-check-solid text-sm lg:text-base" />
+                </button>
+              </Tooltip>
+            </div>
+          },
           {
             (moderator || isTopicCreator) &&
             !(isFirstPost || Post.solution(post)) &&

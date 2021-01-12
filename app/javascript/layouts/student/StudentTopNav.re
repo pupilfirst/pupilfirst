@@ -45,6 +45,20 @@ let signInLink = () =>
       </a>
     </div>
   </div>;
+
+let notificationButton = () => {
+  <div className="relative flex" key="notifications">
+    <Notifications__Root
+      wrapperClasses="md:ml-1 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0 rounded-lg hover:bg-gray-200"
+      buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center p-4 md:px-3 md:py-2"
+      icon="if i-bell-regular text-xl"
+    />
+    <span
+      className="student-navbar__notifications-unread-bullet absolute block h-3 w-3 rounded-full border-2 border-white bg-red-500"
+    />
+  </div>;
+};
+
 let isMobile = () => Webapi.Dom.window |> Webapi.Dom.Window.innerWidth < 768;
 
 let headerLinks = (links, isLoggedIn, user) => {
@@ -68,23 +82,19 @@ let headerLinks = (links, isLoggedIn, user) => {
         <StudentTopNav__DropDown links=dropdownLinks key="more-links" />,
       ])
     ->List.append([
-        isLoggedIn
-          ? <div className="relative flex" key="notifications">
-              <Notifications__Root
-                wrapperClasses="md:ml-1 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0 rounded-lg hover:bg-gray-200"
-                buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center p-4 md:px-3 md:py-2"
-                icon="if i-bell-regular text-xl"
-              />
-              <span
-                className="student-navbar__notifications-unread-bullet absolute block h-3 w-3 rounded-full border-2 border-white bg-red-500"
-              />
-            </div>
-          : React.null,
+        ReactUtils.nullUnless(
+          notificationButton(),
+          isLoggedIn && !isMobile(),
+        ),
       ])
     ->List.append([
-        isLoggedIn
-          ? <StudentTopNav__UserControls user key="user-controls" />
-          : signInLink(),
+        switch (isLoggedIn, isMobile()) {
+        | (true, true) => signOutLink()
+        | (true, false) =>
+          <StudentTopNav__UserControls user key="user-controls" />
+        | (false, true)
+        | (false, false) => signInLink()
+        },
       ])
     |> Array.of_list
     |> ReasonReact.array
@@ -123,8 +133,10 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser) => {
                </div>
              }}
           </a>
-          {isMobile()
-             ? <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
+          {ReactUtils.nullUnless(
+             <div className="flex items-center">
+               {notificationButton()}
+               <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
                  <div
                    className={
                      "student-navbar__menu-btn w-8 h-8 text-center relative focus:outline-none rounded-full "
@@ -135,7 +147,9 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser) => {
                    </span>
                  </div>
                </div>
-             : React.null}
+             </div>,
+             isMobile(),
+           )}
         </div>
         {!menuHidden && !isMobile()
            ? <div

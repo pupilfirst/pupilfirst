@@ -107,7 +107,7 @@ let reducer = (state, action) =>
     }
   | UnmarkReplyAsSolution => {
       ...state,
-      replies: state.replies->Post.unmarkSolution,
+      replies: Post.unmarkSolution(state.replies),
     }
   | UpdateTopicCategory(topicCategory) => {...state, topicCategory: topicCategory}
   | StartChangingLockStatus => {...state, changingLockedStatus: true}
@@ -294,8 +294,7 @@ let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategori
 }
 
 let topicSolutionId = replies => {
-  let topicSolution = replies |> Js.Array.filter(reply => Post.solution(reply))
-  topicSolution |> ArrayUtils.isNotEmpty ? Some(topicSolution[0]->Post.id) : None
+  Js.Array.find(Post.solution, replies)->Belt.Option.map(Post.id)
 }
 
 @react.component

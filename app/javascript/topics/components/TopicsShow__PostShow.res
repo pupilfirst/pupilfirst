@@ -131,7 +131,7 @@ let optionsDropdown = (
         className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
         <FaIcon classes="fas fa-trash-alt fa-fw text-base" />
         <span className="ml-2">
-          {(isFirstPost ? t("delete_post_string") : t("delete_reply_string")) |> str}
+          {(isFirstPost ? t("delete_topic_string") : t("delete_reply_string")) |> str}
         </span>
       </button>
     : React.null

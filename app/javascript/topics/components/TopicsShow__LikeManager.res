@@ -2,6 +2,8 @@ open TopicsShow__Types
 
 let str = React.string
 
+let t = I18n.t(~scope="components.TopicsShow__LikeManager")
+
 module CreatePostLikeQuery = %graphql(
   `
   mutation CreatePostLikeMutation($postId: ID!) {
@@ -92,7 +94,7 @@ let handleCreateResponse = (setSaving, addLikeCB) => {
 let make = (~post, ~addPostLikeCB, ~removePostLikeCB) => {
   let (saving, setSaving) = React.useState(() => false)
   let liked = Post.likedByUser(post)
-  let tip = <div className="text-center"> {"Like this post" |> str} </div>
+  let tip = <div className="text-center"> {t("like_button_tooltip") |> str} </div>
 
   <div className="flex flex-row-reverse md:flex-row">
     <div className="text-center pr-4 md:pt-4">

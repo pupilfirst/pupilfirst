@@ -1,4 +1,4 @@
-class RemoveUnusedFieldsFromStartup < ActiveRecord::Migration
+class RemoveUnusedFieldsFromStartup < ActiveRecord::Migration[4.2]
   def up
     remove_columns :startups, :pre_investers_name, :pre_funds, :startup_before, :company_names, :dsc, :bank_status
     remove_columns :startups, :police_station, :moa, :authorized_capital, :share_holding_pattern, :help_from_sv

@@ -1,4 +1,4 @@
-class ChangeAndRenameShortDescription < ActiveRecord::Migration
+class ChangeAndRenameShortDescription < ActiveRecord::Migration[4.2]
   def self.up
     change_column :target_templates, :short_description, :text
     rename_column :target_templates, :short_description, :description

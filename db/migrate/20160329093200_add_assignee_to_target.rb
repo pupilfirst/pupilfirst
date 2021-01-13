@@ -1,4 +1,4 @@
-class AddAssigneeToTarget < ActiveRecord::Migration
+class AddAssigneeToTarget < ActiveRecord::Migration[4.2]
   def change
     add_column :targets, :assignee_id, :integer
     add_column :targets, :assignee_type, :string

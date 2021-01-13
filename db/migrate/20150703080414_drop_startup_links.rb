@@ -1,4 +1,4 @@
-class DropStartupLinks < ActiveRecord::Migration
+class DropStartupLinks < ActiveRecord::Migration[4.2]
   def up
     drop_table :startup_links
   end

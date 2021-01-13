@@ -1,4 +1,4 @@
-class DropTableNews < ActiveRecord::Migration
+class DropTableNews < ActiveRecord::Migration[4.2]
   def up
     drop_table :news
   end

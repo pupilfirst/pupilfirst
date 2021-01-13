@@ -1,4 +1,4 @@
-class CreateTimelineEventFiles < ActiveRecord::Migration
+class CreateTimelineEventFiles < ActiveRecord::Migration[4.2]
   def change
     create_table :timeline_event_files do |t|
       t.references :timeline_event, index: true, foreign_key: true

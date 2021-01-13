@@ -1,4 +1,4 @@
-class AddCompanyAndDesignationToUsers < ActiveRecord::Migration
+class AddCompanyAndDesignationToUsers < ActiveRecord::Migration[4.2]
   def change
     add_column :users, :company, :string
     add_column :users, :designation, :string

@@ -1,4 +1,4 @@
-class CreateStartupFeedbacks < ActiveRecord::Migration
+class CreateStartupFeedbacks < ActiveRecord::Migration[4.2]
   def change
     create_table :startup_feedbacks do |t|
       t.text :feedback

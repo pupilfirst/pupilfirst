@@ -1,4 +1,4 @@
-class CreateTimelineEventTypes < ActiveRecord::Migration
+class CreateTimelineEventTypes < ActiveRecord::Migration[4.2]
   def change
     create_table :timeline_event_types do |t|
       t.string :key

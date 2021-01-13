@@ -1,4 +1,4 @@
-class CreateCategoriesContacts < ActiveRecord::Migration
+class CreateCategoriesContacts < ActiveRecord::Migration[4.2]
   def change
     create_table :categories_contacts, id: false do |t|
       t.belongs_to :category

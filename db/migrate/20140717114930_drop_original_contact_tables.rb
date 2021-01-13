@@ -1,4 +1,4 @@
-class DropOriginalContactTables < ActiveRecord::Migration
+class DropOriginalContactTables < ActiveRecord::Migration[4.2]
   def up
     drop_table :contacts
     drop_table :contact_shares

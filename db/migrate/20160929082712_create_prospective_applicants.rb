@@ -1,4 +1,4 @@
-class CreateProspectiveApplicants < ActiveRecord::Migration
+class CreateProspectiveApplicants < ActiveRecord::Migration[4.2]
   def change
     create_table :prospective_applicants do |t|
       t.string :name

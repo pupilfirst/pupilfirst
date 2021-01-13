@@ -1,4 +1,4 @@
-class CreateGlossaries < ActiveRecord::Migration
+class CreateGlossaries < ActiveRecord::Migration[4.2]
   def change
     create_table :glossaries do |t|
       t.string :term

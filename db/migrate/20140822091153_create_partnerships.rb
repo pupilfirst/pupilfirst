@@ -1,4 +1,4 @@
-class CreatePartnerships < ActiveRecord::Migration
+class CreatePartnerships < ActiveRecord::Migration[4.2]
   def change
     create_table :partnerships do |t|
       t.references :user, index: true

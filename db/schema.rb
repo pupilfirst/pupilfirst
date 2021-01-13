@@ -14,7 +14,6 @@ ActiveRecord::Schema.define(version: 2020_11_23_180238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
-  enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
@@ -204,11 +203,6 @@ ActiveRecord::Schema.define(version: 2020_11_23_180238) do
     t.string "progression_behavior", null: false
     t.integer "progression_limit"
     t.index ["school_id"], name: "index_courses_on_school_id"
-  end
-
-  create_table "data_migrations", id: false, force: :cascade do |t|
-    t.string "version", null: false
-    t.index ["version"], name: "unique_data_migrations", unique: true
   end
 
   create_table "delayed_jobs", id: :serial, force: :cascade do |t|
@@ -493,10 +487,10 @@ ActiveRecord::Schema.define(version: 2020_11_23_180238) do
 
   create_table "taggings", id: :serial, force: :cascade do |t|
     t.integer "tag_id"
-    t.integer "taggable_id"
     t.string "taggable_type"
-    t.integer "tagger_id"
+    t.integer "taggable_id"
     t.string "tagger_type"
+    t.integer "tagger_id"
     t.string "context", limit: 128
     t.datetime "created_at"
     t.index ["context"], name: "index_taggings_on_context"
@@ -653,8 +647,8 @@ ActiveRecord::Schema.define(version: 2020_11_23_180238) do
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "views", default: 0
     t.bigint "topic_category_id"
+    t.integer "views", default: 0
     t.datetime "locked_at"
     t.bigint "locked_by_id"
     t.index ["community_id"], name: "index_topics_on_community_id"
@@ -681,9 +675,9 @@ ActiveRecord::Schema.define(version: 2020_11_23_180238) do
     t.string "title"
     t.text "about"
     t.bigint "school_id"
-    t.jsonb "preferences", default: {"daily_digest"=>true}, null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
+    t.jsonb "preferences", default: {"daily_digest"=>true}, null: false
     t.string "affiliation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

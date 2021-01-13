@@ -1,4 +1,4 @@
-class AddLocationToUniversities < ActiveRecord::Migration
+class AddLocationToUniversities < ActiveRecord::Migration[4.2]
   def change
     add_column :universities, :location, :string
   end

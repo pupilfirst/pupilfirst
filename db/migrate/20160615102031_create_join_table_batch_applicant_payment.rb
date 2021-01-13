@@ -1,4 +1,4 @@
-class CreateJoinTableBatchApplicantPayment < ActiveRecord::Migration
+class CreateJoinTableBatchApplicantPayment < ActiveRecord::Migration[4.2]
   def change
     create_join_table :batch_applicants, :payments do |t|
       t.index [:batch_applicant_id, :payment_id], name: 'idx_applicants_payments_on_applicant_id_and_payment_id'

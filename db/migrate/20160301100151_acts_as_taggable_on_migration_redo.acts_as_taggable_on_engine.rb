@@ -1,5 +1,5 @@
 # This migration comes from acts_as_taggable_on_engine (originally 1)
-class ActsAsTaggableOnMigrationRedo < ActiveRecord::Migration
+class ActsAsTaggableOnMigrationRedo < ActiveRecord::Migration[4.2]
   def self.up
     create_table :tags do |t|
       t.string :name

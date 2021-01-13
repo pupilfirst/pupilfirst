@@ -1,4 +1,4 @@
-class CreateApplicationSubmissionUrls < ActiveRecord::Migration
+class CreateApplicationSubmissionUrls < ActiveRecord::Migration[4.2]
   def change
     create_table :application_submission_urls do |t|
       t.string :name

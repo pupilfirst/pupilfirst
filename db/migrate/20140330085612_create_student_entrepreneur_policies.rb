@@ -1,4 +1,4 @@
-class CreateStudentEntrepreneurPolicies < ActiveRecord::Migration
+class CreateStudentEntrepreneurPolicies < ActiveRecord::Migration[4.2]
   def change
     create_table :student_entrepreneur_policies do |t|
       t.string :certificate_pic

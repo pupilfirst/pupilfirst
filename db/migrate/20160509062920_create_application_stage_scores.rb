@@ -1,4 +1,4 @@
-class CreateApplicationStageScores < ActiveRecord::Migration
+class CreateApplicationStageScores < ActiveRecord::Migration[4.2]
   def change
     create_table :application_stage_scores do |t|
       t.references :application_stage, index: true

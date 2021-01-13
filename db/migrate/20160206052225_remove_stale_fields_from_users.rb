@@ -1,4 +1,4 @@
-class RemoveStaleFieldsFromUsers < ActiveRecord::Migration
+class RemoveStaleFieldsFromUsers < ActiveRecord::Migration[4.2]
   def change
     remove_column :users, :din, :string
     remove_column :users, :aadhaar, :string

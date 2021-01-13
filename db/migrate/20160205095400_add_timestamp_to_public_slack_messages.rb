@@ -1,4 +1,4 @@
-class AddTimestampToPublicSlackMessages < ActiveRecord::Migration
+class AddTimestampToPublicSlackMessages < ActiveRecord::Migration[4.2]
   def change
     add_column :public_slack_messages, :timestamp, :string
   end

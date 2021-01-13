@@ -1,4 +1,4 @@
-class CreateMoocStudents < ActiveRecord::Migration
+class CreateMoocStudents < ActiveRecord::Migration[4.2]
   def change
     create_table :mooc_students do |t|
       t.string :email

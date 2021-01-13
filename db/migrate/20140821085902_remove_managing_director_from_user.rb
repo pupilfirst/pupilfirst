@@ -1,4 +1,4 @@
-class RemoveManagingDirectorFromUser < ActiveRecord::Migration
+class RemoveManagingDirectorFromUser < ActiveRecord::Migration[4.2]
   def up
     remove_column :users, :managing_director
   end

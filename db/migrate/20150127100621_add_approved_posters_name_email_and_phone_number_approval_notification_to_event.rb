@@ -1,4 +1,4 @@
-class AddApprovedPostersNameEmailAndPhoneNumberApprovalNotificationToEvent < ActiveRecord::Migration
+class AddApprovedPostersNameEmailAndPhoneNumberApprovalNotificationToEvent < ActiveRecord::Migration[4.2]
   def change
   	add_column :events, :approved, :boolean, default: false
     add_column :events, :posters_name, :string

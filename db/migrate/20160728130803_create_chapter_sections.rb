@@ -1,4 +1,4 @@
-class CreateChapterSections < ActiveRecord::Migration
+class CreateChapterSections < ActiveRecord::Migration[4.2]
   def change
     create_table :chapter_sections do |t|
       t.integer :course_chapter_id

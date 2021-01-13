@@ -1,4 +1,4 @@
-class CreateStartups < ActiveRecord::Migration
+class CreateStartups < ActiveRecord::Migration[4.2]
   def change
     create_table :startups do |t|
       t.string :name

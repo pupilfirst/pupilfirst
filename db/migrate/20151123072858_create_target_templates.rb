@@ -1,4 +1,4 @@
-class CreateTargetTemplates < ActiveRecord::Migration
+class CreateTargetTemplates < ActiveRecord::Migration[4.2]
   def change
     create_table :target_templates do |t|
       t.integer :days_from_start

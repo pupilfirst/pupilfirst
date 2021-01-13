@@ -1,4 +1,4 @@
-class CreateStartupJobs < ActiveRecord::Migration
+class CreateStartupJobs < ActiveRecord::Migration[4.2]
   def change
     create_table :startup_jobs do |t|
       t.references :startup, index: true

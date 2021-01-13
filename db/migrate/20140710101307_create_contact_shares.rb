@@ -1,4 +1,4 @@
-class CreateContactShares < ActiveRecord::Migration
+class CreateContactShares < ActiveRecord::Migration[4.2]
   def change
     create_table :contact_shares do |t|
       t.integer :contact_id

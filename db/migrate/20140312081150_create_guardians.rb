@@ -1,4 +1,4 @@
-class CreateGuardians < ActiveRecord::Migration
+class CreateGuardians < ActiveRecord::Migration[4.2]
   def change
     create_table :guardians do |t|
       t.references :name, index: true

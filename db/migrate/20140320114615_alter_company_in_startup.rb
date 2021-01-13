@@ -1,4 +1,4 @@
-class AlterCompanyInStartup < ActiveRecord::Migration
+class AlterCompanyInStartup < ActiveRecord::Migration[4.2]
   def self.up
     remove_column(:startups, :company)
     add_column(:startups, :company_names, :text)

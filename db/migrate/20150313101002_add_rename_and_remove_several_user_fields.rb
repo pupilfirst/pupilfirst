@@ -1,4 +1,4 @@
-class AddRenameAndRemoveSeveralUserFields < ActiveRecord::Migration
+class AddRenameAndRemoveSeveralUserFields < ActiveRecord::Migration[4.2]
   def change
     add_column :users, :district, :string
     add_column :users, :state, :string

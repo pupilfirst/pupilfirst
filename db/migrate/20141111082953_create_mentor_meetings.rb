@@ -1,4 +1,4 @@
-class CreateMentorMeetings < ActiveRecord::Migration
+class CreateMentorMeetings < ActiveRecord::Migration[4.2]
   def change
     create_table :mentor_meetings do |t|
       t.references :user, index: true

@@ -1,4 +1,4 @@
-class AddPartnershipFieldsToUser < ActiveRecord::Migration
+class AddPartnershipFieldsToUser < ActiveRecord::Migration[4.2]
   def change
     add_column :users, :managing_director, :boolean, default: false
     add_column :users, :operate_bank_account, :boolean, default: false

@@ -1,4 +1,4 @@
-class RenameUserIdsToFounderIds < ActiveRecord::Migration
+class RenameUserIdsToFounderIds < ActiveRecord::Migration[4.2]
   def change
     rename_column :karma_points, :user_id, :founder_id
     rename_column :public_slack_messages, :user_id, :founder_id

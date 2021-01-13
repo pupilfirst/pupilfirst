@@ -1,4 +1,4 @@
-class AddSourceIdToKarmaPoint < ActiveRecord::Migration
+class AddSourceIdToKarmaPoint < ActiveRecord::Migration[4.2]
   def change
     add_column :karma_points, :source_id, :integer
     add_index :karma_points, :source_id

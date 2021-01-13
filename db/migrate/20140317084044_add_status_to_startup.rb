@@ -1,4 +1,4 @@
-class AddStatusToStartup < ActiveRecord::Migration
+class AddStatusToStartup < ActiveRecord::Migration[4.2]
   def change
     add_column :startups, :approval_status, :boolean, default: false
     add_column :startups, :incorporation_status, :boolean, default: false

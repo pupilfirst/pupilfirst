@@ -1,4 +1,4 @@
-class CreateMentor < ActiveRecord::Migration
+class CreateMentor < ActiveRecord::Migration[4.2]
   def change
     create_table :mentors do |t|
       t.references :user

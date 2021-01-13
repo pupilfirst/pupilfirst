@@ -1,4 +1,4 @@
-class AddTrigramExtToDb < ActiveRecord::Migration
+class AddTrigramExtToDb < ActiveRecord::Migration[4.2]
   def up
     ActiveRecord::Base.connection.execute("CREATE EXTENSION pg_trgm;")
   end

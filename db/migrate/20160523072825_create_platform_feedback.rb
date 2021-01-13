@@ -1,4 +1,4 @@
-class CreatePlatformFeedback < ActiveRecord::Migration
+class CreatePlatformFeedback < ActiveRecord::Migration[4.2]
   def change
     create_table :platform_feedback do |t|
       t.string :type

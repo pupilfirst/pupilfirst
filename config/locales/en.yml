@@ -199,7 +199,7 @@ en:
       delete_post_confirm_dialog: "Are you sure you want to delete the post? This cannot be undone."
       edit_post_string: Edit Post
       edit_reply_string: Edit Reply
-      delete_post_string: Delete Post
+      delete_topic_string: Delete Topic
       delete_reply_string: Delete Reply
       history_button_text: History
       mark_as_solution_label: Mark as solution
@@ -207,6 +207,8 @@ en:
       new_reply_button: Reply
       go_to_solution_button: Go to solution
       last_edited_by_label: "Last edited by "
+    TopicsShow__LikeManager:
+      like_button_tooltip: Like this post
   jobs:
     timeline_events:
       verification_notification:

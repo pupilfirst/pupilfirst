@@ -261,7 +261,7 @@ feature 'Community', js: true do
     expect(page).to have_text('Edit Topic')
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
     expect(page).to have_text('Edit Post')
-    expect(page).to have_text('Delete Post')
+    expect(page).to have_text('Delete Topic')
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
 
     # Faculty can edit or delete replies
@@ -317,7 +317,7 @@ feature 'Community', js: true do
 
     # When the topic has a reply, the first post won't have the delete option.
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
-    expect(page).not_to have_button('Delete Post')
+    expect(page).not_to have_button('Delete Topic')
 
     # So, let's delete the sole reply.
     find("div[aria-label='Options for post #{reply_1.id}']").click
@@ -328,7 +328,7 @@ feature 'Community', js: true do
 
     # This should make the delete option visible on the first post.
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
-    accept_confirm { click_button('Delete Post') }
+    accept_confirm { click_button('Delete Topic') }
 
     # Student should be back on the community main page.
     expect(page).to have_text(topic_2.title)

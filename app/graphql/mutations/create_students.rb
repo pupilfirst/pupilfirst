@@ -1,6 +1,8 @@
 module Mutations
   class CreateStudents < GraphQL::Schema::Mutation
+    argument :course_id, ID, required: true
     argument :students, [Types::StudentEnrollmentInputType], required: true
+    argument :notify_students, Boolean, required: true
 
     description 'Add one or more students to a course'
 

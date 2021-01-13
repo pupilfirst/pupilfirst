@@ -25,9 +25,9 @@ module Courses
         new_student_tags = new_students.map { |student| student.tags || [] }.flatten.uniq
         school.founder_tag_list << new_student_tags
         school.save!
-      end
 
-      [new_students.count, student_list.count]
+        students.map { |student| student.id }
+      end
     end
 
     private

@@ -6724,6 +6724,20 @@
             "description": "",
             "args": [
               {
+                "name": "courseId",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
                 "name": "students",
                 "description": "",
                 "type": {
@@ -6741,6 +6755,20 @@
                         "ofType": null
                       }
                     }
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "notifyStudents",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
                   }
                 },
                 "defaultValue": null
@@ -10101,20 +10129,6 @@
                     "ofType": null
                   }
                 }
-              }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "notifyStudents",
-            "description": "",
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
               }
             },
             "defaultValue": null

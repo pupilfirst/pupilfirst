@@ -2,7 +2,7 @@ let str = React.string;
 
 [@react.component]
 let make = (~wrapperClasses, ~buttonClasses, ~title=?, ~icon=?) => {
-  let (showNotifications, setShowNotifications) = React.useState(() => true);
+  let (showNotifications, setShowNotifications) = React.useState(() => false);
   <div className=wrapperClasses>
     {<EditorDrawer
        size=EditorDrawer.Small

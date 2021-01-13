@@ -197,7 +197,7 @@ let make = () => {
       state.saving,
       deleteSubscription(send),
       "bell-slash",
-      "unsubscribe",
+      "Unsubscribe",
     )
   | UnSubscribed =>
     button(state.saving, createSubscription(send), "bell", "Subscribe")

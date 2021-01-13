@@ -219,6 +219,20 @@ en:
     StudentsEditor__Search:
       filter_input_label: "Filter by:"
       filter_input_placeholder: Type name, tag or level
+    StudentsEditor__CreateForm:
+      added_full_description: All students were created successfully.
+      added_partial_title: Partially Added
+      added_partial_description: "%{students_added} of %{students_requested} students were added. Remaining students are already a part of the course."
+      added_none_title: Nothing Changed
+      added_none_description: All the students you tried to add were already a part of this course.
+      team_header_label: "TEAM %{team_name}"
+      team_header_add_more_members: Add more team members!
+      drawer_heading: Add New Students
+      teams_to_add_label: "These new students will be added to the course:"
+      teams_to_add_empty: "This list is empty! Add some students using the form above."
+      notify_students_label: "Notify students, and send them a link to sign into this school."
+      save_list_button: Save List
+
     TopicsShow__Root:
       linked_target_label: "Linked Target: "
       view_target_button: View Target

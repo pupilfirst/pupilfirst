@@ -12,7 +12,7 @@ module Mutations
       mutator = CreateStudentsMutator.new(context, params)
 
       student_ids = if mutator.valid?
-          mutator.execute
+          mutator.create_students
         else
           mutator.notify_errors
           nil

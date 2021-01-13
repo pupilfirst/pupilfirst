@@ -70,6 +70,8 @@ let markAsSolution = (replyId, replies) =>
     reply.id == replyId ? {...reply, solution: true} : {...reply, solution: false}
   )
 
+let unmarkSolution = replies => replies |> Js.Array.map(reply => {...reply, solution: false})
+
 let find = (postId, posts) =>
   posts |> ArrayUtils.unsafeFind(
     post => post.id == postId,

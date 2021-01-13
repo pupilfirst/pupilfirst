@@ -13,9 +13,9 @@ type action =
   | SetSaving(bool)
 
 let str = React.string
+let t = I18n.t(~scope="components.StudentsEditor__CreateForm")
 
-let formInvalid = state => state.teamsToAdd |> ArrayUtils.isEmpty
-let handleErrorCB = (send, ()) => send(SetSaving(false))
+let formInvalid = state => ArrayUtils.isEmpty(state.teamsToAdd)
 
 /* Get the tags applied to a list of students. */
 let appliedTags = teams =>
@@ -33,49 +33,83 @@ let appliedTags = teams =>
 let allKnownTags = (incomingTags, appliedTags) =>
   incomingTags |> Js.Array.concat(appliedTags) |> ArrayUtils.distinct
 
-let handleResponseCB = (submitCB, state, json) => {
-  let (studentsAdded, studentsRequested) = json |> {
-    open Json.Decode
-    field("studentCount", pair(int, int))
-  }
+let handleResponseCB = (submitCB, state, studentIds) => {
+  let studentsAdded = Js.Array.length(studentIds)
 
-  let tags = state.teamsToAdd |> appliedTags
-
-  submitCB(tags)
-
-  if studentsAdded == studentsRequested {
-    Notification.success("Success", "All students were created successfully.")
+  if studentsAdded == 0 {
+    Notification.notice(t("added_none_title"), t("added_none_description"))
   } else {
-    let message =
-      (studentsAdded |> string_of_int) ++
-        (" of " ++
-        ((studentsRequested |> string_of_int) ++ " students were added. Remaining students are already a part of the course."))
-    Notification.notice("Partially successful", message)
+    let studentsRequested = Js.Array.reduce(
+      (acc, team) => {acc + TeamInfo.students(team)->Js.Array.length},
+      0,
+      state.teamsToAdd,
+    )
+
+    if studentsAdded == studentsRequested {
+      Notification.success(t("done_exclamation"), t("added_full_description"))
+    } else {
+      let description = t(
+        ~variables=[
+          ("students_added", string_of_int(studentsAdded)),
+          ("students_requested", string_of_int(studentsRequested)),
+        ],
+        "added_partial_description",
+      )
+      Notification.notice(t("added_partial_title"), description)
+    }
   }
+
+  appliedTags(state.teamsToAdd)->submitCB
 }
 
-let saveStudents = (state, send, courseId, responseCB, event) => {
+module CreateStudentsQuery = %graphql(
+  `
+  mutation CreateStudentsMutation($courseId: ID!, $notifyStudents: Boolean!, $students: [StudentEnrollmentInput!]!) {
+    createStudents(courseId: $courseId, notifyStudents: $notifyStudents, students: $students) {
+      studentIds
+    }
+  }
+  `
+)
+
+let createStudents = (state, send, courseId, submitFormCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
   send(SetSaving(true))
-  let payload = Js.Dict.empty()
 
-  Js.Dict.set(payload, "authenticity_token", AuthenticityToken.fromHead() |> Js.Json.string)
+  let students = Js.Array.map(TeamInfo.toJsArray, state.teamsToAdd) |> ArrayUtils.flattenV2
+  let {notifyStudents} = state
 
-  Js.Dict.set(payload, "notify", (state.notifyStudents ? "true" : "false") |> Js.Json.string)
+  CreateStudentsQuery.make(~courseId, ~notifyStudents, ~students, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    switch response["createStudents"]["studentIds"] {
+    | Some(studentIds) => handleResponseCB(submitFormCB, state, studentIds)
+    | None => send(SetSaving(false))
+    }
 
-  Js.Dict.set(payload, "students", state.teamsToAdd |> TeamInfo.encodeArray)
-
-  let url = "/school/courses/" ++ (courseId ++ "/students")
-  Api.create(url, payload, responseCB, handleErrorCB(send))
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(error => {
+    Js.log(error)
+    Notification.error(
+      "Unexpected Error!",
+      "Our team has been notified of this failure. Please reload this page before trying to add students again.",
+    )
+    send(SetSaving(false))
+    Js.Promise.resolve()
+  })
+  |> ignore
 }
 
 let teamHeader = (teamName, studentsCount) =>
   <div className="flex justify-between mb-1">
-    <span className="text-tiny font-semibold"> <span> {"TEAM: " ++ teamName |> str} </span> </span>
+    <span className="text-tiny font-semibold">
+      <span> {t(~variables=[("team_name", teamName)], "team_header_label")->str} </span>
+    </span>
     {studentsCount < 2
       ? <span className="text-tiny">
           <i className="fas fa-exclamation-triangle text-orange-600 mr-1" />
-          {"Add more team members!" |> str}
+          {t("team_header_add_more_members")->str}
         </span>
       : React.null}
   </div>
@@ -91,7 +125,7 @@ let renderTitleAndAffiliation = (title, affiliation) => {
   switch text {
   | Some(text) =>
     <div className="flex items-center">
-      <div className="mr-1 text-xs text-gray-600"> {text |> str} </div>
+      <div className="mr-1 text-xs text-gray-600"> {str(text)} </div>
     </div>
   | None => React.null
   }
@@ -124,7 +158,7 @@ let tagBoxes = tags =>
       <div
         key=tag
         className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
-        {tag |> str}
+        {str(tag)}
       </div>
     )
     |> React.array}
@@ -140,9 +174,9 @@ let studentCard = (studentInfo, send, team, tags) => {
   <div key={studentInfo |> StudentInfo.email} className=containerClasses>
     <div className="flex flex-col flex-1 flex-wrap p-3">
       <div className="flex items-center">
-        <div className="mr-1 font-semibold"> {studentInfo |> StudentInfo.name |> str} </div>
+        <div className="mr-1 font-semibold"> {StudentInfo.name(studentInfo)->str} </div>
         <div className="text-xs text-gray-600">
-          {" (" ++ ((studentInfo |> StudentInfo.email) ++ ")") |> str}
+          {" (" ++ StudentInfo.email(studentInfo) ++ ")" |> str}
         </div>
       </div>
       {renderTitleAndAffiliation(
@@ -166,7 +200,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
   <div className="mx-auto bg-white">
     <div className="max-w-2xl p-6 mx-auto">
       <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
-        {"Student Details" |> str}
+        {t("drawer_heading")->str}
       </h5>
       <StudentsEditor__StudentInfoForm
         addToListCB={(studentInfo, teamName, tags) =>
@@ -177,13 +211,13 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
       <div>
         <div className="mt-5">
           <div className="inline-block tracking-wide text-xs font-semibold">
-            {"These new students will be added to the course:" |> str}
+            {t("teams_to_add_label")->str}
           </div>
           {switch state.teamsToAdd {
           | [] =>
             <div
               className="flex items-center justify-between bg-gray-100 border rounded p-3 italic mt-2">
-              {"This list is empty! Add some students using the form above." |> str}
+              {t("teams_to_add_empty")->str}
             </div>
           | teams => teams |> Js.Array.map(team =>
               switch TeamInfo.nature(team) {
@@ -218,19 +252,17 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
               <polyline points="1.5 6 4.5 9 10.5 1" />
             </svg>
           </span>
-          <span className="text-sm">
-            {str("Notify students, and send them a link to sign into this school.")}
-          </span>
+          <span className="text-sm"> {t("notify_students_label")->str} </span>
         </label>
       </div>
       <div className="flex mt-4">
         <button
           disabled={state.saving || state.teamsToAdd |> ArrayUtils.isEmpty}
-          onClick={saveStudents(state, send, courseId, handleResponseCB(submitFormCB, state))}
+          onClick={createStudents(state, send, courseId, submitFormCB)}
           className={"w-full btn btn-primary btn-large mt-3" ++ (
             formInvalid(state) ? " disabled" : ""
           )}>
-          {(state.saving ? "Saving..." : "Save List") |> str}
+          {(state.saving ? t("saving") : t("save_list_button"))->str}
         </button>
       </div>
     </div>

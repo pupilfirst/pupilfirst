@@ -13,16 +13,15 @@ let title = t => t.title
 
 let affiliation = t => t.affiliation
 
-let encode = (~teamName, ~tags, t) => {
-  open Json.Encode
-  object_(list{
-    ("team_name", teamName |> string),
-    ("tags", tags |> array(string)),
-    ("name", t.name |> string),
-    ("email", t.email |> string),
-    ("title", t.title |> string),
-    ("affiliation", t.affiliation |> string),
-  })
+let toJsObject = (~teamName, ~tags, t) => {
+  {
+    "name": t.name,
+    "email": t.email,
+    "title": Some(t.title),
+    "affiliation": Some(t.affiliation),
+    "teamName": Some(teamName),
+    "tags": tags,
+  }
 }
 
 let make = (~name, ~email, ~title, ~affiliation) => {

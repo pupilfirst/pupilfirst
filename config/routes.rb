@@ -81,7 +81,6 @@ Rails.application.routes.draw do
         end
       end
 
-      post 'students', action: 'create_students'
       post 'mark_teams_active'
       get 'students'
       get 'inactive_students'

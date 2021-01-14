@@ -15,6 +15,9 @@ let make = (~wrapperClasses, ~buttonClasses, ~title=?, ~icon=?) => {
       className=buttonClasses onClick={_ => setShowNotifications(_ => true)}>
       <FaIcon classes={icon->Belt.Option.getWithDefault("")} />
       {str(title->Belt.Option.getWithDefault(""))}
+      <span
+        className="student-navbar__notifications-unread-bullet absolute block h-3 w-3 rounded-full border-2 border-white bg-red-500"
+      />
     </button>
   </div>;
 };

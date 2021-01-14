@@ -47,16 +47,11 @@ let signInLink = () =>
   </div>;
 
 let notificationButton = () => {
-  <div className="relative flex" key="notifications">
-    <Notifications__Root
-      wrapperClasses="md:ml-1 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0 rounded-lg hover:bg-gray-200"
-      buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center p-4 md:px-3 md:py-2"
-      icon="if i-bell-regular text-xl"
-    />
-    <span
-      className="student-navbar__notifications-unread-bullet absolute block h-3 w-3 rounded-full border-2 border-white bg-red-500"
-    />
-  </div>;
+  <Notifications__Root
+    wrapperClasses="md:ml-1 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0 rounded-lg hover:bg-gray-200"
+    buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center p-4 md:px-3 md:py-2"
+    icon="if i-bell-regular text-xl"
+  />;
 };
 
 let isMobile = () => Webapi.Dom.window |> Webapi.Dom.Window.innerWidth < 768;

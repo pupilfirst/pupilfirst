@@ -15,7 +15,7 @@ class StudentSubmissionsResolver < ApplicationQuery
 
     return true if current_user.id == student.user_id
 
-    coach.present? && coach.courses.where(id: student.course).exists?
+    coach.present? && coach.courses.exists?(id: student.course)
   end
 
   def applicable_submissions

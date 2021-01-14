@@ -1,9 +1,5 @@
 module Users
   class DashboardPresenter < ApplicationPresenter
-    def initialize(view_context)
-      super(view_context)
-    end
-
     def page_title
       "Dashboard | #{current_school.name}"
     end
@@ -29,7 +25,7 @@ module Users
     private
 
     def issued_certificate_details
-      current_user.issued_certificates.includes(:course).map do |issued_certificate|
+      current_user.issued_certificates.live.includes(:course).map do |issued_certificate|
         issued_certificate.attributes.slice('id', 'serial_number', 'created_at').merge(
           course_name: issued_certificate.course.name
         )

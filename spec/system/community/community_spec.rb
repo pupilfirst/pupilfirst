@@ -208,12 +208,12 @@ feature 'Community', js: true do
     expect(page).to have_text('This is a reply to another post', count: 2)
 
     # can like and unlike a reply
-    find("div[aria-label='Like post #{reply_1.id}']").click
-    expect(page).to have_selector("div[aria-label='Unlike post #{reply_1.id}']")
+    find("button[aria-label='Like post #{reply_1.id}']").click
+    expect(page).to have_selector("button[aria-label='Unlike post #{reply_1.id}']")
     expect(reply_1.post_likes.where(user: student_2.user).count).to eq(1)
 
-    find("div[aria-label='Unlike post #{reply_1.id}']").click
-    expect(page).to have_selector("div[aria-label='Like post #{reply_1.id}']")
+    find("button[aria-label='Unlike post #{reply_1.id}']").click
+    expect(page).to have_selector("button[aria-label='Like post #{reply_1.id}']")
     expect(reply_1.post_likes.where(user: student_2.user).count).to eq(0)
   end
 
@@ -261,7 +261,7 @@ feature 'Community', js: true do
     expect(page).to have_text('Edit Topic')
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
     expect(page).to have_text('Edit Post')
-    expect(page).to have_text('Delete Post')
+    expect(page).to have_text('Delete Topic')
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
 
     # Faculty can edit or delete replies
@@ -294,9 +294,8 @@ feature 'Community', js: true do
     click_link 'Back to Post'
 
     # can mark a reply as solution
-    find("div[aria-label='Options for post #{reply_1.id}']").click
-    click_button 'Mark as solution'
     within("div#post-show-#{reply_1.id}") do
+      accept_confirm { find("button[aria-label='Mark as solution']").click }
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
     end
 
@@ -307,9 +306,8 @@ feature 'Community', js: true do
   scenario 'topic creator can mark a post as solution' do
     sign_in_user(student_1.user, referrer: topic_path(topic_1))
 
-    find("div[aria-label='Options for post #{reply_1.id}']").click
-    click_button 'Mark as solution'
     within("div#post-show-#{reply_1.id}") do
+      accept_confirm { find("button[aria-label='Mark as solution']").click }
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
     end
   end
@@ -319,7 +317,7 @@ feature 'Community', js: true do
 
     # When the topic has a reply, the first post won't have the delete option.
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
-    expect(page).not_to have_button('Delete Post')
+    expect(page).not_to have_button('Delete Topic')
 
     # So, let's delete the sole reply.
     find("div[aria-label='Options for post #{reply_1.id}']").click
@@ -330,7 +328,7 @@ feature 'Community', js: true do
 
     # This should make the delete option visible on the first post.
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
-    accept_confirm { click_button('Delete Post') }
+    accept_confirm { click_button('Delete Topic') }
 
     # Student should be back on the community main page.
     expect(page).to have_text(topic_2.title)
@@ -362,9 +360,9 @@ feature 'Community', js: true do
     sign_in_user(coach.user, referrer: topic_path(topic_1))
 
     find("div[aria-label='Options for post #{reply_1.id}']").click
-    click_button 'Mark as solution'
 
     within("div#post-show-#{reply_1.id}") do
+      accept_confirm { find("button[aria-label='Mark as solution']").click }
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
     end
 
@@ -450,8 +448,8 @@ feature 'Community', js: true do
       expect(page).to have_text(reply_1.body)
 
       # Like a post.
-      find("div[aria-label='Like post #{topic_1.first_post.id}']").click
-      expect(page).to have_selector("div[aria-label='Unlike post #{topic_1.first_post.id}']")
+      find("button[aria-label='Like post #{topic_1.first_post.id}']").click
+      expect(page).to have_selector("button[aria-label='Unlike post #{topic_1.first_post.id}']")
 
       # Edit a post.
       find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
@@ -490,6 +488,67 @@ feature 'Community', js: true do
       expect(page).to have_text('0 Replies')
       expect(community.topics.reload.find_by(title: topic_title).first_post.body).to eq(topic_body)
     end
+
+    scenario 'admin locks/unlocks a topic in community' do
+      sign_in_user(school_admin.user, referrer: topic_path(topic_1))
+
+      expect(page).to have_text(topic_1.title)
+      expect(page).to_not have_text('This topic thread has been locked')
+
+      accept_confirm { click_button('Lock Topic') }
+
+      expect(page).to have_text('This topic has been locked')
+      dismiss_notification
+
+      expect(page).to have_text('This topic thread has been locked')
+
+      expect(topic_1.reload.locked_at).to_not eq(nil)
+      expect(topic_1.locked_by).to eq(school_admin.user)
+
+      accept_confirm { click_button('Unlock Topic') }
+
+      expect(page).to have_text('This topic has been unlocked')
+      dismiss_notification
+
+      expect(page).to_not have_text('This topic thread has been locked')
+
+      expect(topic_1.reload.locked_at).to eq(nil)
+      expect(topic_1.locked_by).to eq(nil)
+    end
+  end
+
+  scenario 'student attempts to lock a topic' do
+    sign_in_user(student_1.user, referrer: topic_path(topic_1))
+
+    expect(page).to have_text(topic_1.title)
+    expect(page).to_not have_button('Lock Topic')
+  end
+
+  scenario 'coach attempts to lock/unlock a topic' do
+    sign_in_user(coach.user, referrer: topic_path(topic_1))
+
+    accept_confirm { click_button('Lock Topic') }
+
+    expect(page).to have_text('This topic has been locked')
+    dismiss_notification
+
+    accept_confirm { click_button('Unlock Topic') }
+
+    expect(page).to have_text('This topic has been unlocked')
+    dismiss_notification
+  end
+
+  scenario 'student attempts to post reply to a locked topic' do
+    sign_in_user(student_1.user, referrer: topic_path(topic_1))
+
+    replace_markdown reply_body
+
+    # Before posting reply, let's lock the topic.
+    topic_1.update!(locked_at: Time.zone.now, locked_by: coach.user)
+
+    click_button 'Post Your Reply'
+
+    expect(page).to have_text('Cannot add reply to a locked topic')
   end
 
   context 'community has topic categories' do
@@ -575,6 +634,18 @@ feature 'Community', js: true do
     let!(:reply_marked_as_solution) { create :post, topic: topic_1, creator: student_1.user, post_number: 3, solution: true }
     let!(:reply_2) { create :post, topic: topic_2, creator: student_1.user, post_number: 2 }
 
+    scenario 'user checks solved status in topics list' do
+      sign_in_user(coach.user, referrer: community_path(community))
+
+      within("a[aria-label='Topic #{topic_1.id}']") do
+        expect(page).to have_selector("span[aria-label='Solved status icon']")
+      end
+
+      within("a[aria-label='Topic #{topic_2.id}']") do
+        expect(page).to_not have_selector("span[aria-label='Solved status icon']")
+      end
+    end
+
     scenario 'user filters topics with or without solution' do
       sign_in_user(coach.user, referrer: community_path(community))
 
@@ -597,6 +668,22 @@ feature 'Community', js: true do
 
       expect(page).to_not have_text(topic_1.title)
       expect(page).to have_text(topic_2.title)
+    end
+
+    scenario 'user visits show page of topic with solution and checks for solution navigation button' do
+      sign_in_user(coach.user, referrer: topic_path(topic_1))
+
+      within("div#post-show-#{topic_1.first_post.id}") do
+        expect(page).to have_link('Go to solution', href: "#post-show-#{reply_marked_as_solution.id}")
+      end
+    end
+
+    scenario 'user visits show page of topic without solution and checks for solution navigation button' do
+      sign_in_user(coach.user, referrer: topic_path(topic_2))
+
+      within("div#post-show-#{topic_2.first_post.id}") do
+        expect(page).to_not have_link('Go to solution')
+      end
     end
   end
 
@@ -653,6 +740,49 @@ feature 'Community', js: true do
       expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
       expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
     end
+
+    scenario 'user visits a community with filters applied' do
+      sign_in_user(coach.user, referrer: community_path(community, sortDirection: 'Ascending', sortCriterion: 'Views', solution: 'Unsolved'))
+      expect(page).to have_button('Order by Views')
+      expect(page).to have_button('Remove selection: Unsolved')
+      expect(find("#topics a:nth-child(3)")).to have_content(topic_3.title)
+      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
+      expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
+    end
+  end
+
+  context 'solution exists for a topic' do
+    let!(:reply_1) { create :post, topic: topic_1, creator: student_1.user, post_number: 2 }
+    let!(:reply_2) { create :post, topic: topic_1, creator: student_2.user, post_number: 3, solution: true }
+
+    scenario "a moderator can unmark the current post as solution and mark a new solution" do
+      sign_in_user(coach.user, referrer: community_path(community))
+
+      click_link topic_1.title
+
+      within("div#post-show-#{reply_1.id}") do
+        expect(page).to_not have_selector("button[aria-label='Mark as solution']")
+      end
+
+      within("div#post-show-#{reply_2.id}") do
+        accept_confirm { find("div[aria-label='Marked as solution icon']").click }
+      end
+
+      expect(page).to have_text('Reply unmarked as solution')
+      dismiss_notification
+
+      expect(reply_2.reload.solution).to eq(false)
+
+      # change the marked solution
+
+      within("div#post-show-#{reply_1.id}") do
+        accept_confirm { find("button[aria-label='Mark as solution']").click }
+      end
+
+      dismiss_notification
+
+      expect(reply_1.reload.solution).to eq(true)
+    end
   end
 
   context "when the user is a coach who isn't enrolled in one of the community's connected courses" do
@@ -666,10 +796,8 @@ feature 'Community', js: true do
       click_link topic_1.title
 
       # Can mark a reply as solution.
-      find("div[aria-label='Options for post #{reply_1.id}']").click
-      click_button 'Mark as solution'
-
       within("div#post-show-#{reply_1.id}") do
+        accept_confirm { find("button[aria-label='Mark as solution']").click }
         expect(page).to have_selector("div[aria-label='Marked as solution icon']")
       end
     end

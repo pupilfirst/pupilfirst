@@ -32,7 +32,7 @@ module Topics
     private
 
     def topic_details
-      @topic.attributes.slice('id', 'title', 'topic_category_id')
+      @topic.attributes.slice('id', 'title', 'topic_category_id', 'locked_at', 'locked_by_id')
     end
 
     def topic_categories
@@ -69,7 +69,7 @@ module Topics
     def like_data(post)
       {
         total_likes: post.post_likes.count,
-        liked_by_user: post.post_likes.where(user_id: current_user.id).exists?
+        liked_by_user: post.post_likes.exists?(user_id: current_user.id)
       }
     end
 
@@ -77,6 +77,7 @@ module Topics
       user_ids = [
         first_post.creator_id,
         first_post.editor_id,
+        @topic.locked_by_id,
         replies.pluck(:creator_id),
         replies.pluck(:editor_id),
         current_user.id
@@ -91,7 +92,7 @@ module Topics
     end
 
     def subscribed?
-      @topic.topic_subscription.where(user: current_user).exists?
+      @topic.topic_subscription.exists?(user: current_user)
     end
 
     def community

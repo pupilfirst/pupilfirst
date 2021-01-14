@@ -27,8 +27,6 @@ class Target < ApplicationRecord
   has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group
-  has_many :target_resources, dependent: :destroy
-  has_many :resources, through: :target_resources
   has_many :target_evaluation_criteria, dependent: :destroy
   has_many :evaluation_criteria, through: :target_evaluation_criteria
   has_one :level, through: :target_group
@@ -47,15 +45,6 @@ class Target < ApplicationRecord
   scope :not_founder, -> { where.not(role: ROLE_STUDENT) }
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
-  scope :not_auto_verifiable, -> { joins(:target_evaluation_criteria).distinct }
-  scope :auto_verifiable, -> { where.not(id: not_auto_verifiable) }
-
-  # Custom scope to allow AA to filter by intersection of tags.
-  scope :ransack_tagged_with, ->(*tags) { tagged_with(tags) }
-
-  def self.ransackable_scopes(_auth)
-    %i[ransack_tagged_with]
-  end
 
   ROLE_STUDENT = 'student'
   ROLE_TEAM = 'team'

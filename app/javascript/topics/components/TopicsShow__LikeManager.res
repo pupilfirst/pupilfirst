@@ -1,104 +1,100 @@
-open TopicsShow__Types;
+open TopicsShow__Types
 
-let str = React.string;
+let str = React.string
 
-module CreatePostLikeQuery = [%graphql
-  {|
+module CreatePostLikeQuery = %graphql(
+  `
   mutation CreatePostLikeMutation($postId: ID!) {
     createPostLike(postId: $postId)  {
       success
     }
   }
-|}
-];
+`
+)
 
-module DeletePostLikeQuery = [%graphql
-  {|
+module DeletePostLikeQuery = %graphql(
+  `
   mutation DeletePostLikeMutation($postId: ID!) {
     deletePostLike(postId: $postId) {
       success
     }
   }
-  |}
-];
+  `
+)
 
 let iconClasses = (liked, saving) => {
-  let classes = "text-lg fw";
-  classes
-  ++ (
-    if (saving) {
-      " fas fa-thumbs-up cursor-pointer text-primary-200";
-    } else if (liked) {
-      " fas fa-thumbs-up cursor-pointer text-primary-400";
-    } else {
-      " far fa-thumbs-up cursor-pointer";
-    }
-  );
-};
+  let classes = "text-lg fw"
+  classes ++ if saving {
+    " fas fa-thumbs-up cursor-pointer text-primary-200"
+  } else if liked {
+    " fas fa-thumbs-up cursor-pointer text-primary-400"
+  } else {
+    " far fa-thumbs-up cursor-pointer"
+  }
+}
 
-let handlePostLike =
-    (
-      saving,
-      liked,
-      setSaving,
-      postId,
-      removeLikeCB,
-      handleCreateResponse,
-      addLikeCB,
-      event,
-    ) => {
-  event |> ReactEvent.Mouse.preventDefault;
+let handlePostLike = (
+  saving,
+  liked,
+  setSaving,
+  postId,
+  removeLikeCB,
+  handleCreateResponse,
+  addLikeCB,
+  event,
+) => {
+  event |> ReactEvent.Mouse.preventDefault
   saving
     ? ()
     : {
-      setSaving(_ => true);
-      if (liked) {
-        DeletePostLikeQuery.make(~postId, ())
-        |> GraphqlQuery.sendQuery
-        |> Js.Promise.then_(response => {
-             response##deletePostLike##success
-               ? {
-                 removeLikeCB();
-                 setSaving(_ => false);
-               }
-               : setSaving(_ => false);
-             Js.Promise.resolve();
-           })
-        |> Js.Promise.catch(_ => {
-             setSaving(_ => false);
-             Js.Promise.resolve();
-           })
-        |> ignore;
-      } else {
-        CreatePostLikeQuery.make(~postId, ())
-        |> GraphqlQuery.sendQuery
-        |> Js.Promise.then_(response => {
-             response##createPostLike##success
-               ? handleCreateResponse(setSaving, addLikeCB)
-               : setSaving(_ => false);
-             Js.Promise.resolve();
-           })
-        |> Js.Promise.catch(_ => {
-             setSaving(_ => false);
-             Js.Promise.resolve();
-           })
-        |> ignore;
-      };
-    };
-};
+        setSaving(_ => true)
+        if liked {
+          DeletePostLikeQuery.make(~postId, ())
+          |> GraphqlQuery.sendQuery
+          |> Js.Promise.then_(response => {
+            response["deletePostLike"]["success"]
+              ? {
+                  removeLikeCB()
+                  setSaving(_ => false)
+                }
+              : setSaving(_ => false)
+            Js.Promise.resolve()
+          })
+          |> Js.Promise.catch(_ => {
+            setSaving(_ => false)
+            Js.Promise.resolve()
+          })
+          |> ignore
+        } else {
+          CreatePostLikeQuery.make(~postId, ())
+          |> GraphqlQuery.sendQuery
+          |> Js.Promise.then_(response => {
+            response["createPostLike"]["success"]
+              ? handleCreateResponse(setSaving, addLikeCB)
+              : setSaving(_ => false)
+            Js.Promise.resolve()
+          })
+          |> Js.Promise.catch(_ => {
+            setSaving(_ => false)
+            Js.Promise.resolve()
+          })
+          |> ignore
+        }
+      }
+}
 
 let handleCreateResponse = (setSaving, addLikeCB) => {
-  setSaving(_ => false);
-  addLikeCB();
-};
+  setSaving(_ => false)
+  addLikeCB()
+}
 
-[@react.component]
+@react.component
 let make = (~post, ~addPostLikeCB, ~removePostLikeCB) => {
-  let (saving, setSaving) = React.useState(() => false);
-  let liked = Post.likedByUser(post);
+  let (saving, setSaving) = React.useState(() => false)
+  let liked = Post.likedByUser(post)
   <div className="text-center pr-3 md:pr-4">
     <div
-      ariaLabel={(liked ? "Unlike" : "Like") ++ " post " ++ Post.id(post)}
+      ariaLabel={(liked ? "Unlike" : "Like") ++ (" post " ++ Post.id(post))}
       className="cursor-pointer"
       onClick={handlePostLike(
         saving,
@@ -118,5 +114,5 @@ let make = (~post, ~addPostLikeCB, ~removePostLikeCB) => {
         {post |> Post.totalLikes |> string_of_int |> str}
       </p>
     </div>
-  </div>;
-};
+  </div>
+}

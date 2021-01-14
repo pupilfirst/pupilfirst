@@ -27,15 +27,12 @@ class Feature < ApplicationRecord
 
       return false unless feature
 
-      parsed_value = begin
-        JSON.parse(feature.value).with_indifferent_access
-                     rescue JSON::ParserError
-                       return false
-      end
+      parsed_value = JSON.parse(feature.value).with_indifferent_access
 
       return true if parsed_value[:active].present?
-      return true if feature.active_for_user?(user, parsed_value)
 
+      feature.active_for_user?(user, parsed_value)
+    rescue JSON::ParserError
       false
     end
 
@@ -58,7 +55,7 @@ class Feature < ApplicationRecord
   def active_for_admin?(user, parsed_value)
     return false unless parsed_value.include?(:admin)
 
-    AdminUser.where(email: user.email).exists?
+    AdminUser.exists?(email: user.email)
   end
 
   def active_for_regex?(user, parsed_value)

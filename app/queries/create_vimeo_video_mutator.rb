@@ -1,6 +1,7 @@
 class CreateVimeoVideoMutator < ApplicationQuery
   include AuthorizeAuthor
 
+  property :target_id, validates: { presence: true }
   property :size, validates: { presence: true }
   property :title, validates: { length: { maximum: 120 } }
   property :description, validates: { length: { maximum: 4000 } }
@@ -10,7 +11,7 @@ class CreateVimeoVideoMutator < ApplicationQuery
     response = vimeo_api.create_video(size, title, description)
 
     if response[:error].present? || response[:error_code].present?
-      if response[:developer_message].present?app/services/vimeo/api_service.rb
+      if response[:developer_message].present?
         errors[:base] << response[:developer_message]
       else
         errors[:base] << response[:error] || "Encountered error with code #{response[:error_code]} when trying to create a Vimeo video."
@@ -31,6 +32,14 @@ class CreateVimeoVideoMutator < ApplicationQuery
   private
 
   def resource_school
-    current_school
+    course.school
+  end
+
+  def course
+    target&.course
+  end
+
+  def target
+    Target.find_by(id: target_id)
   end
 end

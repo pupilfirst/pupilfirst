@@ -41,6 +41,9 @@ feature 'Target Details Editor', js: true do
     find("a[title='Edit details of target #{target_1_l2.title}']").click
     expect(page).to have_text('Title')
 
+    # Cache current sort index
+    current_sort_index = target_1_l2.sort_index
+
     fill_in 'title', with: new_target_title, fill_options: { clear: :backspace }
     fill_in 'completion-instructions', with: completion_instructions
 
@@ -50,6 +53,9 @@ feature 'Target Details Editor', js: true do
 
     expect(target_1_l2.reload.title).to eq(new_target_title)
     expect(target_1_l2.completion_instructions).to eq(completion_instructions)
+
+    # Check sort index is unaffected
+    expect(target_1_l2.sort_index).to eq(current_sort_index)
 
     # Clears the completion instructions
 
@@ -75,7 +81,7 @@ feature 'Target Details Editor', js: true do
     end
 
     expect(page).to_not have_button('Visit a link to complete the target.')
-    expect(page).to have_text('Atleast one has to be selected')
+    expect(page).to have_text('At least one has to be selected')
 
     find("div[title='Select #{evaluation_criterion.display_name}']").click
 

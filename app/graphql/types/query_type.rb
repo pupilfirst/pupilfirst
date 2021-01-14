@@ -78,6 +78,7 @@ module Types
       argument :search, String, required: false
       argument :tags, [String], required: false
       argument :sort_by, String, required: true
+      argument :sort_direction, Types::SortDirectionType, required: true
     end
 
     resolved_field :evaluation_criteria, [Types::EvaluationCriterionType], null: false do

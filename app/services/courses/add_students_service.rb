@@ -25,9 +25,9 @@ module Courses
         new_student_tags = new_students.map { |student| student.tags || [] }.flatten.uniq
         school.founder_tag_list << new_student_tags
         school.save!
-      end
 
-      [new_students.count, student_list.count]
+        students.map { |student| student.id }
+      end
     end
 
     private
@@ -40,6 +40,7 @@ module Courses
       end
     end
 
+    # Remove team name from students who aren't teamed up with anyone else.
     def sanitize_students(students)
       team_sizes = {}
 
@@ -55,9 +56,7 @@ module Courses
           if team_sizes[student.team_name] > 1
             student
           else
-            new_student = student.dup
-            new_student.team_name = nil
-            new_student
+            student_without_team_name(student)
           end
         else
           student
@@ -65,9 +64,14 @@ module Courses
       end
     end
 
+    def student_without_team_name(student)
+      OpenStruct.new(student.to_h.except(:team_name))
+    end
+
     def create_new_student(student)
       # Create a user and generate a login token.
-      user = User.where(email: student.email, school: school).first_or_create!
+      user = school.users.with_email(student.email).first
+      user = school.users.create!(email: student.email) if user.blank?
 
       user.regenerate_login_token if user.login_token.blank?
 
@@ -75,7 +79,7 @@ module Courses
       user.update!(
         name: user.name.presence || student.name,
         title: user.title.presence || student.title.presence || "Student",
-        affiliation: user.affiliation.presence || student.affiliation
+        affiliation: user.affiliation.presence || student.affiliation.presence
       )
 
       team = find_or_create_team(student)

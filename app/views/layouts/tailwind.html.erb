@@ -51,8 +51,7 @@
   <link rel="icon" href="/favicon.ico"/>
 </head>
 
-<body>
-<%= render 'layouts/pretender_tailwind' if @pretender %>
+<body data-host="<%= current_host %>">
 <section class="min-h-full flex flex-col items-stretch">
   <%= yield :nav %>
   <main class="flex-grow bg-gray-100">

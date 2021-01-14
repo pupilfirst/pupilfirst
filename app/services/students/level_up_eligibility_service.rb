@@ -33,16 +33,19 @@ module Students
             target_eligible?(target, current_level_eligible_statuses)
           end
 
-          return ELIGIBILITY_CURRENT_LEVEL_INCOMPLETE unless current_level_targets_attempted
+          if current_level_targets_attempted
+            minimum_required_level_completed = minimum_required_level_milestone_targets.all? do |target|
+              target_eligible?(target, MINIMUM_REQUIRED_LEVEL_ELIGIBLE_STATUSES)
+            end
 
-          minimum_required_level_completed = minimum_required_level_milestone_targets.all? do |target|
-            target_eligible?(target, MINIMUM_REQUIRED_LEVEL_ELIGIBLE_STATUSES)
+            if minimum_required_level_completed
+              @team_members_pending ? ELIGIBILITY_TEAM_MEMBERS_PENDING : ELIGIBILITY_ELIGIBLE
+            else
+              ELIGIBILITY_PREVIOUS_LEVEL_INCOMPLETE
+            end
+          else
+            ELIGIBILITY_CURRENT_LEVEL_INCOMPLETE
           end
-
-          return ELIGIBILITY_PREVIOUS_LEVEL_INCOMPLETE unless minimum_required_level_completed
-          return ELIGIBILITY_TEAM_MEMBERS_PENDING if @team_members_pending
-
-          ELIGIBILITY_ELIGIBLE
         else
           ELIGIBILITY_NO_MILESTONES
         end

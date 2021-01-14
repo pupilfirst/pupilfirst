@@ -40,6 +40,11 @@ feature 'Target Overlay', js: true do
     # Set correct answers for all quiz questions.
     quiz_question_1.update!(correct_answer: q1_answer_2)
     quiz_question_2.update!(correct_answer: q2_answer_4)
+
+    # Set a custom size for the embedded image.
+    image_block = target_l1.current_content_blocks.find_by(block_type: ContentBlock::BLOCK_TYPE_IMAGE)
+    image_block['content']['width'] = 'sm'
+    image_block.save!
   end
 
   around do |example|
@@ -76,6 +81,7 @@ feature 'Target Overlay', js: true do
     content_blocks = target_l1.current_content_blocks
     image_caption = content_blocks.find_by(block_type: ContentBlock::BLOCK_TYPE_IMAGE).content['caption']
     expect(page).to have_content(image_caption)
+    expect(page).to have_selector('.max-w-sm.mx-auto')
     file_title = content_blocks.find_by(block_type: ContentBlock::BLOCK_TYPE_FILE).content['title']
     expect(page).to have_link(file_title)
   end
@@ -247,6 +253,7 @@ feature 'Target Overlay', js: true do
       click_button('Submit Quiz')
 
       expect(page).to have_content('Your responses have been saved')
+      expect(page).to have_selector('.course-overlay__body-tab-item', text: 'Quiz Result')
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(quiz_target.title)

@@ -573,8 +573,20 @@ feature 'School students index', js: true do
     scenario 'school admin can order students' do
       sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
+      expect(find('.student-team-container:first-child')).to have_text(team_aaa.name)
+
+      # Check ordering by last created
       click_button 'Order by Name'
       click_button 'Order by Last Created'
+
+      expect(find('.student-team-container:first-child')).to have_text(oldest_created.name)
+
+      click_button('Load More')
+
+      expect(find('.student-team-container:last-child')).to have_text(newest_created.name)
+
+      # Reverse sorting
+      click_button('toggle-sort-order')
 
       expect(find('.student-team-container:first-child')).to have_text(newest_created.name)
 
@@ -582,6 +594,7 @@ feature 'School students index', js: true do
 
       expect(find('.student-team-container:last-child')).to have_text(oldest_created.name)
 
+      # Check ordering by last updated
       click_button 'Order by Last Created'
       click_button 'Order by Last Updated'
 
@@ -591,6 +604,16 @@ feature 'School students index', js: true do
 
       expect(find('.student-team-container:last-child')).to have_text(oldest_updated.name)
 
+      # Reverse sorting
+      click_button('toggle-sort-order')
+
+      expect(find('.student-team-container:first-child')).to have_text(oldest_updated.name)
+
+      click_button('Load More')
+
+      expect(find('.student-team-container:last-child')).to have_text(newest_updated.name)
+
+      # Check ordering by name
       click_button 'Order by Last Updated'
       click_button 'Order by Name'
 
@@ -599,6 +622,114 @@ feature 'School students index', js: true do
       click_button('Load More')
 
       expect(find('.student-team-container:last-child')).to have_text(team_zzz.name)
+
+      # Reverse sorting
+      click_button('toggle-sort-order')
+
+      expect(find('.student-team-container:first-child')).to have_text(team_zzz.name)
+
+      click_button('Load More')
+
+      expect(find('.student-team-container:last-child')).to have_text(team_aaa.name)
+    end
+  end
+
+  context 'when a course has no certificates' do
+    let!(:team_1) { create :startup, level: level_1 }
+
+    scenario 'admin visits student editor to issue certificates' do
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+
+      student = team_1.founders.last
+
+      find('a', text: student.name).click
+
+      click_button 'Actions'
+
+      expect(page).to have_text("This course does not have any certificates to issue")
+    end
+  end
+
+  context 'when a course has certificates' do
+    let!(:team_1) { create :startup, level: level_1 }
+    let(:student_without_certificate) { team_1.founders.first }
+    let(:student_with_certificate) { team_1.founders.last }
+    let!(:certificate_1) { create :certificate, course: course }
+    let!(:certificate_2) { create :certificate, course: course }
+
+    before do
+      create :issued_certificate, user: student_with_certificate.user, issuer: school_admin.user, certificate: certificate_1, created_at: 1.day.ago
+    end
+
+    scenario 'admin manually issues a certificate to a student' do
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+
+      find('a', text: student_without_certificate.name).click
+
+      click_button 'Actions'
+
+      expect(page).to have_text('This student has not been issued any certificates')
+
+      # Issue new certificate
+      select certificate_2.name, from: 'issue-certificate'
+
+      click_button('Issue Certificate')
+
+      expect(page).to have_text('Done!')
+      dismiss_notification
+
+      issued_certificate = student_without_certificate.user.issued_certificates.reload.last
+
+      expect(issued_certificate.certificate).to eq(certificate_2)
+      expect(issued_certificate.issuer).to eq(school_admin.user)
+
+      within("div[aria-label='Details of issued certificate #{issued_certificate.id}']") do
+        expect(page).to have_text(issued_certificate.serial_number)
+        expect(page).to have_text(school_admin.user.name)
+        expect(page).to have_text(certificate_2.name)
+        expect(page).to have_text(issued_certificate.created_at.strftime('%B %-d, %Y'))
+        expect(page).to have_button('Revoke Certificate')
+      end
+    end
+
+    scenario 'admin revokes issued certificate and then issues another one' do
+      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+
+      find('a', text: student_with_certificate.name).click
+
+      click_button 'Actions'
+
+      expect(page).to have_text(certificate_1.name)
+
+      issued_certificate = student_with_certificate.user.issued_certificates.last
+
+      # Revoke the issued certificate
+      within("div[aria-label='Details of issued certificate #{issued_certificate.id}']") do
+        accept_confirm do
+          click_button('Revoke Certificate')
+        end
+      end
+
+      expect(page).to have_text('Done')
+
+      dismiss_notification
+
+      expect(issued_certificate.reload.revoked_at).to_not eq(nil)
+      expect(issued_certificate.revoker).to eq(school_admin.user)
+
+      within("div[aria-label='Details of issued certificate #{issued_certificate.id}']") do
+        expect(page).to have_text(school_admin.user.name, count: 2)
+        expect(page).to have_text(issued_certificate.revoked_at.strftime('%B %-d, %Y'))
+      end
+
+      # Can issue new certificate
+      select certificate_2.name, from: 'issue-certificate'
+
+      click_button('Issue Certificate')
+
+      expect(page).to have_text('Done!')
+      expect(student_with_certificate.user.reload.issued_certificates.count).to eq(2)
     end
   end
 end
+

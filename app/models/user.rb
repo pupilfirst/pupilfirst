@@ -11,10 +11,10 @@ class User < ApplicationRecord
   has_many :communities, through: :founders
   has_many :courses, through: :founders
   has_one :faculty, dependent: :restrict_with_error
-  has_many :user_activities, dependent: :destroy
   has_one :school_admin, dependent: :restrict_with_error
   has_many :markdown_attachments, dependent: :nullify
   has_many :issued_certificates, dependent: :nullify
+  has_many :locked_topics, class_name: 'Topic', foreign_key: 'locked_by_id', inverse_of: :locked_by, dependent: :nullify
   has_many :post_likes, dependent: :nullify
   has_many :text_versions, dependent: :nullify
   has_many :course_exports, dependent: :nullify
@@ -69,7 +69,7 @@ class User < ApplicationRecord
   end
 
   def email_bounced?
-    BounceReport.where(email: email).exists?
+    BounceReport.exists?(email: email)
   end
 
   # True if the user has ever signed in, handled by Users::ConfirmationService.

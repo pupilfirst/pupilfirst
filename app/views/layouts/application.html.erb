@@ -31,7 +31,7 @@
   <link rel="icon" href='/favicon.ico'/>
 </head>
 
-<body data-env="<%= Rails.env %>">
+<body data-env="<%= Rails.env %>" data-host="<%= current_host %>">
 <% if Rails.env.test? %>
   <% flash.each do |name, msg| %>
     <%= content_tag :div, "#{name}: #{msg}" %>
@@ -51,8 +51,6 @@
     </div>
   </div>
 <% end %>
-
-<%= render 'layouts/pretender' if @pretender %>
 
 <% unless @hide_layout_header %>
   <section id="header" class="header">

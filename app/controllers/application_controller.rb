@@ -4,15 +4,13 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception. Note that this is different from the default of :null_session.
   protect_from_forgery with: :exception
 
-  # Activate pretender.
-  impersonates :user
-
   before_action :sign_out_if_required
-  before_action :pretender
   before_action :store_user_location, if: :storable_location?
+  before_action :redirect_to_primary_domain, if: :domain_redirection_required?
 
   around_action :set_time_zone, if: :current_user
 
+  helper_method :avatar
   helper_method :current_host
   helper_method :current_school
   helper_method :current_founder
@@ -195,10 +193,6 @@ class ApplicationController < ActionController::Base
     store_location_for(:user, request.fullpath)
   end
 
-  def pretender
-    @pretender = (current_user != true_user)
-  end
-
   def avatar(name, founder: nil, faculty: nil, version: :mid, background_shape: :circle)
     if faculty.present? && faculty.image.attached?
       return helpers.image_tag(faculty.image).html_safe
@@ -215,5 +209,15 @@ class ApplicationController < ActionController::Base
     ).svg.html_safe
   end
 
-  helper_method :avatar
+  def domain_redirection_required?
+    return false if current_domain.blank?
+
+    return false if current_domain.primary? || current_school.domains.one?
+
+    !current_school.configuration['disable_primary_domain_redirection']
+  end
+
+  def redirect_to_primary_domain
+    observable_redirect_to "#{request.ssl? ? 'https' : 'http'}://#{current_school.domains.primary.fqdn}#{request.path}"
+  end
 end

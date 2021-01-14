@@ -1,10 +1,14 @@
-.notifications__entry-card.notifications__entry-card--unread:hover .notifications__entry-card-buttons, .notifications__entry-card.notifications__entry-card--unread:focus .notifications__entry-card-buttons {
+.notifications__entry-card.notifications__entry-card--unread:hover
+  .notifications__entry-card-buttons,
+.notifications__entry-card.notifications__entry-card--unread:focus
+  .notifications__entry-card-buttons {
   @apply opacity-100;
   /* background: rgb(247, 245, 250);
   background: linear-gradient(45deg, rgba(247, 245, 250, 0) 0%, rgba(247, 245, 250, 1) 30%, rgba(247, 245, 250, 1) 100%); */
 }
 
-.notifications__entry-card.notifications__entry-card--unread:hover .notifications__entry-card-time {
+.notifications__entry-card.notifications__entry-card--unread:hover
+  .notifications__entry-card-time {
   @apply opacity-0;
 }
 

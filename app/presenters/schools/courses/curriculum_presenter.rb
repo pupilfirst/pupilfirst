@@ -12,11 +12,12 @@ module Schools
       def props
         {
           course: course_data,
-          evaluationCriteria: evaluation_criteria,
+          evaluation_criteria: evaluation_criteria,
           levels: levels,
-          targetGroups: target_groups,
+          target_groups: target_groups,
           targets: targets,
-          hasVimeoAccessToken: vimeo_access_token?
+          has_vimeo_access_token: vimeo_access_token?,
+          vimeo_plan: vimeo_plan
         }
       end
 
@@ -41,7 +42,7 @@ module Schools
             id: level.id,
             name: level.name,
             number: level.number,
-            unlockAt: level.unlock_at
+            unlock_at: level.unlock_at
           }
         end
       end
@@ -54,7 +55,7 @@ module Schools
             description: target_group.description,
             level_id: target_group.level_id,
             milestone: target_group.milestone,
-            sortIndex: target_group.sort_index,
+            sort_index: target_group.sort_index,
             archived: target_group.archived
           }
         end
@@ -66,16 +67,22 @@ module Schools
             id: target.id,
             target_group_id: target.target_group_id,
             title: target.title,
-            sortIndex: target.sort_index,
+            sort_index: target.sort_index,
             visibility: target.visibility
           }
         end
       end
 
       def vimeo_access_token?
-        token = @course.school.configuration['vimeo'] && @course.school.configuration['vimeo']['access_token'] ||
-          Rails.application.secrets.vimeo_access_token
-        token.present?
+        return @vimeo_access_token if instance_variable_defined?(:@vimeo_access_token)
+
+        @vimeo_access_token = @course.school.configuration.dig('vimeo', 'access_token').present? || Rails.application.secrets.vimeo_access_token.present?
+      end
+
+      def vimeo_plan
+        return unless vimeo_access_token?
+
+        @course.school.configuration.dig('vimeo', 'account_type') || Rails.application.secrets.vimeo_account_type
       end
     end
   end

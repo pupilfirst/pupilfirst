@@ -29,7 +29,6 @@ module PublicSlack
         return OpenStruct.new(errors: @errors)
       end
 
-      message = message
       channel = target[:channel]
       founder = target[:founder]
       founders = target[:founders]

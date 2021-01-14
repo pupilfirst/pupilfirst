@@ -39,7 +39,7 @@ module Layouts
     end
 
     def review_dashboard
-      if current_coach.present? && current_coach.courses.where(id: @course).exists?
+      if current_coach.present? && current_coach.courses.exists?(id: @course)
         "review"
       end
     end
@@ -49,7 +49,7 @@ module Layouts
     end
 
     def report
-      if current_user.present? && current_user.startups.not_dropped_out.joins(:level).where(levels: { course_id: @course.id }).exists?
+      if current_user.present? && current_user.startups.not_dropped_out.joins(:level).exists?(levels: { course_id: @course.id })
         "report"
       end
     end

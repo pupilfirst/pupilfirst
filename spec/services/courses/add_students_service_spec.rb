@@ -38,6 +38,19 @@ describe Courses::AddStudentsService do
       expect(new_team.founders.map { |f| f.email }).to match_array([student_3_data.email, student_4_data.email])
     end
 
+    it 'returns the IDs of newly added students' do
+      students_data = [student_1_data, student_2_data, student_3_data, student_4_data]
+
+      response = subject.add(students_data)
+
+      student_ids = Founder.joins(:user).
+        where(users: {email: [student_1_data.email, student_2_data.email, student_3_data.email, student_4_data.email]}).
+        pluck(:id)
+
+      expect(response.length).to eq(4)
+      expect(response).to contain_exactly(*student_ids)
+    end
+
     context 'course already has students' do
       let!(:persisted_team) { create :startup, level: level_1 }
       let!(:student) { persisted_team.founders.first }

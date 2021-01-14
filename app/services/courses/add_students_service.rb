@@ -29,9 +29,9 @@ module Courses
         new_student_tags = new_students.map { |student| student.tags || [] }.flatten.uniq
         school.founder_tag_list << new_student_tags
         school.save!
-      end
 
-      [new_students.count, student_list.count]
+        students.map { |student| student.id }
+      end
     end
 
     private
@@ -64,14 +64,16 @@ module Courses
           if team_sizes[student.team_name] > 1
             student
           else
-            new_student = student.dup
-            new_student.team_name = nil
-            new_student
+            student_without_team_name(student)
           end
         else
           student
         end
       end
+    end
+
+    def student_without_team_name(student)
+      OpenStruct.new(student.to_h.except(:team_name))
     end
 
     def create_new_student(student)
@@ -85,7 +87,7 @@ module Courses
       user.update!(
         name: user.name.presence || student.name,
         title: user.title.presence || student.title.presence || "Student",
-        affiliation: user.affiliation.presence || student.affiliation
+        affiliation: user.affiliation.presence || student.affiliation.presence
       )
 
       team = find_or_create_team(student)

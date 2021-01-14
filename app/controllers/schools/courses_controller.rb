@@ -76,22 +76,6 @@ module Schools
       @teams = Kaminari.paginate_array(inactive_teams).page(params[:page]).per(20)
     end
 
-    # POST /school/courses/:course_id/students?students[]=
-    def create_students
-      authorize(scope.find(params[:course_id]), policy_class: Schools::CoursePolicy)
-
-      form = Schools::Founders::CreateForm.new(Reform::OpenForm.new)
-
-      response = if form.validate(params)
-        student_count = form.save
-        { error: nil, studentCount: student_count }
-      else
-        { error: form.errors.full_messages.join(', ') }
-      end
-
-      render json: response
-    end
-
     # POST /school/courses/:course_id/mark_teams_active?team_ids[]=
     def mark_teams_active
       course = authorize(scope.find(params[:course_id]), policy_class: Schools::CoursePolicy)

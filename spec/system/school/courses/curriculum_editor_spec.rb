@@ -103,6 +103,7 @@ feature 'Curriculum Editor', js: true do
     expect(target_group.milestone).to eq(true)
 
     # he should be able to update a target group
+    current_sort_index = target_group.sort_index
     find('.target-group__header', text: target_group.name).click
     expect(page).to have_text(target_group.name)
     expect(page).to have_text(target_group.description)
@@ -120,6 +121,7 @@ feature 'Curriculum Editor', js: true do
     target_group.reload
     expect(target_group.description).not_to eq(new_target_group_description)
     expect(target_group.milestone).to eq(false)
+    expect(target_group.sort_index).to eq(current_sort_index)
 
     # he should be able to create another target group
     find('.target-group__create').click

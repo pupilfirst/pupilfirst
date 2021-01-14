@@ -34,6 +34,7 @@ type action =
   | ShowTopicEditor(bool)
   | UpdateSavingTopic(bool)
   | MarkReplyAsSolution(string)
+  | UnmarkReplyAsSolution
   | StartChangingLockStatus
   | FinishLockingTopic(string)
   | FinishUnlockingTopic
@@ -103,6 +104,10 @@ let reducer = (state, action) =>
   | MarkReplyAsSolution(postId) => {
       ...state,
       replies: state.replies |> Post.markAsSolution(postId),
+    }
+  | UnmarkReplyAsSolution => {
+      ...state,
+      replies: Post.unmarkSolution(state.replies),
     }
   | UpdateTopicCategory(topicCategory) => {...state, topicCategory: topicCategory}
   | StartChangingLockStatus => {...state, changingLockedStatus: true}
@@ -288,6 +293,10 @@ let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategori
   }
 }
 
+let topicSolutionId = replies => {
+  Js.Array.find(Post.solution, replies)->Belt.Option.map(Post.id)
+}
+
 @react.component
 let make = (
   ~topic,
@@ -431,7 +440,7 @@ let make = (
                 | None => React.null
                 }}
               </div>}
-          <TopicsShow__PostShow
+          {<TopicsShow__PostShow
             key={Post.id(state.firstPost)}
             post=state.firstPost
             topic=state.topic
@@ -445,8 +454,10 @@ let make = (
             addPostLikeCB={() => send(LikeFirstPost)}
             removePostLikeCB={() => send(RemoveLikeFromFirstPost)}
             markPostAsSolutionCB={() => ()}
+            unmarkPostAsSolutionCB={() => ()}
             archivePostCB={() => archiveTopic(community)}
-          />
+            topicSolutionId={topicSolutionId(state.replies)}
+          />}
         </div>
         <h5 className="pt-4 pb-2 lg:ml-14 border-b">
           {Inflector.pluralize(
@@ -471,9 +482,11 @@ let make = (
               updatePostCB={updateReply(send)}
               addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
               markPostAsSolutionCB={() => send(MarkReplyAsSolution(Post.id(reply)))}
+              unmarkPostAsSolutionCB={() => send(UnmarkReplyAsSolution)}
               removePostLikeCB={() => send(RemoveLikeFromReply(reply))}
               addPostLikeCB={() => send(LikeReply(reply))}
               archivePostCB={() => send(ArchivePost(Post.id(reply)))}
+              topicSolutionId={topicSolutionId(state.replies)}
             />
           </div>
         )

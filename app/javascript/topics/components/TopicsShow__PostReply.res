@@ -32,7 +32,7 @@ let make = (~post, ~users) => {
   let user = Post.user(users, post)
   let tip = <div className="text-left"> {"Jump to reply" |> str} </div>
   <div
-    className="topics-post-reply-show__replies flex flex-col border bg-gray-100 rounded-lg mb-2 p-4">
+    className="topics-post-reply-show__replies flex flex-col border bg-gray-100 rounded-lg mb-2 p-2 md:p-4">
     <div className="flex justify-between">
       <div className="flex items-center">
         {avatar(user)}

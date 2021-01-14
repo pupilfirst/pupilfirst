@@ -57,7 +57,8 @@ let communityTitle = community =>
   </h5>
 
 @react.component
-let make = (~targetId, ~communities) => <div className=""> {communities |> List.map(community => {
+let make = (~targetId, ~communities) =>
+  <div className=""> {communities |> Js.Array.map(community => {
       let communityId = community |> Community.id
       <div key=communityId className="mt-12 bg-gray-100 px-6 py-4 rounded-lg">
         <div className="flex flex-col md:flex-row w-full justify-between pb-3 items-center">
@@ -70,4 +71,4 @@ let make = (~targetId, ~communities) => <div className=""> {communities |> List.
           }}
         </div>
       </div>
-    }) |> Array.of_list |> React.array} </div>
+    }) |> React.array} </div>

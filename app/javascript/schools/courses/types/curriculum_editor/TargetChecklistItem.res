@@ -56,25 +56,22 @@ let updateOptional = (optional, t) => {
   optional: optional,
 }
 
-let removeItem = (index, list) => list |> Js.Array.filteri((_item, i) => i != index)
+let removeItem = (index, array) => array |> Js.Array.filteri((_item, i) => i != index)
 
-let moveUp = (index, list) => list |> ArrayUtils.swapUp(index)
+let moveUp = (index, array) => array |> ArrayUtils.swapUp(index)
 
-let moveDown = (index, list) => list |> ArrayUtils.swapDown(index)
+let moveDown = (index, array) => array |> ArrayUtils.swapDown(index)
 
-let copy = (i, list) =>
-  list
-  |> Array.mapi((index, item) => i == index ? list{item, item} : list{item})
-  |> ArrayUtils.flatten
+let copy = (index, array) =>
+  array |> Js.Array.mapi((item, i) => i == index ? [item, item] : [item]) |> ArrayUtils.flattenV2
 
 let removeMultichoiceOption = (choiceIndex, t) =>
   switch t.kind {
   | MultiChoice(choices) =>
     let updatedChoices =
-      choices
-      |> Array.mapi((i, choice) => i == choiceIndex ? list{} : list{choice})
-      |> ArrayUtils.flatten
-    t |> updateKind(MultiChoice(updatedChoices))
+      choices |> Array.mapi((i, choice) => i == choiceIndex ? [] : [choice]) |> ArrayUtils.flattenV2
+
+    updateKind(MultiChoice(updatedChoices), t)
   | Files
   | Link
   | ShortText
@@ -84,8 +81,8 @@ let removeMultichoiceOption = (choiceIndex, t) =>
 let addMultichoiceOption = t =>
   switch t.kind {
   | MultiChoice(choices) =>
-    let updatedChoices = [""] |> Array.append(choices)
-    t |> updateKind(MultiChoice(updatedChoices))
+    let updatedChoices = Js.Array.concat([""], choices)
+    updateKind(MultiChoice(updatedChoices), t)
   | Files
   | Link
   | ShortText
@@ -95,8 +92,10 @@ let addMultichoiceOption = t =>
 let updateMultichoiceOption = (choiceIndex, newOption, t) =>
   switch t.kind {
   | MultiChoice(choices) =>
-    let updatedChoices = choices |> Array.mapi((i, choice) => i == choiceIndex ? newOption : choice)
-    t |> updateKind(MultiChoice(updatedChoices))
+    let updatedChoices =
+      choices |> Js.Array.mapi((choice, i) => i == choiceIndex ? newOption : choice)
+
+    updateKind(MultiChoice(updatedChoices), t)
   | Files
   | Link
   | ShortText
@@ -114,17 +113,19 @@ let isFilesKind = t =>
   | LongText => false
   }
 
-let isValidChecklistItem = t =>
+let isValidChecklistItem = t => {
+  let titleValid = Js.String.trim(t.title) |> Js.String.length >= 1
+
   switch t.kind {
   | MultiChoice(choices) =>
-    choices |> Js.Array.filter(choice => choice |> String.trim == "") |> ArrayUtils.isEmpty &&
-      t.title |> String.trim |> String.length >= 1
+    choices |> Js.Array.filter(choice => String.trim(choice) == "") |> ArrayUtils.isEmpty &&
+      titleValid
   | Files
   | Link
   | ShortText
-  | LongText =>
-    t.title |> String.trim |> String.length >= 1
+  | LongText => titleValid
   }
+}
 
 let decodeMetadata = (kind, json) =>
   switch kind {
@@ -159,7 +160,7 @@ let encodeMetadata = kind =>
   switch kind {
   | MultiChoice(choices) =>
     open Json.Encode
-    object_(list{("choices", choices |> stringArray)})
+    object_(list{("choices", stringArray(choices))})
   | Files
   | Link
   | ShortText

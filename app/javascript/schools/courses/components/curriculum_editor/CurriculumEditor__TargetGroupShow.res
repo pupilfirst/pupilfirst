@@ -44,12 +44,19 @@ let archivedClasses = archived =>
   )
 
 let updateSortIndex = (targetGroups, targetGroup, up, updateTargetGroupSortIndexCB) => {
-  let newTargetGroups = targetGroups |> ListUtils.swap(up, targetGroup)
+  let index = Js.Array.indexOf(targetGroup, targetGroups)
 
-  let targetGroupIds = newTargetGroups |> List.map(t => t |> TargetGroup.id) |> Array.of_list
-  targetGroupIds |> CurriculumEditor__SortResourcesMutation.sort(
+  let newTargetGroups = up
+    ? ArrayUtils.swapUp(index, targetGroups)
+    : ArrayUtils.swapDown(index, targetGroups)
+
+  let targetGroupIds = Js.Array.map(TargetGroup.id, newTargetGroups)
+
+  CurriculumEditor__SortResourcesMutation.sort(
     CurriculumEditor__SortResourcesMutation.TargetGroup,
+    targetGroupIds,
   )
+
   updateTargetGroupSortIndexCB(newTargetGroups)
 }
 
@@ -74,14 +81,16 @@ let make = (
   )
   let milestone = targetGroup |> TargetGroup.milestone
   let targetGroupArchived = targetGroup |> TargetGroup.archived
-  let targetsInTG =
+
+  let targetsInGroup =
     targets
-    |> List.filter(target => target |> Target.targetGroupId == (targetGroup |> TargetGroup.id))
+    |> Js.Array.filter(target => Target.targetGroupId(target) == TargetGroup.id(targetGroup))
     |> Target.sort
 
   let targetsToDisplay = showArchived
-    ? targetsInTG
-    : targetsInTG |> List.filter(target => !(target |> Target.visibility === Archived))
+    ? targetsInGroup
+    : targetsInGroup |> Js.Array.filter(target => !(Target.visibility(target) == Archived))
+
   let handleResponseCB = target => {
     let targetId = target["id"]
     let targetGroupId = targetGroup |> TargetGroup.id
@@ -133,9 +142,8 @@ let make = (
         | None => React.null
         }}
       </div>
-      {targetGroups |> List.length == 1
-        ? React.null
-        : <div
+      {targetGroups |> Js.Array.length > 1
+        ? <div
             className="target-group__group-reorder flex flex-col shadow rounded-l-lg absolute h-full border border-r-0 overflow-hidden text-gray-700 justify-between items-center bg-white">
             <div
               title="Move Up"
@@ -150,25 +158,20 @@ let make = (
               title="Move Down"
               id={"target-group-move-down-" ++ (targetGroup |> TargetGroup.id)}
               className={"target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200" ++
-              sortIndexHiddenClass(index + 1 == (targetGroups |> List.length))}
+              sortIndexHiddenClass(index + 1 == Js.Array.length(targetGroups))}
               onClick={_ =>
                 updateSortIndex(targetGroups, targetGroup, false, updateTargetGroupSortIndexCB)}>
               <i className="fas fa-arrow-down text-sm" />
             </div>
-          </div>}
+          </div>
+        : React.null}
     </div>
     {targetsToDisplay
-    |> List.mapi((index, target) =>
+    |> Js.Array.mapi((target, index) =>
       <CurriculumEditor__TargetShow
-        key={target |> Target.id}
-        target
-        targets=targetsToDisplay
-        updateTargetSortIndexCB
-        index
-        course
+        key={Target.id(target)} target targets=targetsToDisplay updateTargetSortIndexCB index course
       />
     )
-    |> Array.of_list
     |> ReasonReact.array}
     {targetGroupArchived
       ? ReasonReact.null
@@ -184,7 +187,7 @@ let make = (
             title="Create target"
             value=state.targetTitle
             onChange={event => send(UpdateTargetTitle(ReactEvent.Form.target(event)["value"]))}
-            placeholder=t("create_target")
+            placeholder={t("create_target")}
             className="target-create__input text-left bg-gray-100 pr-5 pl-12 py-6 rounded-b appearance-none block w-full text-sm text-gray-900 font-semibold leading-tight hover:bg-gray-100 focus:outline-none focus:bg-white focus:border-gray-500"
           />
           {state.validTargetTitle

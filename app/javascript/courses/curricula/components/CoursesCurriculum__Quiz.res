@@ -21,11 +21,7 @@ module CreateQuizSubmissionQuery = %graphql(
 
 let createQuizSubmission = (target, selectedAnswersIds, setSaving, addSubmissionCB) => {
   setSaving(_ => true)
-  CreateQuizSubmissionQuery.make(
-    ~targetId=target |> Target.id,
-    ~answerIds=selectedAnswersIds |> Array.of_list,
-    (),
-  )
+  CreateQuizSubmissionQuery.make(~targetId=target |> Target.id, ~answerIds=selectedAnswersIds, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     switch response["createQuizSubmission"]["submission"] {
@@ -73,7 +69,7 @@ let iconClasses = (answerOption, selectedAnswer) => {
 
 let handleSubmit = (answer, target, selectedAnswersIds, setSaving, addSubmissionCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
-  let answerIds = selectedAnswersIds |> List.append(list{answer |> QuizQuestion.answerId})
+  let answerIds = Js.Array.concat(selectedAnswersIds, [QuizQuestion.answerId(answer)])
 
   createQuizSubmission(target, answerIds, setSaving, addSubmissionCB)
 }
@@ -82,9 +78,9 @@ let handleSubmit = (answer, target, selectedAnswersIds, setSaving, addSubmission
 let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
   let quizQuestions = targetDetails |> TargetDetails.quizQuestions
   let (saving, setSaving) = React.useState(() => false)
-  let (selectedQuestion, setSelectedQuestion) = React.useState(() => quizQuestions |> List.hd)
+  let (selectedQuestion, setSelectedQuestion) = React.useState(() => quizQuestions[0])
   let (selectedAnswer, setSelectedAnswer) = React.useState(() => None)
-  let (selectedAnswersIds, setSelectedAnswersIds) = React.useState(() => list{})
+  let (selectedAnswersIds, setSelectedAnswersIds) = React.useState(() => [])
   let currentQuestion = selectedQuestion
   <div className="bg-gray-100 rounded overflow-hidden relative mb-18 mt-4">
     <div className="p-2 md:p-5">
@@ -99,20 +95,19 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
       <div className="pt-2">
         {currentQuestion
         |> QuizQuestion.answerOptions
-        |> List.map(answerOption =>
+        |> Js.Array.map(answerOption =>
           <div
             className={answerOptionClasses(answerOption, selectedAnswer)}
-            key={answerOption |> QuizQuestion.answerId}
+            key={QuizQuestion.answerId(answerOption)}
             onClick={_ => setSelectedAnswer(_ => Some(answerOption))}>
             <FaIcon classes={iconClasses(answerOption, selectedAnswer)} />
             <MarkdownBlock
-              markdown={answerOption |> QuizQuestion.answerValue}
+              markdown={QuizQuestion.answerValue(answerOption)}
               className="overflow-auto ml-2 w-full"
               profile=Markdown.Permissive
             />
           </div>
         )
-        |> Array.of_list
         |> React.array}
       </div>
     </div>
@@ -141,7 +136,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
                 onClick={_ => {
                   setSelectedQuestion(_ => nextQuestion)
                   setSelectedAnswersIds(_ =>
-                    selectedAnswersIds |> List.append(list{answer |> QuizQuestion.answerId})
+                    Js.Array.concat(selectedAnswersIds, [QuizQuestion.answerId(answer)])
                   )
                   setSelectedAnswer(_ => None)
                 }}>

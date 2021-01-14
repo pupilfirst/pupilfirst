@@ -62,4 +62,26 @@ feature 'Topic creator', js: true do
       expect(new_topic.topic_category).to eq(category_2)
     end
   end
+
+  context 'personal coaches are assigned' do
+    let(:coach_1) { create :faculty, school: school }
+    let(:coach_2) { create :faculty, school: school }
+
+    before do
+      create :faculty_course_enrollment, faculty: coach_1, course: course
+      create :faculty_startup_enrollment, faculty: coach_2, startup: student.startup
+    end
+
+    scenario 'personal coaches are notified when a student creates a new topic' do
+      sign_in_user(student.user, referrer: new_topic_community_path(community))
+
+      topic_title = Faker::Lorem.sentence
+      fill_in('Title', with: topic_title)
+      add_markdown 'topic body'
+      click_button 'Create Topic'
+      expect(page).to have_text(topic_title)
+      new_topic = community.topics.find_by(title: topic_title)
+      expect(new_topic.subscribers).to eq([coach_2.user, student.user])
+    end
+  end
 end

@@ -13,6 +13,7 @@ class Topic < ApplicationRecord
   has_many :live_replies, -> { where('post_number > ?', 1).merge(Post.live) }, class_name: 'Post', inverse_of: :topic
   has_many :post_likes, through: :posts
   has_many :topic_subscription, dependent: :destroy
+  has_many :subscribers, through: :topic_subscription, source: :user
   has_many :users, through: :topic_subscription
 
   scope :live, -> { where(archived: false) }

@@ -11,22 +11,22 @@ class GenerateManifestService
       name: @school.name,
       icons: [
         {
-          src: url_helpers.rails_representation_url(icon_variant(:sm), only_path: true),
+          src: icon_src(:sm),
           sizes: "100x100",
           type: "image/png"
         },
         {
-          src: url_helpers.rails_representation_url(icon_variant(:md), only_path: true),
+          src: icon_src(:md),
           sizes: "144x144",
           type: "image/png"
         },
         {
-          src: url_helpers.rails_representation_url(icon_variant(:lg), only_path: true),
+          src: icon_src(:lg),
           sizes: "192x192",
           type: "image/png"
         },
         {
-          src: url_helpers.rails_representation_url(icon_variant(:xl3), only_path: true),
+          src: icon_src(:xl3),
           sizes: "512x512",
           type: "image/png"
         },
@@ -39,11 +39,17 @@ class GenerateManifestService
     }
   end
 
-
   private
 
+  def icon_src(variant)
+    @icon.present? ? url_helpers.rails_representation_url(icon_variant(variant), only_path: true) : '/favicon.ico'
+  end
+
+  def icon
+    @icon ||= @school.icon
+  end
+
   def icon_variant(variant)
-    icon = @school.icon
     case variant
       when :sm
         icon.variant(combine_options:

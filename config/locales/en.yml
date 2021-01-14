@@ -222,7 +222,7 @@ en:
       issued_date_label: "Issued on:"
       issued_by_label: "Issued by:"
       revoked_date_label: "Revoked on:"
-      revoked_by_label: "Revoked by:"/home/bodhi/code/pupilfirst/app/presenters/topics/show_presenter.rb
+      revoked_by_label: "Revoked by:"
       revoked_status_label: Revoked
       new_certificate_label: "Issue new certificate:"
       select_certificate_input_label: Select a certificate to issue

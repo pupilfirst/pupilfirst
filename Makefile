@@ -54,7 +54,7 @@ puma:
 upstream-remotes:
 	@git remote add upstream git@github.com:pupilfirst/pupilfirst.git
 
-fork-sync: upstream-remotes ## Manualy fetch upstream/master, build a fork-sync branch and try to merge it into master
+fork-sync: ## Manualy fetch upstream/master, build a fork-sync branch and try to merge it into master
 	@git fetch upstream
 	@git checkout upstream/master
 	@git switch -c fork-sync

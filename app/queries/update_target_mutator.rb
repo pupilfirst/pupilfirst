@@ -18,6 +18,7 @@ class UpdateTargetMutator < ApplicationQuery
   validate :only_one_method_of_completion
   validate :target_and_evaluation_criteria_have_same_course
   validate :prerequisite_targets_in_same_level
+  validate :prerequisite_targets_not_archived
   validate :checklist_has_valid_data
   validate :checklist_within_allowed_length
 
@@ -37,6 +38,15 @@ class UpdateTargetMutator < ApplicationQuery
     return if targets.count == prerequisite_targets.count
 
     errors[:base] << 'Prerequisite targets must be from the same level as the target'
+  end
+
+  def prerequisite_targets_not_archived
+    non_archived_targets = Target.where(id: prerequisite_targets).
+      where.not(visibility: Target::VISIBILITY_ARCHIVED)
+
+    return if non_archived_targets.count == prerequisite_targets.count
+
+    errors[:base] << 'Cannot have archived prerequisites'
   end
 
   def target_exists

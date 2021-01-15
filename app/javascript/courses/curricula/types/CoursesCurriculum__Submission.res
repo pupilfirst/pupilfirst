@@ -29,7 +29,7 @@ let pending = t =>
 let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")
 
 let sort = ts =>
-  ts->Belt.List.sort((t1, t2) => t2.createdAt->DateFns.differenceInSeconds(t1.createdAt))
+  ts |> ArrayUtils.copyAndSort((t1, t2) => t2.createdAt->DateFns.differenceInSeconds(t1.createdAt))
 
 let decode = json => {
   open Json.Decode

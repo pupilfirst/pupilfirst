@@ -11,7 +11,7 @@ type t = {
   targetGroupId: string,
   sortIndex: int,
   resubmittable: bool,
-  prerequisiteTargetIds: list<string>,
+  prerequisiteTargetIds: array<string>,
   reviewed: bool,
 }
 
@@ -28,7 +28,7 @@ let decode = json => {
     targetGroupId: json |> field("targetGroupId", string),
     sortIndex: json |> field("sortIndex", int),
     resubmittable: json |> field("resubmittable", bool),
-    prerequisiteTargetIds: json |> field("prerequisiteTargetIds", list(string)),
+    prerequisiteTargetIds: json |> field("prerequisiteTargetIds", array(string)),
     reviewed: json |> field("reviewed", bool),
   }
 }

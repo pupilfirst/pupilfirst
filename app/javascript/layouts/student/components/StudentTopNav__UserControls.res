@@ -14,12 +14,13 @@ let showLink = (icon, text, href) => {
 let links = () => {
   [
     showLink("edit", "Edit Profile", "/user/edit"),
-    showLink("power-off", "Sign-out", "/users/sign_out"),
+    showLink("power-off", "Sign Out", "/users/sign_out"),
   ]
 }
 
 let selected = user => {
   <button
+    title="Show user controls"
     className="md:ml-2 h-10 w-10 rounded-full border border-gray-300 hover:border-primary-500">
     {user->Belt.Option.mapWithDefault(
       <Avatar name="Unknown User" className="inline-block object-contain rounded-full" />,

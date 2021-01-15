@@ -63,7 +63,7 @@ feature 'Topic creator', js: true do
     end
   end
 
-  context 'personal coaches are assigned' do
+  context 'when personal coaches are assigned' do
     let(:coach_1) { create :faculty, school: school }
     let(:coach_2) { create :faculty, school: school }
 
@@ -72,7 +72,7 @@ feature 'Topic creator', js: true do
       create :faculty_startup_enrollment, faculty: coach_2, startup: student.startup
     end
 
-    scenario 'personal coaches are notified when a student creates a new topic' do
+    scenario 'when user creates a new topic' do
       sign_in_user(student.user, referrer: new_topic_community_path(community))
 
       topic_title = Faker::Lorem.sentence
@@ -81,6 +81,7 @@ feature 'Topic creator', js: true do
       click_button 'Create Topic'
       expect(page).to have_text(topic_title)
       new_topic = community.topics.find_by(title: topic_title)
+      # personal coaches are subscribed to the new topic
       expect(new_topic.subscribers).to eq([coach_2.user, student.user])
     end
   end

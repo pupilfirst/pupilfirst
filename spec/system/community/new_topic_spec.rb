@@ -79,7 +79,7 @@ feature 'Topic creator', js: true do
       fill_in('Title', with: topic_title)
       add_markdown 'topic body'
       click_button 'Create Topic'
-      expect(page).to have_text(topic_title)
+      expect(page).to have_text('Unsubscribe')
       new_topic = community.topics.find_by(title: topic_title)
       # personal coaches are subscribed to the new topic
       expect(new_topic.subscribers).to eq([coach_2.user, student.user])

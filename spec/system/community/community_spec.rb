@@ -407,6 +407,22 @@ feature 'Community', js: true do
     expect(page).to have_text(topic_1.title)
   end
 
+  scenario 'user plays around with subscription' do
+    sign_in_user(student_1.user, referrer: topic_path(topic_1))
+
+    expect(page).to have_text(topic_1.title)
+
+    # can subscribe to a topic
+    click_button 'Subscribe'
+    expect(page).to have_text('Unsubscribe')
+    expect(topic_1.subscribers).to include(student_1.user)
+
+    # can Unsubscribe
+    click_button 'Unsubscribe'
+    expect(page).to have_text('Subscribe')
+    expect(topic_1.subscribers).not_to include(student_1.user)
+  end
+
   context 'when a topic has a archived replies and likes on its posts' do
     let(:archived_reply) { create :post, topic: topic_1, creator: student_1.user, post_number: 3, archiver: student_1.user, archived_at: Time.zone.now }
 

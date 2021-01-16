@@ -73,4 +73,8 @@ class SubmissionsResolver < ApplicationQuery
   def students
     @students ||= Founder.where(startup_id: course.startups)
   end
+
+  def allow_token_auth?
+    true
+  end
 end

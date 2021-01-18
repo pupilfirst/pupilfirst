@@ -309,8 +309,6 @@ en:
       edit_profile: Edit Profile
       sign_out: Sign Out
 
-
-
   jobs:
     topics:
       topic_created_notification_job:

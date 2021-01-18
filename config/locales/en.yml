@@ -34,8 +34,8 @@ en:
       all_categories_button: All Categories
       empty_topics: There's no discussion here yet.
       filter_input_label: "Filter by:"
-      filter_input_placeholder_default: Search by topic title or filter by solution
-      filter_input_placeholder_categories: Filter by category, solution or search by topic title
+      filter_input_placeholder_default: Search within topics or filter by solution
+      filter_input_placeholder_categories: Filter by category, solution or search within topics
       sort_criterion_input_label: "Sort by:"
       sort_criterion_posted_at: Posted At
       sort_criterion_last_activity: Last Activity

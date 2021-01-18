@@ -56,7 +56,7 @@ let avatar = (~size=("10", "10"), avatarUrl, name) =>
   }
 
 @react.component
-let make = (~entry, ~markNotificationCB, ~showTime) => {
+let make = (~entry, ~markNotificationCB) => {
   let (saving, setSaving) = React.useState(() => false)
 
   <a
@@ -87,8 +87,7 @@ let make = (~entry, ~markNotificationCB, ~showTime) => {
       <div className="flex-shrink-0">
         <span className="notifications__entry-card-time block text-xs text-gray-800">
           <span className="hidden md:inline-block md:pl-4">
-            {(showTime ? "" : "on ") ++
-            Entry.createdAt(entry)->DateFns.format(showTime ? "HH:mm" : "MMM d") |> str}
+            {Entry.createdAt(entry)->DateFns.format("HH:mm") |> str}
           </span>
         </span>
         <div

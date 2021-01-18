@@ -395,7 +395,7 @@ en:
 
   offline:
     title: You are offline
-    headding: You are offline!
+    heading: You are offline!
     message: It seems there is a problem with your connection.<br/>Please check your network status.
 
   dashboard:

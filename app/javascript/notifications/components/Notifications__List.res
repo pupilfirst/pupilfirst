@@ -246,7 +246,7 @@ let computeInitialState = () => {
   saving: false,
 }
 
-let entriesList = (caption, entries, showTime, send) =>
+let entriesList = (caption, entries, send) =>
   <div>
     <div className="text-xs text-gray-800 px-4 lg:px-8"> {str(caption)} </div>
     <div>
@@ -261,7 +261,7 @@ let entriesList = (caption, entries, showTime, send) =>
         : entries
           |> Js.Array.map(entry =>
             <Notifications__EntryCard
-              key={Entry.id(entry)} entry markNotificationCB={markNotification(send)} showTime
+              key={Entry.id(entry)} entry markNotificationCB={markNotification(send)}
             />
           )
           |> React.array}
@@ -393,28 +393,22 @@ let showEntries = (entries, state, send) => {
   )
 
   let now = Js.Date.make()
-  let entriesToday = Js.Array.filter(
-    e => Js.Date.toDateString(Entry.createdAt(e)) == Js.Date.toDateString(now),
-    filteredEntries,
-  )
-  let entriesEarlier = Js.Array.filter(
-    e => Js.Date.toDateString(Entry.createdAt(e)) != Js.Date.toDateString(now),
-    filteredEntries,
-  )
 
-  <div>
-    {ReactUtils.nullIf(
-      entriesList("Today", entriesToday, true, send),
-      ArrayUtils.isEmpty(entriesToday),
-    )}
-    {ReactUtils.nullIf(
-      entriesList("Earlier", entriesEarlier, false, send),
-      ArrayUtils.isEmpty(entriesEarlier),
-    )}
-    <div className="text-center pb-4">
+  let dates = Js.Array.map(e => Entry.createdAt(e), filteredEntries)->ArrayUtils.distinct
+
+  <div> {Js.Array.map(d => {
+      let entries = Js.Array.filter(
+        e => Js.Date.toDateString(Entry.createdAt(e)) == Js.Date.toDateString(d),
+        filteredEntries,
+      )
+
+      let heading =
+        Js.Date.toDateString(d) == Js.Date.toDateString(now) ? "Today" : Js.Date.toDateString(d)
+
+      ReactUtils.nullIf(entriesList(heading, entries, send), ArrayUtils.isEmpty(entries))
+    }, dates)->React.array} <div className="text-center pb-4">
       {entriesLoadedData(state.totalEntriesCount, Array.length(filteredEntries))}
-    </div>
-  </div>
+    </div> </div>
 }
 
 let markAllNotificationsButton = (state, send, entries) => {

@@ -393,6 +393,11 @@ en:
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
     file_invalid: Please select a file with a size less than 5 MB.
 
+  offline:
+    title: You are offline
+    headding: You are offline!
+    message: It seems there is a problem with your connection.<br/>Please check your network status.
+
   dashboard:
     dashboard:
       tour:

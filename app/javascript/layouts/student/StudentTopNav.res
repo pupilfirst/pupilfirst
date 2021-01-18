@@ -1,5 +1,7 @@
 %bs.raw(`require("./StudentTopNav.css")`)
 
+let t = I18n.t(~scope="components.StudentTopNav")
+
 let str = React.string
 
 open StudentTopNav__Types
@@ -26,7 +28,7 @@ let signOutLink = () =>
         href="/users/sign_out"
         rel="nofollow"
         className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold">
-        <FaIcon classes="fas fa-power-off" /> <span className="ml-2"> {"Sign Out" |> str} </span>
+        <FaIcon classes="fas fa-power-off" /> <span className="ml-2"> {t("sign_out") |> str} </span>
       </a>
     </div>
   </div>
@@ -39,7 +41,7 @@ let signInLink = () =>
       <a
         className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold"
         href="/users/sign_in">
-        <FaIcon classes="fas fa-power-off" /> <span className="ml-2"> {"Sign In" |> str} </span>
+        <FaIcon classes="fas fa-power-off" /> <span className="ml-2"> {t("sign_in") |> str} </span>
       </a>
     </div>
   </div>

@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.StudentTopNav__DropDown")
+
 open StudentTopNav__Types
 
 let handleToggle = (setLinksVisible, _) => setLinksVisible(linksVisible => !linksVisible)
@@ -23,7 +25,7 @@ let additionalLinks = (linksVisible, links) =>
         |> Array.of_list
         |> ReasonReact.array}
       </div>
-    : ReasonReact.null;
+    : ReasonReact.null
 
 @react.component
 let make = (~links) => {
@@ -36,7 +38,7 @@ let make = (~links) => {
       className="ml-2 font-semibold text-sm p-4 md:px-3 md:py-2 cursor-pointer relative rounded-lg text-gray-900 hover:bg-gray-200 hover:text-primary-500"
       onClick={handleToggle(setLinksVisible)}
       key="more-links">
-      <span> {"More" |> str} </span>
+      <span> {t("more") |> str} </span>
       <i className="fas fa-caret-down ml-2" />
       {additionalLinks(linksVisible, moreLinks)}
     </div>

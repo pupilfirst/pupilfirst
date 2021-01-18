@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.StudentTopNav__UserControls")
+
 let showLink = (icon, text, href) => {
   <div key=href className="">
     <a
@@ -13,8 +15,8 @@ let showLink = (icon, text, href) => {
 
 let links = () => {
   [
-    showLink("edit", "Edit Profile", "/user/edit"),
-    showLink("power-off", "Sign Out", "/users/sign_out"),
+    showLink("edit", t("edit_profile"), "/user/edit"),
+    showLink("power-off", t("sign_out"), "/users/sign_out"),
   ]
 }
 

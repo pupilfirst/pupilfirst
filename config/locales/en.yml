@@ -300,6 +300,17 @@ en:
       last_edited_by_label: "Last edited by "
     TopicsShow__LikeManager:
       like_button_tooltip: Like this post
+    StudentTopNav:
+      sign_out: Sign Out
+      sign_in: Sign In
+    StudentTopNav__DropDown:
+      more: More
+    StudentTopNav__UserControls:
+      edit_profile: Edit Profile
+      sign_out: Sign Out
+
+
+
   jobs:
     topics:
       topic_created_notification_job:

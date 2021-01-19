@@ -392,19 +392,18 @@ let showEntries = (entries, state, send) => {
     }
   )
 
-  let now = Js.Date.make()
-
-  let dates = Js.Array.map(e => Entry.createdAt(e), filteredEntries)->ArrayUtils.distinct
+  let dates =
+    Js.Array.map(
+      e => Js.Date.toDateString(Entry.createdAt(e)),
+      filteredEntries,
+    )->ArrayUtils.distinct
 
   <div> {Js.Array.map(d => {
       let entries = Js.Array.filter(
-        e => Js.Date.toDateString(Entry.createdAt(e)) == Js.Date.toDateString(d),
+        e => Js.Date.toDateString(Entry.createdAt(e)) == d,
         filteredEntries,
       )
-
-      let heading =
-        Js.Date.toDateString(d) == Js.Date.toDateString(now) ? "Today" : Js.Date.toDateString(d)
-
+      let heading = d == Js.Date.toDateString(Js.Date.make()) ? "Today" : d
       ReactUtils.nullIf(entriesList(heading, entries, send), ArrayUtils.isEmpty(entries))
     }, dates)->React.array} <div className="text-center pb-4">
       {entriesLoadedData(state.totalEntriesCount, Array.length(filteredEntries))}

@@ -123,14 +123,14 @@ en:
       level_up_title: Ready to Level Up!
       level_up_description: Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!
     Notifications__List:
-      empty_notifications: "You don't have any notifications!"
+      empty_notifications: You don't have any notifications!
       notifications_fully_loaded_text: "Showing all %{total_notifications} notifications"
       notifications_partially_loaded_text: "Showing %{loaded_notifications_count} of %{total_notifications} notifications"
-      mark_all_as_read_button: "Mark All as Read"
+      mark_all_as_read_button: Mark All as Read
       filter:
-        input_label: Search by title, event, read and unread
-        input_placeholder: Show topics created
-        input_hint: Search by title, event, read and unread
+        input_label: Search
+        input_placeholder: Search by title, event, read and unread
+        input_hint: Search by title name or event type
         label:
           title: Search by title
           status: Status

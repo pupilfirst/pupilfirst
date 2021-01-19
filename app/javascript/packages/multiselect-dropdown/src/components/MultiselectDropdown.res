@@ -211,13 +211,12 @@ module Make = (Selectable: Selectable) => {
       </div>
       <div />
       {switch (showDropdown, results, defaultOptions, hint) {
-      | (false, results, [], None) =>
+      | (false, results, _options, _hint) =>
         switch (value, results) {
         | ("", _) => React.null
         | (_value, []) => wrapper(str(emptyMessage))
         | (_value, results) => wrapper(React.array(results))
         }
-      | (false, _result, _options, _hint) => React.null
       | (true, [], [], None) => value == "" ? React.null : wrapper(str(emptyMessage))
       | (true, [], [], Some(hint)) => wrapper(showHint(hint))
       | (true, [], options, None) =>

@@ -59,8 +59,7 @@ let avatar = (~size=("10", "10"), avatarUrl, name) =>
 let make = (~entry, ~markNotificationCB) => {
   let (saving, setSaving) = React.useState(() => false)
 
-  <a
-    href={"/notifications/" ++ Entry.id(entry)}
+  <div
     className={"notifications__entry-card block relative py-5 px-4 lg:px-8 hover:bg-gray-200 focus:bg-gray-200 transition ease-in-out duration-150 " ++
     switch Entry.readAt(entry) {
     | Some(_readAt) => "notifications__entry-card--read text-gray-700"
@@ -81,7 +80,9 @@ let make = (~entry, ~markNotificationCB) => {
           </span>->ReactUtils.nullUnless(Entry.readAt(entry)->Belt.Option.isNone)}
         </div>
         {Entry.notifiableId(entry)->Belt.Option.isSome
-          ? <p className="ml-4"> {str(Entry.message(entry))} </p>
+          ? <a className="ml-4" href={"/notifications/" ++ Entry.id(entry)}>
+              {str(Entry.message(entry))}
+            </a>
           : <div className="ml-4"> {str(Entry.message(entry))} </div>}
       </div>
       <div className="flex-shrink-0">
@@ -96,6 +97,7 @@ let make = (~entry, ~markNotificationCB) => {
             <Tooltip tip={str("Mark as Read")} position=#Left>
               <button
                 disabled=saving
+                title="Mark as Read"
                 onClick={markNotification(Entry.id(entry), setSaving, markNotificationCB)}
                 className="flex justify-center items-center w-8 h-8 font-semibold p-2 md:py-1 border border-gray-400 rounded text-sm bg-white text-gray-700 hover:text-primary-500 hover:border-primary-400 hover:bg-gray-200 hover:shadow-md transition ease-in-out duration-150">
                 <Icon className="if i-check-solid" />
@@ -106,5 +108,5 @@ let make = (~entry, ~markNotificationCB) => {
         </div>
       </div>
     </div>
-  </a>
+  </div>
 }

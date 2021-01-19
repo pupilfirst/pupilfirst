@@ -240,7 +240,7 @@ let computeInitialState = () => {
   filter: {
     title: None,
     event: None,
-    status: None,
+    status: Some(#unread),
   },
   totalEntriesCount: 0,
   saving: false,
@@ -250,21 +250,13 @@ let entriesList = (caption, entries, send) =>
   <div>
     <div className="text-xs text-gray-800 px-4 lg:px-8"> {str(caption)} </div>
     <div>
-      {entries |> ArrayUtils.isEmpty
-        ? <div
-            className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
-            <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
-            <h4 className="mt-3 text-base md:text-lg text-center font-semibold">
-              {t("empty_notifications")->str}
-            </h4>
-          </div>
-        : entries
-          |> Js.Array.map(entry =>
-            <Notifications__EntryCard
-              key={Entry.id(entry)} entry markNotificationCB={markNotification(send)}
-            />
-          )
-          |> React.array}
+      {Js.Array.map(
+        entry =>
+          <Notifications__EntryCard
+            key={Entry.id(entry)} entry markNotificationCB={markNotification(send)}
+          />,
+        entries,
+      )->React.array}
     </div>
   </div>
 
@@ -398,16 +390,26 @@ let showEntries = (entries, state, send) => {
       filteredEntries,
     )->ArrayUtils.distinct
 
-  <div> {Js.Array.map(d => {
-      let entries = Js.Array.filter(
-        e => Js.Date.toDateString(Entry.createdAt(e)) == d,
-        filteredEntries,
-      )
-      let heading = d == Js.Date.toDateString(Js.Date.make()) ? "Today" : d
-      ReactUtils.nullIf(entriesList(heading, entries, send), ArrayUtils.isEmpty(entries))
-    }, dates)->React.array} <div className="text-center pb-4">
-      {entriesLoadedData(state.totalEntriesCount, Array.length(filteredEntries))}
-    </div> </div>
+  {
+    ArrayUtils.isEmpty(filteredEntries)
+      ? <div
+          className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
+          <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
+          <h4 className="mt-3 text-base md:text-lg text-center font-semibold">
+            {t("empty_notifications")->str}
+          </h4>
+        </div>
+      : <div> {Js.Array.map(d => {
+            let entries = Js.Array.filter(
+              e => Js.Date.toDateString(Entry.createdAt(e)) == d,
+              filteredEntries,
+            )
+            let heading = d == Js.Date.toDateString(Js.Date.make()) ? "Today" : d
+            ReactUtils.nullIf(entriesList(heading, entries, send), ArrayUtils.isEmpty(entries))
+          }, dates)->React.array} <div className="text-center pb-4">
+            {entriesLoadedData(state.totalEntriesCount, Array.length(filteredEntries))}
+          </div> </div>
+  }
 }
 
 let markAllNotificationsButton = (state, send, entries) => {
@@ -438,11 +440,13 @@ let make = () => {
       <WebpushSubscriptionManager />
     </div>
     <div className="w-full bg-gray-100 border-b sticky top-0 z-30 px-4 lg:px-8 py-3">
-      <label className="block text-tiny font-semibold uppercase pl-px text-left">
+      <label
+        htmlFor="search_notifcations"
+        className="block text-tiny font-semibold uppercase pl-px text-left">
         {t("filter.input_label")->str}
       </label>
       <Multiselect
-        id="filter"
+        id="search_notifcations"
         unselected={unselected(state)}
         selected={selected(state)}
         onSelect={onSelectFilter(send)}

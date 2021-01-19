@@ -376,6 +376,8 @@ en:
       success_notification: This topic has been locked. No new replies will be accepted.
     unlock_topic:
       success_notification: This topic has been unlocked. Community members can now post replies again.
+    mark_notification:
+      success_notification: The notification has been marked as read.
 
   queries:
     delete_certificate_mutator:

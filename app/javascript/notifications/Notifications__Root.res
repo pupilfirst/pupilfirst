@@ -10,7 +10,10 @@ let make = (~wrapperClasses, ~buttonClasses, ~title=?, ~icon=?) => {
       closeDrawerCB={() => setShowNotifications(_ => false)}>
       <Notifications__List />
     </EditorDrawer>->ReactUtils.nullUnless(showNotifications)}
-    <button className=buttonClasses onClick={_ => setShowNotifications(_ => true)}>
+    <button
+      title="Show Notifications"
+      className=buttonClasses
+      onClick={_ => setShowNotifications(_ => true)}>
       <FaIcon classes={icon->Belt.Option.getWithDefault("")} />
       {str(title->Belt.Option.getWithDefault(""))}
       <span

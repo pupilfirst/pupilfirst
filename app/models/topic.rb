@@ -16,8 +16,14 @@ class Topic < ApplicationRecord
   scope :live, -> { where(archived: false) }
 
   pg_search_scope :search_by_title, against: :title, using: {
-                                      tsearch: { prefix: true, any_word: true },
-                                    }
+    tsearch: { prefix: true, any_word: true },
+  }
+
+  pg_search_scope :search_by_title_and_post_body, against: :title, using: {
+    tsearch: { prefix: true, any_word: true },
+  }, associated_against: {
+    posts: :body
+  }
 
   def solution
     replies.find_by(solution: true)

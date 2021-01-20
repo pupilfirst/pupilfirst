@@ -42,11 +42,24 @@ class GenerateManifestService
   private
 
   def icon_src(variant)
-    @icon.present? ? url_helpers.rails_representation_url(icon_variant(variant), only_path: true) : '/favicon.ico'
+    @icon.present? ? url_helpers.rails_representation_url(icon_variant(variant), only_path: true) : "/images/pwa/#{default_icon_variant(variant)}.png"
   end
 
   def icon
     @icon ||= @school.icon
+  end
+
+  def default_icon_variant(variant)
+    case variant
+      when :md
+        "pf_md"
+      when :lg
+        "pf_lg"
+      when :xl3
+        "pf_3xl"
+      when :sm
+        "pf_sm"
+    end
   end
 
   def icon_variant(variant)

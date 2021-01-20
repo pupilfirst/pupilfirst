@@ -8,6 +8,7 @@ module Layouts
         authenticity_token: view.form_authenticity_token,
         is_logged_in: current_user.present?,
         current_user: user_details,
+        has_notifications: notifications?
       }
     end
 
@@ -24,6 +25,12 @@ module Layouts
     end
 
     private
+
+    def notifications?
+      return false if current_user.blank?
+
+      current_user.notifications.where(read_at: nil).any?
+    end
 
     def nav_links
       @nav_links ||= begin

@@ -6,6 +6,7 @@ type props = {
   links: list<NavLink.t>,
   isLoggedIn: bool,
   currentUser: option<User.t>,
+  hasNotifications: bool,
 }
 
 let decodeProps = json => {
@@ -15,6 +16,7 @@ let decodeProps = json => {
     logoUrl: json |> field("logoUrl", nullable(string)) |> Js.Null.toOption,
     links: json |> field("links", list(NavLink.decode)),
     isLoggedIn: json |> field("isLoggedIn", bool),
+    hasNotifications: json |> field("hasNotifications", bool),
     currentUser: json |> field("currentUser", optional(User.decode)),
   }
 }
@@ -28,6 +30,7 @@ ReactDOMRe.renderToElementWithId(
     links={props.links}
     isLoggedIn={props.isLoggedIn}
     currentUser={props.currentUser}
+    hasNotifications={props.hasNotifications}
   />,
   "student-top-nav",
 )

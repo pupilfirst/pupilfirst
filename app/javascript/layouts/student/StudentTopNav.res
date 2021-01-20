@@ -46,17 +46,18 @@ let signInLink = () =>
     </div>
   </div>
 
-let notificationButton = () =>
+let notificationButton = hasNotifications =>
   <Notifications__Root
     key="notifications-button"
     wrapperClasses="md:ml-1 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0 rounded-lg hover:bg-gray-200"
     buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center p-4 md:px-3 md:py-2"
     icon="if i-bell-regular text-xl"
+    hasNotifications
   />
 
 let isMobile = () => Webapi.Dom.window |> Webapi.Dom.Window.innerWidth < 768
 
-let headerLinks = (links, isLoggedIn, user) => {
+let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
   let (visibleLinks, dropdownLinks) = switch (links, isMobile()) {
   | (links, true) => (links, list{})
   | (list{l1, l2, l3, l4, l5, ...rest}, false) => (list{l1, l2, l3}, list{l4, l5, ...rest})
@@ -67,7 +68,9 @@ let headerLinks = (links, isLoggedIn, user) => {
   | visibleLinks =>
     (visibleLinks |> List.mapi((index, l) => headerLink(index |> string_of_int, l)))
     ->List.append(list{<StudentTopNav__DropDown links=dropdownLinks key="more-links" />})
-    ->List.append(list{ReactUtils.nullUnless(notificationButton(), isLoggedIn && !isMobile())})
+    ->List.append(list{
+      ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn && !isMobile()),
+    })
     ->List.append(list{
       switch (isLoggedIn, isMobile()) {
       | (true, true) => signOutLink()
@@ -83,7 +86,7 @@ let headerLinks = (links, isLoggedIn, user) => {
 }
 
 @react.component
-let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser) => {
+let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifications) => {
   let (menuHidden, toggleMenuHidden) = React.useState(() => isMobile())
 
   React.useEffect(() => {
@@ -112,7 +115,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser) => {
           </a>
           {ReactUtils.nullUnless(
             <div className="flex items-center">
-              {notificationButton()}
+              {notificationButton(hasNotifications)}
               <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
                 <div
                   className={"student-navbar__menu-btn w-8 h-8 text-center relative focus:outline-none rounded-full " ++ (
@@ -130,7 +133,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser) => {
         {!menuHidden && !isMobile()
           ? <div
               className="student-navbar__links-container flex justify-end items-center w-3/5 lg:w-3/4 flex-no-wrap flex-shrink-0">
-              {headerLinks(links, isLoggedIn, currentUser)}
+              {headerLinks(links, isLoggedIn, currentUser, hasNotifications)}
             </div>
           : React.null}
       </nav>
@@ -138,7 +141,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser) => {
     {isMobile() && !menuHidden
       ? <div
           className="student-navbar__links-container flex flex-row border-t w-full flex-wrap shadow-lg">
-          {headerLinks(links, isLoggedIn, currentUser)}
+          {headerLinks(links, isLoggedIn, currentUser, hasNotifications)}
         </div>
       : React.null}
   </div>

@@ -1,6 +1,6 @@
 type event =
   | TopicCreated
-  | TopicEdited
+  | PostCreated
 
 type t = {
   actor: option<User.t>,
@@ -36,7 +36,7 @@ let readAt = t => t.readAt
 let decodeEvent = event =>
   switch event {
   | #topic_created => TopicCreated
-  | #topic_edited => TopicEdited
+  | #post_created => PostCreated
   }
 
 let makeFromJS = entry =>

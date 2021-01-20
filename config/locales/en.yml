@@ -149,9 +149,6 @@ en:
       subscribe: Subscribe
       unsubscribe: Unsubscribe
       subscribed_on_another_device: Subscribe on this Device
-
-
-
     TopicsShow__SubscriptionManager:
       subscribe: Subscribe
       unsubscribe: Unsubscribe

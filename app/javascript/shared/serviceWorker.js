@@ -10,10 +10,7 @@ window.addEventListener('load', () => {
     } else if (registration.active) {
       serviceWorker = registration.active;
       console.log('Service worker active.');
-
-
     }
-
   }).catch(registrationError => {
     console.log('Service worker registration failed: ', registrationError);
   });

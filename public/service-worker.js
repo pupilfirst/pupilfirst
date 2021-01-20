@@ -1,6 +1,6 @@
 // https://developers.google.com/web/updates/2015/03/push-notifications-on-the-open-web
 
-self.addEventListener('push', function(event) {
+self.addEventListener('push', function (event) {
   var data = event.data.json();
   event.waitUntil(
     self.registration.showNotification(data.title, {
@@ -10,7 +10,7 @@ self.addEventListener('push', function(event) {
   );
 });
 
-self.addEventListener('notificationclick', function(event) {
+self.addEventListener('notificationclick', function (event) {
   // Android doesn't close the notification when you click on it
   // See: http://crbug.com/463146
   event.notification.close();
@@ -21,16 +21,16 @@ self.addEventListener('notificationclick', function(event) {
     clients.matchAll({
       type: "window"
     })
-    .then(function(clientList) {
-      for (var i = 0; i < clientList.length; i++) {
-        var client = clientList[i];
-        if (client.url == "/notifications/".concat(event.notification.tag)  && 'focus' in client)
-          return client.focus();
-      }
-      if (clients.openWindow) {
-        return clients.openWindow("/notifications/".concat(event.notification.tag));
-      }
-    })
+      .then(function (clientList) {
+        for (var i = 0; i < clientList.length; i++) {
+          var client = clientList[i];
+          if (client.url == "/notifications/".concat(event.notification.tag) && 'focus' in client)
+            return client.focus();
+        }
+        if (clients.openWindow) {
+          return clients.openWindow("/notifications/".concat(event.notification.tag));
+        }
+      })
   );
 });
 
@@ -47,7 +47,7 @@ self.addEventListener("install", (event) => {
       // Setting {cache: 'reload'} in the new request will ensure that the
       // response isn't fulfilled from the HTTP cache; i.e., it will be from
       // the network.
-      await cache.add(new Request(OFFLINE_URL, { cache: "reload" }));
+      await cache.add(new Request(OFFLINE_URL, {cache: "reload"}));
     })()
   );
   // Force the waiting service worker to become the active service worker.

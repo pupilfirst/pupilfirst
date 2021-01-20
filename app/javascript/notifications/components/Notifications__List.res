@@ -4,14 +4,14 @@ open Notifications__Types
 
 let t = I18n.t(~scope="components.Notifications__List")
 
-type event = [#topic_created | #topic_edited]
+type event = [#topic_created | #post_created]
 
 type status = [#unread | #read]
 
 let eventName = event =>
   switch event {
   | #topic_created => t("filter.events.topic_created_text")
-  | #topic_edited => t("filter.events.topic_edited_text")
+  | #post_created => t("filter.events.post_created_text")
   }
 
 module MarkAllNotificationsQuery = %graphql(
@@ -333,7 +333,7 @@ module Selectable = {
 module Multiselect = MultiselectDropdown.Make(Selectable)
 
 let unselected = state => {
-  let eventFilters = Selectable.event->Array.map([#topic_created, #topic_edited])
+  let eventFilters = Selectable.event->Array.map([#topic_created, #post_created])
 
   let trimmedFilterString = state.filterString |> String.trim
   let title = trimmedFilterString == "" ? [] : [Selectable.title(trimmedFilterString)]

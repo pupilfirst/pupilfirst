@@ -2927,7 +2927,7 @@
             "deprecationReason": null
           },
           {
-            "name": "topic_edited",
+            "name": "post_created",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null

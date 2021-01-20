@@ -42,9 +42,8 @@ let decode = json => {
   }
 }
 
-let updateList = (targets, target) => {
-  let oldTargets = targets |> List.filter(t => t.id !== target.id)
-  oldTargets |> List.rev |> List.append(list{target}) |> List.rev
+let updateArray = (targets, target) => {
+  targets |> Js.Array.filter(t => t.id != target.id) |> Js.Array.concat([target])
 }
 
 let create = (~id, ~targetGroupId, ~title, ~sortIndex, ~visibility) => {
@@ -55,7 +54,7 @@ let create = (~id, ~targetGroupId, ~title, ~sortIndex, ~visibility) => {
   visibility: visibility,
 }
 
-let sort = targets => targets |> List.sort((x, y) => x.sortIndex - y.sortIndex)
+let sort = targets => targets |> ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex)
 
 let archive = t => {...t, visibility: Archived}
 
@@ -66,13 +65,13 @@ let archived = t =>
   | Draft => false
   }
 
-let removeTarget = (target, targets) => targets |> List.filter(t => t.id != target.id)
+let removeTarget = (target, targets) => targets |> Js.Array.filter(t => t.id != target.id)
 
-let targetIdsInTargetGroup = (id, targets) =>
-  targets |> List.filter(t => t.targetGroupId == id) |> List.map(t => t.id)
+let targetIdsInTargetGroup = (targetGroupId, targets) =>
+  targets |> Js.Array.filter(t => t.targetGroupId == targetGroupId) |> Js.Array.map(t => t.id)
 
 let updateSortIndex = sortedTargets =>
-  sortedTargets |> List.mapi((sortIndex, t) =>
+  sortedTargets |> Js.Array.mapi((t, sortIndex) =>
     create(
       ~id=t.id,
       ~targetGroupId=t.targetGroupId,

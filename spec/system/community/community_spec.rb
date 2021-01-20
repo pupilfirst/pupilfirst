@@ -394,21 +394,21 @@ feature 'Community', js: true do
 
   scenario 'user searches for topics in community' do
     # Let's set the titles for both topics to completely different sentences to avoid confusing the fuzzy search algo.
-    topic_1.update!(title: 'Hello World')
-    topic_2.update!(title: 'Completely Different Sentence')
+    topic_1.update!(title: 'Complex sentence with certain words')
+    topic_2.update!(title: 'Completely Different Sequence')
+    create :post, topic: topic_3, creator: student_1.user, post_number: 2, body: 'Another Complex Sentence'
 
     sign_in_user(coach.user, referrer: community_path(community))
 
     expect(page).to have_text(topic_2.title)
 
-    search_string = topic_1.title[0..9].strip
+    fill_in 'filter', with: 'complex sentence'
 
-    fill_in 'filter', with: search_string
-
-    click_button "Pick Topic Title: #{search_string}"
+    click_button "Search: complex sentence"
 
     expect(page).to_not have_text(topic_2.title)
     expect(page).to have_text(topic_1.title)
+    expect(page).to have_text(topic_3.title)
   end
 
   scenario 'user plays around with subscription' do

@@ -63,13 +63,13 @@ let checklistDropdown = (checklistItem, allowFileKind, updateChecklistItemCB) =>
   let defaultKindTypes = [ChecklistItem.LongText, ShortText, Link, MultiChoice(["Yes", "No"])]
 
   let allowedKindTypes = allowFileKind
-    ? defaultKindTypes |> Array.append([ChecklistItem.Files])
+    ? Js.Array.concat([ChecklistItem.Files], defaultKindTypes)
     : defaultKindTypes
 
   let contents =
     allowedKindTypes
     |> Js.Array.filter(kind => kind != selectedKind)
-    |> Array.mapi((index, kind) =>
+    |> Js.Array.mapi((kind, index) =>
       <button
         key={index |> string_of_int}
         className="w-full px-2 py-1 focus:outline-none appearance-none text-left"
@@ -100,9 +100,9 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
   <div className="ml-3 mt-3">
     <div className="text-xs font-semibold mb-2"> {"Choices:" |> str} </div>
     {
-      let showRemoveIcon = Array.length(choices) > 2
+      let showRemoveIcon = Js.Array.length(choices) > 2
       choices
-      |> Array.mapi((index, choice) =>
+      |> Js.Array.mapi((choice, index) =>
         <div key={index |> string_of_int}>
           <div className="flex items-center text-sm rounded mt-2">
             <span className="text-gray-400"> <i className="far fa-circle text-base" /> </span>
@@ -169,7 +169,7 @@ let isRequiredStepTitleDuplicated = (checklist, item) => {
     |> Js.Array.filter(checklistItem =>
       checklistItem |> ChecklistItem.title |> String.trim == trimmedTitle
     )
-    |> Array.length > 1
+    |> Js.Array.length > 1
   }
 }
 

@@ -20,7 +20,7 @@ type loading =
 type filter = {
   topicCategory: option<TopicCategory.t>,
   solution: solution,
-  title: option<string>,
+  search: option<string>,
   target: option<Target.t>,
   sortCriterion: sortCriterion,
   sortDirection: sortDirection,
@@ -107,7 +107,7 @@ let getTopics = (send, communityId, cursor, filter) => {
     ~after=?cursor,
     ~topicCategoryId?,
     ~targetId?,
-    ~search=?filter.title,
+    ~search=?filter.search,
     ~resolution=filter.solution,
     ~sortCriterion=filter.sortCriterion,
     ~sortDirection=filter.sortDirection,
@@ -161,7 +161,7 @@ let filterToQueryString = filter => {
     ("sortDirection", sortDirection),
   ])
 
-  Belt.Option.forEach(filter.title, title => Js.Dict.set(filterDict, "title", title))
+  Belt.Option.forEach(filter.search, search => Js.Dict.set(filterDict, "search", search))
 
   Belt.Option.forEach(filter.topicCategory, tc =>
     Js.Dict.set(filterDict, "topicCategory", TopicCategory.id(tc))
@@ -339,37 +339,38 @@ module Selectable = {
   type t =
     | TopicCategory(TopicCategory.t)
     | Solution(bool)
-    | Title(string)
+    | Search(string)
 
   let label = t =>
     switch t {
     | TopicCategory(_category) => Some("Category")
-    | Title(_) => Some("Topic Title")
+    | Search(_) => Some("Search")
     | Solution(_) => Some("Solution")
     }
 
   let value = t =>
     switch t {
     | TopicCategory(category) => TopicCategory.name(category)
-    | Title(search) => search
+    | Search(search) => search
     | Solution(solution) => solution ? "Solved" : "Unsolved"
     }
 
   let searchString = t =>
     switch t {
     | TopicCategory(category) => "category " ++ TopicCategory.name(category)
-    | Title(search) => search
+    | Search(search) => search
     | Solution(_solution) => "solution solved unsolved"
     }
 
   let color = t =>
     switch t {
     | TopicCategory(_category) => "orange"
-    | Title(_search) => "gray"
+    | Search(_search) => "gray"
     | Solution(_solution) => "green"
     }
+
   let topicCategory = topicCategory => TopicCategory(topicCategory)
-  let title = search => Title(search)
+  let search = search => Search(search)
   let solution = on => Solution(on)
 }
 
@@ -388,7 +389,7 @@ let unselected = (topicCategories, filter, state) => {
 
   let trimmedFilterString = state.filterString |> String.trim
 
-  let title = trimmedFilterString == "" ? [] : [Selectable.title(trimmedFilterString)]
+  let search = trimmedFilterString == "" ? [] : [Selectable.search(trimmedFilterString)]
 
   let hasSolution = switch filter.solution {
   | #Solved => [Selectable.solution(false)]
@@ -396,7 +397,7 @@ let unselected = (topicCategories, filter, state) => {
   | #Unselected => [Selectable.solution(true), Selectable.solution(false)]
   }
 
-  unselectedCategories |> Js.Array.concat(title) |> Js.Array.concat(hasSolution)
+  unselectedCategories |> Js.Array.concat(search) |> Js.Array.concat(hasSolution)
 }
 
 let selected = filter => {
@@ -407,7 +408,7 @@ let selected = filter => {
     )
 
   let selectedSearchString =
-    filter.title |> OptionUtils.mapWithDefault(title => [Selectable.title(title)], [])
+    filter.search |> OptionUtils.mapWithDefault(search => [Selectable.search(search)], [])
 
   let selectedSolutionFilter = switch filter.solution {
   | #Solved => [Selectable.solution(true)]
@@ -424,7 +425,7 @@ let onSelectFilter = (filter, send, selectable) => {
   switch selectable {
   | Selectable.TopicCategory(topicCategory) =>
     updateParams({...filter, topicCategory: Some(topicCategory)})
-  | Title(title) => updateParams({...filter, title: Some(title)})
+  | Search(search) => updateParams({...filter, search: Some(search)})
   | Solution(onOrOff) =>
     let solution = onOrOff ? #Solved : #Unsolved
     updateParams({...filter, solution: solution})
@@ -435,12 +436,12 @@ let onSelectFilter = (filter, send, selectable) => {
 let onDeselectFilter = (filter, selectable) =>
   switch selectable {
   | Selectable.TopicCategory(_topicCategory) => updateParams({...filter, topicCategory: None})
-  | Title(_title) => updateParams({...filter, title: None})
+  | Search(_search) => updateParams({...filter, search: None})
   | Solution(_) => updateParams({...filter, solution: #Unselected})
   }
 
 let filterPlaceholder = (filter, topicCategories) =>
-  switch (filter.topicCategory, filter.title) {
+  switch (filter.topicCategory, filter.search) {
   | (None, None) =>
     ArrayUtils.isEmpty(topicCategories)
       ? t("filter_input_placeholder_default")
@@ -526,7 +527,7 @@ let filterFromQueryParams = (search, target, topicCategories) => {
 
   open Webapi.Url.URLSearchParams
   {
-    title: get("title", params),
+    search: get("search", params),
     topicCategory: get("topicCategory", params)->Belt.Option.flatMap(cat =>
       Js.Array.find(c => TopicCategory.id(c) == cat, topicCategories)
     ),

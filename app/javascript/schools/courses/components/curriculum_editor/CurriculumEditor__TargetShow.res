@@ -6,7 +6,7 @@ let str = ReasonReact.string
 
 let targetClasses = (target, targets) =>
   "target-group__target flex justify-between items-center pl-2 pr-5 " ++
-  switch (targets |> List.length == 1, target |> Target.visibility) {
+  switch (Js.Array.length(targets) == 1, target |> Target.visibility) {
   | (true, Archived) => "target-group__target--archived py-4 pl-5"
   | (false, Archived) => "target-group__target--archived py-4"
   | (true, _) => "py-6 pl-5"
@@ -14,11 +14,16 @@ let targetClasses = (target, targets) =>
   }
 
 let updateSortIndex = (targets, target, up, updateTargetSortIndexCB) => {
-  let newTargets = targets |> ListUtils.swap(up, target)
-  let targetIds = newTargets |> List.map(t => t |> Target.id) |> Array.of_list
-  targetIds |> CurriculumEditor__SortResourcesMutation.sort(
+  let index = Js.Array.indexOf(target, targets)
+  let newTargets = up ? ArrayUtils.swapUp(index, targets) : ArrayUtils.swapDown(index, targets)
+
+  let targetIds = newTargets |> Js.Array.map(Target.id)
+
+  CurriculumEditor__SortResourcesMutation.sort(
     CurriculumEditor__SortResourcesMutation.Target,
+    targetIds,
   )
+
   updateTargetSortIndexCB(newTargets)
 }
 
@@ -42,9 +47,8 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
 
   <div
     className="flex target-group__target-container border-t bg-white overflow-hidden relative hover:bg-gray-100 hover:text-primary-500">
-    {targets |> List.length == 1
-      ? React.null
-      : <div
+    {Js.Array.length(targets) > 1
+      ? <div
           className="target-group__target-reorder relative flex flex-col z-10 h-full border-r border-transparent text-gray-700 justify-between items-center">
           <div
             title="Move Up"
@@ -58,11 +62,12 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
             title="Move Down"
             id={"target-move-down-" ++ (target |> Target.id)}
             className={"target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-200" ++
-            sortIndexHiddenClass(index + 1 == (targets |> List.length))}
+            sortIndexHiddenClass(index + 1 == Js.Array.length(targets))}
             onClick={_ => updateSortIndex(targets, target, false, updateTargetSortIndexCB)}>
             <i className="fas fa-arrow-down text-sm" />
           </div>
-        </div>}
+        </div>
+      : React.null}
     <Link
       id={"target-show-" ++ (target |> Target.id)}
       title={"Edit content of target " ++ (target |> Target.title)}

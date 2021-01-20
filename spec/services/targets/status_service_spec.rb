@@ -70,6 +70,19 @@ describe Targets::StatusService do
           end
         end
 
+        context 'when prerequisites are a mix of draft and live targets' do
+          let(:team_target_1) { create :target, :draft, target_group: target_group, role: Target::ROLE_TEAM }
+
+          before do
+            # Submit the individual target.
+            create :timeline_event, :with_owners, latest: true, owners: [founder_1], target: founder_target_2, passed_at: 1.day.ago
+          end
+
+          it 'returns :pending' do
+            expect(subject.status).to eq(Targets::StatusService::STATUS_PENDING)
+          end
+        end
+
         context 'when all prerequisites are complete' do
           let!(:submission_1) do
             create :timeline_event, :with_owners, latest: true, owners: [founder_1, founder_2], target: team_target_1, passed_at: 1.day.ago

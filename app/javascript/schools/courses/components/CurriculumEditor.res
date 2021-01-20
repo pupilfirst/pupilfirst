@@ -12,8 +12,8 @@ type state = {
   selectedLevel: Level.t,
   editorAction: editorAction,
   levels: array<Level.t>,
-  targetGroups: list<TargetGroup.t>,
-  targets: list<Target.t>,
+  targetGroups: array<TargetGroup.t>,
+  targets: array<Target.t>,
   showArchived: bool,
 }
 
@@ -22,9 +22,9 @@ type action =
   | UpdateEditorAction(editorAction)
   | UpdateLevels(Level.t)
   | UpdateTargetGroup(TargetGroup.t)
-  | UpdateTargetGroups(list<TargetGroup.t>)
+  | UpdateTargetGroups(array<TargetGroup.t>)
   | UpdateTarget(Target.t)
-  | UpdateTargets(list<Target.t>)
+  | UpdateTargets(array<Target.t>)
   | ToggleShowArchived
 
 let reducer = (state, action) =>
@@ -35,52 +35,56 @@ let reducer = (state, action) =>
     let newLevels = level |> Level.updateArray(state.levels)
     {...state, levels: newLevels, editorAction: Hidden, selectedLevel: level}
   | UpdateTargetGroup(targetGroup) =>
-    let newtargetGroups = targetGroup |> TargetGroup.updateList(state.targetGroups)
+    let newtargetGroups = targetGroup |> TargetGroup.updateArray(state.targetGroups)
     {...state, targetGroups: newtargetGroups}
   | UpdateTargetGroups(targetGroups) => {...state, targetGroups: targetGroups}
   | UpdateTarget(target) =>
-    let newtargets = target |> Target.updateList(state.targets)
+    let newtargets = target |> Target.updateArray(state.targets)
     {...state, targets: newtargets}
   | ToggleShowArchived => {...state, showArchived: !state.showArchived}
   | UpdateTargets(targets) => {...state, targets: targets}
   }
 
 let showArchivedButton = (targetGroupsInLevel, targets) => {
-  let tgIds = targetGroupsInLevel |> List.map(tg => tg |> TargetGroup.id)
+  let tgIds = targetGroupsInLevel |> Js.Array.map(TargetGroup.id)
 
   let numberOfArchivedTargetGroupsInLevel =
-    targetGroupsInLevel |> List.filter(tg => tg |> TargetGroup.archived) |> List.length
+    targetGroupsInLevel |> Js.Array.filter(TargetGroup.archived) |> Js.Array.length
+
   let numberOfArchivedTargetsInLevel =
     targets
-    |> List.filter(target => tgIds |> List.mem(target |> Target.targetGroupId))
-    |> List.filter(target => target |> Target.visibility === Archived)
-    |> List.length
+    |> Js.Array.filter(target => tgIds |> Js.Array.includes(Target.targetGroupId(target)))
+    |> Js.Array.filter(target => Target.visibility(target) == Archived)
+    |> Js.Array.length
 
   numberOfArchivedTargetGroupsInLevel > 0 || numberOfArchivedTargetsInLevel > 0
 }
 
 let updateTargetSortIndex = (state, send, sortedTargets) => {
-  let oldTargets = state.targets |> List.filter(t => !(sortedTargets |> List.mem(t)))
-  send(UpdateTargets(oldTargets |> List.append(sortedTargets |> Target.updateSortIndex)))
+  let oldTargets = state.targets |> Js.Array.filter(t => !Js.Array.includes(t, sortedTargets))
+
+  send(UpdateTargets(Js.Array.concat(oldTargets, Target.updateSortIndex(sortedTargets))))
 }
 
 let updateTargetGroupSortIndex = (state, send, sortedTargetGroups) => {
-  let oldTargetGroups = state.targetGroups |> List.filter(t => !(sortedTargetGroups |> List.mem(t)))
+  let oldTargetGroups =
+    state.targetGroups |> Js.Array.filter(t => !Js.Array.includes(t, sortedTargetGroups))
+
   send(
     UpdateTargetGroups(
-      oldTargetGroups |> List.append(sortedTargetGroups |> TargetGroup.updateSortIndex),
+      Js.Array.concat(TargetGroup.updateSortIndex(sortedTargetGroups), oldTargetGroups),
     ),
   )
 }
 
 let levelOfTarget = (targetId, targets, levels, targetGroups) => {
   let target =
-    targets |> ListUtils.unsafeFind(
+    targets |> ArrayUtils.unsafeFind(
       target => Target.id(target) == targetId,
       "Unable to find target with ID:" ++ (targetId ++ " in CurriculumEditor"),
     )
   let targetGroup =
-    targetGroups |> ListUtils.unsafeFind(
+    targetGroups |> ArrayUtils.unsafeFind(
       tg => TargetGroup.id(tg) == Target.targetGroupId(target),
       "Unable to find target group with ID:" ++
       (Target.targetGroupId(target) ++
@@ -135,19 +139,22 @@ let make = (
   let currentLevel = state.selectedLevel
   let currentLevelId = Level.id(currentLevel)
   let updateLevelsCB = level => send(UpdateLevels(level))
+
   let targetGroupsInLevel =
     state.targetGroups
-    |> List.filter(targetGroup => targetGroup |> TargetGroup.levelId == currentLevelId)
+    |> Js.Array.filter(targetGroup => TargetGroup.levelId(targetGroup) == currentLevelId)
     |> TargetGroup.sort
+
   let targetGroupsToDisplay = state.showArchived
     ? targetGroupsInLevel
-    : targetGroupsInLevel |> List.filter(tg => !(tg |> TargetGroup.archived))
+    : targetGroupsInLevel |> Js.Array.filter(tg => !TargetGroup.archived(tg))
+
   let showTargetGroupEditorCB = targetGroup =>
     send(UpdateEditorAction(ShowTargetGroupEditor(targetGroup)))
 
   let updateTargetCB = target => {
     let targetGroup =
-      state.targetGroups |> ListUtils.unsafeFind(
+      state.targetGroups |> ArrayUtils.unsafeFind(
         tg => TargetGroup.id(tg) == Target.targetGroupId(target),
         "Unable to find target group with ID:" ++ Target.targetGroupId(target),
       )
@@ -169,8 +176,8 @@ let make = (
           let targetIdsInTargerGroup =
             state.targets |> Target.targetIdsInTargetGroup(targetGroup |> TargetGroup.id)
           let newTargets =
-            state.targets |> List.map(target =>
-              targetIdsInTargerGroup |> List.mem(target |> Target.id)
+            state.targets |> Js.Array.map(target =>
+              targetIdsInTargerGroup |> Js.Array.includes(Target.id(target))
                 ? Target.archive(target)
                 : target
             )
@@ -262,7 +269,7 @@ let make = (
       </div>
       <div className="target-group__container max-w-3xl mt-5 mx-auto relative">
         {targetGroupsToDisplay
-        |> List.mapi((index, targetGroup) =>
+        |> Js.Array.mapi((targetGroup, index) =>
           <CurriculumEditor__TargetGroupShow
             key={targetGroup |> TargetGroup.id}
             targetGroup
@@ -277,7 +284,6 @@ let make = (
             course
           />
         )
-        |> Array.of_list
         |> ReasonReact.array}
         <div
           onClick={_ => send(UpdateEditorAction(ShowTargetGroupEditor(None)))}

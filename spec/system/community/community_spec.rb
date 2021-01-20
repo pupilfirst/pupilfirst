@@ -38,7 +38,7 @@ feature 'Community', js: true do
     create :faculty_course_enrollment, faculty: coach, course: course
     create :community_course_connection, course: course, community: community
     create :community_course_connection, course: course_2, community: community
-    create :topic_subscription, topic: topic_1, user: student_2.user
+    create :topic_subscription, topic: topic_1, user: student_1.user
   end
 
   scenario 'user who is not logged in tries to visit community' do
@@ -125,7 +125,6 @@ feature 'Community', js: true do
     # Topic and replies are visible
     expect(page).to have_text(topic_1.first_post.body)
     expect(page).to have_text(reply_1.body)
-    expect(page).to have_text('Unsubscribe')
 
     # Only a faculty or the creator can edit or delete a topic
     within("div#post-show-#{topic_1.first_post.id}") do
@@ -150,7 +149,7 @@ feature 'Community', js: true do
     new_reply = topic_1.replies.find_by(post_number: 3)
     expect(new_reply.body).to eq(reply_body)
 
-    expect(Notification.last.notifiable).to eq(new_topic)
+    expect(Notification.last.notifiable).to eq(new_reply)
 
     # can edit his reply
     find("div[aria-label='Options for post #{new_reply.id}']").click

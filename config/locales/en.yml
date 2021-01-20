@@ -318,9 +318,11 @@ en:
       sign_out: Sign Out
 
   jobs:
-    topics:
-      topic_created_notification_job:
+    notifications:
+      topic_created_job:
         topic_created: "%{user_name} has created a new topic in %{community_name} community"
+      post_created_job:
+        post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
     timeline_events:
       verification_notification:
         founder:

@@ -1,5 +1,5 @@
-module Topics
-  class TopicCreatedNotificationJob < ApplicationJob
+module Notifications
+  class TopicCreatedJob < ApplicationJob
     queue_as :default
 
     def perform(actor_id, topic_id)
@@ -17,10 +17,9 @@ module Topics
             recipient: recipient,
             message:
               I18n.t(
-                'jobs.topics.topic_created_notification_job.topic_created',
+                'jobs.notifications.topic_created_job.topic_created',
                 user_name: actor.name,
                 community_name: topic.community.name,
-
               )
           )
           Notifications::FireService.new(notification).fire

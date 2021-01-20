@@ -83,15 +83,7 @@ feature 'Topic creator', js: true do
       new_topic = community.topics.find_by(title: topic_title)
       # personal coaches are subscribed to the new topic
       expect(new_topic.subscribers).to eq([coach_2.user, student.user])
-      expect(Notification.count).to eq(1)
-      notification = Notification.last
-      expect(notification.actor).to eq(student.user)
-      expect(notification.notifiable_type).to eq('Topic')
-      expect(notification.notifiable_id).to eq(new_topic.id)
-      expect(notification.read_at).to eq(nil)
-      expect(notification.event).to eq('topic_created')
-      expect(notification.message).to eq("#{student.user.name} has created a new topic in #{community.name} community")
-      expect(notification.recipient).to eq(coach_2.user)
+      expect(Notification.last.notifiable).to eq(new_topic)
     end
   end
 end

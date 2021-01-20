@@ -10,6 +10,9 @@ module Notifications
       case @notification.notifiable_type
         when 'Topic'
           url_helpers.topic_path(@notification.notifiable_id)
+        when 'Post'
+          topic = Post.find(@notification.notifiable_id).topic
+          url_helpers.topic_path(topic)
         else
           url_helpers.dashboard_path
       end

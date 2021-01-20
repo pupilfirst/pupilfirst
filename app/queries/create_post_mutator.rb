@@ -36,6 +36,8 @@ class CreatePostMutator < ApplicationQuery
       # Send a notification mail to addressee only if she isn't replying to herself.
       UserMailer.new_post(post, addressee).deliver_later if addressee.present? && current_user != addressee
 
+      Notifications::PostCreatedJob.perform_later(current_user.id, post.id)
+
       # Update the topic's last activity time.
       topic.update!(last_activity_at: Time.zone.now)
 

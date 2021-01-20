@@ -24,7 +24,7 @@ class CreateTopicMutator < ApplicationQuery
 
       create_subscribers(topic)
 
-      Topics::TopicCreatedNotificationJob.perform_later(current_user.id, topic.id)
+      Notifications::TopicCreatedJob.perform_later(current_user.id, topic.id)
 
       topic
     end

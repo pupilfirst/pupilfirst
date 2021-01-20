@@ -3,7 +3,22 @@ require 'rails_helper'
 feature 'Notification Show Spec', js: true do
   include UserSpecHelper
   include NotificationHelper
+  include WithEnvHelper
   let(:student) { create :student }
+  let(:vapid_key) { Webpush.generate_key }
+
+  let(:env_vars) {
+    {
+      VAPID_PUBLIC_KEY: vapid_key.public_key,
+      VAPID_PRIVATE_KEY: vapid_key.private_key
+    }
+  }
+
+  around do |example|
+    with_env(env_vars) do
+      example.run
+    end
+  end
 
   context 'with few notifications' do
     let!(:notification_1) { create :notification, recipient: student.user }
@@ -76,6 +91,28 @@ feature 'Notification Show Spec', js: true do
     sign_in_user student.user, referrer: dashboard_path
 
     click_button 'Show Notifications'
+    expect(page).to have_text("You don't have any notifications!")
+  end
+
+  scenario 'Subscribes for notifications' do
+
+    sign_in_user student.user, referrer: dashboard_path
+
+    click_button 'Show Notifications'
+    click_button 'Subscribe'
+
+    page.execute_script("document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }))")
+    page.execute_script("document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }))")
+    page.execute_script("document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }))")
+    page.execute_script("document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true }))")
+    # page.driver.execute_script(tab_keypress)
+    # page.driver.execute_script(tab_keypress)
+    # page.driver.execute_script(enter_keypress)
+    # page.send_keys :tab
+    # page.send_keys :tab
+    # page.send_keys :tab
+    # page.send_keys :enter
+    # binding.pry
     expect(page).to have_text("You don't have any notifications!")
   end
   #  add spec for subscription flow

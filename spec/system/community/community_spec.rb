@@ -38,7 +38,7 @@ feature 'Community', js: true do
     create :faculty_course_enrollment, faculty: coach, course: course
     create :community_course_connection, course: course, community: community
     create :community_course_connection, course: course_2, community: community
-    create :topic_subscription, topic: topic_1, user: student_1.user
+    create :topic_subscription, topic: topic_1, user: coach.user
   end
 
   scenario 'user who is not logged in tries to visit community' do

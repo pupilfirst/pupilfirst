@@ -143,6 +143,15 @@ en:
           topic_created_text: Topic Created
           topic_edited_text: Topic Edited
       button_load_more: Load More Notifications...
+    WebpushSubscriptionManager:
+      notification_rejected: Permission Rejected
+      notification_rejected_message: If you change your mind, click the lock icon to give Chrome permission to send you desktop notifications.
+      subscribe: Subscribe
+      unsubscribe: Unsubscribe
+      subscribed_on_another_device: Subscribe on this Device
+
+
+
     TopicsShow__SubscriptionManager:
       subscribe: Subscribe
       unsubscribe: Unsubscribe
@@ -256,7 +265,6 @@ en:
       teams_to_add_empty: "This list is empty! Add some students using the form above."
       notify_students_label: "Notify students, and send them a link to sign into this school."
       save_list_button: Save List
-
     TopicsShow__Root:
       linked_target_label: "Linked Target: "
       view_target_button: View Target

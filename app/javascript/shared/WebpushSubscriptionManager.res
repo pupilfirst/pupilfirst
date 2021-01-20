@@ -4,6 +4,8 @@ type subscription = {
   auth: string,
 }
 
+let t = I18n.t(~scope="components.WebpushSubscriptionManager")
+
 @bs.module("./webpushSubscription")
 external createSubscription: unit => Js.Promise.t<Js.Nullable.t<subscription>> =
   "createSubscription"
@@ -102,10 +104,7 @@ let saveSubscription = (subscription, send) => {
 }
 
 let handleNotificationBlock = () =>
-  Notification.error(
-    "Permission Rejected",
-    "If you change your mind, click the lock icon to give Chrome permission to send you desktop notifications.",
-  )
+  Notification.error(t("notification_rejected"), t("notification_rejected_message"))
 
 let createSubscription = (send, event) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -117,6 +116,7 @@ let createSubscription = (send, event) => {
     Js.Promise.resolve()
   }) |> Js.Promise.catch(_ => {
     send(ClearSaving)
+    Js.log("here i catch you")
     handleNotificationBlock()
     Js.Promise.resolve()
   }) |> ignore
@@ -172,12 +172,11 @@ let make = () => {
   React.useEffect1(loadStatus(state.status, send), [])
 
   switch state.status {
-  | Subscribed => button(state.saving, deleteSubscription(send), "bell-slash", "Unsubscribe")
-  | UnSubscribed => button(state.saving, createSubscription(send), "bell", "Subscribe")
-
+  | Subscribed => button(state.saving, deleteSubscription(send), "bell-slash", t("unsubscribe"))
+  | UnSubscribed => button(state.saving, createSubscription(send), "bell", t("subscribe"))
   | SubscribedOnAnotherDevice =>
     <div>
-      {button(state.saving, createSubscription(send), "bell", "Subscribe on this Device")}
+      {button(state.saving, createSubscription(send), "bell", t("subscribed_on_another_device"))}
     </div>
   }
 }

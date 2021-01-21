@@ -87,6 +87,28 @@ feature 'Notification Show Spec', js: true do
     end
   end
 
+  context 'with many notifications' do
+    before do
+      25.times do
+        create :notification, recipient: student.user
+      end
+    end
+
+    scenario 'user loads all notifications' do
+      sign_in_user student.user, referrer: dashboard_path
+      click_button 'Show Notifications'
+
+      expect(page).to have_text('Showing 10 of 25 notifications')
+      click_button 'Load More Notifications...'
+
+      expect(page).to have_text('Showing 20 of 25 notifications')
+      click_button 'Load More Notifications...'
+
+      expect(page).to have_text('Showing all 25 notifications')
+      expect(page).not_to have_text('Load More Notifications...')
+    end
+  end
+
   scenario 'When an user visits for the first time' do
     sign_in_user student.user, referrer: dashboard_path
 
@@ -99,21 +121,6 @@ feature 'Notification Show Spec', js: true do
     sign_in_user student.user, referrer: dashboard_path
 
     click_button 'Show Notifications'
-    click_button 'Subscribe'
-
-    page.execute_script("document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }))")
-    page.execute_script("document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }))")
-    page.execute_script("document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }))")
-    page.execute_script("document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true }))")
-    # page.driver.execute_script(tab_keypress)
-    # page.driver.execute_script(tab_keypress)
-    # page.driver.execute_script(enter_keypress)
-    # page.send_keys :tab
-    # page.send_keys :tab
-    # page.send_keys :tab
-    # page.send_keys :enter
-    # binding.pry
-    expect(page).to have_text("You don't have any notifications!")
+    expect(page).to have_text("Subscribe")
   end
-  #  add spec for subscription flow
 end

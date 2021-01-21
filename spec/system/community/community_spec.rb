@@ -182,6 +182,7 @@ feature 'Community', js: true do
 
     expect(page).not_to have_text(reply_body_for_edit)
     expect(new_reply.reload.archived_at).to_not eq(nil)
+    # Notifications created for the post must be deleted
     expect(Notification.count).to eq(0)
 
     # can add reply to another post

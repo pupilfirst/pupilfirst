@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :user, aliases: [:actor] do
+  factory :user, aliases: %w[actor recipient] do
     email { Faker::Internet.email(name: name) }
     sequence(:name) { |n| "#{Faker::Name.name} #{n}" }
     school { School.find_by(name: 'test') || create(:school, :current) }

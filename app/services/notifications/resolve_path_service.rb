@@ -7,10 +7,10 @@ module Notifications
     end
 
     def resolve
-      case @notification.notifiable_type
-        when 'Topic'
+      case @notification.event
+        when 'topic_created'
           url_helpers.topic_path(@notification.notifiable_id)
-        when 'Post'
+        when 'post_created'
           topic = Post.find(@notification.notifiable_id).topic
           url_helpers.topic_path(topic)
         else

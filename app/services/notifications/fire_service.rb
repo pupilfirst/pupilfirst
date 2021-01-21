@@ -29,7 +29,7 @@ module Notifications
 
     def vapid_keys
       {
-        subject: 'mailto:sender@example.com',
+        subject: 'mailto:support@pupilfirst.org',
         public_key: Rails.application.secrets.vapid_public_key,
         private_key: Rails.application.secrets.vapid_private_key
       }

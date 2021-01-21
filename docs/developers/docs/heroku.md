@@ -164,6 +164,22 @@ Make sure that the access token has the following scopes enabled:
 
 > Note: You cannot upload private videos if your Vimeo account type is `basic`.
 
+## Webpush Notifications
+To enable webpush notification you will have to set mandatory environment variable `VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY`.
+
+You can generate the keys by running the following on the server. ([Detailed Doc](https://github.com/zaru/webpush#generating-vapid-keys))
+
+```
+vapid_key = Webpush.generate_key
+
+#VAPID_PUBLIC_KEY
+vapid_key.public_key
+
+
+#VAPID_PRIVATE_KEY
+vapid_key.private_key
+```
+
 ## Troubleshooting
 
 If you're encountering crashes or errors, the first thing you should do is check the server logs. You can watch the Rails `production.log` file on Heroku by using the `logs` command:

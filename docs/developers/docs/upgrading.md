@@ -17,6 +17,23 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION`.
 
+### 2021.1
+- Introduced required environment variable `VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY` to support
+  webpush notification.
+
+  You can generate the keys by running the following on the server.
+
+  ```
+  vapid_key = Webpush.generate_key
+
+  #VAPID_PUBLIC_KEY
+  vapid_key.public_key
+
+
+  #VAPID_PRIVATE_KEY
+  vapid_key.private_key
+  ```
+
 ### 2020.4
 
 - Introduced required environment variable `GRAPH_API_RATE_LIMIT`, `MEMCACHEDCLOUD_SERVERS`, `MEMCACHEDCLOUD_USERNAME`,

@@ -34,7 +34,7 @@ class GenerateManifestService
       start_url: "/dashboard",
       display: "standalone",
       scope: "/",
-      background_color: "#4D1E9A",
+      background_color: "#ffffff",
       theme_color: "#4D1E9A",
     }
   end

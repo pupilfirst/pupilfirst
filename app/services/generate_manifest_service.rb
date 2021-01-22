@@ -42,7 +42,7 @@ class GenerateManifestService
   private
 
   def icon_src(variant)
-    @icon.present? ? url_helpers.rails_representation_url(icon_variant(variant), only_path: true) : "/images/pwa/#{default_icon_variant(variant)}.png"
+    icon.present? ? url_helpers.rails_representation_url(icon_variant(variant), only_path: true) : "/images/pwa/#{default_icon_variant(variant)}.png"
   end
 
   def icon

@@ -115,7 +115,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
           </a>
           {ReactUtils.nullUnless(
             <div className="flex items-center">
-              {notificationButton(hasNotifications)}
+              {ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn)}
               <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
                 <div
                   className={"student-navbar__menu-btn w-8 h-8 text-center relative focus:outline-none rounded-full " ++ (

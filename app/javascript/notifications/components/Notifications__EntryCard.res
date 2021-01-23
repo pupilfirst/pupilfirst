@@ -60,7 +60,7 @@ let make = (~entry, ~markNotificationCB) => {
   let (saving, setSaving) = React.useState(() => false)
 
   <div
-    className={"notifications__entry-card block relative py-5 px-4 lg:px-8 hover:bg-gray-200 focus:bg-gray-200 transition ease-in-out duration-150 " ++
+    className={"notifications__entry-card block relative py-5 px-4 lg:px-8 text-sm font-semibold hover:bg-gray-200 focus:bg-gray-200 transition ease-in-out duration-150 " ++
     switch Entry.readAt(entry) {
     | Some(_readAt) => "notifications__entry-card--read text-gray-700"
     | None => "notifications__entry-card--unread"

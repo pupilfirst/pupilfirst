@@ -58,7 +58,7 @@
   @apply .bg-gray-200 .text-primary-500;
 }
 
-.student-navbar__notifications-unread-bullet {
-  top: 4px;
-  right: 8px;
+.school-admin-navbar__notifications-unread-bullet {
+  top: 14px;
+  right: 20px;
 }

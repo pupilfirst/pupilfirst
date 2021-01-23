@@ -25,12 +25,16 @@ let selected = user => {
     title="Show user controls"
     className="md:ml-2 h-10 w-10 rounded-full border border-gray-300 hover:border-primary-500">
     {user->Belt.Option.mapWithDefault(
-      <Avatar name="Unknown User" className="inline-block object-contain rounded-full" />,
+      <Avatar name="Unknown User" className="inline-block object-contain rounded-full text-tiny" />,
       u =>
         User.avatarUrl(u)->Belt.Option.mapWithDefault(
-          <Avatar name={User.name(u)} className="inline-block object-contain rounded-full" />,
+          <Avatar
+            name={User.name(u)} className="inline-block object-contain rounded-full text-tiny"
+          />,
           src =>
-            <img className="inline-block object-contain rounded-full" src alt={User.name(u)} />,
+            <img
+              className="inline-block object-contain rounded-full text-tiny" src alt={User.name(u)}
+            />,
         ),
     )}
   </button>

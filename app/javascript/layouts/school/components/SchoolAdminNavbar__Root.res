@@ -313,13 +313,15 @@ let make = (
         }}
       </div>
       <ul>
-        <Notifications__Root
-          wrapperClasses="w-full"
-          buttonClasses="flex text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center w-full"
-          title=?{shrunk ? None : Some("Notifications")}
-          icon="fas fa-bell fa-fw text-lg mr-2"
-          hasNotifications
-        />
+        <div className="relative">
+          <Notifications__Root
+            wrapperClasses="w-full"
+            buttonClasses="flex relative text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center w-full"
+            title=?{shrunk ? None : Some("Notifications")}
+            icon="fas fa-bell fa-fw text-lg mr-2"
+            hasNotifications
+          />
+        </div>
         {bottomLink("/dashboard", shrunk, "fas fa-home", "Dashboard")}
         <li>
           <a

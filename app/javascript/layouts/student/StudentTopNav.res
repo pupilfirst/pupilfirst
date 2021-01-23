@@ -49,8 +49,8 @@ let signInLink = () =>
 let notificationButton = hasNotifications =>
   <Notifications__Root
     key="notifications-button"
-    wrapperClasses="md:ml-1 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0 rounded-lg hover:bg-gray-200"
-    buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center p-4 md:px-3 md:py-2"
+    wrapperClasses="relative md:ml-1 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center rounded-lg hover:bg-gray-200"
+    buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center px-3 pt-2 md:px-3 md:py-2"
     icon="if i-bell-regular text-xl"
     hasNotifications
   />

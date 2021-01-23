@@ -38,7 +38,7 @@
   }
 }
 
-@screen xl {
+@screen md {
   .editor-drawer {
     width: 48rem;
   }

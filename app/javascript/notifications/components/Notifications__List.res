@@ -435,7 +435,8 @@ let make = () => {
   }, [state.filter])
 
   <div>
-    <div className="flex justify-between items-center pt-4 px-4 lg:px-8 bg-gray-100">
+    <div
+      className="flex justify-start md:justify-between items-center pt-4 px-4 lg:px-8 bg-gray-100">
       <div className="font-bold text-xl"> {str("Notifications")} </div>
       <WebpushSubscriptionManager />
     </div>

@@ -49,8 +49,8 @@ let signInLink = () =>
 let notificationButton = hasNotifications =>
   <Notifications__Root
     key="notifications-button"
-    wrapperClasses="relative md:ml-1 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center rounded-lg hover:bg-gray-200"
-    buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center px-3 pt-2 md:px-3 md:py-2"
+    wrapperClasses="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg hover:bg-gray-200"
+    buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center "
     icon="if i-bell-regular text-xl"
     hasNotifications
   />
@@ -105,7 +105,11 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
           <a className="max-w-sm" href={isLoggedIn ? "/dashboard" : "/"}>
             {switch logoUrl {
             | Some(url) =>
-              <img className="h-9 md:h-12 object-contain" src=url alt={"Logo of " ++ schoolName} />
+              <img
+                className="h-9 md:h-12 object-contain flex text-sm items-center"
+                src=url
+                alt={"Logo of " ++ schoolName}
+              />
             | None =>
               <div
                 className="p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-100 hover:text-primary-600">
@@ -114,11 +118,11 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
             }}
           </a>
           {ReactUtils.nullUnless(
-            <div className="flex items-center">
+            <div className="flex items-center space-x-2">
               {ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn)}
               <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
                 <div
-                  className={"student-navbar__menu-btn w-8 h-8 text-center relative focus:outline-none rounded-full " ++ (
+                  className={"student-navbar__menu-btn cursor-pointer hover:bg-gray-200 w-8 h-8 text-center relative focus:outline-none rounded-lg " ++ (
                     menuHidden ? "" : "open"
                   )}>
                   <span className="student-navbar__menu-icon">

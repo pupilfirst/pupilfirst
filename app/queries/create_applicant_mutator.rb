@@ -52,7 +52,7 @@ class CreateApplicantMutator < ApplicationQuery
   def not_a_student
     return if course.blank?
 
-    return if course.users.where(email: email).empty?
+    return if course.users.with_email(email).empty?
 
     errors[:base] << "You are already enrolled in #{course.name} course. Try signing in, instead."
   end

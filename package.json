@@ -6,7 +6,9 @@
     "docs/developers"
   ],
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-react": "^7.7.4",
+    "@babel/runtime": "^7.12.5",
     "@baransu/graphql_ppx_re": "^0.7.1",
     "@centerforopenscience/markdown-it-imsize": "https://github.com/cos-forks/markdown-it-imsize#cos",
     "@fortawesome/fontawesome-free": "^5.10.1",
@@ -52,7 +54,6 @@
     "webpack-merge": "^4.2.1"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-transform-runtime": "^7.8.3",
     "@graphql-codegen/cli": "^1.11.2",
     "@graphql-codegen/introspection": "^1.11.2",

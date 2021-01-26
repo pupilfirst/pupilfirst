@@ -147,6 +147,17 @@ feature "Apply for public courses", js: true do
     expect(page).to have_text("You are already enrolled in #{public_course.name} course")
   end
 
+  scenario 'a student in the course tries public enrollment with a different email casing' do
+    user = startup.founders.first.user
+
+    visit apply_course_path(public_course)
+    fill_in 'Email', with: user.email.upcase
+    fill_in 'Name', with: user.name
+    click_button 'Apply'
+
+    expect(page).to have_text("You are already enrolled in #{public_course.name} course")
+  end
+
   scenario 'user tries to access a private course page' do
     visit apply_course_path(private_course)
 

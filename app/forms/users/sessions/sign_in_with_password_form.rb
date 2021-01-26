@@ -25,7 +25,7 @@ module Users
       def user_with_email_must_exist
         return if user.present? || email.blank?
 
-        errors[:base] << 'Could not find user with this email. Please check the email that you entered.'
+        errors[:email] << 'is invalid. Could not find user with this email'
       end
 
       def must_have_valid_password
@@ -33,7 +33,7 @@ module Users
 
         return if user.valid_password?(password)
 
-        errors[:base] << 'The supplied password is incorrect. Please check and try again.'
+        errors[:password] << 'is incorrect. Please check and try again.'
       end
     end
   end

@@ -52,6 +52,7 @@ feature "Student levelling up", js: true do
 
       expect(page).not_to have_text(target_l1.title)
       expect(page).not_to have_text(target_group_l1.name)
+      expect(page).not_to have_button('Next Level')
 
       expect(page).to have_text('You have successfully completed all milestone lessons required to level up.')
 

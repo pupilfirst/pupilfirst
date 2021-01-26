@@ -1,45 +1,65 @@
 require 'rails_helper'
 
 describe Users::ValidateResetTokenService do
-  let!(:token) { SecureRandom.uuid }
+  include WithEnvHelper
+
+  let(:token) { SecureRandom.uuid }
+  let(:time_limit) { nil }
+  let(:sent_at) { Time.zone.now }
+  let!(:user) { create :user, reset_password_token: token, reset_password_sent_at: sent_at }
+
   subject { described_class.new(token) }
 
-  describe '#authenticate' do
-    it 'returns nil if no user has the token' do
-      create :user
-      serv = described_class.new(token)
-      expect(serv.authenticate).to eq(nil)
+  around do |example|
+    with_env(RESET_PASSWORD_TOKEN_TIME_LIMIT: time_limit.to_s) do
+      example.run
     end
+  end
 
-    context 'with time limit' do
-      let(:time_limit_minutes) { 3 }
+  describe '#authenticate' do
+    context 'when the token does not match any user' do
+      let!(:user) { create :user }
 
-      before do
-        allow(subject).to receive(:time_limitation?) { true }
-        allow(subject).to receive(:time_limit_minutes) { time_limit_minutes.minutes }
-      end
-
-      it 'returns user based on #reset_password_token' do
-        sent_at = Time.zone.now - (time_limit_minutes - 1).minutes
-        user = create :user, reset_password_token: token, reset_password_sent_at: sent_at
-        expect(subject.authenticate).to eq(user)
-      end
-
-      it 'returns nil due to time limit' do
-        sent_at = Time.zone.now - (time_limit_minutes + 1).minutes
-        user = create :user, reset_password_sent_at: sent_at
+      it 'returns nil' do
         expect(subject.authenticate).to eq(nil)
       end
     end
 
-    context 'without time limit' do
-      before do
-        allow(subject).to receive(:time_limitation?) { false }
+    context 'when a time limit exists' do
+      let(:time_limit) { 3 }
+
+      context 'within time limit' do
+        let(:sent_at) { Time.zone.now - 1.minute }
+
+        it 'returns user based on #reset_password_token' do
+          expect(subject.authenticate).to eq(user)
+        end
       end
 
-      it 'returns user based on #reset_password_token' do
-        user = create :user, reset_password_token: token
-        expect(subject.authenticate).to eq(user)
+      context 'beyond the time limit' do
+        let(:sent_at) { Time.zone.now - 4.minutes }
+
+        it 'returns nil due to time limit' do
+          expect(subject.authenticate).to eq(nil)
+        end
+      end
+    end
+
+    context 'without a configured time limit' do
+      context 'within default time limit' do
+        let(:sent_at) { Time.zone.now - 28.minutes }
+
+        it 'returns user based on #reset_password_token' do
+          expect(subject.authenticate).to eq(user)
+        end
+      end
+
+      context 'beyond the default time limit' do
+        let(:sent_at) { Time.zone.now - 31.minutes }
+
+        it 'returns nil due to time limit' do
+          expect(subject.authenticate).to eq(nil)
+        end
       end
     end
   end

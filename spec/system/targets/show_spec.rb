@@ -185,7 +185,7 @@ feature 'Target Overlay', js: true do
       expect(page).to have_selector('.course-overlay__header-title-card', text: 'Completed')
 
       # Since this is a team target, other students shouldn't be listed as pending.
-      expect(page).not_to have_content('You have team members who are yet to complete this target')
+      expect(page).not_to have_content('You have team members who are yet to complete this lesson')
 
       # Target should have been marked as passed in the database.
       expect(target_l1.status(student)).to eq(Targets::StatusService::STATUS_PASSED)
@@ -394,7 +394,7 @@ feature 'Target Overlay', js: true do
       # A safety check, in case factory is altered.
       expect(other_students.count).to be > 0
 
-      expect(page).to have_content('You have team members who are yet to complete this target:')
+      expect(page).to have_content('You have team members who are yet to complete this lesson:')
 
       # The other students should also be listed.
       other_students.each do |other_student|

@@ -36,7 +36,7 @@ feature 'Automatic issuance of certificates', js: true do
 
     click_button 'Mark As Complete'
 
-    expect(page).to have_text('Target has been marked as complete')
+    expect(page).to have_text('Lesson has been marked as complete')
 
     # No certificate should be issued at this point.
     expect(student_1.user.issued_certificates.count).to eq(0)
@@ -52,7 +52,7 @@ feature 'Automatic issuance of certificates', js: true do
 
       click_button 'Mark As Complete'
 
-      expect(page).to have_text('Target has been marked as complete')
+      expect(page).to have_text('Lesson has been marked as complete')
 
       # No certificate should be issued.
       expect(IssuedCertificate.count).to eq(0)
@@ -67,7 +67,7 @@ feature 'Automatic issuance of certificates', js: true do
 
       click_button 'Mark As Complete'
 
-      expect(page).to have_text('Target has been marked as complete', wait: 10)
+      expect(page).to have_text('Lesson has been marked as complete', wait: 10)
 
       expect(IssuedCertificate.pluck(:user_id)).to contain_exactly(student_1.user.id, student_2.user.id)
 
@@ -99,7 +99,7 @@ feature 'Automatic issuance of certificates', js: true do
 
           click_button 'Mark As Complete'
 
-          expect(page).to have_text('Target has been marked as complete')
+          expect(page).to have_text('Lesson has been marked as complete')
 
           # Both students should have a certificate at this point.
           expect(IssuedCertificate.pluck(:user_id)).to contain_exactly(student_1.user.id, student_2.user.id)
@@ -114,7 +114,7 @@ feature 'Automatic issuance of certificates', js: true do
 
           click_button 'Visit Link To Complete'
 
-          expect(page).to have_text('Target has been marked as complete')
+          expect(page).to have_text('Lesson has been marked as complete')
 
           # Both students should have a certificate at this point.
           expect(IssuedCertificate.pluck(:user_id)).to contain_exactly(student_1.user.id, student_2.user.id)
@@ -191,7 +191,7 @@ feature 'Automatic issuance of certificates', js: true do
 
         click_button 'Mark As Complete'
 
-        expect(page).to have_text('Target has been marked as complete', wait: 10)
+        expect(page).to have_text('Lesson has been marked as complete', wait: 10)
 
         # No certificate should be issued, yet.
         expect(IssuedCertificate.count).to eq(0)
@@ -200,7 +200,7 @@ feature 'Automatic issuance of certificates', js: true do
 
         click_button 'Mark As Complete'
 
-        expect(page).to have_text('Target has been marked as complete')
+        expect(page).to have_text('Lesson has been marked as complete')
 
         # Both students get certificate when the last student in team completes the target.
         expect(IssuedCertificate.pluck(:user_id)).to contain_exactly(student_1.user.id, student_2.user.id)
@@ -215,7 +215,7 @@ feature 'Automatic issuance of certificates', js: true do
 
         click_button 'Mark As Complete'
 
-        expect(page).to have_text('Target has been marked as complete')
+        expect(page).to have_text('Lesson has been marked as complete')
 
         # An active certificate is necessary for the automatic issuance of certificates.
         expect(IssuedCertificate.count).to eq(0)
@@ -230,7 +230,7 @@ feature 'Automatic issuance of certificates', js: true do
 
         click_button 'Mark As Complete'
 
-        expect(page).to have_text('Target has been marked as complete')
+        expect(page).to have_text('Lesson has been marked as complete')
 
         # At least one milestone is required in the final level for the issuance of certificates.
         expect(IssuedCertificate.count).to eq(0)

@@ -75,7 +75,7 @@ feature 'Students view performance report and submissions overview', js: true do
     expect(page).to have_selector('.courses-report-overview__student-level', count: course.levels.where.not(number: 0).count)
 
     # Targets Overview
-    expect(page).to have_text('Targets Overview')
+    expect(page).to have_text('Lessons Overview')
 
     within("div[aria-label='target-completion-status']") do
       expect(page).to have_content('Incomplete: 1')
@@ -140,7 +140,7 @@ feature 'Students view performance report and submissions overview', js: true do
     end
 
     sign_in_user student.user, referrer: report_course_path(course)
-    expect(page).to have_text('Targets Overview')
+    expect(page).to have_text('Lessons Overview')
     click_button 'Submissions'
     expect(page).to have_button('Load More...')
     click_button('Load More...')
@@ -182,7 +182,7 @@ feature 'Students view performance report and submissions overview', js: true do
         expect(page).to have_content("This submission is not considered towards its target's completion")
 
         # There should be an additional link to the target as well.
-        expect(page).to have_link('View Target', href: "/targets/#{target_l1.id}")
+        expect(page).to have_link('View Lesson', href: "/targets/#{target_l1.id}")
       end
     end
   end

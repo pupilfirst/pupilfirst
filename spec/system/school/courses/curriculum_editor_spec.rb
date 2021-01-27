@@ -149,7 +149,7 @@ feature 'Curriculum Editor', js: true do
     fill_in "create-target-input#{target_group.id}", with: new_target_1_title
     click_button 'Create'
 
-    expect(page).to have_text('Target created successfully')
+    expect(page).to have_text('Lesson created successfully')
     dismiss_notification
 
     target = target_group.reload.targets.last
@@ -190,7 +190,7 @@ feature 'Curriculum Editor', js: true do
     fill_in "create-target-input#{target_group_2.id}", with: new_target_1_title
     click_button 'Create'
 
-    expect(page).to have_text('Target created successfully')
+    expect(page).to have_text('Lesson created successfully')
 
     dismiss_notification
   end

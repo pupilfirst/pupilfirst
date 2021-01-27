@@ -176,7 +176,7 @@ feature "Student's view of Course Curriculum", js: true do
     click_link l5_non_reviewed_target.title
     click_button 'Mark As Complete'
 
-    expect(page).to have_text('Target has been marked as complete')
+    expect(page).to have_text('Lesson has been marked as complete')
 
     dismiss_notification
     click_button 'Close'
@@ -186,7 +186,7 @@ feature "Student's view of Course Curriculum", js: true do
 
     click_link l5_non_reviewed_target_with_prerequisite.title
 
-    expect(page).not_to have_text('This target has pre-requisites that are incomplete.')
+    expect(page).not_to have_text('This lesson has pre-requisites that are incomplete.')
     expect(page).to have_button 'Mark As Complete'
 
     click_button 'Close'

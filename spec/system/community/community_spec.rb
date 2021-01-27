@@ -353,7 +353,7 @@ feature 'Community', js: true do
     expect(page).to have_text(target.title)
 
     # ...but not linked.
-    expect(page).not_to have_link('View Target')
+    expect(page).not_to have_link('View Lesson')
   end
 
   scenario 'coach marks a post as solution, edits content, and checks last edited info' do

@@ -19,6 +19,12 @@ en:
         body_suffix: You need to get a passing grade on all milestone lessons to level up.
       level_up_limited_description: "You're at Chapter %{currentLevel}, but you have lessons in the Chapter %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone lessons in Chapter %{minimumRequiredLevel} to continue leveling up."
       level_up_description: Congratulations! You have successfully completed all milestone lessons required to level up. Click the button below to proceed to the next chapter. New challenges await!
+    CoursesReport__Overview:
+      targets_overview: Lessons Overview
+    CoursesStudents__StudentOverlay:
+      targets: " Lessons"
+      targets_overview: Lessons Overview
+      total_targets_completed: Total Lessons Completed
     CurriculumEditor:
       level: Chapter
       create_target_group: Create section
@@ -60,6 +66,7 @@ en:
       linked_target_label: "Linked Lesson: "
       view_target_button: View Lesson
     CoursesCurriculum__Overlay:
+      pending_team_members_notice: "You have team members who are yet to complete this lesson:"
       previous_target_button: Previous Lesson
       next_target_button: Next Lesson
     CurriculumEditor__LevelEditor:
@@ -93,8 +100,12 @@ en:
         create_success: Section created successfully
 
   mutations:
+    create_target:
+      success_notification: Lesson created successfully.
     update_target:
       success_notification: Lesson updated successfully!
+    auto_verify_submission:
+      success_notification: Lesson has been marked as complete.
 
   shared:
     'yes': 'Yes'

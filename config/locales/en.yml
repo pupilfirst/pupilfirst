@@ -122,6 +122,36 @@ en:
       level_up_limited_description: "You're at Level %{currentLevel}, but you have targets in the Level %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up."
       level_up_title: Ready to Level Up!
       level_up_description: Congratulations! You have successfully completed all milestone targets required to move to the next level in the course. Click on the "Level up" button below to continue progressing through the course.
+    CoursesReport__Overview:
+      attempted: " Attempted"
+      average_grades: Average Grades
+      average_quiz_score: Average Quiz Score
+      completed: "Completed: %{targetsCompleted}"
+      course_completed: Course Completed!
+      incomplete: "Incomplete: %{incompleteTargets}"
+      level_progress: Level Progress
+      pending_review: "Pending Review: %{targetsPendingReview}"
+      personal_coaches: Personal Coaches
+      quiz: Quiz
+      schedule_coaching_session: Schedule a coaching session
+      targets_overview: Targets Overview
+    CoursesStudents__StudentOverlay:
+      access_ended_at: "This student's access to the course ended on %{date}."
+      attempted: " Attempted"
+      average_grades: Average Grades
+      average_quiz_score: Average Quiz Score
+      close_student_report: Close student report
+      course_completed: Course Completed!
+      dropped_out_at: "This student dropped out of the course on %{date}."
+      notes: Notes
+      other_team_members: Other Team Members
+      personal_coaches: Personal Coaches
+      submissions: Submissions
+      quiz: Quiz
+      targets: " Targets"
+      targets_overview: Targets Overview
+      team_coaches: Team Coaches
+      total_targets_completed: Total Targets Completed
     CurriculumEditor:
       level: Level
       create_target_group: Create target group

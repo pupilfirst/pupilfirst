@@ -2,6 +2,7 @@
 
 open CoursesStudents__Types
 let str = React.string
+let t = I18n.t(~scope="components.CoursesStudents__StudentOverlay")
 
 type selectedTab =
   | Notes
@@ -127,11 +128,11 @@ let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
   <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
     <div className="student-overlay__doughnut-chart-container">
       {doughnutChart("purple", targetCompletionPercent)}
-      <p className="text-sm font-semibold text-center mt-3"> {"Total Targets Completed" |> str} </p>
+      <p className="text-sm font-semibold text-center mt-3"> {t("total_targets_completed") |> str} </p>
       <p className="text-sm text-gray-700 font-semibold text-center mt-1">
         {(targetsCompleted |> int_of_float |> string_of_int) ++
           ("/" ++
-          ((totalTargets |> int_of_float |> string_of_int) ++ " Targets")) |> str}
+          ((totalTargets |> int_of_float |> string_of_int) ++ t("targets"))) |> str}
       </p>
     </div>
   </div>
@@ -143,9 +144,9 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
     <div ariaLabel="quiz-performance-chart" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
       <div className="student-overlay__doughnut-chart-container">
         {doughnutChart("pink", score |> int_of_float |> string_of_int)}
-        <p className="text-sm font-semibold text-center mt-3"> {"Average Quiz Score" |> str} </p>
+        <p className="text-sm font-semibold text-center mt-3"> {t("average_quiz_score") |> str} </p>
         <p className="text-sm text-gray-700 font-semibold text-center leading-tight mt-1">
-          {Inflector.pluralize("Quiz", ~count=quizzesAttempted, ~inclusive=true, ()) ++ " Attempted"
+          {Inflector.pluralize(t("quiz"), ~count=quizzesAttempted, ~inclusive=true, ()) ++ t("attempted")
             |> str}
         </p>
       </div>
@@ -278,7 +279,7 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
       <h6 className="text-sm font-semibold"> {"Level Progress" |> str} </h6>
       {courseCompleted
         ? <p className="text-green-600 font-semibold">
-            {`🎉` |> str} <span className="text-xs ml-px"> {"Course Completed!" |> str} </span>
+            {`🎉` |> str} <span className="text-xs ml-px"> {t("course_completed") |> str} </span>
           </p>
         : React.null}
     </div>
@@ -332,7 +333,7 @@ let coachInfo = (teamCoaches, studentDetails) => {
   let coaches = studentDetails |> StudentDetails.team |> TeamInfo.coaches(teamCoaches)
 
   let title =
-    studentDetails |> StudentDetails.teamHasManyStudents ? "Team Coaches" : "Personal Coaches"
+    studentDetails |> StudentDetails.teamHasManyStudents ? t("team_coaches") : t("personal_coaches")
 
   coaches |> ArrayUtils.isNotEmpty
     ? <div className="mb-8">
@@ -356,7 +357,7 @@ let navigateToStudent = (setState, _event) => setState(_ => initialState)
 let otherTeamMembers = (setState, studentId, studentDetails) =>
   if studentDetails |> StudentDetails.teamHasManyStudents {
     <div className="block mb-8">
-      <h6 className="font-semibold"> {"Other Team Members" |> str} </h6>
+      <h6 className="font-semibold"> {t("other_team_members") |> str} </h6>
       {studentDetails
       |> StudentDetails.team
       |> TeamInfo.otherStudents(studentId)
@@ -386,16 +387,20 @@ let inactiveWarning = teamInfo => {
   let warning = switch (teamInfo |> TeamInfo.droppedOutAt, teamInfo |> TeamInfo.accessEndsAt) {
   | (Some(droppedOutAt), _) =>
     Some(
-      "This student dropped out of the course on " ++
-      (droppedOutAt->DateFns.formatPreset(~short=true, ~year=true, ()) ++
-      "."),
+      t(
+        ~variables=[
+          ("date", droppedOutAt->DateFns.formatPreset(~short=true, ~year=true, ()))
+        ],
+        "dropped_out_at"),
     )
   | (None, Some(accessEndsAt)) =>
     accessEndsAt |> DateFns.isPast
       ? Some(
-          "This student's access to the course ended on " ++
-          (accessEndsAt->DateFns.formatPreset(~short=true, ~year=true, ()) ++
-          "."),
+          t(
+            ~variables=[
+              ("date", accessEndsAt->DateFns.formatPreset(~short=true, ~year=true, ()))
+            ],
+            "access_ended_at"),
         )
       : None
   | (None, None) => None
@@ -431,7 +436,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
           className="w-full md:w-2/5 bg-white p-4 md:p-8 md:py-6 2xl:px-16 2xl:py-12 md:overflow-y-auto">
           <div className="student-overlay__student-details relative pb-8">
             <button
-              title="Close student report"
+              title={t("close_student_report")}
               onClick={_ => closeOverlay(courseId)}
               className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-200 h-10 w-10 justify-center items-center text-gray-700 hover:text-gray-900 hover:bg-gray-300">
               <Icon className="if i-times-regular text-xl lg:text-2xl" />
@@ -459,7 +464,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
             studentDetails |> StudentDetails.completedLevelIds,
           )}
           <div className="mb-8">
-            <h6 className="font-semibold"> {"Targets Overview" |> str} </h6>
+            <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
             <div className="flex -mx-2 flex-wrap mt-2">
               {targetsCompletionStatus(
                 studentDetails |> StudentDetails.targetsCompleted,
@@ -473,7 +478,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
           </div>
           {studentDetails |> StudentDetails.averageGrades |> ArrayUtils.isNotEmpty
             ? <div className="mb-8">
-                <h6 className="font-semibold"> {"Average Grades" |> str} </h6>
+                <h6 className="font-semibold"> {t("average_grades") |> str} </h6>
                 <div className="flex -mx-2 flex-wrap">
                   {averageGradeCharts(
                     studentDetails |> StudentDetails.evaluationCriteria,
@@ -497,7 +502,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
                 | Notes => "border-b-3 border-primary-500 text-primary-500 -mb-px"
                 | Submissions => "hover:bg-gray-200 hover:text-gray-900"
                 }}>
-                {"Notes" |> str}
+                {t("notes") |> str}
               </li>
               <li
                 onClick={_event => setSelectedTab(Submissions, setState)}
@@ -506,7 +511,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
                 | Submissions => "border-b-3 border-primary-500 text-primary-500 -mb-px"
                 | Notes => "hover:bg-gray-200 hover:text-gray-900"
                 }}>
-                {"Submissions" |> str}
+                {t("submissions") |> str}
               </li>
             </ul>
           </div>

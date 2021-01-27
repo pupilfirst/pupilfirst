@@ -276,7 +276,7 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
 
   <div className="mb-8">
     <div className="flex justify-between items-end">
-      <h6 className="text-sm font-semibold"> {"Level Progress" |> str} </h6>
+      <h6 className="text-sm font-semibold"> {t("level_progress") |> str} </h6>
       {courseCompleted
         ? <p className="text-green-600 font-semibold">
             {`🎉` |> str} <span className="text-xs ml-px"> {t("course_completed") |> str} </span>

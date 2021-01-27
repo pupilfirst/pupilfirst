@@ -144,6 +144,7 @@ en:
       course_completed: Course Completed!
       dropped_out_at: "This student dropped out of the course on %{date}."
       notes: Notes
+      level_progress: Level Progress
       other_team_members: Other Team Members
       personal_coaches: Personal Coaches
       submissions: Submissions

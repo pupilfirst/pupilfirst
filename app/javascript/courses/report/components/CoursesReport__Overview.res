@@ -13,7 +13,7 @@ let avatar = (avatarUrl, name) => {
 }
 
 let calendlyLink = (coachingLink) => {
-  let txt = "Schedule a coaching session"
+  let txt = t("schedule_coaching_session")
   let openCalendly = %raw(`
     function (link) {
       Calendly.initPopupWidget({url: link});

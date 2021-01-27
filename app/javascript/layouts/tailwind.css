@@ -15,7 +15,7 @@ html {
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Barlow", sans-serif;
   color: #453c52;
   @apply w-full h-full antialiased;
 }

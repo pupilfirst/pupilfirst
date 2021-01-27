@@ -18,11 +18,11 @@ module Api
       end
 
       def create_students
-        form = ::Schools::Founders::CreateForm.new(Reform::OpenForm.new)
+        form = Students::CreateForm.new(Reform::OpenForm.new)
 
-        response = if form.validate(params)
+        response = if form.validate(params.merge({notify: true}))
           student_count = form.save
-          { error: nil, studentCount: student_count }
+          { error: nil, studentIds: student_count }
         else
           { error: form.errors.full_messages.join(', ') }
         end

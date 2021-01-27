@@ -291,6 +291,7 @@ module Keycloak
     def user_token(uname_email, password)
       user = user_by_email(uname_email)
       valid = user && user.dig(:credentials, :value) == password
+      raise FailedRequestError.new 'Failed to set user password' unless valid
       user[:token] = SecureRandom.uuid
     end
 

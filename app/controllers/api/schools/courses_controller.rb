@@ -23,17 +23,20 @@ module Api
       def create_students
         form = Students::CreateForm.new(Reform::OpenForm.new)
 
-        response = if form.validate(params.merge({notify: true}))
+        if form.validate(students_params.merge({notify: true}))
           student_count = form.save
-          { error: nil, studentIds: student_count }
+          render json: { error: nil, studentIds: student_count }, status: :created
         else
-          { error: form.errors.full_messages.join(', ') }
+          render json: { error: form.errors.full_messages.join(', ') }, status: :bad_request
         end
-
-        render json: response
       end
 
       private
+
+      def students_params
+        stds = params.require(:students).map { |p| p.permit(:name, :email) }
+        {course_id: @course.id, students: stds }
+      end
 
       def set_course
         @course = authorize(scope.find(params[:course_id]),

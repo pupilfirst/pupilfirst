@@ -80,7 +80,7 @@ module Targets
     end
 
     def topics(community)
-      community.topics.joins(:target).where(targets: { id: @target })
+      community.topics.live.joins(:target).where(targets: { id: @target })
         .order("last_activity_at DESC NULLs FIRST").first(3).map do |topic|
         {
           id: topic.id,

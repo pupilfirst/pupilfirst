@@ -16,20 +16,21 @@ It also makes the deployment and update process extremely simple when compared t
 
 ## Steps on Heroku
 
-1. [Sign up on Heroku](https://signup.heroku.com), and familiarize yourself with the [how Ruby apps run on Heroku](https://devcenter.heroku.com/articles/getting-started-with-ruby).
-2. Create a new Heroku app, to which we'll deploy Pupilfirst.
+Begin by [signing up on Heroku](https://signup.heroku.com), and familiarizing yourself with [how Ruby apps run on Heroku](https://devcenter.heroku.com/articles/getting-started-with-ruby).
+
+### Set up the Heroku app
+
+1. Create a new Heroku app, to which we'll deploy Pupilfirst.
+2. [Configure your new Heroku app](https://devcenter.heroku.com/articles/config-vars) using environment variables.
+   1. Add configuration for [the file storage service](#file-storage-using-aws).
+   2. Add configuration for [the email service](#sending-emails-with-postmark).
+   3. Set `ASSET_HOST` to your app's fully qualified domain name (FQDN), which should look like `my-app-name.herokuapp.com`.
+
+   There are more optional features that you can enable - read through the sections below.
 3. Add the new Heroku app [as a git remote](https://devcenter.heroku.com/articles/git#for-an-existing-heroku-app).
 4. Push the repository to your Heroku app: `git push heroku master`.
 
 This should leave you with a Heroku app that already has an empty Postgres database attached to it.
-
-The next section will require you to [configure your Heroku app](https://devcenter.heroku.com/articles/config-vars) by setting environment variables that control how Pupilfirst works.
-
-### Configure Pupilfirst
-
-1. Add configuration for [the file storage service](#file-storage-using-aws).
-2. Add configuration for [the email service](#sending-emails-with-postmark).
-3. Set `ASSET_HOST` to your app's fully qualified domain name (FQDN), which should look like `my-app-name.herokuapp.com`.
 
 ### Set up the database
 

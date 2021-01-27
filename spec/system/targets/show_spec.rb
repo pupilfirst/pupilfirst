@@ -490,12 +490,12 @@ feature 'Target Overlay', js: true do
   context 'when the course has a community which accepts linked targets' do
     let!(:community_1) { create :community, :target_linkable, school: course.school, courses: [course] }
     let!(:community_2) { create :community, :target_linkable, school: course.school, courses: [course] }
-    let!(:topic_1) { create :topic, community: community_1 }
-    let!(:topic_1_body) { create :post, :first_post, topic: topic_1, creator: student.user }
-    let!(:topic_2) { create :topic, community: community_1 }
-    let!(:topic_2_body) { create :post, :first_post, topic: topic_2, creator: student.user }
+    let!(:topic_1) { create :topic, :with_first_post, community: community_1, creator: student.user }
+    let!(:topic_2) { create :topic, :with_first_post, community: community_1, creator: student.user }
     let(:topic_title) { Faker::Lorem.sentence }
     let(:topic_body) { Faker::Lorem.paragraph }
+    let!(:topic_target_l2_1) { create :topic, :with_first_post, community: community_1, target: target_l1 }
+    let!(:topic_target_l2_2) { create :topic, :with_first_post, community: community_1, target: target_l1, archived: true }
 
     scenario 'student uses the discuss feature' do
       sign_in_user student.user, referrer: target_path(target_l1)
@@ -506,7 +506,11 @@ feature 'Target Overlay', js: true do
       expect(page).to have_text(community_2.name)
       expect(page).to have_link('Go to community', count: 2)
       expect(page).to have_link('Create a topic', count: 2)
-      expect(page).to have_text("There's been no recent discussion about this target.", count: 2)
+      expect(page).to have_text("There's been no recent discussion about this target.", count: 1)
+
+      # Check the presence of existing topics
+      expect(page).to have_text(topic_target_l2_1.title)
+      expect(page).to_not have_text(topic_target_l2_2.title)
 
       # Student can ask a question related to the target in community from target overlay.
       find("a[title='Create a topic in the #{community_1.name} community'").click

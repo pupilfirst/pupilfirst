@@ -151,7 +151,7 @@ let computeInitialState = currentTeamCoach => {
   selectedCoach: currentTeamCoach,
   reviewedTabSortCriterion: #SubmittedAt,
   filterString: "",
-  sortDirection: #Descending,
+  sortDirection: #Ascending,
   reloadAt: Js.Date.make(),
 }
 

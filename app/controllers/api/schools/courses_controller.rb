@@ -2,11 +2,14 @@ module Api
   module Schools
     class CoursesController < SchoolsController
       skip_before_action :verify_authenticity_token
+      skip_after_action :verify_authorized
+
+      after_action :verify_authorized, except: :index
+      after_action :verify_policy_scoped, only: :index
       before_action :authenticate_user!
       before_action :set_course, only: [:students, :create_students]
 
       def index
-        skip_authorization
         render json: scope.to_json
       end
 

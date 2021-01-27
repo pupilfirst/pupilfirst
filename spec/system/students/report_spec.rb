@@ -76,7 +76,7 @@ feature "Course students report", js: true do
     click_link student.name
 
     expect(page).to have_text(student.name)
-    expect(page).to have_text('Level Progress')
+    expect(page).to have_text('Chapter Progress')
     expect(page).to have_selector('.student-overlay__student-level', count: course.levels.where.not(number: 0).count)
 
     # Targets Overview

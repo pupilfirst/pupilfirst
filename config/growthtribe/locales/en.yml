@@ -22,6 +22,7 @@ en:
     CoursesReport__Overview:
       targets_overview: Lessons Overview
     CoursesStudents__StudentOverlay:
+      level_progress: Chapter Progress
       targets: " Lessons"
       targets_overview: Lessons Overview
       total_targets_completed: Total Lessons Completed

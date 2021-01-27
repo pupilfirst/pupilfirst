@@ -71,7 +71,7 @@ feature 'Students view performance report and submissions overview', js: true do
   scenario 'student visits course report link' do
     sign_in_user student.user, referrer: report_course_path(course)
 
-    expect(page).to have_text('Level Progress')
+    expect(page).to have_text('Chapter Progress')
     expect(page).to have_selector('.courses-report-overview__student-level', count: course.levels.where.not(number: 0).count)
 
     # Targets Overview

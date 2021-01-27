@@ -182,7 +182,7 @@ feature 'Students view performance report and submissions overview', js: true do
         expect(page).to have_content("This submission is not considered towards its target's completion")
 
         # There should be an additional link to the target as well.
-        expect(page).to have_link('View Lesson', href: "/targets/#{target_l1.id}")
+        expect(page).to have_link('View Target', href: "/targets/#{target_l1.id}")
       end
     end
   end

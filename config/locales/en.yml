@@ -370,6 +370,8 @@ en:
       success_notification: This topic has been unlocked. Community members can now post replies again.
     auto_verify_submission:
       success_notification: Target has been marked as complete.
+    create_target:
+      success_notification: Target created successfully.
 
   queries:
     delete_certificate_mutator:

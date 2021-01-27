@@ -3,6 +3,10 @@ require 'keycloak'
 module Devise
   module Strategies
     class Keycloak < Authenticatable
+      def valid?
+        request.path.match?(/^\/api/)
+      end
+
       def authenticate!
         return fail if request.headers['Authorization'].blank?
 

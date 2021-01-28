@@ -246,7 +246,7 @@ feature 'Curriculum Editor', js: true do
     expect(page).to have_text("Level #{target_group_2.level.number}: #{target_group_2.level.name}")
 
     fill_in 'level_id', with: level_1.name
-    click_button "Pick Level 1: #{level_1.name}"
+    click_button "Pick Chapter 1: #{level_1.name}"
 
     click_button 'Update Section'
     expect(page).to have_text('Section updated successfully')

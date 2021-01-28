@@ -105,16 +105,16 @@ feature 'Course students list', js: true do
     expect(page).to have_text(course.startups.order('name').first.name)
 
     # Filter by level
-    fill_in 'filter', with: 'level'
-    click_button "Level 1: #{level_1.name}"
+    fill_in 'filter', with: 'chapter'
+    click_button "Chapter 1: #{level_1.name}"
 
     expect(page).not_to have_text(team_5.name)
     expect(page).to have_text(team_1.name)
 
-    fill_in 'filter', with: 'level'
-    click_button "Level 2: #{level_2.name}"
+    fill_in 'filter', with: 'chapter'
+    click_button "Chapter 2: #{level_2.name}"
 
-    expect(page).not_to have_text("Level 1 | #{level_1.name}")
+    expect(page).not_to have_text("Chapter 1 | #{level_1.name}")
 
     expect(page).to have_text(team_3.name)
     expect(page).not_to have_text(team_1.name)
@@ -134,8 +134,8 @@ feature 'Course students list', js: true do
     expect(page).to have_text(team_3.name)
 
     # Switch to level which will have pagination
-    fill_in 'filter', with: 'level'
-    click_button "Level 3: #{level_3.name}"
+    fill_in 'filter', with: 'chapter'
+    click_button "Chapter 3: #{level_3.name}"
 
     expect(page).to_not have_text(team_2.name)
 

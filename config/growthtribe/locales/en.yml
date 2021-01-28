@@ -1,7 +1,5 @@
 en:
   components:
-    CoursesReport__Level:
-      level: Chapter
     CoursesCurriculum:
       level_locked: Chapter locked
       level_locked_notice: "The chapter is currently locked!"
@@ -28,7 +26,6 @@ en:
       targets_overview: Lessons Overview
       total_targets_completed: Total Lessons Completed
     CurriculumEditor:
-      level: Chapter
       create_target_group: Create section
       create_level: Create Chapter
       edit_selected_level: Edit selected chapter
@@ -37,7 +34,6 @@ en:
       create_target: Create a lesson
       milestone_targets: Milestone Lessons
     CurriculumEditor__TargetDetailsEditor:
-      level: Chapter
       target_group: Section
       prerequisite_targets_label: Are there any prerequisite lessons?
       search_targets: Search lessons
@@ -84,7 +80,6 @@ en:
         update_success: Chapter updated successfully
         create_success: Chapter created successfully
     CurriculumEditor__TargetGroupEditor:
-      level: Chapter
       target_group_details: Section Details
       title: Title
       name_placeholder: Type section name here
@@ -112,6 +107,9 @@ en:
   shared:
     'yes': 'Yes'
     'no': 'No'
+    level:
+      label: "Chapter"
+      short_label: "C"
 
   dashboard:
     dashboard:

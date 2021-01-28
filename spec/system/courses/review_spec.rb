@@ -73,19 +73,19 @@ feature "Coach's review interface" do
 
       within("a[aria-label='Submission #{submission_l1_t1.id}']") do
         expect(page).to have_text(target_l1.title)
-        expect(page).to have_text("Level 1")
+        expect(page).to have_text("Chapter 1")
         expect(page).to have_text(team_l1.founders.first.user.name)
       end
 
       within("a[aria-label='Submission #{submission_l2_t2.id}']") do
         expect(page).to have_text(target_l2.title)
-        expect(page).to have_text("Level 2")
+        expect(page).to have_text("Chapter 2")
         expect(page).to have_text(team_l2.founders.first.user.name)
       end
 
       within("a[aria-label='Submission #{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
-        expect(page).to have_text("Level 3")
+        expect(page).to have_text("Chapter 3")
         expect(page).to have_text(team_l3.founders.first.user.name)
       end
 
@@ -94,14 +94,14 @@ feature "Coach's review interface" do
 
       within("a[aria-label='Submission #{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
-        expect(page).to have_text("Level 1")
+        expect(page).to have_text("Chapter 1")
         expect(page).to have_text("Submitted by: #{team_l3.founders.first.user.name}")
         expect(page).to have_text("Completed")
       end
 
       within("a[aria-label='Submission #{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
-        expect(page).to have_text("Level 2")
+        expect(page).to have_text("Chapter 2")
         expect(page).to have_text("Submitted by: #{team_l3.founders.first.user.name}")
         expect(page).to have_text("Rejected")
         expect(page).to have_text("Feedback Sent")
@@ -126,7 +126,7 @@ feature "Coach's review interface" do
       # filter pending submissions
       fill_in 'filter', with: 'level'
       # choose level 1 from the dropdown
-      click_button "Level 1: #{level_1.name}"
+      click_button "Chapter 1: #{level_1.name}"
 
       # choose level 1 submissions should be displayed
       expect(page).to have_text(target_l1.title)
@@ -137,7 +137,7 @@ feature "Coach's review interface" do
 
       # switch level
       fill_in 'filter', with: 'level'
-      click_button "Level 2: #{level_2.name}"
+      click_button "Chapter 2: #{level_2.name}"
 
       # choose level 2 submissions should be displayed
       expect(page).to have_text(target_l2.title)
@@ -154,12 +154,12 @@ feature "Coach's review interface" do
 
       # level filter should work in reviewed tab
       fill_in 'filter', with: 'level'
-      click_button "Level 3: #{level_3.name}"
+      click_button "Chapter 3: #{level_3.name}"
 
       expect(page).to have_text("No submissions found")
 
       fill_in 'filter', with: 'level'
-      click_button "Level 1: #{level_1.name}"
+      click_button "Chapter 1: #{level_1.name}"
 
       expect(page).to have_text(target_l1.title)
       expect(page).not_to have_text(target_l2.title)
@@ -188,7 +188,7 @@ feature "Coach's review interface" do
 
       within("a[aria-label='Submission #{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
-        expect(page).to have_text("Level 3")
+        expect(page).to have_text("Chapter 3")
         expect(page).to have_text(team_l3.founders.first.user.name)
       end
 
@@ -204,13 +204,13 @@ feature "Coach's review interface" do
 
       within("a[aria-label='Submission #{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
-        expect(page).to have_text("Level 1")
+        expect(page).to have_text("Chapter 1")
         expect(page).to have_text(team_l3.founders.first.user.name)
       end
 
       within("a[aria-label='Submission #{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
-        expect(page).to have_text("Level 2")
+        expect(page).to have_text("Chapter 2")
         expect(page).to have_text(team_l3.founders.first.user.name)
       end
 

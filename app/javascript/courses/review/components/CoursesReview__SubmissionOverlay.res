@@ -233,6 +233,12 @@ let make = (
           className="review-submission-overlay__submission-container relative container mx-auto max-w-3xl px-3 lg:px-0 pb-8">
           {submissionDetails
           |> SubmissionDetails.submissions
+          |> ArrayUtils.copyAndSort((s1, s2) =>
+            DateFns.differenceInSeconds(
+              OverlaySubmission.createdAt(s2),
+              OverlaySubmission.createdAt(s1),
+            )
+          )
           |> Array.mapi((index, overlaySubmission) =>
             <CoursesReview__SubmissionsList
               key={index |> string_of_int}

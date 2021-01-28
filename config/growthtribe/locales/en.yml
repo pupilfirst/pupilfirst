@@ -20,6 +20,7 @@ en:
       level_up_limited_description: "You're at Chapter %{currentLevel}, but you have lessons in the Chapter %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone lessons in Chapter %{minimumRequiredLevel} to continue leveling up."
       level_up_description: Congratulations! You have successfully completed all milestone lessons required to level up. Click the button below to proceed to the next chapter. New challenges await!
     CoursesReport__Overview:
+      level_progress: Chapter Progress
       targets_overview: Lessons Overview
     CoursesStudents__StudentOverlay:
       level_progress: Chapter Progress

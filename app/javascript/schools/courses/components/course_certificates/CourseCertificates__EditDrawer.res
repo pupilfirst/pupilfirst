@@ -237,7 +237,7 @@ let make = (
                     <i className="fas fa-exclamation-triangle" />
                   </div>
                   <span className="ml-2">
-                    {"Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target."->React.string}
+                    {t("can_not_be_auto_issued_warning")->React.string}
                   </span>
                 </div>
               : React.null}

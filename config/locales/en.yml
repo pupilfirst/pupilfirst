@@ -89,6 +89,7 @@ en:
       update_issued_certificates_warning:
         one: "This certificate has been issued once.<br/>These changes will also be applied to the issued certificate."
         other: "This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates."
+      can_not_be_auto_issued_warning: Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.
     CoursesReport__Level:
       level: Level
     CoursesCurriculum:

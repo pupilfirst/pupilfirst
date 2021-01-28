@@ -1,5 +1,6 @@
 class GraphqlController < ApplicationController
   skip_forgery_protection if: :skip_csrf_protection?
+  skip_before_action :redirect_to_primary_domain, if: :introspection?
 
   def execute
     variables = ensure_hash(params[:variables])

@@ -85,9 +85,9 @@ let decodeJs = details =>
 
 let updateSubmission = (submission, t) => {
   ...t,
-  submissions: t.submissions
-  |> Js.Array.filter(s => s |> OverlaySubmission.id != (submission |> OverlaySubmission.id))
-  |> Array.append([submission]),
+  submissions: t.submissions |> Js.Array.map(s =>
+    OverlaySubmission.id(s) == OverlaySubmission.id(submission) ? submission : s
+  ),
 }
 
 let makeIndexSubmission = (overlaySubmission, t) =>
@@ -97,7 +97,7 @@ let makeIndexSubmission = (overlaySubmission, t) =>
     ~createdAt=overlaySubmission |> OverlaySubmission.createdAt,
     ~levelId=t.levelId,
     ~userNames=t.students
-    |> Array.map(student => student |> CoursesReview__Student.name)
+    |> Js.Array.map(student => student |> CoursesReview__Student.name)
     |> Js.Array.joinWith(", "),
     ~status=Some(
       IndexSubmission.makeStatus(

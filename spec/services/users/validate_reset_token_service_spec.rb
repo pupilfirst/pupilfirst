@@ -27,7 +27,7 @@ describe Users::ValidateResetTokenService do
 
       it 'returns nil due to time limit' do
         sent_at = Time.zone.now - (time_limit_minutes + 1).minutes
-        user = create :user, reset_password_sent_at: sent_at
+        create :user, reset_password_sent_at: sent_at
         expect(subject.authenticate).to eq(nil)
       end
     end

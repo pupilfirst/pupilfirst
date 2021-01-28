@@ -1,5 +1,7 @@
 en:
   components:
+    CourseCertificates__EditDrawer:
+      can_not_be_auto_issued_warning: Please note that the last chapter of this course does not have any milestone lessons. This certificate will be auto-issued only if the last chapter has at least one milestone lesson.
     CoursesCurriculum:
       level_locked: Chapter locked
       level_locked_notice: "The chapter is currently locked!"

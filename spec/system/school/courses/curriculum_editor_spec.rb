@@ -218,7 +218,7 @@ feature 'Curriculum Editor', js: true do
 
       find('button[title="Edit selected chapter"').click
       click_button 'Actions'
-      select "L1: #{level_1.name}", from: 'Delete & Merge Into'
+      select "C1: #{level_1.name}", from: 'Delete & Merge Into'
 
       accept_confirm do
         click_button 'Merge and Delete'
@@ -235,7 +235,7 @@ feature 'Curriculum Editor', js: true do
 
       find('button[title="Edit selected chapter"').click
       click_button 'Actions'
-      expect(page).not_to have_text("L0: #{level_0.name}")
+      expect(page).not_to have_text("C0: #{level_0.name}")
     end
   end
 
@@ -243,7 +243,7 @@ feature 'Curriculum Editor', js: true do
     sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
     find('.target-group__header', text: target_group_2.name).click
 
-    expect(page).to have_text("Level #{target_group_2.level.number}: #{target_group_2.level.name}")
+    expect(page).to have_text("Chapter #{target_group_2.level.number}: #{target_group_2.level.name}")
 
     fill_in 'level_id', with: level_1.name
     click_button "Pick Chapter 1: #{level_1.name}"

@@ -71,7 +71,7 @@ module Selectable = {
 
   let label = t =>
     switch t {
-    | Level(level) => Some("Level " ++ (level |> Level.number |> string_of_int))
+    | Level(level) => Some(LevelLabel.format(level |> Level.number |> string_of_int))
     | TargetStatus(_targetStatus) => Some("Status")
     }
 
@@ -84,7 +84,7 @@ module Selectable = {
   let searchString = t =>
     switch t {
     | Level(level) =>
-      "level " ++ ((level |> Level.number |> string_of_int) ++ (" " ++ (level |> Level.name)))
+      LevelLabel.searchString(level |> Level.number |> string_of_int, level |> Level.name)
     | TargetStatus(targetStatus) => "status " ++ statusString(targetStatus)
     }
 

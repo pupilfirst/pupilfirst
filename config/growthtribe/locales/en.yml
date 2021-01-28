@@ -20,10 +20,6 @@ en:
       level_up_limited_description: "You're at Chapter %{currentLevel}, but you have lessons in the Chapter %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone lessons in Chapter %{minimumRequiredLevel} to start next chapter."
       level_up_title: Ready to start next chapter!
       level_up_description: Congratulations! You have successfully completed all milestone lessons required to start the next chapter in the course. Click on the "Next Chapter" button below to continue progressing through the course.
-      level_up_blocked:
-        body_suffix: You need to get a passing grade on all milestone lessons to start next chapter.
-      level_up_limited_description: "You're at Chapter %{currentLevel}, but you have lessons in the Chapter %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone lessons in Chapter %{minimumRequiredLevel} to start next chapter."
-      level_up_description: Congratulations! You have successfully completed all milestone lessons required to start next chapter. Click the button below to proceed to the next chapter. New challenges await!
     CoursesReport__Overview:
       level_progress: Chapter Progress
       targets_overview: Lessons Overview

@@ -14,6 +14,7 @@ en:
       course_complete_description: You've completed our coursework. Feel free to complete lessons that you might have left out, and read up at attached links.
       course_ended_description: The course has ended and submissions are disabled for all lessons!
       team_members_pending_description: You have completed all required milestone lessons, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone lessons.
+      level_up: Next Chapter
       level_up_blocked:
         title_rejected: Next Chapter Blocked
         body_prefix: "You have submitted all milestone lessons in chapter %{number}, but one or more submissions "

@@ -501,7 +501,7 @@ feature 'School students index', js: true do
       sign_in_user school_admin.user, referrer: school_course_students_path(course)
 
       # filter by level
-      fill_in 'search', with: 'level'
+      fill_in 'search', with: 'chapter'
       click_button level_2.name
       expect(page).to have_text(startup_2.name)
       expect(page).not_to have_text(startup_1.name)

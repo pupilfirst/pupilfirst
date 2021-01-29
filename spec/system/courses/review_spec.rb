@@ -124,7 +124,7 @@ feature "Coach's review interface" do
       end
 
       # filter pending submissions
-      fill_in 'filter', with: 'level'
+      fill_in 'filter', with: 'chapter'
       # choose level 1 from the dropdown
       click_button "Chapter 1: #{level_1.name}"
 
@@ -136,7 +136,7 @@ feature "Coach's review interface" do
       expect(page).not_to have_text(target_l3.title)
 
       # switch level
-      fill_in 'filter', with: 'level'
+      fill_in 'filter', with: 'chapter'
       click_button "Chapter 2: #{level_2.name}"
 
       # choose level 2 submissions should be displayed
@@ -153,12 +153,12 @@ feature "Coach's review interface" do
       expect(page).not_to have_text(target_l1.title)
 
       # level filter should work in reviewed tab
-      fill_in 'filter', with: 'level'
+      fill_in 'filter', with: 'chapter'
       click_button "Chapter 3: #{level_3.name}"
 
       expect(page).to have_text("No submissions found")
 
-      fill_in 'filter', with: 'level'
+      fill_in 'filter', with: 'chapter'
       click_button "Chapter 1: #{level_1.name}"
 
       expect(page).to have_text(target_l1.title)

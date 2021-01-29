@@ -110,6 +110,8 @@ en:
       access_ended_description: Your access to this course has ended.
       team_members_pending_title: Check With Your Team
       team_members_pending_description: You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.
+      saving: Saving
+      level_up: Level Up
       level_up_blocked:
         title_pending_review: Pending Review
         title_rejected: Level Up Blocked

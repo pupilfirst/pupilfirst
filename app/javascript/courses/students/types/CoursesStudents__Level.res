@@ -17,7 +17,7 @@ let decode = json => {
   }
 }
 
-let shortName = t => "L" ++ (t.number |> string_of_int)
+let shortName = t => LevelLabel.format(~short=true, t.number |> string_of_int)
 
 let sort = levels => levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number)
 

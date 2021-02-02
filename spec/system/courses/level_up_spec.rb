@@ -52,14 +52,14 @@ feature "Student levelling up", js: true do
 
       expect(page).not_to have_text(target_l1.title)
       expect(page).not_to have_text(target_group_l1.name)
-      expect(page).not_to have_button('Next Chapter')
+      expect(page).not_to have_button(title: 'Next Chapter')
 
-      expect(page).to have_text('You have successfully completed all lessons required to start next chapter.')
+      expect(page).to have_text('You have successfully completed all milestone lessons')
 
       # Reload the page, it should still remain the same.
       visit curriculum_course_path(course)
 
-      expect(page).to have_text('You have successfully completed all lessons required to start next chapter.')
+      expect(page).to have_text('You have successfully completed all milestone lessons')
       expect(page).not_to have_text(target_l1.title)
       expect(page).not_to have_text(target_group_l1.name)
 

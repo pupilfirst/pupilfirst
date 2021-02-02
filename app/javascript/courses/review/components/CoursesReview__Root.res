@@ -105,8 +105,8 @@ let reducer = (state, action) =>
         )
       },
     }
-  | SelectPendingTab => {...state, selectedTab: #Pending}
-  | SelectReviewedTab => {...state, selectedTab: #Reviewed}
+  | SelectPendingTab => {...state, selectedTab: #Pending, sortDirection: #Ascending}
+  | SelectReviewedTab => {...state, selectedTab: #Reviewed, sortDirection: #Descending}
   | SelectCoach(coach) => {
       ...state,
       selectedCoach: Some(coach),
@@ -151,7 +151,7 @@ let computeInitialState = currentTeamCoach => {
   selectedCoach: currentTeamCoach,
   reviewedTabSortCriterion: #SubmittedAt,
   filterString: "",
-  sortDirection: #Descending,
+  sortDirection: #Ascending,
   reloadAt: Js.Date.make(),
 }
 

@@ -9,7 +9,7 @@ class TopicsResolver < ApplicationQuery
 
   def topics
     if search.present?
-      applicable_topics.search_by_title(title_for_search)
+      applicable_topics.search_by_title_and_post_body(title_for_search)
     else
       applicable_topics
     end

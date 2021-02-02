@@ -17,6 +17,10 @@
 
 - Open a new GitHub pull request with the patch.
 
+- Make sure that the [_Allow edits from maintainers_](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork)
+  option is enabled. This will allow us to quickly patch your PR if we
+  want to merge it.
+
 - Ensure the PR description clearly describes the problem and solution. Include the relevant issue number if applicable.
 
 - Before submitting, please make sure that your code is properly formatted. For Ruby code, that usually means following

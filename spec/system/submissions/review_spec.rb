@@ -74,7 +74,7 @@ feature 'Submission review overlay' do
       add_markdown(feedback)
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
         expect(page).to have_selector('.course-review-grade-card__grade-pill', count: 4)
-        find("div[title='Bad']").click
+        find("button[title='Bad']").click
       end
 
       # status should be reviewing as the target is not graded completely
@@ -83,7 +83,7 @@ feature 'Submission review overlay' do
       end
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
         expect(page).to have_selector('.course-review-grade-card__grade-pill', count: 3)
-        find("div[title='Bad']").click
+        find("button[title='Bad']").click
       end
 
       # the status should be Rejected
@@ -92,7 +92,7 @@ feature 'Submission review overlay' do
       end
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
-        find("div[title='Good']").click
+        find("button[title='Good']").click
       end
 
       # the status should be Rejected
@@ -118,7 +118,7 @@ feature 'Submission review overlay' do
 
       # the submission must be removed from the pending list
 
-      find("div[aria-label='submissions-overlay-close']").click
+      find("button[aria-label='submissions-overlay-close']").click
       expect(page).to have_text(submission_pending_2.target.title)
       expect(page).to_not have_text(submission.target.title)
     end
@@ -270,7 +270,7 @@ feature 'Submission review overlay' do
       expect(page).to have_content('Grade Card')
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
-        find("div[title='Good']").click
+        find("button[title='Good']").click
       end
 
       # status should be reviewing as the target is not graded completely
@@ -278,7 +278,7 @@ feature 'Submission review overlay' do
         expect(page).to have_text('Reviewing')
       end
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
-        find("div[title='Good']").click
+        find("button[title='Good']").click
       end
 
       # the status should be Rejected
@@ -341,7 +341,7 @@ feature 'Submission review overlay' do
       expect(page).to have_content('Grade Card')
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
-        find("div[title='Good']").click
+        find("button[title='Good']").click
       end
 
       # status should be reviewing as the target is not graded completely
@@ -349,7 +349,7 @@ feature 'Submission review overlay' do
         expect(page).to have_text('Reviewing')
       end
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
-        find("div[title='Good']").click
+        find("button[title='Good']").click
       end
 
       # the status should be completed
@@ -424,11 +424,11 @@ feature 'Submission review overlay' do
       add_markdown note, id: "note-for-submission-#{submission_pending.id}"
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
-        find("div[title='Good']").click
+        find("button[title='Good']").click
       end
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
-        find("div[title='Good']").click
+        find("button[title='Good']").click
       end
 
       click_button 'Save grades'
@@ -453,11 +453,11 @@ feature 'Submission review overlay' do
       add_markdown note, id: "note-for-submission-#{submission_pending.id}"
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
-        find("div[title='Good']").click
+        find("button[title='Good']").click
       end
 
       within("div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']") do
-        find("div[title='Good']").click
+        find("button[title='Good']").click
       end
 
       click_button 'Save grades'
@@ -490,7 +490,7 @@ feature 'Submission review overlay' do
         expect(page).to have_text('Completed')
       end
 
-      find("div[aria-label='submissions-overlay-close']").click
+      find("button[aria-label='submissions-overlay-close']").click
 
       # Closing the overlay should show that the item has been removed from the pending list.
       expect(page).not_to have_text(target.title)
@@ -513,7 +513,7 @@ feature 'Submission review overlay' do
         expect(page).to have_text('Pending Review')
       end
 
-      find("div[aria-label='submissions-overlay-close']").click
+      find("button[aria-label='submissions-overlay-close']").click
 
       # Closing the overlay should show that the item has been removed from the reviewed list.
       expect(page).not_to have_text(target.title)
@@ -649,7 +649,7 @@ feature 'Submission review overlay' do
 
         # grades the pending submission
         within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
-          find("div[title='Good']").click
+          find("button[title='Good']").click
         end
       end
 

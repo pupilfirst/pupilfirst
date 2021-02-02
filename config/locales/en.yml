@@ -34,8 +34,8 @@ en:
       all_categories_button: All Categories
       empty_topics: There's no discussion here yet.
       filter_input_label: "Filter by:"
-      filter_input_placeholder_default: Search by topic title or filter by solution
-      filter_input_placeholder_categories: Filter by category, solution or search by topic title
+      filter_input_placeholder_default: Search within topics or filter by solution
+      filter_input_placeholder_categories: Filter by category, solution or search within topics
       sort_criterion_input_label: "Sort by:"
       sort_criterion_posted_at: Posted At
       sort_criterion_last_activity: Last Activity
@@ -121,7 +121,7 @@ en:
       level_up_limited_title: Level Up Blocked
       level_up_limited_description: "You're at Level %{currentLevel}, but you have targets in the Level %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up."
       level_up_title: Ready to Level Up!
-      level_up_description: Congratulations! You have successfully completed all milestone targets required to level up. Click the button below to proceed to the next level. New challenges await!
+      level_up_description: Congratulations! You have successfully completed all milestone targets required to move to the next level in the course. Click on the "Level up" button below to continue progressing through the course.
     CurriculumEditor:
       level: Level
       create_target_group: Create target group

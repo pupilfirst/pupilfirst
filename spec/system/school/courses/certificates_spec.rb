@@ -184,7 +184,7 @@ feature 'Certificates', js: true do
 
       find("a[title='Edit Certificate #{certificate_c2.name}'").click
 
-      expect(page).to have_text('Please note that the last chapter of this course does not have any milestone lessons. This certificate will be auto-issued only if the last chapter has at least one milestone lesson.')
+      expect(page).not_to have_text('Please note that the last chapter of this course does not have any milestone lessons. This certificate will be auto-issued only if the last chapter has at least one milestone lesson.')
     end
 
     scenario 'user visits certificate editor for course with no live milestone target groups' do

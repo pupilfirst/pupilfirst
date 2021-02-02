@@ -109,6 +109,9 @@ en:
       success_notification: Lesson updated successfully!
     auto_verify_submission:
       success_notification: Lesson has been marked as complete.
+  services:
+    team_up_service:
+      must_be_on_the_same_level: Students must be on the same chapter for teaming up
 
   shared:
     'yes': 'Yes'

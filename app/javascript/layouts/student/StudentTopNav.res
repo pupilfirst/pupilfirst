@@ -59,20 +59,24 @@ let notificationButton = hasNotifications =>
 let isMobile = () => Webapi.Dom.window |> Webapi.Dom.Window.innerWidth < 768
 
 let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
-  let (visibleLinks, dropdownLinks) = switch (links, isMobile()) {
-  | (links, true) => (links, list{})
-  | (list{l1, l2, l3, l4, l5, ...rest}, false) => (list{l1, l2, l3}, list{l4, l5, ...rest})
-  | (fourOrLessLinks, false) => (fourOrLessLinks, list{})
+  let (visibleLinks, dropdownLinks) = switch (Array.to_list(links), isMobile()) {
+  | (links, true) => (Array.of_list(links), [])
+  | (list{l1, l2, l3, l4, l5, ...rest}, false) => (
+      [l1, l2, l3],
+      Js.Array.concat(Array.of_list(rest), [l4, l5]),
+    )
+  | (fourOrLessLinks, false) => (Array.of_list(fourOrLessLinks), [])
   }
 
   switch visibleLinks {
   | visibleLinks =>
-    (visibleLinks |> List.mapi((index, l) => headerLink(index |> string_of_int, l)))
-    ->List.append(list{<StudentTopNav__DropDown links=dropdownLinks key="more-links" />})
-    ->List.append(list{
+    visibleLinks
+    |> Js.Array.mapi((l, index) => headerLink(index |> string_of_int, l))
+    |> Js.Array.concat([<StudentTopNav__DropDown links=dropdownLinks key="more-links" />])
+    |> Js.Array.concat([
       ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn && !isMobile()),
-    })
-    ->List.append(list{
+    ])
+    |> Js.Array.concat([
       switch (isLoggedIn, isMobile()) {
       | (true, true) => signOutLink()
       | (true, false) => <StudentTopNav__UserControls user key="user-controls" />
@@ -80,8 +84,7 @@ let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
       | (false, false) =>
         signInLink()
       },
-    })
-    |> Array.of_list
+    ])
     |> ReasonReact.array
   }
 }

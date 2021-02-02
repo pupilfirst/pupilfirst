@@ -11,7 +11,7 @@ let additionalLinks = (linksVisible, links) =>
     ? <div
         className="dropdown__list dropdown__list-right bg-white shadow-lg rounded mt-3 border absolute w-40 z-50">
         {links
-        |> List.mapi((index, link) =>
+        |> Js.Array.mapi((link, index) =>
           <div key={index |> string_of_int} className="">
             <a
               className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200"
@@ -22,7 +22,6 @@ let additionalLinks = (linksVisible, links) =>
             </a>
           </div>
         )
-        |> Array.of_list
         |> ReasonReact.array}
       </div>
     : ReasonReact.null
@@ -31,7 +30,7 @@ let additionalLinks = (linksVisible, links) =>
 let make = (~links) => {
   let (linksVisible, setLinksVisible) = React.useState(() => false)
   switch links {
-  | list{} => ReasonReact.null
+  | [] => ReasonReact.null
   | moreLinks =>
     <div
       title="Show more links"

@@ -13,6 +13,8 @@ type state = {
   saving: bool,
 }
 
+let ts = I18n.t(~scope="shared")
+
 type action =
   | UpdateName(string, bool)
   | UpdateDescription(string)
@@ -98,7 +100,7 @@ let selectedLevel = (levels, levelId) =>
 let levelEditor = (state, levels, send) =>
   <div id="level_id" className="mt-5">
     <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="level_id">
-      {"Level" |> str}
+      {ts("level.label") |> str}
     </label>
     <LevelSelector
       id="level_id"

@@ -236,7 +236,9 @@ let make = (
                   <div className="w-6 h-6 text-yellow-500 flex-shrink-0">
                     <i className="fas fa-exclamation-triangle" />
                   </div>
-                  <span className="ml-2"> {t("cannot_be_auto_issued_warning")->React.string} </span>
+                  <span className="ml-2">
+                    {t("can_not_be_auto_issued_warning")->React.string}
+                  </span>
                 </div>
               : React.null}
           </div>

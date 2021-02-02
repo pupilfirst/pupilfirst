@@ -447,42 +447,44 @@ let make = (
     {switch state.notice {
     | LevelUp => React.null
     | _anyOtherNotice =>
-      <div className="relative">
-        <CoursesCurriculum__LevelSelector
-          levels
-          teamLevel
-          selectedLevel
-          setSelectedLevelId={selectedLevelId =>
-            setState(state => {...state, selectedLevelId: selectedLevelId})}
-          showLevelZero=state.showLevelZero
-          setShowLevelZero={showLevelZero =>
-            setState(state => {...state, showLevelZero: showLevelZero})}
-          levelZero
-        />
-        {currentLevel |> Level.isLocked && accessLockedLevels
-          ? <div className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto">
-              {"This level is still locked for students, and will be unlocked on " |> str}
-              <strong> {currentLevel |> Level.unlockDateString |> str} </strong>
-              {"." |> str}
-            </div>
-          : React.null}
-        {Level.isUnlocked(currentLevel) || accessLockedLevels
-          ? targetGroupsInLevel == []
-              ? <div className="mx-auto py-10">
-                  <img className="max-w-sm mx-auto" src=levelEmptyImage />
-                  <p className="text-center font-semibold text-lg mt-4">
-                    {t("empty_level_content_notice") |> str}
-                  </p>
-                </div>
-              : targetGroupsInLevel
-                |> TargetGroup.sort
-                |> Js.Array.map(targetGroup =>
-                  renderTargetGroup(targetGroup, targets, state.statusOfTargets)
-                )
-                |> React.array
-          : handleLockedLevel(currentLevel)}
-      </div>
+      [
+        <div className="relative">
+          <CoursesCurriculum__LevelSelector
+            levels
+            teamLevel
+            selectedLevel
+            setSelectedLevelId={selectedLevelId =>
+              setState(state => {...state, selectedLevelId: selectedLevelId})}
+            showLevelZero=state.showLevelZero
+            setShowLevelZero={showLevelZero =>
+              setState(state => {...state, showLevelZero: showLevelZero})}
+            levelZero
+          />
+          {currentLevel |> Level.isLocked && accessLockedLevels
+            ? <div className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto">
+                {"This level is still locked for students, and will be unlocked on " |> str}
+                <strong> {currentLevel |> Level.unlockDateString |> str} </strong>
+                {"." |> str}
+              </div>
+            : React.null}
+          {Level.isUnlocked(currentLevel) || accessLockedLevels
+            ? targetGroupsInLevel == []
+                ? <div className="mx-auto py-10">
+                    <img className="max-w-sm mx-auto" src=levelEmptyImage />
+                    <p className="text-center font-semibold text-lg mt-4">
+                      {t("empty_level_content_notice") |> str}
+                    </p>
+                  </div>
+                : targetGroupsInLevel
+                  |> TargetGroup.sort
+                  |> Js.Array.map(targetGroup =>
+                    renderTargetGroup(targetGroup, targets, state.statusOfTargets)
+                  )
+                  |> React.array
+            : handleLockedLevel(currentLevel)}
+        </div>,
+        {state.showLevelZero ? React.null : quickNavigationLinks(levels, selectedLevel, setState)},
+      ] |> React.array
     }}
-    {state.showLevelZero ? React.null : quickNavigationLinks(levels, selectedLevel, setState)}
   </div>
 }

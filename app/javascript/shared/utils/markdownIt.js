@@ -2,6 +2,7 @@ import commonmarkPreset from "markdown-it/lib/presets/commonmark";
 
 const md = require("markdown-it")({
   ...commonmarkPreset.options,
+  linkify: true,
   highlight: (str, lang) => {
     return (
       '<pre class="line-numbers"><code class="language-' +

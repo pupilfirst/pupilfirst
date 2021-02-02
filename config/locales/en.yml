@@ -379,6 +379,9 @@ en:
     issue_certificate_mutator:
       issued_error: This student has already been issued a certificate for this course.
       certificate_error: The specified certificate could not be found.
+  services:
+    team_up_service:
+      must_be_on_the_same_level: Students must belong to the same level for teaming up
   shared:
     optional: optional
     done_exclamation: Done!

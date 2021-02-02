@@ -5,7 +5,7 @@ module Startups
     end
 
     def team_up(name)
-      raise "Students must belong to the same level for teaming up" unless @founders.joins(startup: :level).distinct('levels.id').pluck('levels.id').one?
+      raise I18n.t("services.team_up_service.must_be_on_the_same_level") unless @founders.joins(startup: :level).distinct('levels.id').pluck('levels.id').one?
 
       Startup.transaction do
         startup = Startup.create!(

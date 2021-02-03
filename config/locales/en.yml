@@ -136,6 +136,23 @@ en:
       quiz: Quiz
       schedule_coaching_session: Schedule a coaching session
       targets_overview: Targets Overview
+    CoursesReport__SubmissionsList:
+      rejected: "Rejected"
+      completed: "Completed"
+      pending_review: "Pending Review"
+      status: Status
+      sory_by: "Sort by:"
+      filter_by_level: Filter by level
+      filter_by_level_or_status: Filter by level, or by status
+      filter_by_another_level: Filter by another level
+      filter_by_another_level_or_status: Filter by another level, or by status
+      submitted_at: Submitted At
+      submitted_on: "Submitted on %{date}"
+      submission_not_considered: This submission is not considered towards its target's completion.
+      submission_not_considered_help: This is a <span className="italic">team</span> target, and this submission is not linked to some members of your team. This can happen if a target is changed after your individual submission, to require a <span className="italic">team</span> submission, or if your team's composition changed after a <span className="italic">team</span> submission was created.
+      view: "View "
+      no_subbmissions_to_show: "No submissions to show "
+      load_more: Load More...
     CoursesStudents__StudentOverlay:
       access_ended_at: "This student's access to the course ended on %{date}."
       attempted: " Attempted"
@@ -394,6 +411,7 @@ en:
     level:
       label: "Level"
       short_label: "L"
+    target: Target
 
   dashboard:
     dashboard:

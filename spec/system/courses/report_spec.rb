@@ -178,11 +178,12 @@ feature 'Students view performance report and submissions overview', js: true do
       # The main link should point to the "backup" submission page.
       expect(page).to have_link(target_l1.title, href: "/submissions/#{submission_target_l1_1.id}")
 
+puts page.driver.browser.manage.logs.get(:browser)
       within("div[aria-label='Team change notice for submission #{submission_target_l1_1.id}']") do
-        expect(page).to have_content("This submission is not considered towards its target's completion")
+        expect(page).to have_content("This submission is not considered towards lesson's completion")
 
         # There should be an additional link to the target as well.
-        expect(page).to have_link('View Target', href: "/targets/#{target_l1.id}")
+        expect(page).to have_link('View Lesson', href: "/targets/#{target_l1.id}")
       end
     end
   end

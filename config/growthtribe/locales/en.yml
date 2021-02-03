@@ -26,6 +26,9 @@ en:
     CoursesReport__Overview:
       level_progress: Chapter Progress
       targets_overview: Lessons Overview
+    CoursesReport__SubmissionsList:
+      submission_not_considered: This submission is not considered towards lesson's completion.
+      submission_not_considered_help: This is a <span className="italic">team</span> lesson, and this submission is not linked to some members of your team. This can happen if a lesson is changed after your individual submission, to require a <span className="italic">team</span> submission, or if your team's composition changed after a <span className="italic">team</span> submission was created.
     CoursesStudents__StudentOverlay:
       level_progress: Chapter Progress
       targets: " Lessons"
@@ -119,6 +122,7 @@ en:
     level:
       label: "Chapter"
       short_label: "C"
+    target: Lesson
 
   dashboard:
     dashboard:

@@ -125,6 +125,25 @@ module Schools
       render json: camelize_keys(stringify_ids(props))
     end
 
+
+    # POST /school/courses/:id/bulk_import_students
+    def bulk_import_students
+      @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+
+      form = ::Courses::BulkImportStudentsForm.new(@course)
+
+      props = if form.validate(params)
+        form.save
+        {
+          success: true,
+        }
+      else
+        { error: form.errors.full_messages.join(", ") }
+      end
+
+      render json: camelize_keys(stringify_ids(props))
+    end
+
     # GET /school/courses/:id/evaluation_criteria
     def evaluation_criteria
       @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)

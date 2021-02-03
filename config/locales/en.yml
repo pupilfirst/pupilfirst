@@ -216,6 +216,7 @@ en:
       button_all_students: All Students
       button_inactive_students: Inactive Students
       button_add_new_students: Add New Students
+      button_bulk_import: Bulk Import
     StudentsEditor__Search:
       filter_input_label: "Filter by:"
       filter_input_placeholder: Type name, tag or level
@@ -232,7 +233,13 @@ en:
       teams_to_add_empty: "This list is empty! Add some students using the form above."
       notify_students_label: "Notify students, and send them a link to sign into this school."
       save_list_button: Save List
-
+    StudentsEditor__BulkImportForm:
+      drawer_heading: Bulk Import Students
+      csv_file_input_label: CSV Import file
+      csv_file_input_placeholder: Select CSV file to import
+      import_button_text: Import Students
+      csv_file_invalid: Please select a valid CSV file with size less than 5 MB
+      success_notification: Import initiated successfully!
     TopicsShow__Root:
       linked_target_label: "Linked Target: "
       view_target_button: View Target

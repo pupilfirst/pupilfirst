@@ -59,6 +59,7 @@ Rails.application.routes.draw do
         get 'authors'
         get 'certificates'
         post 'certificates', action: 'create_certificate'
+        post 'bulk_import_students'
         get 'evaluation_criteria'
         post 'attach_images'
       end

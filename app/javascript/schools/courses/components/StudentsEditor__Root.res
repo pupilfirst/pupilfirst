@@ -12,6 +12,7 @@ type formVisible =
   | None
   | CreateForm
   | UpdateForm(Student.t, teamId)
+  | BulkImportForm
 
 type state = {
   pagedTeams: Page.t,
@@ -226,6 +227,10 @@ let make = (
             send(UpdateStudentCertification(updatedStudent, team))}
         />
       </SchoolAdmin__EditorDrawer>
+    | BulkImportForm =>
+      <SchoolAdmin__EditorDrawer closeDrawerCB={() => send(UpdateFormVisible(None))}>
+        <StudentsEditor__BulkImportForm courseId />
+      </SchoolAdmin__EditorDrawer>
     }}
     <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
       <div className="max-w-3xl w-full mx-auto flex justify-between items-center border-b mt-4">
@@ -244,11 +249,20 @@ let make = (
         </ul>
         {state.selectedStudents |> Array.length > 0
           ? React.null
-          : <button
-              onClick={_e => send(UpdateFormVisible(CreateForm))} className="btn btn-primary ml-4">
-              <i className="fas fa-user-plus mr-2" />
-              <span> {t("button_add_new_students") |> str} </span>
-            </button>}
+          : <div className="flex justify-between">
+              <button
+                onClick={_e => send(UpdateFormVisible(BulkImportForm))}
+                className="btn btn-primary ml-4">
+                <i className="fas fa-file-csv mr-2" />
+                <span> {t("button_bulk_import") |> str} </span>
+              </button>
+              <button
+                onClick={_e => send(UpdateFormVisible(CreateForm))}
+                className="btn btn-primary ml-4">
+                <i className="fas fa-user-plus mr-2" />
+                <span> {t("button_add_new_students") |> str} </span>
+              </button>
+            </div>}
       </div>
       <div className="bg-gray-100 sticky top-0 py-3">
         <div className="border rounded-lg mx-auto max-w-3xl bg-white ">

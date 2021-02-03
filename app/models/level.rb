@@ -18,7 +18,7 @@ class Level < ApplicationRecord
   end
 
   def short_name
-    I18n.t('shared.level.label') + ' ' + number.to_s
+    I18n.t('shared.level_label.long') + ' ' + number.to_s
   end
 
   def unlocked

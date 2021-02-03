@@ -118,5 +118,7 @@ jobs:
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
-          name: Screenshots
-          path: tmp/capybara
+          name: Logs
+          path: | 
+            tmp/capybara
+            log/test.log

@@ -22,10 +22,13 @@ module Api
       def create_students
         form = Students::CreateForm.new(Reform::OpenForm.new)
 
+        Rails.logger.debug("Students params: #{student_params}")
         if form.validate(students_params.merge({notify: true}))
+          Rails.logger.debug("Form valid")
           student_count = form.save
           render json: { error: nil, studentIds: student_count }, status: :created
         else
+          Rails.logger.debug("Form not valid")
           render json: { error: form.errors.full_messages.join(', ') }, status: :bad_request
         end
       end

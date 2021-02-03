@@ -196,6 +196,7 @@ module Keycloak
       if res.status == 200
         MultiJson.load(res.body)
       else
+        Rails.logger.debug(res.body)
         raise FailedRequestError.new 'Failed to fetch user_info'
       end
     end

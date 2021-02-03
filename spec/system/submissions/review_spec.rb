@@ -629,7 +629,7 @@ feature 'Submission review overlay' do
     scenario 'coach visits a submission and grades pending submission', js: true do
       sign_in_user coach.user, referrer: review_timeline_event_path(submission_reviewed)
 
-      within("div[aria-label='submissions-overlay-card-#{submission_reviewed.id}']") do
+      within("div[data-submission-id='#{submission_reviewed.id}']") do
         # Evaluation criteria at the point of grading are shown for reviewed submissions
         within("div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']") do
           expect(page).to have_text(evaluation_criterion_1.name)
@@ -642,7 +642,7 @@ feature 'Submission review overlay' do
         end
       end
 
-      within("div[aria-label='submissions-overlay-card-#{submission_pending.id}']") do
+      within("div[data-submission-id='#{submission_pending.id}']") do
         # New list of evaluation criteria are shown for pending submissions
         expect(page).to have_text(evaluation_criterion_1.name)
         expect(page).not_to have_text(evaluation_criterion_2.name)

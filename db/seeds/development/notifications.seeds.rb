@@ -1,11 +1,10 @@
 after 'development:communities', 'development:posts', 'development:users' do
-  puts 'Notifications...'
+  puts 'Seeding notifications'
   community_users = Community.first.users.first(5)
   community_topics = Community.first.topics
 
   community_topics.each do |topic|
     community_users.each do |recipient|
-
       Notification.create!(
         actor_id: topic.creator.id,
         notifiable: topic,

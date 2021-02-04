@@ -30,7 +30,7 @@ be printed to the command-line after it's successfully installed.
 The following command should install all required dependencies on Ubuntu. If you're using another _flavour_ of Linux,
 adapt the command to work with the package manager available with your distribution.
 
-    $ sudo apt-get install imagemagick postgresql postgresql-contrib autoconf libtool nginx
+    sudo apt-get install imagemagick postgresql postgresql-contrib autoconf libtool nginx
 
 ### Install Ruby & Node.js
 
@@ -40,7 +40,7 @@ Use [asdf](https://asdf-vm.com/) to install Ruby and Node.js. You can find the r
 
 Once Ruby is installed, fetch all gems using Bundler:
 
-    $ bundle install
+    bundle install
 
 You may need to install the `bundler` gem if the version of Ruby you have installed comes with a different `bundler`
 version. Simply follow the instructions in the error message, if this occurs.
@@ -50,19 +50,19 @@ If installation of the `pg` gem crashes, asking for `libpq-fe.h`, run the follow
 #### On macOS:
 
     # Find the exact path to pg_config.
-    $ find /Applications -name pg_config
+    find /Applications -name pg_config
 
     # Use the path returned by the above command in the following one. Replace X.Y.Z with the same version that failed to install.
-    $ gem install pg -v 'X.Y.Z' -- --with-pg-config=/path/to/pg_config
+    gem install pg -v 'X.Y.Z' -- --with-pg-config=/path/to/pg_config
 
 #### On Ubuntu:
 
-    $ sudo apt-get install libpq-dev
+    sudo apt-get install libpq-dev
 
-### Setup ReasonML & fetch JS dependencies
+### Fetch JS & ReScript dependencies
 
 1. Install Yarn following [offical instructions](https://yarnpkg.com/en/docs/install).
-2. From the root of the repository, run the `yarn` command to install all node modules.
+2. From the root of the repository, run the `yarn` command to install all node modules; this will also install ReScript.
 
 ## Set credentials for local database
 
@@ -72,18 +72,18 @@ Make sure that the PostgreSQL server is running. Once that's done, we'll set a p
 default database user. Open the `psql` CLI:
 
     # macOS
-    $ psql -U postgres
+    psql -U postgres
 
     # Ubuntu
-    $ sudo -u postgres psql
+    sudo -u postgres psql
 
-Then set a new password and quit.
+Then, in the PostgreSQL CLI, set a new password and quit.
 
     # Set a password for this username.
-    postgres=# \password postgres
+    \password postgres
 
     # Quit.
-    postgres=# \q
+    \q
 
 Feel free to alter these steps if you're familiar with setting up PostgreSQL.
 
@@ -92,7 +92,7 @@ Feel free to alter these steps if you're familiar with setting up PostgreSQL.
 1. Copy `example.env` to `.env`.
 
    ```
-   $ cp example.env .env
+   cp example.env .env
    ```
 
 2. Update the values of `DB_USERNAME` and `DB_PASSWORD` in the new `.env` file.
@@ -117,14 +117,14 @@ puts "VAPID_PUBLIC_KEY=#{vapid_key.public_key}\nVAPID_PRIVATE_KEY=#{vapid_key.pr
 [Overcommit](https://github.com/sds/overcommit) adds automatic checks that prevents us from making silly mistakes when
 committing changes.
 
-    $ overcommit --install
-    $ overcommit --sign
+    overcommit --install
+    overcommit --sign
 
 **Note:** You may need to run `asdf reshim` to update paths, if you've just finished running Ruby's `bundle install` command.
 
 ## Seed local database
 
-    $ bundle exec rails db:setup
+    bundle exec rails db:setup
 
 This will also _seed_ data into the database that will be useful for testing during development.
 
@@ -156,10 +156,10 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
 
    ```
    # macOS
-   $ brew services restart nginx
+   brew services restart nginx
 
    # Ubuntu
-   $ sudo systemctl restart nginx
+   sudo systemctl restart nginx
    ```
 
 3. You _may_ also need to point the local school domain `school.localhost`, and the `www` and `sso` subdomains, to
@@ -172,28 +172,28 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
    127.0.0.1       sso.school.localhost
    ```
 
-## Compile ReasonML code
+## Compile ReScript code
 
-If you've used the `yarn` command to install JS dependencies, then ReasonML code should already be compiled at this
-point. To compile ReasonML code again (if you've made changes), you can either do a one-time build, or set up a watcher.
+If you've used the `yarn` command to install JS dependencies, then ReScript code should already be compiled at this
+point. To compile ReScript code again (if you've made changes), you can either do a one-time build, or set up a watcher.
 
     # One-time recompilation
-    $ yarn run re:build
+    yarn run re:build
 
     # Recompile, and then watch for changes
-    $ yarn run re:watch
+    yarn run re:watch
 
 ## Run Webpack Dev Server
 
 Start the Webpack Dev Server on another tab or window:
 
-    $ bin/webpack-dev-server
+    bin/webpack-dev-server
 
 ## Start the Rails server
 
 With `webpack-dev-server` running, start the Rails server:
 
-    $ bundle exec rails server
+    bundle exec rails server
 
 You'll want all three of these processes running for best performance when developing.
 

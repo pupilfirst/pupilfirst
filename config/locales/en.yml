@@ -128,11 +128,11 @@ en:
       attempted: " Attempted"
       average_grades: Average Grades
       average_quiz_score: Average Quiz Score
-      completed: "Completed: %{targetsCompleted}"
+      targets_completed: "Completed: %{targetsCount}"
       course_completed: Course Completed!
-      incomplete: "Incomplete: %{incompleteTargets}"
+      incomplete_targets: "Incomplete: %{targetsCount}"
       level_progress: Level Progress
-      pending_review: "Pending Review: %{targetsPendingReview}"
+      targets_pending_review: "Pending Review: %{targetsCount}"
       personal_coaches: Personal Coaches
       quiz: Quiz
       schedule_coaching_session: Schedule a coaching session

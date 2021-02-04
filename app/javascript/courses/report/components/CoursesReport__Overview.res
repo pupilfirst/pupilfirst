@@ -66,24 +66,21 @@ let targetsCompletionStatus = overview => {
       <div className="ml-4">
         <p className="text-sm text-gray-700 font-semibold mt-1">
           {t(
-            ~variables=[
-              ("incompleteTargets", string_of_int(incompleteTargets)),
-            ],
-            "incomplete") |> str}
+            ~variables=[("targetsCount", string_of_int(incompleteTargets))],
+            "incomplete_targets",
+          ) |> str}
         </p>
         <p className="text-sm text-gray-700 font-semibold mt-1">
           {t(
-            ~variables=[
-              ("targetsPendingReview", string_of_int(targetsPendingReview)),
-            ],
-            "pending_review") |> str}
+            ~variables=[("targetsCount", string_of_int(targetsPendingReview))],
+            "targets_pending_review",
+          ) |> str}
         </p>
         <p className="text-sm text-gray-700 font-semibold mt-1">
           {t(
-            ~variables=[
-              ("targetsCompleted", string_of_int(int_of_float(targetsCompleted))),
-            ],
-            "completed") |> str}
+            ~variables=[("targetsCount", string_of_int(int_of_float(targetsCompleted)))],
+            "targets_completed",
+          ) |> str}
         </p>
       </div>
     </div>
@@ -99,12 +96,8 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
         <div className="ml-4">
           <p className="text-sm font-semibold mt-3"> {t("average_quiz_score") |> str} </p>
           <p className="text-sm text-gray-700 font-semibold leading-tight mt-1">
-            {Inflector.pluralize(
-              t("quiz"),
-              ~count=quizzesAttempted,
-              ~inclusive=true,
-              (),
-            ) ++ t("attempted") |> str}
+            {Inflector.pluralize(t("quiz"), ~count=quizzesAttempted, ~inclusive=true, ()) ++
+            t("attempted") |> str}
           </p>
         </div>
       </div>

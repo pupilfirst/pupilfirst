@@ -1,6 +1,6 @@
 let ts = I18n.t(~scope="shared.level_label")
 
-let format = (~short: false, ~name=?, number) => {
+let format = (~short=false, ~name=?, number) => {
   let prefix = switch short {
   | true => ts("short")
   | false => ts("long") ++ " "

@@ -1,16 +1,16 @@
 let ts = I18n.t(~scope="shared.level_label")
 
 let format = (~short=false, ~name=?, number) => {
-  let prefix = switch short {
-  | true => ts("short")
-  | false => ts("long") ++ " "
+  switch name {
+  | Some(name) =>
+    short
+      ? ts(~variables=[("number", number), ("name", name)], "short_with_name")
+      : ts(~variables=[("number", number), ("name", name)], "long_with_name")
+  | None =>
+    short
+      ? ts(~variables=[("number", number)], "short_without_name")
+      : ts(~variables=[("number", number)], "long_without_name")
   }
-  let formattedName = switch name {
-  | Some(value) => ": " ++ value
-  | None => ""
-  }
-
-  prefix ++ number ++ formattedName
 }
 
 let searchString = (number, name) => {

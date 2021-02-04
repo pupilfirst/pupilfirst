@@ -279,7 +279,6 @@ en:
       teams_to_add_empty: "This list is empty! Add some students using the form above."
       notify_students_label: "Notify students, and send them a link to sign into this school."
       save_list_button: Save List
-
     TopicsShow__Root:
       linked_target_label: "Linked Target: "
       view_target_button: View Target
@@ -409,10 +408,11 @@ en:
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
     file_invalid: Please select a file with a size less than 5 MB.
     level_label:
-      long: "Level"
-      short: "L"
+      long_with_name: "Level %{number}: %{name}"
+      short_with_name: "L%{number}: %{name}"
+      long_without_name: "Level %{number}"
+      short_without_name: "L%{number}"
     target: Target
-
   dashboard:
     dashboard:
       tour:

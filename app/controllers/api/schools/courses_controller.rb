@@ -22,7 +22,7 @@ module Api
       def create_students
         form = Students::CreateForm.new(Reform::OpenForm.new)
 
-        Rails.logger.debug("Students params: #{student_params}")
+        Rails.logger.debug("Students params: #{students_params}")
         if form.validate(students_params.merge({notify: true}))
           Rails.logger.debug("Form valid")
           student_count = form.save

@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  skip_forgery_protection only: %i[service_worker]
+
   def index
     @courses = current_school.courses.where(featured: true)
     render layout: 'student'
@@ -56,6 +58,11 @@ class HomeController < ApplicationController
     else
       redirect_to '/favicon.png'
     end
+  end
+
+  # GET /service-worker.js
+  def service_worker
+    # noop
   end
 
   def manifest

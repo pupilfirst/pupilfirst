@@ -206,5 +206,6 @@ Rails.application.routes.draw do
   # Allow developers to simulate the error pages.
   get '/errors/:error_type', to: 'errors#simulate', constraints: DevelopmentConstraint.new
 
+  get '/service-worker.js', to: 'home#service_worker'
   get '/favicon.ico', to: 'home#favicon'
 end

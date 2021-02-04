@@ -49,4 +49,4 @@ let unsafeFind = (levels, componentName, levelId) =>
     "Unable to find level with id: " ++ (levelId ++ (" in CurriculumEditor__" ++ componentName)),
   )
 
-let levelNumberWithName = t => "Level " ++ ((t.number |> string_of_int) ++ (": " ++ t.name))
+let levelNumberWithName = t => LevelLabel.format(~name=t.name, (t.number |> string_of_int))

@@ -103,7 +103,7 @@ let headerSection = (submissionDetails, courseId, assignedCoaches) =>
       <div>
         <div className="block text-sm md:pr-2">
           <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-            {"Level " ++ (submissionDetails |> SubmissionDetails.levelNumber) |> str}
+            {LevelLabel.format(submissionDetails |> SubmissionDetails.levelNumber) |> str}
           </span>
           <a
             href={"/targets/" ++ (submissionDetails |> SubmissionDetails.targetId)}

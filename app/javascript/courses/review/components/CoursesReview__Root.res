@@ -182,7 +182,7 @@ module Selectable = {
 
   let label = t =>
     switch t {
-    | Level(level) => Some("Level " ++ (level |> Level.number |> string_of_int))
+    | Level(level) => Some(LevelLabel.format(level |> Level.number |> string_of_int))
     | AssignedToCoach(_) => Some("Assigned to")
     }
 
@@ -196,7 +196,7 @@ module Selectable = {
   let searchString = t =>
     switch t {
     | Level(level) =>
-      "level " ++ ((level |> Level.number |> string_of_int) ++ (" " ++ (level |> Level.name)))
+      LevelLabel.searchString(level |> Level.number |> string_of_int, level |> Level.name)
     | AssignedToCoach(coach, currentCoachId) =>
       if coach |> Coach.id == currentCoachId {
         (coach |> Coach.name) ++ " assigned to me"

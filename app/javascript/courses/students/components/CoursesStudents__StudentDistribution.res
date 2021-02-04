@@ -135,7 +135,7 @@ let make = (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes, ~filterT
               let (pillClass, style, pillColor) = stylingForLevelPills(percentageStudents)
               let tip =
                 <div className="text-left">
-                  <p> {"Level: " ++ string_of_int(DistributionInLevel.number(level)) |> str} </p>
+                  <p> {LevelLabel.format(DistributionInLevel.number(level) |> string_of_int) |> str} </p>
                   <p>
                     {"Students: " ++ string_of_int(DistributionInLevel.studentsInLevel(level))
                       |> str}

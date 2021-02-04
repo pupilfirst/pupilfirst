@@ -1,6 +1,6 @@
 open CoursesCurriculum__Types
 
-let t = I18n.t(~scope="components.CoursesCurriculum__NoticeManager")
+let t = I18n.t(~scope="components.CoursesCurriculum__LevelUpButton")
 let str = React.string
 
 module LevelUpQuery = %graphql(
@@ -18,8 +18,8 @@ let handleSubmitButton = saving => {
     <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {title |> str} </span>
 
   saving
-    ? submitButtonText(t("saving"), "fas fa-spinner fa-spin")
-    : submitButtonText(t("level_up"), "fas fa-flag")
+    ? submitButtonText(t("button_text_saving"), "fas fa-spinner fa-spin")
+    : submitButtonText(t("button_text_level_up"), "fas fa-flag")
 }
 
 let refreshPage = () => {

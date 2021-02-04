@@ -110,8 +110,6 @@ en:
       access_ended_description: Your access to this course has ended.
       team_members_pending_title: Check With Your Team
       team_members_pending_description: You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.
-      saving: Saving
-      level_up: Level Up
       level_up_blocked:
         title_pending_review: Pending Review
         title_rejected: Level Up Blocked
@@ -123,6 +121,9 @@ en:
       level_up_limited_description: "You're at Level %{currentLevel}, but you have targets in the Level %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up."
       level_up_title: Ready to Level Up!
       level_up_description: Congratulations! You have successfully completed all milestone targets required to move to the next level in the course. Click on the "Level up" button below to continue progressing through the course.
+    CoursesCurriculum__LevelUpButton:
+      button_text_saving: Saving
+      button_text_level_up: Level Up
     CoursesReport__Overview:
       attempted: " Attempted"
       average_grades: Average Grades
@@ -413,6 +414,7 @@ en:
       long_without_name: "Level %{number}"
       short_without_name: "L%{number}"
     target: Target
+    level: Level
   dashboard:
     dashboard:
       tour:

@@ -100,7 +100,7 @@ let selectedLevel = (levels, levelId) =>
 let levelEditor = (state, levels, send) =>
   <div id="level_id" className="mt-5">
     <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="level_id">
-      {ts("level.label") |> str}
+      {ts("level") |> str}
     </label>
     <LevelSelector
       id="level_id"

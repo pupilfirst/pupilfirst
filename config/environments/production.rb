@@ -150,7 +150,7 @@ Rails.application.configure do
   require_relative '../../lib/rack_throttle/rules'
 
   rules = [
-    { method: "POST", limit: ENV['GRAPH_API_RATE_LIMIT'] },
+    { method: "POST", limit: ENV['GRAPH_API_RATE_LIMIT'] || 1 },
     { method: "GET", whitelisted: true }]
 
   cache = if ENV['MEMCACHEDCLOUD_SERVERS'].present?

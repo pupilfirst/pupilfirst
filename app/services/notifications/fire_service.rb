@@ -20,7 +20,7 @@ module Notifications
           open_timeout: 5,
           read_timeout: 5
         )
-      rescue
+      rescue Webpush::InvalidSubscription, Webpush::ExpiredSubscription, Webpush::Unauthorized
         @notification.recipient.update!(webpush_subscription: {})
       end
     end

@@ -2,7 +2,6 @@ require 'rails_helper'
 
 feature 'Notification Show Spec', js: true do
   include UserSpecHelper
-  include NotificationHelper
   include WithEnvHelper
   let(:student) { create :student }
   let(:vapid_key) { Webpush.generate_key }
@@ -71,8 +70,7 @@ feature 'Notification Show Spec', js: true do
         click_button 'Mark as Read'
       end
 
-      expect(page).to have_text('The notification has been marked as read.')
-      dismiss_notification
+      expect(page).not_to have_text(notification_1.message)
       expect(notification_1.reload.read_at).not_to eq(nil)
     end
 

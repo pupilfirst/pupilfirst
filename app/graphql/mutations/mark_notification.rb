@@ -11,7 +11,6 @@ module Mutations
 
       if mutator.valid?
         mutator.mark
-        mutator.notify(:success, I18n.t('shared.done_exclamation'), I18n.t('mutations.mark_notification.success_notification'))
         { success: true }
       else
         mutator.notify_errors

@@ -1,7 +1,7 @@
 en:
   components:
-    CoursesReport__Level:
-      level: Chapter
+    CourseCertificates__EditDrawer:
+      cannot_be_auto_issued_warning: Please note that the last chapter of this course does not have any milestone lessons. This certificate will be auto-issued only if the last chapter has at least one milestone lesson.
     CoursesCurriculum:
       level_locked: Chapter locked
       level_locked_notice: "The chapter is currently locked!"
@@ -14,13 +14,29 @@ en:
       course_complete_description: You've completed our coursework. Feel free to complete lessons that you might have left out, and read up at attached links.
       course_ended_description: The course has ended and submissions are disabled for all lessons!
       team_members_pending_description: You have completed all required milestone lessons, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone lessons.
+      level_up: Start Next Chapter
       level_up_blocked:
+        title_rejected: Next Chapter Blocked
         body_prefix: "You have submitted all milestone lessons in chapter %{number}, but one or more submissions "
-        body_suffix: You need to get a passing grade on all milestone lessons to level up.
-      level_up_limited_description: "You're at Chapter %{currentLevel}, but you have lessons in the Chapter %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone lessons in Chapter %{minimumRequiredLevel} to continue leveling up."
-      level_up_description: Congratulations! You have successfully completed all milestone lessons required to level up. Click the button below to proceed to the next chapter. New challenges await!
+        body_suffix: You need to get a passing grade on all milestone lessons to start next chapter.
+      level_up_limited_title: Next Chapter Blocked
+      level_up_limited_description: "You're at Chapter %{currentLevel}, but you have lessons in the Chapter %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone lessons in Chapter %{minimumRequiredLevel} to start next chapter."
+      level_up_title: Ready to start next chapter!
+      level_up_description: Congratulations! You have successfully completed all milestone lessons required to start the next chapter in the course. Click on the "Start Next Chapter" button below to continue progressing through the course.
+    CoursesCurriculum__LevelUpButton:
+      button_text_level_up: Start Next Chapter
+    CoursesReport__Overview:
+      level_progress: Chapter Progress
+      targets_overview: Lessons Overview
+    CoursesReport__SubmissionsList:
+      submission_not_considered: This submission is not considered towards lesson's completion.
+      submission_not_considered_help: This is a <span className="italic">team</span> lesson, and this submission is not linked to some members of your team. This can happen if a lesson is changed after your individual submission, to require a <span className="italic">team</span> submission, or if your team's composition changed after a <span className="italic">team</span> submission was created.
+    CoursesStudents__StudentOverlay:
+      level_progress: Chapter Progress
+      targets: " Lessons"
+      targets_overview: Lessons Overview
+      total_targets_completed: Total Lessons Completed
     CurriculumEditor:
-      level: Chapter
       create_target_group: Create section
       create_level: Create Chapter
       edit_selected_level: Edit selected chapter
@@ -29,7 +45,6 @@ en:
       create_target: Create a lesson
       milestone_targets: Milestone Lessons
     CurriculumEditor__TargetDetailsEditor:
-      level: Chapter
       target_group: Section
       prerequisite_targets_label: Are there any prerequisite lessons?
       search_targets: Search lessons
@@ -52,7 +67,7 @@ en:
       target_visibility: Lesson Visibility
     CoursesCurriculum__TargetStatus:
       course_locked: The course has ended and submissions are disabled for all lesson!
-      level_locked: You must level up to complete this lesson.
+      level_locked: You must finish the previous chapter to access this lesson.
       prerequisites_incomplete: This lesson has pre-requisites that are incomplete.
     StudentsEditor__Search:
       filter_input_placeholder: Type name, tag or chapter
@@ -60,6 +75,7 @@ en:
       linked_target_label: "Linked Lesson: "
       view_target_button: View Lesson
     CoursesCurriculum__Overlay:
+      pending_team_members_notice: "You have team members who are yet to complete this lesson:"
       previous_target_button: Previous Lesson
       next_target_button: Next Lesson
     CurriculumEditor__LevelEditor:
@@ -75,7 +91,6 @@ en:
         update_success: Chapter updated successfully
         create_success: Chapter created successfully
     CurriculumEditor__TargetGroupEditor:
-      level: Chapter
       target_group_details: Section Details
       title: Title
       name_placeholder: Type section name here
@@ -93,12 +108,26 @@ en:
         create_success: Section created successfully
 
   mutations:
+    create_target:
+      success_notification: Lesson created successfully.
     update_target:
       success_notification: Lesson updated successfully!
+    auto_verify_submission:
+      success_notification: Lesson has been marked as complete.
+  services:
+    team_up_service:
+      must_be_on_the_same_level: Students must be on the same chapter for teaming up
 
   shared:
     'yes': 'Yes'
     'no': 'No'
+    level_label:
+      long_with_name: "Chapter %{number}: %{name}"
+      short_with_name: "C%{number}: %{name}"
+      long_without_name: "Chapter %{number}"
+      short_without_name: "C%{number}"
+    target: Lesson
+    level: Chapter
 
   dashboard:
     dashboard:

@@ -76,16 +76,16 @@ feature "Course students report", js: true do
     click_link student.name
 
     expect(page).to have_text(student.name)
-    expect(page).to have_text('Level Progress')
+    expect(page).to have_text('Chapter Progress')
     expect(page).to have_selector('.student-overlay__student-level', count: course.levels.where.not(number: 0).count)
 
     # Targets Overview
-    expect(page).to have_text('Targets Overview')
+    expect(page).to have_text('Lessons Overview')
 
     within("div[aria-label='target-completion-status']") do
-      expect(page).to have_content('Total Targets Completed')
+      expect(page).to have_content('Total Lessons Completed')
       expect(page).to have_content('83%')
-      expect(page).to have_content('5/6 Targets')
+      expect(page).to have_content('5/6 Lessons')
     end
 
     within("div[aria-label='quiz-performance-chart']") do
@@ -154,9 +154,9 @@ feature "Course students report", js: true do
 
     # Check a student parameter
     within("div[aria-label='target-completion-status']") do
-      expect(page).to have_content('Total Targets Completed')
+      expect(page).to have_content('Total Lessons Completed')
       expect(page).to have_content('83%')
-      expect(page).to have_content('5/6 Targets')
+      expect(page).to have_content('5/6 Lessons')
     end
 
     # Check submissions

@@ -60,7 +60,7 @@ feature 'School Overview', js: true do
     # gets the overall course overview for course 1
     within("div[data-t='#{course_1.name} details']") do
       expect(page).to have_text(course_1.name)
-      expect(page).to have_text("2 Levels")
+      expect(page).to have_text("2 Chapters")
 
       within("div[data-t='#{course_1.name} students']") do
         expect(page).to have_text(6)

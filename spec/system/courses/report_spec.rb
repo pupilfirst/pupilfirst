@@ -71,11 +71,11 @@ feature 'Students view performance report and submissions overview', js: true do
   scenario 'student visits course report link' do
     sign_in_user student.user, referrer: report_course_path(course)
 
-    expect(page).to have_text('Level Progress')
+    expect(page).to have_text('Chapter Progress')
     expect(page).to have_selector('.courses-report-overview__student-level', count: course.levels.where.not(number: 0).count)
 
     # Targets Overview
-    expect(page).to have_text('Targets Overview')
+    expect(page).to have_text('Lessons Overview')
 
     within("div[aria-label='target-completion-status']") do
       expect(page).to have_content('Incomplete: 1')
@@ -115,8 +115,8 @@ feature 'Students view performance report and submissions overview', js: true do
     expect(page).to_not have_content(target_4.title)
 
     # Filter submissions by level
-    fill_in 'filter', with: 'level'
-    click_button "Level 2: #{level_2.name}"
+    fill_in 'filter', with: 'chapter'
+    click_button "Chapter 2: #{level_2.name}"
 
     expect(page).not_to have_text(target_l1.title)
     expect(page).to have_link(target_l2.title, href: "/targets/#{target_l2.id}")
@@ -140,7 +140,7 @@ feature 'Students view performance report and submissions overview', js: true do
     end
 
     sign_in_user student.user, referrer: report_course_path(course)
-    expect(page).to have_text('Targets Overview')
+    expect(page).to have_text('Lessons Overview')
     click_button 'Submissions'
     expect(page).to have_button('Load More...')
     click_button('Load More...')
@@ -178,11 +178,12 @@ feature 'Students view performance report and submissions overview', js: true do
       # The main link should point to the "backup" submission page.
       expect(page).to have_link(target_l1.title, href: "/submissions/#{submission_target_l1_1.id}")
 
+puts page.driver.browser.manage.logs.get(:browser)
       within("div[aria-label='Team change notice for submission #{submission_target_l1_1.id}']") do
-        expect(page).to have_content("This submission is not considered towards its target's completion")
+        expect(page).to have_content("This submission is not considered towards lesson's completion")
 
         # There should be an additional link to the target as well.
-        expect(page).to have_link('View Target', href: "/targets/#{target_l1.id}")
+        expect(page).to have_link('View Lesson', href: "/targets/#{target_l1.id}")
       end
     end
   end

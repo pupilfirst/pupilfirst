@@ -42,7 +42,7 @@ feature 'Submission review overlay' do
       sign_in_user coach.user, referrer: review_timeline_event_path(submission_pending)
 
       within("div[aria-label='submissions-overlay-header']") do
-        expect(page).to have_content('Level 1')
+        expect(page).to have_content('Chapter 1')
         expect(page).to have_content("Submitted by #{student.name}")
         expect(page).to have_link(student.name, href: "/students/#{student.id}/report")
         expect(page).to have_link(target.title, href: "/targets/#{target.id}")
@@ -528,7 +528,7 @@ feature 'Submission review overlay' do
       sign_in_user coach.user, referrer: review_timeline_event_path(submission_reviewed)
 
       within("div[aria-label='submissions-overlay-header']") do
-        expect(page).to have_content('Level 1')
+        expect(page).to have_content('Chapter 1')
         expect(page).to have_content('Submitted by')
 
         # Each name should be linked to the report page.

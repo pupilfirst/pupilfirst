@@ -80,7 +80,7 @@ feature 'Target Details Editor', js: true do
       click_button 'Yes'
     end
 
-    expect(page).to_not have_button('Visit a link to complete the target.')
+    expect(page).to_not have_button('Visit a link to complete the lesson.')
     expect(page).to have_text('At least one has to be selected')
 
     find("div[title='Select #{evaluation_criterion.display_name}']").click
@@ -371,7 +371,7 @@ feature 'Target Details Editor', js: true do
 
     scenario 'admin changes target from quiz target to evaluated and adds a new checklist' do
       sign_in_user course_author.user, referrer: details_school_course_target_path(course_id: course.id, id: quiz_target.id)
-      expect(page).to_not have_text('What steps should the student take to complete this target?')
+      expect(page).to_not have_text('What steps should the student take to complete this lesson?')
 
       # Change target into an evaluated target with checklist
       within("div#evaluated") do

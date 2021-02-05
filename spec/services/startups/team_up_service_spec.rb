@@ -41,7 +41,7 @@ describe Startups::TeamUpService do
     end
 
     it 'raises an exception when founders belong to different levels' do
-      expect { subject.new(founders_in_different_levels).team_up(team_name) }.to raise_error(RuntimeError, 'Students must belong to the same level for teaming up')
+      expect { subject.new(founders_in_different_levels).team_up(team_name) }.to raise_error(RuntimeError, 'Students must be on the same chapter for teaming up')
     end
 
     context 'when teams have some tags' do

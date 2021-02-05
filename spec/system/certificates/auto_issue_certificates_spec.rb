@@ -259,7 +259,7 @@ feature 'Automatic issuance of certificates', js: true do
       scenario 'student resubmits the final target' do
         sign_in_user coach.user, referrer: review_timeline_event_path(@resubmission)
 
-        within("div[aria-label='submissions-overlay-card-#{@resubmission.id}']") do
+        within("div[data-submission-id='#{@resubmission.id}']") do
           find("button[title='Good']").click
         end
 

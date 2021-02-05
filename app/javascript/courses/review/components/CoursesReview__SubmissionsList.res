@@ -150,48 +150,48 @@ let make = (
   ~targetId,
   ~targetEvaluationCriteriaIds,
 ) =>
-  <div
-    ariaLabel={"submissions-overlay-card-" ++ (overlaySubmission |> OverlaySubmission.id)}
-    className={cardClasses(overlaySubmission)}>
-    <div className="rounded-b-lg shadow">
-      <div
-        className="p-4 md:px-6 md:py-5 border-b bg-white flex flex-col sm:flex-row items-center justify-between">
-        <div className="flex flex-col w-full sm:w-auto">
-          <h2 className="font-semibold text-sm lg:text-base leading-tight">
-            {"Submission #" ++ (submissionNumber |> string_of_int) |> str}
-          </h2>
-          <span className="text-xs text-gray-800 pt-px">
-            {overlaySubmission
-            ->OverlaySubmission.createdAt
-            ->DateFns.formatPreset(~year=true, ())
-            ->str}
-          </span>
+  <Spread props={"data-submission-id": OverlaySubmission.id(overlaySubmission)}>
+    <div className={cardClasses(overlaySubmission)}>
+      <div className="rounded-b-lg shadow">
+        <div
+          className="p-4 md:px-6 md:py-5 border-b bg-white flex flex-col sm:flex-row items-center justify-between">
+          <div className="flex flex-col w-full sm:w-auto">
+            <h2 className="font-semibold text-sm lg:text-base leading-tight">
+              {"Submission #" ++ (submissionNumber |> string_of_int) |> str}
+            </h2>
+            <span className="text-xs text-gray-800 pt-px">
+              {overlaySubmission
+              ->OverlaySubmission.createdAt
+              ->DateFns.formatPreset(~year=true, ())
+              ->str}
+            </span>
+          </div>
+          <div className="text-xs flex w-full sm:w-auto mt-2 sm:mt-0">
+            {showFeedbackSent(
+              overlaySubmission |> OverlaySubmission.feedback |> ArrayUtils.isNotEmpty,
+            )}
+            {showSubmissionStatus(overlaySubmission)}
+          </div>
         </div>
-        <div className="text-xs flex w-full sm:w-auto mt-2 sm:mt-0">
-          {showFeedbackSent(
-            overlaySubmission |> OverlaySubmission.feedback |> ArrayUtils.isNotEmpty,
-          )}
-          {showSubmissionStatus(overlaySubmission)}
-        </div>
+        <CoursesReview__GradeCard
+          overlaySubmission
+          teamSubmission
+          evaluationCriteria
+          targetEvaluationCriteriaIds
+          reviewChecklist
+          addGradingCB={addGrading(~addGradingCB, ~currentCoach, ~overlaySubmission)}
+          updateReviewChecklistCB
+          targetId
+        />
+        <CoursesReview__ShowFeedback
+          feedback={overlaySubmission |> OverlaySubmission.feedback}
+          reviewed={overlaySubmission |> OverlaySubmission.grades |> ArrayUtils.isNotEmpty}
+          submissionId={overlaySubmission |> OverlaySubmission.id}
+          reviewChecklist
+          addFeedbackCB={addFeedback(addFeedbackCB, currentCoach, overlaySubmission)}
+          updateReviewChecklistCB
+          targetId
+        />
       </div>
-      <CoursesReview__GradeCard
-        overlaySubmission
-        teamSubmission
-        evaluationCriteria
-        targetEvaluationCriteriaIds
-        reviewChecklist
-        addGradingCB={addGrading(~addGradingCB, ~currentCoach, ~overlaySubmission)}
-        updateReviewChecklistCB
-        targetId
-      />
-      <CoursesReview__ShowFeedback
-        feedback={overlaySubmission |> OverlaySubmission.feedback}
-        reviewed={overlaySubmission |> OverlaySubmission.grades |> ArrayUtils.isNotEmpty}
-        submissionId={overlaySubmission |> OverlaySubmission.id}
-        reviewChecklist
-        addFeedbackCB={addFeedback(addFeedbackCB, currentCoach, overlaySubmission)}
-        updateReviewChecklistCB
-        targetId
-      />
     </div>
-  </div>
+  </Spread>

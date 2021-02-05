@@ -140,7 +140,7 @@ en:
           unread: Unread
         events:
           topic_created_text: Topic Created
-          topic_edited_text: Topic Edited
+          post_created_text: Post Created
       button_load_more: Load More Notifications...
     WebPushSubscriptionManager:
       notification_rejected: Permission Rejected

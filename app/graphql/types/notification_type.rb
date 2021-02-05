@@ -9,5 +9,9 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :message, String, null: false
     field :event, Types::NotificationEventType, null: false
+
+    def event
+      object.event.camelcase
+    end
   end
 end

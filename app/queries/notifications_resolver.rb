@@ -1,7 +1,7 @@
 class NotificationsResolver < ApplicationQuery
   property :search
   property :status, validates: { inclusion: { in: Types::NotificationStatusType.values.keys } }, allow_blank: true
-  property :event, validates: { inclusion: { in: Notification.events.keys } }, allow_blank: true
+  property :event, validates: { inclusion: { in: Notification.events.keys.map { |k| k.camelcase } } }, allow_blank: true
 
   def notifications
     if search.present?
@@ -30,12 +30,12 @@ class NotificationsResolver < ApplicationQuery
     return notifications if status.blank?
 
     case status
-      when 'Unread'
-        notifications.unread
-      when 'Read'
-        notifications.read
-      else
-        notifications
+    when 'Unread'
+      notifications.unread
+    when 'Read'
+      notifications.read
+    else
+      notifications
     end
   end
 

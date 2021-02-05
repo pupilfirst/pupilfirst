@@ -2898,13 +2898,13 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "read",
+            "name": "Read",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "unread",
+            "name": "Unread",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
@@ -2921,13 +2921,13 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "topic_created",
+            "name": "TopicCreated",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "post_created",
+            "name": "PostCreated",
             "description": "",
             "isDeprecated": false,
             "deprecationReason": null

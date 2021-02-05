@@ -1,6 +1,6 @@
 module Mutations
   class MarkAllNotifications < GraphQL::Schema::Mutation
-    description "Mark as read notification"
+    description "Mark all notifications as read"
 
     field :success, Boolean, null: false
 

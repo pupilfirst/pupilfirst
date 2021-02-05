@@ -65,10 +65,12 @@ class HomeController < ApplicationController
     # noop
   end
 
+  # GET /manifest.json
   def manifest
     render json: GenerateManifestService.new(current_school).json
   end
 
+  # GET /offline
   def offline
     render layout: false
   end

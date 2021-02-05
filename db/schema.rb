@@ -677,8 +677,8 @@ ActiveRecord::Schema.define(version: 2020_11_23_190246) do
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "topic_category_id"
     t.integer "views", default: 0
+    t.bigint "topic_category_id"
     t.datetime "locked_at"
     t.bigint "locked_by_id"
     t.index ["community_id"], name: "index_topics_on_community_id"

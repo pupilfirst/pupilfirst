@@ -1,6 +1,6 @@
 module Types
   class NotificationStatusType < Types::BaseEnum
-    value ::Notification::NOTIFICATION_READ, "Notification that are read"
-    value ::Notification::NOTIFICATION_UNREAD, "Notification that are unread"
+    value 'Read', "Notification that has been read"
+    value 'Unread', "Notification that is unread"
   end
 end

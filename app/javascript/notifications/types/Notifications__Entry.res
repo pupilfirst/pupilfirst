@@ -35,8 +35,8 @@ let readAt = t => t.readAt
 
 let decodeEvent = event =>
   switch event {
-  | #topic_created => TopicCreated
-  | #post_created => PostCreated
+  | #TopicCreated => TopicCreated
+  | #PostCreated => PostCreated
   }
 
 let makeFromJS = entry =>

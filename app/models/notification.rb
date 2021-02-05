@@ -9,14 +9,5 @@ class Notification < ApplicationRecord
   scope :unread, -> { where(read_at: nil) }
   scope :read, -> { where.not(read_at: nil) }
 
-  NOTIFICATION_READ = :read
-  NOTIFICATION_UNREAD = :unread
-
-  VALID_STATUS_TYPES = [
-    NOTIFICATION_READ,
-    NOTIFICATION_UNREAD
-  ].freeze
-
   pg_search_scope :search_by_message, against: :message, using: { tsearch: { prefix: true, any_word: true }, }
 end
-

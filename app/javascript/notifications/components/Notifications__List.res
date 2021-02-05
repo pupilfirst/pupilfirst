@@ -4,14 +4,14 @@ open Notifications__Types
 
 let t = I18n.t(~scope="components.Notifications__List")
 
-type event = [#topic_created | #post_created]
+type event = [#TopicCreated | #PostCreated]
 
-type status = [#unread | #read]
+type status = [#Unread | #Read]
 
 let eventName = event =>
   switch event {
-  | #topic_created => t("filter.events.topic_created_text")
-  | #post_created => t("filter.events.post_created_text")
+  | #TopicCreated => t("filter.events.topic_created_text")
+  | #PostCreated => t("filter.events.post_created_text")
   }
 
 module MarkAllNotificationsQuery = %graphql(
@@ -240,7 +240,7 @@ let computeInitialState = () => {
   filter: {
     title: None,
     event: None,
-    status: Some(#unread),
+    status: Some(#Unread),
   },
   totalEntriesCount: 0,
   saving: false,
@@ -297,8 +297,8 @@ module Selectable = {
     | Title(search) => search
     | Status(status) =>
       let key = switch status {
-      | #read => "read"
-      | #unread => "unread"
+      | #Read => "read"
+      | #Unread => "unread"
       }
 
       t("filter.status." ++ key)
@@ -320,8 +320,8 @@ module Selectable = {
     | Title(_search) => "gray"
     | Status(status) =>
       switch status {
-      | #read => "green"
-      | #unread => "orange"
+      | #Read => "green"
+      | #Unread => "orange"
       }
     }
 
@@ -333,22 +333,22 @@ module Selectable = {
 module Multiselect = MultiselectDropdown.Make(Selectable)
 
 let unselected = state => {
-  let eventFilters = Selectable.event->Array.map([#topic_created, #post_created])
+  let eventFilters = Selectable.event->Array.map([#TopicCreated, #PostCreated])
 
   let trimmedFilterString = state.filterString |> String.trim
   let title = trimmedFilterString == "" ? [] : [Selectable.title(trimmedFilterString)]
 
-  let status = state.filter.status->Belt.Option.mapWithDefault([#read, #unread], u =>
+  let status = state.filter.status->Belt.Option.mapWithDefault([#Read, #Unread], u =>
     switch u {
-    | #read => [#unread]
-    | #unread => [#read]
+    | #Read => [#Unread]
+    | #Unread => [#Read]
     }
   ) |> Array.map(s => Selectable.status(s))
 
   eventFilters |> Js.Array.concat(title) |> Js.Array.concat(status)
 }
 
-let defaultOptions = () => [#read, #unread] |> Array.map(s => Selectable.status(s))
+let defaultOptions = () => [#Read, #Unread] |> Array.map(s => Selectable.status(s))
 
 let selected = state => {
   let selectedEventFilters =
@@ -379,8 +379,8 @@ let onDeselectFilter = (send, selectable) =>
 let showEntries = (entries, state, send) => {
   let filteredEntries = state.filter.status->Belt.Option.mapWithDefault(entries, u =>
     switch u {
-    | #read => Js.Array.filter(e => Entry.readAt(e)->Belt.Option.isSome, entries)
-    | #unread => Js.Array.filter(e => Entry.readAt(e)->Belt.Option.isNone, entries)
+    | #Read => Js.Array.filter(e => Entry.readAt(e)->Belt.Option.isSome, entries)
+    | #Unread => Js.Array.filter(e => Entry.readAt(e)->Belt.Option.isNone, entries)
     }
   )
 

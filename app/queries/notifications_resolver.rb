@@ -1,6 +1,6 @@
 class NotificationsResolver < ApplicationQuery
   property :search
-  property :status, validates: { inclusion: { in: Notification::VALID_STATUS_TYPES } }, allow_blank: true
+  property :status, validates: { inclusion: { in: Types::NotificationStatusType.values.keys } }, allow_blank: true
   property :event, validates: { inclusion: { in: Notification.events.keys } }, allow_blank: true
 
   def notifications
@@ -30,9 +30,9 @@ class NotificationsResolver < ApplicationQuery
     return notifications if status.blank?
 
     case status
-      when Notification::NOTIFICATION_UNREAD.to_s
+      when 'Unread'
         notifications.unread
-      when Notification::NOTIFICATION_READ.to_s
+      when 'Read'
         notifications.read
       else
         notifications

@@ -5,6 +5,7 @@ open CoursesReview__Types
 type reviewedTabSortCriterion = [#EvaluatedAt | #SubmittedAt]
 
 let str = React.string
+let tc = I18n.t(~scope="components.CoursesReview__Root")
 
 type selectedTab = [#Reviewed | #Pending]
 
@@ -183,14 +184,14 @@ module Selectable = {
   let label = t =>
     switch t {
     | Level(level) => Some(LevelLabel.format(level |> Level.number |> string_of_int))
-    | AssignedToCoach(_) => Some("Assigned to")
+    | AssignedToCoach(_) => Some(tc("assigned_to"))
     }
 
   let value = t =>
     switch t {
     | Level(level) => level |> Level.name
     | AssignedToCoach(coach, currentCoachId) =>
-      coach |> Coach.id == currentCoachId ? "Me" : coach |> Coach.name
+      coach |> Coach.id == currentCoachId ? tc("me") : coach |> Coach.name
     }
 
   let searchString = t =>
@@ -199,9 +200,9 @@ module Selectable = {
       LevelLabel.searchString(level |> Level.number |> string_of_int, level |> Level.name)
     | AssignedToCoach(coach, currentCoachId) =>
       if coach |> Coach.id == currentCoachId {
-        (coach |> Coach.name) ++ " assigned to me"
+        (coach |> Coach.name) ++ tc("assigned_to_me")
       } else {
-        "assigned to " ++ (coach |> Coach.name)
+        tc("assigned_to_coach") ++ (coach |> Coach.name)
       }
     }
 
@@ -266,10 +267,10 @@ let onDeselectFilter = (send, selectable) =>
 
 let filterPlaceholder = state =>
   switch (state.selectedLevel, state.selectedCoach) {
-  | (None, Some(_)) => "Filter by level"
-  | (None, None) => "Filter by level, or only show submissions assigned to a coach"
-  | (Some(_), Some(_)) => "Filter by another level"
-  | (Some(_), None) => "Filter by another level, or only show submissions assigned to a coach"
+  | (None, Some(_)) => tc("filter_by_level")
+  | (None, None) => tc("filter_by_level_or_submissions_assigned")
+  | (Some(_), Some(_)) => tc("filter_by_another_level")
+  | (Some(_), None) => tc("filter_by_another_level_or_submissions_assigned")
   }
 
 let restoreFilterNotice = (send, currentCoach, message) =>
@@ -279,7 +280,7 @@ let restoreFilterNotice = (send, currentCoach, message) =>
     <button
       className="px-2 py-1 rounded text-xs overflow-hidden border text-gray-800 border-gray-300 bg-gray-200 hover:bg-gray-300 mt-1 md:mt-0"
       onClick={_ => send(SelectCoach(currentCoach))}>
-      {"Assigned to: Me" |> str} <i className="fas fa-level-up-alt ml-2" />
+      {(tc("assigned_to") ++ ": " ++ tc("me")) |> str} <i className="fas fa-level-up-alt ml-2" />
     </button>
   </div>
 
@@ -290,14 +291,14 @@ let restoreAssignedToMeFilter = (state, send, currentTeamCoach) =>
       restoreFilterNotice(
         send,
         currentCoach,
-        "Now showing submissions from all students in this course.",
+        tc("now_showing_submissions_from_all_students"),
       )
     | Some(selectedCoach) when selectedCoach |> Coach.id == Coach.id(currentCoach) => React.null
     | Some(selectedCoach) =>
       restoreFilterNotice(
         send,
         currentCoach,
-        "Now showing submissions assigned to " ++ ((selectedCoach |> Coach.name) ++ "."),
+        tc(~variables=[("name", selectedCoach |> Coach.name)], "now_showing_submissions_assigned_to"),
       )
     }
   , React.null)
@@ -324,8 +325,8 @@ module Sortable = {
 
   let criterion = t =>
     switch t {
-    | #SubmittedAt => "Submitted At"
-    | #EvaluatedAt => "Reviewed At"
+    | #SubmittedAt => tc("submitted_at")
+    | #EvaluatedAt => tc("reviewed_at")
     }
   let criterionType = _t => #Number
 }
@@ -343,7 +344,7 @@ let submissionsSorter = (state, send) => {
   | #Reviewed => state.reviewedTabSortCriterion
   }
   <div ariaLabel="Change submissions sorting" className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
-    <label className="block text-tiny font-semibold uppercase"> {"Sort by:" |> str} </label>
+    <label className="block text-tiny font-semibold uppercase"> {tc("sort_by") |> str} </label>
     <SubmissionsSorter
       criteria
       selectedCriterion
@@ -409,19 +410,19 @@ let make = (~levels, ~courseId, ~teamCoaches, ~currentCoach) => {
               <button
                 className={buttonClasses(state.selectedTab == #Pending)}
                 onClick={_ => send(SelectPendingTab)}>
-                {"Pending" |> str} {submissionsCount(state.pendingSubmissions)}
+                {tc("pending") |> str} {submissionsCount(state.pendingSubmissions)}
               </button>
               <button
                 className={buttonClasses(state.selectedTab == #Reviewed)}
                 onClick={_ => send(SelectReviewedTab)}>
-                {"Reviewed" |> str}
+                {tc("reviewed") |> str}
               </button>
             </div>
           </div>
           <div className="md:flex w-full items-start pb-4">
             <div className="flex-1">
               <label className="block text-tiny font-semibold uppercase">
-                {"Filter by:" |> str}
+                {tc("filter_by") |> str}
               </label>
               <Multiselect
                 id="filter"

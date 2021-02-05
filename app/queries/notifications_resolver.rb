@@ -40,7 +40,7 @@ class NotificationsResolver < ApplicationQuery
   end
 
   def applicable_notifications
-    notifications = event.present? ? filter_by_status.where(event: event) : filter_by_status
+    notifications = event.present? ? filter_by_status.where(event: event.underscore) : filter_by_status
     notifications.order('created_at DESC')
   end
 end

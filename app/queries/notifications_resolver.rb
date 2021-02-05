@@ -30,12 +30,12 @@ class NotificationsResolver < ApplicationQuery
     return notifications if status.blank?
 
     case status
-    when 'Unread'
-      notifications.unread
-    when 'Read'
-      notifications.read
-    else
-      notifications
+      when 'Unread'
+        notifications.unread
+      when 'Read'
+        notifications.read
+      else
+        notifications
     end
   end
 

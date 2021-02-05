@@ -1,7 +1,7 @@
 en:
   components:
     CourseCertificates__EditDrawer:
-      can_not_be_auto_issued_warning: Please note that the last chapter of this course does not have any milestone lessons. This certificate will be auto-issued only if the last chapter has at least one milestone lesson.
+      cannot_be_auto_issued_warning: Please note that the last chapter of this course does not have any milestone lessons. This certificate will be auto-issued only if the last chapter has at least one milestone lesson.
     CoursesCurriculum:
       level_locked: Chapter locked
       level_locked_notice: "The chapter is currently locked!"
@@ -23,6 +23,8 @@ en:
       level_up_limited_description: "You're at Chapter %{currentLevel}, but you have lessons in the Chapter %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone lessons in Chapter %{minimumRequiredLevel} to start next chapter."
       level_up_title: Ready to start next chapter!
       level_up_description: Congratulations! You have successfully completed all milestone lessons required to start the next chapter in the course. Click on the "Start Next Chapter" button below to continue progressing through the course.
+    CoursesCurriculum__LevelUpButton:
+      button_text_level_up: Start Next Chapter
     CoursesReport__Overview:
       level_progress: Chapter Progress
       targets_overview: Lessons Overview
@@ -119,10 +121,13 @@ en:
   shared:
     'yes': 'Yes'
     'no': 'No'
-    level:
-      label: "Chapter"
-      short_label: "C"
+    level_label:
+      long_with_name: "Chapter%{number}: %{name}"
+      short_with_name: "C%{number}: %{name}"
+      long_without_name: "Chapter %{number}"
+      short_without_name: "C%{number}"
     target: Lesson
+    level: Chapter
 
   dashboard:
     dashboard:

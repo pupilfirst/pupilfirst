@@ -266,7 +266,7 @@ let actionsForm = (level, levels, state, send) => {
         {otherLevels
         |> Array.map(level =>
           <option key={Level.id(level)} value={Level.id(level)}>
-            {"L" ++ (Level.number(level)->string_of_int ++ (": " ++ Level.name(level))) |> str}
+            {LevelLabel.format(~short=true, ~name=Level.name(level), (Level.number(level) |> string_of_int)) |> str}
           </option>
         )
         |> React.array}

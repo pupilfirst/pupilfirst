@@ -89,8 +89,7 @@ en:
       update_issued_certificates_warning:
         one: "This certificate has been issued once.<br/>These changes will also be applied to the issued certificate."
         other: "This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates."
-    CoursesReport__Level:
-      level: Level
+      cannot_be_auto_issued_warning: Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.
     CoursesCurriculum:
       issued_certificate_heading: Congratulations! You have been issued a certificate.
       issued_certificate_button: View Certificate
@@ -152,8 +151,58 @@ en:
     TopicsShow__SubscriptionManager:
       subscribe: Subscribe
       unsubscribe: Unsubscribe
+    CoursesCurriculum__LevelUpButton:
+      button_text_saving: Saving
+      button_text_level_up: Level Up
+    CoursesReport__Overview:
+      attempted: " Attempted"
+      average_grades: Average Grades
+      average_quiz_score: Average Quiz Score
+      targets_completed: "Completed: %{targetsCount}"
+      course_completed: Course Completed!
+      incomplete_targets: "Incomplete: %{targetsCount}"
+      level_progress: Level Progress
+      targets_pending_review: "Pending Review: %{targetsCount}"
+      personal_coaches: Personal Coaches
+      quiz: Quiz
+      schedule_coaching_session: Schedule a coaching session
+      targets_overview: Targets Overview
+    CoursesReport__SubmissionsList:
+      rejected: "Rejected"
+      completed: "Completed"
+      pending_review: "Pending Review"
+      status: Status
+      sory_by: "Sort by:"
+      filter_by_level: Filter by level
+      filter_by_level_or_status: Filter by level, or by status
+      filter_by_another_level: Filter by another level
+      filter_by_another_level_or_status: Filter by another level, or by status
+      submitted_at: Submitted At
+      submitted_on: "Submitted on %{date}"
+      submission_not_considered: This submission is not considered towards its target's completion.
+      submission_not_considered_help: This is a <span className="italic">team</span> target, and this submission is not linked to some members of your team. This can happen if a target is changed after your individual submission, to require a <span className="italic">team</span> submission, or if your team's composition changed after a <span className="italic">team</span> submission was created.
+      view: "View "
+      no_subbmissions_to_show: "No submissions to show "
+      load_more: Load More...
+    CoursesStudents__StudentOverlay:
+      access_ended_at: "This student's access to the course ended on %{date}."
+      attempted: " Attempted"
+      average_grades: Average Grades
+      average_quiz_score: Average Quiz Score
+      close_student_report: Close student report
+      course_completed: Course Completed!
+      dropped_out_at: "This student dropped out of the course on %{date}."
+      notes: Notes
+      level_progress: Level Progress
+      other_team_members: Other Team Members
+      personal_coaches: Personal Coaches
+      submissions: Submissions
+      quiz: Quiz
+      targets: " Targets"
+      targets_overview: Targets Overview
+      team_coaches: Team Coaches
+      total_targets_completed: Total Targets Completed
     CurriculumEditor:
-      level: Level
       create_target_group: Create target group
       create_level: Create Level
       edit_selected_level: Edit selected level
@@ -161,7 +210,6 @@ en:
       create_target: Create a target
       milestone_targets: Milestone Targets
     CurriculumEditor__TargetDetailsEditor:
-      level: Level
       target_group: Target Group
       prerequisite_targets_label: Are there any prerequisite targets?
       search_targets: Search targets
@@ -385,6 +433,10 @@ en:
       success_notification: This topic has been unlocked. Community members can now post replies again.
     mark_notification:
       success_notification: The notification has been marked as read.
+    auto_verify_submission:
+      success_notification: Target has been marked as complete.
+    create_target:
+      success_notification: Target created successfully.
 
   queries:
     delete_certificate_mutator:
@@ -392,6 +444,9 @@ en:
     issue_certificate_mutator:
       issued_error: This student has already been issued a certificate for this course.
       certificate_error: The specified certificate could not be found.
+  services:
+    team_up_service:
+      must_be_on_the_same_level: Students must belong to the same level for teaming up
   shared:
     optional: optional
     done_exclamation: Done!
@@ -401,6 +456,13 @@ en:
     saving: Saving...
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
     file_invalid: Please select a file with a size less than 5 MB.
+    level_label:
+      long_with_name: "Level %{number}: %{name}"
+      short_with_name: "L%{number}: %{name}"
+      long_without_name: "Level %{number}"
+      short_without_name: "L%{number}"
+    target: Target
+    level: Level
 
   offline:
     title: You are offline

@@ -12,7 +12,7 @@ module Selectable = {
 
   let label = t => {
     let labelString = switch t {
-    | Level(level) => "Level " ++ (level |> Level.number |> string_of_int)
+    | Level(level) => LevelLabel.format(level |> Level.number |> string_of_int)
     | Tag(_) => "Tag"
     | NameOrEmail(_) => "Name or Email"
     }

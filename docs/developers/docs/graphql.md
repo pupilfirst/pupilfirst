@@ -31,7 +31,7 @@ introspection query.
 
 With the Pupilfirst server running, run the `graphql-codegen` script.
 
-    $ yarn run graphql-codegen
+    yarn run graphql-codegen
 
 It'll visit the local GraphQL end-point which is configured in the `codegen.yml` file, fetch the schema and store it in
 the `graphql_schema.json` file.

@@ -75,7 +75,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Pupilfirst Ltd. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Pupilfirst Pvt. Ltd. Built with Docusaurus.`,
     },
     prism: {
       additionalLanguages: ["ruby", "bash"],

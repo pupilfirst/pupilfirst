@@ -41,4 +41,4 @@ let levelsCompletedByAllStudents = levels => {
   ls |> Array.length == (levels |> Array.length) ? [] : ls
 }
 
-let shortName = t => "L" ++ (t.number |> string_of_int)
+let shortName = t => LevelLabel.format(~short=true, t.number |> string_of_int)

@@ -24,14 +24,14 @@ yet**.
 
 Once that's done, check for packages that Lerna can publish new versions of:
 
-    $ yarn run lerna changed
+    yarn run lerna changed
 
 This command will show all the packages that have changed since the last release. You can also use the `diff` command to
 see the _diff_ between current version and the last published version.
 
 Once you've confirmed the changes, you can use the `version` command to amend the last commit, to include version bumps.
 
-    $ yarn run lerna version --amend
+    yarn run lerna version --amend
 
 This command will ask you how to change the version of changed packages. It'll then update the last commit, changing
 versions as per your instruction and also tagging the commit.
@@ -39,7 +39,7 @@ versions as per your instruction and also tagging the commit.
 Once the commit is ready, you can use it to publish updated packages to npmjs.com. If you haven't logged into npmjs.com
 prior to this, you'll need to login with the `npm login` command before publishing.
 
-    $ yarn run lerna publish from-git
+    yarn run lerna publish from-git
 
 This command will read the version info from the repo, and publish packages.
 

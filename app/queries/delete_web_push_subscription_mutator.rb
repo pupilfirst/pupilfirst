@@ -1,4 +1,4 @@
-class DeleteWebpushSubscriptionMutator < ApplicationQuery
+class DeleteWebPushSubscriptionMutator < ApplicationQuery
   def delete_subscription
     current_user.update!(webpush_subscription: {})
   end

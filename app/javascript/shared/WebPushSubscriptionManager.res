@@ -4,14 +4,14 @@ type subscription = {
   auth: string,
 }
 
-let t = I18n.t(~scope="components.WebpushSubscriptionManager")
+let t = I18n.t(~scope="components.WebPushSubscriptionManager")
 
-@bs.module("./webpushSubscription")
+@bs.module("./webPushSubscription")
 external createSubscription: unit => Js.Promise.t<Js.Nullable.t<subscription>> =
   "createSubscription"
 
-@bs.module("./webpushSubscription")
-external getWebpushData: unit => Js.Promise.t<Js.Nullable.t<subscription>> = "getWebpushData"
+@bs.module("./webPushSubscription")
+external getWebPushData: unit => Js.Promise.t<Js.Nullable.t<subscription>> = "getWebPushData"
 
 let str = React.string
 
@@ -44,20 +44,20 @@ let reducer = (state, action) =>
   | ClearSaving => {...state, saving: false}
   }
 
-module CreateWebpushSubscriptionMutation = %graphql(
+module CreateWebPushSubscriptionMutation = %graphql(
   `
-  mutation CreateWebpushSubscriptionMutation($endpoint: String!, $p256dh: String!, $auth: String!) {
-    createWebpushSubscription(endpoint: $endpoint, p256dh: $p256dh, auth: $auth)  {
+  mutation CreateWebPushSubscriptionMutation($endpoint: String!, $p256dh: String!, $auth: String!) {
+    createWebPushSubscription(endpoint: $endpoint, p256dh: $p256dh, auth: $auth)  {
       success
     }
   }
 `
 )
 
-module DeleteWebpushSubscriptionMutation = %graphql(
+module DeleteWebPushSubscriptionMutation = %graphql(
   `
   mutation DeleteWebPushSubscriptionMutation {
-    deleteWebpushSubscription {
+    deleteWebPushSubscription {
       success
     }
   }
@@ -67,10 +67,10 @@ module DeleteWebpushSubscriptionMutation = %graphql(
 let deleteSubscription = (send, event) => {
   event |> ReactEvent.Mouse.preventDefault
   send(SetSaving)
-  DeleteWebpushSubscriptionMutation.make()
+  DeleteWebPushSubscriptionMutation.make()
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    response["deleteWebpushSubscription"]["success"]
+    response["deleteWebPushSubscription"]["success"]
       ? send(SetStatusUnSubscribed)
       : send(ClearSaving)
     Js.Promise.resolve()
@@ -84,7 +84,7 @@ let deleteSubscription = (send, event) => {
 
 let saveSubscription = (subscription, send) => {
   send(SetSaving)
-  CreateWebpushSubscriptionMutation.make(
+  CreateWebPushSubscriptionMutation.make(
     ~endpoint=subscription.endpoint,
     ~p256dh=subscription.p256dh,
     ~auth=subscription.auth,
@@ -92,7 +92,7 @@ let saveSubscription = (subscription, send) => {
   )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    response["createWebpushSubscription"]["success"] ? send(SetStatusSubscribed) : send(ClearSaving)
+    response["createWebPushSubscription"]["success"] ? send(SetStatusSubscribed) : send(ClearSaving)
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(_ => {
@@ -122,7 +122,7 @@ let createSubscription = (send, event) => {
   }) |> ignore
 }
 
-let webpushEndpoint =
+let webPushEndpoint =
   Webapi.Dom.document
   |> Webapi.Dom.Document.documentElement
   |> Webapi.Dom.Element.getAttribute("data-subscription-endpoint")
@@ -132,9 +132,9 @@ let loadStatus = (status, send, ()) => {
   | UnSubscribed => ()
   | Subscribed
   | SubscribedOnAnotherDevice =>
-    getWebpushData() |> Js.Promise.then_(r => {
+    getWebPushData() |> Js.Promise.then_(r => {
       let response = Js.Nullable.toOption(r)
-      switch (webpushEndpoint, response) {
+      switch (webPushEndpoint, response) {
       | (None, _) => send(SetStatusUnSubscribed)
       | (Some(""), _) => send(SetStatusUnSubscribed)
       | (Some(_endpoint), None) => send(SetStatusSubscribedOnAnotherDevice)
@@ -153,7 +153,7 @@ let loadStatus = (status, send, ()) => {
 }
 
 let computeInitialState = () => {
-  status: webpushEndpoint->Belt.Option.mapWithDefault(UnSubscribed, _u => Subscribed),
+  status: webPushEndpoint->Belt.Option.mapWithDefault(UnSubscribed, _u => Subscribed),
   saving: false,
 }
 

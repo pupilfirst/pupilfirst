@@ -1,4 +1,4 @@
-class CreateWebpushSubscriptionMutator < ApplicationQuery
+class CreateWebPushSubscriptionMutator < ApplicationQuery
   property :endpoint, validates: { presence: true }
   property :p256dh, validates: { presence: true }
   property :auth, validates: { presence: true }

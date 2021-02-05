@@ -57,3 +57,8 @@
 .school-admin-navbar__primary-nav-link--active:hover {
   @apply .bg-gray-200 .text-primary-500;
 }
+
+.school-admin-navbar__notifications-unread-bullet {
+  top: 14px;
+  right: 20px;
+}

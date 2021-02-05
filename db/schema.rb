@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_23_180238) do
+ActiveRecord::Schema.define(version: 2020_11_23_190246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -359,6 +359,21 @@ ActiveRecord::Schema.define(version: 2020_11_23_180238) do
     t.index ["user_id"], name: "index_markdown_attachments_on_user_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "actor_id"
+    t.bigint "recipient_id"
+    t.string "notifiable_type"
+    t.bigint "notifiable_id"
+    t.datetime "read_at"
+    t.text "message"
+    t.string "event"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["actor_id"], name: "index_notifications_on_actor_id"
+    t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable_type_and_notifiable_id"
+    t.index ["recipient_id"], name: "index_notifications_on_recipient_id"
+  end
+
   create_table "post_likes", force: :cascade do |t|
     t.bigint "post_id"
     t.bigint "user_id"
@@ -645,6 +660,15 @@ ActiveRecord::Schema.define(version: 2020_11_23_180238) do
     t.index ["name", "community_id"], name: "index_topic_categories_on_name_and_community_id", unique: true
   end
 
+  create_table "topic_subscriptions", force: :cascade do |t|
+    t.bigint "topic_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["topic_id", "user_id"], name: "index_topic_subscriptions_on_topic_id_and_user_id", unique: true
+    t.index ["user_id"], name: "index_topic_subscriptions_on_user_id"
+  end
+
   create_table "topics", force: :cascade do |t|
     t.bigint "community_id"
     t.bigint "target_id"
@@ -692,6 +716,8 @@ ActiveRecord::Schema.define(version: 2020_11_23_180238) do
     t.datetime "delete_account_sent_at"
     t.datetime "account_deletion_notification_sent_at"
     t.string "api_token_digest"
+    t.string "locale", default: "en"
+    t.jsonb "webpush_subscription", default: {}
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
     t.index ["delete_account_token"], name: "index_users_on_delete_account_token", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true

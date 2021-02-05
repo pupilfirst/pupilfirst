@@ -12,7 +12,9 @@ let toggleDropdown = (setShowDropdown, event) => {
   setShowDropdown(showDropdown => !showDropdown)
 }
 
-let containerClasses = className => "dropdown inline-block relative text-sm " ++ className
+let containerClasses = className => {
+  "dropdown inline-block relative text-sm " ++ className
+}
 
 @react.component
 let make = (~selected, ~contents, ~right=false, ~className="w-full md:w-auto") => {

@@ -1,0 +1,79 @@
+.editor-drawer {
+  background-color: white;
+  display: flex;
+  height: 100vh;
+  position: fixed;
+  right: -48rem;
+  top: 0px;
+  width: 100%;
+  z-index: 501;
+}
+
+.editor-drawer--l0-to-l1 {
+  right: 0;
+  animation: slide-l1 0.25s ease 0s 1 normal forwards;
+}
+
+.editor-drawer--l1-to-l0 {
+  right: 0;
+}
+
+.editor-drawer--l0 {
+  animation: slide-l0 0.25s ease 0s 1 normal forwards;
+}
+
+.editor-drawer--l1 {
+  right: 16rem;
+}
+
+@keyframes slide-l0 {
+  100% {
+    right: 0;
+  }
+}
+
+@keyframes slide-l1 {
+  100% {
+    right: 16rem;
+  }
+}
+
+@screen md {
+  .editor-drawer {
+    width: 48rem;
+  }
+
+  .editor-drawer--large {
+    width: 64rem;
+  }
+
+  .editor-drawer--small {
+    width: 32rem;
+  }
+}
+
+.editor-drawer__close {
+  left: -52px;
+  z-index: -1;
+}
+
+.blanket {
+  bottom: 0px;
+  left: 0px;
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  z-index: 500;
+  animation-name: blanket-animation;
+  animation-duration: 0.15s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes blanket-animation {
+  from {
+    background: rgba(9, 30, 66, 0);
+  }
+  to {
+    background: rgba(9, 30, 66, 0.54);
+  }
+}

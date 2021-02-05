@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.StudentTopNav__DropDown")
+
 open StudentTopNav__Types
 
 let handleToggle = (setLinksVisible, _) => setLinksVisible(linksVisible => !linksVisible)
@@ -9,7 +11,7 @@ let additionalLinks = (linksVisible, links) =>
     ? <div
         className="dropdown__list dropdown__list-right bg-white shadow-lg rounded mt-3 border absolute w-40 z-50">
         {links
-        |> List.mapi((index, link) =>
+        |> Js.Array.mapi((link, index) =>
           <div key={index |> string_of_int} className="">
             <a
               className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200"
@@ -20,7 +22,6 @@ let additionalLinks = (linksVisible, links) =>
             </a>
           </div>
         )
-        |> Array.of_list
         |> ReasonReact.array}
       </div>
     : ReasonReact.null
@@ -29,15 +30,15 @@ let additionalLinks = (linksVisible, links) =>
 let make = (~links) => {
   let (linksVisible, setLinksVisible) = React.useState(() => false)
   switch links {
-  | list{} => ReasonReact.null
+  | [] => ReasonReact.null
   | moreLinks =>
     <div
       title="Show more links"
-      className="ml-6 font-semibold text-sm cursor-pointer relative text-black"
+      className="ml-2 font-semibold text-sm p-4 md:px-3 md:py-2 cursor-pointer relative rounded-lg text-gray-900 hover:bg-gray-200 hover:text-primary-500"
       onClick={handleToggle(setLinksVisible)}
       key="more-links">
-      <span> {"More" |> str} </span>
-      <i className="fas fa-caret-down ml-1" />
+      <span> {t("more") |> str} </span>
+      <i className="fas fa-caret-down ml-2" />
       {additionalLinks(linksVisible, moreLinks)}
     </div>
   }

@@ -63,6 +63,12 @@ module Types
     field :create_topic_category, mutation: Mutations::CreateTopicCategory, null: false
     field :delete_topic_category, mutation: Mutations::DeleteTopicCategory, null: false
     field :update_topic_category, mutation: Mutations::UpdateTopicCategory, null: false
+    field :mark_notification, mutation: Mutations::MarkNotification, null: false
+    field :mark_all_notifications, mutation: Mutations::MarkAllNotifications, null: false
+    field :create_topic_subscription, mutation: Mutations::CreateTopicSubscription, null: false
+    field :delete_topic_subscription, mutation: Mutations::DeleteTopicSubscription, null: false
+    field :create_web_push_subscription, mutation: Mutations::CreateWebPushSubscription, null: false
+    field :delete_web_push_subscription, mutation: Mutations::DeleteWebPushSubscription, null: false
     field :issue_certificate, mutation: Mutations::IssueCertificate, null: false
     field :revoke_issued_certificate, mutation: Mutations::RevokeIssuedCertificate, null: false
     field :lock_topic, mutation: Mutations::LockTopic, null: false

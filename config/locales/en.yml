@@ -142,7 +142,7 @@ en:
       completed: "Completed"
       pending_review: "Pending Review"
       status: Status
-      sory_by: "Sort by:"
+      sort_by: "Sort by:"
       filter_by_level: Filter by level
       filter_by_level_or_status: Filter by level, or by status
       filter_by_another_level: Filter by another level

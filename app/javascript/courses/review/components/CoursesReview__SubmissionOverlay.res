@@ -241,7 +241,7 @@ let make = (
           )
           |> Array.mapi((index, overlaySubmission) =>
             <CoursesReview__SubmissionsList
-              key={index |> string_of_int}
+              key={OverlaySubmission.id(overlaySubmission)}
               overlaySubmission
               teamSubmission={submissionDetails |> SubmissionDetails.students |> Array.length > 1}
               targetEvaluationCriteriaIds={submissionDetails |> SubmissionDetails.targetEvaluationCriteriaIds}

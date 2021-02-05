@@ -2,6 +2,7 @@
 
 open CoursesReport__Types
 let str = React.string
+let t = I18n.t(~scope="components.CoursesReport__Overview")
 
 let avatar = (avatarUrl, name) => {
   let avatarClasses = "w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
@@ -23,7 +24,7 @@ let userInfo = (~key, ~avatarUrl, ~name, ~title) =>
 let coachInfo = coaches =>
   coaches |> ArrayUtils.isNotEmpty
     ? <div className="mb-8">
-        <h6 className="font-semibold"> {"Personal Coaches" |> str} </h6>
+        <h6 className="font-semibold"> {t("personal_coaches") |> str} </h6>
         {coaches
         |> Array.mapi((index, coach) =>
           userInfo(
@@ -64,13 +65,22 @@ let targetsCompletionStatus = overview => {
       <div> {doughnutChart("purple", targetCompletionPercent)} </div>
       <div className="ml-4">
         <p className="text-sm text-gray-700 font-semibold mt-1">
-          {"Incomplete: " ++ string_of_int(incompleteTargets) |> str}
+          {t(
+            ~variables=[("targetsCount", string_of_int(incompleteTargets))],
+            "incomplete_targets",
+          ) |> str}
         </p>
         <p className="text-sm text-gray-700 font-semibold mt-1">
-          {"Pending Review: " ++ string_of_int(targetsPendingReview) |> str}
+          {t(
+            ~variables=[("targetsCount", string_of_int(targetsPendingReview))],
+            "targets_pending_review",
+          ) |> str}
         </p>
         <p className="text-sm text-gray-700 font-semibold mt-1">
-          {"Completed: " ++ string_of_int(int_of_float(targetsCompleted)) |> str}
+          {t(
+            ~variables=[("targetsCount", string_of_int(int_of_float(targetsCompleted)))],
+            "targets_completed",
+          ) |> str}
         </p>
       </div>
     </div>
@@ -84,14 +94,10 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
       <div className="courses-report-overview__doughnut-chart-container bg-white">
         <div> {doughnutChart("pink", score |> int_of_float |> string_of_int)} </div>
         <div className="ml-4">
-          <p className="text-sm font-semibold mt-3"> {"Average Quiz Score" |> str} </p>
+          <p className="text-sm font-semibold mt-3"> {t("average_quiz_score") |> str} </p>
           <p className="text-sm text-gray-700 font-semibold leading-tight mt-1">
-            {Inflector.pluralize(
-              "Quiz",
-              ~count=quizzesAttempted,
-              ~inclusive=true,
-              (),
-            ) ++ " Attempted" |> str}
+            {Inflector.pluralize(t("quiz"), ~count=quizzesAttempted, ~inclusive=true, ()) ++
+            t("attempted") |> str}
           </p>
         </div>
       </div>
@@ -171,10 +177,10 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
 
   <div className="mb-8">
     <div className="flex justify-between items-end">
-      <h6 className="text-sm font-semibold"> {"Level Progress" |> str} </h6>
+      <h6 className="text-sm font-semibold"> {t("level_progress") |> str} </h6>
       {courseCompleted
         ? <p className="text-green-600 font-semibold">
-            {`🎉` |> str} <span className="text-xs ml-px"> {"Course Completed!" |> str} </span>
+            {`🎉` |> str} <span className="text-xs ml-px"> {t("course_completed") |> str} </span>
           </p>
         : React.null}
     </div>
@@ -214,7 +220,7 @@ let make = (~overviewData, ~levels, ~coaches) =>
             overview |> StudentOverview.completedLevelIds,
           )}
           <div className="mb-8">
-            <h6 className="font-semibold"> {"Targets Overview" |> str} </h6>
+            <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
             <div className="flex -mx-2 flex-wrap mt-2">
               {targetsCompletionStatus(overview)}
               {quizPerformanceChart(
@@ -225,7 +231,7 @@ let make = (~overviewData, ~levels, ~coaches) =>
           </div>
           {overview |> StudentOverview.averageGrades |> ArrayUtils.isNotEmpty
             ? <div className="mb-8">
-                <h6 className="font-semibold"> {"Average Grades" |> str} </h6>
+                <h6 className="font-semibold"> {t("average_grades") |> str} </h6>
                 <div className="flex -mx-2 flex-wrap">
                   {averageGradeCharts(
                     overview |> StudentOverview.evaluationCriteria,

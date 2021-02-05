@@ -12,7 +12,7 @@ on:
 
 jobs:
   tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     if: "!contains(github.event.head_commit.message, 'skip ci')"
 
     services:
@@ -115,8 +115,10 @@ jobs:
       - name: Specs (On non-master branches)
         if: env.GIT_BRANCH != 'master'
         run: bundle exec rspec -fd
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: Screenshots
-          path: tmp/capybara
+          name: Logs
+          path: |
+            tmp/capybara
+            log/test.log

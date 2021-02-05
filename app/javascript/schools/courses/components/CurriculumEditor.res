@@ -234,10 +234,7 @@ let make = (
                 |> Level.sort
                 |> Array.map(level =>
                   <option key={Level.id(level)} value={level |> Level.name}>
-                    {t("level") ++
-                    " " ++
-                    ((level |> Level.number |> string_of_int) ++
-                    (": " ++ (level |> Level.name))) |> str}
+                    {LevelLabel.format(~name=(level |> Level.name), (level |> Level.number |> string_of_int)) |> str}
                   </option>
                 )
                 |> ReasonReact.array}

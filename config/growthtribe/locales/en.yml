@@ -122,7 +122,7 @@ en:
     'yes': 'Yes'
     'no': 'No'
     level_label:
-      long_with_name: "Chapter%{number}: %{name}"
+      long_with_name: "Chapter %{number}: %{name}"
       short_with_name: "C%{number}: %{name}"
       long_without_name: "Chapter %{number}"
       short_without_name: "C%{number}"

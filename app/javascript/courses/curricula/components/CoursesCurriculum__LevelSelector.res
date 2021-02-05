@@ -9,8 +9,7 @@ let levelZeroSelectorClasses = isSelected => {
   )
 }
 
-let levelName = level =>
-  "L" ++ ((level |> Level.number |> string_of_int) ++ (": " ++ (level |> Level.name)))
+let levelName = level => LevelLabel.format(~short=true, ~name=(level |> Level.name), (level |> Level.number |> string_of_int))
 
 let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId) => {
   let teamLevelNumber = teamLevel |> Level.number

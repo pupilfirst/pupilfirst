@@ -37,8 +37,8 @@ This should leave you with a Heroku app that already has an empty Postgres datab
 Set up the database using the schema, and seed a few basic entries into the database. We'll use the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) to execute the Rails tasks on the production environment.
 
 ```bash
-$ heroku run rails db:schema:load
-$ heroku run rails db:seed
+heroku run rails db:schema:load
+heroku run rails db:seed
 ```
 
 ### Set up a user to sign in with
@@ -49,7 +49,7 @@ user and use it to gain access to the platform.
 We'll start a Rails console on Heroku to do so:
 
 ```bash
-$ heroku run console
+heroku run console
 ```
 
 Once the console is ready, find and update the user entry.
@@ -81,7 +81,7 @@ and such.
 Finally, start the web and worker dynos on Heroku.
 
 ```bash
-$ heroku ps:scale web=1 worker=1
+heroku ps:scale web=1 worker=1
 ```
 
 Now, if you visit the web address for your Heroku app, you should see the homepage for your school. You should also be able to sign in as `admin@example.com` to start working on your school.
@@ -96,11 +96,11 @@ There are a few tasks that must be run scheduled to run periodically; this can b
 
 1. Add the _Scheduler_ add-on on Heroku.
    ```bash
-   $ heroku addons:create scheduler:standard
+   heroku addons:create scheduler:standard
    ```
 2. Open the _Scheduler_ dashboard for your app.
    ```bash
-   $ heroku addons:open scheduler
+   heroku addons:open scheduler
    ```
 3. Add the the jobs using the _Add Job_ option in the dashboard. Schedule both tasks to run as per the requirements noted above.
 
@@ -139,7 +139,7 @@ You need to add a cache store to handle API rate limiting in the application.
 
 1. Add the _Memcached Cloud_ add-on on Heroku.
    ```bash
-   $ heroku addons:create memcachedcloud
+   heroku addons:create memcachedcloud
    ```
 2. Configure the `GRAPH_API_RATE_LIMIT` environment variable on Heroku to the permitted requests per second.
 
@@ -170,5 +170,5 @@ Make sure that the access token has the following scopes enabled:
 If you're encountering crashes or errors, the first thing you should do is check the server logs. You can watch the Rails `production.log` file on Heroku by using the `logs` command:
 
 ```bash
-$ heroku logs --tail
+heroku logs --tail
 ```

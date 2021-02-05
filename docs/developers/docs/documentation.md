@@ -14,8 +14,8 @@ in our Github repo, and is managed using [Docusaurus](https://v2.docusaurus.io/)
 
 Simply navigate to the `docs/developers` folder and run the `start` command:
 
-    $ cd docs/developers
-    $ yarn run start
+    cd docs/developers
+    yarn run start
 
 This should launch the developer documentation in your browser.
 
@@ -23,10 +23,10 @@ This should launch the developer documentation in your browser.
 
 First, install the docsify CLI globally:
 
-    $ npm i docsify-cli -g
+    npm i docsify-cli -g
 
 Then serve the `docs` folder on the desired port.
 
-    $ docsify serve docs -p 3010i
+    docsify serve docs -p 3010i
 
 The `-p` option sets the port. Visit `localhost:PORT` to view docs locally.

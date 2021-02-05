@@ -109,6 +109,12 @@ let make = (~courseId) => {
           <School__InputGroupError message={t("csv_file_invalid")} active=state.fileInvalid />
         </div>
       </div>
+      <CSVReader
+        onFileLoaded={(x, y) => {
+          Js.log(x)
+          Js.log(y["size"])
+        }}
+      />
       <div className="max-w-2xl p-6 mx-auto">
         <button disabled={saveDisabled(state)} className="w-auto btn btn-large btn-primary">
           {t("import_button_text")->str}

@@ -1,21 +1,27 @@
 let str = React.string
 
+open StudentsEditor__Types
+
 let t = I18n.t(~scope="components.StudentsEditor__BulkImportForm")
 
 type state = {
   fileName: option<string>,
   saving: bool,
+  csvData: array<StudentCSVData.t>,
   fileInvalid: bool,
 }
 
 let initialState = {
   fileName: None,
   saving: false,
+  csvData: [],
   fileInvalid: false,
 }
 
 type action =
-  | UpdateFilename(string, bool)
+  | UpdateFilename(string)
+  | UpdateFileInvalid(bool)
+  | LoadCSVData(array<StudentCSVData.t>)
   | RemoveFilename
   | BeginSaving
   | FailSaving
@@ -23,28 +29,18 @@ type action =
 let fileInputText = fileName =>
   fileName->Belt.Option.getWithDefault(t("csv_file_input_placeholder"))
 
-let selectFile = (send, event) => {
-  let files = ReactEvent.Form.target(event)["files"]
-
-  if ArrayUtils.isEmpty(files) {
-    send(RemoveFilename)
-  } else {
-    let file = Js.Array.unsafe_get(files, 0)
-    let invalid = FileUtils.isInvalid(~csv=true, file)
-    send(UpdateFilename(file["name"], invalid))
-  }
-}
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateFilename(imageFilename, fileInvalid) => {
+  | UpdateFilename(imageFilename) => {
       ...state,
       fileName: Some(imageFilename),
-      fileInvalid: fileInvalid,
     }
+  | UpdateFileInvalid(fileInvalid) => {...state, fileInvalid: fileInvalid}
   | RemoveFilename => {...state, fileName: None}
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
+  | LoadCSVData(csvData) => {...state, csvData: csvData}
   }
 
 let saveDisabled = state => state.fileName == None || (state.fileInvalid || state.saving)
@@ -69,9 +65,16 @@ let submitForm = (courseId, send, event) => {
   )
 }
 
+module CSVData = {
+  type t = StudentCSVData.t
+}
+
+module CSVReader = CSVReader.Make(CSVData)
+
 @react.component
 let make = (~courseId) => {
   let (state, send) = React.useReducer(reducer, initialState)
+  {ArrayUtils.isNotEmpty(state.csvData) ? Js.log(state.csvData) : ()}
   <form onSubmit={submitForm(courseId, send)}>
     <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
     <div className="mx-auto bg-white">
@@ -92,15 +95,16 @@ let make = (~courseId) => {
               )}
             </HelpIcon>
           </div>
-          <input
-            className="hidden"
-            disabled=state.saving
-            name="csv"
-            type_="file"
-            id="csv-file-input"
-            required=true
-            multiple=false
-            onChange={selectFile(send)}
+          <CSVReader
+            label=""
+            inputId="csv-file-input"
+            cssClass="hidden"
+            parserOptions=[("header", "true")]
+            onFileLoaded={(x, y) => {
+              send(LoadCSVData(x))
+              send(UpdateFilename(y["name"]))
+            }}
+            onError={_ => send(UpdateFileInvalid(true))}
           />
           <label className="file-input-label mt-2" htmlFor="csv-file-input">
             <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
@@ -109,12 +113,6 @@ let make = (~courseId) => {
           <School__InputGroupError message={t("csv_file_invalid")} active=state.fileInvalid />
         </div>
       </div>
-      <CSVReader
-        onFileLoaded={(x, y) => {
-          Js.log(x)
-          Js.log(y["size"])
-        }}
-      />
       <div className="max-w-2xl p-6 mx-auto">
         <button disabled={saveDisabled(state)} className="w-auto btn btn-large btn-primary">
           {t("import_button_text")->str}

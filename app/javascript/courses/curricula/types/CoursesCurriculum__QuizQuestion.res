@@ -6,7 +6,7 @@ type answerOption = {
 type t = {
   index: int,
   question: string,
-  answerOptions: list<answerOption>,
+  answerOptions: array<answerOption>,
 }
 
 let decodeAnswerOption = json => {
@@ -22,7 +22,7 @@ let decode = json => {
   {
     index: json |> field("index", int),
     question: json |> field("question", string),
-    answerOptions: json |> field("answerOptions", list(decodeAnswerOption)),
+    answerOptions: json |> field("answerOptions", array(decodeAnswerOption)),
   }
 }
 
@@ -38,11 +38,18 @@ let answerValue = answerOption => answerOption.value
 
 let lastQuestion = questions => {
   let maxIndex =
-    questions |> List.sort((q1, q2) => q1.index - q2.index) |> List.rev |> List.hd |> index
-  questions |> List.find(q => q.index == maxIndex)
+    ArrayUtils.copyAndSort((q1, q2) => q1.index - q2.index, questions)->ArrayUtils.last->index
+
+  questions |> ArrayUtils.unsafeFind(
+    q => q.index == maxIndex,
+    "Could not find last question at index " ++ string_of_int(maxIndex),
+  )
 }
 
 let nextQuestion = (questions, question) =>
-  questions |> List.find(q => q.index == question.index + 1)
+  questions |> ArrayUtils.unsafeFind(
+    q => q.index == question.index + 1,
+    "Could not find a question at index " ++ string_of_int(question.index + 1),
+  )
 
 let isLastQuestion = (questions, question) => questions |> lastQuestion == question

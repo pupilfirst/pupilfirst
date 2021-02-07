@@ -52,13 +52,14 @@ feature "Student levelling up", js: true do
 
       expect(page).not_to have_text(target_l1.title)
       expect(page).not_to have_text(target_group_l1.name)
+      expect(page).not_to have_button('Next Level')
 
-      expect(page).to have_text('You have successfully completed all milestone targets required to level up.')
+      expect(page).to have_text('You have successfully completed all milestone targets')
 
       # Reload the page, it should still remain the same.
       visit curriculum_course_path(course)
 
-      expect(page).to have_text('You have successfully completed all milestone targets required to level up.')
+      expect(page).to have_text('You have successfully completed all milestone targets')
       expect(page).not_to have_text(target_l1.title)
       expect(page).not_to have_text(target_group_l1.name)
 
@@ -399,7 +400,7 @@ feature "Student levelling up", js: true do
       expect(page).to have_text('Completed', count: 1)
 
       # ...but there shouldn't be any option to level up.
-      expect(page).not_to have_text('You have successfully completed all milestone targets required to level up.')
+      expect(page).not_to have_text('You have successfully completed all milestone targets')
       expect(page).not_to have_button('Level Up')
     end
   end

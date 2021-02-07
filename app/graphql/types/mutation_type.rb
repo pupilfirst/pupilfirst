@@ -28,6 +28,7 @@ module Types
     field :update_review_checklist, mutation: Mutations::UpdateReviewChecklist, null: false
     field :delete_school_admin, mutation: Mutations::DeleteSchoolAdmin, null: false
     field :create_coach_note, mutation: Mutations::CreateCoachNote, null: false
+    field :create_students, mutation: Mutations::CreateStudents, null: false
     field :dropout_student, mutation: Mutations::DropoutStudent, null: false
     field :create_evaluation_criterion, mutation: Mutations::CreateEvaluationCriterion, null: false
     field :update_evaluation_criterion, mutation: Mutations::UpdateEvaluationCriterion, null: false
@@ -51,6 +52,7 @@ module Types
     field :create_post_like, mutation: Mutations::CreatePostLike, null: false
     field :delete_post_like, mutation: Mutations::DeletePostLike, null: false
     field :mark_post_as_solution, mutation: Mutations::MarkPostAsSolution, null: false
+    field :unmark_post_as_solution, mutation: Mutations::UnmarkPostAsSolution, null: false
     field :archive_post, mutation: Mutations::ArchivePost, null: false
     field :merge_levels, mutation: Mutations::MergeLevels, null: false
     field :create_vimeo_video, mutation: Mutations::CreateVimeoVideo, null: false
@@ -63,6 +65,12 @@ module Types
     field :create_topic_category, mutation: Mutations::CreateTopicCategory, null: false
     field :delete_topic_category, mutation: Mutations::DeleteTopicCategory, null: false
     field :update_topic_category, mutation: Mutations::UpdateTopicCategory, null: false
+    field :mark_notification, mutation: Mutations::MarkNotification, null: false
+    field :mark_all_notifications, mutation: Mutations::MarkAllNotifications, null: false
+    field :create_topic_subscription, mutation: Mutations::CreateTopicSubscription, null: false
+    field :delete_topic_subscription, mutation: Mutations::DeleteTopicSubscription, null: false
+    field :create_web_push_subscription, mutation: Mutations::CreateWebPushSubscription, null: false
+    field :delete_web_push_subscription, mutation: Mutations::DeleteWebPushSubscription, null: false
     field :issue_certificate, mutation: Mutations::IssueCertificate, null: false
     field :revoke_issued_certificate, mutation: Mutations::RevokeIssuedCertificate, null: false
     field :lock_topic, mutation: Mutations::LockTopic, null: false

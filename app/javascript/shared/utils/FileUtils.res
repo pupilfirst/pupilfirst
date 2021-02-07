@@ -1,5 +1,5 @@
 let defaultMaxSize = 5 * 1024 * 1024
-let defaultVideoMaxSize = 1000 * 1024 * 1024
+let defaultVideoMaxSize = 500 * 1024 * 1024
 
 let hasValidSize = (~maxSize, file) => file["size"] <= maxSize
 
@@ -14,10 +14,13 @@ let isImage = file =>
 let isVideo = file =>
   switch file["_type"] {
   | "video/mp4"
-  | "video/mov"
-  | "video/wmv"
+  | "video/quicktime"
+  | "video/x-ms-asf"
+  | "video/x-ms-wmv"
+  | "video/vnd.avi"
   | "video/avi"
-  | "video/flv" => true
+  | "video/msvideo"
+  | "video/x-msvideo" => true
   | _ => false
   }
 

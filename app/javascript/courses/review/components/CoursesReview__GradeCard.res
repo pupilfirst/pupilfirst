@@ -171,6 +171,7 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, send) => {
           ? "hover:bg-green-500 hover:text-white "
           : "hover:bg-red-500 hover:text-white "
       )
+
     | None => ""
     }
 
@@ -198,21 +199,21 @@ let showGradePill = (key, evaluationCriterion, gradeValue, passGrade, state, sen
       {evaluationCriterion |> EvaluationCriterion.gradesAndLabels |> Array.map(gradeLabel => {
         let gradeLabelGrade = gradeLabel |> GradeLabel.grade
 
-        <div
-          key={gradeLabelGrade |> string_of_int}
+        <button
+          key={string_of_int(gradeLabelGrade)}
           onClick={handleGradePillClick(
             evaluationCriterion |> EvaluationCriterion.id,
             gradeLabelGrade,
             state,
             send,
           )}
-          title={gradeLabel |> GradeLabel.label}
+          title={GradeLabel.label(gradeLabel)}
           className={gradePillClasses(gradeValue, gradeLabelGrade, passGrade, send)}>
           {switch send {
-          | Some(_) => gradeLabelGrade |> string_of_int |> str
+          | Some(_) => string_of_int(gradeLabelGrade)->str
           | None => React.null
           }}
-        </div>
+        </button>
       }) |> React.array}
     </div>
   </div>

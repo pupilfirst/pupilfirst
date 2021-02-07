@@ -60,6 +60,7 @@ let make = (
   ~evaluationCriteria,
   ~course,
   ~updateTargetCB,
+  ~vimeoPlan,
 ) => {
   let url = ReasonReactRouter.useUrl()
   let (dirty, setDirty) = React.useState(() => false)
@@ -80,7 +81,7 @@ let make = (
   switch url.path {
   | list{"school", "courses", _courseId, "targets", targetId, pageName} =>
     let target =
-      targets |> ListUtils.unsafeFind(
+      targets |> ArrayUtils.unsafeFind(
         t => t |> Target.id == targetId,
         "Could not find target for editor drawer with the ID " ++ targetId,
       )
@@ -91,7 +92,7 @@ let make = (
     let (innerComponent, selectedPage) = switch pageName {
     | "content" => (
         <CurriculumEditor__ContentEditor
-          target hasVimeoAccessToken setDirtyCB={dirty => setDirty(_ => dirty)}
+          target hasVimeoAccessToken vimeoPlan setDirtyCB={dirty => setDirty(_ => dirty)}
         />,
         Content,
       )

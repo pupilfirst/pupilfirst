@@ -21,13 +21,13 @@ module Users
       def user_must_exist
         return if user.present?
 
-        errors[:base] << "Your token doesn't appear to be valid. Please refresh the page and try again."
+        errors[:token] << "doesn't appear to be valid. Please refresh the page and try again."
       end
 
       def password_should_match
         return if new_password == confirm_password
 
-        errors[:base] << 'Your password and confirmation password do not match. Please try again.'
+        errors[:password] << 'does not match confirmation password. Please try again.'
       end
     end
   end

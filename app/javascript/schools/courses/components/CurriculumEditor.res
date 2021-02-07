@@ -1,4 +1,5 @@
 let str = ReasonReact.string
+let t = I18n.t(~scope="components.CurriculumEditor")
 
 open CurriculumEditor__Types
 
@@ -11,8 +12,8 @@ type state = {
   selectedLevel: Level.t,
   editorAction: editorAction,
   levels: array<Level.t>,
-  targetGroups: list<TargetGroup.t>,
-  targets: list<Target.t>,
+  targetGroups: array<TargetGroup.t>,
+  targets: array<Target.t>,
   showArchived: bool,
 }
 
@@ -21,9 +22,9 @@ type action =
   | UpdateEditorAction(editorAction)
   | UpdateLevels(Level.t)
   | UpdateTargetGroup(TargetGroup.t)
-  | UpdateTargetGroups(list<TargetGroup.t>)
+  | UpdateTargetGroups(array<TargetGroup.t>)
   | UpdateTarget(Target.t)
-  | UpdateTargets(list<Target.t>)
+  | UpdateTargets(array<Target.t>)
   | ToggleShowArchived
 
 let reducer = (state, action) =>
@@ -34,52 +35,56 @@ let reducer = (state, action) =>
     let newLevels = level |> Level.updateArray(state.levels)
     {...state, levels: newLevels, editorAction: Hidden, selectedLevel: level}
   | UpdateTargetGroup(targetGroup) =>
-    let newtargetGroups = targetGroup |> TargetGroup.updateList(state.targetGroups)
+    let newtargetGroups = targetGroup |> TargetGroup.updateArray(state.targetGroups)
     {...state, targetGroups: newtargetGroups}
   | UpdateTargetGroups(targetGroups) => {...state, targetGroups: targetGroups}
   | UpdateTarget(target) =>
-    let newtargets = target |> Target.updateList(state.targets)
+    let newtargets = target |> Target.updateArray(state.targets)
     {...state, targets: newtargets}
   | ToggleShowArchived => {...state, showArchived: !state.showArchived}
   | UpdateTargets(targets) => {...state, targets: targets}
   }
 
 let showArchivedButton = (targetGroupsInLevel, targets) => {
-  let tgIds = targetGroupsInLevel |> List.map(tg => tg |> TargetGroup.id)
+  let tgIds = targetGroupsInLevel |> Js.Array.map(TargetGroup.id)
 
   let numberOfArchivedTargetGroupsInLevel =
-    targetGroupsInLevel |> List.filter(tg => tg |> TargetGroup.archived) |> List.length
+    targetGroupsInLevel |> Js.Array.filter(TargetGroup.archived) |> Js.Array.length
+
   let numberOfArchivedTargetsInLevel =
     targets
-    |> List.filter(target => tgIds |> List.mem(target |> Target.targetGroupId))
-    |> List.filter(target => target |> Target.visibility === Archived)
-    |> List.length
+    |> Js.Array.filter(target => tgIds |> Js.Array.includes(Target.targetGroupId(target)))
+    |> Js.Array.filter(target => Target.visibility(target) == Archived)
+    |> Js.Array.length
 
   numberOfArchivedTargetGroupsInLevel > 0 || numberOfArchivedTargetsInLevel > 0
 }
 
 let updateTargetSortIndex = (state, send, sortedTargets) => {
-  let oldTargets = state.targets |> List.filter(t => !(sortedTargets |> List.mem(t)))
-  send(UpdateTargets(oldTargets |> List.append(sortedTargets |> Target.updateSortIndex)))
+  let oldTargets = state.targets |> Js.Array.filter(t => !Js.Array.includes(t, sortedTargets))
+
+  send(UpdateTargets(Js.Array.concat(oldTargets, Target.updateSortIndex(sortedTargets))))
 }
 
 let updateTargetGroupSortIndex = (state, send, sortedTargetGroups) => {
-  let oldTargetGroups = state.targetGroups |> List.filter(t => !(sortedTargetGroups |> List.mem(t)))
+  let oldTargetGroups =
+    state.targetGroups |> Js.Array.filter(t => !Js.Array.includes(t, sortedTargetGroups))
+
   send(
     UpdateTargetGroups(
-      oldTargetGroups |> List.append(sortedTargetGroups |> TargetGroup.updateSortIndex),
+      Js.Array.concat(TargetGroup.updateSortIndex(sortedTargetGroups), oldTargetGroups),
     ),
   )
 }
 
 let levelOfTarget = (targetId, targets, levels, targetGroups) => {
   let target =
-    targets |> ListUtils.unsafeFind(
+    targets |> ArrayUtils.unsafeFind(
       target => Target.id(target) == targetId,
       "Unable to find target with ID:" ++ (targetId ++ " in CurriculumEditor"),
     )
   let targetGroup =
-    targetGroups |> ListUtils.unsafeFind(
+    targetGroups |> ArrayUtils.unsafeFind(
       tg => TargetGroup.id(tg) == Target.targetGroupId(target),
       "Unable to find target group with ID:" ++
       (Target.targetGroupId(target) ++
@@ -121,6 +126,7 @@ let make = (
   ~targetGroups,
   ~targets,
   ~hasVimeoAccessToken,
+  ~vimeoPlan,
 ) => {
   let path = ReasonReactRouter.useUrl().path
   let (state, send) = React.useReducerWithMapState(
@@ -133,21 +139,24 @@ let make = (
   let currentLevel = state.selectedLevel
   let currentLevelId = Level.id(currentLevel)
   let updateLevelsCB = level => send(UpdateLevels(level))
+
   let targetGroupsInLevel =
     state.targetGroups
-    |> List.filter(targetGroup => targetGroup |> TargetGroup.levelId == currentLevelId)
+    |> Js.Array.filter(targetGroup => TargetGroup.levelId(targetGroup) == currentLevelId)
     |> TargetGroup.sort
+
   let targetGroupsToDisplay = state.showArchived
     ? targetGroupsInLevel
-    : targetGroupsInLevel |> List.filter(tg => !(tg |> TargetGroup.archived))
+    : targetGroupsInLevel |> Js.Array.filter(tg => !TargetGroup.archived(tg))
+
   let showTargetGroupEditorCB = targetGroup =>
     send(UpdateEditorAction(ShowTargetGroupEditor(targetGroup)))
 
   let updateTargetCB = target => {
     let targetGroup =
-      state.targetGroups |> ListUtils.unsafeFind(
+      state.targetGroups |> ArrayUtils.unsafeFind(
         tg => TargetGroup.id(tg) == Target.targetGroupId(target),
-        "Unabltge to find target group with ID: " ++ Target.targetGroupId(target),
+        "Unable to find target group with ID:" ++ Target.targetGroupId(target),
       )
 
     let updatedTargetGroup = switch target |> Target.visibility {
@@ -167,8 +176,8 @@ let make = (
           let targetIdsInTargerGroup =
             state.targets |> Target.targetIdsInTargetGroup(targetGroup |> TargetGroup.id)
           let newTargets =
-            state.targets |> List.map(target =>
-              targetIdsInTargerGroup |> List.mem(target |> Target.id)
+            state.targets |> Js.Array.map(target =>
+              targetIdsInTargerGroup |> Js.Array.includes(Target.id(target))
                 ? Target.archive(target)
                 : target
             )
@@ -196,6 +205,7 @@ let make = (
       evaluationCriteria
       course
       updateTargetCB
+      vimeoPlan
     />
     {switch state.editorAction {
     | Hidden => ReasonReact.null
@@ -224,9 +234,7 @@ let make = (
                 |> Level.sort
                 |> Array.map(level =>
                   <option key={Level.id(level)} value={level |> Level.name}>
-                    {"Level " ++
-                    ((level |> Level.number |> string_of_int) ++
-                    (": " ++ (level |> Level.name))) |> str}
+                    {LevelLabel.format(~name=(level |> Level.name), (level |> Level.number |> string_of_int)) |> str}
                   </option>
                 )
                 |> ReasonReact.array}
@@ -237,7 +245,7 @@ let make = (
               </div>
             </div>
             <button
-              title="Edit selected level"
+              title={t("edit_selected_level")}
               className="flex items-center text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-400 border-l-0 py-1 px-2 rounded-r focus:outline-none"
               onClick={_ => send(UpdateEditorAction(ShowLevelEditor(Some(state.selectedLevel))))}>
               <i className="fas fa-pencil-alt" />
@@ -246,7 +254,7 @@ let make = (
               className="btn btn-primary ml-4"
               onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
               <i className="fas fa-plus-square mr-2 text-lg" />
-              <span> {"Create Level" |> str} </span>
+              <span> {t("create_level") |> str} </span>
             </button>
           </div>
           {showArchivedButton(targetGroupsInLevel, state.targets)
@@ -258,7 +266,7 @@ let make = (
       </div>
       <div className="target-group__container max-w-3xl mt-5 mx-auto relative">
         {targetGroupsToDisplay
-        |> List.mapi((index, targetGroup) =>
+        |> Js.Array.mapi((targetGroup, index) =>
           <CurriculumEditor__TargetGroupShow
             key={targetGroup |> TargetGroup.id}
             targetGroup
@@ -273,7 +281,6 @@ let make = (
             course
           />
         )
-        |> Array.of_list
         |> ReasonReact.array}
         <div
           onClick={_ => send(UpdateEditorAction(ShowTargetGroupEditor(None)))}
@@ -281,7 +288,7 @@ let make = (
           <span className="flex bg-gray-200 p-2 rounded-full">
             <i className="fas fa-plus-circle text-2xl" />
           </span>
-          <h4 className="font-semibold ml-2"> {"Create a target group" |> str} </h4>
+          <h4 className="font-semibold ml-2"> {t("create_target_group") |> str} </h4>
         </div>
       </div>
     </div>

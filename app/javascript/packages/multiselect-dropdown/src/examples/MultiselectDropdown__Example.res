@@ -106,6 +106,14 @@ module DetailedExample = {
 
   let updateSearchInput = (setState, searchInput) => setState(s => {...s, searchInput: searchInput})
 
+  let defaultOptions = () => {
+    [
+      Selectable.makeCountry("India"),
+      Selectable.makeState("Kerala"),
+      Selectable.makeCity("Bangalore"),
+    ]
+  }
+
   @react.component
   let make = () => {
     let (state, setState) = React.useState(() => {searchInput: "", selected: []})
@@ -125,7 +133,8 @@ module DetailedExample = {
         onDeselect={deselect(state.selected, setState)}
         value=state.searchInput
         onChange={updateSearchInput(setState)}
-        placeholder="Type city, state or country"
+        defaultOptions={defaultOptions()}
+        hint="Select from the above list or search by city name"
       />
     </div>
   }
@@ -185,14 +194,14 @@ module MinimalExample = {
           {"Filter by:" |> str}
         </label>
       </div>
-      <Multiselect unselected selected=state.selected onSelect={selectable => setState(s => {
+      <Multiselect unselected selected={state.selected} onSelect={selectable => setState(s => {
             searchString: "",
             selected: [selectable] |> Array.append(s.selected),
           })} onDeselect={deselect(
           state.selected,
           setState,
-        )} value=state.searchString onChange={searchString =>
-          setState(s => {...s, searchString: searchString})} />
+        )} value={state.searchString} onChange={searchString =>
+          setState(s => {...s, searchString: searchString})} hint="Enter your city name" />
     </div>
   }
 }

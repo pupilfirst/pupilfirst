@@ -1,24 +1,19 @@
 exception UnsafeFindFailed(string)
 
 let copyAndSort = (f, t) => {
-  let cp = t |> Array.copy
-  cp |> Array.sort(f)
-  cp
+  let cp = Js.Array.copy(t)
+  Js.Array.sortInPlaceWith(f, cp)
 }
 
 let copyAndPush = (e, t) => {
-  let copy = t |> Array.copy
-  copy |> Js.Array.push(e) |> ignore
+  let copy = Js.Array.copy(t)
+  Js.Array.push(e, copy) |> ignore
   copy
 }
 
-let isEmpty = a =>
-  switch a {
-  | [] => true
-  | _ => false
-  }
+let isEmpty = a => Js.Array.length(a) == 0
 
-let isNotEmpty = a => !(a |> isEmpty)
+let isNotEmpty = a => !isEmpty(a)
 
 let unsafeFind = (p, message, l) =>
   switch Js.Array.find(p, l) {
@@ -50,10 +45,13 @@ let swapUp = (i, t) =>
     Rollbar.warning("Index to swap out of bounds in array!")
     t
   } else {
-    let copy = t |> Array.copy
+    let copy = Js.Array.copy(t)
+
     copy[i] = t[i - 1]
     copy[i - 1] = t[i]
     copy
   }
 
 let swapDown = (i, t) => swapUp(i + 1, t)
+
+let last = t => t->Js.Array.unsafe_get(Js.Array.length(t) - 1)

@@ -5,6 +5,8 @@ type t = {
   unlocked: bool,
 }
 
+let t = I18n.t(~scope="components.CoursesReport__Level")
+
 let id = t => t.id
 let name = t => t.name
 
@@ -22,16 +24,17 @@ let decode = json => {
   }
 }
 
-let shortName = t => "L" ++ (t.number |> string_of_int)
+let shortName = t => LevelLabel.format(~short=true, t.number |> string_of_int)
 
 let levelLabel = (levels, id) =>
-  "Level " ++
-  (levels
-  |> ArrayUtils.unsafeFind(
-    level => level.id == id,
-    "Unable to find level with ID: " ++ (id ++ " in CoursesReport"),
+  LevelLabel.format(
+    (levels
+    |> ArrayUtils.unsafeFind(
+      level => level.id == id,
+      "Unable to find level with ID: " ++ (id ++ " in CoursesReport"),
+    )
+    |> number
+    |> string_of_int)
   )
-  |> number
-  |> string_of_int)
 
 let sort = levels => levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number)

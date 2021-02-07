@@ -96,9 +96,7 @@ let tabToString = (targetStatus, tab) =>
   }
 
 let selectableTabs = targetDetails =>
-  targetDetails |> TargetDetails.communities |> ListUtils.isNotEmpty
-    ? list{Learn, Discuss}
-    : list{Learn}
+  TargetDetails.communities(targetDetails) == [] ? [Learn] : [Learn, Discuss]
 
 let tabClasses = (selection, tab) =>
   "course-overlay__body-tab-item p-2 md:px-3 md:py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold" ++ (
@@ -140,14 +138,13 @@ let tabOptions = (state, send, targetDetails, targetStatus) => {
 
   <div className="flex justify-between max-w-3xl mx-auto -mb-px mt-5 md:mt-7">
     {selectableTabs(targetDetails)
-    |> List.map(selection => tabButton(selection, state, send, targetStatus))
-    |> Array.of_list
+    |> Js.Array.map(selection => tabButton(selection, state, send, targetStatus))
     |> React.array}
     {switch (targetStatus |> TargetStatus.status, completionType) {
     | (Pending | PendingReview | Completed | Rejected, Evaluated | TakeQuiz) =>
       tabButton(Complete(completionType), state, send, targetStatus)
     | (Locked(CourseLocked | AccessLocked), Evaluated | TakeQuiz) =>
-      targetDetails |> TargetDetails.submissions |> ListUtils.isNotEmpty
+      TargetDetails.submissions(targetDetails) != []
         ? tabButton(Complete(completionType), state, send, targetStatus)
         : React.null
     | (Pending | PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) =>
@@ -260,15 +257,22 @@ let renderLockReason = reason => renderLocked(reason |> TargetStatus.lockReasonT
 
 let prerequisitesIncomplete = (reason, target, targets, statusOfTargets) => {
   let prerequisiteTargetIds = target |> Target.prerequisiteTargetIds
+
   let prerequisiteTargets =
-    targets |> List.filter(target => (target |> Target.id)->List.mem(prerequisiteTargetIds))
+    targets |> Js.Array.filter(target =>
+      prerequisiteTargetIds |> Js.Array.includes(Target.id(target))
+    )
+
   <div className="relative px-3 md:px-0">
     {renderLockReason(reason)}
     <div
       className="course-overlay__prerequisite-targets z-10 max-w-3xl mx-auto bg-white text-center rounded-lg overflow-hidden shadow mt-6">
-      {prerequisiteTargets |> List.map(target => {
+      {prerequisiteTargets |> Js.Array.map(target => {
         let targetStatus =
-          statusOfTargets |> List.find(ts => ts |> TargetStatus.targetId == (target |> Target.id))
+          statusOfTargets |> ArrayUtils.unsafeFind(
+            ts => ts |> TargetStatus.targetId == Target.id(target),
+            "Could not find status of target with ID " ++ Target.id(target),
+          )
 
         <Link
           href={"/targets/" ++ (target |> Target.id)}
@@ -280,7 +284,7 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets) => {
           </span>
           {renderTargetStatus(targetStatus)}
         </Link>
-      }) |> Array.of_list |> React.array}
+      }) |> React.array}
     </div>
   </div>
 }
@@ -398,9 +402,9 @@ let completeSection = (
 let renderPendingStudents = (pendingUserIds, users) =>
   <div className="max-w-3xl mx-auto text-center mt-4">
     <div className="font-semibold text-md"> {t("pending_team_members_notice")->str} </div>
-    <div className="flex justify-center flex-wrap"> {pendingUserIds |> List.map(studentId => {
+    <div className="flex justify-center flex-wrap"> {pendingUserIds |> Js.Array.map(studentId => {
         let user =
-          users |> ListUtils.unsafeFind(
+          users |> ArrayUtils.unsafeFind(
             u => u |> User.id == studentId,
             "Unable to find user with id " ++ (studentId ++ "in CoursesCurriculum__Overlay"),
           )
@@ -411,16 +415,14 @@ let renderPendingStudents = (pendingUserIds, users) =>
           className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md flex-shrink-0 mt-2">
           {user |> User.avatar}
         </div>
-      }) |> Array.of_list |> React.array} </div>
+      }) |> React.array} </div>
   </div>
 
 let handlePendingStudents = (targetStatus, targetDetails, users) =>
   switch (targetDetails, targetStatus |> TargetStatus.status) {
   | (Some(targetDetails), PendingReview | Completed) =>
-    let pendingUserIds = targetDetails |> TargetDetails.pendingUserIds
-    pendingUserIds |> ListUtils.isNotEmpty
-      ? renderPendingStudents(pendingUserIds, users)
-      : React.null
+    let pendingUserIds = TargetDetails.pendingUserIds(targetDetails)
+    pendingUserIds == [] ? React.null : renderPendingStudents(pendingUserIds, users)
   | (Some(_) | None, Locked(_) | Pending | PendingReview | Completed | Rejected) => React.null
   }
 

@@ -16,6 +16,7 @@ type state = {
   changingLockedStatus: bool,
   showTopicEditor: bool,
   topicCategory: option<TopicCategory.t>,
+  subscribed: bool,
 }
 
 type action =
@@ -34,10 +35,13 @@ type action =
   | ShowTopicEditor(bool)
   | UpdateSavingTopic(bool)
   | MarkReplyAsSolution(string)
+  | UnmarkReplyAsSolution
   | StartChangingLockStatus
   | FinishLockingTopic(string)
   | FinishUnlockingTopic
   | UpdateTopicCategory(option<TopicCategory.t>)
+  | Subscribe
+  | Unsubscribe
 
 let reducer = (state, action) =>
   switch action {
@@ -104,8 +108,14 @@ let reducer = (state, action) =>
       ...state,
       replies: state.replies |> Post.markAsSolution(postId),
     }
+  | UnmarkReplyAsSolution => {
+      ...state,
+      replies: Post.unmarkSolution(state.replies),
+    }
   | UpdateTopicCategory(topicCategory) => {...state, topicCategory: topicCategory}
   | StartChangingLockStatus => {...state, changingLockedStatus: true}
+  | Subscribe => {...state, subscribed: true}
+  | Unsubscribe => {...state, subscribed: false}
   | FinishLockingTopic(currentUserId) => {
       ...state,
       changingLockedStatus: false,
@@ -117,6 +127,14 @@ let reducer = (state, action) =>
       topic: Topic.unlock(state.topic),
     }
   }
+
+let subscribe = (send, ()) => {
+  send(Subscribe)
+}
+
+let unsubscribe = (send, ()) => {
+  send(Unsubscribe)
+}
 
 let addNewReply = (send, replyToPostId, ()) => send(AddNewReply(replyToPostId))
 
@@ -288,6 +306,10 @@ let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategori
   }
 }
 
+let topicSolutionId = replies => {
+  Js.Array.find(Post.solution, replies)->Belt.Option.map(Post.id)
+}
+
 @react.component
 let make = (
   ~topic,
@@ -299,6 +321,7 @@ let make = (
   ~community,
   ~target,
   ~topicCategories,
+  ~subscribed,
 ) => {
   let (state, send) = React.useReducerWithMapState(reducer, topic, topic => {
     topic: topic,
@@ -309,6 +332,7 @@ let make = (
     savingTopic: false,
     showTopicEditor: false,
     changingLockedStatus: false,
+    subscribed: subscribed,
     topicCategory: topicCategory(topicCategories, Topic.topicCategoryId(topic)),
   })
 
@@ -430,8 +454,16 @@ let make = (
                   </div>
                 | None => React.null
                 }}
+                <div className="lg:pl-14">
+                  <TopicsShow__SubscriptionManager
+                    subscribed={state.subscribed}
+                    topicId={Topic.id(topic)}
+                    subscribeCB={subscribe(send)}
+                    unsubscribeCB={unsubscribe(send)}
+                  />
+                </div>
               </div>}
-          <TopicsShow__PostShow
+          {<TopicsShow__PostShow
             key={Post.id(state.firstPost)}
             post=state.firstPost
             topic=state.topic
@@ -445,8 +477,10 @@ let make = (
             addPostLikeCB={() => send(LikeFirstPost)}
             removePostLikeCB={() => send(RemoveLikeFromFirstPost)}
             markPostAsSolutionCB={() => ()}
+            unmarkPostAsSolutionCB={() => ()}
             archivePostCB={() => archiveTopic(community)}
-          />
+            topicSolutionId={topicSolutionId(state.replies)}
+          />}
         </div>
         <h5 className="pt-4 pb-2 lg:ml-14 border-b">
           {Inflector.pluralize(
@@ -471,9 +505,11 @@ let make = (
               updatePostCB={updateReply(send)}
               addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
               markPostAsSolutionCB={() => send(MarkReplyAsSolution(Post.id(reply)))}
+              unmarkPostAsSolutionCB={() => send(UnmarkReplyAsSolution)}
               removePostLikeCB={() => send(RemoveLikeFromReply(reply))}
               addPostLikeCB={() => send(LikeReply(reply))}
               archivePostCB={() => send(ArchivePost(Post.id(reply)))}
+              topicSolutionId={topicSolutionId(state.replies)}
             />
           </div>
         )

@@ -3,7 +3,7 @@ class SimilarTopicsResolver < ApplicationQuery
   property :community_id
 
   def similar_topics
-    topics = community.topics.where('created_at > ?', 6.months.ago).search_by_title(title_for_search).limit(5)
+    topics = community.topics.where('created_at > ?', 1.year.ago).search_by_title(title_for_search).limit(5)
     ActiveRecord::Precounter.new(topics).precount(:replies)
   end
 

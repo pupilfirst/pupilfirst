@@ -162,7 +162,7 @@ feature 'Automatic issuance of certificates', js: true do
 
           # Switch to the review interface and set a fail grade for it.
           visit review_timeline_event_path(target_l2_2.timeline_events.last)
-          find("div[title='Bad']").click
+          find("button[title='Bad']").click
           click_button 'Save grades'
 
           expect(page).to have_text('The submission has been marked as reviewed')
@@ -172,7 +172,7 @@ feature 'Automatic issuance of certificates', js: true do
 
           # Undo the grading and set a pass grade.
           accept_confirm { click_button('Undo Grading') }
-          find("div[title='Good']").click
+          find("button[title='Good']").click
           click_button 'Save grades'
 
           expect(page).to have_text('The submission has been marked as reviewed')
@@ -259,8 +259,8 @@ feature 'Automatic issuance of certificates', js: true do
       scenario 'student resubmits the final target' do
         sign_in_user coach.user, referrer: review_timeline_event_path(@resubmission)
 
-        within("div[aria-label='submissions-overlay-card-#{@resubmission.id}']") do
-          find("div[title='Good']").click
+        within("div[data-submission-id='#{@resubmission.id}']") do
+          find("button[title='Good']").click
         end
 
         click_button 'Save grades'

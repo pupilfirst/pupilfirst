@@ -1,5 +1,5 @@
 module Course = CurriculumEditor__Course
-module EvaluationCriteria = CurriculumEditor__EvaluationCriteria
+module EvaluationCriterion = CurriculumEditor__EvaluationCriterion
 module Level = CurriculumEditor__Level
 module TargetGroup = CurriculumEditor__TargetGroup
 module Target = CurriculumEditor__Target
@@ -8,3 +8,4 @@ module QuizQuestion = CurriculumEditor__QuizQuestion
 module TargetDetails = CurriculumEditor__TargetDetails
 module Version = CurriculumEditor__Version
 module ChecklistItem = TargetChecklistItem
+module VimeoPlan = CurriculumEditor__VimeoPlan

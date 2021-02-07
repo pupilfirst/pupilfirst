@@ -31,13 +31,13 @@ module Applicants
       user.regenerate_login_token if user.login_token.blank?
       user.update!(name: @applicant.name)
 
-      startup = Startup.create!(name: @applicant.name, level: first_level)
+      # Create the team and tag it.
+      team = Startup.create!(name: @applicant.name, level: first_level)
+      team.tag_list.add(tag)
+      team.save!
 
-      # Finally, create a student profile for the user and tag it.
-      student = Founder.create!(user: user, startup: startup)
-      student.tag_list.add(tag)
-      student.save!
-      student
+      # Finally, create a student profile for the user.
+      Founder.create!(user: user, startup: team)
     end
 
     def school

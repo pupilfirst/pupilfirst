@@ -123,5 +123,11 @@ module Types
       argument :sort_direction, Types::SortDirectionType, required: true
       argument :sort_criterion, Types::TopicSortCriterionType, required: true
     end
+
+    resolved_field :notifications, Types::NotificationType.connection_type, null: false do
+      argument :search, String, required: false
+      argument :status, Types::NotificationStatusType, required: false
+      argument :event, Types::NotificationEventType, required: false
+    end
   end
 end

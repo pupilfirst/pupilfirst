@@ -38,6 +38,7 @@ feature 'Community', js: true do
     create :faculty_course_enrollment, faculty: coach, course: course
     create :community_course_connection, course: course, community: community
     create :community_course_connection, course: course_2, community: community
+    create :topic_subscription, topic: topic_1, user: coach.user
   end
 
   scenario 'user who is not logged in tries to visit community' do
@@ -148,6 +149,8 @@ feature 'Community', js: true do
     new_reply = topic_1.replies.find_by(post_number: 3)
     expect(new_reply.body).to eq(reply_body)
 
+    expect(Notification.last.notifiable).to eq(new_reply)
+
     # can edit his reply
     find("div[aria-label='Options for post #{new_reply.id}']").click
     click_button 'Edit Reply'
@@ -179,6 +182,8 @@ feature 'Community', js: true do
 
     expect(page).not_to have_text(reply_body_for_edit)
     expect(new_reply.reload.archived_at).to_not eq(nil)
+    # Notifications created for the post must be deleted
+    expect(Notification.count).to eq(0)
 
     # can add reply to another post
     find("button[aria-label='Add reply to post #{reply_1.id}']").click
@@ -208,12 +213,12 @@ feature 'Community', js: true do
     expect(page).to have_text('This is a reply to another post', count: 2)
 
     # can like and unlike a reply
-    find("div[aria-label='Like post #{reply_1.id}']").click
-    expect(page).to have_selector("div[aria-label='Unlike post #{reply_1.id}']")
+    find("button[aria-label='Like post #{reply_1.id}']").click
+    expect(page).to have_selector("button[aria-label='Unlike post #{reply_1.id}']")
     expect(reply_1.post_likes.where(user: student_2.user).count).to eq(1)
 
-    find("div[aria-label='Unlike post #{reply_1.id}']").click
-    expect(page).to have_selector("div[aria-label='Like post #{reply_1.id}']")
+    find("button[aria-label='Unlike post #{reply_1.id}']").click
+    expect(page).to have_selector("button[aria-label='Like post #{reply_1.id}']")
     expect(reply_1.post_likes.where(user: student_2.user).count).to eq(0)
   end
 
@@ -261,7 +266,7 @@ feature 'Community', js: true do
     expect(page).to have_text('Edit Topic')
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
     expect(page).to have_text('Edit Post')
-    expect(page).to have_text('Delete Post')
+    expect(page).to have_text('Delete Topic')
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
 
     # Faculty can edit or delete replies
@@ -294,9 +299,8 @@ feature 'Community', js: true do
     click_link 'Back to Post'
 
     # can mark a reply as solution
-    find("div[aria-label='Options for post #{reply_1.id}']").click
-    click_button 'Mark as solution'
     within("div#post-show-#{reply_1.id}") do
+      accept_confirm { find("button[aria-label='Mark as solution']").click }
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
     end
 
@@ -307,9 +311,8 @@ feature 'Community', js: true do
   scenario 'topic creator can mark a post as solution' do
     sign_in_user(student_1.user, referrer: topic_path(topic_1))
 
-    find("div[aria-label='Options for post #{reply_1.id}']").click
-    click_button 'Mark as solution'
     within("div#post-show-#{reply_1.id}") do
+      accept_confirm { find("button[aria-label='Mark as solution']").click }
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
     end
   end
@@ -319,7 +322,7 @@ feature 'Community', js: true do
 
     # When the topic has a reply, the first post won't have the delete option.
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
-    expect(page).not_to have_button('Delete Post')
+    expect(page).not_to have_button('Delete Topic')
 
     # So, let's delete the sole reply.
     find("div[aria-label='Options for post #{reply_1.id}']").click
@@ -330,7 +333,7 @@ feature 'Community', js: true do
 
     # This should make the delete option visible on the first post.
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
-    accept_confirm { click_button('Delete Post') }
+    accept_confirm { click_button('Delete Topic') }
 
     # Student should be back on the community main page.
     expect(page).to have_text(topic_2.title)
@@ -362,9 +365,9 @@ feature 'Community', js: true do
     sign_in_user(coach.user, referrer: topic_path(topic_1))
 
     find("div[aria-label='Options for post #{reply_1.id}']").click
-    click_button 'Mark as solution'
 
     within("div#post-show-#{reply_1.id}") do
+      accept_confirm { find("button[aria-label='Mark as solution']").click }
       expect(page).to have_selector("div[aria-label='Marked as solution icon']")
     end
 
@@ -392,21 +395,37 @@ feature 'Community', js: true do
 
   scenario 'user searches for topics in community' do
     # Let's set the titles for both topics to completely different sentences to avoid confusing the fuzzy search algo.
-    topic_1.update!(title: 'Hello World')
-    topic_2.update!(title: 'Completely Different Sentence')
+    topic_1.update!(title: 'Complex sentence with certain words')
+    topic_2.update!(title: 'Completely Different Sequence')
+    create :post, topic: topic_3, creator: student_1.user, post_number: 2, body: 'Another Complex Sentence'
 
     sign_in_user(coach.user, referrer: community_path(community))
 
     expect(page).to have_text(topic_2.title)
 
-    search_string = topic_1.title[0..9].strip
+    fill_in 'filter', with: 'complex sentence'
 
-    fill_in 'filter', with: search_string
-
-    click_button "Pick Topic Title: #{search_string}"
+    click_button "Search: complex sentence"
 
     expect(page).to_not have_text(topic_2.title)
     expect(page).to have_text(topic_1.title)
+    expect(page).to have_text(topic_3.title)
+  end
+
+  scenario 'user plays around with subscription' do
+    sign_in_user(student_1.user, referrer: topic_path(topic_1))
+
+    expect(page).to have_text(topic_1.title)
+
+    # can subscribe to a topic
+    click_button 'Subscribe'
+    expect(page).to have_text('Unsubscribe')
+    expect(topic_1.subscribers).to include(student_1.user)
+
+    # can Unsubscribe
+    click_button 'Unsubscribe'
+    expect(page).to have_text('Subscribe')
+    expect(topic_1.subscribers).not_to include(student_1.user)
   end
 
   context 'when a topic has a archived replies and likes on its posts' do
@@ -450,8 +469,8 @@ feature 'Community', js: true do
       expect(page).to have_text(reply_1.body)
 
       # Like a post.
-      find("div[aria-label='Like post #{topic_1.first_post.id}']").click
-      expect(page).to have_selector("div[aria-label='Unlike post #{topic_1.first_post.id}']")
+      find("button[aria-label='Like post #{topic_1.first_post.id}']").click
+      expect(page).to have_selector("button[aria-label='Unlike post #{topic_1.first_post.id}']")
 
       # Edit a post.
       find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
@@ -671,6 +690,22 @@ feature 'Community', js: true do
       expect(page).to_not have_text(topic_1.title)
       expect(page).to have_text(topic_2.title)
     end
+
+    scenario 'user visits show page of topic with solution and checks for solution navigation button' do
+      sign_in_user(coach.user, referrer: topic_path(topic_1))
+
+      within("div#post-show-#{topic_1.first_post.id}") do
+        expect(page).to have_link('Go to solution', href: "#post-show-#{reply_marked_as_solution.id}")
+      end
+    end
+
+    scenario 'user visits show page of topic without solution and checks for solution navigation button' do
+      sign_in_user(coach.user, referrer: topic_path(topic_2))
+
+      within("div#post-show-#{topic_2.first_post.id}") do
+        expect(page).to_not have_link('Go to solution')
+      end
+    end
   end
 
   context 'topics have different views, creation date and last activity time' do
@@ -737,6 +772,40 @@ feature 'Community', js: true do
     end
   end
 
+  context 'solution exists for a topic' do
+    let!(:reply_1) { create :post, topic: topic_1, creator: student_1.user, post_number: 2 }
+    let!(:reply_2) { create :post, topic: topic_1, creator: student_2.user, post_number: 3, solution: true }
+
+    scenario "a moderator can unmark the current post as solution and mark a new solution" do
+      sign_in_user(coach.user, referrer: community_path(community))
+
+      click_link topic_1.title
+
+      within("div#post-show-#{reply_1.id}") do
+        expect(page).to_not have_selector("button[aria-label='Mark as solution']")
+      end
+
+      within("div#post-show-#{reply_2.id}") do
+        accept_confirm { find("div[aria-label='Marked as solution icon']").click }
+      end
+
+      expect(page).to have_text('Reply unmarked as solution')
+      dismiss_notification
+
+      expect(reply_2.reload.solution).to eq(false)
+
+      # change the marked solution
+
+      within("div#post-show-#{reply_1.id}") do
+        accept_confirm { find("button[aria-label='Mark as solution']").click }
+      end
+
+      dismiss_notification
+
+      expect(reply_1.reload.solution).to eq(true)
+    end
+  end
+
   context "when the user is a coach who isn't enrolled in one of the community's connected courses" do
     before do
       CommunityCourseConnection.destroy_all
@@ -748,10 +817,8 @@ feature 'Community', js: true do
       click_link topic_1.title
 
       # Can mark a reply as solution.
-      find("div[aria-label='Options for post #{reply_1.id}']").click
-      click_button 'Mark as solution'
-
       within("div#post-show-#{reply_1.id}") do
+        accept_confirm { find("button[aria-label='Mark as solution']").click }
         expect(page).to have_selector("div[aria-label='Marked as solution icon']")
       end
     end

@@ -250,39 +250,39 @@ feature "Coach's review interface" do
       end
 
       # Check current ordering of pending items
-      expect(find("#submissions a:nth-child(1)")).to have_content(submission_l1_t1.title)
-      expect(find("#submissions a:nth-child(2)")).to have_content(submission_l2_t2.title)
-      expect(find("#submissions a:nth-child(3)")).to have_content(submission_l3_t3.title)
-
-      # Swap the ordering of pending items
-      click_button('toggle-sort-order')
-
       expect(find("#submissions a:nth-child(3)")).to have_content(submission_l1_t1.title)
       expect(find("#submissions a:nth-child(2)")).to have_content(submission_l2_t2.title)
       expect(find("#submissions a:nth-child(1)")).to have_content(submission_l3_t3.title)
 
+      # Swap the ordering of pending items
+      click_button('toggle-sort-order')
+
+      expect(find("#submissions a:nth-child(1)")).to have_content(submission_l1_t1.title)
+      expect(find("#submissions a:nth-child(2)")).to have_content(submission_l2_t2.title)
+      expect(find("#submissions a:nth-child(3)")).to have_content(submission_l3_t3.title)
+
       # Switch to reviewed tab and check sorting
       click_button 'Reviewed'
 
-      expect(find("#submissions a:nth-child(1)")).to have_content(submission_l1_t2.title)
-      expect(find("#submissions a:nth-child(2)")).to have_content(team_submission.title)
+      expect(find("#submissions a:nth-child(1)")).to have_content(submission_l1_t3.title)
+      expect(find("#submissions a:nth-child(2)")).to have_content(submission_l2_t3.title)
 
       click_button('toggle-sort-order')
 
-      expect(find("#submissions a:nth-child(1)")).to have_content(submission_l1_t3.title)
-      expect(find("#submissions a:nth-child(2)")).to have_content(submission_l2_t3.title)
+      expect(find("#submissions a:nth-child(1)")).to have_content(submission_l1_t2.title)
+      expect(find("#submissions a:nth-child(2)")).to have_content(team_submission.title)
 
       # Change sorting criterion in reviewed tab
       click_button 'Submitted At'
       click_button 'Reviewed At'
 
-      expect(find("#submissions a:nth-child(1)")).to have_content(team_submission.title)
-      expect(find("#submissions a:nth-child(2)")).to have_content(submission_l2_t3.title)
+      expect(find("#submissions a:nth-child(1)")).to have_content(submission_l1_t3.title)
+      expect(find("#submissions a:nth-child(2)")).to have_content(submission_l1_t2.title)
 
       click_button('toggle-sort-order')
 
-      expect(find("#submissions a:nth-child(1)")).to have_content(submission_l1_t3.title)
-      expect(find("#submissions a:nth-child(2)")).to have_content(submission_l1_t2.title)
+      expect(find("#submissions a:nth-child(1)")).to have_content(team_submission.title)
+      expect(find("#submissions a:nth-child(2)")).to have_content(submission_l2_t3.title)
     end
 
     scenario 'coach can access submissions from review dashboard', js: true do
@@ -342,7 +342,7 @@ feature "Coach's review interface" do
   context 'when there are over 25 submissions' do
     let(:student_l1) { team_l1.founders.first }
     let(:student_l3) { team_l3.founders.first }
-    let(:earliest_submitted) { student_l1.timeline_events.order(created_at: :ASC).first }
+    let(:latest_submitted) { student_l1.timeline_events.order(created_at: :DESC).first }
     let(:earliest_reviewed) { student_l3.timeline_events.order(evaluated_at: :ASC).first }
 
     before do
@@ -370,7 +370,7 @@ feature "Coach's review interface" do
 
       expect(page).to have_text(target_l1.title, count: 30)
       expect(page).not_to have_button('Load more...')
-      expect(find("#submissions a:last-child")['href']).to end_with("/submissions/#{earliest_submitted.id}/review")
+      expect(find("#submissions a:last-child")['href']).to end_with("/submissions/#{latest_submitted.id}/review")
 
       click_button 'Reviewed'
 

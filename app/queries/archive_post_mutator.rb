@@ -6,9 +6,11 @@ class ArchivePostMutator < ApplicationQuery
   def archive_post
     Post.transaction do
       post.update!(archived_at: Time.zone.now, archiver: current_user)
+      Notifications::DeleteService.new(post).execute
 
       if topic.first_post.id == post.id
         topic.update!(archived: true)
+        Notifications::DeleteService.new(topic).execute
       end
     end
   end

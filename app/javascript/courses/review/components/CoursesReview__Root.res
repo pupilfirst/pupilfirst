@@ -105,8 +105,8 @@ let reducer = (state, action) =>
         )
       },
     }
-  | SelectPendingTab => {...state, selectedTab: #Pending}
-  | SelectReviewedTab => {...state, selectedTab: #Reviewed}
+  | SelectPendingTab => {...state, selectedTab: #Pending, sortDirection: #Ascending}
+  | SelectReviewedTab => {...state, selectedTab: #Reviewed, sortDirection: #Descending}
   | SelectCoach(coach) => {
       ...state,
       selectedCoach: Some(coach),
@@ -151,7 +151,7 @@ let computeInitialState = currentTeamCoach => {
   selectedCoach: currentTeamCoach,
   reviewedTabSortCriterion: #SubmittedAt,
   filterString: "",
-  sortDirection: #Descending,
+  sortDirection: #Ascending,
   reloadAt: Js.Date.make(),
 }
 
@@ -182,7 +182,7 @@ module Selectable = {
 
   let label = t =>
     switch t {
-    | Level(level) => Some("Level " ++ (level |> Level.number |> string_of_int))
+    | Level(level) => Some(LevelLabel.format(level |> Level.number |> string_of_int))
     | AssignedToCoach(_) => Some("Assigned to")
     }
 
@@ -196,7 +196,7 @@ module Selectable = {
   let searchString = t =>
     switch t {
     | Level(level) =>
-      "level " ++ ((level |> Level.number |> string_of_int) ++ (" " ++ (level |> Level.name)))
+      LevelLabel.searchString(level |> Level.number |> string_of_int, level |> Level.name)
     | AssignedToCoach(coach, currentCoachId) =>
       if coach |> Coach.id == currentCoachId {
         (coach |> Coach.name) ++ " assigned to me"

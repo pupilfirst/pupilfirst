@@ -3,6 +3,8 @@ CommitMsg:
     enabled: false
 
 PreCommit:
+  CaseConflicts:
+    enabled: false
   RuboCop:
     enabled: true
     on_warn: fail
@@ -15,5 +17,5 @@ PreCommit:
 
   Stylelint:
     enabled: true
-    command: ['yarn', 'run', '--silent', 'stylelint']
+    command: [ 'yarn', 'run', '--silent', 'stylelint' ]
     required_executable: './node_modules/stylelint/bin/stylelint.js'

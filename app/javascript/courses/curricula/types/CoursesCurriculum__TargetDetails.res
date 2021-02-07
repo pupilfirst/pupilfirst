@@ -4,15 +4,15 @@ type navigation = {
 }
 
 type t = {
-  pendingUserIds: list<string>,
-  submissions: list<CoursesCurriculum__Submission.t>,
-  feedback: list<CoursesCurriculum__Feedback.t>,
-  quizQuestions: list<CoursesCurriculum__QuizQuestion.t>,
-  contentBlocks: list<ContentBlock.t>,
-  communities: list<CoursesCurriculum__Community.t>,
+  pendingUserIds: array<string>,
+  submissions: array<CoursesCurriculum__Submission.t>,
+  feedback: array<CoursesCurriculum__Feedback.t>,
+  quizQuestions: array<CoursesCurriculum__QuizQuestion.t>,
+  contentBlocks: array<ContentBlock.t>,
+  communities: array<CoursesCurriculum__Community.t>,
   linkToComplete: option<string>,
   evaluated: bool,
-  grading: list<CoursesCurriculum__Grade.t>,
+  grading: array<CoursesCurriculum__Grade.t>,
   completionInstructions: option<string>,
   navigation: navigation,
   checklist: array<TargetChecklistItem.t>,
@@ -42,15 +42,15 @@ let decodeNavigation = json => {
 let decode = json => {
   open Json.Decode
   {
-    pendingUserIds: json |> field("pendingUserIds", list(string)),
-    submissions: json |> field("submissions", list(CoursesCurriculum__Submission.decode)),
-    feedback: json |> field("feedback", list(CoursesCurriculum__Feedback.decode)),
-    quizQuestions: json |> field("quizQuestions", list(CoursesCurriculum__QuizQuestion.decode)),
-    contentBlocks: json |> field("contentBlocks", list(ContentBlock.decode)),
-    communities: json |> field("communities", list(CoursesCurriculum__Community.decode)),
+    pendingUserIds: json |> field("pendingUserIds", array(string)),
+    submissions: json |> field("submissions", array(CoursesCurriculum__Submission.decode)),
+    feedback: json |> field("feedback", array(CoursesCurriculum__Feedback.decode)),
+    quizQuestions: json |> field("quizQuestions", array(CoursesCurriculum__QuizQuestion.decode)),
+    contentBlocks: json |> field("contentBlocks", array(ContentBlock.decode)),
+    communities: json |> field("communities", array(CoursesCurriculum__Community.decode)),
     linkToComplete: json |> field("linkToComplete", nullable(string)) |> Js.Null.toOption,
     evaluated: json |> field("evaluated", bool),
-    grading: json |> field("grading", list(CoursesCurriculum__Grade.decode)),
+    grading: json |> field("grading", array(CoursesCurriculum__Grade.decode)),
     completionInstructions: json
     |> field("completionInstructions", nullable(string))
     |> Js.Null.toOption,
@@ -61,11 +61,13 @@ let decode = json => {
 
 let computeCompletionType = targetDetails => {
   let evaluated = targetDetails.evaluated
-  let hasQuiz = targetDetails.quizQuestions |> ListUtils.isNotEmpty
+  let hasQuiz = Js.Array.length(targetDetails.quizQuestions) > 0
+
   let hasLinkToComplete = switch targetDetails.linkToComplete {
   | Some(_) => true
   | None => false
   }
+
   switch (evaluated, hasQuiz, hasLinkToComplete) {
   | (true, _, _) => Evaluated
   | (false, true, _) => TakeQuiz
@@ -82,11 +84,13 @@ let linkToComplete = t => t.linkToComplete
 let completionInstructions = t => t.completionInstructions
 
 let grades = (submissionId, t) =>
-  t.grading |> List.filter(grade => grade |> CoursesCurriculum__Grade.submissionId == submissionId)
+  t.grading |> Js.Array.filter(grade =>
+    grade |> CoursesCurriculum__Grade.submissionId == submissionId
+  )
 
 let addSubmission = (submission, t) => {
   ...t,
-  submissions: list{submission, ...t |> submissions},
+  submissions: Js.Array.concat([submission], submissions(t)),
 }
 
-let clearPendingUserIds = t => {...t, pendingUserIds: list{}}
+let clearPendingUserIds = t => {...t, pendingUserIds: []}

@@ -22,6 +22,10 @@ class CreateTopicMutator < ApplicationQuery
         creator: current_user
       )
 
+      create_subscribers(topic)
+
+      Notifications::TopicCreatedJob.perform_later(current_user.id, topic.id)
+
       topic
     end
   end
@@ -38,6 +42,14 @@ class CreateTopicMutator < ApplicationQuery
     return if topic_category_id.blank?
 
     community.topic_categories.find_by(id: topic_category_id)
+  end
+
+  def create_subscribers(topic)
+    users = User.joins([faculty: :startups]).where(startups: { id: current_user.startups }).distinct + [current_user]
+
+    users.each do |user|
+      TopicSubscription.create!(user: user, topic: topic)
+    end
   end
 
   def target

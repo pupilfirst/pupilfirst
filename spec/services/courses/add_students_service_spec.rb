@@ -38,6 +38,19 @@ describe Courses::AddStudentsService do
       expect(new_team.founders.map { |f| f.email }).to match_array([student_3_data.email, student_4_data.email])
     end
 
+    it 'returns the IDs of newly added students' do
+      students_data = [student_1_data, student_2_data, student_3_data, student_4_data]
+
+      response = subject.add(students_data)
+
+      student_ids = Founder.joins(:user).
+        where(users: {email: [student_1_data.email, student_2_data.email, student_3_data.email, student_4_data.email]}).
+        pluck(:id)
+
+      expect(response.length).to eq(4)
+      expect(response).to contain_exactly(*student_ids)
+    end
+
     context 'course already has students' do
       let!(:persisted_team) { create :startup, level: level_1 }
       let!(:student) { persisted_team.founders.first }
@@ -55,10 +68,10 @@ describe Courses::AddStudentsService do
       let(:name) { Faker::Name.name }
       let(:title) { Faker::Job.title }
       let(:affiliation) { Faker::Company.name }
-      let!(:user) { create :user, name: name, title: title, affiliation: affiliation }
+      let!(:user) { create :user, name: name, email: 'user@example.com', title: title, affiliation: affiliation }
 
       it 'onboards the student without altering their name, title or affiliation' do
-        students_data = [OpenStruct.new(name: Faker::Name.name, email: user.email)]
+        students_data = [OpenStruct.new(name: Faker::Name.name, email: 'User@example.com')]
 
         expect { subject.add(students_data) }.to change { course.founders.count }.by(1)
         expect(user.reload.name).to eq(name)

@@ -11,8 +11,8 @@ let t = I18n.t(~scope="components.CoursesCurriculum")
 type state = {
   selectedLevelId: string,
   showLevelZero: bool,
-  latestSubmissions: list<LatestSubmission.t>,
-  statusOfTargets: list<TargetStatus.t>,
+  latestSubmissions: array<LatestSubmission.t>,
+  statusOfTargets: array<TargetStatus.t>,
   notice: Notice.t,
   levelUpEligibility: LevelUpEligibility.t,
 }
@@ -26,7 +26,7 @@ let targetStatusClasses = targetStatus => {
 let rendertarget = (target, statusOfTargets) => {
   let targetId = target |> Target.id
   let targetStatus =
-    statusOfTargets |> ListUtils.unsafeFind(
+    statusOfTargets |> ArrayUtils.unsafeFind(
       ts => ts |> TargetStatus.targetId == targetId,
       "Could not find targetStatus for listed target with ID " ++ targetId,
     )
@@ -48,7 +48,7 @@ let rendertarget = (target, statusOfTargets) => {
 
 let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
   let targetGroupId = targetGroup |> TargetGroup.id
-  let targets = targets |> List.filter(t => t |> Target.targetGroupId == targetGroupId)
+  let targets = targets |> Js.Array.filter(t => t |> Target.targetGroupId == targetGroupId)
 
   <div
     key={"target-group-" ++ targetGroupId}
@@ -58,7 +58,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
       {targetGroup |> TargetGroup.milestone
         ? <div
             className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
-            {"Milestone targets" |> str}
+            {t("milestone_targets") |> str}
           </div>
         : React.null}
       <div className="p-6 pt-5">
@@ -72,9 +72,8 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
         />
       </div>
       {targets
-      |> List.sort((t1, t2) => (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex))
-      |> List.map(target => rendertarget(target, statusOfTargets))
-      |> Array.of_list
+      |> ArrayUtils.copyAndSort((t1, t2) => (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex))
+      |> Js.Array.map(target => rendertarget(target, statusOfTargets))
       |> React.array}
     </div>
   </div>
@@ -82,7 +81,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
 
 let addSubmission = (setState, latestSubmission, levelUpEligibility) => setState(state => {
     let withoutSubmissionForThisTarget =
-      state.latestSubmissions |> List.filter(s =>
+      state.latestSubmissions |> Js.Array.filter(s =>
         s |> LatestSubmission.targetId != (latestSubmission |> LatestSubmission.targetId)
       )
 
@@ -90,20 +89,20 @@ let addSubmission = (setState, latestSubmission, levelUpEligibility) => setState
 
     {
       ...state,
-      latestSubmissions: list{latestSubmission, ...withoutSubmissionForThisTarget},
+      latestSubmissions: Js.Array.concat([latestSubmission], withoutSubmissionForThisTarget),
       levelUpEligibility: eligibility,
     }
   })
 
 let handleLockedLevel = level =>
   <div className="max-w-xl mx-auto text-center mt-4">
-    <div className="text-2xl font-bold px-3"> {"Level Locked" |> str} </div>
+    <div className="text-2xl font-bold px-3"> {t("level_locked") |> str} </div>
     <img className="max-w-sm mx-auto" src=levelLockedImage />
     {switch level |> Level.unlockAt {
     | Some(date) =>
       let dateString = date->DateFns.format("MMMM d, yyyy")
       <div className="font-semibold text-md px-3">
-        <p> {"The level is currently locked!" |> str} </p>
+        <p> {t("level_locked_notice") |> str} </p>
         <p> {"You can access the content on " ++ (dateString ++ ".") |> str} </p>
       </div>
     | None => React.null
@@ -112,18 +111,20 @@ let handleLockedLevel = level =>
 
 let statusOfMilestoneTargets = (targetGroups, targets, level, statusOfTargets) => {
   let targetGroupsInLevel =
-    targetGroups |> List.filter(tg => tg |> TargetGroup.levelId == (level |> Level.id))
+    targetGroups |> Js.Array.filter(tg => tg |> TargetGroup.levelId == (level |> Level.id))
   let milestoneTargetGroupIds =
     targetGroupsInLevel
-    |> List.filter(tg => tg |> TargetGroup.milestone)
-    |> List.map(tg => tg |> TargetGroup.id)
+    |> Js.Array.filter(tg => tg |> TargetGroup.milestone)
+    |> Js.Array.map(tg => tg |> TargetGroup.id)
 
   let milestoneTargetIds =
     targets
-    |> List.filter(t => (t |> Target.targetGroupId)->List.mem(milestoneTargetGroupIds))
-    |> List.map(t => t |> Target.id)
+    |> Js.Array.filter(t => milestoneTargetGroupIds |> Js.Array.includes(Target.targetGroupId(t)))
+    |> Js.Array.map(t => t |> Target.id)
 
-  statusOfTargets |> List.filter(ts => (ts |> TargetStatus.targetId)->List.mem(milestoneTargetIds))
+  statusOfTargets |> Js.Array.filter(ts =>
+    milestoneTargetIds |> Js.Array.includes(TargetStatus.targetId(ts))
+  )
 }
 
 let issuedCertificate = course =>
@@ -153,8 +154,12 @@ let computeLevelUp = (
   let progressionBehavior = course |> Course.progressionBehavior
   let currentLevelNumber = teamLevel |> Level.number
 
-  let statusOfCurrentMilestoneTargets =
-    statusOfMilestoneTargets(targetGroups, targets, teamLevel, statusOfTargets)->Array.of_list
+  let statusOfCurrentMilestoneTargets = statusOfMilestoneTargets(
+    targetGroups,
+    targets,
+    teamLevel,
+    statusOfTargets,
+  )
 
   switch levelUpEligibility {
   | LevelUpEligibility.Eligible => Notice.LevelUp
@@ -216,8 +221,8 @@ let computeNotice = (
 
 let navigationLink = (direction, level, setState) => {
   let (leftIcon, longText, shortText, rightIcon) = switch direction {
-  | #Previous => (Some("fa-arrow-left"), "Previous Level", "Previous", None)
-  | #Next => (None, "Next Level", "Next", Some("fa-arrow-right"))
+  | #Previous => (Some("fa-arrow-left"), t("nav_previous_level"), "Previous", None)
+  | #Next => (None, t("nav_next_level"), "Next", Some("fa-arrow-right"))
   }
 
   let arrow = icon =>
@@ -283,7 +288,7 @@ let make = (
     targetId
     ->StringUtils.paramToId
     ->Belt.Option.map(targetId =>
-      targets |> ListUtils.unsafeFind(
+      targets |> ArrayUtils.unsafeFind(
         t => t |> Target.id == targetId,
         "Could not find selectedTarget with ID " ++ targetId,
       )
@@ -299,11 +304,11 @@ let make = (
    * used to determine currentLevelId, which is the actual level whose contents
    * are shown on the page. */
 
-  let levelZero = levels |> ListUtils.findOpt(l => l |> Level.number == 0)
+  let levelZero = levels |> Js.Array.find(l => l |> Level.number == 0)
   let teamLevelId = team |> Team.levelId
 
   let teamLevel =
-    levels |> ListUtils.unsafeFind(
+    levels |> ArrayUtils.unsafeFind(
       l => l |> Level.id == teamLevelId,
       "Could not find teamLevel with ID " ++ teamLevelId,
     )
@@ -313,7 +318,7 @@ let make = (
     let targetGroupId = target |> Target.targetGroupId
 
     let targetGroup =
-      targetGroups |> ListUtils.unsafeFind(
+      targetGroups |> ArrayUtils.unsafeFind(
         t => t |> TargetGroup.id == targetGroupId,
         "Could not find targetGroup with ID " ++ targetGroupId,
       )
@@ -339,7 +344,7 @@ let make = (
 
     {
       selectedLevelId: switch (preview, targetLevelId, levelZero) {
-      | (true, None, None) => levels |> Level.first |> Level.id
+      | (true, None, None) => Level.first(levels) |> Level.id
       | (_, Some(targetLevelId), Some(levelZero)) =>
         levelZero |> Level.id == targetLevelId ? teamLevelId : targetLevelId
       | (_, Some(targetLevelId), None) => targetLevelId
@@ -375,13 +380,13 @@ let make = (
   }
 
   let currentLevel =
-    levels |> ListUtils.unsafeFind(
+    levels |> ArrayUtils.unsafeFind(
       l => l |> Level.id == currentLevelId,
       "Could not find currentLevel with id " ++ currentLevelId,
     )
 
   let selectedLevel =
-    levels |> ListUtils.unsafeFind(
+    levels |> ArrayUtils.unsafeFind(
       l => l |> Level.id == state.selectedLevelId,
       "Could not find selectedLevel with id " ++ state.selectedLevelId,
     )
@@ -411,13 +416,13 @@ let make = (
   }, [state.latestSubmissions])
 
   let targetGroupsInLevel =
-    targetGroups |> List.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
+    targetGroups |> Js.Array.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
 
   <div className="bg-gray-100 pt-11 pb-8 -mt-7">
     {switch selectedTarget {
     | Some(target) =>
       let targetStatus =
-        state.statusOfTargets |> ListUtils.unsafeFind(
+        state.statusOfTargets |> ArrayUtils.unsafeFind(
           ts => ts |> TargetStatus.targetId == (target |> Target.id),
           "Could not find targetStatus for selectedTarget with ID " ++ (target |> Target.id),
         )
@@ -442,46 +447,44 @@ let make = (
     {switch state.notice {
     | LevelUp => React.null
     | _anyOtherNotice =>
-      <div className="relative">
-        <CoursesCurriculum__LevelSelector
-          levels
-          teamLevel
-          selectedLevel
-          setSelectedLevelId={selectedLevelId =>
-            setState(state => {...state, selectedLevelId: selectedLevelId})}
-          showLevelZero=state.showLevelZero
-          setShowLevelZero={showLevelZero =>
-            setState(state => {...state, showLevelZero: showLevelZero})}
-          levelZero
-        />
-        {currentLevel |> Level.isLocked && accessLockedLevels
-          ? <div className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto">
-              {"This level is still locked for students, and will be unlocked on " |> str}
-              <strong> {currentLevel |> Level.unlockDateString |> str} </strong>
-              {"." |> str}
-            </div>
-          : React.null}
-        {currentLevel |> Level.isUnlocked || accessLockedLevels
-          ? switch ListUtils.isEmpty(targetGroupsInLevel) {
-            | true =>
-              <div className="mx-auto py-10">
-                <img className="max-w-sm mx-auto" src=levelEmptyImage />
-                <p className="text-center font-semibold text-lg mt-4">
-                  {"There's no published content on this level." |> str}
-                </p>
+      [
+        <div className="relative">
+          <CoursesCurriculum__LevelSelector
+            levels
+            teamLevel
+            selectedLevel
+            setSelectedLevelId={selectedLevelId =>
+              setState(state => {...state, selectedLevelId: selectedLevelId})}
+            showLevelZero=state.showLevelZero
+            setShowLevelZero={showLevelZero =>
+              setState(state => {...state, showLevelZero: showLevelZero})}
+            levelZero
+          />
+          {currentLevel |> Level.isLocked && accessLockedLevels
+            ? <div className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto">
+                {"This level is still locked for students, and will be unlocked on " |> str}
+                <strong> {currentLevel |> Level.unlockDateString |> str} </strong>
+                {"." |> str}
               </div>
-            | false =>
-              targetGroupsInLevel
-              |> TargetGroup.sort
-              |> List.map(targetGroup =>
-                renderTargetGroup(targetGroup, targets, state.statusOfTargets)
-              )
-              |> Array.of_list
-              |> React.array
-            }
-          : handleLockedLevel(currentLevel)}
-      </div>
+            : React.null}
+          {Level.isUnlocked(currentLevel) || accessLockedLevels
+            ? targetGroupsInLevel == []
+                ? <div className="mx-auto py-10">
+                    <img className="max-w-sm mx-auto" src=levelEmptyImage />
+                    <p className="text-center font-semibold text-lg mt-4">
+                      {t("empty_level_content_notice") |> str}
+                    </p>
+                  </div>
+                : targetGroupsInLevel
+                  |> TargetGroup.sort
+                  |> Js.Array.map(targetGroup =>
+                    renderTargetGroup(targetGroup, targets, state.statusOfTargets)
+                  )
+                  |> React.array
+            : handleLockedLevel(currentLevel)}
+        </div>,
+        {state.showLevelZero ? React.null : quickNavigationLinks(levels, selectedLevel, setState)},
+      ] |> React.array
     }}
-    {state.showLevelZero ? React.null : quickNavigationLinks(levels, selectedLevel, setState)}
   </div>
 }

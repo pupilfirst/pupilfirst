@@ -64,7 +64,9 @@ module Targets
     end
 
     def prerequisites_incomplete?
-      passed_prerequisites = @target.prerequisite_targets.joins(timeline_events: :timeline_event_owners).where(
+      applicable_targets = @target.prerequisite_targets.live
+
+      passed_prerequisites = applicable_targets.joins(timeline_events: :timeline_event_owners).where(
         timeline_event_owners: {
           founder_id: @founder.id,
           latest: true
@@ -75,7 +77,7 @@ module Targets
         }
       )
 
-      passed_prerequisites.count != @target.prerequisite_targets.count
+      passed_prerequisites.count != applicable_targets.count
     end
   end
 end

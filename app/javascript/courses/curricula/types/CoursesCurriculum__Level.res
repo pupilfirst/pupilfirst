@@ -28,15 +28,9 @@ let isUnlocked = t =>
 
 let isLocked = t => !(t |> isUnlocked)
 
-let sort = levels => levels |> List.sort((x, y) => x.number - y.number)
+let sort = levels => levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number)
 
-let first = levels =>
-  switch levels |> sort {
-  | list{} =>
-    Rollbar.error("Failed to find the first level from a course's levels.")
-    raise(Not_found)
-  | list{firstLevel, ..._rest} => firstLevel
-  }
+let first = levels => levels->sort->Js.Array.unsafe_get(0)
 
 let unlockDateString = t =>
   switch t.unlockAt {
@@ -47,7 +41,7 @@ let unlockDateString = t =>
   }
 
 let findByLevelNumber = (levels, levelNumber) =>
-  levels |> List.find_opt(l => l.number == levelNumber)
+  levels |> Js.Array.find(l => l.number == levelNumber)
 
 let next = (levels, t) => t.number + 1 |> findByLevelNumber(levels)
 

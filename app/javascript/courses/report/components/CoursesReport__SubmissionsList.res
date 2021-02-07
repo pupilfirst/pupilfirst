@@ -324,7 +324,10 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
               </div>
               <div className="mt-1 ml-px text-xs text-gray-900">
                 <span className="ml-1">
-                  {tc(~variables=[("date", submission |> Submission.createdAtPretty)], "submitted_on") |> str}
+                  {tc(
+                    ~variables=[("date", submission |> Submission.createdAtPretty)],
+                    "submitted_on",
+                  ) |> str}
                 </span>
               </div>
             </div>
@@ -342,7 +345,9 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
                 <div className="inline-block pl-3">
                   {tc("submission_not_considered") |> str}
                   <HelpIcon className="ml-1">
-                    <span dangerouslySetInnerHTML={"__html": tc("submission_not_considered_help")} />
+                    <span
+                      dangerouslySetInnerHTML={"__html": tc("submission_not_considered_help")}
+                    />
                   </HelpIcon>
                 </div>
               </div>
@@ -362,7 +367,7 @@ let showSubmissions = (submissions, levels, teamStudentIds) =>
   submissions |> ArrayUtils.isEmpty
     ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
         <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
-          {tc("no_subbmissions_to_show") |> str}
+          {tc("no_submissions_to_show") |> str}
         </h5>
       </div>
     : showSubmission(submissions, levels, teamStudentIds)

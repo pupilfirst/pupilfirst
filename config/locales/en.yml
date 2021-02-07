@@ -172,7 +172,7 @@ en:
       completed: "Completed"
       pending_review: "Pending Review"
       status: Status
-      sory_by: "Sort by:"
+      sort_by: "Sort by:"
       filter_by_level: Filter by level
       filter_by_level_or_status: Filter by level, or by status
       filter_by_another_level: Filter by another level
@@ -182,7 +182,7 @@ en:
       submission_not_considered: This submission is not considered towards its target's completion.
       submission_not_considered_help: This is a <span className="italic">team</span> target, and this submission is not linked to some members of your team. This can happen if a target is changed after your individual submission, to require a <span className="italic">team</span> submission, or if your team's composition changed after a <span className="italic">team</span> submission was created.
       view: "View "
-      no_subbmissions_to_show: "No submissions to show "
+      no_submissions_to_show: "No submissions to show "
       load_more: Load More...
     CoursesStudents__StudentOverlay:
       access_ended_at: "This student's access to the course ended on %{date}."

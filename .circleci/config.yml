@@ -43,6 +43,7 @@ jobs:
       RAILS_ENV: test
       JAVASCRIPT_DRIVER: headless_chrome
       SPEC_USER_TIME_ZONE: Etc/UTC
+      SPEC_RETRY_COUNT: 2
       ALLOW_EMAIL_SIGN_IN: true
       CAPYBARA_MAX_WAIT_TIME: 7
     steps:

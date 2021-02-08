@@ -29,7 +29,6 @@ Your current version can be found in `Pupilfirst::Application::VERSION`.
   #VAPID_PUBLIC_KEY
   vapid_key.public_key
 
-
   #VAPID_PRIVATE_KEY
   vapid_key.private_key
   ```

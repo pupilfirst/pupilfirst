@@ -21,13 +21,13 @@ type editorAction =
 
 type state = {
   editorAction: editorAction,
-  courses: list<Course.t>,
+  courses: array<Course.t>,
 }
 
 type action =
   | UpdateEditorAction(editorAction)
   | UpdateCourse(Course.t)
-  | UpdateCourses(list<Course.t>)
+  | UpdateCourses(array<Course.t>)
 
 let reducer = (state, action) =>
   switch action {
@@ -68,14 +68,12 @@ let courseLinks = course =>
 
 @react.component
 let make = () => {
-  let (state, send) = React.useReducer(reducer, {editorAction: Hidden, courses: list{}})
+  let (state, send) = React.useReducer(reducer, {editorAction: Hidden, courses: []})
 
   React.useEffect0(() => {
     CoursesQuery.make() |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
-      let courses =
-        result["courses"]
-        |> Js.Array.map(rawCourse => Course.makeFromJs(rawCourse))
-        |> Array.to_list
+      let courses = result["courses"] |> Js.Array.map(rawCourse => Course.makeFromJs(rawCourse))
+
       send(UpdateCourses(courses))
       Js.Promise.resolve()
     }) |> ignore
@@ -87,13 +85,13 @@ let make = () => {
     {switch state.editorAction {
     | Hidden => React.null
     | ShowForm(course) =>
-      <CourseEditor__Form
-        course hideEditorActionCB={hideEditorAction(send)} updateCourseCB={updateCourse(send)}
-      />
+      <SchoolAdmin__EditorDrawer2 closeDrawerCB={hideEditorAction(send)}>
+        <CourseEditor__Form course updateCourseCB={updateCourse(send)} />
+      </SchoolAdmin__EditorDrawer2>
     | ShowCoverImageForm(course) =>
-      <CourseEditor__ImagesForm
-        course updateCourseCB={updateCourse(send)} closeDrawerCB={hideEditorAction(send)}
-      />
+      <SchoolAdmin__EditorDrawer2 closeDrawerCB={hideEditorAction(send)}>
+        <CourseEditor__ImagesForm course updateCourseCB={updateCourse(send)} />
+      </SchoolAdmin__EditorDrawer2>
     }}
     <div className="flex-1 flex flex-col">
       <div className="items-center justify-between max-w-3xl mx-auto mt-8 w-full px-2">
@@ -105,8 +103,7 @@ let make = () => {
         </button>
       </div>
       <div className="px-6 pb-4 mt-5 flex flex-1">
-        <div className="max-w-3xl flex flex-wrap mx-auto w-full">
-          {state.courses |> Course.sort |> List.map(course =>
+        <div className="max-w-3xl flex flex-wrap mx-auto w-full"> {Js.Array.map(course =>
             <div className="px-2 w-1/2" key={course |> Course.id}>
               <div
                 key={course |> Course.id}
@@ -153,8 +150,7 @@ let make = () => {
                 </div>
               </div>
             </div>
-          ) |> Array.of_list |> React.array}
-        </div>
+          , Course.sort(state.courses)) |> React.array} </div>
       </div>
     </div>
   </div>

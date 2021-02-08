@@ -6,7 +6,7 @@ class UnarchiveCourseMutator < ApplicationQuery
   def unarchive_course
     return if course.blank? || course.live?
 
-    content_block.update!(archived_at: nil)
+    course.update!(archived_at: nil)
   end
 
   private

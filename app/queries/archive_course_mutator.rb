@@ -6,7 +6,7 @@ class ArchiveCourseMutator < ApplicationQuery
   def archive_course
     return if course.blank? || course.archived?
 
-    content_block.update!(archived_at: Time.zone.now)
+    course.update!(archived_at: Time.zone.now)
   end
 
   private

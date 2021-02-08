@@ -138,96 +138,95 @@ let reducer = (state, action) =>
   }
 
 @react.component
-let make = (~course, ~updateCourseCB, ~closeDrawerCB) => {
+let make = (~course, ~updateCourseCB) => {
   let (state, send) = React.useReducer(reducer, initialState())
 
   let thumbnail = course |> Course.thumbnail
   let cover = course |> Course.cover
-  <SchoolAdmin__EditorDrawer closeDrawerCB>
-    <form
-      id=formId
-      className="mx-8 pt-8"
-      key="sc-images-editor__form"
-      onSubmit={handleUpdateImages(send, state, course, updateCourseCB)}>
-      <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
-      <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-        {"Course Images" |> str}
-      </h5>
-      <DisablingCover disabled=state.updating>
-        <div key="course-images-editor__thumbnail" className="mt-4">
-          <label
-            className="tracking-wide text-gray-800 text-xs font-semibold"
-            htmlFor="sc-images-editor__logo-on-400-bg-input">
-            {"Thumbnail" |> str}
-          </label>
-          <HelpIcon
-            className="text-xs ml-1"
-            responsiveAlignment=HelpIcon.NonResponsive(AlignLeft)
-            link="https://docs.pupilfirst.com/#/courses?id=course-images">
-            {"The thumbnail will be displayed on the homepage, and here in the admin courses list." |> str}
-          </HelpIcon>
-          <input
-            disabled=state.updating
-            className="hidden"
-            name="course_thumbnail"
-            type_="file"
-            accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-            id="course-images-editor__thumbnail"
-            required=false
-            multiple=false
-            onChange={updateImage(send, false)}
-          />
-          <label className="file-input-label mt-2" htmlFor="course-images-editor__thumbnail">
-            <i className="fas fa-upload" />
-            <span className="ml-2 truncate">
-              {optionalImageLabelText(thumbnail, state.filenameThumb)}
-            </span>
-          </label>
-          <School__InputGroupError
-            message="must be a JPEG / PNG under 2 MB in size" active=state.invalidThumb
-          />
-        </div>
-        <div key="course-images-editor__cover" className="mt-4">
-          <label
-            className="tracking-wide text-gray-800 text-xs font-semibold"
-            htmlFor="sc-images-editor__logo-on-400-bg-input">
-            {"Cover Image" |> str}
-          </label>
-          <HelpIcon
-            className="text-xs ml-1"
-            responsiveAlignment=HelpIcon.NonResponsive(AlignLeft)
-            link="https://docs.pupilfirst.com/#/courses?id=course-images">
-            {"The cover will be displayed at the top of all student pages within the course, and as the header of some course emails." |> str}
-          </HelpIcon>
-          <input
-            disabled=state.updating
-            className="hidden"
-            name="course_cover"
-            type_="file"
-            accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-            id="course-images-editor__cover"
-            required=false
-            multiple=false
-            onChange={updateImage(send, true)}
-          />
-          <label className="file-input-label mt-2" htmlFor="course-images-editor__cover">
-            <i className="fas fa-upload" />
-            <span className="ml-2 truncate">
-              {optionalImageLabelText(cover, state.filenameCover)}
-            </span>
-          </label>
-          <School__InputGroupError
-            message="must be a JPEG / PNG under 2 MB in size" active=state.invalidCover
-          />
-        </div>
-        <button
-          type_="submit"
-          key="sc-images-editor__update-button"
-          disabled={updateButtonDisabled(state)}
-          className="btn btn-primary btn-large mt-6">
-          {updateButtonText(state.updating) |> str}
-        </button>
-      </DisablingCover>
-    </form>
-  </SchoolAdmin__EditorDrawer>
+
+  <form
+    id=formId
+    className="mx-8 pt-8"
+    key="sc-images-editor__form"
+    onSubmit={handleUpdateImages(send, state, course, updateCourseCB)}>
+    <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
+    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+      {"Course Images" |> str}
+    </h5>
+    <DisablingCover disabled=state.updating>
+      <div key="course-images-editor__thumbnail" className="mt-4">
+        <label
+          className="tracking-wide text-gray-800 text-xs font-semibold"
+          htmlFor="sc-images-editor__logo-on-400-bg-input">
+          {"Thumbnail" |> str}
+        </label>
+        <HelpIcon
+          className="text-xs ml-1"
+          responsiveAlignment=HelpIcon.NonResponsive(AlignLeft)
+          link="https://docs.pupilfirst.com/#/courses?id=course-images">
+          {"The thumbnail will be displayed on the homepage, and here in the admin courses list." |> str}
+        </HelpIcon>
+        <input
+          disabled=state.updating
+          className="hidden"
+          name="course_thumbnail"
+          type_="file"
+          accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+          id="course-images-editor__thumbnail"
+          required=false
+          multiple=false
+          onChange={updateImage(send, false)}
+        />
+        <label className="file-input-label mt-2" htmlFor="course-images-editor__thumbnail">
+          <i className="fas fa-upload" />
+          <span className="ml-2 truncate">
+            {optionalImageLabelText(thumbnail, state.filenameThumb)}
+          </span>
+        </label>
+        <School__InputGroupError
+          message="must be a JPEG / PNG under 2 MB in size" active=state.invalidThumb
+        />
+      </div>
+      <div key="course-images-editor__cover" className="mt-4">
+        <label
+          className="tracking-wide text-gray-800 text-xs font-semibold"
+          htmlFor="sc-images-editor__logo-on-400-bg-input">
+          {"Cover Image" |> str}
+        </label>
+        <HelpIcon
+          className="text-xs ml-1"
+          responsiveAlignment=HelpIcon.NonResponsive(AlignLeft)
+          link="https://docs.pupilfirst.com/#/courses?id=course-images">
+          {"The cover will be displayed at the top of all student pages within the course, and as the header of some course emails." |> str}
+        </HelpIcon>
+        <input
+          disabled=state.updating
+          className="hidden"
+          name="course_cover"
+          type_="file"
+          accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+          id="course-images-editor__cover"
+          required=false
+          multiple=false
+          onChange={updateImage(send, true)}
+        />
+        <label className="file-input-label mt-2" htmlFor="course-images-editor__cover">
+          <i className="fas fa-upload" />
+          <span className="ml-2 truncate">
+            {optionalImageLabelText(cover, state.filenameCover)}
+          </span>
+        </label>
+        <School__InputGroupError
+          message="must be a JPEG / PNG under 2 MB in size" active=state.invalidCover
+        />
+      </div>
+      <button
+        type_="submit"
+        key="sc-images-editor__update-button"
+        disabled={updateButtonDisabled(state)}
+        className="btn btn-primary btn-large mt-6">
+        {updateButtonText(state.updating) |> str}
+      </button>
+    </DisablingCover>
+  </form>
 }

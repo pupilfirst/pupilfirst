@@ -66,11 +66,10 @@ let imageUrl = image => image |> Image.url
 let filename = image => image |> Image.filename
 
 let sort = courses =>
-  courses |> List.sort((x, y) => (x.id |> int_of_string) - (y.id |> int_of_string))
+  ArrayUtils.copyAndSort((x, y) => (x.id |> int_of_string) - (y.id |> int_of_string), courses)
 
 let updateList = (courses, course) => {
-  let oldCourses = courses |> List.filter(c => c.id !== course.id)
-  oldCourses |> List.rev |> List.append(list{course}) |> List.rev
+  Js.Array.map(c => c.id == course.id ? course : c, courses)
 }
 
 let makeImageFromJs = data =>

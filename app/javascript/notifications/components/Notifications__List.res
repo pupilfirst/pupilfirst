@@ -30,9 +30,15 @@ type filter = {
   status: option<status>,
 }
 
+module Item = {
+  type t = Entry.t
+}
+
+module Pagination = Pagination.Make(Item)
+
 type state = {
   loading: Loading.t,
-  entries: Entries.t,
+  entries: Pagination.t,
   filterString: string,
   filter: filter,
   saving: bool,
@@ -84,7 +90,7 @@ let reducer = (state, action) =>
   | UpdateFilterString(filterString) => {...state, filterString: filterString}
   | LoadNotifications(endCursor, hasNextPage, newTopics, totalEntriesCount) =>
     let updatedTopics = switch state.loading {
-    | LoadingMore => newTopics |> Array.append(state.entries |> Entries.toArray)
+    | LoadingMore => newTopics |> Array.append(state.entries |> Pagination.toArray)
     | Reloading => newTopics
     | NotLoading => newTopics
     }

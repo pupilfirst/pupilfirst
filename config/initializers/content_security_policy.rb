@@ -71,11 +71,15 @@ Rails.application.config.content_security_policy do |policy|
     %w[fullstory.com *.fullstory.com]
   end
 
+  def usetiful_csp
+    %w[usetiful.com *.usetiful.com]
+  end
+
   def frame_sources
     [
       'https://sv-co-public-slackin.herokuapp.com', 'https://www.google.com', 'https://calendly.com',
       *typeform_csp[:frame], youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame],
-      *google_form_csp[:frame], facebook_csp[:frame], *hotjar_form_csp
+      *google_form_csp[:frame], facebook_csp[:frame], *hotjar_form_csp, *usetiful_csp
     ]
   end
 

@@ -68,8 +68,9 @@ let filename = image => image |> Image.filename
 let sort = courses =>
   ArrayUtils.copyAndSort((x, y) => (x.id |> int_of_string) - (y.id |> int_of_string), courses)
 
-let updateList = (courses, course) => {
-  Js.Array.map(c => c.id == course.id ? course : c, courses)
+let updateList = (course, courses) => {
+  let oldCourses = Js.Array.filter(c => c.id !== course.id, courses)
+  Js.Array.concat([course], oldCourses)
 }
 
 let makeImageFromJs = data =>

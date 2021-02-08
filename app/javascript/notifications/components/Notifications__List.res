@@ -90,19 +90,14 @@ let reducer = (state, action) =>
   | UpdateFilterString(filterString) => {...state, filterString: filterString}
   | LoadNotifications(endCursor, hasNextPage, newTopics, totalEntriesCount) =>
     let updatedTopics = switch state.loading {
-    | LoadingMore => newTopics |> Array.append(state.entries |> Pagination.toArray)
+    | LoadingMore => Js.Array.concat(Pagination.toArray(state.entries), newTopics)
     | Reloading => newTopics
     | NotLoading => newTopics
     }
 
     {
       ...state,
-      entries: switch (hasNextPage, endCursor) {
-      | (_, None)
-      | (false, Some(_)) =>
-        FullyLoaded(updatedTopics)
-      | (true, Some(cursor)) => PartiallyLoaded(updatedTopics, cursor)
-      },
+      entries: Pagination.make(updatedTopics, hasNextPage, endCursor),
       loading: NotLoading,
       totalEntriesCount: totalEntriesCount,
     }
@@ -112,11 +107,7 @@ let reducer = (state, action) =>
   | ClearSaving => {...state, saving: false}
   | MarkNotification(id) => {
       ...state,
-      entries: switch state.entries {
-      | Unloaded => Unloaded
-      | PartiallyLoaded(entries, cursor) => PartiallyLoaded(updateNotification(id, entries), cursor)
-      | FullyLoaded(entries) => FullyLoaded(updateNotification(id, entries))
-      },
+      entries: Pagination.update(state.entries, updateNotification(id)),
       totalEntriesCount: state.filter.status->Belt.Option.isSome
         ? state.totalEntriesCount - 1
         : state.totalEntriesCount,

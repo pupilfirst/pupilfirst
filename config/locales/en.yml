@@ -361,6 +361,21 @@ en:
     StudentTopNav__UserControls:
       edit_profile: Edit Profile
       sign_out: Sign Out
+    CourseEditor:
+      empty_courses: You don't have any courses!
+      courses_fully_loaded_text: "Showing all %{total_courses} courses"
+      courses_partially_loaded_text: "Showing %{loaded_courses_count} of %{total_courses} courses"
+      filter:
+        input_label: Search
+        input_placeholder: Filter and Search courses by name
+        input_hint: Search by name
+        label:
+          name: Search by name
+          archived: Archived
+          live: Live
+        archived: Show Archived Courses
+        live: Show Live Courses
+      button_load_more: Load More Courses...
 
   jobs:
     notifications:

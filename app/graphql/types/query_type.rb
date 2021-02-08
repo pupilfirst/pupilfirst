@@ -28,7 +28,10 @@ module Types
       end
     end
 
-    resolved_field :courses, [Types::CourseType], null: false
+    resolved_field :courses, Types::CourseType.connection_type, null: false do
+      argument :search, String, required: false
+      argument :archived, Boolean, required: false
+    end
 
     resolved_field :content_blocks, [Types::ContentBlockType], null: false do
       argument :target_id, ID, required: true

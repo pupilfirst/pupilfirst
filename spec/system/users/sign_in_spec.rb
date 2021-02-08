@@ -76,6 +76,7 @@ feature 'User signing in by supplying email address', js: true do
         expect(user.reload.reset_password_token).to eq(nil)
 
         # can sign in with the same password
+        click_button "Show user controls"
         click_link "Sign Out"
         expect(page).to have_content(school.name)
         click_link 'Sign In'

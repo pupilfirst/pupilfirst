@@ -101,6 +101,17 @@ Feel free to alter these steps if you're familiar with setting up PostgreSQL.
 
 The `.env` file contains environment variables that are used to configure the application. The file contains documentation explaining where you should source its values from. If you're just starting out, you shouldn't have to change any variables other than the ones listed above.
 
+### (Optional) Set up notifications
+
+Generate and set VAPID keys to enable push notifications:
+
+```ruby
+vapid_key = Webpush.generate_key
+
+# Save these in your .env file.
+puts "VAPID_PUBLIC_KEY=#{vapid_key.public_key}\nVAPID_PRIVATE_KEY=#{vapid_key.private_key}"
+```
+
 ## Setup Overcommit
 
 [Overcommit](https://github.com/sds/overcommit) adds automatic checks that prevents us from making silly mistakes when

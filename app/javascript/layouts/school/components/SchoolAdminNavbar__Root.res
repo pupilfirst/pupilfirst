@@ -61,7 +61,7 @@ let bottomLink = (path, shrunk, iconClasses, text) => {
 
   <li>
     <a ?title href=path className={bottomLinkClasses(shrunk)}>
-      <i className={iconClasses ++ " fa-fw"} />
+      <i className={iconClasses ++ " fa-fw text-lg"} />
       {shrunk ? React.null : <span className="ml-2"> {text |> str} </span>}
     </a>
   </li>
@@ -158,7 +158,14 @@ let secondaryNav = (courses, userRole, selectedOption) =>
   }
 
 @react.component
-let make = (~schoolName, ~schoolLogoPath, ~schoolIconPath, ~courses, ~isCourseAuthor) => {
+let make = (
+  ~schoolName,
+  ~schoolLogoPath,
+  ~schoolIconPath,
+  ~courses,
+  ~isCourseAuthor,
+  ~hasNotifications,
+) => {
   let url = ReasonReactRouter.useUrl()
 
   let userRole = isCourseAuthor ? CourseAuthor : SchoolAdmin
@@ -306,6 +313,16 @@ let make = (~schoolName, ~schoolLogoPath, ~schoolIconPath, ~courses, ~isCourseAu
         }}
       </div>
       <ul>
+        <div className="relative">
+          <Notifications__Root
+            wrapperClasses="w-full"
+            iconClasses="school-admin-navbar__notifications-unread-bullet absolute block h-3 w-3 rounded-full border-2 border-primary-800 bg-red-500"
+            buttonClasses="flex relative text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center w-full"
+            title=?{shrunk ? None : Some("Notifications")}
+            icon="fas fa-bell fa-fw text-lg mr-2"
+            hasNotifications
+          />
+        </div>
         {bottomLink("/dashboard", shrunk, "fas fa-home", "Dashboard")}
         <li>
           <a
@@ -313,7 +330,7 @@ let make = (~schoolName, ~schoolLogoPath, ~schoolIconPath, ~courses, ~isCourseAu
             className={bottomLinkClasses(shrunk)}
             rel="nofollow"
             href="/users/sign_out">
-            <i className="fas fa-sign-out-alt fa-fw" />
+            <i className="fas fa-sign-out-alt fa-fw text-lg" />
             {shrunk ? React.null : <span className="ml-2"> {"Sign Out" |> str} </span>}
           </a>
         </li>

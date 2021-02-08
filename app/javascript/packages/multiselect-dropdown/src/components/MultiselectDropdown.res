@@ -4,9 +4,7 @@ let str = React.string
 
 module DomUtils = {
   exception RootElementMissing(string)
-
   open Webapi.Dom
-
   let focus = id =>
     (switch document |> Document.getElementById(id) {
     | Some(el) => el
@@ -62,6 +60,26 @@ module Make = (Selectable: Selectable) => {
     DomUtils.focus(id)
   }
 
+  let showOptions = (options, onSelect, id, labelSuffix) =>
+    options |> Array.mapi((index, selection) =>
+      <button
+        key={index |> string_of_int}
+        title={selectionTitle(selection)}
+        className="flex text-xs px-4 py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
+        onClick={applyFilter(selection, onSelect, id)}>
+        {switch selection |> Selectable.label {
+        | Some(label) =>
+          <span className="mr-2 flex-shrink-0 md:w-1/6 text-right">
+            {label ++ labelSuffix |> str}
+          </span>
+        | None => React.null
+        }}
+        <span className={tagPillClasses(selection |> Selectable.color, true)}>
+          {selection |> Selectable.value |> str}
+        </span>
+      </button>
+    )
+
   let searchResult = (searchInput, unselected, labelSuffix, id, onSelect) => {
     // Remove all excess space characters from the user input.
     let normalizedString =
@@ -69,30 +87,12 @@ module Make = (Selectable: Selectable) => {
       |> Js.String.trim
       |> Js.String.replaceByRe(Js.Re.fromStringWithFlags("\\s+", ~flags="g"), " ")
 
-    switch normalizedString {
+    let options = switch normalizedString {
     | "" => []
-    | searchString =>
-      let matchingSelections = unselected |> search(searchString)
-
-      matchingSelections |> Array.mapi((index, selection) =>
-        <button
-          key={index |> string_of_int}
-          title={selectionTitle(selection)}
-          className="flex text-xs py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
-          onClick={applyFilter(selection, onSelect, id)}>
-          {switch selection |> Selectable.label {
-          | Some(label) =>
-            <span className="mr-2 flex-shrink-0 md:w-1/6 text-right">
-              {label ++ labelSuffix |> str}
-            </span>
-          | None => React.null
-          }}
-          <span className={tagPillClasses(selection |> Selectable.color, true)}>
-            {selection |> Selectable.value |> str}
-          </span>
-        </button>
-      )
+    | searchString => search(searchString, unselected)
     }
+
+    showOptions(options, onSelect, id, labelSuffix)
   }
 
   let removeSelection = (onDeselect, selection, event) => {
@@ -122,6 +122,33 @@ module Make = (Selectable: Selectable) => {
       </div>
     })
 
+  let onWindowClick = (showDropdown, setShowDropdown, _event) =>
+    if showDropdown {
+      setShowDropdown(_ => false)
+    } else {
+      ()
+    }
+
+  let toggleDropdown = (setShowDropdown, event) => {
+    event |> ReactEvent.Mouse.stopPropagation
+    setShowDropdown(showDropdown => !showDropdown)
+  }
+
+  let wrapper = children =>
+    <div
+      className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg py-2 z-50">
+      <p className="text-gray-700 italic mx-4 text-xs border-b pb-1 mb-2">
+        {str("Suggestions:")}
+      </p>
+      children
+    </div>
+
+  let showHint = hint =>
+    <p
+      className="font-normal text-xs px-4 py-2 -mb-2 rounded-b-lg bg-gray-100 mt-2 text-left border-t">
+      {str(hint)}
+    </p>
+
   @react.component
   let make = (
     ~id=?,
@@ -134,6 +161,8 @@ module Make = (Selectable: Selectable) => {
     ~onDeselect,
     ~labelSuffix=": ",
     ~emptyMessage="No results found",
+    ~hint=?,
+    ~defaultOptions=[],
   ) => {
     let (inputId, _setId) = React.useState(() =>
       switch id {
@@ -145,6 +174,23 @@ module Make = (Selectable: Selectable) => {
       }
     )
 
+    let (showDropdown, setShowDropdown) = React.useState(() => false)
+
+    React.useEffect1(() => {
+      let curriedFunction = onWindowClick(showDropdown, setShowDropdown)
+
+      let removeEventListener = () =>
+        Webapi.Dom.Window.removeEventListener("click", curriedFunction, Webapi.Dom.window)
+
+      if showDropdown {
+        Webapi.Dom.Window.addEventListener("click", curriedFunction, Webapi.Dom.window)
+        Some(removeEventListener)
+      } else {
+        removeEventListener()
+        None
+      }
+    }, [showDropdown])
+
     let results = searchResult(value, unselected, labelSuffix, inputId, onSelect)
     <div className="w-full relative">
       <div>
@@ -152,27 +198,36 @@ module Make = (Selectable: Selectable) => {
           className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
           {selected |> showSelected(onDeselect, labelSuffix) |> React.array}
           <input
+            onClick={_ => setShowDropdown(s => !s)}
             autoComplete="off"
             value
             onChange={e => onChange(ReactEvent.Form.target(e)["value"])}
             className="flex-grow appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 leading-snug focus:outline-none"
             id=inputId
-            type_="text"
+            type_="search"
             placeholder
           />
         </div>
       </div>
       <div />
-      {if value |> String.trim != "" {
-        <div
-          className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg px-4 py-2 z-50">
-          {switch results {
-          | [] => <div> {emptyMessage |> str} </div>
-          | results => results |> React.array
-          }}
-        </div>
-      } else {
-        React.null
+      {switch (showDropdown, results, defaultOptions, hint) {
+      | (false, results, _options, _hint) =>
+        switch (value, results) {
+        | ("", _) => React.null
+        | (_value, []) => wrapper(str(emptyMessage))
+        | (_value, results) => wrapper(React.array(results))
+        }
+      | (true, [], [], None) => value == "" ? React.null : wrapper(str(emptyMessage))
+      | (true, [], [], Some(hint)) => wrapper(showHint(hint))
+      | (true, [], options, None) =>
+        wrapper(React.array(showOptions(options, onSelect, inputId, labelSuffix)))
+      | (true, [], options, Some(hint)) =>
+        wrapper(
+          <div>
+            {React.array(showOptions(options, onSelect, inputId, labelSuffix))} {showHint(hint)}
+          </div>,
+        )
+      | (true, results, _options, _hint) => wrapper(React.array(results))
       }}
     </div>
   }

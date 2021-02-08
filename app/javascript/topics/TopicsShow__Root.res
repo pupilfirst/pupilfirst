@@ -16,6 +16,7 @@ type state = {
   changingLockedStatus: bool,
   showTopicEditor: bool,
   topicCategory: option<TopicCategory.t>,
+  subscribed: bool,
 }
 
 type action =
@@ -39,6 +40,8 @@ type action =
   | FinishLockingTopic(string)
   | FinishUnlockingTopic
   | UpdateTopicCategory(option<TopicCategory.t>)
+  | Subscribe
+  | Unsubscribe
 
 let reducer = (state, action) =>
   switch action {
@@ -111,6 +114,8 @@ let reducer = (state, action) =>
     }
   | UpdateTopicCategory(topicCategory) => {...state, topicCategory: topicCategory}
   | StartChangingLockStatus => {...state, changingLockedStatus: true}
+  | Subscribe => {...state, subscribed: true}
+  | Unsubscribe => {...state, subscribed: false}
   | FinishLockingTopic(currentUserId) => {
       ...state,
       changingLockedStatus: false,
@@ -122,6 +127,14 @@ let reducer = (state, action) =>
       topic: Topic.unlock(state.topic),
     }
   }
+
+let subscribe = (send, ()) => {
+  send(Subscribe)
+}
+
+let unsubscribe = (send, ()) => {
+  send(Unsubscribe)
+}
 
 let addNewReply = (send, replyToPostId, ()) => send(AddNewReply(replyToPostId))
 
@@ -308,6 +321,7 @@ let make = (
   ~community,
   ~target,
   ~topicCategories,
+  ~subscribed,
 ) => {
   let (state, send) = React.useReducerWithMapState(reducer, topic, topic => {
     topic: topic,
@@ -318,6 +332,7 @@ let make = (
     savingTopic: false,
     showTopicEditor: false,
     changingLockedStatus: false,
+    subscribed: subscribed,
     topicCategory: topicCategory(topicCategories, Topic.topicCategoryId(topic)),
   })
 
@@ -439,6 +454,14 @@ let make = (
                   </div>
                 | None => React.null
                 }}
+                <div className="lg:pl-14">
+                  <TopicsShow__SubscriptionManager
+                    subscribed={state.subscribed}
+                    topicId={Topic.id(topic)}
+                    subscribeCB={subscribe(send)}
+                    unsubscribeCB={unsubscribe(send)}
+                  />
+                </div>
               </div>}
           {<TopicsShow__PostShow
             key={Post.id(state.firstPost)}

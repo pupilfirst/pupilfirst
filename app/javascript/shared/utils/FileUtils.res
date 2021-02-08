@@ -14,10 +14,13 @@ let isImage = file =>
 let isVideo = file =>
   switch file["_type"] {
   | "video/mp4"
-  | "video/mov"
   | "video/quicktime"
-  | "video/wmv"
-  | "video/avi" => true
+  | "video/x-ms-asf"
+  | "video/x-ms-wmv"
+  | "video/vnd.avi"
+  | "video/avi"
+  | "video/msvideo"
+  | "video/x-msvideo" => true
   | _ => false
   }
 

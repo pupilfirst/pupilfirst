@@ -38,6 +38,7 @@ feature 'Community', js: true do
     create :faculty_course_enrollment, faculty: coach, course: course
     create :community_course_connection, course: course, community: community
     create :community_course_connection, course: course_2, community: community
+    create :topic_subscription, topic: topic_1, user: coach.user
   end
 
   scenario 'user who is not logged in tries to visit community' do
@@ -148,6 +149,8 @@ feature 'Community', js: true do
     new_reply = topic_1.replies.find_by(post_number: 3)
     expect(new_reply.body).to eq(reply_body)
 
+    expect(Notification.last.notifiable).to eq(new_reply)
+
     # can edit his reply
     find("div[aria-label='Options for post #{new_reply.id}']").click
     click_button 'Edit Reply'
@@ -179,6 +182,8 @@ feature 'Community', js: true do
 
     expect(page).not_to have_text(reply_body_for_edit)
     expect(new_reply.reload.archived_at).to_not eq(nil)
+    # Notifications created for the post must be deleted
+    expect(Notification.count).to eq(0)
 
     # can add reply to another post
     find("button[aria-label='Add reply to post #{reply_1.id}']").click
@@ -405,6 +410,22 @@ feature 'Community', js: true do
     expect(page).to_not have_text(topic_2.title)
     expect(page).to have_text(topic_1.title)
     expect(page).to have_text(topic_3.title)
+  end
+
+  scenario 'user plays around with subscription' do
+    sign_in_user(student_1.user, referrer: topic_path(topic_1))
+
+    expect(page).to have_text(topic_1.title)
+
+    # can subscribe to a topic
+    click_button 'Subscribe'
+    expect(page).to have_text('Unsubscribe')
+    expect(topic_1.subscribers).to include(student_1.user)
+
+    # can Unsubscribe
+    click_button 'Unsubscribe'
+    expect(page).to have_text('Subscribe')
+    expect(topic_1.subscribers).not_to include(student_1.user)
   end
 
   context 'when a topic has a archived replies and likes on its posts' do

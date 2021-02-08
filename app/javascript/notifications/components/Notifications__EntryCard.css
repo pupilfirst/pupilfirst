@@ -1,0 +1,21 @@
+.notifications__entry-card.notifications__entry-card--unread:hover
+  .notifications__entry-card-buttons,
+.notifications__entry-card.notifications__entry-card--unread:focus
+  .notifications__entry-card-buttons {
+  @apply opacity-100;
+}
+
+.notifications__entry-card.notifications__entry-card--unread:hover
+  .notifications__entry-card-time {
+  @apply opacity-0;
+}
+
+.notifications__entry-unread-dot {
+  left: -0.5rem;
+}
+
+@screen md {
+  .notifications__entry-unread-dot {
+    left: -0.75rem;
+  }
+}

@@ -60,6 +60,7 @@ gem 'descriptive_statistics', '~> 2.5', require: 'descriptive_statistics/safe' #
 gem 'kaminari', '~> 1.2' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
 gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstrap4-kaminari-views' # Bootstrap 4 styling for Kaminari gem
 gem 'rack-throttle', '~> 0.7' # API Rate limiting
+gem 'webpush', '~> 1.1.0' # Encryption Utilities for Web Push protocol
 
 # Omniauth providers
 gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google
@@ -110,7 +111,7 @@ group :test do
   gem 'factory_bot_rails', '~> 6.1' # A library for setting up Ruby objects as test data.
   gem 'capybara', '~> 3.0' # For RSpec feature tests.
   gem 'capybara-email', '~> 3.0' # Test ActionMailer and Mailer messages with Capybara
-  gem 'webdrivers', '~> 4.0' # Keep your Selenium WebDrivers updated automatically.
+  gem 'webdrivers', '~> 4.5' # Keep your Selenium WebDrivers updated automatically.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem 'rspec-eventually', '~> 0.2.2' # Rspec helper to match eventually
   gem 'diffy', '~> 3.3' # Easy Diffing in Ruby. https://github.com/samg/diffy

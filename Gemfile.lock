@@ -268,6 +268,7 @@ GEM
     hashie (4.1.0)
     heroku-deflater (0.6.3)
       rack (>= 1.4.5)
+    hkdf (0.3.0)
     http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -625,7 +626,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webdrivers (4.4.1)
+    webdrivers (4.5.0)
       nokogiri (~> 1.6)
       rubyzip (>= 1.3.0)
       selenium-webdriver (>= 3.0, < 4.0)
@@ -638,6 +639,9 @@ GEM
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
+    webpush (1.1.0)
+      hkdf (~> 0.2)
+      jwt (~> 2.0)
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -753,9 +757,10 @@ DEPENDENCIES
   valid_url (= 0.0.4)!
   virtus (~> 1.0)
   web-console (~> 4.0)
-  webdrivers (~> 4.0)
+  webdrivers (~> 4.5)
   webmock (~> 3.5)
   webpacker (~> 5.2)
+  webpush (~> 1.1.0)
 
 RUBY VERSION
    ruby 2.7.2p137

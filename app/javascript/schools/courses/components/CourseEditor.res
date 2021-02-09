@@ -45,11 +45,13 @@ type state = {
   filterString: string,
   filter: filter,
   totalEntriesCount: int,
+  relaodCourses: bool,
 }
 
 type action =
   | SetSearchString(string)
   | UnsetSearchString
+  | ReloadCourses
   | UpdateFilterString(string)
   | BeginLoadingMore
   | BeginReloading
@@ -69,6 +71,11 @@ let reducer = (state, action) =>
         name: Some(string),
       },
       filterString: "",
+    }
+  | ReloadCourses => {
+      ...state,
+      editorAction: Hidden,
+      relaodCourses: !state.relaodCourses,
     }
   | UnsetSearchString => {
       ...state,
@@ -108,7 +115,7 @@ let reducer = (state, action) =>
   | UpdateEditorAction(editorAction) => {...state, editorAction: editorAction}
   | LoadCourses(endCursor, hasNextPage, newCourses, totalEntriesCount) =>
     let courses = switch state.loading {
-    | LoadingMore => Js.Array.concat(Pagination.toArray(state.courses), newCourses)
+    | LoadingMore => Js.Array.concat(newCourses, Pagination.toArray(state.courses))
     | Reloading => newCourses
     | NotLoading => newCourses
     }
@@ -341,10 +348,14 @@ let showCourses = (courses, state, send) => {
           </h4>
         </div>
       : <div className="flex flex-wrap">
-          {Js.Array.map(course => showCourse(course, send), Course.sort(courses)) |> React.array}
+          {Js.Array.map(course => showCourse(course, send), courses) |> React.array}
         </div>}
     {entriesLoadedData(state.totalEntriesCount, Array.length(courses))}
   </div>
+}
+
+let relaodCoursesCB = (send, ()) => {
+  send(ReloadCourses)
 }
 
 @react.component
@@ -359,22 +370,25 @@ let make = () => {
       filterString: "",
       filter: {
         name: None,
-        archived: None,
+        archived: Some(false),
       },
+      relaodCourses: false,
     },
   )
 
-  React.useEffect1(() => {
+  React.useEffect2(() => {
     loadCourses(state, None, send)
     None
-  }, [state.filter])
+  }, (state.filter, state.relaodCourses))
 
   <div className="flex flex-1 h-full bg-gray-200 overflow-y-scroll">
     {switch state.editorAction {
     | Hidden => React.null
     | ShowForm(course) =>
       <SchoolAdmin__EditorDrawer2 closeDrawerCB={hideEditorAction(send)}>
-        <CourseEditor__Form course updateCourseCB={updateCourse(send)} />
+        <CourseEditor__Form
+          course updateCourseCB={updateCourse(send)} relaodCoursesCB={relaodCoursesCB(send)}
+        />
       </SchoolAdmin__EditorDrawer2>
     | ShowCoverImageForm(course) =>
       <SchoolAdmin__EditorDrawer2 closeDrawerCB={hideEditorAction(send)}>

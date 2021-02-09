@@ -105,6 +105,26 @@ module UpdateCourseQuery = %graphql(
   `
 )
 
+module ArciveCourseQuery = %graphql(
+  `
+  mutation ArchiveCourseMutation($id: ID!) {
+    archiveCourse(id: $id)  {
+      success
+    }
+  }
+`
+)
+
+module UnarchiveCourseQuery = %graphql(
+  `
+  mutation UnarchiveCourseMutation($id: ID!) {
+    unarchiveCourse(id: $id)  {
+      success
+    }
+  }
+`
+)
+
 let updateName = (send, name) => {
   let hasError = name |> String.trim |> String.length < 2
   send(UpdateName(name, hasError))
@@ -148,7 +168,7 @@ let createCourse = (state, send, updateCourseCB) => {
 
   createCourseQuery |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
     switch result["createCourse"]["course"] {
-    | Some(course) => Course.makeFromJs(course) |> updateCourseCB
+    | Some(course) => updateCourseCB(Course.makeFromJs(course))
     | None => send(FailSaving)
     }
 
@@ -188,6 +208,40 @@ let updateCourse = (state, send, updateCourseCB, course) => {
     send(FailSaving)
     Js.Promise.resolve()
   }) |> ignore
+}
+
+let archiveCourse = (send, relaodCoursesCB, course) => {
+  send(StartSaving)
+
+  ArciveCourseQuery.make(~id=course |> Course.id, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result => {
+    result["archiveCourse"]["success"] ? relaodCoursesCB() : send(FailSaving)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(error => {
+    Js.log(error)
+    send(FailSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let unarchiveCourse = (send, relaodCoursesCB, course) => {
+  send(StartSaving)
+
+  UnarchiveCourseQuery.make(~id=course |> Course.id, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result => {
+    result["unarchiveCourse"]["success"] ? relaodCoursesCB() : send(FailSaving)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(error => {
+    Js.log(error)
+    send(FailSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
 }
 
 let booleanButtonClasses = bool => {
@@ -431,17 +485,42 @@ let detailsTab = (state, send, course, updateCourseCB) => {
 
 let submitButtonIcons = saving => saving ? "fas fa-spinner fa-spin" : "fa fa-exclamation-triangle"
 
-let actionsTab = state => {
-  <div className="mt-2">
-    <button disabled=state.saving className="btn btn-danger btn-large">
-      <FaIcon classes={submitButtonIcons(state.saving)} />
-      <span className="ml-2"> {"Archive Course"->str} </span>
-    </button>
+let actionsTab = (state, send, relaodCoursesCB, course) => {
+  <div>
+    {Belt.Option.isSome(Course.archivedAt(course))
+      ? <div className="mt-2">
+          <label className="tracking-wide text-xs font-semibold">
+            {str("Do you want to unarchive the course?")}
+          </label>
+          <div>
+            <button
+              disabled=state.saving
+              className="btn btn-success btn-large mt-2"
+              onClick={_e => unarchiveCourse(send, relaodCoursesCB, course)}>
+              <FaIcon classes={submitButtonIcons(state.saving)} />
+              <span className="ml-2"> {"Unarchive Course"->str} </span>
+            </button>
+          </div>
+        </div>
+      : <div className="mt-2">
+          <label className="tracking-wide text-xs font-semibold">
+            {str("Do you want to archive the course?")}
+          </label>
+          <div>
+            <button
+              disabled=state.saving
+              className="btn btn-danger btn-large mt-2"
+              onClick={_e => archiveCourse(send, relaodCoursesCB, course)}>
+              <FaIcon classes={submitButtonIcons(state.saving)} />
+              <span className="ml-2"> {"Archive Course"->str} </span>
+            </button>
+          </div>
+        </div>}
   </div>
 }
 
 @react.component
-let make = (~course, ~updateCourseCB) => {
+let make = (~course, ~updateCourseCB, ~relaodCoursesCB) => {
   let (state, send) = React.useReducerWithMapState(reducer, course, computeInitialState)
   <DisablingCover disabled={state.saving}>
     <div className="mx-auto bg-white">
@@ -450,27 +529,35 @@ let make = (~course, ~updateCourseCB) => {
           <h5 className="uppercase text-center">
             {(course == None ? "Add New Course" : "Edit Course Details") |> str}
           </h5>
-          <div className="w-full pt-6">
-            <div className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
-              <button
-                className={selectedTabClasses(state.tab == DetailsTab)}
-                onClick={_ => send(SetDetailsTab)}>
-                <i className="fa fa-edit" /> <span className="ml-2"> {"Details" |> str} </span>
-              </button>
-              <button
-                className={"-ml-px " ++ selectedTabClasses(state.tab == ActionsTab)}
-                onClick={_ => send(SetActionsTab)}>
-                <i className="fa fa-cog" /> <span className="ml-2"> {"Actions" |> str} </span>
-              </button>
-            </div>
-          </div>
+          {ReactUtils.nullUnless(
+            <div className="w-full pt-6">
+              <div className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
+                <button
+                  className={selectedTabClasses(state.tab == DetailsTab)}
+                  onClick={_ => send(SetDetailsTab)}>
+                  <i className="fa fa-edit" /> <span className="ml-2"> {"Details" |> str} </span>
+                </button>
+                <button
+                  className={"-ml-px " ++ selectedTabClasses(state.tab == ActionsTab)}
+                  onClick={_ => send(SetActionsTab)}>
+                  <i className="fa fa-cog" /> <span className="ml-2"> {"Actions" |> str} </span>
+                </button>
+              </div>
+            </div>,
+            Belt.Option.isSome(course),
+          )}
         </div>
       </div>
       <div className="max-w-2xl mx-auto">
         <div className={tabItemsClasses(state.tab == DetailsTab)}>
           {detailsTab(state, send, course, updateCourseCB)}
         </div>
-        <div className={tabItemsClasses(state.tab == ActionsTab)}> {actionsTab(state)} </div>
+        <div className={tabItemsClasses(state.tab == ActionsTab)}>
+          {switch course {
+          | Some(c) => actionsTab(state, send, relaodCoursesCB, c)
+          | None => React.null
+          }}
+        </div>
       </div>
     </div>
   </DisablingCover>

@@ -26,6 +26,7 @@ type t = {
   cover: option<Image.t>,
   featured: bool,
   progressionBehavior: progressionBehavior,
+  archivedAt: option<Js.Date.t>,
 }
 
 let name = t => t.name
@@ -46,6 +47,8 @@ let cover = t => t.cover
 
 let thumbnail = t => t.thumbnail
 
+let archivedAt = t => t.archivedAt
+
 let progressionBehavior = t =>
   switch t.progressionBehavior {
   | Limited(_) => #Limited
@@ -64,9 +67,6 @@ let progressionLimit = t =>
 let imageUrl = image => image |> Image.url
 
 let filename = image => image |> Image.filename
-
-let sort = courses =>
-  ArrayUtils.copyAndSort((x, y) => (x.id |> int_of_string) - (y.id |> int_of_string), courses)
 
 let updateList = (course, courses) => {
   let oldCourses = Js.Array.filter(c => c.id !== course.id, courses)
@@ -94,7 +94,8 @@ let addImages = (~coverUrl, ~thumbnailUrl, ~coverFilename, ~thumbnailFilename, t
 let replaceImages = (cover, thumbnail, t) => {...t, cover: cover, thumbnail: thumbnail}
 
 let makeFromJs = rawCourse => {
-  let endsAt = rawCourse["endsAt"]->Belt.Option.map(DateFns.decodeISO)
+  let endsAt = Belt.Option.map(rawCourse["endsAt"], DateFns.decodeISO)
+  let archivedAt = Belt.Option.map(rawCourse["archivedAt"], DateFns.decodeISO)
 
   let progressionBehavior = switch rawCourse["progressionBehavior"] {
   | #Limited => Limited(rawCourse["progressionLimit"] |> Belt.Option.getExn)
@@ -113,6 +114,7 @@ let makeFromJs = rawCourse => {
     cover: makeImageFromJs(rawCourse["cover"]),
     featured: rawCourse["featured"],
     progressionBehavior: progressionBehavior,
+    archivedAt: archivedAt,
   }
 }
 
@@ -136,6 +138,7 @@ module Fragments = %graphql(
     featured
     progressionBehavior
     progressionLimit
+    archivedAt
   }
   `
 )

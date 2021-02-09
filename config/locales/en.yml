@@ -450,6 +450,10 @@ en:
       success_notification: Target has been marked as complete.
     create_target:
       success_notification: Target created successfully.
+    archive_course:
+      success_notification: Reloading course list
+    unarchive_course:
+      success_notification: Reloading course list
 
   queries:
     delete_certificate_mutator:

@@ -11,6 +11,7 @@ module Mutations
 
       success = if mutator.valid?
         mutator.archive_course
+        mutator.notify(:success, I18n.t('shared.done_exclamation'), I18n.t('mutations.archive_course.success_notification'))
         true
       else
         mutator.notify_errors

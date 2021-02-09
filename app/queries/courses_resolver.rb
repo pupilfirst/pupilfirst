@@ -4,9 +4,9 @@ class CoursesResolver < ApplicationQuery
 
   def courses
     if search.present?
-      applicable_courses.search_by_name(name_for_search)
+      applicable_courses.search_by_name(search)
     else
-      applicable_courses
+      applicable_courses.includes([:cover_attachment, :thumbnail_attachment])
     end
   end
 
@@ -20,19 +20,11 @@ class CoursesResolver < ApplicationQuery
     current_school_admin.present?
   end
 
-  def name_for_search
-    search.strip
-          .gsub(/[^a-z\s0-9]/i, '')
-          .split(' ').reject do |word|
-      word.length < 3
-    end.join(' ')[0..50]
-  end
-
   def applicable_courses
-    if archived.present?
-      archived ? current_school.courses.archived : current_school.courses.live
-    else
+    if archived.nil?
       current_school.courses
+    else
+      archived ? current_school.courses.archived : current_school.courses.live
     end
   end
 end

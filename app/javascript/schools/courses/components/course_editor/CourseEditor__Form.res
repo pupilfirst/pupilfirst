@@ -4,10 +4,11 @@ let str = ReasonReact.string
 
 type tabs =
   | DetailsTab
+  | ImagesTab
   | ActionsTab
 
 let selectedTabClasses = selected =>
-  "flex items-center focus:outline-none justify-center w-1/2 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer " ++ (
+  "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer " ++ (
     selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-100"
   )
 
@@ -45,6 +46,7 @@ type action =
   | UpdateProgressionLimit(int)
   | SetDetailsTab
   | SetActionsTab
+  | SetImagesTab
 
 let reducer = (state, action) =>
   switch action {
@@ -52,6 +54,7 @@ let reducer = (state, action) =>
   | FailSaving => {...state, saving: false}
   | SetDetailsTab => {...state, tab: DetailsTab}
   | SetActionsTab => {...state, tab: ActionsTab}
+  | SetImagesTab => {...state, tab: ImagesTab}
   | UpdateName(name, hasNameError) => {
       ...state,
       name: name,
@@ -538,6 +541,11 @@ let make = (~course, ~updateCourseCB, ~relaodCoursesCB) => {
                   <i className="fa fa-edit" /> <span className="ml-2"> {"Details" |> str} </span>
                 </button>
                 <button
+                  className={selectedTabClasses(state.tab == ImagesTab)}
+                  onClick={_ => send(SetImagesTab)}>
+                  <i className="fa fa-camera" /> <span className="ml-2"> {"Images" |> str} </span>
+                </button>
+                <button
                   className={"-ml-px " ++ selectedTabClasses(state.tab == ActionsTab)}
                   onClick={_ => send(SetActionsTab)}>
                   <i className="fa fa-cog" /> <span className="ml-2"> {"Actions" |> str} </span>
@@ -552,12 +560,18 @@ let make = (~course, ~updateCourseCB, ~relaodCoursesCB) => {
         <div className={tabItemsClasses(state.tab == DetailsTab)}>
           {detailsTab(state, send, course, updateCourseCB)}
         </div>
-        <div className={tabItemsClasses(state.tab == ActionsTab)}>
-          {switch course {
-          | Some(c) => actionsTab(state, send, relaodCoursesCB, c)
-          | None => React.null
-          }}
-        </div>
+        {switch course {
+        | Some(c) =>
+          [
+            <div className={tabItemsClasses(state.tab == ActionsTab)}>
+              {actionsTab(state, send, relaodCoursesCB, c)}
+            </div>,
+            <div className={tabItemsClasses(state.tab == ImagesTab)}>
+              <CourseEditor__ImagesForm course=c updateCourseCB />
+            </div>,
+          ]->React.array
+        | None => React.null
+        }}
       </div>
     </div>
   </DisablingCover>

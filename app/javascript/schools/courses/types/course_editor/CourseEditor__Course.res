@@ -69,8 +69,7 @@ let imageUrl = image => image |> Image.url
 let filename = image => image |> Image.filename
 
 let updateList = (course, courses) => {
-  let oldCourses = Js.Array.filter(c => c.id !== course.id, courses)
-  Js.Array.concat([course], oldCourses)
+  Js.Array.map(c => c.id == course.id ? course : c, courses)
 }
 
 let makeImageFromJs = data =>

@@ -146,13 +146,9 @@ let make = (~course, ~updateCourseCB) => {
 
   <form
     id=formId
-    className="mx-8 pt-8"
     key="sc-images-editor__form"
     onSubmit={handleUpdateImages(send, state, course, updateCourseCB)}>
     <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
-    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-      {"Course Images" |> str}
-    </h5>
     <DisablingCover disabled=state.updating>
       <div key="course-images-editor__thumbnail" className="mt-4">
         <label

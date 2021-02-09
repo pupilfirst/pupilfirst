@@ -36,7 +36,6 @@ type filter = {
 type editorAction =
   | Hidden
   | ShowForm(option<Course.t>)
-  | ShowCoverImageForm(Course.t)
 
 type state = {
   loading: Loading.t,
@@ -293,18 +292,12 @@ let showCourse = (course, send) => {
             }}
           </div>
           <div
-            className="user-dashboard-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50 justify-between"
+            className="user-dashboard-course__title-container absolute w-full flex h-16 bottom-0 z-50"
             key={Course.id(course)}>
             <h4
               className="user-dashboard-course__title text-white font-semibold leading-tight pl-6 pr-4 text-lg md:text-xl">
               {str(Course.name(course))}
             </h4>
-            <a
-              title={"Edit images for " ++ (course |> Course.name)}
-              onClick={_ => send(UpdateEditorAction(ShowCoverImageForm(course)))}
-              className="mr-4 cursor-pointer">
-              <FaIcon classes="fas fa-camera text-white " />
-            </a>
           </div>
         </div>
         <div className="px-6 pt-4">
@@ -389,10 +382,6 @@ let make = () => {
         <CourseEditor__Form
           course updateCourseCB={updateCourse(send)} relaodCoursesCB={relaodCoursesCB(send)}
         />
-      </SchoolAdmin__EditorDrawer2>
-    | ShowCoverImageForm(course) =>
-      <SchoolAdmin__EditorDrawer2 closeDrawerCB={hideEditorAction(send)}>
-        <CourseEditor__ImagesForm course updateCourseCB={updateCourse(send)} />
       </SchoolAdmin__EditorDrawer2>
     }}
     <div className="flex-1 flex flex-col">

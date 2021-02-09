@@ -36,7 +36,7 @@ feature 'User signing in by supplying email address', js: true do
     end
 
     context 'when the user tries to reset password' do
-      scenario 'user is allowed to reset and blocked from repeat attempts to send sign in email' do
+      scenario 'user is allowed to reset and blocked from repeat attempts to send reset password email' do
         visit new_user_session_path
 
         click_button 'Continue with email'
@@ -54,36 +54,41 @@ feature 'User signing in by supplying email address', js: true do
     end
 
     context 'when user visits the reset password page' do
+      let(:password) { Faker::Internet.password }
+
       before do
         create :founder, user: user
       end
 
-      skip 'allow to change password with a valid token' do
-        keycloak_client = Rails.configuration.keycloak_client
-
-        expect(keycloak_client).to receive(:fetch_user).with(user.email).and_call_original
-        expect(keycloak_client).to receive(:set_user_password).with(user.email, "MyNewPassword@123").and_call_original
-
+      scenario 'allow to change password with a valid token' do
         user.regenerate_reset_password_token
         user.update!(reset_password_sent_at: Time.zone.now)
         visit reset_password_path(token: user.reset_password_token)
 
-        password = "MyNewPassword@123"
         fill_in 'New Password', with: password
         fill_in 'Confirm Password', with: password
         click_button 'Update Password'
         expect(page).to have_content(user.founders.first.course.name)
         expect(user.reload.reset_password_token).to eq(nil)
 
-        # can sign in with the same password
+        # Let's try signing in.
         click_button "Show user controls"
         click_link "Sign Out"
+
         expect(page).to have_content(school.name)
+
+        # Try signing in with an invalid password, and then with the newly set correct password.
         click_link 'Sign In'
         click_button 'Continue with email'
         fill_in 'Email Address', with: user.email
+        fill_in 'Password', with: 'incorrect password'
+        click_button "Sign in with password"
+
+        expect(page).to have_text 'The supplied email address and password do not match'
+
         fill_in 'Password', with: password
         click_button "Sign in with password"
+
         expect(page).to have_content(user.founders.first.course.name)
       end
 

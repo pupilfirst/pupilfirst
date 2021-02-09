@@ -182,7 +182,7 @@ en:
       submitted_at: Submitted At
       submitted_on: "Submitted on %{date}"
       submission_not_considered: This submission is not considered towards its target's completion.
-      submission_not_considered_help: This is a <span className="italic">team</span> target, and this submission is not linked to some members of your team. This can happen if a target is changed after your individual submission, to require a <span className="italic">team</span> submission, or if your team's composition changed after a <span className="italic">team</span> submission was created.
+      submission_not_considered_help: This is a <em>team</em> target, and this submission is not linked to some members of your team. This can happen if a target is changed after your individual submission, to require a <em>team</em> submission, or if your team's composition changed after a <em>team</em> submission was created.
       view: "View "
       no_submissions_to_show: "No submissions to show "
       load_more: Load More...
@@ -495,6 +495,10 @@ en:
         target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, the status and the target submission button.
         target_status: This indicates the present status of the target.
         final_message: That&rsquo;s it for now. If you have any doubts, don&rsquo;t hesitate to reach out to us for help.<br/><br/>Have fun!
+
+  sessions:
+    create:
+      invalid_credentials: The supplied email address and password do not match. Please check your credentials and try again.
 
   ####################################
   # THIRD-PARTY LIBRARY TRANSLATIONS #

@@ -79,10 +79,15 @@ feature 'Topic creator', js: true do
       fill_in('Title', with: topic_title)
       add_markdown 'topic body'
       click_button 'Create Topic'
+
       expect(page).to have_text('Unsubscribe')
+
       new_topic = community.topics.find_by(title: topic_title)
-      # personal coaches are subscribed to the new topic
-      expect(new_topic.subscribers).to eq([coach_2.user, student.user])
+
+      # Personal coaches must already be subscribed to the new topic.
+      expect(new_topic.subscribers.pluck(:id)).to contain_exactly(coach_2.user.id, student.user.id)
+
+      # Notifications should have been created for this new topic.
       expect(Notification.last.notifiable).to eq(new_topic)
     end
   end

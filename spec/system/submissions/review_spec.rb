@@ -634,8 +634,6 @@ feature 'Submission review overlay', js: true do
 
         expect(page).to have_text('The submission has been marked as reviewed')
 
-        screenshot_and_open_image
-
         within("div[data-submission-id='#{submission_reviewed_old.id}']") do
           expect(page).to have_text('Submission #1')
           expect(page).to have_text('2/4')

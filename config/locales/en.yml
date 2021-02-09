@@ -481,6 +481,18 @@ en:
     create:
       invalid_credentials: The supplied email address and password do not match. Please check your credentials and try again.
 
+  home:
+    index:
+      welcome_prefix: Hello, welcome to
+      featured_courses_heading: Featured Courses
+      get_started: Get started
+      learn_more: Learn more
+      course_status:
+        active: Continue course
+        access_ended: Review course content
+        dropped_out: Dropped out
+
+
   ####################################
   # THIRD-PARTY LIBRARY TRANSLATIONS #
   ####################################

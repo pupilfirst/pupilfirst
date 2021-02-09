@@ -7,8 +7,7 @@ module Users
       property :password, validates: { presence: true }
       property :shared_device
 
-      validate :user_with_email_must_exist
-      validate :must_have_valid_password
+      validate :check_credentials
 
       def user
         @user ||= begin
@@ -22,18 +21,10 @@ module Users
 
       private
 
-      def user_with_email_must_exist
-        return if user.present? || email.blank?
+      def check_credentials
+        return if user&.valid_password?(password)
 
-        errors[:email] << 'is invalid. Could not find user with this email'
-      end
-
-      def must_have_valid_password
-        return if user.blank?
-
-        return if user.valid_password?(password)
-
-        errors[:password] << 'is incorrect. Please check and try again.'
+        errors[:base] << I18n.t('sessions.create.invalid_credentials')
       end
     end
   end

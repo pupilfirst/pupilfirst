@@ -477,6 +477,10 @@ en:
         target_status: This indicates the present status of the target.
         final_message: That&rsquo;s it for now. If you have any doubts, don&rsquo;t hesitate to reach out to us for help.<br/><br/>Have fun!
 
+  sessions:
+    create:
+      invalid_credentials: The supplied email address and password do not match. Please check your credentials and try again.
+
   ####################################
   # THIRD-PARTY LIBRARY TRANSLATIONS #
   ####################################

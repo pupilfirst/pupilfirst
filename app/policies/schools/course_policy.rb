@@ -6,7 +6,7 @@ module Schools
     end
 
     def authors?
-      record.school == current_school && index?
+      record.school == current_school && !record.archived? && index?
     end
 
     alias attach_images? authors?

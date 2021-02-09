@@ -13,7 +13,7 @@ module Home
     alias school_name page_title
 
     def courses
-      @school.courses.where(featured: true).order(:name)
+      @school.courses.live.where(featured: true).order(:name)
     end
 
     def cover_image

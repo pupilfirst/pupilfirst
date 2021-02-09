@@ -35,7 +35,7 @@ module Users
     def courses
       @courses ||= begin
         if current_school_admin.present?
-          current_school.courses
+          current_school.courses.live
         else
           current_school.courses.where(id: (courses_with_student_profile.pluck(:course_id) + courses_with_review_access + courses_with_author_access).uniq)
         end.with_attached_thumbnail

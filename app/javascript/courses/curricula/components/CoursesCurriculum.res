@@ -450,6 +450,7 @@ let make = (
         evaluationCriteria
         coaches
         preview
+        author
       />
 
     | None => React.null

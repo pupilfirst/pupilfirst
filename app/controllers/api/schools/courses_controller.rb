@@ -2,7 +2,6 @@ module Api
   module Schools
     class CoursesController < ApplicationController
       skip_before_action :verify_authenticity_token
-
       after_action :verify_authorized, except: :index
       after_action :verify_policy_scoped, only: :index
       before_action :authenticate_user!
@@ -22,13 +21,10 @@ module Api
       def create_students
         form = Students::CreateForm.new(Reform::OpenForm.new)
 
-        Rails.logger.debug("Students params: #{students_params}")
         if form.validate(students_params.merge({notify: true}))
-          Rails.logger.debug("Form valid")
           student_count = form.save
           render json: { error: nil, studentIds: student_count }, status: :created
         else
-          Rails.logger.debug("Form not valid")
           render json: { error: form.errors.full_messages.join(', ') }, status: :bad_request
         end
       end

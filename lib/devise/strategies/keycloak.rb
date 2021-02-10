@@ -8,13 +8,10 @@ module Devise
       end
 
       def authenticate!
-        puts "Authenticate!"
-        Rails.logger.debug("Auth header #{request.headers['Authorization']}")
         return fail if request.headers['Authorization'].blank?
 
         token = request.headers['Authorization'].split(' ').last
         user_info = Rails.configuration.keycloak_client.user_info(token)
-        Rails.logger.debug("User info: #{user_info}")
 
         school = School.joins(:domains).where(domains: { fqdn: request.host }).first
         if user_info['active']

@@ -55,12 +55,23 @@ module Keycloak
   end
 
   class ServiceAccount
+    attr_reader :refresh_token
+
+    def initialize
+      fetch_tokens
+    end
+
     def endpoints
       @endpoints ||= Endpoints.new
     end
 
     def access_token
-      @access_token ||= fetch_tokens[:access_token]
+      if signed_in?
+        @access_token
+      else
+        refresh_access_token
+        @access_token
+      end
     end
 
     def fetch_tokens
@@ -74,10 +85,34 @@ module Keycloak
 
       if res.status == 200
         tokens = MultiJson.load(res.body)
-        {access_token: tokens['access_token'], refresh_token: tokens['refresh_token']}
+        @access_token = tokens['access_token']
+        @refresh_token = tokens['refresh_token']
       else
         raise FailedRequestError.new 'Failed to sign-in as Keycloak\'s service account'
       end
+    end
+
+    def refresh_access_token
+      params = {
+        'client_id' => CONFIG[:client_id],
+        'client_secret' => CONFIG[:client_secret],
+        'refresh_token' => refresh_token,
+        'grant_type' => 'refresh_token',
+      }
+      headers = { 'Content-Type' => 'application/x-www-form-urlencoded' }
+      res = Faraday.post(endpoints.token, params, headers)
+
+      if res.status == 200
+        tokens = MultiJson.load(res.body)
+        @access_token = tokens['access_token']
+        @refresh_token = tokens['refresh_token']
+      else
+        raise FailedRequestError.new 'Failed to refresh Keycloak\'s service account access_token'
+      end
+    end
+
+    def signed_in?
+      Client.new.user_signed_in?(@access_token)
     end
   end
 
@@ -161,7 +196,7 @@ module Keycloak
       if res.status == 200
         MultiJson.load(res.body)
       else
-        raise FailedRequestError.new 'Failed to set user password'
+        raise FailedRequestError.new 'Failed to fetch user_info'
       end
     end
 
@@ -233,7 +268,7 @@ module Keycloak
 
     def set_user_password(email, password)
       user = user_by_email(email)
-      raise FailedRequestError.new 'Failed to set user password' if user
+      raise FailedRequestError.new 'Failed to set user password' unless user
       user[:credentials] = {
         type: "password",
         temporary: false,
@@ -255,7 +290,7 @@ module Keycloak
 
     def user_token(uname_email, password)
       user = user_by_email(uname_email)
-      valid = user && user.dig(:credentials, :password) == password
+      valid = user && user.dig(:credentials, :value) == password
       raise FailedRequestError.new 'Failed to set user password' unless valid
       user[:token] = SecureRandom.uuid
     end
@@ -269,7 +304,7 @@ module Keycloak
 
     private
     def user_by_token(token)
-      @users.find{|_, user| user[:token] == token}
+      @users.values.find{|user| user[:token] == token}
     end
 
     def user_by_email(email)

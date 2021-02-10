@@ -1,12 +1,13 @@
 module Api
   module Schools
-    class CoursesController < SchoolsController
+    class CoursesController < ApplicationController
       skip_before_action :verify_authenticity_token
+      after_action :verify_authorized, except: :index
+      after_action :verify_policy_scoped, only: :index
       before_action :authenticate_user!
       before_action :set_course, only: [:students, :create_students]
 
       def index
-        skip_authorization
         render json: scope.to_json
       end
 
@@ -18,19 +19,22 @@ module Api
       end
 
       def create_students
-        form = ::Schools::Founders::CreateForm.new(Reform::OpenForm.new)
+        form = Students::CreateForm.new(Reform::OpenForm.new)
 
-        response = if form.validate(params)
+        if form.validate(students_params)
           student_count = form.save
-          { error: nil, studentCount: student_count }
+          render json: { error: nil, studentIds: student_count }, status: :created
         else
-          { error: form.errors.full_messages.join(', ') }
+          render json: { error: form.errors.full_messages.join(', ') }, status: :bad_request
         end
-
-        render json: response
       end
 
       private
+
+      def students_params
+        stds = params.require(:students).map { |p| p.permit(:name, :email) }
+        {course_id: @course.id, students: stds }
+      end
 
       def set_course
         @course = authorize(scope.find(params[:course_id]),

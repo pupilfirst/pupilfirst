@@ -1,5 +1,3 @@
-require 'keycloak'
-
 module Courses
   # Adds a list of new students to a course.
   class AddStudentsService

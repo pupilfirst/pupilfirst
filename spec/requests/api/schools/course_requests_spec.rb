@@ -65,7 +65,7 @@ module Api
 
       context 'create_students' do
         let!(:course) do
-          crs = create :course, :with_one_level, school: school
+          create :course, :with_one_level, school: school
         end
 
         it 'register students into a course' do

@@ -55,7 +55,7 @@ module Keycloak
   end
 
   class ServiceAccount
-    attr_reader :access_token, :refresh_token
+    attr_reader :refresh_token
 
     def initialize
       fetch_tokens

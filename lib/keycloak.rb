@@ -305,7 +305,7 @@ module Keycloak
 
     private
     def user_by_token(token)
-      @users.find{|_, user| user[:token] == token}[1]
+      @users.values.find{|user| user[:token] == token}
     end
 
     def user_by_email(email)

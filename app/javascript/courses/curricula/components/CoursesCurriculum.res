@@ -472,6 +472,20 @@ let make = (
               setState(state => {...state, showLevelZero: showLevelZero})}
             levelZero
           />
+          {ReactUtils.nullUnless(
+            <div className="text-center mt-2 max-w-3xl mx-auto">
+              <a
+                className="btn btn-primary-ghost btn-small"
+                href={"/school/courses/" ++
+                Course.id(course) ++
+                "/curriculum?level=" ++
+                Level.number(currentLevel)->string_of_int}>
+                <i className="fas fa-pencil-alt" />
+                <span className="ml-2"> {str("Edit Level")} </span>
+              </a>
+            </div>,
+            author,
+          )}
           {currentLevel |> Level.isLocked && accessLockedLevels
             ? <div className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto">
                 {"This level is still locked for students, and will be unlocked on " |> str}

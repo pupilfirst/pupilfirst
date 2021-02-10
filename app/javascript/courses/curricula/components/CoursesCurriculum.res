@@ -47,7 +47,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
     </Link>
     {ReactUtils.nullUnless(
       <a
-        title={"Edit target " ++ Target.title(target)}
+        title={t("edit_target_button_title", ~variables=[("title", Target.title(target))])}
         href={"/school/courses/" ++ courseId ++ "/targets/" ++ targetId ++ "/content"}
         className="hidden lg:block courses-curriculum__target-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:bg-gray-200">
         <i className="fas fa-pencil-alt" />
@@ -74,7 +74,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
         : React.null}
       <div className="p-6 pt-5">
         <div className="text-2xl font-bold leading-snug">
-          {targetGroup |> TargetGroup.name |> str}
+          {TargetGroup.name(targetGroup)->str}
         </div>
         <MarkdownBlock
           className="text-sm max-w-md mx-auto leading-snug"
@@ -113,8 +113,8 @@ let handleLockedLevel = level =>
     | Some(date) =>
       let dateString = date->DateFns.format("MMMM d, yyyy")
       <div className="font-semibold text-md px-3">
-        <p> {t("level_locked_notice") |> str} </p>
-        <p> {"You can access the content on " ++ (dateString ++ ".") |> str} </p>
+        <p> {t("level_locked_notice")->str} </p>
+        <p> {t("level_locked_explanation", ~variables=[("date", dateString)])->str} </p>
       </div>
     | None => React.null
     }}
@@ -482,17 +482,21 @@ let make = (
                 "/curriculum?level=" ++
                 Level.number(currentLevel)->string_of_int}>
                 <i className="fas fa-pencil-alt" />
-                <span className="ml-2"> {str("Edit Level")} </span>
+                <span className="ml-2"> {t("edit_level_button")->str} </span>
               </a>
             </div>,
             author,
           )}
           {currentLevel |> Level.isLocked && accessLockedLevels
-            ? <div className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto">
-                {"This level is still locked for students, and will be unlocked on " |> str}
-                <strong> {currentLevel |> Level.unlockDateString |> str} </strong>
-                {"." |> str}
-              </div>
+            ? <div
+                className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto"
+                dangerouslySetInnerHTML={
+                  "__html": t(
+                    "level_locked_for_students_notice",
+                    ~variables=[("date", Level.unlockDateString(currentLevel))],
+                  ),
+                }
+              />
             : React.null}
           {Level.isUnlocked(currentLevel) || accessLockedLevels
             ? targetGroupsInLevel == []

@@ -1,5 +1,7 @@
 open CoursesCurriculum__Types
 
+let t = I18n.t(~scope="components.CoursesCurriculum__Learn")
+
 @react.component
 let make = (~targetDetails, ~author, ~courseId, ~targetId) => {
   <div id="learn-component">
@@ -8,7 +10,7 @@ let make = (~targetDetails, ~author, ~courseId, ~targetId) => {
         className="btn btn-primary-ghost btn-small"
         href={"/school/courses/" ++ courseId ++ "/targets/" ++ targetId ++ "/content"}>
         <i className="fas fa-pencil-alt" />
-        <span className="ml-2"> {React.string("Edit Content")} </span>
+        <span className="ml-2"> {t("edit_target_button")->React.string} </span>
       </a>,
       author,
     )}

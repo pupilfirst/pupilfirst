@@ -89,8 +89,7 @@ module Api
             ]
           }
           form = Students::CreateForm.new(Reform::OpenForm.new) 
-          allow(Students::CreateForm).to receive(:new) { form }
-          expect(form).to receive(:validate).with(hash_including(notify: true)).and_call_original
+          allow(Students::CreateForm).to receive(:new).with(course, hash_including(nofity: true)) { form }
           post "/api/schools/courses/#{course.id}/students", params: params, headers: headers
         end
       end

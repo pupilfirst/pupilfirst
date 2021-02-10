@@ -3,7 +3,6 @@ module Api
     module Students
       class CreateForm < Reform::Form
         property :course_id, validates: { presence: true }
-        property :notify
 
         collection :students, populate_if_empty: OpenStruct, virtual: true, default: [] do
           property :name, validates: { presence: true, length: { maximum: 250 } }
@@ -23,14 +22,10 @@ module Api
         end
 
         def save
-          ::Courses::AddStudentsService.new(course, notify: notify?).add(students)
+          ::Courses::AddStudentsService.new(course, notify: true).add(students)
         end
 
         private
-
-        def notify?
-          notify.to_s == 'true'
-        end
 
         def course
           @course ||= Course.find(course_id)

@@ -21,7 +21,7 @@ module Api
       def create_students
         form = Students::CreateForm.new(Reform::OpenForm.new)
 
-        if form.validate(students_params.merge({notify: true}))
+        if form.validate(students_params)
           student_count = form.save
           render json: { error: nil, studentIds: student_count }, status: :created
         else

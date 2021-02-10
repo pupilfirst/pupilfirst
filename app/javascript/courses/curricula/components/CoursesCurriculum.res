@@ -23,7 +23,7 @@ let targetStatusClasses = targetStatus => {
   "curriculum__target-status px-3 py-px ml-4 h-6 " ++ statusClasses
 }
 
-let rendertarget = (target, statusOfTargets) => {
+let rendertarget = (target, statusOfTargets, author, courseId) => {
   let targetId = target |> Target.id
   let targetStatus =
     statusOfTargets |> ArrayUtils.unsafeFind(
@@ -31,22 +31,33 @@ let rendertarget = (target, statusOfTargets) => {
       "Could not find targetStatus for listed target with ID " ++ targetId,
     )
 
-  <Link
-    href={"/targets/" ++ targetId}
-    key={"target-" ++ targetId}
-    className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer"
-    ariaLabel={"Select Target " ++ targetId}>
-    <span className="font-semibold text-left leading-snug"> {target |> Target.title |> str} </span>
-    {ReactUtils.nullIf(
-      <span className={targetStatusClasses(targetStatus)}>
-        {targetStatus |> TargetStatus.statusToString |> str}
-      </span>,
-      TargetStatus.isPending(targetStatus),
+  <div className="courses-curriculum__target-container flex border-t bg-white hover:bg-gray-100">
+    <Link
+      href={"/targets/" ++ targetId}
+      key={"target-" ++ targetId}
+      className="p-6 flex flex-grow items-center justify-between hover:text-primary-500 cursor-pointer"
+      ariaLabel={"Select Target " ++ targetId}>
+      <span className="font-semibold text-left leading-snug"> {Target.title(target)->str} </span>
+      {ReactUtils.nullIf(
+        <span className={targetStatusClasses(targetStatus)}>
+          {TargetStatus.statusToString(targetStatus)->str}
+        </span>,
+        TargetStatus.isPending(targetStatus),
+      )}
+    </Link>
+    {ReactUtils.nullUnless(
+      <a
+        title={"Edit target " ++ Target.title(target)}
+        href={"/school/courses/" ++ courseId ++ "/targets/" ++ targetId ++ "/content"}
+        className="hidden lg:block courses-curriculum__target-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:bg-gray-200">
+        <i className="fas fa-pencil-alt" />
+      </a>,
+      author,
     )}
-  </Link>
+  </div>
 }
 
-let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
+let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId) => {
   let targetGroupId = targetGroup |> TargetGroup.id
   let targets = targets |> Js.Array.filter(t => t |> Target.targetGroupId == targetGroupId)
 
@@ -73,7 +84,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
       </div>
       {targets
       |> ArrayUtils.copyAndSort((t1, t2) => (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex))
-      |> Js.Array.map(target => rendertarget(target, statusOfTargets))
+      |> Js.Array.map(target => rendertarget(target, statusOfTargets, author, courseId))
       |> React.array}
     </div>
   </div>
@@ -268,6 +279,7 @@ let quickNavigationLinks = (levels, selectedLevel, setState) => {
 
 @react.component
 let make = (
+  ~author,
   ~course,
   ~levels,
   ~targetGroups,
@@ -478,7 +490,13 @@ let make = (
                 : targetGroupsInLevel
                   |> TargetGroup.sort
                   |> Js.Array.map(targetGroup =>
-                    renderTargetGroup(targetGroup, targets, state.statusOfTargets)
+                    renderTargetGroup(
+                      targetGroup,
+                      targets,
+                      state.statusOfTargets,
+                      author,
+                      Course.id(course),
+                    )
                   )
                   |> React.array
             : handleLockedLevel(currentLevel)}

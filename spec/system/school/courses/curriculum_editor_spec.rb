@@ -45,12 +45,14 @@ feature 'Curriculum Editor', js: true do
   end
 
   scenario 'admin creates a basic course framework by adding level, target group and targets' do
-    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
+    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course, level: 1)
 
-    # he should be on the last level
-    expect(page).to have_text('Level 2: ' + level_2.name)
+    # When the level number is specified as a param, it should be selected.
+    expect(page).to have_text(target_group_1.name)
 
-    # all targets and target groups on that level should be visible
+    visit(curriculum_school_course_path(course))
+
+    # Visiting the page without the level param should default selection to the max level, with all is targets and groups visible.
     expect(page).to have_text(target_group_2.name)
     expect(page).to have_text(target_3.title)
     expect(page).to have_text(target_4.title)

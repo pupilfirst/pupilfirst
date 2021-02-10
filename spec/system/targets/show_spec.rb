@@ -586,6 +586,7 @@ feature 'Target Overlay', js: true do
         sign_in_user school_admin.user, referrer: target_path(target_l1)
 
         expect(page).to have_content('You are currently looking at a preview of this course.')
+        expect(page).to have_link('Edit Content', href: content_school_course_target_path(course_id: target_l1.course.id, id: target_l1.id))
 
         # This target should have a 'Complete' section.
         find('.course-overlay__body-tab-item', text: 'Complete').click

@@ -9,7 +9,7 @@ feature 'Notification Show Spec', js: true do
   let(:env_vars) {
     {
       VAPID_PUBLIC_KEY: vapid_key.public_key,
-      VAPID_PRIVATE_KEY: vapid_key.private_key
+      VAPID_PRIVATE_KEY: vapid_key.private_key,
     }
   }
 
@@ -20,10 +20,10 @@ feature 'Notification Show Spec', js: true do
   end
 
   context 'with few notifications' do
-    let!(:notification_1) { create :notification, recipient: student.user }
-    let!(:notification_2) { create :notification, recipient: student.user }
-    let!(:notification_3) { create :notification, :read, recipient: student.user }
-    let!(:notification_4) { create :notification, :read, recipient: student.user }
+    let!(:notification_1) { create :notification, message: 'Unique sentence', recipient: student.user }
+    let!(:notification_2) { create :notification, message: 'Something else', recipient: student.user }
+    let!(:notification_3) { create :notification, :read, message: 'Even more', recipient: student.user }
+    let!(:notification_4) { create :notification, :read, message: 'And again', recipient: student.user }
 
     scenario 'user plays around with search' do
       sign_in_user student.user, referrer: dashboard_path
@@ -115,10 +115,9 @@ feature 'Notification Show Spec', js: true do
   end
 
   scenario 'Subscribes for notifications' do
-
     sign_in_user student.user, referrer: dashboard_path
 
     click_button 'Show Notifications'
-    expect(page).to have_text("Subscribe")
+    expect(page).to have_text('Subscribe')
   end
 end

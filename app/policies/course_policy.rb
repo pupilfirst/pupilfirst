@@ -33,11 +33,11 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def show?
-    true
+    !record.archived?
   end
 
   def apply?
-    record&.school == current_school && record.public_signup?
+    record&.school == current_school && record.public_signup? && apply?
   end
 
   alias students? review?

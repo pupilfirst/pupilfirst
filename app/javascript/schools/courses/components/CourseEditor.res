@@ -300,15 +300,18 @@ let showCourse = (course, send) => {
             </h4>
           </div>
         </div>
-        <div className="px-6 pt-4">
-          <i className="fas fa-external-link-square-alt" />
-          <a
-            href={"/courses/" ++ (course |> Course.id)}
-            target="_blank"
-            className="text-sm font-semibold cursor-pointer ml-2 text-gray-800">
-            {"View public page" |> str}
-          </a>
-        </div>
+        {ReactUtils.nullIf(
+          <div className="px-6 pt-4">
+            <i className="fas fa-external-link-square-alt" />
+            <a
+              href={"/courses/" ++ (course |> Course.id)}
+              target="_blank"
+              className="text-sm font-semibold cursor-pointer ml-2 text-gray-800">
+              {"View public page" |> str}
+            </a>
+          </div>,
+          Belt.Option.isSome(Course.archivedAt(course)),
+        )}
         <div
           className="user-dashboard-course__description text-sm px-6 pt-4 w-full leading-relaxed">
           {str(Course.description(course))}
@@ -385,7 +388,7 @@ let make = () => {
       </SchoolAdmin__EditorDrawer2>
     }}
     <div className="flex-1 flex flex-col">
-      <div className="items-center justify-between max-w-3xl mx-auto mt-8 w-full px-2">
+      <div className="items-center justify-between max-w-3xl mx-auto mt-8 w-full px-10">
         <button
           className="w-full flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-md focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg cursor-pointer"
           onClick={_ => send(UpdateEditorAction(ShowForm(None)))}>
@@ -394,7 +397,7 @@ let make = () => {
         </button>
       </div>
       <div className="max-w-3xl mx-auto w-full">
-        <div className="w-full bg-gray-100 border-b sticky top-0 z-30 px-4 lg:px-8 py-3">
+        <div className="w-full sticky top-0 z-30 mt-4 px-10">
           <label
             htmlFor="search_courses"
             className="block text-tiny font-semibold uppercase pl-px text-left">
@@ -414,7 +417,7 @@ let make = () => {
           />
         </div>
       </div>
-      <div id="courses" className="px-6 pb-4 mt-5 mx-auto max-w-3xl w-full">
+      <div id="courses" className="px-6 pb-4 mx-auto max-w-3xl w-full">
         {switch state.courses {
         | Unloaded =>
           <div className="px-2 lg:px-8">

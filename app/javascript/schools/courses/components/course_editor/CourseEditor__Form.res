@@ -154,7 +154,7 @@ let progressionLimitForQuery = state =>
   | #Limited => Some(state.progressionLimit)
   }
 
-let createCourse = (state, send, updateCourseCB) => {
+let createCourse = (state, send, relaodCoursesCB) => {
   send(StartSaving)
 
   let createCourseQuery = CreateCourseQuery.make(
@@ -171,7 +171,7 @@ let createCourse = (state, send, updateCourseCB) => {
 
   createCourseQuery |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
     switch result["createCourse"]["course"] {
-    | Some(course) => updateCourseCB(Course.makeFromJs(course))
+    | Some(_course) => relaodCoursesCB()
     | None => send(FailSaving)
     }
 
@@ -350,7 +350,7 @@ let progressionBehaviorButtonClasses = (state, progressionBehavior, additionalCl
   defaultClasses ++ (selected ? " text-primary-500 border-primary-500" : "")
 }
 
-let detailsTab = (state, send, course, updateCourseCB) => {
+let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
   <div>
     <div className="mt-5">
       <label className="inline-block tracking-wide text-xs font-semibold " htmlFor="name">
@@ -476,7 +476,7 @@ let detailsTab = (state, send, course, updateCourseCB) => {
         | None =>
           <button
             disabled={saveDisabled(state)}
-            onClick={_ => createCourse(state, send, updateCourseCB)}
+            onClick={_ => createCourse(state, send, relaodCoursesCB)}
             className="w-full btn btn-large btn-primary mt-3">
             {"Create Course" |> str}
           </button>
@@ -558,7 +558,7 @@ let make = (~course, ~updateCourseCB, ~relaodCoursesCB) => {
       </div>
       <div className="max-w-2xl mx-auto">
         <div className={tabItemsClasses(state.tab == DetailsTab)}>
-          {detailsTab(state, send, course, updateCourseCB)}
+          {detailsTab(state, send, course, updateCourseCB, relaodCoursesCB)}
         </div>
         {switch course {
         | Some(c) =>

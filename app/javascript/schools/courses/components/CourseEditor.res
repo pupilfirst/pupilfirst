@@ -74,6 +74,7 @@ let reducer = (state, action) =>
   | ReloadCourses => {
       ...state,
       editorAction: Hidden,
+      loading: Reloading,
       relaodCourses: !state.relaodCourses,
     }
   | UnsetSearchString => {

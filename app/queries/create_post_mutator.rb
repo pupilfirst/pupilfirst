@@ -24,25 +24,25 @@ class CreatePostMutator < ApplicationQuery
   end
 
   def create_post
-    Post.transaction do
-      post = Post.create!(
+    post = Post.transaction do
+      # Update the topic's last activity time.
+      topic.update!(last_activity_at: Time.zone.now)
+
+      Post.create!(
         creator: current_user,
         topic: topic,
         body: body,
         reply_to_post: reply_to_post,
-        post_number: post_number
+        post_number: post_number,
       )
-
-      # Send a notification mail to addressee only if she isn't replying to herself.
-      UserMailer.new_post(post, addressee).deliver_later if addressee.present? && current_user != addressee
-
-      Notifications::PostCreatedJob.perform_later(current_user.id, post.id)
-
-      # Update the topic's last activity time.
-      topic.update!(last_activity_at: Time.zone.now)
-
-      post
     end
+
+    # Send a notification mail to addressee only if she isn't replying to herself.
+    UserMailer.new_post(post, addressee).deliver_later if addressee.present? && current_user != addressee
+
+    Notifications::CreateJob.perform_later(:post_created, current_user, post)
+
+    post
   end
 
   private

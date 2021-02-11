@@ -8,26 +8,28 @@ class CreateTopicMutator < ApplicationQuery
   property :topic_category_id
 
   def create_topic
-    Topic.transaction do
+    new_topic = Topic.transaction do
       topic = Topic.create!(
         title: title,
         community: community,
         target_id: target&.id,
-        topic_category: topic_category
+        topic_category: topic_category,
       )
 
       topic.posts.create!(
         post_number: 1,
         body: body,
-        creator: current_user
+        creator: current_user,
       )
 
       create_subscribers(topic)
 
-      Notifications::TopicCreatedJob.perform_later(current_user.id, topic.id)
-
       topic
     end
+
+    Notifications::CreateJob.perform_later(:topic_created, current_user, new_topic)
+
+    new_topic
   end
 
   private
@@ -54,12 +56,12 @@ class CreateTopicMutator < ApplicationQuery
 
   def target
     @target ||= begin
-      t = Target.find_by(id: target_id)
+        t = Target.find_by(id: target_id)
 
-      if t.present? && t.course.school == current_school && target_accessible?(t)
-        t
+        if t.present? && t.course.school == current_school && target_accessible?(t)
+          t
+        end
       end
-    end
   end
 
   def target_accessible?(some_target)

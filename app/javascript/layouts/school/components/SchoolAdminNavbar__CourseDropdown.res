@@ -2,6 +2,8 @@ open SchoolAdminNavbar__Types
 
 let str = React.string
 
+let isPast = date => date->Belt.Option.mapWithDefault(false, DateFns.isPast)
+
 let selected = currentCourse =>
   <button
     title={currentCourse |> Course.name}
@@ -14,10 +16,10 @@ let selected = currentCourse =>
   </button>
 
 let contents = (courses, currentCourse) =>
-  courses
-  |> Course.sort
-  |> List.filter(course => course |> Course.id != (currentCourse |> Course.id))
-  |> List.map(course =>
+  Js.Array.filter(
+    course => Course.id(course) != Course.id(currentCourse) && !isPast(Course.endsAt(course)),
+    courses,
+  ) |> Js.Array.map(course =>
     <a
       className="block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 w-40 truncate"
       key={course |> Course.id}
@@ -25,12 +27,11 @@ let contents = (courses, currentCourse) =>
       {course |> Course.name |> str}
     </a>
   )
-  |> Array.of_list
 
 @react.component
 let make = (~courses, ~currentCourseId) => {
   let currentCourse =
-    courses |> ListUtils.unsafeFind(
+    courses |> ArrayUtils.unsafeFind(
       course => course |> Course.id == currentCourseId,
       "Could not find currentCourse with ID " ++ currentCourseId,
     )

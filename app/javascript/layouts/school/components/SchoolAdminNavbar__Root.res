@@ -281,22 +281,26 @@ let make = (
                 "fas fa-book",
                 "Courses",
               )}
-              {shrunk
-                ? React.null
-                : <ul className="pr-4 pb-4 ml-10 mt-1">
-                    {courses
-                    |> List.map(course =>
-                      <li key={course |> Course.id}>
-                        <a
-                          href={"/school/courses/" ++ ((course |> Course.id) ++ "/curriculum")}
-                          className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
-                          {course |> Course.name |> str}
-                        </a>
-                      </li>
-                    )
-                    |> Array.of_list
-                    |> React.array}
-                  </ul>}
+              {ReactUtils.nullIf(
+                <ul className="pr-4 pb-4 ml-10 mt-1">
+                  {Js.Array.filter(
+                    course =>
+                      Belt.Option.mapWithDefault(Course.endsAt(course), true, DateFns.isFuture),
+                    courses,
+                  )
+                  |> Js.Array.map(course =>
+                    <li key={Course.id(course)}>
+                      <a
+                        href={"/school/courses/" ++ Course.id(course) ++ "/curriculum"}
+                        className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
+                        {str(Course.name(course))}
+                      </a>
+                    </li>
+                  )
+                  |> React.array}
+                </ul>,
+                shrunk,
+              )}
             </li>
             <li>
               {topLink(

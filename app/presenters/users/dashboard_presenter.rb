@@ -37,7 +37,7 @@ module Users
         if current_school_admin.present?
           current_school.courses.live
         else
-          current_school.courses.where(id: (courses_with_student_profile.pluck(:course_id) + courses_with_review_access + courses_with_author_access).uniq)
+          current_school.courses.live.where(id: (courses_with_student_profile.pluck(:course_id) + courses_with_review_access + courses_with_author_access).uniq)
         end.with_attached_thumbnail
       end
     end

@@ -371,10 +371,11 @@ en:
         input_hint: Search by name
         label:
           name: Search by name
-          archived: Archived
-          live: Live
-        archived: Show Archived Courses
-        live: Show Live Courses
+          status: Status
+        status:
+          archived: Show archived courses
+          ended: Show ended Courses
+          active: Show active courses
       button_load_more: Load More Courses...
 
   jobs:

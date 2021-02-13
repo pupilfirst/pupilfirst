@@ -139,17 +139,17 @@ let courseLink = (href, title, icon) =>
   <a
     key=href
     href
-    className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 hover:text-primary-500">
+    className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-no-wrap">
     <i className=icon /> <span className="font-semibold ml-2"> {title |> str} </span>
   </a>
 
 let courseLinks = course => {
   let baseUrl = "/school/courses/" ++ Course.id(course)
   [
-    {courseLink(baseUrl ++ "/curriculum", "Edit Curriculum", "fas fa-check-square")},
-    {courseLink(baseUrl ++ "/students", "Manage Students", "fas fa-users")},
-    {courseLink(baseUrl ++ "/coaches", "Manage Coaches", "fas fa-user")},
-    {courseLink(baseUrl ++ "/exports", "Download Reports", "fas fa-file")},
+    {courseLink(baseUrl ++ "/curriculum", "Edit Curriculum", "fas fa-fw fa-check-square")},
+    {courseLink(baseUrl ++ "/students", "Manage Students", "fas fa-fw fa-users fa-fw")},
+    {courseLink(baseUrl ++ "/coaches", "Manage Coaches", "fas fa-fw fa-user fa-fw")},
+    {courseLink(baseUrl ++ "/exports", "Download Reports", "fas fa-fw fa-file fa-fw")},
   ]
 }
 
@@ -270,8 +270,10 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
   </div>
 
 let dropdownSelected =
-  <button className="px-6 py-2 bg-gray-200 text-primary-500 rounded-lg text-sm">
-    {str("...")}
+  <button
+    className="dropdown__btn appearance-none flex bg-white border hover:bg-primary-100 hover:text-primary-500 items-center relative justify-between focus:outline-none font-semibold text-sm px-3 py-2 rounded w-full">
+    <span> {str("Quick Links")} </span>
+    <i className="fas fa-chevron-down text-xs ml-3 font-semibold" />
   </button>
 
 let showCourse = (course, send) => {
@@ -279,30 +281,33 @@ let showCourse = (course, send) => {
     key={Course.id(course)}
     ariaLabel={Course.name(course)}
     className="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
-    <div className="flex shadow bg-white rounded-lg flex flex-col justify-between h-full">
+    <div className="flex shadow bg-white rounded-lg flex-col justify-between h-full">
       <div>
         <div className="relative">
-          <div className="relative pb-1/2 bg-gray-800">
+          <div className="relative pb-1/2 bg-gray-800 rounded-t-lg">
             {switch Course.thumbnail(course) {
             | Some(image) =>
-              <img className="absolute h-full w-full object-cover" src={Course.imageUrl(image)} />
+              <img
+                className="absolute h-full w-full object-cover rounded-t-lg"
+                src={Course.imageUrl(image)}
+              />
             | None =>
               <div
-                className="user-dashboard-course__cover absolute h-full w-full svg-bg-pattern-1"
+                className="user-dashboard-course__cover rounded-t-lg absolute h-full w-full svg-bg-pattern-1"
               />
             }}
           </div>
           <div
-            className="user-dashboard-course__title-container absolute w-full flex h-16 bottom-0 z-50"
+            className="user-dashboard-course__title-container absolute w-full flex inset-x-0 bottom-0 p-4 z-50"
             key={Course.id(course)}>
             <h4
-              className="user-dashboard-course__title text-white font-semibold leading-tight pl-6 pr-4 text-lg md:text-xl">
+              className="user-dashboard-course__title text-white font-semibold leading-tight pr-4 text-lg md:text-xl">
               {str(Course.name(course))}
             </h4>
           </div>
         </div>
         {ReactUtils.nullIf(
-          <div className="px-6 pt-4">
+          <div className="px-4 pt-4">
             <i className="fas fa-external-link-square-alt" />
             <a
               href={"/courses/" ++ (course |> Course.id)}
@@ -314,21 +319,23 @@ let showCourse = (course, send) => {
           Belt.Option.isSome(Course.archivedAt(course)),
         )}
         <div
-          className="user-dashboard-course__description text-sm px-6 pt-4 w-full leading-relaxed">
+          className="user-dashboard-course__description text-sm px-4 pt-4 w-full leading-relaxed">
           {str(Course.description(course))}
         </div>
       </div>
-      <div className="flex justify-between items-center m-4">
+      <div className="grid grid-cols-5 gap-4 p-4">
         <a
           title={"Edit " ++ Course.name(course)}
-          className="px-6 py-2 bg-gray-200 text-primary-500 rounded-lg text-sm cursor-pointer"
+          className="col-span-3 btn btn-default px-4 py-2 bg-gray-200 text-primary-500 rounded-lg text-sm cursor-pointer"
           onClick={_ => send(UpdateEditorAction(ShowForm(Some(course))))}>
           <div>
-            <FaIcon classes="fas fa-pencil-alt mr-2" />
+            <FaIcon classes="far fa-edit mr-3" />
             <span className="text-black font-semibold"> {str("Edit Course Details")} </span>
           </div>
         </a>
-        <Dropdown selected={dropdownSelected} contents={courseLinks(course)} />
+        <Dropdown
+          className="col-span-2" selected={dropdownSelected} contents={courseLinks(course)}
+        />
       </div>
     </div>
   </div>
@@ -389,7 +396,7 @@ let make = () => {
       </SchoolAdmin__EditorDrawer2>
     }}
     <div className="flex-1 flex flex-col">
-      <div className="items-center justify-between max-w-3xl mx-auto mt-8 w-full px-10">
+      <div className="items-center justify-between max-w-4xl mx-auto mt-8 w-full px-10">
         <button
           className="w-full flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-md focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg cursor-pointer"
           onClick={_ => send(UpdateEditorAction(ShowForm(None)))}>
@@ -397,7 +404,7 @@ let make = () => {
           <span className="font-semibold ml-2"> {"Add New Course" |> str} </span>
         </button>
       </div>
-      <div className="max-w-3xl mx-auto w-full">
+      <div className="max-w-4xl mx-auto w-full">
         <div className="w-full sticky top-0 z-30 mt-4 px-10">
           <label
             htmlFor="search_courses"
@@ -418,7 +425,7 @@ let make = () => {
           />
         </div>
       </div>
-      <div id="courses" className="px-6 pb-4 mx-auto max-w-3xl w-full">
+      <div id="courses" className="px-6 pb-4 mx-auto max-w-4xl w-full">
         {switch state.courses {
         | Unloaded =>
           <div className="px-2 lg:px-8">

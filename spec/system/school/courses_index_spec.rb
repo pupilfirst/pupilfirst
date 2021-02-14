@@ -8,7 +8,9 @@ feature 'Courses Index', js: true do
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
   let!(:course_1) { create :course, school: school }
-  let!(:course_2) { create :course, school: school }
+  let!(:course_2) { create :course, school: school, name: 'Pupilfirst Demo Course' }
+  let!(:course_ended) { create :course, school: school, ends_at: 1.day.ago }
+  let!(:course_archived) { create :course, school: school, archived_at: 1.day.ago }
 
   let!(:school_admin) { create :school_admin, school: school }
 
@@ -165,5 +167,43 @@ feature 'Courses Index', js: true do
   scenario 'user who is not logged in gets redirected to sign in page' do
     visit school_courses_path
     expect(page).to have_text("Please sign in to continue.")
+  end
+
+  scenario 'user plays around with search' do
+    sign_in_user school_admin.user, referrer: school_courses_path
+
+    expect(page).to have_text('Status: Show active courses')
+
+    within("div[id='courses']") do
+      expect(page).to have_text(course_1.name)
+      expect(page).not_to have_text(course_ended.name)
+      expect(page).not_to have_text(course_archived.name)
+    end
+
+    fill_in('Search', with: 'ended')
+    click_button 'Pick Status: Show ended courses'
+
+    within("div[id='courses']") do
+      expect(page).not_to have_text(course_1.name)
+      expect(page).to have_text(course_ended.name)
+      expect(page).not_to have_text(course_archived.name)
+    end
+
+    fill_in('Search', with: 'archived')
+    click_button 'Pick Status: Show archived courses'
+
+    within("div[id='courses']") do
+      expect(page).not_to have_text(course_1.name)
+      expect(page).not_to have_text(course_ended.name)
+      expect(page).to have_text(course_archived.name)
+    end
+
+    click_button 'Remove selection: Show archived courses'
+    fill_in('Search', with: 'pupilfirst demo course')
+    click_button "Pick Search by name: pupilfirst demo course"
+
+    within("div[id='courses']") do
+      expect(page).to have_text(course_2.name)
+    end
   end
 end

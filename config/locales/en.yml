@@ -374,7 +374,7 @@ en:
           status: Status
         status:
           archived: Show archived courses
-          ended: Show ended Courses
+          ended: Show ended courses
           active: Show active courses
       button_load_more: Load More Courses...
 

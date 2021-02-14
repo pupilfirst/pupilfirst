@@ -301,15 +301,7 @@ module Selectable = {
       t("filter.status." ++ key)
     }
 
-  let searchString = s =>
-    switch s {
-    | Event(event) => t("filter.event") ++ (" " ++ eventName(event))
-    | Title(search) => search
-    | Status(_unread) =>
-      t("filter.status.read") ++
-      (" " ++
-      (t("filter.status.unread") ++ (" " ++ t("filter.status.all"))))
-    }
+  let searchString = s => value(s)
 
   let color = t =>
     switch t {
@@ -340,7 +332,7 @@ let unselected = state => {
     | #Read => [#Unread]
     | #Unread => [#Read]
     }
-  ) |> Array.map(s => Selectable.status(s))
+  ) |> Js.Array.map(s => Selectable.status(s))
 
   eventFilters |> Js.Array.concat(title) |> Js.Array.concat(status)
 }

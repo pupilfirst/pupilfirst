@@ -1,6 +1,6 @@
 class CoursesResolver < ApplicationQuery
   property :search
-  property :archived
+  property :status
 
   def courses
     if search.present?
@@ -20,11 +20,20 @@ class CoursesResolver < ApplicationQuery
     current_school_admin.present?
   end
 
-  def applicable_courses
-    if archived.nil?
-      current_school.courses
+  def filter_by_status
+    case status
+    when 'Active'
+      current_school.courses.live.where('ends_at > ?', Time.now).or(current_school.courses.live.where(ends_at: nil))
+    when 'Ended'
+      current_school.courses.where('ends_at < ?', Time.now)
+    when "Archived"
+      current_school.courses.archived
     else
-      archived ? current_school.courses.archived : current_school.courses.live
+      raise "#{status} is not a valid status"
     end
+  end
+
+  def applicable_courses
+    status.blank? ? current_school.courses : filter_by_status
   end
 end

@@ -6,10 +6,12 @@ let t = I18n.t(~scope="components.CourseEditor")
 
 let str = React.string
 
+type status = [#Active | #Ended | #Archived]
+
 module CoursesQuery = %graphql(
   `
-  query CoursesQuery($search: String, $after: String, $archived: Boolean) {
-    courses(archived: $archived, search: $search, first: 10, after: $after){
+  query CoursesQuery($search: String, $after: String, $status: CourseStatus) {
+    courses(status: $status, search: $search, first: 10, after: $after){
       nodes {
         ...Course.Fragments.AllFields
       }
@@ -29,7 +31,7 @@ module Item = {
 module Pagination = Pagination.Make(Item)
 
 type filter = {
-  archived: option<bool>,
+  status: option<status>,
   name: option<string>,
 }
 
@@ -55,7 +57,8 @@ type action =
   | BeginLoadingMore
   | BeginReloading
   | SetFilterArchived
-  | SetFilterLive
+  | SetFilterActive
+  | SetFilterEnded
   | ClearArchivedFilter
   | UpdateEditorAction(editorAction)
   | UpdateCourse(Course.t)
@@ -90,15 +93,23 @@ let reducer = (state, action) =>
       filterString: "",
       filter: {
         ...state.filter,
-        archived: Some(true),
+        status: Some(#Archived),
       },
     }
-  | SetFilterLive => {
+  | SetFilterEnded => {
       ...state,
       filterString: "",
       filter: {
         ...state.filter,
-        archived: Some(false),
+        status: Some(#Ended),
+      },
+    }
+  | SetFilterActive => {
+      ...state,
+      filterString: "",
+      filter: {
+        ...state.filter,
+        status: Some(#Active),
       },
     }
   | ClearArchivedFilter => {
@@ -106,7 +117,7 @@ let reducer = (state, action) =>
       filterString: "",
       filter: {
         ...state.filter,
-        archived: None,
+        status: None,
       },
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
@@ -154,12 +165,7 @@ let courseLinks = course => {
 }
 
 let loadCourses = (state, cursor, send) => {
-  CoursesQuery.make(
-    ~archived=?state.filter.archived,
-    ~after=?cursor,
-    ~search=?state.filter.name,
-    (),
-  )
+  CoursesQuery.make(~status=?state.filter.status, ~after=?cursor, ~search=?state.filter.name, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     let courses =
@@ -179,39 +185,43 @@ let loadCourses = (state, cursor, send) => {
 
 module Selectable = {
   type t =
-    | Archived
-    | Live
+    | Status(status)
     | Name(string)
 
   let label = s =>
     switch s {
-    | Archived => Some(t("filter.label.archived"))
-    | Live => Some(t("filter.label.live"))
+    | Status(_) => Some(t("filter.label.status"))
     | Name(_) => Some(t("filter.label.name"))
     }
 
   let value = s =>
     switch s {
-    | Archived => t("filter.archived")
-    | Live => t("filter.live")
+    | Status(status) =>
+      let key = switch status {
+      | #Active => "active"
+      | #Ended => "ended"
+      | #Archived => "archived"
+      }
+
+      t("filter.status." ++ key)
     | Name(search) => search
     }
 
-  let searchString = s =>
-    switch s {
-    | Archived => t("filter.archived")
-    | Live => t("filter.live")
-    | Name(search) => search
-    }
+  let searchString = s => value(s)
 
   let color = t =>
     switch t {
-    | Live => "blue"
-    | Name(_search) => "gray"
-    | Archived => "orange"
+    | Status(status) =>
+      switch status {
+      | #Active => "green"
+      | #Ended => "orange"
+      | #Archived => "gray"
+      }
+    | Name(_) => "blue"
     }
 
   let name = search => Name(search)
+  let status = status => Status(status)
 }
 
 module Multiselect = MultiselectDropdown.Make(Selectable)
@@ -219,35 +229,45 @@ module Multiselect = MultiselectDropdown.Make(Selectable)
 let unselected = state => {
   let trimmedFilterString = state.filterString |> String.trim
   let name = trimmedFilterString == "" ? [] : [Selectable.name(trimmedFilterString)]
+  let status = Js.Array.map(
+    s => Selectable.status(s),
+    Belt.Option.mapWithDefault(state.filter.status, [#Active, #Ended, #Archived], u =>
+      switch u {
+      | #Active => [#Ended, #Archived]
+      | #Ended => [#Active, #Archived]
+      | #Archived => [#Ended, #Active]
+      }
+    ),
+  )
 
-  Js.Array.concat([Selectable.Archived, Selectable.Live], name)
+  Js.Array.concat(status, name)
 }
 
-let defaultOptions = () => [Selectable.Archived, Selectable.Live]
+let defaultOptions = () => Js.Array.map(s => Selectable.status(s), [#Active, #Ended, #Archived])
 
 let selected = state => {
-  let selectedStatusFilters = state.filter.archived->Belt.Option.mapWithDefault([], a => {
-    [a ? Selectable.Archived : Selectable.Live]
-  })
+  let status = state.filter.status->Belt.Option.mapWithDefault([], u => [Selectable.status(u)])
 
   let selectedSearchString =
     state.filter.name |> OptionUtils.mapWithDefault(name => [Selectable.name(name)], [])
 
-  Js.Array.concat(selectedStatusFilters, selectedSearchString)
+  Js.Array.concat(status, selectedSearchString)
 }
 
 let onSelectFilter = (send, selectable) =>
   switch selectable {
-  | Selectable.Archived => send(SetFilterArchived)
-  | Live => send(SetFilterLive)
+  | Selectable.Status(s) =>
+    switch s {
+    | #Active => send(SetFilterActive)
+    | #Ended => send(SetFilterEnded)
+    | #Archived => send(SetFilterArchived)
+    }
   | Name(n) => send(SetSearchString(n))
   }
 
 let onDeselectFilter = (send, selectable) =>
   switch selectable {
-  | Selectable.Archived
-  | Live =>
-    send(ClearArchivedFilter)
+  | Selectable.Status(_) => send(ClearArchivedFilter)
   | Name(_title) => send(UnsetSearchString)
   }
 
@@ -266,7 +286,7 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
             ],
             "courses_partially_loaded_text",
           )
-    ) |> str}
+    )->str}
   </div>
 
 let dropdownSelected =
@@ -309,11 +329,11 @@ let showCourse = (course, send) => {
         {ReactUtils.nullIf(
           <div className="px-4 pt-4">
             <a
-              href={"/courses/" ++ (course |> Course.id)}
+              href={"/courses/" ++ Course.id(course)}
               target="_blank"
               className="inline-flex items-center underline rounded p-1 text-sm font-semibold cursor-pointer text-gray-800 hover:text-primary-500">
               <Icon className="if i-external-link-solid mr-2" />
-              <span> {"View public page" |> str} </span>
+              <span> {"View public page"->str} </span>
             </a>
           </div>,
           Belt.Option.isSome(Course.archivedAt(course)),
@@ -374,7 +394,7 @@ let make = () => {
       filterString: "",
       filter: {
         name: None,
-        archived: Some(false),
+        status: Some(#Active),
       },
       relaodCourses: false,
     },

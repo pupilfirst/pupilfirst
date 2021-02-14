@@ -118,8 +118,8 @@ feature 'Courses Index', js: true do
 
     scenario 'School admin edits images associated with the course' do
       sign_in_user school_admin.user, referrer: school_courses_path
-
-      find("a[title='Edit images for #{course_1.name}']").click
+      find("a[title='Edit #{course_1.name}']").click
+      click_button 'Images'
 
       expect(page).to have_text('Please choose an image file.', count: 2)
 
@@ -130,13 +130,35 @@ feature 'Courses Index', js: true do
 
       expect(page).to have_text('Images have been updated successfully')
 
-      find("a[title='Edit images for #{course_1.name}']").click
+      find("a[title='Edit #{course_1.name}']").click
+      click_button 'Images'
 
       expect(page).to have_text('Please pick a file to replace logo_lipsum_on_light_bg.png')
       expect(page).to have_text('Please pick a file to replace logo_lipsum_on_dark_bg.png')
 
       expect(course_1.cover).to be_attached
       expect(course_1.thumbnail).to be_attached
+    end
+  end
+
+  context 'with many courses' do
+    before do
+      23.times do
+        create :course, school: school
+      end
+    end
+
+    scenario 'user loads all courses' do
+      sign_in_user school_admin.user, referrer: school_courses_path
+
+      expect(page).to have_text('Showing 10 of 25 courses')
+      click_button 'Load More Courses...'
+
+      expect(page).to have_text('Showing 20 of 25 courses')
+      click_button 'Load More Courses...'
+
+      expect(page).to have_text('Showing all 25 courses')
+      expect(page).not_to have_text('Load More Courses...')
     end
   end
 

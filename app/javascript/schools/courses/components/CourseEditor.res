@@ -151,25 +151,40 @@ let courseLink = (href, title, icon) =>
     key=href
     href
     className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 hover:text-primary-500">
-    <i className=icon /> <span className="font-semibold ml-2"> {title |> str} </span>
+    <i className=icon /> <span className="font-semibold ml-2"> {str(title)} </span>
   </a>
 
 let courseLinks = course => {
   let baseUrl = "/school/courses/" ++ Course.id(course)
-  [
-    {courseLink(baseUrl ++ "/curriculum", "Edit Curriculum", "fas fa-check-square")},
-    {courseLink(baseUrl ++ "/students", "Manage Students", "fas fa-users")},
-    {courseLink(baseUrl ++ "/coaches", "Manage Coaches", "fas fa-user")},
-    {courseLink(baseUrl ++ "/exports", "Download Reports", "fas fa-file")},
+  let defaultLinks = [
+    {courseLink(baseUrl ++ "/curriculum", "Edit curriculum", "fas fa-check-square")},
+    {courseLink(baseUrl ++ "/students", "Manage students", "fas fa-users")},
+    {courseLink(baseUrl ++ "/coaches", "Manage coaches", "fas fa-user")},
+    {courseLink(baseUrl ++ "/exports", "Download reports", "fas fa-file")},
   ]
+
+  Belt.Option.isSome(Course.archivedAt(course))
+    ? defaultLinks
+    : Js.Array.concat(
+        defaultLinks,
+        [
+          courseLink(
+            "/courses/" ++ Course.id(course) ++ "/curriculum",
+            "View as student",
+            "fas fa-eye",
+          ),
+        ],
+      )
 }
 
 let loadCourses = (state, cursor, send) => {
   CoursesQuery.make(~status=?state.filter.status, ~after=?cursor, ~search=?state.filter.name, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    let courses =
-      response["courses"]["nodes"] |> Js.Array.map(rawCourse => Course.makeFromJs(rawCourse))
+    let courses = Js.Array.map(
+      rawCourse => Course.makeFromJs(rawCourse),
+      response["courses"]["nodes"],
+    )
     send(
       LoadCourses(
         response["courses"]["pageInfo"]["endCursor"],
@@ -227,7 +242,7 @@ module Selectable = {
 module Multiselect = MultiselectDropdown.Make(Selectable)
 
 let unselected = state => {
-  let trimmedFilterString = state.filterString |> String.trim
+  let trimmedFilterString = state.filterString->String.trim
   let name = trimmedFilterString == "" ? [] : [Selectable.name(trimmedFilterString)]
   let status = Js.Array.map(
     s => Selectable.status(s),
@@ -248,8 +263,11 @@ let defaultOptions = () => Js.Array.map(s => Selectable.status(s), [#Active, #En
 let selected = state => {
   let status = state.filter.status->Belt.Option.mapWithDefault([], u => [Selectable.status(u)])
 
-  let selectedSearchString =
-    state.filter.name |> OptionUtils.mapWithDefault(name => [Selectable.name(name)], [])
+  let selectedSearchString = OptionUtils.mapWithDefault(
+    name => [Selectable.name(name)],
+    [],
+    state.filter.name,
+  )
 
   Js.Array.concat(status, selectedSearchString)
 }
@@ -365,7 +383,7 @@ let showCourses = (courses, state, send) => {
           </h4>
         </div>
       : <div className="flex flex-wrap">
-          {Js.Array.map(course => showCourse(course, send), courses) |> React.array}
+          {Js.Array.map(course => showCourse(course, send), courses)->React.array}
         </div>}
     {entriesLoadedData(state.totalEntriesCount, Array.length(courses))}
   </div>
@@ -414,7 +432,7 @@ let make = () => {
           className="w-full flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-md focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg cursor-pointer"
           onClick={_ => send(UpdateEditorAction(ShowForm(None)))}>
           <i className="fas fa-plus-circle text-lg" />
-          <span className="font-semibold ml-2"> {"Add New Course" |> str} </span>
+          <span className="font-semibold ml-2"> {str("Add New Course")} </span>
         </button>
       </div>
       <div className="max-w-3xl mx-auto w-full">
@@ -460,7 +478,7 @@ let make = () => {
                     send(BeginLoadingMore)
                     loadCourses(state, Some(cursor), send)
                   }}>
-                  {t("button_load_more") |> str}
+                  {t("button_load_more")->str}
                 </button>
               </div>
             | Reloading => React.null

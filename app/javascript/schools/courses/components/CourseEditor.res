@@ -252,7 +252,7 @@ let onDeselectFilter = (send, selectable) =>
   }
 
 let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
-  <div className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
+  <div className="pt-8 pb-4 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
     {(
       totoalNotificationsCount == loadedNotificaionsCount
         ? t(
@@ -308,18 +308,18 @@ let showCourse = (course, send) => {
         </div>
         {ReactUtils.nullIf(
           <div className="px-4 pt-4">
-            <i className="fas fa-external-link-square-alt" />
             <a
               href={"/courses/" ++ (course |> Course.id)}
               target="_blank"
-              className="text-sm font-semibold cursor-pointer ml-2 text-gray-800">
-              {"View public page" |> str}
+              className="inline-flex items-center underline rounded p-1 text-sm font-semibold cursor-pointer text-gray-800 hover:text-primary-500">
+              <Icon className="if i-external-link-solid mr-2" />
+              <span> {"View public page" |> str} </span>
             </a>
           </div>,
           Belt.Option.isSome(Course.archivedAt(course)),
         )}
         <div
-          className="user-dashboard-course__description text-sm px-4 pt-4 w-full leading-relaxed">
+          className="user-dashboard-course__description text-sm px-4 pt-2 w-full leading-relaxed">
           {str(Course.description(course))}
         </div>
       </div>
@@ -440,7 +440,7 @@ let make = () => {
                 {SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())}
               </div>
             | NotLoading =>
-              <div className="px-4 lg:px-8 pb-6">
+              <div className="px-5 pb-6">
                 <button
                   className="btn btn-primary-ghost cursor-pointer w-full"
                   onClick={_ => {

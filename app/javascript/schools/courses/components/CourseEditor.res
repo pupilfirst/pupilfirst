@@ -180,24 +180,28 @@ let courseLinks = course => {
 }
 
 let loadCourses = (state, cursor, send) => {
-  CoursesQuery.make(~status=?state.filter.status, ~after=?cursor, ~search=?state.filter.name, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    let courses = Js.Array.map(
-      rawCourse => Course.makeFromJs(rawCourse),
-      response["courses"]["nodes"],
-    )
-    send(
-      LoadCourses(
-        response["courses"]["pageInfo"]["endCursor"],
-        response["courses"]["pageInfo"]["hasNextPage"],
-        courses,
-        response["courses"]["totalCount"],
+  ignore(Js.Promise.then_(response => {
+      let courses = Js.Array.map(
+        rawCourse => Course.makeFromJs(rawCourse),
+        response["courses"]["nodes"],
+      )
+      send(
+        LoadCourses(
+          response["courses"]["pageInfo"]["endCursor"],
+          response["courses"]["pageInfo"]["hasNextPage"],
+          courses,
+          response["courses"]["totalCount"],
+        ),
+      )
+      Js.Promise.resolve()
+    }, GraphqlQuery.sendQuery(
+      CoursesQuery.make(
+        ~status=?state.filter.status,
+        ~after=?cursor,
+        ~search=?state.filter.name,
+        (),
       ),
-    )
-    Js.Promise.resolve()
-  })
-  |> ignore
+    )))
 }
 
 module Selectable = {

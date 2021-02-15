@@ -1,3 +1,5 @@
+%bs.raw(`require("./CourseEditor.css")`)
+
 open CourseEditor__Types
 
 let t = I18n.t(~scope="components.CourseEditor")
@@ -328,7 +330,7 @@ let showCourse = (course, send) => {
       <div className="flex shadow bg-white rounded-lg flex-col justify-between h-full">
         <div>
           <div className="relative">
-            <div className="relative pb-1/2 bg-gray-800 rounded-t-lg">
+            <div className="relative pb-1/2 bg-gray-800 rounded-t-lg z-0">
               {switch Course.thumbnail(course) {
               | Some(image) =>
                 <img
@@ -337,15 +339,15 @@ let showCourse = (course, send) => {
                 />
               | None =>
                 <div
-                  className="user-dashboard-course__cover rounded-t-lg absolute h-full w-full svg-bg-pattern-1"
+                  className="course-editor-course__cover rounded-t-lg absolute h-full w-full svg-bg-pattern-1"
                 />
               }}
             </div>
             <div
-              className="user-dashboard-course__title-container absolute w-full flex inset-x-0 bottom-0 p-4 z-50"
+              className="course-editor-course__title-container absolute w-full flex inset-x-0 bottom-0 p-4 z-10"
               key={Course.id(course)}>
               <h4
-                className="user-dashboard-course__title text-white font-semibold leading-tight pr-4 text-lg md:text-xl">
+                className="course-editor-course__title text-white font-semibold leading-tight pr-4 text-lg md:text-xl">
                 {str(Course.name(course))}
               </h4>
             </div>
@@ -363,7 +365,7 @@ let showCourse = (course, send) => {
             Belt.Option.isSome(Course.archivedAt(course)),
           )}
           <div
-            className="user-dashboard-course__description text-sm px-4 pt-2 w-full leading-relaxed">
+            className="course-editor-course__description text-sm px-4 pt-2 w-full leading-relaxed">
             {str(Course.description(course))}
           </div>
         </div>

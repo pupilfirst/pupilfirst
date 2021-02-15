@@ -150,7 +150,7 @@ feature 'Courses Index', js: true do
       end
     end
 
-    scenario 'user loads all courses' do
+    scenario 'school admin loads all courses' do
       sign_in_user school_admin.user, referrer: school_courses_path
 
       expect(page).to have_text('Showing 10 of 25 courses')
@@ -169,7 +169,7 @@ feature 'Courses Index', js: true do
     expect(page).to have_text("Please sign in to continue.")
   end
 
-  scenario 'user plays around with search' do
+  scenario 'school admin plays around with search' do
     sign_in_user school_admin.user, referrer: school_courses_path
 
     expect(page).to have_text('Status: Show active courses')
@@ -204,6 +204,71 @@ feature 'Courses Index', js: true do
 
     within("div[id='courses']") do
       expect(page).to have_text(course_2.name)
+    end
+  end
+
+  scenario 'school admin filters archived courses' do
+    sign_in_user school_admin.user, referrer: school_courses_path
+
+    fill_in('Search', with: 'archived')
+    click_button 'Pick Status: Show archived courses'
+
+    within("div[id='courses']") do
+      expect(page).to have_text(course_archived.name)
+      expect(page).not_to have_text('View public page')
+      expect(page).not_to have_text('Quick Links')
+    end
+  end
+
+  scenario 'school admin clicks on quick links' do
+    sign_in_user school_admin.user, referrer: school_courses_path
+
+    within("div[data-submission-id='#{course_1.name}']") do
+      expect(page).to have_link('View public page', href: course_path(course_1))
+
+      click_button 'Quick Links'
+      expect(page).to have_link('View as Student', href: curriculum_course_path(course_1))
+      expect(page).to have_link('Edit Curriculum', href: curriculum_school_course_path(course_1))
+      expect(page).to have_link('Manage Students', href: school_course_students_path(course_1))
+      expect(page).to have_link('Manage Coaches', href: school_course_coaches_path(course_1))
+      expect(page).to have_link('Download Reports', href: exports_school_course_path(course_1))
+    end
+  end
+
+  context 'when a students exists' do
+    let!(:level) { create :level, course: course_1 }
+    let!(:startup) { create :startup, level: level }
+
+    scenario 'school admin archives a course' do
+      sign_in_user school_admin.user, referrer: school_courses_path
+      find("a[title='Edit #{course_1.name}']").click
+      expect(startup.access_ends_at).to eq(nil)
+      click_button 'Actions'
+
+      click_button 'Archive Course'
+
+      expect(page).to have_text('Course archived successfully')
+      expect(course_1.reload.archived_at).not_to eq(nil)
+      expect(startup.reload.access_ends_at).not_to eq(nil)
+      within("div[id='courses']") do
+        expect(page).not_to have_text(course_1.name)
+      end
+    end
+  end
+
+  scenario 'school admin un-archives a course' do
+    sign_in_user school_admin.user, referrer: school_courses_path
+    fill_in('Search', with: 'archived')
+    click_button 'Pick Status: Show archived courses'
+    find("a[title='Edit #{course_archived.name}']").click
+    click_button 'Actions'
+
+    click_button 'Unarchive Course'
+
+    expect(page).to have_text('Course unarchived successfully')
+    expect(course_archived.reload.archived_at).to eq(nil)
+    within("div[id='courses']") do
+      expect(page).not_to have_text(course_archived.name)
     end
   end
 end

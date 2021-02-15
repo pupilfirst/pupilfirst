@@ -86,10 +86,10 @@ en:
       update_level: Update Chapter
       create_new_level: Create New Chapter
       level_name: Chapter Name
-      level_name_placeholder: Type level name here
+      level_name_placeholder: Type chapter name here
       drawer_title:
-        edit_level: 'Edit Level '
-        create_new_level: Create New Level
+        edit_level: 'Edit Chapter '
+        create_new_level: Create New Chapter
       notifications:
         update_success: Chapter updated successfully
         create_success: Chapter created successfully

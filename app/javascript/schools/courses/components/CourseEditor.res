@@ -158,25 +158,13 @@ let courseLink = (href, title, icon) =>
 
 let courseLinks = course => {
   let baseUrl = "/school/courses/" ++ Course.id(course)
-  let defaultLinks = [
-    {courseLink(baseUrl ++ "/curriculum", "Edit Curriculum", "fas fa-fw fa-check-square")},
-    {courseLink(baseUrl ++ "/students", "Manage Students", "fas fa-fw fa-users fa-fw")},
-    {courseLink(baseUrl ++ "/coaches", "Manage Coaches", "fas fa-fw fa-user fa-fw")},
-    {courseLink(baseUrl ++ "/exports", "Download Reports", "fas fa-fw fa-file fa-fw")},
+  [
+    courseLink("/courses/" ++ Course.id(course) ++ "/curriculum", "View as Student", "fas fa-eye"),
+    courseLink(baseUrl ++ "/curriculum", "Edit Curriculum", "fas fa-fw fa-check-square"),
+    courseLink(baseUrl ++ "/students", "Manage Students", "fas fa-fw fa-users fa-fw"),
+    courseLink(baseUrl ++ "/coaches", "Manage Coaches", "fas fa-fw fa-user fa-fw"),
+    courseLink(baseUrl ++ "/exports", "Download Reports", "fas fa-fw fa-file fa-fw"),
   ]
-
-  Belt.Option.isSome(Course.archivedAt(course))
-    ? defaultLinks
-    : Js.Array.concat(
-        defaultLinks,
-        [
-          courseLink(
-            "/courses/" ++ Course.id(course) ++ "/curriculum",
-            "View as student",
-            "fas fa-eye",
-          ),
-        ],
-      )
 }
 
 let loadCourses = (state, cursor, send) => {
@@ -321,67 +309,70 @@ let dropdownSelected =
   </button>
 
 let showCourse = (course, send) => {
-  <div
-    key={Course.id(course)}
-    ariaLabel={Course.name(course)}
-    className="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
-    <div className="flex shadow bg-white rounded-lg flex-col justify-between h-full">
-      <div>
-        <div className="relative">
-          <div className="relative pb-1/2 bg-gray-800 rounded-t-lg z-0">
-            {switch Course.thumbnail(course) {
-            | Some(image) =>
-              <img
-                className="absolute h-full w-full object-cover rounded-t-lg"
-                src={Course.imageUrl(image)}
-              />
-            | None =>
-              <div
-                className="course-editor-course__cover rounded-t-lg absolute h-full w-full svg-bg-pattern-1"
-              />
-            }}
+  <Spread props={"data-submission-id": Course.name(course)}>
+    <div key={Course.id(course)} className="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
+      <div className="flex shadow bg-white rounded-lg flex-col justify-between h-full">
+        <div>
+          <div className="relative">
+            <div className="relative pb-1/2 bg-gray-800 rounded-t-lg z-0">
+              {switch Course.thumbnail(course) {
+              | Some(image) =>
+                <img
+                  className="absolute h-full w-full object-cover rounded-t-lg"
+                  src={Course.imageUrl(image)}
+                />
+              | None =>
+                <div
+                  className="course-editor-course__cover rounded-t-lg absolute h-full w-full svg-bg-pattern-1"
+                />
+              }}
+            </div>
+            <div
+              className="course-editor-course__title-container absolute w-full flex inset-x-0 bottom-0 p-4 z-10"
+              key={Course.id(course)}>
+              <h4
+                className="course-editor-course__title text-white font-semibold leading-tight pr-4 text-lg md:text-xl">
+                {str(Course.name(course))}
+              </h4>
+            </div>
           </div>
+          {ReactUtils.nullIf(
+            <div className="px-4 pt-4">
+              <a
+                href={"/courses/" ++ Course.id(course)}
+                target="_blank"
+                className="inline-flex items-center underline rounded p-1 text-sm font-semibold cursor-pointer text-gray-800 hover:text-primary-500">
+                <Icon className="if i-external-link-solid mr-2" />
+                <span> {"View public page"->str} </span>
+              </a>
+            </div>,
+            Belt.Option.isSome(Course.archivedAt(course)),
+          )}
           <div
-            className="course-editor-course__title-container absolute w-full flex inset-x-0 bottom-0 p-4 z-10"
-            key={Course.id(course)}>
-            <h4
-              className="course-editor-course__title text-white font-semibold leading-tight pr-4 text-lg md:text-xl">
-              {str(Course.name(course))}
-            </h4>
+            className="course-editor-course__description text-sm px-4 pt-2 w-full leading-relaxed">
+            {str(Course.description(course))}
           </div>
         </div>
-        {ReactUtils.nullIf(
-          <div className="px-4 pt-4">
-            <a
-              href={"/courses/" ++ Course.id(course)}
-              target="_blank"
-              className="inline-flex items-center underline rounded p-1 text-sm font-semibold cursor-pointer text-gray-800 hover:text-primary-500">
-              <Icon className="if i-external-link-solid mr-2" />
-              <span> {"View public page"->str} </span>
-            </a>
-          </div>,
-          Belt.Option.isSome(Course.archivedAt(course)),
-        )}
-        <div className="course-editor-course__description text-sm px-4 pt-2 w-full leading-relaxed">
-          {str(Course.description(course))}
+        <div className="grid grid-cols-5 gap-4 p-4">
+          <a
+            title={"Edit " ++ Course.name(course)}
+            className="col-span-3 btn btn-default px-4 py-2 bg-gray-200 text-primary-500 rounded-lg text-sm cursor-pointer"
+            onClick={_ => send(UpdateEditorAction(ShowForm(Some(course))))}>
+            <div>
+              <FaIcon classes="far fa-edit mr-3" />
+              <span className="text-black font-semibold"> {str("Edit Course Details")} </span>
+            </div>
+          </a>
+          {ReactUtils.nullIf(
+            <Dropdown
+              className="col-span-2" selected={dropdownSelected} contents={courseLinks(course)}
+            />,
+            Belt.Option.isSome(Course.archivedAt(course)),
+          )}
         </div>
-      </div>
-      <div className="grid grid-cols-5 gap-4 p-4">
-        <a
-          title={"Edit " ++ Course.name(course)}
-          className="col-span-3 btn btn-default px-4 py-2 bg-gray-200 text-primary-500 rounded-lg text-sm cursor-pointer"
-          onClick={_ => send(UpdateEditorAction(ShowForm(Some(course))))}>
-          <div>
-            <FaIcon classes="far fa-edit mr-3" />
-            <span className="text-black font-semibold"> {str("Edit Course Details")} </span>
-          </div>
-        </a>
-        <Dropdown
-          className="col-span-2" selected={dropdownSelected} contents={courseLinks(course)}
-        />
       </div>
     </div>
-  </div>
+  </Spread>
 }
 
 let showCourses = (courses, state, send) => {

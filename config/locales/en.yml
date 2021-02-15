@@ -452,9 +452,9 @@ en:
     create_target:
       success_notification: Target created successfully.
     archive_course:
-      success_notification: Reloading course list
+      success_notification: Course archived successfully
     unarchive_course:
-      success_notification: Reloading course list
+      success_notification: Course unarchived successfully
 
   queries:
     delete_certificate_mutator:

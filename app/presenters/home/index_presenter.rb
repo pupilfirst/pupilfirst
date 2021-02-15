@@ -36,9 +36,19 @@ module Home
     def courses_as_student
       @courses_as_student ||= begin
         if current_user.present?
-          current_user.founders.joins(:course).pluck('courses.id')
+          current_user.founders.includes(:startup, :level).each_with_object({}) do |student, courses|
+            status = if student.dropped_out?
+              :dropped_out
+            elsif student.access_ended?
+              :access_ended
+            else
+              :active
+            end
+
+            courses[student.level.course_id] = status
+          end
         else
-          []
+          {}
         end
       end
     end

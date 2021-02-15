@@ -95,17 +95,25 @@ let levelOfTarget = (targetId, targets, levels, targetGroups) => {
 }
 
 let computeIntialState = ((levels, targetGroups, targets, path)) => {
-  let maxLevel = Js.Array2.reduce(
-    levels,
-    (max, level) => Level.number(level) > Level.number(max) ? level : max,
-    Js.Array2.unsafe_get(levels, 0),
-  )
+  let defaultLevel =
+    DomUtils.getUrlParam(~key="level")
+    ->Belt.Option.flatMap(Belt.Int.fromString)
+    ->Belt.Option.flatMap(levelNumber => {
+      Js.Array.find(level => Level.number(level) == levelNumber, levels)
+    })
+    ->Belt.Option.getWithDefault(
+      Js.Array2.reduce(
+        levels,
+        (max, level) => Level.number(level) > Level.number(max) ? level : max,
+        Js.Array2.unsafe_get(levels, 0),
+      ),
+    )
 
   let selectedLevel = switch path {
-  | list{"school", "courses", _courseId, "curriculum"} => maxLevel
+  | list{"school", "courses", _courseId, "curriculum"} => defaultLevel
   | list{"school", "courses", _courseId, "targets", targetId, ..._} =>
     levelOfTarget(targetId, targets, levels, targetGroups)
-  | _ => maxLevel
+  | _ => defaultLevel
   }
 
   {
@@ -234,7 +242,10 @@ let make = (
                 |> Level.sort
                 |> Array.map(level =>
                   <option key={Level.id(level)} value={level |> Level.name}>
-                    {LevelLabel.format(~name=(level |> Level.name), (level |> Level.number |> string_of_int)) |> str}
+                    {LevelLabel.format(
+                      ~name=level |> Level.name,
+                      level |> Level.number |> string_of_int,
+                    ) |> str}
                   </option>
                 )
                 |> ReasonReact.array}

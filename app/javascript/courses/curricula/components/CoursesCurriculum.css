@@ -27,3 +27,7 @@
 .curriculum__target-status--locked {
   @apply bg-gray-100 text-gray-800 border-gray-600;
 }
+
+.courses-curriculum__target-container:hover .courses-curriculum__target-quick-link {
+  @apply border-gray-300 text-gray-700;
+}

@@ -91,14 +91,20 @@ en:
         other: "This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates."
       cannot_be_auto_issued_warning: Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.
     CoursesCurriculum:
+      edit_level_button: Edit Level
+      edit_target_button_title: "Edit target %{title}"
+      level_locked_for_students_notice: "This level is still locked for students, and will be unlocked on <strong>%{date}</strong>."
       issued_certificate_heading: Congratulations! You have been issued a certificate.
       issued_certificate_button: View Certificate
       level_locked: Level locked
       level_locked_notice: "The level is currently locked!"
+      level_locked_explanation: "You can access the content on %{date}."
       nav_previous_level: Previous Level
       nav_next_level: Next Level
       empty_level_content_notice: "There's no published content on this level."
       milestone_targets: Milestone targets
+    CoursesCurriculum__Learn:
+      edit_target_button: Edit Content
     CoursesCurriculum__NoticeManager:
       course_complete_title: Congratulations! You have completed all milestone targets in the final level.
       course_complete_description: You've completed our coursework. Feel free to complete targets that you might have left out, and read up at attached links.
@@ -258,6 +264,12 @@ en:
       access_locked: Your access to this course has ended.
       level_locked: You must level up to complete this target.
       prerequisites_incomplete: This target has pre-requisites that are incomplete.
+      status:
+        pending: Pending
+        pending_review: Pending Review
+        completed: Completed
+        rejected: Rejected
+        locked: Locked
     CurriculumEditor__ContentBlockCreator:
       button_labels:
         markdown: Markdown
@@ -499,6 +511,18 @@ en:
   sessions:
     create:
       invalid_credentials: The supplied email address and password do not match. Please check your credentials and try again.
+
+  home:
+    index:
+      welcome_prefix: Hello, welcome to
+      featured_courses_heading: Featured Courses
+      get_started: Get started
+      learn_more: Learn more
+      course_status:
+        active: Continue course
+        access_ended: Review course content
+        dropped_out: Dropped out
+
 
   ####################################
   # THIRD-PARTY LIBRARY TRANSLATIONS #

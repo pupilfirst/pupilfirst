@@ -13,6 +13,5 @@ let format = (~short=false, ~name=?, number) => {
   }
 }
 
-let searchString = (number, name) => {
-  (ts("long_with_name") |> Js.String.toLowerCase) ++ " " ++ number ++ " " ++ name
-}
+let searchString = (number, name) =>
+  ts("long_with_name", ~variables=[("number", number), ("name", name)])

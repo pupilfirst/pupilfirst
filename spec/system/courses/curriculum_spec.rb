@@ -328,6 +328,10 @@ feature "Student's view of Course Curriculum", js: true do
       # The first level should be selected, and all levels should be available.
       click_button "C1: #{level_1.name}"
 
+      # An admin should be shown links to edit the level and its targets.
+      expect(page).to have_link('Edit Level', href: curriculum_school_course_path(id: course.id, level: 1))
+      expect(page).to have_selector("a[href='#{content_school_course_target_path(course_id: course.id, id: completed_target_l1.id)}']")
+
       [level_2, level_3, level_4, level_5, locked_level_6].each do |l|
         expect(page).to have_button("C#{l.number}: #{l.name}")
       end

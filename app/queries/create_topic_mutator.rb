@@ -1,33 +1,51 @@
 class CreateTopicMutator < ApplicationQuery
   include AuthorizeCommunityUser
 
-  property :title, validates: { length: { minimum: 1, maximum: 250 }, allow_nil: false }
-  property :body, validates: { length: { minimum: 1, maximum: 15_000 }, allow_nil: false }
+  property :title,
+           validates: {
+             length: {
+               minimum: 1,
+               maximum: 250
+             },
+             allow_nil: false
+           }
+
+  property :body,
+           validates: {
+             length: {
+               minimum: 1,
+               maximum: 15_000
+             },
+             allow_nil: false
+           }
+
   property :community_id, validates: { presence: true }
   property :target_id
   property :topic_category_id
 
   def create_topic
-    new_topic = Topic.transaction do
-      topic = Topic.create!(
-        title: title,
-        community: community,
-        target_id: target&.id,
-        topic_category: topic_category,
-      )
+    new_topic =
+      Topic.transaction do
+        topic =
+          Topic.create!(
+            title: title,
+            community: community,
+            target_id: target&.id,
+            topic_category: topic_category
+          )
 
-      topic.posts.create!(
-        post_number: 1,
-        body: body,
-        creator: current_user,
-      )
+        topic.posts.create!(post_number: 1, body: body, creator: current_user)
 
-      create_subscribers(topic)
+        create_subscribers(topic)
 
-      topic
-    end
+        topic
+      end
 
-    Notifications::CreateJob.perform_later(:topic_created, current_user, new_topic)
+    Notifications::CreateJob.perform_later(
+      :topic_created,
+      current_user,
+      new_topic
+    )
 
     new_topic
   end
@@ -47,26 +65,32 @@ class CreateTopicMutator < ApplicationQuery
   end
 
   def create_subscribers(topic)
-    users = User.joins([faculty: :startups]).where(startups: { id: current_user.startups }).distinct + [current_user]
+    users =
+      User
+        .joins([faculty: :startups])
+        .where(startups: { id: current_user.startups })
+        .distinct + [current_user]
 
-    users.each do |user|
-      TopicSubscription.create!(user: user, topic: topic)
-    end
+    users.each { |user| TopicSubscription.create!(user: user, topic: topic) }
   end
 
   def target
-    @target ||= begin
+    @target ||=
+      begin
         t = Target.find_by(id: target_id)
 
-        if t.present? && t.course.school == current_school && target_accessible?(t)
+        if t.present? && t.course.school == current_school &&
+             target_accessible?(t)
           t
         end
       end
   end
 
   def target_accessible?(some_target)
-    current_school_admin.present? ||
-      current_user.faculty.present? ||
-      current_user.founders.joins(:course).exists?(courses: { id: some_target.course.id })
+    current_school_admin.present? || current_user.faculty.present? ||
+      current_user
+        .founders
+        .joins(:course)
+        .exists?(courses: { id: some_target.course.id })
   end
 end

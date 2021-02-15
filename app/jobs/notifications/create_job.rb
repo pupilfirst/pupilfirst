@@ -5,7 +5,9 @@ module Notifications
     end
 
     def perform(event, actor, resource)
-      raise "Encountered unexpected event #{event}" unless Notification.events.include?(event)
+      unless Notification.events.include?(event)
+        raise "Encountered unexpected event #{event}"
+      end
 
       @event = event
       @actor = actor
@@ -13,19 +15,23 @@ module Notifications
 
       return if skip?
 
-      users.where.not(id: actor.id).each do |recipient|
-        I18n.with_locale(recipient.locale) do
-          notification = Notification.create!(
-            actor_id: actor.id,
-            notifiable: resource,
-            event: Notification.events[event],
-            recipient: recipient,
-            message: message,
-          )
+      users
+        .where
+        .not(id: actor.id)
+        .each do |recipient|
+          I18n.with_locale(recipient.locale) do
+            notification =
+              Notification.create!(
+                actor_id: actor.id,
+                notifiable: resource,
+                event: Notification.events[event],
+                recipient: recipient,
+                message: message
+              )
 
-          Notifications::FireService.new(notification).fire
+            Notifications::FireService.new(notification).fire
+          end
         end
-      end
     end
 
     private
@@ -54,13 +60,13 @@ module Notifications
         I18n.t(
           'jobs.notifications.post_created_job.post_created',
           user_name: @actor.name,
-          community_name: @resource.community.name,
+          community_name: @resource.community.name
         )
       when :topic_created
         I18n.t(
           'jobs.notifications.topic_created_job.topic_created',
           user_name: @actor.name,
-          community_name: @resource.community.name,
+          community_name: @resource.community.name
         )
       end
     end

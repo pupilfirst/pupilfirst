@@ -11,9 +11,7 @@ describe Notifications::CreateJob do
       let(:resource) { create :post, topic: topic }
       let(:actor) { resource.creator }
 
-      before do
-        create :topic_subscription, topic: topic, user: coach.user
-      end
+      before { create :topic_subscription, topic: topic, user: coach.user }
 
       it "will create notification for post's topic's subscribers" do
         expect { subject.perform_now }.to change { Notification.count }.by(1)
@@ -25,7 +23,9 @@ describe Notifications::CreateJob do
         expect(notification.notifiable_id).to eq(resource.id)
         expect(notification.read_at).to eq(nil)
         expect(notification.event).to eq('post_created')
-        expect(notification.message).to eq("#{resource.creator.name} has responded to a thread you are part of in the #{topic.community.name} community")
+        expect(notification.message).to eq(
+          "#{resource.creator.name} has responded to a thread you are part of in the #{topic.community.name} community"
+        )
         expect(notification.recipient).to eq(coach.user)
       end
 
@@ -44,9 +44,7 @@ describe Notifications::CreateJob do
       let(:coach) { create :faculty }
       let(:actor) { resource.creator }
 
-      before do
-        create :topic_subscription, topic: resource, user: coach.user
-      end
+      before { create :topic_subscription, topic: resource, user: coach.user }
 
       it "will create notification for topic's subscribers" do
         expect { subject.perform_now }.to change { Notification.count }.by(1)
@@ -58,7 +56,9 @@ describe Notifications::CreateJob do
         expect(notification.notifiable_id).to eq(resource.id)
         expect(notification.read_at).to eq(nil)
         expect(notification.event).to eq('topic_created')
-        expect(notification.message).to eq("#{resource.creator.name} has created a new topic in #{resource.community.name} community")
+        expect(notification.message).to eq(
+          "#{resource.creator.name} has created a new topic in #{resource.community.name} community"
+        )
         expect(notification.recipient).to eq(coach.user)
       end
     end

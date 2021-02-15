@@ -157,11 +157,27 @@ let courseLink = (href, title, icon) =>
 let courseLinks = course => {
   let baseUrl = "/school/courses/" ++ Course.id(course)
   [
-    courseLink("/courses/" ++ Course.id(course) ++ "/curriculum", "View as Student", "fas fa-eye"),
-    courseLink(baseUrl ++ "/curriculum", "Edit Curriculum", "fas fa-fw fa-check-square"),
-    courseLink(baseUrl ++ "/students", "Manage Students", "fas fa-fw fa-users fa-fw"),
-    courseLink(baseUrl ++ "/coaches", "Manage Coaches", "fas fa-fw fa-user fa-fw"),
-    courseLink(baseUrl ++ "/exports", "Download Reports", "fas fa-fw fa-file fa-fw"),
+    courseLink(
+      "/courses/" ++ Course.id(course) ++ "/curriculum",
+      t("course_links.view_as_student"),
+      "fas fa-eye",
+    ),
+    courseLink(
+      baseUrl ++ "/curriculum",
+      t("course_links.edit_curriculum"),
+      "fas fa-fw fa-check-square",
+    ),
+    courseLink(
+      baseUrl ++ "/students",
+      t("course_links.manage_students"),
+      "fas fa-fw fa-users fa-fw",
+    ),
+    courseLink(baseUrl ++ "/coaches", t("course_links.manage_coaches"), "fas fa-fw fa-user fa-fw"),
+    courseLink(
+      baseUrl ++ "/exports",
+      t("course_links.download_reports"),
+      "fas fa-fw fa-file fa-fw",
+    ),
   ]
 }
 
@@ -302,13 +318,13 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
 let dropdownSelected =
   <button
     className="dropdown__btn appearance-none flex bg-white border hover:bg-primary-100 hover:text-primary-500 items-center relative justify-between focus:outline-none font-semibold text-sm px-3 py-2 rounded w-full">
-    <span> {str("Quick Links")} </span>
+    <span> {str(t("quick_links"))} </span>
     <i className="fas fa-chevron-down text-xs ml-3 font-semibold" />
   </button>
 
 let showCourse = (course, send) => {
-  <Spread props={"data-submission-id": Course.name(course)}>
-    <div key={Course.id(course)} className="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
+  <Spread key={Course.id(course)} props={"data-submission-id": Course.name(course)}>
+    <div className="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
       <div className="flex shadow bg-white rounded-lg flex-col justify-between h-full">
         <div>
           <div className="relative">
@@ -341,7 +357,7 @@ let showCourse = (course, send) => {
                 target="_blank"
                 className="inline-flex items-center underline rounded p-1 text-sm font-semibold cursor-pointer text-gray-800 hover:text-primary-500">
                 <Icon className="if i-external-link-solid mr-2" />
-                <span> {"View public page"->str} </span>
+                <span> {t("view_public_page")->str} </span>
               </a>
             </div>,
             Belt.Option.isSome(Course.archivedAt(course)),
@@ -358,7 +374,7 @@ let showCourse = (course, send) => {
             onClick={_ => send(UpdateEditorAction(ShowForm(Some(course))))}>
             <div>
               <FaIcon classes="far fa-edit mr-3" />
-              <span className="text-black font-semibold"> {str("Edit Course Details")} </span>
+              <span className="text-black font-semibold"> {str(t("edit_course_details"))} </span>
             </div>
           </a>
           {ReactUtils.nullIf(
@@ -433,7 +449,7 @@ let make = () => {
           className="w-full flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-md focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg cursor-pointer"
           onClick={_ => send(UpdateEditorAction(ShowForm(None)))}>
           <i className="fas fa-plus-circle text-lg" />
-          <span className="font-semibold ml-2"> {str("Add New Course")} </span>
+          <span className="font-semibold ml-2"> {str(t("add_new_course"))} </span>
         </button>
       </div>
       <div className="max-w-4xl mx-auto w-full">

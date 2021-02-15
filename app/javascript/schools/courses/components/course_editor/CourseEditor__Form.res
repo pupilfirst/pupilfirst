@@ -1,5 +1,8 @@
 open CourseEditor__Types
 
+let t = I18n.t(~scope="components.CourseEditor__Form")
+let ts = I18n.t(~scope="shared")
+
 let str = ReasonReact.string
 
 type tabs =
@@ -129,12 +132,12 @@ module UnarchiveCourseQuery = %graphql(
 )
 
 let updateName = (send, name) => {
-  let hasError = name |> String.trim |> String.length < 2
+  let hasError = name->String.trim->String.length < 2
   send(UpdateName(name, hasError))
 }
 
 let updateDescription = (send, description) => {
-  let lengthOfDescription = description |> String.trim |> String.length
+  let lengthOfDescription = description->String.trim->String.length
   let hasError = lengthOfDescription < 2 || lengthOfDescription >= 150
   send(UpdateDescription(description, hasError))
 }
@@ -187,7 +190,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
   send(StartSaving)
 
   let updateCourseQuery = UpdateCourseQuery.make(
-    ~id=course |> Course.id,
+    ~id=Course.id(course),
     ~name=state.name,
     ~description=state.description,
     ~endsAt=?state.endsAt->Belt.Option.map(DateFns.encodeISO),
@@ -201,7 +204,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
 
   updateCourseQuery |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
     switch result["updateCourse"]["course"] {
-    | Some(course) => Course.makeFromJs(course) |> updateCourseCB
+    | Some(course) => updateCourseCB(Course.makeFromJs(course))
     | None => send(FailSaving)
     }
 
@@ -255,18 +258,18 @@ let booleanButtonClasses = bool => {
 let enablePublicSignupButton = (publicSignup, send) =>
   <div className="flex items-center mt-5">
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-signup">
-      {"Enable public signup for this course?" |> str}
+      {t("enable_public_signup.label")->str}
     </label>
     <div id="public-signup" className="flex toggle-button__group flex-shrink-0 rounded-lg">
       <button
         className={booleanButtonClasses(publicSignup)}
         onClick={_ => send(UpdatePublicSignup(true))}>
-        {"Yes" |> str}
+        {t("enable_public_signup.yes")->str}
       </button>
       <button
         className={booleanButtonClasses(!publicSignup)}
         onClick={_ => send(UpdatePublicSignup(false))}>
-        {"No" |> str}
+        {t("enable_public_signup.no")->str}
       </button>
     </div>
   </div>
@@ -274,42 +277,38 @@ let enablePublicSignupButton = (publicSignup, send) =>
 let featuredButton = (featured, send) =>
   <div className="flex items-center mt-5">
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="featured">
-      {"Feature course in school homepage?" |> str}
+      {t("feature_course_in_homepage.label")->str}
     </label>
     <div id="featured" className="flex toggle-button__group flex-shrink-0 rounded-lg">
       <button className={booleanButtonClasses(featured)} onClick={_ => send(UpdateFeatured(true))}>
-        {"Yes" |> str}
+        {t("feature_course_in_homepage.yes")->str}
       </button>
       <button
         className={booleanButtonClasses(!featured)} onClick={_ => send(UpdateFeatured(false))}>
-        {"No" |> str}
+        {t("feature_course_in_homepage.no")->str}
       </button>
     </div>
   </div>
 
-let about = course =>
-  switch course |> Course.about {
-  | Some(about) => about
-  | None => ""
-  }
+let about = course => Belt.Option.getWithDefault(Course.about(course), "")
 
 let updateAboutCB = (send, about) => send(UpdateAbout(about))
 
 let computeInitialState = course =>
   switch course {
   | Some(course) => {
-      name: course |> Course.name,
-      description: course |> Course.description,
-      endsAt: course |> Course.endsAt,
+      name: Course.name(course),
+      description: Course.description(course),
+      endsAt: Course.endsAt(course),
       hasNameError: false,
       hasDateError: false,
       hasDescriptionError: false,
       dirty: false,
       saving: false,
       about: about(course),
-      publicSignup: course |> Course.publicSignup,
-      featured: course |> Course.featured,
-      progressionBehavior: course |> Course.progressionBehavior,
+      publicSignup: Course.publicSignup(course),
+      featured: Course.featured(course),
+      progressionBehavior: Course.progressionBehavior(course),
       progressionLimit: Course.progressionLimit(course)->Belt.Option.getWithDefault(1),
       tab: DetailsTab,
     }
@@ -332,13 +331,13 @@ let computeInitialState = course =>
   }
 
 let handleSelectProgressionLimit = (send, event) => {
-  let target = event |> ReactEvent.Form.target
+  let target = ReactEvent.Form.target(event)
 
   switch target["value"] {
   | "1"
   | "2"
   | "3" =>
-    send(UpdateProgressionLimit(target["value"] |> int_of_string))
+    send(UpdateProgressionLimit(int_of_string(target["value"])))
   | otherValue => Rollbar.error("Unexpected progression limit was selected: " ++ otherValue)
   }
 }
@@ -354,45 +353,43 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
   <div>
     <div className="mt-5">
       <label className="inline-block tracking-wide text-xs font-semibold " htmlFor="name">
-        {"Course name" |> str}
+        {t("course_name.label")->str}
       </label>
       <input
         className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
         id="name"
         type_="text"
-        placeholder="Type course name here"
+        placeholder={t("course_name.placeholder")}
         maxLength=50
         value=state.name
         onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
       />
-      <School__InputGroupError
-        message="A name is required (2-50 characters)" active=state.hasNameError
-      />
+      <School__InputGroupError message={t("course_name.error_message")} active=state.hasNameError />
     </div>
     <div className="mt-5">
       <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="description">
-        {"Course description" |> str}
+        {t("course_description.label")->str}
       </label>
       <input
         className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
         id="description"
         type_="text"
-        placeholder="Short description for this course"
+        placeholder={t("course_description.placeholder")}
         value=state.description
         maxLength=150
         onChange={event => updateDescription(send, ReactEvent.Form.target(event)["value"])}
       />
     </div>
     <School__InputGroupError
-      message="A description is required (2-150 characters)" active=state.hasDescriptionError
+      message={t("course_description.error_message")} active=state.hasDescriptionError
     />
     <div className="mt-5">
       <label className="tracking-wide text-xs font-semibold" htmlFor="course-ends-at-input">
-        {"Course end date" |> str}
+        {t("course_end_date.label")->str}
       </label>
-      <span className="ml-1 text-xs"> {"(optional)" |> str} </span>
+      <span className="ml-1 text-xs"> {("(" ++ ts("optional") ++ ")")->str} </span>
       <HelpIcon className="ml-2" link="https://docs.pupilfirst.com/#/courses">
-        {"If specified, course will appear as closed to students on this date. Students will not be able to make any more submissions." |> str}
+        {t("course_end_date.help")->str}
       </HelpIcon>
       <DatePicker
         onChange={date => send(UpdateEndsAt(date))} selected=?state.endsAt id="course-ends-at-input"
@@ -401,14 +398,14 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
     <School__InputGroupError message="Enter a valid date" active=state.hasDateError />
     <div className="mt-5">
       <label className="tracking-wide text-xs font-semibold" htmlFor="course-about">
-        {"About" |> str}
+        {t("course_about.label")->str}
       </label>
       <div className="mt-2">
         <MarkdownEditor
           textareaId="course-about"
           onChange={updateAboutCB(send)}
           value=state.about
-          placeholder="Add more details about the course."
+          placeholder={t("course_about.placeholder")}
           profile=Markdown.Permissive
           maxLength=10000
         />
@@ -416,17 +413,17 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
     </div>
     <div className="mt-5">
       <label className="tracking-wide text-xs font-semibold">
-        {"Progression Behavior" |> str}
+        {t("progression_behavior.label")->str}
       </label>
       <HelpIcon
         className="ml-2" link="https://docs.pupilfirst.com/#/courses?id=progression-behaviour">
-        {"This only applies if your course has milestone targets that requires students to submit their work for review by coaches." |> str}
+        {t("progression_behavior.help")->str}
       </HelpIcon>
       <div className="flex mt-2">
         <button
           onClick={_ => send(UpdateProgressionBehavior(#Limited))}
           className={progressionBehaviorButtonClasses(state, #Limited, "mr-1")}>
-          <div className="font-bold text-xl"> {"Limited" |> str} </div>
+          <div className="font-bold text-xl"> {t("progression_behavior.limited") |> str} </div>
           <div className="text-xs mt-2">
             <div> {"Students can level up" |> str} </div>
             <select

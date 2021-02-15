@@ -377,6 +377,47 @@ en:
           ended: Show ended courses
           active: Show active courses
       button_load_more: Load More Courses...
+      course_links:
+        view_as_student: View as Student
+        edit_curriculum: Edit Curriculum
+        manage_students: Manage Students
+        manage_coaches: Manage Coaches
+        download_repoorts: Download Reports
+      quick_links: Quick Links
+      view_public_page: View public page
+      edit_course_details: Edit Course Details
+      add_new_course: Add New Course
+    CourseEditor__Form:
+      enable_public_signup:
+        label: Enable public signup for this course?
+        yes: yes
+        no: No
+      feature_course_in_homepage:
+        label: Feature course in school homepage?
+        yes: yes
+        no: No
+      course_name:
+        label: Course Name
+        placeholder: Type course name here
+        error_message: A name is required (2-50 characters)
+      course_description:
+        label: Course description
+        placeholder: Short description for this course
+        error_message: A description is required (2-150 characters)
+      course_end_date:
+        label: Course end date
+        placeholder: Short description for this course
+        error_message: A description is required (2-150 characters)
+        help: If specified, course will appear as closed to students on this date. Students will not be able to make any more submissions.
+      course_about:
+        label: About
+        placeholder: Add more details about the course.
+      progression_behavior:
+        label: Progression Behavior
+        help: This only applies if your course has milestone targets that requires students to submit their work for review by coaches.
+        limited: Limited
+
+
 
   jobs:
     notifications:

@@ -10,6 +10,7 @@ export default function Reader(props) {
       parserOptions={props.parserOptions}
       inputStyle={props.inputStyle}
       inputId={props.inputId}
+      inputName={props.inputName}
       label={props.label}/>
   );
 };

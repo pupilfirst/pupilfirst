@@ -1,5 +1,7 @@
 open CoursesReport__Types
 let str = React.string
+let tc = I18n.t(~scope="components.CoursesReport__SubmissionsList")
+let ts = I18n.t(~scope="shared")
 
 type targetStatus = [#PendingReview | #Rejected | #Completed]
 
@@ -10,7 +12,7 @@ type sortBy = {
   criterionType: [#String | #Number],
 }
 
-let sortBy = {criterion: "Submitted At", criterionType: #Number}
+let sortBy = {criterion: tc("submitted_at"), criterionType: #Number}
 
 type loading =
   | Loaded
@@ -35,9 +37,9 @@ type action =
 
 let statusString = targetStatus =>
   switch targetStatus {
-  | #PendingReview => "Pending Review"
-  | #Rejected => "Rejected"
-  | #Completed => "Completed"
+  | #PendingReview => tc("pending_review")
+  | #Rejected => tc("rejected")
+  | #Completed => tc("completed")
   }
 
 module StudentSubmissionsQuery = %graphql(
@@ -71,8 +73,8 @@ module Selectable = {
 
   let label = t =>
     switch t {
-    | Level(level) => Some("Level " ++ (level |> Level.number |> string_of_int))
-    | TargetStatus(_targetStatus) => Some("Status")
+    | Level(level) => Some(LevelLabel.format(level |> Level.number |> string_of_int))
+    | TargetStatus(_targetStatus) => Some(tc("status"))
     }
 
   let value = t =>
@@ -84,7 +86,7 @@ module Selectable = {
   let searchString = t =>
     switch t {
     | Level(level) =>
-      "level " ++ ((level |> Level.number |> string_of_int) ++ (" " ++ (level |> Level.name)))
+      LevelLabel.searchString(level |> Level.number |> string_of_int, level |> Level.name)
     | TargetStatus(targetStatus) => "status " ++ statusString(targetStatus)
     }
 
@@ -168,7 +170,7 @@ module SubmissionsSorter = Sorter.Make(Sortable)
 let submissionsSorter = (sortDirection, updateSortDirectionCB) => {
   let criteria = [sortBy]
   <div ariaLabel="Change submissions sorting" className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
-    <label className="block text-tiny font-semibold uppercase"> {"Sort by:" |> str} </label>
+    <label className="block text-tiny font-semibold uppercase"> {tc("sort_by") |> str} </label>
     <SubmissionsSorter
       criteria
       selectedCriterion=sortBy
@@ -181,10 +183,10 @@ let submissionsSorter = (sortDirection, updateSortDirectionCB) => {
 
 let filterPlaceholder = (selectedLevel, selectedStatus) =>
   switch (selectedLevel, selectedStatus) {
-  | (None, Some(_)) => "Filter by level"
-  | (None, None) => "Filter by level, or by status"
-  | (Some(_), Some(_)) => "Filter by another level"
-  | (Some(_), None) => "Filter by another level, or by status"
+  | (None, Some(_)) => tc("filter_by_level")
+  | (None, None) => tc("filter_by_level_or_status")
+  | (Some(_), Some(_)) => tc("filter_by_another_level")
+  | (Some(_), None) => tc("filter_by_another_level_or_status")
   }
 
 let reducer = (state, action) =>
@@ -268,19 +270,19 @@ let showSubmissionStatus = submission =>
   | #Rejected =>
     <div
       className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
-      {"Rejected" |> str}
+      {tc("rejected") |> str}
     </div>
 
   | #Completed =>
     <div
       className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
-      {"Completed" |> str}
+      {tc("completed") |> str}
     </div>
 
   | #PendingReview =>
     <div
       className="bg-blue-100 border border-blue-500 flex-shrink-0 leading-normal text-blue-800 font-semibold px-3 py-px rounded">
-      {"Pending Review" |> str}
+      {tc("pending_review") |> str}
     </div>
   }
 
@@ -322,7 +324,10 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
               </div>
               <div className="mt-1 ml-px text-xs text-gray-900">
                 <span className="ml-1">
-                  {"Submitted on " ++ (submission |> Submission.createdAtPretty) |> str}
+                  {tc(
+                    ~variables=[("date", submission |> Submission.createdAtPretty)],
+                    "submitted_on",
+                  ) |> str}
                 </span>
               </div>
             </div>
@@ -338,25 +343,19 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
               <div className="flex flex-1 justify-start items-center pr-8">
                 <FaIcon classes="fas fa-exclamation-triangle text-sm md:text-base mt-1" />
                 <div className="inline-block pl-3">
-                  {"This submission is not considered towards its target's completion." |> str}
+                  {tc("submission_not_considered") |> str}
                   <HelpIcon className="ml-1">
-                    {str("This is a ")}
-                    <span className="italic"> {"team" |> str} </span>
-                    {str(
-                      " target, and this submission is not linked to some members of your team. This can happen if a target is changed after your individual submission, to require a ",
-                    )}
-                    <span className="italic"> {"team" |> str} </span>
-                    {str(" submission, or if your team's composition changed after a ")}
-                    <span className="italic"> {"team" |> str} </span>
-                    {str(" submission was created.")}
+                    <span
+                      dangerouslySetInnerHTML={"__html": tc("submission_not_considered_help")}
+                    />
                   </HelpIcon>
                 </div>
               </div>
               <a
                 href={"/targets/" ++ Submission.targetId(submission)}
                 className="flex-shrink-0 px-2 py-1 text-xs font-semibold text-indigo-700 hover:bg-indigo-200 hover:text-indigo-800 rounded">
-                <span className="hidden md:inline"> {"View " |> str} </span>
-                {str("Target")}
+                <span className="hidden md:inline"> {tc("view") |> str} </span>
+                {ts("target") |> str}
                 <FaIcon classes="fas fa-arrow-right ml-2" />
               </a>
             </div>
@@ -368,7 +367,7 @@ let showSubmissions = (submissions, levels, teamStudentIds) =>
   submissions |> ArrayUtils.isEmpty
     ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
         <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
-          {"No submissions to show " |> str}
+          {tc("no_submissions_to_show") |> str}
         </h5>
       </div>
     : showSubmission(submissions, levels, teamStudentIds)
@@ -446,7 +445,7 @@ let make = (
                   updateSubmissionsCB,
                 )
               }}>
-              {"Load More..." |> str}
+              {tc("load_more") |> str}
             </button>
           | LoadingMore => SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
           | Reloading => React.null

@@ -46,7 +46,7 @@
             <a class="block border rounded-lg bg-white shadow h-full cursor-pointer hover:border-primary-500 text-black" href=<%= school_course_students_path(course[:id]) %>>
               <div class="flex items-end justify-between border-b p-4 pt-6">
                 <h3 class="font-bold text-xl"><%= course[:name] %></h3>
-                <p class="text-sm"><%= course[:levels_count] %> Levels</p>
+                <p class="text-sm"><%= course[:levels_count] %> <%= I18n.t("shared.level").pluralize(course[:levels_count]) %></p>
               </div>
               <div class="school-overview__course-list-card-count relative flex items-end bg-gray-200 justify-between border-b">
                 <div data-t="<%= course[:name] %> students" class="w-1/2">

@@ -41,7 +41,7 @@ class TeamsResolver < ApplicationQuery
   def self.filter_by_coach(teams, coach_id)
     if coach_id.present?
       teams.joins(:faculty_startup_enrollments)
-        .where('faculty_startup_enrollments.faculty_id = ?', coach_id)
+        .where(faculty_startup_enrollments: { faculty_id: coach_id })
     else
       teams
     end

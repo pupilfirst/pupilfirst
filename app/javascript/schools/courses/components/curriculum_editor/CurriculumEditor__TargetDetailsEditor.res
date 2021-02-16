@@ -484,13 +484,7 @@ module SelectableTargetGroup = {
 
   let label = _t => None
 
-  let tc = t
-
-  let value = t =>
-    tc("level") ++
-    " " ++
-    ((t.level |> Level.number |> string_of_int) ++
-    (": " ++ (t.targetGroup |> TargetGroup.name)))
+  let value = t => LevelLabel.format(~name=(t.targetGroup |> TargetGroup.name), (t.level |> Level.number |> string_of_int))
 
   let searchString = t => t |> value
 

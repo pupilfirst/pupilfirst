@@ -164,11 +164,11 @@ let lockReasonToString = lr =>
 
 let statusToString = t =>
   switch t.status {
-  | Pending => "Pending"
-  | PendingReview => "Pending Review"
-  | Completed => "Completed"
-  | Rejected => "Rejected"
-  | Locked(_) => "Locked"
+  | Pending => tc("status.pending")
+  | PendingReview => tc("status.pending_review")
+  | Completed => tc("status.completed")
+  | Rejected => tc("status.rejected")
+  | Locked(_) => tc("status.locked")
   }
 
 let statusClassesSufix = t =>

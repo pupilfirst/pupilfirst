@@ -80,7 +80,27 @@ feature 'Index spec', js: true do
     scenario 'students can jump directly into the course curriculum' do
       sign_in_user student.user, referrer: root_path
 
-      expect(page).to have_link('View Course', href: curriculum_course_path(course_1))
+      expect(page).to have_link('Continue course', href: curriculum_course_path(course_1))
+    end
+
+    scenario 'student can review content of courses where access has ended' do
+      team.update!(access_ends_at: 1.day.ago)
+
+      sign_in_user student.user, referrer: root_path
+
+      expect(page).to have_link('Review course content', href: curriculum_course_path(course_1))
+    end
+
+    scenario 'student cannot access course content when they have dropped out' do
+      team.update!(dropped_out_at: 1.day.ago)
+
+      sign_in_user student.user, referrer: root_path
+
+      expect(page).not_to have_link('Continue course')
+
+      within("div[aria-label='#{course_1.name}'") do
+        expect(page).to have_text('Dropped out')
+      end
     end
   end
 end

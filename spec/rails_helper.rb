@@ -141,11 +141,21 @@ RSpec.configure do |config|
   # Show retry status in spec process.
   config.verbose_retry = true
 
-  # Try twice (retry once).
-  config.default_retry_count = 2
+  # show exception that triggers a retry if verbose_retry is set to true
+  config.display_try_failure_messages = true
 
-  # Only retry when Selenium raises Net::ReadTimeout.
-  config.exceptions_to_retry = [Net::ReadTimeout]
+  # Run retry only on JS-enabled tests.
+  config.around :each, :js do |ex|
+    ex.run_with_retry retry: ENV['SPEC_RETRY_COUNT'].to_i
+  end
+
+  # callback to be run between retries
+  config.retry_callback = proc do |ex|
+    # run some additional clean up task - can be filtered by example metadata
+    if ex.metadata[:js]
+      Capybara.reset!
+    end
+  end
 end
 
 # Increase Capybara's default maximum wait time to 5 seconds to allow for some slow responds (timeline builder).

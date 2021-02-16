@@ -14,7 +14,7 @@ module TimelineEvents
           Developers::NotificationService.new.execute(
             @founder.course,
             WebhookDelivery.events[:submission_created],
-            @founder,
+            @founder.user,
             te
           )
           update_latest_flag(te)

@@ -35,6 +35,14 @@ describe TimelineEvents::CreateService do
       expect(last_submission.timeline_event_owners.pluck(:latest).uniq).to eq([true])
     end
 
+    it 'publishes submission.created event' do
+      notification_service = instance_double('Developers::NotificationService')
+      expect(notification_service).to receive(:execute)
+        .with(student.course, "submission.created", student.user, an_instance_of(TimelineEvent))
+      subject = described_class.new(params, student, notification_service: notification_service)
+      subject.execute
+    end
+
     context 'when target is a team target and student is in a team' do
       let(:student) { create :founder }
       let(:target) { create :target, role: Target::ROLE_TEAM, target_group: target_group }

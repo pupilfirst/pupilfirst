@@ -1,9 +1,10 @@
 module TimelineEvents
   class CreateService
-    def initialize(params, founder)
+    def initialize(params, founder, notification_service: Developers::NotificationService.new)
       @params = params
       @founder = founder
       @target = params[:target]
+      @notification_service = notification_service
     end
 
     def execute
@@ -11,7 +12,7 @@ module TimelineEvents
         TimelineEvent.create!(@params).tap do |te|
           @founder.timeline_event_owners.create!(timeline_event: te, latest: true)
           create_team_entries(te) if @params[:target].team_target?
-          Developers::NotificationService.new.execute(
+          @notification_service.execute(
             @founder.course,
             WebhookDelivery.events[:submission_created],
             @founder.user,

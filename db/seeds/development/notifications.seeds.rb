@@ -12,7 +12,7 @@ after 'development:communities', 'development:posts', 'development:users' do
         recipient: recipient,
         message:
           I18n.t(
-            'jobs.topics.topic_created_notification_job.topic_created',
+            'jobs.notifications.topic_created_job.topic_created',
             user_name: topic.creator.name,
             community_name: topic.community.name,
           )

@@ -6,24 +6,31 @@ feature 'Notification Show Spec', js: true do
   let(:student) { create :student }
   let(:vapid_key) { Webpush.generate_key }
 
-  let(:env_vars) {
+  let(:env_vars) do
     {
       VAPID_PUBLIC_KEY: vapid_key.public_key,
       VAPID_PRIVATE_KEY: vapid_key.private_key
     }
-  }
-
-  around do |example|
-    with_env(env_vars) do
-      example.run
-    end
   end
 
+  around { |example| with_env(env_vars) { example.run } }
+
   context 'with few notifications' do
-    let!(:notification_1) { create :notification, recipient: student.user }
-    let!(:notification_2) { create :notification, recipient: student.user }
-    let!(:notification_3) { create :notification, :read, recipient: student.user }
-    let!(:notification_4) { create :notification, :read, recipient: student.user }
+    let!(:notification_1) do
+      create :notification, message: 'Unique sentence', recipient: student.user
+    end
+
+    let!(:notification_2) do
+      create :notification, message: 'Something else', recipient: student.user
+    end
+
+    let!(:notification_3) do
+      create :notification, :read, message: 'Even more', recipient: student.user
+    end
+
+    let!(:notification_4) do
+      create :notification, :read, message: 'And again', recipient: student.user
+    end
 
     scenario 'user plays around with search' do
       sign_in_user student.user, referrer: dashboard_path
@@ -86,11 +93,7 @@ feature 'Notification Show Spec', js: true do
   end
 
   context 'with many notifications' do
-    before do
-      25.times do
-        create :notification, recipient: student.user
-      end
-    end
+    before { 25.times { create :notification, recipient: student.user } }
 
     scenario 'user loads all notifications' do
       sign_in_user student.user, referrer: dashboard_path
@@ -115,10 +118,9 @@ feature 'Notification Show Spec', js: true do
   end
 
   scenario 'Subscribes for notifications' do
-
     sign_in_user student.user, referrer: dashboard_path
 
     click_button 'Show Notifications'
-    expect(page).to have_text("Subscribe")
+    expect(page).to have_text('Subscribe')
   end
 end

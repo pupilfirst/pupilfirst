@@ -24,6 +24,24 @@ To authenticate using the token, pass the token in the `Authorization` header:
 Authorization: Bearer ACCESS_TOKEN
 ```
 
+## Browsing GraphQL in development
+
+Visit the `/graphiql` path to browse and interact with all GraphQL queries in the development environment.
+
+**CSP bug**: Pupilfirst LMS uses Content-Security-Policy to prevent execution of unauthorized scripts, and the GraphIQL rubygem doesn't support use of CSP on Rails, yet. [We've created a PR](https://github.com/rmosolgo/graphiql-rails/pull/71) to fix the issue, but until it's merged, one of the gem's files needs to be edited.
+
+You'll need to edit the `show.html.erb` file on the installed gem. It should be at this path:
+
+```
+~/.asdf/installs/ruby/2.7.2/lib/ruby/gems/2.7.0/gems/graphiql-rails-1.7.0/app/views/graphiql/rails/editors/show.html.erb
+```
+
+Add `nonce: true` to the `javascript_include_tag` call:
+
+```erb
+<%= javascript_include_tag("graphiql/rails/application", nonce: true) %>
+```
+
 ## Updating GraphQL schema
 
 If you make any changes to the GraphQL schema, you'll need to update the `graphql_schema.json` file by running an

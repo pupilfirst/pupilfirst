@@ -14927,10 +14927,10 @@ react-base16-styling@^0.6.0:
     lodash.flow "^3.3.0"
     pure-color "^1.2.0"
 
-react-csv-reader@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/react-csv-reader/-/react-csv-reader-3.1.2.tgz#0ade0272b3399d01e2eeec70c7cc6f38e8a76b42"
-  integrity sha512-lnK/z1CR5Fbmp3VIQBYShpUZRRPzO1qXV/hyj4Z7iWg5XWjzt3cuikIWpI3N7CW4Qe1S1igVTEgBRzTF54zV5w==
+react-csv-reader@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/react-csv-reader/-/react-csv-reader-3.2.1.tgz#a2b61dce8de90ee0c5e9da3db4de36fcf8399a0c"
+  integrity sha512-Anqv4T+xls0IZnuAl6LQdJ8GvejEgR8uZrg7BrPPYpNn4DOr5mhck69V4FXQGsrPQETiEkW3DtjUmn8tbwv5Ww==
   dependencies:
     "@types/papaparse" "^5.2.4"
     papaparse "^5.3.0"

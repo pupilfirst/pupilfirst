@@ -55,6 +55,8 @@ module Keycloak
   end
 
   class ServiceAccount
+    class FailedFetchTokensError < FailedRequestError; end
+    class FailedRefreshAccessTokenError < FailedRequestError; end
     attr_reader :refresh_token
 
     def initialize
@@ -69,7 +71,11 @@ module Keycloak
       if signed_in?
         @access_token
       else
-        refresh_access_token
+        begin
+          refresh_access_token
+        rescue FailedRefreshAccessTokenError
+          fetch_tokens
+        end
         @access_token
       end
     end
@@ -88,7 +94,7 @@ module Keycloak
         @access_token = tokens['access_token']
         @refresh_token = tokens['refresh_token']
       else
-        raise FailedRequestError.new 'Failed to sign-in as Keycloak\'s service account'
+        raise FailedFetchTokensError.new "Failed to sign-in as Keycloak\'s service account - #{res.body}"
       end
     end
 
@@ -107,7 +113,7 @@ module Keycloak
         @access_token = tokens['access_token']
         @refresh_token = tokens['refresh_token']
       else
-        raise FailedRequestError.new 'Failed to refresh Keycloak\'s service account access_token'
+        raise FailedRefreshAccessTokenError.new "Failed to refresh Keycloak\'s service account access_token - #{res.body}"
       end
     end
 

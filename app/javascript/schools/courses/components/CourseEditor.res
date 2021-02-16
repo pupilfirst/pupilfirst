@@ -478,16 +478,20 @@ let make = () => {
       <div id="courses" className="px-6 pb-4 mx-auto max-w-4xl w-full">
         {switch state.courses {
         | Unloaded =>
-          <div className="px-2 lg:px-8">
-            {SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())}
+          <div className="px-2 lg:px-5 mt-8">
+            <div className="grid grid-cols-2 gap-x-10 gap-y-8">
+              {SkeletonLoading.multiple(~count=4, ~element=SkeletonLoading.courseCard())}
+            </div>
           </div>
         | PartiallyLoaded(courses, cursor) =>
           <div>
             {showCourses(courses, state, send)}
             {switch state.loading {
             | LoadingMore =>
-              <div className="px-2 lg:px-8">
-                {SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())}
+              <div className="px-2 lg:px-5">
+                <div className="grid grid-cols-2 gap-x-10">
+                  {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.courseCard())}
+                </div>
               </div>
             | NotLoading =>
               <div className="px-5 pb-6">

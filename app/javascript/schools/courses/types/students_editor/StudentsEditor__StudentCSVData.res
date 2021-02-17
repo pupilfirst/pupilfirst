@@ -1,10 +1,10 @@
 type t = {
-  name: string,
-  email: string,
-  tags: string,
-  title: string,
-  team_name: string,
-  affiliation: string,
+  name: option<string>,
+  email: option<string>,
+  tags: option<string>,
+  title: option<string>,
+  team_name: option<string>,
+  affiliation: option<string>,
 }
 
 let name = t => t.name

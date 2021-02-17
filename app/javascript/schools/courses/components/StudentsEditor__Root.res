@@ -228,9 +228,9 @@ let make = (
         />
       </SchoolAdmin__EditorDrawer>
     | BulkImportForm =>
-      <SchoolAdmin__EditorDrawer closeDrawerCB={() => send(UpdateFormVisible(None))}>
+      <SchoolAdmin__EditorDrawer2 closeDrawerCB={() => send(UpdateFormVisible(None))}>
         <StudentsEditor__BulkImportForm courseId />
-      </SchoolAdmin__EditorDrawer>
+      </SchoolAdmin__EditorDrawer2>
     }}
     <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
       <div className="max-w-3xl w-full mx-auto flex justify-between items-center border-b mt-4">

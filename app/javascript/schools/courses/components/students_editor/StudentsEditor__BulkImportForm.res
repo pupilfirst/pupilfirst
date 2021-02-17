@@ -4,46 +4,52 @@ open StudentsEditor__Types
 
 let t = I18n.t(~scope="components.StudentsEditor__BulkImportForm")
 
+module CSVData = {
+  type t = StudentCSVData.t
+}
+
+module CSVReader = CSVReader.Make(CSVData)
+
 type state = {
-  fileName: option<string>,
+  fileInfo: option<CSVReader.fileInfo>,
   saving: bool,
   csvData: array<StudentCSVData.t>,
   fileInvalid: bool,
+  errors: array<CSVDataError.t>,
 }
 
 let initialState = {
-  fileName: None,
+  fileInfo: None,
   saving: false,
   csvData: [],
   fileInvalid: false,
+  errors: [],
 }
 
 type action =
-  | UpdateFilename(string)
   | UpdateFileInvalid(bool)
-  | LoadCSVData(array<StudentCSVData.t>)
-  | RemoveFilename
+  | LoadCSVData(array<StudentCSVData.t>, CSVReader.fileInfo)
   | BeginSaving
   | FailSaving
 
-let fileInputText = fileName =>
-  fileName->Belt.Option.getWithDefault(t("csv_file_input_placeholder"))
-
+let fileInputText = (~fileInfo: option<CSVReader.fileInfo>) =>
+  fileInfo->Belt.Option.mapWithDefault(t("csv_file_input_placeholder"), info => info.name)
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateFilename(imageFilename) => {
-      ...state,
-      fileName: Some(imageFilename),
-    }
   | UpdateFileInvalid(fileInvalid) => {...state, fileInvalid: fileInvalid}
-  | RemoveFilename => {...state, fileName: None}
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
-  | LoadCSVData(csvData) => {...state, csvData: csvData}
+  | LoadCSVData(csvData, fileInfo) => {
+      ...state,
+      csvData: csvData,
+      fileInfo: Some(fileInfo),
+      errors: CSVDataError.parseError(csvData),
+    }
   }
 
-let saveDisabled = state => state.fileName == None || (state.fileInvalid || state.saving)
+let saveDisabled = state =>
+  state.fileInfo->Belt.Option.isNone || (state.fileInvalid || state.saving)
 
 let submitForm = (courseId, send, event) => {
   ReactEvent.Form.preventDefault(event)
@@ -65,11 +71,46 @@ let submitForm = (courseId, send, event) => {
   )
 }
 
-module CSVData = {
-  type t = StudentCSVData.t
+let csvDataTable = csvData => {
+  <table className="table-fixed mt-5 border w-full">
+    <thead>
+      <tr className="bg-gray-200">
+        <th className="w-1/6  text-left"> {"name" |> str} </th>
+        <th className="w-1/6  text-left"> {"email" |> str} </th>
+        <th className="w-1/6  text-left"> {"title" |> str} </th>
+        <th className="w-1/6  text-left"> {"team_name" |> str} </th>
+        <th className="w-1/6  text-left"> {"tags" |> str} </th>
+        <th className="w-1/6  text-left"> {"affiliation" |> str} </th>
+      </tr>
+    </thead>
+    <tbody>
+      {csvData
+      |> Array.mapi((index, studentData) =>
+        <tr key={string_of_int(index)}>
+          <td className="border border-gray-400 truncate text-sm px-2 py-1">
+            {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("") |> str}
+          </td>
+          <td className="border border-gray-400 truncate text-sm px-2 py-1">
+            {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("") |> str}
+          </td>
+          <td className="border border-gray-400 truncate text-sm px-2 py-1">
+            {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("") |> str}
+          </td>
+          <td className="border border-gray-400 truncate text-sm px-2 py-1">
+            {StudentCSVData.team_name(studentData)->Belt.Option.getWithDefault("") |> str}
+          </td>
+          <td className="border border-gray-400 truncate text-sm px-2 py-1">
+            {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("") |> str}
+          </td>
+          <td className="border border-gray-400 truncate text-sm px-2 py-1">
+            {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("") |> str}
+          </td>
+        </tr>
+      )
+      |> React.array}
+    </tbody>
+  </table>
 }
-
-module CSVReader = CSVReader.Make(CSVData)
 
 @react.component
 let make = (~courseId) => {
@@ -98,18 +139,19 @@ let make = (~courseId) => {
           <CSVReader
             label=""
             inputId="csv-file-input"
+            inputName="csv-file"
             cssClass="hidden"
-            parserOptions=[("header", "true")]
+            parserOptions={CSVReader.parserOptions(~header=true, ~skipEmptyLines=true, ())}
             onFileLoaded={(x, y) => {
-              send(LoadCSVData(x))
-              send(UpdateFilename(y["name"]))
+              send(LoadCSVData(x, y))
             }}
             onError={_ => send(UpdateFileInvalid(true))}
           />
           <label className="file-input-label mt-2" htmlFor="csv-file-input">
             <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
-            <span className="truncate"> {fileInputText(state.fileName)->str} </span>
+            <span className="truncate"> {fileInputText(~fileInfo=state.fileInfo)->str} </span>
           </label>
+          {ReactUtils.nullIf(csvDataTable(state.csvData), ArrayUtils.isEmpty(state.csvData))}
           <School__InputGroupError message={t("csv_file_invalid")} active=state.fileInvalid />
         </div>
       </div>

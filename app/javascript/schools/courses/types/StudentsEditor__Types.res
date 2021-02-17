@@ -9,3 +9,4 @@ module Filter = StudentsEditor__Filter
 module SelectedStudent = StudentsEditor__SelectedStudent
 module Certificate = StudentsEditor__Certificate
 module StudentCSVData = StudentsEditor__StudentCSVData
+module CSVDataError = StudentsEditor__CSVDataError

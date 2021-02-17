@@ -1,6 +1,5 @@
 module type CSVData = {
   type t
-  type fileInfo
 }
 
 module Make = (CSVData: CSVData) => {
@@ -12,10 +11,16 @@ module Make = (CSVData: CSVData) => {
     skipEmptyLines: bool,
   }
 
+  type fileInfo = {
+    name: string,
+    size: int,
+    \"type": string,
+  }
+
   module JsComponent = {
     @bs.module("./CSVReader") @react.component
     external make: (
-      ~onFileLoaded: (Js.Array.t<CSVData.t>, CSVData.fileInfo) => unit,
+      ~onFileLoaded: (Js.Array.t<CSVData.t>, fileInfo) => unit,
       ~label: string=?,
       ~inputId: string=?,
       ~inputName: string=?,

@@ -10,11 +10,13 @@ module CSVData = {
 
 module CSVReader = CSVReader.Make(CSVData)
 
+type fileInvalid = InvalidCSVFile | EmptyFile | InvalidTemplate | ExceededEntries
+
 type state = {
   fileInfo: option<CSVReader.fileInfo>,
   saving: bool,
   csvData: array<StudentCSVData.t>,
-  fileInvalid: bool,
+  fileInvalid: option<fileInvalid>,
   errors: array<CSVDataError.t>,
 }
 
@@ -22,12 +24,29 @@ let initialState = {
   fileInfo: None,
   saving: false,
   csvData: [],
-  fileInvalid: false,
+  fileInvalid: None,
   errors: [],
 }
 
+let validTemplate = csvData => {
+  let firstRow = Js.Array.unsafe_get(csvData, 0)
+  StudentCSVData.name(firstRow)->Belt.Option.isSome
+}
+
+let validateFile = (csvData, fileInfo) => {
+  CSVReader.fileSize(fileInfo) > 10000 || CSVReader.fileType(fileInfo) != "text/csv"
+    ? Some(InvalidCSVFile)
+    : csvData |> ArrayUtils.isEmpty
+    ? Some(EmptyFile)
+    : !validTemplate(csvData)
+    ? Some(InvalidTemplate)
+    : Array.length(csvData) > 1000
+    ? Some(ExceededEntries)
+    : None
+}
+
 type action =
-  | UpdateFileInvalid(bool)
+  | UpdateFileInvalid(option<fileInvalid>)
   | LoadCSVData(array<StudentCSVData.t>, CSVReader.fileInfo)
   | BeginSaving
   | FailSaving
@@ -45,11 +64,15 @@ let reducer = (state, action) =>
       csvData: csvData,
       fileInfo: Some(fileInfo),
       errors: CSVDataError.parseError(csvData),
+      fileInvalid: validateFile(csvData, fileInfo),
     }
   }
 
 let saveDisabled = state =>
-  state.fileInfo->Belt.Option.isNone || (state.fileInvalid || state.saving)
+  state.fileInfo->Belt.Option.isNone ||
+  ArrayUtils.isNotEmpty(state.errors) ||
+  (state.fileInvalid->Belt.Option.isSome ||
+  state.saving)
 
 let submitForm = (courseId, send, event) => {
   ReactEvent.Form.preventDefault(event)
@@ -145,14 +168,26 @@ let make = (~courseId) => {
             onFileLoaded={(x, y) => {
               send(LoadCSVData(x, y))
             }}
-            onError={_ => send(UpdateFileInvalid(true))}
+            onError={_ => send(UpdateFileInvalid(Some(InvalidCSVFile)))}
           />
           <label className="file-input-label mt-2" htmlFor="csv-file-input">
             <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
             <span className="truncate"> {fileInputText(~fileInfo=state.fileInfo)->str} </span>
           </label>
           {ReactUtils.nullIf(csvDataTable(state.csvData), ArrayUtils.isEmpty(state.csvData))}
-          <School__InputGroupError message={t("csv_file_invalid")} active=state.fileInvalid />
+          <School__InputGroupError
+            message={switch state.fileInvalid {
+            | Some(invalidStatus) =>
+              switch invalidStatus {
+              | InvalidCSVFile => t("csv_file_errors.invalid")
+              | EmptyFile => t("csv_file_errors.empty")
+              | InvalidTemplate => t("csv_file_errors.invalid_template")
+              | ExceededEntries => t("csv_file_errors.exceeded_entries")
+              }
+            | None => ""
+            }}
+            active={state.fileInvalid->Belt.Option.isSome}
+          />
         </div>
       </div>
       <div className="max-w-2xl p-6 mx-auto">

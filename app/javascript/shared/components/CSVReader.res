@@ -17,6 +17,12 @@ module Make = (CSVData: CSVData) => {
     \"type": string,
   }
 
+  let fileName = fileInfo => fileInfo.name
+
+  let fileType = fileInfo => fileInfo.\"type"
+
+  let fileSize = fileInfo => fileInfo.size
+
   module JsComponent = {
     @bs.module("./CSVReader") @react.component
     external make: (

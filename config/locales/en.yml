@@ -328,6 +328,11 @@ en:
       csv_file_input_label: CSV Import file
       csv_file_input_placeholder: Select CSV file to import
       import_button_text: Import Students
+      csv_file_errors:
+        invalid: Please select a valid CSV file with size less than 10 MB
+        empty: The selected CSV has no valid rows
+        invalid_template: The selected CSV file does not have a valid template
+        exceeded_entries: The CSV file has more than 1000 entries.
       csv_file_invalid: Please select a valid CSV file with size less than 5 MB
       success_notification: Import initiated successfully!
     TopicsShow__Root:

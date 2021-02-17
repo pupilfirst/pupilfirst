@@ -82,8 +82,6 @@ const allowedCodeClasses = languages
   .concat(languages.map((l) => "language-diff-" + l))
   .concat(["language-diff", "diff-highlight"]);
 
-console.log(allowedCodeClasses);
-
 const sanitizationProfile = (profile) => {
   if (profile in sanitizationProfiles) {
     return sanitizationProfiles[profile];

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Developers::EventPublisher do
   subject { described_class.new }
-  let(:context_) { double(:context, id: 123) }
+  let(:course) { double(:course, id: 123) }
   let(:event_type) { 'any-given-event' }
   let(:actor) { double(:actor, id: 234) }
   let(:resource) { double(:resource, id: 456) }
@@ -14,12 +14,12 @@ describe Developers::EventPublisher do
       events << ActiveSupport::Notifications::Event.new(*args)
     end
 
-    subject.execute(context_, event_type, actor, resource)
+    subject.execute(course, event_type, actor, resource)
 
     expect(events.map(&:payload)).to eq [{
       resource_id: resource.id,
       actor_id: actor.id,
-      context_id: context_.id
+      course_id: course.id
     }]
 
     ActiveSupport::Notifications.unsubscribe('any-given-event.pupilfirst')

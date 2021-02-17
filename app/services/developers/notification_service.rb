@@ -8,9 +8,9 @@ module Developers
       @event_publisher = event_publisher
     end
 
-    def execute(context, event_type, actor, resource)
-      @event_publisher.execute(context, event_type, actor, resource)
-      @webhook_service.execute(context, event_type, resource)
+    def execute(course, event_type, actor, resource)
+      @event_publisher.execute(course, event_type, actor, resource)
+      @webhook_service.execute(course, event_type, resource)
     end
   end
 end

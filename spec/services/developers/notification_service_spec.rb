@@ -11,7 +11,7 @@ describe Developers::NotificationService do
 
   it 'pass the call to webhook service & event pubisher' do
     expect(webhook_service).to receive(:execute).with(course, event_type, resource).once
-    expect(event_publisher).to receive(:execute).with(course, event_type, actor, resource).once
+    expect(event_publisher).to receive(:execute).with(event_type, actor, resource).once
     subject.execute(course, event_type, actor, resource)
   end
 end

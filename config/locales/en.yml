@@ -1,23 +1,3 @@
-# ----------------------
-# Organization of en.yml
-# ----------------------
-#
-# components.COMPONENT.* - component-specific strings
-# jobs.[MODULE].JOB.* - strings used by jobs
-# models.MODEL.COLUMN.* = translation of database values to display values
-# mutations.MUTATION.* = strings used by mutations
-# queries.QUERY.* = strings used by resolvers and mutators
-# shared.* - shared strings
-# CONTROLLER.ACTION.* = display_value
-#
-# CONTROLLER is always the plural version. For example: FoundersController#edit = founders.edit.*
-#
-# Order alphabetically where possible.
-#
-# Third-party library translations are at the end of this file, and they follow their own format.
-# Make sure you include links to documentation related to such third-party translations for when
-# we (undoubtedly) forget what the strings were for.
-
 en:
   components:
     CoachesIndex__Root:
@@ -26,17 +6,17 @@ en:
       filter_input_placeholder: Search by name, or select a course
       filter_label_teaches_course: Teaches Course
       filter_label_name_like: Name Like
-      filter_search_string_course: "teaches course %{name}"
-      filter_result_empty: "The filters you've applied does not match any coach. Please change the filter and try again."
+      filter_search_string_course: teaches course %{name}
+      filter_result_empty: The filters you've applied does not match any coach. Please change the filter and try again.
       button_connect: Connect
       button_about: About
     CommunitiesShow__Root:
       all_categories_button: All Categories
       empty_topics: There's no discussion here yet.
-      filter_input_label: "Filter by:"
+      filter_input_label: 'Filter by:'
       filter_input_placeholder_default: Search within topics or filter by solution
       filter_input_placeholder_categories: Filter by category, solution or search within topics
-      sort_criterion_input_label: "Sort by:"
+      sort_criterion_input_label: 'Sort by:'
       sort_criterion_posted_at: Posted At
       sort_criterion_last_activity: Last Activity
       sort_criterion_views: Views
@@ -44,23 +24,23 @@ en:
       topic_stats_replies: Reply
       topic_stats_views: View
       button_load_more: Load More...
-      topics_fully_loaded_text: "Showing all %{total_topics} topics"
-      topics_partially_loaded_text: "Showing %{loaded_topics_count} of %{total_topics} topics"
+      topics_fully_loaded_text: Showing all %{total_topics} topics
+      topics_partially_loaded_text: Showing %{loaded_topics_count} of %{total_topics} topics
       topic_posted_by_text: Posted by
       topic_last_updated_text: Last updated
     CourseCertificates__Root:
       auto_issue_tag: Auto-issue
-      create_action: &certificate_create_action Create New Certificate
+      create_action: Create New Certificate
       issued_count:
         zero: Never issued
         one: Issued only once
-        other: "Issued %{count} times"
+        other: Issued %{count} times
       heading: Certificates
       no_certificates: You haven't created any certificates yet!
-      edit_button_title: "Edit Certificate %{name}"
-      delete_button_title: "Delete Certificate %{name}"
+      edit_button_title: Edit Certificate %{name}
+      delete_button_title: Delete Certificate %{name}
     CourseCertificates__CreateDrawer:
-      create_action: *certificate_create_action
+      create_action: Create New Certificate
       name_label: Name
       name_placeholder: A name to identify this certificate
       certificate_base_image_label: Certificate Base Image
@@ -87,21 +67,21 @@ en:
       qr_bottom_left_label: Bottom Left
       qr_bottom_right_label: Bottom Right
       update_issued_certificates_warning:
-        one: "This certificate has been issued once.<br/>These changes will also be applied to the issued certificate."
-        other: "This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates."
+        one: This certificate has been issued once.<br/>These changes will also be applied to the issued certificate.
+        other: This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates.
       cannot_be_auto_issued_warning: Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.
     CoursesCurriculum:
       edit_level_button: Edit Level
-      edit_target_button_title: "Edit target %{title}"
-      level_locked_for_students_notice: "This level is still locked for students, and will be unlocked on <strong>%{date}</strong>."
+      edit_target_button_title: Edit target %{title}
+      level_locked_for_students_notice: This level is still locked for students, and will be unlocked on <strong>%{date}</strong>.
       issued_certificate_heading: Congratulations! You have been issued a certificate.
       issued_certificate_button: View Certificate
       level_locked: Level locked
-      level_locked_notice: "The level is currently locked!"
-      level_locked_explanation: "You can access the content on %{date}."
+      level_locked_notice: The level is currently locked!
+      level_locked_explanation: You can access the content on %{date}.
       nav_previous_level: Previous Level
       nav_next_level: Next Level
-      empty_level_content_notice: "There's no published content on this level."
+      empty_level_content_notice: There's no published content on this level.
       milestone_targets: Milestone targets
     CoursesCurriculum__Learn:
       edit_target_button: Edit Content
@@ -121,18 +101,18 @@ en:
       level_up_blocked:
         title_pending_review: Pending Review
         title_rejected: Level Up Blocked
-        body_prefix: "You have submitted all milestone targets in level %{number}, but one or more submissions "
-        body_middle_pending_review: "are pending review by a coach. "
-        body_middle_rejected: "have been rejected. "
+        body_prefix: 'You have submitted all milestone targets in level %{number}, but one or more submissions '
+        body_middle_pending_review: 'are pending review by a coach. '
+        body_middle_rejected: 'have been rejected. '
         body_suffix: You need to get a passing grade on all milestone targets to level up.
       level_up_limited_title: Level Up Blocked
-      level_up_limited_description: "You're at Level %{currentLevel}, but you have targets in the Level %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up."
+      level_up_limited_description: You're at Level %{currentLevel}, but you have targets in the Level %{minimumRequiredLevel} that have been rejected, or are pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up.
       level_up_title: Ready to Level Up!
       level_up_description: Congratulations! You have successfully completed all milestone targets required to move to the next level in the course. Click on the "Level up" button below to continue progressing through the course.
     Notifications__List:
       empty_notifications: You don't have any notifications!
-      notifications_fully_loaded_text: "Showing all %{total_notifications} notifications"
-      notifications_partially_loaded_text: "Showing %{loaded_notifications_count} of %{total_notifications} notifications"
+      notifications_fully_loaded_text: Showing all %{total_notifications} notifications
+      notifications_partially_loaded_text: Showing %{loaded_notifications_count} of %{total_notifications} notifications
       mark_all_as_read_button: Mark All as Read
       filter:
         input_label: Search
@@ -163,34 +143,34 @@ en:
       button_text_saving: Saving
       button_text_level_up: Level Up
     CoursesReport__Overview:
-      attempted: " Attempted"
+      attempted: ' Attempted'
       average_grades: Average Grades
       average_quiz_score: Average Quiz Score
-      targets_completed: "Completed: %{targetsCount}"
+      targets_completed: 'Completed: %{targetsCount}'
       course_completed: Course Completed!
-      incomplete_targets: "Incomplete: %{targetsCount}"
+      incomplete_targets: 'Incomplete: %{targetsCount}'
       level_progress: Level Progress
-      targets_pending_review: "Pending Review: %{targetsCount}"
+      targets_pending_review: 'Pending Review: %{targetsCount}'
       personal_coaches: Personal Coaches
       quiz: Quiz
       schedule_coaching_session: Schedule a coaching session
       targets_overview: Targets Overview
     CoursesReport__SubmissionsList:
-      rejected: "Rejected"
-      completed: "Completed"
-      pending_review: "Pending Review"
+      rejected: Rejected
+      completed: Completed
+      pending_review: Pending Review
       status: Status
-      sort_by: "Sort by:"
+      sort_by: 'Sort by:'
       filter_by_level: Filter by level
       filter_by_level_or_status: Filter by level, or by status
       filter_by_another_level: Filter by another level
       filter_by_another_level_or_status: Filter by another level, or by status
       submitted_at: Submitted At
-      submitted_on: "Submitted on %{date}"
+      submitted_on: Submitted on %{date}
       submission_not_considered: This submission is not considered towards its target's completion.
       submission_not_considered_help: This is a <em>team</em> target, and this submission is not linked to some members of your team. This can happen if a target is changed after your individual submission, to require a <em>team</em> submission, or if your team's composition changed after a <em>team</em> submission was created.
-      view: "View "
-      no_submissions_to_show: "No submissions to show "
+      view: 'View '
+      no_submissions_to_show: 'No submissions to show '
       load_more: Load More...
     CoursesReview__Root:
       assigned_to: Assigned to
@@ -210,20 +190,20 @@ en:
       reviewed_at: Reviewed At
       sort_by: "Sort by:"
     CoursesStudents__StudentOverlay:
-      access_ended_at: "This student's access to the course ended on %{date}."
-      attempted: " Attempted"
+      access_ended_at: This student's access to the course ended on %{date}.
+      attempted: ' Attempted'
       average_grades: Average Grades
       average_quiz_score: Average Quiz Score
       close_student_report: Close student report
       course_completed: Course Completed!
-      dropped_out_at: "This student dropped out of the course on %{date}."
+      dropped_out_at: This student dropped out of the course on %{date}.
       notes: Notes
       level_progress: Level Progress
       other_team_members: Other Team Members
       personal_coaches: Personal Coaches
       submissions: Submissions
       quiz: Quiz
-      targets: " Targets"
+      targets: ' Targets'
       targets_overview: Targets Overview
       team_coaches: Team Coaches
       total_targets_completed: Total Targets Completed
@@ -238,7 +218,7 @@ en:
       target_group: Target Group
       prerequisite_targets_label: Are there any prerequisite targets?
       search_targets: Search targets
-      no_targets_selected: "No targets selected"
+      no_targets_selected: No targets selected
       choose_target_group: Choose a target group
       selected_all_targets: You have selected all targets
       take_quiz: Take a quiz to complete the target.
@@ -249,14 +229,14 @@ en:
       update_target: Update Target
       select_criterion_label: Choose evaluation criteria from your list
       select_criterion_warning: At least one has to be selected
-      target_reviewed_by_coach: "Will a coach review submissions on this target?"
+      target_reviewed_by_coach: Will a coach review submissions on this target?
       target_checklist_label: What steps should the student take to complete this target?
-      target_checklist_help_text: "These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review."
+      target_checklist_help_text: These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.
       target_checklist_limit_warning: Maximum allowed checklist items is 15!
-      empty_checklist_warning: "This target has no steps. Students will be able to submit target without any action!"
+      empty_checklist_warning: This target has no steps. Students will be able to submit target without any action!
       target_role_label: How should teams tackle this target?
       target_role_help: Should students in a team submit work on a target individually, or together?
-      completion_instructions_label: "Do you have any completion instructions for the student?"
+      completion_instructions_label: Do you have any completion instructions for the student?
       completion_instructions_help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
       target_visibility: Target Visibility
     CoursesCurriculum__TargetStatus:
@@ -278,16 +258,16 @@ en:
         embed: Embed
         video: Video
       file:
-        upload_size_warning: "Please select a file with a size less than 5 MB."
+        upload_size_warning: Please select a file with a size less than 5 MB.
       image:
-        invalid_image_warning: "Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high."
+        invalid_image_warning: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
       video:
         title_label: Title
         description_label: Description
         uploading: Uploading
         select_file_button: Select File and Upload
-        invalid_format_warning: "Invalid file format, please select an MP4, MOV, WMV or AVI file."
-        upload_limit_warning: "Please select a file less than %{maximumVideoSize} in size."
+        invalid_format_warning: Invalid file format, please select an MP4, MOV, WMV or AVI file.
+        upload_limit_warning: Please select a file less than %{maximumVideoSize} in size.
       embed:
         url_label: URL to Embed
         url_help: We support a number of third-party services (check link below). Just copy & paste the full URL to the page that contains the resource that you'd like to embed.
@@ -303,13 +283,13 @@ en:
       certificates_label: Course Certificates
       empty_course_certificates_text: This course does not have any certificates to issue.
       empty_issued_certificates_text: This student has not been issued any certificates.
-      issued_certificates_label: "Issued certificates:"
-      issued_date_label: "Issued on:"
-      issued_by_label: "Issued by:"
-      revoked_date_label: "Revoked on:"
-      revoked_by_label: "Revoked by:"
+      issued_certificates_label: 'Issued certificates:'
+      issued_date_label: 'Issued on:'
+      issued_by_label: 'Issued by:'
+      revoked_date_label: 'Revoked on:'
+      revoked_by_label: 'Revoked by:'
       revoked_status_label: Revoked
-      new_certificate_label: "Issue new certificate:"
+      new_certificate_label: 'Issue new certificate:'
       select_certificate_input_label: Select a certificate to issue
       issue_certificate_button: Issue Certificate
       revoke_certificate_button: Revoke Certificate
@@ -318,7 +298,7 @@ en:
       revoke_certificate_confirmation: Are you sure? This action cannot be undone.
       active_label: Active
     StudentsEditor__Root:
-      sort_criterion_label: "Sort by:"
+      sort_criterion_label: 'Sort by:'
       sort_criterion_name: Name
       sort_criterion_last_created: Last Created
       sort_criterion_last_updated: Last Updated
@@ -326,26 +306,26 @@ en:
       button_inactive_students: Inactive Students
       button_add_new_students: Add New Students
     StudentsEditor__Search:
-      filter_input_label: "Filter by:"
+      filter_input_label: 'Filter by:'
       filter_input_placeholder: Type name, tag or level
     StudentsEditor__CreateForm:
       added_full_description: All students were created successfully.
       added_partial_title: Partially Added
-      added_partial_description: "%{students_added} of %{students_requested} students were added. Remaining students are already a part of the course."
+      added_partial_description: '%{students_added} of %{students_requested} students were added. Remaining students are already a part of the course.'
       added_none_title: Nothing Changed
       added_none_description: All the students you tried to add were already a part of this course.
-      team_header_label: "TEAM %{team_name}"
+      team_header_label: TEAM %{team_name}
       team_header_add_more_members: Add more team members!
       drawer_heading: Add New Students
-      teams_to_add_label: "These new students will be added to the course:"
-      teams_to_add_empty: "This list is empty! Add some students using the form above."
-      notify_students_label: "Notify students, and send them a link to sign into this school."
+      teams_to_add_label: 'These new students will be added to the course:'
+      teams_to_add_empty: This list is empty! Add some students using the form above.
+      notify_students_label: Notify students, and send them a link to sign into this school.
       save_list_button: Save List
     TopicsShow__Root:
-      linked_target_label: "Linked Target: "
+      linked_target_label: 'Linked Target: '
       view_target_button: View Target
-      topic_category_label: "Topic Category: "
-      topic_editor_cancel_button: "Cancel"
+      topic_category_label: 'Topic Category: '
+      topic_editor_cancel_button: Cancel
       update_topic_button: Update Topic
       edit_topic_button: Edit Topic
       unlock_topic_button: Unlock Topic
@@ -363,15 +343,15 @@ en:
       learn_tab: Learn
       discuss_tab: Discuss
       close_button: Close
-      preview_mode_text: "You are currently looking at a preview of this course."
-      pending_team_members_notice: "You have team members who are yet to complete this target:"
+      preview_mode_text: You are currently looking at a preview of this course.
+      pending_team_members_notice: 'You have team members who are yet to complete this target:'
       previous_target_button: Previous Target
       next_target_button: Next Target
       scroll_to_top: Scroll to Top
     TopicsShow__PostShow:
       solution_icon_label: Solution
-      delete_topic_confirm_dialog: "Are you sure you want to delete the topic? This cannot be undone."
-      delete_post_confirm_dialog: "Are you sure you want to delete the post? This cannot be undone."
+      delete_topic_confirm_dialog: Are you sure you want to delete the topic? This cannot be undone.
+      delete_post_confirm_dialog: Are you sure you want to delete the post? This cannot be undone.
       edit_post_string: Edit Post
       edit_reply_string: Edit Reply
       delete_topic_string: Delete Topic
@@ -381,7 +361,7 @@ en:
       deleted_user_name: Deleted User
       new_reply_button: Reply
       go_to_solution_button: Go to solution
-      last_edited_by_label: "Last edited by "
+      last_edited_by_label: 'Last edited by '
     TopicsShow__LikeManager:
       like_button_tooltip: Like this post
     StudentTopNav:
@@ -392,61 +372,55 @@ en:
     StudentTopNav__UserControls:
       edit_profile: Edit Profile
       sign_out: Sign Out
-
   jobs:
     notifications:
       topic_created_job:
-        topic_created: "%{user_name} has created a new topic in %{community_name} community"
+        topic_created: '%{user_name} has created a new topic in %{community_name} community'
       post_created_job:
-        post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
+        post_created: '%{user_name} has responded to a thread you are part of in the %{community_name} community'
     timeline_events:
       verification_notification:
         founder:
           verified:
-            founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been verified by SV.CO"
-            startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_name}> has been verified by SV.CO"
+            founder_event: Your new timeline entry (<%{event_url}|%{event_title}>) has been verified by SV.CO
+            startup_event: Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_name}> has been verified by SV.CO
           needs_improvement:
-            founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-            startup_event: "Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_name}> has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
+            founder_event: Your new timeline entry (<%{event_url}|%{event_title}>) has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback
+            startup_event: Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_name}> has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback
           not_accepted:
-            founder_event: "Your new timeline entry (<%{event_url}|%{event_title}>) has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
-            startup_event: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by you for <%{startup_url}|%{startup_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+            founder_event: Your new timeline entry (<%{event_url}|%{event_title}>) has not been accepted. Please edit and resubmit the modified timeline event based on the feedback
+            startup_event: The new timeline entry (<%{event_url}|%{event_title}>) submitted by you for <%{startup_url}|%{startup_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback
         team:
-          verified: "Your team <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
-          needs_improvement: "Your team <%{startup_url}|%{startup_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-          not_accepted: "The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your team <%{startup_url}|%{startup_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback"
+          verified: 'Your team <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>'
+          needs_improvement: 'Your team <%{startup_url}|%{startup_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as ''needs improvement''. Please submit a new and revised timeline event based on the feedback'
+          not_accepted: The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your team <%{startup_url}|%{startup_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback
         public:
-          verified:
-            &jobs-timeline_events-verification_notification-public-verified |
+          verified: |
             <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>
             *Description:* %{event_description}
             %{links_attached_notice}
-          needs_improvement: *jobs-timeline_events-verification_notification-public-verified
-
+          needs_improvement: |
+            <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>
+            *Description:* %{event_description}
+            %{links_attached_notice}
     targets:
       send_session_reminders:
         message: 'Reminder: "%{title}" will start in %{time_delta} (at %{time_exact}). Please check the Slack collective channel for the link to join session.'
       send_session_feedback_notification:
         message: |
           Hello there! Thank you to all who attended today's live session by %{faculty_name}.
-
           We hope that you found the session informative and worthwhile.
-
           If you missed watching it live, we will have it up on the dashboard in a couple of days.
-
           Kindly help us improve our sessions with some quick feedback: https://svlabs.typeform.com/to/h7g9Om?faculty=%{faculty_name_escaped}&session=%{session_title}&date=%{session_date}
-
   models:
     faculty:
       commitment:
         part_time: Part-Time
         full_time: Full-Time
-
     target:
       role:
         team: Team
         founder: All Founders
-
   mutations:
     update_certificate:
       success_notification: Certificate details have been updated.
@@ -466,7 +440,6 @@ en:
       success_notification: Target has been marked as complete.
     create_target:
       success_notification: Target created successfully.
-
   queries:
     delete_certificate_mutator:
       issued_error: This certificate has been issued to one or more students - it cannot be deleted.
@@ -486,18 +459,16 @@ en:
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
     file_invalid: Please select a file with a size less than 5 MB.
     level_label:
-      long_with_name: "Level %{number}: %{name}"
-      short_with_name: "L%{number}: %{name}"
-      long_without_name: "Level %{number}"
-      short_without_name: "L%{number}"
+      long_with_name: 'Level %{number}: %{name}'
+      short_with_name: 'L%{number}: %{name}'
+      long_without_name: Level %{number}
+      short_without_name: L%{number}
     target: Target
     level: Level
-
   offline:
     title: You are offline
     heading: You are offline!
     message: It seems there is a problem with your connection.<br/>Please check your network status.
-
   dashboard:
     dashboard:
       tour:
@@ -507,11 +478,9 @@ en:
         target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, the status and the target submission button.
         target_status: This indicates the present status of the target.
         final_message: That&rsquo;s it for now. If you have any doubts, don&rsquo;t hesitate to reach out to us for help.<br/><br/>Have fun!
-
   sessions:
     create:
       invalid_credentials: The supplied email address and password do not match. Please check your credentials and try again.
-
   home:
     index:
       welcome_prefix: Hello, welcome to
@@ -522,14 +491,7 @@ en:
         active: Continue course
         access_ended: Review course content
         dropped_out: Dropped out
-
-
-  ####################################
-  # THIRD-PARTY LIBRARY TRANSLATIONS #
-  ####################################
-
-  # These are custom error messages for the active_storage_validations gem.
   errors:
     messages:
-      content_type_invalid: "has an invalid content type"
-      limit_out_of_range: "total number is out of range"
+      content_type_invalid: has an invalid content type
+      limit_out_of_range: total number is out of range

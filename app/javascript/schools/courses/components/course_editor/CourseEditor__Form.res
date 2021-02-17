@@ -425,7 +425,7 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
           className={progressionBehaviorButtonClasses(state, #Limited, "mr-1")}>
           <div className="font-bold text-xl"> {t("progression_behavior.limited") |> str} </div>
           <div className="text-xs mt-2">
-            <div> {"Students can level up" |> str} </div>
+            <div> {t("progression_behavior.limited.label") |> str} </div>
             <select
               id="progression-limit"
               onChange={handleSelectProgressionLimit(send)}

@@ -74,7 +74,7 @@ en:
       add_new_course: Add New Course
       button_load_more: Load More Courses...
       course_links:
-        download_repoorts: Download Reports
+        download_reports: Download Reports
         edit_curriculum: Edit Curriculum
         manage_coaches: Manage Coaches
         manage_students: Manage Students
@@ -88,7 +88,7 @@ en:
         input_label: Search
         input_placeholder: Filter and Search courses by name
         label:
-          name: Search by name
+          name: or start typing to search by name
           status: Status
         status:
           active: Show active courses
@@ -124,7 +124,8 @@ en:
       progression_behavior:
         help: This only applies if your course has milestone targets that requires students to submit their work for review by coaches.
         label: Progression Behavior
-        limited: Limited
+        limited:
+          label: Students can level up
     CoursesCurriculum:
       edit_level_button: Edit Level
       edit_target_button_title: Edit target %{title}

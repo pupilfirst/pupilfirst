@@ -94,18 +94,7 @@ en:
       course_complete_description: You've completed our coursework. Feel free to complete targets that you might have left out, and read up at attached links.
       course_complete_title: Congratulations! You have completed all milestone targets in the final level.
       course_ended_description: The course has ended and submissions are disabled for all targets!
-<<<<<<< HEAD
-      preview_mode_title: Preview Mode
-      preview_mode_description: You are accessing the preview mode for this course
-      access_ended_title: Access Ended
-      access_ended_description: Your access to this course has ended.
-      team_members_pending_title: Check With Your Team
-      team_members_pending_description: You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.
-      saving: Saving
-      level_up: Level Up
-=======
       course_ended_title: Course Ended
->>>>>>> efd488659 (Order en.yml alphabetically (#633))
       level_up_blocked:
         body_middle_pending_review: 'are pending review by a coach. '
         body_middle_rejected: 'have been rejected. '
@@ -181,21 +170,21 @@ en:
       view: 'View '
     CoursesReview__Root:
       assigned_to: Assigned to
-      me: Me
-      assigned_to_coach: "assigned to "
-      assigned_to_me: " assigned to me"
-      filter_by: "Filter by:"
-      filter_by_level: Filter by level
-      filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
+      assigned_to_coach: 'assigned to '
+      assigned_to_me: ' assigned to me'
+      filter_by: 'Filter by:'
       filter_by_another_level: Filter by another level
       filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
+      filter_by_level: Filter by level
+      filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
+      me: Me
+      now_showing_submissions_assigned_to: Now showing submissions assigned to %{name}.
       now_showing_submissions_from_all_students: Now showing submissions from all students in this course.
-      now_showing_submissions_assigned_to: "Now showing submissions assigned to %{name}."
-      submitted_at: Submitted At
       pending: Pending
       reviewed: Reviewed
       reviewed_at: Reviewed At
-      sort_by: "Sort by:"
+      sort_by: 'Sort by:'
+      submitted_at: Submitted At
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
       attempted: ' Attempted'

@@ -280,7 +280,7 @@ let restoreFilterNotice = (send, currentCoach, message) =>
     <button
       className="px-2 py-1 rounded text-xs overflow-hidden border text-gray-800 border-gray-300 bg-gray-200 hover:bg-gray-300 mt-1 md:mt-0"
       onClick={_ => send(SelectCoach(currentCoach))}>
-      {(tc("assigned_to") ++ ": " ++ tc("me")) |> str} <i className="fas fa-level-up-alt ml-2" />
+      {tc("assigned_to") ++ ": " ++ tc("me") |> str} <i className="fas fa-level-up-alt ml-2" />
     </button>
   </div>
 
@@ -288,17 +288,16 @@ let restoreAssignedToMeFilter = (state, send, currentTeamCoach) =>
   currentTeamCoach |> OptionUtils.mapWithDefault(currentCoach =>
     switch state.selectedCoach {
     | None =>
-      restoreFilterNotice(
-        send,
-        currentCoach,
-        tc("now_showing_submissions_from_all_students"),
-      )
+      restoreFilterNotice(send, currentCoach, tc("now_showing_submissions_from_all_students"))
     | Some(selectedCoach) when selectedCoach |> Coach.id == Coach.id(currentCoach) => React.null
     | Some(selectedCoach) =>
       restoreFilterNotice(
         send,
         currentCoach,
-        tc(~variables=[("name", selectedCoach |> Coach.name)], "now_showing_submissions_assigned_to"),
+        tc(
+          ~variables=[("name", selectedCoach |> Coach.name)],
+          "now_showing_submissions_assigned_to",
+        ),
       )
     }
   , React.null)

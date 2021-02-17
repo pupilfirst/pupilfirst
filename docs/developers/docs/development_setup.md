@@ -101,13 +101,25 @@ Feel free to alter these steps if you're familiar with setting up PostgreSQL.
 
 The `.env` file contains environment variables that are used to configure the application. The file contains documentation explaining where you should source its values from. If you're just starting out, you shouldn't have to change any variables other than the ones listed above.
 
+### Set up push notifications
+
+Generate and set VAPID keys to enable push notifications:
+
+```ruby
+# In the Rails console
+vapid_key = Webpush.generate_key
+
+# Save these in your .env file.
+puts "VAPID_PUBLIC_KEY=#{vapid_key.public_key}\nVAPID_PRIVATE_KEY=#{vapid_key.private_key}"
+```
+
 ## Setup Overcommit
 
 [Overcommit](https://github.com/sds/overcommit) adds automatic checks that prevents us from making silly mistakes when
 committing changes.
 
-    overcommit --install
-    overcommit --sign
+    bundle exec overcommit --install
+    bundle exec overcommit --sign
 
 **Note:** You may need to run `asdf reshim` to update paths, if you've just finished running Ruby's `bundle install` command.
 
@@ -148,8 +160,11 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
    brew services restart nginx
 
    # Ubuntu
-   sudo systemctl restart nginx
+   sudo service nginx restart
    ```
+
+   On Debian/Ubuntu, NGINX comes with a `sites-enabled/default` file which may need to be removed before
+   the LMS will begin responding to requests.
 
 3. You _may_ also need to point the local school domain `school.localhost`, and the `www` and `sso` subdomains, to
    `127.0.0.1` in the `/etc/hosts` file (on macOS and Ubuntu), and the `C:\Windows\System32\Drivers\etc\hosts` file on Windows:

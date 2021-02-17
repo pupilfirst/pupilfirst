@@ -23,7 +23,7 @@ let targetStatusClasses = targetStatus => {
   "curriculum__target-status px-3 py-px ml-4 h-6 " ++ statusClasses
 }
 
-let rendertarget = (target, statusOfTargets) => {
+let rendertarget = (target, statusOfTargets, author, courseId) => {
   let targetId = target |> Target.id
   let targetStatus =
     statusOfTargets |> ArrayUtils.unsafeFind(
@@ -31,22 +31,33 @@ let rendertarget = (target, statusOfTargets) => {
       "Could not find targetStatus for listed target with ID " ++ targetId,
     )
 
-  <Link
-    href={"/targets/" ++ targetId}
-    key={"target-" ++ targetId}
-    className="bg-white border-t p-6 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer"
-    ariaLabel={"Select Target " ++ targetId}>
-    <span className="font-semibold text-left leading-snug"> {target |> Target.title |> str} </span>
-    {ReactUtils.nullIf(
-      <span className={targetStatusClasses(targetStatus)}>
-        {targetStatus |> TargetStatus.statusToString |> str}
-      </span>,
-      TargetStatus.isPending(targetStatus),
+  <div className="courses-curriculum__target-container flex border-t bg-white hover:bg-gray-100">
+    <Link
+      href={"/targets/" ++ targetId}
+      key={"target-" ++ targetId}
+      className="p-6 flex flex-grow items-center justify-between hover:text-primary-500 cursor-pointer"
+      ariaLabel={"Select Target " ++ targetId}>
+      <span className="font-semibold text-left leading-snug"> {Target.title(target)->str} </span>
+      {ReactUtils.nullIf(
+        <span className={targetStatusClasses(targetStatus)}>
+          {TargetStatus.statusToString(targetStatus)->str}
+        </span>,
+        TargetStatus.isPending(targetStatus),
+      )}
+    </Link>
+    {ReactUtils.nullUnless(
+      <a
+        title={t("edit_target_button_title", ~variables=[("title", Target.title(target))])}
+        href={"/school/courses/" ++ courseId ++ "/targets/" ++ targetId ++ "/content"}
+        className="hidden lg:block courses-curriculum__target-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:bg-gray-200">
+        <i className="fas fa-pencil-alt" />
+      </a>,
+      author,
     )}
-  </Link>
+  </div>
 }
 
-let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
+let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId) => {
   let targetGroupId = targetGroup |> TargetGroup.id
   let targets = targets |> Js.Array.filter(t => t |> Target.targetGroupId == targetGroupId)
 
@@ -63,7 +74,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
         : React.null}
       <div className="p-6 pt-5">
         <div className="text-2xl font-bold leading-snug">
-          {targetGroup |> TargetGroup.name |> str}
+          {TargetGroup.name(targetGroup)->str}
         </div>
         <MarkdownBlock
           className="text-sm max-w-md mx-auto leading-snug"
@@ -73,7 +84,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets) => {
       </div>
       {targets
       |> ArrayUtils.copyAndSort((t1, t2) => (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex))
-      |> Js.Array.map(target => rendertarget(target, statusOfTargets))
+      |> Js.Array.map(target => rendertarget(target, statusOfTargets, author, courseId))
       |> React.array}
     </div>
   </div>
@@ -102,8 +113,8 @@ let handleLockedLevel = level =>
     | Some(date) =>
       let dateString = date->DateFns.format("MMMM d, yyyy")
       <div className="font-semibold text-md px-3">
-        <p> {t("level_locked_notice") |> str} </p>
-        <p> {"You can access the content on " ++ (dateString ++ ".") |> str} </p>
+        <p> {t("level_locked_notice")->str} </p>
+        <p> {t("level_locked_explanation", ~variables=[("date", dateString)])->str} </p>
       </div>
     | None => React.null
     }}
@@ -268,6 +279,7 @@ let quickNavigationLinks = (levels, selectedLevel, setState) => {
 
 @react.component
 let make = (
+  ~author,
   ~course,
   ~levels,
   ~targetGroups,
@@ -438,6 +450,7 @@ let make = (
         evaluationCriteria
         coaches
         preview
+        author
       />
 
     | None => React.null
@@ -460,12 +473,30 @@ let make = (
               setState(state => {...state, showLevelZero: showLevelZero})}
             levelZero
           />
+          {ReactUtils.nullUnless(
+            <div className="text-center mt-2 max-w-3xl mx-auto">
+              <a
+                className="btn btn-primary-ghost btn-small"
+                href={"/school/courses/" ++
+                Course.id(course) ++
+                "/curriculum?level=" ++
+                Level.number(currentLevel)->string_of_int}>
+                <i className="fas fa-pencil-alt" />
+                <span className="ml-2"> {t("edit_level_button")->str} </span>
+              </a>
+            </div>,
+            author,
+          )}
           {currentLevel |> Level.isLocked && accessLockedLevels
-            ? <div className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto">
-                {"This level is still locked for students, and will be unlocked on " |> str}
-                <strong> {currentLevel |> Level.unlockDateString |> str} </strong>
-                {"." |> str}
-              </div>
+            ? <div
+                className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto"
+                dangerouslySetInnerHTML={
+                  "__html": t(
+                    "level_locked_for_students_notice",
+                    ~variables=[("date", Level.unlockDateString(currentLevel))],
+                  ),
+                }
+              />
             : React.null}
           {Level.isUnlocked(currentLevel) || accessLockedLevels
             ? targetGroupsInLevel == []
@@ -478,7 +509,13 @@ let make = (
                 : targetGroupsInLevel
                   |> TargetGroup.sort
                   |> Js.Array.map(targetGroup =>
-                    renderTargetGroup(targetGroup, targets, state.statusOfTargets)
+                    renderTargetGroup(
+                      targetGroup,
+                      targets,
+                      state.statusOfTargets,
+                      author,
+                      Course.id(course),
+                    )
                   )
                   |> React.array
             : handleLockedLevel(currentLevel)}

@@ -41,6 +41,7 @@ jobs:
       CAPYBARA_MAX_WAIT_TIME: 5
       CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       SPEC_USER_TIME_ZONE: Etc/UTC
+      SPEC_RETRY_COUNT: 2
 
     steps:
       - uses: actions/checkout@v2

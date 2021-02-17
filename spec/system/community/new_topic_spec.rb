@@ -62,4 +62,33 @@ feature 'Topic creator', js: true do
       expect(new_topic.topic_category).to eq(category_2)
     end
   end
+
+  context 'when personal coaches are assigned' do
+    let(:coach_1) { create :faculty, school: school }
+    let(:coach_2) { create :faculty, school: school }
+
+    before do
+      create :faculty_course_enrollment, faculty: coach_1, course: course
+      create :faculty_startup_enrollment, faculty: coach_2, startup: student.startup
+    end
+
+    scenario 'when user creates a new topic' do
+      sign_in_user(student.user, referrer: new_topic_community_path(community))
+
+      topic_title = Faker::Lorem.sentence
+      fill_in('Title', with: topic_title)
+      add_markdown 'topic body'
+      click_button 'Create Topic'
+
+      expect(page).to have_text('Unsubscribe')
+
+      new_topic = community.topics.find_by(title: topic_title)
+
+      # Personal coaches must already be subscribed to the new topic.
+      expect(new_topic.subscribers.pluck(:id)).to contain_exactly(coach_2.user.id, student.user.id)
+
+      # Notifications should have been created for this new topic.
+      expect(Notification.last.notifiable).to eq(new_topic)
+    end
+  end
 end

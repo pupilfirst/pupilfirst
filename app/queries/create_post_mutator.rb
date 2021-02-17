@@ -10,7 +10,9 @@ class CreatePostMutator < ApplicationQuery
   def cannot_reply_to_topic_body
     return if reply_to_post_id.blank?
 
-    return if reply_to_post_id.present? && reply_to_post_id != topic.first_post.id
+    if reply_to_post_id.present? && reply_to_post_id != topic.first_post.id
+      return
+    end
 
     errors[:base] << 'Cannot add reply to first post'
   end
@@ -24,23 +26,28 @@ class CreatePostMutator < ApplicationQuery
   end
 
   def create_post
-    Post.transaction do
-      post = Post.create!(
-        creator: current_user,
-        topic: topic,
-        body: body,
-        reply_to_post: reply_to_post,
-        post_number: post_number
-      )
+    post =
+      Post.transaction do
+        # Update the topic's last activity time.
+        topic.update!(last_activity_at: Time.zone.now)
 
-      # Send a notification mail to addressee only if she isn't replying to herself.
-      UserMailer.new_post(post, addressee).deliver_later if addressee.present? && current_user != addressee
+        Post.create!(
+          creator: current_user,
+          topic: topic,
+          body: body,
+          reply_to_post: reply_to_post,
+          post_number: post_number
+        )
+      end
 
-      # Update the topic's last activity time.
-      topic.update!(last_activity_at: Time.zone.now)
-
-      post
+    # Send a notification mail to addressee only if she isn't replying to herself.
+    if addressee.present? && current_user != addressee
+      UserMailer.new_post(post, addressee).deliver_later
     end
+
+    Notifications::CreateJob.perform_later(:post_created, current_user, post)
+
+    post
   end
 
   private

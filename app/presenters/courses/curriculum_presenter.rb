@@ -43,12 +43,17 @@ module Courses
 
     def default_props
       {
+        author: author?,
         course: course_details,
         levels: levels_details,
         target_groups: target_groups,
         targets: targets,
         access_locked_levels: access_locked_levels
       }
+    end
+
+    def author?
+      current_school_admin.present? || @course.course_authors.exists?(user: current_user)
     end
 
     def evaluation_criteria

@@ -35,6 +35,8 @@ Rails.application.routes.draw do
     get '/:token/enroll', action: 'enroll', as: 'enroll'
   end
 
+  resources :notifications, only: %i[show]
+
   resource :school, only: %i[show update] do
     get 'customize'
     get 'admins'
@@ -156,6 +158,8 @@ Rails.application.routes.draw do
 
   get 'styleguide', to: 'home#styleguide', constraints: DevelopmentConstraint.new
 
+  get 'manifest', to: 'home#manifest'
+  get 'offline', to: 'home#offline'
   root 'home#index'
 
   # TODO: Remove this backwards-compatibility path after Jan 2021.
@@ -202,5 +206,6 @@ Rails.application.routes.draw do
   # Allow developers to simulate the error pages.
   get '/errors/:error_type', to: 'errors#simulate', constraints: DevelopmentConstraint.new
 
+  get '/service-worker.js', to: 'home#service_worker'
   get '/favicon.ico', to: 'home#favicon'
 end

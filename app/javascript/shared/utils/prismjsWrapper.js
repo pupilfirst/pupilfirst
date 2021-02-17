@@ -14,6 +14,9 @@ Prism.plugins.customClass.prefix("prism-");
 // Include a clone of the 'Okaidia' theme CSS with prefixed classes.
 require("./prism-okaidia.css");
 
-const highlightAllUnder = element => Prism.highlightAllUnder(element);
+// Inlude a clone of the 'diff-highlight' plgin CSS with prefixed classes.
+require("./prism-diff-highlight.css");
+
+const highlightAllUnder = (element) => Prism.highlightAllUnder(element);
 
 export default highlightAllUnder;

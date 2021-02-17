@@ -4,9 +4,17 @@ const md = require("markdown-it")({
   ...commonmarkPreset.options,
   linkify: true,
   highlight: (str, lang) => {
+    const lineNumbersClass = lang.startsWith("diff") ? "" : "line-numbers";
+    const highlightClass = lang.endsWith("-highlight") ? "diff-highlight" : "";
+    const langWithoutHighlight = lang.replace(/-highlight$/, "");
+
     return (
-      '<pre class="line-numbers"><code class="language-' +
-      lang +
+      '<pre class="' +
+      lineNumbersClass +
+      '"><code class="language-' +
+      langWithoutHighlight +
+      " " +
+      highlightClass +
       '">' +
       md.utils.escapeHtml(str) +
       "</code></pre>"
@@ -18,8 +26,8 @@ const subscriptPlugin = require("markdown-it-sub");
 const superscriptPlugin = require("markdown-it-sup");
 const tablePlugin = require("markdown-it-multimd-table");
 const linkifyImagesPlugin = require("markdown-it-linkify-images");
-const imageSizePlugin = require('@centerforopenscience/markdown-it-imsize');
-const linkAttributesPlugin = require('markdown-it-link-attributes')
+const imageSizePlugin = require("@centerforopenscience/markdown-it-imsize");
+const linkAttributesPlugin = require("markdown-it-link-attributes");
 
 md.use(subscriptPlugin)
   .use(superscriptPlugin)
@@ -27,8 +35,8 @@ md.use(subscriptPlugin)
   .use(imageSizePlugin)
   .use(linkAttributesPlugin, {
     attrs: {
-      target: '_blank',
-    }
+      target: "_blank",
+    },
   })
   .use(linkifyImagesPlugin, {
     target: "_blank",

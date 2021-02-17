@@ -6,37 +6,40 @@ sidebar_label: Internationalization
 
 Pupilfirst LMS uses _Rails Internationalization_ (I18n) API for internationalization and localization.
 
-
 ## Organization of en.yml
-- `components.COMPONENT.*` - component-specific strings
-- `jobs.[MODULE].JOB.*` - strings used by jobs
-- `models.MODEL.COLUMN.*` = translation of database values to display values
-- `mutations.MUTATION.*` = strings used by mutations
-- `queries.QUERY.*` = strings used by resolvers and mutators
-- `shared.*` - shared strings
-- `CONTROLLER.ACTION.*` = display_value
 
-CONTROLLER is always the plural version. For example: `FoundersController#edit = founders.edit.*`
+| Key                      | Value                                             |
+| ------------------------ |:-------------------------------------------------:|
+| `components.COMPONENT.*` | Component-specific strings.                       |
+| `jobs.[MODULE].JOB.*`    | Strings used by jobs.                             |
+| `models.MODEL.COLUMN.*`  | Translation of database values to display values. |
+| `mutations.MUTATION.*`   | Strings used by mutations.                        |
+| `queries.QUERY.*`        | Strings used by resolvers and mutators.           |
+| `shared.*`               | Shared strings.                                   |
+| `CONTROLLER.ACTION.*`    | Strings used in traditional views.                |
 
-Always order keys alphabetically.
+- `CONTROLLER` is always the plural version. For example: `FoundersController#edit` is keyed as `founders.edit.*`
+- Always order keys alphabetically. If you use [the VSCode plugin](#visual-studio-code-plugin), this will be done automatically.
+- Third-party library translations follow their own format, and any customization of those should be [documented
+  _here_ in this file](#third-party-library-translations).
 
-Third-party library translations are at the end of this file, and they follow their own format.
+## Visual Studio Code plugin
 
-Make sure you include links to documentation related to such third-party translations in `docs/developers/docs/internationalization.md` for when
-we (undoubtedly) forget what the strings were for.
+**Important Note:** This plugin only works within ReScript (`.res`) files at the moment.
 
-## VSCode plugin (Works only with .res files)
-
-You can use [pupilfirst-translator VSCode plugin](https://marketplace.visualstudio.com/items?itemName=bodhi.pupilfirst-translator) to set keys in I18n Yaml file.
+You can use the [pupilfirst-translator VSCode plugin](https://marketplace.visualstudio.com/items?itemName=bodhi.pupilfirst-translator)
+to quickly move strings from UI components to the I18n YAML file.
 
 ### Usage
-1. Select a string that needs to be added to `en.yml` file
-2. Right click and select _Pupilfirst Transilate_ button (You could also use `ctrl + shift + t` keybaord shortcut)
-3. Enter the key (example: `video.description_label`)
-4. Click `enter`
+
+1. Select a string that needs to be moved to `en.yml`.
+2. Right click and select _Pupilfirst Translate_ button. You can also use the `Ctrl+Shift+t` keyboard shortcut.
+3. Enter the key. For example: `video.description_label`.
+4. Press `Enter` to confirm.
 
 This will create an entry for the `key` you have added in `en.yml` file and replaces the selection.
 
+## Third-party library translations
 
-## THIRD-PARTY LIBRARY TRANSLATIONS
-- `content_type_invalid` and `limit_out_of_range` are custom error messages for the active_storage_validations gem.
+- `errors.messages.content_type_invalid` and `errors.messages.limit_out_of_range` are custom error messages for
+  the [active_storage_validations](https://github.com/igorkasyanchuk/active_storage_validations#internationalization-i18n) gem.

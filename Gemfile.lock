@@ -352,6 +352,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.1.1)
     netrc (0.11.0)
+    newrelic_rpm (6.15.0)
     nio4r (2.5.4)
     nokogiri (1.11.1)
       mini_portile2 (~> 2.5.0)
@@ -702,6 +703,7 @@ DEPENDENCIES
   listen (~> 3.2)
   motion-markdown-it (~> 8.4.1)
   motion-markdown-it-plugins (~> 8.4.2)
+  newrelic_rpm
   omniauth-facebook (~> 8.0)
   omniauth-github (~> 1.2)
   omniauth-google-oauth2 (~> 0.6)

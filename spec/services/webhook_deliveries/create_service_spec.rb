@@ -26,9 +26,8 @@ describe WebhookDeliveries::CreateService do
 
     context 'when the course does not have a webhook endpoint' do
       it 'does nothing' do
-        expect {
-          subject.execute(course, event_type, submission)
-        }.not_to have_enqueued_job
+        subject.execute(course, event_type, submission)
+        expect(WebhookDeliveries::DeliverJob).not_to have_been_enqueued
       end
     end
 
@@ -38,9 +37,8 @@ describe WebhookDeliveries::CreateService do
       end
 
       it 'does nothing' do
-        expect {
-          subject.execute(course, event_type, submission)
-        }.not_to have_enqueued_job
+        subject.execute(course, event_type, submission)
+        expect(WebhookDeliveries::DeliverJob).not_to have_been_enqueued
       end
     end
 
@@ -50,9 +48,8 @@ describe WebhookDeliveries::CreateService do
       end
 
       it 'does nothing' do
-        expect {
-          subject.execute(course, event_type, submission)
-        }.not_to have_enqueued_job
+        subject.execute(course, event_type, submission)
+        expect(WebhookDeliveries::DeliverJob).not_to have_been_enqueued
       end
     end
 

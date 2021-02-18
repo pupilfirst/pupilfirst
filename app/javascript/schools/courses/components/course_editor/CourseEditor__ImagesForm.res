@@ -2,6 +2,8 @@ open CourseEditor__Types
 
 let str = ReasonReact.string
 
+let t = I18n.t(~scope="components.CourseEditor__ImagesForm")
+
 type action =
   | SelectCover(string, bool)
   | SelectThumb(string, bool)
@@ -18,11 +20,12 @@ type state = {
   formDirty: bool,
 }
 
-let updateButtonText = updating => updating ? "Updating..." : "Update Images"
+let updateButtonText = updating =>
+  updating ? t("button_text.updating") : t("button_text.update_images")
 
 let formId = "course-editor-form-image-form"
 
-let filename = optionalFilename => optionalFilename |> OptionUtils.default("unknown")
+let filename = optionalFilename => optionalFilename->Belt.Option.getWithDefault("unknown")
 
 let handleUpdateCB = (json, state, course, updateCourseCB) => {
   let coverUrl = json |> {
@@ -35,7 +38,7 @@ let handleUpdateCB = (json, state, course, updateCourseCB) => {
   }
 
   let newCourse =
-    course |> Course.addImages(
+    course->Course.addImages(
       ~coverUrl,
       ~thumbnailUrl,
       ~coverFilename=filename(state.filenameCover),
@@ -46,17 +49,17 @@ let handleUpdateCB = (json, state, course, updateCourseCB) => {
 }
 
 let handleUpdateImages = (send, state, course, updateCourseCB, event) => {
-  event |> ReactEvent.Form.preventDefault
+  event->ReactEvent.Form.preventDefault
   send(BeginUpdate)
 
   let element = ReactDOMRe._getElementById(formId)
   switch element {
   | Some(element) =>
     Api.sendFormData(
-      "/school/courses/" ++ ((course |> Course.id) ++ "/attach_images"),
+      "/school/courses/" ++ (Course.id(course) ++ "/attach_images"),
       DomUtils.FormData.create(element),
       json => {
-        Notification.success("Done!", "Images have been updated successfully.")
+        Notification.success(t("notification_success.title"), t("notification_success.description"))
         handleUpdateCB(json, state, course, updateCourseCB)
         send(DoneUpdating)
       },
@@ -77,18 +80,17 @@ let optionalImageLabelText = (image, selectedFilename) =>
   switch selectedFilename {
   | Some(name) =>
     <span>
-      {"You have selected " |> str}
-      <code className="mr-1"> {name |> str} </code>
-      {". Click to replace the current image." |> str}
+      {t("image_label.start")->str}
+      <code className="mr-1"> {name->str} </code>
+      {t("image_label.end")->str}
     </span>
   | None =>
     switch image {
     | Some(existingImage) =>
       <span>
-        {"Please pick a file to replace " |> str}
-        <code> {existingImage |> Course.filename |> str} </code>
+        {t("replace_image_label")->str} <code> {Course.filename(existingImage)->str} </code>
       </span>
-    | None => "Please choose an image file." |> str
+    | None => t("empty_image_label") |> str
     }
   }
 
@@ -141,8 +143,8 @@ let reducer = (state, action) =>
 let make = (~course, ~updateCourseCB) => {
   let (state, send) = React.useReducer(reducer, initialState())
 
-  let thumbnail = course |> Course.thumbnail
-  let cover = course |> Course.cover
+  let thumbnail = course->Course.thumbnail
+  let cover = course->Course.cover
 
   <form
     id=formId
@@ -154,13 +156,13 @@ let make = (~course, ~updateCourseCB) => {
         <label
           className="tracking-wide text-gray-800 text-xs font-semibold"
           htmlFor="sc-images-editor__logo-on-400-bg-input">
-          {"Thumbnail" |> str}
+          {t("thumbnail.label")->str}
         </label>
         <HelpIcon
           className="text-xs ml-1"
           responsiveAlignment=HelpIcon.NonResponsive(AlignLeft)
           link="https://docs.pupilfirst.com/#/courses?id=course-images">
-          {"The thumbnail will be displayed on the homepage, and here in the admin courses list." |> str}
+          {t("thumbnail.help")->str}
         </HelpIcon>
         <input
           disabled=state.updating
@@ -179,21 +181,19 @@ let make = (~course, ~updateCourseCB) => {
             {optionalImageLabelText(thumbnail, state.filenameThumb)}
           </span>
         </label>
-        <School__InputGroupError
-          message="must be a JPEG / PNG under 2 MB in size" active=state.invalidThumb
-        />
+        <School__InputGroupError message={t("thumbnail.error_message")} active=state.invalidThumb />
       </div>
       <div key="course-images-editor__cover" className="mt-4">
         <label
           className="tracking-wide text-gray-800 text-xs font-semibold"
           htmlFor="sc-images-editor__logo-on-400-bg-input">
-          {"Cover Image" |> str}
+          {t("cover_image.label") |> str}
         </label>
         <HelpIcon
           className="text-xs ml-1"
           responsiveAlignment=HelpIcon.NonResponsive(AlignLeft)
           link="https://docs.pupilfirst.com/#/courses?id=course-images">
-          {"The cover will be displayed at the top of all student pages within the course, and as the header of some course emails." |> str}
+          {t("cover_image.help") |> str}
         </HelpIcon>
         <input
           disabled=state.updating
@@ -213,7 +213,7 @@ let make = (~course, ~updateCourseCB) => {
           </span>
         </label>
         <School__InputGroupError
-          message="must be a JPEG / PNG under 2 MB in size" active=state.invalidCover
+          message={t("cover_image.error_message")} active=state.invalidCover
         />
       </div>
       <button

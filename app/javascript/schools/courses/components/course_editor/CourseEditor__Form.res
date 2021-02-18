@@ -525,7 +525,11 @@ let make = (~course, ~updateCourseCB, ~relaodCoursesCB) => {
       <div className="pt-6 border-b border-gray-400 bg-gray-100">
         <div className="max-w-2xl mx-auto">
           <h5 className="uppercase text-center">
-            {(course == None ? "Add New Course" : "Edit Course Details")->str}
+            {(
+              course == None
+                ? t("button_text.add_new_course")
+                : t("button_text.edit_course_details")
+            )->str}
           </h5>
           {ReactUtils.nullUnless(
             <div className="w-full pt-6">
@@ -533,17 +537,20 @@ let make = (~course, ~updateCourseCB, ~relaodCoursesCB) => {
                 <button
                   className={selectedTabClasses(state.tab == DetailsTab)}
                   onClick={_ => send(SetDetailsTab)}>
-                  <i className="fa fa-edit" /> <span className="ml-2"> {"Details"->str} </span>
+                  <i className="fa fa-edit" />
+                  <span className="ml-2"> {t("tabs.details")->str} </span>
                 </button>
                 <button
                   className={selectedTabClasses(state.tab == ImagesTab)}
                   onClick={_ => send(SetImagesTab)}>
-                  <i className="fa fa-camera" /> <span className="ml-2"> {"Images"->str} </span>
+                  <i className="fa fa-camera" />
+                  <span className="ml-2"> {t("tabs.images")->str} </span>
                 </button>
                 <button
                   className={"-ml-px " ++ selectedTabClasses(state.tab == ActionsTab)}
                   onClick={_ => send(SetActionsTab)}>
-                  <i className="fa fa-cog" /> <span className="ml-2"> {"Actions"->str} </span>
+                  <i className="fa fa-cog" />
+                  <span className="ml-2"> {t("tabs.actions")->str} </span>
                 </button>
               </div>
             </div>,

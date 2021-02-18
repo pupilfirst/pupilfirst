@@ -1,0 +1,19 @@
+/**
+ * This is a namespaced version of PrismJS's diff-highlight plugin.
+ *
+ * Unmodified version: https://github.com/PrismJS/prism/blob/master/plugins/diff-highlight/prism-diff-highlight.css
+ */
+
+pre.diff-highlight > code .prism-token.prism-deleted:not(.prism-prefix),
+pre > code.diff-highlight .prism-token.prism-deleted:not(.prism-prefix) {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: inherit;
+  display: block;
+}
+
+pre.diff-highlight > code .prism-token.prism-inserted:not(.prism-prefix),
+pre > code.diff-highlight .prism-token.prism-inserted:not(.prism-prefix) {
+  background-color: rgba(0, 255, 128, 0.1);
+  color: inherit;
+  display: block;
+}

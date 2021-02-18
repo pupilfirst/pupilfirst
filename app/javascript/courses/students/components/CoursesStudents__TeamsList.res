@@ -37,7 +37,7 @@ let showStudent = (team, levels, teamCoaches) => {
           <p className="font-semibold inline-block leading-snug">
             {student |> TeamInfo.studentName |> str}
           </p>
-          <p className="text-gray-700 font-semibold text-xs leading-snug flex items-start">
+          <div className="text-gray-700 font-semibold text-xs leading-snug flex items-start">
             <span className="leading-normal pt-px">
               {student |> TeamInfo.studentTitle |> str}
             </span>
@@ -48,14 +48,14 @@ let showStudent = (team, levels, teamCoaches) => {
                   |> Js.Array.map(tag =>
                     <div
                       className="bg-gray-300 rounded mr-1 mt-1 py-px px-1 text-tiny text-gray-900"
-                      key="tag">
+                      key=tag>
                       {str(tag)}
                     </div>
                   )
                   |> React.array}
                 </div>
               : React.null}
-          </p>
+          </div>
         </div>
       </div>
     </div>

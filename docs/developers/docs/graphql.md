@@ -24,6 +24,10 @@ To authenticate using the token, pass the token in the `Authorization` header:
 Authorization: Bearer ACCESS_TOKEN
 ```
 
+## Browsing GraphQL in development
+
+Visit the `/graphiql` path to browse and interact with all GraphQL queries in the development environment.
+
 ## Updating GraphQL schema
 
 If you make any changes to the GraphQL schema, you'll need to update the `graphql_schema.json` file by running an

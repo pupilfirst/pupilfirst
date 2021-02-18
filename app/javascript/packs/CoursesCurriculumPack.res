@@ -3,6 +3,7 @@ open CoursesCurriculum__Types
 let decodeProps = json => {
   open Json.Decode
   (
+    field("author", bool, json),
     field("course", Course.decode, json),
     field("levels", array(Level.decode), json),
     field("targetGroups", array(TargetGroup.decode), json),
@@ -19,6 +20,7 @@ let decodeProps = json => {
 }
 
 let (
+  author,
   course,
   levels,
   targetGroups,
@@ -36,6 +38,7 @@ let (
 
 ReactDOMRe.renderToElementWithId(
   <CoursesCurriculum
+    author
     course
     levels
     targetGroups

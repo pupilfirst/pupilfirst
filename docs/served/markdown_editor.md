@@ -50,7 +50,7 @@ Lists can be ordered (numbered), or unordered:
 3. You can have line-breaks within a single list
    item; just make sure that the continuation text is aligned
    correctly with the text above, like it's done here.
-5. You can also _nest_ lists - i.e., have one list within another:
+4. You can also _nest_ lists - i.e., have one list within another:
    1. Here's a nested list...
    3. ...and a second item in the nested list.
    4. Notice how the numbering doesn't matter. Mistakes in numbering
@@ -66,7 +66,7 @@ Lists can be ordered (numbered), or unordered:
 3. You can have line-breaks within a single list
    item; just make sure that the continuation text is aligned
    correctly with the text above, like it's done here.
-5. You can also _nest_ lists - i.e., have one list within another:
+4. You can also _nest_ lists - i.e., have one list within another:
    1. Here's a nested list...
    3. ...and a second item in the nested list.
    4. Notice how the numbering doesn't matter. Mistakes in numbering
@@ -124,8 +124,11 @@ Here's the second-level heading. You should mostly be using the 2nd, 3rd, and
 4th level headings in your text.
 
 ### 3^rd^ Level Heading
+
 #### 4^th^ Level Heading
+
 ##### 5^th^ Level Heading
+
 ###### 6^th^ Level Heading
 ```
 
@@ -142,8 +145,11 @@ Here's the second-level heading. You should mostly be using the 2nd, 3rd, and
 4th level headings in your text.
 
 ### 3^rd^ Level Heading
+
 #### 4^th^ Level Heading
+
 ##### 5^th^ Level Heading
+
 ###### 6^th^ Level Heading
 
 ### Block-quotes
@@ -167,31 +173,33 @@ line from being converted to a list.
 ### Tables
 
 ```markdown
-| Column 1 Heading          | Column 2 Heading      |
-|---------------------------|-----------------------|
-| First value in row 1      | Second value in row 1 |
-| First value in row 2      | Second value in row 2 |
-| You can also _combine_ rows.                     ||
-| You can also style text `inside` the table.      ||
+| Column 1 Heading                            | Column 2 Heading      |
+| ------------------------------------------- | --------------------- |
+| First value in row 1                        | Second value in row 1 |
+| First value in row 2                        | Second value in row 2 |
+| You can also _combine_ rows.                |                       |
+| You can also style text `inside` the table. |                       |
 ```
 
-| Column 1 Heading          | Column 2 Heading      |
-|---------------------------|-----------------------|
-| First value in row 1      | Second value in row 1 |
-| First value in row 2      | Second value in row 2 |
-| You can also _combine_ rows                      ||
-| You can also style text `inside` the table.      ||
+| Column 1 Heading                            | Column 2 Heading      |
+| ------------------------------------------- | --------------------- |
+| First value in row 1                        | Second value in row 1 |
+| First value in row 2                        | Second value in row 2 |
+| You can also _combine_ rows                 |                       |
+| You can also style text `inside` the table. |                       |
 
-### Code blocks, and inline-code.
+### Inline code
 
-There are a couple of ways to style code with our Markdown editor. You can
-write code in-line by wrapping it using a single _backtick_ character:
+There are a couple of ways to style _code_ with our Markdown editor. You can
+write code inline by wrapping it using a single _backtick_ character:
 
 ```markdown
 This is a line that has some `inline code` within it.
 ```
 
 This is a line that has some `inline code` within it.
+
+### Fenced code blocks
 
 You can also have large multi-line code-blocks by wrapping them in (at-least)
 three backticks:
@@ -230,10 +238,10 @@ hanoi(4, 1, 2, 3);
 const hanoi = (n, a, b, c) => {
   if (n > 0) {
     hanoi(n - 1, a, c, b);
-    console.log('Move disk ' + n + ' from ' + a + ' to ' + b);
-    hanoi(n - 1, c, b, a)
+    console.log("Move disk " + n + " from " + a + " to " + b);
+    hanoi(n - 1, c, b, a);
   }
-}
+};
 
 hanoi(4, 1, 2, 3);
 ```
@@ -247,3 +255,45 @@ We support the following languages:
 - `ruby`
 - `markup` (`html`, `xml`, `svg`, `mathml`)
 - `yaml` (`yml`)
+
+### _Diff_ code blocks
+
+You can also highlight changes in _diff_-style output.
+
+````markdown
+```diff
+@@ -4,6 +4,5 @@
+-    let foo = bar.baz([1, 2, 3]);
+-    foo = foo + 1;
++    const foo = bar.baz([1, 2, 3]) + 1;
+     console.log(`foo: ${foo}`);
+```
+````
+
+```diff
+@@ -4,6 +4,5 @@
+-    let foo = bar.baz([1, 2, 3]);
+-    foo = foo + 1;
++    const foo = bar.baz([1, 2, 3]) + 1;
+     console.log(`foo: ${foo}`);
+```
+
+The `diff` keyword can also be written as `diff-highlight`, `diff-LANGUAGE`, or `diff-LANGUAGE-highlight` . The first of these will enable highlighting of differing lines, the second will enable syntax highlighting based on specified language, and the third will enable both features. For example:
+
+````markdown
+```diff-javascript-highlight
+@@ -4,6 +4,5 @@
+-    let foo = bar.baz([1, 2, 3]);
+-    foo = foo + 1;
++    const foo = bar.baz([1, 2, 3]) + 1;
+     console.log(`foo: ${foo}`);
+```
+````
+
+```diff-javascript-highlight
+@@ -4,6 +4,5 @@
+-    let foo = bar.baz([1, 2, 3]);
+-    foo = foo + 1;
++    const foo = bar.baz([1, 2, 3]) + 1;
+     console.log(`foo: ${foo}`);
+```

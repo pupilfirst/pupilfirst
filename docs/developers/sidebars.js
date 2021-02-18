@@ -6,9 +6,10 @@ module.exports = {
       "testing",
       "graphql",
       "background_jobs",
+      "internationalization",
       "lerna",
-      "documentation"
+      "documentation",
     ],
-    Deployment: ["before_deploying", "heroku", "upgrading"]
-  }
+    Deployment: ["before_deploying", "heroku", "upgrading"],
+  },
 };

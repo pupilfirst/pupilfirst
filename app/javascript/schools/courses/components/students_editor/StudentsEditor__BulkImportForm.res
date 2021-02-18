@@ -94,45 +94,48 @@ let submitForm = (courseId, send, event) => {
   )
 }
 
-let csvDataTable = csvData => {
-  <table className="table-fixed mt-5 border w-full">
-    <thead>
-      <tr className="bg-gray-200">
-        <th className="w-1/6  text-left"> {"name" |> str} </th>
-        <th className="w-1/6  text-left"> {"email" |> str} </th>
-        <th className="w-1/6  text-left"> {"title" |> str} </th>
-        <th className="w-1/6  text-left"> {"team_name" |> str} </th>
-        <th className="w-1/6  text-left"> {"tags" |> str} </th>
-        <th className="w-1/6  text-left"> {"affiliation" |> str} </th>
-      </tr>
-    </thead>
-    <tbody>
-      {csvData
-      |> Array.mapi((index, studentData) =>
-        <tr key={string_of_int(index)}>
-          <td className="border border-gray-400 truncate text-sm px-2 py-1">
-            {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("") |> str}
-          </td>
-          <td className="border border-gray-400 truncate text-sm px-2 py-1">
-            {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("") |> str}
-          </td>
-          <td className="border border-gray-400 truncate text-sm px-2 py-1">
-            {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("") |> str}
-          </td>
-          <td className="border border-gray-400 truncate text-sm px-2 py-1">
-            {StudentCSVData.team_name(studentData)->Belt.Option.getWithDefault("") |> str}
-          </td>
-          <td className="border border-gray-400 truncate text-sm px-2 py-1">
-            {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("") |> str}
-          </td>
-          <td className="border border-gray-400 truncate text-sm px-2 py-1">
-            {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("") |> str}
-          </td>
+let csvDataTable = (csvData, fileInvalid, errors) => {
+  ReactUtils.nullIf(
+    <table className="table-fixed mt-5 border w-full">
+      <thead>
+        <tr className="bg-gray-200">
+          <th className="w-1/6  text-left"> {"name" |> str} </th>
+          <th className="w-1/6  text-left"> {"email" |> str} </th>
+          <th className="w-1/6  text-left"> {"title" |> str} </th>
+          <th className="w-1/6  text-left"> {"team_name" |> str} </th>
+          <th className="w-1/6  text-left"> {"tags" |> str} </th>
+          <th className="w-1/6  text-left"> {"affiliation" |> str} </th>
         </tr>
-      )
-      |> React.array}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {csvData
+        |> Array.mapi((index, studentData) =>
+          <tr key={string_of_int(index)}>
+            <td className="border border-gray-400 truncate text-sm px-2 py-1">
+              {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("") |> str}
+            </td>
+            <td className="border border-gray-400 truncate text-sm px-2 py-1">
+              {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("") |> str}
+            </td>
+            <td className="border border-gray-400 truncate text-sm px-2 py-1">
+              {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("") |> str}
+            </td>
+            <td className="border border-gray-400 truncate text-sm px-2 py-1">
+              {StudentCSVData.team_name(studentData)->Belt.Option.getWithDefault("") |> str}
+            </td>
+            <td className="border border-gray-400 truncate text-sm px-2 py-1">
+              {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("") |> str}
+            </td>
+            <td className="border border-gray-400 truncate text-sm px-2 py-1">
+              {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("") |> str}
+            </td>
+          </tr>
+        )
+        |> React.array}
+      </tbody>
+    </table>,
+    fileInvalid->Belt.Option.isSome || ArrayUtils.isNotEmpty(errors),
+  )
 }
 
 @react.component
@@ -174,7 +177,10 @@ let make = (~courseId) => {
             <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
             <span className="truncate"> {fileInputText(~fileInfo=state.fileInfo)->str} </span>
           </label>
-          {ReactUtils.nullIf(csvDataTable(state.csvData), ArrayUtils.isEmpty(state.csvData))}
+          {ReactUtils.nullIf(
+            csvDataTable(state.csvData, state.fileInvalid, state.errors),
+            ArrayUtils.isEmpty(state.csvData),
+          )}
           <School__InputGroupError
             message={switch state.fileInvalid {
             | Some(invalidStatus) =>

@@ -79,6 +79,9 @@ gem 'batch-loader', '~> 1.5' # Generic lazy batching mechanism to avoid N+1 DB q
 # GrowthTribe gems
 gem 'omniauth-keycloak', '~>1.2.0'
 
+gem 'xapi', '~>0.0.1', git: 'https://github.com/growthtribeacademy/Xapi.git', branch: 'master'
+gem 'pupilfirst_xapi', path: '../pupilfirst-xapi/pupilfirst_xapi'
+
 # Rails assets!
 source 'https://rails-assets.org' do
   gem 'rails-assets-bootstrap-tabcollapse', '~> 0.2' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.

@@ -95,7 +95,7 @@ module.exports = function (api) {
             "markup",
             "yaml",
           ],
-          plugins: ["line-numbers", "custom-class"],
+          plugins: ["line-numbers", "custom-class", "diff-highlight"],
         },
       ],
     ].filter(Boolean),

@@ -96,21 +96,25 @@ let submitForm = (courseId, send, event) => {
 
 let csvDataTable = (csvData, fileInvalid, errors) => {
   ReactUtils.nullIf(
-    <table className="table-fixed mt-5 border w-full">
+    <table className="table-auto mt-5 border w-full">
       <thead>
         <tr className="bg-gray-200">
-          <th className="w-1/6  text-left"> {"name" |> str} </th>
-          <th className="w-1/6  text-left"> {"email" |> str} </th>
-          <th className="w-1/6  text-left"> {"title" |> str} </th>
-          <th className="w-1/6  text-left"> {"team_name" |> str} </th>
-          <th className="w-1/6  text-left"> {"tags" |> str} </th>
-          <th className="w-1/6  text-left"> {"affiliation" |> str} </th>
+          <th className="text-left"> {"no" |> str} </th>
+          <th className="text-left"> {"name" |> str} </th>
+          <th className="text-left"> {"email" |> str} </th>
+          <th className="text-left"> {"title" |> str} </th>
+          <th className="text-left"> {"team_name" |> str} </th>
+          <th className="text-left"> {"tags" |> str} </th>
+          <th className="text-left"> {"affiliation" |> str} </th>
         </tr>
       </thead>
       <tbody>
         {csvData
         |> Array.mapi((index, studentData) =>
           <tr key={string_of_int(index)}>
+            <td className="border border-gray-400 truncate text-sm px-2 py-1">
+              {string_of_int(index + 1) |> str}
+            </td>
             <td className="border border-gray-400 truncate text-sm px-2 py-1">
               {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("") |> str}
             </td>
@@ -165,9 +169,9 @@ let make = (~courseId) => {
           <CSVReader
             label=""
             inputId="csv-file-input"
-            inputName="csv-file"
+            inputName="csv"
             cssClass="hidden"
-            parserOptions={CSVReader.parserOptions(~header=true, ~skipEmptyLines=true, ())}
+            parserOptions={CSVReader.parserOptions(~header=true, ~skipEmptyLines="true", ())}
             onFileLoaded={(x, y) => {
               send(LoadCSVData(x, y))
             }}

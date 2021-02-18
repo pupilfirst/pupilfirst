@@ -10,7 +10,7 @@ feature 'Courses Index', js: true do
   let!(:course_1) { create :course, school: school }
   let!(:course_2) { create :course, school: school, name: 'Pupilfirst Demo Course' }
   let!(:course_ended) { create :course, school: school, ends_at: 1.day.ago }
-  let!(:course_archived) { create :course, school: school, archived_at: 1.day.ago }
+  let!(:course_archived) { create :course, school: school, ends_at: 1.day.ago, archived_at: 1.day.ago }
 
   let!(:school_admin) { create :school_admin, school: school }
 
@@ -249,6 +249,7 @@ feature 'Courses Index', js: true do
 
       expect(page).to have_text('Course archived successfully')
       expect(course_1.reload.archived_at).not_to eq(nil)
+      expect(course_1.reload.ends_at).not_to eq(nil)
       expect(startup.reload.access_ends_at).not_to eq(nil)
       within("div[id='courses']") do
         expect(page).not_to have_text(course_1.name)

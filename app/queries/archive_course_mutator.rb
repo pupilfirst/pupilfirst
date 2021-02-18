@@ -6,7 +6,7 @@ class ArchiveCourseMutator < ApplicationQuery
   def archive_course
     return if course.blank? || course.archived?
 
-    course.update!(archived_at: Time.zone.now)
+    course.update!(archived_at: Time.zone.now, ends_at: course.ends_at.presence || Time.zone.now)
 
     course.startups.where(access_ends_at: nil).update_all(access_ends_at: Time.zone.now) # rubocop:disable Rails/SkipsModelValidations
   end

@@ -25,7 +25,7 @@ class CoursesResolver < ApplicationQuery
     when 'Active'
       current_school.courses.live.where('ends_at > ?', Time.now).or(current_school.courses.live.where(ends_at: nil))
     when 'Ended'
-      current_school.courses.where('ends_at < ?', Time.now)
+      current_school.courses.where('ends_at < ?', Time.now).where(archived_at: nil)
     when "Archived"
       current_school.courses.archived
     else

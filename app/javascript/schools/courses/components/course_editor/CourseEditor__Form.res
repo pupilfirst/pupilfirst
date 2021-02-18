@@ -258,18 +258,18 @@ let booleanButtonClasses = bool => {
 let enablePublicSignupButton = (publicSignup, send) =>
   <div className="flex items-center mt-5">
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-signup">
-      {t("enable_public_signup.label")->str}
+      {t("enable_public_signup_label")->str}
     </label>
     <div id="public-signup" className="flex toggle-button__group flex-shrink-0 rounded-lg">
       <button
         className={booleanButtonClasses(publicSignup)}
         onClick={_ => send(UpdatePublicSignup(true))}>
-        {t("enable_public_signup.yes")->str}
+        {t("enable_public_signup_yes")->str}
       </button>
       <button
         className={booleanButtonClasses(!publicSignup)}
         onClick={_ => send(UpdatePublicSignup(false))}>
-        {t("enable_public_signup.no")->str}
+        {t("enable_public_signup_no")->str}
       </button>
     </div>
   </div>
@@ -277,15 +277,15 @@ let enablePublicSignupButton = (publicSignup, send) =>
 let featuredButton = (featured, send) =>
   <div className="flex items-center mt-5">
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="featured">
-      {t("feature_course_in_homepage.label")->str}
+      {t("feature_course_in_homepage_label")->str}
     </label>
     <div id="featured" className="flex toggle-button__group flex-shrink-0 rounded-lg">
       <button className={booleanButtonClasses(featured)} onClick={_ => send(UpdateFeatured(true))}>
-        {t("feature_course_in_homepage.yes")->str}
+        {t("feature_course_in_homepage_yes")->str}
       </button>
       <button
         className={booleanButtonClasses(!featured)} onClick={_ => send(UpdateFeatured(false))}>
-        {t("feature_course_in_homepage.no")->str}
+        {t("feature_course_in_homepage_no")->str}
       </button>
     </div>
   </div>
@@ -423,37 +423,35 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
         <button
           onClick={_ => send(UpdateProgressionBehavior(#Limited))}
           className={progressionBehaviorButtonClasses(state, #Limited, "mr-1")}>
-          <div className="font-bold text-xl"> {t("progression_behavior.limited") |> str} </div>
+          <div className="font-bold text-xl"> {t("progression_behavior.limited.title")->str} </div>
           <div className="text-xs mt-2">
-            <div> {t("progression_behavior.limited.label") |> str} </div>
+            <div> {t("progression_behavior.limited.description_start")->str} </div>
             <select
               id="progression-limit"
               onChange={handleSelectProgressionLimit(send)}
               className="my-1 cursor-pointer inline-block appearance-none bg-white border-b-2 text-xl font-semibold border-blue-500 hover:border-gray-500 p-1 leading-tight rounded-none focus:outline-none"
               style={ReactDOMRe.Style.make(~textAlignLast="center", ())}
               value={string_of_int(state.progressionLimit)}>
-              <option value="1"> {"once" |> str} </option>
-              <option value="2"> {"twice" |> str} </option>
-              <option value="3"> {"thrice" |> str} </option>
+              <option value="1"> {t("progression_behavior.limited.once")->str} </option>
+              <option value="2"> {t("progression_behavior.limited.twice")->str} </option>
+              <option value="3"> {t("progression_behavior.limited.thrice")->str} </option>
             </select>
-            <div> {" without getting submissions reviewed." |> str} </div>
+            <div> {t("progression_behavior.limited.description_end")->str} </div>
           </div>
         </button>
         <button
           onClick={_ => send(UpdateProgressionBehavior(#Unlimited))}
           className={progressionBehaviorButtonClasses(state, #Unlimited, "mx-1")}>
-          <div className="font-bold text-xl"> {"Unlimited" |> str} </div>
-          <span className="text-xs">
-            {"Students can level up till the end of the course, without getting submissions reviewed." |> str}
-          </span>
+          <div className="font-bold text-xl">
+            {t("progression_behavior.unlimited.title")->str}
+          </div>
+          <span className="text-xs"> {t("progression_behavior.unlimited.description")->str} </span>
         </button>
         <button
           onClick={_ => send(UpdateProgressionBehavior(#Strict))}
           className={progressionBehaviorButtonClasses(state, #Strict, "ml-1")}>
-          <div className="font-bold text-xl"> {"Strict" |> str} </div>
-          <span className="text-xs">
-            {"Students can level up only after getting submissions reviewed, and passing." |> str}
-          </span>
+          <div className="font-bold text-xl"> {t("progression_behavior.strict.title")->str} </div>
+          <span className="text-xs"> {t("progression_behavior.strict.description")->str} </span>
         </button>
       </div>
     </div>
@@ -467,7 +465,7 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
             disabled={saveDisabled(state)}
             onClick={_ => updateCourse(state, send, updateCourseCB, course)}
             className="w-full btn btn-large btn-primary mt-3">
-            {"Update Course" |> str}
+            {t("update_course")->str}
           </button>
 
         | None =>
@@ -475,7 +473,7 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
             disabled={saveDisabled(state)}
             onClick={_ => createCourse(state, send, relaodCoursesCB)}
             className="w-full btn btn-large btn-primary mt-3">
-            {"Create Course" |> str}
+            {t("create_course")->str}
           </button>
         }}
       </div>
@@ -490,7 +488,7 @@ let actionsTab = (state, send, relaodCoursesCB, course) => {
     {Belt.Option.isSome(Course.archivedAt(course))
       ? <div className="mt-2">
           <label className="tracking-wide text-xs font-semibold">
-            {str("Do you want to unarchive the course?")}
+            {str(t("actions.unarchive_course.label"))}
           </label>
           <div>
             <button
@@ -498,13 +496,13 @@ let actionsTab = (state, send, relaodCoursesCB, course) => {
               className="btn btn-success btn-large mt-2"
               onClick={_e => unarchiveCourse(send, relaodCoursesCB, course)}>
               <FaIcon classes={submitButtonIcons(state.saving)} />
-              <span className="ml-2"> {"Unarchive Course"->str} </span>
+              <span className="ml-2"> {t("actions.unarchive_course.button_text")->str} </span>
             </button>
           </div>
         </div>
       : <div className="mt-2">
           <label className="tracking-wide text-xs font-semibold">
-            {str("Do you want to archive the course?")}
+            {str(t("actions.archive_course.label"))}
           </label>
           <div>
             <button
@@ -512,7 +510,7 @@ let actionsTab = (state, send, relaodCoursesCB, course) => {
               className="btn btn-danger btn-large mt-2"
               onClick={_e => archiveCourse(send, relaodCoursesCB, course)}>
               <FaIcon classes={submitButtonIcons(state.saving)} />
-              <span className="ml-2"> {"Archive Course"->str} </span>
+              <span className="ml-2"> {t("actions.archive_course.button_text")->str} </span>
             </button>
           </div>
         </div>}

@@ -8,7 +8,7 @@ module Make = (CSVData: CSVData) => {
     @bs.optional
     header: bool,
     @bs.optional
-    skipEmptyLines: bool,
+    skipEmptyLines: string,
   }
 
   type fileInfo = {

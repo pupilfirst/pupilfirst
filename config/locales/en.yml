@@ -84,11 +84,11 @@ en:
       edit_course_details: Edit Course Details
       empty_courses: You don't have any courses!
       filter:
-        input_hint: Search by name
+        input_hint: or start typing to search by name
         input_label: Search
         input_placeholder: Filter and Search courses by name
         label:
-          name: or start typing to search by name
+          name: Search by name
           status: Status
         status:
           active: Show active courses
@@ -121,7 +121,7 @@ en:
         placeholder: Short description for this course
       course_name:
         error_message: A name is required (2-50 characters)
-        label: Course Name
+        label: Course name
         placeholder: Type course name here
       create_course: Create Course
       enable_public_signup_label: Enable public signup for this course?

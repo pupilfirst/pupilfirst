@@ -34,7 +34,8 @@ let validTemplate = csvData => {
 }
 
 let validateFile = (csvData, fileInfo) => {
-  CSVReader.fileSize(fileInfo) > 10000 || CSVReader.fileType(fileInfo) != "text/csv"
+  Js.log(CSVReader.fileSize(fileInfo))
+  CSVReader.fileSize(fileInfo) > 100000 || CSVReader.fileType(fileInfo) != "text/csv"
     ? Some(InvalidCSVFile)
     : csvData |> ArrayUtils.isEmpty
     ? Some(EmptyFile)
@@ -125,7 +126,7 @@ let csvDataTable = (csvData, fileInvalid, errors) => {
               {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("") |> str}
             </td>
             <td className="border border-gray-400 truncate text-sm px-2 py-1">
-              {StudentCSVData.team_name(studentData)->Belt.Option.getWithDefault("") |> str}
+              {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("") |> str}
             </td>
             <td className="border border-gray-400 truncate text-sm px-2 py-1">
               {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("") |> str}
@@ -153,52 +154,54 @@ let make = (~courseId) => {
         <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
           {t("drawer_heading")->str}
         </h5>
-        <div className="mt-5">
-          <div>
-            <label className="tracking-wide text-xs font-semibold" htmlFor="csv-file-input">
-              {t("csv_file_input_label")->str}
+        <DisablingCover disabled={state.saving} message="Processing...">
+          <div className="mt-5">
+            <div>
+              <label className="tracking-wide text-xs font-semibold" htmlFor="csv-file-input">
+                {t("csv_file_input_label")->str}
+              </label>
+              <HelpIcon
+                className="ml-2"
+                link="https://docs.pupilfirst.com/#/certificates?id=uploading-a-new-certificate">
+                {str(
+                  "This file will be used to import students in bulk. Check the sample file for the required format.",
+                )}
+              </HelpIcon>
+            </div>
+            <CSVReader
+              label=""
+              inputId="csv-file-input"
+              inputName="csv"
+              cssClass="hidden"
+              parserOptions={CSVReader.parserOptions(~header=true, ~skipEmptyLines="true", ())}
+              onFileLoaded={(x, y) => {
+                send(LoadCSVData(x, y))
+              }}
+              onError={_ => send(UpdateFileInvalid(Some(InvalidCSVFile)))}
+            />
+            <label className="file-input-label mt-2" htmlFor="csv-file-input">
+              <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+              <span className="truncate"> {fileInputText(~fileInfo=state.fileInfo)->str} </span>
             </label>
-            <HelpIcon
-              className="ml-2"
-              link="https://docs.pupilfirst.com/#/certificates?id=uploading-a-new-certificate">
-              {str(
-                "This file will be used to import students in bulk. Check the sample file for the required format.",
-              )}
-            </HelpIcon>
+            {ReactUtils.nullIf(
+              csvDataTable(state.csvData, state.fileInvalid, state.errors),
+              ArrayUtils.isEmpty(state.csvData),
+            )}
+            <School__InputGroupError
+              message={switch state.fileInvalid {
+              | Some(invalidStatus) =>
+                switch invalidStatus {
+                | InvalidCSVFile => t("csv_file_errors.invalid")
+                | EmptyFile => t("csv_file_errors.empty")
+                | InvalidTemplate => t("csv_file_errors.invalid_template")
+                | ExceededEntries => t("csv_file_errors.exceeded_entries")
+                }
+              | None => ""
+              }}
+              active={state.fileInvalid->Belt.Option.isSome}
+            />
           </div>
-          <CSVReader
-            label=""
-            inputId="csv-file-input"
-            inputName="csv"
-            cssClass="hidden"
-            parserOptions={CSVReader.parserOptions(~header=true, ~skipEmptyLines="true", ())}
-            onFileLoaded={(x, y) => {
-              send(LoadCSVData(x, y))
-            }}
-            onError={_ => send(UpdateFileInvalid(Some(InvalidCSVFile)))}
-          />
-          <label className="file-input-label mt-2" htmlFor="csv-file-input">
-            <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
-            <span className="truncate"> {fileInputText(~fileInfo=state.fileInfo)->str} </span>
-          </label>
-          {ReactUtils.nullIf(
-            csvDataTable(state.csvData, state.fileInvalid, state.errors),
-            ArrayUtils.isEmpty(state.csvData),
-          )}
-          <School__InputGroupError
-            message={switch state.fileInvalid {
-            | Some(invalidStatus) =>
-              switch invalidStatus {
-              | InvalidCSVFile => t("csv_file_errors.invalid")
-              | EmptyFile => t("csv_file_errors.empty")
-              | InvalidTemplate => t("csv_file_errors.invalid_template")
-              | ExceededEntries => t("csv_file_errors.exceeded_entries")
-              }
-            | None => ""
-            }}
-            active={state.fileInvalid->Belt.Option.isSome}
-          />
-        </div>
+        </DisablingCover>
       </div>
       <div className="max-w-2xl p-6 mx-auto">
         <button disabled={saveDisabled(state)} className="w-auto btn btn-large btn-primary">

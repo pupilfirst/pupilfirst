@@ -3,7 +3,7 @@ type t = {
   email: option<string>,
   tags: option<string>,
   title: option<string>,
-  team_name: option<string>,
+  teamName: option<string>,
   affiliation: option<string>,
 }
 
@@ -15,6 +15,6 @@ let tags = t => t.tags
 
 let title = t => t.title
 
-let team_name = t => t.team_name
+let teamName = t => t.teamName
 
 let affiliation = t => t.affiliation

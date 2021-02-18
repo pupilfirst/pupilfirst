@@ -42,7 +42,7 @@ module Courses
     end
 
     def soft_limit_student_count
-      return if csv_rows.count < 1000
+      return if csv_rows.count <= 1000
 
       errors[:base] << "You can only onboard less than 1000 students at a time"
     end

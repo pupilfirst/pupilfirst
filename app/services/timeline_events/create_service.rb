@@ -34,6 +34,8 @@ module TimelineEvents
         @founder.user,
         submission
       )
+
+      submission
     end
 
     private

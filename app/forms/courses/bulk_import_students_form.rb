@@ -7,6 +7,7 @@ module Courses
     validate :soft_limit_student_count
     validate :emails_must_be_valid
     validate :students_must_have_unique_email
+    validate :strings_must_not_be_too_long
 
     def save
       Course.transaction do
@@ -44,6 +45,22 @@ module Courses
       return if csv_rows.count < 1000
 
       errors[:base] << "You can only onboard less than 1000 students at a time"
+    end
+
+    def valid_string?(string:, max_length:, optional: false)
+      return true if string.blank? && optional
+      string.length <= max_length
+    end
+
+    def strings_must_not_be_too_long
+      return if csv_rows.all? do |r|
+        valid_string?(string: r['name'], max_length: 250) &&
+          valid_string?(string: r['title'], max_length: 250, optional: true) &&
+          valid_string?(string: r['affiliation'], max_length: 250, optional: true) &&
+          valid_string?(string: r['team_name'], max_length: 50, optional: true)
+      end
+
+      errors[:base] << 'One or more of the entries have invalid strings'
     end
   end
 end

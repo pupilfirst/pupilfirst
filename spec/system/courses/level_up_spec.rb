@@ -48,7 +48,7 @@ feature "Student levelling up", js: true do
       expect(page).to have_content('Your submission has been queued for review')
 
       # Let's check the curriculum view to make sure that only the level up option is visible now.
-      click_button 'Close'
+      click_button 'Back'
 
       expect(page).not_to have_text(target_l1.title)
       expect(page).not_to have_text(target_group_l1.name)

@@ -170,7 +170,7 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_text('This lesson has pre-requisites that are incomplete.')
     expect(page).to have_link(l5_non_reviewed_target.title)
 
-    click_button 'Close'
+    click_button 'Back'
 
     # Non-reviewed targets that do not have prerequisites should be unlocked for completion.
     click_link l5_non_reviewed_target.title
@@ -179,7 +179,7 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_text('Lesson has been marked as complete')
 
     dismiss_notification
-    click_button 'Close'
+    click_button 'Back'
 
     # Completing the prerequisite should unlock the previously locked non-reviewed target.
     expect(page).to have_selector('.curriculum__target-status--locked', count: 1)
@@ -189,14 +189,14 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).not_to have_text('This lesson has pre-requisites that are incomplete.')
     expect(page).to have_button 'Mark As Complete'
 
-    click_button 'Close'
+    click_button 'Back'
 
     # Reviewed targets, even those without prerequisites, must be locked.
     click_link l5_reviewed_target.title
 
     expect(page).to have_content('You must finish the previous chapter to access this lesson')
 
-    click_button 'Close'
+    click_button 'Back'
   end
 
   scenario 'student opens a locked level' do

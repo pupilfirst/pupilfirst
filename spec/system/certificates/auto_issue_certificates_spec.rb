@@ -42,7 +42,7 @@ feature 'Automatic issuance of certificates', js: true do
     expect(student_1.user.issued_certificates.count).to eq(0)
 
     dismiss_notification
-    click_button 'Close'
+    click_button 'Back'
     click_link target_l2_2.title
   end
 

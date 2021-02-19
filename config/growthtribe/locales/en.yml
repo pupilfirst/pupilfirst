@@ -81,6 +81,7 @@ en:
       pending_team_members_notice: "You have team members who are yet to complete this lesson:"
       previous_target_button: Previous Lesson
       next_target_button: Next Lesson
+      close_button: Back
     CurriculumEditor__LevelEditor:
       unlock_level_on: 'Unlock chapter on'
       update_level: Update Chapter

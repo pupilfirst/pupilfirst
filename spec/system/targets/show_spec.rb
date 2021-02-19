@@ -122,7 +122,7 @@ feature 'Target Overlay', js: true do
     expect(last_submission.checklist).to eq([{ 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => 'Write something about your submission', 'result' => long_answer, 'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
     # The status should also be updated on the dashboard page.
-    click_button 'Close'
+    click_button 'Back'
 
     within("a[aria-label='Select Target #{target_l1.id}'") do
       expect(page).to have_content('Pending Review')
@@ -564,13 +564,13 @@ feature 'Target Overlay', js: true do
     # The level selected in the curriculum list underneath should always match the target.
     sign_in_user student.user, referrer: target_path(target_l0)
 
-    click_button('Close')
+    click_button('Back')
 
     expect(page).to have_text(target_group_l0.name)
 
     visit target_path(target_l2)
 
-    click_button('Close')
+    click_button('Back')
 
     expect(page).to have_text(target_group_l2.name)
   end

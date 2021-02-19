@@ -240,7 +240,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
         className={"course-overlay__close xl:absolute flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-t-none lg:rounded-b-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 lg:border-transparent lg:border-t-0 lg:shadow hover:text-gray-900 hover:shadow-md focus:border-gray-300 focus:outline-none focus:shadow-inner " ++
         targetStatusClass("course-overlay__close--", targetStatus)}
         onClick={_e => closeOverlay(course)}>
-        <Icon className="if i-times-regular text-xl lg:text-2xl mt-1 lg:mt-0" />
+        <Icon className="fas fa-arrow-left fa-w-14 text-xl lg:text-2xl mt-1 lg:mt-0" />
         <span className="text-xs hidden lg:inline-block mt-px"> {t("close_button")->str} </span>
       </button>
       <div className="w-full flex flex-wrap md:flex-no-wrap items-center justify-between relative">

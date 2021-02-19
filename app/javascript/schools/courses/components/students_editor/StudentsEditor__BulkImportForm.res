@@ -95,20 +95,24 @@ let submitForm = (courseId, send, event) => {
   )
 }
 
+let tableHeader = {
+  <thead>
+    <tr className="bg-gray-200">
+      <th className="text-left"> {"no" |> str} </th>
+      <th className="text-left"> {"name" |> str} </th>
+      <th className="text-left"> {"email" |> str} </th>
+      <th className="text-left"> {"title" |> str} </th>
+      <th className="text-left"> {"team_name" |> str} </th>
+      <th className="text-left"> {"tags" |> str} </th>
+      <th className="text-left"> {"affiliation" |> str} </th>
+    </tr>
+  </thead>
+}
+
 let csvDataTable = (csvData, fileInvalid, errors) => {
   ReactUtils.nullIf(
     <table className="table-auto mt-5 border w-full">
-      <thead>
-        <tr className="bg-gray-200">
-          <th className="text-left"> {"no" |> str} </th>
-          <th className="text-left"> {"name" |> str} </th>
-          <th className="text-left"> {"email" |> str} </th>
-          <th className="text-left"> {"title" |> str} </th>
-          <th className="text-left"> {"team_name" |> str} </th>
-          <th className="text-left"> {"tags" |> str} </th>
-          <th className="text-left"> {"affiliation" |> str} </th>
-        </tr>
-      </thead>
+      {tableHeader}
       <tbody>
         {csvData
         |> Array.mapi((index, studentData) =>
@@ -140,6 +144,59 @@ let csvDataTable = (csvData, fileInvalid, errors) => {
       </tbody>
     </table>,
     fileInvalid->Belt.Option.isSome || ArrayUtils.isNotEmpty(errors),
+  )
+}
+
+let errorTabulation = (csvData, errors) => {
+  ReactUtils.nullIf(
+    <table className="table-auto mt-5 border w-full">
+      {tableHeader} <tbody> {errors |> Array.mapi((index, error) => {
+          let rowNumber = CSVDataError.rowNumber(error)
+          let studentData = Js.Array2.unsafe_get(csvData, rowNumber - 1)
+          <tr key={string_of_int(index)}>
+            <td className="border border-gray-400 truncate text-sm px-2 py-1">
+              {rowNumber |> string_of_int |> str}
+            </td>
+            <td
+              className={"border border-gray-400 truncate text-sm px-2 py-1 " ++ (
+                CSVDataError.hasNameError(error) ? "bg-red-300" : ""
+              )}>
+              {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("") |> str}
+            </td>
+            <td
+              className={"border border-gray-400 truncate text-sm px-2 py-1 " ++ (
+                CSVDataError.hasEmailError(error) ? "bg-red-300" : ""
+              )}>
+              {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("") |> str}
+            </td>
+            <td
+              className={"border border-gray-400 truncate text-sm px-2 py-1 " ++ (
+                CSVDataError.hasTitleError(error) ? "bg-red-300" : ""
+              )}>
+              {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("") |> str}
+            </td>
+            <td
+              className={"border border-gray-400 truncate text-sm px-2 py-1 " ++ (
+                CSVDataError.hasTeamNameError(error) ? "bg-red-300" : ""
+              )}>
+              {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("") |> str}
+            </td>
+            <td
+              className={"border border-gray-400 truncate text-sm px-2 py-1 " ++ (
+                CSVDataError.hasTagsError(error) ? "bg-red-300" : ""
+              )}>
+              {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("") |> str}
+            </td>
+            <td
+              className={"border border-gray-400 truncate text-sm px-2 py-1 " ++ (
+                CSVDataError.hasAffiliationError(error) ? "bg-red-300" : ""
+              )}>
+              {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("") |> str}
+            </td>
+          </tr>
+        }) |> React.array} </tbody>
+    </table>,
+    ArrayUtils.isEmpty(errors),
   )
 }
 
@@ -187,6 +244,7 @@ let make = (~courseId) => {
               csvDataTable(state.csvData, state.fileInvalid, state.errors),
               ArrayUtils.isEmpty(state.csvData),
             )}
+            {errorTabulation(state.csvData, state.errors)}
             <School__InputGroupError
               message={switch state.fileInvalid {
               | Some(invalidStatus) =>

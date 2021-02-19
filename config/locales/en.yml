@@ -334,7 +334,7 @@ en:
         invalid_template: The selected CSV file does not have a valid template
         exceeded_entries: The CSV file has more than 1000 entries.
         invalid_data: The CSV file has invalid data in few cells. Please fix the errors listed below and try again.
-      success_notification: Import initiated successfully!
+      success_notification: Import initiated successfully! You will be notified in an email once complete.
     TopicsShow__Root:
       linked_target_label: "Linked Target: "
       view_target_button: View Target

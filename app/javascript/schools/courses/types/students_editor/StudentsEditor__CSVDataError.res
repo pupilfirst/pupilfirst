@@ -1,12 +1,12 @@
 type errorMessage = string
 
 type errorType =
-  | Name(errorMessage)
-  | Email(errorMessage)
-  | Title(errorMessage)
-  | TeamName(errorMessage)
-  | Tags(errorMessage)
-  | Affiliation(errorMessage)
+  | Name
+  | Email
+  | Title
+  | TeamName
+  | Tags
+  | Affiliation
 
 type t = {
   rowNumber: int,
@@ -19,43 +19,43 @@ let errors = t => t.errors
 
 let nameError = data => {
   switch StudentsEditor__StudentCSVData.name(data) {
-  | None => [Name("empty name")]
-  | Some(name) => name == "" ? [Name("empty name")] : []
+  | None => []
+  | Some(name) => StringUtils.isPresent(name) ? [] : [Name]
   }
 }
 
 let emailError = data => {
   switch StudentsEditor__StudentCSVData.email(data) {
-  | None => [Email("empty email")]
-  | Some(email) => EmailUtils.isInvalid(false, email) ? [Email("invalid email")] : []
+  | None => [Email]
+  | Some(email) => EmailUtils.isInvalid(false, email) ? [Email] : []
   }
 }
 
 let titleError = data => {
   switch StudentsEditor__StudentCSVData.title(data) {
   | None => []
-  | Some(title) => String.length(title) <= 250 ? [] : [Title("title long")]
+  | Some(title) => String.length(title) <= 250 ? [] : [Title]
   }
 }
 
 let affiliationError = data => {
   switch StudentsEditor__StudentCSVData.affiliation(data) {
   | None => []
-  | Some(affiliation) => String.length(affiliation) <= 250 ? [] : [Affiliation("affiliation long")]
+  | Some(affiliation) => String.length(affiliation) <= 250 ? [] : [Affiliation]
   }
 }
 
 let teamNameError = data => {
   switch StudentsEditor__StudentCSVData.teamName(data) {
   | None => []
-  | Some(teamName) => String.length(teamName) <= 50 ? [] : [TeamName("team name long")]
+  | Some(teamName) => String.length(teamName) <= 50 ? [] : [TeamName]
   }
 }
 
 let tagsError = data => {
   switch StudentsEditor__StudentCSVData.tags(data) {
   | None => []
-  | Some(tags) => Js.String.split(",", tags)->Array.length <= 5 ? [] : [Tags("tags more than 5")]
+  | Some(tags) => Js.String.split(",", tags)->Array.length <= 5 ? [] : [Tags]
   }
 }
 
@@ -76,7 +76,7 @@ let parseError = studentCSVData => {
 let hasNameError = t => {
   t.errors |> Js.Array.filter(x =>
     switch x {
-    | Name(_) => true
+    | Name => true
     | _ => false
     }
   ) |> ArrayUtils.isNotEmpty
@@ -85,7 +85,7 @@ let hasNameError = t => {
 let hasTitleError = t => {
   t.errors |> Js.Array.filter(x =>
     switch x {
-    | Title(_) => true
+    | Title => true
     | _ => false
     }
   ) |> ArrayUtils.isNotEmpty
@@ -94,7 +94,7 @@ let hasTitleError = t => {
 let hasEmailError = t => {
   t.errors |> Js.Array.filter(x =>
     switch x {
-    | Email(_) => true
+    | Email => true
     | _ => false
     }
   ) |> ArrayUtils.isNotEmpty
@@ -103,7 +103,7 @@ let hasEmailError = t => {
 let hasAffiliationError = t => {
   t.errors |> Js.Array.filter(x =>
     switch x {
-    | Affiliation(_) => true
+    | Affiliation => true
     | _ => false
     }
   ) |> ArrayUtils.isNotEmpty
@@ -112,7 +112,7 @@ let hasAffiliationError = t => {
 let hasTeamNameError = t => {
   t.errors |> Js.Array.filter(x =>
     switch x {
-    | TeamName(_) => true
+    | TeamName => true
     | _ => false
     }
   ) |> ArrayUtils.isNotEmpty
@@ -121,7 +121,7 @@ let hasTeamNameError = t => {
 let hasTagsError = t => {
   t.errors |> Js.Array.filter(x =>
     switch x {
-    | Tags(_) => true
+    | Tags => true
     | _ => false
     }
   ) |> ArrayUtils.isNotEmpty

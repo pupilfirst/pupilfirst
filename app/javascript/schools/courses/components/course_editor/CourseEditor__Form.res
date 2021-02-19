@@ -33,7 +33,6 @@ type state = {
   featured: bool,
   progressionBehavior: progressionBehavior,
   progressionLimit: int,
-  tab: tabs,
 }
 
 type action =
@@ -47,17 +46,11 @@ type action =
   | UpdateFeatured(bool)
   | UpdateProgressionBehavior(progressionBehavior)
   | UpdateProgressionLimit(int)
-  | SetDetailsTab
-  | SetActionsTab
-  | SetImagesTab
 
 let reducer = (state, action) =>
   switch action {
   | StartSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
-  | SetDetailsTab => {...state, tab: DetailsTab}
-  | SetActionsTab => {...state, tab: ActionsTab}
-  | SetImagesTab => {...state, tab: ImagesTab}
   | UpdateName(name, hasNameError) => {
       ...state,
       name: name,
@@ -310,7 +303,6 @@ let computeInitialState = course =>
       featured: Course.featured(course),
       progressionBehavior: Course.progressionBehavior(course),
       progressionLimit: Course.progressionLimit(course)->Belt.Option.getWithDefault(1),
-      tab: DetailsTab,
     }
   | None => {
       name: "",
@@ -326,7 +318,6 @@ let computeInitialState = course =>
       featured: true,
       progressionBehavior: #Limited,
       progressionLimit: 1,
-      tab: DetailsTab,
     }
   }
 
@@ -518,7 +509,7 @@ let actionsTab = (state, send, relaodCoursesCB, course) => {
 }
 
 @react.component
-let make = (~course, ~updateCourseCB, ~relaodCoursesCB) => {
+let make = (~course, ~updateCourseCB, ~relaodCoursesCB, ~selectedTab) => {
   let (state, send) = React.useReducerWithMapState(reducer, course, computeInitialState)
   <DisablingCover disabled={state.saving}>
     <div className="mx-auto bg-white">
@@ -535,20 +526,20 @@ let make = (~course, ~updateCourseCB, ~relaodCoursesCB) => {
             <div className="w-full pt-6">
               <div className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
                 <button
-                  className={selectedTabClasses(state.tab == DetailsTab)}
-                  onClick={_ => send(SetDetailsTab)}>
+                  className={selectedTabClasses(selectedTab == DetailsTab)}
+                  onClick={_ => ReasonReactRouter.push("./details")}>
                   <i className="fa fa-edit" />
                   <span className="ml-2"> {t("tabs.details")->str} </span>
                 </button>
                 <button
-                  className={selectedTabClasses(state.tab == ImagesTab)}
-                  onClick={_ => send(SetImagesTab)}>
+                  className={selectedTabClasses(selectedTab == ImagesTab)}
+                  onClick={_ => ReasonReactRouter.push("./images")}>
                   <i className="fa fa-camera" />
                   <span className="ml-2"> {t("tabs.images")->str} </span>
                 </button>
                 <button
-                  className={"-ml-px " ++ selectedTabClasses(state.tab == ActionsTab)}
-                  onClick={_ => send(SetActionsTab)}>
+                  className={"-ml-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
+                  onClick={_ => ReasonReactRouter.push("./actions")}>
                   <i className="fa fa-cog" />
                   <span className="ml-2"> {t("tabs.actions")->str} </span>
                 </button>
@@ -559,16 +550,16 @@ let make = (~course, ~updateCourseCB, ~relaodCoursesCB) => {
         </div>
       </div>
       <div className="max-w-2xl mx-auto">
-        <div className={tabItemsClasses(state.tab == DetailsTab)}>
+        <div className={tabItemsClasses(selectedTab == DetailsTab)}>
           {detailsTab(state, send, course, updateCourseCB, relaodCoursesCB)}
         </div>
         {switch course {
         | Some(c) =>
           [
-            <div key="actions-tab" className={tabItemsClasses(state.tab == ActionsTab)}>
+            <div key="actions-tab" className={tabItemsClasses(selectedTab == ActionsTab)}>
               {actionsTab(state, send, relaodCoursesCB, c)}
             </div>,
-            <div key="images-tab" className={tabItemsClasses(state.tab == ImagesTab)}>
+            <div key="images-tab" className={tabItemsClasses(selectedTab == ImagesTab)}>
               <CourseEditor__ImagesForm course=c updateCourseCB />
             </div>,
           ]->React.array

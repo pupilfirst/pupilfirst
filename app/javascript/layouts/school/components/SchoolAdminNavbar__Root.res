@@ -175,6 +175,10 @@ let make = (
   | list{"school", "coaches"} => (SchoolCoaches, false)
   | list{"school", "customize"} => (Settings(Customization), true)
   | list{"school", "courses"} => (Courses, false)
+  | list{"school", "courses", "new"} => (Courses, false)
+  | list{"school", "courses", _courseId, "details"}
+  | list{"school", "courses", _courseId, "images"}
+  | list{"school", "courses", _courseId, "actions"} => (Courses, false)
   | list{"school", "courses", courseId, "students"}
   | list{"school", "courses", courseId, "inactive_students"} => (
       SelectedCourse(courseId, Students),

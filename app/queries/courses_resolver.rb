@@ -1,13 +1,16 @@
 class CoursesResolver < ApplicationQuery
   property :search
   property :status
+  property :id
 
   def courses
+    return Course.where(id: id) if id.present?
+
     if search.present?
-      applicable_courses.search_by_name(search)
+      applicable_courses.where('name ILIKE ?', "%#{search}%")
     else
-      applicable_courses.includes([:cover_attachment, :thumbnail_attachment])
-    end
+      applicable_courses
+    end.includes([:cover_attachment, :thumbnail_attachment])
   end
 
   def allow_token_auth?

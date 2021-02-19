@@ -8,7 +8,11 @@ module Schools
     def authors?
       record.school == current_school && !record.archived? && index?
     end
-
+    alias new? index?
+    alias show? authors?
+    alias details? authors?
+    alias images? authors?
+    alias actions? authors?
     alias attach_images? authors?
     alias delete_coach_enrollment? authors?
     alias update_coach_enrollments? authors?

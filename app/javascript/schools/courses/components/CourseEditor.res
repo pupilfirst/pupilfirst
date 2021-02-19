@@ -12,8 +12,8 @@ type status = [#Active | #Ended | #Archived]
 
 module CoursesQuery = %graphql(
   `
-  query CoursesQuery($search: String, $after: String, $status: CourseStatus) {
-    courses(status: $status, search: $search, first: 10, after: $after){
+  query CoursesQuery($search: String, $after: String, $status: CourseStatus, $id: ID) {
+    courses(status: $status, search: $search, first: 10, after: $after, id: $id){
       nodes {
         ...Course.Fragments.AllFields
       }
@@ -39,16 +39,16 @@ type filter = {
 
 type editorAction =
   | Hidden
-  | ShowForm(option<Course.t>)
+  | ShowForm(option<string>)
 
 type state = {
   loading: Loading.t,
-  editorAction: editorAction,
   courses: Pagination.t,
   filterString: string,
   filter: filter,
   totalEntriesCount: int,
   relaodCourses: bool,
+  needsReload: bool,
 }
 
 type action =
@@ -62,9 +62,8 @@ type action =
   | SetFilterActive
   | SetFilterEnded
   | ClearArchivedFilter
-  | UpdateEditorAction(editorAction)
   | UpdateCourse(Course.t)
-  | LoadCourses(option<string>, bool, array<Course.t>, int)
+  | LoadCourses(option<string>, bool, array<Course.t>, int, bool)
 
 let reducer = (state, action) =>
   switch action {
@@ -78,9 +77,9 @@ let reducer = (state, action) =>
     }
   | ReloadCourses => {
       ...state,
-      editorAction: Hidden,
       loading: Reloading,
       relaodCourses: !state.relaodCourses,
+      needsReload: false,
     }
   | UnsetSearchString => {
       ...state,
@@ -125,8 +124,7 @@ let reducer = (state, action) =>
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
   | UpdateFilterString(filterString) => {...state, filterString: filterString}
-  | UpdateEditorAction(editorAction) => {...state, editorAction: editorAction}
-  | LoadCourses(endCursor, hasNextPage, newCourses, totalEntriesCount) =>
+  | LoadCourses(endCursor, hasNextPage, newCourses, totalEntriesCount, needsReload) =>
     let courses = switch state.loading {
     | LoadingMore => Js.Array.concat(newCourses, Pagination.toArray(state.courses))
     | Reloading => newCourses
@@ -138,15 +136,22 @@ let reducer = (state, action) =>
       courses: Pagination.make(courses, hasNextPage, endCursor),
       loading: NotLoading,
       totalEntriesCount: totalEntriesCount,
+      needsReload: needsReload,
     }
   | UpdateCourse(course) =>
     let newCourses = Pagination.update(state.courses, Course.updateList(course))
-    {...state, courses: newCourses, editorAction: Hidden}
+    {...state, courses: newCourses}
   }
 
-let hideEditorAction = (send, ()) => send(UpdateEditorAction(Hidden))
+let hideEditorAction = (needsReload, send, ()) => {
+  ReasonReactRouter.push("/school/courses/")
+  needsReload ? send(ReloadCourses) : ()
+}
 
-let updateCourse = (send, course) => send(UpdateCourse(course))
+let updateCourse = (send, needsReload, course) => {
+  ReasonReactRouter.push("/school/courses/")
+  needsReload ? send(ReloadCourses) : send(UpdateCourse(course))
+}
 
 let courseLink = (href, title, icon) =>
   <a
@@ -183,29 +188,37 @@ let courseLinks = course => {
   ]
 }
 
-let loadCourses = (state, cursor, send) => {
-  ignore(Js.Promise.then_(response => {
-      let courses = Js.Array.map(
-        rawCourse => Course.makeFromJs(rawCourse),
-        response["courses"]["nodes"],
-      )
-      send(
-        LoadCourses(
-          response["courses"]["pageInfo"]["endCursor"],
-          response["courses"]["pageInfo"]["hasNextPage"],
-          courses,
-          response["courses"]["totalCount"],
-        ),
-      )
-      Js.Promise.resolve()
-    }, GraphqlQuery.sendQuery(
-      CoursesQuery.make(
-        ~status=?state.filter.status,
-        ~after=?cursor,
-        ~search=?state.filter.name,
-        (),
+let loadCourses = (state, cursor, send, editorAction) => {
+  let id = switch editorAction {
+  | Hidden => None
+  | ShowForm(id) => id
+  }
+
+  CoursesQuery.make(
+    ~status=?state.filter.status,
+    ~after=?cursor,
+    ~search=?state.filter.name,
+    ~id?,
+    (),
+  )
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    let courses = Js.Array.map(
+      rawCourse => Course.makeFromJs(rawCourse),
+      response["courses"]["nodes"],
+    )
+    send(
+      LoadCourses(
+        response["courses"]["pageInfo"]["endCursor"],
+        response["courses"]["pageInfo"]["hasNextPage"],
+        courses,
+        response["courses"]["totalCount"],
+        Belt.Option.isSome(id),
       ),
-    )))
+    )
+    Js.Promise.resolve()
+  })
+  |> ignore
 }
 
 module Selectable = {
@@ -324,7 +337,7 @@ let dropdownSelected =
     <i className="fas fa-chevron-down text-xs ml-3 font-semibold" />
   </button>
 
-let showCourse = (course, send) => {
+let showCourse = course => {
   <Spread key={Course.id(course)} props={"data-submission-id": Course.name(course)}>
     <div className="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
       <div className="flex shadow bg-white rounded-lg flex-col justify-between h-full">
@@ -373,7 +386,8 @@ let showCourse = (course, send) => {
           <a
             title={"Edit " ++ Course.name(course)}
             className="col-span-3 btn btn-default px-4 py-2 bg-gray-200 text-primary-500 rounded-lg text-sm cursor-pointer"
-            onClick={_ => send(UpdateEditorAction(ShowForm(Some(course))))}>
+            onClick={_ =>
+              ReasonReactRouter.push("/school/courses/" ++ Course.id(course) ++ "/details")}>
             <div>
               <FaIcon classes="far fa-edit mr-3" />
               <span className="text-black font-semibold"> {str(t("edit_course_details"))} </span>
@@ -391,7 +405,7 @@ let showCourse = (course, send) => {
   </Spread>
 }
 
-let showCourses = (courses, state, send) => {
+let showCourses = (courses, state) => {
   <div className="w-full">
     {ArrayUtils.isEmpty(courses)
       ? <div
@@ -402,14 +416,24 @@ let showCourses = (courses, state, send) => {
           </h4>
         </div>
       : <div className="flex flex-wrap">
-          {Js.Array.map(course => showCourse(course, send), courses)->React.array}
+          {Js.Array.map(course => showCourse(course), courses)->React.array}
         </div>}
     {entriesLoadedData(state.totalEntriesCount, Array.length(courses))}
   </div>
 }
 
 let relaodCoursesCB = (send, ()) => {
+  ReasonReactRouter.push("/school/courses/")
   send(ReloadCourses)
+}
+
+let decodeTabString = tab => {
+  switch tab {
+  | "details" => CourseEditor__Form.DetailsTab
+  | "images" => CourseEditor__Form.ImagesTab
+  | "actions" => CourseEditor__Form.ActionsTab
+  | _ => CourseEditor__Form.DetailsTab
+  }
 }
 
 @react.component
@@ -417,7 +441,6 @@ let make = () => {
   let (state, send) = React.useReducer(
     reducer,
     {
-      editorAction: Hidden,
       courses: Pagination.Unloaded,
       totalEntriesCount: 0,
       loading: NotLoading,
@@ -427,29 +450,53 @@ let make = () => {
         status: Some(#Active),
       },
       relaodCourses: false,
+      needsReload: false,
     },
   )
 
+  let url = ReasonReactRouter.useUrl()
+
+  let (editorAction, selectedTab) = switch url.path {
+  | list{"school", "courses", "new", ..._} => (ShowForm(None), CourseEditor__Form.DetailsTab)
+  | list{"school", "courses", courseId, tab, ..._} => (
+      ShowForm(courseId->StringUtils.paramToId),
+      decodeTabString(tab),
+    )
+  | _ => (Hidden, CourseEditor__Form.DetailsTab)
+  }
+
   React.useEffect2(() => {
-    loadCourses(state, None, send)
+    loadCourses(state, None, send, editorAction)
     None
   }, (state.filter, state.relaodCourses))
 
   <div className="flex flex-1 h-full bg-gray-200 overflow-y-scroll">
-    {switch state.editorAction {
-    | Hidden => React.null
-    | ShowForm(course) =>
-      <SchoolAdmin__EditorDrawer2 closeDrawerCB={hideEditorAction(send)}>
-        <CourseEditor__Form
-          course updateCourseCB={updateCourse(send)} relaodCoursesCB={relaodCoursesCB(send)}
-        />
-      </SchoolAdmin__EditorDrawer2>
+    {switch (state.courses, editorAction) {
+    | (Unloaded, _)
+    | (_, Hidden) => React.null
+    | (_, ShowForm(id)) => {
+        let course = Belt.Option.mapWithDefault(id, None, id => Some(
+          ArrayUtils.unsafeFind(
+            c => Course.id(c) == id,
+            "Unable to find course with ID: " ++ id ++ " in Courses Index",
+            Pagination.toArray(state.courses),
+          ),
+        ))
+        <SchoolAdmin__EditorDrawer2 closeDrawerCB={hideEditorAction(state.needsReload, send)}>
+          <CourseEditor__Form
+            course
+            updateCourseCB={updateCourse(send, state.needsReload)}
+            relaodCoursesCB={relaodCoursesCB(send)}
+            selectedTab
+          />
+        </SchoolAdmin__EditorDrawer2>
+      }
     }}
     <div className="flex-1 flex flex-col">
       <div className="items-center justify-between max-w-4xl mx-auto mt-8 w-full px-10">
         <button
           className="w-full flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-md focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg cursor-pointer"
-          onClick={_ => send(UpdateEditorAction(ShowForm(None)))}>
+          onClick={_ => ReasonReactRouter.push("/school/courses/new")}>
           <i className="fas fa-plus-circle text-lg" />
           <span className="font-semibold ml-2"> {str(t("add_new_course"))} </span>
         </button>
@@ -485,7 +532,7 @@ let make = () => {
           </div>
         | PartiallyLoaded(courses, cursor) =>
           <div>
-            {showCourses(courses, state, send)}
+            {showCourses(courses, state)}
             {switch state.loading {
             | LoadingMore =>
               <div className="px-2 lg:px-5">
@@ -499,7 +546,7 @@ let make = () => {
                   className="btn btn-primary-ghost cursor-pointer w-full"
                   onClick={_ => {
                     send(BeginLoadingMore)
-                    loadCourses(state, Some(cursor), send)
+                    loadCourses(state, Some(cursor), send, editorAction)
                   }}>
                   {t("button_load_more")->str}
                 </button>
@@ -507,7 +554,7 @@ let make = () => {
             | Reloading => React.null
             }}
           </div>
-        | FullyLoaded(courses) => <div> {showCourses(courses, state, send)} </div>
+        | FullyLoaded(courses) => <div> {showCourses(courses, state)} </div>
         }}
       </div>
       {switch state.courses {

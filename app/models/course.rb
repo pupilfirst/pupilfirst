@@ -1,5 +1,4 @@
 class Course < ApplicationRecord
-  include PgSearch::Model
   validates :name, presence: true
 
   belongs_to :school
@@ -44,8 +43,6 @@ class Course < ApplicationRecord
 
   validates :progression_behavior, inclusion: VALID_PROGRESSION_BEHAVIORS
   validates :progression_limit, numericality: { greater_than: 0, allow_nil: true }
-
-  pg_search_scope :search_by_name, against: :name, using: { tsearch: { prefix: true, any_word: true } }
 
   def short_name
     name[0..2].upcase.strip

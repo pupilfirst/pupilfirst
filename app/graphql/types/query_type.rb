@@ -31,6 +31,7 @@ module Types
     resolved_field :courses, Types::CourseType.connection_type, null: false do
       argument :search, String, required: false
       argument :status, Types::CourseStatusType, required: false
+      argument :id, ID, required: false
     end
 
     resolved_field :content_blocks, [Types::ContentBlockType], null: false do

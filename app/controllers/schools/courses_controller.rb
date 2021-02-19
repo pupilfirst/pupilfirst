@@ -5,8 +5,27 @@ module Schools
 
     layout 'school'
 
+    # GET /school/courses
     def index
       authorize(current_school, policy_class: Schools::CoursePolicy)
+    end
+
+    # GET /school/course/new
+    def new
+      index
+      render 'index'
+    end
+
+    # GET /school/course/id/
+    def show
+      authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+      redirect_to details_school_course_path
+    end
+
+    # GET /school/course/id/details
+    def details
+      authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+      render 'index'
     end
 
     # POST /courses/id/attach_images
@@ -68,10 +87,10 @@ module Schools
       @course = authorize(scope.find(params[:course_id]), policy_class: Schools::CoursePolicy)
 
       inactive_teams = if params[:search].present?
-        ::Courses::InactiveTeamsSearchService.new(@course).find_teams(params[:search].to_s)
-      else
-        Startup.joins(:course).inactive.where(courses: { id: @course }).to_a
-      end
+                         ::Courses::InactiveTeamsSearchService.new(@course).find_teams(params[:search].to_s)
+                       else
+                         Startup.joins(:course).inactive.where(courses: { id: @course }).to_a
+                       end
 
       @teams = Kaminari.paginate_array(inactive_teams).page(params[:page]).per(20)
     end
@@ -111,16 +130,16 @@ module Schools
       form = ::Courses::CreateCertificateForm.new(@course)
 
       props = if form.validate(params)
-        scope = Certificate.where(id: form.save.id)
-        ActiveRecord::Precounter.new(scope).precount(:issued_certificates)
+                scope = Certificate.where(id: form.save.id)
+                ActiveRecord::Precounter.new(scope).precount(:issued_certificates)
 
-        {
-          error: nil,
-          certificate: Schools::Courses::CertificatesPresenter.certificate_details(scope.first)
-        }
-      else
-        { error: form.errors.full_messages.join(", ") }
-      end
+                {
+                  error: nil,
+                  certificate: Schools::Courses::CertificatesPresenter.certificate_details(scope.first)
+                }
+              else
+                { error: form.errors.full_messages.join(", ") }
+              end
 
       render json: camelize_keys(stringify_ids(props))
     end

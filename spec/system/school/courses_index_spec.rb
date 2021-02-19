@@ -68,9 +68,7 @@ feature 'Courses Index', js: true do
     let(:course_end_date) { Time.zone.today }
 
     scenario 'School admin edits an existing course' do
-      sign_in_user school_admin.user, referrer: school_courses_path
-
-      find("a[title='Edit #{course_1.name}']").click
+      sign_in_user school_admin.user, referrer: details_school_course_path(course_1)
 
       fill_in 'Course name', with: new_course_name, fill_options: { clear: :backspace }
       fill_in 'Course description', with: new_description, fill_options: { clear: :backspace }
@@ -119,9 +117,7 @@ feature 'Courses Index', js: true do
     end
 
     scenario 'School admin edits images associated with the course' do
-      sign_in_user school_admin.user, referrer: school_courses_path
-      find("a[title='Edit #{course_1.name}']").click
-      click_button 'Images'
+      sign_in_user school_admin.user, referrer: images_school_course_path(course_1)
 
       expect(page).to have_text('Please choose an image file.', count: 2)
 
@@ -240,10 +236,8 @@ feature 'Courses Index', js: true do
     let!(:startup) { create :startup, level: level }
 
     scenario 'school admin archives a course' do
-      sign_in_user school_admin.user, referrer: school_courses_path
-      find("a[title='Edit #{course_1.name}']").click
+      sign_in_user school_admin.user, referrer: actions_school_course_path(course_1)
       expect(startup.access_ends_at).to eq(nil)
-      click_button 'Actions'
 
       click_button 'Archive Course'
 

@@ -2594,20 +2594,12 @@
             "description": "",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
+              "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "CourseEdge",
-                    "ofType": null
-                  }
-                }
+                "kind": "OBJECT",
+                "name": "CourseEdge",
+                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -3179,20 +3171,12 @@
             "description": "",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
+              "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "NotificationEdge",
-                    "ofType": null
-                  }
-                }
+                "kind": "OBJECT",
+                "name": "NotificationEdge",
+                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -5435,20 +5419,12 @@
             "description": "",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
+              "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "SubmissionEdge",
-                    "ofType": null
-                  }
-                }
+                "kind": "OBJECT",
+                "name": "SubmissionEdge",
+                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -6121,20 +6097,12 @@
             "description": "",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
+              "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "TopicEdge",
-                    "ofType": null
-                  }
-                }
+                "kind": "OBJECT",
+                "name": "TopicEdge",
+                "ofType": null
               }
             },
             "isDeprecated": false,

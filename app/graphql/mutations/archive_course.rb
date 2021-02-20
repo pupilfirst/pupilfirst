@@ -1,33 +1,24 @@
 module Mutations
   class ArchiveCourse < ApplicationQuery
-    argument :id, ID, required: true
+    argument :id,
+             ID,
+             required: true,
+             validates: {
+               Validators::ArchiveCourse => {}
+             }
 
     description 'Archives a course.'
 
     field :success, Boolean, null: false
 
     def execute
-      success =
-        if valid_course?
-          notify(
-            :success,
-            I18n.t('shared.done_exclamation'),
-            I18n.t('mutations.archive_course.success_notification')
-          )
-          true
-        else
-          notify_errors
-          false
-        end
-
-      { success: success }
-    end
-
-    def valid_course?
-      return true unless course.archived?
-
-      errors << 'Invalid course'
-      false
+      archive_course
+      notify(
+        :success,
+        I18n.t('shared.done_exclamation'),
+        I18n.t('mutations.archive_course.success_notification')
+      )
+      { success: true }
     end
 
     def archive_course

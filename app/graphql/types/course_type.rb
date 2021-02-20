@@ -15,12 +15,6 @@ module Types
     field :progression_limit, Integer, null: true
     field :archived_at, GraphQL::Types::ISO8601DateTime, null: true
 
-    def grades_and_labels
-      object.grade_labels.map do |grade, label|
-        { grade: grade.to_i, label: label }
-      end
-    end
-
     def cover
       image_details(object.cover)
     end

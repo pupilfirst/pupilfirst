@@ -1,16 +1,13 @@
 class CoursesResolver < ApplicationQuery
   property :search
   property :status
-  property :id
 
   def courses
-    return Course.where(id: id) if id.present?
-
     if search.present?
       applicable_courses.where('name ILIKE ?', "%#{search}%")
     else
       applicable_courses
-    end.includes([:cover_attachment, :thumbnail_attachment])
+    end.includes(%i[cover_attachment thumbnail_attachment])
   end
 
   def allow_token_auth?
@@ -26,10 +23,17 @@ class CoursesResolver < ApplicationQuery
   def filter_by_status
     case status
     when 'Active'
-      current_school.courses.live.where('ends_at > ?', Time.now).or(current_school.courses.live.where(ends_at: nil))
+      current_school
+        .courses
+        .live
+        .where('ends_at > ?', Time.now)
+        .or(current_school.courses.live.where(ends_at: nil))
     when 'Ended'
-      current_school.courses.where('ends_at < ?', Time.now).where(archived_at: nil)
-    when "Archived"
+      current_school
+        .courses
+        .where('ends_at < ?', Time.now)
+        .where(archived_at: nil)
+    when 'Archived'
       current_school.courses.archived
     else
       raise "#{status} is not a valid status"

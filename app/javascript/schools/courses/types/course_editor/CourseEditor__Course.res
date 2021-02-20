@@ -1,3 +1,5 @@
+exception UnexpectedProgressionBehavior(string)
+
 module Image = {
   type t = {
     url: string,
@@ -8,6 +10,14 @@ module Image = {
   let filename = t => t.filename
 
   let make = (url, filename) => {url: url, filename: filename}
+
+  let decode = json => {
+    open Json.Decode
+    {
+      url: json |> field("url", string),
+      filename: json |> field("filename", string),
+    }
+  }
 }
 
 type progressionBehavior =
@@ -114,6 +124,42 @@ let makeFromJs = rawCourse => {
     featured: rawCourse["featured"],
     progressionBehavior: progressionBehavior,
     archivedAt: archivedAt,
+  }
+}
+
+let decode = json => {
+  let behavior = json |> {
+    open Json.Decode
+    field("progressionBehavior", string)
+  }
+
+  let progressionBehavior = switch behavior {
+  | "Limited" =>
+    let progressionLimit = json |> {
+      open Json.Decode
+      field("progressionLimit", int)
+    }
+    Limited(progressionLimit)
+  | "Unlimited" => Unlimited
+  | "Strict" => Strict
+  | otherValue =>
+    Rollbar.error("Unexpected progressionBehavior: " ++ otherValue)
+    raise(UnexpectedProgressionBehavior(behavior))
+  }
+
+  open Json.Decode
+  {
+    id: field("id", string, json),
+    name: field("name", string, json),
+    description: field("description", string, json),
+    endsAt: optional(field("endsAt", string), json)->Belt.Option.map(DateFns.parseISO),
+    progressionBehavior: progressionBehavior,
+    about: optional(field("about", string), json),
+    publicSignup: field("publicSignup", bool, json),
+    thumbnail: optional(field("thumbnail", Image.decode), json),
+    cover: optional(field("cover", Image.decode), json),
+    featured: field("featured", bool, json),
+    archivedAt: optional(field("archivedAt", string), json)->Belt.Option.map(DateFns.parseISO),
   }
 }
 

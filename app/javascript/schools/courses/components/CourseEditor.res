@@ -1,5 +1,7 @@
 %bs.raw(`require("./CourseEditor.css")`)
 
+exception UnsafeFindFailed(string)
+
 open CourseEditor__Types
 
 let t = I18n.t(~scope="components.CourseEditor")
@@ -12,8 +14,8 @@ type status = [#Active | #Ended | #Archived]
 
 module CoursesQuery = %graphql(
   `
-  query CoursesQuery($search: String, $after: String, $status: CourseStatus, $id: ID) {
-    courses(status: $status, search: $search, first: 10, after: $after, id: $id){
+  query CoursesQuery($search: String, $after: String, $status: CourseStatus) {
+    courses(status: $status, search: $search, first: 10, after: $after){
       nodes {
         ...Course.Fragments.AllFields
       }
@@ -48,7 +50,6 @@ type state = {
   filter: filter,
   totalEntriesCount: int,
   relaodCourses: bool,
-  needsReload: bool,
 }
 
 type action =
@@ -63,7 +64,7 @@ type action =
   | SetFilterEnded
   | ClearArchivedFilter
   | UpdateCourse(Course.t)
-  | LoadCourses(option<string>, bool, array<Course.t>, int, bool)
+  | LoadCourses(option<string>, bool, array<Course.t>, int)
 
 let reducer = (state, action) =>
   switch action {
@@ -79,7 +80,6 @@ let reducer = (state, action) =>
       ...state,
       loading: Reloading,
       relaodCourses: !state.relaodCourses,
-      needsReload: false,
     }
   | UnsetSearchString => {
       ...state,
@@ -124,7 +124,7 @@ let reducer = (state, action) =>
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
   | UpdateFilterString(filterString) => {...state, filterString: filterString}
-  | LoadCourses(endCursor, hasNextPage, newCourses, totalEntriesCount, needsReload) =>
+  | LoadCourses(endCursor, hasNextPage, newCourses, totalEntriesCount) =>
     let courses = switch state.loading {
     | LoadingMore => Js.Array.concat(newCourses, Pagination.toArray(state.courses))
     | Reloading => newCourses
@@ -136,21 +136,15 @@ let reducer = (state, action) =>
       courses: Pagination.make(courses, hasNextPage, endCursor),
       loading: NotLoading,
       totalEntriesCount: totalEntriesCount,
-      needsReload: needsReload,
     }
   | UpdateCourse(course) =>
     let newCourses = Pagination.update(state.courses, Course.updateList(course))
     {...state, courses: newCourses}
   }
 
-let hideEditorAction = (needsReload, send, ()) => {
+let updateCourse = (send, course) => {
   ReasonReactRouter.push("/school/courses/")
-  needsReload ? send(ReloadCourses) : ()
-}
-
-let updateCourse = (send, needsReload, course) => {
-  ReasonReactRouter.push("/school/courses/")
-  needsReload ? send(ReloadCourses) : send(UpdateCourse(course))
+  send(UpdateCourse(course))
 }
 
 let courseLink = (href, title, icon) =>
@@ -188,19 +182,8 @@ let courseLinks = course => {
   ]
 }
 
-let loadCourses = (state, cursor, send, editorAction) => {
-  let id = switch editorAction {
-  | Hidden => None
-  | ShowForm(id) => id
-  }
-
-  CoursesQuery.make(
-    ~status=?state.filter.status,
-    ~after=?cursor,
-    ~search=?state.filter.name,
-    ~id?,
-    (),
-  )
+let loadCourses = (state, cursor, send) => {
+  CoursesQuery.make(~status=?state.filter.status, ~after=?cursor, ~search=?state.filter.name, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     let courses = Js.Array.map(
@@ -213,7 +196,6 @@ let loadCourses = (state, cursor, send, editorAction) => {
         response["courses"]["pageInfo"]["hasNextPage"],
         courses,
         response["courses"]["totalCount"],
-        Belt.Option.isSome(id),
       ),
     )
     Js.Promise.resolve()
@@ -436,8 +418,18 @@ let decodeTabString = tab => {
   }
 }
 
+let raiseUnsafeFindError = id => {
+  let message = "Unable to be find course with id: " ++ id ++ " in CourseEditor"
+  Rollbar.error(message)
+  Notification.error(
+    "An unexpected error occurred",
+    "Our team has been notified about this error. Please try reloading this page.",
+  )
+  raise(UnsafeFindFailed(message))
+}
+
 @react.component
-let make = () => {
+let make = (~selectedCourse) => {
   let (state, send) = React.useReducer(
     reducer,
     {
@@ -450,7 +442,6 @@ let make = () => {
         status: Some(#Active),
       },
       relaodCourses: false,
-      needsReload: false,
     },
   )
 
@@ -466,7 +457,7 @@ let make = () => {
   }
 
   React.useEffect2(() => {
-    loadCourses(state, None, send, editorAction)
+    loadCourses(state, None, send)
     None
   }, (state.filter, state.relaodCourses))
 
@@ -475,17 +466,22 @@ let make = () => {
     | (Unloaded, _)
     | (_, Hidden) => React.null
     | (_, ShowForm(id)) => {
-        let course = Belt.Option.mapWithDefault(id, None, id => Some(
-          ArrayUtils.unsafeFind(
-            c => Course.id(c) == id,
-            "Unable to find course with ID: " ++ id ++ " in Courses Index",
-            Pagination.toArray(state.courses),
-          ),
-        ))
-        <SchoolAdmin__EditorDrawer2 closeDrawerCB={hideEditorAction(state.needsReload, send)}>
+        let course = Belt.Option.flatMap(id, id => {
+          Some(
+            ArrayUtils.unsafeFind(
+              c => Course.id(c) == id,
+              "Unable to find course with ID: " ++ id ++ " in Courses Index",
+              Js.Array.concat(
+                Belt.Option.mapWithDefault(selectedCourse, [], s => [s]),
+                Pagination.toArray(state.courses),
+              ),
+            ),
+          )
+        })
+        <SchoolAdmin__EditorDrawer2 closeDrawerCB={_ => ReasonReactRouter.push("/school/courses/")}>
           <CourseEditor__Form
             course
-            updateCourseCB={updateCourse(send, state.needsReload)}
+            updateCourseCB={updateCourse(send)}
             relaodCoursesCB={relaodCoursesCB(send)}
             selectedTab
           />
@@ -546,7 +542,7 @@ let make = () => {
                   className="btn btn-primary-ghost cursor-pointer w-full"
                   onClick={_ => {
                     send(BeginLoadingMore)
-                    loadCourses(state, Some(cursor), send, editorAction)
+                    loadCourses(state, Some(cursor), send)
                   }}>
                   {t("button_load_more")->str}
                 </button>

@@ -1,5 +1,6 @@
 module Types
   class BaseObject < GraphQL::Schema::Object
-    connection_type_class ConnectionWithCounts
+    # TODO: replace ConnectionWithCounts with PupilfirstConnection
+    # connection_type_class ConnectionWithCounts
   end
 end

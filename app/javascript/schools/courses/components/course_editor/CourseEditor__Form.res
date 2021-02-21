@@ -476,6 +476,20 @@ let submitButtonIcons = saving => saving ? "fas fa-spinner fa-spin" : "fa fa-exc
 
 let actionsTab = (state, send, relaodCoursesCB, course) => {
   <div>
+    <div className="mt-2">
+      <label className="tracking-wide text-xs font-semibold">
+        {str(t("actions.archive_course.label"))}
+      </label>
+      <div>
+        <button
+          disabled=state.saving
+          className="btn btn-danger btn-large mt-2"
+          onClick={_e => archiveCourse(send, relaodCoursesCB, course)}>
+          <FaIcon classes={submitButtonIcons(state.saving)} />
+          <span className="ml-2"> {t("actions.archive_course.button_text")->str} </span>
+        </button>
+      </div>
+    </div>
     {Belt.Option.isSome(Course.archivedAt(course))
       ? <div className="mt-2">
           <label className="tracking-wide text-xs font-semibold">

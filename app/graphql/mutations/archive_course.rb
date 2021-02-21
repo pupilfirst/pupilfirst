@@ -1,17 +1,24 @@
 module Mutations
   class ArchiveCourse < ApplicationQuery
-    argument :id,
-             ID,
-             required: true,
-             validates: {
-               Validators::ArchiveCourse => {}
-             }
+    class CourseMustNotBeArchived < GraphQL::Schema::Validator
+      def validate(_object, _context, value)
+        course = Course.find_by(id: value[:id])
+
+        return "Unable to find course with id: #{value[:id]}" if course.blank?
+
+        return 'Course is already archived' if course.archived?
+      end
+    end
+
+    argument :id, ID, required: true
 
     description 'Archives a course.'
 
+    validates CourseMustNotBeArchived => {}
+
     field :success, Boolean, null: false
 
-    def execute
+    def resolve(_params)
       archive_course
       notify(
         :success,
@@ -33,8 +40,6 @@ module Mutations
         .update_all(access_ends_at: Time.zone.now) # rubocop:disable Rails/SkipsModelValidations
     end
 
-    private
-
     def resource_school
       course.school
     end
@@ -43,8 +48,7 @@ module Mutations
       Course.find_by(id: @params[:id])
     end
 
-    def authorized?(**params)
-      @params = params
+    def query_authorized?
       resource_school == current_school && current_school_admin.present?
     end
   end

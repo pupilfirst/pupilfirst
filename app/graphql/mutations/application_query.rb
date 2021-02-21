@@ -1,13 +1,5 @@
 module Mutations
   class ApplicationQuery < GraphQL::Schema::Mutation
-    def resolve(params)
-      @params = params
-      if @context[:token_auth] && !allow_token_auth?
-        raise UnavailableQueryException
-      end
-      execute
-    end
-
     def respond_to_missing?(name, *args)
       context.key?(name.to_sym) || super
     end
@@ -17,30 +9,29 @@ module Mutations
       context.key?(name_symbol) ? context[name_symbol] : super
     end
 
-    def errors
-      @errors ||= []
-    end
-
-    def error_messages
-      errors.flatten
-    end
-
     def notify(kind, title, body)
       context[:notifications].push(kind: kind, title: title, body: body)
     end
 
-    def notify_errors
-      notify(:error, 'Something went wrong!', error_messages.join(', '))
-    end
-
-    private
-
-    def authorized?(*)
+    def query_authorized?
       raise 'Please implement the "authorized?" method in the query class.'
     end
 
     def allow_token_auth?
       false
+    end
+
+    def authorized?(**params)
+      @params = params
+
+      if token_auth && !allow_token_auth?
+        raise GraphQL::ExecutionError,
+              'Authentication using a token is not allowed!'
+      end
+
+      return true if query_authorized?
+
+      raise GraphQL::ExecutionError, 'Authorization failed'
     end
   end
 end

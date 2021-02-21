@@ -28,6 +28,8 @@ class Course < ApplicationRecord
   scope :featured, -> { where(featured: true) }
   scope :live, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
+  scope :access_active, -> { where('ends_at > ?', Time.now).or(where(ends_at: nil)) }
+  scope :active, -> { live.access_active }
 
   normalize_attribute :about
 

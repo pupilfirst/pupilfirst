@@ -168,7 +168,7 @@ feature 'Courses Index', js: true do
   scenario 'school admin plays around with search' do
     sign_in_user school_admin.user, referrer: school_courses_path
 
-    expect(page).to have_text('Status: Show active courses')
+    expect(page).to have_text('Status: Active')
 
     within("div[id='courses']") do
       expect(page).to have_text(course_1.name)
@@ -177,7 +177,7 @@ feature 'Courses Index', js: true do
     end
 
     fill_in('Search', with: 'ended')
-    click_button 'Pick Status: Show ended courses'
+    click_button 'Pick Status: Ended'
 
     within("div[id='courses']") do
       expect(page).not_to have_text(course_1.name)
@@ -186,7 +186,7 @@ feature 'Courses Index', js: true do
     end
 
     fill_in('Search', with: 'archived')
-    click_button 'Pick Status: Show archived courses'
+    click_button 'Pick Status: Archived'
 
     within("div[id='courses']") do
       expect(page).not_to have_text(course_1.name)
@@ -207,7 +207,7 @@ feature 'Courses Index', js: true do
     sign_in_user school_admin.user, referrer: school_courses_path
 
     fill_in('Search', with: 'archived')
-    click_button 'Pick Status: Show archived courses'
+    click_button 'Pick Status: Archived'
 
     within("div[id='courses']") do
       expect(page).to have_text(course_archived.name)
@@ -254,7 +254,7 @@ feature 'Courses Index', js: true do
   scenario 'school admin un-archives a course' do
     sign_in_user school_admin.user, referrer: school_courses_path
     fill_in('Search', with: 'archived')
-    click_button 'Pick Status: Show archived courses'
+    click_button 'Pick Status: Archived'
     find("a[title='Edit #{course_archived.name}']").click
     click_button 'Actions'
 

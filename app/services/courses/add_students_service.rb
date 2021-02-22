@@ -1,10 +1,15 @@
 module Courses
   # Adds a list of new students to a course.
   class AddStudentsService
-    def initialize(course, notify: false)
+    def initialize(
+      course,
+      notify: false,
+      notification_service: Developers::NotificationService.new
+    )
       @course = course
       @notify = notify
       @team_name_translation = {}
+      @notification_service = notification_service
     end
 
     # Accepts a list of students to add to a course. Ignores students who are already present.
@@ -29,6 +34,16 @@ module Courses
 
           students
         end
+
+      students.each do |student|
+        @notification_service.execute(
+          @course,
+          :student_added,
+          student.user,
+          @course
+        )
+      end
+
       students.map { |student| student.id }
     end
 

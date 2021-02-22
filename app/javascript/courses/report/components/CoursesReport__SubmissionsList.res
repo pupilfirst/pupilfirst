@@ -208,13 +208,7 @@ let updateStudentSubmissions = (
   sortDirection,
   nodes,
 ) => {
-  let updatedSubmissions = Array.append(
-    switch nodes {
-    | None => []
-    | Some(submissionsArray) => submissionsArray |> Submission.makeFromJs
-    } |> ArrayUtils.flatten,
-    submissions,
-  )
+  let updatedSubmissions = Js.Array.concat(Submission.makeFromJs(nodes), submissions)
 
   let filter = Submissions.makeFilter(selectedLevel, selectedStatus)
 

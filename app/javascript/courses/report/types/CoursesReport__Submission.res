@@ -39,30 +39,25 @@ let targetRole = t => t.targetRole
 
 let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")
 
-let makeFromJs = submissions => submissions |> Js.Array.map(submission =>
-    switch submission {
-    | Some(submission) =>
-      let createdAt = submission["createdAt"] |> DateFns.decodeISO
-      let status = switch submission["passedAt"] {
-      | Some(_passedAt) => #Completed
-      | None =>
-        switch submission["evaluatedAt"] {
-        | Some(_time) => #Rejected
-        | None => #PendingReview
-        }
+let makeFromJs = submissions => Js.Array.map(submission => {
+    let createdAt = DateFns.decodeISO(submission["createdAt"])
+    let status = switch submission["passedAt"] {
+    | Some(_passedAt) => #Completed
+    | None =>
+      switch submission["evaluatedAt"] {
+      | Some(_time) => #Rejected
+      | None => #PendingReview
       }
-      let targetRole = submission["teamTarget"] ? Team(submission["studentIds"]) : Student
-      list{
-        make(
-          ~id=submission["id"],
-          ~title=submission["title"],
-          ~createdAt,
-          ~levelId=submission["levelId"],
-          ~targetId=submission["targetId"],
-          ~targetRole,
-          ~status,
-        ),
-      }
-    | None => list{}
     }
-  )
+    let targetRole = submission["teamTarget"] ? Team(submission["studentIds"]) : Student
+
+    make(
+      ~id=submission["id"],
+      ~title=submission["title"],
+      ~createdAt,
+      ~levelId=submission["levelId"],
+      ~targetId=submission["targetId"],
+      ~targetRole,
+      ~status,
+    )
+  }, submissions)

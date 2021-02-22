@@ -34,35 +34,29 @@ let make = (~id, ~name, ~tags, ~students, ~coachIds, ~levelId, ~accessEndsAt) =>
   accessEndsAt: accessEndsAt,
 }
 
-let makeFromJS = teamDetails => teamDetails |> Js.Array.map(team =>
-    switch team {
-    | Some(team) =>
-      let students =
-        team["students"] |> Array.map(studentDetails =>
-          StudentsEditor__Student.makeFromJS(studentDetails)
-        )
-      let coachIds = team["coachIds"] |> Array.map(cids => cids)
-      list{
-        make(
-          ~id=team["id"],
-          ~name=team["name"],
-          ~tags=team["tags"],
-          ~levelId=team["levelId"],
-          ~students,
-          ~coachIds,
-          ~accessEndsAt=team["accessEndsAt"]->Belt.Option.map(DateFns.decodeISO),
-        ),
-      }
-    | None => list{}
-    }
-  )
+let makeFromJS = teamDetails => Js.Array.map(team => {
+    let students = Js.Array.map(
+      studentDetails => StudentsEditor__Student.makeFromJS(studentDetails),
+      team["students"],
+    )
+    let coachIds = Js.Array.map(cids => cids, team["coachIds"])
+
+    make(
+      ~id=team["id"],
+      ~name=team["name"],
+      ~tags=team["tags"],
+      ~levelId=team["levelId"],
+      ~students,
+      ~coachIds,
+      ~accessEndsAt=team["accessEndsAt"]->Belt.Option.map(DateFns.decodeISO),
+    )
+  }, teamDetails)
 
 let update = (~name, ~tags, ~student, ~coachIds, ~accessEndsAt, ~team) => {
   let students =
     team.students |> Array.map(s =>
       s |> StudentsEditor__Student.id == (student |> StudentsEditor__Student.id) ? student : s
     )
-
   {
     ...team,
     name: name,

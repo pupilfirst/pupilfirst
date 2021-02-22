@@ -38,13 +38,7 @@ let updateStudentSubmissions = (
   submissions,
   nodes,
 ) => {
-  let updatedSubmissions = Array.append(
-    switch nodes {
-    | None => []
-    | Some(submissionsArray) => submissionsArray |> Submission.makeFromJs
-    } |> ArrayUtils.flatten,
-    submissions,
-  )
+  let updatedSubmissions = Js.Array.concat(Submission.makeFromJs(nodes), submissions)
 
   let submissionsData: Submissions.t = switch (hasNextPage, endCursor) {
   | (true, None)
@@ -66,12 +60,13 @@ let getStudentSubmissions = (studentId, cursor, setState, submissions, updateSub
   }
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    response["studentSubmissions"]["nodes"] |> updateStudentSubmissions(
+    updateStudentSubmissions(
       setState,
       updateSubmissionsCB,
       response["studentSubmissions"]["pageInfo"]["endCursor"],
       response["studentSubmissions"]["pageInfo"]["hasNextPage"],
       submissions,
+      response["studentSubmissions"]["nodes"],
     )
     Js.Promise.resolve()
   })

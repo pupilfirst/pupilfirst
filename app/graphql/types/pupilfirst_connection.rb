@@ -3,7 +3,7 @@ module Types
     field :total_count, Integer, null: false
 
     def total_count
-      object.nodes.size
+      object.items.size
     end
 
     def self.node_nullable

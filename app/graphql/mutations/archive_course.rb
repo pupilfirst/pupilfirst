@@ -1,5 +1,6 @@
 module Mutations
   class ArchiveCourse < ApplicationQuery
+    include QueryAuthorizeSchoolAdmin
     class CourseMustNotBeArchived < GraphQL::Schema::Validator
       def validate(_object, _context, value)
         course = Course.find_by(id: value[:id])
@@ -29,15 +30,17 @@ module Mutations
     end
 
     def archive_course
-      course.update!(
-        archived_at: Time.zone.now,
-        ends_at: course.ends_at.presence || Time.zone.now
-      )
+      Course.transaction do
+        course.update!(
+          archived_at: Time.zone.now,
+          ends_at: course.ends_at.presence || Time.zone.now
+        )
 
-      course
-        .startups
-        .where(access_ends_at: nil)
-        .update_all(access_ends_at: Time.zone.now) # rubocop:disable Rails/SkipsModelValidations
+        course
+          .startups
+          .where(access_ends_at: nil)
+          .update_all(access_ends_at: Time.zone.now) # rubocop:disable Rails/SkipsModelValidations
+      end
     end
 
     def resource_school
@@ -46,10 +49,6 @@ module Mutations
 
     def course
       Course.find_by(id: @params[:id])
-    end
-
-    def query_authorized?
-      resource_school == current_school && current_school_admin.present?
     end
   end
 end

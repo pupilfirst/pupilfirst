@@ -1,24 +1,35 @@
 module Mutations
   class UnarchiveCourse < GraphQL::Schema::Mutation
+    include QueryAuthorizeSchoolAdmin
+
     argument :id, ID, required: true
 
-    description "Un-archives a course."
+    description 'Un-archives a course.'
 
     field :success, Boolean, null: false
 
-    def resolve(params)
-      mutator = UnarchiveCourseMutator.new(context, params)
+    def resolve(_params)
+      unarchive_course
+      notify(
+        :success,
+        I18n.t('shared.done_exclamation'),
+        I18n.t('mutations.unarchive_course.success_notification')
+      )
+      { success: true }
+    end
 
-      success = if mutator.valid?
-        mutator.unarchive_course
-        mutator.notify(:success, I18n.t('shared.done_exclamation'), I18n.t('mutations.unarchive_course.success_notification'))
-        true
-      else
-        mutator.notify_errors
-        false
-      end
+    def unarchive_course
+      return if course.live?
 
-      { success: success }
+      course.update!(archived_at: nil)
+    end
+
+    def resource_school
+      course.school
+    end
+
+    def course
+      Course.find_by(id: @params[:id])
     end
   end
 end

@@ -160,53 +160,60 @@ let errorTabulation = (csvData, fileInvalid) => {
     switch fileInvalid {
     | InvalidData(errors) =>
       <div>
-        <table className="table-auto mt-5 border w-full">
-          {tableHeader} <tbody> {errors |> Array.mapi((index, error) => {
-              let rowNumber = CSVDataError.rowNumber(error)
-              let studentData = Js.Array2.unsafe_get(csvData, rowNumber - 1)
-              <tr key={string_of_int(index)}>
-                <td className="border border-gray-400 truncate text-xs px-2 py-1">
-                  {rowNumber |> string_of_int |> str}
-                </td>
-                <td
-                  className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
-                    CSVDataError.hasNameError(error) ? "bg-red-300" : ""
-                  )}>
-                  {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("") |> str}
-                </td>
-                <td
-                  className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
-                    CSVDataError.hasEmailError(error) ? "bg-red-300" : ""
-                  )}>
-                  {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("") |> str}
-                </td>
-                <td
-                  className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
-                    CSVDataError.hasTitleError(error) ? "bg-red-300" : ""
-                  )}>
-                  {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("") |> str}
-                </td>
-                <td
-                  className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
-                    CSVDataError.hasTeamNameError(error) ? "bg-red-300" : ""
-                  )}>
-                  {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("") |> str}
-                </td>
-                <td
-                  className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
-                    CSVDataError.hasTagsError(error) ? "bg-red-300" : ""
-                  )}>
-                  {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("") |> str}
-                </td>
-                <td
-                  className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
-                    CSVDataError.hasAffiliationError(error) ? "bg-red-300" : ""
-                  )}>
-                  {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("") |> str}
-                </td>
-              </tr>
-            }) |> React.array} </tbody>
-        </table>
+        {errors->Array.length > 10
+          ? <div className="text-red-700 text-sm mt-5">
+              {"There are quite a few errors in the attached sheet. Fix the errors in the following rows and upload again: " ++
+              Array.map(error => CSVDataError.rowNumber(error), errors)->Js.Array2.joinWith(",")
+                |> str}
+            </div>
+          : <table className="table-auto mt-5 border w-full">
+              {tableHeader} <tbody> {errors |> Array.mapi((index, error) => {
+                  let rowNumber = CSVDataError.rowNumber(error)
+                  let studentData = Js.Array2.unsafe_get(csvData, rowNumber - 1)
+                  <tr key={string_of_int(index)}>
+                    <td className="border border-gray-400 truncate text-xs px-2 py-1">
+                      {rowNumber |> string_of_int |> str}
+                    </td>
+                    <td
+                      className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
+                        CSVDataError.hasNameError(error) ? "bg-red-300" : ""
+                      )}>
+                      {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("") |> str}
+                    </td>
+                    <td
+                      className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
+                        CSVDataError.hasEmailError(error) ? "bg-red-300" : ""
+                      )}>
+                      {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("") |> str}
+                    </td>
+                    <td
+                      className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
+                        CSVDataError.hasTitleError(error) ? "bg-red-300" : ""
+                      )}>
+                      {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("") |> str}
+                    </td>
+                    <td
+                      className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
+                        CSVDataError.hasTeamNameError(error) ? "bg-red-300" : ""
+                      )}>
+                      {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("") |> str}
+                    </td>
+                    <td
+                      className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
+                        CSVDataError.hasTagsError(error) ? "bg-red-300" : ""
+                      )}>
+                      {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("") |> str}
+                    </td>
+                    <td
+                      className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
+                        CSVDataError.hasAffiliationError(error) ? "bg-red-300" : ""
+                      )}>
+                      {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("")
+                        |> str}
+                    </td>
+                  </tr>
+                }) |> React.array} </tbody>
+            </table>}
         <div className="text-red-700 text-sm mt-5">
           <div className="text-sm pb-2">
             {"Here is a summary of the errors in the sheet: " |> str}

@@ -22,8 +22,6 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def report?
-    return false if record.blank?
-
     founder = user.founders.joins(:course).where(courses: { id: record }).first
 
     return false if founder.blank?
@@ -33,24 +31,24 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def show?
-    !record.archived?
+    true
   end
 
   def apply?
-    record&.school == current_school && record.public_signup? && apply?
+    record.public_signup?
   end
 
   alias students? review?
 
   class Scope < Scope
     def resolve
-      current_school.courses
+      current_school.courses.live
     end
   end
 
   private
 
   def reviewable_courses
-    @reviewable_courses ||= current_coach&.courses
+    @reviewable_courses ||= current_coach&.courses&.live
   end
 end

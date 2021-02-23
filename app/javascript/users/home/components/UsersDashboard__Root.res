@@ -155,7 +155,7 @@ let courseLinks = (course, currentSchoolAdmin, communities) => {
       Course.author(course) && cta != #EditCourse,
     )}
     {ReactUtils.nullUnless(
-      courseLink(studentLink(courseId, "curriculum"), t("view_curriculum"), "fas fa-book"),
+      courseLink(studentLink(courseId, "curriculum"), t("cta.view_curriculum"), "fas fa-book"),
       cta != #ViewCourse,
     )}
     {ReactUtils.nullUnless(

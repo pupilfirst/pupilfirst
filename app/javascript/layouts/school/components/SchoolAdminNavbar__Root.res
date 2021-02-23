@@ -2,8 +2,6 @@ exception UnknownPathEncountered(list<string>)
 
 %bs.raw(`require("./SchoolAdminNavbar__Root.css")`)
 
-open SchoolAdminNavbar__Types
-
 type courseSelection =
   | Students
   | CourseCoaches
@@ -26,7 +24,7 @@ type selection =
   | SchoolCoaches
   | Settings(settingsSelection)
   | Courses
-  | SelectedCourse(Course.id, courseSelection)
+  | SelectedCourse(CourseInfo.id, courseSelection)
   | Communities
 
 let str = React.string
@@ -287,21 +285,25 @@ let make = (
               )}
               {ReactUtils.nullIf(
                 <ul className="pr-4 pb-4 ml-10 mt-1">
-                  {Js.Array.filter(
+                  {Js.Array.map(
                     course =>
-                      Belt.Option.mapWithDefault(Course.endsAt(course), true, DateFns.isFuture),
-                    courses,
-                  )
-                  |> Js.Array.map(course =>
-                    <li key={Course.id(course)}>
-                      <a
-                        href={"/school/courses/" ++ Course.id(course) ++ "/curriculum"}
-                        className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
-                        {str(Course.name(course))}
-                      </a>
-                    </li>
-                  )
-                  |> React.array}
+                      <li key={CourseInfo.id(course)}>
+                        <a
+                          href={"/school/courses/" ++ CourseInfo.id(course) ++ "/curriculum"}
+                          className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
+                          {str(CourseInfo.name(course))}
+                        </a>
+                      </li>,
+                    Js.Array.filter(
+                      course =>
+                        Belt.Option.mapWithDefault(
+                          CourseInfo.endsAt(course),
+                          true,
+                          DateFns.isFuture,
+                        ),
+                      courses,
+                    ),
+                  )->React.array}
                 </ul>,
                 shrunk,
               )}

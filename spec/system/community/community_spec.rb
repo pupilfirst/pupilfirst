@@ -34,10 +34,16 @@ feature 'Community', js: true do
   let(:team_c2) { create :team, level: level_1_c2 }
   let(:student_c2) { create :student, startup: team_c2 }
 
+  let(:archived_course) { create :course, school: school, archived_at: 1.day.ago }
+  let(:archived_course_level) { create :level, :one, course: archived_course }
+  let(:archived_course_team) { create :team, level: archived_course_level }
+  let!(:archived_course_student) { create :student, startup: archived_course_team }
+
   before do
     create :faculty_course_enrollment, faculty: coach, course: course
     create :community_course_connection, course: course, community: community
     create :community_course_connection, course: course_2, community: community
+    create :community_course_connection, course: archived_course, community: community
     create :topic_subscription, topic: topic_1, user: coach.user
   end
 
@@ -50,6 +56,12 @@ feature 'Community', js: true do
     CommunityCourseConnection.where(course: course).destroy_all
 
     sign_in_user(student_1.user, referrer: community_path(community))
+
+    expect(page).to have_text("The page you were looking for doesn't exist")
+  end
+
+  scenario 'student from an archived course attempts to visit community' do
+    sign_in_user(archived_course_student.user, referrer: community_path(community))
 
     expect(page).to have_text("The page you were looking for doesn't exist")
   end

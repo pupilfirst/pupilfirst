@@ -4,7 +4,7 @@ let decodeProps = json => {
     field("schoolName", string, json),
     field("schoolLogoPath", string, json),
     field("schoolIconPath", string, json),
-    field("courses", array(SchoolAdminNavbar__Course.decode), json),
+    field("courses", array(CourseInfo.decode), json),
     field("isCourseAuthor", bool, json),
     field("hasNotifications", bool, json),
   )

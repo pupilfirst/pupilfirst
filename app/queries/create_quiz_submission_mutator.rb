@@ -1,6 +1,7 @@
 class CreateQuizSubmissionMutator < ApplicationQuery
   include AuthorizeStudent
   include LevelUpEligibilityComputable
+  include DevelopersNotifications
 
   property :target_id, validates: { presence: { message: 'Blank Target Id' } }
   property :answer_ids
@@ -10,21 +11,24 @@ class CreateQuizSubmissionMutator < ApplicationQuery
   validate :ensure_submittability
 
   def create_submission
-    TimelineEvent.transaction do
-      submission = target.timeline_events.create!(
+    submission =
+      TimelineEvent.transaction do
+      target.timeline_events.create!(
         checklist: result[:checklist],
         quiz_score: result[:score],
         passed_at: Time.zone.now
-      )
+      ).tap do |submission|
+        students.map do |student|
+          student.timeline_event_owners.create!(timeline_event: submission, latest: true)
+        end
 
-      students.map do |student|
-        student.timeline_event_owners.create!(timeline_event: submission, latest: true)
+        TimelineEvents::AfterMarkingAsCompleteJob.perform_later(submission)
       end
-
-      TimelineEvents::AfterMarkingAsCompleteJob.perform_later(submission)
-
-      submission
     end
+
+    publish(course, :submission_verified, current_user, submission)
+
+    submission
   end
 
   private

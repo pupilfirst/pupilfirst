@@ -4,6 +4,7 @@ feature 'Target Overlay', js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
   include NotificationHelper
+  include DevelopersNotificationsHelper
 
   let(:course) { create :course }
   let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
@@ -160,6 +161,8 @@ feature 'Target Overlay', js: true do
     let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, completion_instructions: Faker::Lorem.sentence }
 
     scenario 'student completes an auto-verified target' do
+      notification_service = prepare_developers_notification
+
       sign_in_user student.user, referrer: target_path(target_l1)
 
       # There should be a mark as complete button on the learn page.
@@ -189,6 +192,9 @@ feature 'Target Overlay', js: true do
 
       # Target should have been marked as passed in the database.
       expect(target_l1.status(student)).to eq(Targets::StatusService::STATUS_PASSED)
+
+      submission = TimelineEvent.last
+      expect_published(notification_service, course, :submission_automatically_verified, student.user, submission)
     end
 
     context 'when the target requires student to visit a link to complete it' do
@@ -228,6 +234,8 @@ feature 'Target Overlay', js: true do
     end
 
     scenario 'student completes a target by taking a quiz' do
+      notification_service = prepare_developers_notification
+
       sign_in_user student.user, referrer: target_path(quiz_target)
 
       within('.course-overlay__header-title-card') do
@@ -276,8 +284,11 @@ feature 'Target Overlay', js: true do
 
       expect(page).to have_content("Your Correct Answer: #{q2_answer_4.value}")
 
+      submission = TimelineEvent.last
       # The score should have stored on the submission.
-      expect(TimelineEvent.last.quiz_score).to eq('1/2')
+      expect(submission.quiz_score).to eq('1/2')
+
+      expect_published(notification_service, course, :submission_verified, student.user, submission)
     end
   end
 

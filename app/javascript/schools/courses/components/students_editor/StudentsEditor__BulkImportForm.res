@@ -37,7 +37,6 @@ let validTemplate = csvData => {
 }
 
 let validateFile = (csvData, fileInfo) => {
-  Js.log(CSVReader.fileSize(fileInfo))
   CSVReader.fileSize(fileInfo) > 100000 || CSVReader.fileType(fileInfo) != "text/csv"
     ? Some(InvalidCSVFile)
     : csvData |> ArrayUtils.isEmpty
@@ -241,7 +240,7 @@ let errorTabulation = (csvData, fileInvalid) => {
           <div className="text-sm pb-2">
             {"Here is a summary of the errors in the sheet: " |> str}
           </div>
-          <ul className="list-disc">
+          <ul className="list-disc list-inside">
             {errors
             |> Array.map(error => CSVDataError.errors(error))
             |> ArrayUtils.flattenV2
@@ -272,7 +271,6 @@ let errorTabulation = (csvData, fileInvalid) => {
 @react.component
 let make = (~courseId) => {
   let (state, send) = React.useReducer(reducer, initialState)
-  {ArrayUtils.isNotEmpty(state.csvData) ? Js.log(state.csvData) : ()}
   <form onSubmit={submitForm(courseId, send)}>
     <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
     <div className="mx-auto bg-white">
@@ -301,7 +299,6 @@ let make = (~courseId) => {
               cssClass="hidden"
               parserOptions={CSVReader.parserOptions(~header=true, ~skipEmptyLines="true", ())}
               onFileLoaded={(x, y) => {
-                Js.log("test")
                 send(LoadCSVData(x, y))
               }}
               onError={_ => send(UpdateFileInvalid(Some(InvalidCSVFile)))}

@@ -32,7 +32,6 @@ class CreateGradingMutator < ApplicationQuery
         checklist: checklist,
       )
 
-      TimelineEvents::AfterGradingJob.perform_later(submission)
       update_coach_note if note.present?
       send_feedback if feedback.present?
     end

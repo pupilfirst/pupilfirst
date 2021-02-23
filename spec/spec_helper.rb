@@ -38,6 +38,7 @@ RSpec.configure do |config|
     # a real object. This is generally recommended, and will default to
     # `true` in RSpec 4.
     mocks.verify_partial_doubles = true
+    mocks.verify_doubled_constant_names = true
   end
 
   # With this configuration, the :focus filtering will only apply if any

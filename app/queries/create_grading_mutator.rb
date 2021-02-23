@@ -1,5 +1,6 @@
 class CreateGradingMutator < ApplicationQuery
   include AuthorizeCoach
+  include DevelopersNotifications
 
   property :submission_id, validates: { presence: { message: 'Submission ID is required for grading' } }
   property :feedback, validates: { length: { maximum: 10_000 } }
@@ -35,6 +36,8 @@ class CreateGradingMutator < ApplicationQuery
       update_coach_note if note.present?
       send_feedback if feedback.present?
     end
+
+    publish(course, :submission_graded, current_user, submission)
   end
 
   private

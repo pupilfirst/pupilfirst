@@ -269,6 +269,23 @@ en:
       submitted_at: Submitted At
       submitted_on: Submitted on %{date}
       view: 'View '
+    CoursesReview__Root:
+      assigned_to: Assigned to
+      assigned_to_coach: 'assigned to '
+      assigned_to_me: ' assigned to me'
+      filter_by: 'Filter by:'
+      filter_by_another_level: Filter by another level
+      filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
+      filter_by_level: Filter by level
+      filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
+      me: Me
+      now_showing_submissions_assigned_to: Now showing submissions assigned to %{name}.
+      now_showing_submissions_from_all_students: Now showing submissions from all students in this course.
+      pending: Pending
+      reviewed: Reviewed
+      reviewed_at: Reviewed At
+      sort_by: 'Sort by:'
+      submitted_at: Submitted At
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
       attempted: ' Attempted'

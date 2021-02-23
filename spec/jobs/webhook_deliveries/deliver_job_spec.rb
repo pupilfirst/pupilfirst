@@ -20,14 +20,21 @@ describe WebhookDeliveries::DeliverJob do
 
   describe '#perform' do
     it 'delivers the data for valid events as an authenticated request' do
-      expected_hmac = OpenSSL::HMAC.hexdigest('SHA256', webhook_endpoint.hmac_key, payload)
+      expected_hmac =
+        OpenSSL::HMAC.hexdigest('SHA256', webhook_endpoint.hmac_key, payload)
 
-      stub_request(:post, webhook_endpoint.webhook_url).with(
-        body: payload,
-        headers: { Authorization: "PF-HMAC-SHA256 #{expected_hmac}" }
-      ).to_return(headers: response_headers, body: response_body, status: :ok)
+      stub_request(:post, webhook_endpoint.webhook_url)
+        .with(
+          body: payload,
+          headers: {
+            Authorization: "PF-HMAC-SHA256 #{expected_hmac}"
+          }
+        )
+        .to_return(headers: response_headers, body: response_body, status: :ok)
 
-      expect { subject.perform_now(event_type, course, submission) }.to change { WebhookDelivery.count }.by(1)
+      expect { subject.perform_now(event_type, course, submission) }.to change {
+        WebhookDelivery.count
+      }.by(1)
 
       last_delivery = WebhookDelivery.last
       expect(last_delivery.webhook_url).to eq(webhook_endpoint.webhook_url)
@@ -39,12 +46,16 @@ describe WebhookDeliveries::DeliverJob do
     end
 
     it 'record the error class when the request fails' do
-      stub_request(:post, webhook_endpoint.webhook_url).with(body: payload).to_timeout
+      stub_request(:post, webhook_endpoint.webhook_url)
+        .with(body: payload)
+        .to_timeout
 
-      expect { subject.perform_now(event_type, course, submission) }.to change { WebhookDelivery.count }.by(1)
+      expect { subject.perform_now(event_type, course, submission) }.to change {
+        WebhookDelivery.count
+      }.by(1)
 
       last_delivery = WebhookDelivery.last
-      expect(last_delivery.error_class).to eq("Net::OpenTimeout")
+      expect(last_delivery.error_class).to eq('Net::OpenTimeout')
       expect(last_delivery.webhook_url).to eq(webhook_endpoint.webhook_url)
       expect(last_delivery.payload['data']['id']).to eq(submission.id)
       expect(last_delivery.payload['event']).to eq(event_type)
@@ -55,9 +66,24 @@ describe WebhookDeliveries::DeliverJob do
       let!(:event_type) { Faker::Lorem.word }
 
       it 'will not deliver the event' do
-        expect { subject.perform_now(event_type, course, submission) }.to raise_error("Unknown webhook event type: #{event_type}")
+        expect {
+          subject.perform_now(event_type, course, submission)
+        }.to raise_exception(
+          "#{event_type} was not one of the requested events in WebhookEndpoint##{webhook_endpoint.id}"
+        )
+      end
+    end
+
+    context 'for events without a corresponding data service' do
+      let!(:event_type) { 'noop' }
+
+      it 'will not attempt delivery' do
+        expect {
+          subject.perform_now(event_type, course, submission)
+        }.not_to raise_exception
+
+        expect(WebhookDelivery.count).to eq(0)
       end
     end
   end
 end
-

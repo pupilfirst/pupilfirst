@@ -1,0 +1,117 @@
+name: Continuous Integration
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['*']
+    paths-ignore:
+      - 'docs/**'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - 'docs/**'
+
+jobs:
+  tests:
+    runs-on: ubuntu-18.04
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+
+    services:
+      postgres:
+        image: postgres:11.7
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    env:
+      RAILS_ENV: test
+      RUBYOPT: '-W:no-deprecated -W:no-experimental'
+      JAVASCRIPT_DRIVER: headless_chrome
+      DB_HOST: localhost
+      DB_NAME_TEST: postgres
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      CAPYBARA_MAX_WAIT_TIME: 5
+      SPEC_USER_TIME_ZONE: Etc/UTC
+      SPEC_RETRY_COUNT: 2
+      ALLOW_EMAIL_SIGN_IN: true
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Ruby 2.7
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+      - name: Set branch name & commit SHA in env
+        uses: actions/github-script@v3
+        with:
+          script: |
+            console.log(`Event: ${context.eventName}`);
+            let branchName = "";
+
+            if (context.eventName === "push") {
+              // Pushes have a '/ref/heads/' prefixed to the branch name.
+              branchName = process.env.GITHUB_REF.replace("refs/heads/", "");
+            } else {
+              branchName = process.env.GITHUB_HEAD_REF;
+            }
+
+            console.log(`Setting GIT_BRANCH=${branchName}`);
+            core.exportVariable("GIT_BRANCH", branchName);
+            console.log(`Setting GIT_COMMIT_SHA=${context.sha}`);
+            core.exportVariable("GIT_COMMIT_SHA", context.sha);
+      - name: Restore Bundle
+        uses: actions/cache@master
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Bundle
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+      - name: Rubocop
+        run: bundle exec rubocop
+      - name: Setup Database
+        run: |
+          bundle exec rake db:schema:load
+      - name: Restore Assets
+        uses: actions/cache@master
+        with:
+          path: |
+            public/assets
+            public/packs-test
+          key: ${{ runner.os }}-assets-${{ env.GIT_BRANCH }}
+          restore-keys: |
+            ${{ runner.os }}-assets-
+      - name: Restore Lerna
+        uses: actions/cache@master
+        with:
+          path: |
+            node_modules
+            app/javascript/packages/*/node_modules
+          key: ${{ runner.os }}-lerna-${{ hashFiles('**/yarn.lock') }}
+      - name: Precompile Assets
+        run: |
+          bundle exec rails assets:precompile
+          echo Precompilation complete. Cleaning assets...
+          bundle exec rails assets:clean
+          echo Cleaning complete! All done.
+      - name: Specs
+        run: bundle exec rspec -fd
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: Logs
+          path: |
+            tmp/capybara
+            log/test.log

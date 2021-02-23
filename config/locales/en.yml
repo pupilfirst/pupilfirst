@@ -104,6 +104,9 @@ en:
         unarchive_course:
           button_text: Unarchive Course
           label: Do you want to unarchive the course?
+      alert:
+        archive_message: Are you sure you want to archive the course?
+        unarchive_message: Are you sure you want to unarchive the course?
       button_text:
         add_new_course: Add New Course
         edit_course_details: Edit Course Details

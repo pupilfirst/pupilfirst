@@ -485,7 +485,10 @@ let actionsTab = (state, send, relaodCoursesCB, course) => {
             <button
               disabled=state.saving
               className="btn btn-success btn-large mt-2"
-              onClick={_e => unarchiveCourse(send, relaodCoursesCB, course)}>
+              onClick={_ =>
+                WindowUtils.confirm(t("alert.unarchive_message"), () =>
+                  unarchiveCourse(send, relaodCoursesCB, course)
+                )}>
               <FaIcon classes={submitButtonIcons(state.saving)} />
               <span className="ml-2"> {t("actions.unarchive_course.button_text")->str} </span>
             </button>
@@ -499,7 +502,10 @@ let actionsTab = (state, send, relaodCoursesCB, course) => {
             <button
               disabled=state.saving
               className="btn btn-danger btn-large mt-2"
-              onClick={_e => archiveCourse(send, relaodCoursesCB, course)}>
+              onClick={_ =>
+                WindowUtils.confirm(t("alert.archive_message"), () =>
+                  archiveCourse(send, relaodCoursesCB, course)
+                )}>
               <FaIcon classes={submitButtonIcons(state.saving)} />
               <span className="ml-2"> {t("actions.archive_course.button_text")->str} </span>
             </button>

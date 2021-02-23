@@ -239,7 +239,7 @@ feature 'Courses Index', js: true do
       sign_in_user school_admin.user, referrer: actions_school_course_path(course_1)
       expect(startup.access_ends_at).to eq(nil)
 
-      click_button 'Archive Course'
+      accept_confirm { click_button('Archive Course') }
 
       expect(page).to have_text('Course archived successfully')
       expect(course_1.reload.archived_at).not_to eq(nil)
@@ -258,7 +258,7 @@ feature 'Courses Index', js: true do
     find("a[title='Edit #{course_archived.name}']").click
     click_button 'Actions'
 
-    click_button 'Unarchive Course'
+    accept_confirm { click_button('Unarchive Course') }
 
     expect(page).to have_text('Course unarchived successfully')
     expect(course_archived.reload.archived_at).to eq(nil)

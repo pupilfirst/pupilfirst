@@ -194,7 +194,7 @@ feature 'Courses Index', js: true do
       expect(page).to have_text(course_archived.name)
     end
 
-    click_button 'Remove selection: Show archived courses'
+    click_button 'Remove selection: Archived'
     fill_in('Search', with: 'pupilfirst demo course')
     click_button "Pick Search by name: pupilfirst demo course"
 

@@ -1,5 +1,5 @@
 module Mutations
-  class UnarchiveCourse < GraphQL::Schema::Mutation
+  class UnarchiveCourse < ApplicationQuery
     include QueryAuthorizeSchoolAdmin
 
     argument :id, ID, required: true

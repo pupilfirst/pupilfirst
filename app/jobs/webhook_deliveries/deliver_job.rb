@@ -9,7 +9,11 @@ module WebhookDeliveries
         raise "#{event_type} was not one of the requested events in WebhookEndpoint##{webhook_endpoint.id}"
       end
 
-      payload = { data: data(event_type, resource), event: event_type }
+      payload_data = data(event_type, resource)
+
+      return if payload_data.blank?
+
+      payload = { data: payload_data, event: event_type }
 
       uri = URI.parse(webhook_endpoint.webhook_url)
 
@@ -48,10 +52,15 @@ module WebhookDeliveries
 
     def data(event_type, resource)
       case event_type
-      when WebhookDelivery.events[:submission_created]
+      when WebhookDelivery.events[:submission_created],
+           WebhookDelivery.events[:submission_graded]
         TimelineEvents::CreateWebhookDataService.new(resource).data
       else
-        raise "Unknown webhook event type: #{event_type}"
+        Rails.logger.error(
+          "Could not find a data service for event #{event_type}"
+        )
+
+        nil
       end
     end
 

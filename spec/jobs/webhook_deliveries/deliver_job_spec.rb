@@ -73,5 +73,17 @@ describe WebhookDeliveries::DeliverJob do
         )
       end
     end
+
+    context 'for events without a corresponding data service' do
+      let!(:event_type) { 'noop' }
+
+      it 'will not attempt delivery' do
+        expect {
+          subject.perform_now(event_type, course, submission)
+        }.not_to raise_exception
+
+        expect(WebhookDelivery.count).to eq(0)
+      end
+    end
   end
 end

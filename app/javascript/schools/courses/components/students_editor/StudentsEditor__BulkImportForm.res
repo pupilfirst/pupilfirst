@@ -55,6 +55,7 @@ let validateFile = (csvData, fileInfo) => {
 type action =
   | UpdateFileInvalid(option<fileInvalid>)
   | LoadCSVData(array<StudentCSVData.t>, CSVReader.fileInfo)
+  | ClearCSVData
   | BeginSaving
   | EndSaving
   | FailSaving
@@ -65,6 +66,7 @@ let fileInputText = (~fileInfo: option<CSVReader.fileInfo>) =>
 let reducer = (state, action) =>
   switch action {
   | UpdateFileInvalid(fileInvalid) => {...state, fileInvalid: fileInvalid}
+  | ClearCSVData => {...state, fileInfo: None, fileInvalid: None, csvData: []}
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
   | EndSaving => initialState
@@ -151,6 +153,17 @@ let csvDataTable = (csvData, fileInvalid) => {
     </table>,
     fileInvalid->Belt.Option.isSome,
   )
+}
+
+let clearFile = send => {
+  open Webapi.Dom
+
+  switch document |> Document.getElementById("csv-file-input") {
+  | Some(e) => HtmlInputElement.setValue(DomUtils.Element.unsafeToHtmlInputElement(e), "")
+  | None => ()
+  }
+
+  send(ClearCSVData)
 }
 
 let errorsTable = (csvData, errors) => {
@@ -288,11 +301,15 @@ let make = (~courseId) => {
               cssClass="hidden"
               parserOptions={CSVReader.parserOptions(~header=true, ~skipEmptyLines="true", ())}
               onFileLoaded={(x, y) => {
+                Js.log("test")
                 send(LoadCSVData(x, y))
               }}
               onError={_ => send(UpdateFileInvalid(Some(InvalidCSVFile)))}
             />
-            <label className="file-input-label my-2" htmlFor="csv-file-input">
+            <label
+              onClick={_event => clearFile(send)}
+              className="file-input-label my-2"
+              htmlFor="csv-file-input">
               <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
               <span className="truncate"> {fileInputText(~fileInfo=state.fileInfo)->str} </span>
             </label>

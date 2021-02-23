@@ -69,7 +69,7 @@ let parseError = studentCSVData => {
       teamNameError(data),
       tagsError(data),
     ])
-    errors |> ArrayUtils.isEmpty ? [] : [{rowNumber: index + 1, errors: errors}]
+    errors |> ArrayUtils.isEmpty ? [] : [{rowNumber: index + 2, errors: errors}]
   }) |> ArrayUtils.flattenV2
 }
 

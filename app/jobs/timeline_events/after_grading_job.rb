@@ -2,7 +2,8 @@ module TimelineEvents
   class AfterGradingJob < ApplicationJob
     queue_as :default
 
-    def perform(submission)
+    def perform(submission_id)
+      submission = TimelineEvent.find(submission_id)
       # Only process submissions from reviewed submissions.
       return unless submission.reviewed?
 

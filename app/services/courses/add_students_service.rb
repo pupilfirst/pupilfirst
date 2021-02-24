@@ -1,10 +1,15 @@
 module Courses
   # Adds a list of new students to a course.
   class AddStudentsService
-    def initialize(course, notify: false)
+    def initialize(
+      course,
+      notify: false,
+      notification_service: Developers::NotificationService.new
+    )
       @course = course
       @notify = notify
       @team_name_translation = {}
+      @notification_service = notification_service
     end
 
     # Accepts a list of students to add to a course. Ignores students who are already present.
@@ -14,20 +19,32 @@ module Courses
     def add(student_list)
       new_students = sanitize_students(unpersisted_students(student_list))
 
-      Course.transaction do
-        students = new_students.map do |student_data|
-          create_new_student(student_data)
+      students =
+        Course.transaction do
+          students = new_students.map do |student_data|
+            create_new_student(student_data)
+          end
+
+          notify_students(students)
+
+          # Add the tags to the school's list of founder tags. This is useful for retrieval in the school admin interface.
+          new_student_tags = new_students.map { |student| student.tags || [] }.flatten.uniq
+          school.founder_tag_list << new_student_tags
+          school.save!
+
+          students
         end
 
-        notify_students(students)
-
-        # Add the tags to the school's list of founder tags. This is useful for retrieval in the school admin interface.
-        new_student_tags = new_students.map { |student| student.tags || [] }.flatten.uniq
-        school.founder_tag_list << new_student_tags
-        school.save!
-
-        students.map { |student| student.id }
+      students.each do |student|
+        @notification_service.execute(
+          @course,
+          :student_added,
+          student.user,
+          @course
+        )
       end
+
+      students.map { |student| student.id }
     end
 
     private

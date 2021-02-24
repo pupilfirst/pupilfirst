@@ -51,6 +51,29 @@ describe Courses::AddStudentsService do
       expect(response).to contain_exactly(*student_ids)
     end
 
+    it 'publishes student_added event for each student' do
+      students_data = [student_1_data, student_2_data, student_3_data, student_4_data]
+
+      notification_service = instance_double('Developers::NotificationService')
+      allow(notification_service).to receive(:execute)
+      subject =
+        described_class.new(
+          course,
+          notify: notify,
+          notification_service: notification_service
+        )
+      subject.add(students_data)
+      students = User.where(email: students_data.map(&:email))
+      students.each do |student|
+        expect(notification_service).to have_received(:execute).with(
+          course,
+          :student_added,
+          student,
+          course
+        )
+      end
+    end
+
     context 'course already has students' do
       let!(:persisted_team) { create :startup, level: level_1 }
       let!(:student) { persisted_team.founders.first }

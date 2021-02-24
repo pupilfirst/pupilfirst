@@ -45,22 +45,33 @@ Rails.application.config.content_security_policy do |policy|
     { connect: 'https://api.rollbar.com' }
   end
 
+  def newrelic_csp
+    {
+      script: %w[https://js-agent.newrelic.com https://*.nr-data.net],
+      connect: %w[https://*.nr-data.net],
+    }
+  end
+
   def style_sources
     ['fonts.googleapis.com', 'assets.calendly.com', asset_host] - [nil]
   end
 
   def connect_sources
-    sources = [rollbar_csp[:connect], *vimeo_csp[:connect], *hotjar_form_csp, *fullstory_csp]
+    sources = [rollbar_csp[:connect], *vimeo_csp[:connect], *hotjar_form_csp, *fullstory_csp, *newrelic_csp[:connect]]
     sources += %w[http://localhost:3035 ws://localhost:3035] if Rails.env.development?
     sources
   end
 
   def font_sources
-    ['fonts.gstatic.com', asset_host] - [nil]
+    ['fonts.gstatic.com', 'https://script.hotjar.com', asset_host] - [nil]
   end
 
   def child_sources
     ['https://www.youtube.com']
+  end
+
+  def script_sources
+    [*hotjar_form_csp, *usetiful_csp, *newrelic_csp[:script]]
   end
 
   def hotjar_form_csp
@@ -88,7 +99,7 @@ Rails.application.config.content_security_policy do |policy|
 
   policy.default_src :none
   policy.img_src '*', :data, :blob
-  policy.script_src :unsafe_eval, :unsafe_inline, :strict_dynamic, 'https:', 'http:'
+  policy.script_src :unsafe_eval, :unsafe_inline, 'https:', 'http:', *script_sources
   policy.style_src :self, :unsafe_inline, *style_sources
   policy.connect_src :self, *connect_sources
   policy.font_src :self, *font_sources

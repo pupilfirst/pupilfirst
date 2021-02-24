@@ -26,7 +26,7 @@ class CreateQuizSubmissionMutator < ApplicationQuery
       end
     end
 
-    publish(course, :submission_verified, current_user, submission)
+    publish(course, :submission_automatically_verified, current_user, submission)
 
     submission
   end

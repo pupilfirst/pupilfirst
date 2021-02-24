@@ -288,7 +288,7 @@ feature 'Target Overlay', js: true do
       # The score should have stored on the submission.
       expect(submission.quiz_score).to eq('1/2')
 
-      expect_published(notification_service, course, :submission_verified, student.user, submission)
+      expect_published(notification_service, course, :submission_automatically_verified, student.user, submission)
     end
   end
 

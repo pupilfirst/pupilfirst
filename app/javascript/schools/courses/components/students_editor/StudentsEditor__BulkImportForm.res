@@ -118,7 +118,7 @@ let tableHeader = {
 
 let csvDataTable = (csvData, fileInvalid) => {
   ReactUtils.nullIf(
-    <table className="table-auto mt-5 border w-full">
+    <table className="table-auto mt-5 border w-full overflow-x-scroll">
       {tableHeader}
       <tbody>
         {csvData
@@ -166,7 +166,7 @@ let clearFile = send => {
 }
 
 let errorsTable = (csvData, errors) => {
-  <table className="table-auto mt-5 border w-full">
+  <table className="table-auto mt-5 border w-full overflow-x-scroll">
     {tableHeader} <tbody> {errors |> Array.mapi((index, error) => {
         let rowNumber = CSVDataError.rowNumber(error)
         let studentData = Js.Array2.unsafe_get(csvData, rowNumber - 2)
@@ -227,11 +227,13 @@ let errorTabulation = (csvData, fileInvalid) => {
               <div>
                 {errorsTable(csvData, Js.Array.slice(~start=0, ~end_=10, errors))}
                 <div className="text-red-700 text-sm mt-5">
-                  {"There are even more errors. Fix the errors in the following rows and upload again: " ++
-                  Array.map(
-                    error => CSVDataError.rowNumber(error),
-                    Js.Array2.sliceFrom(errors, 10),
-                  )->Js.Array2.joinWith(",") |> str}
+                  {"There are even more errors. Fix the errors in the following rows and upload again: " |> str}
+                  <textArea readOnly=true className="w-full bg-gray-200 p-1">
+                    {Array.map(
+                      error => CSVDataError.rowNumber(error),
+                      Js.Array2.sliceFrom(errors, 10),
+                    )->Js.Array2.joinWith(",") |> str}
+                  </textArea>
                 </div>
               </div>
             }

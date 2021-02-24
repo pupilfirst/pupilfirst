@@ -1,0 +1,30 @@
+module Course
+  class BulkImportStudentsJob < ApplicationJob
+    queue_as :low_priority
+
+    def perform(course, csv_rows, user)
+      student_ids = Courses::OnboardService.new(course, csv_rows).execute
+
+      report_params = { students_added: student_ids.count, students_requested: csv_rows.count }
+
+      SchoolAdminMailer.students_bulk_import_complete(user, course, report_params, report_attachment: report_attachment(csv_rows, student_ids))
+    end
+
+    private
+
+    def report_attachment(csv_rows, student_ids)
+      return if csv_rows.count == student_ids.count
+
+      applicable_emails = csv_rows.map { |row| row['email'] } - Founder.where(id: student_ids).map { |f| f.email }
+
+      headers = ['Sl. No', 'Email']
+
+      csv_data = CSV.generate(headers: true) do |csv|
+        csv << headers
+        applicable_emails.each_with_index { |email, index| csv << [index + 1, email] }
+      end
+
+      { mime_type: 'text/csv', content: csv_data }
+    end
+  end
+end

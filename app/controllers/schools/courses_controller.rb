@@ -131,6 +131,7 @@ module Schools
       @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
 
       form = ::Courses::BulkImportStudentsForm.new(@course)
+      form.current_user = current_user
 
       props = if form.validate(params)
         form.save

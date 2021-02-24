@@ -2,6 +2,8 @@ require 'csv'
 
 module Courses
   class BulkImportStudentsForm < Reform::Form
+    attr_accessor :current_user
+
     property :csv, virtual: true, validates: { presence: true, file_size: { less_than: 5.megabytes } }
 
     validate :soft_limit_student_count
@@ -10,9 +12,7 @@ module Courses
     validate :strings_must_not_be_too_long
 
     def save
-      Course.transaction do
-        Courses::OnboardService.new(model, csv_rows).execute
-      end
+      Courses::BulkImportStudentsJob.perform_later(model, csv_rows, current_user)
     end
 
     def csv_rows

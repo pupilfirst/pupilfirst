@@ -55,7 +55,11 @@ let teamNameError = data => {
 let tagsError = data => {
   switch StudentsEditor__StudentCSVData.tags(data) {
   | None => []
-  | Some(tags) => Js.String.split(",", tags)->Array.length <= 5 ? [] : [Tags]
+  | Some(tagsList) => {
+      let tags = Js.String.split(",", tagsList)
+      let validTags = tags |> Js.Array.filter(tag => String.length(tag) <= 50)
+      tags->Array.length <= 5 && validTags == tags ? [] : [Tags]
+    }
   }
 }
 

@@ -228,7 +228,9 @@ let errorTabulation = (csvData, fileInvalid) => {
                 {errorsTable(csvData, Js.Array.slice(~start=0, ~end_=10, errors))}
                 <div className="text-red-700 text-sm mt-5">
                   {"There are even more errors. Fix the errors in the following rows and upload again: " |> str}
-                  <textArea readOnly=true className="w-full bg-gray-200 p-1">
+                  <textArea
+                    readOnly=true
+                    className="border border-gray-400 bg-gray-100 rounded p-1 mt-1 w-full focus:outline-none focus:ring focus:border-primary-400">
                     {Array.map(
                       error => CSVDataError.rowNumber(error),
                       Js.Array2.sliceFrom(errors, 10),
@@ -251,12 +253,12 @@ let errorTabulation = (csvData, fileInvalid) => {
               <li>
                 {str(
                   switch error {
-                  | CSVDataError.Name => "Name column can't be blank"
-                  | Title => "Title has to be less than 250 characters"
-                  | TeamName => "Team name has to be less than 50 characters"
-                  | Email => "Email has to be valid and can't be blank"
-                  | Affiliation => "Affiliation has to be less than 250 characters"
-                  | Tags => "Tags has to be less than 5 in numbers"
+                  | CSVDataError.Name => t("csv_data_errors.invalid_name")
+                  | Title => t("csv_data_errors.title")
+                  | TeamName => t("csv_data_errors.team_name")
+                  | Email => t("csv_data_errors.email")
+                  | Affiliation => t("csv_data_errors.affiliation")
+                  | Tags => t("csv_data_errors.tags")
                   },
                 )}
               </li>
@@ -288,7 +290,7 @@ let make = (~courseId) => {
               </label>
               <HelpIcon
                 className="ml-2"
-                link="https://docs.pupilfirst.com/#/certificates?id=uploading-a-new-certificate">
+                link="https://docs.pupilfirst.com/#/students?id=importing-students-in-bulk">
                 {str(
                   "This file will be used to import students in bulk. Check the sample file for the required format.",
                 )}
@@ -333,6 +335,9 @@ let make = (~courseId) => {
             {errorTabulation(state.csvData, state.fileInvalid)}
           </div>
         </DisablingCover>
+      </div>
+      <div className="max-w-2xl p-6 mx-auto">
+        <a href="/student_import_sample.csv"> {"Download an example .csv file" |> str} </a>
       </div>
       <div className="max-w-2xl p-6 mx-auto">
         <button disabled={saveDisabled(state)} className="w-auto btn btn-large btn-primary">

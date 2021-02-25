@@ -15,7 +15,7 @@ module Course
     def report_attachment(csv_rows, student_ids)
       return if csv_rows.count == student_ids.count
 
-      applicable_emails = csv_rows.map { |row| row['email'] } - Founder.where(id: student_ids).map { |f| f.email }
+      applicable_emails = csv_rows.map { |row| row['email'] } - Founder.where(id: student_ids).includes(:user).map { |f| f.email }
 
       headers = ['Sl. No', 'Email']
 

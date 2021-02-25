@@ -29,7 +29,7 @@ module Notifications
                 message: message
               )
 
-            Notifications::FireService.new(notification).fire
+            Notifications::DeliverService.new(notification).deliver
           end
         end
     end

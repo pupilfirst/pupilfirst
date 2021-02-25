@@ -70,6 +70,10 @@ en:
         other: Issued %{count} times
         zero: Never issued
       no_certificates: You haven't created any certificates yet!
+    CoursesApply__Root:
+      email_sent_message:
+        description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
+        title: We've sent you a verification mail.
     CoursesCurriculum:
       edit_level_button: Edit Level
       edit_target_button_title: Edit target %{title}

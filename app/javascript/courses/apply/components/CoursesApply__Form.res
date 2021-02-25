@@ -23,8 +23,9 @@ let createApplicant = (courseId, email, name, setSaving, setViewEmailSent, event
   |> ignore
 }
 
-let isInvalidEmail = email => email |> EmailUtils.isInvalid(false)
-let saveDisabled = (email, name, saving) => isInvalidEmail(email) || (saving || name == "")
+let isInvalidEmail = email => EmailUtils.isInvalid(false, email)
+let saveDisabled = (email, name, termsAccepted, saving) =>
+  isInvalidEmail(email) || (saving || name == "") || !termsAccepted
 
 let buttonText = (email, name, saving) =>
   switch (saving, email == "", isInvalidEmail(email), name == "") {
@@ -34,18 +35,45 @@ let buttonText = (email, name, saving) =>
   | (false, false, false, true) => "Enter your full name"
   | (false, false, false, false) => "Apply"
   }
+let checkboxOnChange = (setTermsAccepted, event) =>
+  ReactEvent.Form.target(event)["checked"]
+    ? setTermsAccepted(_ => true)
+    : setTermsAccepted(_ => false)
+
+let checkboxLabel = (termsAndConditions, privacyPolicy) => {
+  <div className="text-xs">
+    {str("I agree to the ")}
+    {termsAndConditions
+      ? <a
+          href="/agreements/terms-and-conditions" className="cursor-pointer hover:text-primary-500">
+          {"Terms of Use" |> str}
+        </a>
+      : React.null}
+    {ReactUtils.nullUnless(
+      <span className="px-1"> {str("&")} </span>,
+      termsAndConditions && privacyPolicy,
+    )}
+    {privacyPolicy
+      ? <a href="/agreements/privacy-policy" className="cursor-pointer hover:text-primary-500">
+          {"Privacy Policy" |> str}
+        </a>
+      : React.null}
+  </div>
+}
 
 @react.component
-let make = (~courseName, ~courseId, ~setViewEmailSent, ~email, ~name) => {
-  let (email, setEmail) = React.useState(() => email |> OptionUtils.default(""))
-  let (name, setName) = React.useState(() => name |> OptionUtils.default(""))
+let make = (~courseId, ~setViewEmailSent, ~email, ~name, ~termsAndConditions, ~privacyPolicy) => {
+  let (email, setEmail) = React.useState(() => OptionUtils.default("", email))
+  let (name, setName) = React.useState(() => OptionUtils.default("", name))
+  let (termsAccepted, setTermsAccepted) = React.useState(() =>
+    !(termsAndConditions || privacyPolicy)
+  )
   let (saving, setSaving) = React.useState(() => false)
   <div className="flex flex-col">
-    <h4 className="font-bold"> {"Enroll to " ++ (courseName ++ " course") |> str} </h4>
     <div className="w-full">
       <div className="mt-4">
         <label htmlFor="email" className="inline-block tracking-wide text-xs font-semibold">
-          {"Email" |> str}
+          {"Email"->str}
         </label>
         <input
           className="appearance-none h-10 mt-1 block w-full border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
@@ -60,7 +88,7 @@ let make = (~courseName, ~courseId, ~setViewEmailSent, ~email, ~name) => {
       </div>
       <div className="mt-4">
         <label htmlFor="name" className="inline-block tracking-wide text-xs font-semibold">
-          {"Name" |> str}
+          {"Name"->str}
         </label>
         <input
           className="appearance-none h-10 mt-1 block w-full border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
@@ -73,11 +101,19 @@ let make = (~courseName, ~courseId, ~setViewEmailSent, ~email, ~name) => {
           placeholder="John Doe"
         />
       </div>
+      <div className="mt-4">
+        <Checkbox
+          id={"terms-accepted"}
+          label={checkboxLabel(termsAndConditions, privacyPolicy)}
+          onChange={checkboxOnChange(setTermsAccepted)}
+          checked=termsAccepted
+        />
+      </div>
     </div>
     <button
-      disabled={saveDisabled(email, name, saving)}
+      disabled={saveDisabled(email, name, termsAccepted, saving)}
       onClick={createApplicant(courseId, email, name, setSaving, setViewEmailSent)}
-      className="btn btn-primary btn-large text-center w-full mt-6">
+      className="btn btn-success btn-large text-center w-full mt-6">
       {saving ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null}
       <span> {buttonText(email, name, saving) |> str} </span>
     </button>

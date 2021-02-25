@@ -22,9 +22,7 @@ module Courses
       students =
         Course.transaction do
           students = new_students.map do |student_data|
-            student = create_new_student(student_data)
-            create_keycloak_user(student_data.email,student_data.name)
-            student
+            create_new_student(student_data)
           end
 
           notify_students(students)
@@ -133,13 +131,6 @@ module Courses
 
       @team_name_translation[team.name] = team
       team
-    end
-
-    def create_keycloak_user(email, name)
-      names = name.split(' ')
-      first_name = names.pop
-      last_name = names.join(' ') || ''
-      Rails.configuration.keycloak_client.create_user(email, first_name, last_name)
     end
 
     def school

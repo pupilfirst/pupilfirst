@@ -12,9 +12,8 @@ module Keycloak
     private
 
     def create_keycloak_user(email, name)
-      names = name.split(' ')
-      first_name = names.pop
-      last_name = names.join(' ') || ''
+      first_name, *names = name.split(' ')
+      last_name = names.join(' ')
       @keycloak_client.create_user(email, first_name, last_name)
     end
   end

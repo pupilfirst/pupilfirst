@@ -3,17 +3,17 @@ type id = string
 type t = {
   id: id,
   name: string,
+  endsAt: option<Js.Date.t>,
 }
 
 let id = t => t.id
 let name = t => t.name
+let endsAt = t => t.endsAt
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
+    id: field("id", string, json),
     name: json |> field("name", string),
+    endsAt: (json |> optional(field("endsAt", string)))->Belt.Option.map(DateFns.parseISO),
   }
 }
-
-let sort = courses =>
-  courses |> List.sort((c1, c2) => Js.String.localeCompare(c2 |> name, c1 |> name) |> int_of_float)

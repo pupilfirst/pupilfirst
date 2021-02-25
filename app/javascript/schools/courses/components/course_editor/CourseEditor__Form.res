@@ -1,6 +1,21 @@
 open CourseEditor__Types
 
+let t = I18n.t(~scope="components.CourseEditor__Form")
+let ts = I18n.t(~scope="shared")
+
 let str = ReasonReact.string
+
+type tabs =
+  | DetailsTab
+  | ImagesTab
+  | ActionsTab
+
+let selectedTabClasses = selected =>
+  "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer " ++ (
+    selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-100"
+  )
+
+let tabItemsClasses = selected => selected ? "" : "hidden"
 
 type progressionBehavior = [#Limited | #Unlimited | #Strict]
 
@@ -89,13 +104,33 @@ module UpdateCourseQuery = %graphql(
   `
 )
 
+module ArciveCourseQuery = %graphql(
+  `
+  mutation ArchiveCourseMutation($id: ID!) {
+    archiveCourse(id: $id)  {
+      success
+    }
+  }
+`
+)
+
+module UnarchiveCourseQuery = %graphql(
+  `
+  mutation UnarchiveCourseMutation($id: ID!) {
+    unarchiveCourse(id: $id)  {
+      success
+    }
+  }
+`
+)
+
 let updateName = (send, name) => {
-  let hasError = name |> String.trim |> String.length < 2
+  let hasError = name->String.trim->String.length < 2
   send(UpdateName(name, hasError))
 }
 
 let updateDescription = (send, description) => {
-  let lengthOfDescription = description |> String.trim |> String.length
+  let lengthOfDescription = description->String.trim->String.length
   let hasError = lengthOfDescription < 2 || lengthOfDescription >= 150
   send(UpdateDescription(description, hasError))
 }
@@ -107,9 +142,6 @@ let saveDisabled = state =>
     (state.hasNameError ||
     (state.name == "" || (!state.dirty || state.saving)))))
 
-let formClasses = value =>
-  value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full"
-
 let progressionLimitForQuery = state =>
   switch state.progressionBehavior {
   | #Unlimited
@@ -118,7 +150,7 @@ let progressionLimitForQuery = state =>
   | #Limited => Some(state.progressionLimit)
   }
 
-let createCourse = (state, send, updateCourseCB) => {
+let createCourse = (state, send, relaodCoursesCB) => {
   send(StartSaving)
 
   let createCourseQuery = CreateCourseQuery.make(
@@ -135,7 +167,7 @@ let createCourse = (state, send, updateCourseCB) => {
 
   createCourseQuery |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
     switch result["createCourse"]["course"] {
-    | Some(course) => Course.makeFromJs(course) |> updateCourseCB
+    | Some(_course) => relaodCoursesCB()
     | None => send(FailSaving)
     }
 
@@ -151,7 +183,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
   send(StartSaving)
 
   let updateCourseQuery = UpdateCourseQuery.make(
-    ~id=course |> Course.id,
+    ~id=Course.id(course),
     ~name=state.name,
     ~description=state.description,
     ~endsAt=?state.endsAt->Belt.Option.map(DateFns.encodeISO),
@@ -165,7 +197,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
 
   updateCourseQuery |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
     switch result["updateCourse"]["course"] {
-    | Some(course) => Course.makeFromJs(course) |> updateCourseCB
+    | Some(course) => updateCourseCB(Course.makeFromJs(course))
     | None => send(FailSaving)
     }
 
@@ -177,6 +209,40 @@ let updateCourse = (state, send, updateCourseCB, course) => {
   }) |> ignore
 }
 
+let archiveCourse = (send, relaodCoursesCB, course) => {
+  send(StartSaving)
+
+  ArciveCourseQuery.make(~id=course |> Course.id, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result => {
+    result["archiveCourse"]["success"] ? relaodCoursesCB() : send(FailSaving)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(error => {
+    Js.log(error)
+    send(FailSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let unarchiveCourse = (send, relaodCoursesCB, course) => {
+  send(StartSaving)
+
+  UnarchiveCourseQuery.make(~id=course |> Course.id, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result => {
+    result["unarchiveCourse"]["success"] ? relaodCoursesCB() : send(FailSaving)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(error => {
+    Js.log(error)
+    send(FailSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
 let booleanButtonClasses = bool => {
   let classes = "toggle-button__button"
   classes ++ (bool ? " toggle-button__button--active" : "")
@@ -185,18 +251,18 @@ let booleanButtonClasses = bool => {
 let enablePublicSignupButton = (publicSignup, send) =>
   <div className="flex items-center mt-5">
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-signup">
-      {"Enable public signup for this course?" |> str}
+      {t("enable_public_signup_label")->str}
     </label>
     <div id="public-signup" className="flex toggle-button__group flex-shrink-0 rounded-lg">
       <button
         className={booleanButtonClasses(publicSignup)}
         onClick={_ => send(UpdatePublicSignup(true))}>
-        {"Yes" |> str}
+        {t("enable_public_signup_yes")->str}
       </button>
       <button
         className={booleanButtonClasses(!publicSignup)}
         onClick={_ => send(UpdatePublicSignup(false))}>
-        {"No" |> str}
+        {t("enable_public_signup_no")->str}
       </button>
     </div>
   </div>
@@ -204,42 +270,38 @@ let enablePublicSignupButton = (publicSignup, send) =>
 let featuredButton = (featured, send) =>
   <div className="flex items-center mt-5">
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="featured">
-      {"Feature course in school homepage?" |> str}
+      {t("feature_course_in_homepage_label")->str}
     </label>
     <div id="featured" className="flex toggle-button__group flex-shrink-0 rounded-lg">
       <button className={booleanButtonClasses(featured)} onClick={_ => send(UpdateFeatured(true))}>
-        {"Yes" |> str}
+        {t("feature_course_in_homepage_yes")->str}
       </button>
       <button
         className={booleanButtonClasses(!featured)} onClick={_ => send(UpdateFeatured(false))}>
-        {"No" |> str}
+        {t("feature_course_in_homepage_no")->str}
       </button>
     </div>
   </div>
 
-let about = course =>
-  switch course |> Course.about {
-  | Some(about) => about
-  | None => ""
-  }
+let about = course => Belt.Option.getWithDefault(Course.about(course), "")
 
 let updateAboutCB = (send, about) => send(UpdateAbout(about))
 
 let computeInitialState = course =>
   switch course {
   | Some(course) => {
-      name: course |> Course.name,
-      description: course |> Course.description,
-      endsAt: course |> Course.endsAt,
+      name: Course.name(course),
+      description: Course.description(course),
+      endsAt: Course.endsAt(course),
       hasNameError: false,
       hasDateError: false,
       hasDescriptionError: false,
       dirty: false,
       saving: false,
       about: about(course),
-      publicSignup: course |> Course.publicSignup,
-      featured: course |> Course.featured,
-      progressionBehavior: course |> Course.progressionBehavior,
+      publicSignup: Course.publicSignup(course),
+      featured: Course.featured(course),
+      progressionBehavior: Course.progressionBehavior(course),
       progressionLimit: Course.progressionLimit(course)->Belt.Option.getWithDefault(1),
     }
   | None => {
@@ -260,13 +322,13 @@ let computeInitialState = course =>
   }
 
 let handleSelectProgressionLimit = (send, event) => {
-  let target = event |> ReactEvent.Form.target
+  let target = ReactEvent.Form.target(event)
 
   switch target["value"] {
   | "1"
   | "2"
   | "3" =>
-    send(UpdateProgressionLimit(target["value"] |> int_of_string))
+    send(UpdateProgressionLimit(int_of_string(target["value"])))
   | otherValue => Rollbar.error("Unexpected progression limit was selected: " ++ otherValue)
   }
 }
@@ -278,172 +340,238 @@ let progressionBehaviorButtonClasses = (state, progressionBehavior, additionalCl
   defaultClasses ++ (selected ? " text-primary-500 border-primary-500" : "")
 }
 
-@react.component
-let make = (~course, ~hideEditorActionCB, ~updateCourseCB) => {
-  let (state, send) = React.useReducerWithMapState(reducer, course, computeInitialState)
+let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
   <div>
-    <div className="blanket" />
-    <div className="drawer-right">
-      <div className="drawer-right__close absolute">
+    <div className="mt-5">
+      <label className="inline-block tracking-wide text-xs font-semibold " htmlFor="name">
+        {t("course_name.label")->str}
+      </label>
+      <input
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        id="name"
+        type_="text"
+        placeholder={t("course_name.placeholder")}
+        maxLength=50
+        value=state.name
+        onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
+      />
+      <School__InputGroupError message={t("course_name.error_message")} active=state.hasNameError />
+    </div>
+    <div className="mt-5">
+      <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="description">
+        {t("course_description.label")->str}
+      </label>
+      <input
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        id="description"
+        type_="text"
+        placeholder={t("course_description.placeholder")}
+        value=state.description
+        maxLength=150
+        onChange={event => updateDescription(send, ReactEvent.Form.target(event)["value"])}
+      />
+    </div>
+    <School__InputGroupError
+      message={t("course_description.error_message")} active=state.hasDescriptionError
+    />
+    <div className="mt-5">
+      <label className="tracking-wide text-xs font-semibold" htmlFor="course-ends-at-input">
+        {t("course_end_date.label")->str}
+      </label>
+      <span className="ml-1 text-xs"> {("(" ++ ts("optional") ++ ")")->str} </span>
+      <HelpIcon className="ml-2" link="https://docs.pupilfirst.com/#/courses">
+        {t("course_end_date.help")->str}
+      </HelpIcon>
+      <DatePicker
+        onChange={date => send(UpdateEndsAt(date))} selected=?state.endsAt id="course-ends-at-input"
+      />
+    </div>
+    <School__InputGroupError message="Enter a valid date" active=state.hasDateError />
+    <div className="mt-5">
+      <label className="tracking-wide text-xs font-semibold" htmlFor="course-about">
+        {t("course_about.label")->str}
+      </label>
+      <div className="mt-2">
+        <MarkdownEditor
+          textareaId="course-about"
+          onChange={updateAboutCB(send)}
+          value=state.about
+          placeholder={t("course_about.placeholder")}
+          profile=Markdown.Permissive
+          maxLength=10000
+        />
+      </div>
+    </div>
+    <div className="mt-5">
+      <label className="tracking-wide text-xs font-semibold">
+        {t("progression_behavior.label")->str}
+      </label>
+      <HelpIcon
+        className="ml-2" link="https://docs.pupilfirst.com/#/courses?id=progression-behaviour">
+        {t("progression_behavior.help")->str}
+      </HelpIcon>
+      <div className="flex mt-2">
         <button
-          title="close"
-          onClick={_ => hideEditorActionCB()}
-          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
-          <i className="fas fa-times text-xl" />
+          onClick={_ => send(UpdateProgressionBehavior(#Limited))}
+          className={progressionBehaviorButtonClasses(state, #Limited, "mr-1")}>
+          <div className="font-bold text-xl"> {t("progression_behavior.limited.title")->str} </div>
+          <div className="text-xs mt-2">
+            <div> {t("progression_behavior.limited.description_start")->str} </div>
+            <select
+              id="progression-limit"
+              onChange={handleSelectProgressionLimit(send)}
+              className="my-1 cursor-pointer inline-block appearance-none bg-white border-b-2 text-xl font-semibold border-blue-500 hover:border-gray-500 p-1 leading-tight rounded-none focus:outline-none"
+              style={ReactDOMRe.Style.make(~textAlignLast="center", ())}
+              value={string_of_int(state.progressionLimit)}>
+              <option value="1"> {t("progression_behavior.limited.once")->str} </option>
+              <option value="2"> {t("progression_behavior.limited.twice")->str} </option>
+              <option value="3"> {t("progression_behavior.limited.thrice")->str} </option>
+            </select>
+            <div> {t("progression_behavior.limited.description_end")->str} </div>
+          </div>
+        </button>
+        <button
+          onClick={_ => send(UpdateProgressionBehavior(#Unlimited))}
+          className={progressionBehaviorButtonClasses(state, #Unlimited, "mx-1")}>
+          <div className="font-bold text-xl">
+            {t("progression_behavior.unlimited.title")->str}
+          </div>
+          <span className="text-xs"> {t("progression_behavior.unlimited.description")->str} </span>
+        </button>
+        <button
+          onClick={_ => send(UpdateProgressionBehavior(#Strict))}
+          className={progressionBehaviorButtonClasses(state, #Strict, "ml-1")}>
+          <div className="font-bold text-xl"> {t("progression_behavior.strict.title")->str} </div>
+          <span className="text-xs"> {t("progression_behavior.strict.description")->str} </span>
         </button>
       </div>
-      <div className={formClasses(state.saving)}>
-        <div className="w-full">
-          <div className="mx-auto bg-white">
-            <div className="max-w-2xl p-6 mx-auto">
-              <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-                {(course == None ? "Add New Course" : "Edit Course Details") |> str}
-              </h5>
-              <div className="mt-5">
-                <label className="inline-block tracking-wide text-xs font-semibold " htmlFor="name">
-                  {"Course name" |> str}
-                </label>
-                <input
-                  className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="name"
-                  type_="text"
-                  placeholder="Type course name here"
-                  maxLength=50
-                  value=state.name
-                  onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
-                />
-                <School__InputGroupError
-                  message="A name is required (2-50 characters)" active=state.hasNameError
-                />
-              </div>
-              <div className="mt-5">
-                <label
-                  className="inline-block tracking-wide text-xs font-semibold"
-                  htmlFor="description">
-                  {"Course description" |> str}
-                </label>
-                <input
-                  className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="description"
-                  type_="text"
-                  placeholder="Short description for this course"
-                  value=state.description
-                  maxLength=150
-                  onChange={event =>
-                    updateDescription(send, ReactEvent.Form.target(event)["value"])}
-                />
-              </div>
-              <School__InputGroupError
-                message="A description is required (2-150 characters)"
-                active=state.hasDescriptionError
-              />
-              <div className="mt-5">
-                <label
-                  className="tracking-wide text-xs font-semibold" htmlFor="course-ends-at-input">
-                  {"Course end date" |> str}
-                </label>
-                <span className="ml-1 text-xs"> {"(optional)" |> str} </span>
-                <HelpIcon className="ml-2" link="https://docs.pupilfirst.com/#/courses">
-                  {"If specified, course will appear as closed to students on this date. Students will not be able to make any more submissions." |> str}
-                </HelpIcon>
-                <DatePicker
-                  onChange={date => send(UpdateEndsAt(date))}
-                  selected=?state.endsAt
-                  id="course-ends-at-input"
-                />
-              </div>
-              <School__InputGroupError message="Enter a valid date" active=state.hasDateError />
-              <div className="mt-5">
-                <label className="tracking-wide text-xs font-semibold" htmlFor="course-about">
-                  {"About" |> str}
-                </label>
-                <div className="mt-2">
-                  <MarkdownEditor
-                    textareaId="course-about"
-                    onChange={updateAboutCB(send)}
-                    value=state.about
-                    placeholder="Add more details about the course."
-                    profile=Markdown.Permissive
-                    maxLength=10000
-                  />
-                </div>
-              </div>
-              <div className="mt-5">
-                <label className="tracking-wide text-xs font-semibold">
-                  {"Progression Behavior" |> str}
-                </label>
-                <HelpIcon
-                  className="ml-2"
-                  link="https://docs.pupilfirst.com/#/courses?id=progression-behaviour">
-                  {"This only applies if your course has milestone targets that requires students to submit their work for review by coaches." |> str}
-                </HelpIcon>
-                <div className="flex mt-2">
-                  <button
-                    onClick={_ => send(UpdateProgressionBehavior(#Limited))}
-                    className={progressionBehaviorButtonClasses(state, #Limited, "mr-1")}>
-                    <div className="font-bold text-xl"> {"Limited" |> str} </div>
-                    <div className="text-xs mt-2">
-                      <div> {"Students can level up" |> str} </div>
-                      <select
-                        id="progression-limit"
-                        onChange={handleSelectProgressionLimit(send)}
-                        className="my-1 cursor-pointer inline-block appearance-none bg-white border-b-2 text-xl font-semibold border-blue-500 hover:border-gray-500 p-1 leading-tight rounded-none focus:outline-none"
-                        style={ReactDOMRe.Style.make(~textAlignLast="center", ())}
-                        value={string_of_int(state.progressionLimit)}>
-                        <option value="1"> {"once" |> str} </option>
-                        <option value="2"> {"twice" |> str} </option>
-                        <option value="3"> {"thrice" |> str} </option>
-                      </select>
-                      <div> {" without getting submissions reviewed." |> str} </div>
-                    </div>
-                  </button>
-                  <button
-                    onClick={_ => send(UpdateProgressionBehavior(#Unlimited))}
-                    className={progressionBehaviorButtonClasses(state, #Unlimited, "mx-1")}>
-                    <div className="font-bold text-xl"> {"Unlimited" |> str} </div>
-                    <span className="text-xs">
-                      {"Students can level up till the end of the course, without getting submissions reviewed." |> str}
-                    </span>
-                  </button>
-                  <button
-                    onClick={_ => send(UpdateProgressionBehavior(#Strict))}
-                    className={progressionBehaviorButtonClasses(state, #Strict, "ml-1")}>
-                    <div className="font-bold text-xl"> {"Strict" |> str} </div>
-                    <span className="text-xs">
-                      {"Students can level up only after getting submissions reviewed, and passing." |> str}
-                    </span>
-                  </button>
-                </div>
-              </div>
-              {featuredButton(state.featured, send)}
-              {enablePublicSignupButton(state.publicSignup, send)}
-            </div>
-          </div>
-          <div className="mx-auto">
-            <div className="max-w-2xl p-6 mx-auto">
-              <div className="flex">
-                {switch course {
-                | Some(course) =>
-                  <button
-                    disabled={saveDisabled(state)}
-                    onClick={_ => updateCourse(state, send, updateCourseCB, course)}
-                    className="w-full btn btn-large btn-primary mt-3">
-                    {"Update Course" |> str}
-                  </button>
+    </div>
+    {featuredButton(state.featured, send)}
+    {enablePublicSignupButton(state.publicSignup, send)}
+    <div className="max-w-2xl p-6 mx-auto">
+      <div className="flex">
+        {switch course {
+        | Some(course) =>
+          <button
+            disabled={saveDisabled(state)}
+            onClick={_ => updateCourse(state, send, updateCourseCB, course)}
+            className="w-full btn btn-large btn-primary mt-3">
+            {t("update_course")->str}
+          </button>
 
-                | None =>
-                  <button
-                    disabled={saveDisabled(state)}
-                    onClick={_ => createCourse(state, send, updateCourseCB)}
-                    className="w-full btn btn-large btn-primary mt-3">
-                    {"Create Course" |> str}
-                  </button>
-                }}
-              </div>
-            </div>
-          </div>
-        </div>
+        | None =>
+          <button
+            disabled={saveDisabled(state)}
+            onClick={_ => createCourse(state, send, relaodCoursesCB)}
+            className="w-full btn btn-large btn-primary mt-3">
+            {t("create_course")->str}
+          </button>
+        }}
       </div>
     </div>
   </div>
+}
+
+let submitButtonIcons = saving => saving ? "fas fa-spinner fa-spin" : "fa fa-exclamation-triangle"
+
+let actionsTab = (state, send, relaodCoursesCB, course) => {
+  <div>
+    {Belt.Option.isSome(Course.archivedAt(course))
+      ? <div className="mt-2">
+          <label className="tracking-wide text-xs font-semibold">
+            {str(t("actions.unarchive_course.label"))}
+          </label>
+          <div>
+            <button
+              disabled=state.saving
+              className="btn btn-success btn-large mt-2"
+              onClick={_ =>
+                WindowUtils.confirm(t("alert.unarchive_message"), () =>
+                  unarchiveCourse(send, relaodCoursesCB, course)
+                )}>
+              <FaIcon classes={submitButtonIcons(state.saving)} />
+              <span className="ml-2"> {t("actions.unarchive_course.button_text")->str} </span>
+            </button>
+          </div>
+        </div>
+      : <div className="mt-2">
+          <label className="tracking-wide text-xs font-semibold">
+            {str(t("actions.archive_course.label"))}
+          </label>
+          <div>
+            <button
+              disabled=state.saving
+              className="btn btn-danger btn-large mt-2"
+              onClick={_ =>
+                WindowUtils.confirm(t("alert.archive_message"), () =>
+                  archiveCourse(send, relaodCoursesCB, course)
+                )}>
+              <FaIcon classes={submitButtonIcons(state.saving)} />
+              <span className="ml-2"> {t("actions.archive_course.button_text")->str} </span>
+            </button>
+          </div>
+        </div>}
+  </div>
+}
+
+@react.component
+let make = (~course, ~updateCourseCB, ~relaodCoursesCB, ~selectedTab) => {
+  let (state, send) = React.useReducerWithMapState(reducer, course, computeInitialState)
+  <DisablingCover disabled={state.saving}>
+    <div className="mx-auto bg-white">
+      <div className="pt-6 border-b border-gray-400 bg-gray-100">
+        <div className="max-w-2xl mx-auto">
+          <h5 className="uppercase text-center">
+            {(
+              course == None
+                ? t("button_text.add_new_course")
+                : t("button_text.edit_course_details")
+            )->str}
+          </h5>
+          {ReactUtils.nullUnless(
+            <div className="w-full pt-6">
+              <div className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
+                <button
+                  className={selectedTabClasses(selectedTab == DetailsTab)}
+                  onClick={_ => ReasonReactRouter.push("./details")}>
+                  <i className="fa fa-edit" />
+                  <span className="ml-2"> {t("tabs.details")->str} </span>
+                </button>
+                <button
+                  className={selectedTabClasses(selectedTab == ImagesTab)}
+                  onClick={_ => ReasonReactRouter.push("./images")}>
+                  <i className="fa fa-camera" />
+                  <span className="ml-2"> {t("tabs.images")->str} </span>
+                </button>
+                <button
+                  className={"-ml-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
+                  onClick={_ => ReasonReactRouter.push("./actions")}>
+                  <i className="fa fa-cog" />
+                  <span className="ml-2"> {t("tabs.actions")->str} </span>
+                </button>
+              </div>
+            </div>,
+            Belt.Option.isSome(course),
+          )}
+        </div>
+      </div>
+      <div className="max-w-2xl mx-auto">
+        <div className={tabItemsClasses(selectedTab == DetailsTab)}>
+          {detailsTab(state, send, course, updateCourseCB, relaodCoursesCB)}
+        </div>
+        {switch course {
+        | Some(c) =>
+          [
+            <div key="actions-tab" className={tabItemsClasses(selectedTab == ActionsTab)}>
+              {actionsTab(state, send, relaodCoursesCB, c)}
+            </div>,
+            <div key="images-tab" className={tabItemsClasses(selectedTab == ImagesTab)}>
+              <CourseEditor__ImagesForm course=c updateCourseCB />
+            </div>,
+          ]->React.array
+        | None => React.null
+        }}
+      </div>
+    </div>
+  </DisablingCover>
 }

@@ -1,3 +1,5 @@
+exception UnexpectedProgressionBehavior(string)
+
 module Image = {
   type t = {
     url: string,
@@ -8,6 +10,14 @@ module Image = {
   let filename = t => t.filename
 
   let make = (url, filename) => {url: url, filename: filename}
+
+  let decode = json => {
+    open Json.Decode
+    {
+      url: json |> field("url", string),
+      filename: json |> field("filename", string),
+    }
+  }
 }
 
 type progressionBehavior =
@@ -26,6 +36,7 @@ type t = {
   cover: option<Image.t>,
   featured: bool,
   progressionBehavior: progressionBehavior,
+  archivedAt: option<Js.Date.t>,
 }
 
 let name = t => t.name
@@ -46,6 +57,8 @@ let cover = t => t.cover
 
 let thumbnail = t => t.thumbnail
 
+let archivedAt = t => t.archivedAt
+
 let progressionBehavior = t =>
   switch t.progressionBehavior {
   | Limited(_) => #Limited
@@ -65,12 +78,8 @@ let imageUrl = image => image |> Image.url
 
 let filename = image => image |> Image.filename
 
-let sort = courses =>
-  courses |> List.sort((x, y) => (x.id |> int_of_string) - (y.id |> int_of_string))
-
-let updateList = (courses, course) => {
-  let oldCourses = courses |> List.filter(c => c.id !== course.id)
-  oldCourses |> List.rev |> List.append(list{course}) |> List.rev
+let updateList = (course, courses) => {
+  Js.Array.map(c => c.id == course.id ? course : c, courses)
 }
 
 let makeImageFromJs = data =>
@@ -94,7 +103,8 @@ let addImages = (~coverUrl, ~thumbnailUrl, ~coverFilename, ~thumbnailFilename, t
 let replaceImages = (cover, thumbnail, t) => {...t, cover: cover, thumbnail: thumbnail}
 
 let makeFromJs = rawCourse => {
-  let endsAt = rawCourse["endsAt"]->Belt.Option.map(DateFns.decodeISO)
+  let endsAt = Belt.Option.map(rawCourse["endsAt"], DateFns.decodeISO)
+  let archivedAt = Belt.Option.map(rawCourse["archivedAt"], DateFns.decodeISO)
 
   let progressionBehavior = switch rawCourse["progressionBehavior"] {
   | #Limited => Limited(rawCourse["progressionLimit"] |> Belt.Option.getExn)
@@ -113,6 +123,43 @@ let makeFromJs = rawCourse => {
     cover: makeImageFromJs(rawCourse["cover"]),
     featured: rawCourse["featured"],
     progressionBehavior: progressionBehavior,
+    archivedAt: archivedAt,
+  }
+}
+
+let decode = json => {
+  let behavior = json |> {
+    open Json.Decode
+    field("progressionBehavior", string)
+  }
+
+  let progressionBehavior = switch behavior {
+  | "Limited" =>
+    let progressionLimit = json |> {
+      open Json.Decode
+      field("progressionLimit", int)
+    }
+    Limited(progressionLimit)
+  | "Unlimited" => Unlimited
+  | "Strict" => Strict
+  | otherValue =>
+    Rollbar.error("Unexpected progressionBehavior: " ++ otherValue)
+    raise(UnexpectedProgressionBehavior(behavior))
+  }
+
+  open Json.Decode
+  {
+    id: field("id", string, json),
+    name: field("name", string, json),
+    description: field("description", string, json),
+    endsAt: optional(field("endsAt", string), json)->Belt.Option.map(DateFns.parseISO),
+    progressionBehavior: progressionBehavior,
+    about: optional(field("about", string), json),
+    publicSignup: field("publicSignup", bool, json),
+    thumbnail: optional(field("thumbnail", Image.decode), json),
+    cover: optional(field("cover", Image.decode), json),
+    featured: field("featured", bool, json),
+    archivedAt: optional(field("archivedAt", string), json)->Belt.Option.map(DateFns.parseISO),
   }
 }
 
@@ -136,6 +183,7 @@ module Fragments = %graphql(
     featured
     progressionBehavior
     progressionLimit
+    archivedAt
   }
   `
 )

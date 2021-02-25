@@ -17,6 +17,11 @@ let decodeNotification = json => {
 
 let decodeNotifications = json => json |> Json.Decode.list(decodeNotification)
 
+let decodeErrors = json => {
+  open Json.Decode
+  json |> array(field("message", string))
+}
+
 let flashNotifications = obj =>
   switch Js.Dict.get(obj, "notifications") {
   | Some(notifications) => notifications |> decodeNotifications |> List.iter(n => {
@@ -75,7 +80,17 @@ let sendQuery = (~notify=true, q) => {
         obj |> flashNotifications
       }
 
-      Js.Dict.unsafeGet(obj, "data") |> q["parse"] |> Js.Promise.resolve
+      switch Js.Dict.get(obj, "errors") {
+      | Some(errors) => {
+          errors |> decodeErrors |> Js.Array.forEach(e => {
+            Notification.error("Error", e)
+          })
+
+          Js.Promise.reject(Graphql_error("Something went wrong!"))
+        }
+      | None => Js.Dict.unsafeGet(obj, "data") |> q["parse"] |> Js.Promise.resolve
+      }
+
     | None => Js.Promise.reject(Graphql_error("Response is not an object"))
     }
   )

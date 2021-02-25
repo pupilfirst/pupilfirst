@@ -2,8 +2,6 @@ exception UnknownPathEncountered(list<string>)
 
 %bs.raw(`require("./SchoolAdminNavbar__Root.css")`)
 
-open SchoolAdminNavbar__Types
-
 type courseSelection =
   | Students
   | CourseCoaches
@@ -27,7 +25,7 @@ type selection =
   | SchoolCoaches
   | Settings(settingsSelection)
   | Courses
-  | SelectedCourse(Course.id, courseSelection)
+  | SelectedCourse(CourseInfo.id, courseSelection)
   | Communities
 
 let str = React.string
@@ -176,6 +174,10 @@ let make = (
   | list{"school", "coaches"} => (SchoolCoaches, false)
   | list{"school", "customize"} => (Settings(Customization), true)
   | list{"school", "courses"} => (Courses, false)
+  | list{"school", "courses", "new"} => (Courses, false)
+  | list{"school", "courses", _courseId, "details"}
+  | list{"school", "courses", _courseId, "images"}
+  | list{"school", "courses", _courseId, "actions"} => (Courses, false)
   | list{"school", "courses", courseId, "students"}
   | list{"school", "courses", courseId, "inactive_students"} => (
       SelectedCourse(courseId, Students),
@@ -286,22 +288,30 @@ let make = (
                 "fas fa-book",
                 "Courses",
               )}
-              {shrunk
-                ? React.null
-                : <ul className="pr-4 pb-4 ml-10 mt-1">
-                    {courses
-                    |> List.map(course =>
-                      <li key={course |> Course.id}>
+              {ReactUtils.nullIf(
+                <ul className="pr-4 pb-4 ml-10 mt-1">
+                  {Js.Array.map(
+                    course =>
+                      <li key={CourseInfo.id(course)}>
                         <a
-                          href={"/school/courses/" ++ ((course |> Course.id) ++ "/curriculum")}
+                          href={"/school/courses/" ++ CourseInfo.id(course) ++ "/curriculum"}
                           className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
-                          {course |> Course.name |> str}
+                          {str(CourseInfo.name(course))}
                         </a>
-                      </li>
-                    )
-                    |> Array.of_list
-                    |> React.array}
-                  </ul>}
+                      </li>,
+                    Js.Array.filter(
+                      course =>
+                        Belt.Option.mapWithDefault(
+                          CourseInfo.endsAt(course),
+                          true,
+                          DateFns.isFuture,
+                        ),
+                      courses,
+                    ),
+                  )->React.array}
+                </ul>,
+                shrunk,
+              )}
             </li>
             <li>
               {topLink(

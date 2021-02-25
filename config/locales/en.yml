@@ -70,6 +70,110 @@ en:
         other: Issued %{count} times
         zero: Never issued
       no_certificates: You haven't created any certificates yet!
+    CourseEditor:
+      add_new_course: Add New Course
+      button_load_more: Load More Courses...
+      course_links:
+        download_reports: Download Reports
+        edit_curriculum: Edit Curriculum
+        manage_coaches: Manage Coaches
+        manage_students: Manage Students
+        view_as_student: View as Student
+      courses_fully_loaded_text: Showing all %{total_courses} courses
+      courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
+      edit_course_details: Edit Course Details
+      empty_courses: You don't have any courses!
+      filter:
+        input_hint: Or start typing to search by name...
+        input_label: Search
+        input_placeholder: Filter and Search courses by name
+        label:
+          name: Search by name
+          status: Status
+        status:
+          active: Active
+          archived: Archived
+          ended: Ended
+      quick_links: Quick Links
+      view_public_page: View public page
+    CourseEditor__Form:
+      actions:
+        archive_course:
+          button_text: Archive Course
+          label: Do you want to archive the course?
+        unarchive_course:
+          button_text: Unarchive Course
+          label: Do you want to unarchive the course?
+      alert:
+        archive_message: Are you sure you want to archive the course?
+        unarchive_message: Are you sure you want to unarchive the course?
+      button_text:
+        add_new_course: Add New Course
+        edit_course_details: Edit Course Details
+      course_about:
+        label: About
+        placeholder: Add more details about the course.
+      course_description:
+        error_message: A description is required (2-150 characters)
+        label: Course description
+        placeholder: Short description for this course
+      course_end_date:
+        error_message: A description is required (2-150 characters)
+        help: If specified, course will appear as closed to students on this date. Students will not be able to make any more submissions.
+        label: Course end date
+        placeholder: Short description for this course
+      course_name:
+        error_message: A name is required (2-50 characters)
+        label: Course name
+        placeholder: Type course name here
+      create_course: Create Course
+      enable_public_signup_label: Enable public signup for this course?
+      enable_public_signup_no: 'No'
+      enable_public_signup_yes: 'Yes'
+      feature_course_in_homepage_label: Feature course in school homepage?
+      feature_course_in_homepage_no: 'No'
+      feature_course_in_homepage_yes: 'Yes'
+      progression_behavior:
+        help: This only applies if your course has milestone targets that requires students to submit their work for review by coaches.
+        label: Progression Behavior
+        limited:
+          description_end: ' without getting submissions reviewed.'
+          description_start: Students can level up
+          once: once
+          thrice: thrice
+          title: Limited
+          twice: twice
+        strict:
+          description: Students can level up only after getting submissions reviewed, and passing.
+          title: Strict
+        unlimited:
+          description: Students can level up till the end of the course, without getting submissions reviewed.
+          title: Unlimited
+      tabs:
+        actions: Actions
+        details: Details
+        images: Images
+      update_course: Update Course
+    CourseEditor__ImagesForm:
+      button_text:
+        update_images: Update Images
+        updating: Updating...
+      cover_image:
+        error_message: must be a JPEG / PNG under 2 MB in size
+        help: The cover will be displayed at the top of all student pages within the course, and as the header of some course emails.
+        label: Cover Image
+      empty_image_label: Please choose an image file.
+      image_label:
+        end: . Click to replace the current image.
+        start: 'You have selected '
+      notification_success:
+        description: Images have been updated successfully.
+        title: Done!
+      replace_image_label: 'Please pick a file to replace '
+      thumbnail:
+        error_message: must be a JPEG / PNG under 2 MB in size
+        help: The thumbnail will be displayed on the homepage, and here in the admin courses list.
+        label: Thumbnail
     CoursesApply__Root:
       email_sent_message:
         description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
@@ -284,6 +388,7 @@ en:
           title: Search by title
         status:
           all: All
+          new: new
           read: Read
           unread: Unread
       mark_all_as_read_button: Mark All as Read
@@ -368,6 +473,24 @@ en:
     TopicsShow__SubscriptionManager:
       subscribe: Subscribe
       unsubscribe: Unsubscribe
+    UsersDashboard__Root:
+      certificates: Certificates
+      communities: Communities
+      course_locked_message: Your student profile for this course is locked, and cannot be updated.
+      cta:
+        course_ended: Course Ended
+        dropped_out: Dropped out
+        edit_curriculum: Edit Curriculum
+        leaderboard: Leaderboard
+        my_students: My Students
+        review_submissions: Review Submissions
+        view_certificate: View Certificate
+        view_course: View Course
+        view_curriculum: View Curriculum
+        visit_community: Visit Community
+      edit_profile: Edit Profile
+      empty_courses: You don't have any active courses right now.
+      my_courses: My Courses
     WebPushSubscriptionManager:
       notification_rejected: Permission Rejected
       notification_rejected_message: If you change your mind, click the lock icon to give your browser permission to send you desktop notifications.
@@ -447,6 +570,8 @@ en:
         founder: All Founders
         team: Team
   mutations:
+    archive_course:
+      success_notification: Course archived successfully
     auto_verify_submission:
       success_notification: Target has been marked as complete.
     create_target:
@@ -461,6 +586,8 @@ en:
       success_notification: This topic has been locked. No new replies will be accepted.
     revoke_issued_certificate:
       success_notification: Certificate revoked!
+    unarchive_course:
+      success_notification: Course unarchived successfully
     unlock_topic:
       success_notification: This topic has been unlocked. Community members can now post replies again.
     update_certificate:

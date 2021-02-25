@@ -43,12 +43,13 @@ module Layouts
 
     def courses
       if current_user.school_admin.present?
-        current_school.courses.as_json(only: %i[name id])
+        current_school.courses.live.as_json(only: %i[name id ends_at])
       elsif current_user.course_authors.any?
         current_school
           .courses
+          .live
           .where(id: current_user.course_authors.pluck(:course_id))
-          .as_json(only: %i[name id])
+          .as_json(only: %i[name id ends_at])
       end
     end
 

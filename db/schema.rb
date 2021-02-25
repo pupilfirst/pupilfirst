@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_23_190246) do
+ActiveRecord::Schema.define(version: 2021_02_25_054439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -203,6 +203,9 @@ ActiveRecord::Schema.define(version: 2020_11_23_190246) do
     t.boolean "can_connect", default: true
     t.string "progression_behavior", null: false
     t.integer "progression_limit"
+    t.datetime "archived_at"
+    t.string "processing_url"
+    t.jsonb "highlights", default: []
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 

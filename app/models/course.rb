@@ -27,7 +27,7 @@ class Course < ApplicationRecord
 
   scope :featured, -> { where(featured: true) }
 
-  normalize_attribute :about
+  normalize_attribute :about, :processing_url
 
   PROGRESSION_BEHAVIOR_LIMITED = -'Limited'
   PROGRESSION_BEHAVIOR_UNLIMITED = -'Unlimited'
@@ -36,11 +36,15 @@ class Course < ApplicationRecord
   VALID_PROGRESSION_BEHAVIORS = [
     PROGRESSION_BEHAVIOR_LIMITED,
     PROGRESSION_BEHAVIOR_UNLIMITED,
-    PROGRESSION_BEHAVIOR_STRICT,
+    PROGRESSION_BEHAVIOR_STRICT
   ].freeze
 
   validates :progression_behavior, inclusion: VALID_PROGRESSION_BEHAVIORS
-  validates :progression_limit, numericality: { greater_than: 0, allow_nil: true }
+  validates :progression_limit,
+            numericality: {
+              greater_than: 0,
+              allow_nil: true
+            }
 
   def short_name
     name[0..2].upcase.strip
@@ -56,13 +60,19 @@ class Course < ApplicationRecord
 
   def cover_url
     if cover.attached?
-      Rails.application.routes.url_helpers.rails_blob_path(cover, only_path: true)
+      Rails.application.routes.url_helpers.rails_blob_path(
+        cover,
+        only_path: true
+      )
     end
   end
 
   def thumbnail_url
     if thumbnail.attached?
-      Rails.application.routes.url_helpers.rails_blob_path(thumbnail, only_path: true)
+      Rails.application.routes.url_helpers.rails_blob_path(
+        thumbnail,
+        only_path: true
+      )
     end
   end
 

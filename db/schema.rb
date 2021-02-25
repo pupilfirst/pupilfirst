@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_23_190246) do
+ActiveRecord::Schema.define(version: 2021_02_25_092502) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -185,6 +185,7 @@ ActiveRecord::Schema.define(version: 2020_11_23_190246) do
     t.boolean "reviewed_only", default: false
     t.text "json_data"
     t.string "export_type"
+    t.boolean "include_inactive_students", default: false
     t.index ["course_id"], name: "index_course_exports_on_course_id"
     t.index ["user_id"], name: "index_course_exports_on_user_id"
   end

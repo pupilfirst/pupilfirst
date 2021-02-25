@@ -5,6 +5,7 @@ module CreateApplicantQuery = %graphql(
    mutation CreateApplicantMutation($courseId: ID!, $email: String!, $name: String!) {
     createApplicant(courseId: $courseId, email: $email, name: $name){
       success
+      redirectUrl
      }
    }
  `
@@ -17,7 +18,14 @@ let createApplicant = (courseId, email, name, setSaving, setViewEmailSent, event
   CreateApplicantQuery.make(~courseId, ~email, ~name, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    response["createApplicant"]["success"] ? setViewEmailSent() : setSaving(_ => false)
+    response["createApplicant"]["success"]
+      ? {
+          switch response["createApplicant"]["redirectUrl"] {
+          | Some(url) => DomUtils.redirect(url)
+          | None => setViewEmailSent()
+          }
+        }
+      : setSaving(_ => false)
     Js.Promise.resolve()
   })
   |> ignore

@@ -4,10 +4,10 @@ class ApplicantsResolver < ApplicationQuery
   property :course_id
   property :search
   property :tags
-  property :sort_by
+  property :sort_criterion
   property :sort_direction
 
-  def course_teams
+  def applicants
     if search.present?
       applicants_by_tag
         .where('name ILIKE ?', "%#{search}%")
@@ -29,7 +29,9 @@ class ApplicantsResolver < ApplicationQuery
 
   def applicants_by_tag
     course_applicants =
-      course.applicants.order("#{sort_by_string} #{sort_direction_string}")
+      course.applicants.order(
+        "#{sort_criterion_string} #{sort_direction_string}"
+      )
 
     if tags.present?
       course_applicants.joins(taggings: :tag).where(tags: { name: tags })
@@ -49,16 +51,16 @@ class ApplicantsResolver < ApplicationQuery
     end
   end
 
-  def sort_by_string
-    case sort_by
-    when 'name'
+  def sort_criterion_string
+    case sort_criterion
+    when 'Name'
       'name'
-    when 'created_at'
+    when 'CreatedAt'
       'created_at'
-    when 'updated_at'
+    when 'UpdatedAt'
       'updated_at'
     else
-      raise "#{sort_by} is not a valid sort criterion"
+      raise "#{sort_criterion} is not a valid sort criterion"
     end
   end
 end

@@ -160,7 +160,9 @@ module Types
       argument :course_id, ID, required: true
       argument :search, String, required: false
       argument :tags, [String], required: false
-      argument :sort_by, String, required: true
+      argument :sort_criterion,
+               Types::ApplicantSortCriterionType,
+               required: true
       argument :sort_direction, Types::SortDirectionType, required: true
     end
   end

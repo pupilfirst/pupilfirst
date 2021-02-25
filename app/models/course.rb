@@ -21,6 +21,7 @@ class Course < ApplicationRecord
   has_many :course_authors, dependent: :restrict_with_error
   has_many :webhook_deliveries, dependent: :destroy
   has_one :webhook_endpoint, dependent: :destroy
+  has_many :applicants, dependent: :destroy
 
   has_one_attached :thumbnail
   has_one_attached :cover
@@ -28,7 +29,8 @@ class Course < ApplicationRecord
   scope :featured, -> { where(featured: true) }
   scope :live, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
-  scope :access_active, -> { where('ends_at > ?', Time.now).or(where(ends_at: nil)) }
+  scope :access_active,
+        -> { where('ends_at > ?', Time.now).or(where(ends_at: nil)) }
   scope :active, -> { live.access_active }
 
   normalize_attribute :about, :processing_url

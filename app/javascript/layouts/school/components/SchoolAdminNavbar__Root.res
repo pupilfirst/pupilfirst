@@ -137,6 +137,12 @@ let secondaryNav = (courses, userRole, selectedOption) =>
               "Authors",
             ),
             secondaryNavOption(
+              "/school/courses/" ++ (courseId ++ "/applicants"),
+              courseSelection,
+              Applicants,
+              "Applicants",
+            ),
+            secondaryNavOption(
               "/school/courses/" ++ (courseId ++ "/certificates"),
               courseSelection,
               Certificates,

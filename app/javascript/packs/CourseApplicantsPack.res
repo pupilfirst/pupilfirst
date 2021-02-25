@@ -1,6 +1,6 @@
 let decodeProps = json => {
   open Json.Decode
-  (field("courseId", string, json), field("tags", array(string), json)->Belt.Set.String.fromArray)
+  (field("courseId", string, json), field("tags", array(string), json))
 }
 
 let (courseId, tags) =

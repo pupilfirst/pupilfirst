@@ -28,6 +28,21 @@ en:
       topic_stats_views: View
       topics_fully_loaded_text: Showing all %{total_topics} topics
       topics_partially_loaded_text: Showing %{loaded_topics_count} of %{total_topics} topics
+    CourseApplicants__Root:
+      applicants_fully_loaded_text: Showing all %{total_applicants} applicants
+      applicants_partially_loaded_text: Showing %{loaded_applicants_count} of %{total_applicants} applicants
+      button_load_more: Load More Applicants...
+      empty_applicants: You don't have any applicants!
+      filter:
+        input_label: Search
+        input_placeholder: Filter and Search Applicants by name
+        label:
+          search: Search by name or email
+          tag: Tag
+      sort_criterion:
+        created_at: Created At
+        name: Name
+        updated_at: Updated At
     CourseCertificates__CreateDrawer:
       certificate_base_image_label: Certificate Base Image
       certificate_base_image_placeholder: Select a base image for certificate

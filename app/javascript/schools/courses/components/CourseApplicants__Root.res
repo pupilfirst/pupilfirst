@@ -4,248 +4,418 @@ let t = I18n.t(~scope="components.CourseApplicants__Root")
 
 let str = React.string
 
-// type teamId = string
+module AppliocantsQuery = %graphql(
+  `
+  query ApplicantsQuery($courseId: ID!, $search: String, $after: String, $tags: [String!], $sortCriterion: ApplicantSortCriterion!, $sortDirection: SortDirection!) {
+    applicants(courseId: $courseId, tags: $tags, search: $search, first: 10, after: $after, sortCriterion: $sortCriterion,sortDirection: $sortDirection){
+      nodes {
+        name
+        email
+        tags
+        id
+      }
+      pageInfo{
+        endCursor,hasNextPage
+      }
+      totalCount
+    }
+  }
+  `
+)
 
-// type tags = array<string>
+type tags = array<string>
 
-// type formVisible =
-//   | None
-//   | CreateForm
-//   | UpdateForm(Student.t, teamId)
+module Item = {
+  type t = Applicant.t
+}
 
-// type state = {
-//   pagedTeams: Page.t,
-//   filter: Filter.t,
-//   selectedStudents: array<SelectedStudent.t>,
-//   formVisible: formVisible,
-//   tags: tags,
-//   loading: Loading.t,
-//   refreshTeams: bool,
-// }
+module Pagination = Pagination.Make(Item)
 
-// type action =
-//   | SelectStudent(SelectedStudent.t)
-//   | DeselectStudent(string)
-//   | UpdateFormVisible(formVisible)
-//   | UpdateStudentCertification(Student.t, Team.t)
-//   | UpdateTeams(Page.t)
-//   | UpdateFilter(Filter.t)
-//   | RefreshData(tags)
-//   | UpdateTeam(Team.t, tags)
-//   | SetLoading(Loading.t)
+type sortCriterion = [#CreatedAt | #UpdatedAt | #Name]
 
-// let handleTeamUpResponse = (send, _json) => {
-//   send(RefreshData([]))
-//   Notification.success("Success!", "Teams updated successfully")
-// }
+type sortDirection = [#Ascending | #Descending]
 
-// let handleErrorCB = () => ()
+type filter = {
+  search: option<string>,
+  tags: tags,
+  sortCriterion: sortCriterion,
+  sortDirection: sortDirection,
+}
 
-// let addTags = (oldtags, newTags) =>
-//   oldtags |> Array.append(newTags) |> ArrayUtils.sort_uniq(String.compare)
+type editorAction =
+  | Hidden
+  | ShowForm(option<string>)
 
-// let teamUp = (selectedStudents, responseCB) => {
-//   let studentIds = selectedStudents |> Array.map(s => s |> SelectedStudent.id)
-//   let payload = Js.Dict.empty()
-//   Js.Dict.set(payload, "authenticity_token", AuthenticityToken.fromHead() |> Js.Json.string)
-//   Js.Dict.set(
-//     payload,
-//     "founder_ids",
-//     studentIds |> {
-//       open Json.Encode
-//       array(string)
-//     },
-//   )
-//   let url = "/school/students/team_up"
-//   Api.create(url, payload, responseCB, handleErrorCB)
-// }
+type state = {
+  loading: Loading.t,
+  applicants: Pagination.t,
+  filterString: string,
+  filter: filter,
+  totalEntriesCount: int,
+  relaodApplicants: bool,
+}
 
-// let initialState = tags => {
-//   pagedTeams: Unloaded,
-//   selectedStudents: [],
-//   filter: Filter.make(),
-//   formVisible: None,
-//   tags: tags,
-//   loading: Loading.NotLoading,
-//   refreshTeams: false,
-// }
+type action =
+  | SetSearchString(string)
+  | UnsetSearchString
+  | ReloadApplicants
+  | UpdateFilterString(string)
+  | BeginLoadingMore
+  | BeginReloading
+  | SetTag(string)
+  | ClearTag(string)
+  | SetSortCriterion(sortCriterion)
+  | SetSortDirection(sortDirection)
+  | LoadApplicants(option<string>, bool, array<Applicant.t>, int)
 
-// let reducer = (state, action) =>
-//   switch action {
-//   | SelectStudent(selectedStudent) => {
-//       ...state,
-//       selectedStudents: state.selectedStudents |> Array.append([selectedStudent]),
-//     }
+let reducer = (state, action) =>
+  switch action {
+  | SetSearchString(string) => {
+      ...state,
+      filter: {
+        ...state.filter,
+        search: Some(string),
+      },
+      filterString: "",
+    }
+  | ReloadApplicants => {
+      ...state,
+      loading: Reloading,
+      relaodApplicants: !state.relaodApplicants,
+    }
+  | UnsetSearchString => {
+      ...state,
+      filterString: "",
+      filter: {
+        ...state.filter,
+        search: None,
+      },
+    }
+  | UpdateFilterString(filterString) => {...state, filterString: filterString}
+  | BeginLoadingMore => {...state, loading: LoadingMore}
+  | BeginReloading => {...state, loading: Reloading}
+  | SetTag(tag) => {
+      ...state,
+      filterString: "",
+      filter: {
+        ...state.filter,
+        tags: ArrayUtils.sort_uniq(String.compare, Js.Array.concat(state.filter.tags, [tag])),
+      },
+    }
+  | ClearTag(tag) => {
+      ...state,
+      filterString: "",
+      filter: {
+        ...state.filter,
+        tags: Js.Array.filter(t => t != tag, state.filter.tags),
+      },
+    }
+  | SetSortCriterion(sortCriterion) => {
+      ...state,
+      filterString: "",
+      filter: {
+        ...state.filter,
+        sortCriterion: sortCriterion,
+      },
+    }
+  | SetSortDirection(sortDirection) => {
+      ...state,
+      filterString: "",
+      filter: {
+        ...state.filter,
+        sortDirection: sortDirection,
+      },
+    }
+  | LoadApplicants(endCursor, hasNextPage, newApplicants, totalEntriesCount) =>
+    let applicants = switch state.loading {
+    | LoadingMore => Js.Array.concat(newApplicants, Pagination.toArray(state.applicants))
+    | Reloading => newApplicants
+    | NotLoading => newApplicants
+    }
 
-//   | DeselectStudent(id) => {
-//       ...state,
-//       selectedStudents: state.selectedStudents |> Js.Array.filter(s =>
-//         s |> SelectedStudent.id != id
-//       ),
-//     }
+    {
+      ...state,
+      applicants: Pagination.make(applicants, hasNextPage, endCursor),
+      loading: NotLoading,
+      totalEntriesCount: totalEntriesCount,
+    }
+  }
 
-//   | UpdateFormVisible(formVisible) => {...state, formVisible: formVisible}
-//   | UpdateTeams(pagedTeams) => {
-//       ...state,
-//       pagedTeams: pagedTeams,
-//       loading: Loading.NotLoading,
-//     }
-//   | UpdateFilter(filter) => {
-//       ...state,
-//       filter: filter,
-//       refreshTeams: !state.refreshTeams,
-//     }
-//   | RefreshData(tags) => {
-//       ...state,
-//       refreshTeams: !state.refreshTeams,
-//       tags: addTags(state.tags, tags),
-//       formVisible: None,
-//       selectedStudents: [],
-//     }
-//   | UpdateTeam(team, tags) => {
-//       ...state,
-//       pagedTeams: state.pagedTeams |> Page.updateTeam(team),
-//       tags: addTags(state.tags, tags),
-//       formVisible: None,
-//       selectedStudents: [],
-//     }
-//   | SetLoading(loading) => {...state, loading: loading}
-//   | UpdateStudentCertification(updatedStudent, team) =>
-//     let updatedTeam = Team.updateStudent(team, updatedStudent)
-//     let pagedTeams = Page.updateTeam(updatedTeam, state.pagedTeams)
-//     let teamId = Team.id(team)
-//     {...state, pagedTeams: pagedTeams, formVisible: UpdateForm(updatedStudent, teamId)}
-//   }
+let initialState = () => {
+  loading: NotLoading,
+  applicants: Unloaded,
+  filterString: "",
+  filter: {
+    search: None,
+    tags: [],
+    sortDirection: #Ascending,
+    sortCriterion: #UpdatedAt,
+  },
+  totalEntriesCount: 0,
+  relaodApplicants: false,
+}
 
-// let selectStudent = (send, student, team) => {
-//   let selectedStudent = SelectedStudent.make(
-//     ~name=student |> Student.name,
-//     ~id=student |> Student.id,
-//     ~teamId=team |> Team.id,
-//     ~avatarUrl=student.avatarUrl,
-//     ~levelId=team |> Team.levelId,
-//     ~teamSize=team |> Team.students |> Array.length,
-//   )
+module Sortable = {
+  type t = sortCriterion
 
-//   send(SelectStudent(selectedStudent))
-// }
+  let criterion = c =>
+    switch c {
+    | #Name => t("sort_criterion.name")
+    | #CreatedAt => t("sort_criterion.created_at")
+    | #UpdatedAt => t("sort_criterion.updated_at")
+    }
 
-// let deselectStudent = (send, studentId) => send(DeselectStudent(studentId))
+  let criterionType = c =>
+    switch c {
+    | #Name
+    | #CreatedAt
+    | #UpdatedAt =>
+      #String
+    }
+}
 
-// let updateFilter = (send, filter) => send(UpdateFilter(filter))
+module ApplicantsSorter = Sorter.Make(Sortable)
 
-// module Sortable = {
-//   type t = Filter.sortBy
+let applicantsSorter = (send, filter) =>
+  <div className="ml-2 flex-shrink-0">
+    <label className="block text-tiny uppercase font-semibold"> {"Filter by" |> str} </label>
+    <div className="mt-1">
+      <ApplicantsSorter
+        criteria=[#Name, #CreatedAt, #UpdatedAt]
+        selectedCriterion={filter.sortCriterion}
+        direction={filter.sortDirection}
+        onDirectionChange={sortDirection => send(SetSortDirection(sortDirection))}
+        onCriterionChange={sortCriterion => send(SetSortCriterion(sortCriterion))}
+      />
+    </div>
+  </div>
 
-//   let criterion = c =>
-//     switch c {
-//     | Filter.Name => t("sort_criterion_name")
-//     | CreatedAt => t("sort_criterion_last_created")
-//     | UpdatedAt => t("sort_criterion_last_updated")
-//     }
+module Selectable = {
+  type t =
+    | Tag(string)
+    | Search(string)
 
-//   let criterionType = c =>
-//     switch c {
-//     | Filter.Name => #String
-//     | CreatedAt
-//     | UpdatedAt =>
-//       #Number
-//     }
-// }
+  let label = s =>
+    switch s {
+    | Tag(_) => Some(t("filter.label.status"))
+    | Search(_) => Some(t("filter.label.search"))
+    }
 
-// module StudentsSorter = Sorter.Make(Sortable)
+  let value = s =>
+    switch s {
+    | Tag(tag) => tag
+    | Search(search) => search
+    }
 
-// let studentsSorter = (send, filter) =>
-//   <div className="ml-2 flex-shrink-0">
-//     <label className="block text-tiny uppercase font-semibold">
-//       {t("sort_criterion_label") |> str}
-//     </label>
-//     <div className="mt-1">
-//       <StudentsSorter
-//         criteria=[Filter.Name, CreatedAt, UpdatedAt]
-//         selectedCriterion={Filter.sortBy(filter)}
-//         direction={Filter.sortDirection(filter)}
-//         onDirectionChange={sortDirection =>
-//           updateFilter(send, {...filter, sortDirection: sortDirection})}
-//         onCriterionChange={sortBy => updateFilter(send, {...filter, sortBy: sortBy})}
-//       />
-//     </div>
-//   </div>
+  let searchString = s => value(s)
 
-// let updateTeams = (send, pagedTeams) => send(UpdateTeams(pagedTeams))
+  let color = t =>
+    switch t {
+    | Tag(_) => "gray"
+    | Search(_) => "blue"
+    }
 
-// let showEditForm = (send, student, teamId) => send(UpdateFormVisible(UpdateForm(student, teamId)))
+  let search = search => Search(search)
+  let tag = tag => Tag(tag)
+}
 
-// let submitForm = (send, tagsToApply) => send(RefreshData(tagsToApply))
+module Multiselect = MultiselectDropdown.Make(Selectable)
 
-// let updateForm = (send, tagsToApply, team) =>
-//   switch team {
-//   | Some(t) => send(UpdateTeam(t, tagsToApply))
-//   | None => send(RefreshData(tagsToApply))
-//   }
+let unselected = (state, tags) => {
+  let trimmedFilterString = state.filterString->String.trim
+  let search = trimmedFilterString == "" ? [] : [Selectable.search(trimmedFilterString)]
+  let tags = Js.Array.map(s => Selectable.tag(s), tags)
 
-// let reloadTeams = (send, ()) => send(RefreshData([]))
+  Js.Array.concat(search, tags)
+}
 
-// let setLoading = (send, loading) => send(SetLoading(loading))
+let selected = state => {
+  let tags = Js.Array.map(s => Selectable.tag(s), state.filter.tags)
+
+  let selectedSearchString = OptionUtils.mapWithDefault(
+    search => [Selectable.search(search)],
+    [],
+    state.filter.search,
+  )
+
+  Js.Array.concat(tags, selectedSearchString)
+}
+
+let onSelectFilter = (send, selectable) =>
+  switch selectable {
+  | Selectable.Tag(t) => send(SetTag(t))
+  | Search(n) => send(SetSearchString(n))
+  }
+
+let onDeselectFilter = (send, selectable) =>
+  switch selectable {
+  | Selectable.Tag(t) => send(ClearTag(t))
+  | Search(_title) => send(UnsetSearchString)
+  }
+
+let loadApplicants = (courseId, state, cursor, send) => {
+  AppliocantsQuery.make(
+    ~tags=?Some(state.filter.tags),
+    ~sortDirection=state.filter.sortDirection,
+    ~sortCriterion=state.filter.sortCriterion,
+    ~after=?cursor,
+    ~search=?state.filter.search,
+    ~courseId,
+    (),
+  )
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    let applicants = Js.Array.map(
+      rawCourse => Applicant.makeFromJS(rawCourse),
+      response["applicants"]["nodes"],
+    )
+    send(
+      LoadApplicants(
+        response["applicants"]["pageInfo"]["endCursor"],
+        response["applicants"]["pageInfo"]["hasNextPage"],
+        applicants,
+        response["applicants"]["totalCount"],
+      ),
+    )
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
+  <div className="pt-8 pb-4 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
+    {(
+      totoalNotificationsCount == loadedNotificaionsCount
+        ? t(
+            ~variables=[("total_applicants", string_of_int(totoalNotificationsCount))],
+            "applicants_fully_loaded_text",
+          )
+        : t(
+            ~variables=[
+              ("total_applicants", string_of_int(totoalNotificationsCount)),
+              ("loaded_applicants_count", string_of_int(loadedNotificaionsCount)),
+            ],
+            "applicants_partially_loaded_text",
+          )
+    )->str}
+  </div>
+
+let showApplicant = applicant => {
+  <div
+    className="flex flex-1 flex-col py-4 px-4 hover:bg-gray-100 bg-white border rounded"
+    key={Applicant.id(applicant)}>
+    <div className="flex w-full items-center justify-between">
+      <div className="text-black font-semibold inline-block ">
+        {Applicant.name(applicant)->str}
+      </div>
+      <div className="text-xs"> {Applicant.email(applicant)->str} </div>
+    </div>
+    <div className="mt-1 space-x-2">
+      {Js.Array.map(
+        a =>
+          <span key=a className="p-1 text-xs bg-gray-100 rounded shadow rounded"> {str(a)} </span>,
+        Applicant.tags(applicant),
+      )->React.array}
+    </div>
+  </div>
+}
+
+let showApplicants = (applicants, state) => {
+  <div className="mt-8">
+    {ArrayUtils.isEmpty(applicants)
+      ? <div
+          className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
+          <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
+          <h4 className="mt-3 text-base md:text-lg text-center font-semibold">
+            {t("empty_applicants")->str}
+          </h4>
+        </div>
+      : <div className="flex flex-col space-y-2 flex-wrap">
+          {Js.Array.map(applicant => showApplicant(applicant), applicants)->React.array}
+        </div>}
+    {entriesLoadedData(state.totalEntriesCount, Array.length(applicants))}
+  </div>
+}
 
 @react.component
 let make = (~courseId, ~tags) => {
-  // let (state, send) = React.useReducer(reducer, initialState(studentTags))
+  let (state, send) = React.useReducer(reducer, initialState())
+  React.useEffect2(() => {
+    loadApplicants(courseId, state, None, send)
+    None
+  }, (state.filter, state.relaodApplicants))
 
   <div className="flex flex-1 flex-col">
-    // {switch state.formVisible {
-    // | None => ReasonReact.null
-    // | CreateForm =>
-    //   <SchoolAdmin__EditorDrawer closeDrawerCB={() => send(UpdateFormVisible(None))}>
-    //     <StudentsEditor__CreateForm courseId submitFormCB={submitForm(send)} teamTags=state.tags />
-    //   </SchoolAdmin__EditorDrawer>
-
-    // | UpdateForm(student, teamId) =>
-    //   let team = teamId |> Team.unsafeFind(state.pagedTeams |> Page.teams, "Root")
-    //   let courseCoaches =
-    //     schoolCoaches |> Js.Array.filter(coach => courseCoachIds |> Array.mem(Coach.id(coach)))
-    //   <SchoolAdmin__EditorDrawer closeDrawerCB={() => send(UpdateFormVisible(None))}>
-    //     <StudentsEditor__UpdateForm
-    //       student
-    //       team
-    //       teamTags=state.tags
-    //       currentUserName
-    //       courseCoaches
-    //       certificates
-    //       updateFormCB={updateForm(send)}
-    //       reloadTeamsCB={reloadTeams(send)}
-    //       updateStudentCertificationCB={updatedStudent =>
-    //         send(UpdateStudentCertification(updatedStudent, team))}
-    //     />
-    //   </SchoolAdmin__EditorDrawer>
-    // }}
     <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
       <div className="bg-gray-100 sticky top-0 py-3">
         <div className="border rounded-lg mx-auto max-w-3xl bg-white ">
           <div>
             <div className="flex w-full items-start p-4">
-              {//   <StudentsEditor__Search
-              //     filter=state.filter updateFilterCB={updateFilter(send)} tags=state.tags levels
-              //   />
-              //   {studentsSorter(send, state.filter)}
-              "search"->str}
+              <div className="w-full">
+                <label
+                  htmlFor="search_notifcations"
+                  className="block text-tiny font-semibold uppercase pl-px text-left">
+                  {t("filter.input_label")->str}
+                </label>
+                <Multiselect
+                  id="search_applicants"
+                  unselected={unselected(state, tags)}
+                  selected={selected(state)}
+                  onSelect={onSelectFilter(send)}
+                  onDeselect={onDeselectFilter(send)}
+                  value=state.filterString
+                  onChange={filterString => send(UpdateFilterString(filterString))}
+                  placeholder={t("filter.input_placeholder")}
+                />
+              </div>
+              {applicantsSorter(send, state.filter)}
             </div>
           </div>
         </div>
       </div>
-      <div> {"lsit"->str} </div>
+      <div id="applicants" className="pb-4 mx-auto max-w-3xl w-full">
+        {switch state.applicants {
+        | Unloaded =>
+          <div className="mt-8">
+            {SkeletonLoading.multiple(~count=4, ~element=SkeletonLoading.card())}
+          </div>
+        | PartiallyLoaded(applicants, cursor) =>
+          <div>
+            {showApplicants(applicants, state)}
+            {switch state.loading {
+            | LoadingMore =>
+              <div className="">
+                {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.card())}
+              </div>
+            | NotLoading =>
+              <div className="px-5 pb-6">
+                <button
+                  className="btn btn-primary-ghost cursor-pointer w-full"
+                  onClick={_ => {
+                    send(BeginLoadingMore)
+                    loadApplicants(courseId, state, Some(cursor), send)
+                  }}>
+                  {t("button_load_more")->str}
+                </button>
+              </div>
+            | Reloading => React.null
+            }}
+          </div>
+        | FullyLoaded(applicants) => <div> {showApplicants(applicants, state)} </div>
+        }}
+      </div>
     </div>
-    // {
-    //   let loading = switch state.pagedTeams {
-    //   | Unloaded => false
-    //   | _ =>
-    //     switch state.loading {
-    //     | NotLoading => false
-    //     | Reloading => true
-    //     | LoadingMore => false
-    //     }
-    //   }
-    //   <LoadingSpinner loading />
-    // }
+    {
+      let loading = switch state.applicants {
+      | Unloaded => false
+      | _ =>
+        switch state.loading {
+        | NotLoading => false
+        | Reloading => true
+        | LoadingMore => false
+        }
+      }
+      <LoadingSpinner loading />
+    }
   </div>
 }

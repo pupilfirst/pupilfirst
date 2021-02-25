@@ -21,11 +21,10 @@ class CreateQuizSubmissionMutator < ApplicationQuery
         students.map do |student|
           student.timeline_event_owners.create!(timeline_event: submission, latest: true)
         end
-
-        TimelineEvents::AfterMarkingAsCompleteJob.perform_later(submission)
       end
     end
 
+    TimelineEvents::AfterMarkingAsCompleteJob.perform_later(submission)
     publish(course, :submission_automatically_verified, current_user, submission)
 
     submission

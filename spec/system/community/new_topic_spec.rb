@@ -23,8 +23,14 @@ feature 'Topic creator', js: true do
     sign_in_user(student.user, referrer: new_topic_community_path(community))
     fill_in('Title', with: 'foo')
 
-    expect(page).to have_link(topic_1.title, href: "/topics/#{topic_1.id}/foo-bar")
-    expect(page).to have_link(topic_2.title, href: "/topics/#{topic_2.id}/foobar-foobaz")
+    expect(page).to have_link(
+      topic_1.title,
+      href: "/topics/#{topic_1.id}/foo-bar"
+    )
+    expect(page).to have_link(
+      topic_2.title,
+      href: "/topics/#{topic_2.id}/foobar-foobaz"
+    )
     expect(page).not_to have_text(topic_3.title)
 
     fill_in('Title', with: ' ')
@@ -34,7 +40,10 @@ feature 'Topic creator', js: true do
 
     fill_in('Title', with: 'BAZ')
 
-    expect(page).to have_link(topic_3.title, href: "/topics/#{topic_3.id}/baz-bar")
+    expect(page).to have_link(
+      topic_3.title,
+      href: "/topics/#{topic_3.id}/baz-bar"
+    )
     expect(page).not_to have_text(topic_1.title)
     expect(page).not_to have_text(topic_2.title)
   end
@@ -69,10 +78,12 @@ feature 'Topic creator', js: true do
 
     before do
       create :faculty_course_enrollment, faculty: coach_1, course: course
-      create :faculty_startup_enrollment, faculty: coach_2, startup: student.startup
+      create :faculty_startup_enrollment,
+             faculty: coach_2,
+             startup: student.startup
     end
 
-    scenario 'when user creates a new topic' do
+    scenario 'user creates a new topic that automatically subscribes personal coaches' do
       sign_in_user(student.user, referrer: new_topic_community_path(community))
 
       topic_title = Faker::Lorem.sentence
@@ -85,7 +96,10 @@ feature 'Topic creator', js: true do
       new_topic = community.topics.find_by(title: topic_title)
 
       # Personal coaches must already be subscribed to the new topic.
-      expect(new_topic.subscribers.pluck(:id)).to contain_exactly(coach_2.user.id, student.user.id)
+      expect(new_topic.subscribers.pluck(:id)).to contain_exactly(
+        coach_2.user.id,
+        student.user.id
+      )
 
       # Notifications should have been created for this new topic.
       expect(Notification.last.notifiable).to eq(new_topic)

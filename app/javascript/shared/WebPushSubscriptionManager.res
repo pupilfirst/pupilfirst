@@ -116,7 +116,6 @@ let createSubscription = (send, event) => {
     Js.Promise.resolve()
   }) |> Js.Promise.catch(_ => {
     send(ClearSaving)
-    Js.log("here i catch you")
     handleNotificationBlock()
     Js.Promise.resolve()
   }) |> ignore

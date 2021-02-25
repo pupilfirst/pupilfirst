@@ -77,7 +77,7 @@ You can move individual students _out_ of a team by selecting just one and using
 
 ## Importing students in bulk
 
-To add new students in bulk to a course, click the _Bulk Import_ button at the top right of the list. The form that opens up allows you to a select a CSV file with list of students to be onboarded to the course. Besides the file input you can also download a template file to list the students with required details. Refer to [add new students form](/students?id=adding-new-students) for details on each field. Here are a few ground rules for the data that you populate in the import sheet:
+To add new students in bulk to a course, click the _Bulk Import_ button at the top right of the list. The form that opens up allows you to a select a CSV file with list of students to be onboarded to the course. You can use the [template file](/files/student_import_sample.csv ":ignore") available in the form to list the students with required details. Refer to [add new students form](/students?id=adding-new-students) for details on each field. Here are a few ground rules for the data that you populate in the import sheet:
 
 1. Name and email are mandatory columns and should have valid data. Name can have a maximum of 250 characters.
 2. Title, affiliation and tags are optional similar to the the [add new students form](/students?id=adding-new-students). A maximum of five tags are allowed per student and should have a character limit of 50. Title and affiliation, each has a character limit of 250.

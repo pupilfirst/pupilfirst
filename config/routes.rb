@@ -56,6 +56,7 @@ Rails.application.routes.draw do
 
     resources :courses, only: %i[index] do
       member do
+        get 'applicants'
         get 'curriculum'
         get 'exports'
         get 'authors'

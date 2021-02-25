@@ -12,6 +12,7 @@ type courseSelection =
   | CourseExports
   | Authors
   | Certificates
+  | Applicants
 
 type settingsSelection =
   | Customization
@@ -198,6 +199,10 @@ let make = (
     } => (SelectedCourse(courseId, Curriculum), true)
   | list{"school", "courses", courseId, "exports"} => (
       SelectedCourse(courseId, CourseExports),
+      true,
+    )
+  | list{"school", "courses", courseId, "applicants"} => (
+      SelectedCourse(courseId, Applicants),
       true,
     )
   | list{"school", "courses", courseId, "authors"} => (SelectedCourse(courseId, Authors), true)

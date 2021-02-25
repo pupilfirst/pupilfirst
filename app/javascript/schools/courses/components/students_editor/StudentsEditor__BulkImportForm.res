@@ -284,17 +284,23 @@ let make = (~courseId) => {
         </h5>
         <DisablingCover disabled={state.saving} message="Processing...">
           <div className="mt-5">
-            <div>
-              <label className="tracking-wide text-xs font-semibold" htmlFor="csv-file-input">
-                {t("csv_file_input_label")->str}
-              </label>
-              <HelpIcon
-                className="ml-2"
-                link="https://docs.pupilfirst.com/#/students?id=importing-students-in-bulk">
-                {str(
-                  "This file will be used to import students in bulk. Check the sample file for the required format.",
-                )}
-              </HelpIcon>
+            <div className="flex justify-between items-center text-center">
+              <div>
+                <label className="tracking-wide text-xs font-semibold" htmlFor="csv-file-input">
+                  {t("csv_file_input_label")->str}
+                </label>
+                <HelpIcon
+                  className="ml-2"
+                  link="https://docs.pupilfirst.com/#/students?id=importing-students-in-bulk">
+                  {str(
+                    "This file will be used to import students in bulk. Check the sample file for the required format.",
+                  )}
+                </HelpIcon>
+              </div>
+              <div className="text-primary-500 underline text-xs font-semibold">
+                <PfIcon className="if i-download-regular if-fw mr-2" />
+                <a href="/student_import_sample.csv"> {"Download an example .csv file" |> str} </a>
+              </div>
             </div>
             <CSVReader
               label=""
@@ -335,9 +341,6 @@ let make = (~courseId) => {
             {errorTabulation(state.csvData, state.fileInvalid)}
           </div>
         </DisablingCover>
-      </div>
-      <div className="max-w-2xl p-6 mx-auto">
-        <a href="/student_import_sample.csv"> {"Download an example .csv file" |> str} </a>
       </div>
       <div className="max-w-2xl p-6 mx-auto">
         <button disabled={saveDisabled(state)} className="w-auto btn btn-large btn-primary">

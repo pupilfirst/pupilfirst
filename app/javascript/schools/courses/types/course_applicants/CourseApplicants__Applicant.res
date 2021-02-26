@@ -27,3 +27,13 @@ let makeFromJS = applicantDetails =>
     ~tags=applicantDetails["tags"],
     ~email=applicantDetails["email"],
   )
+
+let decode = json => {
+  open Json.Decode
+  {
+    id: field("id", string, json),
+    name: field("name", string, json),
+    email: field("email", string, json),
+    tags: field("tags", array(string), json),
+  }
+}

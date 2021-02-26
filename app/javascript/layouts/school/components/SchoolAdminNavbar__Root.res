@@ -213,6 +213,10 @@ let make = (
       SelectedCourse(courseId, Applicants),
       true,
     )
+  | list{"school", "courses", courseId, "applicants", _applicantId} => (
+      SelectedCourse(courseId, Applicants),
+      true,
+    )
   | list{"school", "courses", courseId, "authors"} => (SelectedCourse(courseId, Authors), true)
   | list{"school", "courses", courseId, "authors", _authorId} => (
       SelectedCourse(courseId, Authors),

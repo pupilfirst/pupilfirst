@@ -105,6 +105,7 @@ Rails
           post 'attach_images'
         end
 
+        resources :applicants, only: :show
         resources :authors, only: %w[show new]
 
         resources :targets, only: [] do

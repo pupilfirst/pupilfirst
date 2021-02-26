@@ -194,7 +194,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
       </label>
       <span className="text-xs ml-1"> {"(optional)" |> str} </span>
     </div>
-    <StudentsEditor__SearchableTagList
+    <School__SearchableTagList
       unselectedTags={teamTags |> Js.Array.filter(tag => !(state.tagsToApply |> Array.mem(tag)))}
       selectedTags=state.tagsToApply
       addTagCB={tag => send(AddTag(tag))}

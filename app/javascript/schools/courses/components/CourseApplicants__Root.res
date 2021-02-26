@@ -44,7 +44,7 @@ type filter = {
 
 type editorAction =
   | Hidden
-  | ShowForm(option<string>)
+  | ShowForm(string)
 
 type state = {
   loading: Loading.t,
@@ -300,10 +300,11 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
     )->str}
   </div>
 
-let showApplicant = applicant => {
-  <div
-    className="flex flex-1 flex-col py-4 px-4 hover:bg-gray-100 bg-white border rounded"
-    key={Applicant.id(applicant)}>
+let showApplicant = (baseUrl, applicant) => {
+  <button
+    className="flex flex-1 flex-col py-4 px-4 hover:bg-gray-100 bg-white border rounded cursor-pointer"
+    key={Applicant.id(applicant)}
+    onClick={_ => ReasonReactRouter.push(baseUrl ++ Applicant.id(applicant))}>
     <div className="flex w-full items-center justify-between">
       <div className="text-black font-semibold inline-block ">
         {Applicant.name(applicant)->str}
@@ -317,10 +318,10 @@ let showApplicant = applicant => {
         Applicant.tags(applicant),
       )->React.array}
     </div>
-  </div>
+  </button>
 }
 
-let showApplicants = (applicants, state) => {
+let showApplicants = (baseUrl, applicants, state) => {
   <div className="mt-8">
     {ArrayUtils.isEmpty(applicants)
       ? <div
@@ -331,15 +332,28 @@ let showApplicants = (applicants, state) => {
           </h4>
         </div>
       : <div className="flex flex-col space-y-2 flex-wrap">
-          {Js.Array.map(applicant => showApplicant(applicant), applicants)->React.array}
+          {Js.Array.map(applicant => showApplicant(baseUrl, applicant), applicants)->React.array}
         </div>}
     {entriesLoadedData(state.totalEntriesCount, Array.length(applicants))}
   </div>
 }
 
 @react.component
-let make = (~courseId, ~tags) => {
+let make = (~courseId, ~tags, ~selectedApplicant) => {
   let (state, send) = React.useReducer(reducer, initialState())
+  let baseUrl = "/school/courses/" ++ courseId ++ "/applicants/"
+  let url = ReasonReactRouter.useUrl()
+
+  let editorAction = switch url.path {
+  | list{"school", "courses", _courseId, "applicants", applicantId, ..._} =>
+    switch StringUtils.paramToId(applicantId) {
+    | Some(id) => ShowForm(id)
+    | None => Hidden
+    }
+
+  | _ => Hidden
+  }
+
   React.useEffect2(() => {
     loadApplicants(courseId, state, None, send)
     None
@@ -347,6 +361,24 @@ let make = (~courseId, ~tags) => {
 
   <div className="flex flex-1 flex-col">
     <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
+      {switch (state.applicants, editorAction) {
+      | (Unloaded, _)
+      | (_, Hidden) => React.null
+      | (_, ShowForm(id)) => {
+          let applicant = ArrayUtils.unsafeFind(
+            c => Applicant.id(c) == id,
+            "Unable to find applicant with ID: " ++ id ++ " in CourseApplicants__Root",
+            Js.Array.concat(
+              Belt.Option.mapWithDefault(selectedApplicant, [], s => [s]),
+              Pagination.toArray(state.applicants),
+            ),
+          )
+          <SchoolAdmin__EditorDrawer2
+            closeDrawerCB={_ => ReasonReactRouter.push("/school/courses/")}>
+            <CourseApplicants__EditForm applicant updateApplicantCB={_ => ()} tags />
+          </SchoolAdmin__EditorDrawer2>
+        }
+      }}
       <div className="bg-gray-100 sticky top-0 py-3">
         <div className="border rounded-lg mx-auto max-w-3xl bg-white ">
           <div>
@@ -381,7 +413,7 @@ let make = (~courseId, ~tags) => {
           </div>
         | PartiallyLoaded(applicants, cursor) =>
           <div>
-            {showApplicants(applicants, state)}
+            {showApplicants(baseUrl, applicants, state)}
             {switch state.loading {
             | LoadingMore =>
               <div className="">
@@ -401,7 +433,7 @@ let make = (~courseId, ~tags) => {
             | Reloading => React.null
             }}
           </div>
-        | FullyLoaded(applicants) => <div> {showApplicants(applicants, state)} </div>
+        | FullyLoaded(applicants) => <div> {showApplicants(baseUrl, applicants, state)} </div>
         }}
       </div>
     </div>

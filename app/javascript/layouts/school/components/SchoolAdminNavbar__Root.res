@@ -316,7 +316,7 @@ let make = (
         <div className="relative">
           <Notifications__Root
             wrapperClasses="w-full"
-            iconClasses="school-admin-navbar__notifications-unread-bullet absolute block h-3 w-3 rounded-full border-2 border-primary-800 bg-red-500"
+            iconClasses="school-admin-navbar__notifications-unread-bullet"
             buttonClasses="flex relative text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center w-full"
             title=?{shrunk ? None : Some("Notifications")}
             icon="fas fa-bell fa-fw text-lg mr-2"

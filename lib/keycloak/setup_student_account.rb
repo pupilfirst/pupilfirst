@@ -1,10 +1,16 @@
 module Keycloak
   class SetupStudentAccount
+    class Job < ApplicationJob
+      def perform(payload)
+        SetupStudentAccount.new.call(**payload.slice(:actor_id))
+      end
+    end
+
     def initialize(keycloak_client = Rails.configuration.keycloak_client)
       @keycloak_client = keycloak_client
     end
 
-    def call(actor_id:, **_)
+    def call(actor_id:)
       student = User.find(actor_id)
       create_keycloak_user(student.email, student.name)
     end

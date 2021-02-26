@@ -1,6 +1,6 @@
 {
   :student_added => [
-    Keycloak::SetupStudentAccount.new
+    ->(payload) { Keycloak::SetupStudentAccount::Job.perform_later(payload) }
   ],
 }
 .each do |event_type, subscribers|

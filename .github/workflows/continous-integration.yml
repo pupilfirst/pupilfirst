@@ -115,3 +115,12 @@ jobs:
           path: |
             tmp/capybara
             log/test.log
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_USERNAME: lms
+          SLACK_ICON_EMOJI: :coffee:
+          SLACK_TITLE: ${{ job.status == 'success' && 'Build OK' || job.status == 'cancelled' && 'Build CANCELLED' || 'Build FAILED' }}
+          SLACK_COLOR: ${{ job.status == 'success' && 'good' || job.status == 'cancelled' && '#808080' || 'danger' }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          MSG_MINIMAL: true

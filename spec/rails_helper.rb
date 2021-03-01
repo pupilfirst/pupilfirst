@@ -23,6 +23,8 @@ WebMock.disable_net_connect!(
     'chromedriver.storage.googleapis.com'
   ]
 )
+WebMock.stub_request(:any, /.*data.xAPI.statements/)
+  .to_return(body: '{}', status: 200, headers: {content_type: 'application/json'})
 
 # Let's spec emails.
 require 'capybara/email/rspec'

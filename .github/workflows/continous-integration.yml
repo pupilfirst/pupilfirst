@@ -112,6 +112,7 @@ jobs:
             tmp/capybara
             log/test.log
       - name: Slack Notification
+        if: ${{ always() }}
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_USERNAME: lms

@@ -174,3 +174,6 @@ end
 
 # Faker should use India as locale.
 Faker::Config.locale = 'en-IND'
+
+# Avoid any requests to LRS in tests
+PupilfirstXapi.lrs = ->(statement) { statement && ['XAPI:', statement.actor.name, statement.verb.display.values, statement.object.definition.name.values].flatten.join(' ') }

@@ -36,25 +36,23 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
     } else {
       []
     }
-    let searchResults = Js.Array.map(
-      tag =>
+
+    let searchResults =
+      unselectedTags
+      |> Js.Array.filter(tag =>
+        tag |> String.lowercase_ascii |> Js.String.includes(searchString |> String.lowercase_ascii)
+      )
+      |> ArrayUtils.copyAndSort(String.compare)
+      |> Js.Array.map(tag =>
         <span
           title={"Pick tag " ++ tag}
           key=tag
           className="inline-flex cursor-pointer items-center bg-gray-200 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden"
           onMouseDown={_e => handleClick(tag, send, addTagCB)}>
           {tag->str}
-        </span>,
-      ArrayUtils.copyAndSort(
-        String.compare,
-        Js.Array.filter(
-          tag =>
-            tag->String.lowercase_ascii->Js.String.includes(searchString->String.lowercase_ascii),
-          unselectedTags,
-        ),
-      ),
-    )
-    Js.Array.concat(initial, searchResults)
+        </span>
+      )
+    initial->Array.append(searchResults)
   }
 }
 

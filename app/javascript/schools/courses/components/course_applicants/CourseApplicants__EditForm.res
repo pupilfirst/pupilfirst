@@ -1,90 +1,107 @@
 open CourseApplicants__Types
 
 type state = {
-  name: string,
-  email: string,
   title: string,
   affiliation: string,
   hasNameError: bool,
   hasEmailError: bool,
   tagsToApply: array<string>,
-  teamName: string,
+  accessEndsAt: option<Js.Date.t>,
+  saving: bool,
+  notifyStudent: bool,
 }
 
 type action =
-  | UpdateName(string, bool)
-  | UpdateEmail(string, bool)
   | UpdateTitle(string)
-  | UpdateTeamName(string)
   | UpdateAffiliation(string)
-  | ResetForm
   | AddTag(string)
   | RemoveTag(string)
+  | UpdateAccessEndsAt(option<Js.Date.t>)
+  | StartSaving
+  | FailSaving
+  | ToggleNotifyStudent
+
+module CreateStudentFromApplicant = %graphql(
+  `
+  mutation CreateStudentFromApplicant($applicantId: ID!, $notifyStudent: Boolean!, $accessEndsAt: ISO8601DateTime, $title: String, $affiliation: String, $tags: [String!]!) {
+    createStudentFromApplicant(applicantId: $applicantId, notifyStudent: $notifyStudent, accessEndsAt: $accessEndsAt, title: $title, affiliation: $affiliation, tags: $tags) {
+      success
+    }
+  }
+  `
+)
+
+let updateCourse = (state, send, updateApplicantCB, applicant) => {
+  send(StartSaving)
+
+  let updateCourseQuery = CreateStudentFromApplicant.make(
+    ~applicantId=Applicant.id(applicant),
+    ~accessEndsAt=?state.accessEndsAt->Belt.Option.map(DateFns.encodeISO),
+    ~title=state.title,
+    ~affiliation=state.affiliation,
+    ~notifyStudent=state.notifyStudent,
+    ~tags=state.tagsToApply,
+    (),
+  )
+
+  updateCourseQuery |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
+    result["createStudentFromApplicant"]["success"] ? updateApplicantCB() : send(FailSaving)
+    Js.Promise.resolve()
+  }) |> Js.Promise.catch(error => {
+    Js.log(error)
+    send(FailSaving)
+    Js.Promise.resolve()
+  }) |> ignore
+}
 
 let str = React.string
 
-let updateName = (send, name) => {
-  let hasError = name |> String.length < 2
-  send(UpdateName(name, hasError))
-}
-
-let updateEmail = (send, email) => {
-  let regex = %re(`/.+@.+\\..+/i`)
-  let hasError = !Js.Re.test_(regex, email)
-  send(UpdateEmail(email, hasError))
-}
-
-let formInvalid = state =>
-  state.name == "" || (state.email == "" || (state.hasNameError || state.hasEmailError))
-
 let initialState = applicant => {
-  name: Applicant.name(applicant),
-  email: Applicant.email(applicant),
   title: "",
   affiliation: "",
   hasNameError: false,
   hasEmailError: false,
   tagsToApply: Applicant.tags(applicant),
-  teamName: "",
+  accessEndsAt: None,
+  notifyStudent: false,
+  saving: false,
 }
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateName(name, hasNameError) => {...state, name: name, hasNameError: hasNameError}
-  | UpdateEmail(email, hasEmailError) => {...state, email: email, hasEmailError: hasEmailError}
   | UpdateTitle(title) => {...state, title: title}
-  | UpdateTeamName(teamName) => {...state, teamName: teamName}
   | UpdateAffiliation(affiliation) => {...state, affiliation: affiliation}
-  | ResetForm => {
-      ...state,
-      name: "",
-      email: "",
-      hasNameError: false,
-      hasEmailError: false,
-    }
   | AddTag(tag) => {
       ...state,
-      tagsToApply: state.tagsToApply |> Array.append([tag]),
+      tagsToApply: Js.Array.concat([tag], state.tagsToApply),
     }
   | RemoveTag(tag) => {
       ...state,
-      tagsToApply: state.tagsToApply |> Js.Array.filter(t => t != tag),
+      tagsToApply: Js.Array.filter(t => t != tag, state.tagsToApply),
     }
+  | UpdateAccessEndsAt(accessEndsAt) => {...state, accessEndsAt: accessEndsAt}
+  | StartSaving => {...state, saving: true}
+  | FailSaving => {...state, saving: false}
+  | ToggleNotifyStudent => {...state, notifyStudent: !state.notifyStudent}
   }
 
 @react.component
 let make = (~applicant, ~tags, ~updateApplicantCB) => {
   let (state, send) = React.useReducer(reducer, initialState(applicant))
+  Js.log(tags)
   <div className="relative">
     <div className="mx-auto bg-white">
       <div className="max-w-2xl mx-auto">
+        <div className="mt-5">
+          <h5 className="uppercase text-center"> {"Add as a student"->str} </h5>
+        </div>
         <div className="mt-5">
           <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="name">
             {"Name" |> str}
           </label>
           <input
-            value=state.name
-            onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
+            value={Applicant.name(applicant)}
+            disabled=true
             className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="name"
             type_="text"
@@ -97,8 +114,8 @@ let make = (~applicant, ~tags, ~updateApplicantCB) => {
             {"Email" |> str}
           </label>
           <input
-            value=state.email
-            onChange={event => updateEmail(send, ReactEvent.Form.target(event)["value"])}
+            value={Applicant.email(applicant)}
+            disabled=true
             className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             id="email"
             type_="email"
@@ -139,23 +156,19 @@ let make = (~applicant, ~tags, ~updateApplicantCB) => {
           />
         </div>
         <div className="mt-5">
-          <label
-            className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
-            htmlFor="team_name">
-            {"Team Name" |> str}
+          <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
+            {"Student's Access Ends On" |> str}
           </label>
-          <span className="text-xs ml-1"> {"(optional)" |> str} </span>
-          <HelpIcon className="ml-1">
-            {"Students with same team name will be grouped together; this will not affect existing teams in the course." |> str}
+          <span className="ml-1 text-xs"> {"(optional)" |> str} </span>
+          <HelpIcon
+            className="ml-2"
+            link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
+            {"If set, students will not be able to complete targets after this date." |> str}
           </HelpIcon>
-          <input
-            value=state.teamName
-            onChange={event => send(UpdateTeamName(ReactEvent.Form.target(event)["value"]))}
-            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
-            id="team_name"
-            maxLength=50
-            type_="text"
-            placeholder="Avengers, Fantastic Four, etc."
+          <DatePicker
+            onChange={date => send(UpdateAccessEndsAt(date))}
+            selected=?state.accessEndsAt
+            id="access-ends-at-input"
           />
         </div>
         <div className="mt-5">
@@ -171,10 +184,30 @@ let make = (~applicant, ~tags, ~updateApplicantCB) => {
           removeTagCB={tag => send(RemoveTag(tag))}
           allowNewTags=true
         />
+        <div className="mt-4">
+          <input
+            onChange={_event => send(ToggleNotifyStudent)}
+            checked=state.notifyStudent
+            className="hidden checkbox-input"
+            id="notify-new-students"
+            type_="checkbox"
+          />
+          <label className="checkbox-label" htmlFor="notify-new-students">
+            <span>
+              <svg width="12px" height="10px" viewBox="0 0 12 10">
+                <polyline points="1.5 6 4.5 9 10.5 1" />
+              </svg>
+            </span>
+            <span className="text-sm">
+              {" Notify students, and send them a link to sign into this school."->str}
+            </span>
+          </label>
+        </div>
         <button
-          disabled={formInvalid(state)}
-          className={"btn btn-primary mt-5" ++ (formInvalid(state) ? " disabled" : "")}>
-          {"Add to List" |> str}
+          disabled={state.saving}
+          className={"btn btn-primary mt-5"}
+          onClick={_ => updateCourse(state, send, updateApplicantCB, applicant)}>
+          {"Add as student" |> str}
         </button>
       </div>
     </div>

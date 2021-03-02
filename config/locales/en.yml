@@ -586,9 +586,11 @@ en:
         team: Team
   mutations:
     archive_course:
-      success_notification: Course archived successfully
+      success_notification: Course archived successfully.
     auto_verify_submission:
       success_notification: Target has been marked as complete.
+    create_student_from_applicant:
+      success_notification: Student created successfully.
     create_target:
       success_notification: Target created successfully.
     create_topic_subscription:

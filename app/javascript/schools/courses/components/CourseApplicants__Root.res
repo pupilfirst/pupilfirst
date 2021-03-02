@@ -338,6 +338,11 @@ let showApplicants = (baseUrl, applicants, state) => {
   </div>
 }
 
+let updateApplicant = (baseUrl, send, ()) => {
+  ReasonReactRouter.push(baseUrl)
+  send(ReloadApplicants)
+}
+
 @react.component
 let make = (~courseId, ~tags, ~selectedApplicant) => {
   let (state, send) = React.useReducer(reducer, initialState())
@@ -373,9 +378,10 @@ let make = (~courseId, ~tags, ~selectedApplicant) => {
               Pagination.toArray(state.applicants),
             ),
           )
-          <SchoolAdmin__EditorDrawer2
-            closeDrawerCB={_ => ReasonReactRouter.push("/school/courses/")}>
-            <CourseApplicants__EditForm applicant updateApplicantCB={_ => ()} tags />
+          <SchoolAdmin__EditorDrawer2 closeDrawerCB={_ => ReasonReactRouter.push(baseUrl)}>
+            <CourseApplicants__EditForm
+              applicant updateApplicantCB={updateApplicant(baseUrl, send)} tags
+            />
           </SchoolAdmin__EditorDrawer2>
         }
       }}

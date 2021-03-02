@@ -22,7 +22,8 @@ class UpdateCourseMutator < ApplicationQuery
       featured: featured,
       progression_behavior: progression_behavior,
       progression_limit: sanitized_progression_limit,
-      highlights: highlights
+      highlights: highlights,
+      processing_url: processing_url
     )
 
     course

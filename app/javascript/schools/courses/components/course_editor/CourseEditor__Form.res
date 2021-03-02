@@ -34,6 +34,8 @@ type state = {
   progressionBehavior: progressionBehavior,
   progressionLimit: int,
   highlights: array<Course.Highlight.t>,
+  hasProcessingUrl: bool,
+  processingUrl: string,
 }
 
 type action =
@@ -48,6 +50,9 @@ type action =
   | UpdateProgressionBehavior(progressionBehavior)
   | UpdateProgressionLimit(int)
   | UpdateHighlights(array<Course.Highlight.t>)
+  | SetHasProcessingUrl
+  | ClearHasProcessingUrl
+  | UpdateProcessingUrl(string)
 
 let reducer = (state, action) =>
   switch action {
@@ -80,13 +85,20 @@ let reducer = (state, action) =>
       progressionLimit: progressionLimit,
       dirty: true,
     }
-  | UpdateHighlights(highlights) => {...state, highlights: highlights}
+  | UpdateHighlights(highlights) => {...state, highlights: highlights, dirty: true}
+  | SetHasProcessingUrl => {...state, hasProcessingUrl: true, dirty: true}
+  | ClearHasProcessingUrl => {...state, hasProcessingUrl: false, dirty: true}
+  | UpdateProcessingUrl(processingUrl) => {
+      ...state,
+      processingUrl: processingUrl,
+      dirty: true,
+    }
   }
 
 module CreateCourseQuery = %graphql(
   `
-    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
-      createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
+    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!]!, $processingUrl: String) {
+      createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
         course {
           ...Course.Fragments.AllFields
         }
@@ -97,8 +109,8 @@ module CreateCourseQuery = %graphql(
 
 module UpdateCourseQuery = %graphql(
   `
-    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!]!) {
-      updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights) {
+    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!]!, $processingUrl: String) {
+      updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
         course {
           ...Course.Fragments.AllFields
         }
@@ -153,6 +165,14 @@ let progressionLimitForQuery = state =>
   | #Limited => Some(state.progressionLimit)
   }
 
+let processingUrl = state => {
+  if state.hasProcessingUrl && state.publicSignup {
+    Some(state.processingUrl)
+  } else {
+    None
+  }
+}
+
 let createCourse = (state, send, relaodCoursesCB) => {
   send(StartSaving)
 
@@ -165,6 +185,8 @@ let createCourse = (state, send, relaodCoursesCB) => {
     ~featured=state.featured,
     ~progressionBehavior=state.progressionBehavior,
     ~progressionLimit=?progressionLimitForQuery(state),
+    ~highlights=Course.Highlight.toJSArray(state.highlights),
+    ~processingUrl=?processingUrl(state),
     (),
   )
 
@@ -196,6 +218,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
     ~progressionBehavior=state.progressionBehavior,
     ~progressionLimit=?progressionLimitForQuery(state),
     ~highlights=Course.Highlight.toJSArray(state.highlights),
+    ~processingUrl=?processingUrl(state),
     (),
   )
 
@@ -287,6 +310,38 @@ let featuredButton = (featured, send) =>
     </div>
   </div>
 
+let processingUrlInput = (state, send) =>
+  <div>
+    <div className="flex items-center mt-5">
+      <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="featured">
+        {"Do you want to process applicant information before enrolling them?"->str}
+      </label>
+      <div id="featured" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+        <button
+          className={booleanButtonClasses(state.hasProcessingUrl)}
+          onClick={_ => send(SetHasProcessingUrl)}>
+          {"Yes"->str}
+        </button>
+        <button
+          className={booleanButtonClasses(!state.hasProcessingUrl)}
+          onClick={_ => send(ClearHasProcessingUrl)}>
+          {"No"->str}
+        </button>
+      </div>
+    </div>
+    {ReactUtils.nullUnless(
+      <input
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        id="processing_url"
+        type_="text"
+        placeholder="https://example.com/"
+        value=state.processingUrl
+        onChange={event => send(UpdateProcessingUrl(ReactEvent.Form.target(event)["value"]))}
+      />,
+      state.hasProcessingUrl,
+    )}
+  </div>
+
 let courseHighlights = (highlights, send) =>
   <div className="mt-5">
     <label className="tracking-wide text-xs font-semibold" htmlFor="highlights">
@@ -320,6 +375,8 @@ let computeInitialState = course =>
       progressionBehavior: Course.progressionBehavior(course),
       progressionLimit: Course.progressionLimit(course)->Belt.Option.getWithDefault(1),
       highlights: Course.highlights(course),
+      processingUrl: Belt.Option.getWithDefault(Course.processingUrl(course), ""),
+      hasProcessingUrl: Belt.Option.isSome(Course.processingUrl(course)),
     }
   | None => {
       name: "",
@@ -336,6 +393,8 @@ let computeInitialState = course =>
       progressionBehavior: #Limited,
       progressionLimit: 1,
       highlights: [],
+      processingUrl: "",
+      hasProcessingUrl: false,
     }
   }
 
@@ -466,6 +525,7 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
     </div>
     {featuredButton(state.featured, send)}
     {enablePublicSignupButton(state.publicSignup, send)}
+    {ReactUtils.nullUnless({processingUrlInput(state, send)}, state.publicSignup)}
     {courseHighlights(state.highlights, send)}
     <div className="max-w-2xl p-6 mx-auto">
       <div className="flex">

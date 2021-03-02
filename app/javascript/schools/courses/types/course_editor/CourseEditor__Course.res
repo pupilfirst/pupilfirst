@@ -104,6 +104,8 @@ let archivedAt = t => t.archivedAt
 
 let highlights = t => t.highlights
 
+let processingUrl = t => t.processingUrl
+
 let progressionBehavior = t =>
   switch t.progressionBehavior {
   | Limited(_) => #Limited

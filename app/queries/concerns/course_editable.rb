@@ -37,6 +37,7 @@ module CourseEditable
                }
              }
     property :highlights
+    property :processing_url
 
     validate :limited_progression_requires_details
   end

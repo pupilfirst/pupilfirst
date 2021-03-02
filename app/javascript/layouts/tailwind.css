@@ -315,7 +315,7 @@ button:disabled:focus,
 @screen md {
   .dropdown__list {
     max-height: 20rem;
-    width: 100%;
+    @apply w-auto min-w-full;
   }
 }
 .dropdown__list-right {

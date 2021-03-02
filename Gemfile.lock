@@ -1,14 +1,4 @@
 GIT
-  remote: https://github.com/growthtribeacademy/pupilfirst-xapi.git
-  revision: e6afb94c74f4731aed977cc4396995387f5e70d3
-  branch: main
-  glob: pupilfirst_xapi/*.gemspec
-  specs:
-    pupilfirst_xapi (0.1.0)
-      growthtribe_xapi (~> 0.0.1)
-      rails (~> 6.0.3, >= 6.0.3.4)
-
-GIT
   remote: https://github.com/mahesh-krishnakumar/bootstrap4-kaminari-views.git
   revision: 5ad07179ca22db5d17684f21096bcd0fddc6e289
   specs:
@@ -425,6 +415,9 @@ GEM
       nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
+    pupilfirst_xapi (0.1.0)
+      growthtribe_xapi (~> 0.0.1)
+      rails (~> 6.0.3, >= 6.0.3.4)
     racc (1.5.2)
     rack (2.2.3)
     rack-cors (1.1.1)
@@ -731,7 +724,7 @@ DEPENDENCIES
   pry-rails (~> 0.3.5)
   puma (< 6)
   pundit (~> 2.0)
-  pupilfirst_xapi!
+  pupilfirst_xapi (~> 0.1.0)
   rack-cors (~> 1.0)
   rack-throttle (~> 0.7)
   rails (~> 6.0.3, >= 6.0.3.3)

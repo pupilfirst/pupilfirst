@@ -316,7 +316,7 @@ let make = (~courseId) => {
               <div className="text-primary-500 underline text-xs font-semibold">
                 <PfIcon className="if i-download-regular if-fw mr-2" />
                 <a href="https://docs.pupilfirst.com/files/student_import_sample.csv">
-                  {"Download an example .csv file" |> str}
+                  {t("example_csv_link") |> str}
                 </a>
               </div>
             </div>

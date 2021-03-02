@@ -1,13 +1,13 @@
-module Course
+module Courses
   class BulkImportStudentsJob < ApplicationJob
     queue_as :low_priority
 
     def perform(course, csv_rows, user)
-      student_ids = Courses::OnboardService.new(course, csv_rows).execute
+      student_ids = ::Courses::OnboardService.new(course, csv_rows).execute
 
       report_params = { students_added: student_ids.count, students_requested: csv_rows.count }
 
-      SchoolAdminMailer.students_bulk_import_complete(user, course, report_params, report_attachment: report_attachment(csv_rows, student_ids))
+      SchoolAdminMailer.students_bulk_import_complete(user, course, report_params, report_attachment: report_attachment(csv_rows, student_ids)).deliver_later
     end
 
     private

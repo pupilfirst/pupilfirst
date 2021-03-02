@@ -341,7 +341,10 @@ en:
         invalid_title: Title has to be less than 250 characters
         invalid_team_name: Team name has to be less than 50 characters
         invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
+      error_summary_title: "Here is a summary of the errors in the sheet: "
+      more_errors_text: "There are even more errors. Fix the errors in the following rows and upload again: "
       success_notification: Import initiated successfully! You will be notified in an email once complete.
+      example_csv_link: "Download an example .csv file"
     TopicsShow__Root:
       linked_target_label: "Linked Target: "
       view_target_button: View Target
@@ -523,7 +526,6 @@ en:
         active: Continue course
         access_ended: Review course content
         dropped_out: Dropped out
-
 
   ####################################
   # THIRD-PARTY LIBRARY TRANSLATIONS #

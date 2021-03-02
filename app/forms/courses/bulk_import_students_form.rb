@@ -21,7 +21,7 @@ module Courses
           csv,
           { encoding: 'UTF-8' }
         )
-        CSV.parse(text, headers: true)
+        CSV.parse(text, headers: true).map { |r| r.to_hash }
       end
     end
 

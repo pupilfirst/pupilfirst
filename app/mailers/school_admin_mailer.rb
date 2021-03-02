@@ -15,11 +15,11 @@ class SchoolAdminMailer < SchoolMailer
     @report_params = report_params
     @school_admin = school_admin
     @course = course
-    @school = school_admin.user.school
+    @school = school_admin.school
     @report_attachment = report_attachment
 
     if report_attachment.present?
-      attachments['existing_students.csv'] = report_attachment
+      attachments['students_not_added.csv'] = report_attachment
     end
 
     simple_roadie_mail(school_admin.email, "Import of Students Completed")

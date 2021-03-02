@@ -5,7 +5,7 @@
 <% end %>
 
 <% content_for :subtitle do %>
-  The student import that you initiated for <%= @course.name %> course was completed.
+  The students import that you initiated for <%= @course.name %> course was completed.
 <% end %>
 
 <% content_for :title_button_text do %>
@@ -33,7 +33,7 @@
 
 
   <% if @report_attachment %>
-    <p>Some of the students that you tried to import already existed in the course. Please check the attachment for the
+    <p>Some of the students that you tried to import already existed in the course. These students were ignored during the import. Please check the attachment for the
       emails of already existing students </p>
   <% end %>
 

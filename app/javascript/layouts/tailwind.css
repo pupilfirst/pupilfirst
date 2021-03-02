@@ -309,7 +309,7 @@ button:disabled:focus,
 
 .dropdown__list {
   max-height: 16rem;
-  @apply w-50;
+  @apply w-50 min-w-full;
 }
 
 @screen md {

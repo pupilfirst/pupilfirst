@@ -116,53 +116,71 @@ let tableHeader = {
   </thead>
 }
 
+let tableRows = (csvData, ~startingRow=0, ()) => {
+  csvData
+  |> Array.mapi((index, studentData) =>
+    <tr key={string_of_int(index)}>
+      <td className="border border-gray-400 truncate text-xs px-2 py-1">
+        {string_of_int(startingRow + index + 2) |> str}
+      </td>
+      <td className="border border-gray-400 truncate text-xs px-2 py-1">
+        {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("") |> str}
+      </td>
+      <td className="border border-gray-400 truncate text-xs px-2 py-1">
+        {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("") |> str}
+      </td>
+      <td className="border border-gray-400 truncate text-xs px-2 py-1">
+        {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("") |> str}
+      </td>
+      <td className="border border-gray-400 truncate text-xs px-2 py-1">
+        {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("") |> str}
+      </td>
+      <td className="border border-gray-400 truncate text-xs px-2 py-1">
+        {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("") |> str}
+      </td>
+      <td className="border border-gray-400 truncate text-xs px-2 py-1">
+        {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("") |> str}
+      </td>
+    </tr>
+  )
+  |> React.array
+}
+
+let truncatedTable = csvData => {
+  let firsTwoRows = Js.Array.slice(~start=0, ~end_=2, csvData)
+  let lastTwoRows = Js.Array.sliceFrom(Array.length(csvData) - 2, csvData)
+  <div>
+    <table className="table-auto mt-5 border w-full overflow-x-scroll">
+      {tableHeader} <tbody> {tableRows(firsTwoRows, ())} </tbody>
+    </table>
+    <div className="my-3 text-center text-sm font-normal">
+      {("----" ++ string_of_int(Array.length(csvData) - 4) ++ "rows -----")->str}
+    </div>
+    <table className="table-auto mt-5 border w-full overflow-x-scroll">
+      <tbody> {tableRows(lastTwoRows, ~startingRow={Array.length(csvData) - 2}, ())} </tbody>
+    </table>
+  </div>
+}
+
 let csvDataTable = (csvData, fileInvalid) => {
   ReactUtils.nullIf(
-    <table className="table-auto mt-5 border w-full overflow-x-scroll">
-      {tableHeader}
-      <tbody>
-        {csvData
-        |> Array.mapi((index, studentData) =>
-          <tr key={string_of_int(index)}>
-            <td className="border border-gray-400 truncate text-xs px-2 py-1">
-              {string_of_int(index + 2) |> str}
-            </td>
-            <td className="border border-gray-400 truncate text-xs px-2 py-1">
-              {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("") |> str}
-            </td>
-            <td className="border border-gray-400 truncate text-xs px-2 py-1">
-              {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("") |> str}
-            </td>
-            <td className="border border-gray-400 truncate text-xs px-2 py-1">
-              {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("") |> str}
-            </td>
-            <td className="border border-gray-400 truncate text-xs px-2 py-1">
-              {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("") |> str}
-            </td>
-            <td className="border border-gray-400 truncate text-xs px-2 py-1">
-              {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("") |> str}
-            </td>
-            <td className="border border-gray-400 truncate text-xs px-2 py-1">
-              {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("") |> str}
-            </td>
-          </tr>
-        )
-        |> React.array}
-      </tbody>
-    </table>,
+    {
+      csvData |> Array.length <= 10
+        ? <table className="table-auto mt-5 border w-full overflow-x-scroll">
+            {tableHeader} <tbody> {tableRows(csvData, ())} </tbody>
+          </table>
+        : truncatedTable(csvData)
+    },
     fileInvalid->Belt.Option.isSome,
   )
 }
 
 let clearFile = send => {
-  open Webapi.Dom
-
-  switch document |> Document.getElementById("csv-file-input") {
-  | Some(e) => HtmlInputElement.setValue(DomUtils.Element.unsafeToHtmlInputElement(e), "")
-  | None => ()
-  }
-
-  send(ClearCSVData)
+  DomUtils.Element.clearFileInput(
+    ~inputId="csv-file-input",
+    ~callBack={() => send(ClearCSVData)},
+    (),
+  )
 }
 
 let errorsTable = (csvData, errors) => {
@@ -227,7 +245,7 @@ let errorTabulation = (csvData, fileInvalid) => {
               <div>
                 {errorsTable(csvData, Js.Array.slice(~start=0, ~end_=10, errors))}
                 <div className="text-red-700 text-sm mt-5">
-                  {"There are even more errors. Fix the errors in the following rows and upload again: " |> str}
+                  {t("more_errors_text") |> str}
                   <textArea
                     readOnly=true
                     className="border border-gray-400 bg-gray-100 rounded p-1 mt-1 w-full focus:outline-none focus:ring focus:border-primary-400">
@@ -241,9 +259,7 @@ let errorTabulation = (csvData, fileInvalid) => {
             }
           : errorsTable(csvData, errors)}
         <div className="text-red-700 text-sm mt-5">
-          <div className="text-sm pb-2">
-            {"Here is a summary of the errors in the sheet: " |> str}
-          </div>
+          <div className="text-sm pb-2"> {t("error_summary_title") |> str} </div>
           <ul className="list-disc list-inside">
             {errors
             |> Array.map(error => CSVDataError.errors(error))
@@ -254,11 +270,11 @@ let errorTabulation = (csvData, fileInvalid) => {
                 {str(
                   switch error {
                   | CSVDataError.Name => t("csv_data_errors.invalid_name")
-                  | Title => t("csv_data_errors.title")
-                  | TeamName => t("csv_data_errors.team_name")
-                  | Email => t("csv_data_errors.email")
-                  | Affiliation => t("csv_data_errors.affiliation")
-                  | Tags => t("csv_data_errors.tags")
+                  | Title => t("csv_data_errors.invalid_title")
+                  | TeamName => t("csv_data_errors.invalid_team_name")
+                  | Email => t("csv_data_errors.invalid_email")
+                  | Affiliation => t("csv_data_errors.invalid_affiliation")
+                  | Tags => t("csv_data_errors.invalid_tags")
                   },
                 )}
               </li>

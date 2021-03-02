@@ -5,6 +5,7 @@ feature 'Submission review overlay', js: true do
   include MarkdownEditorHelper
   include NotificationHelper
   include SubmissionsHelper
+  include DevelopersNotificationsHelper
 
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
@@ -62,6 +63,8 @@ feature 'Submission review overlay', js: true do
     end
 
     scenario 'coach evaluates a pending submission and gives a feedback' do
+      notification_service = prepare_developers_notification
+
       sign_in_user coach.user, referrer: review_course_path(course)
 
       expect(page).to have_content(target.title)
@@ -121,6 +124,8 @@ feature 'Submission review overlay', js: true do
       find("button[aria-label='submissions-overlay-close']").click
       expect(page).to have_text(submission_pending_2.target.title)
       expect(page).to_not have_text(submission.target.title)
+
+      expect_published(notification_service, course, :submission_graded, coach.user, submission)
     end
 
     scenario 'coach generates feedback from review checklist' do

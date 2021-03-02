@@ -17,10 +17,27 @@ module TimelineEvents
           evaluation_criteria: evaluation_criteria
         },
         files: files
-      }
+      }.merge(evaluation)
     end
 
     private
+
+    def evaluation
+      return {} if @submission.pending_review?
+
+      {
+        evaluator: @submission.evaluator.name,
+        evaluated_at: @submission.evaluated_at,
+        grades:
+          @submission
+            .timeline_event_grades
+            .each_with_object({}) do |submission_grade, evaluation|
+              evaluation[submission_grade.evaluation_criterion_id] =
+                submission_grade.grade
+              evaluation
+            end
+      }
+    end
 
     def target
       @target ||= @submission.target
@@ -40,7 +57,11 @@ module TimelineEvents
     def files
       @submission.timeline_event_files.map do |timeline_event_file|
         file = timeline_event_file.file
-        file_path = Rails.application.routes.url_helpers.rails_blob_path(file, only_path: true)
+        file_path =
+          Rails.application.routes.url_helpers.rails_blob_path(
+            file,
+            only_path: true
+          )
 
         {
           filename: file.filename.to_s,

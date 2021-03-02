@@ -37,20 +37,20 @@ let make = (~selected, ~contents, ~right=false, ~className="w-full md:w-auto") =
   <div className={containerClasses(className)} onClick={toggleDropdown(setShowDropdown)}>
     selected
     {showDropdown
-      ? <ul
-          className={"dropdown__list bg-white overflow-y-auto shadow-lg rounded mt-1 border border-gray-400 absolute overflow-hidden min-w-full md:w-auto z-30 " ++ (
+      ? <div
+          className={"dropdown__list bg-white shadow-lg rounded mt-1 border border-gray-400 absolute overflow-x-hidden z-30 " ++ (
             right ? "right-0" : "left-0"
           )}>
           {contents
           |> Array.mapi((index, content) =>
-            <li
+            <div
               key={"dropdown-" ++ (index |> string_of_int)}
               className="cursor-pointer block text-sm font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 md:whitespace-no-wrap">
               content
-            </li>
+            </div>
           )
           |> React.array}
-        </ul>
+        </div>
       : React.null}
   </div>
 }

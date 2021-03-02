@@ -1,22 +1,16 @@
 module WebhookDeliveries
   class CreateService
-    def initialize(course, event_type)
-      @course = course
-      @event_type = event_type
-    end
+    def execute(course, event_key, resource)
+      event_value = WebhookDelivery.events[event_key]
 
-    def execute(resource)
+      raise "Invalid event_type #{event_key} encountered" if event_value.blank?
+
+      webhook_endpoint = course.webhook_endpoint
+
       return unless webhook_endpoint&.active?
+      return unless event_value.in?(webhook_endpoint.events)
 
-      return unless @event_type.in? webhook_endpoint.events
-
-      WebhookDeliveries::DeliverJob.perform_later(@event_type, @course, resource)
-    end
-
-    private
-
-    def webhook_endpoint
-      @webhook_endpoint ||= @course.webhook_endpoint
+      WebhookDeliveries::DeliverJob.perform_later(event_value, course, resource)
     end
   end
 end

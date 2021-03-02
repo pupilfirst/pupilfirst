@@ -60,22 +60,27 @@ sanitizationProfiles.areaOfText = [
   "sub",
 ];
 
-const allowedCodeClasses = [
-  "language-javascript",
-  "language-js", // javascript
-  "language-css",
-  "language-scss",
-  "language-ruby",
-  "language-erb",
-  "language-reason",
-  "language-markup",
-  "language-html", // markup
-  "language-xml", // markup
-  "language-svg", // markup
-  "language-mathml", // markup
-  "language-yaml",
-  "language-yml", //yaml
+const languages = [
+  "javascript",
+  "js",
+  "css",
+  "scss",
+  "ruby",
+  "erb",
+  "reason",
+  "markup",
+  "html",
+  "xml",
+  "svg",
+  "mathml",
+  "yaml",
+  "yml",
 ];
+
+const allowedCodeClasses = languages
+  .map((l) => "language-" + l)
+  .concat(languages.map((l) => "language-diff-" + l))
+  .concat(["language-diff", "diff-highlight"]);
 
 const sanitizationProfile = (profile) => {
   if (profile in sanitizationProfiles) {

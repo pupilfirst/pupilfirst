@@ -39,9 +39,6 @@ jobs:
       SPEC_USER_TIME_ZONE: Etc/UTC
       SPEC_RETRY_COUNT: 2
       ALLOW_EMAIL_SIGN_IN: true
-      LRS_ENDPOINT: http://test.lrs/data/xAPI
-      LRS_KEY: does_not
-      LRS_SECRET: matter_here
 
     steps:
       - uses: actions/checkout@v2

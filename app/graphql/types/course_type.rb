@@ -14,6 +14,8 @@ module Types
     field :progression_behavior, Types::ProgressionBehaviorType, null: false
     field :progression_limit, Integer, null: true
     field :archived_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :highlights, [Types::CourseHighlightType], null: false
+    field :processing_url, String, null: true
 
     def cover
       image_details(object.cover)
@@ -28,7 +30,11 @@ module Types
     def image_details(image)
       if image.attached?
         {
-          url: Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true),
+          url:
+            Rails.application.routes.url_helpers.rails_blob_path(
+              image,
+              only_path: true
+            ),
           filename: image.filename
         }
       end

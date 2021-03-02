@@ -14,10 +14,51 @@ module Image = {
   let decode = json => {
     open Json.Decode
     {
-      url: json |> field("url", string),
-      filename: json |> field("filename", string),
+      url: field("url", string, json),
+      filename: field("filename", string, json),
     }
   }
+}
+
+module Highlight = {
+  type t = {
+    title: string,
+    icon: string,
+    description: string,
+  }
+
+  let title = t => t.title
+  let icon = t => t.icon
+  let description = t => t.description
+
+  let make = (title, description, icon) => {title: title, description: description, icon: icon}
+
+  let updateTitle = (t, title) => {...t, title: title}
+  let updateDescription = (t, description) => {...t, description: description}
+  let updateIcon = (t, icon) => {...t, icon: icon}
+
+  let decode = json => {
+    open Json.Decode
+    {
+      icon: field("icon", string, json),
+      title: field("title", string, json),
+      description: field("description", string, json),
+    }
+  }
+
+  let empty = () => {
+    icon: "comment-alt-solid",
+    title: "Enter a title",
+    description: "Describe the title",
+  }
+
+  let toJSArray = Js.Array.map(t =>
+    {
+      "icon": t.icon,
+      "title": t.title,
+      "description": t.description,
+    }
+  )
 }
 
 type progressionBehavior =
@@ -37,6 +78,8 @@ type t = {
   featured: bool,
   progressionBehavior: progressionBehavior,
   archivedAt: option<Js.Date.t>,
+  highlights: array<Highlight.t>,
+  processingUrl: option<string>,
 }
 
 let name = t => t.name
@@ -58,6 +101,8 @@ let cover = t => t.cover
 let thumbnail = t => t.thumbnail
 
 let archivedAt = t => t.archivedAt
+
+let highlights = t => t.highlights
 
 let progressionBehavior = t =>
   switch t.progressionBehavior {
@@ -124,6 +169,11 @@ let makeFromJs = rawCourse => {
     featured: rawCourse["featured"],
     progressionBehavior: progressionBehavior,
     archivedAt: archivedAt,
+    highlights: Js.Array.map(
+      c => Highlight.make(c["title"], c["description"], c["icon"]),
+      rawCourse["highlights"],
+    ),
+    processingUrl: rawCourse["processingUrl"],
   }
 }
 
@@ -160,6 +210,8 @@ let decode = json => {
     cover: optional(field("cover", Image.decode), json),
     featured: field("featured", bool, json),
     archivedAt: optional(field("archivedAt", string), json)->Belt.Option.map(DateFns.parseISO),
+    highlights: field("highlights", array(Highlight.decode), json),
+    processingUrl: field("processingUrl", optional(string), json),
   }
 }
 
@@ -184,6 +236,12 @@ module Fragments = %graphql(
     progressionBehavior
     progressionLimit
     archivedAt
+    highlights{
+      icon
+      title
+      description
+    }
+    processingUrl
   }
   `
 )

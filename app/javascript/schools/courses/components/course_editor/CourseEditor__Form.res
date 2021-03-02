@@ -33,6 +33,7 @@ type state = {
   featured: bool,
   progressionBehavior: progressionBehavior,
   progressionLimit: int,
+  highlights: array<Course.Highlight.t>,
 }
 
 type action =
@@ -46,6 +47,7 @@ type action =
   | UpdateFeatured(bool)
   | UpdateProgressionBehavior(progressionBehavior)
   | UpdateProgressionLimit(int)
+  | UpdateHighlights(array<Course.Highlight.t>)
 
 let reducer = (state, action) =>
   switch action {
@@ -78,6 +80,7 @@ let reducer = (state, action) =>
       progressionLimit: progressionLimit,
       dirty: true,
     }
+  | UpdateHighlights(highlights) => {...state, highlights: highlights}
   }
 
 module CreateCourseQuery = %graphql(
@@ -94,8 +97,8 @@ module CreateCourseQuery = %graphql(
 
 module UpdateCourseQuery = %graphql(
   `
-    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
-      updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
+    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!]!) {
+      updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights) {
         course {
           ...Course.Fragments.AllFields
         }
@@ -192,6 +195,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
     ~featured=state.featured,
     ~progressionBehavior=state.progressionBehavior,
     ~progressionLimit=?progressionLimitForQuery(state),
+    ~highlights=Course.Highlight.toJSArray(state.highlights),
     (),
   )
 
@@ -283,6 +287,18 @@ let featuredButton = (featured, send) =>
     </div>
   </div>
 
+let courseHighlights = (highlights, send) =>
+  <div className="mt-5">
+    <label className="tracking-wide text-xs font-semibold" htmlFor="highlights">
+      {"Course Highlights"->str}
+    </label>
+    <div>
+      <CourseEditor__HighlightEditor
+        highlights updateHighlightsCB={h => send(UpdateHighlights(h))}
+      />
+    </div>
+  </div>
+
 let about = course => Belt.Option.getWithDefault(Course.about(course), "")
 
 let updateAboutCB = (send, about) => send(UpdateAbout(about))
@@ -303,6 +319,7 @@ let computeInitialState = course =>
       featured: Course.featured(course),
       progressionBehavior: Course.progressionBehavior(course),
       progressionLimit: Course.progressionLimit(course)->Belt.Option.getWithDefault(1),
+      highlights: Course.highlights(course),
     }
   | None => {
       name: "",
@@ -318,6 +335,7 @@ let computeInitialState = course =>
       featured: true,
       progressionBehavior: #Limited,
       progressionLimit: 1,
+      highlights: [],
     }
   }
 
@@ -448,6 +466,7 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
     </div>
     {featuredButton(state.featured, send)}
     {enablePublicSignupButton(state.publicSignup, send)}
+    {courseHighlights(state.highlights, send)}
     <div className="max-w-2xl p-6 mx-auto">
       <div className="flex">
         {switch course {

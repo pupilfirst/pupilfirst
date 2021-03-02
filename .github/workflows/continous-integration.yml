@@ -41,6 +41,15 @@ jobs:
       ALLOW_EMAIL_SIGN_IN: true
 
     steps:
+      - name: Build Start Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_USERNAME: lms
+          SLACK_ICON_EMOJI: growthtribe
+          SLACK_TITLE: Build STARTED
+          SLACK_COLOR: '#dbab0a'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          MSG_MINIMAL: ref,actions url,commit
       - uses: actions/checkout@v2
       - name: Use Ruby 2.7
         uses: actions/setup-ruby@v1
@@ -111,12 +120,12 @@ jobs:
           path: |
             tmp/capybara
             log/test.log
-      - name: Slack Notification
+      - name: Build Finished Slack Notification
         if: ${{ always() }}
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_USERNAME: lms
-          SLACK_ICON_EMOJI: ':coffee:'
+          SLACK_ICON_EMOJI: growthtribe
           SLACK_TITLE: ${{ job.status == 'success' && 'Build OK' || job.status == 'cancelled' && 'Build CANCELLED' || 'Build FAILED' }}
           SLACK_COLOR: ${{ job.status == 'success' && 'good' || job.status == 'cancelled' && '#808080' || 'danger' }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

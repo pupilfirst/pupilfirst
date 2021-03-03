@@ -44,7 +44,7 @@ jobs:
           SLACK_TITLE: Bisect STARTED
           SLACK_COLOR: '#dbab0a'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          MSG_MINIMAL: ref,actions url,commit
+          MSG_MINIMAL: ref,actions url
       - uses: actions/checkout@v2
       - name: Use Ruby 2.7
         uses: actions/setup-ruby@v1
@@ -74,4 +74,4 @@ jobs:
           SLACK_TITLE: ${{ job.status == 'success' && 'Bisect COMPLETED' || job.status == 'cancelled' && 'Bisect CANCELLED' || 'Bisect FAILED' }}
           SLACK_COLOR: ${{ job.status == 'success' && 'good' || job.status == 'cancelled' && '#808080' || 'danger' }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          MSG_MINIMAL: ref,actions url,commit
+          MSG_MINIMAL: ref,actions url

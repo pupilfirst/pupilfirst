@@ -112,7 +112,7 @@ jobs:
           bundle exec rails assets:clean
           echo Cleaning complete! All done.
       - name: Specs
-        run: bundle exec rspec -fd
+        run: bundle exec rspec
       - uses: actions/upload-artifact@v2
         if: failure()
         with:

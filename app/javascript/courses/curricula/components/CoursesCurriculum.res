@@ -501,7 +501,7 @@ let make = (
           {Level.isUnlocked(currentLevel) || accessLockedLevels
             ? targetGroupsInLevel == []
                 ? <div className="mx-auto py-10">
-                    <img className="max-w-sm mx-auto" src=levelEmptyImage />
+                    <img className="max-w-xs md:max-w-sm mx-auto" src=levelEmptyImage />
                     <p className="text-center font-semibold text-lg mt-4">
                       {t("empty_level_content_notice") |> str}
                     </p>

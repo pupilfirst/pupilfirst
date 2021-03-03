@@ -3,7 +3,8 @@
   transition: all 0.2s ease-in-out;
 }
 
-.student-navbar__links-container:before, .student-navbar__links-container:after {
+.student-navbar__links-container:before,
+.student-navbar__links-container:after {
   position: absolute;
   content: "";
   display: inline-block;
@@ -27,26 +28,34 @@
 }
 
 @screen md {
-  .student-navbar__links-container:before, .student-navbar__links-container:after {
+  .student-navbar__links-container:before,
+  .student-navbar__links-container:after {
     display: none;
   }
 }
 
 /* Toggle menu btn */
 
-.student-navbar__menu-btn.open .student-navbar__menu-icon .student-navbar__menu-icon-bar {
+.student-navbar__menu-btn.open
+  .student-navbar__menu-icon
+  .student-navbar__menu-icon-bar {
   background: transparent;
 }
 
-.student-navbar__menu-btn.open .student-navbar__menu-icon .student-navbar__menu-icon-bar:before {
+.student-navbar__menu-btn.open
+  .student-navbar__menu-icon
+  .student-navbar__menu-icon-bar:before {
   transform: rotate(-45deg);
 }
 
-.student-navbar__menu-btn.open .student-navbar__menu-icon .student-navbar__menu-icon-bar:after {
+.student-navbar__menu-btn.open
+  .student-navbar__menu-icon
+  .student-navbar__menu-icon-bar:after {
   transform: rotate(45deg);
 }
 
-.student-navbar__menu-btn.open .student-navbar__menu-icon-bar:before, .student-navbar__menu-btn.open .student-navbar__menu-icon-bar:after {
+.student-navbar__menu-btn.open .student-navbar__menu-icon-bar:before,
+.student-navbar__menu-btn.open .student-navbar__menu-icon-bar:after {
   top: 0;
 }
 
@@ -60,21 +69,22 @@
 }
 
 .student-navbar__menu-icon .student-navbar__menu-icon-bar {
-  background: #453C52;
+  background: #453c52;
   display: block;
   height: 2px;
   position: relative;
-  transition: all .2s;
+  transition: all 0.2s;
   width: 20px;
 }
 
-.student-navbar__menu-icon .student-navbar__menu-icon-bar:before, .student-navbar__menu-icon .student-navbar__menu-icon-bar:after {
-  background: #453C52;
-  content: '';
+.student-navbar__menu-icon .student-navbar__menu-icon-bar:before,
+.student-navbar__menu-icon .student-navbar__menu-icon-bar:after {
+  background: #453c52;
+  content: "";
   display: block;
   height: 100%;
   position: absolute;
-  transition: all .2s;
+  transition: all 0.2s;
   width: 100%;
 }
 
@@ -86,6 +96,12 @@
   top: -6px;
 }
 .student-navbar__notifications-unread-bullet {
+  @apply absolute block h-3 w-3 rounded-full border-2 border-white bg-red-500;
   top: 2px;
   right: 6px;
+}
+
+.student-navbar__notifications-unread-bullet::before {
+  content: "";
+  @apply animate-ping absolute inline-flex h-full w-full inset-0 rounded-full bg-red-500 opacity-75;
 }

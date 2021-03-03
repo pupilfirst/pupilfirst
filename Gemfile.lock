@@ -265,7 +265,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
-    graphql (1.12.5)
+    graphql (1.11.6)
     growthtribe_xapi (0.0.2)
       activesupport (>= 5.1)
       addressable (~> 2.3)

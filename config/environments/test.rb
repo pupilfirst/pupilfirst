@@ -22,9 +22,11 @@ Rails.application.configure do
   }
 
   # Show full error reports and disable caching.
-  config.slowpoke.timeout = ENV['SLOWPOKE_TIMEOUT']&.to_i || 120
   config.consider_all_requests_local = false
   config.action_controller.perform_caching = false
+
+  # Request timeout using Slowpoke.
+  config.slowpoke.timeout = ENV.fetch('SLOWPOKE_TIMEOUT', '120').to_i
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = true

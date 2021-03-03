@@ -15,8 +15,8 @@ Rails.application.configure do
   # Rake tasks automatically ignore this option for performance.
   config.eager_load = true
 
-  # Set up the slowpoke gem.
-  config.slowpoke.timeout = ENV['SLOWPOKE_TIMEOUT']&.to_i || 15
+  # Request timeout using Slowpoke.
+  config.slowpoke.timeout = ENV.fetch('SLOWPOKE_TIMEOUT', '15').to_i
 
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local = false
@@ -33,6 +33,7 @@ Rails.application.configure do
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = Uglifier.new(harmony: true)
+
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
@@ -41,7 +42,8 @@ Rails.application.configure do
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.action_controller.asset_host = ENV['ASSET_HOST'] || 'https://assets.pupilfirst.com'
+  config.action_controller.asset_host =
+    ENV['ASSET_HOST'] || 'https://assets.pupilfirst.com'
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
@@ -63,18 +65,19 @@ Rails.application.configure do
   config.log_tags = [:request_id]
 
   # Use a different cache store in production.
-  config.cache_store = if ENV['MEMCACHEDCLOUD_SERVERS']
-    [
-      :dalli_store,
-      ENV['MEMCACHEDCLOUD_SERVERS'].split(','),
-      {
-        username: ENV['MEMCACHEDCLOUD_USERNAME'],
-        password: ENV['MEMCACHEDCLOUD_PASSWORD']
-      }
-    ]
-  else
-    [:memory_store, { size: 64.megabytes }]
-  end
+  config.cache_store =
+    if ENV['MEMCACHEDCLOUD_SERVERS']
+      [
+        :dalli_store,
+        ENV['MEMCACHEDCLOUD_SERVERS'].split(','),
+        {
+          username: ENV['MEMCACHEDCLOUD_USERNAME'],
+          password: ENV['MEMCACHEDCLOUD_PASSWORD']
+        }
+      ]
+    else
+      [:memory_store, { size: 64.megabytes }]
+    end
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque
@@ -127,8 +130,10 @@ Rails.application.configure do
   }
 
   # Postmark
-  # config.action_mailer.delivery_method = :postmark
-  # config.action_mailer.postmark_settings = { api_token: ENV['POSTMARK_API_TOKEN'] }
+  #config.action_mailer.delivery_method = :postmark
+  #config.action_mailer.postmark_settings = {
+  #  api_token: ENV['POSTMARK_API_TOKEN']
+  #}
 
   # Add the rack-cors middleware to serve CORS header for static assets
   config.middleware.insert_before 0, Rack::Cors do
@@ -144,22 +149,32 @@ Rails.application.configure do
   end
 
   # Add the GraphQL probe for Skylight.
-  config.skylight.probes << "graphql"
+  config.skylight.probes << 'graphql'
 
   # Add throttling to application
   require_relative '../../lib/rack_throttle/rules'
 
   rules = [
-    { method: "POST", limit: ENV['GRAPH_API_RATE_LIMIT'] || 1 },
-    { method: "GET", whitelisted: true }]
+    { method: 'POST', limit: ENV['GRAPH_API_RATE_LIMIT'] },
+    { method: 'GET', whitelisted: true }
+  ]
 
-  cache = if ENV['MEMCACHEDCLOUD_SERVERS'].present?
-    Dalli::Client.new((ENV['MEMCACHEDCLOUD_SERVERS']).split(","),
-      { :username => ENV['MEMCACHEDCLOUD_USERNAME'],
-        :password => ENV['MEMCACHEDCLOUD_PASSWORD'] })
-  end
+  cache =
+    if ENV['MEMCACHEDCLOUD_SERVERS'].present?
+      Dalli::Client.new(
+        (ENV['MEMCACHEDCLOUD_SERVERS']).split(','),
+        {
+          username: ENV['MEMCACHEDCLOUD_USERNAME'],
+          password: ENV['MEMCACHEDCLOUD_PASSWORD']
+        }
+      )
+    end
 
-  config.middleware.use RackThrottle::Rules, rules: rules, cache: cache, :key_prefix => :throttle, default: 20
+  config.middleware.use RackThrottle::Rules,
+                        rules: rules,
+                        cache: cache,
+                        key_prefix: :throttle,
+                        default: 20
 
   # Keycloak client
   config.keycloak_client = Keycloak::Client.new

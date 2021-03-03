@@ -38,7 +38,12 @@ body {
   }
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   @apply font-bold;
 }
 
@@ -68,7 +73,8 @@ h6 {
 
 /* Input */
 
-input:disabled, .disabled {
+input:disabled,
+.disabled {
   @apply cursor-not-allowed bg-gray-200 text-gray-700;
 }
 
@@ -88,7 +94,7 @@ input:disabled, .disabled {
   cursor: pointer;
 }
 
-.form-input__file-sr-only:focus+.form-input__file-label {
+.form-input__file-sr-only:focus + .form-input__file-label {
   outline: none;
   box-shadow: 0 0 0 3px theme(colors.primary.100);
   border-color: theme(colors.primary.300);
@@ -136,12 +142,20 @@ button:focus {
 
 .btn-primary {
   @apply bg-primary-500 text-white shadow;
-  background-image: linear-gradient( 135deg, rgba(96, 37, 192, 1) 0%, rgba(77, 30, 154, 1) 100%);
+  background-image: linear-gradient(
+    135deg,
+    rgba(96, 37, 192, 1) 0%,
+    rgba(77, 30, 154, 1) 100%
+  );
 }
 
 .btn-primary:hover {
   @apply bg-primary-600;
-  background-image: linear-gradient( 135deg, rgba(77, 30, 154, 1) 0%, rgba(56, 13, 128, 1) 100%);
+  background-image: linear-gradient(
+    135deg,
+    rgba(77, 30, 154, 1) 0%,
+    rgba(56, 13, 128, 1) 100%
+  );
 }
 
 .btn-primary:focus {
@@ -163,12 +177,20 @@ button:focus {
 
 .btn-secondary {
   @apply bg-secondary-500 text-white;
-  background-image: linear-gradient( 135deg, rgba(246, 16, 103, 1) 0%, rgba(172, 6, 69, 1) 100%);
+  background-image: linear-gradient(
+    135deg,
+    rgba(246, 16, 103, 1) 0%,
+    rgba(172, 6, 69, 1) 100%
+  );
 }
 
 .btn-secondary:hover {
   @apply bg-secondary-600;
-  background-image: linear-gradient( 135deg, rgba(172, 6, 69, 1) 0%, rgba(123, 5, 49, 1) 100%);
+  background-image: linear-gradient(
+    135deg,
+    rgba(172, 6, 69, 1) 0%,
+    rgba(123, 5, 49, 1) 100%
+  );
 }
 
 .btn-secondary:focus {
@@ -178,12 +200,20 @@ button:focus {
 
 .btn-success {
   @apply bg-green-500 text-white;
-  background-image: linear-gradient( 135deg, rgba(72, 187, 120, 1) 0%, rgba(56, 161, 105, 1) 100%);
+  background-image: linear-gradient(
+    135deg,
+    rgba(72, 187, 120, 1) 0%,
+    rgba(56, 161, 105, 1) 100%
+  );
 }
 
 .btn-success:hover {
   @apply bg-green-600;
-  background-image: linear-gradient( 135deg, rgba(56, 161, 105, 1) 0%, rgba(47, 133, 90, 1) 100%);
+  background-image: linear-gradient(
+    135deg,
+    rgba(56, 161, 105, 1) 0%,
+    rgba(47, 133, 90, 1) 100%
+  );
 }
 
 .btn-success:focus {
@@ -193,12 +223,20 @@ button:focus {
 
 .btn-warning {
   @apply bg-yellow-500 text-white;
-  background-image: linear-gradient( 135deg, rgba(237, 137, 54, 1) 0%, rgba(221, 107, 32, 1) 100%);
+  background-image: linear-gradient(
+    135deg,
+    rgba(237, 137, 54, 1) 0%,
+    rgba(221, 107, 32, 1) 100%
+  );
 }
 
 .btn-warning:hover {
   @apply bg-yellow-600;
-  background-image: linear-gradient( 135deg, rgba(221, 107, 32, 1) 0%, rgba(192, 86, 33, 1) 100%);
+  background-image: linear-gradient(
+    135deg,
+    rgba(221, 107, 32, 1) 0%,
+    rgba(192, 86, 33, 1) 100%
+  );
 }
 
 .btn-warning:focus {
@@ -208,12 +246,20 @@ button:focus {
 
 .btn-danger {
   @apply bg-red-500 text-white;
-  background-image: linear-gradient( 135deg, rgba(245, 101, 101, 1) 0%, rgba(229, 62, 62, 1) 100%);
+  background-image: linear-gradient(
+    135deg,
+    rgba(245, 101, 101, 1) 0%,
+    rgba(229, 62, 62, 1) 100%
+  );
 }
 
 .btn-danger:hover {
   @apply bg-red-600;
-  background-image: linear-gradient( 135deg, rgba(229, 62, 62, 1) 0%, rgba(197, 48, 48, 1) 100%);
+  background-image: linear-gradient(
+    135deg,
+    rgba(229, 62, 62, 1) 0%,
+    rgba(197, 48, 48, 1) 100%
+  );
 }
 
 .btn-danger:focus {
@@ -221,12 +267,16 @@ button:focus {
   background-image: none;
 }
 
-button:disabled, .disabled {
+button:disabled,
+.disabled {
   @apply cursor-not-allowed bg-gray-300 text-gray-500 shadow-none border-transparent;
   background-image: none;
 }
 
-button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
+button:disabled:hover,
+.disabled:hover,
+button:disabled:focus,
+.disabled:focus {
   @apply bg-gray-300 text-gray-500 border-transparent shadow-none;
   background-image: none;
 }
@@ -257,12 +307,17 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   background-color: theme(colors.gray.300);
 }
 
+.dropdown__list {
+  max-height: 16rem;
+  @apply w-50 min-w-full;
+}
+
 @screen md {
   .dropdown__list {
     max-height: 20rem;
+    @apply w-auto min-w-full;
   }
 }
-
 .dropdown__list-right {
   @apply right-0;
 }
@@ -271,7 +326,8 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   @apply left-0;
 }
 
-.dropdown__list-left:before, .dropdown__list-left:after {
+.dropdown__list-left:before,
+.dropdown__list-left:after {
   position: absolute;
   content: "";
   display: inline-block;
@@ -294,7 +350,8 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
   border-left: 6px solid transparent;
 }
 
-.dropdown__list-right:before, .dropdown__list-right:after {
+.dropdown__list-right:before,
+.dropdown__list-right:after {
   position: absolute;
   content: "";
   display: inline-block;
@@ -321,10 +378,18 @@ button:disabled:hover, .disabled:hover, button:disabled:focus, .disabled:focus {
 
 @responsive {
   .bg-gradient-primary-600-to-primary-800-to-bottom {
-    background-image: linear-gradient( to bottom, theme("colors.primary.600"), theme("colors.primary.800"));
+    background-image: linear-gradient(
+      to bottom,
+      theme("colors.primary.600"),
+      theme("colors.primary.800")
+    );
   }
   .bg-gradient-secondary-to-secondary-600-120 {
-    background-image: linear-gradient( 120deg, theme("colors.secondary.500"), theme("colors.secondary.600"));
+    background-image: linear-gradient(
+      120deg,
+      theme("colors.secondary.500"),
+      theme("colors.secondary.600")
+    );
   }
 }
 

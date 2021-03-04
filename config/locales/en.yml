@@ -589,6 +589,8 @@ en:
       success_notification: Course archived successfully.
     auto_verify_submission:
       success_notification: Target has been marked as complete.
+    create_course:
+      success_notification: Course created successfully!
     create_student_from_applicant:
       success_notification: Student created successfully.
     create_target:
@@ -609,6 +611,8 @@ en:
       success_notification: This topic has been unlocked. Community members can now post replies again.
     update_certificate:
       success_notification: Certificate details have been updated.
+    update_course:
+      success_notification: Course updated successfully!
   offline:
     heading: You are offline!
     message: It seems there is a problem with your connection.<br/>Please check your network status.

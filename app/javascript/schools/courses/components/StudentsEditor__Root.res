@@ -252,7 +252,7 @@ let make = (
           : <div className="flex justify-between">
               <button
                 onClick={_e => send(UpdateFormVisible(BulkImportForm))}
-                className="btn btn-primary ml-4">
+                className="btn btn-primary-ghost ml-4">
                 <i className="fas fa-file-csv mr-2" />
                 <span> {t("button_bulk_import") |> str} </span>
               </button>

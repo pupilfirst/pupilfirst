@@ -104,14 +104,28 @@ let submitForm = (courseId, send, event) => {
 
 let tableHeader = {
   <thead>
-    <tr className="bg-gray-200">
-      <th className="text-left text-xs"> {"no" |> str} </th>
-      <th className="text-left text-xs"> {"name" |> str} </th>
-      <th className="text-left text-xs"> {"email" |> str} </th>
-      <th className="text-left text-xs"> {"title" |> str} </th>
-      <th className="text-left text-xs"> {"team_name" |> str} </th>
-      <th className="text-left text-xs"> {"tags" |> str} </th>
-      <th className="text-left text-xs"> {"affiliation" |> str} </th>
+    <tr className="bg-gray-300">
+      <th className="w-12 border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+        {"no" |> str}
+      </th>
+      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+        {"name" |> str}
+      </th>
+      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+        {"email" |> str}
+      </th>
+      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+        {"title" |> str}
+      </th>
+      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+        {"team_name" |> str}
+      </th>
+      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+        {"tags" |> str}
+      </th>
+      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+        {"affiliation" |> str}
+      </th>
     </tr>
   </thead>
 }
@@ -120,7 +134,7 @@ let tableRows = (csvData, ~startingRow=0, ()) => {
   csvData
   |> Array.mapi((index, studentData) =>
     <tr key={string_of_int(index)}>
-      <td className="border border-gray-400 truncate text-xs px-2 py-1">
+      <td className="w-12 bg-gray-300 border border-gray-400 truncate text-xs px-2 py-1">
         {string_of_int(startingRow + index + 2) |> str}
       </td>
       <td className="border border-gray-400 truncate text-xs px-2 py-1">
@@ -150,13 +164,13 @@ let truncatedTable = csvData => {
   let firsTwoRows = Js.Array.slice(~start=0, ~end_=2, csvData)
   let lastTwoRows = Js.Array.sliceFrom(Array.length(csvData) - 2, csvData)
   <div>
-    <table className="table-auto mt-5 border w-full overflow-x-scroll">
+    <table className="table-fixed mt-5 border w-full overflow-x-scroll">
       {tableHeader} <tbody> {tableRows(firsTwoRows, ())} </tbody>
     </table>
     <div className="my-3 text-center text-sm font-normal">
       {("----" ++ string_of_int(Array.length(csvData) - 4) ++ "rows -----")->str}
     </div>
-    <table className="table-auto mt-5 border w-full overflow-x-scroll">
+    <table className="table-fixed mt-5 border w-full overflow-x-scroll">
       <tbody> {tableRows(lastTwoRows, ~startingRow={Array.length(csvData) - 2}, ())} </tbody>
     </table>
   </div>
@@ -184,7 +198,7 @@ let clearFile = send => {
 }
 
 let errorsTable = (csvData, errors) => {
-  <table className="table-auto mt-5 border w-full overflow-x-scroll">
+  <table className="table-fixed mt-5 border w-full overflow-x-scroll">
     {tableHeader} <tbody> {errors |> Array.mapi((index, error) => {
         let rowNumber = CSVDataError.rowNumber(error)
         let studentData = Js.Array2.unsafe_get(csvData, rowNumber - 2)

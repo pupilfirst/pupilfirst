@@ -16,6 +16,21 @@ module ValidateCourseEditable
     end
   end
 
+  class ValidProcessingURL < GraphQL::Schema::Validator
+    def validate(_object, _context, value)
+      return if value[:processing_url].blank?
+
+      begin
+        uri = URI.parse(value[:processing_url])
+        resp = uri.kind_of?(URI::HTTP)
+      rescue URI::InvalidURIError
+        resp = false
+      end
+
+      return 'Processing url must be valid' unless resp == true
+    end
+  end
+
   included do
     argument :name,
              String,
@@ -66,6 +81,7 @@ module ValidateCourseEditable
     argument :processing_url, String, required: false
 
     validates LimitedProgressionRequiresDetails => {}
+    validates ValidProcessingURL => {}
   end
 
   def sanitized_progression_limit

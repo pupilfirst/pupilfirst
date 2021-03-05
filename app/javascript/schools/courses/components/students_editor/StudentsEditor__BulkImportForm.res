@@ -130,7 +130,7 @@ let tableHeader = {
 
 let tableRows = (csvData, ~startingRow=0, ()) => {
   csvData
-  |> Js.Array.mapi((index, studentData) =>
+  |> Js.Array.mapi((studentData, index) =>
     <tr key={string_of_int(index)}>
       <td className="w-12 bg-gray-300 border border-gray-400 truncate text-xs px-2 py-1">
         {string_of_int(startingRow + index + 2) |> str}
@@ -223,7 +223,7 @@ let clearFile = send => {
 
 let errorsTable = (csvData, errors) => {
   <table className="table-fixed mt-4 border w-full overflow-x-scroll">
-    {tableHeader} <tbody> {errors |> Js.Array.mapi((index, error) => {
+    {tableHeader} <tbody> {errors |> Js.Array.mapi((error, index) => {
         let rowNumber = CSVDataError.rowNumber(error)
         let studentData = Js.Array2.unsafe_get(csvData, rowNumber - 2)
         <tr key={string_of_int(index)}>

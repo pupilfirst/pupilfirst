@@ -333,6 +333,8 @@ en:
       import_button_text: Import Students
       more_errors_text: 'There are even more errors. Fix the errors in the following rows and upload again: '
       success_notification: Import initiated successfully! You will be notified in an email once complete.
+      valid_data_message: Data validated successfully!
+      valid_data_summary_text: 'Here is a summary of student data in the uploaded sheet: '
     StudentsEditor__CreateForm:
       added_full_description: All students were created successfully.
       added_none_description: All the students you tried to add were already a part of this course.

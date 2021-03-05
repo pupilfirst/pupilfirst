@@ -200,11 +200,9 @@ let csvDataTable = (csvData, fileInvalid) => {
       <p
         className="flex items-center bg-green-200 text-green-800 font-semibold text-xs p-2 rounded">
         <PfIcon className="if i-check-regular if-fw mr-2" />
-        <span> {"Data validated successfully!" |> str} </span>
+        <span> {t("valid_data_message") |> str} </span>
       </p>
-      <p className="font-semibold text-xs mt-4">
-        {"Here's a summary of student data in the uploaded sheet: " |> str}
-      </p>
+      <p className="font-semibold text-xs mt-4"> {t("valid_data_summary_text") |> str} </p>
       {csvData |> Array.length <= 10
         ? <table className="table-fixed mt-2 border w-full overflow-x-scroll">
             {tableHeader} <tbody> {tableRows(csvData, ())} </tbody>

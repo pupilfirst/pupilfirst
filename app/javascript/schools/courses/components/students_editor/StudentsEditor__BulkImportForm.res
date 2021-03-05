@@ -130,7 +130,7 @@ let tableHeader = {
 
 let tableRows = (csvData, ~startingRow=0, ()) => {
   csvData
-  |> Array.mapi((index, studentData) =>
+  |> Js.Array.mapi((index, studentData) =>
     <tr key={string_of_int(index)}>
       <td className="w-12 bg-gray-300 border border-gray-400 truncate text-xs px-2 py-1">
         {string_of_int(startingRow + index + 2) |> str}
@@ -160,7 +160,7 @@ let tableRows = (csvData, ~startingRow=0, ()) => {
 
 let truncatedTable = csvData => {
   let firsTwoRows = Js.Array.slice(~start=0, ~end_=2, csvData)
-  let lastTwoRows = Js.Array.sliceFrom(Array.length(csvData) - 2, csvData)
+  let lastTwoRows = Js.Array.sliceFrom(Js.Array.length(csvData) - 2, csvData)
   <div>
     <table className="table-fixed mt-2 border w-full overflow-x-scroll">
       {tableHeader} <tbody> {tableRows(firsTwoRows, ())} </tbody>
@@ -189,7 +189,7 @@ let truncatedTable = csvData => {
       </tbody>
     </table>
     <table className="table-fixed border w-full overflow-x-scroll">
-      <tbody> {tableRows(lastTwoRows, ~startingRow={Array.length(csvData) - 2}, ())} </tbody>
+      <tbody> {tableRows(lastTwoRows, ~startingRow={Js.Array.length(csvData) - 2}, ())} </tbody>
     </table>
   </div>
 }
@@ -203,7 +203,7 @@ let csvDataTable = (csvData, fileInvalid) => {
         <span> {t("valid_data_message") |> str} </span>
       </p>
       <p className="font-semibold text-xs mt-4"> {t("valid_data_summary_text") |> str} </p>
-      {csvData |> Array.length <= 10
+      {csvData |> Js.Array.length <= 10
         ? <table className="table-fixed mt-2 border w-full overflow-x-scroll">
             {tableHeader} <tbody> {tableRows(csvData, ())} </tbody>
           </table>
@@ -223,7 +223,7 @@ let clearFile = send => {
 
 let errorsTable = (csvData, errors) => {
   <table className="table-fixed mt-4 border w-full overflow-x-scroll">
-    {tableHeader} <tbody> {errors |> Array.mapi((index, error) => {
+    {tableHeader} <tbody> {errors |> Js.Array.mapi((index, error) => {
         let rowNumber = CSVDataError.rowNumber(error)
         let studentData = Js.Array2.unsafe_get(csvData, rowNumber - 2)
         <tr key={string_of_int(index)}>
@@ -278,7 +278,7 @@ let errorTabulation = (csvData, fileInvalid) => {
     switch fileInvalid {
     | InvalidData(errors) =>
       <div>
-        {errors->Array.length > 10
+        {errors->Js.Array.length > 10
           ? {
               <div>
                 {errorsTable(csvData, Js.Array.slice(~start=0, ~end_=10, errors))}
@@ -287,7 +287,7 @@ let errorTabulation = (csvData, fileInvalid) => {
                   <textArea
                     readOnly=true
                     className="border border-gray-400 bg-gray-100 rounded p-1 mt-1 w-full focus:outline-none focus:ring focus:border-primary-400">
-                    {Array.map(
+                    {Js.Array.map(
                       error => CSVDataError.rowNumber(error),
                       Js.Array2.sliceFrom(errors, 10),
                     )->Js.Array2.joinWith(",") |> str}
@@ -300,10 +300,10 @@ let errorTabulation = (csvData, fileInvalid) => {
           <div className="text-sm font-semibold pb-2"> {t("error_summary_title") |> str} </div>
           <ul className="list-disc list-inside text-xs">
             {errors
-            |> Array.map(error => CSVDataError.errors(error))
+            |> Js.Array.map(error => CSVDataError.errors(error))
             |> ArrayUtils.flattenV2
             |> ArrayUtils.distinct
-            |> Array.map(error =>
+            |> Js.Array.map(error =>
               <li>
                 {str(
                   switch error {

@@ -196,13 +196,14 @@ let truncatedTable = csvData => {
 
 let csvDataTable = (csvData, fileInvalid) => {
   ReactUtils.nullIf(
-    {
-      csvData |> Array.length <= 10
+    <div>
+      <div> {"Here's a summary of student data in the uploaded sheet: " |> str} </div>
+      {csvData |> Array.length <= 10
         ? <table className="table-auto mt-5 border w-full overflow-x-scroll">
             {tableHeader} <tbody> {tableRows(csvData, ())} </tbody>
           </table>
-        : truncatedTable(csvData)
-    },
+        : truncatedTable(csvData)}
+    </div>,
     fileInvalid->Belt.Option.isSome,
   )
 }

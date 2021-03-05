@@ -19,9 +19,15 @@ drop-node-modules: ## Drop node_modules folder
 
 reinstall-node-modules: drop-node-modules yarn ## Drop & reinstall npm dependencies
 
-migrate: ## Migrate development database
-	@echo "Migrating development database"
-	@bin/rails db:migrate db:test:prepare
+migrate-db: ## Migrate database
+	@echo "Migrating database"
+	@bin/rails db:migrate
+
+prepare-test-db: ## Prepate test database
+	@echo "Preparing test database"
+	@bin/rails db:test:prepare
+
+migrate: migrate-db prepare-test-db  ## Migrate development database
 
 cleanup: ## Clean files which pile up from time to time
 	@rm -f log/development.log
@@ -65,6 +71,10 @@ fork-sync-cleanup: ## Clean-up after manuall fork sync resolution
 	@git checkout master
 	@git branch -d fork-sync
 
+newrelic-deployment:
+	@curl -X POST 'https://api.eu.newrelic.com/v2/applications/${NEW_RELIC_APP_ID}/deployments.json' -H 'X-Api-Key:${NEW_RELIC_API_KEY}' -i -H 'Content-Type: application/json' -d '{ "deployment": { "revision": "${HEROKU_RELEASE_VERSION}", "changelog": "Deploy ${HEROKU_RELEASE_VERSION}: ${HEROKU_SLUG_COMMIT}", "user": "dev@growthtribe.nl" } }'
+
+release: migrate-db newrelic-deployment ## Release script used by Heroku
 
 .PHONY: help db
 

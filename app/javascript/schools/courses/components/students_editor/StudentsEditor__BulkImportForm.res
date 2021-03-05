@@ -170,20 +170,19 @@ let truncatedTable = csvData => {
         <tr
           className="divide-x divide-dashed divide-gray-400 border-l border-r border-dashed border-gray-400">
           <td className="w-12 px-2 py-3" />
+          <td className="px-2 py-3" />
           <td colSpan=3 className="px-2 py-3">
             <div>
               <div className="absolute inset-0 flex items-center" ariaHidden=true>
                 <div className="w-full border-t border-b py-1 border-dashed border-gray-400" />
               </div>
-              <div className="relative flex justify-start">
-                <span
-                  className="px-2 bg-white text-xs italic text-center font-semibold text-gray-700">
+              <div className="relative flex justify-center">
+                <span className="px-2 bg-white text-xs italic text-center text-gray-700">
                   {("- - - " ++ string_of_int(Array.length(csvData) - 4) ++ " Rows - - -")->str}
                 </span>
               </div>
             </div>
           </td>
-          <td className="px-2 py-3" />
           <td className="px-2 py-3" />
           <td className="px-2 py-3" />
         </tr>
@@ -293,7 +292,7 @@ let errorTabulation = (csvData, fileInvalid) => {
           : errorsTable(csvData, errors)}
         <div className="text-red-700 text-sm mt-4 rounded-md bg-red-100 p-3">
           <div className="text-sm font-semibold pb-2"> {t("error_summary_title") |> str} </div>
-          <ul className="list-disc list-inside">
+          <ul className="list-disc list-inside text-xs">
             {errors
             |> Array.map(error => CSVDataError.errors(error))
             |> ArrayUtils.flattenV2
@@ -346,7 +345,8 @@ let make = (~courseId) => {
                   )}
                 </HelpIcon>
               </div>
-              <div className="text-primary-500 underline text-xs font-semibold">
+              <div
+                className="flex items-center text-primary-500 text-xs font-semibold hover:text-primary-700 hover:underline">
                 <PfIcon className="if i-download-regular if-fw mr-2" />
                 <a href="https://docs.pupilfirst.com/files/student_import_sample.csv">
                   {t("example_csv_link") |> str}

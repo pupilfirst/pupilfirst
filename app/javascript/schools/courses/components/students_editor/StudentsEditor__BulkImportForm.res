@@ -162,7 +162,7 @@ let truncatedTable = csvData => {
   let firsTwoRows = Js.Array.slice(~start=0, ~end_=2, csvData)
   let lastTwoRows = Js.Array.sliceFrom(Array.length(csvData) - 2, csvData)
   <div>
-    <table className="table-fixed mt-4 border w-full overflow-x-scroll">
+    <table className="table-fixed mt-2 border w-full overflow-x-scroll">
       {tableHeader} <tbody> {tableRows(firsTwoRows, ())} </tbody>
     </table>
     <table className="table-fixed relative w-full overflow-x-scroll">
@@ -196,10 +196,17 @@ let truncatedTable = csvData => {
 
 let csvDataTable = (csvData, fileInvalid) => {
   ReactUtils.nullIf(
-    <div>
-      <div> {"Here's a summary of student data in the uploaded sheet: " |> str} </div>
+    <div className="mt-4">
+      <p
+        className="flex items-center bg-green-200 text-green-800 font-semibold text-xs p-2 rounded">
+        <PfIcon className="if i-check-regular if-fw mr-2" />
+        <span> {"Data validated successfully!" |> str} </span>
+      </p>
+      <p className="font-semibold text-xs mt-4">
+        {"Here's a summary of student data in the uploaded sheet: " |> str}
+      </p>
       {csvData |> Array.length <= 10
-        ? <table className="table-auto mt-5 border w-full overflow-x-scroll">
+        ? <table className="table-fixed mt-2 border w-full overflow-x-scroll">
             {tableHeader} <tbody> {tableRows(csvData, ())} </tbody>
           </table>
         : truncatedTable(csvData)}
@@ -367,7 +374,7 @@ let make = (~courseId) => {
             />
             <label
               onClick={_event => clearFile(send)}
-              className="file-input-label my-2"
+              className="file-input-label mt-2"
               htmlFor="csv-file-input">
               <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
               <span className="truncate"> {fileInputText(~fileInfo=state.fileInfo)->str} </span>
@@ -395,7 +402,7 @@ let make = (~courseId) => {
         </DisablingCover>
       </div>
       <div className="max-w-2xl flex justify-end px-6 pb-6 mx-auto">
-        <button disabled={saveDisabled(state)} className="w-auto btn btn-large btn-primary">
+        <button disabled={saveDisabled(state)} className="w-auto btn btn-success">
           {t("import_button_text")->str}
         </button>
       </div>

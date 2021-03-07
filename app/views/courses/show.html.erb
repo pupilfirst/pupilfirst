@@ -21,13 +21,13 @@
     </div>
   </div>
   <div class="px-3">
-    <div class="flex md:flex-row flex-col lg:max-w-3xl mx-auto">
-      <div>
+    <div class="flex flex-col md:flex-row lg:max-w-5xl mx-auto">
+      <div class="flex-1">
         <div
           class="course-show__header-cta-container bg-white border-transparent shadow rounded-lg -mt-5 md:-mt-7 z-10 relative pt-4 pb-5 md:py-8"
         >
           <div class="flex md:flex-row flex-col">
-            <div class="w-full md:w-2/3 pl-4 md:pl-8 ">
+            <div class="px-4 md:px-8">
               <h1 class="font-bold leading-snug">
                 <%= @course.name %>
               </h1>
@@ -51,7 +51,7 @@
         </div>
         <div class="mt-4">
           <% if presenter.show_about? %>
-            <div class="max-w-3xl mx-auto relative z-10 pb-8">
+            <div class="max-w-3xl mx-auto relative z-10 pb-6 md:pb-8">
               <div
                 class="px-4 md:px-8 markdown-block markdown-block__permissive"
               >
@@ -63,18 +63,18 @@
       </div>
 
       <% if @course.highlights.present? %>
-        <div class="ml-4 w-100 flex flex-col justify-between">
+        <div class="md:ml-4 md:w-2/6 flex flex-col justify-between">
           <div
-            class="pt-4 bg-white border-transparent shadow rounded-lg mt-4 -mt-5 md:-mt-7 z-10 relative"
+            class="pt-4 md:pt-6 bg-white border-transparent shadow rounded-lg md:-mt-7 z-10 relative md:sticky md:top-0"
           >
-            <div class="space-y-2 px-4">
+            <div class="space-y-6 px-4 md:px-6">
               <% @course.highlights.map do |highlight| %>
                 <div class="flex">
                   <div class="w-12">
                     <div
-                      class="h-10 w-10 shadow bg-primary-100 text-primary-400 rounded-full p-2"
+                      class="flex items-center justify-center h-10 w-10 shadow bg-primary-100 text-primary-400 rounded-full p-2"
                     >
-                      <i class="<%="if-fw if i-#{highlight['icon']}"%>"></i>
+                      <i class="<%="if text-lg i-#{highlight['icon']}"%>"></i>
                     </div>
                   </div>
                   <div class="ml-2">
@@ -89,7 +89,7 @@
               <%end%>
             </div>
             <% if @course.public_signup %>
-              <div class="mt-2">
+              <div class="p-4 md:p-6">
                 <a
                   href="<%= apply_course_path(@course) %>"
                   class="btn btn-success btn-large w-full"
@@ -102,10 +102,10 @@
         </div>
       <% end %>
     </div>
-    <div class="max-w-3xl mx-auto">
+    <div class="hidden md:block max-w-5xl mx-auto">
       <% if @course.public_signup %>
         <div
-          class="course-show__footer-cta-container bg-white py-12 px-4 text-center mt-8 border-transparent shadow rounded-lg md:mx-8 mx-4"
+          class="course-show__footer-cta-container bg-white py-12 px-4 text-center mt-8 border-transparent shadow rounded-lg"
         >
           <h2 class="text-3xl leading-tight">
             <span class="font-normal"> Enroll to </span>

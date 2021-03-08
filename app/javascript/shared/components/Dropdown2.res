@@ -45,7 +45,8 @@ let make = (
     selected
     {showDropdown
       ? <div
-          className={"dropdown__list bg-white overflow-y-auto shadow-lg rounded mt-1 border border-gray-400 absolute overflow-hidden z-30 " ++
+          className={"dropdown__list-2 bg-white shadow-lg rounded mt-1 border border-gray-400 absolute overflow-x-hidden z-30
+ " ++
           width ++
           ((right ? " right-0 " : " left-0 ") ++
           childClasses)}>
@@ -53,7 +54,8 @@ let make = (
             (content, index) =>
               <div
                 key={"dropdown-" ++ index->string_of_int}
-                className="cursor-pointer block text-sm font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 md:whitespace-no-wrap">
+                className="cursor-pointer block text-sm font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 md:whitespace-no-wrap
+">
                 content
               </div>,
             contents,

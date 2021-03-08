@@ -52,17 +52,21 @@ let removeHighlight = (index, highlights, updateHighlightsCB) => {
 }
 
 let selected = highlight => {
-  <div className="bg-white border border-gray-400 rounded py-3 px-4 h-12 mr-1">
-    <PfIcon className={"text-primary-500 if i-" ++ Course.Highlight.icon(highlight)} />
-  </div>
+  <button
+    className="flex items-center justify-center cursor-pointer bg-white border border-gray-400 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-500">
+    <PfIcon className={"text-lg if i-" ++ Course.Highlight.icon(highlight)} />
+  </button>
 }
 
 let contents = (replaceCB, highlight) => {
   Js.Array.map(
     icon =>
-      <span key=icon className="p-4" onClick={_ => updateIcon(replaceCB, highlight, icon)}>
-        <PfIcon className={"w-12 text-primary-500 if i-" ++ icon} />
-      </span>,
+      <button
+        key=icon
+        className="flex items-center justify-center p-3 w-full h-full"
+        onClick={_ => updateIcon(replaceCB, highlight, icon)}>
+        <PfIcon className={" text-gray-900 text-lg if i-" ++ icon} />
+      </button>,
     icons,
   )
 }
@@ -71,44 +75,49 @@ let contents = (replaceCB, highlight) => {
 let make = (~highlights, ~updateHighlightsCB) => {
   <div> {Js.Array.mapi((highlight, index) => {
       let replaceCB = replace(index, highlights, updateHighlightsCB)
-      <div key={string_of_int(index)} className="p-4 flex bg-gray-200 rounded-lg mt-4">
-        <Dropdown2
-          selected={selected(highlight)}
-          contents={contents(replaceCB, highlight)}
-          childClasses="flex w-40 flex-wrap"
-          width="w-40"
-        />
-        <div className="w-full">
-          <input
-            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id={string_of_int(index) ++ "-title"}
-            type_="text"
-            placeholder="Enter title"
-            maxLength=50
-            value={Course.Highlight.title(highlight)}
-            onChange={event =>
-              updateTitle(replaceCB, highlight, ReactEvent.Form.target(event)["value"])}
+      <div key={string_of_int(index)} className="flex items-start py-2 relative">
+        <div className="flex w-full bg-gray-100 border rounded-lg p-4 mr-1">
+          <Dropdown2
+            selected={selected(highlight)}
+            contents={contents(replaceCB, highlight)}
+            childClasses="grid grid-cols-5"
+            width="w-64"
           />
-          <input
-            className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id={string_of_int(index) ++ "-description"}
-            type_="text"
-            placeholder="Enter description"
-            maxLength=150
-            value={Course.Highlight.description(highlight)}
-            onChange={event =>
-              updateDescription(replaceCB, highlight, ReactEvent.Form.target(event)["value"])}
-          />
+          <div className="w-full">
+            <input
+              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              id={string_of_int(index) ++ "-title"}
+              type_="text"
+              placeholder="Enter title"
+              maxLength=50
+              value={Course.Highlight.title(highlight)}
+              onChange={event =>
+                updateTitle(replaceCB, highlight, ReactEvent.Form.target(event)["value"])}
+            />
+            <input
+              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              id={string_of_int(index) ++ "-description"}
+              type_="text"
+              placeholder="Enter description"
+              maxLength=150
+              value={Course.Highlight.description(highlight)}
+              onChange={event =>
+                updateDescription(replaceCB, highlight, ReactEvent.Form.target(event)["value"])}
+            />
+          </div>
         </div>
-        <button
-          onClick={_ => removeHighlight(index, highlights, updateHighlightsCB)}
-          className="bg-white border border-gray-400 rounded py-3 px-4 h-12 mr-1 cursor-pointer">
-          <FaIcon classes={"fas fa-trash-alt"} />
-        </button>
+        <div
+          className="flex-shrink-0 bg-gray-100 border rounded flex flex-col text-xs sticky top-0">
+          <button
+            onClick={_ => removeHighlight(index, highlights, updateHighlightsCB)}
+            className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
+            <FaIcon classes={"fas fa-trash-alt"} />
+          </button>
+        </div>
       </div>
     }, highlights)->React.array} <div>
       <button
-        className="btn btn-primary btn-large"
+        className="w-full mt-2 btn border border-dashed text-sm border-primary-500 bg-gray-200"
         onClick={_ => addHighlight(highlights, updateHighlightsCB)}>
         {"Add Course Highlight"->str}
       </button>

@@ -527,14 +527,14 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
     {enablePublicSignupButton(state.publicSignup, send)}
     {ReactUtils.nullUnless({processingUrlInput(state, send)}, state.publicSignup)}
     {courseHighlights(state.highlights, send)}
-    <div className="max-w-2xl p-6 mx-auto">
-      <div className="flex">
+    <div className="max-w-2xl py-6 mx-auto">
+      <div className="flex justify-end">
         {switch course {
         | Some(course) =>
           <button
             disabled={saveDisabled(state)}
             onClick={_ => updateCourse(state, send, updateCourseCB, course)}
-            className="w-full btn btn-large btn-primary mt-3">
+            className="btn btn-large btn-primary mt-3">
             {t("update_course")->str}
           </button>
 
@@ -542,7 +542,7 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
           <button
             disabled={saveDisabled(state)}
             onClick={_ => createCourse(state, send, relaodCoursesCB)}
-            className="w-full btn btn-large btn-primary mt-3">
+            className="btn btn-large btn-primary mt-3">
             {t("create_course")->str}
           </button>
         }}

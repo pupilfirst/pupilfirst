@@ -49,23 +49,14 @@ let checkboxOnChange = (setTermsAccepted, event) =>
     : setTermsAccepted(_ => false)
 
 let checkboxLabel = (termsAndConditions, privacyPolicy) => {
-  <div className="text-xs">
+  <div className="text-xs flex">
     {str("I agree to the ")}
-    {termsAndConditions
-      ? <a
-          href="/agreements/terms-and-conditions" className="cursor-pointer hover:text-primary-500">
-          {"Terms of Use" |> str}
-        </a>
-      : React.null}
+    {termsAndConditions ? <p> {"Terms of Use" |> str} </p> : React.null}
     {ReactUtils.nullUnless(
       <span className="px-1"> {str("&")} </span>,
       termsAndConditions && privacyPolicy,
     )}
-    {privacyPolicy
-      ? <a href="/agreements/privacy-policy" className="cursor-pointer hover:text-primary-500">
-          {"Privacy Policy" |> str}
-        </a>
-      : React.null}
+    {privacyPolicy ? <p> {"Privacy Policy" |> str} </p> : React.null}
   </div>
 }
 
@@ -79,7 +70,7 @@ let make = (~courseId, ~setViewEmailSent, ~email, ~name, ~termsAndConditions, ~p
   let (saving, setSaving) = React.useState(() => false)
   <div className="flex flex-col">
     <div className="w-full">
-      <div className="mt-4">
+      <div>
         <label htmlFor="email" className="inline-block tracking-wide text-xs font-semibold">
           {"Email"->str}
         </label>
@@ -108,6 +99,24 @@ let make = (~courseId, ~setViewEmailSent, ~email, ~name, ~termsAndConditions, ~p
           onChange={event => setName(ReactEvent.Form.target(event)["value"])}
           placeholder="John Doe"
         />
+      </div>
+      <div className="mt-4 flex space-x-3 text-xs">
+        {termsAndConditions
+          ? <a
+              href="/agreements/terms-and-conditions"
+              target="_blank"
+              className="inline-block cursor-pointer font-semibold text-gray-700 underline hover:text-primary-500">
+              {"Terms of Use" |> str}
+            </a>
+          : React.null}
+        {privacyPolicy
+          ? <a
+              href="/agreements/privacy-policy"
+              target="_blank"
+              className="inline-block cursor-pointer font-semibold text-gray-700 underline hover:text-primary-500">
+              {"Privacy Policy" |> str}
+            </a>
+          : React.null}
       </div>
       <div className="mt-4">
         <Checkbox

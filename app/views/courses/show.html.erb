@@ -65,7 +65,7 @@
       <% if @course.highlights.present? %>
         <div class="md:ml-4 md:w-2/6 flex flex-col justify-between">
           <div
-            class="pt-4 md:pt-6 bg-white border-transparent shadow rounded-lg md:-mt-7 z-10 relative md:sticky md:top-0"
+            class="py-4 md:py-6 bg-white border-transparent shadow rounded-lg md:-mt-7 z-10 relative md:sticky md:top-0"
           >
             <div class="space-y-6 px-4 md:px-6">
               <% @course.highlights.map do |highlight| %>
@@ -89,7 +89,7 @@
               <%end%>
             </div>
             <% if @course.public_signup %>
-              <div class="p-4 md:p-6">
+              <div class="p-4 pb-0 md:p-6 md:pb-0">
                 <a
                   href="<%= apply_course_path(@course) %>"
                   class="btn btn-success btn-large w-full"

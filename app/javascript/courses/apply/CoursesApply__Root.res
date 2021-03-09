@@ -21,16 +21,17 @@ let emailSentMessage = () =>
 let make = (~courseName, ~courseId, ~email, ~name, ~privacyPolicy, ~termsAndConditions) => {
   let (view, setView) = React.useState(() => Apply)
 
-  <div className="flex min-h-screen bg-gray-100 items-center justify-center">
+  <div className="flex md:min-h-screen bg-gray-100 md:items-center md:justify-center">
     <div className="py-8 w-full">
-      <div className="container mx-auto px-3 max-w-lg">
+      <div className="container mx-auto px-4 max-w-md">
         <div className="flex justify-center">
-          <h4 className="font-bold"> {"Enroll to " ++ (courseName ++ " course") |> str} </h4>
+          <h4 className="font-bold text-center">
+            {"Enroll to " ++ (courseName ++ " course") |> str}
+          </h4>
         </div>
-        <div
-          className="mt-4 relative flex flex-col shadow-xl rounded-lg overflow-hidden bg-white border">
+        <div className="mt-4 relative flex flex-col shadow-md rounded-lg overflow-hidden bg-white">
           <div className="">
-            <div className="p-4 pt-5 md:px-12 md:py-12 md:pt-10">
+            <div className="p-4 md:p-6">
               {switch view {
               | Apply =>
                 <CoursesApply__Form

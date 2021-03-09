@@ -103,7 +103,7 @@ let drawName = issuedCertificate => {
       ctx,
       (fontSize
       |> Js.Math.floor_int
-      |> string_of_int) ++ "px Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace",
+      |> string_of_int) ++ "px Barlow, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace",
     )
   )
   |> ignore
@@ -111,6 +111,8 @@ let drawName = issuedCertificate => {
   ctx |> OptionUtils.map(ctx => Webapi.Canvas.Canvas2d.textAlign(ctx, "center")) |> ignore
 
   ctx |> OptionUtils.map(ctx => Webapi.Canvas.Canvas2d.textBaseline(ctx, "middle")) |> ignore
+
+  ctx |> OptionUtils.map(ctx => Webapi.Canvas.Canvas2d.setFillStyle(ctx, String, "white")) |> ignore
 
   ctx
   |> OptionUtils.map(ctx =>

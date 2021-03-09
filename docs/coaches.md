@@ -13,7 +13,7 @@ Coaches can be added from the coaches page which is linked on the main navigatio
 
 You can add new coaches using the _Add New Coach_ option, and edit them by clicking on the name on this list. Coaches have a few additional properties unique to them:
 
-**Should the coach profile be public?**\
+**Should the coach profile be public?** \
 If this option is turned on for at least one coach, it will enable the public coaches index page at the `/coaches` path on your school. This page will list coaches that have been marked public using this setting.
 
 **Connect Link**\

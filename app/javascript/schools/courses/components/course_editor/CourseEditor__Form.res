@@ -534,7 +534,7 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
           <button
             disabled={saveDisabled(state)}
             onClick={_ => updateCourse(state, send, updateCourseCB, course)}
-            className="btn btn-large btn-primary mt-3">
+            className="btn btn-large btn-success mt-3">
             {t("update_course")->str}
           </button>
 
@@ -542,7 +542,7 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
           <button
             disabled={saveDisabled(state)}
             onClick={_ => createCourse(state, send, relaodCoursesCB)}
-            className="btn btn-large btn-primary mt-3">
+            className="btn btn-large btn-success mt-3">
             {t("create_course")->str}
           </button>
         }}

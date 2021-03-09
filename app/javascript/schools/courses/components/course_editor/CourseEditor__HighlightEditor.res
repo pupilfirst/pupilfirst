@@ -53,7 +53,7 @@ let removeHighlight = (index, highlights, updateHighlightsCB) => {
 
 let selected = highlight => {
   <button
-    className="flex items-center justify-center cursor-pointer bg-white border border-gray-400 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-500">
+    className="flex items-center justify-center cursor-pointer bg-white border border-gray-400 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400">
     <PfIcon className={"text-lg if i-" ++ Course.Highlight.icon(highlight)} />
   </button>
 }
@@ -76,7 +76,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
   <div> {Js.Array.mapi((highlight, index) => {
       let replaceCB = replace(index, highlights, updateHighlightsCB)
       <div key={string_of_int(index)} className="flex items-start py-2 relative">
-        <div className="flex w-full bg-gray-100 border rounded-lg p-4 mr-1">
+        <div className="flex items-start w-full bg-gray-100 border rounded-lg p-4 mr-1">
           <Dropdown2
             selected={selected(highlight)}
             contents={contents(replaceCB, highlight)}
@@ -85,7 +85,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
           />
           <div className="w-full">
             <input
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight font-semibold focus:outline-none focus:bg-white focus:border-gray-500"
               id={string_of_int(index) ++ "-title"}
               type_="text"
               placeholder="Enter title"
@@ -108,6 +108,14 @@ let make = (~highlights, ~updateHighlightsCB) => {
         </div>
         <div
           className="flex-shrink-0 bg-gray-100 border rounded flex flex-col text-xs sticky top-0">
+          <button
+            className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
+            <FaIcon classes={"fas fa-arrow-up"} />
+          </button>
+          <button
+            className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
+            <FaIcon classes={"fas fa-arrow-down"} />
+          </button>
           <button
             onClick={_ => removeHighlight(index, highlights, updateHighlightsCB)}
             className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">

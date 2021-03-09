@@ -404,7 +404,7 @@ let showCourses = (courses, state) => {
   </div>
 }
 
-let relaodCoursesCB = (send, ()) => {
+let reloadCoursesCB = (send, ()) => {
   ReasonReactRouter.push("/school/courses/")
   send(ReloadCourses)
 }
@@ -482,7 +482,7 @@ let make = (~selectedCourse) => {
           <CourseEditor__Form
             course
             updateCourseCB={updateCourse(send)}
-            relaodCoursesCB={relaodCoursesCB(send)}
+            reloadCoursesCB={reloadCoursesCB(send)}
             selectedTab
           />
         </SchoolAdmin__EditorDrawer2>

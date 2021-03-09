@@ -485,7 +485,7 @@ en:
       my_courses: My Courses
     WebPushSubscriptionManager:
       notification_rejected: Permission Rejected
-      notification_rejected_message: If you change your mind, click the lock icon to give Chrome permission to send you desktop notifications.
+      notification_rejected_message: If you change your mind, click the lock icon to give your browser permission to send you desktop notifications.
       subscribe: Subscribe
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe

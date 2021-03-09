@@ -1,10 +1,10 @@
 module Notifications
-  class FireService
+  class DeliverService
     def initialize(notification)
       @notification = notification
     end
 
-    def fire
+    def deliver
       return if @notification.blank?
 
       return if @notification.recipient.webpush_subscription.blank?
@@ -20,7 +20,9 @@ module Notifications
           open_timeout: 5,
           read_timeout: 5
         )
-      rescue Webpush::InvalidSubscription, Webpush::ExpiredSubscription, Webpush::Unauthorized
+      rescue Webpush::InvalidSubscription,
+             Webpush::ExpiredSubscription,
+             Webpush::Unauthorized
         @notification.recipient.update!(webpush_subscription: {})
       end
     end
@@ -36,9 +38,10 @@ module Notifications
     end
 
     def message
-      { title: @notification.message,
-        icon: "/favicon.ico",
-        tag: @notification.id,
+      {
+        title: @notification.message,
+        icon: '/favicon.ico',
+        tag: @notification.id
       }
     end
   end

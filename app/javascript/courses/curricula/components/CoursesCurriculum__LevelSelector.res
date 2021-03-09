@@ -9,7 +9,8 @@ let levelZeroSelectorClasses = isSelected => {
   )
 }
 
-let levelName = level => LevelLabel.format(~short=true, ~name=(level |> Level.name), (level |> Level.number |> string_of_int))
+let levelName = level =>
+  LevelLabel.format(~short=true, ~name=level |> Level.name, level |> Level.number |> string_of_int)
 
 let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId) => {
   let teamLevelNumber = teamLevel |> Level.number
@@ -28,10 +29,10 @@ let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId) => {
     }
 
     <button
-      className="focus:outline-none p-2 w-full text-left"
+      className="flex focus:outline-none p-2 w-full text-left whitespace-normal"
       key={level |> Level.id}
       onClick={_ => setSelectedLevelId(level |> Level.id)}>
-      <span className="mr-2"> <FaIcon classes={"fa-fw " ++ icon} /> </span>
+      <span className="mr-2 mt-px"> <FaIcon classes={"fa-fw " ++ icon} /> </span>
       {levelName(level) |> str}
     </button>
   })

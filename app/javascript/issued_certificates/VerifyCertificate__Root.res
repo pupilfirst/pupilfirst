@@ -96,7 +96,7 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
           </div>
           {currentUser
             ? <div className="mt-4">
-                <a href={linkedInAddToProfileUrl(issuedCertificate)} className="btn btn-primary w-3/4">
+                <a href={linkedInAddToProfileUrl(issuedCertificate)} target="_blank" className="btn btn-primary w-3/4">
                   <i className="fab fa-linkedin"></i>
                   <span className="ml-2"> {"Add to Your profile" |> str} </span>
                 </a>

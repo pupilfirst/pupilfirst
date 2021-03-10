@@ -169,6 +169,7 @@ let make = (
     ~issuedAt=Js.Date.make(),
     ~courseName="Test Course",
     ~imageUrl=Certificate.imageUrl(certificate),
+    ~addToLinkedinProfileUrl=None,
     ~margin=state.margin,
     ~fontSize=state.fontSize,
     ~nameOffsetTop=state.nameOffsetTop,

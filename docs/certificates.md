@@ -21,7 +21,7 @@ When creating a new certificate, you can give it a name (option), and then uploa
 
 Here's an example base image:
 
-![An example base certificate image](https://raw.githubusercontent.com/pupilfirst/pupilfirst/master/spec/support/uploads/certificates/sample.png)
+![An example base certificate image](https://raw.githubusercontent.com/pupilfirst/pupilfirst/master/spec/support/uploads/certificates/sample.png ":class=w-full-to-3xl")
 
 Notice how this image leaves an empty space where a student's name will be placed, and clear areas in the corners where a QR code could be placed.
 

@@ -21,7 +21,7 @@ Levels are the top organizational unit within a course, and act as an indicator 
 
 To create a new level, click the _Create Level_ button next to the level selector, and to edit a level's name, click the _edit icon_ next to the selected level. Levels have one additional property: a date to _Unlock level on_. If set, the _content_ of the level is hidden from students until that date. Coaches in a course, and all school admins will still have access to the content of locked levels.
 
-?> **What purpose does a level's _unlock date_ serve?**\
+?> **What purpose does a level's _unlock date_ serve?** \
 Locked levels are still _visible_ to a student, but it's content (targets) are not. This can be used to communicate to the student about the _path_ they're expected to follow, but to deliberately hide the exact content they'll get access to. For example, this can be useful if the content for a level is still a work-in-progress, but the overall organization of the course is fixed.
 
 ### Level actions
@@ -50,7 +50,7 @@ Clicking on a target will open the _Content_ tab by default, which allows you to
 
 You'll notice that the content is made up of different types of _content blocks_. If you hover over the region between any of the existing blocks, you'll find an option to insert a new content block into that space. There will always be a content block picker visible at the bottom of the existing content.
 
-![Target editor content blocks](https://res.cloudinary.com/sv-co/image/upload/v1581450578/pupilfirst_documentation/curriculum_editor/target_editor_blocks_xnvkky.png)
+![Target editor content blocks](https://res.cloudinary.com/sv-co/image/upload/v1581450578/pupilfirst_documentation/curriculum_editor/target_editor_blocks_xnvkky.png ":class=w-full-to-3xl")
 
 ### Content block types
 
@@ -59,7 +59,7 @@ At the moment, we support four types of content blocks.
 **Markdown**\
 The Markdown block allows you to write formatted text in the Markdown format. You can also embed files and images directly into the text using the file upload feature here, but you'll have no control over how they're displayed. Images will be centered, and displayed at actual size, whereas files will be inserted as links. Use the _Image_ and _File_ block types for greater control over these kinds of content.
 
-![Markdown Editor](https://res.cloudinary.com/sv-co/image/upload/v1581450985/pupilfirst_documentation/curriculum_editor/markdown_editor_xecdd0.png)
+![Markdown Editor](https://res.cloudinary.com/sv-co/image/upload/v1581450985/pupilfirst_documentation/curriculum_editor/markdown_editor_xecdd0.png ":class=w-full-to-3xl")
 
 To see a live preview of the content you're creating in the editor, choose the split-screen option at the top-right of the editor, and it'll switch to a full-screen mode that shows the content you're writing on the left, with its preview on the right.
 
@@ -93,28 +93,28 @@ This tab contains other basic details and configuration for the target, such as 
 
 To decide how a student can complete a target, this interface asks you a few questions:
 
-**Are there any prerequisite targets?**\
+**Are there any prerequisite targets?** \
 You can select other targets from the same level as pre-requisite targets. This will _lock_ the target until the student has completed the prerequisites.
 
-**Will a coach review submissions on this target?**\
+**Will a coach review submissions on this target?** \
 If you would like a coach to review a submission from a student - pick _Yes_ here. If you'd like the student to complete the target on their own, pick _No_.
 
 **Choose evaluation criteria from your list**\
 This list will appear only if you've chosen to have the target's submission reviewed by a coach. Pick at least one evaluation criteria that the coach should use when reviewing submissions from students for this target.
 
-**How do you want the student to complete the target?**\
+**How do you want the student to complete the target?** \
 If you answered _No_ to whether a coach will review submissions for the target, then you'll need to pick one of three ways by which a student can complete the target on their own:
 
 1. Simply mark the target as completed: No additional steps.
 2. Visit a link to complete the target: You'll be asked for the link.
 3. Take a quiz to complete that target: You'll need to prepare a quiz - the process for this is detailed below.
 
-**How should teams tackle this target?**\
+**How should teams tackle this target?** \
 If you have students grouped into teams, then you'll probably have some targets that you'd like them to tackle together. When creating a new target, this setting will default to _All students must submit individually_, which means that each student will need to submit on their own. If it's a reviewed milestone target, then all students in the team will need to pass for the team to [be eligible to level up](/taking_courses?id=leveling-up).
 
 For those targets where you expect students to work together and submit as a _unit_, you can choose the _Only one student in a team needs to submit_ option. Now, if any student in a team submits work on the target, the submission will be credited to all students in the team. If work on the target is reviewed by a coach, then the name of all students in the team will be listed next to the submission, and any feedback on the submission will be sent to all linked students.
 
-**Do you have any completion instructions for the student?**\
+**Do you have any completion instructions for the student?** \
 Text entered here will be displayed right next to where the students take action on a target. For targets that are simply marked as complete or completed by visiting a link, this will be at the end of the main content, next to the button that completes the target. For quizzes and reviewed submissions, this will be at the top of the page that displays the quiz, or the submission form.
 
 ### Defining steps to complete a target
@@ -130,7 +130,8 @@ Each step needs to have a _title_ and an _action type_. Together, they define ho
 5. **Choose from a list:** Student is shown a list of choices, from which they can pick one; you decide what the choices are.
 
 Here's an example target consisting, of four steps to complete the target:
-![Adding a target checklist](https://res.cloudinary.com/sv-co/image/upload/v1583171215/pupilfirst_documentation/curriculum_editor/target_checklist_editor_eguduz.png)
+
+![Adding a target checklist](https://res.cloudinary.com/sv-co/image/upload/v1583171215/pupilfirst_documentation/curriculum_editor/target_checklist_editor_eguduz.png ":class=w-full-to-3xl")
 
 Apart from _title_ and _action type_, you can make any step _optional_. Optional steps can be skipped by students when submitting a target. In the example above, step 2 of type _Attach a Link_ is optional.
 
@@ -172,11 +173,11 @@ The third tab of the target editor is called _Versions_. Just like the _Details_
 
 This tab shows you a preview of a target's content as it appears now to the student. But more importantly, it allows you to save the current state of the content as a version, browse previous versions to see how the target's content looked earlier, and restore an old version.
 
-![Browsing previous versions of a target's contents](https://res.cloudinary.com/sv-co/image/upload/v1581452180/pupilfirst_documentation/curriculum_editor/versions_qtt3j8.png)
+![Browsing previous versions of a target's contents](https://res.cloudinary.com/sv-co/image/upload/v1581452180/pupilfirst_documentation/curriculum_editor/versions_qtt3j8.png ":class=w-full-to-3xl")
 
 When a target is first created, you're assumed to be working on its first version. Once you've worked on the target's content for a while, and are happy with it's state, the _Versions_ tab will allow you to _save that version_. Saving a version will create a new version which will hold future changes.
 
-?> **What exactly is a _version_?**\
+?> **What exactly is a _version_?** \
 A version can be thought of as a _snapshot_ of a target's content as it looked at the time it was taken. However, you're always working on the _current_ version of the target, so that can always be changed an author. You'll need to take a _snapshot_ manually on the versions tab for a new version to be created. As the author of a target, you're the best person to decide when it's appropriate to preserve a version.
 
 This feature allows you to preserve a _known good state_ for a target's content, and since you can browse previous versions of a target, it can help track changes to the content, or even act as a safeguard, by allowing you to _restore a previous version_ if something goes awry during the editing process.

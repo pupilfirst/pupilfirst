@@ -28,12 +28,12 @@ You can create many communities if you'd like, to categorize what's discussed in
 
 When creating a new community, you need to give it a name. You can also edit a few other properties:
 
-**Should students be allowed to discuss targets in this community?**\
+**Should students be allowed to discuss targets in this community?** \
 Enabling this option will make the _Discuss_ tab appear inside the student's target window, and will allow students to link targets in a course to community posts.
 
 The _Discuss_ tab allows students to create questions in the community that are _linked_ to the target that they came from. This allows future students see questions asked in the community that's related to the target that they're currently looking at. Doubts about a target are often similar, so it can be a useful for your students to keep them grouped close to the source material.
 
-**Give access to students from:**\
+**Give access to students from:** \
 Select a list of courses whose students will be allowed to access the community.
 
 ?> **Reminder:** All communities are accessible by coaches and admins.

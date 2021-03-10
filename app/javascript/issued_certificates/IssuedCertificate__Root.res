@@ -101,6 +101,7 @@ let drawName = issuedCertificate => {
   |> OptionUtils.map(ctx =>
     Webapi.Canvas.Canvas2d.font(
       ctx,
+      "600 " ++
       (fontSize
       |> Js.Math.floor_int
       |> string_of_int) ++ "px Barlow, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace",

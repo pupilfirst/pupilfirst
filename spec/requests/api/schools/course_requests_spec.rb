@@ -51,7 +51,7 @@ module Api
         let!(:students) do
           student_structs = 4.times.map { |i| OpenStruct.new(name: "Test#{i}", email: "test#{i}@test.com") }
           student_ids = ::Courses::AddStudentsService.new(course, notify: false).add(student_structs)
-          User.joins(:founders).where(founders: { id: student_ids })
+          User.joins(:founders).where(founders: { id: student_ids }).order(:id)
         end
 
         it 'returns all students of a course' do
@@ -88,7 +88,7 @@ module Api
               {name: 'Test2', email: 'test2@test.com'}
             ]
           }
-          form = Students::CreateForm.new(Reform::OpenForm.new) 
+          form = Students::CreateForm.new(Reform::OpenForm.new)
           allow(Students::CreateForm).to receive(:new) { form }
           expect(::Courses::AddStudentsService).to receive(:new).with(course, hash_including(notify: true)) { form }
           post "/api/schools/courses/#{course.id}/students", params: params, headers: headers

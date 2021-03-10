@@ -12,7 +12,7 @@ module Api
       end
 
       def students
-        students = @course.users.map do |u|
+        students = @course.users.order(:id).map do |u|
           { name: u.name, email: u.email }
         end
         render json: { students: students }

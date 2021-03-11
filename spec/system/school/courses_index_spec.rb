@@ -4,6 +4,7 @@ feature 'Courses Index', js: true do
   include UserSpecHelper
   include NotificationHelper
   include MarkdownEditorHelper
+  include DevelopersNotificationsHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
@@ -273,6 +274,7 @@ feature 'Courses Index', js: true do
     let!(:startup) { create :startup, level: level }
 
     scenario 'school admin archives a course' do
+      notification_service = prepare_developers_notification
       sign_in_user school_admin.user,
                    referrer: actions_school_course_path(course_1)
       expect(startup.access_ends_at).to eq(nil)
@@ -286,10 +288,18 @@ feature 'Courses Index', js: true do
       within("div[id='courses']") do
         expect(page).not_to have_text(course_1.name)
       end
+      expect_published(
+        notification_service,
+        course_1,
+        :course_archived,
+        school_admin.user,
+        course_1
+      )
     end
   end
 
   scenario 'school admin un-archives a course' do
+    notification_service = prepare_developers_notification
     sign_in_user school_admin.user, referrer: school_courses_path
     fill_in('Search', with: 'archived')
     click_button 'Pick Status: Archived'
@@ -303,5 +313,12 @@ feature 'Courses Index', js: true do
     within("div[id='courses']") do
       expect(page).not_to have_text(course_archived.name)
     end
+    expect_published(
+      notification_service,
+      course_archived,
+      :course_unarchived,
+      school_admin.user,
+      course_archived
+    )
   end
 end

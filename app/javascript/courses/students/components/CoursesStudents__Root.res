@@ -189,16 +189,11 @@ let getTeams = (send, courseId, cursor, filter) => {
   )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    let newTeams = switch response["teams"]["nodes"] {
-    | None => []
-    | Some(teamsArray) => teamsArray |> TeamInfo.makeArrayFromJs
-    }
-
     send(
       LoadTeams(
         response["teams"]["pageInfo"]["endCursor"],
         response["teams"]["pageInfo"]["hasNextPage"],
-        newTeams,
+        TeamInfo.makeArrayFromJs(response["teams"]["nodes"]),
       ),
     )
 

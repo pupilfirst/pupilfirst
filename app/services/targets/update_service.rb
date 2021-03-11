@@ -57,13 +57,13 @@ module Targets
     def recreate_quiz(quiz)
       new_quiz = Quiz.create!(target_id: @target.id, title: @target.title)
       quiz.map do |quiz_question|
-        new_quiz_question = QuizQuestion.create!(question: quiz_question["question"], quiz: new_quiz)
-        quiz_question["answerOptions"].map do |answer_option|
-          if answer_option["correctAnswer"]
-            correct_answer = AnswerOption.create!(quiz_question_id: new_quiz_question.id, value: answer_option["answer"])
+        new_quiz_question = QuizQuestion.create!(question: quiz_question.question, quiz: new_quiz)
+        quiz_question.answer_options.map do |answer_option|
+          if answer_option.correct_answer
+            correct_answer = AnswerOption.create!(quiz_question_id: new_quiz_question.id, value: answer_option.answer)
             new_quiz_question.update!(correct_answer_id: correct_answer.id)
           else
-            AnswerOption.create!(quiz_question_id: new_quiz_question.id, value: answer_option["answer"])
+            AnswerOption.create!(quiz_question_id: new_quiz_question.id, value: answer_option.answer)
           end
         end
       end

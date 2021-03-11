@@ -30,9 +30,15 @@ type filter = {
   status: option<status>,
 }
 
+module Item = {
+  type t = Entry.t
+}
+
+module Pagination = Pagination.Make(Item)
+
 type state = {
   loading: Loading.t,
-  entries: Entries.t,
+  entries: Pagination.t,
   filterString: string,
   filter: filter,
   saving: bool,
@@ -84,19 +90,14 @@ let reducer = (state, action) =>
   | UpdateFilterString(filterString) => {...state, filterString: filterString}
   | LoadNotifications(endCursor, hasNextPage, newTopics, totalEntriesCount) =>
     let updatedTopics = switch state.loading {
-    | LoadingMore => newTopics |> Array.append(state.entries |> Entries.toArray)
+    | LoadingMore => Js.Array.concat(Pagination.toArray(state.entries), newTopics)
     | Reloading => newTopics
     | NotLoading => newTopics
     }
 
     {
       ...state,
-      entries: switch (hasNextPage, endCursor) {
-      | (_, None)
-      | (false, Some(_)) =>
-        FullyLoaded(updatedTopics)
-      | (true, Some(cursor)) => PartiallyLoaded(updatedTopics, cursor)
-      },
+      entries: Pagination.make(updatedTopics, hasNextPage, endCursor),
       loading: NotLoading,
       totalEntriesCount: totalEntriesCount,
     }
@@ -106,11 +107,7 @@ let reducer = (state, action) =>
   | ClearSaving => {...state, saving: false}
   | MarkNotification(id) => {
       ...state,
-      entries: switch state.entries {
-      | Unloaded => Unloaded
-      | PartiallyLoaded(entries, cursor) => PartiallyLoaded(updateNotification(id, entries), cursor)
-      | FullyLoaded(entries) => FullyLoaded(updateNotification(id, entries))
-      },
+      entries: Pagination.update(state.entries, updateNotification(id)),
       totalEntriesCount: state.filter.status->Belt.Option.isSome
         ? state.totalEntriesCount - 1
         : state.totalEntriesCount,
@@ -304,15 +301,7 @@ module Selectable = {
       t("filter.status." ++ key)
     }
 
-  let searchString = s =>
-    switch s {
-    | Event(event) => t("filter.event") ++ (" " ++ eventName(event))
-    | Title(search) => search
-    | Status(_unread) =>
-      t("filter.status.read") ++
-      (" " ++
-      (t("filter.status.unread") ++ (" " ++ t("filter.status.all"))))
-    }
+  let searchString = s => value(s)
 
   let color = t =>
     switch t {
@@ -343,7 +332,7 @@ let unselected = state => {
     | #Read => [#Unread]
     | #Unread => [#Read]
     }
-  ) |> Array.map(s => Selectable.status(s))
+  ) |> Js.Array.map(s => Selectable.status(s))
 
   eventFilters |> Js.Array.concat(title) |> Js.Array.concat(status)
 }

@@ -6,13 +6,13 @@ Pupilfirst has a robust data export feature that'll let you pull data out of the
 
 To prepare a new export, visit the _Exports_ sub-menu within a course, and click the _Create New Export_ button. You have a few options to choose when preparing an export:
 
-**Select the kind of export you need:**\
+**Select the kind of export you need:** \
 You need to choose between _Students_ and _Teams_. This changes the resulting export to focus on either teams of students, or on the individual students within a course. These changes are highlighted in the documentation for the individual sheets, below.
 
-**Export only students with the following tags:**\
+**Export only students with the following tags:** \
 You can limit the results to a select group of students (or teams) by picking one or more tags that's associated with them.
 
-**Which targets should the export include?**\
+**Which targets should the export include?** \
 This defaults to _All targets_, but you can change it to _Only targets with reviewed submissions_, which will restrict the exported data to targets with submissions that are reviewed and graded by coaches.
 
 Once you're happy with the options, click the _Create Export_ button.

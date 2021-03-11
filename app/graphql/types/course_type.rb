@@ -1,5 +1,6 @@
 module Types
   class CourseType < Types::BaseObject
+    connection_type_class Types::PupilfirstConnection
     field :id, ID, null: false
     field :name, String, null: false
     field :description, String, null: false
@@ -12,12 +13,7 @@ module Types
     field :featured, Boolean, null: false
     field :progression_behavior, Types::ProgressionBehaviorType, null: false
     field :progression_limit, Integer, null: true
-
-    def grades_and_labels
-      object.grade_labels.map do |grade, label|
-        { grade: grade.to_i, label: label }
-      end
-    end
+    field :archived_at, GraphQL::Types::ISO8601DateTime, null: true
 
     def cover
       image_details(object.cover)

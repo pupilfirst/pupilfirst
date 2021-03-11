@@ -1,1 +1,5 @@
 /* Custom style, if any. */
+.w-full-to-3xl {
+  width: 100%;
+  max-width: 48rem;
+}

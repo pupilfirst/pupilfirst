@@ -10,8 +10,14 @@ describe ApplicationController do
     let!(:third_school_domain) { create :domain, :primary, fqdn: 'www.third.localhost', school: third_school }
 
     context 'when multitenancy is turned on' do
-      before do
-        Rails.application.secrets.multitenancy = true
+      around(:each) do |example|
+        begin
+          current = Rails.application.secrets.multitenancy
+          Rails.application.secrets.multitenancy = true
+          example.run
+        ensure
+          Rails.application.secrets.multitenancy = current
+        end
       end
 
       context 'when the current domain belongs to second school' do
@@ -40,8 +46,14 @@ describe ApplicationController do
     end
 
     context 'when multitenancy is turned off' do
-      before do
-        Rails.application.secrets.multitenancy = false
+      around(:each) do |example|
+        begin
+          current = Rails.application.secrets.multitenancy
+          Rails.application.secrets.multitenancy = false
+          example.run
+        ensure
+          Rails.application.secrets.multitenancy = current
+        end
       end
 
       it 'returns the first school' do

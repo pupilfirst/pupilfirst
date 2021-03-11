@@ -39,25 +39,19 @@ let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")
 
 let timeDistance = t => t.createdAt->DateFns.formatDistanceToNowStrict(~addSuffix=true, ())
 
-let makeFromJs = submissions => submissions |> Js.Array.map(submission =>
-    switch submission {
-    | Some(submission) =>
-      let createdAt = submission["createdAt"]->DateFns.decodeISO
+let makeFromJs = submissions => Js.Array.map(submission => {
+    let createdAt = submission["createdAt"]->DateFns.decodeISO
 
-      let passedAt = submission["passedAt"]->Belt.Option.map(DateFns.decodeISO)
+    let passedAt = submission["passedAt"]->Belt.Option.map(DateFns.decodeISO)
 
-      let evaluatedAt = submission["evaluatedAt"]->Belt.Option.map(DateFns.decodeISO)
+    let evaluatedAt = submission["evaluatedAt"]->Belt.Option.map(DateFns.decodeISO)
 
-      list{
-        make(
-          ~id=submission["id"],
-          ~title=submission["title"],
-          ~createdAt,
-          ~passedAt,
-          ~levelId=submission["levelId"],
-          ~evaluatedAt,
-        ),
-      }
-    | None => list{}
-    }
-  )
+    make(
+      ~id=submission["id"],
+      ~title=submission["title"],
+      ~createdAt,
+      ~passedAt,
+      ~levelId=submission["levelId"],
+      ~evaluatedAt,
+    )
+  }, submissions)

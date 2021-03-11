@@ -25,10 +25,10 @@ This is a markdown field - you can use this to add descriptive text about your c
 **Progression Behavior**\
 This setting controls how students are allowed to level up in your course. This setting only applies if your course contains [milestone targets](/targets?id=milestone-targets) that require your students to submit work for review. There are three possible options, which are described in detail below.
 
-**Feature course in school homepage?**\
+**Feature course in school homepage?** \
 If enabled, the course will be displayed on the list of featured courses on your school's homepage, along with a link to the course's details page (which includes the content of the _about_ field).
 
-**Enable public signup for this course?**\
+**Enable public signup for this course?** \
 If enabled, members of the public will be able to sign up for your course.
 
 ## Editing courses
@@ -72,3 +72,37 @@ Because this image fits with the width of the page, it should be created followi
 Here's an example image that shows where you should place text in a cover image:
 
 [![Cover image composition](https://res.cloudinary.com/sv-co/image/upload/v1574756690/pupilfirst_documentation/courses/cover_composition_hztuof.png)](https://res.cloudinary.com/sv-co/image/upload/v1574756690/pupilfirst_documentation/courses/cover_composition_hztuof.png)
+
+## Course Actions
+
+### Archive Course
+
+Archiving a course will hide the course from the platform. All the students will be marked as _access ended_ and they will no longer be able to access the course.
+
+### Unarchive Course
+
+Unarchiving a course will bring back the course to an _ended_ state. You can move it to _live_ state by clearing the _Course end date_.
+
+> Note: The course will not have any active students.
+
+## States for a course
+
+A course will always be in one of the 3 states mentioned below.
+
+> You can see the courses in each state changing the filter.
+
+### Active
+
+A course that is not ended or archived
+
+### Ended
+
+Courses that have passed the _course end date_
+
+> Note: Course will be hidden form all the _nav bars_ in school admin interface. The links to school admin pages for the course can only be accessed from the courses page.
+
+### Archived
+
+Courses that are archived.
+
+> Course will be hidden from the platform

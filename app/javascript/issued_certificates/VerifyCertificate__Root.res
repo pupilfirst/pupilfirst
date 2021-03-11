@@ -44,6 +44,14 @@ let issuedToName = issuedCertificate => {
   }
 }
 
+let linkedInAddToProfileUrl = (issuedCertificate) => {
+  switch issuedCertificate
+    |> IssuedCertificate.addToLinkedinProfileUrl {
+    | Some(url) => url |> Js.Global.encodeURI
+    | _ => ""
+  }
+}
+
 @react.component
 let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
   let (viewMode, setViewMode) = React.useState(() => Screen)
@@ -81,11 +89,19 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
               </div>
             : React.null}
           <div className="mt-4">
-            <button onClick={printCertificate(setViewMode)} className="btn btn-primary">
+            <button onClick={printCertificate(setViewMode)} className="btn btn-primary w-3/4">
               <i className="fas fa-print" />
               <span className="ml-2"> {"Print, or save as PDF" |> str} </span>
             </button>
           </div>
+          {currentUser
+            ? <div className="mt-4">
+                <a href={linkedInAddToProfileUrl(issuedCertificate)} target="_blank" className="btn btn-primary w-3/4">
+                  <i className="fab fa-linkedin"></i>
+                  <span className="ml-2"> {"Add to Your profile" |> str} </span>
+                </a>
+              </div>
+            : React.null}
         </div>
         <div
           className="md:w-7/12 mt-6 md:mt-0 rounded-lg overflow-hidden border-8 border-white shadow-lg">
@@ -120,3 +136,5 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
     </div>
   }
 }
+
+

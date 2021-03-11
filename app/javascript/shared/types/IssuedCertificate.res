@@ -7,6 +7,7 @@ type t = {
   issuedAt: Js.Date.t,
   courseName: string,
   imageUrl: string,
+  addToLinkedinProfileUrl: option<string>,
   margin: int,
   fontSize: int,
   nameOffsetTop: int,
@@ -20,6 +21,7 @@ let profileName = t => t.profileName
 let issuedAt = t => t.issuedAt
 let courseName = t => t.courseName
 let imageUrl = t => t.imageUrl
+let addToLinkedinProfileUrl = t => t.addToLinkedinProfileUrl
 let margin = t => t.margin
 let nameOffsetTop = t => t.nameOffsetTop
 let fontSize = t => t.fontSize
@@ -33,6 +35,7 @@ let make = (
   ~issuedAt,
   ~courseName,
   ~imageUrl,
+  ~addToLinkedinProfileUrl,
   ~margin,
   ~fontSize,
   ~nameOffsetTop,
@@ -45,6 +48,7 @@ let make = (
   issuedAt: issuedAt,
   courseName: courseName,
   imageUrl: imageUrl,
+  addToLinkedinProfileUrl: addToLinkedinProfileUrl,
   margin: margin,
   fontSize: fontSize,
   nameOffsetTop: nameOffsetTop,
@@ -61,6 +65,7 @@ let decode = json => {
     ~issuedAt=field("issuedAt", DateFns.decodeISO, json),
     ~courseName=field("courseName", string, json),
     ~imageUrl=field("imageUrl", string, json),
+    ~addToLinkedinProfileUrl=json |> optional(field("addToLinkedinProfileUrl", string)),
     ~margin=field("margin", int, json),
     ~fontSize=field("fontSize", int, json),
     ~nameOffsetTop=field("nameOffsetTop", int, json),

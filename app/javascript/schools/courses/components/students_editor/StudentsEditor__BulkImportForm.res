@@ -224,49 +224,34 @@ let clearFile = send => {
   )
 }
 
+let rowClasses = hasError =>
+  "border border-gray-400 truncate text-xs px-2 py-1 " ++ (
+    hasError ? "bg-red-200 text-red-800" : ""
+  )
+
 let errorsTable = (csvData, errors) => {
   <table className="table-fixed mt-4 border w-full overflow-x-scroll">
     {tableHeader} <tbody> {Js.Array.mapi((error, index) => {
         let rowNumber = CSVDataError.rowNumber(error)
         let studentData = Js.Array2.unsafe_get(csvData, rowNumber - 2)
         <tr key={string_of_int(index)}>
-          <td className="border border-gray-400 truncate text-xs px-2 py-1">
-            {rowNumber->string_of_int->str}
-          </td>
-          <td
-            className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
-              CSVDataError.hasNameError(error) ? "bg-red-200 text-red-800" : ""
-            )}>
+          <td className={rowClasses(false)}> {rowNumber->string_of_int->str} </td>
+          <td className={rowClasses(CSVDataError.hasNameError(error))}>
             {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
-          <td
-            className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
-              CSVDataError.hasEmailError(error) ? "bg-red-200 text-red-800" : ""
-            )}>
+          <td className={rowClasses(CSVDataError.hasEmailError(error))}>
             {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
-          <td
-            className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
-              CSVDataError.hasTitleError(error) ? "bg-red-200 text-red-800" : ""
-            )}>
+          <td className={rowClasses(CSVDataError.hasTitleError(error))}>
             {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
-          <td
-            className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
-              CSVDataError.hasTeamNameError(error) ? "bg-red-200 text-red-800" : ""
-            )}>
+          <td className={rowClasses(CSVDataError.hasTeamNameError(error))}>
             {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
-          <td
-            className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
-              CSVDataError.hasTagsError(error) ? "bg-red-200 text-red-800" : ""
-            )}>
+          <td className={rowClasses(CSVDataError.hasTagsError(error))}>
             {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
-          <td
-            className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
-              CSVDataError.hasAffiliationError(error) ? "bg-red-200 text-red-800" : ""
-            )}>
+          <td className={rowClasses(CSVDataError.hasAffiliationError(error))}>
             {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
         </tr>

@@ -37,9 +37,9 @@ let validTemplate = csvData => {
 }
 
 let validateFile = (csvData, fileInfo) => {
-  CSVReader.fileSize(fileInfo) > 100000 || CSVReader.fileType(fileInfo) != "text/csv"
+  CSVReader.fileSize(fileInfo) > 50000
     ? Some(InvalidCSVFile)
-    : csvData |> ArrayUtils.isEmpty
+    : ArrayUtils.isEmpty(csvData)
     ? Some(EmptyFile)
     : !validTemplate(csvData)
     ? Some(InvalidTemplate)
@@ -47,7 +47,7 @@ let validateFile = (csvData, fileInfo) => {
     ? Some(ExceededEntries)
     : {
         let dataErrors = CSVDataError.parseError(csvData)
-        dataErrors |> ArrayUtils.isNotEmpty ? Some(InvalidData(dataErrors)) : None
+        ArrayUtils.isNotEmpty(dataErrors) ? Some(InvalidData(dataErrors)) : None
       }
 }
 
@@ -80,7 +80,7 @@ let reducer = (state, action) =>
 let saveDisabled = state =>
   state.fileInfo->Belt.Option.isNone || state.fileInvalid->Belt.Option.isSome || state.saving
 
-let submitForm = (courseId, send, event) => {
+let submitForm = (courseId, send, closeDrawerCB, event) => {
   ReactEvent.Form.preventDefault(event)
   send(BeginSaving)
 
@@ -94,7 +94,10 @@ let submitForm = (courseId, send, event) => {
     formData,
     json => {
       Json.Decode.field("success", Json.Decode.bool, json)
-        ? Notification.success(t("done_exclamation"), t("success_notification"))
+        ? {
+            Notification.success(t("done_exclamation"), t("success_notification"))
+            closeDrawerCB()
+          }
         : ()
       send(EndSaving)
     },
@@ -107,55 +110,55 @@ let tableHeader = {
     <tr className="bg-gray-300">
       <th className="w-12 border border-gray-400 text-left text-xs px-2 py-1 font-semibold" />
       <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
-        {"name" |> str}
+        {"name"->str}
       </th>
       <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
-        {"email" |> str}
+        {"email"->str}
       </th>
       <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
-        {"title" |> str}
+        {"title"->str}
       </th>
       <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
-        {"team_name" |> str}
+        {"team_name"->str}
       </th>
       <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
-        {"tags" |> str}
+        {"tags"->str}
       </th>
       <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
-        {"affiliation" |> str}
+        {"affiliation"->str}
       </th>
     </tr>
   </thead>
 }
 
 let tableRows = (csvData, ~startingRow=0, ()) => {
-  csvData
-  |> Js.Array.mapi((studentData, index) =>
-    <tr key={string_of_int(index)}>
-      <td className="w-12 bg-gray-300 border border-gray-400 truncate text-xs px-2 py-1">
-        {string_of_int(startingRow + index + 2) |> str}
-      </td>
-      <td className="border border-gray-400 truncate text-xs px-2 py-1">
-        {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("") |> str}
-      </td>
-      <td className="border border-gray-400 truncate text-xs px-2 py-1">
-        {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("") |> str}
-      </td>
-      <td className="border border-gray-400 truncate text-xs px-2 py-1">
-        {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("") |> str}
-      </td>
-      <td className="border border-gray-400 truncate text-xs px-2 py-1">
-        {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("") |> str}
-      </td>
-      <td className="border border-gray-400 truncate text-xs px-2 py-1">
-        {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("") |> str}
-      </td>
-      <td className="border border-gray-400 truncate text-xs px-2 py-1">
-        {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("") |> str}
-      </td>
-    </tr>
-  )
-  |> React.array
+  Js.Array.mapi(
+    (studentData, index) =>
+      <tr key={string_of_int(index)}>
+        <td className="w-12 bg-gray-300 border border-gray-400 truncate text-xs px-2 py-1">
+          {string_of_int(startingRow + index + 2)->str}
+        </td>
+        <td className="border border-gray-400 truncate text-xs px-2 py-1">
+          {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("")->str}
+        </td>
+        <td className="border border-gray-400 truncate text-xs px-2 py-1">
+          {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("")->str}
+        </td>
+        <td className="border border-gray-400 truncate text-xs px-2 py-1">
+          {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("")->str}
+        </td>
+        <td className="border border-gray-400 truncate text-xs px-2 py-1">
+          {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("")->str}
+        </td>
+        <td className="border border-gray-400 truncate text-xs px-2 py-1">
+          {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("")->str}
+        </td>
+        <td className="border border-gray-400 truncate text-xs px-2 py-1">
+          {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("")->str}
+        </td>
+      </tr>,
+    csvData,
+  )->React.array
 }
 
 let truncatedTable = csvData => {
@@ -200,10 +203,10 @@ let csvDataTable = (csvData, fileInvalid) => {
       <p
         className="flex items-center bg-green-200 text-green-800 font-semibold text-xs p-2 rounded">
         <PfIcon className="if i-check-regular if-fw mr-2" />
-        <span> {t("valid_data_message") |> str} </span>
+        <span> {t("valid_data_message")->str} </span>
       </p>
-      <p className="font-semibold text-xs mt-4"> {t("valid_data_summary_text") |> str} </p>
-      {csvData |> Js.Array.length <= 10
+      <p className="font-semibold text-xs mt-4"> {t("valid_data_summary_text")->str} </p>
+      {Js.Array.length(csvData) <= 10
         ? <table className="table-fixed mt-2 border w-full overflow-x-scroll">
             {tableHeader} <tbody> {tableRows(csvData, ())} </tbody>
           </table>
@@ -223,51 +226,51 @@ let clearFile = send => {
 
 let errorsTable = (csvData, errors) => {
   <table className="table-fixed mt-4 border w-full overflow-x-scroll">
-    {tableHeader} <tbody> {errors |> Js.Array.mapi((error, index) => {
+    {tableHeader} <tbody> {Js.Array.mapi((error, index) => {
         let rowNumber = CSVDataError.rowNumber(error)
         let studentData = Js.Array2.unsafe_get(csvData, rowNumber - 2)
         <tr key={string_of_int(index)}>
           <td className="border border-gray-400 truncate text-xs px-2 py-1">
-            {rowNumber |> string_of_int |> str}
+            {rowNumber->string_of_int->str}
           </td>
           <td
             className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
               CSVDataError.hasNameError(error) ? "bg-red-200 text-red-800" : ""
             )}>
-            {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("") |> str}
+            {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
           <td
             className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
               CSVDataError.hasEmailError(error) ? "bg-red-200 text-red-800" : ""
             )}>
-            {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("") |> str}
+            {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
           <td
             className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
               CSVDataError.hasTitleError(error) ? "bg-red-200 text-red-800" : ""
             )}>
-            {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("") |> str}
+            {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
           <td
             className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
               CSVDataError.hasTeamNameError(error) ? "bg-red-200 text-red-800" : ""
             )}>
-            {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("") |> str}
+            {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
           <td
             className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
               CSVDataError.hasTagsError(error) ? "bg-red-200 text-red-800" : ""
             )}>
-            {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("") |> str}
+            {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
           <td
             className={"border border-gray-400 truncate text-xs px-2 py-1 " ++ (
               CSVDataError.hasAffiliationError(error) ? "bg-red-200 text-red-800" : ""
             )}>
-            {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("") |> str}
+            {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("")->str}
           </td>
         </tr>
-      }) |> React.array} </tbody>
+      }, errors)->React.array} </tbody>
   </table>
 }
 
@@ -283,28 +286,30 @@ let errorTabulation = (csvData, fileInvalid) => {
               <div>
                 {errorsTable(csvData, Js.Array.slice(~start=0, ~end_=10, errors))}
                 <div className="text-red-700 text-sm mt-5">
-                  {t("more_errors_text") |> str}
+                  {t("more_errors_text")->str}
                   <textArea
                     readOnly=true
                     className="border border-gray-400 bg-gray-100 rounded p-1 mt-1 w-full focus:outline-none focus:ring focus:border-primary-400">
                     {Js.Array.map(
                       error => CSVDataError.rowNumber(error),
                       Js.Array2.sliceFrom(errors, 10),
-                    )->Js.Array2.joinWith(",") |> str}
+                    )
+                    ->Js.Array2.joinWith(",")
+                    ->str}
                   </textArea>
                 </div>
               </div>
             }
           : errorsTable(csvData, errors)}
         <div className="text-red-700 text-sm mt-4 rounded-md bg-red-100 p-3">
-          <div className="text-sm font-semibold pb-2"> {t("error_summary_title") |> str} </div>
+          <div className="text-sm font-semibold pb-2"> {t("error_summary_title")->str} </div>
           <ul className="list-disc list-inside text-xs">
             {errors
             |> Js.Array.map(error => CSVDataError.errors(error))
             |> ArrayUtils.flattenV2
             |> ArrayUtils.distinct
-            |> Js.Array.map(error =>
-              <li>
+            |> Js.Array.mapi((error, index) =>
+              <li key={string_of_int(index)}>
                 {str(
                   switch error {
                   | CSVDataError.Name => t("csv_data_errors.invalid_name")
@@ -327,9 +332,9 @@ let errorTabulation = (csvData, fileInvalid) => {
 }
 
 @react.component
-let make = (~courseId) => {
+let make = (~courseId, ~closeDrawerCB) => {
   let (state, send) = React.useReducer(reducer, initialState)
-  <form onSubmit={submitForm(courseId, send)}>
+  <form onSubmit={submitForm(courseId, send, closeDrawerCB)}>
     <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
     <div className="mx-auto bg-white">
       <div className="max-w-2xl p-6 mx-auto">
@@ -355,7 +360,7 @@ let make = (~courseId) => {
                 className="flex items-center text-primary-500 text-xs font-semibold hover:text-primary-700 hover:underline">
                 <PfIcon className="if i-download-regular if-fw mr-2" />
                 <a href="https://docs.pupilfirst.com/files/student_import_sample.csv">
-                  {t("example_csv_link") |> str}
+                  {t("example_csv_link")->str}
                 </a>
               </div>
             </div>

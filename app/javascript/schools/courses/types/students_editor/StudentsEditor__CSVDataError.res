@@ -1,5 +1,3 @@
-type errorMessage = string
-
 type errorType =
   | Name
   | Email

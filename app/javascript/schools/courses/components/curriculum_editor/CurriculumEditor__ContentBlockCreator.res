@@ -200,7 +200,7 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
   <label
     ?htmlFor
     key=buttonText
-    className="content-block-creator__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
+    className="content-block-creator__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-100"
     onClick={onBlockTypeSelect(target, aboveContentBlock, send, addContentBlockCB, blockType)}>
     <i className={faIcon ++ " text-2xl"} /> <p className="font-semibold"> {str(buttonText)} </p>
   </label>

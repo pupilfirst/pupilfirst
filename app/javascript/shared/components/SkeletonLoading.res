@@ -86,6 +86,23 @@ let image = () =>
     </div>
   </div>
 
+let courseCard = () =>
+  <div className="skeleton-body-container w-full mx-auto">
+    <div className="skeleton-body-wrapper px-3 lg:px-0">
+      <div className="skeleton-placeholder__card bg-white rounded-lg shadow">
+        <div className="px-4 pt-1">
+          <div className="skeleton-placeholder__image skeleton-animate" />
+        </div>
+        <div className="px-4 pb-4">
+          <div className="skeleton-placeholder__line-sm mt-4 w-3/6 skeleton-animate" />
+          <div className="skeleton-placeholder__line-sm mt-4 skeleton-animate" />
+          <div className="skeleton-placeholder__line-sm mt-4 skeleton-animate" />
+          <div className="skeleton-placeholder__line-sm mt-4 w-4/6 skeleton-animate" />
+        </div>
+      </div>
+    </div>
+  </div>
+
 let paragraph = () =>
   <div className="skeleton-body-container w-full pb-4 mx-auto">
     <div className="skeleton-body-wrapper mt-8 px-3 lg:px-0">

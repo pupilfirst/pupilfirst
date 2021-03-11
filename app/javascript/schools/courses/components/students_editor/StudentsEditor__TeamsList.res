@@ -44,12 +44,7 @@ module CourseTeamsQuery = %graphql(
 )
 
 let updateTeams = (updateTeamsCB, endCursor, hasNextPage, teams, nodes) => {
-  let updatedTeams = switch nodes {
-  | None => []
-  | Some(teamsArray) => teamsArray |> Team.makeFromJS
-  }
-  |> ArrayUtils.flatten
-  |> Array.append(teams)
+  let updatedTeams = Js.Array.concat(Team.makeFromJS(nodes), teams)
 
   let teams = switch (hasNextPage, endCursor) {
   | (_, None)

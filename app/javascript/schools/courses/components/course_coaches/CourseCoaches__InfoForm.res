@@ -53,15 +53,12 @@ let loadCoachTeams = (courseId, coachId, send) =>
   CoachInfoQuery.make(~courseId, ~coachId, ~coachNotes=#IgnoreCoachNotes, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
-    let coachTeams =
-      result["teams"]["nodes"] |> OptionUtils.mapWithDefault(Team.makeArrayFromJs, [])
-
     let stats = {
       reviewedSubmissions: result["coachStats"]["reviewedSubmissions"],
       pendingSubmissions: result["coachStats"]["pendingSubmissions"],
     }
 
-    send(LoadCoachInfo(coachTeams, stats))
+    send(LoadCoachInfo(Team.makeArrayFromJs(result["teams"]["nodes"]), stats))
     Js.Promise.resolve()
   })
   |> ignore

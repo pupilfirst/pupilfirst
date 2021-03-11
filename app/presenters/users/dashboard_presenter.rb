@@ -35,9 +35,9 @@ module Users
     def courses
       @courses ||= begin
         if current_school_admin.present?
-          current_school.courses
+          current_school.courses.active.or(current_school.courses.live.where(id: courses_with_student_profile.pluck(:course_id)))
         else
-          current_school.courses.where(id: (courses_with_student_profile.pluck(:course_id) + courses_with_review_access + courses_with_author_access).uniq)
+          current_school.courses.live.where(id: (courses_with_student_profile.pluck(:course_id) + courses_with_review_access + courses_with_author_access).uniq)
         end.with_attached_thumbnail
       end
     end
@@ -73,7 +73,7 @@ module Users
           communities_in_school
         else
           # Students can access communities linked to their courses, as long as they haven't dropped out.
-          active_courses = Course.joins(startups: [founders: :user]).where(users: { id: current_user }).where(startups: { dropped_out_at: nil })
+          active_courses = Course.live.joins(startups: [founders: :user]).where(users: { id: current_user }).where(startups: { dropped_out_at: nil })
           communities_in_school.joins(:courses).where(courses: { id: active_courses }).distinct
         end
       end

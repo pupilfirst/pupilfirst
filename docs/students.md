@@ -48,7 +48,7 @@ If set, the course will be marked as _ended_ for the student (or team) on this d
 
 In addition to editing a student's details, you can switch to the _Actions_ tab which lists the actions that you can take on a student:
 
-**Has this student dropped out?**\
+**Has this student dropped out?** \
 If you click the _Dropout Student_ button, the student will lose _all_ access to the course. Unlike students whose access to a course ended on a certain date, students who are marked as dropped out will not be able to access course content, or their own work within a course. The course will still be displayed on their dashboard page (marked as _Dropped Out_), but they will not be able to access its curriculum.
 
 ## Inactive students
@@ -67,9 +67,9 @@ To group two or more students as a team, select them using the checkboxes next t
 
 When you first team up a group of students, the platform will give them a randomly generated name. To edit the team's name, you can click on any of the students to edit their details. There'll be a new _field_ in the form called _Team Name_, which you can edit to change their team's name. When students are displayed anywhere in the interface, they'll always be grouped together with their team.
 
-?> **How do I set it up so that students in a team submit work on a target together?**\
-   When editing the details of a target, you are asked the question
-   _[How should teams tackle this target?](/curriculum_editor?id=setting-the-method-of-completion)_.
+?> **How do I set it up so that students in a team submit work on a target together?** \
+ When editing the details of a target, you are asked the question
+_[How should teams tackle this target?](/curriculum_editor?id=setting-the-method-of-completion)_.
 
 ### Removing a student from a team
 

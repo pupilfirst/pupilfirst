@@ -29,7 +29,7 @@ class ApplicantsResolver < ApplicationQuery
 
   def applicants_by_tag
     course_applicants =
-      course.applicants.order(
+      course.applicants.verified.order(
         "#{sort_criterion_string} #{sort_direction_string}"
       )
 

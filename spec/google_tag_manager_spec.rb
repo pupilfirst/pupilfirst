@@ -9,7 +9,6 @@ RSpec.describe GoogleTagManager do
 
       expect(gtm.setup_data_layer).to eq(
         <<~HTML
-        <script>
           window.dataLayer || (window.dataLayer = []);
           window.dataLayer.push({"schoolId":#{school.id},"userId":"N/A","userEmail":null});
           window.addEventListener("load", function() {
@@ -17,7 +16,6 @@ RSpec.describe GoogleTagManager do
               window.dataLayer.push({"pageLoadTime": Math.round(performance.now())});
             }
           });
-        </script>
         HTML
       )
     end
@@ -29,7 +27,6 @@ RSpec.describe GoogleTagManager do
 
       expect(gtm.setup_data_layer).to eq(
         <<~HTML
-        <script>
           window.dataLayer || (window.dataLayer = []);
           window.dataLayer.push({"schoolId":#{school.id},"userId":#{user.id},"userEmail":"user@example.com"});
           window.addEventListener("load", function() {
@@ -37,7 +34,6 @@ RSpec.describe GoogleTagManager do
               window.dataLayer.push({"pageLoadTime": Math.round(performance.now())});
             }
           });
-        </script>
         HTML
       )
     end

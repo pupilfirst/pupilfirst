@@ -51,6 +51,14 @@ let removeHighlight = (index, highlights, updateHighlightsCB) => {
   updateHighlightsCB(Js.Array.filteri((_a, i) => i != index, highlights))
 }
 
+let moveUp = (index, highlights, updateHighlightsCB) => {
+  updateHighlightsCB(ArrayUtils.swapUp(index, highlights))
+}
+
+let moveDown = (index, highlights, updateHighlightsCB) => {
+  updateHighlightsCB(ArrayUtils.swapDown(index, highlights))
+}
+
 let selected = highlight => {
   <button
     className="flex items-center justify-center cursor-pointer bg-white border border-gray-400 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400">
@@ -108,14 +116,22 @@ let make = (~highlights, ~updateHighlightsCB) => {
         </div>
         <div
           className="flex-shrink-0 bg-gray-100 border rounded flex flex-col text-xs sticky top-0">
-          <button
-            className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
-            <FaIcon classes={"fas fa-arrow-up"} />
-          </button>
-          <button
-            className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
-            <FaIcon classes={"fas fa-arrow-down"} />
-          </button>
+          {ReactUtils.nullIf(
+            <button
+              onClick={_ => moveUp(index, highlights, updateHighlightsCB)}
+              className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
+              <FaIcon classes={"fas fa-arrow-up"} />
+            </button>,
+            index == 0,
+          )}
+          {ReactUtils.nullIf(
+            <button
+              onClick={_ => moveDown(index, highlights, updateHighlightsCB)}
+              className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
+              <FaIcon classes={"fas fa-arrow-down"} />
+            </button>,
+            index == Js.Array.length(highlights) - 1,
+          )}
           <button
             onClick={_ => removeHighlight(index, highlights, updateHighlightsCB)}
             className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
@@ -124,10 +140,13 @@ let make = (~highlights, ~updateHighlightsCB) => {
         </div>
       </div>
     }, highlights)->React.array} <div>
-      <button
-        className="w-full mt-2 btn border border-dashed text-sm border-primary-500 bg-gray-200"
-        onClick={_ => addHighlight(highlights, updateHighlightsCB)}>
-        {"Add Course Highlight"->str}
-      </button>
+      {ReactUtils.nullIf(
+        <button
+          className="w-full mt-2 btn border border-dashed text-sm border-primary-500 bg-gray-200"
+          onClick={_ => addHighlight(highlights, updateHighlightsCB)}>
+          {"Add Course Highlight"->str}
+        </button>,
+        Js.Array.length(highlights) >= 4,
+      )}
     </div> </div>
 }

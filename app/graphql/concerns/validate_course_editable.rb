@@ -77,7 +77,14 @@ module ValidateCourseEditable
                  less_than_or_equal_to: 3
                }
              }
-    argument :highlights, [Types::CourseHighlightInputType], required: true
+    argument :highlights,
+             [Types::CourseHighlightInputType],
+             required: true,
+             validates: {
+               length: {
+                 maximum: 4
+               }
+             }
     argument :processing_url, String, required: false
 
     validates LimitedProgressionRequiresDetails => {}

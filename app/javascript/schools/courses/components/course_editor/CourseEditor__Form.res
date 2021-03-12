@@ -154,8 +154,9 @@ let saveDisabled = state =>
   state.hasDateError ||
   (state.hasDescriptionError ||
   (state.description == "" ||
-    (state.hasNameError ||
-    (state.name == "" || (!state.dirty || state.saving)))))
+  (state.hasNameError || (state.name == "" || (!state.dirty || state.saving))))) ||
+  UrlUtils.isInvalid(true, state.processingUrl) ||
+  Course.Highlight.isInValidArray(state.highlights)
 
 let progressionLimitForQuery = state =>
   switch state.progressionBehavior {
@@ -310,12 +311,16 @@ let featuredButton = (featured, send) =>
     </div>
   </div>
 
-let processingUrlInput = (state, send) =>
+let processingUrlInput = (state, send) => {
   <div>
     <div className="flex items-center mt-5">
-      <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="featured">
+      <label className="block tracking-wide text-xs font-semibold " htmlFor="featured">
         {"Do you want to process applicant information before enrolling them?"->str}
       </label>
+      <HelpIcon
+        className="ml-2 mr-6" link="https://docs.pupilfirst.com/#/courses?id=progression-behaviour">
+        {"You can send the applicants to a processing url once they apply for the course"->str}
+      </HelpIcon>
       <div id="featured" className="flex toggle-button__group flex-shrink-0 rounded-lg">
         <button
           className={booleanButtonClasses(state.hasProcessingUrl)}
@@ -330,17 +335,23 @@ let processingUrlInput = (state, send) =>
       </div>
     </div>
     {ReactUtils.nullUnless(
-      <input
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-        id="processing_url"
-        type_="text"
-        placeholder="https://example.com/"
-        value=state.processingUrl
-        onChange={event => send(UpdateProcessingUrl(ReactEvent.Form.target(event)["value"]))}
-      />,
+      <div>
+        <input
+          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="processing_url"
+          type_="text"
+          placeholder="https://example.com/"
+          value=state.processingUrl
+          onChange={event => send(UpdateProcessingUrl(ReactEvent.Form.target(event)["value"]))}
+        />
+        <School__InputGroupError
+          message={"Invalid processing url"} active={UrlUtils.isInvalid(true, state.processingUrl)}
+        />
+      </div>,
       state.hasProcessingUrl,
     )}
   </div>
+}
 
 let courseHighlights = (highlights, send) =>
   <div className="mt-5">

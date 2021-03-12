@@ -59,6 +59,10 @@ module Highlight = {
       "description": t.description,
     }
   )
+
+  let isValid = t => !(t.icon == "" || t.description == "" || t.title == "")
+
+  let isInValidArray = array => !Js.Array.every(isValid, array)
 }
 
 type progressionBehavior =

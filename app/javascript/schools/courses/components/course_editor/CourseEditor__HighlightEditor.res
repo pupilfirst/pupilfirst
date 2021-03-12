@@ -59,10 +59,10 @@ let moveDown = (index, highlights, updateHighlightsCB) => {
   updateHighlightsCB(ArrayUtils.swapDown(index, highlights))
 }
 
-let selected = highlight => {
+let selected = (highlight: Course.Highlight.t) => {
   <button
     className="flex items-center justify-center cursor-pointer bg-white border border-gray-400 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400">
-    <PfIcon className={"text-lg if i-" ++ Course.Highlight.icon(highlight)} />
+    <PfIcon className={"text-lg if i-" ++ highlight.icon} />
   </button>
 }
 
@@ -98,7 +98,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
               type_="text"
               placeholder="Enter title"
               maxLength=50
-              value={Course.Highlight.title(highlight)}
+              value={highlight.title}
               onChange={event =>
                 updateTitle(replaceCB, highlight, ReactEvent.Form.target(event)["value"])}
             />
@@ -108,7 +108,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
               type_="text"
               placeholder="Enter description"
               maxLength=150
-              value={Course.Highlight.description(highlight)}
+              value={highlight.description}
               onChange={event =>
                 updateDescription(replaceCB, highlight, ReactEvent.Form.target(event)["value"])}
             />

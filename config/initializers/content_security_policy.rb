@@ -71,7 +71,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def script_sources
-    [*hotjar_form_csp, *usetiful_csp, *newrelic_csp[:script]]
+    [*hotjar_form_csp, *usetiful_csp, *newrelic_csp[:script], *gtm_csp]
   end
 
   def hotjar_form_csp
@@ -84,6 +84,10 @@ Rails.application.config.content_security_policy do |policy|
 
   def usetiful_csp
     %w[usetiful.com *.usetiful.com]
+  end
+
+  def gtm_csp
+    %w[https://www.googletagmanager.com/gtm.js]
   end
 
   def frame_sources

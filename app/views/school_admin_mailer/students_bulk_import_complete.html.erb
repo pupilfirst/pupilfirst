@@ -1,0 +1,41 @@
+<% link = school_course_students_url(@course) %>
+
+<% content_for :title do %>
+  Students Import Completed
+<% end %>
+
+<% content_for :subtitle do %>
+  The students import that you initiated for <%= @course.name %> course was completed.
+<% end %>
+
+<% content_for :title_button_text do %>
+  View Students
+<% end %>
+
+<% content_for(:title_button_link, link) %>
+
+<% content_for :salutation do %>
+  Hello ,
+<% end %>
+
+<% content_for :body do %>
+  <p>
+    Your request to import students in <strong><%= @course.name %></strong> course, was successfully completed. Here's a
+    small
+    summary
+    on the import:
+  </p>
+
+  <div class="monospace-block mb-15">
+    <p><b>Students requested:</b> <%= @report_params[:students_requested] %> </p>
+    <p><b>Students added:</b> <%= @report_params[:students_added] %> </p>
+  </div>
+
+
+  <% if @report_attachment %>
+    <p>Some of the students that you tried to import already existed in the course. These students were ignored during the import. Please check the attachment for the
+      emails of already existing students </p>
+  <% end %>
+
+  <%= render 'mailers/link_fallback', url: link %>
+<% end %>

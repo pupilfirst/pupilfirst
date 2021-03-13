@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature "Public view of Course", js: true do
+feature 'Public view of Course', js: true do
   include UserSpecHelper
 
   # The basics.
@@ -8,7 +8,9 @@ feature "Public view of Course", js: true do
   let(:school_2) { create :school }
   let(:public_course) { create :course, school: school, public_signup: true }
   let(:private_course) { create :course, school: school }
-  let(:public_course_in_school_2) { create :course, school: school_2, public_signup: true }
+  let(:public_course_in_school_2) do
+    create :course, school: school_2, public_signup: true
+  end
   let(:new_about) { Faker::Lorem.paragraph }
 
   context 'when public user visits a public course' do
@@ -17,11 +19,16 @@ feature "Public view of Course", js: true do
       public_course.update!(about: new_about)
     end
 
-    scenario 'He can see the course name and link to apply' do
+    scenario 'He can see the course details' do
       visit course_path(public_course)
 
       expect(page).to have_content(public_course.name)
-      expect(page).to have_link("Apply Now", href: apply_course_path(public_course))
+      expect(page).to have_link(
+        'Apply Now',
+        href: apply_course_path(public_course)
+      )
+      expect(page).to have_text(public_course.highlights.first['title'])
+      expect(page).to have_text(public_course.highlights.last['description'])
     end
 
     scenario 'He can see the course about when an about exists' do
@@ -44,7 +51,10 @@ feature "Public view of Course", js: true do
       visit course_path(private_course)
 
       expect(page).to have_content(private_course.name)
-      expect(page).not_to have_link("Apply Now", href: apply_course_path(public_course))
+      expect(page).not_to have_link(
+        'Apply Now',
+        href: apply_course_path(public_course)
+      )
     end
   end
 end

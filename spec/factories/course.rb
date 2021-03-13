@@ -5,6 +5,20 @@ FactoryBot.define do
     school { School.find_by(name: 'test') || create(:school, :current) }
     progression_behavior { Course::PROGRESSION_BEHAVIOR_LIMITED }
     progression_limit { 1 }
+    highlights do
+      [
+        {
+          icon: %w[clock-solid comment-alt-solid badge-check-solid].sample,
+          title: Faker::Lorem.words(number: 2).join(' ').titleize,
+          description: Faker::Lorem.paragraph
+        },
+        {
+          icon: %w[clock-solid comment-alt-solid badge-check-solid].sample,
+          title: Faker::Lorem.words(number: 2).join(' ').titleize,
+          description: Faker::Lorem.paragraph
+        }
+      ]
+    end
 
     trait(:unlimited) do
       progression_behavior { Course::PROGRESSION_BEHAVIOR_UNLIMITED }

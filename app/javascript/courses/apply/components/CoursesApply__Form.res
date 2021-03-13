@@ -5,7 +5,7 @@ module CreateApplicantQuery = %graphql(
    mutation CreateApplicantMutation($courseId: ID!, $email: String!, $name: String!) {
     createApplicant(courseId: $courseId, email: $email, name: $name){
       success
-      redirectUrl
+
      }
    }
  `
@@ -18,14 +18,7 @@ let createApplicant = (courseId, email, name, setSaving, setViewEmailSent, event
   CreateApplicantQuery.make(~courseId, ~email, ~name, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    response["createApplicant"]["success"]
-      ? {
-          switch response["createApplicant"]["redirectUrl"] {
-          | Some(url) => DomUtils.redirect(url)
-          | None => setViewEmailSent()
-          }
-        }
-      : setSaving(_ => false)
+    response["createApplicant"]["success"] ? setViewEmailSent() : setSaving(_ => false)
     Js.Promise.resolve()
   })
   |> ignore
@@ -51,7 +44,7 @@ let checkboxOnChange = (setTermsAccepted, event) =>
 let checkboxLabel = (termsAndConditions, privacyPolicy) => {
   <div className="text-xs flex">
     {str("I agree to the ")}
-    {termsAndConditions ? <p> {"Terms of Use" |> str} </p> : React.null}
+    {termsAndConditions ? <p className="ml-1"> {"Terms of Use" |> str} </p> : React.null}
     {ReactUtils.nullUnless(
       <span className="px-1"> {str("&")} </span>,
       termsAndConditions && privacyPolicy,

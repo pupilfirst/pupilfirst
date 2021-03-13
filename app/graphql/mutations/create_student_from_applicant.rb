@@ -51,7 +51,7 @@ module Mutations
     end
 
     def applicant
-      Applicant.find_by(id: @params[:applicant_id])
+      Applicant.find_by(id: @params[:applicant_id], email_verified: true)
     end
   end
 end

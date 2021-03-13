@@ -110,7 +110,7 @@ module ValidateCourseEditable
       progression_behavior: @params[:progression_behavior],
       progression_limit: sanitized_progression_limit,
       highlights: @params[:highlights],
-      processing_url: @params[:processing_ur]
+      processing_url: @params[:processing_url]
     }
   end
 end

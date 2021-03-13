@@ -28,23 +28,10 @@ class CreateApplicantMutator < ApplicationQuery
       # Generate token and send course enrollment email
       applicant.regenerate_login_token
       applicant.update!(login_mail_sent_at: Time.zone.now)
-    end
-
-    if course.processing_url.blank?
       ApplicantMailer.enrollment_verification(applicant).deliver_now
     end
 
     true
-  end
-
-  def redirect_url
-    return if course.processing_url.blank?
-
-    course
-      .processing_url
-      .gsub('${name}', name)
-      .gsub('${course_id}', course_id)
-      .gsub('${email}', email)
   end
 
   private

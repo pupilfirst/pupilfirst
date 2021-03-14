@@ -405,7 +405,7 @@ let make = (~courseId, ~tags, ~selectedApplicant) => {
             <div className="flex w-full items-start p-4">
               <div className="w-full">
                 <label
-                  htmlFor="search_notifcations"
+                  htmlFor="search_applicants"
                   className="block text-tiny font-semibold uppercase pl-px text-left">
                   {t("filter.input_label")->str}
                 </label>

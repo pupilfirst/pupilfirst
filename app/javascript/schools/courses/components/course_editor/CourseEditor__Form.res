@@ -667,23 +667,6 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
         | None => React.null
         }}
       </div>
-      <div className="max-w-2xl mx-auto">
-        <div className={tabItemsClasses(selectedTab == DetailsTab)}>
-          {detailsTab(state, send, course, updateCourseCB, reloadCoursesCB)}
-        </div>
-        {switch course {
-        | Some(c) =>
-          [
-            <div key="actions-tab" className={tabItemsClasses(selectedTab == ActionsTab)}>
-              {actionsTab(state, send, reloadCoursesCB, c)}
-            </div>,
-            <div key="images-tab" className={tabItemsClasses(selectedTab == ImagesTab)}>
-              <CourseEditor__ImagesForm course=c updateCourseCB />
-            </div>,
-          ]->React.array
-        | None => React.null
-        }}
-      </div>
     </div>
   </DisablingCover>
 }

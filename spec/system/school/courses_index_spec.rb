@@ -79,12 +79,12 @@ feature 'Courses Index', js: true do
     let(:highlights) do
       [
         {
-          icon: %w[lamp-solid plus-circle-solid users-solid].sample,
+          icon: Types::CourseHighlightInputType.allowed_icons.sample,
           title: Faker::Lorem.words(number: 2).join(' ').titleize,
           description: Faker::Lorem.paragraph
         },
         {
-          icon: %w[lamp-solid plus-circle-solid users-solid].sample,
+          icon: Types::CourseHighlightInputType.allowed_icons.sample,
           title: Faker::Lorem.words(number: 2).join(' ').titleize,
           description: Faker::Lorem.paragraph
         }

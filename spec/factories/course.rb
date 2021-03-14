@@ -8,12 +8,12 @@ FactoryBot.define do
     highlights do
       [
         {
-          icon: %w[clock-solid comment-alt-solid badge-check-solid].sample,
+          icon: Types::CourseHighlightInputType.allowed_icons.sample,
           title: Faker::Lorem.words(number: 2).join(' ').titleize,
           description: Faker::Lorem.paragraph
         },
         {
-          icon: %w[clock-solid comment-alt-solid badge-check-solid].sample,
+          icon: Types::CourseHighlightInputType.allowed_icons.sample,
           title: Faker::Lorem.words(number: 2).join(' ').titleize,
           description: Faker::Lorem.paragraph
         }

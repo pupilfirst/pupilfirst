@@ -197,7 +197,7 @@ module Selectable = {
 
   let label = s =>
     switch s {
-    | Tag(_) => Some(t("filter.label.status"))
+    | Tag(_) => Some(t("filter.label.tag"))
     | Search(_) => Some(t("filter.label.search"))
     }
 
@@ -303,6 +303,7 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
 let showApplicant = (baseUrl, applicant: Applicant.t) => {
   <div className="flex flex-1 bg-white border rounded">
     <button
+      title={"Show Details: " ++ applicant.name}
       className="flex flex-1 flex-col py-4 px-4 hover:bg-gray-100  cursor-pointer"
       key={applicant.id}
       onClick={_ => ReasonReactRouter.push(baseUrl ++ applicant.id ++ "/details")}>
@@ -318,6 +319,7 @@ let showApplicant = (baseUrl, applicant: Applicant.t) => {
       </div>
     </button>
     <button
+      title={"Show Actions: " ++ applicant.name}
       className="py-4 px-4 hover:bg-gray-100  cursor-pointer"
       onClick={_ => ReasonReactRouter.push(baseUrl ++ applicant.id ++ "/actions")}>
       {str("OnBoard as Student")}

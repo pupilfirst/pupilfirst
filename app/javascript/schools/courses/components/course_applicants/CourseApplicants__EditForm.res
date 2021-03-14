@@ -128,7 +128,7 @@ let detailsTab = (state, applicant) => {
   </div>
 }
 
-let showActionsTab = (state, send, applicant, tags, updateApplicantCB) => {
+let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicantCB) => {
   <div>
     <div className="mt-5">
       <label
@@ -213,7 +213,7 @@ let showActionsTab = (state, send, applicant, tags, updateApplicantCB) => {
       disabled={state.saving}
       className={"btn btn-primary mt-5"}
       onClick={_ => updateCourse(state, send, updateApplicantCB, applicant)}>
-      {"Add as student" |> str}
+      {"Add as Student" |> str}
     </button>
   </div>
 }
@@ -241,10 +241,12 @@ let make = (~applicant, ~tags, ~updateApplicantCB, ~selectedTab, ~baseUrl) => {
               <i className="fa fa-cog" /> <span className="ml-2"> {"Actions"->str} </span>
             </button>
           </div>
-          {switch selectedTab {
-          | DetailsTab => detailsTab(state, applicant)
-          | ActionsTab => showActionsTab(state, send, applicant, tags, updateApplicantCB)
-          }}
+          <Spread props={"applicant-id": applicant.id}>
+            {switch selectedTab {
+            | DetailsTab => detailsTab(state, applicant)
+            | ActionsTab => showActionsTab(state, send, applicant, tags, updateApplicantCB)
+            }}
+          </Spread>
         </div>
       </div>
     </div>

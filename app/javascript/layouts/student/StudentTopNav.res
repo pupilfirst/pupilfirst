@@ -50,7 +50,7 @@ let notificationButton = hasNotifications =>
   <Notifications__Root
     key="notifications-button"
     wrapperClasses="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg hover:bg-gray-200"
-    iconClasses="student-navbar__notifications-unread-bullet absolute block h-3 w-3 rounded-full border-2 border-white bg-red-500"
+    iconClasses="student-navbar__notifications-unread-bullet"
     buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center "
     icon="if i-bell-regular text-xl"
     hasNotifications

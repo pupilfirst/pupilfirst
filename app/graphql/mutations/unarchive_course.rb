@@ -1,6 +1,7 @@
 module Mutations
   class UnarchiveCourse < ApplicationQuery
     include QueryAuthorizeSchoolAdmin
+    include DevelopersNotifications
 
     argument :id, ID, required: true
 
@@ -15,6 +16,7 @@ module Mutations
         I18n.t('shared.done_exclamation'),
         I18n.t('mutations.unarchive_course.success_notification')
       )
+      publish(course, :course_unarchived, current_user, course)
       { success: true }
     end
 

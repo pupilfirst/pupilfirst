@@ -15,6 +15,9 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
+  # Request timeout using Slowpoke.
+  config.slowpoke.timeout = ENV.fetch('SLOWPOKE_TIMEOUT', '300').to_i
+
   # Cache store.
   config.cache_store = :memory_store, { size: 64.megabytes }
 

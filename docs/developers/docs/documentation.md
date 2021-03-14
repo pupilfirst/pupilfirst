@@ -27,6 +27,6 @@ First, install the docsify CLI globally:
 
 Then serve the `docs` folder on the desired port.
 
-    docsify serve docs -p 3010i
+    docsify serve docs -p 3010
 
 The `-p` option sets the port. Visit `localhost:PORT` to view docs locally.

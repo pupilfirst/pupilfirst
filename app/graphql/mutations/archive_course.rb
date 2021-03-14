@@ -1,6 +1,8 @@
 module Mutations
   class ArchiveCourse < ApplicationQuery
     include QueryAuthorizeSchoolAdmin
+    include DevelopersNotifications
+
     class CourseMustNotBeArchived < GraphQL::Schema::Validator
       def validate(_object, _context, value)
         course = Course.find_by(id: value[:id])
@@ -26,6 +28,7 @@ module Mutations
         I18n.t('shared.done_exclamation'),
         I18n.t('mutations.archive_course.success_notification')
       )
+      publish(course, :course_archived, current_user, course)
       { success: true }
     end
 

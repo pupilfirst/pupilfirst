@@ -2,7 +2,7 @@
 
 Courses can contain any number of students. To see the students in a course, first select the course from the main admin navigation bar, or click the _View_ link if you're on the _Courses_ menu. Then pick the _Students_ option from the course's sub-menu.
 
-![Students page within a course in the school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1574242180/pupilfirst_documentation/students/students_page_vuhejp.png)
+![Students page within a course in the school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1614237376/pupilfirst_documentation/students/students_page_qucndn.png)
 
 ## Adding new students
 
@@ -48,7 +48,7 @@ If set, the course will be marked as _ended_ for the student (or team) on this d
 
 In addition to editing a student's details, you can switch to the _Actions_ tab which lists the actions that you can take on a student:
 
-**Has this student dropped out?**\
+**Has this student dropped out?** \
 If you click the _Dropout Student_ button, the student will lose _all_ access to the course. Unlike students whose access to a course ended on a certain date, students who are marked as dropped out will not be able to access course content, or their own work within a course. The course will still be displayed on their dashboard page (marked as _Dropped Out_), but they will not be able to access its curriculum.
 
 ## Inactive students
@@ -67,10 +67,21 @@ To group two or more students as a team, select them using the checkboxes next t
 
 When you first team up a group of students, the platform will give them a randomly generated name. To edit the team's name, you can click on any of the students to edit their details. There'll be a new _field_ in the form called _Team Name_, which you can edit to change their team's name. When students are displayed anywhere in the interface, they'll always be grouped together with their team.
 
-?> **How do I set it up so that students in a team submit work on a target together?**\
-   When editing the details of a target, you are asked the question
-   _[How should teams tackle this target?](/curriculum_editor?id=setting-the-method-of-completion)_.
+?> **How do I set it up so that students in a team submit work on a target together?** \
+ When editing the details of a target, you are asked the question
+_[How should teams tackle this target?](/curriculum_editor?id=setting-the-method-of-completion)_.
 
 ### Removing a student from a team
 
 You can move individual students _out_ of a team by selecting just one and using the _Move out from Team_ option.
+
+## Importing students in bulk
+
+To add new students in bulk to a course, click the _Bulk Import_ button at the top right of the list. The form that opens up allows you to a select a CSV file with list of students to be onboarded to the course. You can use the [template file](/files/student_import_sample.csv ":ignore") available in the form to list the students with required details. Refer to [add new students form](/students?id=adding-new-students) for details on each field. Here are a few ground rules for the data that you populate in the import sheet:
+
+1. Name and email are mandatory columns and should have valid data. Name can have a maximum of 250 characters.
+2. Title, affiliation and tags are optional similar to the the [add new students form](/students?id=adding-new-students). A maximum of five tags are allowed per student and should have a character limit of 50. Title and affiliation, each has a character limit of 250.
+3. Team name is optional and should be only used if you need to club students as a team. If more that one students are assigned the same team name in the sheet, they will be teamed up together. Team name has a character limit of 50.
+4. A maximum of 1000 students are allowed to be imported at once using the bulk uploader.
+
+The errors in the sheet will appear in the form once you upload a CSV file, which will guide you to easily fix them. Once you have a totally error free sheet, use the _Import Students_ button to initiate the bulk onboarding process. On successful completion, you will receive an email confirming the same.

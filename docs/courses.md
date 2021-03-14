@@ -25,10 +25,10 @@ This is a markdown field - you can use this to add descriptive text about your c
 **Progression Behavior**\
 This setting controls how students are allowed to level up in your course. This setting only applies if your course contains [milestone targets](/targets?id=milestone-targets) that require your students to submit work for review. There are three possible options, which are described in detail below.
 
-**Feature course in school homepage?**\
+**Feature course in school homepage?** \
 If enabled, the course will be displayed on the list of featured courses on your school's homepage, along with a link to the course's details page (which includes the content of the _about_ field).
 
-**Enable public signup for this course?**\
+**Enable public signup for this course?** \
 If enabled, members of the public will be able to sign up for your course.
 
 ## Editing courses

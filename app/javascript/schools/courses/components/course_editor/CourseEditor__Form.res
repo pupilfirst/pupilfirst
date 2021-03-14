@@ -179,7 +179,7 @@ let highlightsToOption = highlights => {
   ArrayUtils.isEmpty(highlights) ? None : Some(highlights)
 }
 
-let createCourse = (state, send, relaodCoursesCB) => {
+let createCourse = (state, send, reloadCoursesCB) => {
   send(StartSaving)
 
   let createCourseQuery = CreateCourseQuery.make(
@@ -198,7 +198,7 @@ let createCourse = (state, send, relaodCoursesCB) => {
 
   createCourseQuery |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
     switch result["createCourse"]["course"] {
-    | Some(_course) => relaodCoursesCB()
+    | Some(_course) => reloadCoursesCB()
     | None => send(FailSaving)
     }
 
@@ -242,13 +242,13 @@ let updateCourse = (state, send, updateCourseCB, course) => {
   }) |> ignore
 }
 
-let archiveCourse = (send, relaodCoursesCB, course) => {
+let archiveCourse = (send, reloadCoursesCB, course) => {
   send(StartSaving)
 
   ArciveCourseQuery.make(~id=course |> Course.id, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
-    result["archiveCourse"]["success"] ? relaodCoursesCB() : send(FailSaving)
+    result["archiveCourse"]["success"] ? reloadCoursesCB() : send(FailSaving)
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(error => {
@@ -259,13 +259,13 @@ let archiveCourse = (send, relaodCoursesCB, course) => {
   |> ignore
 }
 
-let unarchiveCourse = (send, relaodCoursesCB, course) => {
+let unarchiveCourse = (send, reloadCoursesCB, course) => {
   send(StartSaving)
 
   UnarchiveCourseQuery.make(~id=course |> Course.id, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
-    result["unarchiveCourse"]["success"] ? relaodCoursesCB() : send(FailSaving)
+    result["unarchiveCourse"]["success"] ? reloadCoursesCB() : send(FailSaving)
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(error => {
@@ -290,12 +290,12 @@ let enablePublicSignupButton = (publicSignup, send) =>
       <button
         className={booleanButtonClasses(publicSignup)}
         onClick={_ => send(UpdatePublicSignup(true))}>
-        {t("enable_public_signup_yes")->str}
+        {ts("_yes")->str}
       </button>
       <button
         className={booleanButtonClasses(!publicSignup)}
         onClick={_ => send(UpdatePublicSignup(false))}>
-        {t("enable_public_signup_no")->str}
+        {ts("_no")->str}
       </button>
     </div>
   </div>
@@ -307,11 +307,11 @@ let featuredButton = (featured, send) =>
     </label>
     <div id="featured" className="flex toggle-button__group flex-shrink-0 rounded-lg">
       <button className={booleanButtonClasses(featured)} onClick={_ => send(UpdateFeatured(true))}>
-        {t("feature_course_in_homepage_yes")->str}
+        {ts("_yes")->str}
       </button>
       <button
         className={booleanButtonClasses(!featured)} onClick={_ => send(UpdateFeatured(false))}>
-        {t("feature_course_in_homepage_no")->str}
+        {ts("_no")->str}
       </button>
     </div>
   </div>
@@ -433,7 +433,7 @@ let progressionBehaviorButtonClasses = (state, progressionBehavior, additionalCl
   defaultClasses ++ (selected ? " text-primary-500 border-primary-500" : "")
 }
 
-let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
+let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
   <div>
     <div className="mt-5">
       <label className="inline-block tracking-wide text-xs font-semibold " htmlFor="name">
@@ -550,15 +550,15 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
           <button
             disabled={saveDisabled(state)}
             onClick={_ => updateCourse(state, send, updateCourseCB, course)}
-            className="btn btn-large btn-success mt-3">
+            className="w-full btn btn-large btn-primary mt-3">
             {t("update_course")->str}
           </button>
 
         | None =>
           <button
             disabled={saveDisabled(state)}
-            onClick={_ => createCourse(state, send, relaodCoursesCB)}
-            className="btn btn-large btn-success mt-3">
+            onClick={_ => createCourse(state, send, reloadCoursesCB)}
+            className="w-full btn btn-large btn-primary mt-3">
             {t("create_course")->str}
           </button>
         }}
@@ -569,7 +569,7 @@ let detailsTab = (state, send, course, updateCourseCB, relaodCoursesCB) => {
 
 let submitButtonIcons = saving => saving ? "fas fa-spinner fa-spin" : "fa fa-exclamation-triangle"
 
-let actionsTab = (state, send, relaodCoursesCB, course) => {
+let actionsTab = (state, send, reloadCoursesCB, course) => {
   <div>
     {Belt.Option.isSome(Course.archivedAt(course))
       ? <div className="mt-2">
@@ -582,7 +582,7 @@ let actionsTab = (state, send, relaodCoursesCB, course) => {
               className="btn btn-success btn-large mt-2"
               onClick={_ =>
                 WindowUtils.confirm(t("alert.unarchive_message"), () =>
-                  unarchiveCourse(send, relaodCoursesCB, course)
+                  unarchiveCourse(send, reloadCoursesCB, course)
                 )}>
               <FaIcon classes={submitButtonIcons(state.saving)} />
               <span className="ml-2"> {t("actions.unarchive_course.button_text")->str} </span>
@@ -599,7 +599,7 @@ let actionsTab = (state, send, relaodCoursesCB, course) => {
               className="btn btn-danger btn-large mt-2"
               onClick={_ =>
                 WindowUtils.confirm(t("alert.archive_message"), () =>
-                  archiveCourse(send, relaodCoursesCB, course)
+                  archiveCourse(send, reloadCoursesCB, course)
                 )}>
               <FaIcon classes={submitButtonIcons(state.saving)} />
               <span className="ml-2"> {t("actions.archive_course.button_text")->str} </span>
@@ -610,7 +610,7 @@ let actionsTab = (state, send, relaodCoursesCB, course) => {
 }
 
 @react.component
-let make = (~course, ~updateCourseCB, ~relaodCoursesCB, ~selectedTab) => {
+let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
   let (state, send) = React.useReducerWithMapState(reducer, course, computeInitialState)
   <DisablingCover disabled={state.saving}>
     <div className="mx-auto bg-white">
@@ -652,13 +652,30 @@ let make = (~course, ~updateCourseCB, ~relaodCoursesCB, ~selectedTab) => {
       </div>
       <div className="max-w-2xl mx-auto">
         <div className={tabItemsClasses(selectedTab == DetailsTab)}>
-          {detailsTab(state, send, course, updateCourseCB, relaodCoursesCB)}
+          {detailsTab(state, send, course, updateCourseCB, reloadCoursesCB)}
         </div>
         {switch course {
         | Some(c) =>
           [
             <div key="actions-tab" className={tabItemsClasses(selectedTab == ActionsTab)}>
-              {actionsTab(state, send, relaodCoursesCB, c)}
+              {actionsTab(state, send, reloadCoursesCB, c)}
+            </div>,
+            <div key="images-tab" className={tabItemsClasses(selectedTab == ImagesTab)}>
+              <CourseEditor__ImagesForm course=c updateCourseCB />
+            </div>,
+          ]->React.array
+        | None => React.null
+        }}
+      </div>
+      <div className="max-w-2xl mx-auto">
+        <div className={tabItemsClasses(selectedTab == DetailsTab)}>
+          {detailsTab(state, send, course, updateCourseCB, reloadCoursesCB)}
+        </div>
+        {switch course {
+        | Some(c) =>
+          [
+            <div key="actions-tab" className={tabItemsClasses(selectedTab == ActionsTab)}>
+              {actionsTab(state, send, reloadCoursesCB, c)}
             </div>,
             <div key="images-tab" className={tabItemsClasses(selectedTab == ImagesTab)}>
               <CourseEditor__ImagesForm course=c updateCourseCB />

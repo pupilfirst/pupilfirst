@@ -4,6 +4,7 @@ feature 'Courses Index', js: true do
   include UserSpecHelper
   include NotificationHelper
   include MarkdownEditorHelper
+  include DevelopersNotificationsHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
@@ -252,7 +253,7 @@ feature 'Courses Index', js: true do
     expect(page).to have_text('Please sign in to continue.')
   end
 
-  scenario 'school admin plays around with search' do
+  scenario 'school admin searches and filters courses' do
     sign_in_user school_admin.user, referrer: school_courses_path
 
     expect(page).to have_text('Status: Active')
@@ -331,11 +332,12 @@ feature 'Courses Index', js: true do
     end
   end
 
-  context 'when a students exists' do
+  context 'when students exist in a course' do
     let!(:level) { create :level, course: course_1 }
     let!(:startup) { create :startup, level: level }
 
     scenario 'school admin archives a course' do
+      notification_service = prepare_developers_notification
       sign_in_user school_admin.user,
                    referrer: actions_school_course_path(course_1)
       expect(startup.access_ends_at).to eq(nil)
@@ -344,15 +346,23 @@ feature 'Courses Index', js: true do
 
       expect(page).to have_text('Course archived successfully')
       expect(course_1.reload.archived_at).not_to eq(nil)
-      expect(course_1.reload.ends_at).not_to eq(nil)
+      expect(course_1.ends_at).not_to eq(nil)
       expect(startup.reload.access_ends_at).not_to eq(nil)
       within("div[id='courses']") do
         expect(page).not_to have_text(course_1.name)
       end
+      expect_published(
+        notification_service,
+        course_1,
+        :course_archived,
+        school_admin.user,
+        course_1
+      )
     end
   end
 
   scenario 'school admin un-archives a course' do
+    notification_service = prepare_developers_notification
     sign_in_user school_admin.user, referrer: school_courses_path
     fill_in('Search', with: 'archived')
     click_button 'Pick Status: Archived'
@@ -366,5 +376,12 @@ feature 'Courses Index', js: true do
     within("div[id='courses']") do
       expect(page).not_to have_text(course_archived.name)
     end
+    expect_published(
+      notification_service,
+      course_archived,
+      :course_unarchived,
+      school_admin.user,
+      course_archived
+    )
   end
 end

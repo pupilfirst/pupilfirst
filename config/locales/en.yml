@@ -143,11 +143,7 @@ en:
         placeholder: Type course name here
       create_course: Create Course
       enable_public_signup_label: Enable public signup for this course?
-      enable_public_signup_no: 'No'
-      enable_public_signup_yes: 'Yes'
       feature_course_in_homepage_label: Feature course in school homepage?
-      feature_course_in_homepage_no: 'No'
-      feature_course_in_homepage_yes: 'Yes'
       progression_behavior:
         help: This only applies if your course has milestone targets that requires students to submit their work for review by coaches.
         label: Progression Behavior
@@ -435,6 +431,30 @@ en:
       revoked_date_label: 'Revoked on:'
       revoked_status_label: Revoked
       select_certificate_input_label: Select a certificate to issue
+    StudentsEditor__BulkImportForm:
+      csv_data_errors:
+        invalid_affiliation: Affiliation has to be less than 250 characters
+        invalid_email: Email has to be valid and can't be blank
+        invalid_name: Name column can't be blank and should be within 250 characters
+        invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
+        invalid_team_name: Team name has to be less than 50 characters
+        invalid_title: Title has to be less than 250 characters
+      csv_file_errors:
+        empty: The selected CSV has no valid rows
+        exceeded_entries: The CSV file has more than 1000 entries.
+        invalid: Please select a valid CSV file with size less than 5 MB
+        invalid_data: The CSV file has invalid data in few cells. Please fix the errors listed below and try again.
+        invalid_template: The selected CSV file does not have a valid template
+      csv_file_input_label: CSV Import file
+      csv_file_input_placeholder: Select CSV file to import
+      drawer_heading: Bulk Import Students
+      error_summary_title: 'Here is a summary of the errors in the sheet: '
+      example_csv_link: Download an example .csv file
+      import_button_text: Import Students
+      more_errors_text: 'There are even more errors. Fix the errors in the following rows and upload again: '
+      success_notification: Import initiated successfully! You will be notified in an email once complete.
+      valid_data_message: Data validated successfully!
+      valid_data_summary_text: 'Here is a summary of student data in the uploaded sheet: '
     StudentsEditor__CreateForm:
       added_full_description: All students were created successfully.
       added_none_description: All the students you tried to add were already a part of this course.
@@ -451,6 +471,7 @@ en:
     StudentsEditor__Root:
       button_add_new_students: Add New Students
       button_all_students: All Students
+      button_bulk_import: Bulk Import
       button_inactive_students: Inactive Students
       sort_criterion_label: 'Sort by:'
       sort_criterion_last_created: Last Created
@@ -630,6 +651,8 @@ en:
     create:
       invalid_credentials: The supplied email address and password do not match. Please check your credentials and try again.
   shared:
+    _no: 'No'
+    _yes: 'Yes'
     cancel: Cancel
     close: Close
     done_exclamation: Done!

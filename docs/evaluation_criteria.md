@@ -28,12 +28,10 @@ The values for maximum and passing grades cannot be modified once a criterion is
 
 An example of grade labels in a student grade card is as shown below:
 
-![Student grade card for a reviewed submission](https://res.cloudinary.com/sv-co/image/upload/v1579069067/pupilfirst_documentation/evaluation_criteria/student_grade_card_wjiiej.png)
+![Student grade card for a reviewed submission](https://res.cloudinary.com/sv-co/image/upload/v1579069067/pupilfirst_documentation/evaluation_criteria/student_grade_card_wjiiej.png ":class=w-full-to-3xl")
 
 The student submission here received a grade of 5 for evaluation criterion with name _Quality of Submission_ and the label for grade 5 is _Wow_.
 
 Here's how grading based on multiple criteria looks in the coach's review interface. The target here is graded on two criteria, each of which has it's own grading scale.
 
 ![Coach review interface for target with multiple criterion](https://res.cloudinary.com/sv-co/image/upload/v1579080296/pupilfirst_documentation/evaluation_criteria/multiple_evaluation_criteria_coach_interface_y5pssn.png)
-
-

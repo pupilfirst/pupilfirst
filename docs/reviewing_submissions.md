@@ -12,20 +12,20 @@ This page has two tabs: _Pending_ and _Reviewed_, with submissions that are pend
 
 Clicking on a submission opens up the submission for review.
 
-![Submission details](https://res.cloudinary.com/sv-co/image/upload/v1583215353/pupilfirst_documentation/reviewing_submissions/submission_in_overlay_icrse4.png)
+![Submission details](https://res.cloudinary.com/sv-co/image/upload/v1583215353/pupilfirst_documentation/reviewing_submissions/submission_in_overlay_icrse4.png ":class=w-full-to-3xl")
 
 ## Submission Details
 
 When a submission is clicked, it opens up to display everything that the student included as a part of the submission along with an option to review it. This page also includes every other submission from the student for the _same_ target.
 
-?> **Why are other submissions for the target listed here?**\
+?> **Why are other submissions for the target listed here?** \
 Because students can make multiple submissions to improve their grade on a target, it makes sense to see previous submissions for the target in the same place. This allows coach to easily and quickly check for improvement from their prior work.
 
 ## Reviewing Submissions
 
 Reviewing a submission involves going over the work that the student has submitted and deciding assigning it grades on each of its evaluation criteria.
 
-![Reviewing a submission](https://res.cloudinary.com/sv-co/image/upload/v1583215466/pupilfirst_documentation/reviewing_submissions/submission_checklist_feedback_notes_and_grading_ez97b1.png)
+![Reviewing a submission](https://res.cloudinary.com/sv-co/image/upload/v1583215466/pupilfirst_documentation/reviewing_submissions/submission_checklist_feedback_notes_and_grading_ez97b1.png ":class=w-full-to-3xl")
 
 There's quite a bit to unpack here, so we'll go over each element one by one, starting with the _Grade Card_.
 
@@ -35,7 +35,7 @@ The minimum work that a coach must do is assign grades for all evaluation criter
 
 If a student fails a submission, they're _expected_ to re-submit the target to get a passing grade. If the target in question is a milestone target, or is a pre-requisite for another, this can cause other targets to [become locked](/targets?id=locked-targets) and block a student's progression in the course until they get a passing grade.
 
-?> **How does passing or failing work with multiple evaluation criteria?**\
+?> **How does passing or failing work with multiple evaluation criteria?** \
 When you have more than one evaluation criteria, as in the example above, if the grade for _any_ criterion falls below the passing grade, then the submission as a whole, will count as a failure.
 
 Once a grade has been assigned for all evaluation criteria, a coach can save the grading. The submission will then be removed from the _Pending_ list in the previous page.
@@ -58,7 +58,7 @@ Over the course of using Pupilfirst ourselves, we've learned that reviewing subm
 
 As the name suggests, this feature allows you to create a checklist for your review process. What's interesting here is that you can couple your checklist with feedback that is appropriate to the result of your check.
 
-![Review Checklist](https://res.cloudinary.com/sv-co/image/upload/v1574340472/pupilfirst_documentation/reviewing_submissions/review_checklist_wnhfzy.png)
+![Review Checklist](https://res.cloudinary.com/sv-co/image/upload/v1574340472/pupilfirst_documentation/reviewing_submissions/review_checklist_wnhfzy.png ":class=w-full-to-3xl")
 
 Over the course of reviewing many student submissions, it's very likely that you'll see a pattern to the mistakes that students make, so it can be quite useful to store generic versions of feedback for the results from your checklist, and use that as a template to prepare feedback for a submission. Of course, you can always edit and personalize the feedback before you send it to your student.
 
@@ -70,5 +70,5 @@ You can write down notes about a student while you're reviewing a submission. Th
 
 If the submission you're leaving a note on is from a _team_, then the note will be posted to the report of all students in that team.
 
-?> **We'd appreciate any feedback you have about this process!**\
+?> **We'd appreciate any feedback you have about this process!** \
 The greater the difficultly of a course, the greater the importance of a good review process and targeted feedback. As always, if your experience as a teacher has shown you new approaches or techniques, our team at Pupilfirst would be more than happy to [have a conversation about it](mailto:support@pupilfirst.com).

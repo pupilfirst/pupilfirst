@@ -53,7 +53,7 @@ module ValidateCourseEditable
     argument :ends_at, GraphQL::Types::ISO8601DateTime, required: false
     argument :about,
              String,
-             required: true,
+             required: false,
              validates: {
                length: {
                  maximum: 10_000
@@ -79,7 +79,7 @@ module ValidateCourseEditable
              }
     argument :highlights,
              [Types::CourseHighlightInputType],
-             required: true,
+             required: false,
              validates: {
                length: {
                  maximum: 4
@@ -109,7 +109,7 @@ module ValidateCourseEditable
       featured: @params[:featured],
       progression_behavior: @params[:progression_behavior],
       progression_limit: sanitized_progression_limit,
-      highlights: @params[:highlights],
+      highlights: @params[:highlights].presence || [],
       processing_url: @params[:processing_url]
     }
   end

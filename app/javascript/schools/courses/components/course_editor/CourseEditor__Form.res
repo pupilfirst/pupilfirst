@@ -97,7 +97,7 @@ let reducer = (state, action) =>
 
 module CreateCourseQuery = %graphql(
   `
-    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!]!, $processingUrl: String) {
+    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
       createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
         course {
           ...Course.Fragments.AllFields
@@ -109,7 +109,7 @@ module CreateCourseQuery = %graphql(
 
 module UpdateCourseQuery = %graphql(
   `
-    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!]!, $processingUrl: String) {
+    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
       updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
         course {
           ...Course.Fragments.AllFields
@@ -174,6 +174,11 @@ let processingUrl = state => {
   }
 }
 
+let highlightsToOption = highlights => {
+  let highlights = Course.Highlight.toJSArray(highlights)
+  ArrayUtils.isEmpty(highlights) ? None : Some(highlights)
+}
+
 let createCourse = (state, send, relaodCoursesCB) => {
   send(StartSaving)
 
@@ -181,12 +186,12 @@ let createCourse = (state, send, relaodCoursesCB) => {
     ~name=state.name,
     ~description=state.description,
     ~endsAt=?state.endsAt->Belt.Option.map(DateFns.encodeISO),
-    ~about=state.about,
+    ~about=?String.trim(state.about) == "" ? None : Some(state.about),
     ~publicSignup=state.publicSignup,
     ~featured=state.featured,
     ~progressionBehavior=state.progressionBehavior,
     ~progressionLimit=?progressionLimitForQuery(state),
-    ~highlights=Course.Highlight.toJSArray(state.highlights),
+    ~highlights=?highlightsToOption(state.highlights),
     ~processingUrl=?processingUrl(state),
     (),
   )
@@ -213,12 +218,12 @@ let updateCourse = (state, send, updateCourseCB, course) => {
     ~name=state.name,
     ~description=state.description,
     ~endsAt=?state.endsAt->Belt.Option.map(DateFns.encodeISO),
-    ~about=state.about,
+    ~about=?String.trim(state.about) == "" ? None : Some(state.about),
     ~publicSignup=state.publicSignup,
     ~featured=state.featured,
     ~progressionBehavior=state.progressionBehavior,
     ~progressionLimit=?progressionLimitForQuery(state),
-    ~highlights=Course.Highlight.toJSArray(state.highlights),
+    ~highlights=?highlightsToOption(state.highlights),
     ~processingUrl=?processingUrl(state),
     (),
   )
@@ -318,10 +323,10 @@ let processingUrlInput = (state, send) => {
         {"Do you want to process applicant information before enrolling them?"->str}
       </label>
       <HelpIcon
-        className="ml-2 mr-6" link="https://docs.pupilfirst.com/#/courses?id=progression-behaviour">
+        className="ml-2 mr-6" link="https://docs.pupilfirst.com/#/courses?id=processing-url">
         {"You can send the applicants to a processing url once they apply for the course"->str}
       </HelpIcon>
-      <div id="featured" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+      <div id="processing-url" className="flex toggle-button__group flex-shrink-0 rounded-lg">
         <button
           className={booleanButtonClasses(state.hasProcessingUrl)}
           onClick={_ => send(SetHasProcessingUrl)}>

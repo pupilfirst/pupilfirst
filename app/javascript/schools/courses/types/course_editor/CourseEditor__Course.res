@@ -47,9 +47,9 @@ module Highlight = {
   }
 
   let empty = () => {
-    icon: "comment-alt-solid",
-    title: "Enter a title",
-    description: "Describe the title",
+    icon: "badge-check-solid",
+    title: "100% online",
+    description: "Start instantly and learn at your own schedule.",
   }
 
   let toJSArray = Js.Array.map(t =>

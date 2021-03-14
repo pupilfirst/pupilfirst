@@ -1,4 +1,14 @@
 class Course < ApplicationRecord
+  # JSON fields schema:
+  #
+  # highlights: [
+  #   {
+  #     icon: string - should match the whitelisted icons
+  #     title: string - title for the highlight (150 chars)
+  #     description: string - description from the highlight (250 chars)
+  #   },
+  #   ...
+  # ]
   validates :name, presence: true
 
   belongs_to :school

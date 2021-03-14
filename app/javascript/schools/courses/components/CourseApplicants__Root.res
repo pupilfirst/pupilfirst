@@ -300,25 +300,29 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
     )->str}
   </div>
 
-let showApplicant = (baseUrl, applicant) => {
-  <button
-    className="flex flex-1 flex-col py-4 px-4 hover:bg-gray-100 bg-white border rounded cursor-pointer"
-    key={Applicant.id(applicant)}
-    onClick={_ => ReasonReactRouter.push(baseUrl ++ Applicant.id(applicant))}>
-    <div className="flex w-full items-center justify-between">
-      <div className="text-black font-semibold inline-block ">
-        {Applicant.name(applicant)->str}
+let showApplicant = (baseUrl, applicant: Applicant.t) => {
+  <div className="flex flex-1 bg-white border rounded">
+    <button
+      className="flex flex-1 flex-col py-4 px-4 hover:bg-gray-100  cursor-pointer"
+      key={applicant.id}
+      onClick={_ => ReasonReactRouter.push(baseUrl ++ applicant.id ++ "/details")}>
+      <div className="flex w-full items-center justify-between">
+        <div className="text-black font-semibold inline-block "> {applicant.name->str} </div>
       </div>
-      <div className="text-xs"> {Applicant.email(applicant)->str} </div>
-    </div>
-    <div className="mt-1 space-x-2">
-      {Js.Array.map(
-        a =>
-          <span key=a className="p-1 text-xs bg-gray-100 rounded shadow rounded"> {str(a)} </span>,
-        Applicant.tags(applicant),
-      )->React.array}
-    </div>
-  </button>
+      <div className="mt-1 space-x-2">
+        <div className="text-xs"> {applicant.email->str} </div>
+        {Js.Array.map(
+          a => <span key=a className="p-1 text-xs bg-gray-100 rounded shadow"> {str(a)} </span>,
+          applicant.tags,
+        )->React.array}
+      </div>
+    </button>
+    <button
+      className="py-4 px-4 hover:bg-gray-100  cursor-pointer"
+      onClick={_ => ReasonReactRouter.push(baseUrl ++ applicant.id ++ "/actions")}>
+      {str("OnBoard as Student")}
+    </button>
+  </div>
 }
 
 let showApplicants = (baseUrl, applicants, state) => {
@@ -343,20 +347,30 @@ let updateApplicant = (baseUrl, send, ()) => {
   send(ReloadApplicants)
 }
 
+let decodeTabString = tab => {
+  switch tab {
+  | "details" => CourseApplicants__EditForm.DetailsTab
+  | "actions" => CourseApplicants__EditForm.ActionsTab
+  | _ => CourseApplicants__EditForm.DetailsTab
+  }
+}
+
 @react.component
 let make = (~courseId, ~tags, ~selectedApplicant) => {
   let (state, send) = React.useReducer(reducer, initialState())
   let baseUrl = "/school/courses/" ++ courseId ++ "/applicants/"
   let url = ReasonReactRouter.useUrl()
 
-  let editorAction = switch url.path {
-  | list{"school", "courses", _courseId, "applicants", applicantId, ..._} =>
-    switch StringUtils.paramToId(applicantId) {
-    | Some(id) => ShowForm(id)
-    | None => Hidden
-    }
+  let (editorAction, selectedTab) = switch url.path {
+  | list{"school", "courses", _courseId, "applicants", applicantId, tab, ..._} => (
+      switch StringUtils.paramToId(applicantId) {
+      | Some(id) => ShowForm(id)
+      | None => Hidden
+      },
+      decodeTabString(tab),
+    )
 
-  | _ => Hidden
+  | _ => (Hidden, CourseApplicants__EditForm.DetailsTab)
   }
 
   React.useEffect2(() => {
@@ -380,7 +394,7 @@ let make = (~courseId, ~tags, ~selectedApplicant) => {
           )
           <SchoolAdmin__EditorDrawer2 closeDrawerCB={_ => ReasonReactRouter.push(baseUrl)}>
             <CourseApplicants__EditForm
-              applicant updateApplicantCB={updateApplicant(baseUrl, send)} tags
+              applicant updateApplicantCB={updateApplicant(baseUrl, send)} tags selectedTab baseUrl
             />
           </SchoolAdmin__EditorDrawer2>
         }

@@ -405,6 +405,16 @@ en:
       mark_all_as_read_button: Mark All as Read
       notifications_fully_loaded_text: Showing all %{total_notifications} notifications
       notifications_partially_loaded_text: Showing %{loaded_notifications_count} of %{total_notifications} notifications
+    SchoolAdminNavbar__Root:
+      course_nav:
+        applicants: Applicants
+        authors: Authors
+        certificates: Certificates
+        coaches: Coaches
+        curriculum: Curriculum
+        evaluation_criteria: Evaluation Criteria
+        exports: Exports
+        students: Students
     StudentTopNav:
       sign_in: Sign In
       sign_out: Sign Out

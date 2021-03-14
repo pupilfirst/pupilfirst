@@ -106,7 +106,12 @@ Rails
           post 'attach_images'
         end
 
-        resources :applicants, only: :show
+        resources :applicants, only: :show do
+          member do
+            get 'actions', action: :show
+            get 'details', action: :show
+          end
+        end
         resources :authors, only: %w[show new]
 
         resources :targets, only: [] do

@@ -53,17 +53,17 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def style_sources
-    ['fonts.googleapis.com', 'assets.calendly.com', asset_host] - [nil]
+    ['fonts.googleapis.com', 'assets.calendly.com', *heap_csp[:style], asset_host] - [nil]
   end
 
   def connect_sources
-    sources = [rollbar_csp[:connect], *vimeo_csp[:connect], *hotjar_form_csp, *fullstory_csp, *newrelic_csp[:connect]]
+    sources = [rollbar_csp[:connect], *vimeo_csp[:connect], *hotjar_form_csp, *fullstory_csp, *newrelic_csp[:connect], *heap_csp[:connect]]
     sources += %w[http://localhost:3035 ws://localhost:3035] if Rails.env.development?
     sources
   end
 
   def font_sources
-    ['fonts.gstatic.com', 'https://script.hotjar.com', asset_host] - [nil]
+    ['fonts.gstatic.com', 'https://script.hotjar.com', *heap_csp[:font], asset_host] - [nil]
   end
 
   def child_sources
@@ -71,7 +71,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def script_sources
-    [*hotjar_form_csp, *usetiful_csp, *newrelic_csp[:script], *gtm_csp[:script]]
+    [*hotjar_form_csp, *usetiful_csp, *newrelic_csp[:script], *gtm_csp[:script], *heap_csp[:script]]
   end
 
   def hotjar_form_csp
@@ -84,6 +84,16 @@ Rails.application.config.content_security_policy do |policy|
 
   def usetiful_csp
     %w[usetiful.com *.usetiful.com]
+  end
+
+  def heap_csp
+    {
+      script: %w[https://cdn.heapanalytics.com https://heapanalytics.com],
+      imgage: %w[ https://heapanalytics.com],
+      style: %w[https://heapanalytics.com],
+      connect: %w[https://heapanalytics.com],
+      font: %w[https://heapanalytics.com],
+    }
   end
 
   def gtm_csp
@@ -101,7 +111,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def image_sources
-    [*gtm_csp[:image]]
+    [*gtm_csp[:image], *heap_csp[:image]]
   end
 
   def media_sources

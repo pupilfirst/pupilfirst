@@ -71,7 +71,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def script_sources
-    [*hotjar_form_csp, *usetiful_csp, *newrelic_csp[:script], *gtm_csp]
+    [*hotjar_form_csp, *usetiful_csp, *newrelic_csp[:script], *gtm_csp[:script]]
   end
 
   def hotjar_form_csp
@@ -87,7 +87,10 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def gtm_csp
-    %w[https://www.googletagmanager.com/gtm.js]
+    {
+      script: %w[https://www.googletagmanager.com],
+      image: %w[www.googletagmanager.com],
+    }
   end
 
   def frame_sources
@@ -97,12 +100,16 @@ Rails.application.config.content_security_policy do |policy|
     ]
   end
 
+  def image_sources
+    [*gtm_csp[:image]]
+  end
+
   def media_sources
     [*resource_csp[:media]]
   end
 
   policy.default_src :none
-  policy.img_src '*', :data, :blob
+  policy.img_src '*', :data, :blob, *image_sources
   policy.script_src :unsafe_eval, :unsafe_inline, 'https:', 'http:', *script_sources
   policy.style_src :self, :unsafe_inline, *style_sources
   policy.connect_src :self, *connect_sources

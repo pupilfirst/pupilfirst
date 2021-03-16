@@ -33,7 +33,7 @@ module ValidateCourseEditable
 
   included do
     argument :name,
-             String,
+             GraphQL::Types::String,
              required: true,
              validates: {
                length: {
@@ -42,7 +42,7 @@ module ValidateCourseEditable
                }
              }
     argument :description,
-             String,
+             GraphQL::Types::String,
              required: true,
              validates: {
                length: {
@@ -52,7 +52,7 @@ module ValidateCourseEditable
              }
     argument :ends_at, GraphQL::Types::ISO8601DateTime, required: false
     argument :about,
-             String,
+             GraphQL::Types::String,
              required: false,
              validates: {
                length: {
@@ -69,7 +69,7 @@ module ValidateCourseEditable
                }
              }
     argument :progression_limit,
-             Integer,
+             GraphQL::Types::Int,
              required: false,
              validates: {
                numericality: {
@@ -85,7 +85,9 @@ module ValidateCourseEditable
                  maximum: 4
                }
              }
-    argument :processing_url, String, required: false
+    argument :public_signup, GraphQL::Types::Boolean, required: true
+    argument :featured, GraphQL::Types::Boolean, required: true
+    argument :processing_url, GraphQL::Types::String, required: false
 
     validates LimitedProgressionRequiresDetails => {}
     validates ValidProcessingURL => {}

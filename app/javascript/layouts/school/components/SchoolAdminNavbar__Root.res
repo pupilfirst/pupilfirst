@@ -103,14 +103,14 @@ let courseSelectionKeys = selection => {
 
 let secondaryNavLinks = (courseSelection, courseId, role) => {
   let navOptionsAdmin = [
+    Curriculum,
+    Students,
     Applicants,
     Authors,
     Certificates,
     CourseCoaches,
-    Curriculum,
     EvaluationCriteria,
     CourseExports,
-    Students,
   ]
 
   let navOptionsAuthor = [Curriculum, EvaluationCriteria]

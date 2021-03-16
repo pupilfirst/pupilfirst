@@ -11,8 +11,6 @@ module Mutations
     include ValidateCourseEditable
 
     argument :id, ID, required: true
-    argument :public_signup, Boolean, required: true
-    argument :featured, Boolean, required: true
 
     validates CourseMustBePresent => {}
 

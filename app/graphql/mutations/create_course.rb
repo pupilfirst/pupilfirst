@@ -5,9 +5,6 @@ module Mutations
 
     description 'Create a new course.'
 
-    argument :public_signup, Boolean, required: true
-    argument :featured, Boolean, required: true
-
     field :course, Types::CourseType, null: true
 
     def resolve(_params)

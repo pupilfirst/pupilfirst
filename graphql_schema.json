@@ -7080,16 +7080,6 @@
                 "defaultValue": null
               },
               {
-                "name": "processingUrl",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null
-              },
-              {
                 "name": "publicSignup",
                 "description": "",
                 "type": {
@@ -7114,6 +7104,16 @@
                     "name": "Boolean",
                     "ofType": null
                   }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "processingUrl",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
                 },
                 "defaultValue": null
               }
@@ -9672,30 +9672,6 @@
                 "defaultValue": null
               },
               {
-                "name": "processingUrl",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "id",
-                "description": "",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              },
-              {
                 "name": "publicSignup",
                 "description": "",
                 "type": {
@@ -9718,6 +9694,30 @@
                   "ofType": {
                     "kind": "SCALAR",
                     "name": "Boolean",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "processingUrl",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "id",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
                     "ofType": null
                   }
                 },

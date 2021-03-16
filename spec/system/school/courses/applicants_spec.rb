@@ -123,10 +123,11 @@ feature 'Applicant Index', js: true do
     dismiss_notification
 
     student = Founder.last
+    open_email(applicant_1.email)
     expect(student.name).to eq(applicant_1.name)
     expect(student.email).to eq(applicant_1.email)
     expect(student.title).to eq(title_1)
-    expect(student.title).to eq(affiliation_1)
+    expect(student.affiliation).to eq(affiliation_1)
     expect(
       student
         .startup

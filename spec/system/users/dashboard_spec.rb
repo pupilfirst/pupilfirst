@@ -24,12 +24,24 @@ feature 'User Dashboard', js: true do
   let(:course_3_level_1) { create :level, :one, course: course_3 }
   let(:course_3_startup_1) { create :startup, level: course_3_level_1 }
   let!(:course_3_founder_1) { create :founder, startup: course_3_startup_1, user: founder.user }
+  let!(:course_3_student_profile_for_admin) { create :founder, startup: course_3_startup_1, user: school_admin.user }
 
   # Course 4 - Founder Exited
   let(:course_4) { create :course, school: school }
   let(:course_4_level_1) { create :level, :one, course: course_4 }
   let(:course_4_startup_1) { create :team, level: course_4_level_1, dropped_out_at: 1.day.ago }
   let!(:course_4_founder_1) { create :founder, startup: course_4_startup_1, user: founder.user }
+
+  # Course Archived
+  let(:course_archived) { create :course, school: school, archived_at: 1.day.ago }
+  let(:course_archived_level_1) { create :level, :one, course: course_archived }
+  let(:course_archived_team_1) { create :team, level: course_archived_level_1, dropped_out_at: 1.day.ago }
+  let!(:course_archived_student_1) { create :founder, startup: course_archived_team_1, user: founder.user }
+  let!(:course_archived_student_2) { create :founder, startup: course_archived_team_1 }
+  let!(:course_archived_student_profile_for_admin) { create :founder, startup: course_archived_team_1, user: school_admin.user }
+
+  # Course Ended - For Admin
+  let!(:course_ended) { create :course, school: school, ends_at: 1.day.ago }
 
   # seed community
   let!(:community_1) { create :community, school: school, target_linkable: true }
@@ -49,6 +61,7 @@ feature 'User Dashboard', js: true do
     create :community_course_connection, course: course_2, community: community_2
     create :community_course_connection, course: course_3, community: community_3
     create :community_course_connection, course: course_4, community: community_4
+    create :community_course_connection, course: course_archived, community: community_4
   end
 
   scenario 'student visits the dashboard page' do
@@ -83,6 +96,8 @@ feature 'User Dashboard', js: true do
       expect(page).to have_text("Dropped out")
       expect(page).not_to have_link("View Curriculum", href: curriculum_course_path(course_4))
     end
+
+    expect(page).not_to have_text(course_archived.name)
 
     click_button 'Communities'
 
@@ -154,8 +169,12 @@ feature 'User Dashboard', js: true do
     # school admin can preview all courses in school
     expect(page).to have_link("View Course", href: curriculum_course_path(course_1))
     expect(page).to have_link("View Course", href: curriculum_course_path(course_2))
+    # ended course with a student profile will be listed on the dashboard
     expect(page).to have_link("View Course", href: curriculum_course_path(course_3))
     expect(page).to have_link("View Course", href: curriculum_course_path(course_4))
+    # ended and archived courses will be hidden
+    expect(page).not_to have_text(course_archived.name)
+    expect(page).not_to have_text(course_ended.name)
 
     click_button 'Communities'
     # school admin has access to all communities in school
@@ -212,5 +231,13 @@ feature 'User Dashboard', js: true do
         expect(page).to_not have_text("Your student profile for this course is locked, and cannot be updated")
       end
     end
+  end
+
+  scenario "dashboard hides archived courses and linked resources" do
+    sign_in_user(course_archived_student_2.user, referrer: dashboard_path)
+
+    expect(page).not_to have_text(course_archived.name)
+    expect(page).not_to have_text('community')
+    expect(page).to have_text("You don't have any active courses right now.")
   end
 end

@@ -15,8 +15,7 @@ let makeFromJS = teamData => {
   students: teamData["students"] |> Array.map(student => student["name"]),
 }
 
-let makeArrayFromJs = detailsOfTeams =>
-  detailsOfTeams->Belt.Array.keepMap(OptionUtils.map(makeFromJS))
+let makeArrayFromJs = detailsOfTeams => Js.Array.map(makeFromJS, detailsOfTeams)
 
 let decode = json => {
   open Json.Decode

@@ -68,4 +68,13 @@ module Element = {
   type t = Dom.element
 
   external unsafeToHtmlInputElement: t => Dom.htmlInputElement = "%identity"
+
+  let clearFileInput = (~inputId, ~callBack=?, ()) => {
+    switch document |> Document.getElementById(inputId) {
+    | Some(e) => HtmlInputElement.setValue(unsafeToHtmlInputElement(e), "")
+    | None => ()
+    }
+
+    callBack->Belt.Option.mapWithDefault((), cb => cb())
+  }
 }

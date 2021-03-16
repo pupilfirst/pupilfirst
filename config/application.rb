@@ -13,7 +13,7 @@ Bundler.require(*Rails.groups)
 
 module Pupilfirst
   class Application < Rails::Application
-    VERSION = '2021.1'
+    VERSION = '2021.2'
 
     # Initialize configuration defaults for originally generated Rails version.
     #
@@ -21,6 +21,7 @@ module Pupilfirst
     config.load_defaults 6.0
 
     config.assets.precompile << 'delayed/web/application.css'
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

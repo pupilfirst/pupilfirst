@@ -43,6 +43,9 @@ feature 'School Overview', js: true do
   let!(:c2_timeline_event_3) { create :timeline_event, :passed, evaluator_id: c2_coach_1.id, evaluated_at: 1.day.ago, founders: c2_startup_2.founders, target: c2_target_1 }
   let!(:c2_timeline_event_4) { create :timeline_event, :passed, evaluator_id: c2_coach_1.id, evaluated_at: 1.day.ago, founders: c2_startup_3.founders, target: c2_target_1 }
 
+  let!(:course_ended) { create :course, school: school, ends_at: 1.day.ago }
+  let!(:course_archived) { create :course, school: school, ends_at: 1.day.ago, archived_at: 1.day.ago }
+
   scenario 'school admin visit the school overview' do
     sign_in_user school_admin.user, referrer: school_path
     expect(page).to have_text(school.name)
@@ -87,6 +90,9 @@ feature 'School Overview', js: true do
 
       expect(page).to have_text("4/4 submissions reviewed.")
     end
+
+    expect(page).not_to have_text(course_ended.name)
+    expect(page).not_to have_text(course_archived.name)
   end
 
   scenario 'user who is not logged in gets redirected to sign in page' do

@@ -8,4 +8,14 @@ class SchoolAdminMailerPreview < ActionMailer::Preview
 
     SchoolAdminMailer.school_admin_added(school_admin, new_school_admin)
   end
+
+  def students_bulk_import_complete
+    school_admin = SchoolAdmin.first
+    course = Course.first
+    report_params = { students_added: 10, students_requested: 12 }
+
+    report_attachment = { mime_type: 'text/csv', content: "Sl. No,Email\n1, test@hey.com\n" }
+
+    SchoolAdminMailer.students_bulk_import_complete(school_admin, course, report_params, report_attachment: report_attachment)
+  end
 end

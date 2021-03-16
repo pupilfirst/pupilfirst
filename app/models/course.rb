@@ -26,6 +26,10 @@ class Course < ApplicationRecord
   has_one_attached :cover
 
   scope :featured, -> { where(featured: true) }
+  scope :live, -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
+  scope :access_active, -> { where('ends_at > ?', Time.now).or(where(ends_at: nil)) }
+  scope :active, -> { live.access_active }
 
   normalize_attribute :about
 
@@ -72,5 +76,13 @@ class Course < ApplicationRecord
 
   def strict?
     progression_behavior == PROGRESSION_BEHAVIOR_STRICT
+  end
+
+  def archived?
+    archived_at.present?
+  end
+
+  def live?
+    archived_at.blank?
   end
 end

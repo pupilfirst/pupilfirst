@@ -11,7 +11,7 @@ module Schools
 
     def course_details
       @course_details ||= begin
-        current_school.courses.map do |course|
+        current_school.courses.active.map do |course|
           {
             id: course.id,
             name: course.name,

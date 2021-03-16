@@ -17,7 +17,12 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION`.
 
+### 2021.2
+
+- List `courses` query is now paginated. This will affect users using the `courses` api.
+
 ### 2021.1
+
 - Introduced required environment variable `VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY` to support
   webpush notification.
 
@@ -51,4 +56,3 @@ Your current version can be found in `Pupilfirst::Application::VERSION`.
 ### 2020.1
 
 - Initial release.
-

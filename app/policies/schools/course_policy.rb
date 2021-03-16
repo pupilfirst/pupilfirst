@@ -6,9 +6,17 @@ module Schools
     end
 
     def authors?
+      record.school == current_school && !record.archived? && index?
+    end
+
+    def show?
       record.school == current_school && index?
     end
 
+    alias new? index?
+    alias details? show?
+    alias images? show?
+    alias actions? show?
     alias attach_images? authors?
     alias delete_coach_enrollment? authors?
     alias update_coach_enrollments? authors?
@@ -19,6 +27,7 @@ module Schools
     alias certificates? authors?
     alias create_certificate? authors?
     alias create_students? authors?
+    alias bulk_import_students? authors?
 
     def curriculum?
       return false if user.blank?

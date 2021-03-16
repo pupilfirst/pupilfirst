@@ -7,10 +7,10 @@ RSpec.describe GoogleTagManager do
     specify "user missing" do
       gtm = GoogleTagManager.new(school, nil, tracker: 'TRACKER-CODE')
 
-      expect(gtm.setup_data_layer).to eq(
+      expect(gtm.setup_data_layer('nonce-here')).to eq(
         <<~HTML
           window.dataLayer || (window.dataLayer = []);
-          window.dataLayer.push({"schoolId":#{school.id},"userId":"N/A","userEmail":null});
+          window.dataLayer.push({"schoolId":#{school.id},"userId":"N/A","userEmail":null,"nonce":"nonce-here"});
           window.addEventListener("load", function() {
             if (window.performance && window.performance.timeOrigin && window.performance.now) {
               window.dataLayer.push({"pageLoadTime": Math.round(performance.now())});
@@ -25,10 +25,10 @@ RSpec.describe GoogleTagManager do
 
       gtm = GoogleTagManager.new(school, user, tracker: 'TRACKER-CODE')
 
-      expect(gtm.setup_data_layer).to eq(
+      expect(gtm.setup_data_layer('nonce-here')).to eq(
         <<~HTML
           window.dataLayer || (window.dataLayer = []);
-          window.dataLayer.push({"schoolId":#{school.id},"userId":#{user.id},"userEmail":"user@example.com"});
+          window.dataLayer.push({"schoolId":#{school.id},"userId":#{user.id},"userEmail":"user@example.com","nonce":"nonce-here"});
           window.addEventListener("load", function() {
             if (window.performance && window.performance.timeOrigin && window.performance.now) {
               window.dataLayer.push({"pageLoadTime": Math.round(performance.now())});
@@ -41,7 +41,7 @@ RSpec.describe GoogleTagManager do
     specify do
       gtm = GoogleTagManager.new(school, nil, tracker: nil)
 
-      expect(gtm.setup_data_layer).to be_nil
+      expect(gtm.setup_data_layer('nonce-here')).to be_nil
     end
   end
 

@@ -9,12 +9,13 @@ class GoogleTagManager
     yield self if block_given? && tracker_defined?
   end
 
-  def setup_data_layer
+  def setup_data_layer(nonce)
     return unless tracker_defined?
     data = {
       schoolId: school.id,
       userId: user&.id.presence || "N/A",
-      userEmail: user&.email
+      userEmail: user&.email,
+      nonce: nonce
     }
     <<~HTML
       window.dataLayer || (window.dataLayer = []);

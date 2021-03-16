@@ -1,6 +1,6 @@
 <% gtm.with do |tag| %>
   <% content_for(:head) do %>
-    <%= javascript_tag id: "gtmScript", nonce: true do %>
+    <%= javascript_tag nonce: true do %>
       <%= raw tag.setup_gtm_head %>
     <% end %>
   <% end %>
@@ -22,7 +22,7 @@
 
 <% gtm.with do |tag| %>
   <%= javascript_tag nonce: true do %>
-    <%= raw tag.setup_data_layer %>
+    <%= raw tag.setup_data_layer(request.content_security_policy_nonce) %>
   <% end %>
 <% end %>
 

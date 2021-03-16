@@ -13,7 +13,7 @@ class CommunityPolicy < ApplicationPolicy
       return scope.where(school: current_school) if current_school_admin.present? || current_coach.present?
 
       course_ids = user.founders.not_dropped_out.joins(:course).select(:course_id)
-      scope.where(school: current_school).joins(:courses).where(courses: { id: course_ids }).distinct
+      scope.where(school: current_school).joins(:courses).where(courses: { id: course_ids, archived_at: nil }).distinct
     end
   end
 end

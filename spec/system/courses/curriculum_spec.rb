@@ -69,6 +69,12 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_content("The page you were looking for doesn't exist!")
   end
 
+  scenario "student attempts to view an archived course's curriculum" do
+    course.update!(archived_at: 1.day.ago)
+    sign_in_user student.user, referrer: curriculum_course_path(course)
+    expect(page).to have_content("The page you were looking for doesn't exist!")
+  end
+
   context 'when the course the student belongs has ended' do
     let(:course) { create :course, ends_at: 1.day.ago }
 

@@ -75,15 +75,16 @@ let make = (
 }
 
 let makeFromJS = teamDetails => {
-  let students =
-    teamDetails["students"] |> Array.map(student =>
+  let students = Js.Array.map(
+    student =>
       makeStudent(
         ~id=student["id"],
         ~name=student["name"],
         ~title=student["title"],
         ~avatarUrl=student["avatarUrl"],
-      )
-    )
+      ),
+    teamDetails["students"],
+  )
 
   make(
     ~id=teamDetails["id"],
@@ -97,8 +98,7 @@ let makeFromJS = teamDetails => {
   )
 }
 
-let makeArrayFromJs = detailsOfTeams =>
-  detailsOfTeams->Belt.Array.keepMap(OptionUtils.map(makeFromJS))
+let makeArrayFromJs = detailsOfTeams => Js.Array.map(makeFromJS, detailsOfTeams)
 
 let otherStudents = (studentId, t) =>
   t.students |> Js.Array.filter((student: student) => student.id != studentId)

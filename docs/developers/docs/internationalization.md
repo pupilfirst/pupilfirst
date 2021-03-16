@@ -8,15 +8,15 @@ Pupilfirst LMS uses _Rails Internationalization_ (I18n) API for internationaliza
 
 ## Organization of en.yml
 
-| Key                      | Value                                             |
-| ------------------------ |:-------------------------------------------------:|
-| `components.COMPONENT.*` | Component-specific strings.                       |
-| `jobs.[MODULE].JOB.*`    | Strings used by jobs.                             |
+| Key                      |                       Value                       |
+| ------------------------ | :-----------------------------------------------: |
+| `components.COMPONENT.*` |            Component-specific strings.            |
+| `jobs.[MODULE].JOB.*`    |               Strings used by jobs.               |
 | `models.MODEL.COLUMN.*`  | Translation of database values to display values. |
-| `mutations.MUTATION.*`   | Strings used by mutations.                        |
-| `queries.QUERY.*`        | Strings used by resolvers and mutators.           |
-| `shared.*`               | Shared strings.                                   |
-| `CONTROLLER.ACTION.*`    | Strings used in traditional views.                |
+| `mutations.MUTATION.*`   |            Strings used by mutations.             |
+| `queries.QUERY.*`        |      Strings used by resolvers and mutators.      |
+| `shared.*`               |                  Shared strings.                  |
+| `CONTROLLER.ACTION.*`    |        Strings used in traditional views.         |
 
 - `CONTROLLER` is always the plural version. For example: `FoundersController#edit` is keyed as `founders.edit.*`
 - Always order keys alphabetically. If you use [the VSCode plugin](#visual-studio-code-plugin), this will be done automatically.
@@ -33,7 +33,7 @@ to quickly move strings from UI components to the I18n YAML file.
 ### Usage
 
 1. Select a string that needs to be moved to `en.yml`.
-2. Right click and select _Pupilfirst Translate_ button. You can also use the `Ctrl+Shift+t` keyboard shortcut.
+2. Right click and select _Pupilfirst Translate_ button. You can also use the `Ctrl+Shift+i` keyboard shortcut.
 3. Enter the key. For example: `video.description_label`.
 4. Press `Enter` to confirm.
 

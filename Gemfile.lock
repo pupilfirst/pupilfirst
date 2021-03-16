@@ -265,7 +265,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
-    graphql (1.11.6)
+    graphql (1.12.5)
     growthtribe_xapi (0.0.2)
       activesupport (>= 5.1)
       addressable (~> 2.3)
@@ -700,7 +700,7 @@ DEPENDENCIES
   fuubar (~> 2.5)
   gaffe (~> 1.2)
   graphiql-rails (~> 1.7)
-  graphql (~> 1.10)
+  graphql (~> 1.12)
   heroku-deflater (~> 0.6)
   humanize (~> 2.1)
   i18n-js (~> 3.7)

@@ -36,7 +36,7 @@ class GraphqlController < ApplicationController
   end
 
   def skip_csrf_protection?
-    introspection? || (api_token.present? && current_user.present?)
+    introspection? || api_token.present?
   end
 
   # Handle form data, JSON body, or a blank value

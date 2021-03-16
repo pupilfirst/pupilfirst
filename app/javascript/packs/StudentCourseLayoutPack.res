@@ -1,15 +1,15 @@
 let decodeProps = json => {
   open Json.Decode
   (
-    json |> field("currentCourseId", string),
-    json |> field("courses", list(StudentCourse__Course.decode)),
-    json |> field("additionalLinks", list(string)),
-    json |> field("coverImage", optional(string)),
+    field("currentCourseId", string, json),
+    field("courses", array(CourseInfo.decode), json),
+    field("additionalLinks", array(string), json),
+    field("coverImage", optional(string), json),
   )
 }
 
 let (currentCourseId, courses, additionalLinks, coverImage) =
-  DomUtils.parseJSONAttribute(~id="course-header-root", ()) |> decodeProps
+  DomUtils.parseJSONAttribute(~id="course-header-root", ())->decodeProps
 
 ReactDOMRe.renderToElementWithId(
   <StudentCourse__Header currentCourseId courses additionalLinks coverImage />,

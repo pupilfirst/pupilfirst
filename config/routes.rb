@@ -60,13 +60,17 @@ Rails.application.routes.draw do
       resource :content_block, only: %i[create]
     end
 
-    resources :courses, only: %i[index] do
+    resources :courses, only: %i[index show new] do
       member do
+        get 'details'
+        get 'images', action: :details
+        get 'actions', action: :details
         get 'curriculum'
         get 'exports'
         get 'authors'
         get 'certificates'
         post 'certificates', action: 'create_certificate'
+        post 'bulk_import_students'
         get 'evaluation_criteria'
         post 'attach_images'
       end

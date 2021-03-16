@@ -1,15 +1,13 @@
-require 'csv'
-
 module Courses
   class OnboardService
-    def initialize(course, csv)
+    def initialize(course, csv_rows)
       @course = course
-      @rows = CSV.parse(csv, headers: true)
+      @csv_rows = csv_rows
     end
 
     def execute
       Course.transaction do
-        students = @rows.map do |row|
+        students = @csv_rows.map do |row|
           tags = (row['tags'].presence || "").strip.split(',')
           OpenStruct.new(name: row['name'], email: row['email'], title: row['title'], affiliation: row['affiliation'], tags: tags, team_name: row['team_name'])
         end

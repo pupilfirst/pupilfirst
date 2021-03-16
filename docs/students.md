@@ -2,7 +2,7 @@
 
 Courses can contain any number of students. To see the students in a course, first select the course from the main admin navigation bar, or click the _View_ link if you're on the _Courses_ menu. Then pick the _Students_ option from the course's sub-menu.
 
-![Students page within a course in the school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1574242180/pupilfirst_documentation/students/students_page_vuhejp.png)
+![Students page within a course in the school administration interface](https://res.cloudinary.com/sv-co/image/upload/v1614237376/pupilfirst_documentation/students/students_page_qucndn.png)
 
 ## Adding new students
 
@@ -74,3 +74,14 @@ _[How should teams tackle this target?](/curriculum_editor?id=setting-the-method
 ### Removing a student from a team
 
 You can move individual students _out_ of a team by selecting just one and using the _Move out from Team_ option.
+
+## Importing students in bulk
+
+To add new students in bulk to a course, click the _Bulk Import_ button at the top right of the list. The form that opens up allows you to a select a CSV file with list of students to be onboarded to the course. You can use the [template file](/files/student_import_sample.csv ":ignore") available in the form to list the students with required details. Refer to [add new students form](/students?id=adding-new-students) for details on each field. Here are a few ground rules for the data that you populate in the import sheet:
+
+1. Name and email are mandatory columns and should have valid data. Name can have a maximum of 250 characters.
+2. Title, affiliation and tags are optional similar to the the [add new students form](/students?id=adding-new-students). A maximum of five tags are allowed per student and should have a character limit of 50. Title and affiliation, each has a character limit of 250.
+3. Team name is optional and should be only used if you need to club students as a team. If more that one students are assigned the same team name in the sheet, they will be teamed up together. Team name has a character limit of 50.
+4. A maximum of 1000 students are allowed to be imported at once using the bulk uploader.
+
+The errors in the sheet will appear in the form once you upload a CSV file, which will guide you to easily fix them. Once you have a totally error free sheet, use the _Import Students_ button to initiate the bulk onboarding process. On successful completion, you will receive an email confirming the same.

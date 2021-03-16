@@ -1,3 +1,5 @@
+<% presenter = Schools::Courses::IndexPresenter.new(self, @course) %>
+
 <% content_for(:head) do %>
   <title><%= current_school.name %> | Courses</title>
   <%= stylesheet_pack_tag 'SchoolsCoursesIndexPack', media: 'all' %>
@@ -7,4 +9,7 @@
   <%= javascript_pack_tag 'SchoolsCoursesIndexPack', nonce: true %>
 <% end %>
 
+<script id="course-editor__props" type="application/json">
+  <%= presenter.props_to_json.html_safe %>
+</script>
 <div id="course-editor" class="flex flex-1 h-full"></div>

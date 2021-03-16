@@ -8,7 +8,7 @@ module Api
       before_action :set_course, only: [:students, :create_students]
 
       def index
-        render json: scope.to_json
+        render json: scope.order(:id).to_json
       end
 
       def students

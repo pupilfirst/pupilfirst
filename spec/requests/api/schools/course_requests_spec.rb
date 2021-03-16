@@ -39,7 +39,7 @@ module Api
           get '/api/schools/courses', headers: headers
 
           expect(response).to have_http_status(:ok)
-          expect(response.body).to eq(courses.to_json)
+          expect(response.body).to eq(courses.sort_by(&:id).to_json)
         end
       end
 

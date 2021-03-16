@@ -288,7 +288,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                         send(UpdateMilestone(true))
                       }}
                       className={booleanButtonClasses(state.milestone == true)}>
-                      {ts("yes") |> str}
+                      {ts("_yes") |> str}
                     </button>
                     <button
                       onClick={_event => {
@@ -296,7 +296,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                         send(UpdateMilestone(false))
                       }}
                       className={booleanButtonClasses(state.milestone == false)}>
-                      {ts("no") |> str}
+                      {ts("_no") |> str}
                     </button>
                   </div>
                 </div>
@@ -318,7 +318,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                           send(UpdateIsArchived(true))
                         }}
                         className={booleanButtonClasses(state.isArchived == true)}>
-                        {ts("yes") |> str}
+                        {ts("_yes") |> str}
                       </button>
                       <button
                         onClick={_event => {
@@ -326,7 +326,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                           send(UpdateIsArchived(false))
                         }}
                         className={booleanButtonClasses(state.isArchived == false)}>
-                        {ts("no") |> str}
+                        {ts("_no") |> str}
                       </button>
                     </div>
                   </div>

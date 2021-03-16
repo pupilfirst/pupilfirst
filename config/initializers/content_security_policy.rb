@@ -5,16 +5,19 @@
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
 Rails.application.config.content_security_policy do |policy|
-  def asset_host
-    Rails.application.config.action_controller.asset_host
+  def asset_host_csp
+    {
+      font: [Rails.application.config.action_controller.asset_host],
+      style: [Rails.application.config.action_controller.asset_host],
+    }
   end
 
   def facebook_csp
-    { frame: 'https://www.facebook.com' }
+    { frame: %w[https://www.facebook.com] }
   end
 
   def typeform_csp
-    { frame: 'https://form.typeform.com' }
+    { frame: %w[https://form.typeform.com] }
   end
 
   def slideshare_csp
@@ -25,8 +28,12 @@ Rails.application.config.content_security_policy do |policy|
     { frame: %w[speakerdeck.com *.speakerdeck.com] }
   end
 
-  def google_form_csp
-    { frame: %w[google.com *.google.com] }
+  def google_csp
+    {
+      frame: %w[google.com *.google.com],
+      font: %w[fonts.gstatic.com],
+      style: %w[fonts.googleapis.com],
+    }
   end
 
   def resource_csp
@@ -34,7 +41,10 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def youtube_csp
-    { frame: 'https://www.youtube.com' }
+    {
+      frame: %w[https://www.youtube.com],
+      child: %w[https://www.youtube.com],
+    }
   end
 
   def vimeo_csp
@@ -42,7 +52,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def rollbar_csp
-    { connect: 'https://api.rollbar.com' }
+    { connect: %w[https://api.rollbar.com] }
   end
 
   def newrelic_csp
@@ -52,38 +62,25 @@ Rails.application.config.content_security_policy do |policy|
     }
   end
 
-  def style_sources
-    ['fonts.googleapis.com', 'assets.calendly.com', *heap_csp[:style], asset_host] - [nil]
-  end
-
-  def connect_sources
-    sources = [rollbar_csp[:connect], *vimeo_csp[:connect], *hotjar_form_csp, *fullstory_csp, *newrelic_csp[:connect], *heap_csp[:connect]]
-    sources += %w[http://localhost:3035 ws://localhost:3035] if Rails.env.development?
-    sources
-  end
-
-  def font_sources
-    ['fonts.gstatic.com', 'https://script.hotjar.com', *heap_csp[:font], asset_host] - [nil]
-  end
-
-  def child_sources
-    ['https://www.youtube.com']
-  end
-
-  def script_sources
-    [*hotjar_form_csp, *usetiful_csp, *newrelic_csp[:script], *gtm_csp[:script], *heap_csp[:script]]
-  end
-
-  def hotjar_form_csp
-    %w[hotjar.com *.hotjar.com wss://*.hotjar.com]
+  def hotjar_csp
+    {
+      image: %w[http://*.hotjar.com https://*.hotjar.com http://*.hotjar.io https://*.hotjar.io],
+      script: %w[http://*.hotjar.com https://*.hotjar.com http://*.hotjar.io https://*.hotjar.io],
+      connect: %w[http://*.hotjar.com:* https://*.hotjar.com:* http://*.hotjar.io https://*.hotjar.io wss://*.hotjar.com],
+      frame: %w[https://*.hotjar.com http://*.hotjar.io https://*.hotjar.io],
+      font: %w[http://*.hotjar.com https://*.hotjar.com http://*.hotjar.io https://*.hotjar.io],
+    }
   end
 
   def fullstory_csp
-    %w[fullstory.com *.fullstory.com]
+    { connect: %w[fullstory.com *.fullstory.com] }
   end
 
   def usetiful_csp
-    %w[usetiful.com *.usetiful.com]
+    {
+      srcipt: %w[usetiful.com *.usetiful.com],
+      frame: %w[usetiful.com *.usetiful.com],
+    }
   end
 
   def heap_csp
@@ -103,30 +100,55 @@ Rails.application.config.content_security_policy do |policy|
     }
   end
 
-  def frame_sources
+  def calendly_csp
+    {
+      style: %w[assets.calendly.com],
+      frame: %w[https://calendly.com],
+    }
+  end
+
+  def development_csp
+    return {} unless Rails.env.development?
+
+    {
+      connect: %w[http://localhost:3035 ws://localhost:3035],
+    }
+  end
+
+  def sources(kind)
     [
-      'https://www.google.com', typeform_csp[:frame], youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame], *google_form_csp[:frame], facebook_csp[:frame],
-       *hotjar_form_csp, *usetiful_csp, 'https://calendly.com'
+      asset_host_csp,
+      facebook_csp,
+      typeform_csp,
+      slideshare_csp,
+      speakerdeck_csp,
+      google_csp,
+      resource_csp,
+      youtube_csp,
+      vimeo_csp,
+      rollbar_csp,
+      newrelic_csp,
+      hotjar_csp,
+      fullstory_csp,
+      usetiful_csp,
+      heap_csp,
+      gtm_csp,
+      calendly_csp,
+      development_csp,
     ]
-  end
-
-  def image_sources
-    [*gtm_csp[:image], *heap_csp[:image]]
-  end
-
-  def media_sources
-    [*resource_csp[:media]]
+      .flat_map{|csp| csp[kind]}
+      .compact
   end
 
   policy.default_src :none
-  policy.img_src '*', :data, :blob, *image_sources
-  policy.script_src :unsafe_eval, :unsafe_inline, 'https:', 'http:', *script_sources
-  policy.style_src :self, :unsafe_inline, *style_sources
-  policy.connect_src :self, *connect_sources
-  policy.font_src :self, *font_sources
-  policy.child_src(*child_sources)
-  policy.frame_src :data, *frame_sources
-  policy.media_src :self, *media_sources
+  policy.img_src '*', :data, :blob, *sources(:image)
+  policy.script_src :unsafe_eval, :unsafe_inline, 'https:', 'http:', *sources(:script)
+  policy.style_src :self, :unsafe_inline, *sources(:style)
+  policy.connect_src :self, *sources(:connect)
+  policy.font_src :self, *sources(:font)
+  policy.child_src(*sources(:child))
+  policy.frame_src :data, *sources(:frame)
+  policy.media_src :self, *sources(:media)
   policy.object_src :self
   policy.worker_src :self
   policy.manifest_src :self

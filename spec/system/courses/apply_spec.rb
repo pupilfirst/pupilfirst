@@ -16,7 +16,6 @@ feature 'Apply for public courses', js: true do
   let(:email) { Faker::Internet.email(name: name) }
   let(:name_2) { Faker::Name.name }
   let(:email_2) { Faker::Internet.email(name: name_2) }
-  let(:old_applicant) { create :applicant, course: course }
   let(:startup) { create :startup, level: level_one }
   let(:token) { Faker::Crypto.md5 }
   let(:saved_tag) { Faker::Lorem.word }
@@ -65,6 +64,24 @@ feature 'Apply for public courses', js: true do
 
     expect(team.tag_list).to include(saved_tag)
     expect(team.tag_list).not_to include('Public Signup')
+  end
+
+  context 'When course has a processing url' do
+    let(:processing_url) do
+      'https://www.example.com/q?course_id=${course_id}&applicant_id=${applicant_id}&name=${name}&email=${email}'
+    end
+    let(:applicant) { create :applicant, course: public_course }
+
+    before { public_course.update!(processing_url: processing_url) }
+
+    scenario 'applicant tries to sign up multiple times in quick succession' do
+      expected_url =
+        "https://www.example.com/q?course_id=#{public_course.id}&applicant_id=#{applicant.id}&name=#{applicant.name}&email=#{applicant.email}"
+      visit enroll_applicants_path(applicant.login_token)
+
+      # User should be redirected to the processing_url.
+      expect(page).to have_current_path(expected_url, url: true)
+    end
   end
 
   scenario 'applicant tries to sign up multiple times in quick succession' do

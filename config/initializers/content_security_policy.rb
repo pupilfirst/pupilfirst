@@ -73,7 +73,11 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def fullstory_csp
-    { connect: %w[fullstory.com *.fullstory.com] }
+    {
+      connect: %w[https://rs.fullstory.com],
+      script: %w[https://edge.fullstory.com https://www.fullstory.com https://fullstory.com],
+      imgage: %w[https://rs.fullstory.com],
+    }
   end
 
   def usetiful_csp

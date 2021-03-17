@@ -1,6 +1,9 @@
 <% gtm.with do |tag| %>
   <% content_for(:head) do %>
     <%= javascript_tag nonce: true do %>
+      <%= raw tag.setup_data_layer(request.content_security_policy_nonce) %>
+    <% end %>
+    <%= javascript_tag nonce: true do %>
       <%= raw tag.setup_gtm_head %>
     <% end %>
   <% end %>
@@ -19,10 +22,3 @@
 <% end %>
 
 <%= render template: 'layouts/tailwind' %>
-
-<% gtm.with do |tag| %>
-  <%= javascript_tag nonce: true do %>
-    <%= raw tag.setup_data_layer(request.content_security_policy_nonce) %>
-  <% end %>
-<% end %>
-

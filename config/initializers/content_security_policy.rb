@@ -84,6 +84,7 @@ Rails.application.config.content_security_policy do |policy|
     {
       srcipt: %w[usetiful.com *.usetiful.com],
       frame: %w[usetiful.com *.usetiful.com],
+      connect: %w[usetiful.com *.usetiful.com],
     }
   end
 

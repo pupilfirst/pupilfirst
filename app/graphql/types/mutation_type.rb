@@ -75,5 +75,6 @@ module Types
     field :revoke_issued_certificate, mutation: Mutations::RevokeIssuedCertificate, null: false
     field :lock_topic, mutation: Mutations::LockTopic, null: false
     field :unlock_topic, mutation: Mutations::UnlockTopic, null: false
+    field :insert_content_block, mutation: Mutations::InsertContentBlock, null: false
   end
 end

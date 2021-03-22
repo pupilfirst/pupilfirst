@@ -538,7 +538,7 @@ let topButton = (handler, id, title, icon) =>
     <div
       id={"top-button-" ++ id}
       title
-      className="content-block-creator__top-button bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20">
+      className="content-block-creator__top-button bg-gray-200 hover:bg-gray-300 hover:text-primary-200 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20">
       <FaIcon classes={"text-base fas " ++ icon} />
     </div>
   </div>

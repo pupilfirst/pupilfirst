@@ -59,7 +59,7 @@ let coachingSessionBlock = () => {
 }
 
 @react.component
-let make = (~contentBlocks) =>
+let make = (~contentBlocks, ~coaches=?) =>
   <div className="text-base" id="learn-component">
     {contentBlocks |> ContentBlock.sort |> Array.map(block => {
       let renderedBlock = switch block |> ContentBlock.blockType {
@@ -68,7 +68,7 @@ let make = (~contentBlocks) =>
       | Image(url, caption, width) => imageContentBlock(url, caption, width)
       | Embed(_url, embedCode, _requestType, _lastResolvedAt) =>
         embedCode->Belt.Option.mapWithDefault(React.null, code => embedContentBlock(code))
-      | CoachingSession(_lastResolvedAt) => coachingSessionBlock()
+      | CoachingSession(_lastResolvedAt) => coachingSessionBlock(coaches)
       }
 
       <div className={renderBlockClasses(block)} key={block |> ContentBlock.id}>

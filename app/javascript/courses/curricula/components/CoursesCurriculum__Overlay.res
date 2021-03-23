@@ -307,9 +307,9 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets) =>
 
 let overlayContentClasses = bool => bool ? "" : "hidden"
 
-let learnSection = (targetDetails, tab, author, courseId, targetId) =>
+let learnSection = (targetDetails, tab, author, courseId, targetId, coaches) =>
   <div className={overlayContentClasses(tab == Learn)}>
-    <CoursesCurriculum__Learn targetDetails author courseId targetId />
+    <CoursesCurriculum__Learn targetDetails author courseId targetId coaches />
   </div>
 
 let discussSection = (target, targetDetails, tab) =>
@@ -561,7 +561,7 @@ let make = (
     | Some(targetDetails) =>
       <div>
         <div className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0">
-          {learnSection(targetDetails, state.tab, author, Course.id(course), Target.id(target))}
+          {learnSection(targetDetails, state.tab, author, Course.id(course), Target.id(target), coaches)}
           {discussSection(target, targetDetails, state.tab)}
           {completeSection(
             state,

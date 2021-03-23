@@ -129,7 +129,7 @@ module Courses
 
         scope.where(startups: { id: current_student.startup })
           .or(scope.where(courses: { id: @course }))
-          .distinct.select(:id, :user_id).load
+          .distinct.select(:id, :user_id, :coaching_session_calendly_link).load
       end
     end
 

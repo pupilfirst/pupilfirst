@@ -19,7 +19,6 @@ class ApplicationPresenter
     :current_user,
     :current_host,
     :current_school,
-    :current_founder,
     :current_startup,
     :current_coach,
     :current_school_admin,

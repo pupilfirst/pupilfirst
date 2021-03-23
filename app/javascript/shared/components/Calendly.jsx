@@ -1,11 +1,19 @@
 import React from 'react';
-import { InlineWidget, openPopupWidget } from "react-calendly";
+import { InlineWidget, PopupText } from "react-calendly";
 
-//import "./Calendly.css";
-
-export function popup({ url, prefill, pageSettings, utm }) {
-  openPopupWidget({ url, prefill, pageSettings, utm })
-}
+export function popupText(props) {
+  return (
+    <PopupText
+      url={props.url}
+      text={props.text}
+      styles={props.styles}
+      prefill={props.prefill}
+      pageSettings={props.pageSettings}
+      utm={props.utm}
+      id={props.id}
+    />
+  );
+};
 
 export default function Calendly(props) {
   return (

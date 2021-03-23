@@ -6,9 +6,7 @@ type styles = {
 
 type prefill = {
   email: string,
-  firstName: option<string>,
-  lastName: option<string>,
-  name: option<string>,
+  name: string,
 }
 
 type pageSettings
@@ -36,3 +34,22 @@ module JsComponent = {
 @react.component
 let make = (~url, ~styles=?, ~prefill=?, ~=pageSettings=?, ~utm=?, ~id=?) =>
   <JsComponent ?id url ?styles ?prefill ?pageSettings ?utm />
+
+module PopupLink = {
+  module PopupLinkJsComponent = {
+    @bs.module("./Calendly") @react.component
+    external make: (
+      ~id: string=?,
+      ~url: string,
+      ~text: string,
+      ~styles: styles=?,
+      ~prefill: prefill=?,
+      ~pageSettings: pageSettings=?,
+      ~utm: utm=?,
+    ) => React.element = "popupText"
+  }
+
+  @react.component
+  let make = (~url, ~text, ~styles=?, ~prefill=?, ~=pageSettings=?, ~utm=?, ~id=?) =>
+    <PopupLinkJsComponent ?id url text ?styles ?prefill ?pageSettings ?utm />
+}

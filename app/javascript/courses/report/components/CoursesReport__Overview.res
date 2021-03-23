@@ -14,14 +14,8 @@ let avatar = (avatarUrl, name) => {
 
 let calendlyLink = (coachingLink) => {
   let txt = t("schedule_coaching_session")
-  let openCalendly = %raw(`
-    function (link) {
-      Calendly.initPopupWidget({url: link});
-      return false
-    }
-  `)
   switch coachingLink {
-  | Some(coachingLink) => <a href="#" onClick={_ => {openCalendly(coachingLink)}}> { txt |> str }</a>
+  | Some(coachingLink) => <Calendly.PopupLink url={coachingLink} text={txt} />
   | None => React.null
   }
 }

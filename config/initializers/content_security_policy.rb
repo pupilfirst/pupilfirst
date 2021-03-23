@@ -108,7 +108,7 @@ Rails.application.config.content_security_policy do |policy|
   def calendly_csp
     {
       style: %w[assets.calendly.com],
-      frame: %w[https://calendly.com],
+      frame: %w[https://calendly.com assets.calendly.com],
     }
   end
 

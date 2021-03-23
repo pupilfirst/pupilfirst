@@ -39,25 +39,23 @@ let embedContentBlock = embedCode =>
 
 let coachingSessionBlock = () => {
   let coachingLink = "https://calendly.com/mpraglowski/online"
+  let styles = {
+    "width": "100%",
+    "minWidth": "320px",
+    "height": "970px"
+  }
 
-  let openCalendly = %raw(`
-    function (link) {
-      Calendly.initPopupWidget({url: link});
-      return false
-    }
-  `)
-
-  <a
-    className="flex justify-between bg-white border rounded-lg px-6 py-4 items-center shadow hover:border-gray-500 hover:bg-gray-100 hover:text-primary-500 hover:shadow-md"
-    onClick={_ => {openCalendly(coachingLink)}}
-    href="#">
-    <div className="flex items-center">
+  <div className="flex flex-col bg-white border rounded-lg px-6 py-4 shadow hover:border-gray-500 hover:bg-gray-100 hover:text-primary-500 hover:shadow-md">
+    <div className="flex flex-row items-center">
       <FaIcon classes="text-4xl text-gray-800 far fa-calendar" />
       <div className="pl-4 leading-tight">
         <div className="text-lg font-semibold"> {"Schedule coaching session" |> str} </div>
       </div>
     </div>
-  </a>
+    <div className="flex flex-row flex-wrap items-center">
+      <Calendly url={coachingLink} styles={styles} />
+    </div>
+  </div>
 }
 
 @react.component

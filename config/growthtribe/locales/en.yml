@@ -55,7 +55,7 @@ en:
       unable_to_find_target_group: "Unable to find section with ID: "
     CurriculumEditor__ContentBlockCreator:
       button_labels:
-        insert: Insert
+        more: More
         coaching_session: Coaching Session
     CurriculumEditor__TargetGroupShow:
       create_target: Create a lesson

@@ -37,13 +37,34 @@ let imageContentBlock = (url, caption, width) =>
 let embedContentBlock = embedCode =>
   <div className="learn-content-block__embed" dangerouslySetInnerHTML={"__html": embedCode} />
 
-let coachingSessionBlock = () => {
-  let coachingLink = "https://calendly.com/mpraglowski/online"
+let coachingSessionBlock = (coaches) => {
+  let coachingLink =
+    switch coaches {
+    | None => None
+    | Some(coaches) => {
+        let coachingSessionLinks = coaches
+          |> Js.Array.map(c => c |> CoursesCurriculum__Coach.coachingSessionCalendlyLink)
+          |> ArrayUtils.compact
+          |> ArrayUtils.distinct
+        switch ArrayUtils.isEmpty(coachingSessionLinks) {
+        | true => None
+        | false => coachingSessionLinks[0]
+        }
+      }
+    }
+
   let styles = {
     "width": "100%",
     "minWidth": "320px",
     "height": "970px"
   }
+
+  let schedulingComponent =
+    switch coachingLink {
+    | Some(link) =>
+        <Calendly url={link} styles={styles} />
+    | None => <div className="text-sm italic text-gray-600">{"None of the coaches assigned is available for the coaching session at the moment." |> str}</div>
+    }
 
   <div className="flex flex-col bg-white border rounded-lg px-6 py-4 shadow hover:border-gray-500 hover:bg-gray-100 hover:text-primary-500 hover:shadow-md">
     <div className="flex flex-row items-center">
@@ -52,9 +73,7 @@ let coachingSessionBlock = () => {
         <div className="text-lg font-semibold"> {"Schedule coaching session" |> str} </div>
       </div>
     </div>
-    <div className="flex flex-row flex-wrap items-center">
-      <Calendly url={coachingLink} styles={styles} />
-    </div>
+    { schedulingComponent }
   </div>
 }
 

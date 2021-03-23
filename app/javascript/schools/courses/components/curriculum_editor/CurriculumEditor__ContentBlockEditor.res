@@ -232,8 +232,8 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, state, send) 
       code => TargetContentView.embedContentBlock(code),
     )
 
-  | CoachingSession(_lastResolvedAt) => React.null
-
+  | CoachingSession(_lastResolvedAt) =>
+    <CurriculumEditor__CoachingSessionBlockEditor />
   | Markdown(markdown) =>
     <CurriculumEditor__MarkdownBlockEditor markdown contentBlock updateContentBlockCB />
   | File(url, title, filename) =>

@@ -12,6 +12,7 @@ module Schools
       def props
         {
           course: course_data,
+          coaches: faculty.map(&:attributes),
           evaluation_criteria: evaluation_criteria,
           levels: levels,
           target_groups: target_groups,
@@ -25,6 +26,15 @@ module Schools
         {
           id: @course.id
         }
+      end
+
+      def faculty
+        @faculty ||= begin
+          scope = Faculty.left_joins(:startups, :courses)
+
+          scope.where(courses: { id: @course })
+            .distinct.select(:id, :user_id, :coaching_session_calendly_link).load
+        end
       end
 
       def evaluation_criteria

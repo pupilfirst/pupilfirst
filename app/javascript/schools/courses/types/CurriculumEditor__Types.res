@@ -1,4 +1,5 @@
 module Course = CurriculumEditor__Course
+module Coach = CoursesCurriculum__Coach
 module EvaluationCriterion = CurriculumEditor__EvaluationCriterion
 module Level = CurriculumEditor__Level
 module TargetGroup = CurriculumEditor__TargetGroup

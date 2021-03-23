@@ -114,6 +114,7 @@ let showContentBlocks = (
   selectedVersion,
   loadContentBlocksCB,
   targetId,
+  coaches,
   send,
 ) =>
   <div>
@@ -143,11 +144,11 @@ let showContentBlocks = (
         </button>
       </div>
     </div>
-    <TargetContentView contentBlocks />
+    <TargetContentView contentBlocks coaches/>
   </div>
 
 @react.component
-let make = (~targetId) => {
+let make = (~targetId, ~coaches) => {
   let (state, send) = React.useReducer(reducer, Loading)
 
   let loadContentBlocksCB = loadContentBlocks(targetId, send)
@@ -167,6 +168,7 @@ let make = (~targetId) => {
         selectedVersion,
         loadContentBlocksCB,
         targetId,
+        coaches,
         send,
       )
     }}

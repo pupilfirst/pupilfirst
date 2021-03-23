@@ -8,6 +8,7 @@ let renderBlockClasses = block =>
   | File(_) => "mt-6"
   | Image(_) => "mt-6"
   | Embed(_) => "mt-6 pb-7"
+  | CoachingSession(_) => "mt-6 pb-7"
   }
 
 let markdownContentBlock = markdown => <MarkdownBlock markdown profile=Markdown.Permissive />
@@ -36,6 +37,29 @@ let imageContentBlock = (url, caption, width) =>
 let embedContentBlock = embedCode =>
   <div className="learn-content-block__embed" dangerouslySetInnerHTML={"__html": embedCode} />
 
+let coachingSessionBlock = () => {
+  let coachingLink = "https://calendly.com/mpraglowski/online"
+
+  let openCalendly = %raw(`
+    function (link) {
+      Calendly.initPopupWidget({url: link});
+      return false
+    }
+  `)
+
+  <a
+    className="flex justify-between bg-white border rounded-lg px-6 py-4 items-center shadow hover:border-gray-500 hover:bg-gray-100 hover:text-primary-500 hover:shadow-md"
+    onClick={_ => {openCalendly(coachingLink)}}
+    href="#">
+    <div className="flex items-center">
+      <FaIcon classes="text-4xl text-gray-800 far fa-calendar" />
+      <div className="pl-4 leading-tight">
+        <div className="text-lg font-semibold"> {"Schedule coaching session" |> str} </div>
+      </div>
+    </div>
+  </a>
+}
+
 @react.component
 let make = (~contentBlocks) =>
   <div className="text-base" id="learn-component">
@@ -46,6 +70,7 @@ let make = (~contentBlocks) =>
       | Image(url, caption, width) => imageContentBlock(url, caption, width)
       | Embed(_url, embedCode, _requestType, _lastResolvedAt) =>
         embedCode->Belt.Option.mapWithDefault(React.null, code => embedContentBlock(code))
+      | CoachingSession(_lastResolvedAt) => coachingSessionBlock()
       }
 
       <div className={renderBlockClasses(block)} key={block |> ContentBlock.id}>

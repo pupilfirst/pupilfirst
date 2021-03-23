@@ -31,6 +31,18 @@ module CreateEmbedContentBlock = %graphql(
   `
 )
 
+module InsertContentBlock = %graphql(
+  `
+    mutation InsertContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $blockType: String!) {
+      insertContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId, blockType: $blockType) {
+        contentBlock {
+          ...ContentBlock.Fragments.AllFields
+        }
+      }
+    }
+  `
+)
+
 module CreateVimeoVideo = %graphql(
   `
     mutation CreateVimeoVideo($targetId: ID!, $size: Int!, $title: String, $description: String) {
@@ -49,6 +61,7 @@ type ui =
   | BlockSelector
   | EmbedForm(string)
   | UploadVideo
+  | InsertForm
 
 type state = {
   ui: ui,
@@ -74,6 +87,8 @@ type action =
   | ShowUploadVideoForm
   | UpdateUploadProgress(int)
   | UpdateEmbedUrl(string)
+  | ShowInsertForm
+  | HideInsertForm
 
 let computeInitialState = isAboveTarget => {
   ui: isAboveTarget ? Hidden : BlockSelector,
@@ -91,6 +106,7 @@ let reducer = (state, action) =>
     | Hidden => BlockSelector
     | BlockSelector
     | UploadVideo
+    | InsertForm
     | EmbedForm(_) =>
       Hidden
     }
@@ -111,6 +127,8 @@ let reducer = (state, action) =>
     }
   | ShowEmbedForm => {...state, ui: EmbedForm("")}
   | HideEmbedForm => {...state, ui: BlockSelector}
+  | ShowInsertForm => {...state, ui: InsertForm}
+  | HideInsertForm => {...state, ui: BlockSelector}
   | ShowUploadVideoForm => {...state, ui: UploadVideo}
   | HideUploadVideoForm => {...state, ui: BlockSelector}
   | UpdateEmbedUrl(url) => {...state, ui: EmbedForm(url)}
@@ -181,8 +199,64 @@ let onBlockTypeSelect = (target, aboveContentBlock, send, addContentBlockCB, blo
   | #File
   | #Image => ()
   | #Embed => send(ShowEmbedForm)
+  | #Insert => send(ShowInsertForm)
   | #VideoEmbed => send(ShowUploadVideoForm)
   }
+
+let handleInsertContentBlock = (
+  target,
+  aboveContentBlock,
+  blockType,
+  send,
+  addContentBlockCB,
+) => {
+  send(ToggleSaving)
+
+  let aboveContentBlockId = aboveContentBlock |> OptionUtils.map(ContentBlock.id)
+
+  let targetId = target |> Target.id
+
+  let blockTypeCode = switch blockType {
+  | #CoachingSession => "coaching_session"
+  }
+
+  InsertContentBlock.make(~targetId, ~aboveContentBlockId?, ~blockType=blockTypeCode, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result =>
+    handleGraphqlCreateResponse(
+      aboveContentBlock,
+      send,
+      addContentBlockCB,
+      result["insertContentBlock"]["contentBlock"],
+    )
+  )
+  |> Js.Promise.catch(_ => {
+    send(FailedToCreate)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let onInsertFormSave = (target, aboveContentBlock, blockType, send, addContentBlockCB, event) => {
+  event |> ReactEvent.Mouse.preventDefault
+
+  handleInsertContentBlock(target, aboveContentBlock, blockType, send, addContentBlockCB)
+}
+
+let insertButton = (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
+  let (faIcon, buttonText, htmlFor) = switch blockType {
+  | #CoachingSession => ("fab fa-calendar-plus", t("button_labels.coaching_session"), None)
+  }
+
+  <label
+    ?htmlFor
+    key=buttonText
+    className="content-block-creator__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-200"
+    onClick={onInsertFormSave(target, aboveContentBlock, blockType, send, addContentBlockCB)}>
+    <i className={faIcon ++ " text-2xl"} /> <p className="font-semibold"> {str(buttonText)} </p>
+  </label>
+}
+
 
 let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
   let fileId = aboveContentBlock |> fileInputId
@@ -194,6 +268,7 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
   | #File => ("far fa-file-alt", t("button_labels.file"), Some(fileId))
   | #Image => ("far fa-image", t("button_labels.image"), Some(imageId))
   | #Embed => ("fas fa-code", t("button_labels.embed"), None)
+  | #Insert => ("fas fa-plus", t("button_labels.insert"), None)
   | #VideoEmbed => ("fab fa-vimeo-v", t("button_labels.video"), Some(videoId))
   }
 
@@ -508,6 +583,7 @@ let visible = state =>
   | Hidden => false
   | BlockSelector
   | UploadVideo
+  | InsertForm
   | EmbedForm(_) => true
   }
 
@@ -543,6 +619,12 @@ let topButton = (handler, id, title, icon) =>
     </div>
   </div>
 
+let closeInsertFormButton = (send, aboveContentBlock) => {
+  let id = aboveContentBlock |> OptionUtils.map(ContentBlock.id) |> OptionUtils.default("bottom")
+
+  topButton(_e => send(HideInsertForm), id, "Close Insert Form", "fa-level-up-alt")
+}
+
 let closeEmbedFormButton = (send, aboveContentBlock) => {
   let id = aboveContentBlock |> OptionUtils.map(ContentBlock.id) |> OptionUtils.default("bottom")
 
@@ -565,6 +647,7 @@ let toggleVisibilityButton = (send, contentBlock) =>
 
 let buttonAboveContentBlock = (state, send, aboveContentBlock) =>
   switch (state.ui, aboveContentBlock) {
+  | (InsertForm, Some(_) | None) => closeInsertFormButton(send, aboveContentBlock)
   | (EmbedForm(_), Some(_) | None) => closeEmbedFormButton(send, aboveContentBlock)
   | (UploadVideo, Some(_) | None) => closeUploadFormButton(send, aboveContentBlock)
   | (Hidden, None)
@@ -644,6 +727,7 @@ let make = (
     | UploadVideo => "Preparing to Upload..."
     | BlockSelector
     | EmbedForm(_)
+    | InsertForm
     | Hidden => "Creating..."
     }}>
     {uploadFormCurried(#File)}
@@ -658,8 +742,8 @@ let make = (
             className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
             {(
               hasVimeoAccessToken
-                ? [#Markdown, #Image, #Embed, #VideoEmbed, #File]
-                : [#Markdown, #Image, #Embed, #File]
+                ? [#Markdown, #Image, #Embed, #Insert, #VideoEmbed, #File]
+                : [#Markdown, #Image, #Embed, #Insert, #File]
             )
             |> Array.map(button(target, aboveContentBlock, send, addContentBlockCB))
             |> React.array}
@@ -710,6 +794,15 @@ let make = (
                 {t("embed.save_button")->str}
               </button>
             </div>
+          </div>
+        | InsertForm =>
+          <div
+            className="clearfix border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
+            {
+              [#CoachingSession]
+              |> Array.map(insertButton(target, aboveContentBlock, send, addContentBlockCB))
+              |> React.array
+            }
           </div>
         }}
       </div>

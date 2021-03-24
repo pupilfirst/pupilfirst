@@ -1,15 +1,11 @@
-type styles = {
-  "height": string,
-  "width": string,
-  "minWidth": string,
-}
+type styles = Js.Dict.t<string>
 
 type prefill = {
   name: string,
   email: string,
 }
 
-type pageSettings
+type pageSettings = Js.Dict.t<string>
 
 type utm = {
   utmCampaign: option<string>,

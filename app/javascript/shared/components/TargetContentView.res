@@ -53,11 +53,10 @@ let coachingSessionBlock = (coaches) => {
       }
     }
 
-  let styles = {
-    "width": "100%",
-    "minWidth": "320px",
-    "height": "970px"
-  }
+  let styles = Js.Dict.fromList(list{
+    ("width", "100%"),
+    ("height", "1000px"),
+  })
 
   let prefill: Calendly.prefill = switch UserUtils.current() {
     | Some(user) => {
@@ -70,7 +69,7 @@ let coachingSessionBlock = (coaches) => {
   let schedulingComponent =
     switch coachingLink {
     | Some(link) =>
-        <div className="-mt-9">
+        <div className="mt-2">
           <Calendly url={link} styles={styles} prefill={prefill} />
         </div>
     | None => <div className="text-sm italic text-gray-600">{"None of the coaches assigned is available for the coaching session at the moment." |> str}</div>

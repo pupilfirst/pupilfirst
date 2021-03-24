@@ -65,6 +65,13 @@ FactoryBot.define do
       end
     end
 
+    trait :with_coaching_session do
+      after(:create) do |target|
+        target_version = create(:target_version, target: target)
+        create(:content_block, :coaching_session, target_version: target_version)
+      end
+    end
+
     trait :with_group do
       target_group { nil } # We'll add it later.
 

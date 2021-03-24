@@ -47,5 +47,10 @@ FactoryBot.define do
         ].sample
       end
     end
+
+    trait :coaching_session do
+      block_type { ContentBlock::BLOCK_TYPE_COACHING_SESSION }
+      content { { last_resolved_atn: Time.now } }
+    end
   end
 end

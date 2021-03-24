@@ -779,4 +779,56 @@ feature 'Target Overlay', js: true do
       expect(target_l1.latest_submission(student_3)).to eq(submission_old_2)
     end
   end
+
+  context 'when scheduling coaching session' do
+    let!(:level) { create :level, :one, course: course }
+    let!(:team) { create :startup, level: level }
+    let!(:student) { team.founders.first }
+    let!(:target_group) { create :target_group, level: level }
+    let!(:target) { create :target, :with_coaching_session, target_group: target_group }
+    let!(:coach_without_link) { create :faculty, school: course.school }
+    let!(:personal_coach_without_link) { create :faculty, school: course.school }
+    let!(:coach_with_link) { create :faculty, :with_coaching_session_link, school: course.school }
+    let!(:personal_coach_with_link) { create :faculty, :with_coaching_session_link, school: course.school }
+
+    scenario 'when personal coach is assigned to student' do
+      create(:faculty_course_enrollment, faculty: coach_with_link, course: course)
+
+      sign_in_user student.user, referrer: target_path(target)
+
+      calendly = find('iframe')
+      expect(calendly["src"]).to starting_with('https://calendly.com/growthtribe')
+      within_frame calendly  do
+        expect(page).to have_text('Welcome to my scheduling page. Please follow the instructions to add an event to my calendar.')
+      end
+    end
+
+    scenario 'when coach is assigned to course' do
+      create(:faculty_startup_enrollment, faculty: personal_coach_with_link, startup: team)
+
+      sign_in_user student.user, referrer: target_path(target)
+
+      calendly = find('iframe')
+      expect(calendly["src"]).to starting_with('https://calendly.com/growthtribe')
+      within_frame calendly  do
+        expect(page).to have_text('Welcome to my scheduling page. Please follow the instructions to add an event to my calendar.')
+      end
+    end
+
+    scenario 'when there is no coach' do
+      sign_in_user student.user, referrer: target_path(target)
+
+      expect(page).to have_text('None of the coaches assigned is available for the coaching session at the moment.')
+    end
+
+    scenario 'when there is no coach with coaching link' do
+      # Enroll one of the coaches to course, and another to the team. One should be left un-enrolled to test how that's handled.
+      create(:faculty_course_enrollment, faculty: coach_without_link, course: course)
+      create(:faculty_startup_enrollment, faculty: personal_coach_without_link, startup: team)
+
+      sign_in_user student.user, referrer: target_path(target)
+
+      expect(page).to have_text('None of the coaches assigned is available for the coaching session at the moment.')
+    end
+  end
 end

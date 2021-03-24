@@ -5,8 +5,8 @@ type styles = {
 }
 
 type prefill = {
-  email: string,
   name: string,
+  email: string,
 }
 
 type pageSettings

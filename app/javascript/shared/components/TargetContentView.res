@@ -59,10 +59,20 @@ let coachingSessionBlock = (coaches) => {
     "height": "970px"
   }
 
+  let prefill: Calendly.prefill = switch UserUtils.current() {
+    | Some(user) => {
+        name: user |> UserUtils.name,
+        email: user |> UserUtils.email
+      }
+    | None => {name: "", email: ""}
+  }
+
   let schedulingComponent =
     switch coachingLink {
     | Some(link) =>
-        <Calendly url={link} styles={styles} />
+        <div className="-mt-9">
+          <Calendly url={link} styles={styles} prefill={prefill} />
+        </div>
     | None => <div className="text-sm italic text-gray-600">{"None of the coaches assigned is available for the coaching session at the moment." |> str}</div>
     }
 

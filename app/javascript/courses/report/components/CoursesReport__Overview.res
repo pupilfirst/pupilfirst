@@ -14,8 +14,16 @@ let avatar = (avatarUrl, name) => {
 
 let calendlyLink = (coachingLink) => {
   let txt = t("schedule_coaching_session")
+  let prefill: Calendly.prefill = switch UserUtils.current() {
+    | Some(user) => {
+        name: user |> UserUtils.name,
+        email: user |> UserUtils.email
+      }
+    | None => {name: "", email: ""}
+  }
+
   switch coachingLink {
-  | Some(coachingLink) => <Calendly.PopupLink url={coachingLink} text={txt} />
+  | Some(coachingLink) => <Calendly.PopupLink url={coachingLink} text={txt} prefill={prefill} />
   | None => React.null
   }
 }

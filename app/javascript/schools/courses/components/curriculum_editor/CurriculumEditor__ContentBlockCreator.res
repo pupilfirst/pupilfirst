@@ -61,7 +61,7 @@ type ui =
   | BlockSelector
   | EmbedForm(string)
   | UploadVideo
-  | MoreForm
+  | AdditionalBlockSelector
 
 type state = {
   ui: ui,
@@ -87,8 +87,8 @@ type action =
   | ShowUploadVideoForm
   | UpdateUploadProgress(int)
   | UpdateEmbedUrl(string)
-  | ShowMoreForm
-  | HideMoreForm
+  | ShowAdditionalBlockSelector
+  | HideAdditionalBlockSelector
 
 let computeInitialState = isAboveTarget => {
   ui: isAboveTarget ? Hidden : BlockSelector,
@@ -106,7 +106,7 @@ let reducer = (state, action) =>
     | Hidden => BlockSelector
     | BlockSelector
     | UploadVideo
-    | MoreForm
+    | AdditionalBlockSelector
     | EmbedForm(_) =>
       Hidden
     }
@@ -127,8 +127,8 @@ let reducer = (state, action) =>
     }
   | ShowEmbedForm => {...state, ui: EmbedForm("")}
   | HideEmbedForm => {...state, ui: BlockSelector}
-  | ShowMoreForm => {...state, ui: MoreForm}
-  | HideMoreForm => {...state, ui: BlockSelector}
+  | ShowAdditionalBlockSelector => {...state, ui: AdditionalBlockSelector}
+  | HideAdditionalBlockSelector => {...state, ui: BlockSelector}
   | ShowUploadVideoForm => {...state, ui: UploadVideo}
   | HideUploadVideoForm => {...state, ui: BlockSelector}
   | UpdateEmbedUrl(url) => {...state, ui: EmbedForm(url)}
@@ -199,16 +199,16 @@ let onBlockTypeSelect = (target, aboveContentBlock, send, addContentBlockCB, blo
   | #File
   | #Image => ()
   | #Embed => send(ShowEmbedForm)
-  | #More => send(ShowMoreForm)
+  | #More => send(ShowAdditionalBlockSelector)
   | #VideoEmbed => send(ShowUploadVideoForm)
   }
 
 let handleInsertContentBlock = (
   target,
   aboveContentBlock,
-  blockType,
   send,
   addContentBlockCB,
+  blockType,
 ) => {
   send(ToggleSaving)
 
@@ -237,10 +237,10 @@ let handleInsertContentBlock = (
   |> ignore
 }
 
-let onMoreFormSave = (target, aboveContentBlock, blockType, send, addContentBlockCB, event) => {
-  event |> ReactEvent.Mouse.preventDefault
-
-  handleInsertContentBlock(target, aboveContentBlock, blockType, send, addContentBlockCB)
+let onAdditonalBlockTypeSelect = (target, aboveContentBlock, send, addContentBlockCB, blockType, _event) => {
+  switch blockType {
+  | #CoachingSession => handleInsertContentBlock(target, aboveContentBlock, send, addContentBlockCB, blockType)
+  }
 }
 
 let insertButton = (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
@@ -252,11 +252,10 @@ let insertButton = (target, aboveContentBlock, send, addContentBlockCB, blockTyp
     ?htmlFor
     key=buttonText
     className="content-block-creator__block-content-type-picker px-3 pt-4 pb-3 flex-1 text-center text-primary-100"
-    onClick={onMoreFormSave(target, aboveContentBlock, blockType, send, addContentBlockCB)}>
+    onClick={onAdditonalBlockTypeSelect(target, aboveContentBlock, send, addContentBlockCB, blockType)}>
     <i className={faIcon ++ " text-2xl"} /> <p className="font-semibold"> {str(buttonText)} </p>
   </label>
 }
-
 
 let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
   let fileId = aboveContentBlock |> fileInputId
@@ -583,7 +582,7 @@ let visible = state =>
   | Hidden => false
   | BlockSelector
   | UploadVideo
-  | MoreForm
+  | AdditionalBlockSelector
   | EmbedForm(_) => true
   }
 
@@ -619,10 +618,10 @@ let topButton = (handler, id, title, icon) =>
     </div>
   </div>
 
-let closeMoreFormButton = (send, aboveContentBlock) => {
+let closeAdditionalBlockSelectorButton = (send, aboveContentBlock) => {
   let id = aboveContentBlock |> OptionUtils.map(ContentBlock.id) |> OptionUtils.default("bottom")
 
-  topButton(_e => send(HideMoreForm), id, "Close More Form", "fa-level-up-alt")
+  topButton(_e => send(HideAdditionalBlockSelector), id, "Close More Form", "fa-level-up-alt")
 }
 
 let closeEmbedFormButton = (send, aboveContentBlock) => {
@@ -647,7 +646,7 @@ let toggleVisibilityButton = (send, contentBlock) =>
 
 let buttonAboveContentBlock = (state, send, aboveContentBlock) =>
   switch (state.ui, aboveContentBlock) {
-  | (MoreForm, Some(_) | None) => closeMoreFormButton(send, aboveContentBlock)
+  | (AdditionalBlockSelector, Some(_) | None) => closeAdditionalBlockSelectorButton(send, aboveContentBlock)
   | (EmbedForm(_), Some(_) | None) => closeEmbedFormButton(send, aboveContentBlock)
   | (UploadVideo, Some(_) | None) => closeUploadFormButton(send, aboveContentBlock)
   | (Hidden, None)
@@ -727,7 +726,7 @@ let make = (
     | UploadVideo => "Preparing to Upload..."
     | BlockSelector
     | EmbedForm(_)
-    | MoreForm
+    | AdditionalBlockSelector
     | Hidden => "Creating..."
     }}>
     {uploadFormCurried(#File)}
@@ -747,6 +746,15 @@ let make = (
             )
             |> Array.map(button(target, aboveContentBlock, send, addContentBlockCB))
             |> React.array}
+          </div>
+        | AdditionalBlockSelector =>
+          <div
+            className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
+            {
+              [#CoachingSession]
+              |> Array.map(insertButton(target, aboveContentBlock, send, addContentBlockCB))
+              |> React.array
+            }
           </div>
         | UploadVideo =>
           <div
@@ -794,15 +802,6 @@ let make = (
                 {t("embed.save_button")->str}
               </button>
             </div>
-          </div>
-        | MoreForm =>
-          <div
-            className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
-            {
-              [#CoachingSession]
-              |> Array.map(insertButton(target, aboveContentBlock, send, addContentBlockCB))
-              |> React.array
-            }
           </div>
         }}
       </div>

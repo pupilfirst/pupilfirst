@@ -205,6 +205,7 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
     let extractor = result => result["updateImageBlock"]["contentBlock"]
 
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
+  | CoachingSession(_)
   | Embed(_) => raise(InvalidBlockTypeForUpdate)
   }
 }
@@ -231,6 +232,8 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, state, send) 
       code => TargetContentView.embedContentBlock(code),
     )
 
+  | CoachingSession(_lastResolvedAt) =>
+    <CurriculumEditor__CoachingSessionBlockEditor />
   | Markdown(markdown) =>
     <CurriculumEditor__MarkdownBlockEditor markdown contentBlock updateContentBlockCB />
   | File(url, title, filename) =>

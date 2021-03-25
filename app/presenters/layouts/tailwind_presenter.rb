@@ -26,5 +26,9 @@ module Layouts
 
       current_user.webpush_subscription['endpoint']
     end
+
+    def current_user_data
+      current_user && current_user.attributes.slice("name", "email").to_json
+    end
   end
 end

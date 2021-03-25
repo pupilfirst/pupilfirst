@@ -1,6 +1,7 @@
 module Types
   class ContentType < Types::BaseUnion
-    possible_types Types::ImageBlockType, Types::FileBlockType, Types::MarkdownBlockType, Types::EmbedBlockType
+    possible_types Types::ImageBlockType, Types::FileBlockType, Types::MarkdownBlockType, Types::EmbedBlockType,
+      Types::CoachingSessionBlockType
 
     def self.resolve_type(object, _context)
       case object[:block_type]
@@ -12,6 +13,8 @@ module Types
           Types::FileBlockType
         when ContentBlock::BLOCK_TYPE_EMBED
           Types::EmbedBlockType
+        when ContentBlock::BLOCK_TYPE_COACHING_SESSION
+          Types::CoachingSessionBlockType
       end
     end
   end

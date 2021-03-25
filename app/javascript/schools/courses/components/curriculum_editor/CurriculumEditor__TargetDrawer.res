@@ -59,6 +59,7 @@ let make = (
   ~levels,
   ~evaluationCriteria,
   ~course,
+  ~coaches,
   ~updateTargetCB,
   ~vimeoPlan,
 ) => {
@@ -108,7 +109,7 @@ let make = (
         />,
         Details,
       )
-    | "versions" => (<CurriculumEditor__VersionsEditor targetId />, Versions)
+    | "versions" => (<CurriculumEditor__VersionsEditor targetId coaches />, Versions)
     | otherPage =>
       Rollbar.warning("Unexpected page requested for target editor drawer: " ++ otherPage)
       (<div> {"Unexpected error. Please reload the page." |> str} </div>, Content)

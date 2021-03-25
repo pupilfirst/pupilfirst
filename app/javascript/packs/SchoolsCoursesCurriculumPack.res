@@ -2,6 +2,7 @@ open CurriculumEditor__Types
 
 type props = {
   course: Course.t,
+  coaches: array<Coach.t>,
   evaluationCriteria: array<EvaluationCriterion.t>,
   levels: array<Level.t>,
   targetGroups: array<TargetGroup.t>,
@@ -14,6 +15,7 @@ let decodeProps = json => {
   open Json.Decode
   {
     course: json |> field("course", Course.decode),
+    coaches: json |> field("coaches", array(Coach.decode)),
     evaluationCriteria: json |> field("evaluationCriteria", array(EvaluationCriterion.decode)),
     levels: json |> field("levels", array(Level.decode)),
     targetGroups: json |> field("targetGroups", array(TargetGroup.decode)),
@@ -29,6 +31,7 @@ let props =
 ReactDOMRe.renderToElementWithId(
   <CurriculumEditor
     course=props.course
+    coaches=props.coaches
     evaluationCriteria=props.evaluationCriteria
     levels=props.levels
     targetGroups=props.targetGroups

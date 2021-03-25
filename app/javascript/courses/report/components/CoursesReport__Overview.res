@@ -14,14 +14,16 @@ let avatar = (avatarUrl, name) => {
 
 let calendlyLink = (coachingLink) => {
   let txt = t("schedule_coaching_session")
-  let openCalendly = %raw(`
-    function (link) {
-      Calendly.initPopupWidget({url: link});
-      return false
-    }
-  `)
+  let prefill: Calendly.prefill = switch UserUtils.current() {
+    | Some(user) => {
+        name: user |> UserUtils.name,
+        email: user |> UserUtils.email
+      }
+    | None => {name: "", email: ""}
+  }
+
   switch coachingLink {
-  | Some(coachingLink) => <a href="#" onClick={_ => {openCalendly(coachingLink)}}> { txt |> str }</a>
+  | Some(coachingLink) => <Calendly.PopupLink url={coachingLink} text={txt} prefill={prefill} />
   | None => React.null
   }
 }

@@ -129,6 +129,7 @@ let computeIntialState = ((levels, targetGroups, targets, path)) => {
 @react.component
 let make = (
   ~course,
+  ~coaches,
   ~evaluationCriteria,
   ~levels,
   ~targetGroups,
@@ -212,6 +213,7 @@ let make = (
       targetGroups=state.targetGroups
       evaluationCriteria
       course
+      coaches
       updateTargetCB
       vimeoPlan
     />

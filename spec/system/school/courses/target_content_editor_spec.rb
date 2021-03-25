@@ -232,6 +232,25 @@ feature 'Target Content Editor', js: true do
     expect(cb.content['request_source']).to eq('User')
   end
 
+  scenario 'school admin adds a coaching session block' do
+    sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
+
+    # Open the content editor for the target.
+    find("a[title='Edit content of target #{target.title}']").click
+
+    expect(target.target_versions.count).to eq(1)
+    expect(target.current_target_version.content_blocks.count).to eq(1)
+
+    # Try adding a new coaching session block.
+    within('.content-block-creator--open') do
+      find('p', text: 'More').click
+      find('p', text: 'Coaching Session').click
+    end
+
+    expect(page).to have_text('Schedule coaching session')
+    expect(target.current_target_version.content_blocks.count).to eq(2)
+  end
+
   context 'when video upload is enabled for a school' do
     let(:vimeo_access_token) { SecureRandom.hex }
     let(:title) { Faker::Lorem.words(number: 3).join(' ') }

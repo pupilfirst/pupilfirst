@@ -14946,6 +14946,11 @@ react-base16-styling@^0.6.0:
     lodash.flow "^3.3.0"
     pure-color "^1.2.0"
 
+react-calendly@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/react-calendly/-/react-calendly-1.3.1.tgz#d7d8880c0d8c63099bb4c094782c78fda0f0cd6d"
+  integrity sha512-e/RA4VK9jR36plWJzmLPjGjQYMFc4KuhzkjSPCTgp/mUx3uPRO/BxBOxVKXn9gvyaYr+cdzOqUe57VA19CGlyQ==
+
 react-csv-reader@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/react-csv-reader/-/react-csv-reader-3.2.1.tgz#a2b61dce8de90ee0c5e9da3db4de36fcf8399a0c"

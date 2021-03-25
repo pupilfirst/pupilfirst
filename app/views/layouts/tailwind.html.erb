@@ -1,7 +1,7 @@
 <% presenter = ::Layouts::TailwindPresenter.new(self) %>
 
 <!DOCTYPE html>
-<html lang='en' data-user-id="<%= current_user&.id %>" data-flash="<%= presenter.flash_messages %>" data-env="<%= Rails.env %>" data-vapid-public-key="<%= presenter.vapid_public_key_bytes %>" data-subscription-endpoint="<%= presenter.webpush_subscription_endpoint %>">
+<html lang='en' data-user-id="<%= current_user&.id %>" data-flash="<%= presenter.flash_messages %>" data-env="<%= Rails.env %>" data-vapid-public-key="<%= presenter.vapid_public_key_bytes %>" data-subscription-endpoint="<%= presenter.webpush_subscription_endpoint %>" data-user="<%= presenter.current_user_data %>">
 
 <head>
   <meta charset="utf-8"/>

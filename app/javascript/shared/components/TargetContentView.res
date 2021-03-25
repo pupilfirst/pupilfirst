@@ -8,6 +8,7 @@ let renderBlockClasses = block =>
   | File(_) => "mt-6"
   | Image(_) => "mt-6"
   | Embed(_) => "mt-6 pb-7"
+  | CoachingSession(_) => "mt-6 pb-7"
   }
 
 let markdownContentBlock = markdown => <MarkdownBlock markdown profile=Markdown.Permissive />
@@ -36,8 +37,57 @@ let imageContentBlock = (url, caption, width) =>
 let embedContentBlock = embedCode =>
   <div className="learn-content-block__embed" dangerouslySetInnerHTML={"__html": embedCode} />
 
+let coachingSessionBlock = (coaches) => {
+  let coachingLink =
+    switch coaches {
+    | None => None
+    | Some(coaches) => {
+        let coachingSessionLinks = coaches
+          |> Js.Array.map(c => c |> CoursesCurriculum__Coach.coachingSessionCalendlyLink)
+          |> ArrayUtils.compact
+          |> ArrayUtils.distinct
+        switch ArrayUtils.isEmpty(coachingSessionLinks) {
+        | true => None
+        | false => coachingSessionLinks[0]
+        }
+      }
+    }
+
+  let styles = Js.Dict.fromList(list{
+    ("width", "100%"),
+    ("height", "1000px"),
+  })
+
+  let prefill: Calendly.prefill = switch UserUtils.current() {
+    | Some(user) => {
+        name: user |> UserUtils.name,
+        email: user |> UserUtils.email
+      }
+    | None => {name: "", email: ""}
+  }
+
+  let schedulingComponent =
+    switch coachingLink {
+    | Some(link) =>
+        <div className="mt-2">
+          <Calendly url={link} styles={styles} prefill={prefill} />
+        </div>
+    | None => <div className="text-sm italic text-gray-600">{"None of the coaches assigned is available for the coaching session at the moment." |> str}</div>
+    }
+
+  <div className="flex flex-col bg-white border rounded-lg px-6 py-4 shadow hover:border-gray-500 hover:bg-gray-100 hover:text-primary-500 hover:shadow-md">
+    <div className="flex flex-row items-center">
+      <FaIcon classes="text-4xl text-gray-800 far fa-calendar" />
+      <div className="pl-4 leading-tight">
+        <div className="text-lg font-semibold"> {"Schedule coaching session" |> str} </div>
+      </div>
+    </div>
+    { schedulingComponent }
+  </div>
+}
+
 @react.component
-let make = (~contentBlocks) =>
+let make = (~contentBlocks, ~coaches=?) =>
   <div className="text-base" id="learn-component">
     {contentBlocks |> ContentBlock.sort |> Array.map(block => {
       let renderedBlock = switch block |> ContentBlock.blockType {
@@ -46,6 +96,7 @@ let make = (~contentBlocks) =>
       | Image(url, caption, width) => imageContentBlock(url, caption, width)
       | Embed(_url, embedCode, _requestType, _lastResolvedAt) =>
         embedCode->Belt.Option.mapWithDefault(React.null, code => embedContentBlock(code))
+      | CoachingSession(_lastResolvedAt) => coachingSessionBlock(coaches)
       }
 
       <div className={renderBlockClasses(block)} key={block |> ContentBlock.id}>

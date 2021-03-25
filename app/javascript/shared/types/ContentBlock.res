@@ -22,6 +22,7 @@ type blockType =
   | File(url, title, filename)
   | Image(url, caption, width)
   | Embed(url, embedCode, requestSource, lastResolvedAt)
+  | CoachingSession(lastResolvedAt)
 
 type rec t = {
   id: id,
@@ -97,6 +98,11 @@ let decodeEmbedContent = json => {
   )
 }
 
+let decodeCouchingSessionContent = json => {
+  open Json.Decode
+  json |> optional(field("lastResolvedAt", DateFns.decodeISO))
+}
+
 let decode = json => {
   open Json.Decode
 
@@ -115,6 +121,10 @@ let decode = json => {
     let (url, embedCode, requestSource, lastResolvedAt) =
       json |> field("content", decodeEmbedContent)
     Embed(url, embedCode, requestSource, lastResolvedAt)
+  | "coaching_session" =>
+    let (lastResolvedAt) =
+      json |> field("content", decodeCouchingSessionContent)
+    CoachingSession(lastResolvedAt)
   | unknownBlockType => raise(UnexpectedBlockType(unknownBlockType))
   }
 
@@ -140,6 +150,7 @@ let makeEmbedBlock = (url, embedCode, requestSource, lastResolvedAt) => Embed(
   requestSource,
   lastResolvedAt,
 )
+let makeCouchingSessionBlock = lastResolvedAt => CoachingSession(lastResolvedAt)
 
 let make = (id, blockType, sortIndex) => {id: id, blockType: blockType, sortIndex: sortIndex}
 
@@ -168,6 +179,10 @@ let makeFromJs = js => {
       content["requestSource"],
       content["lastResolvedAt"]->Belt.Option.map(DateFns.parseISO),
     )
+  | #CoachingSessionBlock(content) =>
+    CoachingSession(
+      content["lastResolvedAt"]->Belt.Option.map(DateFns.parseISO),
+    )
   }
 
   make(id, blockType, sortIndex)
@@ -179,6 +194,7 @@ let blockTypeAsString = blockType =>
   | File(_) => "file"
   | Image(_) => "image"
   | Embed(_) => "embed"
+  | CoachingSession(_) => "coaching_session"
   }
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1}
@@ -194,6 +210,7 @@ let moveDown = (t, ts) =>
 let updateFile = (title, t) =>
   switch t.blockType {
   | File(url, _, filename) => {...t, blockType: File(url, title, filename)}
+  | CoachingSession(_)
   | Markdown(_)
   | Image(_)
   | Embed(_) => t
@@ -204,6 +221,7 @@ let updateImageCaption = (t, caption) =>
   | Image(url, _, width) => {...t, blockType: Image(url, caption, width)}
   | Markdown(_)
   | File(_)
+  | CoachingSession(_)
   | Embed(_) => t
   }
 
@@ -212,6 +230,7 @@ let updateImageWidth = (t, width) =>
   | Image(url, caption, _) => {...t, blockType: Image(url, caption, width)}
   | Markdown(_)
   | File(_)
+  | CoachingSession(_)
   | Embed(_) => t
   }
 
@@ -220,6 +239,7 @@ let updateMarkdown = (markdown, t) =>
   | Markdown(_) => {...t, blockType: Markdown(markdown)}
   | File(_)
   | Image(_)
+  | CoachingSession(_)
   | Embed(_) => t
   }
 
@@ -248,6 +268,9 @@ module Fragments = %graphql(
         url
         embedCode
         requestSource
+        lastResolvedAt
+      }
+      ... on CoachingSessionBlock {
         lastResolvedAt
       }
     }
@@ -281,6 +304,9 @@ module Query = %graphql(
             url
             embedCode
             requestSource
+            lastResolvedAt
+          }
+          ... on CoachingSessionBlock {
             lastResolvedAt
           }
         }

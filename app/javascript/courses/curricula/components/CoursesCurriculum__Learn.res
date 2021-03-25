@@ -3,7 +3,7 @@ open CoursesCurriculum__Types
 let t = I18n.t(~scope="components.CoursesCurriculum__Learn")
 
 @react.component
-let make = (~targetDetails, ~author, ~courseId, ~targetId) => {
+let make = (~targetDetails, ~author, ~courseId, ~targetId, ~coaches) => {
   <div id="learn-component">
     {ReactUtils.nullUnless(
       <a
@@ -16,6 +16,7 @@ let make = (~targetDetails, ~author, ~courseId, ~targetId) => {
     )}
     <TargetContentView
       contentBlocks={TargetDetails.contentBlocks(targetDetails)->ContentBlock.sort}
+      coaches
     />
   </div>
 }

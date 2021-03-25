@@ -189,9 +189,11 @@ let imageInputId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-image-input-")
 let videoInputId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-vimeo-input-")
+let pdfDocumentInputId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-pdf-document-input-")
 let videoFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-vimeo-form-")
 let fileFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-file-form-")
 let imageFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-image-form-")
+let pdfDocumentFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-pdf-document-form-")
 
 let onBlockTypeSelect = (target, aboveContentBlock, send, addContentBlockCB, blockType, _event) =>
   switch blockType {
@@ -239,13 +241,17 @@ let handleInsertContentBlock = (
 
 let onAdditonalBlockTypeSelect = (target, aboveContentBlock, send, addContentBlockCB, blockType, _event) => {
   switch blockType {
-  | #CoachingSession => handleInsertContentBlock(target, aboveContentBlock, send, addContentBlockCB, blockType)
+  | #CoachingSession => handleInsertContentBlock(target, aboveContentBlock, send, addContentBlockCB, #CoachingSession)
+  | #PdfDocument => ()
   }
 }
 
 let insertButton = (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
+  let pdfDocumentId = aboveContentBlock |> pdfDocumentInputId
+
   let (faIcon, buttonText, htmlFor) = switch blockType {
   | #CoachingSession => ("far fa-calendar-plus", t("button_labels.coaching_session"), None)
+  | #PdfDocument => ("far fa-file-pdf", t("button_labels.file"), Some(pdfDocumentId))
   }
 
   <label
@@ -386,6 +392,7 @@ let uploadFile = (
 ) => {
   let isAboveContentBlock = aboveContentBlock != None
   switch blockType {
+  | #PdfDocument
   | #File
   | #Image =>
     Api.sendFormData(
@@ -430,6 +437,7 @@ let submitForm = (target, aboveContentBlock, state, send, addContentBlockCB, blo
   | #File => fileFormId(aboveContentBlock)
   | #Image => imageFormId(aboveContentBlock)
   | #VideoEmbed => videoFormId(aboveContentBlock)
+  | #PdfDocument => pdfDocumentFormId(aboveContentBlock)
   }
 
   let element = ReactDOMRe._getElementById(formId)
@@ -498,6 +506,7 @@ let handleFileInputChange = (
     let file = files[0]
 
     let error = switch blockType {
+    | #PdfDocument
     | #File => FileUtils.isInvalid(file) ? Some(t("file.upload_size_warning")) : None
     | #Image =>
       FileUtils.isInvalid(~image=true, file) ? Some(t("image.invalid_image_warning")) : None
@@ -562,6 +571,12 @@ let uploadForm = (
       videoFormId(aboveContentBlock),
       fileSelectionHandler(#VideoEmbed),
       "video",
+    )
+  | #PdfDocument => (
+      pdfDocumentInputId(aboveContentBlock),
+      pdfDocumentFormId(aboveContentBlock),
+      fileSelectionHandler(#PdfDocument),
+      "pdf_document",
     )
   }
 
@@ -731,6 +746,7 @@ let make = (
     }}>
     {uploadFormCurried(#File)}
     {uploadFormCurried(#Image)}
+    {uploadFormCurried(#PdfDocument)}
     <div className={containerClasses(state |> visible, isAboveContentBlock)}>
       {buttonAboveContentBlock(state, send, aboveContentBlock)}
       <div className="content-block-creator__inner-container">
@@ -751,7 +767,7 @@ let make = (
           <div
             className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
             {
-              [#CoachingSession]
+              [#CoachingSession, #PdfDocument]
               |> Array.map(insertButton(target, aboveContentBlock, send, addContentBlockCB))
               |> React.array
             }

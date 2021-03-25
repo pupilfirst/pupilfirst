@@ -9,6 +9,7 @@ let renderBlockClasses = block =>
   | Image(_) => "mt-6"
   | Embed(_) => "mt-6 pb-7"
   | CoachingSession(_) => "mt-6 pb-7"
+  | PdfDocument(_) => "mt-6"
   }
 
 let markdownContentBlock = markdown => <MarkdownBlock markdown profile=Markdown.Permissive />
@@ -97,6 +98,7 @@ let make = (~contentBlocks, ~coaches=?) =>
       | Embed(_url, embedCode, _requestType, _lastResolvedAt) =>
         embedCode->Belt.Option.mapWithDefault(React.null, code => embedContentBlock(code))
       | CoachingSession(_lastResolvedAt) => coachingSessionBlock(coaches)
+      | PdfDocument(url, title, filename) => fileContentBlock(url, title, filename)
       }
 
       <div className={renderBlockClasses(block)} key={block |> ContentBlock.id}>

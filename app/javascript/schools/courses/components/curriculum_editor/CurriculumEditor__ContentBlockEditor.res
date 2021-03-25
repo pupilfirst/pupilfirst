@@ -206,6 +206,7 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
 
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
   | CoachingSession(_)
+  | PdfDocument(_)
   | Embed(_) => raise(InvalidBlockTypeForUpdate)
   }
 }
@@ -240,6 +241,8 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, state, send) 
     <CurriculumEditor__FileBlockEditor url title filename contentBlock updateContentBlockCB />
   | Image(url, caption, width) =>
     <CurriculumEditor__ImageBlockEditor width url caption contentBlock updateContentBlockCB />
+  | PdfDocument(url, title, filename) =>
+    <CurriculumEditor__FileBlockEditor url title filename contentBlock updateContentBlockCB />
   }
 }
 

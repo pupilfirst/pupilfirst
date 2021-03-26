@@ -57,6 +57,7 @@ en:
       button_labels:
         more: More
         coaching_session: Coaching Session
+        pdf_document: PDF document
     CurriculumEditor__TargetGroupShow:
       create_target: Create a lesson
       milestone_targets: Milestone Lessons

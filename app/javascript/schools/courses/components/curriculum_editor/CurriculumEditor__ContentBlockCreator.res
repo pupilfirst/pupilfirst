@@ -251,7 +251,7 @@ let insertButton = (target, aboveContentBlock, send, addContentBlockCB, blockTyp
 
   let (faIcon, buttonText, htmlFor) = switch blockType {
   | #CoachingSession => ("far fa-calendar-plus", t("button_labels.coaching_session"), None)
-  | #PdfDocument => ("far fa-file-pdf", t("button_labels.file"), Some(pdfDocumentId))
+  | #PdfDocument => ("far fa-file-pdf", t("button_labels.pdf_document"), Some(pdfDocumentId))
   }
 
   <label

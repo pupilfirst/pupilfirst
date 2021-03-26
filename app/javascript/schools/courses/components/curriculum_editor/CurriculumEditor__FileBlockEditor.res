@@ -8,7 +8,7 @@ let onChange = (contentBlock, updateContentBlockCB, event) => {
 }
 
 @react.component
-let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
+let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB, ~fileTypeIcon="fa-file-alt") => {
   let titleInputId = "title-" ++ (contentBlock |> ContentBlock.id)
 
   <div className="relative border border-gray-400 rounded-lg">
@@ -20,7 +20,7 @@ let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
           target="_blank"
           href=url>
           <div className="flex items-center">
-            <FaIcon classes="text-4xl text-gray-800 far fa-file-alt" />
+            <FaIcon classes={"text-4xl text-gray-800 far " ++ fileTypeIcon} />
             <div className="pl-4 leading-tight h-12 flex flex-col justify-center">
               <div className="text-lg font-semibold"> {title |> str} </div>
               <div className="text-sm italic text-gray-600"> {filename |> str} </div>

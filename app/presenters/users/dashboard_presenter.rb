@@ -100,9 +100,15 @@ module Users
           exited: student_dropped_out(course.id),
           thumbnail_url: course.thumbnail_url,
           linked_communities: course.communities.pluck(:id).map(&:to_s),
+          access_ended: course_access_end(course),
           ended: course.ended?
         }
       end
+    end
+    
+    def course_access_end(course) 
+      course_founder = course.founders.not_dropped_out.find_by(user_id: current_user.id)
+      course_founder.present? && course_founder.access_ended?
     end
 
     def student_dropped_out(course_id)

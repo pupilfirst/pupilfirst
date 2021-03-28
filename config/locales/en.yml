@@ -495,6 +495,7 @@ en:
       communities: Communities
       course_locked_message: Your student profile for this course is locked, and cannot be updated.
       cta:
+        access_ended: Access Ended
         course_ended: Course Ended
         dropped_out: Dropped out
         edit_curriculum: Edit Curriculum

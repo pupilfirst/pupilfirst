@@ -100,7 +100,9 @@ let pdfDocumentContentBlock = (url, title, filename) =>
       </div>
       <a target="_blank" href=url><FaIcon classes="text-2xl fas fa-download" /></a>
     </div>
-    <div className="pt-7"><h1>{"here will be dragons" |> str }</h1></div>
+    <div className="pt-7">
+      <PdfViewer url={url} />
+    </div>
   </div>
 
 @react.component

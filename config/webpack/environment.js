@@ -1,5 +1,6 @@
 const { environment } = require("@rails/webpacker");
 const erb = require('./loaders/erb')
+const path = require('path');
 const webpack = require("webpack");
 const dotenv = require("dotenv");
 
@@ -17,6 +18,16 @@ dotenvFiles.forEach(dotenvFile => {
 environment.plugins.prepend(
   "Environment",
   new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(process.env)))
+);
+
+environment.plugins.append(
+  "Pdfjs",
+  new webpack.NormalModuleReplacementPlugin(
+    /^pdfjs-dist$/,
+    resource => {
+      resource.request = path.join(__dirname, './node_modules/pdfjs-dist/webpack');
+    },
+  )
 );
 
 environment.loaders.prepend('erb', erb)

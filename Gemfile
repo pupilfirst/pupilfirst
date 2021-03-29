@@ -50,7 +50,7 @@ gem 'reform', '~> 2.2' # Form objects decoupled from models. http://www.trailbla
 gem 'reform-rails', '~> 0.1'
 gem 'virtus', '~> 1.0' # Required for reform coercion. Attributes on Steroids for Plain Old Ruby Objects
 gem 'dry-validation', '~> 0.10' # There seems to be a dependency bug in reform's coercion code - it required dry-types.
-gem 'postmark-rails', '~> 0.19' # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
+gem 'postmark-rails', '~> 0.21' # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
 gem 'jspdf-rails', '~> 1.0' # HTML5 client-side pdf generation - for certificates
 gem 'responders', '~> 3.0' # A set of Rails responders to dry up your application (respond_to / with)
 gem 'rollbar', '~> 3.0' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com

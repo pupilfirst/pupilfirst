@@ -170,7 +170,18 @@ let renderSignInWithEmail = (
   sharedDevice,
   setSharedDevice,
 ) =>
-  <div className="pt-4 pb-5 md:px-9 items-center max-w-sm mx-auto">
+  <form onSubmit={
+    event => {
+      ReactEvent.Form.preventDefault(event)
+      if validEmail(email) {
+        if validPassword(password)  {
+          signInWithPassword(email, password, setSaving, sharedDevice)
+        } else {
+          sendSignInEmail(email, setView, setSaving, sharedDevice)
+        }
+      }
+    }
+  } className="pt-4 pb-5 md:px-9 items-center max-w-sm mx-auto">
     <div>
       <label
         className="inline-block tracking-wide text-gray-900 text-xs font-semibold" htmlFor="email">
@@ -193,12 +204,13 @@ let renderSignInWithEmail = (
           htmlFor="password">
           {"Password" |> str}
         </label>
-        <button
+        <a
+          tabIndex={-1}
           disabled=saving
           onClick={_ => saving ? () : setView(_ => ForgotPassword)}
           className="text-primary-400 text-center text-xs font-semibold hover:text-primary-600 cursor-pointer whitespace-no-wrap hover:underline inline">
           {"Set a New Password" |> str}
-        </button>
+        </a>
       </div>
       <input
         className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
@@ -244,7 +256,7 @@ let renderSignInWithEmail = (
             <span> {(saving ? "Signing in" : "Email me a link to sign in") |> str} </span>
           </button>}
     </div>
-  </div>
+  </form>
 
 let renderSignInEmailSent = () =>
   <div className="max-w-sm mx-auto">

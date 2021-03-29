@@ -20,12 +20,13 @@ environment.plugins.prepend(
   new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(process.env)))
 );
 
+
 environment.plugins.append(
   "Pdfjs",
   new webpack.NormalModuleReplacementPlugin(
     /^pdfjs-dist$/,
     resource => {
-      resource.request = path.join(__dirname, './node_modules/pdfjs-dist/webpack');
+      resource.request = path.join(__dirname, '../../node_modules/pdfjs-dist/webpack');
     },
   )
 );

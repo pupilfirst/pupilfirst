@@ -15,7 +15,6 @@
     "@glennsl/bs-json": "^5.0.2",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "^5.2.1",
-    "@react-pdf-viewer/core": "2.4.1",
     "autosize": "^4.0.2",
     "babel-plugin-prismjs": "^2.0.0",
     "babel-plugin-react-css-modules": "^3.3.2",
@@ -38,7 +37,6 @@
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
     "node-sass": "^4.14.1",
-    "pdfjs-dist": "2.6.347",
     "pluralize": "^8.0.0",
     "pnotify": "^4.0.0",
     "postcss-scss": "^2.0.0",
@@ -51,6 +49,7 @@
     "react-csv-reader": "^3.2.1",
     "react-datepicker": "^2.9.6",
     "react-dom": "^16.8.6",
+    "react-pdf": "^5.2.0",
     "react_ujs": "^2.5.0",
     "sanitize-html": "^1.20.1",
     "tailwindcss": "^1.7.3",
@@ -71,8 +70,7 @@
     "stylelint": "^13.0.0",
     "stylelint-config-recommended": "^3.0.0",
     "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.10.1",
-    "worker-loader": "^3.0.8"
+    "webpack-dev-server": "^3.10.1"
   },
   "resolutions": {
     "fstream": "^1.0.12",

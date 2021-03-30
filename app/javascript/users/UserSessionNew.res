@@ -269,7 +269,14 @@ let renderSignInEmailSent = () =>
   </div>
 
 let renderForgotPassword = (email, saving, setEmail, setSaving, setView) =>
-  <div className="max-w-sm mx-auto md:px-9 pb-4">
+  <form onSubmit={
+      event => {
+        ReactEvent.Form.preventDefault(event)
+        if validEmail(email) {
+          sendResetPasswordEmail(email, setView, setSaving)
+        }
+      }
+    } className="max-w-sm mx-auto md:px-9 pb-4">
     <div className="text-sm mt-2 text-center pb-3">
       {"Enter your email for password recovery" |> str}
     </div>
@@ -287,13 +294,14 @@ let renderForgotPassword = (email, saving, setEmail, setSaving, setView) =>
       placeholder="john@example.com"
     />
     <button
+      type_="submit"
       disabled={saving || validEmail(email)}
       onClick={_ => sendResetPasswordEmail(email, setView, setSaving)}
       className="btn btn-primary btn-large text-center w-full mt-4 mr-2">
       {saving ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null}
       <span> {(saving ? "Dispatching email" : "Send Email") |> str} </span>
     </button>
-  </div>
+  </form>
 
 @react.component
 let make = (~schoolName, ~fqdn, ~oauthHost) => {

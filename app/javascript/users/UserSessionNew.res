@@ -204,13 +204,14 @@ let renderSignInWithEmail = (
           htmlFor="password">
           {"Password" |> str}
         </label>
-        <a
+        <button
           tabIndex={-1}
+          type_="button"
           disabled=saving
           onClick={_ => saving ? () : setView(_ => ForgotPassword)}
           className="text-primary-400 text-center text-xs font-semibold hover:text-primary-600 cursor-pointer whitespace-no-wrap hover:underline inline">
           {"Set a New Password" |> str}
-        </a>
+        </button>
       </div>
       <input
         className="appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
@@ -242,6 +243,7 @@ let renderSignInWithEmail = (
     <div className="mt-6">
       {validPassword(password)
         ? <button
+            type_="submit"
             disabled={saving || validEmail(email)}
             onClick={_ => signInWithPassword(email, password, setSaving, sharedDevice)}
             className="btn btn-success btn-large text-center w-full">
@@ -249,6 +251,7 @@ let renderSignInWithEmail = (
             <span> {(saving ? "Signing in" : "Sign in with password") |> str} </span>
           </button>
         : <button
+            type_="submit"
             disabled={saving || validEmail(email)}
             onClick={_ => sendSignInEmail(email, setView, setSaving, sharedDevice)}
             className="btn btn-primary btn-large text-center w-full">

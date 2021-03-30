@@ -8,6 +8,7 @@ type t = {
   exited: bool,
   thumbnailUrl: option<string>,
   linkedCommunities: array<string>,
+  accessEnded: bool,
   ended: bool,
 }
 
@@ -19,6 +20,7 @@ let description = t => t.description
 let exited = t => t.exited
 let thumbnailUrl = t => t.thumbnailUrl
 let linkedCommunities = t => t.linkedCommunities
+let accessEnded = t => t.accessEnded
 let ended = t => t.ended
 let enableLeaderboard = t => t.enableLeaderboard
 
@@ -34,6 +36,7 @@ let decode = json => {
     enableLeaderboard: json |> field("enableLeaderboard", bool),
     thumbnailUrl: json |> field("thumbnailUrl", nullable(string)) |> Js.Null.toOption,
     linkedCommunities: json |> field("linkedCommunities", array(string)),
+    accessEnded: json |> field("accessEnded", bool),
     ended: json |> field("ended", bool),
   }
 }

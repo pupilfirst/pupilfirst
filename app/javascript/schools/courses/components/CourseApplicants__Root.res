@@ -178,7 +178,7 @@ module ApplicantsSorter = Sorter.Make(Sortable)
 
 let applicantsSorter = (send, filter) =>
   <div className="ml-2 flex-shrink-0">
-    <label className="block text-tiny uppercase font-semibold"> {"Filter by" |> str} </label>
+    <label className="block text-tiny uppercase font-semibold"> {t("sorter.label") |> str} </label>
     <div className="mt-1">
       <ApplicantsSorter
         criteria=[#Name, #CreatedAt, #UpdatedAt]
@@ -300,29 +300,31 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
     )->str}
   </div>
 
-let showApplicant = (baseUrl, applicant: Applicant.t) => {
+let showApplicant = (baseUrl, applicant) => {
   <div className="flex flex-1 bg-white border rounded">
     <button
-      title={"Show Details: " ++ applicant.name}
+      title={t("show_details") ++ Applicant.name(applicant)}
       className="flex flex-1 flex-col py-4 px-4 hover:bg-gray-100  cursor-pointer"
-      key={applicant.id}
-      onClick={_ => ReasonReactRouter.push(baseUrl ++ applicant.id ++ "/details")}>
+      key={Applicant.id(applicant)}
+      onClick={_ => ReasonReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/details")}>
       <div className="flex w-full items-center justify-between">
-        <div className="text-black font-semibold inline-block "> {applicant.name->str} </div>
+        <div className="text-black font-semibold inline-block ">
+          {Applicant.name(applicant)->str}
+        </div>
       </div>
       <div className="mt-1 space-x-2">
-        <div className="text-xs"> {applicant.email->str} </div>
+        <div className="text-xs"> {Applicant.email(applicant)->str} </div>
         {Js.Array.map(
           a => <span key=a className="p-1 text-xs bg-gray-100 rounded shadow"> {str(a)} </span>,
-          applicant.tags,
+          Applicant.tags(applicant),
         )->React.array}
       </div>
     </button>
     <button
-      title={"Show Actions: " ++ applicant.name}
+      title={"Show Actions: " ++ Applicant.name(applicant)}
       className="py-4 px-4 hover:bg-gray-100  cursor-pointer"
-      onClick={_ => ReasonReactRouter.push(baseUrl ++ applicant.id ++ "/actions")}>
-      {str("OnBoard as Student")}
+      onClick={_ => ReasonReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/actions")}>
+      {str(t("onboard_as_student"))}
     </button>
   </div>
 }

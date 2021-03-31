@@ -28,6 +28,29 @@ en:
       topic_stats_views: View
       topics_fully_loaded_text: Showing all %{total_topics} topics
       topics_partially_loaded_text: Showing %{loaded_topics_count} of %{total_topics} topics
+    CourseApplicants__EditForm:
+      access_ends_at:
+        help: If set, students will not be able to complete targets after this date.
+        label: Student's Access Ends On
+      add_as_student_button: Add as Student
+      affiliation:
+        label: Affiliation
+        placeholder: Acme Inc., Acme University, etc.
+      email:
+        label: Email
+        placeholder: Student email here
+      name:
+        error: is not valid
+        label: Name
+        placeholder: Student name here
+      notify_students:
+        label: Notify students, and send them a link to sign into this school.
+      tabs:
+        actions: Actions
+        details: Details
+      tags:
+        label: Tags
+      title: Add as a student
     CourseApplicants__Root:
       applicants_fully_loaded_text: Showing all %{total_applicants} applicants
       applicants_partially_loaded_text: Showing %{loaded_applicants_count} of %{total_applicants} applicants
@@ -36,13 +59,14 @@ en:
       filter:
         input_label: Search
         input_placeholder: Filter and Search Applicants by name
-        label:
-          search: Search by name or email
-          tag: Tag
+      onboard_as_student: OnBoard as Student
+      show_details: 'Show Details: '
       sort_criterion:
         created_at: Created At
         name: Name
         updated_at: Updated At
+      sorter:
+        label: Sort by
     CourseCertificates__CreateDrawer:
       certificate_base_image_label: Certificate Base Image
       certificate_base_image_placeholder: Select a base image for certificate
@@ -137,6 +161,8 @@ en:
         help: If specified, course will appear as closed to students on this date. Students will not be able to make any more submissions.
         label: Course end date
         placeholder: Short description for this course
+      course_highlights:
+        label: Course Highlights
       course_name:
         error_message: A name is required (2-50 characters)
         label: Course name
@@ -144,6 +170,10 @@ en:
       create_course: Create Course
       enable_public_signup_label: Enable public signup for this course?
       feature_course_in_homepage_label: Feature course in school homepage?
+      processing_url:
+        error: Invalid processing url
+        help: You can send the applicants to a processing url once they apply for the course
+        label: Do you want to process applicant information before enrolling them?
       progression_behavior:
         help: This only applies if your course has milestone targets that requires students to submit their work for review by coaches.
         label: Progression Behavior
@@ -165,6 +195,14 @@ en:
         details: Details
         images: Images
       update_course: Update Course
+    CourseEditor__HighlightEditor:
+      add_highlight: Add Course Highlight
+      description:
+        placeholder: Enter description
+      selected_button:
+        title: Select Icon
+      title:
+        placeholder: Enter title
     CourseEditor__ImagesForm:
       button_text:
         update_images: Update Images

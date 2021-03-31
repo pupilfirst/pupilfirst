@@ -1,7 +1,7 @@
 open CourseEditor__Types
 
 let t = I18n.t(~scope="components.CourseEditor__Form")
-let ts = I18n.t(~scope="shared")
+let ts = I18n.ts
 
 let str = ReasonReact.string
 
@@ -320,22 +320,22 @@ let processingUrlInput = (state, send) => {
   <div>
     <div className="flex items-center mt-5">
       <label className="block tracking-wide text-xs font-semibold " htmlFor="featured">
-        {"Do you want to process applicant information before enrolling them?"->str}
+        {t("processing_url.label")->str}
       </label>
       <HelpIcon
         className="ml-2 mr-6" link="https://docs.pupilfirst.com/#/courses?id=processing-url">
-        {"You can send the applicants to a processing url once they apply for the course"->str}
+        {t("processing_url.help")->str}
       </HelpIcon>
       <div id="processing-url" className="flex toggle-button__group flex-shrink-0 rounded-lg">
         <button
           className={booleanButtonClasses(state.hasProcessingUrl)}
           onClick={_ => send(SetHasProcessingUrl)}>
-          {"Yes"->str}
+          {ts("_yes")->str}
         </button>
         <button
           className={booleanButtonClasses(!state.hasProcessingUrl)}
           onClick={_ => send(ClearHasProcessingUrl)}>
-          {"No"->str}
+          {ts("_no")->str}
         </button>
       </div>
     </div>
@@ -350,7 +350,7 @@ let processingUrlInput = (state, send) => {
           onChange={event => send(UpdateProcessingUrl(ReactEvent.Form.target(event)["value"]))}
         />
         <School__InputGroupError
-          message={"Invalid processing url"} active={UrlUtils.isInvalid(true, state.processingUrl)}
+          message={t("processing_url.error")} active={UrlUtils.isInvalid(true, state.processingUrl)}
         />
       </div>,
       state.hasProcessingUrl,
@@ -361,7 +361,7 @@ let processingUrlInput = (state, send) => {
 let courseHighlights = (highlights, send) =>
   <div className="mt-5">
     <label className="tracking-wide text-xs font-semibold" htmlFor="highlights">
-      {"Course Highlights"->str}
+      {t("course_highlights.label")->str}
     </label>
     <div>
       <CourseEditor__HighlightEditor

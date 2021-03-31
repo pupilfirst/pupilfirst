@@ -1,6 +1,6 @@
 open CourseEditor__Types
 
-let t = I18n.t(~scope="components.CourseEditor__Form")
+let t = I18n.t(~scope="components.CourseEditor__HighlightEditor")
 
 let str = ReasonReact.string
 
@@ -61,7 +61,7 @@ let moveDown = (index, highlights, updateHighlightsCB) => {
 
 let selected = (highlight: Course.Highlight.t) => {
   <button
-    title="Select Icon"
+    title={t("selected_button.title")}
     className="flex items-center justify-center cursor-pointer bg-white border border-gray-400 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400">
     <PfIcon className={"text-lg if i-" ++ highlight.icon} />
   </button>
@@ -99,7 +99,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
                 className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight font-semibold focus:outline-none focus:bg-white focus:border-gray-500"
                 id={"highlight-" ++ string_of_int(index) ++ "-title"}
                 type_="text"
-                placeholder="Enter title"
+                placeholder={t("title.placeholder")}
                 maxLength=150
                 value={highlight.title}
                 onChange={event =>
@@ -109,7 +109,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
                 className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id={"highlight-" ++ string_of_int(index) ++ "-description"}
                 type_="text"
-                placeholder="Enter description"
+                placeholder={t("description.placeholder")}
                 maxLength=250
                 value={highlight.description}
                 onChange={event =>
@@ -151,7 +151,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
         <button
           className="w-full mt-2 btn border border-dashed text-sm border-primary-500 bg-gray-200"
           onClick={_ => addHighlight(highlights, updateHighlightsCB)}>
-          {"Add Course Highlight"->str}
+          {t("add_highlight")->str}
         </button>,
         Js.Array.length(highlights) >= 4,
       )}

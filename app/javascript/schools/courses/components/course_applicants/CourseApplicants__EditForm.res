@@ -1,5 +1,7 @@
 open CourseApplicants__Types
 
+let t = I18n.t(~scope="components.CourseApplicants__EditForm")
+
 type tabs =
   | DetailsTab
   | ActionsTab
@@ -100,7 +102,7 @@ let detailsTab = (state, applicant) => {
   <div>
     <div className="mt-5">
       <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="name">
-        {"Name"->str}
+        {t("name.label")->str}
       </label>
       <input
         value={Applicant.name(applicant)}
@@ -108,13 +110,13 @@ let detailsTab = (state, applicant) => {
         className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
         id="name"
         type_="text"
-        placeholder="Student name here"
+        placeholder={t("name.placeholder")}
       />
-      <School__InputGroupError message="is not valid" active=state.hasNameError />
+      <School__InputGroupError message={t("name.error")} active=state.hasNameError />
     </div>
     <div className="mt-5">
       <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
-        {"Email"->str}
+        {t("email.label")->str}
       </label>
       <input
         value={Applicant.email(applicant)}
@@ -122,10 +124,14 @@ let detailsTab = (state, applicant) => {
         className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
         id="email"
         type_="email"
-        placeholder="Student email here"
+        placeholder={t("email.placeholder")}
       />
     </div>
   </div>
+}
+
+let optionalText = () => {
+  <span className="text-xs ml-1"> {("(" ++ I18n.ts("optional") ++ ")")->str} </span>
 }
 
 let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicantCB) => {
@@ -134,42 +140,42 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
       <label
         className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
         htmlFor="title">
-        {"Title" |> str}
+        {t("title.label")->str}
       </label>
-      <span className="text-xs ml-1"> {"(optional)" |> str} </span>
+      {optionalText()}
       <input
         value=state.title
         onChange={event => send(UpdateTitle(ReactEvent.Form.target(event)["value"]))}
         className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
         id="title"
         type_="text"
-        placeholder="Student, Coach, CEO, etc."
+        placeholder={t("title.placeholder")}
       />
     </div>
     <div className="mt-5">
       <label
         className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
         htmlFor="affiliation">
-        {"Affiliation" |> str}
+        {t("affiliation.label")->str}
       </label>
-      <span className="text-xs ml-1"> {"(optional)" |> str} </span>
+      {optionalText()}
       <input
         value=state.affiliation
         onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
         className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
         id="affiliation"
         type_="text"
-        placeholder="Acme Inc., Acme University, etc."
+        placeholder={t("affiliation.placeholder")}
       />
     </div>
     <div className="mt-5">
       <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
-        {"Student's Access Ends On" |> str}
+        {t("access_ends_at.label")->str}
       </label>
-      <span className="ml-1 text-xs"> {"(optional)" |> str} </span>
+      {optionalText()}
       <HelpIcon
         className="ml-2" link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
-        {"If set, students will not be able to complete targets after this date." |> str}
+        {t("access_ends_at.help")->str}
       </HelpIcon>
       <DatePicker
         onChange={date => send(UpdateAccessEndsAt(date))}
@@ -179,9 +185,9 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
     </div>
     <div className="mt-5">
       <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="tags">
-        {"Tags" |> str}
+        {t("tags.label")->str}
       </label>
-      <span className="text-xs ml-1"> {"(optional)" |> str} </span>
+      {optionalText()}
     </div>
     <School__SearchableTagList
       unselectedTags={Js.Array.filter(tag => !(state.tagsToApply |> Array.mem(tag)), tags)}
@@ -204,16 +210,14 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
             <polyline points="1.5 6 4.5 9 10.5 1" />
           </svg>
         </span>
-        <span className="text-sm">
-          {" Notify students, and send them a link to sign into this school."->str}
-        </span>
+        <span className="text-sm"> {t("notify_students.label")->str} </span>
       </label>
     </div>
     <button
       disabled={state.saving}
       className={"btn btn-primary mt-5"}
       onClick={_ => updateCourse(state, send, updateApplicantCB, applicant)}>
-      {"Add as Student" |> str}
+      {t("add_as_student_button") |> str}
     </button>
   </div>
 }
@@ -221,27 +225,27 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
 @react.component
 let make = (~applicant, ~tags, ~updateApplicantCB, ~selectedTab, ~baseUrl) => {
   let (state, send) = React.useReducer(reducer, initialState(applicant))
-  Js.log(tags)
+
   <div className="relative">
     <div className="mx-auto bg-white">
       <div className="max-w-2xl mx-auto">
-        <div className="mt-5">
-          <h5 className="uppercase text-center"> {"Add as a student"->str} </h5>
-        </div>
+        <div className="mt-5"> <h5 className="uppercase text-center"> {t("title")->str} </h5> </div>
         <div className="w-full pt-6">
           <div className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
             <button
               className={selectedTabClasses(selectedTab == DetailsTab)}
-              onClick={_ => ReasonReactRouter.push(baseUrl ++ applicant.id ++ "/details")}>
-              <i className="fa fa-edit" /> <span className="ml-2"> {"Details"->str} </span>
+              onClick={_ =>
+                ReasonReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/details")}>
+              <i className="fa fa-edit" /> <span className="ml-2"> {t("tabs.details")->str} </span>
             </button>
             <button
               className={"-ml-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
-              onClick={_ => ReasonReactRouter.push(baseUrl ++ applicant.id ++ "/actions")}>
-              <i className="fa fa-cog" /> <span className="ml-2"> {"Actions"->str} </span>
+              onClick={_ =>
+                ReasonReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/actions")}>
+              <i className="fa fa-cog" /> <span className="ml-2"> {t("tabs.actions")->str} </span>
             </button>
           </div>
-          <Spread props={"applicant-id": applicant.id}>
+          <Spread props={"applicant-id": Applicant.id(applicant)}>
             {switch selectedTab {
             | DetailsTab => detailsTab(state, applicant)
             | ActionsTab => showActionsTab(state, send, applicant, tags, updateApplicantCB)

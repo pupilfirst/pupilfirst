@@ -156,7 +156,6 @@ Rails.application.config.content_security_policy do |policy|
   policy.frame_src :data, *sources(:frame)
   policy.media_src :self, *sources(:media)
   policy.object_src :self
-  policy.worker_src :self
   policy.manifest_src :self
 end
 

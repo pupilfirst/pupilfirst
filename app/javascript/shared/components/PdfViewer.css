@@ -18,3 +18,13 @@
   padding: 20px;
   color: white;
 }
+
+input.no-arrows::-webkit-outer-spin-button,
+input.no-arrows::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number].no-arrows {
+  -moz-appearance: textfield;
+}

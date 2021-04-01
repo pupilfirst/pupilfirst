@@ -3,7 +3,7 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
   variants: {
     extend: {
-      backgroundColor: ['disabled'],
+      backgroundColor: ['disabled', 'hover'],
     }
   },
   theme: {

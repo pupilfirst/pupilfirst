@@ -29,6 +29,16 @@ export default function PdfViewer(props) {
     changePage(1);
   }
 
+  function goToPage(number) {
+    const parsed = number && parseInt(number);
+    console.log({number, parsed, numPages, pageNumber});
+    parsed
+      && parsed >= 1
+      && parsed <= numPages
+      && parsed != pageNumber
+      && setPageNumber(parsed)
+  }
+
   return (
     <div className="flex flex-col items-center">
       <Document
@@ -40,14 +50,24 @@ export default function PdfViewer(props) {
       </Document>
       { (numPages || 1) > 1 &&
       <div className="flex flex-row items-center mt-2">
-        <button type="button" className="disabled:bg-transparent"
+        <button type="button" className="transparent-background"
           disabled={pageNumber <= 1} onClick={previousPage}>
           <i className="fas fa-arrow-left"></i>
         </button>
-        <span className="px-4">
-          Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
+        <span className="pl-4">
+          Page
         </span>
-        <button type="button" className="disabled:bg-transparent"
+        <input
+          type="number" id="quantity" name="page"
+          min={1} max={numPages || 1}
+          value={pageNumber || 1}
+          className="no-arrows mx-2 px-1 border border-gray-300 text-center"
+          onChange={e => goToPage(e.target.value)}
+        />
+        <span className="pr-4">
+          of {numPages || '--'}
+        </span>
+        <button type="button" className="transparent-background"
           disabled={pageNumber >= numPages} onClick={nextPage}>
           <i className="fas fa-arrow-right"></i>
         </button>

@@ -281,6 +281,11 @@ button:disabled:focus,
   background-image: none;
 }
 
+.transparent-background:disabled,
+.transparent-background:disabled:hover {
+  @apply bg-transparent
+}
+
 .btn-small {
   @apply py-1 px-3 text-xs h-7 leading-normal;
 }

@@ -179,7 +179,19 @@ let renderFederatedlogin = (fqdn, oauthHost, availableOauthProviders) =>
 
 let validPassword = password => password != ""
 
-let validEmail = email => email |> EmailUtils.isInvalid(false)
+let isInvalidEmail = EmailUtils.isInvalid(false)
+
+let onSubmit = (saving, setSaving, setView, email, password, sharedDevice, event) => {
+  ReactEvent.Form.preventDefault(event)
+
+  if saving || isInvalidEmail(email) {
+    ()
+  } else if validPassword(password) {
+    signInWithPassword(email, password, setSaving, sharedDevice)
+  } else {
+    sendSignInEmail(email, setView, setSaving, sharedDevice)
+  }
+}
 
 let renderSignInWithEmail = (
   email,
@@ -192,7 +204,9 @@ let renderSignInWithEmail = (
   sharedDevice,
   setSharedDevice,
 ) =>
-  <div className="pt-4 pb-5 md:px-9 items-center max-w-sm mx-auto">
+  <form
+    onSubmit={onSubmit(saving, setSaving, setView, email, password, sharedDevice)}
+    className="pt-4 pb-5 md:px-9 items-center max-w-sm mx-auto">
     <div>
       <label
         className="inline-block tracking-wide text-gray-900 text-xs font-semibold" htmlFor="email">
@@ -206,6 +220,7 @@ let renderSignInWithEmail = (
         type_="text"
         onChange={event => setEmail(ReactEvent.Form.target(event)["value"])}
         placeholder="john@example.com"
+        tabIndex={1}
       />
     </div>
     <div className="mt-4">
@@ -216,9 +231,11 @@ let renderSignInWithEmail = (
           {"Password" |> str}
         </label>
         <button
+          type_="button"
           disabled=saving
           onClick={_ => saving ? () : setView(_ => ForgotPassword)}
-          className="text-primary-400 text-center text-xs font-semibold hover:text-primary-600 cursor-pointer whitespace-no-wrap hover:underline inline">
+          className="text-primary-400 text-center text-xs font-semibold hover:text-primary-600 cursor-pointer whitespace-no-wrap hover:underline focus:underline inline"
+          tabIndex={6}>
           {"Set a New Password" |> str}
         </button>
       </div>
@@ -230,6 +247,7 @@ let renderSignInWithEmail = (
         type_="password"
         onChange={event => setPassword(ReactEvent.Form.target(event)["value"])}
         placeholder="Type your password"
+        tabIndex={2}
       />
     </div>
     <div
@@ -241,6 +259,7 @@ let renderSignInWithEmail = (
           checked=sharedDevice
           disabled=saving
           type_="checkbox"
+          tabIndex={3}
         />
         <label
           className="block pl-2 font-semibold cursor-pointer text-xs select-none whitespace-no-wrap"
@@ -252,21 +271,23 @@ let renderSignInWithEmail = (
     <div className="mt-6">
       {validPassword(password)
         ? <button
-            disabled={saving || validEmail(email)}
-            onClick={_ => signInWithPassword(email, password, setSaving, sharedDevice)}
-            className="btn btn-success btn-large text-center w-full">
+            type_="submit"
+            disabled={saving || isInvalidEmail(email)}
+            className="btn btn-success btn-large text-center w-full"
+            tabIndex={4}>
             {saving ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null}
             <span> {(saving ? "Signing in" : "Sign in with password") |> str} </span>
           </button>
         : <button
-            disabled={saving || validEmail(email)}
-            onClick={_ => sendSignInEmail(email, setView, setSaving, sharedDevice)}
-            className="btn btn-primary btn-large text-center w-full">
+            type_="submit"
+            disabled={saving || isInvalidEmail(email)}
+            className="btn btn-primary btn-large text-center w-full"
+            tabIndex={4}>
             {saving ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null}
             <span> {(saving ? "Signing in" : "Email me a link to sign in") |> str} </span>
           </button>}
     </div>
-  </div>
+  </form>
 
 let renderSignInEmailSent = () =>
   <div className="max-w-sm mx-auto">
@@ -276,7 +297,17 @@ let renderSignInEmailSent = () =>
   </div>
 
 let renderForgotPassword = (email, saving, setEmail, setSaving, setView) =>
-  <div className="max-w-sm mx-auto md:px-9 pb-4">
+  <form
+    onSubmit={event => {
+      ReactEvent.Form.preventDefault(event)
+
+      if saving || isInvalidEmail(email) {
+        ()
+      } else {
+        sendResetPasswordEmail(email, setView, setSaving)
+      }
+    }}
+    className="max-w-sm mx-auto md:px-9 pb-4">
     <div className="text-sm mt-2 text-center pb-3">
       {"Enter your email for password recovery" |> str}
     </div>
@@ -294,13 +325,13 @@ let renderForgotPassword = (email, saving, setEmail, setSaving, setView) =>
       placeholder="john@example.com"
     />
     <button
-      disabled={saving || validEmail(email)}
-      onClick={_ => sendResetPasswordEmail(email, setView, setSaving)}
+      type_="submit"
+      disabled={saving || isInvalidEmail(email)}
       className="btn btn-primary btn-large text-center w-full mt-4 mr-2">
       {saving ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null}
       <span> {(saving ? "Dispatching email" : "Send Email") |> str} </span>
     </button>
-  </div>
+  </form>
 
 @react.component
 let make = (~schoolName, ~fqdn, ~oauthHost, ~availableOauthProviders, ~allowEmailSignIn) => {
@@ -359,7 +390,8 @@ let make = (~schoolName, ~fqdn, ~oauthHost, ~availableOauthProviders, ~allowEmai
           <button
             disabled=saving
             onClick={_ => setView(_ => FederatedSignIn)}
-            className="w-full p-3 text-primary-500 leading-snug rounded-lg underline cursor-pointer text-sm text-center font-semibold hover:bg-gray-200 focus:bg-gray-200 focus:outline-none">
+            className="w-full p-3 text-primary-500 leading-snug rounded-lg underline cursor-pointer text-sm text-center font-semibold hover:bg-gray-200 focus:bg-gray-200 focus:outline-none"
+            tabIndex={5}>
             {"Sign in with Google, Facebook, or Github" |> str}
           </button>
         </div>

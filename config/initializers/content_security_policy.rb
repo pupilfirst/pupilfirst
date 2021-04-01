@@ -152,7 +152,7 @@ Rails.application.config.content_security_policy do |policy|
   policy.style_src :self, :unsafe_inline, *sources(:style)
   policy.connect_src :self, *sources(:connect)
   policy.font_src :self, *sources(:font)
-  policy.child_src(*sources(:child))
+  policy.child_src :self, *sources(:child)
   policy.frame_src :data, *sources(:frame)
   policy.media_src :self, *sources(:media)
   policy.object_src :self

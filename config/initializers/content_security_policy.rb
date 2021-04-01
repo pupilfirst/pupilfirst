@@ -9,6 +9,7 @@ Rails.application.config.content_security_policy do |policy|
     {
       font: [Rails.application.config.action_controller.asset_host],
       style: [Rails.application.config.action_controller.asset_host],
+      connect: %w[*.s3.eu-west-3.amazonaws.com],
     }
   end
 

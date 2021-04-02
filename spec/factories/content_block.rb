@@ -52,5 +52,11 @@ FactoryBot.define do
       block_type { ContentBlock::BLOCK_TYPE_COACHING_SESSION }
       content { { last_resolved_atn: Time.now } }
     end
+
+    trait :pdf_document do
+      block_type { ContentBlock::BLOCK_TYPE_PDF_DOCUMENT }
+      file { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/uploads/files/pdf-sample.pdf'), 'application/pdf') }
+      content { { title: Faker::Lorem.words(number: 3).join(" ").titleize } }
+    end
   end
 end

@@ -31,7 +31,7 @@ type action =
   | UpdateSaving(bool)
   | UpdateAccessEndsAt(option<Js.Date.t>)
 
-let str = ReasonReact.string
+let str = React.string
 
 let stringInputInvalid = s => s |> String.length < 2
 
@@ -269,7 +269,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
         />
       </div>
       {isSingleStudent
-        ? ReasonReact.null
+        ? React.null
         : <div className="mt-5">
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"

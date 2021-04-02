@@ -84,7 +84,7 @@ let renderAuthor = (rootPath, author, send) => {
         href=authorPath
         onClick={event => {
           ReactEvent.Mouse.preventDefault(event)
-          ReasonReactRouter.push(authorPath)
+          RescriptReactRouter.push(authorPath)
         }}>
         <div className="flex">
           <span className="mr-4 flex-shrink-0">
@@ -122,7 +122,7 @@ let make = (~courseId, ~authors) => {
   <div className="flex flex-1 h-full overflow-y-scroll bg-gray-100">
     <div className="flex-1 flex flex-col">
       {
-        let url = ReasonReactRouter.useUrl()
+        let url = RescriptReactRouter.useUrl()
         switch url.path {
         | list{"school", "courses", _courseId, "authors"} => React.null
         | list{"school", "courses", _courseId, "authors", authorId} =>
@@ -139,7 +139,7 @@ let make = (~courseId, ~authors) => {
             )
           }
 
-          <SchoolAdmin__EditorDrawer closeDrawerCB={_ => ReasonReactRouter.push(rootPath)}>
+          <SchoolAdmin__EditorDrawer closeDrawerCB={_ => RescriptReactRouter.push(rootPath)}>
             <CourseAuthors__Form
               courseId
               rootPath
@@ -154,7 +154,7 @@ let make = (~courseId, ~authors) => {
       <DisablingCover disabled=state.deleting message="Deleting...">
         <div className="flex px-6 py-2 items-center justify-between">
           <button
-            onClick={_ => ReasonReactRouter.push(rootPath ++ "/new")}
+            onClick={_ => RescriptReactRouter.push(rootPath ++ "/new")}
             className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
             <i className="fas fa-plus-circle" />
             <h5 className="font-semibold ml-2"> {"Add New Author" |> str} </h5>
@@ -166,7 +166,7 @@ let make = (~courseId, ~authors) => {
               {state.authors
               |> Author.sort
               |> Array.map(author => renderAuthor(rootPath, author, send))
-              |> ReasonReact.array}
+              |> React.array}
             </div>
           </div>
         </div>

@@ -22,9 +22,13 @@ let (
 ) =
   DomUtils.parseJSONTag(~id="user-edit__props", ()) |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <UserEdit
-    name about avatarUrl dailyDigest hasCurrentPassword isSchoolAdmin hasValidDeleteAccountToken
-  />,
-  "react-root",
-)
+switch ReactDOM.querySelector("react-root") {
+| Some(root) =>
+  ReactDOM.render(
+    <UserEdit
+      name about avatarUrl dailyDigest hasCurrentPassword isSchoolAdmin hasValidDeleteAccountToken
+    />,
+    root,
+  )
+| None => ()
+}

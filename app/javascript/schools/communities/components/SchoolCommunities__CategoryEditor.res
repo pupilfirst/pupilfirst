@@ -205,7 +205,7 @@ let make = (
         {presentCategoryName == state.categoryName
           ? <span
               className="text-xs py-1 px-2 mr-2"
-              style={ReactDOMRe.Style.make(~backgroundColor, ~color, ())}>
+              style={ReactDOM.Style.make(~backgroundColor, ~color, ())}>
               {Inflector.pluralize(
                 "topic",
                 ~count=Category.topicsCount(category),

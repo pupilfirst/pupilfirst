@@ -3,7 +3,7 @@ open CourseEditor__Types
 let t = I18n.t(~scope="components.CourseEditor__Form")
 let ts = I18n.t(~scope="shared")
 
-let str = ReasonReact.string
+let str = React.string
 
 type tabs =
   | DetailsTab
@@ -421,7 +421,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
               id="progression-limit"
               onChange={handleSelectProgressionLimit(send)}
               className="my-1 cursor-pointer inline-block appearance-none bg-white border-b-2 text-xl font-semibold border-blue-500 hover:border-gray-500 p-1 leading-tight rounded-none focus:outline-none"
-              style={ReactDOMRe.Style.make(~textAlignLast="center", ())}
+              style={ReactDOM.Style.make(~textAlignLast="center", ())}
               value={string_of_int(state.progressionLimit)}>
               <option value="1"> {t("progression_behavior.limited.once")->str} </option>
               <option value="2"> {t("progression_behavior.limited.twice")->str} </option>
@@ -533,19 +533,19 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
               <div className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
                 <button
                   className={selectedTabClasses(selectedTab == DetailsTab)}
-                  onClick={_ => ReasonReactRouter.push("./details")}>
+                  onClick={_ => RescriptReactRouter.push("./details")}>
                   <i className="fa fa-edit" />
                   <span className="ml-2"> {t("tabs.details")->str} </span>
                 </button>
                 <button
                   className={selectedTabClasses(selectedTab == ImagesTab)}
-                  onClick={_ => ReasonReactRouter.push("./images")}>
+                  onClick={_ => RescriptReactRouter.push("./images")}>
                   <i className="fa fa-camera" />
                   <span className="ml-2"> {t("tabs.images")->str} </span>
                 </button>
                 <button
                   className={"-ml-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
-                  onClick={_ => ReasonReactRouter.push("./actions")}>
+                  onClick={_ => RescriptReactRouter.push("./actions")}>
                   <i className="fa fa-cog" />
                   <span className="ml-2"> {t("tabs.actions")->str} </span>
                 </button>

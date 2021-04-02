@@ -18,7 +18,11 @@ let props =
     (),
   ) |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <UserSessionResetPassword token=props.token authenticityToken=props.authenticityToken />,
-  "user-session-reset-password",
-)
+switch ReactDOM.querySelector("user-session-reset-password") {
+| Some(element) =>
+  ReactDOM.render(
+    <UserSessionResetPassword token=props.token authenticityToken=props.authenticityToken />,
+    element,
+  )
+| None => ()
+}

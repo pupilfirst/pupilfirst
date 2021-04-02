@@ -39,7 +39,7 @@ let parseMarkdown = (~attributeName="convert-markdown", ~attribute="data-json-pr
   |> HtmlCollection.toArray
   |> Array.map(element => {
     let props = parseElement(element, attribute)
-    element |> ReactDOMRe.render(
+    element |> ReactDOM.render(
       <MarkdownBlock
         markdown=props.markdown
         className="leading-normal text-sm"

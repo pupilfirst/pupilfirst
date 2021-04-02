@@ -236,7 +236,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
   let submitForm = event => {
     ReactEvent.Form.preventDefault(event)
     send(UpdateSaving)
-    let element = ReactDOMRe._getElementById(formId)
+    let element = ReactDOM.querySelector(formId)
     switch element {
     | Some(element) => sendCoach(DomUtils.FormData.create(element))
     | None => ()

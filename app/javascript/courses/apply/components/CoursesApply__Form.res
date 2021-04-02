@@ -78,7 +78,7 @@ let make = (~courseName, ~courseId, ~setViewEmailSent, ~email, ~name) => {
       disabled={saveDisabled(email, name, saving)}
       onClick={createApplicant(courseId, email, name, setSaving, setViewEmailSent)}
       className="btn btn-primary btn-large text-center w-full mt-6">
-      {saving ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null}
+      {saving ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : React.null}
       <span> {buttonText(email, name, saving) |> str} </span>
     </button>
   </div>

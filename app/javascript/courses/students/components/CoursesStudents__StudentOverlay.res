@@ -24,7 +24,7 @@ let initialState = {
   submissions: Unloaded,
 }
 
-let closeOverlay = courseId => ReasonReactRouter.push("/courses/" ++ (courseId ++ "/students"))
+let closeOverlay = courseId => RescriptReactRouter.push("/courses/" ++ (courseId ++ "/students"))
 
 module StudentDetailsQuery = %graphql(
   `

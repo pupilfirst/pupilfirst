@@ -126,7 +126,7 @@ let issueNewCertificate = (
   |> ignore
 }
 
-let str = ReasonReact.string
+let str = React.string
 
 let submitButtonIcons = saving => saving ? "fas fa-spinner fa-spin" : "fa fa-exclamation-triangle"
 

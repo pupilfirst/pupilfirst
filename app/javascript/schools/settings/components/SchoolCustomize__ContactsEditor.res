@@ -1,6 +1,6 @@
 open SchoolCustomize__Types
 
-let str = ReasonReact.string
+let str = React.string
 
 type action =
   | UpdateAddress(string)

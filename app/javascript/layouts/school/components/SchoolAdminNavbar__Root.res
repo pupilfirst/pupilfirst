@@ -164,7 +164,7 @@ let make = (
   ~isCourseAuthor,
   ~hasNotifications,
 ) => {
-  let url = ReasonReactRouter.useUrl()
+  let url = RescriptReactRouter.useUrl()
 
   let userRole = isCourseAuthor ? CourseAuthor : SchoolAdmin
 

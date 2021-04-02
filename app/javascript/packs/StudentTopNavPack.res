@@ -13,7 +13,11 @@ let decodeProps = json => (
 let (schoolName, logoUrl, links, isLoggedIn, currentUser, hasNotifications) =
   DomUtils.parseJSONTag(~id="student-top-nav-props", ()) |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <StudentTopNav schoolName logoUrl links isLoggedIn currentUser hasNotifications />,
-  "student-top-nav",
-)
+switch ReactDOM.querySelector("student-top-nav") {
+| Some(element) =>
+  ReactDOM.render(
+    <StudentTopNav schoolName logoUrl links isLoggedIn currentUser hasNotifications />,
+    element,
+  )
+| None => ()
+}

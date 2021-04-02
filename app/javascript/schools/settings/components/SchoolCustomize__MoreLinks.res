@@ -1,4 +1,4 @@
-let str = ReasonReact.string
+let str = React.string
 
 type state = bool
 
@@ -15,10 +15,10 @@ let additionalLinks = (linksVisible, links) =>
         <div key=id className="p-2 cursor-default"> <span> {title |> str} </span> </div>
       )
       |> Array.of_list
-      |> ReasonReact.array}
+      |> React.array}
     </div>
   } else {
-    ReasonReact.null
+    React.null
   }
 
 let initialState = () => false
@@ -28,7 +28,7 @@ let reducer = (linksVisible, _action) => !linksVisible
 let make = (~links) => {
   let (state, send) = React.useReducer(reducer, initialState())
   switch links {
-  | list{} => ReasonReact.null
+  | list{} => React.null
   | moreLinks =>
     <div
       title="Show more links"

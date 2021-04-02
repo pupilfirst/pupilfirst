@@ -27,7 +27,7 @@ let make = (
             markAsCorrectCB(answerOption |> CurriculumEditor__AnswerOption.id)
           }}
           className="quiz-maker__answer-option-pointer cursor-pointer">
-          ReasonReact.null
+          React.null
         </div>}
     <div
       id={answerOptionId ++ "-block"}
@@ -70,7 +70,7 @@ let make = (
               }}>
               <i className="fas fa-trash-alt text-sm" />
             </button>
-          : ReasonReact.null}
+          : React.null}
       </div>
     </div>
   </div>

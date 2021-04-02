@@ -78,4 +78,8 @@ module Example = {
     </div>
   }
 }
-ReactDOMRe.renderToElementWithId(<Example />, "Example")
+
+switch ReactDOM.querySelector("Example") {
+| Some(root) => ReactDOM.render(<Example />, root)
+| None => ()
+}

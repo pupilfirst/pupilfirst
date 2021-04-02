@@ -84,7 +84,7 @@ let getSubmissionDetails = (submissionId, setState, syncSubmissionCB, ()) => {
   None
 }
 
-let closeOverlay = courseId => ReasonReactRouter.push("/courses/" ++ (courseId ++ "/review"))
+let closeOverlay = courseId => RescriptReactRouter.push("/courses/" ++ (courseId ++ "/review"))
 
 let headerSection = (submissionDetails, courseId, assignedCoaches) =>
   <div

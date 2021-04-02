@@ -18,8 +18,8 @@ module StudentDistributionQuery = %graphql(
 )
 
 let stylingForLevelPills = percentageStudents => {
-  let emptyStyle = ReactDOMRe.Style.make()
-  let styleWithWidth = ReactDOMRe.Style.make(
+  let emptyStyle = ReactDOM.Style.make()
+  let styleWithWidth = ReactDOM.Style.make(
     ~width=(percentageStudents |> Js.Float.toString) ++ "%",
     (),
   )

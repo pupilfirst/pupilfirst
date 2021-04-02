@@ -1,4 +1,4 @@
-let str = ReasonReact.string
+let str = React.string
 
 type state = string
 

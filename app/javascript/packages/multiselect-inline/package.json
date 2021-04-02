@@ -35,7 +35,6 @@
     "bs-webapi": "^0.19.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "reason-react": ">=0.9.1"
   },
   "scripts": {
     "dev": "parcel index.html",

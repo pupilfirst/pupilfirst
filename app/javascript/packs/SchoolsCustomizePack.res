@@ -17,12 +17,16 @@ let decodeProps = json => {
 
 let props = DomUtils.parseJSONTag(~id="school-customize-data", ()) |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <SchoolCustomize__Root
-    authenticityToken=props.authenticityToken
-    customizations=props.customizations
-    schoolName=props.schoolName
-    schoolAbout=props.schoolAbout
-  />,
-  "school-customize",
-)
+switch ReactDOM.querySelector("school-customize") {
+| Some(element) =>
+  ReactDOM.render(
+    <SchoolCustomize__Root
+      authenticityToken=props.authenticityToken
+      customizations=props.customizations
+      schoolName=props.schoolName
+      schoolAbout=props.schoolAbout
+    />,
+    element,
+  )
+| None => ()
+}

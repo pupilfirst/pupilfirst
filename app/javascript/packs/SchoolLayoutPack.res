@@ -13,9 +13,13 @@ let decodeProps = json => {
 let (schoolName, schoolLogoPath, schoolIconPath, courses, isCourseAuthor, hasNotifications) =
   DomUtils.parseJSONAttribute(~id="school-admin-navbar__root", ()) |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <SchoolAdminNavbar__Root
-    schoolName schoolLogoPath schoolIconPath courses isCourseAuthor hasNotifications
-  />,
-  "school-admin-navbar__root",
-)
+switch ReactDOM.querySelector("school-admin-navbar__root") {
+| Some(root) =>
+  ReactDOM.render(
+    <SchoolAdminNavbar__Root
+      schoolName schoolLogoPath schoolIconPath courses isCourseAuthor hasNotifications
+    />,
+    root,
+  )
+| None => ()
+}

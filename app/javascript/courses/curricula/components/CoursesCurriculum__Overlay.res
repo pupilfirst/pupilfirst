@@ -47,7 +47,7 @@ let reducer = (state, action) =>
   }
 
 let closeOverlay = course =>
-  ReasonReactRouter.push("/courses/" ++ ((course |> Course.id) ++ "/curriculum"))
+  RescriptReactRouter.push("/courses/" ++ ((course |> Course.id) ++ "/curriculum"))
 
 let loadTargetDetails = (target, send, ()) => {
   {

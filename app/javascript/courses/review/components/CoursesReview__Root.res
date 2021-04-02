@@ -158,7 +158,7 @@ let computeInitialState = currentTeamCoach => {
 
 let openOverlay = (submissionId, event) => {
   event |> ReactEvent.Mouse.preventDefault
-  ReasonReactRouter.push("/submissions/" ++ submissionId)
+  RescriptReactRouter.push("/submissions/" ++ submissionId)
 }
 
 let dropdownElementClasses = (level, selectedLevel) =>
@@ -383,7 +383,7 @@ let make = (~levels, ~courseId, ~teamCoaches, ~currentCoach) => {
 
   let (state, send) = React.useReducerWithMapState(reducer, currentTeamCoach, computeInitialState)
 
-  let url = ReasonReactRouter.useUrl()
+  let url = RescriptReactRouter.useUrl()
 
   <div>
     {switch url.path {

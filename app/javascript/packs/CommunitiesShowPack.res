@@ -11,7 +11,7 @@ let decodeProps = json => {
 
 let (communityId, target, topicCategories) = DomUtils.parseJSONTag() |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <CommunitiesShow__Root communityId target topicCategories />,
-  "react-root",
-)
+switch ReactDOM.querySelector("react-root") {
+| Some(root) => ReactDOM.render(<CommunitiesShow__Root communityId target topicCategories />, root)
+| None => ()
+}

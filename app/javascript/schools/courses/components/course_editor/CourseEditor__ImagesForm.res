@@ -1,6 +1,6 @@
 open CourseEditor__Types
 
-let str = ReasonReact.string
+let str = React.string
 
 let t = I18n.t(~scope="components.CourseEditor__ImagesForm")
 
@@ -52,7 +52,7 @@ let handleUpdateImages = (send, state, course, updateCourseCB, event) => {
   event->ReactEvent.Form.preventDefault
   send(BeginUpdate)
 
-  let element = ReactDOMRe._getElementById(formId)
+  let element = ReactDOM.querySelector(formId)
   switch element {
   | Some(element) =>
     Api.sendFormData(

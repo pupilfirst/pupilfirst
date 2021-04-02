@@ -6,7 +6,7 @@ type view =
   | DetailsTab
   | ActionsTab
 
-let str = ReasonReact.string
+let str = React.string
 
 let selectedTabClasses = selected =>
   "flex items-center focus:outline-none justify-center w-1/2 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer " ++ (

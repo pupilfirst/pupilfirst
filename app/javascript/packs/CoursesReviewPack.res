@@ -12,7 +12,7 @@ let decodeProps = json => {
 
 let (levels, courseId, teamCoaches, currentCoach) = DomUtils.parseJSONAttribute() |> decodeProps
 
-switch ReactDOM.querySelector("react-root") {
+switch ReactDOM.querySelector("#react-root") {
 | Some(root) =>
   ReactDOM.render(<CoursesReview__Root levels courseId teamCoaches currentCoach />, root)
 | None => ()

@@ -119,7 +119,7 @@ let uploadAvatar = (send, formData) => {
   )
 }
 let submitAvatarForm = (send, formId) => {
-  let element = ReactDOM.querySelector(formId)
+  let element = ReactDOM.querySelector("#" ++ formId)
 
   switch element {
   | Some(element) => DomUtils.FormData.create(element) |> uploadAvatar(send)

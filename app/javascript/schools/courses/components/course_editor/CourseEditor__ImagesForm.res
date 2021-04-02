@@ -52,7 +52,7 @@ let handleUpdateImages = (send, state, course, updateCourseCB, event) => {
   event->ReactEvent.Form.preventDefault
   send(BeginUpdate)
 
-  let element = ReactDOM.querySelector(formId)
+  let element = ReactDOM.querySelector("#" ++ formId)
   switch element {
   | Some(element) =>
     Api.sendFormData(

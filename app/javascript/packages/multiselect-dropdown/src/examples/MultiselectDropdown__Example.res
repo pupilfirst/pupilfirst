@@ -206,12 +206,12 @@ module MinimalExample = {
   }
 }
 
-switch ReactDOM.querySelector("DetailedExample") {
+switch ReactDOM.querySelector("#DetailedExample") {
 | Some(element) => ReactDOM.render(<DetailedExample />, element)
 | None => ()
 }
 
-switch ReactDOM.querySelector("MinimalExample") {
+switch ReactDOM.querySelector("#MinimalExample") {
 | Some(element) => ReactDOM.render(<MinimalExample />, element)
 | None => ()
 }

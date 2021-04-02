@@ -11,7 +11,7 @@ let decodeProps = json => {
 let (currentCourseId, courses, additionalLinks, coverImage) =
   DomUtils.parseJSONAttribute(~id="course-header-root", ())->decodeProps
 
-switch ReactDOM.querySelector("course-header-root") {
+switch ReactDOM.querySelector("#course-header-root") {
 | Some(root) =>
   ReactDOM.render(
     <StudentCourse__Header currentCourseId courses additionalLinks coverImage />,

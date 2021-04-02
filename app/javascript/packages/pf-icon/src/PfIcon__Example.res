@@ -150,7 +150,7 @@ module Example = {
   }
 }
 
-switch ReactDOM.querySelector("root") {
+switch ReactDOM.querySelector("#root") {
 | Some(root) => ReactDOM.render(<Example />, root)
 | None => ()
 }

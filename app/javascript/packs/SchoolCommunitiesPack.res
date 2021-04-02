@@ -13,7 +13,7 @@ let decodeProps = json => {
 
 let props = DomUtils.parseJSONTag() |> decodeProps
 
-switch ReactDOM.querySelector("school-communities") {
+switch ReactDOM.querySelector("#school-communities") {
 | Some(element) =>
   ReactDOM.render(
     <SchoolCommunities__Index communities=props.communities courses=props.courses />,

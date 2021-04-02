@@ -30,7 +30,7 @@ let (
 ) =
   DomUtils.parseJSONTag() |> decodeProps
 
-switch ReactDOM.querySelector("react-root") {
+switch ReactDOM.querySelector("#react-root") {
 | Some(root) =>
   ReactDOM.render(
     <TopicsShow__Root

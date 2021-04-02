@@ -66,7 +66,7 @@ let uploadFile = (filename, send, attachFileCB, formData) => {
 }
 
 let submitForm = (filename, formId, send, addFileAttachmentCB) => {
-  let element = ReactDOM.querySelector(formId)
+  let element = ReactDOM.querySelector("#" ++ formId)
   switch element {
   | Some(element) =>
     DomUtils.FormData.create(element) |> uploadFile(filename, send, addFileAttachmentCB)

@@ -12,7 +12,7 @@ let decodeProps = json => {
 let (course, exports, tags) =
   DomUtils.parseJSONTag(~id="schools-courses-exports__props", ()) |> decodeProps
 
-switch ReactDOM.querySelector("schools-courses-exports__root") {
+switch ReactDOM.querySelector("#schools-courses-exports__root") {
 | Some(root) => ReactDOM.render(<CourseExports__Root course exports tags />, root)
 | None => ()
 }

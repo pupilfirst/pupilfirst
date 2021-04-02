@@ -22,7 +22,7 @@ let (
 ) =
   DomUtils.parseJSONTag(~id="user-edit__props", ()) |> decodeProps
 
-switch ReactDOM.querySelector("react-root") {
+switch ReactDOM.querySelector("#react-root") {
 | Some(root) =>
   ReactDOM.render(
     <UserEdit

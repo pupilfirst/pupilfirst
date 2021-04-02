@@ -19,7 +19,7 @@ let decodeProps = json => {
 
 let props = DomUtils.parseJSONTag(~id="course-coaches__props", ()) |> decodeProps
 
-switch ReactDOM.querySelector("sa-coaches-enrollment-panel") {
+switch ReactDOM.querySelector("#sa-coaches-enrollment-panel") {
 | Some(element) =>
   ReactDOM.render(
     <CourseCoaches__Root

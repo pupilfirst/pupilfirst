@@ -16,7 +16,7 @@ let decodeProps = json => {
 let (courseId, courseCoachIds, schoolCoaches, levels, studentTags, certificates, currentUserName) =
   DomUtils.parseJSONTag(~id="sa-students-panel-data", ()) |> decodeProps
 
-switch ReactDOM.querySelector("sa-students-panel") {
+switch ReactDOM.querySelector("#sa-students-panel") {
 | Some(element) =>
   ReactDOM.render(
     <StudentsEditor__Root

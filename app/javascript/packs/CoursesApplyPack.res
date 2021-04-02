@@ -23,7 +23,7 @@ let decodeProps = json => {
 
 let props = DomUtils.parseJSONTag() |> decodeProps
 
-switch ReactDOM.querySelector("react-root") {
+switch ReactDOM.querySelector("#react-root") {
 | Some(root) =>
   ReactDOM.render(
     <CoursesApply__Root

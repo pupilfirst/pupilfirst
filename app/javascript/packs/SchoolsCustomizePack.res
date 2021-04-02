@@ -17,7 +17,7 @@ let decodeProps = json => {
 
 let props = DomUtils.parseJSONTag(~id="school-customize-data", ()) |> decodeProps
 
-switch ReactDOM.querySelector("school-customize") {
+switch ReactDOM.querySelector("#school-customize") {
 | Some(element) =>
   ReactDOM.render(
     <SchoolCustomize__Root

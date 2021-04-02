@@ -1,11 +1,11 @@
-switch ReactDOM.querySelector("styleguide__markdown-syntax-highlighting-root") {
+switch ReactDOM.querySelector("#styleguide__markdown-syntax-highlighting-root") {
 | Some(root) => ReactDOM.render(<HomeStyleguide__MarkdownSyntaxHighlightingPreview />, root)
 | None => ()
 }
 
 let stringRepeat = (n, s) => s |> Array.make(n) |> Array.to_list |> String.concat("")
 
-switch ReactDOM.querySelector("styleguide__disabling-cover-root") {
+switch ReactDOM.querySelector("#styleguide__disabling-cover-root") {
 | Some(root) =>
   ReactDOM.render(
     <DisablingCover disabled=true message="This element is disabled, and this is a custom message.">

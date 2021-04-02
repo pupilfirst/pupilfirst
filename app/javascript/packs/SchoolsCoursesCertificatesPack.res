@@ -13,7 +13,7 @@ let decodeProps = json => {
 let (course, certificates, verifyImageUrl, canBeAutoIssued) =
   DomUtils.parseJSONTag(~id="schools-courses-certificates__props", ()) |> decodeProps
 
-switch ReactDOM.querySelector("schools-courses-certificates__root") {
+switch ReactDOM.querySelector("#schools-courses-certificates__root") {
 | Some(root) =>
   ReactDOM.render(
     <CourseCertificates__Root course certificates verifyImageUrl canBeAutoIssued />,

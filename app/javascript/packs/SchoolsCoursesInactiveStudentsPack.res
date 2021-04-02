@@ -24,7 +24,7 @@ let decodeProps = json => {
 let props =
   DomUtils.parseJSONAttribute(~id="sa-students-panel", ~attribute="data-props", ()) |> decodeProps
 
-switch ReactDOM.querySelector("sa-students-panel") {
+switch ReactDOM.querySelector("#sa-students-panel") {
 | Some(element) =>
   ReactDOM.render(
     <SA_InactiveStudentsPanel

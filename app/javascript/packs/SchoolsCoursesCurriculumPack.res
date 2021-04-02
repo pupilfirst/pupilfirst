@@ -26,7 +26,7 @@ let decodeProps = json => {
 let props =
   DomUtils.parseJSONAttribute(~id="curriculum-editor", ~attribute="data-props", ()) |> decodeProps
 
-switch ReactDOM.querySelector("curriculum-editor") {
+switch ReactDOM.querySelector("#curriculum-editor") {
 | Some(element) =>
   ReactDOM.render(
     <CurriculumEditor

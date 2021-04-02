@@ -14,7 +14,7 @@ let decodeProps = json => {
 let props =
   DomUtils.parseJSONTag(~id="schools-courses-evaluation-criteria__props", ()) |> decodeProps
 
-switch ReactDOM.querySelector("schools-courses-evaluation-criteria__root") {
+switch ReactDOM.querySelector("#schools-courses-evaluation-criteria__root") {
 | Some(root) =>
   ReactDOM.render(
     <EvaluationCriteria__Index

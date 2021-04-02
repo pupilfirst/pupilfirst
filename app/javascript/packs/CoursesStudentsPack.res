@@ -15,7 +15,7 @@ let decodeProps = json => {
 let (levels, course, userId, teamCoaches, currentCoach, tags) =
   DomUtils.parseJSONTag(~id="school-course-students__props", ()) |> decodeProps
 
-switch ReactDOM.querySelector("react-root") {
+switch ReactDOM.querySelector("#react-root") {
 | Some(root) =>
   ReactDOM.render(
     <CoursesStudents__Root levels course userId teamCoaches currentCoach tags />,

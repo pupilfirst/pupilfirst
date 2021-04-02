@@ -41,15 +41,8 @@ export default function PdfViewer(props) {
 
   return (
     <div className="flex flex-col items-center">
-      <Document
-        file={props.url}
-        onLoadSuccess={onDocumentLoadSuccess}
-        options={options}
-      >
-        <Page pageNumber={pageNumber} />
-      </Document>
       { (numPages || 1) > 1 &&
-      <div className="flex flex-row items-center mt-2">
+      <div className="flex flex-row items-center mb-2">
         <button type="button" className="transparent-background"
           disabled={pageNumber <= 1} onClick={previousPage}>
           <i className="fas fa-arrow-left"></i>
@@ -72,6 +65,13 @@ export default function PdfViewer(props) {
           <i className="fas fa-arrow-right"></i>
         </button>
       </div>}
+      <Document
+        file={props.url}
+        onLoadSuccess={onDocumentLoadSuccess}
+        options={options}
+      >
+        <Page pageNumber={pageNumber} />
+      </Document>
     </div>
   );
 }

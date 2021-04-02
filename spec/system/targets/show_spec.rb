@@ -85,6 +85,8 @@ feature 'Target Overlay', js: true do
     expect(page).to have_selector('.max-w-sm.mx-auto')
     file_title = content_blocks.find_by(block_type: ContentBlock::BLOCK_TYPE_FILE).content['title']
     expect(page).to have_link(file_title)
+    pdf_document_title = content_blocks.find_by(block_type: ContentBlock::BLOCK_TYPE_PDF_DOCUMENT).content['title']
+    expect(page).to have_text(pdf_document_title)
   end
 
   scenario 'student submits work on a target' do

@@ -1654,6 +1654,11 @@
             "kind": "OBJECT",
             "name": "MarkdownBlock",
             "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "PdfDocumentBlock",
+            "ofType": null
           }
         ]
       },
@@ -1952,6 +1957,65 @@
         "fields": [
           {
             "name": "markdown",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PdfDocumentBlock",
+        "description": "",
+        "fields": [
+          {
+            "name": "filename",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "title",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "url",
             "description": "",
             "args": [],
             "type": {

@@ -9,6 +9,7 @@ let renderBlockClasses = block =>
   | Image(_) => "mt-6"
   | Embed(_) => "mt-6 pb-7"
   | CoachingSession(_) => "mt-6 pb-7"
+  | PdfDocument(_) => "mt-6"
   }
 
 let markdownContentBlock = markdown => <MarkdownBlock markdown profile=Markdown.Permissive />
@@ -86,6 +87,24 @@ let coachingSessionBlock = (coaches) => {
   </div>
 }
 
+let pdfDocumentContentBlock = (url, title, filename) =>
+  <div
+    className="flex flex-col bg-white border rounded-lg px-6 py-4 items-center shadow hover:border-gray-500 hover:bg-gray-100 hover:text-primary-500 hover:shadow-md">
+    <div className="flex flex-row justify-items-stretch w-full">
+      <div className="flex flex-grow items-center">
+        <FaIcon classes="text-4xl text-gray-800 far fa-file-pdf" />
+        <div className="pl-4 leading-tight">
+          <div className="text-lg font-semibold"> {title |> str} </div>
+          <div className="text-sm italic text-gray-600"> {filename |> str} </div>
+        </div>
+      </div>
+      <a target="_blank" href=url><FaIcon classes="text-2xl fas fa-download" /></a>
+    </div>
+    <div className="pt-7">
+      <PdfViewer url={url} />
+    </div>
+  </div>
+
 @react.component
 let make = (~contentBlocks, ~coaches=?) =>
   <div className="text-base" id="learn-component">
@@ -97,6 +116,7 @@ let make = (~contentBlocks, ~coaches=?) =>
       | Embed(_url, embedCode, _requestType, _lastResolvedAt) =>
         embedCode->Belt.Option.mapWithDefault(React.null, code => embedContentBlock(code))
       | CoachingSession(_lastResolvedAt) => coachingSessionBlock(coaches)
+      | PdfDocument(url, title, filename) => pdfDocumentContentBlock(url, title, filename)
       }
 
       <div className={renderBlockClasses(block)} key={block |> ContentBlock.id}>

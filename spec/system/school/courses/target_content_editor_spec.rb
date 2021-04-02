@@ -251,6 +251,58 @@ feature 'Target Content Editor', js: true do
     expect(target.current_target_version.content_blocks.count).to eq(2)
   end
 
+  scenario 'school admin adds and edits a pdf document block' do
+    sign_in_user school_admin.user, referrer: content_school_course_target_path(course, target)
+
+    expect(target.current_target_version.content_blocks.count).to eq(1)
+
+    filename = 'pdf-sample.pdf'
+
+    # Try adding a new file block.
+    within('.content-block-creator--open') do
+      find('p', text: 'More').click
+      page.attach_file(file_path(filename)) do
+        find('p', text: 'PDF document').click
+      end
+    end
+
+    dismiss_notification
+    expect(page).to have_text(filename)
+    expect(target.current_target_version.content_blocks.count).to eq(2)
+    expect(page).not_to have_selector("button[title='Save Changes']")
+
+    cb = ContentBlock.last
+    expect(cb.block_type).to eq(ContentBlock::BLOCK_TYPE_PDF_DOCUMENT)
+    expect(cb.content).to eq('title' => filename)
+
+    # Try changing the caption.
+    new_title = Faker::Lorem.words(number: 3).join(' ')
+
+    within("div[aria-label='Editor for content block #{cb.id}']") do
+      fill_in 'Title', with: new_title
+    end
+
+    # Closing editor should be confirmed.
+    dismiss_confirm { find('button[title="Close Editor"').click }
+
+    within("div[aria-label='Editor for content block #{cb.id}']") do
+      find("button[title='Save Changes']").click
+
+      expect(page).not_to have_selector("button[title='Save Changes']")
+
+      expect(cb.reload.content).to eq('title' => new_title)
+
+      # Try the undo button.
+      fill_in 'Title', with: Faker::Lorem.words(number: 3).join(' ')
+
+      accept_confirm do
+        find("button[title='Undo Changes']").click
+      end
+      expect(page).not_to have_selector("button[title='Undo Changes']")
+      expect(page).to have_selector("input[value='#{new_title}'")
+    end
+  end
+
   context 'when video upload is enabled for a school' do
     let(:vimeo_access_token) { SecureRandom.hex }
     let(:title) { Faker::Lorem.words(number: 3).join(' ') }

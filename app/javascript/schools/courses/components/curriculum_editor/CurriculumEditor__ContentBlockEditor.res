@@ -183,6 +183,7 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
   let id = contentBlock |> ContentBlock.id
 
   switch contentBlock |> ContentBlock.blockType {
+  | ContentBlock.PdfDocument(_url, title, _filename)
   | ContentBlock.File(_url, title, _filename) =>
     let mutation = UpdateFileBlockMutation.make(~id, ~title, ())
     let extractor = result => result["updateFileBlock"]["contentBlock"]
@@ -240,6 +241,8 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, state, send) 
     <CurriculumEditor__FileBlockEditor url title filename contentBlock updateContentBlockCB />
   | Image(url, caption, width) =>
     <CurriculumEditor__ImageBlockEditor width url caption contentBlock updateContentBlockCB />
+  | PdfDocument(url, title, filename) =>
+    <CurriculumEditor__FileBlockEditor url title filename contentBlock updateContentBlockCB fileTypeIcon="fa-file-pdf" />
   }
 }
 

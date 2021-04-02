@@ -1,13 +1,14 @@
 module Schools
   module Targets
     class CreateContentBlockForm < Reform::Form
-      property :block_type, validates: { presence: true, inclusion: { in: %w[image file] } }
+      property :block_type, validates: { presence: true, inclusion: { in: %w[image file pdf_document] } }
       property :target_id, virtual: true, validates: { presence: true }
       property :file, virtual: true
       property :above_content_block_id, virtual: true
 
       validates :file, presence: true, image: true, file_size: { less_than: 100.megabytes }, if: :image_block?
       validates :file, presence: true, file_size: { less_than: 100.megabytes }, if: :file_block?
+      validates :file, presence: true, file_size: { less_than: 100.megabytes }, if: :pdf_document_block?
 
       def save
         ContentBlock.transaction do
@@ -34,7 +35,7 @@ module Schools
         case block_type
         when 'image'
           { caption: filename, width: 'Auto' }
-        when 'file'
+        when 'file', 'pdf_document'
           { title: filename }
         else
           raise "Unexpected block type #{block_type} encountered when creating file-based content block for target with ID #{target_id}"
@@ -55,6 +56,10 @@ module Schools
 
       def file_block?
         block_type == ContentBlock::BLOCK_TYPE_FILE
+      end
+
+      def pdf_document_block?
+        block_type == ContentBlock::BLOCK_TYPE_PDF_DOCUMENT
       end
 
       def above_content_block

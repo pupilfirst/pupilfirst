@@ -1,0 +1,30 @@
+.react-pdf__Document {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.react-pdf__Page {
+  max-width: 100%;
+  box-shadow: 0 0 8px rgba(241, 237, 247);
+}
+
+.react-pdf__Page canvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
+.react-pdf__message {
+  padding: 20px;
+  color: white;
+}
+
+input.no-arrows::-webkit-outer-spin-button,
+input.no-arrows::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number].no-arrows {
+  -moz-appearance: textfield;
+}

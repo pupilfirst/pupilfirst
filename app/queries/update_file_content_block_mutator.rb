@@ -17,7 +17,7 @@ class UpdateFileContentBlockMutator < ApplicationQuery
   private
 
   def must_be_a_file_block
-    return if content_block.file?
+    return if content_block.file? || content_block.pdf_document?
 
     errors[:base] << 'This is not a file block'
   end

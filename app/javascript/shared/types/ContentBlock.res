@@ -23,6 +23,7 @@ type blockType =
   | Image(url, caption, width)
   | Embed(url, embedCode, requestSource, lastResolvedAt)
   | CoachingSession(lastResolvedAt)
+  | PdfDocument(url, title, filename)
 
 type rec t = {
   id: id,
@@ -98,9 +99,14 @@ let decodeEmbedContent = json => {
   )
 }
 
-let decodeCouchingSessionContent = json => {
+let decodeCoachingSessionContent = json => {
   open Json.Decode
   json |> optional(field("lastResolvedAt", DateFns.decodeISO))
+}
+
+let decodePdfDocumentContent = json => {
+  open Json.Decode
+  json |> field("title", string)
 }
 
 let decode = json => {
@@ -123,8 +129,13 @@ let decode = json => {
     Embed(url, embedCode, requestSource, lastResolvedAt)
   | "coaching_session" =>
     let (lastResolvedAt) =
-      json |> field("content", decodeCouchingSessionContent)
+      json |> field("content", decodeCoachingSessionContent)
     CoachingSession(lastResolvedAt)
+  | "pdf_document" =>
+    let title = json |> field("content", decodePdfDocumentContent)
+    let url = json |> field("fileUrl", string)
+    let filename = json |> field("filename", string)
+    PdfDocument(url, title, filename)
   | unknownBlockType => raise(UnexpectedBlockType(unknownBlockType))
   }
 
@@ -150,7 +161,8 @@ let makeEmbedBlock = (url, embedCode, requestSource, lastResolvedAt) => Embed(
   requestSource,
   lastResolvedAt,
 )
-let makeCouchingSessionBlock = lastResolvedAt => CoachingSession(lastResolvedAt)
+let makeCoachingSessionBlock = lastResolvedAt => CoachingSession(lastResolvedAt)
+let makePdfDocumentBlock = (fileUrl, title, fileName) => PdfDocument(fileUrl, title, fileName)
 
 let make = (id, blockType, sortIndex) => {id: id, blockType: blockType, sortIndex: sortIndex}
 
@@ -183,6 +195,7 @@ let makeFromJs = js => {
     CoachingSession(
       content["lastResolvedAt"]->Belt.Option.map(DateFns.parseISO),
     )
+  | #PdfDocumentBlock(content) => PdfDocument(content["url"], content["title"], content["filename"])
   }
 
   make(id, blockType, sortIndex)
@@ -195,6 +208,7 @@ let blockTypeAsString = blockType =>
   | Image(_) => "image"
   | Embed(_) => "embed"
   | CoachingSession(_) => "coaching_session"
+  | PdfDocument(_) => "pdf_document"
   }
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1}
@@ -210,6 +224,7 @@ let moveDown = (t, ts) =>
 let updateFile = (title, t) =>
   switch t.blockType {
   | File(url, _, filename) => {...t, blockType: File(url, title, filename)}
+  | PdfDocument(url, _, filename) => {...t, blockType: PdfDocument(url, title, filename)}
   | CoachingSession(_)
   | Markdown(_)
   | Image(_)
@@ -222,6 +237,7 @@ let updateImageCaption = (t, caption) =>
   | Markdown(_)
   | File(_)
   | CoachingSession(_)
+  | PdfDocument(_)
   | Embed(_) => t
   }
 
@@ -231,6 +247,7 @@ let updateImageWidth = (t, width) =>
   | Markdown(_)
   | File(_)
   | CoachingSession(_)
+  | PdfDocument(_)
   | Embed(_) => t
   }
 
@@ -240,6 +257,7 @@ let updateMarkdown = (markdown, t) =>
   | File(_)
   | Image(_)
   | CoachingSession(_)
+  | PdfDocument(_)
   | Embed(_) => t
   }
 
@@ -272,6 +290,11 @@ module Fragments = %graphql(
       }
       ... on CoachingSessionBlock {
         lastResolvedAt
+      }
+      ... on PdfDocumentBlock {
+        title
+        url
+        filename
       }
     }
   }
@@ -308,6 +331,11 @@ module Query = %graphql(
           }
           ... on CoachingSessionBlock {
             lastResolvedAt
+          }
+          ... on PdfDocumentBlock {
+            title
+            url
+            filename
           }
         }
       }

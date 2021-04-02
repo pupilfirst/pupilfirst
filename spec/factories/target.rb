@@ -55,6 +55,7 @@ FactoryBot.define do
         create(:content_block, :markdown, target_version: target_version)
         create(:content_block, :file, target_version: target_version)
         create(:content_block, :embed, target_version: target_version)
+        create(:content_block, :pdf_document, target_version: target_version)
       end
     end
 
@@ -69,6 +70,13 @@ FactoryBot.define do
       after(:create) do |target|
         target_version = create(:target_version, target: target)
         create(:content_block, :coaching_session, target_version: target_version)
+      end
+    end
+
+    trait :with_pdf_document do
+      after(:create) do |target|
+        target_version = create(:target_version, target: target)
+        create(:content_block, :pdf_document, target_version: target_version)
       end
     end
 

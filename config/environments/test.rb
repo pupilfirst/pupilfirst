@@ -34,7 +34,8 @@ Rails.application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = true
   config.action_mailer.perform_caching = false
-  config.cache_store = :null_store
+
+  # config.cache_store = :null_store
 
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the

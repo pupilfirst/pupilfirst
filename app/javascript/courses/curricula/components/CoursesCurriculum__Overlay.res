@@ -22,7 +22,7 @@ type state = {
 
 type action =
   | Select(tab)
-  | ResetTargetDetails
+  | ResetState
   | SetTargetDetails(TargetDetails.t)
   | AddSubmission(Target.role)
   | ClearTargetDetails
@@ -32,7 +32,7 @@ let initialState = {targetDetails: None, tab: Learn}
 let reducer = (state, action) =>
   switch action {
   | Select(tab) => {...state, tab: tab}
-  | ResetTargetDetails => initialState
+  | ResetState => initialState
   | SetTargetDetails(targetDetails) => {
       ...state,
       targetDetails: Some(targetDetails),
@@ -52,8 +52,6 @@ let closeOverlay = course =>
   ReasonReactRouter.push("/courses/" ++ ((course |> Course.id) ++ "/curriculum"))
 
 let loadTargetDetails = (target, send, ()) => {
-  send(ResetTargetDetails)
-
   {
     open Js.Promise
     Fetch.fetch("/targets/" ++ ((target |> Target.id) ++ "/details_v2"))
@@ -259,7 +257,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
 
 let renderLockReason = reason => renderLocked(reason |> TargetStatus.lockReasonToString)
 
-let prerequisitesIncomplete = (reason, target, targets, statusOfTargets) => {
+let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) => {
   let prerequisiteTargetIds = target |> Target.prerequisiteTargetIds
 
   let prerequisiteTargets =
@@ -279,6 +277,7 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets) => {
           )
 
         <Link
+          onClick={_ => send(ResetState)}
           href={"/targets/" ++ (target |> Target.id)}
           ariaLabel={"Select Target " ++ (target |> Target.id)}
           key={target |> Target.id}
@@ -293,11 +292,12 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets) => {
   </div>
 }
 
-let handleLocked = (target, targets, targetStatus, statusOfTargets) =>
+let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
   switch targetStatus |> TargetStatus.status {
   | Locked(reason) =>
     switch reason {
-    | PrerequisitesIncomplete => prerequisitesIncomplete(reason, target, targets, statusOfTargets)
+    | PrerequisitesIncomplete =>
+      prerequisitesIncomplete(reason, target, targets, statusOfTargets, send)
     | CourseLocked
     | AccessLocked
     | LevelLocked =>
@@ -539,7 +539,7 @@ let make = (
     <div className="bg-gray-100 border-b border-gray-400 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}
-        {handleLocked(target, targets, targetStatus, statusOfTargets)}
+        {handleLocked(target, targets, targetStatus, statusOfTargets, send)}
         {handlePendingStudents(targetStatus, state.targetDetails, users)}
         {switch state.targetDetails {
         | Some(targetDetails) => tabOptions(state, send, targetDetails, targetStatus)

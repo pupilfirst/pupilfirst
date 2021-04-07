@@ -22,6 +22,7 @@ type state = {
 
 type action =
   | Select(tab)
+  | ResetTargetDetails
   | SetTargetDetails(TargetDetails.t)
   | AddSubmission(Target.role)
   | ClearTargetDetails
@@ -31,6 +32,7 @@ let initialState = {targetDetails: None, tab: Learn}
 let reducer = (state, action) =>
   switch action {
   | Select(tab) => {...state, tab: tab}
+  | ResetTargetDetails => initialState
   | SetTargetDetails(targetDetails) => {
       ...state,
       targetDetails: Some(targetDetails),
@@ -50,6 +52,8 @@ let closeOverlay = course =>
   ReasonReactRouter.push("/courses/" ++ ((course |> Course.id) ++ "/curriculum"))
 
 let loadTargetDetails = (target, send, ()) => {
+  send(ResetTargetDetails)
+
   {
     open Js.Promise
     Fetch.fetch("/targets/" ++ ((target |> Target.id) ++ "/details_v2"))
@@ -522,7 +526,7 @@ let make = (
 ) => {
   let (state, send) = React.useReducer(reducer, initialState)
 
-  React.useEffect1(loadTargetDetails(target, send), [target |> Target.id])
+  React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
 
   React.useEffect(() => {
     ScrollLock.activate()

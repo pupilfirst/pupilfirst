@@ -10,31 +10,28 @@
 /* Custom Style */
 
 html {
-  width: 100%;
-  height: 100%;
+  @apply w-full h-full;
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
-  color: #453c52;
-  @apply w-full h-full antialiased;
+  @apply font-sans text-gray-900 w-full h-full antialiased;
 }
 
 @screen md {
   * {
     scrollbar-width: thin;
-    scrollbar-color: theme(colors.gray.500) theme(colors.gray.100);
+    scrollbar-color: theme("colors.gray.500") theme("colors.gray.100");
   }
   ::-webkit-scrollbar {
     width: 12px;
   }
   ::-webkit-scrollbar-track {
-    background: theme(colors.gray.100);
+    background: theme("colors.gray.100");
   }
   ::-webkit-scrollbar-thumb {
-    background-color: theme(colors.gray.500);
+    background-color: theme("colors.gray.500");
     border-radius: 6px;
-    border: 3px solid theme(colors.gray.100);
+    border: 3px solid theme("colors.gray.100");
   }
 }
 
@@ -48,27 +45,27 @@ h6 {
 }
 
 h1 {
-  font-size: 2.5rem;
+  @apply text-4xl
 }
 
 h2 {
-  font-size: 2rem;
+  @apply text-2xl
 }
 
 h3 {
-  font-size: 1.5rem;
+  @apply text-xl
 }
 
 h4 {
-  font-size: 1.25rem;
+  @apply text-lg
 }
 
 h5 {
-  font-size: 1rem;
+  @apply text-base
 }
 
 h6 {
-  font-size: 0.875rem;
+  @apply text-sm
 }
 
 /* Input */
@@ -96,8 +93,8 @@ input:disabled,
 
 .form-input__file-sr-only:focus + .form-input__file-label {
   outline: none;
-  box-shadow: 0 0 0 3px theme(colors.primary.100);
-  border-color: theme(colors.primary.300);
+  box-shadow: 0 0 0 3px theme("colors.primary.100");
+  border-color: theme("colors.primary.300");
 }
 
 /* Button */
@@ -144,8 +141,8 @@ button:focus {
   @apply bg-primary-500 text-white shadow;
   background-image: linear-gradient(
     135deg,
-    rgba(96, 37, 192, 1) 0%,
-    rgba(77, 30, 154, 1) 100%
+    theme("colors.primary.500") 0%,
+    theme("colors.primary.600") 100%,
   );
 }
 
@@ -153,8 +150,8 @@ button:focus {
   @apply bg-primary-600;
   background-image: linear-gradient(
     135deg,
-    rgba(77, 30, 154, 1) 0%,
-    rgba(56, 13, 128, 1) 100%
+    theme("colors.primary.600") 0%,
+    theme("colors.primary.700") 100%,
   );
 }
 
@@ -179,8 +176,8 @@ button:focus {
   @apply bg-secondary-500 text-white;
   background-image: linear-gradient(
     135deg,
-    rgba(246, 16, 103, 1) 0%,
-    rgba(172, 6, 69, 1) 100%
+    theme("colors.secondary.500") 0%,
+    theme("colors.secondary.600") 100%,
   );
 }
 
@@ -188,8 +185,8 @@ button:focus {
   @apply bg-secondary-600;
   background-image: linear-gradient(
     135deg,
-    rgba(172, 6, 69, 1) 0%,
-    rgba(123, 5, 49, 1) 100%
+    theme("colors.secondary.600") 0%,
+    theme("colors.secondary.800") 100%,
   );
 }
 
@@ -202,8 +199,8 @@ button:focus {
   @apply bg-green-500 text-white;
   background-image: linear-gradient(
     135deg,
-    rgba(72, 187, 120, 1) 0%,
-    rgba(56, 161, 105, 1) 100%
+    theme("colors.success.100") 0%,
+    theme("colors.success.200") 100%,
   );
 }
 
@@ -211,8 +208,8 @@ button:focus {
   @apply bg-green-600;
   background-image: linear-gradient(
     135deg,
-    rgba(56, 161, 105, 1) 0%,
-    rgba(47, 133, 90, 1) 100%
+    theme("colors.success.200") 0%,
+    theme("colors.success.300") 100%,
   );
 }
 
@@ -225,8 +222,8 @@ button:focus {
   @apply bg-yellow-500 text-white;
   background-image: linear-gradient(
     135deg,
-    rgba(237, 137, 54, 1) 0%,
-    rgba(221, 107, 32, 1) 100%
+    theme("colors.warning.100") 0%,
+    theme("colors.warning.200") 100%,
   );
 }
 
@@ -234,8 +231,8 @@ button:focus {
   @apply bg-yellow-600;
   background-image: linear-gradient(
     135deg,
-    rgba(221, 107, 32, 1) 0%,
-    rgba(192, 86, 33, 1) 100%
+    theme("colors.warning.200") 0%,
+    theme("colors.warning.300") 100%,
   );
 }
 
@@ -248,8 +245,8 @@ button:focus {
   @apply bg-red-500 text-white;
   background-image: linear-gradient(
     135deg,
-    rgba(245, 101, 101, 1) 0%,
-    rgba(229, 62, 62, 1) 100%
+    theme("colors.danger.100") 0%,
+    theme("colors.danger.200") 100%,
   );
 }
 
@@ -257,8 +254,8 @@ button:focus {
   @apply bg-red-600;
   background-image: linear-gradient(
     135deg,
-    rgba(229, 62, 62, 1) 0%,
-    rgba(197, 48, 48, 1) 100%
+    theme("colors.danger.200") 0%,
+    theme("colors.danger.300") 100%,
   );
 }
 
@@ -300,11 +297,11 @@ button:disabled:focus,
 /* Footer Style */
 
 .footer__container {
-  background-color: theme(colors.gray.200);
+  background-color: theme("colors.gray.200");
 }
 
 .footer__bottom {
-  background-color: theme(colors.gray.300);
+  background-color: theme("colors.gray.300");
 }
 
 .dropdown__list {
@@ -346,7 +343,7 @@ button:disabled:focus,
   top: -6px;
   left: 10px;
   border-right: 6px solid transparent;
-  border-bottom: 6px solid white;
+  border-bottom: 6px solid theme("colors.white");
   border-left: 6px solid transparent;
 }
 
@@ -370,7 +367,7 @@ button:disabled:focus,
   top: -6px;
   right: 10px;
   border-right: 6px solid transparent;
-  border-bottom: 6px solid white;
+  border-bottom: 6px solid theme("colors.white");
   border-left: 6px solid transparent;
 }
 

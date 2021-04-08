@@ -36,7 +36,26 @@ module.exports = {
           700: "#7D728F",
           800: "#6A5F7A",
           900: "#453C52"
-        }
+        },
+        success: {
+          100: "#48bb78",
+          200: "#38a169",
+          300: "#2f855a",
+        },
+        warning: {
+          100: "#ed8936",
+          200: "#dd6b20",
+          300: "#c05621",
+        },
+        danger: {
+          100: "#f56565",
+          200: "#e53e3e",
+          300: "#c53030",
+        },
+        white: "#FFFFFF",
+      },
+      fontFamily: {
+        'sans': ['Open Sans', 'sans-serif'],
       },
       spacing: {
         "7": "1.75rem",

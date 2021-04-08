@@ -381,7 +381,7 @@ button:disabled:focus,
       theme("colors.primary.800")
     );
   }
-  .bg-gradient-secondary-to-secondary-600-120 {
+  .bg-gradient-secondary-500-to-secondary-600-120 {
     background-image: linear-gradient(
       120deg,
       theme("colors.secondary.500"),

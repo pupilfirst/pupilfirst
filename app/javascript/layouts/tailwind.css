@@ -1,6 +1,8 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+@import "themes";
+
 /* Custom utilities */
 
 .max-w-fc {
@@ -10,7 +12,7 @@
 /* Custom Style */
 
 html {
-  @apply w-full h-full;
+  @apply w-full h-full theme-pupilfirst-light;
 }
 
 body {

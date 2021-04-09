@@ -22,15 +22,15 @@ let additionalLinks = (linksVisible, links) =>
             </a>
           </div>
         )
-        |> ReasonReact.array}
+        |> React.array}
       </div>
-    : ReasonReact.null
+    : React.null
 
 @react.component
 let make = (~links) => {
   let (linksVisible, setLinksVisible) = React.useState(() => false)
   switch links {
-  | [] => ReasonReact.null
+  | [] => React.null
   | moreLinks =>
     <div
       title="Show more links"

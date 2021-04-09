@@ -4,16 +4,16 @@ let paddingPercentage = issuedCertificate =>
   (IssuedCertificate.margin(issuedCertificate) |> string_of_int) ++ "%"
 
 let certificateContainerStyle = issuedCertificate =>
-  ReactDOMRe.Style.make(~padding=paddingPercentage(issuedCertificate), ())
+  ReactDOM.Style.make(~padding=paddingPercentage(issuedCertificate), ())
 
 let issuedToStyle = issuedCertificate =>
-  ReactDOMRe.Style.make(
+  ReactDOM.Style.make(
     ~top=(IssuedCertificate.nameOffsetTop(issuedCertificate) |> string_of_int) ++ "%",
     (),
   )
 
 let qrCodeStyle = issuedCertificate =>
-  ReactDOMRe.Style.make(~padding=paddingPercentage(issuedCertificate), ())
+  ReactDOM.Style.make(~padding=paddingPercentage(issuedCertificate), ())
 
 let nameCanvasId = issuedCertificate =>
   "name-canvas-" ++ IssuedCertificate.serialNumber(issuedCertificate)
@@ -39,7 +39,7 @@ let qrPositionClasses = issuedCertificate =>
 let qrContainerStyle = issuedCertificate => {
   let widthPercentage =
     (issuedCertificate |> IssuedCertificate.qrScale |> float_of_int) /. 100.0 *. 10.0
-  ReactDOMRe.Style.make(~width=Js.Float.toString(widthPercentage) ++ "%", ())
+  ReactDOM.Style.make(~width=Js.Float.toString(widthPercentage) ++ "%", ())
 }
 
 let certificateUrl = issuedCertificate => {
@@ -59,7 +59,7 @@ let qrCode = (issuedCertificate, verifyImageUrl) =>
       className={"absolute " ++ qrPositionClasses(issuedCertificate)}
       style={qrContainerStyle(issuedCertificate)}>
       <QrCode
-        style={ReactDOMRe.Style.make(~width="100%", ~height="100%", ())}
+        style={ReactDOM.Style.make(~width="100%", ~height="100%", ())}
         value={certificateUrl(issuedCertificate)}
         className="w-full h-full"
         size=256

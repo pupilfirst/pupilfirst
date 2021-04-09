@@ -2,7 +2,7 @@ open SchoolCustomize__Types
 
 %bs.raw(`require("./SchoolCustomize__LinksEditor.css")`)
 
-let str = ReasonReact.string
+let str = React.string
 
 type kind =
   | HeaderLink
@@ -95,7 +95,7 @@ let showLinks = (state, send, removeLinkCB, kind, links) =>
               <span key="link-editor-entry__title"> {title |> str} </span>,
               <i key="link-editor-entry__icon" className="fas fa-link mx-2" />,
               <code key="link-editor-entry__url"> {url |> str} </code>,
-            ] |> ReasonReact.array
+            ] |> React.array
           | SocialLink => <code> {url |> str} </code>
           }}
         </div>
@@ -106,7 +106,7 @@ let showLinks = (state, send, removeLinkCB, kind, links) =>
           <FaIcon classes={deleteIconClasses(state.deleting |> List.mem(id))} />
         </button>
       </div>
-    ) |> Array.of_list |> ReasonReact.array
+    ) |> Array.of_list |> React.array
   }
 
 let titleInputVisible = state =>
@@ -316,7 +316,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
               <School__InputGroupError message="can't be empty" active=state.titleInvalid />
             </div>
           } else {
-            ReasonReact.null
+            React.null
           }}
           <div className="flex-grow">
             <label

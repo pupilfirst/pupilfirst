@@ -2,7 +2,7 @@
 
 open CurriculumEditor__Types
 
-let str = ReasonReact.string
+let str = React.string
 
 let targetClasses = (target, targets) =>
   "target-group__target flex justify-between items-center pl-2 pr-5 " ++

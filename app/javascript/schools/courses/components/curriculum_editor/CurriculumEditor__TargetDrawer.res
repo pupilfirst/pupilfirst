@@ -44,7 +44,7 @@ let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
 }
 
 let closeDrawer = course =>
-  ReasonReactRouter.push("/school/courses/" ++ ((course |> Course.id) ++ "/curriculum"))
+  RescriptReactRouter.push("/school/courses/" ++ ((course |> Course.id) ++ "/curriculum"))
 
 let beforeWindowUnload = event => {
   event |> Webapi.Dom.Event.preventDefault
@@ -62,7 +62,7 @@ let make = (
   ~updateTargetCB,
   ~vimeoPlan,
 ) => {
-  let url = ReasonReactRouter.useUrl()
+  let url = RescriptReactRouter.useUrl()
   let (dirty, setDirty) = React.useState(() => false)
 
   React.useEffect1(() => {

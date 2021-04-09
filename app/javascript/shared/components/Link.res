@@ -6,7 +6,7 @@ external unsafeAsKeyboardEvent: ReactEvent.Mouse.t => Webapi.Dom.KeyboardEvent.t
 let onConfirm = (href, onClick, event) => {
   ReactEvent.Mouse.preventDefault(event)
   Belt.Option.mapWithDefault(onClick, (), onClick => onClick(event))
-  ReasonReactRouter.push(href)
+  RescriptReactRouter.push(href)
 }
 
 let onCancel = event => event |> ReactEvent.Mouse.preventDefault

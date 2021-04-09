@@ -293,7 +293,7 @@ let make = (
   ~accessLockedLevels,
   ~levelUpEligibility,
 ) => {
-  let url = ReasonReactRouter.useUrl()
+  let url = RescriptReactRouter.useUrl()
 
   let selectedTarget = switch url.path {
   | list{"targets", targetId, ..._} =>

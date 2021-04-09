@@ -63,7 +63,7 @@ let make = (
               }}>
               <i className="fas fa-trash-alt text-lg" />
             </button>
-          : ReasonReact.null}
+          : React.null}
       </div>
     </div>
     <div className="my-2 bg-white">

@@ -311,7 +311,7 @@ let make = (~course, ~exports, ~tags) => {
                           </div>
                         </div>
                         {switch courseExport |> CourseExport.file {
-                        | None => ReasonReact.null
+                        | None => React.null
                         | Some(file) =>
                           <a
                             ariaLabel={"Download Course Export " ++

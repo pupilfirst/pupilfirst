@@ -16,7 +16,7 @@ type imageSettings = {
 @bs.module @react.component
 external make: (
   ~value: string,
-  ~style: ReactDOMRe.style=?,
+  ~style: ReactDOM.style=?,
   ~className: string=?,
   ~renderAs: string=?,
   ~size: int=?,

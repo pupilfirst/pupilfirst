@@ -145,7 +145,7 @@ let make = (~currentSchoolAdminId, ~admins) => {
               |> Array.map(admin =>
                 renderAdmin(currentSchoolAdminId, admin, state.admins, setState)
               )
-              |> ReasonReact.array}
+              |> React.array}
             </div>
           </div>
         </div>

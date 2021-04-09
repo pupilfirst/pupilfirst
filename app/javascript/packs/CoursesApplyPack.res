@@ -23,15 +23,19 @@ let decodeProps = json => {
 
 let props = DomUtils.parseJSONTag() |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <CoursesApply__Root
-    courseName=props.courseName
-    courseId=props.courseId
-    thumbnailUrl=props.thumbnailUrl
-    email=props.email
-    name=props.name
-    privacyPolicy=props.privacyPolicy
-    termsAndConditions=props.termsAndConditions
-  />,
-  "react-root",
-)
+switch ReactDOM.querySelector("#react-root") {
+| Some(root) =>
+  ReactDOM.render(
+    <CoursesApply__Root
+      courseName=props.courseName
+      courseId=props.courseId
+      thumbnailUrl=props.thumbnailUrl
+      email=props.email
+      name=props.name
+      privacyPolicy=props.privacyPolicy
+      termsAndConditions=props.termsAndConditions
+    />,
+    root,
+  )
+| None => ()
+}

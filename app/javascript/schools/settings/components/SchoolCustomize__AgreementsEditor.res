@@ -2,7 +2,7 @@ open SchoolCustomize__Types
 
 %bs.raw(`require("./SchoolCustomize__AgreementsEditor.css")`)
 
-let str = ReasonReact.string
+let str = React.string
 
 type kind =
   | PrivacyPolicy

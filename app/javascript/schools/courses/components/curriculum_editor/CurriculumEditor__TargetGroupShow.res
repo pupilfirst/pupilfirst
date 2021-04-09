@@ -1,6 +1,6 @@
 open CurriculumEditor__Types
 
-let str = ReasonReact.string
+let str = React.string
 
 let t = I18n.t(~scope="components.CurriculumEditor__TargetGroupShow")
 
@@ -128,7 +128,7 @@ let make = (
               className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
               {t("milestone_targets") |> str}
             </div>
-          : ReasonReact.null}
+          : React.null}
         <div className="target-group__title pt-6">
           <h4> {targetGroup |> TargetGroup.name |> str} </h4>
         </div>
@@ -172,9 +172,9 @@ let make = (
         key={Target.id(target)} target targets=targetsToDisplay updateTargetSortIndexCB index course
       />
     )
-    |> ReasonReact.array}
+    |> React.array}
     {targetGroupArchived
-      ? ReasonReact.null
+      ? React.null
       : <div
           className="target-group__target-create relative bg-gray-100 flex items-center border border-dashed border-gray-400 text-gray-700 hover:text-gray-900 active:text-gray-900 focus:text-gray-900 hover:shadow-lg hover:border-gray-500 rounded-lg rounded-t-none overflow-hidden">
           <label
@@ -197,7 +197,7 @@ let make = (
                 className="flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 mr-4 rounded btn-primary appearance-none focus:outline-none text-center">
                 {"Create" |> str}
               </button>
-            : ReasonReact.null}
+            : React.null}
         </div>}
   </div>
 }

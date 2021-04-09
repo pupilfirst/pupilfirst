@@ -435,7 +435,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~tags) => {
 
   let courseId = course |> Course.id
 
-  let url = ReasonReactRouter.useUrl()
+  let url = RescriptReactRouter.useUrl()
 
   React.useEffect1(() => {
     reloadTeams(courseId, state, send)

@@ -9,7 +9,8 @@ let decodeProps = json => {
 
 let (issuedCertificate, verifyImageUrl, currentUser) = DomUtils.parseJSONTag() |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <VerifyCertificate__Root issuedCertificate verifyImageUrl currentUser />,
-  "react-root",
-)
+switch ReactDOM.querySelector("#react-root") {
+| Some(root) =>
+  ReactDOM.render(<VerifyCertificate__Root issuedCertificate verifyImageUrl currentUser />, root)
+| None => ()
+}

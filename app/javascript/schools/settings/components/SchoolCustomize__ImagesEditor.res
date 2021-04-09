@@ -1,6 +1,6 @@
 open SchoolCustomize__Types
 
-let str = ReasonReact.string
+let str = React.string
 
 type action =
   | SelectLogoOnLightBgFile(string, bool)
@@ -29,7 +29,7 @@ let handleUpdateImages = (send, updateImagesCB, event) => {
   event |> ReactEvent.Form.preventDefault
   send(BeginUpdate)
 
-  let element = ReactDOMRe._getElementById(formId)
+  let element = ReactDOM.querySelector("#" ++ formId)
   switch element {
   | Some(element) =>
     Api.sendFormData(

@@ -143,7 +143,7 @@ let reducer = (state, action) =>
   }
 
 let updateCourse = (send, course) => {
-  ReasonReactRouter.push("/school/courses/")
+  RescriptReactRouter.push("/school/courses/")
   send(UpdateCourse(course))
 }
 
@@ -369,7 +369,7 @@ let showCourse = course => {
             title={"Edit " ++ Course.name(course)}
             className="col-span-3 btn btn-default px-4 py-2 bg-gray-200 text-primary-500 rounded-lg text-sm cursor-pointer"
             onClick={_ =>
-              ReasonReactRouter.push("/school/courses/" ++ Course.id(course) ++ "/details")}>
+              RescriptReactRouter.push("/school/courses/" ++ Course.id(course) ++ "/details")}>
             <div>
               <FaIcon classes="far fa-edit mr-3" />
               <span className="text-black font-semibold"> {str(t("edit_course_details"))} </span>
@@ -405,7 +405,7 @@ let showCourses = (courses, state) => {
 }
 
 let reloadCoursesCB = (send, ()) => {
-  ReasonReactRouter.push("/school/courses/")
+  RescriptReactRouter.push("/school/courses/")
   send(ReloadCourses)
 }
 
@@ -445,7 +445,7 @@ let make = (~selectedCourse) => {
     },
   )
 
-  let url = ReasonReactRouter.useUrl()
+  let url = RescriptReactRouter.useUrl()
 
   let (editorAction, selectedTab) = switch url.path {
   | list{"school", "courses", "new", ..._} => (ShowForm(None), CourseEditor__Form.DetailsTab)
@@ -478,7 +478,7 @@ let make = (~selectedCourse) => {
             ),
           )
         })
-        <SchoolAdmin__EditorDrawer2 closeDrawerCB={_ => ReasonReactRouter.push("/school/courses/")}>
+        <SchoolAdmin__EditorDrawer2 closeDrawerCB={_ => RescriptReactRouter.push("/school/courses/")}>
           <CourseEditor__Form
             course
             updateCourseCB={updateCourse(send)}
@@ -492,7 +492,7 @@ let make = (~selectedCourse) => {
       <div className="items-center justify-between max-w-4xl mx-auto mt-8 w-full px-10">
         <button
           className="w-full flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-md focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg cursor-pointer"
-          onClick={_ => ReasonReactRouter.push("/school/courses/new")}>
+          onClick={_ => RescriptReactRouter.push("/school/courses/new")}>
           <i className="fas fa-plus-circle text-lg" />
           <span className="font-semibold ml-2"> {str(t("add_new_course"))} </span>
         </button>

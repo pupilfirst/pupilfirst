@@ -14,7 +14,7 @@ let gradeDescription = (gradeLabels, grading) =>
           {grade |> GradeLabel.labelFor(gradeLabels) |> str}
         </span>
       </span>
-    | None => ReasonReact.null
+    | None => React.null
     }}
   </div>
 
@@ -42,7 +42,7 @@ let gradeBarHeader = (grading, gradeLabels) =>
   <div className="grade-bar__header pb-1">
     {grading |> gradeDescription(gradeLabels)}
     {switch grading |> Grading.grade {
-    | None => ReasonReact.null
+    | None => React.null
     | Some(grade) =>
       <div className="grade-bar__grade font-semibold">
         {(grade |> string_of_int) ++ ("/" ++ maxGrade(gradeLabels)) |> str}
@@ -65,7 +65,7 @@ let gradeBarPill = (gradeLabel, grading, gradeSelectCB, passGrade) => {
     onClick={_event => handleClick(gradeSelectCB, grading, myGrade)}
     className={gradePillClasses(grading |> Grading.grade, passGrade, myGrade, gradeSelectCB)}>
     {switch gradeSelectCB {
-    | None => ReasonReact.null
+    | None => React.null
     | Some(_CB) => myGrade |> string_of_int |> str
     }}
   </div>
@@ -76,7 +76,7 @@ let gradeBarPanel = (grading, gradeLabels, gradeSelectCB, passGrade) =>
     {gradeLabels
     |> List.map(gradeLabel => gradeBarPill(gradeLabel, grading, gradeSelectCB, passGrade))
     |> Array.of_list
-    |> ReasonReact.array}
+    |> React.array}
   </div>
 
 @react.component

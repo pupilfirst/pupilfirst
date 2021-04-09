@@ -74,7 +74,8 @@ module Students
         when Course::PROGRESSION_BEHAVIOR_LIMITED, Course::PROGRESSION_BEHAVIOR_UNLIMITED
           [
             Targets::StatusService::STATUS_SUBMITTED,
-            Targets::StatusService::STATUS_PASSED
+            Targets::StatusService::STATUS_PASSED,
+            Targets::StatusService::STATUS_FAILED
           ]
         else
           raise "Unexpected progression behavior #{course.progression_behavior}"

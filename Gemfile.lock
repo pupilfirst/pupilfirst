@@ -498,7 +498,7 @@ GEM
       builder (>= 3.0)
       dry-inflector (~> 0.1)
       rubyzip (>= 1.0)
-    rollbar (3.1.1)
+    rollbar (3.1.2)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
     rspec-eventually (0.2.2)

@@ -79,6 +79,7 @@ gem 'batch-loader', '~> 1.5' # Generic lazy batching mechanism to avoid N+1 DB q
 # GrowthTribe gems
 gem 'omniauth-keycloak', '~>1.2.0'
 gem 'pupilfirst_xapi', '~>0.2.1'
+gem 'hubspot-ruby'
 
 # Rails assets!
 source 'https://rails-assets.org' do

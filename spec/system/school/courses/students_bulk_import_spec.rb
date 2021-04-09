@@ -59,6 +59,34 @@ feature 'Course students bulk importer', js: true do
     expect(email_body).to have_content("Students requested: 2")
     expect(email_body).to have_content("Students added: 2")
     expect(page).to_not have_content("Some of the students that you tried to import already existed in the course")
+
+    # Check student notification
+    open_email('super@man.com')
+
+    expect(current_email.subject).to have_content("You have been added as a student in #{school.name}")
+  end
+
+  scenario 'admin onboards students with notification unchecked' do
+    sign_in_user school_admin.user, referrer: school_course_students_path(course)
+
+    click_button 'Bulk Import'
+    expect(page).to have_text 'Download an example .csv file'
+
+    attach_csv_file('student_import_valid_data.csv')
+    expect(page).to have_text 'Super Man'
+
+    # uncheck notification option
+    page.find('label', text: 'Notify students, and send them a link to sign into this school.').click
+
+    click_button 'Import Students'
+
+    expect(page).to have_text('Import initiated successfully!')
+    expect(course.reload.founders.count).to eq(2)
+
+    # Check student notification
+    open_email('super@man.com')
+
+    expect(current_email).to eq(nil)
   end
 
   scenario 'admin uploads a csv with invalid template for import' do

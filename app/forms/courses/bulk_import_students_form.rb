@@ -13,7 +13,7 @@ module Courses
     validate :strings_must_not_be_too_long
 
     def save
-      Courses::BulkImportStudentsJob.perform_later(model, csv_rows, current_user, notify_students)
+      Courses::BulkImportStudentsJob.perform_later(model, csv_rows, current_user, notify_students == 'true')
     end
 
     def csv_rows

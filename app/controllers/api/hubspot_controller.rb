@@ -4,6 +4,9 @@ module Api
 
     def create
       verify_hubspot_signature!
+      TransactionalService.new(
+        WebhookHandlers::HubspotService.new
+      ).execute(request_params)
       head :ok
     end
 
@@ -32,7 +35,7 @@ module Api
     end
 
     def request_params
-      request.parameters["_json"]
+      params.require(:_json).map(&:permit!).map(&:to_h)
     end
   end
 end

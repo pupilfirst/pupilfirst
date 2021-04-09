@@ -57,7 +57,7 @@ type action =
   | UpdateFileInvalid(option<fileInvalid>)
   | LoadCSVData(array<StudentCSVData.t>, CSVReader.fileInfo)
   | ClearCSVData
-  | ChangeNotifyStudents
+  | ToggleNotifyStudents
   | BeginSaving
   | EndSaving
   | FailSaving
@@ -69,7 +69,7 @@ let reducer = (state, action) =>
   switch action {
   | UpdateFileInvalid(fileInvalid) => {...state, fileInvalid: fileInvalid}
   | ClearCSVData => {...state, fileInfo: None, fileInvalid: None, csvData: []}
-  | ChangeNotifyStudents => {...state, notifyStudents: !state.notifyStudents}
+  | ToggleNotifyStudents => {...state, notifyStudents: !state.notifyStudents}
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
   | EndSaving => initialState
@@ -394,21 +394,12 @@ let make = (~courseId, ~closeDrawerCB) => {
           </div>
         </DisablingCover>
         {<div className="mt-4">
-          <input
-            onChange={_event => send(ChangeNotifyStudents)}
-            checked={state.notifyStudents}
-            className="hidden checkbox-input"
+          <Checkbox
             id="notify-students"
-            type_="checkbox"
+            label={t("notify_students_label")}
+            onChange={_event => send(ToggleNotifyStudents)}
+            checked={state.notifyStudents}
           />
-          <label className="checkbox-label" htmlFor="notify-students">
-            <span>
-              <svg width="12px" height="10px" viewBox="0 0 12 10">
-                <polyline points="1.5 6 4.5 9 10.5 1" />
-              </svg>
-            </span>
-            <span className="text-sm"> {t("notify_students_label")->str} </span>
-          </label>
         </div>}
       </div>
       <div className="max-w-2xl flex justify-end px-6 pb-6 mx-auto">

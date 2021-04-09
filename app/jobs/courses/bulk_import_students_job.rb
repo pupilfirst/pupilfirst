@@ -2,8 +2,8 @@ module Courses
   class BulkImportStudentsJob < ApplicationJob
     queue_as :low_priority
 
-    def perform(course, csv_rows, user)
-      student_ids = ::Courses::OnboardService.new(course, csv_rows).execute
+    def perform(course, csv_rows, user, notify_students)
+      student_ids = ::Courses::OnboardService.new(course, csv_rows, notify_students).execute
 
       report_params = { students_added: student_ids.count, students_requested: csv_rows.count }
 

@@ -22,6 +22,7 @@ type state = {
   saving: bool,
   csvData: array<StudentCSVData.t>,
   fileInvalid: option<fileInvalid>,
+  notifyStudents: bool,
 }
 
 let initialState = {
@@ -29,6 +30,7 @@ let initialState = {
   saving: false,
   csvData: [],
   fileInvalid: None,
+  notifyStudents: true,
 }
 
 let validTemplate = csvData => {
@@ -55,6 +57,7 @@ type action =
   | UpdateFileInvalid(option<fileInvalid>)
   | LoadCSVData(array<StudentCSVData.t>, CSVReader.fileInfo)
   | ClearCSVData
+  | ChangeNotifyStudents
   | BeginSaving
   | EndSaving
   | FailSaving
@@ -66,6 +69,7 @@ let reducer = (state, action) =>
   switch action {
   | UpdateFileInvalid(fileInvalid) => {...state, fileInvalid: fileInvalid}
   | ClearCSVData => {...state, fileInfo: None, fileInvalid: None, csvData: []}
+  | ChangeNotifyStudents => {...state, notifyStudents: !state.notifyStudents}
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
   | EndSaving => initialState
@@ -321,6 +325,7 @@ let make = (~courseId, ~closeDrawerCB) => {
   let (state, send) = React.useReducer(reducer, initialState)
   <form onSubmit={submitForm(courseId, send, closeDrawerCB)}>
     <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
+    <input name="notify_students" type_="hidden" value={string_of_bool(state.notifyStudents)} />
     <div className="mx-auto bg-white">
       <div className="max-w-2xl p-6 mx-auto">
         <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
@@ -388,6 +393,23 @@ let make = (~courseId, ~closeDrawerCB) => {
             {errorTabulation(state.csvData, state.fileInvalid)}
           </div>
         </DisablingCover>
+        {<div className="mt-4">
+          <input
+            onChange={_event => send(ChangeNotifyStudents)}
+            checked={state.notifyStudents}
+            className="hidden checkbox-input"
+            id="notify-students"
+            type_="checkbox"
+          />
+          <label className="checkbox-label" htmlFor="notify-students">
+            <span>
+              <svg width="12px" height="10px" viewBox="0 0 12 10">
+                <polyline points="1.5 6 4.5 9 10.5 1" />
+              </svg>
+            </span>
+            <span className="text-sm"> {t("notify_students_label")->str} </span>
+          </label>
+        </div>}
       </div>
       <div className="max-w-2xl flex justify-end px-6 pb-6 mx-auto">
         <button disabled={saveDisabled(state)} className="w-auto btn btn-success">

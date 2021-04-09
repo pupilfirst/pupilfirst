@@ -4,7 +4,7 @@ module Courses
   class BulkImportStudentsForm < Reform::Form
     attr_accessor :current_user
 
-    property :notify_students
+    property :notify_students, virtual: true, validates: { presence: true }
     property :csv, virtual: true, validates: { presence: true, file_size: { less_than: 5.megabytes } }
 
     validate :soft_limit_student_count

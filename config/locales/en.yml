@@ -433,6 +433,7 @@ en:
       example_csv_link: Download an example .csv file
       import_button_text: Import Students
       more_errors_text: 'There are even more errors. Fix the errors in the following rows and upload again: '
+      notify_students_label: Notify students, and send them a link to sign into this school.
       success_notification: Import initiated successfully! You will be notified in an email once complete.
       valid_data_message: Data validated successfully!
       valid_data_summary_text: 'Here is a summary of student data in the uploaded sheet: '

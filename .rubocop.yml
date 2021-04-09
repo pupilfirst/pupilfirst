@@ -21,6 +21,8 @@ Rails/Date:
   Enabled: false # This enforces Time.zone.today
 Rails/HasAndBelongsToMany:
   Enabled: false # This disallows HABTM.
+Rails/ApplicationController:
+  Enabled: false
 
 # Project styling
 

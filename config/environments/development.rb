@@ -1,4 +1,5 @@
 require 'keycloak'
+require 'hubspot/adapter'
 
 Rails.application.configure do
   # Verifies that versions and hashed value of the package contents in the project's package.json
@@ -73,4 +74,5 @@ Rails.application.configure do
 
   # Keycloak client
   config.keycloak_client = Keycloak::Client.new
+  config.hubspot_adapter = HubSpot::Adapter.new
 end

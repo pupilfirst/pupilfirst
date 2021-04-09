@@ -44,6 +44,8 @@ class User < ApplicationRecord
 
   before_save :capitalize_name_fragments
 
+  acts_as_taggable
+
   def capitalize_name_fragments
     return unless name_changed?
 

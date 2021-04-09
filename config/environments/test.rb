@@ -1,4 +1,5 @@
 require 'keycloak'
+require 'hubspot/fake_adapter'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -56,4 +57,5 @@ Rails.application.configure do
 
   # Keycloak client
   config.keycloak_client = Keycloak::FakeClient.new
+  config.hubspot_adapter = HubSpot::FakeAdapter.new
 end

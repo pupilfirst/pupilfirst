@@ -21,6 +21,12 @@ module Api
     end
     let(:domain) { create :domain, fqdn: host, primary: true }
     let(:user) { create :user, name: 'Test Test', email: user_email, school: domain.school }
+    let(:mvp_user) {
+      user.tap do |u|
+        u.tag_list.add('mvp')
+        u.save!
+      end
+    }
 
     def payload(mvp)
       [
@@ -39,11 +45,43 @@ module Api
       ]
     end
 
-    it 'toggle mvp tag for user' do
+    it 'set mvp tag for user' do
       user # setup user & school
 
       params = payload(true).to_json
-      post "/api/hubspot", params: params, headers: headers(params)
+      expect {
+        post "/api/hubspot", params: params, headers: headers(params)
+      }.to change { user.reload.tag_list }.from([]).to(['mvp'])
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'remove mvp tag for user' do
+      mvp_user # setup user & school
+
+      params = payload(false).to_json
+      expect {
+        post "/api/hubspot", params: params, headers: headers(params)
+      }.to change { mvp_user.reload.tag_list }.from(['mvp']).to([])
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'no op for user already tagged with mvp tag' do
+      mvp_user # setup user & school
+
+      params = payload(true).to_json
+      expect {
+        post "/api/hubspot", params: params, headers: headers(params)
+      }.not_to change(mvp_user, :tag_list)
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'no op when user is not yet tagged with mvp tag' do
+      user # setup user & school
+
+      params = payload(false).to_json
+      expect {
+        post "/api/hubspot", params: params, headers: headers(params)
+      }.not_to change(user, :tag_list)
       expect(response).to have_http_status(:ok)
     end
   end

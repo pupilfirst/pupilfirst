@@ -25,7 +25,21 @@ module WebhookHandlers
     NO_OP = ->(**_) {}
 
     class ToggleMvpTag
+      MVP = 'mvp'
+
+      def initialize(hubspot = Rails.configuration.hubspot_adapter)
+        @hubspot = hubspot
+      end
+
       def call(object_id:, property_value:, **_)
+        toggle = ActiveModel::Type::Boolean.new.cast(property_value)
+        email = @hubspot.fetch_contact_email(object_id)
+
+        user = User.find_by(email: email)
+        return unless user
+
+        toggle ? user.tag_list.add(MVP) : user.tag_list.remove(MVP)
+        user.save!
       end
     end
   end

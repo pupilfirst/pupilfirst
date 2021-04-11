@@ -1,9 +1,9 @@
 class CoursesController < ApplicationController
-  before_action :authenticate_user!, except: %i[show apply]
+  before_action :authenticate_user!, except: %i[show apply curriculum]
+  before_action :preview_or_authenticate, only: %i[curriculum]
 
   # GET /courses/:id/curriculum
   def curriculum
-    @course = find_course
     @presenter = Courses::CurriculumPresenter.new(view_context, @course)
     render layout: 'student_course'
   end
@@ -47,6 +47,11 @@ class CoursesController < ApplicationController
   end
 
   private
+
+  def preview_or_authenticate
+    @course = find_course
+    authenticate_user! unless @course.public_preview?
+  end
 
   def find_course
     authorize(policy_scope(Course).find(params[:id]))

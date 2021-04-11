@@ -34,9 +34,11 @@ class TargetsController < ApplicationController
   private
 
   def preview_or_authenticate
-    @target = authorize(Target.find(params[:id]))
-    @course = @target.course
+    target = Target.find(params[:id])
+    @course = target.course
 
     authenticate_user! unless @course.public_preview?
+
+    @target = authorize(target)
   end
 end

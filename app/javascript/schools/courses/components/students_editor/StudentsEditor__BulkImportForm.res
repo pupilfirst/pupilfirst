@@ -39,7 +39,7 @@ let validTemplate = csvData => {
 }
 
 let validateFile = (csvData, fileInfo) => {
-  CSVReader.fileSize(fileInfo) > 50000
+  CSVReader.fileSize(fileInfo) > FileUtils.defaultMaxSize
     ? Some(InvalidCSVFile)
     : ArrayUtils.isEmpty(csvData)
     ? Some(EmptyFile)

@@ -26,7 +26,7 @@ The _title_ and _affiliation_ fields are used across the platform to better iden
 Tags are keywords or strings to associate with the list of students that you're adding, and can be used to quickly filter the list of students in a course. You can start typing and pick from the suggested list of tags or create new ones.
 
 **Notify students, and send them a link to sign into this school.**\
-Use this checkbox to enable or disable onboarding email notifcation for the newly added students.
+Use this checkbox to enable or disable onboarding email notification for the newly added students.
 
 ### Add multiple students at once
 

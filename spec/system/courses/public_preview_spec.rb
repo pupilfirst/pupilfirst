@@ -78,12 +78,12 @@ feature 'Public preview of course curriculum', js: true do
     expect(page).not_to have_link(private_course_3.name)
 
     # The first level should be selected, and all other levels should be visible.
-    click_button "L1: #{level_1.name}"
+    click_button "C1: #{level_1.name}"
 
-    expect(page).to have_button("L2: #{level_2.name}")
-    expect(page).to have_button("L3: #{locked_level_3.name}")
+    expect(page).to have_button("C2: #{level_2.name}")
+    expect(page).to have_button("C3: #{locked_level_3.name}")
 
-    click_button "L2: #{level_2.name}"
+    click_button "C2: #{level_2.name}"
 
     expect(page).to have_content(target_group_l2.name)
     expect(page).to have_content(target_group_l2.description)
@@ -105,9 +105,9 @@ feature 'Public preview of course curriculum', js: true do
     expect(page).to have_button('Submit Quiz', disabled: true)
 
     # Let's check out the submission option on L1.
-    click_button 'Close'
-    click_button "L2: #{level_2.name}"
-    click_button "L1: #{level_1.name}"
+    click_button 'Back'
+    click_button "C2: #{level_2.name}"
+    click_button "C1: #{level_1.name}"
 
     # Let's try taking the quiz.
     click_link target_l1.title
@@ -127,12 +127,12 @@ feature 'Public preview of course curriculum', js: true do
     expect(page).to have_button('Submit', disabled: true)
 
     # Let's try to access a locked level.
-    click_button 'Close'
+    click_button 'Back'
 
-    click_button "L1: #{level_1.name}"
-    click_button "L3: #{locked_level_3.name}"
+    click_button "C1: #{level_1.name}"
+    click_button "C3: #{locked_level_3.name}"
 
-    expect(page).to have_text('The level is currently locked')
+    expect(page).to have_text('The chapter is currently locked')
     expect(page).to have_text('You can access the content on')
   end
 

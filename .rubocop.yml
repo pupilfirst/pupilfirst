@@ -8,6 +8,7 @@ AllCops:
     - "node_modules/**/*"
     - "vendor/**/*"
     - "bin/**/*"
+    - "lib/hubspot/*"
 
 # Rails specific
 

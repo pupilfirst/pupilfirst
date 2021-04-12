@@ -517,6 +517,10 @@ en:
       subscribe: Subscribe
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe
+  courses:
+    show:
+      preview_course: Preview Course
+      continue_course: Continue Course
   dashboard:
     dashboard:
       tour:

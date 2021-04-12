@@ -55,7 +55,7 @@
               href="<%= curriculum_course_path(@course) %>"
               class="btn btn-primary btn-large w-full"
             >
-              Preview Course
+              <%= presenter.user_is_student? ? t('courses.show.continue_course') : t('courses.show.preview_course') %>
             </a>
           </div>
         <% end %>

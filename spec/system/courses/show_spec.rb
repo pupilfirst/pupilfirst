@@ -30,6 +30,9 @@ feature 'Public view of Course', js: true do
 
   context 'when the course has public preview enabled' do
     let(:course) { create :course, school: school, public_preview: true }
+    let(:level) { create :level, course: course }
+    let(:team) { create :team, level: level }
+    let(:student) { create :student, startup: team }
 
     scenario 'non-signed-in user can see a link to preview the course' do
       visit course_path(course)
@@ -37,6 +40,15 @@ feature 'Public view of Course', js: true do
       expect(page).to have_content(course.name)
       expect(page).to have_link(
         'Preview Course',
+        href: curriculum_course_path(course)
+      )
+    end
+
+    scenario 'signed-in student sees a link to continue the course' do
+      sign_in_user student.user, referrer: course_path(course)
+
+      expect(page).to have_link(
+        'Continue Course',
         href: curriculum_course_path(course)
       )
     end

@@ -2,7 +2,7 @@ open SchoolCustomize__Types
 
 %bs.raw(`require("./SchoolCustomize__Root.css")`)
 
-let str = ReasonReact.string
+let str = React.string
 
 type editor =
   | LinksEditor(SchoolCustomize__LinksEditor.kind)
@@ -60,7 +60,7 @@ let headerLinks = links => {
     (visibleLinks |> List.map(l => headerLink(l)))
       ->List.append(list{<SchoolCustomize__MoreLinks links=dropdownLinks key="more-links" />})
     |> Array.of_list
-    |> ReasonReact.array
+    |> React.array
   }
 }
 
@@ -78,7 +78,7 @@ let sitemap = links =>
         <div className="w-1/3 pr-4 mt-3 text-xs font-semibold" key=id> {title |> str} </div>
       )
       |> Array.of_list
-      |> ReasonReact.array}
+      |> React.array}
     </div>
   }
 
@@ -94,7 +94,7 @@ let socialLinks = links =>
       {links
       |> List.map(((id, _title, url)) => <SchoolCustomize__SocialLink url key=id />)
       |> Array.of_list
-      |> ReasonReact.array}
+      |> React.array}
     </div>
   }
 
@@ -192,7 +192,7 @@ let editor = (state, send, authenticityToken) =>
       }}
     </SchoolAdmin__EditorDrawer>
 
-  | None => ReasonReact.null
+  | None => React.null
   }
 
 let initialState = (customizations, schoolName, schoolAbout) => {

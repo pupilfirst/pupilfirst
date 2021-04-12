@@ -203,7 +203,7 @@ let make = (
 
   <div className="flex flex-1 flex-col">
     {switch state.formVisible {
-    | None => ReasonReact.null
+    | None => React.null
     | CreateForm =>
       <SchoolAdmin__EditorDrawer closeDrawerCB={() => send(UpdateFormVisible(None))}>
         <StudentsEditor__CreateForm courseId submitFormCB={submitForm(send)} teamTags=state.tags />

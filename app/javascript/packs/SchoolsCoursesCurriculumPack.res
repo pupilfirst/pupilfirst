@@ -28,16 +28,20 @@ let decodeProps = json => {
 let props =
   DomUtils.parseJSONAttribute(~id="curriculum-editor", ~attribute="data-props", ()) |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <CurriculumEditor
-    course=props.course
-    coaches=props.coaches
-    evaluationCriteria=props.evaluationCriteria
-    levels=props.levels
-    targetGroups=props.targetGroups
-    targets=props.targets
-    hasVimeoAccessToken=props.hasVimeoAccessToken
-    vimeoPlan=props.vimeoPlan
-  />,
-  "curriculum-editor",
-)
+switch ReactDOM.querySelector("#curriculum-editor") {
+| Some(element) =>
+  ReactDOM.render(
+    <CurriculumEditor
+      course=props.course
+      coaches=props.coaches
+      evaluationCriteria=props.evaluationCriteria
+      levels=props.levels
+      targetGroups=props.targetGroups
+      targets=props.targets
+      hasVimeoAccessToken=props.hasVimeoAccessToken
+      vimeoPlan=props.vimeoPlan
+    />,
+    element,
+  )
+| None => ()
+}

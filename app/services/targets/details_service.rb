@@ -2,9 +2,10 @@ module Targets
   class DetailsService
     include RoutesResolvable
 
-    def initialize(target, founder)
+    def initialize(target, founder, public_preview:)
       @target = target
       @founder = founder
+      @public_preview = public_preview
     end
 
     def details
@@ -45,20 +46,24 @@ module Targets
     def links_to_adjacent_targets
       links = {}
 
-      sorted_target_ids = @target.level
-        .target_groups
-        .joins(:targets)
-        .merge(Target.live)
-        .order('target_groups.sort_index', 'targets.sort_index')
-        .pluck('targets.id')
+      sorted_target_ids =
+        @target
+          .level
+          .target_groups
+          .joins(:targets)
+          .merge(Target.live)
+          .order('target_groups.sort_index', 'targets.sort_index')
+          .pluck('targets.id')
 
       target_index = sorted_target_ids.index(@target.id)
 
       if target_index.present?
-        previous_target_id = sorted_target_ids[target_index - 1] if target_index.positive?
+        previous_target_id = sorted_target_ids[target_index - 1] if target_index
+          .positive?
         next_target_id = sorted_target_ids[target_index + 1]
 
-        links[:previous] = "/targets/#{previous_target_id}" if previous_target_id.present?
+        links[:previous] =
+          "/targets/#{previous_target_id}" if previous_target_id.present?
         links[:next] = "/targets/#{next_target_id}" if next_target_id.present?
       end
 
@@ -66,27 +71,26 @@ module Targets
     end
 
     def communities
+      return Community.none if @public_preview
+
       @target.course.communities.where(target_linkable: true)
     end
 
     def community_details
       communities.map do |community|
-        {
-          id: community.id,
-          name: community.name,
-          topics: topics(community)
-        }
+        { id: community.id, name: community.name, topics: topics(community) }
       end
     end
 
     def topics(community)
-      community.topics.live.joins(:target).where(targets: { id: @target })
-        .order("last_activity_at DESC NULLs FIRST").first(3).map do |topic|
-        {
-          id: topic.id,
-          title: topic.title
-        }
-      end
+      community
+        .topics
+        .live
+        .joins(:target)
+        .where(targets: { id: @target })
+        .order('last_activity_at DESC NULLs FIRST')
+        .first(3)
+        .map { |topic| { id: topic.id, title: topic.title } }
     end
 
     def pending_user_ids
@@ -109,7 +113,11 @@ module Targets
     end
 
     def submissions
-      scope = @target.timeline_events.joins(:founders).where(founders: { id: @founder })
+      scope =
+        @target
+          .timeline_events
+          .joins(:founders)
+          .where(founders: { id: @founder })
 
       if @target.individual_target?
         scope.load
@@ -121,37 +129,47 @@ module Targets
     end
 
     def feedback_for_submissions
-      StartupFeedback.where(timeline_event_id: submissions.pluck(:id)).map do |feedback|
-        {
-          id: feedback.id,
-          coach_id: feedback.faculty_id,
-          submission_id: feedback.timeline_event_id,
-          feedback: feedback.feedback
-        }
-      end
+      StartupFeedback
+        .where(timeline_event_id: submissions.pluck(:id))
+        .map do |feedback|
+          {
+            id: feedback.id,
+            coach_id: feedback.faculty_id,
+            submission_id: feedback.timeline_event_id,
+            feedback: feedback.feedback
+          }
+        end
     end
 
     def files(submission)
-      submission.timeline_event_files.with_attached_file.map do |file|
-        {
-          id: file.id,
-          name: file.file.filename,
-          url: url_helpers.download_timeline_event_file_path(file)
-        }
-      end
+      submission
+        .timeline_event_files
+        .with_attached_file
+        .map do |file|
+          {
+            id: file.id,
+            name: file.file.filename,
+            url: url_helpers.download_timeline_event_file_path(file)
+          }
+        end
     end
 
     def quiz_questions
       return [] if @target.quiz.blank?
 
-      @target.quiz.quiz_questions.includes(:answer_options).each_with_index.map do |question, index|
-        {
-          index: index,
-          question: question.question,
-          description: question.description,
-          answer_options: answer_options(question).shuffle
-        }
-      end
+      @target
+        .quiz
+        .quiz_questions
+        .includes(:answer_options)
+        .each_with_index
+        .map do |question, index|
+          {
+            index: index,
+            question: question.question,
+            description: question.description,
+            answer_options: answer_options(question).shuffle
+          }
+        end
     end
 
     def answer_options(question)
@@ -163,24 +181,36 @@ module Targets
     def content_blocks
       return [] if @target.current_content_blocks.blank?
 
-      @target.current_content_blocks.with_attached_file.map do |content_block|
-        cb = content_block.attributes.slice('id', 'block_type', 'content', 'sort_index')
-        if content_block.file.attached?
-          cb['file_url'] = url_helpers.rails_blob_path(content_block.file, only_path: true)
-          cb['filename'] = content_block.file.filename
+      @target
+        .current_content_blocks
+        .with_attached_file
+        .map do |content_block|
+          cb =
+            content_block.attributes.slice(
+              'id',
+              'block_type',
+              'content',
+              'sort_index'
+            )
+          if content_block.file.attached?
+            cb['file_url'] =
+              url_helpers.rails_blob_path(content_block.file, only_path: true)
+            cb['filename'] = content_block.file.filename
+          end
+          cb
         end
-        cb
-      end
     end
 
     def grading
-      TimelineEventGrade.where(timeline_event_id: submissions.pluck(:id)).map do |submission_grading|
-        {
-          submission_id: submission_grading.timeline_event_id,
-          evaluation_criterion_id: submission_grading.evaluation_criterion_id,
-          grade: submission_grading.grade
-        }
-      end
+      TimelineEventGrade
+        .where(timeline_event_id: submissions.pluck(:id))
+        .map do |submission_grading|
+          {
+            submission_id: submission_grading.timeline_event_id,
+            evaluation_criterion_id: submission_grading.evaluation_criterion_id,
+            grade: submission_grading.grade
+          }
+        end
     end
   end
 end

@@ -400,7 +400,7 @@ let handleUploadFileResponse = (oldValue, state, send, onChange, json) => {
 }
 
 let submitForm = (formId, oldValue, state, send, onChange) =>
-  ReactDOMRe._getElementById(formId) |> OptionUtils.mapWithDefault(element => {
+  ReactDOM.querySelector("#" ++ formId) |> OptionUtils.mapWithDefault(element => {
     let formData = DomUtils.FormData.create(element)
 
     Api.sendFormData(

@@ -258,7 +258,7 @@ let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
     computeInitialState(courses),
   )
 
-  let url = ReasonReactRouter.useUrl()
+  let url = RescriptReactRouter.useUrl()
 
   let selectedCoachOverlay = switch url.path {
   | list{"coaches", coachIdParam, ..._} =>

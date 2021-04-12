@@ -1,6 +1,6 @@
 open CurriculumEditor__Types
 
-let str = ReasonReact.string
+let str = React.string
 type state = {
   name: string,
   levelId: option<string>,
@@ -257,7 +257,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                       <span className="mr-2"> <i className="fas fa-exclamation-triangle" /> </span>
                       <span> {t("input_error.title_not_valid") |> str} </span>
                     </div>
-                  : ReasonReact.null}
+                  : React.null}
               </div>
               <div className="mt-5">
                 <label className="block tracking-wide text-xs font-semibold" htmlFor="description">
@@ -330,7 +330,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                       </button>
                     </div>
                   </div>
-                | None => ReasonReact.null
+                | None => React.null
                 }}
                 {switch targetGroup {
                 | Some(targetGroup) =>

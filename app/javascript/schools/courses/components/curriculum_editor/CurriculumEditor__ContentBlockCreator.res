@@ -440,7 +440,7 @@ let submitForm = (target, aboveContentBlock, state, send, addContentBlockCB, blo
   | #PdfDocument => pdfDocumentFormId(aboveContentBlock)
   }
 
-  let element = ReactDOMRe._getElementById(formId)
+  let element = ReactDOM.querySelector("#" ++ formId)
 
   switch element {
   | Some(element) =>

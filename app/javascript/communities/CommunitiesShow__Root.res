@@ -177,7 +177,7 @@ let filterToQueryString = filter => {
   URLSearchParams.makeWithDict(filterDict)->URLSearchParams.toString
 }
 
-let updateParams = filter => ReasonReactRouter.push("?" ++ filterToQueryString(filter))
+let updateParams = filter => RescriptReactRouter.push("?" ++ filterToQueryString(filter))
 
 let topicsList = (topicCategories, topics) =>
   topics |> ArrayUtils.isEmpty
@@ -286,7 +286,7 @@ let topicsList = (topicCategories, topics) =>
                         "Unable to find topic category with ID: " ++ id,
                       )
                     let (color, _) = StringUtils.toColor(TopicCategory.name(topicCategory))
-                    let style = ReactDOMRe.Style.make(~backgroundColor=color, ())
+                    let style = ReactDOM.Style.make(~backgroundColor=color, ())
                     <span className="flex items-center text-xs font-semibold py-1 mr-2">
                       <div className="w-3 h-3 rounded" style />
                       <span className="ml-1"> {TopicCategory.name(topicCategory)->str} </span>
@@ -456,7 +456,7 @@ let categoryDropdownSelected = topicCategory =>
     {switch topicCategory {
     | Some(topicCategory) =>
       let (color, _) = TopicCategory.color(topicCategory)
-      let style = ReactDOMRe.Style.make(~backgroundColor=color, ())
+      let style = ReactDOM.Style.make(~backgroundColor=color, ())
 
       <div className="inline-flex items-center">
         <div className="h-3 w-3 border" style />
@@ -481,7 +481,7 @@ let categoryDropdownContents = (availableTopicCategories, filter) => {
 
   Js.Array.map(topicCategory => {
     let (color, _) = TopicCategory.color(topicCategory)
-    let style = ReactDOMRe.Style.make(~backgroundColor=color, ())
+    let style = ReactDOM.Style.make(~backgroundColor=color, ())
     let categoryName = TopicCategory.name(topicCategory)
 
     <div
@@ -555,7 +555,7 @@ let filterFromQueryParams = (search, target, topicCategories) => {
 let make = (~communityId, ~target, ~topicCategories) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
 
-  let url = ReasonReactRouter.useUrl()
+  let url = RescriptReactRouter.useUrl()
   let filter = filterFromQueryParams(url.search, target, topicCategories)
 
   React.useEffect1(() => {

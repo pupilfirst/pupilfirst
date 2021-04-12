@@ -12,7 +12,7 @@ let decodeProps = json => {
 let (schoolName, fqdn, oauthHost, availableOauthProviders, allowEmailSignIn) =
   DomUtils.parseJSONTag(~id="user-session-new-data", ()) |> decodeProps;
 
-ReactDOMRe.renderToElementWithId(
-  <UserSessionNew schoolName fqdn oauthHost availableOauthProviders allowEmailSignIn />,
-  "user-session-new",
-);
+switch ReactDOM.querySelector("#user-session-new") {
+| Some(element) => ReactDOM.render(<UserSessionNew schoolName fqdn oauthHost availableOauthProviders allowEmailSignIn />, element)
+| None => ()
+}

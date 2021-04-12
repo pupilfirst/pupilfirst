@@ -2968,6 +2968,22 @@
             "deprecationReason": null
           },
           {
+            "name": "publicPreview",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "publicSignup",
             "description": "",
             "args": [],
@@ -6692,6 +6708,20 @@
                 "defaultValue": null
               },
               {
+                "name": "publicPreview",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
                 "name": "featured",
                 "description": "",
                 "type": {
@@ -9223,6 +9253,20 @@
               },
               {
                 "name": "publicSignup",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "publicPreview",
                 "description": "",
                 "type": {
                   "kind": "NON_NULL",

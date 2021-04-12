@@ -66,7 +66,7 @@ let uploadFile = (filename, send, attachFileCB, formData) => {
 }
 
 let submitForm = (filename, formId, send, addFileAttachmentCB) => {
-  let element = ReactDOMRe._getElementById(formId)
+  let element = Webapi.Dom.Document.getElementById(formId, Webapi.Dom.document)
   switch element {
   | Some(element) =>
     DomUtils.FormData.create(element) |> uploadFile(filename, send, addFileAttachmentCB)

@@ -275,7 +275,7 @@ let renderSignInWithEmail = (
             disabled={saving || isInvalidEmail(email)}
             className="btn btn-success btn-large text-center w-full"
             tabIndex={4}>
-            {saving ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null}
+            {saving ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : React.null}
             <span> {(saving ? "Signing in" : "Sign in with password") |> str} </span>
           </button>
         : <button
@@ -283,7 +283,7 @@ let renderSignInWithEmail = (
             disabled={saving || isInvalidEmail(email)}
             className="btn btn-primary btn-large text-center w-full"
             tabIndex={4}>
-            {saving ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null}
+            {saving ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : React.null}
             <span> {(saving ? "Signing in" : "Email me a link to sign in") |> str} </span>
           </button>}
     </div>
@@ -328,7 +328,7 @@ let renderForgotPassword = (email, saving, setEmail, setSaving, setView) =>
       type_="submit"
       disabled={saving || isInvalidEmail(email)}
       className="btn btn-primary btn-large text-center w-full mt-4 mr-2">
-      {saving ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : ReasonReact.null}
+      {saving ? <FaIcon classes="fas fa-spinner fa-spin mr-2" /> : React.null}
       <span> {(saving ? "Dispatching email" : "Send Email") |> str} </span>
     </button>
   </form>

@@ -31,6 +31,9 @@ If enabled, the course will be displayed on the list of featured courses on your
 **Enable public signup for this course?** \
 If enabled, members of the public will be able to sign up for your course.
 
+**Allow public to view course curriculum?** \
+If enabled, members of the public will be able to view the course curriculum without signing in. This will not let them _interact_ with the course in any way.
+
 ## Editing courses
 
 To edit a course's details, simply click on the course in the Courses menu. The form for editing a course is identical to the one that you used to create it.

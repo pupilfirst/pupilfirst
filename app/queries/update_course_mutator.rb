@@ -18,10 +18,11 @@ class UpdateCourseMutator < ApplicationQuery
       description: description,
       ends_at: ends_at,
       public_signup: public_signup,
+      public_preview: public_preview,
       about: about,
       featured: featured,
       progression_behavior: progression_behavior,
-      progression_limit: sanitized_progression_limit,
+      progression_limit: sanitized_progression_limit
     )
 
     course

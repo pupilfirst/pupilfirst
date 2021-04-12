@@ -31,7 +31,8 @@ module Courses
           users: [],
           evaluation_criteria: [],
           preview: true,
-          level_up_eligibility: Students::LevelUpEligibilityService::ELIGIBILITY_CURRENT_LEVEL_INCOMPLETE,
+          level_up_eligibility:
+            Students::LevelUpEligibilityService::ELIGIBILITY_CURRENT_LEVEL_INCOMPLETE,
           **default_props
         }
       end
@@ -53,31 +54,62 @@ module Courses
     end
 
     def author?
-      current_school_admin.present? || @course.course_authors.exists?(user: current_user)
+      return false if current_user.blank?
+
+      current_school_admin.present? ||
+        @course.course_authors.exists?(user: current_user)
     end
 
     def evaluation_criteria
       @course.evaluation_criteria.map do |ec|
-        ec.attributes.slice('id', 'name', 'max_grade', 'pass_grade', 'grade_labels')
+        ec.attributes.slice(
+          'id',
+          'name',
+          'max_grade',
+          'pass_grade',
+          'grade_labels'
+        )
       end
     end
 
     def team_details_for_preview_mode
       {
-        name: current_user.name,
+        name: current_user&.name || 'John Doe',
         level_id: levels.first.id,
         access_ends_at: nil
       }
     end
 
     def team_details
-      current_student.startup.attributes.slice('name', 'access_ends_at', 'level_id')
+      current_student.startup.attributes.slice(
+        'name',
+        'access_ends_at',
+        'level_id'
+      )
     end
 
     def course_details
-      @course.attributes.slice('id', 'ends_at', 'progression_behavior', 'progression_limit').merge(
-        certificate_serial_number: current_user.issued_certificates.live.joins(:course).find_by(courses: { id: @course.id })&.serial_number
-      )
+      details =
+        @course.attributes.slice(
+          'id',
+          'ends_at',
+          'progression_behavior',
+          'progression_limit'
+        )
+
+      if current_user.present?
+        details.merge(
+          certificate_serial_number:
+            current_user
+              .issued_certificates
+              .live
+              .joins(:course)
+              .find_by(courses: { id: @course.id })
+              &.serial_number
+        )
+      else
+        details
+      end
     end
 
     def levels
@@ -91,83 +123,131 @@ module Courses
     end
 
     def target_groups
-      scope = @course.target_groups
-        .where(level_id: open_level_ids)
-        .where(archived: false)
+      scope =
+        @course
+          .target_groups
+          .where(level_id: open_level_ids)
+          .where(archived: false)
 
       scope.map do |target_group|
-        target_group.attributes.slice('id', 'level_id', 'name', 'description', 'sort_index', 'milestone')
+        target_group.attributes.slice(
+          'id',
+          'level_id',
+          'name',
+          'description',
+          'sort_index',
+          'milestone'
+        )
       end
     end
 
     def targets
       attributes = %w[id role title target_group_id sort_index resubmittable]
 
-      scope = @course.targets.live.joins(:target_group).includes(:target_prerequisites, :evaluation_criteria)
-        .where(target_groups: { level_id: open_level_ids })
-        .where(archived: false)
+      scope =
+        @course
+          .targets
+          .live
+          .joins(:target_group)
+          .includes(:target_prerequisites, :evaluation_criteria)
+          .where(target_groups: { level_id: open_level_ids })
+          .where(archived: false)
 
-      scope.select(*attributes).map do |target|
-        details = target.attributes.slice(*attributes)
-        details[:prerequisite_target_ids] = target.target_prerequisites.pluck(:prerequisite_target_id)
-        details[:reviewed] = target.evaluation_criteria.present?
-        details
-      end
+      scope
+        .select(*attributes)
+        .map do |target|
+          details = target.attributes.slice(*attributes)
+          details[:prerequisite_target_ids] =
+            target.target_prerequisites.pluck(:prerequisite_target_id)
+          details[:reviewed] = target.evaluation_criteria.present?
+          details
+        end
     end
 
     def submissions
-      current_student.latest_submissions.includes(:target).map do |submission|
-        if submission.target.individual_target? || submission.founder_ids.sort == current_student.team_student_ids
-          submission.attributes.slice('target_id', 'passed_at', 'evaluated_at')
-        end
-      end - [nil]
+      current_student
+        .latest_submissions
+        .includes(:target)
+        .map do |submission|
+          if submission.target.individual_target? ||
+               submission.founder_ids.sort == current_student.team_student_ids
+            submission.attributes.slice(
+              'target_id',
+              'passed_at',
+              'evaluated_at'
+            )
+          end
+        end - [nil]
     end
 
     def faculty
-      @faculty ||= begin
-        scope = Faculty.left_joins(:startups, :courses)
+      @faculty ||=
+        begin
+          scope = Faculty.left_joins(:startups, :courses)
 
-        scope.where(startups: { id: current_student.startup })
-          .or(scope.where(courses: { id: @course }))
-          .distinct.select(:id, :user_id, :coaching_session_calendly_link).load
-      end
+          scope
+            .where(startups: { id: current_student.startup })
+            .or(scope.where(courses: { id: @course }))
+            .distinct
+            .select(:id, :user_id, :coaching_session_calendly_link)
+            .load
+        end
     end
 
     def team_members
-      @team_members ||= current_student.startup.founders.select(:id, :user_id).load
+      @team_members ||=
+        current_student.startup.founders.select(:id, :user_id).load
     end
 
     def users
       user_ids = (team_members.pluck(:user_id) + faculty.pluck(:user_id)).uniq
 
-      User.where(id: user_ids).with_attached_avatar.map do |user|
-        details = user.attributes.slice('id', 'name', 'title')
-        details['avatar_url'] = user.avatar_url(variant: :thumb)
-        details
-      end
+      User
+        .where(id: user_ids)
+        .with_attached_avatar
+        .map do |user|
+          details = user.attributes.slice('id', 'name', 'title')
+          details['avatar_url'] = user.avatar_url(variant: :thumb)
+          details
+        end
     end
 
     def current_student
-      @current_student ||= @course.founders.not_dropped_out.find_by(user_id: current_user.id)
+      @current_student ||=
+        if current_user.present?
+          @course.founders.not_dropped_out.find_by(user_id: current_user.id)
+        else
+          nil
+        end
     end
 
     # Admins and coaches who have review access in this course have access to locked levels as well.
     def access_locked_levels
-      @access_locked_levels ||= begin
-        current_school_admin.present? || (current_user.faculty.present? && CoursePolicy.new(pundit_user, @course).review?)
-      end
+      @access_locked_levels ||=
+        if current_user.present?
+          current_school_admin.present? ||
+            (
+              current_user.faculty.present? &&
+                CoursePolicy.new(pundit_user, @course).review?
+            )
+        else
+          false
+        end
     end
 
     def open_level_ids
-      @open_level_ids ||= begin
-        scope = @course.levels
+      @open_level_ids ||=
+        begin
+          scope = @course.levels
 
-        if access_locked_levels
-          scope
-        else
-          scope.where(unlock_at: nil).or(@course.levels.where('unlock_at <= ?', Time.zone.now))
-        end.pluck(:id)
-      end
+          if access_locked_levels
+            scope
+          else
+            scope
+              .where(unlock_at: nil)
+              .or(@course.levels.where('unlock_at <= ?', Time.zone.now))
+          end.pluck(:id)
+        end
     end
   end
 end

@@ -8,6 +8,7 @@ module Types
     field :enable_leaderboard, Boolean, null: false
     field :about, String, null: true
     field :public_signup, Boolean, null: false
+    field :public_preview, Boolean, null: false
     field :thumbnail, Types::ImageType, null: true
     field :cover, Types::ImageType, null: true
     field :featured, Boolean, null: false
@@ -28,7 +29,11 @@ module Types
     def image_details(image)
       if image.attached?
         {
-          url: Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true),
+          url:
+            Rails.application.routes.url_helpers.rails_blob_path(
+              image,
+              only_path: true
+            ),
           filename: image.filename
         }
       end

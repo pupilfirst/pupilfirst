@@ -32,6 +32,7 @@ type t = {
   endsAt: option<Js.Date.t>,
   about: option<string>,
   publicSignup: bool,
+  publicPreview: bool,
   thumbnail: option<Image.t>,
   cover: option<Image.t>,
   featured: bool,
@@ -48,6 +49,8 @@ let endsAt = t => t.endsAt
 let about = t => t.about
 
 let publicSignup = t => t.publicSignup
+
+let publicPreview = t => t.publicPreview
 
 let description = t => t.description
 
@@ -119,6 +122,7 @@ let makeFromJs = rawCourse => {
     endsAt: endsAt,
     about: rawCourse["about"],
     publicSignup: rawCourse["publicSignup"],
+    publicPreview: rawCourse["publicPreview"],
     thumbnail: makeImageFromJs(rawCourse["thumbnail"]),
     cover: makeImageFromJs(rawCourse["cover"]),
     featured: rawCourse["featured"],
@@ -156,6 +160,7 @@ let decode = json => {
     progressionBehavior: progressionBehavior,
     about: optional(field("about", string), json),
     publicSignup: field("publicSignup", bool, json),
+    publicPreview: field("publicPreview", bool, json),
     thumbnail: optional(field("thumbnail", Image.decode), json),
     cover: optional(field("cover", Image.decode), json),
     featured: field("featured", bool, json),
@@ -172,6 +177,7 @@ module Fragments = %graphql(
     endsAt
     about
     publicSignup
+    publicPreview
     thumbnail {
       url
       filename

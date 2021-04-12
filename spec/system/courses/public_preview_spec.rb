@@ -75,6 +75,8 @@ feature 'Public preview of course curriculum', js: true do
       href: curriculum_course_path(public_course_2)
     )
 
+    expect(page).not_to have_link(private_course_3.name)
+
     # The first level should be selected, and all other levels should be visible.
     click_button "L1: #{level_1.name}"
 
@@ -134,5 +136,9 @@ feature 'Public preview of course curriculum', js: true do
     expect(page).to have_text('You can access the content on')
   end
 
-  scenario 'user can navigate to the preview of curriculum from homepage'
+  scenario 'private courses cannot be viewed by public' do
+    visit curriculum_course_path(private_course_3)
+
+    expect(page).to have_text('Please sign in to continue')
+  end
 end

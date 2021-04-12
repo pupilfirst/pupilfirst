@@ -28,6 +28,7 @@ type state = {
   hasDateError: bool,
   about: string,
   publicSignup: bool,
+  publicPreview: bool,
   dirty: bool,
   saving: bool,
   featured: bool,
@@ -43,6 +44,7 @@ type action =
   | FailSaving
   | UpdateAbout(string)
   | UpdatePublicSignup(bool)
+  | UpdatePublicPreview(bool)
   | UpdateFeatured(bool)
   | UpdateProgressionBehavior(progressionBehavior)
   | UpdateProgressionLimit(int)
@@ -65,6 +67,7 @@ let reducer = (state, action) =>
     }
   | UpdateEndsAt(date) => {...state, endsAt: date, dirty: true}
   | UpdatePublicSignup(publicSignup) => {...state, publicSignup: publicSignup, dirty: true}
+  | UpdatePublicPreview(publicPreview) => {...state, publicPreview: publicPreview, dirty: true}
   | UpdateAbout(about) => {...state, about: about, dirty: true}
   | UpdateFeatured(featured) => {...state, featured: featured, dirty: true}
   | UpdateProgressionBehavior(progressionBehavior) => {
@@ -82,8 +85,8 @@ let reducer = (state, action) =>
 
 module CreateCourseQuery = %graphql(
   `
-    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
-      createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
+    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
+      createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
         course {
           ...Course.Fragments.AllFields
         }
@@ -94,8 +97,8 @@ module CreateCourseQuery = %graphql(
 
 module UpdateCourseQuery = %graphql(
   `
-    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
-      updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
+    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
+      updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
         course {
           ...Course.Fragments.AllFields
         }
@@ -159,6 +162,7 @@ let createCourse = (state, send, reloadCoursesCB) => {
     ~endsAt=?state.endsAt->Belt.Option.map(DateFns.encodeISO),
     ~about=state.about,
     ~publicSignup=state.publicSignup,
+    ~publicPreview=state.publicPreview,
     ~featured=state.featured,
     ~progressionBehavior=state.progressionBehavior,
     ~progressionLimit=?progressionLimitForQuery(state),
@@ -189,6 +193,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
     ~endsAt=?state.endsAt->Belt.Option.map(DateFns.encodeISO),
     ~about=state.about,
     ~publicSignup=state.publicSignup,
+    ~publicPreview=state.publicPreview,
     ~featured=state.featured,
     ~progressionBehavior=state.progressionBehavior,
     ~progressionLimit=?progressionLimitForQuery(state),
@@ -248,7 +253,7 @@ let booleanButtonClasses = bool => {
   classes ++ (bool ? " toggle-button__button--active" : "")
 }
 
-let enablePublicSignupButton = (publicSignup, send) =>
+let publicSignupField = (publicSignup, send) =>
   <div className="flex items-center mt-5">
     <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-signup">
       {t("enable_public_signup_label")->str}
@@ -262,6 +267,25 @@ let enablePublicSignupButton = (publicSignup, send) =>
       <button
         className={booleanButtonClasses(!publicSignup)}
         onClick={_ => send(UpdatePublicSignup(false))}>
+        {ts("_no")->str}
+      </button>
+    </div>
+  </div>
+
+let publicPreviewField = (publicPreview, send) =>
+  <div className="flex items-center mt-5">
+    <label className="block tracking-wide text-xs font-semibold mr-6" htmlFor="public-preview">
+      {t("enable_public_preview_label")->str}
+    </label>
+    <div id="public-preview" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+      <button
+        className={booleanButtonClasses(publicPreview)}
+        onClick={_ => send(UpdatePublicPreview(true))}>
+        {ts("_yes")->str}
+      </button>
+      <button
+        className={booleanButtonClasses(!publicPreview)}
+        onClick={_ => send(UpdatePublicPreview(false))}>
         {ts("_no")->str}
       </button>
     </div>
@@ -300,6 +324,7 @@ let computeInitialState = course =>
       saving: false,
       about: about(course),
       publicSignup: Course.publicSignup(course),
+      publicPreview: Course.publicPreview(course),
       featured: Course.featured(course),
       progressionBehavior: Course.progressionBehavior(course),
       progressionLimit: Course.progressionLimit(course)->Belt.Option.getWithDefault(1),
@@ -315,6 +340,7 @@ let computeInitialState = course =>
       saving: false,
       about: "",
       publicSignup: false,
+      publicPreview: false,
       featured: true,
       progressionBehavior: #Limited,
       progressionLimit: 1,
@@ -447,7 +473,8 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
       </div>
     </div>
     {featuredButton(state.featured, send)}
-    {enablePublicSignupButton(state.publicSignup, send)}
+    {publicSignupField(state.publicSignup, send)}
+    {publicPreviewField(state.publicPreview, send)}
     <div className="max-w-2xl p-6 mx-auto">
       <div className="flex">
         {switch course {

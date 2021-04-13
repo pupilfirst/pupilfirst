@@ -20,6 +20,18 @@ let levelInfo = (levelId, levels) =>
     </div>
   </span>
 
+let showTags = (tags) => {
+  {tags
+  |> Js.Array.map(tag =>
+    <div
+      className="bg-gray-300 rounded mr-1 mt-1 py-px px-1 text-tiny text-gray-900"
+      key="tag">
+      {str(tag)}
+    </div>
+  )
+  |> React.array}
+}
+
 let showStudent = (team, levels, teamCoaches) => {
   let student = TeamInfo.students(team)[0]
   <Link
@@ -43,16 +55,7 @@ let showStudent = (team, levels, teamCoaches) => {
             </span>
             {team |> TeamInfo.tags |> ArrayUtils.isNotEmpty
               ? <div className="hidden md:flex flex-wrap ml-2 font-normal">
-                  {team
-                  |> TeamInfo.tags
-                  |> Js.Array.map(tag =>
-                    <div
-                      className="bg-gray-300 rounded mr-1 mt-1 py-px px-1 text-tiny text-gray-900"
-                      key=tag>
-                      {str(tag)}
-                    </div>
-                  )
-                  |> React.array}
+                  {showTags(team |> TeamInfo.tags)}
                 </div>
               : React.null}
           </div>
@@ -116,16 +119,7 @@ let showTeam = (team, levels, teamCoaches) =>
           <h3 className="text-sm font-semibold leading-snug"> {team |> TeamInfo.name |> str} </h3>
           {team |> TeamInfo.tags |> ArrayUtils.isNotEmpty
             ? <div className="hidden md:flex flex-wrap mt-1">
-                {team
-                |> TeamInfo.tags
-                |> Js.Array.map(tag =>
-                  <div
-                    className="bg-gray-300 rounded mr-1 mt-1 py-px px-1 text-tiny text-gray-900"
-                    key="tag">
-                    {str(tag)}
-                  </div>
-                )
-                |> React.array}
+                {showTags(team |> TeamInfo.tags)}
               </div>
             : React.null}
           <CoursesStudents__TeamCoaches

@@ -21,6 +21,7 @@ module CourseTeamsQuery = %graphql(
             name,
             title,
             avatarUrl,
+            tags,
             email,
             excludedFromLeaderboard,
             affiliation
@@ -130,6 +131,18 @@ let levelInfo = (levels, team) =>
     </div>
   </span>
 
+let studentTags = student =>
+  <div className="flex flex-wrap">
+    {student
+    |> Student.tags
+    |> Array.map(tag =>
+      <div key=tag className="bg-blue-100 rounded mt-1 mr-1 py-px px-2 text-xs text-gray-900">
+        {tag |> str}
+      </div>
+    )
+    |> React.array}
+  </div>
+
 let teamTags = team =>
   <div className="flex flex-wrap">
     {team
@@ -190,7 +203,10 @@ let teamCard = (
                     <p className="text-black font-semibold inline-block ">
                       {student |> Student.name |> str}
                     </p>
-                    {isSingleStudent ? teamTags(team) : React.null}
+                    <span className="flex flex-row">
+                      {studentTags(student)}
+                      {isSingleStudent ? teamTags(team) : React.null}
+                    </span>
                   </div>
                 </div>
                 {isSingleStudent ? team |> levelInfo(levels) : React.null}

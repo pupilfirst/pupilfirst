@@ -3,6 +3,7 @@ type student = {
   name: string,
   title: string,
   avatarUrl: option<string>,
+  tags: array<string>,
 }
 
 type t = {
@@ -37,6 +38,8 @@ let studentTitle = (student: student) => student.title
 
 let studentAvatarUrl = student => student.avatarUrl
 
+let studentTags = (student: student) => student.tags
+
 let droppedOutAt = t => t.droppedOutAt
 
 let accessEndsAt = t => t.accessEndsAt
@@ -47,11 +50,12 @@ let studentWithId = (studentId, t) =>
     "Could not find student with ID " ++ (studentId ++ (" in team with ID " ++ t.id)),
   )
 
-let makeStudent = (~id, ~name, ~title, ~avatarUrl) => {
+let makeStudent = (~id, ~name, ~title, ~avatarUrl, ~tags) => {
   id: id,
   name: name,
   title: title,
   avatarUrl: avatarUrl,
+  tags: tags,
 }
 
 let make = (
@@ -82,6 +86,7 @@ let makeFromJS = teamDetails => {
         ~name=student["name"],
         ~title=student["title"],
         ~avatarUrl=student["avatarUrl"],
+        ~tags=student["tags"],
       ),
     teamDetails["students"],
   )

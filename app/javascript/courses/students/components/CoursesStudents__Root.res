@@ -159,6 +159,7 @@ module TeamsQuery = %graphql(
             name
             title
             avatarUrl
+            tags
           }
           coachUserIds
           accessEndsAt

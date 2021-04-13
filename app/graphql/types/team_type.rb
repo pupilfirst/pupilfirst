@@ -15,7 +15,7 @@ module Types
 
     def students
       object.founders.map do |student|
-        student_attributes = { id: student.id, name: student.name, title: student.title }
+        student_attributes = { id: student.id, name: student.name, title: student.title, tags: student.user.tags.pluck(:name).sort }
 
         if student.user.avatar.attached?
           student_attributes[:avatar_url] =

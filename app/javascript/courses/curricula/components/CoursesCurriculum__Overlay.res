@@ -311,12 +311,23 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
 
 let overlayContentClasses = bool => bool ? "" : "hidden"
 
-let learnSection = (send, targetDetails, tab, author, courseId, targetId, completionType) => {
-  let suffixLinkInfo = switch completionType {
-  | TargetDetails.Evaluated =>
-    Some((Complete(completionType), "Submit your work for review", "fas fa-feather-alt"))
-  | TakeQuiz => Some((Complete(completionType), "Take a Quiz", "fas fa-tasks"))
-  | LinkToComplete | MarkAsComplete => None
+let learnSection = (
+  send,
+  targetDetails,
+  tab,
+  author,
+  courseId,
+  targetId,
+  targetStatus,
+  completionType,
+) => {
+  let suffixLinkInfo = switch (TargetStatus.status(targetStatus), completionType) {
+  | (Pending | Rejected, TargetDetails.Evaluated) =>
+    Some((Complete(completionType), t("learn_cta_submit_work"), "fas fa-feather-alt"))
+  | (Pending | Rejected, TakeQuiz) =>
+    Some((Complete(completionType), t("learn_cta_take_quiz"), "fas fa-tasks"))
+  | (Pending | Rejected, LinkToComplete | MarkAsComplete) => None
+  | (PendingReview | Completed | Locked(_), _anyCompletionType) => None
   }
 
   let linkToTab = Belt.Option.mapWithDefault(suffixLinkInfo, React.null, ((
@@ -326,7 +337,7 @@ let learnSection = (send, targetDetails, tab, author, courseId, targetId, comple
   )) => {
     <a
       onClick={_ => send(Select(tab))}
-      className="mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4">
+      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4">
       <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {str(linkText)} </span>
     </a>
   })
@@ -593,6 +604,7 @@ let make = (
             author,
             Course.id(course),
             Target.id(target),
+            targetStatus,
             completionType,
           )}
           {discussSection(target, targetDetails, state.tab)}

@@ -127,8 +127,8 @@ en:
         label: Course name
         placeholder: Type course name here
       create_course: Create Course
-      enable_public_signup_label: Enable public signup for this course?
       enable_public_preview_label: Allow public to view course curriculum?
+      enable_public_signup_label: Enable public signup for this course?
       feature_course_in_homepage_label: Feature course in school homepage?
       progression_behavior:
         help: This only applies if your course has milestone targets that requires students to submit their work for review by coaches.
@@ -222,6 +222,8 @@ en:
       completion_tab_take_quiz: Take Quiz
       completion_tab_visit_link: Visit Link to Complete
       discuss_tab: Discuss
+      learn_cta_submit_work: Submit work for review
+      learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
       next_target_button: Next Target
       pending_team_members_notice: 'You have team members who are yet to complete this target:'
@@ -519,8 +521,8 @@ en:
       unsubscribe: Unsubscribe
   courses:
     show:
-      preview_course: Preview Course
       continue_course: Continue Course
+      preview_course: Preview Course
   dashboard:
     dashboard:
       tour:

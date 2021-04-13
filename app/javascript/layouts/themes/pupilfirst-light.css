@@ -29,19 +29,5 @@
   --color-gray-800: #6A5F7A;
   --color-gray-900: #453C52;
 
-  --color-success-100: #48bb78;
-  --color-success-200: #38a169;
-  --color-success-300: #2f855a;
-
-  --color-warning-100: #ed8936;
-  --color-warning-200: #dd6b20;
-  --color-warning-300: #c05621;
-
-  --color-danger-100: #f56565;
-  --color-danger-200: #e53e3e;
-  --color-danger-300: #c53030;
-
-  --color-white: #FFFFFF;
-
   --font-family-sans: "Open Sans", sans-serif;
 }

@@ -37,22 +37,6 @@ module.exports = {
           800: "var(--color-gray-800)",
           900: "var(--color-gray-900)"
         },
-        success: {
-          100: "var(--color-success-100)",
-          200: "var(--color-success-200)",
-          300: "var(--color-success-300)",
-        },
-        warning: {
-          100: "var(--color-warning-100)",
-          200: "var(--color-warning-200)",
-          300: "var(--color-warning-300)",
-        },
-        danger: {
-          100: "var(--color-danger-100)",
-          200: "var(--color-danger-200)",
-          300: "var(--color-danger-300)",
-        },
-        white: "var(--color-white)",
       },
       fontFamily: {
         'sans': "var(--font-family-sans)",

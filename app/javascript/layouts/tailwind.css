@@ -140,21 +140,11 @@ button:focus {
 }
 
 .btn-primary {
-  @apply bg-primary-500 text-white shadow;
-  background-image: linear-gradient(
-    135deg,
-    theme("colors.primary.500") 0%,
-    theme("colors.primary.600") 100%,
-  );
+  @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow;
 }
 
 .btn-primary:hover {
-  @apply bg-primary-600;
-  background-image: linear-gradient(
-    135deg,
-    theme("colors.primary.600") 0%,
-    theme("colors.primary.700") 100%,
-  );
+  @apply bg-gradient-to-br from-primary-600 to-primary-700;
 }
 
 .btn-primary:focus {
@@ -175,21 +165,11 @@ button:focus {
 }
 
 .btn-secondary {
-  @apply bg-secondary-500 text-white;
-  background-image: linear-gradient(
-    135deg,
-    theme("colors.secondary.500") 0%,
-    theme("colors.secondary.600") 100%,
-  );
+  @apply bg-gradient-to-br from-secondary-500 to-secondary-600 text-white;
 }
 
 .btn-secondary:hover {
-  @apply bg-secondary-600;
-  background-image: linear-gradient(
-    135deg,
-    theme("colors.secondary.600") 0%,
-    theme("colors.secondary.800") 100%,
-  );
+  @apply bg-gradient-to-br from-secondary-600 to-secondary-700;
 }
 
 .btn-secondary:focus {
@@ -198,21 +178,11 @@ button:focus {
 }
 
 .btn-success {
-  @apply bg-green-500 text-white;
-  background-image: linear-gradient(
-    135deg,
-    theme("colors.success.100") 0%,
-    theme("colors.success.200") 100%,
-  );
+  @apply bg-gradient-to-br from-green-500 to-green-600 text-white;
 }
 
 .btn-success:hover {
-  @apply bg-green-600;
-  background-image: linear-gradient(
-    135deg,
-    theme("colors.success.200") 0%,
-    theme("colors.success.300") 100%,
-  );
+  @apply bg-gradient-to-br from-green-600 to-green-700;
 }
 
 .btn-success:focus {
@@ -221,21 +191,11 @@ button:focus {
 }
 
 .btn-warning {
-  @apply bg-yellow-500 text-white;
-  background-image: linear-gradient(
-    135deg,
-    theme("colors.warning.100") 0%,
-    theme("colors.warning.200") 100%,
-  );
+  @apply bg-gradient-to-br from-yellow-500 to-yellow-600 text-white;
 }
 
 .btn-warning:hover {
-  @apply bg-yellow-600;
-  background-image: linear-gradient(
-    135deg,
-    theme("colors.warning.200") 0%,
-    theme("colors.warning.300") 100%,
-  );
+  @apply bg-gradient-to-br from-yellow-600 to-yellow-700;
 }
 
 .btn-warning:focus {
@@ -244,21 +204,11 @@ button:focus {
 }
 
 .btn-danger {
-  @apply bg-red-500 text-white;
-  background-image: linear-gradient(
-    135deg,
-    theme("colors.danger.100") 0%,
-    theme("colors.danger.200") 100%,
-  );
+  @apply bg-gradient-to-br from-red-500 to-red-600 text-white;
 }
 
 .btn-danger:hover {
-  @apply bg-red-600;
-  background-image: linear-gradient(
-    135deg,
-    theme("colors.danger.200") 0%,
-    theme("colors.danger.300") 100%,
-  );
+  @apply bg-gradient-to-br from-red-600 to-red-700;
 }
 
 .btn-danger:focus {
@@ -371,25 +321,6 @@ button:disabled:focus,
   border-right: 6px solid transparent;
   border-bottom: 6px solid theme("colors.white");
   border-left: 6px solid transparent;
-}
-
-/* Gradients */
-
-@responsive {
-  .bg-gradient-primary-600-to-primary-800-to-bottom {
-    background-image: linear-gradient(
-      to bottom,
-      theme("colors.primary.600"),
-      theme("colors.primary.800")
-    );
-  }
-  .bg-gradient-secondary-500-to-secondary-600-120 {
-    background-image: linear-gradient(
-      120deg,
-      theme("colors.secondary.500"),
-      theme("colors.secondary.600")
-    );
-  }
 }
 
 /* Checkbox */

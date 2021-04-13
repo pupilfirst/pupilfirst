@@ -9,16 +9,17 @@ let decodeProps = json => {
     json |> field("teamCoaches", array(Coach.decode)),
     json |> field("currentCoach", Coach.decode),
     json |> field("tags", array(string)) |> Belt.Set.String.fromArray,
+    json |> field("userTags", array(string)) |> Belt.Set.String.fromArray,
   )
 }
 
-let (levels, course, userId, teamCoaches, currentCoach, tags) =
+let (levels, course, userId, teamCoaches, currentCoach, tags, userTags) =
   DomUtils.parseJSONTag(~id="school-course-students__props", ()) |> decodeProps
 
 switch ReactDOM.querySelector("#react-root") {
 | Some(root) =>
   ReactDOM.render(
-    <CoursesStudents__Root levels course userId teamCoaches currentCoach tags />,
+    <CoursesStudents__Root levels course userId teamCoaches currentCoach tags userTags />,
     root,
   )
 | None => ()

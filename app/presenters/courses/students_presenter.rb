@@ -55,6 +55,7 @@ module Courses
         team_coaches: team_coaches,
         current_coach: current_coach_details,
         tags: @course.team_tags,
+        user_tags: @course.user_tags,
       }
     end
 

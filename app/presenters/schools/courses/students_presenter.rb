@@ -13,6 +13,7 @@ module Schools
           course_coach_ids: @course.faculty.pluck(:id),
           school_coaches: school_coaches,
           levels: levels,
+          user_tags: user_tags,
           student_tags: student_tags,
           certificates: certificates,
           current_user_name: current_user.name,
@@ -42,6 +43,10 @@ module Schools
 
       def student_tags
         @student_tags ||= current_school.founder_tag_list
+      end
+
+      def user_tags
+        @user_tags ||= current_school.user_tag_list
       end
 
       def certificates

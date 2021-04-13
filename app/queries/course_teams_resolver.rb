@@ -35,7 +35,18 @@ class CourseTeamsResolver < ApplicationQuery
       .includes(:faculty_startup_enrollments, founders: { user: { avatar_attachment: :blob } })
       .distinct.order("#{sort_by_string} #{sort_direction_string}")
 
-    tags.present? ? teams.joins(taggings: :tag).where(tags: { name: tags }) : teams.includes(taggings: :tag)
+    if tags.present?
+      tagged = ActsAsTaggableOn::Tagging.joins(:tag)
+        .where(tags: {name: tags})
+        .where("taggings.taggable_type <> 'School'")
+        .select("taggings.taggable_id, taggings.taggable_type")
+        .group_by(&:taggable_type)
+        .map{|type, items| [type, items.map(&:taggable_id)]}
+        .to_h
+      teams = teams.where(users: {id: tagged.fetch("User", []) }).or(teams.where(startups: {id: tagged.fetch("Startup", [])}))
+    end
+
+    teams
   end
 
   def teams_by_level_and_tag

@@ -203,7 +203,7 @@ let make = (
   ~currentUserName,
 ) => {
   let (state, send) = React.useReducer(reducer, initialState(userTags, studentTags))
-  let allTags = Js.Array.concat(state.readonlyTags, state.editableTags)
+  let allTags = Js.Array.concat(state.readonlyTags, state.editableTags) |> ArrayUtils.sort_uniq(String.compare)
 
   <div className="flex flex-1 flex-col">
     {switch state.formVisible {

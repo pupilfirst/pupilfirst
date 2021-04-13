@@ -55,6 +55,25 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
 
 let reducer = (_state, searchString) => searchString
 
+let showTags = (tags, send, removeTagCB) => {
+  {tags
+  |> ArrayUtils.copyAndSort(String.compare)
+  |> Array.map(tag =>
+    <div
+      key=tag
+      className="flex items-center bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+      <span className="px-2 py-px"> {tag |> str} </span>
+      <span
+        title={"Remove tag " ++ tag}
+        className="flex items-center h-full cursor-pointer px-2 text-gray-700 hover:text-black hover:bg-gray-300 border-l border-gray-400"
+        onClick={_e => handleClick(tag, send, removeTagCB)}>
+        <i className="fas fa-times" />
+      </span>
+    </div>
+  )
+  |> React.array}
+}
+
 @react.component
 let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTags) => {
   let (state, send) = React.useReducer(reducer, "")
@@ -62,22 +81,7 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTa
   <div className="mt-2">
     {if selectedTags |> ArrayUtils.isNotEmpty {
       <div className="flex flex-wrap">
-        {selectedTags
-        |> ArrayUtils.copyAndSort(String.compare)
-        |> Array.map(tag =>
-          <div
-            key=tag
-            className="flex items-center bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
-            <span className="px-2 py-px"> {tag |> str} </span>
-            <span
-              title={"Remove tag " ++ tag}
-              className="flex items-center px-2 h-full cursor-pointer px-2 text-gray-700 hover:text-black hover:bg-gray-300 border-l border-gray-400"
-              onClick={_e => handleClick(tag, send, removeTagCB)}>
-              <i className="fas fa-times" />
-            </span>
-          </div>
-        )
-        |> React.array}
+        {showTags(selectedTags, send, removeTagCB)}
       </div>
     } else {
       React.null

@@ -24,12 +24,14 @@
 
 <% content_for :body do %>
   <p>
-    You've been awarded a certificate for completing the <strong><%= course.name %></strong> course.
+    You've been awarded a certificate for completing the
+    <strong><%= course.name %></strong> course.
   </p>
 
   <p>
-    The certificate was issued on <%= @issued_certificate.created_at.strftime('%b %e, %l:%M %p') %> and can be viewed
-    or printed by visiting the certificate's link.
+    The certificate was issued on
+    <%= @issued_certificate.created_at.strftime('%b %e, %l:%M %p') %>
+    and can be viewed or printed by visiting the certificate's link.
   </p>
 
   <%= render 'mailers/link_fallback', url: link %>

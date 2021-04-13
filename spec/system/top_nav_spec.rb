@@ -24,7 +24,7 @@ feature 'Top navigation bar' do
     expect(page).not_to have_link('More')
 
     expect(page).not_to have_link('Admin', href: '/school')
-    expect(page).not_to have_link('Dashboard', href: "/dashboard")
+    expect(page).not_to have_link('Dashboard', href: '/dashboard')
   end
 
   context 'when the user is a school admin and student' do
@@ -33,17 +33,28 @@ feature 'Top navigation bar' do
       create :school_admin, user: student.user, school: student.school
     end
 
-    it 'displays all main links on the navbar and puts custom links in the dropdown', js: true do
-      sign_in_user student.user, referrer: leaderboard_course_path(student.course)
+    it 'displays all main links on the navbar and puts custom links in the dropdown',
+       js: true do
+      sign_in_user student.user,
+                   referrer: leaderboard_course_path(student.course)
 
       expect(page).to have_link('Admin', href: '/school')
-      expect(page).to have_link('Dashboard', href: "/dashboard")
+      expect(page).to have_link('Dashboard', href: '/dashboard')
       expect(page).to have_link(custom_link_4.title, href: custom_link_4.url)
 
       # None of the custom links should be visible by default.
-      expect(page).not_to have_link(custom_link_3.title, href: custom_link_3.url)
-      expect(page).not_to have_link(custom_link_2.title, href: custom_link_2.url)
-      expect(page).not_to have_link(custom_link_1.title, href: custom_link_1.url)
+      expect(page).not_to have_link(
+        custom_link_3.title,
+        href: custom_link_3.url
+      )
+      expect(page).not_to have_link(
+        custom_link_2.title,
+        href: custom_link_2.url
+      )
+      expect(page).not_to have_link(
+        custom_link_1.title,
+        href: custom_link_1.url
+      )
 
       within('div[title="Show more links"]') do
         find('span', text: 'More').click
@@ -58,15 +69,18 @@ feature 'Top navigation bar' do
 
   context 'when the user is a student' do
     it 'displays dashboard link on the navbar', js: true do
-      sign_in_user student.user, referrer: leaderboard_course_path(student.course)
+      sign_in_user student.user,
+                   referrer: leaderboard_course_path(student.course)
 
       expect(page).not_to have_link('Admin', href: '/school')
-      expect(page).to have_link('Dashboard', href: "/dashboard")
+      expect(page).to have_link('Dashboard', href: '/dashboard')
     end
   end
 
   context 'when there are more than four custom links' do
-    let!(:custom_link_5) { create :school_link, :header, school: student.school }
+    let!(:custom_link_5) do
+      create :school_link, :header, school: student.school
+    end
 
     it 'displays additional links in a "More" dropdown', js: true do
       visit new_user_session_path
@@ -77,8 +91,14 @@ feature 'Top navigation bar' do
       expect(page).to have_link(custom_link_3.title, href: custom_link_3.url)
 
       # Other two should not be visible.
-      expect(page).not_to have_link(custom_link_2.title, href: custom_link_2.url)
-      expect(page).not_to have_link(custom_link_1.title, href: custom_link_1.url)
+      expect(page).not_to have_link(
+        custom_link_2.title,
+        href: custom_link_2.url
+      )
+      expect(page).not_to have_link(
+        custom_link_1.title,
+        href: custom_link_1.url
+      )
 
       # They should be in the 'More' dropdown.
       within('div[title="Show more links"]') do

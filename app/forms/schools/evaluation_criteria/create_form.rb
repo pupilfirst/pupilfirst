@@ -2,7 +2,13 @@ module Schools
   module EvaluationCriteria
     class CreateForm < Reform::Form
       property :name, validates: { presence: true, length: { maximum: 250 } }
-      property :description, validates: { presence: true, length: { maximum: 250 } }
+      property :description,
+               validates: {
+                 presence: true,
+                 length: {
+                   maximum: 250
+                 }
+               }
       property :course_id, validates: { presence: true }
 
       validate :course_exists

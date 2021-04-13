@@ -8,7 +8,11 @@ class SubmissionsResolver < ApplicationQuery
 
   def submissions
     applicable_submissions
-      .includes(:startup_feedback, founders: [:user, :startup], target: :target_group)
+      .includes(
+        :startup_feedback,
+        founders: %i[user startup],
+        target: :target_group
+      )
       .distinct
       .order("#{sort_criterion_string} #{sort_direction_string}")
   end
@@ -46,26 +50,31 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def applicable_submissions
-    by_level = if level_id.present?
-      course.levels.where(id: level_id).first.timeline_events
-    else
-      course.timeline_events
-    end
+    by_level =
+      if level_id.present?
+        course.levels.where(id: level_id).first.timeline_events
+      else
+        course.timeline_events
+      end
 
-    by_level_and_status = case status
-    when 'Pending'
-      by_level.pending_review
-    when 'Reviewed'
-      by_level.evaluated_by_faculty
-    else
-      raise "Unexpected status '#{status}' encountered when resolving submissions"
-    end
+    by_level_and_status =
+      case status
+      when 'Pending'
+        by_level.pending_review
+      when 'Reviewed'
+        by_level.evaluated_by_faculty
+      else
+        raise "Unexpected status '#{status}' encountered when resolving submissions"
+      end
 
-    by_level_status_and_coach = if coach_id.present?
-      by_level_and_status.joins(founders: { startup: :faculty_startup_enrollments }).where(faculty_startup_enrollments: { faculty_id: coach_id })
-    else
-      by_level_and_status
-    end
+    by_level_status_and_coach =
+      if coach_id.present?
+        by_level_and_status
+          .joins(founders: { startup: :faculty_startup_enrollments })
+          .where(faculty_startup_enrollments: { faculty_id: coach_id })
+      else
+        by_level_and_status
+      end
 
     by_level_status_and_coach.from_founders(students)
   end

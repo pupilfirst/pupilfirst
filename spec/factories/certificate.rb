@@ -7,7 +7,12 @@ FactoryBot.define do
     name_offset_top { 50 }
     font_size { 100 }
     margin { 5 }
-    image { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/uploads/certificates/sample.png'), 'image/png') }
+    image do
+      Rack::Test::UploadedFile.new(
+        Rails.root.join('spec/support/uploads/certificates/sample.png'),
+        'image/png'
+      )
+    end
 
     trait :active do
       active { true }

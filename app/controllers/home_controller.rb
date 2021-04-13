@@ -14,14 +14,15 @@ class HomeController < ApplicationController
 
   # GET /agreements/:agreement_type
   def agreement
-    klass = case params[:agreement_type]
+    klass =
+      case params[:agreement_type]
       when 'privacy-policy'
         SchoolString::PrivacyPolicy
       when 'terms-and-conditions'
         SchoolString::TermsAndConditions
       else
         raise_not_found
-    end
+      end
 
     @agreement_text = klass.for(current_school)
 
@@ -37,12 +38,13 @@ class HomeController < ApplicationController
     # Disallow routing OAuth results to unknown domains.
     raise_not_found if Domain.find_by(fqdn: params[:fqdn]).blank?
 
-    set_cookie(:oauth_origin, {
-      provider: params[:provider],
-      fqdn: params[:fqdn]
-    }.to_json)
+    set_cookie(
+      :oauth_origin,
+      { provider: params[:provider], fqdn: params[:fqdn] }.to_json
+    )
 
-    redirect_to OmniauthProviderUrlService.new(params[:provider], current_host).oauth_url
+    redirect_to OmniauthProviderUrlService.new(params[:provider], current_host)
+                  .oauth_url
   end
 
   # GET /oauth_error?error=
@@ -78,23 +80,24 @@ class HomeController < ApplicationController
   protected
 
   def background_image_number
-    @background_image_number ||= begin
-      session[:background_image_number] ||= rand(1..4)
-      session[:background_image_number] += 1
-      session[:background_image_number] = 1 if session[:background_image_number] > 4
-      session[:background_image_number]
-    end
+    @background_image_number ||=
+      begin
+        session[:background_image_number] ||= rand(1..4)
+        session[:background_image_number] += 1
+        session[:background_image_number] = 1 if session[
+          :background_image_number
+        ] > 4
+        session[:background_image_number]
+      end
   end
 
   def hero_text_alignment
-    @hero_text_alignment ||= begin
-      {
-        1 => 'center',
-        2 => 'right',
-        3 => 'right',
-        4 => 'right'
-      }[background_image_number]
-    end
+    @hero_text_alignment ||=
+      begin
+        { 1 => 'center', 2 => 'right', 3 => 'right', 4 => 'right' }[
+          background_image_number
+        ]
+      end
   end
 
   helper_method :background_image_number

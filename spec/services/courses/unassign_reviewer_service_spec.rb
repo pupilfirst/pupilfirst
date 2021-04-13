@@ -11,11 +11,15 @@ describe Courses::UnassignReviewerService do
     context 'when the faculty is assigned to the course' do
       before do
         create :faculty_course_enrollment, faculty: faculty, course: course
-        create :faculty_course_enrollment, faculty: another_faculty, course: course
+        create :faculty_course_enrollment,
+               faculty: another_faculty,
+               course: course
       end
 
       it 'removes the faculty enrollment from the course' do
-        expect { subject.unassign(faculty) }.to(change { FacultyCourseEnrollment.count }.from(2).to(1))
+        expect { subject.unassign(faculty) }.to(
+          change { FacultyCourseEnrollment.count }.from(2).to(1)
+        )
 
         # Only the entry for the other faculty member should remain.
         expect(FacultyCourseEnrollment.first.faculty).to eq(another_faculty)
@@ -30,13 +34,24 @@ describe Courses::UnassignReviewerService do
       let(:startup_l2_2) { create :startup, level: level_2 }
 
       before do
-        create :faculty_startup_enrollment, :with_course_enrollment, faculty: faculty, startup: startup_l1
-        create :faculty_startup_enrollment, :with_course_enrollment, faculty: faculty, startup: startup_l2_1
-        create :faculty_startup_enrollment, :with_course_enrollment, faculty: another_faculty, startup: startup_l2_2
+        create :faculty_startup_enrollment,
+               :with_course_enrollment,
+               faculty: faculty,
+               startup: startup_l1
+        create :faculty_startup_enrollment,
+               :with_course_enrollment,
+               faculty: faculty,
+               startup: startup_l2_1
+        create :faculty_startup_enrollment,
+               :with_course_enrollment,
+               faculty: another_faculty,
+               startup: startup_l2_2
       end
 
       it 'removes faculty enrollment from all teams in the course' do
-        expect { subject.unassign(faculty) }.to(change { FacultyStartupEnrollment.count }.from(3).to(1))
+        expect { subject.unassign(faculty) }.to(
+          change { FacultyStartupEnrollment.count }.from(3).to(1)
+        )
 
         # Only the entry for the other faculty member should remain.
         expect(FacultyStartupEnrollment.first.faculty).to eq(another_faculty)

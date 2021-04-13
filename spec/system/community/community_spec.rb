@@ -18,10 +18,29 @@ feature 'Community', js: true do
   let(:student_1) { create :student, startup: team }
   let(:student_2) { create :student, startup: team }
   let(:coach) { create :faculty, school: school }
-  let!(:topic_1) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 1.second.ago }
-  let!(:topic_2) { create :topic, :with_first_post, community: community, creator: student_1.user }
-  let!(:topic_3) { create :topic, :with_first_post, community: community, target: target, creator: student_1.user }
-  let!(:reply_1) { create :post, topic: topic_1, creator: student_1.user, post_number: 2 }
+  let!(:topic_1) do
+    create :topic,
+           :with_first_post,
+           community: community,
+           creator: student_1.user,
+           last_activity_at: 1.second.ago
+  end
+  let!(:topic_2) do
+    create :topic,
+           :with_first_post,
+           community: community,
+           creator: student_1.user
+  end
+  let!(:topic_3) do
+    create :topic,
+           :with_first_post,
+           community: community,
+           target: target,
+           creator: student_1.user
+  end
+  let!(:reply_1) do
+    create :post, topic: topic_1, creator: student_1.user, post_number: 2
+  end
   let(:topic_title) { Faker::Lorem.sentence }
   let(:topic_body) { Faker::Lorem.paragraph }
   let(:topic_body_for_edit) { Faker::Lorem.paragraph }
@@ -34,16 +53,22 @@ feature 'Community', js: true do
   let(:team_c2) { create :team, level: level_1_c2 }
   let(:student_c2) { create :student, startup: team_c2 }
 
-  let(:archived_course) { create :course, school: school, archived_at: 1.day.ago }
+  let(:archived_course) do
+    create :course, school: school, archived_at: 1.day.ago
+  end
   let(:archived_course_level) { create :level, :one, course: archived_course }
   let(:archived_course_team) { create :team, level: archived_course_level }
-  let!(:archived_course_student) { create :student, startup: archived_course_team }
+  let!(:archived_course_student) do
+    create :student, startup: archived_course_team
+  end
 
   before do
     create :faculty_course_enrollment, faculty: coach, course: course
     create :community_course_connection, course: course, community: community
     create :community_course_connection, course: course_2, community: community
-    create :community_course_connection, course: archived_course, community: community
+    create :community_course_connection,
+           course: archived_course,
+           community: community
     create :topic_subscription, topic: topic_1, user: coach.user
   end
 
@@ -61,7 +86,10 @@ feature 'Community', js: true do
   end
 
   scenario 'student from an archived course attempts to visit community' do
-    sign_in_user(archived_course_student.user, referrer: community_path(community))
+    sign_in_user(
+      archived_course_student.user,
+      referrer: community_path(community)
+    )
 
     expect(page).to have_text("The page you were looking for doesn't exist")
   end
@@ -89,7 +117,9 @@ feature 'Community', js: true do
     expect(page).not_to have_text('Create a new topic of discussion')
     expect(page).to have_text(topic_title)
     expect(page).to have_text(topic_body)
-    expect(community.topics.reload.find_by(title: topic_title).first_post.body).to eq(topic_body)
+    expect(
+      community.topics.reload.find_by(title: topic_title).first_post.body
+    ).to eq(topic_body)
   end
 
   scenario 'a student edits her post and leaves a reason' do
@@ -141,7 +171,9 @@ feature 'Community', js: true do
     # Only a faculty or the creator can edit or delete a topic
     within("div#post-show-#{topic_1.first_post.id}") do
       expect(page).not_to have_text('Edit Title')
-      expect(page).not_to have_selector("div[aria-label='Options for post #{topic_1.first_post.id}']")
+      expect(page).not_to have_selector(
+        "div[aria-label='Options for post #{topic_1.first_post.id}']"
+      )
     end
 
     # any one with access to the community can reply to a topic
@@ -154,7 +186,9 @@ feature 'Community', js: true do
     # A notification should have been mailed to the question author.
     open_email(topic_1.creator.email)
     expect(current_email.subject).to eq('New reply for your post')
-    expect(current_email.body).to include("#{student_2.user.name} has posted a reply to something you said on the #{community.name} community")
+    expect(current_email.body).to include(
+      "#{student_2.user.name} has posted a reply to something you said on the #{community.name} community"
+    )
     expect(current_email.body).to include("/topics/#{topic_1.id}")
 
     expect(page).to have_text('2 Replies')
@@ -194,6 +228,7 @@ feature 'Community', js: true do
 
     expect(page).not_to have_text(reply_body_for_edit)
     expect(new_reply.reload.archived_at).to_not eq(nil)
+
     # Notifications created for the post must be deleted
     expect(Notification.count).to eq(0)
 
@@ -212,7 +247,9 @@ feature 'Community', js: true do
     open_email(reply_1.creator.email)
     expect(current_email.subject).to eq('New reply for your post')
     expect(current_email.body).to include('New reply for your post')
-    expect(current_email.body).to include("#{student_2.user.name} has posted a reply to something you said on the #{community.name} community")
+    expect(current_email.body).to include(
+      "#{student_2.user.name} has posted a reply to something you said on the #{community.name} community"
+    )
     expect(current_email.body).to include("/topics/#{topic_1.id}")
 
     # check saved reply
@@ -226,11 +263,15 @@ feature 'Community', js: true do
 
     # can like and unlike a reply
     find("button[aria-label='Like post #{reply_1.id}']").click
-    expect(page).to have_selector("button[aria-label='Unlike post #{reply_1.id}']")
+    expect(page).to have_selector(
+      "button[aria-label='Unlike post #{reply_1.id}']"
+    )
     expect(reply_1.post_likes.where(user: student_2.user).count).to eq(1)
 
     find("button[aria-label='Unlike post #{reply_1.id}']").click
-    expect(page).to have_selector("button[aria-label='Like post #{reply_1.id}']")
+    expect(page).to have_selector(
+      "button[aria-label='Like post #{reply_1.id}']"
+    )
     expect(reply_1.post_likes.where(user: student_2.user).count).to eq(0)
   end
 
@@ -409,7 +450,11 @@ feature 'Community', js: true do
     # Let's set the titles for both topics to completely different sentences to avoid confusing the fuzzy search algo.
     topic_1.update!(title: 'Complex sentence with certain words')
     topic_2.update!(title: 'Completely Different Sequence')
-    create :post, topic: topic_3, creator: student_1.user, post_number: 2, body: 'Another Complex Sentence'
+    create :post,
+           topic: topic_3,
+           creator: student_1.user,
+           post_number: 2,
+           body: 'Another Complex Sentence'
 
     sign_in_user(coach.user, referrer: community_path(community))
 
@@ -417,7 +462,7 @@ feature 'Community', js: true do
 
     fill_in 'filter', with: 'complex sentence'
 
-    click_button "Search: complex sentence"
+    click_button 'Search: complex sentence'
 
     expect(page).to_not have_text(topic_2.title)
     expect(page).to have_text(topic_1.title)
@@ -441,7 +486,14 @@ feature 'Community', js: true do
   end
 
   context 'when a topic has a archived replies and likes on its posts' do
-    let(:archived_reply) { create :post, topic: topic_1, creator: student_1.user, post_number: 3, archiver: student_1.user, archived_at: Time.zone.now }
+    let(:archived_reply) do
+      create :post,
+             topic: topic_1,
+             creator: student_1.user,
+             post_number: 3,
+             archiver: student_1.user,
+             archived_at: Time.zone.now
+    end
 
     before do
       # A like on an archived post or a reply should not be counted.
@@ -482,7 +534,9 @@ feature 'Community', js: true do
 
       # Like a post.
       find("button[aria-label='Like post #{topic_1.first_post.id}']").click
-      expect(page).to have_selector("button[aria-label='Unlike post #{topic_1.first_post.id}']")
+      expect(page).to have_selector(
+        "button[aria-label='Unlike post #{topic_1.first_post.id}']"
+      )
 
       # Edit a post.
       find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
@@ -519,7 +573,9 @@ feature 'Community', js: true do
       click_button 'Create Topic'
 
       expect(page).to have_text('0 Replies')
-      expect(community.topics.reload.find_by(title: topic_title).first_post.body).to eq(topic_body)
+      expect(
+        community.topics.reload.find_by(title: topic_title).first_post.body
+      ).to eq(topic_body)
     end
 
     scenario 'admin locks/unlocks a topic in community' do
@@ -664,8 +720,16 @@ feature 'Community', js: true do
   end
 
   context 'community has a mix of solved and unsolved topics' do
-    let!(:reply_marked_as_solution) { create :post, topic: topic_1, creator: student_1.user, post_number: 3, solution: true }
-    let!(:reply_2) { create :post, topic: topic_2, creator: student_1.user, post_number: 2 }
+    let!(:reply_marked_as_solution) do
+      create :post,
+             topic: topic_1,
+             creator: student_1.user,
+             post_number: 3,
+             solution: true
+    end
+    let!(:reply_2) do
+      create :post, topic: topic_2, creator: student_1.user, post_number: 2
+    end
 
     scenario 'user checks solved status in topics list' do
       sign_in_user(coach.user, referrer: community_path(community))
@@ -675,7 +739,9 @@ feature 'Community', js: true do
       end
 
       within("a[aria-label='Topic #{topic_2.id}']") do
-        expect(page).to_not have_selector("span[aria-label='Solved status icon']")
+        expect(page).to_not have_selector(
+                              "span[aria-label='Solved status icon']"
+                            )
       end
     end
 
@@ -707,7 +773,10 @@ feature 'Community', js: true do
       sign_in_user(coach.user, referrer: topic_path(topic_1))
 
       within("div#post-show-#{topic_1.first_post.id}") do
-        expect(page).to have_link('Go to solution', href: "#post-show-#{reply_marked_as_solution.id}")
+        expect(page).to have_link(
+          'Go to solution',
+          href: "#post-show-#{reply_marked_as_solution.id}"
+        )
       end
     end
 
@@ -721,84 +790,129 @@ feature 'Community', js: true do
   end
 
   context 'topics have different views, creation date and last activity time' do
-    let!(:topic_1) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 1.second.ago, created_at: 2.days.ago, views: 9 }
-    let!(:topic_2) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 3.days.ago, created_at: 4.days.ago, views: 1 }
-    let!(:topic_3) { create :topic, :with_first_post, community: community, creator: student_1.user, last_activity_at: 2.days.ago, created_at: 1.day.ago, views: 20 }
+    let!(:topic_1) do
+      create :topic,
+             :with_first_post,
+             community: community,
+             creator: student_1.user,
+             last_activity_at: 1.second.ago,
+             created_at: 2.days.ago,
+             views: 9
+    end
+    let!(:topic_2) do
+      create :topic,
+             :with_first_post,
+             community: community,
+             creator: student_1.user,
+             last_activity_at: 3.days.ago,
+             created_at: 4.days.ago,
+             views: 1
+    end
+    let!(:topic_3) do
+      create :topic,
+             :with_first_post,
+             community: community,
+             creator: student_1.user,
+             last_activity_at: 2.days.ago,
+             created_at: 1.day.ago,
+             views: 20
+    end
 
     scenario 'user sorts topics based on views, creation date and last activity' do
       sign_in_user(coach.user, referrer: community_path(community))
 
       within("div[aria-label='Change topics sorting']") do
-        expect(page).to have_content("Posted At")
+        expect(page).to have_content('Posted At')
       end
 
       # Check current ordering of topics
-      expect(find("#topics a:nth-child(1)")).to have_content(topic_3.title)
-      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
-      expect(find("#topics a:nth-child(3)")).to have_content(topic_2.title)
+      expect(find('#topics a:nth-child(1)')).to have_content(topic_3.title)
+      expect(find('#topics a:nth-child(2)')).to have_content(topic_1.title)
+      expect(find('#topics a:nth-child(3)')).to have_content(topic_2.title)
 
       #  Swap the ordering of topics
       click_button('toggle-sort-order')
 
-      expect(find("#topics a:nth-child(3)")).to have_content(topic_3.title)
-      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
-      expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
+      expect(find('#topics a:nth-child(3)')).to have_content(topic_3.title)
+      expect(find('#topics a:nth-child(2)')).to have_content(topic_1.title)
+      expect(find('#topics a:nth-child(1)')).to have_content(topic_2.title)
 
       # Change sorting criterion to last activity
       click_button 'Posted At'
       click_button 'Last Activity'
 
-      expect(find("#topics a:nth-child(3)")).to have_content(topic_1.title)
-      expect(find("#topics a:nth-child(2)")).to have_content(topic_3.title)
-      expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
+      expect(find('#topics a:nth-child(3)')).to have_content(topic_1.title)
+      expect(find('#topics a:nth-child(2)')).to have_content(topic_3.title)
+      expect(find('#topics a:nth-child(1)')).to have_content(topic_2.title)
 
       #  Swap the ordering of topics
       click_button('toggle-sort-order')
 
-      expect(find("#topics a:nth-child(1)")).to have_content(topic_1.title)
-      expect(find("#topics a:nth-child(2)")).to have_content(topic_3.title)
-      expect(find("#topics a:nth-child(3)")).to have_content(topic_2.title)
+      expect(find('#topics a:nth-child(1)')).to have_content(topic_1.title)
+      expect(find('#topics a:nth-child(2)')).to have_content(topic_3.title)
+      expect(find('#topics a:nth-child(3)')).to have_content(topic_2.title)
 
       # Change sorting criterion to views
       click_button 'Last Activity'
       click_button 'Views'
 
-      expect(find("#topics a:nth-child(1)")).to have_content(topic_3.title)
-      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
-      expect(find("#topics a:nth-child(3)")).to have_content(topic_2.title)
+      expect(find('#topics a:nth-child(1)')).to have_content(topic_3.title)
+      expect(find('#topics a:nth-child(2)')).to have_content(topic_1.title)
+      expect(find('#topics a:nth-child(3)')).to have_content(topic_2.title)
 
       click_button('toggle-sort-order')
 
-      expect(find("#topics a:nth-child(3)")).to have_content(topic_3.title)
-      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
-      expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
+      expect(find('#topics a:nth-child(3)')).to have_content(topic_3.title)
+      expect(find('#topics a:nth-child(2)')).to have_content(topic_1.title)
+      expect(find('#topics a:nth-child(1)')).to have_content(topic_2.title)
     end
 
     scenario 'user visits a community with filters applied' do
-      sign_in_user(coach.user, referrer: community_path(community, sortDirection: 'Ascending', sortCriterion: 'Views', solution: 'Unsolved'))
+      sign_in_user(
+        coach.user,
+        referrer:
+          community_path(
+            community,
+            sortDirection: 'Ascending',
+            sortCriterion: 'Views',
+            solution: 'Unsolved'
+          )
+      )
       expect(page).to have_button('Order by Views')
       expect(page).to have_button('Remove selection: Unsolved')
-      expect(find("#topics a:nth-child(3)")).to have_content(topic_3.title)
-      expect(find("#topics a:nth-child(2)")).to have_content(topic_1.title)
-      expect(find("#topics a:nth-child(1)")).to have_content(topic_2.title)
+      expect(find('#topics a:nth-child(3)')).to have_content(topic_3.title)
+      expect(find('#topics a:nth-child(2)')).to have_content(topic_1.title)
+      expect(find('#topics a:nth-child(1)')).to have_content(topic_2.title)
     end
   end
 
   context 'solution exists for a topic' do
-    let!(:reply_1) { create :post, topic: topic_1, creator: student_1.user, post_number: 2 }
-    let!(:reply_2) { create :post, topic: topic_1, creator: student_2.user, post_number: 3, solution: true }
+    let!(:reply_1) do
+      create :post, topic: topic_1, creator: student_1.user, post_number: 2
+    end
+    let!(:reply_2) do
+      create :post,
+             topic: topic_1,
+             creator: student_2.user,
+             post_number: 3,
+             solution: true
+    end
 
-    scenario "a moderator can unmark the current post as solution and mark a new solution" do
+    scenario 'a moderator can unmark the current post as solution and mark a new solution' do
       sign_in_user(coach.user, referrer: community_path(community))
 
       click_link topic_1.title
 
       within("div#post-show-#{reply_1.id}") do
-        expect(page).to_not have_selector("button[aria-label='Mark as solution']")
+        expect(page).to_not have_selector(
+                              "button[aria-label='Mark as solution']"
+                            )
       end
 
       within("div#post-show-#{reply_2.id}") do
-        accept_confirm { find("div[aria-label='Marked as solution icon']").click }
+        accept_confirm do
+          find("div[aria-label='Marked as solution icon']").click
+        end
       end
 
       expect(page).to have_text('Reply unmarked as solution')
@@ -819,11 +933,9 @@ feature 'Community', js: true do
   end
 
   context "when the user is a coach who isn't enrolled in one of the community's connected courses" do
-    before do
-      CommunityCourseConnection.destroy_all
-    end
+    before { CommunityCourseConnection.destroy_all }
 
-    scenario "a coach from a different course can still moderate on unlinked communities" do
+    scenario 'a coach from a different course can still moderate on unlinked communities' do
       sign_in_user(coach.user, referrer: community_path(community))
 
       click_link topic_1.title
@@ -831,7 +943,9 @@ feature 'Community', js: true do
       # Can mark a reply as solution.
       within("div#post-show-#{reply_1.id}") do
         accept_confirm { find("button[aria-label='Mark as solution']").click }
-        expect(page).to have_selector("div[aria-label='Marked as solution icon']")
+        expect(page).to have_selector(
+          "div[aria-label='Marked as solution icon']"
+        )
       end
     end
   end

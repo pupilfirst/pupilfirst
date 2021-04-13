@@ -2,7 +2,7 @@ module Mutations
   class UndoSubmission < GraphQL::Schema::Mutation
     argument :target_id, ID, required: true
 
-    description "Delete the last submission for a target"
+    description 'Delete the last submission for a target'
 
     field :success, Boolean, null: false
 

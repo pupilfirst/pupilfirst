@@ -14,7 +14,8 @@ class CreateVimeoVideoMutator < ApplicationQuery
       if response[:developer_message].present?
         errors[:base] << response[:developer_message]
       else
-        errors[:base] << response[:error] || "Encountered error with code #{response[:error_code]} when trying to create a Vimeo video."
+        errors[:base] << response[:error] ||
+          "Encountered error with code #{response[:error_code]} when trying to create a Vimeo video."
       end
 
       nil
@@ -22,10 +23,7 @@ class CreateVimeoVideoMutator < ApplicationQuery
       video_id = response[:uri].split('/')[-1]
       Vimeo::AddAllowedDomainsToVideo.perform_later(current_school, video_id)
 
-      {
-        upload_link: response[:upload][:upload_link],
-        link: response[:link]
-      }
+      { upload_link: response[:upload][:upload_link], link: response[:link] }
     end
   end
 

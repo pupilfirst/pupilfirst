@@ -10,9 +10,12 @@ class CourseTeamsResolver < ApplicationQuery
 
   def course_teams
     if search.present?
-      teams_by_level_and_tag.where('users.name ILIKE ?', "%#{search}%").or(
-        teams_by_level_and_tag.where('startups.name ILIKE ?', "%#{search}%")
-      ).or(teams_by_level_and_tag.where('users.email ILIKE ?', "%#{search}%"))
+      teams_by_level_and_tag
+        .where('users.name ILIKE ?', "%#{search}%")
+        .or(
+          teams_by_level_and_tag.where('startups.name ILIKE ?', "%#{search}%")
+        )
+        .or(teams_by_level_and_tag.where('users.email ILIKE ?', "%#{search}%"))
     else
       teams_by_level_and_tag
     end
@@ -29,13 +32,28 @@ class CourseTeamsResolver < ApplicationQuery
   end
 
   def teams_by_tag
-    teams = course.startups.active
-      .select('"startups".*, LOWER(startups.name) AS startup_name')
-      .joins(founders: :user)
-      .includes(:faculty_startup_enrollments, founders: { user: { avatar_attachment: :blob } })
-      .distinct.order("#{sort_by_string} #{sort_direction_string}")
+    teams =
+      course
+        .startups
+        .active
+        .select('"startups".*, LOWER(startups.name) AS startup_name')
+        .joins(founders: :user)
+        .includes(
+          :faculty_startup_enrollments,
+          founders: {
+            user: {
+              avatar_attachment: :blob
+            }
+          }
+        )
+        .distinct
+        .order("#{sort_by_string} #{sort_direction_string}")
 
-    tags.present? ? teams.joins(taggings: :tag).where(tags: { name: tags }) : teams.includes(taggings: :tag)
+    if tags.present?
+      teams.joins(taggings: :tag).where(tags: { name: tags })
+    else
+      teams.includes(taggings: :tag)
+    end
   end
 
   def teams_by_level_and_tag

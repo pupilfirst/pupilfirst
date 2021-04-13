@@ -8,7 +8,15 @@ module Users
       validate :detect_honeypot
       validate :email_should_not_have_bounced
 
-      property :email, validates: { presence: true, length: { maximum: 250 }, email: true }
+      property :email,
+               validates: {
+                 presence: true,
+                 length: {
+                   maximum: 250
+                 },
+                 email: true
+               }
+
       # Honeypot field. See validation `detect_honeypot` below.
       property :username
 

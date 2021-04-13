@@ -1,7 +1,7 @@
 <%
   topic = @post.topic
   addressee_name = @addressee.name
-  author_name = @post.creator&.name || "A user"
+  author_name = @post.creator&.name || 'A user'
   community_name = @post.topic.community.name
 %>
 
@@ -24,7 +24,11 @@
 <% end %>
 
 <% content_for :body do %>
-  <p><%= author_name %> has posted a reply to something you said on the <%= community_name %> community.</p>
+  <p>
+    <%= author_name %> has posted a reply to something you said on the
+    <%= community_name %>
+    community.
+  </p>
 
   <p>You can view the reply by clicking on the link above.</p>
 

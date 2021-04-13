@@ -2,7 +2,7 @@ module Mutations
   class ArchiveCoachNote < GraphQL::Schema::Mutation
     argument :id, ID, required: true
 
-    description "Archives a coach note for student"
+    description 'Archives a coach note for student'
 
     field :success, Boolean, null: false
 
@@ -11,7 +11,7 @@ module Mutations
 
       if mutator.valid?
         mutator.archive
-        mutator.notify(:success, "Success", "Note removed successfully")
+        mutator.notify(:success, 'Success', 'Note removed successfully')
         { success: true }
       else
         mutator.notify_errors

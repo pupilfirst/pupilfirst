@@ -17,7 +17,8 @@ module Courses
         email: view.params[:email],
         name: view.params[:name],
         privacy_policy: SchoolString::PrivacyPolicy.saved?(current_school),
-        terms_and_conditions: SchoolString::TermsAndConditions.saved?(current_school)
+        terms_and_conditions:
+          SchoolString::TermsAndConditions.saved?(current_school)
       }
     end
   end

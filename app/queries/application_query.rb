@@ -12,7 +12,9 @@ class ApplicationQuery
     @context = context
     assign_attributes(attributes)
 
-    raise UnavailableQueryException if @context[:token_auth] && !allow_token_auth?
+    if @context[:token_auth] && !allow_token_auth?
+      raise UnavailableQueryException
+    end
     raise UnauthorizedQueryException unless authorized?
   end
 
@@ -34,7 +36,7 @@ class ApplicationQuery
   end
 
   def notify_errors
-    notify(:error, 'Something went wrong!', error_messages.join(", "))
+    notify(:error, 'Something went wrong!', error_messages.join(', '))
   end
 
   private

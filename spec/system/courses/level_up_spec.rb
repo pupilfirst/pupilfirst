@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature "Student levelling up", js: true do
+feature 'Student levelling up', js: true do
   include UserSpecHelper
   include SubmissionsHelper
 
@@ -13,18 +13,40 @@ feature "Student levelling up", js: true do
   let!(:level_3) { create :level, :three, course: course }
   let(:team) { create :startup, level: level_1 }
   let(:student) { team.founders.first }
-  let(:target_group_l1) { create :target_group, level: level_1, milestone: true }
+  let(:target_group_l1) do
+    create :target_group, level: level_1, milestone: true
+  end
   let!(:target_l0) { create :target, :with_group, level: level_0 }
-  let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence }
-  let!(:target_l2) { create :target, :with_content, :with_group, level: level_2, milestone: true, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence }
+  let!(:target_l1) do
+    create :target,
+           :with_content,
+           target_group: target_group_l1,
+           role: Target::ROLE_TEAM,
+           evaluation_criteria: [criterion_1, criterion_2],
+           completion_instructions: Faker::Lorem.sentence
+  end
+  let!(:target_l2) do
+    create :target,
+           :with_content,
+           :with_group,
+           level: level_2,
+           milestone: true,
+           role: Target::ROLE_TEAM,
+           evaluation_criteria: [criterion_1, criterion_2],
+           completion_instructions: Faker::Lorem.sentence
+  end
 
   Rspec.shared_examples 'student is limited to current level' do
     scenario 'student cannot level up' do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_text(target.title)
-      expect(page).to have_text("You're at Level #{target.level.number}, but you have targets in the Level 1 that have been rejected, or are pending review by a coach.")
-      expect(page).to have_text("You'll need to pass all milestone targets in Level 1 to continue leveling up.")
+      expect(page).to have_text(
+        "You're at Level #{target.level.number}, but you have targets in the Level 1 that have been rejected, or are pending review by a coach."
+      )
+      expect(page).to have_text(
+        "You'll need to pass all milestone targets in Level 1 to continue leveling up."
+      )
       expect(page).not_to have_button('Level Up')
     end
   end
@@ -54,12 +76,16 @@ feature "Student levelling up", js: true do
       expect(page).not_to have_text(target_group_l1.name)
       expect(page).not_to have_button('Next Level')
 
-      expect(page).to have_text('You have successfully completed all milestone targets')
+      expect(page).to have_text(
+        'You have successfully completed all milestone targets'
+      )
 
       # Reload the page, it should still remain the same.
       visit curriculum_course_path(course)
 
-      expect(page).to have_text('You have successfully completed all milestone targets')
+      expect(page).to have_text(
+        'You have successfully completed all milestone targets'
+      )
       expect(page).not_to have_text(target_l1.title)
       expect(page).not_to have_text(target_group_l1.name)
 
@@ -72,16 +98,12 @@ feature "Student levelling up", js: true do
     context 'when a student is in level 2 and has completed all milestone targets there' do
       let(:team) { create :startup, level: level_2 }
 
-      before do
-        complete_target target_l2, student
-      end
+      before { complete_target target_l2, student }
 
       context 'when student has a milestone target with a submission pending review in level 1' do
         let(:target) { target_l2 }
 
-        before do
-          submit_target target_l1, student
-        end
+        before { submit_target target_l1, student }
 
         include_examples 'student is limited to current level'
       end
@@ -97,9 +119,7 @@ feature "Student levelling up", js: true do
       end
 
       context 'when the student has passed all milestone targets in level 1' do
-        before do
-          complete_target target_l1, student
-        end
+        before { complete_target target_l1, student }
 
         scenario 'student is shown the option to level up again' do
           sign_in_user student.user, referrer: curriculum_course_path(course)
@@ -114,8 +134,24 @@ feature "Student levelling up", js: true do
     let(:course) { create :course, progression_limit: 3 }
     let(:level_4) { create :level, :four, course: course }
     let!(:level_5) { create :level, :five, course: course }
-    let(:target_l3) { create :target, :with_content, :with_group, :team, level: level_3, milestone: true, evaluation_criteria: [criterion_1] }
-    let!(:target_l4) { create :target, :with_content, :with_group, :team, level: level_4, milestone: true, evaluation_criteria: [criterion_1] }
+    let(:target_l3) do
+      create :target,
+             :with_content,
+             :with_group,
+             :team,
+             level: level_3,
+             milestone: true,
+             evaluation_criteria: [criterion_1]
+    end
+    let!(:target_l4) do
+      create :target,
+             :with_content,
+             :with_group,
+             :team,
+             level: level_4,
+             milestone: true,
+             evaluation_criteria: [criterion_1]
+    end
 
     context 'when team is in the third level and all milestone targets have been submitted' do
       let(:team) { create :startup, level: level_3 }
@@ -156,9 +192,33 @@ feature "Student levelling up", js: true do
     let(:level_4) { create :level, :four, course: course }
     let(:level_5) { create :level, :five, course: course }
     let(:team) { create :startup, level: level_4 }
-    let(:target_l3) { create :target, :with_content, :with_group, :team, level: level_3, milestone: true, evaluation_criteria: [criterion_1] }
-    let(:target_l4) { create :target, :with_content, :with_group, :team, level: level_4, milestone: true, evaluation_criteria: [criterion_1] }
-    let!(:target_l5) { create :target, :with_content, :with_group, :team, level: level_5, milestone: true, evaluation_criteria: [criterion_1] }
+    let(:target_l3) do
+      create :target,
+             :with_content,
+             :with_group,
+             :team,
+             level: level_3,
+             milestone: true,
+             evaluation_criteria: [criterion_1]
+    end
+    let(:target_l4) do
+      create :target,
+             :with_content,
+             :with_group,
+             :team,
+             level: level_4,
+             milestone: true,
+             evaluation_criteria: [criterion_1]
+    end
+    let!(:target_l5) do
+      create :target,
+             :with_content,
+             :with_group,
+             :team,
+             level: level_5,
+             milestone: true,
+             evaluation_criteria: [criterion_1]
+    end
 
     before do
       submit_target target_l1, student
@@ -181,39 +241,41 @@ feature "Student levelling up", js: true do
     let(:course) { create :course, :strict }
 
     context 'when the student has submitted all milestone targets' do
-      before do
-        submit_target target_l1, student
-      end
+      before { submit_target target_l1, student }
 
       scenario 'student with a submission pending review is blocked from leveling up' do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text('Pending Review')
-        expect(page).to have_text("You have submitted all milestone targets in level 1, but one or more submissions are pending review by a coach")
-        expect(page).to have_text("You need to get a passing grade on all milestone targets to level up.")
+        expect(page).to have_text(
+          'You have submitted all milestone targets in level 1, but one or more submissions are pending review by a coach'
+        )
+        expect(page).to have_text(
+          'You need to get a passing grade on all milestone targets to level up.'
+        )
         expect(page).not_to have_button('Level Up')
       end
     end
 
     context 'when the student has failed a milestone target' do
-      before do
-        fail_target target_l1, student
-      end
+      before { fail_target target_l1, student }
 
       scenario 'student with a rejected submission is blocked from leveling up' do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text('Level Up Blocked')
-        expect(page).to have_text("You have submitted all milestone targets in level 1, but one or more submissions have been rejected")
-        expect(page).to have_text("You need to get a passing grade on all milestone targets to level up.")
+        expect(page).to have_text(
+          'You have submitted all milestone targets in level 1, but one or more submissions have been rejected'
+        )
+        expect(page).to have_text(
+          'You need to get a passing grade on all milestone targets to level up.'
+        )
         expect(page).not_to have_button('Level Up')
       end
     end
 
     context 'when the student has passed all milestone targets' do
-      before do
-        complete_target target_l1, student
-      end
+      before { complete_target target_l1, student }
 
       scenario 'student levels up' do
         sign_in_user student.user, referrer: curriculum_course_path(course)
@@ -227,22 +289,26 @@ feature "Student levelling up", js: true do
   end
 
   context "when a teammate hasn't completed all milestone targets" do
-    let!(:target_l1) { create :target, :with_content, :student, target_group: target_group_l1 }
-
-    before do
-      complete_target target_l1, student
+    let!(:target_l1) do
+      create :target, :with_content, :student, target_group: target_group_l1
     end
+
+    before { complete_target target_l1, student }
 
     scenario 'student is blocked from leveling up until teammate submits work on target' do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
       expect(page).to have_text('Check With Your Team')
-      expect(page).to have_text("You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.")
+      expect(page).to have_text(
+        "You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets."
+      )
       expect(page).not_to have_button('Level Up')
 
-      team.founders.where.not(id: student.id).each do |other_student|
-        submit_target target_l1, other_student
-      end
+      team
+        .founders
+        .where
+        .not(id: student.id)
+        .each { |other_student| submit_target target_l1, other_student }
 
       visit curriculum_course_path(course)
       click_button('Level Up')
@@ -259,49 +325,64 @@ feature "Student levelling up", js: true do
         complete_target target_l1, student
 
         # Teammates has completed milestone target only in current level.
-        team.founders.each do |student|
-          complete_target target_l2, student
-        end
+        team.founders.each { |student| complete_target target_l2, student }
       end
 
       scenario 'student is blocked from leveling up until teammate submits work on target in previous level' do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text('Check With Your Team')
-        expect(page).to have_text("You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.")
+        expect(page).to have_text(
+          "You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets."
+        )
         expect(page).not_to have_button('Level Up')
       end
     end
 
     context 'when course progression is strict' do
       let(:course) { create :course, :strict }
-      let!(:target_l1) { create :target, :with_content, :student, target_group: target_group_l1, evaluation_criteria: [criterion_1, criterion_2] }
-
-      before do
-        complete_target target_l1, student
+      let!(:target_l1) do
+        create :target,
+               :with_content,
+               :student,
+               target_group: target_group_l1,
+               evaluation_criteria: [criterion_1, criterion_2]
       end
+
+      before { complete_target target_l1, student }
 
       scenario 'student is blocked from leveling up until teammate gets passing grade on milestone targets' do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text('Check With Your Team')
-        expect(page).to have_text("You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.")
+        expect(page).to have_text(
+          "You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets."
+        )
         expect(page).not_to have_button('Level Up')
 
         # Submitting the targets should not result in any change.
-        team.founders.where.not(id: student.id).each do |other_student|
-          submit_target target_l1, other_student
-        end
+        team
+          .founders
+          .where
+          .not(id: student.id)
+          .each { |other_student| submit_target target_l1, other_student }
 
         visit curriculum_course_path(course)
 
         expect(page).to have_text('Check With Your Team')
 
         # Completing the targets should result in allowing the team to level up.
-        team.founders.where.not(id: student.id).each do |other_student|
-          other_student.timeline_events.where(target_id: target_l1.id).destroy_all
-          complete_target target_l1, other_student
-        end
+        team
+          .founders
+          .where
+          .not(id: student.id)
+          .each do |other_student|
+            other_student
+              .timeline_events
+              .where(target_id: target_l1.id)
+              .destroy_all
+            complete_target target_l1, other_student
+          end
 
         visit curriculum_course_path(course)
 
@@ -315,21 +396,23 @@ feature "Student levelling up", js: true do
     context 'when course progression is unlimited' do
       let(:course) { create :course, :unlimited }
 
-      before do
-        submit_target target_l1, student
-      end
+      before { submit_target target_l1, student }
 
-      scenario "student is blocked from leveling up until teammate submits work for milestone targets" do
+      scenario 'student is blocked from leveling up until teammate submits work for milestone targets' do
         sign_in_user student.user, referrer: curriculum_course_path(course)
 
         expect(page).to have_text('Check With Your Team')
-        expect(page).to have_text("You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets.")
+        expect(page).to have_text(
+          "You have completed all required milestone targets, but one or more of your team-mates haven't. Please ask them to sign in and check for incomplete milestone targets."
+        )
         expect(page).not_to have_button('Level Up')
 
         # Submitting the targets should result in allowing the team to level up.
-        team.founders.where.not(id: student.id).each do |other_student|
-          submit_target target_l1, other_student
-        end
+        team
+          .founders
+          .where
+          .not(id: student.id)
+          .each { |other_student| submit_target target_l1, other_student }
 
         visit curriculum_course_path(course)
         click_button('Level Up')
@@ -341,11 +424,11 @@ feature "Student levelling up", js: true do
   end
 
   context 'when a student is in level 1 and has completed all milestone targets there, but level 2 is locked' do
-    let(:level_2) { create :level, :two, course: course, unlock_at: 1.week.from_now }
-
-    before do
-      complete_target target_l1, student
+    let(:level_2) do
+      create :level, :two, course: course, unlock_at: 1.week.from_now
     end
+
+    before { complete_target target_l1, student }
 
     scenario 'regular student cannot level up' do
       sign_in_user student.user, referrer: curriculum_course_path(course)
@@ -371,7 +454,10 @@ feature "Student levelling up", js: true do
       let(:coach) { create :faculty, user: student.user }
 
       before do
-        create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach, startup: team
+        create :faculty_startup_enrollment,
+               :with_course_enrollment,
+               faculty: coach,
+               startup: team
       end
 
       scenario 'coach levels up to locked level' do
@@ -384,11 +470,11 @@ feature "Student levelling up", js: true do
   end
 
   context "when a level doesn't have any milestone target group" do
-    let!(:target_group_l1) { create :target_group, level: level_1, milestone: false }
-
-    before do
-      complete_target target_l1, student
+    let!(:target_group_l1) do
+      create :target_group, level: level_1, milestone: false
     end
+
+    before { complete_target target_l1, student }
 
     scenario 'student cannot level up' do
       sign_in_user student.user, referrer: curriculum_course_path(course)
@@ -400,23 +486,32 @@ feature "Student levelling up", js: true do
       expect(page).to have_text('Completed', count: 1)
 
       # ...but there shouldn't be any option to level up.
-      expect(page).not_to have_text('You have successfully completed all milestone targets')
+      expect(page).not_to have_text(
+        'You have successfully completed all milestone targets'
+      )
       expect(page).not_to have_button('Level Up')
     end
   end
 
   context 'when a student is at the last level with all milestone targets in that level completed' do
     let(:team) { create :startup, level: level_3 }
-    let(:target_l3) { create :target, :with_content, :with_group, level: level_3, milestone: true, role: Target::ROLE_TEAM }
-
-    before do
-      complete_target target_l3, student
+    let(:target_l3) do
+      create :target,
+             :with_content,
+             :with_group,
+             level: level_3,
+             milestone: true,
+             role: Target::ROLE_TEAM
     end
+
+    before { complete_target target_l3, student }
 
     scenario "student sees a notice that they've completed the course" do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
-      expect(page).to have_text('You have completed all milestone targets in the final level')
+      expect(page).to have_text(
+        'You have completed all milestone targets in the final level'
+      )
       expect(page).to have_text("You've completed our coursework")
     end
   end

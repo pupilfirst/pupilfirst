@@ -12,21 +12,21 @@ describe Courses::DemoContentService do
       # Create Level 1
       expect(course.levels.count).to eq(1)
       level = course.levels.first
-      expect(level.name).to eq("Level 1")
+      expect(level.name).to eq('Level 1')
       expect(level.number).to eq(1)
 
       # Create demo target group in level 1
       expect(level.target_groups.count).to eq(1)
       target_group = level.target_groups.first
-      expect(target_group.name).to eq("Demo Target Group")
-      expect(target_group.description).to eq("Description of demo target group")
+      expect(target_group.name).to eq('Demo Target Group')
+      expect(target_group.description).to eq('Description of demo target group')
       expect(target_group.milestone).to eq(true)
 
       # Create a target in the target group
       expect(target_group.targets.count).to eq(1)
       target = target_group.targets.first
       expect(target.role).to eq(Target::ROLE_STUDENT)
-      expect(target.title).to eq("Demo Target")
+      expect(target.title).to eq('Demo Target')
       expect(target.target_action_type).to eq(Target::TYPE_TODO)
       expect(target.visibility).to eq(Target::VISIBILITY_LIVE)
 
@@ -39,8 +39,12 @@ describe Courses::DemoContentService do
 
       # Create 2 evaluation criteria for the course.
       expect(course.evaluation_criteria.count).to eq(2)
-      expect(course.evaluation_criteria.first.name).to eq("Correctness of implementation")
-      expect(course.evaluation_criteria.last.name).to eq("Quality of submission")
+      expect(course.evaluation_criteria.first.name).to eq(
+        'Correctness of implementation'
+      )
+      expect(course.evaluation_criteria.last.name).to eq(
+        'Quality of submission'
+      )
     end
   end
 end

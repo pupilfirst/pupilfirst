@@ -21,7 +21,9 @@ module TargetVersions
         new_content_block = old_content_block.dup
         new_content_block.target_version_id = target_version.id
         new_content_block.save!
-        new_content_block.file.attach(old_content_block.file.blob) if old_content_block.file.attached?
+        if old_content_block.file.attached?
+          new_content_block.file.attach(old_content_block.file.blob)
+        end
       end
     end
   end

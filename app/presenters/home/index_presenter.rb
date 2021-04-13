@@ -29,28 +29,34 @@ module Home
     end
 
     def school_name_classes
-      classes = "relative mx-auto flex flex-col justify-center text-white px-6 py-8 md:p-10"
+      classes =
+        'relative mx-auto flex flex-col justify-center text-white px-6 py-8 md:p-10'
       @school.about.present? ? "#{classes} text-left" : "#{classes} text-center"
     end
 
     def courses_as_student
-      @courses_as_student ||= begin
-        if current_user.present?
-          current_user.founders.includes(:startup, :level).each_with_object({}) do |student, courses|
-            status = if student.dropped_out?
-              :dropped_out
-            elsif student.access_ended?
-              :access_ended
-            else
-              :active
-            end
+      @courses_as_student ||=
+        begin
+          if current_user.present?
+            current_user
+              .founders
+              .includes(:startup, :level)
+              .each_with_object({}) do |student, courses|
+                status =
+                  if student.dropped_out?
+                    :dropped_out
+                  elsif student.access_ended?
+                    :access_ended
+                  else
+                    :active
+                  end
 
-            courses[student.level.course_id] = status
+                courses[student.level.course_id] = status
+              end
+          else
+            {}
           end
-        else
-          {}
         end
-      end
     end
   end
 end

@@ -9,5 +9,7 @@
   <%= javascript_pack_tag 'UsersDeleteAccountPack', nonce: true %>
 <% end %>
 
-<script id="user-delete-account__props" type="application/json"><%= presenter.props_to_json.html_safe %></script>
+<script id="user-delete-account__props" type="application/json">
+  <%= presenter.props_to_json.html_safe %>
+</script>
 <div id="react-root"></div>

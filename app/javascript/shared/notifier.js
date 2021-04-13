@@ -9,8 +9,8 @@ const notify = (title, text, type) => {
     styling: "brighttheme",
     buttons: {
       closer: false,
-      sticker: false
-    }
+      sticker: false,
+    },
   });
   notification.refs.elem.addEventListener("click", () => {
     notification.close();

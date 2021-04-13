@@ -28,7 +28,7 @@ feature 'Course authors editor', js: true do
     fill_in 'name', with: name
     click_button 'Create Author'
 
-    expect(page).to have_text("Author Created")
+    expect(page).to have_text('Author Created')
 
     dismiss_notification
 
@@ -40,8 +40,10 @@ feature 'Course authors editor', js: true do
 
     open_email(new_author_user.email)
 
-    expect(current_email.subject).to include("You have been added as an author in #{course.name}")
-    expect(current_email.body).to have_link("Sign in to Edit Course")
+    expect(current_email.subject).to include(
+      "You have been added as an author in #{course.name}"
+    )
+    expect(current_email.body).to have_link('Sign in to Edit Course')
 
     # The new author should be immediately editable.
     click_link(new_author_user.name)
@@ -50,7 +52,8 @@ feature 'Course authors editor', js: true do
   end
 
   scenario 'school admin edits an author' do
-    sign_in_user school_admin.user, referrer: school_course_author_path(course, course_author)
+    sign_in_user school_admin.user,
+                 referrer: school_course_author_path(course, course_author)
 
     # Edit the author's name.
     fill_in 'name', with: name_for_edit
@@ -72,7 +75,7 @@ feature 'Course authors editor', js: true do
     fill_in 'name', with: name_for_user
     click_button 'Create Author'
 
-    expect(page).to have_text("Author Created")
+    expect(page).to have_text('Author Created')
 
     dismiss_notification
 
@@ -93,19 +96,22 @@ feature 'Course authors editor', js: true do
   end
 
   scenario 'school admin attempts to add an admin as an author' do
-    sign_in_user school_admin.user, referrer: new_school_course_author_path(course)
+    sign_in_user school_admin.user,
+                 referrer: new_school_course_author_path(course)
 
     fill_in 'email', with: school_admin.user.email
     fill_in 'name', with: name_for_user
     click_button 'Create Author'
 
     expect(page).to have_text('This user is already a school admin')
-    expect(CourseAuthor.joins(:user).where(users: { email: school_admin.user.email })).to be_blank
+    expect(
+      CourseAuthor.joins(:user).where(users: { email: school_admin.user.email })
+    ).to be_blank
   end
 
   scenario 'user who is not logged in tries to access course author editor interface' do
     visit authors_school_course_path(course)
-    expect(page).to have_text("Please sign in to continue.")
+    expect(page).to have_text('Please sign in to continue.')
   end
 
   scenario 'logged in user who not a school admin to access course author editor interface' do

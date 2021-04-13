@@ -22,17 +22,19 @@ class TopicsResolver < ApplicationQuery
 
     return false if community.school_id != current_school.id
 
-    return true if current_user.faculty.present? || current_school_admin.present?
+    if current_user.faculty.present? || current_school_admin.present?
+      return true
+    end
 
     (current_user.course_ids & community.course_ids).present?
   end
 
   def title_for_search
-    search.strip
-      .gsub(/[^a-z\s0-9]/i, '')
-      .split(' ').reject do |word|
+    search.strip.gsub(/[^a-z\s0-9]/i, '').split(' ').reject do |word|
       word.length < 3
-    end.join(' ')[0..50]
+    end.join(' ')[
+      0..50
+    ]
   end
 
   def community

@@ -7,12 +7,12 @@ module CourseExports
     def perform(course_export)
       # Prepare the export.
       case course_export.export_type
-        when CourseExport::EXPORT_TYPE_STUDENTS
-          CourseExports::PrepareStudentsExportService.new(course_export).execute
-        when CourseExport::EXPORT_TYPE_TEAMS
-          CourseExports::PrepareTeamsExportService.new(course_export).execute
-        else
-          raise "Unexpected export_type '#{course_export.export_type}' encountered!"
+      when CourseExport::EXPORT_TYPE_STUDENTS
+        CourseExports::PrepareStudentsExportService.new(course_export).execute
+      when CourseExport::EXPORT_TYPE_TEAMS
+        CourseExports::PrepareTeamsExportService.new(course_export).execute
+      else
+        raise "Unexpected export_type '#{course_export.export_type}' encountered!"
       end
 
       # Notify the user who requested the export.

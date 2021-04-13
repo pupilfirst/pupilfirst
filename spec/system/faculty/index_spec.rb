@@ -11,14 +11,18 @@ feature 'Connect to featured coaches', js: true do
   let(:enrolled_hidden_coach) { create :faculty, school: school, public: false }
 
   before do
-    create :faculty_course_enrollment, faculty: enrolled_hidden_coach, course: course
+    create :faculty_course_enrollment,
+           faculty: enrolled_hidden_coach,
+           course: course
   end
 
   context 'when there are no featured coaches' do
     scenario 'A member of the public attempts to view the coaches page' do
       visit coaches_index_path
 
-      expect(page).to have_content("The page you were looking for doesn't exist")
+      expect(page).to have_content(
+        "The page you were looking for doesn't exist"
+      )
     end
   end
 

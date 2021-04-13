@@ -9,16 +9,16 @@ feature 'User Edit' do
   let(:user) { student.user }
   let(:student_name) { Faker::Name.name }
   let(:about) { Faker::Lorem.paragraphs.join(' ') }
-  let(:current_password) { Faker::Internet.password(min_length: 8, max_length: 16) }
+  let(:current_password) do
+    Faker::Internet.password(min_length: 8, max_length: 16)
+  end
   let(:new_password) { Faker::Internet.password(min_length: 8, max_length: 16) }
 
   def upload_path(file)
     File.absolute_path(Rails.root.join('spec', 'support', 'uploads', file))
   end
 
-  before do
-    startup.founders << student
-  end
+  before { startup.founders << student }
 
   scenario 'User tries to submit a blank form', js: true do
     sign_in_user(user, referrer: edit_user_path)
@@ -35,7 +35,9 @@ feature 'User Edit' do
     expect(page).to have_text('Edit').and have_text('profile')
 
     fill_in 'user_name', with: student_name
-    attach_file 'user-edit__avatar-input', upload_path('faculty/donald_duck.jpg'), visible: false
+    attach_file 'user-edit__avatar-input',
+                upload_path('faculty/donald_duck.jpg'),
+                visible: false
     dismiss_notification
     fill_in 'about', with: about
     find('span', text: 'Send me a daily email').click
@@ -46,10 +48,7 @@ feature 'User Edit' do
     dismiss_notification
 
     # Confirm that student has, indeed, been updated.
-    expect(student.reload).to have_attributes(
-      name: student_name,
-      about: about,
-    )
+    expect(student.reload).to have_attributes(name: student_name, about: about)
 
     expect(student.avatar.filename).to eq('donald_duck.jpg')
     expect(user.reload.preferences['daily_digest']).to eq(true)
@@ -65,12 +64,16 @@ feature 'User Edit' do
     fill_in 'New password', with: 'short'
     fill_in 'Confirm password', with: 'short'
 
-    expect(page).to have_text('New password and confirmation should match and must have atleast 8 characters')
+    expect(page).to have_text(
+      'New password and confirmation should match and must have atleast 8 characters'
+    )
 
     fill_in 'New password', with: 'long_enough'
     fill_in 'Confirm password', with: 'but_not_the_same'
 
-    expect(page).to have_text('New password and confirmation should match and must have atleast 8 characters')
+    expect(page).to have_text(
+      'New password and confirmation should match and must have atleast 8 characters'
+    )
 
     # Check basic success.
     fill_in 'New password', with: new_password

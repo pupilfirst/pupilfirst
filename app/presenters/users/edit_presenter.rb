@@ -10,7 +10,12 @@ module Users
         name: current_user.name,
         about: current_user.about || '',
         has_current_password: current_user.encrypted_password.present?,
-        avatar_url: current_user.avatar.attached? ? current_user.avatar_url(variant: :mid) : nil,
+        avatar_url:
+          if current_user.avatar.attached?
+            current_user.avatar_url(variant: :mid)
+          else
+            nil
+          end,
         daily_digest: current_user.preferences['daily_digest'],
         is_school_admin: current_user.school_admin.present?,
         has_valid_delete_account_token: valid_delete_account_token

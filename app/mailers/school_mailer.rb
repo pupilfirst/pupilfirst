@@ -9,7 +9,9 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
   def default_url_options
     primary_fqdn = @school.domains.primary.fqdn
 
-    raise "School##{@school.id} does not have any primary FQDN. Cannot send email." if primary_fqdn.blank?
+    if primary_fqdn.blank?
+      raise "School##{@school.id} does not have any primary FQDN. Cannot send email."
+    end
 
     { host: primary_fqdn }
   end
@@ -22,7 +24,10 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
   end
 
   def roadie_options_for_school
-    host_options = default_url_options.merge(protocol: Rails.env.production? ? 'https' : 'http')
+    host_options =
+      default_url_options.merge(
+        protocol: Rails.env.production? ? 'https' : 'http'
+      )
 
     roadie_options.combine(url_options: host_options)
   end
@@ -30,15 +35,16 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
   # @param email_address [String] email address to send email to
   # @param subject [String] subject of the email
   def simple_roadie_mail(email_address, subject, enable_reply: true)
-    options = { to: email_address, subject: subject, **from_options(enable_reply) }
+    options = {
+      to: email_address,
+      subject: subject,
+      **from_options(enable_reply)
+    }
 
     if Rails.env.test?
       mail(options)
     else
-      roadie_mail(
-        options,
-        roadie_options_for_school
-      )
+      roadie_mail(options, roadie_options_for_school)
     end
   end
 

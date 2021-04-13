@@ -33,7 +33,12 @@
   }
 }
 
-.policy-body h1,.policy-body h2, .policy-body h3, .policy-body h4, .policy-body h5, .policy-body h6 {
+.policy-body h1,
+.policy-body h2,
+.policy-body h3,
+.policy-body h4,
+.policy-body h5,
+.policy-body h6 {
   @apply mt-4 mb-2;
 }
 

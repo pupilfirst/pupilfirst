@@ -7,15 +7,19 @@ module Targets
     def perform
       log 'Checking for reminders to be sent for imminent sessions.'
 
-      Target.sessions.live.where(session_at: (Time.now..35.minutes.from_now)).each do |session|
-        next if session.slack_reminders_sent_at.present?
+      Target
+        .sessions
+        .live
+        .where(session_at: (Time.now..35.minutes.from_now))
+        .each do |session|
+          next if session.slack_reminders_sent_at.present?
 
-        # Update time at which reminders were sent, to avoid repeats.
-        session.update!(slack_reminders_sent_at: Time.zone.now)
+          # Update time at which reminders were sent, to avoid repeats.
+          session.update!(slack_reminders_sent_at: Time.zone.now)
 
-        # Send reminders via Slack to all founders to whom session is applicable.
-        send_slack_reminder_to_founders(session)
-      end
+          # Send reminders via Slack to all founders to whom session is applicable.
+          send_slack_reminder_to_founders(session)
+        end
     end
 
     private
@@ -30,12 +34,14 @@ module Targets
       # and those at or above the session's minimum level.
       session_level = session.target_group.level
       course = session_level.course
-      eligible_levels = course.levels.where('levels.number >= ?', session_level.number)
+      eligible_levels =
+        course.levels.where('levels.number >= ?', session_level.number)
       applicable_startups = Startup.where(level: eligible_levels)
 
       applicable_startups.distinct.each do |startup|
         startup.founders.each do |founder|
-          response = message_service.post(message: message(session), founder: founder)
+          response =
+            message_service.post(message: message(session), founder: founder)
           service_errors << response.errors if response.errors.any?
 
           # Sleep a short while between pings to avoid exceeding Slack's API burst limit.
@@ -47,7 +53,8 @@ module Targets
     end
 
     def message(session)
-      time_delta = "#{((session.session_at - Time.zone.now) / 60).round} minutes"
+      time_delta =
+        "#{((session.session_at - Time.zone.now) / 60).round} minutes"
       time_exact = session.session_at.strftime('%l:%M %p')
 
       I18n.t(

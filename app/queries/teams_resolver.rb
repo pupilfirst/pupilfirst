@@ -20,11 +20,7 @@ class TeamsResolver < ApplicationQuery
   end
 
   def self.filter_by_tags(teams, tags)
-    if tags.any?
-      teams.tagged_with(tags)
-    else
-      teams
-    end
+    tags.any? ? teams.tagged_with(tags) : teams
   end
 
   def self.filter_by_coach_notes(teams, coach_notes)
@@ -40,7 +36,8 @@ class TeamsResolver < ApplicationQuery
 
   def self.filter_by_coach(teams, coach_id)
     if coach_id.present?
-      teams.joins(:faculty_startup_enrollments)
+      teams
+        .joins(:faculty_startup_enrollments)
         .where(faculty_startup_enrollments: { faculty_id: coach_id })
     else
       teams
@@ -50,16 +47,13 @@ class TeamsResolver < ApplicationQuery
   private
 
   def filter_by_level(teams)
-    if level_id.present?
-      teams.where(level_id: level_id)
-    else
-      teams
-    end
+    level_id.present? ? teams.where(level_id: level_id) : teams
   end
 
   def filter_by_search(teams)
     if search.present?
-      teams.where('users.name ILIKE ?', "%#{search}%")
+      teams
+        .where('users.name ILIKE ?', "%#{search}%")
         .or(teams.where('users.email ILIKE ?', "%#{search}%"))
         .or(teams.where('startups.name ILIKE ?', "%#{search}%"))
     else
@@ -68,10 +62,13 @@ class TeamsResolver < ApplicationQuery
   end
 
   def teams_in_course
-    course.startups.active
+    course
+      .startups
+      .active
       .joins({ founders: :user })
       .includes(founders: [user: { avatar_attachment: :blob }])
       .includes(:faculty)
-      .select('"startups".*, LOWER(startups.name) AS startup_name').order('startup_name')
+      .select('"startups".*, LOWER(startups.name) AS startup_name')
+      .order('startup_name')
   end
 end

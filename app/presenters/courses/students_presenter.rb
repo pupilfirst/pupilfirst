@@ -12,23 +12,29 @@ module Courses
     def team_coaches
       school = @course.school
 
-      school.faculty
+      school
+        .faculty
         .joins(startups: :course)
         .where(startups: { courses: { id: @course.id } })
         .includes(user: { avatar_attachment: :blob })
-        .distinct.map do |coach|
-        user = coach.user
+        .distinct
+        .map do |coach|
+          user = coach.user
 
-        coach_details = {
-          id: coach.id,
-          user_id: user.id,
-          name: user.name,
-          title: user.full_title,
-        }
+          coach_details = {
+            id: coach.id,
+            user_id: user.id,
+            name: user.name,
+            title: user.full_title
+          }
 
-        coach_details[:avatar_url] = view.rails_representation_path(user.avatar_variant(:thumb), only_path: true) if user.avatar.attached?
-        coach_details
-      end
+          coach_details[:avatar_url] =
+            view.rails_representation_path(
+              user.avatar_variant(:thumb),
+              only_path: true
+            ) if user.avatar.attached?
+          coach_details
+        end
     end
 
     def current_coach_details
@@ -38,10 +44,14 @@ module Courses
         id: coach.id,
         user_id: current_user.id,
         name: current_user.name,
-        title: current_user.full_title,
+        title: current_user.full_title
       }
 
-      details[:avatar_url] = view.rails_representation_path(current_user.avatar_variant(:thumb), only_path: true) if current_user.avatar.attached?
+      details[:avatar_url] =
+        view.rails_representation_path(
+          current_user.avatar_variant(:thumb),
+          only_path: true
+        ) if current_user.avatar.attached?
       details
     end
 
@@ -54,7 +64,7 @@ module Courses
         user_id: current_user.id,
         team_coaches: team_coaches,
         current_coach: current_coach_details,
-        tags: @course.team_tags,
+        tags: @course.team_tags
       }
     end
 

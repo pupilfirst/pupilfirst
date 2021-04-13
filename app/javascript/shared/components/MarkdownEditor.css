@@ -6,6 +6,7 @@
   min-height: 10.125rem;
 }
 
-.markdown-editor__fullscreen-preview-wrapper>.markdown-editor__fullscreen-preview-editor {
+.markdown-editor__fullscreen-preview-wrapper
+  > .markdown-editor__fullscreen-preview-editor {
   @apply max-w-3xl mx-auto;
 }

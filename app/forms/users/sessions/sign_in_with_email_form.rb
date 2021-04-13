@@ -3,7 +3,15 @@ module Users
     class SignInWithEmailForm < Reform::Form
       include ValidateTokenGeneration
 
-      property :email, validates: { presence: true, length: { maximum: 250 }, email: true }
+      property :email,
+               validates: {
+                 presence: true,
+                 length: {
+                   maximum: 250
+                 },
+                 email: true
+               }
+
       # Honeypot field. See validation `detect_honeypot` below.
       property :username
       property :referrer

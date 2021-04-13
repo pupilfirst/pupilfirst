@@ -7,7 +7,9 @@ feature 'User Delete Account' do
 
   let(:user) { create :user }
   let(:admin_user) { create :user, school: user.school }
-  let!(:school_admin) { create :school_admin, user: admin_user, school: admin_user.school }
+  let!(:school_admin) do
+    create :school_admin, user: admin_user, school: admin_user.school
+  end
 
   context 'user is a not an admin' do
     scenario 'user initiates account deletion', js: true do
@@ -37,17 +39,24 @@ feature 'User Delete Account' do
       expect(subject).to include("Delete account from #{user.school.name}")
 
       body = current_email.body
-      expect(body).to include("Please click the link above to confirm account deletion")
-      expect(body).to include("https://test.host/users/delete_account?token=#{user.delete_account_token_original}")
+      expect(body).to include(
+        'Please click the link above to confirm account deletion'
+      )
+      expect(body).to include(
+        "https://test.host/users/delete_account?token=#{user.delete_account_token_original}"
+      )
     end
 
-    scenario 'user visits the user edit page with an already valid delete token', js: true do
+    scenario 'user visits the user edit page with an already valid delete token',
+             js: true do
       user.regenerate_delete_account_token
       user.update!(delete_account_sent_at: 25.minutes.ago)
 
       sign_in_user(user, referrer: edit_user_path)
 
-      expect(page).to have_text('You have already initiated account deletion. Please check your inbox for further steps to delete your account')
+      expect(page).to have_text(
+        'You have already initiated account deletion. Please check your inbox for further steps to delete your account'
+      )
       expect(page).to_not have_button('Delete Account')
     end
 
@@ -60,17 +69,21 @@ feature 'User Delete Account' do
 
       click_button('Delete Account')
 
-      expect(page).to have_text("Account deletion is in progress", wait: 10)
+      expect(page).to have_text('Account deletion is in progress', wait: 10)
 
-      expect(page).to have_link(href: "/users/sign_in", wait: 10)
+      expect(page).to have_link(href: '/users/sign_in', wait: 10)
 
       open_email(user.email)
       subject = current_email.subject
-      expect(subject).to include("Account deleted successfully from #{user.school.name}")
+      expect(subject).to include(
+        "Account deleted successfully from #{user.school.name}"
+      )
 
       body = current_email.body
-      expect(body).to include("Account Deleted Successfully")
-      expect(body).to include("Your account in #{user.school.name} has been successfully deleted.")
+      expect(body).to include('Account Deleted Successfully')
+      expect(body).to include(
+        "Your account in #{user.school.name} has been successfully deleted."
+      )
 
       # Check audit records
       audit_record = AuditRecord.last
@@ -79,13 +92,17 @@ feature 'User Delete Account' do
       expect(audit_record.metadata['email']).to eq(user.email)
     end
 
-    scenario 'user visits the delete account page with invalid token', js: true do
+    scenario 'user visits the delete account page with invalid token',
+             js: true do
       sign_in_user(user, referrer: delete_account_path(token: 'test_token'))
 
-      expect(page).to have_text("That link has expired or is invalid. Please try again")
+      expect(page).to have_text(
+        'That link has expired or is invalid. Please try again'
+      )
     end
 
-    scenario 'user visits the delete account page with an expired token', js: true do
+    scenario 'user visits the delete account page with an expired token',
+             js: true do
       user.regenerate_delete_account_token
       user.update!(delete_account_sent_at: Time.zone.now)
 
@@ -101,7 +118,9 @@ feature 'User Delete Account' do
     scenario 'user visits user edit page to delete account', js: true do
       sign_in_user(admin_user, referrer: edit_user_path)
 
-      expect(page).to have_text('You are currently an admin of this school. Please delete your admin access to enable account deletion')
+      expect(page).to have_text(
+        'You are currently an admin of this school. Please delete your admin access to enable account deletion'
+      )
       expect(page).to_not have_button('Delete Account')
     end
   end

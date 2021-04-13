@@ -12,28 +12,53 @@ class StudentDetailsResolver < ApplicationQuery
       quiz_scores: quiz_scores,
       average_grades: average_grades,
       completed_level_ids: completed_level_ids,
-      team: team,
+      team: team
     }
   end
 
   def completed_level_ids
-    required_targets_by_level = Target.live.joins(:target_group).where(target_groups: { milestone: true, level_id: levels.select(:id) }).distinct(:id)
-      .pluck(:id, 'target_groups.level_id').each_with_object({}) do |(target_id, level_id), required_targets_by_level|
-      required_targets_by_level[level_id] ||= []
-      required_targets_by_level[level_id] << target_id
-    end
+    required_targets_by_level =
+      Target
+        .live
+        .joins(:target_group)
+        .where(target_groups: { milestone: true, level_id: levels.select(:id) })
+        .distinct(:id)
+        .pluck(:id, 'target_groups.level_id')
+        .each_with_object(
+          {}
+        ) do |(target_id, level_id), required_targets_by_level|
+          required_targets_by_level[level_id] ||= []
+          required_targets_by_level[level_id] << target_id
+        end
 
-    passed_target_ids = TimelineEvent.joins(:founders).where(founders: { id: student.id }).where.not(passed_at: nil).distinct(:target_id).pluck(:target_id)
+    passed_target_ids =
+      TimelineEvent
+        .joins(:founders)
+        .where(founders: { id: student.id })
+        .where
+        .not(passed_at: nil)
+        .distinct(:target_id)
+        .pluck(:target_id)
 
-    levels.pluck(:id).select do |level_id|
-      ((required_targets_by_level[level_id] || []) - passed_target_ids).empty?
-    end
+    levels
+      .pluck(:id)
+      .select do |level_id|
+        ((required_targets_by_level[level_id] || []) - passed_target_ids).empty?
+      end
   end
 
   def average_grades
-    @average_grades ||= TimelineEventGrade.where(timeline_event: submissions_for_grades).group(:evaluation_criterion_id).average(:grade).map do |ec_id, average_grade|
-      { evaluation_criterion_id: ec_id, average_grade: average_grade.round(1) }
-    end
+    @average_grades ||=
+      TimelineEventGrade
+        .where(timeline_event: submissions_for_grades)
+        .group(:evaluation_criterion_id)
+        .average(:grade)
+        .map do |ec_id, average_grade|
+          {
+            evaluation_criterion_id: ec_id,
+            average_grade: average_grade.round(1)
+          }
+        end
   end
 
   def targets_completed
@@ -63,7 +88,8 @@ class StudentDetailsResolver < ApplicationQuery
 
     return true if current_user.id == student.user_id
 
-    current_user.faculty.present? && current_user.faculty.courses.exists?(id: student.course)
+    current_user.faculty.present? &&
+      current_user.faculty.courses.exists?(id: student.course)
   end
 
   def levels
@@ -83,7 +109,11 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def submissions
-    @submissions ||= student.timeline_events.joins(:target).where(targets: { id: current_course_targets })
+    @submissions ||=
+      student
+        .timeline_events
+        .joins(:target)
+        .where(targets: { id: current_course_targets })
   end
 
   def latest_submissions
@@ -91,17 +121,24 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def submissions_for_grades
-    latest_submissions.includes(:founders, :target).select { |submission| submission.target.individual_target? || (submission.founder_ids.sort == student.team_student_ids) }
+    latest_submissions
+      .includes(:founders, :target)
+      .select do |submission|
+        submission.target.individual_target? ||
+          (submission.founder_ids.sort == student.team_student_ids)
+      end
   end
 
   def evaluation_criteria
-    EvaluationCriterion.where(id: average_grades.pluck(:evaluation_criterion_id)).map do |ec|
-      {
-        id: ec.id,
-        name: ec.name,
-        max_grade: ec.max_grade,
-        pass_grade: ec.pass_grade,
-      }
-    end
+    EvaluationCriterion
+      .where(id: average_grades.pluck(:evaluation_criterion_id))
+      .map do |ec|
+        {
+          id: ec.id,
+          name: ec.name,
+          max_grade: ec.max_grade,
+          pass_grade: ec.pass_grade
+        }
+      end
   end
 end

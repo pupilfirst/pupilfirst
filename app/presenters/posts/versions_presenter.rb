@@ -7,7 +7,7 @@ module Posts
     end
 
     def page_title
-      "Versions | Post"
+      'Versions | Post'
     end
 
     def versions
@@ -19,10 +19,7 @@ module Posts
     end
 
     def markdown_prop(markdown)
-      {
-        markdown: markdown,
-        profile: "questionAndAnswer"
-      }.to_json
+      { markdown: markdown, profile: 'questionAndAnswer' }.to_json
     end
 
     def version_number(index)
@@ -30,11 +27,7 @@ module Posts
     end
 
     def editor_name_for_answer
-      if @post.editor.present?
-        @post.editor.name
-      else
-        @post.creator.name
-      end
+      @post.editor.present? ? @post.editor.name : @post.creator.name
     end
 
     def updated_at(object)

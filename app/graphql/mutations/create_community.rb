@@ -4,7 +4,7 @@ module Mutations
     argument :target_linkable, Boolean, required: true
     argument :course_ids, [ID], required: false
 
-    description "Create a new community"
+    description 'Create a new community'
 
     field :id, String, null: true
 
@@ -12,7 +12,7 @@ module Mutations
       mutator = CreateCommunityMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, "Success", "Community created successfully.")
+        mutator.notify(:success, 'Success', 'Community created successfully.')
         { id: mutator.create_community.id }
       else
         mutator.notify_errors

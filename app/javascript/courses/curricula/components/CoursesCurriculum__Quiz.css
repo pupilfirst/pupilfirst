@@ -2,7 +2,8 @@
   @apply text-primary-500 shadow-md;
 }
 
-.quiz-root__answer:not(.quiz-root__answer-selected):hover .quiz-root__answer-option-icon {
+.quiz-root__answer:not(.quiz-root__answer-selected):hover
+  .quiz-root__answer-option-icon {
   @apply text-primary-400;
 }
 

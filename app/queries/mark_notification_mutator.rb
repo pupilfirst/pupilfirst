@@ -23,4 +23,3 @@ class MarkNotificationMutator < ApplicationQuery
     notification.present?
   end
 end
-

@@ -9,4 +9,3 @@ class MarkAllNotificationsMutator < ApplicationQuery
     current_user.present?
   end
 end
-

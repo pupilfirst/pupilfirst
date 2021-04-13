@@ -21,14 +21,14 @@ module Courses
 
       students =
         Course.transaction do
-          students = new_students.map do |student_data|
-            create_new_student(student_data)
-          end
+          students =
+            new_students.map { |student_data| create_new_student(student_data) }
 
           notify_students(students)
 
           # Add the tags to the school's list of founder tags. This is useful for retrieval in the school admin interface.
-          new_student_tags = new_students.map { |student| student.tags || [] }.flatten.uniq
+          new_student_tags =
+            new_students.map { |student| student.tags || [] }.flatten.uniq
           school.founder_tag_list << new_student_tags
           school.save!
 
@@ -95,7 +95,7 @@ module Courses
       # If a user was already present, don't override values of name, title or affiliation.
       user.update!(
         name: user.name.presence || student.name,
-        title: user.title.presence || student.title.presence || "Student",
+        title: user.title.presence || student.title.presence || 'Student',
         affiliation: user.affiliation.presence || student.affiliation.presence
       )
 
@@ -107,11 +107,14 @@ module Courses
 
     def unpersisted_students(students)
       requested_emails = students.map(&:email)
-      enrolled_student_emails = @course.founders.joins(:user).where(users: { email: requested_emails }).pluck(:email)
+      enrolled_student_emails =
+        @course
+          .founders
+          .joins(:user)
+          .where(users: { email: requested_emails })
+          .pluck(:email)
 
-      students.reject do |student|
-        student.email.in?(enrolled_student_emails)
-      end
+      students.reject { |student| student.email.in?(enrolled_student_emails) }
     end
 
     def find_or_create_team(student)
@@ -119,11 +122,12 @@ module Courses
 
       return team if team.present?
 
-      team = Startup.create!(
-        name: student.team_name.presence || student.name,
-        level_id: first_level.id,
-        tag_list: student.tags
-      )
+      team =
+        Startup.create!(
+          name: student.team_name.presence || student.name,
+          level_id: first_level.id,
+          tag_list: student.tags
+        )
 
       @team_name_translation[team.name] = team
       team

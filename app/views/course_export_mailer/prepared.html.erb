@@ -25,13 +25,14 @@
 <% content_for :body do %>
   <p>
     The export that you requested for the course <%= course.name %> on
-    <%= @course_export.created_at.strftime('%b %e, %l:%M %p') %> is now ready for download. Please visit the course
-    exports page using the link above to download the export.
+    <%= @course_export.created_at.strftime('%b %e, %l:%M %p') %>
+    is now ready for download. Please visit the course exports page using the
+    link above to download the export.
   </p>
 
   <p>
-    The export has been prepared in the ODS (OpenDocument Spreadsheet) format, which you should be able to open in all
-    popular spreadsheet applications.
+    The export has been prepared in the ODS (OpenDocument Spreadsheet) format,
+    which you should be able to open in all popular spreadsheet applications.
   </p>
 
   <%= render 'mailers/link_fallback', url: link %>

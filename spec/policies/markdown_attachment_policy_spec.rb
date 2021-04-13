@@ -7,11 +7,7 @@ describe MarkdownAttachmentPolicy do
   let(:markdown_attachment) { create :markdown_attachment, user: user }
   let(:user) { create :user, school: school }
 
-  let(:pundit_user) do
-    OpenStruct.new(
-      current_school: school
-    )
-  end
+  let(:pundit_user) { OpenStruct.new(current_school: school) }
 
   permissions :download? do
     it 'grants access' do

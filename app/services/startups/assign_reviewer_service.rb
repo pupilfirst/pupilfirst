@@ -7,7 +7,9 @@ module Startups
     def assign(faculty_ids)
       faculty_to_assign = @startup.course.faculty.where(id: faculty_ids)
 
-      raise "All coaches must be assigned to the team's course" if faculty_to_assign.count != [faculty_ids].flatten.count
+      if faculty_to_assign.count != [faculty_ids].flatten.count
+        raise "All coaches must be assigned to the team's course"
+      end
 
       FacultyStartupEnrollment.transaction do
         FacultyStartupEnrollment.where(startup: @startup).destroy_all

@@ -130,7 +130,9 @@ p {
   &.disabled {
     cursor: not-allowed;
 
-    &:hover, &:focus, &:active {
+    &:hover,
+    &:focus,
+    &:active {
       color: rgb(165, 173, 186);
     }
   }

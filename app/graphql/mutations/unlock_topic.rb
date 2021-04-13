@@ -2,7 +2,7 @@ module Mutations
   class UnlockTopic < GraphQL::Schema::Mutation
     argument :id, ID, required: true
 
-    description "Unlock a topic in community."
+    description 'Unlock a topic in community.'
 
     field :success, Boolean, null: false
 
@@ -11,7 +11,11 @@ module Mutations
 
       if mutator.valid?
         mutator.unlock_topic
-        mutator.notify(:success, I18n.t('shared.done_exclamation'), I18n.t('mutations.unlock_topic.success_notification'))
+        mutator.notify(
+          :success,
+          I18n.t('shared.done_exclamation'),
+          I18n.t('mutations.unlock_topic.success_notification')
+        )
         { success: true }
       else
         mutator.notify_errors

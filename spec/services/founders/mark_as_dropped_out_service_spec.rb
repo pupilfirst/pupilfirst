@@ -11,7 +11,9 @@ describe Founders::MarkAsDroppedOutService do
     let(:student) { original_team.founders.first }
 
     it 'creates a new startup in the same level and mark the founder as exited' do
-      expect { subject.execute }.to change { student.reload.startup.dropped_out_at }.from(nil)
+      expect { subject.execute }.to change {
+        student.reload.startup.dropped_out_at
+      }.from(nil)
       expect(student.startup.id).not_to eq(original_team.id)
       expect(student.startup.tag_list).to match_array(%w[tag_a tag_b])
 
@@ -30,7 +32,10 @@ describe Founders::MarkAsDroppedOutService do
     let(:coach) { create :faculty, school: team.school }
 
     before do
-      create :faculty_startup_enrollment, :with_course_enrollment, faculty: coach, startup: team
+      create :faculty_startup_enrollment,
+             :with_course_enrollment,
+             faculty: coach,
+             startup: team
     end
 
     it 'marks the student as exited and removes all direct coach enrollments to the team' do

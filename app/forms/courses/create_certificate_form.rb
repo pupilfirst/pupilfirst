@@ -1,7 +1,22 @@
 module Courses
   class CreateCertificateForm < Reform::Form
-    property :image, virtual: true, validates: { presence: true, file_size: { less_than: 5.megabytes }, image: true }
-    property :name, virtual: true, validates: { length: { maximum: 30, blank: true } }
+    property :image,
+             virtual: true,
+             validates: {
+               presence: true,
+               file_size: {
+                 less_than: 5.megabytes
+               },
+               image: true
+             }
+    property :name,
+             virtual: true,
+             validates: {
+               length: {
+                 maximum: 30,
+                 blank: true
+               }
+             }
 
     def save
       model.certificates.create!(
@@ -19,11 +34,7 @@ module Courses
     private
 
     def normalized_name
-      if name.present?
-        name.strip
-      else
-        Time.zone.now.strftime('%-d %b %Y %-l:%M %p')
-      end
+      name.present? ? name.strip : Time.zone.now.strftime('%-d %b %Y %-l:%M %p')
     end
   end
 end

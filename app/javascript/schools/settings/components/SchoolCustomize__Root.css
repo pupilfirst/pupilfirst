@@ -1,4 +1,4 @@
-.school-customize__header-links>:first-child {
+.school-customize__header-links > :first-child {
   @apply ml-0;
 }
 
@@ -30,7 +30,7 @@
 
 .school-customize__featured-courses-empty-placeholder {
   min-height: 18rem;
-  background-image: url('images/no-courses-icon.svg');
+  background-image: url("images/no-courses-icon.svg");
   background-repeat: no-repeat;
   background-position: center;
 }

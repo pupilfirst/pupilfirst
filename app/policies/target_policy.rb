@@ -1,7 +1,9 @@
 class TargetPolicy < ApplicationPolicy
   def show?
     # The curriculum page should be visible to this user.
-    return false unless CoursePolicy.new(@pundit_user, record.course).curriculum?
+    unless CoursePolicy.new(@pundit_user, record.course).curriculum?
+      return false
+    end
 
     # Visible only if level is accessible.
     return false unless LevelPolicy.new(@pundit_user, record.level).accessible?

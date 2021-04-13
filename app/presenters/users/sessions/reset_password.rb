@@ -13,10 +13,7 @@ module Users
       private
 
       def props
-        {
-          authenticity_token: view.form_authenticity_token,
-          token: @token
-        }
+        { authenticity_token: view.form_authenticity_token, token: @token }
       end
 
       def school_name

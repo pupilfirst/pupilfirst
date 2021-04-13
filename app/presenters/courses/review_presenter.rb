@@ -29,9 +29,7 @@ module Courses
     end
 
     def user_names(timeline_event)
-      timeline_event.founders.map do |founder|
-        founder.user.name
-      end.join(', ')
+      timeline_event.founders.map { |founder| founder.user.name }.join(', ')
     end
   end
 end

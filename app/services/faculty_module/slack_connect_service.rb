@@ -16,7 +16,9 @@ module FacultyModule
     private
 
     def api
-      PublicSlack::ApiService.new(token: Rails.application.secrets.slack.dig(:app, :bot_oauth_token))
+      PublicSlack::ApiService.new(
+        token: Rails.application.secrets.slack.dig(:app, :bot_oauth_token)
+      )
     end
   end
 end

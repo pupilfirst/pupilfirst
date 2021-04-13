@@ -8,10 +8,7 @@ module Schools
       end
 
       def props
-        {
-          communities: communities,
-          courses: courses,
-        }
+        { communities: communities, courses: courses }
       end
 
       def communities
@@ -22,23 +19,28 @@ module Schools
               name: community.name,
               target_linkable: community.target_linkable,
               topic_categories: topic_categories(community),
-              course_ids:  community.course_ids.map(&:to_s)
+              course_ids: community.course_ids.map(&:to_s)
             }
           end
       end
 
       def courses
         @school.courses.map do |course|
-          {
-            id: course.id.to_s,
-            name: course.name
-          }
+          { id: course.id.to_s, name: course.name }
         end
       end
 
       def topic_categories(community)
-        topic_categories = ActiveRecord::Precounter.new(TopicCategory.where(community: community)).precount(:topics)
-        topic_categories.map { |category| category.attributes.slice('id', 'name', 'community_id').merge({ topics_count: category.topics_count }) }
+        topic_categories =
+          ActiveRecord::Precounter
+            .new(TopicCategory.where(community: community))
+            .precount(:topics)
+        topic_categories.map do |category|
+          category
+            .attributes
+            .slice('id', 'name', 'community_id')
+            .merge({ topics_count: category.topics_count })
+        end
       end
     end
   end

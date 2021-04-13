@@ -12,7 +12,7 @@ module Mutations
     argument :checklist, GraphQL::Types::JSON, required: true
     argument :visibility, String, required: true
 
-    description "Update a target"
+    description 'Update a target'
 
     field :sort_index, Integer, null: true
 

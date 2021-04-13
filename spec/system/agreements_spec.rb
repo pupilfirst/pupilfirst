@@ -4,9 +4,7 @@ feature 'User Agreements' do
   context 'when the school has custom privacy policy' do
     let(:privacy_policy) { Faker::Lorem.paragraph(sentence_count: 10) }
 
-    before do
-      create :school_string, :privacy_policy, value: privacy_policy
-    end
+    before { create :school_string, :privacy_policy, value: privacy_policy }
 
     it 'displays privacy policy' do
       visit agreement_path(agreement_type: 'privacy-policy')
@@ -40,9 +38,7 @@ feature 'User Agreements' do
   end
 
   context 'when the school does not have custom agreement strings' do
-    before do
-      create :school, :current
-    end
+    before { create :school, :current }
 
     it '404s on privacy policy page' do
       visit agreement_path(agreement_type: 'privacy-policy')

@@ -22,12 +22,15 @@
 
 <% content_for :body do %>
   <p>
-    You have been added as a coach in the course <strong><%= @course.name %></strong>, on <%= @school.name %>. This
-    gives you the ability to review submissions from students, assign grades, and give them feedback on their work.
+    You have been added as a coach in the course
+    <strong><%= @course.name %></strong>, on <%= @school.name %>. This gives you
+    the ability to review submissions from students, assign grades, and give
+    them feedback on their work.
   </p>
 
   <p>
-    Use the link above to sign into <%= @school.name %> and view your students' submissions.
+    Use the link above to sign into <%= @school.name %> and view your students'
+    submissions.
   </p>
 
   <%= render 'mailers/link_fallback', url: sign_in_link %>

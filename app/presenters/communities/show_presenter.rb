@@ -9,7 +9,8 @@ module Communities
 
     def props
       {
-        target: @target.present? ? @target.attributes.slice('id', 'title') : nil,
+        target:
+          @target.present? ? @target.attributes.slice('id', 'title') : nil,
         community_id: @community.id,
         topic_categories: topic_categories
       }
@@ -22,7 +23,9 @@ module Communities
     private
 
     def topic_categories
-      @community.topic_categories.map { |category| { id: category.id, name: category.name } }
+      @community.topic_categories.map do |category|
+        { id: category.id, name: category.name }
+      end
     end
   end
 end

@@ -1,12 +1,16 @@
 class ConnectRequestController < ApplicationController
   # Ask to authenticate if no token for join_session. Only faculty is given token.
-  before_action :authenticate_and_return, only: :join_session, unless: proc { params[:token].present? }
+  before_action :authenticate_and_return,
+                only: :join_session,
+                unless: proc { params[:token].present? }
 
   # GET /connect_request/:id/feedback/from_team/:token
   def feedback_from_team
     load_comment_form_for_team
 
-    @rating_recorded = true if @connect_request.update(rating_for_faculty: params[:rating])
+    @rating_recorded = true if @connect_request.update(
+      rating_for_faculty: params[:rating]
+    )
 
     render 'comment_form'
   end
@@ -15,7 +19,9 @@ class ConnectRequestController < ApplicationController
   def feedback_from_faculty
     load_comment_form_for_faculty
 
-    @rating_recorded = true if @connect_request.update(rating_for_team: params[:rating])
+    @rating_recorded = true if @connect_request.update(
+      rating_for_team: params[:rating]
+    )
 
     render 'comment_form'
   end
@@ -29,7 +35,8 @@ class ConnectRequestController < ApplicationController
     end
     if @comment_form.validate(params[:connect_requests_comment])
       @comment_form.save
-      flash[:success] = 'Thank you! Your comment about the connect session has been saved.'
+      flash[:success] =
+        'Thank you! Your comment about the connect session has been saved.'
       redirect_to root_url
     else
       render 'comment_form'
@@ -40,7 +47,9 @@ class ConnectRequestController < ApplicationController
   def join_session
     @connect_request = ConnectRequest.find(params[:id])
 
-    unless ConnectRequestPolicy.new(pundit_user, @connect_request).join_session?(params[:token])
+    unless ConnectRequestPolicy
+             .new(pundit_user, @connect_request)
+             .join_session?(params[:token])
       raise_not_found
     end
   end
@@ -49,7 +58,8 @@ class ConnectRequestController < ApplicationController
 
   def load_comment_form_for_team
     founder = Founder.find_by(auth_token: params[:token])
-    @connect_request = authorize(founder&.startup&.connect_requests&.find(params[:id]))
+    @connect_request =
+      authorize(founder&.startup&.connect_requests&.find(params[:id]))
 
     @comment_form = ConnectRequests::CommentForm.new(@connect_request)
     @comment_form.from = :team

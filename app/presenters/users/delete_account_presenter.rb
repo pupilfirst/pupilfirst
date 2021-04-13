@@ -12,9 +12,7 @@ module Users
     private
 
     def props
-      {
-        token: @token
-      }
+      { token: @token }
     end
   end
 end

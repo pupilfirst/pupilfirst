@@ -13,7 +13,10 @@ module MarkdownAttachments
     private
 
     def url
-      @view_context.download_markdown_attachment_url(id: @markdown_attachment, token: @markdown_attachment.token)
+      @view_context.download_markdown_attachment_url(
+        id: @markdown_attachment,
+        token: @markdown_attachment.token
+      )
     end
 
     def filename

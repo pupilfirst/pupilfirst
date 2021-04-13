@@ -28,9 +28,7 @@ module Types
     end
 
     def user_names
-      object.founders.map do |founder|
-        founder.user.name
-      end.join(', ')
+      object.founders.map { |founder| founder.user.name }.join(', ')
     end
 
     def feedback_sent
@@ -60,13 +58,21 @@ module Types
     end
 
     def files
-      object.timeline_event_files.with_attached_file.map do |file|
-        {
-          id: file.id,
-          title: file.file.filename,
-          url: Rails.application.routes.url_helpers.download_timeline_event_file_path(file)
-        }
-      end
+      object
+        .timeline_event_files
+        .with_attached_file
+        .map do |file|
+          {
+            id: file.id,
+            title: file.file.filename,
+            url:
+              Rails
+                .application
+                .routes
+                .url_helpers
+                .download_timeline_event_file_path(file)
+          }
+        end
     end
 
     def students_have_same_team
@@ -74,7 +80,8 @@ module Types
     end
 
     def team_name
-      if object.team_submission? && students_have_same_team && object.timeline_event_owners.count > 1
+      if object.team_submission? && students_have_same_team &&
+           object.timeline_event_owners.count > 1
         object.founders.first.startup.name
       end
     end

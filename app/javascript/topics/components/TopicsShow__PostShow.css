@@ -1,11 +1,13 @@
-.topics-post-show__new-reply-container, .topics-post-show__replies-container {
+.topics-post-show__new-reply-container,
+.topics-post-show__replies-container {
   @apply relative;
 }
 
 @screen lg {
-  .topics-post-show__new-reply-container:before, .topics-post-show__replies-container:before {
+  .topics-post-show__new-reply-container:before,
+  .topics-post-show__replies-container:before {
     position: absolute;
-    content: '';
+    content: "";
     width: 1px;
     height: 100%;
     @apply bg-gray-300;
@@ -15,7 +17,7 @@
   }
   .topics-post-show__new-reply-container:after {
     position: absolute;
-    content: '';
+    content: "";
     width: 16px;
     height: 1px;
     @apply bg-gray-300;

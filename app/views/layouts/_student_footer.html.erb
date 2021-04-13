@@ -1,33 +1,50 @@
 <% presenter = ::Layouts::FooterPresenter.new(self) %>
 
 <footer class="footer__container bg-gray-800 flex-shrink-0 border-t">
-  <section class="flex flex-col md:flex-row w-full lg:max-w-5xl mx-auto justify-between items-start py-8 px-3">
+  <section
+    class="flex flex-col md:flex-row w-full lg:max-w-5xl mx-auto justify-between items-start py-8 px-3"
+  >
     <div class="pt-2 w-full md:w-2/5">
       <div class="flex flex-col items-left md:pr-5 text-center md:text-left">
-        <span class="uppercase font-bold text-xs py-2 tracking-wide">SITEMAP</span>
+        <span class="uppercase font-bold text-xs py-2 tracking-wide"
+          >SITEMAP</span
+        >
 
         <div class="w-full flex flex-row flex-wrap text-xs font-semibold">
           <% presenter.nav_links.each do |nav_link| %>
             <div class="w-1/3">
-              <%= link_to(
-                  nav_link[:title], nav_link[:url], {
-                  class: 'no-underline pt-2 pb-1 block hover:text-primary-500'
-                }.merge(nav_link[:custom] ? { target: '_blank', rel: 'noopener' } : {} )
+              <%=
+                link_to(
+                  nav_link[:title],
+                  nav_link[:url],
+                  { class: 'no-underline pt-2 pb-1 block hover:text-primary-500' }.merge(
+                    nav_link[:custom] ? { target: '_blank', rel: 'noopener' } : {},
+                  ),
                 )
               %>
             </div>
           <% end %>
         </div>
       </div>
-
     </div>
     <div class="pt-5 md:pt-2 w-full md:flex-1 md:pr-5">
       <% if presenter.social_links.any? %>
-        <p class="uppercase font-bold text-xs py-2 tracking-wide text-center md:text-left">SOCIAL</p>
+        <p
+          class="uppercase font-bold text-xs py-2 tracking-wide text-center md:text-left"
+        >
+          SOCIAL
+        </p>
         <div class="py-2 flex flex-wrap justify-center md:justify-start">
           <% presenter.social_links.each do |social_link| %>
-            <a class="h-8 w-8 mr-2 hover:text-primary-500 flex items-center justify-center no-underline pointer-cursor" href="<%= social_link[:url] %>" target='_blank' rel='noopener'>
-              <i class="text-xl <%= presenter.social_icon(social_link[:url]) %>"></i>
+            <a
+              class="h-8 w-8 mr-2 hover:text-primary-500 flex items-center justify-center no-underline pointer-cursor"
+              href="<%= social_link[:url] %>"
+              target="_blank"
+              rel="noopener"
+            >
+              <i
+                class="text-xl <%= presenter.social_icon(social_link[:url]) %>"
+              ></i>
             </a>
           <% end %>
         </div>
@@ -44,8 +61,10 @@
         <% end %>
         <div class="text-xs py-2">
           <% if presenter.email_address.present? %>
-            <p>Reach us at
-              <strong><%= mail_to presenter.email_address, presenter.email_address, class: "font-bold no-underline pointer-cursor" %></strong>.
+            <p>
+              Reach us at
+              <strong><%= mail_to presenter.email_address, presenter.email_address, class: "font-bold no-underline pointer-cursor" %></strong
+              >.
             </p>
           <% end %>
         </div>
@@ -54,12 +73,18 @@
   </section>
 
   <section class="w-full footer__bottom">
-    <div class="flex flex-row w-full xl:max-w-5xl mx-auto justify-between items-start px-3">
+    <div
+      class="flex flex-row w-full xl:max-w-5xl mx-auto justify-between items-start px-3"
+    >
       <div class="w-full flex flex-row justify-between items-center">
         <div class="w-1/4 my-4">
           <a class="text-xs" href="/">
             <% if presenter.logo? %>
-              <img class="w-27" src="<%= presenter.logo_url %>" alt="Logo of <%= presenter.school_name %>"/>
+              <img
+                class="w-27"
+                src="<%= presenter.logo_url %>"
+                alt="Logo of <%= presenter.school_name %>"
+              />
             <% else %>
               <span><%= presenter.school_name %></span>
             <% end %>
@@ -74,8 +99,10 @@
             <%= link_to 'Terms & Conditions', agreement_path(agreement_type: 'terms-and-conditions'), class: "cursor-pointer md:mr-3 hover:text-primary-500" %>
           <% end %>
 
-          <span class="text-gray-600 mt-1 md:mt-0 block md:inline-block">&copy; <%= Time.zone.now.year %> <%= presenter.school_name %>
-            .</span>
+          <span class="text-gray-600 mt-1 md:mt-0 block md:inline-block"
+            >&copy; <%= Time.zone.now.year %> <%= presenter.school_name %>
+            .</span
+          >
         </div>
       </div>
     </div>

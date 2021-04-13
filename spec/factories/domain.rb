@@ -3,8 +3,6 @@ FactoryBot.define do
     fqdn { Faker::Internet.domain_name }
     school
 
-    trait(:primary) do
-      primary { true }
-    end
+    trait(:primary) { primary { true } }
   end
 end

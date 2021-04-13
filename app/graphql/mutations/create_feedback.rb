@@ -3,7 +3,7 @@ module Mutations
     argument :submission_id, ID, required: true
     argument :feedback, String, required: true
 
-    description "Create feedback for submission"
+    description 'Create feedback for submission'
 
     field :success, Boolean, null: false
 
@@ -12,7 +12,11 @@ module Mutations
 
       if mutator.valid?
         mutator.create_feedback
-        mutator.notify(:success, "Feedback Sent", "Your feedback will be e-mailed to the student.")
+        mutator.notify(
+          :success,
+          'Feedback Sent',
+          'Your feedback will be e-mailed to the student.'
+        )
         { success: true }
       else
         mutator.notify_errors

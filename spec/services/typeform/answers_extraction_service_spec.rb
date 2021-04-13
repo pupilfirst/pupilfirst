@@ -38,8 +38,9 @@ describe Typeform::AnswersExtractionService do
 
     it 'returns survey answers in the required format' do
       extracted_answers = {
-        :response =>
-        [{ question: "1. Short text", answer: "Lorem ipsum dolor" }],
+        :response => [
+          { question: '1. Short text', answer: 'Lorem ipsum dolor' }
+        ],
         'score' => 42
       }
       expect(subject.execute).to eq(extracted_answers)

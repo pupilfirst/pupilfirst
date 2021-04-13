@@ -22,17 +22,21 @@ class ResolveEmbedCodeMutator < ApplicationQuery
   private
 
   def must_be_embed_type_block
-    return if content_block.present? && content_block.block_type == ContentBlock::BLOCK_TYPE_EMBED
+    if content_block.present? &&
+         content_block.block_type == ContentBlock::BLOCK_TYPE_EMBED
+      return
+    end
 
-    errors[:base] << "Can only resolve embed-type content blocks"
+    errors[:base] << 'Can only resolve embed-type content blocks'
   end
 
   def embed_code
-    @embed_code ||= begin
-      ::Oembed::Resolver.new(origin_url).embed_code
-    rescue ::Oembed::Resolver::ProviderNotSupported
-      nil
-    end
+    @embed_code ||=
+      begin
+        ::Oembed::Resolver.new(origin_url).embed_code
+      rescue ::Oembed::Resolver::ProviderNotSupported
+        nil
+      end
   end
 
   def resolution_required?

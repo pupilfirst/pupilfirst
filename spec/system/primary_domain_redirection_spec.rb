@@ -1,7 +1,13 @@
 require 'rails_helper'
 
 feature 'Primary Domain Redirection' do
-  let(:school) { create :school, :current, configuration: { 'disable_primary_domain_redirection' => nil } }
+  let(:school) do
+    create :school,
+           :current,
+           configuration: {
+             'disable_primary_domain_redirection' => nil
+           }
+  end
   let(:student) { create :student }
 
   before do
@@ -16,8 +22,14 @@ feature 'Primary Domain Redirection' do
     expect(page).to have_text("http://#{@primary_domain.fqdn}/dashboard")
   end
 
-  context "when the configuration option is set" do
-    let(:school) { create :school, :current, configuration: { 'disable_primary_domain_redirection' => true } }
+  context 'when the configuration option is set' do
+    let(:school) do
+      create :school,
+             :current,
+             configuration: {
+               'disable_primary_domain_redirection' => true
+             }
+    end
 
     it 'does not redirect to primary domain' do
       visit dashboard_path

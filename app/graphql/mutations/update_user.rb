@@ -7,21 +7,22 @@ module Mutations
     argument :confirm_new_password, String, required: false
     argument :daily_digest, Boolean, required: true
 
-    description "Update profile of a user"
+    description 'Update profile of a user'
 
     field :success, Boolean, null: false
 
     def resolve(params)
       mutator = UpdateUserMutator.new(context, params)
 
-      success = if mutator.valid?
-        mutator.notify(:success, 'Done!', 'Profile updated successfully!')
-        mutator.update_user
-        true
-      else
-        mutator.notify_errors
-        false
-      end
+      success =
+        if mutator.valid?
+          mutator.notify(:success, 'Done!', 'Profile updated successfully!')
+          mutator.update_user
+          true
+        else
+          mutator.notify_errors
+          false
+        end
 
       { success: success }
     end

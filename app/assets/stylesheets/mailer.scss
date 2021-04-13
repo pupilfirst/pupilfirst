@@ -1,4 +1,5 @@
-body, html {
+body,
+html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -7,7 +8,6 @@ body {
   background-color: #f5f5f5;
   padding: 15px;
   margin: 0;
-  mso-line-height-rule: exactly;
 }
 
 table {
@@ -21,11 +21,7 @@ table {
   }
 }
 
-table, td {
-  mso-table-lspace: 0pt !important;
-  mso-table-rspace: 0pt !important;
-}
-
+table,
 img {
   -ms-interpolation-mode: bicubic;
 }
@@ -37,8 +33,8 @@ table table table {
 .mailer-table {
   background-color: white;
   width: 100%;
-  font-family: 'Source Sans Pro', sans-serif;
-  border-top: 2px solid #32B475;
+  font-family: "Source Sans Pro", sans-serif;
+  border-top: 2px solid #32b475;
   max-width: 600px;
 }
 
@@ -54,9 +50,13 @@ table table table {
 }
 
 .mailer-button--dark {
-  background-color: #6025C0;
+  background-color: #6025c0;
   color: white !important;
-  background-image: linear-gradient(135deg, rgba(96, 37, 192, 1) 0%, rgba(77, 30, 154, 1) 100%);
+  background-image: linear-gradient(
+    135deg,
+    rgba(96, 37, 192, 1) 0%,
+    rgba(77, 30, 154, 1) 100%
+  );
 }
 
 .mailer-body__table {
@@ -102,8 +102,9 @@ table table table {
   padding: 24px;
   color: white;
   text-align: center;
-  background-color: #F1EDF7;
-  background-image: asset-url("mailer/emailer-hero-pattern.png"), linear-gradient(to right, #60b158 0%, #2182a2 100%);
+  background-color: #f1edf7;
+  background-image: asset-url("mailer/emailer-hero-pattern.png"),
+    linear-gradient(to right, #60b158 0%, #2182a2 100%);
   background-size: cover;
   width: 100%;
 
@@ -113,12 +114,12 @@ table table table {
 }
 
 .mailer-body__hero--dark {
-  color: #453C52;
-  background-color: #F1EDF7;
+  color: #453c52;
+  background-color: #f1edf7;
   background-image: none;
 
   a {
-    color: #453C52;
+    color: #453c52;
   }
 }
 
@@ -130,7 +131,7 @@ table table table {
 }
 
 .mailer-body__hero-title--dark {
-  color: #453C52;
+  color: #453c52;
 }
 
 .mailer-body__hero-subtitle {
@@ -142,7 +143,7 @@ table table table {
   font-size: 16px;
   line-height: 1.4;
   padding: 24px;
-  color: #453C52;
+  color: #453c52;
 
   p {
     margin: 0 0 15px;
@@ -150,7 +151,7 @@ table table table {
 
   a {
     font-weight: 600;
-    color: #6025C0;
+    color: #6025c0;
     background-color: #ffffff;
     border-radius: 4px;
     text-decoration: none;
@@ -181,7 +182,8 @@ table table table {
   width: 100%;
 }
 
-p.monospace, pre.monospace {
+p.monospace,
+pre.monospace {
   @extend .monospace;
   @extend .monospace-block;
 }
@@ -189,7 +191,7 @@ p.monospace, pre.monospace {
 .monospace {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 90%;
-  color: #6025C0;
+  color: #6025c0;
 }
 
 .monospace-block {

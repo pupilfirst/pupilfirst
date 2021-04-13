@@ -11,16 +11,25 @@ class AutoVerifySubmissionMutator < ApplicationQuery
   def create_submission
     submission =
       TimelineEvent.transaction do
-        TimelineEvent.create!(target: target, passed_at: Time.zone.now)
+        TimelineEvent
+          .create!(target: target, passed_at: Time.zone.now)
           .tap do |submission|
             students.map do |student|
-              student.timeline_event_owners.create!(timeline_event: submission, latest: true)
+              student.timeline_event_owners.create!(
+                timeline_event: submission,
+                latest: true
+              )
             end
-        end
+          end
       end
 
     TimelineEvents::AfterMarkingAsCompleteJob.perform_later(submission)
-    publish(course, :submission_automatically_verified, current_user, submission)
+    publish(
+      course,
+      :submission_automatically_verified,
+      current_user,
+      submission
+    )
 
     submission
   end

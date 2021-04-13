@@ -5,7 +5,10 @@ module Schools
     # GET /school/courses/:course_id/targets/:id/content
     def content
       @course = current_school.courses.find(params[:course_id])
-      authorize(@course.targets.find(params[:id]), policy_class: Schools::TargetPolicy)
+      authorize(
+        @course.targets.find(params[:id]),
+        policy_class: Schools::TargetPolicy
+      )
       render 'schools/courses/curriculum'
     end
 

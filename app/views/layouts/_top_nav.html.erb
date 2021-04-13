@@ -1,9 +1,20 @@
 <% presenter = ::Layouts::TopNavPresenter.new(self) %>
 
-<div id="nav-links__navbar" class="collapse navbar-collapse justify-content-end navbar-link__container">
-  <ul class="navbar-nav align-items-lg-center" itemscope="itemscope" itemtype="http://www.schema.org/SiteNavigationElement">
+<div
+  id="nav-links__navbar"
+  class="collapse navbar-collapse justify-content-end navbar-link__container"
+>
+  <ul
+    class="navbar-nav align-items-lg-center"
+    itemscope="itemscope"
+    itemtype="http://www.schema.org/SiteNavigationElement"
+  >
     <% presenter.links.each do |link| %>
-      <li class="nav-item navbar-nav__nav-item" role="presentation" itemprop="name">
+      <li
+        class="nav-item navbar-nav__nav-item"
+        role="presentation"
+        itemprop="name"
+      >
         <%= link_to(link[:title], link[:url], class: 'nav-item__link', itemprop: 'url') %>
       </li>
     <% end %>

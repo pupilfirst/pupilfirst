@@ -2,7 +2,14 @@ class UpdateCommunityMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
   property :id
-  property :name, validates: { length: { minimum: 1, maximum: 50, message: 'InvalidLengthName' } }
+  property :name,
+           validates: {
+             length: {
+               minimum: 1,
+               maximum: 50,
+               message: 'InvalidLengthName'
+             }
+           }
   property :target_linkable
   property :course_ids
 
@@ -24,7 +31,7 @@ class UpdateCommunityMutator < ApplicationQuery
     community.update!(
       name: name,
       target_linkable: target_linkable,
-      courses: courses,
+      courses: courses
     )
 
     community.id

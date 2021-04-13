@@ -10,7 +10,8 @@ module Mutations
     def resolve(params)
       mutator = UpdateImageContentBlockMutator.new(context, params)
 
-      content_block = if mutator.valid?
+      content_block =
+        if mutator.valid?
           mutator.update_image_content_block
         else
           mutator.notify_errors

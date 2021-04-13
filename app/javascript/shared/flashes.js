@@ -4,7 +4,7 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   const message = JSON.parse(
     document.documentElement.getAttribute("data-flash")
   );

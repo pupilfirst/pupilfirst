@@ -1,13 +1,11 @@
 require 'rails_helper'
 
-describe "daily_digest" do
-  include_context "rake"
+describe 'daily_digest' do
+  include_context 'rake'
 
   let(:service) { instance_double(DailyDigestService, execute: nil) }
 
-  before do
-    allow(DailyDigestService).to receive(:new).and_return(service)
-  end
+  before { allow(DailyDigestService).to receive(:new).and_return(service) }
 
   it 'should have environment in prerequisites' do
     expect(subject.prerequisites).to include('environment')

@@ -2,19 +2,41 @@ class UpdateCertificateMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
   property :id
-  property :margin, validates: { numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 20 } }
-  property :name_offset_top, validates: { numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 95 } }
-  property :font_size, validates: { numericality: { greater_than_or_equal_to: 75, less_than_or_equal_to: 150 } }
+  property :margin,
+           validates: {
+             numericality: {
+               greater_than_or_equal_to: 0,
+               less_than_or_equal_to: 20
+             }
+           }
+  property :name_offset_top,
+           validates: {
+             numericality: {
+               greater_than_or_equal_to: 0,
+               less_than_or_equal_to: 95
+             }
+           }
+  property :font_size,
+           validates: {
+             numericality: {
+               greater_than_or_equal_to: 75,
+               less_than_or_equal_to: 150
+             }
+           }
   property :qr_corner, validates: { presence: true }
-  property :qr_scale, validates: { numericality: { greater_than_or_equal_to: 50, less_than_or_equal_to: 150 } }
+  property :qr_scale,
+           validates: {
+             numericality: {
+               greater_than_or_equal_to: 50,
+               less_than_or_equal_to: 150
+             }
+           }
   property :active
   property :name, validates: { length: { minimum: 1, maximum: 30 } }
 
   def update_certificate
     Certificate.transaction do
-      if active && !certificate.active
-        Certificate.active.update(active: false)
-      end
+      Certificate.active.update(active: false) if active && !certificate.active
 
       certificate.update!(
         margin: margin,

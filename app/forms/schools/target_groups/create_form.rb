@@ -6,13 +6,14 @@ module Schools
       property :milestone, validates: { presence: true }
 
       def save
-        target_group = TargetGroup.create!(
-          level: model.level,
-          name: name,
-          description: description,
-          sort_index: sort_index,
-          milestone: milestone
-        )
+        target_group =
+          TargetGroup.create!(
+            level: model.level,
+            name: name,
+            description: description,
+            sort_index: sort_index,
+            milestone: milestone
+          )
         target_group
       end
 

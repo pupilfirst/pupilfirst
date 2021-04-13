@@ -4,7 +4,7 @@ module Mutations
     argument :email, String, required: true
     argument :name, String, required: true
 
-    description "Create a new applicant"
+    description 'Create a new applicant'
 
     field :success, Boolean, null: false
 

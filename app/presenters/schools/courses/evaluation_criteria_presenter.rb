@@ -13,10 +13,7 @@ module Schools
       private
 
       def props
-        {
-          course_id: @course.id,
-          evaluation_criteria: evaluation_criteria
-        }
+        { course_id: @course.id, evaluation_criteria: evaluation_criteria }
       end
 
       def evaluation_criteria

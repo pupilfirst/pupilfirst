@@ -4,10 +4,7 @@ class CreatePostLikeMutator < ApplicationQuery
   property :post_id, validates: { presence: true }
 
   def create_post_like
-    PostLike.where(
-      user: current_user,
-      post: post
-    ).first_or_create!
+    PostLike.where(user: current_user, post: post).first_or_create!
   end
 
   private

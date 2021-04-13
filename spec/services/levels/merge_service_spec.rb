@@ -16,7 +16,7 @@ describe Levels::MergeService do
   let!(:target_group_l2) { create :target_group, level: level_2 }
   let!(:target_group_l3) { create :target_group, level: level_3 }
 
-  RSpec.shared_examples "merges a level" do |level_number, merge_into_number|
+  RSpec.shared_examples 'merges a level' do |level_number, merge_into_number|
     let(:level_to_delete) { Level.find_by(number: level_number) }
     let(:level_to_merge_into) { Level.find_by(number: merge_into_number) }
 
@@ -26,14 +26,23 @@ describe Levels::MergeService do
 
       subject.new(level_to_delete).merge_into(level_to_merge_into)
 
-      expect(level_to_merge_into.startups.where(id: chosen_level_startups).count).to eq(chosen_level_startups.count)
-      expect(level_to_merge_into.target_groups.where(id: chosen_level_target_groups).count).to eq(chosen_level_target_groups.count)
+      expect(
+        level_to_merge_into.startups.where(id: chosen_level_startups).count
+      ).to eq(chosen_level_startups.count)
+      expect(
+        level_to_merge_into
+          .target_groups
+          .where(id: chosen_level_target_groups)
+          .count
+      ).to eq(chosen_level_target_groups.count)
     end
 
     it 'removes entry for the chosen level' do
       subject.new(level_to_delete).merge_into(level_to_merge_into)
 
-      expect { level_to_delete.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+      expect { level_to_delete.reload }.to raise_exception(
+        ActiveRecord::RecordNotFound
+      )
     end
   end
 
@@ -87,9 +96,10 @@ describe Levels::MergeService do
     end
 
     it 'does not allow merging of any level into level 0' do
-      expect do
-        subject.new(level_1).merge_into(level_0)
-      end.to raise_error(StandardError, 'Cannot merge into level zero')
+      expect { subject.new(level_1).merge_into(level_0) }.to raise_error(
+        StandardError,
+        'Cannot merge into level zero'
+      )
 
       # Numbers should not have changed.
       expect(level_1.reload.number).to eq(1)

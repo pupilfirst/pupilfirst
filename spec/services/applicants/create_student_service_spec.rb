@@ -40,11 +40,11 @@ describe Applicants::CreateStudentService do
     context 'when the user already exists' do
       let(:existing_coach) { create :faculty }
       let(:existing_title) { Faker::Job.title }
-      let(:applicant) { create :applicant, course: course, email: existing_coach.user.email }
-
-      before do
-        existing_coach.user.update(title: existing_title)
+      let(:applicant) do
+        create :applicant, course: course, email: existing_coach.user.email
       end
+
+      before { existing_coach.user.update(title: existing_title) }
 
       it 'does not change the title of existing users' do
         student = subject.create(tag)

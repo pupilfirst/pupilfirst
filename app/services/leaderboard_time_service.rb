@@ -22,7 +22,9 @@ class LeaderboardTimeService
   private
 
   def adjusted_time(week_minus)
-    week_beginning(@leaderboard_at - week_minus.weeks).in_time_zone('Asia/Calcutta') + 12.hours
+    week_beginning(@leaderboard_at - week_minus.weeks).in_time_zone(
+      'Asia/Calcutta'
+    ) + 12.hours
   end
 
   def week_beginning(time)

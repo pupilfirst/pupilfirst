@@ -8,6 +8,8 @@
 <% end %>
 
 <% content_for(:inner_wrapper) do %>
-  <script id="react-root-data" type="application/json"><%= @presenter.props_to_json.html_safe %></script>
+  <script id="react-root-data" type="application/json">
+    <%= @presenter.props_to_json.html_safe %>
+  </script>
   <div id="react-root"></div>
 <% end %>

@@ -7,14 +7,19 @@ RSpec.describe Target, type: :model do
     context 'if safe_to_change_visibility is not set' do
       it 'fails validation' do
         subject.update(visibility: Target::VISIBILITY_ARCHIVED)
-        expect(subject.errors.to_a).to include('Visibility cannot be modified unsafely')
+        expect(subject.errors.to_a).to include(
+          'Visibility cannot be modified unsafely'
+        )
         expect(subject.reload.visibility).to eq(Target::VISIBILITY_LIVE)
       end
     end
 
     context 'if safe_to_change_visibility is set' do
       it 'passes validation' do
-        subject.update!(visibility: Target::VISIBILITY_ARCHIVED, safe_to_change_visibility: true)
+        subject.update!(
+          visibility: Target::VISIBILITY_ARCHIVED,
+          safe_to_change_visibility: true
+        )
         expect(subject.reload.visibility).to eq(Target::VISIBILITY_ARCHIVED)
       end
     end

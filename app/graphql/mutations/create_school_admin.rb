@@ -3,7 +3,7 @@ module Mutations
     argument :name, String, required: true
     argument :email, String, required: true
 
-    description "Create a new school admin"
+    description 'Create a new school admin'
 
     field :school_admin, Types::UserProxyType, null: true
 

@@ -7,10 +7,15 @@ class MoveContentBlockMutator < ApplicationQuery
 
   def move_content_block
     ContentBlock.transaction do
-      ordered_content_blocks = content_blocks.order(sort_index: :ASC) # Order the versions by current sort_index
-        .to_a # We'll re-order the array...
+      ordered_content_blocks =
+        content_blocks.order(sort_index: :ASC) # Order the versions by current sort_index
+          .to_a # We'll re-order the array...
 
-      direction == 'Up' ? swap_up(ordered_content_blocks, content_block) : swap_down(ordered_content_blocks, content_block)
+      if direction == 'Up'
+        swap_up(ordered_content_blocks, content_block)
+      else
+        swap_down(ordered_content_blocks, content_block)
+      end
 
       # ...and then re-index the re-ordered array.
       ordered_content_blocks.each_with_index do |cb, index|

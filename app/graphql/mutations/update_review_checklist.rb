@@ -3,7 +3,7 @@ module Mutations
     argument :target_id, ID, required: true
     argument :review_checklist, GraphQL::Types::JSON, required: true
 
-    description "Update review checklist"
+    description 'Update review checklist'
 
     field :success, Boolean, null: false
 
@@ -12,7 +12,11 @@ module Mutations
 
       if mutator.valid?
         mutator.update_review_checklist
-        mutator.notify(:success, "Success", "Review checklist updated successfully")
+        mutator.notify(
+          :success,
+          'Success',
+          'Review checklist updated successfully'
+        )
         { success: true }
       else
         mutator.notify_errors

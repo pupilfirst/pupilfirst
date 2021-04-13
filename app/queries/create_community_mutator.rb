@@ -17,7 +17,7 @@ class CreateCommunityMutator < ApplicationQuery
     current_school.communities.create!(
       name: name,
       target_linkable: target_linkable,
-      courses: courses,
+      courses: courses
     )
   end
 

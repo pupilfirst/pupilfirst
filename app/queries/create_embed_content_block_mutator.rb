@@ -27,7 +27,12 @@ class CreateEmbedContentBlockMutator < ApplicationQuery
   def create_embed_block
     target_version.content_blocks.create!(
       block_type: ContentBlock::BLOCK_TYPE_EMBED,
-      content: { url: url, request_source: request_source, embed_code: embed_code, last_resolved_at: Time.zone.now },
+      content: {
+        url: url,
+        request_source: request_source,
+        embed_code: embed_code,
+        last_resolved_at: Time.zone.now
+      },
       sort_index: sort_index
     )
   end

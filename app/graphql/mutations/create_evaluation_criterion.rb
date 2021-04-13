@@ -6,7 +6,7 @@ module Mutations
     argument :grades_and_labels, [Types::GradeAndLabelInputType], required: true
     argument :course_id, ID, required: true
 
-    description "Create a new evaluation criterion."
+    description 'Create a new evaluation criterion.'
 
     field :evaluation_criterion, Types::EvaluationCriterionType, null: true
 
@@ -14,7 +14,11 @@ module Mutations
       mutator = CreateEvaluationCriterionMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, 'Done!', 'Evaluation criterion created successfully!')
+        mutator.notify(
+          :success,
+          'Done!',
+          'Evaluation criterion created successfully!'
+        )
         { evaluation_criterion: mutator.create_evaluation_criterion }
       else
         mutator.notify_errors

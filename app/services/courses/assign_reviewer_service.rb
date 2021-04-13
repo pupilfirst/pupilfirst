@@ -6,17 +6,20 @@ module Courses
     end
 
     def assign(faculty)
-      raise 'Faculty must in same school as course' if faculty.school != @course.school
+      if faculty.school != @course.school
+        raise 'Faculty must in same school as course'
+      end
 
       return if faculty.courses.exists?(id: @course)
 
-      enrollment = FacultyStartupEnrollment.transaction do
-        FacultyCourseEnrollment.create!(
-          safe_to_create: true,
-          faculty: faculty,
-          course: @course
-        )
-      end
+      enrollment =
+        FacultyStartupEnrollment.transaction do
+          FacultyCourseEnrollment.create!(
+            safe_to_create: true,
+            faculty: faculty,
+            course: @course
+          )
+        end
 
       if @notify
         faculty.user.regenerate_login_token if faculty.user.login_token.blank?

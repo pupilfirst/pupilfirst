@@ -12,7 +12,9 @@ describe Startups::AssignReviewerService do
 
   describe '#assign' do
     it 'links coach to the team' do
-      expect { subject.assign([coach.id]) }.to(change { FacultyStartupEnrollment.count }.from(0).to(1))
+      expect { subject.assign([coach.id]) }.to(
+        change { FacultyStartupEnrollment.count }.from(0).to(1)
+      )
 
       team_enrollment = FacultyStartupEnrollment.first
 
@@ -25,7 +27,9 @@ describe Startups::AssignReviewerService do
       let(:another_coach) { create :faculty }
 
       before do
-        create :faculty_course_enrollment, faculty: another_coach, course: another_team.course
+        create :faculty_course_enrollment,
+               faculty: another_coach,
+               course: another_team.course
       end
 
       it 'raises exception' do
@@ -41,7 +45,9 @@ describe Startups::AssignReviewerService do
       end
 
       it 'does nothing' do
-        expect { subject.assign([coach.id]) }.not_to(change { FacultyStartupEnrollment.count })
+        expect { subject.assign([coach.id]) }.not_to(
+          change { FacultyStartupEnrollment.count }
+        )
       end
     end
   end

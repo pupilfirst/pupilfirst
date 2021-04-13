@@ -17,20 +17,22 @@ class CommunitiesController < ApplicationController
   private
 
   def page
-    @page ||= begin
-      page = params[:page].to_i
-      page.zero? ? 1 : page
-    end
+    @page ||=
+      begin
+        page = params[:page].to_i
+        page.zero? ? 1 : page
+      end
   end
 
   def target
     return unless @community.target_linkable?
 
-    @target ||= if params[:target_id].present?
-      t = Target.find_by(id: params[:target_id])
+    @target ||=
+      if params[:target_id].present?
+        t = Target.find_by(id: params[:target_id])
 
-      # Only return the target if the target is in a course that is linked to this community.
-      @community.courses.exists?(id: t&.course) ? t : nil
-    end
+        # Only return the target if the target is in a course that is linked to this community.
+        @community.courses.exists?(id: t&.course) ? t : nil
+      end
   end
 end

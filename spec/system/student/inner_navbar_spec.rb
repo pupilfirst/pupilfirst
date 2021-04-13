@@ -8,6 +8,7 @@ feature 'Student Inner Navbar', js: true do
   let(:coached_course) { create :course }
   let!(:c1_l1) { create :level, :one, course: student.course }
   let!(:c2_l1) { create :level, :one, course: coached_course }
+
   # let(:c1_l1_tg) { create :target_group, level: c1_l1 }
   # let(:c2_l1_tg) { create :target_group, level: c2_l1 }
 
@@ -18,7 +19,10 @@ feature 'Student Inner Navbar', js: true do
 
   context 'when the user is a coach in one course and a student in another' do
     scenario 'user can switch between the two courses' do
-      sign_in_user(student.user, referrer: curriculum_course_path(coached_course))
+      sign_in_user(
+        student.user,
+        referrer: curriculum_course_path(coached_course)
+      )
 
       find('span', text: coached_course.name).click
       click_link(student.course.name)

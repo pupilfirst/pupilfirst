@@ -5,7 +5,7 @@
 @screen lg {
   .topics-post-reply-show__replies:before {
     position: absolute;
-    content: '';
+    content: "";
     width: 16px;
     height: 1px;
     @apply bg-gray-300;
@@ -15,7 +15,7 @@
   }
   .topics-post-reply-show__replies:last-child:after {
     position: absolute;
-    content: '';
+    content: "";
     width: 2px;
     height: 50%;
     @apply bg-white;

@@ -10,8 +10,10 @@
   height: 32px;
 }
 
-.disabling-cover__loading-box-1, .disabling-cover__loading-box-2, .disabling-cover__loading-box-3 {
-  border: 2px solid #976AE2;
+.disabling-cover__loading-box-1,
+.disabling-cover__loading-box-2,
+.disabling-cover__loading-box-3 {
+  border: 2px solid #976ae2;
   background-color: #f6e05e;
   box-sizing: border-box;
   position: absolute;
@@ -24,8 +26,10 @@
   height: 14px;
   margin-top: 18px;
   margin-left: 0px;
-  -webkit-animation: anime1 2.5s 0s forwards cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
-  animation: disabling-cover__loading-box-1-animation 2.5s 0s forwards cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+  -webkit-animation: anime1 2.5s 0s forwards cubic-bezier(0.25, 0.1, 0.25, 1)
+    infinite;
+  animation: disabling-cover__loading-box-1-animation 2.5s 0s forwards
+    cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
 .disabling-cover__loading-box-2 {
@@ -33,8 +37,10 @@
   height: 14px;
   margin-top: 0px;
   margin-left: 0px;
-  -webkit-animation: anime2 2.5s 0s forwards cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
-  animation: disabling-cover__loading-box-2-animation 2.5s 0s forwards cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+  -webkit-animation: anime2 2.5s 0s forwards cubic-bezier(0.25, 0.1, 0.25, 1)
+    infinite;
+  animation: disabling-cover__loading-box-2-animation 2.5s 0s forwards
+    cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
 .disabling-cover__loading-box-3 {
@@ -42,8 +48,10 @@
   height: 14px;
   margin-top: 0px;
   margin-left: 18px;
-  -webkit-animation: anime3 2.5s 0s forwards cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
-  animation: disabling-cover__loading-box-3-animation 2.5s 0s forwards cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+  -webkit-animation: anime3 2.5s 0s forwards cubic-bezier(0.25, 0.1, 0.25, 1)
+    infinite;
+  animation: disabling-cover__loading-box-3-animation 2.5s 0s forwards
+    cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
 @keyframes disabling-cover__loading-box-1-animation {

@@ -24,14 +24,23 @@ module IssuedCertificates
     end
 
     def issued_certificate_details
-      certificate.attributes.slice('margin', 'font_size', 'name_offset_top', 'qr_corner', 'qr_scale').merge(
-        serial_number: serial_number,
-        issued_to: @issued_certificate.name,
-        profile_name: user&.name || @issued_certificate.name,
-        issued_at: @issued_certificate.created_at,
-        course_name: certificate.course.name,
-        image_url: view.url_for(certificate.image)
-      )
+      certificate
+        .attributes
+        .slice(
+          'margin',
+          'font_size',
+          'name_offset_top',
+          'qr_corner',
+          'qr_scale'
+        )
+        .merge(
+          serial_number: serial_number,
+          issued_to: @issued_certificate.name,
+          profile_name: user&.name || @issued_certificate.name,
+          issued_at: @issued_certificate.created_at,
+          course_name: certificate.course.name,
+          image_url: view.url_for(certificate.image)
+        )
     end
 
     def certificate

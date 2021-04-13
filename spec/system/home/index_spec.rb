@@ -2,43 +2,46 @@ require 'rails_helper'
 
 feature 'Index spec', js: true do
   include UserSpecHelper
+
   # Setup a course with founders and target for community.
   let(:school) { create :school, :current }
 
   let!(:course_1) { create :course, school: school, featured: true }
-  let!(:course_2) { create :course, school: school, featured: true, public_signup: true }
-  let!(:course_3) { create :course, school: school, featured: false, public_signup: true }
+  let!(:course_2) do
+    create :course, school: school, featured: true, public_signup: true
+  end
+  let!(:course_3) do
+    create :course, school: school, featured: false, public_signup: true
+  end
   let!(:course_4) { create :course, school: school, featured: false }
 
   context 'When an user visits a school with an about' do
-    before do
-      school.update!(about: Faker::Lorem.sentence)
-    end
+    before { school.update!(about: Faker::Lorem.sentence) }
 
     scenario 'When an user visits a school' do
       visit root_path
 
       expect(page).to have_text(school.name)
       expect(page).to have_text(school.about)
-      expect(page).to have_text("Featured Courses")
+      expect(page).to have_text('Featured Courses')
 
       within("div[aria-label=\"#{course_1.name}\"]") do
         expect(page).to have_text(course_1.name)
         expect(page).to have_text(course_1.description)
-        expect(page).to have_link("Learn more", href: course_path(course_1))
+        expect(page).to have_link('Learn more', href: course_path(course_1))
       end
 
       within("div[aria-label=\"#{course_2.name}\"]") do
         expect(page).to have_text(course_2.name)
         expect(page).to have_text(course_2.description)
-        expect(page).to have_link("Get started", href: course_path(course_2))
+        expect(page).to have_link('Get started', href: course_path(course_2))
       end
 
       expect(page).not_to have_text(course_3.name)
       expect(page).not_to have_text(course_4.name)
 
-      expect(page).not_to have_link("Get started", href: course_path(course_3))
-      expect(page).not_to have_link("Learn more", href: course_path(course_4))
+      expect(page).not_to have_link('Get started', href: course_path(course_3))
+      expect(page).not_to have_link('Learn more', href: course_path(course_4))
     end
   end
 
@@ -50,7 +53,7 @@ feature 'Index spec', js: true do
 
       within("div[aria-label=\"#{course_1.name}\"]") do
         expect(page).to have_text(course_1.name)
-        expect(page).to have_link("Learn more", href: course_path(course_1))
+        expect(page).to have_link('Learn more', href: course_path(course_1))
       end
     end
   end
@@ -63,7 +66,7 @@ feature 'Index spec', js: true do
       visit root_path
 
       expect(page).to have_text(school.name)
-      expect(page).not_to have_text("Featured Courses")
+      expect(page).not_to have_text('Featured Courses')
 
       expect(page).not_to have_text(course_1.name)
       expect(page).not_to have_text(course_2.name)
@@ -80,7 +83,10 @@ feature 'Index spec', js: true do
     scenario 'students can jump directly into the course curriculum' do
       sign_in_user student.user, referrer: root_path
 
-      expect(page).to have_link('Continue course', href: curriculum_course_path(course_1))
+      expect(page).to have_link(
+        'Continue course',
+        href: curriculum_course_path(course_1)
+      )
     end
 
     scenario 'student can review content of courses where access has ended' do
@@ -88,7 +94,10 @@ feature 'Index spec', js: true do
 
       sign_in_user student.user, referrer: root_path
 
-      expect(page).to have_link('Review course content', href: curriculum_course_path(course_1))
+      expect(page).to have_link(
+        'Review course content',
+        href: curriculum_course_path(course_1)
+      )
     end
 
     scenario 'student cannot access course content when they have dropped out' do

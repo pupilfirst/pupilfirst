@@ -5,18 +5,14 @@ module Mutations
     argument :title, String, required: false
     argument :description, String, required: false
 
-    description "Create Vimeo upload URI"
+    description 'Create Vimeo upload URI'
 
     field :vimeo_video, Types::VimeoVideo, null: true
 
     def resolve(params)
       mutator = CreateVimeoVideoMutator.new(context, params)
 
-      vimeo_video = if mutator.valid?
-        mutator.create_vimeo_video
-      else
-        nil
-      end
+      vimeo_video = mutator.valid? ? mutator.create_vimeo_video : nil
 
       mutator.notify_errors if vimeo_video.blank?
 

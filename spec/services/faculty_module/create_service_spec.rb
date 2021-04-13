@@ -13,9 +13,16 @@ describe FacultyModule::CreateService do
   describe '#create' do
     context 'when a faculty profile does not exist in the current school' do
       it 'creates a new faculty profile' do
-        faculty_params = { name: name, email: email, school: school, title: title }
+        faculty_params = {
+          name: name,
+          email: email,
+          school: school,
+          title: title
+        }
 
-        expect { subject.new(faculty_params).create }.to change { Faculty.count }.by(1)
+        expect { subject.new(faculty_params).create }.to change {
+          Faculty.count
+        }.by(1)
 
         faculty = school.faculty.last
 
@@ -29,10 +36,17 @@ describe FacultyModule::CreateService do
       let(:email) { faculty.email }
 
       it 'returns the existing faculty profile' do
-        faculty_params = { name: name, email: email, school: school, title: title }
+        faculty_params = {
+          name: name,
+          email: email,
+          school: school,
+          title: title
+        }
 
         # The service should not create any new coaches.
-        expect { subject.new(faculty_params).create }.not_to(change { Faculty.count })
+        expect { subject.new(faculty_params).create }.not_to(
+          change { Faculty.count }
+        )
       end
     end
   end

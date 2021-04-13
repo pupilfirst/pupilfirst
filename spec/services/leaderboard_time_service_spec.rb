@@ -5,9 +5,7 @@ describe LeaderboardTimeService, broken: true do
 
   around(:each) do |example|
     # Time travel to the test time when running a spec.
-    travel_to(Time.zone.parse('2019-03-20T14:00:00+05:30')) do
-      example.run
-    end
+    travel_to(Time.zone.parse('2019-03-20T14:00:00+05:30')) { example.run }
   end
 
   context 'when there is no delta' do

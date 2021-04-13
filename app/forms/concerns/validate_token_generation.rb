@@ -13,7 +13,8 @@ module ValidateTokenGeneration
   def user_with_email_must_exist
     return if user.present? || email.blank?
 
-    errors[:base] << 'Could not find user with this email. Please check the email that you entered.'
+    errors[:base] <<
+      'Could not find user with this email. Please check the email that you entered.'
   end
 
   def ensure_time_between_requests
@@ -25,7 +26,8 @@ module ValidateTokenGeneration
 
     return if time_since_last_mail > 2.minutes
 
-    errors[:base] << 'An email was sent less than two minutes ago. Please wait for a few minutes before trying again.'
+    errors[:base] <<
+      'An email was sent less than two minutes ago. Please wait for a few minutes before trying again.'
   end
 
   def detect_honeypot
@@ -39,12 +41,14 @@ module ValidateTokenGeneration
 
     return unless user&.email_bounced?
 
-    errors[:email] << "The email address you supplied cannot be used because an email we'd sent earlier bounced"
+    errors[:email] <<
+      "The email address you supplied cannot be used because an email we'd sent earlier bounced"
   end
 
   def user
-    @user ||= begin
-      current_school.users.with_email(email).first if email.present?
-    end
+    @user ||=
+      begin
+        current_school.users.with_email(email).first if email.present?
+      end
   end
 end

@@ -9,7 +9,10 @@
 <% end %>
 
 <% content_for(:wrapper) do %>
-  <div id="course-header-root" data-json-props="<%= presenter.props_to_json %>"></div>
+  <div
+    id="course-header-root"
+    data-json-props="<%= presenter.props_to_json %>"
+  ></div>
 
   <%= content_for(:inner_wrapper) %>
 <% end %>

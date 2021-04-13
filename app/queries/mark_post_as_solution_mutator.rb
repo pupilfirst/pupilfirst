@@ -7,9 +7,7 @@ class MarkPostAsSolutionMutator < ApplicationQuery
     return previous_solution if previous_solution&.id == id
 
     Post.transaction do
-      if previous_solution.present?
-        previous_solution.update!(solution: false)
-      end
+      previous_solution.update!(solution: false) if previous_solution.present?
 
       post.update!(solution: true)
     end

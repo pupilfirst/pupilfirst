@@ -48,7 +48,11 @@ module Schools
       private
 
       def archive_target_group(target_group, archived)
-        archived ? ::TargetGroups::ArchivalService.new(target_group).archive : ::TargetGroups::ArchivalService.new(target_group).unarchive
+        if archived
+          ::TargetGroups::ArchivalService.new(target_group).archive
+        else
+          ::TargetGroups::ArchivalService.new(target_group).unarchive
+        end
       end
 
       def level

@@ -24,8 +24,9 @@ module Communities
       posts = Post.where(topic_id: @community.topics)
       post_ids = posts.select(:id)
 
-      PostLike.joins(:post).where(posts: {id: post_ids}).delete_all
-      TextVersion.where(versionable_type: 'Post', versionable_id: post_ids).delete_all
+      PostLike.joins(:post).where(posts: { id: post_ids }).delete_all
+      TextVersion.where(versionable_type: 'Post', versionable_id: post_ids)
+        .delete_all
       posts.delete_all
 
       Topic.where(community: @community).delete_all

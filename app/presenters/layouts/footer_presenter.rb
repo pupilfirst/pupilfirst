@@ -5,21 +5,28 @@ module Layouts
     end
 
     def nav_links
-      footer_links = current_user.present? ? [{ title: 'Home', url: '/' }, { title: 'Dashboard', url: '/dashboard' }] : []
+      footer_links =
+        if current_user.present?
+          [
+            { title: 'Home', url: '/' },
+            { title: 'Dashboard', url: '/dashboard' }
+          ]
+        else
+          []
+        end
 
-      custom_links = SchoolLink.where(
-        school: current_school,
-        kind: SchoolLink::KIND_FOOTER
-      ).map { |sl| { title: sl.title, url: sl.url, custom: true } }
+      custom_links =
+        SchoolLink
+          .where(school: current_school, kind: SchoolLink::KIND_FOOTER)
+          .map { |sl| { title: sl.title, url: sl.url, custom: true } }
 
       footer_links + custom_links
     end
 
     def social_links
-      @social_links ||= SchoolLink.where(
-        school: current_school,
-        kind: SchoolLink::KIND_SOCIAL
-      ).map { |sl| { title: sl.title, url: sl.url } }.reverse
+      @social_links ||=
+        SchoolLink.where(school: current_school, kind: SchoolLink::KIND_SOCIAL)
+          .map { |sl| { title: sl.title, url: sl.url } }.reverse
     end
 
     def school_name
@@ -35,27 +42,37 @@ module Layouts
     end
 
     def social_icon(title)
-      %w[facebook twitter instagram youtube linkedin snapchat tumblr pinterest reddit flickr].each do |key|
-        if key.in?(title)
-          return "fab fa-#{key}"
-        end
-      end
+      %w[
+        facebook
+        twitter
+        instagram
+        youtube
+        linkedin
+        snapchat
+        tumblr
+        pinterest
+        reddit
+        flickr
+      ].each { |key| return "fab fa-#{key}" if key.in?(title) }
 
       'fas fa-users'
     end
 
     def address
-      @address ||= begin
-        raw_address = SchoolString::Address.for(current_school)
+      @address ||=
+        begin
+          raw_address = SchoolString::Address.for(current_school)
 
-        if raw_address.present?
-          parser = MarkdownIt::Parser.new(:commonmark)
-            .use(MotionMarkdownItPlugins::Sub)
-            .use(MotionMarkdownItPlugins::Sup)
+          if raw_address.present?
+            parser =
+              MarkdownIt::Parser
+                .new(:commonmark)
+                .use(MotionMarkdownItPlugins::Sub)
+                .use(MotionMarkdownItPlugins::Sup)
 
-          parser.render(raw_address)
+            parser.render(raw_address)
+          end
         end
-      end
     end
 
     def email_address

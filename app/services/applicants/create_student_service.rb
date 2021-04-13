@@ -27,7 +27,11 @@ module Applicants
 
     def create_new_student(tag)
       # Create a user and generate a login token.
-      user = school.users.with_email(@applicant.email).first_or_create!(email: @applicant.email, title: 'Student')
+      user =
+        school
+          .users
+          .with_email(@applicant.email)
+          .first_or_create!(email: @applicant.email, title: 'Student')
       user.regenerate_login_token if user.login_token.blank?
       user.update!(name: @applicant.name)
 

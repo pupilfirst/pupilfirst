@@ -5,7 +5,8 @@ class SlackChannelNameValidator < ActiveModel::EachValidator
     end
 
     unless /\A#[^A-Z\s.;!?]+\z/.match?(value)
-      record.errors[attribute] << 'must start with a # and not contain uppercase, spaces or periods'
+      record.errors[attribute] <<
+        'must start with a # and not contain uppercase, spaces or periods'
     end
   end
 end

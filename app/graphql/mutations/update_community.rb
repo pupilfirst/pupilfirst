@@ -5,7 +5,7 @@ module Mutations
     argument :target_linkable, Boolean, required: true
     argument :course_ids, [ID], required: false
 
-    description "Update a new community"
+    description 'Update a new community'
 
     field :community_id, ID, null: true
     field :errors, [Types::UpdateCommunityErrors], null: true

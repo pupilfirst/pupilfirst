@@ -1,9 +1,21 @@
 class FacultyController < ApplicationController
-  before_action :validate_faculty, only: %i[weekly_slots save_weekly_slots mark_unavailable slots_saved]
+  before_action :validate_faculty,
+                only: %i[
+                  weekly_slots
+                  save_weekly_slots
+                  mark_unavailable
+                  slots_saved
+                ]
 
   # GET /faculty, GET /coaches
   def index
-    @coaches = policy_scope(Faculty).includes(:faculty_course_enrollments, user: { avatar_attachment: :blob })
+    @coaches =
+      policy_scope(Faculty).includes(
+        :faculty_course_enrollments,
+        user: {
+          avatar_attachment: :blob
+        }
+      )
 
     raise_not_found unless @coaches.exists?
 
@@ -51,7 +63,12 @@ class FacultyController < ApplicationController
     start_date = 7.days.from_now.beginning_of_week.to_date
 
     # Reset next week slots to empty, while preserving slots with connect requests.
-    faculty.connect_slots.includes(:connect_request).where(connect_requests: { id: nil }).next_week.destroy_all
+    faculty
+      .connect_slots
+      .includes(:connect_request)
+      .where(connect_requests: { id: nil })
+      .next_week
+      .destroy_all
 
     list.each_key do |day|
       day_number = day.to_i
@@ -65,7 +82,9 @@ class FacultyController < ApplicationController
 
         # Save submitted week slots
         ConnectSlot.create(
-          faculty: faculty, slot_at: Time.parse("#{date} #{hour.to_s.rjust(2, '0')}:#{minute}:00 +0530")
+          faculty: faculty,
+          slot_at:
+            Time.parse("#{date} #{hour.to_s.rjust(2, '0')}:#{minute}:00 +0530")
         )
       end
     end
@@ -75,10 +94,15 @@ class FacultyController < ApplicationController
     slots = faculty.connect_slots.next_week
 
     slots.each_with_object({}) do |slot, list_of_slots|
-      day = (slot.slot_at.to_date - 7.days.from_now.beginning_of_week.to_date).to_i + 1
+      day =
+        (slot.slot_at.to_date - 7.days.from_now.beginning_of_week.to_date)
+          .to_i + 1
       list_of_slots[day] ||= []
       time = slot.slot_at.hour + slot.slot_at.min.to_f / 60
-      list_of_slots[day] << { 'time' => time, 'requested' => slot.connect_request.present? }
+      list_of_slots[day] << {
+        'time' => time,
+        'requested' => slot.connect_request.present?
+      }
     end.to_json
   end
 end

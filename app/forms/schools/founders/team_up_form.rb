@@ -9,7 +9,13 @@ module Schools
 
       def founders_must_be_in_same_level
         return if founders.blank?
-        return if founders.joins(startup: :level).distinct('levels.id').pluck('levels.id').one?
+        if founders
+             .joins(startup: :level)
+             .distinct('levels.id')
+             .pluck('levels.id')
+             .one?
+          return
+        end
 
         errors[:base] << 'Students in different levels cannot be teamed up'
       end

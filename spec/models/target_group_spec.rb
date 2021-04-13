@@ -7,7 +7,9 @@ RSpec.describe TargetGroup, type: :model do
     context 'if safe_to_archive is not set' do
       it 'fails validation' do
         subject.update(archived: true)
-        expect(subject.errors.to_a).to include('Archived cannot be set unsafely')
+        expect(subject.errors.to_a).to include(
+          'Archived cannot be set unsafely'
+        )
         expect(subject.reload.archived?).to eq(false)
       end
     end

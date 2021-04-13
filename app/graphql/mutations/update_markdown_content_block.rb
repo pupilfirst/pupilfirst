@@ -3,19 +3,20 @@ module Mutations
     argument :id, ID, required: true
     argument :markdown, String, required: false
 
-    description "Updates the markdown content of a markdown block."
+    description 'Updates the markdown content of a markdown block.'
 
     field :content_block, Types::ContentBlockType, null: true
 
     def resolve(params)
       mutator = UpdateMarkdownContentBlockMutator.new(context, params)
 
-      content_block = if mutator.valid?
-        mutator.update_markdown_content_block
-      else
-        mutator.notify_errors
-        nil
-      end
+      content_block =
+        if mutator.valid?
+          mutator.update_markdown_content_block
+        else
+          mutator.notify_errors
+          nil
+        end
 
       { content_block: content_block }
     end

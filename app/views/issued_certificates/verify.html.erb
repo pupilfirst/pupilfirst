@@ -9,6 +9,8 @@
   <%= javascript_pack_tag 'IssuedCertificatesVerifyPack', nonce: true %>
 <% end %>
 
-<script type="application/json" id="react-root-data"><%= presenter.props_to_json.html_safe %></script>
+<script type="application/json" id="react-root-data">
+  <%= presenter.props_to_json.html_safe %>
+</script>
 
 <div id="react-root"></div>

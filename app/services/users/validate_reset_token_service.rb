@@ -8,9 +8,7 @@ module Users
 
     # @return [User, nil] User with the specified token, or nil.
     def authenticate
-      if @token.present? && valid_request?
-        user
-      end
+      user if @token.present? && valid_request?
     end
 
     private

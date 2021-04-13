@@ -7,7 +7,11 @@ module Topics
 
     POST_FIELDS = {
       only: %i[id body creator_id editor_id created_at post_number solution],
-      include: { replies: { only: :id } }
+      include: {
+        replies: {
+          only: :id
+        }
+      }
     }.freeze
 
     def props
@@ -32,11 +36,19 @@ module Topics
     private
 
     def topic_details
-      @topic.attributes.slice('id', 'title', 'topic_category_id', 'locked_at', 'locked_by_id')
+      @topic.attributes.slice(
+        'id',
+        'title',
+        'topic_category_id',
+        'locked_at',
+        'locked_by_id'
+      )
     end
 
     def topic_categories
-      @community.topic_categories.map { |category| { id: category.id, name: category.name } }
+      @community.topic_categories.map do |category|
+        { id: category.id, name: category.name }
+      end
     end
 
     def linked_target
@@ -44,10 +56,7 @@ module Topics
 
       return if target.blank?
 
-      {
-        id: view.policy(target).show? ? target.id : nil,
-        title: target.title
-      }
+      { id: view.policy(target).show? ? target.id : nil, title: target.title }
     end
 
     def first_post
@@ -59,11 +68,18 @@ module Topics
     end
 
     def replies
-      ActiveRecord::Precounter.new(@topic.replies.live.includes(:replies)).precount(:post_likes)
+      ActiveRecord::Precounter
+        .new(@topic.replies.live.includes(:replies))
+        .precount(:post_likes)
     end
 
     def details_of_replies
-      replies.map { |reply| reply.as_json(POST_FIELDS).merge(like_data(reply).as_json).merge({ edited_at: reply.text_versions.last&.updated_at }.as_json) }
+      replies.map do |reply|
+        reply
+          .as_json(POST_FIELDS)
+          .merge(like_data(reply).as_json)
+          .merge({ edited_at: reply.text_versions.last&.updated_at }.as_json)
+      end
     end
 
     def like_data(post)
@@ -83,12 +99,19 @@ module Topics
         current_user.id
       ].flatten.uniq
 
-      User.where(id: user_ids).with_attached_avatar.includes(:faculty).map do |user|
-        user.attributes.slice('id', 'name').merge(
-          avatar_url: user.avatar_url(variant: :thumb),
-          title: user.full_title
-        )
-      end
+      User
+        .where(id: user_ids)
+        .with_attached_avatar
+        .includes(:faculty)
+        .map do |user|
+          user
+            .attributes
+            .slice('id', 'name')
+            .merge(
+              avatar_url: user.avatar_url(variant: :thumb),
+              title: user.full_title
+            )
+        end
     end
 
     def subscribed?
@@ -100,10 +123,7 @@ module Topics
     end
 
     def community_details
-      {
-        id: community.id,
-        name: community.name
-      }
+      { id: community.id, name: community.name }
     end
   end
 end

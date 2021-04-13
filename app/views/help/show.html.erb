@@ -10,8 +10,13 @@
 <div class="bg-gray-100 py-8">
   <div class="container mx-auto px-3 max-w-6xl">
     <div class="max-w-3xl mx-auto">
-      <div class="convert-markdown" data-json-props="<%= { markdown: @markdown, profile: "permissive" }.to_json %>">
-        <div style="font-family: monospace; white-space: pre-wrap;"><%= sanitize(@markdown) %></div>
+      <div
+        class="convert-markdown"
+        data-json-props="<%= { markdown: @markdown, profile: "permissive" }.to_json %>"
+      >
+        <div style="font-family: monospace; white-space: pre-wrap;">
+          <%= sanitize(@markdown) %>
+        </div>
       </div>
     </div>
   </div>

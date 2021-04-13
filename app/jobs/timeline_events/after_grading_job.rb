@@ -7,7 +7,8 @@ module TimelineEvents
       return unless submission.reviewed?
 
       if TimelineEvents::WasLastTargetService.new(submission).was_last_target?
-        Students::AfterCourseCompletionService.new(submission.founders.first).execute
+        Students::AfterCourseCompletionService.new(submission.founders.first)
+          .execute
       end
     end
   end

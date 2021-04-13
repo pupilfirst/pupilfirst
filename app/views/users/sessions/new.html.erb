@@ -9,5 +9,7 @@
   <%= javascript_pack_tag 'UserSessionNewPack', nonce: true %>
 <% end %>
 
-<script type="application/json" id="user-session-new-data"><%= presenter.props_to_json.html_safe %></script>
+<script type="application/json" id="user-session-new-data">
+  <%= presenter.props_to_json.html_safe %>
+</script>
 <div id="user-session-new"></div>

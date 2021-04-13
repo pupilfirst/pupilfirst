@@ -10,9 +10,9 @@
   }
 }
 
-.review-submission-overlay__submission-container>::after {
+.review-submission-overlay__submission-container > ::after {
   @apply relative block;
-  content: '';
+  content: "";
   margin: 32px auto 26px;
   width: 120px;
   height: 8px;
@@ -22,6 +22,6 @@
   background-position: center;
 }
 
-.review-submission-overlay__submission-container>:last-child::after {
+.review-submission-overlay__submission-container > :last-child::after {
   content: none;
 }

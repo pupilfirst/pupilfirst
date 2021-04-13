@@ -8,12 +8,13 @@ class CreateFeedbackMutator < ApplicationQuery
 
   def create_feedback
     StartupFeedback.transaction do
-      startup_feedback = StartupFeedback.create!(
-        feedback: feedback,
-        startup: submission.startup,
-        faculty: coach,
-        timeline_event: submission,
-      )
+      startup_feedback =
+        StartupFeedback.create!(
+          feedback: feedback,
+          startup: submission.startup,
+          faculty: coach,
+          timeline_event: submission
+        )
       StartupFeedbackModule::EmailService.new(startup_feedback).send
     end
   end

@@ -4,7 +4,7 @@ module Mutations
     argument :p256dh, String, required: true
     argument :auth, String, required: true
 
-    description "Create web push subscription"
+    description 'Create web push subscription'
 
     field :success, Boolean, null: false
 

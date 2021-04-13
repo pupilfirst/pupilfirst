@@ -10,10 +10,13 @@
           <div class="row">
             <% presenter.nav_links.each do |nav_link| %>
               <div class="col-md-4">
-                <%= link_to(
-                    nav_link[:title], nav_link[:url], {
-                    class: 'footer-column__link'
-                  }.merge(nav_link[:custom] ? { target: '_blank', rel: 'noopener' } : {} )
+                <%=
+                  link_to(
+                    nav_link[:title],
+                    nav_link[:url],
+                    { class: 'footer-column__link' }.merge(
+                      nav_link[:custom] ? { target: '_blank', rel: 'noopener' } : {},
+                    ),
                   )
                 %>
               </div>
@@ -35,15 +38,25 @@
               <% if presenter.social_links.any? %>
                 <div class="footer-social-icons">
                   <% presenter.social_links.each do |social_link| %>
-                    <a class="footer-social-link" href="<%= social_link[:url] %>" target='_blank' rel='noopener'>
-                      <i class="fa <%= presenter.social_icon(social_link[:url]) %>"></i>
+                    <a
+                      class="footer-social-link"
+                      href="<%= social_link[:url] %>"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      <i
+                        class="fa <%= presenter.social_icon(social_link[:url]) %>"
+                      ></i>
                     </a>
                   <% end %>
                 </div>
               <% end %>
 
               <% if presenter.email_address.present? %>
-                <p>Reach us at <strong><%= mail_to presenter.email_address %></strong>.</p>
+                <p>
+                  Reach us at
+                  <strong><%= mail_to presenter.email_address %></strong>.
+                </p>
               <% end %>
             </div>
           </div>
@@ -54,11 +67,17 @@
 
   <section class="footer-bottom">
     <div class="container">
-      <div class="row justify-content-between align-items-center footer-bottom__box">
+      <div
+        class="row justify-content-between align-items-center footer-bottom__box"
+      >
         <div class="col">
           <a class="footer-bottom__logo-link" href="/">
             <% if presenter.logo? %>
-              <img class="footer-bottom__logo" src="<%= presenter.logo_url %>" alt="Logo of <%= presenter.school_name %>"/>
+              <img
+                class="footer-bottom__logo"
+                src="<%= presenter.logo_url %>"
+                alt="Logo of <%= presenter.school_name %>"
+              />
             <% else %>
               <span><%= presenter.school_name %></span>
             <% end %>
@@ -72,7 +91,11 @@
           <% if presenter.terms_and_conditions? %>
             <%= link_to 'Terms & Conditions', agreement_path(agreement_type: 'terms-and-conditions'), target: "_blank", class: "cursor-pointer footer-bottom__link mr-3 text-reset" %>
           <% end %>
-          <span class="footer-bottom__copyright mr-3">&copy; <%= Time.zone.now.year %> <%= presenter.school_name %>.</span>
+          <span class="footer-bottom__copyright mr-3"
+            >&copy;
+            <%= Time.zone.now.year %>
+            <%= presenter.school_name %>.</span
+          >
         </div>
       </div>
     </div>
@@ -84,13 +107,17 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title"></h4>
-        <button class="close" data-dismiss="modal" type="button">&times;</button>
+        <button class="close" data-dismiss="modal" type="button">
+          &times;
+        </button>
       </div>
 
       <div class="modal-body"></div>
 
       <div class="modal-footer">
-        <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+        <button class="btn btn-default" data-dismiss="modal" type="button">
+          Close
+        </button>
       </div>
     </div>
   </div>

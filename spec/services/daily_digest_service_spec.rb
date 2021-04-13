@@ -8,9 +8,7 @@ describe DailyDigestService do
 
   around(:each) do |example|
     # Time travel to the test time when running a spec.
-    travel_to(Time.zone.parse('2019-07-16T18:00:00+05:30')) do
-      example.run
-    end
+    travel_to(Time.zone.parse('2019-07-16T18:00:00+05:30')) { example.run }
   end
 
   let(:school) { create :school, :current }
@@ -23,37 +21,175 @@ describe DailyDigestService do
       let(:t1_student) { create :founder, startup: team_1 }
       let(:t2_student) { create :founder, startup: team_2 }
 
-      let(:community_1) { create :community, name: 'First Community', school: school, courses: [team_1.course, team_2.course] }
-      let(:community_2) { create :community, name: 'Second Community', school: school, courses: [team_2.course] }
+      let(:community_1) do
+        create :community,
+               name: 'First Community',
+               school: school,
+               courses: [team_1.course, team_2.course]
+      end
+      let(:community_2) do
+        create :community,
+               name: 'Second Community',
+               school: school,
+               courses: [team_2.course]
+      end
 
       let(:t1_user) { t1_student.user }
       let(:t2_user) { t2_student.user }
 
-      let!(:topic_c1_new_1) { create :topic, :with_first_post, community: community_1, creator: t1_user, views: 10 }
-      let!(:topic_c1_new_2) { create :topic, :with_first_post, community: community_1, creator: t1_user, views: 20 }
-      let!(:topic_c1_new_archived) { create :topic, :with_first_post, community: community_1, creator: t1_user, views: 100, archived: true }
-      let!(:topic_c1_reactivated_1) { create :topic, :with_first_post, community: community_1, creator: t1_user, created_at: 2.days.ago, views: 10 }
-      let!(:topic_c1_reactivated_2) { create :topic, :with_first_post, community: community_1, creator: t1_user, created_at: 3.days.ago, views: 20 }
-      let!(:topic_c1_reactivated_archived) { create :topic, :with_first_post, community: community_1, creator: t1_user, created_at: 4.days.ago, views: 100, archived: true }
-      let!(:topic_c1_old) { create :topic, :with_first_post, community: community_1, creator: t1_user, created_at: 5.days.ago, views: 100 }
-      let!(:topic_c2_new_1) { create :topic, :with_first_post, community: community_2, creator: t2_user, views: 30 }
-      let!(:topic_c2_new_2) { create :topic, :with_first_post, community: community_2, creator: t2_user, views: 40 }
-      let!(:topic_c2_new_3) { create :topic, :with_first_post, community: community_2, creator: t2_user, views: 50 }
-      let!(:topic_c2_new_4) { create :topic, :with_first_post, community: community_2, creator: t2_user, views: 60 }
-      let!(:topic_c2_reactivated_1) { create :topic, :with_first_post, community: community_2, creator: t2_user, created_at: 2.days.ago, views: 30 }
-      let!(:topic_c2_reactivated_2) { create :topic, :with_first_post, community: community_2, creator: t2_user, created_at: 3.days.ago, views: 40 }
-      let!(:topic_c2_reactivated_3) { create :topic, :with_first_post, community: community_2, creator: t2_user, created_at: 4.days.ago, views: 50 }
-      let!(:topic_c2_reactivated_4) { create :topic, :with_first_post, community: community_2, creator: t2_user, created_at: 5.days.ago, views: 60 }
+      let!(:topic_c1_new_1) do
+        create :topic,
+               :with_first_post,
+               community: community_1,
+               creator: t1_user,
+               views: 10
+      end
+      let!(:topic_c1_new_2) do
+        create :topic,
+               :with_first_post,
+               community: community_1,
+               creator: t1_user,
+               views: 20
+      end
+      let!(:topic_c1_new_archived) do
+        create :topic,
+               :with_first_post,
+               community: community_1,
+               creator: t1_user,
+               views: 100,
+               archived: true
+      end
+      let!(:topic_c1_reactivated_1) do
+        create :topic,
+               :with_first_post,
+               community: community_1,
+               creator: t1_user,
+               created_at: 2.days.ago,
+               views: 10
+      end
+      let!(:topic_c1_reactivated_2) do
+        create :topic,
+               :with_first_post,
+               community: community_1,
+               creator: t1_user,
+               created_at: 3.days.ago,
+               views: 20
+      end
+      let!(:topic_c1_reactivated_archived) do
+        create :topic,
+               :with_first_post,
+               community: community_1,
+               creator: t1_user,
+               created_at: 4.days.ago,
+               views: 100,
+               archived: true
+      end
+      let!(:topic_c1_old) do
+        create :topic,
+               :with_first_post,
+               community: community_1,
+               creator: t1_user,
+               created_at: 5.days.ago,
+               views: 100
+      end
+      let!(:topic_c2_new_1) do
+        create :topic,
+               :with_first_post,
+               community: community_2,
+               creator: t2_user,
+               views: 30
+      end
+      let!(:topic_c2_new_2) do
+        create :topic,
+               :with_first_post,
+               community: community_2,
+               creator: t2_user,
+               views: 40
+      end
+      let!(:topic_c2_new_3) do
+        create :topic,
+               :with_first_post,
+               community: community_2,
+               creator: t2_user,
+               views: 50
+      end
+      let!(:topic_c2_new_4) do
+        create :topic,
+               :with_first_post,
+               community: community_2,
+               creator: t2_user,
+               views: 60
+      end
+      let!(:topic_c2_reactivated_1) do
+        create :topic,
+               :with_first_post,
+               community: community_2,
+               creator: t2_user,
+               created_at: 2.days.ago,
+               views: 30
+      end
+      let!(:topic_c2_reactivated_2) do
+        create :topic,
+               :with_first_post,
+               community: community_2,
+               creator: t2_user,
+               created_at: 3.days.ago,
+               views: 40
+      end
+      let!(:topic_c2_reactivated_3) do
+        create :topic,
+               :with_first_post,
+               community: community_2,
+               creator: t2_user,
+               created_at: 4.days.ago,
+               views: 50
+      end
+      let!(:topic_c2_reactivated_4) do
+        create :topic,
+               :with_first_post,
+               community: community_2,
+               creator: t2_user,
+               created_at: 5.days.ago,
+               views: 60
+      end
 
       before do
         # Add a second post for all the "re-activated" topics.
-        create :post, creator: t1_user, topic: topic_c1_reactivated_1, post_number: 2, created_at: 1.hour.ago
-        create :post, creator: t1_user, topic: topic_c1_reactivated_2, post_number: 2, created_at: 1.hour.ago
-        create :post, creator: t1_user, topic: topic_c1_reactivated_archived, post_number: 2, created_at: 1.hour.ago
-        create :post, creator: t2_user, topic: topic_c2_reactivated_1, post_number: 2, created_at: 1.hour.ago
-        create :post, creator: t2_user, topic: topic_c2_reactivated_2, post_number: 2, created_at: 1.hour.ago
-        create :post, creator: t2_user, topic: topic_c2_reactivated_3, post_number: 2, created_at: 1.hour.ago
-        create :post, creator: t2_user, topic: topic_c2_reactivated_4, post_number: 2, created_at: 1.hour.ago
+        create :post,
+               creator: t1_user,
+               topic: topic_c1_reactivated_1,
+               post_number: 2,
+               created_at: 1.hour.ago
+        create :post,
+               creator: t1_user,
+               topic: topic_c1_reactivated_2,
+               post_number: 2,
+               created_at: 1.hour.ago
+        create :post,
+               creator: t1_user,
+               topic: topic_c1_reactivated_archived,
+               post_number: 2,
+               created_at: 1.hour.ago
+        create :post,
+               creator: t2_user,
+               topic: topic_c2_reactivated_1,
+               post_number: 2,
+               created_at: 1.hour.ago
+        create :post,
+               creator: t2_user,
+               topic: topic_c2_reactivated_2,
+               post_number: 2,
+               created_at: 1.hour.ago
+        create :post,
+               creator: t2_user,
+               topic: topic_c2_reactivated_3,
+               post_number: 2,
+               created_at: 1.hour.ago
+        create :post,
+               creator: t2_user,
+               topic: topic_c2_reactivated_4,
+               post_number: 2,
+               created_at: 1.hour.ago
       end
 
       it 'sends digest emails containing 5 most popular newly posted topics and older topics with new activity' do
@@ -114,10 +250,16 @@ describe DailyDigestService do
 
       context 'when there is a student whose access has ended' do
         let(:team_access_ended) { create :team, access_ends_at: 1.day.ago }
-        let(:student_access_ended) { create :founder, startup: team_access_ended }
+        let(:student_access_ended) do
+          create :founder, startup: team_access_ended
+        end
         let!(:user_access_ended) { student_access_ended.user }
-        let(:community_1) { create :community, school: school, courses: [team_access_ended.course] }
-        let(:community_2) { create :community, school: school, courses: [team_access_ended.course] }
+        let(:community_1) do
+          create :community, school: school, courses: [team_access_ended.course]
+        end
+        let(:community_2) do
+          create :community, school: school, courses: [team_access_ended.course]
+        end
 
         it 'does not send digest to student whose access has ended' do
           subject.execute
@@ -130,8 +272,12 @@ describe DailyDigestService do
         let(:team_dropped_out) { create :team, dropped_out_at: 1.day.ago }
         let(:student_dropped_out) { create :founder, startup: team_dropped_out }
         let!(:user_dropped_out) { student_dropped_out.user }
-        let(:community_1) { create :community, school: school, courses: [team_dropped_out.course] }
-        let(:community_2) { create :community, school: school, courses: [team_dropped_out.course] }
+        let(:community_1) do
+          create :community, school: school, courses: [team_dropped_out.course]
+        end
+        let(:community_2) do
+          create :community, school: school, courses: [team_dropped_out.course]
+        end
 
         it 'does not send digest to dropped out student' do
           subject.execute
@@ -144,9 +290,7 @@ describe DailyDigestService do
         let(:student_opt_out) { create :founder, startup: team_2 }
         let!(:user_opt_out) { student_opt_out.user }
 
-        before do
-          user_opt_out.update!(preferences: { daily_digest: false })
-        end
+        before { user_opt_out.update!(preferences: { daily_digest: false }) }
 
         it 'does not send daily digest' do
           subject.execute
@@ -160,7 +304,10 @@ describe DailyDigestService do
         let!(:user_bounced) { student_bounced.user }
 
         before do
-          BounceReport.create!(email: user_bounced.email, bounce_type: 'HardBounce')
+          BounceReport.create!(
+            email: user_bounced.email,
+            bounce_type: 'HardBounce'
+          )
         end
 
         it 'does not send daily digest' do
@@ -175,35 +322,95 @@ describe DailyDigestService do
       let(:course_1) { create :course, school: school }
       let(:level_1) { create :level, :one, course: course_1 }
       let(:target_group_1) { create :target_group, level: level_1 }
-      let!(:target_1) { create :target, :for_founders, target_group: target_group_1 }
-      let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
-      let(:evaluation_criterion_1) { create :evaluation_criterion, course: course_1, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
+      let!(:target_1) do
+        create :target, :for_founders, target_group: target_group_1
+      end
+      let(:grade_labels_for_1) do
+        [
+          { 'grade' => 1, 'label' => 'Bad' },
+          { 'grade' => 2, 'label' => 'Good' },
+          { 'grade' => 3, 'label' => 'Great' },
+          { 'grade' => 4, 'label' => 'Wow' }
+        ]
+      end
+      let(:evaluation_criterion_1) do
+        create :evaluation_criterion,
+               course: course_1,
+               max_grade: 4,
+               pass_grade: 2,
+               grade_labels: grade_labels_for_1
+      end
 
       let(:team_1) { create :startup, level: level_1 }
-      let!(:submission_pending_1) { create(:timeline_event, :with_owners, latest: true, owners: team_1.founders, target: target_1) }
+      let!(:submission_pending_1) do
+        create(
+          :timeline_event,
+          :with_owners,
+          latest: true,
+          owners: team_1.founders,
+          target: target_1
+        )
+      end
 
       let(:course_2) { create :course, school: school }
       let(:level_2) { create :level, :one, course: course_2 }
       let(:target_group_2) { create :target_group, level: level_2 }
-      let!(:target_2) { create :target, :for_founders, target_group: target_group_2 }
-      let(:grade_labels_for_2) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
-      let(:evaluation_criterion_2) { create :evaluation_criterion, course: course_2, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_2 }
+      let!(:target_2) do
+        create :target, :for_founders, target_group: target_group_2
+      end
+      let(:grade_labels_for_2) do
+        [
+          { 'grade' => 1, 'label' => 'Bad' },
+          { 'grade' => 2, 'label' => 'Good' },
+          { 'grade' => 3, 'label' => 'Great' },
+          { 'grade' => 4, 'label' => 'Wow' }
+        ]
+      end
+      let(:evaluation_criterion_2) do
+        create :evaluation_criterion,
+               course: course_2,
+               max_grade: 4,
+               pass_grade: 2,
+               grade_labels: grade_labels_for_2
+      end
 
       let(:team_2) { create :startup, level: level_2 }
-      let!(:submission_pending_2) { create(:timeline_event, :with_owners, latest: true, owners: team_2.founders, target: target_2) }
-      let!(:submission_pending_3) { create(:timeline_event, :with_owners, latest: true, owners: team_2.founders, target: target_2) }
-      let(:submission_pending_4) { create(:timeline_event, target: target_1, created_at: 2.weeks.ago) }
+      let!(:submission_pending_2) do
+        create(
+          :timeline_event,
+          :with_owners,
+          latest: true,
+          owners: team_2.founders,
+          target: target_2
+        )
+      end
+      let!(:submission_pending_3) do
+        create(
+          :timeline_event,
+          :with_owners,
+          latest: true,
+          owners: team_2.founders,
+          target: target_2
+        )
+      end
+      let(:submission_pending_4) do
+        create(:timeline_event, target: target_1, created_at: 2.weeks.ago)
+      end
 
       let(:coach) { create :faculty, school: school }
       let(:team_coach) { create :faculty, school: school }
 
-      let(:community_1) { create :community, school: school, courses: [course_1] }
+      let(:community_1) do
+        create :community, school: school, courses: [course_1]
+      end
       let(:t1_user) { team_1.founders.first.user }
 
       let(:course_3) { create :course, school: school }
       let(:level_3) { create :level, :one, course: course_3 }
       let(:team_3) { create :startup, level: level_3 }
-      let(:community_2) { create :community, school: school, courses: [course_3] }
+      let(:community_2) do
+        create :community, school: school, courses: [course_3]
+      end
       let(:t3_user) { team_3.founders.first.user }
       let(:coach_2) { create :faculty, school: school }
 
@@ -214,8 +421,14 @@ describe DailyDigestService do
         create :faculty_course_enrollment, faculty: team_coach, course: course_2
         create :faculty_startup_enrollment, faculty: team_coach, startup: team_2
         create :faculty_course_enrollment, faculty: coach_2, course: course_3
-        create :topic, :with_first_post, community: community_1, creator: t1_user
-        create :topic, :with_first_post, community: community_2, creator: t3_user
+        create :topic,
+               :with_first_post,
+               community: community_1,
+               creator: t1_user
+        create :topic,
+               :with_first_post,
+               community: community_2,
+               creator: t3_user
 
         target_1.evaluation_criteria << evaluation_criterion_1
         target_2.evaluation_criteria << evaluation_criterion_2
@@ -229,9 +442,9 @@ describe DailyDigestService do
 
         expect(b).to include(course_1.name)
         expect(b).to include(course_2.name)
-        expect(b).to include("There are 3")
-        expect(b).to include("new submissions to review")
-        expect(b).to include("in 2 courses")
+        expect(b).to include('There are 3')
+        expect(b).to include('new submissions to review')
+        expect(b).to include('in 2 courses')
 
         # The email should include community updates, but only
         # from the courses where the coach is enrolled.
@@ -248,11 +461,11 @@ describe DailyDigestService do
 
         expect(b).to include(course_1.name)
         expect(b).to include(course_2.name)
-        expect(b).to include("(2 assigned to you)")
-        expect(b).not_to include("(none of which are assigned to you)")
+        expect(b).to include('(2 assigned to you)')
+        expect(b).not_to include('(none of which are assigned to you)')
       end
 
-      it "only sends community updates where coach is enrolled to a linked course" do
+      it 'only sends community updates where coach is enrolled to a linked course' do
         subject.execute
 
         open_email(coach_2.user.email)
@@ -270,9 +483,24 @@ describe DailyDigestService do
       let(:course_1) { create :course, school: school_2 }
       let(:level_1) { create :level, :one, course: course_1 }
       let(:target_group_1) { create :target_group, level: level_1 }
-      let!(:target_1) { create :target, :for_founders, target_group: target_group_1 }
-      let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
-      let(:evaluation_criterion_1) { create :evaluation_criterion, course: course_1, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
+      let!(:target_1) do
+        create :target, :for_founders, target_group: target_group_1
+      end
+      let(:grade_labels_for_1) do
+        [
+          { 'grade' => 1, 'label' => 'Bad' },
+          { 'grade' => 2, 'label' => 'Good' },
+          { 'grade' => 3, 'label' => 'Great' },
+          { 'grade' => 4, 'label' => 'Wow' }
+        ]
+      end
+      let(:evaluation_criterion_1) do
+        create :evaluation_criterion,
+               course: course_1,
+               max_grade: 4,
+               pass_grade: 2,
+               grade_labels: grade_labels_for_1
+      end
 
       let(:team_1) { create :startup, level: level_1 }
       let(:coach) { create :faculty, school: school_2 }

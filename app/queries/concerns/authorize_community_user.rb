@@ -3,13 +3,19 @@ module AuthorizeCommunityUser
 
   def authorized_create?
     # Current user must exist, and the community in question must be in the 'current' school.
-    return false unless current_user.present? && (community&.school == current_school)
+    unless current_user.present? && (community&.school == current_school)
+      return false
+    end
 
     # Coach has access to all communities
     return true if moderator?
 
     # User should have access to the community
-    current_user.founders.includes(:course).where(courses: { id: community.courses }).any?
+    current_user
+      .founders
+      .includes(:course)
+      .where(courses: { id: community.courses })
+      .any?
   end
 
   def authorized_update?
@@ -20,7 +26,11 @@ module AuthorizeCommunityUser
     if post.post_number != 1
       authorized_update?
     else
-      authorized_create? && (((creator == current_user) && !topic.replies.live.exists?) || moderator?)
+      authorized_create? &&
+        (
+          ((creator == current_user) && !topic.replies.live.exists?) ||
+            moderator?
+        )
     end
   end
 

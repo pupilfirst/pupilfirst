@@ -28,22 +28,35 @@ class TimelineEvent < ApplicationRecord
   delegate :founder_event?, to: :target
   delegate :title, to: :target
 
-  scope :from_admitted_startups, -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
-  scope :not_private, -> { joins(:target).where.not(targets: { role: Target::ROLE_STUDENT }) }
+  scope :from_admitted_startups,
+        -> { joins(:founders).where(founders: { startup: Startup.admitted }) }
+  scope :not_private,
+        -> { joins(:target).where.not(targets: { role: Target::ROLE_STUDENT }) }
   scope :not_auto_verified, -> { joins(:target_evaluation_criteria).distinct }
   scope :auto_verified, -> { where.not(id: not_auto_verified) }
   scope :passed, -> { where.not(passed_at: nil) }
   scope :failed, -> { where(passed_at: nil).where.not(evaluated_at: nil) }
   scope :pending_review, -> { not_auto_verified.where(evaluated_at: nil) }
   scope :evaluated_by_faculty, -> { where.not(evaluated_at: nil) }
-  scope :from_founders, ->(founders) { joins(:timeline_event_owners).where(timeline_event_owners: { founder: founders }) }
+  scope :from_founders,
+        ->(founders) {
+          joins(:timeline_event_owners).where(
+            timeline_event_owners: {
+              founder: founders
+            }
+          )
+        }
 
   CHECKLIST_STATUS_NO_ANSWER = 'noAnswer'
   CHECKLIST_STATUS_PASSED = 'passed'
   CHECKLIST_STATUS_FAILED = 'failed'
 
   def self.valid_checklist_status
-    [CHECKLIST_STATUS_NO_ANSWER, CHECKLIST_STATUS_PASSED, CHECKLIST_STATUS_FAILED].freeze
+    [
+      CHECKLIST_STATUS_NO_ANSWER,
+      CHECKLIST_STATUS_PASSED,
+      CHECKLIST_STATUS_FAILED
+    ].freeze
   end
 
   # Accessors used by timeline builder form to create TimelineEventFile entries.
@@ -64,7 +77,9 @@ class TimelineEvent < ApplicationRecord
   def startup
     first_founder = founders.first
 
-    raise "TimelineEvent##{id} does not have any linked founders" if first_founder.blank?
+    if first_founder.blank?
+      raise "TimelineEvent##{id} does not have any linked founders"
+    end
 
     # TODO: This is a hack. Remove TimelineEvent#startup method after all of its usages have been deleted.
     first_founder.startup

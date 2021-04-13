@@ -14,9 +14,7 @@ describe MailLoginTokenService do
 
     describe '#execute' do
       it 'generates new login token for user' do
-        expect do
-          subject.execute
-        end.to(change { user.reload.login_token })
+        expect { subject.execute }.to(change { user.reload.login_token })
       end
 
       it 'emails login link to user' do
@@ -25,9 +23,15 @@ describe MailLoginTokenService do
         open_email(user.email)
 
         expect(current_email.subject).to eq("Log in to #{school.name}")
-        expect(current_email.body).to include("http://#{domain.fqdn}/users/token?")
-        expect(current_email.body).to include("referrer=#{CGI.escape(referrer)}")
-        expect(current_email.body).to include("token=#{user.reload.login_token}")
+        expect(current_email.body).to include(
+          "http://#{domain.fqdn}/users/token?"
+        )
+        expect(current_email.body).to include(
+          "referrer=#{CGI.escape(referrer)}"
+        )
+        expect(current_email.body).to include(
+          "token=#{user.reload.login_token}"
+        )
       end
     end
   end

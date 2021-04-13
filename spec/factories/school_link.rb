@@ -4,16 +4,10 @@ FactoryBot.define do
     url { |school_link| Faker::Internet.url(host: school_link.title) }
     school
 
-    trait(:header) do
-      kind { SchoolLink::KIND_HEADER }
-    end
+    trait(:header) { kind { SchoolLink::KIND_HEADER } }
 
-    trait(:social) do
-      kind { SchoolLink::KIND_SOCIAL }
-    end
+    trait(:social) { kind { SchoolLink::KIND_SOCIAL } }
 
-    trait(:footer) do
-      kind { SchoolLink::KIND_FOOTER }
-    end
+    trait(:footer) { kind { SchoolLink::KIND_FOOTER } }
   end
 end

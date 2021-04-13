@@ -10,7 +10,9 @@ describe OmniauthProviderUrlService do
       let(:provider) { 'google' }
 
       it 'returns Google Omniauth OAuth URL' do
-        expect(subject.oauth_url).to eq("http://#{host}/users/auth/google_oauth2")
+        expect(subject.oauth_url).to eq(
+          "http://#{host}/users/auth/google_oauth2"
+        )
       end
     end
 
@@ -34,7 +36,9 @@ describe OmniauthProviderUrlService do
       let(:provider) { Faker::Lorem.word }
 
       it 'raises an error' do
-        expect { subject.oauth_url }.to raise_error("Invalid provider #{provider} supplied to oauth redirection route.")
+        expect { subject.oauth_url }.to raise_error(
+          "Invalid provider #{provider} supplied to oauth redirection route."
+        )
       end
     end
   end

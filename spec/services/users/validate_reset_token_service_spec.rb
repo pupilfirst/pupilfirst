@@ -6,14 +6,14 @@ describe Users::ValidateResetTokenService do
   let(:token) { SecureRandom.uuid }
   let(:time_limit) { nil }
   let(:sent_at) { Time.zone.now }
-  let!(:user) { create :user, reset_password_token: token, reset_password_sent_at: sent_at }
+  let!(:user) do
+    create :user, reset_password_token: token, reset_password_sent_at: sent_at
+  end
 
   subject { described_class.new(token) }
 
   around do |example|
-    with_env(RESET_PASSWORD_TOKEN_TIME_LIMIT: time_limit.to_s) do
-      example.run
-    end
+    with_env(RESET_PASSWORD_TOKEN_TIME_LIMIT: time_limit.to_s) { example.run }
   end
 
   describe '#authenticate' do

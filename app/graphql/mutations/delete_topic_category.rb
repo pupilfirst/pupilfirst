@@ -2,7 +2,7 @@ module Mutations
   class DeleteTopicCategory < GraphQL::Schema::Mutation
     argument :id, ID, required: true
 
-    description "Destroy a category in community."
+    description 'Destroy a category in community.'
 
     field :success, Boolean, null: false
 

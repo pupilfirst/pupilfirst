@@ -4,6 +4,9 @@ class CoachMailer < SchoolMailer
     @course = course
     @coach = coach
 
-    simple_roadie_mail(coach.email, "You have been added as a coach in #{@course.name}")
+    simple_roadie_mail(
+      coach.email,
+      "You have been added as a coach in #{@course.name}"
+    )
   end
 end

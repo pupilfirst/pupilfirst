@@ -50,7 +50,9 @@ feature 'Course Exports', js: true do
 
     # A mail should be sent to requesting user when the report is prepared.
     open_email(school_admin.user.email)
-    expect(current_email.subject).to have_text("Export of #{course.name} course is ready for download")
+    expect(current_email.subject).to have_text(
+      "Export of #{course.name} course is ready for download"
+    )
     expect(current_email.body).to have_text(exports_school_course_path(course))
 
     # The export file should be attached at this point.
@@ -59,7 +61,14 @@ feature 'Course Exports', js: true do
     # Reload the page - it should say the report has been prepared.
     visit current_path
     expect(page).to have_text('Prepared less than a minute ago')
-    expect(page).to have_link(nil, href: Rails.application.routes.url_helpers.rails_blob_path(export.file, only_path: true))
+    expect(page).to have_link(
+      nil,
+      href:
+        Rails.application.routes.url_helpers.rails_blob_path(
+          export.file,
+          only_path: true
+        )
+    )
   end
 
   scenario 'school admin creates a teams export' do

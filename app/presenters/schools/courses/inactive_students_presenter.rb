@@ -19,21 +19,21 @@ module Schools
       end
 
       def team_details(teams)
-        teams.map do |team|
-          team.attributes.slice('id', 'name')
-        end
+        teams.map { |team| team.attributes.slice('id', 'name') }
       end
 
       def students
         @students ||=
-          founders.includes(user: { avatar_attachment: :blob }).map do |student|
-            {
-              id: student.id,
-              team_id: student.startup_id,
-              name: student.user.name,
-              avatar_url: student.user.image_or_avatar_url
-            }
-          end
+          founders
+            .includes(user: { avatar_attachment: :blob })
+            .map do |student|
+              {
+                id: student.id,
+                team_id: student.startup_id,
+                name: student.user.name,
+                avatar_url: student.user.image_or_avatar_url
+              }
+            end
       end
 
       private

@@ -4,7 +4,7 @@ module Mutations
     argument :title, String, required: false
     argument :url, String, required: true
 
-    description "Create a school link."
+    description 'Create a school link.'
 
     field :school_link, Types::SchoolLink, null: true
     field :errors, [Types::CreateSchoolLinkError], null: true

@@ -15,7 +15,12 @@ RSpec.describe FacultyStartupEnrollment, type: :model do
 
     context 'when safe_to_create is set' do
       it 'passes validation' do
-        enrollment = described_class.create(faculty: faculty, startup: startup, safe_to_create: true)
+        enrollment =
+          described_class.create(
+            faculty: faculty,
+            startup: startup,
+            safe_to_create: true
+          )
         expect(enrollment.persisted?).to eq(true)
       end
     end

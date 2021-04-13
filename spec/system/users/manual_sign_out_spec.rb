@@ -39,9 +39,7 @@ feature 'Manual User Sign Out', js: true do
   end
 
   context 'when flag is set' do
-    before do
-      user.update!(sign_out_at_next_request: true)
-    end
+    before { user.update!(sign_out_at_next_request: true) }
 
     scenario 'user signs in as usual' do
       visit user_token_path(token: user.login_token, referrer: edit_user_path)

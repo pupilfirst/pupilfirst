@@ -23,6 +23,10 @@ class DeleteCoachTeamEnrollmentMutator < ApplicationQuery
   end
 
   def coach_team_enrollment
-    @coach_team_enrollment ||= FacultyStartupEnrollment.find_by(startup_id: team_id, faculty_id: coach_id)
+    @coach_team_enrollment ||=
+      FacultyStartupEnrollment.find_by(
+        startup_id: team_id,
+        faculty_id: coach_id
+      )
   end
 end

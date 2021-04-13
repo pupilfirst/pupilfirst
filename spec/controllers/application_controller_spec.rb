@@ -6,8 +6,18 @@ describe ApplicationController do
     let!(:second_school) { create :school }
     let!(:third_school) { create :school }
 
-    let!(:second_school_domain) { create :domain, :primary, fqdn: 'www.second.localhost', school: second_school }
-    let!(:third_school_domain) { create :domain, :primary, fqdn: 'www.third.localhost', school: third_school }
+    let!(:second_school_domain) do
+      create :domain,
+             :primary,
+             fqdn: 'www.second.localhost',
+             school: second_school
+    end
+    let!(:third_school_domain) do
+      create :domain,
+             :primary,
+             fqdn: 'www.third.localhost',
+             school: third_school
+    end
 
     context 'when multitenancy is turned on' do
       around(:each) do |example|

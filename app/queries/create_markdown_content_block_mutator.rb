@@ -20,7 +20,9 @@ class CreateMarkdownContentBlockMutator < ApplicationQuery
     target_version.content_blocks.create!(
       sort_index: sort_index,
       block_type: ContentBlock::BLOCK_TYPE_MARKDOWN,
-      content: { markdown: "" }
+      content: {
+        markdown: ''
+      }
     )
   end
 end

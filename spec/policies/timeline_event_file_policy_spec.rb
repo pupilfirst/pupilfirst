@@ -12,13 +12,26 @@ describe TimelineEventFilePolicy do
 
     let(:target_group) { create :target_group, level: startup.level }
     let(:target) { create :target, target_group: target_group }
-    let(:timeline_event) { create :timeline_event, target: target, founders: startup.founders }
-    let(:timeline_event_file) { create :timeline_event_file, timeline_event: timeline_event }
+    let(:timeline_event) do
+      create :timeline_event, target: target, founders: startup.founders
+    end
+    let(:timeline_event_file) do
+      create :timeline_event_file, timeline_event: timeline_event
+    end
 
-    let!(:course_enrollment) { create :faculty_course_enrollment, faculty: course_faculty, course: startup.course }
-    let!(:startup_enrollment) { create :faculty_startup_enrollment, :with_course_enrollment, faculty: startup_faculty, startup: startup }
+    let!(:course_enrollment) do
+      create :faculty_course_enrollment,
+             faculty: course_faculty,
+             course: startup.course
+    end
+    let!(:startup_enrollment) do
+      create :faculty_startup_enrollment,
+             :with_course_enrollment,
+             faculty: startup_faculty,
+             startup: startup
+    end
 
-    context "when the current user is a course coach for the linked course" do
+    context 'when the current user is a course coach for the linked course' do
       let(:pundit_user) do
         OpenStruct.new(
           current_user: course_faculty.user,
@@ -45,7 +58,9 @@ describe TimelineEventFilePolicy do
     end
 
     context 'when the current user is one of the founders linked to the timeline event' do
-      let(:pundit_user) { OpenStruct.new(current_user: startup.founders.first.user) }
+      let(:pundit_user) do
+        OpenStruct.new(current_user: startup.founders.first.user)
+      end
 
       it 'grants access' do
         expect(subject).to permit(pundit_user, timeline_event_file)
@@ -53,14 +68,18 @@ describe TimelineEventFilePolicy do
     end
 
     context 'for any other user' do
-      let(:pundit_user) { OpenStruct.new(current_user: another_startup.founders.first.user) }
+      let(:pundit_user) do
+        OpenStruct.new(current_user: another_startup.founders.first.user)
+      end
 
       it 'denies access' do
         expect(subject).not_to permit(pundit_user, timeline_event_file)
       end
 
       context 'when there is no linked submission' do
-        let(:timeline_event_file) { create :timeline_event_file, timeline_event: nil }
+        let(:timeline_event_file) do
+          create :timeline_event_file, timeline_event: nil
+        end
 
         it 'grants access' do
           expect(subject).to permit(pundit_user, timeline_event_file)

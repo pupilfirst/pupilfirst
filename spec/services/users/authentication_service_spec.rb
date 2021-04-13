@@ -28,7 +28,9 @@ describe Users::AuthenticationService do
       end
 
       it 'clears user token' do
-        expect { subject.authenticate }.to(change { user.reload.login_token }.from(secret_token).to(nil))
+        expect { subject.authenticate }.to(
+          change { user.reload.login_token }.from(secret_token).to(nil)
+        )
       end
 
       context 'when a different school is supplied' do

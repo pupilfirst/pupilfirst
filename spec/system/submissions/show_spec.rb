@@ -23,7 +23,8 @@ feature 'Submissions show' do
       submission_2.founders << team.founders.last
     end
 
-    scenario 'student visits show page of submission he is linked to', js: true do
+    scenario 'student visits show page of submission he is linked to',
+             js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission)
 
       expect(page).to have_content(submission.title)
@@ -31,7 +32,8 @@ feature 'Submissions show' do
       expect(page).to have_content(submission.checklist.first['result'])
     end
 
-    scenario 'student visits show page of submission he is not linked to', js: true do
+    scenario 'student visits show page of submission he is not linked to',
+             js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission_2)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
@@ -39,9 +41,7 @@ feature 'Submissions show' do
   end
 
   context 'submission is of an auto-verified target' do
-    before do
-      submission.founders << student
-    end
+    before { submission.founders << student }
 
     scenario 'student visits show page of submission', js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission)

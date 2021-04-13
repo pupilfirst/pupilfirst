@@ -2,7 +2,7 @@ module Mutations
   class DestroySchoolLink < GraphQL::Schema::Mutation
     argument :id, ID, required: true
 
-    description "Destroy a school link."
+    description 'Destroy a school link.'
 
     field :success, Boolean, null: false
 

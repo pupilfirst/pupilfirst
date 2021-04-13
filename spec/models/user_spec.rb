@@ -22,23 +22,32 @@ describe User, type: :model do
     let!(:user) { create :user }
     context 'when the user has no uploaded image' do
       it 'returns a generated initials avatar' do
-        expect(user.image_or_avatar_url).to match(%r{data:image\/svg\+xml;base64.+})
+        expect(user.image_or_avatar_url).to match(
+          %r{data:image\/svg\+xml;base64.+}
+        )
       end
     end
 
     context 'when the user has an uploaded image' do
       before do
-        avatar = File.open(Rails.root.join('spec/support/uploads/faculty/donald_duck.jpg'))
+        avatar =
+          File.open(
+            Rails.root.join('spec/support/uploads/faculty/donald_duck.jpg')
+          )
         user.avatar.attach(io: avatar, filename: 'donald_duck.jpg')
         user.save!
       end
 
       it 'returns the image blob url' do
-        expect(user.image_or_avatar_url).to match(%r{rails/active_storage/blobs\/.+\.jpg})
+        expect(user.image_or_avatar_url).to match(
+          %r{rails/active_storage/blobs\/.+\.jpg}
+        )
       end
 
       it 'returns the image representation when a variant is specified' do
-        expect(user.image_or_avatar_url(variant: :thumb)).to match(%r{rails/active_storage/representations\/.+\.jpg})
+        expect(user.image_or_avatar_url(variant: :thumb)).to match(
+          %r{rails/active_storage/representations\/.+\.jpg}
+        )
       end
     end
   end

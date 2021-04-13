@@ -1,1 +1,1 @@
-import "communities/show/index.css"
+import "communities/show/index.css";

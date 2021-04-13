@@ -1,6 +1,11 @@
 module FacultyHelper
   def next_week_start
-    7.days.from_now.beginning_of_week.in_time_zone('Asia/Calcutta').strftime('%b %d')
+    7
+      .days
+      .from_now
+      .beginning_of_week
+      .in_time_zone('Asia/Calcutta')
+      .strftime('%b %d')
   end
 
   def next_week_end
@@ -27,11 +32,17 @@ module FacultyHelper
   end
 
   def sidebar_present?(faculty)
-    @sidebar_present ||= faculty.connect_slots.available_for_founder.exists? || past_connect_requests.exists?
+    @sidebar_present ||=
+      faculty.connect_slots.available_for_founder.exists? ||
+        past_connect_requests.exists?
   end
 
   def commitment_this_week
-    commitment = @faculty.connect_slots.where(slot_at: Time.now.beginning_of_week..Time.now.end_of_week).count * 0.5
+    commitment =
+      @faculty
+        .connect_slots
+        .where(slot_at: Time.now.beginning_of_week..Time.now.end_of_week)
+        .count * 0.5
     return 'Unavailable' if commitment.zero?
 
     commitment_string = commitment >= 1 ? commitment.to_i.to_s : ''

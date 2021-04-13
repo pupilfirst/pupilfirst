@@ -16,7 +16,16 @@ describe SchoolMailer do
     end
 
     context 'when the school has an unconfirmed custom sender signature' do
-      let(:school) { create :school, :current, configuration: { email_sender_signature: { name: name, email: email } } }
+      let(:school) do
+        create :school,
+               :current,
+               configuration: {
+                 email_sender_signature: {
+                   name: name,
+                   email: email
+                 }
+               }
+      end
 
       it 'uses school name and default address as signature for emails' do
         expect(mail[:from].value).to eq("#{school.name} <test@example.com>")
@@ -24,7 +33,17 @@ describe SchoolMailer do
     end
 
     context 'when the school has a confirmed custom sender signature' do
-      let(:school) { create :school, :current, configuration: { email_sender_signature: { name: name, email: email, confirmed_at: 1.day.ago.iso8601 } } }
+      let(:school) do
+        create :school,
+               :current,
+               configuration: {
+                 email_sender_signature: {
+                   name: name,
+                   email: email,
+                   confirmed_at: 1.day.ago.iso8601
+                 }
+               }
+      end
 
       it 'uses the custom sender signature' do
         expect(mail[:from].value).to eq("#{name} <#{email}>")

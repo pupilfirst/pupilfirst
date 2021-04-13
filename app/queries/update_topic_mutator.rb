@@ -2,7 +2,14 @@ class UpdateTopicMutator < ApplicationQuery
   include AuthorizeCommunityUser
 
   property :id
-  property :title, validates: { length: { minimum: 1, maximum: 250 }, allow_nil: false }
+  property :title,
+           validates: {
+             length: {
+               minimum: 1,
+               maximum: 250
+             },
+             allow_nil: false
+           }
   property :topic_category_id
 
   def update_topic

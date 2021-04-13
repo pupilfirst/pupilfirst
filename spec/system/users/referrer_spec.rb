@@ -38,6 +38,8 @@ feature 'Referrer Spec', js: true do
 
     open_email(user.email)
     link = current_email.body.match(/href="(?<url>.+?)">/)[:url]
-    expect(CGI::parse(URI::parse(link).query)["referrer"]).to have_content(["/school"])
+    expect(CGI.parse(URI.parse(link).query)['referrer']).to have_content(
+      ['/school']
+    )
   end
 end

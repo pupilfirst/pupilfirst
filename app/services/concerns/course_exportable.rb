@@ -17,7 +17,11 @@ module CourseExportable
     io = StringIO.new(spreadsheet.bytes)
 
     @course_export.json_data = tables.to_json
-    @course_export.file.attach(io: io, filename: filename, content_type: 'application/vnd.oasis.opendocument.spreadsheet')
+    @course_export.file.attach(
+      io: io,
+      filename: filename,
+      content_type: 'application/vnd.oasis.opendocument.spreadsheet'
+    )
     @course_export.save!
   end
 
@@ -51,7 +55,8 @@ module CourseExportable
   def assign_styled_grade(grade_index, grading, submission)
     evaluation_grade = submission.timeline_event_grades.pluck(:grade).join(',')
 
-    grade, style = case [submission.passed_at.present?, evaluation_grade.empty?]
+    grade, style =
+      case [submission.passed_at.present?, evaluation_grade.empty?]
       when [true, true]
         [submission.quiz_score || '✓', '']
       when [true, false]
@@ -68,33 +73,37 @@ module CourseExportable
   # If a grade has already been stored, separate it from the next one with a semi-colon in the same cell.
   def append_grade(grading, grade_index, grade, style)
     # Store the grade as a number if we're not dealing with a complex grade.
-    parsed_grade = begin
+    parsed_grade =
+      begin
         integer_grade = grade.to_i
         integer_grade.to_s == grade ? integer_grade : grade
       end
 
-    value = if grading[grade_index].present?
+    value =
+      if grading[grade_index].present?
         "#{grading[grade_index][:value]};#{parsed_grade}"
       else
         parsed_grade
       end
 
-    grading[grade_index] = if style.present?
-        { value: value, style: style }
-      else
-        value
-      end
+    grading[grade_index] =
+      style.present? ? { value: value, style: style } : value
 
     grading
   end
 
   def targets(role: nil)
-    @targets ||= begin
-        scope = course.targets.live
-          .joins(:level)
-          .includes(:level, :evaluation_criteria, :quiz, :target_group)
+    @targets ||=
+      begin
+        scope =
+          course
+            .targets
+            .live
+            .joins(:level)
+            .includes(:level, :evaluation_criteria, :quiz, :target_group)
 
-        scope = case role
+        scope =
+          case role
           when Target::ROLE_STUDENT
             scope.student
           when Target::ROLE_TEAM
@@ -103,9 +112,16 @@ module CourseExportable
             scope
           end
 
-        scope = @course_export.reviewed_only ? scope.joins(:evaluation_criteria) : scope
+        scope =
+          if @course_export.reviewed_only
+            scope.joins(:evaluation_criteria)
+          else
+            scope
+          end
 
-        scope.order('levels.number ASC, target_groups.sort_index ASC, targets.sort_index ASC').load
+        scope.order(
+          'levels.number ASC, target_groups.sort_index ASC, targets.sort_index ASC'
+        ).load
       end
   end
 

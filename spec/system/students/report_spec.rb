@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature "Course students report", js: true do
+feature 'Course students report', js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
   include NotificationHelper
@@ -22,46 +22,151 @@ feature "Course students report", js: true do
   let(:student) { team.founders.first }
 
   # Create few targets for the student
-  let(:target_group_l1) { create :target_group, level: level_1, milestone: true }
-  let(:target_group_l2) { create :target_group, level: level_2, milestone: true }
-  let(:target_group_l3) { create :target_group, level: level_3, milestone: true }
+  let(:target_group_l1) do
+    create :target_group, level: level_1, milestone: true
+  end
+  let(:target_group_l2) do
+    create :target_group, level: level_2, milestone: true
+  end
+  let(:target_group_l3) do
+    create :target_group, level: level_3, milestone: true
+  end
 
-  let(:target_l1) { create :target, :for_founders, target_group: target_group_l1 }
-  let(:target_l2) { create :target, :for_founders, target_group: target_group_l2 }
-  let(:target_l3) { create :target, :for_founders, target_group: target_group_l3 }
-  let!(:target_4) { create :target, :for_founders, target_group: target_group_l3 }
-  let(:quiz_target_1) { create :target, :for_founders, target_group: target_group_l1 }
-  let(:quiz_target_2) { create :target, :for_founders, target_group: target_group_l3 }
+  let(:target_l1) do
+    create :target, :for_founders, target_group: target_group_l1
+  end
+  let(:target_l2) do
+    create :target, :for_founders, target_group: target_group_l2
+  end
+  let(:target_l3) do
+    create :target, :for_founders, target_group: target_group_l3
+  end
+  let!(:target_4) do
+    create :target, :for_founders, target_group: target_group_l3
+  end
+  let(:quiz_target_1) do
+    create :target, :for_founders, target_group: target_group_l1
+  end
+  let(:quiz_target_2) do
+    create :target, :for_founders, target_group: target_group_l3
+  end
 
   # Create evaluation criteria for targets
   let(:evaluation_criterion_1) { create :evaluation_criterion, course: course }
   let(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
 
   # Create submissions for relevant targets
-  let!(:submission_target_l1_1) { create(:timeline_event, :with_owners, latest: true, owners: [student], target: target_l1, evaluator_id: course_coach.id, evaluated_at: 2.days.ago, passed_at: 3.days.ago) }
-  let!(:submission_target_l1_2) { create(:timeline_event, founders: [student], target: target_l2, evaluator_id: course_coach.id, evaluated_at: 3.days.ago, passed_at: nil) }
-  let!(:submission_target_l2) { create(:timeline_event, :with_owners, latest: true, owners: [student], target: target_l2, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
-  let!(:submission_target_l3) { create(:timeline_event, :with_owners, latest: true, owners: [student], target: target_l3, evaluator_id: course_coach.id, evaluated_at: 1.day.ago, passed_at: 1.day.ago) }
-  let!(:submission_quiz_target_1) { create(:timeline_event, :with_owners, latest: true, owners: [student], target: quiz_target_1, passed_at: 1.day.ago, quiz_score: '1/3') }
-  let!(:submission_quiz_target_2) { create(:timeline_event, :with_owners, latest: true, owners: [student], target: quiz_target_2, passed_at: 1.day.ago, quiz_score: '3/5') }
-  let!(:coach_note_1) { create :coach_note, author: course_coach.user, student: student }
-  let!(:coach_note_2) { create :coach_note, author: team_coach.user, student: student }
+  let!(:submission_target_l1_1) do
+    create(
+      :timeline_event,
+      :with_owners,
+      latest: true,
+      owners: [student],
+      target: target_l1,
+      evaluator_id: course_coach.id,
+      evaluated_at: 2.days.ago,
+      passed_at: 3.days.ago
+    )
+  end
+  let!(:submission_target_l1_2) do
+    create(
+      :timeline_event,
+      founders: [student],
+      target: target_l2,
+      evaluator_id: course_coach.id,
+      evaluated_at: 3.days.ago,
+      passed_at: nil
+    )
+  end
+  let!(:submission_target_l2) do
+    create(
+      :timeline_event,
+      :with_owners,
+      latest: true,
+      owners: [student],
+      target: target_l2,
+      evaluator_id: course_coach.id,
+      evaluated_at: 1.day.ago,
+      passed_at: 1.day.ago
+    )
+  end
+  let!(:submission_target_l3) do
+    create(
+      :timeline_event,
+      :with_owners,
+      latest: true,
+      owners: [student],
+      target: target_l3,
+      evaluator_id: course_coach.id,
+      evaluated_at: 1.day.ago,
+      passed_at: 1.day.ago
+    )
+  end
+  let!(:submission_quiz_target_1) do
+    create(
+      :timeline_event,
+      :with_owners,
+      latest: true,
+      owners: [student],
+      target: quiz_target_1,
+      passed_at: 1.day.ago,
+      quiz_score: '1/3'
+    )
+  end
+  let!(:submission_quiz_target_2) do
+    create(
+      :timeline_event,
+      :with_owners,
+      latest: true,
+      owners: [student],
+      target: quiz_target_2,
+      passed_at: 1.day.ago,
+      quiz_score: '3/5'
+    )
+  end
+  let!(:coach_note_1) do
+    create :coach_note, author: course_coach.user, student: student
+  end
+  let!(:coach_note_2) do
+    create :coach_note, author: team_coach.user, student: student
+  end
 
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course
-    create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach, startup: team
+    create :faculty_startup_enrollment,
+           :with_course_enrollment,
+           faculty: team_coach,
+           startup: team
 
     target_l1.evaluation_criteria << evaluation_criterion_1
-    target_l2.evaluation_criteria << [evaluation_criterion_1, evaluation_criterion_2]
+    target_l2.evaluation_criteria << [
+      evaluation_criterion_1,
+      evaluation_criterion_2
+    ]
     target_l3.evaluation_criteria << evaluation_criterion_2
     target_4.evaluation_criteria << evaluation_criterion_2
 
-    submission_target_l1_2.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_1, grade: 1)
-    submission_target_l1_1.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_1, grade: 3)
+    submission_target_l1_2.timeline_event_grades.create!(
+      evaluation_criterion: evaluation_criterion_1,
+      grade: 1
+    )
+    submission_target_l1_1.timeline_event_grades.create!(
+      evaluation_criterion: evaluation_criterion_1,
+      grade: 3
+    )
 
-    submission_target_l2.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_1, grade: 2)
-    submission_target_l2.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
-    submission_target_l3.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
+    submission_target_l2.timeline_event_grades.create!(
+      evaluation_criterion: evaluation_criterion_1,
+      grade: 2
+    )
+    submission_target_l2.timeline_event_grades.create!(
+      evaluation_criterion: evaluation_criterion_2,
+      grade: 2
+    )
+    submission_target_l3.timeline_event_grades.create!(
+      evaluation_criterion: evaluation_criterion_2,
+      grade: 2
+    )
   end
 
   around do |example|
@@ -77,7 +182,10 @@ feature "Course students report", js: true do
 
     expect(page).to have_text(student.name)
     expect(page).to have_text('Level Progress')
-    expect(page).to have_selector('.student-overlay__student-level', count: course.levels.where.not(number: 0).count)
+    expect(page).to have_selector(
+      '.student-overlay__student-level',
+      count: course.levels.where.not(number: 0).count
+    )
 
     # Targets Overview
     expect(page).to have_text('Targets Overview')
@@ -97,12 +205,16 @@ feature "Course students report", js: true do
     # Average Grades
     expect(page).to have_text('Average Grades')
 
-    within("div[aria-label='average-grade-for-criterion-#{evaluation_criterion_1.id}']") do
+    within(
+      "div[aria-label='average-grade-for-criterion-#{evaluation_criterion_1.id}']"
+    ) do
       expect(page).to have_content(evaluation_criterion_1.name)
       expect(page).to have_content('2.5/3')
     end
 
-    within("div[aria-label='average-grade-for-criterion-#{evaluation_criterion_2.id}']") do
+    within(
+      "div[aria-label='average-grade-for-criterion-#{evaluation_criterion_2.id}']"
+    ) do
       expect(page).to have_content(evaluation_criterion_2.name)
       expect(page).to have_content('2/3')
     end
@@ -113,21 +225,38 @@ feature "Course students report", js: true do
     expect(page).to have_content(target_l1.title)
     expect(page).to_not have_content(target_4.title)
 
-    within("div[aria-label='student-submission-card-#{submission_target_l1_2.id}']") do
-      expect(page).to have_content('Rejected')
-    end
+    within(
+      "div[aria-label='student-submission-card-#{submission_target_l1_2.id}']"
+    ) { expect(page).to have_content('Rejected') }
 
     within("div[aria-label='student-submissions']") do
-      expect(page).to have_link(href: "/submissions/#{submission_target_l1_1.id}/review")
-      expect(page).to have_link(href: "/submissions/#{submission_target_l3.id}/review")
+      expect(page).to have_link(
+        href: "/submissions/#{submission_target_l1_1.id}/review"
+      )
+      expect(page).to have_link(
+        href: "/submissions/#{submission_target_l3.id}/review"
+      )
     end
   end
 
   scenario 'coach loads more submissions' do
     # Create over 20 reviewed submissions
     20.times do
-      submission = create(:timeline_event, :with_owners, latest: true, owners: [student], target: target_4, evaluator_id: course_coach.id, evaluated_at: 2.days.ago, passed_at: 3.days.ago)
-      submission.timeline_event_grades.create!(evaluation_criterion: evaluation_criterion_2, grade: 2)
+      submission =
+        create(
+          :timeline_event,
+          :with_owners,
+          latest: true,
+          owners: [student],
+          target: target_4,
+          evaluator_id: course_coach.id,
+          evaluated_at: 2.days.ago,
+          passed_at: 3.days.ago
+        )
+      submission.timeline_event_grades.create!(
+        evaluation_criterion: evaluation_criterion_2,
+        grade: 2
+      )
     end
 
     sign_in_user course_coach.user, referrer: student_report_path(student)
@@ -137,7 +266,10 @@ feature "Course students report", js: true do
     click_button('Load More...')
 
     within("div[aria-label='student-submissions']") do
-      expect(page).to have_selector('a', count: student.timeline_events.evaluated_by_faculty.count)
+      expect(page).to have_selector(
+        'a',
+        count: student.timeline_events.evaluated_by_faculty.count
+      )
     end
 
     # Switching tabs should preserve already loaded submissions
@@ -145,7 +277,10 @@ feature "Course students report", js: true do
     find('li', text: 'Submissions').click
 
     within("div[aria-label='student-submissions']") do
-      expect(page).to have_selector('a', count: student.timeline_events.evaluated_by_faculty.count)
+      expect(page).to have_selector(
+        'a',
+        count: student.timeline_events.evaluated_by_faculty.count
+      )
     end
   end
 
@@ -163,9 +298,9 @@ feature "Course students report", js: true do
     find('li', text: 'Submissions').click
     expect(page).to have_content(target_l1.title)
     expect(page).to_not have_content(target_4.title)
-    within("div[aria-label='student-submission-card-#{submission_target_l1_2.id}']") do
-      expect(page).to have_content('Rejected')
-    end
+    within(
+      "div[aria-label='student-submission-card-#{submission_target_l1_2.id}']"
+    ) { expect(page).to have_content('Rejected') }
 
     # Check notes
     find('li', text: 'Notes').click
@@ -236,13 +371,15 @@ feature "Course students report", js: true do
 
     scenario 'coach is indicated if there are no notes' do
       another_student = team.founders.last
-      sign_in_user team_coach.user, referrer: student_report_path(another_student)
+      sign_in_user team_coach.user,
+                   referrer: student_report_path(another_student)
       expect(page).to have_text('No notes here!')
     end
   end
 
   scenario 'unauthorized coach attempts to access student report' do
-    sign_in_user coach_without_access.user, referrer: student_report_path(student)
+    sign_in_user coach_without_access.user,
+                 referrer: student_report_path(student)
     expect(page).to have_content("The page you were looking for doesn't exist")
   end
 
@@ -250,7 +387,10 @@ feature "Course students report", js: true do
     let(:team_coach_2) { create :faculty, school: school }
 
     before do
-      create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach_2, startup: team
+      create :faculty_startup_enrollment,
+             :with_course_enrollment,
+             faculty: team_coach_2,
+             startup: team
     end
 
     scenario 'coach checks list of directly assigned team coaches' do
@@ -264,9 +404,16 @@ feature "Course students report", js: true do
   scenario 'coach can navigate to other team members in the team' do
     sign_in_user course_coach.user, referrer: student_report_path(student)
 
-    team.founders.where.not(id: student).each do |teammate|
-      expect(page).to have_link(teammate.name, href: "/students/#{teammate.id}/report")
-    end
+    team
+      .founders
+      .where
+      .not(id: student)
+      .each do |teammate|
+        expect(page).to have_link(
+          teammate.name,
+          href: "/students/#{teammate.id}/report"
+        )
+      end
   end
 
   scenario 'coach is shown a warning about a student being dropped out' do
@@ -275,7 +422,9 @@ feature "Course students report", js: true do
 
     sign_in_user course_coach.user, referrer: student_report_path(student)
 
-    expect(page).to have_text("This student dropped out of the course on #{time.strftime('%b %-d, %Y')}.")
+    expect(page).to have_text(
+      "This student dropped out of the course on #{time.strftime('%b %-d, %Y')}."
+    )
   end
 
   scenario "coach is shown a warning about a student's access to a course having ended" do
@@ -283,6 +432,8 @@ feature "Course students report", js: true do
     team.update!(access_ends_at: time)
     sign_in_user course_coach.user, referrer: student_report_path(student)
 
-    expect(page).to have_text("This student's access to the course ended on #{time.strftime('%b %-d, %Y')}.")
+    expect(page).to have_text(
+      "This student's access to the course ended on #{time.strftime('%b %-d, %Y')}."
+    )
   end
 end

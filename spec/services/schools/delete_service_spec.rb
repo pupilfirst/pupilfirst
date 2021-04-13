@@ -5,26 +5,42 @@ describe Schools::DeleteService do
 
   let(:school_1) { create :school, :current }
   let(:user_s1) { create :user, school: school_1 }
-  let!(:school_string_s1) { create :school_string, :privacy_policy, school: school_1 }
+  let!(:school_string_s1) do
+    create :school_string, :privacy_policy, school: school_1
+  end
   let!(:school_link_s1) { create :school_link, :header, school: school_1 }
-  let!(:school_admin_s1) { create :school_admin, school: school_1, user: user_s1 }
+  let!(:school_admin_s1) do
+    create :school_admin, school: school_1, user: user_s1
+  end
   let!(:course_s1) { create :course, school: school_1 }
   let!(:community_s1) { create :community, school: school_1 }
-  let!(:markdown_attachment_s1) { create :markdown_attachment, user: user_s1, school: school_1 }
+  let!(:markdown_attachment_s1) do
+    create :markdown_attachment, user: user_s1, school: school_1
+  end
   let!(:domain_s1) { create :domain, school: school_1 }
-  let!(:audit_record_s1) { create :audit_record, :add_school_admin, school: school_1 }
+  let!(:audit_record_s1) do
+    create :audit_record, :add_school_admin, school: school_1
+  end
   let!(:faculty_s1) { create :faculty, user: user_s1 }
 
   let(:school_2) { create :school }
   let(:user_s2) { create :user, school: school_2 }
-  let!(:school_string_s2) { create :school_string, :privacy_policy, school: school_2 }
+  let!(:school_string_s2) do
+    create :school_string, :privacy_policy, school: school_2
+  end
   let!(:school_link_s2) { create :school_link, :header, school: school_2 }
-  let!(:school_admin_s2) { create :school_admin, school: school_2, user: user_s2 }
+  let!(:school_admin_s2) do
+    create :school_admin, school: school_2, user: user_s2
+  end
   let!(:course_s2) { create :course, school: school_2 }
   let!(:community_s2) { create :community, school: school_2 }
-  let!(:markdown_attachment_s2) { create :markdown_attachment, user: user_s2, school: school_2 }
+  let!(:markdown_attachment_s2) do
+    create :markdown_attachment, user: user_s2, school: school_2
+  end
   let!(:domain_s2) { create :domain, :primary, school: school_2 }
-  let!(:audit_record_s2) { create :audit_record, :add_school_admin, school: school_2 }
+  let!(:audit_record_s2) do
+    create :audit_record, :add_school_admin, school: school_2
+  end
   let!(:faculty_s2) { create :faculty, user: user_s2 }
 
   before do
@@ -35,7 +51,7 @@ describe Schools::DeleteService do
     school_2.save!
   end
 
-  let(:expectations) {
+  let(:expectations) do
     [
       [Proc.new { School.count }, 2, 1],
       [Proc.new { User.count }, 2, 1],
@@ -46,20 +62,16 @@ describe Schools::DeleteService do
       [Proc.new { Community.count }, 2, 1],
       [Proc.new { MarkdownAttachment.count }, 2, 1],
       [Proc.new { Domain.count }, 3, 1],
-      [Proc.new { AuditRecord.count }, 2, 1],
+      [Proc.new { AuditRecord.count }, 2, 1]
     ]
-  }
+  end
 
   describe '#execute' do
     it 'deletes all data related to the course and the course itself' do
       expect { subject.execute }.to(
-        change {
-          expectations.map { |e| e[0].call }
-        }.from(
+        change { expectations.map { |e| e[0].call } }.from(
           expectations.map { |e| e[1] }
-        ).to(
-          expectations.map { |e| e[2] }
-        )
+        ).to(expectations.map { |e| e[2] })
       )
 
       expect { school_2.reload }.not_to raise_error

@@ -35,53 +35,97 @@ describe Targets::SendSessionRemindersJob do
   let(:l2_target_group) { create :target_group, level: level_2 }
   let(:s2_l2_target_group) { create :target_group, level: level_2_s2 }
 
-  let!(:s1_session_not_imminent) { create :target, :session, session_at: 1.hour.from_now, target_group: l2_target_group }
+  let!(:s1_session_not_imminent) do
+    create :target,
+           :session,
+           session_at: 1.hour.from_now,
+           target_group: l2_target_group
+  end
 
   let(:service_response) { double('Message Service Response', errors: {}) }
-  let(:message_service) { instance_double(PublicSlack::MessageService, post: service_response) }
+  let(:message_service) do
+    instance_double(PublicSlack::MessageService, post: service_response)
+  end
 
   before do
-    allow(PublicSlack::MessageService).to receive(:new).and_return(message_service)
+    allow(PublicSlack::MessageService).to receive(:new).and_return(
+      message_service
+    )
   end
 
   describe '#perform' do
     let(:expected_message) { build_expected_message(session_imminent) }
 
     context 'when a session is imminenet for startups' do
-      let!(:session_imminent) { create :target, :session, session_at: 30.minutes.from_now, target_group: l2_target_group }
+      let!(:session_imminent) do
+        create :target,
+               :session,
+               session_at: 30.minutes.from_now,
+               target_group: l2_target_group
+      end
 
       it 'sends slack messages for imminent sessions to the appropriate founders' do
         # Founders in session's level and above should get notifications.
-        Founder.where(startup: [startup_l2, startup_l3]).each do |founder|
-          expect(message_service).to receive(:post).with(message: expected_message, founder: founder)
-        end
+        Founder
+          .where(startup: [startup_l2, startup_l3])
+          .each do |founder|
+            expect(message_service).to receive(:post).with(
+              message: expected_message,
+              founder: founder
+            )
+          end
 
         # Founders below session's level should not receive notifications.
-        Founder.where(startup: [startup_l1]).each do |founder|
-          expect(message_service).not_to receive(:post).with(message: expected_message, founder: founder)
-        end
+        Founder
+          .where(startup: [startup_l1])
+          .each do |founder|
+            expect(message_service).not_to receive(:post).with(
+              message: expected_message,
+              founder: founder
+            )
+          end
 
         # Founders in other courses should not receive notifications.
-        Founder.where(startup: [startup_s2_l1, startup_s2_l2, startup_s2_l3]).each do |founder|
-          expect(message_service).not_to receive(:post).with(message: expected_message, founder: founder)
-        end
+        Founder
+          .where(startup: [startup_s2_l1, startup_s2_l2, startup_s2_l3])
+          .each do |founder|
+            expect(message_service).not_to receive(:post).with(
+              message: expected_message,
+              founder: founder
+            )
+          end
 
         subject.perform_now
       end
 
       it 'sets slack_reminders_sent_at for processed sessions' do
-        expect { subject.perform_now }.to change { session_imminent.reload.slack_reminders_sent_at }.from(nil).to be_a(ActiveSupport::TimeWithZone)
-        expect(s1_session_not_imminent.reload.slack_reminders_sent_at).to eq(nil)
+        expect { subject.perform_now }.to change {
+          session_imminent.reload.slack_reminders_sent_at
+        }.from(nil).to be_a(ActiveSupport::TimeWithZone)
+        expect(s1_session_not_imminent.reload.slack_reminders_sent_at).to eq(
+          nil
+        )
       end
     end
 
     context 'when slack_reminders_sent_at is already set' do
-      let!(:session_imminent) { create :target, :session, session_at: 30.minutes.from_now, target_group: l2_target_group, slack_reminders_sent_at: 1.minute.ago }
+      let!(:session_imminent) do
+        create :target,
+               :session,
+               session_at: 30.minutes.from_now,
+               target_group: l2_target_group,
+               slack_reminders_sent_at: 1.minute.ago
+      end
 
       it 'does not send slack messages for imminent session' do
-        Founder.where(startup: [startup_l2, startup_l3]).each do |founder|
-          expect(message_service).not_to receive(:post).with(message: expected_message, founder: founder)
-        end
+        Founder
+          .where(startup: [startup_l2, startup_l3])
+          .each do |founder|
+            expect(message_service).not_to receive(:post).with(
+              message: expected_message,
+              founder: founder
+            )
+          end
 
         subject.perform_now
       end

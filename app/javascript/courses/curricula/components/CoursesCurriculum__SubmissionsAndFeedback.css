@@ -1,6 +1,6 @@
 .curriculum__submission-feedback-container::after {
   @apply relative block;
-  content: '';
+  content: "";
   margin: 40px auto 0;
   width: 120px;
   height: 8px;

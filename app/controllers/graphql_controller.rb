@@ -17,10 +17,17 @@ class GraphqlController < ApplicationController
       token_auth: api_token.present?
     }
 
-    result = PupilfirstSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+    result =
+      PupilfirstSchema.execute(
+        query,
+        variables: variables,
+        context: context,
+        operation_name: operation_name
+      )
 
     # Inject notifications into the GraphQL response, if any. These should be manually handled by the client.
-    result[:notifications] = context[:notifications] if context[:notifications].any?
+    result[:notifications] = context[:notifications] if context[:notifications]
+      .any?
 
     render json: result
   rescue => e
@@ -43,11 +50,7 @@ class GraphqlController < ApplicationController
   def ensure_hash(ambiguous_param)
     case ambiguous_param
     when String
-      if ambiguous_param.present?
-        ensure_hash(JSON.parse(ambiguous_param))
-      else
-        {}
-      end
+      ambiguous_param.present? ? ensure_hash(JSON.parse(ambiguous_param)) : {}
     when Hash, ActionController::Parameters
       ambiguous_param
     when nil
@@ -61,6 +64,13 @@ class GraphqlController < ApplicationController
     logger.error error.message
     logger.error error.backtrace.join("\n")
 
-    render json: { error: { message: error.message, backtrace: error.backtrace }, data: {} }, status: :internal_server_error
+    render json: {
+             error: {
+               message: error.message,
+               backtrace: error.backtrace
+             },
+             data: {}
+           },
+           status: :internal_server_error
   end
 end

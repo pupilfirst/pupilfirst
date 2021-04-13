@@ -4,7 +4,8 @@
   max-height: 8rem;
 }
 
-.topics-post-editor__reply-to-preview .topics-post-editor__reply-to-preview-bottom-fadeout {
+.topics-post-editor__reply-to-preview
+  .topics-post-editor__reply-to-preview-bottom-fadeout {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -12,5 +13,9 @@
   text-align: center;
   margin: 0;
   padding: 30px 0;
-  background-image: linear-gradient(to bottom, transparent, theme("colors.gray.200"));
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    theme("colors.gray.200")
+  );
 }

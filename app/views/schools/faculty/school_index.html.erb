@@ -9,4 +9,8 @@
 
 <% @presenter = Schools::FacultyModule::SchoolIndexPresenter.new(self, @school) %>
 
-<div id="sa-coaches-panel" class=" flex flex-1 h-full bg-gray-200" data-props="<%= @presenter.react_props.to_json %>"></div>
+<div
+  id="sa-coaches-panel"
+  class=" flex flex-1 h-full bg-gray-200"
+  data-props="<%= @presenter.react_props.to_json %>"
+></div>

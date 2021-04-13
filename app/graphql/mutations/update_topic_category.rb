@@ -3,7 +3,7 @@ module Mutations
     argument :name, String, required: true
     argument :id, ID, required: true
 
-    description "Update a category in community."
+    description 'Update a category in community.'
 
     field :success, Boolean, null: false
 

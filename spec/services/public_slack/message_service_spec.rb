@@ -17,20 +17,36 @@ describe PublicSlack::MessageService do
     let(:founder_2) { create :founder }
 
     it 'raises ArgumentError if no target specified' do
-      expect { subject.post message: 'Hello' }.to raise_error(ArgumentError, 'specify one of channel, founder or founders')
+      expect { subject.post message: 'Hello' }.to raise_error(
+        ArgumentError,
+        'specify one of channel, founder or founders'
+      )
     end
 
     it 'raises ArgumentError if multiple targets specified' do
-      expect { subject.post message: 'Hello', channel: '#general', founder: founder_1 }.to raise_error(
-        ArgumentError, 'specify one of channel, founder or founders'
+      expect {
+        subject.post message: 'Hello', channel: '#general', founder: founder_1
+      }.to raise_error(
+        ArgumentError,
+        'specify one of channel, founder or founders'
       )
 
-      expect { subject.post message: 'Hello', founder: founder_1, founders: [founder_1, founder_2] }.to raise_error(
-        ArgumentError, 'specify one of channel, founder or founders'
+      expect {
+        subject.post message: 'Hello',
+                     founder: founder_1,
+                     founders: [founder_1, founder_2]
+      }.to raise_error(
+        ArgumentError,
+        'specify one of channel, founder or founders'
       )
 
-      expect { subject.post message: 'Hello', channel: '#general', founders: [founder_1, founder_2] }.to raise_error(
-        ArgumentError, 'specify one of channel, founder or founders'
+      expect {
+        subject.post message: 'Hello',
+                     channel: '#general',
+                     founders: [founder_1, founder_2]
+      }.to raise_error(
+        ArgumentError,
+        'specify one of channel, founder or founders'
       )
     end
 
@@ -46,9 +62,9 @@ describe PublicSlack::MessageService do
           it 'fails' do
             expect(subject).to receive(:channel_valid?).and_return(false)
 
-            expect { subject.post message: 'Hello', channel: '#general' }.to raise_error(
-              'could not validate channel specified'
-            )
+            expect {
+              subject.post message: 'Hello', channel: '#general'
+            }.to raise_error('could not validate channel specified')
           end
         end
       end
@@ -70,23 +86,35 @@ describe PublicSlack::MessageService do
       context 'when slack responds with an error' do
         it 'records the error' do
           expect(subject).to receive(:channel_valid?).and_return(true)
-          stub_request(:get, "https://slack.com/api/chat.postMessage?token=BOT_OAUTH_TOKEN&channel=channel_name"\
-            "&link_names=1&text=hello&as_user=true&unfurl_links=false")
-            .to_return(body: '{"error": "some error"}')
+          stub_request(
+            :get,
+            'https://slack.com/api/chat.postMessage?token=BOT_OAUTH_TOKEN&channel=channel_name' \
+              '&link_names=1&text=hello&as_user=true&unfurl_links=false'
+          ).to_return(body: '{"error": "some error"}')
 
-          expect { subject.post message: 'hello', channel: 'channel_name' }.to raise_error(PublicSlack::OperationFailureException, %q(Response from Slack API indicates failure: '{"error": "some error"}'))
+          expect {
+            subject.post message: 'hello', channel: 'channel_name'
+          }.to raise_error(
+            PublicSlack::OperationFailureException,
+            "Response from Slack API indicates failure: '{\"error\": \"some error\"}'"
+          )
         end
       end
 
       context 'when an HTTP error occurs' do
         it 'records the error' do
           expect(subject).to receive(:channel_valid?).and_return(true)
-          stub_request(:get, "https://slack.com/api/chat.postMessage?token=BOT_OAUTH_TOKEN&channel=channel_name"\
-            "&link_names=1&text=hello&as_user=true&unfurl_links=false")
-            .to_return(body: 'some error', status: 500)
+          stub_request(
+            :get,
+            'https://slack.com/api/chat.postMessage?token=BOT_OAUTH_TOKEN&channel=channel_name' \
+              '&link_names=1&text=hello&as_user=true&unfurl_links=false'
+          ).to_return(body: 'some error', status: 500)
 
           response = subject.post message: 'hello', channel: 'channel_name'
-          expect(response.errors).to eq('HTTP Error' => 'There seems to be a network issue. Please try after sometime')
+          expect(response.errors).to eq(
+            'HTTP Error' =>
+              'There seems to be a network issue. Please try after sometime'
+          )
         end
       end
     end

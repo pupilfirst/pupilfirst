@@ -2,7 +2,7 @@ module Mutations
   class MarkNotification < GraphQL::Schema::Mutation
     argument :notification_id, ID, required: true
 
-    description "Mark a notification as having been read"
+    description 'Mark a notification as having been read'
 
     field :success, Boolean, null: false
 

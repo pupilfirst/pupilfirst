@@ -3,7 +3,7 @@ module Mutations
     argument :resource_ids, [ID], required: true
     argument :resource_type, String, required: true
 
-    description "Sort targets and target groups"
+    description 'Sort targets and target groups'
 
     field :success, Boolean, null: false
 

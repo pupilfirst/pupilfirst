@@ -2,7 +2,7 @@ module Mutations
   class DeleteTopicSubscription < GraphQL::Schema::Mutation
     argument :topic_id, ID, required: true
 
-    description "Unsubscribe from a topic"
+    description 'Unsubscribe from a topic'
 
     field :success, Boolean, null: false
 

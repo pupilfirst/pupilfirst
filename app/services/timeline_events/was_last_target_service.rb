@@ -45,7 +45,17 @@ module TimelineEvents
     end
 
     def final_milestone_targets
-      Target.live.joins(target_group: :level).where(target_groups: { milestone: true }, levels: { id: last_level.id })
+      Target
+        .live
+        .joins(target_group: :level)
+        .where(
+          target_groups: {
+            milestone: true
+          },
+          levels: {
+            id: last_level.id
+          }
+        )
     end
   end
 end

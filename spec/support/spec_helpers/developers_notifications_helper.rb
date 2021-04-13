@@ -7,11 +7,19 @@ module DevelopersNotificationsHelper
       an_instance_of(User),
       kind_of(ApplicationRecord)
     )
-    allow(Developers::NotificationService).to receive(:new).and_return(notification_service)
+    allow(Developers::NotificationService).to receive(:new).and_return(
+      notification_service
+    )
     notification_service
   end
 
-  def expect_published(notification_service, course, event_type, actor, resource)
+  def expect_published(
+    notification_service,
+    course,
+    event_type,
+    actor,
+    resource
+  )
     expect(notification_service).to have_received(:execute).with(
       course,
       event_type,

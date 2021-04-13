@@ -16,7 +16,8 @@ class LevelUpMutator < ApplicationQuery
   end
 
   def level_up_eligibility_service
-    @level_up_eligibility_service ||= Students::LevelUpEligibilityService.new(student)
+    @level_up_eligibility_service ||=
+      Students::LevelUpEligibilityService.new(student)
   end
 
   def course
@@ -28,7 +29,11 @@ class LevelUpMutator < ApplicationQuery
   end
 
   def student
-    @student ||= current_user.founders.joins(:level).find_by(levels: { course_id: course_id })
+    @student ||=
+      current_user
+        .founders
+        .joins(:level)
+        .find_by(levels: { course_id: course_id })
   end
 
   def authorized?

@@ -13,11 +13,16 @@ feature 'Course students bulk importer', js: true do
   let!(:level_1) { create :level, :one, course: course }
 
   def attach_csv_file(file_name)
-    attach_file 'csv', File.absolute_path(Rails.root.join("spec/support/uploads/students/#{file_name}")), visible: false
+    attach_file 'csv',
+                File.absolute_path(
+                  Rails.root.join("spec/support/uploads/students/#{file_name}")
+                ),
+                visible: false
   end
 
   scenario 'school admin attaches a valid csv file for import' do
-    sign_in_user school_admin.user, referrer: school_course_students_path(course)
+    sign_in_user school_admin.user,
+                 referrer: school_course_students_path(course)
 
     click_button 'Bulk Import'
 
@@ -53,21 +58,28 @@ feature 'Course students bulk importer', js: true do
     email_subject = current_email.subject
     email_body = current_email.body
 
-    expect(email_subject).to eq("Import of Students Completed")
+    expect(email_subject).to eq('Import of Students Completed')
 
-    expect(email_body).to have_content("The students import that you initiated for #{course.name} course was completed")
-    expect(email_body).to have_content("Students requested: 2")
-    expect(email_body).to have_content("Students added: 2")
-    expect(page).to_not have_content("Some of the students that you tried to import already existed in the course")
+    expect(email_body).to have_content(
+      "The students import that you initiated for #{course.name} course was completed"
+    )
+    expect(email_body).to have_content('Students requested: 2')
+    expect(email_body).to have_content('Students added: 2')
+    expect(page).to_not have_content(
+                          'Some of the students that you tried to import already existed in the course'
+                        )
 
     # Check student notification
     open_email('super@man.com')
 
-    expect(current_email.subject).to have_content("You have been added as a student in #{school.name}")
+    expect(current_email.subject).to have_content(
+      "You have been added as a student in #{school.name}"
+    )
   end
 
   scenario 'admin onboards students with notification unchecked' do
-    sign_in_user school_admin.user, referrer: school_course_students_path(course)
+    sign_in_user school_admin.user,
+                 referrer: school_course_students_path(course)
 
     click_button 'Bulk Import'
     expect(page).to have_text 'Download an example .csv file'
@@ -76,7 +88,10 @@ feature 'Course students bulk importer', js: true do
     expect(page).to have_text 'Super Man'
 
     # uncheck notification option
-    page.find('label', text: 'Notify students, and send them a link to sign into this school.').click
+    page.find(
+      'label',
+      text: 'Notify students, and send them a link to sign into this school.'
+    ).click
 
     click_button 'Import Students'
 
@@ -90,23 +105,29 @@ feature 'Course students bulk importer', js: true do
   end
 
   scenario 'admin uploads a csv with invalid template for import' do
-    sign_in_user school_admin.user, referrer: school_course_students_path(course)
+    sign_in_user school_admin.user,
+                 referrer: school_course_students_path(course)
 
     click_button 'Bulk Import'
 
     attach_csv_file('student_import_wrong_template.csv')
 
-    expect(page).to have_text('The selected CSV file does not have a valid template')
+    expect(page).to have_text(
+      'The selected CSV file does not have a valid template'
+    )
   end
 
   scenario 'admin uploads a csv with invalid data' do
-    sign_in_user school_admin.user, referrer: school_course_students_path(course)
+    sign_in_user school_admin.user,
+                 referrer: school_course_students_path(course)
 
     click_button 'Bulk Import'
 
     attach_csv_file('student_import_invalid_data.csv')
 
-    expect(page).to have_text('The CSV file has invalid data in few cells. Please fix the errors listed below and try again.')
+    expect(page).to have_text(
+      'The CSV file has invalid data in few cells. Please fix the errors listed below and try again.'
+    )
 
     # Only erroneous rows are displayed
     expect(page).to_not have_text('Bat Man')
@@ -114,17 +135,22 @@ feature 'Course students bulk importer', js: true do
     expect(page).to have_text('tag6')
 
     expect(page).to have_text('Here is a summary of the errors in the sheet:')
-    expect(page).to have_text("Name column can't be blank and should be within 250 characters")
+    expect(page).to have_text(
+      "Name column can't be blank and should be within 250 characters"
+    )
     expect(page).to have_text("Email has to be valid and can't be blank")
   end
 
   context 'import list has a student that already exists' do
-    let!(:user) { create :user, email: 'bat@man.com', school: school, title: "New Title" }
+    let!(:user) do
+      create :user, email: 'bat@man.com', school: school, title: 'New Title'
+    end
     let!(:startup) { create :team, level: level_1 }
     let!(:founder) { create :founder, startup: startup, user: user }
 
     scenario 'admin uploads csv with email of existing student' do
-      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+      sign_in_user school_admin.user,
+                   referrer: school_course_students_path(course)
 
       click_button 'Bulk Import'
 
@@ -144,9 +170,12 @@ feature 'Course students bulk importer', js: true do
 
       email_body = current_email.body
 
-      expect(email_body).to have_content("Some of the students that you tried to import already existed in the course")
-      expect(current_email.attachments.first.body.encoded).to have_text('bat@man.com')
+      expect(email_body).to have_content(
+        'Some of the students that you tried to import already existed in the course'
+      )
+      expect(current_email.attachments.first.body.encoded).to have_text(
+        'bat@man.com'
+      )
     end
   end
 end
-

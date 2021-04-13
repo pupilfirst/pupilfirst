@@ -25,18 +25,22 @@
   <% if @updates[:coach].present? %>
     <% pending_submissions_count = @updates[:coach].map { |s| s[:pending_submissions] }.sum %>
     <p style="margin-top: 10px;">
-
-      There <%= article(pending_submissions_count) %> <strong><%= pending_submissions_count %></strong>
-      new <%= 'submission'.pluralize(pending_submissions_count) %> to review
-      in <%= pluralize(@updates[:coach].length, 'course') %>
+      There
+      <%= article(pending_submissions_count) %>
+      <strong><%= pending_submissions_count %></strong> new
+      <%= 'submission'.pluralize(pending_submissions_count) %>
+      to review in <%= pluralize(@updates[:coach].length, 'course') %>
       that you are a coach in:
     </p>
 
-    <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">
+    <ul
+      style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;"
+    >
       <% @updates[:coach].each do |stats| %>
         <li style="padding: 2px 0px;">
           <%= link_to "#{stats[:course_name]}:", review_course_url(stats[:course_id]), style: 'color: #6025C0; border-radius: 8px; padding: 0px;' %>
-          <span><strong><%= stats[:pending_submissions] %></strong>
+          <span
+            ><strong><%= stats[:pending_submissions] %></strong>
             <% if stats[:is_team_coach] %>
               <%= stats[:pending_submissions_for_coach] == 0 ? '(none of which are assigned to you)' : "(#{stats[:pending_submissions_for_coach]} assigned to you)" %>
             <% end %>
@@ -47,9 +51,7 @@
   <% end %>
 
   <% if @updates[:community_new].present? %>
-    <p style="margin-top: 15px;">
-      Latest topics posted on your communities:
-    </p>
+    <p style="margin-top: 15px;">Latest topics posted on your communities:</p>
 
     <% @updates[:community_new].each do |topic| %>
       <div>
@@ -58,7 +60,9 @@
           &mdash; <strong><%= topic[:author] %></strong>
         </span>
       </div>
-      <div style="font-size: 75%; border-bottom: 1px solid lightgray; margin-bottom: 4px; padding-bottom: 4px;">
+      <div
+        style="font-size: 75%; border-bottom: 1px solid lightgray; margin-bottom: 4px; padding-bottom: 4px;"
+      >
         <%= link_to topic[:community_name], community_url(topic[:community_id]) %>,
         <%= pluralize(topic[:views], 'view') %>,
         <%= pluralize(topic[:replies], 'reply') %>.
@@ -78,17 +82,21 @@
           &mdash; <strong><%= topic[:author] %></strong>
         </span>
       </div>
-      <div style="font-size: 75%; border-bottom: 1px solid lightgray; margin-bottom: 4px; padding-bottom: 4px;">
+      <div
+        style="font-size: 75%; border-bottom: 1px solid lightgray; margin-bottom: 4px; padding-bottom: 4px;"
+      >
         <%= link_to topic[:community_name], community_url(topic[:community_id]) %>,
         <%= pluralize(topic[:views], 'view') %>,
-        <%= pluralize(topic[:replies], 'reply') %>,
-        asked <%= pluralize(topic[:days_ago], 'day') %> ago.
+        <%= pluralize(topic[:replies], 'reply') %>, asked
+        <%= pluralize(topic[:days_ago], 'day') %>
+        ago.
       </div>
     <% end %>
   <% end %>
 
   <p style="font-size: 75%; text-align: center; margin-top: 15px;">
-    You can control these emails from <%= link_to "your profile edit page", edit_user_url %>.
+    You can control these emails from
+    <%= link_to "your profile edit page", edit_user_url %>.
   </p>
 <% end %>
 

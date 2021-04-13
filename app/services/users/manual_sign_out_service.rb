@@ -15,9 +15,15 @@ module Users
 
       # Set signed out at as now if this is a new sign in attempt, so that he'll be signed out a week from 'now' if
       # the flag is still set.
-      session[:signed_out_at] = Time.now.to_i if @current_user.current_sign_in_at > 30.seconds.ago
+      session[:signed_out_at] = Time.now.to_i if @current_user
+        .current_sign_in_at > 30.seconds.ago
 
-      signed_out_at = session[:signed_out_at].present? ? Time.at(session[:signed_out_at].to_i) : Time.at(0)
+      signed_out_at =
+        if session[:signed_out_at].present?
+          Time.at(session[:signed_out_at].to_i)
+        else
+          Time.at(0)
+        end
 
       # Do not sign out the user again if he was signed out using this method less than a week ago.
       return if signed_out_at > 1.week.ago

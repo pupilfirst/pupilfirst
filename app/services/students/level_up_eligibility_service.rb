@@ -16,40 +16,52 @@ module Students
     ELIGIBILITY_TEAM_MEMBERS_PENDING = -'TeamMembersPending'
     ELIGIBILITY_DATE_LOCKED = -'DateLocked'
 
-    MINIMUM_REQUIRED_LEVEL_ELIGIBLE_STATUSES = [Targets::StatusService::STATUS_PASSED].freeze
+    MINIMUM_REQUIRED_LEVEL_ELIGIBLE_STATUSES = [
+      Targets::StatusService::STATUS_PASSED
+    ].freeze
 
     def eligible?
       eligibility == ELIGIBILITY_ELIGIBLE
     end
 
     def eligibility
-      @eligibility ||= begin
-        if next_level.blank?
-          ELIGIBILITY_AT_MAX_LEVEL
-        elsif next_level.unlock_at&.future? && regular_student?
-          ELIGIBILITY_DATE_LOCKED
-        elsif current_level_milestone_targets.any?
-          current_level_targets_attempted = current_level_milestone_targets.all? do |target|
-            target_eligible?(target, current_level_eligible_statuses)
-          end
+      @eligibility ||=
+        begin
+          if next_level.blank?
+            ELIGIBILITY_AT_MAX_LEVEL
+          elsif next_level.unlock_at&.future? && regular_student?
+            ELIGIBILITY_DATE_LOCKED
+          elsif current_level_milestone_targets.any?
+            current_level_targets_attempted =
+              current_level_milestone_targets.all? do |target|
+                target_eligible?(target, current_level_eligible_statuses)
+              end
 
-          if current_level_targets_attempted
-            minimum_required_level_completed = minimum_required_level_milestone_targets.all? do |target|
-              target_eligible?(target, MINIMUM_REQUIRED_LEVEL_ELIGIBLE_STATUSES)
-            end
+            if current_level_targets_attempted
+              minimum_required_level_completed =
+                minimum_required_level_milestone_targets.all? do |target|
+                  target_eligible?(
+                    target,
+                    MINIMUM_REQUIRED_LEVEL_ELIGIBLE_STATUSES
+                  )
+                end
 
-            if minimum_required_level_completed
-              @team_members_pending ? ELIGIBILITY_TEAM_MEMBERS_PENDING : ELIGIBILITY_ELIGIBLE
+              if minimum_required_level_completed
+                if @team_members_pending
+                  ELIGIBILITY_TEAM_MEMBERS_PENDING
+                else
+                  ELIGIBILITY_ELIGIBLE
+                end
+              else
+                ELIGIBILITY_PREVIOUS_LEVEL_INCOMPLETE
+              end
             else
-              ELIGIBILITY_PREVIOUS_LEVEL_INCOMPLETE
+              ELIGIBILITY_CURRENT_LEVEL_INCOMPLETE
             end
           else
-            ELIGIBILITY_CURRENT_LEVEL_INCOMPLETE
+            ELIGIBILITY_NO_MILESTONES
           end
-        else
-          ELIGIBILITY_NO_MILESTONES
         end
-      end
     end
 
     private
@@ -68,10 +80,12 @@ module Students
     end
 
     def current_level_eligible_statuses
-      @current_level_eligible_statuses ||= case course.progression_behavior
+      @current_level_eligible_statuses ||=
+        case course.progression_behavior
         when Course::PROGRESSION_BEHAVIOR_STRICT
           [Targets::StatusService::STATUS_PASSED]
-        when Course::PROGRESSION_BEHAVIOR_LIMITED, Course::PROGRESSION_BEHAVIOR_UNLIMITED
+        when Course::PROGRESSION_BEHAVIOR_LIMITED,
+             Course::PROGRESSION_BEHAVIOR_UNLIMITED
           [
             Targets::StatusService::STATUS_SUBMITTED,
             Targets::StatusService::STATUS_PASSED,
@@ -79,7 +93,7 @@ module Students
           ]
         else
           raise "Unexpected progression behavior #{course.progression_behavior}"
-      end
+        end
     end
 
     def current_level_milestone_targets
@@ -89,34 +103,45 @@ module Students
 
     def minimum_required_level_milestone_targets
       case course.progression_behavior
-        when Course::PROGRESSION_BEHAVIOR_LIMITED
-          if current_level.number > course.progression_limit
-            minimum_required_level_number = current_level.number - course.progression_limit
-            minimum_required_level = current_level.course.levels.find_by(number: minimum_required_level_number)
+      when Course::PROGRESSION_BEHAVIOR_LIMITED
+        if current_level.number > course.progression_limit
+          minimum_required_level_number =
+            current_level.number - course.progression_limit
+          minimum_required_level =
+            current_level.course.levels.find_by(
+              number: minimum_required_level_number
+            )
 
-            raise 'Could not find minimum required level for computing level up eligibility' if minimum_required_level.blank?
-
-            milestone_groups = minimum_required_level.target_groups.where(milestone: true)
-            Target.where(target_group: milestone_groups).live
-          else
-            Target.none
+          if minimum_required_level.blank?
+            raise 'Could not find minimum required level for computing level up eligibility'
           end
-        when Course::PROGRESSION_BEHAVIOR_UNLIMITED, Course::PROGRESSION_BEHAVIOR_STRICT
-          Target.none
+
+          milestone_groups =
+            minimum_required_level.target_groups.where(milestone: true)
+          Target.where(target_group: milestone_groups).live
         else
-          raise "Unexpected progression behavior #{course.progression_behavior}"
+          Target.none
+        end
+      when Course::PROGRESSION_BEHAVIOR_UNLIMITED,
+           Course::PROGRESSION_BEHAVIOR_STRICT
+        Target.none
+      else
+        raise "Unexpected progression behavior #{course.progression_behavior}"
       end
     end
 
     def target_eligible?(target, eligibility)
       if target.individual_target?
-        completed_students = team.founders.all.select do |student|
-          target.status(student).in?(eligibility)
-        end
+        completed_students =
+          team
+            .founders
+            .all
+            .select { |student| target.status(student).in?(eligibility) }
 
         if @student.in?(completed_students)
           # Mark that some teammates haven't yet completed target if applicable.
-          @team_members_pending ||= completed_students.count != team.founders.count
+          @team_members_pending ||=
+            completed_students.count != team.founders.count
 
           # Student has completed this target.
           true

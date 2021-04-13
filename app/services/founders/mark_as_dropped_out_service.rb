@@ -9,12 +9,13 @@ module Founders
     def execute
       Founder.transaction do
         if create_new_team?
-          startup = Startup.create!(
-            name: @student.name,
-            level: @student.startup.level,
-            dropped_out_at: Time.zone.now,
-            tag_list: @student.startup.tag_list
-          )
+          startup =
+            Startup.create!(
+              name: @student.name,
+              level: @student.startup.level,
+              dropped_out_at: Time.zone.now,
+              tag_list: @student.startup.tag_list
+            )
 
           # Mark the student as exited and set him into the new startup (which doesn't have any coach enrollments).
           @student.update!(startup: startup)
@@ -36,7 +37,14 @@ module Founders
     end
 
     def create_audit_record(student)
-      AuditRecord.create!(audit_type: AuditRecord::TYPE_DROPOUT_STUDENT, school_id: @current_user.school_id, metadata: { user_id: @current_user.id, email: student.email })
+      AuditRecord.create!(
+        audit_type: AuditRecord::TYPE_DROPOUT_STUDENT,
+        school_id: @current_user.school_id,
+        metadata: {
+          user_id: @current_user.id,
+          email: student.email
+        }
+      )
     end
   end
 end

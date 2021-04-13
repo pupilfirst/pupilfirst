@@ -2,7 +2,7 @@ module Mutations
   class LevelUp < GraphQL::Schema::Mutation
     argument :course_id, ID, required: true
 
-    description "Level up"
+    description 'Level up'
 
     field :success, Boolean, null: false
 

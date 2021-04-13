@@ -8,12 +8,13 @@ module Schools
       validate :course_exists
 
       def save
-        level = Level.new(
-          course: course,
-          name: name,
-          number: next_level_number,
-          unlock_at: unlock_at_time
-        )
+        level =
+          Level.new(
+            course: course,
+            name: name,
+            number: next_level_number,
+            unlock_at: unlock_at_time
+          )
         level.save
         level
       end

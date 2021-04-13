@@ -6,9 +6,18 @@ class ConnectRequest < ApplicationRecord
   belongs_to :connect_slot
   belongs_to :startup
 
-  scope :upcoming, -> { joins(:connect_slot).where('connect_slots.slot_at > ?', Time.now) }
-  scope :completed, -> { joins(:connect_slot).where(status: STATUS_CONFIRMED).where('connect_slots.slot_at < ?', (Time.now - 20.minutes)) }
-  scope :for_faculty, ->(faculty) { joins(:connect_slot).where(connect_slots: { faculty_id: faculty }) }
+  scope :upcoming,
+        -> { joins(:connect_slot).where('connect_slots.slot_at > ?', Time.now) }
+  scope :completed,
+        -> {
+          joins(:connect_slot)
+            .where(status: STATUS_CONFIRMED)
+            .where('connect_slots.slot_at < ?', (Time.now - 20.minutes))
+        }
+  scope :for_faculty,
+        ->(faculty) {
+          joins(:connect_slot).where(connect_slots: { faculty_id: faculty })
+        }
   scope :requested, -> { where(status: STATUS_REQUESTED) }
   scope :confirmed, -> { where(status: STATUS_CONFIRMED) }
   scope :cancelled, -> { where(status: STATUS_CANCELLED) }
@@ -25,10 +34,24 @@ class ConnectRequest < ApplicationRecord
 
   validates :connect_slot_id, presence: true, uniqueness: true # rubocop:disable Rails/UniqueValidationWithoutIndex
   validates :startup_id, presence: true
-  validates :questions, presence: true, length: { maximum: MAX_QUESTIONS_LENGTH }
+  validates :questions,
+            presence: true,
+            length: {
+              maximum: MAX_QUESTIONS_LENGTH
+            }
   validates :status, presence: true, inclusion: { in: valid_statuses }
-  validates :rating_for_faculty, numericality: { greater_than: 0, less_than: 6 }, allow_nil: true
-  validates :rating_for_team, numericality: { greater_than: 0, less_than: 6 }, allow_nil: true
+  validates :rating_for_faculty,
+            numericality: {
+              greater_than: 0,
+              less_than: 6
+            },
+            allow_nil: true
+  validates :rating_for_team,
+            numericality: {
+              greater_than: 0,
+              less_than: 6
+            },
+            allow_nil: true
 
   before_validation :set_status_for_nil
 

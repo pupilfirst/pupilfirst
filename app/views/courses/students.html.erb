@@ -9,6 +9,8 @@
 <% end %>
 
 <% content_for(:inner_wrapper) do %>
-  <script id="school-course-students__props" type="application/json"><%= presenter.props_to_json.html_safe %></script>
+  <script id="school-course-students__props" type="application/json">
+    <%= presenter.props_to_json.html_safe %>
+  </script>
   <div id="react-root"></div>
 <% end %>

@@ -2,7 +2,14 @@ class CreateCourseAuthorMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
   property :course_id, validates: { presence: true }
-  property :email, validates: { presence: true, length: { maximum: 128 }, email: true }
+  property :email,
+           validates: {
+             presence: true,
+             length: {
+               maximum: 128
+             },
+             email: true
+           }
   property :name, validates: { presence: true, length: { maximum: 128 } }
 
   validate :course_must_be_present
@@ -11,7 +18,9 @@ class CreateCourseAuthorMutator < ApplicationQuery
 
   def create_course_author
     CourseAuthor.transaction do
-      user = persisted_user || User.create!(email: email, school: current_school, title: 'Author')
+      user =
+        persisted_user ||
+          User.create!(email: email, school: current_school, title: 'Author')
       user.update!(name: name)
       course_author = course.course_authors.create!(user: user)
       user.regenerate_login_token if user.login_token.blank?
@@ -39,7 +48,13 @@ class CreateCourseAuthorMutator < ApplicationQuery
   def not_a_course_author
     return if course.blank?
 
-    return unless course.course_authors.joins(:user).pluck('users.email').include?(email)
+    unless course
+             .course_authors
+             .joins(:user)
+             .pluck('users.email')
+             .include?(email)
+      return
+    end
 
     errors[:base] << 'Already enrolled as author'
   end

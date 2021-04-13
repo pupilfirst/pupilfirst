@@ -9,8 +9,9 @@
   <%= javascript_pack_tag 'CoursesReportPack', nonce: true %>
 <% end %>
 
-
 <% content_for(:inner_wrapper) do %>
-  <script id="course-student-report__props" type="application/json"><%= presenter.props_to_json.html_safe %></script>
+  <script id="course-student-report__props" type="application/json">
+    <%= presenter.props_to_json.html_safe %>
+  </script>
   <div id="react-root"></div>
 <% end %>

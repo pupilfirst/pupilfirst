@@ -2,7 +2,7 @@ module Mutations
   class DeleteContentBlock < GraphQL::Schema::Mutation
     argument :id, ID, required: true
 
-    description "Deletes a target content block."
+    description 'Deletes a target content block.'
 
     field :success, Boolean, null: false
 

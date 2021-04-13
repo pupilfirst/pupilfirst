@@ -10,11 +10,7 @@ class CreateWebPushSubscriptionMutator < ApplicationQuery
   private
 
   def webpush_subscription
-    {
-      endpoint: endpoint,
-      p256dh: p256dh,
-      auth: auth
-    }
+    { endpoint: endpoint, p256dh: p256dh, auth: auth }
   end
 
   def authorized?

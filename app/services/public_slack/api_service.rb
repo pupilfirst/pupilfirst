@@ -22,16 +22,19 @@ module PublicSlack
 
       return parsed_response if parsed_response['ok']
 
-      exception = PublicSlack::OperationFailureException.new(
-        "Response from Slack API indicates failure: '#{response}'",
-        parsed_response
-      )
+      exception =
+        PublicSlack::OperationFailureException.new(
+          "Response from Slack API indicates failure: '#{response}'",
+          parsed_response
+        )
 
       raise exception
     rescue JSON::ParserError
-      raise PublicSlack::ParseFailureException, "Failed to parse response as JSON: '#{response}'"
+      raise PublicSlack::ParseFailureException,
+            "Failed to parse response as JSON: '#{response}'"
     rescue RestClient::Exception => e
-      raise PublicSlack::TransportFailureException, "HTTP failure (#{e}) when calling #{api_url}"
+      raise PublicSlack::TransportFailureException,
+            "HTTP failure (#{e}) when calling #{api_url}"
     end
 
     private

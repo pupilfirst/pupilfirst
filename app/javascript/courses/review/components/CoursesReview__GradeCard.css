@@ -1,12 +1,14 @@
-.course-review-grade-card__grade-bar>.course-review-grade-card__grade-pill {
+.course-review-grade-card__grade-bar > .course-review-grade-card__grade-pill {
   @apply border border-r-0;
 }
 
-.course-review-grade-card__grade-bar>.course-review-grade-card__grade-pill:first-child {
+.course-review-grade-card__grade-bar
+  > .course-review-grade-card__grade-pill:first-child {
   @apply rounded-l-lg;
 }
 
-.course-review-grade-card__grade-bar>.course-review-grade-card__grade-pill:last-child {
+.course-review-grade-card__grade-bar
+  > .course-review-grade-card__grade-pill:last-child {
   @apply border-r rounded-r-lg;
 }
 

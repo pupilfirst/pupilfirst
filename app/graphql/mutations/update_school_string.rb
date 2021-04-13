@@ -3,7 +3,7 @@ module Mutations
     argument :key, String, required: true
     argument :value, String, required: false
 
-    description "Update a school string."
+    description 'Update a school string.'
 
     field :errors, [Types::UpdateSchoolStringError], null: false
 

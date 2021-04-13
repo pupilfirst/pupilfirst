@@ -50,7 +50,10 @@ module Schools
     end
 
     def delete_taggings
-      ActsAsTaggableOn::Tagging.where(taggable_type: 'School').where(taggable_id: @school.id).delete_all
+      ActsAsTaggableOn::Tagging
+        .where(taggable_type: 'School')
+        .where(taggable_id: @school.id)
+        .delete_all
     end
 
     def delete_markdown_attachments

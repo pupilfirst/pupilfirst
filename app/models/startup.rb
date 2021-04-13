@@ -4,9 +4,17 @@ class Startup < ApplicationRecord
   acts_as_taggable
 
   scope :admitted, -> { joins(:level).where('levels.number > ?', 0) }
-  scope :inactive, -> { where('access_ends_at < ?', Time.now).or(where.not(dropped_out_at: nil)) }
+  scope :inactive,
+        -> {
+          where('access_ends_at < ?', Time.now).or(
+            where.not(dropped_out_at: nil)
+          )
+        }
   scope :not_dropped_out, -> { where(dropped_out_at: nil) }
-  scope :access_active, -> { where('access_ends_at > ?', Time.now).or(where(access_ends_at: nil)) }
+  scope :access_active,
+        -> {
+          where('access_ends_at > ?', Time.now).or(where(access_ends_at: nil))
+        }
   scope :active, -> { not_dropped_out.access_active }
 
   belongs_to :level
@@ -25,7 +33,9 @@ class Startup < ApplicationRecord
   validate :not_assigned_to_level_zero
 
   def not_assigned_to_level_zero
-    errors[:level] << 'cannot be assigned to level zero' unless level.number.positive?
+    unless level.number.positive?
+      errors[:level] << 'cannot be assigned to level zero'
+    end
   end
 
   def display_name
@@ -33,6 +43,8 @@ class Startup < ApplicationRecord
   end
 
   def timeline_events
-    TimelineEvent.joins(:timeline_event_owners).where(timeline_event_owners: { founder: founders })
+    TimelineEvent
+      .joins(:timeline_event_owners)
+      .where(timeline_event_owners: { founder: founders })
   end
 end

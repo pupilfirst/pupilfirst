@@ -1,5 +1,5 @@
-import React from 'react';
-import CSVReader from 'react-csv-reader'
+import React from "react";
+import CSVReader from "react-csv-reader";
 
 export default function Reader(props) {
   return (
@@ -11,6 +11,7 @@ export default function Reader(props) {
       inputStyle={props.inputStyle}
       inputId={props.inputId}
       inputName={props.inputName}
-      label={props.label}/>
+      label={props.label}
+    />
   );
-};
+}

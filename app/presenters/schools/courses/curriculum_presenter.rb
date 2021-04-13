@@ -22,17 +22,12 @@ module Schools
       end
 
       def course_data
-        {
-          id: @course.id
-        }
+        { id: @course.id }
       end
 
       def evaluation_criteria
         @course.evaluation_criteria.map do |criteria|
-          {
-            id: criteria.id,
-            name: criteria.display_name
-          }
+          { id: criteria.id, name: criteria.display_name }
         end
       end
 
@@ -74,15 +69,20 @@ module Schools
       end
 
       def vimeo_access_token?
-        return @vimeo_access_token if instance_variable_defined?(:@vimeo_access_token)
+        if instance_variable_defined?(:@vimeo_access_token)
+          return @vimeo_access_token
+        end
 
-        @vimeo_access_token = @course.school.configuration.dig('vimeo', 'access_token').present? || Rails.application.secrets.vimeo_access_token.present?
+        @vimeo_access_token =
+          @course.school.configuration.dig('vimeo', 'access_token').present? ||
+            Rails.application.secrets.vimeo_access_token.present?
       end
 
       def vimeo_plan
         return unless vimeo_access_token?
 
-        @course.school.configuration.dig('vimeo', 'account_type') || Rails.application.secrets.vimeo_account_type
+        @course.school.configuration.dig('vimeo', 'account_type') ||
+          Rails.application.secrets.vimeo_account_type
       end
     end
   end

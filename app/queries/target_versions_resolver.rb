@@ -14,6 +14,7 @@ class TargetVersionsResolver < ApplicationQuery
 
     return true if current_school_admin.present?
 
-    current_user.present? && current_user.course_authors.where(course: target.course).present?
+    current_user.present? &&
+      current_user.course_authors.where(course: target.course).present?
   end
 end

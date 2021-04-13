@@ -3,7 +3,7 @@ module Mutations
     argument :coach_id, ID, required: true
     argument :team_id, ID, required: true
 
-    description "Deletes an assigned team for a coach"
+    description 'Deletes an assigned team for a coach'
 
     field :success, Boolean, null: false
 

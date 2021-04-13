@@ -7,8 +7,21 @@ feature 'Target Overlay', js: true do
   include DevelopersNotificationsHelper
 
   let(:course) { create :course }
-  let(:grade_labels_for_1) { [{ 'grade' => 1, 'label' => 'Bad' }, { 'grade' => 2, 'label' => 'Good' }, { 'grade' => 3, 'label' => 'Great' }, { 'grade' => 4, 'label' => 'Wow' }] }
-  let!(:criterion_1) { create :evaluation_criterion, course: course, max_grade: 4, pass_grade: 2, grade_labels: grade_labels_for_1 }
+  let(:grade_labels_for_1) do
+    [
+      { 'grade' => 1, 'label' => 'Bad' },
+      { 'grade' => 2, 'label' => 'Good' },
+      { 'grade' => 3, 'label' => 'Great' },
+      { 'grade' => 4, 'label' => 'Wow' }
+    ]
+  end
+  let!(:criterion_1) do
+    create :evaluation_criterion,
+           course: course,
+           max_grade: 4,
+           pass_grade: 2,
+           grade_labels: grade_labels_for_1
+  end
   let!(:criterion_2) { create :evaluation_criterion, course: course }
   let!(:level_0) { create :level, :zero, course: course }
   let!(:level_1) { create :level, :one, course: course }
@@ -16,17 +29,59 @@ feature 'Target Overlay', js: true do
   let!(:team) { create :startup, level: level_1 }
   let!(:student) { team.founders.first }
   let!(:target_group_l0) { create :target_group, level: level_0 }
-  let!(:target_group_l1) { create :target_group, level: level_1, milestone: true }
+  let!(:target_group_l1) do
+    create :target_group, level: level_1, milestone: true
+  end
   let!(:target_group_l2) { create :target_group, level: level_2 }
-  let!(:target_l0) { create :target, :with_content, target_group: target_group_l0 }
-  let!(:target_l1) { create :target, :with_content, :with_default_checklist, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
-  let!(:target_l2) { create :target, :with_content, target_group: target_group_l2 }
-  let!(:prerequisite_target) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, sort_index: 2 }
-  let!(:target_draft) { create :target, :draft, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM }
-  let!(:target_archived) { create :target, :archived, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM }
+  let!(:target_l0) do
+    create :target, :with_content, target_group: target_group_l0
+  end
+  let!(:target_l1) do
+    create :target,
+           :with_content,
+           :with_default_checklist,
+           target_group: target_group_l1,
+           role: Target::ROLE_TEAM,
+           evaluation_criteria: [criterion_1, criterion_2],
+           completion_instructions: Faker::Lorem.sentence,
+           sort_index: 0
+  end
+  let!(:target_l2) do
+    create :target, :with_content, target_group: target_group_l2
+  end
+  let!(:prerequisite_target) do
+    create :target,
+           :with_content,
+           target_group: target_group_l1,
+           role: Target::ROLE_TEAM,
+           sort_index: 2
+  end
+  let!(:target_draft) do
+    create :target,
+           :draft,
+           :with_content,
+           target_group: target_group_l1,
+           role: Target::ROLE_TEAM
+  end
+  let!(:target_archived) do
+    create :target,
+           :archived,
+           :with_content,
+           target_group: target_group_l1,
+           role: Target::ROLE_TEAM
+  end
 
   # Quiz target
-  let!(:quiz_target) { create :target, :with_content, target_group: target_group_l1, days_to_complete: 60, role: Target::ROLE_TEAM, resubmittable: false, completion_instructions: Faker::Lorem.sentence, sort_index: 3 }
+  let!(:quiz_target) do
+    create :target,
+           :with_content,
+           target_group: target_group_l1,
+           days_to_complete: 60,
+           role: Target::ROLE_TEAM,
+           resubmittable: false,
+           completion_instructions: Faker::Lorem.sentence,
+           sort_index: 3
+  end
   let!(:quiz) { create :quiz, target: quiz_target }
   let!(:quiz_question_1) { create :quiz_question, quiz: quiz }
   let!(:q1_answer_1) { create :answer_option, quiz_question: quiz_question_1 }
@@ -43,14 +98,15 @@ feature 'Target Overlay', js: true do
     quiz_question_2.update!(correct_answer: q2_answer_4)
 
     # Set a custom size for the embedded image.
-    image_block = target_l1.current_content_blocks.find_by(block_type: ContentBlock::BLOCK_TYPE_IMAGE)
+    image_block =
+      target_l1.current_content_blocks.find_by(
+        block_type: ContentBlock::BLOCK_TYPE_IMAGE
+      )
     image_block['content']['width'] = 'sm'
     image_block.save!
   end
 
-  around do |example|
-    Time.use_zone(student.user.time_zone) { example.run }
-  end
+  around { |example| Time.use_zone(student.user.time_zone) { example.run } }
 
   scenario 'student selects a target to view its content' do
     sign_in_user student.user, referrer: curriculum_course_path(course)
@@ -80,10 +136,17 @@ feature 'Target Overlay', js: true do
     expect(page).to have_selector('.learn-content-block__embed')
     expect(page).to have_selector('.markdown-block')
     content_blocks = target_l1.current_content_blocks
-    image_caption = content_blocks.find_by(block_type: ContentBlock::BLOCK_TYPE_IMAGE).content['caption']
+    image_caption =
+      content_blocks.find_by(block_type: ContentBlock::BLOCK_TYPE_IMAGE)
+        .content[
+        'caption'
+      ]
     expect(page).to have_content(image_caption)
     expect(page).to have_selector('.max-w-sm.mx-auto')
-    file_title = content_blocks.find_by(block_type: ContentBlock::BLOCK_TYPE_FILE).content['title']
+    file_title =
+      content_blocks.find_by(block_type: ContentBlock::BLOCK_TYPE_FILE).content[
+        'title'
+      ]
     expect(page).to have_link(file_title)
   end
 
@@ -92,6 +155,7 @@ feature 'Target Overlay', js: true do
 
     # This target should have a 'Complete' section.
     find('.course-overlay__body-tab-item', text: 'Complete').click
+
     # completion instructions should be show on complete section for evaluated targets
     expect(page).to have_text(target_l1.completion_instructions)
 
@@ -125,7 +189,16 @@ feature 'Target Overlay', js: true do
 
     # Let's check the database to make sure the submission was created correctly
     last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([{ 'kind' => Target::CHECKLIST_KIND_LONG_TEXT, 'title' => 'Write something about your submission', 'result' => long_answer, 'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
+    expect(last_submission.checklist).to eq(
+      [
+        {
+          'kind' => Target::CHECKLIST_KIND_LONG_TEXT,
+          'title' => 'Write something about your submission',
+          'result' => long_answer,
+          'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+        }
+      ]
+    )
 
     # The status should also be updated on the dashboard page.
     click_button 'Close'
@@ -142,18 +215,21 @@ feature 'Target Overlay', js: true do
     expect(page).to have_content(long_answer)
 
     # User should be able to undo the submission.
-    accept_confirm do
-      click_button('Undo submission')
-    end
+    accept_confirm { click_button('Undo submission') }
 
     # This action should reload the page and return the user to the content of the target.
     expect(page).to have_selector('.learn-content-block__embed')
 
     # The last submissions should have been deleted...
-    expect { last_submission.reload }.to raise_exception(ActiveRecord::RecordNotFound)
+    expect { last_submission.reload }.to raise_exception(
+      ActiveRecord::RecordNotFound
+    )
 
     # ...and the complete section should be accessible again.
-    expect(page).to have_selector('.course-overlay__body-tab-item', text: 'Complete')
+    expect(page).to have_selector(
+      '.course-overlay__body-tab-item',
+      text: 'Complete'
+    )
   end
 
   scenario "student visits the target's link with a mangled ID" do
@@ -163,7 +239,13 @@ feature 'Target Overlay', js: true do
   end
 
   context 'when the target is auto-verified' do
-    let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, completion_instructions: Faker::Lorem.sentence }
+    let!(:target_l1) do
+      create :target,
+             :with_content,
+             target_group: target_group_l1,
+             role: Target::ROLE_TEAM,
+             completion_instructions: Faker::Lorem.sentence
+    end
 
     scenario 'student completes an auto-verified target' do
       notification_service = prepare_developers_notification
@@ -187,24 +269,46 @@ feature 'Target Overlay', js: true do
       click_button 'Mark As Complete'
 
       # The button should be replaced with a 'completed' marker.
-      expect(page).to have_selector('.complete-button-selected', text: 'Completed')
+      expect(page).to have_selector(
+        '.complete-button-selected',
+        text: 'Completed'
+      )
 
       # The target should be marked as passed.
-      expect(page).to have_selector('.course-overlay__header-title-card', text: 'Completed')
+      expect(page).to have_selector(
+        '.course-overlay__header-title-card',
+        text: 'Completed'
+      )
 
       # Since this is a team target, other students shouldn't be listed as pending.
-      expect(page).not_to have_content('You have team members who are yet to complete this target')
+      expect(page).not_to have_content(
+        'You have team members who are yet to complete this target'
+      )
 
       # Target should have been marked as passed in the database.
-      expect(target_l1.status(student)).to eq(Targets::StatusService::STATUS_PASSED)
+      expect(target_l1.status(student)).to eq(
+        Targets::StatusService::STATUS_PASSED
+      )
 
       submission = TimelineEvent.last
-      expect_published(notification_service, course, :submission_automatically_verified, student.user, submission)
+      expect_published(
+        notification_service,
+        course,
+        :submission_automatically_verified,
+        student.user,
+        submission
+      )
     end
 
     context 'when the target requires student to visit a link to complete it' do
       let(:link_to_complete) { "https://www.example.com/#{Faker::Lorem.word}" }
-      let!(:target_with_link) { create :target, :with_content, target_group: target_group_l1, link_to_complete: link_to_complete, completion_instructions: Faker::Lorem.sentence }
+      let!(:target_with_link) do
+        create :target,
+               :with_content,
+               target_group: target_group_l1,
+               link_to_complete: link_to_complete,
+               completion_instructions: Faker::Lorem.sentence
+      end
 
       scenario 'student completes a target by visiting a link' do
         sign_in_user student.user, referrer: target_path(target_with_link)
@@ -218,7 +322,8 @@ feature 'Target Overlay', js: true do
         expect(page).to have_text(target_with_link.completion_instructions)
 
         # Clicking the tab should highlight the button.
-        find('.course-overlay__body-tab-item', text: 'Visit Link to Complete').click
+        find('.course-overlay__body-tab-item', text: 'Visit Link to Complete')
+          .click
         expect(page).to have_selector('.complete-button-selected')
 
         # Clicking the button should complete the target and send the student to the link.
@@ -231,10 +336,15 @@ feature 'Target Overlay', js: true do
         end
 
         # Target should now be complete for the user.
-        expect(page).to have_selector('.course-overlay__header-title-card', text: 'Completed')
+        expect(page).to have_selector(
+          '.course-overlay__header-title-card',
+          text: 'Completed'
+        )
 
         # Target should have been marked as passed in the database.
-        expect(target_with_link.status(student)).to eq(Targets::StatusService::STATUS_PASSED)
+        expect(target_with_link.status(student)).to eq(
+          Targets::StatusService::STATUS_PASSED
+        )
       end
     end
 
@@ -270,7 +380,10 @@ feature 'Target Overlay', js: true do
       click_button('Submit Quiz')
 
       expect(page).to have_content('Your responses have been saved')
-      expect(page).to have_selector('.course-overlay__body-tab-item', text: 'Quiz Result')
+      expect(page).to have_selector(
+        '.course-overlay__body-tab-item',
+        text: 'Quiz Result'
+      )
 
       within('.course-overlay__header-title-card') do
         expect(page).to have_content(quiz_target.title)
@@ -294,10 +407,17 @@ feature 'Target Overlay', js: true do
       expect(page).to have_content("Your Correct Answer: #{q2_answer_4.value}")
 
       submission = TimelineEvent.last
+
       # The score should have stored on the submission.
       expect(submission.quiz_score).to eq('1/2')
 
-      expect_published(notification_service, course, :submission_automatically_verified, student.user, submission)
+      expect_published(
+        notification_service,
+        course,
+        :submission_automatically_verified,
+        student.user,
+        submission
+      )
     end
   end
 
@@ -305,12 +425,46 @@ feature 'Target Overlay', js: true do
     let(:coach_1) { create :faculty, school: course.school }
     let(:coach_2) { create :faculty, school: course.school } # The 'unknown', un-enrolled coach.
     let(:coach_3) { create :faculty, school: course.school }
-    let!(:submission_1) { create :timeline_event, target: target_l1, founders: team.founders, evaluator: coach_1, created_at: 5.days.ago, evaluated_at: 1.day.ago }
-    let!(:submission_2) { create :timeline_event, :with_owners, latest: true, target: target_l1, owners: team.founders, evaluator: coach_3, passed_at: 2.days.ago, created_at: 3.days.ago, evaluated_at: 1.day.ago }
-    let!(:attached_file) { create :timeline_event_file, timeline_event: submission_2 }
-    let!(:feedback_1) { create :startup_feedback, timeline_event: submission_1, startup: team, faculty: coach_1 }
-    let!(:feedback_2) { create :startup_feedback, timeline_event: submission_1, startup: team, faculty: coach_2 }
-    let!(:feedback_3) { create :startup_feedback, timeline_event: submission_2, startup: team, faculty: coach_3 }
+    let!(:submission_1) do
+      create :timeline_event,
+             target: target_l1,
+             founders: team.founders,
+             evaluator: coach_1,
+             created_at: 5.days.ago,
+             evaluated_at: 1.day.ago
+    end
+    let!(:submission_2) do
+      create :timeline_event,
+             :with_owners,
+             latest: true,
+             target: target_l1,
+             owners: team.founders,
+             evaluator: coach_3,
+             passed_at: 2.days.ago,
+             created_at: 3.days.ago,
+             evaluated_at: 1.day.ago
+    end
+    let!(:attached_file) do
+      create :timeline_event_file, timeline_event: submission_2
+    end
+    let!(:feedback_1) do
+      create :startup_feedback,
+             timeline_event: submission_1,
+             startup: team,
+             faculty: coach_1
+    end
+    let!(:feedback_2) do
+      create :startup_feedback,
+             timeline_event: submission_1,
+             startup: team,
+             faculty: coach_2
+    end
+    let!(:feedback_3) do
+      create :startup_feedback,
+             timeline_event: submission_2,
+             startup: team,
+             faculty: coach_3
+    end
 
     before do
       # Enroll one of the coaches to course, and another to the team. One should be left un-enrolled to test how that's handled.
@@ -318,21 +472,44 @@ feature 'Target Overlay', js: true do
       create(:faculty_startup_enrollment, faculty: coach_3, startup: team)
 
       # First submission should have failed on one criterion.
-      create(:timeline_event_grade, timeline_event: submission_1, evaluation_criterion: criterion_1, grade: 2)
-      create(:timeline_event_grade, timeline_event: submission_1, evaluation_criterion: criterion_2, grade: 1) # Failed criterion
+      create(
+        :timeline_event_grade,
+        timeline_event: submission_1,
+        evaluation_criterion: criterion_1,
+        grade: 2
+      )
+      create(
+        :timeline_event_grade,
+        timeline_event: submission_1,
+        evaluation_criterion: criterion_2,
+        grade: 1
+      ) # Failed criterion
 
       # Second submissions should have passed on both criteria.
-      create(:timeline_event_grade, timeline_event: submission_2, evaluation_criterion: criterion_1, grade: 4)
-      create(:timeline_event_grade, timeline_event: submission_2, evaluation_criterion: criterion_2, grade: 2)
+      create(
+        :timeline_event_grade,
+        timeline_event: submission_2,
+        evaluation_criterion: criterion_1,
+        grade: 4
+      )
+      create(
+        :timeline_event_grade,
+        timeline_event: submission_2,
+        evaluation_criterion: criterion_2,
+        grade: 2
+      )
     end
 
     scenario 'student sees feedback for a reviewed submission' do
       sign_in_user student.user, referrer: target_path(target_l1)
 
-      find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
+      find('.course-overlay__body-tab-item', text: 'Submissions & Feedback')
+        .click
 
       # Both submissions should be visible, along with grading and all feedback from coaches.
-      within("div[aria-label='Details about your submission on #{submission_1.created_at.strftime('%B %-d, %Y')}']") do
+      within(
+        "div[aria-label='Details about your submission on #{submission_1.created_at.strftime('%B %-d, %Y')}']"
+      ) do
         find("div[aria-label='#{submission_1.checklist.first['title']}']").click
         expect(page).to have_content(submission_1.checklist.first['result'])
 
@@ -349,15 +526,21 @@ feature 'Target Overlay', js: true do
         expect(page).to have_content(feedback_2.feedback)
       end
 
-      within("div[aria-label='Details about your submission on #{submission_2.created_at.strftime('%B %-d, %Y')}']") do
+      within(
+        "div[aria-label='Details about your submission on #{submission_2.created_at.strftime('%B %-d, %Y')}']"
+      ) do
         find("div[aria-label='#{submission_2.checklist.first['title']}']").click
         expect(page).to have_content(submission_2.checklist.first['result'])
 
         submission_grades = submission_2.timeline_event_grades
         expect(page).to have_content("#{criterion_1.name}: Wow")
-        expect(page).to have_text("#{submission_grades.where(evaluation_criterion: criterion_1).first.grade}/#{criterion_1.max_grade}")
+        expect(page).to have_text(
+          "#{submission_grades.where(evaluation_criterion: criterion_1).first.grade}/#{criterion_1.max_grade}"
+        )
         expect(page).to have_content("#{criterion_2.name}: Good")
-        expect(page).to have_text("#{submission_grades.where(evaluation_criterion: criterion_2).first.grade}/#{criterion_2.max_grade}")
+        expect(page).to have_text(
+          "#{submission_grades.where(evaluation_criterion: criterion_2).first.grade}/#{criterion_2.max_grade}"
+        )
 
         expect(page).to have_content(coach_3.name)
         expect(page).to have_content(coach_3.title)
@@ -375,16 +558,18 @@ feature 'Target Overlay', js: true do
     end
 
     context 'when the target is non-resubmittable' do
-      before do
-        target_l1.update(resubmittable: false)
-      end
+      before { target_l1.update(resubmittable: false) }
 
       scenario 'student cannot resubmit non-resubmittable passed target' do
         sign_in_user student.user, referrer: target_path(target_l1)
 
-        find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
+        find('.course-overlay__body-tab-item', text: 'Submissions & Feedback')
+          .click
 
-        expect(page).not_to have_selector('button', text: 'Add another submission')
+        expect(page).not_to have_selector(
+          'button',
+          text: 'Add another submission'
+        )
       end
 
       scenario 'student can resubmit non-resubmittable target if its failed' do
@@ -395,7 +580,8 @@ feature 'Target Overlay', js: true do
 
         sign_in_user student.user, referrer: target_path(target_l1)
 
-        find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
+        find('.course-overlay__body-tab-item', text: 'Submissions & Feedback')
+          .click
 
         expect(page).to have_selector('button', text: 'Add another submission')
       end
@@ -403,8 +589,20 @@ feature 'Target Overlay', js: true do
   end
 
   context "when some team members haven't completed an individual target" do
-    let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_STUDENT }
-    let!(:timeline_event) { create :timeline_event, :with_owners, latest: true, target: target_l1, owners: [student], passed_at: 2.days.ago }
+    let!(:target_l1) do
+      create :target,
+             :with_content,
+             target_group: target_group_l1,
+             role: Target::ROLE_STUDENT
+    end
+    let!(:timeline_event) do
+      create :timeline_event,
+             :with_owners,
+             latest: true,
+             target: target_l1,
+             owners: [student],
+             passed_at: 2.days.ago
+    end
 
     scenario 'student is shown pending team members on individual targets' do
       sign_in_user student.user, referrer: target_path(target_l1)
@@ -414,19 +612,21 @@ feature 'Target Overlay', js: true do
       # A safety check, in case factory is altered.
       expect(other_students.count).to be > 0
 
-      expect(page).to have_content('You have team members who are yet to complete this target:')
+      expect(page).to have_content(
+        'You have team members who are yet to complete this target:'
+      )
 
       # The other students should also be listed.
       other_students.each do |other_student|
-        expect(page).to have_selector("div[title='#{other_student.name} has not completed this target.']")
+        expect(page).to have_selector(
+          "div[title='#{other_student.name} has not completed this target.']"
+        )
       end
     end
   end
 
   context 'when a pending target has prerequisites' do
-    before do
-      target_l1.prerequisite_targets << prerequisite_target
-    end
+    before { target_l1.prerequisite_targets << prerequisite_target }
 
     scenario 'student navigates to a prerequisite target' do
       sign_in_user student.user, referrer: target_path(target_l1)
@@ -435,7 +635,9 @@ feature 'Target Overlay', js: true do
         expect(page).to have_content('Locked')
       end
 
-      expect(page).to have_content('This target has pre-requisites that are incomplete.')
+      expect(page).to have_content(
+        'This target has pre-requisites that are incomplete.'
+      )
 
       # It should be possible to navigate to the prerequisite target.
       within('.course-overlay__prerequisite-targets') do
@@ -451,9 +653,7 @@ feature 'Target Overlay', js: true do
   end
 
   context 'when the course has ended' do
-    before do
-      course.update!(ends_at: 1.day.ago)
-    end
+    before { course.update!(ends_at: 1.day.ago) }
 
     scenario 'student visits a pending target' do
       sign_in_user student.user, referrer: target_path(target_l1)
@@ -463,13 +663,22 @@ feature 'Target Overlay', js: true do
         expect(page).to have_content('Locked')
       end
 
-      expect(page).to have_content('The course has ended and submissions are disabled for all targets!')
-      expect(page).not_to have_selector('.course-overlay__body-tab-item', text: 'Complete')
+      expect(page).to have_content(
+        'The course has ended and submissions are disabled for all targets!'
+      )
+      expect(page).not_to have_selector(
+        '.course-overlay__body-tab-item',
+        text: 'Complete'
+      )
       expect(page).not_to have_selector('a', text: 'Submit work for review')
     end
 
     scenario 'student views a submitted target' do
-      create :timeline_event, :with_owners, latest: true, target: target_l1, owners: team.founders
+      create :timeline_event,
+             :with_owners,
+             latest: true,
+             target: target_l1,
+             owners: team.founders
 
       sign_in_user student.user, referrer: target_path(target_l1)
 
@@ -480,7 +689,8 @@ feature 'Target Overlay', js: true do
       end
 
       # The submissions & feedback sections should be visible.
-      find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
+      find('.course-overlay__body-tab-item', text: 'Submissions & Feedback')
+        .click
 
       # The submissions should mention that review is pending.
       expect(page).to have_content('Pending Review')
@@ -491,9 +701,7 @@ feature 'Target Overlay', js: true do
   end
 
   context "when student's access to course has ended" do
-    before do
-      team.update!(access_ends_at: 1.day.ago)
-    end
+    before { team.update!(access_ends_at: 1.day.ago) }
 
     scenario 'student visits a target in a course where their access has ended' do
       sign_in_user student.user, referrer: target_path(target_l1)
@@ -504,20 +712,51 @@ feature 'Target Overlay', js: true do
       end
 
       expect(page).to have_content('Your access to this course has ended.')
-      expect(page).not_to have_selector('.course-overlay__body-tab-item', text: 'Complete')
+      expect(page).not_to have_selector(
+        '.course-overlay__body-tab-item',
+        text: 'Complete'
+      )
       expect(page).not_to have_selector('a', text: 'Submit work for review')
     end
   end
 
   context 'when the course has a community which accepts linked targets' do
-    let!(:community_1) { create :community, :target_linkable, school: course.school, courses: [course] }
-    let!(:community_2) { create :community, :target_linkable, school: course.school, courses: [course] }
-    let!(:topic_1) { create :topic, :with_first_post, community: community_1, creator: student.user }
-    let!(:topic_2) { create :topic, :with_first_post, community: community_1, creator: student.user }
+    let!(:community_1) do
+      create :community,
+             :target_linkable,
+             school: course.school,
+             courses: [course]
+    end
+    let!(:community_2) do
+      create :community,
+             :target_linkable,
+             school: course.school,
+             courses: [course]
+    end
+    let!(:topic_1) do
+      create :topic,
+             :with_first_post,
+             community: community_1,
+             creator: student.user
+    end
+    let!(:topic_2) do
+      create :topic,
+             :with_first_post,
+             community: community_1,
+             creator: student.user
+    end
     let(:topic_title) { Faker::Lorem.sentence }
     let(:topic_body) { Faker::Lorem.paragraph }
-    let!(:topic_target_l2_1) { create :topic, :with_first_post, community: community_1, target: target_l1 }
-    let!(:topic_target_l2_2) { create :topic, :with_first_post, community: community_1, target: target_l1, archived: true }
+    let!(:topic_target_l2_1) do
+      create :topic, :with_first_post, community: community_1, target: target_l1
+    end
+    let!(:topic_target_l2_2) do
+      create :topic,
+             :with_first_post,
+             community: community_1,
+             target: target_l1,
+             archived: true
+    end
 
     scenario 'student uses the discuss feature' do
       sign_in_user student.user, referrer: target_path(target_l1)
@@ -528,14 +767,18 @@ feature 'Target Overlay', js: true do
       expect(page).to have_text(community_2.name)
       expect(page).to have_link('Go to community', count: 2)
       expect(page).to have_link('Create a topic', count: 2)
-      expect(page).to have_text("There's been no recent discussion about this target.", count: 1)
+      expect(page).to have_text(
+        "There's been no recent discussion about this target.",
+        count: 1
+      )
 
       # Check the presence of existing topics
       expect(page).to have_text(topic_target_l2_1.title)
       expect(page).to_not have_text(topic_target_l2_2.title)
 
       # Student can ask a question related to the target in community from target overlay.
-      find("a[title='Create a topic in the #{community_1.name} community'").click
+      find("a[title='Create a topic in the #{community_1.name} community'")
+        .click
 
       expect(page).to have_text(target_l1.title)
       expect(page).to have_text('Create a new topic of discussion')
@@ -568,7 +811,9 @@ feature 'Target Overlay', js: true do
       expect(page).to have_text(topic_title)
 
       # Student can filter all questions linked to the target.
-      find("a[title='Browse all topics about this target in the #{community_1.name} community'").click
+      find(
+        "a[title='Browse all topics about this target in the #{community_1.name} community'"
+      ).click
       expect(page).to have_text('Clear Filter')
       expect(page).to have_text(topic_title)
       expect(page).not_to have_text(topic_1.title)
@@ -601,14 +846,50 @@ feature 'Target Overlay', js: true do
     let(:school_admin) { create :school_admin }
 
     context 'when the target has a checklist' do
-      let(:checklist) { [{ title: 'Describe your submission', kind: Target::CHECKLIST_KIND_LONG_TEXT, optional: false }, { title: 'Attach link', kind: Target::CHECKLIST_KIND_LINK, optional: true }, { title: 'Attach files', kind: Target::CHECKLIST_KIND_FILES, optional: true }] }
-      let!(:target_l1) { create :target, :with_content, checklist: checklist, target_group: target_group_l1, role: Target::ROLE_TEAM, evaluation_criteria: [criterion_1, criterion_2], completion_instructions: Faker::Lorem.sentence, sort_index: 0 }
+      let(:checklist) do
+        [
+          {
+            title: 'Describe your submission',
+            kind: Target::CHECKLIST_KIND_LONG_TEXT,
+            optional: false
+          },
+          {
+            title: 'Attach link',
+            kind: Target::CHECKLIST_KIND_LINK,
+            optional: true
+          },
+          {
+            title: 'Attach files',
+            kind: Target::CHECKLIST_KIND_FILES,
+            optional: true
+          }
+        ]
+      end
+      let!(:target_l1) do
+        create :target,
+               :with_content,
+               checklist: checklist,
+               target_group: target_group_l1,
+               role: Target::ROLE_TEAM,
+               evaluation_criteria: [criterion_1, criterion_2],
+               completion_instructions: Faker::Lorem.sentence,
+               sort_index: 0
+      end
 
       scenario 'admin views the target in preview mode' do
         sign_in_user school_admin.user, referrer: target_path(target_l1)
 
-        expect(page).to have_content('You are currently looking at a preview of this course.')
-        expect(page).to have_link('Edit Content', href: content_school_course_target_path(course_id: target_l1.course.id, id: target_l1.id))
+        expect(page).to have_content(
+          'You are currently looking at a preview of this course.'
+        )
+        expect(page).to have_link(
+          'Edit Content',
+          href:
+            content_school_course_target_path(
+              course_id: target_l1.course.id,
+              id: target_l1.id
+            )
+        )
 
         # This target should have a 'Complete' section.
         find('.course-overlay__body-tab-item', text: 'Complete').click
@@ -625,7 +906,11 @@ feature 'Target Overlay', js: true do
         # The submit button should be disabled.
         expect(page).to have_button('Submit', disabled: true)
 
-        attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
+        attach_file 'attachment_file',
+                    File.absolute_path(
+                      Rails.root.join('spec/support/uploads/faculty/human.png')
+                    ),
+                    visible: false
 
         dismiss_notification
 
@@ -635,7 +920,13 @@ feature 'Target Overlay', js: true do
     end
 
     context 'when the target is auto-verified' do
-      let!(:target_l1) { create :target, :with_content, target_group: target_group_l1, role: Target::ROLE_TEAM, completion_instructions: Faker::Lorem.sentence }
+      let!(:target_l1) do
+        create :target,
+               :with_content,
+               target_group: target_group_l1,
+               role: Target::ROLE_TEAM,
+               completion_instructions: Faker::Lorem.sentence
+      end
 
       scenario 'tries to completes an auto-verified target' do
         sign_in_user school_admin.user, referrer: target_path(target_l1)
@@ -647,7 +938,13 @@ feature 'Target Overlay', js: true do
 
     context 'when the target requires user to visit a link to complete it' do
       let(:link_to_complete) { "https://www.example.com/#{Faker::Lorem.word}" }
-      let!(:target_with_link) { create :target, :with_content, target_group: target_group_l1, link_to_complete: link_to_complete, completion_instructions: Faker::Lorem.sentence }
+      let!(:target_with_link) do
+        create :target,
+               :with_content,
+               target_group: target_group_l1,
+               link_to_complete: link_to_complete,
+               completion_instructions: Faker::Lorem.sentence
+      end
 
       scenario 'link to complete is shown to the user' do
         sign_in_user school_admin.user, referrer: target_path(target_with_link)
@@ -727,31 +1024,54 @@ feature 'Target Overlay', js: true do
     let(:student_d) { team_2.founders.last }
 
     # Create old submissions, linked to students who are no longer teamed up.
-    let!(:submission_old_1) { create :timeline_event, :with_owners, target: target_l1, owners: [student_a, student_c] }
-    let!(:submission_old_2) { create :timeline_event, :with_owners, target: target_l1, owners: [student_b, student_d] }
+    let!(:submission_old_1) do
+      create :timeline_event,
+             :with_owners,
+             target: target_l1,
+             owners: [student_a, student_c]
+    end
+    let!(:submission_old_2) do
+      create :timeline_event,
+             :with_owners,
+             target: target_l1,
+             owners: [student_b, student_d]
+    end
 
     # Create a new submission, linked to students who are currently teamed up.
-    let!(:submission_new) { create :timeline_event, :with_owners, latest: true, target: target_l1, owners: team_1.founders }
+    let!(:submission_new) do
+      create :timeline_event,
+             :with_owners,
+             latest: true,
+             target: target_l1,
+             owners: team_1.founders
+    end
 
     before do
       # Mark ownership of old submissions as latest for C & D, since they don't have a later submission.
-      submission_old_1.timeline_event_owners.where(founder: student_c).update(latest: true)
-      submission_old_2.timeline_event_owners.where(founder: student_d).update(latest: true)
+      submission_old_1
+        .timeline_event_owners
+        .where(founder: student_c)
+        .update(latest: true)
+      submission_old_2
+        .timeline_event_owners
+        .where(founder: student_d)
+        .update(latest: true)
     end
 
     scenario 'latest flag is updated correctly on deleting the latest submission for all concerned students' do
       # Delete Submission A
       sign_in_user student_a.user, referrer: target_path(target_l1)
-      find('.course-overlay__body-tab-item', text: 'Submissions & Feedback').click
+      find('.course-overlay__body-tab-item', text: 'Submissions & Feedback')
+        .click
 
-      accept_confirm do
-        click_button('Undo submission')
-      end
+      accept_confirm { click_button('Undo submission') }
 
       # This action should delete `submission_new`, reload the page and return the user to the content of the target.
       expect(page).to have_selector('.learn-content-block__embed')
 
-      expect { submission_new.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { submission_new.reload }.to raise_error(
+        ActiveRecord::RecordNotFound
+      )
       expect(target_l1.latest_submission(student_a)).to eq(submission_old_1)
       expect(target_l1.latest_submission(student_b)).to eq(submission_old_2)
       expect(target_l1.latest_submission(student_c)).to eq(submission_old_1)
@@ -768,12 +1088,22 @@ feature 'Target Overlay', js: true do
     let(:student_3) { team_2.founders.last }
 
     # Create old submissions, linked to students who are no longer teamed up.
-    let!(:submission_old_1) { create :timeline_event, :with_owners, latest: true, target: target_l1, owners: team_1.founders }
-    let!(:submission_old_2) { create :timeline_event, :with_owners, latest: true, target: target_l1, owners: team_2.founders }
-
-    before do
-      student_2.update!(startup: team_1)
+    let!(:submission_old_1) do
+      create :timeline_event,
+             :with_owners,
+             latest: true,
+             target: target_l1,
+             owners: team_1.founders
     end
+    let!(:submission_old_2) do
+      create :timeline_event,
+             :with_owners,
+             latest: true,
+             target: target_l1,
+             owners: team_2.founders
+    end
+
+    before { student_2.update!(startup: team_1) }
 
     scenario 'latest flag is updated correctly for all students' do
       sign_in_user student_1.user, referrer: target_path(target_l1)
@@ -786,6 +1116,7 @@ feature 'Target Overlay', js: true do
       new_submission = TimelineEvent.last
       expect(target_l1.latest_submission(student_1)).to eq(new_submission)
       expect(target_l1.latest_submission(student_2)).to eq(new_submission)
+
       # Latest submission is not updated for the team 2 user
       expect(target_l1.latest_submission(student_3)).to eq(submission_old_2)
     end

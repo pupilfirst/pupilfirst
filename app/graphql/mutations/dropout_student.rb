@@ -2,7 +2,7 @@ module Mutations
   class DropoutStudent < GraphQL::Schema::Mutation
     argument :id, ID, required: true
 
-    description "Mark student as exited"
+    description 'Mark student as exited'
 
     field :success, Boolean, null: false
 
@@ -11,7 +11,11 @@ module Mutations
 
       if mutator.valid?
         mutator.execute
-        mutator.notify(:success, 'Student updated successfully', 'Reloading students list')
+        mutator.notify(
+          :success,
+          'Student updated successfully',
+          'Reloading students list'
+        )
         { success: true }
       else
         mutator.notify_errors

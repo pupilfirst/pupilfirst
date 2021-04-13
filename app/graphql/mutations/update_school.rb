@@ -3,7 +3,7 @@ module Mutations
     argument :name, String, required: true
     argument :about, String, required: true
 
-    description "Update a School details"
+    description 'Update a School details'
 
     field :success, Boolean, null: false
 

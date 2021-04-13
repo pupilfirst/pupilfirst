@@ -34,7 +34,8 @@
   opacity: 1;
 }
 
-.content-block-creator--open .content-block-creator__top-button-container:before {
+.content-block-creator--open
+  .content-block-creator__top-button-container:before {
   @apply border-t-0;
 }
 
@@ -46,7 +47,8 @@
     transition: opacity 0.25s;
     opacity: 1;
   }
-  .content-block-creator:not(.content-block-creator--open):hover .content-block-creator__top-button {
+  .content-block-creator:not(.content-block-creator--open):hover
+    .content-block-creator__top-button {
     @apply shadow-lg;
   }
 }

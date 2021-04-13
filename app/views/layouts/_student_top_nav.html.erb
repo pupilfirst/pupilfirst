@@ -8,7 +8,9 @@
   <%= javascript_pack_tag 'StudentTopNavPack', nonce: true %>
 <% end %>
 
-<script id="student-top-nav-props" type="application/json"><%= presenter.props_to_json.html_safe %></script>
+<script id="student-top-nav-props" type="application/json">
+  <%= presenter.props_to_json.html_safe %>
+</script>
 
 <header id="header" class="flex-shrink-0">
   <div id="student-top-nav"></div>

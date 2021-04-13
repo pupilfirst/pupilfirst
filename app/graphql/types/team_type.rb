@@ -15,11 +15,18 @@ module Types
 
     def students
       object.founders.map do |student|
-        student_attributes = { id: student.id, name: student.name, title: student.title }
+        student_attributes = {
+          id: student.id,
+          name: student.name,
+          title: student.title
+        }
 
         if student.user.avatar.attached?
           student_attributes[:avatar_url] =
-            Rails.application.routes.url_helpers.rails_representation_path(student.user.avatar_variant(:thumb), only_path: true)
+            Rails.application.routes.url_helpers.rails_representation_path(
+              student.user.avatar_variant(:thumb),
+              only_path: true
+            )
         end
 
         student_attributes

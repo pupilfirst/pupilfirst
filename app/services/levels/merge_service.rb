@@ -16,9 +16,13 @@ module Levels
         @level.reload.destroy!
 
         # Re-number all remaining levels.
-        course.levels.order(number: :asc).each.with_index(minimum_level_number) do |level, index|
-          level.update!(number: index) if level.number != index
-        end
+        course
+          .levels
+          .order(number: :asc)
+          .each
+          .with_index(minimum_level_number) do |level, index|
+            level.update!(number: index) if level.number != index
+          end
       end
 
       other_level

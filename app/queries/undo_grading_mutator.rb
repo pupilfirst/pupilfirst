@@ -9,8 +9,14 @@ class UndoGradingMutator < ApplicationQuery
     TimelineEvent.transaction do
       # Clear existing grades
       TimelineEventGrade.where(timeline_event: submission).destroy_all
+
       # Clear evaluation info
-      submission.update!(passed_at: nil, evaluator_id: nil, evaluated_at: nil, checklist: checklist)
+      submission.update!(
+        passed_at: nil,
+        evaluator_id: nil,
+        evaluated_at: nil,
+        checklist: checklist
+      )
     end
   end
 

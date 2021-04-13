@@ -10,5 +10,10 @@
 
 <% presenter = Schools::Courses::ExportsPresenter.new(self, @course) %>
 
-<script id="schools-courses-exports__props" type="application/json"><%= presenter.props_to_json.html_safe %></script>
-<div id="schools-courses-exports__root" class="flex flex-1 h-screen bg-gray-100"></div>
+<script id="schools-courses-exports__props" type="application/json">
+  <%= presenter.props_to_json.html_safe %>
+</script>
+<div
+  id="schools-courses-exports__root"
+  class="flex flex-1 h-screen bg-gray-100"
+></div>

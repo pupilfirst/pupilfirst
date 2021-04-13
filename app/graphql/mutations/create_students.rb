@@ -11,7 +11,8 @@ module Mutations
     def resolve(params)
       mutator = CreateStudentsMutator.new(context, params)
 
-      student_ids = if mutator.valid?
+      student_ids =
+        if mutator.valid?
           mutator.create_students
         else
           mutator.notify_errors

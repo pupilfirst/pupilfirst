@@ -9,9 +9,9 @@ describe Startup do
     it 'cannot be destroyed if it has founders' do
       create :founder, startup: startup
 
-      expect do
-        startup.destroy!
-      end.to raise_error(ActiveRecord::RecordNotDestroyed)
+      expect { startup.destroy! }.to raise_error(
+        ActiveRecord::RecordNotDestroyed
+      )
     end
   end
 end

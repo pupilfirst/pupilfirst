@@ -12,7 +12,8 @@ class DeleteTopicSubscriptionMutator < ApplicationQuery
   private
 
   def topic_subscription
-    @topic_subscription ||= topic&.topic_subscription&.where(user: current_user)&.first
+    @topic_subscription ||=
+      topic&.topic_subscription&.where(user: current_user)&.first
   end
 
   def topic

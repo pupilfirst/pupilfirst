@@ -5,7 +5,10 @@ class StudentSubmissionsResolver < ApplicationQuery
   property :sort_direction
 
   def student_submissions
-    applicable_submissions.includes(target: :level).distinct.order("timeline_events.created_at #{sort_direction_string}")
+    applicable_submissions
+      .includes(target: :level)
+      .distinct
+      .order("timeline_events.created_at #{sort_direction_string}")
   end
 
   def authorized?
@@ -21,17 +24,14 @@ class StudentSubmissionsResolver < ApplicationQuery
   def applicable_submissions
     submissions_by_student = student.timeline_events.not_auto_verified
 
-    by_level = if level_id.present?
+    by_level =
+      if level_id.present?
         submissions_by_student.where(levels: { id: level_id })
       else
         submissions_by_student
       end
 
-    if status.present?
-      filter_by_status(status, by_level)
-    else
-      by_level
-    end
+    status.present? ? filter_by_status(status, by_level) : by_level
   end
 
   def student

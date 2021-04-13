@@ -3,17 +3,17 @@ let iconData = require("./data/paths.json");
 
 const xmlns = "http://www.w3.org/2000/svg";
 
-const findIconName = className => {
+const findIconName = (className) => {
   const iconName = className.match(/i-([a-zA-z0-9\-]+)/);
   return iconName ? iconName[1] : "default";
 };
 
-const getIconData = className => {
+const getIconData = (className) => {
   const data = iconData[findIconName(className)];
   return data ? data : iconData["default"];
 };
 
-const viewboxClass = width => {
+const viewboxClass = (width) => {
   switch (width) {
     case 320:
       return " if-w-10";
@@ -30,7 +30,7 @@ const viewboxClass = width => {
   }
 };
 
-const createSvg = className => {
+const createSvg = (className) => {
   const icon = getIconData(className);
   const el = document.createElementNS(xmlns, "svg");
   el.setAttribute(
@@ -52,7 +52,7 @@ const createSvg = className => {
 
 export const transformIcons = () => {
   const elements = Array.from(document.getElementsByClassName("if"));
-  elements.forEach(element => {
+  elements.forEach((element) => {
     if (element.tagName == "I") {
       element.parentNode.replaceChild(createSvg(element.className), element);
     }

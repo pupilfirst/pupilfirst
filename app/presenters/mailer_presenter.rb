@@ -20,7 +20,10 @@ class MailerPresenter < ApplicationPresenter
   end
 
   def logo
-    view.image_tag(view.url_for(@school.logo_variant(:mid)), class: 'mailer-head__logo-img')
+    view.image_tag(
+      view.url_for(@school.logo_variant(:mid)),
+      class: 'mailer-head__logo-img'
+    )
   end
 
   def course_cover?
@@ -32,17 +35,17 @@ class MailerPresenter < ApplicationPresenter
   end
 
   def hero_title_classes
-    default = "mailer-body__hero-title"
-    course_cover? ? default + " mailer-body__hero-title--dark" : default
+    default = 'mailer-body__hero-title'
+    course_cover? ? default + ' mailer-body__hero-title--dark' : default
   end
 
   def hero_classes
-    default = "mailer-body__hero"
-    course_cover? ? default + " mailer-body__hero--dark" : default
+    default = 'mailer-body__hero'
+    course_cover? ? default + ' mailer-body__hero--dark' : default
   end
 
   def button_classes
-    default = "mailer-button"
-    course_cover? ? default + " mailer-button--dark" : default
+    default = 'mailer-button'
+    course_cover? ? default + ' mailer-button--dark' : default
   end
 end

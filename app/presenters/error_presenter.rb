@@ -8,11 +8,12 @@ class ErrorPresenter < ApplicationPresenter
   end
 
   def contact_email
-    @contact_email ||= begin
-      if current_school.present?
-        SchoolString::EmailAddress.for(current_school)
+    @contact_email ||=
+      begin
+        if current_school.present?
+          SchoolString::EmailAddress.for(current_school)
+        end
       end
-    end
   end
 
   def school_has_icon?

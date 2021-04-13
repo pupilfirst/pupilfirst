@@ -19,6 +19,12 @@ class DeleteAccountMutator < ApplicationQuery
   end
 
   def create_audit_record(user)
-    AuditRecord.create!(audit_type: AuditRecord::TYPE_DELETE_ACCOUNT, school_id: current_school.id, metadata: { email: user.email })
+    AuditRecord.create!(
+      audit_type: AuditRecord::TYPE_DELETE_ACCOUNT,
+      school_id: current_school.id,
+      metadata: {
+        email: user.email
+      }
+    )
   end
 end

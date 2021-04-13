@@ -9,4 +9,3 @@ class DeleteWebPushSubscriptionMutator < ApplicationQuery
     current_user.present?
   end
 end
-

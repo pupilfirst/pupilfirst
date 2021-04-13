@@ -33,9 +33,10 @@ module Courses
       applicable_emails =
         csv_rows.map { |row| row['email'].downcase } - Founder
           .where(id: student_ids)
-          .includes(:user)
-          .map { |f| f.email }
-
+          .joins(:user)
+          .pluck(:email)
+          .map(&:downcase)
+        
       headers = ['Sl. No', 'Email']
 
       csv_data =

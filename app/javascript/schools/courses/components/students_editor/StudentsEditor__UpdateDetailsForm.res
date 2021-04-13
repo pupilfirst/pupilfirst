@@ -8,6 +8,7 @@ and selected = bool
 type state = {
   name: string,
   teamName: string,
+  studentTags: array<string>,
   tagsToApply: array<string>,
   teamCoaches: array<string>,
   teamCoachSearchInput: string,
@@ -205,6 +206,7 @@ let teamCoachesEditor = (courseCoaches, state, send) => {
 let initialState = (student, team) => {
   name: student |> Student.name,
   teamName: team |> Team.name,
+  studentTags: student |> Student.tags,
   tagsToApply: team |> Team.tags,
   teamCoaches: team |> Team.coachIds,
   teamCoachSearchInput: "",
@@ -333,6 +335,23 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
           {teamCoachesEditor(courseCoaches, state, send)}
         </div>
       </div>
+      {state.studentTags |> ArrayUtils.isNotEmpty
+        ? <div className="mt-5">
+            <div className="mb-2 text-xs font-semibold">
+              {"Tags applied to user:" |> str}
+            </div>
+            <div className="flex flex-wrap">
+              {state.studentTags |> Js.Array.map(tag =>
+                <div
+                  className="bg-blue-100 border border-blue-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900"
+                  key={tag}>
+                  {str(tag)}
+                </div>
+              )
+              |> React.array}
+            </div>
+          </div>
+        : React.null}
       <div className="mt-5">
         <div className="mb-2 text-xs font-semibold">
           {(isSingleStudent ? "Tags applied:" : "Tags applied to team:") |> str}

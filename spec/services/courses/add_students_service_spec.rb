@@ -44,7 +44,7 @@ describe Courses::AddStudentsService do
       response = subject.add(students_data)
 
       student_ids = Founder.joins(:user).
-        where(users: {email: [student_1_data.email, student_2_data.email, student_3_data.email, student_4_data.email]}).
+        where(users: { email: [student_1_data.email, student_2_data.email, student_3_data.email, student_4_data.email] }).
         pluck(:id)
 
       expect(response.length).to eq(4)
@@ -75,15 +75,19 @@ describe Courses::AddStudentsService do
     end
 
     context 'course already has students' do
-      let!(:persisted_team) { create :startup, level: level_1 }
-      let!(:student) { persisted_team.founders.first }
-      let!(:data_with_existing_student_email) { OpenStruct.new(name: Faker::Name.name, email: student.email) }
+      let!(:persisted_team_1) { create :startup, level: level_1 }
+      let!(:persisted_team_2) { create :startup, level: level_1 }
+      let!(:student_1) { persisted_team_1.founders.first }
+      let!(:student_2) { persisted_team_2.founders.first }
+      let!(:data_with_existing_student_email) { OpenStruct.new(name: Faker::Name.name, email: student_1.email) }
+      let!(:data_with_existing_student_email_different_casing) { OpenStruct.new(name: Faker::Name.name, email: student_2.email.capitalize) }
 
       it 'ignores persisted student emails when present in the list to add' do
-        students_data = [student_1_data, student_2_data, data_with_existing_student_email]
+        students_data = [student_1_data, student_2_data, data_with_existing_student_email, data_with_existing_student_email_different_casing]
 
         expect { subject.add(students_data) }.to change { course.founders.count }.by(2)
-        expect(student.reload.startup).to eq(persisted_team)
+        expect(student_1.reload.startup).to eq(persisted_team_1)
+        expect(student_2.reload.startup).to eq(persisted_team_2)
       end
     end
 

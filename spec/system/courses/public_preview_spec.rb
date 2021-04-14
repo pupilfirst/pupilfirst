@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'Public preview of course curriculum', js: true do
   include MarkdownEditorHelper
+  include UserSpecHelper
 
   # The basics.
   let(:public_course_1) { create :course, public_preview: true }
@@ -134,6 +135,34 @@ feature 'Public preview of course curriculum', js: true do
 
     expect(page).to have_text('The level is currently locked')
     expect(page).to have_text('You can access the content on')
+  end
+
+  context 'when the user is a student in another course' do
+    let(:student) { create :founder }
+    let(:enrolled_course) { student.course }
+
+    scenario 'student in one course accesses preview of another course' do
+      sign_in_user student.user,
+                   referrer: curriculum_course_path(enrolled_course)
+
+      expect(page).to have_content(enrolled_course.name)
+
+      # There should be no dropdown in the header menu.
+      expect(page).not_to have_button(enrolled_course.name)
+
+      # Access the public course's preview by visiting its page manually.
+      visit curriculum_course_path(public_course_1)
+
+      # There should now be a dropdown that lets the student access his enrolled courses.
+      click_button public_course_1.name
+
+      expect(page).to have_link(
+        enrolled_course.name,
+        href: curriculum_course_path(enrolled_course)
+      )
+
+      expect(page).to have_text('Preview Mode')
+    end
   end
 
   scenario 'private courses cannot be viewed by public' do

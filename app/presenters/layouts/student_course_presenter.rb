@@ -23,7 +23,7 @@ module Layouts
         # All courses are available to admins.
         current_school.courses.live
       else
-        # Courses as a coach, plus courses as a student.
+        # Courses where user is an author...
         courses_as_course_author =
           if current_user.course_authors.present?
             Course
@@ -32,7 +32,11 @@ module Layouts
           else
             []
           end
+
+        # ...plus courses where user is a coach...
         courses_as_coach = current_coach.present? ? current_coach.courses : []
+
+        # ...plus courses where user is a student...
         courses_as_student =
           Course
             .joins(:founders)
@@ -42,7 +46,14 @@ module Layouts
                 id: current_user.founders.select(:id)
               }
             )
-        (courses_as_course_author + courses_as_coach + courses_as_student).uniq
+
+        # ...plus the current course if course has public preview.
+        previewed_course = @course.public_preview? ? [@course] : []
+
+        (
+          courses_as_course_author + courses_as_coach + courses_as_student +
+            previewed_course
+        ).uniq
       end.as_json(only: %i[name id ends_at])
     end
 

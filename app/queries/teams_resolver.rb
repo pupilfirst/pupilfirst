@@ -17,22 +17,21 @@ class TeamsResolver < ApplicationQuery
     teams = self.class.filter_by_tags(teams, tags)
 
     teams.distinct('startups.id')
+      .select('"startups".*, LOWER(startups.name) AS startup_name').order('startup_name')
   end
 
   def self.filter_by_tags(teams, tags)
     if tags.any?
       teams = teams.joins({ founders: :user })
-      tagged = ActsAsTaggableOn::Tagging.joins(:tag)
-        .where(tags: {name: tags})
-        .where("taggings.taggable_type <> 'School'")
-        .select("taggings.taggable_id, taggings.taggable_type")
-        .group_by(&:taggable_type)
-        .map{|type, items| [type, items.map(&:taggable_id)]}
-        .to_h
-      teams.where(users: {id: tagged.fetch("User", []) }).or(teams.where(startups: {id: tagged.fetch("Startup", [])}))
-    else
-      teams
+      user_tags = ActsAsTaggableOn::Tag.joins(:taggings).where(name: tags, taggings: {taggable_type: 'User'}).pluck(:name)
+      teams_with_user_tags = teams.where(users: {id: User.tagged_with(user_tags).select(:id)}).pluck(:id)
+      team_tags = ActsAsTaggableOn::Tag.joins(:taggings).where(name: tags, taggings: {taggable_type: 'Startup'}).pluck(:name)
+      teams_with_tags = teams.tagged_with(team_tags).pluck(:id)
+
+      teams = teams.where(id: [teams_with_user_tags, teams_with_tags].reject(&:empty?).reduce(&:&))
     end
+
+    teams
   end
 
   def self.filter_by_coach_notes(teams, coach_notes)
@@ -80,6 +79,5 @@ class TeamsResolver < ApplicationQuery
       .joins({ founders: :user })
       .includes(founders: [user: { avatar_attachment: :blob }])
       .includes(:faculty)
-      .select('"startups".*, LOWER(startups.name) AS startup_name').order('startup_name')
   end
 end

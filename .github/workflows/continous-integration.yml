@@ -52,7 +52,7 @@ jobs:
           MSG_MINIMAL: ref,actions url,commit
       - uses: actions/checkout@v2
       - name: Use Ruby 2.7
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: '2.7'
       - name: Set branch name & commit SHA in env

@@ -311,10 +311,42 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
 
 let overlayContentClasses = bool => bool ? "" : "hidden"
 
-let learnSection = (targetDetails, tab, author, courseId, targetId, coaches) =>
+let learnSection = (
+  send,
+  targetDetails,
+  tab,
+  author,
+  courseId,
+  targetId,
+  targetStatus,
+  completionType,
+  coaches,
+) => {
+  let suffixLinkInfo = switch (TargetStatus.status(targetStatus), completionType) {
+  | (Pending | Rejected, TargetDetails.Evaluated) =>
+    Some((Complete(completionType), t("learn_cta_submit_work"), "fas fa-feather-alt"))
+  | (Pending | Rejected, TakeQuiz) =>
+    Some((Complete(completionType), t("learn_cta_take_quiz"), "fas fa-tasks"))
+  | (Pending | Rejected, LinkToComplete | MarkAsComplete) => None
+  | (PendingReview | Completed | Locked(_), _anyCompletionType) => None
+  }
+
+  let linkToTab = Belt.Option.mapWithDefault(suffixLinkInfo, React.null, ((
+    tab,
+    linkText,
+    iconClasses,
+  )) => {
+    <a
+      onClick={_ => send(Select(tab))}
+      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4">
+      <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {str(linkText)} </span>
+    </a>
+  })
+
   <div className={overlayContentClasses(tab == Learn)}>
-    <CoursesCurriculum__Learn targetDetails author courseId targetId coaches />
+    <CoursesCurriculum__Learn targetDetails author courseId targetId coaches /> {linkToTab}
   </div>
+}
 
 let discussSection = (target, targetDetails, tab) =>
   <div className={overlayContentClasses(tab == Discuss)}>
@@ -323,9 +355,9 @@ let discussSection = (target, targetDetails, tab) =>
     />
   </div>
 
-let completeSectionClasses = (tab, completionType: TargetDetails.completionType) =>
+let completeSectionClasses = (tab, completionType) =>
   switch (tab, completionType) {
-  | (Learn, Evaluated | TakeQuiz)
+  | (Learn, TargetDetails.Evaluated | TakeQuiz)
   | (Discuss, Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => "hidden"
   | (Learn, MarkAsComplete | LinkToComplete)
   | (Complete(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => ""
@@ -342,9 +374,8 @@ let completeSection = (
   coaches,
   users,
   preview,
+  completionType,
 ) => {
-  let completionType = targetDetails |> TargetDetails.computeCompletionType
-
   let addVerifiedSubmissionCB = addVerifiedSubmission(target, state, send, addSubmissionCB)
 
   <div className={completeSectionClasses(state.tab, completionType)}>
@@ -563,9 +594,21 @@ let make = (
     </div>
     {switch state.targetDetails {
     | Some(targetDetails) =>
+      let completionType = targetDetails |> TargetDetails.computeCompletionType
+
       <div>
         <div className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0">
-          {learnSection(targetDetails, state.tab, author, Course.id(course), Target.id(target), coaches)}
+          {learnSection(
+            send,
+            targetDetails,
+            state.tab,
+            author,
+            Course.id(course),
+            Target.id(target),
+            targetStatus,
+            completionType,
+            coaches,
+          )}
           {discussSection(target, targetDetails, state.tab)}
           {completeSection(
             state,
@@ -578,6 +621,7 @@ let make = (
             coaches,
             users,
             preview,
+            completionType,
           )}
         </div>
         {switch state.tab {

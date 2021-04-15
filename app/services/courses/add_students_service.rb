@@ -110,11 +110,11 @@ module Courses
     end
 
     def unpersisted_students(students)
-      requested_emails = students.map(&:email)
+      requested_emails = students.map(&:email).map(&:downcase)
       enrolled_student_emails = @course.founders.joins(:user).where(users: { email: requested_emails }).pluck(:email)
 
       students.reject do |student|
-        student.email.in?(enrolled_student_emails)
+        student.email.downcase.in?(enrolled_student_emails)
       end
     end
 

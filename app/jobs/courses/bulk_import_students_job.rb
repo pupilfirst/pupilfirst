@@ -1,5 +1,7 @@
 module Courses
   class BulkImportStudentsJob < ApplicationJob
+    require 'csv'
+
     queue_as :low_priority
 
     def perform(course, csv_rows, user, notify_students)
@@ -15,7 +17,7 @@ module Courses
     def report_attachment(csv_rows, student_ids)
       return if csv_rows.count == student_ids.count
 
-      applicable_emails = csv_rows.map { |row| row['email'] } - Founder.where(id: student_ids).includes(:user).map { |f| f.email }
+      applicable_emails = csv_rows.map { |row| row['email'].downcase } - Founder.where(id: student_ids).joins(:user).pluck(:email).map(&:downcase)
 
       headers = ['Sl. No', 'Email']
 

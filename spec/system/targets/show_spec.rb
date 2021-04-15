@@ -96,6 +96,11 @@ feature 'Target Overlay', js: true do
     find('.course-overlay__body-tab-item', text: 'Complete').click
     # completion instructions should be show on complete section for evaluated targets
     expect(page).to have_text(target_l1.completion_instructions)
+
+    # There should also be a link to the completion section at the bottom of content.
+    find('.course-overlay__body-tab-item', text: 'Learn').click
+    find('a', text: 'Submit work for review').click
+
     long_answer = Faker::Lorem.sentence
 
     replace_markdown long_answer
@@ -249,6 +254,10 @@ feature 'Target Overlay', js: true do
       # Completion instructions should be show on Take Quiz section for targets with quiz
       expect(page).to have_text('Instructions')
       expect(page).to have_text(quiz_target.completion_instructions)
+
+      # There should also be a link to the quiz at the bottom of content.
+      find('.course-overlay__body-tab-item', text: 'Learn').click
+      find('a', text: 'Take a Quiz').click
 
       # Question one
       expect(page).to have_content(/Question #1/i)
@@ -458,6 +467,7 @@ feature 'Target Overlay', js: true do
 
       expect(page).to have_content('The course has ended and submissions are disabled for all lessons!')
       expect(page).not_to have_selector('.course-overlay__body-tab-item', text: 'Complete')
+      expect(page).not_to have_selector('a', text: 'Submit work for review')
     end
 
     scenario 'student views a submitted target' do
@@ -497,6 +507,7 @@ feature 'Target Overlay', js: true do
 
       expect(page).to have_content('Your access to this course has ended.')
       expect(page).not_to have_selector('.course-overlay__body-tab-item', text: 'Complete')
+      expect(page).not_to have_selector('a', text: 'Submit work for review')
     end
   end
 

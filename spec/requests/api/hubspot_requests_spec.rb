@@ -20,10 +20,13 @@ module Api
       }
     end
     let(:domain) { create :domain, fqdn: host, primary: true }
-    let(:user) { create :user, name: 'Test Test', email: user_email, school: domain.school }
+    let(:school) { domain.school }
+    let(:user) { create :user, name: 'Test Test', email: user_email, school: school }
     let(:mvp_user) {
       user.tap do |u|
         u.tag_list.add('mvp')
+        u.school.user_tag_list.add('mvp')
+        u.school.save!
         u.save!
       end
     }
@@ -53,6 +56,8 @@ module Api
         post "/api/hubspot", params: params, headers: headers(params)
       }.to change { user.reload.tag_list }.from([]).to(['mvp'])
       expect(response).to have_http_status(:ok)
+
+      expect(school.reload.user_tag_list).to match(['mvp'])
     end
 
     it 'remove mvp tag for user' do
@@ -63,6 +68,8 @@ module Api
         post "/api/hubspot", params: params, headers: headers(params)
       }.to change { mvp_user.reload.tag_list }.from(['mvp']).to([])
       expect(response).to have_http_status(:ok)
+
+      expect(school.reload.user_tag_list).to match([])
     end
 
     it 'no op for user already tagged with mvp tag' do
@@ -73,6 +80,8 @@ module Api
         post "/api/hubspot", params: params, headers: headers(params)
       }.not_to change(mvp_user, :tag_list)
       expect(response).to have_http_status(:ok)
+
+      expect(school.reload.user_tag_list).to match(['mvp'])
     end
 
     it 'no op when user is not yet tagged with mvp tag' do
@@ -83,6 +92,8 @@ module Api
         post "/api/hubspot", params: params, headers: headers(params)
       }.not_to change(user, :tag_list)
       expect(response).to have_http_status(:ok)
+
+      expect(school.reload.user_tag_list).to match([])
     end
   end
 end

@@ -38,8 +38,30 @@ module WebhookHandlers
         user = User.find_by(email: email)
         return unless user
 
-        toggle ? user.tag_list.add(MVP) : user.tag_list.remove(MVP)
+        toggle ? add_tag(user) : remove_tag(user)
         user.save!
+      end
+
+      private
+
+      def add_tag(user)
+        user.tag_list.add(MVP)
+        unless MVP.in?(user.school.user_tag_list)
+          user.school.user_tag_list.add(MVP)
+          user.school.save!
+        end
+      end
+
+      def remove_tag(user)
+        user.tag_list.remove(MVP)
+        unless any_other_mvp_user?(user)
+          user.school.user_tag_list.remove(MVP)
+          user.school.save!
+        end
+      end
+
+      def any_other_mvp_user?(user)
+        User.where(school: user.school).where.not(id: user.id).tagged_with(MVP).exists?
       end
     end
   end

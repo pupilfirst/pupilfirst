@@ -31,7 +31,7 @@ module Api
       end
     }
 
-    def payload(mvp)
+    def payload(mvp, object_id: 123)
       [
         {
           eventId: "100",
@@ -40,7 +40,7 @@ module Api
           occurredAt: 1617874455120,
           subscriptionType: "contact.propertyChange",
           attemptNumber: 0,
-          objectId: 123,
+          objectId: object_id,
           changeSource: "CRM",
           propertyName: "mvp",
           propertyValue: mvp.to_s
@@ -94,6 +94,17 @@ module Api
       expect(response).to have_http_status(:ok)
 
       expect(school.reload.user_tag_list).to match([])
+    end
+
+    it 'responds with error of no Hubspot::Contact' do
+      user # setup user & school
+
+      params = payload(true, object_id: 234).to_json
+      expect {
+        post "/api/hubspot", params: params, headers: headers(params)
+      }.not_to change(user, :tag_list)
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to match(/Unable to fetch contact for id: 234/)
     end
   end
 end

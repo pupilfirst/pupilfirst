@@ -1,5 +1,8 @@
 module WebhookHandlers
   class HubspotService
+    ServiceError = Class.new(StandardError)
+    InvalidContact = Class.new(ServiceError)
+
     def execute(payload)
       payload
         .map{|p| convert_to_hash(p)}
@@ -34,6 +37,8 @@ module WebhookHandlers
       def call(object_id:, property_value:, **_)
         toggle = ActiveModel::Type::Boolean.new.cast(property_value)
         email = @hubspot.fetch_contact_email(object_id)
+
+        raise InvalidContact.new("Unable to fetch contact for id: #{object_id}") unless email
 
         user = User.find_by(email: email)
         return unless user

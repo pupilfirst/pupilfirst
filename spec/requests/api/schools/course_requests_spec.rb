@@ -81,6 +81,47 @@ module Api
           expect(response).to have_http_status(:created)
         end
 
+        it 'register students into a course & applies tags' do
+          params = {
+            students: [
+              {name: 'Test1', email: 'test1@test.com', tags: ['tag 1']},
+              {name: 'Test2', email: 'test2@test.com', tags: ['tag 1', 'tag 2']},
+            ]
+          }
+          expect {
+            post "/api/schools/courses/#{course.id}/students", params: params, headers: headers
+          }.to change{ course.users.count }.by(2)
+          expect(course.founders.count).to eq(2)
+          expect(course.startups.count).to eq(2)
+          expect(response).to have_http_status(:created)
+
+          tags_for = ->(email) { course.founders.joins(:user).where(users: { email: email}).first.startup.tag_list }
+          expect(tags_for.('test1@test.com')).to eq(['tag 1'])
+          expect(tags_for.('test2@test.com')).to eq(['tag 1', 'tag 2'])
+          expect(course.school.founder_tags.pluck(:name)).to match(['tag 1', 'tag 2'])
+        end
+
+        it 'register students as single team into a course & applies tags' do
+          params = {
+            students: [
+              {name: 'Test1', email: 'test1@test.com', tags: ['tag 1'], team_name: 'A team'},
+              {name: 'Test2', email: 'test2@test.com', tags: ['tag 1', 'tag 2'], team_name: 'A team'},
+            ]
+          }
+          expect {
+            post "/api/schools/courses/#{course.id}/students", params: params, headers: headers
+          }.to change{ course.users.count }.by(2)
+          expect(response).to have_http_status(:created)
+          expect(course.founders.count).to eq(2)
+          expect(course.startups.count).to eq(1)
+          expect(course.startups.first.name).to eq('A team')
+
+          tags_for = ->(email) { course.founders.joins(:user).where(users: { email: email}).first.startup.tag_list }
+          expect(tags_for.('test1@test.com')).to eq(['tag 1'])
+          expect(tags_for.('test2@test.com')).to eq(['tag 1'])
+          expect(course.school.founder_tags.pluck(:name)).to match(['tag 1', 'tag 2'])
+        end
+
         it 'always notify registered students' do
           params = {
             students: [

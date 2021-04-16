@@ -32,8 +32,7 @@ module Api
       private
 
       def students_params
-        stds = params.require(:students).map { |p| p.permit(:name, :email) }
-        {course_id: @course.id, students: stds }
+        {course_id: @course.id, students: params.require(:students).map(&:permit!) }
       end
 
       def set_course

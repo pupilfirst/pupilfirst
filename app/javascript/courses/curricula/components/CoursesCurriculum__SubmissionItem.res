@@ -184,6 +184,8 @@ module AudioRecorder = {
   }
   @bs.module("./navigator")
   external useAudioRecorder: string => useAudioRecorder = "useAudioRecorder"
+  @bs.module external audioPauseImage: string = "../images/target-audio-pause-button.svg"
+  @bs.module external audioRecordImage: string = "../images/target-audio-record-button.svg"
 
   @react.component
   let make = (~onUpload) => {
@@ -196,17 +198,46 @@ module AudioRecorder = {
       None
     }, [audioRecorder.id])
     <>
-      {switch audioRecorder.url {
-      | "" => React.null
-      | src => <audio src controls=true />
-      }}
       {audioRecorder.recording
-        ? <button onClick={_e => audioRecorder.stopRecording()}>
-            {React.string("Stop Recording")}
-          </button>
-        : <button onClick={_e => audioRecorder.startRecording()}>
-            {React.string("Start Recording")}
-          </button>}
+        ? <div
+            style={ReactDOMStyle.make(
+              ~cursor="pointer",
+              ~display="flex",
+              ~flexDirection="row",
+              ~paddingTop="16px",
+              ~alignItems="center",
+              (),
+            )}>
+            <img
+              height="60px"
+              width="60px"
+              src=audioPauseImage
+              onClick={_e => audioRecorder.stopRecording()}
+            />
+            <span style={ReactDOMStyle.make(~paddingLeft="16px", ())}>
+              {React.string("Recording...")}
+            </span>
+          </div>
+        : <div
+            style={ReactDOMStyle.make(
+              ~cursor="pointer",
+              ~display="flex",
+              ~flexDirection="row",
+              ~paddingTop="16px",
+              (),
+            )}>
+            <img
+              style={ReactDOMStyle.make(~cursor="pointer", ())}
+              height="60px"
+              width="60px"
+              src=audioRecordImage
+              onClick={_e => audioRecorder.startRecording()}
+            />
+            {switch audioRecorder.url {
+            | "" => React.null
+            | src => <audio src controls=true style={ReactDOMStyle.make(~paddingLeft="16px", ())} />
+            }}
+          </div>}
     </>
   }
 }

@@ -674,7 +674,7 @@ let make = (
             className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
             {(
               hasVimeoAccessToken
-                ? [#Markdown, #Image, #Embed, #VideoEmbed, #File]
+                ? [#Markdown, #Image, #Embed, #VideoEmbed, #File, #Audio]
                 : [#Markdown, #Image, #Embed, #File, #Audio]
             )
             |> Array.map(button(target, aboveContentBlock, send, addContentBlockCB))

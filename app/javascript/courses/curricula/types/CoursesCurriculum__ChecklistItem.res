@@ -140,11 +140,13 @@ let encodeArray = checklist =>
 let makeFiles = checklist => checklist |> Js.Array.find(c =>
     switch c.result {
     | Files(_files) => true
+    | AudioRecord(_) => true
     | _anyOtherResult => false
     }
   ) |> OptionUtils.mapWithDefault(c =>
     switch c.result {
     | Files(files) => files
+    | AudioRecord(file) => [file]
     | _anyOtherResult => []
     }
   , []) |> Array.map(f => {

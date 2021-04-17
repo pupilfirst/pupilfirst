@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { error } from "../../../shared/Notification.bs"
 function useAudioRecorder(authenticity_token) {
     console.log("started");
     const [recording, setRecording] = useState(false);
@@ -52,6 +53,7 @@ function useAudioRecorder(authenticity_token) {
                         const audioURL = window.URL.createObjectURL(blob);
                         setUrl(audioURL);
                         setRecording(false);
+                        stream.getTracks().forEach(track => track.stop());
                     };
                     setRecording(true);
 
@@ -61,6 +63,7 @@ function useAudioRecorder(authenticity_token) {
                 // Error callback
                 .catch(function (err) {
                     setRecording(false);
+                    error("Permission Denied", String(err))
                     console.log("The following getUserMedia error occured: " + err);
                 });
         } else {

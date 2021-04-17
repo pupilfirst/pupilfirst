@@ -6,6 +6,7 @@ type kind =
   | ShortText
   | LongText
   | MultiChoice(choices)
+  | AudioRecord
 
 type t = {
   title: string,
@@ -24,6 +25,7 @@ let actionStringForKind = kind =>
   | ShortText => "Write Short Text"
   | LongText => "Write Long Text"
   | MultiChoice(_choices) => "Choose from a list"
+  | AudioRecord => "Record Audio"
   }
 
 let kindAsString = kind =>
@@ -31,6 +33,7 @@ let kindAsString = kind =>
   | Files => "files"
   | Link => "link"
   | ShortText => "shortText"
+  | AudioRecord => "audioRecord"
   | LongText => "longText"
   | MultiChoice(_choices) => "multiChoice"
   }
@@ -74,6 +77,7 @@ let removeMultichoiceOption = (choiceIndex, t) =>
     updateKind(MultiChoice(updatedChoices), t)
   | Files
   | Link
+  | AudioRecord
   | ShortText
   | LongText => t
   }
@@ -86,6 +90,7 @@ let addMultichoiceOption = t =>
   | Files
   | Link
   | ShortText
+  | AudioRecord
   | LongText => t
   }
 
@@ -99,6 +104,7 @@ let updateMultichoiceOption = (choiceIndex, newOption, t) =>
   | Files
   | Link
   | ShortText
+  | AudioRecord
   | LongText => t
   }
 
@@ -110,6 +116,7 @@ let isFilesKind = t =>
   | MultiChoice(_choices) => false
   | Link
   | ShortText
+  | AudioRecord
   | LongText => false
   }
 
@@ -123,6 +130,7 @@ let isValidChecklistItem = t => {
   | Files
   | Link
   | ShortText
+  | AudioRecord
   | LongText => titleValid
   }
 }
@@ -143,6 +151,7 @@ let decode = json => {
     | "files" => Files
     | "link" => Link
     | "shortText" => ShortText
+    | "audioRecord" => AudioRecord
     | "longText" => LongText
     | "multiChoice" => MultiChoice(json |> field("metadata", decodeMetadata(#MultiChoice)))
     | otherKind =>
@@ -164,6 +173,7 @@ let encodeMetadata = kind =>
   | Files
   | Link
   | ShortText
+  | AudioRecord
   | LongText =>
     open Json.Encode
     object_(list{})

@@ -12,6 +12,7 @@ let kindIconClasses = result =>
       _selected,
     ) => "if i-check-circle-alt-regular md:text-base text-gray-800 if-fw"
   | Files(_attachments) => "if i-file-regular md:text-base text-gray-800 if-fw"
+  | AudioRecord(_attachments) => "if i-file-regular md:text-base text-gray-800 if-fw"
   }
 
 let computeId = (index, checklistItem) =>
@@ -173,7 +174,42 @@ let showFiles = (files, preview, id, attachingCB, updateResultCB) =>
         />
       : React.null}
   </div>
+module AudioRecorder = {
+  type useAudioRecorder = {
+    url: string,
+    recording: bool,
+    startRecording: unit => unit,
+    stopRecording: unit => unit,
+    id: string,
+  }
+  @bs.module("./navigator")
+  external useAudioRecorder: string => useAudioRecorder = "useAudioRecorder"
 
+  @react.component
+  let make = (~onUpload) => {
+    let audioRecorder = useAudioRecorder(AuthenticityToken.fromHead())
+    React.useEffect1(() => {
+      if audioRecorder.id != "" {
+        Js.log(("id", audioRecorder.id))
+        onUpload(audioRecorder.id)
+      }
+      None
+    }, [audioRecorder.id])
+    <>
+      {switch audioRecorder.url {
+      | "" => React.null
+      | src => <audio src controls=true />
+      }}
+      {audioRecorder.recording
+        ? <button onClick={_e => audioRecorder.stopRecording()}>
+            {React.string("Stop Recording")}
+          </button>
+        : <button onClick={_e => audioRecorder.startRecording()}>
+            {React.string("Start Recording")}
+          </button>}
+    </>
+  }
+}
 @react.component
 let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => {
   let id = computeId(index, checklistItem)
@@ -186,6 +222,16 @@ let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => 
       | ShortText(shortText) => showShortText(shortText, id, updateResultCB)
       | LongText(longText) => showLongText(longText, id, updateResultCB)
       | MultiChoice(choices, selected) => showMultiChoice(choices, selected, id, updateResultCB)
+      | AudioRecord(_) =>
+        <AudioRecorder
+          onUpload={id =>
+            updateResultCB(
+              CoursesCurriculum__ChecklistItem.AudioRecord({
+                id: id,
+                name: "recorderaudio",
+              }),
+            )}
+        />
       }}
     </div>
   </div>

@@ -9,6 +9,7 @@ type rec result =
   | ShortText(string)
   | LongText(string)
   | MultiChoice(choices, option<int>)
+  | AudioRecord(file)
 
 and choices = array<string>
 
@@ -35,6 +36,7 @@ let fromTargetChecklistItem = targetChecklist => targetChecklist |> Array.map(tc
     | ShortText => ShortText("")
     | LongText => LongText("")
     | MultiChoice(choices) => MultiChoice(choices, None)
+    | AudioRecord => AudioRecord({id: "", name: ""})
     }
     make(~title, ~optional, ~result)
   })
@@ -51,6 +53,7 @@ let fileId = file => file.id
 let fileIds = checklist => checklist |> Js.Array.map(c =>
     switch c.result {
     | Files(files) => files |> Js.Array.map(a => a.id)
+    | AudioRecord(file) => [file.id]
     | _anyOtherResult => []
     }
   ) |> ArrayUtils.flattenV2
@@ -62,6 +65,7 @@ let kindAsString = t =>
   | ShortText(_) => "shortText"
   | LongText(_) => "longText"
   | MultiChoice(_, _) => "multiChoice"
+  | AudioRecord(_) => "audioRecord"
   }
 
 let resultAsString = t =>
@@ -70,6 +74,7 @@ let resultAsString = t =>
   | Link(t)
   | ShortText(t)
   | LongText(t) => t
+  | AudioRecord(_) => "audioRecord"
   | MultiChoice(choices, index) =>
     index |> OptionUtils.flatMap(i => choices |> ArrayUtils.getOpt(i)) |> OptionUtils.default("")
   }
@@ -103,6 +108,8 @@ let validResponse = (response, allowBlank) => {
   | (LongText(t), true) => validLongText(t) || t == ""
   | (MultiChoice(choices, index), false) => validMultiChoice(choices, index)
   | (MultiChoice(choices, index), true) => validMultiChoice(choices, index) || index == None
+  | (AudioRecord(_), true) => true
+  | (AudioRecord(file), false) => file.id != ""
   }
 }
 

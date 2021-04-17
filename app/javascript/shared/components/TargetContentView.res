@@ -8,6 +8,7 @@ let renderBlockClasses = block =>
   | File(_) => "mt-6"
   | Image(_) => "mt-6"
   | Embed(_) => "mt-6 pb-7"
+  | Audio(_) => "mt-6"
   }
 
 let markdownContentBlock = markdown => <MarkdownBlock markdown profile=Markdown.Permissive />
@@ -35,7 +36,7 @@ let imageContentBlock = (url, caption, width) =>
 
 let embedContentBlock = embedCode =>
   <div className="learn-content-block__embed" dangerouslySetInnerHTML={"__html": embedCode} />
-
+let audioContentBlock = url => <audio src=url controls=true />
 @react.component
 let make = (~contentBlocks) =>
   <div className="text-base" id="learn-component">
@@ -46,6 +47,7 @@ let make = (~contentBlocks) =>
       | Image(url, caption, width) => imageContentBlock(url, caption, width)
       | Embed(_url, embedCode, _requestType, _lastResolvedAt) =>
         embedCode->Belt.Option.mapWithDefault(React.null, code => embedContentBlock(code))
+      | Audio(url, _title, _filename) => audioContentBlock(url)
       }
 
       <div className={renderBlockClasses(block)} key={block |> ContentBlock.id}>

@@ -30,6 +30,7 @@ let selectedButtonIcon = kind =>
   | ShortText => "i-short-text-regular"
   | Files => "i-file-regular"
   | Link => "i-link-regular"
+  | AudioRecord => "i-file-regular"
   | MultiChoice(_choices) => "i-check-circle-alt-regular"
   }
 let checklistDropdown = (checklistItem, allowFileKind, updateChecklistItemCB) => {
@@ -39,6 +40,7 @@ let checklistDropdown = (checklistItem, allowFileKind, updateChecklistItemCB) =>
   | ShortText => "orange"
   | Files => "pink"
   | Link => "indigo"
+  | AudioRecord => "red"
   | MultiChoice(_choices) => "teal"
   }
   let selected =
@@ -60,7 +62,13 @@ let checklistDropdown = (checklistItem, allowFileKind, updateChecklistItemCB) =>
       </span>
     </button>
 
-  let defaultKindTypes = [ChecklistItem.LongText, ShortText, Link, MultiChoice(["Yes", "No"])]
+  let defaultKindTypes = [
+    ChecklistItem.LongText,
+    ShortText,
+    Link,
+    MultiChoice(["Yes", "No"]),
+    AudioRecord,
+  ]
 
   let allowedKindTypes = allowFileKind
     ? Js.Array.concat([ChecklistItem.Files], defaultKindTypes)
@@ -232,6 +240,7 @@ let make = (
       | Files => filesNotice
       | ShortText
       | LongText
+      | AudioRecord
       | Link => React.null
       }}
     </div>

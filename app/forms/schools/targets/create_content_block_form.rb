@@ -1,7 +1,7 @@
 module Schools
   module Targets
     class CreateContentBlockForm < Reform::Form
-      property :block_type, validates: { presence: true, inclusion: { in: %w[image file] } }
+      property :block_type, validates: { presence: true, inclusion: { in: %w[image file audio] } }
       property :target_id, virtual: true, validates: { presence: true }
       property :file, virtual: true
       property :above_content_block_id, virtual: true
@@ -34,7 +34,7 @@ module Schools
         case block_type
         when 'image'
           { caption: filename, width: 'Auto' }
-        when 'file'
+        when 'file', 'audio'
           { title: filename }
         else
           raise "Unexpected block type #{block_type} encountered when creating file-based content block for target with ID #{target_id}"

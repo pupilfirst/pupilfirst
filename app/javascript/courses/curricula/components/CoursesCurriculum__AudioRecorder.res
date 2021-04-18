@@ -28,9 +28,7 @@ let make = (~attachingCB, ~attachFileCB) => {
             src=audioPauseImage
             onClick={_e => audioRecorder.stopRecording()}
           />
-          <span style={ReactDOMStyle.make(~paddingLeft="16px", ())}>
-            {React.string("Recording...")}
-          </span>
+          <span className="pl-4"> {React.string("Recording...")} </span>
         </div>
       : <div className="flex flex-row pointer-cursor pt-4 items-center">
           <img
@@ -40,7 +38,7 @@ let make = (~attachingCB, ~attachFileCB) => {
           />
           {switch audioRecorder.url {
           | "" => React.null
-          | src => <audio src controls=true style={ReactDOMStyle.make(~paddingLeft="16px", ())} />
+          | src => <audio src controls=true className="pl-4" />
           }}
         </div>}
   </>

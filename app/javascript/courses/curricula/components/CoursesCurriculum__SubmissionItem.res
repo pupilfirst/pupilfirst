@@ -130,6 +130,10 @@ let attachFile = (updateResultCB, attachingCB, files, id, filename) => {
   attachingCB(false)
   updateResultCB(ChecklistItem.Files(files |> Array.append([ChecklistItem.makeFile(id, filename)])))
 }
+let attachRecordingFile = (updateResultCB, attachingCB, id, filename) => {
+  attachingCB(false)
+  updateResultCB(ChecklistItem.AudioRecord({id: id, name: filename}))
+}
 
 let removeFile = (updateResultCB, files, id) =>
   updateResultCB(
@@ -174,55 +178,7 @@ let showFiles = (files, preview, id, attachingCB, updateResultCB) =>
         />
       : React.null}
   </div>
-module AudioRecorder = {
-  type useAudioRecorder = {
-    url: string,
-    recording: bool,
-    startRecording: unit => unit,
-    stopRecording: unit => unit,
-    id: string,
-  }
-  @bs.module("./navigator")
-  external useAudioRecorder: string => useAudioRecorder = "useAudioRecorder"
-  @bs.module external audioPauseImage: string = "../images/target-audio-pause-button.svg"
-  @bs.module external audioRecordImage: string = "../images/target-audio-record-button.svg"
 
-  @react.component
-  let make = (~onUpload) => {
-    let audioRecorder = useAudioRecorder(AuthenticityToken.fromHead())
-    React.useEffect1(() => {
-      if audioRecorder.id != "" {
-        Js.log(("id", audioRecorder.id))
-        onUpload(audioRecorder.id)
-      }
-      None
-    }, [audioRecorder.id])
-    <>
-      {audioRecorder.recording
-        ? <div className="flex flex-row pointer-cursor pt-4 items-center">
-            <img
-              className="h-14 w-14 pointer-cursor"
-              src=audioPauseImage
-              onClick={_e => audioRecorder.stopRecording()}
-            />
-            <span style={ReactDOMStyle.make(~paddingLeft="16px", ())}>
-              {React.string("Recording...")}
-            </span>
-          </div>
-        : <div className="flex flex-row pointer-cursor pt-4 items-center">
-            <img
-              className="h-14 w-14 pointer-cursor"
-              src=audioRecordImage
-              onClick={_e => audioRecorder.startRecording()}
-            />
-            {switch audioRecorder.url {
-            | "" => React.null
-            | src => <audio src controls=true style={ReactDOMStyle.make(~paddingLeft="16px", ())} />
-            }}
-          </div>}
-    </>
-  }
-}
 @react.component
 let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => {
   let id = computeId(index, checklistItem)
@@ -236,14 +192,8 @@ let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => 
       | LongText(longText) => showLongText(longText, id, updateResultCB)
       | MultiChoice(choices, selected) => showMultiChoice(choices, selected, id, updateResultCB)
       | AudioRecord(_) =>
-        <AudioRecorder
-          onUpload={id =>
-            updateResultCB(
-              CoursesCurriculum__ChecklistItem.AudioRecord({
-                id: id,
-                name: "recorderaudio",
-              }),
-            )}
+        <CoursesCurriculum__AudioRecorder
+          attachingCB attachFileCB={attachRecordingFile(updateResultCB, attachingCB)}
         />
       }}
     </div>

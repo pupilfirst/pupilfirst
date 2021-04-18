@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { error } from "../../../shared/Notification.bs"
-function useAudioRecorder(authenticity_token) {
-    console.log("started");
+function useAudioRecorder(authenticity_token,attachingCB) {
     const [recording, setRecording] = useState(false);
     const [url, setUrl] = useState("");
     const mediaStreamRef = useRef();
@@ -9,6 +8,7 @@ function useAudioRecorder(authenticity_token) {
     const [id, setId] = useState("");
     useEffect(() => {
         if (blob) {
+            attachingCB(true)
             const formData = new FormData();
             formData.append("authenticity_token", authenticity_token);
             console.log({ blob });
@@ -21,7 +21,9 @@ function useAudioRecorder(authenticity_token) {
                 .then((res) => {
                     setId(res.id);
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => {
+                    error("Something went wrong", String(err))
+                });
         }
     }, [blob]);
     function startRecording() {
@@ -47,7 +49,6 @@ function useAudioRecorder(authenticity_token) {
                         chunks.push(e.data);
                     };
                     mediaRecorder.onstop = () => {
-                        console.log(mediaStreamRef.current);
                         const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
                         setBlob(blob);
                         const audioURL = window.URL.createObjectURL(blob);

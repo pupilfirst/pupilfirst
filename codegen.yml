@@ -1,4 +1,4 @@
-schema: 'http://localhost:3000/graphql?introspection=true'
+schema: 'http://school.localhost/graphql?introspection=true'
 generates:
   graphql_schema.json:
     plugins:

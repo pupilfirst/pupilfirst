@@ -171,20 +171,19 @@ let imageInputId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-image-input-")
 let videoInputId = aboveContentBlock =>
   aboveContentBlock |> elementId("markdown-block-vimeo-input-")
-let audioInputId = aboveContentBlock => elementId("markdown-block-audio-input-", aboveContentBlock)
 let videoFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-vimeo-form-")
 let fileFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-file-form-")
-let audioFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-audio-form-")
 let imageFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-image-form-")
+let audioFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-audio-form-")
+let audioInputId = aboveContentBlock => elementId("markdown-block-audio-input-", aboveContentBlock)
 
 let onBlockTypeSelect = (target, aboveContentBlock, send, addContentBlockCB, blockType, _event) =>
   switch blockType {
   | #Markdown => createMarkdownContentBlock(target, aboveContentBlock, send, addContentBlockCB)
   | #File
-  | #Image => ()
   | #Audio
-  | #Embed =>
-    send(ShowEmbedForm)
+  | #Image => ()
+  | #Embed => send(ShowEmbedForm)
   | #VideoEmbed => send(ShowUploadVideoForm)
   }
 
@@ -200,7 +199,7 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
   | #Image => ("far fa-image", t("button_labels.image"), Some(imageId))
   | #Embed => ("fas fa-code", t("button_labels.embed"), None)
   | #VideoEmbed => ("fab fa-vimeo-v", t("button_labels.video"), Some(videoId))
-  | #Audio => ("far file-audio", "Audio", Some(audioId))
+  | #Audio => ("far fa-file-audio", "Audio", Some(audioId))
   }
 
   <label

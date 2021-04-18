@@ -199,18 +199,9 @@ module AudioRecorder = {
     }, [audioRecorder.id])
     <>
       {audioRecorder.recording
-        ? <div
-            style={ReactDOMStyle.make(
-              ~cursor="pointer",
-              ~display="flex",
-              ~flexDirection="row",
-              ~paddingTop="16px",
-              ~alignItems="center",
-              (),
-            )}>
+        ? <div className="flex flex-row pointer-cursor pt-4 items-center">
             <img
-              height="60px"
-              width="60px"
+              className="h-14 w-14 pointer-cursor"
               src=audioPauseImage
               onClick={_e => audioRecorder.stopRecording()}
             />
@@ -218,18 +209,9 @@ module AudioRecorder = {
               {React.string("Recording...")}
             </span>
           </div>
-        : <div
-            style={ReactDOMStyle.make(
-              ~cursor="pointer",
-              ~display="flex",
-              ~flexDirection="row",
-              ~paddingTop="16px",
-              (),
-            )}>
+        : <div className="flex flex-row pointer-cursor pt-4 items-center">
             <img
-              style={ReactDOMStyle.make(~cursor="pointer", ())}
-              height="60px"
-              width="60px"
+              className="h-14 w-14 pointer-cursor"
               src=audioRecordImage
               onClick={_e => audioRecorder.startRecording()}
             />

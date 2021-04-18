@@ -11,7 +11,6 @@ function useAudioRecorder(authenticity_token,attachingCB) {
             attachingCB(true)
             const formData = new FormData();
             formData.append("authenticity_token", authenticity_token);
-            console.log({ blob });
             formData.append("file", blob);
             fetch("/timeline_event_files/", {
                 method: "POST",
@@ -65,11 +64,9 @@ function useAudioRecorder(authenticity_token,attachingCB) {
                 .catch(function (err) {
                     setRecording(false);
                     error("Permission Denied", String(err))
-                    console.log("The following getUserMedia error occured: " + err);
                 });
         } else {
-            console.log("getUserMedia not supported on your browser!");
-            alert("Browser does not support recording");
+            error("Browser does not support recording!")
         }
     }
     return {

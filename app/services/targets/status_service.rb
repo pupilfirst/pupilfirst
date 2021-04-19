@@ -44,7 +44,7 @@ module Targets
         elsif @founder.startup.access_ends_at&.past?
           STATUS_ACCESS_LOCKED
         elsif target_level_number > founder_level_number && target_reviewed?
-          STATUS_LEVEL_LOCKED
+          @target.course.unlimited? ? nil : STATUS_LEVEL_LOCKED
         else
           prerequisites_incomplete? ? STATUS_PREREQUISITE_LOCKED : nil
         end

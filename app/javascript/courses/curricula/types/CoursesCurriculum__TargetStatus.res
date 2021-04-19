@@ -137,7 +137,11 @@ let compute = (preview, team, course, levels, targetGroups, targets, submissions
       | SubmissionRejected => Rejected
       | SubmissionMissing =>
         if ct.levelNumber > studentLevelNumber && ct.targetReviewed {
-          Locked(LevelLocked)
+          let progressionBehavior = course |> Course.progressionBehavior
+          switch progressionBehavior {
+          | #Unlimited => Pending
+          | _ => Locked(LevelLocked)
+          }
         } else if !(ct.prerequisiteTargetIds |> allTargetsComplete(targetCache)) {
           Locked(PrerequisitesIncomplete)
         } else {

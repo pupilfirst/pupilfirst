@@ -51,6 +51,19 @@ describe Targets::StatusService do
           end
         end
 
+        context 'when the target is reviewed by a coach but course has unlimited progression behavior' do
+          let(:course) { create :course, :unlimited }
+          let(:evaluation_criterion) { create :evaluation_criterion, course: course }
+
+          before do
+            founder_target_1.evaluation_criteria << evaluation_criterion
+          end
+
+          it 'returns :pending' do
+            expect(subject.status).to eq(Targets::StatusService::STATUS_PENDING)
+          end
+        end
+
         it 'returns :pending for auto-verified target' do
           expect(subject.status).to eq(Targets::StatusService::STATUS_PENDING)
         end

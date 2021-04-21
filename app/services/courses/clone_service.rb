@@ -79,7 +79,7 @@ module Courses
             old_target.attributes
               .slice(
                 'role', 'title', 'description', 'completion_instructions', 'target_action_type',
-                'sort_index', 'link_to_complete', 'review_checklist', 'visibility', 'resubmittable'
+                'sort_index', 'link_to_complete','checklist','review_checklist', 'visibility', 'resubmittable'
               ).merge(target_group: new_target_group)
           )
           create_target_evaluation_criteria(old_target, new_target, evaluation_criteria_translation) if old_target.evaluation_criteria.exists?

@@ -22,13 +22,13 @@ module UpdateTeamTagsMutation = %graphql(
   `
 )
 
-let updateTags = (team, state, send, updateFormCB) => {
+let updateTags = (team, state, send, updateCB) => {
   send(UpdateSaving(true))
   UpdateTeamTagsMutation.make(~teamId=team |> TeamInfo.id, ~tags=state.tagsToApply, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     if (response["updateTeamTags"]["success"]) {
-      updateFormCB(state.tagsToApply, team)
+      updateCB()
     }
     send(UpdateSaving(false))
     Js.Promise.resolve()
@@ -59,7 +59,7 @@ let reducer = (state, action) =>
   }
 
 @react.component
-let make = (~team, ~teamTags, ~updateFormCB) => {
+let make = (~team, ~teamTags, ~updateCB) => {
   let (state, send) = React.useReducer(reducer, initialState(team))
   let isSingleStudent = team |> TeamInfo.isSingleStudent
 
@@ -80,7 +80,7 @@ let make = (~team, ~teamTags, ~updateFormCB) => {
       <div className="my-5 w-auto">
         <button
           onClick={_e =>
-            updateTags(team, state, send, updateFormCB)}
+            updateTags(team, state, send, updateCB)}
           className="btn btn-primary">
           {"Update tags" |> str}
         </button>

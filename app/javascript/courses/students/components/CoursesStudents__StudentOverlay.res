@@ -417,7 +417,7 @@ let inactiveWarning = teamInfo => {
 }
 
 @react.component
-let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~tags, ~onAddCoachNotesCB) => {
+let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~tags, ~onAddCoachNotesCB, ~onUpdateTeamTags) => {
   let (state, setState) = React.useState(() => initialState)
 
   React.useEffect0(() => {
@@ -497,7 +497,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~tags, ~onAdd
             <CoursesStudents__Tags
               team={studentDetails |> StudentDetails.team}
               teamTags={tags}
-              updateFormCB={(tags, _team) => Js.Console.log(tags)}
+              updateCB={onUpdateTeamTags}
             />
             <ul className="flex font-semibold border-b text-sm mt-4">
               <li

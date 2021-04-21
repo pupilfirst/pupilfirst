@@ -3,12 +3,14 @@ open CoursesStudents__Types
 type state = {
   tagsToApply: array<string>,
   saving: bool,
+  noChanges: bool,
 }
 
 type action =
   | AddTag(string)
   | RemoveTag(string)
   | UpdateSaving(bool)
+  | NoChanges
 
 let str = React.string
 
@@ -29,6 +31,7 @@ let updateTags = (team, state, send, updateCB) => {
   |> Js.Promise.then_(response => {
     if (response["updateTeamTags"]["success"]) {
       updateCB()
+      send(NoChanges)
     }
     send(UpdateSaving(false))
     Js.Promise.resolve()
@@ -43,6 +46,7 @@ let updateTags = (team, state, send, updateCB) => {
 let initialState = (team) => {
   tagsToApply: team |> TeamInfo.tags,
   saving: false,
+  noChanges: true,
 }
 
 let reducer = (state, action) =>
@@ -50,12 +54,15 @@ let reducer = (state, action) =>
   | AddTag(tag) => {
       ...state,
       tagsToApply: state.tagsToApply |> Array.append([tag]),
+      noChanges: false,
     }
   | RemoveTag(tag) => {
       ...state,
       tagsToApply: state.tagsToApply |> Js.Array.filter(t => t !== tag),
+      noChanges: false,
     }
   | UpdateSaving(bool) => {...state, saving: bool}
+  | NoChanges => {...state, noChanges: true}
   }
 
 @react.component
@@ -79,6 +86,7 @@ let make = (~team, ~teamTags, ~updateCB) => {
       />
       <div className="my-5 w-auto">
         <button
+          disabled={state.noChanges}
           onClick={_e =>
             updateTags(team, state, send, updateCB)}
           className="btn btn-primary">

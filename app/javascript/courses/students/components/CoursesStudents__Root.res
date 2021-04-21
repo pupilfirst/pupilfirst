@@ -451,6 +451,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~tags) => {
         levels
         userId
         teamCoaches
+        tags={tags |> Belt.Set.String.toArray}
         onAddCoachNotesCB={onAddCoachNote(courseId, state, send)}
       />
     | _ => React.null

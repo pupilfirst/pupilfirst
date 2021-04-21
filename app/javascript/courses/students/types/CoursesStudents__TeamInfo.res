@@ -37,6 +37,8 @@ let studentTitle = (student: student) => student.title
 
 let studentAvatarUrl = student => student.avatarUrl
 
+let isSingleStudent = t => t.students |> Array.length == 1
+
 let droppedOutAt = t => t.droppedOutAt
 
 let accessEndsAt = t => t.accessEndsAt

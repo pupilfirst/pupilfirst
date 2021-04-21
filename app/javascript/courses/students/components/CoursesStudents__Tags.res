@@ -12,33 +12,32 @@ type action =
 
 let str = React.string
 
-let handleErrorCB = (send, ()) => send(UpdateSaving(false))
+module UpdateTeamTagsMutation = %graphql(
+  `
+   mutation UpdateTeamTagsMutation($teamId: ID!, $tags: [String!]) {
+    updateTeamTags(teamId: $teamId, tags: $tags) {
+      success
+    }
+  }
+  `
+)
 
-let handleResponseCB = (updateFormCB, state, team, _json) => {
-  updateFormCB(state.tagsToApply, team)
-  Notification.success(
-    "Success",
-    "Student updated successfully",
-  )
-}
-
-let updateStudent = (student, team, state, send, responseCB) => {
+let updateTags = (team, state, send, updateFormCB) => {
   send(UpdateSaving(true))
-  let payload = Js.Dict.empty()
-
-  Js.Dict.set(payload, "authenticity_token", AuthenticityToken.fromHead() |> Js.Json.string)
-
-  Js.Dict.set(
-    payload,
-    "tags",
-    state.tagsToApply |> {
-      open Json.Encode
-      array(string)
-    },
-  )
-
-  let url = "/school/students/1"
-  Api.update(url, payload, responseCB, handleErrorCB(send))
+  UpdateTeamTagsMutation.make(~teamId=team |> TeamInfo.id, ~tags=state.tagsToApply, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    if (response["updateTeamTags"]["success"]) {
+      updateFormCB(state.tagsToApply, team)
+    }
+    send(UpdateSaving(false))
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(_error => {
+    send(UpdateSaving(false))
+    Js.Promise.resolve()
+  })
+  |> ignore
 }
 
 let initialState = (team) => {
@@ -60,7 +59,7 @@ let reducer = (state, action) =>
   }
 
 @react.component
-let make = (~student, ~team, ~teamTags, ~updateFormCB) => {
+let make = (~team, ~teamTags, ~updateFormCB) => {
   let (state, send) = React.useReducer(reducer, initialState(team))
   let isSingleStudent = team |> TeamInfo.isSingleStudent
 
@@ -81,9 +80,9 @@ let make = (~student, ~team, ~teamTags, ~updateFormCB) => {
       <div className="my-5 w-auto">
         <button
           onClick={_e =>
-            updateStudent(student, team, state, send, handleResponseCB(updateFormCB, state, team))}
+            updateTags(team, state, send, updateFormCB)}
           className="btn btn-primary">
-          {"Update student's tags" |> str}
+          {"Update tags" |> str}
         </button>
       </div>
     </DisablingCover>

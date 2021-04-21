@@ -495,7 +495,6 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~tags, ~onAdd
           <div
             className="sticky top-0 bg-gray-100 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
             <CoursesStudents__Tags
-              student={studentDetails}
               team={studentDetails |> StudentDetails.team}
               teamTags={tags}
               updateFormCB={(tags, _team) => Js.Console.log(tags)}

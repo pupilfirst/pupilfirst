@@ -5,38 +5,41 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          100: "#F0EAFB",
-          200: "#D3BFF3",
-          300: "#B08EE6",
-          400: "#976AE2",
-          500: "#6025C0",
-          600: "#4D1E9A",
-          700: "#380D80",
-          800: "#35156B",
-          900: "#1F0D40"
+          100: "var(--color-primary-100)",
+          200: "var(--color-primary-200)",
+          300: "var(--color-primary-300)",
+          400: "var(--color-primary-400)",
+          500: "var(--color-primary-500)",
+          600: "var(--color-primary-600)",
+          700: "var(--color-primary-700)",
+          800: "var(--color-primary-800)",
+          900: "var(--color-primary-900)"
         },
         secondary: {
-          100: "#FEE6EF",
-          200: "#FCB5D0",
-          300: "#FF80B0",
-          400: "#F95392",
-          500: "#F61067",
-          600: "#AC0645",
-          700: "#A61149",
-          800: "#7B0531",
-          900: "#4A031E"
+          100: "var(--color-secondary-100)",
+          200: "var(--color-secondary-200)",
+          300: "var(--color-secondary-300)",
+          400: "var(--color-secondary-400)",
+          500: "var(--color-secondary-500)",
+          600: "var(--color-secondary-600)",
+          700: "var(--color-secondary-700)",
+          800: "var(--color-secondary-800)",
+          900: "var(--color-secondary-900)"
         },
         gray: {
-          100: "#FBFAFC",
-          200: "#F7F5FA",
-          300: "#F1EDF7",
-          400: "#DFDAE8",
-          500: "#BFB8CC",
-          600: "#9187A1",
-          700: "#7D728F",
-          800: "#6A5F7A",
-          900: "#453C52"
-        }
+          100: "var(--color-gray-100)",
+          200: "var(--color-gray-200)",
+          300: "var(--color-gray-300)",
+          400: "var(--color-gray-400)",
+          500: "var(--color-gray-500)",
+          600: "var(--color-gray-600)",
+          700: "var(--color-gray-700)",
+          800: "var(--color-gray-800)",
+          900: "var(--color-gray-900)"
+        },
+      },
+      fontFamily: {
+        'sans': "var(--font-family-sans)",
       },
       spacing: {
         "7": "1.75rem",

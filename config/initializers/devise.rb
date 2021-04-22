@@ -244,7 +244,7 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  config.omniauth :google_oauth2, ENV['GOOGLE_OAUTH2_CLIENT_ID'], ENV['GOOGLE_OAUTH2_CLIENT_SECRET'], verify_iss: false
+  config.omniauth :google_oauth2, ENV['GOOGLE_OAUTH2_CLIENT_ID'], ENV['GOOGLE_OAUTH2_CLIENT_SECRET'], verify_iss: false, prompt: 'select_account'
   config.omniauth :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
   config.omniauth :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
   config.omniauth :developer, fields: %i[email] if Rails.env.development?

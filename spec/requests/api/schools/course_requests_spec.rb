@@ -96,9 +96,9 @@ module Api
           expect(response).to have_http_status(:created)
 
           tags_for = ->(email) { course.founders.joins(:user).where(users: { email: email}).first.startup.tag_list }
-          expect(tags_for.('test1@test.com')).to match(['tag 1'])
-          expect(tags_for.('test2@test.com')).to match(['tag 1', 'tag 2'])
-          expect(course.school.founder_tags.pluck(:name)).to match(['tag 1', 'tag 2'])
+          expect(tags_for.('test1@test.com')).to match_array(['tag 1'])
+          expect(tags_for.('test2@test.com')).to match_array(['tag 1', 'tag 2'])
+          expect(course.school.founder_tags.pluck(:name)).to match_array(['tag 1', 'tag 2'])
         end
 
         it 'register students as single team into a course & applies tags' do
@@ -117,9 +117,9 @@ module Api
           expect(course.startups.first.name).to eq('A team')
 
           tags_for = ->(email) { course.founders.joins(:user).where(users: { email: email}).first.startup.tag_list }
-          expect(tags_for.('test1@test.com')).to match(['tag 1'])
-          expect(tags_for.('test2@test.com')).to match(['tag 1'])
-          expect(course.school.founder_tags.pluck(:name)).to match(['tag 1', 'tag 2'])
+          expect(tags_for.('test1@test.com')).to match_array(['tag 1'])
+          expect(tags_for.('test2@test.com')).to match_array(['tag 1'])
+          expect(course.school.founder_tags.pluck(:name)).to match_array(['tag 1', 'tag 2'])
         end
 
         it 'always notify registered students' do

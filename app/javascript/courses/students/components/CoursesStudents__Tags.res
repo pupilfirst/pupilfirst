@@ -70,7 +70,7 @@ let make = (~team, ~teamTags, ~updateCB) => {
   let (state, send) = React.useReducer(reducer, initialState(team))
   let isSingleStudent = team |> TeamInfo.isSingleStudent
 
-  <div className="mt-3 text-sm">
+  <div className="mt-3 text-sm" ariaLabel="student-tags">
     <div className="mb-2 text-xs font-semibold">
       {(isSingleStudent ? "Tags applied:" : "Tags applied to team:") |> str}
     </div>

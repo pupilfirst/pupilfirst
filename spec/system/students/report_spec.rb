@@ -16,7 +16,7 @@ feature "Course students report", js: true do
   let(:coach_without_access) { create :faculty, school: school }
 
   # Create few teams
-  let!(:team) { create :startup, level: level_3 }
+  let!(:team) { create :startup, level: level_3, tag_list: ['tag 1', 'tag 2'] }
 
   # Shortcut to a student we'll refer to frequently.
   let(:student) { team.founders.first }
@@ -121,6 +121,11 @@ feature "Course students report", js: true do
       expect(page).to have_link(href: "/submissions/#{submission_target_l1_1.id}/review")
       expect(page).to have_link(href: "/submissions/#{submission_target_l3.id}/review")
     end
+
+    within("div[aria-label='student-tags']") do
+      expect(page).to have_content('tag 1')
+      expect(page).to have_content('tag 2')
+    end
   end
 
   scenario 'coach loads more submissions' do
@@ -206,6 +211,23 @@ feature "Course students report", js: true do
     expect(page).to have_text(course_coach.title, count: 3)
     expect(page).to have_text(Time.zone.today.strftime('%B %-d'), count: 4)
     expect(CoachNote.where(student: student).last.note).to eq(note_2)
+  end
+
+  scenario 'coach manages tags of a student' do
+    sign_in_user course_coach.user, referrer: student_report_path(student)
+
+    within("div[aria-label='student-tags']") do
+      find('input').fill_in(with: 'tag 3')
+      find('span', text: 'tag 3').click
+      find('span', text: 'tag 2').sibling('span').click
+      click_button('Update tags')
+      expect(page).to have_content('tag 1')
+      expect(page).not_to have_content('tag 2')
+      expect(page).to have_content('tag 3')
+    end
+
+    expect(team.reload.tag_list).to match_array(['tag 1', 'tag 3'])
+    expect(school.reload.founder_tag_list).to include('tag 3')
   end
 
   context 'when a coach sees existing notes on the report page' do

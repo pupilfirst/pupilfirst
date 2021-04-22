@@ -467,6 +467,8 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
+    recaptcha (5.7.0)
+      json
     reform (2.3.3)
       disposable (>= 0.4.2, < 0.5.0)
       representable (>= 2.4.0, < 3.1.0)
@@ -712,6 +714,7 @@ DEPENDENCIES
   rails-assets-tether (~> 1.4)!
   rails-assets-waypoints (~> 4.0)!
   react-rails (~> 2.2)
+  recaptcha (~> 5.7)
   reform (~> 2.2)
   reform-rails (~> 0.1)
   responders (~> 3.0)

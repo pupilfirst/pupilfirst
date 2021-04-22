@@ -12,33 +12,27 @@
 }
 
 .markdown-block__h1 {
-  font-size: 2rem;
-  @apply pt-6 leading-snug;
+  @apply text-4xl pt-6 leading-snug;
 }
 
 .markdown-block__h2 {
-  font-size: 1.5rem;
-  @apply pt-6 leading-snug;
+  @apply text-2xl pt-6 leading-snug;
 }
 
 .markdown-block__h3 {
-  font-size: 1.17rem;
-  @apply pt-6 leading-snug;
+  @apply text-xl pt-6 leading-snug;
 }
 
 .markdown-block__h4 {
-  font-size: 1.125rem;
-  @apply pt-6 leading-snug;
+  @apply text-lg pt-6 leading-snug;
 }
 
 .markdown-block__h5 {
-  font-size: 0.875rem;
-  @apply pt-6 leading-snug;
+  @apply text-sm pt-6 leading-snug;
 }
 
 .markdown-block__h6 {
-  font-size: 0.75rem;
-  @apply pt-6 leading-snug;
+  @apply text-xs pt-6 leading-snug;
 }
 
 .markdown-block__em {
@@ -247,32 +241,26 @@
 
 .markdown-block__question-and-answer h1 {
   @apply markdown-block__h1;
-  font-size: 1.5rem;
 }
 
 .markdown-block__question-and-answer h2 {
   @apply markdown-block__h2;
-  font-size: 1.25rem;
 }
 
 .markdown-block__question-and-answer h3 {
   @apply markdown-block__h3;
-  font-size: 1.125rem;
 }
 
 .markdown-block__question-and-answer h4 {
   @apply markdown-block__h4;
-  font-size: 1rem;
 }
 
 .markdown-block__question-and-answer h5 {
   @apply markdown-block__h5;
-  font-size: 0.875rem;
 }
 
 .markdown-block__question-and-answer h6 {
   @apply markdown-block__h6;
-  font-size: 0.75rem;
 }
 
 .markdown-block__question-and-answer em {

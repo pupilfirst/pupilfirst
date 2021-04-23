@@ -1,3 +1,5 @@
+@import "custom_styles";
+
 .theme-pupilfirst-light {
   --color-primary-100: #F0EAFB;
   --color-primary-200: #D3BFF3;
@@ -30,4 +32,9 @@
   --color-gray-900: #453C52;
 
   --font-family-sans: "Open Sans", sans-serif;
+}
+
+
+html {
+  @apply theme-pupilfirst-light;
 }

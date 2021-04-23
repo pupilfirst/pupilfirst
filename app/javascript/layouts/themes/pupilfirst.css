@@ -1,6 +1,6 @@
 @import "custom_styles";
 
-.theme-pupilfirst-light {
+.theme-pupilfirst {
   --color-primary-100: #F0EAFB;
   --color-primary-200: #D3BFF3;
   --color-primary-300: #B08EE6;
@@ -36,5 +36,5 @@
 
 
 html {
-  @apply theme-pupilfirst-light;
+  @apply theme-pupilfirst;
 }

@@ -4,7 +4,9 @@
 @import "themes/pupilfirst";
 
 /* Custom utilities */
+@layer utilities {
 
-.max-w-fc {
-  max-width: fit-content;
+  .max-w-fc {
+    max-width: fit-content;
+  }
 }

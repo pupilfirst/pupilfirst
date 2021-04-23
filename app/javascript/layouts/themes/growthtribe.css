@@ -49,3 +49,27 @@
 html {
   @apply theme-growthtribe;
 }
+
+.btn-primary {
+  @apply bg-none bg-preciseBlue text-white border border-preciseBlue shadow;
+}
+
+.btn-primary:hover {
+  @apply bg-none bg-transparent text-preciseBlue border border-preciseBlue;
+}
+
+.btn-primary:focus {
+  @apply bg-none bg-transparent text-preciseBlue border border-preciseBlue;
+}
+
+.btn-primary-ghost {
+  @apply bg-none text-preciseBlue border border-preciseBlue;
+}
+
+.btn-primary-ghost:hover {
+  @apply bg-none bg-preciseBlue text-white shadow;
+}
+
+.btn-primary-ghost:focus {
+  @apply bg-none bg-preciseBlue text-white shadow;
+}

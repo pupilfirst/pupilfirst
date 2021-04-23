@@ -40,6 +40,17 @@ module.exports = {
           800: "var(--color-gray-800)",
           900: "var(--color-gray-900)"
         },
+        siliconBlue: {
+          100: "var(--color-silicon-blue-100)",
+          300: "var(--color-silicon-blue-300)",
+          600: "var(--color-silicon-blue-600)",
+          900: "var(--color-silicon-blue-900)",
+        },
+        communityPink: "var(--color-community-pink)",
+        curiousBlue: "var(--color-curious-blue)",
+        attentionYellow: "var(--color-attention-yellow)",
+        hackerOrange: "var(--color-hacker-orange)",
+        preciseBlue: "var(--color-precise-blue)",
       },
       fontFamily: {
         'sans': "var(--font-family-sans)",

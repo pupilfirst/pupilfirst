@@ -1,11 +1,13 @@
+@import "custom_styles";
+
 .theme-growthtribe {
   --color-primary-100: #F0EAFB;
   --color-primary-200: #002c58;
   --color-primary-300: #002857;
   --color-primary-400: #002355;
-  --color-primary-500: #166cff;
-  --color-primary-600: #085ef1;
-  --color-primary-700: #085ef1;
+  --color-primary-500: #001f54;
+  --color-primary-600: #001a52;
+  --color-primary-700: #00144f;
   --color-primary-800: #0c0548;
   --color-primary-900: #0c0548;
 
@@ -27,7 +29,23 @@
   --color-gray-600: #9187A1;
   --color-gray-700: #7D728F;
   --color-gray-800: #6A5F7A;
-  --color-gray-900: #453C52;
+  --color-gray-900: #656970;
 
   --font-family-sans: "Barlow", sans-serif;
+
+  --color-silicon-blue-100: #9E9BB6;
+  --color-silicon-blue-300: #6D6991;
+  --color-silicon-blue-600: #3C376D;
+  --color-silicon-blue-900: #0C0548;
+
+  --color-community-pink: #FF919C;
+  --color-curious-blue: #50DBFB;
+  --color-attention-yellow: #FFF208;
+  --color-hacker-orange: #FF5427;
+  --color-precise-blue: #166CFF;
+}
+
+
+html {
+  @apply theme-growthtribe;
 }

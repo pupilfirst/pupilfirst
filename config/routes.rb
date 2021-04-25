@@ -192,6 +192,7 @@ Rails.application.routes.draw do
       get 'curriculum', action: 'curriculum'
       get 'report', action: 'report'
       get 'apply', action: 'apply'
+      post 'apply', action: 'process_application'
       get '/(:name)', action: 'show'
     end
   end

@@ -78,6 +78,10 @@ class Course < ApplicationRecord
     progression_behavior == PROGRESSION_BEHAVIOR_STRICT
   end
 
+  def unlimited?
+    progression_behavior == PROGRESSION_BEHAVIOR_UNLIMITED
+  end
+
   def archived?
     archived_at.present?
   end

@@ -416,6 +416,9 @@ let reloadTeams = (courseId, state, send) => {
   getTeams(send, courseId, None, state.filter)
 }
 
+let onReloadTeams = (courseId, state, send, ()) =>
+  reloadTeams(courseId, state, send)
+
 let onAddCoachNote = (courseId, state, send, ()) =>
   switch state.filter.coachNotes {
   | #WithCoachNotes
@@ -451,7 +454,9 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~tags) => {
         levels
         userId
         teamCoaches
+        tags={tags |> Belt.Set.String.toArray}
         onAddCoachNotesCB={onAddCoachNote(courseId, state, send)}
+        onUpdateTeamTags={onReloadTeams(courseId, state, send)}
       />
     | _ => React.null
     }}

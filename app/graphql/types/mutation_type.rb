@@ -76,5 +76,6 @@ module Types
     field :lock_topic, mutation: Mutations::LockTopic, null: false
     field :unlock_topic, mutation: Mutations::UnlockTopic, null: false
     field :insert_content_block, mutation: Mutations::InsertContentBlock, null: false
+    field :update_team_tags, mutation: Mutations::UpdateTeamTags, null: false
   end
 end

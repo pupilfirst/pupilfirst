@@ -417,7 +417,7 @@ let inactiveWarning = teamInfo => {
 }
 
 @react.component
-let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNotesCB) => {
+let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~tags, ~onAddCoachNotesCB, ~onUpdateTeamTags) => {
   let (state, setState) = React.useState(() => initialState)
 
   React.useEffect0(() => {
@@ -494,7 +494,12 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
           className="w-full relative md:w-3/5 bg-gray-100 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">
           <div
             className="sticky top-0 bg-gray-100 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
-            <ul className="flex font-semibold border-b text-sm">
+            <CoursesStudents__Tags
+              team={studentDetails |> StudentDetails.team}
+              teamTags={tags}
+              updateCB={onUpdateTeamTags}
+            />
+            <ul className="flex font-semibold border-b text-sm mt-4">
               <li
                 onClick={_event => setSelectedTab(Notes, setState)}
                 className={"px-3 py-3 md:py-2 cursor-pointer text-gray-800 rounded-t-lg " ++

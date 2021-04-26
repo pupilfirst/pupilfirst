@@ -121,7 +121,7 @@ let showTeam = (team, levels, teamCoaches) =>
                 |> Js.Array.map(tag =>
                   <div
                     className="bg-gray-300 rounded mr-1 mt-1 py-px px-1 text-tiny text-gray-900"
-                    key="tag">
+                    key={tag}>
                     {str(tag)}
                   </div>
                 )

@@ -74,4 +74,9 @@
   .btn-primary-ghost:focus {
     @apply bg-none bg-preciseBlue text-white shadow;
   }
+
+  .transparent-background:disabled,
+  .transparent-background:disabled:hover {
+    @apply bg-transparent
+  }
 }

@@ -1,6 +1,7 @@
 module Users
   class SessionsController < Devise::SessionsController
     include Devise::Controllers::Rememberable
+    include RecaptchaVerifiable
     before_action :skip_container, only: %i[new send_login_email]
     before_action :must_have_current_school
     layout 'student'
@@ -20,11 +21,20 @@ module Users
       @form = Users::Sessions::SignInWithEmailForm.new(Reform::OpenForm.new)
       @form.current_school = current_school
 
-      if @form.validate(params[:session].merge(referrer: stored_location_for(:user)))
+      recaptcha_success =
+        recaptcha_success?(@form, action: 'user_magic_link_generation')
+
+      unless recaptcha_success
+        redirect_to get_magic_link_path(visible_recaptcha: 1)
+        return
+      end
+
+      if @form.validate(params.merge(referrer: stored_location_for(:user)))
         @form.save
         render json: { error: nil }
       else
-        render json: { error: @form.errors.full_messages.join(', ') }
+        flash[:error] = @form.errors.full_messages.join(', ')
+        redirect_to get_magic_link_path
       end
     end
 
@@ -92,14 +102,49 @@ module Users
       @form = Users::Sessions::SignInWithPasswordForm.new(Reform::OpenForm.new)
       @form.current_school = current_school
 
-      if @form.validate(params[:session])
+      recaptcha_success =
+        recaptcha_success?(@form, action: 'user_password_login')
+
+      unless recaptcha_success
+        redirect_to password_login_path(visible_recaptcha: 1)
+        return
+      end
+
+      if @form.validate(params)
         sign_in @form.user
         @form.user.update!(account_deletion_notification_sent_at: nil)
         remember_me(@form.user) unless @form.shared_device?
-        render json: { error: nil, path: after_sign_in_path_for(current_user) }
+        redirect_to after_sign_in_path_for(current_user)
       else
-        render json: { error: @form.errors.full_messages.join(', '), path: nil }
+        flash[:error] = @form.errors.full_messages.join(', ')
+        redirect_to password_login_path
       end
+    end
+
+    # GET /users/password_login
+    def password_login
+      if current_user.present?
+        flash[:notice] = 'You are already signed in.'
+        redirect_to after_sign_in_path_for(current_user)
+      end
+      @show_checkbox_recaptcha = params[:visible_recaptcha].present?
+    end
+
+    # GET /users/get_magic_link
+    def get_magic_link
+      if current_user.present?
+        flash[:notice] = 'You are already signed in.'
+        redirect_to after_sign_in_path_for(current_user)
+      end
+      @show_checkbox_recaptcha = params[:visible_recaptcha].present?
+    end
+
+    # GET /users/password_reset
+    def password_reset
+      if current_user.present?
+        redirect_to edit_user_path
+      end
+      @show_checkbox_recaptcha = params[:visible_recaptcha].present?
     end
 
     private

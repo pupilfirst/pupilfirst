@@ -9,9 +9,9 @@ open StudentTopNav__Types
 let headerLink = (key, link) =>
   <div
     key
-    className="md:ml-2 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ml-2 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0 text-gray-100 hover:text-white">
     <a
-      className="no-underline bg-gray-100 md:bg-white hover:bg-gray-200 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2"
+      className="no-underline rounded-lg w-full p-4 md:px-3 md:py-2"
       href={link |> NavLink.url}
       target=?{NavLink.local(link) ? None : Some("_blank")}
       rel=?{NavLink.local(link) ? None : Some("noopener")}>
@@ -22,12 +22,12 @@ let headerLink = (key, link) =>
 let signOutLink = () =>
   <div
     key="Logout-button"
-    className="md:ml-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ml-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0 text-gray-100 hover:text-white">
     <div className="flex items-center justify-center">
       <a
         href="/users/sign_out"
         rel="nofollow"
-        className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold">
+        className="rounded px-2 py-1 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold">
         <FaIcon classes="fas fa-power-off" /> <span className="ml-2"> {t("sign_out") |> str} </span>
       </a>
     </div>
@@ -36,10 +36,10 @@ let signOutLink = () =>
 let signInLink = () =>
   <div
     key="SignIn-button"
-    className="md:ml-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ml-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0 text-gray-100 hover:text-white">
     <div className="flex items-center justify-center">
       <a
-        className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold"
+        className="rounded px-2 py-1 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold"
         href="/users/sign_in">
         <FaIcon classes="fas fa-power-off" /> <span className="ml-2"> {t("sign_in") |> str} </span>
       </a>
@@ -49,9 +49,9 @@ let signInLink = () =>
 let notificationButton = hasNotifications =>
   <Notifications__Root
     key="notifications-button"
-    wrapperClasses="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg hover:bg-gray-200"
+    wrapperClasses="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg"
     iconClasses="student-navbar__notifications-unread-bullet"
-    buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center "
+    buttonClasses="font-semibold w-full flex items-center justify-center text-gray-100 hover:text-white"
     icon="if i-bell-regular text-xl"
     hasNotifications
   />
@@ -102,7 +102,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
     None
   })
 
-  <div className="border-b">
+  <div className="border-b bg-siliconBlue-900">
     <div className="container mx-auto px-3 max-w-5xl">
       <nav className="flex justify-between items-center h-20">
         <div className="flex w-full items-center justify-between">
@@ -116,7 +116,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
               />
             | None =>
               <div
-                className="p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-100 hover:text-primary-600">
+                className="p-2 rounded-lg">
                 <span className="text-xl font-bold leading-tight"> {schoolName |> str} </span>
               </div>
             }}
@@ -126,7 +126,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
               {ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn)}
               <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
                 <div
-                  className={"student-navbar__menu-btn cursor-pointer hover:bg-gray-200 w-8 h-8 text-center relative focus:outline-none rounded-lg " ++ (
+                  className={"student-navbar__menu-btn cursor-pointer w-8 h-8 text-center relative focus:outline-none rounded-lg " ++ (
                     menuHidden ? "" : "open"
                   )}>
                   <span className="student-navbar__menu-icon">

@@ -4,8 +4,7 @@
 
 <div class="bg-gray-100 sm:py-10">
   <div class="container mx-auto max-w-lg px-4 py-6 sm:py-8 bg-white rounded-lg shadow">
-    <%= image_tag 'users/sessions/continue-with-email-icon.svg', class: 'mx-auto w-32 sm:w-42', alt: 'Sign-in with password' %>
-    <div class="max-w-sm mx-auto text-lg sm:text-2xl font-bold text-center mt-4">
+    <div class="max-w-sm mx-auto text-lg sm:text-2xl font-bold text-center">
       Continue with email
     </div>
     <%= form_with(url: user_session_path, method: :post, class: 'pt-4 pb-5 md:px-9 items-center max-w-sm mx-auto', local: true) do |f| %>
@@ -35,7 +34,7 @@
         <%= f.password_field :password, placeholder: 'Type your password', class: 'appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400', tabindex: 2 %>
       </div>
       <div
-        class="flex justify-between items-center leading-snug mt-4 flex-col flex-col-reverse sm:flex-row">
+        class="flex justify-between items-center leading-snug mt-4 flex-col sm:flex-row">
         <div class="flex items-strecth text-gray-700 hover:text-gray-900">
           <%= f.check_box :shared_device, required: false, tabindex: 3 %>
           <label
@@ -63,17 +62,28 @@
           )
         %>
       <% end %>
-      <div class="mt-6">
+      <div class="mt-4">
         <%= f.submit "Sign in with password", name: 'password_sign_in', data: { disable: true }, class: "btn btn-success btn-large text-center w-full", tabindex: 4 %>
       </div>
-      <div class="max-w-sm mx-auto text-sm sm:text-xl font-bold text-center mt-4">OR</div>
-      <p class="mt-4 text-center text-sm">We can email you a magic link so you can sign in without having to type your
-        password.</p>
       <div class="mt-6">
-        <%= f.submit "Email me a link to sign in", name: 'email_link', data: { disable: true }, class: "btn btn-primary btn-large text-center w-full", tabindex: 5 %>
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-400"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white">
+              OR
+            </span>
+          </div>
+        </div>
+      <p class="mt-4 font-semibold text-center">Password-free sign in</p>
+      <p class="mt-2 text-center text-sm text-gray-800">We can email you a magic link so you can sign in without having to type your
+        password.</p>
+      <div class="mt-4">
+        <%= f.submit "Email me a link to sign in", name: 'email_link', data: { disable: true }, class: "btn btn-primary-ghost btn-large text-center w-full", tabindex: 5 %>
       </div>
     <% end %>
-    <div class="max-w-sm mx-auto md:px-9 flex flex-col justify-items-center">
+    <div class="max-w-sm mx-auto flex flex-col justify-items-center mt-6">
       <a href="/users/sign_in"
          class="w-full p-3 text-primary-500 leading-snug rounded-lg underline cursor-pointer text-sm text-center
       font-semibold hover:bg-gray-200 focus:bg-gray-200 focus:outline-none"

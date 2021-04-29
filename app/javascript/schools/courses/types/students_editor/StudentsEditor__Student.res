@@ -14,7 +14,7 @@ let name = t => t.name
 
 let avatarUrl = t => t.avatarUrl
 
-let tags = t => t.userTags
+let userTags = t => t.userTags
 
 let id = t => t.id
 

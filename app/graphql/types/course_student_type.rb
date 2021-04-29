@@ -6,6 +6,7 @@ module Types
     field :title, String, null: false
     field :affiliation, String, null: true
     field :avatar_url, String, null: true
+    field :user_tags, [String], null: false
     field :excluded_from_leaderboard, Boolean, null: false
     field :issued_certificates, [Types::IssuedCertificateType], null: false
 
@@ -24,6 +25,24 @@ module Types
             url = Rails.application.routes.url_helpers.rails_representation_path(user.avatar_variant(:thumb), only_path: true)
             loader.call(user.id, url)
           end
+        end
+      end
+    end
+
+    def user_tags
+      BatchLoader::GraphQL.for(object.user_id).batch do |user_ids, loader|
+        tags = User
+          .joins(taggings: :tag)
+          .where(id: user_ids)
+          .distinct('tags.name')
+          .select(:id, 'array_agg(tags.name)')
+          .group(:id)
+          .reduce({}) do |acc, user|
+            acc[user.id] = user.array_agg
+            acc
+          end
+        user_ids.each do |id|
+          loader.call(id, tags.fetch(id, []))
         end
       end
     end

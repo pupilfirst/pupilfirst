@@ -3,12 +3,13 @@ type student = {
   name: string,
   title: string,
   avatarUrl: option<string>,
+  userTags: array<string>,
 }
 
 type t = {
   id: string,
   name: string,
-  tags: array<string>,
+  teamTags: array<string>,
   levelId: string,
   students: array<student>,
   coachUserIds: array<string>,
@@ -21,7 +22,7 @@ let levelId = t => t.levelId
 
 let name = t => t.name
 
-let tags = t => t.tags
+let tags = t => t.teamTags
 
 let title = t => t.title
 
@@ -37,6 +38,8 @@ let studentTitle = (student: student) => student.title
 
 let studentAvatarUrl = student => student.avatarUrl
 
+let studentTags = (student: student) => student.userTags
+
 let droppedOutAt = t => t.droppedOutAt
 
 let accessEndsAt = t => t.accessEndsAt
@@ -47,17 +50,18 @@ let studentWithId = (studentId, t) =>
     "Could not find student with ID " ++ (studentId ++ (" in team with ID " ++ t.id)),
   )
 
-let makeStudent = (~id, ~name, ~title, ~avatarUrl) => {
+let makeStudent = (~id, ~name, ~title, ~avatarUrl, ~userTags) => {
   id: id,
   name: name,
   title: title,
   avatarUrl: avatarUrl,
+  userTags: userTags,
 }
 
 let make = (
   ~id,
   ~name,
-  ~tags,
+  ~teamTags,
   ~levelId,
   ~students,
   ~coachUserIds,
@@ -66,7 +70,7 @@ let make = (
 ) => {
   id: id,
   name: name,
-  tags: tags,
+  teamTags: teamTags,
   levelId: levelId,
   students: students,
   coachUserIds: coachUserIds,
@@ -82,6 +86,7 @@ let makeFromJS = teamDetails => {
         ~name=student["name"],
         ~title=student["title"],
         ~avatarUrl=student["avatarUrl"],
+        ~userTags=student["userTags"],
       ),
     teamDetails["students"],
   )
@@ -89,7 +94,7 @@ let makeFromJS = teamDetails => {
   make(
     ~id=teamDetails["id"],
     ~name=teamDetails["name"],
-    ~tags=teamDetails["tags"],
+    ~teamTags=teamDetails["teamTags"],
     ~levelId=teamDetails["levelId"],
     ~students,
     ~coachUserIds=teamDetails["coachUserIds"],

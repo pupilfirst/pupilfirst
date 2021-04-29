@@ -1,0 +1,15 @@
+<% content_for(:head) do %>
+  <title><%= "Sign In | #{current_school.name}" %></title>
+<% end %>
+
+<div class="bg-gray-100 sm:py-10">
+  <div class="container mx-auto max-w-lg px-4 py-6 sm:py-8 bg-white rounded-lg shadow">
+    <%= image_tag 'users/sessions/email-sent-icon.svg', class: 'mx-auto w-32 sm:w-42', alt: 'Magic link sent successfully' %>
+    <div class="max-w-sm mx-auto text-lg sm:text-2xl font-bold text-center mt-4">
+      We've sent you a magic link!
+    </div>
+    <div class="max-w-sm mx-auto">
+      <p class="mt-4 text-center">It should reach you in less than a minute. Click the link in the email, and you'll be signed in.</p>
+    </div>
+  </div>
+</div>

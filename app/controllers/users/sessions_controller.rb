@@ -16,28 +16,6 @@ module Users
       end
     end
 
-    # POST /user/send_email - find or create user from email received
-    def send_login_email
-      @form = Users::Sessions::SignInWithEmailForm.new(Reform::OpenForm.new)
-      @form.current_school = current_school
-
-      recaptcha_success =
-        recaptcha_success?(@form, action: 'user_magic_link_generation')
-
-      unless recaptcha_success
-        redirect_to get_magic_link_path(visible_recaptcha: 1)
-        return
-      end
-
-      if @form.validate(params.merge(referrer: stored_location_for(:user)))
-        @form.save
-        render json: { error: nil }
-      else
-        flash[:error] = @form.errors.full_messages.join(', ')
-        redirect_to get_magic_link_path
-      end
-    end
-
     # POST /user/send_reset_password_email
     def send_reset_password_email
       @form = Users::Sessions::SendResetPasswordEmailForm.new(Reform::OpenForm.new)
@@ -99,30 +77,33 @@ module Users
 
     # POST /user/sign_in
     def create
-      @form = Users::Sessions::SignInWithPasswordForm.new(Reform::OpenForm.new)
-      @form.current_school = current_school
+      @form = if params[:password_sign_in]
+        Users::Sessions::SignInWithPasswordForm.new(Reform::OpenForm.new)
+      elsif params[:email_link]
+        Users::Sessions::SignInWithEmailForm.new(Reform::OpenForm.new)
+      end
+
+      @form&.current_school = current_school
 
       recaptcha_success =
-        recaptcha_success?(@form, action: 'user_password_login')
+        recaptcha_success?(@form, action: 'user_email_login')
 
       unless recaptcha_success
-        redirect_to password_login_path(visible_recaptcha: 1)
+        redirect_to email_login_path(visible_recaptcha: 1)
         return
       end
 
-      if @form.validate(params)
-        sign_in @form.user
-        @form.user.update!(account_deletion_notification_sent_at: nil)
-        remember_me(@form.user) unless @form.shared_device?
-        redirect_to after_sign_in_path_for(current_user)
+      if params[:password_sign_in]
+        process_password_login
+      elsif params[:email_link]
+        process_link_login
       else
-        flash[:error] = @form.errors.full_messages.join(', ')
-        redirect_to password_login_path
+        redirect_to email_login_path
       end
     end
 
     # GET /users/password_login
-    def password_login
+    def email_login
       if current_user.present?
         flash[:notice] = 'You are already signed in.'
         redirect_to after_sign_in_path_for(current_user)
@@ -130,13 +111,12 @@ module Users
       @show_checkbox_recaptcha = params[:visible_recaptcha].present?
     end
 
-    # GET /users/get_magic_link
-    def get_magic_link
+    # GET /users/email_sent
+    def email_sent
       if current_user.present?
         flash[:notice] = 'You are already signed in.'
         redirect_to after_sign_in_path_for(current_user)
       end
-      @show_checkbox_recaptcha = params[:visible_recaptcha].present?
     end
 
     # GET /users/password_reset
@@ -148,6 +128,28 @@ module Users
     end
 
     private
+
+    def process_password_login
+      if @form.validate(params)
+        sign_in @form.user
+        @form.user.update!(account_deletion_notification_sent_at: nil)
+        remember_me(@form.user) unless @form.shared_device?
+        redirect_to after_sign_in_path_for(current_user)
+      else
+        flash[:error] = @form.errors.full_messages.join(', ')
+        redirect_to email_login_path
+      end
+    end
+
+    def process_link_login
+      if @form.validate(params.merge(referrer: stored_location_for(:user)))
+        @form.save
+        render 'email_sent'
+      else
+        flash[:error] = @form.errors.full_messages.join(', ')
+        redirect_to email_login_path
+      end
+    end
 
     def skip_container
       @skip_container = true

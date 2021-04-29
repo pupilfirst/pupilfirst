@@ -134,7 +134,7 @@ let levelInfo = (levels, team) =>
 let userTags = student =>
   <div className="flex flex-wrap">
     {student
-    |> Student.tags
+    |> Student.userTags
     |> Js.Array.map(tag =>
       <div key=tag className="bg-blue-100 rounded mt-1 mr-1 py-px px-2 text-xs text-gray-900">
         {tag |> str}

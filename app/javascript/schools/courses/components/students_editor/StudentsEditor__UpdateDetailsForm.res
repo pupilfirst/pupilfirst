@@ -206,7 +206,7 @@ let teamCoachesEditor = (courseCoaches, state, send) => {
 let initialState = (student, team) => {
   name: student |> Student.name,
   teamName: team |> Team.name,
-  userTags: student |> Student.tags,
+  userTags: student |> Student.userTags,
   tagsToApply: team |> Team.tags,
   teamCoaches: team |> Team.coachIds,
   teamCoachSearchInput: "",

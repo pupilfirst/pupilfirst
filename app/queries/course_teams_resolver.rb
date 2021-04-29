@@ -44,7 +44,7 @@ class CourseTeamsResolver < ApplicationQuery
           }
         )
 
-    return teams.distinct.order("#{sort_by_string} #{sort_direction_string}") if tags.blank?
+    return teams if tags.blank?
 
     user_tags =
       tags.intersection(
@@ -77,18 +77,16 @@ class CourseTeamsResolver < ApplicationQuery
 
     teams_with_tags = teams.tagged_with(team_tags).pluck(:id)
 
-    scope =
-      if intersect_teams
-        teams.where(id: teams_with_user_tags.intersection(teams_with_tags))
-      else
-        teams.where(id: teams_with_user_tags + teams_with_tags)
-      end
-
-    scope.distinct.order("#{sort_by_string} #{sort_direction_string}")
+    if intersect_teams
+      teams.where(id: teams_with_user_tags.intersection(teams_with_tags))
+    else
+      teams.where(id: teams_with_user_tags + teams_with_tags)
+    end
   end
 
   def teams_by_level_and_tag
-    level_id.present? ? teams_by_tag.where(level_id: level_id) : teams_by_tag
+    scope = level_id.present? ? teams_by_tag.where(level_id: level_id) : teams_by_tag
+    scope.distinct.order("#{sort_by_string} #{sort_direction_string}")
   end
 
   def sort_direction_string

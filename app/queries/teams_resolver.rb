@@ -14,24 +14,51 @@ class TeamsResolver < ApplicationQuery
     teams = self.class.filter_by_coach(teams, coach_id)
     teams = filter_by_search(teams)
     teams = self.class.filter_by_coach_notes(teams, coach_notes)
-    teams = self.class.filter_by_tags(teams, tags)
+    teams = self.class.filter_by_tags(course, teams, tags)
 
     teams.distinct('startups.id')
       .select('"startups".*, LOWER(startups.name) AS startup_name').order('startup_name')
   end
 
-  def self.filter_by_tags(teams, tags)
-    if tags.any?
-      teams = teams.joins({ founders: :user })
-      user_tags = ActsAsTaggableOn::Tag.joins(:taggings).where(name: tags, taggings: {taggable_type: 'User'}).pluck(:name)
-      teams_with_user_tags = teams.where(users: {id: User.tagged_with(user_tags).select(:id)}).pluck(:id)
-      team_tags = ActsAsTaggableOn::Tag.joins(:taggings).where(name: tags, taggings: {taggable_type: 'Startup'}).pluck(:name)
-      teams_with_tags = teams.tagged_with(team_tags).pluck(:id)
+  def self.filter_by_tags(course, teams, tags)
+    return teams if tags.blank?
 
-      teams = teams.where(id: [teams_with_user_tags, teams_with_tags].reject(&:empty?).reduce(&:&))
+    user_tags =
+      tags.intersection(
+          course
+            .users
+            .joins(taggings: :tag)
+            .distinct('tags.name')
+            .pluck('tags.name')
+        )
+
+    team_tags =
+      tags.intersection(
+        course
+          .startups
+          .joins(taggings: :tag)
+          .distinct('tags.name')
+          .pluck('tags.name')
+      )
+
+    intersect_teams = user_tags.present? && team_tags.present?
+
+    teams_with_user_tags =
+      teams.joins({ founders: :user })
+        .where(
+          users: {
+            id: course.school.users.tagged_with(user_tags).select(:id)
+          }
+        )
+        .pluck(:id)
+
+    teams_with_tags = teams.tagged_with(team_tags).pluck(:id)
+
+    if intersect_teams
+      teams.where(id: teams_with_user_tags.intersection(teams_with_tags))
+    else
+      teams.where(id: teams_with_user_tags + teams_with_tags)
     end
-
-    teams
   end
 
   def self.filter_by_coach_notes(teams, coach_notes)

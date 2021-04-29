@@ -2,7 +2,7 @@ type t = {
   id: string,
   name: string,
   avatarUrl: option<string>,
-  tags: array<string>,
+  userTags: array<string>,
   email: string,
   excludedFromLeaderboard: bool,
   title: string,
@@ -14,7 +14,7 @@ let name = t => t.name
 
 let avatarUrl = t => t.avatarUrl
 
-let tags = t => t.tags
+let tags = t => t.userTags
 
 let id = t => t.id
 
@@ -62,7 +62,7 @@ let make = (
   ~id,
   ~name,
   ~avatarUrl,
-  ~tags,
+  ~userTags,
   ~email,
   ~excludedFromLeaderboard,
   ~title,
@@ -72,7 +72,7 @@ let make = (
   id: id,
   name: name,
   avatarUrl: avatarUrl,
-  tags: tags,
+  userTags: userTags,
   email: email,
   excludedFromLeaderboard: excludedFromLeaderboard,
   title: title,
@@ -85,7 +85,7 @@ let makeFromJS = studentDetails =>
     ~id=studentDetails["id"],
     ~name=studentDetails["name"],
     ~avatarUrl=studentDetails["avatarUrl"],
-    ~tags=studentDetails["tags"],
+    ~userTags=studentDetails["userTags"],
     ~email=studentDetails["email"],
     ~excludedFromLeaderboard=studentDetails["excludedFromLeaderboard"],
     ~title=studentDetails["title"],

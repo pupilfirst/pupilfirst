@@ -14,7 +14,7 @@ module Schools
           school_coaches: school_coaches,
           levels: levels,
           user_tags: user_tags,
-          student_tags: student_tags,
+          team_tags: team_tags,
           certificates: certificates,
           current_user_name: current_user.name,
         }
@@ -41,8 +41,8 @@ module Schools
         end
       end
 
-      def student_tags
-        @student_tags ||= current_school.founder_tag_list
+      def team_tags
+        @team_tags ||= current_school.founder_tag_list
       end
 
       def user_tags

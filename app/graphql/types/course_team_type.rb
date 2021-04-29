@@ -2,7 +2,7 @@ module Types
   class CourseTeamType < Types::BaseObject
     field :id, ID, null: false
     field :name, String, null: false
-    field :tags, [String], null: false
+    field :team_tags, [String], null: false
     field :level_id, ID, null: false
     field :students, [Types::CourseStudentType], null: false
     field :coach_ids, [ID], null: false
@@ -12,7 +12,7 @@ module Types
       object.faculty_startup_enrollments.pluck(:faculty_id)
     end
 
-    def tags
+    def team_tags
       object.taggings.map { |tagging| tagging.tag.name }
     end
 

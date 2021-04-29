@@ -152,14 +152,14 @@ module TeamsQuery = %graphql(
         nodes {
           id,
           name,
-          tags,
+          teamTags,
           levelId,
           students {
             id,
             name
             title
             avatarUrl
-            tags
+            userTags
           }
           coachUserIds
           accessEndsAt
@@ -425,7 +425,7 @@ let onAddCoachNote = (courseId, state, send, ()) =>
   }
 
 @react.component
-let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~tags, ~userTags) => {
+let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~teamTags, ~userTags) => {
   let (currentTeamCoach, _) = React.useState(() =>
     teamCoaches->Belt.Array.some(coach => coach |> Coach.id == (currentCoach |> Coach.id))
       ? Some(currentCoach)
@@ -433,7 +433,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~tags, ~user
   )
 
   let (state, send) = React.useReducerWithMapState(reducer, currentTeamCoach, computeInitialState)
-  let allTags = Belt.Set.String.union(tags, userTags)
+  let allTags = Belt.Set.String.union(teamTags, userTags)
 
   let courseId = course |> Course.id
 

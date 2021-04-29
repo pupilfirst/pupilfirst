@@ -6,7 +6,7 @@ module Types
     field :title, String, null: false
     field :affiliation, String, null: true
     field :avatar_url, String, null: true
-    field :tags, [String], null: false
+    field :user_tags, [String], null: false
     field :excluded_from_leaderboard, Boolean, null: false
     field :issued_certificates, [Types::IssuedCertificateType], null: false
 
@@ -29,7 +29,7 @@ module Types
       end
     end
 
-    def tags
+    def user_tags
       object.user.tags.pluck(:name).sort
     end
   end

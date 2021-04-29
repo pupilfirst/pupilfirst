@@ -56,9 +56,9 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
 let reducer = (_state, searchString) => searchString
 
 let showTags = (tags, send, removeTagCB) => {
-  {tags
+  tags
   |> ArrayUtils.copyAndSort(String.compare)
-  |> Array.map(tag =>
+  |> Js.Array.map(tag =>
     <div
       key=tag
       className="flex items-center bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
@@ -71,7 +71,7 @@ let showTags = (tags, send, removeTagCB) => {
       </span>
     </div>
   )
-  |> React.array}
+  |> React.array
 }
 
 @react.component

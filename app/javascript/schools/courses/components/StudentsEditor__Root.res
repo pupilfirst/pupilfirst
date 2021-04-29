@@ -198,11 +198,11 @@ let make = (
   ~schoolCoaches,
   ~levels,
   ~userTags,
-  ~studentTags,
+  ~teamTags,
   ~certificates,
   ~currentUserName,
 ) => {
-  let (state, send) = React.useReducer(reducer, initialState(userTags, studentTags))
+  let (state, send) = React.useReducer(reducer, initialState(userTags, teamTags))
   let allTags = Js.Array.concat(state.readonlyTags, state.editableTags) |> ArrayUtils.sort_uniq(String.compare)
 
   <div className="flex flex-1 flex-col">

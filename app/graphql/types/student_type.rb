@@ -4,6 +4,6 @@ module Types
     field :name, String, null: false
     field :title, String, null: false
     field :avatar_url, String, null: true
-    field :tags, [String], null: false
+    field :user_tags, [String], null: false
   end
 end

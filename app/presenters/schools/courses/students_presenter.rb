@@ -46,7 +46,7 @@ module Schools
       end
 
       def user_tags
-        @user_tags ||= current_school.user_tag_list
+        @user_tags ||= @course.users.joins(taggings: :tag).distinct('tags.name').pluck('tags.name')
       end
 
       def certificates

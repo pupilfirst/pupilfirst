@@ -13,9 +13,6 @@ after 'development:schools' do
 
     user.tag_list = %w[admin]
     user.save!
-
-    school.user_tag_list << %w[admin]
-    school.save!
   end
 
   # Add three student users in the first school.
@@ -39,7 +36,4 @@ after 'development:schools' do
       tag_list: %w[coach]
     )
   end
-
-  school.user_tag_list << %w[student coach]
-  school.save!
 end

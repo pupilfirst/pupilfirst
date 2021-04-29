@@ -14,15 +14,10 @@ module Types
     end
 
     def students
-      object.founders.map do |student|
-        student_attributes = { id: student.id, name: student.name, title: student.title, user_tags: student.user.tags.pluck(:name).sort }
-
-        if student.user.avatar.attached?
-          student_attributes[:avatar_url] =
-            Rails.application.routes.url_helpers.rails_representation_path(student.user.avatar_variant(:thumb), only_path: true)
+      BatchLoader::GraphQL.for(object.id).batch do |team_ids, loader|
+        Startup.includes(:founders).where(id: team_ids).each do |team|
+          loader.call(team.id, team.founders)
         end
-
-        student_attributes
       end
     end
 

@@ -29,21 +29,62 @@ class CourseTeamsResolver < ApplicationQuery
   end
 
   def teams_by_tag
-    teams = course.startups.active
-      .select('"startups".*, LOWER(startups.name) AS startup_name')
-      .joins(founders: :user)
-      .includes(:faculty_startup_enrollments, founders: { user: { avatar_attachment: :blob } })
+    teams =
+      course
+        .startups
+        .active
+        .select('"startups".*, LOWER(startups.name) AS startup_name')
+        .joins(founders: :user)
+        .includes(
+          :faculty_startup_enrollments,
+          founders: {
+            user: {
+              avatar_attachment: :blob
+            }
+          }
+        )
 
-    if tags.present?
-      user_tags = ActsAsTaggableOn::Tag.joins(:taggings).where(name: tags, taggings: {taggable_type: 'User'}).pluck(:name)
-      teams_with_user_tags = teams.where(users: {id: User.tagged_with(user_tags).select(:id)}).pluck(:id)
-      team_tags = ActsAsTaggableOn::Tag.joins(:taggings).where(name: tags, taggings: {taggable_type: 'Startup'}).pluck(:name)
-      teams_with_tags = teams.tagged_with(team_tags).pluck(:id)
+    return teams if tags.blank?
 
-      teams = teams.where(id: [teams_with_user_tags, teams_with_tags].reject(&:empty?).reduce(&:&))
-    end
+    user_tags =
+      tags.intersection(
+        course
+          .users
+          .joins(taggings: :tag)
+          .distinct('tags.name')
+          .pluck('tags.name')
+      )
 
-    teams.distinct.order("#{sort_by_string} #{sort_direction_string}")
+    team_tags =
+      tags.intersection(
+        course
+          .startups
+          .joins(taggings: :tag)
+          .distinct('tags.name')
+          .pluck('tags.name')
+      )
+
+    intersect_teams = user_tags.present? && team_tags.present?
+
+    teams_with_user_tags =
+      teams
+        .where(
+          users: {
+            id: resource_school.users.tagged_with(user_tags).select(:id)
+          }
+        )
+        .pluck(:id)
+
+    teams_with_tags = teams.tagged_with(team_tags).pluck(:id)
+
+    scope =
+      if intersect_teams
+        teams.where(id: teams_with_user_tags.intersection(teams_with_tags))
+      else
+        teams.where(id: teams_with_user_tags + teams_with_tags)
+      end
+
+    scope.distinct.order("#{sort_by_string} #{sort_direction_string}")
   end
 
   def teams_by_level_and_tag

@@ -21,11 +21,20 @@ module Users
       @form = Users::Sessions::SendResetPasswordEmailForm.new(Reform::OpenForm.new)
       @form.current_school = current_school
 
-      if @form.validate(params[:session])
+      recaptcha_success =
+        recaptcha_success?(@form, action: 'user_password_reset')
+
+      unless recaptcha_success
+        redirect_to email_login_path(visible_recaptcha: 1)
+        return
+      end
+
+      if @form.validate(params)
         @form.save
-        render json: { error: nil }
+        render 'email_sent'
       else
-        render json: { error: @form.errors.full_messages.join(', ') }
+        flash[:error] = @form.errors.full_messages.join(', ')
+        redirect_to password_reset_path
       end
     end
 

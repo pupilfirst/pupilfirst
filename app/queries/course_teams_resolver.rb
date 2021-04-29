@@ -44,7 +44,7 @@ class CourseTeamsResolver < ApplicationQuery
           }
         )
 
-    return teams if tags.blank?
+    return teams.distinct.order("#{sort_by_string} #{sort_direction_string}") if tags.blank?
 
     user_tags =
       tags.intersection(

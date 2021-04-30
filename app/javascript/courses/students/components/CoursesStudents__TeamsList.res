@@ -37,7 +37,7 @@ let studentTags = (student) =>
 
 let teamTags = (team) =>
   {team |> TeamInfo.tags |> ArrayUtils.isNotEmpty
-    ? <div className="hidden md:flex flex-wrap mt-1">
+    ? <div className="hidden md:flex flex-wrap">
         {team |> TeamInfo.tags
         |> Js.Array.map(tag =>
           <div

@@ -5,4 +5,6 @@ namespace :api do
       post :students, action: :create_students
     end
   end
+
+  resource :hubspot, controller: 'hubspot', only: %i[create]
 end

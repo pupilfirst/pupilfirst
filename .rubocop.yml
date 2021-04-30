@@ -1,6 +1,6 @@
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 2.7
   Exclude:
     - "db/**/*"
     - "tmp/**/*"
@@ -8,6 +8,7 @@ AllCops:
     - "node_modules/**/*"
     - "vendor/**/*"
     - "bin/**/*"
+    - "lib/hubspot/*"
 
 # Rails specific
 
@@ -21,6 +22,8 @@ Rails/Date:
   Enabled: false # This enforces Time.zone.today
 Rails/HasAndBelongsToMany:
   Enabled: false # This disallows HABTM.
+Rails/ApplicationController:
+  Enabled: false
 
 # Project styling
 

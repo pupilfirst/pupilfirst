@@ -82,6 +82,7 @@ let sendQuery = (~notify=true, q) => {
 
       switch Js.Dict.get(obj, "errors") {
       | Some(errors) => {
+          Js.Console.log(json)
           errors |> decodeErrors |> Js.Array.forEach(e => {
             Notification.error("Error", e)
           })

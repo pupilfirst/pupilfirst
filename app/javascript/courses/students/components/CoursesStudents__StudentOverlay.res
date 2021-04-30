@@ -37,7 +37,7 @@ module StudentDetailsQuery = %graphql(
         team {
           id
           name
-          tags
+          teamTags
           levelId
           droppedOutAt
           accessEndsAt
@@ -46,6 +46,7 @@ module StudentDetailsQuery = %graphql(
             name
             title
             avatarUrl
+            userTags
           }
           coachUserIds
         }

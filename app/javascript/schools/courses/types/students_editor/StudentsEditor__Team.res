@@ -4,7 +4,7 @@ type t = {
   coachIds: array<string>,
   levelId: string,
   accessEndsAt: option<Js.Date.t>,
-  tags: array<string>,
+  teamTags: array<string>,
   students: array<StudentsEditor__Student.t>,
 }
 
@@ -18,16 +18,16 @@ let accessEndsAt = t => t.accessEndsAt
 
 let levelId = t => t.levelId
 
-let tags = t => t.tags
+let tags = t => t.teamTags
 
 let students = t => t.students
 
 let isSingleStudent = t => t.students |> Array.length == 1
 
-let make = (~id, ~name, ~tags, ~students, ~coachIds, ~levelId, ~accessEndsAt) => {
+let make = (~id, ~name, ~teamTags, ~students, ~coachIds, ~levelId, ~accessEndsAt) => {
   id: id,
   name: name,
-  tags: tags,
+  teamTags: teamTags,
   students: students,
   coachIds: coachIds,
   levelId: levelId,
@@ -44,7 +44,7 @@ let makeFromJS = teamDetails => Js.Array.map(team => {
     make(
       ~id=team["id"],
       ~name=team["name"],
-      ~tags=team["tags"],
+      ~teamTags=team["teamTags"],
       ~levelId=team["levelId"],
       ~students,
       ~coachIds,
@@ -52,7 +52,7 @@ let makeFromJS = teamDetails => Js.Array.map(team => {
     )
   }, teamDetails)
 
-let update = (~name, ~tags, ~student, ~coachIds, ~accessEndsAt, ~team) => {
+let update = (~name, ~teamTags, ~student, ~coachIds, ~accessEndsAt, ~team) => {
   let students =
     team.students |> Array.map(s =>
       s |> StudentsEditor__Student.id == (student |> StudentsEditor__Student.id) ? student : s
@@ -60,7 +60,7 @@ let update = (~name, ~tags, ~student, ~coachIds, ~accessEndsAt, ~team) => {
   {
     ...team,
     name: name,
-    tags: tags,
+    teamTags: teamTags,
     coachIds: coachIds,
     accessEndsAt: accessEndsAt,
     students: students,

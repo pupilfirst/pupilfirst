@@ -33,7 +33,7 @@ let kindAsString = kind =>
   | Files => "files"
   | Link => "link"
   | ShortText => "shortText"
-  | AudioRecord => "audioRecord"
+  | AudioRecord => "audio"
   | LongText => "longText"
   | MultiChoice(_choices) => "multiChoice"
   }
@@ -151,7 +151,7 @@ let decode = json => {
     | "files" => Files
     | "link" => Link
     | "shortText" => ShortText
-    | "audioRecord" => AudioRecord
+    | "audio" => AudioRecord
     | "longText" => LongText
     | "multiChoice" => MultiChoice(json |> field("metadata", decodeMetadata(#MultiChoice)))
     | otherKind =>

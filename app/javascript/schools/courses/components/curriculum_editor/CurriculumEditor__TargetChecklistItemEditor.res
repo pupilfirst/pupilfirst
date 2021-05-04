@@ -33,7 +33,7 @@ let selectedButtonIcon = kind =>
   | AudioRecord => "i-file-regular"
   | MultiChoice(_choices) => "i-check-circle-alt-regular"
   }
-let checklistDropdown = (checklistItem, allowFileKind, updateChecklistItemCB) => {
+let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   let selectedKind = checklistItem |> ChecklistItem.kind
   let selectedButtonColor = switch selectedKind {
   | LongText => "blue"
@@ -62,20 +62,17 @@ let checklistDropdown = (checklistItem, allowFileKind, updateChecklistItemCB) =>
       </span>
     </button>
 
-  let defaultKindTypes = [
+  let kindTypes = [
     ChecklistItem.LongText,
     ShortText,
     Link,
     MultiChoice(["Yes", "No"]),
     AudioRecord,
+    Files,
   ]
 
-  let allowedKindTypes = allowFileKind
-    ? Js.Array.concat([ChecklistItem.Files], defaultKindTypes)
-    : defaultKindTypes
-
   let contents =
-    allowedKindTypes
+    kindTypes
     |> Js.Array.filter(kind => kind != selectedKind)
     |> Js.Array.mapi((kind, index) =>
       <button
@@ -191,7 +188,6 @@ let make = (
   ~moveChecklistItemUpCB=?,
   ~moveChecklistItemDownCB=?,
   ~copyChecklistItemCB,
-  ~allowFileKind,
 ) =>
   <div
     key={index |> string_of_int}
@@ -199,7 +195,7 @@ let make = (
     className="flex items-start py-2 relative">
     <div className="w-full bg-gray-100 border rounded-lg p-5 mr-1">
       <div className="flex justify-between items-center">
-        <div> {checklistDropdown(checklistItem, allowFileKind, updateChecklistItemCB)} </div>
+        <div> {checklistDropdown(checklistItem, updateChecklistItemCB)} </div>
         <div className="items-center">
           <input
             className="leading-tight"
@@ -246,7 +242,7 @@ let make = (
     </div>
     <div
       ariaLabel={"Controls for checklist item " ++ (index + 1 |> string_of_int)}
-      className="-mr-10 flex-shrink-0 border bg-gray-100 border rounded-lg flex flex-col text-xs sticky top-0">
+      className="-mr-10 flex-shrink-0 border bg-gray-100 rounded-lg flex flex-col text-xs sticky top-0">
       {controlIcon(
         ~icon="fa-arrow-up",
         ~title="Move Up",

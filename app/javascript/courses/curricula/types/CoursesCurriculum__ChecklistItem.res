@@ -41,8 +41,10 @@ let fromTargetChecklistItem = targetChecklist => targetChecklist |> Array.map(tc
     make(~title, ~optional, ~result)
   })
 
-let updateResultAtIndex = (index, result, checklist) =>
+let updateResultAtIndex = (index, result, checklist) => {
+  Js.log(index)
   checklist |> Js.Array.mapi((c, i) => i == index ? {...c, result: result} : c)
+}
 
 let makeFile = (id, name) => {id: id, name: name}
 
@@ -65,16 +67,16 @@ let kindAsString = t =>
   | ShortText(_) => "shortText"
   | LongText(_) => "longText"
   | MultiChoice(_, _) => "multiChoice"
-  | AudioRecord(_) => "audioRecord"
+  | AudioRecord(_) => "audio"
   }
 
 let resultAsString = t =>
   switch t.result {
-  | Files(_) => "files"
+  | Files(files) => Js.Array.map(file => file.id, files) |> Js.Array.joinWith("'")
   | Link(t)
   | ShortText(t)
   | LongText(t) => t
-  | AudioRecord(_) => "audioRecord"
+  | AudioRecord(file) => file.id
   | MultiChoice(choices, index) =>
     index |> OptionUtils.flatMap(i => choices |> ArrayUtils.getOpt(i)) |> OptionUtils.default("")
   }
@@ -119,7 +121,7 @@ let validChecklist = checklist =>
   |> Js.Array.filter(c => !c)
   |> ArrayUtils.isEmpty
 
-let validResonses = responses => responses |> Js.Array.filter(c => validResponse(c, false))
+let validResponses = responses => responses |> Js.Array.filter(c => validResponse(c, false))
 
 let encode = t => {
   open Json.Encode
@@ -132,7 +134,7 @@ let encode = t => {
 }
 
 let encodeArray = checklist =>
-  validResonses(checklist) |> {
+  validResponses(checklist) |> {
     open Json.Encode
     array(encode)
   }

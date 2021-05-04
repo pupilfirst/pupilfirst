@@ -81,7 +81,7 @@ Rails.application.config.content_security_policy do |policy|
   policy.font_src :self, *font_sources
   policy.child_src(*child_sources)
   policy.frame_src :data, *frame_sources
-  policy.media_src :self, *media_sources
+  policy.media_src :self, *media_sources, '* blob:'
   policy.object_src :self
   policy.worker_src :self
   policy.manifest_src :self

@@ -40,7 +40,7 @@ let makeResult = (result, kind, files) =>
   switch kind {
   | "shortText" => ShortText(result)
   | "longText" => LongText(result)
-  | "audioRecord" => AudioRecord(files[0])
+  | "audio" => AudioRecord(files[0])
   | "link" => Link(result)
   | "multiChoice" => MultiChoice(result)
   | "files" => Files(files)
@@ -108,7 +108,7 @@ let encodeKind = t =>
   | Link(_) => "link"
   | Files(_) => "files"
   | MultiChoice(_) => "multiChoice"
-  | AudioRecord(_) => "audioRecord"
+  | AudioRecord(_) => "audio"
   }
 
 let encodeResult = t =>
@@ -118,7 +118,7 @@ let encodeResult = t =>
   | Link(t) => t
   | MultiChoice(t) => t
   | Files(_) => "files"
-  | AudioRecord(_) => "audioRecord"
+  | AudioRecord(_) => "audio"
   }
 
 let encodeStatus = t =>

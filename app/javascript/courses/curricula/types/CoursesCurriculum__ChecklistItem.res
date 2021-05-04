@@ -65,7 +65,7 @@ let kindAsString = t =>
   | ShortText(_) => "shortText"
   | LongText(_) => "longText"
   | MultiChoice(_, _) => "multiChoice"
-  | AudioRecord(_) => "audioRecord"
+  | AudioRecord(_) => "audio"
   }
 
 let resultAsString = t =>
@@ -74,7 +74,7 @@ let resultAsString = t =>
   | Link(t)
   | ShortText(t)
   | LongText(t) => t
-  | AudioRecord(_) => "audioRecord"
+  | AudioRecord(_) => "audio"
   | MultiChoice(choices, index) =>
     index |> OptionUtils.flatMap(i => choices |> ArrayUtils.getOpt(i)) |> OptionUtils.default("")
   }

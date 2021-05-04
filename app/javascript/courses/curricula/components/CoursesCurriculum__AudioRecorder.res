@@ -1,4 +1,4 @@
-type useAudioRecorder = {
+type audioRecorder = {
   url: string,
   recording: bool,
   startRecording: unit => unit,
@@ -6,16 +6,15 @@ type useAudioRecorder = {
   id: string,
 }
 @bs.module("./navigator")
-external useAudioRecorder: (string, bool => unit) => useAudioRecorder = "useAudioRecorder"
+external audioRecorder: (string, bool => unit) => audioRecorder = "useAudioRecorder"
 @bs.module external audioPauseImage: string = "../images/target-audio-pause-button.svg"
 @bs.module external audioRecordImage: string = "../images/target-audio-record-button.svg"
 
 @react.component
 let make = (~attachingCB, ~attachFileCB) => {
-  let audioRecorder = useAudioRecorder(AuthenticityToken.fromHead(), attachingCB)
+  let audioRecorder = audioRecorder(AuthenticityToken.fromHead(), attachingCB)
   React.useEffect1(() => {
     if audioRecorder.id != "" {
-      Js.log(("id", audioRecorder.id))
       attachFileCB(audioRecorder.id, "recorderaudio")
     }
     None

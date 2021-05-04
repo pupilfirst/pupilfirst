@@ -484,7 +484,11 @@ module SelectableTargetGroup = {
 
   let label = _t => None
 
-  let value = t => LevelLabel.format(~name=(t.targetGroup |> TargetGroup.name), (t.level |> Level.number |> string_of_int))
+  let value = t =>
+    LevelLabel.format(
+      ~name=t.targetGroup |> TargetGroup.name,
+      t.level |> Level.number |> string_of_int,
+    )
 
   let searchString = t => t |> value
 
@@ -914,51 +918,40 @@ let make = (
                     {t("target_checklist_help_text") |> str}
                   </HelpIcon>
                   <div className="ml-6 mb-6">
-                    {
-                      let allowFileKind =
-                        state.checklist
-                        |> Js.Array.filter(item => item |> ChecklistItem.isFilesKind)
-                        |> ArrayUtils.isEmpty
+                    {state.checklist |> Js.Array.mapi((checklistItem, index) => {
+                      let moveChecklistItemUpCB =
+                        index > 0 ? Some(() => send(MoveChecklistItemUp(index))) : None
 
-                      state.checklist |> Js.Array.mapi((checklistItem, index) => {
-                        let moveChecklistItemUpCB =
-                          index > 0 ? Some(() => send(MoveChecklistItemUp(index))) : None
+                      let moveChecklistItemDownCB =
+                        index != Js.Array.length(state.checklist) - 1
+                          ? Some(() => send(MoveChecklistItemDown(index)))
+                          : None
 
-                        let moveChecklistItemDownCB =
-                          index != Js.Array.length(state.checklist) - 1
-                            ? Some(() => send(MoveChecklistItemDown(index)))
-                            : None
-
-                        <CurriculumEditor__TargetChecklistItemEditor
-                          checklist=state.checklist
-                          key={index |> string_of_int}
-                          checklistItem
-                          index
-                          updateChecklistItemCB={newChecklistItem =>
-                            send(UpdateChecklistItem(index, newChecklistItem))}
-                          removeChecklistItemCB={() => send(RemoveChecklistItem(index))}
-                          ?moveChecklistItemUpCB
-                          ?moveChecklistItemDownCB
-                          copyChecklistItemCB={() => send(CopyChecklistItem(index))}
-                          allowFileKind
-                        />
-                      }) |> React.array
-                    }
-                    {state.checklist |> ArrayUtils.isEmpty
+                      <CurriculumEditor__TargetChecklistItemEditor
+                        checklist=state.checklist
+                        key={index |> string_of_int}
+                        checklistItem
+                        index
+                        updateChecklistItemCB={newChecklistItem =>
+                          send(UpdateChecklistItem(index, newChecklistItem))}
+                        removeChecklistItemCB={() => send(RemoveChecklistItem(index))}
+                        ?moveChecklistItemUpCB
+                        ?moveChecklistItemDownCB
+                        copyChecklistItemCB={() => send(CopyChecklistItem(index))}
+                      />
+                    }) |> React.array} {state.checklist |> ArrayUtils.isEmpty
                       ? <div
                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
                           <i className="fas fa-info-circle mr-2" />
                           {t("empty_checklist_warning") |> str}
                         </div>
-                      : React.null}
-                    {state.checklist |> Js.Array.length >= 15
+                      : React.null} {state.checklist |> Js.Array.length >= 15
                       ? <div
                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
                           <i className="fas fa-info-circle mr-2" />
                           {t("target_checklist_limit_warning") |> str}
                         </div>
-                      : React.null}
-                    <button
+                      : React.null} <button
                       className="flex justify-center items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
                       disabled={state.checklist |> Js.Array.length >= 15}
                       onClick={_ => send(AddNewChecklistItem)}>

@@ -30,7 +30,7 @@ let selectedButtonIcon = kind =>
   | ShortText => "i-short-text-regular"
   | Files => "i-file-regular"
   | Link => "i-link-regular"
-  | AudioRecord => "i-file-regular"
+  | AudioRecord => "i-microphone-outline-regular"
   | MultiChoice(_choices) => "i-check-circle-alt-regular"
   }
 let checklistDropdown = (checklistItem, updateChecklistItemCB) => {

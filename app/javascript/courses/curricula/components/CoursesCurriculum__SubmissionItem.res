@@ -12,7 +12,7 @@ let kindIconClasses = result =>
       _selected,
     ) => "if i-check-circle-alt-regular md:text-base text-gray-800 if-fw"
   | Files(_attachments) => "if i-file-regular md:text-base text-gray-800 if-fw"
-  | AudioRecord(_attachments) => "if i-file-regular md:text-base text-gray-800 if-fw"
+  | AudioRecord(_attachments) => "if i-microphone-outline-regular md:text-base text-gray-800 if-fw"
   }
 
 let computeId = (index, checklistItem) =>

@@ -140,7 +140,7 @@ let removeFile = (updateResultCB, files, id) =>
     ChecklistItem.Files(files |> Js.Array.filter(a => a |> ChecklistItem.fileId != id)),
   )
 
-let showFiles = (files, preview, id, attachingCB, updateResultCB) =>
+let showFiles = (files, preview, id, attachingCB, updateResultCB, index) =>
   <div>
     <div className="flex flex-wrap" id>
       {files
@@ -174,7 +174,7 @@ let showFiles = (files, preview, id, attachingCB, updateResultCB) =>
     </div>
     {files |> Array.length < 3
       ? <CoursesCurriculum__FileForm
-          attachingCB attachFileCB={attachFile(updateResultCB, attachingCB, files)} preview
+          attachingCB attachFileCB={attachFile(updateResultCB, attachingCB, files)} preview index
         />
       : React.null}
   </div>
@@ -186,7 +186,7 @@ let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => 
     {placeholder(id, checklistItem)}
     <div className="md:pl-7 pt-2 pr-0 pb-4">
       {switch checklistItem |> ChecklistItem.result {
-      | Files(files) => showFiles(files, preview, id, attachingCB, updateResultCB)
+      | Files(files) => showFiles(files, preview, id, attachingCB, updateResultCB, index)
       | Link(link) => showLink(link, id, updateResultCB)
       | ShortText(shortText) => showShortText(shortText, id, updateResultCB)
       | LongText(longText) => showLongText(longText, id, updateResultCB)

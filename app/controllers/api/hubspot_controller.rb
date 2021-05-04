@@ -16,7 +16,7 @@ module Api
     private
 
     def verify_hubspot_signature!
-      raise ActionController::NotAuthorized unless
+      raise ActionController::BadRequest.new('Not authorized') unless
         valid_signature_version? && valid_signature?
     end
 

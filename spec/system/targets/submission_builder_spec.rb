@@ -179,7 +179,12 @@ feature 'Submission Builder', js: true do
 
     last_submission = TimelineEvent.last
     last_submission_file_ids = last_submission.timeline_event_files.map(&:id).map(&:to_s)
-    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_FILES, "title" => question, "result" => last_submission_file_ids, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
+    checklist_item = last_submission.checklist.first
+
+    expect(checklist_item["kind"]).to eq(Target::CHECKLIST_KIND_FILES)
+    expect(checklist_item["title"]).to eq(question)
+    expect(checklist_item["result"]).to match_array(last_submission_file_ids)
+    expect(checklist_item["status"]).to eq(TimelineEvent::CHECKLIST_STATUS_NO_ANSWER)
 
     expect(page).to have_text('Your Submissions')
     expect(page).to have_text(question)

@@ -20,6 +20,8 @@ class CreateSubmissionMutator < ApplicationQuery
   end
 
   def maximum_three_attachments_per_item
+    return if file_ids.blank?
+
     return if file_items.select { |item| item['result'].split.flatten.length > 3 }.empty?
 
     errors[:base] << 'No more than three files can be attached to a submission item'

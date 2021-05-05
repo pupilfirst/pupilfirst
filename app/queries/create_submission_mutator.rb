@@ -20,7 +20,7 @@ class CreateSubmissionMutator < ApplicationQuery
   end
 
   def maximum_three_attachments_per_item
-    return if file_items.select { |item| item['result'].split(",").length > 3 }.empty?
+    return if file_items.select { |item| item['result'].split.flatten.length > 3 }.empty?
 
     errors[:base] << 'No more than three files can be attached to a submission item'
   end
@@ -28,7 +28,7 @@ class CreateSubmissionMutator < ApplicationQuery
   def valid_file_ids_in_checklist
     return if file_ids.blank?
 
-    return if file_items.map { |item| item['result'].split(',') }.flatten.sort == file_ids.sort
+    return if file_items.map { |item| item['result'] }.flatten.sort == file_ids.sort
 
     errors[:base] << 'some files attached are invalid'
   end
@@ -47,7 +47,7 @@ class CreateSubmissionMutator < ApplicationQuery
     TimelineEvent.transaction do
       params = {
         target: target,
-        checklist: sanitized_checklist
+        checklist: checklist
       }
 
       timeline_event = TimelineEvents::CreateService.new(params, student).execute
@@ -69,7 +69,7 @@ class CreateSubmissionMutator < ApplicationQuery
   def valid_response
     return if checklist.respond_to?(:all?) && checklist.all? do |item|
       item['title'].is_a?(String) && item['kind'].in?(Target.valid_checklist_kind_types) &&
-        item['status'] == TimelineEvent::CHECKLIST_STATUS_NO_ANSWER && item['result'].is_a?(String) &&
+        item['status'] == TimelineEvent::CHECKLIST_STATUS_NO_ANSWER && item['result'].present? &&
         valid_result(item['kind'], item['result'])
     end
 
@@ -78,8 +78,10 @@ class CreateSubmissionMutator < ApplicationQuery
 
   def valid_result(kind, result)
     case kind
-    when Target::CHECKLIST_KIND_FILES, Target::CHECKLIST_KIND_AUDIO
-      (result.split(',') - file_ids).empty?
+    when Target::CHECKLIST_KIND_FILES
+      (result - file_ids).empty?
+    when Target::CHECKLIST_KIND_AUDIO
+      (result.split - file_ids).empty?
     when Target::CHECKLIST_KIND_LINK
       result.length >= 3 && result.length <= 2048
     when Target::CHECKLIST_KIND_LONG_TEXT
@@ -97,7 +99,7 @@ class CreateSubmissionMutator < ApplicationQuery
 
       item = checklist.select { |i| i["title"] == c['title'] }
 
-      next if item.present? && item.count == 1 && item.first['result'].is_a?(String)
+      next if item.present? && item.count == 1 && item.first['result'].present?
 
       errors[:base] << "Missing answer for question: #{c['title']}"
     end
@@ -105,9 +107,5 @@ class CreateSubmissionMutator < ApplicationQuery
 
   def timeline_event_files
     TimelineEventFile.where(id: file_ids)
-  end
-
-  def sanitized_checklist
-    checklist.as_json.map { |item| item['kind'] == 'files' ? item.merge('result' => item['result'].split(',')) : item }
   end
 end

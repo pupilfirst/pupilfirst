@@ -70,16 +70,21 @@ let kindAsString = t =>
   | AudioRecord(_) => "audio"
   }
 
-let resultAsString = t =>
+let resultAsJson = t => {
+  open Json.Encode
   switch t.result {
-  | Files(files) => Js.Array.map(file => file.id, files) |> Js.Array.joinWith("'")
+  | Files(files) => Js.Array.map(file => file.id, files)->stringArray
   | Link(t)
   | ShortText(t)
-  | LongText(t) => t
-  | AudioRecord(file) => file.id
+  | LongText(t) =>
+    t->string
+  | AudioRecord(file) => file.id->string
   | MultiChoice(choices, index) =>
-    index |> OptionUtils.flatMap(i => choices |> ArrayUtils.getOpt(i)) |> OptionUtils.default("")
+    string(
+      index |> OptionUtils.flatMap(i => choices |> ArrayUtils.getOpt(i)) |> OptionUtils.default(""),
+    )
   }
+}
 
 let validString = (s, maxLength) => {
   let length = Js.String.trim(s) |> Js.String.length
@@ -129,7 +134,7 @@ let encode = t => {
     ("title", t.title |> string),
     ("kind", kindAsString(t) |> string),
     ("status", "noAnswer" |> string),
-    ("result", resultAsString(t) |> string),
+    ("result", resultAsJson(t)),
   })
 }
 
@@ -139,19 +144,13 @@ let encodeArray = checklist =>
     array(encode)
   }
 
-let makeFiles = checklist => checklist |> Js.Array.find(c =>
-    switch c.result {
-    | Files(_files) => true
-    | AudioRecord(_) => true
-    | _anyOtherResult => false
-    }
-  ) |> OptionUtils.mapWithDefault(c =>
-    switch c.result {
+let makeFiles = checklist => checklist |> Js.Array.map(item =>
+    switch item.result {
     | Files(files) => files
     | AudioRecord(file) => [file]
-    | _anyOtherResult => []
+    | _nonFileItem => []
     }
-  , []) |> Array.map(f => {
+  ) |> ArrayUtils.flattenV2 |> Array.map(f => {
     let url = "/timeline_event_files/" ++ (f.id ++ "/download")
     SubmissionChecklistItem.makeFile(~name=f.name, ~id=f.id, ~url)
   })

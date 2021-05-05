@@ -152,17 +152,17 @@ feature 'Submission Builder', js: true do
     # The submit button should be disabled at this point.
     expect(page).to have_button('Submit', disabled: true)
 
-    attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
+    attach_file 'attachment_file_0', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
     expect(page).to have_text('human')
 
     sleep 0.1
 
-    attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/minnie_mouse.jpg')), visible: false
+    attach_file 'attachment_file_0', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/minnie_mouse.jpg')), visible: false
     expect(page).to have_text('minnie_mouse')
 
     sleep 0.1
 
-    attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/mickey_mouse.jpg')), visible: false
+    attach_file 'attachment_file_0', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/mickey_mouse.jpg')), visible: false
     expect(page).to have_text('mickey_mouse')
 
     # The attachment forms should have disappeared now.
@@ -178,7 +178,8 @@ feature 'Submission Builder', js: true do
     expect(page).to have_content('Your submission has been queued for review')
 
     last_submission = TimelineEvent.last
-    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_FILES, "title" => question, "result" => "files", "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
+    last_submission_file_ids = last_submission.timeline_event_files.map(&:id).map(&:to_s)
+    expect(last_submission.checklist).to eq([{ "kind" => Target::CHECKLIST_KIND_FILES, "title" => question, "result" => last_submission_file_ids, "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER }])
 
     expect(page).to have_text('Your Submissions')
     expect(page).to have_text(question)

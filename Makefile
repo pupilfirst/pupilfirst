@@ -19,6 +19,10 @@ drop-node-modules: ## Drop node_modules folder
 
 reinstall-node-modules: drop-node-modules yarn ## Drop & reinstall npm dependencies
 
+setup-db: ## Setup database
+	@echo "Creating database"
+	@bin/rails db:setup
+
 migrate-db: ## Migrate database
 	@echo "Migrating database"
 	@bin/rails db:migrate
@@ -42,7 +46,7 @@ dev: setup foreman migrate cleanup ## This is an short alias for day to day upda
 start: ## This starts dev env
 	@foreman start --procfile=Procfile.dev
 
-install: puma setup migrate dev ## Setup dev's environment
+install: puma setup setup-db migrate dev ## Setup dev's environment
 
 check-gems-security:
 	@gem install --no-document --conservative bundler-audit

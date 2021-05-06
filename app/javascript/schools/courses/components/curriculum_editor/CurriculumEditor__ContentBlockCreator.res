@@ -447,7 +447,11 @@ let handleFileInputChange = (
       | (true, true) => None
       }
     | #Audio =>
-      FileUtils.isInvalid(file) ? Some("Please select a file with a size less than 5 MB.") : None
+      switch (FileUtils.isAudio(file), FileUtils.hasValidSize(~maxSize=10 * 1024 * 1024, file)) {
+      | (false, true | false) => Some("Please select a valid audio file")
+      | (true, false) => Some("Please select a file with a size less than 10 MB.")
+      | (true, true) => None
+      }
     }
 
     switch error {

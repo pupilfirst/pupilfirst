@@ -7,7 +7,8 @@ module Layouts
         school_icon_path: school_icon_path,
         courses: courses,
         is_course_author: current_user_is_a_course_author?,
-        has_notifications: notifications?
+        has_notifications: notifications?,
+        features: features
       }
     end
 
@@ -56,6 +57,12 @@ module Layouts
     def current_user_is_a_course_author?
       current_user.course_authors.exists?(course: current_school.courses) &&
         current_user.school_admin.blank?
+    end
+
+    def features
+      Feature.pluck(:key).map do |feature|
+        Feature.active?(feature, current_user) ? feature : nil
+      end.compact
     end
   end
 end

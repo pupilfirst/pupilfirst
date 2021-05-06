@@ -163,10 +163,12 @@ let make = (
   ~courses,
   ~isCourseAuthor,
   ~hasNotifications,
+  ~features
 ) => {
   let url = RescriptReactRouter.useUrl()
 
   let userRole = isCourseAuthor ? CourseAuthor : SchoolAdmin
+
 
   let (selectedOption, shrunk) = switch url.path {
   | list{"school"} => (Overview, false)
@@ -308,16 +310,19 @@ let make = (
                 shrunk,
               )}
             </li>
-            <li>
-              {topLink(
-                selectedOption,
-                Communities,
-                "/school/communities",
-                shrunk,
-                "fas fa-users",
-                "Communities",
-              )}
-            </li>
+            {ReactUtils.nullIf(
+              <li>
+                {topLink(
+                  selectedOption,
+                  Communities,
+                  "/school/communities",
+                  shrunk,
+                  "fas fa-users",
+                  "Communities",
+                )}
+              </li>,
+              !Js.Array.includes("communities", features)
+            )}
           </ul>
         | CourseAuthor => React.null
         }}

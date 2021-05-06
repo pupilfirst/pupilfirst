@@ -7,17 +7,18 @@ let decodeProps = json => {
     field("courses", array(CourseInfo.decode), json),
     field("isCourseAuthor", bool, json),
     field("hasNotifications", bool, json),
+    field("features", array(string), json),
   )
 }
 
-let (schoolName, schoolLogoPath, schoolIconPath, courses, isCourseAuthor, hasNotifications) =
+let (schoolName, schoolLogoPath, schoolIconPath, courses, isCourseAuthor, hasNotifications, features) =
   DomUtils.parseJSONAttribute(~id="school-admin-navbar__root", ()) |> decodeProps
 
 switch ReactDOM.querySelector("#school-admin-navbar__root") {
 | Some(root) =>
   ReactDOM.render(
     <SchoolAdminNavbar__Root
-      schoolName schoolLogoPath schoolIconPath courses isCourseAuthor hasNotifications
+      schoolName schoolLogoPath schoolIconPath courses isCourseAuthor hasNotifications features
     />,
     root,
   )

@@ -11,7 +11,7 @@ let headerLink = (key, link) =>
     key
     className="md:ml-2 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0 text-gray-100 hover:text-white">
     <a
-      className="no-underline rounded-lg w-full p-4 md:px-3 md:py-2"
+      className="no-underline hover:underline rounded-lg w-full p-4 md:px-3 md:py-2"
       href={link |> NavLink.url}
       target=?{NavLink.local(link) ? None : Some("_blank")}
       rel=?{NavLink.local(link) ? None : Some("noopener")}>
@@ -27,7 +27,7 @@ let signOutLink = () =>
       <a
         href="/users/sign_out"
         rel="nofollow"
-        className="rounded px-2 py-1 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold">
+        className="rounded px-2 py-1 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold hover:underline">
         <FaIcon classes="fas fa-power-off" /> <span className="ml-2"> {t("sign_out") |> str} </span>
       </a>
     </div>
@@ -39,7 +39,7 @@ let signInLink = () =>
     className="md:ml-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0 text-gray-100 hover:text-white">
     <div className="flex items-center justify-center">
       <a
-        className="rounded px-2 py-1 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold"
+        className="rounded px-2 py-1 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold hover:underline"
         href="/users/sign_in">
         <FaIcon classes="fas fa-power-off" /> <span className="ml-2"> {t("sign_in") |> str} </span>
       </a>

@@ -110,7 +110,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
             {switch logoUrl {
             | Some(url) =>
               <img
-                className="h-9 md:h-12 object-contain flex text-sm items-center"
+                className="h-10 object-contain flex text-sm items-center"
                 src=url
                 alt={"Logo of " ++ schoolName}
               />

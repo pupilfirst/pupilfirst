@@ -26,7 +26,7 @@ feature 'School Admin Navbar', js: true do
     expect(page).to have_link('Coaches', href: '/school/coaches')
     expect(page).to have_link('Settings', href: '/school/customize')
     expect(page).to have_link('Courses', href: '/school/courses')
-    expect(page).to have_link('Communities', href: '/school/communities')
+    expect(page).not_to have_link('Communities', href: '/school/communities')
 
     # Links to the student page for all courses in school should also be there.
     expect(page).to have_link(course_1.name, href: "/school/courses/#{course_1.id}/students")

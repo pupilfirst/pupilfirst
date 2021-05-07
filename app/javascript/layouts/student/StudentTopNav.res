@@ -56,6 +56,15 @@ let notificationButton = hasNotifications =>
     hasNotifications
   />
 
+let messagesButton = () =>
+  <div className="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg">
+    <a
+      className="font-semibold w-full flex items-center justify-center text-gray-100 hover:text-preciseBlue"
+      href="https://community.growthtribe.io/messages">
+      <FaIcon classes="fas fa-comment text-lg" />
+    </a>
+  </div>
+
 let isMobile = () => Webapi.Dom.window |> Webapi.Dom.Window.innerWidth < 768
 
 let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
@@ -74,6 +83,7 @@ let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
     |> Js.Array.mapi((l, index) => headerLink(index |> string_of_int, l))
     |> Js.Array.concat([<StudentTopNav__DropDown links=dropdownLinks key="more-links" />])
     |> Js.Array.concat([
+      ReactUtils.nullUnless(messagesButton(), isLoggedIn && !isMobile()),
       ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn && !isMobile()),
     ])
     |> Js.Array.concat([
@@ -123,6 +133,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
           </a>
           {ReactUtils.nullUnless(
             <div className="flex items-center space-x-2">
+              {ReactUtils.nullUnless(messagesButton(), isLoggedIn)}
               {ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn)}
               <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
                 <div

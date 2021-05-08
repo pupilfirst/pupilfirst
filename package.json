@@ -50,7 +50,7 @@
     "react-datepicker": "^2.9.6",
     "react-dom": "^16.8.6",
     "react_ujs": "^2.5.0",
-    "sanitize-html": "^1.20.1",
+    "sanitize-html": "^2.3.2",
     "tailwindcss": "^1.7.3",
     "tus-js-client": "^2.2.0",
     "webpack-merge": "^4.2.1"

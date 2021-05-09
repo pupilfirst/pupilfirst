@@ -53,7 +53,7 @@
     "react-dom": "^16.8.6",
     "react-pdf": "^5.2.0",
     "react_ujs": "^2.5.0",
-    "sanitize-html": "^1.20.1",
+    "sanitize-html": "^2.3.2",
     "tailwindcss": "^1.7.3",
     "tus-js-client": "^2.2.0",
     "webpack-merge": "^4.2.1"

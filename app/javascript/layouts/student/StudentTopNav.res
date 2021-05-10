@@ -85,6 +85,7 @@ let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
     |> Js.Array.concat([
       ReactUtils.nullUnless(messagesButton(), isLoggedIn && !isMobile()),
       ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn && !isMobile()),
+      ReactUtils.nullUnless(<StudentTopNav__CommunityActions key="community-actions" />, isLoggedIn && !isMobile()),
     ])
     |> Js.Array.concat([
       switch (isLoggedIn, isMobile()) {

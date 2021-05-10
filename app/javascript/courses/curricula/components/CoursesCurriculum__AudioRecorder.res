@@ -1,12 +1,12 @@
-type audioRecorder = {
+type audioRecorderControls = {
   url: string,
   recording: bool,
   startRecording: unit => unit,
   stopRecording: unit => unit,
   id: string,
 }
-@bs.module("./navigator")
-external audioRecorder: (string, bool => unit) => audioRecorder = "useAudioRecorder"
+@bs.module("./CoursesCurriculum__AudioNavigator")
+external audioRecorder: (string, bool => unit) => audioRecorderControls = "audioRecorder"
 
 @react.component
 let make = (~attachingCB, ~attachFileCB) => {
@@ -44,12 +44,17 @@ let make = (~attachingCB, ~attachFileCB) => {
               <Icon className="if i-microphone-fill-light text-lg text-red-600" />
             </div>
             <span className="inline-block pl-3 pr-4 text-xs font-semibold">
-              {React.string("Start Recording")}
+              {React.string({audioRecorder.id != "" ? "Record Again" : "Start Recording"})}
             </span>
           </button>
           {switch audioRecorder.url {
           | "" => React.null
-          | src => <audio src controls=true className="pt-3 md:pt-0 md:pl-4" />
+          | _src =>
+            <audio
+              src={"/timeline_event_files/" ++ audioRecorder.id ++ "/download"}
+              controls=true
+              className="pt-3 md:pt-0 md:pl-4"
+            />
           }}
         </div>}
   </>

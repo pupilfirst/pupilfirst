@@ -15,7 +15,6 @@ Rails.application.routes.draw do
     post 'users/update_password', controller: 'users/sessions', action: 'update_password', as: 'update_password'
     get 'users/email_login', controller: 'users/sessions', action: 'email_login', as: 'email_login'
     get 'users/password_reset', controller: 'users/sessions', action: 'password_reset', as: 'password_reset'
-    get 'users/email_sent', controller: 'users/sessions', action: 'email_sent', as: 'email_sent'
 
     if Rails.env.development?
       get 'users/auth/developer', controller: 'users/omniauth_callbacks', action: 'passthru', as: 'user_developer_omniauth_authorize'

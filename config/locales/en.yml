@@ -634,6 +634,18 @@ en:
   sessions:
     create:
       invalid_credentials: The supplied email address and password do not match. Please check your credentials and try again.
+    email_sent:
+      image_alt: Image showing a mail coming to your inbox
+      magic_link:
+        page_title: Magic link is on its way!
+        heading: We've sent you a magic link!
+        description: It should reach you in less than a minute. Click the link in the email, and you'll be signed in.
+        notice: This link will work only once.
+      reset_password_link:
+        page_title: Confirm your request
+        heading: We've sent you a link to reset your password!
+        description: It should reach you in less than a minute. Click the link in the email, and you'll be asked to set a new password.
+        notice: This link will work only once.
   shared:
     _no: 'No'
     _yes: 'Yes'

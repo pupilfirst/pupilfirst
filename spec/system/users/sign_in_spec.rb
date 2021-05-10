@@ -44,12 +44,17 @@ feature 'User signing in by supplying email address', js: true do
         click_link 'Set a New Password'
         fill_in 'Email', with: user.email
         click_button 'Send Email'
-        expect(page).to have_content("We've sent you a magic link!")
+
+        expect(page).to have_content(
+          "We've sent you a link to reset your password"
+        )
+
         click_link 'Sign In'
         click_link 'Continue with email'
         click_link 'Set a New Password'
         fill_in 'Email', with: user.email
         click_button 'Send Email'
+
         expect(page).to have_content(
           'An email was sent less than two minutes ago. Please wait for a few minutes before trying again'
         )

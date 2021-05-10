@@ -63,6 +63,12 @@ feature 'School Admin Navbar', js: true do
     expect(page).to have_link('Dashboard', href: "/dashboard")
   end
 
+  scenario 'communities should be visible if enabled' do
+    Feature.create key: 'communities', value: {active: 'admin'}.to_json
+    sign_in_user school_admin.user, referrer: school_path
+    expect(page).to have_link('Communities', href: '/school/communities')
+  end
+
   scenario 'school admin visits an ended course' do
     sign_in_user school_admin.user, referrer: school_course_students_path(course_ended)
 

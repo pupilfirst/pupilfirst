@@ -1,10 +1,11 @@
 type audioRecorderControls = {
-  url: string,
+  url: option<string>,
   recording: bool,
   startRecording: unit => unit,
   stopRecording: unit => unit,
-  id: string,
+  id: option<string>,
 }
+let str = React.string
 @bs.module("./CoursesCurriculum__AudioNavigator")
 external audioRecorder: (string, bool => unit) => audioRecorderControls = "audioRecorder"
 
@@ -12,8 +13,9 @@ external audioRecorder: (string, bool => unit) => audioRecorderControls = "audio
 let make = (~attachingCB, ~attachFileCB) => {
   let audioRecorder = audioRecorder(AuthenticityToken.fromHead(), attachingCB)
   React.useEffect1(() => {
-    if audioRecorder.id != "" {
-      attachFileCB(audioRecorder.id, "recorderaudio")
+    switch audioRecorder.id {
+    | Some(id) => attachFileCB(id, "recorderaudio")
+    | None => ()
     }
     None
   }, [audioRecorder.id])
@@ -31,7 +33,7 @@ let make = (~attachingCB, ~attachFileCB) => {
               />
             </div>
             <span className="inline-block pl-3 pr-4 text-xs font-semibold">
-              {React.string("Recording...")}
+              {str("Recording...")}
             </span>
           </button>
         </div>
@@ -44,14 +46,19 @@ let make = (~attachingCB, ~attachFileCB) => {
               <Icon className="if i-microphone-fill-light text-lg text-red-600" />
             </div>
             <span className="inline-block pl-3 pr-4 text-xs font-semibold">
-              {React.string({audioRecorder.id != "" ? "Record Again" : "Start Recording"})}
+              {str({
+                switch audioRecorder.id {
+                | Some(id) => "Record Again"
+                | None => "Start Recording"
+                }
+              })}
             </span>
           </button>
-          {switch audioRecorder.url {
-          | "" => React.null
-          | _src =>
+          {switch audioRecorder.id {
+          | None => React.null
+          | Some(id) =>
             <audio
-              src={"/timeline_event_files/" ++ audioRecorder.id ++ "/download"}
+              src={"/timeline_event_files/" ++ id ++ "/download"}
               controls=true
               className="pt-3 md:pt-0 md:pl-4"
             />

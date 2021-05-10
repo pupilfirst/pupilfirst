@@ -2,10 +2,10 @@ import { useState, useRef, useEffect } from "react";
 import { error } from "../../../shared/Notification.bs";
 function audioRecorder(authenticity_token, attachingCB) {
   const [recording, setRecording] = useState(false);
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState(undefined);
   const mediaStreamRef = useRef();
   const [blob, setBlob] = useState();
-  const [id, setId] = useState("");
+  const [id, setId] = useState(undefined);
   useEffect(() => {
     if (blob) {
       attachingCB(true);

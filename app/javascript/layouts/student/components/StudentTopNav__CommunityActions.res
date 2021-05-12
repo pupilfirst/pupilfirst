@@ -8,8 +8,8 @@ let showLink = (icon, title, description, href) =>
   <a key=href className="" href=href rel="nofollow">
     <div className="p-4 border-t border-gray-300 first:no-border bg-white hover:bg-gray-200">
       <span role="img" ariaLabel=icon className="emoji text-md"> {icon->str} </span>
-      <b className="pl-3 text-gray-700"> {title->str} </b>
-      <p className="mt-2 text-sm text-gray-500"> {description->str} </p>
+      <b className="pl-3 text-gray-900"> {title->str} </b>
+      <p className="mt-2 text-sm text-gray-700"> {description->str} </p>
     </div>
   </a>
 

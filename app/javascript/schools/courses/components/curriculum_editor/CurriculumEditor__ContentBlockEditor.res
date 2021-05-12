@@ -260,7 +260,7 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, state, send) 
   | PdfDocument(url, title, filename) =>
     <CurriculumEditor__FileBlockEditor url title filename contentBlock updateContentBlockCB fileTypeIcon="fa-file-pdf" />
   | CommunityWidget(kind, slug) =>
-    React.null
+    <CurriculumEditor__CommunityWidgetBlockEditor kind slug contentBlock updateContentBlockCB />
   }
 }
 

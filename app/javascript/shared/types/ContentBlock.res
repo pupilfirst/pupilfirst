@@ -282,6 +282,17 @@ let updateMarkdown = (markdown, t) =>
   | Embed(_) => t
   }
 
+let updateCommunityWidget = (kind, slug, t) =>
+  switch t.blockType {
+  | CommunityWidget(_) => {...t, blockType: CommunityWidget(kind, slug)}
+  | Markdown(_)
+  | File(_)
+  | Image(_)
+  | CoachingSession(_)
+  | PdfDocument(_)
+  | Embed(_) => t
+  }
+
 module Fragments = %graphql(
   `
   fragment allFields on ContentBlock {

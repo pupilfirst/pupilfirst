@@ -106,6 +106,14 @@ let pdfDocumentContentBlock = (url, title, filename) =>
     </div>
   </div>
 
+let communityWidgetContentBlock = (id, kind, slug) => {
+  let id = "community-widget-" ++ id
+  <div id={id}>
+    <h1>{kind |> str}</h1>
+    <h2>{slug |> str}</h2>
+  </div>
+}
+
 @react.component
 let make = (~contentBlocks, ~coaches=?) =>
   <div className="text-base" id="learn-component">
@@ -118,7 +126,7 @@ let make = (~contentBlocks, ~coaches=?) =>
         embedCode->Belt.Option.mapWithDefault(React.null, code => embedContentBlock(code))
       | CoachingSession(_lastResolvedAt) => coachingSessionBlock(coaches)
       | PdfDocument(url, title, filename) => pdfDocumentContentBlock(url, title, filename)
-      | CommunityWidget(kind, slug) => React.null
+      | CommunityWidget(kind, slug) => communityWidgetContentBlock(block |> ContentBlock.id, kind, slug)
       }
 
       <div className={renderBlockClasses(block)} key={block |> ContentBlock.id}>

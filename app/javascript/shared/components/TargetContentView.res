@@ -106,13 +106,7 @@ let pdfDocumentContentBlock = (url, title, filename) =>
     </div>
   </div>
 
-let communityWidgetContentBlock = (id, kind, slug) => {
-  let id = "community-widget-" ++ id
-  <div id={id}>
-    <h1>{kind |> str}</h1>
-    <h2>{slug |> str}</h2>
-  </div>
-}
+let communityWidgetContentBlock = (id, kind, slug) => <Tribe id kind slug />
 
 @react.component
 let make = (~contentBlocks, ~coaches=?) =>

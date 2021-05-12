@@ -9,20 +9,6 @@
   <% end %>
 <% end %>
 
-<% content_for(:head) do %>
-  <!-- Tribe Tag -->
-  <%= javascript_tag nonce: true do %>
-    (function(t,r,i,b,e){
-      if(typeof t.Tribe==='function'){t.Tribe('reload',{portal:i});}
-      else{b=function(){b.r(arguments);};b.q=[];b.r=function(args){b.q.push(args);};
-      t.Tribe=b; e=r.createElement('script');e.type='text/javascript';e.async=true;
-      e.src=i+'/widget/v1/main.js?t='+Math.ceil(new Date() / 3e5) * 3e5;
-      var x=r.getElementsByTagName('script')[0];x.parentNode.insertBefore(e,x);
-      t.Tribe('boot',{portal:i});}
-    })(window,document,'https://community.growthtribe.io');
-  <% end %>
-<% end %>
-
 <% content_for(:nav) do %>
   <% gtm.with do |tag| %>
     <%= raw tag.setup_gtm_body %>

@@ -40,13 +40,13 @@ let headerclasses = shrunk => {
   defaultClasses ++ (
     shrunk
       ? "mx-auto"
-      : "px-5 py-2 relative z-20 border-r border-b border-gray-400 bg-white flex h-16 items-center"
+      : "px-5 py-2 relative z-20 border-r border-b border-gray-400 bg-siliconBlue-900 flex h-16 items-center"
   )
 }
 
 let imageContainerClasses = shrunk => {
   let defaultClasses = "school-admin-navbar__school-logo-container flex items-center "
-  defaultClasses ++ (shrunk ? "justify-center w-16 h-16" : "bg-white h-8 w-3/5 rounded")
+  defaultClasses ++ (shrunk ? "justify-center w-16 h-16" : "h-8 w-3/5 rounded")
 }
 
 let bottomLinkClasses = shrunk => {

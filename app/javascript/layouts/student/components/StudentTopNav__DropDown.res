@@ -14,7 +14,7 @@ let additionalLinks = (linksVisible, links) =>
         |> Js.Array.mapi((link, index) =>
           <div key={index |> string_of_int} className="">
             <a
-              className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200"
+              className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 bg-white hover:text-primary-500 hover:bg-gray-200"
               href={link |> NavLink.url}
               target="_blank"
               rel="noopener">
@@ -34,7 +34,7 @@ let make = (~links) => {
   | moreLinks =>
     <div
       title="Show more links"
-      className="ml-2 font-semibold text-sm p-4 md:px-3 md:py-2 cursor-pointer relative rounded-lg text-gray-900 hover:bg-gray-200 hover:text-primary-500"
+      className="ml-2 font-semibold text-sm p-4 md:px-3 md:py-2 cursor-pointer relative rounded-lg text-gray-100 hover:text-white hover:underline"
       onClick={handleToggle(setLinksVisible)}
       key="more-links">
       <span> {t("more") |> str} </span>

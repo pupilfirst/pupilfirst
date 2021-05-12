@@ -21,7 +21,7 @@
 
 .school-admin-navbar__primary-nav-link--active {
   @apply bg-gray-200 text-primary-500;
-  box-shadow: inset 4px 0 0 0 theme("colors.yellow.500");
+  box-shadow: inset 4px 0 0 0 theme("colors.attentionYellow");
   background-image: linear-gradient(
     to right,
     theme("colors.white"),

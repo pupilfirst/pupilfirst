@@ -40,7 +40,7 @@ let headerLogo = (schoolName, logoOnLightBg) =>
   }
 
 let headerLink = ((id, title, _)) =>
-  <div className="ml-6 text-sm font-semibold cursor-default" key=id>
+  <div className="ml-6 text-sm font-semibold cursor-default text-gray-100 hover:text-white" key=id>
     <span> {title |> str} </span>
   </div>
 
@@ -135,7 +135,7 @@ let footerLogo = (schoolName, logoOnDarkBg) =>
 
 let editIcon = (additionalClasses, clickHandler, title) =>
   <div
-    className={"cursor-pointer bg-primary-100 border border-primary-400 text-primary-500 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 px-2 py-1 rounded flex items-center " ++
+    className={"cursor-pointer bg-transparent border border-preciseBlue text-preciseBlue hover:bg-preciseBlue hover:border-preciseBlue hover:text-white px-2 py-1 rounded flex items-center " ++
     additionalClasses}
     title
     onClick=clickHandler>
@@ -258,14 +258,14 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
   <div>
     <div className="px-6 py-6 w-full xl:max-w-6xl mx-auto">
       <div className="font-bold"> {"Home Page" |> str} </div>
-      <div className="border rounded-t-lg px-5 py-4 flex justify-between mt-3">
-        <div className="flex items-center bg-gray-200 rounded p-2">
+      <div className="border rounded-t-lg px-5 py-4 flex justify-between mt-3 bg-siliconBlue-900">
+        <div className="flex items-center rounded p-2">
           {headerLogo(schoolName, state.customizations |> Customizations.logoOnLightBg)}
           {editIcon("ml-6", showEditor(ImagesEditor, send), "Edit logo (on light backgrounds)")}
         </div>
         <div className="flex items-center">
           <div
-            className="school-customize__header-links flex items-center bg-gray-200 rounded px-3 py-2 h-full">
+            className="school-customize__header-links flex items-center rounded px-3 py-2 h-full">
             {headerLinks(
               state.customizations |> Customizations.headerLinks |> Customizations.unpackLinks,
             )}
@@ -280,7 +280,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
       <div className="relative bg-gray-300">
         <div className="absolute right-0 z-10 pt-3 pr-3">
           <button
-            className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 px-2 py-1 cursor-pointer rounded"
+            className="flex items-center text-xs bg-transparent text-preciseBlue border border-preciseBlue hover:bg-preciseBlue hover:border-preciseBlue hover:text-white px-2 py-1 cursor-pointer rounded"
             onClick={showEditor(ImagesEditor, send)}>
             <i className="fas fa-pencil-alt" />
             <span className="font-semibold ml-2"> {"Change cover" |> str} </span>
@@ -305,10 +305,10 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           <p> {"Hello, welcome to" |> str} </p>
           <div onClick={showEditor(DetailsEditor, send)}>
             <h1
-              className="flex items-center border border-dashed border-gray-800 hover:border-primary-300 hover:text-primary-200 cursor-text rounded px-2 py-1 text-3xl mt-1">
+              className="flex items-center border border-dashed border-gray-800 hover:border-preciseBlue cursor-text rounded px-2 py-1 text-3xl mt-1">
               <span> {state.schoolName |> str} </span>
               <button
-                className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 ml-1 cursor-pointer rounded"
+                className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-preciseBlue hover:border-preciseBlue hover:text-white p-1 ml-1 cursor-pointer rounded"
                 onClick={showEditor(DetailsEditor, send)}>
                 <i className="fas fa-pencil-alt" />
               </button>
@@ -317,10 +317,10 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           <div
             ariaLabel="Edit school details"
             onClick={showEditor(DetailsEditor, send)}
-            className="w-full max-w-2xl mt-2 relative flex items-center justify-center border border-dashed border-gray-800 rounded px-8 py-5 hover:border-primary-300 hover:text-primary-200 cursor-text">
+            className="w-full max-w-2xl mt-2 relative flex items-center justify-center border border-dashed border-gray-800 rounded px-8 py-5 hover:border-preciseBlue cursor-text">
             <div className="absolute right-0 top-0 z-10 pt-2 pr-2">
               <button
-                className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 cursor-pointer rounded">
+                className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-preciseBlue hover:border-preciseBlue hover:text-white p-1 cursor-pointer rounded">
                 <i className="fas fa-pencil-alt" />
               </button>
             </div>

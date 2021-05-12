@@ -31,6 +31,19 @@ module CreateEmbedContentBlock = %graphql(
   `
 )
 
+module CreateCommunityWidgetContentBlock = %graphql(
+  `
+    mutation CreateCommunityWidgetContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $kind: String!, $slug: String!) {
+      createCommunityWidgetContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId, kind: $kind, slug: $slug) {
+        contentBlock {
+          ...ContentBlock.Fragments.AllFields
+        }
+      }
+    }
+  `
+)
+
+
 module InsertContentBlock = %graphql(
   `
     mutation InsertContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $blockType: String!) {
@@ -60,6 +73,7 @@ type ui =
   | Hidden
   | BlockSelector
   | EmbedForm(string)
+  | CommunityWidgetForm(string, string)
   | UploadVideo
   | AdditionalBlockSelector
 
@@ -89,6 +103,9 @@ type action =
   | UpdateEmbedUrl(string)
   | ShowAdditionalBlockSelector
   | HideAdditionalBlockSelector
+  | ShowCommunityWidgetForm
+  | HideCommunityWidgetForm
+  | UpdateCommunityWidgetForm(string, string)
 
 let computeInitialState = isAboveTarget => {
   ui: isAboveTarget ? Hidden : BlockSelector,
@@ -107,6 +124,7 @@ let reducer = (state, action) =>
     | BlockSelector
     | UploadVideo
     | AdditionalBlockSelector
+    | CommunityWidgetForm(_)
     | EmbedForm(_) =>
       Hidden
     }
@@ -127,11 +145,14 @@ let reducer = (state, action) =>
     }
   | ShowEmbedForm => {...state, ui: EmbedForm("")}
   | HideEmbedForm => {...state, ui: BlockSelector}
+  | ShowCommunityWidgetForm => {...state, ui: CommunityWidgetForm("group", "")}
+  | HideCommunityWidgetForm => {...state, ui: AdditionalBlockSelector}
   | ShowAdditionalBlockSelector => {...state, ui: AdditionalBlockSelector}
   | HideAdditionalBlockSelector => {...state, ui: BlockSelector}
   | ShowUploadVideoForm => {...state, ui: UploadVideo}
   | HideUploadVideoForm => {...state, ui: BlockSelector}
   | UpdateEmbedUrl(url) => {...state, ui: EmbedForm(url)}
+  | UpdateCommunityWidgetForm(kind, slug) => {...state, ui: CommunityWidgetForm(kind, slug)}
   | UpdateVideoTitle(videoTitle) => {...state, videoTitle: videoTitle}
   | UpdateVideoDescription(videoDescription) => {...state, videoDescription: videoDescription}
   | UpdateUploadProgress(uploadProgress) => {
@@ -220,6 +241,7 @@ let handleInsertContentBlock = (
 
   let blockTypeCode = switch blockType {
   | #CoachingSession => "coaching_session"
+  | #CommunityWidget => "community_widget"
   }
 
   InsertContentBlock.make(~targetId, ~aboveContentBlockId?, ~blockType=blockTypeCode, ())
@@ -243,6 +265,7 @@ let onAdditonalBlockTypeSelect = (target, aboveContentBlock, send, addContentBlo
   switch blockType {
   | #CoachingSession => handleInsertContentBlock(target, aboveContentBlock, send, addContentBlockCB, #CoachingSession)
   | #PdfDocument => ()
+  | #CommunityWidget => send(ShowCommunityWidgetForm)
   }
 }
 
@@ -252,6 +275,7 @@ let insertButton = (target, aboveContentBlock, send, addContentBlockCB, blockTyp
   let (faIcon, buttonText, htmlFor) = switch blockType {
   | #CoachingSession => ("far fa-calendar-plus", t("button_labels.coaching_session"), None)
   | #PdfDocument => ("far fa-file-pdf", t("button_labels.pdf_document"), Some(pdfDocumentId))
+  | #CommunityWidget => ("fas fa-users", t("button_labels.community_widget"), None)
   }
 
   <label
@@ -338,6 +362,37 @@ let handleCreateEmbedContentBlock = (
       ),
     )
   }
+
+let handleCreateCommunityWidgetContentBlock = (
+  target,
+  aboveContentBlock,
+  kind,
+  slug,
+  send,
+  addContentBlockCB,
+) => {
+  send(ToggleSaving)
+
+  let aboveContentBlockId = aboveContentBlock |> OptionUtils.map(ContentBlock.id)
+
+  let targetId = target |> Target.id
+
+  CreateCommunityWidgetContentBlock.make(~targetId, ~aboveContentBlockId?, ~kind, ~slug, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result =>
+    handleGraphqlCreateResponse(
+      aboveContentBlock,
+      send,
+      addContentBlockCB,
+      result["createCommunityWidgetContentBlock"]["contentBlock"],
+    )
+  )
+  |> Js.Promise.catch(_ => {
+    send(FailedToCreate)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
 
 let uploadOnProgress = (send, current, total) => {
   let progress = int_of_float(float_of_int(current) /. float_of_int(total) *. 100.00)
@@ -598,12 +653,23 @@ let visible = state =>
   | BlockSelector
   | UploadVideo
   | AdditionalBlockSelector
+  | CommunityWidgetForm(_)
   | EmbedForm(_) => true
   }
 
 let updateEmbedUrl = (send, event) => {
   let value = ReactEvent.Form.target(event)["value"]
   send(UpdateEmbedUrl(value))
+}
+
+let updateCommunityWidgetKind = (send, event) => {
+  let value = ReactEvent.Form.target(event)["value"]
+  send(UpdateCommunityWidgetForm(value, ""))
+}
+
+let updateCommunityWidgetSlug = (send, kind, event) => {
+  let value = ReactEvent.Form.target(event)["value"]
+  send(UpdateCommunityWidgetForm(kind, value))
 }
 
 let updateVideoTitle = (send, event) => {
@@ -620,6 +686,12 @@ let onEmbedFormSave = (target, aboveContentBlock, url, send, addContentBlockCB, 
   event |> ReactEvent.Mouse.preventDefault
 
   handleCreateEmbedContentBlock(target, aboveContentBlock, url, send, addContentBlockCB, #User)
+}
+
+let onCommunityWidgetFormSave = (target, aboveContentBlock, kind, slug, send, addContentBlockCB, event) => {
+  event |> ReactEvent.Mouse.preventDefault
+
+  handleCreateCommunityWidgetContentBlock(target, aboveContentBlock, kind, slug, send, addContentBlockCB)
 }
 
 let topButton = (handler, id, title, icon) =>
@@ -645,6 +717,12 @@ let closeEmbedFormButton = (send, aboveContentBlock) => {
   topButton(_e => send(HideEmbedForm), id, "Close Embed Form", "fa-level-up-alt")
 }
 
+let closeCommunityWidgetFormButton = (send, aboveContentBlock) => {
+  let id = aboveContentBlock |> OptionUtils.map(ContentBlock.id) |> OptionUtils.default("bottom")
+
+  topButton(_e => send(HideCommunityWidgetForm), id, "Close Community Widget Form", "fa-level-up-alt")
+}
+
 let closeUploadFormButton = (send, aboveContentBlock) => {
   let id = aboveContentBlock->Belt.Option.mapWithDefault("button", ContentBlock.id)
 
@@ -663,6 +741,7 @@ let buttonAboveContentBlock = (state, send, aboveContentBlock) =>
   switch (state.ui, aboveContentBlock) {
   | (AdditionalBlockSelector, Some(_) | None) => closeAdditionalBlockSelectorButton(send, aboveContentBlock)
   | (EmbedForm(_), Some(_) | None) => closeEmbedFormButton(send, aboveContentBlock)
+  | (CommunityWidgetForm(_), Some(_) | None) => closeCommunityWidgetFormButton(send, aboveContentBlock)
   | (UploadVideo, Some(_) | None) => closeUploadFormButton(send, aboveContentBlock)
   | (Hidden, None)
   | (BlockSelector, None) =>
@@ -741,6 +820,7 @@ let make = (
     | UploadVideo => "Preparing to Upload..."
     | BlockSelector
     | EmbedForm(_)
+    | CommunityWidgetForm(_)
     | AdditionalBlockSelector
     | Hidden => "Creating..."
     }}>
@@ -767,7 +847,7 @@ let make = (
           <div
             className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
             {
-              [#CoachingSession, #PdfDocument]
+              [#CoachingSession, #PdfDocument, #CommunityWidget]
               |> Array.map(insertButton(target, aboveContentBlock, send, addContentBlockCB))
               |> React.array
             }
@@ -815,6 +895,28 @@ let make = (
               <button
                 className="ml-2 btn btn-success"
                 onClick={onEmbedFormSave(target, aboveContentBlock, url, send, addContentBlockCB)}>
+                {t("embed.save_button")->str}
+              </button>
+            </div>
+          </div>
+        | CommunityWidgetForm(kind, slug) =>
+          <div
+            className="clearfix border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
+            <label htmlFor=embedInputId className="text-xs font-semibold">
+              {t("embed.url_label")->str}
+            </label>
+            <div className="flex mt-1">
+              <input
+                id=embedInputId
+                placeholder="community item slug here"
+                className="w-full py-1 px-2 border rounded"
+                type_="text"
+                value=slug
+                onChange={updateCommunityWidgetSlug(send, kind)}
+              />
+              <button
+                className="ml-2 btn btn-success"
+                onClick={onCommunityWidgetFormSave(target, aboveContentBlock, kind, slug, send, addContentBlockCB)}>
                 {t("embed.save_button")->str}
               </button>
             </div>

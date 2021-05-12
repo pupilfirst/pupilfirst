@@ -10,6 +10,7 @@ let renderBlockClasses = block =>
   | Embed(_) => "mt-6 pb-7"
   | CoachingSession(_) => "mt-6 pb-7"
   | PdfDocument(_) => "mt-6"
+  | CommunityWidget(_) => "mt-6"
   }
 
 let markdownContentBlock = markdown => <MarkdownBlock markdown profile=Markdown.Permissive />
@@ -117,6 +118,7 @@ let make = (~contentBlocks, ~coaches=?) =>
         embedCode->Belt.Option.mapWithDefault(React.null, code => embedContentBlock(code))
       | CoachingSession(_lastResolvedAt) => coachingSessionBlock(coaches)
       | PdfDocument(url, title, filename) => pdfDocumentContentBlock(url, title, filename)
+      | CommunityWidget(kind, slug) => React.null
       }
 
       <div className={renderBlockClasses(block)} key={block |> ContentBlock.id}>

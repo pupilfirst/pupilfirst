@@ -29,7 +29,7 @@
           <div class="p-4 pt-5 md:px-12 md:py-12 md:pt-10">
             <%= form_with( url: apply_course_path(@course), method: :post, class: 'flex flex-col', local: true) do |f| %>
               <h4 class="font-bold">
-                Enroll to <%= presenter.course_name %> course
+                <%= t('courses.apply.heading', course_name: presenter.course_name) %>
               </h4>
               <div class="w-full">
                 <div class="mt-4">
@@ -37,18 +37,18 @@
                     for="email"
                     class="inline-block tracking-wide text-xs font-semibold"
                   >
-                    Email
+                    <%= t('courses.apply.email_label') %>
                   </label>
-                  <%= f.email_field :email, value: params[:email], maxlength: 256, placeholder: 'your.name@gmail.com', required: true, class: 'appearance-none h-10 mt-1 block w-full border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400' %>
+                  <%= f.email_field :email, value: params[:email], maxlength: 256, placeholder: t('courses.apply.email_placeholder'), required: true, class: 'appearance-none h-10 mt-1 block w-full border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400' %>
                 </div>
                 <div class="mt-4">
                   <label
                     for="name"
                     class="inline-block tracking-wide text-xs font-semibold"
                   >
-                    Name
+                    <%= t('courses.apply.name_label') %>
                   </label>
-                  <%= f.text_field :name, value: params[:name], maxlength: 128, placeholder: 'Your Name', required: true, class: 'appearance-none h-10 mt-1 block w-full border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400' %>
+                  <%= f.text_field :name, value: params[:name], maxlength: 128, placeholder: t('courses.apply.name_placeholder'), required: true, class: 'appearance-none h-10 mt-1 block w-full border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400' %>
                 </div>
 
                 <% if @show_checkbox_recaptcha %>
@@ -70,7 +70,7 @@
                   %>
                 <% end %>
               </div>
-              <%= f.submit "Apply", data: { disable: true }, class: "btn btn-primary btn-large text-center w-full mt-6" %>
+              <%= f.submit t('courses.apply.apply_button'), data: { disable: true }, class: "btn btn-primary btn-large text-center w-full mt-6" %>
             <% end %>
           </div>
         </div>
@@ -81,7 +81,7 @@
             href="/agreements/terms-and-conditions"
             class="text-xs cursor-pointer hover:text-primary-500"
           >
-            Terms & Conditions
+            <%= t('shared.terms_and_conditions') %>
           </a>
         <% end %>
         <% if presenter.terms_and_conditions? && presenter.privacy_policy? %>
@@ -92,7 +92,7 @@
             href="/agreements/privacy-policy"
             class="text-xs cursor-pointer hover:text-primary-500"
           >
-            Privacy Policy
+            <%= t('shared.privacy_policy') %>
           </a>
         <% end %>
       </div>

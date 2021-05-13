@@ -520,6 +520,14 @@ en:
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe
   courses:
+    apply:
+      page_title: Enroll to %{course_name}
+      heading: Enroll to %{course_name} course
+      email_label: Email
+      email_placeholder: john@example.com
+      name_label: Name
+      name_placeholder: John Doe
+      apply_button: Apply
     show:
       continue_course: Continue Course
       preview_course: Preview Course
@@ -673,3 +681,5 @@ en:
     save_changes: Save Changes
     saving: Saving...
     target: Target
+    terms_and_conditions: Terms & Conditions
+    privacy_policy: Privacy Policy

@@ -56,7 +56,6 @@ FactoryBot.define do
         create(:content_block, :file, target_version: target_version)
         create(:content_block, :embed, target_version: target_version)
         create(:content_block, :pdf_document, target_version: target_version)
-        create(:content_block, :community_widget_group, target_version: target_version)
       end
     end
 

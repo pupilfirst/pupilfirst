@@ -94,7 +94,7 @@ describe Courses::DeleteService do
       [Proc.new { Target.count }, 4, 2],
       [Proc.new { TargetPrerequisite.count }, 2, 1],
       [Proc.new { TargetVersion.count }, 4, 2],
-      [Proc.new { ContentBlock.count }, 24, 12],
+      [Proc.new { ContentBlock.count }, 20, 10],
       [Proc.new { ResourceVersion.count }, 2, 1],
       [Proc.new { Quiz.count }, 2, 1],
       [Proc.new { QuizQuestion.count }, 2, 1],

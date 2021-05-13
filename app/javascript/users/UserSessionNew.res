@@ -93,7 +93,7 @@ let make = (~schoolName, ~fqdn, ~oauthHost) => {
         | None => React.null
         }}
         <a
-          href="/users/email_login"
+          href="/users/sign_in_with_email"
           className="flex justify-center items-center px-3 py-2 leading-snug border border-gray-400 text-primary-500 hover:bg-gray-100 hover:border-primary-500 focus:bg-gray-200 focus::border-primary-500 focus:outline-none rounded-lg cursor-pointer font-semibold mt-4 w-full">
           <span className="w-1/5 text-right text-lg"> <FaIcon classes="fas fa-envelope" /> </span>
           <span className="w-4/5 pl-3 text-left"> {"Continue with email" |> str} </span>

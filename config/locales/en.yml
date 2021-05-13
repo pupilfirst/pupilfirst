@@ -654,6 +654,15 @@ en:
         heading: We've sent you a link to reset your password!
         description: It should reach you in less than a minute. Click the link in the email, and you'll be asked to set a new password.
         notice: This link will work only once.
+    new:
+      page_title: Sign In
+      heading: Sign in to %{school_name}
+      sign_in_options_separator: OR
+      continue_with_google: Continue with Google
+      continue_with_facebook: Continue with Facebook
+      continue_with_github: Continue with Github
+      continue_as_developer: Continue as Developer
+      continue_with_email_link: Continue with email
     request_password_reset:
       page_title: Reset password
       image_alt: A student holding a giant key with a reset symbol on it

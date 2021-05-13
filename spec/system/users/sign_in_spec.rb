@@ -18,18 +18,21 @@ feature 'User signing in by supplying email address', js: true do
       end
     end
 
-    context 'when the user signed in less that two minutes ago' do
-      scenario 'user is blocked from repeat attempts to send sign in email' do
+    context 'when the user requested a magic link less that two minutes ago' do
+      scenario 'user is blocked from repeat attempts to request magic link' do
         visit new_user_session_path
 
         click_link 'Continue with email'
         fill_in 'Email Address', with: user.email
         click_button 'Email me a link to sign in'
+
         expect(page).to have_content("We've sent you a magic link!")
+
         click_link 'Sign In'
         click_link 'Continue with email'
         fill_in 'Email Address', with: user.email
         click_button 'Email me a link to sign in'
+
         expect(page).to have_content(
           'An email was sent less than two minutes ago. Please wait for a few minutes before trying again'
         )

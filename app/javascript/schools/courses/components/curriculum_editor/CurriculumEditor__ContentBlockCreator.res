@@ -662,9 +662,8 @@ let updateEmbedUrl = (send, event) => {
   send(UpdateEmbedUrl(value))
 }
 
-let updateCommunityWidgetKind = (send, event) => {
-  let value = ReactEvent.Form.target(event)["value"]
-  send(UpdateCommunityWidgetForm(value, ""))
+let updateCommunityWidgetKind = (send, kind, _) => {
+  send(UpdateCommunityWidgetForm(kind, ""))
 }
 
 let updateCommunityWidgetSlug = (send, kind, event) => {
@@ -899,28 +898,70 @@ let make = (
               </button>
             </div>
           </div>
-        | CommunityWidgetForm(kind, slug) =>
-          <div
-            className="clearfix border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
-            <label htmlFor=embedInputId className="text-xs font-semibold">
-              {t("embed.url_label")->str}
-            </label>
-            <div className="flex mt-1">
-              <input
-                id=embedInputId
-                placeholder="community item slug here"
-                className="w-full py-1 px-2 border rounded"
-                type_="text"
-                value=slug
-                onChange={updateCommunityWidgetSlug(send, kind)}
-              />
-              <button
-                className="ml-2 btn btn-success"
-                onClick={onCommunityWidgetFormSave(target, aboveContentBlock, kind, slug, send, addContentBlockCB)}>
-                {t("embed.save_button")->str}
+        | CommunityWidgetForm(kind, slug) => {
+            let kindInputId = "kind-" ++ embedInputId
+            let slugInputId = "slug-" ++ embedInputId
+
+            let activeClass = (buttonKind) => switch kind == buttonKind {
+            | true => "toggle-button__button--active"
+            | _ => ""
+            }
+
+            let toggleButton = (buttonKind) => {
+              let text = switch buttonKind {
+              | "group" => "Group"
+              | "question" => "Question"
+              | "post" => "Post"
+              | _ => "Invalid"
+              }
+
+              <button onClick={updateCommunityWidgetKind(send, buttonKind)}
+                className={"toggle-button__button " ++ activeClass(buttonKind)}>
+                { text |> str }
               </button>
+            }
+
+            let (slugTitle, slugPlaceholder) = switch kind {
+              | "group" => ("Slug", "paste group slug here")
+              | "question" => ("Question ID", "paste question id here")
+              | "post" => ("Post ID", "paste post id here")
+              | _ => ("Invalid", "Unknown type")
+            }
+
+            <div
+              className="clearfix border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
+              <div className="flex-row border-t justify-end">
+                <div className="flex-col items-center flex-shrink-0">
+                  <label htmlFor={kindInputId} className="text-xs font-semibold">
+                    {"Widget type" |> str}
+                  </label>
+                  <div className="mt-1 flex toggle-button__group flex-shrink-0 rounded-lg" id={kindInputId}>
+                    {toggleButton("group")}
+                    {toggleButton("post")}
+                    {toggleButton("question")}
+                  </div>
+                </div>
+                <label htmlFor=slugInputId className="text-xs font-semibold">
+                  { slugTitle |> str }
+                </label>
+                <div className="flex mt-1">
+                  <input
+                    id=slugInputId
+                    placeholder={ slugPlaceholder }
+                    className="w-full py-1 px-2 border rounded"
+                    type_="text"
+                    value=slug
+                    onChange={updateCommunityWidgetSlug(send, kind)}
+                  />
+                </div>
+                <button
+                  className="mt-4 btn btn-success"
+                  onClick={onCommunityWidgetFormSave(target, aboveContentBlock, kind, slug, send, addContentBlockCB)}>
+                  {t("embed.save_button")->str}
+                </button>
+              </div>
             </div>
-          </div>
+          }
         }}
       </div>
       {switch state.error {

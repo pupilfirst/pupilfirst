@@ -36,8 +36,16 @@ let make = (~kind, ~slug, ~contentBlock, ~updateContentBlockCB) => {
     </button>
   }
 
+  let (slugTitle, slugPlaceholder) = switch kind {
+    | "group" => ("Slug", "paste group slug here")
+    | "question" => ("Question ID", "paste question id here")
+    | "post" => ("Post ID", "paste post id here")
+    | _ => ("Invalid", "Unknown type")
+  }
+
   <div className="relative border border-gray-400 rounded-lg">
     <div className="flex-col border-t justify-end">
+      <p className="font-bold text-xl p-3 border-1 border-b border-gray-400">{ "Community widget" |> str }</p>
       <div className="flex-col items-center flex-shrink-0 p-3">
         <label htmlFor={kindInputId} className="block tracking-wide text-sm font-semibold mr-3">
           {"Widget type" |> str}
@@ -49,14 +57,14 @@ let make = (~kind, ~slug, ~contentBlock, ~updateContentBlockCB) => {
         </div>
       </div>
       <div className="flex-1 content-block__action-bar-input p-3">
-        <label htmlFor=slugInputId className="text-sm font-semibold"> {"Slug" |> str} </label>
+        <label htmlFor=slugInputId className="text-sm font-semibold"> {slugTitle |> str} </label>
         <input
           id=slugInputId
           className="mt-1 appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
           onChange={onChangeSlug(contentBlock, kind, updateContentBlockCB)}
           type_="text"
           value=slug
-          placeholder="community item slug here"
+          placeholder={ slugPlaceholder }
         />
       </div>
     </div>

@@ -35,7 +35,7 @@ module Users
         render 'email_sent', locals: { kind: :reset_password_link }
       else
         flash[:error] = @form.errors.full_messages.join(', ')
-        redirect_to password_reset_path
+        redirect_to request_password_reset_path
       end
     end
 

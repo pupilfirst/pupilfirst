@@ -43,7 +43,7 @@ feature 'User signing in by supplying email address', js: true do
         click_link 'Continue with email'
         click_link 'Set a New Password'
         fill_in 'Email', with: user.email
-        click_button 'Send Email'
+        click_button 'Request password reset'
 
         expect(page).to have_content(
           "We've sent you a link to reset your password"
@@ -53,7 +53,7 @@ feature 'User signing in by supplying email address', js: true do
         click_link 'Continue with email'
         click_link 'Set a New Password'
         fill_in 'Email', with: user.email
-        click_button 'Send Email'
+        click_button 'Request password reset'
 
         expect(page).to have_content(
           'An email was sent less than two minutes ago. Please wait for a few minutes before trying again'
@@ -103,6 +103,7 @@ feature 'User signing in by supplying email address', js: true do
 
       scenario 'does not allow to change password without a valid token' do
         visit reset_password_path(token: 'myRandomToken')
+
         expect(page).to have_content(
           'That one-time link has already been used, or is invalid'
         )
@@ -117,6 +118,7 @@ feature 'User signing in by supplying email address', js: true do
       click_link 'Continue with email'
       fill_in 'Email Address', with: 'unregistered@example.org'
       click_button 'Email me a link to sign in'
+
       expect(page).to have_content(
         'Could not find user with this email. Please check the email that you entered'
       )
@@ -128,7 +130,8 @@ feature 'User signing in by supplying email address', js: true do
       click_link 'Continue with email'
       click_link 'Set a New Password'
       fill_in 'Email', with: 'unregistered@example.org'
-      click_button 'Send Email'
+      click_button 'Request password reset'
+
       expect(page).to have_content(
         'Could not find user with this email. Please check the email that you entered'
       )

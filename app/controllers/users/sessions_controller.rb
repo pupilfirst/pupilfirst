@@ -133,8 +133,8 @@ module Users
       @show_checkbox_recaptcha = params[:visible_recaptcha].present?
     end
 
-    # GET /users/password_reset
-    def password_reset
+    # GET /users/request_password_reset
+    def request_password_reset
       if current_user.present?
         redirect_to edit_user_path
         return

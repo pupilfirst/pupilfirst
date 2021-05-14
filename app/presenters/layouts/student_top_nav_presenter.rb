@@ -8,7 +8,8 @@ module Layouts
         authenticity_token: view.form_authenticity_token,
         is_logged_in: current_user.present?,
         current_user: user_details,
-        has_notifications: notifications?
+        has_notifications: notifications?,
+        community_host: Rails.configuration.community_host
       }
     end
 

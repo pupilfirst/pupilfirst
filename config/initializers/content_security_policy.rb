@@ -115,7 +115,7 @@ Rails.application.config.content_security_policy do |policy|
 
   def tribe_community_csp
     {
-      frame: %w[https://community.growthtribe.io https://auth.growthtribe.io],
+      frame: [Rails.application.config.community_host, 'https://auth.growthtribe.io'],
     }
   end
 

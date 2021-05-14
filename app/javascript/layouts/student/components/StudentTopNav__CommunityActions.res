@@ -13,11 +13,11 @@ let showLink = (icon, title, description, href) =>
     </div>
   </a>
 
-let links = () => {
+let links = (communityHost) => {
   [
-    showLink(`📄`, "Post", "Quickly share what's on your mind with everyone", "https://community.growthtribe.io/home/posts"),
-    showLink(`❓`, "Question", "Perfect when you want definitive answers on a topic", "https://community.growthtribe.io/home/questions"),
-    showLink(`💬`, "Discussion", "Great for ongoing dialogue with others in the community", "https://community.growthtribe.io/home/discussions"),
+    showLink(`📄`, "Post", "Quickly share what's on your mind with everyone", communityHost ++ "/home/posts"),
+    showLink(`❓`, "Question", "Perfect when you want definitive answers on a topic", communityHost ++ "/home/questions"),
+    showLink(`💬`, "Discussion", "Great for ongoing dialogue with others in the community", communityHost ++ "/home/discussions"),
   ]
 }
 
@@ -34,7 +34,7 @@ let toggleDropdown = (setShowDropdown, event) => {
 }
 
 @react.component
-let make = () => {
+let make = (~communityHost) => {
   let (showDropdown, setShowDropdown) = React.useState(() => false)
 
   React.useEffect1(() => {
@@ -57,7 +57,7 @@ let make = () => {
     </button>
     {showDropdown
       ? <div className="w-64 bg-white shadow-lg rounded mt-1 border border-gray-400 absolute overflow-x-hidden z-30 right-0">
-          {links() |> React.array}
+          {links(communityHost) |> React.array}
         </div>
       : React.null}
   </div>

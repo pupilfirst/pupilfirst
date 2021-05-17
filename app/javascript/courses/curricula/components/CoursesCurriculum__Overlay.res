@@ -572,24 +572,6 @@ let make = (
         {overlayStatus(course, target, targetStatus, preview)}
         {handleLocked(target, targets, targetStatus, statusOfTargets, send)}
         {handlePendingStudents(targetStatus, state.targetDetails, users)}
-        {switch state.targetDetails {
-        | Some(targetDetails) => tabOptions(state, send, targetDetails, targetStatus)
-        | None =>
-          <div className="course-overlay__skeleton-head-container max-w-3xl w-full mx-auto">
-            <div
-              className="course-overlay__skeleton-head-wrapper bg-white h-13 flex items-center justify-between border border-b-0 rounded-t-lg mt-5 md:mt-7">
-              <div
-                className="course-overlay__skeleton-line-placeholder-sm w-1/3 mx-8 skeleton-animate"
-              />
-              <div
-                className="course-overlay__skeleton-line-placeholder-sm w-1/3 mx-8 skeleton-animate"
-              />
-              <div
-                className="course-overlay__skeleton-line-placeholder-sm w-1/3 mx-8 skeleton-animate"
-              />
-            </div>
-          </div>
-        }}
       </div>
     </div>
     {switch state.targetDetails {

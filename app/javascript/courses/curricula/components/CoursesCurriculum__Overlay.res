@@ -344,7 +344,7 @@ let learnSection = (
   })
 
   <div className={overlayContentClasses(tab == Learn)}>
-    <CoursesCurriculum__Learn targetDetails author courseId targetId coaches /> {linkToTab}
+    <CoursesCurriculum__Learn targetDetails author courseId targetId coaches />
   </div>
 }
 

@@ -10,6 +10,7 @@ let renderBlockClasses = block =>
   | Embed(_) => "mt-6 pb-7"
   | CoachingSession(_) => "mt-6 pb-7"
   | PdfDocument(_) => "mt-6"
+  | CommunityWidget(_) => "mt-6"
   }
 
 let markdownContentBlock = markdown => <MarkdownBlock markdown profile=Markdown.Permissive />
@@ -105,6 +106,8 @@ let pdfDocumentContentBlock = (url, title, filename) =>
     </div>
   </div>
 
+let communityWidgetContentBlock = (id, kind, slug) => <Tribe id kind slug />
+
 @react.component
 let make = (~contentBlocks, ~coaches=?) =>
   <div className="text-base" id="learn-component">
@@ -117,6 +120,7 @@ let make = (~contentBlocks, ~coaches=?) =>
         embedCode->Belt.Option.mapWithDefault(React.null, code => embedContentBlock(code))
       | CoachingSession(_lastResolvedAt) => coachingSessionBlock(coaches)
       | PdfDocument(url, title, filename) => pdfDocumentContentBlock(url, title, filename)
+      | CommunityWidget(kind, slug) => communityWidgetContentBlock(block |> ContentBlock.id, kind, slug)
       }
 
       <div className={renderBlockClasses(block)} key={block |> ContentBlock.id}>

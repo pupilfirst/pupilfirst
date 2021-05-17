@@ -56,18 +56,18 @@ let notificationButton = hasNotifications =>
     hasNotifications
   />
 
-let messagesButton = () =>
+let messagesButton = (communityHost) =>
   <div className="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg">
     <a
       className="font-semibold w-full flex items-center justify-center text-gray-100 hover:text-preciseBlue"
-      href="https://community.growthtribe.io/messages">
+      href={communityHost ++ "/messages"}>
       <FaIcon classes="fas fa-comment text-lg" />
     </a>
   </div>
 
 let isMobile = () => Webapi.Dom.window |> Webapi.Dom.Window.innerWidth < 768
 
-let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
+let headerLinks = (links, isLoggedIn, user, hasNotifications, communityHost) => {
   let (visibleLinks, dropdownLinks) = switch (Array.to_list(links), isMobile()) {
   | (links, true) => (Array.of_list(links), [])
   | (list{l1, l2, l3, l4, l5, ...rest}, false) => (
@@ -83,9 +83,9 @@ let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
     |> Js.Array.mapi((l, index) => headerLink(index |> string_of_int, l))
     |> Js.Array.concat([<StudentTopNav__DropDown links=dropdownLinks key="more-links" />])
     |> Js.Array.concat([
-      ReactUtils.nullUnless(messagesButton(), isLoggedIn && !isMobile()),
+      ReactUtils.nullUnless(messagesButton(communityHost), isLoggedIn && !isMobile()),
       ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn && !isMobile()),
-      ReactUtils.nullUnless(<StudentTopNav__CommunityActions key="community-actions" />, isLoggedIn && !isMobile()),
+      ReactUtils.nullUnless(<StudentTopNav__CommunityActions key="community-actions" communityHost />, isLoggedIn && !isMobile()),
     ])
     |> Js.Array.concat([
       switch (isLoggedIn, isMobile()) {
@@ -101,7 +101,7 @@ let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
 }
 
 @react.component
-let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifications) => {
+let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifications, ~communityHost) => {
   let (menuHidden, toggleMenuHidden) = React.useState(() => isMobile())
 
   React.useEffect(() => {
@@ -134,7 +134,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
           </a>
           {ReactUtils.nullUnless(
             <div className="flex items-center space-x-2">
-              {ReactUtils.nullUnless(messagesButton(), isLoggedIn)}
+              {ReactUtils.nullUnless(messagesButton(communityHost), isLoggedIn)}
               {ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn)}
               <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
                 <div
@@ -153,7 +153,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
         {!menuHidden && !isMobile()
           ? <div
               className="student-navbar__links-container flex justify-end items-center w-3/5 lg:w-3/4 flex-no-wrap flex-shrink-0">
-              {headerLinks(links, isLoggedIn, currentUser, hasNotifications)}
+              {headerLinks(links, isLoggedIn, currentUser, hasNotifications, communityHost)}
             </div>
           : React.null}
       </nav>
@@ -161,7 +161,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
     {isMobile() && !menuHidden
       ? <div
           className="student-navbar__links-container flex flex-row border-t w-full flex-wrap shadow-lg">
-          {headerLinks(links, isLoggedIn, currentUser, hasNotifications)}
+          {headerLinks(links, isLoggedIn, currentUser, hasNotifications, communityHost)}
         </div>
       : React.null}
   </div>

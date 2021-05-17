@@ -48,5 +48,8 @@ module Pupilfirst
 
     # Ensure BatchLoader's cache is purged between requests.
     config.middleware.use BatchLoader::Middleware
+
+    # Tribe's Community
+    config.community_host = ENV['COMMUNITY_HOST']
   end
 end

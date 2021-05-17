@@ -38,6 +38,7 @@ module Types
     field :create_embed_content_block, mutation: Mutations::CreateEmbedContentBlock, null: false
     field :update_file_block, mutation: Mutations::UpdateFileContentBlock, null: false
     field :update_markdown_block, mutation: Mutations::UpdateMarkdownContentBlock, null: false
+    field :update_community_widget_block, mutation: Mutations::UpdateCommunityWidgetContentBlock, null: false
     field :update_image_block, mutation: Mutations::UpdateImageContentBlock, null: false
     field :update_target, mutation: Mutations::UpdateTarget, null: false
     field :create_target_version, mutation: Mutations::CreateTargetVersion, null: false
@@ -77,5 +78,6 @@ module Types
     field :unlock_topic, mutation: Mutations::UnlockTopic, null: false
     field :insert_content_block, mutation: Mutations::InsertContentBlock, null: false
     field :update_team_tags, mutation: Mutations::UpdateTeamTags, null: false
+    field :create_community_widget_content_block, mutation: Mutations::CreateCommunityWidgetContentBlock, null: false
   end
 end

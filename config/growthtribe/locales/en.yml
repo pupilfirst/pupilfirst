@@ -58,6 +58,7 @@ en:
         more: More
         coaching_session: Coaching Session
         pdf_document: PDF document
+        community_widget: Community Widget
     CurriculumEditor__TargetGroupShow:
       create_target: Create a lesson
       milestone_targets: Milestone Lessons

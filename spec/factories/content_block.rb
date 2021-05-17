@@ -58,5 +58,20 @@ FactoryBot.define do
       file { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/uploads/files/pdf-sample.pdf'), 'application/pdf') }
       content { { title: Faker::Lorem.words(number: 3).join(" ").titleize } }
     end
+
+    trait :community_widget_group do
+      block_type { ContentBlock::BLOCK_TYPE_COMMUNITY_WIDGET }
+      content { { type: 'group', slug: Faker::Lorem.words(number: 3).join("-"), components: [] } }
+    end
+
+    trait :community_widget_question do
+      block_type { ContentBlock::BLOCK_TYPE_COMMUNITY_WIDGET }
+      content { { type: 'question', slug: Faker::Lorem.words(number: 3).join("-"), components: [] } }
+    end
+
+    trait :community_widget_post do
+      block_type { ContentBlock::BLOCK_TYPE_COMMUNITY_WIDGET }
+      content { { type: 'post', slug: Faker::Lorem.words(number: 3).join("-"), components: [] } }
+    end
   end
 end

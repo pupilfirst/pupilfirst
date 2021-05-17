@@ -113,6 +113,12 @@ Rails.application.config.content_security_policy do |policy|
     }
   end
 
+  def tribe_community_csp
+    {
+      frame: [Rails.application.config.community_host, 'https://auth.growthtribe.io'],
+    }
+  end
+
   def development_csp
     return {} unless Rails.env.development?
 
@@ -140,6 +146,7 @@ Rails.application.config.content_security_policy do |policy|
       heap_csp,
       gtm_csp,
       calendly_csp,
+      tribe_community_csp,
       development_csp,
     ]
       .flat_map{|csp| csp[kind]}

@@ -303,6 +303,83 @@ feature 'Target Content Editor', js: true do
     end
   end
 
+  scenario 'school admin adds an community widget block - group' do
+    sign_in_user school_admin.user, referrer: content_school_course_target_path(course, target)
+
+    expect(target.current_target_version.content_blocks.count).to eq(1)
+    expect(page).to have_selector('button[title="Delete"]', count: 0) # There is only one block - so the button should be hidden.
+
+    slug = 'group-slug-123'
+
+    # Try adding a new file block.
+    within('.content-block-creator--open') do
+      find('p', text: 'More').click
+      find('p', text: 'Community Widget').click
+      fill_in('Slug', with: slug)
+      click_button('Save')
+    end
+    expect(page).to have_selector('button[title="Delete"]', count: 2)
+    expect(target.current_target_version.content_blocks.count).to eq(2)
+
+    cb = ContentBlock.last
+
+    expect(cb.block_type).to eq(ContentBlock::BLOCK_TYPE_COMMUNITY_WIDGET)
+    expect(cb.content['kind']).to eq('group')
+    expect(cb.content['slug']).to eq(slug)
+  end
+
+  scenario 'school admin adds an community widget block - post' do
+    sign_in_user school_admin.user, referrer: content_school_course_target_path(course, target)
+
+    expect(target.current_target_version.content_blocks.count).to eq(1)
+    expect(page).to have_selector('button[title="Delete"]', count: 0) # There is only one block - so the button should be hidden.
+
+    slug = 'post-123'
+
+    # Try adding a new file block.
+    within('.content-block-creator--open') do
+      find('p', text: 'More').click
+      find('p', text: 'Community Widget').click
+      click_button('Post')
+      fill_in('Post ID', with: slug)
+      click_button('Save')
+    end
+    expect(page).to have_selector('button[title="Delete"]', count: 2)
+    expect(target.current_target_version.content_blocks.count).to eq(2)
+
+    cb = ContentBlock.last
+
+    expect(cb.block_type).to eq(ContentBlock::BLOCK_TYPE_COMMUNITY_WIDGET)
+    expect(cb.content['kind']).to eq('post')
+    expect(cb.content['slug']).to eq(slug)
+  end
+
+  scenario 'school admin adds an community widget block - question' do
+    sign_in_user school_admin.user, referrer: content_school_course_target_path(course, target)
+
+    expect(target.current_target_version.content_blocks.count).to eq(1)
+    expect(page).to have_selector('button[title="Delete"]', count: 0) # There is only one block - so the button should be hidden.
+
+    slug = 'question-123'
+
+    # Try adding a new file block.
+    within('.content-block-creator--open') do
+      find('p', text: 'More').click
+      find('p', text: 'Community Widget').click
+      click_button('Question')
+      fill_in('Question ID', with: slug)
+      click_button('Save')
+    end
+    expect(page).to have_selector('button[title="Delete"]', count: 2)
+    expect(target.current_target_version.content_blocks.count).to eq(2)
+
+    cb = ContentBlock.last
+
+    expect(cb.block_type).to eq(ContentBlock::BLOCK_TYPE_COMMUNITY_WIDGET)
+    expect(cb.content['kind']).to eq('question')
+    expect(cb.content['slug']).to eq(slug)
+  end
+
   context 'when video upload is enabled for a school' do
     let(:vimeo_access_token) { SecureRandom.hex }
     let(:title) { Faker::Lorem.words(number: 3).join(' ') }

@@ -9,6 +9,8 @@ type embedCode = option<string>
 type filename = string
 type requestSource = [#User | #VimeoUpload]
 type lastResolvedAt = option<Js.Date.t>
+type kind = string
+type slug = string
 
 type width =
   | Auto
@@ -24,6 +26,7 @@ type blockType =
   | Embed(url, embedCode, requestSource, lastResolvedAt)
   | CoachingSession(lastResolvedAt)
   | PdfDocument(url, title, filename)
+  | CommunityWidget(kind, slug)
 
 type rec t = {
   id: id,
@@ -109,6 +112,14 @@ let decodePdfDocumentContent = json => {
   json |> field("title", string)
 }
 
+let decodeCommunityWidgetContent = json => {
+  open Json.Decode
+  (
+    json |> field("kind", string),
+    json |> field("slug", string)
+  )
+}
+
 let decode = json => {
   open Json.Decode
 
@@ -136,6 +147,9 @@ let decode = json => {
     let url = json |> field("fileUrl", string)
     let filename = json |> field("filename", string)
     PdfDocument(url, title, filename)
+  | "community_widget" =>
+    let (kind, slug) = json |> field("content", decodeCommunityWidgetContent)
+    CommunityWidget(kind, slug)
   | unknownBlockType => raise(UnexpectedBlockType(unknownBlockType))
   }
 
@@ -163,6 +177,7 @@ let makeEmbedBlock = (url, embedCode, requestSource, lastResolvedAt) => Embed(
 )
 let makeCoachingSessionBlock = lastResolvedAt => CoachingSession(lastResolvedAt)
 let makePdfDocumentBlock = (fileUrl, title, fileName) => PdfDocument(fileUrl, title, fileName)
+let makeCommunityWidgetBlock = (kind, slug) => CommunityWidget(kind, slug)
 
 let make = (id, blockType, sortIndex) => {id: id, blockType: blockType, sortIndex: sortIndex}
 
@@ -196,6 +211,7 @@ let makeFromJs = js => {
       content["lastResolvedAt"]->Belt.Option.map(DateFns.parseISO),
     )
   | #PdfDocumentBlock(content) => PdfDocument(content["url"], content["title"], content["filename"])
+  | #CommunityWidgetBlock(content) => CommunityWidget(content["kind"], content["slug"])
   }
 
   make(id, blockType, sortIndex)
@@ -209,6 +225,7 @@ let blockTypeAsString = blockType =>
   | Embed(_) => "embed"
   | CoachingSession(_) => "coaching_session"
   | PdfDocument(_) => "pdf_document"
+  | CommunityWidget(_) => "community_widget"
   }
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1}
@@ -225,6 +242,7 @@ let updateFile = (title, t) =>
   switch t.blockType {
   | File(url, _, filename) => {...t, blockType: File(url, title, filename)}
   | PdfDocument(url, _, filename) => {...t, blockType: PdfDocument(url, title, filename)}
+  | CommunityWidget(_)
   | CoachingSession(_)
   | Markdown(_)
   | Image(_)
@@ -238,6 +256,7 @@ let updateImageCaption = (t, caption) =>
   | File(_)
   | CoachingSession(_)
   | PdfDocument(_)
+  | CommunityWidget(_)
   | Embed(_) => t
   }
 
@@ -248,12 +267,25 @@ let updateImageWidth = (t, width) =>
   | File(_)
   | CoachingSession(_)
   | PdfDocument(_)
+  | CommunityWidget(_)
   | Embed(_) => t
   }
 
 let updateMarkdown = (markdown, t) =>
   switch t.blockType {
   | Markdown(_) => {...t, blockType: Markdown(markdown)}
+  | File(_)
+  | Image(_)
+  | CoachingSession(_)
+  | PdfDocument(_)
+  | CommunityWidget(_)
+  | Embed(_) => t
+  }
+
+let updateCommunityWidget = (kind, slug, t) =>
+  switch t.blockType {
+  | CommunityWidget(_) => {...t, blockType: CommunityWidget(kind, slug)}
+  | Markdown(_)
   | File(_)
   | Image(_)
   | CoachingSession(_)
@@ -296,6 +328,10 @@ module Fragments = %graphql(
         url
         filename
       }
+      ... on CommunityWidgetBlock {
+        kind
+        slug
+      }
     }
   }
 `
@@ -336,6 +372,10 @@ module Query = %graphql(
             title
             url
             filename
+          }
+          ... on CommunityWidgetBlock {
+            kind
+            slug
           }
         }
       }

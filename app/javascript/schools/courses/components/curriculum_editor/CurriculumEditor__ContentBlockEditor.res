@@ -88,6 +88,18 @@ module UpdateImageBlockMutation = %graphql(
   `
 )
 
+module UpdateCommunityWidgetBlockMutation = %graphql(
+  `
+    mutation UpdateCommunityWidgetBlockMutation($id: ID!, $kind: String!, $slug:String! ) {
+      updateCommunityWidgetBlock(id: $id, kind: $kind, slug:$slug) {
+        contentBlock {
+          ...ContentBlock.Fragments.AllFields
+        }
+      }
+    }
+  `
+)
+
 let controlIcon = (~icon, ~title, ~color, ~handler) => {
   let buttonClasses = switch color {
   | #Grey => "hover:bg-gray-200"
@@ -206,6 +218,10 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
     let extractor = result => result["updateImageBlock"]["contentBlock"]
 
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
+  | CommunityWidget(kind, slug) =>
+    let mutation = UpdateCommunityWidgetBlockMutation.make(~id, ~kind, ~slug, ())
+    let extractor = result => result["updateCommunityWidgetBlock"]["contentBlock"]
+    updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
   | CoachingSession(_)
   | Embed(_) => raise(InvalidBlockTypeForUpdate)
   }
@@ -243,6 +259,8 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, state, send) 
     <CurriculumEditor__ImageBlockEditor width url caption contentBlock updateContentBlockCB />
   | PdfDocument(url, title, filename) =>
     <CurriculumEditor__FileBlockEditor url title filename contentBlock updateContentBlockCB fileTypeIcon="fa-file-pdf" />
+  | CommunityWidget(kind, slug) =>
+    <CurriculumEditor__CommunityWidgetBlockEditor kind slug contentBlock updateContentBlockCB />
   }
 }
 

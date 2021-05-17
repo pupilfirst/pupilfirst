@@ -80,6 +80,13 @@ FactoryBot.define do
       end
     end
 
+    trait :with_community_widget do
+      after(:create) do |target|
+        target_version = create(:target_version, target: target)
+        create(:content_block, :community_widget_group, target_version: target_version)
+      end
+    end
+
     trait :with_group do
       target_group { nil } # We'll add it later.
 

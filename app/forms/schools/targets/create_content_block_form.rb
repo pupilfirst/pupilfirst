@@ -37,6 +37,8 @@ module Schools
           { caption: filename, width: 'Auto' }
         when 'file', 'pdf_document'
           { title: filename }
+        when ContentBlock::BLOCK_TYPE_COMMUNITY_WIDGET
+          { components: [] }
         else
           raise "Unexpected block type #{block_type} encountered when creating file-based content block for target with ID #{target_id}"
         end
@@ -60,6 +62,10 @@ module Schools
 
       def pdf_document_block?
         block_type == ContentBlock::BLOCK_TYPE_PDF_DOCUMENT
+      end
+
+      def community_widget?
+        block_type == ContentBlock::BLOCK_TYPE_COMMUNITY_WIDGET
       end
 
       def above_content_block

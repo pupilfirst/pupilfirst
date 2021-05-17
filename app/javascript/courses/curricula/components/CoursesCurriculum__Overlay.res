@@ -357,7 +357,7 @@ let discussSection = (target, targetDetails, tab) =>
 
 let completeSectionClasses = (tab, completionType) =>
   switch (tab, completionType) {
-  | (Learn, TargetDetails.Evaluated | TakeQuiz)
+  | (Learn, TargetDetails.Evaluated | TakeQuiz) => ""
   | (Discuss, Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => "hidden"
   | (Learn, MarkAsComplete | LinkToComplete)
   | (Complete(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => ""

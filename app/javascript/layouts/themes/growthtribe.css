@@ -1,5 +1,7 @@
 @import "custom_styles";
 
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&display=swap');
+
 @layer components {
   .theme-growthtribe {
     --color-primary-100: #F0EAFB;
@@ -49,30 +51,36 @@
 
   html {
     @apply theme-growthtribe;
+    font-family: Barlow, Helvetica, Arial, Verdana, Tahoma, sans-serif;
+  }
+
+
+  .btn-complete {
+    @apply bg-cyan text-white flex items-center justify-center w-full rounded-lg py-4 px-6 font-semibold text-lg;
   }
 
   .btn-primary {
-    @apply bg-none bg-preciseBlue text-white border border-preciseBlue shadow;
+    @apply bg-none bg-preciseBlue text-white text-lg border-2 border-preciseBlue py-4 px-6 font-semibold rounded-lg transition-all duration-200;
   }
 
   .btn-primary:hover {
-    @apply bg-none bg-transparent text-preciseBlue border border-preciseBlue;
+    @apply bg-none bg-transparent text-preciseBlue  ;
   }
 
   .btn-primary:focus {
-    @apply bg-none bg-transparent text-preciseBlue border border-preciseBlue;
+    @apply bg-none bg-transparent text-preciseBlue border border-preciseBlue rounded-lg;
   }
 
   .btn-primary-ghost {
-    @apply bg-none text-preciseBlue border border-preciseBlue;
+    @apply bg-none text-preciseBlue text-lg border-2 border-preciseBlue py-4 px-6 font-semibold rounded-lg transition-all duration-200;
   }
 
   .btn-primary-ghost:hover {
-    @apply bg-none bg-preciseBlue text-white shadow;
+    @apply bg-none bg-preciseBlue text-white border-preciseBlue;
   }
 
   .btn-primary-ghost:focus {
-    @apply bg-none bg-preciseBlue text-white shadow;
+    @apply bg-none bg-preciseBlue text-white shadow rounded-lg;
   }
 
   .transparent-background:disabled,

@@ -2,6 +2,8 @@ exception UnexpectedSubmissionStatus(string)
 
 %bs.raw(`require("./CoursesCurriculum__Overlay.css")`)
 
+@bs.module external backSvg: string = "../../../shared/images/back.svg"
+
 open CoursesCurriculum__Types
 
 module TargetStatus = CoursesCurriculum__TargetStatus
@@ -173,16 +175,15 @@ let renderLocked = text =>
   </div>
 let overlayStatus = (course, target, targetStatus, preview) =>
   <div>
-    <div className={overlayHeaderTitleCardClasses(targetStatus)}>
+    <div>
       <button
-        className={"course-overlay__close xl:absolute flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-t-none lg:rounded-b-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 lg:border-transparent lg:border-t-0 lg:shadow hover:text-gray-900 hover:shadow-md focus:border-gray-300 focus:outline-none focus:shadow-inner " ++
-        targetStatusClass("course-overlay__close--", targetStatus)}
+        className="flex flex-col items-center justify-centerrounded-t-lg lg:rounded-t-none lg:rounded-b-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 lg:border-transparent lg:border-t-0 lg:shadow hover:text-gray-900 hover:shadow-md focus:border-gray-300 focus:outline-none focus:shadow-inner "
         onClick={_e => closeOverlay(course)}>
-        <Icon className="fas fa-arrow-left fa-w-14 text-xl lg:text-2xl mt-1 lg:mt-0" />
-        <span className="text-xs hidden lg:inline-block mt-px"> {t("close_button")->str} </span>
+        <img alt="" src={backSvg}/>
+        <span className="text-xs lg:inline-block mt-px"> {t("close_button")->str} </span>
       </button>
       <div className="w-full flex flex-wrap md:flex-no-wrap items-center justify-between relative">
-        <h1 className="text-base leading-snug md:mr-6 md:text-xl">
+        <h1 className="text-siliconBlue-900 leading-snug md:mr-6 md:text-xl">
           {target |> Target.title |> str}
         </h1>
         {renderTargetStatus(targetStatus)}
@@ -399,21 +400,17 @@ let performQuickNavigation = (send, _event) => {
 }
 
 let navigationLink = (direction, url, send) => {
-  let (leftIcon, text, rightIcon) = switch direction {
-  | #Previous => (Some("fa-arrow-left"), t("previous_target_button"), None)
-  | #Next => (None, t("next_target_button"), Some("fa-arrow-right"))
+  let (cssClass, text) = switch direction {
+  | #Previous => ("btn-primary-ghost", t("previous_target_button"))
+  | #Next => ("btn-primary", t("next_target_button"))
   }
 
-  let arrow = icon =>
-    icon->Belt.Option.mapWithDefault(React.null, icon => <FaIcon classes={"fas " ++ icon} />)
 
   <Link
     href=url
     onClick={performQuickNavigation(send)}
-    className="block p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
-    {arrow(leftIcon)}
+    className={cssClass}>
     <span className="mx-2 hidden md:inline"> {text |> str} </span>
-    {arrow(rightIcon)}
   </Link>
 }
 
@@ -440,7 +437,7 @@ let quickNavigationLinks = (targetDetails, send) => {
         <button
           onClick=scrollOverlayToTop
           className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
-          <span className="mx-2 hidden md:inline"> {t("scroll_to_top")->str} </span>
+          <span className="mx-2 hidden md:inline"> {t("scroll_to_top")->str}</span>
           <span className="mx-2 md:hidden"> <i className="fas fa-arrow-up" /> </span>
         </button>
       </div>
@@ -490,8 +487,8 @@ let make = (
   <div
     id="target-overlay"
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
-    <div className="bg-gray-100 border-b border-gray-400 px-3">
-      <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
+    <div className="">
+      <div className="pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}
         {handleLocked(target, targets, targetStatus, statusOfTargets, send)}
         {handlePendingStudents(targetStatus, state.targetDetails, users)}

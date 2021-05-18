@@ -79,7 +79,7 @@ let autoVerify = (target, linkToComplete, saving, setSaving, addSubmissionCB, pr
   | _ =>
     <button
       disabled={saving || preview}
-      className="flex rounded btn-success text-lg justify-center w-full font-bold p-4  "
+      className="btn-complete"
       onClick={createAutoVerifySubmission(target, linkToComplete, setSaving, addSubmissionCB)}>
       {switch (saving, linkToComplete) {
       | (true, _) => completeButtonText("Saving", "fas fa-spinner fa-spin")

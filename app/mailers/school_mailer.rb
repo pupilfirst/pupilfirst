@@ -2,7 +2,7 @@
 class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMailer
   include Roadie::Rails::Mailer
 
-  layout 'mail/school'
+  layout 'mail/school_redesign'
 
   protected
 

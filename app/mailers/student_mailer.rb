@@ -1,4 +1,6 @@
 class StudentMailer < SchoolMailer
+  layout 'mail/school_redesign'
+
   def enrollment(student)
     @school = student.course.school
     @course = student.course

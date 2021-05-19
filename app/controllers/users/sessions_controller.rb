@@ -2,7 +2,7 @@ module Users
   class SessionsController < Devise::SessionsController
     include Devise::Controllers::Rememberable
     include RecaptchaVerifiable
-    before_action :skip_container, only: %i[new send_login_email]
+    before_action :skip_container, only: %i[new]
     before_action :must_have_current_school
     layout 'student'
 

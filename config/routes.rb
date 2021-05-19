@@ -8,7 +8,6 @@ Rails.application.routes.draw do
   devise_for :users, only: %i[sessions omniauth_callbacks], controllers: { sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks' }
 
   devise_scope :user do
-    post 'users/send_login_email', controller: 'users/sessions', action: 'send_login_email', as: 'user_send_login_email'
     post 'users/send_reset_password_email', controller: 'users/sessions', action: 'send_reset_password_email', as: 'user_send_reset_password_email'
     get 'users/token', controller: 'users/sessions', action: 'token', as: 'user_token'
     get 'users/reset_password', controller: 'users/sessions', action: 'reset_password', as: 'reset_password'

@@ -14,6 +14,7 @@ class UserSessionMailerPreview < ActionMailer::Preview
     host = school.present? ? school.domains.primary.fqdn : 'www.pupilfirst.localhost'
     login_url = Rails.application.routes.url_helpers.user_token_url(token: 'LOGIN_TOKEN', host: host, protocol: 'https')
 
-    UserSessionMailer.send_login_token('johndoe@example.com', school, login_url)
+    user = Founder.last.user
+    UserSessionMailer.send_login_token(user, school)
   end
 end

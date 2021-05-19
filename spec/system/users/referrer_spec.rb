@@ -8,7 +8,7 @@ feature 'Referrer Spec', js: true do
   scenario 'user will be redirected to the last known location upon login with password' do
     visit school_path
 
-    click_button 'Continue with email'
+    click_link 'Continue with email'
     fill_in 'email', with: user.email
     fill_in 'password', with: user.password
     click_button 'Sign in with password'
@@ -19,7 +19,7 @@ feature 'Referrer Spec', js: true do
   scenario 'user will be redirected to referrer path when referrer is set' do
     visit new_user_session_path referrer: school_path
 
-    click_button 'Continue with email'
+    click_link 'Continue with email'
     fill_in 'email', with: user.email
     fill_in 'password', with: user.password
     click_button 'Sign in with password'
@@ -30,7 +30,7 @@ feature 'Referrer Spec', js: true do
   scenario 'referrer will be set for login with token when the last location is known' do
     visit school_path
 
-    click_button 'Continue with email'
+    click_link 'Continue with email'
     fill_in 'Email Address', with: user.email
     click_button 'Email me a link to sign in'
 

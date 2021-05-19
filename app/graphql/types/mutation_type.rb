@@ -17,7 +17,6 @@ module Types
     field :delete_content_block, mutation: Mutations::DeleteContentBlock, null: false
     field :level_up, mutation: Mutations::LevelUp, null: false
     field :move_content_block, mutation: Mutations::MoveContentBlock, null: false
-    field :create_applicant, mutation: Mutations::CreateApplicant, null: false
     field :create_school_admin, mutation: Mutations::CreateSchoolAdmin, null: false
     field :update_school_admin, mutation: Mutations::UpdateSchoolAdmin, null: false
     field :create_course_export, mutation: Mutations::CreateCourseExport, null: false

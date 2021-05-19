@@ -152,13 +152,14 @@ module TeamsQuery = %graphql(
         nodes {
           id,
           name,
-          tags,
+          teamTags,
           levelId,
           students {
             id,
             name
             title
             avatarUrl
+            userTags
           }
           coachUserIds
           accessEndsAt
@@ -424,7 +425,7 @@ let onAddCoachNote = (courseId, state, send, ()) =>
   }
 
 @react.component
-let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~tags) => {
+let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~teamTags, ~userTags) => {
   let (currentTeamCoach, _) = React.useState(() =>
     teamCoaches->Belt.Array.some(coach => coach |> Coach.id == (currentCoach |> Coach.id))
       ? Some(currentCoach)
@@ -432,6 +433,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~tags) => {
   )
 
   let (state, send) = React.useReducerWithMapState(reducer, currentTeamCoach, computeInitialState)
+  let allTags = Belt.Set.String.union(teamTags, userTags)
 
   let courseId = course |> Course.id
 
@@ -468,7 +470,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~tags) => {
         <div className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
           <Multiselect
             id="filter"
-            unselected={unselected(levels, teamCoaches, tags, currentCoach |> Coach.id, state)}
+            unselected={unselected(levels, teamCoaches, allTags, currentCoach |> Coach.id, state)}
             selected={selected(state, currentCoach |> Coach.id)}
             onSelect={onSelectFilter(send)}
             onDeselect={onDeselectFilter(send)}

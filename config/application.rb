@@ -51,6 +51,9 @@ module Pupilfirst
 
     # Tribe's Community
     config.community_host = ENV['COMMUNITY_HOST']
-    config.action_mailer.show_previews = ENV['ENABLE_MAILER_PREVIEWS'].present?
+    if ENV['ENABLE_MAILER_PREVIEWS'].present?
+      config.action_mailer.show_previews =  true
+      config.action_mailer.preview_path ||= defined?(Rails.root) ? "#{Rails.root}/spec/mailers/previews" : nil
+    end
   end
 end

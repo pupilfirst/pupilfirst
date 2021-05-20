@@ -17,32 +17,27 @@ type tab =
 
 type state = {
   targetDetails: option<TargetDetails.t>,
-  tab: tab,
 }
 
 type action =
-  | Select(tab)
   | ResetState
   | SetTargetDetails(TargetDetails.t)
   | AddSubmission(Target.role)
   | ClearTargetDetails
 
-let initialState = {targetDetails: None, tab: Learn}
+let initialState = {targetDetails: None}
 
 let reducer = (state, action) =>
   switch action {
-  | Select(tab) => {...state, tab: tab}
   | ResetState => initialState
   | SetTargetDetails(targetDetails) => {
-      ...state,
       targetDetails: Some(targetDetails),
     }
-  | ClearTargetDetails => {...state, targetDetails: None}
+  | ClearTargetDetails => {targetDetails: None}
   | AddSubmission(role) =>
     switch role {
     | Target.Student => state
     | Team => {
-        ...state,
         targetDetails: state.targetDetails |> OptionUtils.map(TargetDetails.clearPendingUserIds),
       }
     }
@@ -96,65 +91,6 @@ let tabToString = (targetStatus, tab) =>
   | Discuss => t("discuss_tab")
   | Complete(completionType) => completionTypeToString(completionType, targetStatus)
   }
-
-let selectableTabs = targetDetails =>
-  TargetDetails.communities(targetDetails) == [] ? [Learn] : [Learn, Discuss]
-
-let tabClasses = (selection, tab) =>
-  "course-overlay__body-tab-item p-2 md:px-3 md:py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold" ++ (
-    tab == selection
-      ? " course-overlay__body-tab-item--selected"
-      : " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 cursor-pointer"
-  )
-
-let scrollCompleteButtonIntoViewEventually = () => Js.Global.setTimeout(() => {
-    let element = Webapi.Dom.document |> Webapi.Dom.Document.getElementById("auto-verify-target")
-    switch element {
-    | Some(e) =>
-      Webapi.Dom.Element.scrollIntoView(e)
-      e->Webapi.Dom.Element.setClassName("mt-4 complete-button-selected")
-    | None => Rollbar.error("Could not find the 'Complete' button to scroll to.")
-    }
-  }, 50) |> ignore
-
-let handleTablink = (send, _event) => {
-  send(Select(Learn))
-  scrollCompleteButtonIntoViewEventually()
-}
-
-let tabButton = (tab, state, send, targetStatus) =>
-  <span
-    key={"select-" ++ (tab |> tabToString(targetStatus))}
-    className={tabClasses(tab, state.tab)}
-    onClick={_e => send(Select(tab))}>
-    {tab |> tabToString(targetStatus) |> str}
-  </span>
-
-let tabLink = (tab, state, send, targetStatus) =>
-  <span onClick={handleTablink(send)} className={tabClasses(tab, state.tab)}>
-    {tab |> tabToString(targetStatus) |> str}
-  </span>
-
-let tabOptions = (state, send, targetDetails, targetStatus) => {
-  let completionType = targetDetails |> TargetDetails.computeCompletionType
-
-  <div className="flex justify-between max-w-3xl mx-auto -mb-px mt-5 md:mt-7">
-    {selectableTabs(targetDetails)
-    |> Js.Array.map(selection => tabButton(selection, state, send, targetStatus))
-    |> React.array}
-    {switch (targetStatus |> TargetStatus.status, completionType) {
-    | (Pending | PendingReview | Completed | Rejected, Evaluated | TakeQuiz) =>
-      tabButton(Complete(completionType), state, send, targetStatus)
-    | (Locked(CourseLocked | AccessLocked), Evaluated | TakeQuiz) =>
-      TargetDetails.submissions(targetDetails) != []
-        ? tabButton(Complete(completionType), state, send, targetStatus)
-        : React.null
-    | (Pending | PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) =>
-      tabLink(Complete(completionType), state, send, targetStatus)
-    | (Locked(_), _) => React.null
-    }}
-  </div>
-}
 
 let addSubmission = (target, state, send, addSubmissionCB, submission, levelUpEligibility) => {
   switch state.targetDetails {
@@ -310,59 +246,28 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
   }
 
 let learnSection = (
-  send,
   targetDetails,
-  tab,
   author,
   courseId,
   targetId,
-  targetStatus,
-  completionType,
   coaches,
 ) => {
-  let suffixLinkInfo = switch (TargetStatus.status(targetStatus), completionType) {
-  | (Pending | Rejected, TargetDetails.Evaluated) =>
-    Some((Complete(completionType), t("learn_cta_submit_work"), "fas fa-feather-alt"))
-  | (Pending | Rejected, TakeQuiz) =>
-    Some((Complete(completionType), t("learn_cta_take_quiz"), "fas fa-tasks"))
-  | (Pending | Rejected, LinkToComplete | MarkAsComplete) => None
-  | (PendingReview | Completed | Locked(_), _anyCompletionType) => None
-  }
-
-  let linkToTab = Belt.Option.mapWithDefault(suffixLinkInfo, React.null, ((
-    tab,
-    linkText,
-    iconClasses,
-  )) => {
-    <a
-      onClick={_ => send(Select(tab))}
-      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4">
-      <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {str(linkText)} </span>
-    </a>
-  })
-
   <div>
     <CoursesCurriculum__Learn targetDetails author courseId targetId coaches />
   </div>
 }
 
 let discussSection = (target, targetDetails, targetStatus) =>
-  <div>
-    <div id="discuss" className="text-2xl mt-4 pt-4 font-bold border-t border-1">
-      {Discuss |> tabToString(targetStatus) |> str}
+  TargetDetails.communities(targetDetails) == [] ?
+    React.null :
+    <div>
+      <div id="discuss" className="text-2xl mt-4 pt-4 font-bold border-t border-1">
+        {Discuss |> tabToString(targetStatus) |> str}
+      </div>
+      <CoursesCurriculum__Discuss
+        targetId={target |> Target.id} communities={targetDetails |> TargetDetails.communities}
+      />
     </div>
-    <CoursesCurriculum__Discuss
-      targetId={target |> Target.id} communities={targetDetails |> TargetDetails.communities}
-    />
-  </div>
-
-let completeSectionClasses = (tab, completionType) =>
-  switch (tab, completionType) {
-  | (Learn, TargetDetails.Evaluated | TakeQuiz) => ""
-  | (Discuss, Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => "hidden"
-  | (Learn, MarkAsComplete | LinkToComplete)
-  | (Complete(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => ""
-  }
 
 let completeSection = (
   state,
@@ -379,7 +284,8 @@ let completeSection = (
 ) => {
   let addVerifiedSubmissionCB = addVerifiedSubmission(target, state, send, addSubmissionCB)
 
-  <div className={completeSectionClasses(state.tab, completionType)}>
+  let completeSection =
+  <div>
     <div id="complete" className="text-2xl mt-4 pt-4 font-bold border-t border-1">
       {Complete(completionType) |> tabToString(targetStatus) |> str}
     </div>
@@ -436,6 +342,19 @@ let completeSection = (
     | (Locked(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => React.null
     }}
   </div>
+
+
+  {switch (targetStatus |> TargetStatus.status, completionType) {
+  | (Pending | PendingReview | Completed | Rejected, Evaluated | TakeQuiz) =>
+    completeSection
+  | (Locked(CourseLocked | AccessLocked), Evaluated | TakeQuiz) =>
+    TargetDetails.submissions(targetDetails) != []
+      ? completeSection
+      : React.null
+  | (Pending | PendingReview | Completed | Rejected, LinkToComplete | MarkAsComplete) =>
+    completeSection
+  | (Locked(_), _) => React.null
+  }}
 }
 
 let renderPendingStudents = (pendingUserIds, users) =>
@@ -585,14 +504,10 @@ let make = (
       <div>
         <div className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0">
           {learnSection(
-            send,
             targetDetails,
-            state.tab,
             author,
             Course.id(course),
             Target.id(target),
-            targetStatus,
-            completionType,
             coaches,
           )}
           {discussSection(target, targetDetails, targetStatus)}
@@ -610,11 +525,7 @@ let make = (
             completionType,
           )}
         </div>
-        {switch state.tab {
-        | Learn => quickNavigationLinks(targetDetails, send)
-        | Discuss
-        | Complete(_) => React.null
-        }}
+        { quickNavigationLinks(targetDetails, send) }
       </div>
 
     | None =>

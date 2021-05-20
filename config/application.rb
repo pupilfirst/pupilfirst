@@ -53,7 +53,7 @@ module Pupilfirst
     config.community_host = ENV['COMMUNITY_HOST']
     if ENV['ENABLE_MAILER_PREVIEWS'].present?
       config.action_mailer.show_previews =  true
-      config.action_mailer.preview_path ||= defined?(Rails.root) ? Rails.root.join("/spec/mailers/previews") : nil
+      config.action_mailer.preview_path ||= defined?(Rails.root) ? Rails.root.join("spec/mailers/previews") : nil
     end
   end
 end

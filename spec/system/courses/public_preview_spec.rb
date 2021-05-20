@@ -97,7 +97,7 @@ feature 'Public preview of course curriculum', js: true do
       'You are currently looking at a preview of this course.'
     )
 
-    find('.course-overlay__body-tab-item', text: 'Take Quiz').click
+    expect(find('#complete')).to have_text('Take Quiz')
 
     expect(page).to have_content(/Question #1/i)
 
@@ -117,7 +117,7 @@ feature 'Public preview of course curriculum', js: true do
       'You are currently looking at a preview of this course.'
     )
 
-    find('.course-overlay__body-tab-item', text: 'Complete').click
+    expect(find('#complete')).to have_text('Complete')
 
     # The submit button should be disabled.
     expect(page).to have_button('Submit', disabled: true)

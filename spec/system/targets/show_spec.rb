@@ -552,7 +552,7 @@ feature 'Target Overlay', js: true do
 
       # Return to the target overlay. Student should be able to their question there now.
       visit target_path(target_l1)
-      find('.course-overlay__body-tab-item', text: 'Discuss').click
+      expect(find('#discuss')).to have_text('Discuss')
 
       expect(page).to have_text(community_1.name)
       expect(page).to have_text(topic_title)

@@ -174,16 +174,16 @@ let renderLocked = text =>
     <i className="fas fa-lock text-lg" /> <span className="ml-2"> {text |> str} </span>
   </div>
 let overlayStatus = (course, target, targetStatus, preview) =>
-  <div>
+  <div className="max-w-container pt-8 px-4 mx-auto">
     <div>
       <button
-        className="flex flex-col items-center justify-centerrounded-t-lg lg:rounded-t-none lg:rounded-b-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 lg:border-transparent lg:border-t-0 lg:shadow hover:text-gray-900 hover:shadow-md focus:border-gray-300 focus:outline-none focus:shadow-inner "
+        className="text-siliconBlue-900 opacity-50  hover:opacity-100 mb-2 transition duration-300 flex items-center"
         onClick={_e => closeOverlay(course)}>
         <img alt="" src={backSvg}/>
-        <span className="text-xs lg:inline-block mt-px"> {t("close_button")->str} </span>
+        <span className="ml-3 text-xl font-semibold"> {t("close_button")->str} </span>
       </button>
       <div className="w-full flex flex-wrap md:flex-no-wrap items-center justify-between relative">
-        <h1 className="text-siliconBlue-900 leading-snug md:mr-6 md:text-xl">
+        <h1 className="text-siliconBlue-900 leading-snug  text-3xl md:text-4xl">
           {target |> Target.title |> str}
         </h1>
         {renderTargetStatus(targetStatus)}
@@ -410,7 +410,7 @@ let navigationLink = (direction, url, send) => {
     href=url
     onClick={performQuickNavigation(send)}
     className={cssClass}>
-    <span className="mx-2 hidden md:inline"> {text |> str} </span>
+    <span className=""> {text |> str} </span>
   </Link>
 }
 
@@ -425,23 +425,23 @@ let scrollOverlayToTop = _event => {
 let quickNavigationLinks = (targetDetails, send) => {
   let (previous, next) = targetDetails |> TargetDetails.navigation
 
-  <div className="pb-6">
-    <hr className="my-6" />
-    <div className="container mx-auto max-w-3xl flex px-3 lg:px-0">
-      <div className="w-1/3 mr-2">
+  <div className="pb-12">
+    <hr className="my-12" />
+    <div className="container mx-auto max-w-6xl flex px-3 lg:px-0 justify-between">
+      <div className="">
         {previous->Belt.Option.mapWithDefault(React.null, previousUrl =>
           navigationLink(#Previous, previousUrl, send)
         )}
       </div>
-      <div className="w-1/3 mx-2">
+      <div className="">
         <button
           onClick=scrollOverlayToTop
-          className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
+          className="">
           <span className="mx-2 hidden md:inline"> {t("scroll_to_top")->str}</span>
           <span className="mx-2 md:hidden"> <i className="fas fa-arrow-up" /> </span>
         </button>
       </div>
-      <div className="w-1/3 ml-2">
+      <div className="">
         {next->Belt.Option.mapWithDefault(React.null, nextUrl =>
           navigationLink(#Next, nextUrl, send)
         )}
@@ -499,7 +499,7 @@ let make = (
       let completionType = targetDetails |> TargetDetails.computeCompletionType
 
       <div>
-        <div className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0">
+        <div className="max-w-container px-4 mx-auto text-siliconBlue-900">
           {learnSection(
             targetDetails,
             author,

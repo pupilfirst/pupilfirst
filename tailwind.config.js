@@ -122,6 +122,9 @@ module.exports = {
       screens: {
         '2xl': '1824px',
         // => @media (min-width: 1824px) { ... }
+      },
+      maxWidth: {
+        'container': '44.5rem'
       }
     }
   },

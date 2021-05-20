@@ -17,6 +17,13 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION`.
 
+### 2021.3
+
+- Google's Recaptcha has been introduced to protect public-facing forms from automation.
+  To enable the use of Recaptcha, [register for access](https://www.google.com/recaptcha),
+  and create v3 and v2 (checkbox) keys for your school's domains, and add environment variables
+  `RECAPTCHA_V3_SITE_KEY`, `RECAPTCHA_V3_SECRET_KEY`, `RECAPTCHA_V2_SITE_KEY`, and `RECAPTCHA_V2_SECRET_KEY`.
+
 ### 2021.2
 
 - List `courses` query is now paginated. This will affect users using the `courses` api.

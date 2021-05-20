@@ -28,12 +28,6 @@ module ValidateTokenGeneration
     errors[:base] << 'An email was sent less than two minutes ago. Please wait for a few minutes before trying again.'
   end
 
-  def detect_honeypot
-    return if username.blank?
-
-    errors[:base] << 'Your request has been blocked because it is suspicious.'
-  end
-
   def email_should_not_have_bounced
     return if email.blank?
 

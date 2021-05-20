@@ -12,11 +12,12 @@ Rails.application.routes.draw do
   devise_for :users, only: %i[sessions omniauth_callbacks], controllers: { sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks' }
 
   devise_scope :user do
-    post 'users/send_login_email', controller: 'users/sessions', action: 'send_login_email', as: 'user_send_login_email'
     post 'users/send_reset_password_email', controller: 'users/sessions', action: 'send_reset_password_email', as: 'user_send_reset_password_email'
     get 'users/token', controller: 'users/sessions', action: 'token', as: 'user_token'
     get 'users/reset_password', controller: 'users/sessions', action: 'reset_password', as: 'reset_password'
     post 'users/update_password', controller: 'users/sessions', action: 'update_password', as: 'update_password'
+    get 'users/sign_in_with_email', controller: 'users/sessions', action: 'sign_in_with_email', as: 'sign_in_with_email'
+    get 'users/request_password_reset', controller: 'users/sessions', action: 'request_password_reset', as: 'request_password_reset'
 
     if Rails.env.development?
       get 'users/auth/developer', controller: 'users/omniauth_callbacks', action: 'passthru', as: 'user_developer_omniauth_authorize'
@@ -198,6 +199,7 @@ Rails.application.routes.draw do
       get 'curriculum', action: 'curriculum'
       get 'report', action: 'report'
       get 'apply', action: 'apply'
+      post 'apply', action: 'process_application'
       get '/(:name)', action: 'show'
     end
   end

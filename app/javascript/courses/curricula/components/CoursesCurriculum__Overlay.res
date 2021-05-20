@@ -309,8 +309,6 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
   | Rejected => React.null
   }
 
-let overlayContentClasses = bool => bool ? "" : "hidden"
-
 let learnSection = (
   send,
   targetDetails,
@@ -343,13 +341,13 @@ let learnSection = (
     </a>
   })
 
-  <div className={overlayContentClasses(tab == Learn)}>
+  <div>
     <CoursesCurriculum__Learn targetDetails author courseId targetId coaches />
   </div>
 }
 
-let discussSection = (target, targetDetails, targetStatus, tab) =>
-  <div className={overlayContentClasses(tab == Discuss)}>
+let discussSection = (target, targetDetails, targetStatus) =>
+  <div>
     <div id="discuss" className="text-2xl mt-4 pt-4 font-bold border-t border-1">
       {Discuss |> tabToString(targetStatus) |> str}
     </div>
@@ -597,7 +595,7 @@ let make = (
             completionType,
             coaches,
           )}
-          {discussSection(target, targetDetails, targetStatus, state.tab)}
+          {discussSection(target, targetDetails, targetStatus)}
           {completeSection(
             state,
             send,

@@ -51,5 +51,6 @@ module Pupilfirst
 
     # Tribe's Community
     config.community_host = ENV['COMMUNITY_HOST']
+    config.action_mailer.show_previews = ENV['ENABLE_MAILER_PREVIEWS'].present?
   end
 end

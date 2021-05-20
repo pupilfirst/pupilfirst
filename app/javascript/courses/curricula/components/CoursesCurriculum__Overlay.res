@@ -348,8 +348,11 @@ let learnSection = (
   </div>
 }
 
-let discussSection = (target, targetDetails, tab) =>
+let discussSection = (target, targetDetails, targetStatus, tab) =>
   <div className={overlayContentClasses(tab == Discuss)}>
+    <div id="discuss" className="text-2xl mt-4 pt-4 font-bold border-t border-1">
+      {Discuss |> tabToString(targetStatus) |> str}
+    </div>
     <CoursesCurriculum__Discuss
       targetId={target |> Target.id} communities={targetDetails |> TargetDetails.communities}
     />
@@ -379,6 +382,9 @@ let completeSection = (
   let addVerifiedSubmissionCB = addVerifiedSubmission(target, state, send, addSubmissionCB)
 
   <div className={completeSectionClasses(state.tab, completionType)}>
+    <div id="complete" className="text-2xl mt-4 pt-4 font-bold border-t border-1">
+      {Complete(completionType) |> tabToString(targetStatus) |> str}
+    </div>
     {switch (targetStatus |> TargetStatus.status, completionType) {
     | (Pending, Evaluated) =>
       [
@@ -591,7 +597,7 @@ let make = (
             completionType,
             coaches,
           )}
-          {discussSection(target, targetDetails, state.tab)}
+          {discussSection(target, targetDetails, targetStatus, state.tab)}
           {completeSection(
             state,
             send,

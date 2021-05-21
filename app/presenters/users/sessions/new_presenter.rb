@@ -5,16 +5,9 @@ module Users
         "#{I18n.t('sessions.new.page_title')} | #{school_name}"
       end
 
-      def props
-        allow_email = ENV.fetch('ALLOW_EMAIL_SIGN_IN') { 'false' }
-        allow_email = allow_email == 'true' ? true : false
-        {
-          school_name: school_name,
-          fqdn: view.current_host,
-          oauth_host: oauth_host,
-          available_oauth_providers: Devise.omniauth_providers,
-          allow_email_sign_in: allow_email
-        }
+      def allow_email_sign_in?
+        allow_email = ENV.fetch('ALLOW_EMAIL_SIGN_IN') { false }
+        ActiveModel::Type::Boolean.new.cast(allow_email)
       end
 
       def school_name
@@ -28,7 +21,7 @@ module Users
       end
 
       def providers
-        default_providers = %i[google facebook github]
+        default_providers = %i[google facebook github keycloak_openid]
 
         if Rails.env.development?
           [:developer] + default_providers
@@ -51,6 +44,8 @@ module Users
             'federated-sigin-in__google-btn hover:bg-red-600 text-white'
           when :developer
             'bg-green-100 border-green-400 text-green-800 hover:bg-green-200'
+          when :keycloak_openid
+            'federated-sigin-in__github-btn hover:bg-siliconBlue-900 text-white'
           else
             raise_unexpected_provider(provider)
           end
@@ -67,6 +62,8 @@ module Users
             'github'
           when :developer
             'developer'
+          when :keycloak_openid
+            'keycloakopenid'
           else
             raise_unexpected_provider(provider)
           end
@@ -84,6 +81,8 @@ module Users
           'fab fa-github'
         when :developer
           'fas fa-laptop-code'
+        when :keycloak_openid
+          'fas fa-key'
         else
           raise_unexpected_provider(provider)
         end
@@ -100,6 +99,8 @@ module Users
             'continue_with_github'
           when :developer
             'continue_as_developer'
+          when :keycloak_openid
+            'continue_with_keycloak'
           else
             raise_unexpected_provider(provider)
           end

@@ -136,6 +136,9 @@ en:
   services:
     team_up_service:
       must_be_on_the_same_level: Students must be on the same chapter for teaming up
+  sessions:
+    new:
+      continue_with_keycloak: Continue with Keycloak
 
   shared:
     level_label:

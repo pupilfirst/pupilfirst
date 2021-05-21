@@ -164,18 +164,15 @@ let renderTargetStatus = targetStatus => {
   )
 }
 
-let overlayHeaderTitleCardClasses = targetStatus =>
-  "course-overlay__header-title-card relative flex justify-between items-center px-3 py-5 md:p-6 " ++
-  targetStatusClass("course-overlay__header-title-card--", targetStatus)
-
 let renderLocked = text =>
   <div
     className="mx-auto text-center bg-gray-900 text-white max-w-fc px-4 py-2 text-sm font-semibold relative z-10 rounded-b-lg">
     <i className="fas fa-lock text-lg" /> <span className="ml-2"> {text |> str} </span>
   </div>
+
 let overlayStatus = (course, target, targetStatus, preview) =>
   <div className="max-w-container pt-8 px-4 mx-auto">
-    <div>
+    <div id="overlayHeaderTitle">
       <button
         className="text-siliconBlue-900 opacity-50  hover:opacity-100 mb-2 transition duration-300 flex items-center"
         onClick={_e => closeOverlay(course)}>

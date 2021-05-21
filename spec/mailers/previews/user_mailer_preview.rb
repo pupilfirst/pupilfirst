@@ -45,14 +45,14 @@ class UserMailerPreview < ActionMailer::Preview
     (0..(count - 1)).map do |index|
       {
         id: starting_id + index,
-        title: Faker::Lorem.sentence,
+        title: "Repellat alias earum at.",
         views: rand(100),
         replies: update_type == :new ? rand(4) : rand(1..5),
         days_ago: update_type == :new ? 0 : rand(1..6),
-        author: Faker::Name.name,
+        author: "Clarisa Konopelski",
         type: update_type,
         community_id: rand(10),
-        community_name: Faker::Lorem.words(number: 2).join(' ').titleize
+        community_name: "Illum Quia"
       }
     end
   end
@@ -61,7 +61,7 @@ class UserMailerPreview < ActionMailer::Preview
     (1..3).map do |_id|
       {
         course_id: rand(1..9),
-        course_name: Faker::Name.name,
+        course_name: "Logan Stokes",
         pending_submissions: rand(1..9),
         pending_submissions_for_coach: rand(0..3)
       }

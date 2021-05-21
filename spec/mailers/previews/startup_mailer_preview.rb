@@ -22,7 +22,7 @@ class StartupMailerPreview < ActionMailer::Preview
       id: 1,
       connect_slot: connect_slot,
       startup: Startup.last,
-      questions: Faker::Lorem.paragraphs(number: 2).join("\n\n"),
+      questions: "Dolor sequi aut. Ut qui vel. In sunt sunt.\n\nEveniet et optio. Excepturi itaque adipisci. Sequi sit ex.",
       status: ConnectRequest::STATUS_CONFIRMED,
       meeting_link: 'https://example.com/meeting_url'
     )

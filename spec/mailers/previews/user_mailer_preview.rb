@@ -1,6 +1,6 @@
 class UserMailerPreview < ActionMailer::Preview
   def new_post
-    UserMailer.new_post(Post.order('RANDOM()').first, Faculty.last.user)
+    UserMailer.new_post(Post.order('RANDOM()').first, User.first)
   end
 
   def daily_digest

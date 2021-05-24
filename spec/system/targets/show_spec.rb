@@ -64,7 +64,7 @@ feature 'Target Overlay', js: true do
     click_link target_l1.title
 
     # The overlay should now be visible.
-    expect(find('#complete')).to have_text('Complete')
+    expect(find('#complete')).to have_text('Exercise')
 
     # And the page path must have changed.
     expect(page).to have_current_path("/targets/#{target_l1.id}")
@@ -93,7 +93,7 @@ feature 'Target Overlay', js: true do
     sign_in_user student.user, referrer: target_path(target_l1)
 
     # This target should have a 'Complete' section.
-    expect(find('#complete')).to have_text('Complete')
+    expect(find('#complete')).to have_text('Exercise')
     # completion instructions should be show on complete section for evaluated targets
     expect(page).to have_text(target_l1.completion_instructions)
 
@@ -151,7 +151,7 @@ feature 'Target Overlay', js: true do
     expect { last_submission.reload }.to raise_exception(ActiveRecord::RecordNotFound)
 
     # ...and the complete section should be accessible again.
-    expect(find('#complete')).to have_text('Complete')
+    expect(find('#complete')).to have_text('Exercise')
   end
 
   scenario "student visits the target's link with a mangled ID" do
@@ -601,7 +601,7 @@ feature 'Target Overlay', js: true do
         expect(page).to have_link('Edit Content', href: content_school_course_target_path(course_id: target_l1.course.id, id: target_l1.id))
 
         # This target should have a 'Complete' section.
-        expect(find('#complete')).to have_text('Complete')
+        expect(find('#complete')).to have_text('Exercise')
 
         # The submit button should be disabled.
         expect(page).to have_button('Submit', disabled: true)
@@ -767,7 +767,7 @@ feature 'Target Overlay', js: true do
 
     scenario 'latest flag is updated correctly for all students' do
       sign_in_user student_1.user, referrer: target_path(target_l1)
-      expect(find('#complete')).to have_text('Complete')
+      expect(find('#complete')).to have_text('Exercise')
       replace_markdown Faker::Lorem.sentence
       click_button 'Submit'
       expect(page).to have_content('Your submission has been queued for review')

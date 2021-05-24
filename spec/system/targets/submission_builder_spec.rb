@@ -18,7 +18,7 @@ feature 'Submission Builder', js: true do
     sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
-    expect(find('#complete')).to have_text('Complete')
+    expect(find('#complete')).to have_text('Exercise')
 
     expect(page).to have_text("This target has no actions. Click submit to complete the target")
 
@@ -41,7 +41,7 @@ feature 'Submission Builder', js: true do
     sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
-    expect(find('#complete')).to have_text('Complete')
+    expect(find('#complete')).to have_text('Exercise')
 
     # The submit button should be disabled at this point.
     expect(page).to have_button('Submit', disabled: true)
@@ -74,7 +74,7 @@ feature 'Submission Builder', js: true do
     sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
-    expect(find('#complete')).to have_text('Complete')
+    expect(find('#complete')).to have_text('Exercise')
 
     # The submit button should be disabled at this point.
     expect(page).to have_button('Submit', disabled: true)
@@ -107,7 +107,7 @@ feature 'Submission Builder', js: true do
     sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
-    expect(find('#complete')).to have_text('Complete')
+    expect(find('#complete')).to have_text('Exercise')
 
     # The submit button should be disabled at this point.
     expect(page).to have_button('Submit', disabled: true)
@@ -142,7 +142,7 @@ feature 'Submission Builder', js: true do
     sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
-    expect(find('#complete')).to have_text('Complete')
+    expect(find('#complete')).to have_text('Exercise')
 
     within("div[aria-label='0-files'") do
       expect(page).to have_content(question)
@@ -195,7 +195,7 @@ feature 'Submission Builder', js: true do
     sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
-    expect(find('#complete')).to have_text('Complete')
+    expect(find('#complete')).to have_text('Exercise')
 
     within("div[aria-label='0-multiChoice'") do
       expect(page).to have_content(question)
@@ -227,7 +227,7 @@ feature 'Submission Builder', js: true do
     sign_in_user student.user, referrer: target_path(target)
 
     # This target should have a 'Complete' section.
-    expect(find('#complete')).to have_text('Complete')
+    expect(find('#complete')).to have_text('Exercise')
 
     within("div[aria-label='0-longText'") do
       expect(page).to have_content(question_1)

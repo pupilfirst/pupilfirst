@@ -151,7 +151,7 @@ feature 'Automatic issuance of certificates', js: true do
         scenario 'student completed second and final milestone target' do
           complete_first_target
 
-          expect(find('#complete')).to have_text('Complete')
+          expect(find('#complete')).to have_text('Exercise')
           replace_markdown Faker::Lorem.sentence
           click_button 'Submit'
 

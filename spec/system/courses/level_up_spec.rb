@@ -39,7 +39,7 @@ feature "Student levelling up", js: true do
 
       # Let's submit work on the target in L1.
       click_link target_l1.title
-      expect(find('#complete')).to have_text('Complete')
+      expect(find('#complete')).to have_text('Exercise')
 
       expect(page).to have_text(target_l1.completion_instructions)
 

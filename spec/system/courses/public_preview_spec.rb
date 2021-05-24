@@ -117,7 +117,7 @@ feature 'Public preview of course curriculum', js: true do
       'You are currently looking at a preview of this course.'
     )
 
-    expect(find('#complete')).to have_text('Complete')
+    expect(find('#complete')).to have_text('Exercise')
 
     # The submit button should be disabled.
     expect(page).to have_button('Submit', disabled: true)

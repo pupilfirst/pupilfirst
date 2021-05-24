@@ -431,7 +431,7 @@ let make = (
   let targetGroupsInLevel =
     targetGroups |> Js.Array.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
 
-  <div className="bg-gray-100 pt-11 pb-8 -mt-7">
+  <div className="bg-white pt-11 pb-8">
     {switch selectedTarget {
     | Some(target) =>
       let targetStatus =

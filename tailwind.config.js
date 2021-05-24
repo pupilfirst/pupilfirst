@@ -51,7 +51,8 @@ module.exports = {
         attentionYellow: "var(--color-attention-yellow)",
         hackerOrange: "var(--color-hacker-orange)",
         preciseBlue: "var(--color-precise-blue)",
-        cyan: "#1FB4C0"
+        cyan: "#1FB4C0",
+        washedBlue: "#817F97"
       },
       fontFamily: {
         'sans': "var(--font-family-sans)",

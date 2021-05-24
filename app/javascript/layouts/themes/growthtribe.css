@@ -51,7 +51,7 @@
 
   html {
     @apply theme-growthtribe;
-    font-family: Barlow, Helvetica, Arial, Verdana, Tahoma, sans-serif;
+    font-family: var(--font-family-sans), Helvetica, Arial, Verdana, Tahoma, sans-serif;
   }
 
 
@@ -60,7 +60,7 @@
   }
 
   .btn-primary {
-    @apply bg-none bg-preciseBlue text-white text-lg border-2 border-preciseBlue py-4 px-6 font-semibold rounded-lg transition-all duration-200;
+    @apply bg-none bg-preciseBlue text-white border-2 border-preciseBlue py-2 px-4 font-semibold rounded-lg transition-all duration-200;
   }
 
   .btn-primary:hover {
@@ -72,7 +72,7 @@
   }
 
   .btn-primary-ghost {
-    @apply bg-none text-preciseBlue text-lg border-2 border-preciseBlue py-4 px-6 font-semibold rounded-lg transition-all duration-200;
+    @apply bg-none text-preciseBlue border-2 border-preciseBlue py-2 px-4 font-semibold rounded-lg transition-all duration-200;
   }
 
   .btn-primary-ghost:hover {

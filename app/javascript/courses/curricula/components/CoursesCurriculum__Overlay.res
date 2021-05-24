@@ -425,20 +425,20 @@ let quickNavigationLinks = (targetDetails, send) => {
   <div className="pb-12">
     <hr className="my-12" />
     <div className="container mx-auto max-w-6xl flex px-3 lg:px-0 justify-between">
-      <div className="">
+      <div>
         {previous->Belt.Option.mapWithDefault(React.null, previousUrl =>
           navigationLink(#Previous, previousUrl, send)
         )}
       </div>
-      <div className="">
+      <div>
         <button
           onClick=scrollOverlayToTop
-          className="">
+          >
           <span className="mx-2 hidden md:inline"> {t("scroll_to_top")->str}</span>
           <span className="mx-2 md:hidden"> <i className="fas fa-arrow-up" /> </span>
         </button>
       </div>
-      <div className="">
+      <div>
         {next->Belt.Option.mapWithDefault(React.null, nextUrl =>
           navigationLink(#Next, nextUrl, send)
         )}

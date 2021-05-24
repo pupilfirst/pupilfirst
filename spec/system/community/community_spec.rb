@@ -508,7 +508,7 @@ feature 'Community', js: true do
 
       # Post a reply.
       replace_markdown reply_body
-      expect { click_button 'Post Your Reply' }.to change { Post.count }.by(1)
+      expect { click_button 'Post Your Reply' ; sleep 0.2 }.to change { Post.count }.by(1)
       dismiss_notification
 
       # Create a new topic.

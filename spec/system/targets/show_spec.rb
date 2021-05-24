@@ -688,7 +688,7 @@ feature 'Target Overlay', js: true do
 
     expect(page).to have_text(target_l1.title)
 
-    expect(page).not_to have_link('Previous Target')
+    expect(page).not_to have_link('Previous Lesson')
     click_link 'Next Lesson'
 
     expect(page).to have_text(prerequisite_target.title)
@@ -696,11 +696,13 @@ feature 'Target Overlay', js: true do
     click_link 'Next Lesson'
 
     expect(page).to have_text(quiz_target.title)
-    expect(page).not_to have_link('Next Target')
+    expect(page).not_to have_link('Next Lesson')
 
     click_link 'Previous Lesson'
 
     expect(page).to have_text(prerequisite_target.title)
+
+    sleep 0.2
 
     click_link 'Previous Lesson'
 

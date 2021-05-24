@@ -128,7 +128,7 @@ feature 'Automatic issuance of certificates', js: true do
         scenario 'student completed second and final milestone target' do
           complete_first_target
 
-          find('.course-overlay__body-tab-item', text: 'Take Quiz').click
+          expect(find('#complete')).to have_text('Take Quiz')
           find('.quiz-root__answer', text: quiz.quiz_questions.first.answer_options.first.value).click
           click_button('Submit Quiz')
 
@@ -151,7 +151,7 @@ feature 'Automatic issuance of certificates', js: true do
         scenario 'student completed second and final milestone target' do
           complete_first_target
 
-          find('.course-overlay__body-tab-item', text: 'Complete').click
+          expect(find('#complete')).to have_text('Complete')
           replace_markdown Faker::Lorem.sentence
           click_button 'Submit'
 

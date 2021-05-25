@@ -24,13 +24,12 @@ let courseNameContainerClasses = additionalLinks =>
     additionalLinks->ArrayUtils.isEmpty ? "pt-2 pb-3 md:pt-4 md:pb-6" : "pt-2 pb-3 md:pt-4 md:pb-12"
   )
 
-let renderCourseSelector = (currentCourseId, courses, coverImage, additionalLinks) => {
+let renderCourseSelector = (currentCourseId, courses, coverImage) => {
   let currentCourse = ArrayUtils.unsafeFind(
     c => CourseInfo.id(c) == currentCourseId,
     "Could not find current course with ID " ++ (currentCourseId ++ " in StudentCourse__Header"),
     courses,
   )
-  let otherCourses = Js.Array.filter(c => CourseInfo.id(c) != currentCourseId, courses)
   <div className="relative bg-white">
     <div className="relative py-18">
       {switch coverImage {
@@ -59,7 +58,7 @@ let make = (~currentCourseId, ~courses, ~additionalLinks, ~coverImage) => {
   let url = RescriptReactRouter.useUrl()
 
   <div className="bg-white overflow-hidden">
-    {renderCourseSelector(currentCourseId, courses, coverImage, additionalLinks)}
+    {renderCourseSelector(currentCourseId, courses, coverImage)}
     {switch additionalLinks {
     | [] => React.null
     | additionalLinks =>

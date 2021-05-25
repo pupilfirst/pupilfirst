@@ -68,16 +68,6 @@ feature 'Public preview of course curriculum', js: true do
     # Course name should be displayed.
     expect(page).to have_content(public_course_1.name)
 
-    # One other public course should also be displayed.
-    click_button public_course_1.name
-
-    expect(page).to have_link(
-      public_course_2.name,
-      href: curriculum_course_path(public_course_2)
-    )
-
-    expect(page).not_to have_link(private_course_3.name)
-
     # The first level should be selected, and all other levels should be visible.
     click_button "C1: #{level_1.name}"
 
@@ -153,14 +143,7 @@ feature 'Public preview of course curriculum', js: true do
       # Access the public course's preview by visiting its page manually.
       visit curriculum_course_path(public_course_1)
 
-      # There should now be a dropdown that lets the student access his enrolled courses.
-      click_button public_course_1.name
-
-      expect(page).to have_link(
-        enrolled_course.name,
-        href: curriculum_course_path(enrolled_course)
-      )
-
+      expect(page).to have_content(public_course_1.name)
       expect(page).to have_text('Preview Mode')
     end
   end

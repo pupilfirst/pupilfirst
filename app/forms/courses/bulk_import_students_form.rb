@@ -4,6 +4,7 @@ module Courses
   class BulkImportStudentsForm < Reform::Form
     attr_accessor :current_user
 
+    property :notify_students, virtual: true, validates: { presence: true }
     property :csv, virtual: true, validates: { presence: true, file_size: { less_than: 5.megabytes } }
 
     validate :soft_limit_student_count
@@ -12,7 +13,7 @@ module Courses
     validate :strings_must_not_be_too_long
 
     def save
-      Courses::BulkImportStudentsJob.perform_later(model, csv_rows, current_user)
+      Courses::BulkImportStudentsJob.perform_later(model, csv_rows, current_user, notify_students == 'true')
     end
 
     def csv_rows

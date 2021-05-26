@@ -26,16 +26,20 @@ let (
 ) =
   DomUtils.parseJSONTag(~id="users-dashboard-data", ()) |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <UsersDashboard__Root
-    currentSchoolAdmin
-    courses
-    communities
-    showUserEdit
-    userName
-    userTitle
-    avatarUrl
-    issuedCertificates
-  />,
-  "users-dashboard",
-)
+switch ReactDOM.querySelector("#users-dashboard") {
+| Some(element) =>
+  ReactDOM.render(
+    <UsersDashboard__Root
+      currentSchoolAdmin
+      courses
+      communities
+      showUserEdit
+      userName
+      userTitle
+      avatarUrl
+      issuedCertificates
+    />,
+    element,
+  )
+| None => ()
+}

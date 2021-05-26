@@ -235,13 +235,13 @@ let make = (~applicant, ~tags, ~updateApplicantCB, ~selectedTab, ~baseUrl) => {
             <button
               className={selectedTabClasses(selectedTab == DetailsTab)}
               onClick={_ =>
-                ReasonReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/details")}>
+                RescriptReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/details")}>
               <i className="fa fa-edit" /> <span className="ml-2"> {t("tabs.details")->str} </span>
             </button>
             <button
               className={"-ml-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
               onClick={_ =>
-                ReasonReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/actions")}>
+                RescriptReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/actions")}>
               <i className="fa fa-cog" /> <span className="ml-2"> {t("tabs.actions")->str} </span>
             </button>
           </div>

@@ -85,7 +85,7 @@ let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
         signInLink()
       },
     ])
-    |> ReasonReact.array
+    |> React.array
   }
 }
 

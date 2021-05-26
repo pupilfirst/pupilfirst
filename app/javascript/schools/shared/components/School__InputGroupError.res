@@ -12,5 +12,5 @@ let make = (~message, ~active, ~warn=false) =>
       <span> {message |> str} </span>
     </div>
   } else {
-    ReasonReact.null
+    React.null
   }

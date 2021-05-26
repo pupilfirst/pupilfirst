@@ -86,6 +86,7 @@ module ValidateCourseEditable
                }
              }
     argument :public_signup, GraphQL::Types::Boolean, required: true
+    argument :public_preview, GraphQL::Types::Boolean, required: true
     argument :featured, GraphQL::Types::Boolean, required: true
     argument :processing_url, GraphQL::Types::String, required: false
 
@@ -107,6 +108,7 @@ module ValidateCourseEditable
       description: @params[:description],
       ends_at: @params[:ends_at],
       public_signup: @params[:public_signup],
+      public_preview: @params[:public_preview],
       about: @params[:about],
       featured: @params[:featured],
       progression_behavior: @params[:progression_behavior],

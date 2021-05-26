@@ -109,6 +109,8 @@ let callToAction = (course, currentSchoolAdmin) =>
     #DroppedOut
   } else if course->Course.ended {
     #CourseEnded
+  } else if course->Course.accessEnded {
+    #AccessEnded
   } else {
     #ViewCourse
   }
@@ -122,6 +124,7 @@ let ctaFooter = (course, currentSchoolAdmin) => {
     ctaButton(t("cta.edit_curriculum"), "/school/courses/" ++ (courseId ++ "/curriculum"))
   | #ReviewSubmissions => ctaButton(t("cta.review_submissions"), studentLink(courseId, "review"))
   | #DroppedOut => ctaText(t("cta.dropped_out"), "fas fa-user-slash")
+  | #AccessEnded => ctaText(t("cta.access_ended"), "fas fa-history")
   | #CourseEnded => ctaText(t("cta.course_ended"), "fas fa-history")
   }
 }

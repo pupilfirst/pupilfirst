@@ -333,7 +333,7 @@ let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
           />
         </div>
       </div>
-    : ReasonReact.null
+    : React.null
 }
 
 let booleanButtonClasses = bool => {
@@ -656,7 +656,7 @@ let quizEditor = (state, send) =>
     </label>
     <div className="ml-6">
       {isValidQuiz(state.quiz)
-        ? ReasonReact.null
+        ? React.null
         : <School__InputGroupError
             message="All questions must be filled in, and all questions should have at least two answers."
             active=true
@@ -672,7 +672,7 @@ let quizEditor = (state, send) =>
           questionCanBeRemoved={questionCanBeRemoved(state)}
         />
       )
-      |> ReasonReact.array}
+      |> React.array}
       <a
         onClick={addQuizQuestion(send)}
         className="flex items-center bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg p-3 cursor-pointer my-5">

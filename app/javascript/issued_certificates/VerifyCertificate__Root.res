@@ -20,7 +20,7 @@ let heading = (currentUser, issuedCertificate) =>
   if currentUser {
     <span>
       {str("Congratulations ")}
-      <strong> {IssuedCertificate.profileName(issuedCertificate)->str} </strong>
+      <strong className="whitespace-no-wrap"> {IssuedCertificate.profileName(issuedCertificate)->str} </strong>
       {"!" |> str}
       <br />
       {str("You've earned it.")}
@@ -60,9 +60,9 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
           </h3>
           <div className="text-sm mt-4">
             <span> {"This certificate was issued to " |> str} </span>
-            <strong> {issuedToName(issuedCertificate)} </strong>
+            <strong className="whitespace-no-wrap"> {issuedToName(issuedCertificate)} </strong>
             <span> {" on " |> str} </span>
-            <strong>
+            <strong className="whitespace-no-wrap">
               {issuedCertificate
               ->IssuedCertificate.issuedAt
               ->DateFns.formatPreset(~short=true, ~year=true, ())

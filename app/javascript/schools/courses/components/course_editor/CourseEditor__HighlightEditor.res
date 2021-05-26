@@ -2,7 +2,7 @@ open CourseEditor__Types
 
 let t = I18n.t(~scope="components.CourseEditor__HighlightEditor")
 
-let str = ReasonReact.string
+let str = React.string
 
 let icons = [
   "plus-circle-solid",

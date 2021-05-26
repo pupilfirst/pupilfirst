@@ -357,7 +357,7 @@ let submitForm = (target, aboveContentBlock, state, send, addContentBlockCB, blo
   | #VideoEmbed => videoFormId(aboveContentBlock)
   }
 
-  let element = ReactDOMRe._getElementById(formId)
+  let element = ReactDOM.querySelector("#" ++ formId)
 
   switch element {
   | Some(element) =>

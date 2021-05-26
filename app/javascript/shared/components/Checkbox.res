@@ -1,7 +1,5 @@
 %bs.raw(`require("./Checkbox.css")`)
 
-let str = React.string
-
 @react.component
 let make = (~id, ~label, ~onChange, ~checked=false) =>
   <div>

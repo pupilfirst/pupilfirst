@@ -10,9 +10,7 @@ module Courses
     end
 
     def about
-      if show_about?
-        MarkdownIt::Parser.new(:commonmark).render(@course.about)
-      end
+      MarkdownIt::Parser.new(:commonmark).render(@course.about) if show_about?
     end
 
     def cover_image
@@ -21,6 +19,12 @@ module Courses
 
     def show_about?
       @course.about.present?
+    end
+
+    def user_is_student?
+      return false if current_user.blank?
+
+      current_user.founders.joins(:course).exists?(courses: { id: @course.id })
     end
   end
 end

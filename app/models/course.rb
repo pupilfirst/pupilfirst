@@ -96,6 +96,10 @@ class Course < ApplicationRecord
     startups.active.joins(:tags).distinct('tags.name').pluck('tags.name')
   end
 
+  def user_tags
+    users.joins(:tags).distinct('tags.name').pluck('tags.name')
+  end
+
   def strict?
     progression_behavior == PROGRESSION_BEHAVIOR_STRICT
   end

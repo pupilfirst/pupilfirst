@@ -10,7 +10,8 @@ let decodeProps = json => {
 let (courseId, tags, selectedApplicant) =
   DomUtils.parseJSONTag(~id="schools-courses-applicants__props", ())->decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <CourseApplicants__Root courseId tags selectedApplicant />,
-  "schools-courses-applicants__root",
-)
+switch ReactDOM.querySelector("#schools-courses-applicants__root") {
+| Some(root) =>
+  ReactDOM.render(  <CourseApplicants__Root courseId tags selectedApplicant />, root)
+| None => ()
+}

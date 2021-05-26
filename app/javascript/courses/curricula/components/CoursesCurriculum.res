@@ -31,10 +31,11 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
       "Could not find targetStatus for listed target with ID " ++ targetId,
     )
 
-  <div className="courses-curriculum__target-container flex border-t bg-white hover:bg-gray-100">
+  <div
+    key={"target-" ++ targetId}
+    className="courses-curriculum__target-container flex border-t bg-white hover:bg-gray-100">
     <Link
       href={"/targets/" ++ targetId}
-      key={"target-" ++ targetId}
       className="p-6 flex flex-grow items-center justify-between hover:text-primary-500 cursor-pointer"
       ariaLabel={"Select Target " ++ targetId}>
       <span className="font-semibold text-left leading-snug"> {Target.title(target)->str} </span>
@@ -253,7 +254,7 @@ let quickNavigationLinks = (levels, selectedLevel, setState) => {
   let previous = selectedLevel |> Level.previous(levels)
   let next = selectedLevel |> Level.next(levels)
 
-  <div>
+  <div key="quick-navigation-links">
     <hr className="my-6" />
     <div className="container mx-auto max-w-3xl flex px-3 lg:px-0">
       {switch (previous, next) {
@@ -293,7 +294,7 @@ let make = (
   ~accessLockedLevels,
   ~levelUpEligibility,
 ) => {
-  let url = ReasonReactRouter.useUrl()
+  let url = RescriptReactRouter.useUrl()
 
   let selectedTarget = switch url.path {
   | list{"targets", targetId, ..._} =>
@@ -461,7 +462,7 @@ let make = (
     | LevelUp => React.null
     | _anyOtherNotice =>
       [
-        <div className="relative">
+        <div className="relative" key="curriculum-body">
           <CoursesCurriculum__LevelSelector
             levels
             teamLevel

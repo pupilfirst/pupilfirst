@@ -4,9 +4,9 @@ let metaKey = Webapi.Dom.KeyboardEvent.metaKey
 external unsafeAsKeyboardEvent: ReactEvent.Mouse.t => Webapi.Dom.KeyboardEvent.t = "%identity"
 
 let onConfirm = (href, onClick, event) => {
-  event |> ReactEvent.Mouse.preventDefault
-  ReasonReactRouter.push(href)
-  onClick |> OptionUtils.mapWithDefault(onClick => onClick(event), ())
+  ReactEvent.Mouse.preventDefault(event)
+  Belt.Option.mapWithDefault(onClick, (), onClick => onClick(event))
+  RescriptReactRouter.push(href)
 }
 
 let onCancel = event => event |> ReactEvent.Mouse.preventDefault

@@ -1,10 +1,16 @@
 class CoursePolicy < ApplicationPolicy
   def curriculum?
-    return true if current_school_admin.present? || user.course_authors.where(course: record).present?
+    return true if record.public_preview?
+
+    if current_school_admin.present? ||
+         user.course_authors.where(course: record).present?
+      return true
+    end
 
     return true if user.faculty.present? && review?
 
     founder = user.founders.joins(:course).where(courses: { id: record }).first
+
     # User must have a student profile in the course
     return false if founder.blank?
 
@@ -18,7 +24,8 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def review?
-    record.present? && reviewable_courses.present? && reviewable_courses.exists?(id: record)
+    record.present? && reviewable_courses.present? &&
+      reviewable_courses.exists?(id: record)
   end
 
   def report?
@@ -38,6 +45,7 @@ class CoursePolicy < ApplicationPolicy
     record.public_signup?
   end
 
+  alias process_application? apply?
   alias students? review?
 
   class Scope < Scope

@@ -306,7 +306,7 @@ let showApplicant = (baseUrl, applicant) => {
       title={t("show_details") ++ Applicant.name(applicant)}
       className="flex flex-1 flex-col py-4 px-4 hover:bg-gray-100  cursor-pointer"
       key={Applicant.id(applicant)}
-      onClick={_ => ReasonReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/details")}>
+      onClick={_ => RescriptReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/details")}>
       <div className="flex w-full items-center justify-between">
         <div className="text-black font-semibold inline-block ">
           {Applicant.name(applicant)->str}
@@ -323,7 +323,7 @@ let showApplicant = (baseUrl, applicant) => {
     <button
       title={"Show Actions: " ++ Applicant.name(applicant)}
       className="py-4 px-4 hover:bg-gray-100  cursor-pointer"
-      onClick={_ => ReasonReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/actions")}>
+      onClick={_ => RescriptReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/actions")}>
       {str(t("onboard_as_student"))}
     </button>
   </div>
@@ -347,7 +347,7 @@ let showApplicants = (baseUrl, applicants, state) => {
 }
 
 let updateApplicant = (baseUrl, send, ()) => {
-  ReasonReactRouter.push(baseUrl)
+  RescriptReactRouter.push(baseUrl)
   send(ReloadApplicants)
 }
 
@@ -363,7 +363,7 @@ let decodeTabString = tab => {
 let make = (~courseId, ~tags, ~selectedApplicant) => {
   let (state, send) = React.useReducer(reducer, initialState())
   let baseUrl = "/school/courses/" ++ courseId ++ "/applicants/"
-  let url = ReasonReactRouter.useUrl()
+  let url = RescriptReactRouter.useUrl()
 
   let (editorAction, selectedTab) = switch url.path {
   | list{"school", "courses", _courseId, "applicants", applicantId, tab, ..._} => (
@@ -396,7 +396,7 @@ let make = (~courseId, ~tags, ~selectedApplicant) => {
               Pagination.toArray(state.applicants),
             ),
           )
-          <SchoolAdmin__EditorDrawer2 closeDrawerCB={_ => ReasonReactRouter.push(baseUrl)}>
+          <SchoolAdmin__EditorDrawer2 closeDrawerCB={_ => RescriptReactRouter.push(baseUrl)}>
             <CourseApplicants__EditForm
               applicant updateApplicantCB={updateApplicant(baseUrl, send)} tags selectedTab baseUrl
             />

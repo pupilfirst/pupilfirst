@@ -2,27 +2,22 @@ module Types
   class TeamType < Types::BaseObject
     field :id, ID, null: false
     field :name, String, null: false
-    field :tags, [String], null: false
+    field :team_tags, [String], null: false
     field :level_id, ID, null: false
     field :students, [Types::StudentType], null: false
     field :coach_user_ids, [ID], null: false
     field :dropped_out_at, GraphQL::Types::ISO8601DateTime, null: true
     field :access_ends_at, GraphQL::Types::ISO8601DateTime, null: true
 
-    def tags
+    def team_tags
       object.tags.pluck(:name).sort
     end
 
     def students
-      object.founders.map do |student|
-        student_attributes = { id: student.id, name: student.name, title: student.title }
-
-        if student.user.avatar.attached?
-          student_attributes[:avatar_url] =
-            Rails.application.routes.url_helpers.rails_representation_path(student.user.avatar_variant(:thumb), only_path: true)
+      BatchLoader::GraphQL.for(object.id).batch do |team_ids, loader|
+        Startup.includes(:founders).where(id: team_ids).each do |team|
+          loader.call(team.id, team.founders)
         end
-
-        student_attributes
       end
     end
 

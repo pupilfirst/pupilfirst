@@ -74,7 +74,7 @@ let renderCourseSelector = (currentCourseId, courses, coverImage, additionalLink
   </div>
 }
 
-let tabClasses = (url: ReasonReactRouter.url, linkTitle) => {
+let tabClasses = (url: RescriptReactRouter.url, linkTitle) => {
   let defaultClasses = "student-course__nav-tab py-4 px-2 text-center flex-1 font-semibold text-sm "
   switch url.path {
   | list{"courses", _targetId, pageTitle, ..._} when pageTitle == linkTitle =>
@@ -85,7 +85,7 @@ let tabClasses = (url: ReasonReactRouter.url, linkTitle) => {
 
 @react.component
 let make = (~currentCourseId, ~courses, ~additionalLinks, ~coverImage) => {
-  let url = ReasonReactRouter.useUrl()
+  let url = RescriptReactRouter.useUrl()
 
   <div>
     {renderCourseSelector(currentCourseId, courses, coverImage, additionalLinks)}

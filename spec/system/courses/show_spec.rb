@@ -3,7 +3,6 @@ require 'rails_helper'
 feature 'Public view of Course', js: true do
   include UserSpecHelper
 
-  # The basics.
   let(:school) { create :school, :current }
   let(:school_2) { create :school }
   let(:public_course) { create :course, school: school, public_signup: true }
@@ -13,7 +12,7 @@ feature 'Public view of Course', js: true do
   end
   let(:new_about) { Faker::Lorem.paragraph }
 
-  context 'when public user visits a public course' do
+  context 'when the course has public signup enabled' do
     before do
       # Update course description
       public_course.update!(about: new_about)
@@ -31,30 +30,60 @@ feature 'Public view of Course', js: true do
       expect(page).to have_text(public_course.highlights.last['description'])
     end
 
-    scenario 'He can see the course about when an about exists' do
-      visit course_path(public_course)
+    scenario 'non-signed-in user can see the course name and link to apply' do
+      visit course_path(course)
 
-      expect(page).to have_content(public_course.name)
-      expect(page).to have_content(new_about)
+      expect(page).to have_content(course.name)
+      expect(page).to have_link('Apply Now', href: apply_course_path(course))
     end
 
-    scenario "He can't see public courses in other school" do
-      visit course_path(public_course_in_school_2)
+    scenario "non-signed-in user can't see details of public courses from other schools" do
+      visit course_path(public_signup_course_in_school_2)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
-      expect(page).not_to have_content(public_course_in_school_2.name)
+      expect(page).not_to have_content(public_signup_course_in_school_2.name)
     end
   end
 
-  context 'when public user visits a non public course' do
-    scenario 'The page should render' do
-      visit course_path(private_course)
+  context 'when the course has public preview enabled' do
+    let(:course) { create :course, school: school, public_preview: true }
+    let(:level) { create :level, course: course }
+    let(:team) { create :team, level: level }
+    let(:student) { create :student, startup: team }
+
+    scenario 'non-signed-in user can see a link to preview the course' do
+      visit course_path(course)
+
+      expect(page).to have_content(course.name)
+      expect(page).to have_link(
+        'Preview Course',
+        href: curriculum_course_path(course)
+      )
+    end
+
+    scenario 'signed-in student sees a link to continue the course' do
+      sign_in_user student.user, referrer: course_path(course)
+
+      expect(page).to have_link(
+        'Continue Course',
+        href: curriculum_course_path(course)
+      )
+    end
+  end
+
+  context 'when the course is private' do
+    let(:course) { create :course, school: school, about: about }
+    let(:about) { Faker::Lorem.paragraph }
+
+    scenario 'non-signed-in user attempting to view course details' do
+      visit course_path(course)
 
       expect(page).to have_content(private_course.name)
       expect(page).not_to have_link(
         'Apply Now',
         href: apply_course_path(public_course)
       )
+      expect(page).not_to have_link('Preview Course')
     end
   end
 end

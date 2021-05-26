@@ -10,7 +10,7 @@ class StudentDistributionResolver < ApplicationQuery
     course.levels.map do |level|
       teams = TeamsResolver.filter_by_coach(teams_in_level(level), coach_id)
       teams = TeamsResolver.filter_by_coach_notes(teams, coach_notes)
-      teams = TeamsResolver.filter_by_tags(teams, tags)
+      teams = TeamsResolver.filter_by_tags(course, teams, tags)
 
       team_ids = teams.select(:id).distinct(:id)
       students_in_level = Founder.where(startup: team_ids).count

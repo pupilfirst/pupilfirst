@@ -1,4 +1,4 @@
-let str = ReasonReact.string
+let str = React.string
 
 type state = string
 
@@ -73,7 +73,7 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTa
               <span className="px-2 py-px"> {tag |> str} </span>
               <span
                 title={"Remove tag " ++ tag}
-                className="flex items-center px-2 h-full cursor-pointer px-2 text-gray-700 hover:text-black hover:bg-gray-300 border-l border-gray-400"
+                className="flex items-center px-2 h-full cursor-pointer text-gray-700 hover:text-black hover:bg-gray-300 border-l border-gray-400"
                 onClick={_e => handleClick(tag, send, removeTagCB)}>
                 <i className="fas fa-times" />
               </span>

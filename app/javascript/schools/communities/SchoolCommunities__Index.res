@@ -208,7 +208,7 @@ let make = (~communities, ~courses) => {
               </a>
             </div>
           </div>
-        ) |> Array.of_list |> ReasonReact.array}
+        ) |> Array.of_list |> React.array}
       </div>
     </div>
   </div>

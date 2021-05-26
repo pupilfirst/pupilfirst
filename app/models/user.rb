@@ -4,6 +4,8 @@
 #   daily_digest: bool - default true. There may be users without this key.
 # }
 class User < ApplicationRecord
+  acts_as_taggable
+
   belongs_to :school
   has_many :founders, dependent: :restrict_with_error
   has_many :startups, through: :founders

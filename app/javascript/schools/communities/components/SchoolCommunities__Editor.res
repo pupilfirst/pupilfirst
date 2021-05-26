@@ -188,7 +188,7 @@ let categoryList = categories =>
         <span
           key={category |> Category.id}
           className="border rounded mt-2 mr-2 px-2 py-1 text-xs font-semibold"
-          style={ReactDOMRe.Style.make(~backgroundColor, ~color, ())}>
+          style={ReactDOM.Style.make(~backgroundColor, ~color, ())}>
           {Category.name(category) |> str}
         </span>
       }) |> React.array} </div>, ArrayUtils.isEmpty(categories))

@@ -15,8 +15,7 @@
     }
   ],
   "suffix": ".bs.js",
-  "bs-dependencies": ["reason-react"],
-  "refmt": 3,
+  "bs-dependencies": ["@rescript/react"],
   "warnings": {
     "error": "+8"
   }

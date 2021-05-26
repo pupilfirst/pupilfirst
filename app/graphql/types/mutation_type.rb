@@ -31,7 +31,6 @@ module Types
     field :move_content_block,
           mutation: Mutations::MoveContentBlock,
           null: false
-    field :create_applicant, mutation: Mutations::CreateApplicant, null: false
     field :create_school_admin,
           mutation: Mutations::CreateSchoolAdmin,
           null: false

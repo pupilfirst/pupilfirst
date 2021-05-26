@@ -19,12 +19,16 @@ let decodeProps = json => {
 
 let props = DomUtils.parseJSONTag(~id="course-coaches__props", ()) |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <CourseCoaches__Root
-    courseCoaches=props.courseCoaches
-    schoolCoaches=props.schoolCoaches
-    courseId=props.courseId
-    authenticityToken=props.authenticityToken
-  />,
-  "sa-coaches-enrollment-panel",
-)
+switch ReactDOM.querySelector("#sa-coaches-enrollment-panel") {
+| Some(element) =>
+  ReactDOM.render(
+    <CourseCoaches__Root
+      courseCoaches=props.courseCoaches
+      schoolCoaches=props.schoolCoaches
+      courseId=props.courseId
+      authenticityToken=props.authenticityToken
+    />,
+    element,
+  )
+| None => ()
+}

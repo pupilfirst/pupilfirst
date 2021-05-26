@@ -210,13 +210,13 @@ describe Students::LevelUpEligibilityService do
       let(:milestone_target_l2) { create :target, :team, :with_group, milestone: true, level: level_2, evaluation_criteria: [evaluation_criterion] }
       let(:milestone_target_l3) { create :target, :team, :with_group, milestone: true, level: level_3, evaluation_criteria: [evaluation_criterion] }
 
-      context 'when team is in the third level and all milestone targets have been submitted' do
+      context 'when team is in the third level and all milestone targets have been submitted or reviewed with fail grade' do
         let(:startup) { create :startup, level: level_3 }
 
         before do
           submit_target team_target, student
           submit_target milestone_target_l2, student
-          submit_target milestone_target_l3, student
+          fail_target milestone_target_l3, student
         end
 
         it "returns 'Eligible'" do

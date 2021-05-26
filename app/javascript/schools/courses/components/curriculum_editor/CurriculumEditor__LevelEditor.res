@@ -2,7 +2,7 @@
 
 open CurriculumEditor__Types
 
-let str = ReasonReact.string
+let str = React.string
 
 type tab =
   | Details
@@ -157,7 +157,7 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
       />
       {state.hasNameError
         ? <div className="drawer-right-form__error-msg"> {"not a valid name" |> str} </div>
-        : ReasonReact.null}
+        : React.null}
     </div>
     <div className="mt-5">
       <label className="tracking-wide text-xs font-semibold" htmlFor="unlock-on-input">

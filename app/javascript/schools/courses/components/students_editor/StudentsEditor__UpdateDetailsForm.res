@@ -8,6 +8,7 @@ and selected = bool
 type state = {
   name: string,
   teamName: string,
+  userTags: array<string>,
   tagsToApply: array<string>,
   teamCoaches: array<string>,
   teamCoachSearchInput: string,
@@ -31,7 +32,7 @@ type action =
   | UpdateSaving(bool)
   | UpdateAccessEndsAt(option<Js.Date.t>)
 
-let str = ReasonReact.string
+let str = React.string
 
 let stringInputInvalid = s => s |> String.length < 2
 
@@ -79,7 +80,7 @@ let handleResponseCB = (updateFormCB, state, student, oldTeam, _json) => {
   )
   let newTeam = Team.update(
     ~name=state.teamName,
-    ~tags=state.tagsToApply,
+    ~teamTags=state.tagsToApply,
     ~student=newStudent,
     ~coachIds=state.teamCoaches,
     ~accessEndsAt=state.accessEndsAt,
@@ -205,6 +206,7 @@ let teamCoachesEditor = (courseCoaches, state, send) => {
 let initialState = (student, team) => {
   name: student |> Student.name,
   teamName: team |> Team.name,
+  userTags: student |> Student.userTags,
   tagsToApply: team |> Team.tags,
   teamCoaches: team |> Team.coachIds,
   teamCoachSearchInput: "",
@@ -269,7 +271,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
         />
       </div>
       {isSingleStudent
-        ? ReasonReact.null
+        ? React.null
         : <div className="mt-5">
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
@@ -333,6 +335,23 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
           {teamCoachesEditor(courseCoaches, state, send)}
         </div>
       </div>
+      {state.userTags |> ArrayUtils.isNotEmpty
+        ? <div className="mt-5">
+            <div className="mb-2 text-xs font-semibold">
+              {"Tags applied to user:" |> str}
+            </div>
+            <div className="flex flex-wrap">
+              {state.userTags |> Js.Array.map(tag =>
+                <div
+                  className="bg-blue-100 border border-blue-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900"
+                  key={tag}>
+                  {str(tag)}
+                </div>
+              )
+              |> React.array}
+            </div>
+          </div>
+        : React.null}
       <div className="mt-5">
         <div className="mb-2 text-xs font-semibold">
           {(isSingleStudent ? "Tags applied:" : "Tags applied to team:") |> str}

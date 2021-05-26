@@ -9,7 +9,7 @@
 }
 
 .curriculum__target-status {
-  @apply flex items-center text-xs font-semibold rounded border;
+  @apply flex items-center text-xs font-semibold rounded border whitespace-no-wrap;
 }
 
 .curriculum__target-status--pending-review {
@@ -28,6 +28,7 @@
   @apply bg-gray-100 text-gray-800 border-gray-600;
 }
 
-.courses-curriculum__target-container:hover .courses-curriculum__target-quick-link {
+.courses-curriculum__target-container:hover
+  .courses-curriculum__target-quick-link {
   @apply border-gray-300 text-gray-700;
 }

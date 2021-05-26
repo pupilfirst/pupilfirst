@@ -5,4 +5,7 @@ let selectedCourse = {
   )
 }
 
-ReactDOMRe.renderToElementWithId(<CourseEditor selectedCourse />, "course-editor")
+switch ReactDOM.querySelector("#course-editor") {
+| Some(element) => ReactDOM.render(<CourseEditor selectedCourse />, element)
+| None => ()
+}

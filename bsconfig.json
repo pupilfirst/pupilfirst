@@ -16,12 +16,11 @@
   "suffix": ".bs.js",
   "namespace": false,
   "bs-dependencies": [
-    "reason-react",
     "@glennsl/bs-json",
     "bs-fetch",
     "bs-webapi",
+    "@rescript/react"
   ],
-  "refmt": 3,
   "ppx-flags": ["@baransu/graphql_ppx_re/ppx6"],
   "warnings": {
     "number": "-48",

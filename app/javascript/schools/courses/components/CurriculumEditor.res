@@ -1,4 +1,4 @@
-let str = ReasonReact.string
+let str = React.string
 let t = I18n.t(~scope="components.CurriculumEditor")
 
 open CurriculumEditor__Types
@@ -136,7 +136,7 @@ let make = (
   ~hasVimeoAccessToken,
   ~vimeoPlan,
 ) => {
-  let path = ReasonReactRouter.useUrl().path
+  let path = RescriptReactRouter.useUrl().path
   let (state, send) = React.useReducerWithMapState(
     reducer,
     (levels, targetGroups, targets, path),
@@ -216,7 +216,7 @@ let make = (
       vimeoPlan
     />
     {switch state.editorAction {
-    | Hidden => ReasonReact.null
+    | Hidden => React.null
     | ShowTargetGroupEditor(targetGroup) =>
       <CurriculumEditor__TargetGroupEditor
         targetGroup levels=state.levels currentLevelId updateTargetGroupsCB hideEditorActionCB
@@ -248,7 +248,7 @@ let make = (
                     ) |> str}
                   </option>
                 )
-                |> ReasonReact.array}
+                |> React.array}
               </select>
               <div
                 className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-800">
@@ -272,7 +272,7 @@ let make = (
             ? <button className="btn btn-default" onClick={_ => send(ToggleShowArchived)}>
                 {(state.showArchived ? "Hide Archived" : "Show Archived") |> str}
               </button>
-            : ReasonReact.null}
+            : React.null}
         </div>
       </div>
       <div className="target-group__container max-w-3xl mt-5 mx-auto relative">
@@ -292,7 +292,7 @@ let make = (
             course
           />
         )
-        |> ReasonReact.array}
+        |> React.array}
         <div
           onClick={_ => send(UpdateEditorAction(ShowTargetGroupEditor(None)))}
           className="target-group__create flex flex-col items-center justify-center relative bg-white border-2 border-dashed border-gray-400 p-6 z-10 hover:text-primary-500 hover:shadow-lg hover:border-primary-400 hover:border-primary-400 rounded-lg mt-12 cursor-pointer">

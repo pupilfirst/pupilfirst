@@ -483,8 +483,9 @@ let make = (
 
   <div
     id="target-overlay"
-    className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
-    <div className="">
+    className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white pt-16">
+
+    <div>
       <div className="pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}
         {handleLocked(target, targets, targetStatus, statusOfTargets, send)}
@@ -549,5 +550,6 @@ let make = (
         </div>
       </div>
     }}
+
   </div>
 }

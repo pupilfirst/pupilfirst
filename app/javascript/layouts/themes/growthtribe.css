@@ -87,4 +87,6 @@
   .transparent-background:disabled:hover {
     @apply bg-transparent
   }
+
+
 }

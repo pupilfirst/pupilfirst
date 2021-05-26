@@ -109,7 +109,7 @@ let make = (
 ) => {
   let orderedLevels = levels |> Js.Array.filter(l => l |> Level.number != 0) |> Level.sort
 
-  <div className="bg-gray-100 px-3 py-2 mt-3 md:px-0 sticky top-0 z-20">
+  <div className="bg-white px-3 py-2 mt-3 md:px-0 sticky top-0 z-20">
     <div
       className="flex justify-center max-w-sm md:max-w-xl mx-auto rounded-lg border border-gray-400 h-11">
       {switch levelZero {

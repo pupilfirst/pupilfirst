@@ -3,6 +3,8 @@ module Users
     include Devise::Controllers::Rememberable
 
     skip_before_action :verify_authenticity_token, only: [:developer] # rubocop:disable Rails/LexicallyScopedActionFilter
+    before_action :set_rt_cookie_key, only: [:keycloakopenid] # rubocop:disable Rails/LexicallyScopedActionFilter
+
     # GET /users/auth/:action/callback
     def oauth_callback
       @email = email_from_auth_hash
@@ -22,20 +24,8 @@ module Users
     alias google_oauth2 oauth_callback
     alias facebook oauth_callback
     alias github oauth_callback
+    alias keycloakopenid oauth_callback
     alias developer oauth_callback
-
-    def keycloakopenid
-      @email = request.env['omniauth.auth']['info']['email']
-
-      cookies[Keycloak::RT_COOKIE_KEY] = request.env['omniauth.auth']['credentials']['refresh_token']
-
-      if @email.blank?
-        redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: email_blank_flash)
-        nil
-      else
-        sign_in_at_oauth_origin
-      end
-    end
 
     def failure
       if oauth_origin.present?
@@ -48,6 +38,10 @@ module Users
     end
 
     private
+
+    def set_rt_cookie_key
+      cookies[Keycloak::RT_COOKIE_KEY] = request.env['omniauth.auth']['credentials']['refresh_token']
+    end
 
     def oauth_origin
       @oauth_origin ||= begin

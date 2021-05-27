@@ -65,11 +65,11 @@
   }
 
   .btn-primary:hover {
-    @apply bg-white bg-transparent text-preciseBlue  ;
+    @apply bg-none bg-white text-preciseBlue  ;
   }
 
   .btn-primary:focus {
-    @apply bg-white bg-transparent text-preciseBlue border border-preciseBlue rounded-lg;
+    @apply bg-none bg-white text-preciseBlue border border-preciseBlue rounded-lg;
   }
 
   .btn-primary-ghost {

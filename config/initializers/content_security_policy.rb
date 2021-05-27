@@ -123,6 +123,13 @@ Rails.application.config.content_security_policy do |policy|
     }
   end
 
+  def mixpanel_csp
+    {
+      connect: %w[https://api.mixpanel.com https://api-js.mixpanel.com],
+      image: %w[https://cdn.mxpnl.com],
+    }
+  end
+
   def development_csp
     return {} unless Rails.env.development?
 
@@ -152,6 +159,7 @@ Rails.application.config.content_security_policy do |policy|
       calendly_csp,
       tribe_community_csp,
       recaptcha_csp,
+      mixpanel_csp,
       development_csp,
     ]
       .flat_map{|csp| csp[kind]}

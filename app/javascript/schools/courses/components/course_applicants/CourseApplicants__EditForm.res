@@ -229,7 +229,9 @@ let make = (~applicant, ~tags, ~updateApplicantCB, ~selectedTab, ~baseUrl) => {
   <div className="relative">
     <div className="mx-auto bg-white">
       <div className="max-w-2xl mx-auto">
-        <div className="mt-5"> <h5 className="uppercase text-center"> {t("title")->str} </h5> </div>
+        <div className="mt-5">
+          <h5 className="uppercase text-center"> {t("page_title")->str} </h5>
+        </div>
         <div className="w-full pt-6">
           <div className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
             <button

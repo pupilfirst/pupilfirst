@@ -236,9 +236,9 @@ let computeNotice = (
   }
 
 let navigationLink = (direction, level, setState) => {
-  let (leftIcon, longText, shortText, rightIcon) = switch direction {
-  | #Previous => (Some("fa-arrow-left"), t("nav_previous_level"), "Previous", None)
-  | #Next => (None, t("nav_next_level"), "Next", Some("fa-arrow-right"))
+  let (leftIcon, longText, shortText, rightIcon, cssClass) = switch direction {
+  | #Previous => (Some("fa-arrow-left"), t("nav_previous_level"), "Previous", None, "btn-primary-ghost ")
+  | #Next => (None, t("nav_next_level"), "Next", Some("fa-arrow-right"), "btn-primary ml-auto")
   }
 
   let arrow = icon =>
@@ -246,7 +246,7 @@ let navigationLink = (direction, level, setState) => {
 
   <button
     onClick={_ => setState(state => {...state, selectedLevelId: level |> Level.id})}
-    className="btn-primary">
+    className={cssClass}>
     {arrow(leftIcon)}
     <span className="mx-2 hidden md:inline"> {longText |> str} </span>
     <span className="mx-2 inline md:hidden"> {shortText |> str} </span>
@@ -260,22 +260,22 @@ let quickNavigationLinks = (levels, selectedLevel, setState) => {
 
   <div key="quick-navigation-links">
     <hr className="my-6" />
-    <div className="container mx-auto max-w-3xl flex px-3 lg:px-0">
+    <div className="container mx-auto max-w-6xl flex justify-between px-3 lg:px-0">
       {switch (previous, next) {
       | (Some(previousLevel), Some(nextLevel)) =>
         [
-          <div key="previous" className="w-1/2 mr-2">
+          <div key="previous">
             {navigationLink(#Previous, previousLevel, setState)}
           </div>,
-          <div key="next" className="w-1/2 ml-2">
+          <div key="next">
             {navigationLink(#Next, nextLevel, setState)}
           </div>,
         ] |> React.array
 
       | (Some(previousUrl), None) =>
-        <div className="w-full"> {navigationLink(#Previous, previousUrl, setState)} </div>
+         {navigationLink(#Previous, previousUrl, setState)}
       | (None, Some(nextUrl)) =>
-        <div className="w-full"> {navigationLink(#Next, nextUrl, setState)} </div>
+         {navigationLink(#Next, nextUrl, setState)}
       | (None, None) => React.null
       }}
     </div>

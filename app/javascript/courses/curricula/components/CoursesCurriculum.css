@@ -8,6 +8,22 @@
   z-index: 0;
 }
 
+@keyframes animateBackground {
+  0%{background-position:0% 84%}
+  50%{background-position:100% 17%}
+  100%{background-position:0% 84%}
+}
+
+.courses-curriculum__certificate {
+  background: linear-gradient(33deg, var(--color-silicon-blue-900) 0%,  var(--color-silicon-blue-300) 100%);
+  background-size: 300% 300%;
+  animation: animateBackground 30s ease-out infinite;
+}
+
+.courses-curriculum__target-container:hover .fa-pencil-alt {
+  @apply text-siliconBlue-900;
+}
+
 .curriculum__target-status {
   @apply flex items-center text-xs font-semibold rounded border whitespace-no-wrap;
 }
@@ -22,12 +38,12 @@
 
 .curriculum__target-status--completed::before {
   content: "";
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   display: block;
   margin-right: 10px;
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE5LjQ3ODMgMC4yMzQzMzRWMC4yMzQzMzRDMTguOTE3MyAtMC4xNjgxMTkgMTguMTM2NCAtMC4wMzkzMzA2IDE3LjczNDEgMC41MjJMNi4wMzg0IDE2LjgzODFMMi4xMzQyNiAxMi45MjgzQzEuNjQ2MTggMTIuNDM5NyAwLjg1NDY1OCAxMi40Mzk1IDAuMzY2MzUzIDEyLjkyNzlDLTAuMTIxOTU1IDEzLjQxNjMgLTAuMTIyMTQyIDE0LjIwODIgMC4zNjU5MzcgMTQuNjk2OEw1LjMxMTc0IDE5LjY0NDdDNS44MTc0NyAyMC4xMzE2IDYuNjIxOTcgMjAuMTE2MSA3LjEwODYyIDE5LjYxMDFDNy4xNDUxOCAxOS41NzIxIDcuMTc5MzMgMTkuNTMxOSA3LjIxMDg5IDE5LjQ4OTZMMTkuNzY1OCAxLjk3OTUxQzIwLjE2OCAxLjQxODE1IDIwLjAzOTMgMC42MzY4MjQgMTkuNDc4MyAwLjIzNDMzNEwxOS40NzgzIDAuMjM0MzM0WiIgZmlsbD0iIzE2NkNGRiIvPgo8L3N2Zz4K")
-
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE5LjQ3ODMgMC4yMzQzMzRWMC4yMzQzMzRDMTguOTE3MyAtMC4xNjgxMTkgMTguMTM2NCAtMC4wMzkzMzA2IDE3LjczNDEgMC41MjJMNi4wMzg0IDE2LjgzODFMMi4xMzQyNiAxMi45MjgzQzEuNjQ2MTggMTIuNDM5NyAwLjg1NDY1OCAxMi40Mzk1IDAuMzY2MzUzIDEyLjkyNzlDLTAuMTIxOTU1IDEzLjQxNjMgLTAuMTIyMTQyIDE0LjIwODIgMC4zNjU5MzcgMTQuNjk2OEw1LjMxMTc0IDE5LjY0NDdDNS44MTc0NyAyMC4xMzE2IDYuNjIxOTcgMjAuMTE2MSA3LjEwODYyIDE5LjYxMDFDNy4xNDUxOCAxOS41NzIxIDcuMTc5MzMgMTkuNTMxOSA3LjIxMDg5IDE5LjQ4OTZMMTkuNzY1OCAxLjk3OTUxQzIwLjE2OCAxLjQxODE1IDIwLjAzOTMgMC42MzY4MjQgMTkuNDc4MyAwLjIzNDMzNEwxOS40NzgzIDAuMjM0MzM0WiIgZmlsbD0iIzE2NkNGRiIvPgo8L3N2Zz4K");
+  background-size: contain;
 }
 
 .courses-curriculum__target-container:last-child .courses-curriculum__inner-container {

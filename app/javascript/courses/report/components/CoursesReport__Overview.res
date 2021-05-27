@@ -228,7 +228,7 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
 
 @react.component
 let make = (~overviewData, ~levels, ~coaches) =>
-  <div className="max-w-3xl mx-auto">
+  <div className="max-w-6xl mx-auto">
     {switch overviewData {
     | OverviewData.Loaded(overview) =>
       <div className="flex flex-col">

@@ -20,7 +20,7 @@ type state = {
 let targetStatusClasses = targetStatus => {
   let statusClasses =
     "curriculum__target-status--" ++ (targetStatus |> TargetStatus.statusClassesSufix)
-  "curriculum__target-status px-3 py-px ml-4 h-6 " ++ statusClasses
+  "curriculum__target-status text-sm px-3 py-px ml-4 h-6 " ++ statusClasses
 }
 
 let rendertarget = (target, statusOfTargets, author, courseId) => {
@@ -33,7 +33,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
 
   <div
     key={"target-" ++ targetId}
-    className="courses-curriculum__target-container transition duration-200 bg-white hover:bg-lightBlue px-8">
+    className="courses-curriculum__target-container transition duration-200  bg-white hover:bg-lightBlue px-8">
     <div className="courses-curriculum__inner-container border-b flex">
     <Link
       href={"/targets/" ++ targetId}
@@ -51,7 +51,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
       <a
         title={t("edit_target_button_title", ~variables=[("title", Target.title(target))])}
         href={"/school/courses/" ++ courseId ++ "/targets/" ++ targetId ++ "/content"}
-        className="hidden lg:block  text-gray-400 border-l border-transparent py-6 px-3 hover:text-siliconBlue-900 hover:bg-gray-200">
+        className="hidden lg:block  text-gray-400 border-l border-transparent py-6 px-3  ">
         <i className="fas fa-pencil-alt" />
       </a>,
       author,
@@ -72,7 +72,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
       <div className="shadow-md rounded-lg overflow-hidden bg-lightGray">
       {targetGroup |> TargetGroup.milestone
         ? <div
-            className="inline-block px-3 py-2 bg-preciseBlue font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
+            className="inline-block px-3 py-2 bg-hackerOrange font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
             {t("milestone_targets") |> str}
           </div>
         : React.null}
@@ -147,8 +147,8 @@ let issuedCertificate = course =>
   switch Course.certificateSerialNumber(course) {
   | Some(csn) =>
     <div
-      className="max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8">
-      <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight text-siliconBlue-900">
+      className="courses-curriculum__certificate relative  max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8">
+      <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight text-white">
         {t("issued_certificate_heading")->str}
       </div>
       <a href={"/c/" ++ csn} className="mt-4 mb-2 btn btn-primary">

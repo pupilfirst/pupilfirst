@@ -462,7 +462,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~teamTags, ~
       />
     | _ => React.null
     }}
-    <div className="bg-gray-100 pt-8 pb-8 px-3 -mt-7">
+    <div className="bg-white pt-8 pb-8 px-3 -mt-7">
       <CoursesStudents__StudentDistribution
         selectLevelCB={selectLevel(levels, send)}
         courseId

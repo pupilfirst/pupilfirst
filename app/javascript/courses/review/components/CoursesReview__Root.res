@@ -399,9 +399,9 @@ let make = (~levels, ~courseId, ~teamCoaches, ~currentCoach) => {
       />
     | _ => React.null
     }}
-    <div className="bg-gray-100 pt-9 pb-8 px-3 -mt-7">
-      <div className="bg-gray-100 static md:sticky md:top-0">
-        <div className="max-w-3xl mx-auto">
+    <div className="bg-white pt-9 pb-8 px-3 -mt-7">
+      <div className="bg-white static md:sticky md:top-0">
+        <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-end lg:items-center py-4">
             <div
               ariaLabel="status-tab"
@@ -438,10 +438,10 @@ let make = (~levels, ~courseId, ~teamCoaches, ~currentCoach) => {
           </div>
         </div>
       </div>
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {restoreAssignedToMeFilter(state, send, currentTeamCoach)}
       </div>
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <CoursesReview__SubmissionsTab
           courseId
           selectedTab=state.selectedTab

@@ -255,7 +255,7 @@ feature 'Apply for public courses', js: true do
         href: '/agreements/privacy-policy'
       )
       expect(page).to have_link(
-        'Terms of Use',
+        'Terms & Conditions',
         href: '/agreements/terms-and-conditions'
       )
     end
@@ -275,7 +275,7 @@ feature 'Apply for public courses', js: true do
         href: '/agreements/privacy-policy'
       )
       expect(page).to have_link(
-        'Terms of Use',
+        'Terms & Conditions',
         href: '/agreements/terms-and-conditions'
       )
     end

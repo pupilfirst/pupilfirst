@@ -14,10 +14,10 @@ en:
       all_categories_button: All Categories
       button_load_more: Load More...
       empty_topics: There's no discussion here yet.
-      filter_input_label: 'Filter by:'
+      filter_input_label: "Filter by:"
       filter_input_placeholder_categories: Filter by category, solution or search within topics
       filter_input_placeholder_default: Search within topics or filter by solution
-      sort_criterion_input_label: 'Sort by:'
+      sort_criterion_input_label: "Sort by:"
       sort_criterion_last_activity: Last Activity
       sort_criterion_posted_at: Posted At
       sort_criterion_views: Views
@@ -62,8 +62,11 @@ en:
       filter:
         input_label: Search
         input_placeholder: Filter and Search Applicants by name
+        label:
+          search: Search by name or email
+          tag: Tag
       onboard_as_student: OnBoard as Student
-      show_details: 'Show Details: '
+      show_details: "Show Details: "
       sort_criterion:
         created_at: Created At
         name: Name
@@ -182,7 +185,7 @@ en:
         help: This only applies if your course has milestone targets that requires students to submit their work for review by coaches.
         label: Progression Behavior
         limited:
-          description_end: ' without getting submissions reviewed.'
+          description_end: " without getting submissions reviewed."
           description_start: Students can level up
           once: once
           thrice: thrice
@@ -218,11 +221,11 @@ en:
       empty_image_label: Please choose an image file.
       image_label:
         end: . Click to replace the current image.
-        start: 'You have selected '
+        start: "You have selected "
       notification_success:
         description: Images have been updated successfully.
         title: Done!
-      replace_image_label: 'Please pick a file to replace '
+      replace_image_label: "Please pick a file to replace "
       thumbnail:
         error_message: must be a JPEG / PNG under 2 MB in size
         help: The thumbnail will be displayed on the homepage, and here in the admin courses list.
@@ -257,9 +260,9 @@ en:
       course_ended_description: The course has ended and submissions are disabled for all targets!
       course_ended_title: Course Ended
       level_up_blocked:
-        body_middle_pending_review: 'are pending review by a coach. '
-        body_middle_rejected: 'have been rejected. '
-        body_prefix: 'You have submitted all milestone targets in level %{number}, but one or more submissions '
+        body_middle_pending_review: "are pending review by a coach. "
+        body_middle_rejected: "have been rejected. "
+        body_prefix: "You have submitted all milestone targets in level %{number}, but one or more submissions "
         body_suffix: You need to get a passing grade on all milestone targets to level up.
         title_pending_review: Pending Review
         title_rejected: Level Up Blocked
@@ -286,7 +289,7 @@ en:
       learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
       next_target_button: Next Target
-      pending_team_members_notice: 'You have team members who are yet to complete this target:'
+      pending_team_members_notice: "You have team members who are yet to complete this target:"
       preview_mode_text: You are currently looking at a preview of this course.
       previous_target_button: Previous Target
       scroll_to_top: Scroll to Top
@@ -302,18 +305,18 @@ en:
         pending_review: Pending Review
         rejected: Rejected
     CoursesReport__Overview:
-      attempted: ' Attempted'
+      attempted: " Attempted"
       average_grades: Average Grades
       average_quiz_score: Average Quiz Score
       course_completed: Course Completed!
-      incomplete_targets: 'Incomplete: %{targetsCount}'
+      incomplete_targets: "Incomplete: %{targetsCount}"
       level_progress: Level Progress
       personal_coaches: Personal Coaches
       quiz: Quiz
       schedule_coaching_session: Schedule a coaching session
-      targets_completed: 'Completed: %{targetsCount}'
+      targets_completed: "Completed: %{targetsCount}"
       targets_overview: Targets Overview
-      targets_pending_review: 'Pending Review: %{targetsCount}'
+      targets_pending_review: "Pending Review: %{targetsCount}"
     CoursesReport__SubmissionsList:
       completed: Completed
       filter_by_another_level: Filter by another level
@@ -321,21 +324,21 @@ en:
       filter_by_level: Filter by level
       filter_by_level_or_status: Filter by level, or by status
       load_more: Load More...
-      no_submissions_to_show: 'No submissions to show '
+      no_submissions_to_show: "No submissions to show "
       pending_review: Pending Review
       rejected: Rejected
-      sort_by: 'Sort by:'
+      sort_by: "Sort by:"
       status: Status
       submission_not_considered: This submission is not considered towards its target's completion.
       submission_not_considered_help: This is a <em>team</em> target, and this submission is not linked to some members of your team. This can happen if a target is changed after your individual submission, to require a <em>team</em> submission, or if your team's composition changed after a <em>team</em> submission was created.
       submitted_at: Submitted At
       submitted_on: Submitted on %{date}
-      view: 'View '
+      view: "View "
     CoursesReview__Root:
       assigned_to: Assigned to
-      assigned_to_coach: 'assigned to '
-      assigned_to_me: ' assigned to me'
-      filter_by: 'Filter by:'
+      assigned_to_coach: "assigned to "
+      assigned_to_me: " assigned to me"
+      filter_by: "Filter by:"
       filter_by_another_level: Filter by another level
       filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
       filter_by_level: Filter by level
@@ -346,11 +349,11 @@ en:
       pending: Pending
       reviewed: Reviewed
       reviewed_at: Reviewed At
-      sort_by: 'Sort by:'
+      sort_by: "Sort by:"
       submitted_at: Submitted At
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
-      attempted: ' Attempted'
+      attempted: " Attempted"
       average_grades: Average Grades
       average_quiz_score: Average Quiz Score
       close_student_report: Close student report
@@ -362,7 +365,7 @@ en:
       personal_coaches: Personal Coaches
       quiz: Quiz
       submissions: Submissions
-      targets: ' Targets'
+      targets: " Targets"
       targets_overview: Targets Overview
       team_coaches: Team Coaches
       total_targets_completed: Total Targets Completed
@@ -475,14 +478,14 @@ en:
       empty_course_certificates_text: This course does not have any certificates to issue.
       empty_issued_certificates_text: This student has not been issued any certificates.
       issue_certificate_button: Issue Certificate
-      issued_by_label: 'Issued by:'
-      issued_certificates_label: 'Issued certificates:'
-      issued_date_label: 'Issued on:'
-      new_certificate_label: 'Issue new certificate:'
+      issued_by_label: "Issued by:"
+      issued_certificates_label: "Issued certificates:"
+      issued_date_label: "Issued on:"
+      new_certificate_label: "Issue new certificate:"
       revoke_certificate_button: Revoke Certificate
       revoke_certificate_confirmation: Are you sure? This action cannot be undone.
-      revoked_by_label: 'Revoked by:'
-      revoked_date_label: 'Revoked on:'
+      revoked_by_label: "Revoked by:"
+      revoked_date_label: "Revoked on:"
       revoked_status_label: Revoked
       select_certificate_input_label: Select a certificate to issue
     StudentsEditor__BulkImportForm:
@@ -502,19 +505,19 @@ en:
       csv_file_input_label: CSV Import file
       csv_file_input_placeholder: Select CSV file to import
       drawer_heading: Bulk Import Students
-      error_summary_title: 'Here is a summary of the errors in the sheet: '
+      error_summary_title: "Here is a summary of the errors in the sheet: "
       example_csv_link: Download an example .csv file
       import_button_text: Import Students
-      more_errors_text: 'There are even more errors. Fix the errors in the following rows and upload again: '
+      more_errors_text: "There are even more errors. Fix the errors in the following rows and upload again: "
       notify_students_label: Notify students, and send them a link to sign into this school.
       success_notification: Import initiated successfully! You will be notified in an email once complete.
       valid_data_message: Data validated successfully!
-      valid_data_summary_text: 'Here is a summary of student data in the uploaded sheet: '
+      valid_data_summary_text: "Here is a summary of student data in the uploaded sheet: "
     StudentsEditor__CreateForm:
       added_full_description: All students were created successfully.
       added_none_description: All the students you tried to add were already a part of this course.
       added_none_title: Nothing Changed
-      added_partial_description: '%{students_added} of %{students_requested} students were added. Remaining students are already a part of the course.'
+      added_partial_description: "%{students_added} of %{students_requested} students were added. Remaining students are already a part of the course."
       added_partial_title: Partially Added
       drawer_heading: Add New Students
       notify_students_label: Notify students, and send them a link to sign into this school.
@@ -522,18 +525,18 @@ en:
       team_header_add_more_members: Add more team members!
       team_header_label: TEAM %{team_name}
       teams_to_add_empty: This list is empty! Add some students using the form above.
-      teams_to_add_label: 'These new students will be added to the course:'
+      teams_to_add_label: "These new students will be added to the course:"
     StudentsEditor__Root:
       button_add_new_students: Add New Students
       button_all_students: All Students
       button_bulk_import: Bulk Import
       button_inactive_students: Inactive Students
-      sort_criterion_label: 'Sort by:'
+      sort_criterion_label: "Sort by:"
       sort_criterion_last_created: Last Created
       sort_criterion_last_updated: Last Updated
       sort_criterion_name: Name
     StudentsEditor__Search:
-      filter_input_label: 'Filter by:'
+      filter_input_label: "Filter by:"
       filter_input_placeholder: Type name, tag or level
     TopicsShow__LikeManager:
       like_button_tooltip: Like this post
@@ -547,16 +550,16 @@ en:
       edit_reply_string: Edit Reply
       go_to_solution_button: Go to solution
       history_button_text: History
-      last_edited_by_label: 'Last edited by '
+      last_edited_by_label: "Last edited by "
       mark_as_solution_label: Mark as solution
       new_reply_button: Reply
       solution_icon_label: Solution
     TopicsShow__Root:
       edit_topic_button: Edit Topic
-      linked_target_label: 'Linked Target: '
+      linked_target_label: "Linked Target: "
       lock_topic_button: Lock Topic
       locked_topic_notice: This topic thread has been locked; no new replies can be posted.
-      topic_category_label: 'Topic Category: '
+      topic_category_label: "Topic Category: "
       topic_editor_cancel_button: Cancel
       unlock_topic_button: Unlock Topic
       update_topic_button: Update Topic
@@ -627,9 +630,9 @@ en:
   jobs:
     notifications:
       post_created_job:
-        post_created: '%{user_name} has responded to a thread you are part of in the %{community_name} community'
+        post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
       topic_created_job:
-        topic_created: '%{user_name} has created a new topic in %{community_name} community'
+        topic_created: "%{user_name} has created a new topic in %{community_name} community"
     targets:
       send_session_feedback_notification:
         message: |
@@ -661,9 +664,9 @@ en:
             *Description:* %{event_description}
             %{links_attached_notice}
         team:
-          needs_improvement: 'Your team <%{startup_url}|%{startup_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as ''needs improvement''. Please submit a new and revised timeline event based on the feedback'
+          needs_improvement: "Your team <%{startup_url}|%{startup_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
           not_accepted: The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your team <%{startup_url}|%{startup_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback
-          verified: 'Your team <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>'
+          verified: "Your team <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
   models:
     faculty:
       commitment:
@@ -749,8 +752,8 @@ en:
       submit_button: Request password reset
       subtitle: Enter your email for password recovery.
   shared:
-    _no: 'No'
-    _yes: 'Yes'
+    _no: "No"
+    _yes: "Yes"
     cancel: Cancel
     close: Close
     done_exclamation: Done!
@@ -758,9 +761,9 @@ en:
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
     level: Level
     level_label:
-      long_with_name: 'Level %{number}: %{name}'
+      long_with_name: "Level %{number}: %{name}"
       long_without_name: Level %{number}
-      short_with_name: 'L%{number}: %{name}'
+      short_with_name: "L%{number}: %{name}"
       short_without_name: L%{number}
     optional: optional
     privacy_policy: Privacy Policy

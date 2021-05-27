@@ -69,14 +69,14 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
     className="curriculum__target-group-container relative mt-5 px-3">
     <div
       className="curriculum__target-group max-w-6xl mx-auto bg-white text-center relative z-10">
+      <div className="shadow-md rounded-lg overflow-hidden bg-lightGray">
       {targetGroup |> TargetGroup.milestone
         ? <div
-            className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
+            className="inline-block px-3 py-2 bg-preciseBlue font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
             {t("milestone_targets") |> str}
           </div>
         : React.null}
-      <div className="shadow-md rounded-lg overflow-hidden">
-        <div className="p-6 pt-5 bg-lightGray">
+        <div className="p-6 pt-5">
           <div className="text-2xl font-bold leading-snug text-siliconBlue-900 ">
             {TargetGroup.name(targetGroup)->str}
           </div>
@@ -148,7 +148,7 @@ let issuedCertificate = course =>
   | Some(csn) =>
     <div
       className="max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8">
-      <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tighttext-siliconBlue-900">
+      <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight text-siliconBlue-900">
         {t("issued_certificate_heading")->str}
       </div>
       <a href={"/c/" ++ csn} className="mt-4 mb-2 btn btn-primary">
@@ -259,7 +259,7 @@ let quickNavigationLinks = (levels, selectedLevel, setState) => {
   let next = selectedLevel |> Level.next(levels)
 
   <div key="quick-navigation-links">
-    <hr className="my-6" />
+    <hr className="mt-12 mb-6" />
     <div className="container mx-auto max-w-6xl flex justify-between px-3 lg:px-0">
       {switch (previous, next) {
       | (Some(previousLevel), Some(nextLevel)) =>

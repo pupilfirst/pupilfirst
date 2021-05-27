@@ -3,7 +3,7 @@ ruby '2.7.3'
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.0.3', '>= 6.0.3.5'
+gem 'rails', '~> 6.0.3', '>= 6.0.3.7'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 

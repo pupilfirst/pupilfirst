@@ -246,7 +246,7 @@ let navigationLink = (direction, level, setState) => {
 
   <button
     onClick={_ => setState(state => {...state, selectedLevelId: level |> Level.id})}
-    className="block w-full btn-primary">
+    className="btn-primary">
     {arrow(leftIcon)}
     <span className="mx-2 hidden md:inline"> {longText |> str} </span>
     <span className="mx-2 inline md:hidden"> {shortText |> str} </span>

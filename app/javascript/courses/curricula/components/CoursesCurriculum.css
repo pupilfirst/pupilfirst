@@ -13,7 +13,7 @@
 }
 
 .curriculum__target-status--pending-review {
-  @apply bg-blue-100 text-blue-800 border-blue-500;
+  @apply text-blue-800 border-none text-lg font-semibold;
 }
 
 .curriculum__target-status--completed {
@@ -36,14 +36,14 @@
 
 
 .curriculum__target-status--rejected {
-  @apply bg-red-100 text-red-800 border-red-500;
+  @apply text-red-800 border-none text-lg font-semibold;;
 }
 
 .curriculum__target-status--locked {
-  @apply bg-gray-100 text-gray-800 border-gray-600;
+  @apply text-gray-800 border-none text-lg font-semibold;;
 }
 
 .courses-curriculum__target-container:hover
   .courses-curriculum__target-quick-link {
-  @apply border-gray-300 text-gray-700;
+  @apply text-gray-700 border-none text-lg font-semibold;;
 }

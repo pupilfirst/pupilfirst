@@ -72,7 +72,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
       <div className="shadow-md rounded-lg overflow-hidden bg-lightGray">
       {targetGroup |> TargetGroup.milestone
         ? <div
-            className="inline-block px-3 py-2 bg-preciseBlue font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
+            className="inline-block px-3 py-2 bg-hackerOrange font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
             {t("milestone_targets") |> str}
           </div>
         : React.null}

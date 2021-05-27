@@ -125,7 +125,7 @@ let make = (
         onClick={_event => showTargetGroupEditorCB(Some(targetGroup))}>
         {milestone
           ? <div
-              className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
+              className="inline-block px-3 py-2 bg-hackerOrange font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
               {t("milestone_targets") |> str}
             </div>
           : React.null}

@@ -51,7 +51,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
       <a
         title={t("edit_target_button_title", ~variables=[("title", Target.title(target))])}
         href={"/school/courses/" ++ courseId ++ "/targets/" ++ targetId ++ "/content"}
-        className="hidden lg:block courses-curriculum__target-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:bg-gray-200">
+        className="hidden lg:block  text-gray-400 border-l border-transparent py-6 px-3 hover:text-siliconBlue-900 hover:bg-gray-200">
         <i className="fas fa-pencil-alt" />
       </a>,
       author,

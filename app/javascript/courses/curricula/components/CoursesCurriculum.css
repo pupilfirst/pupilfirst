@@ -17,8 +17,23 @@
 }
 
 .curriculum__target-status--completed {
-  @apply bg-green-100 text-green-800 border-green-500;
+  @apply text-preciseBlue border-none text-lg font-semibold;
 }
+
+.curriculum__target-status--completed::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  display: block;
+  margin-right: 10px;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE5LjQ3ODMgMC4yMzQzMzRWMC4yMzQzMzRDMTguOTE3MyAtMC4xNjgxMTkgMTguMTM2NCAtMC4wMzkzMzA2IDE3LjczNDEgMC41MjJMNi4wMzg0IDE2LjgzODFMMi4xMzQyNiAxMi45MjgzQzEuNjQ2MTggMTIuNDM5NyAwLjg1NDY1OCAxMi40Mzk1IDAuMzY2MzUzIDEyLjkyNzlDLTAuMTIxOTU1IDEzLjQxNjMgLTAuMTIyMTQyIDE0LjIwODIgMC4zNjU5MzcgMTQuNjk2OEw1LjMxMTc0IDE5LjY0NDdDNS44MTc0NyAyMC4xMzE2IDYuNjIxOTcgMjAuMTE2MSA3LjEwODYyIDE5LjYxMDFDNy4xNDUxOCAxOS41NzIxIDcuMTc5MzMgMTkuNTMxOSA3LjIxMDg5IDE5LjQ4OTZMMTkuNzY1OCAxLjk3OTUxQzIwLjE2OCAxLjQxODE1IDIwLjAzOTMgMC42MzY4MjQgMTkuNDc4MyAwLjIzNDMzNEwxOS40NzgzIDAuMjM0MzM0WiIgZmlsbD0iIzE2NkNGRiIvPgo8L3N2Zz4K")
+
+}
+
+.courses-curriculum__target-container:last-child .courses-curriculum__inner-container {
+  border-bottom: none;
+}
+
 
 .curriculum__target-status--rejected {
   @apply bg-red-100 text-red-800 border-red-500;

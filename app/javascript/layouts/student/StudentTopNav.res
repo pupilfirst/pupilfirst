@@ -113,7 +113,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
     None
   })
 
-  <div className="border-b bg-siliconBlue-900">
+  <div className="bg-siliconBlue-900">
     <div className="container mx-auto px-3 max-w-6xl">
       <nav className="flex justify-between items-center h-20">
         <div className="flex w-full items-center justify-between">

@@ -50,7 +50,7 @@ let untabbedLevelSelector = (selectedLevel, orderedLevels, teamLevel, setSelecte
   <Dropdown
     selected
     contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId)}
-    className="flex-grow cursor-pointer rounded-lg bg-primary-100 hover:bg-gray-200 hover:text-primary-500"
+    className="flex-grow cursor-pointer rounded-lg bg-none text-siliconBlue-900 text-left border-none hover:text-primary-500 border-0 text-xl"
   />
 }
 

@@ -52,7 +52,9 @@ module.exports = {
         hackerOrange: "var(--color-hacker-orange)",
         preciseBlue: "var(--color-precise-blue)",
         cyan: "#1FB4C0",
-        washedBlue: "#817F97"
+        washedBlue: "#817F97",
+        lightGray: "#F5F5F5",
+        lightBlue: "#F3F8FF"
       },
       fontFamily: {
         'sans': "var(--font-family-sans)",

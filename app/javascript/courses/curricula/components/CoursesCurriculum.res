@@ -33,12 +33,13 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
 
   <div
     key={"target-" ++ targetId}
-    className="courses-curriculum__target-container flex border-t bg-white hover:bg-gray-100">
+    className="courses-curriculum__target-container transition duration-200 bg-white hover:bg-lightBlue px-8">
+    <div className="courses-curriculum__inner-container border-b flex">
     <Link
       href={"/targets/" ++ targetId}
-      className="p-6 flex flex-grow items-center justify-between hover:text-primary-500 cursor-pointer"
+      className="p-6 flex flex-grow items-center justify-between text-siliconBlue-900 cursor-pointer"
       ariaLabel={"Select Target " ++ targetId}>
-      <span className="font-semibold text-left leading-snug"> {Target.title(target)->str} </span>
+      <span className="text-left leading-snug"> {Target.title(target)->str} </span>
       {ReactUtils.nullIf(
         <span className={targetStatusClasses(targetStatus)}>
           {TargetStatus.statusToString(targetStatus)->str}
@@ -55,6 +56,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
       </a>,
       author,
     )}
+    </div>
   </div>
 }
 
@@ -66,27 +68,29 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
     key={"target-group-" ++ targetGroupId}
     className="curriculum__target-group-container relative mt-5 px-3">
     <div
-      className="curriculum__target-group max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden ">
+      className="curriculum__target-group max-w-6xl mx-auto bg-white text-center relative z-10">
       {targetGroup |> TargetGroup.milestone
         ? <div
             className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
             {t("milestone_targets") |> str}
           </div>
         : React.null}
-      <div className="p-6 pt-5">
-        <div className="text-2xl font-bold leading-snug">
-          {TargetGroup.name(targetGroup)->str}
+      <div className="shadow-md rounded-lg overflow-hidden">
+        <div className="p-6 pt-5 bg-lightGray">
+          <div className="text-2xl font-bold leading-snug text-siliconBlue-900 ">
+            {TargetGroup.name(targetGroup)->str}
+          </div>
+          <MarkdownBlock
+            className="text-sm max-w-md mx-auto leading-snug text-siliconBlue-900 "
+            markdown={TargetGroup.description(targetGroup)}
+            profile=Markdown.AreaOfText
+          />
         </div>
-        <MarkdownBlock
-          className="text-sm max-w-md mx-auto leading-snug"
-          markdown={TargetGroup.description(targetGroup)}
-          profile=Markdown.AreaOfText
-        />
+        {targets
+        |> ArrayUtils.copyAndSort((t1, t2) => (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex))
+        |> Js.Array.map(target => rendertarget(target, statusOfTargets, author, courseId))
+        |> React.array}
       </div>
-      {targets
-      |> ArrayUtils.copyAndSort((t1, t2) => (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex))
-      |> Js.Array.map(target => rendertarget(target, statusOfTargets, author, courseId))
-      |> React.array}
     </div>
   </div>
 }
@@ -144,7 +148,7 @@ let issuedCertificate = course =>
   | Some(csn) =>
     <div
       className="max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8">
-      <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight">
+      <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tighttext-siliconBlue-900">
         {t("issued_certificate_heading")->str}
       </div>
       <a href={"/c/" ++ csn} className="mt-4 mb-2 btn btn-primary">
@@ -242,7 +246,7 @@ let navigationLink = (direction, level, setState) => {
 
   <button
     onClick={_ => setState(state => {...state, selectedLevelId: level |> Level.id})}
-    className="block w-full focus:outline-none p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer">
+    className="block w-full btn-primary">
     {arrow(leftIcon)}
     <span className="mx-2 hidden md:inline"> {longText |> str} </span>
     <span className="mx-2 inline md:hidden"> {shortText |> str} </span>

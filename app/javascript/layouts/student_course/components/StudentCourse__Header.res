@@ -17,7 +17,7 @@ let courseOptions = courses => Js.Array.map(course => {
 
 
   let courseTitle = currentCourse =>
-  <h1 className="text-white text-6xl leading-tight max-w-lg">{CourseInfo.name(currentCourse)->str}</h1>
+  <h1 className="text-white text-3xl md:text-6xl leading-tight max-w-lg">{CourseInfo.name(currentCourse)->str}</h1>
 
 let courseNameContainerClasses = additionalLinks =>
   "student-course__name-container w-full " ++ (
@@ -45,10 +45,10 @@ let renderCourseSelector = (currentCourseId, courses, coverImage) => {
 }
 
 let tabClasses = (url: RescriptReactRouter.url, linkTitle) => {
-  let defaultClasses = "text-current  text-lg px-6 py-3 font-semibold block rounded-full"
+  let defaultClasses = "text-current hover:text-siliconBlue-900 hover:bg-gray-200 transition duration-300 text-lg px-6 py-3 font-semibold block rounded-full"
   switch url.path {
   | list{"courses", _targetId, pageTitle, ..._} when pageTitle == linkTitle =>
-    defaultClasses ++ " bg-siliconBlue-900 text-white "
+    "text-lg px-6 py-3 font-semibold block rounded-full bg-siliconBlue-900 text-white  hover:bg-siliconBlue-800"
   | _ => defaultClasses
   }
 }
@@ -62,9 +62,9 @@ let make = (~currentCourseId, ~courses, ~additionalLinks, ~coverImage) => {
     {switch additionalLinks {
     | [] => React.null
     | additionalLinks =>
-      <div className="lg:max-w-6xl mx-auto mt-8 md:mt-12 flex items-start justify-start overflow-hidden">
+      <div className="lg:max-w-6xl mx-auto mt-8 md:mt-12 flex items-start justify-start overflow-hidden ">
         <div
-          className="z-10 relative flex overflow-hidden text-washedBlue border border-gray-300 rounded-full">
+          className="z-10 relative px-2 md:px-0 flex flex-col md:flex-row overflow-hidden text-washedBlue md:border border-gray-300 md:rounded-full">
           {Js.Array.map(l => {
             let (title, suffix) = switch l {
             | "curriculum" => ("Curriculum", "curriculum")

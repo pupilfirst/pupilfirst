@@ -1,5 +1,9 @@
 class CoursesController < ApplicationController
-  before_action :authenticate_user!, except: %i[show apply curriculum]
+  include RecaptchaVerifiable
+
+  before_action :authenticate_user!,
+                except: %i[show apply process_application curriculum]
+
   before_action :preview_or_authenticate, only: %i[curriculum]
 
   # GET /courses/:id/curriculum
@@ -18,8 +22,40 @@ class CoursesController < ApplicationController
   # GET /courses/:id/apply
   def apply
     @course = authorize(find_course)
+    @show_checkbox_recaptcha = params[:visible_recaptcha].present?
+
     save_tag
+
     render layout: 'tailwind'
+  end
+
+  # POST /courses/:id/apply
+  def process_application
+    @course = authorize(find_course)
+
+    form = Courses::EnrollmentForm.new(@course)
+
+    recaptcha_success =
+      recaptcha_success?(@form, action: 'public_course_enrollment')
+
+    unless recaptcha_success
+      redirect_to apply_course_path(params[:id], visible_recaptcha: 1)
+      return
+    end
+
+    if form.validate(params)
+      form.create_applicant(session)
+
+      flash[:success] =
+        "We've sent you a verification mail. It should reach you in less than a minute. Click the link in the email to sign up, and get started."
+
+      redirect_to root_path
+    else
+      flash[:error] =
+        "There were errors with your submission: #{form.errors.full_messages.join(', ')}"
+
+      redirect_to apply_course_path(params[:id], visible_recaptcha: 1)
+    end
   end
 
   # GET /courses/:id/(:slug)

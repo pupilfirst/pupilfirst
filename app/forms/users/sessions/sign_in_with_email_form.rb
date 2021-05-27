@@ -4,14 +4,11 @@ module Users
       include ValidateTokenGeneration
 
       property :email, validates: { presence: true, length: { maximum: 250 }, email: true }
-      # Honeypot field. See validation `detect_honeypot` below.
-      property :username
       property :referrer
       property :shared_device
 
       validate :user_with_email_must_exist
       validate :ensure_time_between_requests
-      validate :detect_honeypot
       validate :email_should_not_have_bounced
 
       def save

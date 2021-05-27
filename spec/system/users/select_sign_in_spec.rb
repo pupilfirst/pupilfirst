@@ -4,7 +4,7 @@ feature 'Select Sign-in available options based on Devise capabilities', js: tru
   let!(:school) { create :school, :current }
 
   scenario 'show only available federated sign-ins' do
-    allow(Devise).to receive(:omniauth_providers).and_return([:keycloak_openid, :github])
+    allow_any_instance_of(Users::Sessions::NewPresenter).to receive(:providers).and_return([:keycloak_openid, :github])
     visit new_user_session_path
 
     expect(page).to have_content('Continue with Keycloak')
@@ -14,15 +14,20 @@ feature 'Select Sign-in available options based on Devise capabilities', js: tru
   end
 
   scenario 'dont have sign-in by email' do
-    mock_props = {
-      school_name: school.name,
-      fqdn: page.current_host,
-      available_oauth_providers: [],
-      allow_email_sign_in: false
-    }
-    mock_presenter = double :presenter, props: mock_props
-    allow(Users::Sessions::NewPresenter).to receive(:new).and_return(mock_presenter)
+    allow(ENV).to receive(:fetch).with('ONLY_KEYCLOAK')
+      .and_return(false)
+    allow(ENV).to receive(:fetch).with('ALLOW_EMAIL_SIGN_IN')
+      .and_return(false)
     visit new_user_session_path
     expect(page).not_to have_content('Continue with email')
+  end
+
+  scenario 'allow sign-in by email' do
+    allow(ENV).to receive(:fetch).with('ONLY_KEYCLOAK')
+      .and_return(false)
+    allow(ENV).to receive(:fetch).with('ALLOW_EMAIL_SIGN_IN')
+      .and_return(true)
+    visit new_user_session_path
+    expect(page).to have_content('Continue with email')
   end
 end

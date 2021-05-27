@@ -43,7 +43,10 @@ jobs:
       CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       SPEC_USER_TIME_ZONE: Etc/UTC
       SPEC_RETRY_COUNT: 2
-      ALLOW_EMAIL_SIGN_IN: true
+      RECAPTCHA_V3_SITE_KEY: ignored
+      RECAPTCHA_V3_SECRET_KEY: ignored
+      RECAPTCHA_V2_SITE_KEY: ignored
+      RECAPTCHA_V2_SECRET_KEY: ignored
 
     steps:
       - uses: actions/checkout@v2

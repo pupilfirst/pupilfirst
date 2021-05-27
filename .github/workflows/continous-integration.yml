@@ -38,6 +38,10 @@ jobs:
       CAPYBARA_MAX_WAIT_TIME: 5
       SPEC_USER_TIME_ZONE: Etc/UTC
       SPEC_RETRY_COUNT: 2
+      RECAPTCHA_V3_SITE_KEY: ignored
+      RECAPTCHA_V3_SECRET_KEY: ignored
+      RECAPTCHA_V2_SITE_KEY: ignored
+      RECAPTCHA_V2_SECRET_KEY: ignored
       ALLOW_EMAIL_SIGN_IN: true
       COMMUNITY_HOST: https://growth-tribe-staging.tribe.so
 

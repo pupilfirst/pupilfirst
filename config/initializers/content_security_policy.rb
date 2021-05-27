@@ -37,6 +37,10 @@ Rails.application.config.content_security_policy do |policy|
     }
   end
 
+  def recaptcha_csp
+    { frame: 'https://www.recaptcha.net' }
+  end
+
   def resource_csp
     { media: %w[https://s3.amazonaws.com/private-assets-sv-co/ https://public-assets.sv.co/ https://s3.amazonaws.com/uploads.pupilfirst.com/] }
   end
@@ -147,6 +151,7 @@ Rails.application.config.content_security_policy do |policy|
       gtm_csp,
       calendly_csp,
       tribe_community_csp,
+      recaptcha_csp,
       development_csp,
     ]
       .flat_map{|csp| csp[kind]}

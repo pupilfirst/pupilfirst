@@ -45,10 +45,10 @@ let renderCourseSelector = (currentCourseId, courses, coverImage) => {
 }
 
 let tabClasses = (url: RescriptReactRouter.url, linkTitle) => {
-  let defaultClasses = "text-current hover:text-siliconBlue-900 hover:bg-gray-200 transition duration-300 text-lg px-6 py-3 font-semibold block rounded-full"
+  let defaultClasses = "text-current text-center hover:text-siliconBlue-900 hover:bg-gray-200 transition duration-300 text-lg px-6 py-3 font-semibold font-condensed block rounded-full"
   switch url.path {
   | list{"courses", _targetId, pageTitle, ..._} when pageTitle == linkTitle =>
-    "text-lg px-6 py-3 font-semibold block rounded-full bg-siliconBlue-900 text-white  hover:bg-siliconBlue-800"
+    "text-lg px-6 py-3 text-center font-semibold block font-condensed rounded-full bg-siliconBlue-900 text-white font-condensed hover:bg-siliconBlue-800"
   | _ => defaultClasses
   }
 }
@@ -62,7 +62,7 @@ let make = (~currentCourseId, ~courses, ~additionalLinks, ~coverImage) => {
     {switch additionalLinks {
     | [] => React.null
     | additionalLinks =>
-      <div className="lg:max-w-6xl mx-auto mt-8 md:mt-12 flex items-start justify-start overflow-hidden ">
+      <div className="lg:max-w-6xl mx-auto mt-8 md:mt-12 flex items-center justify-center md:items-start md:justify-start overflow-hidden ">
         <div
           className="z-10 relative px-2 md:px-0 flex flex-col md:flex-row overflow-hidden text-washedBlue md:border border-gray-300 md:rounded-full">
           {Js.Array.map(l => {

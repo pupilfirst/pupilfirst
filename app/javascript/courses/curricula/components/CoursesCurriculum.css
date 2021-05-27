@@ -10,7 +10,7 @@
 
 @keyframes animateBackground {
   0%{background-position:0% 84%}
-  50%{background-position:100% 17%}
+  50%{background-position:40% 17%}
   100%{background-position:0% 84%}
 }
 
@@ -21,8 +21,13 @@
 }
 
 .courses-curriculum__target-container:hover .fa-pencil-alt {
-  @apply text-siliconBlue-900;
+  @apply text-siliconBlue-900 transition duration-150;
 }
+
+.courses-curriculum__target-container .fa-pencil-alt:hover {
+  transform: scale(1.1);
+}
+
 
 .curriculum__target-status {
   @apply flex items-center text-xs font-semibold rounded border whitespace-no-wrap;

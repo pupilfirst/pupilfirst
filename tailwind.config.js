@@ -58,6 +58,7 @@ module.exports = {
       },
       fontFamily: {
         'sans': "var(--font-family-sans)",
+        'condensed': "var(--font-family-condensed)"
       },
       spacing: {
         "7": "1.75rem",

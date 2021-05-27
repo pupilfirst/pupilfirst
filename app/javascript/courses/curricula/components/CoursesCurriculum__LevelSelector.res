@@ -5,7 +5,7 @@ let str = React.string
 let levelZeroSelectorClasses = isSelected => {
   let defaultClasses = "w-1/2 px-4 py-2 focus:outline-none text-sm font-semibold "
   defaultClasses ++ (
-    isSelected ? "bg-primary-100 text-primary-500 hover:bg-primary-100 hover:text-primary-500" : ""
+    isSelected ? "bg-primary-100 text-silicon hover:bg-primary-100 hover:text-primary-500" : ""
   )
 }
 
@@ -29,10 +29,9 @@ let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId) => {
     }
 
     <button
-      className="flex focus:outline-none p-2 w-full text-left whitespace-normal"
+      className="flex focus:outline-none p-2 w-full text-left whitespace-normal font-semibold px-8 py-2"
       key={level |> Level.id}
       onClick={_ => setSelectedLevelId(level |> Level.id)}>
-      <span className="mr-2 mt-px"> <FaIcon classes={"fa-fw " ++ icon} /> </span>
       {levelName(level) |> str}
     </button>
   })
@@ -40,17 +39,17 @@ let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId) => {
 
 let untabbedLevelSelector = (selectedLevel, orderedLevels, teamLevel, setSelectedLevelId) => {
   let selected =
-    <button className="font-semibold w-full px-2 h-10 flex items-center justify-between">
-      <span className="flex-grow text-center truncate w-0">
+    <button className="font-semibold w-full px-2 h-10 flex items-center justify-start text-2xl md:text-4xl ">
+      <span className="text-left font-condensed">
         {selectedLevel |> levelName |> str}
       </span>
-      <FaIcon classes="fas fa-caret-down ml-1" />
+      <FaIcon classes="fas fa-chevron-down ml-2 transform translate-y-1 scale-50" />
     </button>
 
   <Dropdown
     selected
     contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId)}
-    className="flex-grow cursor-pointer rounded-lg bg-none text-siliconBlue-900 text-left border-none hover:text-primary-500 border-0 text-xl"
+    className="cursor-pointer rounded-lg bg-none font-condensed text-siliconBlue-900 text-left border-none hover:text-primary-500 border-0 text-xl w-auto"
   />
 }
 
@@ -66,10 +65,10 @@ let tabbedLevelSelector = (
   let selected = hideCaret =>
     <button
       className="rounded-l-lg font-semibold w-full px-2 h-10 flex items-center justify-between">
-      <span className="flex-grow text-center truncate w-0">
+      <span className="text-left text-2xl md:text-4xl">
         {selectedLevel |> levelName |> str}
       </span>
-      <FaIcon classes={"fas fa-caret-down ml-1" ++ (hideCaret ? " invisible" : "")} />
+      <FaIcon classes={"fas fa-chevron-down ml-1" ++ (hideCaret ? " invisible" : "")} />
     </button>
 
   let numberedLevelSelector = showLevelZero
@@ -111,7 +110,7 @@ let make = (
 
   <div className="bg-white px-3 py-2 mt-3 md:px-0 z-20">
     <div
-      className="flex justify-center max-w-sm md:max-w-6xl mx-auto rounded-lg border border-gray-400 h-11">
+      className="flex justify-start max-w-sm md:max-w-6xl mx-auto rounded-lg  h-11">
       {switch levelZero {
       | Some(levelZero) =>
         tabbedLevelSelector(

@@ -33,7 +33,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
 
   <div
     key={"target-" ++ targetId}
-    className="courses-curriculum__target-container transition duration-200  bg-white hover:bg-lightBlue px-8">
+    className="courses-curriculum__target-container transition duration-200  bg-white hover:bg-lightBlue md:px-8">
     <div className="courses-curriculum__inner-container border-b flex">
     <Link
       href={"/targets/" ++ targetId}
@@ -77,7 +77,7 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
           </div>
         : React.null}
         <div className="p-6 pt-5">
-          <div className="text-2xl font-bold leading-snug text-siliconBlue-900 ">
+          <div className="text-2xl font-semibold font-condensed leading-snug text-siliconBlue-900 ">
             {TargetGroup.name(targetGroup)->str}
           </div>
           <MarkdownBlock
@@ -147,7 +147,7 @@ let issuedCertificate = course =>
   switch Course.certificateSerialNumber(course) {
   | Some(csn) =>
     <div
-      className="courses-curriculum__certificate relative  max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8">
+      className="courses-curriculum__certificate relative  mb-8 max-w-3xl mx-auto text-center mt-4 bg-white rounded-lg shadow-lg px-6 pt-6 pb-8">
       <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight text-white">
         {t("issued_certificate_heading")->str}
       </div>

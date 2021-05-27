@@ -471,8 +471,8 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~teamTags, ~
         filterTags=state.filter.tags
         reloadAt=state.reloadDistributionAt
       />
-      <div className="w-full py-4 bg-gray-100 relative md:sticky md:top-0 z-10">
-        <div className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
+      <div className="w-full py-4 bg-white relative md:sticky md:top-0 z-10">
+        <div className="max-w-6xl mx-auto bg-white sticky md:static md:top-0">
           <Multiselect
             id="filter"
             unselected={unselected(levels, teamCoaches, allTags, currentCoach |> Coach.id, state)}
@@ -486,7 +486,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~teamTags, ~
           {restoreAssignedToMeFilter(state, send, currentTeamCoach)}
         </div>
       </div>
-      <div className=" max-w-3xl mx-auto">
+      <div className=" max-w-6xl mx-auto">
         {switch state.teams {
         | Unloaded => SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.userCard())
         | PartiallyLoaded(teams, cursor) =>

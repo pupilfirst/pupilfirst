@@ -38,14 +38,14 @@ let make = (~selected, ~contents, ~right=false, ~className="w-full md:w-auto") =
     selected
     {showDropdown
       ? <div
-          className={"dropdown__list bg-white shadow-lg rounded mt-1 border border-gray-400 absolute overflow-x-hidden z-30 " ++ (
+          className={"dropdown__list bg-white shadow-lg rounded-lg mt-4 border border-gray-400 absolute overflow-x-hidden z-30 py-4 " ++ (
             right ? "right-0" : "left-0"
           )}>
           {contents
           |> Array.mapi((index, content) =>
             <div
               key={"dropdown-" ++ (index |> string_of_int)}
-              className="cursor-pointer block text-sm font-semibold text-gray-900 bg-white hover:text-primary-500 hover:bg-gray-200 md:whitespace-no-wrap">
+              className="cursor-pointer block text-lg font-semibold text-siliconBlue-900 bg-white hover:text-preciseBlue md:whitespace-no-wrap ">
               content
             </div>
           )

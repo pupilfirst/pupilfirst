@@ -1,4 +1,6 @@
 class UserSessionMailer < SchoolMailer
+  layout 'mail/school_redesign'
+
   def send_login_token(user, url_options)
     @user = user
     @school = user.school

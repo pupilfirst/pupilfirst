@@ -14,4 +14,12 @@ class UserSessionMailerPreview < ActionMailer::Preview
     user = Founder.last.user
     UserSessionMailer.send_login_token(user, school)
   end
+
+  def set_first_password_token
+    school = School.first
+    user = school.users.first
+    first_password_url = 'https://example.com/password_url'
+
+    UserSessionMailer.set_first_password_token(user, school, first_password_url)
+  end
 end

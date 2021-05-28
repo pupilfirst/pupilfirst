@@ -96,18 +96,10 @@ ol ol ol ol {
 
 ul { margin: 0 !important; }
 
-p.monospace, pre.monospace {
-  @extend .monospace;
-  @extend .monospace-block;
-}
-
 .monospace {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 90%;
   color: #6025C0;
-}
-
-.monospace-block {
   display: inline-block;
   line-height: 1.5;
   background-color: #fafafa;

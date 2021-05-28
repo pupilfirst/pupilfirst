@@ -10,7 +10,7 @@ module Keycloak
 
     def fetch_user(email)
       uri = endpoints.admin_users
-      uri.query = "search=#{email}"
+      uri.query = "search=#{URI.encode_www_form_component(email)}"
       headers = { 'Authorization' => "Bearer #{service_account.access_token}" }
       res = Faraday.get(uri, nil, headers)
       if res.status == 200

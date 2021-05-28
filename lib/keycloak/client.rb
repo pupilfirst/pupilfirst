@@ -121,7 +121,7 @@ module Keycloak
     end
 
     def fail(response, message)
-      raise FailedRequestError.new [message, response.status, response.body].map(:to_s).join(" - ")
+      raise FailedRequestError.new [message, response.status, response.body].map(&:to_s).join(" - ")
     end
   end
 end

@@ -429,7 +429,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~tags, ~onAdd
   React.useEffect1(getStudentDetails(studentId, setState), [studentId])
 
   <div
-    className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll md:overflow-hidden bg-white">
+    className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll md:overflow-hidden bg-white  pt-16">
     {switch state.studentData {
     | Loaded(studentDetails) =>
       <div className="flex flex-col md:flex-row md:h-screen">

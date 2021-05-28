@@ -20,7 +20,7 @@ type state = {
 let targetStatusClasses = targetStatus => {
   let statusClasses =
     "curriculum__target-status--" ++ (targetStatus |> TargetStatus.statusClassesSufix)
-  "curriculum__target-status px-3 py-px ml-4 h-6 " ++ statusClasses
+  "curriculum__target-status text-sm px-3 py-px ml-4 h-6 " ++ statusClasses
 }
 
 let rendertarget = (target, statusOfTargets, author, courseId) => {
@@ -33,12 +33,13 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
 
   <div
     key={"target-" ++ targetId}
-    className="courses-curriculum__target-container flex border-t bg-white hover:bg-gray-100">
+    className="courses-curriculum__target-container transition duration-200  bg-white hover:bg-lightBlue md:px-8">
+    <div className="courses-curriculum__inner-container border-b flex">
     <Link
       href={"/targets/" ++ targetId}
-      className="p-6 flex flex-grow items-center justify-between hover:text-primary-500 cursor-pointer"
+      className="p-6 flex flex-grow items-center justify-between text-siliconBlue-900 cursor-pointer"
       ariaLabel={"Select Target " ++ targetId}>
-      <span className="font-semibold text-left leading-snug"> {Target.title(target)->str} </span>
+      <span className="text-left leading-snug"> {Target.title(target)->str} </span>
       {ReactUtils.nullIf(
         <span className={targetStatusClasses(targetStatus)}>
           {TargetStatus.statusToString(targetStatus)->str}
@@ -50,11 +51,12 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
       <a
         title={t("edit_target_button_title", ~variables=[("title", Target.title(target))])}
         href={"/school/courses/" ++ courseId ++ "/targets/" ++ targetId ++ "/content"}
-        className="hidden lg:block courses-curriculum__target-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:bg-gray-200">
+        className="hidden lg:block  text-gray-400 border-l border-transparent py-6 px-3  ">
         <i className="fas fa-pencil-alt" />
       </a>,
       author,
     )}
+    </div>
   </div>
 }
 
@@ -66,27 +68,29 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
     key={"target-group-" ++ targetGroupId}
     className="curriculum__target-group-container relative mt-5 px-3">
     <div
-      className="curriculum__target-group max-w-3xl mx-auto bg-white text-center rounded-lg shadow-md relative z-10 overflow-hidden ">
+      className="curriculum__target-group max-w-6xl mx-auto bg-white text-center relative z-10">
+      <div className="shadow-md rounded-lg overflow-hidden bg-lightGray">
       {targetGroup |> TargetGroup.milestone
         ? <div
-            className="inline-block px-3 py-2 bg-orange-400 font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
+            className="inline-block px-3 py-2 bg-hackerOrange font-bold text-xs rounded-b-lg leading-tight text-white uppercase">
             {t("milestone_targets") |> str}
           </div>
         : React.null}
-      <div className="p-6 pt-5">
-        <div className="text-2xl font-bold leading-snug">
-          {TargetGroup.name(targetGroup)->str}
+        <div className="p-6 pt-5">
+          <div className="text-2xl font-semibold font-condensed leading-snug text-siliconBlue-900 ">
+            {TargetGroup.name(targetGroup)->str}
+          </div>
+          <MarkdownBlock
+            className="text-sm max-w-md mx-auto leading-snug text-siliconBlue-900 "
+            markdown={TargetGroup.description(targetGroup)}
+            profile=Markdown.AreaOfText
+          />
         </div>
-        <MarkdownBlock
-          className="text-sm max-w-md mx-auto leading-snug"
-          markdown={TargetGroup.description(targetGroup)}
-          profile=Markdown.AreaOfText
-        />
+        {targets
+        |> ArrayUtils.copyAndSort((t1, t2) => (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex))
+        |> Js.Array.map(target => rendertarget(target, statusOfTargets, author, courseId))
+        |> React.array}
       </div>
-      {targets
-      |> ArrayUtils.copyAndSort((t1, t2) => (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex))
-      |> Js.Array.map(target => rendertarget(target, statusOfTargets, author, courseId))
-      |> React.array}
     </div>
   </div>
 }
@@ -143,8 +147,8 @@ let issuedCertificate = course =>
   switch Course.certificateSerialNumber(course) {
   | Some(csn) =>
     <div
-      className="max-w-3xl mx-auto text-center mt-4 bg-white lg:rounded-lg shadow-md px-6 pt-6 pb-8">
-      <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight">
+      className="courses-curriculum__certificate relative  mb-8 max-w-3xl mx-auto text-center mt-4 bg-white rounded-lg shadow-lg px-6 pt-6 pb-8">
+      <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight text-white">
         {t("issued_certificate_heading")->str}
       </div>
       <a href={"/c/" ++ csn} className="mt-4 mb-2 btn btn-primary">
@@ -232,9 +236,9 @@ let computeNotice = (
   }
 
 let navigationLink = (direction, level, setState) => {
-  let (leftIcon, longText, shortText, rightIcon) = switch direction {
-  | #Previous => (Some("fa-arrow-left"), t("nav_previous_level"), "Previous", None)
-  | #Next => (None, t("nav_next_level"), "Next", Some("fa-arrow-right"))
+  let (leftIcon, longText, shortText, rightIcon, cssClass) = switch direction {
+  | #Previous => (Some("fa-arrow-left"), t("nav_previous_level"), "Previous", None, "btn-primary-ghost ")
+  | #Next => (None, t("nav_next_level"), "Next", Some("fa-arrow-right"), "btn-primary ml-auto")
   }
 
   let arrow = icon =>
@@ -242,7 +246,7 @@ let navigationLink = (direction, level, setState) => {
 
   <button
     onClick={_ => setState(state => {...state, selectedLevelId: level |> Level.id})}
-    className="block w-full focus:outline-none p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer">
+    className={cssClass}>
     {arrow(leftIcon)}
     <span className="mx-2 hidden md:inline"> {longText |> str} </span>
     <span className="mx-2 inline md:hidden"> {shortText |> str} </span>
@@ -255,23 +259,23 @@ let quickNavigationLinks = (levels, selectedLevel, setState) => {
   let next = selectedLevel |> Level.next(levels)
 
   <div key="quick-navigation-links">
-    <hr className="my-6" />
-    <div className="container mx-auto max-w-3xl flex px-3 lg:px-0">
+    <hr className="mt-12 mb-6" />
+    <div className="container mx-auto max-w-6xl flex justify-between px-3 lg:px-0">
       {switch (previous, next) {
       | (Some(previousLevel), Some(nextLevel)) =>
         [
-          <div key="previous" className="w-1/2 mr-2">
+          <div key="previous">
             {navigationLink(#Previous, previousLevel, setState)}
           </div>,
-          <div key="next" className="w-1/2 ml-2">
+          <div key="next">
             {navigationLink(#Next, nextLevel, setState)}
           </div>,
         ] |> React.array
 
       | (Some(previousUrl), None) =>
-        <div className="w-full"> {navigationLink(#Previous, previousUrl, setState)} </div>
+         {navigationLink(#Previous, previousUrl, setState)}
       | (None, Some(nextUrl)) =>
-        <div className="w-full"> {navigationLink(#Next, nextUrl, setState)} </div>
+         {navigationLink(#Next, nextUrl, setState)}
       | (None, None) => React.null
       }}
     </div>
@@ -431,7 +435,7 @@ let make = (
   let targetGroupsInLevel =
     targetGroups |> Js.Array.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
 
-  <div className="bg-gray-100 pt-11 pb-8 -mt-7">
+  <div className="bg-white pt-11 pb-8">
     {switch selectedTarget {
     | Some(target) =>
       let targetStatus =

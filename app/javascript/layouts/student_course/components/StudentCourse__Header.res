@@ -15,70 +15,40 @@ let courseOptions = courses => Js.Array.map(course => {
     courses,
   ))
 
-let courseDropdown = (currentCourse, otherCourses) =>
-  <div>
-    {switch otherCourses {
-    | [] =>
-      <div
-        className="flex max-w-xs md:max-w-xl mx-auto items-center relative justify-between font-semibold relative rounded w-full text-lg md:text-2xl leading-tight text-white">
-        <span className="sm:truncate w-full text-left">
-          {CourseInfo.name(currentCourse)->str}
-        </span>
-      </div>
-    | otherCourses =>
-      let selected =
-        <button
-          className="dropdown__btn max-w-xs md:max-w-lg mx-auto text-white appearance-none flex items-center relative justify-between focus:outline-none font-semibold w-full text-lg md:text-2xl leading-tight">
-          <span className="sm:truncate w-full text-left">
-            {CourseInfo.name(currentCourse)->str}
-          </span>
-          <div
-            className="student-course__dropdown-btn ml-3 hover:bg-primary-100 hover:text-primary-500 flex items-center justify-between px-3 py-2 rounded">
-            <i className="fas fa-chevron-down text-xs font-semibold" />
-          </div>
-        </button>
 
-      <Dropdown
-        selected
-        contents={courseOptions(otherCourses)}
-        className="student-course__dropdown relative mx-auto"
-      />
-    }}
-  </div>
+  let courseTitle = currentCourse =>
+  <h1 className="text-white text-3xl md:text-6xl leading-tight max-w-lg">{CourseInfo.name(currentCourse)->str}</h1>
 
 let courseNameContainerClasses = additionalLinks =>
-  "student-course__name-container w-full absolute bottom-0 " ++ (
+  "student-course__name-container w-full " ++ (
     additionalLinks->ArrayUtils.isEmpty ? "pt-2 pb-3 md:pt-4 md:pb-6" : "pt-2 pb-3 md:pt-4 md:pb-12"
   )
 
-let renderCourseSelector = (currentCourseId, courses, coverImage, additionalLinks) => {
+let renderCourseSelector = (currentCourseId, courses, coverImage) => {
   let currentCourse = ArrayUtils.unsafeFind(
     c => CourseInfo.id(c) == currentCourseId,
     "Could not find current course with ID " ++ (currentCourseId ++ " in StudentCourse__Header"),
     courses,
   )
-  let otherCourses = Js.Array.filter(c => CourseInfo.id(c) != currentCourseId, courses)
-  <div className="relative bg-primary-900">
-    <div className="relative pb-1/2 md:pb-1/4 2xl:pb-1/5">
+  <div className="relative bg-white">
+    <div className="relative py-18">
       {switch coverImage {
-      | Some(src) => <img className="absolute h-full w-full object-cover" src />
+      | Some(src) => <img className="absolute top-0 left-0 h-full w-full object-cover" src />
       | None =>
-        <div className="student-course__cover-default absolute h-full w-full svg-bg-pattern-1" />
+        <div className=" student-course__cover-default top-0 left-0 absolute h-full w-full svg-bg-pattern-1" />
       }}
-    </div>
-    <div className={courseNameContainerClasses(additionalLinks)}>
-      <div className="student-course__name relative px-4 lg:px-0 flex h-full mx-auto lg:max-w-3xl">
-        {courseDropdown(currentCourse, otherCourses)}
+      <div className="student-course__name   relative px-4 lg:px-0 py- flex h-full mx-auto lg:max-w-6xl">
+        {courseTitle(currentCourse)}
       </div>
     </div>
   </div>
 }
 
 let tabClasses = (url: RescriptReactRouter.url, linkTitle) => {
-  let defaultClasses = "student-course__nav-tab py-4 px-2 text-center flex-1 font-semibold text-sm "
+  let defaultClasses = "text-current text-center hover:text-siliconBlue-900 hover:bg-gray-200 transition duration-300 text-lg px-6 py-3 font-semibold font-condensed block rounded-full"
   switch url.path {
   | list{"courses", _targetId, pageTitle, ..._} when pageTitle == linkTitle =>
-    defaultClasses ++ "student-course__nav-tab--active"
+    "text-lg px-6 py-3 text-center font-semibold block font-condensed rounded-full bg-siliconBlue-900 text-white font-condensed hover:bg-siliconBlue-800"
   | _ => defaultClasses
   }
 }
@@ -87,14 +57,14 @@ let tabClasses = (url: RescriptReactRouter.url, linkTitle) => {
 let make = (~currentCourseId, ~courses, ~additionalLinks, ~coverImage) => {
   let url = RescriptReactRouter.useUrl()
 
-  <div>
-    {renderCourseSelector(currentCourseId, courses, coverImage, additionalLinks)}
+  <div className="bg-white overflow-hidden">
+    {renderCourseSelector(currentCourseId, courses, coverImage)}
     {switch additionalLinks {
     | [] => React.null
     | additionalLinks =>
-      <div className="md:px-3">
+      <div className="lg:max-w-6xl mx-auto mt-8 md:mt-12 flex items-center justify-center md:items-start md:justify-start overflow-hidden ">
         <div
-          className="bg-white border-transparent flex justify-between overflow-x-auto md:overflow-hidden lg:max-w-3xl mx-auto shadow md:rounded-lg mt-0 md:-mt-7 z-10 relative">
+          className="z-10 relative px-2 md:px-0 flex flex-col md:flex-row overflow-hidden text-washedBlue md:border border-gray-300 md:rounded-full">
           {Js.Array.map(l => {
             let (title, suffix) = switch l {
             | "curriculum" => ("Curriculum", "curriculum")

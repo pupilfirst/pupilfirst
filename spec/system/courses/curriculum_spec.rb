@@ -275,51 +275,6 @@ feature "Student's view of Course Curriculum", js: true do
     end
   end
 
-  context 'when a user has more than one student profile' do
-    context 'when the profile is in the same school' do
-      let(:course_2) { create :course }
-      let(:c2_level_1) { create :level, :one, course: course_2 }
-      let(:c2_target_group) { create :target_group, level: c2_level_1 }
-      let!(:c2_target) { create :target, target_group: c2_target_group, role: Target::ROLE_TEAM }
-      let(:c2_team) { create :startup, level: c2_level_1 }
-      let!(:c2_student) { create :founder, startup: c2_team, dashboard_toured: dashboard_toured, user: student.user }
-
-      scenario 'student switches to another course' do
-        # Sign into the first course.
-        sign_in_user c2_student.user, referrer: curriculum_course_path(course)
-
-        expect(page).to have_content(target_group_l4_1.name)
-
-        # Switch to the second course.
-        click_button(course.name)
-        click_link(course_2.name)
-
-        expect(page).to have_content(c2_target_group.name)
-        expect(page).to have_content(c2_target.title)
-      end
-    end
-
-    context 'when the profile is in another school' do
-      let(:school_2) { create :school }
-      let(:course_2) { create :course, school: school_2 }
-      let(:c2_level_1) { create :level, :one, course: course_2 }
-      let(:c2_team) { create :startup, level: c2_level_1 }
-      let!(:c2_student) { create :founder, startup: c2_team, dashboard_toured: dashboard_toured, user: student.user }
-
-      scenario 'courses in other schools are not displayed' do
-        # Sign into the first course.
-        sign_in_user c2_student.user, referrer: curriculum_course_path(course)
-
-        # There should be no option to switch to course in second school.
-        expect(page).not_to have_selector('button.student-course__dropdown-btn')
-
-        # Attempting to visit the course page directly should show a 404.
-        visit curriculum_course_path(course_2)
-        expect(page).to have_text("The page you were looking for doesn't exist!")
-      end
-    end
-  end
-
   context 'when accessing preview mode of curriculum' do
     let(:school_admin) { create :school_admin }
 

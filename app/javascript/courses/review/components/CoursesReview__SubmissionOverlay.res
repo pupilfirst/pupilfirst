@@ -216,7 +216,7 @@ let make = (
   })
 
   React.useEffect1(getSubmissionDetails(submissionId, setState, syncSubmissionCB), [submissionId])
-  <div className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
+  <div className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white  pt-16">
     {switch state {
     | Loaded(submissionDetails) =>
       let assignedCoaches =

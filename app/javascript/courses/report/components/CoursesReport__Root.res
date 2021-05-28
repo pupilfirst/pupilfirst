@@ -132,9 +132,9 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
 
   React.useEffect1(getOverviewData(studentId, send), [studentId])
 
-  <div className="bg-gray-100 pt-9 pb-8 px-3 -mt-7 border border-transparent shadow rounded-lg">
-    <div className="bg-gray-100 static">
-      <div className="max-w-3xl mx-auto">
+  <div className="bg-white pt-9 pb-8 px-3 -mt-7 border border-transparent shadow rounded-lg">
+    <div className="bg-white static">
+      <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-end lg:items-center py-4">
           <div
             ariaLabel="status-tab"

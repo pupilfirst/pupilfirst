@@ -399,7 +399,7 @@ let make = (
 
     None
   }, (selectedLevel, selectedStatus, sortDirection))
-  <div className="max-w-3xl mx-auto">
+  <div className="max-w-6xl mx-auto">
     <div className="md:flex w-full items-start pb-4">
       <div className="flex-1">
         <label className="block text-tiny font-semibold uppercase"> {"Filter by:" |> str} </label>

@@ -51,9 +51,14 @@ module.exports = {
         attentionYellow: "var(--color-attention-yellow)",
         hackerOrange: "var(--color-hacker-orange)",
         preciseBlue: "var(--color-precise-blue)",
+        cyan: "#1FB4C0",
+        washedBlue: "#817F97",
+        lightGray: "#F5F5F5",
+        lightBlue: "#F3F8FF"
       },
       fontFamily: {
         'sans': "var(--font-family-sans)",
+        'condensed': "var(--font-family-condensed)"
       },
       spacing: {
         "7": "1.75rem",
@@ -121,6 +126,9 @@ module.exports = {
       screens: {
         '2xl': '1824px',
         // => @media (min-width: 1824px) { ... }
+      },
+      maxWidth: {
+        'container': '44.5rem'
       }
     }
   },

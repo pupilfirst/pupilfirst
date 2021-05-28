@@ -2,6 +2,8 @@ exception UnexpectedSubmissionStatus(string)
 
 %bs.raw(`require("./CoursesCurriculum__Overlay.css")`)
 
+@bs.module external backSvg: string = "../../../shared/images/back.svg"
+
 open CoursesCurriculum__Types
 
 module TargetStatus = CoursesCurriculum__TargetStatus
@@ -162,27 +164,23 @@ let renderTargetStatus = targetStatus => {
   )
 }
 
-let overlayHeaderTitleCardClasses = targetStatus =>
-  "course-overlay__header-title-card relative flex justify-between items-center px-3 py-5 md:p-6 " ++
-  targetStatusClass("course-overlay__header-title-card--", targetStatus)
-
 let renderLocked = text =>
   <div
     className="mx-auto text-center bg-gray-900 text-white max-w-fc px-4 py-2 text-sm font-semibold relative z-10 rounded-b-lg">
     <i className="fas fa-lock text-lg" /> <span className="ml-2"> {text |> str} </span>
   </div>
+
 let overlayStatus = (course, target, targetStatus, preview) =>
-  <div>
-    <div className={overlayHeaderTitleCardClasses(targetStatus)}>
+  <div className="max-w-container pt-8 px-4 mx-auto">
+    <div id="overlayHeaderTitle">
       <button
-        className={"course-overlay__close xl:absolute flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-t-none lg:rounded-b-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 lg:border-transparent lg:border-t-0 lg:shadow hover:text-gray-900 hover:shadow-md focus:border-gray-300 focus:outline-none focus:shadow-inner " ++
-        targetStatusClass("course-overlay__close--", targetStatus)}
+        className="text-siliconBlue-900 opacity-50  hover:opacity-100 mb-2 transition duration-300 flex items-center"
         onClick={_e => closeOverlay(course)}>
-        <Icon className="fas fa-arrow-left fa-w-14 text-xl lg:text-2xl mt-1 lg:mt-0" />
-        <span className="text-xs hidden lg:inline-block mt-px"> {t("close_button")->str} </span>
+        <img alt="" src={backSvg}/>
+        <span className="ml-3 text-xl font-semibold"> {t("close_button")->str} </span>
       </button>
       <div className="w-full flex flex-wrap md:flex-no-wrap items-center justify-between relative">
-        <h1 className="text-base leading-snug md:mr-6 md:text-xl">
+        <h1 className="text-siliconBlue-900 leading-snug  text-3xl md:text-4xl">
           {target |> Target.title |> str}
         </h1>
         {renderTargetStatus(targetStatus)}
@@ -399,21 +397,17 @@ let performQuickNavigation = (send, _event) => {
 }
 
 let navigationLink = (direction, url, send) => {
-  let (leftIcon, text, rightIcon) = switch direction {
-  | #Previous => (Some("fa-arrow-left"), t("previous_target_button"), None)
-  | #Next => (None, t("next_target_button"), Some("fa-arrow-right"))
+  let (cssClass, text) = switch direction {
+  | #Previous => ("btn-primary-ghost", t("previous_target_button"))
+  | #Next => ("btn-primary", t("next_target_button"))
   }
 
-  let arrow = icon =>
-    icon->Belt.Option.mapWithDefault(React.null, icon => <FaIcon classes={"fas " ++ icon} />)
 
   <Link
     href=url
     onClick={performQuickNavigation(send)}
-    className="block p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
-    {arrow(leftIcon)}
-    <span className="mx-2 hidden md:inline"> {text |> str} </span>
-    {arrow(rightIcon)}
+    className={cssClass}>
+    <span className=""> {text |> str} </span>
   </Link>
 }
 
@@ -428,23 +422,23 @@ let scrollOverlayToTop = _event => {
 let quickNavigationLinks = (targetDetails, send) => {
   let (previous, next) = targetDetails |> TargetDetails.navigation
 
-  <div className="pb-6">
-    <hr className="my-6" />
-    <div className="container mx-auto max-w-3xl flex px-3 lg:px-0">
-      <div className="w-1/3 mr-2">
+  <div className="pb-12">
+    <hr className="my-12" />
+    <div className="container mx-auto max-w-6xl flex px-3 lg:px-0 justify-between">
+      <div>
         {previous->Belt.Option.mapWithDefault(React.null, previousUrl =>
           navigationLink(#Previous, previousUrl, send)
         )}
       </div>
-      <div className="w-1/3 mx-2">
+      <div>
         <button
           onClick=scrollOverlayToTop
-          className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
-          <span className="mx-2 hidden md:inline"> {t("scroll_to_top")->str} </span>
+          >
+          <span className="mx-2 hidden md:inline"> {t("scroll_to_top")->str}</span>
           <span className="mx-2 md:hidden"> <i className="fas fa-arrow-up" /> </span>
         </button>
       </div>
-      <div className="w-1/3 ml-2">
+      <div>
         {next->Belt.Option.mapWithDefault(React.null, nextUrl =>
           navigationLink(#Next, nextUrl, send)
         )}
@@ -489,9 +483,10 @@ let make = (
 
   <div
     id="target-overlay"
-    className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
-    <div className="bg-gray-100 border-b border-gray-400 px-3">
-      <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
+    className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white pt-16">
+
+    <div>
+      <div className="pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}
         {handleLocked(target, targets, targetStatus, statusOfTargets, send)}
         {handlePendingStudents(targetStatus, state.targetDetails, users)}
@@ -502,7 +497,7 @@ let make = (
       let completionType = targetDetails |> TargetDetails.computeCompletionType
 
       <div>
-        <div className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0">
+        <div className="max-w-container px-4 mx-auto text-siliconBlue-900">
           {learnSection(
             targetDetails,
             author,
@@ -555,5 +550,6 @@ let make = (
         </div>
       </div>
     }}
+
   </div>
 }

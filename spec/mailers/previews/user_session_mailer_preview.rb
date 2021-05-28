@@ -22,4 +22,12 @@ class UserSessionMailerPreview < ActionMailer::Preview
 
     UserSessionMailer.set_first_password_token(user, school, first_password_url)
   end
+
+  def send_reset_password_token
+    school = School.first
+    email = school.users.first.email
+    reset_password_url = 'https://example.com/reset_password_url'
+
+    UserSessionMailer.send_reset_password_token(email, school, reset_password_url)
+  end
 end

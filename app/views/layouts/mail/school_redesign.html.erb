@@ -69,6 +69,13 @@
       </tr>
     </tbody>
 
+    <% if content_for?(:title_button_text) %>
+      <a class="<%= presenter.button_classes %>" href="<%= yield(:title_button_link) %>" title="<%= presenter.school_name %>" target="_blank" rel='noopener'>
+        <%= yield :title_button_text %>
+      </a>
+    <% end %>
+ 
+
   </table><table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="d14230e4-6e01-44c3-a644-bbbf9a31cc52" data-mc-module-version="2019-10-22">
     <%= yield :body %>
     <p><b>The Growth Tribe Team</b></p>

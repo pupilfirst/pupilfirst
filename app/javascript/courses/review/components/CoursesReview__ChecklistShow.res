@@ -7,6 +7,8 @@ type selectionItem = {
 
 let str = React.string
 
+let t = I18n.t(~scope="components.CoursesReview__ChecklistShow")
+
 let selectChecklist = (itemIndex, resultIndex, setSelecton) =>
   setSelecton(selection =>
     selection |> Array.append([{itemIndex: itemIndex, resultIndex: resultIndex}])
@@ -66,7 +68,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
       <button
         className="flex items-center btn btn-small btn-primary-ghost" onClick={_ => showEditorCB()}>
         <i className="far fa-edit" />
-        <span className="ml-2 leading-tight"> {"Edit Checklist" |> str} </span>
+        <span className="ml-2 leading-tight"> {t("edit_checklist_button") |> str} </span>
       </button>
     </div>
     {reviewChecklist
@@ -110,7 +112,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
         disabled={selection |> ArrayUtils.isEmpty}
         onClick={_ =>
           generateFeedback(reviewChecklist, selection, feedback, setSelecton, updateFeedbackCB)}>
-        {"Generate Feedback" |> str}
+        {t("generate_feedback_button") |> str}
       </button>
     </div>
   </div>

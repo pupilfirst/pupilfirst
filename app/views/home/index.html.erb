@@ -11,69 +11,76 @@
 <% end %>
 
 <div class="pb-10 bg-gray-100">
-  <div class="relative bg-gray-300 border-b">
-    <div class="relative pb-1/2 md:pb-1/4">
-      <% if presenter.cover_image.present? %>
-        <img class="absolute h-full w-full object-cover" src=<%= presenter.cover_image %>/>
-      <% else %>
-        <div class="school-index__cover-default opacity-75 absolute h-full w-full svg-bg-pattern-6"></div>
-      <% end %>
-    </div>
-  </div>
   <div class="max-w-4xl 2xl:max-w-5xl mx-auto">
-    <div
-      class="school-index__about flex relative bg-primary-900 shadow-xl rounded-lg mx-3 lg:mx-0 -mt-7">
+    <h1
+      class="mt-14 font-semibold font-condensed leading-snug text-siliconBlue-900  text-3xl md:text-5xl"
+    >
+      <%= t('home.index.welcome_prefix') %> <%= current_school.name %>
+    </h1>
+    <% if current_school.about.present? %>
       <div
-        class=" <%= presenter.school_name_classes %>">
-        <p class="md:text-xl"><%= t('home.index.welcome_prefix') %></p>
-        <h1 class="leading-tight text-3xl md:text-5xl">
-          <span> <%= current_school.name %> </span>
-        </h1>
-        <% if current_school.about.present? %>
-          <div class="w-full max-w-2xl mt-2 leading-relaxed relative flex items-center justify-center rounded">
-            <div class="convert-markdown text-sm lg:text-base" data-json-props="<%= { markdown: current_school.about, profile: "areaOfText" }.to_json %>"></div>
-          </div>
-        <% end %>
+        class="w-full max-w-2xl mt-2 leading-relaxed relative flex items-center justify-center rounded"
+      >
+        <div
+          class="convert-markdown text-sm lg:text-base"
+          data-json-props="<%= { markdown: current_school.about, profile: "areaOfText" }.to_json %>"
+        ></div>
       </div>
-    </div>
+    <% end %>
     <% if presenter.courses.any? %>
       <div>
         <div class="mx-auto text-center pt-8 mt-8">
-          <h2 class="school-index-featured-courses__header relative text-2xl font-bold">
+          <h2 class="relative text-2xl font-bold text-siliconBlue-900">
             <%= t('home.index.featured_courses_heading') %>
           </h2>
         </div>
         <div class="mx-auto">
-          <div class="flex flex-wrap flex-1 lg:-mx-5 <%= presenter.courses.one? ? 'justify-center' : '' %>">
+          <div
+            class="flex flex-wrap flex-1 lg:-mx-5 <%= presenter.courses.one? ? 'justify-center' : '' %>"
+          >
             <% presenter.courses.map do |course| %>
               <div class="w-full px-3 lg:px-5 md:w-1/2 mt-6 md:mt-10">
-                <div class="flex overflow-hidden shadow bg-white rounded-lg flex flex-col h-full" aria-label="<%= course.name %>">
+                <div
+                  class="flex overflow-hidden hover:shadow-md transition duration-200 shadow-xl bg-white rounded-lg flex flex-col justify-between h-full"
+                  aria-label="<%= course.name %>"
+                >
                   <div class="relative">
                     <div class="relative pb-1/2 bg-gray-200">
                       <% if presenter.course_thumbnail(course).present? %>
                         <img
                           alt="Thumbnail for course <%= course.name %>"
                           class="absolute h-full w-full object-cover"
-                          src=<%= presenter.course_thumbnail(course) %>
-                          />
+                          src="<%= presenter.course_thumbnail(course) %>"
+                        />
                       <% else %>
-                        <div class="school-index-course__cover absolute h-full w-full svg-bg-pattern-1"></div>
+                        <div
+                          class="school-index-course__cover absolute h-full w-full svg-bg-pattern-1"
+                        ></div>
                       <% end %>
                     </div>
-                    <div class="school-index-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50">
-                      <h4 class="school-index-course__title text-white font-semibold leading-tight pl-6 pr-4 text-lg md:text-xl">
-                        <%= course.name %>
-                      </h4>
-                    </div>
+                    <div
+                      class="school-index-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50"
+                    ></div>
                   </div>
                   <div class="flex flex-col justify-between h-full">
-                    <div class="school-index-course__description text-sm px-6 pt-6 w-full leading-relaxed">
+                    <h4
+                      class="text-siliconBlue-900 mt-4 font-condensed font-semibold pl-6 pr-4 text-lg md:text-3xl leading-10"
+                    >
+                      <%= course.name %>
+                    </h4>
+
+                    <div
+                      class="school-index-course__description px-6 pt-6 w-full leading-relaxed"
+                    >
                       <%= course.description %>
                     </div>
-                    <div class="flex w-full p-6 justify-center">
+                    <div class="flex w-full p-6 justify-start">
                       <% case presenter.courses_as_student[course.id] %>
                       <% when nil %>
-                        <a class="w-full btn <%= course.public_signup? ? 'btn-primary' : 'btn-default' %>" href="/courses/<%= course.id %>">
+                        <a
+                          class="btn-primary"
+                          href="/courses/<%= course.id %>"
+                        >
                           <% if course.public_signup? %>
                             <i class="fas fa-feather-alt mr-2"></i>
                             <%= t('home.index.get_started') %>
@@ -83,18 +90,25 @@
                           <% end %>
                         </a>
                       <% when :dropped_out %>
-                        <div class="w-full bg-red-100 text-red-600 py-2 px-4 rounded flex text-sm font-semibold justify-center items-center">
+                        <div
+                          class="bg-red-100 text-red-600 py-2 px-4 rounded flex text-sm font-semibold justify-center items-center"
+                        >
                           <i class="fas fa-user-slash mr-2"></i>
                           <%= t('home.index.course_status.dropped_out') %>
                         </div>
                       <% when :access_ended %>
-                        <a class="w-full btn btn-secondary" href="/courses/<%= course.id %>/curriculum">
+                        <a
+                          class="btn-primary-ghost"
+                          href="/courses/<%= course.id %>/curriculum"
+                        >
                           <i class="fas fa-eye mr-2"></i>
                           <%= t('home.index.course_status.access_ended') %>
                         </a>
                       <% when :active %>
-                        <a class="w-full btn btn-secondary" href="/courses/<%= course.id %>/curriculum">
-                          <i class="fas fa-book mr-2"></i>
+                        <a
+                          class="btn-primary"
+                          href="/courses/<%= course.id %>/curriculum"
+                        >
                           <%= t('home.index.course_status.active') %>
                         </a>
                       <% else %>

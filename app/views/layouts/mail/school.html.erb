@@ -37,7 +37,7 @@
           <tbody>
           <% if content_for?(:title) || content_for?(:subtitle) || content_for?(:title_button_text) %>
             <tr>
-              <td class="<%= presenter.hero_classes %>">
+              <td class="mailer-body__hero">
                 <% if content_for?(:title) %>
                   <h1 class="<%= presenter.hero_title_classes %>"><%= yield :title %></h1>
                 <% end %>

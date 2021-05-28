@@ -108,3 +108,56 @@ ul { margin: 0 !important; }
   word-break: break-word;
   border-radius: 5px;
 }
+
+.mailer-body__table {
+  width: 100%;
+  border-style: solid;
+  border-color: #e5e5e5;
+  border-width: 0 1px 1px 1px;
+}
+
+.mailer-head__table {
+  width: 100%;
+  border-style: solid;
+  border-color: #e5e5e5;
+  border-width: 1px 1px 0 1px;
+}
+
+.mailer-body__hero {
+  padding: 24px;
+  color: white;
+  text-align: center;
+  background-color: #F1EDF7;
+  background-image: asset-url("mailer/emailer-hero-pattern.png"), linear-gradient(to right, #60b158 0%, #2182a2 100%);
+  background-size: cover;
+  width: 100%;
+
+  a {
+    color: white;
+  }
+}
+
+.mailer-body__hero {
+  padding: 24px;
+  color: white;
+  text-align: center;
+  background-color: #F1EDF7;
+  background-image: asset-url("mailer/emailer-hero-pattern.png"), linear-gradient(to right, #60b158 0%, #2182a2 100%);
+  background-size: cover;
+  width: 100%;
+
+  a {
+    color: white;
+  }
+}
+
+.mailer-button {
+  background: white;
+  color: #5a67d8 !important;
+  border-radius: 5px;
+  padding: 10px 40px;
+  margin-top: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+}

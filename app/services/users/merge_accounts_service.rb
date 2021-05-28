@@ -148,7 +148,7 @@ module Users
 
       new_user_course_ids = @new_user.courses.pluck(:id)
 
-      common_courses = old_user_course_ids && new_user_course_ids
+      common_courses = old_user_course_ids & new_user_course_ids
 
       if common_courses.present? && @student_profile_ids.empty?
         raise "Both users have student profiles in courses with ids: #{common_courses}. Select one student profile for these courses, and pass the IDs of the selected student profiles as an array to student_profile_ids"

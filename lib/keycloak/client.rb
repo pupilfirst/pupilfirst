@@ -15,9 +15,9 @@ module Keycloak
       res = Faraday.get(uri, nil, headers)
       if res.status == 200
         user = MultiJson.load(res.body).first
-        user.presence || raise(FailedRequestError.new "Failed to find user by email: #{email}")
+        user.presence || fail(res, "Failed to find user by email: #{email}")
       else
-        raise FailedRequestError.new "Failed to find user by email: #{email}"
+        fail(res, "Failed to find user by email: #{email}")
       end
     end
 
@@ -41,7 +41,7 @@ module Keycloak
         Rails.logger.info(body['errorMessage'])
         nil
       else
-        raise FailedRequestError.new 'Failed to create_user'
+        fail(res, 'Failed to create_user')
       end
     end
 
@@ -62,7 +62,7 @@ module Keycloak
       if res.status == 204
         nil
       else
-        raise FailedRequestError.new 'Failed to set user password'
+        fail(res, 'Failed to set user password')
       end
     end
 
@@ -79,7 +79,7 @@ module Keycloak
       if res.status == 200
         MultiJson.load(res.body)
       else
-        raise FailedRequestError.new 'Failed to fetch user_info'
+        fail(res, 'Failed to fetch user_info')
       end
     end
 
@@ -100,7 +100,7 @@ module Keycloak
       if res.status == 200
         MultiJson.load(res.body)
       else
-        raise FailedRequestError.new 'Failed to set user password'
+        fail(res, 'Failed to set user password')
       end
     end
 
@@ -116,8 +116,12 @@ module Keycloak
       if res.status == 204
         true
       else
-        raise FailedRequestError.new 'Failed to sign out user'
+        fail(res, 'Failed to sign out user')
       end
+    end
+
+    def fail(response, message)
+      raise FailedRequestError.new [message, response.status, response.body].map(:to_s).join(" - ")
     end
   end
 end

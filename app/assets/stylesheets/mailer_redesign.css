@@ -9,7 +9,7 @@ body a {
   color: #46b4a5;
   text-decoration: none;
 }
-p { margin: 0; padding: 0; }
+p { margin: 0; margin-bottom: 20px; padding: 0; }
 table.wrapper {
   width:100% !important;
   table-layout: fixed;
@@ -95,3 +95,24 @@ ol ol ol ol {
 }
 
 ul { margin: 0 !important; }
+
+p.monospace, pre.monospace {
+  @extend .monospace;
+  @extend .monospace-block;
+}
+
+.monospace {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 90%;
+  color: #6025C0;
+}
+
+.monospace-block {
+  display: inline-block;
+  line-height: 1.5;
+  background-color: #fafafa;
+  border: 1px solid #999999;
+  padding: 7px 10px;
+  word-break: break-word;
+  border-radius: 5px;
+}

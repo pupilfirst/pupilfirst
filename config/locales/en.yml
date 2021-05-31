@@ -74,6 +74,7 @@ en:
       add_new_course: Add New Course
       button_load_more: Load More Courses...
       course_links:
+        clone_course: Clone Course
         download_reports: Download Reports
         edit_curriculum: Edit Curriculum
         manage_coaches: Manage Coaches

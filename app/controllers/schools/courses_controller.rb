@@ -223,6 +223,20 @@ module Schools
         authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
     end
 
+    # GET /courses/:id/clone
+    def clone
+      course = authorize(
+        scope
+          .where(id: params[:id])
+          .includes(:evaluation_criteria, :levels, :target_groups, :targets)
+          .first,
+        policy_class: Schools::CoursePolicy
+      )
+      new_name = [course.name, "copy"].join(" - ")
+      ::Courses::CloneService.new(course).clone(new_name, course.school)
+      render 'index'
+    end
+
     private
 
     def scope

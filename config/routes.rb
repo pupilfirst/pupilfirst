@@ -68,6 +68,7 @@ Rails.application.routes.draw do
         post 'bulk_import_students'
         get 'evaluation_criteria'
         post 'attach_images'
+        get 'clone'
       end
 
       resources :authors, only: %w[show new]

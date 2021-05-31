@@ -277,7 +277,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                     </option>
                   )
                   |> Array.of_list
-                  |> ReasonReact.array}
+                  |> React.array}
                 </select>
               }}
               <span
@@ -311,7 +311,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                     </option>
                   )
                   |> Array.of_list
-                  |> ReasonReact.array}
+                  |> React.array}
                 </select>
               }}
             </div>

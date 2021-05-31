@@ -251,7 +251,7 @@ let categoryDropdownSelected = topicCategory =>
     {switch topicCategory {
     | Some(topicCategory) =>
       let (color, _) = TopicCategory.color(topicCategory)
-      let style = ReactDOMRe.Style.make(~backgroundColor=color, ())
+      let style = ReactDOM.Style.make(~backgroundColor=color, ())
 
       <div className="inline-flex items-center">
         <div className="h-3 w-3 rounded mt-px" style />
@@ -276,7 +276,7 @@ let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategori
 
   let topicCategoryList = Js.Array.map(topicCategory => {
     let (color, _) = TopicCategory.color(topicCategory)
-    let style = ReactDOMRe.Style.make(~backgroundColor=color, ())
+    let style = ReactDOM.Style.make(~backgroundColor=color, ())
     let categoryName = TopicCategory.name(topicCategory)
 
     <div
@@ -447,7 +447,7 @@ let make = (
                 {switch state.topicCategory {
                 | Some(topicCategory) =>
                   let (color, _) = TopicCategory.color(topicCategory)
-                  let style = ReactDOMRe.Style.make(~backgroundColor=color, ())
+                  let style = ReactDOM.Style.make(~backgroundColor=color, ())
                   <div className="py-2 flex items-center lg:pl-14 text-xs font-semibold">
                     <div className="w-3 h-3 rounded" style />
                     <span className="ml-2"> {TopicCategory.name(topicCategory)->str} </span>

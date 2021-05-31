@@ -30,7 +30,7 @@ type selection =
 let str = React.string
 
 let containerClasses = shrunk => {
-  let defaultClasses = "bg-gradient-primary-600-to-primary-800-to-bottom school-admin-navbar__primary-nav flex flex-col justify-between "
+  let defaultClasses = "bg-gradient-to-b from-primary-600 to-primary-800 school-admin-navbar__primary-nav flex flex-col justify-between "
 
   defaultClasses ++ (shrunk ? "school-admin-navbar__primary-nav--shrunk" : "overflow-y-auto")
 }
@@ -164,7 +164,7 @@ let make = (
   ~isCourseAuthor,
   ~hasNotifications,
 ) => {
-  let url = ReasonReactRouter.useUrl()
+  let url = RescriptReactRouter.useUrl()
 
   let userRole = isCourseAuthor ? CourseAuthor : SchoolAdmin
 

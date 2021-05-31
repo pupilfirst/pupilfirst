@@ -22,6 +22,7 @@ type state = {
 
 type action =
   | Select(tab)
+  | ResetState
   | SetTargetDetails(TargetDetails.t)
   | AddSubmission(Target.role)
   | ClearTargetDetails
@@ -31,6 +32,7 @@ let initialState = {targetDetails: None, tab: Learn}
 let reducer = (state, action) =>
   switch action {
   | Select(tab) => {...state, tab: tab}
+  | ResetState => initialState
   | SetTargetDetails(targetDetails) => {
       ...state,
       targetDetails: Some(targetDetails),
@@ -47,7 +49,7 @@ let reducer = (state, action) =>
   }
 
 let closeOverlay = course =>
-  ReasonReactRouter.push("/courses/" ++ ((course |> Course.id) ++ "/curriculum"))
+  RescriptReactRouter.push("/courses/" ++ ((course |> Course.id) ++ "/curriculum"))
 
 let loadTargetDetails = (target, send, ()) => {
   {
@@ -255,7 +257,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
 
 let renderLockReason = reason => renderLocked(reason |> TargetStatus.lockReasonToString)
 
-let prerequisitesIncomplete = (reason, target, targets, statusOfTargets) => {
+let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) => {
   let prerequisiteTargetIds = target |> Target.prerequisiteTargetIds
 
   let prerequisiteTargets =
@@ -275,6 +277,7 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets) => {
           )
 
         <Link
+          onClick={_ => send(ResetState)}
           href={"/targets/" ++ (target |> Target.id)}
           ariaLabel={"Select Target " ++ (target |> Target.id)}
           key={target |> Target.id}
@@ -289,11 +292,12 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets) => {
   </div>
 }
 
-let handleLocked = (target, targets, targetStatus, statusOfTargets) =>
+let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
   switch targetStatus |> TargetStatus.status {
   | Locked(reason) =>
     switch reason {
-    | PrerequisitesIncomplete => prerequisitesIncomplete(reason, target, targets, statusOfTargets)
+    | PrerequisitesIncomplete =>
+      prerequisitesIncomplete(reason, target, targets, statusOfTargets, send)
     | CourseLocked
     | AccessLocked
     | LevelLocked =>
@@ -307,10 +311,41 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets) =>
 
 let overlayContentClasses = bool => bool ? "" : "hidden"
 
-let learnSection = (targetDetails, tab, author, courseId, targetId) =>
+let learnSection = (
+  send,
+  targetDetails,
+  tab,
+  author,
+  courseId,
+  targetId,
+  targetStatus,
+  completionType,
+) => {
+  let suffixLinkInfo = switch (TargetStatus.status(targetStatus), completionType) {
+  | (Pending | Rejected, TargetDetails.Evaluated) =>
+    Some((Complete(completionType), t("learn_cta_submit_work"), "fas fa-feather-alt"))
+  | (Pending | Rejected, TakeQuiz) =>
+    Some((Complete(completionType), t("learn_cta_take_quiz"), "fas fa-tasks"))
+  | (Pending | Rejected, LinkToComplete | MarkAsComplete) => None
+  | (PendingReview | Completed | Locked(_), _anyCompletionType) => None
+  }
+
+  let linkToTab = Belt.Option.mapWithDefault(suffixLinkInfo, React.null, ((
+    tab,
+    linkText,
+    iconClasses,
+  )) => {
+    <a
+      onClick={_ => send(Select(tab))}
+      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4">
+      <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {str(linkText)} </span>
+    </a>
+  })
+
   <div className={overlayContentClasses(tab == Learn)}>
-    <CoursesCurriculum__Learn targetDetails author courseId targetId />
+    <CoursesCurriculum__Learn targetDetails author courseId targetId /> {linkToTab}
   </div>
+}
 
 let discussSection = (target, targetDetails, tab) =>
   <div className={overlayContentClasses(tab == Discuss)}>
@@ -319,9 +354,9 @@ let discussSection = (target, targetDetails, tab) =>
     />
   </div>
 
-let completeSectionClasses = (tab, completionType: TargetDetails.completionType) =>
+let completeSectionClasses = (tab, completionType) =>
   switch (tab, completionType) {
-  | (Learn, Evaluated | TakeQuiz)
+  | (Learn, TargetDetails.Evaluated | TakeQuiz)
   | (Discuss, Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => "hidden"
   | (Learn, MarkAsComplete | LinkToComplete)
   | (Complete(_), Evaluated | TakeQuiz | MarkAsComplete | LinkToComplete) => ""
@@ -338,9 +373,8 @@ let completeSection = (
   coaches,
   users,
   preview,
+  completionType,
 ) => {
-  let completionType = targetDetails |> TargetDetails.computeCompletionType
-
   let addVerifiedSubmissionCB = addVerifiedSubmission(target, state, send, addSubmissionCB)
 
   <div className={completeSectionClasses(state.tab, completionType)}>
@@ -522,7 +556,7 @@ let make = (
 ) => {
   let (state, send) = React.useReducer(reducer, initialState)
 
-  React.useEffect1(loadTargetDetails(target, send), [target |> Target.id])
+  React.useEffect1(loadTargetDetails(target, send), [Target.id(target)])
 
   React.useEffect(() => {
     ScrollLock.activate()
@@ -535,7 +569,7 @@ let make = (
     <div className="bg-gray-100 border-b border-gray-400 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}
-        {handleLocked(target, targets, targetStatus, statusOfTargets)}
+        {handleLocked(target, targets, targetStatus, statusOfTargets, send)}
         {handlePendingStudents(targetStatus, state.targetDetails, users)}
         {switch state.targetDetails {
         | Some(targetDetails) => tabOptions(state, send, targetDetails, targetStatus)
@@ -559,9 +593,20 @@ let make = (
     </div>
     {switch state.targetDetails {
     | Some(targetDetails) =>
+      let completionType = targetDetails |> TargetDetails.computeCompletionType
+
       <div>
         <div className="container mx-auto mt-6 md:mt-8 max-w-3xl px-3 lg:px-0">
-          {learnSection(targetDetails, state.tab, author, Course.id(course), Target.id(target))}
+          {learnSection(
+            send,
+            targetDetails,
+            state.tab,
+            author,
+            Course.id(course),
+            Target.id(target),
+            targetStatus,
+            completionType,
+          )}
           {discussSection(target, targetDetails, state.tab)}
           {completeSection(
             state,
@@ -574,6 +619,7 @@ let make = (
             coaches,
             users,
             preview,
+            completionType,
           )}
         </div>
         {switch state.tab {

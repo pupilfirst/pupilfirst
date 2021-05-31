@@ -5,18 +5,18 @@ type selectionItem = {
   resultIndex: int,
 }
 
-type selection = list<selectionItem>
-
 let str = React.string
+
+let t = I18n.t(~scope="components.CoursesReview__ChecklistShow")
 
 let selectChecklist = (itemIndex, resultIndex, setSelecton) =>
   setSelecton(selection =>
-    selection |> List.append(list{{itemIndex: itemIndex, resultIndex: resultIndex}})
+    selection |> Array.append([{itemIndex: itemIndex, resultIndex: resultIndex}])
   )
 
 let unSelectChecklist = (itemIndex, resultIndex, setSelecton) =>
   setSelecton(selection =>
-    selection |> List.filter(item =>
+    selection |> Js.Array.filter(item =>
       !(item.itemIndex == itemIndex && item.resultIndex == resultIndex)
     )
   )
@@ -26,16 +26,16 @@ let checkboxOnChange = (itemIndex, resultIndex, setSelecton, event) =>
     ? selectChecklist(itemIndex, resultIndex, setSelecton)
     : unSelectChecklist(itemIndex, resultIndex, setSelecton)
 
-let generateFeedback = (reviewChecklist, selection, feedback, updateFeedbackCB) => {
+let generateFeedback = (reviewChecklist, selection, feedback, setSelecton, updateFeedbackCB) => {
   let newFeedback =
     feedback ++ ("\n\n" ++ (reviewChecklist |> Array.mapi((i, reviewChecklistItem) => {
       let resultIndexList =
         selection
-        |> List.filter(selectionItem => selectionItem.itemIndex == i)
-        |> List.map(item => item.resultIndex)
+        |> Js.Array.filter(selectionItem => selectionItem.itemIndex == i)
+        |> Array.map(item => item.resultIndex)
 
       reviewChecklistItem |> ReviewChecklistItem.result |> Array.mapi((index, resultItem) =>
-        resultIndexList |> List.mem(index)
+        resultIndexList |> Array.mem(index)
           ? switch resultItem |> ReviewChecklistResult.feedback {
             | Some(feedback) => list{feedback}
             | None => list{}
@@ -43,23 +43,24 @@ let generateFeedback = (reviewChecklist, selection, feedback, updateFeedbackCB) 
           : list{}
       ) |> Array.to_list |> List.flatten
     }) |> Array.to_list |> List.flatten |> Array.of_list |> Js.Array.joinWith("\n\n")))
+  setSelecton(_ => [])
   updateFeedbackCB(newFeedback)
 }
 let checklistItemCheckedClasses = (itemIndex, selection) =>
   "mb-4 px-2 pb-2 md:px-4 border-l-2 border-transparent " ++ (
-    selection |> List.filter(s => s.itemIndex == itemIndex) |> ListUtils.isNotEmpty
+    selection |> Js.Array.filter(s => s.itemIndex == itemIndex) |> ArrayUtils.isNotEmpty
       ? "border-green-400"
       : ""
   )
 
 let checklistItemChecked = (itemIndex, resultIndex, selection) =>
   selection
-  |> List.filter(s => s.itemIndex == itemIndex && s.resultIndex == resultIndex)
-  |> ListUtils.isNotEmpty
+  |> Js.Array.filter(s => s.itemIndex == itemIndex && s.resultIndex == resultIndex)
+  |> ArrayUtils.isNotEmpty
 
 @react.component
 let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
-  let (selection, setSelecton) = React.useState(() => list{})
+  let (selection, setSelecton) = React.useState(() => [])
   let (id, _setId) = React.useState(() => DateTime.randomId() ++ "-review-checkbox-")
 
   <div className="relative border bg-gray-100 rounded-lg py-2 md:py-4">
@@ -67,7 +68,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
       <button
         className="flex items-center btn btn-small btn-primary-ghost" onClick={_ => showEditorCB()}>
         <i className="far fa-edit" />
-        <span className="ml-2 leading-tight"> {"Edit Checklist" |> str} </span>
+        <span className="ml-2 leading-tight"> {t("edit_checklist_button") |> str} </span>
       </button>
     </div>
     {reviewChecklist
@@ -108,9 +109,10 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
     <div className="text-center max-w-xs mx-2 md:mx-auto">
       <button
         className="btn btn-primary btn-large w-full "
-        disabled={selection |> ListUtils.isEmpty}
-        onClick={_ => generateFeedback(reviewChecklist, selection, feedback, updateFeedbackCB)}>
-        {"Generate Feedback" |> str}
+        disabled={selection |> ArrayUtils.isEmpty}
+        onClick={_ =>
+          generateFeedback(reviewChecklist, selection, feedback, setSelecton, updateFeedbackCB)}>
+        {t("generate_feedback_button") |> str}
       </button>
     </div>
   </div>

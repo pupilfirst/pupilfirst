@@ -25,6 +25,9 @@ The _title_ and _affiliation_ fields are used across the platform to better iden
 **Tags**\
 Tags are keywords or strings to associate with the list of students that you're adding, and can be used to quickly filter the list of students in a course. You can start typing and pick from the suggested list of tags or create new ones.
 
+**Notify students, and send them a link to sign into this school.**\
+Use this checkbox to enable or disable onboarding email notification for the newly added students.
+
 ### Add multiple students at once
 
 1. Fill in the details of the first student, and click the _Add to List_ button.
@@ -85,3 +88,5 @@ To add new students in bulk to a course, click the _Bulk Import_ button at the t
 4. A maximum of 1000 students are allowed to be imported at once using the bulk uploader.
 
 The errors in the sheet will appear in the form once you upload a CSV file, which will guide you to easily fix them. Once you have a totally error free sheet, use the _Import Students_ button to initiate the bulk onboarding process. On successful completion, you will receive an email confirming the same.
+
+Similar to [add new students form](/students?id=adding-new-students), use the notification checkbox above the _Import Students_ button to enable/disable onboarding email notification for newly added students.

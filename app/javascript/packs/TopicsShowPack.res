@@ -30,18 +30,22 @@ let (
 ) =
   DomUtils.parseJSONTag() |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <TopicsShow__Root
-    topic
-    firstPost
-    replies
-    users
-    currentUserId
-    moderator
-    community
-    target
-    topicCategories
-    subscribed
-  />,
-  "react-root",
-)
+switch ReactDOM.querySelector("#react-root") {
+| Some(root) =>
+  ReactDOM.render(
+    <TopicsShow__Root
+      topic
+      firstPost
+      replies
+      users
+      currentUserId
+      moderator
+      community
+      target
+      topicCategories
+      subscribed
+    />,
+    root,
+  )
+| None => ()
+}

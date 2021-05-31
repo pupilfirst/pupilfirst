@@ -29,17 +29,64 @@ class CourseTeamsResolver < ApplicationQuery
   end
 
   def teams_by_tag
-    teams = course.startups.active
-      .select('"startups".*, LOWER(startups.name) AS startup_name')
-      .joins(founders: :user)
-      .includes(:faculty_startup_enrollments, founders: { user: { avatar_attachment: :blob } })
-      .distinct.order("#{sort_by_string} #{sort_direction_string}")
+    teams =
+      course
+        .startups
+        .active
+        .select('"startups".*, LOWER(startups.name) AS startup_name')
+        .joins(founders: :user)
+        .includes(
+          :faculty_startup_enrollments,
+          founders: {
+            user: {
+              avatar_attachment: :blob
+            }
+          }
+        )
 
-    tags.present? ? teams.joins(taggings: :tag).where(tags: { name: tags }) : teams.includes(taggings: :tag)
+    return teams if tags.blank?
+
+    user_tags =
+      tags.intersection(
+        course
+          .users
+          .joins(taggings: :tag)
+          .distinct('tags.name')
+          .pluck('tags.name')
+      )
+
+    team_tags =
+      tags.intersection(
+        course
+          .startups
+          .joins(taggings: :tag)
+          .distinct('tags.name')
+          .pluck('tags.name')
+      )
+
+    intersect_teams = user_tags.present? && team_tags.present?
+
+    teams_with_user_tags =
+      teams
+        .where(
+          users: {
+            id: resource_school.users.tagged_with(user_tags).select(:id)
+          }
+        )
+        .pluck(:id)
+
+    teams_with_tags = teams.tagged_with(team_tags).pluck(:id)
+
+    if intersect_teams
+      teams.where(id: teams_with_user_tags.intersection(teams_with_tags))
+    else
+      teams.where(id: teams_with_user_tags + teams_with_tags)
+    end
   end
 
   def teams_by_level_and_tag
-    level_id.present? ? teams_by_tag.where(level_id: level_id) : teams_by_tag
+    scope = level_id.present? ? teams_by_tag.where(level_id: level_id) : teams_by_tag
+    scope.distinct.order("#{sort_by_string} #{sort_direction_string}")
   end
 
   def sort_direction_string

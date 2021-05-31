@@ -19,7 +19,8 @@ type state = {
   filter: Filter.t,
   selectedStudents: array<SelectedStudent.t>,
   formVisible: formVisible,
-  tags: tags,
+  readonlyTags: tags,
+  editableTags: tags,
   loading: Loading.t,
   refreshTeams: bool,
 }
@@ -61,12 +62,13 @@ let teamUp = (selectedStudents, responseCB) => {
   Api.create(url, payload, responseCB, handleErrorCB)
 }
 
-let initialState = tags => {
+let initialState = (readonlyTags, editableTags) => {
   pagedTeams: Unloaded,
   selectedStudents: [],
   filter: Filter.make(),
   formVisible: None,
-  tags: tags,
+  readonlyTags: readonlyTags,
+  editableTags: editableTags,
   loading: Loading.NotLoading,
   refreshTeams: false,
 }
@@ -99,14 +101,14 @@ let reducer = (state, action) =>
   | RefreshData(tags) => {
       ...state,
       refreshTeams: !state.refreshTeams,
-      tags: addTags(state.tags, tags),
+      editableTags: addTags(state.editableTags, tags),
       formVisible: None,
       selectedStudents: [],
     }
   | UpdateTeam(team, tags) => {
       ...state,
       pagedTeams: state.pagedTeams |> Page.updateTeam(team),
-      tags: addTags(state.tags, tags),
+      editableTags: addTags(state.editableTags, tags),
       formVisible: None,
       selectedStudents: [],
     }
@@ -195,18 +197,20 @@ let make = (
   ~courseCoachIds,
   ~schoolCoaches,
   ~levels,
-  ~studentTags,
+  ~userTags,
+  ~teamTags,
   ~certificates,
   ~currentUserName,
 ) => {
-  let (state, send) = React.useReducer(reducer, initialState(studentTags))
+  let (state, send) = React.useReducer(reducer, initialState(userTags, teamTags))
+  let allTags = Js.Array.concat(state.readonlyTags, state.editableTags) |> ArrayUtils.sort_uniq(String.compare)
 
   <div className="flex flex-1 flex-col">
     {switch state.formVisible {
-    | None => ReasonReact.null
+    | None => React.null
     | CreateForm =>
       <SchoolAdmin__EditorDrawer closeDrawerCB={() => send(UpdateFormVisible(None))}>
-        <StudentsEditor__CreateForm courseId submitFormCB={submitForm(send)} teamTags=state.tags />
+        <StudentsEditor__CreateForm courseId submitFormCB={submitForm(send)} teamTags=state.editableTags />
       </SchoolAdmin__EditorDrawer>
 
     | UpdateForm(student, teamId) =>
@@ -217,7 +221,7 @@ let make = (
         <StudentsEditor__UpdateForm
           student
           team
-          teamTags=state.tags
+          teamTags=state.editableTags
           currentUserName
           courseCoaches
           certificates
@@ -271,7 +275,7 @@ let make = (
           <div>
             <div className="flex w-full items-start p-4">
               <StudentsEditor__Search
-                filter=state.filter updateFilterCB={updateFilter(send)} tags=state.tags levels
+                filter=state.filter updateFilterCB={updateFilter(send)} tags=allTags levels
               />
               {studentsSorter(send, state.filter)}
             </div>

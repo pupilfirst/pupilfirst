@@ -62,9 +62,12 @@ feature 'Courses Index', js: true do
     expect(course.about).to eq(nil)
     expect(course.enable_leaderboard).to eq(false)
     expect(course.public_signup).to eq(false)
+    expect(course.public_preview).to eq(false)
+
     expect(course.progression_behavior).to eq(
       Course::PROGRESSION_BEHAVIOR_LIMITED
     )
+
     expect(course.progression_limit).to eq(1)
   end
 
@@ -93,6 +96,7 @@ feature 'Courses Index', js: true do
       select 'thrice', from: 'progression-limit'
 
       within('div#public-signup') { click_button 'Yes' }
+      within('div#public-preview') { click_button 'Yes' }
 
       click_button 'Update Course'
 
@@ -102,10 +106,13 @@ feature 'Courses Index', js: true do
       expect(course_1.description).to eq(new_description)
       expect(course_1.about).to eq(new_about)
       expect(course_1.public_signup).to eq(true)
+      expect(course_1.public_preview).to eq(true)
       expect(course_1.ends_at.to_date).to eq(course_end_date)
+
       expect(course_1.progression_behavior).to eq(
         Course::PROGRESSION_BEHAVIOR_LIMITED
       )
+
       expect(course_1.progression_limit).to eq(3)
     end
 

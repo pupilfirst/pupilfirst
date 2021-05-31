@@ -36,21 +36,25 @@ let (
 ) =
   DomUtils.parseJSONTag() |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <CoursesCurriculum
-    author
-    course
-    levels
-    targetGroups
-    targets
-    submissions
-    team
-    coaches
-    users
-    evaluationCriteria
-    preview
-    accessLockedLevels
-    levelUpEligibility
-  />,
-  "react-root",
-)
+switch ReactDOM.querySelector("#react-root") {
+| Some(root) =>
+  ReactDOM.render(
+    <CoursesCurriculum
+      author
+      course
+      levels
+      targetGroups
+      targets
+      submissions
+      team
+      coaches
+      users
+      evaluationCriteria
+      preview
+      accessLockedLevels
+      levelUpEligibility
+    />,
+    root,
+  )
+| None => ()
+}

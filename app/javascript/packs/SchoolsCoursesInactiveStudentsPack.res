@@ -24,14 +24,18 @@ let decodeProps = json => {
 let props =
   DomUtils.parseJSONAttribute(~id="sa-students-panel", ~attribute="data-props", ()) |> decodeProps
 
-ReactDOMRe.renderToElementWithId(
-  <SA_InactiveStudentsPanel
-    teams=props.teams
-    courseId=props.courseId
-    currentPage=props.currentPage
-    isLastPage=props.isLastPage
-    students=props.students
-    authenticityToken=props.authenticityToken
-  />,
-  "sa-students-panel",
-)
+switch ReactDOM.querySelector("#sa-students-panel") {
+| Some(element) =>
+  ReactDOM.render(
+    <SA_InactiveStudentsPanel
+      teams=props.teams
+      courseId=props.courseId
+      currentPage=props.currentPage
+      isLastPage=props.isLastPage
+      students=props.students
+      authenticityToken=props.authenticityToken
+    />,
+    element,
+  )
+| None => ()
+}

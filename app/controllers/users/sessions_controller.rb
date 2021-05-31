@@ -1,7 +1,8 @@
 module Users
   class SessionsController < Devise::SessionsController
     include Devise::Controllers::Rememberable
-    before_action :skip_container, only: %i[new send_login_email]
+    include RecaptchaVerifiable
+    before_action :skip_container, only: %i[new]
     before_action :must_have_current_school
     layout 'student'
 
@@ -15,35 +16,34 @@ module Users
       end
     end
 
-    # POST /user/send_email - find or create user from email received
-    def send_login_email
-      @form = Users::Sessions::SignInWithEmailForm.new(Reform::OpenForm.new)
-      @form.current_school = current_school
-
-      if @form.validate(params[:session].merge(referrer: stored_location_for(:user)))
-        @form.save
-        render json: { error: nil }
-      else
-        render json: { error: @form.errors.full_messages.join(', ') }
-      end
-    end
-
     # POST /user/send_reset_password_email
     def send_reset_password_email
-      @form = Users::Sessions::SendResetPasswordEmailForm.new(Reform::OpenForm.new)
+      @form =
+        Users::Sessions::SendResetPasswordEmailForm.new(Reform::OpenForm.new)
       @form.current_school = current_school
 
-      if @form.validate(params[:session])
+      recaptcha_success =
+        recaptcha_success?(@form, action: 'user_password_reset')
+
+      unless recaptcha_success
+        redirect_to sign_in_with_email_path(visible_recaptcha: 1)
+        return
+      end
+
+      if @form.validate(params)
         @form.save
-        render json: { error: nil }
+        render 'email_sent', locals: { kind: :reset_password_link }
       else
-        render json: { error: @form.errors.full_messages.join(', ') }
+        flash[:error] = @form.errors.full_messages.join(', ')
+        redirect_to request_password_reset_path
       end
     end
 
     # GET /user/token?referrer - link to sign_in user with token in params
     def token
-      user = Users::AuthenticationService.new(current_school, params[:token]).authenticate
+      user =
+        Users::AuthenticationService.new(current_school, params[:token])
+          .authenticate
       store_location_for(:user, params[:referrer]) if params[:referrer].present?
 
       if user.present?
@@ -54,7 +54,8 @@ module Users
 
         redirect_to after_sign_in_path_for(user)
       else
-        flash[:error] = "That one-time link has expired, or is invalid. Please try signing in again."
+        flash[:error] =
+          'That one-time link has expired, or is invalid. Please try signing in again.'
         redirect_to new_user_session_path
       end
     end
@@ -65,7 +66,8 @@ module Users
       if user.present?
         @token = params[:token]
       else
-        flash[:error] = "That one-time link has already been used, or is invalid. Please try resetting your password again."
+        flash[:error] =
+          'That one-time link has already been used, or is invalid. Please try resetting your password again.'
         redirect_to new_user_session_path
       end
     end
@@ -80,29 +82,90 @@ module Users
           @form.save
           @form.user.update!(account_deletion_notification_sent_at: nil)
           sign_in @form.user
-          render json: { error: nil, path: after_sign_in_path_for(current_user) }
+          render json: {
+                   error: nil,
+                   path: after_sign_in_path_for(current_user)
+                 }
         else
-          render json: { error: @form.errors.full_messages.join(', '), path: nil }
+          render json: {
+                   error: @form.errors.full_messages.join(', '),
+                   path: nil
+                 }
         end
       end
     end
 
     # POST /user/sign_in
     def create
-      @form = Users::Sessions::SignInWithPasswordForm.new(Reform::OpenForm.new)
-      @form.current_school = current_school
+      @form =
+        if params[:password_sign_in]
+          Users::Sessions::SignInWithPasswordForm.new(Reform::OpenForm.new)
+        elsif params[:email_link]
+          Users::Sessions::SignInWithEmailForm.new(Reform::OpenForm.new)
+        end
 
-      if @form.validate(params[:session])
-        sign_in @form.user
-        @form.user.update!(account_deletion_notification_sent_at: nil)
-        remember_me(@form.user) unless @form.shared_device?
-        render json: { error: nil, path: after_sign_in_path_for(current_user) }
+      @form&.current_school = current_school
+
+      recaptcha_success = recaptcha_success?(@form, action: 'user_email_login')
+
+      unless recaptcha_success
+        redirect_to sign_in_with_email_path(visible_recaptcha: 1)
+        return
+      end
+
+      if params[:password_sign_in]
+        process_password_login
+      elsif params[:email_link]
+        process_link_login
       else
-        render json: { error: @form.errors.full_messages.join(', '), path: nil }
+        redirect_to sign_in_with_email_path
       end
     end
 
+    # GET /users/sign_in_with_email
+    def sign_in_with_email
+      if current_user.present?
+        flash[:notice] = 'You are already signed in.'
+        redirect_to after_sign_in_path_for(current_user)
+        return
+      end
+
+      @show_checkbox_recaptcha = params[:visible_recaptcha].present?
+    end
+
+    # GET /users/request_password_reset
+    def request_password_reset
+      if current_user.present?
+        redirect_to edit_user_path
+        return
+      end
+
+      @show_checkbox_recaptcha = params[:visible_recaptcha].present?
+    end
+
     private
+
+    def process_password_login
+      if @form.validate(params)
+        sign_in @form.user
+        @form.user.update!(account_deletion_notification_sent_at: nil)
+        remember_me(@form.user) unless @form.shared_device?
+        redirect_to after_sign_in_path_for(current_user)
+      else
+        flash[:error] = @form.errors.full_messages.join(', ')
+        redirect_to sign_in_with_email_path
+      end
+    end
+
+    def process_link_login
+      if @form.validate(params.merge(referrer: stored_location_for(:user)))
+        @form.save
+        render 'email_sent', locals: { kind: :magic_link }
+      else
+        flash[:error] = @form.errors.full_messages.join(', ')
+        redirect_to sign_in_with_email_path
+      end
+    end
 
     def skip_container
       @skip_container = true

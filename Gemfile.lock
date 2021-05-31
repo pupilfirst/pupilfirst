@@ -317,7 +317,7 @@ GEM
     listen (3.4.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.9.0)
+    loofah (2.9.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -329,8 +329,8 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2020.1104)
     mini_magick (4.11.0)
-    mini_mime (1.0.3)
-    mini_portile2 (2.5.0)
+    mini_mime (1.1.0)
+    mini_portile2 (2.5.1)
     minitest (5.14.4)
     motion-markdown-it (8.4.1.2)
       linkify-it-rb (~> 2.0)
@@ -343,7 +343,7 @@ GEM
     multipart-post (2.1.1)
     netrc (0.11.0)
     nio4r (2.5.7)
-    nokogiri (1.11.2)
+    nokogiri (1.11.5)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
     oauth2 (1.4.4)
@@ -391,7 +391,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.6)
-    puma (5.1.1)
+    puma (5.3.1)
       nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
@@ -461,6 +461,8 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
+    recaptcha (5.7.0)
+      json
     reform (2.3.3)
       disposable (>= 0.4.2, < 0.5.0)
       representable (>= 2.4.0, < 3.1.0)
@@ -481,7 +483,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rexml (3.2.4)
+    rexml (3.2.5)
     roadie (4.0.0)
       css_parser (~> 1.4)
       nokogiri (~> 1.8)
@@ -492,7 +494,7 @@ GEM
       builder (>= 3.0)
       dry-inflector (~> 0.1)
       rubyzip (>= 1.0)
-    rollbar (3.1.1)
+    rollbar (3.1.2)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
     rspec-eventually (0.2.2)
@@ -706,6 +708,7 @@ DEPENDENCIES
   rails-assets-tether (~> 1.4)!
   rails-assets-waypoints (~> 4.0)!
   react-rails (~> 2.2)
+  recaptcha (~> 5.7)
   reform (~> 2.2)
   reform-rails (~> 0.1)
   responders (~> 3.0)
@@ -737,7 +740,7 @@ DEPENDENCIES
   webpush (~> 1.1.0)
 
 RUBY VERSION
-   ruby 2.7.2p137
+   ruby 2.7.3p183
 
 BUNDLED WITH
    2.1.4

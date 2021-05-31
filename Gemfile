@@ -1,4 +1,4 @@
-ruby '2.7.2'
+ruby '2.7.3'
 
 source 'https://rubygems.org'
 
@@ -75,6 +75,7 @@ gem 'graphql', '~> 1.12' # Ruby implementation of GraphQL http://graphql-ruby.or
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
 gem 'i18n-js', '~> 3.7' # Provide Rails I18n translations on Javascript.
 gem 'batch-loader', '~> 1.5' # Generic lazy batching mechanism to avoid N+1 DB queries.
+gem 'recaptcha', '~> 5.7' # ReCaptcha helpers for Ruby apps. http://github.com/ambethia/recaptcha
 
 # Rails assets!
 source 'https://rails-assets.org' do

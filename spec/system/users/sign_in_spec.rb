@@ -10,7 +10,7 @@ feature 'User signing in by supplying email address', js: true do
       scenario 'user can sign in with email' do
         visit new_user_session_path
 
-        click_button 'Continue with email'
+        click_link 'Continue with email'
         fill_in 'Email Address', with: user.email
         click_button 'Email me a link to sign in'
 
@@ -18,18 +18,21 @@ feature 'User signing in by supplying email address', js: true do
       end
     end
 
-    context 'when the user signed in less that two minutes ago' do
-      scenario 'user is blocked from repeat attempts to send sign in email' do
+    context 'when the user requested a magic link less that two minutes ago' do
+      scenario 'user is blocked from repeat attempts to request magic link' do
         visit new_user_session_path
 
-        click_button 'Continue with email'
+        click_link 'Continue with email'
         fill_in 'Email Address', with: user.email
         click_button 'Email me a link to sign in'
+
         expect(page).to have_content("We've sent you a magic link!")
+
         click_link 'Sign In'
-        click_button 'Continue with email'
+        click_link 'Continue with email'
         fill_in 'Email Address', with: user.email
         click_button 'Email me a link to sign in'
+
         expect(page).to have_content(
           'An email was sent less than two minutes ago. Please wait for a few minutes before trying again'
         )
@@ -40,16 +43,21 @@ feature 'User signing in by supplying email address', js: true do
       scenario 'user is allowed to reset and blocked from repeat attempts to send reset password email' do
         visit new_user_session_path
 
-        click_button 'Continue with email'
-        click_button 'Set a New Password'
+        click_link 'Continue with email'
+        click_link 'Set a New Password'
         fill_in 'Email', with: user.email
-        click_button 'Send Email'
-        expect(page).to have_content("We've sent you a magic link!")
+        click_button 'Request password reset'
+
+        expect(page).to have_content(
+          "We've sent you a link to reset your password"
+        )
+
         click_link 'Sign In'
-        click_button 'Continue with email'
-        click_button 'Set a New Password'
+        click_link 'Continue with email'
+        click_link 'Set a New Password'
         fill_in 'Email', with: user.email
-        click_button 'Send Email'
+        click_button 'Request password reset'
+
         expect(page).to have_content(
           'An email was sent less than two minutes ago. Please wait for a few minutes before trying again'
         )
@@ -80,7 +88,7 @@ feature 'User signing in by supplying email address', js: true do
 
         # Try signing in with an invalid password, and then with the newly set correct password.
         click_link 'Sign In'
-        click_button 'Continue with email'
+        click_link 'Continue with email'
         fill_in 'Email Address', with: user.email
         fill_in 'Password', with: 'incorrect password'
         click_button 'Sign in with password'
@@ -90,6 +98,7 @@ feature 'User signing in by supplying email address', js: true do
         ).to have_text 'The supplied email address and password do not match'
 
         # Let's try using the enter key instead.
+        fill_in 'Email Address', with: user.email
         fill_in 'Password', with: password + "\n"
 
         expect(page).to have_content(user.founders.first.course.name)
@@ -97,6 +106,7 @@ feature 'User signing in by supplying email address', js: true do
 
       scenario 'does not allow to change password without a valid token' do
         visit reset_password_path(token: 'myRandomToken')
+
         expect(page).to have_content(
           'That one-time link has already been used, or is invalid'
         )
@@ -108,9 +118,10 @@ feature 'User signing in by supplying email address', js: true do
     scenario 'Email me a link will responds with an error message' do
       visit new_user_session_path
 
-      click_button 'Continue with email'
+      click_link 'Continue with email'
       fill_in 'Email Address', with: 'unregistered@example.org'
       click_button 'Email me a link to sign in'
+
       expect(page).to have_content(
         'Could not find user with this email. Please check the email that you entered'
       )
@@ -119,10 +130,11 @@ feature 'User signing in by supplying email address', js: true do
     scenario 'Reset password responds with an error message' do
       visit new_user_session_path
 
-      click_button 'Continue with email'
-      click_button 'Set a New Password'
+      click_link 'Continue with email'
+      click_link 'Set a New Password'
       fill_in 'Email', with: 'unregistered@example.org'
-      click_button 'Send Email'
+      click_button 'Request password reset'
+
       expect(page).to have_content(
         'Could not find user with this email. Please check the email that you entered'
       )

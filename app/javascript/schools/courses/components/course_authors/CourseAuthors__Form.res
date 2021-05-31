@@ -36,7 +36,7 @@ let createCourseAuthorQuery = (courseId, rootPath, email, name, setSaving, addAu
         Author.create(~id=courseAuthor["id"], ~name, ~email, ~avatarUrl=courseAuthor["avatarUrl"]),
       )
 
-      ReasonReactRouter.push(rootPath)
+      RescriptReactRouter.push(rootPath)
     | None => setSaving(_ => false)
     }
     Js.Promise.resolve()
@@ -56,7 +56,7 @@ let updateCourseAuthorQuery = (rootPath, author, name, setSaving, updateAuthorCB
   |> Js.Promise.then_(response => {
     if response["updateCourseAuthor"]["success"] {
       updateAuthorCB(author |> Author.updateName(name))
-      ReasonReactRouter.push(rootPath)
+      RescriptReactRouter.push(rootPath)
     } else {
       setSaving(_ => false)
     }

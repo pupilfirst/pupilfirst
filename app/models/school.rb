@@ -17,6 +17,7 @@ class School < ApplicationRecord
   has_many :audit_records, dependent: :destroy
 
   acts_as_taggable_on :founder_tags
+  acts_as_taggable_on :user_tags
 
   normalize_attribute :about
 

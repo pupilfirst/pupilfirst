@@ -608,6 +608,8 @@ en:
         founder: All Founders
         team: Team
   mutations:
+    clone_course:
+      success_notification: Course copy requested. It will appear here soon!
     archive_course:
       success_notification: Course archived successfully
     auto_verify_submission:

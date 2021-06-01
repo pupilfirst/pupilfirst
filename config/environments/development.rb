@@ -12,6 +12,9 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
+  # Let's use delayed job in development to process background jobs.
+  config.active_job.queue_adapter = :delayed_job
+
   # Show full error reports.
   config.consider_all_requests_local = true
 

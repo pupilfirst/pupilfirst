@@ -39,7 +39,7 @@ module Schools
     end
 
     alias evaluation_criteria? curriculum?
-    alias clone? curriculum?
+    alias clone? index?
 
     class Scope < ::CoursePolicy::Scope
     end

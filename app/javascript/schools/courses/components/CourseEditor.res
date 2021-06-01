@@ -169,11 +169,6 @@ let courseLinks = course => {
       "fas fa-fw fa-check-square",
     ),
     courseLink(
-      baseUrl ++ "/clone",
-      t("course_links.clone_course"),
-      "fas fa-copy",
-    ),
-    courseLink(
       baseUrl ++ "/students",
       t("course_links.manage_students"),
       "fas fa-fw fa-users fa-fw",

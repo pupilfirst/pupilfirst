@@ -74,7 +74,6 @@ en:
       add_new_course: Add New Course
       button_load_more: Load More Courses...
       course_links:
-        clone_course: Clone Course
         download_reports: Download Reports
         edit_curriculum: Edit Curriculum
         manage_coaches: Manage Coaches
@@ -105,9 +104,13 @@ en:
         unarchive_course:
           button_text: Unarchive Course
           label: Do you want to unarchive the course?
+        clone_course:
+          button_text: Clone Course
+          label: Do you want to create a copy of the course?
       alert:
         archive_message: Are you sure you want to archive the course?
         unarchive_message: Are you sure you want to unarchive the course?
+        clone_course_message: Are you sure you want to make a copy of the course?
       button_text:
         add_new_course: Add New Course
         edit_course_details: Edit Course Details

@@ -127,6 +127,16 @@ module UnarchiveCourseQuery = %graphql(
 `
 )
 
+module CloneCourseQuery = %graphql(
+  `
+  mutation CloneCourseMutation($id: ID!) {
+    cloneCourse(id: $id)  {
+      success
+    }
+  }
+`
+)
+
 let updateName = (send, name) => {
   let hasError = name->String.trim->String.length < 2
   send(UpdateName(name, hasError))
@@ -238,6 +248,23 @@ let unarchiveCourse = (send, reloadCoursesCB, course) => {
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result => {
     result["unarchiveCourse"]["success"] ? reloadCoursesCB() : send(FailSaving)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(error => {
+    Js.log(error)
+    send(FailSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let cloneCourse = (send, reloadCoursesCB, course) => {
+  send(StartSaving)
+
+  CloneCourseQuery.make(~id=course |> Course.id, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result => {
+    result["cloneCourse"]["success"] ? reloadCoursesCB() : send(FailSaving)
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(error => {
@@ -499,10 +526,28 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
   </div>
 }
 
+let cloneButtonIcons = saving => saving ? "fas fa-spinner fa-spin" : "fas fa-copy"
 let submitButtonIcons = saving => saving ? "fas fa-spinner fa-spin" : "fa fa-exclamation-triangle"
 
 let actionsTab = (state, send, reloadCoursesCB, course) => {
   <div>
+    <div className="mt-2">
+      <label className="tracking-wide text-xs font-semibold">
+        {str(t("actions.clone_course.label"))}
+      </label>
+      <div>
+        <button
+          disabled=state.saving
+          className="btn btn-primary-ghost btn-large mt-2"
+          onClick={_ =>
+            WindowUtils.confirm(t("alert.clone_course_message"), () =>
+              cloneCourse(send, reloadCoursesCB, course)
+            )}>
+          <FaIcon classes={cloneButtonIcons(state.saving)} />
+          <span className="ml-2"> {t("actions.clone_course.button_text")->str} </span>
+        </button>
+      </div>
+    </div>
     {Belt.Option.isSome(Course.archivedAt(course))
       ? <div className="mt-2">
           <label className="tracking-wide text-xs font-semibold">

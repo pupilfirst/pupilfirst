@@ -262,10 +262,6 @@ feature 'Courses Index', js: true do
         href: curriculum_school_course_path(course_1)
       )
       expect(page).to have_link(
-        'Clone Course',
-        href: clone_school_course_path(course_1)
-      )
-      expect(page).to have_link(
         'Manage Students',
         href: school_course_students_path(course_1)
       )

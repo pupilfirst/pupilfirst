@@ -162,5 +162,6 @@ module Types
     field :create_student_from_applicant,
           mutation: Mutations::CreateStudentFromApplicant,
           null: false
+    field :clone_level, mutation: Mutations::CloneLevel, null: false
   end
 end

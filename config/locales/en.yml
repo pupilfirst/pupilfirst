@@ -562,6 +562,9 @@ en:
       learn_more: Learn more
       welcome_prefix: Hello, welcome to
   jobs:
+    courses:
+      clone_course:
+        new_name: "%{name} - copy"
     notifications:
       post_created_job:
         post_created: '%{user_name} has responded to a thread you are part of in the %{community_name} community'

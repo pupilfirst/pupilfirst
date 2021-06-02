@@ -17,7 +17,7 @@ module Pupilfirst
     # Initialize configuration defaults for originally generated Rails version.
     #
     # Note: This is not the original Rails version. However, this is the easiest way to enforce the latest defaults.
-    config.load_defaults 6.0
+    config.load_defaults 6.1
 
     config.assets.precompile << 'delayed/web/application.css'
 

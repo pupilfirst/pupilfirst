@@ -16,6 +16,7 @@ type state = {
   saving: bool,
   tab: tab,
   mergeIntoLevelId: string,
+  cloneIntoCourseId: string,
 }
 
 type action =
@@ -25,6 +26,7 @@ type action =
   | FailSaving
   | UpdateTab(tab)
   | SelectLevelToMergeInto(string)
+  | SelectCourseToCloneInto(string)
 
 let reducer = (state, action) =>
   switch action {
@@ -39,6 +41,7 @@ let reducer = (state, action) =>
   | FailSaving => {...state, saving: false}
   | UpdateTab(tab) => {...state, tab: tab}
   | SelectLevelToMergeInto(mergeIntoLevelId) => {...state, mergeIntoLevelId: mergeIntoLevelId}
+  | SelectCourseToCloneInto(cloneIntoCourseId) => {...state, cloneIntoCourseId: cloneIntoCourseId}
   }
 
 let updateName = (send, name) => {
@@ -80,6 +83,7 @@ let computeInitialState = level => {
     saving: false,
     tab: Details,
     mergeIntoLevelId: "0",
+    cloneIntoCourseId: "0",
   }
 }
 
@@ -235,6 +239,50 @@ let deleteSelectedLevel = (state, send, level, _event) =>
     |> ignore
   })
 
+let handleSelectCourseForCloneInto = (send, courseId) => {
+  send(SelectCourseToCloneInto(courseId))
+}
+
+module CloneLevelQuery = %graphql(
+  `
+  mutation CloneLevelQuery($levelId: ID!, $cloneIntoCourseId: ID!) {
+    cloneLevel(levelId: $levelId, cloneIntoCourseId: $cloneIntoCourseId) {
+      success
+    }
+  }
+`
+)
+
+let cloneSelectedLevel = (state, send, level, _event) =>
+  WindowUtils.confirm("Are you sure you want to make a copy of this level?", () => {
+    send(BeginSaving)
+
+    CloneLevelQuery.make(
+      ~levelId=Level.id(level),
+      ~cloneIntoCourseId=state.cloneIntoCourseId,
+      (),
+    )
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(result => {
+      if result["cloneLevel"]["success"] {
+        DomUtils.reload()
+      } else {
+        send(FailSaving)
+      }
+
+      Js.Promise.resolve()
+    })
+    |> Js.Promise.catch(error => {
+      Js.log(error)
+      Notification.error(
+        "Oops!",
+        "Something went wrong when we tried to copy this level. Please reload this page before trying again.",
+      )
+      Js.Promise.resolve()
+    })
+    |> ignore
+  })
+
 let actionsForm = (level, levels, state, send) => {
   let visibiltyClass = switch state.tab {
   | Details => Some("hidden")
@@ -276,6 +324,28 @@ let actionsForm = (level, levels, state, send) => {
         onClick={deleteSelectedLevel(state, send, level)}
         className="btn btn-primary mt-2">
         {str("Merge and Delete")}
+      </button>
+    </div>
+    <div className="mt-5 pt-1 border-t">
+      <label
+        className="inline-block tracking-wide text-xs font-semibold"
+        htmlFor="clone-level">
+        {"Copy Into" |> str}
+      </label>
+      <HelpIcon className="ml-1 text-sm">
+        {str(
+          "Pick course to copy this level into. This action will copy all targets into selected course.",
+        )}
+      </HelpIcon>
+      <CourseSelect
+        id="clone-level"
+        onChange={handleSelectCourseForCloneInto(send)}
+        value=state.cloneIntoCourseId />
+      <button
+        disabled={state.cloneIntoCourseId == "0"}
+        onClick={cloneSelectedLevel(state, send, level)}
+        className="btn btn-primary mt-2">
+        {str("Copy Level")}
       </button>
     </div>
   </div>

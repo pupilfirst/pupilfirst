@@ -1,6 +1,6 @@
 module Users
   class MergeAccountsService
-    def initialize(old_user, new_user, student_profile_ids: [])
+    def initialize(old_user:, new_user:, student_profile_ids: [])
       @old_user = old_user
       @new_user = new_user
       @student_profile_ids = student_profile_ids.uniq
@@ -8,7 +8,7 @@ module Users
 
     def execute
       if @old_user.school != @new_user.school
-        raise 'Users has to be in the same school'
+        raise 'Users have to be in the same school'
       end
 
       User.transaction do
@@ -21,6 +21,7 @@ module Users
         merge_markdown_attachments
         merge_issued_certificates
         merge_course_exports
+        add_audit_record
         delete_old_account
       end
 
@@ -135,7 +136,7 @@ module Users
         old_student_profile.update!(user_id: @new_user.id)
         new_student_profile.destroy!
       else
-        raise "Only one student profile IDs must be supplied for course: #{course.id}"
+        raise "A unique student profile ID must be supplied for Course##{course.id}"
       end
     end
 
@@ -151,7 +152,7 @@ module Users
       common_courses = old_user_course_ids & new_user_course_ids
 
       if common_courses.present? && @student_profile_ids.empty?
-        raise "Both users have student profiles in courses with ids: #{common_courses}. Select one student profile for these courses, and pass the IDs of the selected student profiles as an array to student_profile_ids"
+        raise "Both users have student profiles in courses with IDs: #{common_courses.join(', ')}. Select one student profile for each course, and pass an array of their IDs using the keyword argument `student_profile_ids`"
       end
 
       @old_user.founders.each do |founder|
@@ -183,6 +184,17 @@ module Users
 
     def delete_old_account
       Users::DeleteAccountService.new(@old_user.reload).execute
+    end
+
+    def add_audit_record
+      AuditRecord.create!(
+        school_id: @old_user.school_id,
+        audit_type: AuditRecord::TYPE_MERGE_USER_ACCOUNTS,
+        metadata: {
+          user_id: @new_user.id,
+          old_account_email: @old_user.email
+        }
+      )
     end
   end
 end

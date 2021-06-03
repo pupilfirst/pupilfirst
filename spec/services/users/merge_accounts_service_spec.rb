@@ -71,10 +71,11 @@ describe Users::MergeAccountsService do
   end
 
   describe '#execute' do
-    it 'create initializes a school with a new course, coach, student and community' do
+    it 'merges the old user account to a new account and updates applicable records' do
       old_user_id = old_user.id
+      old_user_email = old_user.email
 
-      subject.new(old_user, new_user).execute
+      subject.new(old_user: old_user, new_user: new_user).execute
 
       # Check student profiles
       expect(student_old_user_c1.reload.user).to eq(new_user)
@@ -107,6 +108,16 @@ describe Users::MergeAccountsService do
 
       # Check old user is deleted
       expect(User.find_by(id: old_user_id)).to eq(nil)
+
+      # Check audit record
+      audit_record = AuditRecord.first
+      expect(audit_record.school_id).to eq(new_user.school_id)
+      expect(audit_record.audit_type).to eq(
+        AuditRecord::TYPE_MERGE_USER_ACCOUNTS
+      )
+      expect(audit_record.metadata.to_h).to eq(
+        { 'user_id' => new_user.id, 'old_account_email' => old_user_email }
+      )
     end
 
     context 'both users have student profiles in the same course' do
@@ -115,17 +126,19 @@ describe Users::MergeAccountsService do
         create :student, user: new_user, startup: team_new_user_c1
       end
       it 'prompts to select the student profile to be used' do
-        expect { subject.new(old_user, new_user).execute }.to raise_error(
+        expect {
+          subject.new(old_user: old_user, new_user: new_user).execute
+        }.to raise_error(
           RuntimeError,
-          "Both users have student profiles in courses with ids: #{[course_1.id]}. Select one student profile for these courses, and pass the IDs of the selected student profiles as an array to student_profile_ids"
+          "Both users have student profiles in courses with IDs: #{course_1.id}. Select one student profile for each course, and pass an array of their IDs using the keyword argument `student_profile_ids`"
         )
       end
 
       it 'throws an error if both profile ids are passed to the service' do
         expect {
           subject.new(
-            old_user,
-            new_user,
+            old_user: old_user,
+            new_user: new_user,
             student_profile_ids: [
               student_new_user_c1.id,
               student_old_user_c1.id
@@ -133,14 +146,14 @@ describe Users::MergeAccountsService do
           ).execute
         }.to raise_error(
           RuntimeError,
-          "Only one student profile IDs must be supplied for course: #{course_1.id}"
+          "A unique student profile ID must be supplied for Course##{course_1.id}"
         )
       end
 
       it 'retains the student profile of the new account if selected' do
         subject.new(
-          old_user,
-          new_user,
+          old_user: old_user,
+          new_user: new_user,
           student_profile_ids: [student_new_user_c1.id]
         ).execute
 
@@ -158,8 +171,8 @@ describe Users::MergeAccountsService do
       it 'switches to the student profile of the old account if selected' do
         new_user_student_profile_id = student_new_user_c1.id
         subject.new(
-          old_user,
-          new_user,
+          old_user: old_user,
+          new_user: new_user,
           student_profile_ids: [student_old_user_c1.id]
         ).execute
 

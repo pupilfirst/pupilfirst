@@ -40,6 +40,7 @@ class Target < ApplicationRecord
   acts_as_taggable
 
   scope :live, -> { where(visibility: VISIBILITY_LIVE) }
+  scope :draft, -> { where(visibility: VISIBILITY_DRAFT) }
   scope :founder, -> { where(role: ROLE_STUDENT) }
   scope :student, -> { where(role: ROLE_STUDENT) }
   scope :not_founder, -> { where.not(role: ROLE_STUDENT) }
@@ -78,14 +79,28 @@ class Target < ApplicationRecord
   end
 
   def self.valid_checklist_kind_types
-    [CHECKLIST_KIND_FILES, CHECKLIST_KIND_LINK, CHECKLIST_KIND_LONG_TEXT, CHECKLIST_KIND_MULTI_CHOICE, CHECKLIST_KIND_SHORT_TEXT].freeze
+    [
+      CHECKLIST_KIND_FILES,
+      CHECKLIST_KIND_LINK,
+      CHECKLIST_KIND_LONG_TEXT,
+      CHECKLIST_KIND_MULTI_CHOICE,
+      CHECKLIST_KIND_SHORT_TEXT
+    ].freeze
   end
 
-  validates :target_action_type, inclusion: { in: valid_target_action_types }, allow_nil: true
+  validates :target_action_type,
+            inclusion: {
+              in: valid_target_action_types
+            },
+            allow_nil: true
   validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :call_to_action, length: { maximum: 20 }
-  validates :visibility, inclusion: { in: valid_visibility_types }, allow_nil: true
+  validates :visibility,
+            inclusion: {
+              in: valid_visibility_types
+            },
+            allow_nil: true
 
   validate :days_to_complete_or_session_at_should_be_present
 
@@ -110,7 +125,10 @@ class Target < ApplicationRecord
   validate :must_be_safe_to_change_visibility
 
   def must_be_safe_to_change_visibility
-    return unless visibility_changed? && (visibility.in? [VISIBILITY_DRAFT, VISIBILITY_ARCHIVED])
+    unless visibility_changed? &&
+             (visibility.in? [VISIBILITY_DRAFT, VISIBILITY_ARCHIVED])
+      return
+    end
     return if safe_to_change_visibility
 
     errors[:visibility] << 'cannot be modified unsafely'
@@ -124,11 +142,16 @@ class Target < ApplicationRecord
     evaluation_criteria.each do |ec|
       next if ec.course_id == course.id
 
-      errors[:base] << 'Target and evaluation criterion must belong to same course'
+      errors[:base] <<
+        'Target and evaluation criterion must belong to same course'
     end
   end
 
-  normalize_attribute :slideshow_embed, :video_embed, :youtube_video_id, :link_to_complete, :completion_instructions
+  normalize_attribute :slideshow_embed,
+                      :video_embed,
+                      :youtube_video_id,
+                      :link_to_complete,
+                      :completion_instructions
 
   def display_name
     if target_group.present?

@@ -1,35 +1,42 @@
 import { useState, useRef, useEffect } from "react";
 import { error } from "../../../shared/Notification.bs";
+import { Blob } from "blob-polyfill";
+import { saveAs } from "file-saver";
+
 function audioRecorder(authenticity_token, attachingCB) {
-  const [recording, setRecording] = useState(false);
-  const [url, setUrl] = useState(undefined);
+  const [state, setState] = useState({
+    recording: false,
+    url: undefined,
+    blob: undefined,
+    id: undefined,
+  });
+
   const mediaStreamRef = useRef();
-  const [blob, setBlob] = useState();
-  const [id, setId] = useState(undefined);
+
   useEffect(() => {
-    if (blob) {
+    if (state.blob && state.blob.size < 5000000) {
       attachingCB(true);
       const formData = new FormData();
       formData.append("authenticity_token", authenticity_token);
-      formData.append("file", blob);
+      formData.append("file", state.blob);
       fetch("/timeline_event_files/", {
         method: "POST",
         body: formData,
       })
         .then((res) => res.json())
         .then((res) => {
-          setId(res.id);
+          setState({ ...state, id: res.id });
         })
         .catch((err) => {
           error("Something went wrong", String(err));
         });
     }
-  }, [blob]);
+  }, [state.blob]);
   function startRecording() {
     if (
       navigator.mediaDevices &&
       navigator.mediaDevices.getUserMedia &&
-      !recording
+      !state.recording
     ) {
       navigator.mediaDevices
         .getUserMedia({
@@ -44,13 +51,11 @@ function audioRecorder(authenticity_token, attachingCB) {
           };
           mediaRecorder.onstop = () => {
             const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
-            setBlob(blob);
             const audioURL = window.URL.createObjectURL(blob);
-            setUrl(audioURL);
-            setRecording(false);
+            setState({ ...state, blob: blob, url: audioURL, recording: false });
             stream.getTracks().forEach((track) => track.stop());
           };
-          setRecording(true);
+          setState({ ...state, recording: true });
 
           mediaRecorder.start();
         })
@@ -63,13 +68,19 @@ function audioRecorder(authenticity_token, attachingCB) {
     }
   }
   return {
-    id,
-    url,
-    recording,
+    id: state.id,
+    url: state.url,
+    recording: state.recording,
+    blobSize: state.blob?.size,
     startRecording,
     stopRecording: () => {
       if (mediaStreamRef.current) {
         mediaStreamRef.current.stop();
+      }
+    },
+    downloadBlob: () => {
+      if (state.blob) {
+        saveAs(state.blob, "Recording.mp3");
       }
     },
   };

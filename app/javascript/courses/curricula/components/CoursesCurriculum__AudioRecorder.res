@@ -1,8 +1,10 @@
 type audioRecorderControls = {
   url: option<string>,
   recording: bool,
+  blobSize: option<int>,
   startRecording: unit => unit,
   stopRecording: unit => unit,
+  downloadBlob: unit => unit,
   id: option<string>,
 }
 let str = React.string
@@ -47,22 +49,34 @@ let make = (~attachingCB, ~attachFileCB) => {
             </div>
             <span className="inline-block pl-3 pr-4 text-xs font-semibold">
               {str({
-                switch audioRecorder.id {
-                | Some(id) => "Record Again"
+                switch audioRecorder.url {
+                | Some(_url) => "Record Again"
                 | None => "Start Recording"
                 }
               })}
             </span>
           </button>
-          {switch audioRecorder.id {
+          {switch audioRecorder.url {
           | None => React.null
-          | Some(id) =>
-            <audio
-              src={"/timeline_event_files/" ++ id ++ "/download"}
-              controls=true
-              className="pt-3 md:pt-0 md:pl-4"
-            />
+          | Some(url) => <audio src={url} controls=true className="pt-3 md:pt-0 md:pl-4" />
+          }}
+          {switch audioRecorder.url {
+          | None => React.null
+          | Some(_) =>
+            <div className="btn btn-success ml-4" onClick={_e => audioRecorder.downloadBlob()}>
+              <FaIcon classes="fas fa-download" />
+            </div>
           }}
         </div>}
+    {switch audioRecorder.blobSize {
+    | None => React.null
+    | Some(size) =>
+      size > 5000000
+        ? <div className="text-xs text-red-500 mt-2">
+            <FaIcon classes="fas fa-exclamation-triangle mr-2" />
+            {str("The recording should not exceed 5mb in size. Please re-record")}
+          </div>
+        : React.null
+    }}
   </>
 }

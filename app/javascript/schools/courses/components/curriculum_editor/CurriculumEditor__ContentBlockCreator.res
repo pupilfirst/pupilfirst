@@ -166,15 +166,13 @@ let elementId = (prefix, aboveContentBlock) =>
   | None => "bottom"
   }
 
-let fileInputId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-file-input-")
-let imageInputId = aboveContentBlock =>
-  aboveContentBlock |> elementId("markdown-block-image-input-")
-let videoInputId = aboveContentBlock =>
-  aboveContentBlock |> elementId("markdown-block-vimeo-input-")
-let videoFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-vimeo-form-")
-let fileFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-file-form-")
-let imageFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-image-form-")
-let audioFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-audio-form-")
+let fileInputId = aboveContentBlock => elementId("markdown-block-file-input-", aboveContentBlock)
+let imageInputId = aboveContentBlock => elementId("markdown-block-image-input-", aboveContentBlock)
+let videoInputId = aboveContentBlock => elementId("markdown-block-vimeo-input-", aboveContentBlock)
+let videoFormId = aboveContentBlock => elementId("markdown-block-vimeo-form-", aboveContentBlock)
+let fileFormId = aboveContentBlock => elementId("markdown-block-file-form-", aboveContentBlock)
+let imageFormId = aboveContentBlock => elementId("markdown-block-image-form-", aboveContentBlock)
+let audioFormId = aboveContentBlock => elementId("markdown-block-audio-form-", aboveContentBlock)
 let audioInputId = aboveContentBlock => elementId("markdown-block-audio-input-", aboveContentBlock)
 
 let onBlockTypeSelect = (target, aboveContentBlock, send, addContentBlockCB, blockType, _event) =>
@@ -448,8 +446,8 @@ let handleFileInputChange = (
       }
     | #Audio =>
       switch (FileUtils.isAudio(file), FileUtils.hasValidSize(~maxSize=10 * 1024 * 1024, file)) {
-      | (false, true | false) => Some("Please select a valid audio file")
-      | (true, false) => Some("Please select a file with a size less than 10 MB.")
+      | (false, true | false) => Some(t("invalid_audio_file_error"))
+      | (true, false) => Some(t("audio_upload_size_limit_warning"))
       | (true, true) => None
       }
     }

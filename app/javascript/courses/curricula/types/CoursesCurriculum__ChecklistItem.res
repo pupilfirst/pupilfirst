@@ -42,7 +42,6 @@ let fromTargetChecklistItem = targetChecklist => targetChecklist |> Array.map(tc
   })
 
 let updateResultAtIndex = (index, result, checklist) => {
-  Js.log(index)
   checklist |> Js.Array.mapi((c, i) => i == index ? {...c, result: result} : c)
 }
 

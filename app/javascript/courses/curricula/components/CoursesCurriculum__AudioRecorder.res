@@ -10,6 +10,7 @@ type audioRecorderControls = {
 let str = React.string
 @bs.module("./CoursesCurriculum__AudioNavigator")
 external audioRecorder: (string, bool => unit) => audioRecorderControls = "audioRecorder"
+let t = I18n.t(~scope="components.CoursesCurriculum__AudioRecorder")
 
 @react.component
 let make = (~attachingCB, ~attachFileCB) => {
@@ -35,7 +36,7 @@ let make = (~attachingCB, ~attachFileCB) => {
               />
             </div>
             <span className="inline-block pl-3 pr-4 text-xs font-semibold">
-              {str("Recording...")}
+              {str(t("recording_string"))}
             </span>
           </button>
         </div>
@@ -50,8 +51,8 @@ let make = (~attachingCB, ~attachFileCB) => {
             <span className="inline-block pl-3 pr-4 text-xs font-semibold">
               {str({
                 switch audioRecorder.url {
-                | Some(_url) => "Record Again"
-                | None => "Start Recording"
+                | Some(_url) => t("button_text_record_again")
+                | None => t("button_text_start_recording")
                 }
               })}
             </span>
@@ -74,7 +75,7 @@ let make = (~attachingCB, ~attachFileCB) => {
       size > 5000000
         ? <div className="text-xs text-red-500 mt-2">
             <FaIcon classes="fas fa-exclamation-triangle mr-2" />
-            {str("The recording should not exceed 5mb in size. Please re-record")}
+            {str(t("recording_size_limit_warning"))}
           </div>
         : React.null
     }}

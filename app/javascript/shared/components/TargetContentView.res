@@ -7,8 +7,8 @@ let renderBlockClasses = block =>
   | Markdown(_) => "mt-6"
   | File(_) => "mt-6"
   | Image(_) => "mt-6"
-  | Embed(_) => "mt-6 pb-7"
   | Audio(_) => "mt-6"
+  | Embed(_) => "mt-6 pb-7"
   }
 
 let markdownContentBlock = markdown => <MarkdownBlock markdown profile=Markdown.Permissive />

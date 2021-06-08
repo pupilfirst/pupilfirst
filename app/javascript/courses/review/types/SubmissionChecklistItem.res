@@ -86,9 +86,9 @@ let decodeFile = json => {
 let decode = (files, json) => {
   open Json.Decode
   {
-    result: makeResult(json, json |> field("kind", string), files),
-    status: makeStatus(json |> field("status", string)),
-    title: json |> field("title", string),
+    result: makeResult(json, field("kind", string, json), files),
+    status: makeStatus(field("status", string, json)),
+    title: field("title", string, json),
   }
 }
 

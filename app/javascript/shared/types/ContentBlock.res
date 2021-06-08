@@ -117,9 +117,9 @@ let decode = json => {
       json |> field("content", decodeEmbedContent)
     Embed(url, embedCode, requestSource, lastResolvedAt)
   | "audio" =>
-    let title = json |> field("content", decodeFileContent)
-    let url = json |> field("fileUrl", string)
-    let filename = json |> field("filename", string)
+    let title = field("content", decodeFileContent, json)
+    let url = field("fileUrl", string, json)
+    let filename = field("filename", string, json)
     Audio(url, title, filename)
   | unknownBlockType => raise(UnexpectedBlockType(unknownBlockType))
   }

@@ -9,7 +9,13 @@ class ContentBlock < ApplicationRecord
   belongs_to :target_version
 
   def self.valid_block_types
-    [BLOCK_TYPE_MARKDOWN, BLOCK_TYPE_IMAGE, BLOCK_TYPE_EMBED, BLOCK_TYPE_FILE, BLOCK_TYPE_AUDIO]
+    [
+      BLOCK_TYPE_MARKDOWN,
+      BLOCK_TYPE_IMAGE,
+      BLOCK_TYPE_EMBED,
+      BLOCK_TYPE_FILE,
+      BLOCK_TYPE_AUDIO
+    ]
   end
 
   validates :block_type, inclusion: { in: valid_block_types }
@@ -25,10 +31,6 @@ class ContentBlock < ApplicationRecord
 
   def embed?
     BLOCK_TYPE_EMBED == block_type
-  end
-
-  def audio?
-    BLOCK_TYPE_AUDIO == block_type
   end
 
   def markdown?

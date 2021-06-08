@@ -61,7 +61,10 @@ function audioRecorder(authenticity_token, attachingCB) {
         })
         .catch(function (err) {
           setRecording(false);
-          error("Permission to access microphone not granted", String(err));
+          error(
+            "Permission to access microphone not granted.",
+            "Allow access to microphone in your browser settings for this domain."
+          );
         });
     } else {
       error("Browser does not support recording!");

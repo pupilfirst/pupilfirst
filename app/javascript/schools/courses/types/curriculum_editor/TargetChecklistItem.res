@@ -1,5 +1,7 @@
 type choices = array<string>
 
+let t = I18n.t(~scope="components.TargetChecklistItem")
+
 type kind =
   | Files
   | Link
@@ -20,12 +22,12 @@ let optional = t => t.optional
 
 let actionStringForKind = kind =>
   switch kind {
-  | Files => "Upload Files"
-  | Link => "Attach a Link"
-  | ShortText => "Write Short Text"
-  | LongText => "Write Long Text"
-  | MultiChoice(_choices) => "Choose from a list"
-  | AudioRecord => "Record Audio"
+  | Files => t("action_string_upload_files")
+  | Link => t("action_string_attach_link")
+  | ShortText => t("action_string_write_short_text")
+  | LongText => t("action_string_write_long_text")
+  | MultiChoice(_choices) => t("action_string_choose_from_list")
+  | AudioRecord => t("action_string_record_audio")
   }
 
 let kindAsString = kind =>

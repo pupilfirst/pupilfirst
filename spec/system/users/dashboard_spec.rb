@@ -57,6 +57,16 @@ feature 'User Dashboard', js: true do
     create :founder, startup: course_5_startup_1, user: founder.user
   end
 
+  # Course 6 - Access end date set to a future date
+  let(:course_6) { create :course, school: school }
+  let(:course_6_level_1) { create :level, :one, course: course_6 }
+  let(:course_6_startup_1) do
+    create :startup, level: course_6_level_1, access_ends_at: 1.day.from_now
+  end
+  let!(:course_6_founder_1) do
+    create :founder, startup: course_6_startup_1, user: founder.user
+  end
+
   # Course Archived
   let(:course_archived) do
     create :course, school: school, archived_at: 1.day.ago
@@ -173,6 +183,17 @@ feature 'User Dashboard', js: true do
       expect(page).to have_link(
         'View Curriculum',
         href: curriculum_course_path(course_5)
+      )
+    end
+
+    # Course where student's course access end date is set to a future date.
+    within("div[aria-label=\"#{course_6.name}\"]") do
+      expect(page).to have_text(course_6.name)
+      expect(page).to have_text(course_6.description)
+      expect(page).to_not have_text('Access Ended')
+      expect(page).to have_link(
+        'View Course',
+        href: curriculum_course_path(course_6)
       )
     end
 

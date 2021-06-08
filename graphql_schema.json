@@ -2267,7 +2267,7 @@
             "deprecationReason": null
           },
           {
-            "name": "tags",
+            "name": "teamTags",
             "description": "",
             "args": [],
             "type": {
@@ -2424,6 +2424,30 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "userTags",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               }
             },
             "isDeprecated": false,
@@ -4059,7 +4083,7 @@
             "deprecationReason": null
           },
           {
-            "name": "tags",
+            "name": "teamTags",
             "description": "",
             "args": [],
             "type": {
@@ -4148,6 +4172,30 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "userTags",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               }
             },
             "isDeprecated": false,
@@ -6443,11 +6491,11 @@
             "deprecationReason": null
           },
           {
-            "name": "createApplicant",
+            "name": "cloneCourse",
             "description": "",
             "args": [
               {
-                "name": "courseId",
+                "name": "id",
                 "description": "",
                 "type": {
                   "kind": "NON_NULL",
@@ -6459,34 +6507,6 @@
                   }
                 },
                 "defaultValue": null
-              },
-              {
-                "name": "email",
-                "description": "",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "name",
-                "description": "",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
               }
             ],
             "type": {
@@ -6494,7 +6514,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "CreateApplicantPayload",
+                "name": "CloneCoursePayload",
                 "ofType": null
               }
             },
@@ -10276,7 +10296,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "CreateApplicantPayload",
+        "name": "CloneCoursePayload",
         "description": "",
         "fields": [
           {

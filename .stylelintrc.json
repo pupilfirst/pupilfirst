@@ -11,7 +11,8 @@
           "responsive",
           "screen",
           "include",
-          "extend"
+          "extend",
+          "layer"
         ]
       }
     ],

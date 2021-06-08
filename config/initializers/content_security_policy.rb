@@ -29,6 +29,10 @@ Rails.application.config.content_security_policy do |policy|
     { frame: %w[google.com *.google.com] }
   end
 
+  def recaptcha_csp
+    { frame: 'https://www.recaptcha.net' }
+  end
+
   def resource_csp
     { media: %w[https://s3.amazonaws.com/private-assets-sv-co/ https://public-assets.sv.co/ https://s3.amazonaws.com/uploads.pupilfirst.com/] }
   end
@@ -65,7 +69,7 @@ Rails.application.config.content_security_policy do |policy|
 
   def frame_sources
     [
-      'https://www.google.com', typeform_csp[:frame], youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame], *google_form_csp[:frame], facebook_csp[:frame],
+      'https://www.google.com', typeform_csp[:frame], youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame], *google_form_csp[:frame], facebook_csp[:frame], recaptcha_csp[:frame]
     ]
   end
 

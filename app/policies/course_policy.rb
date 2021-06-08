@@ -45,6 +45,7 @@ class CoursePolicy < ApplicationPolicy
     record.public_signup?
   end
 
+  alias review_v2? review?
   alias process_application? apply?
   alias students? review?
 

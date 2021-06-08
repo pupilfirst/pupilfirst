@@ -1,0 +1,13 @@
+<% content_for(:head) do %>
+  <%# <%= stylesheet_pack_tag 'AppRouterPack', media: 'all' %>
+<% end %>
+
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'AppRouterPack', nonce: true %>
+<% end %>
+
+<% content_for(:wrapper) do %>
+  <div id="app-router"></div>
+<% end %>
+
+<%= render template: 'layouts/tailwind' %>

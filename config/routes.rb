@@ -123,6 +123,9 @@ Rails.application.routes.draw do
 
   get 'dashboard', controller: 'users', action: 'dashboard', as: 'dashboard'
 
+
+  get 'dashboard_v2', controller: 'users', action: 'dashboard', as: 'dashboard_v2'
+
   resource :user, only: %i[edit] do
     post 'upload_avatar'
   end
@@ -182,12 +185,14 @@ Rails.application.routes.draw do
   resources :timeline_events, only: %i[show], path: 'submissions' do
     member do
       get 'review', action: 'review'
+      get 'review_v2', action: 'review_v2'
     end
   end
 
   resources :courses, only: %i[show] do
     member do
       get 'review', action: 'review'
+      get 'review_v2', action: 'review_v2'
       get 'students', action: 'students'
       get 'leaderboard', action: 'leaderboard'
       get 'curriculum', action: 'curriculum'
@@ -195,6 +200,12 @@ Rails.application.routes.draw do
       get 'apply', action: 'apply'
       post 'apply', action: 'process_application'
       get '/(:name)', action: 'show'
+    end
+
+    resources :timeline_events, only: %i[show], path: 'submissions' do
+      member do
+        get 'review_v2', action: 'review_v2'
+      end
     end
   end
 

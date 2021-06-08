@@ -70,6 +70,11 @@ class CoursesController < ApplicationController
     render layout: 'student_course'
   end
 
+  def review_v2
+    @course = authorize(find_course)
+    render 'users/dashboard_v2', layout: 'app_router'
+  end
+
   # GET /courses/:id/students
   def students
     @course = authorize(find_course)

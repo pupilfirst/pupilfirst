@@ -14,4 +14,6 @@ class TimelineEventPolicy < ApplicationPolicy
 
     record.founders.where(user: user).present?
   end
+
+  alias review_v2? review?
 end

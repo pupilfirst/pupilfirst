@@ -202,7 +202,7 @@ en:
         details: Details
         images: Images
       update_course: Update Course
-    CourseEditor__HighlightEditor:
+    CourseEditor__HighlightsEditor:
       add_highlight: Add Course Highlight
       description:
         placeholder: Enter description
@@ -641,7 +641,7 @@ en:
           If you missed watching it live, we will have it up on the dashboard in a couple of days.
           Kindly help us improve our sessions with some quick feedback: https://svlabs.typeform.com/to/h7g9Om?faculty=%{faculty_name_escaped}&session=%{session_title}&date=%{session_date}
       send_session_reminders:
-        message: 'Reminder: "%{title}" will start in %{time_delta} (at %{time_exact}). Please check the Slack collective channel for the link to join session.'
+        message: "Reminder: \"%{title}\" will start in %{time_delta} (at %{time_exact}). Please check the Slack collective channel for the link to join session."
     timeline_events:
       verification_notification:
         founder:

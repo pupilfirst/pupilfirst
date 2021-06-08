@@ -388,7 +388,7 @@ let courseHighlights = (highlights, send) =>
       {t("course_highlights.label")->str}
     </label>
     <div>
-      <CourseEditor__HighlightEditor
+      <CourseEditor__HighlightsEditor
         highlights updateHighlightsCB={h => send(UpdateHighlights(h))}
       />
     </div>

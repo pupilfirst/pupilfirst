@@ -4,7 +4,7 @@ let t = I18n.t(~scope="components.CourseApplicants__Root")
 
 let str = React.string
 
-module AppliocantsQuery = %graphql(
+module ApplicantsQuery = %graphql(
   `
   query ApplicantsQuery($courseId: ID!, $search: String, $after: String, $tags: [String!], $sortCriterion: ApplicantSortCriterion!, $sortDirection: SortDirection!) {
     applicants(courseId: $courseId, tags: $tags, search: $search, first: 10, after: $after, sortCriterion: $sortCriterion,sortDirection: $sortDirection){
@@ -254,7 +254,7 @@ let onDeselectFilter = (send, selectable) =>
   }
 
 let loadApplicants = (courseId, state, cursor, send) => {
-  AppliocantsQuery.make(
+  ApplicantsQuery.make(
     ~tags=?Some(state.filter.tags),
     ~sortDirection=state.filter.sortDirection,
     ~sortCriterion=state.filter.sortCriterion,
@@ -282,17 +282,17 @@ let loadApplicants = (courseId, state, cursor, send) => {
   |> ignore
 }
 
-let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
+let entriesLoadedData = (totalNotificationsCount, loadedNotificaionsCount) =>
   <div className="pt-8 pb-4 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
     {(
-      totoalNotificationsCount == loadedNotificaionsCount
+      totalNotificationsCount == loadedNotificaionsCount
         ? t(
-            ~variables=[("total_applicants", string_of_int(totoalNotificationsCount))],
+            ~variables=[("total_applicants", string_of_int(totalNotificationsCount))],
             "applicants_fully_loaded_text",
           )
         : t(
             ~variables=[
-              ("total_applicants", string_of_int(totoalNotificationsCount)),
+              ("total_applicants", string_of_int(totalNotificationsCount)),
               ("loaded_applicants_count", string_of_int(loadedNotificaionsCount)),
             ],
             "applicants_partially_loaded_text",

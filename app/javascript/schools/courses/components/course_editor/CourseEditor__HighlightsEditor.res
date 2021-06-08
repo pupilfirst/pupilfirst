@@ -1,6 +1,6 @@
 open CourseEditor__Types
 
-let t = I18n.t(~scope="components.CourseEditor__HighlightEditor")
+let t = I18n.t(~scope="components.CourseEditor__HighlightsEditor")
 
 let str = React.string
 

@@ -37,7 +37,7 @@ If enabled, applicants will be redirected to the `processing_url` upon verifying
 > Note: Applicants will not be added as a students unless you manually approve them from the applicants page. This feature could be used for setting up a payments flow for the course.
 
 **Course Highlights** \
-If set, a highlight section will be shown on the courses public page. You can use this session to highlight the core features of the course.
+If set, a highlights section will be shown on the course's public page. You can use this session to highlight the core features of the course.
 
 ## Processing url
 

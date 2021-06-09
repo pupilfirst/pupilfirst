@@ -67,26 +67,26 @@ module CourseExports
         .evaluation_criteria
         .pluck(:id)
         .each_with_object(empty_grades) do |evaluation_criterion_id, grades|
-          average_grade =
-            TimelineEventGrade
-              .joins(timeline_event: :timeline_event_owners)
-              .where(
-                timeline_event_owners: {
-                  latest: true,
-                  founder_id: students.pluck(:id)
-                },
-                timeline_events: {
-                  target_id: target.id
-                },
-                evaluation_criterion_id: evaluation_criterion_id
-              )
-              .distinct
-              .average(:grade)
-              &.round(2)
+        average_grade =
+          TimelineEventGrade
+            .joins(timeline_event: :timeline_event_owners)
+            .where(
+              timeline_event_owners: {
+                latest: true,
+                founder_id: students.pluck(:id)
+              },
+              timeline_events: {
+                target_id: target.id
+              },
+              evaluation_criterion_id: evaluation_criterion_id
+            )
+            .distinct
+            .average(:grade)
+            &.round(2)
 
-          grades[evaluation_criteria_ids.index(evaluation_criterion_id)] =
-            average_grade
-        end
+        grades[evaluation_criteria_ids.index(evaluation_criterion_id)] =
+          average_grade
+      end
     end
 
     def average_grades_for_student(student)
@@ -194,19 +194,19 @@ module CourseExports
         .order(:created_at)
         .distinct
         .each_with_object([]) do |submission, grading|
-          grade_index = target_ids.index(submission.target_id)
+        grade_index = target_ids.index(submission.target_id)
 
-          # We can't record grades for submissions where the target has been archived.
-          next if grade_index.nil?
+        # We can't record grades for submissions where the target has been archived.
+        next if grade_index.nil?
 
-          assign_styled_grade(grade_index, grading, submission)
-        end
+        assign_styled_grade(grade_index, grading, submission)
+      end
     end
 
     def students
       @students ||=
         begin
-          scope = course.founders.includes(:user, :level)
+          scope = course.founders.includes(:level, :user)
 
           # Exclude inactive students, unless requested.
           scope =
@@ -214,7 +214,8 @@ module CourseExports
 
           # Filter by tag, if applicable.
           if tags.present?
-            scope.joins(:startup).merge(Startup.tagged_with(tags, any: true))
+            applicable_startup_ids = Startup.tagged_with(tags, any: true).pluck(:id)
+            scope.joins(:startup).merge(Startup.where(id: applicable_startup_ids))
           else
             scope
           end

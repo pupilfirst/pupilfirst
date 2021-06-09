@@ -30,36 +30,21 @@ class School < ApplicationRecord
     logo = background == :light ? logo_on_light_bg : logo_on_dark_bg
 
     case variant
-      when :mid
-        logo.variant(combine_options:
-          {
-            auto_orient: true,
-            gravity: "center",
-            resize: '200x200>'
-          })
-      when :thumb
-        logo.variant(combine_options:
-          {
-            auto_orient: true,
-            gravity: "center",
-            resize: '100x100>'
-          })
-      else
-        logo
+    when :mid
+      logo.variant(auto_orient: true, gravity: 'center', resize: '200x200>')
+    when :thumb
+      logo.variant(auto_orient: true, gravity: 'center', resize: '100x100>')
+    else
+      logo
     end
   end
 
   def icon_variant(variant)
     case variant
-      when :thumb
-        icon.variant(combine_options:
-          {
-            auto_orient: true,
-            gravity: "center",
-            resize: '100x100>'
-          })
-      else
-        icon
+    when :thumb
+      icon.variant(auto_orient: true, gravity: 'center', resize: '100x100>')
+    else
+      icon
     end
   end
 end

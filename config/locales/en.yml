@@ -652,6 +652,14 @@ en:
       success_notification: This topic has been unlocked. Community members can now post replies again.
     update_certificate:
       success_notification: Certificate details have been updated.
+    create_submission:
+      success_notifiication: Your submission has been queued for review.
+      linked_file_exists_error: Some file attachments have already been linked to a submission
+      item_file_limit_error: No more than three files can be attached to a submission item
+      blocked_submission_status_error: "The status of this target is %{target_status}, so you cannot add a new submission; please reload the page"
+      missing_answer_error: "Missing answer for question: %{title}"
+      invalid_submission_checklist: Submission checklist is not valid.
+      invalid_files_attached: Some files attached are invalid
   offline:
     heading: You are offline!
     message: It seems there is a problem with your connection.<br/>Please check your network status.

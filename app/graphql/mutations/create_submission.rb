@@ -18,7 +18,7 @@ module Mutations
 
         return if files.where.not(timeline_event_id: nil).blank?
 
-        'Some file attachments have already been linked to a submission'
+        I18n.t('mutations.create_submission.linked_file_exists_error')
       end
     end
 
@@ -39,7 +39,7 @@ module Mutations
           return
         end
 
-        'No more than three files can be attached to a submission item'
+        I18n.t('mutations.create_submission.item_file_limit_error')
       end
     end
 
@@ -72,7 +72,10 @@ module Mutations
           return
         end
 
-        "The status of this target is '#{target_status}', so you cannot add a new submission; please reload the page"
+        I18n.t(
+          'mutations.create_submission.blocked_submission_status_error',
+          target_status: target_status
+        )
       end
     end
 
@@ -93,7 +96,11 @@ module Mutations
               next
             end
 
-            result << "Missing answer for question: #{c['title']}"
+            result <<
+              I18n.t(
+                'mutations.create_submission.missing_answer_error',
+                title: c['title']
+              )
           end
       end
     end
@@ -114,7 +121,7 @@ module Mutations
           return
         end
 
-        'Submission checklist is not valid.'
+        I18n.t('mutations.create_submission.invalid_submission_checklist')
       end
 
       def valid_result(kind, result, file_ids)
@@ -154,7 +161,7 @@ module Mutations
           return
         end
 
-        'some files attached are invalid'
+        I18n.t('mutations.create_submission.invalid_files_attached')
       end
     end
 
@@ -162,8 +169,11 @@ module Mutations
 
     def resolve(_params)
       submission = create_submission
-
-      notify(:success, 'Done!', 'Your submission has been queued for review.')
+      notify(
+        :success,
+        I18n.t('shared.done_exclamation'),
+        I18n.t('mutations.create_submission.success_notification')
+      )
       { submission: submission, level_up_eligibility: level_up_eligibility }
     end
 

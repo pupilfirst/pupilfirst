@@ -301,10 +301,10 @@ let entriesLoadedData = (totalNotificationsCount, loadedNotificaionsCount) =>
   </div>
 
 let showApplicant = (baseUrl, applicant) => {
-  <div className="flex flex-1 bg-white border rounded">
+  <div className="flex flex-1 items-center pr-4 bg-white hover:shadow border rounded">
     <button
       title={t("show_details") ++ Applicant.name(applicant)}
-      className="flex flex-1 flex-col py-4 px-4 hover:bg-gray-100  cursor-pointer"
+      className="flex flex-1 flex-col py-4 px-4 hover:bg-gray-100 cursor-pointer"
       key={Applicant.id(applicant)}
       onClick={_ => RescriptReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/details")}>
       <div className="flex w-full items-center justify-between">
@@ -313,7 +313,7 @@ let showApplicant = (baseUrl, applicant) => {
         </div>
       </div>
       <div className="mt-1 space-x-2">
-        <div className="text-xs"> {Applicant.email(applicant)->str} </div>
+        <div className="text-xs text-left"> {Applicant.email(applicant)->str} </div>
         {Js.Array.map(
           a => <span key=a className="p-1 text-xs bg-gray-100 rounded shadow"> {str(a)} </span>,
           Applicant.tags(applicant),
@@ -322,7 +322,7 @@ let showApplicant = (baseUrl, applicant) => {
     </button>
     <button
       title={"Show Actions: " ++ Applicant.name(applicant)}
-      className="py-4 px-4 hover:bg-gray-100  cursor-pointer"
+      className="btn btn-small btn-primary-ghost"
       onClick={_ => RescriptReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/actions")}>
       {str(t("onboard_as_student"))}
     </button>
@@ -330,7 +330,7 @@ let showApplicant = (baseUrl, applicant) => {
 }
 
 let showApplicants = (baseUrl, applicants, state) => {
-  <div className="mt-8">
+  <div className="mt-4">
     {ArrayUtils.isEmpty(applicants)
       ? <div
           className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
@@ -384,6 +384,9 @@ let make = (~courseId, ~tags, ~selectedApplicant) => {
 
   <div className="flex flex-1 flex-col">
     <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
+      <p className="mx-auto max-w-3xl pt-4 pb-3 font-semibold border-b">
+        {t("applicants_page_title")->str}
+      </p>
       {switch (state.applicants, editorAction) {
       | (Unloaded, _)
       | (_, Hidden) => React.null

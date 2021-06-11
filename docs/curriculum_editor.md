@@ -129,8 +129,9 @@ Each step needs to have a _title_ and an _action type_. Together, they define ho
 1. **Write Long Text:** Allows the student to write paragraphs of text.
 2. **Write Short Text:** Allows the student to write a single line of text.
 3. **Attach a Link:** Allows the student to attach a single URL.
-4. **Upload Files:** Allows the student to attach files to complete the step. Only one of this type of question is allowed as a step, and up to 3 files can be attached such a step (max 5 MB, each).
+4. **Upload Files:** Allows the student to attach files to complete the step. Up to 3 files can be attached such a step (max 5 MB, each).
 5. **Choose from a list:** Student is shown a list of choices, from which they can pick one; you decide what the choices are.
+6. **Record Audio:** Allows student to record an audio with a size limit of 5MB
 
 Here's an example target consisting, of four steps to complete the target:
 
@@ -143,8 +144,7 @@ You can also change the order of steps, remove a particular step, or even duplic
 Here are some other points to keep in mind:
 
 1. The maximum number of steps allowed in a target is 15.
-2. The _Upload Files_ action type is allowed only once in a target. All other action types can be used multiple times.
-3. You are allowed to create an evaluated target without any steps. However, this would mean that a student can _submit_ work on a target without actually providing any information. This would still require the coach to review an empty submission. This option can be used for cases where the work in question is done _outside_ of the platform and is known to the coach.
+2. You are allowed to create an evaluated target without any steps. However, this would mean that a student can _submit_ work on a target without actually providing any information. This would still require the coach to review an empty submission. This option can be used for cases where the work in question is done _outside_ of the platform and is known to the coach.
 
 Once all steps are defined, students can submit the target by executing the required steps and a coach gets to see the response from students for each step.
 

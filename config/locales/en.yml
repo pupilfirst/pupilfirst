@@ -660,6 +660,16 @@ en:
       missing_answer_error: "Missing answer for question: %{title}"
       invalid_submission_checklist: Submission checklist is not valid.
       invalid_files_attached: Some files attached are invalid
+    update_target:
+      success_notification: Target updated successfully!
+      target_group_not_present_error: Target group does not exist
+      evaluation_criteria_course_error: Evaluation criteria must be from the same course as the target
+      prerequisities_in_same_level: Prerequisite targets must be from the same level as the target
+      prerequisities_archived_error: Cannot have archived prerequisites
+      target_missing_error: Target does not exist
+      multiple_method_of_completion: More than one method of completion
+      invalid_checklist_error: Checklist not valid
+      checklist_items_exceeded_error: Checklist should have less than 15 items
   offline:
     heading: You are offline!
     message: It seems there is a problem with your connection.<br/>Please check your network status.

@@ -83,6 +83,9 @@ If there's a specific website you'd like us to include, [please let us know](mai
 **File**\
 The file block accepts the file and a caption and displays it as a distinctly styled block in the content of the target.
 
+**Audio**\
+The audio block accepts an audio file and uses the default browser player to play the uploaded audio in the content of the target.
+
 ## Editing a target's other details
 
 The _Details_ tab can be accessed by clicking on the tab once the editor is open, or by clicking the _details icon_ on each of the listed targets.

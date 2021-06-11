@@ -147,7 +147,8 @@ module Users
 
       return false if course_with_student.blank?
 
-      course_with_student[:access_ends_at].present?
+      course_with_student[:access_ends_at].present? &&
+        course_with_student[:access_ends_at].past?
     end
 
     def student_dropped_out(course_id)

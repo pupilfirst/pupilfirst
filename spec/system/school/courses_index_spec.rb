@@ -391,4 +391,19 @@ feature 'Courses Index', js: true do
       course_archived
     )
   end
+
+  scenario 'school admin makes a copy of a course' do
+    sign_in_user school_admin.user, referrer: school_courses_path
+    find("a[title='Edit #{course_1.name}']").click
+    click_button 'Actions'
+
+    accept_confirm { click_button('Clone Course') }
+
+    expect(page).to have_text('Course copy requested. It will appear here soon!')
+
+    visit school_courses_path
+    within("div[id='courses']") do
+      expect(page).to have_text(course_1.name + " - copy")
+    end
+  end
 end

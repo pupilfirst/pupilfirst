@@ -150,9 +150,13 @@ en:
         unarchive_course:
           button_text: Unarchive Course
           label: Do you want to unarchive the course?
+        clone_course:
+          button_text: Clone Course
+          label: Do you want to create a copy of the course?
       alert:
         archive_message: Are you sure you want to archive the course?
         unarchive_message: Are you sure you want to unarchive the course?
+        clone_course_message: Are you sure you want to make a copy of the course?
       button_text:
         add_new_course: Add New Course
         edit_course_details: Edit Course Details
@@ -335,6 +339,9 @@ en:
       submitted_at: Submitted At
       submitted_on: Submitted on %{date}
       view: "View "
+    CoursesReview__ChecklistShow:
+      edit_checklist_button: Edit Checklist
+      generate_feedback_button: Generate Feedback
     CoursesReview__Root:
       assigned_to: Assigned to
       assigned_to_coach: "assigned to "
@@ -629,6 +636,9 @@ en:
       learn_more: Learn more
       welcome_prefix: Hello, welcome to
   jobs:
+    courses:
+      clone_course:
+        new_name: "%{name} - copy"
     notifications:
       post_created_job:
         post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
@@ -642,7 +652,7 @@ en:
           If you missed watching it live, we will have it up on the dashboard in a couple of days.
           Kindly help us improve our sessions with some quick feedback: https://svlabs.typeform.com/to/h7g9Om?faculty=%{faculty_name_escaped}&session=%{session_title}&date=%{session_date}
       send_session_reminders:
-        message: 'Reminder: "%{title}" will start in %{time_delta} (at %{time_exact}). Please check the Slack collective channel for the link to join session.'
+        message: "Reminder: \"%{title}\" will start in %{time_delta} (at %{time_exact}). Please check the Slack collective channel for the link to join session."
     timeline_events:
       verification_notification:
         founder:
@@ -678,6 +688,8 @@ en:
         founder: All Founders
         team: Team
   mutations:
+    clone_course:
+      success_notification: Course copy requested. It will appear here soon!
     archive_course:
       success_notification: Course archived successfully.
     auto_verify_submission:

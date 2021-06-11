@@ -3,7 +3,7 @@ ruby '2.7.3'
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.0.3', '>= 6.0.3.7'
+gem 'rails', '~> 6.1.3', '>= 6.1.3.2'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
@@ -43,7 +43,7 @@ gem 'motion-markdown-it', '~> 8.4.1' # Ruby version of Markdown-it (a CommonMark
 gem 'motion-markdown-it-plugins', '~> 8.4.2' # Plugins for motion-markdown-it.
 gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
 gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.
-gem 'acts-as-taggable-on', github: 'spark-solutions/acts-as-taggable-on', branch: 'fix/rails-6-and-failing-specs' # Tag a single model on several contexts. TODO: remove tracking branch when gem is updated for Rails 6 issues
+gem 'acts-as-taggable-on', '~> 7.0' # Tag a single model on several contexts.
 gem 'email_inquire', '~> 0.6' # Validate email for format, common typos and one-time email providers
 gem 'titleize', '~> 1.4' # better titleizing, modifies Inflector.titleize from default rails
 gem 'reform', '~> 2.2' # Form objects decoupled from models. http://www.trailblazer.to/gems/reform
@@ -131,6 +131,5 @@ end
 group :production do
   gem 'dalli', '~> 2.7.10' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
   gem 'skylight', '~> 4.2' # Skylight is a smart profiler for Rails, Sinatra, and other Ruby apps.
-  gem 'heroku-deflater', '~> 0.6' # Enable gzip compression on heroku, but don't compress images.
   gem 'aws-sdk-s3', '~> 1.35 ', require: false
 end

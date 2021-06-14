@@ -1,29 +1,38 @@
 module ValidateTargetEditable
   extend ActiveSupport::Concern
 
-  class TargetGroupExists < GraphQL::Schema::Validator
-    def validate(_object, _context, value)
-      course = Target.find_by(id: value[:id]).course
-      target_group =
-        course.target_groups.where(id: value[:target_group_id]).first
+  class ValidateTargetAndEvaluationCriteria < GraphQL::Schema::Validator
+    include ValidatorCombinable
 
-      return if target_group.present?
+    def validate(_object, _context, value)
+      @target = Target.find_by(id: value[:id])
+      @course = @target.course
+      @target_group =
+        @course.target_groups.where(id: value[:target_group_id]).first
+      @evaluation_criteria = value[:evaluation_criteria]
+
+      combine(target_group_exists, same_course_for_target_and_ec, target_exists)
+    end
+
+    def target_group_exists
+      return if @target_group.present?
 
       I18n.t('mutations.update_target.target_group_not_present_error')
     end
-  end
 
-  class SameCourseForTargetAndEvaluationCriteria < GraphQL::Schema::Validator
-    def validate(_object, _context, value)
-      course = Target.find_by(id: value[:id]).course
-      evaluation_criteria = value[:evaluation_criteria]
-
-      if course.evaluation_criteria.where(id: evaluation_criteria).count ==
-           evaluation_criteria.count
+    def same_course_for_target_and_ec
+      if @course.evaluation_criteria.where(id: @evaluation_criteria).count ==
+           @evaluation_criteria.count
         return
       end
 
       I18n.t('mutations.update_target.evaluation_criteria_course_error')
+    end
+
+    def target_exists
+      return if @target.present?
+
+      I18n.t('mutations.update_target.target_missing_error')
     end
   end
 
@@ -53,16 +62,6 @@ module ValidateTargetEditable
       return if prerequisite_targets.count == non_archived_targets.count
 
       I18n.t('mutations.update_target.prerequisities_archived_error')
-    end
-  end
-
-  class TargetExists < GraphQL::Schema::Validator
-    def validate(_object, _context, value)
-      target = Target.find_by(id: value[:id])
-
-      return if target.present?
-
-      I18n.t('mutations.update_target.target_missing_error')
     end
   end
 
@@ -151,11 +150,9 @@ module ValidateTargetEditable
     argument :checklist, GraphQL::Types::JSON, required: true
     argument :visibility, GraphQL::Types::String, required: true
 
-    validates TargetGroupExists => {}
-    validates SameCourseForTargetAndEvaluationCriteria => {}
+    validates ValidateTargetAndEvaluationCriteria => {}
     validates PrerequisitesInSameLevel => {}
     validates PrerequisitesNotArchived => {}
-    validates TargetExists => {}
     validates OnlyOneMethodOfCompletion => {}
     validates ChecklistHasValidData => {}
     validates ChecklistHasValidLength => {}

@@ -1,35 +1,6 @@
 module ValidateStudentSubmission
   extend ActiveSupport::Concern
 
-  class AllFilesAreNew < GraphQL::Schema::Validator
-    def validate(_object, _context, value)
-      files = TimelineEventFile.where(id: value[:file_ids])
-
-      return if files.where.not(timeline_event_id: nil).blank?
-
-      I18n.t('mutations.create_submission.linked_file_exists_error')
-    end
-  end
-
-  class MaximumThreeAttachmentsPerItem < GraphQL::Schema::Validator
-    def validate(_object, _context, value)
-      return if value[:file_ids].blank?
-
-      file_items =
-        value[:checklist].filter do |item|
-          (item['kind'] == 'files' || item['kind'] == 'audio')
-        end
-
-      if file_items.select do |item|
-           item['result'].split.flatten.length > 3
-         end.empty?
-        return
-      end
-
-      I18n.t('mutations.create_submission.item_file_limit_error')
-    end
-  end
-
   class EnsureSubmittability < GraphQL::Schema::Validator
     def validate(_object, context, value)
       target = Target.find_by(id: value[:target_id])
@@ -124,22 +95,55 @@ module ValidateStudentSubmission
     end
   end
 
-  class ValidFileIdsInChecklist < GraphQL::Schema::Validator
-    def validate(_object, _context, value)
-      file_ids = value[:file_ids]
+  class ValidateFileAttachments < GraphQL::Schema::Validator
+    include ValidatorCombinable
 
-      file_items =
+    def validate(_object, _context, value)
+      @file_ids = value[:file_ids]
+
+      @files = TimelineEventFile.where(id: value[:file_ids])
+
+      @file_items =
         value[:checklist].filter do |item|
           (item['kind'] == 'files' || item['kind'] == 'audio')
         end
 
-      return if file_ids.blank?
+      combine(
+        maximum_three_attachments_per_item,
+        valid_file_ids_in_checklist,
+        all_files_are_new
+      )
+    end
 
-      if file_items.map { |item| item['result'] }.flatten.sort == file_ids.sort
+    def maximum_three_attachments_per_item
+      return if @file_ids.blank?
+
+      if @file_items.select do |item|
+           item['result'].split.flatten.length > 3
+         end.empty?
+        return
+      end
+
+      I18n.t('mutations.create_submission.item_file_limit_error')
+    end
+
+    def valid_file_ids_in_checklist
+      return if @file_ids.blank?
+
+      if @file_items.map { |item| item['result'] }.flatten.sort ==
+           @file_ids.sort
         return
       end
 
       I18n.t('mutations.create_submission.invalid_files_attached')
+    end
+
+    def all_files_are_new
+      return if @file_ids.blank?
+
+      return if @files.where.not(timeline_event_id: nil).blank?
+
+      I18n.t('mutations.create_submission.linked_file_exists_error')
     end
   end
 
@@ -149,10 +153,8 @@ module ValidateStudentSubmission
     argument :file_ids, [GraphQL::Types::ID], required: true
 
     validates ValidResponse => {}
-    validates ValidFileIdsInChecklist => {}
+    validates ValidateFileAttachments => {}
     validates AttemptedMinimumQuestions => {}
-    validates AllFilesAreNew => {}
-    validates MaximumThreeAttachmentsPerItem => {}
     validates EnsureSubmittability => {}
   end
 end

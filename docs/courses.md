@@ -31,6 +31,25 @@ If enabled, the course will be displayed on the list of featured courses on your
 **Enable public signup for this course?** \
 If enabled, members of the public will be able to sign up for your course.
 
+**Do you want to process applicant information before enrolling them?** \
+If enabled, applicants will be redirected to the `processing_url` upon verifying their email.
+
+> Note: Applicants will not be added as a students unless you manually approve them from the applicants page. This feature could be used for setting up a payments flow for the course.
+
+**Course Highlights** \
+If set, a highlights section will be shown on the course's public page. You can use this session to highlight the core features of the course.
+
+## Processing url
+
+You can also set `${course_id}`, `${applicant_id}`, `${name}` and `${email}` as special params for the `processing_url`. The server will replace special params with its values.
+
+Example
+
+```
+https://www.example.com/q?course_id=${course_id}&applicant_id=${applicant_id}&name=${name}&email=${email}
+
+```
+
 **Allow public to view course curriculum?** \
 If enabled, members of the public will be able to view the course curriculum without signing in. This will not let them _interact_ with the course in any way.
 

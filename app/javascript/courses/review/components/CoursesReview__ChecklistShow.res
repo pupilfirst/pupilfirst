@@ -90,7 +90,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
               key={(itemIndex |> string_of_int) ++ (resultIndex |> string_of_int)}>
               <Checkbox
                 id={id ++ ((itemIndex |> string_of_int) ++ (resultIndex |> string_of_int))}
-                label={checklistItem |> ReviewChecklistResult.title}
+                label={str(checklistItem->ReviewChecklistResult.title)}
                 onChange={checkboxOnChange(itemIndex, resultIndex, setSelecton)}
                 checked={checklistItemChecked(itemIndex, resultIndex, selection)}
               />

@@ -44,3 +44,6 @@ let t = (~scope=?, ~variables: array<(key, value)>=[], ~count=?, identifier) => 
 
   translate(fullIdentifier, fullOptions)
 }
+
+let ts = (~variables: array<(key, value)>=[], ~count=?, identifier) =>
+  t(~scope="shared", ~variables, ~count?, identifier)

@@ -14,6 +14,133 @@
         "description": "",
         "fields": [
           {
+            "name": "applicants",
+            "description": "",
+            "args": [
+              {
+                "name": "after",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "before",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "first",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "last",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "courseId",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "search",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "tags",
+                "description": "",
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "sortCriterion",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "ApplicantSortCriterion",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "sortDirection",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "SortDirection",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "ApplicantConnection",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "coachNotes",
             "description": "",
             "args": [
@@ -1323,8 +1450,362 @@
       },
       {
         "kind": "SCALAR",
+        "name": "String",
+        "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Int",
+        "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
         "name": "ID",
         "description": "The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted as an ID.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ApplicantSortCriterion",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CreatedAt",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UpdatedAt",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Name",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "SortDirection",
+        "description": "",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "Ascending",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Descending",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "ApplicantConnection",
+        "description": "",
+        "fields": [
+          {
+            "name": "edges",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "ApplicantEdge",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodes",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Applicant",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pageInfo",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PageInfo",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "totalCount",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "ApplicantEdge",
+        "description": "",
+        "fields": [
+          {
+            "name": "cursor",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "node",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Applicant",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Applicant",
+        "description": "",
+        "fields": [
+          {
+            "name": "email",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tags",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PageInfo",
+        "description": "",
+        "fields": [
+          {
+            "name": "endCursor",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hasNextPage",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hasPreviousPage",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "startCursor",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Boolean",
+        "description": "The `Boolean` scalar type represents `true` or `false`.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -1475,16 +1956,6 @@
       },
       {
         "kind": "SCALAR",
-        "name": "String",
-        "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
         "name": "ISO8601DateTime",
         "description": null,
         "fields": null,
@@ -1533,16 +2004,6 @@
         ],
         "inputFields": null,
         "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "Int",
-        "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
@@ -1942,29 +2403,6 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "SortDirection",
-        "description": "",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "Ascending",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "Descending",
-            "description": "",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
         "possibleTypes": null
       },
       {
@@ -2396,16 +2834,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "SCALAR",
-        "name": "Boolean",
-        "description": "The `Boolean` scalar type represents `true` or `false`.",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
         "kind": "OBJECT",
         "name": "IssuedCertificate",
         "description": "",
@@ -2510,73 +2938,6 @@
                 "name": "String",
                 "ofType": null
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "PageInfo",
-        "description": "",
-        "fields": [
-          {
-            "name": "endCursor",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "hasNextPage",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "hasPreviousPage",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "startCursor",
-            "description": "",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2840,6 +3201,30 @@
             "deprecationReason": null
           },
           {
+            "name": "highlights",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CourseHighlight",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "id",
             "description": "",
             "args": [],
@@ -2867,6 +3252,18 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "processingUrl",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2972,6 +3369,65 @@
           },
           {
             "name": "url",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CourseHighlight",
+        "description": "",
+        "fields": [
+          {
+            "name": "description",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "icon",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "title",
             "description": "",
             "args": [],
             "type": {
@@ -6611,12 +7067,50 @@
                 "name": "about",
                 "description": "",
                 "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "progressionBehavior",
+                "description": "",
+                "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
+                    "kind": "ENUM",
+                    "name": "ProgressionBehavior",
                     "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "progressionLimit",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "highlights",
+                "description": "",
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "CourseHighlightInput",
+                      "ofType": null
+                    }
                   }
                 },
                 "defaultValue": null
@@ -6664,25 +7158,11 @@
                 "defaultValue": null
               },
               {
-                "name": "progressionBehavior",
-                "description": "",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "ENUM",
-                    "name": "ProgressionBehavior",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "progressionLimit",
+                "name": "processingUrl",
                 "description": "",
                 "type": {
                   "kind": "SCALAR",
-                  "name": "Int",
+                  "name": "String",
                   "ofType": null
                 },
                 "defaultValue": null
@@ -7406,6 +7886,99 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "CreateSchoolLinkPayload",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "createStudentFromApplicant",
+            "description": "",
+            "args": [
+              {
+                "name": "applicantId",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "title",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "affiliation",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "accessEndsAt",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ISO8601DateTime",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "tags",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "SCALAR",
+                        "name": "String",
+                        "ofType": null
+                      }
+                    }
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "notifyStudent",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "CreateStudentFromApplicantPayload",
                 "ofType": null
               }
             },
@@ -9059,20 +9632,6 @@
             "description": "",
             "args": [
               {
-                "name": "id",
-                "description": "",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null
-              },
-              {
                 "name": "name",
                 "description": "",
                 "type": {
@@ -9114,12 +9673,50 @@
                 "name": "about",
                 "description": "",
                 "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "progressionBehavior",
+                "description": "",
+                "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
+                    "kind": "ENUM",
+                    "name": "ProgressionBehavior",
                     "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "progressionLimit",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "highlights",
+                "description": "",
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "CourseHighlightInput",
+                      "ofType": null
+                    }
                   }
                 },
                 "defaultValue": null
@@ -9167,26 +9764,26 @@
                 "defaultValue": null
               },
               {
-                "name": "progressionBehavior",
+                "name": "processingUrl",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "id",
                 "description": "",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "ENUM",
-                    "name": "ProgressionBehavior",
+                    "kind": "SCALAR",
+                    "name": "ID",
                     "ofType": null
                   }
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "progressionLimit",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
                 },
                 "defaultValue": null
               }
@@ -10304,6 +10901,59 @@
         "possibleTypes": null
       },
       {
+        "kind": "INPUT_OBJECT",
+        "name": "CourseHighlightInput",
+        "description": "",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "icon",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "title",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "description",
+            "description": "",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "CreateCoursePayload",
         "description": "",
@@ -11015,6 +11665,33 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CreateStudentFromApplicantPayload",
+        "description": "",
+        "fields": [
+          {
+            "name": "success",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               }
             },

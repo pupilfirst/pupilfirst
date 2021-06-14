@@ -396,7 +396,7 @@ let make = (~courseId, ~closeDrawerCB) => {
         {<div className="mt-4">
           <Checkbox
             id="notify-students"
-            label={t("notify_students_label")}
+            label={str(t("notify_students_label"))}
             onChange={_event => send(ToggleNotifyStudents)}
             checked={state.notifyStudents}
           />

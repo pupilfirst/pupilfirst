@@ -7,11 +7,11 @@ describe Applicants::CreateStudentService do
   let(:school) { course.school }
   let!(:level_one) { create :level, course: course }
   let(:applicant) { create :applicant, course: course }
-  let(:tag) { Faker::Lorem.word }
+  let(:tags) { Faker::Lorem.words }
 
   describe '#create' do
     it 'create a student account for the applicant' do
-      student = subject.create(tag)
+      student = subject.create(tags)
       user = student.user
 
       # The user should have same name and email
@@ -31,7 +31,7 @@ describe Applicants::CreateStudentService do
       expect(startup.level).to eq(level_one)
 
       # Founder should have tag "Public Signup"
-      expect(startup.tag_list).to eq([tag])
+      expect(startup.tag_list.sort).to eq(tags.sort)
 
       # Applicant should be destroyed
       expect(Applicant.where(email: applicant.email).count).to eq(0)
@@ -40,14 +40,14 @@ describe Applicants::CreateStudentService do
     context 'when the user already exists' do
       let(:existing_coach) { create :faculty }
       let(:existing_title) { Faker::Job.title }
-      let(:applicant) { create :applicant, course: course, email: existing_coach.user.email }
-
-      before do
-        existing_coach.user.update(title: existing_title)
+      let(:applicant) do
+        create :applicant, course: course, email: existing_coach.user.email
       end
 
+      before { existing_coach.user.update(title: existing_title) }
+
       it 'does not change the title of existing users' do
-        student = subject.create(tag)
+        student = subject.create(tags)
 
         expect(student.user.reload.title).to eq(existing_title)
       end

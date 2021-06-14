@@ -13,7 +13,7 @@ let decode = json => {
   open Json.Decode
   {
     id: field("id", string, json),
-    name: field("name", string, json),
-    endsAt: optional(field("endsAt", string), json)->Belt.Option.map(DateFns.parseISO),
+    name: json |> field("name", string),
+    endsAt: (json |> optional(field("endsAt", string)))->Belt.Option.map(DateFns.parseISO),
   }
 }

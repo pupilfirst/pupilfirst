@@ -71,7 +71,7 @@ gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
 gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'chartkick', '~> 3.4' # Create beautiful charts with one line of JavaScript.
-gem 'graphql', '~> 1.12' # Ruby implementation of GraphQL http://graphql-ruby.org
+gem 'graphql', '~> 1.12.6' # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
 gem 'i18n-js', '~> 3.7' # Provide Rails I18n translations on Javascript.
 gem 'batch-loader', '~> 1.5' # Generic lazy batching mechanism to avoid N+1 DB queries.

@@ -69,6 +69,8 @@ feature 'Courses Index', js: true do
     )
 
     expect(course.progression_limit).to eq(1)
+    expect(course.highlights).to eq([])
+    expect(course.processing_url).to eq(nil)
   end
 
   context 'when a course exists' do
@@ -76,6 +78,21 @@ feature 'Courses Index', js: true do
     let(:new_about) { Faker::Lorem.paragraph }
     let(:new_description) { Faker::Lorem.sentences.join ' ' }
     let(:course_end_date) { Time.zone.today }
+    let(:processing_url) { Faker::Internet.url }
+    let(:highlights) do
+      [
+        {
+          icon: Types::CourseHighlightInputType.allowed_icons.sample,
+          title: Faker::Lorem.words(number: 2).join(' ').titleize,
+          description: Faker::Lorem.paragraph
+        },
+        {
+          icon: Types::CourseHighlightInputType.allowed_icons.sample,
+          title: Faker::Lorem.words(number: 2).join(' ').titleize,
+          description: Faker::Lorem.paragraph
+        }
+      ]
+    end
 
     scenario 'School admin edits an existing course' do
       sign_in_user school_admin.user,
@@ -96,6 +113,50 @@ feature 'Courses Index', js: true do
       select 'thrice', from: 'progression-limit'
 
       within('div#public-signup') { click_button 'Yes' }
+      within('div#processing-url') { click_button 'Yes' }
+      fill_in 'processing_url', with: processing_url
+
+      click_button 'Add Course Highlight'
+      click_button 'Add Course Highlight'
+
+      within('div[data-highlight-index="2"]') do
+        click_button 'Select Icon'
+        click_button "Select #{highlights.last[:icon]}"
+
+        fill_in 'highlight-2-title',
+                with: highlights.last[:title],
+                fill_options: {
+                  clear: :backspace
+                }
+        fill_in 'highlight-2-description',
+                with: highlights.last[:description],
+                fill_options: {
+                  clear: :backspace
+                }
+        click_button 'Move Down'
+      end
+
+      within('div[data-highlight-index="2"]') do
+        click_button 'Select Icon'
+
+        click_button "Select #{highlights.first[:icon]}"
+
+        fill_in 'highlight-2-title',
+                with: highlights.first[:title],
+                fill_options: {
+                  clear: :backspace
+                }
+        fill_in 'highlight-2-description',
+                with: highlights.first[:description],
+                fill_options: {
+                  clear: :backspace
+                }
+      end
+
+      within('div[data-highlight-index="0"]') do
+        click_button 'Delete highlight'
+        click_button 'Delete highlight'
+      end
       within('div#public-preview') { click_button 'Yes' }
 
       click_button 'Update Course'
@@ -114,6 +175,8 @@ feature 'Courses Index', js: true do
       )
 
       expect(course_1.progression_limit).to eq(3)
+      expect(course_1.highlights).to eq(highlights.map(&:stringify_keys))
+      expect(course_1.processing_url).to eq(processing_url)
     end
 
     scenario 'School admin sets other progression behaviors on existing course' do

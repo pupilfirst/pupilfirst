@@ -1,4 +1,14 @@
 class Course < ApplicationRecord
+  # JSON fields schema:
+  #
+  # highlights: [
+  #   {
+  #     icon: string - should match the whitelisted icons
+  #     title: string - title for the highlight (150 chars)
+  #     description: string - description from the highlight (250 chars)
+  #   },
+  #   ...
+  # ]
   validates :name, presence: true
 
   belongs_to :school
@@ -21,6 +31,7 @@ class Course < ApplicationRecord
   has_many :course_authors, dependent: :restrict_with_error
   has_many :webhook_deliveries, dependent: :destroy
   has_one :webhook_endpoint, dependent: :destroy
+  has_many :applicants, dependent: :destroy
 
   has_one_attached :thumbnail
   has_one_attached :cover
@@ -28,10 +39,11 @@ class Course < ApplicationRecord
   scope :featured, -> { where(featured: true) }
   scope :live, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
-  scope :access_active, -> { where('ends_at > ?', Time.now).or(where(ends_at: nil)) }
+  scope :access_active,
+        -> { where('ends_at > ?', Time.now).or(where(ends_at: nil)) }
   scope :active, -> { live.access_active }
 
-  normalize_attribute :about
+  normalize_attribute :about, :processing_url
 
   PROGRESSION_BEHAVIOR_LIMITED = -'Limited'
   PROGRESSION_BEHAVIOR_UNLIMITED = -'Unlimited'
@@ -40,11 +52,15 @@ class Course < ApplicationRecord
   VALID_PROGRESSION_BEHAVIORS = [
     PROGRESSION_BEHAVIOR_LIMITED,
     PROGRESSION_BEHAVIOR_UNLIMITED,
-    PROGRESSION_BEHAVIOR_STRICT,
+    PROGRESSION_BEHAVIOR_STRICT
   ].freeze
 
   validates :progression_behavior, inclusion: VALID_PROGRESSION_BEHAVIORS
-  validates :progression_limit, numericality: { greater_than: 0, allow_nil: true }
+  validates :progression_limit,
+            numericality: {
+              greater_than: 0,
+              allow_nil: true
+            }
 
   def short_name
     name[0..2].upcase.strip
@@ -60,13 +76,19 @@ class Course < ApplicationRecord
 
   def cover_url
     if cover.attached?
-      Rails.application.routes.url_helpers.rails_blob_path(cover, only_path: true)
+      Rails.application.routes.url_helpers.rails_blob_path(
+        cover,
+        only_path: true
+      )
     end
   end
 
   def thumbnail_url
     if thumbnail.attached?
-      Rails.application.routes.url_helpers.rails_blob_path(thumbnail, only_path: true)
+      Rails.application.routes.url_helpers.rails_blob_path(
+        thumbnail,
+        only_path: true
+      )
     end
   end
 

@@ -1,7 +1,5 @@
 %bs.raw(`require("./Checkbox.css")`)
 
-let str = React.string
-
 @react.component
 let make = (~id, ~label, ~onChange, ~checked=false) =>
   <div>
@@ -12,6 +10,6 @@ let make = (~id, ~label, ~onChange, ~checked=false) =>
           <polyline points="1.5 6 4.5 9 10.5 1" />
         </svg>
       </span>
-      <span className="text-sm flex-1 font-semibold leading-loose"> {label |> str} </span>
+      <span className="text-sm flex-1 font-semibold leading-loose"> {label} </span>
     </label>
   </div>

@@ -15,6 +15,8 @@ module Types
     field :progression_behavior, Types::ProgressionBehaviorType, null: false
     field :progression_limit, Integer, null: true
     field :archived_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :highlights, [Types::CourseHighlightType], null: false
+    field :processing_url, String, null: true
 
     def cover
       image_details(object.cover)

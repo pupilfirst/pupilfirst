@@ -18,13 +18,15 @@ module Schools
 
     # GET /school/course/id/
     def show
-      @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+      @course =
+        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
       redirect_to details_school_course_path
     end
 
     # GET /school/course/id/details
     def details
-      @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+      @course =
+        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
       render 'index'
     end
 
@@ -37,16 +39,16 @@ module Schools
       if @form.validate(params)
         @form.save
         render json: {
-          thumbnail_url: course.thumbnail_url,
-          cover_url: course.cover_url,
-          error: nil
-        }
+                 thumbnail_url: course.thumbnail_url,
+                 cover_url: course.cover_url,
+                 error: nil
+               }
       else
         render json: {
-          thumbnail_url: nil,
-          cover_url: nil,
-          error: @form.errors.full_messages.join(', ')
-        }
+                 thumbnail_url: nil,
+                 cover_url: nil,
+                 error: @form.errors.full_messages.join(', ')
+               }
       end
     end
 
@@ -110,6 +112,12 @@ module Schools
         )
     end
 
+    # GET /school/courses/:id/applicants
+    def applicants
+      @course =
+        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+    end
+
     def inactive_students
       @course =
         authorize(
@@ -143,13 +151,13 @@ module Schools
           .startups
           .where(id: params[:team_ids])
           .each do |startup|
-          startup.update!(access_ends_at: nil, dropped_out_at: nil)
-        end
+            startup.update!(access_ends_at: nil, dropped_out_at: nil)
+          end
 
         render json: {
-          message: 'Teams marked active successfully!',
-          error: nil
-        }
+                 message: 'Teams marked active successfully!',
+                 error: nil
+               }
       end
     end
 
@@ -197,22 +205,21 @@ module Schools
       render json: camelize_keys(stringify_ids(props))
     end
 
-
     # POST /school/courses/:id/bulk_import_students
     def bulk_import_students
-      @course = authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
+      @course =
+        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
 
       form = ::Courses::BulkImportStudentsForm.new(@course)
       form.current_user = current_user
 
-      props = if form.validate(params)
-        form.save
-        {
-          success: true,
-        }
-      else
-        { error: form.errors.full_messages.join(", ") }
-      end
+      props =
+        if form.validate(params)
+          form.save
+          { success: true }
+        else
+          { error: form.errors.full_messages.join(', ') }
+        end
 
       render json: camelize_keys(stringify_ids(props))
     end

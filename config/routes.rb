@@ -57,6 +57,7 @@ Rails.application.routes.draw do
 
     resources :courses, only: %i[index show new] do
       member do
+        get 'applicants'
         get 'details'
         get 'images', action: :details
         get 'actions', action: :details
@@ -71,6 +72,13 @@ Rails.application.routes.draw do
       end
 
       resources :authors, only: %w[show new]
+
+      resources :applicants, only: :show do
+        member do
+          get 'actions', action: :show
+          get 'details', action: :show
+        end
+      end
 
       resources :targets, only: [] do
         member do

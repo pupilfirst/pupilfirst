@@ -28,6 +28,52 @@ en:
       topic_stats_views: View
       topics_fully_loaded_text: Showing all %{total_topics} topics
       topics_partially_loaded_text: Showing %{loaded_topics_count} of %{total_topics} topics
+    CourseApplicants__EditForm:
+      access_ends_at:
+        help: If set, students will not be able to complete targets after this date.
+        label: Student's Access Ends On
+      add_as_student_button: Add as Student
+      affiliation:
+        label: Affiliation
+        placeholder: Acme Inc., Acme University, etc.
+      email:
+        label: Email
+        placeholder: Student email here
+      name:
+        error: is not valid
+        label: Name
+        placeholder: Student name here
+      notify_students:
+        label: Notify students, and send them a link to sign into this school.
+      page_title: Add as a student
+      tabs:
+        actions: Actions
+        details: Details
+      tags:
+        label: Tags
+      title:
+        label: Title
+        placeholder: Student, Coach, CEO, etc.
+    CourseApplicants__Root:
+      applicants_page_title: Applicants
+      applicants_fully_loaded_text: Showing all %{total_applicants} applicants
+      applicants_partially_loaded_text: Showing %{loaded_applicants_count} of %{total_applicants} applicants
+      button_load_more: Load More Applicants...
+      empty_applicants: You don't have any applicants!
+      filter:
+        input_label: Search
+        input_placeholder: Filter and Search Applicants by name
+        label:
+          search: Search by name or email
+          tag: Tag
+      onboard_as_student: OnBoard as Student
+      show_details: "Show Details: "
+      sort_criterion:
+        created_at: Created At
+        name: Name
+        updated_at: Updated At
+      sorter:
+        label: Sort by
     CourseCertificates__CreateDrawer:
       certificate_base_image_label: Certificate Base Image
       certificate_base_image_placeholder: Select a base image for certificate
@@ -126,6 +172,8 @@ en:
         help: If specified, course will appear as closed to students on this date. Students will not be able to make any more submissions.
         label: Course end date
         placeholder: Short description for this course
+      course_highlights:
+        label: Course Highlights
       course_name:
         error_message: A name is required (2-50 characters)
         label: Course name
@@ -134,6 +182,10 @@ en:
       enable_public_preview_label: Allow public to view course curriculum?
       enable_public_signup_label: Enable public signup for this course?
       feature_course_in_homepage_label: Feature course in school homepage?
+      processing_url:
+        error: Invalid processing url
+        help: You can send the applicants to a processing url once they apply for the course
+        label: Do you want to process applicant information before enrolling them?
       progression_behavior:
         help: This only applies if your course has milestone targets that requires students to submit their work for review by coaches.
         label: Progression Behavior
@@ -155,6 +207,14 @@ en:
         details: Details
         images: Images
       update_course: Update Course
+    CourseEditor__HighlightsEditor:
+      add_highlight: Add Course Highlight
+      description:
+        placeholder: Description of highlight
+      selected_button:
+        title: Select Icon
+      title:
+        placeholder: Title of highlight
     CourseEditor__ImagesForm:
       button_text:
         update_images: Update Images
@@ -175,6 +235,10 @@ en:
         error_message: must be a JPEG / PNG under 2 MB in size
         help: The thumbnail will be displayed on the homepage, and here in the admin courses list.
         label: Thumbnail
+    CoursesApply__Root:
+      email_sent_message:
+        description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
+        title: We've sent you a verification mail.
     CoursesCurriculum:
       edit_level_button: Edit Level
       edit_target_button_title: Edit target %{title}
@@ -403,6 +467,16 @@ en:
       mark_all_as_read_button: Mark All as Read
       notifications_fully_loaded_text: Showing all %{total_notifications} notifications
       notifications_partially_loaded_text: Showing %{loaded_notifications_count} of %{total_notifications} notifications
+    SchoolAdminNavbar__Root:
+      course_nav:
+        applicants: Applicants
+        authors: Authors
+        certificates: Certificates
+        coaches: Coaches
+        curriculum: Curriculum
+        evaluation_criteria: Evaluation Criteria
+        exports: Exports
+        students: Students
     StudentTopNav:
       sign_in: Sign In
       sign_out: Sign Out
@@ -631,9 +705,13 @@ en:
     clone_course:
       success_notification: Course copy requested. It will appear here soon!
     archive_course:
-      success_notification: Course archived successfully
+      success_notification: Course archived successfully.
     auto_verify_submission:
       success_notification: Target has been marked as complete.
+    create_course:
+      success_notification: Course created successfully!
+    create_student_from_applicant:
+      success_notification: Student created successfully.
     create_target:
       success_notification: Target created successfully.
     create_topic_subscription:
@@ -670,6 +748,8 @@ en:
       multiple_method_of_completion: More than one method of completion
       invalid_checklist_error: Checklist not valid
       checklist_items_exceeded_error: Checklist should have less than 15 items
+    update_course:
+      success_notification: Course updated successfully!
   offline:
     heading: You are offline!
     message: It seems there is a problem with your connection.<br/>Please check your network status.

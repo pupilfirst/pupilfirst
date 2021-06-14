@@ -1,12 +1,10 @@
 <% presenter = Courses::ShowPresenter.new(self, @course) %>
-
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
   <%= stylesheet_pack_tag 'courses/shared', 'data-turbolinks-track': 'reload' %>
   <%= stylesheet_pack_tag 'courses/show', 'data-turbolinks-track': 'reload' %>
   <%= stylesheet_pack_tag 'shared/markdownBlockCSS', 'data-turbolinks-track': 'reload' %>
 <% end %>
-
 <div class="pb-8 bg-gray-100 ">
   <div class="relative bg-primary-900">
     <div class="relative pb-1/2 md:pb-1/4 2xl:pb-1/5">
@@ -23,69 +21,127 @@
     </div>
   </div>
   <div class="px-3">
-    <div
-      class="course-show__header-cta-container bg-white border-transparent lg:max-w-3xl mx-auto shadow rounded-lg -mt-5 md:-mt-7 z-10 relative pt-4 pb-5 md:py-8"
-    >
-      <div class="flex md:flex-row flex-col">
-        <div class="w-full md:w-2/3 pl-4 md:pl-8 ">
-          <h1 class="font-bold leading-snug">
-            <%= @course.name %>
-          </h1>
-          <div class="mt-2">
-            <%= @course.description %>
-          </div>
-        </div>
-        <% if @course.public_signup %>
-          <div
-            class="w-full md:w-1/3 flex justify-center items-center mt-4 md:mt-0 px-4 md:px-8"
-          >
-            <a
-              href="<%= apply_course_path(@course) %>"
-              class="btn btn-success btn-large w-full"
-            >
-              Apply Now
-            </a>
-          </div>
-        <% end %>
-        <% if @course.public_preview? %>
-          <div
-            class="w-full md:w-1/3 flex justify-center items-center mt-4 md:mt-0 px-4 md:px-8"
-          >
-            <a
-              href="<%= curriculum_course_path(@course) %>"
-              class="btn btn-primary btn-large w-full"
-            >
-              <%= presenter.user_is_student? ? t('courses.show.continue_course') : t('courses.show.preview_course') %>
-            </a>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </div>
-  <div class="mt-4">
-    <% if presenter.show_about? %>
-      <div class="max-w-3xl mx-auto relative z-10 pb-8">
-        <div class="px-4 md:px-8 markdown-block markdown-block__permissive">
-          <%= sanitize(presenter.about) %>
-        </div>
-        <% if @course.public_signup %>
-          <div
-            class="course-show__footer-cta-container bg-white py-12 px-4 text-center mt-8 border-transparent shadow rounded-lg md:mx-8 mx-4"
-          >
-            <h2 class="text-3xl leading-tight">
-              <span class="font-normal"> Enroll to </span>
-              <span class="block font-bold">
+    <div class="flex flex-col md:flex-row lg:max-w-5xl mx-auto">
+      <div class="flex-1">
+        <div
+          class="course-show__header-cta-container bg-white border-transparent shadow rounded-lg -mt-5 md:-mt-7 z-10 relative pt-4 pb-5 md:py-8"
+        >
+          <div class="flex md:flex-row flex-col">
+            <div class="px-4 md:px-8 w-full">
+              <h1 class="font-bold leading-snug">
                 <%= @course.name %>
-              </span>
-            </h2>
-            <a
-              href="<%= apply_course_path(@course) %>"
-              class="btn btn-large btn-success w-full sm:w-auto course-show__footer-cta-button shadow mt-3"
-              >Apply Now</a
-            >
+              </h1>
+              <div class="mt-2">
+                <%= @course.description %>
+              </div>
+            </div>
+            <% if @course.public_preview? && @course.highlights.empty? %>
+              <div
+                class="w-full md:w-1/3 flex justify-center items-center mt-4 md:mt-0 px-4 md:px-8"
+              >
+                <a
+                  href="<%= curriculum_course_path(@course) %>"
+                  class="btn btn-primary btn-large w-full"
+                >
+                  <%= presenter.user_is_student? ? t('courses.show.continue_course') : t('courses.show.preview_course') %>
+                </a>
+              </div>
+            <% end %>
+            <% if @course.public_signup && @course.highlights.empty? %>
+              <div
+                class="w-full md:w-1/3 flex justify-center items-center mt-4 md:mt-0 px-4 md:px-8"
+              >
+                <a
+                  href="<%= apply_course_path(@course) %>"
+                  class="btn btn-success btn-large w-full"
+                >
+                  Apply Now
+                </a>
+              </div>
+            <% end %>
           </div>
-        <% end %>
+        </div>
+        <div class="mt-4">
+          <% if presenter.show_about? %>
+            <div class="max-w-3xl mx-auto relative z-10 pb-6 md:pb-8">
+              <div
+                class="px-4 md:px-8 markdown-block markdown-block__permissive"
+              >
+                <%= sanitize(presenter.about) %>
+              </div>
+            </div>
+          <% end %>
+        </div>
       </div>
-    <% end %>
+
+      <% if @course.highlights.present? %>
+        <div class="md:ml-4 md:w-2/6 flex flex-col justify-between">
+          <div
+            class="py-4 md:py-6 bg-white border-transparent shadow rounded-lg md:-mt-7 z-10 relative md:sticky md:top-0"
+          >
+            <div class="space-y-6 px-4 md:px-6">
+              <% @course.highlights.map do |highlight| %>
+                <div class="flex">
+                  <div class="w-12">
+                    <div
+                      class="flex items-center justify-center h-10 w-10 shadow bg-primary-100 text-primary-400 rounded-full p-2"
+                    >
+                      <i class="<%="if text-lg i-#{highlight['icon']}"%>"></i>
+                    </div>
+                  </div>
+                  <div class="ml-2">
+                    <div class="text-sm font-bold">
+                      <%= highlight['title']%>
+                    </div>
+                    <div class="text-xs">
+                      <%= highlight['description']%>
+                    </div>
+                  </div>
+                </div>
+              <%end%>
+            </div>
+            <% if @course.public_preview? %>
+              <div class="p-4 pb-0 md:p-6 md:pb-0">
+                <a
+                  href="<%= curriculum_course_path(@course) %>"
+                  class="btn btn-primary btn-large w-full"
+                >
+                  <%= presenter.user_is_student? ? t('courses.show.continue_course') : t('courses.show.preview_course') %>
+                </a>
+              </div>
+            <% end %>
+            <% if @course.public_signup %>
+              <div class="p-4 pb-0 md:p-6 md:pb-0">
+                <a
+                  href="<%= apply_course_path(@course) %>"
+                  class="btn btn-success btn-large w-full"
+                >
+                  Apply Now
+                </a>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="hidden md:block max-w-5xl mx-auto">
+      <% if @course.public_signup %>
+        <div
+          class="course-show__footer-cta-container bg-white py-12 px-4 text-center mt-8 border-transparent shadow rounded-lg"
+        >
+          <h2 class="text-3xl leading-tight">
+            <span class="font-normal"> Enroll to </span>
+            <span class="block font-bold">
+              <%= @course.name %>
+            </span>
+          </h2>
+          <a
+            href="<%= apply_course_path(@course) %>"
+            class="btn btn-large btn-success w-full sm:w-auto course-show__footer-cta-button shadow mt-3"
+            >Apply Now</a
+          >
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>

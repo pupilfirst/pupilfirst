@@ -1,7 +1,7 @@
 open CourseEditor__Types
 
 let t = I18n.t(~scope="components.CourseEditor__Form")
-let ts = I18n.t(~scope="shared")
+let ts = I18n.ts
 
 let str = React.string
 
@@ -34,6 +34,9 @@ type state = {
   featured: bool,
   progressionBehavior: progressionBehavior,
   progressionLimit: int,
+  highlights: array<Course.Highlight.t>,
+  hasProcessingUrl: bool,
+  processingUrl: string,
 }
 
 type action =
@@ -48,6 +51,10 @@ type action =
   | UpdateFeatured(bool)
   | UpdateProgressionBehavior(progressionBehavior)
   | UpdateProgressionLimit(int)
+  | UpdateHighlights(array<Course.Highlight.t>)
+  | SetHasProcessingUrl
+  | ClearHasProcessingUrl
+  | UpdateProcessingUrl(string)
 
 let reducer = (state, action) =>
   switch action {
@@ -81,12 +88,20 @@ let reducer = (state, action) =>
       progressionLimit: progressionLimit,
       dirty: true,
     }
+  | UpdateHighlights(highlights) => {...state, highlights: highlights, dirty: true}
+  | SetHasProcessingUrl => {...state, hasProcessingUrl: true, dirty: true}
+  | ClearHasProcessingUrl => {...state, hasProcessingUrl: false, dirty: true}
+  | UpdateProcessingUrl(processingUrl) => {
+      ...state,
+      processingUrl: processingUrl,
+      dirty: true,
+    }
   }
 
 module CreateCourseQuery = %graphql(
   `
-    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
-      createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
+    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
+      createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
         course {
           ...Course.Fragments.AllFields
         }
@@ -97,8 +112,8 @@ module CreateCourseQuery = %graphql(
 
 module UpdateCourseQuery = %graphql(
   `
-    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String!, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int) {
-      updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit) {
+    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
+      updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
         course {
           ...Course.Fragments.AllFields
         }
@@ -152,8 +167,9 @@ let saveDisabled = state =>
   state.hasDateError ||
   (state.hasDescriptionError ||
   (state.description == "" ||
-    (state.hasNameError ||
-    (state.name == "" || (!state.dirty || state.saving)))))
+  (state.hasNameError || (state.name == "" || (!state.dirty || state.saving))))) ||
+  UrlUtils.isInvalid(true, state.processingUrl) ||
+  Course.Highlight.isInValidArray(state.highlights)
 
 let progressionLimitForQuery = state =>
   switch state.progressionBehavior {
@@ -163,6 +179,19 @@ let progressionLimitForQuery = state =>
   | #Limited => Some(state.progressionLimit)
   }
 
+let processingUrl = state => {
+  if state.hasProcessingUrl && state.publicSignup {
+    Some(state.processingUrl)
+  } else {
+    None
+  }
+}
+
+let highlightsToOption = highlights => {
+  let highlights = Course.Highlight.toJSArray(highlights)
+  ArrayUtils.isEmpty(highlights) ? None : Some(highlights)
+}
+
 let createCourse = (state, send, reloadCoursesCB) => {
   send(StartSaving)
 
@@ -170,12 +199,14 @@ let createCourse = (state, send, reloadCoursesCB) => {
     ~name=state.name,
     ~description=state.description,
     ~endsAt=?state.endsAt->Belt.Option.map(DateFns.encodeISO),
-    ~about=state.about,
+    ~about=?String.trim(state.about) === "" ? None : Some(state.about),
     ~publicSignup=state.publicSignup,
     ~publicPreview=state.publicPreview,
     ~featured=state.featured,
     ~progressionBehavior=state.progressionBehavior,
     ~progressionLimit=?progressionLimitForQuery(state),
+    ~highlights=?highlightsToOption(state.highlights),
+    ~processingUrl=?processingUrl(state),
     (),
   )
 
@@ -201,12 +232,14 @@ let updateCourse = (state, send, updateCourseCB, course) => {
     ~name=state.name,
     ~description=state.description,
     ~endsAt=?state.endsAt->Belt.Option.map(DateFns.encodeISO),
-    ~about=state.about,
+    ~about=?String.trim(state.about) === "" ? None : Some(state.about),
     ~publicSignup=state.publicSignup,
     ~publicPreview=state.publicPreview,
     ~featured=state.featured,
     ~progressionBehavior=state.progressionBehavior,
     ~progressionLimit=?progressionLimitForQuery(state),
+    ~highlights=?highlightsToOption(state.highlights),
+    ~processingUrl=?processingUrl(state),
     (),
   )
 
@@ -334,6 +367,60 @@ let featuredButton = (featured, send) =>
     </div>
   </div>
 
+let processingUrlInput = (state, send) => {
+  <div>
+    <div className="flex items-center mt-5">
+      <label className="block tracking-wide text-xs font-semibold " htmlFor="featured">
+        {t("processing_url.label")->str}
+      </label>
+      <HelpIcon
+        className="ml-2 mr-6" link="https://docs.pupilfirst.com/#/courses?id=processing-url">
+        {t("processing_url.help")->str}
+      </HelpIcon>
+      <div id="processing-url" className="flex toggle-button__group flex-shrink-0 rounded-lg">
+        <button
+          className={booleanButtonClasses(state.hasProcessingUrl)}
+          onClick={_ => send(SetHasProcessingUrl)}>
+          {ts("_yes")->str}
+        </button>
+        <button
+          className={booleanButtonClasses(!state.hasProcessingUrl)}
+          onClick={_ => send(ClearHasProcessingUrl)}>
+          {ts("_no")->str}
+        </button>
+      </div>
+    </div>
+    {ReactUtils.nullUnless(
+      <div>
+        <input
+          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="processing_url"
+          type_="text"
+          placeholder="https://example.com/"
+          value=state.processingUrl
+          onChange={event => send(UpdateProcessingUrl(ReactEvent.Form.target(event)["value"]))}
+        />
+        <School__InputGroupError
+          message={t("processing_url.error")} active={UrlUtils.isInvalid(true, state.processingUrl)}
+        />
+      </div>,
+      state.hasProcessingUrl,
+    )}
+  </div>
+}
+
+let courseHighlights = (highlights, send) =>
+  <div className="mt-5">
+    <label className="tracking-wide text-xs font-semibold" htmlFor="highlights">
+      {t("course_highlights.label")->str}
+    </label>
+    <div>
+      <CourseEditor__HighlightsEditor
+        highlights updateHighlightsCB={h => send(UpdateHighlights(h))}
+      />
+    </div>
+  </div>
+
 let about = course => Belt.Option.getWithDefault(Course.about(course), "")
 
 let updateAboutCB = (send, about) => send(UpdateAbout(about))
@@ -355,6 +442,9 @@ let computeInitialState = course =>
       featured: Course.featured(course),
       progressionBehavior: Course.progressionBehavior(course),
       progressionLimit: Course.progressionLimit(course)->Belt.Option.getWithDefault(1),
+      highlights: Course.highlights(course),
+      processingUrl: Belt.Option.getWithDefault(Course.processingUrl(course), ""),
+      hasProcessingUrl: Belt.Option.isSome(Course.processingUrl(course)),
     }
   | None => {
       name: "",
@@ -371,6 +461,9 @@ let computeInitialState = course =>
       featured: true,
       progressionBehavior: #Limited,
       progressionLimit: 1,
+      highlights: [],
+      processingUrl: "",
+      hasProcessingUrl: false,
     }
   }
 
@@ -502,8 +595,10 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
     {featuredButton(state.featured, send)}
     {publicSignupField(state.publicSignup, send)}
     {publicPreviewField(state.publicPreview, send)}
-    <div className="max-w-2xl p-6 mx-auto">
-      <div className="flex">
+    {ReactUtils.nullUnless({processingUrlInput(state, send)}, state.publicSignup)}
+    {courseHighlights(state.highlights, send)}
+    <div className="max-w-2xl py-6 mx-auto">
+      <div className="flex justify-end">
         {switch course {
         | Some(course) =>
           <button

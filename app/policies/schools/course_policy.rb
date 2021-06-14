@@ -21,6 +21,7 @@ module Schools
     alias delete_coach_enrollment? authors?
     alias update_coach_enrollments? authors?
     alias students? authors?
+    alias applicants? authors?
     alias inactive_students? authors?
     alias mark_teams_active? authors?
     alias exports? authors?

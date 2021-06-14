@@ -210,11 +210,11 @@ en:
     CourseEditor__HighlightsEditor:
       add_highlight: Add Course Highlight
       description:
-        placeholder: Enter description
+        placeholder: Description of highlight
       selected_button:
         title: Select Icon
       title:
-        placeholder: Enter title
+        placeholder: Title of highlight
     CourseEditor__ImagesForm:
       button_text:
         update_images: Update Images

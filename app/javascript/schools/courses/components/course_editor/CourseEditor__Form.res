@@ -597,7 +597,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
     {publicPreviewField(state.publicPreview, send)}
     {ReactUtils.nullUnless({processingUrlInput(state, send)}, state.publicSignup)}
     {courseHighlights(state.highlights, send)}
-    <div className="max-w-2xl p-6 mx-auto">
+    <div className="max-w-2xl py-6 mx-auto">
       <div className="flex justify-end">
         {switch course {
         | Some(course) =>

@@ -48,8 +48,8 @@ module Highlight = {
 
   let empty = () => {
     icon: "badge-check-solid",
-    title: "100% online",
-    description: "Start instantly and learn at your own schedule.",
+    title: "",
+    description: "",
   }
 
   let toJSArray = Js.Array.map(t =>
@@ -60,9 +60,10 @@ module Highlight = {
     }
   )
 
-  let isValid = t => !(t.icon == "" || t.description == "" || t.title == "")
+  let isInvalid = t =>
+    t.icon == "" || Js.String.trim(t.description) == "" || Js.String.trim(t.title) == ""
 
-  let isInValidArray = array => !Js.Array.every(isValid, array)
+  let isInValidArray = array => Js.Array.some(isInvalid, array)
 }
 
 type progressionBehavior =

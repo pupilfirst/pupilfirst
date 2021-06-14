@@ -46,8 +46,7 @@ You can also set `${course_id}`, `${applicant_id}`, `${name}` and `${email}` as 
 Example
 
 ```
-https://www.example.com/q?c
-ourse_id=${course_id}&applicant_id=${applicant_id}&name=${name}&email=${email}
+https://www.example.com/q?course_id=${course_id}&applicant_id=${applicant_id}&name=${name}&email=${email}
 
 ```
 

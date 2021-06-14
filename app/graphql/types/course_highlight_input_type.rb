@@ -2,27 +2,21 @@ module Types
   class CourseHighlightInputType < Types::BaseInputObject
     def self.allowed_icons
       %w[
-        plus-circle-solid
-        plus-circle-regular
-        plus-circle-light
+        book-open-solid
+        book-open-light
         lamp-solid
-        check-light
-        times-light
         badge-check-solid
-        badge-check-regular
-        badge-check-light
         writing-pad-solid
         eye-solid
         users-solid
-        users-regular
-        users-light
-        ellipsis-h-solid
-        ellipsis-h-regular
-        ellipsis-h-light
-        check-square-alt-solid
-        check-square-alt-regular
-        check-square-alt-light
-        comment-alt-solid
+        certificate-regular
+        briefcase-solid
+        globe-light
+        signal-fill-solid
+        signal-2-light
+        signal-1-light
+        academic-cap-solid
+        award-solid
       ]
     end
 

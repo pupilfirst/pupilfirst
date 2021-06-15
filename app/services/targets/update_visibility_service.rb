@@ -10,10 +10,7 @@ module Targets
       case @visibility
       when Target::VISIBILITY_ARCHIVED
         remove_target_prerequisites
-      when Target::VISIBILITY_DRAFT
-        remove_target_prerequisites
-        unarchive_target_group
-      when Target::VISIBILITY_LIVE
+      when Target::VISIBILITY_DRAFT, Target::VISIBILITY_LIVE
         unarchive_target_group
       else
         raise "Targets::UpdateVisibilityService received unknown visiblity value '#{@visibility}'"

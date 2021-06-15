@@ -284,7 +284,8 @@ feature 'Curriculum Editor', js: true do
         click_button 'Copy Level'
       end
 
-      sleep 1
+      expect(page).to have_content('Level copy requested. It will apppear in target course soon!')
+
       visit curriculum_school_course_path(course)
       expect(all('option').last.text).to eq("Level 3: #{level_2.name}")
     end
@@ -301,7 +302,8 @@ feature 'Curriculum Editor', js: true do
         click_button 'Copy Level'
       end
 
-      sleep 1
+      expect(page).to have_content('Level copy requested. It will apppear in target course soon!')
+
       visit curriculum_school_course_path(course_2)
       expect(all('option').last.text).to eq("Level 1: #{level_2.name}")
     end

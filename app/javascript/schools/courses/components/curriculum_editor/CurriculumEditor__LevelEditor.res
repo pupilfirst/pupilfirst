@@ -25,7 +25,7 @@ type action =
   | UpdateName(string, bool)
   | UpdateUnlockAt(option<Js.Date.t>)
   | BeginSaving
-  | FailSaving
+  | FinishSaving
   | UpdateTab(tab)
   | SelectLevelToMergeInto(string)
   | SelectCourseToCloneInto(string)
@@ -40,7 +40,7 @@ let reducer = (state, action) =>
     }
   | UpdateUnlockAt(date) => {...state, unlockAt: date, dirty: true}
   | BeginSaving => {...state, saving: true}
-  | FailSaving => {...state, saving: false}
+  | FinishSaving => {...state, saving: false}
   | UpdateTab(tab) => {...state, tab: tab}
   | SelectLevelToMergeInto(mergeIntoLevelId) => {...state, mergeIntoLevelId: mergeIntoLevelId}
   | SelectCourseToCloneInto(cloneIntoCourseId) => {...state, cloneIntoCourseId: cloneIntoCourseId}
@@ -120,7 +120,7 @@ let handleResponseCB = (level, updateLevelsCB, state, json) => {
 let createLevel = (course, updateLevelsCB, state, send) => {
   send(BeginSaving)
 
-  let handleErrorCB = () => send(FailSaving)
+  let handleErrorCB = () => send(FinishSaving)
   let url = "/school/courses/" ++ (Course.id(course) ++ "/levels")
 
   Api.create(
@@ -134,7 +134,7 @@ let createLevel = (course, updateLevelsCB, state, send) => {
 let updateLevel = (level, updateLevelsCB, state, send) => {
   send(BeginSaving)
 
-  let handleErrorCB = () => send(FailSaving)
+  let handleErrorCB = () => send(FinishSaving)
   let url = "/school/levels/" ++ Level.id(level)
 
   Api.update(
@@ -228,7 +228,7 @@ let deleteSelectedLevel = (state, send, level, _event) =>
       if result["mergeLevels"]["success"] {
         DomUtils.reload()
       } else {
-        send(FailSaving)
+        send(FinishSaving)
       }
 
       Js.Promise.resolve()
@@ -268,13 +268,8 @@ let cloneSelectedLevel = (state, send, level, _event) =>
       (),
     )
     |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(result => {
-      if result["cloneLevel"]["success"] {
-        DomUtils.reload()
-      } else {
-        send(FailSaving)
-      }
-
+    |> Js.Promise.then_(_result => {
+      send(FinishSaving)
       Js.Promise.resolve()
     })
     |> Js.Promise.catch(error => {

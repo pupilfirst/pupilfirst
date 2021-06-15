@@ -12,6 +12,7 @@ let kindIconClasses = result =>
       _selected,
     ) => "if i-check-circle-alt-regular md:text-base text-gray-800 if-fw"
   | Files(_attachments) => "if i-file-regular md:text-base text-gray-800 if-fw"
+  | AudioRecord(_attachments) => "if i-microphone-outline-regular md:text-base text-gray-800 if-fw"
   }
 
 let computeId = (index, checklistItem) =>
@@ -129,13 +130,17 @@ let attachFile = (updateResultCB, attachingCB, files, id, filename) => {
   attachingCB(false)
   updateResultCB(ChecklistItem.Files(files |> Array.append([ChecklistItem.makeFile(id, filename)])))
 }
+let attachRecordingFile = (updateResultCB, attachingCB, id, filename) => {
+  attachingCB(false)
+  updateResultCB(ChecklistItem.AudioRecord({id: id, name: filename}))
+}
 
 let removeFile = (updateResultCB, files, id) =>
   updateResultCB(
     ChecklistItem.Files(files |> Js.Array.filter(a => a |> ChecklistItem.fileId != id)),
   )
 
-let showFiles = (files, preview, id, attachingCB, updateResultCB) =>
+let showFiles = (files, preview, id, attachingCB, updateResultCB, index) =>
   <div>
     <div className="flex flex-wrap" id>
       {files
@@ -169,7 +174,7 @@ let showFiles = (files, preview, id, attachingCB, updateResultCB) =>
     </div>
     {files |> Array.length < 3
       ? <CoursesCurriculum__FileForm
-          attachingCB attachFileCB={attachFile(updateResultCB, attachingCB, files)} preview
+          attachingCB attachFileCB={attachFile(updateResultCB, attachingCB, files)} preview index
         />
       : React.null}
   </div>
@@ -181,11 +186,15 @@ let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => 
     {placeholder(id, checklistItem)}
     <div className="md:pl-7 pt-2 pr-0 pb-4">
       {switch checklistItem |> ChecklistItem.result {
-      | Files(files) => showFiles(files, preview, id, attachingCB, updateResultCB)
+      | Files(files) => showFiles(files, preview, id, attachingCB, updateResultCB, index)
       | Link(link) => showLink(link, id, updateResultCB)
       | ShortText(shortText) => showShortText(shortText, id, updateResultCB)
       | LongText(longText) => showLongText(longText, id, updateResultCB)
       | MultiChoice(choices, selected) => showMultiChoice(choices, selected, id, updateResultCB)
+      | AudioRecord(_) =>
+        <CoursesCurriculum__AudioRecorder
+          attachingCB attachFileCB={attachRecordingFile(updateResultCB, attachingCB)}
+        />
       }}
     </div>
   </div>

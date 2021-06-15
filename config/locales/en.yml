@@ -252,6 +252,11 @@ en:
       milestone_targets: Milestone targets
       nav_next_level: Next Level
       nav_previous_level: Previous Level
+    CoursesCurriculum__AudioRecorder:
+      button_text_record_again: Record Again
+      button_text_start_recording: Start Recording
+      recording_size_limit_warning: The recording should not exceed 5mb in size. Please re-record
+      recording_string: Recording...
     CoursesCurriculum__Learn:
       edit_target_button: Edit Content
     CoursesCurriculum__LevelUpButton:
@@ -382,6 +387,7 @@ en:
       create_target_group: Create target group
       edit_selected_level: Edit selected level
     CurriculumEditor__ContentBlockCreator:
+      audio_upload_size_limit_warning: Please select a file with a size less than 10 MB.
       button_labels:
         embed: Embed
         file: File
@@ -396,6 +402,7 @@ en:
         upload_size_warning: Please select a file with a size less than 5 MB.
       image:
         invalid_image_warning: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
+      invalid_audio_file_error: Please select a valid audio file
       video:
         description_label: Description
         invalid_format_warning: Invalid file format, please select an MP4, MOV, WMV or AVI file.
@@ -546,6 +553,13 @@ en:
     StudentsEditor__Search:
       filter_input_label: "Filter by:"
       filter_input_placeholder: Type name, tag or level
+    TargetChecklistItem:
+      action_string_attach_link: Attach a Link
+      action_string_choose_from_list: Choose from a list
+      action_string_record_audio: Record Audio
+      action_string_upload_files: Upload Files
+      action_string_write_long_text: Write Long Text
+      action_string_write_short_text: Write Short Text
     TopicsShow__LikeManager:
       like_button_tooltip: Like this post
     TopicsShow__PostShow:
@@ -716,6 +730,24 @@ en:
       success_notification: This topic has been unlocked. Community members can now post replies again.
     update_certificate:
       success_notification: Certificate details have been updated.
+    create_submission:
+      success_notification: Your submission has been queued for review.
+      linked_file_exists_error: Some file attachments have already been linked to a submission
+      item_file_limit_error: No more than three files can be attached to a submission item
+      blocked_submission_status_error: "The status of this target is %{target_status}, so you cannot add a new submission; please reload the page"
+      missing_answer_error: "Missing answer for question: %{title}"
+      invalid_submission_checklist: Submission checklist is not valid.
+      invalid_files_attached: Some files attached are invalid
+    update_target:
+      success_notification: Target updated successfully!
+      target_group_not_present_error: Target group does not exist
+      evaluation_criteria_course_error: Evaluation criteria must be from the same course as the target
+      prerequisities_in_same_level: Prerequisite targets must be from the same level as the target
+      prerequisities_archived_error: Cannot have archived prerequisites
+      target_missing_error: Target does not exist
+      multiple_method_of_completion: More than one method of completion
+      invalid_checklist_error: Checklist not valid
+      checklist_items_exceeded_error: Checklist should have less than 15 items
     update_course:
       success_notification: Course updated successfully!
   offline:

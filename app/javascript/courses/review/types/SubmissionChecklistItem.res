@@ -10,6 +10,7 @@ type result =
   | Link(string)
   | Files(array<file>)
   | MultiChoice(string)
+  | AudioRecord(file)
 
 type status =
   | Passed
@@ -35,19 +36,31 @@ let makeFile = (~name, ~url, ~id) => {name: name, url: url, id: id}
 let makeFiles = data =>
   data |> Js.Array.map(a => makeFile(~url=a["url"], ~name=a["title"], ~id=a["id"]))
 
-let makeResult = (result, kind, files) =>
+let findAudioFile = (files, id) => {
+  ArrayUtils.unsafeFind(file => file.id == id, "Unable to find file with ID: " ++ id, files)
+}
+
+let findFiles = (files, ids) => {
+  Js.Array.filter(file => Js.Array.includes(file.id, ids), files)
+}
+
+let makeResult = (json, kind, files) => {
+  open Json.Decode
+
   switch kind {
-  | "shortText" => ShortText(result)
-  | "longText" => LongText(result)
-  | "link" => Link(result)
-  | "multiChoice" => MultiChoice(result)
-  | "files" => Files(files)
+  | "shortText" => ShortText(json |> field("result", string))
+  | "longText" => LongText(json |> field("result", string))
+  | "audio" => AudioRecord(findAudioFile(files, json |> field("result", string)))
+  | "link" => Link(json |> field("result", string))
+  | "multiChoice" => MultiChoice(json |> field("result", string))
+  | "files" => Files(findFiles(files, json |> field("result", array(string))))
   | randomKind =>
     Rollbar.error(
       "Unkown kind: " ++ (randomKind ++ "recived in CurriculumEditor__TargetChecklistItem"),
     )
     ShortText("Error")
   }
+}
 
 let makeStatus = data =>
   switch data {
@@ -61,15 +74,6 @@ let makeStatus = data =>
     NoAnswer
   }
 
-let makeArrayFromJs = (files, checklist) =>
-  checklist |> Js.Array.map(c =>
-    make(
-      ~title=c["title"],
-      ~result=makeResult(c["result"], c["kind"], makeFiles(files)),
-      ~status=makeStatus(c["status"]),
-    )
-  )
-
 let decodeFile = json => {
   open Json.Decode
   {
@@ -82,9 +86,9 @@ let decodeFile = json => {
 let decode = (files, json) => {
   open Json.Decode
   {
-    result: makeResult(json |> field("result", string), json |> field("kind", string), files),
-    status: makeStatus(json |> field("status", string)),
-    title: json |> field("title", string),
+    result: makeResult(json, field("kind", string, json), files),
+    status: makeStatus(field("status", string, json)),
+    title: field("title", string, json),
   }
 }
 
@@ -106,6 +110,7 @@ let encodeKind = t =>
   | Link(_) => "link"
   | Files(_) => "files"
   | MultiChoice(_) => "multiChoice"
+  | AudioRecord(_) => "audio"
   }
 
 let encodeResult = t =>
@@ -115,6 +120,7 @@ let encodeResult = t =>
   | Link(t) => t
   | MultiChoice(t) => t
   | Files(_) => "files"
+  | AudioRecord(_) => "audio"
   }
 
 let encodeStatus = t =>

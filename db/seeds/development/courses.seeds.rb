@@ -2,7 +2,7 @@ after 'development:schools' do
   puts 'Seeding courses'
 
   school = School.first
-  
+
   def highlights
     {
       icon: Types::CourseHighlightInputType.allowed_icons.sample,

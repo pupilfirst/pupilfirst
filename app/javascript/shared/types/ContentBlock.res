@@ -22,6 +22,7 @@ type blockType =
   | File(url, title, filename)
   | Image(url, caption, width)
   | Embed(url, embedCode, requestSource, lastResolvedAt)
+  | Audio(url, title, filename)
 
 type rec t = {
   id: id,
@@ -115,6 +116,11 @@ let decode = json => {
     let (url, embedCode, requestSource, lastResolvedAt) =
       json |> field("content", decodeEmbedContent)
     Embed(url, embedCode, requestSource, lastResolvedAt)
+  | "audio" =>
+    let title = field("content", decodeFileContent, json)
+    let url = field("fileUrl", string, json)
+    let filename = field("filename", string, json)
+    Audio(url, title, filename)
   | unknownBlockType => raise(UnexpectedBlockType(unknownBlockType))
   }
 
@@ -140,7 +146,7 @@ let makeEmbedBlock = (url, embedCode, requestSource, lastResolvedAt) => Embed(
   requestSource,
   lastResolvedAt,
 )
-
+let makeAudioBlock = (fileUrl, title, fileName) => Audio(fileUrl, title, fileName)
 let make = (id, blockType, sortIndex) => {id: id, blockType: blockType, sortIndex: sortIndex}
 
 let makeFromJs = js => {
@@ -168,6 +174,7 @@ let makeFromJs = js => {
       content["requestSource"],
       content["lastResolvedAt"]->Belt.Option.map(DateFns.parseISO),
     )
+  | #AudioBlock(content) => Audio(content["url"], content["title"], content["filename"])
   }
 
   make(id, blockType, sortIndex)
@@ -179,6 +186,7 @@ let blockTypeAsString = blockType =>
   | File(_) => "file"
   | Image(_) => "image"
   | Embed(_) => "embed"
+  | Audio(_) => "audio"
   }
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1}
@@ -196,6 +204,7 @@ let updateFile = (title, t) =>
   | File(url, _, filename) => {...t, blockType: File(url, title, filename)}
   | Markdown(_)
   | Image(_)
+  | Audio(_)
   | Embed(_) => t
   }
 
@@ -204,6 +213,7 @@ let updateImageCaption = (t, caption) =>
   | Image(url, _, width) => {...t, blockType: Image(url, caption, width)}
   | Markdown(_)
   | File(_)
+  | Audio(_)
   | Embed(_) => t
   }
 
@@ -212,6 +222,7 @@ let updateImageWidth = (t, width) =>
   | Image(url, caption, _) => {...t, blockType: Image(url, caption, width)}
   | Markdown(_)
   | File(_)
+  | Audio(_)
   | Embed(_) => t
   }
 
@@ -220,6 +231,7 @@ let updateMarkdown = (markdown, t) =>
   | Markdown(_) => {...t, blockType: Markdown(markdown)}
   | File(_)
   | Image(_)
+  | Audio(_)
   | Embed(_) => t
   }
 
@@ -237,6 +249,11 @@ module Fragments = %graphql(
         width
       }
       ... on FileBlock {
+        title
+        url
+        filename
+      }
+      ... on AudioBlock {
         title
         url
         filename
@@ -270,6 +287,11 @@ module Query = %graphql(
             width
           }
           ... on FileBlock {
+            title
+            url
+            filename
+          }
+          ... on AudioBlock {
             title
             url
             filename

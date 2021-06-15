@@ -77,9 +77,9 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   # Set type to :service for all service_spec-s.
-  config.define_derived_metadata(file_path: Regexp.new('/spec/services/')) do |metadata|
-    metadata[:type] = :service
-  end
+  config.define_derived_metadata(
+    file_path: Regexp.new('/spec/services/')
+  ) { |metadata| metadata[:type] = :service }
 
   # Include email helpers in service and job specs.
   config.include Capybara::Email::DSL, type: :service
@@ -95,16 +95,14 @@ RSpec.configure do |config|
   config.filter_run_excluding broken: true
 
   # Remember failures. Run only failed tests with the --only-failures flag.
-  config.example_status_persistence_file_path = "examples.txt"
+  config.example_status_persistence_file_path = 'examples.txt'
 
   config.before(:each, js: true) do
     Capybara.page.driver.browser.manage.window.maximize
   end
 
   # Faker clear store for unique generator after run
-  config.before(:each) do
-    Faker::UniqueGenerator.clear
-  end
+  config.before(:each) { Faker::UniqueGenerator.clear }
 
   include AnObjectLikeMatcher
 end
@@ -115,7 +113,9 @@ end
 
 Capybara.register_driver :headless_chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new
-  options.add_argument("--window-size=1920,1080")
+  options.add_argument('--window-size=1920,1080')
+  options.add_argument('use-fake-ui-for-media-stream')
+  options.add_argument('use-fake-device-for-media-stream')
   options.headless!
 
   Capybara::Selenium::Driver.new app, browser: :chrome, options: options
@@ -132,7 +132,12 @@ Capybara.register_driver :headless_firefox do |app|
   Capybara::Selenium::Driver.new app, browser: :firefox, options: options
 end
 
-Capybara.javascript_driver = ENV['JAVASCRIPT_DRIVER'].present? ? ENV['JAVASCRIPT_DRIVER'].to_sym : :headless_chrome
+Capybara.javascript_driver =
+  if ENV['JAVASCRIPT_DRIVER'].present?
+    ENV['JAVASCRIPT_DRIVER'].to_sym
+  else
+    :headless_chrome
+  end
 
 # Use rspec-retry to retry pesky intermittent failures.
 require 'rspec/retry'
@@ -150,16 +155,20 @@ RSpec.configure do |config|
   end
 
   # callback to be run between retries
-  config.retry_callback = proc do |ex|
-    # run some additional clean up task - can be filtered by example metadata
-    if ex.metadata[:js]
-      Capybara.reset!
+  config.retry_callback =
+    proc do |ex|
+      # run some additional clean up task - can be filtered by example metadata
+      Capybara.reset! if ex.metadata[:js]
     end
-  end
 end
 
 # Increase Capybara's default maximum wait time to 5 seconds to allow for some slow responds (timeline builder).
-Capybara.default_max_wait_time = ENV['CAPYBARA_MAX_WAIT_TIME'].present? ? ENV['CAPYBARA_MAX_WAIT_TIME'].to_i : 5
+Capybara.default_max_wait_time =
+  if ENV['CAPYBARA_MAX_WAIT_TIME'].present?
+    ENV['CAPYBARA_MAX_WAIT_TIME'].to_i
+  else
+    5
+  end
 
 # Save screenshots on failure (and more).
 require 'capybara-screenshot/rspec'

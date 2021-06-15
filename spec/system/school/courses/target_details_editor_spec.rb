@@ -260,8 +260,6 @@ feature 'Target Details Editor', js: true do
 
       within("div[aria-label='Editor for checklist item 3'") do
         click_on 'Write Long Text'
-        # Only 1 upload file item in a checklist should be allowed
-        expect(page).to_not have_text('Upload Files')
 
         click_on 'Choose from a list'
 
@@ -306,6 +304,16 @@ feature 'Target Details Editor', js: true do
         fill_in 'checklist-item-4-title', with: 'Attach a link for the submission', fill_options: { clear: :backspace }
       end
 
+      click_button 'Add a Step'
+
+      within("div[aria-label='Editor for checklist item 5'") do
+        expect(page).to have_text('Step cannot be empty')
+
+        click_on 'Write Long Text'
+        click_on 'Record Audio'
+        fill_in 'checklist-item-5-title', with: 'Title for audio item', fill_options: { clear: :backspace }
+      end
+
       click_button 'Update Target'
 
       expect(page).to have_text("Target updated successfully")
@@ -316,7 +324,8 @@ feature 'Target Details Editor', js: true do
         { 'kind' => Target::CHECKLIST_KIND_SHORT_TEXT, 'title' => "New title for short text item", 'metadata' => {}, 'optional' => false },
         { 'kind' => Target::CHECKLIST_KIND_FILES, 'title' => "Add a file for the submission", 'metadata' => {}, 'optional' => true },
         { 'kind' => Target::CHECKLIST_KIND_MULTI_CHOICE, 'title' => "Choose one item", 'metadata' => { 'choices' => ["First Choice", "Another Choice"] }, 'optional' => false },
-        { 'kind' => Target::CHECKLIST_KIND_LINK, 'title' => "Attach a link for the submission", 'metadata' => {}, 'optional' => true }
+        { 'kind' => Target::CHECKLIST_KIND_LINK, 'title' => "Attach a link for the submission", 'metadata' => {}, 'optional' => true },
+        { 'kind' => Target::CHECKLIST_KIND_AUDIO, 'title' => "Title for audio item", 'metadata' => {}, 'optional' => false }
       ]
 
       expect(target_2_l2.reload.checklist).to eq(expected_checklist)

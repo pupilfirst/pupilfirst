@@ -625,7 +625,7 @@ feature 'Target Overlay', js: true do
         # The submit button should be disabled.
         expect(page).to have_button('Submit', disabled: true)
 
-        attach_file 'attachment_file', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
+        attach_file 'attachment_file_2', File.absolute_path(Rails.root.join('spec/support/uploads/faculty/human.png')), visible: false
 
         dismiss_notification
 

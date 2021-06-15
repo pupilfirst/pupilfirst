@@ -9,6 +9,7 @@ let kindIconClasses = result =>
   | Link(_link) => "if i-link-regular md:text-base text-gray-800 if-fw"
   | MultiChoice(_text) => "if i-check-circle-alt-regular md:text-base text-gray-800 if-fw"
   | Files(_files) => "if i-file-regular md:text-base text-gray-800 if-fw"
+  | AudioRecord(_files) => "if i-file-regular md:text-base text-gray-800 if-fw"
   }
 
 let showFiles = files =>
@@ -156,6 +157,7 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) =>
             | Link(link) => showlink(link)
             | MultiChoice(text) => <div> {text |> str} </div>
             | Files(files) => showFiles(files)
+            | AudioRecord(file) => <audio src={file.url} controls=true />
             }}
           </div>
           {switch updateChecklistCB {

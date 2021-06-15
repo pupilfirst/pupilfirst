@@ -2,7 +2,7 @@ exception UnsafeFindFailed(string)
 
 open CourseEditor__Types
 
-let t = I18n.t(~scope="components.CourseEditor")
+let t = I18n.t(~scope="components.CourseSelect")
 
 let str = React.string
 
@@ -298,16 +298,6 @@ let showCourses = (courses, state, value, onChangeCB) => {
 
 let reloadCoursesCB = (send, ()) => {
   send(ReloadCourses)
-}
-
-let raiseUnsafeFindError = id => {
-  let message = "Unable to be find course with id: " ++ id ++ " in CourseEditor"
-  Rollbar.error(message)
-  Notification.error(
-    "An unexpected error occurred",
-    "Our team has been notified about this error. Please try reloading this page.",
-  )
-  raise(UnsafeFindFailed(message))
 }
 
 @react.component

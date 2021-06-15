@@ -235,6 +235,22 @@ en:
         error_message: must be a JPEG / PNG under 2 MB in size
         help: The thumbnail will be displayed on the homepage, and here in the admin courses list.
         label: Thumbnail
+    CourseSelect:
+      button_load_more: Load More Courses...
+      courses_fully_loaded_text: Showing all %{total_courses} courses
+      courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
+      empty_courses: You don't have any courses!
+      filter:
+        input_hint: Or start typing to search by name...
+        input_label: Search
+        input_placeholder: Filter and Search courses by name
+        label:
+          name: Search by name
+          status: Status
+        status:
+          active: Active
+          archived: Archived
+          ended: Ended
     CoursesApply__Root:
       email_sent_message:
         description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.

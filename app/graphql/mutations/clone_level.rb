@@ -1,6 +1,6 @@
 module Mutations
   class CloneLevel < ApplicationQuery
-    include QueryAuthorizeAuthor
+    include QueryAuthorizeSchoolAdmin
     argument :level_id, ID, required: true
     argument :clone_into_course_id, ID, required: true
 

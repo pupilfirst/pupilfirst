@@ -4,7 +4,6 @@ type t = {
   avatarUrl: option<string>,
   userTags: array<string>,
   email: string,
-  excludedFromLeaderboard: bool,
   title: string,
   affiliation: option<string>,
   issuedCertificates: array<StudentsEditor__IssuedCertificate.t>,
@@ -23,8 +22,6 @@ let title = t => t.title
 let affiliation = t => t.affiliation
 
 let email = t => t.email
-
-let excludedFromLeaderboard = t => t.excludedFromLeaderboard
 
 let issuedCertificates = t => t.issuedCertificates
 
@@ -50,10 +47,9 @@ let hasLiveCertificate = t =>
     t.issuedCertificates,
   )->Belt.Option.isSome
 
-let updateInfo = (~name, ~excludedFromLeaderboard, ~title, ~affiliation, ~student) => {
+let updateInfo = (~name, ~title, ~affiliation, ~student) => {
   ...student,
   name: name,
-  excludedFromLeaderboard: excludedFromLeaderboard,
   title: title,
   affiliation: affiliation,
 }
@@ -64,7 +60,6 @@ let make = (
   ~avatarUrl,
   ~userTags,
   ~email,
-  ~excludedFromLeaderboard,
   ~title,
   ~affiliation,
   ~issuedCertificates,
@@ -74,7 +69,6 @@ let make = (
   avatarUrl: avatarUrl,
   userTags: userTags,
   email: email,
-  excludedFromLeaderboard: excludedFromLeaderboard,
   title: title,
   affiliation: affiliation,
   issuedCertificates: issuedCertificates,
@@ -87,7 +81,6 @@ let makeFromJS = studentDetails =>
     ~avatarUrl=studentDetails["avatarUrl"],
     ~userTags=studentDetails["userTags"],
     ~email=studentDetails["email"],
-    ~excludedFromLeaderboard=studentDetails["excludedFromLeaderboard"],
     ~title=studentDetails["title"],
     ~affiliation=studentDetails["affiliation"],
     ~issuedCertificates=studentDetails["issuedCertificates"] |> Js.Array.map(ic =>
@@ -95,10 +88,9 @@ let makeFromJS = studentDetails =>
     ),
   )
 
-let update = (~name, ~excludedFromLeaderboard, ~title, ~affiliation, ~student) => {
+let update = (~name, ~title, ~affiliation, ~student) => {
   ...student,
   name: name,
-  excludedFromLeaderboard: excludedFromLeaderboard,
   title: title,
   affiliation: affiliation,
 }
@@ -110,7 +102,6 @@ let encode = (teamName, t) => {
     ("name", t.name |> string),
     ("team_name", teamName |> string),
     ("email", t.email |> string),
-    ("excluded_from_leaderboard", t.excludedFromLeaderboard |> bool),
     ("title", t.title |> string),
     ("affiliation", t.affiliation |> OptionUtils.toString |> string),
   })

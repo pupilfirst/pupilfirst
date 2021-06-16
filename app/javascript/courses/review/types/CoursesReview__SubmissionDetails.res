@@ -107,6 +107,7 @@ let makeIndexSubmission = (overlaySubmission, t) =>
     ),
     ~coachIds=t.coachIds,
     ~teamName=t.teamName,
+    ~levelNumber=0
   )
 
 let updateReviewChecklist = (reviewChecklist, t) => {...t, reviewChecklist: reviewChecklist}

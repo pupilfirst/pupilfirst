@@ -3,10 +3,6 @@ let str = React.string
 
 // let navigation = [{name: "Dashboard", href: "#", icon: "HomeIcon", current: true}]
 
-// function classNames(...classes) {
-//   return classes.filter(Boolean).join(" ")
-// }
-
 let classNames = (default, trueClasses, falseClasses, bool) => {
   default ++ " " ++ (bool ? trueClasses : falseClasses)
 }
@@ -22,8 +18,8 @@ let make = () => {
         <div className="py-6">
           {switch url.path {
           | list{"courses", courseId, "review_v2"} => <CoursesReviewV2__Root courseId />
-          | list{"courses", courseId, "submissions", _submissionId, "review_v2"} =>
-            <CoursesReviewV2__Root courseId />
+          | list{"submissions", submissionId, "review_v2"} =>
+            <CoursesReviewV2__SubmissionOverlay submissionId />
           | _ =>
             Rollbar.critical(
               "Unknown path encountered by app router: " ++

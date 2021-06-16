@@ -12,11 +12,13 @@ type t = {
   status: option<status>,
   coachIds: array<string>,
   teamName: option<string>,
+  levelNumber: int,
 }
 
 let id = t => t.id
 let title = t => t.title
 let levelId = t => t.levelId
+let levelNumber = t => t.levelNumber
 
 let userNames = t => t.userNames
 
@@ -38,7 +40,17 @@ let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")
 
 let timeDistance = t => t.createdAt->DateFns.formatDistanceToNowStrict(~addSuffix=true, ())
 
-let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~status, ~coachIds, ~teamName) => {
+let make = (
+  ~id,
+  ~title,
+  ~createdAt,
+  ~levelId,
+  ~userNames,
+  ~status,
+  ~coachIds,
+  ~teamName,
+  ~levelNumber,
+) => {
   id: id,
   title: title,
   createdAt: createdAt,
@@ -47,6 +59,7 @@ let make = (~id, ~title, ~createdAt, ~levelId, ~userNames, ~status, ~coachIds, ~
   status: status,
   coachIds: coachIds,
   teamName: teamName,
+  levelNumber: levelNumber,
 }
 
 let makeStatus = (~passedAt, ~feedbackSent) => {passedAt: passedAt, feedbackSent: feedbackSent}
@@ -69,6 +82,29 @@ let decodeJs = submission => {
     ~status,
     ~coachIds=submission["coachIds"],
     ~teamName=submission["teamName"],
+    ~levelNumber=submission["levelNumber"],
+  )
+}
+
+let makeFromJS = submission => {
+  let status =
+    submission["evaluatedAt"]->Belt.Option.map(_ =>
+      makeStatus(
+        ~passedAt=submission["passedAt"]->Belt.Option.map(DateFns.decodeISO),
+        ~feedbackSent=submission["feedbackSent"],
+      )
+    )
+
+  make(
+    ~id=submission["id"],
+    ~title=submission["title"],
+    ~createdAt=DateFns.decodeISO(submission["createdAt"]),
+    ~levelId=submission["levelId"],
+    ~userNames=submission["userNames"],
+    ~status,
+    ~coachIds=submission["coachIds"],
+    ~teamName=submission["teamName"],
+    ~levelNumber=submission["levelNumber"],
   )
 }
 

@@ -201,12 +201,6 @@ Rails.application.routes.draw do
       post 'apply', action: 'process_application'
       get '/(:name)', action: 'show'
     end
-
-    resources :timeline_events, only: %i[show], path: 'submissions' do
-      member do
-        get 'review_v2', action: 'review_v2'
-      end
-    end
   end
 
   resources :markdown_attachments, only: %i[create] do

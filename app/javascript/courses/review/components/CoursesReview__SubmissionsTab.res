@@ -27,7 +27,8 @@ module SubmissionsQuery = %graphql(
           createdAt,
           targetId,
           coachIds,
-          teamName
+          teamName,
+          levelNumber
         }
         pageInfo {
           endCursor,

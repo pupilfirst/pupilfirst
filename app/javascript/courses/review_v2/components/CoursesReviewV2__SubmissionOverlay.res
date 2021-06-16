@@ -7,7 +7,7 @@ let make = (~submissionId) => {
       <div className="bg-gray-100 static md:sticky md:top-0">
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col md:flex-row items-end lg:items-center py-4">
-            {str("Bar")}
+            {str("Submission Home")}
           </div>
         </div>
       </div>

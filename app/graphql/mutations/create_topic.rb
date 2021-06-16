@@ -70,7 +70,7 @@ module Mutations
     def topic_category
       return if @params[:topic_category_id].blank?
 
-      community.topic_categories.find_by(id: topic_category_id)
+      community.topic_categories.find_by(id: @params[:topic_category_id])
     end
 
     def create_subscribers(topic)

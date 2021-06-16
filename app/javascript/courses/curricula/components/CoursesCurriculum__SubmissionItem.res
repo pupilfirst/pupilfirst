@@ -179,6 +179,12 @@ let showFiles = (files, preview, id, attachingCB, updateResultCB, index) =>
       : React.null}
   </div>
 
+let showAudioRecorder = (attachingCB, updateResultCB, preview) => {
+  <CoursesCurriculum__AudioRecorder
+    attachingCB attachFileCB={attachRecordingFile(updateResultCB, attachingCB)} preview
+  />
+}
+
 @react.component
 let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => {
   let id = computeId(index, checklistItem)
@@ -191,10 +197,7 @@ let make = (~index, ~checklistItem, ~updateResultCB, ~attachingCB, ~preview) => 
       | ShortText(shortText) => showShortText(shortText, id, updateResultCB)
       | LongText(longText) => showLongText(longText, id, updateResultCB)
       | MultiChoice(choices, selected) => showMultiChoice(choices, selected, id, updateResultCB)
-      | AudioRecord(_) =>
-        <CoursesCurriculum__AudioRecorder
-          attachingCB attachFileCB={attachRecordingFile(updateResultCB, attachingCB)}
-        />
+      | AudioRecord(_) => showAudioRecorder(attachingCB, updateResultCB, preview)
       }}
     </div>
   </div>

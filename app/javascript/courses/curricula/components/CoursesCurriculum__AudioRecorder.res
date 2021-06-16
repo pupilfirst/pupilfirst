@@ -13,7 +13,7 @@ external audioRecorder: (string, bool => unit) => audioRecorderControls = "audio
 let t = I18n.t(~scope="components.CoursesCurriculum__AudioRecorder")
 
 @react.component
-let make = (~attachingCB, ~attachFileCB) => {
+let make = (~attachingCB, ~attachFileCB, ~preview) => {
   let audioRecorder = audioRecorder(AuthenticityToken.fromHead(), attachingCB)
   React.useEffect1(() => {
     switch audioRecorder.id {
@@ -43,7 +43,10 @@ let make = (~attachingCB, ~attachFileCB) => {
       : <div className="flex flex-col md:flex-row pointer-cursor pt-2 md:items-center">
           <button
             className="flex items-center bg-red-100 border rounded-full hover:bg-red-200"
-            onClick={_e => audioRecorder.startRecording()}>
+            onClick={_e =>
+              preview
+                ? Notification.notice("Preview Mode", "You cannot record audio.")
+                : audioRecorder.startRecording()}>
             <div
               className="flex flex-shrink-0 items-center justify-center bg-white shadow-md rounded-full h-10 w-10">
               <Icon className="if i-microphone-fill-light text-lg text-red-600" />

@@ -359,7 +359,7 @@ feature 'School students index', js: true do
         expect(user_1.reload.name).to end_with('Jr.')
         expect(user_1.title).to eq(new_title)
         expect(user_1.affiliation).to eq(nil)
-        expect(student_1.startup.name).to eq(user_1.name)
+        expect(student_1.startup.reload.name).to eq(user_1.name)
 
         # Form a Team
         check "select-student-#{student_1.id}"

@@ -232,8 +232,8 @@ let make = (~courseId) => {
     | _ =>
       let loading = switch state.loading {
       | NotLoading => false
-      | Reloading
-      | LoadingMore => true
+      | Reloading => true
+      | LoadingMore => false
       }
       <LoadingSpinner loading />
     }}

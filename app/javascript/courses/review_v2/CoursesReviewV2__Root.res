@@ -36,6 +36,8 @@ type action =
   | LoadSubmissions(option<string>, bool, array<IndexSubmission.t>, int)
   | BeginLoadingMore
   | BeginReloading
+  | ShowPending
+  | ShowReviewed
 
 let reducer = (state, action) =>
   switch action {
@@ -71,6 +73,8 @@ let reducer = (state, action) =>
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
+  | ShowPending => {...state, filter: {...state.filter, selectedTab: #Pending}}
+  | ShowReviewed => {...state, filter: {...state.filter, selectedTab: #Reviewed}}
   }
 
 module SubmissionsQuery = %graphql(
@@ -147,12 +151,7 @@ let reloadSubmissions = (courseId, state, send) => {
   getSubmissions(send, courseId, None, state.filter)
 }
 
-let submissionsList = (submissions, selectedTab) =>
-<CoursesReviewV2__SubmissionCard submissions selectedTab/>
-
-
-
-let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
+let submissionsLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
   <div className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
     {str(
       totoalNotificationsCount == loadedNotificaionsCount
@@ -170,6 +169,17 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
     )}
   </div>
 
+let submissionsList = (submissions, state) =>
+  <div>
+    <CoursesReviewV2__SubmissionCard submissions selectedTab=state.filter.selectedTab />
+    {ReactUtils.nullIf(
+      <div className="text-center pb-4">
+        {submissionsLoadedData(state.totalEntriesCount, Array.length(submissions))}
+      </div>,
+      ArrayUtils.isEmpty(submissions),
+    )}
+  </div>
+
 @react.component
 let make = (~courseId) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
@@ -181,7 +191,11 @@ let make = (~courseId) => {
 
   let url = RescriptReactRouter.useUrl()
 
-  <div>
+  <div className="max-w-3xl mx-auto">
+    <div>
+      <div className="btn btn-default" onClick={_ => send(ShowPending)}> {str("Pending")} </div>
+      <div className="btn btn-default" onClick={_ => send(ShowReviewed)}> {str("Reviewed")} </div>
+    </div>
     <div id="submissions" className="mt-4">
       {switch state.submissions {
       | Unloaded =>
@@ -190,7 +204,7 @@ let make = (~courseId) => {
         </div>
       | PartiallyLoaded(submissions, cursor) =>
         <div>
-          {submissionsList(submissions, state.filter.selectedTab)}
+          {submissionsList(submissions, state)}
           {switch state.loading {
           | LoadingMore =>
             <div className="px-2 lg:px-8">
@@ -210,17 +224,16 @@ let make = (~courseId) => {
           | Reloading => React.null
           }}
         </div>
-      | FullyLoaded(submissions) => <div> {submissionsList(submissions, state.filter.selectedTab)} </div>
+      | FullyLoaded(submissions) => <div> {submissionsList(submissions, state)} </div>
       }}
     </div>
     {switch state.submissions {
     | Unloaded => React.null
-
     | _ =>
       let loading = switch state.loading {
       | NotLoading => false
-      | Reloading => true
-      | LoadingMore => false
+      | Reloading
+      | LoadingMore => true
       }
       <LoadingSpinner loading />
     }}

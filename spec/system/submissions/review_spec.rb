@@ -78,6 +78,17 @@ feature 'Submission review overlay', js: true do
         target: target_2
       )
     end
+    let!(:submission_file_attachment) do
+      create(:timeline_event_file, timeline_event: submission_pending)
+    end
+
+    let!(:submission_audio_attachment) do
+      create(
+        :timeline_event_file,
+        timeline_event: submission_pending,
+        file_path: 'files/audio_file_sample.mp3'
+      )
+    end
 
     scenario 'coach visits submission review page' do
       sign_in_user coach.user,
@@ -308,10 +319,14 @@ feature 'Submission review overlay', js: true do
       question_2 = Faker::Lorem.sentence
       question_3 = Faker::Lorem.sentence
       question_4 = Faker::Lorem.sentence
+      question_5 = Faker::Lorem.sentence
+      question_6 = Faker::Lorem.sentence
       answer_1 = Faker::Lorem.sentence
       answer_2 = 'https://example.org/invalidLink'
       answer_3 = Faker::Lorem.sentence
       answer_4 = Faker::Lorem.sentence
+      answer_5 = [submission_file_attachment.id.to_s]
+      answer_6 = submission_audio_attachment.id.to_s
       submission_checklist_long_text = {
         'kind' => Target::CHECKLIST_KIND_LONG_TEXT,
         'title' => question_1,
@@ -336,11 +351,25 @@ feature 'Submission review overlay', js: true do
         'result' => answer_4,
         'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
       }
+      submission_checklist_files = {
+        'kind' => Target::CHECKLIST_KIND_FILES,
+        'title' => question_5,
+        'result' => answer_5,
+        'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+      }
+      submission_checklist_audio = {
+        'kind' => Target::CHECKLIST_KIND_AUDIO,
+        'title' => question_6,
+        'result' => answer_6,
+        'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+      }
       submission_checklist = [
         submission_checklist_long_text,
         submission_checklist_link,
         submission_checklist_choice,
-        submission_checklist_short_text
+        submission_checklist_short_text,
+        submission_checklist_files,
+        submission_checklist_audio
       ]
       submission_pending.update!(checklist: submission_checklist)
 

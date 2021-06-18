@@ -2,7 +2,12 @@ class CreateGradingMutator < ApplicationQuery
   include AuthorizeCoach
   include DevelopersNotifications
 
-  property :submission_id, validates: { presence: { message: 'Submission ID is required for grading' } }
+  property :submission_id,
+           validates: {
+             presence: {
+               message: 'Submission ID is required for grading'
+             }
+           }
   property :feedback, validates: { length: { maximum: 10_000 } }
   property :note, validates: { length: { maximum: 10_000 } }
   property :grades
@@ -21,7 +26,7 @@ class CreateGradingMutator < ApplicationQuery
         TimelineEventGrade.create!(
           timeline_event: submission,
           evaluation_criterion: criterion,
-          grade: grade_hash[criterion.id.to_s],
+          grade: grade_hash[criterion.id.to_s]
         )
       end
 
@@ -29,7 +34,7 @@ class CreateGradingMutator < ApplicationQuery
         passed_at: (failed? ? nil : Time.zone.now),
         evaluator: coach,
         evaluated_at: Time.zone.now,
-        checklist: checklist,
+        checklist: checklist
       )
 
       TimelineEvents::AfterGradingJob.perform_later(submission)
@@ -44,39 +49,71 @@ class CreateGradingMutator < ApplicationQuery
 
   def update_coach_note
     submission.founders.each do |student|
-      CoachNote.create!(note: note, author_id: current_user.id, student_id: student.id)
+      CoachNote.create!(
+        note: note,
+        author_id: current_user.id,
+        student_id: student.id
+      )
     end
   end
 
   def right_shape_for_checklist
-    return if checklist.respond_to?(:all?) && checklist.all? do |item|
-      item['title'].is_a?(String) && item['kind'].in?(Target.valid_checklist_kind_types) && item['status'].in?([TimelineEvent::CHECKLIST_STATUS_FAILED, TimelineEvent::CHECKLIST_STATUS_NO_ANSWER]) && item['result'].is_a?(String)
+    if checklist.respond_to?(:all?) && checklist.all? do |item|
+         item['title'].is_a?(String) &&
+           item['kind'].in?(Target.valid_checklist_kind_types) &&
+           item['status'].in?(
+             [
+               TimelineEvent::CHECKLIST_STATUS_FAILED,
+               TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+             ]
+           ) && (item['result'].is_a?(String) || item['result'].is_a?(Array))
+       end
+      return
     end
 
     errors[:base] << 'Invalid checklist'
   end
 
   def checklist_data_is_not_mutated
-    old_checklist = submission.checklist.map do |c|
-      [c['title'], c['kind'], c['result']]
+    old_checklist =
+      submission.checklist.map do |c|
+        [
+          c['title'],
+          c['kind'],
+          c['kind'] == 'files' ? c['result'].sort : c['result']
+        ]
+      end
+
+    new_checklist =
+      checklist.map do |c|
+        [
+          c['title'],
+          c['kind'],
+          c['kind'] == 'files' ? c['result'].sort : c['result']
+        ]
+      end
+
+    if (old_checklist - new_checklist).empty? &&
+         old_checklist.count == new_checklist.count
+      return
     end
 
-    new_checklist = checklist.map do |c|
-      [c['title'], c['kind'], c['result']]
+    if (old_checklist - new_checklist).empty? &&
+         old_checklist.count == new_checklist.count
+      return
     end
-
-    return if (old_checklist - new_checklist).empty? && old_checklist.count == new_checklist.count
 
     errors[:base] << 'Invalid checklist'
   end
 
   def send_feedback
-    startup_feedback = StartupFeedback.create!(
-      feedback: feedback,
-      startup: submission.startup,
-      faculty: coach,
-      timeline_event: submission,
-    )
+    startup_feedback =
+      StartupFeedback.create!(
+        feedback: feedback,
+        startup: submission.startup,
+        faculty: coach,
+        timeline_event: submission
+      )
 
     StartupFeedbackModule::EmailService.new(startup_feedback).send
   end
@@ -96,7 +133,8 @@ class CreateGradingMutator < ApplicationQuery
   def valid_evaluation_criteria
     return if evaluation_criteria.present?
 
-    errors[:base] << "Cannot grade Submission##{submission_id} without evaluation criteria"
+    errors[:base] <<
+      "Cannot grade Submission##{submission_id} without evaluation criteria"
   end
 
   def valid_grading
@@ -122,11 +160,12 @@ class CreateGradingMutator < ApplicationQuery
   end
 
   def grade_hash
-    @grade_hash ||= grades.each_with_object({}) do |incoming_grade, grade_hash|
-      criteria_id = incoming_grade[:evaluation_criterion_id]
-      grade = incoming_grade[:grade]
-      grade_hash[criteria_id] = grade
-    end
+    @grade_hash ||=
+      grades.each_with_object({}) do |incoming_grade, grade_hash|
+        criteria_id = incoming_grade[:evaluation_criterion_id]
+        grade = incoming_grade[:grade]
+        grade_hash[criteria_id] = grade
+      end
   end
 
   def valid_grading?
@@ -142,15 +181,17 @@ class CreateGradingMutator < ApplicationQuery
   end
 
   def max_grades
-    @max_grades ||= grade_hash.keys.index_with do |ec_id|
-      evaluation_criteria.find(ec_id).max_grade
-    end
+    @max_grades ||=
+      grade_hash.keys.index_with do |ec_id|
+        evaluation_criteria.find(ec_id).max_grade
+      end
   end
 
   def pass_grades
-    @pass_grades ||= grade_hash.keys.index_with do |ec_id|
-      evaluation_criteria.find(ec_id).pass_grade
-    end
+    @pass_grades ||=
+      grade_hash.keys.index_with do |ec_id|
+        evaluation_criteria.find(ec_id).pass_grade
+      end
   end
 
   def failed?

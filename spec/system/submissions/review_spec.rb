@@ -401,6 +401,12 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_content('Incorrect')
       end
 
+      within("div[aria-label='#{submission_pending.checklist[5]['title']}']") do
+        expect(page).to have_content(question_6)
+        click_button 'Mark as incorrect'
+        expect(page).to have_content('Incorrect')
+      end
+
       expect(page).to have_content('Grade Card')
 
       within(
@@ -444,7 +450,14 @@ feature 'Submission review overlay', js: true do
           'result' => answer_3,
           'status' => TimelineEvent::CHECKLIST_STATUS_FAILED
         },
-        submission_checklist_short_text
+        submission_checklist_short_text,
+        submission_checklist_files,
+        {
+          'kind' => Target::CHECKLIST_KIND_AUDIO,
+          'title' => question_6,
+          'result' => answer_6,
+          'status' => TimelineEvent::CHECKLIST_STATUS_FAILED
+        }
       ]
 
       expect(submission_pending.reload.checklist).to eq(new_checklist)
@@ -478,8 +491,8 @@ feature 'Submission review overlay', js: true do
       within(
         "div[aria-label='#{submission_pending.checklist.last['title']}']"
       ) do
-        find('p', text: question_4).click
-        expect(page).to have_content(answer_4)
+        find('p', text: question_6).click
+        expect(page).to have_content('Incorrect')
       end
 
       accept_confirm { click_button('Undo Grading') }

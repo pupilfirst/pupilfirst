@@ -113,15 +113,18 @@ let encodeKind = t =>
   | AudioRecord(_) => "audio"
   }
 
-let encodeResult = t =>
+let encodeResult = t => {
+  open Json.Encode
   switch t.result {
   | ShortText(t)
   | LongText(t)
-  | Link(t) => t
-  | MultiChoice(t) => t
-  | Files(_) => "files"
-  | AudioRecord(_) => "audio"
+  | Link(t)
+  | MultiChoice(t) =>
+    string(t)
+  | AudioRecord(file) => string(file.id)
+  | Files(files) => stringArray(Js.Array.map(file => file.id, files))
   }
+}
 
 let encodeStatus = t =>
   switch t.status {
@@ -136,7 +139,7 @@ let encode = t => {
     ("title", t.title |> string),
     ("kind", encodeKind(t) |> string),
     ("status", encodeStatus(t) |> string),
-    ("result", encodeResult(t) |> string),
+    ("result", encodeResult(t)),
   })
 }
 

@@ -95,7 +95,7 @@ let validShortText = s => validString(s, 250)
 
 let validLongText = s => validString(s, 5000)
 
-let validFiles = files => files != [] && files |> Array.length < 3
+let validFiles = files => files != [] && files |> Array.length < 4
 
 let validMultiChoice = (choices, index) =>
   index |> OptionUtils.mapWithDefault(i => choices |> Array.length > i, false)

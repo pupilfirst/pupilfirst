@@ -50,7 +50,7 @@ module Mutations
           submission_not_graded,
           valid_evaluation_criteria,
           right_shape_for_checklist,
-          right_shape_for_checklist,
+          checklist_data_is_not_mutated,
           valid_grading
         )
       end

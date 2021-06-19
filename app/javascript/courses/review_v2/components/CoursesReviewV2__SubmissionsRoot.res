@@ -175,14 +175,16 @@ let make = (~submissionId) => {
             SubmissionDetails.allSubmissions(submissionDetails),
           )->React.array}
         </div>
-        <div className="flex md:flex-row flex-col w-full">
-          <div className="md:w-1/2 w-full p-4">
-            <div className="bg-white rounded-lg shadow"> {str("LHS")} </div>
-          </div>
-          <div className="md:w-1/2 w-full p-4">
-            <div className="bg-white rounded-lg shadow"> {str("RHS")} </div>
-          </div>
-        </div>
+        <CoursesReviewV2__GradeCard
+          overlaySubmission={SubmissionDetails.submission(submissionDetails)}
+          teamSubmission={submissionDetails |> SubmissionDetails.students |> Array.length > 1}
+          evaluationCriteria={submissionDetails |> SubmissionDetails.evaluationCriteria}
+          targetEvaluationCriteriaIds={submissionDetails |> SubmissionDetails.targetEvaluationCriteriaIds}
+          reviewChecklist={submissionDetails |> SubmissionDetails.reviewChecklist}
+          addGradingCB={_ => ()}
+          updateReviewChecklistCB={_ => ()}
+          targetId={submissionDetails |> SubmissionDetails.targetId}
+        />
       </div>
 
     | Loading =>

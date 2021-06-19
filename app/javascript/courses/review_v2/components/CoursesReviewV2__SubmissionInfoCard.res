@@ -30,7 +30,10 @@ let showSubmissionStatus = submission => {
 
 @react.component
 let make = (~submission, ~submissionNumber) =>
-  <div className={cardClasses(submission)}>
+  <Link
+    href={"/submissions/" ++ (SubmissionMeta.id(submission) ++ "/review_v2")}
+    key={SubmissionMeta.id(submission)}
+    className={cardClasses(submission)}>
     <div className="rounded-r-lg shadow">
       <div className="p-4 border-b bg-white flex flex-row items-center justify-between">
         <div className="flex flex-col pr-2">
@@ -53,4 +56,4 @@ let make = (~submission, ~submissionNumber) =>
         </div>
       </div>
     </div>
-  </div>
+  </Link>

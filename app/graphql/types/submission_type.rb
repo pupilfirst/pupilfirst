@@ -1,7 +1,5 @@
 module Types
   class SubmissionType < Types::BaseObject
-    connection_type_class Types::PupilfirstConnection
-
     field :id, ID, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :evaluated_at, GraphQL::Types::ISO8601DateTime, null: true

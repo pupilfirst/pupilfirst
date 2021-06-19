@@ -958,7 +958,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SubmissionConnection",
+                "name": "SubmissionInfoConnection",
                 "ofType": null
               }
             },
@@ -5666,7 +5666,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "SubmissionConnection",
+        "name": "SubmissionInfoConnection",
         "description": "",
         "fields": [
           {
@@ -5678,7 +5678,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "SubmissionEdge",
+                "name": "SubmissionInfoEdge",
                 "ofType": null
               }
             },
@@ -5700,7 +5700,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "Submission",
+                    "name": "SubmissionInfo",
                     "ofType": null
                   }
                 }
@@ -5749,7 +5749,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "SubmissionEdge",
+        "name": "SubmissionInfoEdge",
         "description": "",
         "fields": [
           {
@@ -5774,7 +5774,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "Submission",
+              "name": "SubmissionInfo",
               "ofType": null
             },
             "isDeprecated": false,

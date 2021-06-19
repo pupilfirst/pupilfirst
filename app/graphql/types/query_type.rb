@@ -21,7 +21,11 @@ module Types
 
     def method_missing(name, *args)
       if resolved_fields.include?(name)
-        resolver = (name.to_s + '_resolver').camelcase.constantize.new(context, args[0] || {})
+        resolver =
+          (name.to_s + '_resolver').camelcase.constantize.new(
+            context,
+            args[0] || {}
+          )
         resolver.public_send(name)
       else
         super
@@ -43,16 +47,22 @@ module Types
       argument :target_id, ID, required: true
     end
 
-    resolved_field :submissions, Types::SubmissionType.connection_type, null: false do
+    resolved_field :submissions,
+                   Types::SubmissionInfoType.connection_type,
+                   null: false do
       argument :course_id, ID, required: true
       argument :status, Types::SubmissionStatusType, required: true
       argument :sort_direction, Types::SortDirectionType, required: true
-      argument :sort_criterion, Types::SubmissionSortCriterionType, required: true
+      argument :sort_criterion,
+               Types::SubmissionSortCriterionType,
+               required: true
       argument :level_id, ID, required: false
       argument :coach_id, ID, required: false
     end
 
-    resolved_field :submission_details, Types::SubmissionDetailsType, null: false do
+    resolved_field :submission_details,
+                   Types::SubmissionDetailsType,
+                   null: false do
       argument :submission_id, ID, required: true
     end
 
@@ -69,14 +79,18 @@ module Types
       argument :student_id, ID, required: true
     end
 
-    resolved_field :student_submissions, Types::StudentSubmissionType.connection_type, null: false do
+    resolved_field :student_submissions,
+                   Types::StudentSubmissionType.connection_type,
+                   null: false do
       argument :student_id, ID, required: true
       argument :level_id, ID, required: false
       argument :status, Types::SubmissionReviewStatusType, required: false
       argument :sort_direction, Types::SortDirectionType, required: true
     end
 
-    resolved_field :course_teams, Types::CourseTeamType.connection_type, null: false do
+    resolved_field :course_teams,
+                   Types::CourseTeamType.connection_type,
+                   null: false do
       argument :course_id, ID, required: true
       argument :level_id, ID, required: false
       argument :search, String, required: false
@@ -85,7 +99,9 @@ module Types
       argument :sort_direction, Types::SortDirectionType, required: true
     end
 
-    resolved_field :evaluation_criteria, [Types::EvaluationCriterionType], null: false do
+    resolved_field :evaluation_criteria,
+                   [Types::EvaluationCriterionType],
+                   null: false do
       argument :course_id, ID, required: true
     end
 
@@ -111,7 +127,9 @@ module Types
       argument :student_id, ID, required: true
     end
 
-    resolved_field :student_distribution, [Types::DistributionInLevelType], null: false do
+    resolved_field :student_distribution,
+                   [Types::DistributionInLevelType],
+                   null: false do
       argument :course_id, ID, required: true
       argument :coach_notes, Types::CoachNoteFilterType, required: true
       argument :tags, [String], required: true
@@ -128,7 +146,9 @@ module Types
       argument :sort_criterion, Types::TopicSortCriterionType, required: true
     end
 
-    resolved_field :notifications, Types::NotificationType.connection_type, null: false do
+    resolved_field :notifications,
+                   Types::NotificationType.connection_type,
+                   null: false do
       argument :search, String, required: false
       argument :status, Types::NotificationStatusType, required: false
       argument :event, Types::NotificationEventType, required: false

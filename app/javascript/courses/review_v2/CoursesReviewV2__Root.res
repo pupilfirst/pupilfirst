@@ -88,10 +88,7 @@ module SubmissionsQuery = %graphql(
           evaluatedAt,
           passedAt,
           feedbackSent,
-          levelId,
           createdAt,
-          targetId,
-          coachIds,
           teamName,
           levelNumber
         }

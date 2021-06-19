@@ -17,7 +17,7 @@ let make = () => {
       <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none">
         <div className="py-6">
           {switch url.path {
-          | list{"courses", courseId, "review_v2"} => <CoursesReviewV2__Root courseId />
+          | list{"courses", courseId, "review"} => <CoursesReviewV2__Root courseId />
           | list{"submissions", submissionId, "review_v2"} =>
             <CoursesReviewV2__SubmissionOverlay submissionId />
           | _ =>

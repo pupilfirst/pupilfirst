@@ -1,0 +1,14 @@
+<% content_for(:head) do %>
+  <title><%= @course.name %> | Applicants</title>
+  <%= stylesheet_pack_tag 'CourseApplicantsPack' %>
+<% end %>
+
+<%= content_for(:tail) do %>
+  <%= javascript_pack_tag 'CourseApplicantsPack', nonce: true %>
+<% end %>
+
+<script id="schools-courses-applicants__props" type="application/json">
+  <%= Schools::Courses::ApplicantsPresenter.new(self, @course).props_to_json.html_safe %>
+</script>
+
+<div id="schools-courses-applicants__root" class="flex flex-1 h-screen"></div>

@@ -22,3 +22,4 @@
   - `Schools::DeleteService`
 - [ ] Check if changes in _packaged_ components have been published to `npm`.
 - [ ] Add development seeds for new tables.
+- [ ] If the updates involve Graph mutations ensure that the files are migrated to the new approach without a mutator.

@@ -2,6 +2,8 @@ exception UnknownPathEncountered(list<string>)
 
 %bs.raw(`require("./SchoolAdminNavbar__Root.css")`)
 
+let t = I18n.t(~scope="components.SchoolAdminNavbar__Root")
+
 type courseSelection =
   | Students
   | CourseCoaches
@@ -10,6 +12,7 @@ type courseSelection =
   | CourseExports
   | Authors
   | Certificates
+  | Applicants
 
 type settingsSelection =
   | Customization
@@ -85,6 +88,48 @@ let secondaryNavOption = (path, currentSelection, inspectedSelection, text) => {
   <div key=text> <a href=path className=classes> {text |> str} </a> </div>
 }
 
+let courseSelectionKeys = selection => {
+  switch selection {
+  | Students => "students"
+  | CourseCoaches => "coaches"
+  | Curriculum => "curriculum"
+  | EvaluationCriteria => "evaluation_criteria"
+  | CourseExports => "exports"
+  | Authors => "authors"
+  | Certificates => "certificates"
+  | Applicants => "applicants"
+  }
+}
+
+let secondaryNavLinks = (courseSelection, courseId, role) => {
+  let navOptionsAdmin = [
+    Curriculum,
+    Students,
+    Applicants,
+    Authors,
+    Certificates,
+    CourseCoaches,
+    EvaluationCriteria,
+    CourseExports,
+  ]
+
+  let navOptionsAuthor = [Curriculum, EvaluationCriteria]
+
+  Js.Array.map(
+    selection =>
+      secondaryNavOption(
+        "/school/courses/" ++ (courseId ++ "/" ++ courseSelectionKeys(selection)),
+        courseSelection,
+        selection,
+        t("course_nav." ++ courseSelectionKeys(selection)),
+      ),
+    switch role {
+    | SchoolAdmin => navOptionsAdmin
+    | CourseAuthor => navOptionsAuthor
+    },
+  )
+}
+
 let secondaryNav = (courses, userRole, selectedOption) =>
   switch selectedOption {
   | Settings(settingsSelection) =>
@@ -102,54 +147,7 @@ let secondaryNav = (courses, userRole, selectedOption) =>
       className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
       <div className="p-4">
         <SchoolAdminNavbar__CourseDropdown courses currentCourseId=courseId />
-        {secondaryNavOption(
-          "/school/courses/" ++ (courseId ++ "/curriculum"),
-          courseSelection,
-          Curriculum,
-          "Curriculum",
-        )}
-        {switch userRole {
-        | SchoolAdmin =>
-          [
-            secondaryNavOption(
-              "/school/courses/" ++ (courseId ++ "/students"),
-              courseSelection,
-              Students,
-              "Students",
-            ),
-            secondaryNavOption(
-              "/school/courses/" ++ (courseId ++ "/coaches"),
-              courseSelection,
-              CourseCoaches,
-              "Coaches",
-            ),
-            secondaryNavOption(
-              "/school/courses/" ++ (courseId ++ "/exports"),
-              courseSelection,
-              CourseExports,
-              "Exports",
-            ),
-            secondaryNavOption(
-              "/school/courses/" ++ (courseId ++ "/authors"),
-              courseSelection,
-              Authors,
-              "Authors",
-            ),
-            secondaryNavOption(
-              "/school/courses/" ++ (courseId ++ "/certificates"),
-              courseSelection,
-              Certificates,
-              "Certificates",
-            ),
-          ] |> React.array
-        | CourseAuthor => React.null
-        }}
-        {secondaryNavOption(
-          "/school/courses/" ++ (courseId ++ "/evaluation_criteria"),
-          courseSelection,
-          EvaluationCriteria,
-          "Evaluation Criteria",
-        )}
+        {secondaryNavLinks(courseSelection, courseId, userRole)->React.array}
       </div>
     </div>
   | _ => React.null
@@ -174,9 +172,7 @@ let make = (
   | list{"school", "customize"} => (Settings(Customization), true)
   | list{"school", "courses"} => (Courses, false)
   | list{"school", "courses", "new"} => (Courses, false)
-  | list{"school", "courses", _courseId, "details"}
-  | list{"school", "courses", _courseId, "images"}
-  | list{"school", "courses", _courseId, "actions"} => (Courses, false)
+  | list{"school", "courses", _courseId, "details" | "images" | "actions"} => (Courses, false)
   | list{"school", "courses", courseId, "students"}
   | list{"school", "courses", courseId, "inactive_students"} => (
       SelectedCourse(courseId, Students),
@@ -200,6 +196,14 @@ let make = (
     } => (SelectedCourse(courseId, Curriculum), true)
   | list{"school", "courses", courseId, "exports"} => (
       SelectedCourse(courseId, CourseExports),
+      true,
+    )
+  | list{"school", "courses", courseId, "applicants"} => (
+      SelectedCourse(courseId, Applicants),
+      true,
+    )
+  | list{"school", "courses", courseId, "applicants", _applicantId, "details" | "actions"} => (
+      SelectedCourse(courseId, Applicants),
       true,
     )
   | list{"school", "courses", courseId, "authors"} => (SelectedCourse(courseId, Authors), true)
@@ -231,7 +235,7 @@ let make = (
         <div className={headerclasses(shrunk)}>
           <div className={imageContainerClasses(shrunk)}>
             {shrunk
-              ? <div className="p-2 bg-white flex items-center justify-center p-2 m-2 rounded">
+              ? <div className="bg-white flex items-center justify-center p-2 m-2 rounded">
                   {isCourseAuthor
                     ? <img src=schoolIconPath alt=schoolName />
                     : <a className="text-xs" href="/school">

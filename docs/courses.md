@@ -31,8 +31,34 @@ If enabled, the course will be displayed on the list of featured courses on your
 **Enable public signup for this course?** \
 If enabled, members of the public will be able to sign up for your course.
 
+**Do you want to process applicant information before enrolling them?** \
+If enabled, applicants will be redirected to a URL of your choice for further processing, after verifying their email address. [This URL can be customized](#customizing-the-processing-url) to include information about the applicant.
+
+> [!ATTENTION]
+> Applicants will not be added as a students until you manually approve them from the _Applicants_ page. This feature could be used for setting up a payments flow for the course.
+
+**Course Highlights** \
+If set, a highlights section will be shown on the course's public page. You can use this session to highlight the core features of the course.
+
 **Allow public to view course curriculum?** \
 If enabled, members of the public will be able to view the course curriculum without signing in. This will not let them _interact_ with the course in any way.
+
+### Customizing the processing URL
+
+You can add properties related to applicants to the processing URL that the they are redirected to after email verification. The properties that can be added are:
+
+- The unique ID of the course - `course_id`
+- The unique ID of the applicant - `applicant_id`
+- The name of the applicant - `name`
+- The email address of the applicant - `email`
+
+When used in the processing URL, Pupilfirst LMS will replace these special keywords with their actual values when the applicant clicks the link in the verification email.
+
+Here's an example URL that includes all the available properties:
+
+```
+https://paymentgateway.com/process?name=${name}&email=${email}&course_id=${course_id}&applicant_id=${applicant_id}
+```
 
 ## Editing courses
 

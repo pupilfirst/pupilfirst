@@ -12,7 +12,6 @@ type state = {
   tagsToApply: array<string>,
   teamCoaches: array<string>,
   teamCoachSearchInput: string,
-  excludedFromLeaderboard: bool,
   title: string,
   affiliation: string,
   saving: bool,
@@ -26,7 +25,6 @@ type action =
   | RemoveTag(string)
   | UpdateCoachesList(array<string>)
   | UpdateCoachSearchInput(string)
-  | UpdateExcludedFromLeaderboard(bool)
   | UpdateTitle(string)
   | UpdateAffiliation(string)
   | UpdateSaving(bool)
@@ -71,13 +69,7 @@ let handleResponseCB = (updateFormCB, state, student, oldTeam, _json) => {
   | "" => None
   | text => Some(text)
   }
-  let newStudent = Student.update(
-    ~name=state.name,
-    ~excludedFromLeaderboard=state.excludedFromLeaderboard,
-    ~title=state.title,
-    ~affiliation,
-    ~student,
-  )
+  let newStudent = Student.update(~name=state.name, ~title=state.title, ~affiliation, ~student)
   let newTeam = Team.update(
     ~name=state.teamName,
     ~teamTags=state.tagsToApply,
@@ -105,7 +97,6 @@ let updateStudent = (student, state, send, responseCB) => {
 
   let updatedStudent = Student.updateInfo(
     ~name=state.name,
-    ~excludedFromLeaderboard=state.excludedFromLeaderboard,
     ~title=state.title,
     ~affiliation=Some(state.affiliation),
     ~student,
@@ -210,7 +201,6 @@ let initialState = (student, team) => {
   tagsToApply: team |> Team.tags,
   teamCoaches: team |> Team.coachIds,
   teamCoachSearchInput: "",
-  excludedFromLeaderboard: student |> Student.excludedFromLeaderboard,
   title: student |> Student.title,
   affiliation: student |> Student.affiliation |> OptionUtils.toString,
   saving: false,
@@ -233,10 +223,6 @@ let reducer = (state, action) =>
   | UpdateCoachSearchInput(teamCoachSearchInput) => {
       ...state,
       teamCoachSearchInput: teamCoachSearchInput,
-    }
-  | UpdateExcludedFromLeaderboard(excludedFromLeaderboard) => {
-      ...state,
-      excludedFromLeaderboard: excludedFromLeaderboard,
     }
   | UpdateTitle(title) => {...state, title: title}
   | UpdateAffiliation(affiliation) => {...state, affiliation: affiliation}
@@ -337,11 +323,10 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
       </div>
       {state.userTags |> ArrayUtils.isNotEmpty
         ? <div className="mt-5">
-            <div className="mb-2 text-xs font-semibold">
-              {"Tags applied to user:" |> str}
-            </div>
+            <div className="mb-2 text-xs font-semibold"> {"Tags applied to user:" |> str} </div>
             <div className="flex flex-wrap">
-              {state.userTags |> Js.Array.map(tag =>
+              {state.userTags
+              |> Js.Array.map(tag =>
                 <div
                   className="bg-blue-100 border border-blue-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900"
                   key={tag}>
@@ -356,7 +341,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
         <div className="mb-2 text-xs font-semibold">
           {(isSingleStudent ? "Tags applied:" : "Tags applied to team:") |> str}
         </div>
-        <StudentsEditor__SearchableTagList
+        <School__SearchableTagList
           unselectedTags={teamTags |> Js.Array.filter(tag =>
             !(state.tagsToApply |> Array.mem(tag))
           )}
@@ -365,33 +350,6 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
           removeTagCB={tag => send(RemoveTag(tag))}
           allowNewTags=true
         />
-      </div>
-      <div className="mt-5">
-        <div className="flex items-center flex-shrink-0">
-          <label className="block tracking-wide text-xs font-semibold mr-3">
-            {"Should this student be excluded from leaderboards?" |> str}
-          </label>
-          <div className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
-            <button
-              title="Exclude this student from the leaderboard"
-              onClick={event => {
-                ReactEvent.Mouse.preventDefault(event)
-                send(UpdateExcludedFromLeaderboard(true))
-              }}
-              className={boolBtnClasses(state.excludedFromLeaderboard)}>
-              {"Yes" |> str}
-            </button>
-            <button
-              title="Include this student in the leaderboard"
-              onClick={_event => {
-                ReactEvent.Mouse.preventDefault(_event)
-                send(UpdateExcludedFromLeaderboard(false))
-              }}
-              className={boolBtnClasses(!state.excludedFromLeaderboard)}>
-              {"No" |> str}
-            </button>
-          </div>
-        </div>
       </div>
       <div className="mt-5">
         <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">

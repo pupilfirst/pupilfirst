@@ -153,5 +153,17 @@ module Types
       argument :status, Types::NotificationStatusType, required: false
       argument :event, Types::NotificationEventType, required: false
     end
+
+    resolved_field :applicants,
+                   Types::ApplicantType.connection_type,
+                   null: false do
+      argument :course_id, ID, required: true
+      argument :search, String, required: false
+      argument :tags, [String], required: false
+      argument :sort_criterion,
+               Types::ApplicantSortCriterionType,
+               required: true
+      argument :sort_direction, Types::SortDirectionType, required: true
+    end
   end
 end

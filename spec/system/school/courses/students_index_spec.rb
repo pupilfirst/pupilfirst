@@ -27,7 +27,9 @@ feature 'School students index', js: true do
     let!(:startup_2) { create :startup, level: level_2 }
     let(:team_in_different_course) { create :team }
 
-    let(:team_with_lone_student) { create :team, level: level_2, tag_list: tags }
+    let(:team_with_lone_student) do
+      create :team, level: level_2, tag_list: tags
+    end
     let!(:lone_student) { create :founder, startup: team_with_lone_student }
 
     let(:name_1) { Faker::Name.name }
@@ -45,11 +47,14 @@ feature 'School students index', js: true do
 
     before do
       create :faculty_course_enrollment, faculty: course_coach, course: course
-      create :faculty_course_enrollment, faculty: coach_in_different_course, course: team_in_different_course.course
+      create :faculty_course_enrollment,
+             faculty: coach_in_different_course,
+             course: team_in_different_course.course
     end
 
     scenario 'School admin adds new students and a team' do
-      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+      sign_in_user school_admin.user,
+                   referrer: school_course_students_path(course)
 
       expect(page).to have_text(startup_1.founders.first.name)
       expect(page).to have_text(startup_2.founders.last.name)
@@ -79,6 +84,7 @@ feature 'School students index', js: true do
 
       # Clear the title.
       fill_in 'Title', with: ''
+
       # Clear affiliation
       fill_in 'Affiliation', with: ''
 
@@ -161,36 +167,56 @@ feature 'School students index', js: true do
       expect(student_3.startup.id).to eq(student_4.startup.id)
 
       expect(student_1.startup.tag_list).to contain_exactly('Abc', 'Def')
-      expect(student_2.startup.tag_list).to contain_exactly('Abc', 'Def', 'GHI JKL')
+      expect(student_2.startup.tag_list).to contain_exactly(
+        'Abc',
+        'Def',
+        'GHI JKL'
+      )
 
       open_email(student_1_user.email)
 
-      expect(current_email.subject).to include("You have been added as a student in #{school.name}")
+      expect(current_email.subject).to include(
+        "You have been added as a student in #{school.name}"
+      )
       expect(current_email.body).to have_link('Sign in to View Course')
 
       open_email(student_2_user.email)
 
-      expect(current_email.subject).to include("You have been added as a student in #{school.name}")
+      expect(current_email.subject).to include(
+        "You have been added as a student in #{school.name}"
+      )
 
       open_email(student_3_user.email)
 
-      expect(current_email.subject).to include("You have been added as a student in #{school.name}")
-      expect(current_email.body).to include("You have also been teamed up with #{student_4_user.name}")
+      expect(current_email.subject).to include(
+        "You have been added as a student in #{school.name}"
+      )
+      expect(current_email.body).to include(
+        "You have also been teamed up with #{student_4_user.name}"
+      )
 
       open_email(student_4_user.email)
 
-      expect(current_email.subject).to include("You have been added as a student in #{school.name}")
-      expect(current_email.body).to include("You have also been teamed up with #{student_3_user.name}")
+      expect(current_email.subject).to include(
+        "You have been added as a student in #{school.name}"
+      )
+      expect(current_email.body).to include(
+        "You have also been teamed up with #{student_3_user.name}"
+      )
     end
 
     scenario 'school admin adds a student after disabling the notify option' do
-      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+      sign_in_user school_admin.user,
+                   referrer: school_course_students_path(course)
 
       click_button 'Add New Students'
       fill_in 'Name', with: name_1
       fill_in 'Email', with: email_1
       click_button 'Add to List'
-      page.find('label', text: 'Notify students, and send them a link to sign into this school.').click
+      page.find(
+        'label',
+        text: 'Notify students, and send them a link to sign into this school.'
+      ).click
       click_button 'Save List'
 
       expect(page).to have_text('All students were created successfully')
@@ -206,7 +232,8 @@ feature 'School students index', js: true do
       let(:faculty) { create :faculty, user: coach_user }
 
       scenario 'School admin adds a coach as a student' do
-        sign_in_user school_admin.user, referrer: school_course_students_path(course)
+        sign_in_user school_admin.user,
+                     referrer: school_course_students_path(course)
 
         click_button 'Add New Students'
 
@@ -232,7 +259,9 @@ feature 'School students index', js: true do
 
         open_email(coach_user.email)
 
-        expect(current_email.subject).to include("You have been added as a student in #{school.name}")
+        expect(current_email.subject).to include(
+          "You have been added as a student in #{school.name}"
+        )
         expect(current_email.body).to have_link('Sign in to View Course')
       end
     end
@@ -243,12 +272,11 @@ feature 'School students index', js: true do
       let!(:original_affiliation) { existing_user.affiliation }
       let(:name_3) { Faker::Name.name }
 
-      before do
-        create :student, user: existing_user, startup: startup_1
-      end
+      before { create :student, user: existing_user, startup: startup_1 }
 
       scenario 'School admin tries to add the existing student alongside a new student' do
-        sign_in_user school_admin.user, referrer: school_course_students_path(course)
+        sign_in_user school_admin.user,
+                     referrer: school_course_students_path(course)
 
         click_button 'Add New Students'
 
@@ -268,7 +296,9 @@ feature 'School students index', js: true do
           # Try to save both.
           click_button 'Save List'
 
-          expect(page).to have_text('1 of 2 students were added. Remaining students are already a part of the course')
+          expect(page).to have_text(
+            '1 of 2 students were added. Remaining students are already a part of the course'
+          )
           dismiss_notification
         end.to change { Founder.count }.by(1)
 
@@ -285,8 +315,18 @@ feature 'School students index', js: true do
     end
 
     context 'when there are two existing students' do
-      let(:user_1) { create :user, email: email_1, name: name_1, affiliation: Faker::Company.name }
-      let(:user_2) { create :user, email: email_2, name: name_2, affiliation: Faker::Company.name }
+      let(:user_1) do
+        create :user,
+               email: email_1,
+               name: name_1,
+               affiliation: Faker::Company.name
+      end
+      let(:user_2) do
+        create :user,
+               email: email_2,
+               name: name_2,
+               affiliation: Faker::Company.name
+      end
 
       # Put two students by themselves in different teams.
       let(:team_1) { create :team, level: level_1 }
@@ -297,7 +337,8 @@ feature 'School students index', js: true do
       let(:new_title) { Faker::Job.title }
 
       scenario 'School admin edits student details' do
-        sign_in_user school_admin.user, referrer: school_course_students_path(course)
+        sign_in_user school_admin.user,
+                     referrer: school_course_students_path(course)
 
         # Update a student
         find('a', text: name_1).click
@@ -310,7 +351,6 @@ feature 'School students index', js: true do
         expect(page).not_to have_field('Team Name')
         fill_in 'Title', with: new_title
         fill_in 'Affiliation', with: ''
-        find('button[title="Exclude this student from the leaderboard"]').click
         click_button 'Update Student'
 
         expect(page).to have_text('Student updated successfully')
@@ -319,8 +359,7 @@ feature 'School students index', js: true do
         expect(user_1.reload.name).to end_with('Jr.')
         expect(user_1.title).to eq(new_title)
         expect(user_1.affiliation).to eq(nil)
-        expect(student_1.reload.excluded_from_leaderboard).to eq(true)
-        expect(student_1.startup.name).to eq(user_1.name)
+        expect(student_1.startup.reload.name).to eq(user_1.name)
 
         # Form a Team
         check "select-student-#{student_1.id}"
@@ -371,7 +410,9 @@ feature 'School students index', js: true do
 
         dismiss_notification
 
-        expect(founder.reload.startup.faculty.find_by(id: course_coach)).to be_present
+        expect(
+          founder.reload.startup.faculty.find_by(id: course_coach)
+        ).to be_present
       end
     end
 
@@ -380,9 +421,13 @@ feature 'School students index', js: true do
       let(:access_ends_at) { 1.day.from_now }
 
       scenario 'School admin updates access end date' do
-        sign_in_user school_admin.user, referrer: school_course_students_path(course)
+        sign_in_user school_admin.user,
+                     referrer: school_course_students_path(course)
 
-        expect(page).to have_link('Inactive Students', href: school_course_inactive_students_path(course))
+        expect(page).to have_link(
+          'Inactive Students',
+          href: school_course_inactive_students_path(course)
+        )
 
         founder = inactive_team_1.founders.first
         expect(page).to have_text(founder.name)
@@ -397,28 +442,47 @@ feature 'School students index', js: true do
         dismiss_notification
 
         expect(
-          founder.reload.startup.access_ends_at.in_time_zone(founder.user.time_zone).to_date
+          founder
+            .reload
+            .startup
+            .access_ends_at
+            .in_time_zone(founder.user.time_zone)
+            .to_date
         ).to eq(access_ends_at.to_date)
 
         find('a', text: founder.name).click
         fill_in "Team's Access Ends On", with: 1.day.ago.iso8601
         click_button 'Update Student'
 
-        expect(page).to have_text('Team has been updated, and moved to list of inactive students')
+        expect(page).to have_text(
+          'Team has been updated, and moved to list of inactive students'
+        )
         dismiss_notification
 
-        expect(founder.reload.startup.access_ends_at.to_date).to eq(1.day.ago.to_date)
+        expect(founder.reload.startup.access_ends_at.to_date).to eq(
+          1.day.ago.to_date
+        )
         expect(page).not_to have_text(founder.name)
       end
     end
 
     scenario 'school admin marks students as dropped out' do
       # Enroll the coach as a team coach in all three teams.
-      create :faculty_startup_enrollment, :with_course_enrollment, faculty: course_coach, startup: startup_1
-      create :faculty_startup_enrollment, :with_course_enrollment, faculty: course_coach, startup: startup_2
-      create :faculty_startup_enrollment, :with_course_enrollment, faculty: course_coach, startup: team_with_lone_student
+      create :faculty_startup_enrollment,
+             :with_course_enrollment,
+             faculty: course_coach,
+             startup: startup_1
+      create :faculty_startup_enrollment,
+             :with_course_enrollment,
+             faculty: course_coach,
+             startup: startup_2
+      create :faculty_startup_enrollment,
+             :with_course_enrollment,
+             faculty: course_coach,
+             startup: team_with_lone_student
 
-      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+      sign_in_user school_admin.user,
+                   referrer: school_course_students_path(course)
 
       # Mark a student in a team of more than one students as dropped out.
       founder = startup_2.founders.last
@@ -461,6 +525,7 @@ feature 'School students index', js: true do
 
       lone_user_team = lone_student.reload.startup
       expect(lone_user_team.dropped_out_at).not_to eq(nil)
+
       # The student's team should not have changed.
       expect(lone_user_team).to eq(team_with_lone_student)
 
@@ -475,7 +540,8 @@ feature 'School students index', js: true do
     end
 
     scenario 'school admin tries to add the same email twice' do
-      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+      sign_in_user school_admin.user,
+                   referrer: school_course_students_path(course)
 
       # Add a student
       click_button 'Add New Students'
@@ -500,7 +566,8 @@ feature 'School students index', js: true do
     end
 
     scenario 'school admin tries to filter students' do
-      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+      sign_in_user school_admin.user,
+                   referrer: school_course_students_path(course)
 
       # filter by level
       fill_in 'search', with: 'level'
@@ -549,7 +616,8 @@ feature 'School students index', js: true do
 
     def safe_random_team
       @selected_team_ids ||= []
-      team = Startup.all.where.not(id: @selected_team_ids).order('random()').first
+      team =
+        Startup.all.where.not(id: @selected_team_ids).order('random()').first
       @selected_team_ids << team.id
       team
     end
@@ -571,66 +639,93 @@ feature 'School students index', js: true do
     end
 
     scenario 'school admin can order students' do
-      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+      sign_in_user school_admin.user,
+                   referrer: school_course_students_path(course)
 
-      expect(find('.student-team-container:first-child')).to have_text(team_aaa.name)
+      expect(find('.student-team-container:first-child')).to have_text(
+        team_aaa.name
+      )
 
       # Check ordering by last created
       click_button 'Order by Name'
       click_button 'Order by Last Created'
 
-      expect(find('.student-team-container:first-child')).to have_text(oldest_created.name)
+      expect(find('.student-team-container:first-child')).to have_text(
+        oldest_created.name
+      )
 
       click_button('Load More')
 
-      expect(find('.student-team-container:last-child')).to have_text(newest_created.name)
+      expect(find('.student-team-container:last-child')).to have_text(
+        newest_created.name
+      )
 
       # Reverse sorting
       click_button('toggle-sort-order')
 
-      expect(find('.student-team-container:first-child')).to have_text(newest_created.name)
+      expect(find('.student-team-container:first-child')).to have_text(
+        newest_created.name
+      )
 
       click_button('Load More')
 
-      expect(find('.student-team-container:last-child')).to have_text(oldest_created.name)
+      expect(find('.student-team-container:last-child')).to have_text(
+        oldest_created.name
+      )
 
       # Check ordering by last updated
       click_button 'Order by Last Created'
       click_button 'Order by Last Updated'
 
-      expect(find('.student-team-container:first-child')).to have_text(newest_updated.name)
+      expect(find('.student-team-container:first-child')).to have_text(
+        newest_updated.name
+      )
 
       click_button('Load More')
 
-      expect(find('.student-team-container:last-child')).to have_text(oldest_updated.name)
+      expect(find('.student-team-container:last-child')).to have_text(
+        oldest_updated.name
+      )
 
       # Reverse sorting
       click_button('toggle-sort-order')
 
-      expect(find('.student-team-container:first-child')).to have_text(oldest_updated.name)
+      expect(find('.student-team-container:first-child')).to have_text(
+        oldest_updated.name
+      )
 
       click_button('Load More')
 
-      expect(find('.student-team-container:last-child')).to have_text(newest_updated.name)
+      expect(find('.student-team-container:last-child')).to have_text(
+        newest_updated.name
+      )
 
       # Check ordering by name
       click_button 'Order by Last Updated'
       click_button 'Order by Name'
 
-      expect(find('.student-team-container:first-child')).to have_text(team_aaa.name)
+      expect(find('.student-team-container:first-child')).to have_text(
+        team_aaa.name
+      )
 
       click_button('Load More')
 
-      expect(find('.student-team-container:last-child')).to have_text(team_zzz.name)
+      expect(find('.student-team-container:last-child')).to have_text(
+        team_zzz.name
+      )
 
       # Reverse sorting
       click_button('toggle-sort-order')
 
-      expect(find('.student-team-container:first-child')).to have_text(team_zzz.name)
+      expect(find('.student-team-container:first-child')).to have_text(
+        team_zzz.name
+      )
 
       click_button('Load More')
 
-      expect(find('.student-team-container:last-child')).to have_text(team_aaa.name)
+      expect(find('.student-team-container:last-child')).to have_text(
+        team_aaa.name
+      )
     end
   end
 
@@ -638,7 +733,8 @@ feature 'School students index', js: true do
     let!(:team_1) { create :startup, level: level_1 }
 
     scenario 'admin visits student editor to issue certificates' do
-      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+      sign_in_user school_admin.user,
+                   referrer: school_course_students_path(course)
 
       student = team_1.founders.last
 
@@ -646,7 +742,9 @@ feature 'School students index', js: true do
 
       click_button 'Actions'
 
-      expect(page).to have_text("This course does not have any certificates to issue")
+      expect(page).to have_text(
+        'This course does not have any certificates to issue'
+      )
     end
   end
 
@@ -658,17 +756,24 @@ feature 'School students index', js: true do
     let!(:certificate_2) { create :certificate, course: course }
 
     before do
-      create :issued_certificate, user: student_with_certificate.user, issuer: school_admin.user, certificate: certificate_1, created_at: 1.day.ago
+      create :issued_certificate,
+             user: student_with_certificate.user,
+             issuer: school_admin.user,
+             certificate: certificate_1,
+             created_at: 1.day.ago
     end
 
     scenario 'admin manually issues a certificate to a student' do
-      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+      sign_in_user school_admin.user,
+                   referrer: school_course_students_path(course)
 
       find('a', text: student_without_certificate.name).click
 
       click_button 'Actions'
 
-      expect(page).to have_text('This student has not been issued any certificates')
+      expect(page).to have_text(
+        'This student has not been issued any certificates'
+      )
 
       # Issue new certificate
       select certificate_2.name, from: 'issue-certificate'
@@ -678,22 +783,28 @@ feature 'School students index', js: true do
       expect(page).to have_text('Done!')
       dismiss_notification
 
-      issued_certificate = student_without_certificate.user.issued_certificates.reload.last
+      issued_certificate =
+        student_without_certificate.user.issued_certificates.reload.last
 
       expect(issued_certificate.certificate).to eq(certificate_2)
       expect(issued_certificate.issuer).to eq(school_admin.user)
 
-      within("div[aria-label='Details of issued certificate #{issued_certificate.id}']") do
+      within(
+        "div[aria-label='Details of issued certificate #{issued_certificate.id}']"
+      ) do
         expect(page).to have_text(issued_certificate.serial_number)
         expect(page).to have_text(school_admin.user.name)
         expect(page).to have_text(certificate_2.name)
-        expect(page).to have_text(issued_certificate.created_at.strftime('%B %-d, %Y'))
+        expect(page).to have_text(
+          issued_certificate.created_at.strftime('%B %-d, %Y')
+        )
         expect(page).to have_button('Revoke Certificate')
       end
     end
 
     scenario 'admin revokes issued certificate and then issues another one' do
-      sign_in_user school_admin.user, referrer: school_course_students_path(course)
+      sign_in_user school_admin.user,
+                   referrer: school_course_students_path(course)
 
       find('a', text: student_with_certificate.name).click
 
@@ -701,14 +812,13 @@ feature 'School students index', js: true do
 
       expect(page).to have_text(certificate_1.name)
 
-      issued_certificate = student_with_certificate.user.issued_certificates.last
+      issued_certificate =
+        student_with_certificate.user.issued_certificates.last
 
       # Revoke the issued certificate
-      within("div[aria-label='Details of issued certificate #{issued_certificate.id}']") do
-        accept_confirm do
-          click_button('Revoke Certificate')
-        end
-      end
+      within(
+        "div[aria-label='Details of issued certificate #{issued_certificate.id}']"
+      ) { accept_confirm { click_button('Revoke Certificate') } }
 
       expect(page).to have_text('Done')
 
@@ -717,9 +827,13 @@ feature 'School students index', js: true do
       expect(issued_certificate.reload.revoked_at).to_not eq(nil)
       expect(issued_certificate.revoker).to eq(school_admin.user)
 
-      within("div[aria-label='Details of issued certificate #{issued_certificate.id}']") do
+      within(
+        "div[aria-label='Details of issued certificate #{issued_certificate.id}']"
+      ) do
         expect(page).to have_text(school_admin.user.name, count: 2)
-        expect(page).to have_text(issued_certificate.revoked_at.strftime('%B %-d, %Y'))
+        expect(page).to have_text(
+          issued_certificate.revoked_at.strftime('%B %-d, %Y')
+        )
       end
 
       # Can issue new certificate
@@ -728,8 +842,9 @@ feature 'School students index', js: true do
       click_button('Issue Certificate')
 
       expect(page).to have_text('Done!')
-      expect(student_with_certificate.user.reload.issued_certificates.count).to eq(2)
+      expect(
+        student_with_certificate.user.reload.issued_certificates.count
+      ).to eq(2)
     end
   end
 end
-

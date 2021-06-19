@@ -117,8 +117,9 @@ let submit = (state, send, target, addSubmissionCB, event) => {
   |> ignore
 }
 
-let updateResult = (state, send, index, result) =>
+let updateResult = (state, send, index, result) => {
   send(UpdateResponse(state.checklist |> ChecklistItem.updateResultAtIndex(index, result)))
+}
 
 let buttonClasses = checklist =>
   "flex mt-3 " ++ (checklist |> ArrayUtils.isEmpty ? "justify-center" : "justify-end")

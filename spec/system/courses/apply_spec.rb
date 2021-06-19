@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature "Apply for public courses", js: true do
+feature 'Apply for public courses', js: true do
   include UserSpecHelper
 
   # The basics.
@@ -9,12 +9,13 @@ feature "Apply for public courses", js: true do
   let(:public_course) { create :course, school: school, public_signup: true }
   let!(:level_one) { create :level, course: public_course }
   let(:private_course) { create :course, school: school }
-  let(:public_course_in_school_2) { create :course, school: school_2, public_signup: true }
+  let(:public_course_in_school_2) do
+    create :course, school: school_2, public_signup: true
+  end
   let(:name) { Faker::Name.name }
   let(:email) { Faker::Internet.email(name: name) }
   let(:name_2) { Faker::Name.name }
   let(:email_2) { Faker::Internet.email(name: name_2) }
-  let(:old_applicant) { create :applicant, course: course }
   let(:startup) { create :startup, level: level_one }
   let(:token) { Faker::Crypto.md5 }
   let(:saved_tag) { Faker::Lorem.word }
@@ -27,7 +28,12 @@ feature "Apply for public courses", js: true do
   end
 
   scenario 'public sign up for a public course' do
-    visit apply_course_path(public_course, name: name, email: email, tag: saved_tag)
+    visit apply_course_path(
+            public_course,
+            name: name,
+            email: email,
+            tag: saved_tag
+          )
 
     # The fields should already be filled in.
     expect(page).to have_content(public_course.name)
@@ -60,6 +66,24 @@ feature "Apply for public courses", js: true do
     expect(team.tag_list).not_to include('Public Signup')
   end
 
+  context 'When course has a processing url' do
+    let(:processing_url) do
+      'https://www.example.com/q?course_id=${course_id}&applicant_id=${applicant_id}&name=${name}&email=${email}'
+    end
+    let(:applicant) { create :applicant, course: public_course }
+
+    before { public_course.update!(processing_url: processing_url) }
+
+    scenario 'applicant tries to sign up multiple times in quick succession' do
+      expected_url =
+        "https://www.example.com/q?course_id=#{public_course.id}&applicant_id=#{applicant.id}&name=#{applicant.name}&email=#{applicant.email}"
+      visit enroll_applicants_path(applicant.login_token)
+
+      # User should be redirected to the processing_url.
+      expect(page).to have_current_path(expected_url, url: true)
+    end
+  end
+
   scenario 'applicant tries to sign up multiple times in quick succession' do
     visit apply_course_path(public_course)
 
@@ -79,7 +103,9 @@ feature "Apply for public courses", js: true do
     fill_in 'Name', with: name_2
     click_button 'Apply'
 
-    expect(page).to have_content('An email was sent less than two minutes ago. Please wait for a few minutes before trying again')
+    expect(page).to have_content(
+      'An email was sent less than two minutes ago. Please wait for a few minutes before trying again'
+    )
   end
 
   scenario 'applicant signing up without a tag is given a default tag' do
@@ -95,7 +121,12 @@ feature "Apply for public courses", js: true do
   end
 
   scenario 'applicant signing up with an unknown tag is given the default tag' do
-    visit apply_course_path(public_course, name: name, email: email, tag: 'An unknown tag')
+    visit apply_course_path(
+            public_course,
+            name: name,
+            email: email,
+            tag: 'An unknown tag'
+          )
     click_button 'Apply'
 
     expect(page).to have_content("We've sent you a verification mail")
@@ -129,7 +160,7 @@ feature "Apply for public courses", js: true do
     expect(Startup.last.tag_list).to include(saved_tag)
   end
 
-  scenario "user visits a public course in other school" do
+  scenario 'user visits a public course in other school' do
     visit apply_course_path(public_course_in_school_2)
 
     expect(page).to have_text("The page you were looking for doesn't exist!")
@@ -144,7 +175,9 @@ feature "Apply for public courses", js: true do
     fill_in 'Name', with: user.name
     click_button 'Apply'
 
-    expect(page).to have_text("You are already enrolled in #{public_course.name} course")
+    expect(page).to have_text(
+      "You are already enrolled in #{public_course.name} course"
+    )
   end
 
   scenario 'a student in the course tries public enrollment with a different email casing' do
@@ -155,7 +188,9 @@ feature "Apply for public courses", js: true do
     fill_in 'Name', with: user.name
     click_button 'Apply'
 
-    expect(page).to have_text("You are already enrolled in #{public_course.name} course")
+    expect(page).to have_text(
+      "You are already enrolled in #{public_course.name} course"
+    )
   end
 
   scenario 'user tries to access a private course page' do
@@ -168,7 +203,7 @@ feature "Apply for public courses", js: true do
   scenario 'user tries to access enrollment page without a valid token' do
     visit enroll_applicants_path(token)
 
-    expect(page).to have_text("Sign in")
+    expect(page).to have_text('Sign in')
     expect(page).to have_text('That one-time link has expired, or is invalid')
   end
 
@@ -181,7 +216,9 @@ feature "Apply for public courses", js: true do
     fill_in 'Name', with: name_2
     click_button 'Apply'
 
-    expect(page).to have_text("The email address you supplied cannot be used because an email we'd sent earlier bounced")
+    expect(page).to have_text(
+      "The email address you supplied cannot be used because an email we'd sent earlier bounced"
+    )
   end
 
   context 'when school has privacy policy' do
@@ -193,8 +230,14 @@ feature "Apply for public courses", js: true do
     scenario 'applicant can only see link to the privacy policy' do
       visit apply_course_path(public_course)
 
-      expect(page).to have_link('Privacy Policy', href: '/agreements/privacy-policy')
-      expect(page).not_to have_link('Terms & Conditions', href: '/agreements/terms-and-conditions')
+      expect(page).to have_link(
+        'Privacy Policy',
+        href: '/agreements/privacy-policy'
+      )
+      expect(page).not_to have_link(
+        'Terms & Conditions',
+        href: '/agreements/terms-and-conditions'
+      )
     end
   end
 
@@ -207,8 +250,14 @@ feature "Apply for public courses", js: true do
     scenario 'applicant can only see link to the terms and conditions' do
       visit apply_course_path(public_course)
 
-      expect(page).not_to have_link('Privacy Policy', href: '/agreements/privacy-policy')
-      expect(page).to have_link('Terms & Conditions', href: '/agreements/terms-and-conditions')
+      expect(page).not_to have_link(
+        'Privacy Policy',
+        href: '/agreements/privacy-policy'
+      )
+      expect(page).to have_link(
+        'Terms & Conditions',
+        href: '/agreements/terms-and-conditions'
+      )
     end
   end
 
@@ -221,8 +270,14 @@ feature "Apply for public courses", js: true do
     scenario 'applicant can see links to both agreements' do
       visit apply_course_path(public_course)
 
-      expect(page).to have_link('Privacy Policy', href: '/agreements/privacy-policy')
-      expect(page).to have_link('Terms & Conditions', href: '/agreements/terms-and-conditions')
+      expect(page).to have_link(
+        'Privacy Policy',
+        href: '/agreements/privacy-policy'
+      )
+      expect(page).to have_link(
+        'Terms & Conditions',
+        href: '/agreements/terms-and-conditions'
+      )
     end
   end
 end

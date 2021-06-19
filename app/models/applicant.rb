@@ -6,7 +6,13 @@ class Applicant < ApplicationRecord
   acts_as_taggable
 
   validates :name, presence: true
-  validates :email, presence: true, email: true, uniqueness: { scope: :course_id }
+  validates :email,
+            presence: true,
+            email: true,
+            uniqueness: {
+              scope: :course_id
+            }
 
+  scope :verified, -> { where(email_verified: true) }
   scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }
 end

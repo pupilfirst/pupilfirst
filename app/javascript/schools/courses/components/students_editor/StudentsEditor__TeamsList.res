@@ -23,7 +23,6 @@ module CourseTeamsQuery = %graphql(
             avatarUrl,
             userTags,
             email,
-            excludedFromLeaderboard,
             affiliation
             issuedCertificates {
               id
@@ -119,7 +118,7 @@ let studentAvatar = student =>
 
 let levelInfo = (levels, team) =>
   <span
-    className="inline-flex flex-col items-center rounded bg-orange-100 border border-orange-300 px-2 pt-2 pb-1 border">
+    className="inline-flex flex-col items-center rounded bg-orange-100 border border-orange-300 px-2 pt-2 pb-1">
     <div className="text-xs font-semibold"> {"Level" |> str} </div>
     <div className="font-bold">
       {team
@@ -204,8 +203,7 @@ let teamCard = (
                       {student |> Student.name |> str}
                     </p>
                     <span className="flex flex-row">
-                      {userTags(student)}
-                      {isSingleStudent ? teamTags(team) : React.null}
+                      {userTags(student)} {isSingleStudent ? teamTags(team) : React.null}
                     </span>
                   </div>
                 </div>

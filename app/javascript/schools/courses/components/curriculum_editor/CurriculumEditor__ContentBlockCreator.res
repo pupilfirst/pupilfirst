@@ -166,19 +166,20 @@ let elementId = (prefix, aboveContentBlock) =>
   | None => "bottom"
   }
 
-let fileInputId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-file-input-")
-let imageInputId = aboveContentBlock =>
-  aboveContentBlock |> elementId("markdown-block-image-input-")
-let videoInputId = aboveContentBlock =>
-  aboveContentBlock |> elementId("markdown-block-vimeo-input-")
-let videoFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-vimeo-form-")
-let fileFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-file-form-")
-let imageFormId = aboveContentBlock => aboveContentBlock |> elementId("markdown-block-image-form-")
+let fileInputId = aboveContentBlock => elementId("markdown-block-file-input-", aboveContentBlock)
+let imageInputId = aboveContentBlock => elementId("markdown-block-image-input-", aboveContentBlock)
+let videoInputId = aboveContentBlock => elementId("markdown-block-vimeo-input-", aboveContentBlock)
+let videoFormId = aboveContentBlock => elementId("markdown-block-vimeo-form-", aboveContentBlock)
+let fileFormId = aboveContentBlock => elementId("markdown-block-file-form-", aboveContentBlock)
+let imageFormId = aboveContentBlock => elementId("markdown-block-image-form-", aboveContentBlock)
+let audioFormId = aboveContentBlock => elementId("markdown-block-audio-form-", aboveContentBlock)
+let audioInputId = aboveContentBlock => elementId("markdown-block-audio-input-", aboveContentBlock)
 
 let onBlockTypeSelect = (target, aboveContentBlock, send, addContentBlockCB, blockType, _event) =>
   switch blockType {
   | #Markdown => createMarkdownContentBlock(target, aboveContentBlock, send, addContentBlockCB)
   | #File
+  | #Audio
   | #Image => ()
   | #Embed => send(ShowEmbedForm)
   | #VideoEmbed => send(ShowUploadVideoForm)
@@ -188,6 +189,7 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
   let fileId = aboveContentBlock |> fileInputId
   let imageId = aboveContentBlock |> imageInputId
   let videoId = aboveContentBlock |> videoInputId
+  let audioId = aboveContentBlock |> audioInputId
 
   let (faIcon, buttonText, htmlFor) = switch blockType {
   | #Markdown => ("fab fa-markdown", t("button_labels.markdown"), None)
@@ -195,6 +197,7 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
   | #Image => ("far fa-image", t("button_labels.image"), Some(imageId))
   | #Embed => ("fas fa-code", t("button_labels.embed"), None)
   | #VideoEmbed => ("fab fa-vimeo-v", t("button_labels.video"), Some(videoId))
+  | #Audio => ("far fa-file-audio", "Audio", Some(audioId))
   }
 
   <label
@@ -311,6 +314,7 @@ let uploadFile = (
 ) => {
   let isAboveContentBlock = aboveContentBlock != None
   switch blockType {
+  | #Audio
   | #File
   | #Image =>
     Api.sendFormData(
@@ -355,6 +359,7 @@ let submitForm = (target, aboveContentBlock, state, send, addContentBlockCB, blo
   | #File => fileFormId(aboveContentBlock)
   | #Image => imageFormId(aboveContentBlock)
   | #VideoEmbed => videoFormId(aboveContentBlock)
+  | #Audio => audioFormId(aboveContentBlock)
   }
 
   let element = ReactDOM.querySelector("#" ++ formId)
@@ -439,6 +444,12 @@ let handleFileInputChange = (
         )
       | (true, true) => None
       }
+    | #Audio =>
+      switch (FileUtils.isAudio(file), FileUtils.hasValidSize(~maxSize=10 * 1024 * 1024, file)) {
+      | (false, true | false) => Some(t("invalid_audio_file_error"))
+      | (true, false) => Some(t("audio_upload_size_limit_warning"))
+      | (true, true) => None
+      }
     }
 
     switch error {
@@ -487,6 +498,12 @@ let uploadForm = (
       videoFormId(aboveContentBlock),
       fileSelectionHandler(#VideoEmbed),
       "video",
+    )
+  | #Audio => (
+      audioInputId(aboveContentBlock),
+      audioFormId(aboveContentBlock),
+      fileSelectionHandler(#Audio),
+      "audio",
     )
   }
 
@@ -647,6 +664,7 @@ let make = (
     }}>
     {uploadFormCurried(#File)}
     {uploadFormCurried(#Image)}
+    {uploadFormCurried(#Audio)}
     <div className={containerClasses(state |> visible, isAboveContentBlock)}>
       {buttonAboveContentBlock(state, send, aboveContentBlock)}
       <div className="content-block-creator__inner-container">
@@ -657,8 +675,8 @@ let make = (
             className="content-block-creator__block-content-type text-sm hidden shadow-lg mx-auto relative bg-primary-900 rounded-lg -mt-4 z-10">
             {(
               hasVimeoAccessToken
-                ? [#Markdown, #Image, #Embed, #VideoEmbed, #File]
-                : [#Markdown, #Image, #Embed, #File]
+                ? [#Markdown, #Image, #Embed, #VideoEmbed, #File, #Audio]
+                : [#Markdown, #Image, #Embed, #File, #Audio]
             )
             |> Array.map(button(target, aboveContentBlock, send, addContentBlockCB))
             |> React.array}

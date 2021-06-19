@@ -27,6 +27,8 @@ let unsafeFind = (p, message, l) =>
     raise(UnsafeFindFailed(message))
   }
 
+let replaceWithIndex = (i, t, l) => Js.Array.mapi((a, index) => index == i ? t : a, l)
+
 let flatten = t => t |> Array.to_list |> List.flatten |> Array.of_list
 
 let flattenV2 = a => a |> Js.Array.reduce((flat, next) => flat |> Js.Array.concat(next), [])

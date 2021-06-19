@@ -3,7 +3,7 @@ ruby '2.7.3'
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.0.3', '>= 6.0.3.7'
+gem 'rails', '~> 6.1.3', '>= 6.1.3.2'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
@@ -43,7 +43,7 @@ gem 'motion-markdown-it', '~> 8.4.1' # Ruby version of Markdown-it (a CommonMark
 gem 'motion-markdown-it-plugins', '~> 8.4.2' # Plugins for motion-markdown-it.
 gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
 gem 'react-rails', '~> 2.2' # For automatically transforming JSX and using React in Rails.
-gem 'acts-as-taggable-on', github: 'spark-solutions/acts-as-taggable-on', branch: 'fix/rails-6-and-failing-specs' # Tag a single model on several contexts. TODO: remove tracking branch when gem is updated for Rails 6 issues
+gem 'acts-as-taggable-on', '~> 7.0' # Tag a single model on several contexts.
 gem 'email_inquire', '~> 0.6' # Validate email for format, common typos and one-time email providers
 gem 'titleize', '~> 1.4' # better titleizing, modifies Inflector.titleize from default rails
 gem 'reform', '~> 2.2' # Form objects decoupled from models. http://www.trailblazer.to/gems/reform
@@ -71,7 +71,7 @@ gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
 gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'chartkick', '~> 3.4' # Create beautiful charts with one line of JavaScript.
-gem 'graphql', '~> 1.12' # Ruby implementation of GraphQL http://graphql-ruby.org
+gem 'graphql', '~> 1.12.6' # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
 gem 'i18n-js', '~> 3.7' # Provide Rails I18n translations on Javascript.
 gem 'batch-loader', '~> 1.5' # Generic lazy batching mechanism to avoid N+1 DB queries.
@@ -131,6 +131,5 @@ end
 group :production do
   gem 'dalli', '~> 2.7.10' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
   gem 'skylight', '~> 4.2' # Skylight is a smart profiler for Rails, Sinatra, and other Ruby apps.
-  gem 'heroku-deflater', '~> 0.6' # Enable gzip compression on heroku, but don't compress images.
   gem 'aws-sdk-s3', '~> 1.35 ', require: false
 end

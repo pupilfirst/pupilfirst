@@ -24,6 +24,14 @@ let isVideo = file =>
   | _ => false
   }
 
+let isAudio = file =>
+  switch file["_type"] {
+  | "audio/wav"
+  | "audio/mpeg"
+  | "audio/ogg" => true
+  | _ => false
+  }
+
 let isValid = (~maxSize=defaultMaxSize, ~image=false, ~video=false, file) => {
   let maxSize = video ? defaultVideoMaxSize : maxSize
   let sizeValid = hasValidSize(~maxSize, file)

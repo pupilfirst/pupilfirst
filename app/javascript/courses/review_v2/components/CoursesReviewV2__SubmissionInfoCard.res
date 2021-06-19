@@ -32,26 +32,22 @@ let showSubmissionStatus = submission => {
 let make = (~submission, ~submissionNumber) =>
   <div className={cardClasses(submission)}>
     <div className="rounded-r-lg shadow">
-      <div
-        className="p-4 md:px-6 md:py-5 border-b bg-white flex flex-row items-center justify-between">
-        <div className="flex flex-col pr-4">
-          <h2 className="font-semibold text-sm lg:text-base leading-tight">
+      <div className="p-4 border-b bg-white flex flex-row items-center justify-between">
+        <div className="flex flex-col pr-2">
+          <h2 className="font-semibold text-sm leading-tight">
             {("Submission #" ++ string_of_int(submissionNumber))->str}
           </h2>
           <span className="text-xs text-gray-800 pt-px">
             {submission->SubmissionMeta.createdAt->DateFns.formatPreset(~year=true, ())->str}
           </span>
         </div>
-        <div className="text-xs flex w-auto mt-2 sm:mt-0">
+        <div className="text-xs flex w-auto">
           {ReactUtils.nullUnless(
             <div
-              className="bg-primary-100 text-primary-600 border border-transparent font-semibold px-3 py-px rounded mr-3">
-              <span className="hidden md:block"> {"Feedback Sent"->str} </span>
-              <span className="md:hidden block">
-                <PfIcon className="if i-comment-alt-solid if-fw" />
-              </span>
+              className="bg-primary-100 text-primary-600 border border-transparent font-semibold px-2 py-px rounded mr-2">
+              <PfIcon className="if i-comment-alt-solid if-fw" />
             </div>,
-            (SubmissionMeta.feedbackSent(submission)),
+            SubmissionMeta.feedbackSent(submission),
           )}
           {showSubmissionStatus(submission)}
         </div>

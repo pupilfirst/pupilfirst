@@ -3,6 +3,7 @@ module IndexSubmission = CoursesReview__IndexSubmission
 module Student = CoursesReview__Student
 module ReviewChecklistItem = CoursesReview__ReviewChecklistItem
 module SubmissionMeta = CoursesReview__SubmissionMeta
+module Coach = UserProxy
 
 type t = {
   submission: OverlaySubmission.t,
@@ -16,8 +17,9 @@ type t = {
   reviewChecklist: array<ReviewChecklistItem.t>,
   targetEvaluationCriteriaIds: array<string>,
   inactiveStudents: bool,
-  coachIds: array<string>,
+  coaches: array<Coach.t>,
   teamName: option<string>,
+  courseId: string
 }
 let submission = t => t.submission
 let allSubmissions = t=> t.allSubmissions
@@ -29,8 +31,9 @@ let evaluationCriteria = t => t.evaluationCriteria
 let reviewChecklist = t => t.reviewChecklist
 let targetEvaluationCriteriaIds = t => t.targetEvaluationCriteriaIds
 let inactiveStudents = t => t.inactiveStudents
-let coachIds = t => t.coachIds
+let coaches = t => t.coaches
 let teamName = t => t.teamName
+let courseId = t=> t.courseId
 
 let make = (
   ~submission,
@@ -44,8 +47,9 @@ let make = (
   ~reviewChecklist,
   ~targetEvaluationCriteriaIds,
   ~inactiveStudents,
-  ~coachIds,
+  ~coaches,
   ~teamName,
+  ~courseId
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
@@ -58,8 +62,9 @@ let make = (
   reviewChecklist: reviewChecklist,
   targetEvaluationCriteriaIds: targetEvaluationCriteriaIds,
   inactiveStudents: inactiveStudents,
-  coachIds: coachIds,
+  coaches: coaches,
   teamName: teamName,
+  courseId: courseId
 }
 
 
@@ -94,8 +99,9 @@ let decodeJs = details =>
       )
     ),
     ~reviewChecklist=details["reviewChecklist"] |> ReviewChecklistItem.makeFromJs,
-    ~coachIds=details["coachIds"],
+    ~coaches= Js.Array.map(Coach.makeFromJs, details["coaches"]),
     ~teamName=details["teamName"],
+    ~courseId=details["courseId"]
   )
 
 // let updateSubmission = (submission, t) => {

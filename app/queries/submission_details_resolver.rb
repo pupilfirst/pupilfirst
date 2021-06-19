@@ -15,7 +15,8 @@ class SubmissionDetailsResolver < ApplicationQuery
       evaluation_criteria: evaluation_criteria,
       review_checklist: review_checklist,
       inactive_students: inactive_students,
-      coach_ids: assigned_coach_ids
+      coaches: coaches,
+      course_id: level.course_id
     }
   end
 
@@ -23,6 +24,14 @@ class SubmissionDetailsResolver < ApplicationQuery
 
   def submission
     @submission ||= TimelineEvent.find_by(id: submission_id)
+  end
+
+  def coaches
+    team_ids = submission.founders.map(&:startup_id).uniq
+    FacultyStartupEnrollment
+      .where(startup_id: team_ids)
+      .includes(faculty: [user: [avatar_attachment: :blob]])
+      .map { |c| c.faculty }
   end
 
   def submissions_from_same_set_of_students
@@ -90,14 +99,6 @@ class SubmissionDetailsResolver < ApplicationQuery
 
   def inactive_students
     submission.founders.count != submission.founders.active.count
-  end
-
-  def assigned_coach_ids
-    Founder
-      .where(id: submission.founders)
-      .joins(startup: :faculty_startup_enrollments)
-      .distinct(:faculty_id)
-      .pluck(:faculty_id)
   end
 
   def students_have_same_team

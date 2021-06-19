@@ -1,6 +1,7 @@
 module Types
   class SubmissionDetailsType < Types::BaseObject
-    field :submissions, [Types::SubmissionType], null: false
+    field :all_submissions, [Types::SubmissionInfoType], null: false
+    field :submission, Types::SubmissionType, null: false
     field :target_id, ID, null: false
     field :target_title, String, null: false
     field :students, [Types::StudentMiniType], null: false

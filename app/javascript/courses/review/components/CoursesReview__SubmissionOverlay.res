@@ -7,45 +7,45 @@ type state =
   | Loading
   | Loaded(SubmissionDetails.t)
 
-module SubmissionDetailsQuery = %graphql(
-  `
-    query SubmissionDetailsQuery($submissionId: ID!) {
-      submissionDetails(submissionId: $submissionId) {
-        targetId, targetTitle, levelNumber, levelId, inactiveStudents
-        students {
-          id
-          name
-        },
-        evaluationCriteria{
-          id, name, maxGrade, passGrade, gradeLabels { grade label}
-        },
-        reviewChecklist{
-          title
-          result{
-            title
-            feedback
-          }
-        },
-        targetEvaluationCriteriaIds,
-        submissions{
-          id, evaluatorName, passedAt, createdAt, evaluatedAt
-          files{
-            url, title, id
-          },
-          grades {
-            evaluationCriterionId, grade
-          },
-          feedback{
-            id, coachName, coachAvatarUrl, coachTitle, createdAt,value
-          },
-          checklist
-        }
-        coachIds
-        teamName
-      }
-    }
-  `
-)
+// module SubmissionDetailsQuery = %graphql(
+//   `
+//     query SubmissionDetailsQuery($submissionId: ID!) {
+//       submissionDetails(submissionId: $submissionId) {
+//         targetId, targetTitle, levelNumber, levelId, inactiveStudents
+//         students {
+//           id
+//           name
+//         },
+//         evaluationCriteria{
+//           id, name, maxGrade, passGrade, gradeLabels { grade label}
+//         },
+//         reviewChecklist{
+//           title
+//           result{
+//             title
+//             feedback
+//           }
+//         },
+//         targetEvaluationCriteriaIds,
+//         submissions{
+//           id, evaluatorName, passedAt, createdAt, evaluatedAt
+//           files{
+//             url, title, id
+//           },
+//           grades {
+//             evaluationCriterionId, grade
+//           },
+//           feedback{
+//             id, coachName, coachAvatarUrl, coachTitle, createdAt,value
+//           },
+//           checklist
+//         }
+//         coachIds
+//         teamName
+//       }
+//     }
+//   `
+// )
 
 /*
  * Use the sync submission callback to allow the index to reload its data if
@@ -53,36 +53,36 @@ module SubmissionDetailsQuery = %graphql(
  *
  * Then, set the state of this component to Loaded.
  */
-let updateSubmissionDetails = (setState, submissionId, syncSubmissionCB, details) => {
-  let submissionDetails = details |> SubmissionDetails.decodeJs
+// let updateSubmissionDetails = (setState, submissionId, syncSubmissionCB, details) => {
+//   let submissionDetails = details |> SubmissionDetails.decodeJs
 
-  submissionDetails
-  |> SubmissionDetails.submissions
-  |> ArrayUtils.unsafeFind(
-    submission => submission |> OverlaySubmission.id == submissionId,
-    "Could not find overlaySubmission with ID " ++ (submissionId ++ " in loaded submissions"),
-  )
-  |> syncSubmissionCB
+//   submissionDetails
+//   |> SubmissionDetails.submissions
+//   |> ArrayUtils.unsafeFind(
+//     submission => submission |> OverlaySubmission.id == submissionId,
+//     "Could not find overlaySubmission with ID " ++ (submissionId ++ " in loaded submissions"),
+//   )
+//   |> syncSubmissionCB
 
-  setState(_ => Loaded(submissionDetails))
-}
+//   setState(_ => Loaded(submissionDetails))
+// }
 
-let getSubmissionDetails = (submissionId, setState, syncSubmissionCB, ()) => {
-  setState(_ => Loading)
-  SubmissionDetailsQuery.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["submissionDetails"] |> updateSubmissionDetails(
-      setState,
-      submissionId,
-      syncSubmissionCB,
-    )
-    Js.Promise.resolve()
-  })
-  |> ignore
+// let getSubmissionDetails = (submissionId, setState, syncSubmissionCB, ()) => {
+//   setState(_ => Loading)
+//   SubmissionDetailsQuery.make(~submissionId, ())
+//   |> GraphqlQuery.sendQuery
+//   |> Js.Promise.then_(response => {
+//     response["submissionDetails"] |> updateSubmissionDetails(
+//       setState,
+//       submissionId,
+//       syncSubmissionCB,
+//     )
+//     Js.Promise.resolve()
+//   })
+//   |> ignore
 
-  None
-}
+//   None
+// }
 
 let closeOverlay = courseId => RescriptReactRouter.push("/courses/" ++ (courseId ++ "/review"))
 
@@ -151,52 +151,53 @@ let headerSection = (submissionDetails, courseId, assignedCoaches) =>
     </div>
   </div>
 
-let updateSubmissionDetails = (setState, submissionDetails, overlaySubmission) => {
-  // Create new details for overlay with updated overlaySubmission.
-  let newSubmissionDetails =
-    submissionDetails |> SubmissionDetails.updateSubmission(overlaySubmission)
+// let updateSubmissionDetails = (setState, submissionDetails, overlaySubmission) => {
+//   // Create new details for overlay with updated overlaySubmission.
+//   // let newSubmissionDetails =
+//   //   submissionDetails |> SubmissionDetails.updateSubmission(overlaySubmission)
 
-  // Re-render the overlay with the updated submission details.
-  setState(_ => Loaded(newSubmissionDetails))
+//   // // Re-render the overlay with the updated submission details.
+//   // setState(_ => Loaded(newSubmissionDetails))
 
-  newSubmissionDetails
-}
+//   // newSubmissionDetails
 
-let addGrading = (setState, removePendingSubmissionCB, submissionDetails, overlaySubmission) => {
-  updateSubmissionDetails(setState, submissionDetails, overlaySubmission) |> ignore
+// }
 
-  removePendingSubmissionCB()
-}
+// let addGrading = (setState, removePendingSubmissionCB, submissionDetails, overlaySubmission) => {
+//   updateSubmissionDetails(setState, submissionDetails, overlaySubmission) |> ignore
 
-let addFeedbackToReviewedSubmission = (
-  setState,
-  updateReviewedSubmissionCB,
-  submissionDetails,
-  overlaySubmission,
-) =>
-  updateSubmissionDetails(setState, submissionDetails, overlaySubmission)
-  |> SubmissionDetails.makeIndexSubmission(overlaySubmission)
-  |> updateReviewedSubmissionCB
+//   removePendingSubmissionCB()
+// }
 
-let updateReviewChecklist = (submissionDetails, setState, reviewChecklist) =>
-  setState(_ => Loaded(
-    submissionDetails |> SubmissionDetails.updateReviewChecklist(reviewChecklist),
-  ))
+// let addFeedbackToReviewedSubmission = (
+//   setState,
+//   updateReviewedSubmissionCB,
+//   submissionDetails,
+//   overlaySubmission,
+// ) =>
+//   updateSubmissionDetails(setState, submissionDetails, overlaySubmission)
+//   |> SubmissionDetails.makeIndexSubmission(overlaySubmission)
+//   |> updateReviewedSubmissionCB
 
-let inactiveWarning = submissionDetails =>
-  if submissionDetails |> SubmissionDetails.inactiveStudents {
-    let warning = if submissionDetails |> SubmissionDetails.students |> Array.length > 1 {
-      "This submission is linked to one or more students whose access to the course has ended, or have dropped out."
-    } else {
-      "This submission is from a student whose access to the course has ended, or has dropped out."
-    }
+// let updateReviewChecklist = (submissionDetails, setState, reviewChecklist) =>
+//   setState(_ => Loaded(
+//     submissionDetails |> SubmissionDetails.updateReviewChecklist(reviewChecklist),
+//   ))
 
-    <div className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3">
-      <i className="fas fa-exclamation-triangle" /> <span className="ml-2"> {warning |> str} </span>
-    </div>
-  } else {
-    React.null
-  }
+// let inactiveWarning = submissionDetails =>
+//   if submissionDetails |> SubmissionDetails.inactiveStudents {
+//     let warning = if submissionDetails |> SubmissionDetails.students |> Array.length > 1 {
+//       "This submission is linked to one or more students whose access to the course has ended, or have dropped out."
+//     } else {
+//       "This submission is from a student whose access to the course has ended, or has dropped out."
+//     }
+
+//     <div className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3">
+//       <i className="fas fa-exclamation-triangle" /> <span className="ml-2"> {warning |> str} </span>
+//     </div>
+//   } else {
+//     React.null
+//   }
 
 @react.component
 let make = (
@@ -215,55 +216,56 @@ let make = (
     Some(() => ScrollLock.deactivate())
   })
 
-  React.useEffect1(getSubmissionDetails(submissionId, setState, syncSubmissionCB), [submissionId])
+  // React.useEffect1(getSubmissionDetails(submissionId, setState, syncSubmissionCB), [submissionId])
   <div className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
     {switch state {
     | Loaded(submissionDetails) =>
-      let assignedCoaches =
-        teamCoaches |> Js.Array.filter(coach =>
-          submissionDetails |> SubmissionDetails.coachIds |> Array.mem(coach |> Coach.id)
-        )
+    React.null
+      // let assignedCoaches =
+      //   teamCoaches |> Js.Array.filter(coach =>
+      //     submissionDetails |> SubmissionDetails.coachIds |> Array.mem(coach |> Coach.id)
+      //   )
 
-      <div>
-        {headerSection(submissionDetails, courseId, assignedCoaches)}
-        <div className="container mx-auto mt-16 md:mt-18 max-w-3xl px-3 lg:px-0">
-          {inactiveWarning(submissionDetails)}
-        </div>
-        <div
-          className="review-submission-overlay__submission-container relative container mx-auto max-w-3xl px-3 lg:px-0 pb-8">
-          {submissionDetails
-          |> SubmissionDetails.submissions
-          |> ArrayUtils.copyAndSort((s1, s2) =>
-            DateFns.differenceInSeconds(
-              OverlaySubmission.createdAt(s2),
-              OverlaySubmission.createdAt(s1),
-            )
-          )
-          |> Array.mapi((index, overlaySubmission) =>
-            <CoursesReview__SubmissionsList
-              key={OverlaySubmission.id(overlaySubmission)}
-              overlaySubmission
-              teamSubmission={submissionDetails |> SubmissionDetails.students |> Array.length > 1}
-              targetEvaluationCriteriaIds={submissionDetails |> SubmissionDetails.targetEvaluationCriteriaIds}
-              addGradingCB={addGrading(setState, removePendingSubmissionCB, submissionDetails)}
-              addFeedbackCB={addFeedbackToReviewedSubmission(
-                setState,
-                updateReviewedSubmissionCB,
-                submissionDetails,
-              )}
-              submissionNumber={(submissionDetails
-              |> SubmissionDetails.submissions
-              |> Array.length) - index}
-              currentCoach
-              evaluationCriteria={submissionDetails |> SubmissionDetails.evaluationCriteria}
-              reviewChecklist={submissionDetails |> SubmissionDetails.reviewChecklist}
-              updateReviewChecklistCB={updateReviewChecklist(submissionDetails, setState)}
-              targetId={submissionDetails |> SubmissionDetails.targetId}
-            />
-          )
-          |> React.array}
-        </div>
-      </div>
+      // <div>
+      //   {headerSection(submissionDetails, courseId, assignedCoaches)}
+      //   <div className="container mx-auto mt-16 md:mt-18 max-w-3xl px-3 lg:px-0">
+      //     {inactiveWarning(submissionDetails)}
+      //   </div>
+      //   <div
+      //     className="review-submission-overlay__submission-container relative container mx-auto max-w-3xl px-3 lg:px-0 pb-8">
+      //     {submissionDetails
+      //     |> SubmissionDetails.submissions
+      //     |> ArrayUtils.copyAndSort((s1, s2) =>
+      //       DateFns.differenceInSeconds(
+      //         OverlaySubmission.createdAt(s2),
+      //         OverlaySubmission.createdAt(s1),
+      //       )
+      //     )
+      //     |> Array.mapi((index, overlaySubmission) =>
+      //       <CoursesReview__SubmissionsList
+      //         key={OverlaySubmission.id(overlaySubmission)}
+      //         overlaySubmission
+      //         teamSubmission={submissionDetails |> SubmissionDetails.students |> Array.length > 1}
+      //         targetEvaluationCriteriaIds={submissionDetails |> SubmissionDetails.targetEvaluationCriteriaIds}
+      //         addGradingCB={addGrading(setState, removePendingSubmissionCB, submissionDetails)}
+      //         addFeedbackCB={addFeedbackToReviewedSubmission(
+      //           setState,
+      //           updateReviewedSubmissionCB,
+      //           submissionDetails,
+      //         )}
+      //         submissionNumber={(submissionDetails
+      //         |> SubmissionDetails.submissions
+      //         |> Array.length) - index}
+      //         currentCoach
+      //         evaluationCriteria={submissionDetails |> SubmissionDetails.evaluationCriteria}
+      //         reviewChecklist={submissionDetails |> SubmissionDetails.reviewChecklist}
+      //         updateReviewChecklistCB={updateReviewChecklist(submissionDetails, setState)}
+      //         targetId={submissionDetails |> SubmissionDetails.targetId}
+      //       />
+      //     )
+      //     |> React.array}
+      //   </div>
+      // </div>
 
     | Loading =>
       <div>

@@ -3,7 +3,8 @@ class SubmissionDetailsResolver < ApplicationQuery
 
   def submission_details
     {
-      submissions: submissions_from_same_set_of_students,
+      all_submissions: submissions_from_same_set_of_students,
+      submission: submission,
       target_id: target.id,
       target_title: target.title,
       students: students,
@@ -25,15 +26,20 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def submissions_from_same_set_of_students
-    submissions.includes(:startup_feedback, :timeline_event_grades, :evaluator)
-      .order("timeline_events.created_at DESC")
-      .select { |s| s.timeline_event_owners.pluck(:founder_id).sort == student_ids }
+    submissions
+      .includes(:startup_feedback)
+      .order('timeline_events.created_at DESC')
+      .select do |s|
+        s.timeline_event_owners.pluck(:founder_id).sort == student_ids
+      end
   end
 
   def submissions
-    TimelineEvent.where(target_id: submission.target_id)
+    TimelineEvent
+      .where(target_id: submission.target_id)
       .joins(:timeline_event_owners)
-      .where(timeline_event_owners: { founder_id: student_ids }).distinct
+      .where(timeline_event_owners: { founder_id: student_ids })
+      .distinct
   end
 
   def student_ids
@@ -50,11 +56,15 @@ class SubmissionDetailsResolver < ApplicationQuery
 
   def evaluation_criteria
     # EvaluationCriterion of target OR EvaluationCriteria of submissions
-    target_criteria = target.evaluation_criteria.as_json(only: evaluation_criteria_fields)
+    target_criteria =
+      target.evaluation_criteria.as_json(only: evaluation_criteria_fields)
 
-    submission_criteria = EvaluationCriterion.joins(timeline_event_grades: :timeline_event)
-      .where(timeline_events: { id: submissions_from_same_set_of_students })
-      .distinct.as_json(only: evaluation_criteria_fields)
+    submission_criteria =
+      EvaluationCriterion
+        .joins(timeline_event_grades: :timeline_event)
+        .where(timeline_events: { id: submissions_from_same_set_of_students })
+        .distinct
+        .as_json(only: evaluation_criteria_fields)
 
     (target_criteria + submission_criteria).uniq
   end
@@ -64,12 +74,10 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def students
-    submission.founders.joins(:user).map do |student|
-      {
-        id: student.id,
-        name: student.name
-      }
-    end
+    submission
+      .founders
+      .joins(:user)
+      .map { |student| { id: student.id, name: student.name } }
   end
 
   def authorized?
@@ -85,7 +93,8 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def assigned_coach_ids
-    Founder.where(id: submission.founders)
+    Founder
+      .where(id: submission.founders)
       .joins(startup: :faculty_startup_enrollments)
       .distinct(:faculty_id)
       .pluck(:faculty_id)
@@ -96,7 +105,8 @@ class SubmissionDetailsResolver < ApplicationQuery
   end
 
   def team_name
-    if submission.team_submission? && students_have_same_team && !student_ids.one?
+    if submission.team_submission? && students_have_same_team &&
+         !student_ids.one?
       Founder.find_by(id: student_ids.first).startup.name
     end
   end

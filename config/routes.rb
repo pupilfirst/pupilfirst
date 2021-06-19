@@ -192,7 +192,6 @@ Rails.application.routes.draw do
   resources :courses, only: %i[show] do
     member do
       get 'review', action: 'review'
-      get 'review_v2', action: 'review_v2'
       get 'students', action: 'students'
       get 'leaderboard', action: 'leaderboard'
       get 'curriculum', action: 'curriculum'

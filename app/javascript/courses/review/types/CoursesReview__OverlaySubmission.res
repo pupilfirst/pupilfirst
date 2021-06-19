@@ -37,8 +37,7 @@ let make = (
   checklist: checklist,
 }
 
-let makeFromJs = details =>
-  details |> Js.Array.map(s =>
+let makeFromJs = s =>
     make(
       ~id=s["id"],
       ~createdAt=DateFns.decodeISO(s["createdAt"]),
@@ -64,7 +63,7 @@ let makeFromJs = details =>
         SubmissionChecklistItem.decode(SubmissionChecklistItem.makeFiles(s["files"])),
       ),
     )
-  )
+
 
 let feedbackSent = t => t.feedback |> ArrayUtils.isNotEmpty
 

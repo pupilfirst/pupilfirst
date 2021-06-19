@@ -67,11 +67,6 @@ class CoursesController < ApplicationController
   # GET /courses/:id/review
   def review
     @course = authorize(find_course)
-    render layout: 'student_course'
-  end
-
-  def review_v2
-    @course = authorize(find_course)
     render 'users/dashboard_v2', layout: 'app_router'
   end
 

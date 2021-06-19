@@ -2,9 +2,11 @@ module OverlaySubmission = CoursesReview__OverlaySubmission
 module IndexSubmission = CoursesReview__IndexSubmission
 module Student = CoursesReview__Student
 module ReviewChecklistItem = CoursesReview__ReviewChecklistItem
+module SubmissionMeta = CoursesReview__SubmissionMeta
 
 type t = {
-  submissions: array<OverlaySubmission.t>,
+  submission: OverlaySubmission.t,
+  allSubmissions: array<SubmissionMeta.t>,
   targetId: string,
   targetTitle: string,
   students: array<Student.t>,
@@ -17,7 +19,8 @@ type t = {
   coachIds: array<string>,
   teamName: option<string>,
 }
-let submissions = t => t.submissions
+let submission = t => t.submission
+let allSubmissions = t=> t.allSubmissions
 let targetId = t => t.targetId
 let targetTitle = t => t.targetTitle
 let levelNumber = t => t.levelNumber
@@ -30,7 +33,8 @@ let coachIds = t => t.coachIds
 let teamName = t => t.teamName
 
 let make = (
-  ~submissions,
+  ~submission,
+  ~allSubmissions,
   ~targetId,
   ~targetTitle,
   ~students,
@@ -43,7 +47,8 @@ let make = (
   ~coachIds,
   ~teamName,
 ) => {
-  submissions: submissions,
+  submission: submission,
+  allSubmissions: allSubmissions,
   targetId: targetId,
   targetTitle: targetTitle,
   students: students,
@@ -57,9 +62,19 @@ let make = (
   teamName: teamName,
 }
 
+
+
 let decodeJs = details =>
   make(
-    ~submissions=details["submissions"] |> OverlaySubmission.makeFromJs,
+    ~submission=OverlaySubmission.makeFromJs(details["submission"]),
+    ~allSubmissions=ArrayUtils.copyAndSort(
+      (s1, s2) =>
+        DateFns.differenceInSeconds(
+          SubmissionMeta.createdAt(s2),
+          SubmissionMeta.createdAt(s1),
+        ),
+      SubmissionMeta.makeFromJs(details["allSubmissions"]),
+    ),
     ~targetId=details["targetId"],
     ~targetTitle=details["targetTitle"],
     ~students=details["students"] |> Array.map(Student.makeFromJs),
@@ -83,31 +98,31 @@ let decodeJs = details =>
     ~teamName=details["teamName"],
   )
 
-let updateSubmission = (submission, t) => {
-  ...t,
-  submissions: t.submissions |> Js.Array.map(s =>
-    OverlaySubmission.id(s) == OverlaySubmission.id(submission) ? submission : s
-  ),
-}
+// let updateSubmission = (submission, t) => {
+//   ...t,
+//   submissions: t.submissions |> Js.Array.map(s =>
+//     OverlaySubmission.id(s) == OverlaySubmission.id(submission) ? submission : s
+//   ),
+// }
 
-let makeIndexSubmission = (overlaySubmission, t) =>
-  IndexSubmission.make(
-    ~id=overlaySubmission |> OverlaySubmission.id,
-    ~title=t.targetTitle,
-    ~createdAt=overlaySubmission |> OverlaySubmission.createdAt,
-    ~levelId=t.levelId,
-    ~userNames=t.students
-    |> Js.Array.map(student => student |> CoursesReview__Student.name)
-    |> Js.Array.joinWith(", "),
-    ~status=Some(
-      IndexSubmission.makeStatus(
-        ~passedAt=overlaySubmission |> OverlaySubmission.passedAt,
-        ~feedbackSent=overlaySubmission |> OverlaySubmission.feedbackSent,
-      ),
-    ),
-    ~coachIds=t.coachIds,
-    ~teamName=t.teamName,
-    ~levelNumber=0
-  )
+// let makeIndexSubmission = (overlaySubmission, t) =>
+//   IndexSubmission.make(
+//     ~id=overlaySubmission |> OverlaySubmission.id,
+//     ~title=t.targetTitle,
+//     ~createdAt=overlaySubmission |> OverlaySubmission.createdAt,
+//     ~levelId=t.levelId,
+//     ~userNames=t.students
+//     |> Js.Array.map(student => student |> CoursesReview__Student.name)
+//     |> Js.Array.joinWith(", "),
+//     ~status=Some(
+//       IndexSubmission.makeStatus(
+//         ~passedAt=overlaySubmission |> OverlaySubmission.passedAt,
+//         ~feedbackSent=overlaySubmission |> OverlaySubmission.feedbackSent,
+//       ),
+//     ),
+//     ~coachIds=t.coachIds,
+//     ~teamName=t.teamName,
+//     ~levelNumber=0,
+//   )
 
 let updateReviewChecklist = (reviewChecklist, t) => {...t, reviewChecklist: reviewChecklist}

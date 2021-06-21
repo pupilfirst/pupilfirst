@@ -305,8 +305,8 @@ en:
       scroll_to_top: Scroll to Top
     CoursesCurriculum__TargetStatus:
       access_locked: Your access to this course has ended.
-      course_locked: The course has ended and submissions are disabled for all target!
-      level_locked: You must level up to complete this target.
+      course_locked: This course has ended.
+      level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
       prerequisites_incomplete: This target has pre-requisites that are incomplete.
       status:
         completed: Completed

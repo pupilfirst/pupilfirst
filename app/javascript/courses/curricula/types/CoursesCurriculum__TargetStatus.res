@@ -158,7 +158,7 @@ let lockReasonToString = lr =>
   switch lr {
   | CourseLocked => tc("course_locked")
   | AccessLocked => tc("access_locked")
-  | LevelLocked => tc("level_locked")
+  | LevelLocked => tc(~variables=[("current_level", "2")], "level_locked")
   | PrerequisitesIncomplete => tc("prerequisites_incomplete")
   }
 

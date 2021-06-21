@@ -27,6 +27,7 @@ Rails.application.routes.draw do
 
   authenticate :user, ->(u) { AdminUser.where(email: u.email).present? } do
     mount Delayed::Web::Engine, at: '/jobs'
+    mount Flipper::UI.app(Flipper), at: '/toggle'
   end
 
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?

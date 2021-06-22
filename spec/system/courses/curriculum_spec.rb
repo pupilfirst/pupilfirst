@@ -348,7 +348,7 @@ feature "Student's view of Course Curriculum", js: true do
     click_link l5_reviewed_target.title
 
     expect(page).to have_content(
-      "You're in Level 4. Complete all milestone targets in L4 first."
+      "You're in Level 4. Complete all milestone targets in Level 4 first."
     )
 
     click_button 'Close'

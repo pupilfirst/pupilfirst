@@ -18,7 +18,7 @@ module LatestSubmission = CoursesCurriculum__LatestSubmission
 type lockReason =
   | CourseLocked
   | AccessLocked
-  | LevelLocked
+  | LevelLocked(string)
   | PrerequisitesIncomplete
 
 type status =
@@ -137,7 +137,7 @@ let compute = (preview, team, course, levels, targetGroups, targets, submissions
       | SubmissionRejected => Rejected
       | SubmissionMissing =>
         if ct.levelNumber > studentLevelNumber && ct.targetReviewed {
-          Locked(LevelLocked)
+          Locked(LevelLocked(string_of_int(studentLevelNumber)))
         } else if !(ct.prerequisiteTargetIds |> allTargetsComplete(targetCache)) {
           Locked(PrerequisitesIncomplete)
         } else {
@@ -154,11 +154,11 @@ let status = t => t.status
 
 let isPending = t => t.status == Pending
 
-let lockReasonToString = lr =>
-  switch lr {
+let lockReasonToString = lockReason =>
+  switch lockReason {
   | CourseLocked => tc("course_locked")
   | AccessLocked => tc("access_locked")
-  | LevelLocked => tc(~variables=[("current_level", "2")], "level_locked")
+  | LevelLocked(currentLevel) => tc(~variables=[("current_level", currentLevel)], "level_locked")
   | PrerequisitesIncomplete => tc("prerequisites_incomplete")
   }
 

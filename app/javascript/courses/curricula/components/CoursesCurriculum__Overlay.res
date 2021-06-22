@@ -255,7 +255,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
     {ReactUtils.nullUnless(<div> {renderLocked(t("preview_mode_text"))} </div>, preview)}
   </div>
 
-let renderLockReason = reason => renderLocked(reason |> TargetStatus.lockReasonToString)
+let renderLockReason = reason => TargetStatus.lockReasonToString(reason)->renderLocked
 
 let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) => {
   let prerequisiteTargetIds = target |> Target.prerequisiteTargetIds
@@ -300,7 +300,7 @@ let handleLocked = (target, targets, targetStatus, statusOfTargets, send) =>
       prerequisitesIncomplete(reason, target, targets, statusOfTargets, send)
     | CourseLocked
     | AccessLocked
-    | LevelLocked =>
+    | LevelLocked(_) =>
       renderLockReason(reason)
     }
   | Pending

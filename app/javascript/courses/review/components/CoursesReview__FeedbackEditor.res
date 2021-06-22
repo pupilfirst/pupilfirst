@@ -22,7 +22,7 @@ let make = (
         />
 
       | (false, true) =>
-        <div className="px-4 pt-4 md:px-6 pt-6">
+        <div className="px-4 pt-4 md:px-6">
           <button
             className="flex items-center bg-gray-100 border p-4 rounded-lg w-full text-left text-primary-500 font-semibold hover:bg-gray-200 hover:border-primary-300 focus:outline-none"
             onClick={_ => setChecklistVisible(_ => true)}>

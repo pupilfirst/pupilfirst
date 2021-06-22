@@ -8,30 +8,44 @@ type status =
   | Grading
   | Ungraded
 
+type editor =
+  | GradesEditor
+  | ChecklistEditor
+  | NotesEditor
+
 type state = {
   grades: array<Grade.t>,
   newFeedback: string,
   saving: bool,
   checklist: array<SubmissionChecklistItem.t>,
   note: option<string>,
+  editor: editor,
 }
 
 type action =
   | BeginSaving
   | FinishSaving
   | UpdateFeedback(string)
+  | GenerateFeeback(string)
   | UpdateGrades(array<Grade.t>)
   | UpdateChecklist(array<SubmissionChecklistItem.t>)
   | UpdateNote(string)
+  | ShowGradesEditor
+  | ShowChecklistEditor
+  | ShowNotesEditor
 
 let reducer = (state, action) =>
   switch action {
   | BeginSaving => {...state, saving: true}
   | FinishSaving => {...state, saving: false}
   | UpdateFeedback(newFeedback) => {...state, newFeedback: newFeedback}
+  | GenerateFeeback(newFeedback) => {...state, newFeedback: newFeedback, editor: GradesEditor}
   | UpdateGrades(grades) => {...state, grades: grades}
   | UpdateChecklist(checklist) => {...state, checklist: checklist}
   | UpdateNote(note) => {...state, note: Some(note)}
+  | ShowGradesEditor => {...state, editor: GradesEditor}
+  | ShowChecklistEditor => {...state, editor: ChecklistEditor}
+  | ShowNotesEditor => {...state, editor: NotesEditor}
   }
 
 let passed = (grades, evaluationCriteria) => grades |> Js.Array.filter(g => {
@@ -358,20 +372,6 @@ let gradeSubmission = (
   }
 }
 
-let showFeedbackForm = (grades, reviewChecklist, updateReviewChecklistCB, state, send, targetId) =>
-  switch grades {
-  | [] =>
-    <CoursesReview__FeedbackEditor
-      feedback=state.newFeedback
-      label="Add Your Feedback"
-      updateFeedbackCB={feedback => send(UpdateFeedback(feedback))}
-      reviewChecklist
-      updateReviewChecklistCB
-      checklistVisible=true
-      targetId
-    />
-  | _ => React.null
-  }
 let reviewButtonDisabled = status =>
   switch status {
   | Graded(_) => false
@@ -494,6 +494,7 @@ let make = (
       saving: false,
       note: None,
       checklist: overlaySubmission |> OverlaySubmission.checklist,
+      editor: GradesEditor,
     },
   )
 
@@ -519,52 +520,98 @@ let make = (
       </div>
       <div className="md:w-1/2 w-full p-4">
         <div className="bg-white rounded-lg shadow p-4">
-          {showFeedbackForm(
-            overlaySubmission |> OverlaySubmission.grades,
-            reviewChecklist,
-            updateReviewChecklistCB,
-            state,
-            send,
-            targetId,
-          )}
-          <div className="w-full px-4 pt-4 md:px-6 md:pt-6">
-            {noteForm(overlaySubmission, teamSubmission, state.note, send)}
-            <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
-              <Icon className="if i-tachometer-regular text-gray-800 text-base" />
-              <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card" |> str} </span>
-            </h5>
-            <div
-              className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
-              <div className="w-full md:w-3/6">
-                {switch overlaySubmission |> OverlaySubmission.grades {
-                | [] =>
-                  renderGradePills(evaluationCriteria, targetEvaluationCriteriaIds, state, send)
-
-                | grades => showGrades(grades, evaluationCriteria, state)
-                }}
+          {switch state.editor {
+          | GradesEditor =>
+            <div>
+              <div className="px-4 pt-4 md:px-6">
+                <div className="flex h-7 items-end">
+                  <h5 className="font-semibold text-sm flex items-center">
+                    <PfIcon
+                      className="if i-check-square-alt-regular text-gray-800 text-base md:text-lg inline-block"
+                    />
+                    <span className="ml-2 md:ml-3 tracking-wide">
+                      {"Review Checklist" |> str}
+                    </span>
+                  </h5>
+                </div>
+                <button
+                  className="mt-2 bg-gray-100 p-4 rounded-lg w-full text-left text-gray-900 font-semibold hover:bg-gray-200 hover:border-gray-300 border-dashed focus:outline-none"
+                  onClick={_ => send(ShowChecklistEditor)}>
+                  <span className="ml-3"> {"Show Review Checklist" |> str} </span>
+                </button>
               </div>
-              {submissionStatusIcon(status, overlaySubmission, send)}
-            </div>
-          </div>
-          {switch overlaySubmission |> OverlaySubmission.grades {
-          | [] =>
-            <div className="bg-white pt-4 mr-4 ml-4 md:mr-6 md:ml-13">
-              <button
-                disabled={reviewButtonDisabled(status)}
-                className="btn btn-success btn-large w-full border border-green-600"
-                onClick={gradeSubmission(
-                  overlaySubmission |> OverlaySubmission.id,
-                  state,
-                  send,
-                  evaluationCriteria,
-                  addGradingCB,
-                  status,
-                )}>
-                {submitButtonText(state.newFeedback, state.grades) |> str}
-              </button>
+              <div className="px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor text-sm">
+                <h5 className="font-semibold text-sm flex items-center">
+                  <PfIcon
+                    className="if i-comment-alt-regular text-gray-800 text-base md:text-lg inline-block"
+                  />
+                  <span className="ml-2 md:ml-3 tracking-wide"> {"Add Your Feedback" |> str} </span>
+                </h5>
+                <div className="mt-2 md:ml-7" ariaLabel="feedback">
+                  <MarkdownEditor
+                    onChange={feedback => send(UpdateFeedback(feedback))}
+                    value=state.newFeedback
+                    profile=Markdown.Permissive
+                    maxLength=10000
+                    placeholder="This feedback will be emailed to students when you finish grading."
+                  />
+                </div>
+              </div>
+              <div className="w-full px-4 pt-4 md:px-6 md:pt-6">
+                {noteForm(overlaySubmission, teamSubmission, state.note, send)}
+                <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
+                  <Icon className="if i-tachometer-regular text-gray-800 text-base" />
+                  <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card" |> str} </span>
+                </h5>
+                <div
+                  className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
+                  <div className="w-full md:w-3/6">
+                    {switch overlaySubmission |> OverlaySubmission.grades {
+                    | [] =>
+                      renderGradePills(evaluationCriteria, targetEvaluationCriteriaIds, state, send)
+
+                    | grades => showGrades(grades, evaluationCriteria, state)
+                    }}
+                  </div>
+                  {submissionStatusIcon(status, overlaySubmission, send)}
+                </div>
+              </div>
+              {switch overlaySubmission |> OverlaySubmission.grades {
+              | [] =>
+                <div className="bg-white pt-4 mr-4 ml-4 md:mr-6 md:ml-13">
+                  <button
+                    disabled={reviewButtonDisabled(status)}
+                    className="btn btn-success btn-large w-full border border-green-600"
+                    onClick={gradeSubmission(
+                      overlaySubmission |> OverlaySubmission.id,
+                      state,
+                      send,
+                      evaluationCriteria,
+                      addGradingCB,
+                      status,
+                    )}>
+                    {submitButtonText(state.newFeedback, state.grades) |> str}
+                  </button>
+                </div>
+
+              | _ => React.null
+              }}
             </div>
 
-          | _ => React.null
+          | ChecklistEditor =>
+            <div>
+              <div className="btn btn-default" onClick={_ => send(ShowGradesEditor)}>
+                {str("back")}
+              </div>
+              <CoursesReview__Checklist
+                reviewChecklist
+                updateFeedbackCB={feedback => send(GenerateFeeback(feedback))}
+                feedback=state.newFeedback
+                updateReviewChecklistCB
+                targetId
+              />
+            </div>
+          | NotesEditor => <div> {str("back")} </div>
           }}
         </div>
       </div>

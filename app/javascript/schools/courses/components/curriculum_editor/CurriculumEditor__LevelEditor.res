@@ -19,6 +19,7 @@ type state = {
   tab: tab,
   mergeIntoLevelId: string,
   cloneIntoCourseId: string,
+  cloneLevelsEnabled: bool,
 }
 
 type action =
@@ -71,7 +72,8 @@ let setPayload = (authenticityToken, state) => {
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full"
 
-let computeInitialState = level => {
+let computeInitialState = (args) => {
+  let (level, toggles) = args
   let (name, unlockAt) = switch level {
   | Some(level) => (level |> Level.name, level |> Level.unlockAt)
   | None => ("", None)
@@ -86,6 +88,7 @@ let computeInitialState = level => {
     tab: Details,
     mergeIntoLevelId: "0",
     cloneIntoCourseId: "0",
+    cloneLevelsEnabled: Js.Array2.some(toggles, x => x == "clone_level")
   }
 }
 
@@ -324,6 +327,7 @@ let actionsForm = (level, levels, state, send) => {
         {str(t("merge_levels_button"))}
       </button>
     </div>
+    {state.cloneLevelsEnabled ?
     <div className="mt-5 pt-1 border-t">
       <label
         className="inline-block tracking-wide text-xs font-semibold"
@@ -344,6 +348,7 @@ let actionsForm = (level, levels, state, send) => {
         {str(t("clone_level_button"))}
       </button>
     </div>
+    : React.null}
   </div>
 }
 
@@ -366,7 +371,8 @@ let tab = (tab, state, send) => {
 
 @react.component
 let make = (~level, ~levels, ~course, ~hideEditorActionCB, ~updateLevelsCB) => {
-  let (state, send) = React.useReducerWithMapState(reducer, level, computeInitialState)
+  let toggles = React.useContext(ToggleContext.context)
+  let (state, send) = React.useReducerWithMapState(reducer, (level, toggles), computeInitialState)
 
   <SchoolAdmin__EditorDrawer closeDrawerCB=hideEditorActionCB>
     <DisablingCover disabled=state.saving>

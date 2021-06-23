@@ -8,6 +8,7 @@ type props = {
   targets: array<Target.t>,
   hasVimeoAccessToken: bool,
   vimeoPlan: option<VimeoPlan.t>,
+  enabledFeatures: array<string>,
 }
 
 let decodeProps = json => {
@@ -20,6 +21,7 @@ let decodeProps = json => {
     targets: json |> field("targets", array(Target.decode)),
     hasVimeoAccessToken: json |> field("hasVimeoAccessToken", bool),
     vimeoPlan: Belt.Option.map(json |> optional(field("vimeoPlan", string)), VimeoPlan.decode),
+    enabledFeatures: json |> field("enabledFeatures", array(string))
   }
 }
 
@@ -29,15 +31,17 @@ let props =
 switch ReactDOM.querySelector("#curriculum-editor") {
 | Some(element) =>
   ReactDOM.render(
-    <CurriculumEditor
-      course=props.course
-      evaluationCriteria=props.evaluationCriteria
-      levels=props.levels
-      targetGroups=props.targetGroups
-      targets=props.targets
-      hasVimeoAccessToken=props.hasVimeoAccessToken
-      vimeoPlan=props.vimeoPlan
-    />,
+    <ToggleContext.Provider value=props.enabledFeatures>
+      <CurriculumEditor
+        course=props.course
+        evaluationCriteria=props.evaluationCriteria
+        levels=props.levels
+        targetGroups=props.targetGroups
+        targets=props.targets
+        hasVimeoAccessToken=props.hasVimeoAccessToken
+        vimeoPlan=props.vimeoPlan
+      />
+    </ToggleContext.Provider>,
     element,
   )
 | None => ()

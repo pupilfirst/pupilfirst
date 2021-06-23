@@ -129,11 +129,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :feature_enabled?
 
-  def enabled_features
-    current_user &&
-      Flipper.features.map{|f| f.name if f.enabled?(current_user)}.compact
-  end
-
   # Makes redirects observable from integration tests.
   def observable_redirect_to(url)
     if Rails.env.test?

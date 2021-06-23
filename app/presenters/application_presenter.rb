@@ -7,10 +7,20 @@ class ApplicationPresenter
   end
 
   def props_to_json
-    camelize_keys(stringify_ids(props)).to_json
+    camelize_keys(stringify_ids(props_with_toggles)).to_json
   end
 
   private
+
+  def props_with_toggles
+    props.merge(enabled_features: enabled_features)
+  end
+
+  def enabled_features
+    return [] unless current_user
+
+    Flipper.features.map{|f| f.name if f.enabled?(current_user)}.compact
+  end
 
   attr_reader :view
 

@@ -1,3 +1,5 @@
+require 'override_csp'
+
 Rails.application.routes.draw do
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql'
@@ -27,7 +29,7 @@ Rails.application.routes.draw do
 
   authenticate :user, ->(u) { AdminUser.where(email: u.email).present? } do
     mount Delayed::Web::Engine, at: '/jobs'
-    mount Flipper::UI.app(Flipper), at: '/toggle'
+    mount OverrideCsp.new(Flipper::UI.app(Flipper)), at: '/toggle'
   end
 
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?

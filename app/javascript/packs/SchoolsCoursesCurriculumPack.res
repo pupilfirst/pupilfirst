@@ -31,7 +31,7 @@ let props =
 switch ReactDOM.querySelector("#curriculum-editor") {
 | Some(element) =>
   ReactDOM.render(
-    <ToggleContext.Provider value=props.enabledFeatures>
+    <Toggle.Provider value=props.enabledFeatures>
       <CurriculumEditor
         course=props.course
         evaluationCriteria=props.evaluationCriteria
@@ -41,7 +41,7 @@ switch ReactDOM.querySelector("#curriculum-editor") {
         hasVimeoAccessToken=props.hasVimeoAccessToken
         vimeoPlan=props.vimeoPlan
       />
-    </ToggleContext.Provider>,
+    </Toggle.Provider>,
     element,
   )
 | None => ()

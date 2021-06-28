@@ -42,3 +42,10 @@ module Pupilfirst
     config.middleware.use BatchLoader::Middleware
   end
 end
+
+require 'flipper'
+require 'flipper/adapters/active_record'
+
+Flipper.configure do |config|
+  config.adapter { Flipper::Adapters::ActiveRecord.new }
+end

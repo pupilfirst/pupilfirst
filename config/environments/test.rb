@@ -65,3 +65,8 @@ Rails.application.configure do
   # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
 end
+
+require 'flipper/adapters/pstore'
+Flipper.configure do |config|
+  config.adapter { Flipper::Adapters::PStore.new('flipper.pstore', true) }
+end

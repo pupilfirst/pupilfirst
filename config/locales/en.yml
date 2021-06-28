@@ -235,6 +235,22 @@ en:
         error_message: must be a JPEG / PNG under 2 MB in size
         help: The thumbnail will be displayed on the homepage, and here in the admin courses list.
         label: Thumbnail
+    CourseSelect:
+      button_load_more: Load More Courses...
+      courses_fully_loaded_text: Showing all %{total_courses} courses
+      courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
+      empty_courses: You don't have any courses!
+      filter:
+        input_hint: Or start typing to search by name...
+        input_label: Search
+        input_placeholder: Filter and Search courses by name
+        label:
+          name: Search by name
+          status: Status
+        status:
+          active: Active
+          archived: Archived
+          ended: Ended
     CoursesApply__Root:
       email_sent_message:
         description: It should reach you in less than a minute. Click the link in the email to sign up, and get started.
@@ -417,6 +433,33 @@ en:
         full: Full width
         three_fifths: Three-fifths width
         two_fifths: Two-fifths width
+    CurriculumEditor__LevelEditor:
+      create_level: Create New Level
+      edit_level: "Edit Level %{number}"
+      update_level: Update Level
+      success: Success
+      create_success: Level created successfully
+      update_success: Level updated successfully
+      level_name_label: Level Name
+      level_name_placeholder: Type level name here
+      level_name_invalid: not a valid name
+      unlock_on_label: Unlock level on
+      optional: " (optional)"
+      actions_error_title: Oops!
+      merge_levels_label: Delete & Merge Into
+      merge_levels_hint: Pick another level to merge this level into. This action will shift all targets and students in level.
+      merge_levels_select: Select a different level
+      merge_levels_button: Merge and Delete
+      merge_levels_confirm: Are you sure? This action cannot be undone.
+      merge_levels_error_message: Something went wrong when we tried to merge & delete this level. Please reload this page before trying again.
+      clone_level_label: Copy Into
+      clone_level_hint: Pick course to copy this level into. This action will copy all targets into selected course.
+      clone_level_button: Copy Level
+      clone_level_confirm: Are you sure you want to make a copy of this level?
+      clone_level_error_message: Something went wrong when we tried to copy this level. Please reload this page before trying again.
+      tabs:
+        actions: Actions
+        details: Details
     CurriculumEditor__TargetDetailsEditor:
       choose_target_group: Choose a target group
       completion_instructions_help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
@@ -704,6 +747,8 @@ en:
   mutations:
     clone_course:
       success_notification: Course copy requested. It will appear here soon!
+    clone_level:
+      success_notification: Level copy requested. It will apppear in target course soon!
     archive_course:
       success_notification: Course archived successfully.
     auto_verify_submission:

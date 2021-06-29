@@ -1,8 +1,9 @@
 open CoursesReview__Types
 let str = React.string
 
-let cardClasses = submission =>
-  "mt-6 rounded-r-lg bg-white border-l-3 " ++
+let cardClasses = (submission, selected) =>
+  "mt-6 rounded-r-lg  border-l-3 " ++
+  (selected ? "bg-gray-200 " : "bg-white ") ++
   switch (SubmissionMeta.passedAt(submission), SubmissionMeta.evaluatedAt(submission)) {
   | (None, None) => "border-orange-300"
   | (None, Some(_)) => "border-red-500"
@@ -29,13 +30,13 @@ let showSubmissionStatus = submission => {
 }
 
 @react.component
-let make = (~submission, ~submissionNumber) =>
+let make = (~submission, ~submissionNumber, ~selected) =>
   <Link
     href={"/submissions/" ++ (SubmissionMeta.id(submission) ++ "/review_v2")}
     key={SubmissionMeta.id(submission)}
-    className={cardClasses(submission)}>
+    className={cardClasses(submission, selected)}>
     <div className="rounded-r-lg shadow">
-      <div className="p-4 border-b bg-white flex flex-row items-center justify-between">
+      <div className="p-4 border-b flex flex-row items-center justify-between">
         <div className="flex flex-col pr-2">
           <h2 className="font-semibold text-sm leading-tight">
             {("Submission #" ++ string_of_int(submissionNumber))->str}

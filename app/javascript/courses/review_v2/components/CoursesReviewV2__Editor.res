@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesReview__GradeCard.css")`)
+%bs.raw(`require("./CoursesReview__Editor.css")`)
 
 open CoursesReview__Types
 let str = React.string
@@ -20,44 +20,41 @@ type state = {
   checklist: array<SubmissionChecklistItem.t>,
   note: option<string>,
   editor: editor,
+  additonalFeedbackEditorVisible: bool,
 }
 
 type action =
   | BeginSaving
   | FinishSaving
   | UpdateFeedback(string)
-  | GenerateFeeback(string)
+  | GenerateFeeback(string, editor)
   | UpdateGrades(array<Grade.t>)
   | UpdateChecklist(array<SubmissionChecklistItem.t>)
   | UpdateNote(string)
   | ShowGradesEditor
   | ShowChecklistEditor
+  | ShowAdditionalFeedbackEditor
+  | FeedbackAfterSave
 
 let reducer = (state, action) =>
   switch action {
   | BeginSaving => {...state, saving: true}
   | FinishSaving => {...state, saving: false}
   | UpdateFeedback(newFeedback) => {...state, newFeedback: newFeedback}
-  | GenerateFeeback(newFeedback) => {...state, newFeedback: newFeedback, editor: GradesEditor}
+  | GenerateFeeback(newFeedback, editor) => {...state, newFeedback: newFeedback, editor: editor}
   | UpdateGrades(grades) => {...state, grades: grades}
   | UpdateChecklist(checklist) => {...state, checklist: checklist}
   | UpdateNote(note) => {...state, note: Some(note)}
   | ShowGradesEditor => {...state, editor: GradesEditor}
   | ShowChecklistEditor => {...state, editor: ChecklistEditor}
+  | ShowAdditionalFeedbackEditor => {...state, additonalFeedbackEditorVisible: true}
+  | FeedbackAfterSave => {
+      ...state,
+      saving: false,
+      additonalFeedbackEditorVisible: false,
+      newFeedback: "",
+    }
   }
-
-let passed = (grades, evaluationCriteria) => grades |> Js.Array.filter(g => {
-    let passGrade =
-      evaluationCriteria
-      |> ArrayUtils.unsafeFind(
-        ec => EvaluationCriterion.id(ec) == (g |> Grade.evaluationCriterionId),
-        "CoursesReview__GradeCard: Unable to find evaluation criterion with id - " ++
-        (g |> Grade.evaluationCriterionId),
-      )
-      |> EvaluationCriterion.passGrade
-
-    g |> Grade.value < passGrade
-  }) |> ArrayUtils.isEmpty
 
 module CreateGradingMutation = %graphql(
   `
@@ -79,6 +76,28 @@ module UndoGradingMutation = %graphql(
   `
 )
 
+module CreateFeedbackMutation = %graphql(
+  `
+    mutation CreateFeedbackMutation($submissionId: ID!, $feedback: String!) {
+      createFeedback(submissionId: $submissionId, feedback: $feedback){
+        success
+      }
+    }
+  `
+)
+
+let createFeedback = (submissionId, feedback, send) => {
+  send(BeginSaving)
+
+  CreateFeedbackMutation.make(~submissionId, ~feedback, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    response["createFeedback"]["success"] ? send(FeedbackAfterSave) : send(FinishSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
 let undoGrading = (submissionId, send) => {
   send(BeginSaving)
 
@@ -91,27 +110,30 @@ let undoGrading = (submissionId, send) => {
   |> ignore
 }
 
-let trimToOption = s =>
-  switch s |> String.trim {
-  | "" => None
-  | s => Some(s)
-  }
+let passed = (grades, evaluationCriteria) => Js.Array.filter(g => {
+    let passGrade = EvaluationCriterion.passGrade(
+      ArrayUtils.unsafeFind(
+        ec => EvaluationCriterion.id(ec) == Grade.evaluationCriterionId(g),
+        "CoursesReview__GradeCard: Unable to find evaluation criterion with id - " ++
+        Grade.evaluationCriterionId(g),
+        evaluationCriteria,
+      ),
+    )
+
+    Grade.value(g) < passGrade
+  }, grades)->ArrayUtils.isEmpty
+
+let trimToOption = s => Js.String.trim(s) == "" ? None : Some(s)
 
 let gradeSubmissionQuery = (submissionId, state, send, evaluationCriteria, addGradingCB) => {
-  let jsGradesArray = state.grades |> Array.map(g => g |> Grade.asJsType)
-
-  let checklist = state.checklist |> SubmissionChecklistItem.encodeArray
   send(BeginSaving)
-
-  let feedback = state.newFeedback |> trimToOption
-  let note = state.note |> OptionUtils.flatMap(trimToOption)
 
   CreateGradingMutation.make(
     ~submissionId,
-    ~feedback?,
-    ~note?,
-    ~grades=jsGradesArray,
-    ~checklist,
+    ~feedback=?trimToOption(state.newFeedback),
+    ~note=?Belt.Option.flatMap(state.note, trimToOption),
+    ~grades=Js.Array.map(g => Grade.asJsType(g), state.grades),
+    ~checklist=SubmissionChecklistItem.encodeArray(state.checklist),
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -131,18 +153,19 @@ let gradeSubmissionQuery = (submissionId, state, send, evaluationCriteria, addGr
 }
 
 let updateGrading = (grade, state, send) => {
-  let newGrades =
-    state.grades
-    |> Js.Array.filter(g =>
-      g |> Grade.evaluationCriterionId != (grade |> Grade.evaluationCriterionId)
-    )
-    |> Array.append([grade])
+  let newGrades = Js.Array.concat(
+    [grade],
+    Js.Array.filter(
+      g => Grade.evaluationCriterionId(g) != Grade.evaluationCriterionId(grade),
+      state.grades,
+    ),
+  )
 
   send(UpdateGrades(newGrades))
 }
 
 let handleGradePillClick = (evaluationCriterionId, value, state, send, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   switch send {
   | Some(send) => updateGrading(Grade.make(~evaluationCriterionId, ~value), state, send)
   | None => ()
@@ -150,8 +173,9 @@ let handleGradePillClick = (evaluationCriterionId, value, state, send, event) =>
 }
 
 let findEvaluationCriterion = (evaluationCriteria, evaluationCriterionId) =>
-  switch evaluationCriteria |> Js.Array.find(ec =>
-    ec |> EvaluationCriterion.id == evaluationCriterionId
+  switch Js.Array.find(
+    ec => EvaluationCriterion.id(ec) == evaluationCriterionId,
+    evaluationCriteria,
   ) {
   | Some(ec) => ec
   | None =>
@@ -165,17 +189,17 @@ let findEvaluationCriterion = (evaluationCriteria, evaluationCriterionId) =>
 
 let gradePillHeader = (evaluationCriteriaName, selectedGrade, gradeLabels) =>
   <div className="flex justify-between">
-    <p className="text-xs font-semibold"> {evaluationCriteriaName |> str} </p>
+    <p className="text-xs font-semibold"> {evaluationCriteriaName->str} </p>
     <p className="text-xs font-semibold">
-      {(selectedGrade |> string_of_int) ++
+      {(selectedGrade->string_of_int ++
         ("/" ++
-        (GradeLabel.maxGrade(gradeLabels |> Array.to_list) |> string_of_int)) |> str}
+        GradeLabel.maxGrade(Array.to_list(gradeLabels))->string_of_int))->str}
     </p>
   </div>
 
 let gradePillClasses = (selectedGrade, currentGrade, passgrade, send) => {
   let defaultClasses =
-    "course-review-grade-card__grade-pill border-gray-400 py-1 px-2 text-sm flex-1 font-semibold " ++
+    "course-review-editor__grade-pill border-gray-400 py-1 px-2 text-sm flex-1 font-semibold " ++
     switch send {
     | Some(_) =>
       "cursor-pointer hover:shadow-lg focus:outline-none " ++ (
@@ -199,7 +223,7 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, send) => {
 
 let showGradePill = (key, evaluationCriterion, gradeValue, passGrade, state, send) =>
   <div
-    ariaLabel={"evaluation-criterion-" ++ (evaluationCriterion |> EvaluationCriterion.id)}
+    ariaLabel={"evaluation-criterion-" ++ EvaluationCriterion.id(evaluationCriterion)}
     key={key |> string_of_int}
     className="md:pr-8 mt-4">
     {gradePillHeader(
@@ -207,7 +231,7 @@ let showGradePill = (key, evaluationCriterion, gradeValue, passGrade, state, sen
       gradeValue,
       evaluationCriterion |> EvaluationCriterion.gradesAndLabels,
     )}
-    <div className="course-review-grade-card__grade-bar inline-flex w-full text-center mt-1">
+    <div className="course-review-editor__grade-bar inline-flex w-full text-center mt-1">
       {evaluationCriterion |> EvaluationCriterion.gradesAndLabels |> Array.map(gradeLabel => {
         let gradeLabelGrade = gradeLabel |> GradeLabel.grade
 
@@ -272,7 +296,7 @@ let gradeStatusClasses = (color, status) =>
   (color ++
   ("-400 " ++
   switch status {
-  | Grading => "course-review-grade-card__status-pulse"
+  | Grading => "course-review-editor__status-pulse"
   | Graded(_)
   | Ungraded => ""
   })))))
@@ -473,6 +497,78 @@ let noteForm = (overlaySubmission, teamSubmission, note, send) =>
   | _someGrades => React.null
   }
 
+let feedbackGenerator = (state, send) => {
+  <div>
+    <div className="px-4 pt-4 md:px-6">
+      <div className="flex h-7 items-end">
+        <h5 className="font-semibold text-sm flex items-center">
+          <PfIcon
+            className="if i-check-square-alt-regular text-gray-800 text-base md:text-lg inline-block"
+          />
+          <span className="ml-2 md:ml-3 tracking-wide"> {"Review Checklist"->str} </span>
+        </h5>
+      </div>
+      <button
+        className="mt-2 bg-gray-100 p-4 rounded-lg w-full text-left text-gray-900 font-semibold hover:bg-gray-200 hover:border-gray-300 border-dashed focus:outline-none"
+        onClick={_ => send(ShowChecklistEditor)}>
+        <span className="ml-3"> {"Show Review Checklist"->str} </span>
+      </button>
+    </div>
+    <div className="px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor text-sm">
+      <h5 className="font-semibold text-sm flex items-center">
+        <PfIcon
+          className="if i-comment-alt-regular text-gray-800 text-base md:text-lg inline-block"
+        />
+        <span className="ml-2 md:ml-3 tracking-wide"> {"Add Your Feedback"->str} </span>
+      </h5>
+      <div className="mt-2 md:ml-7" ariaLabel="feedback">
+        <MarkdownEditor
+          onChange={feedback => send(UpdateFeedback(feedback))}
+          value=state.newFeedback
+          profile=Markdown.Permissive
+          maxLength=10000
+          placeholder="This feedback will be emailed to students when you finish grading."
+        />
+      </div>
+    </div>
+  </div>
+}
+
+let showFeedback = feedback => Js.Array.mapi((f, index) =>
+    <div key={index->string_of_int} className="border-t p-4 md:p-6 mt-4">
+      <div className="flex items-center">
+        <div
+          className="flex-shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
+          {switch Feedback.coachAvatarUrl(f) {
+          | Some(avatarUrl) => <img src=avatarUrl />
+          | None => <Avatar name={Feedback.coachName(f)} />
+          }}
+        </div>
+        <div>
+          <p className="text-xs leading-tight"> {"Feedback from:"->str} </p>
+          <div>
+            <h4 className="font-semibold text-base leading-tight block md:inline-flex self-end">
+              {Feedback.coachName(f)->str}
+            </h4>
+            <span
+              className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight self-end">
+              {("(" ++ (Feedback.coachTitle(f) ++ ")"))->str}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className="md:ml-15">
+        <p
+          className="text-xs leading-tight font-semibold inline-block p-1 bg-gray-200 rounded mt-3">
+          {Feedback.createdAtPretty(f)->str}
+        </p>
+        <MarkdownBlock
+          className="pt-1 text-sm" profile=Markdown.Permissive markdown={Feedback.value(f)}
+        />
+      </div>
+    </div>
+  , feedback)->React.array
+
 @react.component
 let make = (
   ~overlaySubmission,
@@ -495,6 +591,7 @@ let make = (
       editor: ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
         ? GradesEditor
         : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
+      additonalFeedbackEditorVisible: false,
     },
   )
 
@@ -524,38 +621,7 @@ let make = (
           {switch state.editor {
           | GradesEditor =>
             <div>
-              <div className="px-4 pt-4 md:px-6">
-                <div className="flex h-7 items-end">
-                  <h5 className="font-semibold text-sm flex items-center">
-                    <PfIcon
-                      className="if i-check-square-alt-regular text-gray-800 text-base md:text-lg inline-block"
-                    />
-                    <span className="ml-2 md:ml-3 tracking-wide"> {"Review Checklist"->str} </span>
-                  </h5>
-                </div>
-                <button
-                  className="mt-2 bg-gray-100 p-4 rounded-lg w-full text-left text-gray-900 font-semibold hover:bg-gray-200 hover:border-gray-300 border-dashed focus:outline-none"
-                  onClick={_ => send(ShowChecklistEditor)}>
-                  <span className="ml-3"> {"Show Review Checklist"->str} </span>
-                </button>
-              </div>
-              <div className="px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor text-sm">
-                <h5 className="font-semibold text-sm flex items-center">
-                  <PfIcon
-                    className="if i-comment-alt-regular text-gray-800 text-base md:text-lg inline-block"
-                  />
-                  <span className="ml-2 md:ml-3 tracking-wide"> {"Add Your Feedback"->str} </span>
-                </h5>
-                <div className="mt-2 md:ml-7" ariaLabel="feedback">
-                  <MarkdownEditor
-                    onChange={feedback => send(UpdateFeedback(feedback))}
-                    value=state.newFeedback
-                    profile=Markdown.Permissive
-                    maxLength=10000
-                    placeholder="This feedback will be emailed to students when you finish grading."
-                  />
-                </div>
-              </div>
+              {feedbackGenerator(state, send)}
               <div className="w-full px-4 pt-4 md:px-6 md:pt-6">
                 {noteForm(overlaySubmission, teamSubmission, state.note, send)}
                 <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
@@ -594,7 +660,15 @@ let make = (
               </div>
               <CoursesReview__Checklist
                 reviewChecklist
-                updateFeedbackCB={feedback => send(GenerateFeeback(feedback))}
+                updateFeedbackCB={feedback =>
+                  send(
+                    GenerateFeeback(
+                      feedback,
+                      pending
+                        ? GradesEditor
+                        : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
+                    ),
+                  )}
                 feedback=state.newFeedback
                 updateReviewChecklistCB
                 targetId
@@ -616,6 +690,34 @@ let make = (
                   {submissionStatusIcon(status, overlaySubmission, send)}
                 </div>
               </div>
+              {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
+              {state.additonalFeedbackEditorVisible
+                ? <div>
+                    {feedbackGenerator(state, send)}
+                    <div className="flex justify-end pr-4 pl-10 pt-2 pb-4 md:px-6 md:pb-6">
+                      <button
+                        disabled={state.newFeedback == "" || state.saving}
+                        className="btn btn-success border border-green-600 w-full md:w-auto"
+                        onClick={_ =>
+                          createFeedback(
+                            OverlaySubmission.id(overlaySubmission),
+                            state.newFeedback,
+                            send,
+                          )}>
+                        {"Share Feedback" |> str}
+                      </button>
+                    </div>
+                  </div>
+                : <div className="bg-gray-200 px-3 py-5 shadow-inner rounded-b-lg text-center">
+                    <button
+                      onClick={_ => send(ShowAdditionalFeedbackEditor)}
+                      className="btn btn-primary-ghost cursor-pointer shadow hover:shadow-lg w-full md:w-auto">
+                      {switch OverlaySubmission.feedback(overlaySubmission) {
+                      | [] => "Add feedback"
+                      | _ => "Add another feedback"
+                      }->str}
+                    </button>
+                  </div>}
             </div>
           }}
         </div>

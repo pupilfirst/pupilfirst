@@ -534,7 +534,6 @@ let make = (
           <div className="w-full md:w-3/6">
             {switch overlaySubmission |> OverlaySubmission.grades {
             | [] => renderGradePills(evaluationCriteria, targetEvaluationCriteriaIds, state, send)
-
             | grades => showGrades(grades, evaluationCriteria, state)
             }}
           </div>

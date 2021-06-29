@@ -166,6 +166,7 @@ let make = (~submissionId) => {
             (submission, index) =>
               <CoursesReviewV2__SubmissionInfoCard
                 key={SubmissionMeta.id(submission)}
+                selected={SubmissionMeta.id(submission) == submissionId}
                 submission
                 submissionNumber={Array.length(
                   SubmissionDetails.allSubmissions(submissionDetails),
@@ -175,7 +176,7 @@ let make = (~submissionId) => {
             SubmissionDetails.allSubmissions(submissionDetails),
           )->React.array}
         </div>
-        <CoursesReviewV2__GradeCard
+        <CoursesReviewV2__Editor
           overlaySubmission={SubmissionDetails.submission(submissionDetails)}
           teamSubmission={submissionDetails |> SubmissionDetails.students |> Array.length > 1}
           evaluationCriteria={submissionDetails |> SubmissionDetails.evaluationCriteria}

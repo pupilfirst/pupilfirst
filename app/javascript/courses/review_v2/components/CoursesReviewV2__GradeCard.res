@@ -11,7 +11,7 @@ type status =
 type editor =
   | GradesEditor
   | ChecklistEditor
-  | NotesEditor
+  | ReviewedSubmissionEditor(array<Grade.t>)
 
 type state = {
   grades: array<Grade.t>,
@@ -32,7 +32,6 @@ type action =
   | UpdateNote(string)
   | ShowGradesEditor
   | ShowChecklistEditor
-  | ShowNotesEditor
 
 let reducer = (state, action) =>
   switch action {
@@ -45,7 +44,6 @@ let reducer = (state, action) =>
   | UpdateNote(note) => {...state, note: Some(note)}
   | ShowGradesEditor => {...state, editor: GradesEditor}
   | ShowChecklistEditor => {...state, editor: ChecklistEditor}
-  | ShowNotesEditor => {...state, editor: NotesEditor}
   }
 
 let passed = (grades, evaluationCriteria) => grades |> Js.Array.filter(g => {
@@ -493,8 +491,10 @@ let make = (
       newFeedback: "",
       saving: false,
       note: None,
-      checklist: overlaySubmission |> OverlaySubmission.checklist,
-      editor: GradesEditor,
+      checklist: OverlaySubmission.checklist(overlaySubmission),
+      editor: ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
+        ? GradesEditor
+        : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
     },
   )
 
@@ -505,11 +505,12 @@ let make = (
     targetEvaluationCriteriaIds,
   )
 
-  let updateChecklistCB = switch overlaySubmission |> OverlaySubmission.grades {
+  let updateChecklistCB = switch OverlaySubmission.grades(overlaySubmission) {
   | [] => Some(checklist => send(UpdateChecklist(checklist)))
   | _ => None
   }
-  let pending = overlaySubmission |> OverlaySubmission.grades |> ArrayUtils.isEmpty
+
+  let pending = ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
 
   <DisablingCover disabled=state.saving>
     <div className="flex md:flex-row flex-col w-full">
@@ -529,15 +530,13 @@ let make = (
                     <PfIcon
                       className="if i-check-square-alt-regular text-gray-800 text-base md:text-lg inline-block"
                     />
-                    <span className="ml-2 md:ml-3 tracking-wide">
-                      {"Review Checklist" |> str}
-                    </span>
+                    <span className="ml-2 md:ml-3 tracking-wide"> {"Review Checklist"->str} </span>
                   </h5>
                 </div>
                 <button
                   className="mt-2 bg-gray-100 p-4 rounded-lg w-full text-left text-gray-900 font-semibold hover:bg-gray-200 hover:border-gray-300 border-dashed focus:outline-none"
                   onClick={_ => send(ShowChecklistEditor)}>
-                  <span className="ml-3"> {"Show Review Checklist" |> str} </span>
+                  <span className="ml-3"> {"Show Review Checklist"->str} </span>
                 </button>
               </div>
               <div className="px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor text-sm">
@@ -545,7 +544,7 @@ let make = (
                   <PfIcon
                     className="if i-comment-alt-regular text-gray-800 text-base md:text-lg inline-block"
                   />
-                  <span className="ml-2 md:ml-3 tracking-wide"> {"Add Your Feedback" |> str} </span>
+                  <span className="ml-2 md:ml-3 tracking-wide"> {"Add Your Feedback"->str} </span>
                 </h5>
                 <div className="mt-2 md:ml-7" ariaLabel="feedback">
                   <MarkdownEditor
@@ -561,41 +560,31 @@ let make = (
                 {noteForm(overlaySubmission, teamSubmission, state.note, send)}
                 <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
                   <Icon className="if i-tachometer-regular text-gray-800 text-base" />
-                  <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card" |> str} </span>
+                  <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
                 </h5>
                 <div
                   className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
                   <div className="w-full md:w-3/6">
-                    {switch overlaySubmission |> OverlaySubmission.grades {
-                    | [] =>
-                      renderGradePills(evaluationCriteria, targetEvaluationCriteriaIds, state, send)
-
-                    | grades => showGrades(grades, evaluationCriteria, state)
-                    }}
+                    {renderGradePills(evaluationCriteria, targetEvaluationCriteriaIds, state, send)}
                   </div>
                   {submissionStatusIcon(status, overlaySubmission, send)}
                 </div>
               </div>
-              {switch overlaySubmission |> OverlaySubmission.grades {
-              | [] =>
-                <div className="bg-white pt-4 mr-4 ml-4 md:mr-6 md:ml-13">
-                  <button
-                    disabled={reviewButtonDisabled(status)}
-                    className="btn btn-success btn-large w-full border border-green-600"
-                    onClick={gradeSubmission(
-                      overlaySubmission |> OverlaySubmission.id,
-                      state,
-                      send,
-                      evaluationCriteria,
-                      addGradingCB,
-                      status,
-                    )}>
-                    {submitButtonText(state.newFeedback, state.grades) |> str}
-                  </button>
-                </div>
-
-              | _ => React.null
-              }}
+              <div className="bg-white pt-4 mr-4 ml-4 md:mr-6 md:ml-13">
+                <button
+                  disabled={reviewButtonDisabled(status)}
+                  className="btn btn-success btn-large w-full border border-green-600"
+                  onClick={gradeSubmission(
+                    OverlaySubmission.id(overlaySubmission),
+                    state,
+                    send,
+                    evaluationCriteria,
+                    addGradingCB,
+                    status,
+                  )}>
+                  {submitButtonText(state.newFeedback, state.grades)->str}
+                </button>
+              </div>
             </div>
 
           | ChecklistEditor =>
@@ -611,7 +600,23 @@ let make = (
                 targetId
               />
             </div>
-          | NotesEditor => <div> {str("back")} </div>
+
+          | ReviewedSubmissionEditor(grades) =>
+            <div>
+              <div className="w-full px-4 pt-4 md:px-6 md:pt-6">
+                <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
+                  <Icon className="if i-tachometer-regular text-gray-800 text-base" />
+                  <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
+                </h5>
+                <div
+                  className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
+                  <div className="w-full md:w-3/6">
+                    {showGrades(grades, evaluationCriteria, state)}
+                  </div>
+                  {submissionStatusIcon(status, overlaySubmission, send)}
+                </div>
+              </div>
+            </div>
           }}
         </div>
       </div>

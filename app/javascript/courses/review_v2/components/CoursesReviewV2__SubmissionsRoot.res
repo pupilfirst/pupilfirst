@@ -190,9 +190,9 @@ let make = (~submissionId) => {
     | Loading =>
       <div>
         <div className="bg-gray-100 py-4">
-          <div className="max-w-3xl mx-auto"> {SkeletonLoading.card()} </div>
+          <div className="mx-auto"> {SkeletonLoading.card()} </div>
         </div>
-        <div className="max-w-3xl mx-auto">
+        <div className="mx-auto">
           {SkeletonLoading.heading()}
           {SkeletonLoading.paragraph()}
           {SkeletonLoading.profileCard()}

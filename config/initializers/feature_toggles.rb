@@ -12,3 +12,7 @@ end
 Flipper.register(:school_admins) do |actor|
   User === actor.thing && SchoolAdmin.exists?(user_id: actor.id)
 end
+
+Flipper.register(:course_authors) do |actor|
+  User === actor.thing && CourseAuthor.exists?(user_id: actor.id)
+end

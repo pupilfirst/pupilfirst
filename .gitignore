@@ -56,3 +56,6 @@ examples.txt
 
 # Ignore logs from lerna
 lerna-debug.log
+
+# Ignore test flipper store
+flipper.pstore

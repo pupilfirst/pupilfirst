@@ -35,6 +35,7 @@ type action =
   | ShowChecklistEditor
   | ShowAdditionalFeedbackEditor
   | FeedbackAfterSave
+  | FinishGrading(array<Grade.t>)
 
 let reducer = (state, action) =>
   switch action {
@@ -48,6 +49,7 @@ let reducer = (state, action) =>
   | ShowGradesEditor => {...state, editor: GradesEditor}
   | ShowChecklistEditor => {...state, editor: ChecklistEditor}
   | ShowAdditionalFeedbackEditor => {...state, additonalFeedbackEditorVisible: true}
+  | FinishGrading(grades) => {...state, editor: ReviewedSubmissionEditor(grades), saving: false}
   | FeedbackAfterSave => {
       ...state,
       saving: false,
@@ -85,14 +87,43 @@ module CreateFeedbackMutation = %graphql(
     }
   `
 )
-
-let createFeedback = (submissionId, feedback, send) => {
+let makeFeedback = (user, feedback) => {
+  Feedback.make(
+    ~coachName=Some(User.name(user)),
+    ~coachAvatarUrl=User.avatarUrl(user),
+    ~coachTitle=User.title(user),
+    ~createdAt=Js.Date.make(),
+    ~value=feedback,
+  )
+}
+let createFeedback = (
+  submissionId,
+  feedback,
+  send,
+  overlaySubmission,
+  user,
+  updateSubmissionCB,
+) => {
   send(BeginSaving)
 
   CreateFeedbackMutation.make(~submissionId, ~feedback, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    response["createFeedback"]["success"] ? send(FeedbackAfterSave) : send(FinishSaving)
+    response["createFeedback"]["success"]
+      ? {
+          updateSubmissionCB(
+            OverlaySubmission.updateFeedback(
+              Js.Array.concat(
+                [makeFeedback(user, feedback)],
+                OverlaySubmission.feedback(overlaySubmission),
+              ),
+              overlaySubmission,
+            ),
+          )
+
+          send(FeedbackAfterSave)
+        }
+      : send(FinishSaving)
     Js.Promise.resolve()
   })
   |> ignore
@@ -125,28 +156,49 @@ let passed = (grades, evaluationCriteria) => Js.Array.filter(g => {
 
 let trimToOption = s => Js.String.trim(s) == "" ? None : Some(s)
 
-let gradeSubmissionQuery = (submissionId, state, send, evaluationCriteria, addGradingCB) => {
+let gradeSubmissionQuery = (
+  submissionId,
+  state,
+  send,
+  evaluationCriteria,
+  overlaySubmission,
+  user,
+  updateSubmissionCB,
+) => {
   send(BeginSaving)
+  let feedback = trimToOption(state.newFeedback)
+  let grades = Js.Array.map(g => Grade.asJsType(g), state.grades)
 
   CreateGradingMutation.make(
     ~submissionId,
-    ~feedback=?trimToOption(state.newFeedback),
+    ~feedback?,
     ~note=?Belt.Option.flatMap(state.note, trimToOption),
-    ~grades=Js.Array.map(g => Grade.asJsType(g), state.grades),
+    ~grades,
     ~checklist=SubmissionChecklistItem.encodeArray(state.checklist),
     (),
   )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    response["createGrading"]["success"] ? () : ()
+    response["createGrading"]["success"]
+      ? {
+          updateSubmissionCB(
+            OverlaySubmission.update(
+              passed(state.grades, evaluationCriteria) ? Some(Js.Date.make()) : None,
+              Some("Foo"),
+              Js.Array.concat(
+                Belt.Option.mapWithDefault(feedback, [], f => [makeFeedback(user, f)]),
+                OverlaySubmission.feedback(overlaySubmission),
+              ),
+              state.grades,
+              Some(Js.Date.make()),
+              state.checklist,
+              overlaySubmission,
+            ),
+          )
+          send(FinishGrading(state.grades))
+        }
+      : send(FinishSaving)
 
-    // addGradingCB(
-    //     ~newFeedback=state.newFeedback,
-    //     ~passed=passed(state.grades, evaluationCriteria),
-    //     ~grades=state.grades,
-    //     ~checklist=state.checklist,
-    //   )
-    send(FinishSaving)
     Js.Promise.resolve()
   })
   |> ignore
@@ -382,13 +434,24 @@ let gradeSubmission = (
   state,
   send,
   evaluationCriteria,
-  addGradingCB,
+  updateSubmissionCB,
   status,
+  user,
+  overlaySubmission,
   event,
 ) => {
   event |> ReactEvent.Mouse.preventDefault
   switch status {
-  | Graded(_) => gradeSubmissionQuery(submissionId, state, send, evaluationCriteria, addGradingCB)
+  | Graded(_) =>
+    gradeSubmissionQuery(
+      submissionId,
+      state,
+      send,
+      evaluationCriteria,
+      overlaySubmission,
+      user,
+      updateSubmissionCB,
+    )
   | Grading
   | Ungraded => ()
   }
@@ -575,10 +638,11 @@ let make = (
   ~teamSubmission,
   ~evaluationCriteria,
   ~reviewChecklist,
-  ~addGradingCB,
+  ~updateSubmissionCB,
   ~updateReviewChecklistCB,
   ~targetId,
   ~targetEvaluationCriteriaIds,
+  ~currentUser,
 ) => {
   let (state, send) = React.useReducer(
     reducer,
@@ -645,8 +709,10 @@ let make = (
                     state,
                     send,
                     evaluationCriteria,
-                    addGradingCB,
+                    updateSubmissionCB,
                     status,
+                    currentUser,
+                    overlaySubmission,
                   )}>
                   {submitButtonText(state.newFeedback, state.grades)->str}
                 </button>
@@ -703,6 +769,9 @@ let make = (
                             OverlaySubmission.id(overlaySubmission),
                             state.newFeedback,
                             send,
+                            overlaySubmission,
+                            currentUser,
+                            updateSubmissionCB,
                           )}>
                         {"Share Feedback" |> str}
                       </button>

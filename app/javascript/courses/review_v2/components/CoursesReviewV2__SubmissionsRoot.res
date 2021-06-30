@@ -35,7 +35,7 @@ module SubmissionDetailsQuery = %graphql(
             evaluationCriterionId, grade
           },
           feedback{
-            id, coachName, coachAvatarUrl, coachTitle, createdAt,value
+            id, coachName, coachAvatarUrl, coachTitle, createdAt, value
           },
           checklist
         }
@@ -149,8 +149,20 @@ let headerSection = submissionDetails =>
     </div>
   </div>
 
+let updateSubmission = (setState, submissionDetails, overlaySubmission) => {
+  let newSubmissionDetails = SubmissionDetails.updateOverlaySubmission(
+    overlaySubmission,
+    submissionDetails,
+  )
+
+  setState(_ => Loaded(newSubmissionDetails))
+}
+
+let updateReviewChecklist = (submissionDetails, setState, reviewChecklist) =>
+  setState(_ => Loaded(SubmissionDetails.updateReviewChecklist(reviewChecklist, submissionDetails)))
+
 @react.component
-let make = (~submissionId) => {
+let make = (~submissionId, ~currentUser) => {
   let (state, setState) = React.useState(() => Loading)
 
   React.useEffect1(getSubmissionDetails(submissionId, setState), [submissionId])
@@ -182,9 +194,10 @@ let make = (~submissionId) => {
           evaluationCriteria={submissionDetails |> SubmissionDetails.evaluationCriteria}
           targetEvaluationCriteriaIds={submissionDetails |> SubmissionDetails.targetEvaluationCriteriaIds}
           reviewChecklist={submissionDetails |> SubmissionDetails.reviewChecklist}
-          addGradingCB={_ => ()}
-          updateReviewChecklistCB={_ => ()}
+          updateSubmissionCB={updateSubmission(setState, submissionDetails)}
+          updateReviewChecklistCB={updateReviewChecklist(submissionDetails, setState)}
           targetId={submissionDetails |> SubmissionDetails.targetId}
+          currentUser
         />
       </div>
 

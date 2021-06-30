@@ -10,3 +10,4 @@ module ReviewChecklistItem = CoursesReview__ReviewChecklistItem
 module ReviewChecklistResult = CoursesReview__ReviewChecklistResult
 module Student = CoursesReview__Student
 module SubmissionsSorting = CoursesReview__SubmissionsSorting
+module User = AppRouter__User

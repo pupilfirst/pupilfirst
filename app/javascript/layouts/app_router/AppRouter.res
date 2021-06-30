@@ -6,13 +6,13 @@ let classNames = (default, trueClasses, falseClasses, bool) => {
 }
 
 @react.component
-let make = () => {
+let make = (~courses, ~currentUser) => {
   let url = RescriptReactRouter.useUrl()
 
   let (component, showNav) = switch url.path {
   | list{"courses", courseId, "review"} => (<CoursesReviewV2__Root courseId />, true)
   | list{"submissions", submissionId, "review_v2"} => (
-      <CoursesReviewV2__SubmissionsRoot submissionId />,
+      <CoursesReviewV2__SubmissionsRoot submissionId currentUser />,
       false,
     )
   | _ =>

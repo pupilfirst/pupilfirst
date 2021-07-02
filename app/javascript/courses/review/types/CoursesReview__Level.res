@@ -21,11 +21,11 @@ let sort = levels => levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.num
 
 let unsafeLevelNumber = (levels, componentName, levelId) =>
   LevelLabel.format(
-    (levels
+    levels
     |> ArrayUtils.unsafeFind(
       l => l.id == levelId,
       "Unable to find level with id: " ++ (levelId ++ ("in CoursesRevew__" ++ componentName)),
     )
     |> number
-    |> string_of_int)
+    |> string_of_int,
   )

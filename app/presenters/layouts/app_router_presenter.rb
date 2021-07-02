@@ -101,9 +101,14 @@ module Layouts
                 .select(:id, :name)
                 .map { |c| { id: c.id.to_s, name: c.name } },
             access_ended: student_access_end(course.id),
-            ended: course.ended?
+            ended: course.ended?,
+            is_student: student_profile?(course.id)
           }
         end
+    end
+
+    def student_profile?(course_id)
+      courses_with_student_profile.detect { |c| c.id == course_id }.present?
     end
 
     def student_access_end(course_id)

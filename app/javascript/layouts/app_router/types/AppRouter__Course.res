@@ -15,6 +15,7 @@ type t = {
   linkedCommunities: array<community>,
   accessEnded: bool,
   ended: bool,
+  isStudent: bool,
 }
 
 let name = t => t.name
@@ -28,6 +29,7 @@ let linkedCommunities = t => t.linkedCommunities
 let accessEnded = t => t.accessEnded
 let ended = t => t.ended
 let enableLeaderboard = t => t.enableLeaderboard
+let isStudent = t => t.isStudent
 
 let decodeCommunity = json => {
   open Json.Decode
@@ -51,5 +53,6 @@ let decode = json => {
     linkedCommunities: field("linkedCommunities", array(decodeCommunity), json),
     accessEnded: field("accessEnded", bool, json),
     ended: field("ended", bool, json),
+    isStudent: field("isStudent", bool, json),
   }
 }

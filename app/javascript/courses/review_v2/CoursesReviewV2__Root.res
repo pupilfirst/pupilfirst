@@ -24,6 +24,8 @@ module PagedLevels = Pagination.Make(ItemLevel)
 
 module PagedCoaches = Pagination.Make(ItemCoach)
 
+type filterLoader = ShowLevels | ShowCoaches | ShowTargets
+
 type filter = {
   nameOrEmail: option<string>,
   selectedLevel: option<Level.t>,
@@ -31,10 +33,9 @@ type filter = {
   tags: Belt.Set.String.t,
   sortBy: SubmissionsSorting.t,
   selectedTab: selectedTab,
+  loader: option<filterLoader>,
   loading: bool,
 }
-
-type filterLoader = | ShowLevels | ShowCoaches | ShowTargets
 
 type state = {
   loading: Loading.t,
@@ -63,6 +64,8 @@ type action =
   | DeselectLevel
   | SetFilterLoading
   | ClearFilterLoading
+  | SetLoader(filterLoader)
+  | ClearLoader
 
 let reducer = (state, action) =>
   switch action {
@@ -96,13 +99,12 @@ let reducer = (state, action) =>
       loading: NotLoading,
       totalEntriesCount: totalEntriesCount,
     }
-  | LoadLevels(endCursor, hasNextPage, levels) =>
-    {
+  | LoadLevels(endCursor, hasNextPage, levels) => {
       ...state,
       levels: PagedLevels.make(levels, hasNextPage, endCursor),
+      filter: {...state.filter, loading: false},
     }
-  | LoadCoaches(endCursor, hasNextPage, coaches) =>
-    {
+  | LoadCoaches(endCursor, hasNextPage, coaches) => {
       ...state,
       coaches: PagedCoaches.make(coaches, hasNextPage, endCursor),
     }
@@ -127,6 +129,8 @@ let reducer = (state, action) =>
   | DeselectCoach => {...state, filter: {...state.filter, selectedCoach: None}}
   | SetFilterLoading => {...state, filter: {...state.filter, loading: true}}
   | ClearFilterLoading => {...state, filter: {...state.filter, loading: false}}
+  | SetLoader(loader) => {...state, filter: {...state.filter, loader: Some(loader)}}
+  | ClearLoader => {...state, filter: {...state.filter, loader: None}}
   }
 
 module SubmissionsQuery = %graphql(
@@ -232,13 +236,9 @@ let getSubmissions = (send, courseId, cursor, filter) => {
   |> ignore
 }
 
-
 let getLevels = (send, courseId, state) => {
-  LevelsQuery.make(
-    ~courseId,
-    ~search=state.filterString,
-    (),
-  )
+  send(SetFilterLoading)
+  LevelsQuery.make(~courseId, ~search=state.filterString, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     send(
@@ -254,7 +254,6 @@ let getLevels = (send, courseId, state) => {
 }
 
 module Selectable = {
-
   type t =
     | Level(Level.t)
     | AssignedToCoach(Coach.t, string)
@@ -277,7 +276,8 @@ module Selectable = {
 
   let searchString = t =>
     switch t {
-    | Level(level) => "Level: " ++
+    | Level(level) =>
+      "Level: " ++
       LevelLabel.searchString(level |> Level.number |> string_of_int, level |> Level.name)
     | AssignedToCoach(coach, currentCoachId) =>
       if coach |> Coach.id == currentCoachId {
@@ -291,7 +291,7 @@ module Selectable = {
   let color = _t => "gray"
   let level = level => Level(level)
   let assignedToCoach = (coach, currentCoachId) => AssignedToCoach(coach, currentCoachId)
-  let makeLoader = () => Loader(ShowLevels)
+  let makeLoader = l => Loader(l)
 }
 
 module Multiselect = MultiselectDropdown.Make(Selectable)
@@ -333,24 +333,27 @@ let selected = (filter, currentCoachId) => {
       [],
     )
 
-  selectedLevel |> Array.append(selectedCoach)
+  let selectedLoader =
+    filter.loader |> OptionUtils.mapWithDefault(l => [Selectable.makeLoader(l)], [])
+
+  Js.Array.concat(Js.Array.concat(selectedLevel, selectedCoach), selectedLoader)
 }
 
 let onSelectFilter = (send, selectable) =>
   switch selectable {
   | Selectable.AssignedToCoach(coach, _currentCoachId) => send(SelectCoach(coach))
   | Level(level) => send(SelectLevel(level))
-  | Loader(_) => ()
+  | Loader(l) => send(SetLoader(l))
   }
 
 let onDeselectFilter = (send, selectable) =>
   switch selectable {
   | Selectable.AssignedToCoach(_) => send(DeselectCoach)
   | Level(_) => send(DeselectLevel)
-  | Loader(_) => ()
+  | Loader(_) => send(ClearLoader)
   }
 
-let defaultOptions = () => [Selectable.makeLoader()]
+let defaultOptions = () => [Selectable.makeLoader(ShowLevels)]
 
 let filterPlaceholder = state =>
   switch (state.selectedLevel, state.selectedCoach) {
@@ -374,6 +377,7 @@ let computeInitialState = () => {
     sortBy: SubmissionsSorting.default(),
     selectedTab: #Pending,
     loading: false,
+    loader: None,
   },
   totalEntriesCount: 0,
 }
@@ -430,7 +434,15 @@ let make = (~courseId) => {
   }, [state.filter])
 
   React.useEffect1(() => {
-    getLevels(send, courseId, state)
+    switch state.filter.loader {
+    | Some(loader) =>
+      switch loader {
+      | ShowLevels => getLevels(send, courseId, state)
+      | _ => ()
+      }
+    | None => ()
+    }
+
     None
   }, [state.filterString])
 

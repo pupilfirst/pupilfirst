@@ -15,11 +15,15 @@ class ReviewedTargetsInfoResolver < ApplicationQuery
   def authorized?
     return false if course.blank?
 
+    return false if current_user.blank?
+
+    current_user.faculty.present?
+
     current_coach.present?
   end
 
   def course
-    @course ||= Course.find_by(id: course_id)
+    @course ||= current_school.course.find_by(id: course_id)
   end
 
   def applicable_reviewed_targets

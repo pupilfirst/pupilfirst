@@ -172,13 +172,15 @@ module Types
     end
 
     resolved_field :reviewed_targets_info,
-                   [Types::TargetInfoType],
+                   [Types::TargetInfoType.connection_type],
                    null: false do
       argument :course_id, ID, required: true
       argument :search, String, required: false
     end
 
-    resolved_field :team_coaches, [Types::CoachType], null: false do
+    resolved_field :team_coaches,
+                   [Types::CoachType.connection_type],
+                   null: false do
       argument :course_id, ID, required: true
       argument :search, String, required: false
     end

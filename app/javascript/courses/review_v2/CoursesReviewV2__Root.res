@@ -10,7 +10,19 @@ module Item = {
   type t = IndexSubmission.t
 }
 
-module Pagination = Pagination.Make(Item)
+module ItemLevel = {
+  type t = Level.t
+}
+
+module ItemCoach = {
+  type t = Coach.t
+}
+
+module PagedSubmission = Pagination.Make(Item)
+
+module PagedLevels = Pagination.Make(ItemLevel)
+
+module PagedCoaches = Pagination.Make(ItemCoach)
 
 type filter = {
   nameOrEmail: option<string>,
@@ -22,9 +34,13 @@ type filter = {
   loading: bool,
 }
 
+type filterLoader = | ShowLevels | ShowCoaches | ShowTargets
+
 type state = {
   loading: Loading.t,
-  submissions: Pagination.t,
+  submissions: PagedSubmission.t,
+  levels: PagedLevels.t,
+  coaches: PagedCoaches.t,
   filter: filter,
   filterString: string,
   totalEntriesCount: int,
@@ -35,6 +51,8 @@ type action =
   | UnsetSearchString
   | UpdateFilterString(string)
   | LoadSubmissions(option<string>, bool, array<IndexSubmission.t>, int)
+  | LoadLevels(option<string>, bool, array<Level.t>)
+  | LoadCoaches(option<string>, bool, array<Coach.t>)
   | BeginLoadingMore
   | BeginReloading
   | ShowPending
@@ -67,16 +85,26 @@ let reducer = (state, action) =>
   | UpdateFilterString(filterString) => {...state, filterString: filterString}
   | LoadSubmissions(endCursor, hasNextPage, newTopics, totalEntriesCount) =>
     let updatedTopics = switch state.loading {
-    | LoadingMore => Js.Array.concat(Pagination.toArray(state.submissions), newTopics)
+    | LoadingMore => Js.Array.concat(PagedSubmission.toArray(state.submissions), newTopics)
     | Reloading => newTopics
     | NotLoading => newTopics
     }
 
     {
       ...state,
-      submissions: Pagination.make(updatedTopics, hasNextPage, endCursor),
+      submissions: PagedSubmission.make(updatedTopics, hasNextPage, endCursor),
       loading: NotLoading,
       totalEntriesCount: totalEntriesCount,
+    }
+  | LoadLevels(endCursor, hasNextPage, levels) =>
+    {
+      ...state,
+      levels: PagedLevels.make(levels, hasNextPage, endCursor),
+    }
+  | LoadCoaches(endCursor, hasNextPage, coaches) =>
+    {
+      ...state,
+      coaches: PagedCoaches.make(coaches, hasNextPage, endCursor),
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
@@ -126,6 +154,58 @@ module SubmissionsQuery = %graphql(
   `
 )
 
+module LevelsQuery = %graphql(
+  `
+    query LevelsQuery($search: String, $courseId: ID!) {
+      levels(search: $search, courseId: $courseId) {
+        nodes {
+          id
+          name
+          number
+        }
+        pageInfo{
+          endCursor,hasNextPage
+        }
+      }
+    }
+  `
+)
+
+module TeamCoachesQuery = %graphql(
+  `
+    query TeamCoachesQuery($search: String, $courseId: ID!) {
+      teamCoaches(search: $search, courseId: $courseId) {
+        nodes {
+          id
+          name
+          userId
+          title
+          avatarUrl
+        }
+        pageInfo{
+          endCursor,hasNextPage
+        }
+      }
+    }
+  `
+)
+
+module ReviewedTargetsInfoQuery = %graphql(
+  `
+    query ReviewedTargetsInfoQuery($search: String, $courseId: ID!) {
+      reviewedTargetsInfo(search: $search, courseId: $courseId) {
+        nodes {
+          id
+          title
+        }
+        pageInfo{
+          endCursor,hasNextPage
+        }
+      }
+    }
+  `
+)
+
 let getSubmissions = (send, courseId, cursor, filter) => {
   SubmissionsQuery.make(
     ~courseId,
@@ -152,17 +232,39 @@ let getSubmissions = (send, courseId, cursor, filter) => {
   |> ignore
 }
 
+
+let getLevels = (send, courseId, state) => {
+  LevelsQuery.make(
+    ~courseId,
+    ~search=state.filterString,
+    (),
+  )
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    send(
+      LoadLevels(
+        response["levels"]["pageInfo"]["endCursor"],
+        response["levels"]["pageInfo"]["hasNextPage"],
+        Js.Array.map(Level.makeFromJS, response["levels"]["nodes"]),
+      ),
+    )
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
 module Selectable = {
+
   type t =
     | Level(Level.t)
     | AssignedToCoach(Coach.t, string)
-    | LoadLevels
+    | Loader(filterLoader)
 
   let label = t =>
     switch t {
     | Level(level) => Some(LevelLabel.format(level |> Level.number |> string_of_int))
     | AssignedToCoach(_) => Some(tc("assigned_to"))
-    | LoadLevels => Some("load_levels")
+    | Loader(_) => Some("load_levels")
     }
 
   let value = t =>
@@ -170,12 +272,12 @@ module Selectable = {
     | Level(level) => level |> Level.name
     | AssignedToCoach(coach, currentCoachId) =>
       coach |> Coach.id == currentCoachId ? tc("me") : coach |> Coach.name
-    | LoadLevels => ""
+    | Loader(_) => ""
     }
 
   let searchString = t =>
     switch t {
-    | Level(level) =>
+    | Level(level) => "Level: " ++
       LevelLabel.searchString(level |> Level.number |> string_of_int, level |> Level.name)
     | AssignedToCoach(coach, currentCoachId) =>
       if coach |> Coach.id == currentCoachId {
@@ -183,13 +285,13 @@ module Selectable = {
       } else {
         tc("assigned_to_coach") ++ (coach |> Coach.name)
       }
-    | LoadLevels => "Level"
+    | Loader(_) => "Level"
     }
 
   let color = _t => "gray"
   let level = level => Level(level)
   let assignedToCoach = (coach, currentCoachId) => AssignedToCoach(coach, currentCoachId)
-  let makeLevels = () => LoadLevels
+  let makeLoader = () => Loader(ShowLevels)
 }
 
 module Multiselect = MultiselectDropdown.Make(Selectable)
@@ -238,17 +340,17 @@ let onSelectFilter = (send, selectable) =>
   switch selectable {
   | Selectable.AssignedToCoach(coach, _currentCoachId) => send(SelectCoach(coach))
   | Level(level) => send(SelectLevel(level))
-  | LoadLevels => ()
+  | Loader(_) => ()
   }
 
 let onDeselectFilter = (send, selectable) =>
   switch selectable {
   | Selectable.AssignedToCoach(_) => send(DeselectCoach)
   | Level(_) => send(DeselectLevel)
-  | LoadLevels => ()
+  | Loader(_) => ()
   }
 
-let defaultOptions = () => [Selectable.makeLevels()]
+let defaultOptions = () => [Selectable.makeLoader()]
 
 let filterPlaceholder = state =>
   switch (state.selectedLevel, state.selectedCoach) {
@@ -261,6 +363,8 @@ let filterPlaceholder = state =>
 let computeInitialState = () => {
   loading: NotLoading,
   submissions: Unloaded,
+  levels: Unloaded,
+  coaches: Unloaded,
   filterString: "",
   filter: {
     nameOrEmail: None,
@@ -325,6 +429,11 @@ let make = (~courseId) => {
     None
   }, [state.filter])
 
+  React.useEffect1(() => {
+    getLevels(send, courseId, state)
+    None
+  }, [state.filterString])
+
   let url = RescriptReactRouter.useUrl()
 
   <div className="max-w-3xl mx-auto">
@@ -335,7 +444,7 @@ let make = (~courseId) => {
         </label>
         <Multiselect
           id="filter"
-          unselected={unselected([], [], "1", state.filter)}
+          unselected={unselected(PagedLevels.toArray(state.levels), [], "1", state.filter)}
           selected={selected(state.filter, "1")}
           onSelect={onSelectFilter(send)}
           onDeselect={onDeselectFilter(send)}

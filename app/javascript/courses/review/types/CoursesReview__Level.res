@@ -29,3 +29,19 @@ let unsafeLevelNumber = (levels, componentName, levelId) =>
     |> number
     |> string_of_int,
   )
+
+let make = (~id, ~name, ~number) =>{
+  id: id,
+  name: name,
+  number: number,
+}
+
+let makeFromJS = submission => {
+
+  make(
+    ~id=submission["id"],
+    ~name=submission["name"],
+    ~number=submission["number"],
+
+  )
+}

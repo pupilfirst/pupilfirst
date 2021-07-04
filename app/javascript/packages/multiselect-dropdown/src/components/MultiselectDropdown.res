@@ -60,27 +60,28 @@ module Make = (Selectable: Selectable) => {
     DomUtils.focus(id)
   }
 
-  let showOptions = (options, onSelect, id, labelSuffix) =>
-    options |> Array.mapi((index, selection) =>
-      <button
-        key={index |> string_of_int}
-        title={selectionTitle(selection)}
-        className="flex text-xs px-4 py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
-        onClick={applyFilter(selection, onSelect, id)}>
-        {switch selection |> Selectable.label {
-        | Some(label) =>
-          <span className="mr-2 flex-shrink-0 md:w-1/6 text-right">
-            {label ++ labelSuffix |> str}
-          </span>
-        | None => React.null
-        }}
-        <span className={tagPillClasses(selection |> Selectable.color, true)}>
-          {selection |> Selectable.value |> str}
-        </span>
-      </button>
-    )
+  let showOptions = (options, onSelect, id, labelSuffix, loading) => {
+    loading ? [<div> {str("Loading")} </div>] : options |> Array.mapi((index, selection) =>
+          <button
+            key={index |> string_of_int}
+            title={selectionTitle(selection)}
+            className="flex text-xs px-4 py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
+            onClick={applyFilter(selection, onSelect, id)}>
+            {switch selection |> Selectable.label {
+            | Some(label) =>
+              <span className="mr-2 flex-shrink-0 md:w-1/6 text-right">
+                {label ++ labelSuffix |> str}
+              </span>
+            | None => React.null
+            }}
+            <span className={tagPillClasses(selection |> Selectable.color, true)}>
+              {selection |> Selectable.value |> str}
+            </span>
+          </button>
+        )
+  }
 
-  let searchResult = (searchInput, unselected, labelSuffix, id, onSelect) => {
+  let searchResult = (searchInput, unselected, labelSuffix, loading, id, onSelect) => {
     // Remove all excess space characters from the user input.
     let normalizedString =
       searchInput
@@ -92,7 +93,7 @@ module Make = (Selectable: Selectable) => {
     | searchString => search(searchString, unselected)
     }
 
-    showOptions(options, onSelect, id, labelSuffix)
+    showOptions(options, onSelect, id, labelSuffix, loading)
   }
 
   let removeSelection = (onDeselect, selection, event) => {
@@ -163,6 +164,7 @@ module Make = (Selectable: Selectable) => {
     ~emptyMessage="No results found",
     ~hint=?,
     ~defaultOptions=[],
+    ~loading=false,
   ) => {
     let (inputId, _setId) = React.useState(() =>
       switch id {
@@ -191,7 +193,7 @@ module Make = (Selectable: Selectable) => {
       }
     }, [showDropdown])
 
-    let results = searchResult(value, unselected, labelSuffix, inputId, onSelect)
+    let results = searchResult(value, unselected, labelSuffix, loading, inputId, onSelect)
     <div className="w-full relative">
       <div>
         <div
@@ -220,11 +222,12 @@ module Make = (Selectable: Selectable) => {
       | (true, [], [], None) => value == "" ? React.null : wrapper(str(emptyMessage))
       | (true, [], [], Some(hint)) => wrapper(showHint(hint))
       | (true, [], options, None) =>
-        wrapper(React.array(showOptions(options, onSelect, inputId, labelSuffix)))
+        wrapper(React.array(showOptions(options, onSelect, inputId, labelSuffix, loading)))
       | (true, [], options, Some(hint)) =>
         wrapper(
           <div>
-            {React.array(showOptions(options, onSelect, inputId, labelSuffix))} {showHint(hint)}
+            {React.array(showOptions(options, onSelect, inputId, labelSuffix, loading))}
+            {showHint(hint)}
           </div>,
         )
       | (true, results, _options, _hint) => wrapper(React.array(results))

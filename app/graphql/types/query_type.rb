@@ -165,5 +165,22 @@ module Types
                required: true
       argument :sort_direction, Types::SortDirectionType, required: true
     end
+
+    resolved_field :levels, Types::LevelType.connection_type, null: false do
+      argument :course_id, ID, required: true
+      argument :search, String, required: false
+    end
+
+    resolved_field :reviewed_targets_info,
+                   [Types::TargetInfoType],
+                   null: false do
+      argument :course_id, ID, required: true
+      argument :search, String, required: false
+    end
+
+    resolved_field :team_coaches, [Types::CoachType], null: false do
+      argument :course_id, ID, required: true
+      argument :search, String, required: false
+    end
   end
 end

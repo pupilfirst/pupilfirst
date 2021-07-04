@@ -104,13 +104,6 @@ let statusButton = (index, status, callback, checklist) =>
     </button>
   </div>
 
-let computeShowResult = (pending, checklistItem) =>
-  switch (pending, ChecklistItem.status(checklistItem)) {
-  | (true, NoAnswer | Passed | Failed) => true
-  | (false, Failed) => true
-  | (false, NoAnswer | Passed) => false
-  }
-
 let cardClasses = pending => pending ? "mt-3" : "rounded shadow mt-4 "
 
 let cardHeaderClasses = pending =>
@@ -123,46 +116,31 @@ let cardBodyClasses = pending =>
 
 @react.component
 let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) => {
-  let (showResult, setShowResult) = React.useState(() => computeShowResult(pending, checklistItem))
-
-  React.useEffect1(() => {
-    let newShowResult = computeShowResult(pending, checklistItem)
-    newShowResult == showResult ? () : setShowResult(_ => newShowResult)
-    None
-  }, [updateChecklistCB])
   let status = ChecklistItem.status(checklistItem)
 
-  <div
-    className={cardClasses(pending)}
-    ariaLabel={ChecklistItem.title(checklistItem)}
-    onClick={_ => setShowResult(_ => true)}>
+  <div className={cardClasses(pending)} ariaLabel={ChecklistItem.title(checklistItem)}>
     <div className={cardHeaderClasses(pending)}>
       <div className="inline-flex items-center">
         {statusIcon(updateChecklistCB, status)}
         <PfIcon className={kindIconClasses(ChecklistItem.result(checklistItem))} />
         <p className="pl-2 tracking-wide"> {ChecklistItem.title(checklistItem)->str} </p>
       </div>
-      <div className="inline-block">
-        {showResult ? showStatus(status) : <button> <i className="fas fa-chevron-down" /> </button>}
-      </div>
     </div>
-    {showResult
-      ? <div className={cardBodyClasses(pending)}>
-          <div>
-            {switch ChecklistItem.result(checklistItem) {
-            | ShortText(text) => <div> {text->str} </div>
-            | LongText(markdown) => <MarkdownBlock profile=Markdown.Permissive markdown />
-            | Link(link) => showlink(link)
-            | MultiChoice(text) => <div> {text->str} </div>
-            | Files(files) => showFiles(files)
-            | AudioRecord(file) => <audio src={file.url} controls=true />
-            }}
-          </div>
-          {switch updateChecklistCB {
-          | Some(callback) => statusButton(index, status, callback, checklist)
-          | None => React.null
-          }}
-        </div>
-      : React.null}
+    <div className={cardBodyClasses(pending)}>
+      <div>
+        {switch ChecklistItem.result(checklistItem) {
+        | ShortText(text) => <div> {text->str} </div>
+        | LongText(markdown) => <MarkdownBlock profile=Markdown.Permissive markdown />
+        | Link(link) => showlink(link)
+        | MultiChoice(text) => <div> {text->str} </div>
+        | Files(files) => showFiles(files)
+        | AudioRecord(file) => <audio src={file.url} controls=true />
+        }}
+      </div>
+      {switch updateChecklistCB {
+      | Some(callback) => statusButton(index, status, callback, checklist)
+      | None => React.null
+      }}
+    </div>
   </div>
 }

@@ -17,9 +17,9 @@ let contents = (courses, currentCourse, selectedPage) => {
   Js.Array.map(
     course =>
       <a
-        className="block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 w-40 truncate"
+        className="block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 truncate"
         key={course->Course.id}
-        href={Page.canAcessPage(selectedPage, currentCourse)
+        href={Page.canAcessPage(selectedPage, course)
           ? Page.path(Page.changeId(selectedPage, Course.id(course)))
           : Page.path(Page.Student__Curriculum(Course.id(course)))}>
         {Course.name(course)->str}

@@ -36,12 +36,12 @@ let renderLinks = (courses, selectedPage) => {
           | Student__Leaderboard(_) => ("Leaderboard", "i-book-open-light")
           | Student__SubmissionShow(_) => ("Unknown", "")
           }
-          <Link
+          <a
             key=title
             href={Page.path(link)}
             className="flex items-center py-3 px-3 hover:text-primary-700 hover:font-semibold hover:bg-primary-100">
             <PfIcon className={`if ${icon} if-fw`} /> <div className="pl-2"> {str(title)} </div>
-          </Link>
+          </a>
         }, Page.activeLinks(currentCourse))->React.array} </div>
     </div>
   | None => React.null

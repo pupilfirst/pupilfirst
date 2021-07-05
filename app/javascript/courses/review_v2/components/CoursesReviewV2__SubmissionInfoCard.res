@@ -2,7 +2,7 @@ open CoursesReview__Types
 let str = React.string
 
 let cardClasses = (submission, selected) =>
-  "mt-6 rounded-r-lg  border-l-3 " ++
+  "inline-block rounded-lg border-l-3 " ++
   (selected ? "bg-gray-200 " : "bg-white ") ++
   switch (SubmissionMeta.passedAt(submission), SubmissionMeta.evaluatedAt(submission)) {
   | (None, None) => "border-orange-300"

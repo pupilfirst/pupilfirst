@@ -27,12 +27,8 @@ let make = (~courses, ~currentUser) => {
     )
     raise(UnknownPathEncountered(url.path))
   }
-  <div className="h-screen flex overflow-hidden bg-gray-100">
+  <div className="h-screen flex bg-gray-100">
     {ReactUtils.nullUnless(<AppRouter__Nav courses selectedPage />, Page.showSideNav(selectedPage))}
-    <div className="flex flex-col w-0 flex-1 overflow-hidden">
-      <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none">
-        <div className="py-6"> {component} </div>
-      </main>
-    </div>
+    {component}
   </div>
 }

@@ -85,9 +85,9 @@ let closeOverlay = courseId => RescriptReactRouter.push("/courses/" ++ (courseId
 let headerSection = submissionDetails =>
   <div
     ariaLabel="submissions-overlay-header"
-    className="bg-gray-100 border-b border-gray-300 px-3 flex justify-center">
+    className="bg-gray-100 border-b border-gray-300 flex justify-center">
     <div
-      className="bg-white border lg:border-transparent p-4 lg:px-6 lg:py-5 flex flex-wrap items-center justify-between rounded-lg shadow w-full">
+      className="bg-white border-b p-4 lg:px-6 lg:py-4 flex flex-wrap items-center justify-between w-full">
       <div className="flex">
         <button
           title="Close"
@@ -167,27 +167,32 @@ let make = (~submissionId, ~currentUser) => {
 
   React.useEffect1(getSubmissionDetails(submissionId, setState), [submissionId])
 
-  <div>
+  <div className="flex-1 flex flex-col overflow-hidden">
     {switch state {
     | Loaded(submissionDetails) =>
-      <div>
-        {headerSection(submissionDetails)}
-        <div className="container mx-auto max-w-7xl"> {inactiveWarning(submissionDetails)} </div>
-        <div className="flex space-x-2 overflow-x-auto px-4">
-          {Js.Array.mapi(
-            (submission, index) =>
-              <CoursesReviewV2__SubmissionInfoCard
-                key={SubmissionMeta.id(submission)}
-                selected={SubmissionMeta.id(submission) == submissionId}
-                submission
-                submissionNumber={Array.length(
-                  SubmissionDetails.allSubmissions(submissionDetails),
-                ) -
-                index}
-              />,
-            SubmissionDetails.allSubmissions(submissionDetails),
-          )->React.array}
-        </div>
+      [
+        <div>
+          {headerSection(submissionDetails)}
+          <div className="container mx-auto max-w-7xl"> {inactiveWarning(submissionDetails)} </div>
+          <div className="flex space-x-4 overflow-x-auto px-4 py-2 border-b bg-gray-200">
+            {ReactUtils.nullIf(
+              Js.Array.mapi(
+                (submission, index) =>
+                  <CoursesReviewV2__SubmissionInfoCard
+                    key={SubmissionMeta.id(submission)}
+                    selected={SubmissionMeta.id(submission) == submissionId}
+                    submission
+                    submissionNumber={Array.length(
+                      SubmissionDetails.allSubmissions(submissionDetails),
+                    ) -
+                    index}
+                  />,
+                SubmissionDetails.allSubmissions(submissionDetails),
+              )->React.array,
+              Js.Array.length(SubmissionDetails.allSubmissions(submissionDetails)) == 1,
+            )}
+          </div>
+        </div>,
         <CoursesReviewV2__Editor
           overlaySubmission={SubmissionDetails.submission(submissionDetails)}
           teamSubmission={submissionDetails |> SubmissionDetails.students |> Array.length > 1}
@@ -198,8 +203,8 @@ let make = (~submissionId, ~currentUser) => {
           updateReviewChecklistCB={updateReviewChecklist(submissionDetails, setState)}
           targetId={submissionDetails |> SubmissionDetails.targetId}
           currentUser
-        />
-      </div>
+        />,
+      ]->React.array
 
     | Loading =>
       <div>

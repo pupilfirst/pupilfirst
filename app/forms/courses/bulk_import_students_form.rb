@@ -33,7 +33,7 @@ module Courses
 
       return unless invalid
 
-      errors[:base] << 'One or more of the entries have an invalid email address'
+      errors[:base] << 'One or more entries have an invalid email address'
     end
 
     def students_must_have_unique_email
@@ -61,7 +61,7 @@ module Courses
           valid_string?(string: r['team_name'], max_length: 50, optional: true)
       end
 
-      errors[:base] << 'One or more of the entries have invalid strings'
+      errors[:base] << 'One or more entries have invalid strings'
     end
   end
 end

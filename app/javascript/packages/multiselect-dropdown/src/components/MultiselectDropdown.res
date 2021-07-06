@@ -214,7 +214,7 @@ module Make = (Selectable: Selectable) => {
       <div />
       {switch (showDropdown, results, defaultOptions, hint) {
       | (false, results, _options, _hint) =>
-        switch (value, results) {
+        switch (Js.String.trim(value), results) {
         | ("", _) => React.null
         | (_value, []) => wrapper(str(emptyMessage))
         | (_value, results) => wrapper(React.array(results))

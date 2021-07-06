@@ -15,11 +15,13 @@ class TeamCoachesResolver < ApplicationQuery
   def authorized?
     return false if course.blank?
 
-    current_coach.present?
+    return false if current_user.blank?
+
+    current_user.faculty.present?
   end
 
   def course
-    @course ||= Course.find_by(id: course_id)
+    @course ||= current_school.courses.find_by(id: course_id)
   end
 
   def applicable_team_coaches

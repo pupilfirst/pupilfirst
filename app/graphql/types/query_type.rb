@@ -51,7 +51,7 @@ module Types
                    Types::SubmissionInfoType.connection_type,
                    null: false do
       argument :course_id, ID, required: true
-      argument :status, Types::SubmissionStatusType, required: true
+      argument :status, Types::SubmissionStatusType, required: false
       argument :sort_direction, Types::SortDirectionType, required: true
       argument :sort_criterion,
                Types::SubmissionSortCriterionType,
@@ -166,21 +166,19 @@ module Types
       argument :sort_direction, Types::SortDirectionType, required: true
     end
 
-    resolved_field :levels, Types::LevelType.connection_type, null: false do
+    resolved_field :levels, [Types::LevelType], null: false do
       argument :course_id, ID, required: true
       argument :search, String, required: false
     end
 
     resolved_field :reviewed_targets_info,
-                   [Types::TargetInfoType.connection_type],
+                   [Types::TargetInfoType],
                    null: false do
       argument :course_id, ID, required: true
       argument :search, String, required: false
     end
 
-    resolved_field :team_coaches,
-                   [Types::CoachType.connection_type],
-                   null: false do
+    resolved_field :team_coaches, [Types::UserProxyType], null: false do
       argument :course_id, ID, required: true
       argument :search, String, required: false
     end

@@ -349,7 +349,7 @@ en:
       generate_feedback_button: Generate Feedback
     CoursesReview__Root:
       assigned_to: Assigned to
-      assigned_to_coach: "assigned to "
+      assigned_to_coach: "assigned to:"
       assigned_to_me: " assigned to me"
       filter_by: "Filter by:"
       filter_by_another_level: Filter by another level

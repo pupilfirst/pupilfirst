@@ -57,15 +57,7 @@ class SubmissionsResolver < ApplicationQuery
         course.timeline_events
       end
 
-    by_level_and_status =
-      case status
-      when 'Pending'
-        by_level.pending_review
-      when 'Reviewed'
-        by_level.evaluated_by_faculty
-      else
-        raise "Unexpected status '#{status}' encountered when resolving submissions"
-      end
+    by_level_and_status = filter_by_status(by_level)
 
     by_level_status_and_coach =
       if coach_id.present?
@@ -77,6 +69,19 @@ class SubmissionsResolver < ApplicationQuery
       end
 
     by_level_status_and_coach.from_founders(students)
+  end
+
+  def filter_by_status(submissions)
+    return submissions if status.blank?
+
+    case status
+    when 'Pending'
+      submissions.pending_review
+    when 'Reviewed'
+      submissions.evaluated_by_faculty
+    else
+      raise "Unexpected status '#{status}' encountered when resolving submissions"
+    end
   end
 
   def students

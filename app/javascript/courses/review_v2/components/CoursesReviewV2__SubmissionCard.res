@@ -88,10 +88,12 @@ let showSubmission = submissions => <div id="submissions"> {Js.Array.map(submiss
 
 @react.component
 let make = (~submissions, ~selectedTab) => {
-  let imageSrc = switch selectedTab {
-  | #Pending => pendingEmptyImage
-  | #Reviewed => reviewedEmptyImage
-  }
+  let imageSrc = Belt.Option.mapWithDefault(selectedTab, pendingEmptyImage, t =>
+    switch t {
+    | #Pending => pendingEmptyImage
+    | #Reviewed => reviewedEmptyImage
+    }
+  )
 
   ArrayUtils.isEmpty(submissions)
     ? <div className="course-review__submissions-empty text-lg font-semibold text-center py-4">

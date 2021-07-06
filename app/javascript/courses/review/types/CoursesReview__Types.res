@@ -1,4 +1,5 @@
 module Level = CoursesReview__Level
+module TargetInfo = CoursesReview__TargetInfo
 module IndexSubmission = CoursesReview__IndexSubmission
 module SubmissionDetails = CoursesReview__SubmissionDetails
 module OverlaySubmission = CoursesReview__OverlaySubmission

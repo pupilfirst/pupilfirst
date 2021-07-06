@@ -18,12 +18,10 @@ class ReviewedTargetsInfoResolver < ApplicationQuery
     return false if current_user.blank?
 
     current_user.faculty.present?
-
-    current_coach.present?
   end
 
   def course
-    @course ||= current_school.course.find_by(id: course_id)
+    @course ||= current_school.courses.find_by(id: course_id)
   end
 
   def applicable_reviewed_targets

@@ -25,6 +25,8 @@ module Types
         user.avatar_variant(:thumb),
         only_path: true
       )
+    else
+      null
     end
   end
 end

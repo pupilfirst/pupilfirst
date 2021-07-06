@@ -174,9 +174,9 @@ let make = (~submissionId, ~currentUser) => {
         <div>
           {headerSection(submissionDetails)}
           <div className="container mx-auto max-w-7xl"> {inactiveWarning(submissionDetails)} </div>
-          <div className="flex space-x-4 overflow-x-auto px-4 py-2 border-b bg-gray-200">
-            {ReactUtils.nullIf(
-              Js.Array.mapi(
+          {ReactUtils.nullIf(
+            <div className="flex space-x-4 overflow-x-auto px-4 py-2 border-b bg-gray-200">
+              {Js.Array.mapi(
                 (submission, index) =>
                   <CoursesReviewV2__SubmissionInfoCard
                     key={SubmissionMeta.id(submission)}
@@ -188,10 +188,10 @@ let make = (~submissionId, ~currentUser) => {
                     index}
                   />,
                 SubmissionDetails.allSubmissions(submissionDetails),
-              )->React.array,
-              Js.Array.length(SubmissionDetails.allSubmissions(submissionDetails)) == 1,
-            )}
-          </div>
+              )->React.array}
+            </div>,
+            Js.Array.length(SubmissionDetails.allSubmissions(submissionDetails)) == 1,
+          )}
         </div>,
         <CoursesReviewV2__Editor
           overlaySubmission={SubmissionDetails.submission(submissionDetails)}

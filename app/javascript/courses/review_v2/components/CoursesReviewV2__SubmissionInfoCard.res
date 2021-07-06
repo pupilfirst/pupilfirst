@@ -1,14 +1,18 @@
+%bs.raw(`require("./CoursesReviewV2__SubmissionInfoCard.css")`)
+
 open CoursesReview__Types
 let str = React.string
 
 let cardClasses = (submission, selected) =>
-  "inline-block rounded-lg border-l-3 " ++
-  (selected ? "bg-gray-200 " : "bg-white ") ++
+  "inline-block bg-white relative rounded-lg submission-info__tab " ++
+  (selected
+    ? "border border-primary-400 "
+    : "bg-opacity-50 border border-gray-300 hover:bg-opacity-100 ") ++
   switch (SubmissionMeta.passedAt(submission), SubmissionMeta.evaluatedAt(submission)) {
-  | (None, None) => "border-orange-300"
-  | (None, Some(_)) => "border-red-500"
+  | (None, None) => "submission-info__tab-pending"
+  | (None, Some(_)) => "submission-info__tab-rejected"
   | (Some(_), None)
-  | (Some(_), Some(_)) => "border-green-500"
+  | (Some(_), Some(_)) => "submission-info__tab-completed"
   }
 
 let showSubmissionStatus = submission => {
@@ -35,8 +39,8 @@ let make = (~submission, ~submissionNumber, ~selected) =>
     href={"/submissions/" ++ (SubmissionMeta.id(submission) ++ "/review_v2")}
     key={SubmissionMeta.id(submission)}
     className={cardClasses(submission, selected)}>
-    <div className="rounded-r-lg shadow">
-      <div className="p-4 border-b flex flex-row items-center justify-between">
+    <div className="shadow hover:shadow-lg transition">
+      <div className="px-4 py-2 flex flex-row items-center justify-between">
         <div className="flex flex-col pr-2">
           <h2 className="font-semibold text-sm leading-tight">
             {("Submission #" ++ string_of_int(submissionNumber))->str}

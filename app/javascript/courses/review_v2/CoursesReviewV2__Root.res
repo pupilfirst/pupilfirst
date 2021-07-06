@@ -505,20 +505,20 @@ let reloadSubmissions = (courseId, state, send) => {
   getSubmissions(send, courseId, None, state.filter)
 }
 
-let submissionsLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
+let submissionsLoadedData = (totoalSubmissionsCount, loadedSubmissionsCount) =>
   <div className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
     {str(
-      totoalNotificationsCount == loadedNotificaionsCount
+      totoalSubmissionsCount == loadedSubmissionsCount
         ? tc(
-            ~variables=[("total_notifications", string_of_int(totoalNotificationsCount))],
-            "notifications_fully_loaded_text",
+            ~variables=[("total_submissions", string_of_int(totoalSubmissionsCount))],
+            "submissions_fully_loaded_text",
           )
         : tc(
             ~variables=[
-              ("total_notifications", string_of_int(totoalNotificationsCount)),
-              ("loaded_notifications_count", string_of_int(loadedNotificaionsCount)),
+              ("total_submissions", string_of_int(totoalSubmissionsCount)),
+              ("loaded_submissions_count", string_of_int(loadedSubmissionsCount)),
             ],
-            "notifications_partially_loaded_text",
+            "submissions_partially_loaded_text",
           ),
     )}
   </div>
@@ -571,72 +571,73 @@ let make = (~courseId) => {
   }, [state.filterString])
 
   let url = RescriptReactRouter.useUrl()
-
-  <div className="max-w-3xl mx-auto">
-    <div className="md:flex w-full items-start pb-4">
-      <div className="flex-1">
-        <label className="block text-tiny font-semibold uppercase">
-          {tc("filter_by") |> str}
-        </label>
-        <Multiselect
-          id="filter"
-          unselected={unselected(state, "1", state.filter)}
-          selected={selected(state.filter, "1")}
-          onSelect={onSelectFilter(send, courseId, state)}
-          onDeselect={onDeselectFilter(send)}
-          value=state.filterString
-          onChange={filterString => send(UpdateFilterString(filterString))}
-          placeholder={filterPlaceholder(state.filter)}
-          loading={state.filterLoading}
-          defaultOptions={defaultOptions(state)}
-        />
+  <div className="flex-1 overflow-y-auto">
+    <div className="max-w-3xl mx-auto">
+      <div className="md:flex w-full items-start py-4">
+        <div className="flex-1">
+          <label className="block text-tiny font-semibold uppercase">
+            {tc("filter_by") |> str}
+          </label>
+          <Multiselect
+            id="filter"
+            unselected={unselected(state, "1", state.filter)}
+            selected={selected(state.filter, "1")}
+            onSelect={onSelectFilter(send, courseId, state)}
+            onDeselect={onDeselectFilter(send)}
+            value=state.filterString
+            onChange={filterString => send(UpdateFilterString(filterString))}
+            placeholder={filterPlaceholder(state.filter)}
+            loading={state.filterLoading}
+            defaultOptions={defaultOptions(state)}
+          />
+        </div>
+        // {submissionsSorter(state, send)}
       </div>
-      // {submissionsSorter(state, send)}
-    </div>
-    <div>
-      <div className="btn btn-default" onClick={_ => send(ShowPending)}> {str("Pending")} </div>
-      <div className="btn btn-default" onClick={_ => send(ShowReviewed)}> {str("Reviewed")} </div>
-    </div>
-    <div id="submissions" className="mt-4">
+      <div>
+        <div className="btn btn-default" onClick={_ => send(ShowPending)}> {str("Pending")} </div>
+        <div className="btn btn-default" onClick={_ => send(ShowReviewed)}> {str("Reviewed")} </div>
+      </div>
+      <div id="submissions" className="mt-4">
+        {switch state.submissions {
+        | Unloaded =>
+          <div className="px-2 lg:px-8">
+            {SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())}
+          </div>
+        | PartiallyLoaded(submissions, cursor) =>
+          <div>
+            {submissionsList(submissions, state)}
+            {switch state.loading {
+            | LoadingMore =>
+              <div className="px-2 lg:px-8">
+                {SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())}
+              </div>
+            | NotLoading =>
+              <div className="px-4 lg:px-8 pb-6">
+                <button
+                  className="btn btn-primary-ghost cursor-pointer w-full"
+                  onClick={_ => {
+                    send(BeginLoadingMore)
+                    getSubmissions(send, courseId, Some(cursor), state.filter)
+                  }}>
+                  {tc("button_load_more") |> str}
+                </button>
+              </div>
+            | Reloading => React.null
+            }}
+          </div>
+        | FullyLoaded(submissions) => <div> {submissionsList(submissions, state)} </div>
+        }}
+      </div>
       {switch state.submissions {
-      | Unloaded =>
-        <div className="px-2 lg:px-8">
-          {SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())}
-        </div>
-      | PartiallyLoaded(submissions, cursor) =>
-        <div>
-          {submissionsList(submissions, state)}
-          {switch state.loading {
-          | LoadingMore =>
-            <div className="px-2 lg:px-8">
-              {SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())}
-            </div>
-          | NotLoading =>
-            <div className="px-4 lg:px-8 pb-6">
-              <button
-                className="btn btn-primary-ghost cursor-pointer w-full"
-                onClick={_ => {
-                  send(BeginLoadingMore)
-                  getSubmissions(send, courseId, Some(cursor), state.filter)
-                }}>
-                {tc("button_load_more") |> str}
-              </button>
-            </div>
-          | Reloading => React.null
-          }}
-        </div>
-      | FullyLoaded(submissions) => <div> {submissionsList(submissions, state)} </div>
+      | Unloaded => React.null
+      | _ =>
+        let loading = switch state.loading {
+        | NotLoading => false
+        | Reloading => true
+        | LoadingMore => false
+        }
+        <LoadingSpinner loading />
       }}
     </div>
-    {switch state.submissions {
-    | Unloaded => React.null
-    | _ =>
-      let loading = switch state.loading {
-      | NotLoading => false
-      | Reloading => true
-      | LoadingMore => false
-      }
-      <LoadingSpinner loading />
-    }}
   </div>
 }

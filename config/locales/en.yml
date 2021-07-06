@@ -55,8 +55,8 @@ en:
         label: Title
         placeholder: Student, Coach, CEO, etc.
     CourseApplicants__Root:
-      applicants_page_title: Applicants
       applicants_fully_loaded_text: Showing all %{total_applicants} applicants
+      applicants_page_title: Applicants
       applicants_partially_loaded_text: Showing %{loaded_applicants_count} of %{total_applicants} applicants
       button_load_more: Load More Applicants...
       empty_applicants: You don't have any applicants!
@@ -147,16 +147,16 @@ en:
         archive_course:
           button_text: Archive Course
           label: Do you want to archive the course?
-        unarchive_course:
-          button_text: Unarchive Course
-          label: Do you want to unarchive the course?
         clone_course:
           button_text: Clone Course
           label: Do you want to create a copy of the course?
+        unarchive_course:
+          button_text: Unarchive Course
+          label: Do you want to unarchive the course?
       alert:
         archive_message: Are you sure you want to archive the course?
-        unarchive_message: Are you sure you want to unarchive the course?
         clone_course_message: Are you sure you want to make a copy of the course?
+        unarchive_message: Are you sure you want to unarchive the course?
       button_text:
         add_new_course: Add New Course
         edit_course_details: Edit Course Details
@@ -363,6 +363,8 @@ en:
       reviewed: Reviewed
       reviewed_at: Reviewed At
       sort_by: "Sort by:"
+      submissions_fully_loaded_text: Showing all %{total_submissions} submissions
+      submissions_partially_loaded_text: Showing %{loaded_submissions_count} of %{total_submissions} submissions
       submitted_at: Submitted At
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
@@ -702,16 +704,33 @@ en:
         founder: All Founders
         team: Team
   mutations:
-    clone_course:
-      success_notification: Course copy requested. It will appear here soon!
     archive_course:
       success_notification: Course archived successfully.
     auto_verify_submission:
       success_notification: Target has been marked as complete.
+    clone_course:
+      success_notification: Course copy requested. It will appear here soon!
     create_course:
       success_notification: Course created successfully!
+    create_grading:
+      evaluation_criteria_error: Cannot grade Submission %{submission_id} without evaluation criteria
+      grade_recorded: Grades Recorded
+      invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
+      invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
+      invalid_grading_error: "Grading values supplied are invalid: %{grades_data}"
+      submission_graded_error: Submission already graded
+      submission_missing_error: "Unable to find submission with ID: %{submission_id}"
+      success_notification: The submission has been marked as reviewed.
     create_student_from_applicant:
       success_notification: Student created successfully.
+    create_submission:
+      blocked_submission_status_error: The status of this target is %{target_status}, so you cannot add a new submission; please reload the page
+      invalid_files_attached: Some files attached are invalid
+      invalid_submission_checklist: Submission checklist is not valid.
+      item_file_limit_error: No more than three files can be attached to a submission item
+      linked_file_exists_error: Some file attachments have already been linked to a submission
+      missing_answer_error: "Missing answer for question: %{title}"
+      success_notification: Your submission has been queued for review.
     create_target:
       success_notification: Target created successfully.
     create_topic_subscription:
@@ -730,35 +749,18 @@ en:
       success_notification: This topic has been unlocked. Community members can now post replies again.
     update_certificate:
       success_notification: Certificate details have been updated.
-    create_submission:
-      success_notification: Your submission has been queued for review.
-      linked_file_exists_error: Some file attachments have already been linked to a submission
-      item_file_limit_error: No more than three files can be attached to a submission item
-      blocked_submission_status_error: "The status of this target is %{target_status}, so you cannot add a new submission; please reload the page"
-      missing_answer_error: "Missing answer for question: %{title}"
-      invalid_submission_checklist: Submission checklist is not valid.
-      invalid_files_attached: Some files attached are invalid
-    update_target:
-      success_notification: Target updated successfully!
-      target_group_not_present_error: Target group does not exist
-      evaluation_criteria_course_error: Evaluation criteria must be from the same course as the target
-      prerequisities_in_same_level: Prerequisite targets must be from the same level as the target
-      prerequisities_archived_error: Cannot have archived prerequisites
-      target_missing_error: Target does not exist
-      multiple_method_of_completion: More than one method of completion
-      invalid_checklist_error: Checklist not valid
-      checklist_items_exceeded_error: Checklist should have less than 15 items
-    create_grading:
-      success_notification: The submission has been marked as reviewed.
-      grade_recorded: Grades Recorded
-      submission_missing_error: "Unable to find submission with ID: %{submission_id}"
-      submission_graded_error: Submission already graded
-      evaluation_criteria_error: "Cannot grade Submission %{submission_id} without evaluation criteria"
-      invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
-      invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
-      invalid_grading_error: "Grading values supplied are invalid: %{grades_data}"
     update_course:
       success_notification: Course updated successfully!
+    update_target:
+      checklist_items_exceeded_error: Checklist should have less than 15 items
+      evaluation_criteria_course_error: Evaluation criteria must be from the same course as the target
+      invalid_checklist_error: Checklist not valid
+      multiple_method_of_completion: More than one method of completion
+      prerequisities_archived_error: Cannot have archived prerequisites
+      prerequisities_in_same_level: Prerequisite targets must be from the same level as the target
+      success_notification: Target updated successfully!
+      target_group_not_present_error: Target group does not exist
+      target_missing_error: Target does not exist
   offline:
     heading: You are offline!
     message: It seems there is a problem with your connection.<br/>Please check your network status.

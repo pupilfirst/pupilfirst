@@ -217,7 +217,7 @@ feature 'Apply for public courses', js: true do
     click_button 'Apply'
 
     expect(page).to have_text(
-      "The email address you supplied cannot be used because an email we'd sent earlier bounced"
+      "The email address you supplied cannot be used because an email we sent earlier bounced"
     )
   end
 

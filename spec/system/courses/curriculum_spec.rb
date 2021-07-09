@@ -522,7 +522,7 @@ feature "Student's view of Course Curriculum", js: true do
 
       # Being an admin, level 6 should be open, but there should be a notice saying when the level will open for 'regular' students.
       expect(page).to have_content(
-        "This level is still locked for students, and will be unlocked on #{locked_level_6.unlock_at.strftime('%b %-d')}"
+        "This level is still locked for students and will be unlocked on #{locked_level_6.unlock_at.strftime('%b %-d')}"
       )
       expect(page).to have_content(target_group_l6.name)
       expect(page).to have_content(target_group_l6.description)

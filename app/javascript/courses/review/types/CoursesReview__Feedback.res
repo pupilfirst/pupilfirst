@@ -14,6 +14,7 @@ let coachName = t =>
 let coachAvatarUrl = t => t.coachAvatarUrl
 let coachTitle = t => t.coachTitle
 let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")
+let createdAt = t => t.createdAt
 
 let make = (~coachName, ~coachAvatarUrl, ~coachTitle, ~createdAt, ~value) => {
   coachName: coachName,

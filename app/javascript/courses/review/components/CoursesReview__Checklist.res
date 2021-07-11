@@ -43,16 +43,13 @@ let make = (
   ~targetId,
 ) => {
   let (state, setState) = React.useState(() => Show)
-  <div className="px-4 pt-4 md:px-6 md:pt-6">
+  <div className="pt-4 md:pt-6">
     <div className="flex h-7 items-end">
-      <h5 className="font-semibold text-sm flex items-center">
-        <PfIcon
-          className="if i-check-square-alt-regular text-gray-800 text-base md:text-lg inline-block"
-        />
-        <span className="ml-2 md:ml-3 tracking-wide"> {"Review Checklist" |> str} </span>
+      <h5 className="font-semibold text-sm flex items-center tracking-wide">
+        {"Review Checklist" |> str}
       </h5>
     </div>
-    <div className="mt-2 md:ml-7">
+    <div className="mt-2">
       {switch state {
       | Edit =>
         <CoursesReview__ChecklistEditor

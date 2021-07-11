@@ -48,10 +48,10 @@ let generateFeedback = (checklist, selection, feedback, setSelecton, updateFeedb
   updateFeedbackCB(newFeedback)
 }
 let checklistItemCheckedClasses = (itemIndex, selection) =>
-  "mb-4 px-2 pb-2 md:px-4 border-l-2 border-transparent " ++ (
+  "absolute w-1 inset-0 rounded-r-md " ++ (
     Js.Array.filter(s => s.itemIndex == itemIndex, selection)->ArrayUtils.isNotEmpty
-      ? "border-green-400"
-      : ""
+      ? "bg-green-400"
+      : "bg-gray-500"
   )
 
 let checklistItemChecked = (itemIndex, resultIndex, selection) =>
@@ -89,7 +89,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
   let (selection, setSelecton) = React.useState(() => [])
   let (id, _setId) = React.useState(() => DateTime.randomId() ++ "-review-checkbox-")
 
-  <div className="relative border bg-gray-100 rounded-lg py-2 md:py-4">
+  <div className="relative border bg-gray-200 rounded-lg py-2 md:py-4">
     <div className="absolute right-0 top-0 -mt-9">
       <button
         className="flex items-center btn btn-small btn-primary-ghost" onClick={_ => showEditorCB()}>
@@ -100,15 +100,17 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
     {Js.Array.mapi(
       (reviewChecklistItem, itemIndex) =>
         <div
-          className={checklistItemCheckedClasses(itemIndex, selection)}
+          className="mb-4 pb-2"
           key={string_of_int(itemIndex)}
           ariaLabel={"checklist-item-" ++ itemIndex->string_of_int}>
-          <h4 className="text-base font-semibold mt-2 md:mt-0 w-full md:w-4/5">
+          <h4
+            className="relative text-sm md:text-base font-semibold mt-2 md:mt-0 px-4 w-full md:w-4/5">
+            <div className={checklistItemCheckedClasses(itemIndex, selection)} />
             {ReviewChecklistItem.title(reviewChecklistItem)->str}
           </h4>
           <div> {Js.Array.mapi((checklistItem, resultIndex) =>
               <div
-                className="px-2 md:px-4 mt-2"
+                className="px-6 mt-3"
                 ariaLabel={"result-item-" ++ resultIndex->string_of_int}
                 key={itemIndex->string_of_int ++ resultIndex->string_of_int}>
                 <Checkbox
@@ -125,11 +127,11 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
                     )->Belt.Option.isSome
 
                   ReactUtils.nullUnless(
-                    <div className="pl-7">
+                    <div className="pl-7 pt-2">
                       <textarea
-                        rows=2
+                        rows=4
                         cols=33
-                        className="appearance-none border border-gray-400 bg-transparent rounded-b text-xs align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
+                        className="appearance-none border border-gray-400 bg-transparent rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
                         id={"result_" ++ (resultIndex->string_of_int ++ "_feedback")}
                         type_="text"
                         placeholder="Add feedback (optional)"

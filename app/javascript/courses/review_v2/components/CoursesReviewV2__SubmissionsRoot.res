@@ -73,7 +73,8 @@ let inactiveWarning = submissionDetails =>
       "This submission is from a student whose access to the course has ended, or has dropped out."
     }
 
-    <div className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3">
+    <div
+      className="border border-yellow-400 rounded bg-yellow-200 py-2 px-3 text-xs md:text-sm md:text-center">
       <i className="fas fa-exclamation-triangle" /> <span className="ml-2"> {warning->str} </span>
     </div>
   } else {
@@ -86,8 +87,7 @@ let headerSection = submissionDetails =>
   <div
     ariaLabel="submissions-overlay-header"
     className="bg-gray-100 border-b border-gray-300 flex justify-center">
-    <div
-      className="bg-white border-b p-4 lg:px-6 lg:py-4 flex flex-wrap items-center justify-between w-full">
+    <div className="bg-white px-4 py-3 flex flex-wrap items-center justify-between w-full">
       <div className="flex">
         <button
           title="Close"
@@ -105,7 +105,7 @@ let headerSection = submissionDetails =>
             <a
               href={"/targets/" ++ SubmissionDetails.targetId(submissionDetails)}
               target="_blank"
-              className="ml-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-sm md:text-lg">
+              className="ml-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-sm md:text-base">
               {SubmissionDetails.targetTitle(submissionDetails)->str}
             </a>
           </div>
@@ -172,10 +172,10 @@ let make = (~submissionId, ~currentUser) => {
     | Loaded(submissionDetails) =>
       [
         <div>
+          <div> {inactiveWarning(submissionDetails)} </div>
           {headerSection(submissionDetails)}
-          <div className="container mx-auto max-w-7xl"> {inactiveWarning(submissionDetails)} </div>
           {ReactUtils.nullIf(
-            <div className="flex space-x-4 overflow-x-auto px-4 py-2 border-b bg-gray-200">
+            <div className="flex space-x-4 overflow-x-auto px-4 py-3 border-b bg-gray-200">
               {Js.Array.mapi(
                 (submission, index) =>
                   <CoursesReviewV2__SubmissionInfoCard

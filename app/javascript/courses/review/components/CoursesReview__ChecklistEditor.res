@@ -221,7 +221,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                     <textarea
                       rows=2
                       cols=33
-                      className="appearance-none border border-gray-400 bg-transparent rounded-b text-xs align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
+                      className="appearance-none border border-gray-400 bg-transparent rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
                       id={"result_" ++ ((resultIndex |> string_of_int) ++ "_feedback")}
                       type_="text"
                       placeholder="Add feedback (optional)"

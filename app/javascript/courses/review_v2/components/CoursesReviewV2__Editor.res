@@ -571,11 +571,13 @@ let feedbackGenerator = (state, send) => {
           <span className="ml-2 md:ml-3 tracking-wide"> {"Review Checklist"->str} </span>
         </h5>
       </div>
-      <button
-        className="mt-2 bg-gray-100 p-4 rounded-lg w-full text-left text-gray-900 font-semibold hover:bg-gray-200 hover:border-gray-300 border-dashed focus:outline-none"
-        onClick={_ => send(ShowChecklistEditor)}>
-        <span className="ml-3"> {"Show Review Checklist"->str} </span>
-      </button>
+      <div className="mt-2 ml-7">
+        <button
+          className="bg-gray-300 px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-gray-900 hover:bg-white hover:text-primary-500 hover:shadow-md hover:border-primary-300 focus:outline-none transition"
+          onClick={_ => send(ShowChecklistEditor)}>
+          <span> {"Show Review Checklist"->str} </span>
+        </button>
+      </div>
     </div>
     <div className="pt-4 md:pt-6 course-review__feedback-editor text-sm">
       <h5 className="font-semibold text-sm flex items-center">
@@ -630,7 +632,10 @@ let showFeedback = feedback => Js.Array.mapi((f, index) =>
         />
       </div>
     </div>
-  , feedback)->React.array
+  , ArrayUtils.copyAndSort(
+    (x, y) => DateFns.differenceInSeconds(Feedback.createdAt(y), Feedback.createdAt(x)),
+    feedback,
+  ))->React.array
 
 @react.component
 let make = (
@@ -677,7 +682,7 @@ let make = (
     containerClasses="flex flex-col md:flex-row flex-1 space-y-6 md:space-y-0 overflow-y-auto"
     disabled=state.saving>
     <div className="md:w-1/2 w-full bg-white border-r relative md:overflow-y-auto">
-      <div className="px-6 py-4 bg-white border-b sticky top-0 z-50">
+      <div className="px-4 py-3 bg-white border-b sticky top-0 z-50">
         <div className="flex justify-between">
           <div>
             <p className="font-semibold text-sm"> {str("Submission 01")} </p>
@@ -691,7 +696,7 @@ let make = (
       </div>
     </div>
     <div className="md:w-1/2 w-full md:overflow-y-auto">
-      <div className="px-6 py-4 bg-white border-b sticky top-0 z-50">
+      <div className="px-4 py-3 bg-white border-b sticky top-0 z-50">
         <div className="flex justify-between">
           <div>
             <p className="font-semibold text-sm"> {str("Submission 01")} </p>
@@ -775,7 +780,6 @@ let make = (
                 {submissionStatusIcon(status, overlaySubmission, send)}
               </div>
             </div>
-            {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
             {state.additonalFeedbackEditorVisible
               ? <div>
                   {feedbackGenerator(state, send)}
@@ -806,6 +810,7 @@ let make = (
                     }->str}
                   </button>
                 </div>}
+            {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
           </div>
         }}
       </div>

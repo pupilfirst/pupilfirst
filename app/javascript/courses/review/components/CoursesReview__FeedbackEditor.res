@@ -16,11 +16,7 @@ let make = (
     <div>
       {switch (checklistVisible, reviewChecklistIsNotEmpty) {
       | (true, _)
-      | (false, false) =>
-        <CoursesReview__Checklist
-          reviewChecklist updateFeedbackCB feedback updateReviewChecklistCB targetId
-        />
-
+      | (false, false) => React.null
       | (false, true) =>
         <div className="px-4 pt-4 md:px-6">
           <button

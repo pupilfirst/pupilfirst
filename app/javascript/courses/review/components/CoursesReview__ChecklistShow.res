@@ -84,88 +84,96 @@ let updateChecklistResultFeedback = (
 }
 
 @react.component
-let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB) => {
+let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~cancelCB) => {
   let (checklist, setChecklist) = React.useState(() => reviewChecklist)
   let (selection, setSelecton) = React.useState(() => [])
   let (id, _setId) = React.useState(() => DateTime.randomId() ++ "-review-checkbox-")
-
-  <div className="relative border bg-gray-200 rounded-lg py-2 md:py-4">
-    <div className="absolute right-0 top-0 -mt-9">
-      <button
-        className="flex items-center btn btn-small btn-primary-ghost" onClick={_ => showEditorCB()}>
-        <i className="far fa-edit" />
-        <span className="ml-2 leading-tight"> {t("edit_checklist_button")->str} </span>
-      </button>
+  <div>
+    <div className="flex items-center px-4 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+      <div className="flex flex-1 items-center justify-between">
+        <div className="btn btn-subtle" onClick=cancelCB> {str("back")} </div>
+        <button
+          className="btn btn-primary "
+          disabled={selection->ArrayUtils.isEmpty}
+          onClick={_ =>
+            generateFeedback(checklist, selection, feedback, setSelecton, updateFeedbackCB)}>
+          {t("generate_feedback_button")->str}
+        </button>
+      </div>
     </div>
-    {Js.Array.mapi(
-      (reviewChecklistItem, itemIndex) =>
-        <div
-          className="mb-4 pb-2"
-          key={string_of_int(itemIndex)}
-          ariaLabel={"checklist-item-" ++ itemIndex->string_of_int}>
-          <h4
-            className="relative text-sm md:text-base font-semibold mt-2 md:mt-0 px-4 w-full md:w-4/5">
-            <div className={checklistItemCheckedClasses(itemIndex, selection)} />
-            {ReviewChecklistItem.title(reviewChecklistItem)->str}
-          </h4>
-          <div> {Js.Array.mapi((checklistItem, resultIndex) =>
-              <div
-                className="px-6 mt-3"
-                ariaLabel={"result-item-" ++ resultIndex->string_of_int}
-                key={itemIndex->string_of_int ++ resultIndex->string_of_int}>
-                <Checkbox
-                  id={id ++ (itemIndex->string_of_int ++ resultIndex->string_of_int)}
-                  label={str(checklistItem->ReviewChecklistResult.title)}
-                  onChange={checkboxOnChange(itemIndex, resultIndex, setSelecton)}
-                  checked={checklistItemChecked(itemIndex, resultIndex, selection)}
-                />
-                {
-                  let isSelected =
-                    Js.Array.find(
-                      s => s.itemIndex == itemIndex && s.resultIndex == resultIndex,
-                      selection,
-                    )->Belt.Option.isSome
+    <div className="p-4">
+      <div className="flex items-end justify-between">
+        <h5 className="font-semibold text-sm flex items-center tracking-wide">
+          {"Review Checklist" |> str}
+        </h5>
+        <button className="btn btn-small btn-default" onClick={_ => showEditorCB()}>
+          <i className="far fa-edit" />
+          <div className="ml-2"> {t("edit_checklist_button")->str} </div>
+        </button>
+      </div>
+      <div className="border bg-gray-200 rounded-lg py-2 md:py-4 mt-2">
+        {Js.Array.mapi(
+          (reviewChecklistItem, itemIndex) =>
+            <div
+              className="mb-4 pb-2"
+              key={string_of_int(itemIndex)}
+              ariaLabel={"checklist-item-" ++ itemIndex->string_of_int}>
+              <h4
+                className="relative text-sm md:text-base font-semibold mt-2 md:mt-0 px-4 w-full md:w-4/5">
+                <div className={checklistItemCheckedClasses(itemIndex, selection)} />
+                {ReviewChecklistItem.title(reviewChecklistItem)->str}
+              </h4>
+              <div> {Js.Array.mapi((checklistItem, resultIndex) =>
+                  <div
+                    className="px-6 mt-3"
+                    ariaLabel={"result-item-" ++ resultIndex->string_of_int}
+                    key={itemIndex->string_of_int ++ resultIndex->string_of_int}>
+                    <Checkbox
+                      id={id ++ (itemIndex->string_of_int ++ resultIndex->string_of_int)}
+                      label={str(checklistItem->ReviewChecklistResult.title)}
+                      onChange={checkboxOnChange(itemIndex, resultIndex, setSelecton)}
+                      checked={checklistItemChecked(itemIndex, resultIndex, selection)}
+                    />
+                    {
+                      let isSelected =
+                        Js.Array.find(
+                          s => s.itemIndex == itemIndex && s.resultIndex == resultIndex,
+                          selection,
+                        )->Belt.Option.isSome
 
-                  ReactUtils.nullUnless(
-                    <div className="pl-7 pt-2">
-                      <textarea
-                        rows=4
-                        cols=33
-                        className="appearance-none border border-gray-400 bg-transparent rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
-                        id={"result_" ++ (resultIndex->string_of_int ++ "_feedback")}
-                        type_="text"
-                        placeholder="Add feedback (optional)"
-                        value={Belt.Option.getWithDefault(
-                          ReviewChecklistResult.feedback(checklistItem),
-                          "",
-                        )}
-                        onChange={event =>
-                          updateChecklistResultFeedback(
-                            itemIndex,
-                            resultIndex,
-                            ReactEvent.Form.target(event)["value"],
-                            reviewChecklistItem,
-                            checklistItem,
-                            setChecklist,
-                          )}
-                      />
-                    </div>,
-                    isSelected,
-                  )
-                }
-              </div>
-            , ReviewChecklistItem.result(reviewChecklistItem))->React.array} </div>
-        </div>,
-      checklist,
-    )->React.array}
-    <div className="text-center max-w-xs mx-2 md:mx-auto">
-      <button
-        className="btn btn-primary btn-large w-full "
-        disabled={selection->ArrayUtils.isEmpty}
-        onClick={_ =>
-          generateFeedback(checklist, selection, feedback, setSelecton, updateFeedbackCB)}>
-        {t("generate_feedback_button")->str}
-      </button>
+                      ReactUtils.nullUnless(
+                        <div className="pl-7 pt-2">
+                          <textarea
+                            rows=4
+                            cols=33
+                            className="appearance-none border border-gray-400 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
+                            id={"result_" ++ (resultIndex->string_of_int ++ "_feedback")}
+                            type_="text"
+                            placeholder="Add feedback (optional)"
+                            value={Belt.Option.getWithDefault(
+                              ReviewChecklistResult.feedback(checklistItem),
+                              "",
+                            )}
+                            onChange={event =>
+                              updateChecklistResultFeedback(
+                                itemIndex,
+                                resultIndex,
+                                ReactEvent.Form.target(event)["value"],
+                                reviewChecklistItem,
+                                checklistItem,
+                                setChecklist,
+                              )}
+                          />
+                        </div>,
+                        isSelected,
+                      )
+                    }
+                  </div>
+                , ReviewChecklistItem.result(reviewChecklistItem))->React.array} </div>
+            </div>,
+          checklist,
+        )->React.array}
+      </div>
     </div>
   </div>
 }

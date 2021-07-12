@@ -561,7 +561,7 @@ let noteForm = (overlaySubmission, teamSubmission, note, send) =>
   }
 
 let feedbackGenerator = (state, send) => {
-  <div>
+  <div className="p-4">
     <div>
       <div className="flex h-7 items-end">
         <h5 className="font-semibold text-sm flex items-center">
@@ -571,7 +571,7 @@ let feedbackGenerator = (state, send) => {
           <span className="ml-2 md:ml-3 tracking-wide"> {"Review Checklist"->str} </span>
         </h5>
       </div>
-      <div className="mt-2 ml-7">
+      <div className="mt-2 md:ml-7">
         <button
           className="bg-gray-300 px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-gray-900 hover:bg-white hover:text-primary-500 hover:shadow-md hover:border-primary-300 focus:outline-none transition"
           onClick={_ => send(ShowChecklistEditor)}>
@@ -586,7 +586,7 @@ let feedbackGenerator = (state, send) => {
         />
         <span className="ml-2 md:ml-3 tracking-wide"> {"Add Your Feedback"->str} </span>
       </h5>
-      <div className="mt-2 md:ml-7" ariaLabel="feedback">
+      <div className="mt-2 md:ml-8" ariaLabel="feedback">
         <MarkdownEditor
           onChange={feedback => send(UpdateFeedback(feedback))}
           value=state.newFeedback
@@ -600,7 +600,7 @@ let feedbackGenerator = (state, send) => {
 }
 
 let showFeedback = feedback => Js.Array.mapi((f, index) =>
-    <div key={index->string_of_int} className="border-t p-4 md:p-6 mt-4">
+    <div key={index->string_of_int} className="border-t p-4 mt-4">
       <div className="flex items-center">
         <div
           className="flex-shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
@@ -679,16 +679,16 @@ let make = (
   let pending = ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
 
   <DisablingCover
-    containerClasses="flex flex-col md:flex-row flex-1 space-y-6 md:space-y-0 overflow-y-auto"
+    containerClasses="flex flex-col md:flex-row flex-1 space-y-6 md:space-y-0 md:overflow-y-auto"
     disabled=state.saving>
     <div className="md:w-1/2 w-full bg-white border-r relative md:overflow-y-auto">
-      <div className="px-4 py-3 bg-white border-b sticky top-0 z-50">
-        <div className="flex justify-between">
+      <div className="flex items-center px-4 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+        <div className="flex flex-1 items-center justify-between">
           <div>
             <p className="font-semibold text-sm"> {str("Submission 01")} </p>
-            <p className="text-gray-700 text-xs"> {str("Submission 01")} </p>
+            <p className="text-gray-700 text-xs"> {str("11/07/2021")} </p>
           </div>
-          <div> {str("Submission 01")} </div>
+          <p className="text-sm"> {str("Submission 01")} </p>
         </div>
       </div>
       <div className="p-6">
@@ -696,124 +696,115 @@ let make = (
       </div>
     </div>
     <div className="md:w-1/2 w-full md:overflow-y-auto">
-      <div className="px-4 py-3 bg-white border-b sticky top-0 z-50">
-        <div className="flex justify-between">
-          <div>
-            <p className="font-semibold text-sm"> {str("Submission 01")} </p>
-            <p className="text-gray-700 text-xs"> {str("Submission 01")} </p>
+      {switch state.editor {
+      | GradesEditor =>
+        <div>
+          <div
+            className="flex items-center justify-between px-4 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+            <p className="font-semibold text-sm"> {str("Review")} </p>
           </div>
-          <div> {str("Submission 01")} </div>
+          {feedbackGenerator(state, send)}
+          <div className="w-full px-4">
+            {noteForm(overlaySubmission, teamSubmission, state.note, send)}
+            <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
+              <Icon className="if i-tachometer-regular text-gray-800 text-base" />
+              <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
+            </h5>
+            <div
+              className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
+              <div className="w-full md:w-3/6">
+                {renderGradePills(evaluationCriteria, targetEvaluationCriteriaIds, state, send)}
+              </div>
+              {submissionStatusIcon(status, overlaySubmission, send)}
+            </div>
+          </div>
+          <div className="pt-4 md:ml-7">
+            <button
+              disabled={reviewButtonDisabled(status)}
+              className="btn btn-success btn-large w-full border border-green-600"
+              onClick={gradeSubmission(
+                OverlaySubmission.id(overlaySubmission),
+                state,
+                send,
+                evaluationCriteria,
+                updateSubmissionCB,
+                status,
+                currentUser,
+                overlaySubmission,
+              )}>
+              {submitButtonText(state.newFeedback, state.grades)->str}
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="p-6">
-        {switch state.editor {
-        | GradesEditor =>
-          <div>
-            {feedbackGenerator(state, send)}
-            <div className="w-full pt-4 md:pt-6">
-              {noteForm(overlaySubmission, teamSubmission, state.note, send)}
-              <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
-                <Icon className="if i-tachometer-regular text-gray-800 text-base" />
-                <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
-              </h5>
-              <div
-                className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
-                <div className="w-full md:w-3/6">
-                  {renderGradePills(evaluationCriteria, targetEvaluationCriteriaIds, state, send)}
-                </div>
-                {submissionStatusIcon(status, overlaySubmission, send)}
+
+      | ChecklistEditor =>
+        <div>
+          <CoursesReview__Checklist
+            reviewChecklist
+            updateFeedbackCB={feedback =>
+              send(
+                GenerateFeeback(
+                  feedback,
+                  pending
+                    ? GradesEditor
+                    : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
+                ),
+              )}
+            feedback=state.newFeedback
+            updateReviewChecklistCB
+            targetId
+            cancelCB={_ => send(ShowGradesEditor)}
+          />
+        </div>
+
+      | ReviewedSubmissionEditor(grades) =>
+        <div>
+          <div className="w-full p-4">
+            <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
+              <Icon className="if i-tachometer-regular text-gray-800 text-base" />
+              <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
+            </h5>
+            <div
+              className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
+              <div className="w-full md:w-3/6">
+                {showGrades(grades, evaluationCriteria, state)}
               </div>
-            </div>
-            <div className="pt-4 md:ml-7">
-              <button
-                disabled={reviewButtonDisabled(status)}
-                className="btn btn-success btn-large w-full border border-green-600"
-                onClick={gradeSubmission(
-                  OverlaySubmission.id(overlaySubmission),
-                  state,
-                  send,
-                  evaluationCriteria,
-                  updateSubmissionCB,
-                  status,
-                  currentUser,
-                  overlaySubmission,
-                )}>
-                {submitButtonText(state.newFeedback, state.grades)->str}
-              </button>
+              {submissionStatusIcon(status, overlaySubmission, send)}
             </div>
           </div>
-
-        | ChecklistEditor =>
-          <div>
-            <div className="btn btn-default" onClick={_ => send(ShowGradesEditor)}>
-              {str("back")}
-            </div>
-            <CoursesReview__Checklist
-              reviewChecklist
-              updateFeedbackCB={feedback =>
-                send(
-                  GenerateFeeback(
-                    feedback,
-                    pending
-                      ? GradesEditor
-                      : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
-                  ),
-                )}
-              feedback=state.newFeedback
-              updateReviewChecklistCB
-              targetId
-            />
-          </div>
-
-        | ReviewedSubmissionEditor(grades) =>
-          <div>
-            <div className="w-full pt-4 md:pt-6">
-              <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
-                <Icon className="if i-tachometer-regular text-gray-800 text-base" />
-                <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
-              </h5>
-              <div
-                className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
-                <div className="w-full md:w-3/6">
-                  {showGrades(grades, evaluationCriteria, state)}
-                </div>
-                {submissionStatusIcon(status, overlaySubmission, send)}
-              </div>
-            </div>
-            {state.additonalFeedbackEditorVisible
-              ? <div>
-                  {feedbackGenerator(state, send)}
-                  <div className="flex justify-end pr-4 pl-10 pt-2 pb-4 md:px-6 md:pb-6">
-                    <button
-                      disabled={state.newFeedback == "" || state.saving}
-                      className="btn btn-success border border-green-600 w-full md:w-auto"
-                      onClick={_ =>
-                        createFeedback(
-                          OverlaySubmission.id(overlaySubmission),
-                          state.newFeedback,
-                          send,
-                          overlaySubmission,
-                          currentUser,
-                          updateSubmissionCB,
-                        )}>
-                      {"Share Feedback" |> str}
-                    </button>
-                  </div>
-                </div>
-              : <div className="bg-gray-200 px-3 py-5 shadow-inner rounded-b-lg text-center">
+          {state.additonalFeedbackEditorVisible
+            ? <div>
+                {feedbackGenerator(state, send)}
+                <div className="flex justify-end pr-4 pl-10 pt-2 pb-4 md:px-6 md:pb-6">
                   <button
-                    onClick={_ => send(ShowAdditionalFeedbackEditor)}
-                    className="btn btn-primary-ghost cursor-pointer shadow hover:shadow-lg w-full md:w-auto">
-                    {switch OverlaySubmission.feedback(overlaySubmission) {
-                    | [] => "Add feedback"
-                    | _ => "Add another feedback"
-                    }->str}
+                    disabled={state.newFeedback == "" || state.saving}
+                    className="btn btn-success border border-green-600 w-full md:w-auto"
+                    onClick={_ =>
+                      createFeedback(
+                        OverlaySubmission.id(overlaySubmission),
+                        state.newFeedback,
+                        send,
+                        overlaySubmission,
+                        currentUser,
+                        updateSubmissionCB,
+                      )}>
+                    {"Share Feedback" |> str}
                   </button>
-                </div>}
-            {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
-          </div>
-        }}
-      </div>
+                </div>
+              </div>
+            : <div className="bg-gray-200 px-3 py-5 shadow-inner rounded-b-lg text-center">
+                <button
+                  onClick={_ => send(ShowAdditionalFeedbackEditor)}
+                  className="btn btn-primary-ghost cursor-pointer shadow hover:shadow-lg w-full md:w-auto">
+                  {switch OverlaySubmission.feedback(overlaySubmission) {
+                  | [] => "Add feedback"
+                  | _ => "Add another feedback"
+                  }->str}
+                </button>
+              </div>}
+          {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
+        </div>
+      }}
     </div>
   </DisablingCover>
 }

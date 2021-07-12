@@ -167,7 +167,7 @@ let make = (~submissionId, ~currentUser) => {
 
   React.useEffect1(getSubmissionDetails(submissionId, setState), [submissionId])
 
-  <div className="flex-1 flex flex-col overflow-hidden">
+  <div className="flex-1 md:flex md:flex-col md:overflow-hidden">
     {switch state {
     | Loaded(submissionDetails) =>
       [

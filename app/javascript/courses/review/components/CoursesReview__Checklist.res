@@ -41,30 +41,24 @@ let make = (
   ~feedback,
   ~updateReviewChecklistCB,
   ~targetId,
+  ~cancelCB,
 ) => {
   let (state, setState) = React.useState(() => Show)
-  <div className="pt-4 md:pt-6">
-    <div className="flex h-7 items-end">
-      <h5 className="font-semibold text-sm flex items-center tracking-wide">
-        {"Review Checklist" |> str}
-      </h5>
-    </div>
-    <div className="mt-2">
-      {switch state {
-      | Edit =>
-        <CoursesReview__ChecklistEditor
-          reviewChecklist
-          updateReviewChecklistCB={updateReviewChecklist(setState, updateReviewChecklistCB)}
-          closeEditModeCB={closeEditMode(setState)}
-          targetId
-        />
-      | Show =>
-        reviewChecklist |> ArrayUtils.isEmpty
-          ? handleEmpty(setState)
-          : <CoursesReview__ChecklistShow
-              reviewChecklist feedback updateFeedbackCB showEditorCB={showEditor(setState)}
-            />
-      }}
-    </div>
+  <div>
+    {switch state {
+    | Edit =>
+      <CoursesReview__ChecklistEditor
+        reviewChecklist
+        updateReviewChecklistCB={updateReviewChecklist(setState, updateReviewChecklistCB)}
+        closeEditModeCB={closeEditMode(setState)}
+        targetId
+      />
+    | Show =>
+      reviewChecklist |> ArrayUtils.isEmpty
+        ? handleEmpty(setState)
+        : <CoursesReview__ChecklistShow
+            cancelCB reviewChecklist feedback updateFeedbackCB showEditorCB={showEditor(setState)}
+          />
+    }}
   </div>
 }

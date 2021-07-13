@@ -10,7 +10,7 @@ module SubmissionDetailsQuery = %graphql(
   `
     query SubmissionDetailsQuery($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
-        targetId, targetTitle, levelNumber, levelId, inactiveStudents
+        targetId, targetTitle, levelNumber, levelId, inactiveStudents, createdAt,
         students {
           id
           name
@@ -161,6 +161,12 @@ let updateSubmission = (setState, submissionDetails, overlaySubmission) => {
 let updateReviewChecklist = (submissionDetails, setState, reviewChecklist) =>
   setState(_ => Loaded(SubmissionDetails.updateReviewChecklist(reviewChecklist, submissionDetails)))
 
+let currentSubmissionIndex = (submissionId, allSubmissions) => {
+  Js.Array.length(allSubmissions) - Js.Array.findIndex(s => {
+    SubmissionMeta.id(s) === submissionId
+  }, allSubmissions)
+}
+
 @react.component
 let make = (~submissionId, ~currentUser) => {
   let (state, setState) = React.useState(() => Loading)
@@ -202,6 +208,10 @@ let make = (~submissionId, ~currentUser) => {
           updateSubmissionCB={updateSubmission(setState, submissionDetails)}
           updateReviewChecklistCB={updateReviewChecklist(submissionDetails, setState)}
           targetId={submissionDetails |> SubmissionDetails.targetId}
+          number={currentSubmissionIndex(
+            submissionId,
+            SubmissionDetails.allSubmissions(submissionDetails),
+          )}
           currentUser
         />,
       ]->React.array

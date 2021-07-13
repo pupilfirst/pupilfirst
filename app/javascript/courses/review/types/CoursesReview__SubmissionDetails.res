@@ -7,6 +7,7 @@ module Coach = UserProxy
 
 type t = {
   submission: OverlaySubmission.t,
+  createdAt: Js.Date.t,
   allSubmissions: array<SubmissionMeta.t>,
   targetId: string,
   targetTitle: string,
@@ -34,6 +35,7 @@ let inactiveStudents = t => t.inactiveStudents
 let coaches = t => t.coaches
 let teamName = t => t.teamName
 let courseId = t => t.courseId
+let createdAt = t => t.createdAt
 
 let make = (
   ~submission,
@@ -50,6 +52,7 @@ let make = (
   ~coaches,
   ~teamName,
   ~courseId,
+  ~createdAt,
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
@@ -65,6 +68,7 @@ let make = (
   coaches: coaches,
   teamName: teamName,
   courseId: courseId,
+  createdAt: createdAt,
 }
 
 let decodeJs = details =>
@@ -82,6 +86,7 @@ let decodeJs = details =>
     ~levelId=details["levelId"],
     ~targetEvaluationCriteriaIds=details["targetEvaluationCriteriaIds"],
     ~inactiveStudents=details["inactiveStudents"],
+    ~createdAt=DateFns.decodeISO(details["createdAt"]),
     ~evaluationCriteria=details["evaluationCriteria"] |> Js.Array.map(ec =>
       EvaluationCriterion.make(
         ~id=ec["id"],

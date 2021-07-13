@@ -277,7 +277,7 @@ let showGradePill = (key, evaluationCriterion, gradeValue, passGrade, state, sen
   <div
     ariaLabel={"evaluation-criterion-" ++ EvaluationCriterion.id(evaluationCriterion)}
     key={key |> string_of_int}
-    className="md:pr-8 mt-4">
+    className="mt-2">
     {gradePillHeader(
       evaluationCriterion |> EvaluationCriterion.name,
       gradeValue,
@@ -353,13 +353,73 @@ let gradeStatusClasses = (color, status) =>
   | Ungraded => ""
   })))))
 
+let gradeBadgeClasses = (color, status) =>
+  "px-2 py-2 space-x-2 flex justify-center border rounded items-center bg-" ++
+  (color ++
+  ("-100 " ++
+  ("border-" ++
+  (color ++
+  ("-400 " ++
+  switch status {
+  | Grading => "course-review-editor__status-pulse"
+  | Graded(_)
+  | Ungraded => ""
+  })))))
+
+let submissionReviewStatus = (status, overlaySubmission) => {
+  let (text, color) = switch status {
+  | Graded(passed) => passed ? ("Completed", "green") : ("Rejected", "red")
+  | Grading => ("Reviewing", "orange")
+  | Ungraded => ("Pending Review", "gray")
+  }
+  <div ariaLabel="submission-status" className="flex space-x-4">
+    <div className="flex items-center">
+      {switch (overlaySubmission |> OverlaySubmission.evaluatedAt, status) {
+      | (Some(date), Graded(_)) =>
+        <div>
+          <div>
+            <p className="text-xs text-gray-800"> {"Evaluated By" |> str} </p>
+            <p className="text-xs font-semibold">
+              {switch overlaySubmission |> OverlaySubmission.evaluatorName {
+              | Some(name) => name |> str
+              | None => <em> {"Deleted Coach" |> str} </em>
+              }}
+            </p>
+          </div>
+          // <div
+          //   className="text-xs bg-gray-300 flex items-center rounded-b-lg px-3 py-2 md:px-3 md:py-1">
+          //   {"on " ++ date->DateFns.format("MMMM d, yyyy") |> str}
+          // </div>
+        </div>
+      | (None, Graded(_))
+      | (_, Grading)
+      | (_, Ungraded) => React.null
+      }}
+      <div className="flex justify-center ml-4">
+        <div className={gradeBadgeClasses(color, status)}>
+          {switch status {
+          | Graded(passed) =>
+            passed
+              ? <Icon className="if i-badge-check-solid text-xl text-green-500" />
+              : <FaIcon classes="fas fa-exclamation-triangle text-xl text-red-500" />
+          | Grading => <Icon className="if i-writing-pad-solid text-xl text-orange-300" />
+          | Ungraded => <Icon className="if i-eye-solid text-xl text-gray-400" />
+          }}
+          <p className={"text-xs font-semibold " ++ ("text-" ++ (color ++ "-800 "))}>
+            {text |> str}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
 let submissionStatusIcon = (status, overlaySubmission, send) => {
   let (text, color) = switch status {
   | Graded(passed) => passed ? ("Completed", "green") : ("Rejected", "red")
   | Grading => ("Reviewing", "orange")
   | Ungraded => ("Pending Review", "gray")
   }
-
   <div
     ariaLabel="submission-status"
     className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l mt-4 md:mt-0">
@@ -561,7 +621,7 @@ let noteForm = (overlaySubmission, teamSubmission, note, send) =>
   }
 
 let feedbackGenerator = (state, send) => {
-  <div className="p-4">
+  <div className="px-4 pt-4 space-y-8">
     <div>
       <div className="flex h-7 items-end">
         <h5 className="font-semibold text-sm flex items-center">
@@ -573,13 +633,13 @@ let feedbackGenerator = (state, send) => {
       </div>
       <div className="mt-2 md:ml-7">
         <button
-          className="bg-gray-300 px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-gray-900 hover:bg-white hover:text-primary-500 hover:shadow-md hover:border-primary-300 focus:outline-none transition"
+          className="bg-gray-300 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-gray-900 hover:bg-white hover:text-primary-500 hover:shadow-md hover:border-primary-300 focus:outline-none transition"
           onClick={_ => send(ShowChecklistEditor)}>
-          <span> {"Show Review Checklist"->str} </span>
+          <span> {"Show Review Checklist"->str} </span> <FaIcon classes="fas fa-arrow-right" />
         </button>
       </div>
     </div>
-    <div className="pt-4 md:pt-6 course-review__feedback-editor text-sm">
+    <div className="course-review__feedback-editor text-sm">
       <h5 className="font-semibold text-sm flex items-center">
         <PfIcon
           className="if i-comment-alt-regular text-gray-800 text-base md:text-lg inline-block"
@@ -681,8 +741,8 @@ let make = (
   <DisablingCover
     containerClasses="flex flex-col md:flex-row flex-1 space-y-6 md:space-y-0 md:overflow-y-auto"
     disabled=state.saving>
-    <div className="md:w-1/2 w-full bg-white border-r relative md:overflow-y-auto">
-      <div className="flex items-center px-4 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+    <div className="md:w-1/2 w-full bg-white md:border-r relative md:overflow-y-auto">
+      <div className="flex items-center px-4 py-3 bg-white border-b sticky top-0 z-50 h-16">
         <div className="flex flex-1 items-center justify-between">
           <div>
             <p className="font-semibold text-sm"> {str("Submission 01")} </p>
@@ -691,7 +751,7 @@ let make = (
           <p className="text-sm"> {str("Submission 01")} </p>
         </div>
       </div>
-      <div className="p-6">
+      <div className="p-4">
         <SubmissionChecklistShow checklist=state.checklist updateChecklistCB pending />
       </div>
     </div>
@@ -704,24 +764,26 @@ let make = (
             <p className="font-semibold text-sm"> {str("Review")} </p>
           </div>
           {feedbackGenerator(state, send)}
-          <div className="w-full px-4">
+          <div className="w-full px-4 pt-8 space-y-8">
             {noteForm(overlaySubmission, teamSubmission, state.note, send)}
-            <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
-              <Icon className="if i-tachometer-regular text-gray-800 text-base" />
-              <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
-            </h5>
-            <div
-              className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
-              <div className="w-full md:w-3/6">
-                {renderGradePills(evaluationCriteria, targetEvaluationCriteriaIds, state, send)}
+            <div>
+              <h5 className="font-semibold text-sm flex items-center">
+                <Icon className="if i-tachometer-regular text-gray-800 text-base" />
+                <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
+              </h5>
+              <div
+                className="flex md:flex-row flex-col border md:ml-7 bg-white p-2 md:p-4 rounded-lg mt-2">
+                <div className="w-full md:w-3/6">
+                  {renderGradePills(evaluationCriteria, targetEvaluationCriteriaIds, state, send)}
+                </div>
+                {submissionStatusIcon(status, overlaySubmission, send)}
               </div>
-              {submissionStatusIcon(status, overlaySubmission, send)}
             </div>
           </div>
-          <div className="pt-4 md:ml-7">
+          <div className="flex justify-end bg-white md:bg-gray-100 border-t px-4 py-2 md:py-4 mt-4">
             <button
               disabled={reviewButtonDisabled(status)}
-              className="btn btn-success btn-large w-full border border-green-600"
+              className="btn btn-success btn-large w-full md:w-auto border border-green-600"
               onClick={gradeSubmission(
                 OverlaySubmission.id(overlaySubmission),
                 state,
@@ -759,23 +821,25 @@ let make = (
 
       | ReviewedSubmissionEditor(grades) =>
         <div>
+          <div
+            className="flex items-center justify-between px-4 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+            <p className="font-semibold text-sm"> {str("Review")} </p>
+            {submissionReviewStatus(status, overlaySubmission)}
+          </div>
           <div className="w-full p-4">
-            <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
+            <h5 className="font-semibold text-sm flex items-center">
               <Icon className="if i-tachometer-regular text-gray-800 text-base" />
               <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
             </h5>
-            <div
-              className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
-              <div className="w-full md:w-3/6">
-                {showGrades(grades, evaluationCriteria, state)}
-              </div>
+            <div className="flex md:flex-row flex-col md:ml-7 bg-gray-100 mt-2">
+              <div className="w-full"> {showGrades(grades, evaluationCriteria, state)} </div>
               {submissionStatusIcon(status, overlaySubmission, send)}
             </div>
           </div>
           {state.additonalFeedbackEditorVisible
             ? <div>
                 {feedbackGenerator(state, send)}
-                <div className="flex justify-end pr-4 pl-10 pt-2 pb-4 md:px-6 md:pb-6">
+                <div className="flex justify-end px-4 pt-4">
                   <button
                     disabled={state.newFeedback == "" || state.saving}
                     className="btn btn-success border border-green-600 w-full md:w-auto"

@@ -40,16 +40,19 @@ let make = (~submission, ~submissionNumber, ~selected) =>
     key={SubmissionMeta.id(submission)}
     className={cardClasses(submission, selected)}>
     <div className="shadow hover:shadow-lg transition">
-      <div className="px-4 py-2 flex flex-row items-center justify-between">
-        <div className="flex flex-col pr-2">
+      <div className="px-4 py-2 flex flex-row items-center justify-between min-w-min">
+        <div className="flex flex-col md:pr-2">
           <h2 className="font-semibold text-sm leading-tight">
-            {("Submission #" ++ string_of_int(submissionNumber))->str}
+            <p className="hidden md:block">
+              {("Submission #" ++ string_of_int(submissionNumber))->str}
+            </p>
+            <p className="md:hidden"> {("#" ++ string_of_int(submissionNumber))->str} </p>
           </h2>
           <span className="text-xs text-gray-800 pt-px">
             {submission->SubmissionMeta.createdAt->DateFns.formatPreset(~year=true, ())->str}
           </span>
         </div>
-        <div className="text-xs flex w-auto">
+        <div className="hidden md:flex text-xs w-auto">
           {ReactUtils.nullUnless(
             <div
               className="bg-primary-100 text-primary-600 border border-transparent font-semibold px-2 py-px rounded mr-2">

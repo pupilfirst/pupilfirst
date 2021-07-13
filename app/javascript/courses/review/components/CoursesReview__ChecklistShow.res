@@ -89,19 +89,14 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
   let (selection, setSelecton) = React.useState(() => [])
   let (id, _setId) = React.useState(() => DateTime.randomId() ++ "-review-checkbox-")
   <div>
-    <div className="flex items-center px-4 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+    <div className="flex items-center px-4 py-3 bg-white border-b sticky top-0 z-50 h-16">
       <div className="flex flex-1 items-center justify-between">
-        <div className="btn btn-subtle" onClick=cancelCB> {str("back")} </div>
-        <button
-          className="btn btn-primary "
-          disabled={selection->ArrayUtils.isEmpty}
-          onClick={_ =>
-            generateFeedback(checklist, selection, feedback, setSelecton, updateFeedbackCB)}>
-          {t("generate_feedback_button")->str}
-        </button>
+        <div className="btn btn-subtle" onClick=cancelCB>
+          <FaIcon classes="fas fa-arrow-left" /> <p className="pl-2"> {str("Back to Review")} </p>
+        </div>
       </div>
     </div>
-    <div className="p-4">
+    <div className="p-4 pb-0">
       <div className="flex items-end justify-between">
         <h5 className="font-semibold text-sm flex items-center tracking-wide">
           {"Review Checklist" |> str}
@@ -111,11 +106,10 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
           <div className="ml-2"> {t("edit_checklist_button")->str} </div>
         </button>
       </div>
-      <div className="border bg-gray-200 rounded-lg py-2 md:py-4 mt-2">
+      <div className="border bg-gray-200 rounded-lg pt-2 md:pt-4 mt-2 space-y-8">
         {Js.Array.mapi(
           (reviewChecklistItem, itemIndex) =>
             <div
-              className="mb-4 pb-2"
               key={string_of_int(itemIndex)}
               ariaLabel={"checklist-item-" ++ itemIndex->string_of_int}>
               <h4
@@ -123,9 +117,9 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
                 <div className={checklistItemCheckedClasses(itemIndex, selection)} />
                 {ReviewChecklistItem.title(reviewChecklistItem)->str}
               </h4>
-              <div> {Js.Array.mapi((checklistItem, resultIndex) =>
+              <div className="space-y-3 pt-2"> {Js.Array.mapi((checklistItem, resultIndex) =>
                   <div
-                    className="px-6 mt-3"
+                    className="px-4"
                     ariaLabel={"result-item-" ++ resultIndex->string_of_int}
                     key={itemIndex->string_of_int ++ resultIndex->string_of_int}>
                     <Checkbox
@@ -174,6 +168,16 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
           checklist,
         )->React.array}
       </div>
+    </div>
+    <div
+      className="flex justify-end bg-white md:bg-gray-100 border-t sticky bottom-0 px-4 py-2 mt-4 md:py-4">
+      <button
+        className="btn btn-primary w-full md:w-auto"
+        disabled={selection->ArrayUtils.isEmpty}
+        onClick={_ =>
+          generateFeedback(checklist, selection, feedback, setSelecton, updateFeedbackCB)}>
+        {t("generate_feedback_button")->str}
+      </button>
     </div>
   </div>
 }

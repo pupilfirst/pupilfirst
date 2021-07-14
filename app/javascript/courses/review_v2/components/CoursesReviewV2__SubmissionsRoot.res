@@ -81,9 +81,10 @@ let inactiveWarning = submissionDetails =>
     React.null
   }
 
-let closeOverlay = courseId => RescriptReactRouter.push("/courses/" ++ (courseId ++ "/review"))
+let closeOverlay = (courseId, filter) =>
+  RescriptReactRouter.push("/courses/" ++ courseId ++ "/review" ++ "?" ++ filter)
 
-let headerSection = submissionDetails =>
+let headerSection = (submissionDetails, filter) =>
   <div
     ariaLabel="submissions-overlay-header"
     className="bg-gray-100 border-b border-gray-300 flex justify-center">
@@ -92,7 +93,7 @@ let headerSection = submissionDetails =>
         <button
           title="Close"
           ariaLabel="submissions-overlay-close"
-          onClick={_ => closeOverlay(SubmissionDetails.courseId(submissionDetails))}
+          onClick={_ => closeOverlay(SubmissionDetails.courseId(submissionDetails), filter)}
           className="flex flex-col items-center justify-center rounded-t-lg lg:rounded-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 border-gray-400 lg:border-0 lg:shadow lg:border-gray-300 bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
           <Icon className="if i-times-regular text-xl lg:text-2xl mt-1 lg:mt-0" />
           <span className="text-xs hidden lg:inline-block mt-px"> {str("close")} </span>
@@ -170,7 +171,7 @@ let currentSubmissionIndex = (submissionId, allSubmissions) => {
 @react.component
 let make = (~submissionId, ~currentUser) => {
   let (state, setState) = React.useState(() => Loading)
-
+  let url = RescriptReactRouter.useUrl()
   React.useEffect1(getSubmissionDetails(submissionId, setState), [submissionId])
 
   <div className="flex-1 md:flex md:flex-col md:overflow-hidden">
@@ -179,7 +180,7 @@ let make = (~submissionId, ~currentUser) => {
       [
         <div>
           <div> {inactiveWarning(submissionDetails)} </div>
-          {headerSection(submissionDetails)}
+          {headerSection(submissionDetails, url.search)}
           {ReactUtils.nullIf(
             <div className="flex space-x-4 overflow-x-auto px-4 py-3 border-b bg-gray-200">
               {Js.Array.mapi(

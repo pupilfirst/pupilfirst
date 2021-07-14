@@ -358,7 +358,7 @@ let gradeSubmission = (
   }
 }
 
-let showFeedbackForm = (grades, reviewChecklist, updateReviewChecklistCB, state, send, targetId) =>
+let showFeedbackForm = (grades, reviewChecklist, state, send, targetId) =>
   switch grades {
   | [] =>
     <CoursesReview__FeedbackEditor
@@ -366,9 +366,7 @@ let showFeedbackForm = (grades, reviewChecklist, updateReviewChecklistCB, state,
       label="Add Your Feedback"
       updateFeedbackCB={feedback => send(UpdateFeedback(feedback))}
       reviewChecklist
-      updateReviewChecklistCB
       checklistVisible=true
-      targetId
     />
   | _ => React.null
   }
@@ -518,7 +516,6 @@ let make = (
       {showFeedbackForm(
         overlaySubmission |> OverlaySubmission.grades,
         reviewChecklist,
-        updateReviewChecklistCB,
         state,
         send,
         targetId,

@@ -1,15 +1,7 @@
 let str = React.string
 
 @react.component
-let make = (
-  ~feedback,
-  ~updateFeedbackCB,
-  ~label,
-  ~reviewChecklist,
-  ~updateReviewChecklistCB,
-  ~checklistVisible,
-  ~targetId,
-) => {
+let make = (~feedback, ~updateFeedbackCB, ~label, ~reviewChecklist, ~checklistVisible) => {
   let (checklistVisible, setChecklistVisible) = React.useState(() => checklistVisible)
   let reviewChecklistIsNotEmpty = reviewChecklist |> ArrayUtils.isNotEmpty
   <div>

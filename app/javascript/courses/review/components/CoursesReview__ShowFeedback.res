@@ -81,7 +81,6 @@ let make = (
   ~reviewChecklist,
   ~addFeedbackCB,
   ~updateReviewChecklistCB,
-  ~targetId,
 ) => {
   let (state, setState) = React.useState(() => {
     saving: false,
@@ -100,9 +99,7 @@ let make = (
                     label="Add feedback"
                     updateFeedbackCB={updateFeedbackCB(setState)}
                     reviewChecklist
-                    updateReviewChecklistCB
                     checklistVisible=false
-                    targetId
                   />
                 </DisablingCover>
                 <div className="flex justify-end pr-4 pl-10 pt-2 pb-4 md:px-6 md:pb-6">

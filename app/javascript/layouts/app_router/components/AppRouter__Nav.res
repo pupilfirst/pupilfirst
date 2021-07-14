@@ -50,7 +50,7 @@ let renderLinks = (courses, selectedPage) => {
 
 @react.component
 let make = (~courses, ~selectedPage) => {
-  let url = RescriptReactRouter.useUrl()
+  // let url = RescriptReactRouter.useUrl()
 
   let (sidebarOpen, setSidebarOpen) = React.useState(_ => false)
   [

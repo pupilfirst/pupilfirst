@@ -1,4 +1,6 @@
 class TeamCoachesResolver < ApplicationQuery
+  include AuthorizeCoach
+
   property :search
   property :course_id
 
@@ -11,14 +13,6 @@ class TeamCoachesResolver < ApplicationQuery
   end
 
   private
-
-  def authorized?
-    return false if course.blank?
-
-    return false if current_user.blank?
-
-    current_user.faculty.present?
-  end
 
   def course
     @course ||= current_school.courses.find_by(id: course_id)

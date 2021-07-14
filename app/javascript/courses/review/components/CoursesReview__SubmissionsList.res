@@ -190,7 +190,6 @@ let make = (
           reviewChecklist
           addFeedbackCB={addFeedback(addFeedbackCB, currentCoach, overlaySubmission)}
           updateReviewChecklistCB
-          targetId
         />
       </div>
     </div>

@@ -41,13 +41,18 @@ let submissionCardClasses = submission =>
   }
 
 let openSubmission = (submission, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  event->ReactEvent.Mouse.preventDefault
   RescriptReactRouter.push("/submissions/" ++ (IndexSubmission.id(submission) ++ "/review_v2"))
 }
 
-let showSubmission = submissions => <div id="submissions"> {Js.Array.map(submission =>
+let showSubmission = (submissions, filterString) =>
+  <div id="submissions"> {Js.Array.map(submission =>
       <Link
-        href={"/submissions/" ++ (IndexSubmission.id(submission) ++ "/review_v2")}
+        href={"/submissions/" ++
+        (IndexSubmission.id(submission) ++
+        "/review_v2" ++
+        "?" ++
+        filterString)}
         key={IndexSubmission.id(submission)}
         ariaLabel={"Submission " ++ IndexSubmission.id(submission)}
         className={submissionCardClasses(submission)}>
@@ -87,7 +92,7 @@ let showSubmission = submissions => <div id="submissions"> {Js.Array.map(submiss
     , submissions)->React.array} </div>
 
 @react.component
-let make = (~submissions, ~selectedTab) => {
+let make = (~submissions, ~selectedTab, ~filterString) => {
   let imageSrc = Belt.Option.mapWithDefault(selectedTab, pendingEmptyImage, t =>
     switch t {
     | #Pending => pendingEmptyImage
@@ -102,5 +107,5 @@ let make = (~submissions, ~selectedTab) => {
         </h5>
         <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=imageSrc />
       </div>
-    : showSubmission(submissions)
+    : showSubmission(submissions, filterString)
 }

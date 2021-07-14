@@ -16,7 +16,8 @@ class SubmissionDetailsResolver < ApplicationQuery
       review_checklist: review_checklist,
       inactive_students: inactive_students,
       coaches: coaches,
-      course_id: level.course_id
+      course_id: level.course_id,
+      created_at: submission.created_at
     }
   end
 

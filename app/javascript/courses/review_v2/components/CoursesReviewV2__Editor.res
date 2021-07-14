@@ -697,6 +697,23 @@ let showFeedback = feedback => Js.Array.mapi((f, index) =>
     feedback,
   ))->React.array
 
+let showSubmissionStatus = status => {
+  let (text, classes) = switch status {
+  | Graded(passed) =>
+    passed
+      ? ("Completed", "bg-green-100 border border-green-500 text-green-800")
+      : ("Rejected", "bg-red-100 border border-red-500 text-red-700")
+  | Ungraded
+  | Grading => ("Pending Review", "bg-orange-100 border border-orange-500 text-orange-800 ")
+  }
+  <div className={"font-semibold px-3 py-px rounded " ++ classes}>
+    <span className="hidden md:block"> {text->str} </span>
+    <span className="md:hidden block">
+      <PfIcon className="if i-check-square-alt-solid if-fw" />
+    </span>
+  </div>
+}
+
 @react.component
 let make = (
   ~overlaySubmission,
@@ -708,6 +725,7 @@ let make = (
   ~targetId,
   ~targetEvaluationCriteriaIds,
   ~currentUser,
+  ~number,
 ) => {
   let (state, send) = React.useReducer(
     reducer,
@@ -745,10 +763,15 @@ let make = (
       <div className="flex items-center px-4 py-3 bg-white border-b sticky top-0 z-50 h-16">
         <div className="flex flex-1 items-center justify-between">
           <div>
-            <p className="font-semibold text-sm"> {str("Submission 01")} </p>
-            <p className="text-gray-700 text-xs"> {str("11/07/2021")} </p>
+            <p className="font-semibold text-sm"> {str("Submission " ++ string_of_int(number))} </p>
+            <p className="text-gray-700 text-xs">
+              {overlaySubmission
+              ->OverlaySubmission.createdAt
+              ->DateFns.formatPreset(~year=true, ())
+              ->str}
+            </p>
           </div>
-          <p className="text-sm"> {str("Submission 01")} </p>
+          <p className="text-sm"> {showSubmissionStatus(status)} </p>
         </div>
       </div>
       <div className="p-4">

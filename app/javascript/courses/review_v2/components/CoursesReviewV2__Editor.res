@@ -372,7 +372,7 @@ let submissionReviewStatus = (status, overlaySubmission) => {
   | Grading => ("Reviewing", "orange")
   | Ungraded => ("Pending Review", "gray")
   }
-  <div ariaLabel="submission-status" className="flex space-x-4">
+  <div ariaLabel="submission-status" className="hidden md:flex space-x-4 justify-end w-3/4">
     <div className="flex items-center">
       {switch (overlaySubmission |> OverlaySubmission.evaluatedAt, status) {
       | (Some(date), Graded(_)) =>
@@ -395,7 +395,7 @@ let submissionReviewStatus = (status, overlaySubmission) => {
       | (_, Grading)
       | (_, Ungraded) => React.null
       }}
-      <div className="flex justify-center ml-4">
+      <div className="flex justify-center ml-2 md:ml-4">
         <div className={gradeBadgeClasses(color, status)}>
           {switch status {
           | Graded(passed) =>
@@ -422,7 +422,7 @@ let submissionStatusIcon = (status, overlaySubmission, send) => {
   }
   <div
     ariaLabel="submission-status"
-    className="flex w-full md:w-3/6 flex-col items-center justify-center md:border-l mt-4 md:mt-0">
+    className="flex flex-1 flex-col items-center justify-center md:border-l mt-4 md:mt-0">
     <div
       className="flex flex-col-reverse md:flex-row items-start md:items-stretch justify-center w-full md:pl-6">
       {switch (overlaySubmission |> OverlaySubmission.evaluatedAt, status) {
@@ -469,23 +469,6 @@ let submissionStatusIcon = (status, overlaySubmission, send) => {
         </p>
       </div>
     </div>
-    {switch (overlaySubmission |> OverlaySubmission.evaluatedAt, status) {
-    | (Some(_), Graded(_)) =>
-      <div className="mt-4 md:pl-6 w-full">
-        <button
-          onClick={_ =>
-            WindowUtils.confirm(
-              "Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.",
-              () => OverlaySubmission.id(overlaySubmission)->undoGrading(send),
-            )}
-          className="btn btn-danger btn-small">
-          <i className="fas fa-undo" /> <span className="ml-2"> {"Undo Grading" |> str} </span>
-        </button>
-      </div>
-    | (None, Graded(_))
-    | (_, Grading)
-    | (_, Ungraded) => React.null
-    }}
   </div>
 }
 
@@ -580,28 +563,27 @@ let noteForm = (overlaySubmission, teamSubmission, note, send) =>
     let textareaId = "note-for-submission-" ++ (overlaySubmission |> OverlaySubmission.id)
 
     <div className="text-sm">
-      <h5 className="font-semibold text-sm flex items-center">
-        <i className="far fa-sticky-note text-gray-800 text-base" />
+      <p className="font-semibold text-sm flex">
+        <i className="far fa-sticky-note text-gray-800 text-lg" />
         {switch note {
         | Some(_) =>
-          <span className="ml-2 md:ml-3 tracking-wide">
+          <span className="ml-2 md:ml-4 tracking-wide">
             <label htmlFor=textareaId> {"Write a Note" |> str} </label> help
           </span>
         | None =>
-          <div className="ml-2 md:ml-3 tracking-wide flex justify-between items-center w-full">
-            <span>
+          <div className="ml-2 md:ml-4 tracking-wide w-full">
+            <div>
               <span>
                 {"Would you like to write a note about this " ++ (noteAbout ++ "?") |> str}
               </span>
               help
-            </span>
-            <button
-              className="btn btn-small btn-primary-ghost ml-1" onClick={_ => send(UpdateNote(""))}>
-              {"Write a Note" |> str}
+            </div>
+            <button className="btn btn-default mt-2" onClick={_ => send(UpdateNote(""))}>
+              <i className="far fa-edit" /> <p className="pl-2"> {"Write a Note" |> str} </p>
             </button>
           </div>
         }}
-      </h5>
+      </p>
       {switch note {
       | Some(note) =>
         <div className="ml-6 md:ml-7 mt-2">
@@ -633,7 +615,7 @@ let feedbackGenerator = (state, send) => {
       </div>
       <div className="mt-2 md:ml-7">
         <button
-          className="bg-gray-300 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-gray-900 hover:bg-white hover:text-primary-500 hover:shadow-md hover:border-primary-300 focus:outline-none transition"
+          className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none transition"
           onClick={_ => send(ShowChecklistEditor)}>
           <span> {"Show Review Checklist"->str} </span> <FaIcon classes="fas fa-arrow-right" />
         </button>
@@ -660,36 +642,35 @@ let feedbackGenerator = (state, send) => {
 }
 
 let showFeedback = feedback => Js.Array.mapi((f, index) =>
-    <div key={index->string_of_int} className="border-t p-4 mt-4">
-      <div className="flex items-center">
-        <div
-          className="flex-shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
-          {switch Feedback.coachAvatarUrl(f) {
-          | Some(avatarUrl) => <img src=avatarUrl />
-          | None => <Avatar name={Feedback.coachName(f)} />
-          }}
-        </div>
-        <div>
-          <p className="text-xs leading-tight"> {"Feedback from:"->str} </p>
+    <div key={index->string_of_int}>
+      <div className="pt-6">
+        <div className="flex">
+          <div
+            className="flex-shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
+            {switch Feedback.coachAvatarUrl(f) {
+            | Some(avatarUrl) => <img src=avatarUrl />
+            | None => <Avatar name={Feedback.coachName(f)} />
+            }}
+          </div>
           <div>
-            <h4 className="font-semibold text-base leading-tight block md:inline-flex self-end">
-              {Feedback.coachName(f)->str}
-            </h4>
-            <span
-              className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight self-end">
-              {("(" ++ (Feedback.coachTitle(f) ++ ")"))->str}
-            </span>
+            <div className="flex flex-col md:flex-row">
+              <p className="font-semibold text-sm leading-tight inline-flex">
+                {Feedback.coachName(f)->str}
+              </p>
+              <p className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight">
+                {("(" ++ (Feedback.coachTitle(f) ++ ")"))->str}
+              </p>
+            </div>
+            <p className="text-xs leading-tight font-semibold inline-block text-gray-800">
+              {Feedback.createdAtPretty(f)->str}
+            </p>
           </div>
         </div>
-      </div>
-      <div className="md:ml-15">
-        <p
-          className="text-xs leading-tight font-semibold inline-block p-1 bg-gray-200 rounded mt-3">
-          {Feedback.createdAtPretty(f)->str}
-        </p>
-        <MarkdownBlock
-          className="pt-1 text-sm" profile=Markdown.Permissive markdown={Feedback.value(f)}
-        />
+        <div>
+          <MarkdownBlock
+            className="pt-1 text-sm" profile=Markdown.Permissive markdown={Feedback.value(f)}
+          />
+        </div>
       </div>
     </div>
   , ArrayUtils.copyAndSort(
@@ -700,13 +681,11 @@ let showFeedback = feedback => Js.Array.mapi((f, index) =>
 let showSubmissionStatus = status => {
   let (text, classes) = switch status {
   | Graded(passed) =>
-    passed
-      ? ("Completed", "bg-green-100 border border-green-500 text-green-800")
-      : ("Rejected", "bg-red-100 border border-red-500 text-red-700")
+    passed ? ("Completed", "bg-green-100 text-green-800") : ("Rejected", "bg-red-100 text-red-700")
   | Ungraded
-  | Grading => ("Pending Review", "bg-orange-100 border border-orange-500 text-orange-800 ")
+  | Grading => ("Pending Review", "bg-yellow-100 text-yellow-800 ")
   }
-  <div className={"font-semibold px-3 py-px rounded " ++ classes}>
+  <div className={"font-semibold px-2 py-px rounded " ++ classes}>
     <span className="hidden md:block"> {text->str} </span>
     <span className="md:hidden block">
       <PfIcon className="if i-check-square-alt-solid if-fw" />
@@ -794,10 +773,11 @@ let make = (
                 <Icon className="if i-tachometer-regular text-gray-800 text-base" />
                 <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
               </h5>
-              <div
-                className="flex md:flex-row flex-col border md:ml-7 bg-white p-2 md:p-4 rounded-lg mt-2">
-                <div className="w-full md:w-3/6">
-                  {renderGradePills(evaluationCriteria, targetEvaluationCriteriaIds, state, send)}
+              <div className="flex md:flex-row flex-col md:ml-8 rounded-lg mt-2">
+                <div className="w-full md:w-9/12">
+                  <div className="pr-8">
+                    {renderGradePills(evaluationCriteria, targetEvaluationCriteriaIds, state, send)}
+                  </div>
                 </div>
                 {submissionStatusIcon(status, overlaySubmission, send)}
               </div>
@@ -850,19 +830,43 @@ let make = (
             {submissionReviewStatus(status, overlaySubmission)}
           </div>
           <div className="w-full p-4">
-            <h5 className="font-semibold text-sm flex items-center">
-              <Icon className="if i-tachometer-regular text-gray-800 text-base" />
-              <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
-            </h5>
-            <div className="flex md:flex-row flex-col md:ml-7 bg-gray-100 mt-2">
+            <div className="flex items-center justify-between">
+              <h5 className="font-semibold text-sm flex items-center">
+                <Icon className="if i-tachometer-regular text-gray-800 text-base" />
+                <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
+              </h5>
+              <div>
+                {switch (overlaySubmission |> OverlaySubmission.evaluatedAt, status) {
+                | (Some(_), Graded(_)) =>
+                  <div>
+                    <button
+                      onClick={_ =>
+                        WindowUtils.confirm(
+                          "Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.",
+                          () => OverlaySubmission.id(overlaySubmission)->undoGrading(send),
+                        )}
+                      className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200">
+                      <i className="fas fa-undo" />
+                      <span className="ml-2"> {"Undo Grading" |> str} </span>
+                    </button>
+                  </div>
+                | (None, Graded(_))
+                | (_, Grading)
+                | (_, Ungraded) => React.null
+                }}
+              </div>
+            </div>
+            <div className="flex md:flex-row flex-col md:ml-8 bg-gray-100 mt-2">
               <div className="w-full"> {showGrades(grades, evaluationCriteria, state)} </div>
-              {submissionStatusIcon(status, overlaySubmission, send)}
+              <div className="block md:hidden">
+                {submissionStatusIcon(status, overlaySubmission, send)}
+              </div>
             </div>
           </div>
           {state.additonalFeedbackEditorVisible
             ? <div>
                 {feedbackGenerator(state, send)}
-                <div className="flex justify-end px-4 pt-4">
+                <div className="flex justify-end px-4 py-4">
                   <button
                     disabled={state.newFeedback == "" || state.saving}
                     className="btn btn-success border border-green-600 w-full md:w-auto"
@@ -879,17 +883,30 @@ let make = (
                   </button>
                 </div>
               </div>
-            : <div className="bg-gray-200 px-3 py-5 shadow-inner rounded-b-lg text-center">
+            : <div className="p-4 md:ml-8 text-center">
                 <button
                   onClick={_ => send(ShowAdditionalFeedbackEditor)}
-                  className="btn btn-primary-ghost cursor-pointer shadow hover:shadow-lg w-full md:w-auto">
-                  {switch OverlaySubmission.feedback(overlaySubmission) {
-                  | [] => "Add feedback"
-                  | _ => "Add another feedback"
-                  }->str}
+                  className="bg-primary-100 flex items-center justify-center px-4 py-3 border border-dashed border-primary-500 rounded-md w-full font-semibold text-sm text-primary-600 hover:bg-white hover:text-primary-500 hover:shadow-lg hover:border-primary-300 focus:outline-none transition cursor-pointer">
+                  <Icon className="if i-plus-regular" />
+                  <p className="pl-2">
+                    {switch OverlaySubmission.feedback(overlaySubmission) {
+                    | [] => "Add feedback"
+                    | _ => "Add another feedback"
+                    }->str}
+                  </p>
                 </button>
               </div>}
-          {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
+          <div className="p-4">
+            <h5 className="font-semibold text-sm flex items-center">
+              <PfIcon
+                className="if i-comment-alt-regular text-gray-800 text-base md:text-lg inline-block"
+              />
+              <span className="ml-2 md:ml-3 tracking-wide"> {"Feedback"->str} </span>
+            </h5>
+            <div className="divide-y space-y-6 md:ml-8">
+              {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
+            </div>
+          </div>
         </div>
       }}
     </div>

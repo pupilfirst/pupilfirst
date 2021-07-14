@@ -5,6 +5,8 @@ class SubmissionsResolver < ApplicationQuery
   property :sort_criterion
   property :level_id
   property :coach_id
+  property :target_id
+  property :search
 
   def submissions
     applicable_submissions
@@ -57,7 +59,10 @@ class SubmissionsResolver < ApplicationQuery
         course.timeline_events
       end
 
-    by_level_and_status = filter_by_status(by_level)
+    by_level_and_target =
+      target_id.present? ? by_level.where(target_id: target_id) : by_level
+
+    by_level_and_status = filter_by_status(by_level_and_target)
 
     by_level_status_and_coach =
       if coach_id.present?
@@ -84,8 +89,23 @@ class SubmissionsResolver < ApplicationQuery
     end
   end
 
+  def teams
+    @teams ||= course.startups.active.joins(founders: :user)
+  end
+
+  def course_teams
+    if search.present?
+      teams
+        .where('users.name ILIKE ?', "%#{search}%")
+        .or(teams.where('startups.name ILIKE ?', "%#{search}%"))
+        .or(teams.where('users.email ILIKE ?', "%#{search}%"))
+    else
+      teams
+    end
+  end
+
   def students
-    @students ||= Founder.where(startup_id: course.startups)
+    @students ||= Founder.where(startup_id: course_teams)
   end
 
   def allow_token_auth?

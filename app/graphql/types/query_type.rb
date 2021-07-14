@@ -58,6 +58,8 @@ module Types
                required: true
       argument :level_id, ID, required: false
       argument :coach_id, ID, required: false
+      argument :target_id, ID, required: false
+      argument :search, String, required: false
     end
 
     resolved_field :submission_details,
@@ -181,6 +183,18 @@ module Types
     resolved_field :team_coaches, [Types::UserProxyType], null: false do
       argument :course_id, ID, required: true
       argument :search, String, required: false
+    end
+
+    resolved_field :coach, Types::UserProxyType, null: true do
+      argument :coach_id, ID, required: false
+    end
+
+    resolved_field :level, Types::LevelType, null: true do
+      argument :level_id, ID, required: false
+    end
+
+    resolved_field :target_info, Types::TargetInfoType, null: true do
+      argument :target_id, ID, required: false
     end
   end
 end

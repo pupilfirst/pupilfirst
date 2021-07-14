@@ -1,6 +1,10 @@
 module Types
   class UserProxyType < Types::BaseObject
-    field :id, ID, null: false, description: "The ID returned by the type can represent different user role types"
+    field :id,
+          ID,
+          null: false,
+          description:
+            'The ID returned by the type can represent different user role types'
     field :user_id, ID, null: false
     field :name, String, null: false
     field :title, String, null: false

@@ -3,6 +3,7 @@
 @bs.module external graduateIcon: string = "./images/graduate-icon.svg"
 
 let str = React.string
+let t = I18n.t(~scope="components.VerifyCertificate__Root")
 
 type viewMode =
   | Screen
@@ -18,13 +19,11 @@ let printCertificate = (setViewMode, _event) => {
 
 let heading = (currentUser, issuedCertificate) =>
   if currentUser {
-    <span>
-      {str("Congratulations ")}
-      <strong className="whitespace-no-wrap"> {IssuedCertificate.profileName(issuedCertificate)->str} </strong>
-      {"!" |> str}
-      <br />
-      {str("You've earned it.")}
-    </span>
+    <span
+      dangerouslySetInnerHTML={DOMPurify.sanitizedHTML(
+        t(~variables=[("name", IssuedCertificate.profileName(issuedCertificate))], "heading"),
+      )}
+    />
   } else {
     IssuedCertificate.serialNumber(issuedCertificate)->str
   }
@@ -36,11 +35,10 @@ let issuedToName = issuedCertificate => {
   let profileName = IssuedCertificate.profileName(issuedCertificate)
 
   if issuedTo == profileName {
-    str(profileName)
+    profileName
   } else {
-    <a href="#name-change-notice" className="text-blue-500 hover:text-blue-600">
-      {str(profileName)} <i className="ml-1 fas fa-exclamation-circle" />
-    </a>
+    "<a href=\"#name-change-notice\" className=\"text-blue-500 hover:text-blue-600\">" ++
+    profileName ++ "<i className=\"ml-1 fas fa-exclamation-circle\" /></a>"
   }
 }
 
@@ -58,32 +56,39 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
           <h3 className="font-semibold mt-1 md:mt-2">
             {heading(currentUser, issuedCertificate)}
           </h3>
-          <div className="text-sm mt-4">
-            <span> {"This certificate was issued to " |> str} </span>
-            <strong className="whitespace-no-wrap"> {issuedToName(issuedCertificate)} </strong>
-            <span> {" on " |> str} </span>
-            <strong className="whitespace-no-wrap">
-              {issuedCertificate
-              ->IssuedCertificate.issuedAt
-              ->DateFns.formatPreset(~short=true, ~year=true, ())
-              ->str}
-            </strong>
-            <span> {" for completing the course " |> str} </span>
-            <strong> {issuedCertificate |> IssuedCertificate.courseName |> str} </strong>
-            <span> {"." |> str} </span>
-          </div>
-          {currentUser
-            ? <div className="mt-4 text-xs">
-                <code>
-                  {"Serial No. " |> str}
-                  {issuedCertificate |> IssuedCertificate.serialNumber |> str}
-                </code>
-              </div>
-            : React.null}
+          <div
+            className="text-sm mt-4"
+            dangerouslySetInnerHTML={DOMPurify.sanitizedHTML(
+              t(
+                ~variables=[
+                  ("name", issuedToName(issuedCertificate)),
+                  (
+                    "issue_date",
+                    issuedCertificate
+                    ->IssuedCertificate.issuedAt
+                    ->DateFns.formatPreset(~short=true, ~year=true, ()),
+                  ),
+                  ("course_name", IssuedCertificate.courseName(issuedCertificate)),
+                ],
+                "description",
+              ),
+            )}
+          />
+          {ReactUtils.nullUnless(
+            <div className="mt-4 text-xs">
+              <code>
+                {t(
+                  ~variables=[("serial", IssuedCertificate.serialNumber(issuedCertificate))],
+                  "serial_number",
+                )->str}
+              </code>
+            </div>,
+            currentUser,
+          )}
           <div className="mt-4">
             <button onClick={printCertificate(setViewMode)} className="btn btn-primary">
               <i className="fas fa-print" />
-              <span className="ml-2"> {"Print, or save as PDF" |> str} </span>
+              <span className="ml-2"> {t("print_or_save")->str} </span>
             </button>
           </div>
         </div>
@@ -92,29 +97,31 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
           <IssuedCertificate__Root issuedCertificate verifyImageUrl />
         </div>
       </div>
-      {IssuedCertificate.profileName(issuedCertificate) !=
-        IssuedCertificate.issuedTo(issuedCertificate)
-        ? <div
-            id="name-change-notice"
-            className="border border-blue-200 rounded-lg shadow-lg bg-blue-100 p-3 md:p-6 mt-6 flex items-center">
-            <div> <i className="fas fa-exclamation-circle text-2xl text-blue-500" /> </div>
-            <div className="ml-4 text-sm">
-              {str(
-                "This student's name was updated after the certificate was issued. This certificate was originally issued to ",
-              )}
-              <strong> {IssuedCertificate.issuedTo(issuedCertificate)->str} </strong>
-              {str(".")}
-            </div>
-          </div>
-        : React.null}
+      {ReactUtils.nullIf(
+        <div
+          id="name-change-notice"
+          className="border border-blue-200 rounded-lg shadow-lg bg-blue-100 p-3 md:p-6 mt-6 flex items-center">
+          <div> <i className="fas fa-exclamation-circle text-2xl text-blue-500" /> </div>
+          <div
+            className="ml-4 text-sm"
+            dangerouslySetInnerHTML={DOMPurify.sanitizedHTML(
+              t(
+                ~variables=[("name", IssuedCertificate.issuedTo(issuedCertificate))],
+                "originally_issued_to",
+              ),
+            )}
+          />
+        </div>,
+        IssuedCertificate.profileName(issuedCertificate) ==
+          IssuedCertificate.issuedTo(issuedCertificate),
+      )}
     </div>
   | Print =>
     <div className="flex flex-col items-center">
       <button
         onClick={handleCancelPrint(setViewMode)}
         className="btn btn-secondary my-4 md:my-6 verify-certificate__cancel-button">
-        <i className="fas fa-undo-alt" />
-        <span className="ml-1"> {"Cancel and return" |> str} </span>
+        <i className="fas fa-undo-alt" /> <span className="ml-1"> {t("cancel")->str} </span>
       </button>
       <IssuedCertificate__Root issuedCertificate verifyImageUrl />
     </div>

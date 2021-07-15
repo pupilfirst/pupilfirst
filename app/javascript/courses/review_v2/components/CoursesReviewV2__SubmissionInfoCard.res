@@ -34,9 +34,9 @@ let showSubmissionStatus = submission => {
 }
 
 @react.component
-let make = (~submission, ~submissionNumber, ~selected) =>
+let make = (~submission, ~submissionNumber, ~selected, ~filterString) =>
   <Link
-    href={"/submissions/" ++ (SubmissionMeta.id(submission) ++ "/review_v2")}
+    href={"/submissions/" ++ (SubmissionMeta.id(submission) ++ "/review_v2" ++ "?" ++ filterString)}
     key={SubmissionMeta.id(submission)}
     className={cardClasses(submission, selected)}>
     <div className="shadow hover:shadow-lg transition">

@@ -32,7 +32,7 @@ type state = {
   levels: array<Level.t>,
   coaches: array<Coach.t>,
   targets: array<TargetInfo.t>,
-  filterString: string,
+  filterInput: string,
   totalEntriesCount: int,
   filterLoading: bool,
   filterLoader: option<filterLoader>,
@@ -43,7 +43,7 @@ type state = {
 
 type action =
   | UnsetSearchString
-  | UpdateFilterString(string)
+  | UpdateFilterInput(string)
   | LoadSubmissions(
       option<string>,
       bool,
@@ -67,9 +67,9 @@ let reducer = (state, action) =>
   switch action {
   | UnsetSearchString => {
       ...state,
-      filterString: "",
+      filterInput: "",
     }
-  | UpdateFilterString(filterString) => {...state, filterString: filterString}
+  | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
   | LoadSubmissions(endCursor, hasNextPage, newTopics, totalEntriesCount, target, level, coach) =>
     let updatedTopics = switch state.loading {
     | LoadingMore => Js.Array.concat(PagedSubmission.toArray(state.submissions), newTopics)
@@ -116,7 +116,7 @@ let reducer = (state, action) =>
   | ClearFilterLoading => {...state, filterLoading: false}
   | SetLoader(loader) => {
       ...state,
-      filterString: switch loader {
+      filterInput: switch loader {
       | ShowLevels => "Level: "
       | ShowCoaches => "Assigned to: "
       | ShowTargets => "Target: "
@@ -496,15 +496,11 @@ let unselected = (state, currentCoachId, filter) => {
     )
     |> Array.map(coach => Selectable.assignedToCoach(coach, currentCoachId))
 
-  let trimmedFilterString = state.filterString |> String.trim
-  let nameOrEmail = trimmedFilterString == "" ? [] : [Selectable.nameOrEmail(trimmedFilterString)]
-
   ArrayUtils.flattenV2([
     unSelectedStatus(filter),
     unselectedLevels,
     unselectedCoaches,
     unselectedTargets,
-    nameOrEmail,
   ])
 }
 
@@ -547,6 +543,10 @@ let selected = (state, filter, currentCoachId) => {
 
 let onSelectFilter = (send, courseId, state, filter, selectable) => {
   switch selectable {
+  | Selectable.Loader(_) => ()
+  | _ => send(UnsetSearchString)
+  }
+  switch selectable {
   | Selectable.AssignedToCoach(coach, _currentCoachId) =>
     updateParams({...filter, coachId: Some(Coach.id(coach))})
   | Level(level) => updateParams({...filter, levelId: Some(Level.id(level))})
@@ -566,10 +566,6 @@ let onSelectFilter = (send, courseId, state, filter, selectable) => {
     }
   | NameOrEmail(nameOrEmail) => updateParams({...filter, nameOrEmail: Some(nameOrEmail)})
   }
-  switch selectable {
-  | loader => ()
-  | _ => send(UnsetSearchString)
-  }
 }
 
 let onDeselectFilter = (send, filter, selectable) =>
@@ -582,15 +578,20 @@ let onDeselectFilter = (send, filter, selectable) =>
   | NameOrEmail(_) => updateParams({...filter, nameOrEmail: None})
   }
 
-let defaultOptions = filter =>
-  Js.Array.concat(
+let defaultOptions = (state, filter) => {
+  let trimmedFilterInput = state.filterInput->String.trim
+  let nameOrEmail = trimmedFilterInput == "" ? [] : [Selectable.nameOrEmail(trimmedFilterInput)]
+
+  ArrayUtils.flattenV2([
+    nameOrEmail,
     [
       Selectable.makeLoader(ShowLevels),
       Selectable.makeLoader(ShowCoaches),
       Selectable.makeLoader(ShowTargets),
     ],
     unSelectedStatus(filter),
-  )
+  ])
+}
 
 let reloadSubmissions = (courseId, filter, send) => {
   send(BeginReloading)
@@ -637,14 +638,14 @@ let filterPlaceholder = filter =>
   }
 
 let loadFilters = (send, courseId, state) => {
-  if StringUtils.isPresent(state.filterString) {
-    if StringUtils.test("level:", String.lowercase_ascii(state.filterString)) {
+  if StringUtils.isPresent(state.filterInput) {
+    if StringUtils.test("level:", String.lowercase_ascii(state.filterInput)) {
       getLevels(send, courseId, state)
     }
-    if StringUtils.test("assigned to:", String.lowercase_ascii(state.filterString)) {
+    if StringUtils.test("assigned to:", String.lowercase_ascii(state.filterInput)) {
       getCoaches(send, courseId, state)
     }
-    if StringUtils.test("target:", String.lowercase_ascii(state.filterString)) {
+    if StringUtils.test("target:", String.lowercase_ascii(state.filterInput)) {
       getTargets(send, courseId, state)
     }
   }
@@ -663,7 +664,7 @@ let computeInitialState = () => {
   targets: [],
   filterLoading: false,
   filterLoader: None,
-  filterString: "",
+  filterInput: "",
   targetsLoaded: false,
   levelsLoaded: false,
   coachesLoaded: false,
@@ -685,7 +686,7 @@ let make = (~courseId) => {
   React.useEffect1(() => {
     loadFilters(send, courseId, state)
     None
-  }, [state.filterString])
+  }, [state.filterInput])
 
   <div className="flex-1 overflow-y-auto">
     <div className="max-w-3xl mx-auto">
@@ -700,11 +701,11 @@ let make = (~courseId) => {
             selected={selected(state, filter, "1")}
             onSelect={onSelectFilter(send, courseId, state, filter)}
             onDeselect={onDeselectFilter(send, filter)}
-            value=state.filterString
-            onChange={filterString => send(UpdateFilterString(filterString))}
+            value=state.filterInput
+            onChange={filterInput => send(UpdateFilterInput(filterInput))}
             placeholder={filterPlaceholder(filter)}
             loading={state.filterLoading}
-            defaultOptions={defaultOptions(filter)}
+            defaultOptions={defaultOptions(state, filter)}
           />
         </div>
         {submissionsSorter(filter)}

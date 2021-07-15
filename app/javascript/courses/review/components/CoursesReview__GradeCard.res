@@ -506,7 +506,7 @@ let make = (
   | [] => Some(checklist => send(UpdateChecklist(checklist)))
   | _ => None
   }
-  let pending = overlaySubmission |> OverlaySubmission.grades |> ArrayUtils.isEmpty
+  let pending = OverlaySubmission.grades(overlaySubmission)->ArrayUtils.isEmpty
 
   <DisablingCover disabled=state.saving>
     <div>
@@ -514,7 +514,7 @@ let make = (
         <SubmissionChecklistShow checklist=state.checklist updateChecklistCB pending />
       </div>
       {showFeedbackForm(
-        overlaySubmission |> OverlaySubmission.grades,
+        OverlaySubmission.grades(overlaySubmission),
         reviewChecklist,
         state,
         send,
@@ -524,12 +524,12 @@ let make = (
         {noteForm(overlaySubmission, teamSubmission, state.note, send)}
         <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
           <Icon className="if i-tachometer-regular text-gray-800 text-base" />
-          <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card" |> str} </span>
+          <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
         </h5>
         <div
           className="flex md:flex-row flex-col border md:ml-7 bg-gray-100 p-2 md:p-4 rounded-lg mt-2">
           <div className="w-full md:w-3/6">
-            {switch overlaySubmission |> OverlaySubmission.grades {
+            {switch OverlaySubmission.grades(overlaySubmission) {
             | [] => renderGradePills(evaluationCriteria, targetEvaluationCriteriaIds, state, send)
             | grades => showGrades(grades, evaluationCriteria, state)
             }}
@@ -538,21 +538,21 @@ let make = (
         </div>
       </div>
     </div>
-    {switch overlaySubmission |> OverlaySubmission.grades {
+    {switch OverlaySubmission.grades(overlaySubmission) {
     | [] =>
       <div className="bg-white pt-4 mr-4 ml-4 md:mr-6 md:ml-13">
         <button
           disabled={reviewButtonDisabled(status)}
           className="btn btn-success btn-large w-full border border-green-600"
           onClick={gradeSubmission(
-            overlaySubmission |> OverlaySubmission.id,
+            OverlaySubmission.id(overlaySubmission),
             state,
             send,
             evaluationCriteria,
             addGradingCB,
             status,
           )}>
-          {submitButtonText(state.newFeedback, state.grades) |> str}
+          {submitButtonText(state.newFeedback, state.grades)->str}
         </button>
       </div>
 

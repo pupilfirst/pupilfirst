@@ -35,6 +35,7 @@ type action =
   | ShowChecklistEditor
   | ShowAdditionalFeedbackEditor
   | FeedbackAfterSave
+  | UpdateEditor(editor)
   | FinishGrading(array<Grade.t>)
 
 let reducer = (state, action) =>
@@ -50,6 +51,7 @@ let reducer = (state, action) =>
   | ShowChecklistEditor => {...state, editor: ChecklistEditor}
   | ShowAdditionalFeedbackEditor => {...state, additonalFeedbackEditorVisible: true}
   | FinishGrading(grades) => {...state, editor: ReviewedSubmissionEditor(grades), saving: false}
+  | UpdateEditor(editor) => {...state, editor: editor}
   | FeedbackAfterSave => {
       ...state,
       saving: false,
@@ -735,6 +737,10 @@ let make = (
 
   let pending = ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
 
+  let findEditor = (pending, overlaySubmission) => {
+    pending ? GradesEditor : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
+  }
+
   <DisablingCover
     containerClasses="flex flex-col md:flex-row flex-1 space-y-6 md:space-y-0 md:overflow-y-auto"
     disabled=state.saving>
@@ -807,18 +813,11 @@ let make = (
           <CoursesReview__Checklist
             reviewChecklist
             updateFeedbackCB={feedback =>
-              send(
-                GenerateFeeback(
-                  feedback,
-                  pending
-                    ? GradesEditor
-                    : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
-                ),
-              )}
+              send(GenerateFeeback(feedback, findEditor(pending, overlaySubmission)))}
             feedback=state.newFeedback
             updateReviewChecklistCB
             targetId
-            cancelCB={_ => send(ShowGradesEditor)}
+            cancelCB={_ => send(UpdateEditor(findEditor(pending, overlaySubmission)))}
           />
         </div>
 
@@ -836,7 +835,7 @@ let make = (
                 <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
               </h5>
               <div>
-                {switch (overlaySubmission |> OverlaySubmission.evaluatedAt, status) {
+                {switch (OverlaySubmission.evaluatedAt(overlaySubmission), status) {
                 | (Some(_), Graded(_)) =>
                   <div>
                     <button
@@ -879,7 +878,7 @@ let make = (
                         currentUser,
                         updateSubmissionCB,
                       )}>
-                    {"Share Feedback" |> str}
+                    {"Share Feedback"->str}
                   </button>
                 </div>
               </div>

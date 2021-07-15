@@ -17,7 +17,7 @@ let make = (~courses, ~currentUser) => {
       <CoursesReviewV2__Root courseId />,
       Student__Review(courseId),
     )
-  | list{"submissions", submissionId, "review_v2"} => (
+  | list{"submissions", submissionId, "review"} => (
       <CoursesReviewV2__SubmissionsRoot submissionId currentUser />,
       Student__SubmissionShow(submissionId),
     )

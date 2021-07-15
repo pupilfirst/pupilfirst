@@ -40,17 +40,12 @@ let submissionCardClasses = submission =>
     "border-green-500"
   }
 
-let openSubmission = (submission, event) => {
-  event->ReactEvent.Mouse.preventDefault
-  RescriptReactRouter.push("/submissions/" ++ (IndexSubmission.id(submission) ++ "/review_v2"))
-}
-
 let showSubmission = (submissions, filterString) =>
   <div id="submissions"> {Js.Array.map(submission =>
       <Link
         href={"/submissions/" ++
         (IndexSubmission.id(submission) ++
-        "/review_v2" ++
+        "/review" ++
         "?" ++
         filterString)}
         key={IndexSubmission.id(submission)}

@@ -217,7 +217,6 @@ let make = (~submissionId, ~currentUser) => {
           currentUser
         />,
       ]->React.array
-
     | Loading =>
       <div>
         <div className="bg-gray-100 py-4">

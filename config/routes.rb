@@ -193,7 +193,6 @@ Rails.application.routes.draw do
   resources :timeline_events, only: %i[show], path: 'submissions' do
     member do
       get 'review', action: 'review'
-      get 'review_v2', action: 'review_v2'
     end
   end
 

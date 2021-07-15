@@ -605,7 +605,7 @@ let noteForm = (overlaySubmission, teamSubmission, note, send) =>
   }
 
 let feedbackGenerator = (state, send) => {
-  <div className="px-4 pt-4 space-y-8">
+  <div className="px-4 md:px-6 pt-4 space-y-8">
     <div>
       <div className="flex h-7 items-end">
         <h5 className="font-semibold text-sm flex items-center">
@@ -687,12 +687,7 @@ let showSubmissionStatus = status => {
   | Ungraded
   | Grading => ("Pending Review", "bg-yellow-100 text-yellow-800 ")
   }
-  <div className={"font-semibold px-2 py-px rounded " ++ classes}>
-    <span className="hidden md:block"> {text->str} </span>
-    <span className="md:hidden block">
-      <PfIcon className="if i-check-square-alt-solid if-fw" />
-    </span>
-  </div>
+  <div className={"font-semibold px-2 py-px rounded " ++ classes}> <p> {text->str} </p> </div>
 }
 
 @react.component
@@ -745,7 +740,7 @@ let make = (
     containerClasses="flex flex-col md:flex-row flex-1 space-y-6 md:space-y-0 md:overflow-y-auto"
     disabled=state.saving>
     <div className="md:w-1/2 w-full bg-white md:border-r relative md:overflow-y-auto">
-      <div className="flex items-center px-4 py-3 bg-white border-b sticky top-0 z-50 h-16">
+      <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
         <div className="flex flex-1 items-center justify-between">
           <div>
             <p className="font-semibold text-sm"> {str("Submission " ++ string_of_int(number))} </p>
@@ -759,7 +754,7 @@ let make = (
           <p className="text-sm"> {showSubmissionStatus(status)} </p>
         </div>
       </div>
-      <div className="p-4">
+      <div className="p-4 md:p-6">
         <SubmissionChecklistShow checklist=state.checklist updateChecklistCB pending />
       </div>
     </div>
@@ -768,7 +763,7 @@ let make = (
       | GradesEditor =>
         <div>
           <div
-            className="flex items-center justify-between px-4 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+            className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
             <p className="font-semibold text-sm"> {str("Review")} </p>
           </div>
           {feedbackGenerator(state, send)}
@@ -824,11 +819,11 @@ let make = (
       | ReviewedSubmissionEditor(grades) =>
         <div>
           <div
-            className="flex items-center justify-between px-4 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+            className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
             <p className="font-semibold text-sm"> {str("Review")} </p>
             {submissionReviewStatus(status, overlaySubmission)}
           </div>
-          <div className="w-full p-4">
+          <div className="w-full p-4 md:p-6">
             <div className="flex items-center justify-between">
               <h5 className="font-semibold text-sm flex items-center">
                 <Icon className="if i-tachometer-regular text-gray-800 text-base" />
@@ -865,7 +860,7 @@ let make = (
           {state.additonalFeedbackEditorVisible
             ? <div>
                 {feedbackGenerator(state, send)}
-                <div className="flex justify-end px-4 py-4">
+                <div className="flex justify-end px-4 md:px-6 py-4">
                   <button
                     disabled={state.newFeedback == "" || state.saving}
                     className="btn btn-success border border-green-600 w-full md:w-auto"
@@ -882,7 +877,7 @@ let make = (
                   </button>
                 </div>
               </div>
-            : <div className="p-4 md:ml-8 text-center">
+            : <div className="p-4 md:p-6 md:ml-8 text-center">
                 <button
                   onClick={_ => send(ShowAdditionalFeedbackEditor)}
                   className="bg-primary-100 flex items-center justify-center px-4 py-3 border border-dashed border-primary-500 rounded-md w-full font-semibold text-sm text-primary-600 hover:bg-white hover:text-primary-500 hover:shadow-lg hover:border-primary-300 focus:outline-none transition cursor-pointer">
@@ -895,7 +890,7 @@ let make = (
                   </p>
                 </button>
               </div>}
-          <div className="p-4">
+          <div className="p-4 md:p-6">
             <h5 className="font-semibold text-sm flex items-center">
               <PfIcon
                 className="if i-comment-alt-regular text-gray-800 text-base md:text-lg inline-block"

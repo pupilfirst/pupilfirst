@@ -88,17 +88,33 @@ let headerSection = (submissionDetails, filter) =>
   <div
     ariaLabel="submissions-overlay-header"
     className="bg-gray-100 border-b border-gray-300 flex justify-center">
-    <div className="bg-white px-4 py-3 flex flex-wrap items-center justify-between w-full">
-      <div className="flex">
-        <button
-          title="Close"
-          ariaLabel="submissions-overlay-close"
-          onClick={_ => closeOverlay(SubmissionDetails.courseId(submissionDetails), filter)}
-          className="flex flex-col items-center justify-center rounded-t-lg lg:rounded-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 border-gray-400 lg:border-0 lg:shadow lg:border-gray-300 bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
-          <Icon className="if i-times-regular text-xl lg:text-2xl mt-1 lg:mt-0" />
-          <span className="text-xs hidden lg:inline-block mt-px"> {str("close")} </span>
-        </button>
-        <div className="pl-4">
+    <div className="bg-white flex justify-between w-full">
+      <div className="flex flex-col md:flex-row w-full md:w-auto">
+        <div className="flex flex-1 md:flex-none justify-between border-b md:border-0">
+          <button
+            title="Close"
+            ariaLabel="submissions-overlay-close"
+            onClick={_ => closeOverlay(SubmissionDetails.courseId(submissionDetails), filter)}
+            className="flex flex-col items-center justify-center leading-tight px-6 py-4 cursor-pointer border-r bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+            <Icon className="if i-times-regular text-xl lg:text-2xl mt-1 lg:mt-0" />
+            <span className="text-xs hidden lg:inline-block mt-px"> {str("close")} </span>
+          </button>
+          <div className="flex space-x-4">
+            <CoursesStudents__TeamCoaches
+              tooltipPosition=#Bottom
+              defaultAvatarSize="8"
+              mdAvatarSize="8"
+              title={<span className="hidden"> {"Assigned Coaches"->str} </span>}
+              className="flex md:hidden items-center flex-shrink-0"
+              coaches={SubmissionDetails.coaches(submissionDetails)}
+            />
+            <button
+              className="flex flex-shrink-0 items-center md:hidden border-l text-sm font-semibold px-5 py-4">
+              {str("Review Next")}
+            </button>
+          </div>
+        </div>
+        <div className="px-4 py-3">
           <div className="block text-sm md:pr-2">
             <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
               {LevelLabel.format(SubmissionDetails.levelNumber(submissionDetails))->str}
@@ -139,14 +155,19 @@ let headerSection = (submissionDetails, filter) =>
           </div>
         </div>
       </div>
-      <CoursesStudents__TeamCoaches
-        tooltipPosition=#Bottom
-        defaultAvatarSize="8"
-        mdAvatarSize="8"
-        title={<span className="mr-2"> {"Assigned Coaches"->str} </span>}
-        className="mt-2 flex w-full md:w-auto items-center flex-shrink-0"
-        coaches={SubmissionDetails.coaches(submissionDetails)}
-      />
+      <div className="hidden md:flex flex-shrink-0 space-x-6">
+        <CoursesStudents__TeamCoaches
+          tooltipPosition=#Bottom
+          defaultAvatarSize="8"
+          mdAvatarSize="8"
+          title={<span className="mr-2"> {"Assigned Coaches"->str} </span>}
+          className="flex w-full md:w-auto items-center flex-shrink-0"
+          coaches={SubmissionDetails.coaches(submissionDetails)}
+        />
+        <button className="flex items-center border-l text-sm font-semibold px-5 py-4">
+          {str("Review Next")}
+        </button>
+      </div>
     </div>
   </div>
 

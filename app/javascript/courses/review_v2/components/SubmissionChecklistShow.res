@@ -2,7 +2,7 @@ let str = React.string
 
 @react.component
 let make = (~checklist, ~updateChecklistCB, ~pending) =>
-  <div>
+  <div className="space-y-8">
     {ArrayUtils.isEmpty(checklist)
       ? <div> {"Target was marked as complete."->str} </div>
       : Array.mapi(

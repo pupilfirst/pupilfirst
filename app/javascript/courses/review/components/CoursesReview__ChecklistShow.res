@@ -89,14 +89,14 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
   let (selection, setSelecton) = React.useState(() => [])
   let (id, _setId) = React.useState(() => DateTime.randomId() ++ "-review-checkbox-")
   <div>
-    <div className="flex items-center px-4 py-3 bg-white border-b sticky top-0 z-50 h-16">
+    <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
       <div className="flex flex-1 items-center justify-between">
         <div className="btn btn-subtle" onClick=cancelCB>
           <FaIcon classes="fas fa-arrow-left" /> <p className="pl-2"> {str("Back to Review")} </p>
         </div>
       </div>
     </div>
-    <div className="p-4 pb-0">
+    <div className="p-4 md:p-6 pb-0">
       <div className="flex items-end justify-between">
         <h5 className="font-semibold text-sm flex items-center tracking-wide">
           {"Review Checklist" |> str}
@@ -170,7 +170,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
       </div>
     </div>
     <div
-      className="flex justify-end bg-white md:bg-gray-100 border-t sticky bottom-0 px-4 py-2 mt-4 md:py-4">
+      className="flex justify-end bg-white md:bg-gray-100 border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
       <button
         className="btn btn-primary w-full md:w-auto"
         disabled={selection->ArrayUtils.isEmpty}

@@ -4,12 +4,12 @@ let str = React.string
 
 let kindIconClasses = result =>
   switch (result: ChecklistItem.result) {
-  | ShortText(_text) => "if i-short-text-regular md:text-base text-gray-800 if-fw"
-  | LongText(_markdown) => "if i-long-text-regular md:text-base text-gray-800 if-fw"
-  | Link(_link) => "if i-link-regular md:text-base text-gray-800 if-fw"
-  | MultiChoice(_text) => "if i-check-circle-alt-regular md:text-base text-gray-800 if-fw"
-  | Files(_files) => "if i-file-regular md:text-base text-gray-800 if-fw"
-  | AudioRecord(_files) => "if i-file-regular md:text-base text-gray-800 if-fw"
+  | ShortText(_text) => "if i-short-text-regular text-base text-gray-800 if-fw mt-1"
+  | LongText(_markdown) => "if i-long-text-regular text-base text-gray-800 if-fw mt-1"
+  | Link(_link) => "if i-link-regular text-base text-gray-800 if-fw mt-1"
+  | MultiChoice(_text) => "if i-check-circle-alt-regular text-base text-gray-800 mt-1"
+  | Files(_files) => "if i-file-regular text-base text-gray-800 if-fw mt-1"
+  | AudioRecord(_files) => "if i-file-regular text-base text-gray-800 if-fw mt-1"
   }
 
 let showFiles = files =>
@@ -50,9 +50,15 @@ let showlink = link =>
 let statusIcon = (updateChecklistCB, status) =>
   switch (updateChecklistCB, (status: ChecklistItem.status)) {
   | (None, Passed) =>
-    <PfIcon className="if i-check-square-solid text-green-500 text-lg mr-3 -ml-6 mt-1 bg-white" />
+    <div className="flex items-center space-x-2 text-xs bg-green-100 px-1 py-px mt-1">
+      <PfIcon className="if i-check-square-solid text-green-500 text-base bg-white" />
+      <p> {"Correct"->str} </p>
+    </div>
   | (None, Failed) =>
-    <PfIcon className="if i-times-square-solid text-red-500 text-lg mr-3 -ml-6 mt-1 bg-white" />
+    <div className="flex items-center space-x-2 text-xs bg-red-100 px-1 py-px mt-px">
+      <PfIcon className="if i-times-square-solid text-red-500 text-base bg-white" />
+      <p> {"Incorrect"->str} </p>
+    </div>
   | (_, _) => React.null
   }
 
@@ -104,29 +110,28 @@ let statusButton = (index, status, callback, checklist) =>
     </button>
   </div>
 
-let cardClasses = pending => pending ? "mt-3" : "rounded shadow mt-4 "
-
 let cardHeaderClasses = pending =>
-  "text-sm font-semibold flex items-center justify-between " ++ (
-    pending ? "" : "p-4 bg-white rounded cursor-pointer"
-  )
+  "text-sm font-semibold flex items-center justify-between " ++ (pending ? "" : "bg-white rounded")
 
-let cardBodyClasses = pending =>
-  "pl-5 md:pl-7 p-3 pb-4 " ++ (pending ? "" : "border-t bg-gray-200 rounded-b")
+let cardBodyClasses = pending => "pl-7 md:pl-8 " ++ (pending ? "" : "rounded-b")
 
 @react.component
 let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) => {
   let status = ChecklistItem.status(checklistItem)
 
-  <div className={cardClasses(pending)} ariaLabel={ChecklistItem.title(checklistItem)}>
+  <div ariaLabel={ChecklistItem.title(checklistItem)}>
     <div className={cardHeaderClasses(pending)}>
-      <div className="inline-flex items-center">
+      <div className="flex flex-1 items-start justify-between">
+        <div className="flex items-start">
+          <PfIcon className={kindIconClasses(ChecklistItem.result(checklistItem))} />
+          <p className="ml-2 md:ml-3 pr-2 tracking-wide">
+            {ChecklistItem.title(checklistItem)->str}
+          </p>
+        </div>
         {statusIcon(updateChecklistCB, status)}
-        <PfIcon className={kindIconClasses(ChecklistItem.result(checklistItem))} />
-        <p className="pl-2 tracking-wide"> {ChecklistItem.title(checklistItem)->str} </p>
       </div>
     </div>
-    <div className={cardBodyClasses(pending)}>
+    <div className="pl-7 md:pl-8 mt-2">
       <div>
         {switch ChecklistItem.result(checklistItem) {
         | ShortText(text) => <div> {text->str} </div>

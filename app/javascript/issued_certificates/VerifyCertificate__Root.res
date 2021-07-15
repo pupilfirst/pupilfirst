@@ -20,12 +20,9 @@ let printCertificate = (setViewMode, _event) => {
 let heading = (currentUser, issuedCertificate) =>
   if currentUser {
     <span
-      dangerouslySetInnerHTML={
-        "__html": t(
-          ~variables=[("name", IssuedCertificate.profileName(issuedCertificate))],
-          "heading",
-        ),
-      }
+      dangerouslySetInnerHTML={DOMPurify.sanitizedHTML(
+        t(~variables=[("name", IssuedCertificate.profileName(issuedCertificate))], "heading"),
+      )}
     />
   } else {
     IssuedCertificate.serialNumber(issuedCertificate)->str
@@ -61,8 +58,8 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
           </h3>
           <div
             className="text-sm mt-4"
-            dangerouslySetInnerHTML={
-              "__html": t(
+            dangerouslySetInnerHTML={DOMPurify.sanitizedHTML(
+              t(
                 ~variables=[
                   ("name", issuedToName(issuedCertificate)),
                   (
@@ -75,7 +72,7 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
                 ],
                 "description",
               ),
-            }
+            )}
           />
           {currentUser
             ? <div className="mt-4 text-xs">
@@ -107,12 +104,12 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
             <div> <i className="fas fa-exclamation-circle text-2xl text-blue-500" /> </div>
             <div
               className="ml-4 text-sm"
-              dangerouslySetInnerHTML={
-                "__html": t(
+              dangerouslySetInnerHTML={DOMPurify.sanitizedHTML(
+                t(
                   ~variables=[("name", IssuedCertificate.issuedTo(issuedCertificate))],
                   "originally_issued_to",
                 ),
-              }
+              )}
             />
           </div>
         : React.null}

@@ -182,7 +182,7 @@ let make = (~submissionId, ~currentUser) => {
           <div> {inactiveWarning(submissionDetails)} </div>
           {headerSection(submissionDetails, url.search)}
           {ReactUtils.nullIf(
-            <div className="flex space-x-4 overflow-x-auto px-4 py-3 border-b bg-gray-200">
+            <div className="flex space-x-4 overflow-x-auto px-4 py-2 md:py-3 border-b bg-gray-200">
               {Js.Array.mapi(
                 (submission, index) =>
                   <CoursesReviewV2__SubmissionInfoCard

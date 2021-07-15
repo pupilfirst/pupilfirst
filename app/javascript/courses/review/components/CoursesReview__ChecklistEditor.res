@@ -131,33 +131,16 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
     saving: false,
   })
   <div>
-    <div className="flex items-center px-4 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+    <div className="flex items-center px-4 py-3 bg-white border-b sticky top-0 z-50 h-16">
       <div className="flex flex-1 items-center justify-between">
         <h5 className="font-semibold text-sm flex items-center tracking-wide">
           {"Edit Review Checklist" |> str}
         </h5>
-        <div className="flex flex-row-reverse">
-          <button
-            disabled={state.saving || invalidChecklist(state.reviewChecklist)}
-            onClick={_ =>
-              updateReviewChecklist(
-                targetId,
-                state.reviewChecklist,
-                setState,
-                updateReviewChecklistCB,
-              )}
-            className="btn btn-success">
-            {"Save Checklist" |> str}
-          </button>
-          <button className="btn btn-subtle mr-4" onClick={_ => closeEditModeCB()}>
-            {"Cancel" |> str}
-          </button>
-        </div>
       </div>
     </div>
-    <div className="p-4">
-      <div className="bg-gray-200 border border-primary-300 rounded-md p-2 pt-0 md:p-4 md:pt-0">
-        <DisablingCover disabled=state.saving>
+    <DisablingCover disabled=state.saving>
+      <div className="p-4 relative">
+        <div className="bg-gray-200 border border-primary-300 rounded-md p-2 pt-0 md:p-4 md:pt-0">
           {state.reviewChecklist
           |> Array.mapi((itemIndex, reviewChecklistItem) =>
             <div
@@ -294,8 +277,25 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
               <span className="px-3 py-2"> {"Add Checklist Item" |> str} </span>
             </button>
           </div>
-        </DisablingCover>
+        </div>
       </div>
-    </div>
+      <div className="flex bg-white border-t flex-row-reverse sticky bottom-0 px-4 py-2 md:py-4">
+        <button
+          disabled={state.saving || invalidChecklist(state.reviewChecklist)}
+          onClick={_ =>
+            updateReviewChecklist(
+              targetId,
+              state.reviewChecklist,
+              setState,
+              updateReviewChecklistCB,
+            )}
+          className="btn btn-success">
+          {"Save Checklist" |> str}
+        </button>
+        <button className="btn btn-subtle mr-4" onClick={_ => closeEditModeCB()}>
+          {"Cancel" |> str}
+        </button>
+      </div>
+    </DisablingCover>
   </div>
 }

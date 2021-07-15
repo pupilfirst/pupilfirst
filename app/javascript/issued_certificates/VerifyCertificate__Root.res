@@ -74,16 +74,17 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
               ),
             )}
           />
-          {currentUser
-            ? <div className="mt-4 text-xs">
-                <code>
-                  {t(
-                    ~variables=[("serial", IssuedCertificate.serialNumber(issuedCertificate))],
-                    "serial_number",
-                  )->str}
-                </code>
-              </div>
-            : React.null}
+          {ReactUtils.nullUnless(
+            <div className="mt-4 text-xs">
+              <code>
+                {t(
+                  ~variables=[("serial", IssuedCertificate.serialNumber(issuedCertificate))],
+                  "serial_number",
+                )->str}
+              </code>
+            </div>,
+            currentUser,
+          )}
           <div className="mt-4">
             <button onClick={printCertificate(setViewMode)} className="btn btn-primary">
               <i className="fas fa-print" />
@@ -96,23 +97,24 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
           <IssuedCertificate__Root issuedCertificate verifyImageUrl />
         </div>
       </div>
-      {IssuedCertificate.profileName(issuedCertificate) !=
-        IssuedCertificate.issuedTo(issuedCertificate)
-        ? <div
-            id="name-change-notice"
-            className="border border-blue-200 rounded-lg shadow-lg bg-blue-100 p-3 md:p-6 mt-6 flex items-center">
-            <div> <i className="fas fa-exclamation-circle text-2xl text-blue-500" /> </div>
-            <div
-              className="ml-4 text-sm"
-              dangerouslySetInnerHTML={DOMPurify.sanitizedHTML(
-                t(
-                  ~variables=[("name", IssuedCertificate.issuedTo(issuedCertificate))],
-                  "originally_issued_to",
-                ),
-              )}
-            />
-          </div>
-        : React.null}
+      {ReactUtils.nullIf(
+        <div
+          id="name-change-notice"
+          className="border border-blue-200 rounded-lg shadow-lg bg-blue-100 p-3 md:p-6 mt-6 flex items-center">
+          <div> <i className="fas fa-exclamation-circle text-2xl text-blue-500" /> </div>
+          <div
+            className="ml-4 text-sm"
+            dangerouslySetInnerHTML={DOMPurify.sanitizedHTML(
+              t(
+                ~variables=[("name", IssuedCertificate.issuedTo(issuedCertificate))],
+                "originally_issued_to",
+              ),
+            )}
+          />
+        </div>,
+        IssuedCertificate.profileName(issuedCertificate) ==
+          IssuedCertificate.issuedTo(issuedCertificate),
+      )}
     </div>
   | Print =>
     <div className="flex flex-col items-center">

@@ -214,6 +214,7 @@ let make = (~submissionId, ~currentUser) => {
                       SubmissionDetails.allSubmissions(submissionDetails),
                     ) -
                     index}
+                    filterString={url.search}
                   />,
                 SubmissionDetails.allSubmissions(submissionDetails),
               )->React.array}

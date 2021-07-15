@@ -229,7 +229,6 @@ module LevelsQuery = %graphql(
   `
     query LevelsQuery($search: String, $courseId: ID!) {
       levels(search: $search, courseId: $courseId) {
-
         id
         name
         number

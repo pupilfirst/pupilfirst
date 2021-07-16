@@ -566,7 +566,7 @@ let noteForm = (overlaySubmission, teamSubmission, note, send) =>
 
     <div className="text-sm">
       <p className="font-semibold text-sm flex">
-        <i className="far fa-sticky-note text-gray-800 text-lg" />
+        <Icon className="if i-long-text-light text-gray-800 text-base" />
         {switch note {
         | Some(_) =>
           <span className="ml-2 md:ml-4 tracking-wide">
@@ -610,12 +610,12 @@ let feedbackGenerator = (state, send) => {
       <div className="flex h-7 items-end">
         <h5 className="font-semibold text-sm flex items-center">
           <PfIcon
-            className="if i-check-square-alt-regular text-gray-800 text-base md:text-lg inline-block"
+            className="if i-check-square-alt-light text-gray-800 text-base md:text-lg inline-block"
           />
           <span className="ml-2 md:ml-3 tracking-wide"> {"Review Checklist"->str} </span>
         </h5>
       </div>
-      <div className="mt-2 md:ml-7">
+      <div className="mt-2 md:ml-8">
         <button
           className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none transition"
           onClick={_ => send(ShowChecklistEditor)}>
@@ -626,7 +626,7 @@ let feedbackGenerator = (state, send) => {
     <div className="course-review__feedback-editor text-sm">
       <h5 className="font-semibold text-sm flex items-center">
         <PfIcon
-          className="if i-comment-alt-regular text-gray-800 text-base md:text-lg inline-block"
+          className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
         />
         <span className="ml-2 md:ml-3 tracking-wide"> {"Add Your Feedback"->str} </span>
       </h5>
@@ -743,8 +743,8 @@ let make = (
       <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
         <div className="flex flex-1 items-center justify-between">
           <div>
-            <p className="font-semibold text-sm"> {str("Submission " ++ string_of_int(number))} </p>
-            <p className="text-gray-700 text-xs">
+            <p className="font-semibold"> {str("Submission " ++ string_of_int(number))} </p>
+            <p className="text-gray-800 text-xs">
               {overlaySubmission
               ->OverlaySubmission.createdAt
               ->DateFns.formatPreset(~year=true, ())
@@ -764,19 +764,19 @@ let make = (
         <div>
           <div
             className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
-            <p className="font-semibold text-sm"> {str("Review")} </p>
+            <p className="font-semibold"> {str("Review")} </p>
           </div>
           {feedbackGenerator(state, send)}
-          <div className="w-full px-4 pt-8 space-y-8">
+          <div className="w-full px-4 md:px-6 pt-8 space-y-8">
             {noteForm(overlaySubmission, teamSubmission, state.note, send)}
             <div>
               <h5 className="font-semibold text-sm flex items-center">
-                <Icon className="if i-tachometer-regular text-gray-800 text-base" />
+                <Icon className="if i-tachometer-light text-gray-800 text-base" />
                 <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
               </h5>
               <div className="flex md:flex-row flex-col md:ml-8 rounded-lg mt-2">
                 <div className="w-full md:w-9/12">
-                  <div className="pr-8">
+                  <div className="md:pr-8">
                     {renderGradePills(evaluationCriteria, targetEvaluationCriteriaIds, state, send)}
                   </div>
                 </div>
@@ -820,13 +820,13 @@ let make = (
         <div>
           <div
             className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
-            <p className="font-semibold text-sm"> {str("Review")} </p>
+            <p className="font-semibold"> {str("Review")} </p>
             {submissionReviewStatus(status, overlaySubmission)}
           </div>
           <div className="w-full p-4 md:p-6">
             <div className="flex items-center justify-between">
               <h5 className="font-semibold text-sm flex items-center">
-                <Icon className="if i-tachometer-regular text-gray-800 text-base" />
+                <Icon className="if i-tachometer-light text-gray-800 text-base" />
                 <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
               </h5>
               <div>
@@ -893,7 +893,7 @@ let make = (
           <div className="p-4 md:p-6">
             <h5 className="font-semibold text-sm flex items-center">
               <PfIcon
-                className="if i-comment-alt-regular text-gray-800 text-base md:text-lg inline-block"
+                className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
               />
               <span className="ml-2 md:ml-3 tracking-wide"> {"Feedback"->str} </span>
             </h5>

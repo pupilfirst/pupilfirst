@@ -96,9 +96,9 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
         </div>
       </div>
     </div>
-    <div className="p-4 md:p-6 pb-0">
+    <div className="p-4 md:px-6 pb-0">
       <div className="flex items-end justify-between">
-        <h5 className="font-semibold text-sm flex items-center tracking-wide">
+        <h5 className="font-semibold flex items-center tracking-wide">
           {"Review Checklist" |> str}
         </h5>
         <button className="btn btn-small btn-default" onClick={_ => showEditorCB()}>

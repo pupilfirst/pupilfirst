@@ -434,7 +434,7 @@ let noteForm = (overlaySubmission, teamSubmission, note, send) =>
 
     <div className="text-sm">
       <h5 className="font-semibold text-sm flex items-center">
-        <i className="far fa-sticky-note text-gray-800 text-base" />
+        <Icon className="if i-long-text-light text-gray-800 text-base" />
         {switch note {
         | Some(_) =>
           <span className="ml-2 md:ml-3 tracking-wide">
@@ -523,7 +523,7 @@ let make = (
       <div className="w-full px-4 pt-4 md:px-6 md:pt-6">
         {noteForm(overlaySubmission, teamSubmission, state.note, send)}
         <h5 className="font-semibold text-sm flex items-center mt-4 md:mt-6">
-          <Icon className="if i-tachometer-regular text-gray-800 text-base" />
+          <Icon className="if i-tachometer-light text-gray-800 text-base" />
           <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
         </h5>
         <div

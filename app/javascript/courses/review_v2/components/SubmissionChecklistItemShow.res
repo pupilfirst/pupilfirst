@@ -4,12 +4,12 @@ let str = React.string
 
 let kindIconClasses = result =>
   switch (result: ChecklistItem.result) {
-  | ShortText(_text) => "if i-short-text-regular text-base text-gray-800 if-fw mt-1"
-  | LongText(_markdown) => "if i-long-text-regular text-base text-gray-800 if-fw mt-1"
-  | Link(_link) => "if i-link-regular text-base text-gray-800 if-fw mt-1"
-  | MultiChoice(_text) => "if i-check-circle-alt-regular text-base text-gray-800 mt-1"
-  | Files(_files) => "if i-file-regular text-base text-gray-800 if-fw mt-1"
-  | AudioRecord(_files) => "if i-file-regular text-base text-gray-800 if-fw mt-1"
+  | ShortText(_text) => "if i-short-text-light text-base md:text-lg text-gray-800 mt-px"
+  | LongText(_markdown) => "if i-long-text-light text-base md:text-lg text-gray-800 mt-px"
+  | Link(_link) => "if i-link-light text-base md:text-lg text-gray-800 mt-px"
+  | MultiChoice(_text) => "if i-check-circle-alt-light text-base md:text-lg text-gray-800 mt-px"
+  | Files(_files) => "if i-file-light text-base md:text-lg text-gray-800 mt-px"
+  | AudioRecord(_files) => "if i-file-light text-base md:text-lg text-gray-800 mt-px"
   }
 
 let showFiles = files =>
@@ -124,14 +124,12 @@ let make = (~index, ~checklistItem, ~updateChecklistCB, ~checklist, ~pending) =>
       <div className="flex flex-1 items-start justify-between">
         <div className="flex items-start">
           <PfIcon className={kindIconClasses(ChecklistItem.result(checklistItem))} />
-          <p className="ml-2 md:ml-3 pr-2 tracking-wide">
-            {ChecklistItem.title(checklistItem)->str}
-          </p>
+          <p className="ml-3 pr-2 tracking-wide"> {ChecklistItem.title(checklistItem)->str} </p>
         </div>
         {statusIcon(updateChecklistCB, status)}
       </div>
     </div>
-    <div className="pl-7 md:pl-8 mt-2">
+    <div className="pl-7 mt-2 text-sm">
       <div>
         {switch ChecklistItem.result(checklistItem) {
         | ShortText(text) => <div> {text->str} </div>

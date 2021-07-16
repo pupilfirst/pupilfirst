@@ -26,7 +26,7 @@ let make = (~feedback, ~updateFeedbackCB, ~label, ~reviewChecklist, ~checklistVi
     <div className="px-4 pt-4 md:px-6 md:pt-6 course-review__feedback-editor text-sm">
       <h5 className="font-semibold text-sm flex items-center">
         <PfIcon
-          className="if i-comment-alt-regular text-gray-800 text-base md:text-lg inline-block"
+          className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
         />
         <span className="ml-2 md:ml-3 tracking-wide"> {label |> str} </span>
       </h5>

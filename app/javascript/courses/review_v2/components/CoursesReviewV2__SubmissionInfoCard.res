@@ -41,7 +41,7 @@ let make = (~submission, ~submissionNumber, ~selected, ~filterString) =>
     className={cardClasses(submission, selected)}>
     <div className="shadow hover:shadow-lg transition">
       <div className="px-4 py-2 flex flex-row items-center justify-between min-w-min">
-        <div className="flex flex-col md:pr-2">
+        <div className="flex flex-col md:pr-6">
           <h2 className="font-semibold text-sm leading-tight">
             <p className="hidden md:block">
               {("Submission #" ++ string_of_int(submissionNumber))->str}
@@ -52,11 +52,11 @@ let make = (~submission, ~submissionNumber, ~selected, ~filterString) =>
             {submission->SubmissionMeta.createdAt->DateFns.formatPreset(~year=true, ())->str}
           </span>
         </div>
-        <div className="hidden md:flex text-xs w-auto">
+        <div className="hidden md:flex items-center space-x-2 text-xs w-auto">
           {ReactUtils.nullUnless(
             <div
-              className="bg-primary-100 text-primary-600 border border-transparent font-semibold px-2 py-px rounded mr-2">
-              <PfIcon className="if i-comment-alt-solid if-fw" />
+              className="flex items-center justify-center bg-primary-100 text-primary-600 border border-transparent font-semibold p-1 rounded">
+              <PfIcon className="if i-comment-alt-regular if-fw" />
             </div>,
             SubmissionMeta.feedbackSent(submission),
           )}

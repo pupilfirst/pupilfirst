@@ -95,9 +95,11 @@ let headerSection = (submissionDetails, filter) =>
             title="Close"
             ariaLabel="submissions-overlay-close"
             onClick={_ => closeOverlay(SubmissionDetails.courseId(submissionDetails), filter)}
-            className="flex flex-col items-center justify-center leading-tight px-6 py-4 cursor-pointer border-r bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
-            <Icon className="if i-times-regular text-xl lg:text-2xl mt-1 lg:mt-0" />
-            <span className="text-xs hidden lg:inline-block mt-px"> {str("close")} </span>
+            className="flex flex-col items-center justify-center leading-tight px-3 py-2 md:px-5 md:py-4 cursor-pointer border-r bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+            <div className="flex items-center justify-center bg-gray-300 rounded-full w-8 h-8">
+              <Icon className="if i-times-regular text-lg lg:text-2xl" />
+            </div>
+            <span className="sr-only"> {str("close")} </span>
           </button>
           <div className="flex space-x-4">
             <CoursesStudents__TeamCoaches
@@ -109,7 +111,7 @@ let headerSection = (submissionDetails, filter) =>
               coaches={SubmissionDetails.coaches(submissionDetails)}
             />
             <button
-              className="flex flex-shrink-0 items-center md:hidden border-l text-sm font-semibold px-5 py-4">
+              className="flex flex-shrink-0 items-center md:hidden border-l text-sm font-semibold px-3 py-2 md:px-5 md:py-4">
               {str("Review Next")}
             </button>
           </div>
@@ -203,7 +205,8 @@ let make = (~submissionId, ~currentUser) => {
           <div> {inactiveWarning(submissionDetails)} </div>
           {headerSection(submissionDetails, url.search)}
           {ReactUtils.nullIf(
-            <div className="flex space-x-4 overflow-x-auto px-4 py-2 md:py-3 border-b bg-gray-200">
+            <div
+              className="flex space-x-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-200">
               {Js.Array.mapi(
                 (submission, index) =>
                   <CoursesReviewV2__SubmissionInfoCard

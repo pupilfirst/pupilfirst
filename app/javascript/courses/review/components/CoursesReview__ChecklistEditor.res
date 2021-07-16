@@ -131,15 +131,15 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
     saving: false,
   })
   <div>
-    <div className="flex items-center px-4 py-3 bg-white border-b sticky top-0 z-50 h-16">
+    <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
       <div className="flex flex-1 items-center justify-between">
-        <h5 className="font-semibold text-sm flex items-center tracking-wide">
+        <h5 className="font-semibold flex items-center tracking-wide">
           {"Edit Review Checklist" |> str}
         </h5>
       </div>
     </div>
     <DisablingCover disabled=state.saving>
-      <div className="p-4 relative">
+      <div className="p-4 md:p-6 relative">
         <div className="bg-gray-200 border border-primary-300 rounded-md p-2 pt-0 md:p-4 md:pt-0">
           {state.reviewChecklist
           |> Array.mapi((itemIndex, reviewChecklistItem) =>
@@ -279,7 +279,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
           </div>
         </div>
       </div>
-      <div className="flex bg-white border-t flex-row-reverse sticky bottom-0 px-4 py-2 md:py-4">
+      <div className="flex bg-gray-100 border-t flex-row-reverse sticky bottom-0 px-4 py-2 md:py-4">
         <button
           disabled={state.saving || invalidChecklist(state.reviewChecklist)}
           onClick={_ =>

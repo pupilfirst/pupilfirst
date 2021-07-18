@@ -124,7 +124,7 @@ let headerSection = (submissionDetails, filter) =>
             <a
               href={"/targets/" ++ SubmissionDetails.targetId(submissionDetails)}
               target="_blank"
-              className="ml-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-sm md:text-base">
+              className="ml-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base">
               {SubmissionDetails.targetTitle(submissionDetails)->str}
             </a>
           </div>

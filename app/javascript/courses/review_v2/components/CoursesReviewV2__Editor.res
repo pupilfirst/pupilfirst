@@ -630,6 +630,13 @@ let feedbackGenerator = (state, send) => {
         />
         <span className="ml-2 md:ml-3 tracking-wide"> {"Add Your Feedback"->str} </span>
       </h5>
+      <div
+        className="inline-flex items-center bg-green-200 mt-2 md:ml-8 text-green-800 px-2 py-1 rounded-md">
+        <Icon className="if i-check-circle-solid text-green-700 text-base inline-block" />
+        <p className="pl-2 text-sm font-semibold">
+          {"Feedback generated from review checklist." |> str}
+        </p>
+      </div>
       <div className="mt-2 md:ml-8" ariaLabel="feedback">
         <MarkdownEditor
           onChange={feedback => send(UpdateFeedback(feedback))}
@@ -648,7 +655,7 @@ let showFeedback = feedback => Js.Array.mapi((f, index) =>
       <div className="pt-6">
         <div className="flex">
           <div
-            className="flex-shrink-0 w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
+            className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
             {switch Feedback.coachAvatarUrl(f) {
             | Some(avatarUrl) => <img src=avatarUrl />
             | None => <Avatar name={Feedback.coachName(f)} />

@@ -3,3 +3,8 @@
   background-position: center center;
   background-size: cover;
 }
+
+.approuter-nav__sidebar {
+  position: relative;
+  width: 20rem;
+}

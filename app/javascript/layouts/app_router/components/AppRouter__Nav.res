@@ -19,12 +19,12 @@ let renderLinks = (courses, selectedPage) => {
     <div>
       <div className="relative pb-1/2 bg-gray-800 rounded-lg">
         {switch Course.thumbnailUrl(currentCourse) {
-        | Some(url) => <img className="absolute h-full w-full object-cover" src=url />
+        | Some(url) => <img className="absolute h-full w-full object-cover rounded-lg" src=url />
         | None =>
           <div className="app-router-nav-course__cover absolute h-full w-full svg-bg-pattern-1 " />
         }}
       </div>
-      <div className="mt-2">
+      <div className="mt-4">
         <AppRouter__CourseSelector courses selectedPage currentCourseId />
       </div>
       <div> {Js.Array.map(link => {
@@ -77,10 +77,10 @@ let make = (~courses, ~selectedPage) => {
       sidebarOpen,
     ),
     <div className="hidden md:flex md:flex-shrink-0">
-      <div className="flex flex-col w-64">
+      <div className="approuter-nav__sidebar flex flex-col">
         <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
           <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-            <nav className="mt-5 flex-1 px-2 bg-white space-y-1">
+            <nav className="mt-5 flex-1 px-4 bg-white space-y-1">
               {renderLinks(courses, selectedPage)}
             </nav>
           </div>

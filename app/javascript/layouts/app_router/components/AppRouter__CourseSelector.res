@@ -5,7 +5,7 @@ open AppRouter__Types
 let selected = currentCourse =>
   <button
     title={Course.name(currentCourse)}
-    className="border-b border-gray-400 appearance-none flex items-center justify-between hover:bg-primary-100 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-2 py-2 rounded w-full">
+    className="bg-gray-200 appearance-none flex items-center justify-between hover:bg-primary-100 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-2 py-2 rounded w-full">
     <span className="w-5/6 flex items-center">
       <i className="fas fa-book" />
       <span className="truncate ml-2 text-left"> {Course.name(currentCourse)->str} </span>
@@ -17,7 +17,7 @@ let contents = (courses, currentCourse, selectedPage) => {
   Js.Array.map(
     course =>
       <a
-        className="block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 truncate"
+        className="block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-normal"
         key={course->Course.id}
         href={Page.canAcessPage(selectedPage, course)
           ? Page.path(Page.changeId(selectedPage, Course.id(course)))

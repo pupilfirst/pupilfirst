@@ -3,7 +3,7 @@ ruby '2.7.4'
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.1.3', '>= 6.1.3.2'
+gem 'rails', '~> 6.1.4'
 
 gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
 
@@ -28,7 +28,7 @@ gem 'turbolinks', '~> 5.0' # Quicker page navigation. https://github.com/turboli
 gem 'uglifier', '~> 4.1' # JavaScript compressor.
 gem 'rest-client', '~> 2.0' # Used to contact Fast Alerts' API.
 gem 'bootstrap', '>= 4.3.1' # Official Sass port of Bootstrap.
-gem 'autoprefixer-rails', '~> 10.0.2' # Autoprefixer for Ruby and Ruby on Rails.
+gem 'autoprefixer-rails', '~> 10.2' # Autoprefixer for Ruby and Ruby on Rails.
 gem 'bootstrap_form', '~> 4.0' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
 gem 'valid_url', '= 0.0.4', github: 'ralovets/valid_url' # URL validation: https://github.com/ralovets/valid_url
 gem 'roadie-rails', '~> 2.0' # CSS management for e-mails.
@@ -67,10 +67,9 @@ gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google
 gem 'omniauth-facebook', '~> 8.0' # Facebook OAuth2 Strategy for OmniAuth http://mkdynamic.github.com/omniauth-facebook
 gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
 
-gem 'file_validators', '~> 2.1' # Adds file validators to ActiveModel.
+gem 'file_validators', '~> 3.0' # Adds file validators to ActiveModel.
 gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
-gem 'chartkick', '~> 3.4' # Create beautiful charts with one line of JavaScript.
 gem 'graphql', '~> 1.12.6' # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
 gem 'i18n-js', '~> 3.7' # Provide Rails I18n translations on Javascript.
@@ -78,9 +77,9 @@ gem 'batch-loader', '~> 1.5' # Generic lazy batching mechanism to avoid N+1 DB q
 gem 'recaptcha', '~> 5.7' # ReCaptcha helpers for Ruby apps. http://github.com/ambethia/recaptcha
 
 # Feature toggle
-gem 'flipper', '~> 0.21.0'
-gem 'flipper-ui', '~> 0.21.0'
-gem 'flipper-active_record', '~> 0.21.0'
+gem 'flipper', '~> 0.22'
+gem 'flipper-ui', '~> 0.22'
+gem 'flipper-active_record', '~> 0.22'
 
 # Rails assets!
 source 'https://rails-assets.org' do
@@ -135,6 +134,6 @@ end
 
 group :production do
   gem 'dalli', '~> 2.7.10' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
-  gem 'skylight', '~> 4.2' # Skylight is a smart profiler for Rails, Sinatra, and other Ruby apps.
+  gem 'skylight', '~> 5.1' # Skylight is a smart profiler for Rails, Sinatra, and other Ruby apps.
   gem 'aws-sdk-s3', '~> 1.35 ', require: false
 end

@@ -31,7 +31,7 @@ class CreateTargetVersionMutator < ApplicationQuery
   end
 
   def less_than_three_versions_per_day
-    return if target.target_versions.where(created_at: Time.now.beginning_of_day..Time.now.end_of_day).count < 3
+    return if target.target_versions.where(created_at: Time.now.all_day).count < 3
 
     errors[:base] << 'You cannot create more than 3 versions per day'
   end

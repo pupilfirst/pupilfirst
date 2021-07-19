@@ -3,7 +3,7 @@ class Course < ApplicationRecord
   #
   # highlights: [
   #   {
-  #     icon: string - should match the whitelisted icons
+  #     icon: string - should match the list of allowed icons
   #     title: string - title for the highlight (150 chars)
   #     description: string - description from the highlight (250 chars)
   #   },

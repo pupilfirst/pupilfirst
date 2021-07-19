@@ -652,9 +652,7 @@ let loadFilters = (send, courseId, state) => {
 }
 
 let shortCutClasses = selected =>
-  "cursor-pointer px-2 text primary-500 " ++ (
-    selected ? "border-b-3 border-primary-500 font-semibold" : ""
-  )
+  "cursor-pointer p-2 " ++ (selected ? "border-b-3 text-primary-500 border-primary-500" : "")
 
 let computeInitialState = () => {
   loading: NotLoading,
@@ -688,88 +686,99 @@ let make = (~courseId) => {
     None
   }, [state.filterInput])
 
-  <div className="flex-1 overflow-y-auto">
-    <div className="max-w-3xl mx-auto">
-      <div className="md:flex w-full items-start py-4">
-        <div className="flex-1">
-          <label className="block text-tiny font-semibold uppercase">
-            {tc("filter_by")->str}
-          </label>
-          <Multiselect
-            id="filter"
-            unselected={unselected(state, "1", filter)}
-            selected={selected(state, filter, "1")}
-            onSelect={onSelectFilter(send, courseId, state, filter)}
-            onDeselect={onDeselectFilter(send, filter)}
-            value=state.filterInput
-            onChange={filterInput => send(UpdateFilterInput(filterInput))}
-            placeholder={filterPlaceholder(filter)}
-            loading={state.filterLoading}
-            defaultOptions={defaultOptions(state, filter)}
-          />
-        </div>
-        {submissionsSorter(filter)}
-      </div>
-      <div className="flex space-x-4 border-b-3">
-        <div
-          className={shortCutClasses(filter.tab === None)}
-          onClick={_ => updateParams({...filter, tab: None, sortCriterion: #SubmittedAt})}>
-          {str("All")}
-        </div>
-        <div
-          className={shortCutClasses(filter.tab === Some(#Pending))}
-          onClick={_ =>
-            updateParams({...filter, tab: Some(#Pending), sortCriterion: #SubmittedAt})}>
-          {str("Pending")}
-        </div>
-        <div
-          className={shortCutClasses(filter.tab === Some(#Reviewed))}
-          onClick={_ =>
-            updateParams({...filter, tab: Some(#Reviewed), sortCriterion: #EvaluatedAt})}>
-          {str("Reviewed")}
+  <div className="flex-1 flex flex-col">
+    <div className="p-4 bg-white border-b h-16"> {str("Header")} </div>
+    <div className="flex-1 md:overflow-y-auto">
+      <div className="sticky top-0 z-30 md:static bg-gray-100">
+        <div className="max-w-3xl 2xl:max-w-5xl mx-auto">
+          <div className="flex space-x-4 md:pt-3 text-sm font-semibold border-b">
+            <div
+              className={shortCutClasses(filter.tab === None)}
+              onClick={_ => updateParams({...filter, tab: None, sortCriterion: #SubmittedAt})}>
+              {str("All")}
+            </div>
+            <div
+              className={shortCutClasses(filter.tab === Some(#Pending))}
+              onClick={_ =>
+                updateParams({...filter, tab: Some(#Pending), sortCriterion: #SubmittedAt})}>
+              {str("Pending")}
+            </div>
+            <div
+              className={shortCutClasses(filter.tab === Some(#Reviewed))}
+              onClick={_ =>
+                updateParams({...filter, tab: Some(#Reviewed), sortCriterion: #EvaluatedAt})}>
+              {str("Reviewed")}
+            </div>
+          </div>
         </div>
       </div>
-      <div id="submissions" className="mt-4">
+      <div className="md:sticky md:top-0 bg-gray-100">
+        <div className="max-w-3xl 2xl:max-w-5xl mx-auto">
+          <div className="md:flex w-full items-start py-4">
+            <div className="flex-1">
+              <label className="block text-tiny font-semibold uppercase">
+                {tc("filter_by")->str}
+              </label>
+              <Multiselect
+                id="filter"
+                unselected={unselected(state, "1", filter)}
+                selected={selected(state, filter, "1")}
+                onSelect={onSelectFilter(send, courseId, state, filter)}
+                onDeselect={onDeselectFilter(send, filter)}
+                value=state.filterInput
+                onChange={filterInput => send(UpdateFilterInput(filterInput))}
+                placeholder={filterPlaceholder(filter)}
+                loading={state.filterLoading}
+                defaultOptions={defaultOptions(state, filter)}
+              />
+            </div>
+            {submissionsSorter(filter)}
+          </div>
+        </div>
+      </div>
+      <div className="max-w-3xl 2xl:max-w-5xl mx-auto">
+        <div id="submissions" className="mt-4">
+          {switch state.submissions {
+          | Unloaded =>
+            <div className="px-2 lg:px-8">
+              {SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())}
+            </div>
+          | PartiallyLoaded(submissions, cursor) =>
+            <div>
+              {submissionsList(submissions, state, filter)}
+              {switch state.loading {
+              | LoadingMore =>
+                <div className="px-2 lg:px-8">
+                  {SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())}
+                </div>
+              | NotLoading =>
+                <div className="px-4 lg:px-8 pb-6">
+                  <button
+                    className="btn btn-primary-ghost cursor-pointer w-full"
+                    onClick={_ => {
+                      send(BeginLoadingMore)
+                      getSubmissions(send, courseId, Some(cursor), filter)
+                    }}>
+                    {tc("button_load_more") |> str}
+                  </button>
+                </div>
+              | Reloading => React.null
+              }}
+            </div>
+          | FullyLoaded(submissions) => <div> {submissionsList(submissions, state, filter)} </div>
+          }}
+        </div>
         {switch state.submissions {
-        | Unloaded =>
-          <div className="px-2 lg:px-8">
-            {SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())}
-          </div>
-        | PartiallyLoaded(submissions, cursor) =>
-          <div>
-            {submissionsList(submissions, state, filter)}
-            {switch state.loading {
-            | LoadingMore =>
-              <div className="px-2 lg:px-8">
-                {SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())}
-              </div>
-            | NotLoading =>
-              <div className="px-4 lg:px-8 pb-6">
-                <button
-                  className="btn btn-primary-ghost cursor-pointer w-full"
-                  onClick={_ => {
-                    send(BeginLoadingMore)
-                    getSubmissions(send, courseId, Some(cursor), filter)
-                  }}>
-                  {tc("button_load_more") |> str}
-                </button>
-              </div>
-            | Reloading => React.null
-            }}
-          </div>
-        | FullyLoaded(submissions) => <div> {submissionsList(submissions, state, filter)} </div>
+        | Unloaded => React.null
+        | _ =>
+          let loading = switch state.loading {
+          | NotLoading => false
+          | Reloading => true
+          | LoadingMore => false
+          }
+          <LoadingSpinner loading />
         }}
       </div>
-      {switch state.submissions {
-      | Unloaded => React.null
-      | _ =>
-        let loading = switch state.loading {
-        | NotLoading => false
-        | Reloading => true
-        | LoadingMore => false
-        }
-        <LoadingSpinner loading />
-      }}
     </div>
   </div>
 }

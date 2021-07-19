@@ -21,26 +21,29 @@ let renderLinks = (courses, selectedPage) => {
         {switch Course.thumbnailUrl(currentCourse) {
         | Some(url) => <img className="absolute h-full w-full object-cover rounded-lg" src=url />
         | None =>
-          <div className="app-router-nav-course__cover absolute h-full w-full svg-bg-pattern-1 " />
+          <div
+            className="app-router-nav-course__cover absolute h-full w-full svg-bg-pattern-1 rounded-lg "
+          />
         }}
       </div>
       <div className="mt-4">
         <AppRouter__CourseSelector courses selectedPage currentCourseId />
       </div>
-      <div> {Js.Array.map(link => {
+      <div className="mt-4 space-y-2"> {Js.Array.map(link => {
           let (title, icon) = switch link {
           | Page.Student__Curriculum(_) => ("Curriculum", "i-book-open-light")
-          | Student__Report(_) => ("Report", "i-check-circle-alt-regular")
+          | Student__Report(_) => ("Report", "i-check-circle-alt-light")
           | Student__Students(_) => ("Student", "i-book-open-light")
-          | Student__Review(_) => ("Review", "i-clock-regular")
+          | Student__Review(_) => ("Review", "i-clock-light")
           | Student__Leaderboard(_) => ("Leaderboard", "i-book-open-light")
           | Student__SubmissionShow(_) => ("Unknown", "")
           }
           <a
             key=title
             href={Page.path(link)}
-            className="flex items-center py-3 px-3 hover:text-primary-700 hover:font-semibold hover:bg-primary-100">
-            <PfIcon className={`if ${icon} if-fw`} /> <div className="pl-2"> {str(title)} </div>
+            className="flex items-center p-3 rounded-md text-sm font-semibold hover:text-primary-500 hover:bg-gray-200">
+            <Icon className={`if ${icon} text-lg if-fw`} />
+            <div className="pl-2"> {str(title)} </div>
           </a>
         }, Page.activeLinks(currentCourse))->React.array} </div>
     </div>
@@ -79,10 +82,9 @@ let make = (~courses, ~selectedPage) => {
     <div className="hidden md:flex md:flex-shrink-0">
       <div className="approuter-nav__sidebar flex flex-col">
         <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
-          <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-            <nav className="mt-5 flex-1 px-4 bg-white space-y-1">
-              {renderLinks(courses, selectedPage)}
-            </nav>
+          <div className="p-4 bg-white border-b h-16"> {str("Header")} </div>
+          <div className="flex-1 flex flex-col pt-4 pb-4 overflow-y-auto">
+            <nav className="flex-1 px-4 bg-white"> {renderLinks(courses, selectedPage)} </nav>
           </div>
         </div>
       </div>

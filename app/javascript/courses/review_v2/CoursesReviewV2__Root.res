@@ -711,23 +711,30 @@ let make = (~courseId) => {
         {submissionsSorter(filter)}
       </div>
       <div className="flex space-x-4 border-b-3">
-        <div
-          className={shortCutClasses(filter.tab === None)}
-          onClick={_ => updateParams({...filter, tab: None, sortCriterion: #SubmittedAt})}>
-          {str("All")}
-        </div>
-        <div
-          className={shortCutClasses(filter.tab === Some(#Pending))}
-          onClick={_ =>
-            updateParams({...filter, tab: Some(#Pending), sortCriterion: #SubmittedAt})}>
-          {str("Pending")}
-        </div>
-        <div
-          className={shortCutClasses(filter.tab === Some(#Reviewed))}
-          onClick={_ =>
-            updateParams({...filter, tab: Some(#Reviewed), sortCriterion: #EvaluatedAt})}>
-          {str("Reviewed")}
-        </div>
+        <Link
+          href={"/courses/" ++
+          courseId ++
+          "/review?" ++
+          filterToQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
+          className={shortCutClasses(filter.tab === None)}>
+          <div> {str("All")} </div>
+        </Link>
+        <Link
+          href={"/courses/" ++
+          courseId ++
+          "/review?" ++
+          filterToQueryString({...filter, tab: Some(#Pending), sortCriterion: #SubmittedAt})}
+          className={shortCutClasses(filter.tab === Some(#Pending))}>
+          <div> {str("Pending")} </div>
+        </Link>
+        <Link
+          href={"/courses/" ++
+          courseId ++
+          "/review?" ++
+          filterToQueryString({...filter, tab: Some(#Reviewed), sortCriterion: #EvaluatedAt})}
+          className={shortCutClasses(filter.tab === Some(#Reviewed))}>
+          <div> {str("Reviewed")} </div>
+        </Link>
       </div>
       <div id="submissions" className="mt-4">
         {switch state.submissions {

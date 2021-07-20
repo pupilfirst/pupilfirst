@@ -134,7 +134,7 @@ feature 'Submission review overlay', js: true do
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
       ) do
         expect(page).to have_selector(
-          '.course-review-grade-card__grade-pill',
+          '.course-review-editor__grade-pill',
           count: 4
         )
         find("button[title='Bad']").click
@@ -148,7 +148,7 @@ feature 'Submission review overlay', js: true do
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
       ) do
         expect(page).to have_selector(
-          '.course-review-grade-card__grade-pill',
+          '.course-review-editor__grade-pill',
           count: 3
         )
         find("button[title='Bad']").click

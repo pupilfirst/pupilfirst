@@ -21,6 +21,7 @@ type state = {
   note: option<string>,
   editor: editor,
   additonalFeedbackEditorVisible: bool,
+  feedbackGenerated: bool,
 }
 
 type action =
@@ -43,7 +44,12 @@ let reducer = (state, action) =>
   | BeginSaving => {...state, saving: true}
   | FinishSaving => {...state, saving: false}
   | UpdateFeedback(newFeedback) => {...state, newFeedback: newFeedback}
-  | GenerateFeeback(newFeedback, editor) => {...state, newFeedback: newFeedback, editor: editor}
+  | GenerateFeeback(newFeedback, editor) => {
+      ...state,
+      newFeedback: newFeedback,
+      editor: editor,
+      feedbackGenerated: true,
+    }
   | UpdateGrades(grades) => {...state, grades: grades}
   | UpdateChecklist(checklist) => {...state, checklist: checklist}
   | UpdateNote(note) => {...state, note: Some(note)}
@@ -637,13 +643,16 @@ let feedbackGenerator = (reviewChecklist, state, send) => {
         />
         <span className="ml-2 md:ml-3 tracking-wide"> {"Add Your Feedback"->str} </span>
       </h5>
-      <div
-        className="inline-flex items-center bg-green-200 mt-2 md:ml-8 text-green-800 px-2 py-1 rounded-md">
-        <Icon className="if i-check-circle-solid text-green-700 text-base inline-block" />
-        <p className="pl-2 text-sm font-semibold">
-          {"Feedback generated from review checklist." |> str}
-        </p>
-      </div>
+      {ReactUtils.nullUnless(
+        <div
+          className="inline-flex items-center bg-green-200 mt-2 md:ml-8 text-green-800 px-2 py-1 rounded-md">
+          <Icon className="if i-check-circle-solid text-green-700 text-base inline-block" />
+          <p className="pl-2 text-sm font-semibold">
+            {"Feedback generated from review checklist." |> str}
+          </p>
+        </div>,
+        state.feedbackGenerated,
+      )}
       <div className="mt-2 md:ml-8" ariaLabel="feedback">
         <MarkdownEditor
           onChange={feedback => send(UpdateFeedback(feedback))}
@@ -729,6 +738,7 @@ let make = (
         ? GradesEditor
         : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
       additonalFeedbackEditorVisible: false,
+      feedbackGenerated: false,
     },
   )
 

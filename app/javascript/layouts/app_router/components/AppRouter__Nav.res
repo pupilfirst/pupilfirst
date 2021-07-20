@@ -108,11 +108,13 @@ let make = (~courses, ~selectedPage) => {
       </div>,
       sidebarOpen,
     ),
-    <div className="hidden md:flex md:flex-shrink-0">
-      <div className="approuter-nav__sidebar flex flex-col">
+    <div className="flex flex-shrink-0">
+      <div className="p-4 bg-white border-b h-16 md:fixed w-full md:inset-x-0 md:top-0 z-50">
+        {str("Header")}
+      </div>
+      <div className="approuter-nav__sidebar hidden md:flex flex-col">
         <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
-          <div className="p-4 bg-white border-b h-16"> {str("Header")} </div>
-          <div className="flex-1 flex flex-col pt-4 pb-4 overflow-y-auto">
+          <div className="flex-1 flex flex-col pt-4 pb-4 overflow-y-auto md:mt-16">
             <nav className="flex-1 px-4 bg-white"> {renderLinks(courses, selectedPage)} </nav>
           </div>
         </div>

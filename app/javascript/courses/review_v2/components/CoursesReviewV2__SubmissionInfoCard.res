@@ -48,7 +48,7 @@ let make = (~submission, ~submissionNumber, ~selected, ~filterString) =>
             </p>
             <p className="md:hidden"> {("#" ++ string_of_int(submissionNumber))->str} </p>
           </h2>
-          <span className="text-xs text-gray-800 pt-px">
+          <span className="text-xs text-gray-800 pt-px whitespace-no-wrap">
             {submission->SubmissionMeta.createdAt->DateFns.formatPreset(~year=true, ())->str}
           </span>
         </div>

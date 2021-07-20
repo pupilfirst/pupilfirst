@@ -5,7 +5,7 @@ open AppRouter__Types
 let selected = currentCourse =>
   <button
     title={Course.name(currentCourse)}
-    className="bg-gray-200 appearance-none flex items-center justify-between hover:bg-primary-100 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-2 py-2 rounded w-full">
+    className="bg-gray-200 appearance-none flex items-center justify-between hover:bg-gray-200 focus:bg-gray-200 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-3 py-2 rounded-md w-full">
     <span className="w-5/6 flex items-center">
       <i className="fas fa-book" />
       <span className="truncate ml-2 text-left"> {Course.name(currentCourse)->str} </span>

@@ -134,7 +134,11 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
     <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
       <div className="flex flex-1 items-center justify-between">
         <h5 className="font-semibold flex items-center tracking-wide">
-          {"Edit Review Checklist" |> str}
+          {(
+            ArrayUtils.isEmpty(reviewChecklist)
+              ? "Create Review Checklist"
+              : "Edit Review Checklist"
+          )->str}
         </h5>
       </div>
     </div>

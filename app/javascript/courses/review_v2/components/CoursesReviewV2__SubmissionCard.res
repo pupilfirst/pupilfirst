@@ -8,14 +8,14 @@ open CoursesReview__Types
 let str = React.string
 
 let submissionStatus = submission => {
-  let classes = "border flex-shrink-0 leading-normal font-semibold px-3 py-px rounded "
+  let classes = "flex-shrink-0 leading-normal font-semibold px-2 py-px rounded "
 
   let (className, text) = if IndexSubmission.pendingReview(submission) {
-    (classes ++ "bg-orange-100 text-orange-600", IndexSubmission.timeDistance(submission))
+    (classes ++ "bg-orange-100 text-orange-800", IndexSubmission.timeDistance(submission))
   } else if IndexSubmission.failed(submission) {
-    (classes ++ "bg-red-100 border-red-500 text-red-800", "Rejected")
+    (classes ++ "bg-red-100 text-red-800", "Rejected")
   } else {
-    (classes ++ "bg-green-100 border-green-500 text-green-800", "Completed")
+    (classes ++ "bg-green-100 text-green-800", "Completed")
   }
   <div className> {str(text)} </div>
 }
@@ -23,7 +23,7 @@ let submissionStatus = submission => {
 let feedbackSentNotice = feedbackSent =>
   ReactUtils.nullUnless(
     <div
-      className="bg-primary-100 text-primary-600 border border-transparent flex-shrink-0 leading-normal font-semibold px-3 py-px rounded mr-3">
+      className="bg-primary-100 text-primary-600 border border-transparent flex-shrink-0 leading-normal font-semibold px-2 py-px rounded mr-3">
       {str("Feedback Sent")}
     </div>,
     feedbackSent,
@@ -56,7 +56,7 @@ let showSubmission = (submissions, filterString) =>
             <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
               {str("Level " ++ string_of_int(IndexSubmission.levelNumber(submission)))}
             </span>
-            <span className="ml-2 font-semibold text-base">
+            <span className="ml-2 font-semibold text-sm md:text-base">
               {IndexSubmission.title(submission)->str}
             </span>
           </div>

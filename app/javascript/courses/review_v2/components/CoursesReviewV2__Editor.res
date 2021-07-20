@@ -95,7 +95,9 @@ module CreateFeedbackMutation = %graphql(
     }
   `
 )
-let makeFeedback = (user, feedback) => {
+let makeFeedback = (u, feedback) => {
+  let user = Belt.Option.getWithDefault(u, User.empty())
+
   Feedback.make(
     ~coachName=Some(User.name(user)),
     ~coachAvatarUrl=User.avatarUrl(user),

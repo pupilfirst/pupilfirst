@@ -1,5 +1,11 @@
 en:
   components:
+    AppRouter__Dropdown:
+      more: More
+    AppRouter__Header:
+      sign_in: Sign In
+      sign_out: Sign Out
+      edit_profile: Edit Profile
     CoachesIndex__Root:
       button_about: About
       button_connect: Connect
@@ -484,9 +490,6 @@ en:
       sign_out: Sign Out
     StudentTopNav__DropDown:
       more: More
-    StudentTopNav__UserControls:
-      edit_profile: Edit Profile
-      sign_out: Sign Out
     StudentsEditor__ActionsForm:
       active_label: Active
       certificates_label: Course Certificates

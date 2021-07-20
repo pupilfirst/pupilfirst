@@ -9,7 +9,7 @@ let classNames = (default, trueClasses, falseClasses, bool) => {
 }
 
 @react.component
-let make = (~courses, ~currentUser) => {
+let make = (~school, ~courses, ~currentUser) => {
   let url = RescriptReactRouter.useUrl()
 
   let (component, selectedPage: Page.t) = switch url.path {
@@ -28,7 +28,10 @@ let make = (~courses, ~currentUser) => {
     raise(UnknownPathEncountered(url.path))
   }
   <div className="md:h-screen md:flex bg-gray-100">
-    {ReactUtils.nullUnless(<AppRouter__Nav courses selectedPage />, Page.showSideNav(selectedPage))}
+    {ReactUtils.nullUnless(
+      <AppRouter__Nav school courses selectedPage currentUser />,
+      Page.showSideNav(selectedPage),
+    )}
     {component}
   </div>
 }

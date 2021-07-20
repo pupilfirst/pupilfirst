@@ -1,8 +1,6 @@
 %bs.raw(`require("courses/shared/background_patterns.css")`)
 %bs.raw(`require("./AppRouter__Nav.css")`)
 
-exception UnknownPathEncountered(list<string>)
-
 open AppRouter__Types
 
 let str = React.string
@@ -81,9 +79,7 @@ let renderLinksMobile = (courses, selectedPage) => {
 }
 
 @react.component
-let make = (~courses, ~selectedPage) => {
-  // let url = RescriptReactRouter.useUrl()
-
+let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
   let (sidebarOpen, setSidebarOpen) = React.useState(_ => false)
   [
     ReactUtils.nullUnless(
@@ -109,8 +105,8 @@ let make = (~courses, ~selectedPage) => {
       sidebarOpen,
     ),
     <div className="flex flex-shrink-0">
-      <div className="p-4 bg-white border-b h-16 md:fixed w-full md:inset-x-0 md:top-0 z-50">
-        {str("Header")}
+      <div className="p-2 bg-white border-b h-16 md:fixed w-full md:inset-x-0 md:top-0 z-50">
+        <AppRouter__Header school currentUser />
       </div>
       <div className="approuter-nav__sidebar hidden md:flex flex-col">
         <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">

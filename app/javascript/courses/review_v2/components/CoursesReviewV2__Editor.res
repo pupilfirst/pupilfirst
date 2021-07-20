@@ -673,7 +673,7 @@ let showFeedback = feedback => Js.Array.mapi((f, index) =>
       <div className="pt-6">
         <div className="flex">
           <div
-            className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full overflow-hidden mr-3 object-cover">
+            className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full overflow-hidden mr-4 object-cover">
             {switch Feedback.coachAvatarUrl(f) {
             | Some(avatarUrl) => <img src=avatarUrl />
             | None => <Avatar name={Feedback.coachName(f)} />
@@ -693,7 +693,7 @@ let showFeedback = feedback => Js.Array.mapi((f, index) =>
             </p>
           </div>
         </div>
-        <div>
+        <div className="md:ml-14">
           <MarkdownBlock
             className="pt-1 text-sm" profile=Markdown.Permissive markdown={Feedback.value(f)}
           />
@@ -923,7 +923,7 @@ let make = (
               <span className="ml-2 md:ml-3 tracking-wide"> {"Feedback"->str} </span>
             </h5>
             {ReactUtils.nullIf(
-              <div className="p-4 md:p-6 md:ml-2 text-center">
+              <div className="py-4 md:ml-8 text-center">
                 <button
                   onClick={_ => send(ShowAdditionalFeedbackEditor)}
                   className="bg-primary-100 flex items-center justify-center px-4 py-3 border border-dashed border-primary-500 rounded-md w-full font-semibold text-sm text-primary-600 hover:bg-white hover:text-primary-500 hover:shadow-lg hover:border-primary-300 focus:outline-none transition cursor-pointer">

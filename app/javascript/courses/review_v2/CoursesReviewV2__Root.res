@@ -652,7 +652,9 @@ let loadFilters = (send, courseId, state) => {
 }
 
 let shortCutClasses = selected =>
-  "cursor-pointer p-2 " ++ (selected ? "border-b-3 text-primary-500 border-primary-500" : "")
+  "cursor-pointer rounded-t-md px-4 py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-200 " ++ (
+    selected ? "border-b-3 text-primary-500 border-primary-500" : ""
+  )
 
 let computeInitialState = () => {
   loading: NotLoading,
@@ -689,9 +691,9 @@ let make = (~courseId) => {
   <div className="flex-1 flex flex-col">
     <div className="hidden md:block h-16" />
     <div className="flex-1 md:overflow-y-auto">
-      <div className="sticky top-0 z-30 md:static bg-gray-100">
+      <div className="sticky top-0 z-20 md:static bg-gray-100">
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
-          <div className="flex space-x-4 md:pt-3 border-b-3">
+          <div className="flex md:pt-3 border-b">
             <Link
               href={"/courses/" ++
               courseId ++
@@ -747,17 +749,13 @@ let make = (~courseId) => {
         <div id="submissions" className="mt-4">
           {switch state.submissions {
           | Unloaded =>
-            <div className="px-2 lg:px-8">
-              {SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())}
-            </div>
+            <div> {SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())} </div>
           | PartiallyLoaded(submissions, cursor) =>
             <div>
               {submissionsList(submissions, state, filter)}
               {switch state.loading {
               | LoadingMore =>
-                <div className="px-2 lg:px-8">
-                  {SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())}
-                </div>
+                <div> {SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())} </div>
               | NotLoading =>
                 <div className="px-4 lg:px-8 pb-6">
                   <button

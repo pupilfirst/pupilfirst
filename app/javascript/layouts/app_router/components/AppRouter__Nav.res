@@ -49,6 +49,33 @@ let renderLinks = (courses, selectedPage) => {
   }
 }
 
+let courseSelector = (courses, selectedPage) => {
+  switch Page.courseId(selectedPage) {
+  | Some(currentCourseId) =>
+    let currentCourse = ArrayUtils.unsafeFind(
+      course => Course.id(course) == currentCourseId,
+      "Could not find currentCourse with ID " ++ currentCourseId,
+      courses,
+    )
+
+    <div>
+      <div className="relative pb-1/2 bg-gray-800 rounded-lg">
+        {switch Course.thumbnailUrl(currentCourse) {
+        | Some(url) => <img className="absolute h-full w-full object-cover rounded-lg" src=url />
+        | None =>
+          <div
+            className="app-router-nav-course__cover absolute h-full w-full svg-bg-pattern-1 rounded-lg "
+          />
+        }}
+      </div>
+      <div className="mt-4">
+        <AppRouter__CourseSelector courses selectedPage currentCourseId />
+      </div>
+    </div>
+  | None => React.null
+  }
+}
+
 let renderLinksMobile = (courses, selectedPage) => {
   switch Page.courseId(selectedPage) {
   | Some(currentCourseId) =>
@@ -105,11 +132,14 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
       sidebarOpen,
     ),
     <div className="flex flex-shrink-0">
-      <div className="p-2 bg-white border-b h-16 md:fixed w-full md:inset-x-0 md:top-0 z-50">
-        <AppRouter__Header school currentUser />
+      <div className="flex flex-1 flex-col">
+        <div className="p-2 bg-white border-b h-16 md:fixed w-full md:inset-x-0 md:top-0 z-50">
+          <AppRouter__Header school currentUser />
+        </div>
+        <div className="md:hidden p-4 md:mt-16"> {courseSelector(courses, selectedPage)} </div>
       </div>
       <div className="approuter-nav__sidebar hidden md:flex flex-col">
-        <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
+        <div className="flex flex-col h-0 flex-1 border-r bg-white">
           <div className="flex-1 flex flex-col pt-4 pb-4 overflow-y-auto md:mt-16">
             <nav className="flex-1 px-4 bg-white"> {renderLinks(courses, selectedPage)} </nav>
           </div>

@@ -51,6 +51,35 @@ let renderLinks = (courses, selectedPage) => {
   }
 }
 
+let renderLinksMobile = (courses, selectedPage) => {
+  switch Page.courseId(selectedPage) {
+  | Some(currentCourseId) =>
+    let currentCourse = ArrayUtils.unsafeFind(
+      course => Course.id(course) == currentCourseId,
+      "Could not find currentCourse with ID " ++ currentCourseId,
+      courses,
+    )
+
+    <div className="flex"> {Js.Array.map(link => {
+        let (title, icon) = switch link {
+        | Page.Student__Curriculum(_) => ("Curriculum", "i-book-open-light")
+        | Student__Report(_) => ("Report", "i-check-circle-alt-light")
+        | Student__Students(_) => ("Student", "i-book-open-light")
+        | Student__Review(_) => ("Review", "i-clock-light")
+        | Student__Leaderboard(_) => ("Leaderboard", "i-book-open-light")
+        | Student__SubmissionShow(_) => ("Unknown", "")
+        }
+        <a
+          key=title
+          href={Page.path(link)}
+          className="flex flex-col flex-1 items-center py-3 text-xs text-gray-800 font-semibold hover:text-primary-500 hover:bg-gray-200">
+          <Icon className={`if ${icon} text-lg if-fw`} /> <div className="pt-1"> {str(title)} </div>
+        </a>
+      }, Page.activeLinks(currentCourse))->React.array} </div>
+  | None => React.null
+  }
+}
+
 @react.component
 let make = (~courses, ~selectedPage) => {
   // let url = RescriptReactRouter.useUrl()
@@ -88,6 +117,9 @@ let make = (~courses, ~selectedPage) => {
           </div>
         </div>
       </div>
+    </div>,
+    <div className="md:hidden fixed inset-x-0 bottom-0 flex-1 bg-white border-t">
+      {renderLinksMobile(courses, selectedPage)}
     </div>,
   ]->React.array
 }

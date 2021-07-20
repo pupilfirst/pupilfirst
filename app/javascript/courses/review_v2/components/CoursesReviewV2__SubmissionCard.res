@@ -56,7 +56,7 @@ let showSubmission = (submissions, filterString) =>
             <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
               {str("Level " ++ string_of_int(IndexSubmission.levelNumber(submission)))}
             </span>
-            <span className="ml-2 font-semibold text-base">
+            <span className="ml-2 font-semibold text-sm md:text-base">
               {IndexSubmission.title(submission)->str}
             </span>
           </div>

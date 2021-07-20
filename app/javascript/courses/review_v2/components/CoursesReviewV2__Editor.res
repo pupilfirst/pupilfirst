@@ -891,27 +891,37 @@ let make = (
               </div>
             </div>
           </div>
-          {state.additonalFeedbackEditorVisible
-            ? <div>
-                {feedbackGenerator(reviewChecklist, state, send)}
-                <div className="flex justify-end px-4 md:px-6 py-4">
-                  <button
-                    disabled={state.newFeedback == "" || state.saving}
-                    className="btn btn-success border border-green-600 w-full md:w-auto"
-                    onClick={_ =>
-                      createFeedback(
-                        OverlaySubmission.id(overlaySubmission),
-                        state.newFeedback,
-                        send,
-                        overlaySubmission,
-                        currentUser,
-                        updateSubmissionCB,
-                      )}>
-                    {"Share Feedback"->str}
-                  </button>
-                </div>
+          {ReactUtils.nullUnless(
+            <div>
+              {feedbackGenerator(reviewChecklist, state, send)}
+              <div className="flex justify-end px-4 md:px-6 py-4">
+                <button
+                  disabled={state.newFeedback == "" || state.saving}
+                  className="btn btn-success border border-green-600 w-full md:w-auto"
+                  onClick={_ =>
+                    createFeedback(
+                      OverlaySubmission.id(overlaySubmission),
+                      state.newFeedback,
+                      send,
+                      overlaySubmission,
+                      currentUser,
+                      updateSubmissionCB,
+                    )}>
+                  {"Share Feedback"->str}
+                </button>
               </div>
-            : <div className="p-4 md:p-6 md:ml-8 text-center">
+            </div>,
+            state.additonalFeedbackEditorVisible,
+          )}
+          <div className="p-4 md:p-6">
+            <h5 className="font-semibold text-sm flex items-center">
+              <PfIcon
+                className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
+              />
+              <span className="ml-2 md:ml-3 tracking-wide"> {"Feedback"->str} </span>
+            </h5>
+            {ReactUtils.nullIf(
+              <div className="p-4 md:p-6 md:ml-2 text-center">
                 <button
                   onClick={_ => send(ShowAdditionalFeedbackEditor)}
                   className="bg-primary-100 flex items-center justify-center px-4 py-3 border border-dashed border-primary-500 rounded-md w-full font-semibold text-sm text-primary-600 hover:bg-white hover:text-primary-500 hover:shadow-lg hover:border-primary-300 focus:outline-none transition cursor-pointer">
@@ -923,14 +933,9 @@ let make = (
                     }->str}
                   </p>
                 </button>
-              </div>}
-          <div className="p-4 md:p-6">
-            <h5 className="font-semibold text-sm flex items-center">
-              <PfIcon
-                className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
-              />
-              <span className="ml-2 md:ml-3 tracking-wide"> {"Feedback"->str} </span>
-            </h5>
+              </div>,
+              state.additonalFeedbackEditorVisible,
+            )}
             <div className="divide-y space-y-6 md:ml-8">
               {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
             </div>

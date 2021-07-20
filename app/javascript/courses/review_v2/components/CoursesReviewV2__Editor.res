@@ -604,7 +604,7 @@ let noteForm = (overlaySubmission, teamSubmission, note, send) =>
   | _someGrades => React.null
   }
 
-let feedbackGenerator = (state, send) => {
+let feedbackGenerator = (reviewChecklist, state, send) => {
   <div className="px-4 md:px-6 pt-4 space-y-8">
     <div>
       <div className="flex h-7 items-end">
@@ -619,7 +619,14 @@ let feedbackGenerator = (state, send) => {
         <button
           className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none transition"
           onClick={_ => send(ShowChecklistEditor)}>
-          <span> {"Show Review Checklist"->str} </span> <FaIcon classes="fas fa-arrow-right" />
+          <span>
+            {(
+              ArrayUtils.isEmpty(reviewChecklist)
+                ? "Create Review Checklist"
+                : "Show Review Checklist"
+            )->str}
+          </span>
+          <FaIcon classes="fas fa-arrow-right" />
         </button>
       </div>
     </div>
@@ -773,7 +780,7 @@ let make = (
             className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
             <p className="font-semibold"> {str("Review")} </p>
           </div>
-          {feedbackGenerator(state, send)}
+          {feedbackGenerator(reviewChecklist, state, send)}
           <div className="w-full px-4 md:px-6 pt-8 space-y-8">
             {noteForm(overlaySubmission, teamSubmission, state.note, send)}
             <div>
@@ -866,7 +873,7 @@ let make = (
           </div>
           {state.additonalFeedbackEditorVisible
             ? <div>
-                {feedbackGenerator(state, send)}
+                {feedbackGenerator(reviewChecklist, state, send)}
                 <div className="flex justify-end px-4 md:px-6 py-4">
                   <button
                     disabled={state.newFeedback == "" || state.saving}

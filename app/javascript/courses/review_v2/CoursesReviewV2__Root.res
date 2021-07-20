@@ -691,24 +691,31 @@ let make = (~courseId) => {
     <div className="flex-1 md:overflow-y-auto">
       <div className="sticky top-0 z-30 md:static bg-gray-100">
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
-          <div className="flex space-x-4 md:pt-3 text-sm font-semibold border-b">
-            <div
-              className={shortCutClasses(filter.tab === None)}
-              onClick={_ => updateParams({...filter, tab: None, sortCriterion: #SubmittedAt})}>
-              {str("All")}
-            </div>
-            <div
-              className={shortCutClasses(filter.tab === Some(#Pending))}
-              onClick={_ =>
-                updateParams({...filter, tab: Some(#Pending), sortCriterion: #SubmittedAt})}>
-              {str("Pending")}
-            </div>
-            <div
-              className={shortCutClasses(filter.tab === Some(#Reviewed))}
-              onClick={_ =>
-                updateParams({...filter, tab: Some(#Reviewed), sortCriterion: #EvaluatedAt})}>
-              {str("Reviewed")}
-            </div>
+          <div className="flex space-x-4 md:pt-3 border-b-3">
+            <Link
+              href={"/courses/" ++
+              courseId ++
+              "/review?" ++
+              filterToQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
+              className={shortCutClasses(filter.tab === None)}>
+              <div> {str("All")} </div>
+            </Link>
+            <Link
+              href={"/courses/" ++
+              courseId ++
+              "/review?" ++
+              filterToQueryString({...filter, tab: Some(#Pending), sortCriterion: #SubmittedAt})}
+              className={shortCutClasses(filter.tab === Some(#Pending))}>
+              <div> {str("Pending")} </div>
+            </Link>
+            <Link
+              href={"/courses/" ++
+              courseId ++
+              "/review?" ++
+              filterToQueryString({...filter, tab: Some(#Reviewed), sortCriterion: #EvaluatedAt})}
+              className={shortCutClasses(filter.tab === Some(#Reviewed))}>
+              <div> {str("Reviewed")} </div>
+            </Link>
           </div>
         </div>
       </div>

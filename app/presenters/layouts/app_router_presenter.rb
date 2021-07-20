@@ -82,29 +82,41 @@ module Layouts
       @courses_with_author_access_ids ||= courses_with_author_access.pluck(:id)
     end
 
+    def communities
+      @communities ||=
+        CommunityCourseConnection
+          .where(id: courses.pluck(:id))
+          .joins(:community)
+          .map do |c|
+            {
+              id: c.community_id.to_s,
+              name: c.community.name,
+              course_id: c.course_id
+            }
+          end
+    end
+
+    def linked_communities(course)
+      communities.select { |c| c[:course_id] == course.id }
+    end
+
     def course_details_array
-      courses
-        .includes(:communities)
-        .map do |course|
-          {
-            id: course.id,
-            name: course.name,
-            review: course.id.in?(courses_with_review_access_ids),
-            author: course.id.in?(courses_with_author_access_ids),
-            enable_leaderboard: course.enable_leaderboard?,
-            description: course.description,
-            exited: student_dropped_out(course.id),
-            thumbnail_url: course.thumbnail_url,
-            linked_communities:
-              course
-                .communities
-                .select(:id, :name)
-                .map { |c| { id: c.id.to_s, name: c.name } },
-            access_ended: student_access_end(course.id),
-            ended: course.ended?,
-            is_student: student_profile?(course.id)
-          }
-        end
+      courses.map do |course|
+        {
+          id: course.id,
+          name: course.name,
+          review: course.id.in?(courses_with_review_access_ids),
+          author: course.id.in?(courses_with_author_access_ids),
+          enable_leaderboard: course.enable_leaderboard?,
+          description: course.description,
+          exited: student_dropped_out(course.id),
+          thumbnail_url: course.thumbnail_url,
+          linked_communities: linked_communities(course),
+          access_ended: student_access_end(course.id),
+          ended: course.ended?,
+          is_student: student_profile?(course.id)
+        }
+      end
     end
 
     def student_profile?(course_id)

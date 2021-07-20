@@ -9,8 +9,8 @@ let closeEditMode = (setState, ()) => setState(_ => Show)
 let showEditor = (setState, ()) => setState(_ => Edit)
 
 let updateReviewChecklist = (setState, updateReviewChecklistCB, reviewChecklist) => {
-  setState(_ => Show)
   updateReviewChecklistCB(reviewChecklist)
+  setState(_ => Show)
 }
 
 let handleEmpty = setState =>
@@ -45,7 +45,7 @@ let make = (
   ~targetId,
   ~cancelCB,
 ) => {
-  let (state, setState) = React.useState(() => Show)
+  let (state, setState) = React.useState(() => ArrayUtils.isEmpty(reviewChecklist) ? Edit : Show)
   <div>
     {switch state {
     | Edit =>
@@ -56,11 +56,9 @@ let make = (
         targetId
       />
     | Show =>
-      reviewChecklist |> ArrayUtils.isEmpty
-        ? handleEmpty(setState)
-        : <CoursesReview__ChecklistShow
-            cancelCB reviewChecklist feedback updateFeedbackCB showEditorCB={showEditor(setState)}
-          />
+      <CoursesReview__ChecklistShow
+        cancelCB reviewChecklist feedback updateFeedbackCB showEditorCB={showEditor(setState)}
+      />
     }}
   </div>
 }

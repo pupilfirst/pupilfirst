@@ -687,7 +687,7 @@ let make = (~courseId) => {
   }, [state.filterInput])
 
   <div className="flex-1 flex flex-col">
-    <div className="p-4 bg-white border-b h-16"> {str("Header")} </div>
+    <div className="hidden md:block h-16" />
     <div className="flex-1 md:overflow-y-auto">
       <div className="sticky top-0 z-30 md:static bg-gray-100">
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
@@ -714,7 +714,7 @@ let make = (~courseId) => {
       </div>
       <div className="md:sticky md:top-0 bg-gray-100">
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
-          <div className="md:flex w-full items-start p-4">
+          <div className="md:flex w-full items-start py-3 px-4 md:py-4">
             <div className="flex-1">
               <label className="block text-tiny font-semibold uppercase">
                 {tc("filter_by")->str}
@@ -780,5 +780,7 @@ let make = (~courseId) => {
         }}
       </div>
     </div>
+    // Footer spacer
+    <div className="md:hidden h-16" />
   </div>
 }

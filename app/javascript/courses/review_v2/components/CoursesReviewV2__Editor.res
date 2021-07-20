@@ -632,7 +632,7 @@ let feedbackGenerator = (state, send) => {
       </h5>
       <div
         className="inline-flex items-center bg-green-200 mt-2 md:ml-8 text-green-800 px-2 py-1 rounded-md">
-        <Icon className="if i-check-circle-solid text-green-700 text-base inline-block" />
+        <Icon className="if i-check-circle-solid text-green-700 text-base" />
         <p className="pl-2 text-sm font-semibold">
           {"Feedback generated from review checklist." |> str}
         </p>

@@ -834,7 +834,17 @@ let make = (
         <div>
           <div
             className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
-            <p className="font-semibold"> {str("Review")} </p>
+            <div>
+              <p className="font-semibold"> {str("Review")} </p>
+              {Belt.Option.mapWithDefault(
+                OverlaySubmission.evaluatedAt(overlaySubmission),
+                React.null,
+                date =>
+                  <p className="text-gray-800 text-xs">
+                    {date->DateFns.format("MMMM d, yyyy")->str}
+                  </p>,
+              )}
+            </div>
             {submissionReviewStatus(status, overlaySubmission)}
           </div>
           <div className="w-full p-4 md:p-6">

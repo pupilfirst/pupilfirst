@@ -5,8 +5,8 @@ module I18nJS
   end
 end
 
-I18n.available_locales = %w[en]
-I18n.default_locale = 'en'
+I18n.available_locales = ENV['I18N_AVAILABLE_LOCALES'].split(',')
+I18n.default_locale = ENV['I18N_DEFAULT_LOCALE']
 I18n.load_path += Dir[Rails.root.join('config/locales/**/*.yml').to_s]
 
 require 'i18n-js/listen'

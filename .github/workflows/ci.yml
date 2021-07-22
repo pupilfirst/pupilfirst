@@ -105,6 +105,8 @@ jobs:
             node_modules
             app/javascript/packages/*/node_modules
           key: ${{ runner.os }}-lerna-${{ hashFiles('**/yarn.lock') }}
+      - name: Generate locales.json
+        run: bundle exec i18n export
       - name: Precompile Assets
         run: |
           bundle exec rails assets:precompile

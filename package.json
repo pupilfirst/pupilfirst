@@ -83,7 +83,6 @@
     "prismjs": "^1.24.1"
   },
   "scripts": {
-    "postinstall": "test -n \"$NOYARNPOSTINSTALL\" || yarn run re:build",
     "re:build": "bsb -make-world -clean-world",
     "re:watch": "bsb -make-world -clean-world -w"
   }

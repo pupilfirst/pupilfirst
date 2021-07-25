@@ -202,7 +202,7 @@ module Make = (Selectable: Selectable) => {
     <div className="w-full relative">
       <div>
         <div
-          className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
+          className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-1 px-2 mt-1 focus:outline-none focus:bg-white focus:border-primary-300">
           {selected |> showSelected(onDeselect, labelSuffix) |> React.array}
           <input
             onClick={_ => setShowDropdown(s => !s)}

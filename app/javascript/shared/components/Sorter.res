@@ -10,7 +10,7 @@ module Make = (Sortable: Sortable) => {
     let selectedForDropdown =
       <button
         title={"Order by " ++ (selectedCriterion |> Sortable.criterion)}
-        className="flex w-full items-center justify-between bg-white leading-relaxed font-semibold border border-gray-400 rounded focus:outline-none focus:bg-white focus:border-gray-500 px-2 md:px-3 py-2 text-xs ">
+        className="flex w-full items-center justify-between bg-white leading-relaxed font-semibold border border-gray-400 rounded focus:outline-none focus:bg-white focus:border-gray-500 px-2 md:px-3 py-2 ">
         <span> {selectedCriterion |> Sortable.criterion |> str} </span>
         <i className="fas fa-caret-down ml-3" />
       </button>

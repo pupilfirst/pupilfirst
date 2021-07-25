@@ -243,14 +243,20 @@ let make = (~submissionId, ~currentUser) => {
       ]->React.array
     | Loading =>
       <div>
-        <div className="bg-gray-100 py-4">
+        <div className="bg-gray-100 md:px-4">
           <div className="mx-auto"> {SkeletonLoading.card()} </div>
         </div>
-        <div className="mx-auto">
-          {SkeletonLoading.heading()}
-          {SkeletonLoading.paragraph()}
-          {SkeletonLoading.profileCard()}
-          {SkeletonLoading.paragraph()}
+        <div className="grid md:grid-cols-2 mt-10 border-t h-full">
+          <div className="md:px-4 bg-white">
+            {SkeletonLoading.heading()}
+            {SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.paragraph())}
+          </div>
+          <div className="md:px-4 bg-gray-100 border-l">
+            {SkeletonLoading.profileCard()}
+            {SkeletonLoading.paragraph()}
+            {SkeletonLoading.profileCard()}
+            {SkeletonLoading.paragraph()}
+          </div>
         </div>
       </div>
     }}

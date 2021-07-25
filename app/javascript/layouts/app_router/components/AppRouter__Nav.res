@@ -133,7 +133,8 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
     ),
     <div className="flex flex-shrink-0">
       <div className="flex flex-1 flex-col">
-        <div className="p-2 bg-white border-b h-16 md:fixed w-full md:inset-x-0 md:top-0 z-50">
+        <div
+          className="px-4 py-2 bg-white border-b h-16 md:fixed w-full md:inset-x-0 md:top-0 z-50">
           <AppRouter__Header school currentUser />
         </div>
         <div className="md:hidden p-4 md:mt-16"> {courseSelector(courses, selectedPage)} </div>

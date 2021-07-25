@@ -148,7 +148,7 @@ let make = (~school, ~currentUser) => {
   let hasNotifications = Belt.Option.mapWithDefault(currentUser, false, User.hasNotifications)
 
   <div>
-    <div className="container mx-auto px-3">
+    <div className="mx-auto">
       <nav className="flex justify-between items-center">
         <div className="flex w-full items-center justify-between">
           <a className="max-w-sm" href={Belt.Option.isSome(currentUser) ? "/dashboard" : "/"}>

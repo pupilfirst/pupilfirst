@@ -46,7 +46,7 @@ module Make = (Selectable: Selectable) => {
     let textColor800 = "text-" ++ (color ++ "-800 ")
     let textColor900 = "text-" ++ (color ++ "-900 ")
 
-    "rounded text-xs overflow-hidden " ++
+    "rounded text-sm font-semibold overflow-hidden " ++
     (bgColor200 ++
     (textColor800 ++ (
       showHover ? "px-2 py-px hover:" ++ (bgColor300 ++ ("hover:" ++ textColor900)) : "inline-flex"
@@ -61,11 +61,16 @@ module Make = (Selectable: Selectable) => {
   }
 
   let showOptions = (options, onSelect, id, labelSuffix, loading) => {
-    loading ? [<div> {str("Loading")} </div>] : options |> Array.mapi((index, selection) =>
+    loading ? [<div className="px-4"> <div className="px-4"><div className="skeleton-body-container w-full pb-4 mx-auto">
+    <div className="skeleton-body-wrapper px-3 lg:px-0">
+      <div className="skeleton-placeholder__line-sm mt-4 w-2/4 skeleton-animate" />
+      <div className="skeleton-placeholder__line-sm mt-4 w-3/4 skeleton-animate" />
+    </div>
+  </div></div></div>] : options |> Array.mapi((index, selection) =>
           <button
             key={index |> string_of_int}
             title={selectionTitle(selection)}
-            className="flex text-xs px-4 py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
+            className="flex text-sm px-4 py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
             onClick={applyFilter(selection, onSelect, id)}>
             {switch selection |> Selectable.label {
             | Some(label) =>

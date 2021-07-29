@@ -308,7 +308,7 @@
 }
 
 .toggle-button__button:focus {
-  @apply outline-none text-gray-900 shadow-outline;
+  @apply outline-none text-gray-900 ring;
 }
 
 .toggle-button__button--active {

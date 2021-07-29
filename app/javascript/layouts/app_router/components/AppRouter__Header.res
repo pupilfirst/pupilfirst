@@ -187,7 +187,7 @@ let make = (~school, ~currentUser) => {
         </div>
         {!menuHidden && !isMobile()
           ? <div
-              className="app-router-header__links-container flex justify-end items-center w-3/5 lg:w-3/4 flex-no-wrap flex-shrink-0">
+              className="app-router-header__links-container flex justify-end items-center w-3/5 lg:w-3/4 flex-nowrap flex-shrink-0">
               {headerLinks(School.links(school), isLoggedIn, currentUser, hasNotifications)}
             </div>
           : React.null}

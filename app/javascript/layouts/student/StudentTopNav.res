@@ -140,7 +140,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
         </div>
         {!menuHidden && !isMobile()
           ? <div
-              className="student-navbar__links-container flex justify-end items-center w-3/5 lg:w-3/4 flex-no-wrap flex-shrink-0">
+              className="student-navbar__links-container flex justify-end items-center w-3/5 lg:w-3/4 flex-nowrap flex-shrink-0">
               {headerLinks(links, isLoggedIn, currentUser, hasNotifications)}
             </div>
           : React.null}

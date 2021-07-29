@@ -24,7 +24,7 @@ module Make = (Sortable: Sortable) => {
           key={Sortable.criterion(criterion)}
           title={"Order by " ++ Sortable.criterion(criterion)}
           onClick={_ => onCriterionChange(criterion)}
-          className="inline-flex items-center w-full font-semibold whitespace-no-wrap text-xs p-3 text-left focus:outline-none ">
+          className="inline-flex items-center w-full font-semibold whitespace-nowrap text-xs p-3 text-left focus:outline-none ">
           <Icon className="if i-clock-regular text-sm if-fw text-gray-700" />
           <span className="ml-2"> {Sortable.criterion(criterion) |> str} </span>
         </button>

@@ -4,100 +4,7 @@
  */
 
 .markdown-block {
-  overflow-wrap: break-word;
-}
-
-.markdown-block__p {
-  @apply py-2;
-}
-
-.markdown-block__h1 {
-  @apply text-4xl pt-6 leading-snug;
-}
-
-.markdown-block__h2 {
-  @apply text-2xl pt-6 leading-snug;
-}
-
-.markdown-block__h3 {
-  @apply text-xl pt-6 leading-snug;
-}
-
-.markdown-block__h4 {
-  @apply text-lg pt-6 leading-snug;
-}
-
-.markdown-block__h5 {
-  @apply text-sm pt-6 leading-snug;
-}
-
-.markdown-block__h6 {
-  @apply text-xs pt-6 leading-snug;
-}
-
-.markdown-block__em {
-  font-style: italic;
-}
-
-.markdown-block__strong {
-  @apply font-bold;
-}
-
-.markdown-block__ul {
-  @apply ml-7 pt-3 list-disc;
-}
-
-.markdown-block__ol {
-  @apply ml-7 pt-3 list-decimal;
-}
-
-.markdown-block__li {
-  @apply pb-2;
-}
-
-.markdown-block__strikethrough {
-  @apply line-through;
-}
-
-.markdown-block__a {
-  @apply text-primary-500 underline font-semibold whitespace-pre-line;
-  word-break: break-word;
-}
-
-.markdown-block__blockquote {
-  @apply border-l-4 border-gray-800 bg-gray-100 px-4 py-2 my-4 text-lg rounded-r font-semibold text-gray-800;
-}
-
-.markdown-block__hr {
-  @apply border-t border-gray-400 mt-6 pb-2;
-}
-
-.markdown-block__sup-sub {
-  font-size: 75%;
-  line-height: 0;
-  position: relative;
-  vertical-align: baseline;
-}
-
-.markdown-block__img {
-  @apply mx-auto;
-}
-
-.markdown-block__table {
-  @apply block pt-2 w-full table-auto overflow-auto;
-  border-spacing: 0;
-}
-
-.markdown-block__table-th {
-  @apply bg-gray-200 px-4 py-2 border border-gray-400 font-semibold;
-}
-
-.markdown-block__table-tr {
-  @apply bg-white border-t border-gray-400;
-}
-
-.markdown-block__table-td {
-  @apply px-4 py-2 border border-gray-400;
+  @apply break-words;
 }
 
 /*
@@ -106,73 +13,74 @@
  */
 
 .markdown-block__permissive p {
-  @apply markdown-block__p leading-relaxed;
+  @apply py-2 leading-relaxed;
 }
 
 .markdown-block__permissive h1 {
-  @apply markdown-block__h1;
+  @apply text-4xl pt-6 leading-snug;
 }
 
 .markdown-block__permissive h2 {
-  @apply markdown-block__h2;
+  @apply text-2xl pt-6 leading-snug;
 }
 
 .markdown-block__permissive h3 {
-  @apply markdown-block__h3;
+  @apply text-xl pt-6 leading-snug;
 }
 
 .markdown-block__permissive h4 {
-  @apply markdown-block__h4;
+  @apply text-lg pt-6 leading-snug;
 }
 
 .markdown-block__permissive h5 {
-  @apply markdown-block__h5;
+  @apply text-sm pt-6 leading-snug;
 }
 
 .markdown-block__permissive h6 {
-  @apply markdown-block__h6;
+  @apply text-xs pt-6 leading-snug;
 }
 
 .markdown-block__permissive em {
-  @apply markdown-block__em;
+  @apply italic;
 }
 
 .markdown-block__permissive b,
 .markdown-block__permissive strong {
-  @apply markdown-block__strong;
+  @apply font-bold;
 }
 
 .markdown-block__permissive s,
 .markdown-block__permissive del {
-  @apply markdown-block__strikethrough;
+  @apply line-through;
 }
 
 .markdown-block__permissive ul {
-  @apply markdown-block__ul;
+  @apply ml-7 pt-3 list-disc;
 }
 
 @screen md {
   .markdown-block__permissive ul {
-    @apply markdown-block__ul ml-10;
+    @apply pt-3 list-disc ml-10;
   }
 }
 
 .markdown-block__permissive ol {
-  @apply markdown-block__ol;
+  @apply ml-7 pt-3 list-decimal;
 }
 
 @screen md {
   .markdown-block__permissive ol {
-    @apply markdown-block__ol ml-10;
+    @apply pt-3 list-decimal ml-10;
   }
 }
 
 .markdown-block__permissive li {
-  @apply markdown-block__li leading-relaxed;
+  @apply pb-2 leading-relaxed;
 }
 
 .markdown-block__permissive a {
-  @apply markdown-block__a;
+  @apply text-primary-500 underline font-semibold whitespace-pre-line;
+  word-break: break-word;
 }
 
 .markdown-block__permissive a:hover {
@@ -180,7 +88,7 @@
 }
 
 .markdown-block__permissive blockquote {
-  @apply markdown-block__blockquote;
+  @apply border-l-4 border-gray-800 bg-gray-100 px-4 py-2 my-4 text-lg rounded-r font-semibold text-gray-800;
 }
 
 .markdown-block__permissive blockquote code,
@@ -189,37 +97,41 @@
 }
 
 .markdown-block__permissive hr {
-  @apply markdown-block__hr;
+  @apply border-t border-gray-400 mt-6 pb-2;
 }
 
 .markdown-block__permissive sup {
-  @apply markdown-block__sup-sub;
+  font-size: 75%;
+  line-height: 0;
+  @apply relative align-baseline;
   top: -0.5em;
 }
 
 .markdown-block__permissive sub {
-  @apply markdown-block__sup-sub;
+  font-size: 75%;
+  line-height: 0;
   bottom: -0.25em;
+  @apply relative align-baseline;
 }
 
 .markdown-block__permissive img {
-  @apply markdown-block__img;
+  @apply mx-auto;
 }
 
 .markdown-block__permissive table {
-  @apply markdown-block__table;
+  @apply block pt-2 w-full table-auto overflow-auto border-collapse;
 }
 
 .markdown-block__permissive table th {
-  @apply markdown-block__table-th;
+  @apply bg-gray-200 px-4 py-2 border border-gray-400 font-semibold;
 }
 
 .markdown-block__permissive table tr {
-  @apply markdown-block__table-tr;
+  @apply bg-white border-t border-gray-400;
 }
 
 .markdown-block__permissive table td {
-  @apply markdown-block__table-td;
+  @apply px-4 py-2 border border-gray-400;
 }
 
 .markdown-block__permissive img[align="left"] {
@@ -236,61 +148,62 @@
  */
 
 .markdown-block__question-and-answer p {
-  @apply markdown-block__p leading-relaxed;
+  @apply py-2 leading-relaxed;
 }
 
 .markdown-block__question-and-answer h1 {
-  @apply markdown-block__h1;
+  @apply text-4xl pt-6 leading-snug;
 }
 
 .markdown-block__question-and-answer h2 {
-  @apply markdown-block__h2;
+  @apply text-2xl pt-6 leading-snug;
 }
 
 .markdown-block__question-and-answer h3 {
-  @apply markdown-block__h3;
+  @apply text-xl pt-6 leading-snug;
 }
 
 .markdown-block__question-and-answer h4 {
-  @apply markdown-block__h4;
+  @apply text-lg pt-6 leading-snug;
 }
 
 .markdown-block__question-and-answer h5 {
-  @apply markdown-block__h5;
+  @apply text-sm pt-6 leading-snug;
 }
 
 .markdown-block__question-and-answer h6 {
-  @apply markdown-block__h6;
+  @apply text-xs pt-6 leading-snug;
 }
 
 .markdown-block__question-and-answer em {
-  @apply markdown-block__em;
+  @apply italic;
 }
 
 .markdown-block__question-and-answer b,
 .markdown-block__question-and-answer strong {
-  @apply markdown-block__strong;
+  @apply font-bold;
 }
 
 .markdown-block__question-and-answer s,
 .markdown-block__question-and-answer del {
-  @apply markdown-block__strikethrough;
+  @apply line-through;
 }
 
 .markdown-block__question-and-answer ul {
-  @apply markdown-block__ul;
+  @apply ml-7 pt-3 list-disc;
 }
 
 .markdown-block__question-and-answer ol {
-  @apply markdown-block__ol;
+  @apply ml-7 pt-3 list-decimal;
 }
 
 .markdown-block__question-and-answer li {
-  @apply markdown-block__li leading-relaxed;
+  @apply pb-2 leading-relaxed;
 }
 
 .markdown-block__question-and-answer a {
-  @apply markdown-block__a;
+  @apply text-primary-500 underline font-semibold whitespace-pre-line;
+  word-break: break-word;
 }
 
 .markdown-block__question-and-answer a:hover {
@@ -298,25 +211,29 @@
 }
 
 .markdown-block__question-and-answer blockquote {
-  @apply markdown-block__blockquote;
+  @apply border-l-4 border-gray-800 bg-gray-100 px-4 py-2 my-4 text-lg rounded-r font-semibold text-gray-800;
 }
 
 .markdown-block__question-and-answer hr {
-  @apply markdown-block__hr;
+  @apply border-t border-gray-400 mt-6 pb-2;
 }
 
 .markdown-block__question-and-answer sup {
-  @apply markdown-block__sup-sub;
+  font-size: 75%;
+  line-height: 0;
+  @apply relative align-baseline;
   top: -0.5em;
 }
 
 .markdown-block__question-and-answer sub {
-  @apply markdown-block__sup-sub;
+  font-size: 75%;
+  line-height: 0;
+  @apply relative align-baseline;
   bottom: -0.25em;
 }
 
 .markdown-block__question-and-answer img {
-  @apply markdown-block__img;
+  @apply mx-auto;
 }
 
 /*
@@ -324,25 +241,26 @@
  */
 
 .markdown-block__comment p {
-  @apply markdown-block__p leading-relaxed;
+  @apply py-2 leading-relaxed;
 }
 
 .markdown-block__comment em {
-  @apply markdown-block__em;
+  @apply italic;
 }
 
 .markdown-block__comment b,
 .markdown-block__comment strong {
-  @apply markdown-block__strong;
+  @apply font-bold;
 }
 
 .markdown-block__comment s,
 .markdown-block__comment del {
-  @apply markdown-block__strikethrough;
+  @apply line-through;
 }
 
 .markdown-block__comment a {
-  @apply markdown-block__a;
+  @apply text-primary-500 underline font-semibold whitespace-pre-line;
+  word-break: break-word;
 }
 
 .markdown-block__comment a:hover {
@@ -350,12 +268,16 @@
 }
 
 .markdown-block__comment sup {
-  @apply markdown-block__sup-sub;
+  font-size: 75%;
+  line-height: 0;
+  @apply relative align-baseline;
   top: -0.5em;
 }
 
 .markdown-block__comment sub {
-  @apply markdown-block__sup-sub;
+  font-size: 75%;
+  line-height: 0;
+  @apply relative align-baseline;
   bottom: -0.25em;
 }
 
@@ -364,5 +286,5 @@
  */
 
 .markdown-block__area-of-text p {
-  @apply markdown-block__p leading-relaxed;
+  @apply py-2 leading-relaxed;
 }

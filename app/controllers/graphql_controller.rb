@@ -2,10 +2,8 @@ class GraphqlController < ApplicationController
   skip_forgery_protection if: :skip_csrf_protection?
   skip_before_action :redirect_to_primary_domain, if: :introspection?
 
-
   rescue_from ActionController::InvalidAuthenticityToken do
-    logger.error "exception"
-    render json: { error:"Invalid or expired session, Please try refresh page or signing in again" }, status: :internal_server_error
+    render json: { errors: [{ message: 'Invalid or expired session, Please try refresh page or signing in again' }] }
   end
 
   def execute

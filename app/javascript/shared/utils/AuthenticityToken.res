@@ -14,5 +14,4 @@ let fromHead = () => {
     | Some(token) => token
     }
   }
-  // "Sds"
 }

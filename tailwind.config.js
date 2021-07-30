@@ -2,7 +2,7 @@ const colors = require("tailwindcss/colors");
 
 module.exports = {
   mode: "jit",
-  purge: ["./app/**/*.html.erb", "./app/**/*.res"],
+  purge: ["./app/**/*.html.erb", "./app/**/*.bs.js", "./app/**/*.jsx"],
   theme: {
     colors: {
       transparent: "transparent",

@@ -87,6 +87,7 @@
   "scripts": {
     "postinstall": "test -n \"$NOYARNPOSTINSTALL\" || yarn run re:build",
     "re:build": "bsb -make-world -clean-world",
-    "re:watch": "bsb -make-world -clean-world -w"
+    "re:watch": "bsb -make-world -clean-world -w",
+    "webpack-dev-server": "TAILWIND_MODE=watch bin/webpack-dev-server"
   }
 }

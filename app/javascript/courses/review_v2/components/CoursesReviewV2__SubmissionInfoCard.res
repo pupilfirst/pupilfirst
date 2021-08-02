@@ -33,10 +33,17 @@ let showSubmissionStatus = submission => {
   </div>
 }
 
+let linkUrl = (submissionId, filterString) => {
+  "/submissions/" ++
+  submissionId ++
+  "/review" ++ (String.trim(filterString) === "" ? "" : "?" ++ filterString)
+}
+
 @react.component
 let make = (~submission, ~submissionNumber, ~selected, ~filterString) =>
   <Link
-    href={"/submissions/" ++ (SubmissionMeta.id(submission) ++ "/review" ++ "?" ++ filterString)}
+    title={"Submission #" ++ string_of_int(submissionNumber)}
+    href={linkUrl(SubmissionMeta.id(submission), filterString)}
     key={SubmissionMeta.id(submission)}
     className={cardClasses(submission, selected)}>
     <div className="shadow hover:shadow-lg transition">

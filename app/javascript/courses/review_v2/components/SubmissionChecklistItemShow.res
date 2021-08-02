@@ -106,7 +106,9 @@ let statusButton = (index, status, callback, checklist) =>
       <span className="w-8 p-2 border-r border-gray-500 flex items-center justify-center">
         <PfIcon className={statusButtonIcon(status == ChecklistItem.Failed)} />
       </span>
-      <span className="p-2"> {"Mark as incorrect"->str} </span>
+      <span className="p-2">
+        {(status == ChecklistItem.Failed ? "Mark as correct" : "Mark as incorrect")->str}
+      </span>
     </button>
   </div>
 

@@ -147,130 +147,135 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
         <div className="bg-gray-200 border border-primary-300 rounded-md p-2 pt-0 md:p-4 md:pt-0">
           {state.reviewChecklist
           |> Array.mapi((itemIndex, reviewChecklistItem) =>
-            <div
-              className="pt-5"
-              key={itemIndex |> string_of_int}
-              ariaLabel={"checklist-item-" ++ (itemIndex |> string_of_int)}>
-              <div className="flex">
-                <div className="w-full">
-                  <input
-                    className="checklist-editor__checklist-item-title h-11 text-sm focus:outline-none focus:bg-white focus:border-primary-300"
-                    id="checklist_title"
-                    type_="text"
-                    placeholder="Add an item to the checklist"
-                    value={reviewChecklistItem |> ReviewChecklistItem.title}
-                    onChange={event =>
-                      updateChecklistItemTitle(
-                        itemIndex,
-                        ReactEvent.Form.target(event)["value"],
-                        reviewChecklistItem,
-                        setState,
-                      )}
-                  />
-                  <School__InputGroupError
-                    message="A checklist item cannot be blank"
-                    active={reviewChecklistItem |> ReviewChecklistItem.title |> invalidTitle}
-                  />
+            <Spread
+              props={"data-checklist-item": string_of_int(itemIndex)}
+              key={string_of_int(itemIndex)}>
+              <div
+                className="pt-5"
+                key={itemIndex |> string_of_int}
+                ariaLabel={"checklist-item-" ++ (itemIndex |> string_of_int)}>
+                <div className="flex">
+                  <div className="w-full">
+                    <input
+                      className="checklist-editor__checklist-item-title h-11 text-sm focus:outline-none focus:bg-white focus:border-primary-300"
+                      id="checklist_title"
+                      type_="text"
+                      placeholder="Add an item to the checklist"
+                      value={reviewChecklistItem |> ReviewChecklistItem.title}
+                      onChange={event =>
+                        updateChecklistItemTitle(
+                          itemIndex,
+                          ReactEvent.Form.target(event)["value"],
+                          reviewChecklistItem,
+                          setState,
+                        )}
+                    />
+                    <School__InputGroupError
+                      message="A checklist item cannot be blank"
+                      active={reviewChecklistItem |> ReviewChecklistItem.title |> invalidTitle}
+                    />
+                  </div>
+                  <button
+                    title="Remove checklist item"
+                    className="bg-gray-200 p-2 w-11 border border-gray-400 text-gray-700 rounded ml-2 hover:text-red-600 hover:bg-red-100 focus:outline-none"
+                    onClick={_ => removeChecklistItem(itemIndex, setState)}>
+                    <i className="fas fa-trash-alt" />
+                  </button>
                 </div>
-                <button
-                  title="Remove checklist item"
-                  className="bg-gray-200 p-2 w-11 border border-gray-400 text-gray-700 rounded ml-2 hover:text-red-600 hover:bg-red-100 focus:outline-none"
-                  onClick={_ => removeChecklistItem(itemIndex, setState)}>
-                  <i className="fas fa-trash-alt" />
-                </button>
-              </div>
-              <div>
-                {reviewChecklistItem
-                |> ReviewChecklistItem.result
-                |> Array.mapi((resultIndex, resultItem) => {
-                  let feedback = switch resultItem |> ReviewChecklistResult.feedback {
-                  | Some(f) => f
-                  | None => ""
-                  }
-                  <div
-                    ariaLabel={"result-item-" ++ (resultIndex |> string_of_int)}
-                    className="pl-2 md:pl-4 mt-2"
-                    key={(itemIndex |> string_of_int) ++ (resultIndex |> string_of_int)}>
-                    <div className="flex">
-                      <label
-                        title="Disabled"
-                        className="flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
-                      />
-                      <div className="w-full bg-gray-100 relative">
-                        <div className="relative">
-                          <input
-                            className="checklist-editor__checklist-result-item-title h-10 pr-12 focus:outline-none focus:bg-white focus:border-primary-300"
-                            id={"result_" ++ ((resultIndex |> string_of_int) ++ "_title")}
-                            type_="text"
-                            placeholder="Add a result for this check"
-                            value={resultItem |> ReviewChecklistResult.title}
-                            onChange={event =>
-                              updateChecklistResultTitle(
-                                itemIndex,
-                                resultIndex,
-                                ReactEvent.Form.target(event)["value"],
-                                reviewChecklistItem,
-                                resultItem,
-                                setState,
-                              )}
+                <div>
+                  {reviewChecklistItem
+                  |> ReviewChecklistItem.result
+                  |> Array.mapi((resultIndex, resultItem) => {
+                    let feedback = switch resultItem |> ReviewChecklistResult.feedback {
+                    | Some(f) => f
+                    | None => ""
+                    }
+                    <Spread
+                      props={"data-result-item": string_of_int(resultIndex)}
+                      key={string_of_int(itemIndex) ++ string_of_int(resultIndex)}>
+                      <div className="pl-2 md:pl-4 mt-2">
+                        <div className="flex">
+                          <label
+                            title="Disabled"
+                            className="flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
                           />
-                          <div
-                            className="flex w-10 h-10 absolute top-0 right-0 mr-1 items-center justify-center">
-                            <button
-                              title="Remove checklist result"
-                              className="flex items-center justify-center bg-gray-100 w-7 h-7 mt-px text-sm text-gray-700 hover:text-red-600 hover:bg-red-100 rounded-full ml-2 border border-transparent text-center"
-                              onClick={_ =>
-                                removeChecklistResult(
+                          <div className="w-full bg-gray-100 relative">
+                            <div className="relative">
+                              <input
+                                className="checklist-editor__checklist-result-item-title h-10 pr-12 focus:outline-none focus:bg-white focus:border-primary-300"
+                                id={"result_" ++ ((resultIndex |> string_of_int) ++ "_title")}
+                                type_="text"
+                                placeholder="Add a result for this check"
+                                value={resultItem |> ReviewChecklistResult.title}
+                                onChange={event =>
+                                  updateChecklistResultTitle(
+                                    itemIndex,
+                                    resultIndex,
+                                    ReactEvent.Form.target(event)["value"],
+                                    reviewChecklistItem,
+                                    resultItem,
+                                    setState,
+                                  )}
+                              />
+                              <div
+                                className="flex w-10 h-10 absolute top-0 right-0 mr-1 items-center justify-center">
+                                <button
+                                  title="Remove checklist result"
+                                  className="flex items-center justify-center bg-gray-100 w-7 h-7 mt-px text-sm text-gray-700 hover:text-red-600 hover:bg-red-100 rounded-full ml-2 border border-transparent text-center"
+                                  onClick={_ =>
+                                    removeChecklistResult(
+                                      itemIndex,
+                                      resultIndex,
+                                      reviewChecklistItem,
+                                      setState,
+                                    )}>
+                                  <Icon className="if i-times-regular" />
+                                </button>
+                              </div>
+                            </div>
+                            <textarea
+                              rows=2
+                              cols=33
+                              className="appearance-none border border-gray-400 bg-transparent rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
+                              id={"result_" ++ ((resultIndex |> string_of_int) ++ "_feedback")}
+                              type_="text"
+                              placeholder="Add feedback (optional)"
+                              value=feedback
+                              onChange={event =>
+                                updateChecklistResultFeedback(
                                   itemIndex,
                                   resultIndex,
+                                  ReactEvent.Form.target(event)["value"],
                                   reviewChecklistItem,
+                                  resultItem,
                                   setState,
-                                )}>
-                              <Icon className="if i-times-regular" />
-                            </button>
+                                )}
+                            />
+                            <School__InputGroupError
+                              message="A check's result cannot be blank"
+                              active={resultItem |> ReviewChecklistResult.title |> invalidTitle}
+                            />
                           </div>
                         </div>
-                        <textarea
-                          rows=2
-                          cols=33
-                          className="appearance-none border border-gray-400 bg-transparent rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
-                          id={"result_" ++ ((resultIndex |> string_of_int) ++ "_feedback")}
-                          type_="text"
-                          placeholder="Add feedback (optional)"
-                          value=feedback
-                          onChange={event =>
-                            updateChecklistResultFeedback(
-                              itemIndex,
-                              resultIndex,
-                              ReactEvent.Form.target(event)["value"],
-                              reviewChecklistItem,
-                              resultItem,
-                              setState,
-                            )}
-                        />
-                        <School__InputGroupError
-                          message="A check's result cannot be blank"
-                          active={resultItem |> ReviewChecklistResult.title |> invalidTitle}
-                        />
                       </div>
-                    </div>
-                  </div>
-                })
-                |> React.array}
-                <button
-                  onClick={_ => addEmptyResultItem(reviewChecklistItem, itemIndex, setState)}
-                  className="checklist-editor__add-result-btn ml-2 md:ml-4 mt-3 flex items-center focus:outline-none">
-                  <span
-                    title="Add Result"
-                    className="checklist-editor__add-result-btn-check flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2"
-                  />
-                  <span
-                    className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-200 px-3 py-1 rounded border border-dashed border-gray-600">
-                    <i className="fas fa-plus text-xs mr-2" /> {"Add Result" |> str}
-                  </span>
-                </button>
+                    </Spread>
+                  })
+                  |> React.array}
+                  <button
+                    onClick={_ => addEmptyResultItem(reviewChecklistItem, itemIndex, setState)}
+                    className="checklist-editor__add-result-btn ml-2 md:ml-4 mt-3 flex items-center focus:outline-none">
+                    <span
+                      title="Add Result"
+                      className="checklist-editor__add-result-btn-check flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2"
+                    />
+                    <span
+                      className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-200 px-3 py-1 rounded border border-dashed border-gray-600">
+                      <i className="fas fa-plus text-xs mr-2" /> {"Add Result" |> str}
+                    </span>
+                  </button>
+                </div>
               </div>
-            </div>
+            </Spread>
           )
           |> React.array}
           <div className="pt-5">

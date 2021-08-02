@@ -669,37 +669,39 @@ let feedbackGenerator = (reviewChecklist, state, send) => {
 }
 
 let showFeedback = feedback => Js.Array.mapi((f, index) =>
-    <div key={index->string_of_int}>
-      <div className="pt-6">
-        <div className="flex">
-          <div
-            className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full overflow-hidden mr-4 object-cover">
-            {switch Feedback.coachAvatarUrl(f) {
-            | Some(avatarUrl) => <img src=avatarUrl />
-            | None => <Avatar name={Feedback.coachName(f)} />
-            }}
-          </div>
-          <div>
-            <div className="flex flex-col md:flex-row">
-              <p className="font-semibold text-sm leading-tight inline-flex">
-                {Feedback.coachName(f)->str}
-              </p>
-              <p className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight">
-                {("(" ++ (Feedback.coachTitle(f) ++ ")"))->str}
+    <Spread props={"data-title": "feedback-section"} key={index->string_of_int}>
+      <div>
+        <div className="pt-6">
+          <div className="flex">
+            <div
+              className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full overflow-hidden mr-4 object-cover">
+              {switch Feedback.coachAvatarUrl(f) {
+              | Some(avatarUrl) => <img src=avatarUrl />
+              | None => <Avatar name={Feedback.coachName(f)} />
+              }}
+            </div>
+            <div>
+              <div className="flex flex-col md:flex-row">
+                <p className="font-semibold text-sm leading-tight inline-flex">
+                  {Feedback.coachName(f)->str}
+                </p>
+                <p className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight">
+                  {("(" ++ (Feedback.coachTitle(f) ++ ")"))->str}
+                </p>
+              </div>
+              <p className="text-xs leading-tight font-semibold inline-block text-gray-800">
+                {Feedback.createdAtPretty(f)->str}
               </p>
             </div>
-            <p className="text-xs leading-tight font-semibold inline-block text-gray-800">
-              {Feedback.createdAtPretty(f)->str}
-            </p>
+          </div>
+          <div className="md:ml-14">
+            <MarkdownBlock
+              className="pt-1 text-sm" profile=Markdown.Permissive markdown={Feedback.value(f)}
+            />
           </div>
         </div>
-        <div className="md:ml-14">
-          <MarkdownBlock
-            className="pt-1 text-sm" profile=Markdown.Permissive markdown={Feedback.value(f)}
-          />
-        </div>
       </div>
-    </div>
+    </Spread>
   , ArrayUtils.copyAndSort(
     (x, y) => DateFns.differenceInSeconds(Feedback.createdAt(y), Feedback.createdAt(x)),
     feedback,
@@ -713,6 +715,14 @@ let showSubmissionStatus = status => {
   | Grading => ("Pending Review", "bg-yellow-100 text-yellow-800 ")
   }
   <div className={"font-semibold px-2 py-px rounded " ++ classes}> <p> {text->str} </p> </div>
+}
+
+let updateReviewChecklist = (cb, send, checklist) => {
+  if ArrayUtils.isEmpty(checklist) {
+    send(ShowGradesEditor)
+  }
+
+  cb(checklist)
 }
 
 @react.component
@@ -836,7 +846,7 @@ let make = (
             updateFeedbackCB={feedback =>
               send(GenerateFeeback(feedback, findEditor(pending, overlaySubmission)))}
             feedback=state.newFeedback
-            updateReviewChecklistCB
+            updateReviewChecklistCB={updateReviewChecklist(updateReviewChecklistCB, send)}
             targetId
             cancelCB={_ => send(UpdateEditor(findEditor(pending, overlaySubmission)))}
           />

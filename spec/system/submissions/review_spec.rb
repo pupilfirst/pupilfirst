@@ -190,6 +190,7 @@ feature 'Submission review overlay', js: true do
       # the submission must be removed from the pending list
 
       find("button[aria-label='submissions-overlay-close']").click
+      click_link 'Pending'
       expect(page).to have_text(submission_pending_2.target.title)
       expect(page).to_not have_text(submission.target.title)
 
@@ -222,9 +223,9 @@ feature 'Submission review overlay', js: true do
 
       expect(target.review_checklist).to eq([])
 
-      click_button 'Create a review checklist'
+      click_button 'Create Review Checklist'
 
-      within("div[aria-label='checklist-item-0']") do
+      within("div[data-checklist-item='0']") do
         fill_in 'checklist_title', with: checklist_title_1
         fill_in 'result_0_title', with: c1_result_0_title
         fill_in 'result_0_feedback', with: c1_result_0_feedback
@@ -235,7 +236,7 @@ feature 'Submission review overlay', js: true do
 
       click_button 'Add Checklist Item'
 
-      within("div[aria-label='checklist-item-1']") do
+      within("div[data-checklist-item='1']") do
         fill_in 'checklist_title', with: checklist_title_2
         fill_in 'result_0_title', with: c2_result_0_title
         fill_in 'result_0_feedback', with: c2_result_0_feedback
@@ -253,28 +254,30 @@ feature 'Submission review overlay', js: true do
       # Reload Page
       visit review_timeline_event_path(submission_pending)
 
-      within("div[aria-label='checklist-item-0']") do
+      click_button 'Show Review Checklist'
+
+      within("div[data-checklist-item='0']") do
         expect(page).to have_content(checklist_title_1)
 
-        within("div[aria-label='result-item-0']") do
+        within("div[data-result-item='0']") do
           expect(page).to have_content(c1_result_0_title)
           find('label', text: c1_result_0_title).click
         end
 
-        within("div[aria-label='result-item-1']") do
+        within("div[data-result-item='1']") do
           expect(page).to have_content(c1_result_1_title)
           find('label', text: c1_result_1_title).click
         end
       end
 
-      within("div[aria-label='checklist-item-1']") do
+      within("div[data-checklist-item='1']") do
         expect(page).to have_content(checklist_title_2)
-        within("div[aria-label='result-item-0']") do
+        within("div[data-result-item='0']") do
           expect(page).to have_content(c2_result_0_title)
           find('label', text: c2_result_0_title).click
         end
 
-        within("div[aria-label='result-item-1']") do
+        within("div[data-result-item='1']") do
           expect(page).to have_content(c2_result_1_title)
           find('label', text: c2_result_1_title).click
         end
@@ -282,9 +285,8 @@ feature 'Submission review overlay', js: true do
 
       click_button 'Generate Feedback'
 
-      expect(page).to have_button('Generate Feedback', disabled: true)
-
-      expect(page)
+      expect(page).not_to have_button('Generate Feedback')
+      expect(page).to have_text('Feedback generated from review checklist')
 
       within("div[aria-label='feedback']") do
         expect(page).to have_content(c1_result_0_feedback)
@@ -292,25 +294,26 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_content(c2_result_0_feedback)
       end
 
+      click_button 'Show Review Checklist'
       click_button 'Edit Checklist'
 
-      within("div[aria-label='checklist-item-1']") do
-        within("div[aria-label='result-item-0']") do
+      within("div[data-checklist-item='1']") do
+        within("div[data-result-item='0']") do
           find("button[title='Remove checklist result']").click
         end
       end
 
-      within("div[aria-label='checklist-item-1']") do
+      within("div[data-checklist-item='1']") do
         find("button[title='Remove checklist item']").click
       end
 
-      within("div[aria-label='checklist-item-0']") do
+      within("div[data-checklist-item='0']") do
         find("button[title='Remove checklist item']").click
       end
 
       click_button 'Save Checklist'
 
-      click_button 'Create a review checklist'
+      click_button 'Create Review Checklist'
       expect(target.reload.review_checklist).to eq([])
     end
 
@@ -389,7 +392,7 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_content(question_2)
         expect(page).to have_content(answer_2)
         click_button 'Mark as incorrect'
-        expect(page).to have_content('Incorrect')
+        expect(page).to have_content('Mark as correct')
       end
 
       within(
@@ -398,13 +401,13 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_content(question_3)
         expect(page).to have_content(answer_3)
         click_button 'Mark as incorrect'
-        expect(page).to have_content('Incorrect')
+        expect(page).to have_content('Mark as correct')
       end
 
       within("div[aria-label='#{submission_pending.checklist[5]['title']}']") do
         expect(page).to have_content(question_6)
         click_button 'Mark as incorrect'
-        expect(page).to have_content('Incorrect')
+        expect(page).to have_content('Mark as correct')
       end
 
       expect(page).to have_content('Grade Card')
@@ -656,6 +659,7 @@ feature 'Submission review overlay', js: true do
     scenario 'coach opens the overlay for a submission after its status has changed in the DB' do
       # Opening the overlay should reload data on index if it's different.
       sign_in_user coach.user, referrer: review_course_path(course)
+      click_link 'Pending'
 
       expect(page).to have_text(target.title)
       expect(page).to have_text(target_2.title)
@@ -687,7 +691,7 @@ feature 'Submission review overlay', js: true do
       expect(page).to have_text(target_2.title) # The second submission should still be there.
 
       # The submission should be visible in the Pending list.
-      click_button 'Reviewed'
+      click_link 'Reviewed'
 
       # The submission should show up in the Reviewed list.
       expect(page).to have_text(target.title)
@@ -755,15 +759,16 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_link(target.title, href: "/targets/#{target.id}")
       end
 
-      expect(page).to have_content('Submission #1')
+      expect(page).to have_content('Submission 1')
       expect(page).to have_content('Completed')
 
       within("div[aria-label='submission-status']") do
         expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
-        expect(page).to have_button('Undo Grading')
       end
+
+      expect(page).to have_button('Undo Grading')
 
       within(
         "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
@@ -785,8 +790,9 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
-        expect(page).to have_button('Undo Grading')
       end
+
+      expect(page).to have_button('Undo Grading')
 
       expect(page).to have_button('Add feedback')
 
@@ -805,7 +811,7 @@ feature 'Submission review overlay', js: true do
 
       expect(page).to have_button('Add another feedback')
 
-      within("div[aria-label='feedback-section']") do
+      within("div[data-title='feedback-section']") do
         expect(page).to have_text(coach.name)
       end
 
@@ -822,8 +828,9 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
-        expect(page).to have_button('Undo Grading')
       end
+
+      expect(page).to have_button('Undo Grading')
 
       accept_confirm { click_button 'Undo Grading' }
 
@@ -852,30 +859,28 @@ feature 'Submission review overlay', js: true do
                      referrer:
                        review_timeline_event_path(submission_reviewed_old)
 
-        within("div[data-submission-id='#{submission_reviewed_old.id}']") do
-          within(
-            "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
-          ) { find("button[title='Good']").click }
+        within(
+          "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+        ) { find("button[title='Good']").click }
 
-          within(
-            "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
-          ) { find("button[title='Bad']").click }
+        within(
+          "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
+        ) { find("button[title='Bad']").click }
 
-          click_button 'Save grades'
-        end
+        click_button 'Save grades'
 
         expect(page).to have_text('The submission has been marked as reviewed')
 
-        within("div[data-submission-id='#{submission_reviewed_old.id}']") do
-          expect(page).to have_text('Submission #1')
-          expect(page).to have_text('2/4')
-          expect(page).to have_text('1/3')
-        end
+        click_link 'Submission #1'
 
-        within("div[data-submission-id='#{submission_reviewed.id}']") do
-          expect(page).to have_text('Submission #2')
-          expect(page).to have_text('4/4')
-        end
+        expect(page).to have_text('Submission 1')
+        expect(page).to have_text('2/4')
+        expect(page).to have_text('1/3')
+
+        click_link 'Submission #2'
+
+        expect(page).to have_text('Submission 2')
+        expect(page).to have_text('4/4')
       end
     end
   end
@@ -924,37 +929,35 @@ feature 'Submission review overlay', js: true do
       sign_in_user coach.user,
                    referrer: review_timeline_event_path(submission_reviewed)
 
-      within("div[data-submission-id='#{submission_reviewed.id}']") do
-        # Evaluation criteria at the point of grading are shown for reviewed submissions
-        within(
-          "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
-        ) do
-          expect(page).to have_text(evaluation_criterion_1.name)
-          expect(page).to have_text(
-            "#{timeline_event_grade_1.grade}/#{evaluation_criterion_1.max_grade}"
-          )
-        end
-
-        within(
-          "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
-        ) do
-          expect(page).to have_text(evaluation_criterion_2.name)
-          expect(page).to have_text(
-            "#{timeline_event_grade_2.grade}/#{evaluation_criterion_2.max_grade}"
-          )
-        end
-      end
-
-      within("div[data-submission-id='#{submission_pending.id}']") do
-        # New list of evaluation criteria are shown for pending submissions
+      # Evaluation criteria at the point of grading are shown for reviewed submissions
+      within(
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+      ) do
         expect(page).to have_text(evaluation_criterion_1.name)
-        expect(page).not_to have_text(evaluation_criterion_2.name)
-
-        # grades the pending submission
-        within(
-          "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
-        ) { find("button[title='Good']").click }
+        expect(page).to have_text(
+          "#{timeline_event_grade_1.grade}/#{evaluation_criterion_1.max_grade}"
+        )
       end
+
+      within(
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_2.id}']"
+      ) do
+        expect(page).to have_text(evaluation_criterion_2.name)
+        expect(page).to have_text(
+          "#{timeline_event_grade_2.grade}/#{evaluation_criterion_2.max_grade}"
+        )
+      end
+
+      click_link 'Submission #2'
+
+      # New list of evaluation criteria are shown for pending submissions
+      expect(page).to have_text(evaluation_criterion_1.name)
+      expect(page).not_to have_text(evaluation_criterion_2.name)
+
+      # grades the pending submission
+      within(
+        "div[aria-label='evaluation-criterion-#{evaluation_criterion_1.id}']"
+      ) { find("button[title='Good']").click }
 
       click_button 'Save grades'
 
@@ -996,9 +999,11 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
-        expect(page).to have_button('Undo Grading')
       end
-      within("div[aria-label='feedback-section']") do
+
+      expect(page).to have_button('Undo Grading')
+
+      within("div[data-title='feedback-section']") do
         expect(page).to have_text(coach.name)
       end
 
@@ -1030,8 +1035,9 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_text('Completed')
         expect(page).to have_text('Evaluated By')
         expect(page).to have_text(coach.name)
-        expect(page).to have_button('Undo Grading')
       end
+
+      expect(page).to have_button('Undo Grading')
 
       accept_confirm { click_button 'Undo Grading' }
 
@@ -1172,10 +1178,14 @@ feature 'Submission review overlay', js: true do
 
       expect(page).to have_text(team_1.founders.last.name)
       expect(page).to have_text(team_2.founders.first.name)
-      expect(page).to have_text(submission_reviewed_3.checklist.first['title'])
-      expect(page).to have_text(submission_reviewed_2.checklist.first['title'])
-      expect(page).not_to have_text(
-        submission_reviewed_1.checklist.first['title']
+      expect(page).to have_link(
+        href: "/submissions/#{submission_reviewed_3.id}/review"
+      )
+      expect(page).to have_link(
+        href: "/submissions/#{submission_reviewed_2.id}/review"
+      )
+      expect(page).not_to have_link(
+        href: "/submissions/#{submission_reviewed_1.id}/review"
       )
     end
   end

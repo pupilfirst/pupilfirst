@@ -355,8 +355,10 @@ let submissionsSorter = filter => {
   | None => [#SubmittedAt]
   }
 
-  <div ariaLabel="Change submissions sorting" className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
-    <label className="block text-tiny font-semibold uppercase"> {tc("sort_by") |> str} </label>
+  <div ariaLabel="Change submissions sorting" className="flex-shrink-0 md:ml-2">
+    <label className="hidden md:block text-tiny font-semibold uppercase">
+      {tc("sort_by") |> str}
+    </label>
     <SubmissionsSorter
       criteria
       selectedCriterion={filter.sortCriterion}
@@ -694,9 +696,14 @@ let make = (~courseId, ~currentCoachId) => {
   <div className="flex-1 flex flex-col">
     <div className="hidden md:block h-16" />
     <div className="flex-1 md:overflow-y-auto">
-      <div className="sticky top-0 z-20 md:static bg-gray-100">
-        <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
-          <div className="flex md:pt-3 border-b">
+      <div className="bg-gray-100">
+        <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
+          <div
+            className="flex items-center justify-between bg-white md:bg-transparent px-4 py-2 md:pt-4 border-b md:border-none">
+            <p className="font-semibold"> {str("Review")} </p>
+            <div className="block md:hidden"> {submissionsSorter(filter)} </div>
+          </div>
+          <div className="flex pt-3 border-b px-4">
             <Link
               href={"/courses/" ++
               courseId ++
@@ -754,7 +761,7 @@ let make = (~courseId, ~currentCoachId) => {
                 defaultOptions={defaultOptions(state, filter)}
               />
             </div>
-            {submissionsSorter(filter)}
+            <div className="hidden md:block"> {submissionsSorter(filter)} </div>
           </div>
         </div>
       </div>
@@ -770,7 +777,7 @@ let make = (~courseId, ~currentCoachId) => {
               | LoadingMore =>
                 <div> {SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())} </div>
               | NotLoading =>
-                <div className="px-4 lg:px-8 pb-6">
+                <div className="pb-6">
                   <button
                     className="btn btn-primary-ghost cursor-pointer w-full"
                     onClick={_ => {

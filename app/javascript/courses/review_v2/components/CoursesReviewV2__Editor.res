@@ -172,7 +172,7 @@ let gradeSubmissionQuery = (
   send,
   evaluationCriteria,
   overlaySubmission,
-  user,
+  currentUser,
   updateSubmissionCB,
 ) => {
   send(BeginSaving)
@@ -194,9 +194,9 @@ let gradeSubmissionQuery = (
           updateSubmissionCB(
             OverlaySubmission.update(
               passed(state.grades, evaluationCriteria) ? Some(Js.Date.make()) : None,
-              Some("Foo"),
+              Belt.Option.map(currentUser, AppRouter__User.name),
               Js.Array.concat(
-                Belt.Option.mapWithDefault(feedback, [], f => [makeFeedback(user, f)]),
+                Belt.Option.mapWithDefault(feedback, [], f => [makeFeedback(currentUser, f)]),
                 OverlaySubmission.feedback(overlaySubmission),
               ),
               state.grades,
@@ -489,7 +489,7 @@ let gradeSubmission = (
   evaluationCriteria,
   updateSubmissionCB,
   status,
-  user,
+  currentUser,
   overlaySubmission,
   event,
 ) => {
@@ -502,7 +502,7 @@ let gradeSubmission = (
       send,
       evaluationCriteria,
       overlaySubmission,
-      user,
+      currentUser,
       updateSubmissionCB,
     )
   | Grading

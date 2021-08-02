@@ -54,9 +54,14 @@ class SubmissionsResolver < ApplicationQuery
   def applicable_submissions
     by_level =
       if level_id.present?
-        course.levels.where(id: level_id).first.timeline_events
+        course
+          .levels
+          .where(id: level_id)
+          .first
+          .timeline_events
+          .not_auto_verified
       else
-        course.timeline_events
+        course.timeline_events.not_auto_verified
       end
 
     by_level_and_target =

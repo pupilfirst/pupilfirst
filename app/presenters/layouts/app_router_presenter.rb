@@ -32,6 +32,8 @@ module Layouts
       if current_user.avatar.attached?
         user[:avatar_url] = view.url_for(current_user.avatar_variant(:thumb))
       end
+
+      user[:coach_id] = current_coach.id if current_coach.present?
       user
     end
 

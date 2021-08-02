@@ -3,9 +3,9 @@ en:
     AppRouter__Dropdown:
       more: More
     AppRouter__Header:
+      edit_profile: Edit Profile
       sign_in: Sign In
       sign_out: Sign Out
-      edit_profile: Edit Profile
     CoachesIndex__Root:
       button_about: About
       button_connect: Connect
@@ -357,6 +357,7 @@ en:
       assigned_to: Assigned to
       assigned_to_coach: "assigned to:"
       assigned_to_me: " assigned to me"
+      button_load_more: Load More Submissions...
       filter_by: "Filter by:"
       filter_by_another_level: Filter by another level
       filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach

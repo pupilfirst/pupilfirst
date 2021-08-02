@@ -183,7 +183,11 @@ let filterFromQueryParams = search => {
     sortDirection: switch get("sortDirection", params) {
     | Some(direction) when direction == "Descending" => #Descending
     | Some(direction) when direction == "Ascending" => #Ascending
-    | _ => #Descending
+    | _ =>
+      switch get("tab", params) {
+      | Some(t) when t == "Pending" => #Ascending
+      | _ => #Descending
+      }
     },
   }
 }
@@ -391,7 +395,7 @@ module Selectable = {
     switch t {
     | Level(level) => string_of_int(Level.number(level)) ++ ", " ++ Level.name(level)
     | AssignedToCoach(coach, currentCoachId) =>
-      coach |> Coach.id == currentCoachId ? tc("me") : coach |> Coach.name
+      Coach.id(coach) == currentCoachId ? tc("me") : coach |> Coach.name
     | Target(t) => TargetInfo.title(t)
     | Loader(l) =>
       switch l {
@@ -411,10 +415,10 @@ module Selectable = {
     switch t {
     | Level(level) => "level: " ++ string_of_int(Level.number(level)) ++ ", " ++ Level.name(level)
     | AssignedToCoach(coach, currentCoachId) =>
-      if coach |> Coach.id == currentCoachId {
+      if Coach.id(coach) == currentCoachId {
         "assigned to: " ++ tc("me")
       } else {
-        "assigned to: " ++ (coach |> Coach.name)
+        "assigned to: " ++ Coach.name(coach)
       }
     | Target(t) => "target: " ++ TargetInfo.title(t)
     | Loader(_) => ""
@@ -672,9 +676,8 @@ let computeInitialState = () => {
 }
 
 @react.component
-let make = (~courseId) => {
+let make = (~courseId, ~currentCoachId) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
-
   let url = RescriptReactRouter.useUrl()
   let filter = filterFromQueryParams(url.search)
 
@@ -706,7 +709,12 @@ let make = (~courseId) => {
               href={"/courses/" ++
               courseId ++
               "/review?" ++
-              filterToQueryString({...filter, tab: Some(#Pending), sortCriterion: #SubmittedAt})}
+              filterToQueryString({
+                ...filter,
+                tab: Some(#Pending),
+                sortCriterion: #SubmittedAt,
+                sortDirection: #Ascending,
+              })}
               className={shortCutClasses(filter.tab === Some(#Pending))}>
               <div> {str("Pending")} </div>
             </Link>
@@ -714,7 +722,12 @@ let make = (~courseId) => {
               href={"/courses/" ++
               courseId ++
               "/review?" ++
-              filterToQueryString({...filter, tab: Some(#Reviewed), sortCriterion: #EvaluatedAt})}
+              filterToQueryString({
+                ...filter,
+                tab: Some(#Reviewed),
+                sortCriterion: #EvaluatedAt,
+                sortDirection: #Descending,
+              })}
               className={shortCutClasses(filter.tab === Some(#Reviewed))}>
               <div> {str("Reviewed")} </div>
             </Link>
@@ -730,8 +743,8 @@ let make = (~courseId) => {
               </label>
               <Multiselect
                 id="filter"
-                unselected={unselected(state, "1", filter)}
-                selected={selected(state, filter, "1")}
+                unselected={unselected(state, currentCoachId, filter)}
+                selected={selected(state, filter, currentCoachId)}
                 onSelect={onSelectFilter(send, courseId, state, filter)}
                 onDeselect={onDeselectFilter(send, filter)}
                 value=state.filterInput

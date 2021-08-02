@@ -46,7 +46,7 @@ feature 'Course leaderboard' do
   end
 
   scenario 'Student visits leaderboard' do
-    skip 'The leaderboard feature is currently inactive, and needs to be re-built.'
+    skip 'The leaderboard feature is currently inactive and needs to be re-built.'
 
     sign_in_user(student.user, referrer: leaderboard_course_path(student.course))
 

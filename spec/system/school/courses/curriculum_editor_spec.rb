@@ -265,4 +265,47 @@ feature 'Curriculum Editor', js: true do
 
     expect(page).to have_text('Please sign in to continue.')
   end
+
+  context 'copy level into course' do
+    let!(:target_1) { create :target, :with_content, target_group: target_group_1 }
+    let!(:target_2) { create :target, :with_content, target_group: target_group_1, prerequisite_targets: [target_5] }
+    let!(:target_3) { create :target, :with_content, target_group: target_group_2 }
+    let!(:target_4) { create :target, :with_content, target_group: target_group_2, prerequisite_targets: [target_3] }
+
+    scenario 'admin copies level into the same course' do
+      sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
+
+      find('button[title="Edit selected level"').click
+      click_button 'Actions'
+
+      find("div[data-submission-id=\"#{course.name}\"]").click
+
+      accept_confirm do
+        click_button 'Copy Level'
+      end
+
+      expect(page).to have_content('Level copy requested. It will apppear in target course soon!')
+
+      visit curriculum_school_course_path(course)
+      expect(all('option').last.text).to eq("Level 3: #{level_2.name}")
+    end
+
+    scenario 'admin copies level into another course' do
+      sign_in_user school_admin.user, referrer: curriculum_school_course_path(course)
+
+      find('button[title="Edit selected level"').click
+      click_button 'Actions'
+
+      find("div[data-submission-id=\"#{course_2.name}\"]").click
+
+      accept_confirm do
+        click_button 'Copy Level'
+      end
+
+      expect(page).to have_content('Level copy requested. It will apppear in target course soon!')
+
+      visit curriculum_school_course_path(course_2)
+      expect(all('option').last.text).to eq("Level 1: #{level_2.name}")
+    end
+  end
 end

@@ -179,7 +179,7 @@ feature 'Students view performance report and submissions overview', js: true do
       expect(page).to have_link(target_l1.title, href: "/submissions/#{submission_target_l1_1.id}")
 
       within("div[aria-label='Team change notice for submission #{submission_target_l1_1.id}']") do
-        expect(page).to have_content("This submission is not considered towards its target's completion")
+        expect(page).to have_content("This submission is not counted toward the target's completion")
 
         # There should be an additional link to the target as well.
         expect(page).to have_link('View Target', href: "/targets/#{target_l1.id}")

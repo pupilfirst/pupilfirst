@@ -17,7 +17,7 @@ module Schools
       def founders_must_be_active
         return if founders.count == founders.active.count
 
-        errors[:base] << 'Can only team up active students'
+        errors[:base] << 'You can only team up active students'
       end
 
       def at_least_one_founder

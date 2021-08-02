@@ -1,0 +1,8 @@
+development: &common
+  clone_level: Enables copying selected level into another course
+staging:
+  <<: *common
+test:
+  <<: *common
+production:
+  <<: *common

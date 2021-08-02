@@ -19,6 +19,7 @@
   - `Courses::CloneService`
   - `Courses::DeleteService`
   - `Courses::DemoContentService`
+  - `Levels::CloneService`
   - `Schools::DeleteService`
 - [ ] Check if changes in _packaged_ components have been published to `npm`.
 - [ ] Add development seeds for new tables.

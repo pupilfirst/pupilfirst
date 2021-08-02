@@ -68,7 +68,7 @@ module Courses
       return if BounceReport.where(email: email).blank?
 
       errors[:base] <<
-        "The email address you supplied cannot be used because an email we'd sent earlier bounced"
+        'The email address you supplied cannot be used because an email we sent earlier bounced'
     end
   end
 end

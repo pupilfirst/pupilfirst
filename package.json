@@ -31,6 +31,7 @@
     "coffeescript": "1.12.7",
     "date-fns": "^2.12.0",
     "date-fns-tz": "^1.0.10",
+    "dompurify": "^2.3.0",
     "dotenv": "^8.0.0",
     "file-saver": "^2.0.5",
     "i18n-js": "^3.7.1",
@@ -46,7 +47,7 @@
     "postcss": "^8.3.6",
     "postcss-loader": "^4.3.0",
     "postcss-scss": "^2.0.0",
-    "prismjs": "^1.19.0",
+    "prismjs": "^1.24.1",
     "prop-types": "^15.7.2",
     "qrcode.react": "^1.0.0",
     "rails-erb-loader": "^5.5.2",
@@ -82,7 +83,8 @@
     "lodash.template": "^4.5.0",
     "sshpk": "^1.13.2",
     "serialize-javascript": "^4.0.0",
-    "dot-prop": "^5.2.0"
+    "dot-prop": "^5.2.0",
+    "prismjs": "^1.24.1"
   },
   "scripts": {
     "postinstall": "test -n \"$NOYARNPOSTINSTALL\" || yarn run re:build",

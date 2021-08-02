@@ -122,6 +122,13 @@ class ApplicationController < ActionController::Base
 
   helper_method :feature_active?
 
+  def feature_enabled?(feature_name)
+    feature = Flipper[feature_name]
+    feature.enabled?(current_user)
+  end
+
+  helper_method :feature_enabled?
+
   # Makes redirects observable from integration tests.
   def observable_redirect_to(url)
     if Rails.env.test?

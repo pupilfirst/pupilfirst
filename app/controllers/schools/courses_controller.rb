@@ -56,9 +56,9 @@ module Schools
     def curriculum
       course =
         scope
-          .where(id: params[:id])
           .includes(:evaluation_criteria, :levels, :target_groups, :targets)
-          .first
+          .find(params[:id])
+
       @course = authorize(course, policy_class: Schools::CoursePolicy)
     end
 

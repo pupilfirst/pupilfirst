@@ -33,7 +33,7 @@ module ValidateTokenGeneration
 
     return unless user&.email_bounced?
 
-    errors[:email] << "The email address you supplied cannot be used because an email we'd sent earlier bounced"
+    errors[:email] << "The email address you supplied cannot be used because an email we sent earlier bounced"
   end
 
   def user

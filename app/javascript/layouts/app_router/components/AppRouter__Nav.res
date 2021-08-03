@@ -1,6 +1,8 @@
 %bs.raw(`require("courses/shared/background_patterns.css")`)
 %bs.raw(`require("./AppRouter__Nav.css")`)
 
+let t = I18n.t(~scope="components.AppRouter__Nav")
+
 open AppRouter__Types
 
 let str = React.string
@@ -29,12 +31,12 @@ let renderLinks = (courses, selectedPage) => {
       </div>
       <div className="mt-4 space-y-2"> {Js.Array.map(link => {
           let (title, icon) = switch link {
-          | Page.Student__Curriculum(_) => ("Curriculum", "i-book-open-light")
-          | Student__Report(_) => ("Report", "i-check-circle-alt-light")
-          | Student__Students(_) => ("Student", "i-book-open-light")
-          | Student__Review(_) => ("Review", "i-clock-light")
-          | Student__Leaderboard(_) => ("Leaderboard", "i-book-open-light")
-          | Student__SubmissionShow(_) => ("Unknown", "")
+          | Page.Student__Curriculum(_) => (t("curriculum"), "i-book-open-light")
+          | Student__Report(_) => (t("report"), "i-check-circle-alt-light")
+          | Student__Students(_) => (t("student"), "i-book-open-light")
+          | Student__Review(_) => (t("review"), "i-clock-light")
+          | Student__Leaderboard(_) => (t("leaderboard"), "i-book-open-light")
+          | Student__SubmissionShow(_) => ("", "")
           }
           <a
             key=title
@@ -87,12 +89,12 @@ let renderLinksMobile = (courses, selectedPage) => {
 
     <div className="flex"> {Js.Array.map(link => {
         let (title, icon) = switch link {
-        | Page.Student__Curriculum(_) => ("Curriculum", "i-book-open-light")
-        | Student__Report(_) => ("Report", "i-check-circle-alt-light")
-        | Student__Students(_) => ("Student", "i-book-open-light")
-        | Student__Review(_) => ("Review", "i-clock-light")
-        | Student__Leaderboard(_) => ("Leaderboard", "i-book-open-light")
-        | Student__SubmissionShow(_) => ("Unknown", "")
+        | Page.Student__Curriculum(_) => (t("curriculum"), "i-book-open-light")
+        | Student__Report(_) => (t("report"), "i-check-circle-alt-light")
+        | Student__Students(_) => (t("student"), "i-book-open-light")
+        | Student__Review(_) => (t("review"), "i-clock-light")
+        | Student__Leaderboard(_) => (t("leaderboard"), "i-book-open-light")
+        | Student__SubmissionShow(_) => ("", "")
         }
         <a
           key=title
@@ -118,7 +120,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
                 <button
                   className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                   onClick={_e => setSidebarOpen(_ => false)}>
-                  <span className="sr-only"> {str("Close sidebar")} </span>
+                  <span className="sr-only"> {str(t("close_sidebar"))} </span>
                 </button>
               </div>
             </div>

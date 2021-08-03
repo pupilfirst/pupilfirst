@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.StudentTopNav__DropDown")
+let t = I18n.t(~scope="components.AppRouter__Dropdown")
 
 open AppRouter__Types
 
@@ -13,11 +13,11 @@ let make = (~links) => {
   | [] => React.null
   | moreLinks =>
     <div
-      title="Show more links"
+      title={t("show_more_links")}
       className="ml-2 font-semibold text-sm p-4 md:px-3 md:py-2 cursor-pointer relative rounded-lg text-gray-900 hover:bg-gray-200 hover:text-primary-500"
       onClick={handleToggle(setLinksVisible)}
       key="more-links">
-      <span> {t("more") |> str} </span>
+      <span> {t("more")->str} </span>
       <i className="fas fa-caret-down ml-2" />
       {ReactUtils.nullUnless(
         <div

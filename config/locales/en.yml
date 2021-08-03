@@ -2,10 +2,18 @@ en:
   components:
     AppRouter__Dropdown:
       more: More
+      show_more_links: Show more links
     AppRouter__Header:
       edit_profile: Edit Profile
       sign_in: Sign In
       sign_out: Sign Out
+    AppRouter__Nav:
+      close_sidebar: Close sidebar
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
+      student: Student
     CoachesIndex__Root:
       button_about: About
       button_connect: Connect
@@ -431,16 +439,24 @@ en:
       filter_by: "Filter by:"
       filter_by_another_level: Filter by another level
       filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
+      filter_by_assigned_to: Fillter by assigned to
       filter_by_level: Filter by level
       filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
+      filter_by_target: Filter by target
       level: Level
       me: Me
       name_or_email: Name or Email
       now_showing_submissions_assigned_to: Now showing submissions assigned to %{name}.
       now_showing_submissions_from_all_students: Now showing submissions from all students in this course.
       pending: Pending
+      review: Review
       reviewed: Reviewed
       reviewed_at: Reviewed At
+      search:
+        assigned_to: "assigned to:"
+        level: "level:"
+        status: "status: "
+        target: "target:"
       sort_by: "Sort by:"
       status: Status
       submissions_fully_loaded_text: Showing all %{total_submissions} submissions

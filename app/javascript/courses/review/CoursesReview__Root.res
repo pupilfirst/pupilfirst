@@ -397,38 +397,35 @@ module Selectable = {
     switch t {
     | Level(level) => string_of_int(Level.number(level)) ++ ", " ++ Level.name(level)
     | AssignedToCoach(coach, currentCoachId) =>
-      Coach.id(coach) == currentCoachId ? tc("me") : coach |> Coach.name
+      Coach.id(coach) == currentCoachId ? tc("me") : Coach.name(coach)
     | Target(t) => TargetInfo.title(t)
     | Loader(l) =>
       switch l {
-      | ShowLevels => "Filter by level"
-      | ShowCoaches => "Fillter by assigned to"
-      | ShowTargets => "Filter by target"
+      | ShowLevels => tc("filter_by_level")
+      | ShowCoaches => tc("filter_by_assigned_to")
+      | ShowTargets => tc("filter_by_target")
       }
     | Status(t) =>
       switch t {
-      | #Pending => "Pending"
-      | #Reviewed => "Reviewed"
+      | #Pending => tc("pending")
+      | #Reviewed => tc("reviewed")
       }
     | NameOrEmail(search) => search
     }
 
   let searchString = t =>
     switch t {
-    | Level(level) => "level: " ++ string_of_int(Level.number(level)) ++ ", " ++ Level.name(level)
+    | Level(level) =>
+      tc("search.level") ++ string_of_int(Level.number(level)) ++ ", " ++ Level.name(level)
     | AssignedToCoach(coach, currentCoachId) =>
-      if Coach.id(coach) == currentCoachId {
-        "assigned to: " ++ tc("me")
-      } else {
-        "assigned to: " ++ Coach.name(coach)
-      }
-    | Target(t) => "target: " ++ TargetInfo.title(t)
+      tc("search.assigned_to") ++ Coach.id(coach) == currentCoachId ? tc("me") : Coach.name(coach)
+    | Target(t) => tc("search.target") ++ TargetInfo.title(t)
     | Loader(_) => ""
     | Status(t) =>
-      "status: " ++
+      tc("search.status") ++
       switch t {
-      | #Pending => "Pending"
-      | #Reviewed => "Reviewed"
+      | #Pending => tc("pending")
+      | #Reviewed => tc("reviewed")
       }
     | NameOrEmail(search) => search
     }
@@ -474,33 +471,36 @@ let unSelectedStatus = filter =>
 let unselected = (state, currentCoachId, filter) => {
   let unselectedLevels =
     state.levels
-    |> Js.Array.filter(level =>
-      filter.levelId |> OptionUtils.mapWithDefault(
-        selectedLevel => level |> Level.id != selectedLevel,
+    ->Js.Array2.filter(level =>
+      OptionUtils.mapWithDefault(
+        selectedLevel => Level.id(level) != selectedLevel,
         true,
+        filter.levelId,
       )
     )
-    |> Array.map(Selectable.level)
+    ->Js.Array2.map(Selectable.level)
 
   let unselectedTargets =
     state.targets
-    |> Js.Array.filter(target =>
-      filter.targetId |> OptionUtils.mapWithDefault(
+    ->Js.Array2.filter(target =>
+      OptionUtils.mapWithDefault(
         selectedTarget => TargetInfo.id(target) != selectedTarget,
         true,
+        filter.targetId,
       )
     )
-    |> Array.map(Selectable.target)
+    ->Js.Array2.map(Selectable.target)
 
   let unselectedCoaches =
     state.coaches
-    |> Js.Array.filter(coach =>
-      filter.coachId |> OptionUtils.mapWithDefault(
-        selectedCoach => coach |> Coach.id != selectedCoach,
+    ->Js.Array2.filter(coach =>
+      OptionUtils.mapWithDefault(
+        selectedCoach => Coach.id(coach) != selectedCoach,
         true,
+        filter.coachId,
       )
     )
-    |> Array.map(coach => Selectable.assignedToCoach(coach, currentCoachId))
+    ->Js.Array2.map(coach => Selectable.assignedToCoach(coach, currentCoachId))
 
   ArrayUtils.flattenV2([
     unSelectedStatus(filter),
@@ -645,13 +645,13 @@ let filterPlaceholder = filter =>
 
 let loadFilters = (send, courseId, state) => {
   if StringUtils.isPresent(state.filterInput) {
-    if StringUtils.test("level:", String.lowercase_ascii(state.filterInput)) {
+    if StringUtils.test(tc("search.level"), String.lowercase_ascii(state.filterInput)) {
       getLevels(send, courseId, state)
     }
-    if StringUtils.test("assigned to:", String.lowercase_ascii(state.filterInput)) {
+    if StringUtils.test(tc("search.assigned_to"), String.lowercase_ascii(state.filterInput)) {
       getCoaches(send, courseId, state)
     }
-    if StringUtils.test("target:", String.lowercase_ascii(state.filterInput)) {
+    if StringUtils.test(tc("search.target"), String.lowercase_ascii(state.filterInput)) {
       getTargets(send, courseId, state)
     }
   }
@@ -702,7 +702,7 @@ let make = (~courseId, ~currentCoachId) => {
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
           <div
             className="flex items-center justify-between bg-white md:bg-transparent px-4 py-2 md:pt-4 border-b md:border-none">
-            <p className="font-semibold"> {str("Review")} </p>
+            <p className="font-semibold"> {str(tc("review"))} </p>
             <div className="block md:hidden"> {submissionsSorter(filter)} </div>
           </div>
           <div className="px-4">
@@ -728,7 +728,7 @@ let make = (~courseId, ~currentCoachId) => {
                     sortDirection: #Ascending,
                   })}
                   className={shortCutClasses(filter.tab === Some(#Pending))}>
-                  <div> {str("Pending")} </div>
+                  <div> {str(tc("pending"))} </div>
                 </Link>
                 <Link
                   href={"/courses/" ++
@@ -741,7 +741,7 @@ let make = (~courseId, ~currentCoachId) => {
                     sortDirection: #Descending,
                   })}
                   className={shortCutClasses(filter.tab === Some(#Reviewed))}>
-                  <div> {str("Reviewed")} </div>
+                  <div> {str(tc("reviewed"))} </div>
                 </Link>
               </div>
             </div>
@@ -791,7 +791,7 @@ let make = (~courseId, ~currentCoachId) => {
                       send(BeginLoadingMore)
                       getSubmissions(send, courseId, Some(cursor), filter)
                     }}>
-                    {tc("button_load_more") |> str}
+                    {tc("button_load_more")->str}
                   </button>
                 </div>
               | Reloading => React.null

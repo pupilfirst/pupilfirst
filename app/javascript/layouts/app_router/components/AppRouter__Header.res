@@ -1,12 +1,10 @@
 %bs.raw(`require("./AppRouter__Header.css")`)
 
-let t = I18n.t(~scope="components.AppRouter__Header")
-
 open AppRouter__Types
 
 let str = React.string
 
-let t = I18n.t(~scope="components.StudentTopNav__UserControls")
+let t = I18n.t(~scope="components.AppRouter__Header")
 
 let showLink = (icon, text, href) => {
   <div key=href className="whitespace-nowrap">
@@ -135,9 +133,10 @@ let make = (~school, ~currentUser) => {
 
   React.useEffect(() => {
     let resizeCB = _ => toggleMenuHidden(_ => isMobile())
-    Webapi.Dom.Window.asEventTarget(Webapi.Dom.window) |> Webapi.Dom.EventTarget.addEventListener(
+    Webapi.Dom.EventTarget.addEventListener(
       "resize",
       resizeCB,
+      Webapi.Dom.Window.asEventTarget(Webapi.Dom.window),
     )
     None
   })

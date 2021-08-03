@@ -11,7 +11,7 @@ const notify = (title, text, type) => {
     notificationText =
       "<div>" +
       text +
-      "<button class='btn btn-secondary mt-4'>Refresh Page</a></div>";
+      "<button class='btn btn-secondary mt-4'>Refresh Page</button></div>";
     textTrusted = true;
     reloadRequired = true;
   }

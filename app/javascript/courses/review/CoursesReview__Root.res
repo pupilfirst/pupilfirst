@@ -357,7 +357,7 @@ let submissionsSorter = filter => {
 
   <div ariaLabel="Change submissions sorting" className="flex-shrink-0 md:ml-2">
     <label className="hidden md:block text-tiny font-semibold uppercase pb-1">
-      {tc("sort_by") |> str}
+      {tc("sort_by")->str}
     </label>
     <SubmissionsSorter
       criteria
@@ -380,17 +380,17 @@ module Selectable = {
 
   let label = t =>
     switch t {
-    | Level(_) => Some("Level")
+    | Level(_) => Some(tc("level"))
     | AssignedToCoach(_) => Some(tc("assigned_to"))
-    | Target(_) => Some("Target")
+    | Target(_) => Some(tc("target"))
     | Loader(l) =>
       switch l {
-      | ShowLevels => Some("Level")
-      | ShowCoaches => Some("Assigned To")
-      | ShowTargets => Some("Target")
+      | ShowLevels => Some(tc("level"))
+      | ShowCoaches => Some(tc("assigned_to"))
+      | ShowTargets => Some(tc("target"))
       }
-    | Status(_) => Some("Status")
-    | NameOrEmail(_) => Some("Name or Email")
+    | Status(_) => Some(tc("status"))
+    | NameOrEmail(_) => Some(tc("name_or_email"))
     }
 
   let value = t =>

@@ -1,5 +1,7 @@
 %bs.raw(`require("./CoursesReview__SubmissionInfoCard.css")`)
 
+let t = I18n.t(~scope="components.CoursesReview__SubmissionInfoCard")
+
 open CoursesReview__Types
 let str = React.string
 
@@ -34,15 +36,15 @@ let showSubmissionStatus = submission => {
 }
 
 let linkUrl = (submissionId, filterString) => {
-  "/submissions/" ++
-  submissionId ++
-  "/review" ++ (String.trim(filterString) === "" ? "" : "?" ++ filterString)
+  `/submissions/${submissionId}/review${String.trim(filterString) === ""
+    ? ""
+    : "?" ++ filterString}`
 }
 
 @react.component
 let make = (~submission, ~submissionNumber, ~selected, ~filterString) =>
   <Link
-    title={"Submission #" ++ string_of_int(submissionNumber)}
+    title={t("submission_hash") ++ string_of_int(submissionNumber)}
     href={linkUrl(SubmissionMeta.id(submission), filterString)}
     key={SubmissionMeta.id(submission)}
     className={cardClasses(submission, selected)}>
@@ -51,7 +53,7 @@ let make = (~submission, ~submissionNumber, ~selected, ~filterString) =>
         <div className="flex flex-col md:pr-6">
           <h2 className="font-semibold text-sm leading-tight">
             <p className="hidden md:block">
-              {("Submission #" ++ string_of_int(submissionNumber))->str}
+              {(t("submission_hash") ++ string_of_int(submissionNumber))->str}
             </p>
             <p className="md:hidden"> {("#" ++ string_of_int(submissionNumber))->str} </p>
           </h2>

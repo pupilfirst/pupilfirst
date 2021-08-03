@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.CoursesReview__SubmissionsRoot")
+
 open CoursesReview__Types
 
 type state =
@@ -68,9 +70,9 @@ let getSubmissionDetails = (submissionId, setState, ()) => {
 let inactiveWarning = submissionDetails =>
   if SubmissionDetails.inactiveStudents(submissionDetails) {
     let warning = if Array.length(SubmissionDetails.students(submissionDetails)) > 1 {
-      "This submission is linked to one or more students whose access to the course has ended, or have dropped out."
+      t("students_dropped_out_message")
     } else {
-      "This submission is from a student whose access to the course has ended, or has dropped out."
+      t("student_dropped_out_message")
     }
 
     <div
@@ -82,7 +84,7 @@ let inactiveWarning = submissionDetails =>
   }
 
 let closeOverlay = (courseId, filter) =>
-  RescriptReactRouter.push("/courses/" ++ courseId ++ "/review" ++ "?" ++ filter)
+  RescriptReactRouter.push("/courses/" ++ courseId ++ "/review?" ++ filter)
 
 let headerSection = (submissionDetails, filter) =>
   <div
@@ -92,27 +94,27 @@ let headerSection = (submissionDetails, filter) =>
       <div className="flex flex-col md:flex-row w-full md:w-auto">
         <div className="flex flex-1 md:flex-none justify-between border-b md:border-0">
           <button
-            title="Close"
+            title={t("close")}
             ariaLabel="submissions-overlay-close"
             onClick={_ => closeOverlay(SubmissionDetails.courseId(submissionDetails), filter)}
             className="flex flex-col items-center justify-center leading-tight px-3 py-2 md:px-5 md:py-4 cursor-pointer border-r bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
             <div className="flex items-center justify-center bg-gray-300 rounded-full w-8 h-8">
               <Icon className="if i-times-regular text-lg lg:text-2xl" />
             </div>
-            <span className="sr-only"> {str("close")} </span>
+            <span className="sr-only"> {str(t("close"))} </span>
           </button>
           <div className="flex space-x-4">
             <CoursesStudents__TeamCoaches
               tooltipPosition=#Bottom
               defaultAvatarSize="8"
               mdAvatarSize="8"
-              title={<span className="hidden"> {"Assigned Coaches"->str} </span>}
+              title={<span className="hidden"> {t("assigned_coaches")->str} </span>}
               className="flex md:hidden items-center flex-shrink-0"
               coaches={SubmissionDetails.coaches(submissionDetails)}
             />
             <button
               className="flex flex-shrink-0 items-center md:hidden border-l text-sm font-semibold px-3 py-2 md:px-5 md:py-4">
-              {str("Review Next")}
+              {str(t("review_next"))}
             </button>
           </div>
         </div>
@@ -132,11 +134,11 @@ let headerSection = (submissionDetails, filter) =>
             {switch SubmissionDetails.teamName(submissionDetails) {
             | Some(teamName) =>
               <span>
-                {"Submitted by team: "->str}
+                {t("submitted_by_team")->str}
                 <span className="font-semibold"> {teamName->str} </span>
                 {" - "->str}
               </span>
-            | None => <span> {"Submitted by "->str} </span>
+            | None => <span> {t("submitted_by")->str} </span>
             }}
             {
               let studentCount = SubmissionDetails.students(submissionDetails)->Array.length
@@ -146,7 +148,7 @@ let headerSection = (submissionDetails, filter) =>
                 <span key={Student.id(student)}>
                   <a
                     className="font-semibold underline"
-                    href={"/students/" ++ (student->Student.id ++ "/report")}
+                    href={"/students/" ++ Student.id(student) ++ "/report"}
                     target="_blank">
                     {Student.name(student)->str}
                   </a>
@@ -162,12 +164,12 @@ let headerSection = (submissionDetails, filter) =>
           tooltipPosition=#Bottom
           defaultAvatarSize="8"
           mdAvatarSize="8"
-          title={<span className="mr-2"> {"Assigned Coaches"->str} </span>}
+          title={<span className="mr-2"> {t("assigned_coaches")->str} </span>}
           className="flex w-full md:w-auto items-center flex-shrink-0"
           coaches={SubmissionDetails.coaches(submissionDetails)}
         />
         <button className="flex items-center border-l text-sm font-semibold px-5 py-4">
-          {str("Review Next")}
+          {str(t("review_next"))}
         </button>
       </div>
     </div>

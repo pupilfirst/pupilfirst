@@ -391,8 +391,40 @@ en:
       feedback_placeholder: Add feedback (optional)
       generate_feedback_button: Generate Feedback
       review_checklist: Review Checklist
+    CoursesReview__Editor:
+      _on: "on "
+      add_another_feedback: Add another feedback
+      add_feedback: Add feedback
+      add_your_feedback: Add Your Feedback
+      create_review_checklist: Create Review Checklist
+      deleted_coach: Deleted Coach
+      evaluated_by: Evaluated By
+      feedback: Feedback
+      feedback_generated_text: Feedback generated from review checklist.
+      feedback_placeholder: This feedback will be emailed to students when you finish grading.
+      grade_card: Grade Card
+      help_text: Notes can be used to keep track of a %{noteAbout}'s progress. These notes are shown only to coaches in a student's report. %{additionalHelp}
+      note_help: "Would you like to write a note about this "
+      note_placeholder: Did you notice something while reviewing this submission?
+      review: Review
+      review_checklist: Review Checklist
+      save_grades: Save grades
+      save_grades_and_send_feedback: Save grades & send feedback
+      share_feedback: Share Feedback
+      show_review_checklist: Show Review Checklist
+      status:
+        completed: Completed
+        pending_review: Pending Review
+        rejected: Rejected
+        reviewing: Reviewing
+      student: student
+      team: team
+      team_notice: " This submission is from a team, so a note added here will be posted to the report of all students in the team."
+      undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
+      undo_grading: Undo Grading
+      write_a_note: Write a Note
     CoursesReview__Root:
-      assigned_to: Assigned to
+      assigned_to: Assigned To
       assigned_to_coach: "assigned to:"
       assigned_to_me: " assigned to me"
       button_load_more: Load More Submissions...
@@ -401,16 +433,39 @@ en:
       filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
       filter_by_level: Filter by level
       filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
+      level: Level
       me: Me
+      name_or_email: Name or Email
       now_showing_submissions_assigned_to: Now showing submissions assigned to %{name}.
       now_showing_submissions_from_all_students: Now showing submissions from all students in this course.
       pending: Pending
       reviewed: Reviewed
       reviewed_at: Reviewed At
       sort_by: "Sort by:"
+      status: Status
       submissions_fully_loaded_text: Showing all %{total_submissions} submissions
       submissions_partially_loaded_text: Showing %{loaded_submissions_count} of %{total_submissions} submissions
       submitted_at: Submitted At
+      target: Target
+    CoursesReview__SubmissionCard:
+      _on: "on "
+      completed: Completed
+      feedback_sent: Feedback Sent
+      level: "Level "
+      no_submissions_found: No submissions found
+      rejected: Rejected
+      submitted_by: "Submitted by: "
+      submitted_by_team: "Submitted by team: "
+    CoursesReview__SubmissionInfoCard:
+      submission_hash: "Submission #"
+    CoursesReview__SubmissionsRoot:
+      assigned_coaches: Assigned Coaches
+      close: close
+      review_next: Review Next
+      student_dropped_out_message: This submission is from a student whose access to the course has ended, or has dropped out.
+      students_dropped_out_message: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team: "
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
       attempted: " Attempted"
@@ -624,6 +679,8 @@ en:
     StudentsEditor__Search:
       filter_input_label: "Filter by:"
       filter_input_placeholder: Type name, tag or level
+    SubmissionChecklistShow:
+      target_marked_as_complete: Target was marked as complete.
     TargetChecklistItem:
       action_string_attach_link: Attach a Link
       action_string_choose_from_list: Choose from a list

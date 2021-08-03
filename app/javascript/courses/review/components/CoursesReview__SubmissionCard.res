@@ -3,6 +3,8 @@ external reviewedEmptyImage: string = "../../shared/images/reviewed-empty.svg"
 @bs.module
 external pendingEmptyImage: string = "../images/pending-empty.svg"
 
+let t = I18n.t(~scope="components.CoursesReview__SubmissionCard")
+
 open CoursesReview__Types
 
 let str = React.string
@@ -13,9 +15,9 @@ let submissionStatus = submission => {
   let (className, text) = if IndexSubmission.pendingReview(submission) {
     (classes ++ "bg-orange-100 text-orange-800", IndexSubmission.timeDistance(submission))
   } else if IndexSubmission.failed(submission) {
-    (classes ++ "bg-red-100 text-red-800", "Rejected")
+    (classes ++ "bg-red-100 text-red-800", t("rejected"))
   } else {
-    (classes ++ "bg-green-100 text-green-800", "Completed")
+    (classes ++ "bg-green-100 text-green-800", t("completed"))
   }
   <div className> {str(text)} </div>
 }
@@ -24,7 +26,7 @@ let feedbackSentNotice = feedbackSent =>
   ReactUtils.nullUnless(
     <div
       className="bg-primary-100 text-primary-600 border border-transparent flex-shrink-0 leading-normal font-semibold px-2 py-px rounded mr-3">
-      {str("Feedback Sent")}
+      {str(t("feedback_sent"))}
     </div>,
     feedbackSent,
   )
@@ -43,18 +45,14 @@ let submissionCardClasses = submission =>
 let showSubmission = (submissions, filterString) =>
   <div id="submissions"> {Js.Array.map(submission =>
       <Link
-        href={"/submissions/" ++
-        (IndexSubmission.id(submission) ++
-        "/review" ++
-        "?" ++
-        filterString)}
+        href={`/submissions/${IndexSubmission.id(submission)}/review?${filterString}`}
         key={IndexSubmission.id(submission)}
         ariaLabel={"Submission " ++ IndexSubmission.id(submission)}
         className={submissionCardClasses(submission)}>
         <div className="w-full md:w-3/4">
           <div className="block text-sm md:pr-2">
             <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-              {str("Level " ++ string_of_int(IndexSubmission.levelNumber(submission)))}
+              {str(t("level") ++ string_of_int(IndexSubmission.levelNumber(submission)))}
             </span>
             <span className="ml-2 font-semibold text-sm md:text-base">
               {IndexSubmission.title(submission)->str}
@@ -64,18 +62,18 @@ let showSubmission = (submissions, filterString) =>
             {switch IndexSubmission.teamName(submission) {
             | Some(name) =>
               <span>
-                {str("Submitted by team: ")} <span className="font-semibold"> {str(name)} </span>
+                {str(t("submitted_by_team"))} <span className="font-semibold"> {str(name)} </span>
               </span>
             | None =>
               <span>
-                {str("Submitted by: ")}
+                {str(t("submitted_by"))}
                 <span className="font-semibold">
                   {IndexSubmission.userNames(submission)->str}
                 </span>
               </span>
             }}
             <span className="ml-1">
-              {("on " ++ IndexSubmission.createdAtPretty(submission))->str}
+              {(t("_on") ++ IndexSubmission.createdAtPretty(submission))->str}
             </span>
           </div>
         </div>
@@ -98,7 +96,7 @@ let make = (~submissions, ~selectedTab, ~filterString) => {
   ArrayUtils.isEmpty(submissions)
     ? <div className="course-review__submissions-empty text-lg font-semibold text-center py-4">
         <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
-          {"No submissions found"->str}
+          {t("no_submissions_found")->str}
         </h5>
         <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=imageSrc />
       </div>

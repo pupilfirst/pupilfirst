@@ -1,41 +1,40 @@
 @import "custom_styles";
 
 @layer components {
-
   .theme-pupilfirst {
-    --color-primary-100: #F0EAFB;
-    --color-primary-200: #D3BFF3;
-    --color-primary-300: #B08EE6;
-    --color-primary-400: #976AE2;
-    --color-primary-500: #6025C0;
-    --color-primary-600: #4D1E9A;
-    --color-primary-700: #380D80;
-    --color-primary-800: #35156B;
-    --color-primary-900: #1F0D40;
+    --color-primary-100: #f0eafb;
+    --color-primary-200: #d3bff3;
+    --color-primary-300: #b08ee6;
+    --color-primary-400: #976ae2;
+    --color-primary-500: #6025c0;
+    --color-primary-600: #4d1e9a;
+    --color-primary-700: #380d80;
+    --color-primary-800: #35156b;
+    --color-primary-900: #1f0d40;
 
-    --color-secondary-100: #FEE6EF;
-    --color-secondary-200: #FCB5D0;
-    --color-secondary-300: #FF80B0;
-    --color-secondary-400: #F95392;
-    --color-secondary-500: #F61067;
-    --color-secondary-600: #AC0645;
-    --color-secondary-700: #A61149;
-    --color-secondary-800: #7B0531;
-    --color-secondary-900: #4A031E;
+    --color-secondary-100: #fee6ef;
+    --color-secondary-200: #fcb5d0;
+    --color-secondary-300: #ff80b0;
+    --color-secondary-400: #f95392;
+    --color-secondary-500: #f61067;
+    --color-secondary-600: #ac0645;
+    --color-secondary-700: #a61149;
+    --color-secondary-800: #7b0531;
+    --color-secondary-900: #4a031e;
 
-    --color-gray-100: #FBFAFC;
-    --color-gray-200: #F7F5FA;
-    --color-gray-300: #F1EDF7;
-    --color-gray-400: #DFDAE8;
-    --color-gray-500: #BFB8CC;
-    --color-gray-600: #9187A1;
-    --color-gray-700: #7D728F;
-    --color-gray-800: #6A5F7A;
-    --color-gray-900: #453C52;
+    --color-gray-50: #fdfdfd;
+    --color-gray-100: #fbfafc;
+    --color-gray-200: #f7f5fa;
+    --color-gray-300: #f1edf7;
+    --color-gray-400: #dfdae8;
+    --color-gray-500: #bfb8cc;
+    --color-gray-600: #9187a1;
+    --color-gray-700: #7d728f;
+    --color-gray-800: #6a5f7a;
+    --color-gray-900: #453c52;
 
     --font-family-sans: "Open Sans", sans-serif;
   }
-
 
   html {
     @apply theme-pupilfirst;

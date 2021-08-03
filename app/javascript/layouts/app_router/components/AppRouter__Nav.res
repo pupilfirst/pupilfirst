@@ -59,16 +59,16 @@ let courseSelector = (courses, selectedPage) => {
     )
 
     <div>
-      <div className="relative pb-1/2 bg-gray-800 rounded-lg">
+      <div className="relative pb-1/2 bg-gray-800">
         {switch Course.thumbnailUrl(currentCourse) {
-        | Some(url) => <img className="absolute h-full w-full object-cover rounded-lg" src=url />
+        | Some(url) => <img className="absolute h-full w-full object-cover" src=url />
         | None =>
           <div
             className="app-router-nav-course__cover absolute h-full w-full svg-bg-pattern-1 rounded-lg "
           />
         }}
       </div>
-      <div className="mt-4">
+      <div className="-mt-11 pb-2 md:pb-0 md:mt-4 px-2">
         <AppRouter__CourseSelector courses selectedPage currentCourseId />
       </div>
     </div>
@@ -137,7 +137,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
           className="px-4 py-2 bg-white border-b h-16 md:fixed w-full md:inset-x-0 md:top-0 z-50">
           <AppRouter__Header school currentUser />
         </div>
-        <div className="md:hidden p-4 md:mt-16"> {courseSelector(courses, selectedPage)} </div>
+        <div className="md:hidden"> {courseSelector(courses, selectedPage)} </div>
       </div>
       <div className="approuter-nav__sidebar hidden md:flex flex-col">
         <div className="flex flex-col h-0 flex-1 border-r bg-white">

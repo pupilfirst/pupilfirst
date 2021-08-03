@@ -246,7 +246,7 @@
 
   .dropdown__list {
     max-height: 16rem;
-    @apply w-50 min-w-full;
+    @apply min-w-full;
   }
 
   @screen md {

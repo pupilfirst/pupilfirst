@@ -366,9 +366,31 @@ en:
       submitted_at: Submitted At
       submitted_on: Submitted on %{date}
       view: "View "
+    CoursesReview__Checklist:
+      create_review_checklist: Create a review checklist
+      create_review_checklist_description: Prepare for your review by creating a checklist
+    CoursesReview__ChecklistEditor:
+      add_checklist_item: Add Checklist Item
+      add_result: Add Result
+      cancel: Cancel
+      checklist_item_description:
+        error_message: A check's result cannot be blank
+        placeholder: Add feedback (optional)
+      checklist_item_title:
+        placeholder: Add a result for this check
+        remove_button_title: Remove checklist result
+      checklist_title:
+        error_message: A checklist item cannot be blank
+        placeholder: Add an item to the checklist
+        remove_button_title: Remove checklist item
+      create_review_checklist: Create Review Checklist
+      edit_review_checklist: Edit Review Checklist
+      save_checklist: Save Checklist
     CoursesReview__ChecklistShow:
       edit_checklist_button: Edit Checklist
+      feedback_placeholder: Add feedback (optional)
       generate_feedback_button: Generate Feedback
+      review_checklist: Review Checklist
     CoursesReview__Root:
       assigned_to: Assigned to
       assigned_to_coach: "assigned to:"

@@ -11,7 +11,7 @@ let t = I18n.t(~scope="components.CoursesReview__ChecklistShow")
 
 let selectChecklist = (itemIndex, resultIndex, setSelecton) =>
   setSelecton(selection =>
-    Js.Array.concat(selection, [{itemIndex: itemIndex, resultIndex: resultIndex}])
+    Js.Array2.concat(selection, [{itemIndex: itemIndex, resultIndex: resultIndex}])
   )
 
 let unSelectChecklist = (itemIndex, resultIndex, setSelecton) =>
@@ -102,7 +102,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
     <div className="p-4 md:px-6 pb-0">
       <div className="flex items-end justify-between">
         <h5 className="font-semibold flex items-center tracking-wide">
-          {"Review Checklist"->str}
+          {t("review_checklist")->str}
         </h5>
         <button className="btn btn-small btn-default" onClick={_ => showEditorCB()}>
           <i className="far fa-edit" />
@@ -147,7 +147,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
                                 className="appearance-none border border-gray-400 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
                                 id={"result_" ++ (resultIndex->string_of_int ++ "_feedback")}
                                 type_="text"
-                                placeholder="Add feedback (optional)"
+                                placeholder={t("feedback_placeholder")}
                                 value={Belt.Option.getWithDefault(
                                   ReviewChecklistResult.feedback(checklistItem),
                                   "",

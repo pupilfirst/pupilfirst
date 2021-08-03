@@ -1,3 +1,5 @@
+let t = I18n.t(~scope="components.CoursesReview__Checklist")
+
 type state =
   | Edit
   | Show
@@ -27,11 +29,9 @@ let handleEmpty = setState =>
       </span>
       <span className="block text-left ml-4">
         <span className="block text-base font-semibold text-primary-500">
-          {"Create a review checklist" |> str}
+          {t("create_review_checklist")->str}
         </span>
-        <span className="text-sm block">
-          {"Prepare for your review by creating a checklist" |> str}
-        </span>
+        <span className="text-sm block"> {t("create_review_checklist_description")->str} </span>
       </span>
     </button>
   </div>

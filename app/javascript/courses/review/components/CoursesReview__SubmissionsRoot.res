@@ -227,13 +227,15 @@ let make = (~submissionId, ~currentUser) => {
         </div>,
         <CoursesReview__Editor
           overlaySubmission={SubmissionDetails.submission(submissionDetails)}
-          teamSubmission={submissionDetails |> SubmissionDetails.students |> Array.length > 1}
-          evaluationCriteria={submissionDetails |> SubmissionDetails.evaluationCriteria}
-          targetEvaluationCriteriaIds={submissionDetails |> SubmissionDetails.targetEvaluationCriteriaIds}
-          reviewChecklist={submissionDetails |> SubmissionDetails.reviewChecklist}
+          teamSubmission={SubmissionDetails.students(submissionDetails)->Js.Array2.length > 1}
+          evaluationCriteria={SubmissionDetails.evaluationCriteria(submissionDetails)}
+          targetEvaluationCriteriaIds={SubmissionDetails.targetEvaluationCriteriaIds(
+            submissionDetails,
+          )}
+          reviewChecklist={SubmissionDetails.reviewChecklist(submissionDetails)}
           updateSubmissionCB={updateSubmission(setState, submissionDetails)}
           updateReviewChecklistCB={updateReviewChecklist(submissionDetails, setState)}
-          targetId={submissionDetails |> SubmissionDetails.targetId}
+          targetId={SubmissionDetails.targetId(submissionDetails)}
           number={currentSubmissionIndex(
             submissionId,
             SubmissionDetails.allSubmissions(submissionDetails),

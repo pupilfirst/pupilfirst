@@ -2,8 +2,6 @@
 
 let t = I18n.t(~scope="components.AppRouter__Header")
 
-let str = React.string
-
 open AppRouter__Types
 
 let str = React.string

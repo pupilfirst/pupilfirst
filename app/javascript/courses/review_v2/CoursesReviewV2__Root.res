@@ -356,7 +356,7 @@ let submissionsSorter = filter => {
   }
 
   <div ariaLabel="Change submissions sorting" className="flex-shrink-0 md:ml-2">
-    <label className="hidden md:block text-tiny font-semibold uppercase">
+    <label className="hidden md:block text-tiny font-semibold uppercase pb-1">
       {tc("sort_by") |> str}
     </label>
     <SubmissionsSorter
@@ -658,8 +658,10 @@ let loadFilters = (send, courseId, state) => {
 }
 
 let shortCutClasses = selected =>
-  "cursor-pointer rounded-t-md px-4 py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-200 " ++ (
-    selected ? "border-b-3 text-primary-500 border-primary-500" : ""
+  "cursor-pointer flex-1 md:flex-auto rounded-md md:rounded-t-md p-1.5 md:px-4 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-400 md:hover:bg-gray-200 " ++ (
+    selected
+      ? "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500"
+      : ""
   )
 
 let computeInitialState = () => {
@@ -703,47 +705,52 @@ let make = (~courseId, ~currentCoachId) => {
             <p className="font-semibold"> {str("Review")} </p>
             <div className="block md:hidden"> {submissionsSorter(filter)} </div>
           </div>
-          <div className="flex pt-3 border-b px-4">
-            <Link
-              href={"/courses/" ++
-              courseId ++
-              "/review?" ++
-              filterToQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
-              className={shortCutClasses(filter.tab === None)}>
-              <div> {str("All")} </div>
-            </Link>
-            <Link
-              href={"/courses/" ++
-              courseId ++
-              "/review?" ++
-              filterToQueryString({
-                ...filter,
-                tab: Some(#Pending),
-                sortCriterion: #SubmittedAt,
-                sortDirection: #Ascending,
-              })}
-              className={shortCutClasses(filter.tab === Some(#Pending))}>
-              <div> {str("Pending")} </div>
-            </Link>
-            <Link
-              href={"/courses/" ++
-              courseId ++
-              "/review?" ++
-              filterToQueryString({
-                ...filter,
-                tab: Some(#Reviewed),
-                sortCriterion: #EvaluatedAt,
-                sortDirection: #Descending,
-              })}
-              className={shortCutClasses(filter.tab === Some(#Reviewed))}>
-              <div> {str("Reviewed")} </div>
-            </Link>
+          <div className="px-4">
+            <div className="flex pt-3 md:border-b border-gray-300">
+              <div
+                className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent ">
+                <Link
+                  href={"/courses/" ++
+                  courseId ++
+                  "/review?" ++
+                  filterToQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
+                  className={shortCutClasses(filter.tab === None)}>
+                  <div> {str("All")} </div>
+                </Link>
+                <Link
+                  href={"/courses/" ++
+                  courseId ++
+                  "/review?" ++
+                  filterToQueryString({
+                    ...filter,
+                    tab: Some(#Pending),
+                    sortCriterion: #SubmittedAt,
+                    sortDirection: #Ascending,
+                  })}
+                  className={shortCutClasses(filter.tab === Some(#Pending))}>
+                  <div> {str("Pending")} </div>
+                </Link>
+                <Link
+                  href={"/courses/" ++
+                  courseId ++
+                  "/review?" ++
+                  filterToQueryString({
+                    ...filter,
+                    tab: Some(#Reviewed),
+                    sortCriterion: #EvaluatedAt,
+                    sortDirection: #Descending,
+                  })}
+                  className={shortCutClasses(filter.tab === Some(#Reviewed))}>
+                  <div> {str("Reviewed")} </div>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div className="md:sticky md:top-0 bg-gray-100">
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
-          <div className="md:flex w-full items-start py-3 px-4 md:py-4">
+          <div className="md:flex w-full items-start pt-4 px-4 md:pt-6">
             <div className="flex-1">
               <label className="block text-tiny font-semibold uppercase">
                 {tc("filter_by")->str}

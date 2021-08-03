@@ -10,7 +10,7 @@ module Make = (Sortable: Sortable) => {
     let selectedForDropdown =
       <button
         title={"Order by " ++ (selectedCriterion |> Sortable.criterion)}
-        className="flex w-full items-center justify-between bg-white leading-relaxed font-semibold border border-gray-400 rounded focus:outline-none focus:bg-white focus:border-gray-500 px-2 md:px-3 py-2 ">
+        className="flex w-full items-center justify-between bg-white leading-relaxed font-semibold border border-gray-400 rounded focus:outline-none focus:bg-white focus:border-gray-500 px-2 md:px-3 py-1 md:py-2 ">
         <span> {selectedCriterion |> Sortable.criterion |> str} </span>
         <i className="fas fa-caret-down ml-3" />
       </button>
@@ -42,12 +42,12 @@ module Make = (Sortable: Sortable) => {
 
   @react.component
   let make = (~criteria, ~selectedCriterion, ~direction, ~onDirectionChange, ~onCriterionChange) =>
-    <div className="flex mt-1">
+    <div className="flex">
       {criteria |> Array.length > 1
         ? dropdown(criteria, selectedCriterion, onCriterionChange)
         : <div
             title={"Order by " ++ (selectedCriterion |> Sortable.criterion)}
-            className="inline-flex flex-1 md:flex-auto items-center bg-gray-100 leading-relaxed font-semibold text-gray-700 border border-gray-400 rounded focus:outline-none px-3 py-2 text-sm ">
+            className="inline-flex flex-1 md:flex-auto items-center bg-gray-100 leading-relaxed font-semibold text-gray-700 border border-gray-400 rounded focus:outline-none px-3 py-1 md:py-2 text-sm ">
             <div> {selectedCriterion |> Sortable.criterion |> str} </div>
           </div>}
       <span className="flex ml-1">

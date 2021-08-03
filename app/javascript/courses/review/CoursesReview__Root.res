@@ -622,7 +622,7 @@ let submissionsLoadedData = (totoalSubmissionsCount, loadedSubmissionsCount) =>
 
 let submissionsList = (submissions, state, filter) =>
   <div>
-    <CoursesReviewV2__SubmissionCard
+    <CoursesReview__SubmissionCard
       submissions selectedTab=filter.tab filterString={filterToQueryString(filter)}
     />
     {ReactUtils.nullIf(

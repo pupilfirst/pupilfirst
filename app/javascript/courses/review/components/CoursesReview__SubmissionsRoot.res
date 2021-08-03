@@ -209,7 +209,7 @@ let make = (~submissionId, ~currentUser) => {
               className="flex space-x-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-200">
               {Js.Array.mapi(
                 (submission, index) =>
-                  <CoursesReviewV2__SubmissionInfoCard
+                  <CoursesReview__SubmissionInfoCard
                     key={SubmissionMeta.id(submission)}
                     selected={SubmissionMeta.id(submission) == submissionId}
                     submission
@@ -225,7 +225,7 @@ let make = (~submissionId, ~currentUser) => {
             Js.Array.length(SubmissionDetails.allSubmissions(submissionDetails)) == 1,
           )}
         </div>,
-        <CoursesReviewV2__Editor
+        <CoursesReview__Editor
           overlaySubmission={SubmissionDetails.submission(submissionDetails)}
           teamSubmission={submissionDetails |> SubmissionDetails.students |> Array.length > 1}
           evaluationCriteria={submissionDetails |> SubmissionDetails.evaluationCriteria}

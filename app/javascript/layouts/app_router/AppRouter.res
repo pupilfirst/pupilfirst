@@ -14,14 +14,14 @@ let make = (~school, ~courses, ~currentUser) => {
 
   let (component, selectedPage: Page.t) = switch url.path {
   | list{"courses", courseId, "review"} => (
-      <CoursesReviewV2__Root
+      <CoursesReview__Root
         courseId
         currentCoachId={Belt.Option.getWithDefault(User.coachId(User.defaultUser(currentUser)), "")}
       />,
       Student__Review(courseId),
     )
   | list{"submissions", submissionId, "review"} => (
-      <CoursesReviewV2__SubmissionsRoot submissionId currentUser />,
+      <CoursesReview__SubmissionsRoot submissionId currentUser />,
       Student__SubmissionShow(submissionId),
     )
   | _ =>

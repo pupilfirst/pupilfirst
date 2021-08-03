@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesReviewV2__SubmissionInfoCard.css")`)
+%bs.raw(`require("./CoursesReview__SubmissionInfoCard.css")`)
 
 open CoursesReview__Types
 let str = React.string

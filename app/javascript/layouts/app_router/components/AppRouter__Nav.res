@@ -145,6 +145,17 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         <div className="flex flex-col h-0 flex-1 border-r bg-white">
           <div className="flex-1 flex flex-col pt-4 pb-4 overflow-y-auto md:mt-16">
             <nav className="flex-1 px-4 bg-white"> {renderLinks(courses, selectedPage)} </nav>
+            <div className="px-4 pt-6">
+              <button
+                title="Show user controls"
+                className="flex w-full items-center p-2 bg-gray-100 rounded-md focus:ring ring-gray-300 ring-offset-2 hover:bg-gray-200 focus:bg-gray-200 transition">
+                <div className="h-12 w-12 rounded-full bg-white border border-gray-300" />
+                <div className="pl-3">
+                  <p className="text-sm font-semibold text-left"> {str("John Doe")} </p>
+                  <p className="text-xs text-gray-700"> {str("johndoe@gmail.com")} </p>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>

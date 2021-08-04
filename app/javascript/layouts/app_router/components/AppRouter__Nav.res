@@ -2,6 +2,7 @@
 %bs.raw(`require("./AppRouter__Nav.css")`)
 
 let t = I18n.t(~scope="components.AppRouter__Nav")
+let tc = I18n.t(~scope="components.AppRouter__Header")
 
 open AppRouter__Types
 
@@ -107,6 +108,57 @@ let renderLinksMobile = (courses, selectedPage) => {
   }
 }
 
+let showLink = (icon, text, href) => {
+  <div key=href className="whitespace-nowrap">
+    <a
+      rel="nofollow"
+      className="cursor-pointer font-semibold text-gray-900 hover:text-primary-500 hover:bg-gray-200"
+      href>
+      <FaIcon classes={"fas fw fa-" ++ icon} /> <span className="pl-2"> {str(text)} </span>
+    </a>
+  </div>
+}
+
+let links = () => {
+  [
+    showLink("edit", tc("edit_profile"), "/user/edit"),
+    showLink("power-off", tc("sign_out"), "/users/sign_out"),
+  ]
+}
+
+let showUser = user => {
+  switch user {
+  | Some(user) =>
+    <div className="px-4 pt-6">
+      <button
+        title="Show user controls"
+        className="flex w-full items-center p-2 bg-gray-100 rounded-md focus:ring ring-gray-300 ring-offset-2 hover:bg-gray-200 focus:bg-gray-200 transition">
+        <button
+          title="Show user controls"
+          className="md:ml-2 h-10 w-10 rounded-full border border-gray-300 hover:border-primary-500">
+          {User.avatarUrl(user)->Belt.Option.mapWithDefault(
+            <Avatar
+              name={User.name(user)} className="inline-block object-contain rounded-full text-tiny"
+            />,
+            src =>
+              <img
+                className="inline-block object-contain rounded-full text-tiny"
+                src
+                alt={User.name(user)}
+              />,
+          )}
+        </button>
+        <div className="pl-2">
+          <p className="text-sm font-semibold text-left"> {str(User.name(user))} </p>
+          <div className="text-xs text-gray-700 flex space-x-3"> {links()->React.array} </div>
+        </div>
+      </button>
+    </div>
+
+  | None => React.null
+  }
+}
+
 @react.component
 let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
   let (sidebarOpen, setSidebarOpen) = React.useState(_ => false)
@@ -145,17 +197,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         <div className="flex flex-col h-0 flex-1 border-r bg-white">
           <div className="flex-1 flex flex-col pt-4 pb-4 overflow-y-auto md:mt-16">
             <nav className="flex-1 px-4 bg-white"> {renderLinks(courses, selectedPage)} </nav>
-            <div className="px-4 pt-6">
-              <button
-                title="Show user controls"
-                className="flex w-full items-center p-2 bg-gray-100 rounded-md focus:ring ring-gray-300 ring-offset-2 hover:bg-gray-200 focus:bg-gray-200 transition">
-                <div className="h-12 w-12 rounded-full bg-white border border-gray-300" />
-                <div className="pl-3">
-                  <p className="text-sm font-semibold text-left"> {str("John Doe")} </p>
-                  <p className="text-xs text-gray-700"> {str("johndoe@gmail.com")} </p>
-                </div>
-              </button>
-            </div>
+            {showUser(currentUser)}
           </div>
         </div>
       </div>

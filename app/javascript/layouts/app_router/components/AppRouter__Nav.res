@@ -2,7 +2,6 @@
 %bs.raw(`require("./AppRouter__Nav.css")`)
 
 let t = I18n.t(~scope="components.AppRouter__Nav")
-let tc = I18n.t(~scope="components.AppRouter__Header")
 
 open AppRouter__Types
 
@@ -108,22 +107,19 @@ let renderLinksMobile = (courses, selectedPage) => {
   }
 }
 
-let showLink = (icon, text, href) => {
+let showLink = (icon, href) => {
   <div key=href className="whitespace-nowrap">
     <a
       rel="nofollow"
-      className="cursor-pointer font-semibold text-gray-900 hover:text-primary-500 hover:bg-gray-200"
+      className="cursor-pointer font-semibold text-gray-900 hover:text-primary-500 hover:bg-gray-400 bg-gray-200"
       href>
-      <FaIcon classes={"fas fw fa-" ++ icon} /> <span className="pl-2"> {str(text)} </span>
+      <FaIcon classes={"fas fw fa-" ++ icon} />
     </a>
   </div>
 }
 
 let links = () => {
-  [
-    showLink("edit", tc("edit_profile"), "/user/edit"),
-    showLink("power-off", tc("sign_out"), "/users/sign_out"),
-  ]
+  [showLink("edit", "/user/edit"), showLink("power-off", "/users/sign_out")]
 }
 
 let showUser = user => {
@@ -148,7 +144,7 @@ let showUser = user => {
               />,
           )}
         </button>
-        <div className="pl-2">
+        <div className="pl-2 flex justify-between w-full items-center">
           <p className="text-sm font-semibold text-left"> {str(User.name(user))} </p>
           <div className="text-xs text-gray-700 flex space-x-3"> {links()->React.array} </div>
         </div>

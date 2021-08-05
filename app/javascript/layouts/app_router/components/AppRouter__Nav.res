@@ -111,44 +111,42 @@ let showLink = (icon, href) => {
   <div key=href className="whitespace-nowrap">
     <a
       rel="nofollow"
-      className="cursor-pointer font-semibold text-gray-900 hover:text-primary-500 hover:bg-gray-400 bg-gray-200"
+      className="flex justify-center items-center text-sm text-gray-800 bg-gray-300 px-2 py-1 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
       href>
-      <FaIcon classes={"fas fw fa-" ++ icon} />
+      <FaIcon classes={"fas fw fa-" ++ icon} /> <p className="ml-2"> {t("sign_out")->str} </p>
     </a>
   </div>
 }
 
 let links = () => {
-  [showLink("edit", "/user/edit"), showLink("power-off", "/users/sign_out")]
+  [showLink("power-off", "/users/sign_out")]
 }
 
 let showUser = user => {
   switch user {
   | Some(user) =>
     <div className="px-4 pt-6">
-      <button
-        title="Show user controls"
-        className="flex w-full items-center p-2 bg-gray-100 rounded-md focus:ring ring-gray-300 ring-offset-2 hover:bg-gray-200 focus:bg-gray-200 transition">
-        <button
-          title="Show user controls"
-          className="md:ml-2 h-10 w-10 rounded-full border border-gray-300 hover:border-primary-500">
+      <div className="flex w-full items-center p-2 bg-gray-100 rounded-md">
+        <div
+          className="flex items-center justify-center rounded-full text-center border border-gray-300">
           {User.avatarUrl(user)->Belt.Option.mapWithDefault(
             <Avatar
-              name={User.name(user)} className="inline-block object-contain rounded-full text-tiny"
+              name={User.name(user)}
+              className="inline-block h-10 w-10 object-contain rounded-full text-tiny flex-shrink-0"
             />,
             src =>
               <img
-                className="inline-block object-contain rounded-full text-tiny"
+                className="inline-block h-10 w-10 object-contain rounded-full text-tiny"
                 src
                 alt={User.name(user)}
               />,
           )}
-        </button>
+        </div>
         <div className="pl-2 flex justify-between w-full items-center">
           <p className="text-sm font-semibold text-left"> {str(User.name(user))} </p>
-          <div className="text-xs text-gray-700 flex space-x-3"> {links()->React.array} </div>
+          <div className="text-xs text-gray-700 flex space-x-2"> {links()->React.array} </div>
         </div>
-      </button>
+      </div>
     </div>
 
   | None => React.null

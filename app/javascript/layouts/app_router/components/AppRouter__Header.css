@@ -1,39 +1,3 @@
-.app-router-header__links-container {
-  position: relative;
-  transition: all 0.2s ease-in-out;
-}
-
-.app-router-header__links-container:before,
-.app-router-header__links-container:after {
-  position: absolute;
-  content: "";
-  display: inline-block;
-}
-
-.app-router-header__links-container:before {
-  top: -10px;
-  right: 23px;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid theme("colors.gray.400");
-  border-left: 10px solid transparent;
-  border-bottom-color: theme("colors.gray.400");
-}
-
-.app-router-header__links-container:after {
-  top: -9px;
-  right: 24px;
-  border-right: 9px solid transparent;
-  border-bottom: 9px solid theme("colors.gray.100");
-  border-left: 9px solid transparent;
-}
-
-@screen md {
-  .app-router-header__links-container:before,
-  .app-router-header__links-container:after {
-    display: none;
-  }
-}
-
 /* Toggle menu btn */
 
 .app-router-header__menu-btn.open

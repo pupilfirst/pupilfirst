@@ -47,7 +47,7 @@ let renderLinks = user => {
 let headerLink = (key, link) =>
   <div
     key
-    className="md:ml-2 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ml-2 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center">
     <a
       className="no-underline bg-gray-100 md:bg-white hover:bg-gray-200 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2"
       href={link->School.linkUrl}
@@ -60,7 +60,7 @@ let headerLink = (key, link) =>
 let signOutLink = () =>
   <div
     key="Logout-button"
-    className="md:ml-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ml-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center">
     <div className="flex items-center justify-center">
       <a
         href="/users/sign_out"
@@ -74,7 +74,7 @@ let signOutLink = () =>
 let signInLink = () =>
   <div
     key="SignIn-button"
-    className="md:ml-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ml-2 text-sm font-semibold cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center">
     <div className="flex items-center justify-center">
       <a
         className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold"
@@ -184,7 +184,7 @@ let make = (~school, ~currentUser) => {
         </div>
         {!menuHidden && !isMobile()
           ? <div
-              className="app-router-header__links-container flex justify-end items-center w-3/5 lg:w-3/4 flex-nowrap flex-shrink-0">
+              className="relative flex justify-end items-center w-3/5 lg:w-3/4 flex-nowrap flex-shrink-0 transition">
               {headerLinks(School.links(school), isLoggedIn, currentUser, hasNotifications)}
             </div>
           : React.null}
@@ -192,7 +192,7 @@ let make = (~school, ~currentUser) => {
     </div>
     {isMobile() && !menuHidden
       ? <div
-          className="app-router-header__links-container flex flex-row border-t w-full flex-wrap shadow-lg">
+          className="relative mt-2 flex flex-row w-full flex-wrap bg-gray-100 rounded-lg shadow-lg transition">
           {headerLinks(School.links(school), isLoggedIn, currentUser, hasNotifications)}
         </div>
       : React.null}

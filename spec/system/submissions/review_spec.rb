@@ -226,23 +226,23 @@ feature 'Submission review overlay', js: true do
       click_button 'Create Review Checklist'
 
       within("div[data-checklist-item='0']") do
-        fill_in 'checklist_title', with: checklist_title_1
-        fill_in 'result_0_title', with: c1_result_0_title
-        fill_in 'result_0_feedback', with: c1_result_0_feedback
+        fill_in 'checklist_0_title', with: checklist_title_1
+        fill_in 'result_00_title', with: c1_result_0_title
+        fill_in 'result_00_feedback', with: c1_result_0_feedback
 
-        fill_in 'result_1_title', with: c1_result_1_title
-        fill_in 'result_1_feedback', with: c1_result_1_feedback
+        fill_in 'result_01_title', with: c1_result_1_title
+        fill_in 'result_01_feedback', with: c1_result_1_feedback
       end
 
       click_button 'Add Checklist Item'
 
       within("div[data-checklist-item='1']") do
-        fill_in 'checklist_title', with: checklist_title_2
-        fill_in 'result_0_title', with: c2_result_0_title
-        fill_in 'result_0_feedback', with: c2_result_0_feedback
+        fill_in 'checklist_1_title', with: checklist_title_2
+        fill_in 'result_10_title', with: c2_result_0_title
+        fill_in 'result_10_feedback', with: c2_result_0_feedback
         click_button 'Add Result'
-        fill_in 'result_1_title', with: c2_result_1_title
-        fill_in 'result_1_feedback', with: c2_result_1_feedback
+        fill_in 'result_11_title', with: c2_result_1_title
+        fill_in 'result_11_feedback', with: c2_result_1_feedback
       end
 
       click_button 'Save Checklist'

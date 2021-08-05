@@ -287,6 +287,30 @@ feature "Coach's review interface" do
       expect(page).not_to have_text(target_l3.title)
     end
 
+    scenario 'course coach uses the target filter', js: true do
+      sign_in_user course_coach.user, referrer: review_course_path(course)
+
+      # Ensure coach is on the review dashboard.
+      expect(page).to have_content('3')
+
+      # filter pending submissions
+      fill_in 'filter', with: 'target:'
+
+      # choose level 1 from the dropdown
+      click_button team_target.title
+
+      # choose level 1 submissions should be displayed
+
+      within("div[id='submissions']") do
+        expect(page).to have_text(team_target.title)
+      end
+
+      # submissions from other levels should not be displayed
+      expect(page).not_to have_text(target_l1.title)
+      expect(page).not_to have_text(target_l2.title)
+      expect(page).not_to have_text(target_l3.title)
+    end
+
     scenario 'team coach visits the review dashboard', js: true do
       sign_in_user team_coach.user, referrer: review_course_path(course)
 

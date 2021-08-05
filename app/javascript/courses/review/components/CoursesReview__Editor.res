@@ -392,7 +392,7 @@ let submissionReviewStatus = (status, overlaySubmission) => {
   let (text, color) = switch status {
   | Graded(passed) => passed ? (t("status.completed"), Green) : (t("status.rejected"), Red)
   | Grading => (t("status.reviewing"), Orange)
-  | Ungraded => (t("status.pending.review"), Gray)
+  | Ungraded => (t("status.pending_review"), Gray)
   }
   <div ariaLabel="submission-status" className="hidden md:flex space-x-4 justify-end w-3/4">
     <div className="flex items-center">
@@ -434,7 +434,7 @@ let submissionStatusIcon = (status, overlaySubmission) => {
   let (text, color) = switch status {
   | Graded(passed) => passed ? (t("status.completed"), Green) : (t("status.rejected"), Red)
   | Grading => (t("status.reviewing"), Orange)
-  | Ungraded => (t("status.pending.review"), Gray)
+  | Ungraded => (t("status.pending_review"), Gray)
   }
   <div
     ariaLabel="submission-status"

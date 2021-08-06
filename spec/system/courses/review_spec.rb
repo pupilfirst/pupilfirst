@@ -318,7 +318,7 @@ feature "Coach's review interface" do
       click_link 'Pending'
 
       fill_in 'filter', with: 'Assigned to:'
-      click_button 'Pick Assigned to: Me'
+      click_button 'Pick Assigned To: Me'
 
       expect(page).to have_content('1')
 
@@ -471,14 +471,14 @@ feature "Coach's review interface" do
 
         click_link 'Pending'
         fill_in 'filter', with: 'assigned to:'
-        click_button 'Pick Assigned to: Me'
+        click_button 'Pick Assigned To: Me'
 
         expect(page).to have_content('1')
         expect(page).to have_text(target_l3.title)
         expect(page).not_to have_text(target_l2.title)
 
         fill_in 'filter', with: 'assigned to:'
-        click_button "Assigned to: #{team_coach_2.name}"
+        click_button "Assigned To: #{team_coach_2.name}"
         expect(page).to have_content('1')
 
         # ...but the submission has changed.

@@ -127,16 +127,15 @@ let showUser = user => {
   | Some(user) =>
     <div className="px-4 pt-6">
       <div className="flex w-full items-center p-2 bg-gray-100 rounded-md">
-        <div
-          className="flex items-center justify-center rounded-full text-center border border-gray-300">
+        <div className="flex items-center justify-center rounded-full text-center flex-shrink-0">
           {User.avatarUrl(user)->Belt.Option.mapWithDefault(
             <Avatar
               name={User.name(user)}
-              className="inline-block h-10 w-10 object-contain rounded-full text-tiny flex-shrink-0"
+              className="flex w-10 h-10 border border-gray-300 object-contain object-center rounded-full text-tiny flex-shrink-0"
             />,
             src =>
               <img
-                className="inline-block h-10 w-10 object-contain rounded-full text-tiny"
+                className="flex w-10 h-10 border border-gray-300 object-cover object-center rounded-full text-tiny"
                 src
                 alt={User.name(user)}
               />,

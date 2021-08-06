@@ -416,10 +416,11 @@ module Selectable = {
   let searchString = t =>
     switch t {
     | Level(level) =>
-      tc("search.level") ++ string_of_int(Level.number(level)) ++ ", " ++ Level.name(level)
+      tc("search.level") ++ " " ++ string_of_int(Level.number(level)) ++ ", " ++ Level.name(level)
     | AssignedToCoach(coach, currentCoachId) =>
-      tc("search.assigned_to") ++ Coach.id(coach) == currentCoachId ? tc("me") : Coach.name(coach)
-    | Target(t) => tc("search.target") ++ TargetInfo.title(t)
+      tc("search.assigned_to") ++
+      " " ++ (Coach.id(coach) == currentCoachId ? tc("me") : Coach.name(coach))
+    | Target(t) => tc("search.target") ++ " " ++ TargetInfo.title(t)
     | Loader(_) => ""
     | Status(t) =>
       tc("search.status") ++
@@ -773,7 +774,7 @@ let make = (~courseId, ~currentCoachId) => {
         </div>
       </div>
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
-        <div id="submissions" className="mt-4">
+        <div className="mt-4">
           {switch state.submissions {
           | Unloaded =>
             <div> {SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())} </div>

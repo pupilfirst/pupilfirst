@@ -100,7 +100,7 @@ let addEmptyResultItem = (reviewChecklistItem, itemIndex, setState) =>
 
 let addEmptyChecklistItem = setState => setState(state => {
     ...state,
-    reviewChecklist: ReviewChecklistItem.empty()->Js.Array2.concat(state.reviewChecklist),
+    reviewChecklist: Js.Array2.concat(state.reviewChecklist, ReviewChecklistItem.empty()),
   })
 
 let removeChecklistResult = (itemIndex, resultIndex, reviewChecklistItem, setState) =>
@@ -165,7 +165,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                   <div className="w-full">
                     <input
                       className="checklist-editor__checklist-item-title h-11 text-sm focus:outline-none focus:bg-white focus:border-primary-300"
-                      id="checklist_title"
+                      id={"checklist_" ++ string_of_int(itemIndex) ++ "_title"}
                       type_="text"
                       placeholder={t("checklist_title.placeholder")}
                       value={ReviewChecklistItem.title(reviewChecklistItem)}
@@ -209,7 +209,9 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                             <div className="relative">
                               <input
                                 className="checklist-editor__checklist-result-item-title h-10 pr-12 focus:outline-none focus:bg-white focus:border-primary-300"
-                                id={"result_" ++ string_of_int(resultIndex) ++ "_title"}
+                                id={"result_" ++
+                                string_of_int(itemIndex) ++
+                                string_of_int(resultIndex) ++ "_title"}
                                 type_="text"
                                 placeholder={t("checklist_item_title.placeholder")}
                                 value={ReviewChecklistResult.title(resultItem)}
@@ -243,7 +245,9 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                               rows=2
                               cols=33
                               className="appearance-none border border-gray-400 bg-transparent rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
-                              id={"result_" ++ string_of_int(resultIndex) ++ "_feedback"}
+                              id={"result_" ++
+                              string_of_int(itemIndex) ++
+                              string_of_int(resultIndex) ++ "_feedback"}
                               type_="text"
                               placeholder={t("checklist_item_description.placeholder")}
                               value=feedback

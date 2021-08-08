@@ -41,7 +41,7 @@ let selected = user => {
 }
 
 let renderLinks = user => {
-  <Dropdown selected={selected(user)} contents={links()} right=true />
+  <Dropdown selected={selected(user)} contents={links()} right=true key="links-dropdown" />
 }
 
 let headerLink = (key, link) =>

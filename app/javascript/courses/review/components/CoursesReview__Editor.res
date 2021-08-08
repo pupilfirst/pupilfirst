@@ -576,7 +576,7 @@ let noteForm = (overlaySubmission, teamSubmission, note, send) =>
     let textareaId = "note-for-submission-" ++ OverlaySubmission.id(overlaySubmission)
 
     <div className="text-sm">
-      <p className="font-semibold text-sm flex">
+      <div className="font-semibold text-sm flex">
         <Icon className="if i-long-text-light text-gray-800 text-base" />
         {switch note {
         | Some(_) =>
@@ -587,11 +587,11 @@ let noteForm = (overlaySubmission, teamSubmission, note, send) =>
           <div className="ml-2 md:ml-4 tracking-wide w-full">
             <div> <span> {(t("note_help") ++ (noteAbout ++ "?"))->str} </span> help </div>
             <button className="btn btn-default mt-2" onClick={_ => send(UpdateNote(""))}>
-              <i className="far fa-edit" /> <p className="pl-2"> {t("write_a_note")->str} </p>
+              <i className="far fa-edit" /> <span className="pl-2"> {t("write_a_note")->str} </span>
             </button>
           </div>
         }}
-      </p>
+      </div>
       {switch note {
       | Some(note) =>
         <div className="ml-6 md:ml-7 mt-2">
@@ -647,7 +647,7 @@ let feedbackGenerator = (reviewChecklist, state, send) => {
         <div
           className="inline-flex items-center bg-green-200 mt-2 md:ml-8 text-green-800 px-2 py-1 rounded-md">
           <Icon className="if i-check-circle-solid text-green-700 text-base" />
-          <p className="pl-2 text-sm font-semibold"> {t("feedback_generated_text")->str} </p>
+          <span className="pl-2 text-sm font-semibold"> {t("feedback_generated_text")->str} </span>
         </div>,
         state.feedbackGenerated,
       )}
@@ -785,7 +785,7 @@ let make = (
               ->str}
             </p>
           </div>
-          <p className="text-sm"> {showSubmissionStatus(status)} </p>
+          <div className="text-sm"> {showSubmissionStatus(status)} </div>
         </div>
       </div>
       <div className="p-4 md:p-6">

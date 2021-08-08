@@ -157,7 +157,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
   let (sidebarOpen, setSidebarOpen) = React.useState(_ => false)
   [
     ReactUtils.nullUnless(
-      <div className="fixed inset-0 flex z-40 md:hidden">
+      <div className="fixed inset-0 flex z-40 md:hidden" key="sidebar">
         <div>
           <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white">
             <div>
@@ -178,7 +178,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
       </div>,
       sidebarOpen,
     ),
-    <div className="flex flex-shrink-0">
+    <div className="flex flex-shrink-0" key="main">
       <div className="flex flex-1 flex-col">
         <div
           className="px-4 py-2 bg-white border-b h-16 md:fixed w-full md:inset-x-0 md:top-0 z-50">
@@ -195,7 +195,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         </div>
       </div>
     </div>,
-    <div className="md:hidden fixed inset-x-0 bottom-0 flex-1 bg-white border-t">
+    <div className="md:hidden fixed inset-x-0 bottom-0 flex-1 bg-white border-t" key="mobile-links">
       {renderLinksMobile(courses, selectedPage)}
     </div>,
   ]->React.array

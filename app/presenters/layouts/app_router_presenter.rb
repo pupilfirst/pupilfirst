@@ -65,13 +65,13 @@ module Layouts
                 id: current_user.founders.select(:id)
               }
             )
-        end
+        end.to_a
     end
 
     def courses_with_review_access
       @courses_with_review_access ||=
         begin
-          current_coach.present? ? current_coach.courses : []
+          current_coach.present? ? current_coach.courses : Course.none
         end
     end
 
@@ -85,7 +85,7 @@ module Layouts
           .joins(:course_authors)
           .where(course_authors: current_user.course_authors)
       else
-        []
+        Course.none
       end
     end
 

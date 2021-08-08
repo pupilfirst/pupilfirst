@@ -189,7 +189,7 @@ let updateReviewChecklist = (submissionDetails, setState, reviewChecklist) =>
 
 let currentSubmissionIndex = (submissionId, allSubmissions) => {
   Js.Array.length(allSubmissions) - Js.Array.findIndex(s => {
-    SubmissionMeta.id(s) === submissionId
+    SubmissionMeta.id(s) == submissionId
   }, allSubmissions)
 }
 
@@ -203,7 +203,7 @@ let make = (~submissionId, ~currentUser) => {
     {switch state {
     | Loaded(submissionDetails) =>
       [
-        <div>
+        <div key="submission-header">
           <div> {inactiveWarning(submissionDetails)} </div>
           {headerSection(submissionDetails, url.search)}
           {ReactUtils.nullIf(
@@ -228,6 +228,7 @@ let make = (~submissionId, ~currentUser) => {
           )}
         </div>,
         <CoursesReview__Editor
+          key="submission-editor"
           overlaySubmission={SubmissionDetails.submission(submissionDetails)}
           teamSubmission={SubmissionDetails.students(submissionDetails)->Js.Array2.length > 1}
           evaluationCriteria={SubmissionDetails.evaluationCriteria(submissionDetails)}

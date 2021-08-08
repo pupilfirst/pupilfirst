@@ -40,7 +40,7 @@ let path = t => {
   | Student__Students(courseId) => `/courses/${courseId}/students`
   | Student__Review(courseId) => `/courses/${courseId}/review`
   | Student__Leaderboard(courseId) => `/courses/${courseId}/leaderboard`
-  | Student__SubmissionShow(id) => `/courses/${id}/submission`
+  | Student__SubmissionShow(submissionId) => `/submissions/${submissionId}/review`
   }
 }
 
@@ -68,7 +68,7 @@ let changeId = (t, id) => {
   }
 }
 
-let canAcessPage = (t, course) => {
+let canAccessPage = (t, course) => {
   Belt.Option.isSome(
     Js.Array.find(l => l == changeId(t, AppRouter__Course.id(course)), activeLinks(course)),
   )

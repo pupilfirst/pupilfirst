@@ -36,9 +36,7 @@ let showSubmissionStatus = submission => {
 }
 
 let linkUrl = (submissionId, filterString) => {
-  `/submissions/${submissionId}/review${String.trim(filterString) === ""
-    ? ""
-    : "?" ++ filterString}`
+  `/submissions/${submissionId}/review${String.trim(filterString) == "" ? "" : "?" ++ filterString}`
 }
 
 @react.component

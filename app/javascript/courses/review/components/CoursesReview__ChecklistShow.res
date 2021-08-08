@@ -30,7 +30,7 @@ let checkboxOnChange = (itemIndex, resultIndex, setSelecton, event) =>
 let generateFeedback = (checklist, selection, feedback, setSelecton, updateFeedbackCB) => {
   let newFeedback =
     feedback ++
-    ((String.trim(feedback) === "" ? "" : "\n\n") ++
+    ((String.trim(feedback) == "" ? "" : "\n\n") ++
     checklist->Js.Array2.mapi((reviewChecklistItem, i) => {
       let resultIndexList =
         selection
@@ -44,8 +44,8 @@ let generateFeedback = (checklist, selection, feedback, setSelecton, updateFeedb
             | None => []
             }
           : []
-      )->Js.Array2.concatMany([])
-    })->Js.Array2.joinWith("\n\n"))
+      )->ArrayUtils.flattenV2
+    })->ArrayUtils.flattenV2->Js.Array2.joinWith("\n\n"))
   setSelecton(_ => [])
   updateFeedbackCB(newFeedback)
 }

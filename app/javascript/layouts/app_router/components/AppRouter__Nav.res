@@ -31,19 +31,19 @@ let renderLinks = (courses, selectedPage) => {
       </div>
       <div className="mt-4 space-y-2"> {Js.Array.map(link => {
           let (title, icon) = switch link {
-          | Page.Student__Curriculum(_) => (t("curriculum"), "i-book-open-light")
-          | Student__Report(_) => (t("report"), "i-check-circle-alt-light")
-          | Student__Students(_) => (t("student"), "i-book-open-light")
-          | Student__Review(_) => (t("review"), "i-clock-light")
-          | Student__Leaderboard(_) => (t("leaderboard"), "i-book-open-light")
+          | Page.Student__Curriculum(_) => (t("curriculum"), "i-journal-text-light")
+          | Student__Report(_) => (t("report"), "i-graph-up-light")
+          | Student__Students(_) => (t("student"), "i-users-light")
+          | Student__Review(_) => (t("review"), "i-clipboard-check-light")
+          | Student__Leaderboard(_) => (t("leaderboard"), "i-tachometer-alt-light")
           | Student__SubmissionShow(_) => ("", "")
           }
           <a
             key=title
             href={Page.path(link)}
             className="flex items-center p-3 rounded-md text-sm font-semibold hover:text-primary-500 hover:bg-gray-200">
-            <Icon className={`if ${icon} text-lg if-fw`} />
-            <div className="pl-2"> {str(title)} </div>
+            <Icon className={`if ${icon} text-xl if-fw`} />
+            <div className="pl-3"> {str(title)} </div>
           </a>
         }, Page.activeLinks(currentCourse))->React.array} </div>
     </div>
@@ -89,11 +89,11 @@ let renderLinksMobile = (courses, selectedPage) => {
 
     <div className="flex"> {Js.Array.map(link => {
         let (title, icon) = switch link {
-        | Page.Student__Curriculum(_) => (t("curriculum"), "i-book-open-light")
-        | Student__Report(_) => (t("report"), "i-check-circle-alt-light")
-        | Student__Students(_) => (t("student"), "i-book-open-light")
-        | Student__Review(_) => (t("review"), "i-clock-light")
-        | Student__Leaderboard(_) => (t("leaderboard"), "i-book-open-light")
+        | Page.Student__Curriculum(_) => (t("curriculum"), "i-journal-text-regular")
+        | Student__Report(_) => (t("report"), "i-graph-up-regular")
+        | Student__Students(_) => (t("student"), "i-users-regular")
+        | Student__Review(_) => (t("review"), "i-clipboard-check-regular")
+        | Student__Leaderboard(_) => (t("leaderboard"), "i-tachometer-alt-regular")
         | Student__SubmissionShow(_) => ("", "")
         }
         <a

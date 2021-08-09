@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActionController::InvalidAuthenticityToken do
-    flash[:error] = 'Invalid or expired session, Please try refresh page or signing in again'
+    flash[:error] =  I18n.t('shared.invalid_authenticity_token_error')
   end
 
   # Redirect all requests from unknown domains to service homepage.

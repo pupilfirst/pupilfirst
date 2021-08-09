@@ -3,7 +3,7 @@ class GraphqlController < ApplicationController
   skip_before_action :redirect_to_primary_domain, if: :introspection?
 
   rescue_from ActionController::InvalidAuthenticityToken do
-    render json: { errors: [{ message: 'Invalid or expired session, Please try refresh page or signing in again' }] }
+    render json: { errors: [{ message: I18n.t('shared.invalid_authenticity_token_error') }] }
   end
 
   def execute

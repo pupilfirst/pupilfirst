@@ -8,6 +8,8 @@ type state =
   | Loading
   | Loaded(SubmissionDetails.t)
 
+type nextSubmission = DataUnloaded | DataLoading | DataLoaded
+
 module SubmissionDetailsQuery = %graphql(
   `
     query SubmissionDetailsQuery($submissionId: ID!) {
@@ -54,6 +56,18 @@ module SubmissionDetailsQuery = %graphql(
   `
 )
 
+module NextSubmissionQuery = %graphql(
+  `
+    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $excludeSubmissionId: ID, $after: String) {
+      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, levelId: $levelId, coachId: $coachId, first: 1, after: $after) {
+        nodes {
+          id
+        }
+      }
+    }
+  `
+)
+
 let getSubmissionDetails = (submissionId, setState, ()) => {
   setState(_ => Loading)
   SubmissionDetailsQuery.make(~submissionId, ())
@@ -65,6 +79,42 @@ let getSubmissionDetails = (submissionId, setState, ()) => {
   |> ignore
 
   None
+}
+
+let getNextSubmission = (setNextSubmission, courseId, filter, submissionId) => {
+  setNextSubmission(_ => DataLoading)
+  NextSubmissionQuery.make(
+    ~courseId,
+    ~status=?Filter.tab(filter),
+    ~sortDirection=Filter.sortDirection(filter),
+    ~sortCriterion=Filter.sortCriterion(filter),
+    ~levelId=?Filter.levelId(filter),
+    ~coachId=?Filter.coachId(filter),
+    ~targetId=?Filter.targetId(filter),
+    ~search=?Filter.nameOrEmail(filter),
+    ~excludeSubmissionId=?Some(submissionId),
+    (),
+  )
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    setNextSubmission(_ => DataLoaded)
+    if ArrayUtils.isEmpty(response["submissions"]["nodes"]) {
+      setNextSubmission(_ => DataLoaded)
+      Notification.notice(
+        t("getNextSubmission.notice.done"),
+        t("getNextSubmission.notice.done_description"),
+      )
+    } else {
+      RescriptReactRouter.push(
+        "/submissions/" ++
+        response["submissions"]["nodes"][0]["id"] ++
+        "/review?" ++
+        Filter.toQueryString(filter),
+      )
+    }
+    Js.Promise.resolve()
+  })
+  |> ignore
 }
 
 let inactiveWarning = submissionDetails =>
@@ -84,9 +134,32 @@ let inactiveWarning = submissionDetails =>
   }
 
 let closeOverlay = (courseId, filter) =>
-  RescriptReactRouter.push("/courses/" ++ courseId ++ "/review?" ++ filter)
+  RescriptReactRouter.push("/courses/" ++ courseId ++ "/review?" ++ Filter.toQueryString(filter))
 
-let headerSection = (submissionDetails, filter) =>
+let reviewNextButton = (
+  nextSubmission,
+  setNextSubmission,
+  courseId,
+  filter,
+  submissionId,
+  className,
+) => {
+  ReactUtils.nullIf(
+    <button
+      onClick={_ => getNextSubmission(setNextSubmission, courseId, filter, submissionId)}
+      disabled={nextSubmission == DataLoading}
+      className>
+      {ReactUtils.nullUnless(
+        <i className="fas fa-spinner fa-pulse mr-2" />,
+        nextSubmission == DataLoading,
+      )}
+      {str(t("review_next"))}
+    </button>,
+    nextSubmission == DataLoaded,
+  )
+}
+
+let headerSection = (nextSubmission, setNextSubmission, submissionDetails, filter, submissionId) =>
   <div
     ariaLabel="submissions-overlay-header"
     className="bg-gray-100 border-b border-gray-300 flex justify-center">
@@ -112,10 +185,14 @@ let headerSection = (submissionDetails, filter) =>
               className="flex md:hidden items-center flex-shrink-0"
               coaches={SubmissionDetails.coaches(submissionDetails)}
             />
-            <button
-              className="flex flex-shrink-0 items-center md:hidden border-l text-sm font-semibold px-3 py-2 md:px-5 md:py-4">
-              {str(t("review_next"))}
-            </button>
+            {reviewNextButton(
+              nextSubmission,
+              setNextSubmission,
+              SubmissionDetails.courseId(submissionDetails),
+              filter,
+              submissionId,
+              "flex flex-shrink-0 items-center md:hidden border-l text-sm font-semibold px-3 py-2 md:px-5 md:py-4",
+            )}
           </div>
         </div>
         <div className="px-4 py-3">
@@ -168,9 +245,14 @@ let headerSection = (submissionDetails, filter) =>
           className="flex w-full md:w-auto items-center flex-shrink-0"
           coaches={SubmissionDetails.coaches(submissionDetails)}
         />
-        <button className="flex items-center border-l text-sm font-semibold px-5 py-4">
-          {str(t("review_next"))}
-        </button>
+        {reviewNextButton(
+          nextSubmission,
+          setNextSubmission,
+          SubmissionDetails.courseId(submissionDetails),
+          filter,
+          submissionId,
+          "flex items-center border-l text-sm font-semibold px-5 py-4",
+        )}
       </div>
     </div>
   </div>
@@ -196,7 +278,9 @@ let currentSubmissionIndex = (submissionId, allSubmissions) => {
 @react.component
 let make = (~submissionId, ~currentUser) => {
   let (state, setState) = React.useState(() => Loading)
+  let (nextSubmission, setNextSubmission) = React.useState(() => DataUnloaded)
   let url = RescriptReactRouter.useUrl()
+  let filter = Filter.makeFromQueryParams(url.search)
   React.useEffect1(getSubmissionDetails(submissionId, setState), [submissionId])
 
   <div className="flex-1 md:flex md:flex-col md:overflow-hidden">
@@ -205,7 +289,13 @@ let make = (~submissionId, ~currentUser) => {
       [
         <div key="submission-header">
           <div> {inactiveWarning(submissionDetails)} </div>
-          {headerSection(submissionDetails, url.search)}
+          {headerSection(
+            nextSubmission,
+            setNextSubmission,
+            submissionDetails,
+            filter,
+            submissionId,
+          )}
           {ReactUtils.nullIf(
             <div
               className="flex space-x-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-200">

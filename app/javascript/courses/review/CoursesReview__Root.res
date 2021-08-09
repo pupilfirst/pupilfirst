@@ -4,10 +4,6 @@ open CoursesReview__Types
 
 let tc = I18n.t(~scope="components.CoursesReview__Root")
 
-type selectedTab = [#Reviewed | #Pending]
-type sortDirection = [#Ascending | #Descending]
-type sortCriterion = [#EvaluatedAt | #SubmittedAt]
-
 module Item = {
   type t = IndexSubmission.t
 }
@@ -15,16 +11,6 @@ module Item = {
 module PagedSubmission = Pagination.Make(Item)
 
 type filterLoader = ShowLevels | ShowCoaches | ShowTargets
-
-type filter = {
-  nameOrEmail: option<string>,
-  levelId: option<string>,
-  coachId: option<string>,
-  targetId: option<string>,
-  sortCriterion: sortCriterion,
-  sortDirection: sortDirection,
-  tab: option<selectedTab>,
-}
 
 type state = {
   loading: Loading.t,
@@ -125,72 +111,7 @@ let reducer = (state, action) =>
   | ClearLoader => {...state, filterLoader: None}
   }
 
-let filterToQueryString = filter => {
-  let sortCriterion = switch filter.sortCriterion {
-  | #EvaluatedAt => "EvaluatedAt"
-  | #SubmittedAt => "SubmittedAt"
-  }
-
-  let sortDirection = switch filter.sortDirection {
-  | #Descending => "Descending"
-  | #Ascending => "Ascending"
-  }
-
-  let filterDict = Js.Dict.fromArray([
-    ("sortCriterion", sortCriterion),
-    ("sortDirection", sortDirection),
-  ])
-
-  Belt.Option.forEach(filter.nameOrEmail, search => Js.Dict.set(filterDict, "search", search))
-  Belt.Option.forEach(filter.targetId, targetId => Js.Dict.set(filterDict, "targetId", targetId))
-  Belt.Option.forEach(filter.levelId, levelId => Js.Dict.set(filterDict, "levelId", levelId))
-  Belt.Option.forEach(filter.coachId, coachId => Js.Dict.set(filterDict, "coachId", coachId))
-
-  switch filter.tab {
-  | Some(tab) =>
-    switch tab {
-    | #Pending => Js.Dict.set(filterDict, "tab", "Pending")
-    | #Reviewed => Js.Dict.set(filterDict, "tab", "Reviewed")
-    }
-  | None => ()
-  }
-
-  open Webapi.Url
-  URLSearchParams.makeWithDict(filterDict)->URLSearchParams.toString
-}
-
-let updateParams = filter => RescriptReactRouter.push("?" ++ filterToQueryString(filter))
-
-let filterFromQueryParams = search => {
-  let params = Webapi.Url.URLSearchParams.make(search)
-
-  open Webapi.Url.URLSearchParams
-  {
-    nameOrEmail: get("search", params),
-    levelId: get("levelId", params),
-    coachId: get("coachId", params),
-    targetId: get("targetId", params),
-    tab: switch get("tab", params) {
-    | Some(t) when t == "Pending" => Some(#Pending)
-    | Some(t) when t == "Reviewed" => Some(#Reviewed)
-    | _ => None
-    },
-    sortCriterion: switch get("sortCriterion", params) {
-    | Some(criterion) when criterion == "EvaluatedAt" => #EvaluatedAt
-    | Some(criterion) when criterion == "SubmittedAt" => #SubmittedAt
-    | _ => #SubmittedAt
-    },
-    sortDirection: switch get("sortDirection", params) {
-    | Some(direction) when direction == "Descending" => #Descending
-    | Some(direction) when direction == "Ascending" => #Ascending
-    | _ =>
-      switch get("tab", params) {
-      | Some(t) when t == "Pending" => #Ascending
-      | _ => #Descending
-      }
-    },
-  }
-}
+let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryString(filter))
 
 module SubmissionsQuery = %graphql(
   `
@@ -265,13 +186,13 @@ module ReviewedTargetsInfoQuery = %graphql(
 let getSubmissions = (send, courseId, cursor, filter) => {
   SubmissionsQuery.make(
     ~courseId,
-    ~status=?filter.tab,
-    ~sortDirection=filter.sortDirection,
-    ~sortCriterion=filter.sortCriterion,
-    ~levelId=?filter.levelId,
-    ~coachId=?filter.coachId,
-    ~targetId=?filter.targetId,
-    ~search=?filter.nameOrEmail,
+    ~status=?Filter.tab(filter),
+    ~sortDirection=Filter.sortDirection(filter),
+    ~sortCriterion=Filter.sortCriterion(filter),
+    ~levelId=?Filter.levelId(filter),
+    ~coachId=?Filter.coachId(filter),
+    ~targetId=?Filter.targetId(filter),
+    ~search=?Filter.nameOrEmail(filter),
     ~after=?cursor,
     (),
   )
@@ -346,7 +267,7 @@ module Sortable = {
 module SubmissionsSorter = Sorter.Make(Sortable)
 
 let submissionsSorter = filter => {
-  let criteria = switch filter.tab {
+  let criteria = switch Filter.tab(filter) {
   | Some(c) =>
     switch c {
     | #Pending => [#SubmittedAt]
@@ -375,7 +296,7 @@ module Selectable = {
     | AssignedToCoach(Coach.t, string)
     | Loader(filterLoader)
     | Target(TargetInfo.t)
-    | Status(selectedTab)
+    | Status(Filter.selectedTab)
     | NameOrEmail(string)
 
   let label = t =>
@@ -460,7 +381,7 @@ module Selectable = {
 module Multiselect = MultiselectDropdown.Make(Selectable)
 
 let unSelectedStatus = filter =>
-  switch filter.tab {
+  switch Filter.tab(filter) {
   | Some(s) =>
     switch s {
     | #Pending => [Selectable.status(#Reviewed)]
@@ -476,7 +397,7 @@ let unselected = (state, currentCoachId, filter) => {
       OptionUtils.mapWithDefault(
         selectedLevel => Level.id(level) != selectedLevel,
         true,
-        filter.levelId,
+        Filter.levelId(filter),
       )
     )
     ->Js.Array2.map(Selectable.level)
@@ -512,7 +433,7 @@ let unselected = (state, currentCoachId, filter) => {
 }
 
 let selected = (state, filter, currentCoachId) => {
-  let selectedLevel = Belt.Option.mapWithDefault(filter.levelId, [], levelId =>
+  let selectedLevel = Belt.Option.mapWithDefault(Filter.levelId(filter), [], levelId =>
     Belt.Option.mapWithDefault(Js.Array.find(l => Level.id(l) == levelId, state.levels), [], l => [
       Selectable.level(l),
     ])
@@ -626,7 +547,7 @@ let submissionsLoadedData = (totoalSubmissionsCount, loadedSubmissionsCount) =>
 let submissionsList = (submissions, state, filter) =>
   <div>
     <CoursesReview__SubmissionCard
-      submissions selectedTab=filter.tab filterString={filterToQueryString(filter)}
+      submissions selectedTab={Filter.tab(filter)} filterString={Filter.toQueryString(filter)}
     />
     {ReactUtils.nullIf(
       <div className="text-center pb-4">
@@ -637,7 +558,7 @@ let submissionsList = (submissions, state, filter) =>
   </div>
 
 let filterPlaceholder = filter =>
-  switch (filter.levelId, filter.coachId) {
+  switch (Filter.levelId(filter), Filter.coachId(filter)) {
   | (None, Some(_)) => tc("filter_by_level")
   | (None, None) => tc("filter_by_level_or_submissions_assigned")
   | (Some(_), Some(_)) => tc("filter_by_another_level")
@@ -684,7 +605,7 @@ let computeInitialState = () => {
 let make = (~courseId, ~currentCoachId) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
   let url = RescriptReactRouter.useUrl()
-  let filter = filterFromQueryParams(url.search)
+  let filter = Filter.makeFromQueryParams(url.search)
 
   React.useEffect1(() => {
     reloadSubmissions(courseId, filter, send)
@@ -714,7 +635,7 @@ let make = (~courseId, ~currentCoachId) => {
                   href={"/courses/" ++
                   courseId ++
                   "/review?" ++
-                  filterToQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
+                  Filter.toQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
                   className={shortCutClasses(filter.tab === None)}>
                   <div> {str("All")} </div>
                 </Link>
@@ -722,7 +643,7 @@ let make = (~courseId, ~currentCoachId) => {
                   href={"/courses/" ++
                   courseId ++
                   "/review?" ++
-                  filterToQueryString({
+                  Filter.toQueryString({
                     ...filter,
                     tab: Some(#Pending),
                     sortCriterion: #SubmittedAt,
@@ -735,7 +656,7 @@ let make = (~courseId, ~currentCoachId) => {
                   href={"/courses/" ++
                   courseId ++
                   "/review?" ++
-                  filterToQueryString({
+                  Filter.toQueryString({
                     ...filter,
                     tab: Some(#Reviewed),
                     sortCriterion: #EvaluatedAt,

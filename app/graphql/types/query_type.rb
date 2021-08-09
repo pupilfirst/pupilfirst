@@ -60,6 +60,7 @@ module Types
       argument :coach_id, ID, required: false
       argument :target_id, ID, required: false
       argument :search, String, required: false
+      argument :exclude_submission_id, ID, required: false
     end
 
     resolved_field :submission_details,

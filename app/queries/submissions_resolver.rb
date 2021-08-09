@@ -7,6 +7,7 @@ class SubmissionsResolver < ApplicationQuery
   property :coach_id
   property :target_id
   property :search
+  property :exclude_submission_id
 
   def submissions
     applicable_submissions
@@ -78,7 +79,14 @@ class SubmissionsResolver < ApplicationQuery
         by_level_and_status
       end
 
-    by_level_status_and_coach.from_founders(students)
+    final_list =
+      if exclude_submission_id.present?
+        by_level_status_and_coach.where.not(id: exclude_submission_id)
+      else
+        by_level_status_and_coach
+      end
+
+    final_list.from_founders(students)
   end
 
   def filter_by_status(submissions)

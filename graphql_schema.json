@@ -1238,6 +1238,16 @@
                   "ofType": null
                 },
                 "defaultValue": null
+              },
+              {
+                "name": "excludeSubmissionId",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null
               }
             ],
             "type": {

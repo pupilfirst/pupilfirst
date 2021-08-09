@@ -843,6 +843,17 @@ feature 'Submission review overlay', js: true do
       expect(submission.timeline_event_grades).to eq([])
     end
 
+    scenario 'coach uses the next button' do
+      sign_in_user coach.user,
+                   referrer: review_timeline_event_path(submission_reviewed)
+
+      click_button 'Next'
+
+      expect(page).to have_text('There are no more submissions to review')
+
+      dismiss_notification
+    end
+
     context 'with two reviewed submissions' do
       let!(:submission_reviewed_old) do
         create(
@@ -881,6 +892,17 @@ feature 'Submission review overlay', js: true do
 
         expect(page).to have_text('Submission 2')
         expect(page).to have_text('4/4')
+      end
+
+      scenario 'coach uses the next button' do
+        sign_in_user coach.user,
+                     referrer: review_timeline_event_path(submission_reviewed)
+
+        click_button 'Next'
+
+        expect(page).to have_current_path(
+          "#{review_timeline_event_path(submission_reviewed_old)}?sortCriterion=SubmittedAt&sortDirection=Descending"
+        )
       end
     end
   end

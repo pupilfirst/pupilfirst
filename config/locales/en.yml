@@ -482,7 +482,7 @@ en:
         notice:
           done: Done!
           done_description: There are no more submissions to review
-      review_next: Review Next
+      review_next: Next
       student_dropped_out_message: This submission is from a student whose access to the course has ended, or has dropped out.
       students_dropped_out_message: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
       submitted_by: "Submitted by "

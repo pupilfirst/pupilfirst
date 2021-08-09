@@ -33,7 +33,7 @@ let renderLinks = (courses, selectedPage) => {
           let (title, icon) = switch link {
           | Page.Student__Curriculum(_) => (t("curriculum"), "i-journal-text-light")
           | Student__Report(_) => (t("report"), "i-graph-up-light")
-          | Student__Students(_) => (t("student"), "i-users-light")
+          | Student__Students(_) => (t("students"), "i-users-light")
           | Student__Review(_) => (t("review"), "i-clipboard-check-light")
           | Student__Leaderboard(_) => (t("leaderboard"), "i-tachometer-alt-light")
           | Student__SubmissionShow(_) => ("", "")

@@ -29,7 +29,7 @@ let renderLinks = (courses, selectedPage) => {
       <div className="mt-4">
         <AppRouter__CourseSelector courses selectedPage currentCourseId />
       </div>
-      <div className="mt-4 space-y-2"> {Js.Array.map(link => {
+      <div className="mt-4 space-y-3"> {Js.Array.map(link => {
           let (title, icon) = switch link {
           | Page.Student__Curriculum(_) => (t("curriculum"), "i-journal-text-light")
           | Student__Report(_) => (t("report"), "i-graph-up-light")
@@ -41,7 +41,11 @@ let renderLinks = (courses, selectedPage) => {
           <a
             key=title
             href={Page.path(link)}
-            className="flex items-center p-3 rounded-md text-sm font-semibold hover:text-primary-500 hover:bg-gray-200">
+            className={"flex relative items-center p-3 rounded-md text-sm font-semibold " ++ (
+              link == selectedPage
+                ? "text-primary-500 bg-gray-200 before:block before:bg-primary-500 before:w-1 before:absolute before:left-0 before:top-1/2 before:h-3/4 before:rounded-r-md before:transform before:-translate-y-1/2"
+                : "hover:text-primary-500 hover:bg-gray-200"
+            )}>
             <Icon className={`if ${icon} text-xl if-fw`} />
             <div className="pl-3"> {str(title)} </div>
           </a>
@@ -99,7 +103,11 @@ let renderLinksMobile = (courses, selectedPage) => {
         <a
           key=title
           href={Page.path(link)}
-          className="flex flex-col flex-1 items-center py-3 text-xs text-gray-800 font-semibold hover:text-primary-500 hover:bg-gray-200">
+          className={"flex flex-col flex-1 items-center py-3 text-xs text-gray-800 font-semibold " ++ (
+            link == selectedPage
+              ? "text-primary-500 bg-gray-200"
+              : "hover:text-primary-500 hover:bg-gray-200"
+          )}>
           <Icon className={`if ${icon} text-lg if-fw`} /> <div className="pt-1"> {str(title)} </div>
         </a>
       }, Page.activeLinks(currentCourse))->React.array} </div>
@@ -111,7 +119,7 @@ let showLink = (icon, href) => {
   <div key=href className="whitespace-nowrap">
     <a
       rel="nofollow"
-      className="flex justify-center items-center text-sm text-gray-800 bg-gray-300 px-2 py-1 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
+      className="flex justify-center items-center text-xs text-gray-800 bg-gray-300 px-2 py-1 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
       href>
       <FaIcon classes={"fas fw fa-" ++ icon} /> <p className="ml-2"> {t("sign_out")->str} </p>
     </a>

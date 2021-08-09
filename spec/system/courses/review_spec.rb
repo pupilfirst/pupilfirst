@@ -48,6 +48,8 @@ feature "Coach's review interface" do
     target_l2.evaluation_criteria << evaluation_criterion
     target_l3.evaluation_criteria << evaluation_criterion
     team_target.evaluation_criteria << evaluation_criterion
+    team_l3.founders.first.user.update!(email: 'pupilfirst@example.com')
+    team_l2.founders.first.user.update!(name: 'Pupilfirst Test User')
   end
 
   context 'with multiple submissions' do
@@ -176,7 +178,7 @@ feature "Coach's review interface" do
       end
 
       click_link 'Pending'
-      expect(page).to have_content('3')
+      expect(page).to have_content('Showing all 3 submissions')
 
       # All pending submissions should be listed (excluding the auto-verified one)
       expect(page).not_to have_text(auto_verify_target.title)
@@ -232,7 +234,7 @@ feature "Coach's review interface" do
       sign_in_user course_coach.user, referrer: review_course_path(course)
 
       # Ensure coach is on the review dashboard.
-      expect(page).to have_content('3')
+      expect(page).to have_content('Showing all 7 submissions')
 
       # filter pending submissions
       fill_in 'filter', with: 'level:'
@@ -291,7 +293,7 @@ feature "Coach's review interface" do
       sign_in_user course_coach.user, referrer: review_course_path(course)
 
       # Ensure coach is on the review dashboard.
-      expect(page).to have_content('3')
+      expect(page).to have_content('Showing all 7 submissions')
 
       # filter pending submissions
       fill_in 'filter', with: 'target:'
@@ -309,6 +311,39 @@ feature "Coach's review interface" do
       expect(page).not_to have_text(target_l1.title)
       expect(page).not_to have_text(target_l2.title)
       expect(page).not_to have_text(target_l3.title)
+    end
+
+    scenario 'course coach uses the search filter', js: true do
+      sign_in_user course_coach.user, referrer: review_course_path(course)
+
+      # Ensure coach is on the review dashboard.
+      expect(page).to have_content('Showing all 7 submissions')
+
+      # Search by email
+      fill_in 'filter', with: 'pupilfirst@example.com'
+      click_button 'Pick Name or Email: pupilfirst@example.com'
+
+      within("div[id='submissions']") do
+        expect(page).to have_text(team_l3.founders.first.name)
+      end
+
+      expect(page).to have_text(target_l1.title)
+      expect(page).to have_text(target_l2.title)
+      expect(page).to have_text(target_l3.title)
+      expect(page).to have_text(team_target.title)
+
+      expect(page).to have_content('Showing all 4 submissions')
+
+      # Search by name
+      fill_in 'filter', with: 'Pupilfirst Test User'
+      click_button 'Pick Name or Email: Pupilfirst Test User'
+
+      expect(page).to have_text(target_l1.title)
+      expect(page).to have_text(target_l2.title)
+      expect(page).not_to have_text(target_l3.title)
+      expect(page).not_to have_text(team_target.title)
+
+      expect(page).to have_content('Showing all 2 submissions')
     end
 
     scenario 'team coach visits the review dashboard', js: true do
@@ -359,7 +394,7 @@ feature "Coach's review interface" do
       click_link 'Pending'
 
       # The 'pending' count should update once we switch to the pending tab.
-      expect(page).to have_content('3')
+      expect(page).to have_content('Showing all 3 submissions')
 
       # The pending tab should list all pending submissions.
       expect(page).to have_text(target_l1.title)

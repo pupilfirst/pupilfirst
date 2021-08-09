@@ -342,7 +342,12 @@ module Selectable = {
       tc("search.assigned_to") ++
       " " ++ (Coach.id(coach) == currentCoachId ? tc("me") : Coach.name(coach))
     | Target(t) => tc("search.target") ++ " " ++ TargetInfo.title(t)
-    | Loader(_) => ""
+    | Loader(l) =>
+      switch l {
+      | ShowLevels => tc("search.level")
+      | ShowCoaches => tc("search.assigned_to")
+      | ShowTargets => tc("search.target")
+      }
     | Status(t) =>
       tc("search.status") ++
       switch t {
@@ -390,6 +395,11 @@ let unSelectedStatus = filter =>
   | None => [Selectable.status(#Pending), Selectable.status(#Reviewed)]
   }
 
+let nameOrEmailFilter = state => {
+  let trimmedFilterInput = state.filterInput->String.trim
+  trimmedFilterInput == "" ? [] : [Selectable.nameOrEmail(trimmedFilterInput)]
+}
+
 let unselected = (state, currentCoachId, filter) => {
   let unselectedLevels =
     state.levels
@@ -429,6 +439,10 @@ let unselected = (state, currentCoachId, filter) => {
     unselectedLevels,
     unselectedCoaches,
     unselectedTargets,
+    state.levelsLoaded ? [] : [Selectable.makeLoader(ShowLevels)],
+    state.coachesLoaded ? [] : [Selectable.makeLoader(ShowCoaches)],
+    state.targetsLoaded ? [] : [Selectable.makeLoader(ShowTargets)],
+    nameOrEmailFilter(state),
   ])
 }
 
@@ -507,11 +521,8 @@ let onDeselectFilter = (send, filter, selectable) =>
   }
 
 let defaultOptions = (state, filter) => {
-  let trimmedFilterInput = state.filterInput->String.trim
-  let nameOrEmail = trimmedFilterInput == "" ? [] : [Selectable.nameOrEmail(trimmedFilterInput)]
-
   ArrayUtils.flattenV2([
-    nameOrEmail,
+    nameOrEmailFilter(state),
     [
       Selectable.makeLoader(ShowLevels),
       Selectable.makeLoader(ShowCoaches),

@@ -8,7 +8,7 @@ type state =
   | Loading
   | Loaded(SubmissionDetails.t)
 
-type nextSubmission = DataUnloaded | DataLoading | DataLoaded
+type nextSubmission = DataUnloaded | DataLoading | DataEmpty
 
 module SubmissionDetailsQuery = %graphql(
   `
@@ -68,8 +68,9 @@ module NextSubmissionQuery = %graphql(
   `
 )
 
-let getSubmissionDetails = (submissionId, setState, ()) => {
+let getSubmissionDetails = (submissionId, setState, setNextSubmission, ()) => {
   setState(_ => Loading)
+  setNextSubmission(_ => DataUnloaded)
   SubmissionDetailsQuery.make(~submissionId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
@@ -97,9 +98,8 @@ let getNextSubmission = (setNextSubmission, courseId, filter, submissionId) => {
   )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    setNextSubmission(_ => DataLoaded)
     if ArrayUtils.isEmpty(response["submissions"]["nodes"]) {
-      setNextSubmission(_ => DataLoaded)
+      setNextSubmission(_ => DataEmpty)
       Notification.notice(
         t("getNextSubmission.notice.done"),
         t("getNextSubmission.notice.done_description"),
@@ -155,7 +155,7 @@ let reviewNextButton = (
       )}
       {str(t("review_next"))}
     </button>,
-    nextSubmission == DataLoaded,
+    nextSubmission == DataEmpty,
   )
 }
 
@@ -281,7 +281,7 @@ let make = (~submissionId, ~currentUser) => {
   let (nextSubmission, setNextSubmission) = React.useState(() => DataUnloaded)
   let url = RescriptReactRouter.useUrl()
   let filter = Filter.makeFromQueryParams(url.search)
-  React.useEffect1(getSubmissionDetails(submissionId, setState), [submissionId])
+  React.useEffect1(getSubmissionDetails(submissionId, setState, setNextSubmission), [submissionId])
 
   <div className="flex-1 md:flex md:flex-col md:overflow-hidden">
     {switch state {

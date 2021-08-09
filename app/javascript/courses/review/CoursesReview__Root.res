@@ -1,4 +1,5 @@
 let str = React.string
+%bs.raw(`require("./CoursesReview__Root.css")`)
 
 open CoursesReview__Types
 
@@ -619,7 +620,7 @@ let make = (~courseId, ~currentCoachId) => {
 
   <div className="flex-1 flex flex-col">
     <div className="hidden md:block h-16" />
-    <div className="flex-1 md:overflow-y-auto">
+    <div className="course-review-root__submissions-list-container">
       <div className="bg-gray-100">
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
           <div
@@ -698,13 +699,13 @@ let make = (~courseId, ~currentCoachId) => {
         <div className="mt-4">
           {switch state.submissions {
           | Unloaded =>
-            <div> {SkeletonLoading.multiple(~count=10, ~element=SkeletonLoading.card())} </div>
+            <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
           | PartiallyLoaded(submissions, cursor) =>
             <div>
               {submissionsList(submissions, state, filter)}
               {switch state.loading {
               | LoadingMore =>
-                <div> {SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())} </div>
+                <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
               | NotLoading =>
                 <div className="pb-6">
                   <button

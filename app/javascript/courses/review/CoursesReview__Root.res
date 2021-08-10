@@ -13,6 +13,8 @@ module PagedSubmission = Pagination.Make(Item)
 
 type filterLoader = ShowLevels | ShowCoaches | ShowTargets
 
+type loading = Unloaded | Loading | Loaded
+
 type state = {
   loading: Loading.t,
   submissions: PagedSubmission.t,
@@ -23,9 +25,9 @@ type state = {
   totalEntriesCount: int,
   filterLoading: bool,
   filterLoader: option<filterLoader>,
-  targetsLoaded: bool,
-  levelsLoaded: bool,
-  coachesLoaded: bool,
+  targetsLoaded: loading,
+  levelsLoaded: loading,
+  coachesLoaded: loading,
 }
 
 type action =
@@ -45,8 +47,9 @@ type action =
   | LoadTargets(array<TargetInfo.t>)
   | BeginLoadingMore
   | BeginReloading
-  | SetFilterLoading
-  | ClearFilterLoading
+  | SetLevelLoading
+  | SetTargetLoading
+  | SetCoachLoading
   | SetLoader(filterLoader)
   | ClearLoader
 
@@ -83,24 +86,25 @@ let reducer = (state, action) =>
       ...state,
       levels: levels,
       filterLoading: false,
-      levelsLoaded: true,
+      levelsLoaded: Loaded,
     }
   | LoadCoaches(coaches) => {
       ...state,
       coaches: coaches,
       filterLoading: false,
-      coachesLoaded: true,
+      coachesLoaded: Loaded,
     }
   | LoadTargets(targets) => {
       ...state,
       targets: targets,
       filterLoading: false,
-      targetsLoaded: true,
+      targetsLoaded: Loaded,
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
-  | SetFilterLoading => {...state, filterLoading: true}
-  | ClearFilterLoading => {...state, filterLoading: false}
+  | SetLevelLoading => {...state, filterLoading: true, levelsLoaded: Loading}
+  | SetTargetLoading => {...state, filterLoading: true, targetsLoaded: Loading}
+  | SetCoachLoading => {...state, filterLoading: true, coachesLoaded: Loading}
   | SetLoader(loader) => {
       ...state,
       filterInput: switch loader {
@@ -219,8 +223,8 @@ let getSubmissions = (send, courseId, cursor, filter) => {
 }
 
 let getLevels = (send, courseId, state) => {
-  if !state.levelsLoaded {
-    send(SetFilterLoading)
+  if state.levelsLoaded == Unloaded {
+    send(SetLevelLoading)
 
     LevelsQuery.make(~courseId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
       send(LoadLevels(Js.Array.map(Level.makeFromJs, response["levels"])))
@@ -230,8 +234,8 @@ let getLevels = (send, courseId, state) => {
 }
 
 let getCoaches = (send, courseId, state) => {
-  if !state.coachesLoaded {
-    send(SetFilterLoading)
+  if state.coachesLoaded == Unloaded {
+    send(SetCoachLoading)
 
     TeamCoachesQuery.make(~courseId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
       send(LoadCoaches(Js.Array.map(Coach.makeFromJs, response["teamCoaches"])))
@@ -241,8 +245,8 @@ let getCoaches = (send, courseId, state) => {
 }
 
 let getTargets = (send, courseId, state) => {
-  if !state.targetsLoaded {
-    send(SetFilterLoading)
+  if state.targetsLoaded == Unloaded {
+    send(SetTargetLoading)
 
     ReviewedTargetsInfoQuery.make(~courseId, ())
     |> GraphqlQuery.sendQuery
@@ -440,9 +444,9 @@ let unselected = (state, currentCoachId, filter) => {
     unselectedLevels,
     unselectedCoaches,
     unselectedTargets,
-    state.levelsLoaded ? [] : [Selectable.makeLoader(ShowLevels)],
-    state.coachesLoaded ? [] : [Selectable.makeLoader(ShowCoaches)],
-    state.targetsLoaded ? [] : [Selectable.makeLoader(ShowTargets)],
+    state.levelsLoaded == Loaded ? [] : [Selectable.makeLoader(ShowLevels)],
+    state.coachesLoaded == Loaded ? [] : [Selectable.makeLoader(ShowCoaches)],
+    state.targetsLoaded == Loaded ? [] : [Selectable.makeLoader(ShowTargets)],
     nameOrEmailFilter(state),
   ])
 }
@@ -607,9 +611,9 @@ let computeInitialState = () => {
   filterLoading: false,
   filterLoader: None,
   filterInput: "",
-  targetsLoaded: false,
-  levelsLoaded: false,
-  coachesLoaded: false,
+  targetsLoaded: Unloaded,
+  levelsLoaded: Unloaded,
+  coachesLoaded: Unloaded,
   totalEntriesCount: 0,
 }
 

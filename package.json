@@ -34,6 +34,7 @@
     "dompurify": "^2.3.0",
     "dotenv": "^8.0.0",
     "file-saver": "^2.0.5",
+    "fuse.js": "^6.4.6",
     "i18n-js": "^3.7.1",
     "markdown-it": "^10.0.0",
     "markdown-it-link-attributes": "^3.0.0",

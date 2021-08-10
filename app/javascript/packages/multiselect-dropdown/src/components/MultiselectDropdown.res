@@ -1,5 +1,21 @@
 %bs.raw(`require("./MultiselectDropdown.css")`)
 
+module type Selectable = {
+  type t
+  let label: t => option<string>
+  let value: t => string
+  let searchString: t => string
+  let color: t => string
+}
+
+type searchItem = {
+  index: int,
+  text: string,
+}
+
+@bs.module("../utils/fuzzySearch")
+external fuzzySearch: (string, array<searchItem>) => array<searchItem> = "default"
+
 let str = React.string
 
 module DomUtils = {
@@ -12,25 +28,40 @@ module DomUtils = {
     } |> Element.asHtmlElement)->Belt.Option.map(HtmlElement.focus) |> ignore
 }
 
-module type Selectable = {
-  type t
-  let label: t => option<string>
-  let value: t => string
-  let searchString: t => string
-  let color: t => string
-}
-
 module Make = (Selectable: Selectable) => {
-  let search = (searchString, selections) =>
-    (selections |> Js.Array.filter(selection =>
-      selection
-      |> Selectable.searchString
-      |> String.lowercase_ascii
-      |> Js.String.includes(searchString |> String.lowercase_ascii)
-    ))
-      ->Belt.SortArray.stableSortBy((x, y) =>
-        String.compare(x |> Selectable.value, y |> Selectable.value)
-      )
+  // let search = (searchString, selections) =>
+  //   (selections |> Js.Array.filter(selection =>
+  //     selection
+  //     |> Selectable.searchString
+  //     |> String.lowercase_ascii
+  //     |> Js.String.includes(searchString |> String.lowercase_ascii)
+  //   ))
+  //     ->Belt.SortArray.stableSortBy((x, y) =>
+  //       String.compare(x |> Selectable.value, y |> Selectable.value)
+  //     )
+
+  // Js.String2.search(
+  //   String.lowercase_ascii(Selectable.searchString(selection)),
+  //   Js.Re.fromString(String.lowercase_ascii(searchString)),
+  // ),
+  let search = (searchString, selections) => {
+    // let searchStringArray = String.lowercase_ascii(searchString)->Js.String2.split("")
+    // selections->Js.Array2.map(selection => {
+    //   let position = Js.String2.search(
+    //     String.lowercase_ascii(Selectable.searchString(selection)),
+    //     Js.Re.fromString(String.lowercase_ascii(searchString)),
+    //   )
+
+    //   (position, selection)
+    // })->Belt.SortArray.stableSortBy(((x, _), (y, _)) =>
+    //   x - y
+    // )->Js.Array2.filter(((x, _)) => x != -1)->Js.Array2.map(((_, p)) => p)
+
+    let searchSelection =
+      selections->Js.Array2.mapi((s, i) => {index: i, text: Selectable.searchString(s)})
+    let results = fuzzySearch(String.lowercase_ascii(searchString), searchSelection)
+    results->Js.Array2.map(searchItem => selections[searchItem.index])
+  }
 
   let selectionTitle = selection => {
     let value = selection |> Selectable.value
@@ -61,12 +92,20 @@ module Make = (Selectable: Selectable) => {
   }
 
   let showOptions = (options, onSelect, id, labelSuffix, loading) => {
-    loading ? [<div className="px-4"> <div className="px-4"><div className="skeleton-body-container w-full pb-4 mx-auto">
-    <div className="skeleton-body-wrapper px-3 lg:px-0">
-      <div className="skeleton-placeholder__line-sm mt-4 w-2/4 skeleton-animate" />
-      <div className="skeleton-placeholder__line-sm mt-4 w-3/4 skeleton-animate" />
-    </div>
-  </div></div></div>] : options |> Array.mapi((index, selection) =>
+    loading
+      ? [
+          <div className="px-4">
+            <div className="px-4">
+              <div className="skeleton-body-container w-full pb-4 mx-auto">
+                <div className="skeleton-body-wrapper px-3 lg:px-0">
+                  <div className="skeleton-placeholder__line-sm mt-4 w-2/4 skeleton-animate" />
+                  <div className="skeleton-placeholder__line-sm mt-4 w-3/4 skeleton-animate" />
+                </div>
+              </div>
+            </div>
+          </div>,
+        ]
+      : options |> Array.mapi((index, selection) =>
           <button
             key={index |> string_of_int}
             title={selectionTitle(selection)}

@@ -2,17 +2,17 @@
 
 When targets are completed by a review from a coach, student submissions first appear in the a coach's _Review_ tab. This is accessible from the `/dashboard` page, and when loaded, it shows submissions from students in courses that you're assigned to as a coach.
 
-![Submissions for review](https://res.cloudinary.com/sv-co/image/upload/v1589826331/pupilfirst_documentation/reviewing_submissions/review_page_mwzyth.png)
+![Submissions for review](https://res.cloudinary.com/sv-co/image/upload/v1628594964/pupilfirst_documentation/reviewing_submissions/v2/index_lgssar.png)
 
 If you're directly assigned to some students, then the page will load with the filter set to show only submissions from those assigned students.
 
 ## Submissions for review
 
-This page has two tabs: _Pending_ and _Reviewed_, with submissions that are pending review kept in the first tab. The _Reviewed_ tab holds a list of submissions that have already been reviewed.
+This page has three tabs: _All_, _Pending_ and _Reviewed_, with submissions that are pending review kept in the pending tab. The _Reviewed_ tab holds a list of submissions that have already been reviewed.
 
 Clicking on a submission opens up the submission for review.
 
-![Submission details](https://res.cloudinary.com/sv-co/image/upload/v1583215353/pupilfirst_documentation/reviewing_submissions/submission_in_overlay_icrse4.png ":class=w-full-to-3xl")
+![Submission details](https://res.cloudinary.com/sv-co/image/upload/v1628594964/pupilfirst_documentation/reviewing_submissions/v2/show_xgnrox.png ":class=w-full-to-3xl")
 
 ## Submission Details
 
@@ -25,7 +25,7 @@ Because students can make multiple submissions to improve their grade on a targe
 
 Reviewing a submission involves going over the work that the student has submitted and deciding assigning it grades on each of its evaluation criteria.
 
-![Reviewing a submission](https://res.cloudinary.com/sv-co/image/upload/v1583215466/pupilfirst_documentation/reviewing_submissions/submission_checklist_feedback_notes_and_grading_ez97b1.png ":class=w-full-to-3xl")
+![Reviewing a submission](https://res.cloudinary.com/sv-co/image/upload/v1628594965/pupilfirst_documentation/reviewing_submissions/v2/reviewing_viztph.png ":class=w-full-to-3xl")
 
 There's quite a bit to unpack here, so we'll go over each element one by one, starting with the _Grade Card_.
 
@@ -58,7 +58,7 @@ Over the course of using Pupilfirst ourselves, we've learned that reviewing subm
 
 As the name suggests, this feature allows you to create a checklist for your review process. What's interesting here is that you can couple your checklist with feedback that is appropriate to the result of your check.
 
-![Review Checklist](https://res.cloudinary.com/sv-co/image/upload/v1574340472/pupilfirst_documentation/reviewing_submissions/review_checklist_wnhfzy.png ":class=w-full-to-3xl")
+![Review Checklist](https://res.cloudinary.com/sv-co/image/upload/v1628594965/pupilfirst_documentation/reviewing_submissions/v2/review-checklist_bbkrkg.png ":class=w-full-to-3xl")
 
 Over the course of reviewing many student submissions, it's very likely that you'll see a pattern to the mistakes that students make, so it can be quite useful to store generic versions of feedback for the results from your checklist, and use that as a template to prepare feedback for a submission. Of course, you can always edit and personalize the feedback before you send it to your student.
 

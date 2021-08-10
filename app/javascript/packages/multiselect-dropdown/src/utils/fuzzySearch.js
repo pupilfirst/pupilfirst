@@ -7,7 +7,7 @@ const options = {
 
 const search = (input, selectable) => {
   const fuse = new Fuse(selectable, options);
-  return fuse.search(`=${input}`).map((p) => p.item);
+  return fuse.search(input).map((p) => p.item);
 };
 
 export default search;

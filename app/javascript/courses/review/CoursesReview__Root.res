@@ -401,8 +401,15 @@ let unSelectedStatus = filter =>
   }
 
 let nameOrEmailFilter = state => {
-  let trimmedFilterInput = state.filterInput->String.trim
-  trimmedFilterInput == "" ? [] : [Selectable.nameOrEmail(trimmedFilterInput)]
+  let input = state.filterInput->String.trim
+  let firstWord = Js.String2.split(input, " ")[0]
+
+  input == "" ||
+  firstWord == tc("search.level") ||
+  firstWord == tc("search.target") ||
+  firstWord == tc("search.assigned_to")
+    ? []
+    : [Selectable.nameOrEmail(input)]
 }
 
 let unselected = (state, currentCoachId, filter) => {

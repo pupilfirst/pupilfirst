@@ -153,7 +153,8 @@ let reviewNextButton = (
         <i className="fas fa-spinner fa-pulse mr-2" />,
         nextSubmission == DataLoading,
       )}
-      {str(t("review_next"))}
+      <p className="pr-2"> {str(t("review_next"))} </p>
+      <Icon className="if i-arrow-right-short-light text-lg lg:text-2xl" />
     </button>,
     nextSubmission == DataEmpty,
   )
@@ -191,7 +192,7 @@ let headerSection = (nextSubmission, setNextSubmission, submissionDetails, filte
               SubmissionDetails.courseId(submissionDetails),
               filter,
               submissionId,
-              "flex flex-shrink-0 items-center md:hidden border-l text-sm font-semibold px-3 py-2 md:px-5 md:py-4",
+              "flex flex-shrink-0 items-center md:hidden border-l text-sm font-semibold px-3 py-2 md:px-5 md:py-4 hover:bg-gray-200 hover:text-primary-500",
             )}
           </div>
         </div>
@@ -251,7 +252,7 @@ let headerSection = (nextSubmission, setNextSubmission, submissionDetails, filte
           SubmissionDetails.courseId(submissionDetails),
           filter,
           submissionId,
-          "flex items-center border-l text-sm font-semibold px-5 py-4",
+          "flex items-center border-l text-sm font-semibold px-5 py-4 hover:bg-gray-200 hover:text-primary-500",
         )}
       </div>
     </div>

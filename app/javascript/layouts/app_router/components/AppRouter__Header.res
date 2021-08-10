@@ -106,25 +106,22 @@ let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
   | (fourOrLessLinks, false) => (Array.of_list(fourOrLessLinks), [])
   }
 
-  switch visibleLinks {
-  | visibleLinks =>
-    visibleLinks
-    ->Js.Array2.mapi((l, index) => headerLink(string_of_int(index), l))
-    ->Js.Array2.concat([<AppRouter__Dropdown links=dropdownLinks key="more-links" />])
-    ->Js.Array2.concat([
-      ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn && !isMobile()),
-    ])
-    ->Js.Array2.concat([
-      switch (user, isMobile()) {
-      | (Some(_), true) => signOutLink()
-      | (Some(user), false) => renderLinks(user)
-      | (None, true)
-      | (None, false) =>
-        signInLink()
-      },
-    ])
-    ->React.array
-  }
+  visibleLinks
+  ->Js.Array2.mapi((l, index) => headerLink(string_of_int(index), l))
+  ->Js.Array2.concat([<AppRouter__Dropdown links=dropdownLinks key="more-links" />])
+  ->Js.Array2.concat([
+    ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn && !isMobile()),
+  ])
+  ->Js.Array2.concat([
+    switch (user, isMobile()) {
+    | (Some(_), true) => signOutLink()
+    | (Some(user), false) => renderLinks(user)
+    | (None, true)
+    | (None, false) =>
+      signInLink()
+    },
+  ])
+  ->React.array
 }
 
 @react.component

@@ -116,8 +116,8 @@ module Layouts
         {
           id: course.id,
           name: course.name,
-          review: course.id.in?(courses_with_review_access_ids),
-          author: course.id.in?(courses_with_author_access_ids),
+          can_review: course.id.in?(courses_with_review_access_ids),
+          is_author: course.id.in?(courses_with_author_access_ids),
           enable_leaderboard: course.enable_leaderboard?,
           description: course.description,
           exited: student_dropped_out(course.id),

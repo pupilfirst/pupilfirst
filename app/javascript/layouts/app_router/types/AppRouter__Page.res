@@ -52,7 +52,7 @@ let activeLinks = currentCourse => {
     ? Js.Array.concat([Student__Report(id)], defaultLinks)
     : defaultLinks
 
-  AppRouter__Course.review(currentCourse)
+  AppRouter__Course.canReview(currentCourse)
     ? Js.Array.concat([Student__Review(id), Student__Students(id)], linksForStudents)
     : linksForStudents
 }

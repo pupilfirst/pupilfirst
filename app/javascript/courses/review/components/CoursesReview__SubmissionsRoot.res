@@ -101,8 +101,8 @@ let getNextSubmission = (setNextSubmission, courseId, filter, submissionId) => {
     if ArrayUtils.isEmpty(response["submissions"]["nodes"]) {
       setNextSubmission(_ => DataEmpty)
       Notification.notice(
-        t("getNextSubmission.notice.done"),
-        t("getNextSubmission.notice.done_description"),
+        t("get_next_submission.notice.done"),
+        t("get_next_submission.notice.done_description"),
       )
     } else {
       RescriptReactRouter.push(

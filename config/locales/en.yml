@@ -478,7 +478,7 @@ en:
     CoursesReview__SubmissionsRoot:
       assigned_coaches: Assigned Coaches
       close: close
-      getNextSubmission:
+      get_next_submission:
         notice:
           done: Done!
           done_description: There are no more submissions to review

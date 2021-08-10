@@ -95,7 +95,7 @@ let renderLinksMobile = (courses, selectedPage) => {
         let (title, icon) = switch link {
         | Page.Student__Curriculum(_) => (t("curriculum"), "i-journal-text-regular")
         | Student__Report(_) => (t("report"), "i-graph-up-regular")
-        | Student__Students(_) => (t("student"), "i-users-regular")
+        | Student__Students(_) => (t("students"), "i-users-regular")
         | Student__Review(_) => (t("review"), "i-clipboard-check-regular")
         | Student__Leaderboard(_) => (t("leaderboard"), "i-tachometer-alt-regular")
         | Student__SubmissionShow(_) => ("", "")

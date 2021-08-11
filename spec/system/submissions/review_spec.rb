@@ -847,7 +847,7 @@ feature 'Submission review overlay', js: true do
 
       click_button 'Next'
 
-      expect(page).to have_text('There are no more submissions to review')
+      expect(page).to have_text('There are no other similar submissions.')
 
       dismiss_notification
     end

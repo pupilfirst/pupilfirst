@@ -10,14 +10,9 @@ class SubmissionsResolver < ApplicationQuery
   property :exclude_submission_id
 
   def submissions
-    applicable_submissions
-      .includes(
-        :startup_feedback,
-        founders: %i[user startup],
-        target: [target_group: :level]
-      )
-      .distinct
-      .order("#{sort_criterion_string} #{sort_direction_string}")
+    applicable_submissions.distinct.order(
+      "#{sort_criterion_string} #{sort_direction_string}"
+    )
   end
 
   def authorized?

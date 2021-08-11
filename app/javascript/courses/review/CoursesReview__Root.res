@@ -16,7 +16,7 @@ type filterLoader = ShowLevels | ShowCoaches | ShowTargets
 type loading = Unloaded | Loading | Loaded
 
 type state = {
-  loading: Loading.t,
+  loading: LoadingV2.t,
   submissions: PagedSubmission.t,
   levels: array<Level.t>,
   coaches: array<Coach.t>,
@@ -63,14 +63,13 @@ let reducer = (state, action) =>
   | LoadSubmissions(endCursor, hasNextPage, newTopics, totalEntriesCount, target, level, coach) =>
     let updatedTopics = switch state.loading {
     | LoadingMore => Js.Array.concat(PagedSubmission.toArray(state.submissions), newTopics)
-    | Reloading => newTopics
-    | NotLoading => newTopics
+    | Reloading(_) => newTopics
     }
 
     {
       ...state,
       submissions: PagedSubmission.make(updatedTopics, hasNextPage, endCursor),
-      loading: NotLoading,
+      loading: LoadingV2.setNotLoading(state.loading),
       totalEntriesCount: totalEntriesCount,
       targets: ArrayUtils.isEmpty(state.targets)
         ? Belt.Option.mapWithDefault(target, [], t => [t])
@@ -101,7 +100,7 @@ let reducer = (state, action) =>
       targetsLoaded: Loaded,
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
-  | BeginReloading => {...state, loading: Reloading}
+  | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
   | SetLevelLoading => {...state, filterLoading: true, levelsLoaded: Loading}
   | SetTargetLoading => {...state, filterLoading: true, targetsLoaded: Loading}
   | SetCoachLoading => {...state, filterLoading: true, coachesLoaded: Loading}
@@ -608,7 +607,7 @@ let shortCutClasses = selected =>
   )
 
 let computeInitialState = () => {
-  loading: NotLoading,
+  loading: LoadingV2.empty(),
   submissions: Unloaded,
   levels: [],
   coaches: [],
@@ -727,18 +726,20 @@ let make = (~courseId, ~currentCoachId) => {
               {switch state.loading {
               | LoadingMore =>
                 <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
-              | NotLoading =>
-                <div className="pb-6">
-                  <button
-                    className="btn btn-primary-ghost cursor-pointer w-full"
-                    onClick={_ => {
-                      send(BeginLoadingMore)
-                      getSubmissions(send, courseId, Some(cursor), filter)
-                    }}>
-                    {tc("button_load_more")->str}
-                  </button>
-                </div>
-              | Reloading => React.null
+              | Reloading(times) =>
+                ReactUtils.nullUnless(
+                  <div className="pb-6">
+                    <button
+                      className="btn btn-primary-ghost cursor-pointer w-full"
+                      onClick={_ => {
+                        send(BeginLoadingMore)
+                        getSubmissions(send, courseId, Some(cursor), filter)
+                      }}>
+                      {tc("button_load_more")->str}
+                    </button>
+                  </div>,
+                  ArrayUtils.isNotEmpty(times),
+                )
               }}
             </div>
           | FullyLoaded(submissions) => <div> {submissionsList(submissions, state, filter)} </div>
@@ -748,8 +749,7 @@ let make = (~courseId, ~currentCoachId) => {
         | Unloaded => React.null
         | _ =>
           let loading = switch state.loading {
-          | NotLoading => false
-          | Reloading => true
+          | Reloading(times) => ArrayUtils.isNotEmpty(times)
           | LoadingMore => false
           }
           <LoadingSpinner loading />

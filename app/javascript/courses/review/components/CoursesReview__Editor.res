@@ -69,7 +69,13 @@ let reducer = (state, action) =>
   | ShowGradesEditor => {...state, editor: GradesEditor}
   | ShowChecklistEditor => {...state, editor: ChecklistEditor}
   | ShowAdditionalFeedbackEditor => {...state, additonalFeedbackEditorVisible: true}
-  | FinishGrading(grades) => {...state, editor: ReviewedSubmissionEditor(grades), saving: false}
+  | FinishGrading(grades) => {
+      ...state,
+      editor: ReviewedSubmissionEditor(grades),
+      saving: false,
+      newFeedback: "",
+      note: None,
+    }
   | UpdateEditor(editor) => {...state, editor: editor}
   | FeedbackAfterSave => {
       ...state,
@@ -942,7 +948,6 @@ let make = (
   ~currentUser,
   ~number,
   ~submissionDetails,
-  ~filter,
   ~submissionId,
 ) => {
   let (state, send) = React.useReducer(
@@ -980,6 +985,9 @@ let make = (
     pending ? GradesEditor : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
   }
 
+  let url = RescriptReactRouter.useUrl()
+  let filter = Filter.makeFromQueryParams(url.search)
+
   [
     <div key="submission-header">
       <div> {inactiveWarning(submissionDetails)} </div>
@@ -997,7 +1005,7 @@ let make = (
                   SubmissionDetails.allSubmissions(submissionDetails),
                 ) -
                 index}
-                filterString={Filter.toQueryString(filter)}
+                filterString={url.search}
               />,
             SubmissionDetails.allSubmissions(submissionDetails),
           )->React.array}

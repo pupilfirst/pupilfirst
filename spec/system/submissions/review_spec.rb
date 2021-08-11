@@ -181,7 +181,7 @@ feature 'Submission review overlay', js: true do
       expect(submission.passed_at).to eq(nil)
       expect(submission.evaluated_at).not_to eq(nil)
       expect(submission.startup_feedback.count).to eq(1)
-      expect(submission.startup_feedback.last.feedback).to eq(feedback.strip)
+      expect(submission.startup_feedback.last.feedback).to eq(feedback)
       expect(submission.timeline_event_grades.pluck(:grade)).to contain_exactly(
         1,
         2

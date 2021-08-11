@@ -98,8 +98,6 @@ let currentSubmissionIndex = (submissionId, allSubmissions) => {
 @react.component
 let make = (~submissionId, ~currentUser) => {
   let (state, setState) = React.useState(() => Loading)
-  let url = RescriptReactRouter.useUrl()
-  let filter = Filter.makeFromQueryParams(url.search)
   React.useEffect1(getSubmissionDetails(submissionId, setState), [submissionId])
 
   <div className="flex-1 md:flex md:flex-col md:overflow-hidden">
@@ -122,7 +120,6 @@ let make = (~submissionId, ~currentUser) => {
         )}
         currentUser
         submissionDetails
-        filter
         submissionId
       />
 

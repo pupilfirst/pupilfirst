@@ -29,34 +29,7 @@ module DomUtils = {
 }
 
 module Make = (Selectable: Selectable) => {
-  // let search = (searchString, selections) =>
-  //   (selections |> Js.Array.filter(selection =>
-  //     selection
-  //     |> Selectable.searchString
-  //     |> String.lowercase_ascii
-  //     |> Js.String.includes(searchString |> String.lowercase_ascii)
-  //   ))
-  //     ->Belt.SortArray.stableSortBy((x, y) =>
-  //       String.compare(x |> Selectable.value, y |> Selectable.value)
-  //     )
-
-  // Js.String2.search(
-  //   String.lowercase_ascii(Selectable.searchString(selection)),
-  //   Js.Re.fromString(String.lowercase_ascii(searchString)),
-  // ),
   let search = (searchString, selections) => {
-    // let searchStringArray = String.lowercase_ascii(searchString)->Js.String2.split("")
-    // selections->Js.Array2.map(selection => {
-    //   let position = Js.String2.search(
-    //     String.lowercase_ascii(Selectable.searchString(selection)),
-    //     Js.Re.fromString(String.lowercase_ascii(searchString)),
-    //   )
-
-    //   (position, selection)
-    // })->Belt.SortArray.stableSortBy(((x, _), (y, _)) =>
-    //   x - y
-    // )->Js.Array2.filter(((x, _)) => x != -1)->Js.Array2.map(((_, p)) => p)
-
     let searchSelection =
       selections->Js.Array2.mapi((s, i) => {index: i, text: Selectable.searchString(s)})
     let results = fuzzySearch(String.lowercase_ascii(searchString), searchSelection)

@@ -17,7 +17,7 @@ let setNotLoading = t => {
   | LoadingMore => Reloading([])
   | Reloading(times) => {
       times->Js.Array2.pop->ignore
-      ArrayUtils.isEmpty(times) ? Reloading([]) : Reloading(times)
+      Reloading(times)
     }
   }
 }

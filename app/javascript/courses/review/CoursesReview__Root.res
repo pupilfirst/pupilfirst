@@ -738,7 +738,7 @@ let make = (~courseId, ~currentCoachId) => {
                       {tc("button_load_more")->str}
                     </button>
                   </div>,
-                  ArrayUtils.isNotEmpty(times),
+                  ArrayUtils.isEmpty(times),
                 )
               }}
             </div>

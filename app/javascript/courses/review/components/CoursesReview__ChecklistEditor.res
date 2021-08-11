@@ -202,7 +202,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                       <div className="pl-2 md:pl-4 mt-2">
                         <div className="flex">
                           <label
-                            title="Disabled"
+                            title={t("disabled")}
                             className="flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
                           />
                           <div className="w-full bg-gray-100 relative">

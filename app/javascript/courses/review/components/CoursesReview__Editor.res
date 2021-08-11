@@ -450,13 +450,16 @@ let submissionStatusIcon = (status, overlaySubmission) => {
             <p className="text-sm font-semibold px-3 pb-3">
               {switch OverlaySubmission.evaluatorName(overlaySubmission) {
               | Some(name) => name->str
-              | None => <em> {"Deleted Coach"->str} </em>
+              | None => <em> {t("deleted_coach")->str} </em>
               }}
             </p>
           </div>
           <div
             className="text-xs bg-gray-300 flex items-center rounded-b-lg px-3 py-2 md:px-3 md:py-1">
-            {(t("_on") ++ date->DateFns.format("MMMM d, yyyy"))->str}
+            {t(
+              ~variables=[("evaluated_at", DateFns.format(date, "MMMM d, yyyy"))],
+              "evaluated_at",
+            )->str}
           </div>
         </div>
       | (None, Graded(_))

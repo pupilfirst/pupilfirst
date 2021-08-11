@@ -22,7 +22,7 @@ let renderLinks = (courses, selectedPage) => {
         | Some(url) => <img className="absolute h-full w-full object-cover rounded-lg" src=url />
         | None =>
           <div
-            className="app-router-nav-course__cover absolute h-full w-full svg-bg-pattern-1 rounded-lg "
+            className="app-router-nav__course-cover absolute h-full w-full svg-bg-pattern-1 rounded-lg "
           />
         }}
       </div>
@@ -70,7 +70,7 @@ let courseSelector = (courses, selectedPage) => {
         | Some(url) => <img className="absolute h-full w-full object-cover" src=url />
         | None =>
           <div
-            className="app-router-nav-course__cover absolute h-full w-full svg-bg-pattern-1 rounded-lg "
+            className="app-router-nav__course-cover absolute h-full w-full svg-bg-pattern-1 rounded-lg "
           />
         }}
       </div>

@@ -14,23 +14,23 @@ let kindIconClasses = result =>
 
 let showFiles = files =>
   <div className="flex flex-wrap">
-    {Js.Array.map(
-      file =>
-        <a
-          key={"file-" ++ ChecklistItem.fileUrl(file)}
-          href={ChecklistItem.fileUrl(file)}
-          target="_blank"
-          className="mt-1 mr-3 flex border overflow-hidden rounded hover:shadow-md border-pink-400 bg-white text-pink-700 hover:border-pink-600 hover:text-pink-700">
-          <span
-            className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-nowrap truncate w-32 md:w-42 h-full px-3 py-2 leading-loose">
-            {ChecklistItem.fileName(file)->str}
-          </span>
-          <span className="flex w-10 justify-center items-center p-2 bg-pink-700 text-white">
-            <PfIcon className="if i-download-regular" />
-          </span>
-        </a>,
-      files,
-    )->React.array}
+    {files
+    ->Js.Array2.map(file =>
+      <a
+        key={"file-" ++ ChecklistItem.fileUrl(file)}
+        href={ChecklistItem.fileUrl(file)}
+        target="_blank"
+        className="mt-1 mr-3 flex border overflow-hidden rounded hover:shadow-md border-pink-400 bg-white text-pink-700 hover:border-pink-600 hover:text-pink-700">
+        <span
+          className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-nowrap truncate w-32 md:w-42 h-full px-3 py-2 leading-loose">
+          {ChecklistItem.fileName(file)->str}
+        </span>
+        <span className="flex w-10 justify-center items-center p-2 bg-pink-700 text-white">
+          <PfIcon className="if i-download-regular" />
+        </span>
+      </a>
+    )
+    ->React.array}
   </div>
 
 let showlink = link =>

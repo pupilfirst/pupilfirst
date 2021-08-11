@@ -7,11 +7,6 @@ class UsersController < ApplicationController
     @user = authorize(current_user)
   end
 
-  def dashboard_v2
-    @user = authorize(current_user)
-    render layout: 'app_router'
-  end
-
   def edit
     @user = authorize(current_user)
   end

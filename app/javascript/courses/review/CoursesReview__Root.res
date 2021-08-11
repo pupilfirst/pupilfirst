@@ -709,6 +709,7 @@ let make = (~courseId, ~currentCoachId) => {
                 placeholder={filterPlaceholder(filter)}
                 loading={state.filterLoading}
                 defaultOptions={defaultOptions(state, filter)}
+                hint={tc("filter_hint")}
               />
             </div>
             <div className="hidden md:block"> {submissionsSorter(filter)} </div>

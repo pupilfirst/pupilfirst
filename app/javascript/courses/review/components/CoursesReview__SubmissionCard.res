@@ -73,7 +73,12 @@ let showSubmission = (submissions, filterString) =>
               </span>
             }}
             <span className="ml-1">
-              {(t("_on") ++ IndexSubmission.createdAtPretty(submission))->str}
+              {{
+                t(
+                  ~variables=[("created_at", IndexSubmission.createdAtPretty(submission))],
+                  "created_at",
+                )
+              }->str}
             </span>
           </div>
         </div>

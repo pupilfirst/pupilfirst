@@ -56,16 +56,15 @@ module Layouts
 
     def courses_with_student_profile
       @courses_with_student_profile ||=
-        begin
-          Course
-            .joins(:founders)
-            .where(
-              school: current_school,
-              founders: {
-                id: current_user.founders.select(:id)
-              }
-            )
-        end.to_a
+        Course
+          .joins(:founders)
+          .where(
+            school: current_school,
+            founders: {
+              id: current_user.founders.select(:id)
+            }
+          )
+          .to_a
     end
 
     def courses_with_review_access

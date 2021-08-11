@@ -393,6 +393,7 @@ en:
         placeholder: Add an item to the checklist
         remove_button_title: Remove checklist item
       create_review_checklist: Create Review Checklist
+      disabled: Disabled
       edit_review_checklist: Edit Review Checklist
       save_checklist: Save Checklist
     CoursesReview__ChecklistShow:
@@ -401,12 +402,12 @@ en:
       generate_feedback_button: Generate Feedback
       review_checklist: Review Checklist
     CoursesReview__Editor:
-      _on: "on "
       add_another_feedback: Add another feedback
       add_feedback: Add feedback
       add_your_feedback: Add Your Feedback
       create_review_checklist: Create Review Checklist
       deleted_coach: Deleted Coach
+      evaluated_at: on %{evaluated_at}
       evaluated_by: Evaluated By
       feedback: Feedback
       feedback_generated_text: Feedback generated from review checklist.
@@ -444,6 +445,7 @@ en:
       filter_by_level: Filter by level
       filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
       filter_by_target: Filter by target
+      filter_hint: ...or start typing to filter by student using their name or email address
       level: Level
       me: Me
       name_or_email: Name or Email
@@ -467,8 +469,8 @@ en:
       submitted_at: Submitted At
       target: Target
     CoursesReview__SubmissionCard:
-      _on: "on "
       completed: Completed
+      created_at: on %{created_at}
       feedback_sent: Feedback Sent
       level: "Level "
       no_submissions_found: No submissions found
@@ -483,7 +485,7 @@ en:
       get_next_submission:
         notice:
           done: Done!
-          done_description: There are no more submissions to review
+          done_description: There are no other similar submissions.
       review_next: Next
       student_dropped_out_message: This submission is from a student whose access to the course has ended, or has dropped out.
       students_dropped_out_message: This submission is linked to one or more students whose access to the course has ended, or have dropped out.

@@ -157,8 +157,8 @@ module SubmissionsQuery = %graphql(
 
 module LevelsQuery = %graphql(
   `
-    query LevelsQuery($search: String, $courseId: ID!) {
-      levels(search: $search, courseId: $courseId) {
+    query LevelsQuery($courseId: ID!) {
+      levels(courseId: $courseId) {
         id
         name
         number
@@ -169,8 +169,8 @@ module LevelsQuery = %graphql(
 
 module TeamCoachesQuery = %graphql(
   `
-    query TeamCoachesQuery($search: String, $courseId: ID!) {
-      teamCoaches(search: $search, courseId: $courseId) {
+    query TeamCoachesQuery($courseId: ID!) {
+      teamCoaches(courseId: $courseId) {
         ...UserProxy.Fragments.AllFields
       }
     }
@@ -179,8 +179,8 @@ module TeamCoachesQuery = %graphql(
 
 module ReviewedTargetsInfoQuery = %graphql(
   `
-    query ReviewedTargetsInfoQuery($search: String, $courseId: ID!) {
-      reviewedTargetsInfo(search: $search, courseId: $courseId) {
+    query ReviewedTargetsInfoQuery($courseId: ID!) {
+      reviewedTargetsInfo(courseId: $courseId) {
         id
         title
       }
@@ -549,17 +549,15 @@ let reloadSubmissions = (courseId, filter, send) => {
   getSubmissions(send, courseId, None, filter)
 }
 
-let submissionsLoadedData = (totoalSubmissionsCount, loadedSubmissionsCount) =>
+let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
   <div className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
     {str(
-      totoalSubmissionsCount == loadedSubmissionsCount
-        ? tc(
-            ~variables=[("total_submissions", string_of_int(totoalSubmissionsCount))],
-            "submissions_fully_loaded_text",
-          )
+      totalSubmissionsCount == loadedSubmissionsCount
+        ? tc(~count=loadedSubmissionsCount, "submissions_fully_loaded_text")
         : tc(
+            ~count=loadedSubmissionsCount,
             ~variables=[
-              ("total_submissions", string_of_int(totoalSubmissionsCount)),
+              ("total_submissions", string_of_int(totalSubmissionsCount)),
               ("loaded_submissions_count", string_of_int(loadedSubmissionsCount)),
             ],
             "submissions_partially_loaded_text",

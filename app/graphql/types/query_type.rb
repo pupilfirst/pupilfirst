@@ -171,19 +171,16 @@ module Types
 
     resolved_field :levels, [Types::LevelType], null: false do
       argument :course_id, ID, required: true
-      argument :search, String, required: false
     end
 
     resolved_field :reviewed_targets_info,
                    [Types::TargetInfoType],
                    null: false do
       argument :course_id, ID, required: true
-      argument :search, String, required: false
     end
 
     resolved_field :team_coaches, [Types::UserProxyType], null: false do
       argument :course_id, ID, required: true
-      argument :search, String, required: false
     end
 
     resolved_field :coach, Types::UserProxyType, null: true do

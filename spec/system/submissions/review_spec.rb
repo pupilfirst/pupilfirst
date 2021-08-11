@@ -830,8 +830,6 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_text(coach.name)
       end
 
-      expect(page).to have_button('Undo Grading')
-
       accept_confirm { click_button 'Undo Grading' }
 
       expect(page).to have_text('Add Your Feedback')

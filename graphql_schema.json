@@ -630,16 +630,6 @@
                   }
                 },
                 "defaultValue": null
-              },
-              {
-                "name": "search",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null
               }
             ],
             "type": {
@@ -764,16 +754,6 @@
                     "name": "ID",
                     "ofType": null
                   }
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "search",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
                 },
                 "defaultValue": null
               }
@@ -1370,16 +1350,6 @@
                     "name": "ID",
                     "ofType": null
                   }
-                },
-                "defaultValue": null
-              },
-              {
-                "name": "search",
-                "description": "",
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
                 },
                 "defaultValue": null
               }

@@ -460,7 +460,9 @@ en:
         target: "target:"
       sort_by: "Sort by:"
       status: Status
-      submissions_fully_loaded_text: Showing all %{total_submissions} submissions
+      submissions_fully_loaded_text:
+        one: Showing all submissions
+        other: Showing all %{count} submissions
       submissions_partially_loaded_text: Showing %{loaded_submissions_count} of %{total_submissions} submissions
       submitted_at: Submitted At
       target: Target

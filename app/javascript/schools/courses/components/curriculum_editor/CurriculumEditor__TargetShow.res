@@ -78,7 +78,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
         {switch target |> Target.visibility {
         | Draft =>
           <span
-            className="target-group__target-draft-pill leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400 mr-2 whitespace-no-wrap">
+            className="target-group__target-draft-pill leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400 mr-2 whitespace-nowrap">
             <i className="fas fa-file-signature text-sm" />
             <span className="ml-1"> {"Draft" |> str} </span>
           </span>

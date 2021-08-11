@@ -136,7 +136,7 @@ module Example = {
                   <div className="font-semibold text-xl"> {icon |> str} </div>
                   <div className="overflow-x-auto">
                     <code
-                      className="inline-block text-gray-900 text-xs bg-red-100 p-1 mt-px whitespace-no-wrap">
+                      className="inline-block text-gray-900 text-xs bg-red-100 p-1 mt-px whitespace-nowrap">
                       {"<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />") |> str}
                     </code>
                   </div>

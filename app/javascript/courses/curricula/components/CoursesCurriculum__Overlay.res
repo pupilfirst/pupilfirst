@@ -245,7 +245,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
         <Icon className="if i-times-regular text-xl lg:text-2xl mt-1 lg:mt-0" />
         <span className="text-xs hidden lg:inline-block mt-px"> {t("close_button")->str} </span>
       </button>
-      <div className="w-full flex flex-wrap md:flex-no-wrap items-center justify-between relative">
+      <div className="w-full flex flex-wrap md:flex-nowrap items-center justify-between relative">
         <h1 className="text-base leading-snug md:mr-6 md:text-xl">
           {target |> Target.title |> str}
         </h1>

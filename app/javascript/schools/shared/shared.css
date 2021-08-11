@@ -56,7 +56,7 @@
 /* Checkbox */
 
 .checkbox-label {
-  @apply select-none .cursor-pointer;
+  @apply select-none cursor-pointer;
 }
 
 .checkbox-label span {
@@ -175,7 +175,7 @@
 
 @screen md {
   .drawer-right {
-    @apply .w-4/5;
+    @apply w-4/5;
   }
 }
 
@@ -205,7 +205,7 @@
 }
 
 .sa-toggle__menu-btn {
-  @apply p-4 inline-block .cursor-pointer;
+  @apply p-4 inline-block cursor-pointer;
   transition-property: opacity, filter;
   transition-duration: 0.15s;
   transition-timing-function: linear;
@@ -279,7 +279,7 @@
 }
 
 .file-input-label:hover {
-  @apply .bg-gray-400;
+  @apply bg-gray-400;
 }
 
 .toggle-button__group {
@@ -308,15 +308,11 @@
 }
 
 .toggle-button__button:focus {
-  @apply outline-none text-gray-900 shadow-outline;
+  @apply outline-none text-gray-900 ring;
 }
 
 .toggle-button__button--active {
   @apply bg-primary-100 text-primary-600;
-}
-
-.toggle-button__button--active:hover {
-  @apply toggle-button__button--active;
 }
 
 .target-group__container > :not(:last-child):before {

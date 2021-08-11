@@ -48,16 +48,19 @@ module Types
     end
 
     resolved_field :submissions,
-                   Types::SubmissionType.connection_type,
+                   Types::SubmissionInfoType.connection_type,
                    null: false do
       argument :course_id, ID, required: true
-      argument :status, Types::SubmissionStatusType, required: true
+      argument :status, Types::SubmissionStatusType, required: false
       argument :sort_direction, Types::SortDirectionType, required: true
       argument :sort_criterion,
                Types::SubmissionSortCriterionType,
                required: true
       argument :level_id, ID, required: false
       argument :coach_id, ID, required: false
+      argument :target_id, ID, required: false
+      argument :search, String, required: false
+      argument :exclude_submission_id, ID, required: false
     end
 
     resolved_field :submission_details,
@@ -164,6 +167,32 @@ module Types
                Types::ApplicantSortCriterionType,
                required: true
       argument :sort_direction, Types::SortDirectionType, required: true
+    end
+
+    resolved_field :levels, [Types::LevelType], null: false do
+      argument :course_id, ID, required: true
+    end
+
+    resolved_field :reviewed_targets_info,
+                   [Types::TargetInfoType],
+                   null: false do
+      argument :course_id, ID, required: true
+    end
+
+    resolved_field :team_coaches, [Types::UserProxyType], null: false do
+      argument :course_id, ID, required: true
+    end
+
+    resolved_field :coach, Types::UserProxyType, null: true do
+      argument :coach_id, ID, required: false
+    end
+
+    resolved_field :level, Types::LevelType, null: true do
+      argument :level_id, ID, required: false
+    end
+
+    resolved_field :target_info, Types::TargetInfoType, null: true do
+      argument :target_id, ID, required: false
     end
   end
 end

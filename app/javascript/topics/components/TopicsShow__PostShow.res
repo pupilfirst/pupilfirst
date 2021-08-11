@@ -116,7 +116,7 @@ let optionsDropdown = (
   let editPostButton =
     <button
       onClick={_ => toggleShowPostEdit(_ => true)}
-      className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
+      className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-nowrap">
       <FaIcon classes="fas fa-edit fa-fw text-base" />
       <span className="ml-2">
         {(isFirstPost ? t("edit_post_string") : t("edit_reply_string")) |> str}
@@ -128,7 +128,7 @@ let optionsDropdown = (
   let deletePostButton = showDelete
     ? <button
         onClick={_ => archivePost(isFirstPost, post |> Post.id, archivePostCB)}
-        className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
+        className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-nowrap">
         <FaIcon classes="fas fa-trash-alt fa-fw text-base" />
         <span className="ml-2">
           {(isFirstPost ? t("delete_topic_string") : t("delete_reply_string")) |> str}
@@ -139,7 +139,7 @@ let optionsDropdown = (
   | Some(_id) =>
     <a
       href={"/posts/" ++ (Post.id(post) ++ "/versions")}
-      className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-no-wrap">
+      className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-nowrap">
       <FaIcon classes="fas fa-history fa-fw text-base" />
       <span className="ml-2"> {t("history_button_text") |> str} </span>
     </a>

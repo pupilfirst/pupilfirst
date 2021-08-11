@@ -22,6 +22,11 @@ let includes = (~caseInsensitive=true, source, target) => {
 
 let isPresent = t => Js.String.trim(t) != ""
 
+let test = (value, text) => {
+  let tester = Js.Re.fromString(value)
+  Js.Re.test_(tester, text)
+}
+
 let colors = [
   ("#ff4040", false),
   ("#7f2020", false),

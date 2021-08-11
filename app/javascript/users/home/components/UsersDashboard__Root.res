@@ -42,8 +42,8 @@ let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) =>
   </div>
 
 let navButtonClasses = selected =>
-  "font-semibold border-b-2 border-transparent text-sm py-4 mr-6 focus:outline-none " ++ (
-    selected ? "text-primary-500 border-primary-500" : ""
+  "font-semibold border-b-2 text-sm py-4 mr-6 focus:outline-none " ++ (
+    selected ? "text-primary-500 border-primary-500" : "border-transparent"
   )
 
 let navSection = (view, setView, communities, issuedCertificates) =>

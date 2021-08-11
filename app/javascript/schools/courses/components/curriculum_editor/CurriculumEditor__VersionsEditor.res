@@ -85,7 +85,7 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
         key=id
         title={"Select version " ++ id}
         onClick={_ => loadContentBlocksCB(Some(version))}
-        className="whitespace-no-wrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500 w-full text-left">
+        className="whitespace-nowrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500 w-full text-left">
         {versionText(version)}
       </button>
     })

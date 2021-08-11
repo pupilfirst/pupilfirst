@@ -82,7 +82,7 @@
 
 .complete-button-selected {
   animation: completeButtonGlowing 500ms ease-in;
-  @apply .border-indigo-400;
+  @apply border-indigo-400;
 }
 
 .course-overlay__body-tab-item {

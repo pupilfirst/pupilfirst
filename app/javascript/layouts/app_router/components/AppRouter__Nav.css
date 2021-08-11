@@ -1,0 +1,10 @@
+.app-router-nav__course-cover {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.approuter-nav__sidebar {
+  position: relative;
+  width: 20rem;
+}

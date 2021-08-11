@@ -13,12 +13,14 @@ class UsersController < ApplicationController
 
   # GET /users/delete_account
   def delete_account
-    user = Users::ValidateDeletionTokenService.new(params[:token], current_school).authenticate
+    user =
+      Users::ValidateDeletionTokenService.new(params[:token], current_school)
+        .authenticate
     if user.present?
       sign_in user
       @token = params[:token]
     else
-      flash[:error] = "That link has expired or is invalid. Please try again."
+      flash[:error] = 'That link has expired or is invalid. Please try again.'
       redirect_to root_path
     end
   end

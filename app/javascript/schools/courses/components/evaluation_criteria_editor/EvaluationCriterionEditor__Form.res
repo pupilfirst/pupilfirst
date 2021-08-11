@@ -169,7 +169,7 @@ let labels = (state, setState) =>
       <div className="flex-1">
         <input
           id={"grade-label-for-" ++ (grade |> string_of_int)}
-          className=" appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className=" appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:ring"
           type_="text"
           maxLength=40
           value={gradeAndLabel |> GradeLabel.label}

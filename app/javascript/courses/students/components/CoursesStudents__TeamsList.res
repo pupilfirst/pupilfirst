@@ -20,35 +20,37 @@ let levelInfo = (levelId, levels) =>
     </div>
   </span>
 
-let studentTags = (student) =>
-  {student |> TeamInfo.studentTags |> ArrayUtils.isNotEmpty
+let studentTags = student => {
+  student |> TeamInfo.studentTags |> ArrayUtils.isNotEmpty
     ? <div className="hidden md:flex flex-wrap">
-        {student |> TeamInfo.studentTags
+        {student
+        |> TeamInfo.studentTags
         |> Js.Array.map(tag =>
           <div
-            className="bg-blue-100 rounded mt-1 mr-1 py-px px-2 text-tiny text-gray-900"
-            key={tag}>
+            className="bg-blue-100 rounded mt-1 mr-1 py-px px-2 text-tiny text-gray-900" key={tag}>
             {str(tag)}
           </div>
         )
         |> React.array}
       </div>
-    : React.null}
+    : React.null
+}
 
-let teamTags = (team) =>
-  {team |> TeamInfo.tags |> ArrayUtils.isNotEmpty
+let teamTags = team => {
+  team |> TeamInfo.tags |> ArrayUtils.isNotEmpty
     ? <div className="hidden md:flex flex-wrap">
-        {team |> TeamInfo.tags
+        {team
+        |> TeamInfo.tags
         |> Js.Array.map(tag =>
           <div
-            className="bg-gray-300 rounded mt-1 mr-1 py-px px-2 text-tiny text-gray-900"
-            key={tag}>
+            className="bg-gray-300 rounded mt-1 mr-1 py-px px-2 text-tiny text-gray-900" key={tag}>
             {str(tag)}
           </div>
         )
         |> React.array}
       </div>
-    : React.null}
+    : React.null
+}
 
 let showStudent = (team, levels, teamCoaches) => {
   let student = TeamInfo.students(team)[0]
@@ -72,8 +74,7 @@ let showStudent = (team, levels, teamCoaches) => {
               {student |> TeamInfo.studentTitle |> str}
             </span>
             <span className="font-normal ml-2 flex flex-wrap">
-              {studentTags(student)}
-              {teamTags(team)}
+              {studentTags(student)} {teamTags(team)}
             </span>
           </div>
         </div>
@@ -121,8 +122,8 @@ let showTeam = (team, levels, teamCoaches) =>
                 {student |> TeamInfo.studentTitle |> str}
               </p>
               {studentTags(student)}
-              </div>
             </div>
+          </div>
         </Link>
       )
       |> React.array}

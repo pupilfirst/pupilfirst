@@ -1,15 +1,17 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.SubmissionChecklistShow")
+
 @react.component
 let make = (~checklist, ~updateChecklistCB, ~pending) =>
-  <div>
-    {checklist |> ArrayUtils.isEmpty
-      ? <div> {"Target was marked as complete." |> str} </div>
+  <div className="space-y-8">
+    {ArrayUtils.isEmpty(checklist)
+      ? <div> {t("target_marked_as_complete")->str} </div>
       : checklist
-        |> Array.mapi((index, checklistItem) =>
+        ->Js.Array2.mapi((checklistItem, index) =>
           <SubmissionChecklistItemShow
-            key={index |> string_of_int} index checklistItem updateChecklistCB checklist pending
+            key={string_of_int(index)} index checklistItem updateChecklistCB checklist pending
           />
         )
-        |> React.array}
+        ->React.array}
   </div>

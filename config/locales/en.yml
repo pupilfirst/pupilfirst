@@ -405,6 +405,9 @@ en:
       add_another_feedback: Add another feedback
       add_feedback: Add feedback
       add_your_feedback: Add Your Feedback
+      assigned_coaches: Assigned Coaches
+      close: close
+      close_submission_warning: Are you sure you want to close the submission without saving?
       create_review_checklist: Create Review Checklist
       deleted_coach: Deleted Coach
       evaluated_at: on %{evaluated_at}
@@ -412,12 +415,17 @@ en:
       feedback: Feedback
       feedback_generated_text: Feedback generated from review checklist.
       feedback_placeholder: This feedback will be emailed to students when you finish grading.
+      get_next_submission:
+        notice:
+          done: Done!
+          done_description: There are no other similar submissions.
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{noteAbout}'s progress. These notes are shown only to coaches in a student's report. %{additionalHelp}
       note_help: "Would you like to write a note about this "
       note_placeholder: Did you notice something while reviewing this submission?
       review: Review
       review_checklist: Review Checklist
+      review_next: Next
       save_grades: Save grades
       save_grades_and_send_feedback: Save grades & send feedback
       share_feedback: Share Feedback
@@ -428,6 +436,10 @@ en:
         rejected: Rejected
         reviewing: Reviewing
       student: student
+      student_dropped_out_message: This submission is from a student whose access to the course has ended, or has dropped out.
+      students_dropped_out_message: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team: "
       team: team
       team_notice: " This submission is from a team, so a note added here will be posted to the report of all students in the team."
       undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
@@ -479,18 +491,6 @@ en:
       submitted_by_team: "Submitted by team: "
     CoursesReview__SubmissionInfoCard:
       submission_hash: "Submission #"
-    CoursesReview__SubmissionsRoot:
-      assigned_coaches: Assigned Coaches
-      close: close
-      get_next_submission:
-        notice:
-          done: Done!
-          done_description: There are no other similar submissions.
-      review_next: Next
-      student_dropped_out_message: This submission is from a student whose access to the course has ended, or has dropped out.
-      students_dropped_out_message: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
-      submitted_by: "Submitted by "
-      submitted_by_team: "Submitted by team: "
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
       attempted: " Attempted"

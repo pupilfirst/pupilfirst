@@ -20,7 +20,7 @@ let showFiles = files =>
         key={"file-" ++ ChecklistItem.fileUrl(file)}
         href={ChecklistItem.fileUrl(file)}
         target="_blank"
-        className="mt-1 mr-3 flex border overflow-hidden rounded hover:shadow-md border-pink-400 bg-white text-pink-700 hover:border-pink-600 hover:text-pink-700">
+        className="mt-1 mr-3 flex border overflow-hidden rounded hover:shadow-md border-pink-400 bg-white text-pink-700 hover:border-pink-600 hover:text-pink-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
         <span
           className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-nowrap truncate w-32 md:w-42 h-full px-3 py-2 leading-loose">
           {ChecklistItem.fileName(file)->str}
@@ -37,7 +37,7 @@ let showlink = link =>
   <a
     href=link
     target="_blank"
-    className="max-w-fc mt-1 mr-3 flex border overflow-hidden rounded hover:shadow-md border-indigo-400 bg-white text-indigo-700 hover:border-blue-600 hover:text-indigo-800">
+    className="max-w-fc mt-1 mr-3 flex border overflow-hidden rounded hover:shadow-md border-indigo-400 bg-white text-indigo-700 hover:border-blue-600 hover:text-indigo-800 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
     <span
       className="course-show-attachments__attachment-title rounded text-xs font-semibold inline-block whitespace-nowrap truncate w-32 md:w-42 h-full px-3 py-2 leading-loose">
       {link->str}

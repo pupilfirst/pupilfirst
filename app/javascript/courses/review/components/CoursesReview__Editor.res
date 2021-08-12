@@ -344,11 +344,11 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
             ariaLabel="submissions-overlay-close"
             onClick={_ =>
               closeOverlay(state, SubmissionDetails.courseId(submissionDetails), filter)}
-            className="flex flex-col items-center justify-center leading-tight px-3 py-2 md:px-5 md:py-4 cursor-pointer border-r bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+            className="flex flex-col items-center justify-center leading-tight px-3 py-2 md:px-5 md:py-4 cursor-pointer border-r bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:ring-2 focus:ring-indigo-500 ring-inset ">
             <div className="flex items-center justify-center bg-gray-300 rounded-full w-8 h-8">
               <Icon className="if i-times-regular text-lg lg:text-2xl" />
             </div>
-            <span className="sr-only"> {str(t("close"))} </span>
+            <span className="text-xs mt-0.5"> {str(t("close"))} </span>
           </button>
           <div className="flex space-x-4">
             <CoursesStudents__TeamCoaches
@@ -377,7 +377,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
             <a
               href={"/targets/" ++ SubmissionDetails.targetId(submissionDetails)}
               target="_blank"
-              className="ml-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base">
+              className="ml-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
               {SubmissionDetails.targetTitle(submissionDetails)->str}
             </a>
           </div>
@@ -398,7 +398,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
                 let commaRequired = index + 1 != studentCount
                 <span key={Student.id(student)}>
                   <a
-                    className="font-semibold underline"
+                    className="font-semibold underline focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     href={"/students/" ++ Student.id(student) ++ "/report"}
                     target="_blank">
                     {Student.name(student)->str}
@@ -425,7 +425,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
           SubmissionDetails.courseId(submissionDetails),
           filter,
           submissionId,
-          "flex items-center border-l text-sm font-semibold px-5 py-4 hover:bg-gray-200 hover:text-primary-500",
+          "flex items-center border-l text-sm font-semibold px-5 py-4 hover:bg-gray-200 hover:text-primary-500 focus:ring-2 focus:ring-indigo-500 ring-inset ",
         )}
       </div>
     </div>
@@ -478,10 +478,10 @@ let gradePillHeader = (evaluationCriteriaName, selectedGrade, gradeLabels) =>
 
 let gradePillClasses = (selectedGrade, currentGrade, passgrade, send) => {
   let defaultClasses =
-    "course-review-editor__grade-pill border-gray-400 py-1 px-2 text-sm flex-1 font-semibold " ++
+    "course-review-editor__grade-pill border-gray-400 py-1 px-2 text-sm flex-1 font-semibold transition " ++
     switch send {
     | Some(_) =>
-      "cursor-pointer hover:shadow-lg focus:outline-none " ++ (
+      "cursor-pointer hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 " ++ (
         currentGrade >= passgrade
           ? "hover:bg-green-500 hover:text-white "
           : "hover:bg-red-500 hover:text-white "
@@ -493,8 +493,8 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, send) => {
   defaultClasses ++ (
     currentGrade <= selectedGrade
       ? switch selectedGrade >= passgrade {
-        | true => "bg-green-500 text-white shadow-lg"
-        | false => "bg-red-500 text-white shadow-lg"
+        | true => "cursor-default bg-green-500 text-white shadow-lg"
+        | false => "cursor-default bg-red-500 text-white shadow-lg"
         }
       : "bg-white text-gray-900"
   )
@@ -835,7 +835,7 @@ let feedbackGenerator = (reviewChecklist, state, send) => {
       </div>
       <div className="mt-2 md:ml-8">
         <button
-          className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none transition"
+          className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
           onClick={_ => send(ShowChecklistEditor)}>
           <span>
             {(
@@ -1133,7 +1133,7 @@ let make = (
                           WindowUtils.confirm(t("undo_grade_warning"), () =>
                             OverlaySubmission.id(overlaySubmission)->undoGrading(send)
                           )}
-                        className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200">
+                        className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <i className="fas fa-undo" />
                         <span className="ml-2"> {t("undo_grading")->str} </span>
                       </button>
@@ -1184,7 +1184,7 @@ let make = (
                 <div className="py-4 md:ml-8 text-center">
                   <button
                     onClick={_ => send(ShowAdditionalFeedbackEditor)}
-                    className="bg-primary-100 flex items-center justify-center px-4 py-3 border border-dashed border-primary-500 rounded-md w-full font-semibold text-sm text-primary-600 hover:bg-white hover:text-primary-500 hover:shadow-lg hover:border-primary-300 focus:outline-none transition cursor-pointer">
+                    className="bg-primary-100 flex items-center justify-center px-4 py-3 border border-dashed border-primary-500 rounded-md w-full font-semibold text-sm text-primary-600 hover:bg-white hover:text-primary-500 hover:shadow-lg hover:border-primary-300 focus:outline-none transition cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     <Icon className="if i-plus-regular" />
                     <p className="pl-2">
                       {switch OverlaySubmission.feedback(overlaySubmission) {

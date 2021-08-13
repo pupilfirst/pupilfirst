@@ -41,7 +41,7 @@ let renderLinks = (courses, selectedPage) => {
           <a
             key=title
             href={Page.path(link)}
-            className={"flex relative items-center p-3 rounded-md text-sm font-semibold " ++ (
+            className={"flex relative items-center p-3 rounded-md text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 " ++ (
               link == selectedPage
                 ? "text-primary-500 bg-gray-200 before:block before:bg-primary-500 before:w-1 before:absolute before:left-0 before:top-1/2 before:h-3/4 before:rounded-r-md before:transform before:-translate-y-1/2"
                 : "hover:text-primary-500 hover:bg-gray-200"

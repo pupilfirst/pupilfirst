@@ -1,0 +1,4 @@
+.course-review-root__submissions-list-container {
+  @apply flex-1 md:overflow-y-auto;
+  overflow-anchor: none;
+}

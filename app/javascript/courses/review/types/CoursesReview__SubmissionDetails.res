@@ -2,9 +2,13 @@ module OverlaySubmission = CoursesReview__OverlaySubmission
 module IndexSubmission = CoursesReview__IndexSubmission
 module Student = CoursesReview__Student
 module ReviewChecklistItem = CoursesReview__ReviewChecklistItem
+module SubmissionMeta = CoursesReview__SubmissionMeta
+module Coach = UserProxy
 
 type t = {
-  submissions: array<OverlaySubmission.t>,
+  submission: OverlaySubmission.t,
+  createdAt: Js.Date.t,
+  allSubmissions: array<SubmissionMeta.t>,
   targetId: string,
   targetTitle: string,
   students: array<Student.t>,
@@ -14,10 +18,12 @@ type t = {
   reviewChecklist: array<ReviewChecklistItem.t>,
   targetEvaluationCriteriaIds: array<string>,
   inactiveStudents: bool,
-  coachIds: array<string>,
+  coaches: array<Coach.t>,
   teamName: option<string>,
+  courseId: string,
 }
-let submissions = t => t.submissions
+let submission = t => t.submission
+let allSubmissions = t => t.allSubmissions
 let targetId = t => t.targetId
 let targetTitle = t => t.targetTitle
 let levelNumber = t => t.levelNumber
@@ -26,11 +32,14 @@ let evaluationCriteria = t => t.evaluationCriteria
 let reviewChecklist = t => t.reviewChecklist
 let targetEvaluationCriteriaIds = t => t.targetEvaluationCriteriaIds
 let inactiveStudents = t => t.inactiveStudents
-let coachIds = t => t.coachIds
+let coaches = t => t.coaches
 let teamName = t => t.teamName
+let courseId = t => t.courseId
+let createdAt = t => t.createdAt
 
 let make = (
-  ~submissions,
+  ~submission,
+  ~allSubmissions,
   ~targetId,
   ~targetTitle,
   ~students,
@@ -40,10 +49,13 @@ let make = (
   ~reviewChecklist,
   ~targetEvaluationCriteriaIds,
   ~inactiveStudents,
-  ~coachIds,
+  ~coaches,
   ~teamName,
+  ~courseId,
+  ~createdAt,
 ) => {
-  submissions: submissions,
+  submission: submission,
+  allSubmissions: allSubmissions,
   targetId: targetId,
   targetTitle: targetTitle,
   students: students,
@@ -53,13 +65,20 @@ let make = (
   reviewChecklist: reviewChecklist,
   targetEvaluationCriteriaIds: targetEvaluationCriteriaIds,
   inactiveStudents: inactiveStudents,
-  coachIds: coachIds,
+  coaches: coaches,
   teamName: teamName,
+  courseId: courseId,
+  createdAt: createdAt,
 }
 
 let decodeJs = details =>
   make(
-    ~submissions=details["submissions"] |> OverlaySubmission.makeFromJs,
+    ~submission=OverlaySubmission.makeFromJs(details["submission"]),
+    ~allSubmissions=ArrayUtils.copyAndSort(
+      (s1, s2) =>
+        DateFns.differenceInSeconds(SubmissionMeta.createdAt(s2), SubmissionMeta.createdAt(s1)),
+      SubmissionMeta.makeFromJs(details["allSubmissions"]),
+    ),
     ~targetId=details["targetId"],
     ~targetTitle=details["targetTitle"],
     ~students=details["students"] |> Array.map(Student.makeFromJs),
@@ -67,6 +86,7 @@ let decodeJs = details =>
     ~levelId=details["levelId"],
     ~targetEvaluationCriteriaIds=details["targetEvaluationCriteriaIds"],
     ~inactiveStudents=details["inactiveStudents"],
+    ~createdAt=DateFns.decodeISO(details["createdAt"]),
     ~evaluationCriteria=details["evaluationCriteria"] |> Js.Array.map(ec =>
       EvaluationCriterion.make(
         ~id=ec["id"],
@@ -79,34 +99,31 @@ let decodeJs = details =>
       )
     ),
     ~reviewChecklist=details["reviewChecklist"] |> ReviewChecklistItem.makeFromJs,
-    ~coachIds=details["coachIds"],
+    ~coaches=Js.Array.map(Coach.makeFromJs, details["coaches"]),
     ~teamName=details["teamName"],
+    ~courseId=details["courseId"],
   )
 
-let updateSubmission = (submission, t) => {
-  ...t,
-  submissions: t.submissions |> Js.Array.map(s =>
-    OverlaySubmission.id(s) == OverlaySubmission.id(submission) ? submission : s
-  ),
+let updateMetaSubmission = submission => {
+  SubmissionMeta.make(
+    ~id=OverlaySubmission.id(submission),
+    ~createdAt=OverlaySubmission.createdAt(submission),
+    ~passedAt=OverlaySubmission.passedAt(submission),
+    ~evaluatedAt=OverlaySubmission.evaluatedAt(submission),
+    ~feedbackSent=ArrayUtils.isNotEmpty(OverlaySubmission.feedback(submission)),
+  )
 }
 
-let makeIndexSubmission = (overlaySubmission, t) =>
-  IndexSubmission.make(
-    ~id=overlaySubmission |> OverlaySubmission.id,
-    ~title=t.targetTitle,
-    ~createdAt=overlaySubmission |> OverlaySubmission.createdAt,
-    ~levelId=t.levelId,
-    ~userNames=t.students
-    |> Js.Array.map(student => student |> CoursesReview__Student.name)
-    |> Js.Array.joinWith(", "),
-    ~status=Some(
-      IndexSubmission.makeStatus(
-        ~passedAt=overlaySubmission |> OverlaySubmission.passedAt,
-        ~feedbackSent=overlaySubmission |> OverlaySubmission.feedbackSent,
-      ),
-    ),
-    ~coachIds=t.coachIds,
-    ~teamName=t.teamName,
-  )
+let updateOverlaySubmission = (submission, t) => {
+  ...t,
+  submission: submission,
+  allSubmissions: Js.Array.map(
+    s =>
+      SubmissionMeta.id(s) == OverlaySubmission.id(submission)
+        ? updateMetaSubmission(submission)
+        : s,
+    t.allSubmissions,
+  ),
+}
 
 let updateReviewChecklist = (reviewChecklist, t) => {...t, reviewChecklist: reviewChecklist}

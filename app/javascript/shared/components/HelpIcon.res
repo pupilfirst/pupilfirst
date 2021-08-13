@@ -66,7 +66,7 @@ let make = (~className="", ~link=?, ~responsiveAlignment=NonResponsive(AlignCent
     {helpVisible
       ? <div
           onClick={event => event |> ReactEvent.Mouse.stopPropagation}
-          className={"help-icon__help-container overflow-y-auto mt-1 border border-gray-900 absolute z-50 px-4 py-3 shadow-lg leading-snug rounded-lg bg-gray-900 text-white max-w-xs text-center" ++
+          className={"help-icon__help-container overflow-y-auto mt-1 border border-gray-900 absolute z-50 px-4 py-3 shadow-lg leading-snug rounded-lg bg-gray-900 text-white max-w-xs" ++
           (responsiveAlignment |> responsiveAlignmentClass)}>
           children
           {link

@@ -194,7 +194,7 @@ let make = (
             ? <button
                 onClick={_e => handleCreateTarget(state.targetTitle, targetGroup |> TargetGroup.id)}
                 disabled=state.savingNewTarget
-                className="flex items-center whitespace-no-wrap text-sm font-semibold py-2 px-4 mr-4 rounded btn-primary appearance-none focus:outline-none text-center">
+                className="flex items-center whitespace-nowrap text-sm font-semibold py-2 px-4 mr-4 rounded btn-primary appearance-none focus:outline-none text-center">
                 {"Create" |> str}
               </button>
             : React.null}

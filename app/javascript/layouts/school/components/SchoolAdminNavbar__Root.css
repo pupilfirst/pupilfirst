@@ -3,7 +3,7 @@
 }
 
 .school-admin-navbar__primary-nav {
-  @apply .w-full;
+  @apply w-full;
 }
 
 .school-admin-navbar__primary-nav--shrunk {
@@ -16,7 +16,7 @@
 }
 
 .school-admin-navbar__primary-nav-link:hover {
-  @apply .bg-primary-800;
+  @apply bg-primary-800;
 }
 
 .school-admin-navbar__primary-nav-link--active {
@@ -55,7 +55,7 @@
 }
 
 .school-admin-navbar__primary-nav-link--active:hover {
-  @apply .bg-gray-200 .text-primary-500;
+  @apply bg-gray-200 text-primary-500;
 }
 
 .school-admin-navbar__notifications-unread-bullet {

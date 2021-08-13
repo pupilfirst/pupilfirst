@@ -105,7 +105,7 @@ let make = (
                   id=version
                   key=version
                   onClick={handleVersionSelect(setShowDropdown, selectVersionCB, version)}
-                  className="target-editor__version-dropdown-list-item flex justify-between whitespace-no-wrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500">
+                  className="target-editor__version-dropdown-list-item flex justify-between whitespace-nowrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500">
                   {version |> str}
                 </li>
               )

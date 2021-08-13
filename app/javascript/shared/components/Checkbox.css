@@ -1,21 +1,21 @@
 /* Checkbox */
 
 .checkbox__label {
-  @apply select-none .cursor-pointer;
+  @apply select-none cursor-pointer;
 }
 
-.checkbox__label span {
-  @apply inline-block align-middle;
+.checkbox__label div {
+  @apply inline-block;
   transform: translate3d(0, 0, 0);
 }
 
-.checkbox__label span:first-child {
+.checkbox__label div:first-child {
   @apply relative rounded align-middle border border-gray-500 bg-white w-4 h-4 mr-3;
   transform: scale(1);
   transition: all 0.2s ease;
 }
 
-.checkbox__label span:first-child svg {
+.checkbox__label div:first-child svg {
   position: absolute;
   top: 3px;
   left: 2px;
@@ -31,26 +31,26 @@
   transform: translate3d(0, 0, 0);
 }
 
-.checkbox__label span:first-child:before {
+.checkbox__label div:first-child:before {
   content: "";
   @apply bg-primary-500 w-full h-full block opacity-100 rounded-full;
   transform: scale(0);
 }
 
-.checkbox__label:hover span:first-child {
+.checkbox__label:hover div:first-child {
   @apply bg-primary-100 border-primary-500;
 }
 
-.checkbox__input:checked + .checkbox__label span:first-child {
+.checkbox__input:checked + .checkbox__label div:first-child {
   @apply bg-primary-500 border-primary-500;
   animation: wave 0.4s ease;
 }
 
-.checkbox__input:checked + .checkbox__label span:first-child svg {
+.checkbox__input:checked + .checkbox__label div:first-child svg {
   stroke-dashoffset: 0;
 }
 
-.checkbox__input:checked + .checkbox__label span:first-child:before {
+.checkbox__input:checked + .checkbox__label div:first-child:before {
   transform: scale(3.5);
   opacity: 0;
   transition: all 0.6s ease;

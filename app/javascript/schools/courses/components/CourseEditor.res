@@ -151,7 +151,7 @@ let courseLink = (href, title, icon) =>
   <a
     key=href
     href
-    className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-no-wrap">
+    className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-nowrap">
     <i className=icon /> <span className="font-semibold ml-2"> {title->str} </span>
   </a>
 
@@ -478,7 +478,8 @@ let make = (~selectedCourse) => {
             ),
           )
         })
-        <SchoolAdmin__EditorDrawer2 closeDrawerCB={_ => RescriptReactRouter.push("/school/courses/")}>
+        <SchoolAdmin__EditorDrawer2
+          closeDrawerCB={_ => RescriptReactRouter.push("/school/courses/")}>
           <CourseEditor__Form
             course
             updateCourseCB={updateCourse(send)}

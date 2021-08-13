@@ -191,7 +191,7 @@ point. To compile ReScript code again (if you've made changes), you can either d
 
 Start the Webpack Dev Server on another tab or window:
 
-    bin/webpack-dev-server
+    yarn run wds
 
 ## Start the Rails server
 

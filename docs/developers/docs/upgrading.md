@@ -17,6 +17,77 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION`.
 
+### 2021.4
+
+Introduced support for public and private file storage. Its now mandatory to have two bucket's for storage, one public and one private linked to the app.
+
+#### Migration Steps
+
+<!-- Improve documentation -->
+
+1. Convert the current bucket that you are using to a public bucket and create a new private bucket.
+2. Rename the env variable `AWS_BUCKET` to `AWS_BUCKET_PUBLIC`.
+3. Add a new environment variable `AWS_BUCKET_PRIVATE`, this should be the private bucket name. (New Bucket)
+4. Deploy and run the migration.
+
+#### Steps for a migrating with a shorter downtime (optional)
+
+If you want to complete the migration with a shorter downtime you will need to split the deployment into three steps.
+
+1. _Pre-deployment_: Copy the files till a specific date to the new bucket before migration
+2. _Deployment_: Setup downtime and deploy code which will migrate the rest of the files.
+3. _Post-deployment_: Cleanup the files from the old bucket
+
+##### Additional Steps
+
+1. Add a new environment variable `TEMP_DATE_OF_FILE_TRANSITION`, the variable will store date in `dd/mm/yyyy` format
+2. Add a new environment variable `TEMP_SKIP_DELETE` that will ensure that files are not purged as part of the migration.
+3. Run the following script from your terminal and copy the files till a specific date to the new private bucket.
+
+   ```ruby
+     # The files from start till the date mentioned will be copied to the new private bucket. Format dd/mm/yyyy
+     date_of_transition = '16/08/2021'
+
+     def copy_objects(scope)
+       list = scope.where('created_at < ?', Date.parse(date_of_transition).beginning_of_day
+       total_objects = list.count
+
+       list.each_with_index do |l, i|
+         Rails.logger.info("Copying #{i}/#{total_objects}")
+         object = old_bucket.object(l.file.blob.key)
+         object.copy_to(
+           bucket: new_bucket_key,
+           key: l.file.blob.key
+         )
+       end
+     end
+
+     Rails.logger.info('Migrating Submission Files')
+     copy_objects(TimelineEventFile.joins(file_attachment: :blob))
+
+     Rails.logger.info('Migrating Course Exports')
+     copy_objects(CourseExport.joins(file_attachment: :blob))
+   ```
+
+4. Follow the _Migration Steps_ mentioned above.
+5. Run the following code after migration and purge the old files.
+
+   ```ruby
+   def delete_old_objects_and_update(scope)
+     total_objects = scope.count
+     scope.each_with_index do |l, i|
+       Rails.logger.info("Deleting #{i}/#{total_objects}")
+       old_bucket.object.delete({})
+     end
+   end
+
+   Rails.logger.info('Deleting the copy of Submission Files')
+   delete_old_objects(TimelineEventFile.joins(file_attachment: :blob))
+
+   Rails.logger.info('Deleting the copy of Course Exports')
+   delete_old_objects(CourseExport.joins(file_attachment: :blob))
+   ```
+
 ### 2021.3
 
 - Google's Recaptcha has been introduced to protect public-facing forms from automation.

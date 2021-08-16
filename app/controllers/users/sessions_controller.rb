@@ -106,7 +106,7 @@ module Users
 
       @form&.current_school = current_school
 
-      recaptcha_success = recaptcha_success?(@form, action: 'user_email_login')
+      recaptcha_success = recaptcha_success?(@form, action: 'user_password_login')
 
       unless recaptcha_success
         redirect_to sign_in_with_email_path(visible_recaptcha: 1)

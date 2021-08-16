@@ -2,6 +2,10 @@ class GraphqlController < ApplicationController
   skip_forgery_protection if: :skip_csrf_protection?
   skip_before_action :redirect_to_primary_domain, if: :introspection?
 
+  rescue_from ActionController::InvalidAuthenticityToken do
+    render json: { errors: [{ message: I18n.t('shared.invalid_authenticity_token_error') }] }
+  end
+
   def execute
     variables = ensure_hash(params[:variables])
     query = params[:query]

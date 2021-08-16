@@ -991,3 +991,4 @@ en:
     saving: Saving...
     target: Target
     terms_and_conditions: Terms & Conditions
+    invalid_authenticity_token_error: Invalid or missing CSRF token. Please refresh this page before trying to perform that action.

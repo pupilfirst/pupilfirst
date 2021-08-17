@@ -6,7 +6,7 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
-amazon:
+amazon: &amazon
   service: S3
   access_key_id: <%= Rails.application.secrets.aws[:access_key_id] %>
   secret_access_key: <%= Rails.application.secrets.aws[:secret_access_key] %>
@@ -15,8 +15,5 @@ amazon:
   public: true
 
 amazon_private:
-  service: S3
-  access_key_id: <%= Rails.application.secrets.aws[:access_key_id] %>
-  secret_access_key: <%= Rails.application.secrets.aws[:secret_access_key] %>
-  region: <%= Rails.application.secrets.aws[:region] %>
+  <<: *amazon
   bucket: <%= Rails.application.secrets.aws[:bucket_private] %>

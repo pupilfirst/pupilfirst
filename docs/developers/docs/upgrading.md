@@ -45,28 +45,35 @@ If you want to complete the migration with a shorter downtime you will need to s
 3. Run the following script from your terminal and copy the files till a specific date to the new private bucket.
 
    ```ruby
-     # The files from start till the date mentioned will be copied to the new private bucket. Format dd/mm/yyyy
-     date_of_transition = '16/08/2021'
+   # The files from start till the date mentioned will be copied to the new private bucket. Format dd/mm/yyyy
+   @old_bucket = Aws::S3::Bucket.new('public_bucket_key')
+   @new_bucket_key = 'private_bucket_key'
+   @date_of_transition = '16/08/2021'
 
-     def copy_objects(scope)
-       list = scope.where('created_at < ?', Date.parse(date_of_transition).beginning_of_day
-       total_objects = list.count
+   def copy_objects(scope, table_name)
+     list =
+       scope.where(
+         "#{table_name}.created_at < ?",
+         Date.parse(@date_of_transition).beginning_of_day,
+       )
+     total_objects = list.count
 
-       list.each_with_index do |l, i|
-         Rails.logger.info("Copying #{i}/#{total_objects}")
-         object = old_bucket.object(l.file.blob.key)
-         object.copy_to(
-           bucket: new_bucket_key,
-           key: l.file.blob.key
-         )
-       end
+     list.each_with_index do |l, i|
+       Rails.logger.info("Copying #{i}/#{total_objects}")
+       key = l.file.blob.key
+       object = @old_bucket.object(key)
+       object.copy_to(bucket: @new_bucket_key, key: key)
      end
+   end
 
-     Rails.logger.info('Migrating Submission Files')
-     copy_objects(TimelineEventFile.joins(file_attachment: :blob))
+   Rails.logger.info('Migrating Submission Files')
+   copy_objects(
+     TimelineEventFile.joins(file_attachment: :blob),
+     'timeline_event_files',
+   )
 
-     Rails.logger.info('Migrating Course Exports')
-     copy_objects(CourseExport.joins(file_attachment: :blob))
+   Rails.logger.info('Migrating Course Exports')
+   copy_objects(CourseExport.joins(file_attachment: :blob), 'course_exports')
    ```
 
 4. Follow the _Migration Steps_ mentioned above.
@@ -77,7 +84,8 @@ If you want to complete the migration with a shorter downtime you will need to s
      total_objects = scope.count
      scope.each_with_index do |l, i|
        Rails.logger.info("Deleting #{i}/#{total_objects}")
-       old_bucket.object.delete({})
+       object = @old_bucket.object(l.file.blob.key)
+       object.delete({})
      end
    end
 

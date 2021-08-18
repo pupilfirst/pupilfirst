@@ -30,6 +30,18 @@ Introduced support for public and private file storage. Its now mandatory to hav
 3. Add a new environment variable `AWS_BUCKET_PRIVATE`, this should be the private bucket name. (New Bucket)
 4. Deploy and run the migration.
 
+#### Steps for configuring public access settings for your S3 bucket
+
+Amazon S3 Block Public Access feature provides settings to help you manage public access to Amazon S3 resources. By default, new buckets and objects do not allow public access.
+You can use the S3 console or AWS CLI to configure public access settings for your bucket. 
+
+For information on configuring public access to your S3 storage, please refer to the documentation [here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/configuring-block-public-access-bucket.html)
+
+#### Creating S3 private bucket
+When you create a new bucket through the AWS S3 console, the default setting in set permissions is Block all public access.
+
+Refer to this documentation on [creating a new S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
+
 #### Steps for a migrating with a shorter downtime (optional)
 
 If you want to complete the migration with a shorter downtime you will need to split the deployment into three steps.

@@ -85,5 +85,5 @@ Rails.application.configure do
   Bullet.skip_html_injection = true
 
   # In development , let's have ActiveStorage store everything on local disk
-  config.active_storage.service = :local
+  config.active_storage.service = :amazon
 end

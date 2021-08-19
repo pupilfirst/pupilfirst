@@ -21,7 +21,7 @@ module Layouts
 
     def school_logo_path
       if current_school.logo_on_light_bg.attached?
-        view.rails_blob_path(
+        view.rails_public_blob_url(
           current_school.logo_variant('thumb'),
           only_path: true
         )
@@ -32,7 +32,7 @@ module Layouts
 
     def school_icon_path
       if current_school.icon.attached?
-        view.rails_blob_path(
+        view.rails_public_blob_url(
           current_school.icon_variant('thumb'),
           only_path: true
         )

@@ -90,7 +90,7 @@ See this code, and a more advanced version, in action here: https://multiselect-
 
 ### Other examples
 
-- [Real world Usage in Pupilfirst](https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/schools/courses/components/students_editor/StudentsEditor__Search.re)
+- [Real world Usage in Pupilfirst](https://github.com/pupilfirst/pupilfirst/blob/master/app/javascript/courses/review/CoursesReview__Root.res)
 
 ## Usage
 
@@ -123,3 +123,4 @@ The `MultiselectDropdown` component accepts the following props:
 | `emptyMessage`   | `string` (optional)                        | Empty message shown when the search result is empty. Defaults to `No results found`.   |
 | `hint`           | `string` (optional)                        | Message shown on click when value is empty.                                            |
 | `defaultOptions` | `array(MultiselectDropdown.Selectable.t)`  | The array of default options that will show on click when `value` is empty             |
+| `loading`        | `bool` (optional)                          | Used to render skelton loading                                                         |

@@ -1,5 +1,20 @@
 en:
   components:
+    AppRouter__Dropdown:
+      more: More
+      show_more_links: Show more links
+    AppRouter__Header:
+      edit_profile: Edit Profile
+      sign_in: Sign In
+      sign_out: Sign Out
+    AppRouter__Nav:
+      close_sidebar: Close sidebar
+      curriculum: Curriculum
+      leaderboard: Leaderboard
+      report: Report
+      review: Review
+      sign_out: Sign Out
+      students: Students
     CoachesIndex__Root:
       button_about: About
       button_connect: Connect
@@ -55,8 +70,8 @@ en:
         label: Title
         placeholder: Student, Coach, CEO, etc.
     CourseApplicants__Root:
-      applicants_page_title: Applicants
       applicants_fully_loaded_text: Showing all %{total_applicants} applicants
+      applicants_page_title: Applicants
       applicants_partially_loaded_text: Showing %{loaded_applicants_count} of %{total_applicants} applicants
       button_load_more: Load More Applicants...
       empty_applicants: You don't have any applicants!
@@ -147,16 +162,16 @@ en:
         archive_course:
           button_text: Archive Course
           label: Do you want to archive the course?
-        unarchive_course:
-          button_text: Unarchive Course
-          label: Do you want to unarchive the course?
         clone_course:
           button_text: Clone Course
           label: Do you want to create a copy of the course?
+        unarchive_course:
+          button_text: Unarchive Course
+          label: Do you want to unarchive the course?
       alert:
         archive_message: Are you sure you want to archive the course?
-        unarchive_message: Are you sure you want to unarchive the course?
         clone_course_message: Are you sure you want to make a copy of the course?
+        unarchive_message: Are you sure you want to unarchive the course?
       button_text:
         add_new_course: Add New Course
         edit_course_details: Edit Course Details
@@ -360,26 +375,122 @@ en:
       submitted_at: Submitted At
       submitted_on: Submitted on %{date}
       view: "View "
+    CoursesReview__Checklist:
+      create_review_checklist: Create a review checklist
+      create_review_checklist_description: Prepare for your review by creating a checklist
+    CoursesReview__ChecklistEditor:
+      add_checklist_item: Add Checklist Item
+      add_result: Add Result
+      cancel: Cancel
+      checklist_item_description:
+        error_message: A check's result cannot be blank
+        placeholder: Add feedback (optional)
+      checklist_item_title:
+        placeholder: Add a result for this check
+        remove_button_title: Remove checklist result
+      checklist_title:
+        error_message: A checklist item cannot be blank
+        placeholder: Add an item to the checklist
+        remove_button_title: Remove checklist item
+      create_review_checklist: Create Review Checklist
+      disabled: Disabled
+      edit_review_checklist: Edit Review Checklist
+      save_checklist: Save Checklist
     CoursesReview__ChecklistShow:
       edit_checklist_button: Edit Checklist
+      feedback_placeholder: Add feedback (optional)
       generate_feedback_button: Generate Feedback
+      review_checklist: Review Checklist
+    CoursesReview__Editor:
+      add_another_feedback: Add another feedback
+      add_feedback: Add feedback
+      add_your_feedback: Add Your Feedback
+      assigned_coaches: Assigned Coaches
+      close: close
+      close_submission_warning: Are you sure you want to close the submission without saving?
+      create_review_checklist: Create Review Checklist
+      deleted_coach: Deleted Coach
+      evaluated_at: on %{evaluated_at}
+      evaluated_by: Evaluated By
+      feedback: Feedback
+      feedback_generated_text: Feedback generated from review checklist.
+      feedback_placeholder: This feedback will be emailed to students when you finish grading.
+      get_next_submission:
+        notice:
+          done: Done!
+          done_description: There are no other similar submissions.
+      grade_card: Grade Card
+      help_text: Notes can be used to keep track of a %{noteAbout}'s progress. These notes are shown only to coaches in a student's report. %{additionalHelp}
+      note_help: "Would you like to write a note about this "
+      note_placeholder: Did you notice something while reviewing this submission?
+      review: Review
+      review_checklist: Review Checklist
+      review_next: Next
+      save_grades: Save grades
+      save_grades_and_send_feedback: Save grades & send feedback
+      share_feedback: Share Feedback
+      show_review_checklist: Show Review Checklist
+      status:
+        completed: Completed
+        pending_review: Pending Review
+        rejected: Rejected
+        reviewing: Reviewing
+      student: student
+      student_dropped_out_message: This submission is from a student whose access to the course has ended, or has dropped out.
+      students_dropped_out_message: This submission is linked to one or more students whose access to the course has ended, or have dropped out.
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team: "
+      team: team
+      team_notice: " This submission is from a team, so a note added here will be posted to the report of all students in the team."
+      undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
+      undo_grading: Undo Grading
+      write_a_note: Write a Note
     CoursesReview__Root:
-      assigned_to: Assigned to
-      assigned_to_coach: "assigned to "
+      assigned_to: Assigned To
+      assigned_to_coach: "assigned to:"
       assigned_to_me: " assigned to me"
+      button_load_more: Load More Submissions...
       filter_by: "Filter by:"
       filter_by_another_level: Filter by another level
       filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
+      filter_by_assigned_to: Fillter by assigned to
       filter_by_level: Filter by level
       filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
+      filter_by_target: Filter by target
+      filter_hint: ...or start typing to filter by student using their name or email address
+      level: Level
       me: Me
+      name_or_email: Name or Email
       now_showing_submissions_assigned_to: Now showing submissions assigned to %{name}.
       now_showing_submissions_from_all_students: Now showing submissions from all students in this course.
       pending: Pending
+      review: Review
       reviewed: Reviewed
       reviewed_at: Reviewed At
+      search:
+        assigned_to: "assigned to:"
+        level: "level:"
+        status: "status: "
+        target: "target:"
       sort_by: "Sort by:"
+      status: Status
+      submissions_fully_loaded_text:
+        one: There's only one submission.
+        other: Showing all %{count} submissions
+      submissions_partially_loaded_text: Showing %{loaded_submissions_count} of %{total_submissions} submissions
       submitted_at: Submitted At
+      target: Target
+    CoursesReview__SubmissionCard:
+      completed: Completed
+      created_at: on %{created_at}
+      feedback_sent: Feedback Sent
+      level: "Level "
+      no_submissions_found: No submissions found
+      rejected: Rejected
+      submitted_by: "Submitted by: "
+      submitted_by_team: "Submitted by team: "
+    CoursesReview__SubmissionInfoCard:
+      submission_hash: "Submission #"
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
       attempted: " Attempted"
@@ -434,32 +545,32 @@ en:
         three_fifths: Three-fifths width
         two_fifths: Two-fifths width
     CurriculumEditor__LevelEditor:
-      create_level: Create New Level
-      edit_level: "Edit Level %{number}"
-      update_level: Update Level
-      success: Success
-      create_success: Level created successfully
-      update_success: Level updated successfully
-      level_name_label: Level Name
-      level_name_placeholder: Type level name here
-      level_name_invalid: not a valid name
-      unlock_on_label: Unlock level on
-      optional: " (optional)"
       actions_error_title: Oops!
-      merge_levels_label: Delete & Merge Into
-      merge_levels_hint: Pick another level to merge this level into. This action will shift all targets and students in level.
-      merge_levels_select: Select a different level
-      merge_levels_button: Merge and Delete
-      merge_levels_confirm: Are you sure? This action cannot be undone.
-      merge_levels_error_message: Something went wrong when we tried to merge & delete this level. Please reload this page before trying again.
-      clone_level_label: Copy Into
-      clone_level_hint: Pick course to copy this level into. This action will copy all targets into selected course.
       clone_level_button: Copy Level
       clone_level_confirm: Are you sure you want to make a copy of this level?
       clone_level_error_message: Something went wrong when we tried to copy this level. Please reload this page before trying again.
+      clone_level_hint: Pick course to copy this level into. This action will copy all targets into selected course.
+      clone_level_label: Copy Into
+      create_level: Create New Level
+      create_success: Level created successfully
+      edit_level: Edit Level %{number}
+      level_name_invalid: not a valid name
+      level_name_label: Level Name
+      level_name_placeholder: Type level name here
+      merge_levels_button: Merge and Delete
+      merge_levels_confirm: Are you sure? This action cannot be undone.
+      merge_levels_error_message: Something went wrong when we tried to merge & delete this level. Please reload this page before trying again.
+      merge_levels_hint: Pick another level to merge this level into. This action will shift all targets and students in level.
+      merge_levels_label: Delete & Merge Into
+      merge_levels_select: Select a different level
+      optional: " (optional)"
+      success: Success
       tabs:
         actions: Actions
         details: Details
+      unlock_on_label: Unlock level on
+      update_level: Update Level
+      update_success: Level updated successfully
     CurriculumEditor__TargetDetailsEditor:
       choose_target_group: Choose a target group
       completion_instructions_help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
@@ -527,6 +638,7 @@ en:
       more: More
     StudentTopNav__UserControls:
       edit_profile: Edit Profile
+      sign_in: Sign In
       sign_out: Sign Out
     StudentsEditor__ActionsForm:
       active_label: Active
@@ -596,6 +708,8 @@ en:
     StudentsEditor__Search:
       filter_input_label: "Filter by:"
       filter_input_placeholder: Type name, tag or level
+    SubmissionChecklistShow:
+      target_marked_as_complete: Target was marked as complete.
     TargetChecklistItem:
       action_string_attach_link: Attach a Link
       action_string_choose_from_list: Choose from a list
@@ -752,18 +866,35 @@ en:
         founder: All Founders
         team: Team
   mutations:
-    clone_course:
-      success_notification: Course copy requested. It will appear here soon!
-    clone_level:
-      success_notification: Level copy requested. It will apppear in target course soon!
     archive_course:
       success_notification: Course archived successfully.
     auto_verify_submission:
       success_notification: Target has been marked as complete.
+    clone_course:
+      success_notification: Course copy requested. It will appear here soon!
+    clone_level:
+      success_notification: Level copy requested. It will apppear in target course soon!
     create_course:
       success_notification: Course created successfully!
+    create_grading:
+      evaluation_criteria_error: Cannot grade Submission %{submission_id} without evaluation criteria
+      grade_recorded: Grades Recorded
+      invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
+      invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
+      invalid_grading_error: "Grading values supplied are invalid: %{grades_data}"
+      submission_graded_error: Submission already graded
+      submission_missing_error: "Unable to find submission with ID: %{submission_id}"
+      success_notification: The submission has been marked as reviewed.
     create_student_from_applicant:
       success_notification: Student created successfully.
+    create_submission:
+      blocked_submission_status_error: The status of this target is %{target_status}, so you cannot add a new submission; please reload the page
+      invalid_files_attached: Some files attached are invalid
+      invalid_submission_checklist: Submission checklist is not valid.
+      item_file_limit_error: No more than three files can be attached to a submission item
+      linked_file_exists_error: Some file attachments have already been linked to a submission
+      missing_answer_error: "Missing answer for question: %{title}"
+      success_notification: Your submission has been queued for review.
     create_target:
       success_notification: Target created successfully.
     create_topic_subscription:
@@ -782,35 +913,18 @@ en:
       success_notification: This topic has been unlocked. Community members can now post replies again.
     update_certificate:
       success_notification: Certificate details have been updated.
-    create_submission:
-      success_notification: Your submission has been queued for review.
-      linked_file_exists_error: Some file attachments have already been linked to a submission
-      item_file_limit_error: No more than three files can be attached to a submission item
-      blocked_submission_status_error: "The status of this target is %{target_status}, so you cannot add a new submission; please reload the page"
-      missing_answer_error: "Missing answer for question: %{title}"
-      invalid_submission_checklist: Submission checklist is not valid.
-      invalid_files_attached: Some files attached are invalid
-    update_target:
-      success_notification: Target updated successfully!
-      target_group_not_present_error: Target group does not exist
-      evaluation_criteria_course_error: Evaluation criteria must be from the same course as the target
-      prerequisities_in_same_level: Prerequisite targets must be from the same level as the target
-      prerequisities_archived_error: Cannot have archived prerequisites
-      target_missing_error: Target does not exist
-      multiple_method_of_completion: More than one method of completion
-      invalid_checklist_error: Checklist not valid
-      checklist_items_exceeded_error: Checklist should have less than 15 items
-    create_grading:
-      success_notification: The submission has been marked as reviewed.
-      grade_recorded: Grades Recorded
-      submission_missing_error: "Unable to find submission with ID: %{submission_id}"
-      submission_graded_error: Submission already graded
-      evaluation_criteria_error: "Cannot grade Submission %{submission_id} without evaluation criteria"
-      invalid_checklist_shape_error: The shape of data in the submission checklist does not match the one sent with the review
-      invalid_checklist_values_error: The values for checklist items in the submission does not match with review data
-      invalid_grading_error: "Grading values supplied are invalid: %{grades_data}"
     update_course:
       success_notification: Course updated successfully!
+    update_target:
+      checklist_items_exceeded_error: Checklist should have less than 15 items
+      evaluation_criteria_course_error: Evaluation criteria must be from the same course as the target
+      invalid_checklist_error: Checklist not valid
+      multiple_method_of_completion: More than one method of completion
+      prerequisities_archived_error: Cannot have archived prerequisites
+      prerequisities_in_same_level: Prerequisite targets must be from the same level as the target
+      success_notification: Target updated successfully!
+      target_group_not_present_error: Target group does not exist
+      target_missing_error: Target does not exist
   offline:
     heading: You are offline!
     message: It seems there is a problem with your connection.<br/>Please check your network status.
@@ -877,3 +991,4 @@ en:
     saving: Saving...
     target: Target
     terms_and_conditions: Terms & Conditions
+    invalid_authenticity_token_error: Invalid or missing CSRF token. Please refresh this page before trying to perform that action.

@@ -1,5 +1,4 @@
 @layer components {
-
   html {
     @apply w-full h-full;
   }
@@ -36,27 +35,27 @@
   }
 
   h1 {
-    @apply text-4xl
+    @apply text-4xl;
   }
 
   h2 {
-    @apply text-2xl
+    @apply text-2xl;
   }
 
   h3 {
-    @apply text-xl
+    @apply text-xl;
   }
 
   h4 {
-    @apply text-lg
+    @apply text-lg;
   }
 
   h5 {
-    @apply text-base
+    @apply text-base;
   }
 
   h6 {
-    @apply text-sm
+    @apply text-sm;
   }
 
   /* Input */
@@ -95,11 +94,7 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center whitespace-no-wrap text-sm font-semibold py-2 px-4 rounded cursor-pointer;
-  }
-
-  .btn:focus {
-    @apply outline-none shadow-inner;
+    @apply inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold py-2 px-4 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
   }
 
   /* Button Styles */
@@ -247,7 +242,7 @@
 
   .dropdown__list {
     max-height: 16rem;
-    @apply w-50 min-w-full;
+    @apply min-w-full;
   }
 
   @screen md {

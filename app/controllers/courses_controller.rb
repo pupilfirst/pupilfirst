@@ -67,7 +67,7 @@ class CoursesController < ApplicationController
   # GET /courses/:id/review
   def review
     @course = authorize(find_course)
-    render layout: 'student_course'
+    render html: '', layout: 'app_router'
   end
 
   # GET /courses/:id/students

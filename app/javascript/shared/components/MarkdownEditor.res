@@ -102,8 +102,10 @@ let computeInitialState = ((value, textareaId, mode)) => {
 
 let containerClasses = mode =>
   switch mode {
-  | Windowed(_) => "relative bg-white"
-  | Fullscreen(_) => "bg-white fixed z-50 top-0 left-0 h-screen w-screen flex flex-col"
+  | Windowed(_) => "relative bg-white overscroll-contain"
+  | Fullscreen(
+      _,
+    ) => "bg-white fixed z-50 top-0 left-0 h-screen w-screen flex flex-col overscroll-contain"
   }
 
 let modeIcon = (desiredMode, currentMode) => {
@@ -362,10 +364,10 @@ let previewClasses = mode =>
 
 let focusOnEditor = id => {
   open Webapi.Dom
-  document
-  |> Document.getElementById(id)
-  |> OptionUtils.flatMap(HtmlElement.ofElement)
-  |> OptionUtils.mapWithDefault(element => element |> HtmlElement.focus, ())
+
+  Document.getElementById(id, document)
+  ->Belt.Option.flatMap(HtmlElement.ofElement)
+  ->Belt.Option.mapWithDefault((), element => element->HtmlElement.focus)
 }
 
 let handleUploadFileResponse = (oldValue, state, send, onChange, json) => {
@@ -399,8 +401,9 @@ let handleUploadFileResponse = (oldValue, state, send, onChange, json) => {
   }
 }
 
-let submitForm = (formId, oldValue, state, send, onChange) =>
-  ReactDOM.querySelector("#" ++ formId) |> OptionUtils.mapWithDefault(element => {
+let submitForm = (formId, oldValue, state, send, onChange) => {
+  open Webapi.Dom
+  Document.getElementById(formId, document)->Belt.Option.mapWithDefault((), element => {
     let formData = DomUtils.FormData.create(element)
 
     Api.sendFormData(
@@ -414,7 +417,8 @@ let submitForm = (formId, oldValue, state, send, onChange) =>
           ),
         ),
     )
-  }, ())
+  })
+}
 
 let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
   switch ReactEvent.Form.target(event)["files"] {
@@ -620,19 +624,19 @@ let make = (
     let curriedHandler = handleKeyboardControls(value, state, send, onChange)
     let textareaEventTarget = {
       open Webapi.Dom
-      document |> Document.getElementById(state.id) |> OptionUtils.map(Element.asEventTarget)
+      Document.getElementById(state.id, document)->Belt.Option.map(Element.asEventTarget)
     }
 
-    textareaEventTarget |> OptionUtils.mapWithDefault(
-      Webapi.Dom.EventTarget.addKeyDownEventListener(curriedHandler),
+    textareaEventTarget->Belt.Option.mapWithDefault(
       (),
+      Webapi.Dom.EventTarget.addKeyDownEventListener(curriedHandler),
     )
 
     Some(
       () =>
-        textareaEventTarget |> OptionUtils.mapWithDefault(
-          Webapi.Dom.EventTarget.removeKeyDownEventListener(curriedHandler),
+        textareaEventTarget->Belt.Option.mapWithDefault(
           (),
+          Webapi.Dom.EventTarget.removeKeyDownEventListener(curriedHandler),
         ),
     )
   })

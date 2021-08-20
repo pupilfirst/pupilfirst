@@ -85,7 +85,7 @@ let make = (~studentId, ~coachNotes, ~hasArchivedNotes, ~addNoteCB, ~removeNoteC
       {coachNotes |> ArrayUtils.isEmpty
         ? <div
             className="bg-gray-200 rounded text-center p-4 md:p-6 items-center justify-center mt-2">
-            <i className="fas fa-sticky-note text-gray-400 text-4xl" />
+            <Icon className="if i-long-text-light text-gray-800 text-base" />
             <p className="text-xs font-semibold text-gray-700 mt-2">
               {(
                 hasArchivedNotes ? "This student has some archived notes." : "No notes here!"

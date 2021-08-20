@@ -2,7 +2,8 @@ class ApplicationController < ActionController::Base
   include Pundit
 
   # Prevent CSRF attacks by raising an exception. Note that this is different from the default of :null_session.
-  protect_from_forgery with: :exception
+  # Rails 5 introduced a boolean option called prepend for maintaining the order of execution
+  protect_from_forgery with: :exception, prepend: true
 
   before_action :sign_out_if_required
   before_action :store_user_location, if: :storable_location?
@@ -36,6 +37,10 @@ class ApplicationController < ActionController::Base
     end
 
     raise_not_found
+  end
+
+  rescue_from ActionController::InvalidAuthenticityToken do
+    flash[:error] =  I18n.t('shared.invalid_authenticity_token_error')
   end
 
   # Redirect all requests from unknown domains to service homepage.

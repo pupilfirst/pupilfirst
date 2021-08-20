@@ -11,6 +11,8 @@ let coachName = t =>
   | Some(name) => name
   | None => "Deleted Coach"
   }
+
+let createdAt = t => t.createdAt
 let coachAvatarUrl = t => t.coachAvatarUrl
 let coachTitle = t => t.coachTitle
 let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")

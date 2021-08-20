@@ -12,7 +12,7 @@ and run them after deployment.
 ## Breaking changes
 
 These are a list of changes that should be accounted for when upgrading an existing installation of Pupilfirst. If you
-encounter any problems while following these instructions, please [create a new issue](https://github.com/pupilfirst/pupilfirst/issues/new)
+encounter any problems while following these instructions, please [create a new issue](https://github.com/pupilfirst/pupilfirst/issues/new/choose)
 on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION`.

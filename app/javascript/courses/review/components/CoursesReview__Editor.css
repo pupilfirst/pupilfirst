@@ -1,16 +1,18 @@
-.course-review-grade-card__grade-bar>.course-review-grade-card__grade-pill {
+.course-review-editor__grade-bar > .course-review-editor__grade-pill {
   @apply border border-r-0;
 }
 
-.course-review-grade-card__grade-bar>.course-review-grade-card__grade-pill:first-child {
+.course-review-editor__grade-bar
+  > .course-review-editor__grade-pill:first-child {
   @apply rounded-l-lg;
 }
 
-.course-review-grade-card__grade-bar>.course-review-grade-card__grade-pill:last-child {
+.course-review-editor__grade-bar
+  > .course-review-editor__grade-pill:last-child {
   @apply border-r rounded-r-lg;
 }
 
-.course-review-grade-card__status-pulse {
+.course-review-editor__status-pulse {
   box-shadow: 0 0 0 rgba(237, 137, 54, 0.4);
   animation: grade-status-pulse 1.25s infinite;
 }

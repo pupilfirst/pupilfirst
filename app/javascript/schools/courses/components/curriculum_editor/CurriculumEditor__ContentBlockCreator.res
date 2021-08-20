@@ -683,7 +683,7 @@ let make = (
           </div>
         | UploadVideo =>
           <div
-            className="clearfix border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
+            className="flow-root border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
             {uploadFormCurried(#VideoEmbed)}
             {state.uploadProgress->Belt.Option.mapWithDefault(
               uploadVideoForm(videoInputId, state, send),
@@ -703,7 +703,7 @@ let make = (
           </div>
         | EmbedForm(url) =>
           <div
-            className="clearfix border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
+            className="flow-root border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
             <label htmlFor=embedInputId className="text-xs font-semibold">
               {t("embed.url_label")->str}
             </label>

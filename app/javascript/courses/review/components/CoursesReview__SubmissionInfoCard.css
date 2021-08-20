@@ -1,0 +1,17 @@
+.submission-info__tab {
+  @apply relative;
+}
+.submission-info__tab::before {
+  content: "";
+  top: 50%;
+  @apply absolute left-0 h-3/4 w-1 rounded-r-md transform -translate-y-1/2;
+}
+.submission-info__tab-pending::before {
+  @apply bg-yellow-500;
+}
+.submission-info__tab-completed::before {
+  @apply bg-green-500;
+}
+.submission-info__tab-rejected::before {
+  @apply bg-red-500;
+}

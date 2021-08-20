@@ -7,7 +7,7 @@ let courseOptions = courses => Js.Array.map(course => {
     <a
       key={"course-" ++ courseId}
       href={"/courses/" ++ (courseId ++ "/curriculum")}
-      className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-no-wrap">
+      className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-nowrap">
       <span> {CourseInfo.name(course)->str} </span>
     </a>
   }, Js.Array.filter(

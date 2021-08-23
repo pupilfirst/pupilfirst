@@ -138,7 +138,7 @@ module Schools
         if content_block.file.attached?
           attributes.merge(
             fileUrl:
-              Rails.application.routes.url_helpers.rails_blob_path(
+              Rails.application.routes.url_helpers.rails_public_blob_url(
                 content_block.file,
                 only_path: true
               ),

@@ -45,7 +45,7 @@ module Schools
         if image.attached?
           {
             url:
-              Rails.application.routes.url_helpers.rails_blob_path(
+              Rails.application.routes.url_helpers.rails_public_blob_url(
                 image,
                 only_path: true
               ),

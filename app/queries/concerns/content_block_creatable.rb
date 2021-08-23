@@ -45,7 +45,7 @@ module ContentBlockCreatable
 
     if content_block.file.attached?
       attributes.merge(
-        fileUrl: Rails.application.routes.url_helpers.rails_blob_path(content_block.file, only_path: true),
+        fileUrl: Rails.application.routes.url_helpers.rails_public_blob_url(content_block.file, only_path: true),
         filename: content_block.file.filename.to_s,
       )
     else

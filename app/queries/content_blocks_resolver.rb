@@ -27,7 +27,7 @@ class ContentBlocksResolver < ApplicationQuery
   end
 
   def file_details(content_block)
-    { url: Rails.application.routes.url_helpers.rails_blob_path(content_block.file, only_path: true), filename: content_block.file.filename.to_s }
+    { url: Rails.application.routes.url_helpers.rails_public_blob_url(content_block.file, only_path: true), filename: content_block.file.filename.to_s }
   end
 
   def content_data(content_blocks)

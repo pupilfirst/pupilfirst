@@ -14,7 +14,7 @@ module Courses
     end
 
     def cover_image
-      view.url_for(@course.cover) if @course.cover.attached?
+      view.rails_public_blob_url(@course.cover) if @course.cover.attached?
     end
 
     def show_about?

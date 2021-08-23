@@ -24,7 +24,7 @@ module ContentBlockEditable
 
     if content_block.file.attached?
       attributes[:content].merge!(
-        url: Rails.application.routes.url_helpers.rails_blob_path(content_block.file, only_path: true),
+        url: Rails.application.routes.url_helpers.rails_public_blob_url(content_block.file, only_path: true),
         filename: content_block.file.filename.to_s,
       )
     end

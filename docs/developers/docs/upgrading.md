@@ -38,7 +38,7 @@ You can use the S3 console or AWS CLI to configure public access settings for yo
 For information on configuring public access to your S3 storage, please refer to the documentation [here](https://docs.aws.amazon.com/AmazonS3/latest/userguide/configuring-block-public-access-bucket.html)
 
 #### Creating S3 private bucket
-When you create a new bucket through the AWS S3 console, the default setting in set permissions is Block all public access.
+When you create a new bucket through the AWS S3 console, the default setting in set permissions is _Block all public access_.
 
 Refer to this documentation on [creating a new S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
 

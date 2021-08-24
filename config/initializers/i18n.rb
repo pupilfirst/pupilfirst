@@ -1,3 +1,4 @@
+# The following monkey-patch fixes https://github.com/fnando/i18n-js/issues/616
 module I18nJS
   def self.translations
     ::I18n.backend.send(:init_translations)

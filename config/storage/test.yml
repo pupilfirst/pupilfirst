@@ -1,0 +1,6 @@
+test: &test
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+amazon_private:
+  <<: *test

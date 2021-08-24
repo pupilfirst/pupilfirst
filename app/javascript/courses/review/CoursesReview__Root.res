@@ -600,7 +600,7 @@ let loadFilters = (send, courseId, state) => {
 }
 
 let shortCutClasses = selected =>
-  "cursor-pointer flex-1 md:flex-auto rounded-md md:rounded-t-md p-1.5 md:px-4 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-400 md:hover:bg-gray-200 " ++ (
+  "cursor-pointer flex-1 md:flex-auto rounded-md md:rounded-t-md p-1.5 md:px-4 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-400 md:hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 " ++ (
     selected
       ? "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500"
       : ""

@@ -6,7 +6,7 @@ open CoursesReview__Types
 let str = React.string
 
 let cardClasses = (submission, selected) =>
-  "inline-block bg-white relative rounded-lg submission-info__tab " ++
+  "inline-block bg-white relative rounded-lg submission-info__tab focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 " ++
   (selected
     ? "border border-primary-400 "
     : "bg-opacity-50 border border-gray-300 hover:bg-opacity-100 ") ++
@@ -46,7 +46,7 @@ let make = (~submission, ~submissionNumber, ~selected, ~filterString) =>
     href={linkUrl(SubmissionMeta.id(submission), filterString)}
     key={SubmissionMeta.id(submission)}
     className={cardClasses(submission, selected)}>
-    <div className="shadow hover:shadow-lg transition">
+    <div className="shadow hover:shadow-lg rounded-lg transition">
       <div className="px-4 py-2 flex flex-row items-center justify-between min-w-min">
         <div className="flex flex-col md:pr-6">
           <h2 className="font-semibold text-sm leading-tight">

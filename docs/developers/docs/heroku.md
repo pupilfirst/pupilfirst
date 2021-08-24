@@ -24,7 +24,8 @@ Begin by [signing up on Heroku](https://signup.heroku.com), and familiarizing yo
 2. [Configure your new Heroku app](https://devcenter.heroku.com/articles/config-vars) using environment variables.
    1. Add configuration for [the file storage service](#file-storage-using-aws).
    2. Add configuration for [the email service](#sending-emails-with-postmark).
-   3. Set `ASSET_HOST` to your app's fully qualified domain name (FQDN), which should look like `my-app-name.herokuapp.com`.
+   3. Set environment variable `ASSET_HOST` to your app's fully qualified domain name (FQDN), which should look like `my-app-name.herokuapp.com`.
+   4. Set environment variable `YARN_PRODUCTION` to `false`.
 
    There are more optional features that you can enable - read through the sections below.
 3. Add the new Heroku app [as a git remote](https://devcenter.heroku.com/articles/git#for-an-existing-heroku-app).

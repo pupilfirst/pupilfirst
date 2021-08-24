@@ -32,7 +32,7 @@ let feedbackSentNotice = feedbackSent =>
   )
 
 let submissionCardClasses = submission =>
-  "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mb-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md " ++ if (
+  "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mb-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 " ++ if (
     IndexSubmission.pendingReview(submission)
   ) {
     "border-orange-400"

@@ -89,7 +89,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
       </span>
       <MarkdownBlock
         markdown={currentQuestion |> QuizQuestion.question}
-        className="font-semibold text-lg md:text-xl"
+        className="text-lg md:text-xl"
         profile=Markdown.Permissive
       />
       <div className="pt-2">

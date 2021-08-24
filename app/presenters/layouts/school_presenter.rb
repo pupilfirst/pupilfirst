@@ -21,10 +21,7 @@ module Layouts
 
     def school_logo_path
       if current_school.logo_on_light_bg.attached?
-        view.rails_public_blob_url(
-          current_school.logo_variant('thumb'),
-          only_path: true
-        )
+        view.rails_public_blob_url(current_school.logo_variant('thumb'))
       else
         view.image_path('shared/pupilfirst-logo.svg')
       end
@@ -32,10 +29,7 @@ module Layouts
 
     def school_icon_path
       if current_school.icon.attached?
-        view.rails_public_blob_url(
-          current_school.icon_variant('thumb'),
-          only_path: true
-        )
+        view.rails_public_blob_url(current_school.icon_variant('thumb'))
       else
         '/favicon.png'
       end

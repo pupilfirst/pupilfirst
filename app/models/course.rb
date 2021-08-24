@@ -76,19 +76,13 @@ class Course < ApplicationRecord
 
   def cover_url
     if cover.attached?
-      Rails.application.routes.url_helpers.rails_public_blob_url(
-        cover,
-        only_path: true
-      )
+      Rails.application.routes.url_helpers.rails_public_blob_url(cover)
     end
   end
 
   def thumbnail_url
     if thumbnail.attached?
-      Rails.application.routes.url_helpers.rails_public_blob_url(
-        thumbnail,
-        only_path: true
-      )
+      Rails.application.routes.url_helpers.rails_public_blob_url(thumbnail)
     end
   end
 

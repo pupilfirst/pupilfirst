@@ -145,14 +145,10 @@ class User < ApplicationRecord
     return unless avatar.attached?
 
     if variant.blank?
-      Rails.application.routes.url_helpers.rails_public_blob_url(
-        avatar,
-        only_path: true
-      )
+      Rails.application.routes.url_helpers.rails_public_blob_url(avatar)
     else
       Rails.application.routes.url_helpers.rails_public_blob_url(
-        avatar_variant(variant),
-        only_path: true
+        avatar_variant(variant)
       )
     end
   end
@@ -163,14 +159,10 @@ class User < ApplicationRecord
 
     if avatar.attached?
       if variant.blank?
-        Rails.application.routes.url_helpers.rails_public_blob_url(
-          avatar,
-          only_path: true
-        )
+        Rails.application.routes.url_helpers.rails_public_blob_url(avatar)
       else
         Rails.application.routes.url_helpers.rails_public_blob_url(
-          avatar_variant(variant),
-          only_path: true
+          avatar_variant(variant)
         )
       end
     else

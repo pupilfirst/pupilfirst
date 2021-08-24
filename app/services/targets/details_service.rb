@@ -194,7 +194,7 @@ module Targets
             )
           if content_block.file.attached?
             cb['file_url'] =
-              url_helpers.rails_blob_path(content_block.file, only_path: true)
+              url_helpers.rails_public_blob_url(content_block.file)
             cb['filename'] = content_block.file.filename
           end
           cb

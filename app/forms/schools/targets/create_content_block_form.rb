@@ -139,8 +139,7 @@ module Schools
           attributes.merge(
             fileUrl:
               Rails.application.routes.url_helpers.rails_public_blob_url(
-                content_block.file,
-                only_path: true
+                content_block.file
               ),
             filename: content_block.file.filename.to_s
           )

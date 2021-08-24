@@ -13,7 +13,7 @@ Rails.application.routes.draw do
         else
          :rails_blob
         end
-      route_for(route, blob)
+      route_for(route, blob, only_path: true)
     else
       File.join("https://#{ENV.fetch("CDN_HOST")}", blob.key)
     end

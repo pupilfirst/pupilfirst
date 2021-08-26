@@ -1,4 +1,5 @@
 const { environment } = require("@rails/webpacker");
+const erb = require("./loaders/erb");
 const webpack = require("webpack");
 const dotenv = require("dotenv");
 
@@ -17,6 +18,8 @@ environment.plugins.prepend(
   "Environment",
   new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(process.env)))
 );
+
+environment.loaders.prepend("erb", erb);
 
 // Workaround for webpacker + postcss-loader v4 incompatibility.
 // Source: https://github.com/rails/webpacker/issues/2784

@@ -22,12 +22,14 @@ Begin by [signing up on Heroku](https://signup.heroku.com), and familiarizing yo
 
 1. Create a new Heroku app, to which we'll deploy Pupilfirst.
 2. [Configure your new Heroku app](https://devcenter.heroku.com/articles/config-vars) using environment variables.
+
    1. Add configuration for [the file storage service](#file-storage-using-aws).
    2. Add configuration for [the email service](#sending-emails-with-postmark).
    3. Set environment variable `ASSET_HOST` to your app's fully qualified domain name (FQDN), which should look like `my-app-name.herokuapp.com`.
    4. Set environment variable `YARN_PRODUCTION` to `false`.
 
    There are more optional features that you can enable - read through the sections below.
+
 3. Add the new Heroku app [as a git remote](https://devcenter.heroku.com/articles/git#for-an-existing-heroku-app).
 4. Push the repository to your Heroku app: `git push heroku master`.
 
@@ -57,7 +59,10 @@ Once the console is ready, find and update the user entry.
 
 ```ruby
 user = User.find_by(email: 'admin@example.com')
-user.update!(password: 'a secure password', password_confirmation: 'a secure password')
+user.update!(
+  password: 'a secure password',
+  password_confirmation: 'a secure password',
+)
 ```
 
 You **should** discard this user, later, via the school administration interface once you've enrolled yourself as a school
@@ -167,6 +172,7 @@ Make sure that the access token has the following scopes enabled:
 > Note: You cannot upload private videos if your Vimeo account type is `basic`.
 
 ## Webpush Notifications
+
 To enable webpush notification you will have to set mandatory environment variable `VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY`.
 
 You can generate the keys by running the following on the server. ([Detailed Doc](https://github.com/zaru/webpush#generating-vapid-keys))
@@ -180,6 +186,25 @@ vapid_key.public_key
 
 #VAPID_PRIVATE_KEY
 vapid_key.private_key
+```
+
+## Content delivery network
+
+To enable content delivery network, you will have to set cloudfront environment variables.
+
+Create a cloudfront public key to generate signed URLs with canned policy. ([Detailed Doc](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-creating-signed-url-canned-policy.html))
+
+Create a cloudfront distribution for accessing the private AWD S3 contents with signed URLs. ([Detailed Doc](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html))
+
+```
+# Bas64 encoded private key used for generating the cloudfront public key
+CLOUDFRONT_PRIVATE_KEY_BASE_64_ENCODED=cloudfront_private_key_from_aws
+
+# Cloudfront hostname
+CLOUDFRONT_HOST=cloudfront_host_from_aws
+
+# Cloudfront public key pair ID
+CLOUDFRONT_KEY_PAIR_ID=cloudfront_key_pair_id_from_aws
 ```
 
 ## Troubleshooting

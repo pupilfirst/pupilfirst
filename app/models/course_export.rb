@@ -2,7 +2,7 @@ class CourseExport < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :course
 
-  has_one_attached :file, service: :amazon_private
+  has_one_attached :file
 
   EXPORT_TYPE_STUDENTS = -'Students'
   EXPORT_TYPE_TEAMS = -'Teams'

@@ -282,7 +282,6 @@ GEM
       ruby-progressbar (~> 1.4)
     gaffe (1.2.0)
       rails (>= 4.0.0)
-    glob (0.2.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     graphiql-rails (1.7.0)
@@ -298,9 +297,8 @@ GEM
     humanize (2.5.1)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
-    i18n-js (4.0.0.alpha1)
-      glob
-      i18n
+    i18n-js (3.8.3)
+      i18n (>= 0.6.6)
     ice_nine (0.11.2)
     image_processing (1.12.1)
       mini_magick (>= 4.9.5, < 5)
@@ -683,7 +681,7 @@ DEPENDENCIES
   graphiql-rails (~> 1.7)
   graphql (~> 1.12.6)
   humanize (~> 2.1)
-  i18n-js (~> 4.0.0.alpha1)
+  i18n-js (~> 3.7)
   image_processing (~> 1.12)
   jbuilder (~> 2.6)
   jquery-rails (~> 4.3)

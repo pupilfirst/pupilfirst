@@ -142,6 +142,10 @@
   @apply py-4 pl-6;
 }
 
+.markdown-block__permissive .text-align-center {
+  @apply text-center;
+}
+
 /*
  * Styling used in questions and answer blocks in the
  * community section.
@@ -236,49 +240,8 @@
   @apply mx-auto;
 }
 
-/*
- * Styling used in comments in the community section.
- */
-
-.markdown-block__comment p {
-  @apply py-2 leading-relaxed;
-}
-
-.markdown-block__comment em {
-  @apply italic;
-}
-
-.markdown-block__comment b,
-.markdown-block__comment strong {
-  @apply font-bold;
-}
-
-.markdown-block__comment s,
-.markdown-block__comment del {
-  @apply line-through;
-}
-
-.markdown-block__comment a {
-  @apply text-primary-500 underline font-semibold whitespace-pre-line;
-  word-break: break-word;
-}
-
-.markdown-block__comment a:hover {
-  @apply bg-primary-100 text-primary-600;
-}
-
-.markdown-block__comment sup {
-  font-size: 75%;
-  line-height: 0;
-  @apply relative align-baseline;
-  top: -0.5em;
-}
-
-.markdown-block__comment sub {
-  font-size: 75%;
-  line-height: 0;
-  @apply relative align-baseline;
-  bottom: -0.25em;
+.markdown-block__question-and-answer .text-align-center {
+  @apply text-center;
 }
 
 /*

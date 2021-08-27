@@ -5,10 +5,9 @@ let randomId = () => {
   "markdown-block-" ++ randomComponent
 }
 
-let profileClasses = (profile: Markdown.profile) =>
+let profileClasses = profile =>
   switch profile {
-  | Comment => "markdown-block__comment "
-  | QuestionAndAnswer => "markdown-block__question-and-answer "
+  | Markdown.QuestionAndAnswer => "markdown-block__question-and-answer "
   | Permissive => "markdown-block__permissive "
   | AreaOfText => "markdown-block__area-of-text "
   }
@@ -33,6 +32,6 @@ let make = (~markdown, ~className=?, ~profile) => {
   <div
     className={markdownBlockClasses(profile, className)}
     id
-    dangerouslySetInnerHTML={"__html": markdown |> Markdown.parse(profile)}
+    dangerouslySetInnerHTML={Markdown.parse(profile, markdown)->DOMPurify.sanitizedHTML}
   />
 }

@@ -49,8 +49,12 @@ Rails.application.config.content_security_policy do |policy|
     { connect: 'https://api.rollbar.com' }
   end
 
+  def katex_csp
+    { style: 'https://cdn.jsdelivr.net/npm/katex@0.13.13/' }
+  end
+
   def style_sources
-    ['fonts.googleapis.com', asset_host] - [nil]
+    ['fonts.googleapis.com', asset_host, katex_csp[:style]] - [nil]
   end
 
   def connect_sources

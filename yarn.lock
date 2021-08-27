@@ -3679,6 +3679,13 @@
   resolved "https://registry.yarnpkg.com/@iarna/toml/-/toml-2.2.3.tgz#f060bf6eaafae4d56a7dac618980838b0696e2ab"
   integrity sha512-FmuxfCuolpLl0AnQ2NHSzoUKWEJDFl63qXjzdoWBVyFCXzMGm1spBzk7LeHNoVCiWCF7mRVms9e6jEV9+MoPbg==
 
+"@jeff-tian/markdown-it-katex@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@jeff-tian/markdown-it-katex/-/markdown-it-katex-2.1.0.tgz#4bdf3485643f6513c758164b6a5f77d461bd38e0"
+  integrity sha512-vK6dRcXbe1kuoKLSnrd33wpzvE0J3Ys9dZrb5y9iOc433Xq1FzKalSf60VnazQZcTY/IRCjwW47pJbj04UXQvg==
+  dependencies:
+    katex "^0.13.13"
+
 "@lerna/add@3.21.0":
   version "3.21.0"
   resolved "https://registry.yarnpkg.com/@lerna/add/-/add-3.21.0.tgz#27007bde71cc7b0a2969ab3c2f0ae41578b4577b"
@@ -11736,6 +11743,13 @@ jws@^3.2.2:
     jwa "^1.4.1"
     safe-buffer "^5.0.1"
 
+katex@^0.13.13:
+  version "0.13.13"
+  resolved "https://registry.yarnpkg.com/katex/-/katex-0.13.13.tgz#15a796e95516869bc6d483443b58b2df872ee40f"
+  integrity sha512-cCMcil4jwMm7behpXGiQfXJA29sko/Gd/26iCsr53Dv5Jn2iHbHyEb14dm9uVrIijUXx6Zz1WhlFhHE6DckvkQ==
+  dependencies:
+    commander "^6.0.0"
+
 keyv@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/keyv/-/keyv-3.1.0.tgz#ecc228486f69991e49e9476485a5be1e8fc5c4d9"
@@ -12499,6 +12513,11 @@ markdown-escapes@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.4.tgz#c95415ef451499d7602b91095f3c8e8975f78535"
   integrity sha512-8z4efJYk43E0upd0NbVXwgSTQs6cT3T06etieCMEg7dRbzCbxUCK/GHlX8mhHRDcp+OLlHkPKsvqQTCvsRl2cg==
+
+markdown-it-center-text@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/markdown-it-center-text/-/markdown-it-center-text-1.0.4.tgz#4e7f907b6539b62a6200fead50aebed587734b3c"
+  integrity sha512-7AA0gek4FYJ6gWB2kdGNx06k3GrlO97nEMY7uovQ70/6MtfqPznrgnKoWO3V4p36m3RT5GeQIFXqBH9Wr4iL/g==
 
 markdown-it-link-attributes@^3.0.0:
   version "3.0.0"

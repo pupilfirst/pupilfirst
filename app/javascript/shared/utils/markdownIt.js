@@ -2,6 +2,7 @@ import commonmarkPreset from "markdown-it/lib/presets/commonmark";
 
 const md = require("markdown-it")({
   ...commonmarkPreset.options,
+  html: false,
   linkify: true,
   highlight: (str, lang) => {
     const lineNumbersClass = lang.startsWith("diff") ? "" : "line-numbers";
@@ -28,6 +29,8 @@ const tablePlugin = require("markdown-it-multimd-table");
 const linkifyImagesPlugin = require("markdown-it-linkify-images");
 const imageSizePlugin = require("@centerforopenscience/markdown-it-imsize");
 const linkAttributesPlugin = require("markdown-it-link-attributes");
+const katexPlugin = require("@jeff-tian/markdown-it-katex");
+const centerTextPlugin = require("markdown-it-center-text");
 
 md.use(subscriptPlugin)
   .use(superscriptPlugin)
@@ -40,7 +43,9 @@ md.use(subscriptPlugin)
   })
   .use(linkifyImagesPlugin, {
     target: "_blank",
-  });
+  })
+  .use(katexPlugin)
+  .use(centerTextPlugin);
 
 const parse = (markdown) => {
   return md.render(markdown);

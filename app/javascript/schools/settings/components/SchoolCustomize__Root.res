@@ -103,9 +103,7 @@ let address = a =>
   | Some(a) =>
     <div
       className="text-xs font-semibold mt-3 leading-normal"
-      dangerouslySetInnerHTML={
-        "__html": a |> Markdown.parse(Markdown.Permissive),
-      }
+      dangerouslySetInnerHTML={Markdown.parse(Markdown.Permissive, a)->DOMPurify.sanitizedHTML}
     />
   | None =>
     <div

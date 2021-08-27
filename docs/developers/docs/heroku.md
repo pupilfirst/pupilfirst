@@ -188,24 +188,27 @@ vapid_key.public_key
 vapid_key.private_key
 ```
 
-## Content delivery network
+## Content Delivery Network
 
-To enable content delivery network, you will have to set cloudfront environment variables.
+To enable delivery of user-uploaded files through a CDN, you will have to set Cloudfront environment variables.
 
-Create a cloudfront public key to generate signed URLs with canned policy. ([Detailed Doc](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-creating-signed-url-canned-policy.html))
+1. [Create a Cloudfront public key](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-creating-signed-url-canned-policy.html) to generate signed URLs with canned policy.
+2. [Create a cloudfront distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) for accessing the private AWD S3 contents with signed URLs.
+3. Set up the required environment variables:
 
-Create a cloudfront distribution for accessing the private AWD S3 contents with signed URLs. ([Detailed Doc](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html))
+   ```
+   # Bas64 encoded private key used for generating the cloudfront public key
+   CLOUDFRONT_PRIVATE_KEY_BASE_64_ENCODED=cloudfront_private_key_from_aws
 
-```
-# Bas64 encoded private key used for generating the cloudfront public key
-CLOUDFRONT_PRIVATE_KEY_BASE_64_ENCODED=cloudfront_private_key_from_aws
+   # Cloudfront hostname
+   CLOUDFRONT_HOST=cloudfront_host_from_aws
 
-# Cloudfront hostname
-CLOUDFRONT_HOST=cloudfront_host_from_aws
+   # Cloudfront public key pair ID
+   CLOUDFRONT_KEY_PAIR_ID=cloudfront_key_pair_id_from_aws
 
-# Cloudfront public key pair ID
-CLOUDFRONT_KEY_PAIR_ID=cloudfront_key_pair_id_from_aws
-```
+   # An integer in seconds used to compute the expiry time for the signed URL
+   CLOUDFRONT_EXPIRY=expiry_in_seconds
+   ```
 
 ## Troubleshooting
 

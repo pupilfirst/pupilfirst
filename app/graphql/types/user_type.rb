@@ -22,10 +22,6 @@ module Types
               end
             end
         end
-
-      # if object.avatar.attached?
-      #   Rails.application.routes.url_helpers.rails_public_blob_url(object.avatar_variant(:thumb))
-      # end
     end
 
     def title

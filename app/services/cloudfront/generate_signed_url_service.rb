@@ -14,7 +14,9 @@ module Cloudfront
 
       signer.signed_url(
         "https://#{Rails.application.secrets.cloudfront[:host]}/#{@path}",
-        expires: Time.zone.now + 10.minutes
+        expires:
+          Time.zone.now +
+            Rails.application.secrets.cloudfront[:expiry].to_i.seconds
       )
     end
   end

@@ -17,10 +17,6 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION`.
 
-### 2021.4
-
-- Introduced support for cloudfront CDN. See [this guide](https://pupilfirst.com/docs/developers/docs/cloudfront-cdn) for more information.
-
 ### 2021.3
 
 - Google's Recaptcha has been introduced to protect public-facing forms from automation.

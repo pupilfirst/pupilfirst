@@ -54,7 +54,7 @@ class HomeController < ApplicationController
   # GET /favicon.ico
   def favicon
     if current_school.present? && current_school.icon.attached?
-      redirect_to view_context.url_for(current_school.icon_variant(:thumb))
+      redirect_to view_context.rails_public_blob_url(current_school.icon_variant(:thumb))
     else
       redirect_to '/favicon.png'
     end

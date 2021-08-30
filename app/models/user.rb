@@ -123,14 +123,14 @@ class User < ApplicationRecord
         gravity: 'center',
         resize: '320x320^',
         crop: '320x320+0+0'
-      )
+      ).processed
     when :thumb
       avatar.variant(
         auto_orient: true,
         gravity: 'center',
         resize: '100x100^',
         crop: '100x100+0+0'
-      )
+      ).processed
     else
       avatar
     end
@@ -145,14 +145,10 @@ class User < ApplicationRecord
     return unless avatar.attached?
 
     if variant.blank?
-      Rails.application.routes.url_helpers.rails_blob_path(
-        avatar,
-        only_path: true
-      )
+      Rails.application.routes.url_helpers.rails_public_blob_url(avatar)
     else
-      Rails.application.routes.url_helpers.rails_representation_path(
-        avatar_variant(variant),
-        only_path: true
+      Rails.application.routes.url_helpers.rails_public_blob_url(
+        avatar_variant(variant)
       )
     end
   end
@@ -163,14 +159,10 @@ class User < ApplicationRecord
 
     if avatar.attached?
       if variant.blank?
-        Rails.application.routes.url_helpers.rails_blob_path(
-          avatar,
-          only_path: true
-        )
+        Rails.application.routes.url_helpers.rails_public_blob_url(avatar)
       else
-        Rails.application.routes.url_helpers.rails_representation_path(
-          avatar_variant(variant),
-          only_path: true
+        Rails.application.routes.url_helpers.rails_public_blob_url(
+          avatar_variant(variant)
         )
       end
     else

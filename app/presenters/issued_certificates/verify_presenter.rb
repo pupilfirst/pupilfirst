@@ -30,7 +30,7 @@ module IssuedCertificates
         profile_name: user&.name || @issued_certificate.name,
         issued_at: @issued_certificate.created_at,
         course_name: certificate.course.name,
-        image_url: view.url_for(certificate.image)
+        image_url: view.rails_public_blob_url(certificate.image)
       )
     end
 

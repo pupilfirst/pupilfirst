@@ -17,11 +17,11 @@ module Home
     end
 
     def cover_image
-      view.url_for(@school.cover_image) if @school.cover_image.attached?
+      view.rails_public_blob_url(@school.cover_image) if @school.cover_image.attached?
     end
 
     def course_thumbnail(course)
-      view.url_for(course.thumbnail) if course.thumbnail.attached?
+      view.rails_public_blob_url(course.thumbnail) if course.thumbnail.attached?
     end
 
     def about

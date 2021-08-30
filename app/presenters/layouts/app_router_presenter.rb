@@ -30,7 +30,8 @@ module Layouts
         has_notifications: notifications?
       }
       if current_user.avatar.attached?
-        user[:avatar_url] = view.url_for(current_user.avatar_variant(:thumb))
+        user[:avatar_url] =
+          view.rails_public_blob_url(current_user.avatar_variant(:thumb))
       end
 
       user[:coach_id] = current_coach.id if current_coach.present?
@@ -217,10 +218,8 @@ module Layouts
     end
 
     def logo_url
-      if current_school.blank?
-        view.image_url('mailer/pupilfirst-logo.png')
-      elsif current_school.logo_on_light_bg.attached?
-        view.url_for(current_school.logo_variant(:high))
+      if current_school.logo_on_light_bg.attached?
+        view.rails_public_blob_url(current_school.logo_variant(:high))
       end
     end
   end

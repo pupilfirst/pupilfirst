@@ -17,7 +17,7 @@ module Users
 
       if current_user.avatar.attached?
         dashboard_props[:avatar_url] =
-          view.url_for(current_user.avatar_variant(:thumb))
+          view.rails_public_blob_url(current_user.avatar_variant(:thumb))
       end
 
       dashboard_props

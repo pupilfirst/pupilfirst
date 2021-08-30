@@ -27,10 +27,7 @@ class GenerateManifestService
 
   def icon_src(variant)
     if icon.present?
-      url_helpers.rails_representation_url(
-        icon_variant(variant),
-        only_path: true
-      )
+      url_helpers.rails_public_blob_url(icon_variant(variant))
     else
       "/images/pwa/#{default_icon_variant(variant)}.png"
     end
@@ -56,13 +53,13 @@ class GenerateManifestService
   def icon_variant(variant)
     case variant
     when :sm
-      icon.variant(variant_options('100x100>'))
+      icon.variant(variant_options('100x100>')).processed
     when :md
-      icon.variant(variant_options('144x144>'))
+      icon.variant(variant_options('144x144>')).processed
     when :lg
-      icon.variant(variant_options('192x192>'))
+      icon.variant(variant_options('192x192>')).processed
     when :xl3
-      icon.variant(variant_options('512x512>'))
+      icon.variant(variant_options('512x512>')).processed
     else
       icon
     end

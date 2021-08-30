@@ -20,7 +20,7 @@ class MailerPresenter < ApplicationPresenter
   end
 
   def logo
-    view.image_tag(view.url_for(@school.logo_variant(:mid)), class: 'mailer-head__logo-img')
+    view.image_tag(view.rails_public_blob_url(@school.logo_variant(:mid)), class: 'mailer-head__logo-img')
   end
 
   def course_cover?
@@ -28,7 +28,7 @@ class MailerPresenter < ApplicationPresenter
   end
 
   def course_cover_url
-    view.url_for(@course.cover)
+    view.rails_public_blob_url(@course.cover)
   end
 
   def hero_title_classes

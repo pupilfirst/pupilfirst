@@ -31,7 +31,7 @@ module Layouts
     end
 
     def logo_url
-      view.url_for(current_school.logo_variant(:mid, background: :light))
+      view.rails_public_blob_url(current_school.logo_variant(:mid, background: :light))
     end
 
     def social_icon(title)

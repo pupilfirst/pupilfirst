@@ -1,3 +1,5 @@
+require 'aws-sdk-cloudfront'
+
 module Cloudfront
   class GenerateSignedUrlService
     def initialize(path)

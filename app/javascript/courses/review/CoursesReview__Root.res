@@ -138,15 +138,15 @@ module SubmissionsQuery = %graphql(
         }
         totalCount
       }
-      level(levelId: $levelId) {
+      level(levelId: $levelId, courseId: $courseId) {
         id
         name
         number
       }
-      coach(coachId: $coachId) {
+      coach(coachId: $coachId, courseId: $courseId) {
         ...UserProxy.Fragments.AllFields
       }
-      targetInfo(targetId: $targetId) {
+      targetInfo(targetId: $targetId, courseId: $courseId) {
         id
         title
       }

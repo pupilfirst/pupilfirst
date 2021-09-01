@@ -49,24 +49,23 @@ class SubmissionsResolver < ApplicationQuery
 
   def applicable_submissions
     by_level =
-      if level_id.present?
-        course
-          .levels
-          .where(id: level_id)
-          .first
-          .timeline_events
-          .not_auto_verified
+      if level_id.present? && course.levels.find_by(id: level_id).present?
+        course.levels.find_by(id: level_id).timeline_events.not_auto_verified
       else
         course.timeline_events.not_auto_verified
       end
 
     by_level_and_target =
-      target_id.present? ? by_level.where(target_id: target_id) : by_level
+      if target_id.present? && course.targets.find_by(id: target_id).present?
+        by_level.where(target_id: target_id)
+      else
+        by_level
+      end
 
     by_level_and_status = filter_by_status(by_level_and_target)
 
     by_level_status_and_coach =
-      if coach_id.present?
+      if coach_id.present? && course.faculty.find_by(id: coach_id).present?
         by_level_and_status
           .joins(founders: { startup: :faculty_startup_enrollments })
           .where(faculty_startup_enrollments: { faculty_id: coach_id })

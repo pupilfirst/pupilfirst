@@ -401,6 +401,34 @@ feature "Coach's review interface" do
       expect(page).to have_text(target_l2.title)
     end
 
+    context 'when the course has inactive students' do
+      let(:inactive_team) do
+        create :startup, level: level_1, access_ends_at: 1.day.ago
+      end
+      let!(:submission_from_inactive_team) do
+        create(
+          :timeline_event,
+          :with_owners,
+          latest: true,
+          owners: inactive_team.founders,
+          target: team_target
+        )
+      end
+
+      scenario 'coach can access inactive submission', js: true do
+        sign_in_user course_coach.user, referrer: review_course_path(course)
+
+        expect(page).to have_content('Showing all 7 submissions')
+
+        # Search by email
+        fill_in 'filter', with: 'Inactive Students'
+        click_button 'Pick Include: Inactive Students'
+
+        expect(page).to have_content('Showing all 8 submissions')
+        expect(page).to have_content(inactive_team.name)
+      end
+    end
+
     context 'when random filters are applied' do
       let(:random_level) { create :level, :one }
       let(:random_target) { create :target, :for_founders }

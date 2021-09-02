@@ -2,8 +2,8 @@ require 'aws-sdk-cloudfront'
 
 module Cloudfront
   class GenerateSignedUrlService
-    def initialize(path)
-      @path = path
+    def initialize(blob)
+      @blob = blob
     end
 
     def generate_url
@@ -14,8 +14,19 @@ module Cloudfront
             Base64.decode64(Rails.application.secrets.cloudfront[:private_key])
         )
 
+      uri =
+        URI(
+          "https://#{Rails.application.secrets.cloudfront[:host]}/#{@blob.key}"
+        )
+
+      uri.query = {
+        'response-content-disposition':
+          "attachment; filename=\"#{@blob.filename}\";",
+        'response-content-type': @blob.content_type
+      }.to_query
+
       signer.signed_url(
-        "https://#{Rails.application.secrets.cloudfront[:host]}/#{@path}",
+        uri.to_s,
         expires:
           Time.zone.now + Rails.application.secrets.cloudfront[:expiry].seconds
       )

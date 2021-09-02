@@ -318,7 +318,7 @@ module Selectable = {
       }
     | Status(_) => Some(tc("status"))
     | NameOrEmail(_) => Some(tc("name_or_email"))
-    | IncludeInactive => Some("Include")
+    | IncludeInactive => Some(tc("include"))
     }
 
   let value = t =>
@@ -339,7 +339,7 @@ module Selectable = {
       | #Reviewed => tc("reviewed")
       }
     | NameOrEmail(search) => search
-    | IncludeInactive => "Inactive Students"
+    | IncludeInactive => tc("inactive_students")
     }
 
   let searchString = t =>
@@ -363,7 +363,7 @@ module Selectable = {
       | #Reviewed => tc("reviewed")
       }
     | NameOrEmail(search) => search
-    | IncludeInactive => "Include Inactive Students"
+    | IncludeInactive => `${tc("include")}: ${tc("inactive_students")}`
     }
 
   let color = t =>

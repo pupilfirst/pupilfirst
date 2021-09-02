@@ -458,6 +458,8 @@ en:
       filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
       filter_by_target: Filter by target
       filter_hint: ...or start typing to filter by student using their name or email address
+      inactive_students: Inactive Students
+      include: Include
       level: Level
       me: Me
       name_or_email: Name or Email
@@ -979,6 +981,7 @@ en:
     done_exclamation: Done!
     file_invalid: Please select a file with a size less than 5 MB.
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
+    invalid_authenticity_token_error: Invalid or missing CSRF token. Please refresh this page before trying to perform that action.
     level: Level
     level_label:
       long_with_name: "Level %{number}: %{name}"
@@ -991,4 +994,3 @@ en:
     saving: Saving...
     target: Target
     terms_and_conditions: Terms & Conditions
-    invalid_authenticity_token_error: Invalid or missing CSRF token. Please refresh this page before trying to perform that action.

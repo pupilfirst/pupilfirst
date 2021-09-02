@@ -19,14 +19,19 @@ module Cloudfront
           "https://#{Rails.application.secrets.cloudfront[:host]}/#{@blob.key}"
         )
 
-      unless @blob.is_a?(ActiveStorage::Variant) ||
-               @blob.is_a?(ActiveStorage::VariantWithRecord)
-        uri.query = {
-          'response-content-disposition':
-            "attachment; filename=\"#{@blob.filename}\";",
-          'response-content-type': @blob.content_type
-        }.to_query
-      end
+      blob =
+        if @blob.is_a?(ActiveStorage::Variant) ||
+             @blob.is_a?(ActiveStorage::VariantWithRecord)
+          @blob.blob
+        else
+          @blob
+        end
+
+      uri.query = {
+        'response-content-disposition':
+          "attachment; filename=\"#{blob.filename}\";",
+        'response-content-type': blob.content_type
+      }.to_query
 
       signer.signed_url(
         uri.to_s,

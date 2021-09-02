@@ -119,8 +119,8 @@ let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryStrin
 
 module SubmissionsQuery = %graphql(
   `
-    query SubmissionsQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $after: String) {
-      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, levelId: $levelId, coachId: $coachId, first: 20, after: $after) {
+    query SubmissionsQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $includeInactive: Boolean, $after: String) {
+      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, levelId: $levelId, coachId: $coachId, includeInactive: $includeInactive, first: 20, after: $after) {
         nodes {
           id,
           title,
@@ -197,6 +197,7 @@ let getSubmissions = (send, courseId, cursor, filter) => {
     ~coachId=?Filter.coachId(filter),
     ~targetId=?Filter.targetId(filter),
     ~search=?Filter.nameOrEmail(filter),
+    ~includeInactive=Filter.includeInactive(filter),
     ~after=?cursor,
     (),
   )
@@ -302,6 +303,7 @@ module Selectable = {
     | Target(TargetInfo.t)
     | Status(Filter.selectedTab)
     | NameOrEmail(string)
+    | IncludeInactive
 
   let label = t =>
     switch t {
@@ -316,6 +318,7 @@ module Selectable = {
       }
     | Status(_) => Some(tc("status"))
     | NameOrEmail(_) => Some(tc("name_or_email"))
+    | IncludeInactive => Some("Include")
     }
 
   let value = t =>
@@ -336,6 +339,7 @@ module Selectable = {
       | #Reviewed => tc("reviewed")
       }
     | NameOrEmail(search) => search
+    | IncludeInactive => "Inactive Students"
     }
 
   let searchString = t =>
@@ -359,6 +363,7 @@ module Selectable = {
       | #Reviewed => tc("reviewed")
       }
     | NameOrEmail(search) => search
+    | IncludeInactive => "Include Inactive Students"
     }
 
   let color = t =>
@@ -378,6 +383,7 @@ module Selectable = {
       | #Reviewed => "green"
       }
     | NameOrEmail(_) => "gray"
+    | IncludeInactive => "gray"
     }
   let level = level => Level(level)
   let assignedToCoach = (coach, currentCoachId) => AssignedToCoach(coach, currentCoachId)
@@ -385,6 +391,7 @@ module Selectable = {
   let target = target => Target(target)
   let status = status => Status(status)
   let nameOrEmail = search => NameOrEmail(search)
+  let includeInactive = () => IncludeInactive
 }
 
 module Multiselect = MultiselectDropdown.Make(Selectable)
@@ -454,6 +461,7 @@ let unselected = (state, currentCoachId, filter) => {
     state.coachesLoaded == Loaded ? [] : [Selectable.makeLoader(ShowCoaches)],
     state.targetsLoaded == Loaded ? [] : [Selectable.makeLoader(ShowTargets)],
     nameOrEmailFilter(state),
+    Filter.includeInactive(filter) ? [] : [Selectable.includeInactive()],
   ])
 }
 
@@ -491,6 +499,7 @@ let selected = (state, filter, currentCoachId) => {
     selectedCoach,
     selectedTarget,
     selectedSearchString,
+    Filter.includeInactive(filter) ? [Selectable.includeInactive()] : [],
   ])
 }
 
@@ -518,6 +527,7 @@ let onSelectFilter = (send, courseId, state, filter, selectable) => {
     | #Reviewed => updateParams({...filter, tab: Some(#Reviewed), sortCriterion: #EvaluatedAt})
     }
   | NameOrEmail(nameOrEmail) => updateParams({...filter, nameOrEmail: Some(nameOrEmail)})
+  | IncludeInactive => updateParams({...filter, includeInactive: true})
   }
 }
 
@@ -529,6 +539,7 @@ let onDeselectFilter = (send, filter, selectable) =>
   | Target(_) => updateParams({...filter, targetId: None})
   | Status(_) => updateParams({...filter, tab: None, sortCriterion: #SubmittedAt})
   | NameOrEmail(_) => updateParams({...filter, nameOrEmail: None})
+  | IncludeInactive => updateParams({...filter, includeInactive: false})
   }
 
 let defaultOptions = (state, filter) => {
@@ -538,6 +549,7 @@ let defaultOptions = (state, filter) => {
       Selectable.makeLoader(ShowLevels),
       Selectable.makeLoader(ShowCoaches),
       Selectable.makeLoader(ShowTargets),
+      Selectable.includeInactive(),
     ],
     unSelectedStatus(filter),
   ])

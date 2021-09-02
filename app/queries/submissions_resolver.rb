@@ -8,6 +8,7 @@ class SubmissionsResolver < ApplicationQuery
   property :target_id
   property :search
   property :exclude_submission_id
+  property :include_inactive
 
   def submissions
     applicable_submissions.distinct.order(
@@ -97,7 +98,10 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def teams
-    @teams ||= course.startups.active.joins(founders: :user)
+    @teams ||=
+      (include_inactive ? course.startups : course.startups.active).joins(
+        founders: :user
+      )
   end
 
   def course_teams

@@ -61,6 +61,7 @@ module Types
       argument :target_id, ID, required: false
       argument :search, String, required: false
       argument :exclude_submission_id, ID, required: false
+      argument :include_inactive, Boolean, required: false
     end
 
     resolved_field :submission_details,

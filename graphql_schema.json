@@ -1256,6 +1256,16 @@
                   "ofType": null
                 },
                 "defaultValue": null
+              },
+              {
+                "name": "includeInactive",
+                "description": "",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": null
               }
             ],
             "type": {

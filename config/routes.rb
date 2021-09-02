@@ -15,7 +15,7 @@ Rails.application.routes.draw do
         end
       route_for(route, blob, only_path: true)
     else
-      Cloudfront::GenerateSignedUrlService.new(blob.key).generate_url
+      Cloudfront::GenerateSignedUrlService.new(blob).generate_url
     end
   end
 

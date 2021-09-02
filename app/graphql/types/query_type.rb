@@ -184,14 +184,17 @@ module Types
     end
 
     resolved_field :coach, Types::UserProxyType, null: true do
+      argument :course_id, ID, required: true
       argument :coach_id, ID, required: false
     end
 
     resolved_field :level, Types::LevelType, null: true do
+      argument :course_id, ID, required: true
       argument :level_id, ID, required: false
     end
 
     resolved_field :target_info, Types::TargetInfoType, null: true do
+      argument :course_id, ID, required: true
       argument :target_id, ID, required: false
     end
   end

@@ -2,9 +2,10 @@ class LevelResolver < ApplicationQuery
   include AuthorizeCoach
 
   property :level_id
+  property :course_id
 
   def level
-    @level ||= Level.find_by(id: level_id)
+    @level ||= course.levels.find_by(id: level_id)
   end
 
   private
@@ -14,6 +15,6 @@ class LevelResolver < ApplicationQuery
   end
 
   def course
-    @course ||= level&.course
+    @course ||= current_school.courses.find_by(id: course_id)
   end
 end

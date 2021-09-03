@@ -2,6 +2,7 @@ module Mutations
   class CreateGrading < ApplicationQuery
     include QueryAuthorizeCoach
     include DevelopersNotifications
+    include ValidateSubmissionGradable
 
     argument :submission_id, ID, required: true
     argument :grades, [Types::GradeInputType], required: true

@@ -47,6 +47,7 @@ module SubmissionDetailsQuery = %graphql(
         }
         teamName
         courseId
+        preview
       }
     }
   `

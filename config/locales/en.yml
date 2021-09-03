@@ -805,6 +805,11 @@ en:
     messages:
       content_type_invalid: has an invalid content type
       limit_out_of_range: total number is out of range
+  graphql:
+    concerns:
+      validate_submission_gradable:
+        owners_should_be_active_error: Cannot update inactive student submissions.
+        owners_should_be_present_error: null
   home:
     index:
       course_status:
@@ -878,6 +883,10 @@ en:
       success_notification: Level copy requested. It will apppear in target course soon!
     create_course:
       success_notification: Course created successfully!
+    create_feedback:
+      success_notification:
+        description: Your feedback will be e-mailed to the student.
+        title: Feedback Sent
     create_grading:
       evaluation_criteria_error: Cannot grade Submission %{submission_id} without evaluation criteria
       grade_recorded: Grades Recorded
@@ -911,6 +920,11 @@ en:
       success_notification: Certificate revoked!
     unarchive_course:
       success_notification: Course unarchived successfully
+    undo_grading:
+      must_be_graded: Could not find a graded submission with the given ID
+      success_notification:
+        description: The submission is now pending review.
+        title: Grades Removed
     unlock_topic:
       success_notification: This topic has been unlocked. Community members can now post replies again.
     update_certificate:

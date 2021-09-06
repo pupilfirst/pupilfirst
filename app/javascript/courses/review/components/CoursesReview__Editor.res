@@ -11,6 +11,7 @@ type status =
   | Ungraded
 
 type editor =
+  | AssignReviewer
   | GradesEditor
   | ChecklistEditor
   | ReviewedSubmissionEditor(array<Grade.t>)
@@ -981,7 +982,7 @@ let make = (
       note: None,
       checklist: OverlaySubmission.checklist(overlaySubmission),
       editor: ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
-        ? GradesEditor
+        ? SubmissionDetails.reviewerAssigned(submissionDetails) ? GradesEditor : AssignReviewer
         : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
       additonalFeedbackEditorVisible: false,
       feedbackGenerated: false,
@@ -1061,6 +1062,25 @@ let make = (
       </div>
       <div className="md:w-1/2 w-full md:overflow-y-auto">
         {switch state.editor {
+        | AssignReviewer =>
+          <div>
+            <div
+              className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+              <p className="font-semibold"> {str("Review")} </p>
+            </div>
+            <div className="w-full px-4 md:px-6 pt-8 space-y-8 mx-auto">
+              <div className="flex flex-col justify-center items-center">
+                <div
+                  className="h-40 w-40 rounded-full bg-gray-300 flex items-center justify-center">
+                  <Icon className="if i-tachometer-light text-gray-800 text-6xl" />
+                </div>
+                <div className="mt-4">
+                  <button className="btn btn-primary btn-large"> {str("Start Review")} </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         | GradesEditor =>
           <div>
             <div

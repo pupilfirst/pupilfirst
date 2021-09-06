@@ -18,7 +18,9 @@ class SubmissionDetailsResolver < ApplicationQuery
       coaches: coaches,
       course_id: level.course_id,
       created_at: submission.created_at,
-      preview: preview?
+      preview: preview?,
+      reviewer: submission.reviewer,
+      reviewer_assigned_at: submission.reviewer_assigned_at
     }
   end
 

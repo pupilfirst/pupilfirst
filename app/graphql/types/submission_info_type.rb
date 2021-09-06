@@ -9,6 +9,7 @@ module Types
     field :user_names, String, null: false
     field :feedback_sent, Boolean, null: false
     field :team_name, String, null: true
+    field :reviewer_name, String, null: true
 
     def title
       BatchLoader::GraphQL
@@ -91,6 +92,19 @@ module Types
             end
         end
     end
-    # resolve_team_name(object)
+
+    def reviewer_name
+      BatchLoader::GraphQL
+        .for(object.id)
+        .batch do |submission_ids, loader|
+          TimelineEvent
+            .includes(reviewer: [faculty: :user])
+            .where(id: submission_ids)
+            .each do |submission|
+              loader.call(submission.id, submission.reviewer.faculty.user.name)
+            end
+        end
+      # object.founders.map { |founder| founder.user.name }.join(', ')
+    end
   end
 end

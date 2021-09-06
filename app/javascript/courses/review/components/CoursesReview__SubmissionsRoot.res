@@ -48,18 +48,10 @@ module SubmissionDetailsQuery = %graphql(
         teamName
         courseId
         preview
-      }
-    }
-  `
-)
-
-module NextSubmissionQuery = %graphql(
-  `
-    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $excludeSubmissionId: ID, $after: String) {
-      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, levelId: $levelId, coachId: $coachId, first: 1, after: $after) {
-        nodes {
-          id
+        reviewer{
+          id, userId, name, title, avatarUrl
         }
+        reviewerAssignedAt
       }
     }
   `

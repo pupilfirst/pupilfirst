@@ -221,7 +221,7 @@ module Make = (Selectable: Selectable) => {
             autoComplete="off"
             value
             onChange={e => onChange(ReactEvent.Form.target(e)["value"])}
-            className="flex-grow appearance-none bg-transparent border-none text-gray-700 py-1 leading-snug focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-opacity-50 "
+            className="flex-grow appearance-none bg-transparent border-none text-gray-700 p-2 leading-snug focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-400 "
             id=inputId
             type_="search"
             placeholder

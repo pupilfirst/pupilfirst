@@ -150,3 +150,9 @@ let updateOverlaySubmission = (submission, t) => {
 }
 
 let updateReviewChecklist = (reviewChecklist, t) => {...t, reviewChecklist: reviewChecklist}
+
+let updateReviewer = (reviewer, t) => {
+  ...t,
+  reviewer: reviewer,
+  reviewerAssignedAt: Belt.Option.isSome(reviewer) ? Some(Js.Date.make()) : None,
+}

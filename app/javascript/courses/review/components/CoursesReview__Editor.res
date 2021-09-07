@@ -52,6 +52,7 @@ type action =
   | FinishGrading(array<Grade.t>)
   | SetNextSubmissionDataLoading
   | SetNextSubmissionDataEmpty
+  | UnAssignReviewer
 
 let reducer = (state, action) =>
   switch action {
@@ -86,6 +87,7 @@ let reducer = (state, action) =>
     }
   | SetNextSubmissionDataLoading => {...state, nextSubmission: DataLoading}
   | SetNextSubmissionDataEmpty => {...state, nextSubmission: DataEmpty}
+  | UnAssignReviewer => {...state, editor: AssignReviewer, saving: false}
   }
 
 module CreateGradingMutation = %graphql(
@@ -130,6 +132,36 @@ module NextSubmissionQuery = %graphql(
   `
 )
 
+module UnassignReviewerMutation = %graphql(
+  `
+    mutation UnassignReviewerMutation($submissionId: ID!) {
+      unassignReviewer(submissionId: $submissionId){
+        success
+      }
+    }
+  `
+)
+
+let unassignReviewer = (submissionId, send, updateReviewerCB) => {
+  send(BeginSaving)
+
+  UnassignReviewerMutation.make(~submissionId, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    if response["unassignReviewer"]["success"] {
+      updateReviewerCB(None)
+      send(UnAssignReviewer)
+    }
+    send(FinishSaving)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(_ => {
+    send(FinishSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
 let getNextSubmission = (send, courseId, filter, submissionId) => {
   send(SetNextSubmissionDataLoading)
   NextSubmissionQuery.make(
@@ -165,9 +197,7 @@ let getNextSubmission = (send, courseId, filter, submissionId) => {
   |> ignore
 }
 
-let makeFeedback = (u, feedback) => {
-  let user = Belt.Option.getWithDefault(u, User.empty())
-
+let makeFeedback = (user, feedback) => {
   Feedback.make(
     ~coachName=Some(User.name(user)),
     ~coachAvatarUrl=User.avatarUrl(user),
@@ -268,7 +298,7 @@ let gradeSubmissionQuery = (
           updateSubmissionCB(
             OverlaySubmission.update(
               passed(state.grades, evaluationCriteria) ? Some(Js.Date.make()) : None,
-              Belt.Option.map(currentUser, AppRouter__User.name),
+              Some(User.name(currentUser)),
               Js.Array.concat(
                 Belt.Option.mapWithDefault(feedback, [], f => [makeFeedback(currentUser, f)]),
                 OverlaySubmission.feedback(overlaySubmission),
@@ -958,6 +988,11 @@ let updateReviewChecklist = (cb, send, checklist) => {
   cb(checklist)
 }
 
+let updateReviewer = (cb, send, reviewer) => {
+  cb(reviewer)
+  send(ShowGradesEditor)
+}
+
 @react.component
 let make = (
   ~overlaySubmission,
@@ -972,6 +1007,7 @@ let make = (
   ~number,
   ~submissionDetails,
   ~submissionId,
+  ~updateReviewerCB,
 ) => {
   let (state, send) = React.useReducer(
     reducer,
@@ -982,7 +1018,11 @@ let make = (
       note: None,
       checklist: OverlaySubmission.checklist(overlaySubmission),
       editor: ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
-        ? SubmissionDetails.reviewerAssigned(submissionDetails) ? GradesEditor : AssignReviewer
+        ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
+            Reviewer.userId(r) == User.id(currentUser)
+          )
+            ? GradesEditor
+            : AssignReviewer
         : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
       additonalFeedbackEditorVisible: false,
       feedbackGenerated: false,
@@ -1068,17 +1108,11 @@ let make = (
               className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
               <p className="font-semibold"> {str("Review")} </p>
             </div>
-            <div className="w-full px-4 md:px-6 pt-8 space-y-8 mx-auto">
-              <div className="flex flex-col justify-center items-center">
-                <div
-                  className="h-40 w-40 rounded-full bg-gray-300 flex items-center justify-center">
-                  <Icon className="if i-tachometer-light text-gray-800 text-6xl" />
-                </div>
-                <div className="mt-4">
-                  <button className="btn btn-primary btn-large"> {str("Start Review")} </button>
-                </div>
-              </div>
-            </div>
+            <CoursesReview__ReviewerManager
+              submissionDetails
+              updateReviewerCB={updateReviewer(updateReviewerCB, send)}
+              submissionId
+            />
           </div>
 
         | GradesEditor =>
@@ -1086,6 +1120,28 @@ let make = (
             <div
               className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
               <p className="font-semibold"> {str("Review")} </p>
+              <div ariaLabel="reviewer">
+                <div className="flex items-center">
+                  {switch SubmissionDetails.reviewer(submissionDetails) {
+                  | Some(reviewer) =>
+                    <div>
+                      <div>
+                        <p className="text-xs text-gray-800"> {"Reviewer"->str} </p>
+                        <p className="text-xs font-semibold"> {Reviewer.name(reviewer)->str} </p>
+                      </div>
+                    </div>
+                  | None => React.null
+                  }}
+                  <div className="flex justify-center ml-2 md:ml-4">
+                    <button
+                      onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
+                      className="px-2 py-2 space-x-2 flex justify-center border rounded items-center">
+                      <FaIcon classes="fas fa-times text-xl text-red-500" />
+                      <p className={"text-xs font-semibold text-red-500"}> {"Clear"->str} </p>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
             {feedbackGenerator(reviewChecklist, state, send)}
             <div className="w-full px-4 md:px-6 pt-8 space-y-8">

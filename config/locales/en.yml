@@ -883,6 +883,19 @@ en:
       success_notification: Level copy requested. It will apppear in target course soon!
     create_course:
       success_notification: Course created successfully!
+    assign_reviewer:
+      success_notification: The submission has been assigned to you.
+      submission_graded_error: Assignment will only work with pending submissions.
+      submission_already_assigned: The submission has been already assigned to a coach.
+    reassign_reviewer:
+      success_notification: The submission has been assigned to you.
+      submission_graded_error: Assignment will only work with pending submissions.
+      submission_not_assigned_to_coach: The submission is already assigned to you.
+    unassign_reviewer:
+      success_notification: The submission has been unassigned.
+      submission_graded_error: Assignment will only work with pending submissions.
+      submission_not_assigned: The submission is not yet assigned!
+      submission_assigned_to_another_coach: The submission is assigned to another coach!
     create_feedback:
       success_notification:
         description: Your feedback will be e-mailed to the student.

@@ -7,6 +7,7 @@ module SubmissionMeta = CoursesReview__SubmissionMeta
 module Feedback = CoursesReview__Feedback
 module Grade = CoursesReview__Grade
 module Coach = UserProxy
+module Reviewer = UserProxy
 module ReviewChecklistItem = CoursesReview__ReviewChecklistItem
 module ReviewChecklistResult = CoursesReview__ReviewChecklistResult
 module Student = CoursesReview__Student

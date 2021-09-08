@@ -19,7 +19,8 @@ module Users
     private
 
     def user
-      @user ||= @school.users.find_by(login_token: @token)
+      login_token = Digest::SHA2.base64digest(@token)
+      @user ||= @school.users.find_by(login_token: login_token)
     end
   end
 end

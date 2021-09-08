@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_13_153132) do
+ActiveRecord::Schema.define(version: 2021_09_08_041421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -213,9 +213,9 @@ ActiveRecord::Schema.define(version: 2021_08_13_153132) do
     t.string "progression_behavior", null: false
     t.integer "progression_limit"
     t.datetime "archived_at"
-    t.boolean "public_preview", default: false
     t.string "processing_url"
     t.jsonb "highlights", default: []
+    t.boolean "public_preview", default: false
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 
@@ -706,8 +706,8 @@ ActiveRecord::Schema.define(version: 2021_08_13_153132) do
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "views", default: 0
     t.bigint "topic_category_id"
+    t.integer "views", default: 0
     t.datetime "locked_at"
     t.bigint "locked_by_id"
     t.index ["community_id"], name: "index_topics_on_community_id"
@@ -747,6 +747,7 @@ ActiveRecord::Schema.define(version: 2021_08_13_153132) do
     t.string "api_token_digest"
     t.string "locale", default: "en"
     t.jsonb "webpush_subscription", default: {}
+    t.string "login_token_digest"
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
     t.index ["delete_account_token"], name: "index_users_on_delete_account_token", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true

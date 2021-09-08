@@ -96,10 +96,7 @@ class User < ApplicationRecord
     @original_login_token.presence || raise('Original login token is inaccessible')
   end
 
-  # def self.find_by_hashed_login_token(original_login_token)
-  #   login_token = Digest::SHA2.hexdigest(original_login_token)
-  #   find_by(login_token: login_token)
-  # end
+
 
   def regenerate_delete_account_token
     @delete_account_token_original = SecureRandom.urlsafe_base64

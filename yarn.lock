@@ -12514,10 +12514,10 @@ markdown-escapes@^1.0.0:
   resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.4.tgz#c95415ef451499d7602b91095f3c8e8975f78535"
   integrity sha512-8z4efJYk43E0upd0NbVXwgSTQs6cT3T06etieCMEg7dRbzCbxUCK/GHlX8mhHRDcp+OLlHkPKsvqQTCvsRl2cg==
 
-markdown-it-center-text@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/markdown-it-center-text/-/markdown-it-center-text-1.0.4.tgz#4e7f907b6539b62a6200fead50aebed587734b3c"
-  integrity sha512-7AA0gek4FYJ6gWB2kdGNx06k3GrlO97nEMY7uovQ70/6MtfqPznrgnKoWO3V4p36m3RT5GeQIFXqBH9Wr4iL/g==
+markdown-it-align@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/markdown-it-align/-/markdown-it-align-0.1.0.tgz#d41bb647b2b437af3a22cf580e8a1163bd28678c"
+  integrity sha512-0EzZy0yuiiZbmfQCsBiDXWz/hKET2xnE4B5ZX6J079uMf2LVhxEhHfAiuyoWqlypd9vxKugWQHXgMuXYzlw2Ew==
 
 markdown-it-link-attributes@^3.0.0:
   version "3.0.0"

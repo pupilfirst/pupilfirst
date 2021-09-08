@@ -142,8 +142,16 @@
   @apply py-4 pl-6;
 }
 
-.markdown-block__permissive .text-align-center {
-  @apply text-center;
+.markdown-block__permissive .align-left {
+  @apply block text-left;
+}
+
+.markdown-block__permissive .align-center {
+  @apply block text-center;
+}
+
+.markdown-block__permissive .align-right {
+  @apply block text-right;
 }
 
 /*
@@ -240,8 +248,16 @@
   @apply mx-auto;
 }
 
-.markdown-block__question-and-answer .text-align-center {
-  @apply text-center;
+.markdown-block__question-and-answer .align-left {
+  @apply block text-left;
+}
+
+.markdown-block__question-and-answer .align-center {
+  @apply block text-center;
+}
+
+.markdown-block__question-and-answer .align-right {
+  @apply block text-right;
 }
 
 /*

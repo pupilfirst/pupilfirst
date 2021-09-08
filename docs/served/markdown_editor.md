@@ -42,6 +42,28 @@ here's [a link to Wikipedia](https://www.wikipedia.org/).
 
 ---
 
+#### Aligning text
+
+You can also align blocks of text:
+
+---
+
+```markdown
+=-- Text aligned to the _left_ (**default**).
+
+-=- Text that is _center-aligned_.
+
+--= Text aligned to the _right_.
+```
+
+=-- Text aligned to the _left_ (**default**).
+
+-=- Text that is _center-aligned_.
+
+--= Text aligned to the _right_.
+
+---
+
 ### Lists
 
 Lists can be ordered (numbered), or unordered:
@@ -353,47 +375,6 @@ language, and the third will enable both features. For example:
 ```
 
 ---
-
-## Advanced usage
-
-### Aligning content
-
-You can align text by writing some _HTML_ inside of your Markdown.
-
----
-
-```markdown
-<div align="center">
-
-This paragraph of text will be _aligned_ so that it's horizontally centered in
-the page.
-
-This will apply to **all** paragraphs within the bounds of the `<div>` tag.
-
-</div>
-```
-
-<div align="center">
-
-This paragraph of text will be _aligned_ so that it's horizontally centered in
-the page.
-
-This will apply to **all** paragraphs within the bounds of the `<div>` tag.
-
-</div>
-
----
-
-Everything between the opening `<div>` and the closing `</div>` tags will be
-center-aligned.
-
-> **Important: Mind the gap!**\
-> Note the gap (the extra line-break), in-between the opening `<div>`, the
-> content, and the closing `</div>`. Without this additional gap, you won't be
-> able to style the _content within_ using other Markdown features.
-
-Possible values for the `align` property are: `left` (the default alignment),
-`center`, `right`, and `justify`.
 
 ## Supported Languages
 

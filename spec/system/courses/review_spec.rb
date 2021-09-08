@@ -401,6 +401,25 @@ feature "Coach's review interface" do
       expect(page).to have_text(target_l2.title)
     end
 
+    context 'when random filters are applied' do
+      let(:random_level) { create :level, :one }
+      let(:random_target) { create :target, :for_founders }
+
+      scenario 'coach visits review dashboard', js: true do
+        sign_in_user course_coach.user,
+                     referrer:
+                       review_course_path(
+                         course,
+                         levelId: random_level.id,
+                         targetId: random_target.id
+                       )
+
+        expect(page).to have_content('Showing all 7 submissions')
+        expect(page).not_to have_content(random_level.name)
+        expect(page).not_to have_content(random_target.title)
+      end
+    end
+
     scenario 'coach changes the sort order of submissions', js: true do
       sign_in_user course_coach.user, referrer: review_course_path(course)
 

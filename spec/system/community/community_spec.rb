@@ -344,6 +344,13 @@ feature 'Community', js: true do
     expect(topic_1.first_post.reload.body).to eq(topic_body_for_edit)
     expect(topic_1.first_post.text_versions.first.value).to eq(old_description)
 
+    visit topic_path(topic_1)
+
+    # should have a "last edited by" marker
+    within("div#post-show-#{topic_1.first_post.id}") do
+      expect(page).to have_text("Last edited by #{coach.user.name}")
+    end
+
     # can see topic edit history
     find("div[aria-label='Options for post #{topic_1.first_post.id}']").click
     click_link 'History'

@@ -23,7 +23,7 @@ class ErrorPresenter < ApplicationPresenter
 
   def school_icon_url
     if current_school.present?
-      view.url_for(current_school.icon_variant(:thumb))
+      view.rails_public_blob_url(current_school.icon_variant(:thumb))
     else
       view.image_path('shared/pupilfirst-icon.svg')
     end

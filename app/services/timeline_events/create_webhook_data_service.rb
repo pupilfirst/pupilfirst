@@ -57,18 +57,23 @@ module TimelineEvents
     def files
       @submission.timeline_event_files.map do |timeline_event_file|
         file = timeline_event_file.file
+
         file_path =
-          Rails.application.routes.url_helpers.rails_blob_path(
-            file,
-            only_path: true
-          )
+          Rails.application.routes.url_helpers.rails_public_blob_url(file)
+
+        file_url =
+          if ENV['CLOUDFRONT_HOST'].present? && Rails.env.production?
+            file_path
+          else
+            "https://#{school.domains.primary.fqdn}#{file_path}"
+          end
 
         {
           filename: file.filename.to_s,
           content_type: file.content_type,
           byte_size: file.byte_size,
           checksum: file.checksum,
-          url: "https://#{school.domains.primary.fqdn}#{file_path}"
+          url: file_url
         }
       end
     end

@@ -36,13 +36,8 @@ module Types
             .each do |user|
               if user.avatar.attached?
                 url =
-                  Rails
-                    .application
-                    .routes
-                    .url_helpers
-                    .rails_representation_path(
-                    user.avatar_variant(:thumb),
-                    only_path: true
+                  Rails.application.routes.url_helpers.rails_public_blob_url(
+                    user.avatar_variant(:thumb)
                   )
                 loader.call(user.id, url)
               end

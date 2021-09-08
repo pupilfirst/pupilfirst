@@ -14,7 +14,7 @@ module Layouts
       if current_school.blank?
         view.image_url('mailer/pupilfirst-logo.png')
       else
-        view.url_for(current_school.logo_variant(:high))
+        view.rails_public_blob_url(current_school.logo_variant(:high))
       end
     end
 

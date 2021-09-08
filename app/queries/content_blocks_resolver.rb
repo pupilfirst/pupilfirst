@@ -15,7 +15,8 @@ class ContentBlocksResolver < ApplicationQuery
   def authorized?
     return false if target&.course&.school != current_school
 
-    current_school_admin.present? || current_user&.course_authors&.where(course: target.course).present?
+    current_school_admin.present? ||
+      current_user&.course_authors&.where(course: target.course).present?
   end
 
   def target_version
@@ -27,13 +28,27 @@ class ContentBlocksResolver < ApplicationQuery
   end
 
   def file_details(content_block)
-    { url: Rails.application.routes.url_helpers.rails_blob_path(content_block.file, only_path: true), filename: content_block.file.filename.to_s }
+    {
+      url:
+        Rails.application.routes.url_helpers.rails_public_blob_url(
+          content_block.file
+        ),
+      filename: content_block.file.filename.to_s
+    }
   end
 
   def content_data(content_blocks)
     content_blocks.with_attached_file.map do |content_block|
-      content_block_data = content_block.attributes.slice('id', 'block_type', 'content', 'sort_index')
-      content_block_data.merge!(file_details(content_block)) if content_block.file.attached?
+      content_block_data =
+        content_block.attributes.slice(
+          'id',
+          'block_type',
+          'content',
+          'sort_index'
+        )
+      if content_block.file.attached?
+        content_block_data.merge!(file_details(content_block))
+      end
       content_block_data.symbolize_keys
     end
   end

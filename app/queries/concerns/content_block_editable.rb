@@ -18,14 +18,19 @@ module ContentBlockEditable
   end
 
   def json_attributes
-    attributes = content_block.attributes
-      .slice('id', 'block_type', 'content', 'sort_index')
-      .with_indifferent_access
+    attributes =
+      content_block
+        .attributes
+        .slice('id', 'block_type', 'content', 'sort_index')
+        .with_indifferent_access
 
     if content_block.file.attached?
       attributes[:content].merge!(
-        url: Rails.application.routes.url_helpers.rails_blob_path(content_block.file, only_path: true),
-        filename: content_block.file.filename.to_s,
+        url:
+          Rails.application.routes.url_helpers.rails_public_blob_url(
+            content_block.file
+          ),
+        filename: content_block.file.filename.to_s
       )
     end
 

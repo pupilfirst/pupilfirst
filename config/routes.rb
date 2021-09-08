@@ -5,6 +5,20 @@ Rails.application.routes.draw do
     mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql'
   end
 
+  direct :rails_public_blob do |blob|
+    if Rails.env.development? || Rails.env.test? || ENV['CLOUDFRONT_HOST'].blank?
+      route =
+        if blob.is_a?(ActiveStorage::Variant) || blob.is_a?(ActiveStorage::VariantWithRecord)
+          :rails_representation
+        else
+         :rails_blob
+        end
+      route_for(route, blob, only_path: true)
+    else
+      Cloudfront::GenerateSignedUrlService.new(blob).generate_url
+    end
+  end
+
   post '/graphql', to: 'graphql#execute'
 
   devise_for :users, only: %i[sessions omniauth_callbacks], controllers: { sessions: 'users/sessions', omniauth_callbacks: 'users/omniauth_callbacks' }

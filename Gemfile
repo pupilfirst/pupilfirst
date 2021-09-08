@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 # Ruby on Rails. http://rubyonrails.org
 gem 'rails', '~> 6.1.4.1'
 
-gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
+gem 'dotenv-rails', '~> 2.7.6', groups: %i[development test]
 
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'active_storage_validations', '~> 0.9' # Better validations for active_storage.
@@ -135,5 +135,6 @@ end
 group :production do
   gem 'dalli', '~> 2.7.10' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
   gem 'skylight', '~> 5.1' # Skylight is a smart profiler for Rails, Sinatra, and other Ruby apps.
-  gem 'aws-sdk-s3', '~> 1.35 ', require: false
+  gem 'aws-sdk-s3', '~> 1.35', require: false
+  gem 'aws-sdk-cloudfront', '~> 1.47', require: false
 end

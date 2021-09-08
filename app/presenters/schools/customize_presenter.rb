@@ -38,7 +38,7 @@ module Schools
 
     def file_details(file)
       {
-        url: view.url_for(file),
+        url: view.rails_public_blob_url(file),
         filename: file.filename
       }
     end

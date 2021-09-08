@@ -3,9 +3,9 @@ ruby '2.7.4'
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.1.4'
+gem 'rails', '~> 6.1.4.1'
 
-gem 'dotenv-rails', '~> 2.2', groups: %i[development test]
+gem 'dotenv-rails', '~> 2.7.6', groups: %i[development test]
 
 gem 'attribute_normalizer', '~> 1.2.0.b' # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem 'active_storage_validations', '~> 0.9' # Better validations for active_storage.
@@ -72,7 +72,7 @@ gem 'pundit', '~> 2.0' # Minimal authorization through OO design and pure Ruby c
 gem 'rack-cors', '~> 1.0', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
 gem 'graphql', '~> 1.12.6' # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
-gem 'i18n-js', '~> 3.7' # Provide Rails I18n translations on Javascript.
+gem 'i18n-js', '~> 4.0.0.alpha1' # Provide Rails I18n translations on Javascript.
 gem 'batch-loader', '~> 1.5' # Generic lazy batching mechanism to avoid N+1 DB queries.
 gem 'recaptcha', '~> 5.7' # ReCaptcha helpers for Ruby apps. http://github.com/ambethia/recaptcha
 
@@ -135,5 +135,6 @@ end
 group :production do
   gem 'dalli', '~> 2.7.10' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
   gem 'skylight', '~> 5.1' # Skylight is a smart profiler for Rails, Sinatra, and other Ruby apps.
-  gem 'aws-sdk-s3', '~> 1.35 ', require: false
+  gem 'aws-sdk-s3', '~> 1.35', require: false
+  gem 'aws-sdk-cloudfront', '~> 1.47', require: false
 end

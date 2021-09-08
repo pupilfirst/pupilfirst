@@ -6,7 +6,7 @@ open CoursesReview__Types
 let str = React.string
 
 let cardClasses = (submission, selected) =>
-  "inline-block bg-white relative rounded-lg submission-info__tab focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 " ++
+  "inline-block bg-white relative rounded-lg submission-info__tab flex-shrink-0 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 " ++
   (selected
     ? "border border-primary-400 "
     : "bg-opacity-50 border border-gray-300 hover:bg-opacity-100 ") ++

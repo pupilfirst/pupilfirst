@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   end
 
   direct :rails_public_blob do |blob|
-    if Rails.env.development? || Rails.env.test? || ENV.fetch("CDN_HOST").blank?
+    if Rails.env.development? || Rails.env.test? || ENV['CLOUDFRONT_HOST'].blank?
       route =
         if blob.is_a?(ActiveStorage::Variant) || blob.is_a?(ActiveStorage::VariantWithRecord)
           :rails_representation
@@ -15,7 +15,7 @@ Rails.application.routes.draw do
         end
       route_for(route, blob, only_path: true)
     else
-      File.join("https://#{ENV.fetch("CDN_HOST")}", blob.key)
+      Cloudfront::GenerateSignedUrlService.new(blob).generate_url
     end
   end
 

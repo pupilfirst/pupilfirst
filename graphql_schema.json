@@ -145,6 +145,20 @@
             "description": "",
             "args": [
               {
+                "name": "courseId",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
                 "name": "coachId",
                 "description": "",
                 "type": {
@@ -594,6 +608,20 @@
             "name": "level",
             "description": "",
             "args": [
+              {
+                "name": "courseId",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
               {
                 "name": "levelId",
                 "description": "",
@@ -1277,6 +1305,20 @@
             "name": "targetInfo",
             "description": "",
             "args": [
+              {
+                "name": "courseId",
+                "description": "",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
               {
                 "name": "targetId",
                 "description": "",

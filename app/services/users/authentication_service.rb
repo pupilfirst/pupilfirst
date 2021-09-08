@@ -11,7 +11,7 @@ module Users
     def authenticate
       if @token.present? && user.present?
         # Clear the token from user.
-        user.update!(login_token: nil)
+        user.update!(login_token_digest: nil)
         user
       end
     end
@@ -20,7 +20,7 @@ module Users
 
     def user
       login_token = Digest::SHA2.base64digest(@token)
-      @user ||= @school.users.find_by(login_token: login_token)
+      @user ||= @school.users.find_by(login_token_digest: login_token)
     end
   end
 end

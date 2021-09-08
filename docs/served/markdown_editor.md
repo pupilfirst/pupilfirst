@@ -236,6 +236,37 @@ line from being converted to a list.
 
 ---
 
+### Mathematical expressions
+
+You can use $\KaTeX$ to write mathematical expressions. To learn how to write
+KaTeX, please check [their official documentation](https://katex.org/docs/supported.html).
+
+---
+
+```tex
+An expression as a block:
+
+$$\begin{CD}
+   A @>a>> B \\
+@VbVV @AAcA \\
+   C @= D
+\end{CD}$$
+
+An inline expression: $c = \pm\sqrt{a^2 + b^2}$
+```
+
+An expression as a block:
+
+$$\begin{CD}
+   A @>a>> B \\
+@VbVV @AAcA \\
+   C @= D
+\end{CD}$$
+
+An inline expression: $c = \pm\sqrt{a^2 + b^2}$
+
+---
+
 ### Inline code
 
 There are a couple of ways to style _code_ with our Markdown editor. You can
@@ -378,8 +409,8 @@ language, and the third will enable both features. For example:
 
 ## Supported Languages
 
-This is the comprehensive list of languages that we support syntax highlighting
-on, within fenced code-blocks.
+This is the comprehensive list of languages and scripts that we support syntax
+highlighting on, within fenced code-blocks.
 
 - `javascript` (`js`)
 - `json` (`webmanifest`)
@@ -402,3 +433,4 @@ on, within fenced code-blocks.
 - `reason`
 - `markdown` (`md`)
 - `yaml` (`yml`)
+- `latex` (`tex`, `context`)

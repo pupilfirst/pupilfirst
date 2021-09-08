@@ -8,13 +8,13 @@ class MailLoginTokenService
   end
 
   def execute
-    # Make sure we generate a new token.
+    # Make sure we generate a new hashed login token.
     @user.regenerate_login_token
     # Update the time at which last login mail was sent.
     @user.update!(login_mail_sent_at: Time.zone.now)
-
+    login_token = @user.original_login_token
     url_options = {
-      token: @user.login_token,
+      token: login_token,
       shared_device: @shared_device
     }
     url_options[:referrer] = @referrer if @referrer.present?

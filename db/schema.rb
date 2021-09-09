@@ -285,7 +285,6 @@ ActiveRecord::Schema.define(version: 2021_09_06_183613) do
     t.bigint "course_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "enable_auto_assignment", default: false
     t.index ["course_id", "faculty_id"], name: "index_faculty_course_enrollments_on_course_id_and_faculty_id", unique: true
     t.index ["faculty_id"], name: "index_faculty_course_enrollments_on_faculty_id"
   end

@@ -449,6 +449,7 @@ en:
       change_reviewer_and_start_review: Change Reviewer and Start Review
       reviewer: Reviewer
       start_review: Start Review
+      assigned_at: Assigned %{date}
     CoursesReview__Root:
       assigned_to: Assigned To
       assigned_to_coach: "assigned to:"

@@ -809,7 +809,6 @@ en:
     concerns:
       validate_submission_gradable:
         owners_should_be_active_error: Cannot update inactive student submissions.
-        owners_should_be_present_error: null
   home:
     index:
       course_status:

@@ -1,6 +1,8 @@
 open CoursesReview__Types
 let str = React.string
 
+let t = I18n.t(~scope="components.CoursesReview__ReviewerManager")
+
 module AssignReviewerMutation = %graphql(
   `
     mutation AssignReviewerMutation($submissionId: ID!) {
@@ -80,13 +82,16 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
               />
             }
           },
-          <div className="text-sm mt-4"> {"Reviewer"->str} </div>,
+          <div className="text-sm mt-4"> {t("reviewer")->str} </div>,
           <div className="text-md font-semibold"> {Reviewer.name(reviewer)->str} </div>,
           {
             switch SubmissionDetails.reviewerAssignedAt(submissionDetails) {
             | Some(date) =>
               <p className="text-xs">
-                {str(`Assigned ${DateFns.formatDistanceToNow(date, ~addSuffix=true, ())} `)}
+                {t(
+                  ~variables=[("date", DateFns.formatDistanceToNow(date, ~addSuffix=true, ()))],
+                  "assigned_at",
+                )->str}
               </p>
             | None => React.null
             }
@@ -103,13 +108,13 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
               disabled=saving
               onClick={_ => reassignReviewer(submissionId, setSaving, updateReviewerCB)}
               className="btn btn-primary btn-large">
-              {str("Assign to me!")}
+              {str(t("change_reviewer_and_start_review"))}
             </button>
           : <button
               disabled=saving
               onClick={_ => assignReviewer(submissionId, setSaving, updateReviewerCB)}
               className="btn btn-primary btn-large">
-              {str("Start Review")}
+              {str(t("start_review"))}
             </button>}
       </div>
     </div>

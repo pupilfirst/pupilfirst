@@ -420,7 +420,7 @@ en:
           done: Done!
           done_description: There are no other similar submissions.
       grade_card: Grade Card
-      help_text: Notes can be used to keep track of a %{noteAbout}'s progress. These notes are shown only to coaches in a student's report. %{additionalHelp}
+      help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       note_help: "Would you like to write a note about this "
       note_placeholder: Did you notice something while reviewing this submission?
       review: Review
@@ -445,6 +445,10 @@ en:
       undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
       undo_grading: Undo Grading
       write_a_note: Write a Note
+    CoursesReview__ReviewerManager:
+      change_reviewer_and_start_review: Change Reviewer and Start Review
+      reviewer: Reviewer
+      start_review: Start Review
     CoursesReview__Root:
       assigned_to: Assigned To
       assigned_to_coach: "assigned to:"
@@ -875,6 +879,10 @@ en:
   mutations:
     archive_course:
       success_notification: Course archived successfully.
+    assign_reviewer:
+      submission_already_assigned: The submission has been already assigned to a coach.
+      submission_graded_error: Assignment will only work with pending submissions.
+      success_notification: The submission has been assigned to you.
     auto_verify_submission:
       success_notification: Target has been marked as complete.
     clone_course:
@@ -883,19 +891,6 @@ en:
       success_notification: Level copy requested. It will apppear in target course soon!
     create_course:
       success_notification: Course created successfully!
-    assign_reviewer:
-      success_notification: The submission has been assigned to you.
-      submission_graded_error: Assignment will only work with pending submissions.
-      submission_already_assigned: The submission has been already assigned to a coach.
-    reassign_reviewer:
-      success_notification: The submission has been assigned to you.
-      submission_graded_error: Assignment will only work with pending submissions.
-      submission_not_assigned_to_coach: The submission is already assigned to you.
-    unassign_reviewer:
-      success_notification: The submission has been unassigned.
-      submission_graded_error: Assignment will only work with pending submissions.
-      submission_not_assigned: The submission is not yet assigned!
-      submission_assigned_to_another_coach: The submission is assigned to another coach!
     create_feedback:
       success_notification:
         description: Your feedback will be e-mailed to the student.
@@ -929,10 +924,19 @@ en:
       success_notification: Certificate issued successfully!
     lock_topic:
       success_notification: This topic has been locked. No new replies will be accepted.
+    reassign_reviewer:
+      submission_graded_error: Assignment will only work with pending submissions.
+      submission_not_assigned_to_coach: The submission is already assigned to you.
+      success_notification: The submission has been assigned to you.
     revoke_issued_certificate:
       success_notification: Certificate revoked!
     unarchive_course:
       success_notification: Course unarchived successfully
+    unassign_reviewer:
+      submission_assigned_to_another_coach: The submission is assigned to another coach!
+      submission_graded_error: Assignment will only work with pending submissions.
+      submission_not_assigned: The submission is not yet assigned!
+      success_notification: The submission has been unassigned.
     undo_grading:
       must_be_graded: Could not find a graded submission with the given ID
       success_notification:

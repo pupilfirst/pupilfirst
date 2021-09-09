@@ -4,7 +4,7 @@ describe Users::AuthenticationService do
   subject { described_class.new(user.school, supplied_token) }
 
   let(:secret_token) { SecureRandom.hex }
-  let!(:user) { create :user, login_token: secret_token }
+  let!(:user) { create :user, login_token_digest: secret_token }
   let(:another_school) { create :school }
 
   describe '#authenticate' do
@@ -28,7 +28,7 @@ describe Users::AuthenticationService do
       end
 
       it 'clears user token' do
-        expect { subject.authenticate }.to(change { user.reload.login_token }.from(secret_token).to(nil))
+        expect { subject.authenticate }.to(change { user.reload.login_token_digest }.from(secret_token).to(nil))
       end
 
       context 'when a different school is supplied' do

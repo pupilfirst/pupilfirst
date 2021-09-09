@@ -3,7 +3,7 @@ module ValidateSubmissionGradable
 
   class OwnersShouldBeActive < GraphQL::Schema::Validator
     def validate(_object, _context, value)
-      submission = TimelineEvent.find(id: value[:submission_id])
+      submission = TimelineEvent.find(value[:submission_id])
 
       if submission.founders.active.empty?
         return(

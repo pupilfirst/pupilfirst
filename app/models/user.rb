@@ -88,13 +88,15 @@ class User < ApplicationRecord
   def regenerate_login_token
     @original_login_token = SecureRandom.urlsafe_base64
     update!(
-      login_token: Digest::SHA2.base64digest(@original_login_token),
+      login_token_digest: Digest::SHA2.base64digest(@original_login_token),
     )
   end
 
   def original_login_token
     @original_login_token.presence || raise('Original login token is inaccessible')
   end
+
+
 
 
 

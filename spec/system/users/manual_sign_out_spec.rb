@@ -8,7 +8,7 @@ feature 'Manual User Sign Out', js: true do
 
   scenario 'active user session is interrupted by the setting of the flag' do
     # Log in the user.
-    visit user_token_path(token: user.login_token, referrer: edit_user_path)
+    visit user_token_path(token: user.login_token_digest, referrer: edit_user_path)
 
     expect(page).to have_content('profile')
 
@@ -24,7 +24,7 @@ feature 'Manual User Sign Out', js: true do
       # Log the user in again.
       user.regenerate_login_token
 
-      visit user_token_path(token: user.login_token, referrer: edit_user_path)
+      visit user_token_path(token: user.login_token_digest, referrer: edit_user_path)
 
       expect(page).to have_content('profile')
     end
@@ -44,7 +44,7 @@ feature 'Manual User Sign Out', js: true do
     end
 
     scenario 'user signs in as usual' do
-      visit user_token_path(token: user.login_token, referrer: edit_user_path)
+      visit user_token_path(token: user.login_token_digest, referrer: edit_user_path)
 
       expect(page).to have_content('profile')
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_08_041421) do
+ActiveRecord::Schema.define(version: 2021_09_12_172832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 2021_09_08_041421) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "email_verified", default: false
+    t.string "login_token_digest"
     t.index ["course_id"], name: "index_applicants_on_course_id"
     t.index ["email", "course_id"], name: "index_applicants_on_email_and_course_id", unique: true
     t.index ["login_token"], name: "index_applicants_on_login_token", unique: true

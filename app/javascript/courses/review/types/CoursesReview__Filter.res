@@ -10,6 +10,7 @@ type t = {
   sortCriterion: sortCriterion,
   sortDirection: sortDirection,
   tab: option<selectedTab>,
+  includeInactive: bool,
 }
 
 let nameOrEmail = t => t.nameOrEmail
@@ -19,6 +20,7 @@ let targetId = t => t.targetId
 let sortCriterion = t => t.sortCriterion
 let sortDirection = t => t.sortDirection
 let tab = t => t.tab
+let includeInactive = t => t.includeInactive
 
 let makeFromQueryParams = search => {
   let params = Webapi.Url.URLSearchParams.make(search)
@@ -47,6 +49,10 @@ let makeFromQueryParams = search => {
       | Some(t) when t == "Pending" => #Ascending
       | _ => #Descending
       }
+    },
+    includeInactive: switch get("includeInactive", params) {
+    | Some(t) when t == "true" => true
+    | _ => false
     },
   }
 }
@@ -80,6 +86,8 @@ let toQueryString = filter => {
     }
   | None => ()
   }
+
+  filter.includeInactive ? Js.Dict.set(filterDict, "includeInactive", "true") : ()
 
   open Webapi.Url
   URLSearchParams.makeWithDict(filterDict)->URLSearchParams.toString

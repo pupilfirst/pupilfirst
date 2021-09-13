@@ -268,7 +268,7 @@ let controlsContainerClasses = mode =>
   | Fullscreen(_) => "border-gray-400 "
   }
 
-let controls = (value, state, send, onChange) => {
+let controls = (disabled, value, state, send, onChange) => {
   let buttonClasses = "px-2 py-1 hover:bg-gray-300 hover:text-primary-500 focus:outline-none "
   let {mode} = state
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange)
@@ -281,15 +281,17 @@ let controls = (value, state, send, onChange) => {
     | Windowed(#Editor)
     | Fullscreen(#Editor | #Split) =>
       <div className="bg-white border border-gray-400 rounded-t border-b-0">
-        <button className=buttonClasses onClick={_ => curriedModifyPhrase(Bold)}>
+        <button disabled className=buttonClasses onClick={_ => curriedModifyPhrase(Bold)}>
           <i className="fas fa-bold fa-fw" />
         </button>
         <button
+          disabled
           className={buttonClasses ++ "border-l border-gray-400"}
           onClick={_ => curriedModifyPhrase(Italic)}>
           <i className="fas fa-italic fa-fw" />
         </button>
         <button
+          disabled
           className={buttonClasses ++ "border-l border-gray-400"}
           onClick={_ => curriedModifyPhrase(Strikethrough)}>
           <i className="fas fa-strikethrough fa-fw" />
@@ -297,15 +299,18 @@ let controls = (value, state, send, onChange) => {
       </div>
     }}
     <div className="py-1">
-      <button className={"rounded " ++ buttonClasses} onClick={onClickPreview(state, send)}>
+      <button
+        disabled className={"rounded " ++ buttonClasses} onClick={onClickPreview(state, send)}>
         {modeIcon(#Preview, mode)}
       </button>
       <button
+        disabled
         className={buttonClasses ++ "rounded ml-1 hidden md:inline"}
         onClick={onClickSplit(state, send)}>
         {modeIcon(#Split, mode)}
       </button>
       <button
+        disabled
         className={buttonClasses ++ "rounded  ml-1 hidden md:inline"}
         onClick={onClickFullscreen(state, send)}>
         {modeIcon(#Fullscreen, mode)}
@@ -447,7 +452,7 @@ let footerContainerClasses = mode =>
   | Fullscreen(_) => "border-gray-400"
   }
 
-let footer = (fileUpload, oldValue, state, send, onChange) => {
+let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
   let {id} = state
   let fileFormId = id ++ "-file-form"
   let fileInputId = id ++ "-file-input"
@@ -459,7 +464,9 @@ let footer = (fileUpload, oldValue, state, send, onChange) => {
   | Fullscreen(#Editor | #Split) =>
     <div className={footerContainerClasses(state.mode)}>
       {<form
-        className="flex items-center flex-wrap flex-1 text-sm font-semibold hover:bg-gray-300 hover:text-primary-500"
+        className={`flex items-center flex-wrap flex-1 text-sm font-semibold ${disabled
+          ? ""
+          : "hover:bg-gray-300 hover:text-primary-500"}`}
         id=fileFormId>
         <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
         <input
@@ -468,11 +475,14 @@ let footer = (fileUpload, oldValue, state, send, onChange) => {
           name="markdown_attachment[file]"
           id=fileInputId
           multiple=false
+          disabled
           onChange={attachFile(fileFormId, oldValue, state, send, onChange)}
         />
         {switch state.uploadState {
         | ReadyToUpload(error) =>
-          <label className="text-xs px-3 py-2 flex-grow cursor-pointer" htmlFor=fileInputId>
+          <label
+            className={`text-xs px-3 py-2 flex-grow ${disabled ? "cursor-not-allowed" : ""}`}
+            htmlFor=fileInputId>
             {switch error {
             | Some(error) =>
               <span className="text-red-500">
@@ -585,6 +595,7 @@ let make = (
   ~placeholder=?,
   ~tabIndex=?,
   ~fileUpload=true,
+  ~disabled=false,
 ) => {
   let (state, send) = React.useReducerWithMapState(
     reducer,
@@ -668,7 +679,7 @@ let make = (
     }
   }, [state.mode])
   <div className={containerClasses(state.mode)}>
-    {controls(value, state, send, onChange)}
+    {controls(disabled, value, state, send, onChange)}
     <div className={modeClasses(state.mode)}>
       <div className={editorContainerClasses(state.mode)}>
         <DisablingCover
@@ -686,6 +697,7 @@ let make = (
             id=state.id
             value
             className={textareaClasses(state.mode)}
+            disabled
           />
         </DisablingCover>
       </div>
@@ -704,6 +716,6 @@ let make = (
         </div>
       }}
     </div>
-    {footer(fileUpload, value, state, send, onChange)}
+    {footer(disabled, fileUpload, value, state, send, onChange)}
   </div>
 }

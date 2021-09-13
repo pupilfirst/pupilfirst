@@ -718,6 +718,65 @@ feature 'Submission review overlay', js: true do
     end
   end
 
+  context 'when the course has inactive students' do
+    let(:inactive_team) do
+      create :startup, level: level, access_ends_at: 1.day.ago
+    end
+
+    let!(:pending_submission_from_inactive_team) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: inactive_team.founders,
+        target: target
+      )
+    end
+    let!(:reviewed_submission_from_inactive_team) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: inactive_team.founders,
+        target: target,
+        evaluator_id: coach.id,
+        evaluated_at: 1.day.ago,
+        passed_at: 1.day.ago
+      )
+    end
+    before do
+      create(
+        :timeline_event_grade,
+        timeline_event: reviewed_submission_from_inactive_team,
+        evaluation_criterion: evaluation_criterion_1,
+        grade: 4
+      )
+    end
+
+    scenario 'coach visits pending submission page' do
+      sign_in_user coach.user,
+                   referrer:
+                     review_timeline_event_path(
+                       pending_submission_from_inactive_team
+                     )
+
+      expect(page).to have_button('Create Review Checklist', disabled: true)
+      expect(page).to have_button('Write a Note', disabled: true)
+      expect(page).to have_button('Save grades', disabled: true)
+    end
+
+    scenario 'coach visits reviewed submission page' do
+      sign_in_user coach.user,
+                   referrer:
+                     review_timeline_event_path(
+                       reviewed_submission_from_inactive_team
+                     )
+
+      expect(page).to have_button('Undo Grading', disabled: true)
+
+      expect(page).to have_button('Add feedback', disabled: true)
+    end
+  end
   context 'with a reviewed submission' do
     let!(:submission_reviewed) do
       create(

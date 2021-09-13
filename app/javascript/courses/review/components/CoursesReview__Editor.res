@@ -500,7 +500,15 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, send) => {
   )
 }
 
-let showGradePill = (key, evaluationCriterion, gradeValue, passGrade, state, send) =>
+let showGradePill = (
+  key,
+  submissionDetails,
+  evaluationCriterion,
+  gradeValue,
+  passGrade,
+  state,
+  send,
+) =>
   <div
     ariaLabel={"evaluation-criterion-" ++ EvaluationCriterion.id(evaluationCriterion)}
     key={key->string_of_int}
@@ -522,6 +530,7 @@ let showGradePill = (key, evaluationCriterion, gradeValue, passGrade, state, sen
             state,
             send,
           )}
+          disabled={SubmissionDetails.preview(submissionDetails)}
           title={GradeLabel.label(gradeLabel)}
           className={gradePillClasses(gradeValue, gradeLabelGrade, passGrade, send)}>
           {switch send {
@@ -533,7 +542,7 @@ let showGradePill = (key, evaluationCriterion, gradeValue, passGrade, state, sen
     </div>
   </div>
 
-let showGrades = (grades, evaluationCriteria, state) =>
+let showGrades = (grades, evaluationCriteria, submissionDetails, state) =>
   <div> {Grade.sort(evaluationCriteria, grades)->Js.Array2.mapi((grade, key) => {
       let gradeEcId = Grade.evaluationCriterionId(grade)
       let ec = ArrayUtils.unsafeFind(
@@ -542,10 +551,23 @@ let showGrades = (grades, evaluationCriteria, state) =>
         evaluationCriteria,
       )
 
-      showGradePill(key, ec, Grade.value(grade), EvaluationCriterion.passGrade(ec), state, None)
+      showGradePill(
+        key,
+        submissionDetails,
+        ec,
+        Grade.value(grade),
+        EvaluationCriterion.passGrade(ec),
+        state,
+        None,
+      )
     })->React.array} </div>
-let renderGradePills = (evaluationCriteria, targetEvaluationCriteriaIds, state, send) =>
-  targetEvaluationCriteriaIds->Js.Array2.mapi((evaluationCriterionId, key) => {
+let renderGradePills = (
+  evaluationCriteria,
+  targetEvaluationCriteriaIds,
+  submissionDetails,
+  state,
+  send,
+) => targetEvaluationCriteriaIds->Js.Array2.mapi((evaluationCriterionId, key) => {
     let ec = ArrayUtils.unsafeFind(
       e => EvaluationCriterion.id(e) == evaluationCriterionId,
       "CoursesRevew__Editor: Unable to find evaluation criterion with id - " ++
@@ -563,7 +585,7 @@ let renderGradePills = (evaluationCriteria, targetEvaluationCriteriaIds, state, 
 
     let passGrade = EvaluationCriterion.passGrade(ec)
 
-    showGradePill(key, ec, gradeValue, passGrade, state, Some(send))
+    showGradePill(key, submissionDetails, ec, gradeValue, passGrade, state, Some(send))
   })->React.array
 
 let badgeColorClasses = statusColor => {
@@ -770,7 +792,7 @@ let submitButtonText = (feedback, grades) =>
     t("save_grades_and_send_feedback")
   }
 
-let noteForm = (overlaySubmission, teamSubmission, note, send) =>
+let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send) =>
   switch OverlaySubmission.grades(overlaySubmission) {
   | [] =>
     let (noteAbout, additionalHelp) = teamSubmission
@@ -798,7 +820,10 @@ let noteForm = (overlaySubmission, teamSubmission, note, send) =>
         | None =>
           <div className="ml-2 md:ml-4 tracking-wide w-full">
             <div> <span> {(t("note_help") ++ (noteAbout ++ "?"))->str} </span> help </div>
-            <button className="btn btn-default mt-2" onClick={_ => send(UpdateNote(""))}>
+            <button
+              className="btn btn-default mt-2"
+              disabled={SubmissionDetails.preview(submissionDetails)}
+              onClick={_ => send(UpdateNote(""))}>
               <i className="far fa-edit" /> <span className="pl-2"> {t("write_a_note")->str} </span>
             </button>
           </div>
@@ -822,7 +847,7 @@ let noteForm = (overlaySubmission, teamSubmission, note, send) =>
   | _someGrades => React.null
   }
 
-let feedbackGenerator = (reviewChecklist, state, send) => {
+let feedbackGenerator = (submissionDetails, reviewChecklist, state, send) => {
   <div className="px-4 md:px-6 pt-4 space-y-8">
     <div>
       <div className="flex h-7 items-end">
@@ -835,6 +860,7 @@ let feedbackGenerator = (reviewChecklist, state, send) => {
       </div>
       <div className="mt-2 md:ml-8">
         <button
+          disabled={SubmissionDetails.preview(submissionDetails)}
           className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
           onClick={_ => send(ShowChecklistEditor)}>
           <span>
@@ -869,6 +895,7 @@ let feedbackGenerator = (reviewChecklist, state, send) => {
           value=state.newFeedback
           profile=Markdown.Permissive
           maxLength=10000
+          disabled={SubmissionDetails.preview(submissionDetails)}
           placeholder={t("feedback_placeholder")}
         />
       </div>
@@ -1045,9 +1072,9 @@ let make = (
               className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
               <p className="font-semibold"> {str("Review")} </p>
             </div>
-            {feedbackGenerator(reviewChecklist, state, send)}
+            {feedbackGenerator(submissionDetails, reviewChecklist, state, send)}
             <div className="w-full px-4 md:px-6 pt-8 space-y-8">
-              {noteForm(overlaySubmission, teamSubmission, state.note, send)}
+              {noteForm(submissionDetails, overlaySubmission, teamSubmission, state.note, send)}
               <div>
                 <h5 className="font-semibold text-sm flex items-center">
                   <Icon className="if i-tachometer-light text-gray-800 text-base" />
@@ -1059,6 +1086,7 @@ let make = (
                       {renderGradePills(
                         evaluationCriteria,
                         targetEvaluationCriteriaIds,
+                        submissionDetails,
                         state,
                         send,
                       )}
@@ -1133,6 +1161,7 @@ let make = (
                           WindowUtils.confirm(t("undo_grade_warning"), () =>
                             OverlaySubmission.id(overlaySubmission)->undoGrading(send)
                           )}
+                        disabled={SubmissionDetails.preview(submissionDetails)}
                         className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <i className="fas fa-undo" />
                         <span className="ml-2"> {t("undo_grading")->str} </span>
@@ -1145,7 +1174,9 @@ let make = (
                 </div>
               </div>
               <div className="flex md:flex-row flex-col md:ml-8 bg-gray-100 mt-2">
-                <div className="w-full"> {showGrades(grades, evaluationCriteria, state)} </div>
+                <div className="w-full">
+                  {showGrades(grades, evaluationCriteria, submissionDetails, state)}
+                </div>
                 <div className="block md:hidden">
                   {submissionStatusIcon(status, overlaySubmission)}
                 </div>
@@ -1153,7 +1184,7 @@ let make = (
             </div>
             {ReactUtils.nullUnless(
               <div>
-                {feedbackGenerator(reviewChecklist, state, send)}
+                {feedbackGenerator(submissionDetails, reviewChecklist, state, send)}
                 <div className="flex justify-end px-4 md:px-6 py-4">
                   <button
                     disabled={state.newFeedback == "" || state.saving}
@@ -1184,6 +1215,7 @@ let make = (
                 <div className="py-4 md:ml-8 text-center">
                   <button
                     onClick={_ => send(ShowAdditionalFeedbackEditor)}
+                    disabled={SubmissionDetails.preview(submissionDetails)}
                     className="bg-primary-100 flex items-center justify-center px-4 py-3 border border-dashed border-primary-500 rounded-md w-full font-semibold text-sm text-primary-600 hover:bg-white hover:text-primary-500 hover:shadow-lg hover:border-primary-300 focus:outline-none transition cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     <Icon className="if i-plus-regular" />
                     <p className="pl-2">

@@ -458,6 +458,8 @@ en:
       filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
       filter_by_target: Filter by target
       filter_hint: ...or start typing to filter by student using their name or email address
+      inactive_students: Inactive Students
+      include: Include
       level: Level
       me: Me
       name_or_email: Name or Email
@@ -803,6 +805,10 @@ en:
     messages:
       content_type_invalid: has an invalid content type
       limit_out_of_range: total number is out of range
+  graphql:
+    concerns:
+      validate_submission_gradable:
+        owners_should_be_active_error: Cannot update inactive student submissions.
   home:
     index:
       course_status:
@@ -876,6 +882,10 @@ en:
       success_notification: Level copy requested. It will apppear in target course soon!
     create_course:
       success_notification: Course created successfully!
+    create_feedback:
+      success_notification:
+        description: Your feedback will be e-mailed to the student.
+        title: Feedback Sent
     create_grading:
       evaluation_criteria_error: Cannot grade Submission %{submission_id} without evaluation criteria
       grade_recorded: Grades Recorded
@@ -909,6 +919,11 @@ en:
       success_notification: Certificate revoked!
     unarchive_course:
       success_notification: Course unarchived successfully
+    undo_grading:
+      must_be_graded: Could not find a graded submission with the given ID
+      success_notification:
+        description: The submission is now pending review.
+        title: Grades Removed
     unlock_topic:
       success_notification: This topic has been unlocked. Community members can now post replies again.
     update_certificate:
@@ -979,6 +994,7 @@ en:
     done_exclamation: Done!
     file_invalid: Please select a file with a size less than 5 MB.
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
+    invalid_authenticity_token_error: Invalid or missing CSRF token. Please refresh this page before trying to perform that action.
     level: Level
     level_label:
       long_with_name: "Level %{number}: %{name}"
@@ -991,4 +1007,3 @@ en:
     saving: Saving...
     target: Target
     terms_and_conditions: Terms & Conditions
-    invalid_authenticity_token_error: Invalid or missing CSRF token. Please refresh this page before trying to perform that action.

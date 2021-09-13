@@ -21,6 +21,7 @@ type t = {
   coaches: array<Coach.t>,
   teamName: option<string>,
   courseId: string,
+  preview: bool,
 }
 let submission = t => t.submission
 let allSubmissions = t => t.allSubmissions
@@ -36,6 +37,7 @@ let coaches = t => t.coaches
 let teamName = t => t.teamName
 let courseId = t => t.courseId
 let createdAt = t => t.createdAt
+let preview = t => t.preview
 
 let make = (
   ~submission,
@@ -53,6 +55,7 @@ let make = (
   ~teamName,
   ~courseId,
   ~createdAt,
+  ~preview,
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
@@ -69,6 +72,7 @@ let make = (
   teamName: teamName,
   courseId: courseId,
   createdAt: createdAt,
+  preview: preview,
 }
 
 let decodeJs = details =>
@@ -102,6 +106,7 @@ let decodeJs = details =>
     ~coaches=Js.Array.map(Coach.makeFromJs, details["coaches"]),
     ~teamName=details["teamName"],
     ~courseId=details["courseId"],
+    ~preview=details["preview"],
   )
 
 let updateMetaSubmission = submission => {

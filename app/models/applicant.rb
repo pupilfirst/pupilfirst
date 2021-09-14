@@ -15,7 +15,6 @@ class Applicant < ApplicationRecord
   scope :verified, -> { where(email_verified: true) }
   scope :with_email, ->(email) { where('lower(email) = ?', email.downcase) }
 
-
   def regenerate_login_token
     @original_login_token = SecureRandom.urlsafe_base64
     update!(

@@ -45,7 +45,6 @@ class User < ApplicationRecord
            inverse_of: :recipient,
            dependent: :destroy
 
-  has_secure_token :login_token
   has_secure_token :reset_password_token
   has_secure_token :delete_account_token
 
@@ -95,10 +94,6 @@ class User < ApplicationRecord
   def original_login_token
     @original_login_token.presence || raise('Original login token is inaccessible')
   end
-
-
-
-
 
   def regenerate_delete_account_token
     @delete_account_token_original = SecureRandom.urlsafe_base64

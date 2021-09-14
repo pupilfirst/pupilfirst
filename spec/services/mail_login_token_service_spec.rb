@@ -14,9 +14,10 @@ describe MailLoginTokenService do
 
     describe '#execute' do
       it 'generates new login token for user' do
+        user.regenerate_login_token
         expect do
           subject.execute
-        end.to(change { user.reload.login_token })
+        end.to(change { user.original_login_token })
       end
 
       it 'emails login link to user' do

@@ -53,6 +53,7 @@ feature 'Apply for public courses', js: true do
     open_email(email)
     expect(current_email.body).to include(public_course.name)
     expect(current_email.body).to match(/[a-zA-Z0-9\-_]{22}/)
+
     applicant.regenerate_login_token
     visit enroll_applicants_path(applicant.original_login_token)
 
@@ -77,6 +78,7 @@ feature 'Apply for public courses', js: true do
     scenario 'applicant tries to sign up multiple times in quick succession' do
       expected_url =
         "https://www.example.com/q?course_id=#{public_course.id}&applicant_id=#{applicant.id}&name=#{applicant.name}&email=#{applicant.email}"
+
       applicant.regenerate_login_token
       visit enroll_applicants_path(applicant.original_login_token)
 
@@ -114,6 +116,8 @@ feature 'Apply for public courses', js: true do
     click_button 'Apply'
 
     expect(page).to have_content("We've sent you a verification mail")
+
+    applicant = Applicant.last
     applicant.regenerate_login_token
     visit enroll_applicants_path(applicant.original_login_token)
 
@@ -131,6 +135,8 @@ feature 'Apply for public courses', js: true do
     click_button 'Apply'
 
     expect(page).to have_content("We've sent you a verification mail")
+
+    applicant = Applicant.last
     applicant.regenerate_login_token
     visit enroll_applicants_path(applicant.original_login_token)
 
@@ -155,6 +161,8 @@ feature 'Apply for public courses', js: true do
     click_button 'Apply'
 
     expect(page).to have_content("We've sent you a verification mail")
+
+    applicant = Applicant.last
     applicant.regenerate_login_token
     visit enroll_applicants_path(applicant.original_login_token)
 

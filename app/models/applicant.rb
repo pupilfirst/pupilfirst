@@ -1,7 +1,6 @@
 class Applicant < ApplicationRecord
   belongs_to :course
 
-  has_secure_token :login_token
 
   acts_as_taggable
 

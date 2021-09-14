@@ -446,8 +446,9 @@ en:
       undo_grading: Undo Grading
       write_a_note: Write a Note
     CoursesReview__ReviewerManager:
-      change_reviewer_and_start_review: Change Reviewer and Start Review
+      change_reviewer_and_start_review: Yes, Assign Me
       reviewer: Reviewer
+      remove_reviewer_assign_to_me: Do you want to remove Iva Patrick & assign yourself to review?
       start_review: Start Review
       assigned_at: Assigned %{date}
     CoursesReview__Root:

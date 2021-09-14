@@ -1120,26 +1120,26 @@ let make = (
             <div
               className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
               <p className="font-semibold"> {str("Review")} </p>
-              <div ariaLabel="reviewer">
-                <div className="flex items-center">
-                  {switch SubmissionDetails.reviewer(submissionDetails) {
-                  | Some(reviewer) =>
+            </div>
+            <div className="px-4 md:px-6 py-4 border-b border-gray-300" ariaLabel="reviewer">
+              <div className="flex items-center justify-between px-3 py-2 rounded-md bg-gray-200">
+                {switch SubmissionDetails.reviewer(submissionDetails) {
+                | Some(reviewer) =>
+                  <div>
                     <div>
-                      <div>
-                        <p className="text-xs text-gray-800"> {"Reviewer"->str} </p>
-                        <p className="text-xs font-semibold"> {Reviewer.name(reviewer)->str} </p>
-                      </div>
+                      <p className="text-xs text-gray-800"> {"Reviewer"->str} </p>
+                      <p className="text-xs font-semibold"> {Reviewer.name(reviewer)->str} </p>
                     </div>
-                  | None => React.null
-                  }}
-                  <div className="flex justify-center ml-2 md:ml-4">
-                    <button
-                      onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
-                      className="px-2 py-2 space-x-2 flex justify-center border rounded items-center">
-                      <FaIcon classes="fas fa-times text-xl text-red-500" />
-                      <p className={"text-xs font-semibold text-red-500"}> {"Clear"->str} </p>
-                    </button>
                   </div>
+                | None => React.null
+                }}
+                <div className="flex justify-center ml-2 md:ml-4">
+                  <button
+                    onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
+                    className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <i className="fas fa-user-minus" />
+                    <span className="ml-2"> {"Remove"->str} </span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -1168,10 +1168,10 @@ let make = (
               </div>
             </div>
             <div
-              className="flex justify-end bg-white md:bg-gray-100 border-t px-4 py-2 md:py-4 mt-4">
+              className="flex justify-end bg-white md:bg-gray-100 border-t px-4 md:px-6 py-2 md:py-4 mt-4 md:ml-8">
               <button
                 disabled={reviewButtonDisabled(status)}
-                className="btn btn-success btn-large w-full md:w-auto border border-green-600"
+                className="btn btn-success btn-large w-full border border-green-600"
                 onClick={gradeSubmission(
                   OverlaySubmission.id(overlaySubmission),
                   state,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_12_172832) do
+ActiveRecord::Schema.define(version: 2021_09_14_182659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -334,7 +334,6 @@ ActiveRecord::Schema.define(version: 2021_09_12_172832) do
     t.integer "user_id"
     t.boolean "dashboard_toured"
     t.integer "resume_file_id"
-    t.string "slack_access_token"
     t.boolean "excluded_from_leaderboard", default: false
     t.index ["user_id"], name: "index_founders_on_user_id"
   end

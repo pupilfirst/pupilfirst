@@ -11,7 +11,7 @@ module Item = {
 
 module PagedSubmission = Pagination.Make(Item)
 
-type filterLoader = ShowLevels | ShowCoaches | ShowTargets
+type filterLoader = ShowLevels | ShowAssignedCoaches | ShowReviewingCoaches | ShowTargets
 
 type loading = Unloaded | Loading | Loaded
 
@@ -19,7 +19,8 @@ type state = {
   loading: LoadingV2.t,
   submissions: PagedSubmission.t,
   levels: array<Level.t>,
-  coaches: array<Coach.t>,
+  assignedCoaches: array<Coach.t>,
+  reviewingCoaches: array<Coach.t>,
   targets: array<TargetInfo.t>,
   filterInput: string,
   totalEntriesCount: int,
@@ -27,7 +28,8 @@ type state = {
   filterLoader: option<filterLoader>,
   targetsLoaded: loading,
   levelsLoaded: loading,
-  coachesLoaded: loading,
+  assignedCoachesLoaded: loading,
+    reviewingCoachesLoaded: loading
 }
 
 type action =
@@ -41,15 +43,18 @@ type action =
       option<TargetInfo.t>,
       option<Level.t>,
       option<Coach.t>,
+      option<Coach.t>,
     )
   | LoadLevels(array<Level.t>)
-  | LoadCoaches(array<Coach.t>)
+  | LoadAssignedCoaches(array<Coach.t>)
+  | LoadReviewingCoaches(array<Coach.t>)
   | LoadTargets(array<TargetInfo.t>)
   | BeginLoadingMore
   | BeginReloading
   | SetLevelLoading
   | SetTargetLoading
-  | SetCoachLoading
+  | SetAssignedCoachLoading
+  | SetReviewingCoachesLoading
   | SetLoader(filterLoader)
   | ClearLoader
 
@@ -60,7 +65,7 @@ let reducer = (state, action) =>
       filterInput: "",
     }
   | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
-  | LoadSubmissions(endCursor, hasNextPage, newTopics, totalEntriesCount, target, level, coach) =>
+  | LoadSubmissions(endCursor, hasNextPage, newTopics, totalEntriesCount, target, level, assignedCoach, reviewingCoach) =>
     let updatedTopics = switch state.loading {
     | LoadingMore => Js.Array.concat(PagedSubmission.toArray(state.submissions), newTopics)
     | Reloading(_) => newTopics
@@ -77,9 +82,12 @@ let reducer = (state, action) =>
       levels: ArrayUtils.isEmpty(state.levels)
         ? Belt.Option.mapWithDefault(level, [], t => [t])
         : state.levels,
-      coaches: ArrayUtils.isEmpty(state.coaches)
-        ? Belt.Option.mapWithDefault(coach, [], t => [t])
-        : state.coaches,
+      assignedCoaches: ArrayUtils.isEmpty(state.assignedCoaches)
+        ? Belt.Option.mapWithDefault(assignedCoach, [], t => [t])
+        : state.assignedCoaches,
+        reviewingCoaches: ArrayUtils.isEmpty(state.reviewingCoaches)
+        ? Belt.Option.mapWithDefault(reviewingCoach, [], t => [t])
+        : state.reviewingCoaches,
     }
   | LoadLevels(levels) => {
       ...state,
@@ -87,11 +95,17 @@ let reducer = (state, action) =>
       filterLoading: false,
       levelsLoaded: Loaded,
     }
-  | LoadCoaches(coaches) => {
+  | LoadAssignedCoaches(coaches) => {
       ...state,
-      coaches: coaches,
+      assignedCoaches: coaches,
       filterLoading: false,
-      coachesLoaded: Loaded,
+      assignedCoachesLoaded: Loaded,
+    }
+    | LoadReviewingCoaches(coaches) => {
+      ...state,
+      reviewingCoaches: coaches,
+      filterLoading: false,
+      reviewingCoachesLoaded: Loaded,
     }
   | LoadTargets(targets) => {
       ...state,
@@ -103,14 +117,16 @@ let reducer = (state, action) =>
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
   | SetLevelLoading => {...state, filterLoading: true, levelsLoaded: Loading}
   | SetTargetLoading => {...state, filterLoading: true, targetsLoaded: Loading}
-  | SetCoachLoading => {...state, filterLoading: true, coachesLoaded: Loading}
+  | SetAssignedCoachLoading => {...state, filterLoading: true, assignedCoachesLoaded: Loading}
+  | SetReviewingCoachesLoading => {...state, filterLoading: true, reviewingCoachesLoaded: Loading}
   | SetLoader(loader) => {
       ...state,
       filterInput: switch loader {
-      | ShowLevels => "Level: "
-      | ShowCoaches => "Assigned to: "
-      | ShowTargets => "Target: "
-      },
+      | ShowLevels => tc("level")
+      | ShowAssignedCoaches => tc("assigned_to")
+      | ShowReviewingCoaches => tc("reviewed_by")
+      | ShowTargets => tc("target")
+      } ++ ": ",
     }
   | ClearLoader => {...state, filterLoader: None}
   }
@@ -119,8 +135,8 @@ let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryStrin
 
 module SubmissionsQuery = %graphql(
   `
-    query SubmissionsQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $includeInactive: Boolean, $after: String) {
-      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, levelId: $levelId, coachId: $coachId, includeInactive: $includeInactive, first: 20, after: $after) {
+    query SubmissionsQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $assignedCoachId: ID, $reviewingCoachId: ID, $includeInactive: Boolean, $after: String) {
+      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, levelId: $levelId, assignedCoachId: $assignedCoachId, reviewingCoachId: $reviewingCoachId, includeInactive: $includeInactive, first: 20, after: $after) {
         nodes {
           id,
           title,
@@ -143,7 +159,10 @@ module SubmissionsQuery = %graphql(
         name
         number
       }
-      coach(coachId: $coachId, courseId: $courseId) {
+      assignedCoach: coach(coachId: $assignedCoachId, courseId: $courseId) {
+        ...UserProxy.Fragments.AllFields
+      }
+      reviewingCoach: coach(coachId: $reviewingCoachId, courseId: $courseId) {
         ...UserProxy.Fragments.AllFields
       }
       targetInfo(targetId: $targetId, courseId: $courseId) {
@@ -176,6 +195,16 @@ module TeamCoachesQuery = %graphql(
   `
 )
 
+module CourseCoachesQuery = %graphql(
+  `
+    query CourseCoachesQuery($courseId: ID!) {
+      courseCoaches(courseId: $courseId) {
+        ...UserProxy.Fragments.AllFields
+      }
+    }
+  `
+)
+
 module ReviewedTargetsInfoQuery = %graphql(
   `
     query ReviewedTargetsInfoQuery($courseId: ID!) {
@@ -194,7 +223,8 @@ let getSubmissions = (send, courseId, cursor, filter) => {
     ~sortDirection=Filter.sortDirection(filter),
     ~sortCriterion=Filter.sortCriterion(filter),
     ~levelId=?Filter.levelId(filter),
-    ~coachId=?Filter.coachId(filter),
+    ~assignedCoachId=?Filter.assignedCoachId(filter),
+    ~reviewingCoachId=?Filter.reviewingCoachId(filter),
     ~targetId=?Filter.targetId(filter),
     ~search=?Filter.nameOrEmail(filter),
     ~includeInactive=Filter.includeInactive(filter),
@@ -204,7 +234,8 @@ let getSubmissions = (send, courseId, cursor, filter) => {
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     let target = OptionUtils.map(TargetInfo.makeFromJs, response["targetInfo"])
-    let coach = OptionUtils.map(Coach.makeFromJs, response["coach"])
+    let assignedCoach = OptionUtils.map(Coach.makeFromJs, response["assignedCoach"])
+    let reviewingCoach = OptionUtils.map(Coach.makeFromJs, response["reviewingCoach"])
     let level = OptionUtils.map(Level.makeFromJs, response["level"])
     send(
       LoadSubmissions(
@@ -214,7 +245,8 @@ let getSubmissions = (send, courseId, cursor, filter) => {
         response["submissions"]["totalCount"],
         target,
         level,
-        coach,
+        assignedCoach,
+        reviewingCoach
       ),
     )
     Js.Promise.resolve()
@@ -233,12 +265,23 @@ let getLevels = (send, courseId, state) => {
   }
 }
 
-let getCoaches = (send, courseId, state) => {
-  if state.coachesLoaded == Unloaded {
-    send(SetCoachLoading)
+let getAssignedCoaches = (send, courseId, state) => {
+  if state.assignedCoachesLoaded == Unloaded {
+    send(SetAssignedCoachLoading)
 
     TeamCoachesQuery.make(~courseId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
-      send(LoadCoaches(Js.Array.map(Coach.makeFromJs, response["teamCoaches"])))
+      send(LoadAssignedCoaches(Js.Array.map(Coach.makeFromJs, response["teamCoaches"])))
+      Js.Promise.resolve()
+    }) |> ignore
+  }
+}
+
+let getReviewingCoaches = (send, courseId, state) => {
+  if state.reviewingCoachesLoaded == Unloaded {
+    send(SetReviewingCoachesLoading)
+
+    CourseCoachesQuery.make(~courseId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
+      send(LoadReviewingCoaches(Js.Array.map(Coach.makeFromJs, response["courseCoaches"])))
       Js.Promise.resolve()
     }) |> ignore
   }
@@ -299,6 +342,7 @@ module Selectable = {
   type t =
     | Level(Level.t)
     | AssignedToCoach(Coach.t, string)
+    | ReviewedByCoach(Coach.t, string)
     | Loader(filterLoader)
     | Target(TargetInfo.t)
     | Status(Filter.selectedTab)
@@ -309,11 +353,13 @@ module Selectable = {
     switch t {
     | Level(_) => Some(tc("level"))
     | AssignedToCoach(_) => Some(tc("assigned_to"))
+    | ReviewedByCoach(_) => Some(tc("reviewed_by"))
     | Target(_) => Some(tc("target"))
     | Loader(l) =>
       switch l {
       | ShowLevels => Some(tc("level"))
-      | ShowCoaches => Some(tc("assigned_to"))
+      | ShowAssignedCoaches => Some(tc("assigned_to"))
+      | ShowReviewingCoaches => Some(tc("reviewed_by"))
       | ShowTargets => Some(tc("target"))
       }
     | Status(_) => Some(tc("status"))
@@ -326,11 +372,14 @@ module Selectable = {
     | Level(level) => string_of_int(Level.number(level)) ++ ", " ++ Level.name(level)
     | AssignedToCoach(coach, currentCoachId) =>
       Coach.id(coach) == currentCoachId ? tc("me") : Coach.name(coach)
+    | ReviewedByCoach(coach, currentCoachId) =>
+      Coach.id(coach) == currentCoachId ? tc("me") : Coach.name(coach)
     | Target(t) => TargetInfo.title(t)
     | Loader(l) =>
       switch l {
       | ShowLevels => tc("filter_by_level")
-      | ShowCoaches => tc("filter_by_assigned_to")
+      | ShowAssignedCoaches => tc("filter_by_assigned_to")
+      | ShowReviewingCoaches => tc("filter_by_reviewed_by")
       | ShowTargets => tc("filter_by_target")
       }
     | Status(t) =>
@@ -349,11 +398,14 @@ module Selectable = {
     | AssignedToCoach(coach, currentCoachId) =>
       tc("search.assigned_to") ++
       " " ++ (Coach.id(coach) == currentCoachId ? tc("me") : Coach.name(coach))
+      | ReviewedByCoach(coach, currentCoachId) => tc("search.reviewed_by") ++
+      " " ++ (Coach.id(coach) == currentCoachId ? tc("me") : Coach.name(coach))
     | Target(t) => tc("search.target") ++ " " ++ TargetInfo.title(t)
     | Loader(l) =>
       switch l {
       | ShowLevels => tc("search.level")
-      | ShowCoaches => tc("search.assigned_to")
+      | ShowAssignedCoaches => tc("search.assigned_to")
+      | ShowReviewingCoaches => tc("search.reviewed_by")
       | ShowTargets => tc("search.target")
       }
     | Status(t) =>
@@ -370,11 +422,13 @@ module Selectable = {
     switch t {
     | Level(_) => "blue"
     | AssignedToCoach(_) => "purple"
+    | ReviewedByCoach(_) => "purple"
     | Target(_) => "red"
     | Loader(l) =>
       switch l {
       | ShowLevels => "blue"
-      | ShowCoaches => "purple"
+      | ShowAssignedCoaches => "purple"
+      | ShowReviewingCoaches => "purple"
       | ShowTargets => "red"
       }
     | Status(t) =>
@@ -387,6 +441,7 @@ module Selectable = {
     }
   let level = level => Level(level)
   let assignedToCoach = (coach, currentCoachId) => AssignedToCoach(coach, currentCoachId)
+  let reviewedByCoach = (coach, currentCoachId) => ReviewedByCoach(coach, currentCoachId)
   let makeLoader = l => Loader(l)
   let target = target => Target(target)
   let status = status => Status(status)
@@ -413,7 +468,8 @@ let nameOrEmailFilter = state => {
   input == "" ||
   firstWord == tc("search.level") ||
   firstWord == tc("search.target") ||
-  firstWord == tc("search.assigned_to")
+  firstWord == tc("search.assigned_to") ||
+  firstWord == tc("search.reviewed_by")
     ? []
     : [Selectable.nameOrEmail(input)]
 }
@@ -441,13 +497,24 @@ let unselected = (state, currentCoachId, filter) => {
     )
     ->Js.Array2.map(Selectable.target)
 
-  let unselectedCoaches =
-    state.coaches
+  let unselectedAssignedCoaches =
+    state.assignedCoaches
     ->Js.Array2.filter(coach =>
       OptionUtils.mapWithDefault(
         selectedCoach => Coach.id(coach) != selectedCoach,
         true,
-        filter.coachId,
+        filter.assignedCoachId,
+      )
+    )
+    ->Js.Array2.map(coach => Selectable.assignedToCoach(coach, currentCoachId))
+
+      let unselectedReviewingCoaches =
+    state.reviewingCoaches
+    ->Js.Array2.filter(coach =>
+      OptionUtils.mapWithDefault(
+        selectedCoach => Coach.id(coach) != selectedCoach,
+        true,
+        filter.reviewingCoachId,
       )
     )
     ->Js.Array2.map(coach => Selectable.assignedToCoach(coach, currentCoachId))
@@ -455,10 +522,11 @@ let unselected = (state, currentCoachId, filter) => {
   ArrayUtils.flattenV2([
     unSelectedStatus(filter),
     unselectedLevels,
-    unselectedCoaches,
+    unselectedAssignedCoaches,
+    unselectedReviewingCoaches,
     unselectedTargets,
     state.levelsLoaded == Loaded ? [] : [Selectable.makeLoader(ShowLevels)],
-    state.coachesLoaded == Loaded ? [] : [Selectable.makeLoader(ShowCoaches)],
+    state.assignedCoachesLoaded == Loaded ? [] : [Selectable.makeLoader(ShowAssignedCoaches)],
     state.targetsLoaded == Loaded ? [] : [Selectable.makeLoader(ShowTargets)],
     nameOrEmailFilter(state),
     Filter.includeInactive(filter) ? [] : [Selectable.includeInactive()],
@@ -479,9 +547,16 @@ let selected = (state, filter, currentCoachId) => {
       t => [Selectable.target(t)],
     )
   )
-  let selectedCoach = Belt.Option.mapWithDefault(filter.coachId, [], coachId =>
-    Belt.Option.mapWithDefault(Js.Array.find(c => Coach.id(c) == coachId, state.coaches), [], c => [
+
+  let selectedAssignedCoach = Belt.Option.mapWithDefault(filter.assignedCoachId, [], coachId =>
+    Belt.Option.mapWithDefault(Js.Array.find(c => Coach.id(c) == coachId, state.assignedCoaches), [], c => [
       Selectable.assignedToCoach(c, currentCoachId),
+    ])
+  )
+
+  let selectedReviewingCoach = Belt.Option.mapWithDefault(filter.reviewingCoachId, [], coachId =>
+    Belt.Option.mapWithDefault(Js.Array.find(c => Coach.id(c) == coachId, state.reviewingCoaches), [], c => [
+      Selectable.reviewedByCoach(c, currentCoachId),
     ])
   )
 
@@ -496,7 +571,8 @@ let selected = (state, filter, currentCoachId) => {
   ArrayUtils.flattenV2([
     selectedStatus,
     selectedLevel,
-    selectedCoach,
+    selectedAssignedCoach,
+    selectedReviewingCoach,
     selectedTarget,
     selectedSearchString,
     Filter.includeInactive(filter) ? [Selectable.includeInactive()] : [],
@@ -510,13 +586,15 @@ let onSelectFilter = (send, courseId, state, filter, selectable) => {
   }
   switch selectable {
   | Selectable.AssignedToCoach(coach, _currentCoachId) =>
-    updateParams({...filter, coachId: Some(Coach.id(coach))})
+    updateParams({...filter, assignedCoachId: Some(Coach.id(coach))})
+    | ReviewedByCoach(coach, _currentCoachId) => updateParams({...filter, reviewingCoachId: Some(Coach.id(coach))})
   | Level(level) => updateParams({...filter, levelId: Some(Level.id(level))})
   | Loader(l) => {
       send(SetLoader(l))
       switch l {
       | ShowLevels => getLevels(send, courseId, state)
-      | ShowCoaches => getCoaches(send, courseId, state)
+      | ShowAssignedCoaches => getAssignedCoaches(send, courseId, state)
+      | ShowReviewingCoaches => getReviewingCoaches(send, courseId, state)
       | ShowTargets => getTargets(send, courseId, state)
       }
     }
@@ -533,7 +611,8 @@ let onSelectFilter = (send, courseId, state, filter, selectable) => {
 
 let onDeselectFilter = (send, filter, selectable) =>
   switch selectable {
-  | Selectable.AssignedToCoach(_) => updateParams({...filter, coachId: None})
+  | Selectable.AssignedToCoach(_) => updateParams({...filter, assignedCoachId: None})
+  | ReviewedByCoach(_) => updateParams({...filter, reviewingCoachId: None})
   | Level(_) => updateParams({...filter, levelId: None})
   | Loader(_) => send(ClearLoader)
   | Target(_) => updateParams({...filter, targetId: None})
@@ -547,7 +626,8 @@ let defaultOptions = (state, filter) => {
     nameOrEmailFilter(state),
     [
       Selectable.makeLoader(ShowLevels),
-      Selectable.makeLoader(ShowCoaches),
+      Selectable.makeLoader(ShowAssignedCoaches),
+      Selectable.makeLoader(ShowReviewingCoaches),
       Selectable.makeLoader(ShowTargets),
       Selectable.includeInactive(),
     ],
@@ -590,7 +670,7 @@ let submissionsList = (submissions, state, filter) =>
   </div>
 
 let filterPlaceholder = filter =>
-  switch (Filter.levelId(filter), Filter.coachId(filter)) {
+  switch (Filter.levelId(filter), Filter.assignedCoachId(filter)) {
   | (None, Some(_)) => tc("filter_by_level")
   | (None, None) => tc("filter_by_level_or_submissions_assigned")
   | (Some(_), Some(_)) => tc("filter_by_another_level")
@@ -603,7 +683,10 @@ let loadFilters = (send, courseId, state) => {
       getLevels(send, courseId, state)
     }
     if StringUtils.test(tc("search.assigned_to"), String.lowercase_ascii(state.filterInput)) {
-      getCoaches(send, courseId, state)
+      getAssignedCoaches(send, courseId, state)
+    }
+    if StringUtils.test(tc("search.reviewed_by"), String.lowercase_ascii(state.filterInput)) {
+      getReviewingCoaches(send, courseId, state)
     }
     if StringUtils.test(tc("search.target"), String.lowercase_ascii(state.filterInput)) {
       getTargets(send, courseId, state)
@@ -622,14 +705,16 @@ let computeInitialState = () => {
   loading: LoadingV2.empty(),
   submissions: Unloaded,
   levels: [],
-  coaches: [],
+  assignedCoaches: [],
+  reviewingCoaches: [],
   targets: [],
   filterLoading: false,
   filterLoader: None,
   filterInput: "",
   targetsLoaded: Unloaded,
   levelsLoaded: Unloaded,
-  coachesLoaded: Unloaded,
+  assignedCoachesLoaded: Unloaded,
+  reviewingCoachesLoaded: Unloaded,
   totalEntriesCount: 0,
 }
 

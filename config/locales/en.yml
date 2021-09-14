@@ -447,15 +447,14 @@ en:
       write_a_note: Write a Note
     CoursesReview__Root:
       assigned_to: Assigned To
-      assigned_to_coach: "assigned to:"
-      assigned_to_me: " assigned to me"
       button_load_more: Load More Submissions...
       filter_by: "Filter by:"
       filter_by_another_level: Filter by another level
       filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
-      filter_by_assigned_to: Fillter by assigned to
+      filter_by_assigned_to: Filter by who's assigned to a student
       filter_by_level: Filter by level
       filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
+      filter_by_reviewed_by: Filter by who reviewed a submission
       filter_by_target: Filter by target
       filter_hint: ...or start typing to filter by student using their name or email address
       inactive_students: Inactive Students
@@ -469,9 +468,11 @@ en:
       review: Review
       reviewed: Reviewed
       reviewed_at: Reviewed At
+      reviewed_by: Reviewed By
       search:
         assigned_to: "assigned to:"
         level: "level:"
+        reviewed_by: "reviewed by:"
         status: "status: "
         target: "target:"
       sort_by: "Sort by:"

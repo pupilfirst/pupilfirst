@@ -119,8 +119,8 @@ module CreateFeedbackMutation = %graphql(
 
 module NextSubmissionQuery = %graphql(
   `
-    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $excludeSubmissionId: ID, $after: String) {
-      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, levelId: $levelId, coachId: $coachId, first: 1, after: $after) {
+    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $assignedCoachId: ID, $reviewingCoachId: ID, $excludeSubmissionId: ID, $after: String) {
+      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, levelId: $levelId, assignedCoachId: $assignedCoachId, reviewingCoachId: $reviewingCoachId, first: 1, after: $after) {
         nodes {
           id
         }
@@ -137,7 +137,8 @@ let getNextSubmission = (send, courseId, filter, submissionId) => {
     ~sortDirection=Filter.sortDirection(filter),
     ~sortCriterion=Filter.sortCriterion(filter),
     ~levelId=?Filter.levelId(filter),
-    ~coachId=?Filter.coachId(filter),
+    ~assignedCoachId=?Filter.assignedCoachId(filter),
+    ~reviewingCoachId=?Filter.reviewingCoachId(filter),
     ~targetId=?Filter.targetId(filter),
     ~search=?Filter.nameOrEmail(filter),
     ~excludeSubmissionId=?Some(submissionId),

@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 2021_09_12_172832) do
     t.index ["course_id"], name: "index_applicants_on_course_id"
     t.index ["email", "course_id"], name: "index_applicants_on_email_and_course_id", unique: true
     t.index ["login_token"], name: "index_applicants_on_login_token", unique: true
+    t.index ["login_token_digest"], name: "index_applicants_on_login_token_digest", unique: true
   end
 
   create_table "audit_records", force: :cascade do |t|
@@ -752,6 +753,7 @@ ActiveRecord::Schema.define(version: 2021_09_12_172832) do
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
     t.index ["delete_account_token"], name: "index_users_on_delete_account_token", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
+    t.index ["login_token_digest"], name: "index_users_on_login_token_digest", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"
   end

@@ -66,9 +66,7 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
   <div className="w-full p-4 md:p-6 space-y-8 mx-auto">
     <div>
       {switch SubmissionDetails.reviewer(submissionDetails) {
-      | Some(reviewer) =>
-        [
-          <div className="text-xs text-gray-800"> {t("reviewer")->str} </div>,
+      | Some(reviewer) => [
           <div className="inline-flex bg-gray-200 px-3 py-2 mt-2 rounded-md">
             {switch Reviewer.avatarUrl(reviewer) {
             | Some(avatarUrl) =>
@@ -96,35 +94,38 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
               }}
             </div>
           </div>,
-        ]->React.array
-      | None =>
-        <div className="flex items-center justify-center">
-          <div
-            className="h-24 w-24 md:h-30 md:w-30 rounded-full bg-gray-300 flex items-center justify-center">
-            <Icon className="if i-eye-solid text-gray-800 text-4xl" />
-          </div>
-        </div>
-      }}
-      <div className="mt-4">
-        {Belt.Option.isSome(SubmissionDetails.reviewer(submissionDetails))
-          ? <div className="flex flex-col md:flex-row items-center">
-              <p className="text-sm pr-4"> {t("remove_reviewer_assign_to_me")->str} </p>
-              <button
-                disabled=saving
-                onClick={_ => reassignReviewer(submissionId, setSaving, updateReviewerCB)}
-                className="btn md:btn-small btn-default w-full md:w-auto mt-2 md:mt-0">
-                {str(t("change_reviewer_and_start_review"))}
-              </button>
+          <div className="flex flex-col md:flex-row items-center mt-4">
+            <p className="text-sm pr-4">
+              {t(
+                ~variables=[("current_coach_name", Reviewer.name(reviewer))],
+                "remove_reviewer_assign_to_me",
+              )->str}
+            </p>
+            <button
+              disabled=saving
+              onClick={_ => reassignReviewer(submissionId, setSaving, updateReviewerCB)}
+              className="btn md:btn-small btn-default w-full md:w-auto mt-2 md:mt-0">
+              {str(t("change_reviewer_and_start_review"))}
+            </button>
+          </div>,
+        ]
+      | None => [
+          <div className="flex items-center justify-center">
+            <div
+              className="h-24 w-24 md:h-30 md:w-30 rounded-full bg-gray-300 flex items-center justify-center">
+              <Icon className="if i-eye-solid text-gray-800 text-4xl" />
             </div>
-          : <div className="flex items-center justify-center">
-              <button
-                disabled=saving
-                onClick={_ => assignReviewer(submissionId, setSaving, updateReviewerCB)}
-                className="btn btn-primary w-full md:w-auto">
-                {str(t("start_review"))}
-              </button>
-            </div>}
-      </div>
+          </div>,
+          <div className="flex items-center justify-center mt-4">
+            <button
+              disabled=saving
+              onClick={_ => assignReviewer(submissionId, setSaving, updateReviewerCB)}
+              className="btn btn-primary w-full md:w-auto">
+              {str(t("start_review"))}
+            </button>
+          </div>,
+        ]
+      }->React.array}
     </div>
   </div>
 }

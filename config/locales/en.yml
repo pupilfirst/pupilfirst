@@ -406,6 +406,7 @@ en:
       add_feedback: Add feedback
       add_your_feedback: Add Your Feedback
       assigned_coaches: Assigned Coaches
+      assigned_to: Assigned to
       close: close
       close_submission_warning: Are you sure you want to close the submission without saving?
       create_review_checklist: Create Review Checklist
@@ -423,6 +424,7 @@ en:
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       note_help: "Would you like to write a note about this "
       note_placeholder: Did you notice something while reviewing this submission?
+      remove: Remove
       review: Review
       review_checklist: Review Checklist
       review_next: Next
@@ -446,11 +448,10 @@ en:
       undo_grading: Undo Grading
       write_a_note: Write a Note
     CoursesReview__ReviewerManager:
-      change_reviewer_and_start_review: Yes, Assign Me
-      reviewer: Reviewer
-      remove_reviewer_assign_to_me: Do you want to remove Iva Patrick & assign yourself to review?
-      start_review: Start Review
       assigned_at: Assigned %{date}
+      change_reviewer_and_start_review: Yes, Assign Me
+      remove_reviewer_assign_to_me: Do you want to remove %{current_coach_name} & assign yourself to review?
+      start_review: Start Review
     CoursesReview__Root:
       assigned_to: Assigned To
       assigned_to_coach: "assigned to:"

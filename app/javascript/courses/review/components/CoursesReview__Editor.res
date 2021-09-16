@@ -1121,13 +1121,13 @@ let make = (
               className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
               <p className="font-semibold"> {str("Review")} </p>
             </div>
-            <div className="px-4 md:px-6 py-4 border-b border-gray-300" ariaLabel="reviewer">
+            <div className="px-4 md:px-6 py-4 border-b border-gray-300" ariaLabel="Assigned to">
               <div className="flex items-center justify-between px-3 py-2 rounded-md bg-gray-200">
                 {switch SubmissionDetails.reviewer(submissionDetails) {
                 | Some(reviewer) =>
                   <div>
                     <div>
-                      <p className="text-xs text-gray-800"> {"Reviewer"->str} </p>
+                      <p className="text-xs text-gray-800"> {t("assigned_to")->str} </p>
                       <p className="text-xs font-semibold"> {Reviewer.name(reviewer)->str} </p>
                     </div>
                   </div>
@@ -1138,7 +1138,7 @@ let make = (
                     onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
                     className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     <i className="fas fa-user-minus" />
-                    <span className="ml-2"> {"Remove"->str} </span>
+                    <span className="ml-2"> {t("remove")->str} </span>
                   </button>
                 </div>
               </div>

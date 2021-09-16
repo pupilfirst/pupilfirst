@@ -34,7 +34,7 @@ module Applicants
           .users
           .with_email(@applicant.email)
           .first_or_create!(email: @applicant.email, title: 'Student')
-      user.regenerate_login_token if user.login_token.blank?
+      user.regenerate_login_token
       user.update!(name: @applicant.name)
 
       # Create the team and tag it.

@@ -208,7 +208,6 @@ feature 'Automatic issuance of certificates', js: true do
 
         scenario 'student completed second and final milestone target' do
           complete_first_target
-
           find('.course-overlay__body-tab-item', text: 'Complete').click
           replace_markdown Faker::Lorem.sentence
           click_button 'Submit'
@@ -222,6 +221,7 @@ feature 'Automatic issuance of certificates', js: true do
 
           # Switch to the review interface and set a fail grade for it.
           visit review_timeline_event_path(target_l2_2.timeline_events.last)
+          click_button 'Start Review'
           find("button[title='Bad']").click
           click_button 'Save grades'
 
@@ -348,8 +348,8 @@ feature 'Automatic issuance of certificates', js: true do
         sign_in_user coach.user,
                      referrer: review_timeline_event_path(@resubmission)
 
+        click_button 'Start Review'
         find("button[title='Good']").click
-
         click_button 'Save grades'
 
         # It doesn't issue duplicate certificates.

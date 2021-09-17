@@ -10,6 +10,7 @@ module Types
     field :feedback_sent, Boolean, null: false
     field :team_name, String, null: true
     field :reviewer_name, String, null: true
+    field :reviewer_assigned_at, GraphQL::Types::ISO8601DateTime, null: true
 
     def title
       BatchLoader::GraphQL
@@ -98,13 +99,24 @@ module Types
         .for(object.id)
         .batch do |submission_ids, loader|
           TimelineEvent
-            .includes(reviewer: [faculty: :user])
+            .includes(reviewer: :user)
             .where(id: submission_ids)
             .each do |submission|
-              loader.call(submission.id, submission.reviewer.faculty.user.name)
+              loader.call(submission.id, submission.reviewer&.user&.name)
             end
         end
-      # object.founders.map { |founder| founder.user.name }.join(', ')
+    end
+
+    def reviewer_assigned_at
+      BatchLoader::GraphQL
+        .for(object.id)
+        .batch do |submission_ids, loader|
+          TimelineEvent
+            .where(id: submission_ids)
+            .each do |submission|
+              loader.call(submission.id, submission.reviewer_assigned_at)
+            end
+        end
     end
   end
 end

@@ -11,6 +11,8 @@ type t = {
   status: option<status>,
   teamName: option<string>,
   levelNumber: int,
+  reviewerName: option<string>,
+  reviewerAssignedAt: option<Js.Date.t>,
 }
 
 let id = t => t.id
@@ -18,6 +20,8 @@ let title = t => t.title
 let levelNumber = t => t.levelNumber
 let userNames = t => t.userNames
 let teamName = t => t.teamName
+let reviewerName = t => t.reviewerName
+let reviewerAssignedAt = t => t.reviewerAssignedAt
 
 let failed = t =>
   switch t.status {
@@ -25,7 +29,7 @@ let failed = t =>
   | Some(status) => OptionUtils.mapWithDefault(_ => false, true, status.passedAt)
   }
 
-let pendingReview = t =>   OptionUtils.mapWithDefault(_ => false, true ,t.status)
+let pendingReview = t => OptionUtils.mapWithDefault(_ => false, true, t.status)
 
 let feedbackSent = t => OptionUtils.mapWithDefault(status => status.feedbackSent, false, t.status)
 
@@ -41,6 +45,8 @@ let make = (
   ~status,
   ~teamName,
   ~levelNumber,
+  ~reviewerName,
+  ~reviewerAssignedAt,
 ) => {
   id: id,
   title: title,
@@ -49,29 +55,11 @@ let make = (
   status: status,
   teamName: teamName,
   levelNumber: levelNumber,
+  reviewerName: reviewerName,
+  reviewerAssignedAt: reviewerAssignedAt,
 }
 
 let makeStatus = (~passedAt, ~feedbackSent) => {passedAt: passedAt, feedbackSent: feedbackSent}
-
-let decodeJs = submission => {
-  let status =
-    submission["evaluatedAt"]->Belt.Option.map(_ =>
-      makeStatus(
-        ~passedAt=submission["passedAt"]->Belt.Option.map(DateFns.decodeISO),
-        ~feedbackSent=submission["feedbackSent"],
-      )
-    )
-
-  make(
-    ~id=submission["id"],
-    ~title=submission["title"],
-    ~createdAt=DateFns.decodeISO(submission["createdAt"]),
-    ~userNames=submission["userNames"],
-    ~status,
-    ~teamName=submission["teamName"],
-    ~levelNumber=submission["levelNumber"],
-  )
-}
 
 let makeFromJS = submission => {
   let status =
@@ -90,6 +78,8 @@ let makeFromJS = submission => {
     ~status,
     ~teamName=submission["teamName"],
     ~levelNumber=submission["levelNumber"],
+    ~reviewerName=submission["reviewerName"],
+    ~reviewerAssignedAt=Belt.Option.map(submission["reviewerAssignedAt"], DateFns.decodeISO),
   )
 }
 

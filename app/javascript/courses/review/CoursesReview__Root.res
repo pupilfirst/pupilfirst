@@ -131,6 +131,8 @@ module SubmissionsQuery = %graphql(
           createdAt,
           teamName,
           levelNumber
+          reviewerName,
+          reviewerAssignedAt,
         }
         pageInfo {
           endCursor,

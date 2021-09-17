@@ -5955,6 +5955,18 @@
             "deprecationReason": null
           },
           {
+            "name": "reviewerAssignedAt",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "reviewerName",
             "description": "",
             "args": [],

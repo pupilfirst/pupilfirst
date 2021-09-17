@@ -80,6 +80,21 @@ let showSubmission = (submissions, filterString) =>
                 )
               }->str}
             </span>
+            {switch IndexSubmission.reviewerName(submission) {
+            | Some(name) =>
+              <span> {str(",")} <span className="ml-1 font-semibold"> {name->str} </span> </span>
+            | None => React.null
+            }}
+            {switch IndexSubmission.reviewerAssignedAt(submission) {
+            | Some(date) =>
+              <span className="text-xs text-gray-800 ml-1">
+                {t(
+                  ~variables=[("date", DateFns.formatDistanceToNow(date, ~addSuffix=true, ()))],
+                  "assigned_at",
+                )->str}
+              </span>
+            | None => React.null
+            }}
           </div>
         </div>
         <div className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">

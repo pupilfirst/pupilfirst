@@ -498,6 +498,7 @@ en:
       rejected: Rejected
       submitted_by: "Submitted by: "
       submitted_by_team: "Submitted by team: "
+      assigned_at: Assigned %{date}
     CoursesReview__SubmissionInfoCard:
       submission_hash: "Submission #"
     CoursesStudents__StudentOverlay:

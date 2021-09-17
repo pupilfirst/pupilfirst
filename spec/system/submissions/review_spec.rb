@@ -75,7 +75,9 @@ feature 'Submission review overlay', js: true do
         :with_owners,
         owners: [student],
         latest: true,
-        target: target_2
+        target: target_2,
+        reviewer_assigned_at: 1.day.ago,
+        reviewer: team_coach
       )
     end
     let!(:submission_file_attachment) do
@@ -117,6 +119,28 @@ feature 'Submission review overlay', js: true do
       expect(page).to have_content(evaluation_criterion_1.name)
       expect(page).to have_content(evaluation_criterion_2.name)
       expect(page).to have_button('Save grades', disabled: true)
+      click_button 'Remove'
+      dismiss_notification
+      expect(page).to have_button('Start Review')
+    end
+
+    scenario 'coach visits an assigned submission' do
+      sign_in_user team_coach.user,
+                   referrer: review_timeline_event_path(submission_pending_2)
+      expect(page).to have_text(team_coach.name)
+      expect(page).not_to have_text('Start Review')
+      expect(page).to have_button('Remove')
+    end
+
+    scenario 'coach takes over an assigned submission' do
+      sign_in_user coach.user,
+                   referrer: review_timeline_event_path(submission_pending_2)
+      expect(page).to have_text(team_coach.name)
+      expect(page).not_to have_text('Start Review')
+      click_button 'Yes, Assign Me'
+      dismiss_notification
+      expect(page).to have_text(coach.name)
+      expect(page).to have_button('Remove')
     end
 
     scenario 'coach evaluates a pending submission and gives a feedback' do

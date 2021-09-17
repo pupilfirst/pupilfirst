@@ -222,6 +222,7 @@ feature 'Automatic issuance of certificates', js: true do
           # Switch to the review interface and set a fail grade for it.
           visit review_timeline_event_path(target_l2_2.timeline_events.last)
           click_button 'Start Review'
+          dismiss_notification
           find("button[title='Bad']").click
           click_button 'Save grades'
 
@@ -349,6 +350,7 @@ feature 'Automatic issuance of certificates', js: true do
                      referrer: review_timeline_event_path(@resubmission)
 
         click_button 'Start Review'
+        dismiss_notification
         find("button[title='Good']").click
         click_button 'Save grades'
 

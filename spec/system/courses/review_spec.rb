@@ -402,10 +402,11 @@ feature "Coach's review interface" do
     end
 
     context 'when the course has inactive students' do
-      let(:inactive_team) do
+      let!(:inactive_team) do
         create :startup, level: level_1, access_ends_at: 1.day.ago
       end
-      let!(:submission_from_inactive_team) do
+
+      before do
         create(
           :timeline_event,
           :with_owners,

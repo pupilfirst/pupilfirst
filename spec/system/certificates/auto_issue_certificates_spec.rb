@@ -235,6 +235,8 @@ feature 'Automatic issuance of certificates', js: true do
 
           # Undo the grading and set a pass grade.
           accept_confirm { click_button('Undo Grading') }
+          click_button 'Start Review'
+          dismiss_notification
           find("button[title='Good']").click
           click_button 'Save grades'
 

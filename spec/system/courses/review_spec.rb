@@ -125,6 +125,8 @@ feature "Coach's review interface" do
         :with_owners,
         latest: true,
         target: target_l1,
+        reviewer: course_coach,
+        reviewer_assigned_at: 1.day.ago,
         owners: [team_l1.founders.first]
       )
     end
@@ -353,7 +355,7 @@ feature "Coach's review interface" do
       click_link 'Pending'
 
       fill_in 'filter', with: 'Personal coach:'
-      click_button 'Pick Personal coach: Me'
+      click_button 'Pick Personal Coach: Me'
 
       expect(page).to have_content('1')
 
@@ -399,6 +401,39 @@ feature "Coach's review interface" do
       # The pending tab should list all pending submissions.
       expect(page).to have_text(target_l1.title)
       expect(page).to have_text(target_l2.title)
+    end
+
+    scenario 'coach uses the assigned to filter', js: true do
+      sign_in_user course_coach.user, referrer: review_course_path(course)
+
+      # Ensure coach is on the review dashboard.
+      click_link 'Pending'
+
+      fill_in 'filter', with: 'assigned to:'
+      click_button 'Pick Assigned To: Me'
+
+      expect(page).to have_content('1')
+
+      within("a[aria-label='Submission #{submission_l1_t1.id}']") do
+        expect(page).to have_text(target_l1.title)
+        expect(page).to have_text('Level 1')
+      end
+
+      # submissions from other teams should not be shown
+      expect(page).not_to have_text(target_l3.title)
+      expect(page).not_to have_text(target_l2.title)
+      expect(page).to have_content("There's only one submission")
+
+      # team coach should be able to remove the filter showing only his assigned submissions.
+      find('button[title="Remove selection: Me"]').click
+
+      # Target in L1 should now be listed twice, for the submission from a non-assigned team.
+      expect(page).to have_text(target_l1.title)
+      expect(page).to have_text(target_l2.title)
+      expect(page).to have_text(target_l3.title)
+
+      # The 'pending' count should update once we switch to the pending tab.
+      expect(page).to have_content('Showing all 3 submissions')
     end
 
     context 'when the course has inactive students' do
@@ -554,14 +589,14 @@ feature "Coach's review interface" do
 
         click_link 'Pending'
         fill_in 'filter', with: 'personal coach:'
-        click_button 'Pick Personal coach: Me'
+        click_button 'Pick Personal Coach: Me'
 
         expect(page).to have_content('1')
         expect(page).to have_text(target_l3.title)
         expect(page).not_to have_text(target_l2.title)
 
         fill_in 'filter', with: 'personal coach:'
-        click_button "Personal coach: #{team_coach_2.name}"
+        click_button "Personal Coach: #{team_coach_2.name}"
         expect(page).to have_content('1')
 
         # ...but the submission has changed.

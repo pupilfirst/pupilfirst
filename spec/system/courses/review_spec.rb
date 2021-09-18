@@ -417,6 +417,7 @@ feature "Coach's review interface" do
       within("a[aria-label='Submission #{submission_l1_t1.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text('Level 1')
+        expect(page).to have_text(course_coach.user.name)
       end
 
       # submissions from other teams should not be shown

@@ -352,8 +352,8 @@ feature "Coach's review interface" do
       # Ensure coach is on the review dashboard.
       click_link 'Pending'
 
-      fill_in 'filter', with: 'Assigned to:'
-      click_button 'Pick Assigned To: Me'
+      fill_in 'filter', with: 'Personal coach:'
+      click_button 'Pick Personal coach: Me'
 
       expect(page).to have_content('1')
 
@@ -548,27 +548,27 @@ feature "Coach's review interface" do
                startup: team_l2
       end
 
-      scenario 'one team coach uses filter to see submissions assigned to another coach',
+      scenario 'one team coach uses filter to see submissions personal coach another coach',
                js: true do
         sign_in_user team_coach.user, referrer: review_course_path(course)
 
         click_link 'Pending'
-        fill_in 'filter', with: 'assigned to:'
-        click_button 'Pick Assigned To: Me'
+        fill_in 'filter', with: 'personal coach:'
+        click_button 'Pick Personal coach: Me'
 
         expect(page).to have_content('1')
         expect(page).to have_text(target_l3.title)
         expect(page).not_to have_text(target_l2.title)
 
-        fill_in 'filter', with: 'assigned to:'
-        click_button "Assigned To: #{team_coach_2.name}"
+        fill_in 'filter', with: 'personal coach:'
+        click_button "Personal coach: #{team_coach_2.name}"
         expect(page).to have_content('1')
 
         # ...but the submission has changed.
         expect(page).not_to have_text(target_l3.title)
         expect(page).to have_text(target_l2.title)
 
-        # Similarly, the reviewed page will list a submission from the team assigned to team coach 2, but not the current coach.
+        # Similarly, the reviewed page will list a submission from the team personal coach team coach 2, but not the current coach.
         click_link 'Reviewed'
 
         expect(page).to have_text team_l2.founders.first.name

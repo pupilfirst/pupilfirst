@@ -59,6 +59,7 @@ module Types
       argument :level_id, ID, required: false
       argument :personal_coach_id, ID, required: false
       argument :assigned_coach_id, ID, required: false
+      argument :reviewing_coach_id, ID, required: false
       argument :target_id, ID, required: false
       argument :search, String, required: false
       argument :exclude_submission_id, ID, required: false

@@ -7,6 +7,7 @@ type t = {
   levelId: option<string>,
   personalCoachId: option<string>,
   assignedCoachId: option<string>,
+  reviewingCoachId: option<string>,
   targetId: option<string>,
   sortCriterion: sortCriterion,
   sortDirection: sortDirection,
@@ -23,6 +24,7 @@ let tab = t => t.tab
 let includeInactive = t => t.includeInactive
 let assignedCoachId = t => t.assignedCoachId
 let personalCoachId = t => t.personalCoachId
+let reviewingCoachId = t => t.reviewingCoachId
 
 let makeFromQueryParams = search => {
   let params = Webapi.Url.URLSearchParams.make(search)
@@ -33,6 +35,7 @@ let makeFromQueryParams = search => {
     levelId: get("levelId", params),
     personalCoachId: get("personalCoachId", params),
     assignedCoachId: get("assignedCoachId", params),
+    reviewingCoachId: get("reviewingCoachId", params),
     targetId: get("targetId", params),
     tab: switch get("tab", params) {
     | Some(t) when t == "Pending" => Some(#Pending)
@@ -84,6 +87,9 @@ let toQueryString = filter => {
   )
   Belt.Option.forEach(filter.assignedCoachId, assignedCoachId =>
     Js.Dict.set(filterDict, "assignedCoachId", assignedCoachId)
+  )
+  Belt.Option.forEach(filter.reviewingCoachId, reviewingCoachId =>
+    Js.Dict.set(filterDict, "reviewingCoachId", reviewingCoachId)
   )
 
   switch filter.tab {

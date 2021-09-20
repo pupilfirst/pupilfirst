@@ -455,6 +455,7 @@ en:
     CoursesReview__Root:
       assigned_to: Assigned To
       personal_coach: Personal Coach
+      reviewed_by: Reviewed By
       assigned_to_coach: "assigned to:"
       assigned_to_me: " assigned to me"
       button_load_more: Load More Submissions...
@@ -464,11 +465,13 @@ en:
         target: "Target: "
         assigned_to: "Assigned To: "
         personal_coach: "Personal Coach: "
+        reviewed_by: "Reviewed By: "
       filter_by_another_level: Filter by another level
       filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
       coach_filter_by:
-        assigned_to: Filter by assigned to
-        personal_coach: Filter by personal coach
+        assigned_to: Filter by who's assigned to a submission
+        personal_coach: Filter by who's assigned to a student
+        reviewed_by: Filter by who reviewed a submission
       filter_by_level: Filter by level
       filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
       filter_by_target: Filter by target
@@ -490,6 +493,7 @@ en:
         status: "status: "
         target: "target:"
         personal_coach: "personal coach:"
+        reviewed_by: "reviewed by:"
       sort_by: "Sort by:"
       status: Status
       submissions_fully_loaded_text:

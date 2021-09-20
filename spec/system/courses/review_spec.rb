@@ -61,7 +61,7 @@ feature "Coach's review interface" do
         latest: true,
         owners: [team_l3.founders.first],
         target: target_l1,
-        evaluator_id: course_coach.id,
+        evaluator_id: team_coach.id,
         evaluated_at: 4.days.ago,
         passed_at: 1.day.ago
       )
@@ -111,7 +111,7 @@ feature "Coach's review interface" do
         latest: true,
         owners: [team_l2.founders.first],
         target: target_l1,
-        evaluator_id: course_coach.id,
+        evaluator_id: team_coach.id,
         evaluated_at: 3.days.ago,
         passed_at: 3.days.ago,
         created_at: 4.days.ago
@@ -435,6 +435,21 @@ feature "Coach's review interface" do
 
       # The 'pending' count should update once we switch to the pending tab.
       expect(page).to have_content('Showing all 3 submissions')
+    end
+
+    scenario 'coach uses the reviewed by filter', js: true do
+      sign_in_user course_coach.user, referrer: review_course_path(course)
+
+      fill_in 'filter', with: 'reviewed by:'
+      click_button 'Pick Reviewed By: Me'
+
+      expect(page).to have_content('Showing all 2 submissions')
+      expect(page).to have_content('Status: Reviewed')
+      expect(page).not_to have_text(target_l1.title)
+
+      find('button[title="Remove selection: Me"]').click
+      expect(page).to have_text(target_l1.title)
+      expect(page).to have_content('Showing all 4 submissions')
     end
 
     context 'when the course has inactive students' do

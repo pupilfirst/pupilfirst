@@ -420,20 +420,16 @@ feature "Coach's review interface" do
         expect(page).to have_text(course_coach.user.name)
       end
 
-      # submissions from other teams should not be shown
       expect(page).not_to have_text(target_l3.title)
       expect(page).not_to have_text(target_l2.title)
       expect(page).to have_content("There's only one submission")
 
-      # team coach should be able to remove the filter showing only his assigned submissions.
       find('button[title="Remove selection: Me"]').click
 
-      # Target in L1 should now be listed twice, for the submission from a non-assigned team.
       expect(page).to have_text(target_l1.title)
       expect(page).to have_text(target_l2.title)
       expect(page).to have_text(target_l3.title)
 
-      # The 'pending' count should update once we switch to the pending tab.
       expect(page).to have_content('Showing all 3 submissions')
     end
 

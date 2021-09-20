@@ -508,7 +508,7 @@ let unselected = (state, currentCoachId, filter) => {
     )
     ->Js.Array2.map(coach => Selectable.assignedToCoach(coach, currentCoachId))
 
-      let unselectedReviewingCoaches =
+  let unselectedReviewingCoaches =
     state.reviewingCoaches
     ->Js.Array2.filter(coach =>
       OptionUtils.mapWithDefault(
@@ -517,7 +517,7 @@ let unselected = (state, currentCoachId, filter) => {
         filter.reviewingCoachId,
       )
     )
-    ->Js.Array2.map(coach => Selectable.assignedToCoach(coach, currentCoachId))
+    ->Js.Array2.map(coach => Selectable.reviewedByCoach(coach, currentCoachId))
 
   ArrayUtils.flattenV2([
     unSelectedStatus(filter),

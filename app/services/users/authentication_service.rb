@@ -33,7 +33,7 @@ module Users
     end
 
     def time_limit_minutes
-      time_limit = ENV.fetch('LOGIN_PASSWORD_TOKEN_TIME_LIMIT', '30').to_i
+      time_limit = ENV.fetch('LOGIN_TOKEN_TIME_LIMIT', '30').to_i
       time_limit.positive? ? time_limit.minutes : 30.minutes
     end
   end

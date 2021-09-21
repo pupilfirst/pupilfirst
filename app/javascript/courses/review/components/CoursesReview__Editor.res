@@ -1050,7 +1050,13 @@ let make = (
           <div className="flex flex-1 items-center justify-between">
             <div>
               <p className="font-semibold"> {str("Submission " ++ string_of_int(number))} </p>
-              <p className="text-gray-800 text-xs">
+              <p
+                className="text-gray-800 text-xs"
+                title={OverlaySubmission.createdAt(overlaySubmission)->DateFns.formatPreset(
+                  ~year=true,
+                  ~time=true,
+                  (),
+                )}>
                 {overlaySubmission
                 ->OverlaySubmission.createdAt
                 ->DateFns.formatPreset(~year=true, ())

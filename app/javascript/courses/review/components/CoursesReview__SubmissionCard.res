@@ -72,7 +72,13 @@ let showSubmission = (submissions, filterString) =>
                 </span>
               </span>
             }}
-            <span className="ml-1">
+            <span
+              className="ml-1"
+              title={IndexSubmission.createdAt(submission)->DateFns.formatPreset(
+                ~year=true,
+                ~time=true,
+                (),
+              )}>
               {{
                 t(
                   ~variables=[("created_at", IndexSubmission.createdAtPretty(submission))],

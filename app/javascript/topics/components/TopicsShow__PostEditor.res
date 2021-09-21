@@ -1,7 +1,7 @@
 open TopicsShow__Types
 
 let str = React.string
-%bs.raw(`require("./TopicsShow__PostEditor.css")`)
+%raw(`require("./TopicsShow__PostEditor.css")`)
 
 type state = {
   body: string,
@@ -9,25 +9,21 @@ type state = {
   editReason: option<string>,
 }
 
-module CreatePostQuery = %graphql(
-  `
+module CreatePostQuery = %graphql(`
   mutation CreatePostMutation($body: String!, $topicId: ID!, $replyToPostId: ID) {
     createPost(body: $body, topicId: $topicId, replyToPostId: $replyToPostId)  {
       postId
     }
   }
-`
-)
+`)
 
-module UpdatePostQuery = %graphql(
-  `
+module UpdatePostQuery = %graphql(`
   mutation UpdatePostMutation($id: ID!, $body: String!, $editReason: String) {
     updatePost(id: $id, body: $body, editReason: $editReason)  {
       success
     }
   }
-`
-)
+`)
 
 let dateTime = Js.Date.make()
 

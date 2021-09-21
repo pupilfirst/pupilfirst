@@ -3,15 +3,13 @@ open CoursesCurriculum__Types
 let t = I18n.t(~scope="components.CoursesCurriculum__LevelUpButton")
 let str = React.string
 
-module LevelUpQuery = %graphql(
-  `
+module LevelUpQuery = %graphql(`
    mutation LevelUpMutation($courseId: ID!) {
     levelUp(courseId: $courseId){
       success
       }
     }
- `
-)
+ `)
 
 let handleSubmitButton = saving => {
   let submitButtonText = (title, iconClasses) =>

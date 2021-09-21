@@ -1,14 +1,12 @@
 let str = React.string
 
-module DeleteSubmissionQuery = %graphql(
-  `
+module DeleteSubmissionQuery = %graphql(`
   mutation UndoSubmissionMutation($targetId: ID!) {
     undoSubmission(targetId: $targetId) {
       success
     }
   }
-  `
-)
+  `)
 
 type status =
   | Pending

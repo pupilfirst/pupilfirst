@@ -4,8 +4,7 @@ let t = I18n.t(~scope="components.CourseApplicants__Root")
 
 let str = React.string
 
-module ApplicantsQuery = %graphql(
-  `
+module ApplicantsQuery = %graphql(`
   query ApplicantsQuery($courseId: ID!, $search: String, $after: String, $tags: [String!], $sortCriterion: ApplicantSortCriterion!, $sortDirection: SortDirection!) {
     applicants(courseId: $courseId, tags: $tags, search: $search, first: 10, after: $after, sortCriterion: $sortCriterion,sortDirection: $sortDirection){
       nodes {
@@ -20,8 +19,7 @@ module ApplicantsQuery = %graphql(
       totalCount
     }
   }
-  `
-)
+  `)
 
 type tags = array<string>
 

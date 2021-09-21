@@ -25,14 +25,14 @@
     "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/pf-icon"
   },
   "devDependencies": {
-    "bs-platform": "8.3.3",
+    "rescript": "9.1.4",
     "parcel-bundler": "^1.12.4",
     "tailwindcss": "^1.1.4"
   },
   "dependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "@rescript/react": "^0.10.1"
+    "@rescript/react": "^0.10.3"
   },
   "scripts": {
     "dev": "parcel index.html",

@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesReview__Editor.css")`)
+%raw(`require("./CoursesReview__Editor.css")`)
 
 let t = I18n.t(~scope="components.CoursesReview__Editor")
 
@@ -87,38 +87,31 @@ let reducer = (state, action) =>
   | SetNextSubmissionDataEmpty => {...state, nextSubmission: DataEmpty}
   }
 
-module CreateGradingMutation = %graphql(
-  `
+module CreateGradingMutation = %graphql(`
     mutation CreateGradingMutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!, $note: String,  $checklist: JSON!) {
       createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades, note: $note, checklist: $checklist){
         success
       }
     }
-  `
-)
+  `)
 
-module UndoGradingMutation = %graphql(
-  `
+module UndoGradingMutation = %graphql(`
     mutation UndoGradingMutation($submissionId: ID!) {
       undoGrading(submissionId: $submissionId){
         success
       }
     }
-  `
-)
+  `)
 
-module CreateFeedbackMutation = %graphql(
-  `
+module CreateFeedbackMutation = %graphql(`
     mutation CreateFeedbackMutation($submissionId: ID!, $feedback: String!) {
       createFeedback(submissionId: $submissionId, feedback: $feedback){
         success
       }
     }
-  `
-)
+  `)
 
-module NextSubmissionQuery = %graphql(
-  `
+module NextSubmissionQuery = %graphql(`
     query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $excludeSubmissionId: ID, $after: String) {
       submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, levelId: $levelId, coachId: $coachId, first: 1, after: $after) {
         nodes {
@@ -126,8 +119,7 @@ module NextSubmissionQuery = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
 let getNextSubmission = (send, courseId, filter, submissionId) => {
   send(SetNextSubmissionDataLoading)
@@ -519,7 +511,8 @@ let showGradePill = (
       EvaluationCriterion.gradesAndLabels(evaluationCriterion),
     )}
     <div className="course-review-editor__grade-bar inline-flex w-full text-center mt-1">
-      {EvaluationCriterion.gradesAndLabels(evaluationCriterion)->Js.Array2.map(gradeLabel => {
+      {EvaluationCriterion.gradesAndLabels(evaluationCriterion)
+      ->Js.Array2.map(gradeLabel => {
         let gradeLabelGrade = GradeLabel.grade(gradeLabel)
 
         <button
@@ -538,12 +531,15 @@ let showGradePill = (
           | None => React.null
           }}
         </button>
-      })->React.array}
+      })
+      ->React.array}
     </div>
   </div>
 
 let showGrades = (grades, evaluationCriteria, submissionDetails, state) =>
-  <div> {Grade.sort(evaluationCriteria, grades)->Js.Array2.mapi((grade, key) => {
+  <div>
+    {Grade.sort(evaluationCriteria, grades)
+    ->Js.Array2.mapi((grade, key) => {
       let gradeEcId = Grade.evaluationCriterionId(grade)
       let ec = ArrayUtils.unsafeFind(
         ec => EvaluationCriterion.id(ec) == gradeEcId,
@@ -560,14 +556,18 @@ let showGrades = (grades, evaluationCriteria, submissionDetails, state) =>
         state,
         None,
       )
-    })->React.array} </div>
+    })
+    ->React.array}
+  </div>
 let renderGradePills = (
   evaluationCriteria,
   targetEvaluationCriteriaIds,
   submissionDetails,
   state,
   send,
-) => targetEvaluationCriteriaIds->Js.Array2.mapi((evaluationCriterionId, key) => {
+) =>
+  targetEvaluationCriteriaIds
+  ->Js.Array2.mapi((evaluationCriterionId, key) => {
     let ec = ArrayUtils.unsafeFind(
       e => EvaluationCriterion.id(e) == evaluationCriterionId,
       "CoursesRevew__Editor: Unable to find evaluation criterion with id - " ++
@@ -586,7 +586,8 @@ let renderGradePills = (
     let passGrade = EvaluationCriterion.passGrade(ec)
 
     showGradePill(key, submissionDetails, ec, gradeValue, passGrade, state, Some(send))
-  })->React.array
+  })
+  ->React.array
 
 let badgeColorClasses = statusColor => {
   switch statusColor {
@@ -711,8 +712,8 @@ let submissionStatusIcon = (status, overlaySubmission) => {
         </div>
         <p
           className={`text-xs flex items-center justify-center md:block text-center w-full border rounded px-1 py-px font-semibold md:mt-1 ${badgeColorClasses(
-            color,
-          )} ${textColor(color)}`}>
+              color,
+            )} ${textColor(color)}`}>
           {text->str}
         </p>
       </div>

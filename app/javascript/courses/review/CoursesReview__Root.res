@@ -1,5 +1,5 @@
 let str = React.string
-%bs.raw(`require("./CoursesReview__Root.css")`)
+%raw(`require("./CoursesReview__Root.css")`)
 
 open CoursesReview__Types
 
@@ -117,8 +117,7 @@ let reducer = (state, action) =>
 
 let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryString(filter))
 
-module SubmissionsQuery = %graphql(
-  `
+module SubmissionsQuery = %graphql(`
     query SubmissionsQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $includeInactive: Boolean, $after: String) {
       submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, levelId: $levelId, coachId: $coachId, includeInactive: $includeInactive, first: 20, after: $after) {
         nodes {
@@ -151,11 +150,9 @@ module SubmissionsQuery = %graphql(
         title
       }
     }
-  `
-)
+  `)
 
-module LevelsQuery = %graphql(
-  `
+module LevelsQuery = %graphql(`
     query LevelsQuery($courseId: ID!) {
       levels(courseId: $courseId) {
         id
@@ -163,29 +160,24 @@ module LevelsQuery = %graphql(
         number
       }
     }
-  `
-)
+  `)
 
-module TeamCoachesQuery = %graphql(
-  `
+module TeamCoachesQuery = %graphql(`
     query TeamCoachesQuery($courseId: ID!) {
       teamCoaches(courseId: $courseId) {
         ...UserProxy.Fragments.AllFields
       }
     }
-  `
-)
+  `)
 
-module ReviewedTargetsInfoQuery = %graphql(
-  `
+module ReviewedTargetsInfoQuery = %graphql(`
     query ReviewedTargetsInfoQuery($courseId: ID!) {
       reviewedTargetsInfo(courseId: $courseId) {
         id
         title
       }
     }
-  `
-)
+  `)
 
 let getSubmissions = (send, courseId, cursor, filter) => {
   SubmissionsQuery.make(
@@ -226,10 +218,13 @@ let getLevels = (send, courseId, state) => {
   if state.levelsLoaded == Unloaded {
     send(SetLevelLoading)
 
-    LevelsQuery.make(~courseId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
+    LevelsQuery.make(~courseId, ())
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(response => {
       send(LoadLevels(Js.Array.map(Level.makeFromJs, response["levels"])))
       Js.Promise.resolve()
-    }) |> ignore
+    })
+    |> ignore
   }
 }
 
@@ -237,10 +232,13 @@ let getCoaches = (send, courseId, state) => {
   if state.coachesLoaded == Unloaded {
     send(SetCoachLoading)
 
-    TeamCoachesQuery.make(~courseId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
+    TeamCoachesQuery.make(~courseId, ())
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(response => {
       send(LoadCoaches(Js.Array.map(Coach.makeFromJs, response["teamCoaches"])))
       Js.Promise.resolve()
-    }) |> ignore
+    })
+    |> ignore
   }
 }
 

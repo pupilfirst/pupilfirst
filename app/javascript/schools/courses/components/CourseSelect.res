@@ -8,8 +8,7 @@ let str = React.string
 
 type status = [#Active | #Ended | #Archived]
 
-module CoursesQuery = %graphql(
-  `
+module CoursesQuery = %graphql(`
   query CoursesQuery($search: String, $after: String, $status: CourseStatus) {
     courses(status: $status, search: $search, first: 10, after: $after){
       nodes {
@@ -21,8 +20,7 @@ module CoursesQuery = %graphql(
       totalCount
     }
   }
-  `
-)
+  `)
 
 module Item = {
   type t = Course.t
@@ -269,12 +267,9 @@ let showCourse = (course, selected, onChangeCB) => {
   <Spread key={Course.id(course)} props={"data-submission-id": Course.name(course)}>
     <div
       className={"w-full flex cursor-pointer hover:bg-gray-300" ++ selectedClass}
-      onClick={(_) => onChangeCB(Course.id(course))}
+      onClick={_ => onChangeCB(Course.id(course))}
       key={Course.id(course)}>
-      <span
-        className="p-1 pr-4 text-gray-900">
-        {str(Course.name(course))}
-      </span>
+      <span className="p-1 pr-4 text-gray-900"> {str(Course.name(course))} </span>
     </div>
   </Spread>
 }
@@ -282,15 +277,17 @@ let showCourse = (course, selected, onChangeCB) => {
 let showCourses = (courses, state, value, onChangeCB) => {
   <div className="w-full">
     {ArrayUtils.isEmpty(courses)
-      ? <div
-          className="flex flex-col mx-auto rounded-md border p-6 justify-center items-center">
+      ? <div className="flex flex-col mx-auto rounded-md border p-6 justify-center items-center">
           <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
           <h4 className="mt-3 text-base md:text-lg text-center font-semibold">
             {t("empty_courses")->str}
           </h4>
         </div>
       : <div className="flex flex-wrap">
-          {Js.Array.map(course => showCourse(course, Course.id(course) == value, onChangeCB), courses)->React.array}
+          {Js.Array.map(
+            course => showCourse(course, Course.id(course) == value, onChangeCB),
+            courses,
+          )->React.array}
         </div>}
     {entriesLoadedData(state.totalEntriesCount, Array.length(courses))}
   </div>

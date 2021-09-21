@@ -6,8 +6,7 @@ type state =
   | Loading
   | Loaded(SubmissionDetails.t)
 
-module SubmissionDetailsQuery = %graphql(
-  `
+module SubmissionDetailsQuery = %graphql(`
     query SubmissionDetailsQuery($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
         targetId, targetTitle, levelNumber, levelId, inactiveStudents, createdAt,
@@ -50,11 +49,9 @@ module SubmissionDetailsQuery = %graphql(
         preview
       }
     }
-  `
-)
+  `)
 
-module NextSubmissionQuery = %graphql(
-  `
+module NextSubmissionQuery = %graphql(`
     query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $excludeSubmissionId: ID, $after: String) {
       submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, levelId: $levelId, coachId: $coachId, first: 1, after: $after) {
         nodes {
@@ -62,8 +59,7 @@ module NextSubmissionQuery = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
 let getSubmissionDetails = (submissionId, setState, ()) => {
   setState(_ => Loading)

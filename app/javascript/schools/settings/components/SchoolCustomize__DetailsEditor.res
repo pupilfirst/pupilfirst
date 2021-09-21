@@ -13,15 +13,13 @@ type state = {
 }
 let updateButtonText = saving => saving ? "Updating..." : "Update"
 
-module UpdateSchoolQuery = %graphql(
-  `
+module UpdateSchoolQuery = %graphql(`
   mutation UpdateSchoolMutation($name: String!, $about: String!) {
     updateSchool(about: $about, name: $name) {
       success
     }
   }
-`
-)
+`)
 
 let optionAbout = about => about == "" ? None : Some(about)
 

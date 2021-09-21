@@ -95,6 +95,17 @@ class User < ApplicationRecord
     @original_login_token.presence || raise('Original login token is inaccessible')
   end
 
+  def regenerate_reset_password_token
+    @original_reset_token = SecureRandom.urlsafe_base64
+    update!(
+      reset_password_token: Digest::SHA2.base64digest(@original_reset_token),
+    )
+  end
+
+  def original_reset_token
+    @original_reset_token.presence || raise('Original login token is inaccessible')
+  end
+
   def regenerate_delete_account_token
     @delete_account_token_original = SecureRandom.urlsafe_base64
     update!(

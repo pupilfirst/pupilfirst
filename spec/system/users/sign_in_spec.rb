@@ -71,8 +71,9 @@ feature 'User signing in by supplying email address', js: true do
 
       scenario 'allow to change password with a valid token' do
         user.regenerate_reset_password_token
+
         user.update!(reset_password_sent_at: Time.zone.now)
-        visit reset_password_path(token: user.reset_password_token)
+        visit reset_password_path(token: user.original_reset_token)
 
         fill_in 'New Password', with: password
         fill_in 'Confirm Password', with: password

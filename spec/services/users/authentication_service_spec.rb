@@ -4,8 +4,9 @@ describe Users::AuthenticationService do
   subject { described_class.new(user.school, supplied_token) }
 
   let(:secret_token) { SecureRandom.urlsafe_base64 }
+  let(:sent_at) { Time.zone.now }
   let(:login_token_digest) { Digest::SHA2.base64digest(secret_token) }
-  let!(:user) { create :user, login_token_digest: login_token_digest }
+  let!(:user) { create :user, login_token_digest: login_token_digest, login_mail_sent_at: sent_at  }
   let(:another_school) { create :school }
 
   describe '#authenticate' do

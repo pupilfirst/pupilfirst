@@ -39,6 +39,6 @@
     "build": "parcel build index.html",
     "test": "echo \"Error: run tests from root\" && exit 1",
     "re:build": "bsb -make-world -clean-world",
-    "re:watch": "bsb -make-world -clean-world -w"
+    "re:watch": "rescript clean && rescript build -w"
   }
 }

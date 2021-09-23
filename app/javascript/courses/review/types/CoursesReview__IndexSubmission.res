@@ -17,6 +17,7 @@ type t = {
 
 let id = t => t.id
 let title = t => t.title
+let createdAt = t => t.createdAt
 let levelNumber = t => t.levelNumber
 let userNames = t => t.userNames
 let teamName = t => t.teamName

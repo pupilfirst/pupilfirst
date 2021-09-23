@@ -3,6 +3,11 @@ type status = {
   feedbackSent: bool,
 }
 
+type reviewerInfo = {
+  name: string,
+  assignedAt: Js.Date.t,
+}
+
 type t = {
   id: string,
   title: string,
@@ -11,8 +16,7 @@ type t = {
   status: option<status>,
   teamName: option<string>,
   levelNumber: int,
-  reviewerName: option<string>,
-  reviewerAssignedAt: option<Js.Date.t>,
+  reviewer: option<reviewerInfo>,
 }
 
 let id = t => t.id
@@ -21,8 +25,9 @@ let createdAt = t => t.createdAt
 let levelNumber = t => t.levelNumber
 let userNames = t => t.userNames
 let teamName = t => t.teamName
-let reviewerName = t => t.reviewerName
-let reviewerAssignedAt = t => t.reviewerAssignedAt
+let reviewer = t => t.reviewer
+let reviewerName = reviewer => reviewer.name
+let reviewerAssignedAt = reviewer => reviewer.assignedAt
 
 let failed = t =>
   switch t.status {
@@ -38,17 +43,7 @@ let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")
 
 let timeDistance = t => t.createdAt->DateFns.formatDistanceToNowStrict(~addSuffix=true, ())
 
-let make = (
-  ~id,
-  ~title,
-  ~createdAt,
-  ~userNames,
-  ~status,
-  ~teamName,
-  ~levelNumber,
-  ~reviewerName,
-  ~reviewerAssignedAt,
-) => {
+let make = (~id, ~title, ~createdAt, ~userNames, ~status, ~teamName, ~levelNumber, ~reviewer) => {
   id: id,
   title: title,
   createdAt: createdAt,
@@ -56,11 +51,15 @@ let make = (
   status: status,
   teamName: teamName,
   levelNumber: levelNumber,
-  reviewerName: reviewerName,
-  reviewerAssignedAt: reviewerAssignedAt,
+  reviewer: reviewer,
 }
 
 let makeStatus = (~passedAt, ~feedbackSent) => {passedAt: passedAt, feedbackSent: feedbackSent}
+
+let makeReviewerInfo = reviewer => {
+  name: reviewer["name"],
+  assignedAt: DateFns.decodeISO(reviewer["assignedAt"]),
+}
 
 let makeFromJS = submission => {
   let status =
@@ -79,8 +78,7 @@ let makeFromJS = submission => {
     ~status,
     ~teamName=submission["teamName"],
     ~levelNumber=submission["levelNumber"],
-    ~reviewerName=submission["reviewerName"],
-    ~reviewerAssignedAt=Belt.Option.map(submission["reviewerAssignedAt"], DateFns.decodeISO),
+    ~reviewer=Belt.Option.map(submission["reviewer"], makeReviewerInfo),
   )
 }
 

@@ -52,7 +52,7 @@ type action =
   | FinishGrading(array<Grade.t>)
   | SetNextSubmissionDataLoading
   | SetNextSubmissionDataEmpty
-  | UnAssignReviewer
+  | UnassignReviewer
 
 let reducer = (state, action) =>
   switch action {
@@ -87,7 +87,7 @@ let reducer = (state, action) =>
     }
   | SetNextSubmissionDataLoading => {...state, nextSubmission: DataLoading}
   | SetNextSubmissionDataEmpty => {...state, nextSubmission: DataEmpty}
-  | UnAssignReviewer => {...state, editor: AssignReviewer, saving: false}
+  | UnassignReviewer => {...state, editor: AssignReviewer, saving: false}
   }
 
 module CreateGradingMutation = %graphql(
@@ -150,7 +150,7 @@ let unassignReviewer = (submissionId, send, updateReviewerCB) => {
   |> Js.Promise.then_(response => {
     if response["unassignReviewer"]["success"] {
       updateReviewerCB(None)
-      send(UnAssignReviewer)
+      send(UnassignReviewer)
     }
     send(FinishSaving)
     Js.Promise.resolve()

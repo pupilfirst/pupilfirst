@@ -504,14 +504,14 @@ en:
       target: Target
     CoursesReview__SubmissionCard:
       completed: Completed
-      created_at: on %{created_at}
+      created_at: on %{created_at}.
       feedback_sent: Feedback Sent
       level: "Level "
       no_submissions_found: No submissions found
       rejected: Rejected
-      submitted_by: "Submitted by: "
-      submitted_by_team: "Submitted by team: "
-      assigned_at: Assigned %{date}
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team "
+      assigned_to: Assigned to
     CoursesReview__SubmissionInfoCard:
       submission_hash: "Submission #"
     CoursesStudents__StudentOverlay:

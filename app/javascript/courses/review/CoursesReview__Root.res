@@ -11,8 +11,8 @@ module Item = {
 
 module PagedSubmission = Pagination.Make(Item)
 
-type filterCoachVaiants = Assigned | Personal | ReviewedBy
-type filterLoader = ShowLevels | ShowCoaches(filterCoachVaiants) | ShowTargets
+type coachFilter = Assigned | Personal | ReviewedBy
+type filterLoader = ShowLevels | ShowCoaches(coachFilter) | ShowTargets
 
 type loading = Unloaded | Loading | Loaded
 
@@ -54,8 +54,8 @@ type action =
   | SetLoader(filterLoader)
   | ClearLoader
 
-let filterCoachVaiantKeys = variant => {
-  switch variant {
+let coachFilterTranslationKey = coachFilter => {
+  switch coachFilter {
   | Assigned => "assigned_to"
   | Personal => "personal_coach"
   | ReviewedBy => "reviewed_by"
@@ -115,7 +115,7 @@ let reducer = (state, action) =>
       ...state,
       filterInput: switch loader {
       | ShowLevels => tc("filter_input.level")
-      | ShowCoaches(key) => tc(`filter_input.${filterCoachVaiantKeys(key)}`)
+      | ShowCoaches(key) => tc(`filter_input.${coachFilterTranslationKey(key)}`)
       | ShowTargets => tc("filter_input.target")
       },
     }
@@ -138,8 +138,10 @@ module SubmissionsQuery = %graphql(
           createdAt,
           teamName,
           levelNumber
-          reviewerName,
-          reviewerAssignedAt,
+          reviewer {
+            name,
+            assignedAt,
+          }
         }
         pageInfo {
           endCursor,
@@ -199,10 +201,12 @@ module ReviewedTargetsInfoQuery = %graphql(
 let getSubmissions = (send, courseId, cursor, filter) => {
   let coachIds =
     [
-      Belt.Option.mapWithDefault(Filter.personalCoachId(filter), [], t => [t]),
-      Belt.Option.mapWithDefault(Filter.assignedCoachId(filter), [], t => [t]),
-      Belt.Option.mapWithDefault(Filter.reviewingCoachId(filter), [], t => [t]),
-    ]->ArrayUtils.flattenV2
+      Filter.personalCoachId(filter),
+      Filter.assignedCoachId(filter),
+      Filter.reviewingCoachId(filter),
+    ]
+    ->Js.Array2.map(Belt.Option.mapWithDefault(_, [], t => [t]))
+    ->ArrayUtils.flattenV2
 
   SubmissionsQuery.make(
     ~courseId,
@@ -336,7 +340,7 @@ module Selectable = {
     | Loader(l) =>
       switch l {
       | ShowLevels => Some(tc("level"))
-      | ShowCoaches(key) => Some(tc(filterCoachVaiantKeys(key)))
+      | ShowCoaches(key) => Some(tc(coachFilterTranslationKey(key)))
       | ShowTargets => Some(tc("target"))
       }
     | Status(_) => Some(tc("status"))
@@ -355,7 +359,7 @@ module Selectable = {
     | Loader(l) =>
       switch l {
       | ShowLevels => tc("filter_by_level")
-      | ShowCoaches(key) => tc(`coach_filter_by.${filterCoachVaiantKeys(key)}`)
+      | ShowCoaches(key) => tc(`coach_filter_by.${coachFilterTranslationKey(key)}`)
       | ShowTargets => tc("filter_by_target")
       }
     | Status(t) =>
@@ -381,18 +385,11 @@ module Selectable = {
       tc("search.reviewed_by") ++
       " " ++ (Coach.id(coach) == currentCoachId ? tc("me") : Coach.name(coach))
     | Target(t) => tc("search.target") ++ " " ++ TargetInfo.title(t)
-    | Loader(l) =>
-      switch l {
-      | ShowLevels => tc("search.level")
-      | ShowCoaches(key) => tc(`search.${filterCoachVaiantKeys(key)}`)
-      | ShowTargets => tc("search.target")
-      }
-    | Status(t) =>
-      tc("search.status") ++
-      switch t {
-      | #Pending => tc("pending")
-      | #Reviewed => tc("reviewed")
-      }
+    | Loader(ShowLevels) => tc("search.level")
+    | Loader(ShowCoaches(key)) => tc(`search.${coachFilterTranslationKey(key)}`)
+    | Loader(ShowTargets) => tc("search.target")
+    | Status(#Pending) => tc("search.status") ++ tc("pending")
+    | Status(#Reviewed) => tc("search.status") ++ tc("reviewed")
     | NameOrEmail(search) => search
     | IncludeInactive => `${tc("include")}: ${tc("inactive_students")}`
     }
@@ -404,22 +401,13 @@ module Selectable = {
     | PersonalCoach(_) => "green"
     | ReviewedBy(_) => "orange"
     | Target(_) => "red"
-    | Loader(l) =>
-      switch l {
-      | ShowLevels => "blue"
-      | ShowCoaches(key) =>
-        switch key {
-        | Assigned => "purple"
-        | Personal => "green"
-        | ReviewedBy => "orange"
-        }
-      | ShowTargets => "red"
-      }
-    | Status(t) =>
-      switch t {
-      | #Pending => "yellow"
-      | #Reviewed => "green"
-      }
+    | Loader(ShowLevels) => "blue"
+    | Loader(ShowCoaches(Assigned)) => "purple"
+    | Loader(ShowCoaches(Personal)) => "green"
+    | Loader(ShowCoaches(ReviewedBy)) => "orange"
+    | Loader(ShowTargets) => "red"
+    | Status(#Pending) => "yellow"
+    | Status(#Reviewed) => "green"
     | NameOrEmail(_) => "gray"
     | IncludeInactive => "gray"
     }
@@ -481,43 +469,34 @@ let unselected = (state, currentCoachId, filter) => {
     )
     ->Js.Array2.map(Selectable.target)
 
-  let unselectedAssiginedCoaches =
+  let unselectedCoaches = (getCoachId, getSelectable) =>
     state.coaches
     ->Js.Array2.filter(coach =>
-      OptionUtils.mapWithDefault(
-        selectedCoach => Coach.id(coach) != selectedCoach,
-        true,
-        filter.assignedCoachId,
+      Belt.Option.mapWithDefault(getCoachId(filter), true, selectedCoach =>
+        Coach.id(coach) != selectedCoach
       )
     )
-    ->Js.Array2.map(coach => Selectable.assignedToCoach(coach, currentCoachId))
+    ->Js.Array2.map(coach => getSelectable(coach, currentCoachId))
 
-  let unselectedPersonalCoaches =
-    state.coaches
-    ->Js.Array2.filter(coach =>
-      OptionUtils.mapWithDefault(
-        selectedCoach => Coach.id(coach) != selectedCoach,
-        true,
-        filter.personalCoachId,
-      )
-    )
-    ->Js.Array2.map(coach => Selectable.personalCoach(coach, currentCoachId))
+  let unselectedAssignedCoaches = unselectedCoaches(
+    filter => filter.assignedCoachId,
+    Selectable.assignedToCoach,
+  )
 
-  let unselectedReviewers =
-    state.coaches
-    ->Js.Array2.filter(coach =>
-      OptionUtils.mapWithDefault(
-        selectedCoach => Coach.id(coach) != selectedCoach,
-        true,
-        filter.reviewingCoachId,
-      )
-    )
-    ->Js.Array2.map(coach => Selectable.reviewedBy(coach, currentCoachId))
+  let unselectedPersonalCoaches = unselectedCoaches(
+    filter => filter.personalCoachId,
+    Selectable.personalCoach,
+  )
+
+  let unselectedReviewers = unselectedCoaches(
+    filter => filter.reviewingCoachId,
+    Selectable.reviewedBy,
+  )
 
   ArrayUtils.flattenV2([
     unSelectedStatus(filter),
     unselectedLevels,
-    unselectedAssiginedCoaches,
+    unselectedAssignedCoaches,
     unselectedPersonalCoaches,
     unselectedReviewers,
     unselectedTargets,
@@ -549,23 +528,27 @@ let selected = (state, filter, currentCoachId) => {
       t => [Selectable.target(t)],
     )
   )
-  let selectedAssiginedCoach = Belt.Option.mapWithDefault(filter.assignedCoachId, [], coachId =>
-    Belt.Option.mapWithDefault(Js.Array.find(c => Coach.id(c) == coachId, state.coaches), [], c => [
-      Selectable.assignedToCoach(c, currentCoachId),
-    ])
+
+  let selectedCoaches = (getCoachId, getSelectable) =>
+    Belt.Option.mapWithDefault(getCoachId(filter), [], coachId =>
+      Belt.Option.mapWithDefault(
+        Js.Array.find(c => Coach.id(c) == coachId, state.coaches),
+        [],
+        c => [getSelectable(c, currentCoachId)],
+      )
+    )
+
+  let selectedAssiginedCoach = selectedCoaches(
+    filter => filter.assignedCoachId,
+    Selectable.assignedToCoach,
   )
 
-  let selectedPersonalCoach = Belt.Option.mapWithDefault(filter.personalCoachId, [], coachId =>
-    Belt.Option.mapWithDefault(Js.Array.find(c => Coach.id(c) == coachId, state.coaches), [], c => [
-      Selectable.personalCoach(c, currentCoachId),
-    ])
+  let selectedPersonalCoach = selectedCoaches(
+    filter => filter.personalCoachId,
+    Selectable.personalCoach,
   )
 
-  let selectedReviewer = Belt.Option.mapWithDefault(filter.reviewingCoachId, [], coachId =>
-    Belt.Option.mapWithDefault(Js.Array.find(c => Coach.id(c) == coachId, state.coaches), [], c => [
-      Selectable.reviewedBy(c, currentCoachId),
-    ])
-  )
+  let selectedReviewer = selectedCoaches(filter => filter.reviewingCoachId, Selectable.reviewedBy)
 
   let selectedStatus = OptionUtils.mapWithDefault(t => [Selectable.status(t)], [], filter.tab)
 

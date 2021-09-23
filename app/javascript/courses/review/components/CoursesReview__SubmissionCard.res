@@ -86,18 +86,27 @@ let showSubmission = (submissions, filterString) =>
                 )
               }->str}
             </span>
-            {switch IndexSubmission.reviewerName(submission) {
-            | Some(name) =>
-              <span> {str(",")} <span className="ml-1 font-semibold"> {name->str} </span> </span>
-            | None => React.null
-            }}
-            {switch IndexSubmission.reviewerAssignedAt(submission) {
-            | Some(date) =>
-              <span className="text-xs text-gray-800 ml-1">
-                {t(
-                  ~variables=[("date", DateFns.formatDistanceToNow(date, ~addSuffix=true, ()))],
-                  "assigned_at",
-                )->str}
+            {switch IndexSubmission.reviewer(submission) {
+            | Some(reviewer) =>
+              <span className="ml-1">
+                {str(t("assigned_to"))}
+                <span className="ml-1 font-semibold">
+                  {{IndexSubmission.reviewerName(reviewer)}->str}
+                </span>
+                <span
+                  className="text-xs text-gray-800 ml-1"
+                  title={IndexSubmission.reviewerAssignedAt(reviewer)->DateFns.formatPreset(
+                    ~year=true,
+                    ~time=true,
+                    (),
+                  )}>
+                  {DateFns.formatDistanceToNow(
+                    IndexSubmission.reviewerAssignedAt(reviewer),
+                    ~addSuffix=true,
+                    (),
+                  )->str}
+                  {str(".")}
+                </span>
               </span>
             | None => React.null
             }}

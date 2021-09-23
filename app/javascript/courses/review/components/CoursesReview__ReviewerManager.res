@@ -32,7 +32,7 @@ let assignReviewer = (submissionId, setSaving, updateReviewerCB) => {
   AssignReviewerMutation.make(~submissionId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    updateReviewerCB(Some(Reviewer.makeFromJs(response["assignReviewer"]["reviewer"])))
+    updateReviewerCB(Some(UserProxy.makeFromJs(response["assignReviewer"]["reviewer"])))
     setSaving(_ => false)
     Js.Promise.resolve()
   })
@@ -48,7 +48,7 @@ let reassignReviewer = (submissionId, setSaving, updateReviewerCB) => {
   ReassignReviewerMutation.make(~submissionId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    updateReviewerCB(Some(Reviewer.makeFromJs(response["reassignReviewer"]["reviewer"])))
+    updateReviewerCB(Some(UserProxy.makeFromJs(response["reassignReviewer"]["reviewer"])))
     setSaving(_ => false)
     Js.Promise.resolve()
   })
@@ -68,7 +68,7 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
       {switch SubmissionDetails.reviewer(submissionDetails) {
       | Some(reviewer) => [
           <div className="inline-flex bg-gray-200 px-3 py-2 mt-2 rounded-md">
-            {switch Reviewer.avatarUrl(reviewer) {
+            {switch UserProxy.avatarUrl(Reviewer.user(reviewer)) {
             | Some(avatarUrl) =>
               <img
                 className="h-9 w-9 md:h-10 md:w-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
@@ -76,28 +76,35 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
               />
             | None =>
               <Avatar
-                name={Reviewer.name(reviewer)}
+                name={UserProxy.name(Reviewer.user(reviewer))}
                 className="h-9 w-9 md:h-10 md:w-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
               />
             }}
             <div className="ml-2">
-              <p className="text-sm font-semibold"> {Reviewer.name(reviewer)->str} </p>
-              {switch SubmissionDetails.reviewerAssignedAt(submissionDetails) {
-              | Some(date) =>
-                <p className="text-xs text-gray-800">
-                  {t(
-                    ~variables=[("date", DateFns.formatDistanceToNow(date, ~addSuffix=true, ()))],
-                    "assigned_at",
-                  )->str}
-                </p>
-              | None => React.null
-              }}
+              <p className="text-sm font-semibold">
+                {UserProxy.name(Reviewer.user(reviewer))->str}
+              </p>
+              <p className="text-xs text-gray-800">
+                {t(
+                  ~variables=[
+                    (
+                      "date",
+                      DateFns.formatDistanceToNow(
+                        Reviewer.assignedAt(reviewer),
+                        ~addSuffix=true,
+                        (),
+                      ),
+                    ),
+                  ],
+                  "assigned_at",
+                )->str}
+              </p>
             </div>
           </div>,
           <div className="flex flex-col md:flex-row items-center mt-4">
             <p className="text-sm pr-4">
               {t(
-                ~variables=[("current_coach_name", Reviewer.name(reviewer))],
+                ~variables=[("current_coach_name", UserProxy.name(Reviewer.user(reviewer)))],
                 "remove_reviewer_assign_to_me",
               )->str}
             </p>

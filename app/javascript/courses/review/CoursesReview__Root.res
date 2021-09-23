@@ -594,7 +594,13 @@ let onSelectFilter = (send, courseId, state, filter, selectable) => {
   | Target(target) => updateParams({...filter, targetId: Some(TargetInfo.id(target))})
   | Status(status) =>
     switch status {
-    | #Pending => updateParams({...filter, tab: Some(#Pending), sortCriterion: #SubmittedAt})
+    | #Pending =>
+      updateParams({
+        ...filter,
+        tab: Some(#Pending),
+        sortCriterion: #SubmittedAt,
+        reviewingCoachId: None,
+      })
     | #Reviewed => updateParams({...filter, tab: Some(#Reviewed), sortCriterion: #EvaluatedAt})
     }
   | NameOrEmail(nameOrEmail) => updateParams({...filter, nameOrEmail: Some(nameOrEmail)})

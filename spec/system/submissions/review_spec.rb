@@ -154,6 +154,8 @@ feature 'Submission review overlay', js: true do
       find("a[aria-label='Submission #{submission_pending.id}']").click
       click_button 'Start Review'
       dismiss_notification
+      expect(submission_pending.reload.reviewer).to eq(coach)
+      expect(submission_pending.reviewer_assigned_at).not_to eq(nil)
       expect(page).to have_content('Grade Card')
       feedback = Faker::Markdown.sandwich(sentences: 6)
       add_markdown(feedback)
@@ -204,6 +206,8 @@ feature 'Submission review overlay', js: true do
       expect(page).to have_button('Undo Grading')
 
       submission = submission_pending.reload
+      expect(submission.reviewer).to eq(nil)
+      expect(submission.reviewer_assigned_at).to eq(nil)
       expect(submission.evaluator_id).to eq(coach.id)
       expect(submission.passed_at).to eq(nil)
       expect(submission.evaluated_at).not_to eq(nil)

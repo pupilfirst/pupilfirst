@@ -4,7 +4,7 @@ module Student = CoursesReview__Student
 module ReviewChecklistItem = CoursesReview__ReviewChecklistItem
 module SubmissionMeta = CoursesReview__SubmissionMeta
 module Coach = UserProxy
-module Reviewer = UserProxy
+module Reviewer = CoursesReview__Reviewer
 
 type t = {
   submission: OverlaySubmission.t,
@@ -24,7 +24,6 @@ type t = {
   courseId: string,
   preview: bool,
   reviewer: option<Reviewer.t>,
-  reviewerAssignedAt: option<Js.Date.t>,
 }
 
 let submission = t => t.submission
@@ -43,7 +42,6 @@ let courseId = t => t.courseId
 let createdAt = t => t.createdAt
 let preview = t => t.preview
 let reviewer = t => t.reviewer
-let reviewerAssignedAt = t => t.reviewerAssignedAt
 
 let make = (
   ~submission,
@@ -63,7 +61,6 @@ let make = (
   ~createdAt,
   ~preview,
   ~reviewer,
-  ~reviewerAssignedAt,
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
@@ -82,13 +79,6 @@ let make = (
   createdAt: createdAt,
   preview: preview,
   reviewer: reviewer,
-  reviewerAssignedAt: reviewerAssignedAt,
-}
-
-let reviewerAssigned = t => {
-  Belt.Option.mapWithDefault(t.reviewerAssignedAt, false, dateTime =>
-    DateFns.differenceInSeconds(Js.Date.make(), dateTime) > 86400
-  )
 }
 
 let decodeJs = details =>
@@ -123,8 +113,7 @@ let decodeJs = details =>
     ~teamName=details["teamName"],
     ~courseId=details["courseId"],
     ~preview=details["preview"],
-    ~reviewer=Belt.Option.map(details["reviewer"], UserProxy.makeFromJs),
-    ~reviewerAssignedAt=Belt.Option.map(details["reviewerAssignedAt"], DateFns.decodeISO),
+    ~reviewer=Belt.Option.map(details["reviewerDetails"], Reviewer.makeFromJs),
   )
 
 let updateMetaSubmission = submission => {
@@ -151,8 +140,7 @@ let updateOverlaySubmission = (submission, t) => {
 
 let updateReviewChecklist = (reviewChecklist, t) => {...t, reviewChecklist: reviewChecklist}
 
-let updateReviewer = (reviewer, t) => {
+let updateReviewer = (user, t) => {
   ...t,
-  reviewer: reviewer,
-  reviewerAssignedAt: Belt.Option.isSome(reviewer) ? Some(Js.Date.make()) : None,
+  reviewer: Belt.Option.map(user, Reviewer.setReviewer),
 }

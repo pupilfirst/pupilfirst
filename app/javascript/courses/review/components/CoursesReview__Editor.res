@@ -1025,7 +1025,7 @@ let make = (
       checklist: OverlaySubmission.checklist(overlaySubmission),
       editor: ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
         ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
-            Reviewer.userId(r) == User.id(currentUser)
+            UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
           ) ||
           SubmissionDetails.preview(submissionDetails)
             ? GradesEditor
@@ -1142,7 +1142,9 @@ let make = (
                     <div>
                       <div>
                         <p className="text-xs text-gray-800"> {t("assigned_to")->str} </p>
-                        <p className="text-xs font-semibold"> {Reviewer.name(reviewer)->str} </p>
+                        <p className="text-xs font-semibold">
+                          {UserProxy.name(Reviewer.user(reviewer))->str}
+                        </p>
                       </div>
                     </div>
                   | None => React.null

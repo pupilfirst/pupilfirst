@@ -48,10 +48,12 @@ module SubmissionDetailsQuery = %graphql(
         teamName
         courseId
         preview
-        reviewer{
-          id, userId, name, title, avatarUrl
+        reviewerDetails{
+          assignedAt
+          user{
+            id, userId, name, title, avatarUrl
+          }
         }
-        reviewerAssignedAt
       }
     }
   `

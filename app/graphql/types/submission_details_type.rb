@@ -16,7 +16,6 @@ module Types
     field :coaches, [Types::UserProxyType], null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :preview, Boolean, null: false
-    field :reviewer, Types::UserProxyType, null: true
-    field :reviewer_assigned_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :reviewer_details, Types::ReviewerDetailType, null: true
   end
 end

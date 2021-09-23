@@ -119,7 +119,7 @@ feature 'Submission review overlay', js: true do
       expect(page).to have_content(evaluation_criterion_1.name)
       expect(page).to have_content(evaluation_criterion_2.name)
       expect(page).to have_button('Save grades', disabled: true)
-      click_button 'Remove'
+      click_button 'Remove assignment'
       dismiss_notification
       expect(page).to have_button('Start Review')
     end
@@ -129,7 +129,7 @@ feature 'Submission review overlay', js: true do
                    referrer: review_timeline_event_path(submission_pending_2)
       expect(page).to have_text(team_coach.name)
       expect(page).not_to have_text('Start Review')
-      expect(page).to have_button('Remove')
+      expect(page).to have_button('Remove assignment')
     end
 
     scenario 'coach takes over an assigned submission' do
@@ -140,7 +140,7 @@ feature 'Submission review overlay', js: true do
       click_button 'Yes, Assign Me'
       dismiss_notification
       expect(page).to have_text(coach.name)
-      expect(page).to have_button('Remove')
+      expect(page).to have_button('Remove assignment')
     end
 
     scenario 'coach evaluates a pending submission and gives a feedback' do

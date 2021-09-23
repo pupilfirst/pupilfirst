@@ -424,7 +424,7 @@ en:
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       note_help: "Would you like to write a note about this "
       note_placeholder: Did you notice something while reviewing this submission?
-      remove: Remove
+      remove_assignment: Remove assignment
       review: Review
       review_checklist: Review Checklist
       review_next: Next
@@ -896,9 +896,9 @@ en:
     archive_course:
       success_notification: Course archived successfully.
     assign_reviewer:
-      submission_already_assigned: The submission has been already assigned to a coach.
-      submission_graded_error: Assignment will only work with pending submissions.
-      success_notification: The submission has been assigned to you.
+      submission_already_assigned: This submission has been already assigned to a coach.
+      submission_graded_error: You can only assign yourself to pending submissions.
+      success_notification: This submission has been assigned to you.
     auto_verify_submission:
       success_notification: Target has been marked as complete.
     clone_course:
@@ -941,7 +941,7 @@ en:
     lock_topic:
       success_notification: This topic has been locked. No new replies will be accepted.
     reassign_reviewer:
-      submission_graded_error: Assignment will only work with pending submissions.
+      submission_graded_error: You can only assign yourself to pending submissions.
       submission_not_assigned_to_coach: The submission is already assigned to you.
       success_notification: The submission has been assigned to you.
     revoke_issued_certificate:
@@ -949,10 +949,10 @@ en:
     unarchive_course:
       success_notification: Course unarchived successfully
     unassign_reviewer:
-      submission_assigned_to_another_coach: The submission is assigned to another coach!
-      submission_graded_error: Assignment will only work with pending submissions.
-      submission_not_assigned: The submission is not yet assigned!
-      success_notification: The submission has been unassigned.
+      submission_assigned_to_another_coach: The submission is assigned to another coach.
+      submission_graded_error: This submission has already been graded.
+      submission_not_assigned: The submission is not yet assigned.
+      success_notification: You're no longer assigned to this submission.
     undo_grading:
       must_be_graded: Could not find a graded submission with the given ID
       success_notification:

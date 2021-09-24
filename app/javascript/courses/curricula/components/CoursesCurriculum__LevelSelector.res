@@ -12,13 +12,15 @@ let levelZeroSelectorClasses = isSelected => {
 let levelName = level =>
   LevelLabel.format(~short=true, ~name=level |> Level.name, level |> Level.number |> string_of_int)
 
-let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId) => {
+let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId, preview) => {
   let teamLevelNumber = teamLevel |> Level.number
 
   orderedLevels |> Js.Array.map(level => {
     let levelNumber = level |> Level.number
 
-    let icon = if levelNumber < teamLevelNumber {
+    let icon = if preview {
+      "fas fa-eye"
+    } else if levelNumber < teamLevelNumber {
       "fas fa-check text-green-500"
     } else if levelNumber == teamLevelNumber {
       "fas fa-map-marker-alt text-blue-400"
@@ -38,7 +40,13 @@ let selectableLevels = (orderedLevels, teamLevel, setSelectedLevelId) => {
   })
 }
 
-let untabbedLevelSelector = (selectedLevel, orderedLevels, teamLevel, setSelectedLevelId) => {
+let untabbedLevelSelector = (
+  selectedLevel,
+  orderedLevels,
+  teamLevel,
+  setSelectedLevelId,
+  preview,
+) => {
   let selected =
     <button className="font-semibold w-full px-2 h-10 flex items-center justify-between">
       <span className="flex-grow text-center truncate w-0">
@@ -49,7 +57,7 @@ let untabbedLevelSelector = (selectedLevel, orderedLevels, teamLevel, setSelecte
 
   <Dropdown
     selected
-    contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId)}
+    contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId, preview)}
     className="flex-grow cursor-pointer rounded-lg bg-primary-100 hover:bg-gray-200 hover:text-primary-500"
   />
 }
@@ -62,6 +70,7 @@ let tabbedLevelSelector = (
   showLevelZero,
   setShowLevelZero,
   levelZero,
+  preview,
 ) => {
   let selected = hideCaret =>
     <button
@@ -81,7 +90,7 @@ let tabbedLevelSelector = (
     : <Dropdown
         key="numbered-level-selector"
         selected={selected(false)}
-        contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId)}
+        contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId, preview)}
         className="cursor-pointer flex-grow rounded-l-lg bg-primary-100 hover:bg-gray-200 hover:text-primary-500"
       />
 
@@ -102,6 +111,7 @@ let make = (
   ~levels,
   ~teamLevel,
   ~selectedLevel,
+  ~preview,
   ~setSelectedLevelId,
   ~showLevelZero,
   ~setShowLevelZero,
@@ -122,8 +132,10 @@ let make = (
           showLevelZero,
           setShowLevelZero,
           levelZero,
+          preview,
         )
-      | None => untabbedLevelSelector(selectedLevel, orderedLevels, teamLevel, setSelectedLevelId)
+      | None =>
+        untabbedLevelSelector(selectedLevel, orderedLevels, teamLevel, setSelectedLevelId, preview)
       }}
     </div>
   </div>

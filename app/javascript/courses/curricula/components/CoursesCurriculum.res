@@ -467,6 +467,7 @@ let make = (
             levels
             teamLevel
             selectedLevel
+            preview
             setSelectedLevelId={selectedLevelId =>
               setState(state => {...state, selectedLevelId: selectedLevelId})}
             showLevelZero=state.showLevelZero

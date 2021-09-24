@@ -3,6 +3,11 @@ type status = {
   feedbackSent: bool,
 }
 
+type reviewerInfo = {
+  name: string,
+  assignedAt: Js.Date.t,
+}
+
 type t = {
   id: string,
   title: string,
@@ -11,6 +16,7 @@ type t = {
   status: option<status>,
   teamName: option<string>,
   levelNumber: int,
+  reviewer: option<reviewerInfo>,
 }
 
 let id = t => t.id
@@ -19,6 +25,9 @@ let createdAt = t => t.createdAt
 let levelNumber = t => t.levelNumber
 let userNames = t => t.userNames
 let teamName = t => t.teamName
+let reviewer = t => t.reviewer
+let reviewerName = reviewer => reviewer.name
+let reviewerAssignedAt = reviewer => reviewer.assignedAt
 
 let failed = t =>
   switch t.status {
@@ -26,7 +35,7 @@ let failed = t =>
   | Some(status) => OptionUtils.mapWithDefault(_ => false, true, status.passedAt)
   }
 
-let pendingReview = t =>   OptionUtils.mapWithDefault(_ => false, true ,t.status)
+let pendingReview = t => OptionUtils.mapWithDefault(_ => false, true, t.status)
 
 let feedbackSent = t => OptionUtils.mapWithDefault(status => status.feedbackSent, false, t.status)
 
@@ -34,15 +43,7 @@ let createdAtPretty = t => t.createdAt->DateFns.format("MMMM d, yyyy")
 
 let timeDistance = t => t.createdAt->DateFns.formatDistanceToNowStrict(~addSuffix=true, ())
 
-let make = (
-  ~id,
-  ~title,
-  ~createdAt,
-  ~userNames,
-  ~status,
-  ~teamName,
-  ~levelNumber,
-) => {
+let make = (~id, ~title, ~createdAt, ~userNames, ~status, ~teamName, ~levelNumber, ~reviewer) => {
   id: id,
   title: title,
   createdAt: createdAt,
@@ -50,28 +51,14 @@ let make = (
   status: status,
   teamName: teamName,
   levelNumber: levelNumber,
+  reviewer: reviewer,
 }
 
 let makeStatus = (~passedAt, ~feedbackSent) => {passedAt: passedAt, feedbackSent: feedbackSent}
 
-let decodeJs = submission => {
-  let status =
-    submission["evaluatedAt"]->Belt.Option.map(_ =>
-      makeStatus(
-        ~passedAt=submission["passedAt"]->Belt.Option.map(DateFns.decodeISO),
-        ~feedbackSent=submission["feedbackSent"],
-      )
-    )
-
-  make(
-    ~id=submission["id"],
-    ~title=submission["title"],
-    ~createdAt=DateFns.decodeISO(submission["createdAt"]),
-    ~userNames=submission["userNames"],
-    ~status,
-    ~teamName=submission["teamName"],
-    ~levelNumber=submission["levelNumber"],
-  )
+let makeReviewerInfo = reviewer => {
+  name: reviewer["name"],
+  assignedAt: DateFns.decodeISO(reviewer["assignedAt"]),
 }
 
 let makeFromJS = submission => {
@@ -91,6 +78,7 @@ let makeFromJS = submission => {
     ~status,
     ~teamName=submission["teamName"],
     ~levelNumber=submission["levelNumber"],
+    ~reviewer=Belt.Option.map(submission["reviewer"], makeReviewerInfo),
   )
 }
 

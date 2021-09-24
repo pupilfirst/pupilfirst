@@ -9,6 +9,7 @@ module Types
     field :user_names, String, null: false
     field :feedback_sent, Boolean, null: false
     field :team_name, String, null: true
+    field :reviewer, Types::ReviewerDetailInfoType, null: true
 
     def title
       BatchLoader::GraphQL
@@ -45,9 +46,10 @@ module Types
             .each do |submission|
               loader.call(
                 submission.id,
-                submission.founders.map { |founder| founder.user.name }.join(
-                  ', '
-                )
+                submission
+                  .founders
+                  .map { |founder| founder.user.name }
+                  .join(', ')
               )
             end
         end
@@ -91,6 +93,9 @@ module Types
             end
         end
     end
-    # resolve_team_name(object)
+
+    def reviewer
+      object.reviewer_id.present? ? object : nil
+    end
   end
 end

@@ -61,7 +61,7 @@ feature "Coach's review interface" do
         latest: true,
         owners: [team_l3.founders.first],
         target: target_l1,
-        evaluator_id: course_coach.id,
+        evaluator_id: team_coach.id,
         evaluated_at: 4.days.ago,
         passed_at: 1.day.ago
       )
@@ -111,7 +111,7 @@ feature "Coach's review interface" do
         latest: true,
         owners: [team_l2.founders.first],
         target: target_l1,
-        evaluator_id: course_coach.id,
+        evaluator_id: team_coach.id,
         evaluated_at: 3.days.ago,
         passed_at: 3.days.ago,
         created_at: 4.days.ago
@@ -125,6 +125,8 @@ feature "Coach's review interface" do
         :with_owners,
         latest: true,
         target: target_l1,
+        reviewer: course_coach,
+        reviewer_assigned_at: 1.day.ago,
         owners: [team_l1.founders.first]
       )
     end
@@ -172,7 +174,7 @@ feature "Coach's review interface" do
       within("a[aria-label='Submission #{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text(
-          "Submitted by: #{team_l3.founders.first.user.name}"
+          "Submitted by #{team_l3.founders.first.user.name}"
         )
         expect(page).to have_text('Completed')
       end
@@ -208,7 +210,7 @@ feature "Coach's review interface" do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text('Level 1')
         expect(page).to have_text(
-          "Submitted by: #{team_l3.founders.first.user.name}"
+          "Submitted by #{team_l3.founders.first.user.name}"
         )
         expect(page).to have_text('Completed')
       end
@@ -217,7 +219,7 @@ feature "Coach's review interface" do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text('Level 2')
         expect(page).to have_text(
-          "Submitted by: #{team_l3.founders.first.user.name}"
+          "Submitted by #{team_l3.founders.first.user.name}"
         )
         expect(page).to have_text('Rejected')
         expect(page).to have_text('Feedback Sent')
@@ -226,7 +228,7 @@ feature "Coach's review interface" do
       expect(page).to have_text(team_target.title).once
 
       within("a[aria-label='Submission #{team_submission.id}']") do
-        expect(page).to have_text("Submitted by team: #{team_l3.name}")
+        expect(page).to have_text("Submitted by team #{team_l3.name}")
       end
     end
 
@@ -352,8 +354,8 @@ feature "Coach's review interface" do
       # Ensure coach is on the review dashboard.
       click_link 'Pending'
 
-      fill_in 'filter', with: 'Assigned to:'
-      click_button 'Pick Assigned To: Me'
+      fill_in 'filter', with: 'Personal coach:'
+      click_button 'Pick Personal Coach: Me'
 
       expect(page).to have_content('1')
 
@@ -399,6 +401,51 @@ feature "Coach's review interface" do
       # The pending tab should list all pending submissions.
       expect(page).to have_text(target_l1.title)
       expect(page).to have_text(target_l2.title)
+    end
+
+    scenario 'coach uses the assigned to filter', js: true do
+      sign_in_user course_coach.user, referrer: review_course_path(course)
+
+      # Ensure coach is on the review dashboard.
+      click_link 'Pending'
+
+      fill_in 'filter', with: 'assigned to:'
+      click_button 'Pick Assigned To: Me'
+
+      expect(page).to have_content('1')
+
+      within("a[aria-label='Submission #{submission_l1_t1.id}']") do
+        expect(page).to have_text(target_l1.title)
+        expect(page).to have_text('Level 1')
+        expect(page).to have_text(course_coach.user.name)
+      end
+
+      expect(page).not_to have_text(target_l3.title)
+      expect(page).not_to have_text(target_l2.title)
+      expect(page).to have_content("There's only one submission")
+
+      find('button[title="Remove selection: Me"]').click
+
+      expect(page).to have_text(target_l1.title)
+      expect(page).to have_text(target_l2.title)
+      expect(page).to have_text(target_l3.title)
+
+      expect(page).to have_content('Showing all 3 submissions')
+    end
+
+    scenario 'coach uses the reviewed by filter', js: true do
+      sign_in_user course_coach.user, referrer: review_course_path(course)
+
+      fill_in 'filter', with: 'reviewed by:'
+      click_button 'Pick Reviewed By: Me'
+
+      expect(page).to have_content('Showing all 2 submissions')
+      expect(page).to have_content('Status: Reviewed')
+      expect(page).not_to have_text(target_l1.title)
+
+      find('button[title="Remove selection: Me"]').click
+      expect(page).to have_text(target_l1.title)
+      expect(page).to have_content('Showing all 4 submissions')
     end
 
     context 'when the course has inactive students' do
@@ -548,27 +595,27 @@ feature "Coach's review interface" do
                startup: team_l2
       end
 
-      scenario 'one team coach uses filter to see submissions assigned to another coach',
+      scenario 'one team coach uses filter to see submissions personal coach another coach',
                js: true do
         sign_in_user team_coach.user, referrer: review_course_path(course)
 
         click_link 'Pending'
-        fill_in 'filter', with: 'assigned to:'
-        click_button 'Pick Assigned To: Me'
+        fill_in 'filter', with: 'personal coach:'
+        click_button 'Pick Personal Coach: Me'
 
         expect(page).to have_content('1')
         expect(page).to have_text(target_l3.title)
         expect(page).not_to have_text(target_l2.title)
 
-        fill_in 'filter', with: 'assigned to:'
-        click_button "Assigned To: #{team_coach_2.name}"
+        fill_in 'filter', with: 'personal coach:'
+        click_button "Personal Coach: #{team_coach_2.name}"
         expect(page).to have_content('1')
 
         # ...but the submission has changed.
         expect(page).not_to have_text(target_l3.title)
         expect(page).to have_text(target_l2.title)
 
-        # Similarly, the reviewed page will list a submission from the team assigned to team coach 2, but not the current coach.
+        # Similarly, the reviewed page will list a submission from the team personal coach team coach 2, but not the current coach.
         click_link 'Reviewed'
 
         expect(page).to have_text team_l2.founders.first.name

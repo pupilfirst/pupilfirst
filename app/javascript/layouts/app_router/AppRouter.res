@@ -21,7 +21,7 @@ let make = (~school, ~courses, ~currentUser) => {
       Student__Review(courseId),
     )
   | list{"submissions", submissionId, "review"} => (
-      <CoursesReview__SubmissionsRoot submissionId currentUser />,
+      <CoursesReview__SubmissionsRoot submissionId currentUser={User.defaultUser(currentUser)} />,
       Student__SubmissionShow(submissionId),
     )
   | _ =>

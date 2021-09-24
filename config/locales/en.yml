@@ -406,6 +406,7 @@ en:
       add_feedback: Add feedback
       add_your_feedback: Add Your Feedback
       assigned_coaches: Assigned Coaches
+      assigned_to: Assigned to
       close: close
       close_submission_warning: Are you sure you want to close the submission without saving?
       create_review_checklist: Create Review Checklist
@@ -420,9 +421,10 @@ en:
           done: Done!
           done_description: There are no other similar submissions.
       grade_card: Grade Card
-      help_text: Notes can be used to keep track of a %{noteAbout}'s progress. These notes are shown only to coaches in a student's report. %{additionalHelp}
+      help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
       note_help: "Would you like to write a note about this "
       note_placeholder: Did you notice something while reviewing this submission?
+      remove_assignment: Remove assignment
       review: Review
       review_checklist: Review Checklist
       review_next: Next
@@ -445,15 +447,31 @@ en:
       undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
       undo_grading: Undo Grading
       write_a_note: Write a Note
+    CoursesReview__ReviewerManager:
+      assigned_at: Assigned %{date}
+      change_reviewer_and_start_review: Yes, Assign Me
+      remove_reviewer_assign_to_me: Do you want to remove %{current_coach_name} & assign yourself to review?
+      start_review: Start Review
     CoursesReview__Root:
       assigned_to: Assigned To
+      personal_coach: Personal Coach
+      reviewed_by: Reviewed By
       assigned_to_coach: "assigned to:"
       assigned_to_me: " assigned to me"
       button_load_more: Load More Submissions...
       filter_by: "Filter by:"
+      filter_input:
+        level: "Level: "
+        target: "Target: "
+        assigned_to: "Assigned To: "
+        personal_coach: "Personal Coach: "
+        reviewed_by: "Reviewed By: "
       filter_by_another_level: Filter by another level
       filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
-      filter_by_assigned_to: Fillter by assigned to
+      coach_filter_by:
+        assigned_to: Filter by who's assigned to a submission
+        personal_coach: Filter by who's assigned to a student
+        reviewed_by: Filter by who reviewed a submission
       filter_by_level: Filter by level
       filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
       filter_by_target: Filter by target
@@ -474,6 +492,8 @@ en:
         level: "level:"
         status: "status: "
         target: "target:"
+        personal_coach: "personal coach:"
+        reviewed_by: "reviewed by:"
       sort_by: "Sort by:"
       status: Status
       submissions_fully_loaded_text:
@@ -484,13 +504,14 @@ en:
       target: Target
     CoursesReview__SubmissionCard:
       completed: Completed
-      created_at: on %{created_at}
+      created_at: on %{created_at}.
       feedback_sent: Feedback Sent
       level: "Level "
       no_submissions_found: No submissions found
       rejected: Rejected
-      submitted_by: "Submitted by: "
-      submitted_by_team: "Submitted by team: "
+      submitted_by: "Submitted by "
+      submitted_by_team: "Submitted by team "
+      assigned_to: Assigned to
     CoursesReview__SubmissionInfoCard:
       submission_hash: "Submission #"
     CoursesStudents__StudentOverlay:
@@ -874,6 +895,10 @@ en:
   mutations:
     archive_course:
       success_notification: Course archived successfully.
+    assign_reviewer:
+      submission_already_assigned: This submission has been already assigned to a coach.
+      submission_graded_error: You can only assign yourself to pending submissions.
+      success_notification: This submission has been assigned to you.
     auto_verify_submission:
       success_notification: Target has been marked as complete.
     clone_course:
@@ -915,10 +940,19 @@ en:
       success_notification: Certificate issued successfully!
     lock_topic:
       success_notification: This topic has been locked. No new replies will be accepted.
+    reassign_reviewer:
+      submission_graded_error: You can only assign yourself to pending submissions.
+      submission_not_assigned_to_coach: The submission is already assigned to you.
+      success_notification: The submission has been assigned to you.
     revoke_issued_certificate:
       success_notification: Certificate revoked!
     unarchive_course:
       success_notification: Course unarchived successfully
+    unassign_reviewer:
+      submission_assigned_to_another_coach: The submission is assigned to another coach.
+      submission_graded_error: This submission has already been graded.
+      submission_not_assigned: The submission is not yet assigned.
+      success_notification: You're no longer assigned to this submission.
     undo_grading:
       must_be_graded: Could not find a graded submission with the given ID
       success_notification:

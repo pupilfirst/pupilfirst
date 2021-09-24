@@ -45,8 +45,6 @@ class User < ApplicationRecord
            inverse_of: :recipient,
            dependent: :destroy
 
-  has_secure_token :reset_password_token
-  has_secure_token :delete_account_token
 
   # database_authenticable is required by devise_for to generate the session routes
   devise :database_authenticatable,
@@ -96,14 +94,14 @@ class User < ApplicationRecord
   end
 
   def regenerate_reset_password_token
-    @original_reset_token = SecureRandom.urlsafe_base64
+    @original_reset_password_token = SecureRandom.urlsafe_base64
     update!(
-      reset_password_token: Digest::SHA2.base64digest(@original_reset_token),
+      reset_password_token: Digest::SHA2.base64digest(@original_reset_password_token),
     )
   end
 
-  def original_reset_token
-    @original_reset_token.presence || raise('Original login token is inaccessible')
+  def original_reset_password_token
+    @original_reset_password_token.presence || raise('Original reset password token is inaccessible')
   end
 
   def regenerate_delete_account_token

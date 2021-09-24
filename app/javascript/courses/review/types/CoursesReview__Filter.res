@@ -82,15 +82,22 @@ let toQueryString = filter => {
   Belt.Option.forEach(filter.nameOrEmail, search => Js.Dict.set(filterDict, "search", search))
   Belt.Option.forEach(filter.targetId, targetId => Js.Dict.set(filterDict, "targetId", targetId))
   Belt.Option.forEach(filter.levelId, levelId => Js.Dict.set(filterDict, "levelId", levelId))
+
   Belt.Option.forEach(filter.personalCoachId, coachId =>
     Js.Dict.set(filterDict, "personalCoachId", coachId)
   )
-  Belt.Option.forEach(filter.assignedCoachId, assignedCoachId =>
-    Js.Dict.set(filterDict, "assignedCoachId", assignedCoachId)
-  )
-  Belt.Option.forEach(filter.reviewingCoachId, reviewingCoachId =>
-    Js.Dict.set(filterDict, "reviewingCoachId", reviewingCoachId)
-  )
+
+  if filter.tab != Some(#Reviewed) {
+    Belt.Option.forEach(filter.assignedCoachId, assignedCoachId =>
+      Js.Dict.set(filterDict, "assignedCoachId", assignedCoachId)
+    )
+  }
+
+  if filter.tab != Some(#Pending) {
+    Belt.Option.forEach(filter.reviewingCoachId, reviewingCoachId =>
+      Js.Dict.set(filterDict, "reviewingCoachId", reviewingCoachId)
+    )
+  }
 
   switch filter.tab {
   | Some(tab) =>

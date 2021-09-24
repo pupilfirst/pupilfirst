@@ -575,13 +575,29 @@ let onSelectFilter = (send, courseId, state, filter, selectable) => {
   | Selectable.Loader(_) => ()
   | _ => send(UnsetSearchString)
   }
+
   switch selectable {
   | Selectable.AssignedToCoach(coach, _currentCoachId) =>
-    updateParams({...filter, assignedCoachId: Some(Coach.id(coach))})
+    let tab = switch Filter.tab(filter) {
+    | Some(#Reviewed) => Some(#Pending)
+    | otherTab => otherTab
+    }
+
+    updateParams({
+      ...filter,
+      assignedCoachId: Some(Coach.id(coach)),
+      tab: tab,
+      reviewingCoachId: None,
+    })
   | PersonalCoach(coach, _currentCoachId) =>
     updateParams({...filter, personalCoachId: Some(Coach.id(coach))})
   | ReviewedBy(coach, _currentCoachId) =>
-    updateParams({...filter, reviewingCoachId: Some(Coach.id(coach)), tab: Some(#Reviewed)})
+    updateParams({
+      ...filter,
+      reviewingCoachId: Some(Coach.id(coach)),
+      tab: Some(#Reviewed),
+      assignedCoachId: None,
+    })
   | Level(level) => updateParams({...filter, levelId: Some(Level.id(level))})
   | Loader(l) => {
       send(SetLoader(l))
@@ -601,7 +617,13 @@ let onSelectFilter = (send, courseId, state, filter, selectable) => {
         sortCriterion: #SubmittedAt,
         reviewingCoachId: None,
       })
-    | #Reviewed => updateParams({...filter, tab: Some(#Reviewed), sortCriterion: #EvaluatedAt})
+    | #Reviewed =>
+      updateParams({
+        ...filter,
+        tab: Some(#Reviewed),
+        sortCriterion: #EvaluatedAt,
+        assignedCoachId: None,
+      })
     }
   | NameOrEmail(nameOrEmail) => updateParams({...filter, nameOrEmail: Some(nameOrEmail)})
   | IncludeInactive => updateParams({...filter, includeInactive: true})

@@ -318,10 +318,8 @@ let make = (
    * are shown on the page. */
 
   let levelZero = levels |> Js.Array.find(l => l |> Level.number == 0)
-  Js.log(levelZero)
   let teamLevelId = team |> Team.levelId
-  Js.log("teamID")
-  Js.log(teamLevelId)
+
   let teamLevel =
     levels |> ArrayUtils.unsafeFind(
       l => l |> Level.id == teamLevelId,
@@ -356,7 +354,7 @@ let make = (
 
   let (state, setState) = React.useState(() => {
     let statusOfTargets = computeTargetStatus(submissions)
-    Js.log(Level.second(levels))
+
     {
       selectedLevelId: switch (preview, targetLevelId, levelZero) {
       | (true, None, None) => Level.first(levels) |> Level.id
@@ -394,7 +392,7 @@ let make = (
   | (None, true | false) =>
     state.selectedLevelId
   }
-  Js.log(currentLevelId)
+
   let currentLevel =
     levels |> ArrayUtils.unsafeFind(
       l => l |> Level.id == currentLevelId,

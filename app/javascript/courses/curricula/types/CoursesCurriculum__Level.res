@@ -30,8 +30,12 @@ let isLocked = t => !(t |> isUnlocked)
 
 let sort = levels => levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number)
 
-let first = levels => levels->sort->Js.Array.unsafe_get(0)
-let second = levels => levels->sort->Js.Array.unsafe_get(1)
+let first = levels =>
+  ArrayUtils.unsafeFind(
+    level => level.number == 1,
+    "Unable to find level one at CoursesCurriculum__Level",
+    levels,
+  )
 
 let unlockDateString = t =>
   switch t.unlockAt {

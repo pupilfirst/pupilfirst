@@ -357,8 +357,7 @@ let make = (
 
     {
       selectedLevelId: switch (preview, targetLevelId, levelZero) {
-      | (true, None, None) => Level.first(levels) |> Level.id
-      | (true, None, Some(_)) => Level.second(levels) |> Level.id
+      | (true, None, _) => Level.first(levels) |> Level.id
       | (_, Some(targetLevelId), Some(levelZero)) =>
         levelZero |> Level.id == targetLevelId ? teamLevelId : targetLevelId
       | (_, Some(targetLevelId), None) => targetLevelId

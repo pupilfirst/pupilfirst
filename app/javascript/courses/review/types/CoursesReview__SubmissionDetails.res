@@ -4,6 +4,7 @@ module Student = CoursesReview__Student
 module ReviewChecklistItem = CoursesReview__ReviewChecklistItem
 module SubmissionMeta = CoursesReview__SubmissionMeta
 module Coach = UserProxy
+module Reviewer = CoursesReview__Reviewer
 
 type t = {
   submission: OverlaySubmission.t,
@@ -22,7 +23,9 @@ type t = {
   teamName: option<string>,
   courseId: string,
   preview: bool,
+  reviewer: option<Reviewer.t>,
 }
+
 let submission = t => t.submission
 let allSubmissions = t => t.allSubmissions
 let targetId = t => t.targetId
@@ -38,6 +41,7 @@ let teamName = t => t.teamName
 let courseId = t => t.courseId
 let createdAt = t => t.createdAt
 let preview = t => t.preview
+let reviewer = t => t.reviewer
 
 let make = (
   ~submission,
@@ -56,6 +60,7 @@ let make = (
   ~courseId,
   ~createdAt,
   ~preview,
+  ~reviewer,
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
@@ -73,6 +78,7 @@ let make = (
   courseId: courseId,
   createdAt: createdAt,
   preview: preview,
+  reviewer: reviewer,
 }
 
 let decodeJs = details =>
@@ -85,28 +91,29 @@ let decodeJs = details =>
     ),
     ~targetId=details["targetId"],
     ~targetTitle=details["targetTitle"],
-    ~students=details["students"] |> Array.map(Student.makeFromJs),
+    ~students=details["students"]->Js.Array2.map(Student.makeFromJs),
     ~levelNumber=details["levelNumber"],
     ~levelId=details["levelId"],
     ~targetEvaluationCriteriaIds=details["targetEvaluationCriteriaIds"],
     ~inactiveStudents=details["inactiveStudents"],
     ~createdAt=DateFns.decodeISO(details["createdAt"]),
-    ~evaluationCriteria=details["evaluationCriteria"] |> Js.Array.map(ec =>
+    ~evaluationCriteria=details["evaluationCriteria"]->Js.Array2.map(ec =>
       EvaluationCriterion.make(
         ~id=ec["id"],
         ~name=ec["name"],
         ~maxGrade=ec["maxGrade"],
         ~passGrade=ec["passGrade"],
-        ~gradesAndLabels=ec["gradeLabels"] |> Array.map(gradeAndLabel =>
+        ~gradesAndLabels=ec["gradeLabels"]->Js.Array2.map(gradeAndLabel =>
           GradeLabel.makeFromJs(gradeAndLabel)
         ),
       )
     ),
-    ~reviewChecklist=details["reviewChecklist"] |> ReviewChecklistItem.makeFromJs,
+    ~reviewChecklist=ReviewChecklistItem.makeFromJs(details["reviewChecklist"]),
     ~coaches=Js.Array.map(Coach.makeFromJs, details["coaches"]),
     ~teamName=details["teamName"],
     ~courseId=details["courseId"],
     ~preview=details["preview"],
+    ~reviewer=Belt.Option.map(details["reviewerDetails"], Reviewer.makeFromJs),
   )
 
 let updateMetaSubmission = submission => {
@@ -132,3 +139,8 @@ let updateOverlaySubmission = (submission, t) => {
 }
 
 let updateReviewChecklist = (reviewChecklist, t) => {...t, reviewChecklist: reviewChecklist}
+
+let updateReviewer = (user, t) => {
+  ...t,
+  reviewer: Belt.Option.map(user, Reviewer.setReviewer),
+}

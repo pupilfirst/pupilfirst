@@ -11,6 +11,7 @@ type status =
   | Ungraded
 
 type editor =
+  | AssignReviewer
   | GradesEditor
   | ChecklistEditor
   | ReviewedSubmissionEditor(array<Grade.t>)
@@ -51,6 +52,7 @@ type action =
   | FinishGrading(array<Grade.t>)
   | SetNextSubmissionDataLoading
   | SetNextSubmissionDataEmpty
+  | UnassignReviewer
 
 let reducer = (state, action) =>
   switch action {
@@ -85,41 +87,80 @@ let reducer = (state, action) =>
     }
   | SetNextSubmissionDataLoading => {...state, nextSubmission: DataLoading}
   | SetNextSubmissionDataEmpty => {...state, nextSubmission: DataEmpty}
+  | UnassignReviewer => {...state, editor: AssignReviewer, saving: false}
   }
 
-module CreateGradingMutation = %graphql(`
+module CreateGradingMutation = %graphql(
+  `
     mutation CreateGradingMutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!, $note: String,  $checklist: JSON!) {
       createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades, note: $note, checklist: $checklist){
         success
       }
     }
-  `)
+  `
+)
 
-module UndoGradingMutation = %graphql(`
+module UndoGradingMutation = %graphql(
+  `
     mutation UndoGradingMutation($submissionId: ID!) {
       undoGrading(submissionId: $submissionId){
         success
       }
     }
-  `)
+  `
+)
 
-module CreateFeedbackMutation = %graphql(`
+module CreateFeedbackMutation = %graphql(
+  `
     mutation CreateFeedbackMutation($submissionId: ID!, $feedback: String!) {
       createFeedback(submissionId: $submissionId, feedback: $feedback){
         success
       }
     }
-  `)
+  `
+)
 
-module NextSubmissionQuery = %graphql(`
-    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $excludeSubmissionId: ID, $after: String) {
-      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, levelId: $levelId, coachId: $coachId, first: 1, after: $after) {
+module NextSubmissionQuery = %graphql(
+  `
+    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID,  $personalCoachId: ID, $assignedCoachId: ID, $excludeSubmissionId: ID, $after: String) {
+      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, levelId: $levelId, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId, first: 1, after: $after) {
         nodes {
           id
         }
       }
     }
-  `)
+  `
+)
+
+module UnassignReviewerMutation = %graphql(
+  `
+    mutation UnassignReviewerMutation($submissionId: ID!) {
+      unassignReviewer(submissionId: $submissionId){
+        success
+      }
+    }
+  `
+)
+
+let unassignReviewer = (submissionId, send, updateReviewerCB) => {
+  send(BeginSaving)
+
+  UnassignReviewerMutation.make(~submissionId, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    if response["unassignReviewer"]["success"] {
+      updateReviewerCB(None)
+      send(UnassignReviewer)
+    }
+    send(FinishSaving)
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(_ => {
+    send(FinishSaving)
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
 
 let getNextSubmission = (send, courseId, filter, submissionId) => {
   send(SetNextSubmissionDataLoading)
@@ -129,7 +170,8 @@ let getNextSubmission = (send, courseId, filter, submissionId) => {
     ~sortDirection=Filter.sortDirection(filter),
     ~sortCriterion=Filter.sortCriterion(filter),
     ~levelId=?Filter.levelId(filter),
-    ~coachId=?Filter.coachId(filter),
+    ~personalCoachId=?Filter.personalCoachId(filter),
+    ~assignedCoachId=?Filter.assignedCoachId(filter),
     ~targetId=?Filter.targetId(filter),
     ~search=?Filter.nameOrEmail(filter),
     ~excludeSubmissionId=?Some(submissionId),
@@ -156,9 +198,7 @@ let getNextSubmission = (send, courseId, filter, submissionId) => {
   |> ignore
 }
 
-let makeFeedback = (u, feedback) => {
-  let user = Belt.Option.getWithDefault(u, User.empty())
-
+let makeFeedback = (user, feedback) => {
   Feedback.make(
     ~coachName=Some(User.name(user)),
     ~coachAvatarUrl=User.avatarUrl(user),
@@ -259,7 +299,7 @@ let gradeSubmissionQuery = (
           updateSubmissionCB(
             OverlaySubmission.update(
               passed(state.grades, evaluationCriteria) ? Some(Js.Date.make()) : None,
-              Belt.Option.map(currentUser, AppRouter__User.name),
+              Some(User.name(currentUser)),
               Js.Array.concat(
                 Belt.Option.mapWithDefault(feedback, [], f => [makeFeedback(currentUser, f)]),
                 OverlaySubmission.feedback(overlaySubmission),
@@ -511,8 +551,7 @@ let showGradePill = (
       EvaluationCriterion.gradesAndLabels(evaluationCriterion),
     )}
     <div className="course-review-editor__grade-bar inline-flex w-full text-center mt-1">
-      {EvaluationCriterion.gradesAndLabels(evaluationCriterion)
-      ->Js.Array2.map(gradeLabel => {
+      {EvaluationCriterion.gradesAndLabels(evaluationCriterion)->Js.Array2.map(gradeLabel => {
         let gradeLabelGrade = GradeLabel.grade(gradeLabel)
 
         <button
@@ -531,15 +570,12 @@ let showGradePill = (
           | None => React.null
           }}
         </button>
-      })
-      ->React.array}
+      })->React.array}
     </div>
   </div>
 
 let showGrades = (grades, evaluationCriteria, submissionDetails, state) =>
-  <div>
-    {Grade.sort(evaluationCriteria, grades)
-    ->Js.Array2.mapi((grade, key) => {
+  <div> {Grade.sort(evaluationCriteria, grades)->Js.Array2.mapi((grade, key) => {
       let gradeEcId = Grade.evaluationCriterionId(grade)
       let ec = ArrayUtils.unsafeFind(
         ec => EvaluationCriterion.id(ec) == gradeEcId,
@@ -556,18 +592,14 @@ let showGrades = (grades, evaluationCriteria, submissionDetails, state) =>
         state,
         None,
       )
-    })
-    ->React.array}
-  </div>
+    })->React.array} </div>
 let renderGradePills = (
   evaluationCriteria,
   targetEvaluationCriteriaIds,
   submissionDetails,
   state,
   send,
-) =>
-  targetEvaluationCriteriaIds
-  ->Js.Array2.mapi((evaluationCriterionId, key) => {
+) => targetEvaluationCriteriaIds->Js.Array2.mapi((evaluationCriterionId, key) => {
     let ec = ArrayUtils.unsafeFind(
       e => EvaluationCriterion.id(e) == evaluationCriterionId,
       "CoursesRevew__Editor: Unable to find evaluation criterion with id - " ++
@@ -586,8 +618,7 @@ let renderGradePills = (
     let passGrade = EvaluationCriterion.passGrade(ec)
 
     showGradePill(key, submissionDetails, ec, gradeValue, passGrade, state, Some(send))
-  })
-  ->React.array
+  })->React.array
 
 let badgeColorClasses = statusColor => {
   switch statusColor {
@@ -712,8 +743,8 @@ let submissionStatusIcon = (status, overlaySubmission) => {
         </div>
         <p
           className={`text-xs flex items-center justify-center md:block text-center w-full border rounded px-1 py-px font-semibold md:mt-1 ${badgeColorClasses(
-              color,
-            )} ${textColor(color)}`}>
+            color,
+          )} ${textColor(color)}`}>
           {text->str}
         </p>
       </div>
@@ -963,6 +994,11 @@ let updateReviewChecklist = (cb, send, checklist) => {
   cb(checklist)
 }
 
+let updateReviewer = (cb, send, reviewer) => {
+  cb(reviewer)
+  send(ShowGradesEditor)
+}
+
 @react.component
 let make = (
   ~overlaySubmission,
@@ -977,6 +1013,7 @@ let make = (
   ~number,
   ~submissionDetails,
   ~submissionId,
+  ~updateReviewerCB,
 ) => {
   let (state, send) = React.useReducer(
     reducer,
@@ -987,7 +1024,12 @@ let make = (
       note: None,
       checklist: OverlaySubmission.checklist(overlaySubmission),
       editor: ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
-        ? GradesEditor
+        ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
+            UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
+          ) ||
+          SubmissionDetails.preview(submissionDetails)
+            ? GradesEditor
+            : AssignReviewer
         : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission)),
       additonalFeedbackEditorVisible: false,
       feedbackGenerated: false,
@@ -1051,7 +1093,13 @@ let make = (
           <div className="flex flex-1 items-center justify-between">
             <div>
               <p className="font-semibold"> {str("Submission " ++ string_of_int(number))} </p>
-              <p className="text-gray-800 text-xs">
+              <p
+                className="text-gray-800 text-xs"
+                title={OverlaySubmission.createdAt(overlaySubmission)->DateFns.formatPreset(
+                  ~year=true,
+                  ~time=true,
+                  (),
+                )}>
                 {overlaySubmission
                 ->OverlaySubmission.createdAt
                 ->DateFns.formatPreset(~year=true, ())
@@ -1067,12 +1115,52 @@ let make = (
       </div>
       <div className="md:w-1/2 w-full md:overflow-y-auto">
         {switch state.editor {
+        | AssignReviewer =>
+          <div>
+            <div
+              className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+              <p className="font-semibold"> {str("Review")} </p>
+            </div>
+            <CoursesReview__ReviewerManager
+              submissionDetails
+              updateReviewerCB={updateReviewer(updateReviewerCB, send)}
+              submissionId
+            />
+          </div>
+
         | GradesEditor =>
           <div>
             <div
               className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
               <p className="font-semibold"> {str("Review")} </p>
             </div>
+            {ReactUtils.nullIf(
+              <div className="px-4 md:px-6 py-4 border-b border-gray-300" ariaLabel="Assigned to">
+                <div className="flex items-center justify-between px-3 py-2 rounded-md bg-gray-200">
+                  {switch SubmissionDetails.reviewer(submissionDetails) {
+                  | Some(reviewer) =>
+                    <div>
+                      <div>
+                        <p className="text-xs text-gray-800"> {t("assigned_to")->str} </p>
+                        <p className="text-xs font-semibold">
+                          {UserProxy.name(Reviewer.user(reviewer))->str}
+                        </p>
+                      </div>
+                    </div>
+                  | None => React.null
+                  }}
+                  <div className="flex justify-center ml-2 md:ml-4">
+                    <button
+                      onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
+                      className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                      <i className="fas fa-user-minus" />
+                      <span className="ml-2"> {t("remove_assignment")->str} </span>
+                    </button>
+                  </div>
+                </div>
+              </div>,
+              SubmissionDetails.preview(submissionDetails),
+            )}
             {feedbackGenerator(submissionDetails, reviewChecklist, state, send)}
             <div className="w-full px-4 md:px-6 pt-8 space-y-8">
               {noteForm(submissionDetails, overlaySubmission, teamSubmission, state.note, send)}
@@ -1098,10 +1186,10 @@ let make = (
               </div>
             </div>
             <div
-              className="flex justify-end bg-white md:bg-gray-100 border-t px-4 py-2 md:py-4 mt-4">
+              className="flex justify-end bg-white md:bg-gray-100 border-t px-4 md:px-6 py-2 md:py-4 mt-4 md:ml-8">
               <button
                 disabled={reviewButtonDisabled(status)}
-                className="btn btn-success btn-large w-full md:w-auto border border-green-600"
+                className="btn btn-success btn-large w-full border border-green-600"
                 onClick={gradeSubmission(
                   OverlaySubmission.id(overlaySubmission),
                   state,

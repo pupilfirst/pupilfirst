@@ -163,5 +163,8 @@ module Types
           mutation: Mutations::CreateStudentFromApplicant,
           null: false
     field :clone_level, mutation: Mutations::CloneLevel, null: false
+    field :assign_reviewer, mutation: Mutations::AssignReviewer, null: false
+    field :reassign_reviewer, mutation: Mutations::ReassignReviewer, null: false
+    field :unassign_reviewer, mutation: Mutations::UnassignReviewer, null: false
   end
 end

@@ -186,7 +186,9 @@ module Mutations
           passed_at: (failed? ? nil : Time.zone.now),
           evaluator: coach,
           evaluated_at: Time.zone.now,
-          checklist: @params[:checklist]
+          checklist: @params[:checklist],
+          reviewer: nil,
+          reviewer_assigned_at: nil
         )
 
         TimelineEvents::AfterGradingJob.perform_later(submission)

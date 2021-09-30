@@ -27,7 +27,7 @@
     "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/multiselect-dropdown"
   },
   "devDependencies": {
-    "bs-platform": "8.3.3",
+    "rescript": "9.1.4",
     "parcel-bundler": "^1.12.4",
     "tailwindcss": "^1.9.6"
   },
@@ -37,13 +37,13 @@
     "fuse.js": "^6.4.6",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "@rescript/react": "^0.10.1"
+    "@rescript/react": "^0.10.2"
   },
   "scripts": {
     "dev": "parcel index.html",
     "build": "parcel build index.html",
     "test": "echo \"Error: run tests from root\" && exit 1",
-    "re:build": "bsb -make-world -clean-world",
-    "re:watch": "bsb -make-world -clean-world -w"
+    "re:build": "rescript",
+    "re:watch": "rescript clean && rescript build -w"
   }
 }

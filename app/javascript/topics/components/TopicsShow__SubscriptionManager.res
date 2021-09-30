@@ -2,25 +2,21 @@ let t = I18n.t(~scope="components.TopicsShow__SubscriptionManager")
 
 let str = React.string
 
-module CreateTopicSubscriptionQuery = %graphql(
-  `
+module CreateTopicSubscriptionQuery = %graphql(`
   mutation CreateTopicSubscriptionMutation($topicId: ID!) {
     createTopicSubscription(topicId: $topicId)  {
       success
     }
   }
-`
-)
+`)
 
-module DeleteTopicSubscriptionQuery = %graphql(
-  `
+module DeleteTopicSubscriptionQuery = %graphql(`
   mutation DeleteTopicSubscriptionMutation($topicId: ID!) {
     deleteTopicSubscription(topicId: $topicId) {
       success
     }
   }
-  `
-)
+  `)
 
 let iconClasses = (subscribed, saving) =>
   "fa-fw" ++ if saving {

@@ -566,6 +566,6 @@ feature 'Submission Builder', js: true do
     last_submission = TimelineEvent.last
     submission_files = last_submission.timeline_event_files
     expect(submission_files.count).to eq(1)
-    expect(submission_files.first.file.blob.content_type).to eq('video/webm')
+    expect(submission_files.first.file.blob.content_type).to eq('audio/webm')
   end
 end

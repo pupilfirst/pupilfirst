@@ -1,4 +1,4 @@
-%bs.raw(`require("./CommunitiesShow__Root.css")`)
+%raw(`require("./CommunitiesShow__Root.css")`)
 
 open CommunitiesShow__Types
 
@@ -64,8 +64,7 @@ let reducer = (state, action) =>
   | BeginReloading => {...state, loading: Reloading}
   }
 
-module TopicsQuery = %graphql(
-  `
+module TopicsQuery = %graphql(`
     query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $resolution: TopicResolutionFilter!, $search: String, $after: String, $sortCriterion: TopicSortCriterion!, $sortDirection: SortDirection!) {
       topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, resolution: $resolution, sortDirection: $sortDirection, sortCriterion: $sortCriterion, first: 10, after: $after) {
         nodes {
@@ -94,8 +93,7 @@ module TopicsQuery = %graphql(
         totalCount
       }
     }
-  `
-)
+  `)
 
 let getTopics = (send, communityId, cursor, filter) => {
   let topicCategoryId = filter.topicCategory |> OptionUtils.map(TopicCategory.id)
@@ -188,7 +186,8 @@ let topicsList = (topicCategories, topics) =>
           {t("empty_topics")->str}
         </h4>
       </div>
-    : topics |> Js.Array.map(topic =>
+    : topics
+      |> Js.Array.map(topic =>
         <a
           className="block"
           key={Topic.id(topic)}
@@ -314,7 +313,8 @@ let topicsList = (topicCategories, topics) =>
             </div>
           </div>
         </a>
-      ) |> React.array
+      )
+      |> React.array
 
 let topicsLoadedData = (totalTopicsCount, loadedTopicsCount) =>
   <div
@@ -533,19 +533,19 @@ let filterFromQueryParams = (search, target, topicCategories) => {
     ),
     target: target,
     solution: switch get("solution", params) {
-    | Some(criterion) when criterion == "Solved" => #Solved
-    | Some(criterion) when criterion == "Unsolved" => #Unsolved
+    | Some(criterion) if criterion == "Solved" => #Solved
+    | Some(criterion) if criterion == "Unsolved" => #Unsolved
     | _ => #Unselected
     },
     sortCriterion: switch get("sortCriterion", params) {
-    | Some(criterion) when criterion == "LastActivityAt" => #LastActivityAt
-    | Some(criterion) when criterion == "Views" => #Views
-    | Some(criterion) when criterion == "CreatedAt" => #CreatedAt
+    | Some(criterion) if criterion == "LastActivityAt" => #LastActivityAt
+    | Some(criterion) if criterion == "Views" => #Views
+    | Some(criterion) if criterion == "CreatedAt" => #CreatedAt
     | _ => #CreatedAt
     },
     sortDirection: switch get("sortDirection", params) {
-    | Some(direction) when direction == "Descending" => #Descending
-    | Some(direction) when direction == "Ascending" => #Ascending
+    | Some(direction) if direction == "Descending" => #Descending
+    | Some(direction) if direction == "Ascending" => #Ascending
     | _ => #Descending
     },
   }

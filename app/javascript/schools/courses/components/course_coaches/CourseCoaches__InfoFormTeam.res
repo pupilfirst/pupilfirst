@@ -4,15 +4,13 @@ let str = React.string
 
 let deleteIconClasses = deleting => deleting ? "fas fa-spinner fa-pulse" : "far fa-trash-alt"
 
-module DeleteCoachTeamEnrollmentQuery = %graphql(
-  `
+module DeleteCoachTeamEnrollmentQuery = %graphql(`
   mutation($teamId: ID!, $coachId: ID!) {
     deleteCoachTeamEnrollment(teamId: $teamId, coachId: $coachId) {
       success
     }
   }
-`
-)
+`)
 
 let deleteTeamEnrollment = (team, coach, setDeleting, removeTeamEnrollmentCB, event) => {
   event |> ReactEvent.Mouse.preventDefault

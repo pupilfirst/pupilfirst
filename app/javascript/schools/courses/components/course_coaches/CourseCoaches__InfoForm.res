@@ -28,8 +28,7 @@ let reducer = (state, action) =>
     }
   }
 
-module CoachInfoQuery = %graphql(
-  `
+module CoachInfoQuery = %graphql(`
     query CoachInfoQuery($courseId: ID!, $coachId: ID!, $coachNotes: CoachNoteFilter!) {
       teams(courseId: $courseId, coachNotes: $coachNotes, coachId: $coachId, first: 100, tags: []) {
         nodes {
@@ -46,8 +45,7 @@ module CoachInfoQuery = %graphql(
         pendingSubmissions
       }
     }
-  `
-)
+  `)
 
 let loadCoachTeams = (courseId, coachId, send) =>
   CoachInfoQuery.make(~courseId, ~coachId, ~coachNotes=#IgnoreCoachNotes, ())

@@ -36,15 +36,13 @@ let reducer = (state, action) =>
     }
   }
 
-module DeleteCourseAuthorQuery = %graphql(
-  `
+module DeleteCourseAuthorQuery = %graphql(`
   mutation DeleteCourseAuthorMutation($id: ID!) {
     deleteCourseAuthor(id: $id) {
       success
     }
   }
-`
-)
+`)
 
 let removeCourseAuthor = (send, author, event) => {
   event |> ReactEvent.Mouse.preventDefault

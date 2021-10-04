@@ -90,7 +90,7 @@ class User < ApplicationRecord
   end
 
   def original_login_token
-    @original_login_token.presence || raise('Original login token is inaccessible')
+    @original_login_token || raise('Original login token is unavailable')
   end
 
   def regenerate_reset_password_token
@@ -101,7 +101,7 @@ class User < ApplicationRecord
   end
 
   def original_reset_password_token
-    @original_reset_password_token.presence || raise('Original reset password token is inaccessible')
+    @original_reset_password_token || raise('Original reset password token is unavailable')
   end
 
   def regenerate_delete_account_token

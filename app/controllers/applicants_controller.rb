@@ -1,8 +1,8 @@
 class ApplicantsController < ApplicationController
   # GET /applicants/:token/enroll
   def enroll
-    login_token = Digest::SHA2.base64digest(params[:token])
-    @applicant = Applicant.find_by(login_token_digest: login_token)
+    login_token_digest = Digest::SHA2.base64digest(params[:token])
+    @applicant = Applicant.find_by(login_token_digest: login_token_digest)
 
     if valid_applicant?
       @applicant.update!(email_verified: true)

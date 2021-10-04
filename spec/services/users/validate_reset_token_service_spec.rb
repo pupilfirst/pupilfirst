@@ -3,11 +3,11 @@ require 'rails_helper'
 describe Users::ValidateResetTokenService do
   include WithEnvHelper
 
-  let(:token) { SecureRandom.urlsafe_base64 }
-  let(:reset_password_token) { Digest::SHA2.base64digest(token) }
+  let(:reset_password_token) { SecureRandom.urlsafe_base64 }
+  let(:reset_password_token_digest) { Digest::SHA2.base64digest(reset_password_token) }
   let(:time_limit) { nil }
   let(:sent_at) { Time.zone.now }
-  let!(:user) { create :user, reset_password_token: reset_password_token, reset_password_sent_at: sent_at }
+  let!(:user) { create :user, reset_password_token: reset_password_token_digest, reset_password_sent_at: sent_at }
 
   subject { described_class.new(token) }
 

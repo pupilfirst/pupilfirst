@@ -54,9 +54,8 @@ module Users
       if user.present?
         # Regenerate the login token.
         user.regenerate_login_token
-        login_token = user.original_login_token
         token_url_options = {
-          token: login_token,
+          token: user.original_login_token,
           host: oauth_origin[:fqdn]
         }
         # Redirect user to sign in at the origin domain with newly generated token.

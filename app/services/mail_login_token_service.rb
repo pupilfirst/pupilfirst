@@ -13,9 +13,8 @@ class MailLoginTokenService
     # Update the time at which last login mail was sent.
     @user.update!(login_mail_sent_at: Time.zone.now)
 
-    login_token = @user.original_login_token
     url_options = {
-      token: login_token,
+      token: @user.original_login_token,
       shared_device: @shared_device
     }
     url_options[:referrer] = @referrer if @referrer.present?

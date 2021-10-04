@@ -23,6 +23,6 @@ class Applicant < ApplicationRecord
   end
 
   def original_login_token
-    @original_login_token.presence || raise('Original login token is inaccessible')
+    @original_login_token || raise('Original login token is unavailable')
   end
 end

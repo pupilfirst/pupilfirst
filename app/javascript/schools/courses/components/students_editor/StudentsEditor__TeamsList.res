@@ -4,6 +4,7 @@ let str = React.string
 
 open StudentsEditor__Types
 
+type displayCount = {displayCount: int, totalCount: int}
 module CourseTeamsQuery = %graphql(
   `
     query CourseTeamsQuery($courseId: ID!, $levelId: ID, $search: String, $after: String, $tags: [String!], $sortBy: String!, $sortDirection: SortDirection!) {
@@ -38,6 +39,7 @@ module CourseTeamsQuery = %graphql(
         pageInfo {
           endCursor,hasNextPage
         }
+        totalCount
       }
     }
   `
@@ -97,9 +99,11 @@ let getTeams = (courseId, cursor, updateTeamsCB, teams, filter, setLoadingCB, lo
       response["courseTeams"]["pageInfo"]["hasNextPage"],
       teams,
     )
-    Js.Promise.resolve()
+    Js.Promise.resolve({
+      "count": response["courseTeams"]["nodes"]->Js.Array2.length,
+      "totalCount": response["courseTeams"]["totalCount"],
+    })
   })
-  |> ignore
 }
 
 let studentAvatar = student =>
@@ -268,6 +272,21 @@ let showTeams = (
     |> React.array
   }
 
+let submissionsLoadedData = (totalStudentsCount, loadedStudentsCount) =>
+  <div className="text-center pb-4">
+    <div className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
+      {str(
+        totalStudentsCount == loadedStudentsCount
+          ? totalStudentsCount === 1
+              ? "There's only one student."
+              : `Showing all ${string_of_int(totalStudentsCount)} students`
+          : `Showing ${string_of_int(loadedStudentsCount)} of ${string_of_int(
+              totalStudentsCount,
+            )} students`,
+      )}
+    </div>
+  </div>
+
 @react.component
 let make = (
   ~levels,
@@ -284,12 +303,17 @@ let make = (
   ~updateFilterCB,
   ~refreshTeams,
 ) => {
+  let (count, setCount) = React.useState(() => None)
   React.useEffect1(() => {
     getTeams(courseId, None, updateTeamsCB, [], filter, setLoadingCB, Loading.Reloading)
+    |> Js.Promise.then_(response => {
+      setCount(_ => Some({displayCount: response["count"], totalCount: response["totalCount"]}))
+      Js.Promise.resolve()
+    })
+    |> ignore
 
     None
   }, [refreshTeams])
-
   <div className="pb-6">
     <div className="max-w-3xl mx-auto w-full">
       <div>
@@ -311,6 +335,11 @@ let make = (
           )
         }}
       </div>
+      {switch count {
+      | Some({totalCount: 0}) => React.null
+      | Some(count) => submissionsLoadedData(count.totalCount, count.displayCount)
+      | None => React.null
+      }}
       {switch (pagedTeams: Page.t) {
       | Unloaded
       | FullyLoaded(_) => React.null
@@ -329,7 +358,25 @@ let make = (
                     filter,
                     setLoadingCB,
                     Loading.LoadingMore,
-                  )}>
+                  )
+                  |> Js.Promise.then_(response => {
+                    setCount(prevCount =>
+                      switch prevCount {
+                      | None =>
+                        Some({
+                          displayCount: response["count"],
+                          totalCount: response["totalCount"],
+                        })
+                      | Some(count) =>
+                        Some({
+                          displayCount: count.displayCount + response["count"],
+                          totalCount: response["totalCount"],
+                        })
+                      }
+                    )
+                    Js.Promise.resolve()
+                  })
+                  |> ignore}>
                 {"Load More" |> str}
               </button>
             </div>

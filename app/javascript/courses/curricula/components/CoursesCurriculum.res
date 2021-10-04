@@ -354,10 +354,9 @@ let make = (
 
   let (state, setState) = React.useState(() => {
     let statusOfTargets = computeTargetStatus(submissions)
-
     {
       selectedLevelId: switch (preview, targetLevelId, levelZero) {
-      | (true, None, _) => Level.first(levels) |> Level.id
+      | (true, None, _levelZero) => Level.first(levels)->Level.id
       | (_, Some(targetLevelId), Some(levelZero)) =>
         levelZero |> Level.id == targetLevelId ? teamLevelId : targetLevelId
       | (_, Some(targetLevelId), None) => targetLevelId

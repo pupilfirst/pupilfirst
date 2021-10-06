@@ -17,7 +17,7 @@ module Users
 
     def user
       reset_token = Digest::SHA2.base64digest(@token)
-      @user ||= User.find_by(reset_password_token: reset_token)
+      @user ||= User.find_by(reset_password_token_digest: reset_token)
     end
 
     def valid_request?

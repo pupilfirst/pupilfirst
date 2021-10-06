@@ -79,7 +79,7 @@ feature 'User signing in by supplying email address', js: true do
         fill_in 'Confirm Password', with: password
         click_button 'Update Password'
         expect(page).to have_content(user.founders.first.course.name)
-        expect(user.reload.reset_password_token).to eq(nil)
+        expect(user.reload.reset_password_token_digest).to eq(nil)
 
         # Let's try signing in.
         click_button 'Show user controls'

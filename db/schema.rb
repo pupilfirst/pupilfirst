@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_14_182659) do
+ActiveRecord::Schema.define(version: 2021_10_06_052917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -215,9 +215,9 @@ ActiveRecord::Schema.define(version: 2021_09_14_182659) do
     t.string "progression_behavior", null: false
     t.integer "progression_limit"
     t.datetime "archived_at"
+    t.boolean "public_preview", default: false
     t.string "processing_url"
     t.jsonb "highlights", default: []
-    t.boolean "public_preview", default: false
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 
@@ -681,6 +681,9 @@ ActiveRecord::Schema.define(version: 2021_09_14_182659) do
     t.string "quiz_score"
     t.datetime "evaluated_at"
     t.jsonb "checklist", default: []
+    t.bigint "reviewer_id"
+    t.datetime "reviewer_assigned_at"
+    t.index ["reviewer_id"], name: "index_timeline_events_on_reviewer_id"
   end
 
   create_table "topic_categories", force: :cascade do |t|
@@ -707,8 +710,8 @@ ActiveRecord::Schema.define(version: 2021_09_14_182659) do
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "topic_category_id"
     t.integer "views", default: 0
+    t.bigint "topic_category_id"
     t.datetime "locked_at"
     t.bigint "locked_by_id"
     t.index ["community_id"], name: "index_topics_on_community_id"
@@ -736,13 +739,13 @@ ActiveRecord::Schema.define(version: 2021_09_14_182659) do
     t.text "about"
     t.bigint "school_id"
     t.jsonb "preferences", default: {"daily_digest"=>true}, null: false
-    t.string "reset_password_token"
+    t.string "reset_password_token_digest"
     t.datetime "reset_password_sent_at"
     t.string "affiliation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "time_zone", default: "Asia/Kolkata", null: false
-    t.string "delete_account_token"
+    t.string "delete_account_token_digest"
     t.datetime "delete_account_sent_at"
     t.datetime "account_deletion_notification_sent_at"
     t.string "api_token_digest"
@@ -750,10 +753,10 @@ ActiveRecord::Schema.define(version: 2021_09_14_182659) do
     t.jsonb "webpush_subscription", default: {}
     t.string "login_token_digest"
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
-    t.index ["delete_account_token"], name: "index_users_on_delete_account_token", unique: true
+    t.index ["delete_account_token_digest"], name: "index_users_on_delete_account_token_digest", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
     t.index ["login_token_digest"], name: "index_users_on_login_token_digest", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["reset_password_token_digest"], name: "index_users_on_reset_password_token_digest", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"
   end
 
@@ -829,6 +832,7 @@ ActiveRecord::Schema.define(version: 2021_09_14_182659) do
   add_foreign_key "target_versions", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
+  add_foreign_key "timeline_events", "faculty", column: "reviewer_id"
   add_foreign_key "topic_categories", "communities"
   add_foreign_key "topics", "communities"
   add_foreign_key "topics", "topic_categories"

@@ -96,7 +96,7 @@ class User < ApplicationRecord
   def regenerate_reset_password_token
     @original_reset_password_token = SecureRandom.urlsafe_base64
     update!(
-      reset_password_token: Digest::SHA2.base64digest(@original_reset_password_token),
+      reset_password_token_digest: Digest::SHA2.base64digest(@original_reset_password_token),
     )
   end
 

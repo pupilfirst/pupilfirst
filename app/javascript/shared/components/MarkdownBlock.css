@@ -134,14 +134,6 @@
   @apply px-4 py-2 border border-gray-400;
 }
 
-.markdown-block__permissive img[align="left"] {
-  @apply py-4 pr-6;
-}
-
-.markdown-block__permissive img[align="right"] {
-  @apply py-4 pl-6;
-}
-
 .markdown-block__permissive .align-left {
   @apply block text-left;
 }

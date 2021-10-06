@@ -1,4 +1,4 @@
-%bs.raw(`require("./MarkdownBlock.css")`)
+%raw(`require("./MarkdownBlock.css")`)
 
 let randomId = () => {
   let randomComponent = Js.Math.random() |> Js.Float.toString |> Js.String.substr(~from=2)
@@ -20,6 +20,20 @@ let markdownBlockClasses = (profile, className) => {
   }
 }
 
+let sanitize = (html, profile) =>
+  switch profile {
+  | Markdown.QuestionAndAnswer
+  | Permissive =>
+    DOMPurify.sanitizedHTML(html)
+  | AreaOfText =>
+    DOMPurify.sanitizedHTMLOpt(
+      html,
+      {
+        "ALLOWED_TAGS": ["p", "em", "strong", "del", "s", "a", "sup", "sub"],
+      },
+    )
+  }
+
 @react.component
 let make = (~markdown, ~className=?, ~profile) => {
   let (id, _setId) = React.useState(() => randomId())
@@ -32,6 +46,6 @@ let make = (~markdown, ~className=?, ~profile) => {
   <div
     className={markdownBlockClasses(profile, className)}
     id
-    dangerouslySetInnerHTML={Markdown.parse(profile, markdown)->DOMPurify.sanitizedHTML}
+    dangerouslySetInnerHTML={Markdown.parse(profile, markdown)->sanitize(profile)}
   />
 }

@@ -1,4 +1,4 @@
-%bs.raw(`require("./CurriculumEditor__LevelEditor.css")`)
+%raw(`require("./CurriculumEditor__LevelEditor.css")`)
 
 let t = I18n.t(~scope="components.CurriculumEditor__LevelEditor")
 
@@ -85,16 +85,13 @@ let computeInitialState = level => {
     saving: false,
     tab: Details,
     mergeIntoLevelId: "0",
-    cloneIntoCourseId: "0"
+    cloneIntoCourseId: "0",
   }
 }
 
 let drawerTitle = level =>
   switch level {
-  | Some(level) => t(
-      ~variables=[("number", Level.number(level)->string_of_int)],
-      "edit_level"
-    )
+  | Some(level) => t(~variables=[("number", Level.number(level)->string_of_int)], "edit_level")
   | None => t("create_level")
   }
 
@@ -160,7 +157,7 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
         className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
         id="name"
         type_="text"
-        placeholder=t("level_name_placeholder")
+        placeholder={t("level_name_placeholder")}
         value=state.name
         onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
       />
@@ -204,15 +201,13 @@ let handleSelectLevelForDeletion = (send, event) => {
   send(SelectLevelToMergeInto(target["value"]))
 }
 
-module MergeLevelsQuery = %graphql(
-  `
+module MergeLevelsQuery = %graphql(`
   mutation MergeLevelsQuery($deleteLevelId: ID!, $mergeIntoLevelId: ID!) {
     mergeLevels(deleteLevelId: $deleteLevelId, mergeIntoLevelId: $mergeIntoLevelId) {
       success
     }
   }
-`
-)
+`)
 
 let deleteSelectedLevel = (state, send, level, _event) =>
   WindowUtils.confirm(t("merge_levels_confirm"), () => {
@@ -235,10 +230,7 @@ let deleteSelectedLevel = (state, send, level, _event) =>
     })
     |> Js.Promise.catch(error => {
       Js.log(error)
-      Notification.error(
-        t("actions_error_title"),
-        t("merge_levels_error_message"),
-      )
+      Notification.error(t("actions_error_title"), t("merge_levels_error_message"))
       Js.Promise.resolve()
     })
     |> ignore
@@ -248,25 +240,19 @@ let handleSelectCourseForCloneInto = (send, courseId) => {
   send(SelectCourseToCloneInto(courseId))
 }
 
-module CloneLevelQuery = %graphql(
-  `
+module CloneLevelQuery = %graphql(`
   mutation CloneLevelQuery($levelId: ID!, $cloneIntoCourseId: ID!) {
     cloneLevel(levelId: $levelId, cloneIntoCourseId: $cloneIntoCourseId) {
       success
     }
   }
-`
-)
+`)
 
 let cloneSelectedLevel = (state, send, level, _event) =>
   WindowUtils.confirm(t("clone_level_confirm"), () => {
     send(BeginSaving)
 
-    CloneLevelQuery.make(
-      ~levelId=Level.id(level),
-      ~cloneIntoCourseId=state.cloneIntoCourseId,
-      (),
-    )
+    CloneLevelQuery.make(~levelId=Level.id(level), ~cloneIntoCourseId=state.cloneIntoCourseId, ())
     |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(_result => {
       send(FinishSaving)
@@ -274,10 +260,7 @@ let cloneSelectedLevel = (state, send, level, _event) =>
     })
     |> Js.Promise.catch(error => {
       Js.log(error)
-      Notification.error(
-        t("actions_error_title"),
-        t("clone_level_error_message"),
-      )
+      Notification.error(t("actions_error_title"), t("clone_level_error_message"))
       Js.Promise.resolve()
     })
     |> ignore
@@ -300,9 +283,7 @@ let actionsForm = (level, levels, state, send) => {
         htmlFor="delete-and-merge-level">
         {t("merge_levels_label") |> str}
       </label>
-      <HelpIcon className="ml-1 text-sm">
-        {str(t("merge_levels_hint"))}
-      </HelpIcon>
+      <HelpIcon className="ml-1 text-sm"> {str(t("merge_levels_hint"))} </HelpIcon>
       <select
         id="delete-and-merge-level"
         onChange={handleSelectLevelForDeletion(send)}
@@ -312,7 +293,11 @@ let actionsForm = (level, levels, state, send) => {
         {otherLevels
         |> Array.map(level =>
           <option key={Level.id(level)} value={Level.id(level)}>
-            {LevelLabel.format(~short=true, ~name=Level.name(level), (Level.number(level) |> string_of_int)) |> str}
+            {LevelLabel.format(
+              ~short=true,
+              ~name=Level.name(level),
+              Level.number(level) |> string_of_int,
+            ) |> str}
           </option>
         )
         |> React.array}
@@ -324,28 +309,25 @@ let actionsForm = (level, levels, state, send) => {
         {str(t("merge_levels_button"))}
       </button>
     </div>
-    {Toggle.enabled("clone_level") ?
-    <div className="mt-5 pt-1 border-t">
-      <label
-        className="inline-block tracking-wide text-xs font-semibold"
-        htmlFor="clone-level">
-        {t("clone_level_label") |> str}
-      </label>
-      <HelpIcon className="ml-1 text-sm">
-        {str(t("clone_level_hint"))}
-      </HelpIcon>
-      <CourseSelect
-        id="clone-level"
-        onChange={handleSelectCourseForCloneInto(send)}
-        value=state.cloneIntoCourseId />
-      <button
-        disabled={state.cloneIntoCourseId == "0"}
-        onClick={cloneSelectedLevel(state, send, level)}
-        className="btn btn-primary mt-2">
-        {str(t("clone_level_button"))}
-      </button>
-    </div>
-    : React.null}
+    {Toggle.enabled("clone_level")
+      ? <div className="mt-5 pt-1 border-t">
+          <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="clone-level">
+            {t("clone_level_label") |> str}
+          </label>
+          <HelpIcon className="ml-1 text-sm"> {str(t("clone_level_hint"))} </HelpIcon>
+          <CourseSelect
+            id="clone-level"
+            onChange={handleSelectCourseForCloneInto(send)}
+            value=state.cloneIntoCourseId
+          />
+          <button
+            disabled={state.cloneIntoCourseId == "0"}
+            onClick={cloneSelectedLevel(state, send, level)}
+            className="btn btn-primary mt-2">
+            {str(t("clone_level_button"))}
+          </button>
+        </div>
+      : React.null}
   </div>
 }
 

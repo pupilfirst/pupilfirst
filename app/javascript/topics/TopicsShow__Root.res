@@ -1,4 +1,4 @@
-%bs.raw(`require("./TopicsShow__Root.css")`)
+%raw(`require("./TopicsShow__Root.css")`)
 
 let t = I18n.t(~scope="components.TopicsShow__Root")
 
@@ -150,15 +150,13 @@ let isTopicCreator = (firstPost, currentUserId) =>
 let archiveTopic = community =>
   community |> Community.path |> Webapi.Dom.Window.setLocation(Webapi.Dom.window)
 
-module UpdateTopicQuery = %graphql(
-  `
+module UpdateTopicQuery = %graphql(`
   mutation UpdateTopicMutation($id: ID!, $title: String!, $topicCategoryId: ID) {
     updateTopic(id: $id, title: $title, topicCategoryId: $topicCategoryId)  {
       success
     }
   }
-`
-)
+`)
 
 let updateTopic = (state, send, event) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -184,33 +182,32 @@ let updateTopic = (state, send, event) => {
   |> ignore
 }
 
-module LockTopicQuery = %graphql(
-  `
+module LockTopicQuery = %graphql(`
   mutation LockTopicMutation($id: ID!) {
     lockTopic(id: $id)  {
       success
     }
   }
-`
-)
+`)
 
-module UnlockTopicQuery = %graphql(
-  `
+module UnlockTopicQuery = %graphql(`
   mutation UnlockTopicMutation($id: ID!) {
     unlockTopic(id: $id)  {
       success
     }
   }
-`
-)
+`)
 
 let lockTopic = (topicId, currentUserId, send) =>
   WindowUtils.confirm("Are you sure you want to lock this topic?", () => {
     send(StartChangingLockStatus)
-    LockTopicQuery.make(~id=topicId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
+    LockTopicQuery.make(~id=topicId, ())
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(response => {
       response["lockTopic"]["success"] ? send(FinishLockingTopic(currentUserId)) : ()
       Js.Promise.resolve()
-    }) |> ignore
+    })
+    |> ignore
   })
 
 let unlockTopic = (topicId, send) =>

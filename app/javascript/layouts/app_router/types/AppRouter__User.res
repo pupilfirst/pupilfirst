@@ -1,4 +1,5 @@
 type t = {
+  id: string,
   name: string,
   title: string,
   isAdmin: bool,
@@ -8,6 +9,7 @@ type t = {
   coachId: option<string>,
 }
 
+let id = t => t.id
 let name = t => t.name
 let title = t => t.title
 let isAdmin = t => t.isAdmin
@@ -19,6 +21,7 @@ let coachId = t => t.coachId
 let decode = json => {
   open Json.Decode
   {
+    id: field("id", string, json),
     title: field("title", string, json),
     name: field("name", string, json),
     isAdmin: field("isAdmin", bool, json),
@@ -30,6 +33,7 @@ let decode = json => {
 }
 
 let empty = () => {
+  id: "",
   name: "Unknown User",
   title: "Unknown",
   isAdmin: false,

@@ -57,10 +57,13 @@ module Types
                Types::SubmissionSortCriterionType,
                required: true
       argument :level_id, ID, required: false
-      argument :coach_id, ID, required: false
+      argument :personal_coach_id, ID, required: false
+      argument :assigned_coach_id, ID, required: false
+      argument :reviewing_coach_id, ID, required: false
       argument :target_id, ID, required: false
       argument :search, String, required: false
       argument :exclude_submission_id, ID, required: false
+      argument :include_inactive, Boolean, required: false
     end
 
     resolved_field :submission_details,
@@ -179,13 +182,9 @@ module Types
       argument :course_id, ID, required: true
     end
 
-    resolved_field :team_coaches, [Types::UserProxyType], null: false do
+    resolved_field :coaches, [Types::UserProxyType], null: false do
       argument :course_id, ID, required: true
-    end
-
-    resolved_field :coach, Types::UserProxyType, null: true do
-      argument :course_id, ID, required: true
-      argument :coach_id, ID, required: false
+      argument :coach_ids, [ID], required: false
     end
 
     resolved_field :level, Types::LevelType, null: true do

@@ -1,4 +1,4 @@
-%bs.raw(`require("./CourseEditor.css")`)
+%raw(`require("./CourseEditor.css")`)
 
 exception UnsafeFindFailed(string)
 
@@ -6,14 +6,13 @@ open CourseEditor__Types
 
 let t = I18n.t(~scope="components.CourseEditor")
 
-%bs.raw(`require("courses/shared/background_patterns.css")`)
+%raw(`require("courses/shared/background_patterns.css")`)
 
 let str = React.string
 
 type status = [#Active | #Ended | #Archived]
 
-module CoursesQuery = %graphql(
-  `
+module CoursesQuery = %graphql(`
   query CoursesQuery($search: String, $after: String, $status: CourseStatus) {
     courses(status: $status, search: $search, first: 10, after: $after){
       nodes {
@@ -25,8 +24,7 @@ module CoursesQuery = %graphql(
       totalCount
     }
   }
-  `
-)
+  `)
 
 module Item = {
   type t = Course.t

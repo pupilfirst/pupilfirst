@@ -195,7 +195,7 @@ class ApplicationController < ActionController::Base
   end
 
   def storable_location?
-    non_html_response = destroy_user_session_path || is_a?(::TargetsController) && params[:action] == "details_v2"
+    non_html_response = destroy_user_session_path || (is_a?(::TargetsController) && params[:action] == "details_v2")
     public_page = _process_action_callbacks.none? { |p| p.filter == :authenticate_user! }
 
     request.get? && is_navigational_format? && !request.xhr? && !public_page && !non_html_response

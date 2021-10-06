@@ -10,16 +10,19 @@ class Topic < ApplicationRecord
   has_one :first_post,
           -> { where post_number: 1 },
           class_name: 'Post',
-          inverse_of: :topic
+          inverse_of: :topic,
+          dependent: :destroy
   has_one :creator, through: :first_post
   has_many :replies,
            -> { where('post_number > ?', 1) },
            class_name: 'Post',
-           inverse_of: :topic
+           inverse_of: :topic,
+           dependent: :destroy
   has_many :live_replies,
            -> { where('post_number > ?', 1).merge(Post.live) },
            class_name: 'Post',
-           inverse_of: :topic
+           inverse_of: :topic,
+           dependent: :destroy
   has_many :post_likes, through: :posts
   has_many :topic_subscription, dependent: :destroy
   has_many :subscribers, through: :topic_subscription, source: :user

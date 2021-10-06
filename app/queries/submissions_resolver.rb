@@ -4,10 +4,13 @@ class SubmissionsResolver < ApplicationQuery
   property :sort_direction
   property :sort_criterion
   property :level_id
-  property :coach_id
+  property :personal_coach_id
+  property :assigned_coach_id
+  property :reviewing_coach_id
   property :target_id
   property :search
   property :exclude_submission_id
+  property :include_inactive
 
   def submissions
     applicable_submissions.distinct.order(
@@ -48,36 +51,55 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def applicable_submissions
-    by_level =
+    # Filter by level
+    stage_1 =
       if course.levels.exists?(id: level_id)
         course.levels.find_by(id: level_id).timeline_events.not_auto_verified
       else
         course.timeline_events.not_auto_verified
       end
 
-    by_level_and_target =
+    # Filter by target
+    stage_2 =
       if course.targets.exists?(id: target_id)
-        by_level.where(target_id: target_id)
+        stage_1.where(target_id: target_id)
       else
-        by_level
+        stage_1
       end
 
-    by_level_and_status = filter_by_status(by_level_and_target)
+    stage_3 = filter_by_status(stage_2)
 
-    by_level_status_and_coach =
-      if course.faculty.exists?(id: coach_id)
-        by_level_and_status
+    # Filter by personal coach
+    stage_4 =
+      if course.faculty.exists?(id: personal_coach_id)
+        stage_3
           .joins(founders: { startup: :faculty_startup_enrollments })
-          .where(faculty_startup_enrollments: { faculty_id: coach_id })
+          .where(faculty_startup_enrollments: { faculty_id: personal_coach_id })
       else
-        by_level_and_status
+        stage_3
+      end
+
+    # Filter by assigned coach
+    stage_5 =
+      if course.faculty.exists?(id: assigned_coach_id)
+        stage_4.where(reviewer: assigned_coach_id)
+      else
+        stage_4
+      end
+
+    # Filter by evaluator coach
+    stage_6 =
+      if course.faculty.exists?(id: reviewing_coach_id)
+        stage_5.where(evaluator_id: reviewing_coach_id)
+      else
+        stage_5
       end
 
     final_list =
       if exclude_submission_id.present?
-        by_level_status_and_coach.where.not(id: exclude_submission_id)
+        stage_6.where.not(id: exclude_submission_id)
       else
-        by_level_status_and_coach
+        stage_6
       end
 
     final_list.from_founders(students)
@@ -97,7 +119,10 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def teams
-    @teams ||= course.startups.active.joins(founders: :user)
+    @teams ||=
+      (include_inactive ? course.startups : course.startups.active).joins(
+        founders: :user
+      )
   end
 
   def course_teams

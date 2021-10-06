@@ -23,6 +23,7 @@ module Layouts
 
     def user_details
       user = {
+        id: current_user.id,
         name: current_user.name,
         title: current_user.full_title,
         is_admin: current_school_admin.present?,

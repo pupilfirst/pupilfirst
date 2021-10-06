@@ -15,5 +15,7 @@ module Types
     field :inactive_students, Boolean, null: false
     field :coaches, [Types::UserProxyType], null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :preview, Boolean, null: false
+    field :reviewer_details, Types::ReviewerDetailType, null: true
   end
 end

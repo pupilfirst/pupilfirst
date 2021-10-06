@@ -1,10 +1,10 @@
 open CurriculumEditor__Types
 
-@bs.module
+@module
 external markIcon: string = "./images/target-complete-mark-icon.svg"
-@bs.module
+@module
 external linkIcon: string = "./images/target-complete-link-icon.svg"
-@bs.module
+@module
 external quizIcon: string = "./images/target-complete-quiz-icon.svg"
 
 let str = React.string
@@ -68,8 +68,7 @@ type action =
   | ClearTargetGroupId
   | ResetEditor
 
-module TargetDetailsQuery = %graphql(
-  `
+module TargetDetailsQuery = %graphql(`
     query TargetDetailsQuery($targetId: ID!) {
       targetDetails(targetId: $targetId) {
         title
@@ -93,15 +92,17 @@ module TargetDetailsQuery = %graphql(
         checklist
       }
   }
-`
-)
+`)
 
 let loadTargetDetails = (targetId, send) =>
-  TargetDetailsQuery.make(~targetId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
+  TargetDetailsQuery.make(~targetId, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result => {
     let targetDetails = TargetDetails.makeFromJs(result["targetDetails"])
     send(SaveTargetDetails(targetDetails))
     Js.Promise.resolve()
-  }) |> ignore
+  })
+  |> ignore
 
 let defaultChecklist = [
   ChecklistItem.make(~title="Describe your submission", ~kind=LongText, ~optional=false),
@@ -718,15 +719,13 @@ let saveDisabled = (
   (!hasValidTitle ||
   (!hasValidMethodOfCompletion || (!dirty || saving)))
 
-module UpdateTargetQuery = %graphql(
-  `
+module UpdateTargetQuery = %graphql(`
    mutation UpdateTargetMutation($id: ID!, $targetGroupId: ID!, $title: String!, $role: String!, $evaluationCriteria: [ID!]!,$prerequisiteTargets: [ID!]!, $quiz: [TargetQuizInput!]!, $completionInstructions: String, $linkToComplete: String, $visibility: String!, $checklist: JSON! ) {
      updateTarget(id: $id, targetGroupId: $targetGroupId, title: $title, role: $role, evaluationCriteria: $evaluationCriteria,prerequisiteTargets: $prerequisiteTargets, quiz: $quiz, completionInstructions: $completionInstructions, linkToComplete: $linkToComplete, visibility: $visibility, checklist: $checklist  ) {
         sortIndex
        }
      }
-   `
-)
+   `)
 
 let updateTargetButton = (
   ~callback,
@@ -918,7 +917,8 @@ let make = (
                     {t("target_checklist_help_text") |> str}
                   </HelpIcon>
                   <div className="ml-6 mb-6">
-                    {state.checklist |> Js.Array.mapi((checklistItem, index) => {
+                    {state.checklist
+                    |> Js.Array.mapi((checklistItem, index) => {
                       let moveChecklistItemUpCB =
                         index > 0 ? Some(() => send(MoveChecklistItemUp(index))) : None
 
@@ -939,19 +939,23 @@ let make = (
                         ?moveChecklistItemDownCB
                         copyChecklistItemCB={() => send(CopyChecklistItem(index))}
                       />
-                    }) |> React.array} {state.checklist |> ArrayUtils.isEmpty
+                    })
+                    |> React.array}
+                    {state.checklist |> ArrayUtils.isEmpty
                       ? <div
                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
                           <i className="fas fa-info-circle mr-2" />
                           {t("empty_checklist_warning") |> str}
                         </div>
-                      : React.null} {state.checklist |> Js.Array.length >= 15
+                      : React.null}
+                    {state.checklist |> Js.Array.length >= 15
                       ? <div
                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
                           <i className="fas fa-info-circle mr-2" />
                           {t("target_checklist_limit_warning") |> str}
                         </div>
-                      : React.null} <button
+                      : React.null}
+                    <button
                       className="flex justify-center items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
                       disabled={state.checklist |> Js.Array.length >= 15}
                       onClick={_ => send(AddNewChecklistItem)}>
@@ -1051,7 +1055,8 @@ let make = (
                   </label>
                   <div
                     id="visibility" className="flex toggle-button__group flex-shrink-0 rounded-lg">
-                    {[TargetDetails.Live, Archived, Draft] |> Js.Array.mapi((visibility, index) =>
+                    {[TargetDetails.Live, Archived, Draft]
+                    |> Js.Array.mapi((visibility, index) =>
                       <button
                         key={index |> string_of_int}
                         onClick={updateVisibility(visibility, send)}
@@ -1069,7 +1074,8 @@ let make = (
                         | Draft => "Draft"
                         } |> str}
                       </button>
-                    ) |> React.array}
+                    )
+                    |> React.array}
                   </div>
                 </div>
                 <div className="w-auto">

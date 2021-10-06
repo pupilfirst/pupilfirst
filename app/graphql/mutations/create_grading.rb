@@ -2,6 +2,7 @@ module Mutations
   class CreateGrading < ApplicationQuery
     include QueryAuthorizeCoach
     include DevelopersNotifications
+    include ValidateSubmissionGradable
 
     argument :submission_id, ID, required: true
     argument :grades, [Types::GradeInputType], required: true
@@ -185,7 +186,9 @@ module Mutations
           passed_at: (failed? ? nil : Time.zone.now),
           evaluator: coach,
           evaluated_at: Time.zone.now,
-          checklist: @params[:checklist]
+          checklist: @params[:checklist],
+          reviewer: nil,
+          reviewer_assigned_at: nil
         )
 
         TimelineEvents::AfterGradingJob.perform_later(submission)

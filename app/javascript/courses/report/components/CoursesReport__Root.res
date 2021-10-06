@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesReport.css")`)
+%raw(`require("./CoursesReport.css")`)
 open CoursesReport__Types
 
 let str = React.string
@@ -61,8 +61,7 @@ let reducer = (state, action) =>
   | UpdateSortDirection(sortDirection) => {...state, sortDirection: sortDirection}
   }
 
-module StudentReportOverviewQuery = %graphql(
-  `
+module StudentReportOverviewQuery = %graphql(`
     query StudentReportOverviewQuery($studentId: ID!) {
       studentDetails(studentId: $studentId) {
         evaluationCriteria {
@@ -93,8 +92,7 @@ module StudentReportOverviewQuery = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
 let saveOverviewData = (studentId, send, data) =>
   send(SaveOverviewData(Loaded(data |> StudentOverview.makeFromJs(studentId))))

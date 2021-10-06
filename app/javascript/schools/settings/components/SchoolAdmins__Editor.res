@@ -10,15 +10,13 @@ type state = {
   deleting: bool,
 }
 
-module DeleteSchoolAdminQuery = %graphql(
-  `
+module DeleteSchoolAdminQuery = %graphql(`
   mutation DeleteSchoolAdminMutation($id: ID!) {
     deleteSchoolAdmin(id: $id) {
       success
     }
   }
-`
-)
+`)
 
 let removeSchoolAdmin = (setState, admin, currentSchoolAdminId, event) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -104,7 +102,8 @@ let renderAdmin = (currentSchoolAdminId, admin, admins, setState) =>
     </div>
   </div>
 
-let handleUpdate = (setState, admin) => setState(state => {
+let handleUpdate = (setState, admin) =>
+  setState(state => {
     ...state,
     admins: state.admins |> SchoolAdmin.update(admin),
     editorAction: Hidden,

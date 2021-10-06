@@ -1,4 +1,4 @@
-%bs.raw(`require("./EvaluationCriterionEditor__Form.css")`)
+%raw(`require("./EvaluationCriterionEditor__Form.css")`)
 
 let str = React.string
 
@@ -11,8 +11,7 @@ type state = {
   dirty: bool,
 }
 
-module CreateEvaluationCriterionQuery = %graphql(
-  `
+module CreateEvaluationCriterionQuery = %graphql(`
    mutation CreateEvaluationCriterionMutation($name: String!, $courseId: ID!, $maxGrade: Int!, $passGrade: Int!, $gradesAndLabels: [GradeAndLabelInput!]!) {
      createEvaluationCriterion(courseId: $courseId, name: $name, maxGrade: $maxGrade, passGrade: $passGrade, gradesAndLabels: $gradesAndLabels ) {
        evaluationCriterion {
@@ -27,11 +26,9 @@ module CreateEvaluationCriterionQuery = %graphql(
        }
      }
    }
-   `
-)
+   `)
 
-module UpdateEvaluationCriterionQuery = %graphql(
-  `
+module UpdateEvaluationCriterionQuery = %graphql(`
    mutation UpdateEvaluationCriterionMutation($id: ID!, $name: String!, $gradesAndLabels: [GradeAndLabelInput!]!) {
     updateEvaluationCriterion(id: $id, name: $name, gradesAndLabels: $gradesAndLabels){
        evaluationCriterion {
@@ -46,8 +43,7 @@ module UpdateEvaluationCriterionQuery = %graphql(
        }
       }
    }
-   `
-)
+   `)
 
 let formClasses = value =>
   value ? "drawer-right-form w-full opacity-50" : "drawer-right-form w-full"

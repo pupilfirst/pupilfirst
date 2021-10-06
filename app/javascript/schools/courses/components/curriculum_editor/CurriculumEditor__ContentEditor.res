@@ -30,7 +30,8 @@ let reducer = (state, action) =>
     let newBlockSortIndex = newContentBlock |> ContentBlock.sortIndex
     {
       ...state,
-      contentBlocks: state.contentBlocks |> Array.map(contentBlock => {
+      contentBlocks: state.contentBlocks
+      |> Array.map(contentBlock => {
         let sortIndex = contentBlock |> ContentBlock.sortIndex
 
         if sortIndex < newBlockSortIndex {
@@ -38,7 +39,8 @@ let reducer = (state, action) =>
         } else {
           contentBlock |> ContentBlock.incrementSortIndex
         }
-      }) |> Array.append([newContentBlock]),
+      })
+      |> Array.append([newContentBlock]),
     }
   | UpdateContentBlock(updatedContentBlock) => {
       ...state,
@@ -133,7 +135,8 @@ let editor = (target, hasVimeoAccessToken, vimeoPlan, state, send) => {
         <span className="text-sm font-semibold"> currentVersion </span>
       </div>
     </div>
-    {sortedContentBlocks |> Array.mapi((index, contentBlock) => {
+    {sortedContentBlocks
+    |> Array.mapi((index, contentBlock) => {
       let moveContentBlockUpCB = index == 0 ? None : Some(moveContentBlockUp(send))
       let moveContentBlockDownCB =
         index + 1 == numberOfContentBlocks ? None : Some(moveContentBlockDown(send))
@@ -157,7 +160,8 @@ let editor = (target, hasVimeoAccessToken, vimeoPlan, state, send) => {
           ?updateContentBlockCB
         />
       </div>
-    }) |> React.array}
+    })
+    |> React.array}
     <CurriculumEditor__ContentBlockCreator
       target hasVimeoAccessToken vimeoPlan addContentBlockCB={addContentBlock(send)}
     />

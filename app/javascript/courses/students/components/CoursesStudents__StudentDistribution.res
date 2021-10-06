@@ -1,10 +1,9 @@
-%bs.raw(`require("./CoursesStudents__StudentDistribution.css")`)
+%raw(`require("./CoursesStudents__StudentDistribution.css")`)
 
 open CoursesStudents__Types
 let str = React.string
 
-module StudentDistributionQuery = %graphql(
-  `
+module StudentDistributionQuery = %graphql(`
     query StudentDistribution($courseId: ID!, $coachNotes: CoachNoteFilter!, $coachId: ID, $tags: [String!]!) {
       studentDistribution(courseId: $courseId, coachNotes: $coachNotes, coachId: $coachId, tags: $tags) {
         id
@@ -14,8 +13,7 @@ module StudentDistributionQuery = %graphql(
         unlocked
       }
     }
-  `
-)
+  `)
 
 let stylingForLevelPills = percentageStudents => {
   let emptyStyle = ReactDOM.Style.make()
@@ -135,7 +133,9 @@ let make = (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes, ~filterT
               let (pillClass, style, pillColor) = stylingForLevelPills(percentageStudents)
               let tip =
                 <div className="text-left">
-                  <p> {LevelLabel.format(DistributionInLevel.number(level) |> string_of_int) |> str} </p>
+                  <p>
+                    {LevelLabel.format(DistributionInLevel.number(level) |> string_of_int) |> str}
+                  </p>
                   <p>
                     {"Students: " ++ string_of_int(DistributionInLevel.studentsInLevel(level))
                       |> str}

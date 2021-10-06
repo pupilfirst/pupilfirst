@@ -9,7 +9,7 @@ describe Users::ValidateResetTokenService do
   let(:sent_at) { Time.zone.now }
   let!(:user) { create :user, reset_password_token: reset_password_token_digest, reset_password_sent_at: sent_at }
 
-  subject { described_class.new(token) }
+  subject { described_class.new(reset_password_token) }
 
   around do |example|
     with_env(RESET_PASSWORD_TOKEN_TIME_LIMIT: time_limit.to_s) do

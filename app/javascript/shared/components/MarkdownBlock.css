@@ -1,15 +1,9 @@
-/*
- * Template styling that should be
- * inherited by specific profile classes;
- */
-
 .markdown-block {
   @apply break-words;
 }
 
 /*
- * Permissive styling used in learn section and its preview
- * in the school admin section.
+ * Permissive styling used in most Markdown blocks.
  */
 
 .markdown-block__permissive p {
@@ -147,115 +141,45 @@
 }
 
 /*
- * Styling used in questions and answer blocks in the
- * community section.
+ * Stricter sanitization that limits the kinds of tags available.
  */
 
-.markdown-block__question-and-answer p {
+.markdown-block__area-of-text p {
   @apply py-2 leading-relaxed;
 }
 
-.markdown-block__question-and-answer h1 {
-  @apply text-4xl pt-6 leading-snug;
-}
-
-.markdown-block__question-and-answer h2 {
-  @apply text-2xl pt-6 leading-snug;
-}
-
-.markdown-block__question-and-answer h3 {
-  @apply text-xl pt-6 leading-snug;
-}
-
-.markdown-block__question-and-answer h4 {
-  @apply text-lg pt-6 leading-snug;
-}
-
-.markdown-block__question-and-answer h5 {
-  @apply text-sm pt-6 leading-snug;
-}
-
-.markdown-block__question-and-answer h6 {
-  @apply text-xs pt-6 leading-snug;
-}
-
-.markdown-block__question-and-answer em {
+.markdown-block__area-of-text em {
   @apply italic;
 }
 
-.markdown-block__question-and-answer b,
-.markdown-block__question-and-answer strong {
+.markdown-block__area-of-text strong {
   @apply font-bold;
 }
 
-.markdown-block__question-and-answer s,
-.markdown-block__question-and-answer del {
+.markdown-block__area-of-text s,
+.markdown-block__area-of-text del {
   @apply line-through;
 }
 
-.markdown-block__question-and-answer ul {
-  @apply ml-7 pt-3 list-disc;
-}
-
-.markdown-block__question-and-answer ol {
-  @apply ml-7 pt-3 list-decimal;
-}
-
-.markdown-block__question-and-answer li {
-  @apply pb-2 leading-relaxed;
-}
-
-.markdown-block__question-and-answer a {
+.markdown-block__area-of-text a {
   @apply text-primary-500 underline font-semibold whitespace-pre-line;
   word-break: break-word;
 }
 
-.markdown-block__question-and-answer a:hover {
+.markdown-block__area-of-text a:hover {
   @apply bg-primary-100 text-primary-600;
 }
 
-.markdown-block__question-and-answer blockquote {
-  @apply border-l-4 border-gray-800 bg-gray-100 px-4 py-2 my-4 text-lg rounded-r font-semibold text-gray-800;
-}
-
-.markdown-block__question-and-answer hr {
-  @apply border-t border-gray-400 mt-6 pb-2;
-}
-
-.markdown-block__question-and-answer sup {
+.markdown-block__area-of-text sup {
   font-size: 75%;
   line-height: 0;
   @apply relative align-baseline;
   top: -0.5em;
 }
 
-.markdown-block__question-and-answer sub {
+.markdown-block__area-of-text sub {
   font-size: 75%;
   line-height: 0;
-  @apply relative align-baseline;
   bottom: -0.25em;
-}
-
-.markdown-block__question-and-answer img {
-  @apply mx-auto;
-}
-
-.markdown-block__question-and-answer .align-left {
-  @apply block text-left;
-}
-
-.markdown-block__question-and-answer .align-center {
-  @apply block text-center;
-}
-
-.markdown-block__question-and-answer .align-right {
-  @apply block text-right;
-}
-
-/*
- * Styling used in root
- */
-
-.markdown-block__area-of-text p {
-  @apply py-2 leading-relaxed;
+  @apply relative align-baseline;
 }

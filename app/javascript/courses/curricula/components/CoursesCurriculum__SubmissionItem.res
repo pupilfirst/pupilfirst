@@ -103,7 +103,7 @@ let showLongText = (value, id, updateResultCB) =>
       textareaId=id
       onChange={updateLongText(updateResultCB)}
       value
-      profile=Markdown.QuestionAndAnswer
+      profile=Markdown.Permissive
       maxLength=5000
     />
     {longTextWarning(value)}
@@ -115,7 +115,9 @@ let checkboxOnChange = (choices, itemIndex, updateResultCB, event) =>
     : updateResultCB(ChecklistItem.MultiChoice(choices, None))
 
 let showMultiChoice = (choices, choice, id, updateResultCB) =>
-  <div> <div> {choices |> Array.mapi((index, label) => {
+  <div>
+    <div>
+      {Js.Array2.mapi(choices, (label, index) => {
         let checked = choice |> OptionUtils.mapWithDefault(i => i == index, false)
         <Radio
           key={index |> string_of_int}
@@ -124,7 +126,9 @@ let showMultiChoice = (choices, choice, id, updateResultCB) =>
           onChange={checkboxOnChange(choices, index, updateResultCB)}
           checked
         />
-      }) |> React.array} </div> </div>
+      })->React.array}
+    </div>
+  </div>
 
 let attachFile = (updateResultCB, attachingCB, files, id, filename) => {
   attachingCB(false)

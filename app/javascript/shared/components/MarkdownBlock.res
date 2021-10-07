@@ -7,8 +7,7 @@ let randomId = () => {
 
 let profileClasses = profile =>
   switch profile {
-  | Markdown.QuestionAndAnswer => "markdown-block__question-and-answer "
-  | Permissive => "markdown-block__permissive "
+  | Markdown.Permissive => "markdown-block__permissive "
   | AreaOfText => "markdown-block__area-of-text "
   }
 
@@ -22,9 +21,7 @@ let markdownBlockClasses = (profile, className) => {
 
 let sanitize = (html, profile) =>
   switch profile {
-  | Markdown.QuestionAndAnswer
-  | Permissive =>
-    DOMPurify.sanitizedHTML(html)
+  | Markdown.Permissive => DOMPurify.sanitizedHTML(html)
   | AreaOfText =>
     DOMPurify.sanitizedHTMLOpt(
       html,

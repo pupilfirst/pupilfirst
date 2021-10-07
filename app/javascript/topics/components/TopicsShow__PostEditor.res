@@ -219,7 +219,7 @@ let make = (
                 <MarkdownBlock
                   markdown={reply |> Post.body}
                   className="leading-normal text-sm"
-                  profile=Markdown.QuestionAndAnswer
+                  profile=Markdown.Permissive
                 />
               </p>
               <div className="topics-post-editor__reply-to-preview-bottom-fadeout" />
@@ -231,7 +231,7 @@ let make = (
               textareaId="new-reply"
               onChange=updateMarkdownCB
               value=state.body
-              profile=Markdown.QuestionAndAnswer
+              profile=Markdown.Permissive
               maxLength=10000
             />
             {editing

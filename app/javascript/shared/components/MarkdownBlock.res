@@ -19,18 +19,6 @@ let markdownBlockClasses = (profile, className) => {
   }
 }
 
-let sanitize = (html, profile) =>
-  switch profile {
-  | Markdown.Permissive => DOMPurify.sanitizedHTML(html)
-  | AreaOfText =>
-    DOMPurify.sanitizedHTMLOpt(
-      html,
-      {
-        "ALLOWED_TAGS": ["p", "em", "strong", "del", "s", "a", "sup", "sub"],
-      },
-    )
-  }
-
 @react.component
 let make = (~markdown, ~className=?, ~profile) => {
   let (id, _setId) = React.useState(() => randomId())
@@ -43,6 +31,6 @@ let make = (~markdown, ~className=?, ~profile) => {
   <div
     className={markdownBlockClasses(profile, className)}
     id
-    dangerouslySetInnerHTML={Markdown.parse(profile, markdown)->sanitize(profile)}
+    dangerouslySetInnerHTML={Markdown.toSafeHTML(markdown, profile)}
   />
 }

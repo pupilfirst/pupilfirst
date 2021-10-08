@@ -1,13 +1,19 @@
-@module("./markdownIt") external markdownIt: string => string = "default"
+@module("./markdownIt") external parse: string => string = "default"
 
 type profile =
   | Permissive
   | AreaOfText
 
-let profileString = profile =>
+let sanitize = (html, profile) =>
   switch profile {
-  | Permissive => "permissive"
-  | AreaOfText => "areaOfText"
+  | Permissive => DOMPurify.sanitizedHTML(html)
+  | AreaOfText =>
+    DOMPurify.sanitizedHTMLOpt(
+      html,
+      {
+        "ALLOWED_TAGS": ["p", "em", "strong", "del", "s", "a", "sup", "sub"],
+      },
+    )
   }
 
-let parse = (_profile, markdown) => markdown |> markdownIt
+let toSafeHTML = (markdown, profile) => parse(markdown)->sanitize(profile)

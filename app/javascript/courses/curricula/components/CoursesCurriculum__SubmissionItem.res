@@ -115,20 +115,17 @@ let checkboxOnChange = (choices, itemIndex, updateResultCB, event) =>
     : updateResultCB(ChecklistItem.MultiChoice(choices, None))
 
 let showMultiChoice = (choices, choice, id, updateResultCB) =>
-  <div>
-    <div>
-      {Js.Array2.mapi(choices, (label, index) => {
-        let checked = choice |> OptionUtils.mapWithDefault(i => i == index, false)
-        <Radio
-          key={index |> string_of_int}
-          id={id ++ (index |> string_of_int)}
-          label
-          onChange={checkboxOnChange(choices, index, updateResultCB)}
-          checked
-        />
-      })->React.array}
-    </div>
-  </div>
+  Js.Array2.mapi(choices, (label, index) => {
+    let checked = Belt.Option.mapWithDefault(choice, false, i => i == index)
+
+    <Radio
+      key={index |> string_of_int}
+      id={id ++ (index |> string_of_int)}
+      label
+      onChange={checkboxOnChange(choices, index, updateResultCB)}
+      checked
+    />
+  })->React.array
 
 let attachFile = (updateResultCB, attachingCB, files, id, filename) => {
   attachingCB(false)

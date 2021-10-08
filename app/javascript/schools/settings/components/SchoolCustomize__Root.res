@@ -1,6 +1,6 @@
 open SchoolCustomize__Types
 
-%bs.raw(`require("./SchoolCustomize__Root.css")`)
+%raw(`require("./SchoolCustomize__Root.css")`)
 
 let str = React.string
 
@@ -103,9 +103,7 @@ let address = a =>
   | Some(a) =>
     <div
       className="text-xs font-semibold mt-3 leading-normal"
-      dangerouslySetInnerHTML={
-        "__html": a |> Markdown.parse(Markdown.Permissive),
-      }
+      dangerouslySetInnerHTML={Markdown.toSafeHTML(a, Markdown.Permissive)}
     />
   | None =>
     <div

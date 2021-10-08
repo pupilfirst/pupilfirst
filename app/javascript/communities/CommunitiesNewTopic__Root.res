@@ -349,7 +349,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                   onChange={markdown => send(UpdateBody(markdown))}
                   value=state.body
                   placeholder="If you're asking a question, try to be as descriptive as possible to make it easier for others to post answers. You can use Markdown to format this text."
-                  profile=Markdown.QuestionAndAnswer
+                  profile=Markdown.Permissive
                   maxLength=10000
                 />
                 <div>

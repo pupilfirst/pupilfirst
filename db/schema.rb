@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_11_052428) do
+ActiveRecord::Schema.define(version: 2021_09_06_183613) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -680,6 +680,9 @@ ActiveRecord::Schema.define(version: 2021_08_11_052428) do
     t.string "quiz_score"
     t.datetime "evaluated_at"
     t.jsonb "checklist", default: []
+    t.bigint "reviewer_id"
+    t.datetime "reviewer_assigned_at"
+    t.index ["reviewer_id"], name: "index_timeline_events_on_reviewer_id"
   end
 
   create_table "topic_categories", force: :cascade do |t|
@@ -826,6 +829,7 @@ ActiveRecord::Schema.define(version: 2021_08_11_052428) do
   add_foreign_key "target_versions", "targets"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
+  add_foreign_key "timeline_events", "faculty", column: "reviewer_id"
   add_foreign_key "topic_categories", "communities"
   add_foreign_key "topics", "communities"
   add_foreign_key "topics", "topic_categories"

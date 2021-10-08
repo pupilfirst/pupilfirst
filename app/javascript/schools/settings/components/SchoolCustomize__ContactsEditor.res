@@ -24,8 +24,7 @@ let handleInputChange = (callback, event) => {
 
 let updateContactDetailsButtonText = updating => updating ? "Updating..." : "Update Contact Details"
 
-module UpdateContactDetailsQuery = %graphql(
-  `
+module UpdateContactDetailsQuery = %graphql(`
    mutation UpdateAddressAndEmailMutation($address: String!, $emailAddress: String!) {
      updateAddress: updateSchoolString(key: "address", value: $address) {
        errors
@@ -35,8 +34,7 @@ module UpdateContactDetailsQuery = %graphql(
        errors
      }
    }
-  `
-)
+  `)
 
 module UpdateSchoolStringErrorHandler = GraphqlErrorHandler.Make(
   SchoolCustomize__UpdateSchoolStringError,

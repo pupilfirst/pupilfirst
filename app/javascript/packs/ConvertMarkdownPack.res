@@ -48,4 +48,4 @@ let parseMarkdown = (~attributeName="convert-markdown", ~attribute="data-json-pr
     )
   })
 
-parseMarkdown()
+parseMarkdown()->ignore

@@ -1,41 +1,35 @@
 open TopicsShow__Types
 
 let str = React.string
-%bs.raw(`require("./TopicsShow__PostShow.css")`)
+%raw(`require("./TopicsShow__PostShow.css")`)
 
 let t = I18n.t(~scope="components.TopicsShow__PostShow")
 
 let findUser = (userId, users) => userId->Belt.Option.map(userId => users |> User.findById(userId))
 
-module MarkPostAsSolutionQuery = %graphql(
-  `
+module MarkPostAsSolutionQuery = %graphql(`
   mutation MarkAsSolutionMutation($id: ID!) {
     markPostAsSolution(id: $id)  {
       success
     }
   }
-`
-)
+`)
 
-module UnmarkPostAsSolutionQuery = %graphql(
-  `
+module UnmarkPostAsSolutionQuery = %graphql(`
   mutation UnmarkAsSolutionMutation($id: ID!) {
     unmarkPostAsSolution(id: $id)  {
       success
     }
   }
-`
-)
+`)
 
-module ArchivePostQuery = %graphql(
-  `
+module ArchivePostQuery = %graphql(`
   mutation ArchivePostMutation($id: ID!) {
     archivePost(id: $id)  {
       success
     }
   }
-`
-)
+`)
 
 let markPostAsSolution = (postId, markPostAsSolutionCB) =>
   WindowUtils.confirm("Are you sure you want to mark this post as solution?", () =>

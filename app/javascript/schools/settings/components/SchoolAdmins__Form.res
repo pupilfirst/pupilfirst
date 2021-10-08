@@ -1,7 +1,6 @@
 let str = React.string
 
-module CreateSchoolAdminQuery = %graphql(
-  `
+module CreateSchoolAdminQuery = %graphql(`
   mutation CreateSchoolAdminMutation($name: String!, $email: String!) {
     createSchoolAdmin(name: $name, email: $email){
       schoolAdmin{
@@ -10,18 +9,15 @@ module CreateSchoolAdminQuery = %graphql(
       }
     }
   }
-`
-)
+`)
 
-module UpdateSchoolAdminQuery = %graphql(
-  `
+module UpdateSchoolAdminQuery = %graphql(`
   mutation UpdateSchoolAdminMutation($id: ID!, $name: String!) {
     updateSchoolAdmin(id: $id, name: $name) {
       success
     }
   }
-`
-)
+`)
 
 let createSchoolAdminQuery = (email, name, setSaving, updateCB) => {
   setSaving(_ => true)

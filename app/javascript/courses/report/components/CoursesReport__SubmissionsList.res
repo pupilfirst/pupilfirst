@@ -42,8 +42,7 @@ let statusString = targetStatus =>
   | #Completed => tc("completed")
   }
 
-module StudentSubmissionsQuery = %graphql(
-  `
+module StudentSubmissionsQuery = %graphql(`
    query StudentsReportSubmissionsQuery($studentId: ID!, $after: String, $status: SubmissionReviewStatus, $levelId: ID, $sortDirection: SortDirection!) {
     studentSubmissions(studentId: $studentId, after: $after, first: 20 , status: $status, levelId: $levelId, sortDirection: $sortDirection) {
        nodes {
@@ -63,8 +62,7 @@ module StudentSubmissionsQuery = %graphql(
        }
       }
     }
-   `
-)
+   `)
 
 module Selectable = {
   type t =
@@ -289,7 +287,9 @@ let submissionCardClasses = submission =>
   }
 
 let showSubmission = (submissions, levels, teamStudentIds) =>
-  <div> {submissions |> Array.map(submission => {
+  <div>
+    {submissions
+    |> Array.map(submission => {
       let teamMismatch = switch submission |> Submission.targetRole {
       | Student => false
       | Team(studentIds) => teamStudentIds != studentIds
@@ -355,7 +355,9 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
             </div>
           : React.null}
       </div>
-    }) |> React.array} </div>
+    })
+    |> React.array}
+  </div>
 
 let showSubmissions = (submissions, levels, teamStudentIds) =>
   submissions |> ArrayUtils.isEmpty

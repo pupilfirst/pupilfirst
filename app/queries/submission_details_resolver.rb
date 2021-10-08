@@ -18,7 +18,8 @@ class SubmissionDetailsResolver < ApplicationQuery
       coaches: coaches,
       course_id: level.course_id,
       created_at: submission.created_at,
-      preview: preview?
+      preview: preview?,
+      reviewer_details: reviewer_details
     }
   end
 
@@ -26,6 +27,10 @@ class SubmissionDetailsResolver < ApplicationQuery
 
   def submission
     @submission ||= TimelineEvent.find_by(id: submission_id)
+  end
+
+  def reviewer_details
+    return submission if submission.reviewer_id.present?
   end
 
   def coaches

@@ -82,6 +82,7 @@ module Make = (Selectable: Selectable) => {
           <button
             key={index |> string_of_int}
             title={selectionTitle(selection)}
+            ariaLabel={Selectable.searchString(selection)}
             className="flex text-sm px-4 py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
             onClick={applyFilter(selection, onSelect, id)}>
             {switch selection |> Selectable.label {

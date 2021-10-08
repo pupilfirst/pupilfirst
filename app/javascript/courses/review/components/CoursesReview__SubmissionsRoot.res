@@ -48,17 +48,11 @@ module SubmissionDetailsQuery = %graphql(
         teamName
         courseId
         preview
-      }
-    }
-  `
-)
-
-module NextSubmissionQuery = %graphql(
-  `
-    query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $coachId: ID, $excludeSubmissionId: ID, $after: String) {
-      submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, levelId: $levelId, coachId: $coachId, first: 1, after: $after) {
-        nodes {
-          id
+        reviewerDetails{
+          assignedAt
+          user{
+            id, userId, name, title, avatarUrl
+          }
         }
       }
     }
@@ -96,6 +90,10 @@ let currentSubmissionIndex = (submissionId, allSubmissions) => {
   }, allSubmissions)
 }
 
+let updateReviewer = (submissionDetails, setState, reviewer) => {
+  setState(_ => Loaded(SubmissionDetails.updateReviewer(reviewer, submissionDetails)))
+}
+
 @react.component
 let make = (~submissionId, ~currentUser) => {
   let (state, setState) = React.useState(() => Loading)
@@ -122,6 +120,7 @@ let make = (~submissionId, ~currentUser) => {
         currentUser
         submissionDetails
         submissionId
+        updateReviewerCB={updateReviewer(submissionDetails, setState)}
       />
 
     | Loading =>

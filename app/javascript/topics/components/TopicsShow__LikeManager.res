@@ -4,25 +4,21 @@ let str = React.string
 
 let t = I18n.t(~scope="components.TopicsShow__LikeManager")
 
-module CreatePostLikeQuery = %graphql(
-  `
+module CreatePostLikeQuery = %graphql(`
   mutation CreatePostLikeMutation($postId: ID!) {
     createPostLike(postId: $postId)  {
       success
     }
   }
-`
-)
+`)
 
-module DeletePostLikeQuery = %graphql(
-  `
+module DeletePostLikeQuery = %graphql(`
   mutation DeletePostLikeMutation($postId: ID!) {
     deletePostLike(postId: $postId) {
       success
     }
   }
-  `
-)
+  `)
 
 let iconClasses = (liked, saving) => {
   let classes = "text-lg"

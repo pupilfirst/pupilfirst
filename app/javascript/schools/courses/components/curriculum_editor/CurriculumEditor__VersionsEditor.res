@@ -20,15 +20,13 @@ let reducer = (_state, action) =>
   | SetLoading => Loading
   }
 
-module CreateTargetVersionMutation = %graphql(
-  `
+module CreateTargetVersionMutation = %graphql(`
    mutation CreateTargetVersionMutation($targetVersionId: ID!) {
     createTargetVersion(targetVersionId: $targetVersionId) {
        success
      }
    }
-   `
-)
+   `)
 
 let loadContentBlocks = (targetId, send, version) => {
   let targetVersionId = version |> OptionUtils.map(Version.id)
@@ -77,7 +75,9 @@ let versionText = version =>
 
 let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
   let contents =
-    versions |> Js.Array.filter(version => version != selectedVersion) |> Array.map(version => {
+    versions
+    |> Js.Array.filter(version => version != selectedVersion)
+    |> Array.map(version => {
       let id = version |> Version.id
 
       <button

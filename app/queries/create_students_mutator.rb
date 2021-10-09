@@ -49,7 +49,7 @@ class CreateStudentsMutator < ApplicationQuery
   end
 
   def students_must_have_unique_email
-    return if students.map(&:email).uniq.count == students.count
+    return if students.map {|student| student.email.downcase }.uniq.count == students.count
 
     errors[:base] << 'Email addresses must be unique'
   end

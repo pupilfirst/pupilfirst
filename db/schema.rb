@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_06_183613) do
+ActiveRecord::Schema.define(version: 2021_10_09_115501) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -638,6 +638,7 @@ ActiveRecord::Schema.define(version: 2021_09_06_183613) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "reason"
+    t.string "editor_id"
     t.index ["user_id"], name: "index_text_versions_on_user_id"
     t.index ["versionable_type", "versionable_id"], name: "index_text_versions_on_versionable_type_and_versionable_id"
   end

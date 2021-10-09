@@ -52,7 +52,7 @@
           </div>
           <div class="mt-4 text-xs">
             <span>Edited by</span>
-            <span class="font-semibold"><%= version.user&.name || 'Unknown' %></span>
+            <span class="font-semibold"><%= version.editor&.name ||version.user&.name|| 'Unknown' %></span>
             <span><%= presenter.updated_at(version) %></span>
           </div>
           <% if version.reason? %>

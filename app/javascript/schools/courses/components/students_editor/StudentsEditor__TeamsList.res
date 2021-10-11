@@ -4,7 +4,6 @@ let str = React.string
 
 open StudentsEditor__Types
 
-type displayCount = {displayCount: int, totalCount: int}
 module CourseTeamsQuery = %graphql(
   `
     query CourseTeamsQuery($courseId: ID!, $levelId: ID, $search: String, $after: String, $tags: [String!], $sortBy: String!, $sortDirection: SortDirection!) {
@@ -45,7 +44,7 @@ module CourseTeamsQuery = %graphql(
   `
 )
 
-let updateTeams = (updateTeamsCB, endCursor, hasNextPage, teams, nodes) => {
+let updateTeams = (updateTeamsCB, endCursor, hasNextPage, teams, totalCount, nodes) => {
   let updatedTeams = Js.Array.concat(Team.makeFromJS(nodes), teams)
 
   let teams = switch (hasNextPage, endCursor) {
@@ -55,7 +54,7 @@ let updateTeams = (updateTeamsCB, endCursor, hasNextPage, teams, nodes) => {
   | (true, Some(cursor)) => Page.PartiallyLoaded(updatedTeams, cursor)
   }
 
-  updateTeamsCB(teams)
+  updateTeamsCB(teams, totalCount)
 }
 
 let getTeams = (courseId, cursor, updateTeamsCB, teams, filter, setLoadingCB, loading) => {
@@ -98,12 +97,11 @@ let getTeams = (courseId, cursor, updateTeamsCB, teams, filter, setLoadingCB, lo
       response["courseTeams"]["pageInfo"]["endCursor"],
       response["courseTeams"]["pageInfo"]["hasNextPage"],
       teams,
+      response["courseTeams"]["totalCount"],
     )
-    Js.Promise.resolve({
-      "count": response["courseTeams"]["nodes"]->Js.Array2.length,
-      "totalCount": response["courseTeams"]["totalCount"],
-    })
+    Js.Promise.resolve()
   })
+  |> ignore
 }
 
 let studentAvatar = student =>
@@ -294,6 +292,7 @@ let make = (
   ~updateTeamsCB,
   ~filter,
   ~pagedTeams,
+  ~totalTeamsCount,
   ~selectedStudentIds,
   ~selectStudentCB,
   ~deselectStudentCB,
@@ -303,17 +302,12 @@ let make = (
   ~updateFilterCB,
   ~refreshTeams,
 ) => {
-  let (count, setCount) = React.useState(() => None)
   React.useEffect1(() => {
-    getTeams(courseId, None, updateTeamsCB, [], filter, setLoadingCB, Loading.Reloading)
-    |> Js.Promise.then_(response => {
-      setCount(_ => Some({displayCount: response["count"], totalCount: response["totalCount"]}))
-      Js.Promise.resolve()
-    })
-    |> ignore
+    getTeams(courseId, None, updateTeamsCB, [], filter, setLoadingCB, Loading.Reloading) |> ignore
 
     None
   }, [refreshTeams])
+
   <div className="pb-6">
     <div className="max-w-3xl mx-auto w-full">
       <div>
@@ -335,10 +329,9 @@ let make = (
           )
         }}
       </div>
-      {switch count {
-      | Some({totalCount: 0}) => React.null
-      | Some(count) => submissionsLoadedData(count.totalCount, count.displayCount)
-      | None => React.null
+      {switch totalTeamsCount {
+      | 0 => React.null
+      | count => submissionsLoadedData(count, Array.length(pagedTeams |> Page.teams))
       }}
       {switch (pagedTeams: Page.t) {
       | Unloaded
@@ -358,25 +351,7 @@ let make = (
                     filter,
                     setLoadingCB,
                     Loading.LoadingMore,
-                  )
-                  |> Js.Promise.then_(response => {
-                    setCount(prevCount =>
-                      switch prevCount {
-                      | None =>
-                        Some({
-                          displayCount: response["count"],
-                          totalCount: response["totalCount"],
-                        })
-                      | Some(count) =>
-                        Some({
-                          displayCount: count.displayCount + response["count"],
-                          totalCount: response["totalCount"],
-                        })
-                      }
-                    )
-                    Js.Promise.resolve()
-                  })
-                  |> ignore}>
+                  ) |> ignore}>
                 {"Load More" |> str}
               </button>
             </div>

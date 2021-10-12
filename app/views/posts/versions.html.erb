@@ -51,7 +51,11 @@
             <%= version.value %>
           </div>
           <div class="mt-4 text-xs">
+            <% if index === (presenter.versions.length - 1) %>
+            <span>Created by</span>
+            <% else %>
             <span>Edited by</span>
+            <% end %>
             <span class="font-semibold"><%= version.editor&.name ||version.user&.name|| 'Unknown' %></span>
             <span><%= presenter.updated_at(version) %></span>
           </div>

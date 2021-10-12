@@ -24,7 +24,7 @@ type action =
 let str = React.string
 
 let updateName = (send, name) => {
-  let hasError = name |> String.length < 2
+  let hasError = Js.String2.length(name) < 2
   send(UpdateName(name, hasError))
 }
 
@@ -34,8 +34,10 @@ let updateEmail = (send, email) => {
   send(UpdateEmail(email, hasError))
 }
 
-let hasEmailDuplication = (email, emailsToAdd) =>
-  emailsToAdd |> Array.exists(emailToAdd => email == emailToAdd)
+let hasEmailDuplication = (email, emailsToAdd) => {
+  let lowerCaseEmail = Js.String2.toLowerCase(email)
+  Js.Array2.some(emailsToAdd, emailToAdd => lowerCaseEmail == Js.String2.toLowerCase(emailToAdd))
+}
 
 let formInvalid = (state, emailsToAdd) =>
   state.name == "" ||
@@ -43,7 +45,7 @@ let formInvalid = (state, emailsToAdd) =>
     (state.hasNameError || (state.hasEmailError || hasEmailDuplication(state.email, emailsToAdd))))
 
 let handleAdd = (state, send, emailsToAdd, addToListCB) => {
-  let trimmedTeamName = state.teamName |> String.trim
+  let trimmedTeamName = Js.String2.trim(state.teamName)
   let teamName = trimmedTeamName == "" ? None : Some(trimmedTeamName)
 
   if !formInvalid(state, emailsToAdd) {
@@ -88,11 +90,11 @@ let reducer = (state, action) =>
     }
   | AddTag(tag) => {
       ...state,
-      tagsToApply: state.tagsToApply |> Array.append([tag]),
+      tagsToApply: Js.Array2.concat(state.tagsToApply, [tag]),
     }
   | RemoveTag(tag) => {
       ...state,
-      tagsToApply: state.tagsToApply |> Js.Array.filter(t => t != tag),
+      tagsToApply: Js.Array2.filter(state.tagsToApply, t => t != tag),
     }
   }
 
@@ -195,7 +197,9 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
       <span className="text-xs ml-1"> {"(optional)" |> str} </span>
     </div>
     <School__SearchableTagList
-      unselectedTags={teamTags |> Js.Array.filter(tag => !(state.tagsToApply |> Array.mem(tag)))}
+      unselectedTags={Js.Array2.filter(teamTags, tag =>
+        !Js.Array2.includes(state.tagsToApply, tag)
+      )}
       selectedTags=state.tagsToApply
       addTagCB={tag => send(AddTag(tag))}
       removeTagCB={tag => send(RemoveTag(tag))}

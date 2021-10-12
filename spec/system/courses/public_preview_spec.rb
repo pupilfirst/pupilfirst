@@ -77,7 +77,7 @@ feature 'Public preview of course curriculum', js: true do
     )
 
     expect(page).not_to have_link(private_course_3.name)
-    expect(page).to have_content("L1: #{level_1.name}")
+
     # The first level should be selected, and all other levels should be visible.
     click_button "L1: #{level_1.name}"
 
@@ -137,14 +137,10 @@ feature 'Public preview of course curriculum', js: true do
     expect(page).to have_text('You can access the content on')
   end
 
-  context "when the preview course has a level 0 in it" do
+  context 'when the course has level zero enabled' do
     let(:level_0) { create :level, :zero, course: public_course_1 }
-    let(:target_group_l0) { create :target_group, level: level_0 }
-    let!(:level_0_target) do
-      create :target, target_group: target_group_l0, role: Target::ROLE_TEAM
-    end
 
-    scenario 'user can preview course curriculum with level 1 selected' do
+    scenario 'user can preview level zero' do
       visit curriculum_course_path(public_course_1)
 
       expect(page).to have_button(level_0.name)

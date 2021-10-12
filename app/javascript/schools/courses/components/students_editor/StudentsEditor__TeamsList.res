@@ -4,7 +4,7 @@ let str = React.string
 
 open StudentsEditor__Types
 
-let tc = I18n.t(~scope="components.StudentsEditor__Search")
+let t = I18n.t(~scope="components.StudentsEditor__TeamsList")
 
 module CourseTeamsQuery = %graphql(
   `
@@ -123,7 +123,7 @@ let studentAvatar = student =>
 let levelInfo = (levels, team) =>
   <span
     className="inline-flex flex-col items-center rounded bg-orange-100 border border-orange-300 px-2 pt-2 pb-1">
-    <div className="text-xs font-semibold"> {"Level" |> str} </div>
+    <div className="text-xs font-semibold"> {t("level")->str} </div>
     <div className="font-bold">
       {team
       |> Team.levelId
@@ -222,7 +222,7 @@ let teamCard = (
           <div className="w-4/6 py-4 pl-5 pr-4">
             <div className="students-team--name mb-5">
               <p className="inline-block text-xs bg-green-200 leading-tight px-1 py-px rounded">
-                {"Team" |> str}
+                {t("team")->str}
               </p>
               <h4> {team |> Team.name |> str} </h4>
               {teamTags(team)}
@@ -234,18 +234,18 @@ let teamCard = (
 }
 
 let showEmpty = (filter, loading, updateFilterCB) =>
-  loading == Loading.NotLoading && filter |> Filter.isEmpty
-    ? <div className="text-center"> {"No students here." |> str} </div>
+  loading == Loading.NotLoading && filter->Filter.isEmpty
+    ? <div className="text-center"> {t("empty_message")->str} </div>
     : <div className="flex">
         <div className="w-1/2 px-3">
-          <p className="text-xl font-semibold mt-4"> {"Sorry, no results found." |> str} </p>
+          <p className="text-xl font-semibold mt-4"> {t("no_results_found")->str} </p>
           <ul className="list-disc text-gray-800 text-sm ml-5 mt-2">
-            <li className="py-1"> {"Make sure the spelling is correct." |> str} </li>
-            <li className="py-1"> {"Try removing the search filter options." |> str} </li>
+            <li className="py-1"> {t("check_spelling")->str} </li>
+            <li className="py-1"> {t("try_removing_filter")->str} </li>
           </ul>
           <button
-            className="btn btn-default mt-4" onClick={_ => updateFilterCB(filter |> Filter.clear)}>
-            {"Clear Filter" |> str}
+            className="btn btn-default mt-4" onClick={_ => updateFilterCB(filter->Filter.clear)}>
+            {t("clear_filter")->str}
           </button>
         </div>
         <div className="w-1/2"> <img className="w-full" src=notFoundIcon /> </div>
@@ -277,8 +277,8 @@ let submissionsLoadedData = (totalStudentsCount, loadedStudentsCount) =>
     <div className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
       {str(
         totalStudentsCount == loadedStudentsCount
-          ? tc(~count=loadedStudentsCount, "students_fully_loaded_text")
-          : tc(
+          ? t(~count=loadedStudentsCount, "students_fully_loaded_text")
+          : t(
               ~count=loadedStudentsCount,
               ~variables=[
                 ("total_students", string_of_int(totalStudentsCount)),
@@ -308,7 +308,7 @@ let make = (
   ~refreshTeams,
 ) => {
   React.useEffect1(() => {
-    getTeams(courseId, None, updateTeamsCB, [], filter, setLoadingCB, Loading.Reloading) |> ignore
+    getTeams(courseId, None, updateTeamsCB, [], filter, setLoadingCB, Loading.Reloading)
 
     None
   }, [refreshTeams])
@@ -334,10 +334,10 @@ let make = (
           )
         }}
       </div>
-      {switch totalTeamsCount {
-      | 0 => React.null
-      | count => submissionsLoadedData(count, Array.length(pagedTeams |> Page.teams))
-      }}
+      {ReactUtils.nullIf(
+        submissionsLoadedData(totalTeamsCount, Array.length(pagedTeams->Page.teams)),
+        totalTeamsCount == 0,
+      )}
       {switch (pagedTeams: Page.t) {
       | Unloaded
       | FullyLoaded(_) => React.null
@@ -356,8 +356,8 @@ let make = (
                     filter,
                     setLoadingCB,
                     Loading.LoadingMore,
-                  ) |> ignore}>
-                {"Load More" |> str}
+                  )}>
+                {t("load_more")->str}
               </button>
             </div>
       }}

@@ -454,28 +454,26 @@ en:
       start_review: Start Review
     CoursesReview__Root:
       assigned_to: Assigned To
-      personal_coach: Personal Coach
-      reviewed_by: Reviewed By
       assigned_to_coach: "assigned to:"
       assigned_to_me: " assigned to me"
       button_load_more: Load More Submissions...
-      filter_by: "Filter by:"
-      filter_input:
-        level: "Level: "
-        target: "Target: "
-        assigned_to: "Assigned To: "
-        personal_coach: "Personal Coach: "
-        reviewed_by: "Reviewed By: "
-      filter_by_another_level: Filter by another level
-      filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
       coach_filter_by:
         assigned_to: Filter by who's assigned to a submission
         personal_coach: Filter by who's assigned to a student
         reviewed_by: Filter by who reviewed a submission
+      filter_by: "Filter by:"
+      filter_by_another_level: Filter by another level
+      filter_by_another_level_or_submissions_assigned: Filter by another level, or only show submissions assigned to a coach
       filter_by_level: Filter by level
       filter_by_level_or_submissions_assigned: Filter by level, or only show submissions assigned to a coach
       filter_by_target: Filter by target
       filter_hint: ...or start typing to filter by student using their name or email address
+      filter_input:
+        assigned_to: "Assigned To: "
+        level: "Level: "
+        personal_coach: "Personal Coach: "
+        reviewed_by: "Reviewed By: "
+        target: "Target: "
       inactive_students: Inactive Students
       include: Include
       level: Level
@@ -484,16 +482,18 @@ en:
       now_showing_submissions_assigned_to: Now showing submissions assigned to %{name}.
       now_showing_submissions_from_all_students: Now showing submissions from all students in this course.
       pending: Pending
+      personal_coach: Personal Coach
       review: Review
       reviewed: Reviewed
       reviewed_at: Reviewed At
+      reviewed_by: Reviewed By
       search:
         assigned_to: "assigned to:"
         level: "level:"
-        status: "status: "
-        target: "target:"
         personal_coach: "personal coach:"
         reviewed_by: "reviewed by:"
+        status: "status: "
+        target: "target:"
       sort_by: "Sort by:"
       status: Status
       submissions_fully_loaded_text:
@@ -503,6 +503,7 @@ en:
       submitted_at: Submitted At
       target: Target
     CoursesReview__SubmissionCard:
+      assigned_to: Assigned to
       completed: Completed
       created_at: on %{created_at}.
       feedback_sent: Feedback Sent
@@ -511,7 +512,6 @@ en:
       rejected: Rejected
       submitted_by: "Submitted by "
       submitted_by_team: "Submitted by team "
-      assigned_to: Assigned to
     CoursesReview__SubmissionInfoCard:
       submission_hash: "Submission #"
     CoursesStudents__StudentOverlay:
@@ -731,10 +731,19 @@ en:
     StudentsEditor__Search:
       filter_input_label: "Filter by:"
       filter_input_placeholder: Type name, tag or level
+    StudentsEditor__TeamsList:
+      check_spelling: Make sure the spelling is correct.
+      clear_filter: Clear Filter
+      empty_message: No students here.
+      level: Level
+      load_more: "Load More "
+      no_results_found: Sorry, no results found.
       students_fully_loaded_text:
         one: There's only one student.
         other: Showing all %{count} students
       students_partially_loaded_text: Showing %{loaded_students_count} of %{total_students} students
+      team: Team
+      try_removing_filter: Try removing the search filter options.
     SubmissionChecklistShow:
       target_marked_as_complete: Target was marked as complete.
     TargetChecklistItem:

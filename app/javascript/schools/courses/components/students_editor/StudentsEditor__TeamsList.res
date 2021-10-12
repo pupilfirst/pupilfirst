@@ -4,6 +4,8 @@ let str = React.string
 
 open StudentsEditor__Types
 
+let tc = I18n.t(~scope="components.StudentsEditor__Search")
+
 module CourseTeamsQuery = %graphql(
   `
     query CourseTeamsQuery($courseId: ID!, $levelId: ID, $search: String, $after: String, $tags: [String!], $sortBy: String!, $sortDirection: SortDirection!) {
@@ -275,12 +277,15 @@ let submissionsLoadedData = (totalStudentsCount, loadedStudentsCount) =>
     <div className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
       {str(
         totalStudentsCount == loadedStudentsCount
-          ? totalStudentsCount === 1
-              ? "There's only one student."
-              : `Showing all ${string_of_int(totalStudentsCount)} students`
-          : `Showing ${string_of_int(loadedStudentsCount)} of ${string_of_int(
-              totalStudentsCount,
-            )} students`,
+          ? tc(~count=loadedStudentsCount, "students_fully_loaded_text")
+          : tc(
+              ~count=loadedStudentsCount,
+              ~variables=[
+                ("total_students", string_of_int(totalStudentsCount)),
+                ("loaded_students_count", string_of_int(loadedStudentsCount)),
+              ],
+              "students_partially_loaded_text",
+            ),
       )}
     </div>
   </div>

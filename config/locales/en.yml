@@ -731,6 +731,10 @@ en:
     StudentsEditor__Search:
       filter_input_label: "Filter by:"
       filter_input_placeholder: Type name, tag or level
+      students_fully_loaded_text:
+        one: There's only one student.
+        other: Showing all %{count} students
+      students_partially_loaded_text: Showing %{loaded_students_count} of %{total_students} students
     SubmissionChecklistShow:
       target_marked_as_complete: Target was marked as complete.
     TargetChecklistItem:

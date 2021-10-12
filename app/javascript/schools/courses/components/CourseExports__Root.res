@@ -85,8 +85,7 @@ let unselected = (allTags, selectedTags) => {
   allTags |> Js.Array.filter(t => !(selectedTagIds |> Array.mem(t |> Tag.id)))
 }
 
-module CreateCourseExportQuery = %graphql(
-  `
+module CreateCourseExportQuery = %graphql(`
  mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!, $exportType: Export!) {
   createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly, exportType: $exportType){
     courseExport {
@@ -97,8 +96,7 @@ module CreateCourseExportQuery = %graphql(
     }
    }
  }
-`
-)
+`)
 
 let createCourseExport = (state, send, course, event) => {
   event |> ReactEvent.Mouse.preventDefault

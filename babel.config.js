@@ -107,6 +107,7 @@ module.exports = function (api) {
             "reason",
             "markdown",
             "yaml",
+            "latex",
           ],
           plugins: ["line-numbers", "custom-class", "diff-highlight"],
         },

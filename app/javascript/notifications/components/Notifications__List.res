@@ -14,15 +14,13 @@ let eventName = event =>
   | #PostCreated => t("filter.events.post_created_text")
   }
 
-module MarkAllNotificationsQuery = %graphql(
-  `
+module MarkAllNotificationsQuery = %graphql(`
   mutation MarkAllNotificationsMutation {
     markAllNotifications {
       success
     }
   }
-`
-)
+`)
 
 type filter = {
   event: option<event>,
@@ -157,8 +155,7 @@ let reducer = (state, action) =>
     }
   }
 
-module NotificationsQuery = %graphql(
-  `
+module NotificationsQuery = %graphql(`
     query NotificationsFromNotificationsListQuery($search: String, $after: String, $event: NotificationEvent, $status: NotificationStatus) {
       notifications(event: $event, search: $search, first: 10, after: $after, status: $status) {
         nodes {
@@ -182,19 +179,22 @@ module NotificationsQuery = %graphql(
         totalCount
       }
     }
-  `
-)
+  `)
 
 let markAllNotifications = (send, event) => {
   event |> ReactEvent.Mouse.preventDefault
   send(SetSaving)
-  MarkAllNotificationsQuery.make() |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
+  MarkAllNotificationsQuery.make()
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
     response["markAllNotifications"]["success"] ? send(MarkAllNotifications) : send(ClearSaving)
     Js.Promise.resolve()
-  }) |> Js.Promise.catch(_ => {
+  })
+  |> Js.Promise.catch(_ => {
     send(ClearSaving)
     Js.Promise.resolve()
-  }) |> ignore
+  })
+  |> ignore
 }
 
 let getEntries = (send, cursor, filter) =>
@@ -327,12 +327,13 @@ let unselected = state => {
   let trimmedFilterString = state.filterString |> String.trim
   let title = trimmedFilterString == "" ? [] : [Selectable.title(trimmedFilterString)]
 
-  let status = state.filter.status->Belt.Option.mapWithDefault([#Read, #Unread], u =>
-    switch u {
-    | #Read => [#Unread]
-    | #Unread => [#Read]
-    }
-  ) |> Js.Array.map(s => Selectable.status(s))
+  let status =
+    state.filter.status->Belt.Option.mapWithDefault([#Read, #Unread], u =>
+      switch u {
+      | #Read => [#Unread]
+      | #Unread => [#Read]
+      }
+    ) |> Js.Array.map(s => Selectable.status(s))
 
   eventFilters |> Js.Array.concat(title) |> Js.Array.concat(status)
 }

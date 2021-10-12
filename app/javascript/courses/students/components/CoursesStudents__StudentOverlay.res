@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesStudents__StudentOverlay.css")`)
+%raw(`require("./CoursesStudents__StudentOverlay.css")`)
 
 open CoursesStudents__Types
 let str = React.string
@@ -26,8 +26,7 @@ let initialState = {
 
 let closeOverlay = courseId => RescriptReactRouter.push("/courses/" ++ (courseId ++ "/students"))
 
-module StudentDetailsQuery = %graphql(
-  `
+module StudentDetailsQuery = %graphql(`
     query StudentDetailsQuery($studentId: ID!) {
       studentDetails(studentId: $studentId) {
         email,
@@ -72,8 +71,7 @@ module StudentDetailsQuery = %graphql(
       }
       hasArchivedCoachNotes(studentId: $studentId)
     }
-  `
-)
+  `)
 
 let updateStudentDetails = (setState, studentId, details, coachNotes, hasArchivedCoachNotes) => {
   let studentDetails = StudentDetails.makeFromJs(
@@ -129,7 +127,9 @@ let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
   <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
     <div className="student-overlay__doughnut-chart-container">
       {doughnutChart("purple", targetCompletionPercent)}
-      <p className="text-sm font-semibold text-center mt-3"> {t("total_targets_completed") |> str} </p>
+      <p className="text-sm font-semibold text-center mt-3">
+        {t("total_targets_completed") |> str}
+      </p>
       <p className="text-sm text-gray-700 font-semibold text-center mt-1">
         {(targetsCompleted |> int_of_float |> string_of_int) ++
           ("/" ++
@@ -147,8 +147,8 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
         {doughnutChart("pink", score |> int_of_float |> string_of_int)}
         <p className="text-sm font-semibold text-center mt-3"> {t("average_quiz_score") |> str} </p>
         <p className="text-sm text-gray-700 font-semibold text-center leading-tight mt-1">
-          {Inflector.pluralize(t("quiz"), ~count=quizzesAttempted, ~inclusive=true, ()) ++ t("attempted")
-            |> str}
+          {Inflector.pluralize(t("quiz"), ~count=quizzesAttempted, ~inclusive=true, ()) ++
+          t("attempted") |> str}
         </p>
       </div>
     </div>
@@ -158,7 +158,9 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
 let averageGradeCharts = (
   evaluationCriteria: array<CoursesStudents__EvaluationCriterion.t>,
   averageGrades: array<StudentDetails.averageGrade>,
-) => averageGrades |> Array.map(grade => {
+) =>
+  averageGrades
+  |> Array.map(grade => {
     let criterion = StudentDetails.evaluationCriterionForGrade(
       grade,
       evaluationCriteria,
@@ -202,7 +204,8 @@ let averageGradeCharts = (
         </p>
       </div>
     </div>
-  }) |> React.array
+  })
+  |> React.array
 
 let test = (value, url) => {
   let tester = Js.Re.fromString(value)
@@ -211,14 +214,14 @@ let test = (value, url) => {
 
 let socialLinkIconClass = url =>
   switch url {
-  | url when url |> test("twitter") => "fab fa-twitter"
-  | url when url |> test("facebook") => "fab fa-facebook-f"
-  | url when url |> test("instagram") => "fab fa-instagram"
-  | url when url |> test("youtube") => "fab fa-youtube"
-  | url when url |> test("linkedin") => "fab fa-linkedin"
-  | url when url |> test("reddit") => "fab fa-reddit"
-  | url when url |> test("flickr") => "fab fa-flickr"
-  | url when url |> test("github") => "fab fa-github"
+  | url if url |> test("twitter") => "fab fa-twitter"
+  | url if url |> test("facebook") => "fab fa-facebook-f"
+  | url if url |> test("instagram") => "fab fa-instagram"
+  | url if url |> test("youtube") => "fab fa-youtube"
+  | url if url |> test("linkedin") => "fab fa-linkedin"
+  | url if url |> test("reddit") => "fab fa-reddit"
+  | url if url |> test("flickr") => "fab fa-flickr"
+  | url if url |> test("github") => "fab fa-github"
   | _unknownUrl => "fas fa-users"
   }
 
@@ -289,7 +292,9 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
         className={"student-overlay__student-level-progress flex w-full " ++ (
           courseCompleted ? "student-overlay__student-level-progress--completed" : ""
         )}>
-        {applicableLevels |> Level.sort |> Array.map(level => {
+        {applicableLevels
+        |> Level.sort
+        |> Array.map(level => {
           let levelNumber = level |> Level.number
           let levelCompleted = levelsCompleted |> Array.mem(level |> Level.id)
 
@@ -301,7 +306,8 @@ let levelProgressBar = (levelId, levels, levelsCompleted) => {
               {levelNumber |> string_of_int |> str}
             </span>
           </li>
-        }) |> React.array}
+        })
+        |> React.array}
       </ul>
     </div>
   </div>
@@ -316,7 +322,8 @@ let addNote = (setState, studentDetails, onAddCoachNotesCB, note) => {
   })
 }
 
-let removeNote = (setState, studentDetails, noteId) => setState(state => {
+let removeNote = (setState, studentDetails, noteId) =>
+  setState(state => {
     ...state,
     studentData: Loaded(StudentDetails.removeNote(noteId, studentDetails)),
   })
@@ -389,19 +396,17 @@ let inactiveWarning = teamInfo => {
   | (Some(droppedOutAt), _) =>
     Some(
       t(
-        ~variables=[
-          ("date", droppedOutAt->DateFns.formatPreset(~short=true, ~year=true, ()))
-        ],
-        "dropped_out_at"),
+        ~variables=[("date", droppedOutAt->DateFns.formatPreset(~short=true, ~year=true, ()))],
+        "dropped_out_at",
+      ),
     )
   | (None, Some(accessEndsAt)) =>
     accessEndsAt |> DateFns.isPast
       ? Some(
           t(
-            ~variables=[
-              ("date", accessEndsAt->DateFns.formatPreset(~short=true, ~year=true, ()))
-            ],
-            "access_ended_at"),
+            ~variables=[("date", accessEndsAt->DateFns.formatPreset(~short=true, ~year=true, ()))],
+            "access_ended_at",
+          ),
         )
       : None
   | (None, None) => None

@@ -19,10 +19,7 @@ module Topics
     end
 
     def markdown_prop(markdown)
-      {
-        markdown: markdown,
-        profile: "questionAndAnswer"
-      }.to_json
+      { markdown: markdown, profile: 'permissive' }.to_json
     end
 
     def editor_name_for_topic

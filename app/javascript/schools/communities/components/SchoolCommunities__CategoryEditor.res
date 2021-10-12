@@ -26,35 +26,29 @@ let reducer = (state, action) =>
   | FailDeleting => {...state, deleting: false}
   }
 
-module CreateCategoryQuery = %graphql(
-  `
+module CreateCategoryQuery = %graphql(`
   mutation CreateCategoryMutation($name: String!, $communityId: ID!) {
     createTopicCategory(name: $name, communityId: $communityId ) {
       id
     }
   }
-`
-)
+`)
 
-module DeleteCategoryQuery = %graphql(
-  `
+module DeleteCategoryQuery = %graphql(`
   mutation DeleteCategoryMutation($id: ID!) {
     deleteTopicCategory(id: $id ) {
       success
     }
   }
-`
-)
+`)
 
-module UpdateCategoryQuery = %graphql(
-  `
+module UpdateCategoryQuery = %graphql(`
   mutation UpdateCategoryMutation($name: String!, $id: ID!) {
     updateTopicCategory(id: $id, name: $name ) {
       success
     }
   }
-`
-)
+`)
 
 let makeDeleteCategoryQuery = (categoryId, deleteCategoryCB, send) => {
   send(StartDeleting)

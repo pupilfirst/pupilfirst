@@ -98,8 +98,7 @@ let reducer = (state, action) =>
     }
   }
 
-module CreateCourseQuery = %graphql(
-  `
+module CreateCourseQuery = %graphql(`
     mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
       createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
         course {
@@ -107,11 +106,9 @@ module CreateCourseQuery = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
-module UpdateCourseQuery = %graphql(
-  `
+module UpdateCourseQuery = %graphql(`
     mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
       updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
         course {
@@ -119,38 +116,31 @@ module UpdateCourseQuery = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
-module ArciveCourseQuery = %graphql(
-  `
+module ArciveCourseQuery = %graphql(`
   mutation ArchiveCourseMutation($id: ID!) {
     archiveCourse(id: $id)  {
       success
     }
   }
-`
-)
+`)
 
-module UnarchiveCourseQuery = %graphql(
-  `
+module UnarchiveCourseQuery = %graphql(`
   mutation UnarchiveCourseMutation($id: ID!) {
     unarchiveCourse(id: $id)  {
       success
     }
   }
-`
-)
+`)
 
-module CloneCourseQuery = %graphql(
-  `
+module CloneCourseQuery = %graphql(`
   mutation CloneCourseMutation($id: ID!) {
     cloneCourse(id: $id)  {
       success
     }
   }
-`
-)
+`)
 
 let updateName = (send, name) => {
   let hasError = name->String.trim->String.length < 2
@@ -210,18 +200,22 @@ let createCourse = (state, send, reloadCoursesCB) => {
     (),
   )
 
-  createCourseQuery |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
+  createCourseQuery
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result => {
     switch result["createCourse"]["course"] {
     | Some(_course) => reloadCoursesCB()
     | None => send(FailSaving)
     }
 
     Js.Promise.resolve()
-  }) |> Js.Promise.catch(error => {
+  })
+  |> Js.Promise.catch(error => {
     Js.log(error)
     send(FailSaving)
     Js.Promise.resolve()
-  }) |> ignore
+  })
+  |> ignore
 }
 
 let updateCourse = (state, send, updateCourseCB, course) => {
@@ -243,18 +237,22 @@ let updateCourse = (state, send, updateCourseCB, course) => {
     (),
   )
 
-  updateCourseQuery |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
+  updateCourseQuery
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result => {
     switch result["updateCourse"]["course"] {
     | Some(course) => updateCourseCB(Course.makeFromJs(course))
     | None => send(FailSaving)
     }
 
     Js.Promise.resolve()
-  }) |> Js.Promise.catch(error => {
+  })
+  |> Js.Promise.catch(error => {
     Js.log(error)
     send(FailSaving)
     Js.Promise.resolve()
-  }) |> ignore
+  })
+  |> ignore
 }
 
 let archiveCourse = (send, reloadCoursesCB, course) => {

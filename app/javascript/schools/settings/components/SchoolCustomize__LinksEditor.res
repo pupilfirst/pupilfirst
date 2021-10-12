@@ -1,6 +1,6 @@
 open SchoolCustomize__Types
 
-%bs.raw(`require("./SchoolCustomize__LinksEditor.css")`)
+%raw(`require("./SchoolCustomize__LinksEditor.css")`)
 
 let str = React.string
 
@@ -46,15 +46,13 @@ let handleUrlChange = (send, event) => {
   send(UpdateUrl(url, url |> UrlUtils.isInvalid(false)))
 }
 
-module DestroySchoolLinkQuery = %graphql(
-  `
+module DestroySchoolLinkQuery = %graphql(`
   mutation DestroySchoolLinkMutation($id: ID!) {
     destroySchoolLink(id: $id) {
       success
     }
   }
-  `
-)
+  `)
 
 let handleDelete = (state, send, removeLinkCB, id, event) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -83,7 +81,9 @@ let showLinks = (state, send, removeLinkCB, kind, links) =>
       className="border border-gray-400 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
       {"There are no custom links here. Add some?" |> str}
     </div>
-  | links => links |> List.map(((id, title, url)) =>
+  | links =>
+    links
+    |> List.map(((id, title, url)) =>
       <div
         className="flex items-center justify-between bg-gray-100 text-xs text-gray-900 border rounded pl-3 mt-2"
         key=id>
@@ -106,7 +106,9 @@ let showLinks = (state, send, removeLinkCB, kind, links) =>
           <FaIcon classes={deleteIconClasses(state.deleting |> List.mem(id))} />
         </button>
       </div>
-    ) |> Array.of_list |> React.array
+    )
+    |> Array.of_list
+    |> React.array
   }
 
 let titleInputVisible = state =>
@@ -141,8 +143,7 @@ let addLinkDisabled = state =>
     true
   }
 
-module CreateSchoolLinkQuery = %graphql(
-  `
+module CreateSchoolLinkQuery = %graphql(`
   mutation CreateSchoolLinkMutation($kind: String!, $title: String, $url: String!) {
     createSchoolLink(kind: $kind, title: $title, url: $url) @bsVariant {
       schoolLink {
@@ -151,8 +152,7 @@ module CreateSchoolLinkQuery = %graphql(
       errors
     }
   }
-`
-)
+`)
 
 let displayNewLink = (state, addLinkCB, id) =>
   switch state.kind {

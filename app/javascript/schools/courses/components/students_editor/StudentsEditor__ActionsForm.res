@@ -2,28 +2,23 @@ open StudentsEditor__Types
 
 let t = I18n.t(~scope="components.StudentsEditor__ActionsForm")
 
-module DropoutStudentQuery = %graphql(
-  `
+module DropoutStudentQuery = %graphql(`
    mutation DropoutStudentMutation($id: ID!) {
     dropoutStudent(id: $id){
       success
      }
    }
- `
-)
+ `)
 
-module RevokeCertificateQuery = %graphql(
-  `
+module RevokeCertificateQuery = %graphql(`
    mutation RevokeCertificateMutation($issuedCertificateId: ID!) {
     revokeIssuedCertificate(issuedCertificateId: $issuedCertificateId){
       success
      }
    }
- `
-)
+ `)
 
-module IssueCertificateQuery = %graphql(
-  `
+module IssueCertificateQuery = %graphql(`
    mutation IssueCertificateQueryMutation($certificateId: ID!, $studentId: ID!) {
     issueCertificate(certificateId: $certificateId, studentId: $studentId){
       issuedCertificate {
@@ -32,17 +27,19 @@ module IssueCertificateQuery = %graphql(
       }
      }
    }
- `
-)
+ `)
 
 let dropoutStudent = (id, setSaving, reloadTeamsCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
   setSaving(_ => true)
 
-  DropoutStudentQuery.make(~id, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
+  DropoutStudentQuery.make(~id, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
     response["dropoutStudent"]["success"] ? reloadTeamsCB() : setSaving(_ => false)
     Js.Promise.resolve()
-  }) |> ignore
+  })
+  |> ignore
 }
 
 let revokeIssuedCertificate = (
@@ -52,7 +49,8 @@ let revokeIssuedCertificate = (
   student,
   currentUserName,
   _event,
-) => WindowUtils.confirm(t("revoke_certificate_confirmation"), () => {
+) =>
+  WindowUtils.confirm(t("revoke_certificate_confirmation"), () => {
     setRevoking(_ => true)
 
     let issuedCertificateId = StudentsEditor__IssuedCertificate.id(issuedCertificate)
@@ -147,7 +145,8 @@ let showIssuedCertificates = (
         <label className="tracking-wide text-sm font-semibold mb-2">
           {t("issued_certificates_label")->str}
         </label>
-        {issuedCertificates |> Js.Array.map(ic =>
+        {issuedCertificates
+        |> Js.Array.map(ic =>
           <div
             ariaLabel={"Details of issued certificate " ++ StudentsEditor__IssuedCertificate.id(ic)}
             key={StudentsEditor__IssuedCertificate.id(ic)}
@@ -226,7 +225,8 @@ let showIssuedCertificates = (
               }}
             </div>
           </div>
-        ) |> React.array}
+        )
+        |> React.array}
       </div>
 }
 
@@ -275,10 +275,12 @@ let make = (
                     }}
                     value=selectedCertificateId>
                     <option key="0" value="0"> {t("select_certificate_input_label")->str} </option>
-                    {certificates |> Array.map(certificate =>
+                    {certificates
+                    |> Array.map(certificate =>
                       <option key={Certificate.id(certificate)} value={Certificate.id(certificate)}>
                         {
                           let name = Certificate.name(certificate)
+
                           (
                             Certificate.active(certificate)
                               ? name ++ (" (" ++ (t("active_label") ++ ")"))
@@ -286,7 +288,8 @@ let make = (
                           )->str
                         }
                       </option>
-                    ) |> React.array}
+                    )
+                    |> React.array}
                   </select>
                   <button
                     onClick={issueNewCertificate(

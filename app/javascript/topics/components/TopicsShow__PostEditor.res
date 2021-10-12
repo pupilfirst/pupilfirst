@@ -1,7 +1,7 @@
 open TopicsShow__Types
 
 let str = React.string
-%bs.raw(`require("./TopicsShow__PostEditor.css")`)
+%raw(`require("./TopicsShow__PostEditor.css")`)
 
 type state = {
   body: string,
@@ -9,25 +9,21 @@ type state = {
   editReason: option<string>,
 }
 
-module CreatePostQuery = %graphql(
-  `
+module CreatePostQuery = %graphql(`
   mutation CreatePostMutation($body: String!, $topicId: ID!, $replyToPostId: ID) {
     createPost(body: $body, topicId: $topicId, replyToPostId: $replyToPostId)  {
       postId
     }
   }
-`
-)
+`)
 
-module UpdatePostQuery = %graphql(
-  `
+module UpdatePostQuery = %graphql(`
   mutation UpdatePostMutation($id: ID!, $body: String!, $editReason: String) {
     updatePost(id: $id, body: $body, editReason: $editReason)  {
       success
     }
   }
-`
-)
+`)
 
 let dateTime = Js.Date.make()
 
@@ -223,7 +219,7 @@ let make = (
                 <MarkdownBlock
                   markdown={reply |> Post.body}
                   className="leading-normal text-sm"
-                  profile=Markdown.QuestionAndAnswer
+                  profile=Markdown.Permissive
                 />
               </p>
               <div className="topics-post-editor__reply-to-preview-bottom-fadeout" />
@@ -235,7 +231,7 @@ let make = (
               textareaId="new-reply"
               onChange=updateMarkdownCB
               value=state.body
-              profile=Markdown.QuestionAndAnswer
+              profile=Markdown.Permissive
               maxLength=10000
             />
             {editing

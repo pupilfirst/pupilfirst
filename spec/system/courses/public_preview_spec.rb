@@ -139,6 +139,11 @@ feature 'Public preview of course curriculum', js: true do
 
   context 'when the course has level zero enabled' do
     let(:level_0) { create :level, :zero, course: public_course_1 }
+    let(:target_group_l0) { create :target_group, level: level_0 }
+
+    before do
+      create :target, target_group: target_group_l0, role: Target::ROLE_TEAM
+    end
 
     scenario 'user can preview level zero' do
       visit curriculum_course_path(public_course_1)

@@ -2,8 +2,7 @@ let str = React.string
 
 open CourseAuthors__Types
 
-module CreateCourseAuthorQuery = %graphql(
-  `
+module CreateCourseAuthorQuery = %graphql(`
   mutation CreateCourseAuthorMutation($courseId: ID!, $name: String!, $email: String!) {
     createCourseAuthor(courseId: $courseId, name: $name, email: $email){
       courseAuthor{
@@ -12,18 +11,15 @@ module CreateCourseAuthorQuery = %graphql(
       }
     }
   }
-`
-)
+`)
 
-module UpdateCourseAuthorQuery = %graphql(
-  `
+module UpdateCourseAuthorQuery = %graphql(`
   mutation UpdateCourseAuthorMutation($id: ID!, $name: String!) {
     updateCourseAuthor(id: $id, name: $name) {
       success
     }
   }
-`
-)
+`)
 
 let createCourseAuthorQuery = (courseId, rootPath, email, name, setSaving, addAuthorCB) => {
   setSaving(_ => true)

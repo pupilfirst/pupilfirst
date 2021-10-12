@@ -85,25 +85,21 @@ let reducer = (state, action) =>
     }
   }
 
-module UpdateUserQuery = %graphql(
-  `
+module UpdateUserQuery = %graphql(`
    mutation UpdateUserMutation($name: String!, $about: String, $currentPassword: String, $newPassword: String, $confirmPassword: String, $dailyDigest: Boolean! ) {
      updateUser(name: $name, about: $about, currentPassword: $currentPassword, newPassword: $newPassword, confirmNewPassword: $confirmPassword, dailyDigest: $dailyDigest  ) {
         success
        }
      }
-   `
-)
+   `)
 
-module InitiateAccountDeletionQuery = %graphql(
-  `
+module InitiateAccountDeletionQuery = %graphql(`
    mutation InitiateAccountDeletionMutation($email: String! ) {
      initiateAccountDeletion(email: $email ) {
         success
        }
      }
-   `
-)
+   `)
 
 let uploadAvatar = (send, formData) => {
   open Json.Decode

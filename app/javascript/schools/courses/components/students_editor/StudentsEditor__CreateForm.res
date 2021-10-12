@@ -62,15 +62,13 @@ let handleResponseCB = (submitCB, state, studentIds) => {
   appliedTags(state.teamsToAdd)->submitCB
 }
 
-module CreateStudentsQuery = %graphql(
-  `
+module CreateStudentsQuery = %graphql(`
   mutation CreateStudentsMutation($courseId: ID!, $notifyStudents: Boolean!, $students: [StudentEnrollmentInput!]!) {
     createStudents(courseId: $courseId, notifyStudents: $notifyStudents, students: $students) {
       studentIds
     }
   }
-  `
-)
+  `)
 
 let createStudents = (state, send, courseId, submitFormCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -219,7 +217,9 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
               className="flex items-center justify-between bg-gray-100 border rounded p-3 italic mt-2">
               {t("teams_to_add_empty")->str}
             </div>
-          | teams => teams |> Js.Array.map(team =>
+          | teams =>
+            teams
+            |> Js.Array.map(team =>
               switch TeamInfo.nature(team) {
               | TeamInfo.MultiMember(teamName, studentsInTeam) =>
                 <div className="mt-3" key=teamName>
@@ -234,7 +234,8 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
               | SingleMember(studentInfo) =>
                 studentCard(studentInfo, send, false, TeamInfo.tags(team))
               }
-            ) |> React.array
+            )
+            |> React.array
           }}
         </div>
       </div>

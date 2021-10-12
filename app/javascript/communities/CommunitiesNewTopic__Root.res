@@ -68,8 +68,7 @@ let reducer = (state, action) =>
   | SelectCategory(selectedCategory) => {...state, selectedCategory: selectedCategory}
   }
 
-module SimilarTopicsQuery = %graphql(
-  `
+module SimilarTopicsQuery = %graphql(`
     query SimilarTopicsQuery($communityId: ID!, $title: String!) {
       similarTopics(communityId: $communityId, title: $title) {
         id
@@ -78,8 +77,7 @@ module SimilarTopicsQuery = %graphql(
         liveRepliesCount
       }
     }
-  `
-)
+  `)
 
 let searchForSimilarTopics = (send, title, communityId, ()) => {
   send(BeginSearching)
@@ -124,15 +122,13 @@ let updateTitleAndSearch = (state, send, communityId, title) => {
   }
 }
 
-module CreateTopicQuery = %graphql(
-  `
+module CreateTopicQuery = %graphql(`
   mutation CreateTopicQuery($title: String!, $body: String!, $communityId: ID!, $targetId: ID, $topicCategoryId: ID) {
     createTopic(body: $body, title: $title, communityId: $communityId, targetId: $targetId, topicCategoryId: $topicCategoryId) {
       topicId
     }
   }
-`
-)
+`)
 
 let redirectToNewTopic = (id, title) => {
   let redirectPath = "/topics/" ++ (id ++ ("/" ++ StringUtils.parameterize(title)))
@@ -193,7 +189,8 @@ let suggestions = state => {
         {state.searching
           ? <span className="ml-2"> <FaIcon classes="fa fa-spinner fa-pulse" /> </span>
           : React.null}
-        {suggestions |> Array.map(suggestion => {
+        {suggestions
+        |> Array.map(suggestion => {
           let askedOn =
             suggestion->TopicSuggestion.createdAt->DateFns.formatPreset(~short=true, ~year=true, ())
           let (answersText, answersClasses) = switch suggestion |> TopicSuggestion.repliesCount {
@@ -225,7 +222,8 @@ let suggestions = state => {
               {answersText |> str}
             </div>
           </a>
-        }) |> React.array}
+        })
+        |> React.array}
       </div>
     : React.null
 }
@@ -351,7 +349,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                   onChange={markdown => send(UpdateBody(markdown))}
                   value=state.body
                   placeholder="If you're asking a question, try to be as descriptive as possible to make it easier for others to post answers. You can use Markdown to format this text."
-                  profile=Markdown.QuestionAndAnswer
+                  profile=Markdown.Permissive
                   maxLength=10000
                 />
                 <div>

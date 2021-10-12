@@ -1,5 +1,5 @@
 let str = React.string
-%bs.raw(`require("./CoursesReview__Root.css")`)
+%raw(`require("./CoursesReview__Root.css")`)
 
 open CoursesReview__Types
 

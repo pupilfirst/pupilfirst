@@ -1,15 +1,13 @@
-%bs.raw(`require("./MarkdownBlock.css")`)
+%raw(`require("./MarkdownBlock.css")`)
 
 let randomId = () => {
   let randomComponent = Js.Math.random() |> Js.Float.toString |> Js.String.substr(~from=2)
   "markdown-block-" ++ randomComponent
 }
 
-let profileClasses = (profile: Markdown.profile) =>
+let profileClasses = profile =>
   switch profile {
-  | Comment => "markdown-block__comment "
-  | QuestionAndAnswer => "markdown-block__question-and-answer "
-  | Permissive => "markdown-block__permissive "
+  | Markdown.Permissive => "markdown-block__permissive "
   | AreaOfText => "markdown-block__area-of-text "
   }
 
@@ -33,6 +31,6 @@ let make = (~markdown, ~className=?, ~profile) => {
   <div
     className={markdownBlockClasses(profile, className)}
     id
-    dangerouslySetInnerHTML={"__html": markdown |> Markdown.parse(profile)}
+    dangerouslySetInnerHTML={Markdown.toSafeHTML(markdown, profile)}
   />
 }

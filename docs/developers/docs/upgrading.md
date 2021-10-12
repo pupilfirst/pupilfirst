@@ -17,6 +17,19 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION`.
 
+### 2021.5
+
+Markdown editors no longer support the Commonmark standard. Even prior to this version, support for mixing HTML, CSS
+and JS into Markdown was spotty because of very strict output sanitization. This means that Commonmark support was
+partial. With this change, scripting within Markdown text inputs has been completely disabled.
+
+This means that any stored Markdown text that contained compliant HTML / CSS / JS within prior to this change will now
+be _escaped_ and displayed as plaintext in the rendered output.
+
+This also breaks the `<img align="center">` approach for centering text. Since this method for centering text in HTML
+relied on writing HTML within Markdown, it doesn't work anymore. Instead, Markdown's syntax has been extended to support
+alignment of text using special markers. Check out the built-in documentation of Markdown for more information.
+
 ### 2021.4
 
 Introduced required environment variables `I18N_AVAILABLE_LOCALES` and `I18N_DEFAULT_LOCALE`.

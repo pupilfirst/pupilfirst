@@ -55,8 +55,7 @@ let isBusy = formState =>
   | Ready => false
   }
 
-module CreateSubmissionQuery = %graphql(
-  `
+module CreateSubmissionQuery = %graphql(`
   mutation CreateSubmissionMutation($targetId: ID!, $checklist: JSON!, $fileIds: [ID!]!) {
     createSubmission(targetId: $targetId, checklist: $checklist, fileIds: $fileIds) {
       submission {
@@ -66,8 +65,7 @@ module CreateSubmissionQuery = %graphql(
       levelUpEligibility
     }
   }
-  `
-)
+  `)
 
 let isButtonDisabled = state =>
   switch state.formState {

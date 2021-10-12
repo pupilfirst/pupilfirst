@@ -1,19 +1,17 @@
 let str = React.string
-%bs.raw(`require("./Notifications__EntryCard.css")`)
+%raw(`require("./Notifications__EntryCard.css")`)
 
 open Notifications__Types
 
 let t = I18n.t(~scope="components.Notifications__List")
 
-module MarkNotificationQuery = %graphql(
-  `
+module MarkNotificationQuery = %graphql(`
   mutation MarkNotificationMutation($notificationId: ID!) {
     markNotification(notificationId: $notificationId)  {
       success
     }
   }
-`
-)
+`)
 
 let markNotification = (notificationId, setSaving, markNotificationCB, event) => {
   event |> ReactEvent.Mouse.preventDefault

@@ -2,15 +2,13 @@ type resourceType =
   | Target
   | TargetGroup
 
-module SortResourceMutation = %graphql(
-  `
+module SortResourceMutation = %graphql(`
    mutation SortCurriculumResourcesMutation($resourceIds: [ID!]!, $resourceType: String!) {
     sortCurriculumResources(resourceIds: $resourceIds, resourceType: $resourceType){
       success
     }
   }
-   `
-)
+   `)
 
 let resourceTypeToString = resourceType =>
   switch resourceType {

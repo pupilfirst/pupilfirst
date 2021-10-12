@@ -1,6 +1,6 @@
 open SchoolCustomize__Types
 
-%bs.raw(`require("./SchoolCustomize__AgreementsEditor.css")`)
+%raw(`require("./SchoolCustomize__AgreementsEditor.css")`)
 
 let str = React.string
 
@@ -40,15 +40,13 @@ let handleAgreementChange = (send, event) => {
 let updateAgreementText = (updating, kind) =>
   updating ? "Updating..." : "Update " ++ kindToString(kind)
 
-module UpdateSchoolStringQuery = %graphql(
-  `
+module UpdateSchoolStringQuery = %graphql(`
    mutation UpdateSchoolStringMutation($key: String!, $value: String!) {
      updateSchoolString(key: $key, value: $value) {
        errors
      }
    }
-  `
-)
+  `)
 
 module UpdateSchoolStringErrorHandler = GraphqlErrorHandler.Make(
   SchoolCustomize__UpdateSchoolStringError,

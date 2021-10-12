@@ -1,6 +1,6 @@
-%bs.raw(`require("./CoursesStudents__StudentOverlay.css")`)
+%raw(`require("./CoursesStudents__StudentOverlay.css")`)
 
-@bs.module
+@module
 external reviewedEmptyImage: string = "../../shared/images/reviewed-empty.svg"
 
 open CoursesStudents__Types
@@ -9,8 +9,7 @@ type state = {loading: bool}
 
 let str = React.string
 
-module StudentSubmissionsQuery = %graphql(
-  `
+module StudentSubmissionsQuery = %graphql(`
    query StudentSubmissionsQuery($studentId: ID!, $after: String, $sortDirection: SortDirection!) {
     studentSubmissions(studentId: $studentId, after: $after, first: 20 , sortDirection: $sortDirection) {
        nodes {
@@ -27,8 +26,7 @@ module StudentSubmissionsQuery = %graphql(
        }
       }
     }
-   `
-)
+   `)
 
 let updateStudentSubmissions = (
   setState,

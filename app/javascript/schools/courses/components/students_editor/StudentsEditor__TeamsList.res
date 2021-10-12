@@ -1,4 +1,4 @@
-@bs.module external notFoundIcon: string = "./images/no-students-found.svg"
+@module external notFoundIcon: string = "./images/no-students-found.svg"
 
 let str = React.string
 
@@ -6,8 +6,7 @@ open StudentsEditor__Types
 
 let t = I18n.t(~scope="components.StudentsEditor__TeamsList")
 
-module CourseTeamsQuery = %graphql(
-  `
+module CourseTeamsQuery = %graphql(`
     query CourseTeamsQuery($courseId: ID!, $levelId: ID, $search: String, $after: String, $tags: [String!], $sortBy: String!, $sortDirection: SortDirection!) {
       courseTeams(courseId: $courseId, levelId: $levelId, search: $search, first: 20, after: $after, tags: $tags, sortBy: $sortBy, sortDirection: $sortDirection) {
         nodes {
@@ -43,8 +42,7 @@ module CourseTeamsQuery = %graphql(
         totalCount
       }
     }
-  `
-)
+  `)
 
 let updateTeams = (updateTeamsCB, endCursor, hasNextPage, teams, totalCount, nodes) => {
   let updatedTeams = Js.Array.concat(Team.makeFromJS(nodes), teams)
@@ -172,7 +170,10 @@ let teamCard = (
     key=teamId
     id={team |> Team.name}
     className="student-team-container flex items-strecth shadow bg-white rounded-lg mb-3 overflow-hidden">
-    <div className="flex flex-col flex-1 w-3/5"> {team |> Team.students |> Array.map(student => {
+    <div className="flex flex-col flex-1 w-3/5">
+      {team
+      |> Team.students
+      |> Array.map(student => {
         let studentId = student |> Student.id
         let isChecked = selectedStudentIds |> Array.mem(studentId)
         let checkboxId = "select-student-" ++ studentId
@@ -216,7 +217,10 @@ let teamCard = (
             </div>
           </div>
         </div>
-      }) |> React.array} </div> {isSingleStudent
+      })
+      |> React.array}
+    </div>
+    {isSingleStudent
       ? React.null
       : <div className="flex w-2/5 items-center border-l border-gray-200">
           <div className="w-4/6 py-4 pl-5 pr-4">

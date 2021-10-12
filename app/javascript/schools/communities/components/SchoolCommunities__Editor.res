@@ -2,25 +2,21 @@ let str = React.string
 
 open SchoolCommunities__IndexTypes
 
-module CreateCommunityQuery = %graphql(
-  `
+module CreateCommunityQuery = %graphql(`
   mutation CreateCommunityMutation($name: String!, $targetLinkable: Boolean!, $courseIds: [ID!]!) {
     createCommunity(name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds ) {
       id
     }
   }
-`
-)
+`)
 
-module UpdateCommunityQuery = %graphql(
-  `
+module UpdateCommunityQuery = %graphql(`
   mutation UpdateCommunityMutation($id: ID!, $name: String!, $targetLinkable: Boolean!, $courseIds: [ID!]!) {
     updateCommunity(id: $id, name: $name, targetLinkable: $targetLinkable, courseIds: $courseIds)  {
       communityId
     }
   }
-`
-)
+`)
 
 type state = {
   saving: bool,
@@ -168,7 +164,9 @@ module Selectable = {
 module CourseSelector = MultiselectInline.Make(Selectable)
 
 let selectedCourses = (~invert=false, courses, selectedCourseIds) =>
-  courses |> Array.of_list |> Js.Array.filter(course => {
+  courses
+  |> Array.of_list
+  |> Js.Array.filter(course => {
     let condition = selectedCourseIds->Belt.Set.String.has(course |> Course.id)
     invert ? !condition : condition
   })
@@ -183,7 +181,10 @@ let onSelectCourse = (send, course) => send(SelectCourse(course |> Course.id))
 let onDeselectCourse = (send, course) => send(DeselectCourse(course |> Course.id))
 
 let categoryList = categories =>
-  ReactUtils.nullIf(<div className="mb-2 flex flex-wrap"> {categories |> Js.Array.map(category => {
+  ReactUtils.nullIf(
+    <div className="mb-2 flex flex-wrap">
+      {categories
+      |> Js.Array.map(category => {
         let (backgroundColor, color) = Category.color(category)
         <span
           key={category |> Category.id}
@@ -191,7 +192,11 @@ let categoryList = categories =>
           style={ReactDOM.Style.make(~backgroundColor, ~color, ())}>
           {Category.name(category) |> str}
         </span>
-      }) |> React.array} </div>, ArrayUtils.isEmpty(categories))
+      })
+      |> React.array}
+    </div>,
+    ArrayUtils.isEmpty(categories),
+  )
 
 @react.component
 let make = (

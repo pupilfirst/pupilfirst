@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesStudents__Root.css")`)
+%raw(`require("./CoursesStudents__Root.css")`)
 
 open CoursesStudents__Types
 
@@ -145,8 +145,7 @@ let reducer = (state, action) =>
     }
   }
 
-module TeamsQuery = %graphql(
-  `
+module TeamsQuery = %graphql(`
     query TeamsFromCoursesStudentsRootQuery($courseId: ID!, $coachNotes: CoachNoteFilter!, $levelId: ID, $coachId: ID, $search: String, $after: String, $tags: [String!]!) {
       teams(courseId: $courseId, coachNotes: $coachNotes, levelId: $levelId, coachId: $coachId, search: $search, first: 10, after: $after, tags: $tags) {
         nodes {
@@ -170,8 +169,7 @@ module TeamsQuery = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
 let getTeams = (send, courseId, cursor, filter) => {
   let levelId = filter.level |> OptionUtils.map(Level.id)
@@ -378,7 +376,7 @@ let restoreAssignedToMeFilter = (state, send, currentTeamCoach) =>
   currentTeamCoach |> OptionUtils.mapWithDefault(currentCoach =>
     switch state.filter.coach {
     | None => restoreFilterNotice(send, currentCoach, "Now showing all students in this course.")
-    | Some(selectedCoach) when selectedCoach |> Coach.id == Coach.id(currentCoach) => React.null
+    | Some(selectedCoach) if selectedCoach |> Coach.id == Coach.id(currentCoach) => React.null
     | Some(selectedCoach) =>
       restoreFilterNotice(
         send,

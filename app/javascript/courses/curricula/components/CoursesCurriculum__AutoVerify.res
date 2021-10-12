@@ -3,8 +3,7 @@ let str = React.string
 open CoursesCurriculum__Types
 module TargetStatus = CoursesCurriculum__TargetStatus
 
-module AutoVerifySubmissionQuery = %graphql(
-  `
+module AutoVerifySubmissionQuery = %graphql(`
    mutation AutoVerifySubmissionMutation($targetId: ID!) {
     autoVerifySubmission(targetId: $targetId){
       submission{
@@ -14,8 +13,7 @@ module AutoVerifySubmissionQuery = %graphql(
       levelUpEligibility
      }
    }
- `
-)
+ `)
 
 let redirect = link => {
   let window = Webapi.Dom.window

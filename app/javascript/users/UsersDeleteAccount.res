@@ -1,4 +1,4 @@
-@bs.module
+@module
 external permanentDeleteIcon: string = "./images/permanent-delete.svg"
 
 let str = React.string
@@ -8,21 +8,21 @@ type state =
   | Deleting
   | Deleted
 
-module DeleteAccountQuery = %graphql(
-  `
+module DeleteAccountQuery = %graphql(`
    mutation DeleteAccountMutation($token: String!) {
      deleteAccount(token: $token ) {
         success
        }
      }
-   `
-)
+   `)
 
 let deleteAccount = (token, setState, event) => {
   ReactEvent.Mouse.preventDefault(event)
   setState(_ => Deleting)
 
-  DeleteAccountQuery.make(~token, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
+  DeleteAccountQuery.make(~token, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result => {
     result["deleteAccount"]["success"]
       ? {
           setState(_ => Deleted)
@@ -30,7 +30,9 @@ let deleteAccount = (token, setState, event) => {
         }
       : ()
     Js.Promise.resolve()
-  }) |> Js.Promise.catch(_ => Js.Promise.resolve()) |> ignore
+  })
+  |> Js.Promise.catch(_ => Js.Promise.resolve())
+  |> ignore
   ()
 }
 

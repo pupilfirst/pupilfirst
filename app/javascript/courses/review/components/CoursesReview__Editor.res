@@ -1203,6 +1203,20 @@ let make = (
                 {submitButtonText(state.newFeedback, state.grades)->str}
               </button>
             </div>
+            {ReactUtils.nullIf(
+              <div className="p-4 md:p-6">
+                <h5 className="font-semibold text-sm flex items-center">
+                  <PfIcon
+                    className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
+                  />
+                  <span className="ml-2 md:ml-3 tracking-wide"> {t("feedback")->str} </span>
+                </h5>
+                <div className="divide-y space-y-6 md:ml-8">
+                  {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
+                </div>
+              </div>,
+              Js.Array.length(OverlaySubmission.feedback(overlaySubmission)) == 0,
+            )}
           </div>
 
         | ChecklistEditor =>

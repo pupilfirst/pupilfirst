@@ -642,6 +642,7 @@ feature 'School students index', js: true do
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
 
+      expect(page).to have_content('Showing 20 of 30 students')
       expect(find('.student-team-container:first-child')).to have_text(
         team_aaa.name
       )

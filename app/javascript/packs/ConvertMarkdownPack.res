@@ -26,8 +26,6 @@ let parseElement = (element, attribute) =>
 
 let profileType = profile =>
   switch profile {
-  | "comment" => Markdown.Comment
-  | "questionAndAnswer" => Markdown.QuestionAndAnswer
   | "permissive" => Markdown.Permissive
   | "areaOfText" => Markdown.AreaOfText
   | profile => raise(InvalidProfile(profile))

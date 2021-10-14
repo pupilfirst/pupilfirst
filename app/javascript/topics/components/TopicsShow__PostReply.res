@@ -1,7 +1,7 @@
 open TopicsShow__Types
 
 let str = React.string
-%bs.raw(`require("./TopicsShow__PostReply.css")`)
+%raw(`require("./TopicsShow__PostReply.css")`)
 
 let avatarClasses = "w-6 h-6 md:w-8 md:h-8 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
 
@@ -51,9 +51,7 @@ let make = (~post, ~users) => {
     </div>
     <div className="text-sm ml-9">
       <MarkdownBlock
-        markdown={post |> Post.body}
-        className="leading-normal text-sm "
-        profile=Markdown.QuestionAndAnswer
+        markdown={post |> Post.body} className="leading-normal text-sm " profile=Markdown.Permissive
       />
     </div>
   </div>

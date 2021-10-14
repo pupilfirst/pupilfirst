@@ -266,7 +266,7 @@ let make = (
                   <MarkdownBlock
                     markdown={post |> Post.body}
                     className="leading-normal text-sm "
-                    profile=Markdown.QuestionAndAnswer
+                    profile=Markdown.Permissive
                   />
                   {switch Post.editedAt(post) {
                   | Some(editedAt) =>

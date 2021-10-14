@@ -1,6 +1,6 @@
-%bs.raw(`require("./VerifyCertificate__Root.css")`)
+%raw(`require("./VerifyCertificate__Root.css")`)
 
-@bs.module external graduateIcon: string = "./images/graduate-icon.svg"
+@module external graduateIcon: string = "./images/graduate-icon.svg"
 
 let str = React.string
 let t = I18n.t(~scope="components.VerifyCertificate__Root")

@@ -16,6 +16,7 @@
     "@centerforopenscience/markdown-it-imsize": "https://github.com/cos-forks/markdown-it-imsize#cos",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@glennsl/bs-json": "^5.0.4",
+    "@jeff-tian/markdown-it-katex": "^2.1.0",
     "@rails/ujs": "^6.1.4",
     "@rails/webpacker": "^5.4.0",
     "@rescript/react": "^0.10.3",
@@ -28,7 +29,6 @@
     "blob-polyfill": "^5.0.20210201",
     "bootstrap": "^4.3.1",
     "bs-fetch": "^0.6.2",
-    "rescript": "9.1.4",
     "bs-webapi": "^0.19.1",
     "cloc": "^2.8.0",
     "coffeescript": "1.12.7",
@@ -40,6 +40,7 @@
     "fuse.js": "^6.4.6",
     "i18n-js": "^4.0.0-alpha.11",
     "markdown-it": "^12.2.0",
+    "markdown-it-align": "^0.1.0",
     "markdown-it-link-attributes": "^3.0.0",
     "markdown-it-linkify-images": "^2.0.0",
     "markdown-it-multimd-table": "^4.0.0",
@@ -59,7 +60,7 @@
     "react-datepicker": "^4.2.1",
     "react-dom": "^16.8.6",
     "react_ujs": "^2.6.1",
-    "sanitize-html": "^2.5.1",
+    "rescript": "9.1.4",
     "tailwindcss": "^2.2.15",
     "tus-js-client": "^2.3.0",
     "webpack-merge": "^5.8.0"
@@ -76,8 +77,8 @@
     "sass-loader": "^10.1.1",
     "stylelint": "^13.13.1",
     "stylelint-config-recommended": "^5.0.0",
-    "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "^4.2.1"
+    "webpack-cli": "^3",
+    "webpack-dev-server": "^3"
   },
   "resolutions": {
     "fstream": "^1.0.12",

@@ -1169,7 +1169,7 @@ feature 'Submission review overlay', js: true do
       expect(submission.timeline_event_grades).to eq([])
     end
 
-    scenario 'coach undo a submission with feedback' do
+    scenario 'coach clears grading for a submission with feedback' do
       sign_in_user team_coach.user,
                    referrer: review_timeline_event_path(submission_reviewed)
 

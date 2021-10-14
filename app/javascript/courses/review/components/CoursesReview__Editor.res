@@ -90,38 +90,31 @@ let reducer = (state, action) =>
   | UnassignReviewer => {...state, editor: AssignReviewer, saving: false}
   }
 
-module CreateGradingMutation = %graphql(
-  `
+module CreateGradingMutation = %graphql(`
     mutation CreateGradingMutation($submissionId: ID!, $feedback: String, $grades: [GradeInput!]!, $note: String,  $checklist: JSON!) {
       createGrading(submissionId: $submissionId, feedback: $feedback, grades: $grades, note: $note, checklist: $checklist){
         success
       }
     }
-  `
-)
+  `)
 
-module UndoGradingMutation = %graphql(
-  `
+module UndoGradingMutation = %graphql(`
     mutation UndoGradingMutation($submissionId: ID!) {
       undoGrading(submissionId: $submissionId){
         success
       }
     }
-  `
-)
+  `)
 
-module CreateFeedbackMutation = %graphql(
-  `
+module CreateFeedbackMutation = %graphql(`
     mutation CreateFeedbackMutation($submissionId: ID!, $feedback: String!) {
       createFeedback(submissionId: $submissionId, feedback: $feedback){
         success
       }
     }
-  `
-)
+  `)
 
-module NextSubmissionQuery = %graphql(
-  `
+module NextSubmissionQuery = %graphql(`
     query NextSubmissionQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID,  $personalCoachId: ID, $assignedCoachId: ID, $excludeSubmissionId: ID, $after: String) {
       submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, excludeSubmissionId: $excludeSubmissionId, sortCriterion: $sortCriterion, levelId: $levelId, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId, first: 1, after: $after) {
         nodes {
@@ -129,18 +122,15 @@ module NextSubmissionQuery = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
-module UnassignReviewerMutation = %graphql(
-  `
+module UnassignReviewerMutation = %graphql(`
     mutation UnassignReviewerMutation($submissionId: ID!) {
       unassignReviewer(submissionId: $submissionId){
         success
       }
     }
-  `
-)
+  `)
 
 let unassignReviewer = (submissionId, send, updateReviewerCB) => {
   send(BeginSaving)
@@ -551,7 +541,8 @@ let showGradePill = (
       EvaluationCriterion.gradesAndLabels(evaluationCriterion),
     )}
     <div className="course-review-editor__grade-bar inline-flex w-full text-center mt-1">
-      {EvaluationCriterion.gradesAndLabels(evaluationCriterion)->Js.Array2.map(gradeLabel => {
+      {EvaluationCriterion.gradesAndLabels(evaluationCriterion)
+      ->Js.Array2.map(gradeLabel => {
         let gradeLabelGrade = GradeLabel.grade(gradeLabel)
 
         <button
@@ -570,12 +561,15 @@ let showGradePill = (
           | None => React.null
           }}
         </button>
-      })->React.array}
+      })
+      ->React.array}
     </div>
   </div>
 
 let showGrades = (grades, evaluationCriteria, submissionDetails, state) =>
-  <div> {Grade.sort(evaluationCriteria, grades)->Js.Array2.mapi((grade, key) => {
+  <div>
+    {Grade.sort(evaluationCriteria, grades)
+    ->Js.Array2.mapi((grade, key) => {
       let gradeEcId = Grade.evaluationCriterionId(grade)
       let ec = ArrayUtils.unsafeFind(
         ec => EvaluationCriterion.id(ec) == gradeEcId,
@@ -592,14 +586,18 @@ let showGrades = (grades, evaluationCriteria, submissionDetails, state) =>
         state,
         None,
       )
-    })->React.array} </div>
+    })
+    ->React.array}
+  </div>
 let renderGradePills = (
   evaluationCriteria,
   targetEvaluationCriteriaIds,
   submissionDetails,
   state,
   send,
-) => targetEvaluationCriteriaIds->Js.Array2.mapi((evaluationCriterionId, key) => {
+) =>
+  targetEvaluationCriteriaIds
+  ->Js.Array2.mapi((evaluationCriterionId, key) => {
     let ec = ArrayUtils.unsafeFind(
       e => EvaluationCriterion.id(e) == evaluationCriterionId,
       "CoursesRevew__Editor: Unable to find evaluation criterion with id - " ++
@@ -618,7 +616,8 @@ let renderGradePills = (
     let passGrade = EvaluationCriterion.passGrade(ec)
 
     showGradePill(key, submissionDetails, ec, gradeValue, passGrade, state, Some(send))
-  })->React.array
+  })
+  ->React.array
 
 let badgeColorClasses = statusColor => {
   switch statusColor {
@@ -743,8 +742,8 @@ let submissionStatusIcon = (status, overlaySubmission) => {
         </div>
         <p
           className={`text-xs flex items-center justify-center md:block text-center w-full border rounded px-1 py-px font-semibold md:mt-1 ${badgeColorClasses(
-            color,
-          )} ${textColor(color)}`}>
+              color,
+            )} ${textColor(color)}`}>
           {text->str}
         </p>
       </div>
@@ -935,44 +934,45 @@ let feedbackGenerator = (submissionDetails, reviewChecklist, state, send) => {
   </div>
 }
 
-let showFeedback = feedback => Js.Array.mapi((f, index) =>
-    <Spread props={"data-title": "feedback-section"} key={index->string_of_int}>
-      <div>
-        <div className="pt-6">
-          <div className="flex">
-            <div
-              className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full overflow-hidden mr-4 object-cover">
-              {switch Feedback.coachAvatarUrl(f) {
-              | Some(avatarUrl) => <img src=avatarUrl />
-              | None => <Avatar name={Feedback.coachName(f)} />
-              }}
-            </div>
-            <div>
-              <div className="flex flex-col md:flex-row">
-                <p className="font-semibold text-sm leading-tight inline-flex">
-                  {Feedback.coachName(f)->str}
-                </p>
-                <p className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight">
-                  {("(" ++ (Feedback.coachTitle(f) ++ ")"))->str}
+let showFeedback = feedback =>
+  <div className="divide-y space-y-6 md:ml-8"> {Js.Array.mapi((f, index) =>
+      <Spread props={"data-title": "feedback-section"} key={index->string_of_int}>
+        <div>
+          <div className="pt-6">
+            <div className="flex">
+              <div
+                className="flex-shrink-0 w-10 h-10 bg-gray-300 rounded-full overflow-hidden mr-4 object-cover">
+                {switch Feedback.coachAvatarUrl(f) {
+                | Some(avatarUrl) => <img src=avatarUrl />
+                | None => <Avatar name={Feedback.coachName(f)} />
+                }}
+              </div>
+              <div>
+                <div className="flex flex-col md:flex-row">
+                  <p className="font-semibold text-sm leading-tight inline-flex">
+                    {Feedback.coachName(f)->str}
+                  </p>
+                  <p className="block md:inline-flex text-xs text-gray-800 md:ml-2 leading-tight">
+                    {("(" ++ (Feedback.coachTitle(f) ++ ")"))->str}
+                  </p>
+                </div>
+                <p className="text-xs leading-tight font-semibold inline-block text-gray-800">
+                  {Feedback.createdAtPretty(f)->str}
                 </p>
               </div>
-              <p className="text-xs leading-tight font-semibold inline-block text-gray-800">
-                {Feedback.createdAtPretty(f)->str}
-              </p>
+            </div>
+            <div className="md:ml-14">
+              <MarkdownBlock
+                className="pt-1 text-sm" profile=Markdown.Permissive markdown={Feedback.value(f)}
+              />
             </div>
           </div>
-          <div className="md:ml-14">
-            <MarkdownBlock
-              className="pt-1 text-sm" profile=Markdown.Permissive markdown={Feedback.value(f)}
-            />
-          </div>
         </div>
-      </div>
-    </Spread>
-  , ArrayUtils.copyAndSort(
-    (x, y) => DateFns.differenceInSeconds(Feedback.createdAt(y), Feedback.createdAt(x)),
-    feedback,
-  ))->React.array
+      </Spread>
+    , ArrayUtils.copyAndSort(
+      (x, y) => DateFns.differenceInSeconds(Feedback.createdAt(y), Feedback.createdAt(x)),
+      feedback,
+    ))->React.array} </div>
 
 let showSubmissionStatus = status => {
   let (text, classes) = switch status {
@@ -1211,11 +1211,9 @@ let make = (
                   />
                   <span className="ml-2 md:ml-3 tracking-wide"> {t("feedback")->str} </span>
                 </h5>
-                <div className="divide-y space-y-6 md:ml-8">
-                  {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
-                </div>
+                {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
               </div>,
-              Js.Array.length(OverlaySubmission.feedback(overlaySubmission)) == 0,
+              ArrayUtils.isEmpty(OverlaySubmission.feedback(overlaySubmission)),
             )}
           </div>
 
@@ -1331,9 +1329,7 @@ let make = (
                 </div>,
                 state.additonalFeedbackEditorVisible,
               )}
-              <div className="divide-y space-y-6 md:ml-8">
-                {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
-              </div>
+              {showFeedback(OverlaySubmission.feedback(overlaySubmission))}
             </div>
           </div>
         }}

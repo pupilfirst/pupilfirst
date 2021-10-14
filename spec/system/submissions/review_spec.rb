@@ -1169,31 +1169,22 @@ feature 'Submission review overlay', js: true do
       expect(submission.timeline_event_grades).to eq([])
     end
 
-    scenario 'team coach should see the previous feedback after undoing grading on a submission' do
+    scenario 'coach undo a submission with feedback' do
       sign_in_user team_coach.user,
                    referrer: review_timeline_event_path(submission_reviewed)
 
-      within("div[aria-label='submission-status']") do
-        expect(page).to have_text('Completed')
-        expect(page).to have_text('Evaluated By')
-        expect(page).to have_text(coach.name)
-      end
-
       accept_confirm { click_button 'Undo Grading' }
 
-      previous_feedback = feedback.feedback
-
       expect(submission_reviewed.startup_feedback.count).to eq(1)
-      expect(submission_reviewed.startup_feedback.last.feedback).to eq(previous_feedback)
-
-      expect(page).to have_text('Start Review')
 
       click_button 'Start Review'
       dismiss_notification
 
       within("div[data-title='feedback-section']") do
         expect(page).to have_text(coach.name)
-        expect(page).to have_content(previous_feedback)
+        expect(page).to have_content(
+          submission_reviewed.startup_feedback.first.feedback
+        )
       end
     end
   end

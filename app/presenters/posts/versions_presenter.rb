@@ -27,7 +27,7 @@ module Posts
     end
 
     def editor_name_for_answer
-      @post.editor.present? ? @post.editor.name : @post.creator.name
+      @post.editor&.name || 'Unknown'
     end
 
     def updated_at(object)

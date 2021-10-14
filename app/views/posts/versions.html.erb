@@ -43,7 +43,7 @@
       </div>
 
     </div>
-    <% presenter.versions.reverse().each_with_index do |version, index| %>
+    <% presenter.versions.order(created_at: :desc).each_with_index do |version, index| %>
       <div class="flex items-start mt-4">
         <div class="w-1/12 font-bold text-lg md:text-4xl mr-2 md:mr-3 text-center text-gray-500"><%= presenter.version_number(index) %></div>
         <div class="flex-1 relative bg-orange-100 border border-orange-200 rounded p-5 overflow-hidden">
@@ -51,7 +51,7 @@
             <%= version.value %>
           </div>
           <div class="mt-4 text-xs">
-            <% if index === (presenter.versions.length - 1) %>
+            <% if index === (presenter.versions_count - 1) %>
             <span>Created by</span>
             <% else %>
             <span>Edited by</span>

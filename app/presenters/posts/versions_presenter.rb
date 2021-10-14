@@ -34,8 +34,6 @@ module Posts
       object.updated_at.to_formatted_s(:long)
     end
 
-    private
-
     def versions_count
       @versions_count ||= versions.count
     end

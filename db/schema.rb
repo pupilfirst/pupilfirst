@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_06_183613) do
+ActiveRecord::Schema.define(version: 2021_10_12_174901) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -535,6 +535,15 @@ ActiveRecord::Schema.define(version: 2021_09_06_183613) do
     t.index ["level_id"], name: "index_startups_on_level_id"
   end
 
+  create_table "submission_reports", force: :cascade do |t|
+    t.string "status"
+    t.bigint "submissions_id"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["submissions_id"], name: "index_submission_reports_on_submissions_id"
+  end
+
   create_table "taggings", id: :serial, force: :cascade do |t|
     t.integer "tag_id"
     t.integer "taggable_id"
@@ -682,6 +691,8 @@ ActiveRecord::Schema.define(version: 2021_09_06_183613) do
     t.jsonb "checklist", default: []
     t.bigint "reviewer_id"
     t.datetime "reviewer_assigned_at"
+    t.integer "number"
+    t.datetime "archived_at"
     t.index ["reviewer_id"], name: "index_timeline_events_on_reviewer_id"
   end
 
@@ -823,6 +834,7 @@ ActiveRecord::Schema.define(version: 2021_09_06_183613) do
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "levels"
+  add_foreign_key "submission_reports", "timeline_events", column: "submissions_id"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"

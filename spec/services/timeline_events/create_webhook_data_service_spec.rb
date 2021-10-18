@@ -24,6 +24,7 @@ describe TimelineEvents::CreateWebhookDataService do
         title: target.title,
         evaluation_criteria: [
           {
+            id: criterion.id,
             name: criterion.name,
             max_grade: criterion.max_grade,
             pass_grade: criterion.pass_grade,

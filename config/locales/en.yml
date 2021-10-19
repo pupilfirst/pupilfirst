@@ -843,6 +843,7 @@ en:
     concerns:
       validate_submission_gradable:
         owners_should_be_active_error: Cannot update inactive student submissions.
+        submission_should_be_live: Student has revoked the submission or it does not exist.
   home:
     index:
       course_status:

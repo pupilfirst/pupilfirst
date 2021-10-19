@@ -442,6 +442,15 @@ feature 'Target Overlay', js: true do
              created_at: 3.days.ago,
              evaluated_at: 1.day.ago
     end
+    let!(:archived_submission) do
+      create :timeline_event,
+             :with_owners,
+             latest: false,
+             target: target_l1,
+             owners: team.founders,
+             created_at: 3.days.ago,
+             archived_at: 1.day.ago
+    end
     let!(:attached_file) do
       create :timeline_event_file, timeline_event: submission_2
     end
@@ -504,7 +513,12 @@ feature 'Target Overlay', js: true do
       find('.course-overlay__body-tab-item', text: 'Submissions & Feedback')
         .click
 
-      # Both submissions should be visible, along with grading and all feedback from coaches.
+      # Both submissions should be visible, along with grading and all feedback from coaches. Archived submission should not be listed
+
+      expect(page).to have_selector(
+        '.curriculum__submission-feedback-container',
+        count: 2
+      )
       within(
         "div[aria-label='Details about your submission on #{submission_1.created_at.strftime('%B %-d, %Y')}']"
       ) do

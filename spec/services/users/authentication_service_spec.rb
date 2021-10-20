@@ -3,8 +3,9 @@ require 'rails_helper'
 describe Users::AuthenticationService do
   subject { described_class.new(user.school, supplied_token) }
 
-  let(:secret_token) { SecureRandom.hex }
-  let!(:user) { create :user, login_token: secret_token }
+  let(:secret_token) { SecureRandom.urlsafe_base64 }
+  let(:login_token_digest) { Digest::SHA2.base64digest(secret_token) }
+  let!(:user) { create :user, login_token_digest: login_token_digest, login_mail_sent_at:  Time.zone.now  }
   let(:another_school) { create :school }
 
   describe '#authenticate' do
@@ -28,7 +29,7 @@ describe Users::AuthenticationService do
       end
 
       it 'clears user token' do
-        expect { subject.authenticate }.to(change { user.reload.login_token }.from(secret_token).to(nil))
+        expect { subject.authenticate }.to(change { user.reload.login_token_digest }.from(login_token_digest).to(nil))
       end
 
       context 'when a different school is supplied' do

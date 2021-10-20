@@ -23,14 +23,14 @@ feature 'User Delete Account' do
         fill_in 'email', with: user.email
       end
 
-      current_delete_token = user.delete_account_token
+      current_delete_token = user.delete_account_token_digest
 
       click_button 'Initiate Deletion'
 
       expect(page).to have_text('Check your inbox for further steps', wait: 10)
       dismiss_notification
 
-      expect(user.reload.delete_account_token).to_not eq(current_delete_token)
+      expect(user.reload.delete_account_token_digest).to_not eq(current_delete_token)
       open_email(user.email)
 
       subject = current_email.subject

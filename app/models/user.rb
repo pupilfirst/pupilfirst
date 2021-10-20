@@ -45,9 +45,6 @@ class User < ApplicationRecord
            inverse_of: :recipient,
            dependent: :destroy
 
-  has_secure_token :login_token
-  has_secure_token :reset_password_token
-  has_secure_token :delete_account_token
 
   # database_authenticable is required by devise_for to generate the session routes
   devise :database_authenticatable,
@@ -85,16 +82,38 @@ class User < ApplicationRecord
   attr_reader :delete_account_token_original
   attr_reader :api_token
 
+  def regenerate_login_token
+    @original_login_token = SecureRandom.urlsafe_base64
+    update!(
+      login_token_digest: Digest::SHA2.base64digest(@original_login_token),
+    )
+  end
+
+  def original_login_token
+    @original_login_token || raise('Original login token is unavailable')
+  end
+
+  def regenerate_reset_password_token
+    @original_reset_password_token = SecureRandom.urlsafe_base64
+    update!(
+      reset_password_token: Digest::SHA2.base64digest(@original_reset_password_token),
+    )
+  end
+
+  def original_reset_password_token
+    @original_reset_password_token || raise('Original reset password token is unavailable')
+  end
+
   def regenerate_delete_account_token
     @delete_account_token_original = SecureRandom.urlsafe_base64
     update!(
-      delete_account_token:
+      delete_account_token_digest:
         Digest::SHA2.hexdigest(@delete_account_token_original)
     )
   end
 
   def self.find_by_hashed_delete_account_token(delete_account_token)
-    find_by(delete_account_token: Digest::SHA2.hexdigest(delete_account_token))
+    find_by(delete_account_token_digest: Digest::SHA2.hexdigest(delete_account_token))
   end
 
   def regenerate_api_token

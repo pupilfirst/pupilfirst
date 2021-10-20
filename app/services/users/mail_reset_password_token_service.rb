@@ -14,12 +14,11 @@ module Users
     def execute
       # Make sure we generate a new token.
       @user.regenerate_reset_password_token
-
       # Update the time at which last reset password mail was sent.
       @user.update!(reset_password_sent_at: Time.zone.now)
 
       url_options = {
-        token: @user.reset_password_token,
+        token: @user.original_reset_password_token,
         host: @domain.fqdn,
         protocol: 'https'
       }

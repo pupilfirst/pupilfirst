@@ -9,12 +9,12 @@ module Users
       validate :user_must_exist
 
       def save
-        @user.update!(password: new_password, reset_password_token_digest: nil)
+        @user.update!(password: new_password, reset_password_token: nil)
       end
 
       def user
         reset_token = Digest::SHA2.base64digest(token)
-        @user ||= User.find_by(reset_password_token_digest: reset_token)
+        @user ||= User.find_by(reset_password_token: reset_token)
       end
 
       private

@@ -537,11 +537,11 @@ ActiveRecord::Schema.define(version: 2021_10_12_174901) do
 
   create_table "submission_reports", force: :cascade do |t|
     t.string "status"
-    t.bigint "submissions_id"
+    t.bigint "submission_id"
     t.string "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["submissions_id"], name: "index_submission_reports_on_submissions_id"
+    t.index ["submission_id"], name: "index_submission_reports_on_submission_id"
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
@@ -834,7 +834,7 @@ ActiveRecord::Schema.define(version: 2021_10_12_174901) do
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "levels"
-  add_foreign_key "submission_reports", "timeline_events", column: "submissions_id"
+  add_foreign_key "submission_reports", "timeline_events", column: "submission_id"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"

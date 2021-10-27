@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   before_action :redirect_to_primary_domain, if: :domain_redirection_required?
 
   around_action :set_time_zone, if: :current_user
-  around_action :switch_locale
+  around_action :switch_locale, if: :current_user
 
   helper_method :avatar
   helper_method :current_host
@@ -192,8 +192,7 @@ class ApplicationController < ActionController::Base
   end
 
   def switch_locale(&action)
-    locale = current_user.try(:locale) || I18n.default_locale
-    I18n.with_locale(locale, &action)
+    I18n.with_locale(current_user.locale, &action)
   end
 
   def sign_out_if_required

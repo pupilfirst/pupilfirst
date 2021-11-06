@@ -1014,6 +1014,7 @@ let make = (
   ~submissionDetails,
   ~submissionId,
   ~updateReviewerCB,
+  ~setTitle,
 ) => {
   let (state, send) = React.useReducer(
     reducer,
@@ -1036,6 +1037,23 @@ let make = (
       nextSubmission: DataUnloaded,
     },
   )
+
+  React.useEffect0(() => {
+    let studentOrTeamName = switch SubmissionDetails.teamName(submissionDetails) {
+    | Some(teamName) => teamName
+    | None => {
+        let students = SubmissionDetails.students(submissionDetails)
+        Student.name(students[0])
+      }
+    }
+
+    setTitle(_ =>
+      `Submission ${string_of_int(number)} | L${SubmissionDetails.levelNumber(
+          submissionDetails,
+        )} | ${studentOrTeamName}`
+    )
+    None
+  })
 
   let status = computeStatus(
     overlaySubmission,

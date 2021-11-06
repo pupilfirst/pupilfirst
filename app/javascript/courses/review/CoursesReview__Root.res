@@ -124,8 +124,7 @@ let reducer = (state, action) =>
 
 let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryString(filter))
 
-module SubmissionsQuery = %graphql(
-  `
+module SubmissionsQuery = %graphql(`
     query SubmissionsQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $personalCoachId: ID, $assignedCoachId: ID, $reviewingCoachId: ID, $includeInactive: Boolean, $coachIds: [ID!] $after: String) {
       submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, levelId: $levelId, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId, reviewingCoachId: $reviewingCoachId,  includeInactive: $includeInactive, first: 20, after: $after) {
         nodes {
@@ -162,11 +161,9 @@ module SubmissionsQuery = %graphql(
         title
       }
     }
-  `
-)
+  `)
 
-module LevelsQuery = %graphql(
-  `
+module LevelsQuery = %graphql(`
     query LevelsQuery($courseId: ID!) {
       levels(courseId: $courseId) {
         id
@@ -174,29 +171,24 @@ module LevelsQuery = %graphql(
         number
       }
     }
-  `
-)
+  `)
 
-module CoachesQuery = %graphql(
-  `
+module CoachesQuery = %graphql(`
     query CoachesQuery($courseId: ID!) {
       coaches(courseId: $courseId) {
         ...UserProxy.Fragments.AllFields
       }
     }
-  `
-)
+  `)
 
-module ReviewedTargetsInfoQuery = %graphql(
-  `
+module ReviewedTargetsInfoQuery = %graphql(`
     query ReviewedTargetsInfoQuery($courseId: ID!) {
       reviewedTargetsInfo(courseId: $courseId) {
         id
         title
       }
     }
-  `
-)
+  `)
 
 let getSubmissions = (send, courseId, cursor, filter) => {
   let coachIds =
@@ -249,10 +241,13 @@ let getLevels = (send, courseId, state) => {
   if state.levelsLoaded == Unloaded {
     send(SetLevelLoading)
 
-    LevelsQuery.make(~courseId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
+    LevelsQuery.make(~courseId, ())
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(response => {
       send(LoadLevels(Js.Array.map(Level.makeFromJs, response["levels"])))
       Js.Promise.resolve()
-    }) |> ignore
+    })
+    |> ignore
   }
 }
 
@@ -260,10 +255,13 @@ let getCoaches = (send, courseId, state) => {
   if state.coachesLoaded == Unloaded {
     send(SetCoachLoading)
 
-    CoachesQuery.make(~courseId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
+    CoachesQuery.make(~courseId, ())
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(response => {
       send(LoadCoaches(Js.Array.map(Coach.makeFromJs, response["coaches"])))
       Js.Promise.resolve()
-    }) |> ignore
+    })
+    |> ignore
   }
 }
 
@@ -742,10 +740,20 @@ let computeInitialState = () => {
 }
 
 @react.component
-let make = (~courseId, ~currentCoachId) => {
+let make = (~courseId, ~currentCoachId, ~setTitle, ~courses) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
   let url = RescriptReactRouter.useUrl()
   let filter = Filter.makeFromQueryParams(url.search)
+
+  React.useEffect0(() => {
+    let currentCourse = ArrayUtils.unsafeFind(
+      course => AppRouter__Course.id(course) == courseId,
+      "Could not find currentCourse with ID " ++ courseId,
+      courses,
+    )
+    setTitle(_ => `Review | ${AppRouter__Course.name(currentCourse)}`)
+    None
+  })
 
   React.useEffect1(() => {
     reloadSubmissions(courseId, filter, send)

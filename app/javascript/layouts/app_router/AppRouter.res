@@ -11,17 +11,29 @@ let classNames = (default, trueClasses, falseClasses, bool) => {
 @react.component
 let make = (~school, ~courses, ~currentUser) => {
   let url = RescriptReactRouter.useUrl()
+  let (title, setTitle) = React.useState(() => "")
+
+  React.useEffect1(() => {
+    open Webapi.Dom
+    let htmlDocument = document->Document.unsafeAsHtmlDocument
+    HtmlDocument.setTitle(htmlDocument, title)
+    None
+  }, [title])
 
   let (component, selectedPage: Page.t) = switch url.path {
   | list{"courses", courseId, "review"} => (
       <CoursesReview__Root
         courseId
         currentCoachId={Belt.Option.getWithDefault(User.coachId(User.defaultUser(currentUser)), "")}
+        setTitle
+        courses
       />,
       Student__Review(courseId),
     )
   | list{"submissions", submissionId, "review"} => (
-      <CoursesReview__SubmissionsRoot submissionId currentUser={User.defaultUser(currentUser)} />,
+      <CoursesReview__SubmissionsRoot
+        submissionId currentUser={User.defaultUser(currentUser)} setTitle
+      />,
       Student__SubmissionShow(submissionId),
     )
   | _ =>

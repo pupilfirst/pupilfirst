@@ -1,14 +1,13 @@
 exception FormNotFound(string)
 
-%bs.raw(`require("./CurriculumEditor__ContentBlockCreator.css")`)
+%raw(`require("./CurriculumEditor__ContentBlockCreator.css")`)
 
 open CurriculumEditor__Types
 
 let str = React.string
 let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockCreator")
 
-module CreateMarkdownContentBlock = %graphql(
-  `
+module CreateMarkdownContentBlock = %graphql(`
     mutation CreateMarkdownContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID) {
       createMarkdownContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId) {
         contentBlock {
@@ -16,11 +15,9 @@ module CreateMarkdownContentBlock = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
-module CreateEmbedContentBlock = %graphql(
-  `
+module CreateEmbedContentBlock = %graphql(`
     mutation CreateEmbedContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $url: String!, $requestSource: EmbedRequestSource!) {
       createEmbedContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId, url: $url, requestSource: $requestSource) {
         contentBlock {
@@ -28,11 +25,9 @@ module CreateEmbedContentBlock = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
-module CreateVimeoVideo = %graphql(
-  `
+module CreateVimeoVideo = %graphql(`
     mutation CreateVimeoVideo($targetId: ID!, $size: Int!, $title: String, $description: String) {
       createVimeoVideo(targetId: $targetId, size: $size, title: $title, description: $description) {
         vimeoVideo {
@@ -41,8 +36,7 @@ module CreateVimeoVideo = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
 type ui =
   | Hidden
@@ -210,14 +204,14 @@ let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => 
 }
 
 let embedUrlRegexes = [
-  %bs.re("/https:\\/\\/.*slideshare\\.net/"),
-  %bs.re("/https:\\/\\/.*vimeo\\.com/"),
-  %bs.re("/https:\\/\\/.*youtube\\.com/"),
-  %bs.re("/https:\\/\\/.*youtu\\.be/"),
-  %bs.re("/https:\\/\\/docs\\.google\\.com\\/presentation/"),
-  %bs.re("/https:\\/\\/docs\\.google\\.com\\/document/"),
-  %bs.re("/https:\\/\\/docs\\.google\\.com\\/spreadsheets/"),
-  %bs.re("/https:\\/\\/docs\\.google\\.com\\/forms/"),
+  %re("/https:\\/\\/.*slideshare\\.net/"),
+  %re("/https:\\/\\/.*vimeo\\.com/"),
+  %re("/https:\\/\\/.*youtube\\.com/"),
+  %re("/https:\\/\\/.*youtu\\.be/"),
+  %re("/https:\\/\\/docs\\.google\\.com\\/presentation/"),
+  %re("/https:\\/\\/docs\\.google\\.com\\/document/"),
+  %re("/https:\\/\\/docs\\.google\\.com\\/spreadsheets/"),
+  %re("/https:\\/\\/docs\\.google\\.com\\/forms/"),
 ]
 
 let validEmbedUrl = url => Belt.Array.some(embedUrlRegexes, regex => regex->Js.Re.test_(url))
@@ -385,14 +379,14 @@ let maxVideoSize = vimeoPlan => {
   switch vimeoPlan {
   | Some(plan) =>
     switch plan {
-    | VimeoPlan.Basic => 500 * 1024 * 1024
+    | VimeoPlan.Basic => 500.0 *. 1024.0 *. 1024.0
     | Plus
     | Pro
     | Business
     | Premium =>
-      5000 * 1024 * 1024
+      5.0 *. 1024.0 *. 1024.0 *. 1024.0
     }
-  | None => FileUtils.defaultVideoMaxSize
+  | None => float_of_int(FileUtils.defaultVideoMaxSize)
   }
 }
 
@@ -433,7 +427,7 @@ let handleFileInputChange = (
       FileUtils.isInvalid(~image=true, file) ? Some(t("image.invalid_image_warning")) : None
     | #VideoEmbed =>
       let maxVideoSize = maxVideoSize(vimeoPlan)
-      switch (FileUtils.isVideo(file), FileUtils.hasValidSize(~maxSize=maxVideoSize, file)) {
+      switch (FileUtils.isVideo(file), FileUtils.hasValidFloatSize(~maxSize=maxVideoSize, file)) {
       | (false, true | false) => Some(t("video.invalid_format_warning"))
       | (true, false) =>
         Some(

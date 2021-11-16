@@ -59,6 +59,7 @@
     "react-csv-reader": "^3.3.1",
     "react-datepicker": "^4.2.1",
     "react-dom": "^16.8.6",
+    "react-helmet": "^6.1.0",
     "react_ujs": "^2.6.1",
     "rescript": "9.1.4",
     "tailwindcss": "^2.2.15",

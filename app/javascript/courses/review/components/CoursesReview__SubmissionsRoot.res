@@ -93,13 +93,9 @@ let updateReviewer = (submissionDetails, setState, reviewer) => {
 }
 
 @react.component
-let make = (~submissionId, ~currentUser, ~setTitle) => {
+let make = (~submissionId, ~currentUser) => {
   let (state, setState) = React.useState(() => Loading)
 
-  React.useEffect0(() => {
-    setTitle(_ => "Submission Loading....")
-    None
-  })
   React.useEffect1(getSubmissionDetails(submissionId, setState), [submissionId])
 
   <div className="flex-1 md:flex md:flex-col md:overflow-hidden">
@@ -124,7 +120,6 @@ let make = (~submissionId, ~currentUser, ~setTitle) => {
         submissionDetails
         submissionId
         updateReviewerCB={updateReviewer(submissionDetails, setState)}
-        setTitle
       />
 
     | Loading =>

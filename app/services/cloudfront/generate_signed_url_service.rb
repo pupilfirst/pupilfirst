@@ -27,9 +27,16 @@ module Cloudfront
           @blob
         end
 
+      content_disposition =
+        if MIME::Types[blob.content_type].first&.media_type == 'image'
+          'inline'
+        else
+          'attachment'
+        end
+
       uri.query = {
         'response-content-disposition':
-          "attachment; filename=\"#{blob.filename}\";",
+          "#{content_disposition}; filename=\"#{blob.filename}\";",
         'response-content-type': blob.content_type
       }.to_query
 

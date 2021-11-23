@@ -30,11 +30,11 @@ be printed to the command-line after it's successfully installed.
 The following command should install all required dependencies on Ubuntu. If you're using another _flavour_ of Linux,
 adapt the command to work with the package manager available with your distribution.
 
-    sudo apt-get install imagemagick postgresql postgresql-contrib autoconf libtool nginx
+    sudo apt-get install imagemagick postgresql postgresql-contrib autoconf libtool nginx libpq-dev
 
 ### Install Ruby & Node.js
 
-Use [asdf](https://asdf-vm.com/) to install Ruby and Node.js. You can find the required versions in the `.tool-versions` file.
+Use [asdf](https://asdf-vm.com/) to install Ruby and Node.js. Simply run `asdf install` from the project directory. It'll read the required versions from the `.tool-versions` file and install them.
 
 ### Install Rubygems
 
@@ -45,28 +45,24 @@ Once Ruby is installed, fetch all gems using Bundler:
 You may need to install the `bundler` gem if the version of Ruby you have installed comes with a different `bundler`
 version. Simply follow the instructions in the error message, if this occurs.
 
-If installation of the `pg` gem crashes, asking for `libpq-fe.h`, run the following commands, and then run `bundle install` again:
+On macOS, if installation of the `pg` gem crashes, asking for `libpq-fe.h`, run the following commands, and then run `bundle install` again:
 
-#### On macOS:
+```bash
+# Find the exact path to pg_config.
+find /Applications -name pg_config
 
-    # Find the exact path to pg_config.
-    find /Applications -name pg_config
-
-    # Use the path returned by the above command in the following one. Replace X.Y.Z with the same version that failed to install.
-    gem install pg -v 'X.Y.Z' -- --with-pg-config=/path/to/pg_config
-
-#### On Ubuntu:
-
-    sudo apt-get install libpq-dev
+# Use the path returned by the above command in the following one. Replace X.Y.Z with the same version that failed to install.
+gem install pg -v 'X.Y.Z' -- --with-pg-config=/path/to/pg_config
+```
 
 ### Fetch JS & ReScript dependencies
 
-1. Install Yarn following [offical instructions](https://yarnpkg.com/en/docs/install).
+1. Install Yarn following [offical instructions](https://yarnpkg.com/getting-started/install).
 2. From the root of the repository, run the `yarn` command to install all node modules; this will also install ReScript.
 
 ## Set credentials for local database
 
-We'll now set a password for the `postgres` database username.
+If you're setting up Postgres for the first time, we'll now set a password for the `postgres` database username.
 
 Make sure that the PostgreSQL server is running. Once that's done, we'll set a password for the
 default database user. Open the `psql` CLI:
@@ -85,8 +81,6 @@ Then, in the PostgreSQL CLI, set a new password and quit.
     # Quit.
     \q
 
-Feel free to alter these steps if you're familiar with setting up PostgreSQL.
-
 ## Configure application environment variables
 
 1. Copy `example.env` to `.env`.
@@ -99,19 +93,19 @@ Feel free to alter these steps if you're familiar with setting up PostgreSQL.
 
    Use the same values from the previous step. The username should be `postgres`, and the password will be whatever value you've set.
 
+3. Set up push notifications by generating and setting VAPID keys to enable push notifications:
+
+   ```ruby
+   # In the Rails console
+   vapid_key = Webpush.generate_key
+
+   # Save these in your .env file.
+   puts "VAPID_PUBLIC_KEY=#{vapid_key.public_key}\nVAPID_PRIVATE_KEY=#{vapid_key.private_key}"
+   ```
+
+   Paste the output into `.env`, replacing the existing lines for these two keys.
+
 The `.env` file contains environment variables that are used to configure the application. The file contains documentation explaining where you should source its values from. If you're just starting out, you shouldn't have to change any variables other than the ones listed above.
-
-### Set up push notifications
-
-Generate and set VAPID keys to enable push notifications:
-
-```ruby
-# In the Rails console
-vapid_key = Webpush.generate_key
-
-# Save these in your .env file.
-puts "VAPID_PUBLIC_KEY=#{vapid_key.public_key}\nVAPID_PRIVATE_KEY=#{vapid_key.private_key}"
-```
 
 ## Setup Overcommit
 
@@ -187,17 +181,17 @@ point. To compile ReScript code again (if you've made changes), you can either d
     # Recompile, and then watch for changes
     yarn run re:watch
 
-## Run Webpack Dev Server
-
-Start the Webpack Dev Server on another tab or window:
-
-    yarn run wds
-
 ## Start the Rails server
 
 With `webpack-dev-server` running, start the Rails server:
 
     bundle exec rails server
+
+## Run Webpack Dev Server
+
+Start the Webpack Dev Server on another tab or window:
+
+    yarn run wds
 
 You'll want all three of these processes running for best performance when developing.
 

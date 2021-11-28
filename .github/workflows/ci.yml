@@ -54,7 +54,7 @@ jobs:
       - name: Use Ruby 2.7
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "2.7"
+          ruby-version: "2.7.4"
       - name: Set branch name & commit SHA in env
         uses: actions/github-script@v3
         with:

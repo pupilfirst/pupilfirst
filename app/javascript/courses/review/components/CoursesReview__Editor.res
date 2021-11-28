@@ -1002,15 +1002,15 @@ let updateReviewer = (cb, send, reviewer) => {
 let pageTitle = (number, submissionDetails) => {
   let studentOrTeamName = switch SubmissionDetails.teamName(submissionDetails) {
   | Some(teamName) => teamName
-  | None => {
-      let students = SubmissionDetails.students(submissionDetails)
-      Student.name(students[0])
-    }
+  | None =>
+    Js.Array2.map(SubmissionDetails.students(submissionDetails), Student.name)->Js.Array2.joinWith(
+      ", ",
+    )
   }
 
-  `${t("submission")} ${number->Belt.Int.toString}  |  L${SubmissionDetails.levelNumber(
-      submissionDetails,
-    )}  |  ${studentOrTeamName}`
+  `${t("submission")} ${number->string_of_int} | ${t(
+      "level_acronym",
+    )}${SubmissionDetails.levelNumber(submissionDetails)} | ${studentOrTeamName}`
 }
 
 @react.component
@@ -1072,9 +1072,9 @@ let make = (
   let url = RescriptReactRouter.useUrl()
   let filter = Filter.makeFromQueryParams(url.search)
 
-  <>
-    <Helmet> <title> {str(pageTitle(number, submissionDetails))} </title> </Helmet>
-    {[
+  {
+    [
+      <Helmet key="helmet"> <title> {str(pageTitle(number, submissionDetails))} </title> </Helmet>,
       <div key="submission-header">
         <div> {inactiveWarning(submissionDetails)} </div>
         {headerSection(state, state.nextSubmission, send, submissionDetails, filter, submissionId)}
@@ -1352,6 +1352,6 @@ let make = (
           }}
         </div>
       </DisablingCover>,
-    ]->React.array}
-  </>
+    ]->React.array
+  }
 }

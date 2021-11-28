@@ -1397,7 +1397,9 @@ feature 'Submission review overlay', js: true do
       sign_in_user team_coach.user,
                    referrer:
                      review_timeline_event_path(submission_team_target_2)
-
+      expect(page).to have_title(
+        "Submission 1 | L1 | #{student.name}, #{team_2.founders.first.name}"
+      )
       expect(page).to have_text(student.name)
       expect(page).to have_text(team_2.founders.first.name)
       expect(page).to_not have_text(team_1.name)

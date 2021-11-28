@@ -742,7 +742,7 @@ let computeInitialState = () => {
 let pageTitle = (courses, courseId) => {
   let currentCourse = ArrayUtils.unsafeFind(
     course => AppRouter__Course.id(course) == courseId,
-    "Could not find currentCourse with ID " ++ courseId,
+    "Could not find currentCourse with ID " ++ courseId ++ " in CoursesReview__Root",
     courses,
   )
 

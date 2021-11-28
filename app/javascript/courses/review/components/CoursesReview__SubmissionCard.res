@@ -1,6 +1,6 @@
-@bs.module
+@module
 external reviewedEmptyImage: string = "../../shared/images/reviewed-empty.svg"
-@bs.module
+@module
 external pendingEmptyImage: string = "../images/pending-empty.svg"
 
 let t = I18n.t(~scope="components.CoursesReview__SubmissionCard")
@@ -32,7 +32,7 @@ let feedbackSentNotice = feedbackSent =>
   )
 
 let submissionCardClasses = submission =>
-  "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mb-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 " ++ if (
+  "flex flex-col lg:flex-row items-start lg:items-center justify-between bg-white border-l-3 p-3 lg:py-6 lg:px-5 mb-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 " ++ if (
     IndexSubmission.pendingReview(submission)
   ) {
     "border-orange-400"
@@ -49,8 +49,8 @@ let showSubmission = (submissions, filterString) =>
         key={IndexSubmission.id(submission)}
         ariaLabel={"Submission " ++ IndexSubmission.id(submission)}
         className={submissionCardClasses(submission)}>
-        <div className="w-full md:w-3/4">
-          <div className="block text-sm md:pr-2">
+        <div className="w-full lg:w-8/12">
+          <div className="block text-sm lg:pr-4">
             <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
               {str(t("level") ++ string_of_int(IndexSubmission.levelNumber(submission)))}
             </span>
@@ -112,7 +112,7 @@ let showSubmission = (submissions, filterString) =>
             }}
           </div>
         </div>
-        <div className="w-auto md:w-1/4 text-xs flex justify-end mt-2 md:mt-0">
+        <div className="w-auto lg:w-4/12 text-xs flex justify-end mt-2 lg:mt-0">
           {feedbackSentNotice(IndexSubmission.feedbackSent(submission))}
           {submissionStatus(submission)}
         </div>

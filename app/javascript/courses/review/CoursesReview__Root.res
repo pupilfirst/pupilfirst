@@ -822,7 +822,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
         </div>
         <div className="md:sticky md:top-0 bg-gray-100">
           <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
-            <div className="md:flex w-full items-start pt-4 px-4 md:pt-6">
+            <div className="md:flex w-full items-start pt-4 pb-3 px-4 md:pt-6">
               <div className="flex-1">
                 <label className="block text-tiny font-semibold uppercase">
                   {tc("filter_by")->str}
@@ -846,7 +846,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
           </div>
         </div>
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
-          <div className="mt-4">
+          <div>
             {switch state.submissions {
             | Unloaded =>
               <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>

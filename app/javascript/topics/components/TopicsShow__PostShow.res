@@ -386,20 +386,21 @@ let make = (
                   </button>
                 : React.null}
             </div>
-            {Topic.lockedAt(topic)->Belt.Option.isSome
-              ? React.null
-              : <button
-                  onClick={_ => {
-                    addNewReplyCB()
-                    navigateToEditor()
-                  }}
-                  id={"reply-button-" ++ Post.id(post)}
-                  ariaLabel={isFirstPost
-                    ? "Add reply to topic"
-                    : "Add reply to post " ++ Post.id(post)}
-                  className="bg-gray-100 lg:border lg:bg-gray-200 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-300">
-                  <FaIcon classes="fas fa-reply mr-2" /> {t("new_reply_button") |> str}
-                </button>}
+            {ReactUtils.nullIf(
+              <button
+                onClick={_ => {
+                  addNewReplyCB()
+                  navigateToEditor()
+                }}
+                id={"reply-button-" ++ Post.id(post)}
+                ariaLabel={isFirstPost
+                  ? "Add reply to topic"
+                  : "Add reply to post " ++ Post.id(post)}
+                className="bg-gray-100 lg:border lg:bg-gray-200 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-300">
+                <FaIcon classes="fas fa-reply mr-2" /> {t("new_reply_button") |> str}
+              </button>,
+              Topic.lockedAt(topic)->Belt.Option.isSome,
+            )}
           </div>
         </div>
         {showReplies

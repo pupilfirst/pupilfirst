@@ -164,6 +164,8 @@ feature "Coach's review interface" do
     scenario 'course coach visits review dashboard', js: true do
       sign_in_user course_coach.user, referrer: review_course_path(course)
 
+      expect(page).to have_title("Review | #{course.name}")
+
       # Ensure coach is on the review dashboard.
       # Pending and Reviewed targets must be visible
       within("a[aria-label='Submission #{submission_l1_t1.id}']") do

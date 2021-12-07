@@ -14,10 +14,9 @@ describe MailLoginTokenService do
 
     describe '#execute' do
       it 'generates new login token for user' do
-        user.regenerate_login_token
-        expect do
-          subject.execute
-        end.to(change { user.original_login_token })
+        expect {user.original_login_token}.to raise_error(RuntimeError, "Original login token is unavailable")
+        subject.execute
+        expect(user.original_login_token).not_to eq nil
       end
 
       it 'emails login link to user' do

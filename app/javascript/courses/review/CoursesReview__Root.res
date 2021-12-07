@@ -124,8 +124,7 @@ let reducer = (state, action) =>
 
 let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryString(filter))
 
-module SubmissionsQuery = %graphql(
-  `
+module SubmissionsQuery = %graphql(`
     query SubmissionsQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $personalCoachId: ID, $assignedCoachId: ID, $reviewingCoachId: ID, $includeInactive: Boolean, $coachIds: [ID!] $after: String) {
       submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, levelId: $levelId, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId, reviewingCoachId: $reviewingCoachId,  includeInactive: $includeInactive, first: 20, after: $after) {
         nodes {
@@ -162,11 +161,9 @@ module SubmissionsQuery = %graphql(
         title
       }
     }
-  `
-)
+  `)
 
-module LevelsQuery = %graphql(
-  `
+module LevelsQuery = %graphql(`
     query LevelsQuery($courseId: ID!) {
       levels(courseId: $courseId) {
         id
@@ -174,29 +171,24 @@ module LevelsQuery = %graphql(
         number
       }
     }
-  `
-)
+  `)
 
-module CoachesQuery = %graphql(
-  `
+module CoachesQuery = %graphql(`
     query CoachesQuery($courseId: ID!) {
       coaches(courseId: $courseId) {
         ...UserProxy.Fragments.AllFields
       }
     }
-  `
-)
+  `)
 
-module ReviewedTargetsInfoQuery = %graphql(
-  `
+module ReviewedTargetsInfoQuery = %graphql(`
     query ReviewedTargetsInfoQuery($courseId: ID!) {
       reviewedTargetsInfo(courseId: $courseId) {
         id
         title
       }
     }
-  `
-)
+  `)
 
 let getSubmissions = (send, courseId, cursor, filter) => {
   let coachIds =
@@ -249,10 +241,13 @@ let getLevels = (send, courseId, state) => {
   if state.levelsLoaded == Unloaded {
     send(SetLevelLoading)
 
-    LevelsQuery.make(~courseId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
+    LevelsQuery.make(~courseId, ())
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(response => {
       send(LoadLevels(Js.Array.map(Level.makeFromJs, response["levels"])))
       Js.Promise.resolve()
-    }) |> ignore
+    })
+    |> ignore
   }
 }
 
@@ -260,10 +255,13 @@ let getCoaches = (send, courseId, state) => {
   if state.coachesLoaded == Unloaded {
     send(SetCoachLoading)
 
-    CoachesQuery.make(~courseId, ()) |> GraphqlQuery.sendQuery |> Js.Promise.then_(response => {
+    CoachesQuery.make(~courseId, ())
+    |> GraphqlQuery.sendQuery
+    |> Js.Promise.then_(response => {
       send(LoadCoaches(Js.Array.map(Coach.makeFromJs, response["coaches"])))
       Js.Promise.resolve()
-    }) |> ignore
+    })
+    |> ignore
   }
 }
 
@@ -741,8 +739,18 @@ let computeInitialState = () => {
   totalEntriesCount: 0,
 }
 
+let pageTitle = (courses, courseId) => {
+  let currentCourse = ArrayUtils.unsafeFind(
+    course => AppRouter__Course.id(course) == courseId,
+    "Could not find currentCourse with ID " ++ courseId ++ " in CoursesReview__Root",
+    courses,
+  )
+
+  `${tc("review")} | ${AppRouter__Course.name(currentCourse)}`
+}
+
 @react.component
-let make = (~courseId, ~currentCoachId) => {
+let make = (~courseId, ~currentCoachId, ~courses) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
   let url = RescriptReactRouter.useUrl()
   let filter = Filter.makeFromQueryParams(url.search)
@@ -757,126 +765,129 @@ let make = (~courseId, ~currentCoachId) => {
     None
   }, [state.filterInput])
 
-  <div className="flex-1 flex flex-col">
-    <div className="hidden md:block h-16" />
-    <div className="course-review-root__submissions-list-container">
-      <div className="bg-gray-100">
-        <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
-          <div
-            className="flex items-center justify-between bg-white md:bg-transparent px-4 py-2 md:pt-4 border-b md:border-none">
-            <p className="font-semibold"> {str(tc("review"))} </p>
-            <div className="block md:hidden"> {submissionsSorter(filter)} </div>
-          </div>
-          <div className="px-4">
-            <div className="flex pt-3 md:border-b border-gray-300">
-              <div
-                className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent ">
-                <Link
-                  href={"/courses/" ++
-                  courseId ++
-                  "/review?" ++
-                  Filter.toQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
-                  className={shortCutClasses(filter.tab === None)}>
-                  <div> {str("All")} </div>
-                </Link>
-                <Link
-                  href={"/courses/" ++
-                  courseId ++
-                  "/review?" ++
-                  Filter.toQueryString({
-                    ...filter,
-                    tab: Some(#Pending),
-                    sortCriterion: #SubmittedAt,
-                    sortDirection: #Ascending,
-                  })}
-                  className={shortCutClasses(filter.tab === Some(#Pending))}>
-                  <div> {str(tc("pending"))} </div>
-                </Link>
-                <Link
-                  href={"/courses/" ++
-                  courseId ++
-                  "/review?" ++
-                  Filter.toQueryString({
-                    ...filter,
-                    tab: Some(#Reviewed),
-                    sortCriterion: #EvaluatedAt,
-                    sortDirection: #Descending,
-                  })}
-                  className={shortCutClasses(filter.tab === Some(#Reviewed))}>
-                  <div> {str(tc("reviewed"))} </div>
-                </Link>
+  <>
+    <Helmet> <title> {str(pageTitle(courses, courseId))} </title> </Helmet>
+    <div className="flex-1 flex flex-col">
+      <div className="hidden md:block h-16" />
+      <div className="course-review-root__submissions-list-container">
+        <div className="bg-gray-100">
+          <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
+            <div
+              className="flex items-center justify-between bg-white md:bg-transparent px-4 py-2 md:pt-4 border-b md:border-none">
+              <p className="font-semibold"> {str(tc("review"))} </p>
+              <div className="block md:hidden"> {submissionsSorter(filter)} </div>
+            </div>
+            <div className="px-4">
+              <div className="flex pt-3 md:border-b border-gray-300">
+                <div
+                  className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent ">
+                  <Link
+                    href={"/courses/" ++
+                    courseId ++
+                    "/review?" ++
+                    Filter.toQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
+                    className={shortCutClasses(filter.tab === None)}>
+                    <div> {str("All")} </div>
+                  </Link>
+                  <Link
+                    href={"/courses/" ++
+                    courseId ++
+                    "/review?" ++
+                    Filter.toQueryString({
+                      ...filter,
+                      tab: Some(#Pending),
+                      sortCriterion: #SubmittedAt,
+                      sortDirection: #Ascending,
+                    })}
+                    className={shortCutClasses(filter.tab === Some(#Pending))}>
+                    <div> {str(tc("pending"))} </div>
+                  </Link>
+                  <Link
+                    href={"/courses/" ++
+                    courseId ++
+                    "/review?" ++
+                    Filter.toQueryString({
+                      ...filter,
+                      tab: Some(#Reviewed),
+                      sortCriterion: #EvaluatedAt,
+                      sortDirection: #Descending,
+                    })}
+                    className={shortCutClasses(filter.tab === Some(#Reviewed))}>
+                    <div> {str(tc("reviewed"))} </div>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="md:sticky md:top-0 bg-gray-100">
-        <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
-          <div className="md:flex w-full items-start pt-4 px-4 md:pt-6">
-            <div className="flex-1">
-              <label className="block text-tiny font-semibold uppercase">
-                {tc("filter_by")->str}
-              </label>
-              <Multiselect
-                id="filter"
-                unselected={unselected(state, currentCoachId, filter)}
-                selected={selected(state, filter, currentCoachId)}
-                onSelect={onSelectFilter(send, courseId, state, filter)}
-                onDeselect={onDeselectFilter(send, filter)}
-                value=state.filterInput
-                onChange={filterInput => send(UpdateFilterInput(filterInput))}
-                placeholder={filterPlaceholder(filter)}
-                loading={state.filterLoading}
-                defaultOptions={defaultOptions(state, filter)}
-                hint={tc("filter_hint")}
-              />
+        <div className="md:sticky md:top-0 bg-gray-100">
+          <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
+            <div className="md:flex w-full items-start pt-4 pb-3 px-4 md:pt-6">
+              <div className="flex-1">
+                <label className="block text-tiny font-semibold uppercase">
+                  {tc("filter_by")->str}
+                </label>
+                <Multiselect
+                  id="filter"
+                  unselected={unselected(state, currentCoachId, filter)}
+                  selected={selected(state, filter, currentCoachId)}
+                  onSelect={onSelectFilter(send, courseId, state, filter)}
+                  onDeselect={onDeselectFilter(send, filter)}
+                  value=state.filterInput
+                  onChange={filterInput => send(UpdateFilterInput(filterInput))}
+                  placeholder={filterPlaceholder(filter)}
+                  loading={state.filterLoading}
+                  defaultOptions={defaultOptions(state, filter)}
+                  hint={tc("filter_hint")}
+                />
+              </div>
+              <div className="hidden md:block"> {submissionsSorter(filter)} </div>
             </div>
-            <div className="hidden md:block"> {submissionsSorter(filter)} </div>
           </div>
         </div>
-      </div>
-      <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
-        <div className="mt-4">
+        <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
+          <div>
+            {switch state.submissions {
+            | Unloaded =>
+              <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
+            | PartiallyLoaded(submissions, cursor) =>
+              <div>
+                {submissionsList(submissions, state, filter)}
+                {switch state.loading {
+                | LoadingMore =>
+                  <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
+                | Reloading(times) =>
+                  ReactUtils.nullUnless(
+                    <div className="pb-6">
+                      <button
+                        className="btn btn-primary-ghost cursor-pointer w-full"
+                        onClick={_ => {
+                          send(BeginLoadingMore)
+                          getSubmissions(send, courseId, Some(cursor), filter)
+                        }}>
+                        {tc("button_load_more")->str}
+                      </button>
+                    </div>,
+                    ArrayUtils.isEmpty(times),
+                  )
+                }}
+              </div>
+            | FullyLoaded(submissions) => <div> {submissionsList(submissions, state, filter)} </div>
+            }}
+          </div>
           {switch state.submissions {
-          | Unloaded =>
-            <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
-          | PartiallyLoaded(submissions, cursor) =>
-            <div>
-              {submissionsList(submissions, state, filter)}
-              {switch state.loading {
-              | LoadingMore =>
-                <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
-              | Reloading(times) =>
-                ReactUtils.nullUnless(
-                  <div className="pb-6">
-                    <button
-                      className="btn btn-primary-ghost cursor-pointer w-full"
-                      onClick={_ => {
-                        send(BeginLoadingMore)
-                        getSubmissions(send, courseId, Some(cursor), filter)
-                      }}>
-                      {tc("button_load_more")->str}
-                    </button>
-                  </div>,
-                  ArrayUtils.isEmpty(times),
-                )
-              }}
-            </div>
-          | FullyLoaded(submissions) => <div> {submissionsList(submissions, state, filter)} </div>
+          | Unloaded => React.null
+          | _ =>
+            let loading = switch state.loading {
+            | Reloading(times) => ArrayUtils.isNotEmpty(times)
+            | LoadingMore => false
+            }
+            <LoadingSpinner loading />
           }}
         </div>
-        {switch state.submissions {
-        | Unloaded => React.null
-        | _ =>
-          let loading = switch state.loading {
-          | Reloading(times) => ArrayUtils.isNotEmpty(times)
-          | LoadingMore => false
-          }
-          <LoadingSpinner loading />
-        }}
       </div>
+      // Footer spacer
+      <div className="md:hidden h-16" />
     </div>
-    // Footer spacer
-    <div className="md:hidden h-16" />
-  </div>
+  </>
 }

@@ -1,5 +1,5 @@
-%bs.raw(`require("courses/shared/background_patterns.css")`)
-%bs.raw(`require("./AppRouter__Nav.css")`)
+%raw(`require("courses/shared/background_patterns.css")`)
+%raw(`require("./AppRouter__Nav.css")`)
 
 let t = I18n.t(~scope="components.AppRouter__Nav")
 

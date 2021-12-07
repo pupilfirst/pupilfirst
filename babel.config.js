@@ -87,6 +87,7 @@ module.exports = function (api) {
         {
           languages: [
             "javascript",
+            "jsx",
             "json",
             "markup",
             "css",
@@ -98,6 +99,7 @@ module.exports = function (api) {
             "csharp",
             "php",
             "typescript",
+            "tsx",
             "cpp",
             "c",
             "go",

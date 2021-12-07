@@ -413,6 +413,7 @@ This is the comprehensive list of languages and scripts that we support syntax
 highlighting on, within fenced code-blocks.
 
 - `javascript` (`js`)
+- `jsx`
 - `json` (`webmanifest`)
 - `markup` (`html`, `xml`, `svg`, `mathml`)
 - `css`
@@ -424,6 +425,7 @@ highlighting on, within fenced code-blocks.
 - `csharp` (`cs`, `dotnet`)
 - `php`
 - `typescript` (`ts`)
+- `tsx`
 - `cpp`
 - `c`
 - `go`

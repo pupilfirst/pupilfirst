@@ -3,6 +3,8 @@ let defaultVideoMaxSize = 500 * 1024 * 1024
 
 let hasValidSize = (~maxSize, file) => file["size"] <= maxSize
 
+let hasValidFloatSize = (~maxSize: float, file) => file["size"] <= maxSize
+
 let isImage = file =>
   switch file["_type"] {
   | "image/jpeg"

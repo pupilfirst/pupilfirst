@@ -1168,6 +1168,25 @@ feature 'Submission review overlay', js: true do
       expect(submission.evaluated_at).to eq(nil)
       expect(submission.timeline_event_grades).to eq([])
     end
+
+    scenario 'coach clears grading for a submission with feedback' do
+      sign_in_user team_coach.user,
+                   referrer: review_timeline_event_path(submission_reviewed)
+
+      accept_confirm { click_button 'Undo Grading' }
+
+      expect(submission_reviewed.startup_feedback.count).to eq(1)
+
+      click_button 'Start Review'
+      dismiss_notification
+
+      within("div[data-title='feedback-section']") do
+        expect(page).to have_text(coach.name)
+        expect(page).to have_content(
+          submission_reviewed.startup_feedback.first.feedback
+        )
+      end
+    end
   end
 
   context 'with an auto verified submission' do
@@ -1356,6 +1375,8 @@ feature 'Submission review overlay', js: true do
       sign_in_user team_coach.user,
                    referrer: review_timeline_event_path(submission_team_target)
 
+      expect(page).to have_title("Submission 1 | L1 | #{team_2.name}")
+
       expect(page).to have_text(team_2.founders.first.name)
       expect(page).to have_text(team_2.founders.last.name)
       expect(page).to have_text(team_2.name)
@@ -1366,6 +1387,8 @@ feature 'Submission review overlay', js: true do
                    referrer:
                      review_timeline_event_path(submission_individual_target)
 
+      expect(page).to have_title("Submission 1 | L1 | #{student.name}")
+
       expect(page).to have_text(student.name)
       expect(page).to_not have_text(team_1.name)
     end
@@ -1374,7 +1397,9 @@ feature 'Submission review overlay', js: true do
       sign_in_user team_coach.user,
                    referrer:
                      review_timeline_event_path(submission_team_target_2)
-
+      expect(page).to have_title(
+        "Submission 1 | L1 | #{student.name}, #{team_2.founders.first.name}"
+      )
       expect(page).to have_text(student.name)
       expect(page).to have_text(team_2.founders.first.name)
       expect(page).to_not have_text(team_1.name)

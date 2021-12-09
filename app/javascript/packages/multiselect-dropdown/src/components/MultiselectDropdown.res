@@ -1,4 +1,4 @@
-%bs.raw(`require("./MultiselectDropdown.css")`)
+%raw(`require("./MultiselectDropdown.css")`)
 
 module type Selectable = {
   type t
@@ -13,7 +13,7 @@ type searchItem = {
   text: string,
 }
 
-@bs.module("../utils/fuzzySearch")
+@module("../utils/fuzzySearch")
 external fuzzySearch: (string, array<searchItem>) => array<searchItem> = "default"
 
 let str = React.string
@@ -50,7 +50,7 @@ module Make = (Selectable: Selectable) => {
     let textColor800 = "text-" ++ (color ++ "-800 ")
     let textColor900 = "text-" ++ (color ++ "-900 ")
 
-    "rounded text-sm font-semibold overflow-hidden " ++
+    "rounded text-sm text-left font-semibold overflow-hidden " ++
     (bgColor200 ++
     (textColor800 ++ (
       showHover ? "px-2 py-px hover:" ++ (bgColor300 ++ ("hover:" ++ textColor900)) : "inline-flex"
@@ -87,7 +87,7 @@ module Make = (Selectable: Selectable) => {
             onClick={applyFilter(selection, onSelect, id)}>
             {switch selection |> Selectable.label {
             | Some(label) =>
-              <span className="mr-2 flex-shrink-0 md:w-1/6 text-right">
+              <span className="mr-2 flex-shrink-0 w-2/6 sm:w-auto md:w-2/6 text-right">
                 {label ++ labelSuffix |> str}
               </span>
             | None => React.null
@@ -222,7 +222,7 @@ module Make = (Selectable: Selectable) => {
             autoComplete="off"
             value
             onChange={e => onChange(ReactEvent.Form.target(e)["value"])}
-            className="flex-grow appearance-none bg-transparent border-none text-gray-700 p-2 leading-snug focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-400 "
+            className="flex-grow appearance-none bg-transparent border-none text-gray-700 p-1.5 leading-snug focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-400 "
             id=inputId
             type_="search"
             placeholder

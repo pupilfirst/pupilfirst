@@ -6,8 +6,7 @@ type state =
   | Loading
   | Loaded(SubmissionDetails.t)
 
-module SubmissionDetailsQuery = %graphql(
-  `
+module SubmissionDetailsQuery = %graphql(`
     query SubmissionDetailsQuery($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
         targetId, targetTitle, levelNumber, levelId, inactiveStudents, createdAt,
@@ -56,8 +55,7 @@ module SubmissionDetailsQuery = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
 let getSubmissionDetails = (submissionId, setState, ()) => {
   setState(_ => Loading)
@@ -97,6 +95,7 @@ let updateReviewer = (submissionDetails, setState, reviewer) => {
 @react.component
 let make = (~submissionId, ~currentUser) => {
   let (state, setState) = React.useState(() => Loading)
+
   React.useEffect1(getSubmissionDetails(submissionId, setState), [submissionId])
 
   <div className="flex-1 md:flex md:flex-col md:overflow-hidden">

@@ -17,6 +17,7 @@ let make = (~school, ~courses, ~currentUser) => {
       <CoursesReview__Root
         courseId
         currentCoachId={Belt.Option.getWithDefault(User.coachId(User.defaultUser(currentUser)), "")}
+        courses
       />,
       Student__Review(courseId),
     )

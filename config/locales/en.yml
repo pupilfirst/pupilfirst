@@ -433,6 +433,14 @@ en:
       save_grades_and_send_feedback: Save grades & send feedback
       share_feedback: Share Feedback
       show_review_checklist: Show Review Checklist
+      report_status_string:
+        success: All automated tests have passed
+        failure: Some of the tests failed
+        error: Tests could not be completed successfully
+        pending: Automated tests in progress
+      show_test_report_button: Show Test Report
+      hide_test_report_button: Hide Test Report
+      report_description: Test Report
       status:
         completed: Completed
         pending_review: Pending Review

@@ -22,6 +22,7 @@ type state = {
   grades: array<Grade.t>,
   newFeedback: string,
   saving: bool,
+  showReport: bool,
   checklist: array<SubmissionChecklistItem.t>,
   note: option<string>,
   editor: editor,
@@ -53,6 +54,7 @@ type action =
   | SetNextSubmissionDataLoading
   | SetNextSubmissionDataEmpty
   | UnassignReviewer
+  | ChangeReportVisibility
 
 let reducer = (state, action) =>
   switch action {
@@ -70,6 +72,7 @@ let reducer = (state, action) =>
   | UpdateNote(note) => {...state, note: Some(note)}
   | ShowGradesEditor => {...state, editor: GradesEditor}
   | ShowChecklistEditor => {...state, editor: ChecklistEditor}
+  | ChangeReportVisibility => {...state, showReport: !state.showReport}
   | ShowAdditionalFeedbackEditor => {...state, additonalFeedbackEditorVisible: true}
   | FinishGrading(grades) => {
       ...state,
@@ -1013,6 +1016,24 @@ let pageTitle = (number, submissionDetails) => {
     )}${SubmissionDetails.levelNumber(submissionDetails)} | ${studentOrTeamName}`
 }
 
+let reportStatusString = status => {
+  switch status {
+  | #pending => t("report_status_string.pending")
+  | #success => t("report_status_string.success")
+  | #failure => t("report_status_string.failure")
+  | #error => t("report_status_string.error")
+  }
+}
+
+let reportStatusIconClasses = status => {
+  switch status {
+  | #pending => "if animate-spin i-dashed-circle-regular text-2xl text-yellow-500 rounded-full"
+  | #success => "if i-check-circle-solid text-2xl text-green-500 bg-white rounded-full"
+  | #error => "if i-exclamation-triangle-circle-solid text-2xl text-gray-600 bg-white rounded-full"
+  | #failure => "if i-times-circle-solid text-2xl text-red-500 bg-white rounded-full"
+  }
+}
+
 @react.component
 let make = (
   ~overlaySubmission,
@@ -1035,6 +1056,7 @@ let make = (
       grades: [],
       newFeedback: "",
       saving: false,
+      showReport: false,
       note: None,
       checklist: OverlaySubmission.checklist(overlaySubmission),
       editor: ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
@@ -1125,31 +1147,43 @@ let make = (
               <div className="text-sm"> {showSubmissionStatus(status)} </div>
             </div>
           </div>
-          <div className="p-4 md:p-6">
-            <SubmissionChecklistShow checklist=state.checklist updateChecklistCB pending />
-          </div>
-        </div>
-        <div className="p-4 md:p-6 space-y-8">
-          <div className="bg-gray-300 p-4 rounded-md">
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center space-x-3">
-                <Icon
-                  className="if i-check-circle-solid text-2xl text-green-500 bg-white rounded-full"
-                />
-                <p className="font-semibold"> {str("All automated tests have passed")} </p>
+          {switch SubmissionDetails.submissionReport(submissionDetails) {
+          | Some(report) =>
+            <div className="p-4 md:p-6 space-y-8">
+              <div className="bg-gray-300 p-4 rounded-md">
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center space-x-3">
+                    <Icon className={reportStatusIconClasses(SubmissionReport.status(report))} />
+                    <p className="font-semibold">
+                      {str(reportStatusString(SubmissionReport.status(report)))}
+                    </p>
+                  </div>
+                  <button
+                    onClick={_ => send(ChangeReportVisibility)}
+                    className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+                    <span className="hidden md:block pr-3">
+                      {str(
+                        state.showReport
+                          ? t("hide_test_report_button")
+                          : t("show_test_report_button"),
+                      )}
+                    </span>
+                    <Icon className="if i-arrows-expand-light text-xl" />
+                  </button>
+                </div>
+                {state.showReport
+                  ? <div>
+                      <p className="text-sm font-semibold mt-4"> {str("Test Report")} </p>
+                      <div className="bg-white p-3 rounded-md border mt-2">
+                        {str(SubmissionReport.description(report))}
+                      </div>
+                    </div>
+                  : React.null}
               </div>
-              <button
-                className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
-                <span className="hidden md:block pr-3"> {str("Show Test Report")} </span>
-                <Icon className="if i-arrows-expand-light text-xl" />
-              </button>
+              <SubmissionChecklistShow checklist=state.checklist updateChecklistCB pending />
             </div>
-            <p className="text-sm font-semibold mt-4"> {str("Test Report")} </p>
-            <div className="bg-white p-3 rounded-md border mt-2">
-              {str("markdown block here")}
-            </div>
-          </div>
-          <SubmissionChecklistShow checklist=state.checklist updateChecklistCB pending />
+          | None => React.null
+          }}
         </div>
         <div className="md:w-1/2 w-full md:overflow-y-auto">
           {switch state.editor {

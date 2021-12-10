@@ -5,6 +5,7 @@ module ReviewChecklistItem = CoursesReview__ReviewChecklistItem
 module SubmissionMeta = CoursesReview__SubmissionMeta
 module Coach = UserProxy
 module Reviewer = CoursesReview__Reviewer
+module SubmissionReport = CoursesReview__SubmissionReport
 
 type t = {
   submission: OverlaySubmission.t,
@@ -15,6 +16,7 @@ type t = {
   students: array<Student.t>,
   levelNumber: string,
   levelId: string,
+  submissionReport: option<SubmissionReport.t>,
   evaluationCriteria: array<EvaluationCriterion.t>,
   reviewChecklist: array<ReviewChecklistItem.t>,
   targetEvaluationCriteriaIds: array<string>,
@@ -42,6 +44,7 @@ let courseId = t => t.courseId
 let createdAt = t => t.createdAt
 let preview = t => t.preview
 let reviewer = t => t.reviewer
+let submissionReport = t => t.submissionReport
 
 let make = (
   ~submission,
@@ -55,6 +58,7 @@ let make = (
   ~reviewChecklist,
   ~targetEvaluationCriteriaIds,
   ~inactiveStudents,
+  ~submissionReport,
   ~coaches,
   ~teamName,
   ~courseId,
@@ -73,6 +77,7 @@ let make = (
   reviewChecklist: reviewChecklist,
   targetEvaluationCriteriaIds: targetEvaluationCriteriaIds,
   inactiveStudents: inactiveStudents,
+  submissionReport: submissionReport,
   coaches: coaches,
   teamName: teamName,
   courseId: courseId,
@@ -110,6 +115,7 @@ let decodeJs = details =>
     ),
     ~reviewChecklist=ReviewChecklistItem.makeFromJs(details["reviewChecklist"]),
     ~coaches=Js.Array.map(Coach.makeFromJs, details["coaches"]),
+    ~submissionReport=Belt.Option.map(details["submissionReport"], SubmissionReport.makeFromJS),
     ~teamName=details["teamName"],
     ~courseId=details["courseId"],
     ~preview=details["preview"],

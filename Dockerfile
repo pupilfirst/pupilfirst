@@ -18,6 +18,6 @@ RUN bundle exec rails assets:precompile
 
 FROM ruby:2.7.5-slim
 WORKDIR /app
-COPY . /app &&
+COPY . /app
 COPY --from=0 /build/public/assets public/assets
 ENTRYPOINT [ "bundle", "exec", "puma", "-C", "config/puma.rb" ]

@@ -31,7 +31,6 @@
     "bs-fetch": "^0.6.2",
     "bs-webapi": "^0.19.1",
     "cloc": "^2.8.0",
-    "coffeescript": "1.12.7",
     "date-fns": "^2.24.0",
     "date-fns-tz": "^1.1.6",
     "dompurify": "^2.3.3",

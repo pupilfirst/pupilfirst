@@ -15,7 +15,6 @@ gem 'image_processing', '~> 1.12' # Gem to support variants in ActiveStorage
 # Use Webpack to manage app-like JavaScript modules in Rails.
 gem 'webpacker', '~> 5.4'
 
-gem 'coffee-rails', '~> 5.0.0' # Coffeescript on Rails.
 gem 'devise', '~> 4.7', '>= 4.7.1' # User auth library.
 gem 'jbuilder', '~> 2.11' # Standard part of Rails, but unused, since we don't have an API.
 gem 'jquery-rails', '~> 4.4' # JQuery on Rails.
@@ -25,11 +24,7 @@ gem 'activerecord-precounter', '~> 0.4' # N+1 count query optimizer for ActiveRe
 gem 'sass-rails', '>= 6'
 gem 'slim', '~> 4.1' # Slim templating.
 gem 'turbolinks', '~> 5.2' # Quicker page navigation. https://github.com/turbolinks/turbolinks
-gem 'uglifier', '~> 4.2' # JavaScript compressor.
 gem 'rest-client', '~> 2.1' # Used to contact Fast Alerts' API.
-gem 'bootstrap', '>= 4.3.1' # Official Sass port of Bootstrap.
-gem 'autoprefixer-rails', '~> 10.3' # Autoprefixer for Ruby and Ruby on Rails.
-gem 'bootstrap_form', '~> 4.0' # a Rails form builder that makes it super easy to create beautiful-looking forms using Bootstrap 4
 gem 'valid_url', '= 0.0.4', github: 'ralovets/valid_url' # URL validation: https://github.com/ralovets/valid_url
 gem 'roadie-rails', '~> 2.2' # CSS management for e-mails.
 gem 'puma', '< 6' # The Puma ruby web server.
@@ -42,7 +37,6 @@ gem 'kramdown', '~> 2.3' # kramdown is a fast, pure Ruby Markdown superset conve
 gem 'motion-markdown-it', '~> 8.4.1' # Ruby version of Markdown-it (a CommonMark compliant extensible parser).
 gem 'motion-markdown-it-plugins', '~> 8.4.2' # Plugins for motion-markdown-it.
 gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
-gem 'react-rails', '~> 2.6' # For automatically transforming JSX and using React in Rails.
 gem 'acts-as-taggable-on', '~> 8.1' # Tag a single model on several contexts.
 gem 'email_inquire', '~> 0.11' # Validate email for format, common typos and one-time email providers
 gem 'titleize', '~> 1.4' # better titleizing, modifies Inflector.titleize from default rails
@@ -57,7 +51,6 @@ gem 'rollbar', '~> 3.2' # Exception tracking and logging from Ruby to Rollbar ht
 gem 'humanize', '~> 2.5' # Convert numbers to english words
 gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.
 gem 'kaminari', '~> 1.2' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
-gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstrap4-kaminari-views' # Bootstrap 4 styling for Kaminari gem
 gem 'rack-throttle', '~> 0.7' # API Rate limiting
 gem 'webpush', '~> 1.1.0' # Encryption Utilities for Web Push protocol
 gem 'activerecord-nulldb-adapter', '~> 0.8' # A database backend that translates database interactions into no-ops.
@@ -83,7 +76,6 @@ gem 'flipper-active_record', '~> 0.22'
 
 # Rails assets!
 source 'https://rails-assets.org' do
-  gem 'rails-assets-bootstrap-tabcollapse', '~> 0.2' # Bootstrap plugin that switches bootstrap tabs component to collapse component for small screens.
   gem 'rails-assets-jquery-stickit', '~> 0.2' # A jQuery plugin provides a sticky header, sidebar or else when scrolling.
   gem 'rails-assets-jquery.scrollTo', '~> 2.1' # Lightweight, cross-browser and highly customizable animated scrolling with jQuery
   gem 'rails-assets-intro.js', '~> 2.4' # A better way for new feature introduction and step-by-step users guide for your website and project.

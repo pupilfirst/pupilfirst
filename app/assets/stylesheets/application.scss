@@ -1,7 +1,5 @@
-// Bootstrap customization variables
+// Variables & mixins
 @import "variables";
-@import "bootstrap";
-@import "bootstrap_btn_customization";
 @import "custom_mixins";
 
 @import "font-awesome";
@@ -15,11 +13,3 @@
 // Common
 @import "shared";
 @import "fonts";
-@import "navbar";
-@import "footer";
-
-// Controller-specific
-@import "faculty";
-
-// Customizations
-@import "customizations";

@@ -15,8 +15,28 @@ GIT
       rails
 
 GEM
-  remote: https://rubygems.org/
   remote: https://rails-assets.org/
+  specs:
+    rails-assets-bootstrap-tabcollapse (0.2.7)
+    rails-assets-gemini-scrollbar (1.5.3)
+    rails-assets-intro.js (2.9.3)
+    rails-assets-jquery (3.4.1)
+    rails-assets-jquery-stickit (0.2.14)
+      rails-assets-jquery (>= 1.6)
+    rails-assets-jquery.scrollTo (2.1.2)
+      rails-assets-jquery (>= 1.8)
+    rails-assets-lodash (4.17.15)
+    rails-assets-moment (2.24.0)
+    rails-assets-perfect-scrollbar (0.8.1)
+    rails-assets-readmore (2.2.1)
+      rails-assets-jquery (>= 2.1.4)
+    rails-assets-slick-carousel (1.8.1)
+      rails-assets-jquery (>= 1.7)
+    rails-assets-tether (1.4.7)
+    rails-assets-waypoints (4.0.1)
+
+GEM
+  remote: https://rubygems.org/
   specs:
     actioncable (6.1.4.1)
       actionpack (= 6.1.4.1)
@@ -450,23 +470,6 @@ GEM
       bundler (>= 1.15.0)
       railties (= 6.1.4.1)
       sprockets-rails (>= 2.0.0)
-    rails-assets-bootstrap-tabcollapse (0.2.7)
-    rails-assets-gemini-scrollbar (1.5.3)
-    rails-assets-intro.js (2.9.3)
-    rails-assets-jquery (3.4.1)
-    rails-assets-jquery-stickit (0.2.14)
-      rails-assets-jquery (>= 1.6)
-    rails-assets-jquery.scrollTo (2.1.2)
-      rails-assets-jquery (>= 1.8)
-    rails-assets-lodash (4.17.15)
-    rails-assets-moment (2.24.0)
-    rails-assets-perfect-scrollbar (0.8.1)
-    rails-assets-readmore (2.2.1)
-      rails-assets-jquery (>= 2.1.4)
-    rails-assets-slick-carousel (1.8.1)
-      rails-assets-jquery (>= 1.7)
-    rails-assets-tether (1.4.7)
-    rails-assets-waypoints (4.0.1)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)

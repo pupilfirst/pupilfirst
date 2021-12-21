@@ -60,6 +60,7 @@ gem 'kaminari', '~> 1.2' # Scope & Engine based, clean, powerful, customizable a
 gem 'bootstrap4-kaminari-views', '= 1.0.0', github: 'mahesh-krishnakumar/bootstrap4-kaminari-views' # Bootstrap 4 styling for Kaminari gem
 gem 'rack-throttle', '~> 0.7' # API Rate limiting
 gem 'webpush', '~> 1.1.0' # Encryption Utilities for Web Push protocol
+gem 'activerecord-nulldb-adapter', '~> 0.8' # A database backend that translates database interactions into no-ops.
 
 # Omniauth providers
 gem 'omniauth-google-oauth2', '~> 0.6' # Oauth2 strategy for Google

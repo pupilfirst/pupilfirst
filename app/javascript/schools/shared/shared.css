@@ -300,7 +300,7 @@
 }
 
 .toggle-button__button:nth-child(n + 2) {
-  @apply -ml-px border-gray-400;
+  @apply -ml-px;
 }
 
 .toggle-button__button:hover {
@@ -312,7 +312,7 @@
 }
 
 .toggle-button__button--active {
-  @apply bg-primary-100 text-primary-600;
+  @apply bg-primary-100 text-primary-600 border-primary-500 z-10;
 }
 
 .target-group__container > :not(:last-child):before {

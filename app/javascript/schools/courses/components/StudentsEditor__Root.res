@@ -309,7 +309,7 @@ let make = (
                             {selectedStudent |> SelectedStudent.name |> str}
                           </span>
                           <button
-                            className="flex h-full text-xs text-red-700 px-2 py-px border-l focus:outline-none bg-gray-100 hover:bg-red-400 hover:text-white "
+                            className="flex items-center h-full text-xs text-red-700 px-2 py-px border-l focus:outline-none bg-gray-100 hover:bg-red-700 hover:text-white "
                             onClick={_ =>
                               deselectStudent(send, selectedStudent |> SelectedStudent.id)}>
                             <Icon className="if i-times-regular" />

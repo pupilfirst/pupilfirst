@@ -20,7 +20,6 @@ COPY yarn.lock .
 
 # Install JS dependencies using Yarn.
 RUN corepack enable
-ENV YARN_PRODUCTION="false"
 RUN yarn install
 
 # Finally, copy over remaining files and set up for precompilation.

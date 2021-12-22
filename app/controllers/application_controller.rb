@@ -58,7 +58,9 @@ class ApplicationController < ActionController::Base
   end
 
   def current_host
-    @current_host ||= Rails.env.test? ? 'test.host' : request.host
+    return 'test.host' if Rails.env.test?
+
+    request.port == 80 ? request.host : "#{request.host}:#{request.port}"
   end
 
   def current_domain

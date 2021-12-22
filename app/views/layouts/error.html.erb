@@ -1,9 +1,5 @@
 <% presenter = ErrorPresenter.new(self) %>
 
-<% content_for(:head) do %>
-  <%= stylesheet_pack_tag 'layouts/error', media: 'all', 'data-turbolinks-track': 'reload' %>
-<% end %>
-
 <% content_for(:wrapper) do %>
   <%= yield %>
 

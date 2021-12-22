@@ -570,8 +570,6 @@ feature 'Community', js: true do
       # Post a reply.
       replace_markdown reply_body
 
-      # click_button 'Post Your Reply'
-
       expect {
         click_button 'Post Your Reply'
         dismiss_notification

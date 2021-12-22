@@ -569,8 +569,13 @@ feature 'Community', js: true do
 
       # Post a reply.
       replace_markdown reply_body
-      expect { click_button 'Post Your Reply' }.to change { Post.count }.by(1)
-      dismiss_notification
+
+      # click_button 'Post Your Reply'
+
+      expect {
+        click_button 'Post Your Reply'
+        dismiss_notification
+      }.to change { Post.count }.by(1)
 
       # Create a new topic.
       click_link community.name
@@ -599,11 +604,11 @@ feature 'Community', js: true do
       expect(page).to have_text('This topic thread has been locked')
 
       expect(page).to_not have_selector(
-        "button[aria-label='Add reply to topic']"
-      )
+                            "button[aria-label='Add reply to topic']"
+                          )
       expect(page).to_not have_selector(
-        "button[aria-label='Add reply to post #{reply_1.id}']"
-      )
+                            "button[aria-label='Add reply to post #{reply_1.id}']"
+                          )
 
       expect(topic_1.reload.locked_at).to_not eq(nil)
       expect(topic_1.locked_by).to eq(school_admin.user)
@@ -615,9 +620,7 @@ feature 'Community', js: true do
 
       expect(page).to_not have_text('This topic thread has been locked')
 
-      expect(page).to have_selector(
-        "button[aria-label='Add reply to topic']"
-      )
+      expect(page).to have_selector("button[aria-label='Add reply to topic']")
       expect(page).to have_selector(
         "button[aria-label='Add reply to post #{reply_1.id}']"
       )

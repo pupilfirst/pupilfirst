@@ -27,7 +27,6 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "babel-preset-react": "^6.24.1",
     "blob-polyfill": "^5.0.20210201",
-    "bootstrap": "^4.3.1",
     "bs-fetch": "^0.6.2",
     "bs-webapi": "^0.19.1",
     "cloc": "^2.8.0",

@@ -1,15 +1,7 @@
-// Variables & mixins
-@import "variables";
+// mixins
 @import "custom_mixins";
 
 @import "font-awesome";
 
-// Rails Assets.
-@import "intro.js/introjs.scss";
-@import "slick-carousel/slick.scss";
-@import "slick-carousel/slick-theme.scss";
-@import "perfect-scrollbar";
-
 // Common
-@import "shared";
 @import "fonts";

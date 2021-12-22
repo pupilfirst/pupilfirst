@@ -14,10 +14,8 @@ gem 'image_processing', '~> 1.12' # Gem to support variants in ActiveStorage
 
 # Use Webpack to manage app-like JavaScript modules in Rails.
 gem 'webpacker', '~> 5.4'
-
 gem 'devise', '~> 4.7', '>= 4.7.1' # User auth library.
 gem 'jbuilder', '~> 2.11' # Standard part of Rails, but unused, since we don't have an API.
-gem 'jquery-rails', '~> 4.4' # JQuery on Rails.
 gem 'pg', '~> 1.2' # PostgreSQL support.
 gem 'pg_search', '~> 2.3' # builds ActiveRecord named scopes that take advantage of PostgreSQL's full text search.
 gem 'activerecord-precounter', '~> 0.4' # N+1 count query optimizer for ActiveRecord.
@@ -45,7 +43,6 @@ gem 'reform-rails', '~> 0.2'
 gem 'virtus', '~> 2.0' # Required for reform coercion. Attributes on Steroids for Plain Old Ruby Objects
 gem 'dry-validation', '~> 1.7' # There seems to be a dependency bug in reform's coercion code - it required dry-types.
 gem 'postmark-rails', '~> 0.21' # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
-gem 'jspdf-rails', '~> 1.0' # HTML5 client-side pdf generation - for certificates
 gem 'responders', '~> 3.0' # A set of Rails responders to dry up your application (respond_to / with)
 gem 'rollbar', '~> 3.2' # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem 'humanize', '~> 2.5' # Convert numbers to english words
@@ -73,22 +70,6 @@ gem 'recaptcha', '~> 5.8' # ReCaptcha helpers for Ruby apps. http://github.com/a
 gem 'flipper', '~> 0.22'
 gem 'flipper-ui', '~> 0.22'
 gem 'flipper-active_record', '~> 0.22'
-
-# Rails assets!
-source 'https://rails-assets.org' do
-  gem 'rails-assets-jquery-stickit', '~> 0.2' # A jQuery plugin provides a sticky header, sidebar or else when scrolling.
-  gem 'rails-assets-jquery.scrollTo', '~> 2.1' # Lightweight, cross-browser and highly customizable animated scrolling with jQuery
-  gem 'rails-assets-intro.js', '~> 2.4' # A better way for new feature introduction and step-by-step users guide for your website and project.
-  gem 'rails-assets-perfect-scrollbar', '~> 0.6' # Minimalistic but perfect custom scrollbar plugin
-  gem 'rails-assets-slick-carousel', '~> 1.6' # the last carousel you'll ever need http://kenwheeler.github.io/slick
-  gem 'rails-assets-tether', '~> 1.4' # A positioning engine to make overlays, tooltips and dropdowns better
-  gem 'rails-assets-readmore', '~> 2.2' # A lightweight jQuery plugin for collapsing and expanding long blocks of text with "Read more" and "Close" links.
-  gem 'rails-assets-waypoints', '~> 4.0' # Waypoints is a library that makes it easy to execute a function whenever you scroll to an element.
-  gem 'rails-assets-gemini-scrollbar', '~> 1.5' # Custom overlay-scrollbars with native scrolling mechanism for web applications
-  gem 'rails-assets-moment', '~> 2.18' # Parse, validate, manipulate, and display dates in javascript. http://momentjs.com
-  gem 'rails-assets-jquery', '~> 3.3' # TODO: Lock down jquery to v2 because v3 doesn't work well with AA.
-  gem 'rails-assets-lodash', '~> 4.17' # A modern JavaScript utility library delivering modularity, performance, & extras.
-end
 
 group :development do
   gem 'letter_opener_web', '~> 1.4' # A web interface for browsing Ruby on Rails sent emails.

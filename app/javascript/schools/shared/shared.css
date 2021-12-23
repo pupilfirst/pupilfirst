@@ -299,8 +299,8 @@
   @apply rounded-r;
 }
 
-.toggle-button__button:nth-child(n + 2) {
-  @apply -ml-px;
+.toggle-button__button:not(:last-of-type) {
+  border-right-color: transparent;
 }
 
 .toggle-button__button:hover {
@@ -312,7 +312,11 @@
 }
 
 .toggle-button__button--active {
-  @apply bg-primary-100 text-primary-600 border-primary-500 z-10;
+  @apply bg-primary-100 text-primary-600 border-primary-500;
+}
+
+.toggle-button__button--active:not(:last-of-type) {
+  border-right-color: currentColor;
 }
 
 .target-group__container > :not(:last-child):before {

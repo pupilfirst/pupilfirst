@@ -14,6 +14,12 @@ class UserSessionMailerPreview < ActionMailer::Preview
     # login_url = Rails.application.routes.url_helpers.user_token_url(token: 'LOGIN_TOKEN', host: host, protocol: 'https')
     school = School.first
     user = school.users.first
-    UserSessionMailer.send_login_token(user, {})
+    user.regenerate_login_token
+    url_options = {
+      token: user.original_login_token,
+      host:  school.present? ? school.domains.primary.fqdn : 'www.pupilfirst.localhost',
+      protocol: 'https'
+    }
+    UserSessionMailer.send_login_token(user, url_options)
   end
 end

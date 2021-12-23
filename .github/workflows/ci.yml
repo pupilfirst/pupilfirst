@@ -107,6 +107,10 @@ jobs:
           key: ${{ runner.os }}-lerna-${{ hashFiles('**/yarn.lock') }}
       - name: Yarn Install
         run: yarn install
+      - name: Generate locales.json
+        run: bundle exec i18n export
+      - name: Compile ReScript files
+        run: yarn run re:build
       - name: Precompile Assets
         run: |
           bundle exec rails assets:precompile

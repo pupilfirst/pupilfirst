@@ -4,7 +4,7 @@ class CoachMailerPreview < ActionMailer::Preview
     coach = course.faculty.last || Faculty.first
     @user = coach.user
 
-    coach.user.login_token_digest = 'LOGIN_TOKEN'
+    coach.user.regenerate_login_token
 
     CoachMailer.course_enrollment(coach, course)
   end

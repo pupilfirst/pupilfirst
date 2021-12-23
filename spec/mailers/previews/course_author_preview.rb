@@ -1,8 +1,7 @@
 class CourseAuthorPreview < ActionMailer::Preview
   def addition
     course_author = CourseAuthor.first
-    p course_author
-    course_author.user.login_token_digest = 'LOGIN_TOKEN'
+    course_author.user.regenerate_login_token
 
     CourseAuthorMailer.addition(course_author)
   end

@@ -33,6 +33,6 @@ Visit the `/graphiql` path to browse and interact with all GraphQL queries in th
 If you make any changes to the GraphQL schema, you'll need to update the `graphql_schema.json` file by running an
 introspection query.
 
-With the Pupilfirst server running, run the `graphql-codegen` script.
+Run the following rake task to generate the schema:
 
     rails graphql:schema:json

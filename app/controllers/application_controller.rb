@@ -60,7 +60,12 @@ class ApplicationController < ActionController::Base
   def current_host
     return 'test.host' if Rails.env.test?
 
-    request.port == 80 ? request.host : "#{request.host}:#{request.port}"
+    # If there is a port in the request URL, then keep it in the string returned here.
+    if request.original_url.match?(/^https?:\/\/.*:\d{1,5}/)
+      "#{request.host}:#{request.port}"
+    else
+      request.host
+    end
   end
 
   def current_domain

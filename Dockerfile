@@ -47,8 +47,10 @@ RUN bundle exec rails assets:precompile
 FROM ruby:2.7.5-slim
 
 # We'll need the PostgreSQL client in this image.
-RUN apt-get update
-RUN apt-get -y install postgresql-client
+RUN apt-get update && apt-get install -y \
+  postgresql-client \
+  imagemagick \
+  && rm -rf /var/lib/apt/lists/*
 
 # Let's also upgrade bundler to the same version used in the build.
 RUN gem install bundler -v '2.2.33'
@@ -69,4 +71,5 @@ RUN bundle install
 ENV RAILS_ENV="production"
 
 RUN mkdir -p tmp/pids
+EXPOSE 3000
 ENTRYPOINT [ "bundle", "exec", "puma", "-C", "config/puma.rb" ]

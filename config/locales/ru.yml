@@ -1,0 +1,1059 @@
+ru:
+  components:
+    AppRouter__Dropdown:
+      more: More
+      show_more_links: Показать больше ссылок
+    AppRouter__Header:
+      edit_profile: Редактировать Профиль
+      sign_in: Войти
+      sign_out: Выйти
+    AppRouter__Nav:
+      close_sidebar: Закрыть боковую панель
+      curriculum: Силлабус
+      leaderboard: Таблица Лидеров
+      report: Отчет
+      review: Оценить
+      sign_out: Выйти
+      students: Студенты
+    CoachesIndex__Root:
+      button_about: О Тренере
+      button_connect: Подключиться
+      filter_input_label: Фильтрировать по
+      filter_input_placeholder: Найти по названию или выберать курс
+      filter_label_name_like: Имя Как
+      filter_label_teaches_course: Обучает Курсу
+      filter_result_empty: Примененные вами фильтры не соответствуют ни одному тренеру. Пожалуйста, измените фильтр и попробуйте еще раз.
+      filter_search_string_course: обучает курс %{name}
+      heading: Тренера
+    CommunitiesShow__Root:
+      all_categories_button: Все Категории
+      button_load_more: Загрузить Больше...
+      empty_topics: Здесь пока нет обсуждения.
+      filter_input_label: "Фильтрировать по:"
+      filter_input_placeholder_categories: Фильтрировать по категории, решению или поиск по темам
+      filter_input_placeholder_default: Искать по темам или фильтровать по решению
+      sort_criterion_input_label: "Сортировать по:"
+      sort_criterion_last_activity: Последняя Активность
+      sort_criterion_posted_at: Размещено в
+      sort_criterion_views: Просмотров
+      topic_last_updated_text: Последнне обновление
+      topic_posted_by_text: Сообщение от
+      topic_stats_likes: Лайк
+      topic_stats_replies: Ответить
+      topic_stats_views: Посмотреть
+      topics_fully_loaded_text: Показать все %{total_topics} темы
+      topics_partially_loaded_text: Показано %{loaded_topics_count} из %{total_topics} тем
+    CourseApplicants__EditForm:
+      access_ends_at:
+        help: Если установлено, учащиеся не смогут выполнять задания после этой даты.
+        label: Доступ студента заканчивается
+      add_as_student_button: Добавить как студента
+      affiliation:
+        label: Принадлежность
+        placeholder: Acme Inc., Acme University и т.д.
+      email:
+        label: Почта
+        placeholder: Почта студента здесь
+      name:
+        error: недействителен
+        label: Имя
+        placeholder: Имя студента здесь
+      notify_students:
+        label: Уведомите учащихся и отправьте им ссылку для входа в эту школу.
+      page_title: Добавить как студента
+      tabs:
+        actions: Действия
+        details: Детали
+      tags:
+        label: Теги
+      title:
+        label: Заголовок
+        placeholder: Студент, тренер, генеральный директор и т.д.
+    CourseApplicants__Root:
+      applicants_fully_loaded_text: Показаны все  %{total_applicants} кандидатов
+      applicants_page_title: Кандидаты
+      applicants_partially_loaded_text: Показаны %{loaded_applicants_count} из %{total_applicants} кандидатов
+      button_load_more: Загрузить больше кандидатов...
+      empty_applicants: У вас нет кандидатов!
+      filter:
+        input_label: Искать
+        input_placeholder: Фильтр и поиск кандидатов по имени
+        label:
+          search: Поиск по имени или почте
+          tag: Тег
+      onboard_as_student: Добавить как Студента
+      show_details: "Показать Детали: "
+      sort_criterion:
+        created_at: Создан В
+        name: Имя
+        updated_at: Обновлен В
+      sorter:
+        label: Сортировать по
+    CourseCertificates__CreateDrawer:
+      certificate_base_image_label: Основное Изображение Сертификата
+      certificate_base_image_placeholder: Выберите основное изображение для сертификата
+      create_action: Создать Новый Сертификат
+      create_button_text: Создать Сертификат
+      name_label: Имя
+      name_placeholder: Имя для идентификации этого сертификата
+      success_notification: Теперь вы можете редактировать этот сертификат.
+    CourseCertificates__EditDrawer:
+      active_help: Хотя у вас может быть несколько сертификатов, только один может быть выдан автоматически; он будет выдан, когда студент <em>окончит</em> курс.
+      active_label: Следует ли студентам автоматически выдавать этот сертификат?
+      cannot_be_auto_issued_warning: Обратите внимание, что последний уровень этого курса не имеет каких-либо контрольных задач. Этот сертификат будет автоматически выдан только в том случае, если на последнем уровне есть хотя бы одна задача.
+      edit_action: Редактировать Сертификат
+      font_size_label: Размер Шрифта
+      margin_label: Отступ
+      name_error: Имя не может быть пустым
+      name_label: Имя
+      name_offset_top_label: Смещение имени (сверху)
+      name_placeholder: Краткое название этого сертификата
+      qr_bottom_left_label: Нижний Левый
+      qr_bottom_right_label: Нижний Правый
+      qr_hidden_label: Скрытый
+      qr_position_label: Положение QR-кода
+      qr_scale_label: Размер QR-кода
+      qr_top_left_label: Верхний Левый
+      qr_top_right_label: Верхний Правый
+      qr_visibility_help: Он будет содержать ссылку на страницу вашей школы, которую каждый может посетить, чтобы проверить выданный сертификат.
+      qr_visibility_label: Добавить QR-код?
+      update_issued_certificates_warning:
+        one: Этот сертификат однажды выдавался. <br/>Эти изменения также будут применены к выданному сертификату.
+        other: Этот сертификат выдаввался %{count} раз.<br/>Эти изменения также будут применены к другим %{count} выданным сертификатам.
+    CourseCertificates__Root:
+      auto_issue_tag: Авто-выпуск
+      create_action: Создать новый сертификат
+      delete_button_title: Удалить Сертификат %{name}
+      edit_button_title: Редактировать Сертификат %{name}
+      heading: Сертификаты
+      issued_count:
+        one: Выдавался лишь раз
+        other: Выдавался %{count} раз
+        zero: Никогда не выдавался
+      no_certificates: Вы еще не создали ни одного сертификата!
+    CourseEditor:
+      add_new_course: Добавить новый курс
+      button_load_more: Загрузить Больше Курсов...
+      course_links:
+        download_reports: Загрузить Отчеты
+        edit_curriculum: Редактировать Силлабус
+        manage_coaches: Управлять Тренерами
+        manage_students: Управлять Студентами
+        view_as_student: Посмотреть как Студент
+      courses_fully_loaded_text: Показаны все %{total_courses} курсы
+      courses_partially_loaded_text: Показаны %{loaded_courses_count} из %{total_courses} курсов
+      edit_course_details: Изменить детали о курса
+      empty_courses: У вас нет курсов!
+      filter:
+        input_hint: Или начните вводить для поиска по имени...
+        input_label: Искать
+        input_placeholder: Фильтр и поиск курсов по названию
+        label:
+          name: Искать по имени
+          status: Статус
+        status:
+          active: Активен
+          archived: Архивирован
+          ended: Окончен
+      quick_links: Быстрые Ссылки
+      view_public_page: Посмотреть публичной страницы
+    CourseEditor__Form:
+      actions:
+        archive_course:
+          button_text: Архивировать Курс
+          label: Хотите ли вы заархивировать курс?
+        clone_course:
+          button_text: Закрыть Курс
+          label: Хотите ли вы создать копию курса?
+        unarchive_course:
+          button_text: Разархивировать Курс
+          label: Хотите ли вы разархивировать курс?
+      alert:
+        archive_message: Вы уверены, что хотите заархивировать курс?
+        clone_course_message: Вы уверены, что хотите создать копию курса?
+        unarchive_message: Вы уверены, что хотите разархивировать курс?
+      button_text:
+        add_new_course: Создать Новый Курс
+        edit_course_details: Редактирвовать Детали Курса
+      course_about:
+        label: О Курсе
+        placeholder: Добавьте подробности о курсе.
+      course_description:
+        error_message: Требуется описание (2–150 знаков)
+        label: Описание курса
+        placeholder: Краткое описание этого курса
+      course_end_date:
+        error_message: Требуется описание (2–150 знаков)
+        help: Если указано, курс будет показан как закрыт для студентов в эту дату. Студенты больше не смогут подавать заявки.
+        label: Дата окончание курса
+        placeholder: Краткое описание этого курса
+      course_highlights:
+        label: Основные моменты курса
+      course_name:
+        error_message: Требуется название (2–50 знаков)
+        label: Название курса
+        placeholder: Введите название курса здесь
+      create_course: Создать Курс
+      enable_public_preview_label: Разрешить всем просматривать учебную программу?
+      enable_public_signup_label: Разрешить всем записываться на этот курс?
+      feature_course_in_homepage_label: Рекомендовать курс на домашней странице школы?
+      processing_url:
+        error: Недействительный URL обработки
+        help: Вы можете отправить URL курса кандидатам после того, как они подадут заявку на курс.
+        label: Хотите ли вы обработать информацию о кандидатах перед их зачислением?
+      progression_behavior:
+        help: Это применимо только в том случае, если ваш курс имеет контрольные задачи, требующие от студентов представления своей работы на рассмотрение тренерам.
+        label: Успешность
+        limited:
+          description_end: " без рассмотрения отправленных материалов.."
+          description_start: Уровень студентов может подняться
+          once: один раз
+          thrice: три раза
+          title: Лимитировано
+          twice: два раза
+        strict:
+          description: Учащиеся могут повысить свой уровень только после проверки и сдачи работ. 
+          title: Строго
+        unlimited:
+          description: Студенты могут повышать свой уровень до конца курса без рассмотрения их работ.
+          title: Без Лимита
+      tabs:
+        actions: Действия
+        details: Детали
+        images: Картинки
+      update_course: Обновить Курс
+    CourseEditor__HighlightsEditor:
+      add_highlight: Добавить Главные Моменты Курса
+      description:
+        placeholder: Описание Главных Моментов
+      selected_button:
+        title: Выбрать Иконку
+      title:
+        placeholder: Название Главных Моментов
+    CourseEditor__ImagesForm:
+      button_text:
+        update_images: Обновить Картинку
+        updating: Обновляем...
+      cover_image:
+        error_message: должен быть в формате JPEG/PNG размером менее 2 МБ.
+        help: Обложка будет отображаться в верхней части всех студенческих страниц в рамках курса, а также в качестве заголовка некоторых электронных писем по курсу.
+
+        label: Обложка
+      empty_image_label: Пожалуйста, выберите файл изображения.
+      image_label:
+        end: . Щелкните, чтобы заменить текущее изображение.
+        start: "Вы выбрали "
+      notification_success:
+        description: Изображения успешно обновлены.
+        title: Выполнено!
+      replace_image_label: "Выберите файл для замены "
+      thumbnail:
+        error_message: должен быть в формате JPEG/PNG размером менее 2 МБ 
+        help: Миниатюра будет отображаться на главной странице и здесь, в списке административных курсов.
+        label: Миниатюра
+    CourseSelect:
+      button_load_more: Загрузить Больше Курсов...
+      courses_fully_loaded_text: Показаны все %{total_courses} курса
+      courses_partially_loaded_text: Показаны %{loaded_courses_count} из %{total_courses} курса
+      empty_courses: У вас нет курсов!
+      filter:
+        input_hint: Или начните вводить для поиска по имени...
+        input_label: Искать
+        input_placeholder: Фильтруйте и ищите курсы по названию
+        label:
+          name: Искать по названию
+          status: Статус
+        status:
+          active: Активен
+          archived: Архивирован
+          ended: Окончен
+    CoursesApply__Root:
+      email_sent_message:
+        description: Он должен добраться до вас меньше чем за минуту. Нажмите на ссылку в электронном письме, чтобы зарегистрироваться, и приступайте.
+        title: Мы отправили вам письмо с подтверждением.
+    CoursesCurriculum:
+      edit_level_button: Редактировать Уровень
+      edit_target_button_title: Редактировать Задачу %{title}
+      empty_level_content_notice: На этом уровне нет опубликованного контента.
+      issued_certificate_button: Посмотреть Сертификат
+      issued_certificate_heading: Поздравляю! Вам выдан сертификат.
+      level_locked: Уровень закрыт
+      level_locked_explanation: Вы можете получить доступ к контенту %{date}.
+      level_locked_for_students_notice: Этот уровень по-прежнему заблокирован для учащихся и будет разблокирован <strong>%{date}</strong>.
+      level_locked_notice: Уровень в настоящее время заблокирован!
+      milestone_targets: Контрольные задачи
+      nav_next_level: След. Уровень
+      nav_previous_level: Пред. Уровень
+    CoursesCurriculum__AudioRecorder:
+      button_text_record_again: Записать Снова
+      button_text_start_recording: Начать Запись
+      recording_size_limit_warning: Размер записи не должен превышать 5 МБ. Пожалуйста, перезапишите
+      recording_string: Записываем...
+    CoursesCurriculum__Learn:
+      edit_target_button: Редактировать Контент
+    CoursesCurriculum__LevelUpButton:
+      button_text_level_up: Уровень повышен
+      button_text_saving: Сохраняем
+    CoursesCurriculum__NoticeManager:
+      access_ended_description: Ваш доступ к этому курсу закончился.
+      access_ended_title: Доступ прекращен
+      course_complete_description: Вы выполнили нашу курсовую работу. Не стесняйтесь выполнять задачи, которые вы могли упустить, и читайте по прикрепленным ссылкам.
+      course_complete_title: Поздравляю! Вы выполнили все контрольные задачи на последнем уровне.
+      course_ended_description: Курс завершен, и отправка материалов отключена для всех задачах!
+      course_ended_title: Курс Окончен
+      level_up_blocked:
+        body_middle_pending_review: "все еще ожидают рассмотрения тренером. "
+        body_middle_rejected: "были отклонены. "
+        body_prefix: "Вы отправили все контрольные задачи на уровне %{number}, но еще остались задачи"
+        body_suffix: Вам нужен проходной балл по всем контрольным показателям для повышения уровня.
+        title_pending_review: Ожидает оценки
+        title_rejected: Поднятие Уровня Блокирован
+      level_up_description: Поздравляем! Вы успешно выполнили все контрольные задачи, необходимые для перехода на следующий уровень курса. Нажмите кнопку «Поднять уровень» ниже, чтобы продолжить изучение курса.
+      level_up_limited_description: Вы на Уровне %{currentLevel}, но у вас остались задачи на уровне %{minimumRequiredLevel} которые были отклонены или все еще ожидают рассмотрения тренером. Вам нужно будет пройти все этапы на Уровне %{minimumRequiredLevel} чтобы продолжать повышать уровень.
+      level_up_limited_title: Повышение Уровня Заблокировано
+      level_up_title: Готовы к повышению!
+      preview_mode_description: Вы входите в режим предварительного просмотра курса
+      preview_mode_title: Режим предварительного просмотра
+      team_members_pending_description: Вы выполнили все необходимые контрольные задачи, но один или несколько товарищей по команде еще не закончили. Попросите их войти в систему и проверить, нет ли незавершенных контрольных показателей.
+      team_members_pending_title: Свяжитесь с вашей командой
+    CoursesCurriculum__Overlay:
+      close_button: Закрыть
+      completion_tab_complete: Завершить
+      completion_tab_completed: Завершено
+      completion_tab_locked: Заблокировано
+      completion_tab_mark_complete: Отметить как завершено
+      completion_tab_quiz_result: Результаты Теста
+      completion_tab_submissions: Работы и Отзывы
+      completion_tab_take_quiz: Пройти Тест
+      completion_tab_visit_link: Пройдите по Ссылке для Заввершения
+      discuss_tab: Обсуждения
+      learn_cta_submit_work: Отправить работу на рассмотрение
+      learn_cta_take_quiz: Пройти Тест
+      learn_tab: Учиться
+      next_target_button: След. Задача
+      pending_team_members_notice: "У вас есть члены команды, которым еще предстоит выполнить эту задачу:"
+      preview_mode_text: Вы сейчас в режиме предварительного просмотра.
+      previous_target_button: Пред. Задача
+      scroll_to_top: Пролистать наверх
+    CoursesCurriculum__TargetStatus:
+      access_locked: Ваш доступ к этому курсу закончился.
+      course_locked: Курс был окончен.
+      level_locked: Вы на уровне %{current_level}. Сперва завершите все контрольные задачи на Уровне %{current_level}.
+      prerequisites_incomplete: Данная задача имеет предварительные условия которые вы не выполнили.
+      status:
+        completed: Завершен
+        locked: Заблокирован
+        pending: В Ожидании
+        pending_review: Ожидает оценки
+        rejected: Отклонен
+    CoursesReport__Overview:
+      attempted: " Попытки"
+      average_grades: Средние Оценки
+      average_quiz_score: Средний Балл за Тесты
+      course_completed: Курс Пройден!
+      incomplete_targets: "Незавершены: %{targetsCount}"
+      level_progress: Прогресс Провня
+      personal_coaches: Персональные Тренера
+      quiz: Тест
+      schedule_coaching_session: Запланировать сеанс с тренером
+      targets_completed: "Завершены: %{targetsCount}"
+      targets_overview: Обзор задач
+      targets_pending_review: "Pending Review: %{targetsCount}"
+    CoursesReport__SubmissionsList:
+      completed: Завершено
+      filter_by_another_level: Фильтровать по другому уровню
+      filter_by_another_level_or_status: Фильтровать по другому уровню или по статусу
+      filter_by_level: Фильтровать по уровню
+      filter_by_level_or_status: Фильтровать по уровню или статусу
+      load_more: Загрузить Больше...
+      no_submissions_to_show: "Нет представленных материалов для показа "
+      pending_review: Ожидает оценки
+      rejected: Отклонен
+      sort_by: "Сортировать по:"
+      status: Статус
+      submission_not_considered: Данная работа не засчитывается для завершения.
+      submission_not_considered_help: Данная задача <em>командная</em> и это работа не связана с некоторыми членами вашей команды. Это может произойти, если цель изменилась после вашего индивидуального представления, чтобы потребовать <em>командной</em> работы или если состав вашей команды изменился после создания <em>команды</em>.
+      submitted_at: Отправлено в
+      submitted_on: Отправлено в %{date}
+      view: "Посмотреть "
+    CoursesReview__Checklist:
+      create_review_checklist: Создайте список оценки
+      create_review_checklist_description: Подготовьтесь к оценки курса, составив контрольный список
+    CoursesReview__ChecklistEditor:
+      add_checklist_item: Добавить элемент списка
+      add_result: Добавить результат
+      cancel: Отменить
+      checklist_item_description:
+        error_message: Список не может быть пустым
+        placeholder: Добавить отзыв (необязательно)
+      checklist_item_title:
+        placeholder: Добавить результат элемента
+        remove_button_title: Удалить результат элемента
+      checklist_title:
+        error_message: Список не может быть пустым
+        placeholder: Добавить элемент списка
+        remove_button_title: Удалить элемент списка
+      create_review_checklist: Создать список для оценки
+      disabled: Отключено
+      edit_review_checklist: Изменить список оценки
+      save_checklist: Сохранить список оценки
+    CoursesReview__ChecklistShow:
+      edit_checklist_button: Редактировать список
+      feedback_placeholder: Добавить отзыв (необязательно)
+      generate_feedback_button: Создать отзыв
+      review_checklist: Проверить список
+    CoursesReview__Editor:
+      add_another_feedback: Добавить еще один отзыв
+      add_feedback: Добавить отзыв
+      add_your_feedback: Добавьте свой отзыв
+      assigned_coaches: Назначенные тренеры
+      assigned_to: Назначен к
+      close: закрыть
+      close_submission_warning: Вы уверены, что хотите закрыть отправку без сохранения?
+      create_review_checklist: Создать список для проверки
+      deleted_coach: Удаленные тренеры
+      evaluated_at: на %{evaluated_at}
+      evaluated_by: Оценен от
+      feedback: Отзыв
+      feedback_generated_text: Отзыв, полученный из списка оценки.
+      feedback_placeholder: Данный отзыв будет отправлен учащимся по электронной почте, когда вы завершите оценку.
+      get_next_submission:
+        notice:
+          done: Выполнено!
+          done_description: Других подобных работ нет.
+      grade_card: Оценочная Карта
+      help_text: Заметки можно использовать для отслеживания прогресса %{note_about}. Эти заметки показываются только тренерам в отчете студента. %{additional_help}
+      level_acronym: У
+      note_help: "Хотели бы вы написать об этом заметку "
+      note_placeholder: Заметили ли вы что-то при рассмотре данной работы?
+      remove_assignment: Удалить задание
+      review: Проверить
+      review_checklist: Проверить список
+      review_next: След.
+      save_grades: Сохранить оценки
+      save_grades_and_send_feedback: Сохранить оценки и отправить отзыв
+      share_feedback: Поделиться Отзывом
+      show_review_checklist: Показать список оценок
+      status:
+        completed: Выполнен
+        pending_review: Ожидает оценки
+        rejected: Отклонен
+        reviewing: Оценивается
+      student: студент
+      student_dropped_out_message: Данная работа от студента, у которого закончился доступ к курсу или который выбыл из него.
+      students_dropped_out_message: Данная работа связана с одним или несколькими студентами, доступ которых к курсу закончился или которые бросили учебу.
+      submission: Работа
+      submitted_by: "Отправлен от "
+      submitted_by_team: "Отправлено командой: "
+      team: команда
+      team_notice: " Это заявление от команды, поэтому добавленная здесь заметка будет опубликована в отчете всех студентов в команде."
+      undo_grade_warning: Вы действительно хотите удалить эти оценки? Это вернет отправку в состояние 'Ожидает рассмотрения'.
+      undo_grading: Отменить Оценивание
+      write_a_note: Написать Заметку
+    CoursesReview__ReviewerManager:
+      assigned_at: Назначен в %{date}
+      change_reviewer_and_start_review: Да, Назначьте меня
+      remove_reviewer_assign_to_me: Хотите ли вы удалить %{current_coach_name} и назначить себя на оценивание?
+      start_review: Начать Оценивание
+    CoursesReview__Root:
+      assigned_to: Назначен к
+      assigned_to_coach: "Назначен к:"
+      assigned_to_me: " назначен ко мне"
+      button_load_more: Загрузить Больше Работ...
+      coach_filter_by:
+        assigned_to: Фильтровать по тем, кто отправил работы
+        personal_coach: Фильтровать по тому, кто назначен студенту
+        reviewed_by: Фильтровать по тем, кто просмотрел работу
+      filter_by: "Фильтровать по:"
+      filter_by_another_level: Фильтр по другому уровню
+      filter_by_another_level_or_submissions_assigned: Фильтровать по другому уровню или показать только работы, назначенные тренеру
+      filter_by_level: Фильтровать по уровню
+      filter_by_level_or_submissions_assigned: Фильтровать по уровню или показать только работы, назначенные тренеру 
+      filter_by_target: Фильтровать по целям
+      filter_hint: ... или начните вводить текст, чтобы фильтровать учащегося по имени или адресу электронной почты
+      filter_input:
+        assigned_to: "Назначен: "
+        level: "Уровень: "
+        personal_coach: "Личный Тренер: "
+        reviewed_by: "Оценен от: "
+        target: "Задача: "
+      inactive_students: Неактивные Студенты
+      include: Включать
+      level: Уровень
+      me: Я
+      name_or_email: Имя или Почта
+      now_showing_submissions_assigned_to: Теперь отображаются материалы, назначенные %{name}.
+      now_showing_submissions_from_all_students: Теперь отображаются работы всех студентов этого курса.
+      pending: Ожидаются
+      personal_coach: Личный Тренер
+      review: Оценить
+      reviewed: Оценено
+      reviewed_at: Оценено в
+      reviewed_by: Оценено
+      search:
+        assigned_to: "Назначен:"
+        level: "Уровень:"
+        personal_coach: "личный тренер:"
+        reviewed_by: "оценен:"
+        status: "статус: "
+        target: "задача:"
+      sort_by: "Сортировать по:"
+      status: Статус
+      submissions_fully_loaded_text:
+        one: Здась только одна работа.
+        other: Показаны все %{count} работы
+      submissions_partially_loaded_text: Показаны %{loaded_submissions_count} из %{total_submissions} курсов
+      submitted_at: Отправлено в
+      target: Задача
+    CoursesReview__SubmissionCard:
+      assigned_to: Назначен
+      completed: Выполнено
+      created_at: в %{created_at}.
+      feedback_sent: Отзыв Отправлен
+      level: "Уровень "
+      no_submissions_found: Работы не найдены
+      rejected: Отклонено
+      submitted_by: "Отправлено от "
+      submitted_by_team: "Отправлено от команды "
+    CoursesReview__SubmissionInfoCard:
+      submission_hash: "Работа #"
+    CoursesStudents__StudentOverlay:
+      access_ended_at: Доступ этого студента к курсу закончился %{date}.
+      attempted: " Попыток"
+      average_grades: Средние оценка
+      average_quiz_score: Средний Балл за Тест
+      close_student_report: Закрыть отчет студента
+      course_completed: Курс Пройден!
+      dropped_out_at: Этот студент выбыл из курса в %{date}.
+      level_progress: Прогресс Уровня
+      notes: Заметки
+      other_team_members: Другие Члены Команды
+      personal_coaches: Личные Тренера
+      quiz: Тест
+      submissions: Работы
+      targets: " Задачи"
+      targets_overview: Обзор Задач
+      team_coaches: Тренера Команд
+      total_targets_completed: Всего целей выполнено
+    CurriculumEditor:
+      create_level: Создать Уровень
+      create_target_group: Создать группу задач
+      edit_selected_level: Редактировать выбранный уровень
+    CurriculumEditor__ContentBlockCreator:
+      audio_upload_size_limit_warning: Пожалуйста, выберите файл размером менее 10 МБ.
+      button_labels:
+        embed: Встроить
+        file: Файл
+        image: Картинку
+        markdown: Текст (Markdown)
+        video: Видео
+      embed:
+        save_button: Сохранить
+        url_help: Мы поддерживаем ряд сторонних сервисов (см. Ссылку ниже). Просто скопируйте и вставьте полный URL-адрес на страницу, содержащую ресурс, который вы хотите встроить.
+        url_label: Ссылка для встраивания
+      file:
+        upload_size_warning: Пожалуйста, выберите файл размером менее 5 МБ.
+      image:
+        invalid_image_warning: Выберите изображение (PNG, JPEG, GIF) размером менее 5 МБ и не более 4096 пикселей в ширину или в высоту.
+      invalid_audio_file_error: Пожалуйста, выберите допустимый аудиофайл
+      video:
+        description_label: Описание
+        invalid_format_warning: Неверный формат файла. Пожалуйста, выберите файл MP4, MOV, WMV или AVI.
+        select_file_button: Выберите Файл и Загрузите
+        title_label: Заголовок
+        upload_limit_warning: Пожалуйста, выберите файл меньше чем %{maximumVideoSize}.
+        uploading: Загружаем
+    CurriculumEditor__ImageBlockEditor:
+      resize_panel_button_title:
+        auto: Автоматическая ширина
+        four_fifths: Четыре пятых ширины
+        full: Полная ширина
+        three_fifths: Три пятых ширины
+        two_fifths: Две пятых ширины
+    CurriculumEditor__LevelEditor:
+      actions_error_title: Упс!
+      clone_level_button: Скопировать Уровень
+      clone_level_confirm: Вы уверены, что хотите сделать копию этого уровня?
+      clone_level_error_message: Что-то пошло не так, когда мы попытались скопировать этот уровень. Пожалуйста, перезагрузите эту страницу перед повторной попыткой.
+      clone_level_hint: Выберите курс, на который нужно скопировать этот уровень. Это действие скопирует все цели на выбранный курс.
+      clone_level_label: Скопировать в
+      create_level: Создать Новый Уровень
+      create_success: Уровень успешно создан
+      edit_level: Редактировать Уровень %{number}
+      level_name_invalid: неверное название
+      level_name_label: Имя Уровня
+      level_name_placeholder: Введите здесь название уровня
+      merge_levels_button: Объединить и Удалить
+      merge_levels_confirm: Уверены ли вы? Это действие не может быть отменено.
+      merge_levels_error_message: Что-то пошло не так, когда мы попытались объединить и удалить этот уровень. Пожалуйста, перезагрузите эту страницу перед повторной попыткой.
+      merge_levels_hint: Выберите другой уровень, с которым хотите объединить этот уровень. Это действие сдвинет все цели и учеников по уровню.
+      merge_levels_label: Удалить и Объеденить с
+      merge_levels_select: Выбрать другой уровень
+      optional: " (необязательно)"
+      success: Успех
+      tabs:
+        actions: Действия
+        details: Детали
+      unlock_on_label: Разблокировать уровень в
+      update_level: Обновить Уровень
+      update_success: Уровень успешно обновлен
+    CurriculumEditor__TargetDetailsEditor:
+      choose_target_group: Выберите группу задач
+      completion_instructions_help: Используйте это, чтобы напомнить ученику о чем-то важном. Эти инструкции будут отображаться рядом с тем местом, где учащиеся выполнят задание.
+      completion_instructions_label: Есть ли у вас какие-либо инструкции для ученика?
+      empty_checklist_warning: У этой задачи нет шагов. Студенты смогут отправить работу без каких-либо действий!
+      mark_as_complete: Просто отметьте цель как выполненную.
+      no_targets_selected: Задачи не выбраны
+      prerequisite_targets_label: Есть ли предварительные цели?
+      search_targets: Искать Задачи
+      select_criterion_label: Выберите критерии оценки из вашего списка
+      select_criterion_warning: По крайней мере, один должен быть выбран
+      selected_all_targets: Вы выбрали все задачи
+      take_quiz: Пройдите тест, чтобы выполнить задачу.
+      target_checklist_help_text: Это шаги, которые студент должен выполнить, чтобы отправить работу по задаче. Эта информация будет показана тренеру для ознакомления.
+      target_checklist_label: Какие шаги должен предпринять ученик для достижения этой цели?
+      target_checklist_limit_warning: Максимально допустимое количество элементов списка - 15!
+      target_group: Группа задач
+      target_method_of_completion_label: Как вы хотите, чтобы ученик выполнил задание?
+      target_reviewed_by_coach: Будет ли тренер проверять работы по этой задаче?
+      target_role_help: Должны ли студенты в команде подавать работу над задачей индивидуально или вместе?
+      target_role_label: Как командам следует решать эту задачу?
+      target_title_placeholder: Введите название задачи здесь
+      target_visibility: Видимость Задачи
+      update_target: Обновить Задачу
+      visit_link: Пройдите по ссылке, чтобы выполнить цель.
+    CurriculumEditor__TargetGroupShow:
+      create_target: Создать задачу
+      milestone_targets: Контрольные Задачи
+    Notifications__List:
+      button_load_more: Загрузить больше уведомлений...
+      empty_notifications: У вас нет уведомлений!
+      filter:
+        events:
+          post_created_text: Пост Создан
+          topic_created_text: Тема создана
+        input_hint: Поиск по названию или типу события
+        input_label: Искать
+        input_placeholder: Поиск по заголовку, событию, прочитанным и непрочитанным
+        label:
+          event: Событие
+          status: Статус
+          title: Поиск по названию
+        status:
+          all: Все
+          new: Новый
+          read: Прочитанно
+          unread: Непрочитано
+      mark_all_as_read_button: Отметить все как прочитанное
+      notifications_fully_loaded_text: Показаны все %{total_notifications} уведомления
+      notifications_partially_loaded_text: Показаны %{loaded_notifications_count} из %{total_notifications} уведомлении
+    SchoolAdminNavbar__Root:
+      course_nav:
+        applicants: Кандидаты
+        authors: Авторы
+        certificates: Сертификаты
+        coaches: Тренера
+        curriculum: Силлабус
+        evaluation_criteria: Критерии Оценивания
+        exports: Экспорты
+        students: Студенты
+    StudentTopNav:
+      sign_in: Войти
+      sign_out: Выйти
+    StudentTopNav__DropDown:
+      more: Больше
+    StudentTopNav__UserControls:
+      edit_profile: Редактировать Профиль
+      sign_in: Войти
+      sign_out: Выйти
+    StudentsEditor__ActionsForm:
+      active_label: Активен
+      certificates_label: Сертификаты Курса
+      dropout_button: Выгнать Студента
+      dropout_student_label: Был ли студент выгнан?
+      empty_course_certificates_text: Этот курс не имеет сертификатов для выдачи.
+      empty_issued_certificates_text: Этому студенту не выдавали никаких сертификатов.
+      issue_certificate_button: Выдать Сертификат
+      issued_by_label: "Выдано от:"
+      issued_certificates_label: "Выданные сертификаты:"
+      issued_date_label: "Выдано в:"
+      new_certificate_label: "Выдать новый сертификат:"
+      revoke_certificate_button: Отозвать Сертификат
+      revoke_certificate_confirmation: Уверены ли вы? Это действие не может быть отменено.
+      revoked_by_label: "Отозван от:"
+      revoked_date_label: "Отозван в:"
+      revoked_status_label: Отозван
+      select_certificate_input_label: Выберите сертификат для выдачи
+    StudentsEditor__BulkImportForm:
+      csv_data_errors:
+        invalid_affiliation: Принадлежность не должна превышать 250 символов.
+        invalid_email: Почта должна быть действительной и не может быть пустым.
+        invalid_name: Имя не может быть пустым и должен содержать не более 250 символов.
+        invalid_tags: Каждому учащемуся разрешено использовать не более 5 тегов (не более 50 символов каждый).
+        invalid_team_name: Название команды должно быть меньше 50 символов.
+        invalid_title: Название должно быть меньше 250 символов.
+      csv_file_errors:
+        empty: В выбранном CSV-файле нет допустимых строк.
+        exceeded_entries: В CSV-файле более 1000 записей.
+        invalid: Выберите действительный файл CSV размером менее 5 МБ.
+        invalid_data: В CSV-файле есть недопустимые данные в нескольких ячейках. Исправьте ошибки, перечисленные ниже, и повторите попытку.
+        invalid_template: Выбранный файл CSV не имеет допустимого шаблона
+      csv_file_input_label: CSV-файл импорта
+      csv_file_input_placeholder: Выберите файл CSV для импорта
+      drawer_heading: Массовый импорт студентов
+      error_summary_title: "Вот сводка ошибок в таблице: "
+      example_csv_link: Загрузите пример файла .csv
+      import_button_text: Импортировать студентов
+      more_errors_text: "Ошибок еще больше. Исправьте ошибки в следующих строках и загрузите снова: "
+      notify_students_label: Уведомите учащихся и отправьте им ссылку для входа в эту школу.
+      success_notification: Импорт успешно начат! После завершения вы получите уведомление по электронной почте.
+      valid_data_message: Данные успешно подтверждены!
+      valid_data_summary_text: "Вот сводка данных о студентах на загруженном листе: "
+    StudentsEditor__CreateForm:
+      added_full_description: Все ученики созданы успешно.
+      added_none_description: Все студенты, которых вы пытались добавить, уже были частью этого курса.
+      added_none_title: Ничего не изменилось
+      added_partial_description: "%{students_added} из %{students_requested} студентов были добавлены. Остальные студенты уже прошли курс."
+      added_partial_title: Частично добавлено
+      drawer_heading: Добавить новых студентов
+      notify_students_label: Уведомите учащихся и отправьте им ссылку для входа в эту школу.
+      save_list_button: Сохранить Список
+      team_header_add_more_members: Добавьте больше членов команды!
+      team_header_label: КОМАНДА %{team_name}
+      teams_to_add_empty: Этот список пуст! Добавьте несколько студентов, используя форму выше.
+      teams_to_add_label: "Эти новые студенты будут добавлены к курсу.:"
+    StudentsEditor__Root:
+      button_add_new_students: Добавить новых студентов
+      button_all_students: Все Студенты
+      button_bulk_import: Массовый Импорт
+      button_inactive_students: Неактивные Студенты
+      sort_criterion_label: "Сортировать по:"
+      sort_criterion_last_created: Последнее Создание
+      sort_criterion_last_updated: Последнее Обновление
+      sort_criterion_name: Имя
+    StudentsEditor__Search:
+      filter_input_label: "Фильтровать по:"
+      filter_input_placeholder: Введите имя, тег или уровень
+    StudentsEditor__TeamsList:
+      check_spelling: Убедитесь, что написано по буквам правильно.
+      clear_filter: Убрать Фильтры
+      empty_message: Здесь нет студентов.
+      level: Уровень
+      load_more: "Загрузить Больше "
+      no_results_found: Результатов не найдено.
+      students_fully_loaded_text:
+        one: Здесь только один студент.
+        other: Показаны все %{count} студентов
+      students_partially_loaded_text: Показаны %{loaded_students_count} из %{total_students} студентов
+      team: Команда
+      try_removing_filter: Попробуйте удалить параметры фильтра поиска.
+    SubmissionChecklistShow:
+      target_marked_as_complete: Цель была отмечена как завершенная.
+    TargetChecklistItem:
+      action_string_attach_link: Прикрепить ссылку
+      action_string_choose_from_list: Выбрать из списка
+      action_string_record_audio: Записать аудио
+      action_string_upload_files: Загрузить файлы
+      action_string_write_long_text: Напишите Длинный Текст
+      action_string_write_short_text: Напишите Короткий Текст
+    TopicsShow__LikeManager:
+      like_button_tooltip: Лайкнуть Этот Пост
+    TopicsShow__PostShow:
+      delete_post_confirm_dialog: Вы уверены, что хотите удалить пост? Это не может быть отменено.
+      delete_reply_string: Удалить Ответ
+      delete_topic_confirm_dialog: Вы уверены, что хотите удалить тему? Это не может быть отменено.
+      delete_topic_string: Удалить Тему
+      deleted_user_name: Удаленный Пользователь
+      edit_post_string: Редактировать Пост
+      edit_reply_string: Редактировать Ответ
+      go_to_solution_button: Перейти к Решению
+      history_button_text: История
+      last_edited_by_label: "Последнее Редактирование "
+      mark_as_solution_label: Отметить как решение
+      new_reply_button: Ответить
+      solution_icon_label: Решение
+    TopicsShow__Root:
+      edit_topic_button: Редактировать Тему
+      linked_target_label: "Связанная Задача: "
+      lock_topic_button: Заблокировать Тему
+      locked_topic_notice: Эта тема заблокирована; публиковать новые ответы нельзя.
+      topic_category_label: "Категория Темы: "
+      topic_editor_cancel_button: Отмена
+      unlock_topic_button: Разблокировать Тему
+      update_topic_button: Обновить Тему
+      view_target_button: Посмотреть Задачу
+    TopicsShow__SubscriptionManager:
+      subscribe: Подписаться
+      unsubscribe: Отписаться
+    UsersDashboard__Root:
+      certificates: Сертификаты
+      communities: Сообщества
+      course_locked_message: Ваш профиль студента для этого курса заблокирован и не может быть обновлен.
+      cta:
+        access_ended: Доступ Закончен
+        course_ended: Курс Окончен
+        dropped_out: Выгнан
+        edit_curriculum: Изменить Силлабус
+        leaderboard: Таблица Лидеров
+        my_students: Мои студенты
+        review_submissions: Оценить работы
+        view_certificate: Посмотреть Сертификат
+        view_course: Посмотреть Курс
+        view_curriculum: Посмотреть Учебную Программу
+        visit_community: Посетить Сообщество
+      edit_profile: Редактировать Профиль
+      empty_courses: В данный момент у вас нет активных курсов.
+      my_courses: Мои Курсы
+    VerifyCertificate__Root:
+      cancel: Отменить и Вернуться
+      description: Данный сертификат был выдан <strong class="whitespace-no-wrap">%{name}</strong> в <strong class="whitespace-no-wrap">%{issue_date}</strong> по курсу <strong>%{course_name}</strong>.
+      heading: Поздравляем, <strong class="whitespace-no-wrap">%{name}</strong>!<br/>Вы заслужили это.
+      originally_issued_to: Имя этого студента было обновлено после выдачи сертификата. Этот сертификат изначально был выдан <strong>%{name}</strong>.
+      print_or_save: Распечатайте или сохраните как PDF
+      serial_number: Серийный Номер %{serial}
+    WebPushSubscriptionManager:
+      notification_rejected: Разрешение отклонено
+      notification_rejected_message: Если вы передумали, щелкните значок замка, чтобы разрешить браузеру отправлять вам уведомления на рабочем столе.
+      subscribe: Подписаться
+      subscribed_on_another_device: Подписаться на этом Устройстве
+      unsubscribe: Отписаться
+  courses:
+    apply:
+      apply_button: Применить
+      email_label: Почта
+      email_placeholder: john@example.com
+      heading: Зарегистрироваться на курс %{course_name}
+      name_label: Имя
+      name_placeholder: John Doe
+      page_title: Регистрация в %{course_name}
+    show:
+      continue_course: Продолжить Курс
+      preview_course: Предварительный просмотр курса
+  dashboard:
+    dashboard:
+      tour:
+        final_message: Пока это все. Если у вас есть какие-либо сомнения, не стесняйтесь обращаться к нам.<br/><br/>Развлекайтесь!
+        intro: Добро пожаловать в личный кабинет! Здесь будет показано, успеваемость вашей команды.
+        level_select: Программа разбита на несколько уровней, содержащих задачи. Новые уровни открываются, когда вы выполняете <em>контрольные задачи</em> на каждом уровне. <br/> <br/> Вы можете вернуться к выполнению дополнительных задач на предыдущих уровнях, а также можете проверить цели на будущих уровнях , но вы не можете отправить работу для них, пока они не будут разблокированы.
+        target: Целевая панель будет иметь имя задачи и ее статус завершения. Щелкнув цель, вы получите подробную информацию о цели, статусе и кнопке отправки цели.
+        target_group: В ваших целевых группах будут перечислены все цели вместе со статусом завершения.
+        target_status: Это указывает на текущий статус цели.
+  errors:
+    messages:
+      content_type_invalid: имеет недопустимый тип содержимого
+      limit_out_of_range: общее количество вне допустимого диапазона
+  graphql:
+    concerns:
+      validate_submission_gradable:
+        owners_should_be_active_error: Невозможно обновить неактивные работы учащихся.
+  home:
+    index:
+      course_status:
+        access_ended: Посмотреть содержание курса
+        active: Продолжить курс
+        dropped_out: Выгнан из курса
+      featured_courses_heading: Избранные курсы
+      get_started: Начать
+      learn_more: Узнать больше
+      welcome_prefix: Привет, добро пожаловать в
+  jobs:
+    courses:
+      clone_course:
+        new_name: "%{name} - копия"
+    notifications:
+      post_created_job:
+        post_created: "%{user_name} ответил в чате, в котором вы состоите в сообществе %{community_name}"
+      topic_created_job:
+        topic_created: "%{user_name} создал новую тему в сообществе %{community_name}"
+    targets:
+      send_session_feedback_notification:
+        message: |
+          Привет! Спасибо всем, кто посетил сегодняшнюю прямую трансляцию %{faculty_name}.
+          Мы надеемся, что вы нашли эту сессию информативной и полезной.
+          Если вы пропустили просмотр в прямом эфире, мы разместим его на панели управления через пару дней.
+          Пожалуйста, помогите нам улучшить наши занятия с помощью быстрой обратной связи: https://svlabs.typeform.com/to/h7g9Om?faculty=%{faculty_name_escaped}&session=%{session_title}&date=%{session_date}
+      send_session_reminders:
+        message: "Напоминание: \"%{title}\" начнется через %{time_delta} (в %{time_exact}). Пожалуйста, проверьте коллективный канал Slack, чтобы найти ссылку для присоединения к сеансу."
+    timeline_events:
+      verification_notification:
+        founder:
+          needs_improvement:
+            founder_event: Ваша новая запись на таймлайне (<%{event_url}|%{event_title}>) был отмечен как 'нуждается в доработке'. Пожалуйста, отправьте новое и измененное таймлайн ивент на основе полученных отзывов
+            startup_event: Ваша новая запись на таймлайне (<%{event_url}|%{event_title}>) для <%{startup_url}|%{startup_name}> был отмечен как 'нуждается в улучшении'. Пожалуйста, отправьте новое и измененное таймлайн ивент на основе полученных отзывов 
+          not_accepted:
+            founder_event: Ваша новая запись на таймлайне (<%{event_url}|%{event_title}>) был отклонен. Отредактируйте и повторно отправьте измененное событие временной шкалы на основе отзыва
+            startup_event: Ваша новая запись на таймлайне (<%{event_url}|%{event_title}>) отправленный вами для <%{startup_url}|%{startup_name}> не был принят. Отредактируйте и повторно отправьте измененное событие временной шкалы на основе отзыва
+          verified:
+            founder_event: Ваша новая запись на таймлайне (<%{event_url}|%{event_title}>) был проверен SV.CO
+            startup_event: Ваша новая запись на таймлайне (<%{event_url}|%{event_title}>) для <%{startup_url}|%{startup_name}> был проверен SV.CO
+        public:
+          needs_improvement: |
+            <%{startup_url}|%{startup_name}> есть новая подтвержденная запись на таймлайне: <%{event_url}|%{event_title}>
+            *Описание:* %{event_description}
+            %{links_attached_notice}
+          verified: |
+            <%{startup_url}|%{startup_name}> есть новая подтвержденная запись на таймлайне: <%{event_url}|%{event_title}>
+            *Описание:* %{event_description}
+            %{links_attached_notice}
+        team:
+          needs_improvement: "Ваша команда <%{startup_url}|%{startup_name}> имеет новую запись на таймлайне: (<%{event_url}|%{event_title}>) и был отмечен как 'нуждается в улучшении'. Пожалуйста, отправьте новое и измененное мероприятие временной шкалы на основе отзывов"
+          not_accepted: Ваша новая запись на таймлайне (<%{event_url}|%{event_title}>) отправленная вашей командой <%{startup_url}|%{startup_name}> не был принят. Отредактируйте и повторно отправьте измененное событие временной шкалы на основе отзыва
+          verified: "Ваша команда <%{startup_url}|%{startup_name}> есть новая подтвержденная запись на таймлайне: <%{event_url}|%{event_title}>"
+  models:
+    faculty:
+      commitment:
+        full_time: Полный рабочий день
+        part_time: Неполный рабочий день
+    target:
+      role:
+        founder: Все учредители
+        team: Команда
+  mutations:
+    archive_course:
+      success_notification: Курс успешно заархивирован.
+    assign_reviewer:
+      submission_already_assigned: Данная работа уже назначена тренеру.
+      submission_graded_error: Вы можете назначить себя только участникам, ожидающим рассмотрения.
+      success_notification: Данная работа была назначена вам.
+    auto_verify_submission:
+      success_notification: Цель отмечена как завершенная.
+    clone_course:
+      success_notification: Запрошено создание копии курса. Скоро здесь появится!
+    clone_level:
+      success_notification: Запрошена копия уровня. Скоро он появится в намеченном курсе!
+    create_course:
+      success_notification: Курс успешно создан!
+    create_feedback:
+      success_notification:
+        description: Ваш отзыв будет отправлен студенту по электронной почте.
+        title: Отзыв Отправлен
+    create_grading:
+      evaluation_criteria_error: Невозможно оценить отправку% {submission_id} без критериев оценки
+      grade_recorded: Оценки Записаны
+      invalid_checklist_shape_error: Форма данных в списке отправки не соответствует форме, отправленной с оценкой.
+      invalid_checklist_values_error: Значения элементов списка в отправке не совпадают с данными обзора.
+      invalid_grading_error: "Указанные значения оценок недействительны: %{grades_data}"
+      submission_graded_error: Работа уже оценена
+      submission_missing_error: "Не удалось найти работу с идентификатором: %{submission_id}"
+      success_notification: Работа отмечена как рассмотренная.
+    create_student_from_applicant:
+      success_notification: Студент успешно создан.
+    create_submission:
+      blocked_submission_status_error: Статус этой цели - %{target_status}, поэтому вы не можете добавить новую работу; пожалуйста, перезагрузите страницу
+      invalid_files_attached: Некоторые прикрепленные файлы недействительны
+      invalid_submission_checklist: Список работ недействителен.
+      item_file_limit_error: К отправке можно прикрепить не более трех файлов
+      linked_file_exists_error: Некоторые прикрепленные файлы уже связаны с работой 
+      missing_answer_error: "Отсутствует ответ на вопрос: %{title}"
+      success_notification: Ваша работа находится в очереди на рассмотрение.
+    create_target:
+      success_notification: Задача успешно создана.
+    create_topic_subscription:
+      success_notification: Вы будете уведомлены обо всех обновлениях.
+    delete_certificate:
+      success_notification: Сертификат был удален.
+    issue_certificate:
+      success_notification: Сертификат успешно выдан!
+    lock_topic:
+      success_notification: Эта тема была заблокирована. Новые ответы не принимаются.
+    reassign_reviewer:
+      submission_graded_error: Вы можете назначить себя только участникам, ожидающим рассмотрения.
+      submission_not_assigned_to_coach: Работа уже назначена вам.
+      success_notification: Работа была назначен вам.
+    revoke_issued_certificate:
+      success_notification: Сертификат отозван!
+    unarchive_course:
+      success_notification: Курс успешно разархивирован
+    unassign_reviewer:
+      submission_assigned_to_another_coach: Работа передана другому тренеру.
+      submission_graded_error: Эта работа уже была оценена.
+      submission_not_assigned: Работа еще не назначена тренерам.
+      success_notification: Вы больше не назначены для этой работы.
+    undo_grading:
+      must_be_graded: Не удалось найти оцененную работу с заданным идентификатором ID.
+      success_notification:
+        description: Отправка сейчас ожидает рассмотрения.
+        title: Оценки Удалены
+    unlock_topic:
+      success_notification: Эта тема разблокирована. Члены сообщества теперь могут снова публиковать ответы.
+    update_certificate:
+      success_notification: Данные сертификата обновлены.
+    update_course:
+      success_notification: Курс успешно обновлен!
+    update_target:
+      checklist_items_exceeded_error: Список должен содержать менее 15 пунктов.
+      evaluation_criteria_course_error: Критерии оценки должны быть из того же курса, что и задача
+      invalid_checklist_error: Список недействителен
+      multiple_method_of_completion: Более одного метода завершения
+      prerequisities_archived_error: Невозможно заархивировать предварительные требования
+      prerequisities_in_same_level: Предварительные цели должны быть того же уровня, что и цель.
+      success_notification: Задача обновлена успешна!
+      target_group_not_present_error: Группа задач не существуеш
+      target_missing_error: Задачи не существует
+  offline:
+    heading: Вы не в сети!
+    message: Похоже, возникла проблема с вашим подключением. <br/> Проверьте статус вашей сети.
+    title: Вы не в сети 
+  queries:
+    delete_certificate_mutator:
+      issued_error: Этот сертификат выдан одному или нескольким студентам - его нельзя удалить.
+    issue_certificate_mutator:
+      certificate_error: Указанный сертификат не найден.
+      issued_error: Этому студенту уже выдан сертификат о прохождении этого курса.
+  services:
+    team_up_service:
+      must_be_on_the_same_level: Для объединения в команду студенты должны принадлежать к одному уровню
+  sessions:
+    create:
+      invalid_credentials: Почта и пароль не совпадают. Пожалуйста, проверьте свои учетные данные и попробуйте еще раз.
+    email_sent:
+      image_alt: Электронное письмо придет на вашу почту
+      magic_link:
+        description: Ссылка придет вам на почту менее чем через минуту. Щелкните ссылку в письме, и вы войдете в систему.
+        heading: Мы отправили вам ссылку!
+        notice: Эта ссылка будет работать только один раз.
+        page_title: Ссылка уже в пути!
+      reset_password_link:
+        description: Он должен быть доставлен вам менее чем через минуту. Щелкните ссылку в письме, и вам будет предложено установить новый пароль.
+        heading: Мы отправили вам ссылку для сброса пароля!
+        notice: Эта ссылка будет работать только один раз.
+        page_title: Подтвердите ваш запрос
+    new:
+      continue_as_developer: Продолжить как Разработчик
+      continue_with_email_link: Продолжить через почту
+      continue_with_facebook: Продолжить с Facebook
+      continue_with_github: Продолжить с Github
+      continue_with_google: Продолжить с Google
+      heading: Войти в %{school_name}
+      page_title: Войти
+      sign_in_options_separator: ИЛИ
+    request_password_reset:
+      cancel_link: Войдите в систему с Google, Facebook или Github
+      email_label: Почта
+      email_placeholder: john@example.com
+      heading: Сброс пароля
+      image_alt: Студент держит гигантский ключ с символом сброса на нем
+      page_title: Сброс пароля
+      submit_button: Запросить сброс пароля
+      subtitle: Введите свой адрес электронной почты для восстановления пароля.
+  shared:
+    _no: "Нет"
+    _yes: "Да"
+    cancel: Отмена
+    close: Закрыть
+    done_exclamation: Выполнено!
+    file_invalid: Пожалуйста, выберите файл размером менее 5 МБ.
+    image_file_invalid: Выберите изображение (PNG, JPEG, GIF) размером менее 5 МБ и не более 4096 пикселей в ширину или в высоту.
+    invalid_authenticity_token_error: Неверный или отсутствующий токен CSRF. Пожалуйста, обновите эту страницу, прежде чем пытаться выполнить это действие.
+    level: Уровень
+    level_label:
+      long_with_name: "Уровень %{number}: %{name}"
+      long_without_name: Уровень %{number}
+      short_with_name: "У%{number}: %{name}"
+      short_without_name: У%{number}
+    optional: необязательно
+    privacy_policy: Политика конфиденциальности
+    save_changes: Сохранить изменения
+    saving: Сохраняем...
+    target: Задача
+    terms_and_conditions: Условия и Положения

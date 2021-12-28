@@ -781,6 +781,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
               <div className="flex pt-3 md:border-b border-gray-300">
                 <div
                   role="tablist"
+                  ariaLabel="Status tabs"
                   className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent ">
                   <div role="tab" ariaSelected={filter.tab === None} className="flex-1">
                     <Link

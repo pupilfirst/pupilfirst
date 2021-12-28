@@ -6,7 +6,7 @@ let str = React.string
 
 let levelInfo = (levelId, levels) =>
   <span
-    className="inline-flex flex-col items-center rounded bg-orange-100 border border-orange-300 px-2 pt-2 pb-1 border">
+    className="inline-flex flex-col items-center rounded bg-orange-100 border border-orange-300 px-2 pt-2 pb-1">
     <p className="text-xs font-semibold"> {"Level" |> str} </p>
     <p className="font-bold">
       {levels

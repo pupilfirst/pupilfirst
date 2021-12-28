@@ -32,10 +32,10 @@ type action =
   | UpdateSortDirection(sortDirection)
 
 let buttonClasses = selected =>
-  "w-1/2 md:w-auto py-2 px-3 md:px-6 font-semibold text-sm focus:outline-none " ++ (
+  "cursor-pointer flex flex-1 justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-200 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-200 focus:ring-indigo-500 md:focus:border-b-none md:focus:rounded-t-md " ++ (
     selected
-      ? "bg-primary-100 shadow-inner text-primary-500"
-      : "bg-white shadow-md hover:shadow hover:text-primary-500 hover:bg-gray-100"
+      ? "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500"
+      : ""
   )
 
 let reducer = (state, action) =>
@@ -133,16 +133,21 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
   <div className="bg-gray-100 pt-9 pb-8 px-3 -mt-7 border border-transparent shadow rounded-lg">
     <div className="bg-gray-100 static">
       <div className="max-w-3xl mx-auto">
-        <div className="flex flex-col md:flex-row items-end lg:items-center py-4">
+        <div className="flex pt-3 mb-4 md:border-b border-gray-300">
           <div
-            ariaLabel="status-tab"
-            className="course-report__category-tab w-full md:w-auto flex rounded-lg border border-gray-400">
+            role="tablist"
+            ariaLabel="Status tabs"
+            className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent">
             <button
+              role="tab"
+              ariaSelected={state.selectedTab == #Overview}
               className={buttonClasses(state.selectedTab == #Overview)}
               onClick={_ => send(SelectOverviewTab)}>
               {"Overview" |> str}
             </button>
             <button
+              role="tab"
+              ariaSelected={state.selectedTab == #Submissions}
               className={buttonClasses(state.selectedTab == #Submissions)}
               onClick={_ => send(SelectSubmissionsTab)}>
               {"Submissions" |> str}

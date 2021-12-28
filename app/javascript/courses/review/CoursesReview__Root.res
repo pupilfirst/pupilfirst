@@ -718,7 +718,7 @@ let loadFilters = (send, courseId, state) => {
 }
 
 let shortCutClasses = selected =>
-  "cursor-pointer flex justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-200 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-200 focus:ring-indigo-500 md:focus:border-b-none " ++ (
+  "cursor-pointer flex justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-200 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-200 focus:ring-indigo-500 md:focus:border-b-none md:focus:rounded-t-md " ++ (
     selected
       ? "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500"
       : ""
@@ -782,7 +782,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                 <div
                   role="tablist"
                   className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent ">
-                  <div role="tab" className="flex-1">
+                  <div role="tab" ariaSelected={filter.tab === None} className="flex-1">
                     <Link
                       href={"/courses/" ++
                       courseId ++
@@ -793,7 +793,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                       <p> {str("All")} </p>
                     </Link>
                   </div>
-                  <div role="tab" className="flex-1">
+                  <div role="tab" ariaSelected={filter.tab === Some(#Pending)} className="flex-1">
                     <Link
                       href={"/courses/" ++
                       courseId ++
@@ -808,7 +808,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                       <p> {str(tc("pending"))} </p>
                     </Link>
                   </div>
-                  <div role="tab" className="flex-1">
+                  <div role="tab"  ariaSelected={filter.tab === Some(#Reviewed)} className="flex-1">
                     <Link
                       href={"/courses/" ++
                       courseId ++

@@ -1,6 +1,7 @@
 class CoursesResolver < ApplicationQuery
   property :search
   property :status
+  property :courseId
 
   def courses
     if search.present?
@@ -41,6 +42,10 @@ class CoursesResolver < ApplicationQuery
   end
 
   def applicable_courses
+    if courseId.present?
+      current_school.courses.where(id: courseId)
+    else
     status.blank? ? current_school.courses : filter_by_status
+    end
   end
 end

@@ -13,8 +13,8 @@ let str = React.string
 type status = [#Active | #Ended | #Archived]
 
 module CoursesQuery = %graphql(`
-  query CoursesQuery($search: String, $after: String, $status: CourseStatus) {
-    courses(status: $status, search: $search, first: 10, after: $after){
+  query CoursesQuery($search: String, $after: String,$courseId: ID, $status: CourseStatus) {
+    courses(status: $status, search: $search, first: 10, courseId: $courseId, after: $after){
       nodes {
         ...Course.Fragments.AllFields
       }
@@ -180,8 +180,14 @@ let courseLinks = course => {
   ]
 }
 
-let loadCourses = (state, cursor, send) => {
-  CoursesQuery.make(~status=?state.filter.status, ~after=?cursor, ~search=?state.filter.name, ())
+let loadCourses = (courseId, state, cursor, send) => {
+  CoursesQuery.make(
+    ~status=?state.filter.status,
+    ~after=?cursor,
+    ~search=?state.filter.name,
+    ~courseId?,
+    (),
+  )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     let courses = Js.Array.map(
@@ -455,7 +461,10 @@ let make = (~selectedCourse) => {
   }
 
   React.useEffect2(() => {
-    loadCourses(state, None, send)
+    switch url.path {
+    | list{"school", "courses", courseId, ..._} => loadCourses(Some(courseId), state, None, send)
+    | _ => loadCourses(None, state, None, send)
+    }
     None
   }, (state.filter, state.relaodCourses))
 
@@ -541,7 +550,7 @@ let make = (~selectedCourse) => {
                   className="btn btn-primary-ghost cursor-pointer w-full"
                   onClick={_ => {
                     send(BeginLoadingMore)
-                    loadCourses(state, Some(cursor), send)
+                    loadCourses(None, state, Some(cursor), send)
                   }}>
                   {t("button_load_more")->str}
                 </button>

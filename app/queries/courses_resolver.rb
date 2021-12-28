@@ -42,10 +42,17 @@ class CoursesResolver < ApplicationQuery
   end
 
   def applicable_courses
+    courses_in_school = current_school.courses
+    by_status = if status.blank?
+        courses_in_school
+      else
+        filter_by_status
+      end
+
     if courseId.present?
-      current_school.courses.where(id: courseId)
+      current_school.courses.where(id: courseId).or(by_status)
     else
-    status.blank? ? current_school.courses : filter_by_status
+      status.blank? ? courses_in_school : filter_by_status
     end
   end
 end

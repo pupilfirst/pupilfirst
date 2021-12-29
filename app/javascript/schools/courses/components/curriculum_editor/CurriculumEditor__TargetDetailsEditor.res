@@ -572,10 +572,10 @@ let targetGroupEditor = (state, targetGroups, levels, send) =>
   </div>
 
 let methodOfCompletionButtonClasses = value => {
-  let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4"
+  let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4"
   value
     ? defaultClasses ++ " target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500"
-    : defaultClasses ++ " opacity-75 text-gray-900"
+    : defaultClasses ++ " border-gray-400 opacity-75 text-gray-900"
 }
 
 let methodOfCompletionSelection = polyMethodOfCompletion =>

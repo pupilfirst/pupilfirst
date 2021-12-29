@@ -36,8 +36,8 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
     className="courses-curriculum__target-container flex border-t bg-white hover:bg-gray-100">
     <Link
       href={"/targets/" ++ targetId}
-      className="p-6 flex flex-grow items-center justify-between hover:text-primary-500 cursor-pointer"
-      ariaLabel={"Select Target " ++ targetId}>
+      className="p-6 flex flex-grow items-center justify-between hover:text-primary-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 focus:text-primary-500 focus:bg-gray-100 focus:rounded-lg"
+      ariaLabel={"Select Target: " ++ (Target.title(target) ++ ", Status: " ++ TargetStatus.statusToString(targetStatus))}>
       <span className="font-semibold text-left leading-snug"> {Target.title(target)->str} </span>
       {ReactUtils.nullIf(
         <span className={targetStatusClasses(targetStatus)}>
@@ -49,8 +49,9 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
     {ReactUtils.nullUnless(
       <a
         title={t("edit_target_button_title", ~variables=[("title", Target.title(target))])}
+        ariaLabel={t("edit_target_button_title", ~variables=[("title", Target.title(target))])}
         href={"/school/courses/" ++ courseId ++ "/targets/" ++ targetId ++ "/content"}
-        className="hidden lg:block courses-curriculum__target-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:bg-gray-200">
+        className="hidden lg:block courses-curriculum__target-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:text-primary-500 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 focus:bg-gray-100 focus:text-primary-500 focus:rounded-lg">
         <i className="fas fa-pencil-alt" />
       </a>,
       author,
@@ -241,8 +242,9 @@ let navigationLink = (direction, level, setState) => {
     icon->Belt.Option.mapWithDefault(React.null, icon => <FaIcon classes={"fas " ++ icon} />)
 
   <button
+    ariaLabel={"Go to " ++ longText}
     onClick={_ => setState(state => {...state, selectedLevelId: level |> Level.id})}
-    className="block w-full focus:outline-none p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer">
+    className="block w-full focus:outline-none p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer hover:text-primary-500 focus:text-primary-500 focus:bg-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500">
     {arrow(leftIcon)}
     <span className="mx-2 hidden md:inline"> {longText |> str} </span>
     <span className="mx-2 inline md:hidden"> {shortText |> str} </span>
@@ -430,7 +432,7 @@ let make = (
   let targetGroupsInLevel =
     targetGroups |> Js.Array.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
 
-  <div className="bg-gray-100 pt-11 pb-8 -mt-7">
+  <div role="main" ariaLabel="Curriculum" className="bg-gray-100 pt-11 pb-8 -mt-7">
     {switch selectedTarget {
     | Some(target) =>
       let targetStatus =

@@ -1,6 +1,6 @@
 <%
   school_name = @school.name
-  login_url = enroll_applicants_url(@applicant.login_token)
+  login_url = enroll_applicants_url(@applicant.original_login_token)
   course_name = @applicant.course.name
 %>
 

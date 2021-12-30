@@ -14,9 +14,9 @@ describe MailLoginTokenService do
 
     describe '#execute' do
       it 'generates new login token for user' do
-        expect do
-          subject.execute
-        end.to(change { user.reload.login_token })
+        expect {user.original_login_token}.to raise_error(RuntimeError, "Original login token is unavailable")
+        subject.execute
+        expect(user.original_login_token).not_to eq nil
       end
 
       it 'emails login link to user' do
@@ -27,7 +27,7 @@ describe MailLoginTokenService do
         expect(current_email.subject).to eq("Log in to #{school.name}")
         expect(current_email.body).to include("http://#{domain.fqdn}/users/token?")
         expect(current_email.body).to include("referrer=#{CGI.escape(referrer)}")
-        expect(current_email.body).to include("token=#{user.reload.login_token}")
+        expect(current_email.body).to include("token=#{user.original_login_token}")
       end
     end
   end

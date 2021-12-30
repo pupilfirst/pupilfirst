@@ -29,6 +29,7 @@ type state = {
   additonalFeedbackEditorVisible: bool,
   feedbackGenerated: bool,
   nextSubmission: nextSubmission,
+  reloadSubmissionReport: bool,
 }
 
 type statusColors =
@@ -131,6 +132,15 @@ module UnassignReviewerMutation = %graphql(`
     mutation UnassignReviewerMutation($submissionId: ID!) {
       unassignReviewer(submissionId: $submissionId){
         success
+      }
+    }
+  `)
+
+module SubmissionReportQuery = %graphql(`
+    query SubmissionReportQuery($id: ID!) {
+      submissionReport(id: $id) {
+        status
+        description
       }
     }
   `)
@@ -1034,6 +1044,34 @@ let reportStatusIconClasses = status => {
   }
 }
 
+let loadSubmissionReport = (report, updateSubmissionReportCB) => {
+  let id = SubmissionReport.id(report)
+  SubmissionReportQuery.make(~id, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    let reportData = response["submissionReport"]
+    let updatedReport = SubmissionReport.make(
+      ~id,
+      ~description=reportData["description"],
+      ~status=reportData["status"],
+    )
+
+    updateSubmissionReportCB(Some(updatedReport))
+
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let reloadSubmissionReport = (report, updateSubmissionReportCB) => {
+  switch SubmissionReport.status(report) {
+  | #pending => loadSubmissionReport(report, updateSubmissionReportCB)
+  | #success
+  | #failure
+  | #error => ()
+  }
+}
+
 @react.component
 let make = (
   ~overlaySubmission,
@@ -1049,6 +1087,8 @@ let make = (
   ~submissionDetails,
   ~submissionId,
   ~updateReviewerCB,
+  ~submissionReport,
+  ~updateSubmissionReportCB,
 ) => {
   let (state, send) = React.useReducer(
     reducer,
@@ -1070,6 +1110,7 @@ let make = (
       additonalFeedbackEditorVisible: false,
       feedbackGenerated: false,
       nextSubmission: DataUnloaded,
+      reloadSubmissionReport: false,
     },
   )
 
@@ -1090,6 +1131,19 @@ let make = (
   let findEditor = (pending, overlaySubmission) => {
     pending ? GradesEditor : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
   }
+
+  React.useEffect0(() => {
+    switch submissionReport {
+    | Some(report) => {
+        let intervalId = Js.Global.setInterval(
+          () => reloadSubmissionReport(report, updateSubmissionReportCB),
+          30000,
+        )
+        Some(() => Js.Global.clearInterval(intervalId))
+      }
+    | None => None
+    }
+  })
 
   let url = RescriptReactRouter.useUrl()
   let filter = Filter.makeFromQueryParams(url.search)
@@ -1147,7 +1201,10 @@ let make = (
               <div className="text-sm"> {showSubmissionStatus(status)} </div>
             </div>
           </div>
-          {switch SubmissionDetails.submissionReport(submissionDetails) {
+          <div className="p-4 md:p-6">
+            <SubmissionChecklistShow checklist=state.checklist updateChecklistCB pending />
+          </div>
+          {switch submissionReport {
           | Some(report) =>
             <div className="p-4 md:p-6 space-y-8">
               <div className="bg-gray-300 p-4 rounded-md">
@@ -1180,7 +1237,6 @@ let make = (
                     </div>
                   : React.null}
               </div>
-              <SubmissionChecklistShow checklist=state.checklist updateChecklistCB pending />
             </div>
           | None => React.null
           }}

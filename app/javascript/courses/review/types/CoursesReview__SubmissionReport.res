@@ -16,6 +16,14 @@ let makeFromJS = object => {
   }
 }
 
+let make = (~id, ~status, ~description) => {
+  id: id,
+  status: status,
+  description: description,
+}
+
+let id = t => t.id
+
 let status = t => t.status
 
 let description = t => t.description

@@ -150,3 +150,8 @@ let updateReviewer = (user, t) => {
   ...t,
   reviewer: Belt.Option.map(user, Reviewer.setReviewer),
 }
+
+let updateSubmissionReport = (report, t) => {
+  ...t,
+  submissionReport: report,
+}

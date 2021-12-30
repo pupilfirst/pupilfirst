@@ -97,6 +97,12 @@ let updateReviewer = (submissionDetails, setState, reviewer) => {
   setState(_ => Loaded(SubmissionDetails.updateReviewer(reviewer, submissionDetails)))
 }
 
+let updateSubmissionReport = (submissionDetails, setState, submissionReport) => {
+  setState(_ => Loaded(
+    SubmissionDetails.updateSubmissionReport(submissionReport, submissionDetails),
+  ))
+}
+
 @react.component
 let make = (~submissionId, ~currentUser) => {
   let (state, setState) = React.useState(() => Loading)
@@ -116,6 +122,7 @@ let make = (~submissionId, ~currentUser) => {
         reviewChecklist={SubmissionDetails.reviewChecklist(submissionDetails)}
         updateSubmissionCB={updateSubmission(setState, submissionDetails)}
         updateReviewChecklistCB={updateReviewChecklist(submissionDetails, setState)}
+        submissionReport={SubmissionDetails.submissionReport(submissionDetails)}
         targetId={SubmissionDetails.targetId(submissionDetails)}
         number={currentSubmissionIndex(
           submissionId,
@@ -125,6 +132,7 @@ let make = (~submissionId, ~currentUser) => {
         submissionDetails
         submissionId
         updateReviewerCB={updateReviewer(submissionDetails, setState)}
+        updateSubmissionReportCB={updateSubmissionReport(submissionDetails, setState)}
       />
 
     | Loading =>

@@ -121,6 +121,19 @@ let modeIcon = (desiredMode, currentMode) => {
   <FaIcon classes={"fa-fw " ++ icon} />
 }
 
+let modeLabel = (desiredMode, currentMode) => {
+  let label = switch (desiredMode, currentMode) {
+  | (#Preview, Windowed(#Editor) | Fullscreen(#Editor) | Fullscreen(#Split)) => "Preview"
+  | (#Preview, Windowed(#Preview) | Fullscreen(#Preview)) => "Edit"
+  | (#Split, Windowed(_) | Fullscreen(#Editor) | Fullscreen(#Preview)) => "View editor and preview in split view"
+  | (#Split, Fullscreen(#Split)) => "Close split view"
+  | (#Fullscreen, Windowed(_)) => "Full screen"
+  | (#Fullscreen, Fullscreen(_)) => "Exit full screen"
+  }
+
+  label
+}
+
 let onClickFullscreen = (state, send, _event) => {
   switch state.mode {
   | Windowed(_) => TextareaAutosize.destroy(state.id)
@@ -269,7 +282,7 @@ let controlsContainerClasses = mode =>
   }
 
 let controls = (disabled, value, state, send, onChange) => {
-  let buttonClasses = "px-2 py-1 hover:bg-gray-300 hover:text-primary-500 focus:outline-none "
+  let buttonClasses = "px-2 py-1 hover:bg-gray-300 hover:text-primary-500 focus:outline-none focus:bg-gray-300 focus:text-primary-500 "
   let {mode} = state
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange)
 
@@ -280,18 +293,27 @@ let controls = (disabled, value, state, send, onChange) => {
       <div />
     | Windowed(#Editor)
     | Fullscreen(#Editor | #Split) =>
-      <div className="bg-white border border-gray-400 rounded-t border-b-0">
-        <button disabled className=buttonClasses onClick={_ => curriedModifyPhrase(Bold)}>
+      <div role="toolbar" className="bg-white border border-gray-400 rounded-t border-b-0">
+        <button
+          disabled
+          ariaLabel="Bold"
+          title="Bold"
+          className=buttonClasses
+          onClick={_ => curriedModifyPhrase(Bold)}>
           <i className="fas fa-bold fa-fw" />
         </button>
         <button
           disabled
+          ariaLabel="Italic"
+          title="Italic"
           className={buttonClasses ++ "border-l border-gray-400"}
           onClick={_ => curriedModifyPhrase(Italic)}>
           <i className="fas fa-italic fa-fw" />
         </button>
         <button
           disabled
+          ariaLabel="Strikethrough"
+          title="Strikethrough"
           className={buttonClasses ++ "border-l border-gray-400"}
           onClick={_ => curriedModifyPhrase(Strikethrough)}>
           <i className="fas fa-strikethrough fa-fw" />
@@ -300,23 +322,30 @@ let controls = (disabled, value, state, send, onChange) => {
     }}
     <div className="py-1">
       <button
-        disabled className={"rounded " ++ buttonClasses} onClick={onClickPreview(state, send)}>
+        ariaLabel={modeLabel(#Preview, mode)}
+        title={modeLabel(#Preview, mode)}
+        disabled
+        className={"rounded " ++ buttonClasses} onClick={onClickPreview(state, send)}>
         {modeIcon(#Preview, mode)}
       </button>
       <button
+        ariaLabel={modeLabel(#Split, mode)}
+        title={modeLabel(#Split, mode)}
         disabled
         className={buttonClasses ++ "rounded ml-1 hidden md:inline"}
         onClick={onClickSplit(state, send)}>
         {modeIcon(#Split, mode)}
       </button>
       <button
+        ariaLabel={modeLabel(#Fullscreen, mode)}
+        title={modeLabel(#Fullscreen, mode)}
         disabled
         className={buttonClasses ++ "rounded  ml-1 hidden md:inline"}
         onClick={onClickFullscreen(state, send)}>
         {modeIcon(#Fullscreen, mode)}
         {switch mode {
         | Fullscreen(_) =>
-          <span className="ml-2 text-xs font-semibold"> {"Exit full-screen" |> str} </span>
+          <span ariaHidden=true className="ml-2 text-xs font-semibold"> {"Exit full screen" |> str} </span>
         | Windowed(_) => React.null
         }}
       </button>
@@ -464,13 +493,13 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
   | Fullscreen(#Editor | #Split) =>
     <div className={footerContainerClasses(state.mode)}>
       {<form
-        className={`flex items-center flex-wrap flex-1 text-sm font-semibold ${disabled
+        className={`relative flex items-center flex-wrap flex-1 text-sm font-semibold ${disabled
           ? ""
-          : "hover:bg-gray-300 hover:text-primary-500"}`}
+          : "hover:bg-gray-300 hover:text-primary-500 focus-within:outline-none focus-within:bg-gray-300 focus-within:text-primary-500"}`}
         id=fileFormId>
         <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
         <input
-          className="hidden"
+          className="absolute w-0 h-0"
           type_="file"
           name="markdown_attachment[file]"
           id=fileInputId
@@ -481,7 +510,7 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
         {switch state.uploadState {
         | ReadyToUpload(error) =>
           <label
-            className={`text-xs px-3 py-2 flex-grow ${disabled ? "cursor-not-allowed" : ""}`}
+            className={`text-xs px-3 py-2 flex-grow ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
             htmlFor=fileInputId>
             {switch error {
             | Some(error) =>
@@ -502,9 +531,10 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
         }}
       </form>->ReactUtils.nullUnless(fileUpload)}
       <a
+        ariaLabel="Need help with Markdown?"
         href="/help/markdown_editor"
         target="_blank"
-        className="flex items-center px-3 py-2 hover:bg-gray-300 hover:text-secondary-500 cursor-pointer">
+        className="flex items-center px-3 py-2 hover:bg-gray-300 hover:text-secondary-500 focus:outline-none focus:bg-gray-300 focus:text-secondary-500 cursor-pointer">
         <i className="fab fa-markdown text-sm" />
         <span className="text-xs ml-1 font-semibold hidden sm:inline"> {"Need help?" |> str} </span>
       </a>
@@ -513,10 +543,10 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
 }
 
 let textareaClasses = mode =>
-  "w-full outline-none font-mono " ++
+  "editor w-full outline-none font-mono " ++
   switch mode {
   | Windowed(_) => "p-3"
-  | Fullscreen(_) => "px-3 pt-4 pb-8 h-full resize-none"
+  | Fullscreen(_) => "editor--full-screen px-3 pt-4 pb-8 h-full resize-none"
   }
 
 let onChangeWrapper = (onChange, event) => {

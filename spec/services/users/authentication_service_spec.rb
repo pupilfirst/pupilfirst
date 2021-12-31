@@ -32,6 +32,14 @@ describe Users::AuthenticationService do
         expect { subject.authenticate }.to(change { user.reload.login_token_digest }.from(login_token_digest).to(nil))
       end
 
+      context 'when user has no login email sent time' do
+        let!(:user) { create :user, login_token_digest: login_token_digest }
+
+        it 'returns nil' do
+          expect(subject.authenticate).to eq(user)
+        end
+      end
+
       context 'when a different school is supplied' do
         subject { described_class.new(another_school, supplied_token) }
 

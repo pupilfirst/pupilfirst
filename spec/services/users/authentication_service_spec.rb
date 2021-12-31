@@ -35,7 +35,7 @@ describe Users::AuthenticationService do
       context 'when user has no login email sent time' do
         let!(:user) { create :user, login_token_digest: login_token_digest }
 
-        it 'returns nil' do
+        it 'returns the user' do
           expect(subject.authenticate).to eq(user)
         end
       end

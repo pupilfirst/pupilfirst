@@ -50,7 +50,7 @@
         <% @presenter.course_details.each_with_index do |course, index| %>
           <div data-t="<%= course[:name] %> details" class="w-1/2 mb-4">
             <a
-              class="block border rounded-lg bg-white shadow h-full cursor-pointer hover:border-primary-500 text-black"
+              class="block border rounded-lg bg-white shadow h-full cursor-pointer hover:border-primary-500 text-black focus:outline-none focus:border-primary-500"
               href="<%= school_course_students_path(course[:id]) %>"
             >
               <div class="flex items-end justify-between border-b p-4 pt-6">

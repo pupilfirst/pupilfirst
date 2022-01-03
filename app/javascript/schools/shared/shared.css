@@ -130,9 +130,7 @@
   right: 0px;
   top: 0px;
   z-index: 500;
-  animation-name: blanket-animation;
-  animation-duration: 0.15s;
-  animation-fill-mode: forwards;
+  animation-name: blanket-animation 0.4s cubic-bezier(.63,.34,0,1) normal;
 }
 
 @keyframes blanket-animation {
@@ -141,6 +139,12 @@
   }
   to {
     background: rgba(9, 30, 66, 0.54);
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    right: -9999px;
   }
 }
 
@@ -153,6 +157,7 @@
   top: 0px;
   width: 100%;
   z-index: 501;
+  animation: slideIn 0.3s cubic-bezier(.63,.34,0,1) 0s 1 normal;
 }
 
 /* Community */
@@ -278,7 +283,8 @@
   background-color: #e6f1ff;
 }
 
-.file-input-label:hover {
+.file-input-label:hover,
+.file-input-label:focus {
   @apply bg-gray-400;
 }
 
@@ -287,7 +293,7 @@
 }
 
 .toggle-button__button {
-  @apply w-1/2 text-sm font-semibold py-1 px-6 text-gray-700 border border-gray-400;
+  @apply w-1/2 text-sm font-semibold py-1 px-6 text-gray-700 border border-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500;
   transition: 0.3s cubic-bezier(0, 0, 0, 1);
 }
 
@@ -308,7 +314,7 @@
 }
 
 .toggle-button__button:focus {
-  @apply outline-none text-gray-900 ring;
+  @apply outline-none text-gray-900;
 }
 
 .toggle-button__button--active {

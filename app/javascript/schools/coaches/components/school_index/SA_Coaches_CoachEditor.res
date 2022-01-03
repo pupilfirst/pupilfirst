@@ -246,9 +246,10 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
     <div className="drawer-right">
       <div className="drawer-right__close absolute">
         <button
+          ariaLabel="close"
           title="close"
           onClick={_e => closeFormCB()}
-          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
+          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none focus:text-primary-500 mt-4">
           <i className="fas fa-times text-xl" />
         </button>
       </div>
@@ -381,26 +382,28 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     </label>
                     <div
                       id="notification"
-                      className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
-                      <button
-                        type_="submit"
-                        onClick={_event => {
-                          ReactEvent.Mouse.preventDefault(_event)
-                          send(UpdatePublic(true))
-                        }}
-                        name="faculty[public]"
-                        value="true"
-                        className={booleanButtonClasses(state.public)}>
-                        {"Yes" |> str}
-                      </button>
-                      <button
-                        onClick={_event => {
-                          ReactEvent.Mouse.preventDefault(_event)
-                          send(UpdatePublic(false))
-                        }}
-                        className={booleanButtonClasses(!state.public)}>
-                        {"No" |> str}
-                      </button>
+                      className="flex flex-shrink-0 overflow-hidden ">
+                      <div>
+                        <button
+                          type_="submit"
+                          onClick={_event => {
+                            ReactEvent.Mouse.preventDefault(_event)
+                            send(UpdatePublic(true))
+                          }}
+                          name="faculty[public]"
+                          value="true"
+                          className={booleanButtonClasses(state.public)}>
+                          {"Yes" |> str}
+                        </button>
+                        <button
+                          onClick={_event => {
+                            ReactEvent.Mouse.preventDefault(_event)
+                            send(UpdatePublic(false))
+                          }}
+                          className={booleanButtonClasses(!state.public)}>
+                          {"No" |> str}
+                        </button>
+                      </div>
                       <input
                         type_="hidden" name="faculty[public]" value={state.public |> string_of_bool}
                       />
@@ -412,21 +415,23 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     className="block tracking-wide text-xs font-semibold" htmlFor="avatarUploader">
                     {"Avatar" |> str}
                   </label>
-                  <input
-                    disabled=state.saving
-                    className="hidden"
-                    name="faculty[image]"
-                    type_="file"
-                    id="sa-coach-editor__file-input"
-                    required=false
-                    multiple=false
-                    onChange={event =>
-                      send(UpdateImageFileName(ReactEvent.Form.target(event)["files"][0]["name"]))}
-                  />
-                  <label className="file-input-label mt-2" htmlFor="sa-coach-editor__file-input">
-                    <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
-                    <span className="truncate"> {avatarUploaderText() |> str} </span>
-                  </label>
+                  <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+                    <input
+                      disabled=state.saving
+                      className="absolute w-0 h-0"
+                      name="faculty[image]"
+                      type_="file"
+                      id="sa-coach-editor__file-input"
+                      required=false
+                      multiple=false
+                      onChange={event =>
+                        send(UpdateImageFileName(ReactEvent.Form.target(event)["files"][0]["name"]))}
+                    />
+                    <label className="file-input-label mt-2" htmlFor="sa-coach-editor__file-input">
+                      <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+                      <span className="truncate"> {avatarUploaderText() |> str} </span>
+                    </label>
+                  </div>
                 </div>
               </div>
               <div className="p-6 bg-gray-200">
@@ -442,24 +447,26 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                         </label>
                         <div
                           id="exited"
-                          className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
-                          <button
-                            onClick={_event => {
-                              ReactEvent.Mouse.preventDefault(_event)
-                              send(UpdateExited(true))
-                            }}
-                            name="faculty[exited]"
-                            className={booleanButtonClasses(state.exited)}>
-                            {"Yes" |> str}
-                          </button>
-                          <button
-                            onClick={_event => {
-                              ReactEvent.Mouse.preventDefault(_event)
-                              send(UpdateExited(false))
-                            }}
-                            className={booleanButtonClasses(!state.exited)}>
-                            {"No" |> str}
-                          </button>
+                          className="flex flex-shrink-0 overflow-hidden">
+                          <div>
+                            <button
+                              onClick={_event => {
+                                ReactEvent.Mouse.preventDefault(_event)
+                                send(UpdateExited(true))
+                              }}
+                              name="faculty[exited]"
+                              className={booleanButtonClasses(state.exited)}>
+                              {"Yes" |> str}
+                            </button>
+                            <button
+                              onClick={_event => {
+                                ReactEvent.Mouse.preventDefault(_event)
+                                send(UpdateExited(false))
+                              }}
+                              className={booleanButtonClasses(!state.exited)}>
+                              {"No" |> str}
+                            </button>
+                          </div>
                           <input
                             type_="hidden"
                             name="faculty[exited]"

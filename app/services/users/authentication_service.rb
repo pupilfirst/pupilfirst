@@ -11,7 +11,7 @@ module Users
     def authenticate
       if @token.present? && valid_request?
         # Clear the token from user.
-        user.update!(login_token_digest: nil)
+        user.update!(login_token_digest: nil, login_mail_sent_at: nil)
         user
       end
     end

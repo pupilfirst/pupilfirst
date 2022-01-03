@@ -4,7 +4,9 @@ Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
-  config.secret_key = 'fb57cf065698c76155e7ec9936691d9cb9deb6c676ad55e0167397c3edfbabf3cf5882553a6dfb37ab2727c2d8c1cc880da91747fd5a4940fad29942f8799427'
+  # Devise will use the `secret_key_base` as its `secret_key`
+  # by default. You can change it below and use your own secret key.
+  # config.secret_key = '5f9b34a05ad884865f13bcef9a963cfcb9b83913426ca7a1d0d4d1ec43b5c799cab4738c1fc820b3cc087711a1c69928531208430dfa22d7d6979b6aa2a6c8d5'
 
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and

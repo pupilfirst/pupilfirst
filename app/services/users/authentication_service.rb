@@ -28,7 +28,7 @@ module Users
 
       return true if user.login_mail_sent_at.blank?
 
-      time_since_last_mail = ((Time.zone.now - user.login_mail_sent_at)/60.0).to_i
+      time_since_last_mail = (Time.zone.now - user.login_mail_sent_at).to_i
       time_since_last_mail < Rails.application.secrets.login_token_time_limit
     end
   end

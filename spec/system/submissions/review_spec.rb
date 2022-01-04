@@ -1405,5 +1405,46 @@ feature 'Submission review overlay', js: true do
       expect(page).to_not have_text(team_1.name)
       expect(page).to_not have_text(team_2.name)
     end
+
+    context 'when a submission report exists for a submission' do
+      let(:student) { team.founders.first }
+      let!(:submission_with_report) do
+        create(
+          :timeline_event,
+          :with_owners,
+          owners: [student],
+          latest: true,
+          target: target
+        )
+      end
+      let!(:submission_report) do
+        create :submission_report, :pending, submission: submission_with_report
+      end
+
+      scenario 'indicates the status of the automated test in submission review page' do
+        sign_in_user team_coach.user,
+                     referrer:
+                       review_timeline_event_path(submission_with_report)
+        expect(page).to have_text('Automated tests in progress')
+        expect(page).to_not have_text(submission_report.description)
+        click_button 'Show Test Report'
+        expect(page).to have_text(submission_report.description)
+      end
+
+      scenario 'status of the report is checked every 30 seconds without page reload if pending' do
+        sign_in_user team_coach.user,
+                     referrer:
+                       review_timeline_event_path(submission_with_report)
+        expect(page).to have_text('Automated tests in progress')
+        submission_report.update!(
+          status: 'success',
+          description: 'A new report description'
+        )
+        sleep 30
+        expect(page).to have_text('All automated tests have passed')
+        click_button 'Show Test Report'
+        expect(page).to have_text('A new report description')
+      end
+    end
   end
 end

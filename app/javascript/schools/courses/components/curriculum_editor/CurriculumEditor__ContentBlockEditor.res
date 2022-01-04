@@ -90,14 +90,16 @@ module UpdateImageBlockMutation = %graphql(
 
 let controlIcon = (~icon, ~title, ~color, ~handler) => {
   let buttonClasses = switch color {
-  | #Grey => "hover:bg-gray-200"
-  | #Green => "bg-green-600 hover:bg-green-700 text-white rounded-b"
+  | #Grey => "hover:bg-gray-200 hover:text-primary-500 focus:bg-gray-200 focus:text-primary-500"
+  | #Green => "bg-green-600 hover:bg-green-700 focus:bg-green-700 text-white rounded-b"
+  | #Red => "hover:text-red-500 focus:text-red-500"
   }
 
   handler == None
     ? React.null
     : <button
         title
+        ariaLabel={title}
         disabled={handler == None}
         className={"p-2 focus:outline-none " ++ buttonClasses}
         onClick=?handler>
@@ -278,7 +280,7 @@ let make = (
         {controlIcon(
           ~icon="fa-trash-alt",
           ~title="Delete",
-          ~color=#Grey,
+          ~color=#Red,
           ~handler=removeContentBlockCB |> OptionUtils.map(cb => onDelete(contentBlock, cb, send)),
         )}
         {controlIcon(

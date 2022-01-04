@@ -45,7 +45,7 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   }
   let selected =
     <button
-      className={"border focus:outline-none appearance-none flex items-center rounded " ++
+      className={"border focus:outline-none appearance-none flex items-center rounded focus:ring focus:ring-indigo-500 " ++
       buttonColorClasses(selectedButtonColor)}>
       <div className="flex">
         <span
@@ -121,7 +121,9 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
                 value=choice
               />
               <button
+                className="flex items-center hover:text-red-500 focus:text-red-500"
                 title={"Remove Choice " ++ (index + 1 |> string_of_int)}
+                ariaLabel={"Remove Choice " ++ (index + 1 |> string_of_int)}
                 onClick={_ => removeMultichoiceOption(index, checklistItem, updateChecklistItemCB)}>
                 {showRemoveIcon ? <PfIcon className="if i-times-regular if-fw" /> : React.null}
               </button>

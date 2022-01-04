@@ -57,7 +57,8 @@ let moveDown = (index, highlights, updateHighlightsCB) => {
 let selected = (highlight: Course.Highlight.t) => {
   <button
     title={t("selected_button.title")}
-    className="flex items-center justify-center cursor-pointer bg-white border border-gray-400 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400">
+    ariaLabel={t("selected_button.title")}
+    className="flex items-center justify-center cursor-pointer bg-white border border-gray-400 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
     <PfIcon className={"text-lg if i-" ++ highlight.icon} />
   </button>
 }
@@ -68,9 +69,10 @@ let contents = (replaceCB, highlight) => {
       <button
         key=icon
         title={"Select " ++ icon}
-        className="flex items-center justify-center p-3 w-full h-full"
+        ariaLabel={"Select " ++ icon}
+        className="flex items-center justify-center p-3 w-full h-full text-gray-900 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:bg-gray-100"
         onClick={_ => updateIcon(replaceCB, highlight, icon)}>
-        <PfIcon className={" text-gray-900 text-lg if i-" ++ icon} />
+        <PfIcon className={"text-lg if i-" ++ icon} />
       </button>,
     icons,
   )
@@ -95,6 +97,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
                 id={"highlight-" ++ string_of_int(index) ++ "-title"}
                 type_="text"
                 placeholder={t("title.placeholder")}
+                ariaLabel={t("title.placeholder")}
                 maxLength=150
                 value={highlight.title}
                 onChange={event =>
@@ -105,6 +108,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
                 id={"highlight-" ++ string_of_int(index) ++ "-description"}
                 type_="text"
                 placeholder={t("description.placeholder")}
+                ariaLabel={t("description.placeholder")}
                 maxLength=250
                 value={highlight.description}
                 onChange={event =>
@@ -117,8 +121,9 @@ let make = (~highlights, ~updateHighlightsCB) => {
             {ReactUtils.nullIf(
               <button
                 title="Move up"
+                ariaLabel="Move up"
                 onClick={_ => moveUp(index, highlights, updateHighlightsCB)}
-                className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
+                className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden cursor-pointer">
                 <FaIcon classes={"fas fa-arrow-up"} />
               </button>,
               index == 0,
@@ -126,8 +131,9 @@ let make = (~highlights, ~updateHighlightsCB) => {
             {ReactUtils.nullIf(
               <button
                 title="Move Down"
+                ariaLabel="Move Down"
                 onClick={_ => moveDown(index, highlights, updateHighlightsCB)}
-                className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
+                className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden cursor-pointer">
                 <FaIcon classes={"fas fa-arrow-down"} />
               </button>,
               index == Js.Array.length(highlights) - 1,
@@ -135,7 +141,8 @@ let make = (~highlights, ~updateHighlightsCB) => {
             <button
               onClick={_ => removeHighlight(index, highlights, updateHighlightsCB)}
               title="Delete highlight"
-              className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
+              ariaLabel="Delete highlight"
+              className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-red-500 focus:bg-gray-300 focus:text-red-500 overflow-hidden cursor-pointer">
               <FaIcon classes={"fas fa-trash-alt"} />
             </button>
           </div>

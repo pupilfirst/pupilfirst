@@ -343,7 +343,7 @@ let booleanButtonClasses = bool => {
 }
 
 let targetRoleClasses = selected =>
-  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-left " ++ (
+  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-left focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 " ++ (
     selected
       ? "target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500"
       : "border-gray-400 hover:bg-gray-200 bg-white"
@@ -572,7 +572,7 @@ let targetGroupEditor = (state, targetGroups, levels, send) =>
   </div>
 
 let methodOfCompletionButtonClasses = value => {
-  let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4"
+  let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border hover:bg-gray-200 text-sm font-semibold focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 rounded p-4"
   value
     ? defaultClasses ++ " target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500"
     : defaultClasses ++ " border-gray-400 opacity-75 text-gray-900"
@@ -956,7 +956,7 @@ let make = (
                         </div>
                       : React.null}
                     <button
-                      className="flex justify-center items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 focus:outline-none hover:shadow-lg"
+                      className="flex justify-center items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       disabled={state.checklist |> Js.Array.length >= 15}
                       onClick={_ => send(AddNewChecklistItem)}>
                       <PfIcon className="fas fa-plus-circle text-lg" />

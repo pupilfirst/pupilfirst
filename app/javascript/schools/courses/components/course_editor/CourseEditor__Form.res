@@ -480,7 +480,7 @@ let handleSelectProgressionLimit = (send, event) => {
 let progressionBehaviorButtonClasses = (state, progressionBehavior, additionalClasses) => {
   let selected = state.progressionBehavior == progressionBehavior
   let defaultClasses =
-    additionalClasses ++ " w-1/3 relative border font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-center bg-gray-200 hover:bg-gray-300"
+    additionalClasses ++ " w-1/3 relative border font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-center bg-gray-200 hover:bg-gray-300 focus:bg-gray-300 focus:ring-2 focus:ring-indigo-500 "
   defaultClasses ++ (selected ? " text-primary-500 border-primary-500" : "")
 }
 

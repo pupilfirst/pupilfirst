@@ -19,7 +19,7 @@ let confirmDirtyAction = (dirty, action) =>
   }
 
 let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
-  let defaultClasses = "curriculum-editor__target-drawer-tab cursor-pointer"
+  let defaultClasses = "curriculum-editor__target-drawer-tab cursor-pointer  focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
 
   let (title, pathSuffix, iconClass) = switch page {
   | Content => ("Content", "content", "fa-pen-nib")

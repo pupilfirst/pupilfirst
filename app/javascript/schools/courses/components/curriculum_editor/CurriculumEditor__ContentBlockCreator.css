@@ -42,7 +42,8 @@
   .content-block-creator__top-button-container {
     opacity: 0;
   }
-  .content-block-creator:hover .content-block-creator__top-button-container {
+  .content-block-creator:hover .content-block-creator__top-button-container,
+  .content-block-creator:focus-within .content-block-creator__top-button-container {
     transition: opacity 0.25s;
     opacity: 1;
   }

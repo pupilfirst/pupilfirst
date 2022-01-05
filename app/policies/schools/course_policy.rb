@@ -41,7 +41,10 @@ module Schools
 
     alias evaluation_criteria? curriculum?
 
-    class Scope < ::CoursePolicy::Scope
+    class Scope < Scope
+      def resolve
+        current_school.courses
+      end
     end
   end
 end

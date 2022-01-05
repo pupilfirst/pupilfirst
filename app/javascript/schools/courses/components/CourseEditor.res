@@ -14,7 +14,7 @@ type status = [#Active | #Ended | #Archived]
 
 module CoursesQuery = %graphql(`
   query CoursesQuery($search: String, $after: String,$courseId: ID, $status: CourseStatus) {
-    courses(status: $status, search: $search, first: 10, courseId: $courseId, after: $after){
+    courses(status: $status, search: $search, first: 10, after: $after){
       nodes {
         ...Course.Fragments.AllFields
       }
@@ -22,6 +22,9 @@ module CoursesQuery = %graphql(`
         endCursor,hasNextPage
       }
       totalCount
+    }
+    courseInfo(courseId: $courseId){
+        ...Course.Fragments.AllFields
     }
   }
   `)
@@ -48,6 +51,7 @@ type state = {
   filter: filter,
   totalEntriesCount: int,
   relaodCourses: bool,
+  singleCourse: option<Course.t>,
 }
 
 type action =
@@ -63,9 +67,14 @@ type action =
   | ClearArchivedFilter
   | UpdateCourse(Course.t)
   | LoadCourses(option<string>, bool, array<Course.t>, int)
+  | UpdateSingleCourse(option<Course.t>)
 
 let reducer = (state, action) =>
   switch action {
+  | UpdateSingleCourse(singleCourse) => {
+      ...state,
+      singleCourse: singleCourse,
+    }
   | SetSearchString(string) => {
       ...state,
       filter: {
@@ -194,6 +203,11 @@ let loadCourses = (courseId, state, cursor, send) => {
       rawCourse => Course.makeFromJs(rawCourse),
       response["courses"]["nodes"],
     )
+    let course = response["courseInfo"]
+    switch course {
+    | None => send(UpdateSingleCourse(None))
+    | Some(course) => send(UpdateSingleCourse(Some(course->Course.makeFromJs)))
+    }
     send(
       LoadCourses(
         response["courses"]["pageInfo"]["endCursor"],
@@ -446,6 +460,7 @@ let make = (~selectedCourse) => {
         status: Some(#Active),
       },
       relaodCourses: false,
+      singleCourse: None,
     },
   )
 
@@ -473,18 +488,23 @@ let make = (~selectedCourse) => {
     | (Unloaded, _)
     | (_, Hidden) => React.null
     | (_, ShowForm(id)) => {
-        let course = Belt.Option.flatMap(id, id => {
-          Some(
-            ArrayUtils.unsafeFind(
-              c => Course.id(c) == id,
-              "Unable to find course with ID: " ++ id ++ " in Courses Index",
-              Js.Array.concat(
-                Belt.Option.mapWithDefault(selectedCourse, [], s => [s]),
-                Pagination.toArray(state.courses),
+        let course = switch state.singleCourse {
+        | Some(c) if Some(c.id) == id => Some(c)
+        | _ =>
+          Belt.Option.flatMap(id, id => {
+            Some(
+              ArrayUtils.unsafeFind(
+                c => Course.id(c) == id,
+                "Unable to find course with ID: " ++ id ++ " in Courses Index",
+                Js.Array.concat(
+                  Belt.Option.mapWithDefault(selectedCourse, [], s => [s]),
+                  Pagination.toArray(state.courses),
+                ),
               ),
-            ),
-          )
-        })
+            )
+          })
+        }
+
         <SchoolAdmin__EditorDrawer2
           closeDrawerCB={_ => RescriptReactRouter.push("/school/courses/")}>
           <CourseEditor__Form

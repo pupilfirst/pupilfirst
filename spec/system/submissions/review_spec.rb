@@ -1429,6 +1429,18 @@ feature 'Submission review overlay', js: true do
         expect(page).to_not have_text(submission_report.description)
         click_button 'Show Test Report'
         expect(page).to have_text(submission_report.description)
+
+        submission_report.update!(status: 'success')
+        refresh
+        expect(page).to have_text('All automated tests have passed')
+
+        submission_report.update!(status: 'failure')
+        refresh
+        expect(page).to have_text('Some of the tests failed')
+
+        submission_report.update!(status: 'error')
+        refresh
+        expect(page).to have_text('Tests could not be completed successfully')
       end
 
       scenario 'status of the report is checked every 30 seconds without page reload if pending' do

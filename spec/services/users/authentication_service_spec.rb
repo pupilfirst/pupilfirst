@@ -3,8 +3,13 @@ require 'rails_helper'
 describe Users::AuthenticationService do
   subject { described_class.new(user.school, supplied_token) }
 
-  let(:secret_token) { SecureRandom.hex }
-  let!(:user) { create :user, login_token: secret_token }
+  let(:secret_token) { SecureRandom.urlsafe_base64 }
+  let(:login_token_digest) { Digest::SHA2.base64digest(secret_token) }
+  let!(:user) do
+    create :user,
+           login_token_digest: login_token_digest,
+           login_mail_sent_at: Time.zone.now
+  end
   let(:another_school) { create :school }
 
   describe '#authenticate' do
@@ -27,8 +32,21 @@ describe Users::AuthenticationService do
         expect(returned_user).to eq(user)
       end
 
-      it 'clears user token' do
-        expect { subject.authenticate }.to(change { user.reload.login_token }.from(secret_token).to(nil))
+      it 'clears user token and login email time' do
+        expect { subject.authenticate }.to(
+          change { user.reload.login_token_digest }
+            .from(login_token_digest)
+            .to(nil)
+        )
+        expect(user.login_mail_sent_at).to eq(nil)
+      end
+
+      context 'when user has no login email sent time' do
+        let!(:user) { create :user, login_token_digest: login_token_digest }
+
+        it 'returns the user' do
+          expect(subject.authenticate).to eq(user)
+        end
       end
 
       context 'when a different school is supplied' do

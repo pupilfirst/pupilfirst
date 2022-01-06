@@ -1,5 +1,5 @@
 <%
-  sign_in_link = user_token_url(token: @user.login_token)
+  sign_in_link = user_token_url(token: @user.original_login_token)
 %>
 
 <% content_for :title do %>

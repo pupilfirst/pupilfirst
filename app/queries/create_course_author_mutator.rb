@@ -14,7 +14,7 @@ class CreateCourseAuthorMutator < ApplicationQuery
       user = persisted_user || User.create!(email: email, school: current_school, title: 'Author')
       user.update!(name: name)
       course_author = course.course_authors.create!(user: user)
-      user.regenerate_login_token if user.login_token.blank?
+      user.regenerate_login_token
       CourseAuthorMailer.addition(course_author).deliver_later
       course_author
     end

@@ -90,7 +90,7 @@ module Courses
       user = school.users.with_email(student.email).first
       user = school.users.create!(email: student.email) if user.blank?
 
-      user.regenerate_login_token if user.login_token.blank?
+      user.regenerate_login_token
 
       # If a user was already present, don't override values of name, title or affiliation.
       user.update!(

@@ -416,6 +416,9 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
+    rails-healthcheck (1.4.0)
+      actionpack
+      railties
     rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
     railties (6.1.4.1)
@@ -655,6 +658,7 @@ DEPENDENCIES
   rack-cors (~> 1.1)
   rack-throttle (~> 0.7)
   rails (~> 6.1.4.1)
+  rails-healthcheck (~> 1.4)
   recaptcha (~> 5.8)
   reform (~> 2.6)
   reform-rails (~> 0.2)

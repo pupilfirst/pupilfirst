@@ -74,6 +74,6 @@ ENV RAILS_ENV="production"
 RUN mkdir -p tmp/pids
 EXPOSE 3000
 
-HEALTHCHECK CMD curl --fail --insecure https://localhost:3000/healthcheck || exit 1
+HEALTHCHECK CMD curl --fail http://localhost:3000/healthcheck || exit 1
 
 ENTRYPOINT [ "bundle", "exec", "puma", "-C", "config/puma.rb" ]

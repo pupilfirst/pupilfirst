@@ -352,14 +352,14 @@ let make = (
                     </div>
                     <div className="flex mt-2">
                       <button
-                        className={"w-1/2 mr-2 rounded border pt-3 px-3 pb-5 text-sm font-semibold focus:ring hover:bg-gray-300 hover:text-gray-900 " ++
+                        className={"w-1/2 mr-2 rounded border pt-3 px-3 pb-5 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-indigo-500 " ++
                         buttonTypeClass(state.qrCorner, #TopLeft)}
                         onClick={_ => send(UpdateQrCorner(#TopLeft))}>
                         <div className="flex"> <Icon className="if i-qr-code-regular" /> </div>
                         {t("qr_top_left_label")->str}
                       </button>
                       <button
-                        className={"w-1/2 rounded border pt-3 px-3 pb-5 text-sm font-semibold focus:ring hover:bg-gray-300 hover:text-gray-900 " ++
+                        className={"w-1/2 rounded border pt-3 px-3 pb-5 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-indigo-500 " ++
                         buttonTypeClass(state.qrCorner, #TopRight)}
                         onClick={_ => send(UpdateQrCorner(#TopRight))}>
                         <div className="flex justify-end">
@@ -370,14 +370,14 @@ let make = (
                     </div>
                     <div className="flex mt-2">
                       <button
-                        className={"w-1/2 mr-2 rounded border pt-5 px-3 pb-3 text-sm font-semibold focus:ring hover:bg-gray-300 hover:text-gray-900 " ++
+                        className={"w-1/2 mr-2 rounded border pt-5 px-3 pb-3 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-indigo-500 " ++
                         buttonTypeClass(state.qrCorner, #BottomLeft)}
                         onClick={_ => send(UpdateQrCorner(#BottomLeft))}>
                         {t("qr_bottom_left_label")->str}
                         <div className="flex"> <Icon className="if i-qr-code-regular" /> </div>
                       </button>
                       <button
-                        className={"w-1/2 rounded border pt-5 px-3 pb-3 text-sm font-semibold focus:ring hover:bg-gray-300 hover:text-gray-900 " ++
+                        className={"w-1/2 rounded border pt-5 px-3 pb-3 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-indigo-500 " ++
                         buttonTypeClass(state.qrCorner, #BottomRight)}
                         onClick={_ => send(UpdateQrCorner(#BottomRight))}>
                         {t("qr_bottom_right_label")->str}

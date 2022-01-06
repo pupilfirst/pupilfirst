@@ -55,7 +55,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
             title="Move Up"
             ariaLabel={"Move Up: "++ (target |> Target.title)}
             id={"target-move-up-" ++ (target |> Target.id)}
-            className={"target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:text-primary-500" ++
+            className={"target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200 focus:outline-none focus:text-primary-500" ++
             sortIndexHiddenClass(index == 0)}
             onClick={_ => updateSortIndex(targets, target, true, updateTargetSortIndexCB)}>
             <i className="fas fa-arrow-up text-sm" />
@@ -64,7 +64,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
             title="Move Down"
             ariaLabel={"Move down: " ++ (target |> Target.title)}
             id={"target-move-down-" ++ (target |> Target.id)}
-            className={"target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:text-primary-500" ++
+            className={"target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-200 focus:outline-none focus:text-primary-500" ++
             sortIndexHiddenClass(index + 1 == Js.Array.length(targets))}
             onClick={_ => updateSortIndex(targets, target, false, updateTargetSortIndexCB)}>
             <i className="fas fa-arrow-down text-sm" />

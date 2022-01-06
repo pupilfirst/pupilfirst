@@ -567,6 +567,11 @@
   @apply h-4 w-4 shadow-md border-2 border-white rounded-full bg-primary-500 cursor-pointer -mt-1 appearance-none;
 }
 
+.form-input__range[type="range"]:focus::-moz-range-thumb,
+.form-input__range[type="range"]:focus::-webkit-slider-thumb {
+  @apply ring-2 ring-offset-2 ring-indigo-500;
+}
+
 @keyframes glowing {
   0% {
     box-shadow: 0 0 20px #7886d7;

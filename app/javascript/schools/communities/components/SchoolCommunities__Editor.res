@@ -244,7 +244,7 @@ let make = (
             htmlFor="communities-editor__course-list">
             {"Should students be allowed to discuss targets in this community?" |> str}
           </label>
-          <div className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden ml-2">
+          <div className="flex toggle-button__group flex-no-shrink overflow-hidden ml-2">
             <button
               onClick={_ => send(SetTargetLinkable(true))}
               className={booleanButtonClasses(state.targetLinkable)}>
@@ -285,7 +285,7 @@ let make = (
             | Some(_community) =>
               <button
                 onClick={_ => showCategoryEditorCB()}
-                className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
+                className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
                 <i className="fas fa-pencil-alt" />
                 <span className="text-xs font-semibold ml-2">
                   {(ArrayUtils.isEmpty(categories) ? "Add Categories" : "Edit Categories") |> str}

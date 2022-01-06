@@ -11,7 +11,7 @@ type tabs =
   | ActionsTab
 
 let selectedTabClasses = selected =>
-  "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer " ++ (
+  "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer hover:bg-gray-200 hover:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-indigo-500 " ++ (
     selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-100"
   )
 
@@ -695,20 +695,26 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
           </h5>
           {ReactUtils.nullUnless(
             <div className="w-full pt-6">
-              <div className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
+              <div role="tablist" className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
                 <button
+                  role="tab"
+                  ariaSelected={selectedTab == DetailsTab}
                   className={selectedTabClasses(selectedTab == DetailsTab)}
                   onClick={_ => RescriptReactRouter.push("./details")}>
                   <i className="fa fa-edit" />
                   <span className="ml-2"> {t("tabs.details")->str} </span>
                 </button>
                 <button
+                  role="tab"
+                  ariaSelected={selectedTab == ImagesTab}
                   className={selectedTabClasses(selectedTab == ImagesTab)}
                   onClick={_ => RescriptReactRouter.push("./images")}>
                   <i className="fa fa-camera" />
                   <span className="ml-2"> {t("tabs.images")->str} </span>
                 </button>
                 <button
+                  role="tab"
+                  ariaSelected={selectedTab == ActionsTab}
                   className={"-ml-px " ++ selectedTabClasses(selectedTab == ActionsTab)}
                   onClick={_ => RescriptReactRouter.push("./actions")}>
                   <i className="fa fa-cog" />

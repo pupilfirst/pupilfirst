@@ -1,11 +1,13 @@
 .notifications__entry-card.notifications__entry-card--unread:hover
   .notifications__entry-card-buttons,
-.notifications__entry-card.notifications__entry-card--unread:focus
+.notifications__entry-card.notifications__entry-card--unread:focus-within
   .notifications__entry-card-buttons {
   @apply opacity-100;
 }
 
 .notifications__entry-card.notifications__entry-card--unread:hover
+  .notifications__entry-card-time,
+.notifications__entry-card.notifications__entry-card--unread:focus-within
   .notifications__entry-card-time {
   @apply opacity-0;
 }

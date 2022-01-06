@@ -68,7 +68,7 @@ let renderAdmin = (currentSchoolAdminId, admin, admins, setState) =>
     <div
       className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
       <button
-        className="w-full cursor-pointer p-4"
+        className="w-full cursor-pointer p-4 text-left"
         onClick={_event => {
           ReactEvent.Mouse.preventDefault(_event)
           setState(state => {...state, editorAction: ShowEditor(Some(admin))})

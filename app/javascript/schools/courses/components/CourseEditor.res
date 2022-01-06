@@ -149,7 +149,7 @@ let courseLink = (href, title, icon) =>
   <a
     key=href
     href
-    className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-nowrap">
+    className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 focus:outline-none focus:text-primary-500 focus:bg-gray-200 whitespace-nowrap">
     <i className=icon /> <span className="font-semibold ml-2"> {title->str} </span>
   </a>
 

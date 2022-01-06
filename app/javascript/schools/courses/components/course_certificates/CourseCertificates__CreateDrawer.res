@@ -125,20 +125,22 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                       )}
                     </HelpIcon>
                   </div>
-                  <input
-                    disabled=state.saving
-                    className="hidden"
-                    name="image"
-                    type_="file"
-                    id="certificate-file-input"
-                    required=false
-                    multiple=false
-                    onChange={selectFile(send)}
-                  />
-                  <label className="file-input-label mt-2" htmlFor="certificate-file-input">
-                    <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
-                    <span className="truncate"> {imageInputText(state.imageFilename)->str} </span>
-                  </label>
+                  <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+                    <input
+                      disabled=state.saving
+                      className="absolute w-0 h-0 focus:outline-none"
+                      name="image"
+                      type_="file"
+                      id="certificate-file-input"
+                      required=false
+                      multiple=false
+                      onChange={selectFile(send)}
+                    />
+                    <label className="file-input-label mt-2" htmlFor="certificate-file-input">
+                      <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+                      <span className="truncate"> {imageInputText(state.imageFilename)->str} </span>
+                    </label>
+                  </div>
                   <School__InputGroupError
                     message={t("image_file_invalid")} active=state.fileInvalid
                   />

@@ -164,23 +164,25 @@ let make = (~course, ~updateCourseCB) => {
           link="https://docs.pupilfirst.com/#/courses?id=course-images">
           {t("thumbnail.help")->str}
         </HelpIcon>
-        <input
-          disabled=state.updating
-          className="hidden"
-          name="course_thumbnail"
-          type_="file"
-          accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-          id="course-images-editor__thumbnail"
-          required=false
-          multiple=false
-          onChange={updateImage(send, false)}
-        />
-        <label className="file-input-label mt-2" htmlFor="course-images-editor__thumbnail">
-          <i className="fas fa-upload" />
-          <span className="ml-2 truncate">
-            {optionalImageLabelText(thumbnail, state.filenameThumb)}
-          </span>
-        </label>
+        <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+          <input
+            disabled=state.updating
+            className="absolute h-0 w-0 focus:outline-none"
+            name="course_thumbnail"
+            type_="file"
+            accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+            id="course-images-editor__thumbnail"
+            required=false
+            multiple=false
+            onChange={updateImage(send, false)}
+          />
+          <label className="file-input-label mt-2" htmlFor="course-images-editor__thumbnail">
+            <i className="fas fa-upload" />
+            <span className="ml-2 truncate">
+              {optionalImageLabelText(thumbnail, state.filenameThumb)}
+            </span>
+          </label>
+        </div>
         <School__InputGroupError message={t("thumbnail.error_message")} active=state.invalidThumb />
       </div>
       <div key="course-images-editor__cover" className="mt-4">
@@ -195,23 +197,25 @@ let make = (~course, ~updateCourseCB) => {
           link="https://docs.pupilfirst.com/#/courses?id=course-images">
           {t("cover_image.help") |> str}
         </HelpIcon>
-        <input
-          disabled=state.updating
-          className="hidden"
-          name="course_cover"
-          type_="file"
-          accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-          id="course-images-editor__cover"
-          required=false
-          multiple=false
-          onChange={updateImage(send, true)}
-        />
-        <label className="file-input-label mt-2" htmlFor="course-images-editor__cover">
-          <i className="fas fa-upload" />
-          <span className="ml-2 truncate">
-            {optionalImageLabelText(cover, state.filenameCover)}
-          </span>
-        </label>
+        <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+          <input
+            disabled=state.updating
+            className="absolute h-0 w-0 focus:outline-none"
+            name="course_cover"
+            type_="file"
+            accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+            id="course-images-editor__cover"
+            required=false
+            multiple=false
+            onChange={updateImage(send, true)}
+          />
+          <label className="file-input-label mt-2" htmlFor="course-images-editor__cover">
+            <i className="fas fa-upload" />
+            <span className="ml-2 truncate">
+              {optionalImageLabelText(cover, state.filenameCover)}
+            </span>
+          </label>
+        </div>
         <School__InputGroupError
           message={t("cover_image.error_message")} active=state.invalidCover
         />

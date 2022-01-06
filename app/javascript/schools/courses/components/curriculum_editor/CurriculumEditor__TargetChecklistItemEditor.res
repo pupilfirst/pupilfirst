@@ -140,7 +140,7 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
     }
     <button
       onClick={_ => addMultichoiceOption(checklistItem, updateChecklistItemCB)}
-      className="flex mt-2 ml-7 p-2 text-sm appearance-none bg-white border rounded items-center justify-between outline-none border-gray-400 hover:border-gray-100 hover:shadow-lg focus:outline-none">
+      className="flex mt-2 ml-7 p-2 text-sm appearance-none bg-white border rounded items-center justify-between outline-none border-gray-400 hover:border-gray-100 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
       <PfIcon className="fas fa-plus-circle if-fw" />
       <span className="font-semibold ml-2"> {"Add a choice" |> str} </span>
     </button>
@@ -151,8 +151,9 @@ let controlIcon = (~icon, ~title, ~handler) =>
     ? React.null
     : <button
         title
+        ariaLabel={title}
         disabled={handler == None}
-        className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden"
+        className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden"
         onClick=?handler>
         <i className={"fas fa-fw " ++ icon} />
       </button>

@@ -10,7 +10,7 @@ class UndoSubmissionMutator < ApplicationQuery
       # Remove the submission
       timeline_event.update!(archived_at: Time.zone.now)
       timeline_event.timeline_event_owners.each do |owner|
-        owner.update!(latest: true)
+        owner.update!(latest: false)
       end
 
       # Set the most recent submission to latest.

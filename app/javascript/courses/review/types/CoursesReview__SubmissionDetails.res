@@ -129,6 +129,7 @@ let updateMetaSubmission = submission => {
     ~passedAt=OverlaySubmission.passedAt(submission),
     ~evaluatedAt=OverlaySubmission.evaluatedAt(submission),
     ~feedbackSent=ArrayUtils.isNotEmpty(OverlaySubmission.feedback(submission)),
+    ~number=OverlaySubmission.number(submission),
   )
 }
 

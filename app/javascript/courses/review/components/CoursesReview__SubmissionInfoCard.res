@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesReview__SubmissionInfoCard.css")`)
+%raw(`require("./CoursesReview__SubmissionInfoCard.css")`)
 
 let t = I18n.t(~scope="components.CoursesReview__SubmissionInfoCard")
 
@@ -40,9 +40,9 @@ let linkUrl = (submissionId, filterString) => {
 }
 
 @react.component
-let make = (~submission, ~submissionNumber, ~selected, ~filterString) =>
+let make = (~submission, ~selected, ~filterString) =>
   <Link
-    title={t("submission_hash") ++ string_of_int(submissionNumber)}
+    title={t("submission_hash") ++ string_of_int(SubmissionMeta.number(submission))}
     href={linkUrl(SubmissionMeta.id(submission), filterString)}
     key={SubmissionMeta.id(submission)}
     className={cardClasses(submission, selected)}>
@@ -51,9 +51,11 @@ let make = (~submission, ~submissionNumber, ~selected, ~filterString) =>
         <div className="flex flex-col md:pr-6">
           <h2 className="font-semibold text-sm leading-tight">
             <p className="hidden md:block">
-              {(t("submission_hash") ++ string_of_int(submissionNumber))->str}
+              {(t("submission_hash") ++ string_of_int(SubmissionMeta.number(submission)))->str}
             </p>
-            <p className="md:hidden"> {("#" ++ string_of_int(submissionNumber))->str} </p>
+            <p className="md:hidden">
+              {("#" ++ string_of_int(SubmissionMeta.number(submission)))->str}
+            </p>
           </h2>
           <span className="text-xs text-gray-800 pt-px whitespace-nowrap">
             {submission->SubmissionMeta.createdAt->DateFns.formatPreset(~year=true, ())->str}

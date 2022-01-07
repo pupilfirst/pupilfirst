@@ -692,7 +692,7 @@ ActiveRecord::Schema.define(version: 2021_10_12_174901) do
     t.jsonb "checklist", default: []
     t.bigint "reviewer_id"
     t.datetime "reviewer_assigned_at"
-    t.integer "number"
+    t.integer "number", default: 1, null: false
     t.datetime "archived_at"
     t.index ["reviewer_id"], name: "index_timeline_events_on_reviewer_id"
   end

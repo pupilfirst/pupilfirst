@@ -16,6 +16,7 @@ module Types
     field :user_names, String, null: false
     field :feedback_sent, Boolean, null: false
     field :team_name, String, null: true
+    field :number, Integer, null: false
 
     def title
       object.target.title

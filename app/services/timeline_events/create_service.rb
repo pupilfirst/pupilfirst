@@ -25,6 +25,7 @@ module TimelineEvents
               create_team_entries(s) if @params[:target].team_target?
 
               update_latest_flag(s)
+              update_number(s)
             end
         end
 
@@ -50,17 +51,15 @@ module TimelineEvents
     end
 
     def update_latest_flag(timeline_event)
-      old_events =
-        @target
-          .timeline_events
-          .joins(:timeline_event_owners)
-          .where(timeline_event_owners: { founder: owners })
-          .where
-          .not(id: timeline_event)
-
       TimelineEventOwner
-        .where(timeline_event_id: old_events, founder: owners)
+        .where(timeline_event_id: old_events(timeline_event), founder: owners)
         .update_all(latest: false) # rubocop:disable Rails/SkipsModelValidations
+    end
+
+    def update_number(timeline_event)
+      timeline_event.update!(
+        number: old_events(timeline_event).maximum(:number) + 1
+      )
     end
 
     def owners
@@ -69,6 +68,14 @@ module TimelineEvents
 
     def team_members
       @founder.startup.founders - [@founder]
+    end
+
+    def old_events(timeline_event)
+      @target
+        .timeline_events
+        .joins(:timeline_event_owners)
+        .where(timeline_event_owners: { founder: owners })
+        .where.not(id: timeline_event)
     end
   end
 end

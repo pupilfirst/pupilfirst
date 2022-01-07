@@ -7,6 +7,7 @@ type t = {
   feedback: array<CoursesReview__Feedback.t>,
   grades: array<CoursesReview__Grade.t>,
   checklist: array<SubmissionChecklistItem.t>,
+  number: int,
 }
 let id = t => t.id
 let createdAt = t => t.createdAt
@@ -16,6 +17,7 @@ let evaluatedAt = t => t.evaluatedAt
 let grades = t => t.grades
 let feedback = t => t.feedback
 let checklist = t => t.checklist
+let number = t => t.number
 
 let make = (
   ~id,
@@ -26,6 +28,7 @@ let make = (
   ~grades,
   ~evaluatedAt,
   ~checklist,
+  ~number,
 ) => {
   id: id,
   createdAt: createdAt,
@@ -35,6 +38,7 @@ let make = (
   grades: grades,
   evaluatedAt: evaluatedAt,
   checklist: checklist,
+  number: number,
 }
 
 let makeFromJs = s =>
@@ -62,6 +66,7 @@ let makeFromJs = s =>
     ~checklist=s["checklist"] |> Json.Decode.array(
       SubmissionChecklistItem.decode(SubmissionChecklistItem.makeFiles(s["files"])),
     ),
+    ~number=s["number"],
   )
 
 let update = (passedAt, evaluatorName, feedback, grades, evaluatedAt, checklist, t) => {

@@ -37,8 +37,9 @@
   transform: scale(0);
 }
 
-.checkbox__label:hover div:first-child {
-  @apply bg-primary-100 border-primary-500;
+.checkbox__label:hover div:first-child,
+.checkbox__input:focus + label div:first-child {
+  @apply outline-none bg-primary-100 border-primary-500;
 }
 
 .checkbox__input:checked + .checkbox__label div:first-child {

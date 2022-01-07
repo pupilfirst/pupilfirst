@@ -2,8 +2,8 @@
 
 @react.component
 let make = (~id, ~label, ~onChange, ~checked=false) =>
-  <div>
-    <input className="hidden checkbox__input" id type_="checkbox" onChange checked />
+  <div className="relative">
+    <input className="absolute top-1 w-0 h-0 overflow-hidden focus:outline-none checkbox__input" id type_="checkbox" onChange checked />
     <label className="checkbox__label flex items-center" htmlFor=id>
       <div>
         <svg width="11px" height="11px" viewBox="0 0 13 13">

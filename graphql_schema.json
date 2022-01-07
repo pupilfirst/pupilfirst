@@ -9939,11 +9939,11 @@
               "deprecationReason": null
             },
             {
-              "name": "courseInfo",
+              "name": "course",
               "description": null,
               "args": [
                 {
-                  "name": "courseId",
+                  "name": "id",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",

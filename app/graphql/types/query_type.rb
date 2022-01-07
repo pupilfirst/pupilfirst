@@ -38,8 +38,8 @@ module Types
       argument :id, ID, required: false
     end
 
-    resolved_field :course_info, Types::CourseType, null: true do
-      argument :courseId, ID, required: false
+    resolved_field :course, Types::CourseType, null: true do
+      argument :id, ID, required: false
     end
 
     resolved_field :content_blocks, [Types::ContentBlockType], null: false do

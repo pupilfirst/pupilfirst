@@ -23,7 +23,7 @@ module CoursesQuery = %graphql(`
       }
       totalCount
     }
-    courseInfo(courseId: $courseId){
+    course(id: $courseId){
         ...Course.Fragments.AllFields
     }
   }
@@ -203,11 +203,8 @@ let loadCourses = (courseId, state, cursor, send) => {
       rawCourse => Course.makeFromJs(rawCourse),
       response["courses"]["nodes"],
     )
-    let course = response["courseInfo"]
-    switch course {
-    | None => send(UpdateSingleCourse(None))
-    | Some(course) => send(UpdateSingleCourse(Some(course->Course.makeFromJs)))
-    }
+    let course = response["course"]->Belt.Option.map(Course.makeFromJs)
+    send(UpdateSingleCourse(course))
     send(
       LoadCourses(
         response["courses"]["pageInfo"]["endCursor"],

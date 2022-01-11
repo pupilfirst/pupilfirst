@@ -51,7 +51,7 @@ type state = {
   filter: filter,
   totalEntriesCount: int,
   relaodCourses: bool,
-  singleCourse: option<Course.t>,
+  currentCourse: option<Course.t>,
 }
 
 type action =
@@ -67,13 +67,13 @@ type action =
   | ClearArchivedFilter
   | UpdateCourse(Course.t)
   | LoadCourses(option<string>, bool, array<Course.t>, int)
-  | UpdateSingleCourse(option<Course.t>)
+  | UpdateCurrentCourse(option<Course.t>)
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateSingleCourse(singleCourse) => {
+  | UpdateCurrentCourse(currentCourse) => {
       ...state,
-      singleCourse: singleCourse,
+      currentCourse: currentCourse,
     }
   | SetSearchString(string) => {
       ...state,
@@ -204,7 +204,7 @@ let loadCourses = (courseId, state, cursor, send) => {
       response["courses"]["nodes"],
     )
     let course = response["course"]->Belt.Option.map(Course.makeFromJs)
-    send(UpdateSingleCourse(course))
+    send(UpdateCurrentCourse(course))
     send(
       LoadCourses(
         response["courses"]["pageInfo"]["endCursor"],
@@ -457,7 +457,7 @@ let make = (~selectedCourse) => {
         status: Some(#Active),
       },
       relaodCourses: false,
-      singleCourse: None,
+      currentCourse: None,
     },
   )
 
@@ -485,7 +485,7 @@ let make = (~selectedCourse) => {
     | (Unloaded, _)
     | (_, Hidden) => React.null
     | (_, ShowForm(id)) => {
-        let course = switch state.singleCourse {
+        let course = switch state.currentCourse {
         | Some(c) if Some(c.id) == id => Some(c)
         | _ =>
           Belt.Option.flatMap(id, id => {

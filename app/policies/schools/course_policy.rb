@@ -17,7 +17,7 @@ module Schools
     alias details? show?
     alias images? show?
     alias actions? show?
-    alias attach_images? authors?
+    alias attach_images? show?
     alias delete_coach_enrollment? authors?
     alias update_coach_enrollments? authors?
     alias students? authors?

@@ -236,6 +236,40 @@ feature 'Courses Index', js: true do
       expect(course_1.cover).to be_attached
       expect(course_1.thumbnail).to be_attached
     end
+
+    scenario 'School admin edits images associated with the archived course' do
+      sign_in_user school_admin.user,
+                   referrer: images_school_course_path(course_archived)
+
+      expect(page).to have_text('Please choose an image file.', count: 2)
+
+      attach_file 'course_thumbnail',
+                  file_path('logo_lipsum_on_light_bg.png'),
+                  visible: false
+      attach_file 'course_cover',
+                  file_path('logo_lipsum_on_dark_bg.png'),
+                  visible: false
+
+      click_button 'Update Images'
+
+      expect(page).to have_text('Images have been updated successfully')
+
+      fill_in('Search', with: 'archived')
+      click_button 'Pick Status: Archived'
+
+      find("a[title='Edit #{course_archived.name}']").click
+      click_button 'Images'
+
+      expect(page).to have_text(
+        'Please pick a file to replace logo_lipsum_on_light_bg.png'
+      )
+      expect(page).to have_text(
+        'Please pick a file to replace logo_lipsum_on_dark_bg.png'
+      )
+
+      expect(course_archived.cover).to be_attached
+      expect(course_archived.thumbnail).to be_attached
+    end
   end
 
   context 'with many courses' do
@@ -252,6 +286,13 @@ feature 'Courses Index', js: true do
 
       expect(page).to have_text('Showing all 25 courses')
       expect(page).not_to have_text('Load More Courses...')
+    end
+
+    scenario 'school admin loads details route for last course' do
+      sign_in_user school_admin.user, referrer: details_school_course_path(school.courses.last)
+      expect(page).to have_text(
+        'EDIT COURSE DETAILS'
+      )
     end
   end
 
@@ -337,13 +378,6 @@ feature 'Courses Index', js: true do
         href: exports_school_course_path(course_1),
       )
     end
-  end
-
-  scenario 'school admin visits details route for course' do
-    sign_in_user school_admin.user, referrer: details_school_course_path(course_1)
-    expect(page).to have_text(
-      'EDIT COURSE DETAILS'
-    )
   end
 
   scenario 'school admin visits details route for archived course' do

@@ -204,7 +204,15 @@ let loadCourses = (courseId, state, cursor, send) => {
       response["courses"]["nodes"],
     )
     let course = response["course"]->Belt.Option.map(Course.makeFromJs)
-    send(UpdateCurrentCourse(course))
+    switch course {
+    | None => send(UpdateCurrentCourse(None))
+    | Some(course) =>
+      if courses->Js.Array2.find(c => {c.id == course.id}) == None {
+        send(UpdateCurrentCourse(Some(course)))
+      } else {
+        send(UpdateCurrentCourse(None))
+      }
+    }
     send(
       LoadCourses(
         response["courses"]["pageInfo"]["endCursor"],
@@ -444,7 +452,7 @@ let raiseUnsafeFindError = id => {
 }
 
 @react.component
-let make = (~selectedCourse) => {
+let make = () => {
   let (state, send) = React.useReducer(
     reducer,
     {
@@ -493,10 +501,7 @@ let make = (~selectedCourse) => {
               ArrayUtils.unsafeFind(
                 c => Course.id(c) == id,
                 "Unable to find course with ID: " ++ id ++ " in Courses Index",
-                Js.Array.concat(
-                  Belt.Option.mapWithDefault(selectedCourse, [], s => [s]),
-                  Pagination.toArray(state.courses),
-                ),
+                Pagination.toArray(state.courses),
               ),
             )
           })

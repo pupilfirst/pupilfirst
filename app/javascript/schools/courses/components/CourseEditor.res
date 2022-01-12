@@ -50,7 +50,7 @@ type state = {
   filterString: string,
   filter: filter,
   totalEntriesCount: int,
-  relaodCourses: bool,
+  reloadCourses: bool,
   selectedCourse: option<Course.t>,
 }
 
@@ -86,7 +86,7 @@ let reducer = (state, action) =>
   | ReloadCourses => {
       ...state,
       loading: Reloading,
-      relaodCourses: !state.relaodCourses,
+      reloadCourses: !state.reloadCourses,
     }
   | UnsetSearchString => {
       ...state,
@@ -464,7 +464,7 @@ let make = () => {
         name: None,
         status: Some(#Active),
       },
-      relaodCourses: false,
+      reloadCourses: false,
       selectedCourse: None,
     },
   )
@@ -486,7 +486,7 @@ let make = () => {
     | _ => loadCourses(None, state, None, send)
     }
     None
-  }, (state.filter, state.relaodCourses))
+  }, (state.filter, state.reloadCourses))
 
   <div className="flex flex-1 h-full bg-gray-200 overflow-y-scroll">
     {switch (state.courses, editorAction) {

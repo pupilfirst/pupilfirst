@@ -84,13 +84,13 @@ feature 'Courses Index', js: true do
         {
           icon: Types::CourseHighlightInputType.allowed_icons.sample,
           title: Faker::Lorem.words(number: 2).join(' ').titleize,
-          description: Faker::Lorem.paragraph,
+          description: Faker::Lorem.paragraph
         },
         {
           icon: Types::CourseHighlightInputType.allowed_icons.sample,
           title: Faker::Lorem.words(number: 2).join(' ').titleize,
-          description: Faker::Lorem.paragraph,
-        },
+          description: Faker::Lorem.paragraph
+        }
       ]
     end
 
@@ -101,12 +101,12 @@ feature 'Courses Index', js: true do
       fill_in 'Course name',
               with: new_course_name,
               fill_options: {
-                clear: :backspace,
+                clear: :backspace
               }
       fill_in 'Course description',
               with: new_description,
               fill_options: {
-                clear: :backspace,
+                clear: :backspace
               }
       fill_in 'Course end date', with: course_end_date.iso8601
       replace_markdown new_about
@@ -126,12 +126,12 @@ feature 'Courses Index', js: true do
         fill_in 'highlight-2-title',
                 with: highlights.last[:title],
                 fill_options: {
-                  clear: :backspace,
+                  clear: :backspace
                 }
         fill_in 'highlight-2-description',
                 with: highlights.last[:description],
                 fill_options: {
-                  clear: :backspace,
+                  clear: :backspace
                 }
         click_button 'Move Down'
       end
@@ -144,12 +144,12 @@ feature 'Courses Index', js: true do
         fill_in 'highlight-2-title',
                 with: highlights.first[:title],
                 fill_options: {
-                  clear: :backspace,
+                  clear: :backspace
                 }
         fill_in 'highlight-2-description',
                 with: highlights.first[:description],
                 fill_options: {
-                  clear: :backspace,
+                  clear: :backspace
                 }
       end
 
@@ -289,10 +289,9 @@ feature 'Courses Index', js: true do
     end
 
     scenario 'school admin loads details route for last course' do
-      sign_in_user school_admin.user, referrer: details_school_course_path(school.courses.last)
-      expect(page).to have_text(
-        'EDIT COURSE DETAILS'
-      )
+      sign_in_user school_admin.user,
+                   referrer: details_school_course_path(school.courses.last)
+      expect(page).to have_text('EDIT COURSE DETAILS')
     end
   end
 
@@ -359,32 +358,31 @@ feature 'Courses Index', js: true do
       click_button 'Quick Links'
       expect(page).to have_link(
         'View as Student',
-        href: curriculum_course_path(course_1),
+        href: curriculum_course_path(course_1)
       )
       expect(page).to have_link(
         'Edit Curriculum',
-        href: curriculum_school_course_path(course_1),
+        href: curriculum_school_course_path(course_1)
       )
       expect(page).to have_link(
         'Manage Students',
-        href: school_course_students_path(course_1),
+        href: school_course_students_path(course_1)
       )
       expect(page).to have_link(
         'Manage Coaches',
-        href: school_course_coaches_path(course_1),
+        href: school_course_coaches_path(course_1)
       )
       expect(page).to have_link(
         'Download Reports',
-        href: exports_school_course_path(course_1),
+        href: exports_school_course_path(course_1)
       )
     end
   end
 
   scenario 'school admin visits details route for archived course' do
-    sign_in_user school_admin.user, referrer: details_school_course_path(course_archived)
-    expect(page).to have_text(
-      'EDIT COURSE DETAILS'
-    )
+    sign_in_user school_admin.user,
+                 referrer: details_school_course_path(course_archived)
+    expect(page).to have_text('EDIT COURSE DETAILS')
   end
 
   context 'when students exist in a course' do
@@ -447,7 +445,9 @@ feature 'Courses Index', js: true do
 
     accept_confirm { click_button('Clone Course') }
 
-    expect(page).to have_text('Course copy requested. It will appear here soon!')
+    expect(page).to have_text(
+      'Course copy requested. It will appear here soon!'
+    )
 
     visit school_courses_path
     within("div[id='courses']") do

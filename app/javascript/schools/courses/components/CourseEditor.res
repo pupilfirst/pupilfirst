@@ -207,10 +207,9 @@ let loadCourses = (courseId, state, cursor, send) => {
     switch course {
     | None => send(UpdateSelectedCourse(None))
     | Some(course) =>
-      if courses->Js.Array2.find(c => {c.id == course.id}) == None {
-        send(UpdateSelectedCourse(Some(course)))
-      } else {
-        send(UpdateSelectedCourse(None))
+      switch courses->Js.Array2.find(c => {c.id == course.id}) {
+      | None => send(UpdateSelectedCourse(Some(course)))
+      | Some(_) => send(UpdateSelectedCourse(None))
       }
     }
     send(

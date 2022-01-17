@@ -20,7 +20,15 @@ class MailerPresenter < ApplicationPresenter
   end
 
   def logo
-    view.image_tag(view.rails_public_blob_url(@school.logo_variant(:mid)), class: 'mailer-head__logo-img')
+    file_path = view.rails_public_blob_url(@school.logo_variant(:mid))
+
+        file_url =
+          if ENV['CLOUDFRONT_HOST'].present? && Rails.env.production?
+            file_path
+          else
+            "https://#{@school.domains.primary.fqdn}#{file_path}"
+          end
+    view.image_tag(file_url, class: 'mailer-head__logo-img')
   end
 
   def course_cover?

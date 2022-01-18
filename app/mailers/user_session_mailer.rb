@@ -1,7 +1,6 @@
 class UserSessionMailer < SchoolMailer
   def send_login_token(user, url_options)
     @user = user
-    user.regenerate_login_token
     user.update!(login_mail_sent_at: Time.zone.now)
     @school = user.school
     @school_name = @school.name

@@ -31,8 +31,12 @@ Rails.application.configure do
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
-  # Compress CSS using a preprocessor.
-  # config.assets.css_compressor = :sass
+  # If we're serving static files, make sure that they can be cached.
+  if ENV['RAILS_SERVE_STATIC_FILES'].present?
+    config.public_file_server.headers = {
+      'Cache-Control' => "public, max-age=#{1.year.to_i}"
+    }
+  end
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false

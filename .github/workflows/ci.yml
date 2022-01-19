@@ -164,6 +164,7 @@ dockerhub-master:
         VERSION=2021.5
         echo IMAGE_ID=$IMAGE_ID
         echo VERSION=$VERSION
-        docker tag $IMAGE_NAME $IMAGE_ID.$VERSION.$SHORT_SHA
         docker tag $IMAGE_NAME $IMAGE_ID:latest
+        docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+        docker tag $IMAGE_NAME $IMAGE_ID:$VERSION.$SHORT_SHA
         docker push $IMAGE_ID --all-tags

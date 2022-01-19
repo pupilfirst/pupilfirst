@@ -7,14 +7,6 @@
   end
 %>
 
-<% content_for :title do %>
-  Daily digest from <%= school_name %>
-<% end %>
-
-<% content_for :title_button_text do %>
-  Visit <%= school_name %> dashboard
-<% end %>
-
 <% content_for(:title_button_link, dashboard_url) %>
 
 <% content_for :salutation do %>

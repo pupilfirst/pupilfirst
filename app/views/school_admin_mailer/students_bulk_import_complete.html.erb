@@ -1,20 +1,5 @@
 <% link = school_course_students_url(@course) %>
 
-<% content_for :title do %>
-  Students Import Completed
-<% end %>
-
-<% content_for :subtitle do %>
-  The students import that you initiated for <%= @course.name %> course was
-  completed.
-<% end %>
-
-<% content_for :title_button_text do %>
-  View Students
-<% end %>
-
-<% content_for(:title_button_link, link) %>
-
 <% content_for :salutation do %>
   Hello ,
 <% end %>
@@ -30,6 +15,10 @@
     <p><b>Students requested:</b> <%= @report_params[:students_requested] %></p>
     <p><b>Students added:</b> <%= @report_params[:students_added] %></p>
   </div>
+
+  <p>
+    Use this <%= link_to 'link', link%> to view students.
+  </p>
 
   <% if @report_attachment %>
     <p>

@@ -2,20 +2,6 @@
   login_url = user_token_url(@url_options)
 %>
 
-<% content_for :title do %>
-  Sign In to <%= @school_name%>
-<% end %>
-
-<% content_for :subtitle do %>
-  This is a one-time link to sign in to <%= @school_name%>
-<% end %>
-
-<% content_for :title_button_text do %>
-  Sign In
-<% end %>
-
-<% content_for(:title_button_link, login_url) %>
-
 <% content_for :salutation do %>
   Hello,
 <% end %>

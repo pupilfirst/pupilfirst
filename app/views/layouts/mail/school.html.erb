@@ -2,48 +2,18 @@
 
 <html lang="en">
   <head>
-    <%= stylesheet_link_tag 'mailer' %>
     <%= stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600' %>
   </head>
 
-  <body width="100%">
+  <body width="100%" style="font-family: 'Source Sans Pro', sans-serif;">
     <center
-      style="width: 100%; background: #f5f5f5; text-align: left; padding-top: 30px;"
+      style="width: 100%;  text-align: left;"
     >
-      <table class="mailer-table">
+      <table>
         <tbody>
           <tr>
             <td>
-              <table class="mailer-head__table">
-                <tbody>
-                  <tr>
-                    <% if presenter.course_cover? %>
-                      <td
-                        class="mailer-head__course-cover"
-                        style="background-image: url('<%= presenter.course_cover_url %>');"
-                      ></td>
-                    <% else %>
-                      <td class="mailer-head__data">
-                        <a
-                          class="mailer-head__logo"
-                          href="<%= presenter.school_url %>"
-                          title="<%= presenter.school_name %>"
-                          target="_blank"
-                          rel="noopener"
-                        >
-                          <% if presenter.logo? %>
-                            <%= presenter.logo %>
-                          <% else %>
-                            <%= presenter.school_name %>
-                          <% end %>
-                        </a>
-                      </td>
-                    <% end %>
-                  </tr>
-                </tbody>
-              </table>
-
-              <table class="mailer-body__table">
+              <table>
                 <tbody>
                   <% if content_for?(:title) || content_for?(:subtitle) || content_for?(:title_button_text) %>
                     <tr>
@@ -55,14 +25,13 @@
                         <% end %>
 
                         <% if content_for?(:subtitle) %>
-                          <p class="mailer-body__hero-subtitle">
+                          <p >
                             <%= yield :subtitle %>
                           </p>
                         <% end %>
 
                         <% if content_for?(:title_button_text) %>
                           <a
-                            class="<%= presenter.button_classes %>"
                             href="<%= yield(:title_button_link) %>"
                             title="<%= presenter.school_name %>"
                             target="_blank"
@@ -76,8 +45,8 @@
                   <% end %>
 
                   <tr>
-                    <td class="mailer-body__content">
-                      <p class="mailer-body__salutation">
+                    <td>
+                      <p>
                         <%= yield :salutation %>
                       </p>
 
@@ -86,7 +55,7 @@
                       <% if content_for?(:signature) %>
                         <%= yield :signature %>
                       <% else %>
-                        <p class="mailer-body__signature">
+                        <p>
                           <%= presenter.school_name %>
                         </p>
                       <% end %>
@@ -94,8 +63,8 @@
                   </tr>
                 </tbody>
               </table>
-
-              <table class="mail-footer__table">
+              <p>----</p>
+              <table>
                 <tbody>
                   <tr>
                     <td>

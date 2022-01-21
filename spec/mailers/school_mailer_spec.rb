@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe SchoolMailer do
   describe 'email sender signature' do
-    let(:user) { create :user, school: school }
+    let(:user) { create :user, school: school, login_mail_sent_at: Time.zone.now}
     let(:mail) { UserSessionMailer.send_login_token(user, {}) }
     let(:name) { Faker::Name.name }
     let(:email) { Faker::Internet.email(name: name) }

@@ -140,7 +140,7 @@ jobs:
     needs: tests
     environment: Production
     name: Build & Push to Dockerhub
-    if: github.ref == 'refs/heads/deploy-to-docker-hub'
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

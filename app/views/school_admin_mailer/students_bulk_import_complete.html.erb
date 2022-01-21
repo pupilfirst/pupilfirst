@@ -1,7 +1,7 @@
 <% link = school_course_students_url(@course) %>
 
 <% content_for :salutation do %>
-  Hello ,
+  Hello <%= @school_admin.name %>,
 <% end %>
 
 <% content_for :body do %>
@@ -11,7 +11,7 @@
     Here's a small summary on the import:
   </p>
 
-  <div class="monospace-block mb-15">
+  <div>
     <p><b>Students requested:</b> <%= @report_params[:students_requested] %></p>
     <p><b>Students added:</b> <%= @report_params[:students_added] %></p>
   </div>

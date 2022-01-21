@@ -7,7 +7,7 @@
 
   <body width="100%" style="font-family: 'Source Sans Pro', sans-serif;">
     <center
-      style="width: 100%;  text-align: left;"
+      style="width: 100%; text-align: left;"
     >
       <table>
         <tbody>
@@ -15,35 +15,6 @@
             <td>
               <table>
                 <tbody>
-                  <% if content_for?(:title) || content_for?(:subtitle) || content_for?(:title_button_text) %>
-                    <tr>
-                      <td class="<%= presenter.hero_classes %>">
-                        <% if content_for?(:title) %>
-                          <h1 class="<%= presenter.hero_title_classes %>">
-                            <%= yield :title %>
-                          </h1>
-                        <% end %>
-
-                        <% if content_for?(:subtitle) %>
-                          <p >
-                            <%= yield :subtitle %>
-                          </p>
-                        <% end %>
-
-                        <% if content_for?(:title_button_text) %>
-                          <a
-                            href="<%= yield(:title_button_link) %>"
-                            title="<%= presenter.school_name %>"
-                            target="_blank"
-                            rel="noopener"
-                          >
-                            <%= yield :title_button_text %>
-                          </a>
-                        <% end %>
-                      </td>
-                    </tr>
-                  <% end %>
-
                   <tr>
                     <td>
                       <p>
@@ -56,22 +27,9 @@
                         <%= yield :signature %>
                       <% else %>
                         <p>
-                          <%= presenter.school_name %>
+                          <%= link_to presenter.school_name, presenter.school_url %>
                         </p>
                       <% end %>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <p>----</p>
-              <table>
-                <tbody>
-                  <tr>
-                    <td>
-                      <p>
-                        This email has been sent to you by
-                        <%= link_to presenter.school_name, presenter.school_url %>
-                      </p>
                     </td>
                   </tr>
                 </tbody>

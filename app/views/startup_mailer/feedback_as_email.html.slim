@@ -4,18 +4,6 @@
 - target_url = target_url(target) if target.present?
 - coach_name = @startup_feedback.faculty.name
 
-= content_for :title do
-  | Feedback from coach
-
-= content_for :subtitle do
-  | #{@startup_feedback.faculty.name} has some feedback for you.
-
-- if target.present?
-  = content_for :title_button_text do
-    | View Feedback on Dashboard
-
-  = content_for(:title_button_link, target_url)
-
 = content_for :salutation do
   | Hello,
 

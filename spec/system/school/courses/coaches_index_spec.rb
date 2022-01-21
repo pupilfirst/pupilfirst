@@ -61,7 +61,7 @@ feature 'Course Coaches Index', js: true do
     open_email(coach_4.email)
 
     expect(current_email.subject).to include("You have been added as a coach in #{course_1.name}")
-    expect(current_email.body).to have_link("Sign in to Review Course")
+    expect(current_email.body).to have_link("link")
   end
 
   scenario 'school admin removes a course coach' do

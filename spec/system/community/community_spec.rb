@@ -246,7 +246,6 @@ feature 'Community', js: true do
     # A mail should have been sent to post author.
     open_email(reply_1.creator.email)
     expect(current_email.subject).to eq('New reply for your post')
-    expect(current_email.body).to include('New reply for your post')
     expect(current_email.body).to include(
       "#{student_2.user.name} has posted a reply to something you said on the #{community.name} community"
     )

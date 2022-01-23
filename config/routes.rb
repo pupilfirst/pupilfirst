@@ -160,16 +160,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :faculty, only: %i[] do
-    collection do
-      get 'filter/:active_tab', to: 'faculty#index'
-      get 'weekly_slots/:token', to: 'faculty#weekly_slots', as: 'weekly_slots'
-      post 'save_weekly_slots/:token', to: 'faculty#save_weekly_slots', as: 'save_weekly_slots'
-      delete 'weekly_slots/:token', to: 'faculty#mark_unavailable', as: 'mark_unavailable'
-      get 'slots_saved/:token', to: 'faculty#slots_saved', as: 'slots_saved'
-    end
-  end
-
   scope 'coaches', controller: 'faculty' do
     get '/', action: 'index', as: 'coaches_index'
     get '/:id(/:slug)', action: 'show', as: 'coach'

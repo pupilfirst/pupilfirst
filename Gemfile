@@ -71,8 +71,6 @@ gem 'flipper', '~> 0.22'
 gem 'flipper-ui', '~> 0.22'
 gem 'flipper-active_record', '~> 0.22'
 
-gem 'rails-healthcheck', '~> 1.4' # A simple way to configure a healthcheck route in Rails applications.
-
 group :development do
   gem 'letter_opener_web', '~> 1.4' # A web interface for browsing Ruby on Rails sent emails.
   gem 'bullet', '~> 6.1' # Detect N+1 queries.

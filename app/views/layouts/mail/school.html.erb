@@ -1,15 +1,19 @@
 <% presenter = MailerPresenter.new(self, @school, course: @course) %>
 
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
   <head>
-    <%= stylesheet_link_tag 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600' %>
-  </head>
-
-  <body width="100%" style="font-family: 'Source Sans Pro', sans-serif;">
-    <center
-      style="width: 100%; text-align: left;"
-    >
-      <table>
+    <meta charset="utf-8"> <!-- utf-8 works for most cases -->
+    <meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
+    <meta name="x-apple-disable-message-reformatting">  <!-- Disable auto-scale in iOS 10 Mail entirely -->
+    <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no"> <!-- Tell iOS not to automatically link certain text strings. -->
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
+  <head>
+  <body width="100%" style="margin: 0; padding: 8px;">
+    <center role="article" aria-roledescription="email" lang="en" style="width: 100%;">
+      <table style="font-family: Arial, sans-serif; width: 100%; text-align: left; max-width:768px; margin:auto; background: #fafafa; padding:0px 16px;">
         <tbody>
           <tr>
             <td>

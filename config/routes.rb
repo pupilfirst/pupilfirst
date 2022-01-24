@@ -1,6 +1,8 @@
 require 'override_csp'
 
 Rails.application.routes.draw do
+  Healthcheck.routes(self)
+
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql'
   end
@@ -172,13 +174,6 @@ Rails.application.routes.draw do
     get '/', action: 'index', as: 'coaches_index'
     get '/:id(/:slug)', action: 'show', as: 'coach'
     get '/filter/:active_tab', action: 'index'
-  end
-
-  scope 'connect_request', controller: 'connect_request', as: 'connect_request' do
-    get ':id/feedback/from_team/:token', action: 'feedback_from_team', as: 'feedback_from_team'
-    get ':id/feedback/from_faculty/:token', action: 'feedback_from_faculty', as: 'feedback_from_faculty'
-    get ':id/join_session(/:token)', action: 'join_session', as: 'join_session'
-    patch ':id/feedback/comment/:token', action: 'comment_submit', as: 'comment_submit'
   end
 
   # Founder show

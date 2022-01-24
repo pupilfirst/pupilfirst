@@ -9,7 +9,8 @@ on:
     branches: [master]
     paths-ignore:
       - "docs/**"
-
+env:
+  IMAGE_NAME: pupilfirst
 jobs:
   tests:
     runs-on: ubuntu-18.04
@@ -107,6 +108,10 @@ jobs:
           key: ${{ runner.os }}-lerna-${{ hashFiles('**/yarn.lock') }}
       - name: Yarn Install
         run: yarn install
+      - name: Generate locales.json
+        run: bundle exec i18n export
+      - name: Compile ReScript files
+        run: yarn run re:build
       - name: Precompile Assets
         run: |
           bundle exec rails assets:precompile
@@ -131,3 +136,35 @@ jobs:
           path: |
             tmp/capybara
             log/test.log
+  dockerhub-master:
+    needs: tests
+    environment: Production
+    name: Build & Push to Dockerhub
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Github Short SHA
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+
+      - name: Push image
+        run: |
+          IMAGE_ID=${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          VERSION=2022.0
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:latest
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION.$SHORT_SHA
+          docker push $IMAGE_ID --all-tags

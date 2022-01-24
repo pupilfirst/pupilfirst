@@ -17,6 +17,10 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION`.
 
+### 2022.0
+
+This version does not have any breaking changes.
+
 ### 2021.5
 
 Markdown editors no longer support the Commonmark standard. Even prior to this version, support for mixing HTML, CSS

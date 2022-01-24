@@ -31,10 +31,12 @@ Rails.application.configure do
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
-  # Compress JavaScripts and CSS.
-  config.assets.js_compressor = Uglifier.new(harmony: true)
-
-  # config.assets.css_compressor = :sass
+  # If we're serving static files, make sure that they can be cached.
+  if ENV['RAILS_SERVE_STATIC_FILES'].present?
+    config.public_file_server.headers = {
+      'Cache-Control' => "public, max-age=#{1.year.to_i}"
+    }
+  end
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
@@ -56,6 +58,13 @@ Rails.application.configure do
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
+
+  # ...except on the `/healthcheck` route.
+  config.ssl_options = {
+    redirect: {
+      exclude: ->(request) { /healthcheck/.match?(request.path) }
+    }
+  }
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.

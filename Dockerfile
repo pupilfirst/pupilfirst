@@ -48,6 +48,7 @@ FROM ruby:2.7.5-slim
 
 # We'll need the PostgreSQL client in this image.
 RUN apt-get update && apt-get install -y \
+  cron \
   curl \
   postgresql-client \
   imagemagick \
@@ -72,8 +73,5 @@ RUN bundle install
 ENV RAILS_ENV="production"
 
 RUN mkdir -p tmp/pids
-EXPOSE 3000
 
-HEALTHCHECK CMD curl --fail http://localhost:3000/healthcheck || exit 1
-
-ENTRYPOINT [ "bundle", "exec", "puma", "-C", "config/puma.rb" ]
+CMD [ "bundle", "exec", "puma", "-C", "config/puma.rb" ]

@@ -48,6 +48,7 @@ FROM ruby:2.7.5-slim
 
 # We'll need the PostgreSQL client in this image.
 RUN apt-get update && apt-get install -y \
+  cron \
   curl \
   postgresql-client \
   imagemagick \

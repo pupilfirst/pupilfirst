@@ -193,7 +193,7 @@ vapid_key.private_key
 To enable delivery of user-uploaded files through a CDN, you will have to set Cloudfront environment variables.
 
 1. [Create a Cloudfront public key](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-creating-signed-url-canned-policy.html) to generate signed URLs with canned policy.
-2. [Create a cloudfront distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) for accessing the private AWD S3 contents with signed URLs.
+2. [Create a cloudfront distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) for accessing the private AWS S3 contents with signed URLs.
 3. Set up the required environment variables:
 
    ```

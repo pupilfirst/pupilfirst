@@ -125,6 +125,11 @@ class User < ApplicationRecord
     BounceReport.exists?(email: email)
   end
 
+
+  def login_token_expiration_time
+    (login_mail_sent_at + Rails.application.secrets.login_token_time_limit).strftime('%B %-d, %Y %H:%M %p')
+  end
+
   # True if the user has ever signed in, handled by Users::ConfirmationService.
   def confirmed?
     confirmed_at.present?

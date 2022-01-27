@@ -49,7 +49,6 @@ Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
   resource :applicants, only: [] do
-    get '/:token', action: 'enroll' # TODO: Legacy route - remove after a few weeks.
     get '/:token/enroll', action: 'enroll', as: 'enroll'
   end
 
@@ -184,9 +183,6 @@ Rails.application.routes.draw do
   get 'manifest', to: 'home#manifest'
   get 'offline', to: 'home#offline'
   root 'home#index'
-
-  # TODO: Remove this backwards-compatibility path after Jan 2021.
-  get 'agreements/terms-of-use', to: redirect('/agreements/terms-and-conditions')
 
   get 'agreements/:agreement_type', as: 'agreement', controller: 'home', action: 'agreement'
 

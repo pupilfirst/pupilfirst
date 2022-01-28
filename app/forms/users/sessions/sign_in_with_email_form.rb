@@ -3,7 +3,14 @@ module Users
     class SignInWithEmailForm < Reform::Form
       include ValidateTokenGeneration
 
-      property :email, validates: { presence: true, length: { maximum: 250 }, email: true }
+      property :email,
+               validates: {
+                 presence: true,
+                 length: {
+                   maximum: 250
+                 },
+                 email: true
+               }
       property :referrer
       property :shared_device
 
@@ -16,10 +23,6 @@ module Users
       end
 
       private
-
-      def token_generated_at
-        user&.login_mail_sent_at
-      end
 
       def shared_device?
         shared_device == '1'

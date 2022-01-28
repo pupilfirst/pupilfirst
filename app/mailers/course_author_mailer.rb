@@ -4,7 +4,6 @@ class CourseAuthorMailer < SchoolMailer
     @school = @course.school
     @user = course_author.user
     @user.regenerate_login_token
-    @user.update!(login_token_generated_at: Time.zone.now)
 
     simple_roadie_mail(
       @user.email,

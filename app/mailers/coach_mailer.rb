@@ -5,7 +5,6 @@ class CoachMailer < SchoolMailer
     @coach = coach
     @user = coach.user
     @user.regenerate_login_token
-    @user.update!(login_token_generated_at: Time.zone.now)
 
     simple_roadie_mail(
       coach.email,

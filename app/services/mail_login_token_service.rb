@@ -11,9 +11,6 @@ class MailLoginTokenService
     # Make sure we generate a new hashed login token.
     @user.regenerate_login_token
 
-    # Update the time at which last login mail was sent.
-    @user.update!(login_token_generated_at: Time.zone.now)
-
     url_options = {
       token: @user.original_login_token,
       shared_device: @shared_device

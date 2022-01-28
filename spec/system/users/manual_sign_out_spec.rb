@@ -9,7 +9,6 @@ feature 'Manual User Sign Out', js: true do
   scenario 'active user session is interrupted by the setting of the flag' do
     # Log in the user.
     user.regenerate_login_token
-    user.update!(login_token_generated_at: Time.zone.now)
     visit user_token_path(
             token: user.original_login_token,
             referrer: edit_user_path
@@ -28,7 +27,6 @@ feature 'Manual User Sign Out', js: true do
 
       # Log the user in again.
       user.regenerate_login_token
-      user.update!(login_token_generated_at: Time.zone.now)
       visit user_token_path(
               token: user.original_login_token,
               referrer: edit_user_path
@@ -51,7 +49,6 @@ feature 'Manual User Sign Out', js: true do
 
     scenario 'user signs in as usual' do
       user.regenerate_login_token
-      user.update!(login_token_generated_at: Time.zone.now)
       visit user_token_path(
               token: user.original_login_token,
               referrer: edit_user_path

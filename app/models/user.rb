@@ -84,10 +84,12 @@ class User < ApplicationRecord
   attr_reader :delete_account_token_original
   attr_reader :api_token
 
-  def regenerate_login_token
+  def regenerate_login_token(update_time_stamp: true)
     @original_login_token = SecureRandom.urlsafe_base64
     update!(
-      login_token_digest: Digest::SHA2.base64digest(@original_login_token)
+      login_token_digest: Digest::SHA2.base64digest(@original_login_token),
+      login_token_generated_at:
+        update_time_stamp ? Time.zone.now : login_token_generated_at
     )
   end
 

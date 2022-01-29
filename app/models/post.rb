@@ -1,4 +1,6 @@
 class Post < ApplicationRecord
+  include PgSearch::Model
+
   belongs_to :topic
   belongs_to :creator, class_name: 'User', optional: true
   belongs_to :editor, class_name: 'User', optional: true
@@ -12,4 +14,14 @@ class Post < ApplicationRecord
   scope :live, -> { where(archived_at: nil) }
 
   delegate :community, to: :topic
+
+  pg_search_scope :search_by_post_body,
+  against: :body,
+  using: {
+    tsearch: {
+      prefix: true,
+      any_word: true
+    }
+  }
+
 end

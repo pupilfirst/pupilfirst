@@ -152,6 +152,7 @@ module Types
       argument :topic_category_id, ID, required: false
       argument :target_id, ID, required: false
       argument :search, String, required: false
+      argument :search_by, String, required: false
       argument :sort_direction, Types::SortDirectionType, required: true
       argument :sort_criterion, Types::TopicSortCriterionType, required: true
     end

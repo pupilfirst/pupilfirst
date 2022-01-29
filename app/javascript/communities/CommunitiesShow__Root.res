@@ -366,14 +366,12 @@ module Selectable = {
     | Search(SearchTitle(_)) => Some("Search by title")
     | Search(SearchContent(_)) => Some("Search by content")
     | Solution(_) => Some("Solution")
-    // | SearchByContent(_) => Some("Search By")
     }
 
   let value = t =>
     switch t {
     | TopicCategory(category) => TopicCategory.name(category)
     | Search(search) => search->getSearch
-    // | SearchByContent(searchByContent) => searchByContent
     | Solution(solution) => solution ? "Solved" : "Unsolved"
     }
 
@@ -381,7 +379,6 @@ module Selectable = {
     switch t {
     | TopicCategory(category) => "category " ++ TopicCategory.name(category)
     | Search(search) => search->getSearch
-    // | SearchByContent(searchByContent) => searchByContent
     | Solution(_solution) => "solution solved unsolved"
     }
 
@@ -389,13 +386,11 @@ module Selectable = {
     switch t {
     | TopicCategory(_category) => "orange"
     | Search(_search) => "gray"
-    // | SearchByContent(_searchByContent) => "gray"
     | Solution(_solution) => "green"
     }
 
   let topicCategory = topicCategory => TopicCategory(topicCategory)
   let search = search => Search(search)
-  // let searchBy = searchByContent => SearchByContent(searchByContent)
   let solution = on => Solution(on)
 }
 
@@ -421,7 +416,6 @@ let unselected = (topicCategories, filter, state) => {
           Selectable.search(SearchContent(trimmedFilterString)),
           Selectable.search(SearchTitle(trimmedFilterString)),
         ]
-  // let searchByContent = trimmedFilterString == "" ? [] : [Selectable.searchBy(trimmedFilterString)]
 
   let hasSolution = switch filter.solution {
   | #Solved => [Selectable.solution(false)]
@@ -430,7 +424,6 @@ let unselected = (topicCategories, filter, state) => {
   }
 
   unselectedCategories |> Js.Array.concat(search) |> Js.Array.concat(hasSolution)
-  // |> Js.Array.concat(searchByContent)
 }
 
 let selected = filter => {
@@ -442,11 +435,6 @@ let selected = filter => {
 
   let selectedSearchString =
     filter.search |> OptionUtils.mapWithDefault(search => [Selectable.search(search)], [])
-  // let selectedSearchByContentString =
-  //   filter.searchByContent |> OptionUtils.mapWithDefault(
-  //     search => [Selectable.searchBy(search->getSearch)],
-  //     [],
-  //   )
 
   let selectedSolutionFilter = switch filter.solution {
   | #Solved => [Selectable.solution(true)]
@@ -456,7 +444,6 @@ let selected = filter => {
 
   selectedCategory
   |> Js.Array.concat(selectedSearchString)
-  // |> Js.Array.concat(selectedSearchByContentString)
   |> Js.Array.concat(selectedSolutionFilter)
 }
 
@@ -465,7 +452,6 @@ let onSelectFilter = (filter, send, selectable) => {
   | Selectable.TopicCategory(topicCategory) =>
     updateParams({...filter, topicCategory: Some(topicCategory)})
   | Search(search) => updateParams({...filter, search: Some(search)})
-  // | SearchByContent(searchByContent) => updateParams({...filter, search: Some(searchByContent)})
   | Solution(onOrOff) =>
     let solution = onOrOff ? #Solved : #Unsolved
     updateParams({...filter, solution: solution})
@@ -477,7 +463,6 @@ let onDeselectFilter = (filter, selectable) =>
   switch selectable {
   | Selectable.TopicCategory(_topicCategory) => updateParams({...filter, topicCategory: None})
   | Search(_search) => updateParams({...filter, search: None})
-  // | SearchByContent(_searchByContent) => updateParams({...filter, search: None})
   | Solution(_) => updateParams({...filter, solution: #Unselected})
   }
 
@@ -577,7 +562,6 @@ let filterFromQueryParams = (search, target, topicCategories) => {
       }
     ),
     author: None,
-    // searchByContent: get("searchByContent", params),
     topicCategory: get("topicCategory", params)->Belt.Option.flatMap(cat =>
       Js.Array.find(c => TopicCategory.id(c) == cat, topicCategories)
     ),

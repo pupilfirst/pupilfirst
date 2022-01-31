@@ -6,10 +6,17 @@ class TopicsResolver < ApplicationQuery
   property :resolution
   property :sort_direction
   property :sort_criterion
+  property :search_by
 
   def topics
     if search.present?
-      applicable_topics.search_by_title_and_post_body(title_for_search)
+      by_title = applicable_topics.search_by_title(title_for_search)
+      case search_by
+      when 'content'
+        applicable_topics.search_by_post_body(title_for_search)
+      else
+        by_title
+      end
     else
       applicable_topics
     end

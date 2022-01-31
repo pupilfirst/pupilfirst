@@ -10,12 +10,10 @@ class TopicsResolver < ApplicationQuery
 
   def topics
     if search.present?
-      by_title = applicable_topics.search_by_title(title_for_search)
-      case search_by
-      when 'content'
+      if search_by == 'content'
         applicable_topics.search_by_post_body(title_for_search)
       else
-        by_title
+        applicable_topics.search_by_title(title_for_search)
       end
     else
       applicable_topics

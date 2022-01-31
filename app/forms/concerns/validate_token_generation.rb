@@ -45,8 +45,4 @@ module ValidateTokenGeneration
         current_school.users.with_email(email).first if email.present?
       end
   end
-
-  def token_generated_at
-    @token_generated_at ||= user&.login_token_generated_at
-  end
 end

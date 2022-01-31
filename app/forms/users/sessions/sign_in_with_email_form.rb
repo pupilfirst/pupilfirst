@@ -24,6 +24,10 @@ module Users
 
       private
 
+      def token_generated_at
+        user&.login_token_generated_at
+      end
+
       def shared_device?
         shared_device == '1'
       end

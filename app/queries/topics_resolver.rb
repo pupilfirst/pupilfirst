@@ -69,10 +69,11 @@ class TopicsResolver < ApplicationQuery
   end
 
   def filter_by_solution(topics, resolution)
-    topics_with_solution = topics.joins(:posts).where(posts: { solution: true })
+    topics_with_solution =
+      topics.joins(:posts).where(posts: { solution: true }).select(:id)
     case resolution
     when 'Solved'
-      topics_with_solution
+      Topic.where(id: topics_with_solution)
     when 'Unsolved'
       topics.where.not(id: topics_with_solution)
     else

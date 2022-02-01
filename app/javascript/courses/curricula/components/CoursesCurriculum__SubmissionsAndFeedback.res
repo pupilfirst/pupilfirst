@@ -50,12 +50,12 @@ let submissionStatusIcon = (~passed) => {
   let color = passed ? "green" : "red"
 
   <div className="max-w-fc">
-    <div className={"flex border-2 rounded-lg border-" ++ (color ++ "-500 px-4 py-6")}>
+    <div className={"flex justify-center border-2 rounded-lg border-" ++ (color ++ "-500 px-4 py-6")}>
       {passed
-        ? <span className="fa-stack text-green-500 text-lg">
+        ? <div className="fa-stack text-green-500 text-lg">
             <i className="fas fa-certificate fa-stack-2x" />
             <i className="fas fa-check fa-stack-1x fa-inverse" />
-          </span>
+          </div>
         : <i className="fas fa-exclamation-triangle text-3xl text-red-500 mx-1" />}
     </div>
     <div className={"text-center text-" ++ (color ++ "-500 font-bold mt-2")}> {text |> str} </div>

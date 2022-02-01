@@ -122,7 +122,7 @@ Capybara.register_driver :headless_chrome do |app|
   options.add_argument('use-fake-device-for-media-stream')
   options.headless!
 
-  Capybara::Selenium::Driver.new app, browser: :chrome, options: options
+  Capybara::Selenium::Driver.new app, browser: :chrome, capabilities: [options]
 end
 
 Capybara.register_driver :firefox do |app|
@@ -133,7 +133,7 @@ Capybara.register_driver :headless_firefox do |app|
   options = Selenium::WebDriver::Firefox::Options.new
   options.headless!
 
-  Capybara::Selenium::Driver.new app, browser: :firefox, options: options
+  Capybara::Selenium::Driver.new app, browser: :firefox, capabilities: [options]
 end
 
 Capybara.javascript_driver =

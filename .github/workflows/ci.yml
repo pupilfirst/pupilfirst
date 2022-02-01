@@ -168,3 +168,17 @@ jobs:
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION.$SHORT_SHA
           docker push $IMAGE_ID --all-tags
+  deploy_to_digital_ocean:
+      needs: dockerhub-master
+      name: DigitalOcean App Platform deployment
+      if: github.ref == 'refs/heads/master'
+      runs-on: ubuntu-latest
+      env:
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      steps:
+        - name: Deploy to DigitalOcean
+          uses: digitalocean/app_action@main
+          if: "${{ env.DIGITALOCEAN_ACCESS_TOKEN != '' }}"
+          with:
+            app_name: pupilfirst
+            token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}

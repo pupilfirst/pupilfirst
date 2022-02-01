@@ -1,8 +1,6 @@
 require 'override_csp'
 
 Rails.application.routes.draw do
-  Healthcheck.routes(self)
-
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql'
   end

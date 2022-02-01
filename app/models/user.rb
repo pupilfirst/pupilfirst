@@ -45,7 +45,6 @@ class User < ApplicationRecord
            inverse_of: :recipient,
            dependent: :destroy
 
-
   # database_authenticable is required by devise_for to generate the session routes
   devise :database_authenticatable,
          :trackable,
@@ -73,10 +72,13 @@ class User < ApplicationRecord
     return unless name_changed?
 
     self.name =
-      name.split.map do |name_fragment|
-        name_fragment[0] = name_fragment[0].capitalize
-        name_fragment
-      end.join(' ')
+      name
+        .split
+        .map do |name_fragment|
+          name_fragment[0] = name_fragment[0].capitalize
+          name_fragment
+        end
+        .join(' ')
   end
 
   attr_reader :delete_account_token_original
@@ -86,6 +88,7 @@ class User < ApplicationRecord
     @original_login_token = SecureRandom.urlsafe_base64
     update!(
       login_token_digest: Digest::SHA2.base64digest(@original_login_token),
+      login_token_generated_at: Time.zone.now
     )
   end
 
@@ -96,12 +99,14 @@ class User < ApplicationRecord
   def regenerate_reset_password_token
     @original_reset_password_token = SecureRandom.urlsafe_base64
     update!(
-      reset_password_token: Digest::SHA2.base64digest(@original_reset_password_token),
+      reset_password_token:
+        Digest::SHA2.base64digest(@original_reset_password_token)
     )
   end
 
   def original_reset_password_token
-    @original_reset_password_token || raise('Original reset password token is unavailable')
+    @original_reset_password_token ||
+      raise('Original reset password token is unavailable')
   end
 
   def regenerate_delete_account_token
@@ -113,7 +118,9 @@ class User < ApplicationRecord
   end
 
   def self.find_by_hashed_delete_account_token(delete_account_token)
-    find_by(delete_account_token_digest: Digest::SHA2.hexdigest(delete_account_token))
+    find_by(
+      delete_account_token_digest: Digest::SHA2.hexdigest(delete_account_token)
+    )
   end
 
   def regenerate_api_token
@@ -125,9 +132,11 @@ class User < ApplicationRecord
     BounceReport.exists?(email: email)
   end
 
-
   def login_token_expiration_time
-    (login_mail_sent_at + Rails.application.secrets.login_token_time_limit).strftime('%B %-d, %Y %H:%M %p')
+    (
+      login_token_generated_at +
+        Rails.application.secrets.login_token_time_limit
+    ).strftime('%B %-d, %Y %H:%M %p')
   end
 
   # True if the user has ever signed in, handled by Users::ConfirmationService.

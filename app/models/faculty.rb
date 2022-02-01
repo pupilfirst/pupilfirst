@@ -64,29 +64,6 @@ class Faculty < ApplicationRecord
             allow_blank: true
 
   scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
-  scope :visiting_coaches,
-        -> {
-          where(category: CATEGORY_VISITING_COACHES).order('sort_index ASC')
-        }
-  scope :developer_coaches,
-        -> {
-          where(category: CATEGORY_DEVELOPER_COACHES).order('sort_index ASC')
-        }
-  scope :vr_coaches,
-        -> { where(category: CATEGORY_VR_COACHES).order('sort_index ASC') }
-  scope :advisory_board,
-        -> { where(category: CATEGORY_ADVISORY_BOARD).order('sort_index ASC') }
-  scope :available_for_connect,
-        -> {
-          where(
-            category: [
-              CATEGORY_TEAM,
-              CATEGORY_VISITING_COACHES,
-              CATEGORY_ALUMNI,
-              CATEGORY_VR_COACHES
-            ]
-          )
-        }
 
   delegate :email, :name, :title, :affiliation, :about, :avatar, to: :user
 

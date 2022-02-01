@@ -453,10 +453,26 @@ feature 'Community', js: true do
     end
   end
 
-  scenario 'user searches for topics in community' do
+  scenario 'user searches for topics in community by post title' do
     # Let's set the titles for both topics to completely different sentences to avoid confusing the fuzzy search algo.
     topic_1.update!(title: 'Complex sentence with certain words')
     topic_2.update!(title: 'Completely Different Sequence')
+
+    sign_in_user(coach.user, referrer: community_path(community))
+
+    expect(page).to have_text(topic_2.title)
+
+    fill_in 'filter', with: 'complex sentence'
+
+    click_button 'Search by title: complex sentence'
+
+    expect(page).to_not have_text(topic_2.title)
+    expect(page).to have_text(topic_1.title)
+  end
+
+  scenario 'user searches for topics in community by post body content' do
+    # Let's set the titles for both topics to completely different sentences to avoid confusing the fuzzy search algo.
+    topic_1.update!(title: 'Complex sentence with certain words')
     create :post,
            topic: topic_3,
            creator: student_1.user,
@@ -469,10 +485,9 @@ feature 'Community', js: true do
 
     fill_in 'filter', with: 'complex sentence'
 
-    click_button 'Search: complex sentence'
+    click_button 'Search by content: complex sentence'
 
-    expect(page).to_not have_text(topic_2.title)
-    expect(page).to have_text(topic_1.title)
+    expect(page).to_not have_text(topic_1.title)
     expect(page).to have_text(topic_3.title)
   end
 

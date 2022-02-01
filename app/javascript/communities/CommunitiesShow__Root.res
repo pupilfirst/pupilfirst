@@ -32,7 +32,6 @@ type filter = {
   topicCategory: option<TopicCategory.t>,
   solution: solution,
   search: option<search>,
-  author: option<string>,
   target: option<Target.t>,
   sortCriterion: sortCriterion,
   sortDirection: sortDirection,
@@ -561,7 +560,6 @@ let filterFromQueryParams = (search, target, topicCategories) => {
       | Some(_) => SearchTitle(a)
       }
     ),
-    author: None,
     topicCategory: get("topicCategory", params)->Belt.Option.flatMap(cat =>
       Js.Array.find(c => TopicCategory.id(c) == cat, topicCategories)
     ),

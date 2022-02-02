@@ -38,6 +38,10 @@ module Types
       argument :id, ID, required: false
     end
 
+    resolved_field :course, Types::CourseType, null: true do
+      argument :id, ID, required: false
+    end
+
     resolved_field :content_blocks, [Types::ContentBlockType], null: false do
       argument :target_id, ID, required: true
       argument :target_version_id, ID, required: false

@@ -103,18 +103,6 @@ class Founder < ApplicationRecord
     startup.dropped_out_at?
   end
 
-  def pending_connect_request_for?(faculty)
-    startup
-      .connect_requests
-      .joins(:connect_slot)
-      .exists?(
-        connect_slots: {
-          faculty_id: faculty.id
-        },
-        status: ConnectRequest::STATUS_REQUESTED
-      )
-  end
-
   def latest_submissions
     timeline_events.live.where(timeline_event_owners: { latest: true })
   end

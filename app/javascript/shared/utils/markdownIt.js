@@ -1,5 +1,4 @@
 import commonmarkPreset from "markdown-it/lib/presets/commonmark";
-import "katex/dist/katex.min.css";
 
 const md = require("markdown-it")({
   ...commonmarkPreset.options,

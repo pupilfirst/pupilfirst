@@ -873,7 +873,7 @@ ru:
           Если вы пропустили просмотр в прямом эфире, мы разместим его на панели управления через пару дней.
           Пожалуйста, помогите нам улучшить наши занятия с помощью быстрой обратной связи: https://svlabs.typeform.com/to/h7g9Om?faculty=%{faculty_name_escaped}&session=%{session_title}&date=%{session_date}
       send_session_reminders:
-        message: "Напоминание: \"%{title}\" начнется через %{time_delta} (в %{time_exact}). Пожалуйста, проверьте коллективный канал Slack, чтобы найти ссылку для присоединения к сеансу."
+        message: 'Напоминание: "%{title}" начнется через %{time_delta} (в %{time_exact}). Пожалуйста, проверьте коллективный канал Slack, чтобы найти ссылку для присоединения к сеансу.'
     timeline_events:
       verification_notification:
         founder:
@@ -928,7 +928,7 @@ ru:
         description: Ваш отзыв будет отправлен студенту по электронной почте.
         title: Отзыв Отправлен
     create_grading:
-      evaluation_criteria_error: Невозможно оценить отправку% {submission_id} без критериев оценки
+      evaluation_criteria_error: Невозможно оценить отправку %{submission_id} без критериев оценки
       grade_recorded: Оценки Записаны
       invalid_checklist_shape_error: Форма данных в списке отправки не соответствует форме, отправленной с оценкой.
       invalid_checklist_values_error: Значения элементов списка в отправке не совпадают с данными обзора.

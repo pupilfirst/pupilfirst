@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_06_183613) do
+ActiveRecord::Schema.define(version: 2022_01_28_050607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -74,9 +74,11 @@ ActiveRecord::Schema.define(version: 2021_09_06_183613) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "email_verified", default: false
+    t.string "login_token_digest"
     t.index ["course_id"], name: "index_applicants_on_course_id"
     t.index ["email", "course_id"], name: "index_applicants_on_email_and_course_id", unique: true
     t.index ["login_token"], name: "index_applicants_on_login_token", unique: true
+    t.index ["login_token_digest"], name: "index_applicants_on_login_token_digest", unique: true
   end
 
   create_table "audit_records", force: :cascade do |t|
@@ -136,32 +138,6 @@ ActiveRecord::Schema.define(version: 2021_09_06_183613) do
     t.bigint "course_id"
     t.index ["community_id"], name: "index_community_course_connections_on_community_id"
     t.index ["course_id", "community_id"], name: "index_community_course_connection_on_course_id_and_community_id", unique: true
-  end
-
-  create_table "connect_requests", id: :serial, force: :cascade do |t|
-    t.integer "connect_slot_id"
-    t.integer "startup_id"
-    t.text "questions"
-    t.string "status"
-    t.string "meeting_link"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "confirmed_at"
-    t.datetime "feedback_mails_sent_at"
-    t.integer "rating_for_faculty"
-    t.integer "rating_for_team"
-    t.text "comment_for_faculty"
-    t.text "comment_for_team"
-    t.index ["connect_slot_id"], name: "index_connect_requests_on_connect_slot_id"
-    t.index ["startup_id"], name: "index_connect_requests_on_startup_id"
-  end
-
-  create_table "connect_slots", id: :serial, force: :cascade do |t|
-    t.integer "faculty_id"
-    t.datetime "slot_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["faculty_id"], name: "index_connect_slots_on_faculty_id"
   end
 
   create_table "content_blocks", force: :cascade do |t|
@@ -332,7 +308,6 @@ ActiveRecord::Schema.define(version: 2021_09_06_183613) do
     t.integer "user_id"
     t.boolean "dashboard_toured"
     t.integer "resume_file_id"
-    t.string "slack_access_token"
     t.boolean "excluded_from_leaderboard", default: false
     t.index ["user_id"], name: "index_founders_on_user_id"
   end
@@ -732,7 +707,7 @@ ActiveRecord::Schema.define(version: 2021_09_06_183613) do
     t.string "remember_token"
     t.boolean "sign_out_at_next_request"
     t.datetime "confirmed_at"
-    t.datetime "login_mail_sent_at"
+    t.datetime "login_token_generated_at"
     t.string "name"
     t.string "title"
     t.text "about"
@@ -744,15 +719,17 @@ ActiveRecord::Schema.define(version: 2021_09_06_183613) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "time_zone", default: "Asia/Kolkata", null: false
-    t.string "delete_account_token"
+    t.string "delete_account_token_digest"
     t.datetime "delete_account_sent_at"
     t.datetime "account_deletion_notification_sent_at"
     t.string "api_token_digest"
     t.string "locale", default: "en"
     t.jsonb "webpush_subscription", default: {}
+    t.string "login_token_digest"
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
-    t.index ["delete_account_token"], name: "index_users_on_delete_account_token", unique: true
+    t.index ["delete_account_token_digest"], name: "index_users_on_delete_account_token_digest", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true
+    t.index ["login_token_digest"], name: "index_users_on_login_token_digest", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["school_id"], name: "index_users_on_school_id"
   end
@@ -790,9 +767,6 @@ ActiveRecord::Schema.define(version: 2021_09_06_183613) do
   add_foreign_key "communities", "schools"
   add_foreign_key "community_course_connections", "communities"
   add_foreign_key "community_course_connections", "courses"
-  add_foreign_key "connect_requests", "connect_slots"
-  add_foreign_key "connect_requests", "startups"
-  add_foreign_key "connect_slots", "faculty"
   add_foreign_key "course_authors", "courses"
   add_foreign_key "course_authors", "users"
   add_foreign_key "course_exports", "courses"

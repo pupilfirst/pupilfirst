@@ -1,9 +1,12 @@
 class SsoConstraint
   def matches?(request)
-    # Match constraint if testing.
-    return true if request.host.in? %w[127.0.0.1 www.example.com]
+    return true unless Rails.application.secrets.multitenancy
 
-    # Match constraint if visiting an 'Pupilfirst domain'.
-    request.host == Rails.application.secrets.sso_domain
+    sso_domain = Rails.application.secrets.sso_domain
+
+    return true if sso_domain.blank?
+
+    # Match constraint if visiting the SSO domain.
+    request.host == sso_domain
   end
 end

@@ -13,7 +13,7 @@ let str = React.string
 type status = [#Active | #Ended | #Archived]
 
 module CoursesQuery = %graphql(`
-  query CoursesQuery($search: String, $after: String, $status: CourseStatus) {
+  query CoursesQuery($search: String, $after: String,$courseId: ID, $status: CourseStatus) {
     courses(status: $status, search: $search, first: 10, after: $after){
       nodes {
         ...Course.Fragments.AllFields
@@ -22,6 +22,9 @@ module CoursesQuery = %graphql(`
         endCursor,hasNextPage
       }
       totalCount
+    }
+    course(id: $courseId){
+        ...Course.Fragments.AllFields
     }
   }
   `)
@@ -47,7 +50,8 @@ type state = {
   filterString: string,
   filter: filter,
   totalEntriesCount: int,
-  relaodCourses: bool,
+  reloadCourses: bool,
+  selectedCourse: option<Course.t>,
 }
 
 type action =
@@ -63,9 +67,14 @@ type action =
   | ClearArchivedFilter
   | UpdateCourse(Course.t)
   | LoadCourses(option<string>, bool, array<Course.t>, int)
+  | UpdateSelectedCourse(option<Course.t>)
 
 let reducer = (state, action) =>
   switch action {
+  | UpdateSelectedCourse(selectedCourse) => {
+      ...state,
+      selectedCourse: selectedCourse,
+    }
   | SetSearchString(string) => {
       ...state,
       filter: {
@@ -77,7 +86,7 @@ let reducer = (state, action) =>
   | ReloadCourses => {
       ...state,
       loading: Reloading,
-      relaodCourses: !state.relaodCourses,
+      reloadCourses: !state.reloadCourses,
     }
   | UnsetSearchString => {
       ...state,
@@ -180,14 +189,29 @@ let courseLinks = course => {
   ]
 }
 
-let loadCourses = (state, cursor, send) => {
-  CoursesQuery.make(~status=?state.filter.status, ~after=?cursor, ~search=?state.filter.name, ())
+let loadCourses = (courseId, state, cursor, send) => {
+  CoursesQuery.make(
+    ~status=?state.filter.status,
+    ~after=?cursor,
+    ~search=?state.filter.name,
+    ~courseId?,
+    (),
+  )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     let courses = Js.Array.map(
       rawCourse => Course.makeFromJs(rawCourse),
       response["courses"]["nodes"],
     )
+    let course = response["course"]->Belt.Option.map(Course.makeFromJs)
+    switch course {
+    | None => send(UpdateSelectedCourse(None))
+    | Some(course) =>
+      switch courses->Js.Array2.find(c => {c.id == course.id}) {
+      | None => send(UpdateSelectedCourse(Some(course)))
+      | Some(_) => send(UpdateSelectedCourse(None))
+      }
+    }
     send(
       LoadCourses(
         response["courses"]["pageInfo"]["endCursor"],
@@ -427,7 +451,7 @@ let raiseUnsafeFindError = id => {
 }
 
 @react.component
-let make = (~selectedCourse) => {
+let make = () => {
   let (state, send) = React.useReducer(
     reducer,
     {
@@ -439,7 +463,8 @@ let make = (~selectedCourse) => {
         name: None,
         status: Some(#Active),
       },
-      relaodCourses: false,
+      reloadCourses: false,
+      selectedCourse: None,
     },
   )
 
@@ -455,27 +480,32 @@ let make = (~selectedCourse) => {
   }
 
   React.useEffect2(() => {
-    loadCourses(state, None, send)
+    switch url.path {
+    | list{"school", "courses", courseId, ..._} => loadCourses(Some(courseId), state, None, send)
+    | _ => loadCourses(None, state, None, send)
+    }
     None
-  }, (state.filter, state.relaodCourses))
+  }, (state.filter, state.reloadCourses))
 
   <div className="flex flex-1 h-full bg-gray-200 overflow-y-scroll">
     {switch (state.courses, editorAction) {
     | (Unloaded, _)
     | (_, Hidden) => React.null
     | (_, ShowForm(id)) => {
-        let course = Belt.Option.flatMap(id, id => {
-          Some(
-            ArrayUtils.unsafeFind(
-              c => Course.id(c) == id,
-              "Unable to find course with ID: " ++ id ++ " in Courses Index",
-              Js.Array.concat(
-                Belt.Option.mapWithDefault(selectedCourse, [], s => [s]),
+        let course = switch state.selectedCourse {
+        | Some(c) if Some(c.id) == id => Some(c)
+        | _ =>
+          Belt.Option.flatMap(id, id => {
+            Some(
+              ArrayUtils.unsafeFind(
+                c => Course.id(c) == id,
+                "Unable to find course with ID: " ++ id ++ " in Courses Index",
                 Pagination.toArray(state.courses),
               ),
-            ),
-          )
-        })
+            )
+          })
+        }
+
         <SchoolAdmin__EditorDrawer2
           closeDrawerCB={_ => RescriptReactRouter.push("/school/courses/")}>
           <CourseEditor__Form
@@ -541,7 +571,7 @@ let make = (~selectedCourse) => {
                   className="btn btn-primary-ghost cursor-pointer w-full"
                   onClick={_ => {
                     send(BeginLoadingMore)
-                    loadCourses(state, Some(cursor), send)
+                    loadCourses(None, state, Some(cursor), send)
                   }}>
                   {t("button_load_more")->str}
                 </button>

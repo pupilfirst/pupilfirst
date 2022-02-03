@@ -1,0 +1,4 @@
+#!/bin/sh
+bundle exec rails db:migrate
+bundle exec whenever --update-crontab
+bundle exec rake jobs:work

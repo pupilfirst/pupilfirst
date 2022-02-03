@@ -3,6 +3,8 @@ class StudentMailer < SchoolMailer
     @school = student.course.school
     @course = student.course
     @student = student
+    @user = student.user
+    @user.regenerate_login_token
 
     simple_roadie_mail(
       @student.email,

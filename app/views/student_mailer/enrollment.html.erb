@@ -1,6 +1,6 @@
 <%
   team_members = @student.startup.founders.where.not(id: @student.id).map(&:name).to_sentence
-  sign_in_link = user_token_url(token: @student.user.login_token)
+  sign_in_link = user_token_url(token: @user.original_login_token)
 %>
 
 <% content_for :title do %>
@@ -36,4 +36,8 @@
   <% end %>
 
   <%= render 'mailers/link_fallback', url: sign_in_link %>
+
+  <p>
+    Please note that the link will expire by <%= @student.user.login_token_expiration_time %>. If the link has expired, you can request another one-time token from <a href=<%= sign_in_with_email_url %>>the sign-in page</a>.
+  </p>
 <% end %>

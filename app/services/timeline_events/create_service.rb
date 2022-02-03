@@ -58,7 +58,7 @@ module TimelineEvents
 
     def update_number(timeline_event)
       timeline_event.update!(
-        number: old_events(timeline_event).maximum(:number) + 1
+        number: (old_events(timeline_event).maximum(:number) || 0) + 1
       )
     end
 

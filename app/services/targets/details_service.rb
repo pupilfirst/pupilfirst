@@ -113,7 +113,8 @@ module Targets
           created_at: submission.created_at,
           status: submission.status,
           checklist: submission.checklist,
-          files: files(submission)
+          files: files(submission),
+          number: submission.number
         }
       end
     end

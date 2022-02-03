@@ -114,4 +114,8 @@ class TimelineEvent < ApplicationRecord
       evaluated_at.present? ? :passed : :marked_as_complete
     end
   end
+
+  def archived?
+    archived_at.present?
+  end
 end

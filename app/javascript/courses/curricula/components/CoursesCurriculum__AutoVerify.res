@@ -28,6 +28,7 @@ let handleSuccess = (submission, levelUpEligibility, linkToComplete, addSubmissi
       ~createdAt=submission["createdAt"]->DateFns.decodeISO,
       ~status=Submission.MarkedAsComplete,
       ~checklist=[],
+      ~number=1,
     ),
     levelUpEligibility,
   )

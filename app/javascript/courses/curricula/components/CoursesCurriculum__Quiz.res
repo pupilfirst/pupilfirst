@@ -37,6 +37,7 @@ let createQuizSubmission = (target, selectedAnswersIds, setSaving, addSubmission
           ~createdAt=DateFns.decodeISO(submission["createdAt"]),
           ~status=Submission.MarkedAsComplete,
           ~checklist,
+          ~number=1,
         ),
         levelUpEligibility,
       )

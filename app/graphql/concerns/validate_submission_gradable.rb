@@ -19,7 +19,7 @@ module ValidateSubmissionGradable
     def validate(_object, _context, value)
       submission = TimelineEvent.find(value[:submission_id])
 
-      if submission.archived_at.present?
+      if submission.archived?
         return(
           I18n.t(
             'graphql.concerns.validate_submission_gradable.submission_should_be_live'

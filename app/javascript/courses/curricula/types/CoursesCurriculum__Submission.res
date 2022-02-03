@@ -11,12 +11,14 @@ type t = {
   createdAt: Js.Date.t,
   status: status,
   checklist: array<SubmissionChecklistItem.t>,
+  number: int,
 }
 
 let id = t => t.id
 let createdAt = t => t.createdAt
 let status = t => t.status
 let checklist = t => t.checklist
+let number = t => t.number
 
 let pending = t =>
   switch t.status {
@@ -36,6 +38,7 @@ let decode = json => {
   {
     id: json |> field("id", string),
     createdAt: json |> field("createdAt", DateFns.decodeISO),
+    number: json |> field("number", int),
     status: switch json |> field("status", string) {
     | "marked_as_complete" => MarkedAsComplete
     | "pending" => Pending
@@ -54,9 +57,10 @@ let decode = json => {
   }
 }
 
-let make = (~id, ~createdAt, ~status, ~checklist) => {
+let make = (~id, ~createdAt, ~status, ~checklist, ~number) => {
   id: id,
   createdAt: createdAt,
   status: status,
   checklist: checklist,
+  number: number,
 }

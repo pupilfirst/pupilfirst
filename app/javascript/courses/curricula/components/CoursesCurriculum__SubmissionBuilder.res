@@ -61,6 +61,7 @@ module CreateSubmissionQuery = %graphql(`
       submission {
         id
         createdAt
+        number
       }
       levelUpEligibility
     }
@@ -96,6 +97,7 @@ let submit = (state, send, target, addSubmissionCB, event) => {
         ~createdAt=DateFns.decodeISO(submission["createdAt"]),
         ~status=Submission.Pending,
         ~checklist=submissionChecklist,
+        ~number=submission["number"],
       )
       let levelUpEligibility = LevelUpEligibility.makeOptionFromJs(
         response["createSubmission"]["levelUpEligibility"],

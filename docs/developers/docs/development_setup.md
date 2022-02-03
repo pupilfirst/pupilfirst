@@ -153,8 +153,27 @@ Visit the school using your browser at `http://localhost:3000`.
 You should be able to sign in as `admin@example.com` (use the _Continue as Developer_ option on the sign-in page), to
 test access to all interfaces. Test data has been seeded to the development database to make this process easier.
 
-# Additional setup for development with multitenancy enabled
-## Set up a reverse-proxy using Nginx
+> If you see an error related to the absence of a `locales.json` file, please make sure that your Rails server is running.
+
+## Enabling multitenancy
+
+**Optional:** If you'd like to enable multitenancy in your development environment, a few additional steps are required.
+
+### Add environment variables
+
+1. Turn on the multitenancy mode by additing the following environment variable.
+
+```
+MULTITENANCY=on
+```
+
+2. Update the SSO domain.
+
+```
+SSO_DOMAIN=sso.school.localhost
+```
+
+### Set up a reverse-proxy using Nginx
 
 Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your web application running on port 3000
 (the default Rails server port). Use following server configuration as an example:
@@ -200,16 +219,6 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
    127.0.0.1       www.school.localhost
    127.0.0.1       sso.school.localhost
    ```
-
-## Configure additional environment variables for multitenancy
-1. Turn on the multitenancy mode by additing the following environment variable
-```
-MULTITENANCY=on
-```
-2. Update the SSO domain
-```
-SSO_DOMAIN=sso.school.localhost
-```
 
 If your Nginx reverse-proxy has been set up correctly, then visit the school using your browser at
 `http://school.localhost`.

@@ -10,7 +10,7 @@ class SeedSubmissionNumbers < ActiveRecord::Migration[6.1]
       end
 
       all_submissions.each_with_index do |s, index|
-        s.update!(number: index)
+        s.update!(number: index + 1)
         @updated_submissions[s.id] = true
       end
     end

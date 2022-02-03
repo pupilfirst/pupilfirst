@@ -1039,6 +1039,7 @@ ru:
   shared:
     _no: "Нет"
     _yes: "Да"
+    all: Все
     cancel: Отмена
     close: Закрыть
     done_exclamation: Выполнено!

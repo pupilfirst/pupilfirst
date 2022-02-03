@@ -3,6 +3,7 @@ let decodeProps = json => {
   (
     json |> field("name", string),
     json |> field("about", string),
+    field("locale", string, json)->Locale.fromString,
     json |> field("avatarUrl", optional(string)),
     json |> field("dailyDigest", optional(bool)),
     json |> field("hasCurrentPassword", bool),
@@ -14,6 +15,7 @@ let decodeProps = json => {
 let (
   name,
   about,
+  locale,
   avatarUrl,
   dailyDigest,
   hasCurrentPassword,
@@ -26,7 +28,14 @@ switch ReactDOM.querySelector("#react-root") {
 | Some(root) =>
   ReactDOM.render(
     <UserEdit
-      name about avatarUrl dailyDigest hasCurrentPassword isSchoolAdmin hasValidDeleteAccountToken
+      name
+      about
+      locale
+      avatarUrl
+      dailyDigest
+      hasCurrentPassword
+      isSchoolAdmin
+      hasValidDeleteAccountToken
     />,
     root,
   )

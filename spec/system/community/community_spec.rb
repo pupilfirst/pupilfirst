@@ -453,10 +453,22 @@ feature 'Community', js: true do
     end
   end
 
-  scenario 'user searches for topics in community by post title' do
+  scenario 'user searches for topics in community and apply solved filters' do
     # Let's set the titles for both topics to completely different sentences to avoid confusing the fuzzy search algo.
     topic_1.update!(title: 'Complex sentence with certain words')
     topic_2.update!(title: 'Completely Different Sequence')
+    create :post,
+           topic: topic_1,
+           creator: student_1.user,
+           post_number: 4,
+           solution: true,
+           body: 'Another Complex Sentence'
+    create :post,
+           topic: topic_2,
+           creator: student_1.user,
+           post_number: 3,
+           solution: false,
+           body: 'Completely Different'
 
     sign_in_user(coach.user, referrer: community_path(community))
 
@@ -469,29 +481,74 @@ feature 'Community', js: true do
     expect(page).to_not have_text(topic_2.title)
     expect(page).to have_text(topic_1.title)
 
+    find("button[title='Remove selection: complex sentence']").click
 
-  end
+    fill_in 'filter', with: 'Completely Different'
 
-  scenario 'user searches for topics in community by post body content' do
-    # Let's set the titles for both topics to completely different sentences to avoid confusing the fuzzy search algo.
-    topic_1.update!(title: 'Complex sentence with certain words')
-    create :post,
-           topic: topic_3,
-           creator: student_1.user,
-           post_number: 2,
-           body: 'Another Complex Sentence'
+    click_button 'Search by content: Completely Different'
 
-    sign_in_user(coach.user, referrer: community_path(community))
-
+    expect(page).to_not have_text(topic_1.title)
     expect(page).to have_text(topic_2.title)
+
+    find("button[title='Remove selection: Completely Different']").click
+
+    fill_in 'filter', with: 'complex sentence'
+
+    click_button 'Search by title: complex sentence'
+
+    fill_in 'filter', with: 'solution'
+
+    click_button 'Solution: Solved'
+
+    expect(page).to_not have_text(topic_2.title)
+    expect(page).to have_text(topic_1.title)
+
+    # Clear the filter
+    find("button[title='Remove selection: Solved']").click
+    find("button[title='Remove selection: complex sentence']").click
+
+    fill_in 'filter', with: 'Completely Different'
+
+    click_button 'Search by title: Completely Different'
+
+    fill_in 'filter', with: 'solution'
+
+    click_button 'Solution: Unsolved'
+
+    expect(page).to_not have_text(topic_1.title)
+    expect(page).to have_text(topic_2.title)
+
+    # Clear the filter
+    find("button[title='Remove selection: Unsolved']").click
+    find("button[title='Remove selection: Completely Different']").click
 
     fill_in 'filter', with: 'complex sentence'
 
     click_button 'Search by content: complex sentence'
 
+    fill_in 'filter', with: 'solution'
+
+    click_button 'Solution: Solved'
+
+    expect(page).to_not have_text(topic_2.title)
+    expect(page).to have_text(topic_1.title)
+
+    # Clear the filter
+    find("button[title='Remove selection: Solved']").click
+    find("button[title='Remove selection: complex sentence']").click
+
+    fill_in 'filter', with: 'Completely Different'
+
+    click_button 'Search by content: Completely Different'
+
+    fill_in 'filter', with: 'solution'
+
+    click_button 'Solution: Unsolved'
+
     expect(page).to_not have_text(topic_1.title)
-    expect(page).to have_text(topic_3.title)
+    expect(page).to have_text(topic_2.title)
   end
+
 
   scenario 'user plays around with subscription' do
     sign_in_user(student_1.user, referrer: topic_path(topic_1))
@@ -799,83 +856,6 @@ feature 'Community', js: true do
 
       expect(page).to have_text(topic_2.title)
       expect(page).to have_text(topic_1.title)
-
-      fill_in 'filter', with: 'solution'
-
-      click_button 'Solution: Unsolved'
-
-      expect(page).to_not have_text(topic_1.title)
-      expect(page).to have_text(topic_2.title)
-    end
-
-    scenario 'user searches for topic by title and apply filter topics with or without solution ' do
-      sign_in_user(coach.user, referrer: community_path(community))
-
-      topic_1.update!(title: 'Complex sentence with certain words')
-      topic_2.update!(title: 'Completely Different Sequence')
-
-      fill_in 'filter', with: 'complex sentence'
-
-      click_button 'Search by title: complex sentence'
-
-      fill_in 'filter', with: 'solution'
-
-      click_button 'Solution: Solved'
-
-      expect(page).to_not have_text(topic_2.title)
-      expect(page).to have_text(topic_1.title)
-      # Clear the filter
-      find("button[title='Remove selection: Solved']").click
-      find("button[title='Remove selection: complex sentence']").click
-
-      fill_in 'filter', with: 'Completely Different'
-
-      click_button 'Search by title: Completely Different'
-
-      fill_in 'filter', with: 'solution'
-
-      click_button 'Solution: Unsolved'
-
-      expect(page).to_not have_text(topic_1.title)
-      expect(page).to have_text(topic_2.title)
-    end
-
-    scenario 'user searches for topic by post body and apply filter topics with or without solution ' do
-      sign_in_user(coach.user, referrer: community_path(community))
-
-      topic_1.update!(title: 'Complex sentence with certain words')
-      topic_2.update!(title: 'Completely Different Sequence')
-      create :post,
-           topic: topic_1,
-           creator: student_1.user,
-           post_number: 4,
-           solution: true,
-           body: 'Another Complex Sentence'
-      create :post,
-           topic: topic_2,
-           creator: student_1.user,
-           post_number: 3,
-           solution: false,
-           body: 'Completely Different'
-
-
-      fill_in 'filter', with: 'complex sentence'
-
-      click_button 'Search by content: complex sentence'
-
-      fill_in 'filter', with: 'solution'
-
-      click_button 'Solution: Solved'
-
-      expect(page).to_not have_text(topic_2.title)
-      expect(page).to have_text(topic_1.title)
-      # Clear the filter
-      find("button[title='Remove selection: Solved']").click
-      find("button[title='Remove selection: complex sentence']").click
-
-      fill_in 'filter', with: 'Completely Different'
-
-      click_button 'Search by content: Completely Different'
 
       fill_in 'filter', with: 'solution'
 

@@ -12,7 +12,7 @@ Bundler.require(*Rails.groups)
 
 module Pupilfirst
   class Application < Rails::Application
-    VERSION = '2021.5'
+    VERSION = '2022.0'
 
     # Initialize configuration defaults for originally generated Rails version.
     #

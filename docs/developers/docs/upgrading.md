@@ -6,7 +6,7 @@ sidebar_label: Upgrading
 
 ## Run Migrations
 
-When deploying changes from `master` branch, please check for any pending [migrations](https://edgeguides.rubyonrails.org/active_record_migrations.html)
+When deploying an updated version of the LMS, please check for any pending [migrations](https://edgeguides.rubyonrails.org/active_record_migrations.html)
 and run them after deployment.
 
 ## Breaking changes
@@ -15,7 +15,11 @@ These are a list of changes that should be accounted for when upgrading an exist
 encounter any problems while following these instructions, please [create a new issue](https://github.com/pupilfirst/pupilfirst/issues/new/choose)
 on our Github repo.
 
-Your current version can be found in `Pupilfirst::Application::VERSION`.
+Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
+
+### 2022.0
+
+This version does not have any breaking changes.
 
 ### 2021.5
 

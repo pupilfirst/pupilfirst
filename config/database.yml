@@ -1,5 +1,5 @@
 common: &common
-  adapter: postgresql
+  adapter: <%= ENV['DB_ADAPTER'] || 'postgresql' %>
   host: <%= ENV['DB_HOST'] %>
   username: <%= ENV['DB_USERNAME'] %>
   password: <%= ENV['DB_PASSWORD'] %>
@@ -14,4 +14,5 @@ test:
   database: <%= ENV['DB_NAME_TEST'] %>
 
 production:
+  <<: *common
   pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 5 %>

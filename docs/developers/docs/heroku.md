@@ -26,7 +26,7 @@ Begin by [signing up on Heroku](https://signup.heroku.com), and familiarizing yo
    1. Add configuration for [the file storage service](#file-storage-using-aws).
    2. Add configuration for [the email service](#sending-emails-with-postmark).
    3. Set environment variable `ASSET_HOST` to your app's fully qualified domain name (FQDN), which should look like `my-app-name.herokuapp.com`.
-   4. Set environment variable `YARN_PRODUCTION` to `false`.
+   4. Set environment variable `PREPARE_FOR_PRECOMPILATION` to `true`.
 
    There are more optional features that you can enable - read through the sections below.
 
@@ -193,7 +193,7 @@ vapid_key.private_key
 To enable delivery of user-uploaded files through a CDN, you will have to set Cloudfront environment variables.
 
 1. [Create a Cloudfront public key](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-creating-signed-url-canned-policy.html) to generate signed URLs with canned policy.
-2. [Create a cloudfront distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) for accessing the private AWD S3 contents with signed URLs.
+2. [Create a cloudfront distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) for accessing the private AWS S3 contents with signed URLs.
 3. Set up the required environment variables:
 
    ```

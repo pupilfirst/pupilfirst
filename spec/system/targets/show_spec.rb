@@ -161,7 +161,6 @@ feature 'Target Overlay', js: true do
 
     # There should also be a link to the completion section at the bottom of content.
     find('.course-overlay__body-tab-item', text: 'Learn').click
-    # find('a', text: 'Submit work for review').click
     click_button 'Submit work for review'
 
     long_answer = Faker::Lorem.sentence

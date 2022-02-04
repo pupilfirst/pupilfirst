@@ -492,6 +492,7 @@ feature 'Community', js: true do
 
     find("button[title='Remove selection: Completely Different']").click
 
+    # Apply solved filter
     fill_in 'filter', with: 'complex sentence'
 
     click_button 'Search by title: complex sentence'
@@ -522,6 +523,7 @@ feature 'Community', js: true do
     find("button[title='Remove selection: Unsolved']").click
     find("button[title='Remove selection: Completely Different']").click
 
+    # Apply unsolved filter
     fill_in 'filter', with: 'complex sentence'
 
     click_button 'Search by content: complex sentence'
@@ -548,7 +550,6 @@ feature 'Community', js: true do
     expect(page).to_not have_text(topic_1.title)
     expect(page).to have_text(topic_2.title)
   end
-
 
   scenario 'user plays around with subscription' do
     sign_in_user(student_1.user, referrer: topic_path(topic_1))

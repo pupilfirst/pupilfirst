@@ -12,5 +12,4 @@ class Post < ApplicationRecord
   scope :live, -> { where(archived_at: nil) }
 
   delegate :community, to: :topic
-
 end

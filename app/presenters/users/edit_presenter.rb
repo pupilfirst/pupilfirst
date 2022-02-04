@@ -10,6 +10,7 @@ module Users
         name: current_user.name,
         about: current_user.about || '',
         locale: current_user.locale,
+        available_locales: Rails.application.secrets.locale[:available],
         has_current_password: current_user.encrypted_password.present?,
         avatar_url:
           if current_user.avatar.attached?

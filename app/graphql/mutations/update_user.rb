@@ -2,7 +2,7 @@ module Mutations
   class UpdateUser < GraphQL::Schema::Mutation
     argument :name, String, required: true
     argument :about, String, required: false
-    argument :locale, Types::LocaleType, required: true
+    argument :locale, String, required: true
     argument :current_password, String, required: false
     argument :new_password, String, required: false
     argument :confirm_new_password, String, required: false

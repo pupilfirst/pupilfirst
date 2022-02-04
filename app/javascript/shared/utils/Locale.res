@@ -1,28 +1,19 @@
-type t = En | Ru
+type intlDisplayNames
 
-let toPolymorphic = t =>
-  switch t {
-  | En => #en
-  | Ru => #ru
-  }
+@send external intlDisplayNameOf: (intlDisplayNames, string) => string = "of"
 
-let all = [En, Ru]
+@new
+external createIntlDisplayNames: (array<string>, {"type": string}) => intlDisplayNames =
+  "Intl.DisplayNames"
 
-let name = t =>
-  switch t {
-  | En => "English"
-  | Ru => `русский`
-  }
+let toLanguageName = (inputLanguage, outputLanguage) => {
+  let intlDisplayNames = createIntlDisplayNames([outputLanguage], {"type": "language"})
+  intlDisplayNameOf(intlDisplayNames, inputLanguage)
+}
 
-let toString = t =>
-  switch t {
-  | En => "en"
-  | Ru => "ru"
-  }
-
-let fromString = localeString =>
-  switch localeString {
-  | "en" => En
-  | "ru" => Ru
-  | _anyOtherLocaleString => En
+let humanize = languageCode =>
+  if languageCode->Js.String2.startsWith("en") {
+    toLanguageName(languageCode, languageCode)
+  } else {
+    toLanguageName(languageCode, "en") ++ " - " ++ toLanguageName(languageCode, languageCode)
   }

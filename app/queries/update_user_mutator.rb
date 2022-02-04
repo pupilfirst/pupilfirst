@@ -1,7 +1,14 @@
 class UpdateUserMutator < ApplicationQuery
   property :name, validates: { presence: true }
   property :about, validates: { length: { maximum: 1000 } }
-  property :locale, validates: { presence: true }
+
+  property :locale,
+           validates: {
+             presence: true,
+             inclusion: {
+               in: Rails.application.secrets.locale[:available]
+             }
+           }
 
   property :current_password,
            validates: {

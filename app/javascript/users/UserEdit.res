@@ -3,7 +3,7 @@ let str = React.string
 type state = {
   name: string,
   about: string,
-  locale: Locale.t,
+  locale: string,
   avatarUrl: option<string>,
   currentPassword: string,
   newPassword: string,
@@ -40,7 +40,7 @@ let reducer = (state, action) =>
   switch action {
   | UpdateName(name) => {...state, name: name, dirty: true}
   | UpdateAbout(about) => {...state, about: about, dirty: true}
-  | UpdateLocale(localeString) => {...state, locale: Locale.fromString(localeString), dirty: true}
+  | UpdateLocale(locale) => {...state, locale: locale, dirty: true}
   | UpdateCurrentPassword(currentPassword) => {
       ...state,
       currentPassword: currentPassword,
@@ -89,7 +89,7 @@ let reducer = (state, action) =>
   }
 
 module UpdateUserQuery = %graphql(`
-  mutation UpdateUserMutation($name: String!, $about: String, $locale: Locale!, $currentPassword: String, $newPassword: String, $confirmPassword: String, $dailyDigest: Boolean!) {
+  mutation UpdateUserMutation($name: String!, $about: String, $locale: String!, $currentPassword: String, $newPassword: String, $confirmPassword: String, $dailyDigest: Boolean!) {
     updateUser(name: $name, about: $about, locale: $locale, currentPassword: $currentPassword, newPassword: $newPassword, confirmNewPassword: $confirmPassword, dailyDigest: $dailyDigest) {
       success
     }
@@ -162,7 +162,7 @@ let updateUser = (state, send, event) => {
   UpdateUserQuery.make(
     ~name=state.name,
     ~about=state.about,
-    ~locale=Locale.toPolymorphic(state.locale),
+    ~locale=state.locale,
     ~currentPassword=state.currentPassword,
     ~newPassword=state.newPassword,
     ~confirmPassword=state.confirmPassword,
@@ -259,6 +259,7 @@ let make = (
   ~hasCurrentPassword,
   ~about,
   ~locale,
+  ~availableLocales,
   ~avatarUrl,
   ~dailyDigest,
   ~isSchoolAdmin,
@@ -488,18 +489,18 @@ let make = (
             <div className="mt-6">
               <select
                 id="language"
-                value={Locale.toString(state.locale)}
+                value={state.locale}
                 onChange={event => {
                   Js.log(ReactEvent.Form.target(event)["value"])
                   send(UpdateLocale(ReactEvent.Form.target(event)["value"]))
                 }}
                 className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-gray-500">
-                {Locale.all
-                ->Js.Array2.map(locale => {
-                  <option key={Locale.toString(locale)} value={Locale.toString(locale)}>
-                    {Locale.name(locale)->str}
+                {availableLocales
+                ->Js.Array2.map(availableLocale =>
+                  <option key=availableLocale value=availableLocale>
+                    {Locale.humanize(availableLocale)->str}
                   </option>
-                })
+                )
                 ->React.array}
               </select>
             </div>

@@ -510,6 +510,15 @@ ActiveRecord::Schema.define(version: 2022_01_28_050607) do
     t.index ["level_id"], name: "index_startups_on_level_id"
   end
 
+  create_table "submission_reports", force: :cascade do |t|
+    t.string "status"
+    t.bigint "submission_id"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["submission_id"], name: "index_submission_reports_on_submission_id"
+  end
+
   create_table "taggings", id: :serial, force: :cascade do |t|
     t.integer "tag_id"
     t.integer "taggable_id"
@@ -657,6 +666,8 @@ ActiveRecord::Schema.define(version: 2022_01_28_050607) do
     t.jsonb "checklist", default: []
     t.bigint "reviewer_id"
     t.datetime "reviewer_assigned_at"
+    t.integer "number", default: 1, null: false
+    t.datetime "archived_at"
     t.index ["reviewer_id"], name: "index_timeline_events_on_reviewer_id"
   end
 
@@ -797,6 +808,7 @@ ActiveRecord::Schema.define(version: 2022_01_28_050607) do
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "levels"
+  add_foreign_key "submission_reports", "timeline_events", column: "submission_id"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"

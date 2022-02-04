@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesStudents__Root.css")`)
+%raw(`require("./CoursesStudents__Root.css")`)
 
 open CoursesStudents__Types
 
@@ -96,61 +96,67 @@ let showStudent = (team, levels, teamCoaches) => {
 }
 
 let showTeam = (team, levels, teamCoaches) =>
-  <div
-    key={team |> TeamInfo.id}
-    ariaLabel={"Info of team " ++ (team |> TeamInfo.name)}
-    className="flex shadow bg-white rounded-lg mt-4 overflow-hidden flex-col-reverse md:flex-row">
-    <div className="flex flex-col flex-1 w-full md:w-3/5">
-      {team
-      |> TeamInfo.students
-      |> Array.map(student =>
-        <Link
-          href={"/students/" ++ ((student |> TeamInfo.studentId) ++ "/report")}
-          key={student |> TeamInfo.studentId}
-          ariaLabel={"Student: " ++ (student |> TeamInfo.studentName) ++ " in team " ++ (team |> TeamInfo.name)}
-          className="flex items-center rounded-l-lg bg-white cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-          <div className="flex w-full md:flex-1 p-3 md:px-4 md:py-5">
-            {CoursesStudents__TeamCoaches.avatar(
-              student |> TeamInfo.studentAvatarUrl,
-              student |> TeamInfo.studentName,
-            )}
-            <div className="ml-2 md:ml-3 text-sm flex flex-col">
-              <p className="font-semibold inline-block leading-snug ">
-                {student |> TeamInfo.studentName |> str}
-              </p>
-              <p className="text-gray-700 font-semibold text-xs mt-px leading-snug ">
-                {student |> TeamInfo.studentTitle |> str}
-              </p>
-              {studentTags(student)}
-            </div>
-          </div>
-        </Link>
-      )
-      |> React.array}
-    </div>
+  <Spread props={"data-team-id": TeamInfo.id(team)} key={TeamInfo.id(team)}>
     <div
-      className="flex w-full md:w-2/5 items-center bg-gray-200 md:bg-white border-l py-2 md:py-0 px-3 md:px-4">
-      <div className="flex-1 pb-3 md:py-3 pr-3">
-        <div>
-          <p className="inline-block leading-tight font-semibold text-gray-800 text-tiny uppercase">
-            {"Team" |> str}
-          </p>
-          <h3 className="text-sm font-semibold leading-snug"> {team |> TeamInfo.name |> str} </h3>
-          {teamTags(team)}
-          <CoursesStudents__TeamCoaches
-            title={<div className="font-semibold text-gray-800 text-tiny uppercase pb-1 ">
-              {"Team Coaches" |> str}
-            </div>}
-            className="hidden md:inline-block mt-6"
-            coaches=teamCoaches
-          />
+      key={team |> TeamInfo.id}
+      ariaLabel={"Info of team " ++ (team |> TeamInfo.name)}
+      className="flex shadow bg-white rounded-lg mt-4 overflow-hidden flex-col-reverse md:flex-row">
+      <div className="flex flex-col flex-1 w-full md:w-3/5">
+        {team
+        |> TeamInfo.students
+        |> Array.map(student =>
+          <Link
+            href={"/students/" ++ ((student |> TeamInfo.studentId) ++ "/report")}
+            key={student |> TeamInfo.studentId}
+            ariaLabel={"Student: " ++
+            (student |> TeamInfo.studentName) ++
+            " in team " ++
+            (team |> TeamInfo.name)}
+            className="flex items-center rounded-l-lg bg-white cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+            <div className="flex w-full md:flex-1 p-3 md:px-4 md:py-5">
+              {CoursesStudents__TeamCoaches.avatar(
+                student |> TeamInfo.studentAvatarUrl,
+                student |> TeamInfo.studentName,
+              )}
+              <div className="ml-2 md:ml-3 text-sm flex flex-col">
+                <p className="font-semibold inline-block leading-snug ">
+                  {student |> TeamInfo.studentName |> str}
+                </p>
+                <p className="text-gray-700 font-semibold text-xs mt-px leading-snug ">
+                  {student |> TeamInfo.studentTitle |> str}
+                </p>
+                {studentTags(student)}
+              </div>
+            </div>
+          </Link>
+        )
+        |> React.array}
+      </div>
+      <div
+        className="flex w-full md:w-2/5 items-center bg-gray-200 md:bg-white border-l py-2 md:py-0 px-3 md:px-4">
+        <div className="flex-1 pb-3 md:py-3 pr-3">
+          <div>
+            <p
+              className="inline-block leading-tight font-semibold text-gray-800 text-tiny uppercase">
+              {"Team" |> str}
+            </p>
+            <h3 className="text-sm font-semibold leading-snug"> {team |> TeamInfo.name |> str} </h3>
+            {teamTags(team)}
+            <CoursesStudents__TeamCoaches
+              title={<div className="font-semibold text-gray-800 text-tiny uppercase pb-1 ">
+                {"Team Coaches" |> str}
+              </div>}
+              className="hidden md:inline-block mt-6"
+              coaches=teamCoaches
+            />
+          </div>
+        </div>
+        <div ariaLabel={"team level info: " ++ (team |> TeamInfo.id)} className="flex-shrink-0">
+          {levelInfo(team |> TeamInfo.levelId, levels)}
         </div>
       </div>
-      <div ariaLabel={"team level info: " ++ (team |> TeamInfo.id)} className="flex-shrink-0">
-        {levelInfo(team |> TeamInfo.levelId, levels)}
-      </div>
     </div>
-  </div>
+  </Spread>
 
 @react.component
 let make = (~levels, ~teams, ~teamCoaches) =>
@@ -161,11 +167,13 @@ let make = (~levels, ~teams, ~teamCoaches) =>
             {"No teams to show" |> str}
           </h4>
         </div>
-      : teams |> Array.map(team => {
+      : teams
+        |> Array.map(team => {
           let coaches = team |> TeamInfo.coaches(teamCoaches)
 
           Array.length(team |> TeamInfo.students) == 1
             ? showStudent(team, levels, coaches)
             : showTeam(team, levels, coaches)
-        }) |> React.array}
+        })
+        |> React.array}
   </div>

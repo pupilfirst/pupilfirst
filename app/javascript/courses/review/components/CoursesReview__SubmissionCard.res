@@ -45,9 +45,13 @@ let submissionCardClasses = submission =>
 let showSubmission = (submissions, filterString) =>
   <div id="submissions"> {Js.Array.map(submission =>
       <Link
-        href={`/submissions/${IndexSubmission.id(submission)}/review?${filterString}`}
         key={IndexSubmission.id(submission)}
-        ariaLabel={"Submission " ++ IndexSubmission.id(submission) ++ ", Submitted by: " ++ IndexSubmission.userNames(submission)}
+        props={"data-submission-id": IndexSubmission.id(submission)}
+        href={`/submissions/${IndexSubmission.id(submission)}/review?${filterString}`}
+        ariaLabel={"Submission " ++
+        IndexSubmission.id(submission) ++
+        ", Submitted by: " ++
+        IndexSubmission.userNames(submission)}
         className={submissionCardClasses(submission)}>
         <div className="w-full lg:w-8/12">
           <div className="block text-sm lg:pr-4">

@@ -147,7 +147,7 @@ feature 'Students view performance report and submissions overview', js: true do
 
     total_submissions = student.timeline_events.evaluated_by_faculty.count + student.timeline_events.pending_review.count
 
-    within("div[aria-label='student-submissions']") do
+    within("div[aria-label='Student submissions']") do
       expect(page).to have_selector('a', count: total_submissions)
     end
 
@@ -155,7 +155,7 @@ feature 'Students view performance report and submissions overview', js: true do
     click_button 'Overview'
     click_button 'Submissions'
 
-    within("div[aria-label='student-submissions']") do
+    within("div[aria-label='Student submissions']") do
       expect(page).to have_selector('a', count: total_submissions)
     end
   end

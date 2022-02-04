@@ -1,7 +1,7 @@
-%bs.raw(`require("./CoursesCurriculum.css")`)
+%raw(`require("./CoursesCurriculum.css")`)
 
-@bs.module external levelLockedImage: string = "../images/level-lock.svg"
-@bs.module external levelEmptyImage: string = "../images/level-empty.svg"
+@module external levelLockedImage: string = "../images/level-lock.svg"
+@module external levelEmptyImage: string = "../images/level-empty.svg"
 
 open CoursesCurriculum__Types
 
@@ -35,9 +35,13 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
     key={"target-" ++ targetId}
     className="courses-curriculum__target-container flex border-t bg-white hover:bg-gray-100">
     <Link
+      props={"data-target-id": targetId}
       href={"/targets/" ++ targetId}
       className="p-6 flex flex-grow items-center justify-between hover:text-primary-500 cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 focus:text-primary-500 focus:bg-gray-100 focus:rounded-lg"
-      ariaLabel={"Select Target: " ++ (Target.title(target) ++ ", Status: " ++ TargetStatus.statusToString(targetStatus))}>
+      ariaLabel={"Select Target: " ++
+      (Target.title(target) ++
+      ", Status: " ++
+      TargetStatus.statusToString(targetStatus))}>
       <span className="font-semibold text-left leading-snug"> {Target.title(target)->str} </span>
       {ReactUtils.nullIf(
         <span className={targetStatusClasses(targetStatus)}>
@@ -92,7 +96,8 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, author, courseId
   </div>
 }
 
-let addSubmission = (setState, latestSubmission, levelUpEligibility) => setState(state => {
+let addSubmission = (setState, latestSubmission, levelUpEligibility) =>
+  setState(state => {
     let withoutSubmissionForThisTarget =
       state.latestSubmissions |> Js.Array.filter(s =>
         s |> LatestSubmission.targetId != (latestSubmission |> LatestSubmission.targetId)

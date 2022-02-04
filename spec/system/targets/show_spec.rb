@@ -203,7 +203,7 @@ feature 'Target Overlay', js: true do
     # The status should also be updated on the dashboard page.
     click_button 'Close'
 
-    within("a[aria-label='Select Target #{target_l1.id}'") do
+    within("a[data-target-id='#{target_l1.id}']") do
       expect(page).to have_content('Pending Review')
     end
 

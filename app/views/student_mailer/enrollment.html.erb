@@ -10,12 +10,10 @@
 <% content_for :body do %>
   <p>
     You have been enrolled as a student in the course <strong><%= @course.name %></strong>, on <%= @school.name %>.
-
-    You can now sign into <%= @school.name %> and start working on this course.
   </p>
 
-   <p>
-    Use this <%= link_to 'Sign in link', sign_in_link%> to View Course.
+  <p>
+    You can now <%= link_to("sign into #{@school.name} and start working on this course", sign_in_link) %>.
   </p>
 
   <% if team_members.present? %>
@@ -26,4 +24,6 @@
   <% end %>
 
   <%= render 'mailers/link_fallback', url: sign_in_link %>
+
+  <p><%= t('shared.login_token_expiration_warning_html', timestamp: @user.login_token_expiration_time, login_url: sign_in_with_email_url) %></p>
 <% end %>

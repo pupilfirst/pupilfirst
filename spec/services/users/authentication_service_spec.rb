@@ -8,7 +8,7 @@ describe Users::AuthenticationService do
   let!(:user) do
     create :user,
            login_token_digest: login_token_digest,
-           login_mail_sent_at: Time.zone.now
+           login_token_generated_at: Time.zone.now
   end
   let(:another_school) { create :school }
 
@@ -38,14 +38,14 @@ describe Users::AuthenticationService do
             .from(login_token_digest)
             .to(nil)
         )
-        expect(user.login_mail_sent_at).to eq(nil)
+        expect(user.login_token_generated_at).to eq(nil)
       end
 
-      context 'when user has no login email sent time' do
+      context 'when user has no login token generated time' do
         let!(:user) { create :user, login_token_digest: login_token_digest }
 
-        it 'returns the user' do
-          expect(subject.authenticate).to eq(user)
+        it 'returns nil' do
+          expect(subject.authenticate).to eq(nil)
         end
       end
 

@@ -12,15 +12,16 @@
 
 <% content_for :body do %>
   <p>
-  <b>Congratulations!</b>
+    <b>Congratulations!</b>
   </p>
+
   <p>
     You've been awarded a certificate for completing the <strong><%= course.name %></strong> course.
   </p>
 
   <p>
     The certificate was issued on <%= @issued_certificate.created_at.strftime('%b %e, %l:%M %p') %> and can be viewed
-    or printed by visiting the certificate's <%= link_to 'link', link%>.
+    or printed by <%= link_to "visiting the certificate's public link", link %>.
   </p>
 
   <%= render 'mailers/link_fallback', url: link %>

@@ -8,8 +8,8 @@
   <p> We will automatically delete your account after one month. Once your account is deleted, all your personal
     information will be removed and you will no longer have access to the school.</p>
 
-  <p> If you would like to keep your account, please sign into the school using this <%= link_to 'link', @sign_in_url%>
-    before <%= 1.month.from_now.strftime("%b %d,%Y") %>. </p>
+  <p> If you would like to keep your account, <%= link_to 'please sign into the school', @sign_in_url %>
+    before <%= 1.month.from_now.strftime("%b %d, %Y") %>. </p>
 
   <%= render 'mailers/link_fallback', url: @sign_in_url %>
 <% end %>

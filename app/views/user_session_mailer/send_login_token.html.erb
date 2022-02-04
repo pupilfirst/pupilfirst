@@ -8,14 +8,12 @@
 
 <% content_for :body do %>
   <p>
-    Please <%= link_to 'click here', login_url%> to login to your <%= @school_name%> account.
+    Please <%= link_to "click here", login_url %> to login to your <%= @school_name %> account.
   </p>
 
   <%= render 'mailers/link_fallback', url: login_url%>
 
-  <p>
-    Please note that this is a private URL and should not be shared.
-  </p>
+  <p><%= t('shared.login_token_expiration_warning_html', timestamp: @user.login_token_expiration_time, login_url: sign_in_with_email_url) %></p>
 <% end %>
 
 <% content_for(:signature) do %>

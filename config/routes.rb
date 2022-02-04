@@ -174,13 +174,6 @@ Rails.application.routes.draw do
     get '/filter/:active_tab', action: 'index'
   end
 
-  scope 'connect_request', controller: 'connect_request', as: 'connect_request' do
-    get ':id/feedback/from_team/:token', action: 'feedback_from_team', as: 'feedback_from_team'
-    get ':id/feedback/from_faculty/:token', action: 'feedback_from_faculty', as: 'feedback_from_faculty'
-    get ':id/join_session(/:token)', action: 'join_session', as: 'join_session'
-    patch ':id/feedback/comment/:token', action: 'comment_submit', as: 'comment_submit'
-  end
-
   # Founder show
   scope 'students', controller: 'founders' do
     get '/:id/report', action: 'report', as: 'student_report'

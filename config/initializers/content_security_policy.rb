@@ -49,8 +49,12 @@ Rails.application.config.content_security_policy do |policy|
     { connect: 'https://api.rollbar.com' }
   end
 
+  def jsdelivr_csp
+    { style: 'cdn.jsdelivr.net', font: 'cdn.jsdelivr.net' }
+  end
+
   def style_sources
-    ['fonts.googleapis.com', asset_host] - [nil]
+    ['fonts.googleapis.com', jsdelivr_csp[:style], asset_host] - [nil]
   end
 
   def connect_sources
@@ -60,7 +64,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def font_sources
-    ['fonts.gstatic.com', asset_host] - [nil]
+    ['fonts.gstatic.com', jsdelivr_csp[:font], asset_host] - [nil]
   end
 
   def child_sources
@@ -79,7 +83,7 @@ Rails.application.config.content_security_policy do |policy|
 
   policy.default_src :none
   policy.img_src '*', :data, :blob
-  policy.script_src :unsafe_eval, :unsafe_inline, :strict_dynamic, 'https:', 'http:'
+  policy.script_src :strict_dynamic, :unsafe_eval, :unsafe_inline, 'https:', 'http:'
   policy.style_src :self, :unsafe_inline, *style_sources
   policy.connect_src :self, *connect_sources
   policy.font_src :self, *font_sources

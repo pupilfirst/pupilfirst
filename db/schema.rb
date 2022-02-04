@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_08_041421) do
+ActiveRecord::Schema.define(version: 2022_01_28_050607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -733,7 +733,7 @@ ActiveRecord::Schema.define(version: 2021_09_08_041421) do
     t.string "remember_token"
     t.boolean "sign_out_at_next_request"
     t.datetime "confirmed_at"
-    t.datetime "login_mail_sent_at"
+    t.datetime "login_token_generated_at"
     t.string "name"
     t.string "title"
     t.text "about"

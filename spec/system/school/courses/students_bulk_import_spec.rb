@@ -171,8 +171,9 @@ feature 'Course students bulk importer', js: true do
       email_body = current_email.body
 
       expect(email_body).to have_content(
-        'Some of the students you tried to import already exist in the course'
+        'Some of the students you tried to import were already enrolled in the course'
       )
+
       expect(current_email.attachments.first.body.encoded).to have_text(
         'bat@man.com'
       )

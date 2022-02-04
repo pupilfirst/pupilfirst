@@ -10,6 +10,6 @@ module.exports = {
       "lerna",
       "documentation",
     ],
-    Deployment: ["before_deploying", "heroku", "upgrading"],
+    Deployment: ["before_deploying", "heroku", "docker", "upgrading"],
   },
 };

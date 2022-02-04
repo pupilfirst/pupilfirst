@@ -89,7 +89,7 @@ feature 'User Edit', js: true do
     sign_in_user(user, referrer: edit_user_path)
     expect(page).to have_text('Localization')
 
-    select 'русский', from: 'Language'
+    select 'Russian - русский', from: 'Language'
     click_button 'Save Changes'
 
     expect(page).to have_text('Profile updated successfully!')

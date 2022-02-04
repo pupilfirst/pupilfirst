@@ -1,5 +1,4 @@
 class Post < ApplicationRecord
-
   belongs_to :topic
   belongs_to :creator, class_name: 'User', optional: true
   belongs_to :editor, class_name: 'User', optional: true

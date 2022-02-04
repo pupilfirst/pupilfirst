@@ -151,8 +151,7 @@ module Types
       argument :resolution, Types::TopicResolutionFilterType, required: true
       argument :topic_category_id, ID, required: false
       argument :target_id, ID, required: false
-      argument :search, String, required: false
-      argument :search_by, String, required: false
+      argument :search, Types::CommunitySearchFilterType, required: false
       argument :sort_direction, Types::SortDirectionType, required: true
       argument :sort_criterion, Types::TopicSortCriterionType, required: true
     end

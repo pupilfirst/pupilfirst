@@ -76,8 +76,8 @@ let reducer = (state, action) =>
   }
 
 module TopicsQuery = %graphql(`
-    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $resolution: TopicResolutionFilter!, $search: String, $after: String, $sortCriterion: TopicSortCriterion!, $sortDirection: SortDirection!, $searchBy: String) {
-      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, resolution: $resolution, sortDirection: $sortDirection, sortCriterion: $sortCriterion, first: 10, after: $after, searchBy: $searchBy) {
+    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $resolution: TopicResolutionFilter!, $search: CommunitySearchFilter, $after: String, $sortCriterion: TopicSortCriterion!, $sortDirection: SortDirection!) {
+      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, resolution: $resolution, sortDirection: $sortDirection, sortCriterion: $sortCriterion, first: 10, after: $after) {
         nodes {
           id
           lastActivityAt
@@ -113,7 +113,17 @@ let getTopics = (send, communityId, cursor, filter) => {
 
   let search = filter.search->Belt.Option.map(search => getSearch(search))
 
-  let searchBy = filter.search->Belt.Option.map(search => searchBy(search))
+  let searchBy = filter.search->Belt.Option.map(search => switch searchBy(search) {
+    | "content" => #content
+    | _ => #title
+  })
+
+  let search = switch (search,searchBy){
+    | (None,None) => None
+    | (None, Some(searchBy)) => Some({"search": "", "searchBy": searchBy })
+    | (Some(search), None) => Some({"search": search, "searchBy": #title })
+    | (Some(search), Some(searchBy)) => Some({"search": search, "searchBy": searchBy })
+  }
   TopicsQuery.make(
     ~communityId,
     ~after=?cursor,
@@ -123,7 +133,6 @@ let getTopics = (send, communityId, cursor, filter) => {
     ~resolution=filter.solution,
     ~sortCriterion=filter.sortCriterion,
     ~sortDirection=filter.sortDirection,
-    ~searchBy?,
     (),
   )
   |> GraphqlQuery.sendQuery
@@ -175,8 +184,8 @@ let filterToQueryString = filter => {
   ])
 
   Belt.Option.forEach(filter.search, search => {
-    Js.Dict.set(filterDict, "search", search->getSearch)
-    Js.Dict.set(filterDict, "searchBy", search->searchBy)
+    Js.Dict.set(filterDict, "search", getSearch(search))
+    Js.Dict.set(filterDict, "searchBy", searchBy(search))
   })
 
   Belt.Option.forEach(filter.topicCategory, tc =>
@@ -370,14 +379,14 @@ module Selectable = {
   let value = t =>
     switch t {
     | TopicCategory(category) => TopicCategory.name(category)
-    | Search(search) => search->getSearch
+    | Search(search) => getSearch(search)
     | Solution(solution) => solution ? "Solved" : "Unsolved"
     }
 
   let searchString = t =>
     switch t {
     | TopicCategory(category) => "category " ++ TopicCategory.name(category)
-    | Search(search) => search->getSearch
+    | Search(search) => getSearch(search)
     | Solution(_solution) => "solution solved unsolved"
     }
 
@@ -552,12 +561,12 @@ let filterFromQueryParams = (search, target, topicCategories) => {
 
   open Webapi.Url.URLSearchParams
   {
-    search: get("search", params)->Belt.Option.map(a =>
+    search: get("search", params)->Belt.Option.map(searchString =>
       switch get("searchBy", params) {
-      | None => SearchTitle(a)
-      | Some("content") => SearchContent(a)
-      | Some("title") => SearchTitle(a)
-      | Some(_) => SearchTitle(a)
+      | None => SearchTitle(searchString)
+      | Some("content") => SearchContent(searchString)
+      | Some("title") => SearchTitle(searchString)
+      | Some(_) => SearchTitle(searchString)
       }
     ),
     topicCategory: get("topicCategory", params)->Belt.Option.flatMap(cat =>

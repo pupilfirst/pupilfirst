@@ -10,10 +10,10 @@ class TopicsResolver < ApplicationQuery
 
   def topics
     if search.present?
-      if search_by == 'content'
-        applicable_topics.search_by_post_body(title_for_search)
+      if search.search_by == 'content'
+        applicable_topics.search_by_post_body(sanitized_search)
       else
-        applicable_topics.search_by_title(title_for_search)
+        applicable_topics.search_by_title(sanitized_search)
       end
     else
       applicable_topics
@@ -32,8 +32,8 @@ class TopicsResolver < ApplicationQuery
     (current_user.course_ids & community.course_ids).present?
   end
 
-  def title_for_search
-    search.strip
+  def sanitized_search
+    search.search.strip
       .gsub(/[^a-z\s0-9]/i, '')
       .split(' ').reject do |word|
       word.length < 3

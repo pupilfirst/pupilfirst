@@ -468,6 +468,8 @@ feature 'Community', js: true do
 
     expect(page).to_not have_text(topic_2.title)
     expect(page).to have_text(topic_1.title)
+
+
   end
 
   scenario 'user searches for topics in community by post body content' do

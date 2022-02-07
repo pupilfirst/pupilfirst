@@ -1213,9 +1213,16 @@ let make = (
             <div className="p-4 md:p-6 space-y-8">
               <div className="bg-gray-300 p-4 rounded-md">
                 <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center space-x-3">
-                    <Icon className={reportStatusIconClasses(report)} />
-                    <p className="font-semibold"> {str(reportStatusString(report))} </p>
+                  <div className="flex items-start space-x-3">
+                    <div className="pt-1">
+                      <Icon className={reportStatusIconClasses(report)} />
+                    </div>
+                    <div>
+                      <p className="font-semibold"> {str(reportStatusString(report))} </p>
+                      <p className="text-gray-800 text-xs">
+                        {str("Succeeded 3 days ago in 30m 54s")}
+                      </p>
+                    </div>
                   </div>
                   <button
                     onClick={_ => send(ChangeReportVisibility)}
@@ -1231,7 +1238,9 @@ let make = (
                       let toggleTestReportIcon = state.showReport
                         ? "i-arrows-collapse-light"
                         : "i-arrows-expand-light"
-                      <Icon className={"if text-xl " ++ toggleTestReportIcon} />
+                      <span className="inline-block w-5 h-5">
+                        <Icon className={"if text-xl " ++ toggleTestReportIcon} />
+                      </span>
                     }
                   </button>
                 </div>

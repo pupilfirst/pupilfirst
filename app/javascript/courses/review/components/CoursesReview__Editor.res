@@ -1227,7 +1227,12 @@ let make = (
                           : t("show_test_report_button"),
                       )}
                     </span>
-                    <Icon className="if i-arrows-expand-light text-xl" />
+                    {
+                      let toggleTestReportIcon = state.showReport
+                        ? "i-arrows-collapse-light"
+                        : "i-arrows-expand-light"
+                      <Icon className={"if text-xl " ++ toggleTestReportIcon} />
+                    }
                   </button>
                 </div>
                 {state.showReport

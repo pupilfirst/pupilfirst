@@ -26,7 +26,7 @@ Begin by [signing up on Heroku](https://signup.heroku.com), and familiarizing yo
    1. Add configuration for [the file storage service](#file-storage-using-aws).
    2. Add configuration for [the email service](#sending-emails-with-postmark).
    3. Set environment variable `ASSET_HOST` to your app's fully qualified domain name (FQDN), which should look like `my-app-name.herokuapp.com`.
-   4. Set environment variable `YARN_PRODUCTION` to `false`.
+   4. Set environment variable `PREPARE_FOR_PRECOMPILATION` to `true`.
 
    There are more optional features that you can enable - read through the sections below.
 

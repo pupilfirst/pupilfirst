@@ -787,7 +787,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                     "/review?" ++
                     Filter.toQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
                     className={shortCutClasses(filter.tab === None)}>
-                    <div> {str("All")} </div>
+                    <div> {I18n.ts("all")->str} </div>
                   </Link>
                   <Link
                     href={"/courses/" ++

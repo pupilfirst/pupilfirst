@@ -139,8 +139,12 @@ module UnassignReviewerMutation = %graphql(`
 module SubmissionReportQuery = %graphql(`
     query SubmissionReportQuery($id: ID!) {
       submissionReport(id: $id) {
+        id
         status
-        description
+        testReport
+        startedAt
+        completedAt
+        conclusion
       }
     }
   `)
@@ -1026,21 +1030,29 @@ let pageTitle = (number, submissionDetails) => {
     )}${SubmissionDetails.levelNumber(submissionDetails)} | ${studentOrTeamName}`
 }
 
-let reportStatusString = status => {
-  switch status {
-  | #pending => t("report_status_string.pending")
-  | #success => t("report_status_string.success")
-  | #failure => t("report_status_string.failure")
-  | #error => t("report_status_string.error")
+let reportStatusString = report => {
+  switch SubmissionReport.status(report) {
+  | Queued => t("report_status_string.queued")
+  | InProgress => t("report_status_string.in_progress")
+  | Completed(conclusion, _completedAt) =>
+    switch conclusion {
+    | Success => t("report_status_string.completed.success")
+    | Failure => t("report_status_string.completed.failure")
+    | Error => t("report_status_string.completed.error")
+    }
   }
 }
 
-let reportStatusIconClasses = status => {
-  switch status {
-  | #pending => "if animate-spin i-dashed-circle-regular text-2xl text-yellow-500 rounded-full"
-  | #success => "if i-check-circle-solid text-2xl text-green-500 bg-white rounded-full"
-  | #error => "if i-exclamation-triangle-circle-solid text-2xl text-gray-600 bg-white rounded-full"
-  | #failure => "if i-times-circle-solid text-2xl text-red-500 bg-white rounded-full"
+let reportStatusIconClasses = report => {
+  switch SubmissionReport.status(report) {
+  | Queued => "if animate-spin i-dashed-circle-regular text-2xl text-yellow-500 rounded-full"
+  | InProgress => "if animate-spin i-dashed-circle-regular text-2xl text-yellow-500 rounded-full"
+  | Completed(conclusion, _completedAt) =>
+    switch conclusion {
+    | Success => "if i-check-circle-solid text-2xl text-green-500 bg-white rounded-full"
+    | Failure => "if i-times-circle-solid text-2xl text-red-500 bg-white rounded-full"
+    | Error => "if i-exclamation-triangle-circle-solid text-2xl text-gray-600 bg-white rounded-full"
+    }
   }
 }
 
@@ -1050,11 +1062,7 @@ let loadSubmissionReport = (report, updateSubmissionReportCB) => {
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     let reportData = response["submissionReport"]
-    let updatedReport = SubmissionReport.make(
-      ~id,
-      ~description=reportData["description"],
-      ~status=reportData["status"],
-    )
+    let updatedReport = SubmissionReport.makeFromJS(reportData)
 
     updateSubmissionReportCB(Some(updatedReport))
 
@@ -1065,10 +1073,10 @@ let loadSubmissionReport = (report, updateSubmissionReportCB) => {
 
 let reloadSubmissionReport = (report, updateSubmissionReportCB) => {
   switch SubmissionReport.status(report) {
-  | #pending => loadSubmissionReport(report, updateSubmissionReportCB)
-  | #success
-  | #failure
-  | #error => ()
+  | Queued
+  | InProgress =>
+    loadSubmissionReport(report, updateSubmissionReportCB)
+  | Completed(_, _) => ()
   }
 }
 
@@ -1206,10 +1214,8 @@ let make = (
               <div className="bg-gray-300 p-4 rounded-md">
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center space-x-3">
-                    <Icon className={reportStatusIconClasses(SubmissionReport.status(report))} />
-                    <p className="font-semibold">
-                      {str(reportStatusString(SubmissionReport.status(report)))}
-                    </p>
+                    <Icon className={reportStatusIconClasses(report)} />
+                    <p className="font-semibold"> {str(reportStatusString(report))} </p>
                   </div>
                   <button
                     onClick={_ => send(ChangeReportVisibility)}
@@ -1228,7 +1234,9 @@ let make = (
                   ? <div>
                       <p className="text-sm font-semibold mt-4"> {str("Test Report")} </p>
                       <div className="bg-white p-3 rounded-md border mt-2">
-                        {str(SubmissionReport.description(report))}
+                        <MarkdownBlock
+                          profile=Markdown.AreaOfText markdown={SubmissionReport.testReport(report)}
+                        />
                       </div>
                     </div>
                   : React.null}

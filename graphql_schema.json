@@ -14069,19 +14069,29 @@
           "description": null,
           "fields": [
             {
-              "name": "description",
+              "name": "completedAt",
               "description": null,
               "args": [
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "conclusion",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "ENUM",
+                "name": "SubmissionReportConclusion",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -14105,6 +14115,20 @@
               "deprecationReason": null
             },
             {
+              "name": "startedAt",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "status",
               "description": null,
               "args": [
@@ -14121,6 +14145,24 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "testReport",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -14132,7 +14174,7 @@
         },
         {
           "kind": "ENUM",
-          "name": "SubmissionReportStatus",
+          "name": "SubmissionReportConclusion",
           "description": null,
           "fields": null,
           "inputFields": null,
@@ -14140,7 +14182,7 @@
           "enumValues": [
             {
               "name": "error",
-              "description": "Checks could not be completed successfully",
+              "description": "checks could not be completed successfully",
               "isDeprecated": false,
               "deprecationReason": null
             },
@@ -14151,14 +14193,37 @@
               "deprecationReason": null
             },
             {
-              "name": "pending",
+              "name": "success",
+              "description": "checks successfully completed for the submission",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "SubmissionReportStatus",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "queued",
+              "description": "automated tests are queued",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "in_progress",
               "description": "checks in progress for the submission",
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "success",
-              "description": "checks successfully completed for the submission",
+              "name": "completed",
+              "description": "checks completed for the submission",
               "isDeprecated": false,
               "deprecationReason": null
             }

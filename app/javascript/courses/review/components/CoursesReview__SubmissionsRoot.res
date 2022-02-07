@@ -16,8 +16,11 @@ module SubmissionDetailsQuery = %graphql(`
         },
         submissionReport {
           id
-          description
+          testReport
           status
+          startedAt
+          completedAt
+          conclusion
         }
         evaluationCriteria{
           id, name, maxGrade, passGrade, gradeLabels { grade label}

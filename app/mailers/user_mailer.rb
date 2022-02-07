@@ -29,10 +29,10 @@ class UserMailer < SchoolMailer
     simple_roadie_mail(user.email, "Delete account from #{@school.name}")
   end
 
-  def confirm_account_deletion(email, school)
-    @email = email
+  def confirm_account_deletion(user, school)
+    @user = user
     @school = school
-    simple_roadie_mail(email, "Account deleted successfully from #{@school.name}")
+    simple_roadie_mail(user.email, "Account deleted successfully from #{@school.name}")
   end
 
   def account_deletion_notification(user, sign_in_url, inactivity_months)

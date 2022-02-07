@@ -1,5 +1,3 @@
-<% content_for(:title_button_link, @delete_account_url) %>
-
 <% content_for :salutation do %>
   Hello <%= @user.name %>,
 <% end %>
@@ -15,7 +13,7 @@
   </p>
 
   <p>
-    <%= @delete_account_url %></p>
+    <%= render 'mailers/link_fallback', url: @delete_account_url %>
 
   <p> This action is irreversible, and will permanently remove your access to the school.</p>
 <% end %>

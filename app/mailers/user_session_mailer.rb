@@ -8,11 +8,12 @@ class UserSessionMailer < SchoolMailer
     simple_roadie_mail(user.email, "Log in to #{@school_name}", enable_reply: false)
   end
 
-  def send_reset_password_token(email, school, reset_password_url)
+  def send_reset_password_token(user, school, reset_password_url)
+    @user = user
     @school = school
     @school_name = school.name
     @reset_password_url = reset_password_url
 
-    simple_roadie_mail(email, "#{@school_name} account recovery", enable_reply: false)
+    simple_roadie_mail(user.email, "#{@school_name} account recovery", enable_reply: false)
   end
 end

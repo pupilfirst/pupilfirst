@@ -112,7 +112,7 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
           <div className="flex items-center text-sm rounded mt-2">
             <span className="text-gray-400"> <i className="far fa-circle text-base" /> </span>
             <div
-              className="flex flex-1 py-2 px-3 ml-3 justify-between items-center focus:outline-none bg-white focus:bg-white focus:border-primary-300 border border-gray-400 rounded">
+              className="flex flex-1 py-2 px-3 ml-3 justify-between items-center focus:outline-none bg-white focus-within:bg-white focus-within:border-transparent focus-within:ring-2 focus:ring-indigo-500 border border-gray-400 rounded">
               <input
                 name={"multichoice-input-" ++ (index + 1 |> string_of_int)}
                 className="flex-1 appearance-none bg-transparent border-none leading-snug focus:outline-none"
@@ -213,7 +213,7 @@ let make = (
         </div>
       </div>
       <div
-        className="flex items-center text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-2 focus:outline-none focus:bg-white focus:border-primary-300">
+        className="flex items-center text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-2 focus-within:bg-white focus-within:border-transparent focus-within:ring-2 focus-within:ring-indigo-500">
         <input
           name={"checklist-item-" ++ ((index + 1 |> string_of_int) ++ "-title")}
           className="flex-grow appearance-none bg-transparent border-none leading-relaxed focus:outline-none"

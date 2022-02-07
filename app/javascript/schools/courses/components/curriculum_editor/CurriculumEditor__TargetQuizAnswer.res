@@ -35,7 +35,7 @@ let make = (
       <div className="flex">
         <textarea
           id=answerOptionId
-          className="appearance-none block w-full bg-white text-gray-800 text-sm rounded-lg px-4 py-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          className="appearance-none block w-full bg-white text-gray-800 text-sm rounded-lg px-4 py-3 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500 focus:ring-inset"
           placeholder="Answer option (supports markdown)"
           value={answerOption |> CurriculumEditor__AnswerOption.answer}
           onChange={event =>

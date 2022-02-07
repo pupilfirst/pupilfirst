@@ -198,7 +198,8 @@ let make = (
             </label>
             <div>
               <input
-                className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
+                autoFocus=true
+                className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
                 maxLength=30
                 id="name"
                 type_="text"

@@ -93,7 +93,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
             />
             <div className="w-full">
               <input
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight font-semibold focus:outline-none focus:bg-white focus:border-gray-500"
+                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight font-semibold focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
                 id={"highlight-" ++ string_of_int(index) ++ "-title"}
                 type_="text"
                 placeholder={t("title.placeholder")}
@@ -104,7 +104,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
                   updateTitle(replaceCB, highlight, ReactEvent.Form.target(event)["value"])}
               />
               <input
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-1 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
                 id={"highlight-" ++ string_of_int(index) ++ "-description"}
                 type_="text"
                 placeholder={t("description.placeholder")}

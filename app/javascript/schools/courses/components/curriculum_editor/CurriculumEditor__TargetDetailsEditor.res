@@ -462,7 +462,7 @@ let linkEditor = (state, send) =>
     </label>
     <div className="ml-6">
       <input
-        className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
         id="link_to_complete"
         type_="text"
         placeholder="Paste link to complete"
@@ -678,12 +678,12 @@ let quizEditor = (state, send) =>
         />
       )
       |> React.array}
-      <a
+      <button
         onClick={addQuizQuestion(send)}
-        className="flex items-center bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg p-3 cursor-pointer my-5">
+        className="flex w-full items-center bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md focus:bg-white focus:text-primary-500 focus:shadow-md rounded-lg p-3 cursor-pointer my-5">
         <i className="fas fa-plus-circle text-lg" />
         <h5 className="font-semibold ml-2"> {"Add another Question" |> str} </h5>
-      </a>
+      </button>
     </div>
   </div>
 
@@ -869,7 +869,8 @@ let make = (
                 </label>
                 <div className="ml-6">
                   <input
-                    className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
+                    autoFocus=true
+                    className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
                     id="title"
                     type_="text"
                     placeholder={t("target_title_placeholder")}
@@ -1035,7 +1036,7 @@ let make = (
                 </HelpIcon>
                 <div className="ml-6">
                   <input
-                    className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
                     id="completion-instructions"
                     type_="text"
                     maxLength=255

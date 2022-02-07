@@ -22,6 +22,7 @@ let make = (
   ~name,
   ~onChange,
   ~labelText,
+  ~autoFocus=false,
   ~imageName,
   ~selectedImageName,
   ~errorState,
@@ -33,6 +34,7 @@ let make = (
     </label>
     <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
       <input
+        autoFocus
         disabled
         className="absolute w-0 h-0"
         name

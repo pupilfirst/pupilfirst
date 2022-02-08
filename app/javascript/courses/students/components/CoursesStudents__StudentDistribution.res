@@ -155,16 +155,18 @@ let make = (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes, ~filterT
                 key={DistributionInLevel.id(level)}
                 ariaLabel={"Students in level " ++
                 (DistributionInLevel.number(level) |> string_of_int)}
-                className={"student-distribution__container text-center relative " ++ pillClass}
+                className={"student-distribution__container text-center relative focus-within:outline-none focus-within:opacity-75 " ++ pillClass}
                 style>
                 <label
+                  htmlFor={"Students in level " ++ (DistributionInLevel.number(level) |> string_of_int)}
                   className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-700 text-center">
                   {level |> DistributionInLevel.shortName |> str}
                 </label>
                 <Tooltip className="w-full" tip position=#Bottom>
-                  <div
+                  <button
+                    id={"Students in level " ++ (DistributionInLevel.number(level) |> string_of_int)}
                     onClick={_ => DistributionInLevel.id(level)->selectLevelCB}
-                    className={"student-distribution__pill hover:shadow-inner focus:shadow-inner relative cursor-pointer border-white text-xs leading-none text-center " ++ (
+                    className={"student-distribution__pill w-full hover:shadow-inner focus:shadow-inner relative cursor-pointer border-white text-xs leading-none text-center " ++ (
                       completedLevels |> Array.mem(level)
                         ? "bg-yellow-300 text-yellow-900"
                         : switch DistributionInLevel.unlocked(level) {
@@ -188,7 +190,7 @@ let make = (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes, ~filterT
                                 <i className="fas fa-lock text-tiny" />
                               </div>}
                         </div>}
-                  </div>
+                  </button>
                 </Tooltip>
               </div>
             })

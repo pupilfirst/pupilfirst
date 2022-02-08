@@ -145,7 +145,7 @@
   }
 
   .btn-primary-ghost:focus {
-    @apply bg-primary-800 text-white border-primary-400;
+    @apply bg-primary-100 text-primary-600 border-primary-400;
   }
 
   .btn-secondary {

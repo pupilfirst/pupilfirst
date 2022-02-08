@@ -790,7 +790,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                       "/review?" ++
                       Filter.toQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
                       className={shortCutClasses(filter.tab === None)}>
-                      <p> {str("All")} </p>
+                      <p> {I18n.ts("all")->str} </p>
                     </Link>
                   </div>
                   <div role="tab" ariaSelected={filter.tab === Some(#Pending)} className="flex-1">

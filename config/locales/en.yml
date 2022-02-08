@@ -1036,6 +1036,7 @@ en:
   shared:
     _no: "No"
     _yes: "Yes"
+    all: All
     cancel: Cancel
     close: Close
     done_exclamation: Done!

@@ -49,7 +49,6 @@ Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
   resource :applicants, only: [] do
-    get '/:token', action: 'enroll' # TODO: Legacy route - remove after a few weeks.
     get '/:token/enroll', action: 'enroll', as: 'enroll'
   end
 
@@ -158,27 +157,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :faculty, only: %i[] do
-    collection do
-      get 'filter/:active_tab', to: 'faculty#index'
-      get 'weekly_slots/:token', to: 'faculty#weekly_slots', as: 'weekly_slots'
-      post 'save_weekly_slots/:token', to: 'faculty#save_weekly_slots', as: 'save_weekly_slots'
-      delete 'weekly_slots/:token', to: 'faculty#mark_unavailable', as: 'mark_unavailable'
-      get 'slots_saved/:token', to: 'faculty#slots_saved', as: 'slots_saved'
-    end
-  end
-
   scope 'coaches', controller: 'faculty' do
     get '/', action: 'index', as: 'coaches_index'
     get '/:id(/:slug)', action: 'show', as: 'coach'
     get '/filter/:active_tab', action: 'index'
-  end
-
-  scope 'connect_request', controller: 'connect_request', as: 'connect_request' do
-    get ':id/feedback/from_team/:token', action: 'feedback_from_team', as: 'feedback_from_team'
-    get ':id/feedback/from_faculty/:token', action: 'feedback_from_faculty', as: 'feedback_from_faculty'
-    get ':id/join_session(/:token)', action: 'join_session', as: 'join_session'
-    patch ':id/feedback/comment/:token', action: 'comment_submit', as: 'comment_submit'
   end
 
   # Founder show
@@ -191,9 +173,6 @@ Rails.application.routes.draw do
   get 'manifest', to: 'home#manifest'
   get 'offline', to: 'home#offline'
   root 'home#index'
-
-  # TODO: Remove this backwards-compatibility path after Jan 2021.
-  get 'agreements/terms-of-use', to: redirect('/agreements/terms-and-conditions')
 
   get 'agreements/:agreement_type', as: 'agreement', controller: 'home', action: 'agreement'
 

@@ -168,12 +168,12 @@ feature "Coach's review interface" do
 
       # Ensure coach is on the review dashboard.
       # Pending and Reviewed targets must be visible
-      within("a[aria-label='Submission #{submission_l1_t1.id}']") do
+      within("a[data-submission-id='#{submission_l1_t1.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text(team_l1.founders.first.user.name)
       end
 
-      within("a[aria-label='Submission #{submission_l1_t3.id}']") do
+      within("a[data-submission-id='#{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text(
           "Submitted by #{team_l3.founders.first.user.name}"
@@ -187,19 +187,19 @@ feature "Coach's review interface" do
       # All pending submissions should be listed (excluding the auto-verified one)
       expect(page).not_to have_text(auto_verify_target.title)
 
-      within("a[aria-label='Submission #{submission_l1_t1.id}']") do
+      within("a[data-submission-id='#{submission_l1_t1.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text('Level 1')
         expect(page).to have_text(team_l1.founders.first.user.name)
       end
 
-      within("a[aria-label='Submission #{submission_l2_t2.id}']") do
+      within("a[data-submission-id='#{submission_l2_t2.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text('Level 2')
         expect(page).to have_text(team_l2.founders.first.user.name)
       end
 
-      within("a[aria-label='Submission #{submission_l3_t3.id}']") do
+      within("a[data-submission-id='#{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
         expect(page).to have_text('Level 3')
         expect(page).to have_text(team_l3.founders.first.user.name)
@@ -208,7 +208,7 @@ feature "Coach's review interface" do
       # The 'reviewed' tab should show reviewed submissions
       click_link 'Reviewed'
 
-      within("a[aria-label='Submission #{submission_l1_t3.id}']") do
+      within("a[data-submission-id='#{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text('Level 1')
         expect(page).to have_text(
@@ -217,7 +217,7 @@ feature "Coach's review interface" do
         expect(page).to have_text('Completed')
       end
 
-      within("a[aria-label='Submission #{submission_l2_t3.id}']") do
+      within("a[data-submission-id='#{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text('Level 2')
         expect(page).to have_text(
@@ -229,7 +229,7 @@ feature "Coach's review interface" do
 
       expect(page).to have_text(team_target.title).once
 
-      within("a[aria-label='Submission #{team_submission.id}']") do
+      within("a[data-submission-id='#{team_submission.id}']") do
         expect(page).to have_text("Submitted by team #{team_l3.name}")
       end
     end
@@ -361,7 +361,7 @@ feature "Coach's review interface" do
 
       expect(page).to have_content('1')
 
-      within("a[aria-label='Submission #{submission_l3_t3.id}']") do
+      within("a[data-submission-id='#{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
         expect(page).to have_text('Level 3')
         expect(page).to have_text(team_l3.founders.first.user.name)
@@ -377,13 +377,13 @@ feature "Coach's review interface" do
       # Target in L1 should be listed only once.
       expect(page).to have_text(target_l1.title, count: 1)
 
-      within("a[aria-label='Submission #{submission_l1_t3.id}']") do
+      within("a[data-submission-id='#{submission_l1_t3.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text('Level 1')
         expect(page).to have_text(team_l3.founders.first.user.name)
       end
 
-      within("a[aria-label='Submission #{submission_l2_t3.id}']") do
+      within("a[data-submission-id='#{submission_l2_t3.id}']") do
         expect(page).to have_text(target_l2.title)
         expect(page).to have_text('Level 2')
         expect(page).to have_text(team_l3.founders.first.user.name)
@@ -416,7 +416,7 @@ feature "Coach's review interface" do
 
       expect(page).to have_content('1')
 
-      within("a[aria-label='Submission #{submission_l1_t1.id}']") do
+      within("a[data-submission-id='#{submission_l1_t1.id}']") do
         expect(page).to have_text(target_l1.title)
         expect(page).to have_text('Level 1')
         expect(page).to have_text(course_coach.user.name)
@@ -577,7 +577,7 @@ feature "Coach's review interface" do
     scenario 'coach can access submissions from review dashboard', js: true do
       sign_in_user course_coach.user, referrer: review_course_path(course)
 
-      within("a[aria-label='Submission #{submission_l3_t3.id}']") do
+      within("a[data-submission-id='#{submission_l3_t3.id}']") do
         expect(page).to have_text(target_l3.title)
       end
 

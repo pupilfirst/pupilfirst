@@ -40,9 +40,10 @@ let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
 
 let deleteIcon = (note, removeNoteCB, setArchiving, archiving) =>
   <button
-    className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded hover:bg-gray-200 focus:outline-none "
+    ariaLabel={"Delete note " ++ (note |> CoachNote.id)}
+    className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded hover:bg-gray-200 hover:text-red-500 focus:outline-none focus:bg-gray-200 focus:text-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500 "
     disabled=archiving
-    title={"Delete " ++ (note |> CoachNote.id)}
+    title={"Delete note " ++ (note |> CoachNote.id)}
     onClick={removeCoachNote(note |> CoachNote.id, removeNoteCB, setArchiving)}>
     <FaIcon classes={archiving ? "fas fa-spinner fa-spin" : "fas fa-trash-alt"} />
   </button>

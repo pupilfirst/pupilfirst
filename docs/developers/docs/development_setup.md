@@ -123,7 +123,57 @@ committing changes.
 
 This will also _seed_ data into the database that will be useful for testing during development.
 
-## Set up a reverse-proxy using Nginx
+## Compile ReScript code
+
+If you've used the `yarn` command to install JS dependencies, then ReScript code should already be compiled at this
+point. To compile ReScript code again (if you've made changes), you can either do a one-time build, or set up a watcher.
+
+    # One-time recompilation
+    yarn run re:build
+
+    # Recompile, and then watch for changes
+    yarn run re:watch
+
+## Start the Rails server
+
+With `webpack-dev-server` running, start the Rails server:
+
+    bundle exec rails server
+
+## Run Webpack Dev Server
+
+Start the Webpack Dev Server on another tab or window:
+
+    yarn run wds
+
+You'll want all three of these processes running for best performance when developing.
+
+Visit the school using your browser at `http://localhost:3000`.
+
+You should be able to sign in as `admin@example.com` (use the _Continue as Developer_ option on the sign-in page), to
+test access to all interfaces. Test data has been seeded to the development database to make this process easier.
+
+> If you see an error related to the absence of a `locales.json` file, please make sure that your Rails server is running.
+
+## Enabling multitenancy
+
+**Optional:** If you'd like to enable multitenancy in your development environment, a few additional steps are required.
+
+### Add environment variables
+
+1. Turn on the multitenancy mode by additing the following environment variable.
+
+```
+MULTITENANCY=on
+```
+
+2. Update the SSO domain.
+
+```
+SSO_DOMAIN=sso.school.localhost
+```
+
+### Set up a reverse-proxy using Nginx
 
 Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your web application running on port 3000
 (the default Rails server port). Use following server configuration as an example:
@@ -170,33 +220,5 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
    127.0.0.1       sso.school.localhost
    ```
 
-## Compile ReScript code
-
-If you've used the `yarn` command to install JS dependencies, then ReScript code should already be compiled at this
-point. To compile ReScript code again (if you've made changes), you can either do a one-time build, or set up a watcher.
-
-    # One-time recompilation
-    yarn run re:build
-
-    # Recompile, and then watch for changes
-    yarn run re:watch
-
-## Start the Rails server
-
-With `webpack-dev-server` running, start the Rails server:
-
-    bundle exec rails server
-
-## Run Webpack Dev Server
-
-Start the Webpack Dev Server on another tab or window:
-
-    yarn run wds
-
-You'll want all three of these processes running for best performance when developing.
-
 If your Nginx reverse-proxy has been set up correctly, then visit the school using your browser at
 `http://school.localhost`.
-
-You should be able to sign in as `admin@example.com` (use the _Continue as Developer_ option on the sign-in page), to
-test access to all interfaces. Test data has been seeded to the development database to make this process easier.

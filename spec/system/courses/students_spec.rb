@@ -56,15 +56,15 @@ feature 'Course students list', js: true do
     end
 
     # Check levels of few teams
-    within("div[aria-label='team-level-info-#{team_1.id}']") do
+    within("div[aria-label='team level info: #{team_1.id}']") do
       expect(page).to have_text('1')
     end
 
-    within("div[aria-label='team-level-info-#{team_2.id}']") do
+    within("div[aria-label='team level info: #{team_2.id}']") do
       expect(page).to have_text('2')
     end
 
-    within("div[aria-label='team-level-info-#{team_5.id}']") do
+    within("div[aria-label='team level info: #{team_5.id}']") do
       expect(page).to have_text('3')
     end
 
@@ -207,7 +207,7 @@ feature 'Course students list', js: true do
       .map { |name_fragment| name_fragment[0] }
       .map(&:capitalize).join
 
-    within("div[aria-label='Info of team #{team_6.id}']") do
+    within("div[data-team-id='#{team_6.id}']") do
       find('.tooltip__trigger', text: expected_initials).hover
     end
 
@@ -234,7 +234,7 @@ feature 'Course students list', js: true do
 
       click_button('Load More...')
 
-      within("div[aria-label='Info of team #{team_6.id}']") do
+      within("div[data-team-id='#{team_6.id}']") do
         find('.tooltip__trigger', text: '+2').hover
       end
 

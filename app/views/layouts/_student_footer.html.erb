@@ -63,8 +63,9 @@
           <% if presenter.email_address.present? %>
             <p>
               Reach us at
-              <strong><%= mail_to presenter.email_address, presenter.email_address, class: "font-bold no-underline pointer-cursor focus:outline-none focus:text-primary-500" %></strong
-              >.
+              <strong>
+                <!--email_off--><%= mail_to presenter.email_address, presenter.email_address, class: "font-bold no-underline pointer-cursor focus:outline-none focus:text-primary-500" %><!--/email_off-->
+              </strong>.
             </p>
           <% end %>
         </div>
@@ -99,10 +100,9 @@
             <%= link_to 'Terms & Conditions', agreement_path(agreement_type: 'terms-and-conditions'), class: "cursor-pointer md:mr-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
           <% end %>
 
-          <span class="text-gray-600 mt-1 md:mt-0 block md:inline-block"
-            >&copy; <%= Time.zone.now.year %> <%= presenter.school_name %>
-            .</span
-          >
+          <span class="text-gray-600 mt-1 md:mt-0 block md:inline-block">
+            &copy; <%= Time.zone.now.year %> <%= presenter.school_name %>.
+          </span>
         </div>
       </div>
     </div>

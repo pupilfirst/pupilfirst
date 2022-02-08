@@ -11,7 +11,7 @@ module Users
     def authenticate
       if @token.present? && valid_request?
         # Clear the token from user.
-        user.update!(login_token_digest: nil)
+        user.update!(login_token_digest: nil, login_token_generated_at: nil)
         user
       end
     end
@@ -26,9 +26,10 @@ module Users
     def valid_request?
       return false if user.blank?
 
-      return true if user.login_mail_sent_at.blank?
+      return false if user.login_token_generated_at.blank?
 
-      time_since_last_mail = ((Time.zone.now - user.login_mail_sent_at)/60.0).to_i
+      time_since_last_mail =
+        (Time.zone.now - user.login_token_generated_at).to_i
       time_since_last_mail < Rails.application.secrets.login_token_time_limit
     end
   end

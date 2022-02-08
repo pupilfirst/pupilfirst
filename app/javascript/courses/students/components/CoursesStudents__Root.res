@@ -366,7 +366,7 @@ let restoreFilterNotice = (send, currentCoach, message) =>
     className="mt-2 text-sm italic flex flex-col md:flex-row items-center justify-between p-3 border border-gray-300 bg-white rounded-lg">
     <span> {message |> str} </span>
     <button
-      className="px-2 py-1 rounded text-xs overflow-hidden border border-gray-300 bg-gray-200 text-gray-800 border-gray-300 bg-gray-200 hover:bg-gray-300 mt-1 md:mt-0"
+      className="px-2 py-1 rounded text-xs overflow-hidden border border-gray-300 bg-gray-200 text-gray-800 hover:bg-gray-300 mt-1 md:mt-0"
       onClick={_ => send(SelectCoach(currentCoach))}>
       {"Assigned to: Me" |> str} <i className="fas fa-level-up-alt ml-2" />
     </button>
@@ -442,7 +442,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~teamTags, ~
     None
   }, [state.filter])
 
-  <div>
+  <div role="main" ariaLabel="Students">
     {switch url.path {
     | list{"students", studentId, "report"} =>
       <CoursesStudents__StudentOverlay

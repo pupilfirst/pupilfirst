@@ -245,19 +245,19 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_content(pending_target_g2.title)
 
     # All targets should have the right status written next to their titles.
-    within("a[aria-label='Select Target #{completed_target_l4.id}']") do
+    within("a[data-target-id='#{completed_target_l4.id}']") do
       expect(page).to have_content('Completed')
     end
 
-    within("a[aria-label='Select Target #{submitted_target.id}']") do
+    within("a[data-target-id='#{submitted_target.id}']") do
       expect(page).to have_content('Pending Review')
     end
 
-    within("a[aria-label='Select Target #{failed_target.id}']") do
+    within("a[data-target-id='#{failed_target.id}']") do
       expect(page).to have_content('Rejected')
     end
 
-    within("a[aria-label='Select Target #{target_with_prerequisites.id}']") do
+    within("a[data-target-id='#{target_with_prerequisites.id}']") do
       expect(page).to have_content('Locked')
     end
 
@@ -289,7 +289,7 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_content(target_group_l2.description)
     expect(page).to have_content(completed_target_l2.title)
 
-    within("a[aria-label='Select Target #{completed_target_l2.id}']") do
+    within("a[data-target-id='#{completed_target_l2.id}']") do
       expect(page).to have_content('Completed')
     end
   end

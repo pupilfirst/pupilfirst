@@ -1332,7 +1332,7 @@
               "deprecationReason": null
             },
             {
-              "name": "includeInactive",
+              "name": "includeInactiveStudents",
               "description": null,
               "args": [
 

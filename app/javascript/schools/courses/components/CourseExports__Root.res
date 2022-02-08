@@ -97,6 +97,7 @@ module CreateCourseExportQuery = %graphql(`
       createdAt
       tags
       reviewedOnly
+      includeInactiveStudents
     }
    }
  }
@@ -132,6 +133,7 @@ let createCourseExport = (state, send, course, event) => {
         ~createdAt=\"export"["createdAt"]->DateFns.decodeISO,
         ~tags=\"export"["tags"],
         ~reviewedOnly=\"export"["reviewedOnly"],
+        ~includeInactive=\"export"["includeInactiveStudents"],
       )
 
       send(FinishSaving(courseExport))
@@ -324,6 +326,12 @@ let make = (~course, ~exports, ~tags) => {
                               ? <span
                                   className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
                                   {"Reviewed Submissions Only" |> str}
+                                </span>
+                              : React.null}
+                            {courseExport |> CourseExport.includeInactive
+                              ? <span
+                                  className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
+                                  {"Included Inactive Students" |> str}
                                 </span>
                               : React.null}
                             {courseExport

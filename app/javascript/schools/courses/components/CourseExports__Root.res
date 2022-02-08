@@ -7,6 +7,7 @@ type state = {
   selectedTags: array<Tag.t>,
   saving: bool,
   reviewedOnly: bool,
+  includeInactive: bool,
   tagSearch: string,
   courseExports: array<CourseExport.t>,
   exportType: CourseExport.exportType,
@@ -17,6 +18,7 @@ let computeInitialState = exports => {
   selectedTags: [],
   saving: false,
   reviewedOnly: false,
+  includeInactive: false,
   tagSearch: "",
   courseExports: exports,
   exportType: CourseExport.Students,
@@ -29,6 +31,7 @@ type action =
   | FinishSaving(CourseExport.t)
   | FailSaving
   | SetReviewedOnly(bool)
+  | SetIncludeInactive(bool)
   | SelectTag(Tag.t)
   | DeselectTag(Tag.t)
   | SelectExportType(CourseExport.exportType)
@@ -47,6 +50,7 @@ let reducer = (state, action) =>
     }
   | FailSaving => {...state, saving: false}
   | SetReviewedOnly(reviewedOnly) => {...state, reviewedOnly: reviewedOnly}
+  | SetIncludeInactive(includeInactive) => {...state, includeInactive: includeInactive}
   | SelectTag(tag) => {
       ...state,
       selectedTags: state.selectedTags |> Array.append([tag]),
@@ -86,8 +90,8 @@ let unselected = (allTags, selectedTags) => {
 }
 
 module CreateCourseExportQuery = %graphql(`
- mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!, $exportType: Export!) {
-  createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly, exportType: $exportType){
+ mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!, $includeInactive: Boolean!, $exportType: Export!) {
+  createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly, includeInactive: $includeInactive, exportType: $exportType){
     courseExport {
       id
       createdAt
@@ -113,6 +117,7 @@ let createCourseExport = (state, send, course, event) => {
     ~courseId=course |> Course.id,
     ~tagIds,
     ~reviewedOnly=state.reviewedOnly,
+    ~includeInactive=state.includeInactive,
     ~exportType,
     (),
   )
@@ -224,6 +229,31 @@ let make = (~course, ~exports, ~tags) => {
                       <div className="mt-1">
                         {"Only targets with reviewed submissions" |> str}
                       </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-5">
+                <label
+                  className="block tracking-wide text-xs font-semibold mr-6 mb-2"
+                  htmlFor="targets_filter">
+                  {"Select the students to include in course export" |> str}
+                </label>
+                <div id="targets_filter" className="flex -mx-2">
+                  <div className="w-1/2 px-2">
+                    <button
+                      onClick={_ => send(SetIncludeInactive(false))}
+                      className={toggleChoiceClasses(!state.includeInactive)}>
+                      <i className="fas fa-list" />
+                      <div className="mt-1"> {"Active Students" |> str} </div>
+                    </button>
+                  </div>
+                  <div className="w-1/2 px-2">
+                    <button
+                      onClick={_event => send(SetIncludeInactive(true))}
+                      className={toggleChoiceClasses(state.includeInactive)}>
+                      <i className="fas fa-tasks" />
+                      <div className="mt-1"> {"All Students" |> str} </div>
                     </button>
                   </div>
                 </div>

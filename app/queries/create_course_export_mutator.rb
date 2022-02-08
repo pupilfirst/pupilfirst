@@ -5,6 +5,7 @@ class CreateCourseExportMutator < ApplicationQuery
   property :course_id, validates: { presence: { message: 'CourseIdBlank' } }
   property :tag_ids
   property :reviewed_only
+  property :include_inactive
 
   validate :require_valid_course
   validate :require_valid_tags
@@ -30,6 +31,7 @@ class CreateCourseExportMutator < ApplicationQuery
         course: course,
         user: current_user,
         reviewed_only: !!reviewed_only,
+        include_inactive_students: !!include_inactive,
         tag_list: tag_list,
       )
 

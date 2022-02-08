@@ -4,6 +4,7 @@ module Mutations
     argument :export_type, Types::ExportType, required: true
     argument :tag_ids, [ID], required: true
     argument :reviewed_only, Boolean, required: true
+    argument :include_inactive, Boolean, required: true
 
     description "Request a course export."
 

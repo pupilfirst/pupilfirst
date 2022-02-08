@@ -12,7 +12,7 @@ type status = Queued(queuedAt) | InProgress(startedAt) | Completed(completedTime
 type t = {
   id: string,
   status: status,
-  testReport: string,
+  testReport: option<string>,
   queuedAt: Js.Date.t,
 }
 

@@ -28,7 +28,7 @@ class SubmissionReport < ApplicationRecord
 
     return if started_at.present? && [completed_at, conclusion].all?(&:blank?)
 
-    errors[:status] << 'invalid in progress report status'
+    errors[:status] << 'invalid in-progress report status'
   end
 
   validate :completed_state_is_valid

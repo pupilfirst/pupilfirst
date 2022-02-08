@@ -1225,6 +1225,7 @@ let make = (
                       </p>
                     </div>
                   </div>
+                  { SubmissionReport.testReport(report) -> Belt.Option.isSome ?
                   <button
                     onClick={_ => send(ChangeReportVisibility)}
                     className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
@@ -1243,14 +1244,14 @@ let make = (
                         <Icon className={"if text-xl " ++ toggleTestReportIcon} />
                       </span>
                     }
-                  </button>
+                  </button> : React.null}
                 </div>
                 {state.showReport
                   ? <div>
                       <p className="text-sm font-semibold mt-4"> {str("Test Report")} </p>
                       <div className="bg-white p-3 rounded-md border mt-2">
                         <MarkdownBlock
-                          profile=Markdown.AreaOfText markdown={SubmissionReport.testReport(report)}
+                          profile=Markdown.AreaOfText markdown={SubmissionReport.testReport(report) -> Belt.Option.mapWithDefault("", s => s)}
                         />
                       </div>
                     </div>

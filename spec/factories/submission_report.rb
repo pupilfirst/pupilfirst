@@ -1,20 +1,12 @@
 FactoryBot.define do
   factory :submission_report do
-    description { Faker::Lorem.sentence }
-    trait :pending do
-      status { 'pending' }
+    trait :queued do
+      status { 'queued' }
     end
 
-    trait :success do
-      status { 'success' }
-    end
-
-    trait :error do
-      status { 'error' }
-    end
-
-    trait :failure do
-      status { 'failure' }
+    trait :in_progress do
+      status { 'in_progress' }
+      started_at { 2.minutes.ago }
     end
   end
 end

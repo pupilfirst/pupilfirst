@@ -825,7 +825,8 @@ feature 'Submission review overlay', js: true do
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
-        passed_at: 1.day.ago
+        passed_at: 1.day.ago,
+        number: 2
       )
     end
     let!(:timeline_event_grade) do
@@ -856,7 +857,7 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_link(target.title, href: "/targets/#{target.id}")
       end
 
-      expect(page).to have_content('Submission 1')
+      expect(page).to have_content('Submission 2')
       expect(page).to have_content('Completed')
 
       within("div[aria-label='submission-status']") do
@@ -956,7 +957,8 @@ feature 'Submission review overlay', js: true do
           :with_owners,
           owners: team.founders,
           target: target,
-          created_at: 3.days.ago
+          created_at: 3.days.ago,
+          number: 1
         )
       end
 
@@ -1014,7 +1016,8 @@ feature 'Submission review overlay', js: true do
         target: target_1,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
-        passed_at: 1.day.ago
+        passed_at: 1.day.ago,
+        number: 1
       )
     end
     let!(:timeline_event_grade_1) do
@@ -1037,7 +1040,8 @@ feature 'Submission review overlay', js: true do
         :with_owners,
         latest: true,
         owners: [team.founders.first],
-        target: target_1
+        target: target_1,
+        number: 2
       )
     end
 
@@ -1418,42 +1422,64 @@ feature 'Submission review overlay', js: true do
         )
       end
       let!(:submission_report) do
-        create :submission_report, :pending, submission: submission_with_report
+        create :submission_report, :queued, submission: submission_with_report
       end
 
       scenario 'indicates the status of the automated test in submission review page' do
         sign_in_user team_coach.user,
                      referrer:
                        review_timeline_event_path(submission_with_report)
-        expect(page).to have_text('Automated tests in progress')
-        expect(page).to_not have_text(submission_report.description)
+        expect(page).to have_text('Automated tests are queued')
+        expect(page).to_not have_button('Show Test Report')
+
+        submission_report.update!(
+          status: 'in_progress',
+          started_at: 2.minutes.ago
+        )
+        refresh
+        expect(page).to have_text('Automated tests are in progress')
+        expect(page).to have_text('Started 2 minutes ago')
+
+        submission_report.update!(
+          status: 'completed',
+          conclusion: 'success',
+          started_at: 2.minutes.ago,
+          completed_at: Time.zone.now,
+          test_report: 'Foo'
+        )
+        refresh
+        expect(page).to have_text('All automated tests succeeded')
+        expect(page).to_not have_text('Foo')
         click_button 'Show Test Report'
-        expect(page).to have_text(submission_report.description)
+        expect(page).to have_text('Foo')
 
-        submission_report.update!(status: 'success')
+        submission_report.update!(
+          status: 'completed',
+          conclusion: 'failure',
+          started_at: 2.minutes.ago,
+          completed_at: Time.zone.now,
+          test_report: 'Bar'
+        )
         refresh
-        expect(page).to have_text('All automated tests have passed')
-
-        submission_report.update!(status: 'failure')
-        refresh
-        expect(page).to have_text('Some of the tests failed')
-
-        submission_report.update!(status: 'error')
-        refresh
-        expect(page).to have_text('Tests could not be completed successfully')
+        expect(page).to have_text('Some automated tests failed')
+        click_button 'Show Test Report'
+        expect(page).to have_text('Bar')
       end
 
-      scenario 'status of the report is checked every 30 seconds without page reload if pending' do
+      scenario 'status of the report is checked every 30 seconds without page reload if current status is not completed' do
         sign_in_user team_coach.user,
                      referrer:
                        review_timeline_event_path(submission_with_report)
-        expect(page).to have_text('Automated tests in progress')
+        expect(page).to have_text('Automated tests are queued')
         submission_report.update!(
-          status: 'success',
-          description: 'A new report description'
+          status: 'completed',
+          conclusion: 'success',
+          test_report: 'A new report description',
+          started_at: 2.minutes.ago,
+          completed_at: Time.zone.now
         )
         sleep 30
-        expect(page).to have_text('All automated tests have passed')
+        expect(page).to have_text('All automated tests succeeded')
         click_button 'Show Test Report'
         expect(page).to have_text('A new report description')
       end

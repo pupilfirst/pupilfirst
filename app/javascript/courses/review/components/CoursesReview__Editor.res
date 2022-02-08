@@ -1045,7 +1045,7 @@ let reportStatusString = report => {
 
 let reportStatusIconClasses = report => {
   switch SubmissionReport.status(report) {
-  | Queued => "if animate-spin i-dashed-circle-regular text-2xl text-yellow-500 rounded-full"
+  | Queued => "if i-clock-light text-2xl text-gray-600 rounded-full"
   | InProgress => "if animate-spin i-dashed-circle-regular text-2xl text-yellow-500 rounded-full"
   | Completed(conclusion, _completedAt) =>
     switch conclusion {
@@ -1220,7 +1220,7 @@ let make = (
                     <div>
                       <p className="font-semibold"> {str(reportStatusString(report))} </p>
                       <p className="text-gray-800 text-xs">
-                        {str("Succeeded 3 days ago in 30m 54s")}
+                        {str(SubmissionReport.conclusionTimeString(report))}
                       </p>
                     </div>
                   </div>

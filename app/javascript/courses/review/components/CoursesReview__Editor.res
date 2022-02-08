@@ -145,6 +145,7 @@ module SubmissionReportQuery = %graphql(`
         startedAt
         completedAt
         conclusion
+        queuedAt
       }
     }
   `)
@@ -1032,9 +1033,9 @@ let pageTitle = (number, submissionDetails) => {
 
 let reportStatusString = report => {
   switch SubmissionReport.status(report) {
-  | Queued => t("report_status_string.queued")
-  | InProgress => t("report_status_string.in_progress")
-  | Completed(conclusion, _completedAt) =>
+  | Queued(_) => t("report_status_string.queued")
+  | InProgress(_) => t("report_status_string.in_progress")
+  | Completed(_timeStamps, conclusion) =>
     switch conclusion {
     | Success => t("report_status_string.completed.success")
     | Failure => t("report_status_string.completed.failure")
@@ -1045,9 +1046,9 @@ let reportStatusString = report => {
 
 let reportStatusIconClasses = report => {
   switch SubmissionReport.status(report) {
-  | Queued => "if i-clock-light text-2xl text-gray-600 rounded-full"
-  | InProgress => "if animate-spin i-dashed-circle-regular text-2xl text-yellow-500 rounded-full"
-  | Completed(conclusion, _completedAt) =>
+  | Queued(_) => "if i-clock-light text-2xl text-gray-600 rounded-full"
+  | InProgress(_) => "if animate-spin i-dashed-circle-regular text-2xl text-yellow-500 rounded-full"
+  | Completed(_timeStamps, conclusion) =>
     switch conclusion {
     | Success => "if i-check-circle-solid text-2xl text-green-500 bg-white rounded-full"
     | Failure => "if i-times-circle-solid text-2xl text-red-500 bg-white rounded-full"
@@ -1073,8 +1074,8 @@ let loadSubmissionReport = (report, updateSubmissionReportCB) => {
 
 let reloadSubmissionReport = (report, updateSubmissionReportCB) => {
   switch SubmissionReport.status(report) {
-  | Queued
-  | InProgress =>
+  | Queued(_)
+  | InProgress(_) =>
     loadSubmissionReport(report, updateSubmissionReportCB)
   | Completed(_, _) => ()
   }

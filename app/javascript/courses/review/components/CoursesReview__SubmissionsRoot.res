@@ -21,6 +21,7 @@ module SubmissionDetailsQuery = %graphql(`
           startedAt
           completedAt
           conclusion
+          queuedAt
         }
         evaluationCriteria{
           id, name, maxGrade, passGrade, gradeLabels { grade label}

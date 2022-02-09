@@ -9,7 +9,7 @@ type state =
 module SubmissionDetailsQuery = %graphql(`
     query SubmissionDetailsQuery($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
-        targetId, targetTitle, levelNumber, levelId, inactiveStudents, createdAt,
+        targetId, targetTitle, levelNumber, levelId, inactiveStudents, createdAt, submissionReportPollTime
         students {
           id
           name
@@ -129,6 +129,7 @@ let make = (~submissionId, ~currentUser) => {
         submissionId
         updateReviewerCB={updateReviewer(submissionDetails, setState)}
         updateSubmissionReportCB={updateSubmissionReport(submissionDetails, setState)}
+        submissionReportPollTime={SubmissionDetails.submissionReportPollTime(submissionDetails)}
       />
 
     | Loading =>

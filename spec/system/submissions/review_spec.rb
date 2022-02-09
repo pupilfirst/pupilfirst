@@ -6,6 +6,7 @@ feature 'Submission review overlay', js: true do
   include NotificationHelper
   include SubmissionsHelper
   include DevelopersNotificationsHelper
+  include WithEnvHelper
 
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
@@ -1425,6 +1426,10 @@ feature 'Submission review overlay', js: true do
         create :submission_report, :queued, submission: submission_with_report
       end
 
+      around do |example|
+        with_env(SUBMISSION_REPORT_POLL_TIME: 2) { example.run }
+      end
+
       scenario 'indicates the status of the automated test in submission review page' do
         sign_in_user team_coach.user,
                      referrer:
@@ -1478,7 +1483,7 @@ feature 'Submission review overlay', js: true do
           started_at: 2.minutes.ago,
           completed_at: Time.zone.now
         )
-        sleep 30
+        sleep 2
         expect(page).to have_text('All automated tests succeeded')
         click_button 'Show Test Report'
         expect(page).to have_text('A new report description')

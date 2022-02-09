@@ -26,6 +26,7 @@ type t = {
   courseId: string,
   preview: bool,
   reviewer: option<Reviewer.t>,
+  submissionReportPollTime: int,
 }
 
 let submission = t => t.submission
@@ -45,6 +46,7 @@ let createdAt = t => t.createdAt
 let preview = t => t.preview
 let reviewer = t => t.reviewer
 let submissionReport = t => t.submissionReport
+let submissionReportPollTime = t => t.submissionReportPollTime;
 
 let make = (
   ~submission,
@@ -65,6 +67,7 @@ let make = (
   ~createdAt,
   ~preview,
   ~reviewer,
+  ~submissionReportPollTime
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
@@ -84,6 +87,7 @@ let make = (
   createdAt: createdAt,
   preview: preview,
   reviewer: reviewer,
+  submissionReportPollTime: submissionReportPollTime,
 }
 
 let decodeJs = details =>
@@ -120,6 +124,7 @@ let decodeJs = details =>
     ~courseId=details["courseId"],
     ~preview=details["preview"],
     ~reviewer=Belt.Option.map(details["reviewerDetails"], Reviewer.makeFromJs),
+    ~submissionReportPollTime=details["submissionReportPollTime"]
   )
 
 let updateMetaSubmission = submission => {

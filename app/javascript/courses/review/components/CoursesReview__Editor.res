@@ -1098,6 +1098,7 @@ let make = (
   ~updateReviewerCB,
   ~submissionReport,
   ~updateSubmissionReportCB,
+  ~submissionReportPollTime
 ) => {
   let (state, send) = React.useReducer(
     reducer,
@@ -1146,7 +1147,7 @@ let make = (
     | Some(report) => {
         let intervalId = Js.Global.setInterval(
           () => reloadSubmissionReport(report, updateSubmissionReportCB),
-          30000,
+          submissionReportPollTime * 1000,
         )
         Some(() => Js.Global.clearInterval(intervalId))
       }

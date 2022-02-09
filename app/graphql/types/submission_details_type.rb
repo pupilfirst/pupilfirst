@@ -18,5 +18,6 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :preview, Boolean, null: false
     field :reviewer_details, Types::ReviewerDetailType, null: true
+    field :submission_report_poll_time, Integer, null: false
   end
 end

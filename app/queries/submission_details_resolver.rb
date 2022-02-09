@@ -20,7 +20,8 @@ class SubmissionDetailsResolver < ApplicationQuery
       course_id: level.course_id,
       created_at: submission.created_at,
       preview: preview?,
-      reviewer_details: reviewer_details
+      reviewer_details: reviewer_details,
+      submission_report_poll_time: ENV.fetch('SUBMISSION_REPORT_POLL_TIME', 30)
     }
   end
 

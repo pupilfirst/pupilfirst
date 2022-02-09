@@ -1427,7 +1427,7 @@ feature 'Submission review overlay', js: true do
       end
 
       around do |example|
-        with_env(SUBMISSION_REPORT_POLL_TIME: 2) { example.run }
+        with_env(SUBMISSION_REPORT_POLL_TIME: '2') { example.run }
       end
 
       scenario 'indicates the status of the automated test in submission review page' do

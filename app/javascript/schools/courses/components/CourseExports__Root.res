@@ -238,10 +238,10 @@ let make = (~course, ~exports, ~tags) => {
               <div className="mt-5">
                 <label
                   className="block tracking-wide text-xs font-semibold mr-6 mb-2"
-                  htmlFor="targets_filter">
+                  htmlFor="inactive_students_filter">
                   {"Select the students to include in course export" |> str}
                 </label>
-                <div id="targets_filter" className="flex -mx-2">
+                <div id="inactive_students_filter" className="flex -mx-2">
                   <div className="w-1/2 px-2">
                     <button
                       onClick={_ => send(SetIncludeInactive(false))}
@@ -322,13 +322,13 @@ let make = (~course, ~exports, ~tags) => {
                             </p>
                           </div>
                           <div className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
-                            {courseExport |> CourseExport.reviewedOnly
+                            {courseExport->CourseExport.reviewedOnly
                               ? <span
                                   className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
                                   {"Reviewed Submissions Only" |> str}
                                 </span>
                               : React.null}
-                            {courseExport |> CourseExport.includeInactive
+                            {courseExport->CourseExport.includeInactive
                               ? <span
                                   className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
                                   {"Included Inactive Students" |> str}

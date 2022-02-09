@@ -1,5 +1,8 @@
 module Mutations
-  class CreateCourseExport < GraphQL::Schema::Mutation
+  class CreateCourseExport < ApplicationQuery
+    include QueryAuthorizeSchoolAdmin
+    include ValidateCourseExport
+
     argument :course_id, ID, required: true
     argument :export_type, Types::ExportType, required: true
     argument :tag_ids, [ID], required: true
@@ -10,19 +13,42 @@ module Mutations
 
     field :course_export, Types::CourseExportType, null: true
 
-    def resolve(params)
-      mutator = CreateCourseExportMutator.new(context, params)
+    def create_course_export
+      CourseExport.transaction do
+        tag_list = tags.present? ? tags.pluck(:name) : []
 
-      export = if mutator.valid?
-        export = mutator.create_course_export
-        mutator.notify(:success, "Processing", "Your export is being processed. We'll notify you as soon as it is ready.")
+        export = CourseExport.create!(
+          export_type: @params[:export_type],
+          course: course,
+          user: current_user,
+          reviewed_only: !!@params[:reviewed_only],
+          include_inactive_students: @params[:include_inactive],
+          tag_list: tag_list,
+        )
+
+        # Queue a job to prepare the report.
+        CourseExports::PrepareJob.perform_later(export)
+
         export
-      else
-        mutator.notify_errors
-        nil
       end
+    end
 
-      { course_export: export }
+    def resolve(_params)
+      notify(:success, "Processing", "Your export is being processed. We'll notify you as soon as it is ready.")
+
+      { course_export: create_course_export }
+    end
+
+    def tags
+      @tags ||= current_school.founder_tags.where(id: @params[:tag_ids])
+    end
+
+    def resource_school
+      current_school
+    end
+
+    def course
+      @course ||= Course.find_by(id: @params[:course_id])
     end
   end
 end

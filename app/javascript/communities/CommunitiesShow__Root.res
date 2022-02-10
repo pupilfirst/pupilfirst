@@ -111,19 +111,13 @@ let getTopics = (send, communityId, cursor, filter) => {
 
   let targetId = filter.target |> OptionUtils.map(Target.id)
 
-  let search = filter.search->Belt.Option.map(search => getSearch(search))
+  let search = Belt.Option.map(filter.search, search =>
+    switch search {
+    | SearchContent(searchString) => {"search": searchString, "searchBy": #content}
+    | SearchTitle(searchString) => {"search": searchString, "searchBy": #title}
+    }
+  )
 
-  let searchBy = filter.search->Belt.Option.map(search => switch searchBy(search) {
-    | "content" => #content
-    | _ => #title
-  })
-
-  let search = switch (search,searchBy){
-    | (None,None) => None
-    | (None, Some(searchBy)) => Some({"search": "", "searchBy": searchBy })
-    | (Some(search), None) => Some({"search": search, "searchBy": #title })
-    | (Some(search), Some(searchBy)) => Some({"search": search, "searchBy": searchBy })
-  }
   TopicsQuery.make(
     ~communityId,
     ~after=?cursor,

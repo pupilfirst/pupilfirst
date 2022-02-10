@@ -6,7 +6,7 @@ class SchoolAdminMailer < SchoolMailer
     @new_school_admin = new_school_admin
     @adding_user = adding_user
     @school = school_admin.user.school
-    simple_roadie_mail(school_admin.email, 'New School Admin Added')
+    simple_mail(school_admin.email, 'New School Admin Added')
   end
 
   # @param school_admin [SchoolAdmin] Who initiated the import
@@ -28,6 +28,6 @@ class SchoolAdminMailer < SchoolMailer
       attachments['students_not_added.csv'] = report_attachment
     end
 
-    simple_roadie_mail(school_admin.email, 'Import of Students Completed')
+    simple_mail(school_admin.email, 'Import of Students Completed')
   end
 end

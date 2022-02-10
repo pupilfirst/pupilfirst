@@ -23,7 +23,6 @@ gem 'slim', '~> 4.1' # Slim templating.
 gem 'turbolinks', '~> 5.2' # Quicker page navigation. https://github.com/turbolinks/turbolinks
 gem 'rest-client', '~> 2.1' # Used to contact Fast Alerts' API.
 gem 'valid_url', '= 0.0.4', github: 'ralovets/valid_url' # URL validation: https://github.com/ralovets/valid_url
-gem 'roadie-rails', '~> 2.2' # CSS management for e-mails.
 gem 'puma', '< 6' # The Puma ruby web server.
 gem 'slowpoke', '~> 0.3' # Rack::Timeout enhancements for Rails. https://github.com/ankane/slowpoke
 gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.

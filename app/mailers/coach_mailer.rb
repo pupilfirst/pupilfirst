@@ -6,7 +6,7 @@ class CoachMailer < SchoolMailer
     @user = coach.user
     @user.regenerate_login_token
 
-    simple_roadie_mail(
+    simple_mail(
       coach.email,
       "You have been added as a coach in #{@course.name}"
     )

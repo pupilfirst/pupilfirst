@@ -5,7 +5,7 @@ class CourseAuthorMailer < SchoolMailer
     @user = course_author.user
     @user.regenerate_login_token
 
-    simple_roadie_mail(
+    simple_mail(
       @user.email,
       "You have been added as an author in #{@course.name}"
     )

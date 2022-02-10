@@ -167,7 +167,6 @@ module Courses
     def submissions
       current_student
         .latest_submissions
-        .live
         .includes(:target)
         .map do |submission|
           if submission.target.individual_target? ||

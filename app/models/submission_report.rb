@@ -3,6 +3,12 @@ class SubmissionReport < ApplicationRecord
 
   validates :status, presence: true
 
+  validate :completed_state_is_valid
+
+  validate :in_progress_state_is_valid
+
+  validate :queued_state_is_valid
+
   enum status: {
          queued: 'queued',
          in_progress: 'in_progress',
@@ -10,8 +16,6 @@ class SubmissionReport < ApplicationRecord
        }
 
   enum conclusion: { success: 'success', failure: 'failure', error: 'error' }
-
-  validate :queued_state_is_valid
 
   def queued_state_is_valid
     return unless queued?
@@ -21,8 +25,6 @@ class SubmissionReport < ApplicationRecord
     errors[:status] << 'invalid queued report status'
   end
 
-  validate :in_progress_state_is_valid
-
   def in_progress_state_is_valid
     return unless in_progress?
 
@@ -30,8 +32,6 @@ class SubmissionReport < ApplicationRecord
 
     errors[:status] << 'invalid in-progress report status'
   end
-
-  validate :completed_state_is_valid
 
   def completed_state_is_valid
     return unless completed?

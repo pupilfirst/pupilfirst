@@ -1,4 +1,6 @@
 class SubmissionReportResolver < ApplicationQuery
+  include AuthorizeCoach
+
   property :id
 
   def submission_report

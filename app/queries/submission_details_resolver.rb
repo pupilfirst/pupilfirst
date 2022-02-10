@@ -21,7 +21,8 @@ class SubmissionDetailsResolver < ApplicationQuery
       created_at: submission.created_at,
       preview: preview?,
       reviewer_details: reviewer_details,
-      submission_report_poll_time: ENV.fetch('SUBMISSION_REPORT_POLL_TIME', 30)
+      submission_report_poll_time:
+        Rails.application.secrets.submission_report_poll_time
     }
   end
 

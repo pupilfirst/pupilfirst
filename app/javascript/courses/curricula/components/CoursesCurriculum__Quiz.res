@@ -11,6 +11,7 @@ module CreateQuizSubmissionQuery = %graphql(`
         id
         createdAt
         checklist
+        number
       }
       levelUpEligibility
      }
@@ -37,7 +38,7 @@ let createQuizSubmission = (target, selectedAnswersIds, setSaving, addSubmission
           ~createdAt=DateFns.decodeISO(submission["createdAt"]),
           ~status=Submission.MarkedAsComplete,
           ~checklist,
-          ~number=1,
+          ~number=submission["number"],
         ),
         levelUpEligibility,
       )

@@ -87,23 +87,3 @@ let status = t => t.status
 let testReport = t => t.testReport
 
 let startedAt = t => t.startedAt
-
-let conclusionTimeString = t => {
-  switch t.status {
-  | Queued(queuedAt) =>
-    "Queued " ++ DateFns.formatDistanceToNowStrict(queuedAt, ~addSuffix=true, ())
-  | InProgress(startedAt) =>
-    "Started " ++ DateFns.formatDistanceToNowStrict(startedAt, ~addSuffix=true, ())
-
-  | Completed(completedTimestamps, _conclusion) =>
-    "Finished " ++
-    DateFns.formatDistanceToNowStrict(completedTimestamps.completedAt, ~addSuffix=true, ()) ++
-    " in " ++
-    DateFns.formatDistance(
-      completedTimestamps.completedAt,
-      completedTimestamps.startedAt,
-      ~includeSeconds=true,
-      (),
-    )
-  }
-}

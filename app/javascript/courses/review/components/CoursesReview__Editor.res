@@ -1057,6 +1057,27 @@ let reportStatusIconClasses = report => {
   }
 }
 
+let reportConclusionTimeString = report => {
+  switch SubmissionReport.status(report) {
+  | Queued(queuedAt) =>
+    "Queued " ++ DateFns.formatDistanceToNowStrict(queuedAt, ~addSuffix=true, ())
+  | InProgress(startedAt) =>
+    "Started " ++ DateFns.formatDistanceToNowStrict(startedAt, ~addSuffix=true, ())
+
+  | Completed(completedTimestamps, _conclusion) =>
+    "Finished " ++
+    DateFns.formatDistanceToNowStrict(completedTimestamps.completedAt, ~addSuffix=true, ()) ++
+    ", and took " ++
+    DateFns.formatDistance(
+      completedTimestamps.completedAt,
+      completedTimestamps.startedAt,
+      ~includeSeconds=true,
+      (),
+    )
+  }
+}
+
+
 let loadSubmissionReport = (report, updateSubmissionReportCB) => {
   let id = SubmissionReport.id(report)
   SubmissionReportQuery.make(~id, ())
@@ -1167,7 +1188,7 @@ let make = (
         {ReactUtils.nullIf(
           <div
             className="flex space-x-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-200">
-            {Js.Array.map(
+            {Js.Array2.map(SubmissionDetails.allSubmissions(submissionDetails),
               submission =>
                 <CoursesReview__SubmissionInfoCard
                   key={SubmissionMeta.id(submission)}
@@ -1175,7 +1196,7 @@ let make = (
                   submission
                   filterString={url.search}
                 />,
-              SubmissionDetails.allSubmissions(submissionDetails),
+
             )->React.array}
           </div>,
           Js.Array.length(SubmissionDetails.allSubmissions(submissionDetails)) == 1,
@@ -1222,7 +1243,7 @@ let make = (
                     <div>
                       <p className="font-semibold"> {str(reportStatusString(report))} </p>
                       <p className="text-gray-800 text-xs">
-                        {str(SubmissionReport.conclusionTimeString(report))}
+                        {str(reportConclusionTimeString(report))}
                       </p>
                     </div>
                   </div>

@@ -1411,6 +1411,15 @@ feature 'Submission review overlay', js: true do
       expect(page).to_not have_text(team_2.name)
     end
 
+    scenario 'coaches are not shown report on automation tests in the absence of a submission report' do
+      sign_in_user team_coach.user,
+                   referrer: review_timeline_event_path(submission_team_target)
+
+      expect(page).to have_title("Submission 1 | L1 | #{team_2.name}")
+
+      expect(page).to_not have_text('Automated tests are queued')
+    end
+
     context 'when a submission report exists for a submission' do
       let(:student) { team.founders.first }
       let!(:submission_with_report) do

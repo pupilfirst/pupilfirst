@@ -44,6 +44,7 @@ class UndoSubmissionMutator < ApplicationQuery
     @timeline_event ||=
       target
         .timeline_events
+        .live
         .joins(:founders)
         .where(founders: { id: founder })
         .order(created_at: :DESC)
@@ -63,9 +64,10 @@ class UndoSubmissionMutator < ApplicationQuery
         .first
   end
 
-  # Founders linked to a timeline event can delete it.
+  # Founders linked to a timeline event can delete it and submission should be live.
   def authorized?
     target.present? && founder.present? &&
-      target.status(founder) == Targets::StatusService::STATUS_SUBMITTED
+      target.status(founder) == Targets::StatusService::STATUS_SUBMITTED &&
+      timeline_event.live?
   end
 end

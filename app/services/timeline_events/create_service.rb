@@ -52,7 +52,10 @@ module TimelineEvents
 
     def update_latest_flag(timeline_event)
       TimelineEventOwner
-        .where(timeline_event_id: old_events(timeline_event), founder: owners)
+        .where(
+          timeline_event_id: old_events(timeline_event).live,
+          founder: owners
+        )
         .update_all(latest: false) # rubocop:disable Rails/SkipsModelValidations
     end
 

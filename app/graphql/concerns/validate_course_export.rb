@@ -30,5 +30,4 @@ module ValidateCourseExport
     validates RequireValidCourse => {}
     validates RequireValidTags => {}
   end
-
 end

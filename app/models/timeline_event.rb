@@ -118,4 +118,8 @@ class TimelineEvent < ApplicationRecord
   def archived?
     archived_at.present?
   end
+
+  def live?
+    !archived?
+  end
 end

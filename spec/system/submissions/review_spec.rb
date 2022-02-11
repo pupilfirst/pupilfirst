@@ -6,7 +6,7 @@ feature 'Submission review overlay', js: true do
   include NotificationHelper
   include SubmissionsHelper
   include DevelopersNotificationsHelper
-  include WithEnvHelper
+  include ConfigHelper
 
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
@@ -1436,7 +1436,7 @@ feature 'Submission review overlay', js: true do
       end
 
       around do |example|
-        with_env(SUBMISSION_REPORT_POLL_TIME: '2') { example.run }
+        with_secret(submission_report_poll_time: 2) { example.run }
       end
 
       scenario 'indicates the status of the automated test in submission review page' do

@@ -1,20 +1,24 @@
 require 'rails_helper'
 
 describe Users::ValidateResetTokenService do
-  include WithEnvHelper
+  include ConfigHelper
 
   let(:reset_password_token) { SecureRandom.urlsafe_base64 }
-  let(:reset_password_token_digest) { Digest::SHA2.base64digest(reset_password_token) }
+  let(:reset_password_token_digest) do
+    Digest::SHA2.base64digest(reset_password_token)
+  end
   let(:time_limit) { nil }
   let(:sent_at) { Time.zone.now }
-  let!(:user) { create :user, reset_password_token: reset_password_token_digest, reset_password_sent_at: sent_at }
+  let!(:user) do
+    create :user,
+           reset_password_token: reset_password_token_digest,
+           reset_password_sent_at: sent_at
+  end
 
   subject { described_class.new(reset_password_token) }
 
   around do |example|
-    with_env(RESET_PASSWORD_TOKEN_TIME_LIMIT: time_limit.to_s) do
-      example.run
-    end
+    with_env(RESET_PASSWORD_TOKEN_TIME_LIMIT: time_limit.to_s) { example.run }
   end
 
   describe '#authenticate' do
@@ -30,7 +34,7 @@ describe Users::ValidateResetTokenService do
       let(:time_limit) { 3 }
 
       context 'within time limit' do
-        let(:sent_at) { Time.zone.now - 1.minute }
+        let(:sent_at) { 1.minute.ago }
 
         it 'returns user based on #reset_password_token' do
           expect(subject.authenticate).to eq(user)
@@ -38,7 +42,7 @@ describe Users::ValidateResetTokenService do
       end
 
       context 'beyond the time limit' do
-        let(:sent_at) { Time.zone.now - 4.minutes }
+        let(:sent_at) { 4.minutes.ago }
 
         it 'returns nil due to time limit' do
           expect(subject.authenticate).to eq(nil)
@@ -48,7 +52,7 @@ describe Users::ValidateResetTokenService do
 
     context 'without a configured time limit' do
       context 'within default time limit' do
-        let(:sent_at) { Time.zone.now - 28.minutes }
+        let(:sent_at) { 28.minutes.ago }
 
         it 'returns user based on #reset_password_token' do
           expect(subject.authenticate).to eq(user)
@@ -56,7 +60,7 @@ describe Users::ValidateResetTokenService do
       end
 
       context 'beyond the default time limit' do
-        let(:sent_at) { Time.zone.now - 31.minutes }
+        let(:sent_at) { 31.minutes.ago }
 
         it 'returns nil due to time limit' do
           expect(subject.authenticate).to eq(nil)

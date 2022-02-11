@@ -58,36 +58,51 @@ let linkUrl = (submissionId, filterString) => {
   `/submissions/${submissionId}/review${String.trim(filterString) == "" ? "" : "?" ++ filterString}`
 }
 
-@react.component
-let make = (~submission, ~selected, ~filterString) =>
-  <Link
-    title={t("submission_hash") ++ string_of_int(SubmissionMeta.number(submission))}
-    href={linkUrl(SubmissionMeta.id(submission), filterString)}
-    key={SubmissionMeta.id(submission)}
-    className={cardClasses(submission, selected)}>
-    <div className="px-4 py-2 flex flex-row items-center justify-between min-w-min">
-      <div className="flex flex-col md:pr-6">
-        <h2 className="font-semibold text-sm leading-tight">
-          <p className="hidden md:block">
-            {(t("submission_hash") ++ string_of_int(SubmissionMeta.number(submission)))->str}
-          </p>
-          <p className="md:hidden">
-            {("#" ++ string_of_int(SubmissionMeta.number(submission)))->str}
-          </p>
-        </h2>
-        <span className="text-xs text-gray-800 pt-px whitespace-nowrap">
-          {submission->SubmissionMeta.createdAt->DateFns.formatPreset(~year=true, ())->str}
-        </span>
-      </div>
-      <div className="hidden md:flex items-center space-x-2 text-xs w-auto">
-        {ReactUtils.nullUnless(
-          <div
-            className="flex items-center justify-center bg-primary-100 text-primary-600 border border-transparent font-semibold p-1 rounded">
-            <PfIcon className="if i-comment-alt-regular if-fw" />
-          </div>,
-          SubmissionMeta.feedbackSent(submission),
-        )}
-        {showSubmissionStatus(submission)}
-      </div>
+let submissionInfoCardContent = submission => {
+  <div className="px-4 py-2 flex flex-row items-center justify-between min-w-min">
+    <div className="flex flex-col md:pr-6">
+      <h2 className="font-semibold text-sm leading-tight">
+        <p className="hidden md:block">
+          {(t("submission_hash") ++ string_of_int(SubmissionMeta.number(submission)))->str}
+        </p>
+        <p className="md:hidden">
+          {("#" ++ string_of_int(SubmissionMeta.number(submission)))->str}
+        </p>
+      </h2>
+      <span className="text-xs text-gray-800 pt-px whitespace-nowrap">
+        {submission->SubmissionMeta.createdAt->DateFns.formatPreset(~year=true, ())->str}
+      </span>
     </div>
-  </Link>
+    <div className="hidden md:flex items-center space-x-2 text-xs w-auto">
+      {ReactUtils.nullUnless(
+        <div
+          className="flex items-center justify-center bg-primary-100 text-primary-600 border border-transparent font-semibold p-1 rounded">
+          <PfIcon className="if i-comment-alt-regular if-fw" />
+        </div>,
+        SubmissionMeta.feedbackSent(submission),
+      )}
+      {showSubmissionStatus(submission)}
+    </div>
+  </div>
+}
+
+@react.component
+let make = (~submission, ~selected, ~filterString) => {
+  switch SubmissionMeta.archivedAt(submission) {
+  | Some(_archivedAt) =>
+    <div
+      title={t("submission_hash") ++ string_of_int(SubmissionMeta.number(submission))}
+      key={SubmissionMeta.id(submission)}
+      className={cardClasses(submission, selected)}>
+      {submissionInfoCardContent(submission)}
+    </div>
+  | None =>
+    <Link
+      title={t("submission_hash") ++ string_of_int(SubmissionMeta.number(submission))}
+      href={linkUrl(SubmissionMeta.id(submission), filterString)}
+      key={SubmissionMeta.id(submission)}
+      className={cardClasses(submission, selected)}>
+      {submissionInfoCardContent(submission)}
+    </Link>
+  }
+}

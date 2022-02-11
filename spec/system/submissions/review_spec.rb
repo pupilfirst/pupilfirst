@@ -152,7 +152,7 @@ feature 'Submission review overlay', js: true do
       expect(page).to have_content(target.title)
       expect(page).to have_content(target_2.title)
 
-      find("a[aria-label='Submission #{submission_pending.id}']").click
+      find("a[data-submission-id='#{submission_pending.id}']").click
       click_button 'Start Review'
       dismiss_notification
       expect(submission_pending.reload.reviewer).to eq(coach)
@@ -718,7 +718,7 @@ feature 'Submission review overlay', js: true do
       )
 
       # Open the overlay.
-      find("a[aria-label='Submission #{submission_pending.id}']").click
+      find("a[data-submission-id='#{submission_pending.id}']").click
 
       # It should show Completed.
       within("div[aria-label='submission-status']") do
@@ -745,7 +745,7 @@ feature 'Submission review overlay', js: true do
         evaluator: nil
       )
 
-      find("a[aria-label='Submission #{submission_pending.id}']").click
+      find("a[data-submission-id='#{submission_pending.id}']").click
 
       # The overlay should show pending review status.
       expect(page).to have_text('Start Review')

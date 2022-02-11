@@ -161,7 +161,7 @@ feature 'Target Overlay', js: true do
 
     # There should also be a link to the completion section at the bottom of content.
     find('.course-overlay__body-tab-item', text: 'Learn').click
-    find('a', text: 'Submit work for review').click
+    click_button 'Submit work for review'
 
     long_answer = Faker::Lorem.sentence
 
@@ -203,7 +203,7 @@ feature 'Target Overlay', js: true do
     # The status should also be updated on the dashboard page.
     click_button 'Close'
 
-    within("a[aria-label='Select Target #{target_l1.id}'") do
+    within("a[data-target-id='#{target_l1.id}']") do
       expect(page).to have_content('Pending Review')
     end
 
@@ -363,7 +363,8 @@ feature 'Target Overlay', js: true do
 
       # There should also be a link to the quiz at the bottom of content.
       find('.course-overlay__body-tab-item', text: 'Learn').click
-      find('a', text: 'Take a Quiz').click
+
+      click_button 'Take a Quiz'
 
       # Question one
       expect(page).to have_content(/Question #1/i)

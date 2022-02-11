@@ -49,7 +49,7 @@ let createQuizSubmission = (target, selectedAnswersIds, setSaving, addSubmission
   |> ignore
 }
 let answerOptionClasses = (answerOption, selectedAnswer) => {
-  let defaultClasses = "quiz-root__answer bg-white flex items-center shadow border border-transparent rounded p-3 mt-3 cursor-pointer "
+  let defaultClasses = "quiz-root__answer bg-white flex items-center shadow border border-transparent rounded p-3 mt-3 cursor-pointer text-left "
   switch selectedAnswer {
   | Some(answer) if answer == answerOption =>
     defaultClasses ++ "bg-primary-100 border-primary-500 text-primary-500 shadow-md quiz-root__answer-selected "
@@ -92,11 +92,11 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
         className="text-lg md:text-xl"
         profile=Markdown.Permissive
       />
-      <div className="pt-2">
+      <div className="pt-2 flex flex-col">
         {currentQuestion
         |> QuizQuestion.answerOptions
         |> Js.Array.map(answerOption =>
-          <div
+          <button
             className={answerOptionClasses(answerOption, selectedAnswer)}
             key={QuizQuestion.answerId(answerOption)}
             onClick={_ => setSelectedAnswer(_ => Some(answerOption))}>
@@ -106,7 +106,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
               className="overflow-auto ml-2 w-full"
               profile=Markdown.Permissive
             />
-          </div>
+          </button>
         )
         |> React.array}
       </div>

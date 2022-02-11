@@ -32,7 +32,7 @@ let feedbackSentNotice = feedbackSent =>
   )
 
 let submissionCardClasses = submission =>
-  "flex flex-col lg:flex-row items-start lg:items-center justify-between bg-white border-l-3 p-3 lg:py-6 lg:px-5 mb-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 " ++ if (
+  "flex flex-col lg:flex-row items-start lg:items-center justify-between bg-white border-l-3 p-3 lg:py-6 lg:px-5 mb-4 cursor-pointer rounded-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-inset focus:ring-indigo-500 " ++ if (
     IndexSubmission.pendingReview(submission)
   ) {
     "border-orange-400"
@@ -45,9 +45,13 @@ let submissionCardClasses = submission =>
 let showSubmission = (submissions, filterString) =>
   <div id="submissions"> {Js.Array.map(submission =>
       <Link
-        href={`/submissions/${IndexSubmission.id(submission)}/review?${filterString}`}
         key={IndexSubmission.id(submission)}
-        ariaLabel={"Submission " ++ IndexSubmission.id(submission)}
+        props={"data-submission-id": IndexSubmission.id(submission)}
+        href={`/submissions/${IndexSubmission.id(submission)}/review?${filterString}`}
+        ariaLabel={"Submission " ++
+        IndexSubmission.id(submission) ++
+        ", Submitted by: " ++
+        IndexSubmission.userNames(submission)}
         className={submissionCardClasses(submission)}>
         <div className="w-full lg:w-8/12">
           <div className="block text-sm lg:pr-4">

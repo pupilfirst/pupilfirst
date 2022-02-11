@@ -475,14 +475,12 @@ feature 'Community', js: true do
     expect(page).to have_text(topic_2.title)
 
     fill_in 'filter', with: 'complex sentence'
-
     click_button 'Search by title: complex sentence'
 
     expect(page).to_not have_text(topic_2.title)
     expect(page).to have_text(topic_1.title)
 
     find("button[title='Remove selection: complex sentence']").click
-
     fill_in 'filter', with: 'Completely Different'
 
     click_button 'Search by content: Completely Different'
@@ -494,9 +492,7 @@ feature 'Community', js: true do
 
     # Apply solved filter
     fill_in 'filter', with: 'complex sentence'
-
     click_button 'Search by title: complex sentence'
-
     fill_in 'filter', with: 'solution'
 
     click_button 'Solution: Solved'
@@ -509,9 +505,7 @@ feature 'Community', js: true do
     find("button[title='Remove selection: complex sentence']").click
 
     fill_in 'filter', with: 'Completely Different'
-
     click_button 'Search by title: Completely Different'
-
     fill_in 'filter', with: 'solution'
 
     click_button 'Solution: Unsolved'
@@ -525,9 +519,7 @@ feature 'Community', js: true do
 
     # Apply unsolved filter
     fill_in 'filter', with: 'complex sentence'
-
     click_button 'Search by content: complex sentence'
-
     fill_in 'filter', with: 'solution'
 
     click_button 'Solution: Solved'
@@ -540,9 +532,7 @@ feature 'Community', js: true do
     find("button[title='Remove selection: complex sentence']").click
 
     fill_in 'filter', with: 'Completely Different'
-
     click_button 'Search by content: Completely Different'
-
     fill_in 'filter', with: 'solution'
 
     click_button 'Solution: Unsolved'

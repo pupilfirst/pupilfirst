@@ -17,7 +17,7 @@ type loading =
   | Reloading
   | LoadingMore
 
-type search = SearchContent(string) | SearchTitle(string)
+type searchFilter = SearchContent(string) | SearchTitle(string)
 let getSearch = search =>
   switch search {
   | SearchContent(search) => search
@@ -31,7 +31,7 @@ let searchBy = search =>
 type filter = {
   topicCategory: option<TopicCategory.t>,
   solution: solution,
-  search: option<search>,
+  search: option<searchFilter>,
   target: option<Target.t>,
   sortCriterion: sortCriterion,
   sortDirection: sortDirection,
@@ -76,8 +76,8 @@ let reducer = (state, action) =>
   }
 
 module TopicsQuery = %graphql(`
-    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $resolution: TopicResolutionFilter!, $search: CommunitySearchFilter, $after: String, $sortCriterion: TopicSortCriterion!, $sortDirection: SortDirection!) {
-      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, resolution: $resolution, sortDirection: $sortDirection, sortCriterion: $sortCriterion, first: 10, after: $after) {
+    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $resolution: TopicResolutionFilter!, $searchFilter: CommunitySearchFilter, $after: String, $sortCriterion: TopicSortCriterion!, $sortDirection: SortDirection!) {
+      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $searchFilter, resolution: $resolution, sortDirection: $sortDirection, sortCriterion: $sortCriterion, first: 10, after: $after) {
         nodes {
           id
           lastActivityAt
@@ -111,7 +111,7 @@ let getTopics = (send, communityId, cursor, filter) => {
 
   let targetId = filter.target |> OptionUtils.map(Target.id)
 
-  let search = Belt.Option.map(filter.search, search =>
+  let searchFilter = Belt.Option.map(filter.search, search =>
     switch search {
     | SearchContent(searchString) => {"search": searchString, "searchBy": #content}
     | SearchTitle(searchString) => {"search": searchString, "searchBy": #title}
@@ -123,7 +123,7 @@ let getTopics = (send, communityId, cursor, filter) => {
     ~after=?cursor,
     ~topicCategoryId?,
     ~targetId?,
-    ~search?,
+    ~searchFilter?,
     ~resolution=filter.solution,
     ~sortCriterion=filter.sortCriterion,
     ~sortDirection=filter.sortDirection,
@@ -360,7 +360,7 @@ module Selectable = {
   type t =
     | TopicCategory(TopicCategory.t)
     | Solution(bool)
-    | Search(search)
+    | Search(searchFilter)
 
   let label = t =>
     switch t {

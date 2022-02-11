@@ -12872,6 +12872,20 @@
           "description": null,
           "fields": [
             {
+              "name": "archivedAt",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "checklist",
               "description": null,
               "args": [
@@ -13770,6 +13784,20 @@
           "description": null,
           "fields": [
             {
+              "name": "archivedAt",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "createdAt",
               "description": null,
               "args": [
@@ -14230,19 +14258,19 @@
           "enumValues": [
             {
               "name": "error",
-              "description": "checks could not be completed successfully",
+              "description": "Checks could not be completed successfully",
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "failure",
-              "description": "one or more checks failed for the submission",
+              "description": "One or more checks failed for the submission",
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "success",
-              "description": "checks successfully completed for the submission",
+              "description": "Checks successfully completed for the submission",
               "isDeprecated": false,
               "deprecationReason": null
             }
@@ -14259,19 +14287,19 @@
           "enumValues": [
             {
               "name": "queued",
-              "description": "automated tests are queued",
+              "description": "Automated tests are queued",
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "in_progress",
-              "description": "checks in progress for the submission",
+              "description": "Checks in progress for the submission",
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "completed",
-              "description": "checks completed for the submission",
+              "description": "Checks completed for the submission",
               "isDeprecated": false,
               "deprecationReason": null
             }

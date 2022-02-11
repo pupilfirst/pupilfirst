@@ -10,22 +10,29 @@ let cardClasses = (submission, selected) =>
   (selected
     ? "border border-primary-400 "
     : "bg-opacity-50 border border-gray-300 hover:bg-opacity-100 ") ++
-  switch (SubmissionMeta.passedAt(submission), SubmissionMeta.evaluatedAt(submission)) {
-  | (None, None) => "submission-info__tab-pending"
-  | (None, Some(_)) => "submission-info__tab-rejected"
-  | (Some(_), None)
-  | (Some(_), Some(_)) => "submission-info__tab-completed"
+  switch (
+    SubmissionMeta.archivedAt(submission),
+    SubmissionMeta.passedAt(submission),
+    SubmissionMeta.evaluatedAt(submission),
+  ) {
+  | (Some(_), _, _) => "submission-info__tab-deleted"
+  | (None, None, None) => "submission-info__tab-pending"
+  | (None, None, Some(_)) => "submission-info__tab-rejected"
+  | (None, Some(_), None)
+  | (None, Some(_), Some(_)) => "submission-info__tab-completed"
   }
 
 let showSubmissionStatus = submission => {
   let (text, classes) = switch (
+    SubmissionMeta.archivedAt(submission),
     SubmissionMeta.passedAt(submission),
     SubmissionMeta.evaluatedAt(submission),
   ) {
-  | (None, None) => ("Pending Review", "bg-orange-100 text-orange-800 ")
-  | (None, Some(_)) => ("Rejected", "bg-red-100 text-red-700")
-  | (Some(_), None)
-  | (Some(_), Some(_)) => ("Completed", "bg-green-100 text-green-800")
+  | (Some(_), _, _) => ("Deleted", "bg-gray-100 text-gray-800 ")
+  | (None, None, None) => ("Pending Review", "bg-orange-100 text-orange-800 ")
+  | (None, None, Some(_)) => ("Rejected", "bg-red-100 text-red-700")
+  | (None, Some(_), None)
+  | (None, Some(_), Some(_)) => ("Completed", "bg-green-100 text-green-800")
   }
   <div className={"font-semibold px-3 py-px rounded " ++ classes}>
     <span className="hidden md:block"> {text->str} </span>

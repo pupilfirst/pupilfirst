@@ -46,7 +46,7 @@ let createdAt = t => t.createdAt
 let preview = t => t.preview
 let reviewer = t => t.reviewer
 let submissionReport = t => t.submissionReport
-let submissionReportPollTime = t => t.submissionReportPollTime;
+let submissionReportPollTime = t => t.submissionReportPollTime
 
 let make = (
   ~submission,
@@ -67,7 +67,7 @@ let make = (
   ~createdAt,
   ~preview,
   ~reviewer,
-  ~submissionReportPollTime
+  ~submissionReportPollTime,
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
@@ -124,7 +124,7 @@ let decodeJs = details =>
     ~courseId=details["courseId"],
     ~preview=details["preview"],
     ~reviewer=Belt.Option.map(details["reviewerDetails"], Reviewer.makeFromJs),
-    ~submissionReportPollTime=details["submissionReportPollTime"]
+    ~submissionReportPollTime=details["submissionReportPollTime"],
   )
 
 let updateMetaSubmission = submission => {
@@ -135,6 +135,7 @@ let updateMetaSubmission = submission => {
     ~evaluatedAt=OverlaySubmission.evaluatedAt(submission),
     ~feedbackSent=ArrayUtils.isNotEmpty(OverlaySubmission.feedback(submission)),
     ~number=OverlaySubmission.number(submission),
+    ~archivedAt=OverlaySubmission.archivedAt(submission),
   )
 }
 

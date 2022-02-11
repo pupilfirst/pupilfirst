@@ -35,7 +35,7 @@ module SubmissionDetailsQuery = %graphql(`
         },
         targetEvaluationCriteriaIds,
         submission{
-          id, evaluatorName, passedAt, createdAt, evaluatedAt
+          id, evaluatorName, passedAt, createdAt, evaluatedAt, archivedAt
           files{
             url, title, id
           },
@@ -49,7 +49,7 @@ module SubmissionDetailsQuery = %graphql(`
           number
         }
         allSubmissions{
-          id, passedAt, createdAt, evaluatedAt, feedbackSent, number
+          id, passedAt, createdAt, evaluatedAt, feedbackSent, number, archivedAt
         }
         coaches{
           id, userId, name, title, avatarUrl

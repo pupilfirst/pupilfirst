@@ -6,6 +6,9 @@
   top: 50%;
   @apply absolute left-0 h-3/4 w-1 rounded-r-md transform -translate-y-1/2;
 }
+.submission-info__tab-deleted::before {
+  @apply bg-gray-500;
+}
 .submission-info__tab-pending::before {
   @apply bg-yellow-500;
 }

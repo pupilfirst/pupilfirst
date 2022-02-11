@@ -4,6 +4,7 @@ type t = {
   passedAt: option<Js.Date.t>,
   feedbackSent: bool,
   evaluatedAt: option<Js.Date.t>,
+  archivedAt: option<Js.Date.t>,
   number: int,
 }
 
@@ -13,14 +14,16 @@ let passedAt = t => t.passedAt
 let evaluatedAt = t => t.evaluatedAt
 let feedbackSent = t => t.feedbackSent
 let number = t => t.number
+let archivedAt = t => t.archivedAt
 
-let make = (~id, ~createdAt, ~passedAt, ~evaluatedAt, ~feedbackSent, ~number) => {
+let make = (~id, ~createdAt, ~passedAt, ~evaluatedAt, ~feedbackSent, ~archivedAt, ~number) => {
   id: id,
   createdAt: createdAt,
   passedAt: passedAt,
   feedbackSent: feedbackSent,
   evaluatedAt: evaluatedAt,
   number: number,
+  archivedAt: archivedAt,
 }
 
 let makeFromJs = details =>
@@ -32,5 +35,6 @@ let makeFromJs = details =>
       ~evaluatedAt=s["evaluatedAt"]->Belt.Option.map(DateFns.decodeISO),
       ~feedbackSent=s["feedbackSent"],
       ~number=s["number"],
+      ~archivedAt=s["archivedAt"]->Belt.Option.map(DateFns.decodeISO),
     )
   )

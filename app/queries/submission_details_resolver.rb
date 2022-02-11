@@ -55,7 +55,6 @@ class SubmissionDetailsResolver < ApplicationQuery
 
   def submissions
     TimelineEvent
-      .live
       .where(target_id: submission.target_id)
       .joins(:timeline_event_owners)
       .where(timeline_event_owners: { founder_id: student_ids })

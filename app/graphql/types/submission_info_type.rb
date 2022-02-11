@@ -3,6 +3,7 @@ module Types
     field :id, ID, null: false
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :evaluated_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :archived_at, GraphQL::Types::ISO8601DateTime, null: true
     field :passed_at, GraphQL::Types::ISO8601DateTime, null: true
     field :title, String, null: false
     field :level_number, Int, null: false

@@ -73,7 +73,7 @@ Rails.application.config.content_security_policy do |policy|
 
   def frame_sources
     [
-      'https://www.google.com', typeform_csp[:frame], youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame], *google_form_csp[:frame], facebook_csp[:frame], recaptcha_csp[:frame]
+      'http://www.school.localhost:3000', 'https://www.google.com', typeform_csp[:frame], youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame], *google_form_csp[:frame], facebook_csp[:frame], recaptcha_csp[:frame]
     ]
   end
 

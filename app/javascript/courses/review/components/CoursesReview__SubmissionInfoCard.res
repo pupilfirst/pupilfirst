@@ -6,7 +6,7 @@ open CoursesReview__Types
 let str = React.string
 
 let cardClasses = (submission, selected) =>
-  "inline-block bg-white relative rounded-lg submission-info__tab flex-shrink-0 transition " ++
+  "inline-block bg-white relative rounded-lg submission-info__tab flex-shrink-0 rounded-lg transition " ++
   (selected
     ? "border border-primary-400 "
     : "bg-opacity-50 border border-gray-300 hover:bg-opacity-100 ") ++
@@ -20,18 +20,18 @@ let cardClasses = (submission, selected) =>
       None,
       None,
       None,
-    ) => "submission-info__tab-pending focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 shadow hover:shadow-lg rounded-lg"
+    ) => "submission-info__tab-pending focus:ring focus:ring-indigo-400 shadow hover:shadow-lg"
   | (
       None,
       None,
       Some(_),
-    ) => "submission-info__tab-rejected focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 shadow hover:shadow-lg rounded-lg"
+    ) => "submission-info__tab-rejected focus:ring focus:ring-indigo-400 shadow hover:shadow-lg"
   | (None, Some(_), None)
   | (
     None,
     Some(_),
     Some(_),
-  ) => "submission-info__tab-completed focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 shadow hover:shadow-lg rounded-lg"
+  ) => "submission-info__tab-completed focus:ring focus:ring-indigo-400 shadow hover:shadow-lg"
   }
 
 let showSubmissionStatus = submission => {

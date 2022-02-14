@@ -132,7 +132,14 @@ en:
         zero: Never issued
       no_certificates: You haven't created any certificates yet!
     CourseExport__EditDrawer:
-      create_action: Export Course Data
+
+    CoursesExport__Root:
+      reviewed_only_tag: Reviewed Submissions Only
+      include_inactive_students_tag: Included Inactive Students
+      create_action: Create New Export
+      heading: Exports
+      no_exports_notice: You haven't exported anything yet!
+      create_action_button: Export Course Data
       export_type_label: Please select the kind of export you need
       students_label: Students
       teams_label: Teams
@@ -145,12 +152,6 @@ en:
       all_students_label: All Students
       create_button_text: Create Export
       create_button_active_label: Setting up an export...
-    CourseExport__Root:
-      reviewed_only_tag: Reviewed Submissions Only
-      include_inactive_students_tag: Included Inactive Students
-      create_action: Create New Export
-      heading: Exports
-      no_exports: You haven't exported anything yet!
     CourseEditor:
       add_new_course: Add New Course
       button_load_more: Load More Courses...
@@ -930,6 +931,9 @@ en:
   mutations:
     archive_course:
       success_notification: Course archived successfully.
+    export_course_report:
+      course_not_found_error: Could not find a course with the given ID
+      tag_not_found_error: Could not find tags with the given IDs
     assign_reviewer:
       submission_already_assigned: This submission has been already assigned to a coach.
       submission_graded_error: You can only assign yourself to pending submissions.

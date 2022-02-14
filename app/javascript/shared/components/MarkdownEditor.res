@@ -1,6 +1,6 @@
 exception InvalidModeForPreview
 
-%bs.raw(`require("./MarkdownEditor.css")`)
+%raw(`require("./MarkdownEditor.css")`)
 
 let str = React.string
 
@@ -125,7 +125,10 @@ let modeLabel = (desiredMode, currentMode) => {
   let label = switch (desiredMode, currentMode) {
   | (#Preview, Windowed(#Editor) | Fullscreen(#Editor) | Fullscreen(#Split)) => "Preview"
   | (#Preview, Windowed(#Preview) | Fullscreen(#Preview)) => "Edit"
-  | (#Split, Windowed(_) | Fullscreen(#Editor) | Fullscreen(#Preview)) => "View editor and preview in split view"
+  | (
+      #Split,
+      Windowed(_) | Fullscreen(#Editor) | Fullscreen(#Preview),
+    ) => "View editor and preview in split view"
   | (#Split, Fullscreen(#Split)) => "Close split view"
   | (#Fullscreen, Windowed(_)) => "Full screen"
   | (#Fullscreen, Fullscreen(_)) => "Exit full screen"
@@ -177,8 +180,7 @@ let wrapWith = (wrapper, selectionStart, selectionEnd, sourceText) => {
   head ++ (wrapper ++ (selection ++ (wrapper ++ tail)))
 }
 
-@ocaml.doc(
-  "
+@ocaml.doc("
   * After changing the Markdown using any of the controls or key commands, the
   * textarea element will need to be manually \"synced\" in two ways:
   *
@@ -192,8 +194,7 @@ let wrapWith = (wrapper, selectionStart, selectionEnd, sourceText) => {
   * This function is making an assumption that re-render can happen in 25ms.
   * The need for these manual adjustments can be visibly seen by increasing the
   * renderDelay to something like 1000ms.
- *"
-)
+ *")
 let updateTextareaAfterDelay = (state, (startPosition, endPosition)) => {
   let renderDelay = 25 //ms
 
@@ -325,7 +326,8 @@ let controls = (disabled, value, state, send, onChange) => {
         ariaLabel={modeLabel(#Preview, mode)}
         title={modeLabel(#Preview, mode)}
         disabled
-        className={"rounded " ++ buttonClasses} onClick={onClickPreview(state, send)}>
+        className={"rounded " ++ buttonClasses}
+        onClick={onClickPreview(state, send)}>
         {modeIcon(#Preview, mode)}
       </button>
       <button
@@ -345,7 +347,9 @@ let controls = (disabled, value, state, send, onChange) => {
         {modeIcon(#Fullscreen, mode)}
         {switch mode {
         | Fullscreen(_) =>
-          <span ariaHidden=true className="ml-2 text-xs font-semibold"> {"Exit full screen" |> str} </span>
+          <span ariaHidden=true className="ml-2 text-xs font-semibold">
+            {"Exit full screen" |> str}
+          </span>
         | Windowed(_) => React.null
         }}
       </button>
@@ -494,12 +498,12 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
     <div className={footerContainerClasses(state.mode)}>
       {<form
         className={`relative flex items-center flex-wrap flex-1 text-sm font-semibold ${disabled
-          ? ""
-          : "hover:bg-gray-300 hover:text-primary-500 focus-within:outline-none focus-within:bg-gray-300 focus-within:text-primary-500"}`}
+            ? ""
+            : "hover:bg-gray-300 hover:text-primary-500 focus-within:outline-none focus-within:bg-gray-300 focus-within:text-primary-500"}`}
         id=fileFormId>
         <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
         <input
-          className="absolute w-0 h-0"
+          className="absolute w-0 h-0 focus:outline-none"
           type_="file"
           name="markdown_attachment[file]"
           id=fileInputId
@@ -510,7 +514,9 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
         {switch state.uploadState {
         | ReadyToUpload(error) =>
           <label
-            className={`text-xs px-3 py-2 flex-grow ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
+            className={`text-xs px-3 py-2 flex flex-grow ${disabled
+                ? "cursor-not-allowed"
+                : "cursor-pointer"}`}
             htmlFor=fileInputId>
             {switch error {
             | Some(error) =>
@@ -543,7 +549,7 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
 }
 
 let textareaClasses = mode =>
-  "editor w-full outline-none font-mono " ++
+  "editor w-full outline-none font-mono focus:ring-1 focus:ring-inset focus:ring-indigo-400 " ++
   switch mode {
   | Windowed(_) => "p-3"
   | Fullscreen(_) => "editor--full-screen px-3 pt-4 pb-8 h-full resize-none"
@@ -581,8 +587,8 @@ let handleKeyboardControls = (value, state, send, onChange, event) => {
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange)
 
   switch event |> Webapi.Dom.KeyboardEvent.key {
-  | "b" when event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Bold)
-  | "i" when event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Italic)
+  | "b" if event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Bold)
+  | "i" if event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Italic)
   | _anyOtherKey => ()
   }
 }

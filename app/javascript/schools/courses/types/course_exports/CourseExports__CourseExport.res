@@ -17,7 +17,7 @@ type t = {
   createdAt: Js.Date.t,
   file: option<file>,
   reviewedOnly: bool,
-  includeInactive: bool,
+  includeInactiveStudents: bool,
   exportType: exportType,
 }
 
@@ -27,7 +27,7 @@ let tags = t => t.tags
 let file = t => t.file
 let exportType = t => t.exportType
 let reviewedOnly = t => t.reviewedOnly
-let includeInactive = t => t.includeInactive
+let includeInactiveStudents = t => t.includeInactiveStudents
 let fileCreatedAt = (file: file) => file.createdAt
 let filePath = file => file.path
 
@@ -54,17 +54,17 @@ let decode = json => {
       raise(UnexpectedExportType(otherExportType))
     },
     reviewedOnly: json |> field("reviewedOnly", bool),
-    includeInactive: json |> field("includeInactiveStudents", bool),
+    includeInactiveStudents: json |> field("includeInactiveStudents", bool),
   }
 }
 
-let make = (~id, ~exportType, ~createdAt, ~tags, ~reviewedOnly, ~includeInactive) => {
+let make = (~id, ~exportType, ~createdAt, ~tags, ~reviewedOnly, ~includeInactiveStudents) => {
   id: id,
   createdAt: createdAt,
   tags: tags,
   exportType: exportType,
   reviewedOnly: reviewedOnly,
-  includeInactive: includeInactive,
+  includeInactiveStudents: includeInactiveStudents,
   file: None,
 }
 

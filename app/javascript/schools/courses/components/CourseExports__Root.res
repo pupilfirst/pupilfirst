@@ -1,15 +1,14 @@
 open CourseExports__Types
 
 let str = React.string
-let t = I18n.t(~scope="components.CourseExport__Root")
-let te = I18n.t(~scope="components.CourseExport__EditDrawer")
+let t = I18n.t(~scope="components.CoursesExport__Root")
 
 type state = {
   drawerOpen: bool,
   selectedTags: array<Tag.t>,
   saving: bool,
   reviewedOnly: bool,
-  includeInactive: bool,
+  includeInactiveStudents: bool,
   tagSearch: string,
   courseExports: array<CourseExport.t>,
   exportType: CourseExport.exportType,
@@ -20,7 +19,7 @@ let computeInitialState = exports => {
   selectedTags: [],
   saving: false,
   reviewedOnly: false,
-  includeInactive: false,
+  includeInactiveStudents: false,
   tagSearch: "",
   courseExports: exports,
   exportType: CourseExport.Students,
@@ -33,7 +32,7 @@ type action =
   | FinishSaving(CourseExport.t)
   | FailSaving
   | SetReviewedOnly(bool)
-  | SetIncludeInactive(bool)
+  | SetIncludeInactiveStudents(bool)
   | SelectTag(Tag.t)
   | DeselectTag(Tag.t)
   | SelectExportType(CourseExport.exportType)
@@ -52,7 +51,10 @@ let reducer = (state, action) =>
     }
   | FailSaving => {...state, saving: false}
   | SetReviewedOnly(reviewedOnly) => {...state, reviewedOnly: reviewedOnly}
-  | SetIncludeInactive(includeInactive) => {...state, includeInactive: includeInactive}
+  | SetIncludeInactiveStudents(includeInactiveStudents) => {
+      ...state,
+      includeInactiveStudents: includeInactiveStudents,
+    }
   | SelectTag(tag) => {
       ...state,
       selectedTags: state.selectedTags |> Array.append([tag]),
@@ -92,8 +94,8 @@ let unselected = (allTags, selectedTags) => {
 }
 
 module CreateCourseExportQuery = %graphql(`
- mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!, $includeInactive: Boolean!, $exportType: Export!) {
-  createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly, includeInactive: $includeInactive, exportType: $exportType){
+ mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!, $includeInactiveStudents: Boolean!, $exportType: Export!) {
+  createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly, includeInactiveStudents: $includeInactiveStudents, exportType: $exportType){
     courseExport {
       id
       createdAt
@@ -120,7 +122,7 @@ let createCourseExport = (state, send, course, event) => {
     ~courseId=course |> Course.id,
     ~tagIds,
     ~reviewedOnly=state.reviewedOnly,
-    ~includeInactive=state.includeInactive,
+    ~includeInactiveStudents=state.includeInactiveStudents,
     ~exportType,
     (),
   )
@@ -135,7 +137,7 @@ let createCourseExport = (state, send, course, event) => {
         ~createdAt=\"export"["createdAt"]->DateFns.decodeISO,
         ~tags=\"export"["tags"],
         ~reviewedOnly=\"export"["reviewedOnly"],
-        ~includeInactive=\"export"["includeInactiveStudents"],
+        ~includeInactiveStudents=\"export"["includeInactiveStudents"],
       )
 
       send(FinishSaving(courseExport))
@@ -170,11 +172,11 @@ let make = (~course, ~exports, ~tags) => {
           <div className="mx-auto bg-white">
             <div className="max-w-2xl pt-6 px-6 mx-auto">
               <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-                {te("create_action")->str}
+                {t("create_action_button")->str}
               </h5>
               <div className="mt-4">
                 <label className="block tracking-wide text-xs font-semibold mr-6 mb-2">
-                  {te("export_type_label")->str}
+                  {t("export_type_label")->str}
                 </label>
                 <div className="flex -mx-2">
                   <div className="w-1/2 px-2">
@@ -182,7 +184,7 @@ let make = (~course, ~exports, ~tags) => {
                       onClick={_ => send(SelectExportType(CourseExport.Students))}
                       className={toggleChoiceClasses(state.exportType == CourseExport.Students)}>
                       <i className="fas fa-user" />
-                      <div className="mt-1"> {te("students_label")->str} </div>
+                      <div className="mt-1"> {t("students_label")->str} </div>
                     </button>
                   </div>
                   <div className="w-1/2 px-2">
@@ -190,14 +192,14 @@ let make = (~course, ~exports, ~tags) => {
                       onClick={_ => send(SelectExportType(CourseExport.Teams))}
                       className={toggleChoiceClasses(state.exportType == CourseExport.Teams)}>
                       <i className="fas fa-user-friends" />
-                      <div className="mt-1"> {te("teams_label")->str} </div>
+                      <div className="mt-1"> {t("teams_label")->str} </div>
                     </button>
                   </div>
                 </div>
               </div>
               <div className="mt-4">
                 <label className="block tracking-wide text-xs font-semibold mb-2">
-                  {te("export_tags_label")->str}
+                  {t("export_tags_label")->str}
                 </label>
                 <TagsSelector
                   placeholder="Search for a tag"
@@ -214,7 +216,7 @@ let make = (~course, ~exports, ~tags) => {
                 <label
                   className="block tracking-wide text-xs font-semibold mr-6 mb-2"
                   htmlFor="targets_filter">
-                  {te("export_targets_label")->str}
+                  {t("export_targets_label")->str}
                 </label>
                 <div id="targets_filter" className="flex -mx-2">
                   <div className="w-1/2 px-2">
@@ -222,7 +224,7 @@ let make = (~course, ~exports, ~tags) => {
                       onClick={_ => send(SetReviewedOnly(false))}
                       className={toggleChoiceClasses(!state.reviewedOnly)}>
                       <i className="fas fa-list" />
-                      <div className="mt-1"> {te("all_targets_label")->str} </div>
+                      <div className="mt-1"> {t("all_targets_label")->str} </div>
                     </button>
                   </div>
                   <div className="w-1/2 px-2">
@@ -230,7 +232,7 @@ let make = (~course, ~exports, ~tags) => {
                       onClick={_event => send(SetReviewedOnly(true))}
                       className={toggleChoiceClasses(state.reviewedOnly)}>
                       <i className="fas fa-tasks" />
-                      <div className="mt-1"> {te("reviewed_only_targets_label")->str} </div>
+                      <div className="mt-1"> {t("reviewed_only_targets_label")->str} </div>
                     </button>
                   </div>
                 </div>
@@ -239,23 +241,23 @@ let make = (~course, ~exports, ~tags) => {
                 <label
                   className="block tracking-wide text-xs font-semibold mr-6 mb-2"
                   htmlFor="inactive_students_filter">
-                  {te("students_to_include_label")->str}
+                  {t("students_to_include_label")->str}
                 </label>
                 <div id="inactive_students_filter" className="flex -mx-2">
                   <div className="w-1/2 px-2">
                     <button
-                      onClick={_ => send(SetIncludeInactive(false))}
-                      className={toggleChoiceClasses(!state.includeInactive)}>
+                      onClick={_ => send(SetIncludeInactiveStudents(false))}
+                      className={toggleChoiceClasses(!state.includeInactiveStudents)}>
                       <i className="fas fa-list" />
-                      <div className="mt-1"> {te("active_students_label")->str} </div>
+                      <div className="mt-1"> {t("active_students_label")->str} </div>
                     </button>
                   </div>
                   <div className="w-1/2 px-2">
                     <button
-                      onClick={_event => send(SetIncludeInactive(true))}
-                      className={toggleChoiceClasses(state.includeInactive)}>
+                      onClick={_event => send(SetIncludeInactiveStudents(true))}
+                      className={toggleChoiceClasses(state.includeInactiveStudents)}>
                       <i className="fas fa-tasks" />
-                      <div className="mt-1"> {te("all_students_label")->str} </div>
+                      <div className="mt-1"> {t("all_students_label")->str} </div>
                     </button>
                   </div>
                 </div>
@@ -268,10 +270,10 @@ let make = (~course, ~exports, ~tags) => {
                   {if state.saving {
                     <span>
                       <FaIcon classes="fas fa-spinner fa-pulse" />
-                      <span className="ml-2"> {te("create_button_active_label")->str} </span>
+                      <span className="ml-2"> {t("create_button_active_label")->str} </span>
                     </span>
                   } else {
-                    {te("create_button_text")->str}
+                    {t("create_button_text")->str}
                   }}
                 </button>
               </div>
@@ -291,7 +293,7 @@ let make = (~course, ~exports, ~tags) => {
       {state.courseExports |> ArrayUtils.isEmpty
         ? <div
             className="flex justify-center bg-gray-100 border rounded p-3 italic mx-auto max-w-2xl w-full">
-            {t("no_exports")->str}
+            {t("no_exports_notice")->str}
           </div>
         : <div className="px-6 pb-4 mt-5 flex flex-1 bg-gray-100">
             <div className="max-w-2xl w-full mx-auto relative">
@@ -328,7 +330,7 @@ let make = (~course, ~exports, ~tags) => {
                                   {t("reviewed_only_tag")->str}
                                 </span>
                               : React.null}
-                            {courseExport->CourseExport.includeInactive
+                            {courseExport->CourseExport.includeInactiveStudents
                               ? <span
                                   className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
                                   {t("include_inactive_students_tag")->str}

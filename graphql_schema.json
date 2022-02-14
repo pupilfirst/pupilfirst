@@ -5388,7 +5388,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "includeInactive",
+                  "name": "includeInactiveStudents",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",

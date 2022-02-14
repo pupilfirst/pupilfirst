@@ -7,7 +7,7 @@ module Mutations
     argument :export_type, Types::ExportType, required: true
     argument :tag_ids, [ID], required: true
     argument :reviewed_only, Boolean, required: true
-    argument :include_inactive, Boolean, required: true
+    argument :include_inactive_students, Boolean, required: true
 
     description "Request a course export."
 
@@ -22,7 +22,7 @@ module Mutations
           course: course,
           user: current_user,
           reviewed_only: !!@params[:reviewed_only],
-          include_inactive_students: @params[:include_inactive],
+          include_inactive_students: @params[:include_inactive_students],
           tag_list: tag_list,
         )
 

@@ -5,7 +5,7 @@ module ValidateCourseExport
     def validate(_object, _context, value)
       course = Course.find_by(id: value[:course_id])
       return if course.present?
-      errors[:base] << 'Could not find a course with the given ID'
+      I18n.t('mutations.export_course_report.course_not_found_error')
     end
   end
 
@@ -13,9 +13,9 @@ module ValidateCourseExport
     def validate(_object, _context, value)
       course = Course.find_by(id: value[:course_id])
       current_school= course&.school
-      tags ||= current_school.founder_tags.where(id: value[:tag_ids])
+      tags = current_school.founder_tags.where(id: value[:tag_ids])
       return if value[:tag_ids].count == tags.count
-      errors[:base] << 'Could not find tags with the given IDs'
+      I18n.t('mutations.export_course_report.tag_not_found_error')
     end
   end
 
@@ -25,7 +25,7 @@ module ValidateCourseExport
     argument :export_type, Types::ExportType, required: true
     argument :tag_ids, [GraphQL::Types::ID], required: true
     argument :reviewed_only, GraphQL::Types::Boolean, required: true
-    argument :include_inactive, GraphQL::Types::Boolean, required: true
+    argument :include_inactive_students, GraphQL::Types::Boolean, required: true
 
     validates RequireValidCourse => {}
     validates RequireValidTags => {}

@@ -1,5 +1,5 @@
 # Ignore bundler config.
-/.bundle
+.bundle/config
 
 # Ignore all logfiles and tempfiles.
 /log/*

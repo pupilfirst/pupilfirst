@@ -373,7 +373,7 @@ let otherTeamMembers = (setState, studentId, studentDetails) =>
         let path = "/students/" ++ ((student |> TeamInfo.studentId) ++ "/report")
 
         <Link
-          className="block"
+          className="block rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
           href=path
           onClick={navigateToStudent(setState)}
           key={student |> TeamInfo.studentId}>
@@ -442,9 +442,10 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
           className="w-full md:w-2/5 bg-white p-4 md:p-8 md:py-6 2xl:px-16 2xl:py-12 md:overflow-y-auto">
           <div className="student-overlay__student-details relative pb-8">
             <button
+              ariaLabel={t("close_student_report")}
               title={t("close_student_report")}
               onClick={_ => closeOverlay(courseId)}
-              className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-200 h-10 w-10 justify-center items-center text-gray-700 hover:text-gray-900 hover:bg-gray-300">
+              className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-200 h-10 w-10 justify-center items-center text-gray-700 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-500">
               <Icon className="if i-times-regular text-xl lg:text-2xl" />
             </button>
             <div
@@ -500,22 +501,28 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
           className="w-full relative md:w-3/5 bg-gray-100 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">
           <div
             className="sticky top-0 bg-gray-100 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
-            <ul className="flex font-semibold border-b text-sm">
+            <ul role="tablist" className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent">
               <li
+                tabIndex=0
+                role="tab"
+                ariaSelected={state.selectedTab === Notes}
                 onClick={_event => setSelectedTab(Notes, setState)}
-                className={"px-3 py-3 md:py-2 cursor-pointer text-gray-800 rounded-t-lg " ++
+                className={"cursor-pointer flex  flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-200 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-200 focus:ring-indigo-500 md:focus:border-b-none md:focus:rounded-t-md " ++
                 switch state.selectedTab {
-                | Notes => "border-b-3 border-primary-500 text-primary-500 -mb-px"
-                | Submissions => "hover:bg-gray-200 hover:text-gray-900"
+                | Notes => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
+                | Submissions => " "
                 }}>
                 {t("notes") |> str}
               </li>
               <li
+                tabIndex=0
+                role="tab"
+                ariaSelected={state.selectedTab === Submissions}
                 onClick={_event => setSelectedTab(Submissions, setState)}
-                className={"px-3 py-3 md:py-2 cursor-pointer text-gray-800 " ++
+                className={"cursor-pointer flex flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-200 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-200 focus:ring-indigo-500 md:focus:border-b-none md:focus:rounded-t-md  " ++
                 switch state.selectedTab {
-                | Submissions => "border-b-3 border-primary-500 text-primary-500 -mb-px"
-                | Notes => "hover:bg-gray-200 hover:text-gray-900"
+                | Submissions => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
+                | Notes => " "
                 }}>
                 {t("submissions") |> str}
               </li>

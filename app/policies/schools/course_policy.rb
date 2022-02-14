@@ -17,7 +17,7 @@ module Schools
     alias details? show?
     alias images? show?
     alias actions? show?
-    alias attach_images? authors?
+    alias attach_images? show?
     alias delete_coach_enrollment? authors?
     alias update_coach_enrollments? authors?
     alias students? authors?
@@ -41,7 +41,10 @@ module Schools
 
     alias evaluation_criteria? curriculum?
 
-    class Scope < ::CoursePolicy::Scope
+    class Scope < Scope
+      def resolve
+        current_school.courses
+      end
     end
   end
 end

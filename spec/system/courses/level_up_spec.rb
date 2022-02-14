@@ -43,7 +43,9 @@ feature "Student levelling up", js: true do
 
       expect(page).to have_text(target_l1.completion_instructions)
 
-      click_button 'Complete'
+      within('div[id="submission-builder"]') do
+        click_button 'Complete'
+      end
 
       expect(page).to have_content('Your submission has been queued for review')
 

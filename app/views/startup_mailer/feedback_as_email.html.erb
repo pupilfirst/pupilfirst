@@ -1,0 +1,29 @@
+<%
+  startup = @startup_feedback.startup
+  timeline_event = @startup_feedback.timeline_event
+  target = @startup_feedback.timeline_event&.target
+  target_url = target_url(target) if target.present?
+  coach_name = @startup_feedback.faculty.name
+%>
+
+<% content_for :salutation do %>
+  Hello <%= @startup_feedback.startup.name  %>,
+<% end %>
+
+<% content_for :body do %>
+  <% update_for = timeline_event.present? ? 'recent submission' : 'recent updates' %>
+  <p>
+    Here is some feedback from <%= coach_name %> on your <%= update_for %>
+  </p>
+  <blockquote>
+    <%= sanitize(MarkdownIt::Parser.new(:commonmark).render(@startup_feedback.feedback)).html_safe %>
+  </blockquote>
+
+  <% if target.present? %>
+    <p>
+      You can view <%= link_to 'the full feedback', target_url%>, including any files attached to the feedback.
+    </p>
+  <% end %>
+
+  <%= render 'mailers/link_fallback', url: target_url %>
+<% end %>

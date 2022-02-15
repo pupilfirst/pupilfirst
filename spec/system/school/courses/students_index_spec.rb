@@ -178,7 +178,10 @@ feature 'School students index', js: true do
       expect(current_email.subject).to include(
         "You have been added as a student in #{school.name}"
       )
-      expect(current_email.body).to have_link('Sign in to View Course')
+
+      expect(current_email.body).to have_link(
+        "sign into #{school.name} and start working on this course"
+      )
 
       open_email(student_2_user.email)
 
@@ -262,7 +265,10 @@ feature 'School students index', js: true do
         expect(current_email.subject).to include(
           "You have been added as a student in #{school.name}"
         )
-        expect(current_email.body).to have_link('Sign in to View Course')
+
+        expect(current_email.body).to have_link(
+          "sign into #{school.name} and start working on this course"
+        )
       end
     end
 

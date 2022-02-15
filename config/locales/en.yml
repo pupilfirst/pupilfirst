@@ -131,8 +131,6 @@ en:
         other: Issued %{count} times
         zero: Never issued
       no_certificates: You haven't created any certificates yet!
-    CourseExport__EditDrawer:
-
     CoursesExport__Root:
       reviewed_only_tag: Reviewed Submissions Only
       include_inactive_students_tag: Included Inactive Students
@@ -934,6 +932,7 @@ en:
     export_course_report:
       course_not_found_error: Could not find a course with the given ID
       tag_not_found_error: Could not find tags with the given IDs
+      success_notification: Your export is being processed. We'll notify you as soon as it is ready.
     assign_reviewer:
       submission_already_assigned: This submission has been already assigned to a coach.
       submission_graded_error: You can only assign yourself to pending submissions.
@@ -1077,6 +1076,7 @@ en:
     optional: optional
     privacy_policy: Privacy Policy
     save_changes: Save Changes
+    processing: Processing
     saving: Saving...
     target: Target
     terms_and_conditions: Terms & Conditions

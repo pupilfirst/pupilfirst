@@ -37,8 +37,8 @@ module Mutations
     def resolve(_params)
       notify(
         :success,
-        'Processing',
-        "Your export is being processed. We'll notify you as soon as it is ready."
+        I18n.t('shared.processing'),
+        I18n.t('mutations.export_course_report.success_notification')
       )
 
       { course_export: create_course_export }

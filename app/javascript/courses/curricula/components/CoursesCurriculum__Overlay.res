@@ -101,10 +101,10 @@ let selectableTabs = targetDetails =>
   TargetDetails.communities(targetDetails) == [] ? [Learn] : [Learn, Discuss]
 
 let tabClasses = (selection, tab) =>
-  "course-overlay__body-tab-item p-2 md:px-3 md:py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold" ++ (
+  "course-overlay__body-tab-item p-2 md:px-3 md:py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" ++ (
     tab == selection
       ? " course-overlay__body-tab-item--selected"
-      : " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 cursor-pointer"
+      : " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 focus:text-primary-400 focus:bg-gray-200 cursor-pointer"
   )
 
 let scrollCompleteButtonIntoViewEventually = () => Js.Global.setTimeout(() => {
@@ -123,22 +123,24 @@ let handleTablink = (send, _event) => {
 }
 
 let tabButton = (tab, state, send, targetStatus) =>
-  <span
+  <button
     key={"select-" ++ (tab |> tabToString(targetStatus))}
+    role="tab"
+    ariaSelected={tab == state.tab}
     className={tabClasses(tab, state.tab)}
     onClick={_e => send(Select(tab))}>
     {tab |> tabToString(targetStatus) |> str}
-  </span>
+  </button>
 
 let tabLink = (tab, state, send, targetStatus) =>
-  <span onClick={handleTablink(send)} className={tabClasses(tab, state.tab)}>
+  <button onClick={handleTablink(send)} className={tabClasses(tab, state.tab)}>
     {tab |> tabToString(targetStatus) |> str}
-  </span>
+  </button>
 
 let tabOptions = (state, send, targetDetails, targetStatus) => {
   let completionType = targetDetails |> TargetDetails.computeCompletionType
 
-  <div className="flex justify-between max-w-3xl mx-auto -mb-px mt-5 md:mt-7">
+  <div role="tablist" className="flex justify-between max-w-3xl mx-auto -mb-px mt-5 md:mt-7">
     {selectableTabs(targetDetails)
     |> Js.Array.map(selection => tabButton(selection, state, send, targetStatus))
     |> React.array}
@@ -239,7 +241,8 @@ let overlayStatus = (course, target, targetStatus, preview) =>
   <div>
     <div className={overlayHeaderTitleCardClasses(targetStatus)}>
       <button
-        className={"course-overlay__close xl:absolute flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-t-none lg:rounded-b-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 lg:border-transparent lg:border-t-0 lg:shadow hover:text-gray-900 hover:shadow-md focus:border-gray-300 focus:outline-none focus:shadow-inner " ++
+        ariaLabel={t("close_button")}
+        className={"course-overlay__close xl:absolute flex flex-col items-center justify-center absolute rounded-t-lg lg:rounded-t-none lg:rounded-b-lg leading-tight px-4 py-1 h-8 lg:h-full cursor-pointer border border-b-0 lg:border-transparent lg:border-t-0 lg:shadow hover:text-gray-900 hover:shadow-md focus:border-gray-300 focus:outline-none focus:text-gray-900 " ++
         targetStatusClass("course-overlay__close--", targetStatus)}
         onClick={_e => closeOverlay(course)}>
         <Icon className="if i-times-regular text-xl lg:text-2xl mt-1 lg:mt-0" />
@@ -335,11 +338,11 @@ let learnSection = (
     linkText,
     iconClasses,
   )) => {
-    <a
+    <button
       onClick={_ => send(Select(tab))}
-      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4">
+      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
       <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {str(linkText)} </span>
-    </a>
+    </button>
   })
 
   <div className={overlayContentClasses(tab == Learn)}>

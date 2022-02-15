@@ -3,6 +3,7 @@ let str = React.string
 type state = {
   name: string,
   about: string,
+  locale: string,
   avatarUrl: option<string>,
   currentPassword: string,
   newPassword: string,
@@ -20,6 +21,7 @@ type state = {
 type action =
   | UpdateName(string)
   | UpdateAbout(string)
+  | UpdateLocale(string)
   | UpdateCurrentPassword(string)
   | UpdateNewPassword(string)
   | UpdateNewPassWordConfirm(string)
@@ -38,6 +40,7 @@ let reducer = (state, action) =>
   switch action {
   | UpdateName(name) => {...state, name: name, dirty: true}
   | UpdateAbout(about) => {...state, about: about, dirty: true}
+  | UpdateLocale(locale) => {...state, locale: locale, dirty: true}
   | UpdateCurrentPassword(currentPassword) => {
       ...state,
       currentPassword: currentPassword,
@@ -86,12 +89,12 @@ let reducer = (state, action) =>
   }
 
 module UpdateUserQuery = %graphql(`
-   mutation UpdateUserMutation($name: String!, $about: String, $currentPassword: String, $newPassword: String, $confirmPassword: String, $dailyDigest: Boolean! ) {
-     updateUser(name: $name, about: $about, currentPassword: $currentPassword, newPassword: $newPassword, confirmNewPassword: $confirmPassword, dailyDigest: $dailyDigest  ) {
-        success
-       }
-     }
-   `)
+  mutation UpdateUserMutation($name: String!, $about: String, $locale: String!, $currentPassword: String, $newPassword: String, $confirmPassword: String, $dailyDigest: Boolean!) {
+    updateUser(name: $name, about: $about, locale: $locale, currentPassword: $currentPassword, newPassword: $newPassword, confirmNewPassword: $confirmPassword, dailyDigest: $dailyDigest) {
+      success
+    }
+  }
+`)
 
 module InitiateAccountDeletionQuery = %graphql(`
    mutation InitiateAccountDeletionMutation($email: String! ) {
@@ -159,6 +162,7 @@ let updateUser = (state, send, event) => {
   UpdateUserQuery.make(
     ~name=state.name,
     ~about=state.about,
+    ~locale=state.locale,
     ~currentPassword=state.currentPassword,
     ~newPassword=state.newPassword,
     ~confirmPassword=state.confirmPassword,
@@ -254,6 +258,8 @@ let make = (
   ~name,
   ~hasCurrentPassword,
   ~about,
+  ~locale,
+  ~availableLocales,
   ~avatarUrl,
   ~dailyDigest,
   ~isSchoolAdmin,
@@ -262,6 +268,7 @@ let make = (
   let initialState = {
     name: name,
     about: about,
+    locale: locale,
     avatarUrl: avatarUrl,
     dailyDigest: dailyDigest |> OptionUtils.mapWithDefault(d => d, false),
     saving: false,
@@ -464,6 +471,38 @@ let make = (
                   checked={!state.dailyDigest}
                 />
               </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row mt-10 md:mt-12">
+          <div className="w-full md:w-1/3 pr-4">
+            <h3 className="text-lg font-semibold"> {"Localization" |> str} </h3>
+            <p className="mt-1 text-sm text-gray-700">
+              {"Update settings related to your locale." |> str}
+            </p>
+          </div>
+          <div className="mt-5 md:mt-0 w-full md:w-2/3">
+            <label htmlFor="language" className="font-semibold"> {"Language" |> str} </label>
+            <p className="text-sm text-gray-700">
+              {"Select the language that you would prefer the user interface to dislpay." |> str}
+            </p>
+            <div className="mt-6">
+              <select
+                id="language"
+                value={state.locale}
+                onChange={event => {
+                  Js.log(ReactEvent.Form.target(event)["value"])
+                  send(UpdateLocale(ReactEvent.Form.target(event)["value"]))
+                }}
+                className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-gray-500">
+                {availableLocales
+                ->Js.Array2.map(availableLocale =>
+                  <option key=availableLocale value=availableLocale>
+                    {Locale.humanize(availableLocale)->str}
+                  </option>
+                )
+                ->React.array}
+              </select>
             </div>
           </div>
         </div>

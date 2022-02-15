@@ -183,10 +183,8 @@ en:
         label: Course description
         placeholder: Short description for this course
       course_end_date:
-        error_message: A description is required (2-150 characters)
         help: If specified, course will appear as closed to students on this date. Students will not be able to make any more submissions.
         label: Course end date
-        placeholder: Short description for this course
       course_highlights:
         label: Course Highlights
       course_name:
@@ -1038,6 +1036,7 @@ en:
   shared:
     _no: "No"
     _yes: "Yes"
+    all: All
     cancel: Cancel
     close: Close
     done_exclamation: Done!

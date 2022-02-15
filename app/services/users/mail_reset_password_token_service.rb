@@ -26,7 +26,7 @@ module Users
       login_url = url_helpers.reset_password_url(url_options)
 
       # Send the email with link to sign in.
-      UserSessionMailer.send_reset_password_token(@user.email, @school, login_url).deliver_now
+      UserSessionMailer.send_reset_password_token(@user, @school, login_url).deliver_now
     end
   end
 end

@@ -6,6 +6,6 @@ class StartupMailer < SchoolMailer
     @school = startup_feedback.startup.school
 
     subject = "New feedback from #{startup_feedback.faculty.name} on your submission"
-    simple_roadie_mail(send_to, subject)
+    simple_mail(send_to, subject)
   end
 end

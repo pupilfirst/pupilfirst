@@ -1,7 +1,5 @@
 # TODO: The SchoolMailer class should be renamed to ApplicationMailer.
 class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMailer
-  include Roadie::Rails::Mailer
-
   layout 'mail/school'
 
   protected
@@ -21,25 +19,11 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
     options
   end
 
-  def roadie_options_for_school
-    host_options = default_url_options.merge(protocol: Rails.env.production? ? 'https' : 'http')
-
-    roadie_options.combine(url_options: host_options)
-  end
-
   # @param email_address [String] email address to send email to
   # @param subject [String] subject of the email
-  def simple_roadie_mail(email_address, subject, enable_reply: true)
+  def simple_mail(email_address, subject, enable_reply: true)
     options = { to: email_address, subject: subject, **from_options(enable_reply) }
-
-    if Rails.env.test?
-      mail(options)
-    else
-      roadie_mail(
-        options,
-        roadie_options_for_school
-      )
-    end
+    mail(options)
   end
 
   private

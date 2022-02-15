@@ -17,7 +17,7 @@ type loading =
   | Reloading
   | LoadingMore
 
-type searchFilter = SearchContent(string) | SearchTitle(string)
+type search = SearchContent(string) | SearchTitle(string)
 let getSearch = search =>
   switch search {
   | SearchContent(search) => search
@@ -31,7 +31,7 @@ let searchBy = search =>
 type filter = {
   topicCategory: option<TopicCategory.t>,
   solution: solution,
-  search: option<searchFilter>,
+  search: option<search>,
   target: option<Target.t>,
   sortCriterion: sortCriterion,
   sortDirection: sortDirection,
@@ -360,7 +360,7 @@ module Selectable = {
   type t =
     | TopicCategory(TopicCategory.t)
     | Solution(bool)
-    | Search(searchFilter)
+    | Search(search)
 
   let label = t =>
     switch t {

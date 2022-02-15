@@ -3,6 +3,6 @@ class ApplicantMailer < SchoolMailer
     @applicant = applicant
     @school = applicant.course.school
 
-    simple_roadie_mail(@applicant.email, "Verify Your Email Address", enable_reply: false)
+    simple_mail(@applicant.email, "Verify Your Email Address", enable_reply: false)
   end
 end

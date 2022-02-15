@@ -10,22 +10,43 @@ class Founder < ApplicationRecord
   has_one :level, through: :startup
   has_one :course, through: :level
   has_many :communities, through: :course
-  has_many :coach_notes, foreign_key: 'student_id', class_name: 'CoachNote', dependent: :destroy, inverse_of: :student
+  has_many :coach_notes,
+           foreign_key: 'student_id',
+           class_name: 'CoachNote',
+           dependent: :destroy,
+           inverse_of: :student
   belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
   has_many :timeline_event_owners, dependent: :destroy
   has_many :timeline_events, through: :timeline_event_owners
   has_many :leaderboard_entries, dependent: :destroy
-  has_many :coach_notes, foreign_key: 'student_id', inverse_of: :student, dependent: :destroy
+  has_many :coach_notes,
+           foreign_key: 'student_id',
+           inverse_of: :student,
+           dependent: :destroy
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :startup_members, -> { where.not(startup_id: nil) }
   scope :missing_startups, -> { where.not(startup_id: Startup.pluck(:id)) }
   scope :non_founders, -> { where(startup_id: nil) }
-  scope :not_dropped_out, -> { joins(:startup).where(startups: { dropped_out_at: nil }) }
-  scope :access_active, -> { joins(:startup).where('startups.access_ends_at > ?', Time.zone.now).or(joins(:startup).where(startups: { access_ends_at: nil })) }
+  scope :not_dropped_out,
+        -> { joins(:startup).where(startups: { dropped_out_at: nil }) }
+  scope :access_active,
+        -> {
+          joins(:startup)
+            .where('startups.access_ends_at > ?', Time.zone.now)
+            .or(joins(:startup).where(startups: { access_ends_at: nil }))
+        }
   scope :active, -> { not_dropped_out.access_active }
 
-  delegate :email, :name, :title, :affiliation, :about, :avatar, :avatar_variant, :initials_avatar, to: :user
+  delegate :email,
+           :name,
+           :title,
+           :affiliation,
+           :about,
+           :avatar,
+           :avatar_variant,
+           :initials_avatar,
+           to: :user
 
   def admitted?
     startup.present? && startup.level.number.positive?
@@ -82,10 +103,6 @@ class Founder < ApplicationRecord
     startup.dropped_out_at?
   end
 
-  def pending_connect_request_for?(faculty)
-    startup.connect_requests.joins(:connect_slot).exists?(connect_slots: { faculty_id: faculty.id }, status: ConnectRequest::STATUS_REQUESTED)
-  end
-
   def latest_submissions
     timeline_events.where(timeline_event_owners: { latest: true })
   end
@@ -100,7 +117,10 @@ class Founder < ApplicationRecord
     return Faculty.none if startup.blank?
 
     scope = Faculty.left_joins(:startups, :courses)
-    scope.where(startups: { id: startup }).or(scope.where(courses: { id: startup.level.course })).distinct
+    scope
+      .where(startups: { id: startup })
+      .or(scope.where(courses: { id: startup.level.course }))
+      .distinct
   end
 
   def access_ended?

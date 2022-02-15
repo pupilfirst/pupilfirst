@@ -1,22 +1,7 @@
 <% link = school_course_students_url(@course) %>
 
-<% content_for :title do %>
-  Students Import Completed
-<% end %>
-
-<% content_for :subtitle do %>
-  The students import that you initiated for <%= @course.name %> course was
-  completed.
-<% end %>
-
-<% content_for :title_button_text do %>
-  View Students
-<% end %>
-
-<% content_for(:title_button_link, link) %>
-
 <% content_for :salutation do %>
-  Hello ,
+  Hello <%= @school_admin.name %>,
 <% end %>
 
 <% content_for :body do %>
@@ -26,16 +11,20 @@
     Here's a small summary on the import:
   </p>
 
-  <div class="monospace-block mb-15">
+  <div>
     <p><b>Students requested:</b> <%= @report_params[:students_requested] %></p>
     <p><b>Students added:</b> <%= @report_params[:students_added] %></p>
   </div>
 
+  <p>
+    You can <%= link_to 'view these newly added students in the school administration interface', link%>.
+  </p>
+
   <% if @report_attachment %>
     <p>
-      Some of the students you tried to import already exist in the course.
-      These students were ignored during the import. Please check the attachment
-      for the emails of already existing students
+      Some of the students you tried to import were already enrolled in the course.
+      These students were ignored during the import. A list of email addresses of
+      such students has been included as an attachment with this email.
     </p>
   <% end %>
 

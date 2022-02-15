@@ -31,12 +31,6 @@ feature 'User Agreements' do
       expect(page).to have_link('Terms & Conditions')
       expect(page).not_to have_link('Privacy Policy')
     end
-
-    # Test the backwards-compatibility path.
-    it 'redirects from agreements/terms-of-use to new agreements path' do
-      visit agreement_path(agreement_type: 'terms-of-use')
-      expect(page).to have_text('Terms & Conditions')
-    end
   end
 
   context 'when the school does not have custom agreement strings' do

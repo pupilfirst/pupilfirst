@@ -662,7 +662,7 @@ let reloadSubmissions = (courseId, filter, send) => {
 }
 
 let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
-  <div className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
+  <p tabIndex=0 className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
     {str(
       totalSubmissionsCount == loadedSubmissionsCount
         ? tc(~count=loadedSubmissionsCount, "submissions_fully_loaded_text")
@@ -675,7 +675,7 @@ let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
             "submissions_partially_loaded_text",
           ),
     )}
-  </div>
+  </p>
 
 let submissionsList = (submissions, state, filter) =>
   <div>
@@ -718,7 +718,7 @@ let loadFilters = (send, courseId, state) => {
 }
 
 let shortCutClasses = selected =>
-  "cursor-pointer flex-1 md:flex-auto rounded-md md:rounded-t-md p-1.5 md:px-4 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-400 md:hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 " ++ (
+  "cursor-pointer flex justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-200 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-200 focus:ring-indigo-500 md:focus:border-b-none md:focus:rounded-t-md " ++ (
     selected
       ? "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500"
       : ""
@@ -767,54 +767,62 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
 
   <>
     <Helmet> <title> {str(pageTitle(courses, courseId))} </title> </Helmet>
-    <div className="flex-1 flex flex-col">
+    <div role="main" ariaLabel="Review" className="flex-1 flex flex-col">
       <div className="hidden md:block h-16" />
       <div className="course-review-root__submissions-list-container">
         <div className="bg-gray-100">
           <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
             <div
               className="flex items-center justify-between bg-white md:bg-transparent px-4 py-2 md:pt-4 border-b md:border-none">
-              <p className="font-semibold"> {str(tc("review"))} </p>
+              <h4 className="font-semibold"> {str(tc("review"))} </h4>
               <div className="block md:hidden"> {submissionsSorter(filter)} </div>
             </div>
             <div className="px-4">
               <div className="flex pt-3 md:border-b border-gray-300">
                 <div
+                  role="tablist"
+                  ariaLabel="Status tabs"
                   className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent ">
-                  <Link
-                    href={"/courses/" ++
-                    courseId ++
-                    "/review?" ++
-                    Filter.toQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
-                    className={shortCutClasses(filter.tab === None)}>
-                    <div> {str("All")} </div>
-                  </Link>
-                  <Link
-                    href={"/courses/" ++
-                    courseId ++
-                    "/review?" ++
-                    Filter.toQueryString({
-                      ...filter,
-                      tab: Some(#Pending),
-                      sortCriterion: #SubmittedAt,
-                      sortDirection: #Ascending,
-                    })}
-                    className={shortCutClasses(filter.tab === Some(#Pending))}>
-                    <div> {str(tc("pending"))} </div>
-                  </Link>
-                  <Link
-                    href={"/courses/" ++
-                    courseId ++
-                    "/review?" ++
-                    Filter.toQueryString({
-                      ...filter,
-                      tab: Some(#Reviewed),
-                      sortCriterion: #EvaluatedAt,
-                      sortDirection: #Descending,
-                    })}
-                    className={shortCutClasses(filter.tab === Some(#Reviewed))}>
-                    <div> {str(tc("reviewed"))} </div>
-                  </Link>
+                  <div role="tab" ariaSelected={filter.tab === None} className="flex-1">
+                    <Link
+                      href={"/courses/" ++
+                      courseId ++
+                      "/review?" ++
+                      Filter.toQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
+                      className={shortCutClasses(filter.tab === None)}>
+                      <p> {I18n.ts("all")->str} </p>
+                    </Link>
+                  </div>
+                  <div role="tab" ariaSelected={filter.tab === Some(#Pending)} className="flex-1">
+                    <Link
+                      href={"/courses/" ++
+                      courseId ++
+                      "/review?" ++
+                      Filter.toQueryString({
+                        ...filter,
+                        tab: Some(#Pending),
+                        sortCriterion: #SubmittedAt,
+                        sortDirection: #Ascending,
+                      })}
+                      className={shortCutClasses(filter.tab === Some(#Pending))}>
+                      <p> {str(tc("pending"))} </p>
+                    </Link>
+                  </div>
+                  <div role="tab"  ariaSelected={filter.tab === Some(#Reviewed)} className="flex-1">
+                    <Link
+                      href={"/courses/" ++
+                      courseId ++
+                      "/review?" ++
+                      Filter.toQueryString({
+                        ...filter,
+                        tab: Some(#Reviewed),
+                        sortCriterion: #EvaluatedAt,
+                        sortDirection: #Descending,
+                      })}
+                      className={shortCutClasses(filter.tab === Some(#Reviewed))}>
+                      <p> {str(tc("reviewed"))} </p>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -822,9 +830,9 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
         </div>
         <div className="md:sticky md:top-0 bg-gray-100">
           <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
-            <div className="md:flex w-full items-start pt-4 pb-3 px-4 md:pt-6">
+            <div role="form" className="md:flex w-full items-start pt-4 pb-3 px-4 md:pt-6">
               <div className="flex-1">
-                <label className="block text-tiny font-semibold uppercase">
+                <label htmlFor="filter" className="block text-tiny font-semibold uppercase">
                   {tc("filter_by")->str}
                 </label>
                 <Multiselect

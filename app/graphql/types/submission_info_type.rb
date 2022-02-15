@@ -11,7 +11,6 @@ module Types
     field :feedback_sent, Boolean, null: false
     field :team_name, String, null: true
     field :reviewer, Types::ReviewerDetailInfoType, null: true
-    field :number, Integer, null: false
 
     def title
       BatchLoader::GraphQL

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_03_183409) do
+ActiveRecord::Schema.define(version: 2022_01_28_050607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -669,7 +669,6 @@ ActiveRecord::Schema.define(version: 2022_02_03_183409) do
     t.jsonb "checklist", default: []
     t.bigint "reviewer_id"
     t.datetime "reviewer_assigned_at"
-    t.integer "number", default: 1, null: false
     t.datetime "archived_at"
     t.index ["reviewer_id"], name: "index_timeline_events_on_reviewer_id"
   end

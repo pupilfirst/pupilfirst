@@ -98,9 +98,9 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
   let curriedGradeBar = gradeBar(evaluationCriteria)
 
   let submissions = TargetDetails.submissions(targetDetails)
+  let totalSubmissions = Js.Array2.length(submissions)
 
-  Submission.sort(submissions)
-  |> Js.Array.map(submission => {
+  Js.Array2.mapi(Submission.sort(submissions), (submission, index) => {
     let grades = targetDetails |> TargetDetails.grades(submission |> Submission.id)
 
     <div
@@ -109,7 +109,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
       ariaLabel={"Details about your submission on " ++ (submission |> Submission.createdAtPretty)}>
       <div className="flex justify-between items-end">
         <h2 className="ml-2 mb-2 font-semibold text-sm lg:text-base leading-tight">
-          {"Submission #" ++ (Submission.number(submission) |> string_of_int) |> str}
+          {str("Submission #" ++ (totalSubmissions - index)->string_of_int)}
         </h2>
         <div
           className="text-xs font-semibold bg-gray-100 inline-block px-3 py-1 mr-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
@@ -215,8 +215,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
         |> React.array}
       </div>
     </div>
-  })
-  |> React.array
+  }) |> React.array
 }
 
 let addSubmission = (setShowSubmissionForm, addSubmissionCB, submission) => {

@@ -826,8 +826,7 @@ feature 'Submission review overlay', js: true do
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
-        passed_at: 1.day.ago,
-        number: 2
+        passed_at: 1.day.ago
       )
     end
     let!(:timeline_event_grade) do
@@ -958,8 +957,7 @@ feature 'Submission review overlay', js: true do
           :with_owners,
           owners: team.founders,
           target: target,
-          created_at: 3.days.ago,
-          number: 1
+          created_at: 3.days.ago
         )
       end
 
@@ -1017,8 +1015,7 @@ feature 'Submission review overlay', js: true do
         target: target_1,
         evaluator_id: coach.id,
         evaluated_at: 1.day.ago,
-        passed_at: 1.day.ago,
-        number: 1
+        passed_at: 1.day.ago
       )
     end
     let!(:timeline_event_grade_1) do
@@ -1041,8 +1038,7 @@ feature 'Submission review overlay', js: true do
         :with_owners,
         latest: true,
         owners: [team.founders.first],
-        target: target_1,
-        number: 2
+        target: target_1
       )
     end
 
@@ -1431,8 +1427,7 @@ feature 'Submission review overlay', js: true do
         target: target,
         evaluator_id: coach.id,
         evaluated_at: 2.days.ago,
-        passed_at: 2.days.ago,
-        number: 1
+        passed_at: 2.days.ago
       )
     end
     let!(:timeline_event_grade_1) do
@@ -1456,7 +1451,6 @@ feature 'Submission review overlay', js: true do
         latest: false,
         owners: [team.founders.first],
         target: target,
-        number: 2,
         archived_at: 1.day.ago
       )
     end
@@ -1466,8 +1460,7 @@ feature 'Submission review overlay', js: true do
         :with_owners,
         latest: true,
         owners: [team.founders.first],
-        target: target,
-        number: 3
+        target: target
       )
     end
 

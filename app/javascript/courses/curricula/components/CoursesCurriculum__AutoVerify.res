@@ -9,7 +9,6 @@ module AutoVerifySubmissionQuery = %graphql(`
       submission{
         id
         createdAt
-        number
       }
       levelUpEligibility
      }
@@ -29,7 +28,6 @@ let handleSuccess = (submission, levelUpEligibility, linkToComplete, addSubmissi
       ~createdAt=submission["createdAt"]->DateFns.decodeISO,
       ~status=Submission.MarkedAsComplete,
       ~checklist=[],
-      ~number=submission["number"],
     ),
     levelUpEligibility,
   )

@@ -25,7 +25,6 @@ module TimelineEvents
               create_team_entries(s) if @params[:target].team_target?
 
               update_latest_flag(s)
-              update_number(s)
             end
         end
 
@@ -57,12 +56,6 @@ module TimelineEvents
           founder: owners
         )
         .update_all(latest: false) # rubocop:disable Rails/SkipsModelValidations
-    end
-
-    def update_number(timeline_event)
-      timeline_event.update!(
-        number: (old_events(timeline_event).maximum(:number) || 0) + 1
-      )
     end
 
     def owners

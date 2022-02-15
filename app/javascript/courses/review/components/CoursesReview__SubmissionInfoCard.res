@@ -58,15 +58,15 @@ let linkUrl = (submissionId, filterString) => {
   `/submissions/${submissionId}/review${String.trim(filterString) == "" ? "" : "?" ++ filterString}`
 }
 
-let submissionInfoCardContent = submission => {
+let submissionInfoCardContent = (submission, submissionNumber) => {
   <div className="px-4 py-2 flex flex-row items-center justify-between min-w-min">
     <div className="flex flex-col md:pr-6">
       <h2 className="font-semibold text-sm leading-tight">
         <p className="hidden md:block">
-          {(t("submission_hash") ++ string_of_int(SubmissionMeta.number(submission)))->str}
+          {(t("submission_hash") ++ string_of_int(submissionNumber))->str}
         </p>
         <p className="md:hidden">
-          {("#" ++ string_of_int(SubmissionMeta.number(submission)))->str}
+          {("#" ++ string_of_int(submissionNumber))->str}
         </p>
       </h2>
       <span className="text-xs text-gray-800 pt-px whitespace-nowrap">
@@ -87,22 +87,22 @@ let submissionInfoCardContent = submission => {
 }
 
 @react.component
-let make = (~submission, ~selected, ~filterString) => {
+let make = (~submission, ~submissionNumber, ~selected, ~filterString) => {
   switch SubmissionMeta.archivedAt(submission) {
   | Some(_archivedAt) =>
     <div
-      title={t("submission_hash") ++ string_of_int(SubmissionMeta.number(submission))}
+      title={t("submission_hash") ++ string_of_int(submissionNumber)}
       key={SubmissionMeta.id(submission)}
       className={cardClasses(submission, selected)}>
-      {submissionInfoCardContent(submission)}
+      {submissionInfoCardContent(submission, submissionNumber)}
     </div>
   | None =>
     <Link
-      title={t("submission_hash") ++ string_of_int(SubmissionMeta.number(submission))}
+      title={t("submission_hash") ++ string_of_int(submissionNumber)}
       href={linkUrl(SubmissionMeta.id(submission), filterString)}
       key={SubmissionMeta.id(submission)}
       className={cardClasses(submission, selected)}>
-      {submissionInfoCardContent(submission)}
+      {submissionInfoCardContent(submission, submissionNumber)}
     </Link>
   }
 }

@@ -1188,12 +1188,16 @@ let make = (
         {ReactUtils.nullIf(
           <div
             className="flex space-x-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-200">
-            {Js.Array2.map(SubmissionDetails.allSubmissions(submissionDetails),
-              submission =>
+            {Js.Array2.mapi(SubmissionDetails.allSubmissions(submissionDetails),
+              (submission, index) =>
                 <CoursesReview__SubmissionInfoCard
                   key={SubmissionMeta.id(submission)}
                   selected={SubmissionMeta.id(submission) == submissionId}
                   submission
+                  submissionNumber={Array.length(
+                    SubmissionDetails.allSubmissions(submissionDetails),
+                  ) -
+                  index}
                   filterString={url.search}
                 />,
 

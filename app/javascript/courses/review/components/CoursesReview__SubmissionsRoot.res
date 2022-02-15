@@ -46,10 +46,9 @@ module SubmissionDetailsQuery = %graphql(`
             id, coachName, coachAvatarUrl, coachTitle, createdAt, value
           },
           checklist,
-          number
         }
         allSubmissions{
-          id, passedAt, createdAt, evaluatedAt, feedbackSent, number, archivedAt
+          id, passedAt, createdAt, evaluatedAt, feedbackSent, archivedAt
         }
         coaches{
           id, userId, name, title, avatarUrl
@@ -89,6 +88,12 @@ let updateSubmission = (setState, submissionDetails, overlaySubmission) => {
   setState(_ => Loaded(newSubmissionDetails))
 }
 
+let currentSubmissionIndex = (submissionId, allSubmissions) => {
+  Js.Array.length(allSubmissions) - Js.Array.findIndex(s => {
+    SubmissionMeta.id(s) == submissionId
+  }, allSubmissions)
+}
+
 let updateReviewChecklist = (submissionDetails, setState, reviewChecklist) =>
   setState(_ => Loaded(SubmissionDetails.updateReviewChecklist(reviewChecklist, submissionDetails)))
 
@@ -123,7 +128,10 @@ let make = (~submissionId, ~currentUser) => {
         updateReviewChecklistCB={updateReviewChecklist(submissionDetails, setState)}
         submissionReport={SubmissionDetails.submissionReport(submissionDetails)}
         targetId={SubmissionDetails.targetId(submissionDetails)}
-        number={OverlaySubmission.number(SubmissionDetails.submission(submissionDetails))}
+        number={currentSubmissionIndex(
+          submissionId,
+          SubmissionDetails.allSubmissions(submissionDetails),
+        )}
         currentUser
         submissionDetails
         submissionId

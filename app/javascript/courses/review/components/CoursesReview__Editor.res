@@ -22,12 +22,14 @@ type state = {
   grades: array<Grade.t>,
   newFeedback: string,
   saving: bool,
+  showReport: bool,
   checklist: array<SubmissionChecklistItem.t>,
   note: option<string>,
   editor: editor,
   additonalFeedbackEditorVisible: bool,
   feedbackGenerated: bool,
   nextSubmission: nextSubmission,
+  reloadSubmissionReport: bool,
 }
 
 type statusColors =
@@ -53,6 +55,7 @@ type action =
   | SetNextSubmissionDataLoading
   | SetNextSubmissionDataEmpty
   | UnassignReviewer
+  | ChangeReportVisibility
 
 let reducer = (state, action) =>
   switch action {
@@ -70,6 +73,7 @@ let reducer = (state, action) =>
   | UpdateNote(note) => {...state, note: Some(note)}
   | ShowGradesEditor => {...state, editor: GradesEditor}
   | ShowChecklistEditor => {...state, editor: ChecklistEditor}
+  | ChangeReportVisibility => {...state, showReport: !state.showReport}
   | ShowAdditionalFeedbackEditor => {...state, additonalFeedbackEditorVisible: true}
   | FinishGrading(grades) => {
       ...state,
@@ -128,6 +132,20 @@ module UnassignReviewerMutation = %graphql(`
     mutation UnassignReviewerMutation($submissionId: ID!) {
       unassignReviewer(submissionId: $submissionId){
         success
+      }
+    }
+  `)
+
+module SubmissionReportQuery = %graphql(`
+    query SubmissionReportQuery($id: ID!) {
+      submissionReport(id: $id) {
+        id
+        status
+        testReport
+        startedAt
+        completedAt
+        conclusion
+        queuedAt
       }
     }
   `)
@@ -1013,6 +1031,77 @@ let pageTitle = (number, submissionDetails) => {
     )}${SubmissionDetails.levelNumber(submissionDetails)} | ${studentOrTeamName}`
 }
 
+let reportStatusString = report => {
+  switch SubmissionReport.status(report) {
+  | Queued(_) => t("report_status_string.queued")
+  | InProgress(_) => t("report_status_string.in_progress")
+  | Completed(_timeStamps, conclusion) =>
+    switch conclusion {
+    | Success => t("report_status_string.completed.success")
+    | Failure => t("report_status_string.completed.failure")
+    | Error => t("report_status_string.completed.error")
+    }
+  }
+}
+
+let reportStatusIconClasses = report => {
+  switch SubmissionReport.status(report) {
+  | Queued(_) => "if i-clock-light text-2xl text-gray-600 rounded-full"
+  | InProgress(_) => "if animate-spin i-dashed-circle-regular text-2xl text-yellow-500 rounded-full"
+  | Completed(_timeStamps, conclusion) =>
+    switch conclusion {
+    | Success => "if i-check-circle-solid text-2xl text-green-500 bg-white rounded-full"
+    | Failure => "if i-times-circle-solid text-2xl text-red-500 bg-white rounded-full"
+    | Error => "if i-exclamation-triangle-circle-solid text-2xl text-gray-600 bg-white rounded-full"
+    }
+  }
+}
+
+let reportConclusionTimeString = report => {
+  switch SubmissionReport.status(report) {
+  | Queued(queuedAt) =>
+    "Queued " ++ DateFns.formatDistanceToNowStrict(queuedAt, ~addSuffix=true, ())
+  | InProgress(startedAt) =>
+    "Started " ++ DateFns.formatDistanceToNowStrict(startedAt, ~addSuffix=true, ())
+
+  | Completed(completedTimestamps, _conclusion) =>
+    "Finished " ++
+    DateFns.formatDistanceToNowStrict(completedTimestamps.completedAt, ~addSuffix=true, ()) ++
+    ", and took " ++
+    DateFns.formatDistance(
+      completedTimestamps.completedAt,
+      completedTimestamps.startedAt,
+      ~includeSeconds=true,
+      (),
+    )
+  }
+}
+
+
+let loadSubmissionReport = (report, updateSubmissionReportCB) => {
+  let id = SubmissionReport.id(report)
+  SubmissionReportQuery.make(~id, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    let reportData = response["submissionReport"]
+    let updatedReport = SubmissionReport.makeFromJS(reportData)
+
+    updateSubmissionReportCB(Some(updatedReport))
+
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+let reloadSubmissionReport = (report, updateSubmissionReportCB) => {
+  switch SubmissionReport.status(report) {
+  | Queued(_)
+  | InProgress(_) =>
+    loadSubmissionReport(report, updateSubmissionReportCB)
+  | Completed(_, _) => ()
+  }
+}
+
 @react.component
 let make = (
   ~overlaySubmission,
@@ -1028,6 +1117,9 @@ let make = (
   ~submissionDetails,
   ~submissionId,
   ~updateReviewerCB,
+  ~submissionReport,
+  ~updateSubmissionReportCB,
+  ~submissionReportPollTime
 ) => {
   let (state, send) = React.useReducer(
     reducer,
@@ -1035,6 +1127,7 @@ let make = (
       grades: [],
       newFeedback: "",
       saving: false,
+      showReport: false,
       note: None,
       checklist: OverlaySubmission.checklist(overlaySubmission),
       editor: ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
@@ -1048,6 +1141,7 @@ let make = (
       additonalFeedbackEditorVisible: false,
       feedbackGenerated: false,
       nextSubmission: DataUnloaded,
+      reloadSubmissionReport: false,
     },
   )
 
@@ -1069,6 +1163,19 @@ let make = (
     pending ? GradesEditor : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
   }
 
+  React.useEffect0(() => {
+    switch submissionReport {
+    | Some(report) => {
+        let intervalId = Js.Global.setInterval(
+          () => reloadSubmissionReport(report, updateSubmissionReportCB),
+          submissionReportPollTime * 1000,
+        )
+        Some(() => Js.Global.clearInterval(intervalId))
+      }
+    | None => None
+    }
+  })
+
   let url = RescriptReactRouter.useUrl()
   let filter = Filter.makeFromQueryParams(url.search)
 
@@ -1081,7 +1188,7 @@ let make = (
         {ReactUtils.nullIf(
           <div
             className="flex space-x-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-200">
-            {Js.Array.mapi(
+            {Js.Array2.mapi(SubmissionDetails.allSubmissions(submissionDetails),
               (submission, index) =>
                 <CoursesReview__SubmissionInfoCard
                   key={SubmissionMeta.id(submission)}
@@ -1093,7 +1200,7 @@ let make = (
                   index}
                   filterString={url.search}
                 />,
-              SubmissionDetails.allSubmissions(submissionDetails),
+
             )->React.array}
           </div>,
           Js.Array.length(SubmissionDetails.allSubmissions(submissionDetails)) == 1,
@@ -1128,6 +1235,57 @@ let make = (
           <div className="p-4 md:p-6">
             <SubmissionChecklistShow checklist=state.checklist updateChecklistCB pending />
           </div>
+          {switch submissionReport {
+          | Some(report) =>
+            <div className="p-4 md:p-6 space-y-8">
+              <div className="bg-gray-300 p-4 rounded-md">
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-start space-x-3">
+                    <div className="pt-1">
+                      <Icon className={reportStatusIconClasses(report)} />
+                    </div>
+                    <div>
+                      <p className="font-semibold"> {str(reportStatusString(report))} </p>
+                      <p className="text-gray-800 text-xs">
+                        {str(reportConclusionTimeString(report))}
+                      </p>
+                    </div>
+                  </div>
+                  { SubmissionReport.testReport(report) -> Belt.Option.isSome ?
+                  <button
+                    onClick={_ => send(ChangeReportVisibility)}
+                    className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+                    <span className="hidden md:block pr-3">
+                      {str(
+                        state.showReport
+                          ? t("hide_test_report_button")
+                          : t("show_test_report_button"),
+                      )}
+                    </span>
+                    {
+                      let toggleTestReportIcon = state.showReport
+                        ? "i-arrows-collapse-light"
+                        : "i-arrows-expand-light"
+                      <span className="inline-block w-5 h-5">
+                        <Icon className={"if text-xl " ++ toggleTestReportIcon} />
+                      </span>
+                    }
+                  </button> : React.null}
+                </div>
+                {state.showReport
+                  ? <div>
+                      <p className="text-sm font-semibold mt-4"> {str("Test Report")} </p>
+                      <div className="bg-white p-3 rounded-md border mt-2">
+                        <MarkdownBlock
+                          profile=Markdown.AreaOfText markdown={SubmissionReport.testReport(report) -> Belt.Option.mapWithDefault("", s => s)}
+                        />
+                      </div>
+                    </div>
+                  : React.null}
+              </div>
+            </div>
+          | None => React.null
+          }}
         </div>
         <div className="md:w-1/2 w-full md:overflow-y-auto">
           {switch state.editor {

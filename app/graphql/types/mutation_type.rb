@@ -166,5 +166,8 @@ module Types
     field :assign_reviewer, mutation: Mutations::AssignReviewer, null: false
     field :reassign_reviewer, mutation: Mutations::ReassignReviewer, null: false
     field :unassign_reviewer, mutation: Mutations::UnassignReviewer, null: false
+    field :create_submission_reports,
+          mutation: Mutations::CreateSubmissionReports,
+          null: false
   end
 end

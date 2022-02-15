@@ -6,16 +6,28 @@ class UndoSubmissionMutator < ApplicationQuery
   def undo_submission
     TimelineEvent.transaction do
       owners = timeline_event.founders.load
+
       # Remove the submission
-      timeline_event.destroy!
+      timeline_event.update!(archived_at: Time.zone.now)
+      timeline_event.timeline_event_owners.each do |owner|
+        owner.update!(latest: false)
+      end
 
       # Set the most recent submission to latest.
       owners.each do |owner|
-        timeline_event = owner.timeline_events.where(target: target).order(:created_at).last
+        timeline_event =
+          owner
+            .timeline_events
+            .live
+            .where(target: target)
+            .order(:created_at)
+            .last
 
         next if timeline_event.blank?
 
-        TimelineEventOwner.where(founder: owner, timeline_event: timeline_event).update(latest: true)
+        TimelineEventOwner
+          .where(founder: owner, timeline_event: timeline_event)
+          .update(latest: true)
       end
     end
   end
@@ -29,7 +41,14 @@ class UndoSubmissionMutator < ApplicationQuery
   end
 
   def timeline_event
-    @timeline_event ||= target.timeline_events.joins(:founders).where(founders: { id: founder }).order(created_at: :DESC).first
+    @timeline_event ||=
+      target
+        .timeline_events
+        .live
+        .joins(:founders)
+        .where(founders: { id: founder })
+        .order(created_at: :DESC)
+        .first
   end
 
   def target
@@ -37,13 +56,18 @@ class UndoSubmissionMutator < ApplicationQuery
   end
 
   def founder
-    @founder ||= current_user.founders.joins(:level).where(levels: { course_id: target.course }).first
+    @founder ||=
+      current_user
+        .founders
+        .joins(:level)
+        .where(levels: { course_id: target.course })
+        .first
   end
 
-  # Founders linked to a timeline event can delete it.
+  # Founders linked to a timeline event can delete it and submission should be live.
   def authorized?
-    target.present? &&
-      founder.present? &&
-      target.status(founder) == Targets::StatusService::STATUS_SUBMITTED
+    target.present? && founder.present? &&
+      target.status(founder) == Targets::StatusService::STATUS_SUBMITTED &&
+      timeline_event.live?
   end
 end

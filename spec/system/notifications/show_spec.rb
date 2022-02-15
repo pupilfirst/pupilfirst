@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'Notification Show Spec', js: true do
   include UserSpecHelper
-  include WithEnvHelper
+  include ConfigHelper
   let(:student) { create :student }
   let(:vapid_key) { Webpush.generate_key }
 

@@ -450,6 +450,16 @@ en:
       save_grades_and_send_feedback: Save grades & send feedback
       share_feedback: Share Feedback
       show_review_checklist: Show Review Checklist
+      report_status_string:
+        queued: Automated tests are queued
+        in_progress: Automated tests are in progress
+        completed:
+          success: All automated tests succeeded
+          failure: Some automated tests failed
+          error: Automated tests could not complete due to errors
+      show_test_report_button: Show Test Report
+      hide_test_report_button: Hide Test Report
+      report_description: Test Report
       status:
         completed: Completed
         pending_review: Pending Review
@@ -862,6 +872,7 @@ en:
     concerns:
       validate_submission_gradable:
         owners_should_be_active_error: Cannot update inactive student submissions.
+        submission_should_be_live: Such a submission does not exist, or it has been archived.
   home:
     index:
       course_status:

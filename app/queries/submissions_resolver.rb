@@ -13,7 +13,7 @@ class SubmissionsResolver < ApplicationQuery
   property :include_inactive
 
   def submissions
-    applicable_submissions.distinct.order(
+    applicable_submissions.live.distinct.order(
       "#{sort_criterion_string} #{sort_direction_string}"
     )
   end

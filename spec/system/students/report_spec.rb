@@ -174,7 +174,7 @@ feature "Course students report", js: true do
 
     accept_confirm do
       within("div[aria-label='Note #{coach_note_2.id}']") do
-        find("button[title='Delete #{coach_note_2.id}']").click
+        find("button[title='Delete note #{coach_note_2.id}']").click
       end
     end
     dismiss_notification
@@ -217,7 +217,7 @@ feature "Course students report", js: true do
 
       accept_confirm do
         within("div[aria-label='Note #{coach_note_2.id}']") do
-          find("button[title='Delete #{coach_note_2.id}']").click
+          find("button[title='Delete note #{coach_note_2.id}']").click
         end
       end
 

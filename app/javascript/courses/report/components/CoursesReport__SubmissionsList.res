@@ -279,7 +279,7 @@ let showSubmissionStatus = submission =>
   }
 
 let submissionCardClasses = submission =>
-  "flex flex-col md:flex-row items-start md:items-center justify-between bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer rounded-r-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md " ++
+  "flex flex-col md:flex-row items-start md:items-center justify-between rounded-lg bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:outline-none focus:border-2 focus:border-indigo-500 " ++
   switch submission |> Submission.status {
   | #Rejected => "border-red-500"
   | #Completed => "border-green-500"
@@ -300,12 +300,13 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
         : "/targets/" ++ Submission.targetId(submission)
 
       <div
-        key={submission |> Submission.id}
-        ariaLabel={"student-submission-" ++ (submission |> Submission.id)}>
-        <a className="block relative z-10" href=submissionHref>
+        className=""
+        key={submission |> Submission.id}>
+        <a className="block relative z-10 rounded-lg focus:outline-none focus:ring focus-ring-inset focus:ring-indigo-500"
+          ariaLabel={"Student submission " ++ (submission |> Submission.id)}
+          href=submissionHref>
           <div
             key={submission |> Submission.id}
-            ariaLabel={"student-submission-card-" ++ (submission |> Submission.id)}
             className={submissionCardClasses(submission)}>
             <div className="w-full md:w-3/4">
               <div className="block text-sm md:pr-2">
@@ -347,7 +348,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
               </div>
               <a
                 href={"/targets/" ++ Submission.targetId(submission)}
-                className="flex-shrink-0 px-2 py-1 text-xs font-semibold text-indigo-700 hover:bg-indigo-200 hover:text-indigo-800 rounded">
+                className="flex-shrink-0 px-2 py-1 text-xs font-semibold text-indigo-700 hover:bg-indigo-200 hover:text-indigo-800 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                 <span className="hidden md:inline"> {tc("view") |> str} </span>
                 {ts("target") |> str}
                 <FaIcon classes="fas fa-arrow-right ml-2" />
@@ -402,9 +403,9 @@ let make = (
     None
   }, (selectedLevel, selectedStatus, sortDirection))
   <div className="max-w-3xl mx-auto">
-    <div className="md:flex w-full items-start pb-4">
+    <div role="form" className="md:flex items-end w-full pb-4">
       <div className="flex-1">
-        <label className="block text-tiny font-semibold uppercase"> {"Filter by:" |> str} </label>
+        <label htmlFor="filter" className="block text-tiny font-semibold uppercase"> {"Filter by:" |> str} </label>
         <Multiselect
           id="filter"
           unselected={unselected(levels, selectedLevel, selectedStatus)}
@@ -418,7 +419,7 @@ let make = (
       </div>
       {submissionsSorter(sortDirection, updateSortDirectionCB)}
     </div>
-    <div ariaLabel="student-submissions">
+    <div ariaLabel="Student submissions">
       {switch (submissions: Submissions.t) {
       | Unloaded => SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
       | PartiallyLoaded({submissions}, cursor) =>
@@ -427,7 +428,7 @@ let make = (
           {switch state.loading {
           | Loaded =>
             <button
-              className="btn btn-primary-ghost cursor-pointer w-full mt-4"
+              className="btn btn-primary-ghost cursor-pointer w-full mt-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
               onClick={_ => {
                 send(BeginLoadingMore)
                 getStudentSubmissions(

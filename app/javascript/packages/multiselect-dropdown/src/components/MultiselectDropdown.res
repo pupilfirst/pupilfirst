@@ -132,8 +132,9 @@ module Make = (Selectable: Selectable) => {
             } |> str}
           </span>
           <button
+            ariaLabel={"Remove selection: " ++ value}
             title={"Remove selection: " ++ value}
-            className="ml-1 text-red-700 px-2 py-px focus:outline-none hover:bg-red-400 hover:text-white flex items-center"
+            className="ml-1 text-red-700 px-2 py-px focus:outline-none hover:bg-red-400 hover:text-white flex items-center focus:bg-red-400 focus:text-white"
             onClick={removeSelection(onDeselect, selection)}>
             <PfIcon className="if i-times-light" />
           </button>
@@ -155,6 +156,7 @@ module Make = (Selectable: Selectable) => {
 
   let wrapper = children =>
     <div
+      role="listbox"
       className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg py-2 z-50">
       <p className="text-gray-700 italic mx-4 text-xs border-b pb-1 mb-2">
         {str("Suggestions:")}
@@ -215,16 +217,17 @@ module Make = (Selectable: Selectable) => {
     <div className="w-full relative">
       <div>
         <div
-          className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-1 px-2 mt-1 ">
+          className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-1 px-2 mt-1 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
           {selected |> showSelected(onDeselect, labelSuffix) |> React.array}
           <input
             onClick={_ => setShowDropdown(s => !s)}
             autoComplete="off"
             value
             onChange={e => onChange(ReactEvent.Form.target(e)["value"])}
-            className="flex-grow appearance-none bg-transparent border-none text-gray-700 p-1.5 leading-snug focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-400 "
+            className="flex-grow appearance-none bg-transparent border-none text-gray-700 p-1.5 leading-snug focus:outline-none placeholder-gray-500"
             id=inputId
             type_="search"
+            role="combobox"
             placeholder
           />
         </div>

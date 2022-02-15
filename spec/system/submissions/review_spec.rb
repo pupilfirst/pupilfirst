@@ -857,7 +857,7 @@ feature 'Submission review overlay', js: true do
         expect(page).to have_link(target.title, href: "/targets/#{target.id}")
       end
 
-      expect(page).to have_content('Submission 2')
+      expect(page).to have_content('Submission 1')
       expect(page).to have_content('Completed')
 
       within("div[aria-label='submission-status']") do

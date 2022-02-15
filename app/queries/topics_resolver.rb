@@ -6,10 +6,15 @@ class TopicsResolver < ApplicationQuery
   property :resolution
   property :sort_direction
   property :sort_criterion
+  property :search_by
 
   def topics
     if search.present?
-      applicable_topics.search_by_title_and_post_body(title_for_search)
+      if search.search_by == 'content'
+        applicable_topics.search_by_post_body(sanitized_search)
+      else
+        applicable_topics.search_by_title(sanitized_search)
+      end
     else
       applicable_topics
     end
@@ -27,8 +32,8 @@ class TopicsResolver < ApplicationQuery
     (current_user.course_ids & community.course_ids).present?
   end
 
-  def title_for_search
-    search.strip
+  def sanitized_search
+    search.search.strip
       .gsub(/[^a-z\s0-9]/i, '')
       .split(' ').reject do |word|
       word.length < 3
@@ -64,10 +69,11 @@ class TopicsResolver < ApplicationQuery
   end
 
   def filter_by_solution(topics, resolution)
-    topics_with_solution = topics.joins(:posts).where(posts: { solution: true })
+    topics_with_solution =
+      topics.joins(:posts).where(posts: { solution: true }).select(:id)
     case resolution
     when 'Solved'
-      topics_with_solution
+      Topic.where(id: topics_with_solution)
     when 'Unsolved'
       topics.where.not(id: topics_with_solution)
     else

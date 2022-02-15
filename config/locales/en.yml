@@ -131,6 +131,25 @@ en:
         other: Issued %{count} times
         zero: Never issued
       no_certificates: You haven't created any certificates yet!
+    CoursesExport__Root:
+      reviewed_only_tag: Reviewed Submissions Only
+      include_inactive_students_tag: Included Inactive Students
+      create_action: Create New Export
+      heading: Exports
+      no_exports_notice: You haven't exported anything yet!
+      create_action_button: Export Course Data
+      export_type_label: Please select the kind of export you need
+      students_label: Students
+      teams_label: Teams
+      export_tags_label : Export only students with the following tags
+      export_targets_label: Which targets should the export include?
+      all_targets_label: All targets
+      reviewed_only_targets_label: Only targets with reviewed submissions
+      students_to_include_label: Select the students to include in course export
+      active_students_label: Active Students
+      all_students_label: All Students
+      create_button_text: Create Export
+      create_button_active_label: Setting up an export...
     CourseEditor:
       add_new_course: Add New Course
       button_load_more: Load More Courses...
@@ -919,6 +938,10 @@ en:
   mutations:
     archive_course:
       success_notification: Course archived successfully.
+    export_course_report:
+      course_not_found_error: Could not find a course with the given ID
+      tag_not_found_error: Could not find tags with the given IDs
+      success_notification: Your export is being processed. We'll notify you as soon as it is ready.
     assign_reviewer:
       submission_already_assigned: This submission has been already assigned to a coach.
       submission_graded_error: You can only assign yourself to pending submissions.
@@ -1063,6 +1086,8 @@ en:
     optional: optional
     privacy_policy: Privacy Policy
     save_changes: Save Changes
+    processing: Processing
     saving: Saving...
     target: Target
     terms_and_conditions: Terms & Conditions
+    login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.

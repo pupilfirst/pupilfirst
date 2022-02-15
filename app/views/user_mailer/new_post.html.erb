@@ -5,20 +5,6 @@
   community_name = @post.topic.community.name
 %>
 
-<% content_for :title do %>
-  New reply for your post
-<% end %>
-
-<% content_for :subtitle do %>
-  <%= author_name %> has replied to your post.
-<% end %>
-
-<% content_for :title_button_text do %>
-  View Reply
-<% end %>
-
-<% content_for(:title_button_link, topic_url(topic)) %>
-
 <% content_for :salutation do %>
   Hello <%= addressee_name %>,
 <% end %>
@@ -26,7 +12,7 @@
 <% content_for :body do %>
   <p><%= author_name %> has posted a reply to something you said on the <%= community_name %> community.</p>
 
-  <p>You can view the reply by clicking on the link above.</p>
+  <p>You can <%= link_to "view the reply on the #{community_name} community", topic_url(topic) %>.
 
   <%= render 'mailers/link_fallback', url: topic_url(topic) %>
 <% end %>

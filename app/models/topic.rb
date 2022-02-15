@@ -41,8 +41,7 @@ class Topic < ApplicationRecord
                     }
                   }
 
-  pg_search_scope :search_by_title_and_post_body,
-                  against: :title,
+  pg_search_scope :search_by_post_body,
                   using: {
                     tsearch: {
                       prefix: true,

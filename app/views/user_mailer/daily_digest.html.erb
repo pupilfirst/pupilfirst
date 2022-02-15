@@ -7,16 +7,6 @@
   end
 %>
 
-<% content_for :title do %>
-  Daily digest from <%= school_name %>
-<% end %>
-
-<% content_for :title_button_text do %>
-  Visit <%= school_name %> dashboard
-<% end %>
-
-<% content_for(:title_button_link, dashboard_url) %>
-
 <% content_for :salutation do %>
   Hello <%= recipient_name %>,
 <% end %>
@@ -87,7 +77,7 @@
     <% end %>
   <% end %>
 
-  <p style="font-size: 75%; text-align: center; margin-top: 15px;">
+  <p style="font-size: 75%; margin-top: 15px;">
     You can control these emails from <%= link_to "your profile edit page", edit_user_url %>.
   </p>
 <% end %>

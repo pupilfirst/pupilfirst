@@ -61,7 +61,7 @@ feature 'Course students bulk importer', js: true do
     expect(email_subject).to eq('Import of Students Completed')
 
     expect(email_body).to have_content(
-      "The students import that you initiated for #{course.name} course was\n  completed"
+      "Your request to import students in\n    #{course.name} course, was successfully completed."
     )
     expect(email_body).to have_content('Students requested: 2')
     expect(email_body).to have_content('Students added: 2')
@@ -171,8 +171,9 @@ feature 'Course students bulk importer', js: true do
       email_body = current_email.body
 
       expect(email_body).to have_content(
-        'Some of the students you tried to import already exist in the course'
+        'Some of the students you tried to import were already enrolled in the course'
       )
+
       expect(current_email.attachments.first.body.encoded).to have_text(
         'bat@man.com'
       )

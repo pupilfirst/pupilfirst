@@ -1,9 +1,5 @@
-<% content_for :title do %>
-  Account Deleted Successfully
-<% end %>
-
 <% content_for :salutation do %>
-  Hello,
+  Hello <%= @user.name %>,
 <% end %>
 
 <% content_for :body do %>

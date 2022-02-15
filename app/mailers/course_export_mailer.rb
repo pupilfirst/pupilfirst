@@ -5,6 +5,6 @@ class CourseExportMailer < SchoolMailer
   def prepared(course_export)
     @school = course_export.course.school
     @course_export = course_export
-    simple_roadie_mail(course_export.user.email, "Export of #{course_export.course.name} course is ready for download")
+    simple_mail(course_export.user.email, "Export of #{course_export.course.name} course is ready for download")
   end
 end

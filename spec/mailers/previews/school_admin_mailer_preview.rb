@@ -6,7 +6,11 @@ class SchoolAdminMailerPreview < ActionMailer::Preview
     user.email = Faker::Internet.email(name: user.name)
     new_school_admin = SchoolAdmin.new(user: user, created_at: Time.zone.now)
 
-    SchoolAdminMailer.school_admin_added(school_admin, new_school_admin)
+    SchoolAdminMailer.school_admin_added(
+      school_admin,
+      new_school_admin,
+      User.where.not(id: school_admin.user).first
+    )
   end
 
   def students_bulk_import_complete
@@ -14,8 +18,16 @@ class SchoolAdminMailerPreview < ActionMailer::Preview
     course = Course.first
     report_params = { students_added: 10, students_requested: 12 }
 
-    report_attachment = { mime_type: 'text/csv', content: "Sl. No,Email\n1, test@hey.com\n" }
+    report_attachment = {
+      mime_type: 'text/csv',
+      content: "Sl. No,Email\n1, test@hey.com\n"
+    }
 
-    SchoolAdminMailer.students_bulk_import_complete(school_admin, course, report_params, report_attachment: report_attachment)
+    SchoolAdminMailer.students_bulk_import_complete(
+      school_admin,
+      course,
+      report_params,
+      report_attachment: report_attachment
+    )
   end
 end

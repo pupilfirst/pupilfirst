@@ -185,6 +185,13 @@ let teamCard = (
           <div className="flex flex-1 w-3/5 h-full">
             <div className="flex items-center w-full">
               <div className="relative px-4">
+                <label className="checkbox__label flex items-center" htmlFor=checkboxId>
+                  <div>
+                    <svg width="11px" height="11px" viewBox="0 0 13 13">
+                      <polyline points="1.5 6 4.5 9 10.5 1" />
+                    </svg>
+                  </div>
+                </label>
                 <input
                   className="absolute top-2 w-0 h-0 focus:outline-none checkbox__input"
                   type_="checkbox"
@@ -194,15 +201,6 @@ let teamCard = (
                     ? _e => deselectStudentCB(studentId)
                     : _e => selectStudentCB(student, team)}
                 />
-                <label
-                  className="checkbox__label flex items-center"
-                  htmlFor=checkboxId>
-                  <div>
-                    <svg width="11px" height="11px" viewBox="0 0 13 13">
-                      <polyline points="1.5 6 4.5 9 10.5 1" />
-                    </svg>
-                  </div>
-                </label>
               </div>
               <button
                 className="flex flex-1 items-center text-left py-4 px-4 hover:bg-gray-100 hover:text-primary-500 focus:bg-gray-100 focus:text-primary-500 justify-between"

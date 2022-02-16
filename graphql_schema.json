@@ -742,13 +742,13 @@
           "enumValues": [
             {
               "name": "title",
-              "description": "To search topics by post title",
+              "description": "To search for topics by title",
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "content",
-              "description": "To search topics by post body content",
+              "description": "To search for topics by post body",
               "isDeprecated": false,
               "deprecationReason": null
             }

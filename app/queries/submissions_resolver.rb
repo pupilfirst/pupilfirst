@@ -13,7 +13,7 @@ class SubmissionsResolver < ApplicationQuery
   property :include_inactive
 
   def submissions
-    applicable_submissions.live.distinct.order(
+    applicable_submissions.distinct.order(
       "#{sort_criterion_string} #{sort_direction_string}"
     )
   end
@@ -57,7 +57,7 @@ class SubmissionsResolver < ApplicationQuery
         course.levels.find_by(id: level_id).timeline_events.not_auto_verified
       else
         course.timeline_events.not_auto_verified
-      end
+      end.live
 
     # Filter by target
     stage_2 =

@@ -115,7 +115,10 @@ let drawName = issuedCertificate => {
   ctx
   |> OptionUtils.map(ctx =>
     Webapi.Canvas.Canvas2d.fillText(
-      IssuedCertificate.profileName(issuedCertificate)->DOMPurify.sanitize,
+      IssuedCertificate.profileName(issuedCertificate)->DOMPurify.sanitize({
+        "ALLOWED_TAGS": ["p", "em", "strong", "del", "s", "a", "sup", "sub"],
+        "ADD_ATTR": ["target"],
+      }),
       ~x=1000.0,
       ~y=50.0,
       ctx,

@@ -277,7 +277,7 @@ let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
 let controlsContainerClasses = mode =>
   "border bg-gray-100 text-sm px-2 flex justify-between items-end " ++
   switch mode {
-  | Windowed(_) => "rounded-t border-gray-400 sticky top-0 z-20"
+  | Windowed(_) => "rounded-t border-gray-400"
   | Fullscreen(_) => "border-gray-400 "
   }
 
@@ -538,12 +538,14 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
   }
 }
 
-let textareaClasses = mode =>
-  "editor w-full outline-none font-mono focus:ring-1 focus:ring-inset focus:ring-indigo-400 " ++
+let textareaClasses = (mode, dynamicHeight) => {
+  let editorClasses = dynamicHeight ? "w-full outline-none font-mono " : "markdown-editor__textarea w-full outline-none font-mono "
+  editorClasses ++ "align-top focus:ring-1 focus:ring-indigo-500 " ++
   switch mode {
   | Windowed(_) => "p-3"
-  | Fullscreen(_) => "editor--full-screen px-3 pt-4 pb-8 h-full resize-none"
+  | Fullscreen(_) => "markdown-editor__textarea--full-screen px-3 pt-4 pb-8 h-full resize-none"
   }
+}
 
 let onChangeWrapper = (onChange, event) => {
   let value = ReactEvent.Form.target(event)["value"]
@@ -622,6 +624,7 @@ let make = (
   ~tabIndex=?,
   ~fileUpload=true,
   ~disabled=false,
+  ~dynamicHeight=false,
 ) => {
   let (state, send) = React.useReducerWithMapState(
     reducer,
@@ -722,7 +725,7 @@ let make = (
             onChange={onChangeWrapper(onChange)}
             id=state.id
             value
-            className={textareaClasses(state.mode)}
+            className={textareaClasses(state.mode, dynamicHeight)}
             disabled
           />
         </DisablingCover>

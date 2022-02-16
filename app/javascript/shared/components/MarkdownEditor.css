@@ -11,10 +11,10 @@
   @apply max-w-3xl mx-auto;
 }
 
-.editor {
+.markdown-editor__textarea {
   max-height: 12rem;
 }
 
-.editor--full-screen {
+.markdown-editor__textarea--full-screen {
   max-height: 100% !important;
 }

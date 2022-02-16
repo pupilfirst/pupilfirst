@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 bundle exec rails db:migrate
 bundle exec whenever --update-crontab
 service cron start

@@ -2,36 +2,36 @@
 
 @layer components {
   .theme-pupilfirst {
-    --color-primary-100: #f0eafb;
-    --color-primary-200: #d3bff3;
-    --color-primary-300: #b08ee6;
-    --color-primary-400: #976ae2;
-    --color-primary-500: #6025c0;
-    --color-primary-600: #4d1e9a;
-    --color-primary-700: #380d80;
-    --color-primary-800: #35156b;
-    --color-primary-900: #1f0d40;
+    --color-primary-100: #dbeafe;
+    --color-primary-200: #bfdbfe;
+    --color-primary-300: #93c5fd;
+    --color-primary-400: #60a5fa;
+    --color-primary-500: #3b82f6;
+    --color-primary-600: #2563eb;
+    --color-primary-700: #1d4ed8;
+    --color-primary-800: #1e40af;
+    --color-primary-900: #1e3a8a;
 
-    --color-secondary-100: #fee6ef;
-    --color-secondary-200: #fcb5d0;
-    --color-secondary-300: #ff80b0;
-    --color-secondary-400: #f95392;
-    --color-secondary-500: #f61067;
-    --color-secondary-600: #ac0645;
-    --color-secondary-700: #a61149;
-    --color-secondary-800: #7b0531;
-    --color-secondary-900: #4a031e;
+    --color-secondary-100: #e0f2fe;
+    --color-secondary-200: #bae6fd;
+    --color-secondary-300: #7dd3fc;
+    --color-secondary-400: #38bdf8;
+    --color-secondary-500: #0ea5e9;
+    --color-secondary-600: #0284c7;
+    --color-secondary-700: #0369a1;
+    --color-secondary-800: #075985;
+    --color-secondary-900: #0c4a6e;
 
-    --color-gray-50: #fdfdfd;
-    --color-gray-100: #fbfafc;
-    --color-gray-200: #f7f5fa;
-    --color-gray-300: #f1edf7;
-    --color-gray-400: #dfdae8;
-    --color-gray-500: #bfb8cc;
-    --color-gray-600: #9187a1;
-    --color-gray-700: #7d728f;
-    --color-gray-800: #6a5f7a;
-    --color-gray-900: #453c52;
+    --color-gray-50: #f8fafc;
+    --color-gray-100: #f1f5f9;
+    --color-gray-200: #e2e8f0;
+    --color-gray-300: #cbd5e1;
+    --color-gray-400: #94a3b8;
+    --color-gray-500: #64748b;
+    --color-gray-600: #475569;
+    --color-gray-700: #334155;
+    --color-gray-800: #1e293b;
+    --color-gray-900: #0f172a;
 
     --font-family-sans: "Open Sans", sans-serif;
   }

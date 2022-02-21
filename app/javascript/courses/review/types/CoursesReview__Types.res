@@ -14,3 +14,4 @@ module SubmissionsSorting = CoursesReview__SubmissionsSorting
 module Filter = CoursesReview__Filter
 module User = AppRouter__User
 module Reviewer = CoursesReview__Reviewer
+module SubmissionReport = CoursesReview__SubmissionReport

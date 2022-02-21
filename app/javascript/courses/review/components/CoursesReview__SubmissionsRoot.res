@@ -9,11 +9,20 @@ type state =
 module SubmissionDetailsQuery = %graphql(`
     query SubmissionDetailsQuery($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
-        targetId, targetTitle, levelNumber, levelId, inactiveStudents, createdAt,
+        targetId, targetTitle, levelNumber, levelId, inactiveStudents, createdAt, submissionReportPollTime
         students {
           id
           name
         },
+        submissionReport {
+          id
+          testReport
+          status
+          startedAt
+          completedAt
+          conclusion
+          queuedAt
+        }
         evaluationCriteria{
           id, name, maxGrade, passGrade, gradeLabels { grade label}
         },
@@ -26,7 +35,7 @@ module SubmissionDetailsQuery = %graphql(`
         },
         targetEvaluationCriteriaIds,
         submission{
-          id, evaluatorName, passedAt, createdAt, evaluatedAt
+          id, evaluatorName, passedAt, createdAt, evaluatedAt, archivedAt
           files{
             url, title, id
           },
@@ -36,10 +45,10 @@ module SubmissionDetailsQuery = %graphql(`
           feedback{
             id, coachName, coachAvatarUrl, coachTitle, createdAt, value
           },
-          checklist
+          checklist,
         }
         allSubmissions{
-          id, passedAt, createdAt, evaluatedAt, feedbackSent
+          id, passedAt, createdAt, evaluatedAt, feedbackSent, archivedAt
         }
         coaches{
           id, userId, name, title, avatarUrl
@@ -79,17 +88,23 @@ let updateSubmission = (setState, submissionDetails, overlaySubmission) => {
   setState(_ => Loaded(newSubmissionDetails))
 }
 
-let updateReviewChecklist = (submissionDetails, setState, reviewChecklist) =>
-  setState(_ => Loaded(SubmissionDetails.updateReviewChecklist(reviewChecklist, submissionDetails)))
-
 let currentSubmissionIndex = (submissionId, allSubmissions) => {
   Js.Array.length(allSubmissions) - Js.Array.findIndex(s => {
     SubmissionMeta.id(s) == submissionId
   }, allSubmissions)
 }
 
+let updateReviewChecklist = (submissionDetails, setState, reviewChecklist) =>
+  setState(_ => Loaded(SubmissionDetails.updateReviewChecklist(reviewChecklist, submissionDetails)))
+
 let updateReviewer = (submissionDetails, setState, reviewer) => {
   setState(_ => Loaded(SubmissionDetails.updateReviewer(reviewer, submissionDetails)))
+}
+
+let updateSubmissionReport = (submissionDetails, setState, submissionReport) => {
+  setState(_ => Loaded(
+    SubmissionDetails.updateSubmissionReport(submissionReport, submissionDetails),
+  ))
 }
 
 @react.component
@@ -111,6 +126,7 @@ let make = (~submissionId, ~currentUser) => {
         reviewChecklist={SubmissionDetails.reviewChecklist(submissionDetails)}
         updateSubmissionCB={updateSubmission(setState, submissionDetails)}
         updateReviewChecklistCB={updateReviewChecklist(submissionDetails, setState)}
+        submissionReport={SubmissionDetails.submissionReport(submissionDetails)}
         targetId={SubmissionDetails.targetId(submissionDetails)}
         number={currentSubmissionIndex(
           submissionId,
@@ -120,6 +136,8 @@ let make = (~submissionId, ~currentUser) => {
         submissionDetails
         submissionId
         updateReviewerCB={updateReviewer(submissionDetails, setState)}
+        updateSubmissionReportCB={updateSubmissionReport(submissionDetails, setState)}
+        submissionReportPollTime={SubmissionDetails.submissionReportPollTime(submissionDetails)}
       />
 
     | Loading =>

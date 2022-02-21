@@ -74,4 +74,11 @@ ENV RAILS_ENV="production"
 
 RUN mkdir -p tmp/pids
 
+# Add Tini.
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+ENTRYPOINT ["/tini", "--"]
+
+# Run under tini to ensure proper signal handling.
 CMD [ "bundle", "exec", "puma", "-C", "config/puma.rb" ]

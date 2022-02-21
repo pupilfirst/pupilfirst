@@ -41,7 +41,8 @@ module Schools
             file: file,
             export_type: export.export_type,
             tags: export.tags.collect(&:name),
-            reviewed_only: export.reviewed_only
+            reviewed_only: export.reviewed_only,
+            includeInactiveStudents: export.include_inactive_students
           }
         end
       end

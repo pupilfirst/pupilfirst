@@ -57,7 +57,7 @@ class SubmissionsResolver < ApplicationQuery
         course.levels.find_by(id: level_id).timeline_events.not_auto_verified
       else
         course.timeline_events.not_auto_verified
-      end
+      end.live
 
     # Filter by target
     stage_2 =

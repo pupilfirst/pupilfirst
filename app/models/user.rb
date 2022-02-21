@@ -136,7 +136,7 @@ class User < ApplicationRecord
     (
       login_token_generated_at +
         Rails.application.secrets.login_token_time_limit
-    ).strftime('%B %-d, %Y %H:%M %p')
+    ).strftime('%B %-d, %Y at %l:%M %p')
   end
 
   # True if the user has ever signed in, handled by Users::ConfirmationService.

@@ -98,6 +98,12 @@ module Types
       argument :sort_direction, Types::SortDirectionType, required: true
     end
 
+    resolved_field :submission_report,
+                   Types::SubmissionReportType,
+                   null: false do
+      argument :id, ID, required: true
+    end
+
     resolved_field :course_teams,
                    Types::CourseTeamType.connection_type,
                    null: false do
@@ -151,7 +157,7 @@ module Types
       argument :resolution, Types::TopicResolutionFilterType, required: true
       argument :topic_category_id, ID, required: false
       argument :target_id, ID, required: false
-      argument :search, String, required: false
+      argument :search, Types::CommunitySearchFilterType, required: false
       argument :sort_direction, Types::SortDirectionType, required: true
       argument :sort_criterion, Types::TopicSortCriterionType, required: true
     end

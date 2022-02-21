@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Vimeo::ApiService do
-  include WithEnvHelper
+  include ConfigHelper
 
   subject { described_class.new(school) }
 
@@ -57,20 +57,24 @@ describe Vimeo::ApiService do
     end
 
     before do
-      school.configuration['vimeo'] = { access_token: vimeo_access_token, account_type: account_type }
+      school.configuration['vimeo'] = {
+        access_token: vimeo_access_token,
+        account_type: account_type
+      }
       school.save!
     end
 
     it 'creates a new video' do
-      stub_request(:post, "https://api.vimeo.com/me/videos/").
-        with(
+      stub_request(:post, 'https://api.vimeo.com/me/videos/')
+        .with(
           body: expected_data.to_json,
           headers: {
             'Accept' => 'application/vnd.vimeo.*+json;version=3.4',
             'Authorization' => "Bearer #{vimeo_access_token}",
-            'Content-Type' => 'application/json',
-          }).
-        to_return(status: 200, body: response_body)
+            'Content-Type' => 'application/json'
+          }
+        )
+        .to_return(status: 200, body: response_body)
 
       response = subject.create_video(size, name, description)
 
@@ -86,15 +90,16 @@ describe Vimeo::ApiService do
         data = expected_data.dup
         data[:embed][:title][:name] = 'hide'
 
-        stub_request(:post, "https://api.vimeo.com/me/videos/").
-          with(
+        stub_request(:post, 'https://api.vimeo.com/me/videos/')
+          .with(
             body: data.to_json,
             headers: {
               'Accept' => 'application/vnd.vimeo.*+json;version=3.4',
               'Authorization' => "Bearer #{vimeo_access_token}",
-              'Content-Type' => 'application/json',
-            }).
-          to_return(status: 200, body: response_body)
+              'Content-Type' => 'application/json'
+            }
+          )
+          .to_return(status: 200, body: response_body)
 
         response = subject.create_video(size, name, description)
 
@@ -115,14 +120,17 @@ describe Vimeo::ApiService do
     end
 
     it 'adds an allowed domain to an existing video' do
-      stub_request(:put, "https://api.vimeo.com/videos/#{video_id}/privacy/domains/#{domain}/").
-        with(
-          body: "{}",
-          headers: {
-            'Accept' => 'application/vnd.vimeo.*+json;version=3.4',
-            'Authorization' => "Bearer #{vimeo_access_token}",
-            'Content-Type' => 'application/json'
-          })
+      stub_request(
+        :put,
+        "https://api.vimeo.com/videos/#{video_id}/privacy/domains/#{domain}/"
+      ).with(
+        body: '{}',
+        headers: {
+          'Accept' => 'application/vnd.vimeo.*+json;version=3.4',
+          'Authorization' => "Bearer #{vimeo_access_token}",
+          'Content-Type' => 'application/json'
+        }
+      )
 
       subject.add_allowed_domain_to_video(domain, video_id)
     end

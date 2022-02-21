@@ -4,6 +4,7 @@ type t = {
   passedAt: option<Js.Date.t>,
   evaluatorName: option<string>,
   evaluatedAt: option<Js.Date.t>,
+  archivedAt: option<Js.Date.t>,
   feedback: array<CoursesReview__Feedback.t>,
   grades: array<CoursesReview__Grade.t>,
   checklist: array<SubmissionChecklistItem.t>,
@@ -16,6 +17,7 @@ let evaluatedAt = t => t.evaluatedAt
 let grades = t => t.grades
 let feedback = t => t.feedback
 let checklist = t => t.checklist
+let archivedAt = t => t.archivedAt
 
 let make = (
   ~id,
@@ -25,6 +27,7 @@ let make = (
   ~feedback,
   ~grades,
   ~evaluatedAt,
+  ~archivedAt,
   ~checklist,
 ) => {
   id: id,
@@ -35,6 +38,7 @@ let make = (
   grades: grades,
   evaluatedAt: evaluatedAt,
   checklist: checklist,
+  archivedAt: archivedAt,
 }
 
 let makeFromJs = s =>
@@ -62,6 +66,7 @@ let makeFromJs = s =>
     ~checklist=s["checklist"] |> Json.Decode.array(
       SubmissionChecklistItem.decode(SubmissionChecklistItem.makeFiles(s["files"])),
     ),
+    ~archivedAt=s["archivedAt"]->Belt.Option.map(DateFns.decodeISO),
   )
 
 let update = (passedAt, evaluatorName, feedback, grades, evaluatedAt, checklist, t) => {

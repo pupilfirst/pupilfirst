@@ -3,20 +3,6 @@
   sign_in_link = user_token_url(token: @user.original_login_token)
 %>
 
-<% content_for :title do %>
-  <%= @course.name %>
-<% end %>
-
-<% content_for :subtitle do %>
-  You have been enrolled to a course on <%= @school.name %>.
-<% end %>
-
-<% content_for :title_button_text do %>
-  Sign in to View Course
-<% end %>
-
-<% content_for(:title_button_link, sign_in_link) %>
-
 <% content_for :salutation do %>
   Hello <%= @student.name %>,
 <% end %>
@@ -24,8 +10,10 @@
 <% content_for :body do %>
   <p>
     You have been enrolled as a student in the course <strong><%= @course.name %></strong>, on <%= @school.name %>.
+  </p>
 
-    You can now sign into <%= @school.name %> and start working on this course.
+  <p>
+    You can now <%= link_to("sign into #{@school.name} and start working on this course", sign_in_link) %>.
   </p>
 
   <% if team_members.present? %>
@@ -37,7 +25,5 @@
 
   <%= render 'mailers/link_fallback', url: sign_in_link %>
 
-  <p>
-    Please note that the link will expire by <%= @student.user.login_token_expiration_time %>. If the link has expired, you can request another one-time token from <a href=<%= sign_in_with_email_url %>>the sign-in page</a>.
-  </p>
+  <p><%= t('shared.login_token_expiration_warning_html', timestamp: @user.login_token_expiration_time, login_url: sign_in_with_email_url) %></p>
 <% end %>

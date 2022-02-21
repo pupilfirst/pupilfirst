@@ -27,7 +27,6 @@ class Startup < ApplicationRecord
   has_one :school, through: :course
 
   validates :name, presence: true
-  validates :level, presence: true
 
   validate :not_assigned_to_level_zero
 

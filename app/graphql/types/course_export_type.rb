@@ -5,6 +5,7 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :tags, [String], null: false
     field :reviewed_only, Boolean, null: false
+    field :include_inactive_students, Boolean, null: false
 
     def tags
       object.tag_list

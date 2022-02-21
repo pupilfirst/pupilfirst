@@ -11,11 +11,15 @@ module Users
         delete_founder_data if @user.founders.present?
         delete_coach_profile if @user.faculty.present?
         delete_course_authors if @user.course_authors.present?
+
         UserMailer.confirm_account_deletion(
           @user.name,
           @user.email,
           @user.school
         ).deliver_later
+
+        create_audit_record
+
         @user.reload.destroy!
       end
     end
@@ -53,6 +57,18 @@ module Users
 
     def delete_course_authors
       @user.course_authors.each(&:destroy!)
+    end
+
+    def create_audit_record
+      AuditRecord.create!(
+        audit_type: AuditRecord::TYPE_DELETE_ACCOUNT,
+        school_id: @user.school_id,
+        metadata: {
+          email: @user.email,
+          account_deletion_notification_sent_at:
+            @user.account_deletion_notification_sent_at&.iso8601
+        }
+      )
     end
   end
 end

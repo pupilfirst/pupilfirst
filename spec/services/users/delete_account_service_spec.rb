@@ -4,7 +4,7 @@ describe Users::DeleteAccountService do
   subject { described_class.new(user) }
 
   # Setup the basics
-  let(:user) { create :user }
+  let(:user) { create :user, account_deletion_notification_sent_at: 2.days.ago }
   let!(:student) { create :student, user: user }
   let!(:student_team) { student.startup }
   let!(:student_with_teammates) { create :founder, user: user }
@@ -122,6 +122,14 @@ describe Users::DeleteAccountService do
         expect(issued_certificate_for_user.reload.user_id).to eq(nil)
         expect(markdown_attachment_by_user.reload.user_id).to eq(nil)
         expect(course_export.reload.user_id).to eq(nil)
+
+        # Check audit record is created
+        audit_record = AuditRecord.last
+        expect(audit_record.audit_type).to eq(AuditRecord::TYPE_DELETE_ACCOUNT)
+        expect(audit_record.metadata['email']).to eq(user.email)
+        expect(
+          audit_record.metadata['account_deletion_notification_sent_at']
+        ).to eq(user.account_deletion_notification_sent_at.iso8601)
       end
     end
   end

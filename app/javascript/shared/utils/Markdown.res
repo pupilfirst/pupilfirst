@@ -10,7 +10,6 @@ let sanitize = (html, profile) => {
     DOMPurify.sanitizedHTML(
       html,
       {
-        "ALLOWED_TAGS": ["p", "em", "strong", "del", "s", "a", "sup", "sub"],
         "ADD_ATTR": ["target"],
       },
     )

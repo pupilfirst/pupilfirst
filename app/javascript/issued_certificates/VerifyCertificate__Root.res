@@ -20,11 +20,11 @@ let printCertificate = (setViewMode, _event) => {
 let heading = (currentUser, issuedCertificate) =>
   if currentUser {
     <span
-      dangerouslySetInnerHTML={DOMPurify.sanitizedHTML(
+      dangerouslySetInnerHTML={DOMPurify.sanitizedHTMLOpt(
         t(~variables=[("name", IssuedCertificate.profileName(issuedCertificate))], "heading"),
         {
-          "ALLOWED_TAGS": ["p", "em", "strong", "del", "s", "a", "sup", "sub"],
-          "ADD_ATTR": ["target"],
+          "ALLOWED_TAGS": ["strong", "br"],
+          "ADD_ATTR": ["class"],
         },
       )}
     />
@@ -62,7 +62,7 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
           </h3>
           <div
             className="text-sm mt-4"
-            dangerouslySetInnerHTML={DOMPurify.sanitizedHTML(
+            dangerouslySetInnerHTML={DOMPurify.sanitizedHTMLOpt(
               t(
                 ~variables=[
                   ("name", issuedToName(issuedCertificate)),
@@ -77,8 +77,8 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
                 "description",
               ),
               {
-                "ALLOWED_TAGS": ["p", "em", "strong", "del", "s", "a", "sup", "sub"],
-                "ADD_ATTR": ["target"],
+                "ALLOWED_TAGS": ["strong"],
+                "ADD_ATTR": ["class"],
               },
             )}
           />
@@ -112,14 +112,14 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
           <div> <i className="fas fa-exclamation-circle text-2xl text-blue-500" /> </div>
           <div
             className="ml-4 text-sm"
-            dangerouslySetInnerHTML={DOMPurify.sanitizedHTML(
+            dangerouslySetInnerHTML={DOMPurify.sanitizedHTMLOpt(
               t(
                 ~variables=[("name", IssuedCertificate.issuedTo(issuedCertificate))],
                 "originally_issued_to",
               ),
               {
-                "ALLOWED_TAGS": ["p", "em", "strong", "del", "s", "a", "sup", "sub"],
-                "ADD_ATTR": ["target"],
+                "ALLOWED_TAGS": ["strong"],
+                "ADD_ATTR": ["class"],
               },
             )}
           />

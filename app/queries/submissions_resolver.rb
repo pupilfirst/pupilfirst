@@ -119,15 +119,13 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def teams
-    @teams ||=
-      (include_inactive ? course.startups : course.startups.active).joins(
-        founders: :user
-      )
+    @teams ||= (include_inactive ? course.startups : course.startups.active)
   end
 
   def course_teams
     if search.present?
       teams
+        .joins(founders: :user)
         .where('users.name ILIKE ?', "%#{search}%")
         .or(teams.where('startups.name ILIKE ?', "%#{search}%"))
         .or(teams.where('users.email ILIKE ?', "%#{search}%"))

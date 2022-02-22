@@ -18,7 +18,8 @@ class UserMailer < SchoolMailer
     @user = user
     @updates = updates
     @school = user.school
-    subject = "#{user.school.name}: Daily Digest - #{Time.zone.now.strftime('%b %-d, %Y')}"
+    subject =
+      "#{user.school.name}: Daily Digest - #{Time.zone.now.strftime('%b %-d, %Y')}"
     simple_mail(user.email, subject)
   end
 
@@ -29,10 +30,11 @@ class UserMailer < SchoolMailer
     simple_mail(user.email, "Delete account from #{@school.name}")
   end
 
-  def confirm_account_deletion(user, school)
-    @user = user
+  def confirm_account_deletion(name, email, school)
+    @name = name
+    @email = email
     @school = school
-    simple_mail(user.email, "Account deleted successfully from #{@school.name}")
+    simple_mail(email, "Account deleted successfully from #{@school.name}")
   end
 
   def account_deletion_notification(user, sign_in_url, inactivity_months)
@@ -40,6 +42,9 @@ class UserMailer < SchoolMailer
     @school = user.school
     @inactivity_months = inactivity_months
     @sign_in_url = sign_in_url
-    simple_mail(user.email, "Your account in #{@school.name} will be deleted in 30 days")
+    simple_mail(
+      user.email,
+      "Your account in #{@school.name} will be deleted in 30 days"
+    )
   end
 end

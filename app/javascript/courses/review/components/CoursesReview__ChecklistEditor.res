@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesReview__ChecklistEditor.css")`)
+%raw(`require("./CoursesReview__ChecklistEditor.css")`)
 
 let t = I18n.t(~scope="components.CoursesReview__ChecklistEditor")
 
@@ -11,15 +11,13 @@ type state = {
 
 let str = React.string
 
-module UpdateReviewChecklistMutation = %graphql(
-  `
+module UpdateReviewChecklistMutation = %graphql(`
     mutation UpdateReviewChecklistMutation($targetId: ID!, $reviewChecklist: JSON!) {
       updateReviewChecklist(targetId: $targetId, reviewChecklist: $reviewChecklist){
         success
       }
     }
-  `
-)
+  `)
 
 let updateReviewChecklist = (targetId, reviewChecklist, setState, updateReviewChecklistCB) => {
   setState(state => {...state, saving: true})
@@ -43,13 +41,38 @@ let updateReviewChecklist = (targetId, reviewChecklist, setState, updateReviewCh
   |> ignore
 }
 
-let updateChecklistItem = (checklistItem, itemIndex, setState) => setState(state => {
+let updateChecklistItem = (checklistItem, itemIndex, setState) =>
+  setState(state => {
     ...state,
     reviewChecklist: ReviewChecklistItem.replace(checklistItem, itemIndex, state.reviewChecklist),
   })
 
 let updateChecklistItemTitle = (itemIndex, title, checklistItem, setState) =>
   updateChecklistItem(ReviewChecklistItem.updateTitle(title, checklistItem), itemIndex, setState)
+
+let moveChecklistItemUp = (itemIndex, setState) => {
+  itemIndex > 0
+    ? Some(
+        () =>
+          setState(state => {
+            ...state,
+            reviewChecklist: state.reviewChecklist |> ReviewChecklistItem.moveUp(itemIndex),
+          }),
+      )
+    : None
+}
+
+let moveChecklistItemDown = (itemIndex, setState, state) => {
+  itemIndex != Js.Array.length(state.reviewChecklist) - 1
+    ? Some(
+        () =>
+          setState(state => {
+            ...state,
+            reviewChecklist: state.reviewChecklist |> ReviewChecklistItem.moveDown(itemIndex),
+          }),
+      )
+    : None
+}
 
 let updateChecklistResultTitle = (
   itemIndex,
@@ -98,7 +121,8 @@ let addEmptyResultItem = (reviewChecklistItem, itemIndex, setState) =>
     setState,
   )
 
-let addEmptyChecklistItem = setState => setState(state => {
+let addEmptyChecklistItem = setState =>
+  setState(state => {
     ...state,
     reviewChecklist: Js.Array2.concat(state.reviewChecklist, ReviewChecklistItem.empty()),
   })
@@ -110,7 +134,8 @@ let removeChecklistResult = (itemIndex, resultIndex, reviewChecklistItem, setSta
     setState,
   )
 
-let removeChecklistItem = (itemIndex, setState) => setState(state => {
+let removeChecklistItem = (itemIndex, setState) =>
+  setState(state => {
     ...state,
     reviewChecklist: state.reviewChecklist->Js.Array2.filteri((_el, i) => i != itemIndex),
   })
@@ -130,6 +155,17 @@ let invalidChecklist = reviewChecklist =>
   )
   ->Js.Array2.filter(valid => valid)
   ->ArrayUtils.isNotEmpty
+
+let controlIcon = (~icon, ~title, ~handler) =>
+  handler == None
+    ? React.null
+    : <button
+        title
+        disabled={handler == None}
+        className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden"
+        onClick=?handler>
+        <i className={"fas fa-fw " ++ icon} />
+      </button>
 
 @react.component
 let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targetId) => {
@@ -182,12 +218,31 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                       active={invalidTitle(ReviewChecklistItem.title(reviewChecklistItem))}
                     />
                   </div>
-                  <button
-                    title={t("checklist_title.remove_button_title")}
-                    className="bg-gray-200 p-2 w-11 border border-gray-400 text-gray-700 rounded ml-2 hover:text-red-600 hover:bg-red-100 focus:outline-none"
-                    onClick={_ => removeChecklistItem(itemIndex, setState)}>
-                    <i className="fas fa-trash-alt" />
-                  </button>
+                  <div
+                    className="-mr-10 flex-shrink-0 border bg-gray-100 rounded-lg flex flex-col text-xs sticky top-0">
+                    {controlIcon(
+                      ~icon="fa-arrow-up",
+                      ~title="Move Up",
+                      ~handler=moveChecklistItemUp(itemIndex, setState) |> OptionUtils.map((
+                        cb,
+                        _,
+                      ) => cb()),
+                    )}
+                    {controlIcon(
+                      ~icon="fa-arrow-down",
+                      ~title="Move Down",
+                      ~handler=moveChecklistItemDown(
+                        itemIndex,
+                        setState,
+                        state,
+                      ) |> OptionUtils.map((cb, _) => cb()),
+                    )}
+                    {controlIcon(
+                      ~icon="fa-trash-alt",
+                      ~title="Delete",
+                      ~handler=Some(_ => removeChecklistItem(itemIndex, setState)),
+                    )}
+                  </div>
                 </div>
                 <div>
                   {ReviewChecklistItem.result(reviewChecklistItem)

@@ -25,6 +25,10 @@ let updateTitle = (title, t) => make(~title, ~result=t.result)
 
 let updateChecklist = (result, t) => make(~title=t.title, ~result)
 
+let moveUp = (index, array) => array |> ArrayUtils.swapUp(index)
+
+let moveDown = (index, array) => array |> ArrayUtils.swapDown(index)
+
 let replace = (t, itemIndex, result) =>
   result |> Array.mapi((index, item) => index == itemIndex ? t : item)
 

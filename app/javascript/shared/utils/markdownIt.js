@@ -39,7 +39,7 @@ md.use(subscriptPlugin)
   .use(linkAttributesPlugin, {
     attrs: {
       target: "_blank",
-      rel: "noopener",
+      rel: "noopener noreferrer",
     },
   })
   .use(linkifyImagesPlugin, {

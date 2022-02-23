@@ -24,7 +24,6 @@ let heading = (currentUser, issuedCertificate) =>
         t(~variables=[("name", IssuedCertificate.profileName(issuedCertificate))], "heading"),
         {
           "ALLOWED_TAGS": ["strong", "br"],
-          "ADD_ATTR": ["class"],
         },
       )}
     />
@@ -78,7 +77,6 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
               ),
               {
                 "ALLOWED_TAGS": ["strong"],
-                "ADD_ATTR": ["class"],
               },
             )}
           />
@@ -119,7 +117,6 @@ let make = (~issuedCertificate, ~verifyImageUrl, ~currentUser) => {
               ),
               {
                 "ALLOWED_TAGS": ["strong"],
-                "ADD_ATTR": ["class"],
               },
             )}
           />

@@ -1,10 +1,25 @@
-type options = {"ALLOWED_TAGS": array<string>, "ADD_ATTR": array<string>}
-type optionsTwo = {"ADD_ATTR": array<string>}
-
 @module("dompurify") external sanitize: string => string = "sanitize"
-@module("dompurify") external sanitizeHTML: (string, optionsTwo) => string = "sanitize"
+
+type options = {"ALLOWED_TAGS": array<string>}
+
 @module("dompurify") external sanitizeOpt: (string, options) => string = "sanitize"
 
-let sanitizedHTML = (html, optionsTwo) => {"__html": sanitizeHTML(html, optionsTwo)}
+let sanitizedHTML = html => {"__html": sanitize(html)}
 
 let sanitizedHTMLOpt = (html, options) => {"__html": sanitizeOpt(html, options)}
+
+@module("dompurify") external addHook: (string, Dom.node => unit) => int = "addHook"
+
+let sanitizedHTMLHook = (entryPoint, hookFunction) => {
+  addHook(entryPoint, hookFunction)
+}
+
+%%raw(`
+  sanitizedHTMLHook('afterSanitizeAttributes', function(node) {
+      // set all elements owning target to target=_blank
+      if ('target' in node) {
+          node.setAttribute('target','_blank');
+          node.setAttribute('rel', 'noopener noreferrer');
+      }
+  });
+`)

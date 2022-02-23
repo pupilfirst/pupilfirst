@@ -123,7 +123,7 @@ let modeIcon = (desiredMode, currentMode) => {
 }
 
 let modeLabel = (desiredMode, currentMode) => {
-  let label = switch (desiredMode, currentMode) {
+  switch (desiredMode, currentMode) {
   | (#Preview, Windowed(#Editor) | Fullscreen(#Editor) | Fullscreen(#Split)) =>
     t("mode_label_preview")
   | (#Preview, Windowed(#Preview) | Fullscreen(#Preview)) => t("mode_label_preview_exit")
@@ -132,8 +132,6 @@ let modeLabel = (desiredMode, currentMode) => {
   | (#Fullscreen, Windowed(_)) => t("mode_label_fullscreen")
   | (#Fullscreen, Fullscreen(_)) => t("mode_label_fullscreen_exit")
   }
-
-  label
 }
 
 let onClickFullscreen = (state, send, _event) => {

@@ -74,6 +74,32 @@ let moveChecklistItemDown = (itemIndex, setState, state) => {
     : None
 }
 
+let moveChecklistResultUp = (itemIndex, resultIndex, reviewChecklistItem, setState) => {
+  resultIndex > 0
+    ? Some(
+        () =>
+          updateChecklistItem(
+            ReviewChecklistItem.moveResultItemUp(resultIndex, reviewChecklistItem),
+            itemIndex,
+            setState,
+          ),
+      )
+    : None
+}
+
+let moveChecklistResultDown = (itemIndex, resultIndex, reviewChecklistItem, result, setState) => {
+  resultIndex != Js.Array.length(result) - 1
+    ? Some(
+        () =>
+          updateChecklistItem(
+            ReviewChecklistItem.moveResultItemDown(resultIndex, reviewChecklistItem),
+            itemIndex,
+            setState,
+          ),
+      )
+    : None
+}
+
 let updateChecklistResultTitle = (
   itemIndex,
   resultIndex,
@@ -281,19 +307,41 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                   )}
                               />
                               <div
-                                className="flex w-10 h-10 absolute top-0 right-0 mr-1 items-center justify-center">
-                                <button
-                                  title={t("checklist_item_title.remove_button_title")}
-                                  className="flex items-center justify-center bg-gray-100 w-7 h-7 mt-px text-sm text-gray-700 hover:text-red-600 hover:bg-red-100 rounded-full ml-2 border border-transparent text-center"
-                                  onClick={_ =>
-                                    removeChecklistResult(
-                                      itemIndex,
-                                      resultIndex,
-                                      reviewChecklistItem,
-                                      setState,
-                                    )}>
-                                  <Icon className="if i-times-regular" />
-                                </button>
+                                className="flex h-10 absolute top-0 right-0 mr-1 items-center justify-center">
+                                {controlIcon(
+                                  ~icon="fa-arrow-up",
+                                  ~title="Move Up",
+                                  ~handler=moveChecklistResultUp(
+                                    itemIndex,
+                                    resultIndex,
+                                    reviewChecklistItem,
+                                    setState,
+                                  ) |> OptionUtils.map((cb, _) => cb()),
+                                )}
+                                {controlIcon(
+                                  ~icon="fa-arrow-down",
+                                  ~title="Move Down",
+                                  ~handler=moveChecklistResultDown(
+                                    itemIndex,
+                                    resultIndex,
+                                    reviewChecklistItem,
+                                    reviewChecklistItem.result,
+                                    setState,
+                                  ) |> OptionUtils.map((cb, _) => cb()),
+                                )}
+                                {controlIcon(
+                                  ~icon="fa-trash-alt",
+                                  ~title={t("checklist_item_title.remove_button_title")},
+                                  ~handler=Some(
+                                    _ =>
+                                      removeChecklistResult(
+                                        itemIndex,
+                                        resultIndex,
+                                        reviewChecklistItem,
+                                        setState,
+                                      ),
+                                  ),
+                                )}
                               </div>
                             </div>
                             <textarea

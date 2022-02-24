@@ -332,11 +332,20 @@ feature 'Submission review overlay', js: true do
 
       within("div[data-checklist-item='1']") do
         within("div[data-result-item='0']") do
+          find("button[title='Move Down checklist result']").click
+        end
+        within("div[data-result-item='1']") do
+          find("button[title='Move up checklist result']").click
           find("button[title='Remove checklist result']").click
         end
       end
 
       within("div[data-checklist-item='1']") do
+        find("button[title='Move up checklist item']").click
+      end
+
+      within("div[data-checklist-item='0']") do
+        find("button[title='Move Down checklist item']").click
         find("button[title='Remove checklist item']").click
       end
 

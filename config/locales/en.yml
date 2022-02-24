@@ -405,10 +405,14 @@ en:
       checklist_item_title:
         placeholder: Add a result for this check
         remove_button_title: Remove checklist result
+        move_up_button_title: Move Up checklist result
+        move_down_button_title: Move Down checklist result
       checklist_title:
         error_message: A checklist item cannot be blank
         placeholder: Add an item to the checklist
         remove_button_title: Remove checklist item
+        move_up_button_title: Move Up checklist item
+        move_down_button_title: Move Down checklist item
       create_review_checklist: Create Review Checklist
       disabled: Disabled
       edit_review_checklist: Edit Review Checklist

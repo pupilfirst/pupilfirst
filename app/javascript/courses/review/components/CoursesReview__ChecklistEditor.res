@@ -248,7 +248,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                     className="-mr-10 flex-shrink-0 border bg-gray-100 rounded-lg flex flex-col text-xs sticky top-0">
                     {controlIcon(
                       ~icon="fa-arrow-up",
-                      ~title="Move Up",
+                      ~title={t("checklist_title.move_up_button_title")},
                       ~handler=moveChecklistItemUp(itemIndex, setState) |> OptionUtils.map((
                         cb,
                         _,
@@ -256,7 +256,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                     )}
                     {controlIcon(
                       ~icon="fa-arrow-down",
-                      ~title="Move Down",
+                      ~title={t("checklist_title.move_down_button_title")},
                       ~handler=moveChecklistItemDown(
                         itemIndex,
                         setState,
@@ -265,7 +265,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                     )}
                     {controlIcon(
                       ~icon="fa-trash-alt",
-                      ~title="Delete",
+                      ~title={t("checklist_title.remove_button_title")},
                       ~handler=Some(_ => removeChecklistItem(itemIndex, setState)),
                     )}
                   </div>
@@ -310,7 +310,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                 className="flex h-10 absolute top-0 right-0 mr-1 items-center justify-center">
                                 {controlIcon(
                                   ~icon="fa-arrow-up",
-                                  ~title="Move Up",
+                                  ~title={t("checklist_item_title.move_up_button_title")},
                                   ~handler=moveChecklistResultUp(
                                     itemIndex,
                                     resultIndex,
@@ -320,7 +320,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                 )}
                                 {controlIcon(
                                   ~icon="fa-arrow-down",
-                                  ~title="Move Down",
+                                  ~title={t("checklist_item_title.move_down_button_title")},
                                   ~handler=moveChecklistResultDown(
                                     itemIndex,
                                     resultIndex,

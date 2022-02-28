@@ -50,56 +50,6 @@ let updateChecklistItem = (checklistItem, itemIndex, setState) =>
 let updateChecklistItemTitle = (itemIndex, title, checklistItem, setState) =>
   updateChecklistItem(ReviewChecklistItem.updateTitle(title, checklistItem), itemIndex, setState)
 
-let moveChecklistItemUp = (itemIndex, setState) => {
-  itemIndex > 0
-    ? Some(
-        () =>
-          setState(state => {
-            ...state,
-            reviewChecklist: state.reviewChecklist |> ReviewChecklistItem.moveUp(itemIndex),
-          }),
-      )
-    : None
-}
-
-let moveChecklistItemDown = (itemIndex, setState, state) => {
-  itemIndex != Js.Array.length(state.reviewChecklist) - 1
-    ? Some(
-        () =>
-          setState(state => {
-            ...state,
-            reviewChecklist: state.reviewChecklist |> ReviewChecklistItem.moveDown(itemIndex),
-          }),
-      )
-    : None
-}
-
-let moveChecklistResultUp = (itemIndex, resultIndex, reviewChecklistItem, setState) => {
-  resultIndex > 0
-    ? Some(
-        () =>
-          updateChecklistItem(
-            ReviewChecklistItem.moveResultItemUp(resultIndex, reviewChecklistItem),
-            itemIndex,
-            setState,
-          ),
-      )
-    : None
-}
-
-let moveChecklistResultDown = (itemIndex, resultIndex, reviewChecklistItem, result, setState) => {
-  resultIndex != Js.Array.length(result) - 1
-    ? Some(
-        () =>
-          updateChecklistItem(
-            ReviewChecklistItem.moveResultItemDown(resultIndex, reviewChecklistItem),
-            itemIndex,
-            setState,
-          ),
-      )
-    : None
-}
-
 let updateChecklistResultTitle = (
   itemIndex,
   resultIndex,
@@ -182,16 +132,17 @@ let invalidChecklist = reviewChecklist =>
   ->Js.Array2.filter(valid => valid)
   ->ArrayUtils.isNotEmpty
 
-let controlIcon = (~icon, ~title, ~handler) =>
-  handler == None
-    ? React.null
-    : <button
-        title
-        disabled={handler == None}
-        className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden"
-        onClick=?handler>
-        <i className={"fas fa-fw " ++ icon} />
-      </button>
+let controlIcon = (~icon, ~title, ~handler, ~hidden) =>
+  ReactUtils.nullIf(
+    <button
+      title
+      disabled={hidden}
+      className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden"
+      onClick={handler}>
+      <i className={"fas fa-fw " ++ icon} />
+    </button>,
+    hidden,
+  )
 
 @react.component
 let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targetId) => {
@@ -249,24 +200,32 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                     {controlIcon(
                       ~icon="fa-arrow-up",
                       ~title={t("checklist_title.move_up_button_title")},
-                      ~handler=moveChecklistItemUp(itemIndex, setState) |> OptionUtils.map((
-                        cb,
-                        _,
-                      ) => cb()),
+                      ~handler={
+                        _ =>
+                          setState(state => {
+                            ...state,
+                            reviewChecklist: ArrayUtils.swapUp(itemIndex, state.reviewChecklist),
+                          })
+                      },
+                      ~hidden={itemIndex <= 0},
                     )}
                     {controlIcon(
                       ~icon="fa-arrow-down",
                       ~title={t("checklist_title.move_down_button_title")},
-                      ~handler=moveChecklistItemDown(
-                        itemIndex,
-                        setState,
-                        state,
-                      ) |> OptionUtils.map((cb, _) => cb()),
+                      ~handler={
+                        _ =>
+                          setState(state => {
+                            ...state,
+                            reviewChecklist: ArrayUtils.swapDown(itemIndex, state.reviewChecklist),
+                          })
+                      },
+                      ~hidden={itemIndex == Js.Array.length(reviewChecklist) - 1},
                     )}
                     {controlIcon(
                       ~icon="fa-trash-alt",
                       ~title={t("checklist_title.remove_button_title")},
-                      ~handler=Some(_ => removeChecklistItem(itemIndex, setState)),
+                      ~handler={_ => removeChecklistItem(itemIndex, setState)},
+                      ~hidden=false,
                     )}
                   </div>
                 </div>
@@ -311,36 +270,53 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                 {controlIcon(
                                   ~icon="fa-arrow-up",
                                   ~title={t("checklist_item_title.move_up_button_title")},
-                                  ~handler=moveChecklistResultUp(
-                                    itemIndex,
-                                    resultIndex,
-                                    reviewChecklistItem,
-                                    setState,
-                                  ) |> OptionUtils.map((cb, _) => cb()),
+                                  ~handler={
+                                    _ =>
+                                      updateChecklistItem(
+                                        ReviewChecklistItem.moveResultItemUp(
+                                          resultIndex,
+                                          reviewChecklistItem,
+                                        ),
+                                        itemIndex,
+                                        setState,
+                                      )
+                                  },
+                                  ~hidden={resultIndex <= 0},
                                 )}
                                 {controlIcon(
                                   ~icon="fa-arrow-down",
                                   ~title={t("checklist_item_title.move_down_button_title")},
-                                  ~handler=moveChecklistResultDown(
-                                    itemIndex,
-                                    resultIndex,
-                                    reviewChecklistItem,
-                                    reviewChecklistItem.result,
-                                    setState,
-                                  ) |> OptionUtils.map((cb, _) => cb()),
+                                  ~handler={
+                                    _ =>
+                                      updateChecklistItem(
+                                        ReviewChecklistItem.moveResultItemDown(
+                                          resultIndex,
+                                          reviewChecklistItem,
+                                        ),
+                                        itemIndex,
+                                        setState,
+                                      )
+                                  },
+                                  ~hidden={
+                                    resultIndex ==
+                                      Js.Array.length(
+                                        ReviewChecklistItem.result(reviewChecklistItem),
+                                      ) - 1
+                                  },
                                 )}
                                 {controlIcon(
                                   ~icon="fa-trash-alt",
                                   ~title={t("checklist_item_title.remove_button_title")},
-                                  ~handler=Some(
+                                  ~handler={
                                     _ =>
                                       removeChecklistResult(
                                         itemIndex,
                                         resultIndex,
                                         reviewChecklistItem,
                                         setState,
-                                      ),
-                                  ),
+                                      )
+                                  },
+                                  ~hidden=false,
                                 )}
                               </div>
                             </div>

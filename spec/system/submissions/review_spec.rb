@@ -332,24 +332,34 @@ feature 'Submission review overlay', js: true do
 
       within("div[data-checklist-item='1']") do
         within("div[data-result-item='0']") do
+          expect(page).to_not have_button('Move Up checklist result')
           find("button[title='Move Down checklist result']").click
         end
         within("div[data-result-item='1']") do
+          expect(page).to_not have_button('Move Down checklist result')
           find("button[title='Move Up checklist result']").click
           find("button[title='Remove checklist result']").click
+        end
+        within("div[data-result-item='0']") do
+          expect(page).to_not have_button('Move Up checklist result')
+          expect(page).to_not have_button('Move Down checklist result')
         end
       end
 
       within("div[data-checklist-item='1']") do
+        expect(page).to_not have_button('Move Down checklist item')
         find("button[title='Move Up checklist item']").click
       end
 
       within("div[data-checklist-item='0']") do
+        expect(page).to_not have_button('Move Up checklist item')
         find("button[title='Move Down checklist item']").click
         find("button[title='Remove checklist item']").click
       end
 
       within("div[data-checklist-item='0']") do
+        expect(page).to_not have_button('Move Down checklist item')
+        expect(page).to_not have_button('Move Up checklist item')
         find("button[title='Remove checklist item']").click
       end
 

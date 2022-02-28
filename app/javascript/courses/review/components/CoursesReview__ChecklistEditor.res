@@ -219,7 +219,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                             reviewChecklist: ArrayUtils.swapDown(itemIndex, state.reviewChecklist),
                           })
                       },
-                      ~hidden={itemIndex == Js.Array.length(reviewChecklist) - 1},
+                      ~hidden={itemIndex == Js.Array.length(state.reviewChecklist) - 1},
                     )}
                     {controlIcon(
                       ~icon="fa-trash-alt",

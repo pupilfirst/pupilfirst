@@ -11,8 +11,15 @@ module Users
         delete_founder_data if @user.founders.present?
         delete_coach_profile if @user.faculty.present?
         delete_course_authors if @user.course_authors.present?
-        UserMailer.confirm_account_deletion(@user, @user.school).deliver_later
+
+        UserMailer.confirm_account_deletion(
+          @user.name,
+          @user.email,
+          @user.school
+        ).deliver_later
+
         create_audit_record
+
         @user.reload.destroy!
       end
     end

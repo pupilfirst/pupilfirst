@@ -10,7 +10,7 @@ jobs:
       - uses: maadhattah/combine-dependabot-prs@main
         with:
           branchPrefix: "dependabot"
-          mustBeGreen: true
+          mustBeGreen: false
           combineBranchName: "combined-prs"
           ignoreLabel: "nocombine"
           baseBranch: "master"

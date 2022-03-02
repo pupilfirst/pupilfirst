@@ -132,7 +132,7 @@ let invalidChecklist = reviewChecklist =>
   ->Js.Array2.filter(valid => valid)
   ->ArrayUtils.isNotEmpty
 
-let controlIcon = (~icon, ~title, ~handler, ~hidden) =>
+let controlIcon = (~icon, ~title, ~handler, ~hidden=false) =>
   ReactUtils.nullIf(
     <button
       title
@@ -225,7 +225,6 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                       ~icon="fa-trash-alt",
                       ~title={t("checklist_title.remove_button_title")},
                       ~handler={_ => removeChecklistItem(itemIndex, setState)},
-                      ~hidden=false,
                     )}
                   </div>
                 </div>
@@ -316,7 +315,6 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                         setState,
                                       )
                                   },
-                                  ~hidden=false,
                                 )}
                               </div>
                             </div>

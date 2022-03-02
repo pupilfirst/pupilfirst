@@ -4,7 +4,7 @@ type profile =
   | Permissive
   | AreaOfText
 
-let sanitize = (html, profile) =>
+let sanitize = (html, profile) => {
   switch profile {
   | Permissive => DOMPurify.sanitizedHTML(html)
   | AreaOfText =>
@@ -15,5 +15,6 @@ let sanitize = (html, profile) =>
       },
     )
   }
+}
 
 let toSafeHTML = (markdown, profile) => parse(markdown)->sanitize(profile)

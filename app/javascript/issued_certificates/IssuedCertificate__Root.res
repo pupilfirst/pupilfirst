@@ -76,7 +76,7 @@ let qrCode = (issuedCertificate, verifyImageUrl) =>
     </div>
   }
 
-@bs.send
+@send
 external getContextWithAlpha: (Dom.element, string, {"alpha": bool}) => Webapi.Canvas.Canvas2d.t =
   "getContext"
 

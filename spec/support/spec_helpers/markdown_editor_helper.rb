@@ -17,11 +17,6 @@ module MarkdownEditorHelper
   private
 
   def delete_sequence(editor)
-    if (/darwin/ =~ RUBY_PLATFORM).present?
-      # The :command key doesn't work on OSX + Chrome.
-      ([:backspace] * editor.text.length)
-    else
-      [[:control, 'a'], :delete]
-    end
+    ([:backspace] * editor.text.length)
   end
 end

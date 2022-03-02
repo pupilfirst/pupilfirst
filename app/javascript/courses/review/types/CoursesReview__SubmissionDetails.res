@@ -5,6 +5,7 @@ module ReviewChecklistItem = CoursesReview__ReviewChecklistItem
 module SubmissionMeta = CoursesReview__SubmissionMeta
 module Coach = UserProxy
 module Reviewer = CoursesReview__Reviewer
+module SubmissionReport = CoursesReview__SubmissionReport
 
 type t = {
   submission: OverlaySubmission.t,
@@ -15,6 +16,7 @@ type t = {
   students: array<Student.t>,
   levelNumber: string,
   levelId: string,
+  submissionReport: option<SubmissionReport.t>,
   evaluationCriteria: array<EvaluationCriterion.t>,
   reviewChecklist: array<ReviewChecklistItem.t>,
   targetEvaluationCriteriaIds: array<string>,
@@ -24,6 +26,7 @@ type t = {
   courseId: string,
   preview: bool,
   reviewer: option<Reviewer.t>,
+  submissionReportPollTime: int,
 }
 
 let submission = t => t.submission
@@ -42,6 +45,8 @@ let courseId = t => t.courseId
 let createdAt = t => t.createdAt
 let preview = t => t.preview
 let reviewer = t => t.reviewer
+let submissionReport = t => t.submissionReport
+let submissionReportPollTime = t => t.submissionReportPollTime
 
 let make = (
   ~submission,
@@ -55,12 +60,14 @@ let make = (
   ~reviewChecklist,
   ~targetEvaluationCriteriaIds,
   ~inactiveStudents,
+  ~submissionReport,
   ~coaches,
   ~teamName,
   ~courseId,
   ~createdAt,
   ~preview,
   ~reviewer,
+  ~submissionReportPollTime,
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
@@ -73,12 +80,14 @@ let make = (
   reviewChecklist: reviewChecklist,
   targetEvaluationCriteriaIds: targetEvaluationCriteriaIds,
   inactiveStudents: inactiveStudents,
+  submissionReport: submissionReport,
   coaches: coaches,
   teamName: teamName,
   courseId: courseId,
   createdAt: createdAt,
   preview: preview,
   reviewer: reviewer,
+  submissionReportPollTime: submissionReportPollTime,
 }
 
 let decodeJs = details =>
@@ -110,10 +119,12 @@ let decodeJs = details =>
     ),
     ~reviewChecklist=ReviewChecklistItem.makeFromJs(details["reviewChecklist"]),
     ~coaches=Js.Array.map(Coach.makeFromJs, details["coaches"]),
+    ~submissionReport=Belt.Option.map(details["submissionReport"], SubmissionReport.makeFromJS),
     ~teamName=details["teamName"],
     ~courseId=details["courseId"],
     ~preview=details["preview"],
     ~reviewer=Belt.Option.map(details["reviewerDetails"], Reviewer.makeFromJs),
+    ~submissionReportPollTime=details["submissionReportPollTime"],
   )
 
 let updateMetaSubmission = submission => {
@@ -123,6 +134,7 @@ let updateMetaSubmission = submission => {
     ~passedAt=OverlaySubmission.passedAt(submission),
     ~evaluatedAt=OverlaySubmission.evaluatedAt(submission),
     ~feedbackSent=ArrayUtils.isNotEmpty(OverlaySubmission.feedback(submission)),
+    ~archivedAt=OverlaySubmission.archivedAt(submission),
   )
 }
 
@@ -143,4 +155,9 @@ let updateReviewChecklist = (reviewChecklist, t) => {...t, reviewChecklist: revi
 let updateReviewer = (user, t) => {
   ...t,
   reviewer: Belt.Option.map(user, Reviewer.setReviewer),
+}
+
+let updateSubmissionReport = (report, t) => {
+  ...t,
+  submissionReport: report,
 }

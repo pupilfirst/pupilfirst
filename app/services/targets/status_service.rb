@@ -15,19 +15,24 @@ module Targets
     end
 
     def status
-      reason_to_lock.presence ||
-        status_from_event.presence ||
-        STATUS_PENDING
+      reason_to_lock.presence || status_from_event.presence || STATUS_PENDING
     end
 
     private
 
     def linked_event
-      @linked_event ||= @founder.latest_submissions
-        .where(target: @target)
-        .order(created_at: :desc).find do |submission|
-        @target.individual_target? ? true : submission.founder_ids.sort == @founder.team_student_ids
-      end
+      @linked_event ||=
+        @founder
+          .latest_submissions
+          .where(target: @target)
+          .order(created_at: :desc)
+          .find do |submission|
+            if @target.individual_target?
+              true
+            else
+              submission.founder_ids.sort == @founder.team_student_ids
+            end
+          end
     end
 
     def status_from_event
@@ -38,17 +43,18 @@ module Targets
     end
 
     def reason_to_lock
-      @reason_to_lock ||= begin
-        if @target.course.ends_at&.past?
-          STATUS_COURSE_LOCKED
-        elsif @founder.startup.access_ends_at&.past?
-          STATUS_ACCESS_LOCKED
-        elsif target_level_number > founder_level_number && target_reviewed?
-          STATUS_LEVEL_LOCKED
-        else
-          prerequisites_incomplete? ? STATUS_PREREQUISITE_LOCKED : nil
+      @reason_to_lock ||=
+        begin
+          if @target.course.ends_at&.past?
+            STATUS_COURSE_LOCKED
+          elsif @founder.startup.access_ends_at&.past?
+            STATUS_ACCESS_LOCKED
+          elsif target_level_number > founder_level_number && target_reviewed?
+            STATUS_LEVEL_LOCKED
+          else
+            prerequisites_incomplete? ? STATUS_PREREQUISITE_LOCKED : nil
+          end
         end
-      end
     end
 
     def founder_level_number
@@ -66,16 +72,16 @@ module Targets
     def prerequisites_incomplete?
       applicable_targets = @target.prerequisite_targets.live
 
-      passed_prerequisites = applicable_targets.joins(timeline_events: :timeline_event_owners).where(
-        timeline_event_owners: {
-          founder_id: @founder.id,
-          latest: true
-        }
-      ).where.not(
-        timeline_events: {
-          passed_at: nil
-        }
-      )
+      passed_prerequisites =
+        applicable_targets
+          .joins(timeline_events: :timeline_event_owners)
+          .where(
+            timeline_event_owners: {
+              founder_id: @founder.id,
+              latest: true
+            }
+          )
+          .where.not(timeline_events: { passed_at: nil })
 
       passed_prerequisites.count != applicable_targets.count
     end

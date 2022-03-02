@@ -44,14 +44,23 @@ RUN rm bin/yarn
 RUN bundle exec rails assets:precompile
 
 # With precompilation done, we can move onto the final stage.
-FROM ruby:2.7.5-slim
+FROM ruby:2.7.5-slim-bullseye
 
-# We'll need the PostgreSQL client in this image.
+# We'll need a few packages in this image.
 RUN apt-get update && apt-get install -y \
+  ca-certificates \
   cron \
   curl \
-  postgresql-client \
+  gnupg \
   imagemagick \
+  && rm -rf /var/lib/apt/lists/*
+
+# We'll also need the exact version of PostgreSQL client, matching our server version, so let's get it from official repos.
+RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
+
+# Now install the exact version of the client we need.
+RUN apt-get update && apt-get install -y postgresql-client-12 \
   && rm -rf /var/lib/apt/lists/*
 
 # Let's also upgrade bundler to the same version used in the build.
@@ -74,4 +83,11 @@ ENV RAILS_ENV="production"
 
 RUN mkdir -p tmp/pids
 
+# Add Tini.
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+ENTRYPOINT ["/tini", "--"]
+
+# Run under tini to ensure proper signal handling.
 CMD [ "bundle", "exec", "puma", "-C", "config/puma.rb" ]

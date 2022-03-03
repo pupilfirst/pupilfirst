@@ -25,7 +25,7 @@ module WebhookDeliveries
 
       http = Net::HTTP.new(uri.host, uri.port)
       http.read_timeout = Rails.application.secrets.webhook_read_timeout
-      http.use_ssl = (uri.scheme == 'https' && !Rails.env.development?)
+      http.use_ssl = uri.scheme == 'https'
 
       response = http.request(request)
 
@@ -56,7 +56,7 @@ module WebhookDeliveries
            WebhookDelivery.events[:submission_graded]
         TimelineEvents::CreateWebhookDataService.new(resource).data
       when WebhookDelivery.events[:course_completed]
-        Courses::CompletedWebhookDataService.new(resource, actor).data
+        Courses::CompletionWebhookDataService.new(resource, actor).data
       else
         Rails.logger.error(
           "Could not find a data service for event #{event_type}"

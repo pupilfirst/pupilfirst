@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Courses::CompletedWebhookDataService do
+describe Courses::CompletionWebhookDataService do
   subject { described_class.new(course, user) }
   let(:course) { create :course }
   let(:level) { create :level, course: course }

@@ -1,5 +1,5 @@
 module Courses
-  class CompletedWebhookDataService
+  class CompletionWebhookDataService
     def initialize(course, user)
       @course = course
       @user = user

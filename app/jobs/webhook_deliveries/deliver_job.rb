@@ -25,7 +25,7 @@ module WebhookDeliveries
 
       http = Net::HTTP.new(uri.host, uri.port)
       http.read_timeout = Rails.application.secrets.webhook_read_timeout
-      http.use_ssl = (uri.scheme == 'https' && Rails.env.development?)
+      http.use_ssl = (uri.scheme == 'https' && !Rails.env.development?)
 
       response = http.request(request)
 

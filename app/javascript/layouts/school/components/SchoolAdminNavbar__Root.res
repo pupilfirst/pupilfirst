@@ -345,7 +345,7 @@ let make = (
             rel="nofollow"
             href="/users/sign_out">
             <i className="fas fa-sign-out-alt fa-fw text-lg" />
-            {shrunk ? React.null : <span className="ml-2"> {"Sign Out" |> str} </span>}
+            {shrunk ? React.null : <span className="ml-2"> {I18n.t("shared.sign_out") |> str} </span>}
           </a>
         </li>
       </ul>

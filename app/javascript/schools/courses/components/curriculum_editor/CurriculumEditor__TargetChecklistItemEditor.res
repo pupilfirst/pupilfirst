@@ -157,7 +157,7 @@ let controlIcon = (~icon, ~title, ~handler) =>
 
 let filesNotice =
   <div className="mt-2 text-sm">
-    <strong> {"Note:" |> str} </strong>
+    <strong> {I18n.t("shared.note") |> str} </strong>
     <span className="ml-1">
       {"Students can submit up to 3 files, limited to 5 MB each." |> str}
     </span>

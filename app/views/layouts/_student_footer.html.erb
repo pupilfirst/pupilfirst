@@ -94,10 +94,10 @@
 
         <div class="w-3/4 md:w-2/5 text-right text-xs">
           <% if presenter.privacy_policy? %>
-            <%= link_to 'Privacy Policy', agreement_path(agreement_type: 'privacy-policy'), class: "cursor-pointer mr-3 hover:text-primary-500" %>
+            <%= link_to t('shared.agreements.privacy_policy'), agreement_path(agreement_type: 'privacy-policy'), class: "cursor-pointer mr-3 hover:text-primary-500" %>
           <% end %>
           <% if presenter.terms_and_conditions? %>
-            <%= link_to 'Terms & Conditions', agreement_path(agreement_type: 'terms-and-conditions'), class: "cursor-pointer md:mr-3 hover:text-primary-500" %>
+            <%= link_to t('shared.agreements.terms_and_conditions'), agreement_path(agreement_type: 'terms-and-conditions'), class: "cursor-pointer md:mr-3 hover:text-primary-500" %>
           <% end %>
 
           <span class="text-gray-600 mt-1 md:mt-0 block md:inline-block">

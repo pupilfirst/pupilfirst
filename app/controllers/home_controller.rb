@@ -27,7 +27,12 @@ class HomeController < ApplicationController
 
     raise_not_found if @agreement_text.blank?
 
-    @agreement_type = klass.name.demodulize.titleize
+    @agreement_type = case klass.name.demodulize.titleize
+      when 'Privacy Policy'
+        t('shared.agreements.privacy_policy')
+      when 'Terms and Conditions'
+        t('shared.agreements.terms_and_conditions')
+    end
 
     render layout: 'student'
   end

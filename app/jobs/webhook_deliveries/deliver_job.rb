@@ -55,6 +55,8 @@ module WebhookDeliveries
       when WebhookDelivery.events[:submission_created],
            WebhookDelivery.events[:submission_graded]
         TimelineEvents::CreateWebhookDataService.new(resource).data
+      when WebhookDelivery.events[:course_completed]
+        Courses::CompletedWebhookDataService.new(course, resource).data
       else
         Rails.logger.error(
           "Could not find a data service for event #{event_type}"

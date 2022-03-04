@@ -132,7 +132,7 @@ let invalidChecklist = reviewChecklist =>
   ->Js.Array2.filter(valid => valid)
   ->ArrayUtils.isNotEmpty
 
-let controlIcon = (~icon, ~title, ~handler, ~hidden=false) =>
+let controlIcon = (~icon, ~title, ~hidden=false, handler) =>
   ReactUtils.nullIf(
     <button
       title
@@ -200,31 +200,31 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                     {controlIcon(
                       ~icon="fa-arrow-up",
                       ~title={t("checklist_title.move_up_button_title")},
-                      ~handler={
+                      ~hidden={itemIndex <= 0},
+                      {
                         _ =>
                           setState(state => {
                             ...state,
                             reviewChecklist: ArrayUtils.swapUp(itemIndex, state.reviewChecklist),
                           })
                       },
-                      ~hidden={itemIndex <= 0},
                     )}
                     {controlIcon(
                       ~icon="fa-arrow-down",
                       ~title={t("checklist_title.move_down_button_title")},
-                      ~handler={
+                      ~hidden={itemIndex == Js.Array.length(state.reviewChecklist) - 1},
+                      {
                         _ =>
                           setState(state => {
                             ...state,
                             reviewChecklist: ArrayUtils.swapDown(itemIndex, state.reviewChecklist),
                           })
                       },
-                      ~hidden={itemIndex == Js.Array.length(state.reviewChecklist) - 1},
                     )}
                     {controlIcon(
                       ~icon="fa-trash-alt",
                       ~title={t("checklist_title.remove_button_title")},
-                      ~handler={_ => removeChecklistItem(itemIndex, setState)},
+                      {_ => removeChecklistItem(itemIndex, setState)},
                     )}
                   </div>
                 </div>
@@ -269,7 +269,8 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                 {controlIcon(
                                   ~icon="fa-arrow-up",
                                   ~title={t("checklist_item_title.move_up_button_title")},
-                                  ~handler={
+                                  ~hidden={resultIndex <= 0},
+                                  {
                                     _ =>
                                       updateChecklistItem(
                                         ReviewChecklistItem.moveResultItemUp(
@@ -280,12 +281,17 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                         setState,
                                       )
                                   },
-                                  ~hidden={resultIndex <= 0},
                                 )}
                                 {controlIcon(
                                   ~icon="fa-arrow-down",
                                   ~title={t("checklist_item_title.move_down_button_title")},
-                                  ~handler={
+                                  ~hidden={
+                                    resultIndex ==
+                                      Js.Array.length(
+                                        ReviewChecklistItem.result(reviewChecklistItem),
+                                      ) - 1
+                                  },
+                                  {
                                     _ =>
                                       updateChecklistItem(
                                         ReviewChecklistItem.moveResultItemDown(
@@ -296,17 +302,11 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                         setState,
                                       )
                                   },
-                                  ~hidden={
-                                    resultIndex ==
-                                      Js.Array.length(
-                                        ReviewChecklistItem.result(reviewChecklistItem),
-                                      ) - 1
-                                  },
                                 )}
                                 {controlIcon(
                                   ~icon="fa-trash-alt",
                                   ~title={t("checklist_item_title.remove_button_title")},
-                                  ~handler={
+                                  {
                                     _ =>
                                       removeChecklistResult(
                                         itemIndex,

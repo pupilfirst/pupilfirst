@@ -9,6 +9,14 @@ type state = {
   saving: bool,
 }
 
+type action =
+  | SwapUpReviewChecklistItem(int)
+  | SwapDownReviewChecklistItem(int)
+  | UpdateChecklistItem(ReviewChecklistItem.t, int)
+  | AddEmptyChecklistItem
+  | RemoveChecklistItem(int)
+  | UpdateSaving
+
 let str = React.string
 
 module UpdateReviewChecklistMutation = %graphql(`
@@ -19,8 +27,8 @@ module UpdateReviewChecklistMutation = %graphql(`
     }
   `)
 
-let updateReviewChecklist = (targetId, reviewChecklist, setState, updateReviewChecklistCB) => {
-  setState(state => {...state, saving: true})
+let updateReviewChecklist = (targetId, reviewChecklist, send, updateReviewChecklistCB) => {
+  send(UpdateSaving)
 
   let trimmedChecklist = reviewChecklist->Js.Array2.map(ReviewChecklistItem.trim)
 
@@ -35,20 +43,14 @@ let updateReviewChecklist = (targetId, reviewChecklist, setState, updateReviewCh
       updateReviewChecklistCB(trimmedChecklist)
     }
 
-    setState(state => {...state, saving: false})
+    send(UpdateSaving)
     Js.Promise.resolve()
   })
   |> ignore
 }
 
-let updateChecklistItem = (checklistItem, itemIndex, setState) =>
-  setState(state => {
-    ...state,
-    reviewChecklist: ReviewChecklistItem.replace(checklistItem, itemIndex, state.reviewChecklist),
-  })
-
-let updateChecklistItemTitle = (itemIndex, title, checklistItem, setState) =>
-  updateChecklistItem(ReviewChecklistItem.updateTitle(title, checklistItem), itemIndex, setState)
+let updateChecklistItemTitle = (itemIndex, title, checklistItem, send) =>
+  send(UpdateChecklistItem(ReviewChecklistItem.updateTitle(title, checklistItem), itemIndex))
 
 let updateChecklistResultTitle = (
   itemIndex,
@@ -56,7 +58,7 @@ let updateChecklistResultTitle = (
   title,
   reviewChecklistItem,
   resultItem,
-  setState,
+  send,
 ) => {
   let newReviewChecklistItem = ReviewChecklistItem.updateChecklist(
     ReviewChecklistResult.updateTitle(
@@ -67,7 +69,7 @@ let updateChecklistResultTitle = (
     ),
     reviewChecklistItem,
   )
-  updateChecklistItem(newReviewChecklistItem, itemIndex, setState)
+  send(UpdateChecklistItem(newReviewChecklistItem, itemIndex))
 }
 
 let updateChecklistResultFeedback = (
@@ -76,7 +78,7 @@ let updateChecklistResultFeedback = (
   feedback,
   reviewChecklistItem,
   resultItem,
-  setState,
+  send,
 ) => {
   let newReviewChecklistItem = ReviewChecklistItem.updateChecklist(
     ReviewChecklistResult.updateFeedback(
@@ -87,34 +89,24 @@ let updateChecklistResultFeedback = (
     ),
     reviewChecklistItem,
   )
-  updateChecklistItem(newReviewChecklistItem, itemIndex, setState)
+  send(UpdateChecklistItem(newReviewChecklistItem, itemIndex))
 }
 
-let addEmptyResultItem = (reviewChecklistItem, itemIndex, setState) =>
-  updateChecklistItem(
-    ReviewChecklistItem.appendEmptyChecklistItem(reviewChecklistItem),
-    itemIndex,
-    setState,
+let addEmptyResultItem = (send, reviewChecklistItem, itemIndex) =>
+  send(
+    UpdateChecklistItem(
+      ReviewChecklistItem.appendEmptyChecklistItem(reviewChecklistItem),
+      itemIndex,
+    ),
   )
 
-let addEmptyChecklistItem = setState =>
-  setState(state => {
-    ...state,
-    reviewChecklist: Js.Array2.concat(state.reviewChecklist, ReviewChecklistItem.empty()),
-  })
-
-let removeChecklistResult = (itemIndex, resultIndex, reviewChecklistItem, setState) =>
-  updateChecklistItem(
-    ReviewChecklistItem.deleteResultItem(resultIndex, reviewChecklistItem),
-    itemIndex,
-    setState,
+let removeChecklistResult = (itemIndex, resultIndex, reviewChecklistItem, send) =>
+  send(
+    UpdateChecklistItem(
+      ReviewChecklistItem.deleteResultItem(resultIndex, reviewChecklistItem),
+      itemIndex,
+    ),
   )
-
-let removeChecklistItem = (itemIndex, setState) =>
-  setState(state => {
-    ...state,
-    reviewChecklist: state.reviewChecklist->Js.Array2.filteri((_el, i) => i != itemIndex),
-  })
 
 let initialStateForReviewChecklist = reviewChecklist =>
   ArrayUtils.isEmpty(reviewChecklist) ? ReviewChecklistItem.emptyTemplate() : reviewChecklist
@@ -132,6 +124,31 @@ let invalidChecklist = reviewChecklist =>
   ->Js.Array2.filter(valid => valid)
   ->ArrayUtils.isNotEmpty
 
+let reducer = (state, action) =>
+  switch action {
+  | SwapUpReviewChecklistItem(itemIndex) => {
+      ...state,
+      reviewChecklist: ArrayUtils.swapUp(itemIndex, state.reviewChecklist),
+    }
+  | SwapDownReviewChecklistItem(itemIndex) => {
+      ...state,
+      reviewChecklist: ArrayUtils.swapDown(itemIndex, state.reviewChecklist),
+    }
+  | UpdateChecklistItem(checklistItem, itemIndex) => {
+      ...state,
+      reviewChecklist: ReviewChecklistItem.replace(checklistItem, itemIndex, state.reviewChecklist),
+    }
+  | AddEmptyChecklistItem => {
+      ...state,
+      reviewChecklist: Js.Array2.concat(state.reviewChecklist, ReviewChecklistItem.empty()),
+    }
+  | RemoveChecklistItem(itemIndex) => {
+      ...state,
+      reviewChecklist: state.reviewChecklist->Js.Array2.filteri((_el, i) => i != itemIndex),
+    }
+  | UpdateSaving => {...state, saving: !state.saving}
+  }
+
 let controlIcon = (~icon, ~title, ~hidden=false, handler) =>
   ReactUtils.nullIf(
     <button
@@ -146,10 +163,14 @@ let controlIcon = (~icon, ~title, ~hidden=false, handler) =>
 
 @react.component
 let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targetId) => {
-  let (state, setState) = React.useState(() => {
-    reviewChecklist: initialStateForReviewChecklist(reviewChecklist),
-    saving: false,
-  })
+  let (state, send) = React.useReducer(
+    reducer,
+    {
+      reviewChecklist: initialStateForReviewChecklist(reviewChecklist),
+      saving: false,
+    },
+  )
+
   <div>
     <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
       <div className="flex flex-1 items-center justify-between">
@@ -187,7 +208,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                           itemIndex,
                           ReactEvent.Form.target(event)["value"],
                           reviewChecklistItem,
-                          setState,
+                          send,
                         )}
                     />
                     <School__InputGroupError
@@ -202,11 +223,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                       ~title={t("checklist_title.move_up_button_title")},
                       ~hidden={itemIndex <= 0},
                       {
-                        _ =>
-                          setState(state => {
-                            ...state,
-                            reviewChecklist: ArrayUtils.swapUp(itemIndex, state.reviewChecklist),
-                          })
+                        _ => send(SwapUpReviewChecklistItem(itemIndex))
                       },
                     )}
                     {controlIcon(
@@ -214,17 +231,13 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                       ~title={t("checklist_title.move_down_button_title")},
                       ~hidden={itemIndex == Js.Array.length(state.reviewChecklist) - 1},
                       {
-                        _ =>
-                          setState(state => {
-                            ...state,
-                            reviewChecklist: ArrayUtils.swapDown(itemIndex, state.reviewChecklist),
-                          })
+                        _ => send(SwapDownReviewChecklistItem(itemIndex))
                       },
                     )}
                     {controlIcon(
                       ~icon="fa-trash-alt",
                       ~title={t("checklist_title.remove_button_title")},
-                      {_ => removeChecklistItem(itemIndex, setState)},
+                      {_ => send(RemoveChecklistItem(itemIndex))},
                     )}
                   </div>
                 </div>
@@ -261,7 +274,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                     ReactEvent.Form.target(event)["value"],
                                     reviewChecklistItem,
                                     resultItem,
-                                    setState,
+                                    send,
                                   )}
                               />
                               <div
@@ -272,13 +285,14 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                   ~hidden={resultIndex <= 0},
                                   {
                                     _ =>
-                                      updateChecklistItem(
-                                        ReviewChecklistItem.moveResultItemUp(
-                                          resultIndex,
-                                          reviewChecklistItem,
+                                      send(
+                                        UpdateChecklistItem(
+                                          ReviewChecklistItem.moveResultItemUp(
+                                            resultIndex,
+                                            reviewChecklistItem,
+                                          ),
+                                          itemIndex,
                                         ),
-                                        itemIndex,
-                                        setState,
                                       )
                                   },
                                 )}
@@ -293,13 +307,14 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                   },
                                   {
                                     _ =>
-                                      updateChecklistItem(
-                                        ReviewChecklistItem.moveResultItemDown(
-                                          resultIndex,
-                                          reviewChecklistItem,
+                                      send(
+                                        UpdateChecklistItem(
+                                          ReviewChecklistItem.moveResultItemDown(
+                                            resultIndex,
+                                            reviewChecklistItem,
+                                          ),
+                                          itemIndex,
                                         ),
-                                        itemIndex,
-                                        setState,
                                       )
                                   },
                                 )}
@@ -312,7 +327,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                         itemIndex,
                                         resultIndex,
                                         reviewChecklistItem,
-                                        setState,
+                                        send,
                                       )
                                   },
                                 )}
@@ -335,7 +350,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                   ReactEvent.Form.target(event)["value"],
                                   reviewChecklistItem,
                                   resultItem,
-                                  setState,
+                                  send,
                                 )}
                             />
                             <School__InputGroupError
@@ -349,7 +364,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                   })
                   ->React.array}
                   <button
-                    onClick={_ => addEmptyResultItem(reviewChecklistItem, itemIndex, setState)}
+                    onClick={_ => addEmptyResultItem(send, reviewChecklistItem, itemIndex)}
                     className="checklist-editor__add-result-btn ml-2 md:ml-4 mt-3 flex items-center focus:outline-none">
                     <span
                       title={t("add_result")}
@@ -368,7 +383,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
           <div className="pt-5">
             <button
               className="flex items-center text-sm font-semibold bg-gray-200 rounded border border-dashed border-gray-600 w-full hover:text-primary-500 hover:bg-white hover:border-primary-500 hover:shadow-md focus:outline-none"
-              onClick={_ => addEmptyChecklistItem(setState)}>
+              onClick={_ => send(AddEmptyChecklistItem)}>
               <span className="bg-gray-300 py-2 w-10"> <i className="fas fa-plus text-sm" /> </span>
               <span className="px-3 py-2"> {t("add_checklist_item")->str} </span>
             </button>
@@ -379,12 +394,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
         <button
           disabled={state.saving || invalidChecklist(state.reviewChecklist)}
           onClick={_ =>
-            updateReviewChecklist(
-              targetId,
-              state.reviewChecklist,
-              setState,
-              updateReviewChecklistCB,
-            )}
+            updateReviewChecklist(targetId, state.reviewChecklist, send, updateReviewChecklistCB)}
           className="btn btn-success">
           {t("save_checklist")->str}
         </button>

@@ -3,13 +3,13 @@
     <%= image_tag 'layouts/errors/error-404.svg', class: 'md:w-3/5', alt: 'Page not found' %>
   </picture>
   <div class="max-w-3xl mx-auto text-center px-4 pb-4">
-    <h1>The page you were looking for doesn't exist!</h1>
+    <h1><%= t("errors.not_found.not_exist") %></h1>
     <p class="mt-3 text-sm leading-normal">
-      You may have mistyped the address, or the page may have moved.
+      <%= t("errors.not_found.mistyped_moved") %>
     </p>
 
     <p class="mt-1 mb-3 text-sm leading-normal">
-      Try heading back to our homepage?
+      <%= t("errors.not_found.try_homepage") %>
     </p>
   </div>
 </div>

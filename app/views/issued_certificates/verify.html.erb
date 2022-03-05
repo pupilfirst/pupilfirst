@@ -1,7 +1,7 @@
 <% presenter = IssuedCertificates::VerifyPresenter.new(self, @issued_certificate) %>
 
 <% content_for(:head) do %>
-  <title>Certificate <%= presenter.serial_number %></title>
+  <title> <%= t("shared.certificate")%> <%= presenter.serial_number %></title>
   <%= stylesheet_pack_tag 'IssuedCertificatesVerifyPack', media: nil %>
 <% end %>
 

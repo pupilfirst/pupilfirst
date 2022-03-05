@@ -1,4 +1,12 @@
 ru:
+  admin:
+    overview: Обзор
+    students: Студентов
+    coaches: Менторов
+    courses: Курсы
+    levels: Уровней
+    no_submissions: Еще нет студенческих заявок!
+    submissions_reviewed: материалов рассмотрено
   components:
     AppRouter__Dropdown:
       more: More
@@ -16,15 +24,15 @@ ru:
       sign_out: Выйти
       students: Студенты
     CoachesIndex__Root:
-      button_about: О Тренере
+      button_about: О Менторе
       button_connect: Подключиться
       filter_input_label: Фильтрировать по
       filter_input_placeholder: Найти по названию или выберать курс
       filter_label_name_like: Имя Как
       filter_label_teaches_course: Обучает Курсу
-      filter_result_empty: Примененные вами фильтры не соответствуют ни одному тренеру. Пожалуйста, измените фильтр и попробуйте еще раз.
+      filter_result_empty: Примененные вами фильтры не соответствуют ни одному ментору. Пожалуйста, измените фильтр и попробуйте еще раз.
       filter_search_string_course: обучает курс %{name}
-      heading: Тренера
+      heading: Менторы
     CommunitiesShow__Root:
       all_categories_button: Все Категории
       button_load_more: Загрузить Больше...
@@ -43,6 +51,8 @@ ru:
       topic_stats_views: Посмотреть
       topics_fully_loaded_text: Показать все %{total_topics} темы
       topics_partially_loaded_text: Показано %{loaded_topics_count} из %{total_topics} тем
+    courses:
+      apply_now: Поступить Сейчас
     CourseApplicants__EditForm:
       access_ends_at:
         help: Если установлено, учащиеся не смогут выполнять задания после этой даты.
@@ -68,7 +78,7 @@ ru:
         label: Теги
       title:
         label: Заголовок
-        placeholder: Студент, тренер, генеральный директор и т.д.
+        placeholder: Студент, ментор, генеральный директор и т.д.
     CourseApplicants__Root:
       applicants_fully_loaded_text: Показаны все  %{total_applicants} кандидатов
       applicants_page_title: Кандидаты
@@ -137,7 +147,7 @@ ru:
       course_links:
         download_reports: Загрузить Отчеты
         edit_curriculum: Редактировать Силлабус
-        manage_coaches: Управлять Тренерами
+        manage_coaches: Управлять Менторами
         manage_students: Управлять Студентами
         view_as_student: Посмотреть как Студент
       courses_fully_loaded_text: Показаны все %{total_courses} курсы
@@ -202,7 +212,7 @@ ru:
         help: Вы можете отправить URL курса кандидатам после того, как они подадут заявку на курс.
         label: Хотите ли вы обработать информацию о кандидатах перед их зачислением?
       progression_behavior:
-        help: Это применимо только в том случае, если ваш курс имеет контрольные задачи, требующие от студентов представления своей работы на рассмотрение тренерам.
+        help: Это применимо только в том случае, если ваш курс имеет контрольные задачи, требующие от студентов представления своей работы на рассмотрение менторам.
         label: Успешность
         limited:
           description_end: " без рассмотрения отправленных материалов.."
@@ -276,7 +286,7 @@ ru:
       edit_target_button_title: Редактировать Задачу %{title}
       empty_level_content_notice: На этом уровне нет опубликованного контента.
       issued_certificate_button: Посмотреть Сертификат
-      issued_certificate_heading: Поздравляю! Вам выдан сертификат.
+      issued_certificate_heading: Поздравляем, вам выдан сертификат!
       level_locked: Уровень закрыт
       level_locked_explanation: Вы можете получить доступ к контенту %{date}.
       level_locked_for_students_notice: Этот уровень по-прежнему заблокирован для учащихся и будет разблокирован <strong>%{date}</strong>.
@@ -302,14 +312,14 @@ ru:
       course_ended_description: Курс завершен, и отправка материалов отключена для всех задачах!
       course_ended_title: Курс Окончен
       level_up_blocked:
-        body_middle_pending_review: "все еще ожидают рассмотрения тренером. "
+        body_middle_pending_review: "все еще ожидают рассмотрения ментором. "
         body_middle_rejected: "были отклонены. "
         body_prefix: "Вы отправили все контрольные задачи на уровне %{number}, но еще остались задачи"
         body_suffix: Вам нужен проходной балл по всем контрольным показателям для повышения уровня.
         title_pending_review: Ожидает оценки
         title_rejected: Поднятие Уровня Блокирован
       level_up_description: Поздравляем! Вы успешно выполнили все контрольные задачи, необходимые для перехода на следующий уровень курса. Нажмите кнопку «Поднять уровень» ниже, чтобы продолжить изучение курса.
-      level_up_limited_description: Вы на Уровне %{currentLevel}, но у вас остались задачи на уровне %{minimumRequiredLevel} которые были отклонены или все еще ожидают рассмотрения тренером. Вам нужно будет пройти все этапы на Уровне %{minimumRequiredLevel} чтобы продолжать повышать уровень.
+      level_up_limited_description: Вы на Уровне %{currentLevel}, но у вас остались задачи на уровне %{minimumRequiredLevel} которые были отклонены или все еще ожидают рассмотрения ментором. Вам нужно будет пройти все этапы на Уровне %{minimumRequiredLevel} чтобы продолжать повышать уровень.
       level_up_limited_title: Повышение Уровня Заблокировано
       level_up_title: Готовы к повышению!
       preview_mode_description: Вы входите в режим предварительного просмотра курса
@@ -353,9 +363,9 @@ ru:
       course_completed: Курс Пройден!
       incomplete_targets: "Незавершены: %{targetsCount}"
       level_progress: Прогресс Провня
-      personal_coaches: Персональные Тренера
+      personal_coaches: Персональные Менторы
       quiz: Тест
-      schedule_coaching_session: Запланировать сеанс с тренером
+      schedule_coaching_session: Запланировать сеанс с ментором
       targets_completed: "Завершены: %{targetsCount}"
       targets_overview: Обзор задач
       targets_pending_review: "Pending Review: %{targetsCount}"
@@ -406,12 +416,12 @@ ru:
       add_another_feedback: Добавить еще один отзыв
       add_feedback: Добавить отзыв
       add_your_feedback: Добавьте свой отзыв
-      assigned_coaches: Назначенные тренеры
+      assigned_coaches: Назначенные менторы
       assigned_to: Назначен к
       close: закрыть
       close_submission_warning: Вы уверены, что хотите закрыть отправку без сохранения?
       create_review_checklist: Создать список для проверки
-      deleted_coach: Удаленные тренеры
+      deleted_coach: Удаленные менторы
       evaluated_at: на %{evaluated_at}
       evaluated_by: Оценен от
       feedback: Отзыв
@@ -422,7 +432,7 @@ ru:
           done: Выполнено!
           done_description: Других подобных работ нет.
       grade_card: Оценочная Карта
-      help_text: Заметки можно использовать для отслеживания прогресса %{note_about}. Эти заметки показываются только тренерам в отчете студента. %{additional_help}
+      help_text: Заметки можно использовать для отслеживания прогресса %{note_about}. Эти заметки показываются только менторам в отчете студента. %{additional_help}
       level_acronym: У
       note_help: "Хотели бы вы написать об этом заметку "
       note_placeholder: Заметили ли вы что-то при рассмотре данной работы?
@@ -466,15 +476,15 @@ ru:
         reviewed_by: Фильтровать по тем, кто просмотрел работу
       filter_by: "Фильтровать по:"
       filter_by_another_level: Фильтр по другому уровню
-      filter_by_another_level_or_submissions_assigned: Фильтровать по другому уровню или показать только работы, назначенные тренеру
+      filter_by_another_level_or_submissions_assigned: Фильтровать по другому уровню или показать только работы, назначенные ментору
       filter_by_level: Фильтровать по уровню
-      filter_by_level_or_submissions_assigned: Фильтровать по уровню или показать только работы, назначенные тренеру
+      filter_by_level_or_submissions_assigned: Фильтровать по уровню или показать только работы, назначенные ментору
       filter_by_target: Фильтровать по целям
       filter_hint: ... или начните вводить текст, чтобы фильтровать учащегося по имени или адресу электронной почты
       filter_input:
         assigned_to: "Назначен: "
         level: "Уровень: "
-        personal_coach: "Личный Тренер: "
+        personal_coach: "Личный Ментор: "
         reviewed_by: "Оценен от: "
         target: "Задача: "
       inactive_students: Неактивные Студенты
@@ -485,7 +495,7 @@ ru:
       now_showing_submissions_assigned_to: Теперь отображаются материалы, назначенные %{name}.
       now_showing_submissions_from_all_students: Теперь отображаются работы всех студентов этого курса.
       pending: Ожидаются
-      personal_coach: Личный Тренер
+      personal_coach: Личный Ментор
       review: Оценить
       reviewed: Оценено
       reviewed_at: Оценено в
@@ -493,7 +503,7 @@ ru:
       search:
         assigned_to: "Назначен:"
         level: "Уровень:"
-        personal_coach: "личный тренер:"
+        personal_coach: "личный ментор:"
         reviewed_by: "оценен:"
         status: "статус: "
         target: "задача:"
@@ -528,12 +538,12 @@ ru:
       level_progress: Прогресс Уровня
       notes: Заметки
       other_team_members: Другие Члены Команды
-      personal_coaches: Личные Тренера
+      personal_coaches: Личные Менторы
       quiz: Тест
       submissions: Работы
       targets: " Задачи"
       targets_overview: Обзор Задач
-      team_coaches: Тренера Команд
+      team_coaches: Менторы Команд
       total_targets_completed: Всего целей выполнено
     CurriculumEditor:
       create_level: Создать Уровень
@@ -610,12 +620,12 @@ ru:
       select_criterion_warning: По крайней мере, один должен быть выбран
       selected_all_targets: Вы выбрали все задачи
       take_quiz: Пройдите тест, чтобы выполнить задачу.
-      target_checklist_help_text: Это шаги, которые студент должен выполнить, чтобы отправить работу по задаче. Эта информация будет показана тренеру для ознакомления.
+      target_checklist_help_text: Это шаги, которые студент должен выполнить, чтобы отправить работу по задаче. Эта информация будет показана ментору для ознакомления.
       target_checklist_label: Какие шаги должен предпринять ученик для достижения этой цели?
       target_checklist_limit_warning: Максимально допустимое количество элементов списка - 15!
       target_group: Группа задач
       target_method_of_completion_label: Как вы хотите, чтобы ученик выполнил задание?
-      target_reviewed_by_coach: Будет ли тренер проверять работы по этой задаче?
+      target_reviewed_by_coach: Будет ли ментор проверять работы по этой задаче?
       target_role_help: Должны ли студенты в команде подавать работу над задачей индивидуально или вместе?
       target_role_label: Как командам следует решать эту задачу?
       target_title_placeholder: Введите название задачи здесь
@@ -652,7 +662,7 @@ ru:
         applicants: Кандидаты
         authors: Авторы
         certificates: Сертификаты
-        coaches: Тренера
+        coaches: Менторы
         curriculum: Силлабус
         evaluation_criteria: Критерии Оценивания
         exports: Экспорты
@@ -817,6 +827,9 @@ ru:
       subscribe: Подписаться
       subscribed_on_another_device: Подписаться на этом Устройстве
       unsubscribe: Отписаться
+  communities:
+    new_topic: Новая Тема
+    welcome: Добро пожаловать в
   courses:
     apply:
       apply_button: Применить
@@ -826,6 +839,7 @@ ru:
       name_label: Имя
       name_placeholder: John Doe
       page_title: Регистрация в %{course_name}
+    enroll: Зарегистрироваться в
     show:
       continue_course: Продолжить Курс
       preview_course: Предварительный просмотр курса
@@ -838,7 +852,29 @@ ru:
         target: Целевая панель будет иметь имя задачи и ее статус завершения. Щелкнув цель, вы получите подробную информацию о цели, статусе и кнопке отправки цели.
         target_group: В ваших целевых группах будут перечислены все цели вместе со статусом завершения.
         target_status: Это указывает на текущий статус цели.
+  enrollment:
+    activate: Активируйте свою учетную запись и войдите
+    welcome_to: Добро Пожаловать в
+    hello: Привет
+    to_activate: Для активации вашего аккаунта %{school_name} и зарегистрироваться в курс %{course_name}, пожалуйста, подтвердите ваш адрес электронной почты. Нажимая на данную <strong>одноразовую ссылку</strong>, мы проверим подлинность ваш адрес электронной почты и подтвердим, что вы хотите создать учетную запись на %{school_name}.
+    verify: Воспользуйтесь этой <strong>одноразовой ссылкой</strong>, чтобы подтвердить свой адрес электронной почты и войти в %{school_name}!
   errors:
+    internal:
+      went_wrong: Извините, что-то пошло не так.
+      details: Похоже, наш сервер столкнулся с проблемой при попытке обработать ваш запрос. Мы автоматически отслеживаем эти ошибки, но если проблема не устранена, не стесняйтесь обращаться к нам. А пока попробуйте перезагрузить страницу.
+    not_acceptable:
+      details: Похоже, ваш браузер запросил ответ в формате, который наш сервер не может обработать. Мы автоматически отслеживаем эти ошибки, но если проблема не устранена, не стесняйтесь обращаться к нам. А пока попробуйте перезагрузить страницу.
+      invalid_format: Ваш браузер запросил недопустимый формат.
+    not_found:
+      not_exist: Страница, которую вы искали, не существует!
+      mistyped_moved: Возможно, вы ошиблись адресом или страница переехала.
+      try_homepage: Попробуйте вернуться на нашу домашнюю страницу.
+    service_unavailable:
+      too_long: Эта страница загружалась слишком долго.
+      try_reloading: Не могли бы вы попробовать перезагрузить страницу?
+    unprocessable_entity:
+      invalid_request: Your browser made an invalid request.
+      wasnt_valid: <em>Something</em> about the request that your browser sent wasn&rsquo;t valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
     messages:
       content_type_invalid: имеет недопустимый тип содержимого
       limit_out_of_range: общее количество вне допустимого диапазона
@@ -846,6 +882,17 @@ ru:
     concerns:
       validate_submission_gradable:
         owners_should_be_active_error: Невозможно обновить неактивные работы учащихся.
+  faculty:
+    coaches_at: Менторы в
+  footer:
+    sitemap: Карта Сайта
+    contact: Контакты
+    social: Соц. Сети
+    privacy_policy: Политика Конфиденциальности
+    terms_conditions: Правила и Условия
+    reach_us: Свяжитесь с нами по
+  help:
+    help: Помощь
   home:
     index:
       course_status:
@@ -862,9 +909,9 @@ ru:
         new_name: "%{name} - копия"
     notifications:
       post_created_job:
-        post_created: "%{user_name} ответил в чате, в котором вы состоите в сообществе %{community_name}"
+        post_created: "%{user_name} ответил(-а) в чате, в котором вы состоите в сообществе %{community_name}"
       topic_created_job:
-        topic_created: "%{user_name} создал новую тему в сообществе %{community_name}"
+        topic_created: "%{user_name} создал(-а) новую тему в сообществе %{community_name}"
     targets:
       send_session_feedback_notification:
         message: |
@@ -899,6 +946,8 @@ ru:
           needs_improvement: "Ваша команда <%{startup_url}|%{startup_name}> имеет новую запись на таймлайне: (<%{event_url}|%{event_title}>) и был отмечен как 'нуждается в улучшении'. Пожалуйста, отправьте новое и измененное мероприятие временной шкалы на основе отзывов"
           not_accepted: Ваша новая запись на таймлайне (<%{event_url}|%{event_title}>) отправленная вашей командой <%{startup_url}|%{startup_name}> не был принят. Отредактируйте и повторно отправьте измененное событие временной шкалы на основе отзыва
           verified: "Ваша команда <%{startup_url}|%{startup_name}> есть новая подтвержденная запись на таймлайне: <%{event_url}|%{event_title}>"
+  link_fallback:
+    link_fallback: "Если вы не можете перейти по ссылке выше, пожалуйста, скопируйте и вставьте следующую ссылку в адресную строку вашего браузера:"
   models:
     faculty:
       commitment:
@@ -912,7 +961,7 @@ ru:
     archive_course:
       success_notification: Курс успешно заархивирован.
     assign_reviewer:
-      submission_already_assigned: Данная работа уже назначена тренеру.
+      submission_already_assigned: Данная работа уже назначена ментору.
       submission_graded_error: Вы можете назначить себя только участникам, ожидающим рассмотрения.
       success_notification: Данная работа была назначена вам.
     auto_verify_submission:
@@ -965,9 +1014,9 @@ ru:
     unarchive_course:
       success_notification: Курс успешно разархивирован
     unassign_reviewer:
-      submission_assigned_to_another_coach: Работа передана другому тренеру.
+      submission_assigned_to_another_coach: Работа передана другому ментору.
       submission_graded_error: Эта работа уже была оценена.
-      submission_not_assigned: Работа еще не назначена тренерам.
+      submission_not_assigned: Работа еще не назначена менторам.
       success_notification: Вы больше не назначены для этой работы.
     undo_grading:
       must_be_graded: Не удалось найти оцененную работу с заданным идентификатором ID.
@@ -990,10 +1039,21 @@ ru:
       success_notification: Задача обновлена успешна!
       target_group_not_present_error: Группа задач не существуеш
       target_missing_error: Задачи не существует
+  navbar:
+    dashboard: Обучение
+    admin: Администрация
+    home: Главная
+    coaches: Менторы
   offline:
     heading: Вы не в сети!
     message: Похоже, возникла проблема с вашим подключением. <br/> Проверьте статус вашей сети.
     title: Вы не в сети
+  posts:
+    back_to_post: Back to Post
+    edit_history: Post Edit History
+    current_version: Current Version
+    edited_by: Edited by
+    created_by: Created by
   queries:
     delete_certificate_mutator:
       issued_error: Этот сертификат выдан одному или нескольким студентам - его нельзя удалить.
@@ -1041,7 +1101,9 @@ ru:
     _yes: "Да"
     all: Все
     cancel: Отмена
+    certificate: Сертификат
     close: Закрыть
+    coaches: Менторы
     done_exclamation: Выполнено!
     file_invalid: Пожалуйста, выберите файл размером менее 5 МБ.
     image_file_invalid: Выберите изображение (PNG, JPEG, GIF) размером менее 5 МБ и не более 4096 пикселей в ширину или в высоту.
@@ -1053,8 +1115,21 @@ ru:
       short_with_name: "У%{number}: %{name}"
       short_without_name: У%{number}
     optional: необязательно
+    or: ИЛИ
     privacy_policy: Политика конфиденциальности
     save_changes: Сохранить изменения
     saving: Сохраняем...
+    school: Школа
+    settings: Settings
     target: Задача
     terms_and_conditions: Условия и Положения
+  users:
+    oauth:
+      invalid_request: Ваш браузер сделал неверный запрос.
+      details: <em>Что-то</em> в запросе, отправленном вашим браузером, было недействительным. Мы автоматически отслеживаем эти ошибки, но если проблема не устранена, не стесняйтесь обращаться к нам. А пока попробуйте перезагрузить страницу.
+    sessions:
+      email: Продолжить через почту
+      email_address: Адрес Электронной Почты
+      password: Пароль
+      password_new: Установить Новый Пароль
+      shared: Вы используете общее устройство?

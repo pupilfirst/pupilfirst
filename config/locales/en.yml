@@ -1,4 +1,12 @@
 en:
+  admin:
+    overview: Overview
+    students: Students
+    coaches: Coaches
+    courses: Courses
+    levels: Levels
+    no_submissions: No student submissions yet!
+    submissions_reviewed: submissions reviewed
   components:
     AppRouter__Dropdown:
       more: More
@@ -52,7 +60,7 @@ en:
         label: Affiliation
         placeholder: Acme Inc., Acme University, etc.
       email:
-        label: Email
+        label: Emai l
         placeholder: Student email here
       name:
         error: is not valid
@@ -69,6 +77,8 @@ en:
       title:
         label: Title
         placeholder: Student, Coach, CEO, etc.
+    courses:
+      apply_now: Apply Now
     CourseApplicants__Root:
       applicants_fully_loaded_text: Showing all %{total_applicants} applicants
       applicants_page_title: Applicants
@@ -843,6 +853,9 @@ en:
       subscribe: Subscribe
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe
+  communities:
+    new_topic: New Topic
+    welcome: Welcome to the
   courses:
     apply:
       apply_button: Apply
@@ -852,6 +865,7 @@ en:
       name_label: Name
       name_placeholder: John Doe
       page_title: Enroll to %{course_name}
+    enroll: Enroll to
     show:
       continue_course: Continue Course
       preview_course: Preview Course
@@ -864,15 +878,48 @@ en:
         target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, the status and the target submission button.
         target_group: Your target groups will have all the targets listed along with its completion status.
         target_status: This indicates the present status of the target.
+  enrollment:
+    activate: Activate your account and sign in
+    welcome_to: Welcome to
+    hello: Hello
+    to_activate: To activate your %{school_name} account, and enroll to the %{course_name} course, please verify your email address. Clicking on this <strong>one-time link</strong> will verify your email-address and confirm that you wish to create an account at %{school_name}.
+    verify: Use this <strong>one-time link</strong> to verify your email address and sign into %{school_name}!
   errors:
+    internal:
+      went_wrong: We're sorry, but something went wrong.
+      details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+    not_acceptable:
+      details: It looks like your browser requested a response in a format that our server cannot fulfil. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+      invalid_format: Your browser requested an invalid format.
+    not_found:
+      not_exist: The page you were looking for doesn't exist!
+      mistyped_moved: You may have mistyped the address, or the page may have moved.
+      try_homepage: Try heading back to our homepage?
+    service_unavailable:
+      too_long: This page took too long to load.
+      try_reloading: Could you please try reloading this page?
+    unprocessable_entity:
+      invalid_request: Your browser made an invalid request.
+      wasnt_valid: <em>Something</em> about the request that your browser sent wasn&rsquo;t valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
     messages:
       content_type_invalid: has an invalid content type
       limit_out_of_range: total number is out of range
+  faculty:
+    coaches_at: Coaches at
+  footer:
+    sitemap: Sitemap
+    contact: Contact
+    social: Social
+    privacy_policy: Privacy Policy
+    terms_conditions: Terms & Conditions
+    reach_us: Reach us at
   graphql:
     concerns:
       validate_submission_gradable:
         owners_should_be_active_error: Cannot update inactive student submissions.
         submission_should_be_live: Such a submission does not exist, or it has been archived.
+  help:
+    help: Help
   home:
     index:
       course_status:
@@ -926,6 +973,8 @@ en:
           needs_improvement: "Your team <%{startup_url}|%{startup_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
           not_accepted: The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your team <%{startup_url}|%{startup_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback
           verified: "Your team <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
+  link_fallback:
+    link_fallback: "If you&rsquo;re unable to click the link above, please copy and paste the following link into your browser&rsquo;s address bar:"
   models:
     faculty:
       commitment:
@@ -1021,10 +1070,21 @@ en:
       success_notification: Target updated successfully!
       target_group_not_present_error: Target group does not exist
       target_missing_error: Target does not exist
+  navbar:
+    dashboard: Dashboard
+    admin: Admin
+    home: Home
+    coaches: Coaches
   offline:
     heading: You are offline!
     message: It seems there is a problem with your connection.<br/>Please check your network status.
     title: You are offline
+  posts:
+    back_to_post: Back to Post
+    edit_history: Post Edit History
+    current_version: Current Version
+    edited_by: Edited by
+    created_by: Created by
   queries:
     delete_certificate_mutator:
       issued_error: This certificate has been issued to one or more students - it cannot be deleted.
@@ -1072,7 +1132,9 @@ en:
     _yes: "Yes"
     all: All
     cancel: Cancel
+    certificate: Certificate
     close: Close
+    coaches: Coaches
     done_exclamation: Done!
     file_invalid: Please select a file with a size less than 5 MB.
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
@@ -1084,10 +1146,26 @@ en:
       short_with_name: "L%{number}: %{name}"
       short_without_name: L%{number}
     optional: optional
+    or: OR
     privacy_policy: Privacy Policy
     save_changes: Save Changes
     processing: Processing
     saving: Saving...
+    school: School
+    settings: Settings
     target: Target
     terms_and_conditions: Terms & Conditions
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
+  users:
+    oauth:
+      invalid_request: Your browser made an invalid request.
+      details: <em>Something</em> about the request that your browser sent wasn&rsquo;t valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+    sessions:
+      email: Continue with email
+      email_address: Email Address
+      password: Password
+      password_new: Set a New Password
+      shared: Are you using a shared device?
+      password_free: Password-free sign in
+      magic_link: We can email you a magic link so you can sign in without having to type your password.
+      oauth: Sign in with Google, Facebook, or Github

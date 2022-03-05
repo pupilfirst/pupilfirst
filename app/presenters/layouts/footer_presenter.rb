@@ -5,7 +5,7 @@ module Layouts
     end
 
     def nav_links
-      footer_links = current_user.present? ? [{ title: 'Home', url: '/' }, { title: 'Dashboard', url: '/dashboard' }] : []
+      footer_links = current_user.present? ? [{ title: I18n.t("navbar.home"), url: '/' }, { title: I18n.t("navbar.dashboard"), url: '/dashboard' }] : []
 
       custom_links = SchoolLink.where(
         school: current_school,

@@ -108,7 +108,7 @@ ru:
       name_placeholder: Имя для идентификации этого сертификата
       success_notification: Теперь вы можете редактировать этот сертификат.
     CourseCertificates__EditDrawer:
-      active_help: Хотя у вас может быть несколько сертификатов, только один может быть выдан автоматически; он будет выдан, когда студент <em>окончит</em> курс.
+      active_help: Хоть у вас может быть несколько сертификатов, только один может быть выдан автоматически; он будет выдан, когда студент <em>окончит</em> курс.
       active_label: Следует ли студентам автоматически выдавать этот сертификат?
       cannot_be_auto_issued_warning: Обратите внимание, что последний уровень этого курса не имеет каких-либо контрольных задач. Этот сертификат будет автоматически выдан только в том случае, если на последнем уровне есть хотя бы одна задача.
       edit_action: Редактировать Сертификат
@@ -362,7 +362,7 @@ ru:
       average_quiz_score: Средний Балл за Тесты
       course_completed: Курс Пройден!
       incomplete_targets: "Незавершены: %{targetsCount}"
-      level_progress: Прогресс Провня
+      level_progress: Прогресс Уровня
       personal_coaches: Персональные Менторы
       quiz: Тест
       schedule_coaching_session: Запланировать сеанс с ментором
@@ -783,9 +783,9 @@ ru:
       new_reply_button: Ответить
       solution_icon_label: Решение
     TopicsShow__Root:
-      edit_topic_button: Редактировать Тему
+      edit_topic_button: Редактировать
       linked_target_label: "Связанная Задача: "
-      lock_topic_button: Заблокировать Тему
+      lock_topic_button: Заблокировать
       locked_topic_notice: Эта тема заблокирована; публиковать новые ответы нельзя.
       topic_category_label: "Категория Темы: "
       topic_editor_cancel_button: Отмена
@@ -1104,6 +1104,7 @@ ru:
     certificate: Сертификат
     close: Закрыть
     coaches: Менторы
+    customization: Кастомизация
     done_exclamation: Выполнено!
     file_invalid: Пожалуйста, выберите файл размером менее 5 МБ.
     image_file_invalid: Выберите изображение (PNG, JPEG, GIF) размером менее 5 МБ и не более 4096 пикселей в ширину или в высоту.

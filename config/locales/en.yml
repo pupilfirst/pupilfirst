@@ -1135,6 +1135,7 @@ en:
     certificate: Certificate
     close: Close
     coaches: Coaches
+    customization: Customization
     done_exclamation: Done!
     file_invalid: Please select a file with a size less than 5 MB.
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.

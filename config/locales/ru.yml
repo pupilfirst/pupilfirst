@@ -141,6 +141,25 @@ ru:
         other: Выдавался %{count} раз
         zero: Никогда не выдавался
       no_certificates: Вы еще не создали ни одного сертификата!
+    CoursesExport__Root:
+      reviewed_only_tag: Только Рассмотренные Подачи
+      include_inactive_students_tag: Включая еактивных студентов
+      create_action: Создать Новый Экспорт
+      heading: Экспорты
+      no_exports_notice: Вы еще ничего не экспортировали!
+      create_action_button: Экспорт данных курса
+      export_type_label: Пожалуйста, выберите тип экспорта
+      students_label: Студенты
+      teams_label: Команды
+      export_tags_label: Экспортировать только студентов со следующими тегами
+      export_targets_label: Какие задачи должен включать экспорт?
+      all_targets_label: Все задачи
+      reviewed_only_targets_label: Только цели с проверенными подачами
+      students_to_include_label: Выберите учащихся для включения в экспорт курса
+      active_students_label: Активные Студенты
+      all_students_label: Все Студенты
+      create_button_text: Создать Экспорт
+      create_button_active_label: Составляем Экспорт...
     CourseEditor:
       add_new_course: Добавить новый курс
       button_load_more: Загрузить Больше Курсов...
@@ -193,10 +212,8 @@ ru:
         label: Описание курса
         placeholder: Краткое описание этого курса
       course_end_date:
-        error_message: Требуется описание (2–150 знаков)
         help: Если указано, курс будет показан как закрыт для студентов в эту дату. Студенты больше не смогут подавать заявки.
         label: Дата окончание курса
-        placeholder: Краткое описание этого курса
       course_highlights:
         label: Основные моменты курса
       course_name:
@@ -247,7 +264,6 @@ ru:
       cover_image:
         error_message: должен быть в формате JPEG/PNG размером менее 2 МБ.
         help: Обложка будет отображаться в верхней части всех студенческих страниц в рамках курса, а также в качестве заголовка некоторых электронных писем по курсу.
-
         label: Обложка
       empty_image_label: Пожалуйста, выберите файл изображения.
       image_label:
@@ -444,6 +460,16 @@ ru:
       save_grades_and_send_feedback: Сохранить оценки и отправить отзыв
       share_feedback: Поделиться Отзывом
       show_review_checklist: Показать список оценок
+      report_status_string:
+        queued: Автоматические тесты поставлены в очередь
+        in_progress: Автоматические тесты в ходе выполнения
+        completed:
+          success: Все автоматические тесты прошли успешно
+          failure: Некоторые автоматические тесты не прошли
+          error: Автоматические тесты не могут быть завершены из-за ошибок
+      show_test_report_button: Показать Отчет Тестов
+      hide_test_report_button: Скрыть Отчет Тестов
+      report_description: Отчет Тестов
       status:
         completed: Выполнен
         pending_review: Ожидает оценки
@@ -882,6 +908,7 @@ ru:
     concerns:
       validate_submission_gradable:
         owners_should_be_active_error: Невозможно обновить неактивные работы учащихся.
+        submission_should_be_live: Такой подачи не существует, или оно было заархивировано.
   faculty:
     coaches_at: Менторы в
   footer:
@@ -960,6 +987,10 @@ ru:
   mutations:
     archive_course:
       success_notification: Курс успешно заархивирован.
+    export_course_report:
+      course_not_found_error: Не удалось найти курс с указанным идентификатором
+      tag_not_found_error: Не удалось найти теги с указанными идентификаторами
+      success_notification: Ваш экспорт обрабатывается. Мы сообщим вам, как только он будет готов.
     assign_reviewer:
       submission_already_assigned: Данная работа уже назначена ментору.
       submission_graded_error: Вы можете назначить себя только участникам, ожидающим рассмотрения.
@@ -1097,6 +1128,10 @@ ru:
       submit_button: Запросить сброс пароля
       subtitle: Введите свой адрес электронной почты для восстановления пароля.
   shared:
+    agreements:
+      privacy_policy: Политика Конфиденциальности
+      terms_and_conditions: Условия и Положения
+      note: " Менторы в вашей школе имеют доступ ко всем сообществам."
     _no: "Нет"
     _yes: "Да"
     all: Все
@@ -1105,6 +1140,9 @@ ru:
     close: Закрыть
     coaches: Менторы
     customization: Кастомизация
+    edit: Редактировать
+    sign_out: Выйти
+    note: "Примечание:"
     done_exclamation: Выполнено!
     file_invalid: Пожалуйста, выберите файл размером менее 5 МБ.
     image_file_invalid: Выберите изображение (PNG, JPEG, GIF) размером менее 5 МБ и не более 4096 пикселей в ширину или в высоту.
@@ -1117,13 +1155,13 @@ ru:
       short_without_name: У%{number}
     optional: необязательно
     or: ИЛИ
-    privacy_policy: Политика конфиденциальности
     save_changes: Сохранить изменения
+    processing: Обрабатывается
     saving: Сохраняем...
     school: Школа
     settings: Settings
     target: Задача
-    terms_and_conditions: Условия и Положения
+    login_token_expiration_warning_html: Срок действия этой ссылки истекает через %{timestamp}. Если срок действия ссылки истек, вы можете запросить еще один одноразовый токен на <a href="%{login_url}" %>странице входа</a>. Обратите внимание, что это личный URL-адрес, которым нельзя делиться.
   users:
     oauth:
       invalid_request: Ваш браузер сделал неверный запрос.
@@ -1134,3 +1172,7 @@ ru:
       password: Пароль
       password_new: Установить Новый Пароль
       shared: Вы используете общее устройство?
+      password_free: Вход без пароля
+      magic_link: Мы можем отправить вам по электронной почте волшебную ссылку, чтобы вы могли войти в систему без необходимости вводить свой пароль.
+      oauth: Войдите в систему с помощью Google, Facebook или Github
+    no_email_found: Не удалось найти пользователя с этим адресом электронной почты. Пожалуйста, проверьте адрес электронной почты, который вы ввели.

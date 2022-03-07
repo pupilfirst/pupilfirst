@@ -151,7 +151,7 @@ en:
       export_type_label: Please select the kind of export you need
       students_label: Students
       teams_label: Teams
-      export_tags_label : Export only students with the following tags
+      export_tags_label: Export only students with the following tags
       export_targets_label: Which targets should the export include?
       all_targets_label: All targets
       reviewed_only_targets_label: Only targets with reviewed submissions
@@ -1155,14 +1155,12 @@ en:
       short_without_name: L%{number}
     optional: optional
     or: OR
-    privacy_policy: Privacy Policy
     save_changes: Save Changes
     processing: Processing
     saving: Saving...
     school: School
     settings: Settings
     target: Target
-    terms_and_conditions: Terms & Conditions
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
   users:
     oauth:

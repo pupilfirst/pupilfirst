@@ -355,21 +355,21 @@ feature 'Submission review overlay', js: true do
                    referrer: review_timeline_event_path(submission_pending)
 
       # Checklist item 1
-      checklist_title_1 = "Checklist item one"
+      checklist_title_1 = 'Checklist item one'
       c1_result_0_title = Faker::Lorem.sentence
       c1_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
       c1_result_1_title = Faker::Lorem.sentence
       c1_result_1_feedback = Faker::Markdown.sandwich(sentences: 3)
 
       # Checklist item 2
-      checklist_title_2 = "Checklist item two"
+      checklist_title_2 = 'Checklist item two'
       c2_result_0_title = Faker::Lorem.sentence
       c2_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
       c2_result_1_title = Faker::Lorem.sentence
       c2_result_1_feedback = Faker::Markdown.sandwich(sentences: 3)
 
       # Checklist item 3
-      checklist_title_3 = "Checklist item three"
+      checklist_title_3 = 'Checklist item three'
       c3_result_0_title = Faker::Lorem.sentence
       c3_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
       c3_result_1_title = Faker::Lorem.sentence
@@ -449,12 +449,18 @@ feature 'Submission review overlay', js: true do
       within("div[data-checklist-item='0']") do
         expect(page).to_not have_button('Move Up checklist item')
         find("button[title='Move Down checklist item']")
-        expect(find('input', id: 'checklist_0_title').value).to eq checklist_title_2
+        expect(
+          find('input', id: 'checklist_0_title').value
+        ).to eq checklist_title_2
         within("div[data-result-item='0']") do
-          expect(find('input', id: 'result_00_title').value).to eq c2_result_0_title
+          expect(
+            find('input', id: 'result_00_title').value
+          ).to eq c2_result_0_title
         end
         within("div[data-result-item='1']") do
-          expect(find('input', id: 'result_01_title').value).to eq c2_result_1_title
+          expect(
+            find('input', id: 'result_01_title').value
+          ).to eq c2_result_1_title
         end
       end
 
@@ -463,32 +469,40 @@ feature 'Submission review overlay', js: true do
         find("button[title='Move Down checklist item']").click
       end
 
-
       # The middle checklist item, should have the content as checklist_item_3 and should have the "move up & down button"
       within("div[data-checklist-item='1']") do
         find("button[title='Move Up checklist item']")
         find("button[title='Move Down checklist item']")
-        expect(find('input', id: 'checklist_1_title').value).to eq checklist_title_3
+        expect(
+          find('input', id: 'checklist_1_title').value
+        ).to eq checklist_title_3
         within("div[data-result-item='0']") do
-          expect(find('input', id: 'result_10_title').value).to eq c3_result_0_title
+          expect(
+            find('input', id: 'result_10_title').value
+          ).to eq c3_result_0_title
         end
         within("div[data-result-item='1']") do
-          expect(find('input', id: 'result_11_title').value).to eq c3_result_1_title
+          expect(
+            find('input', id: 'result_11_title').value
+          ).to eq c3_result_1_title
         end
       end
-
 
       # Results iniside checklist item move up & move down
       within("div[data-checklist-item='1']") do
         within("div[data-result-item='0']") do
           expect(page).to_not have_button('Move Up checklist result')
           find("button[title='Move Down checklist result']").click
-          expect(find('input', id: 'result_10_title').value).to eq c3_result_1_title
+          expect(
+            find('input', id: 'result_10_title').value
+          ).to eq c3_result_1_title
         end
         within("div[data-result-item='1']") do
           expect(page).to_not have_button('Move Down checklist result')
           find("button[title='Move Up checklist result']").click
-          expect(find('input', id: 'result_11_title').value).to eq c3_result_1_title
+          expect(
+            find('input', id: 'result_11_title').value
+          ).to eq c3_result_1_title
         end
       end
 

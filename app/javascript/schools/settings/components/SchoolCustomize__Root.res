@@ -138,7 +138,7 @@ let editIcon = (additionalClasses, clickHandler, title) =>
     title
     onClick=clickHandler>
     <i className="fas fa-pencil-alt text-xs" />
-    <span className="text-xs font-semibold ml-2"> {"Edit" |> str} </span>
+    <span className="text-xs font-semibold ml-2"> {I18n.t("shared.edit") |> str} </span>
   </div>
 
 let showEditor = (editor, send, event) => {

@@ -1128,6 +1128,10 @@ en:
       submit_button: Request password reset
       subtitle: Enter your email for password recovery.
   shared:
+    agreements:
+      privacy_policy: Privacy Policy
+      terms_and_conditions: Terms and Conditions
+      note: " Coaches in your school have access to all communities."
     _no: "No"
     _yes: "Yes"
     all: All
@@ -1136,6 +1140,9 @@ en:
     close: Close
     coaches: Coaches
     customization: Customization
+    edit: Edit
+    sign_out: Sign Out
+    note: "Note:"
     done_exclamation: Done!
     file_invalid: Please select a file with a size less than 5 MB.
     image_file_invalid: Please select an image (PNG, JPEG, GIF) with a size less than 5 MB, and less than 4096px wide or high.
@@ -1170,3 +1177,4 @@ en:
       password_free: Password-free sign in
       magic_link: We can email you a magic link so you can sign in without having to type your password.
       oauth: Sign in with Google, Facebook, or Github
+    no_email_found: Could not find user with this email. Please check the email that you entered.

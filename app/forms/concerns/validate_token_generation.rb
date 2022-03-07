@@ -13,8 +13,7 @@ module ValidateTokenGeneration
   def user_with_email_must_exist
     return if user.present? || email.blank?
 
-    errors[:base] <<
-      'Could not find user with this email. Please check the email that you entered.'
+    errors[:base] << I18n.t('shared.no_email_found')
   end
 
   def ensure_time_between_requests

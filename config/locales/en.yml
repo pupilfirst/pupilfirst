@@ -854,6 +854,7 @@ en:
   communities:
     new_topic: New Topic
     welcome: Welcome to the
+    note: " Coaches in your school have access to all communities."
   courses:
     apply:
       apply_now: Apply Now
@@ -1130,7 +1131,6 @@ en:
     agreements:
       privacy_policy: Privacy Policy
       terms_and_conditions: Terms and Conditions
-      note: " Coaches in your school have access to all communities."
     _no: "No"
     _yes: "Yes"
     all: All

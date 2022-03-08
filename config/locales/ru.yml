@@ -854,6 +854,7 @@ ru:
   communities:
     new_topic: Новая Тема
     welcome: Добро пожаловать в
+    note: " Менторы в вашей школе имеют доступ ко всем сообществам."
   courses:
     apply:
       apply_now: Начать Курс
@@ -1130,7 +1131,6 @@ ru:
     agreements:
       privacy_policy: Политика Конфиденциальности
       terms_and_conditions: Условия и Положения
-      note: " Менторы в вашей школе имеют доступ ко всем сообществам."
     _no: "Нет"
     _yes: "Да"
     all: Все

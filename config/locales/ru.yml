@@ -51,8 +51,6 @@ ru:
       topic_stats_views: Посмотреть
       topics_fully_loaded_text: Показать все %{total_topics} темы
       topics_partially_loaded_text: Показано %{loaded_topics_count} из %{total_topics} тем
-    courses:
-      apply_now: Поступить Сейчас
     CourseApplicants__EditForm:
       access_ends_at:
         help: Если установлено, учащиеся не смогут выполнять задания после этой даты.
@@ -858,6 +856,7 @@ ru:
     welcome: Добро пожаловать в
   courses:
     apply:
+      apply_now: Начать Курс
       apply_button: Применить
       email_label: Почта
       email_placeholder: john@example.com
@@ -868,7 +867,7 @@ ru:
     enroll: Зарегистрироваться в
     show:
       continue_course: Продолжить Курс
-      preview_course: Предварительный просмотр курса
+      preview_course: Предварительный просмотр
   dashboard:
     dashboard:
       tour:

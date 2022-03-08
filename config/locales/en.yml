@@ -77,8 +77,6 @@ en:
       title:
         label: Title
         placeholder: Student, Coach, CEO, etc.
-    courses:
-      apply_now: Apply Now
     CourseApplicants__Root:
       applicants_fully_loaded_text: Showing all %{total_applicants} applicants
       applicants_page_title: Applicants
@@ -858,6 +856,7 @@ en:
     welcome: Welcome to the
   courses:
     apply:
+      apply_now: Apply Now
       apply_button: Apply
       email_label: Email
       email_placeholder: john@example.com

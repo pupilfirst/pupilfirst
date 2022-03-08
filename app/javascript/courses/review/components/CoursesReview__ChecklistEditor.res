@@ -152,9 +152,10 @@ let reducer = (state, action) =>
 let controlIcon = (~icon, ~title, ~hidden=false, handler) =>
   ReactUtils.nullIf(
     <button
+      ariaLabel=title
       title
       disabled={hidden}
-      className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden"
+      className="px-2 py-1 text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden focus:outline-none focus:bg-gray-300 focus:text-gray-900"
       onClick={handler}>
       <i className={"fas fa-fw " ++ icon} />
     </button>,
@@ -185,90 +186,143 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
     </div>
     <DisablingCover disabled=state.saving>
       <div className="p-4 md:p-6 relative">
-        <div className="bg-gray-200 border border-primary-300 rounded-md p-2 pt-0 md:p-4 md:pt-0">
+        <div>
           {state.reviewChecklist
           ->Js.Array2.mapi((reviewChecklistItem, itemIndex) =>
             <Spread
               props={"data-checklist-item": string_of_int(itemIndex)}
               key={string_of_int(itemIndex)}>
-              <div
-                className="pt-5"
-                key={itemIndex->string_of_int}
-                ariaLabel={"checklist-item-" ++ itemIndex->string_of_int}>
-                <div className="flex">
-                  <div className="w-full">
-                    <input
-                      className="checklist-editor__checklist-item-title h-11 text-sm focus:outline-none focus:bg-white focus:border-primary-300"
-                      id={"checklist_" ++ string_of_int(itemIndex) ++ "_title"}
-                      type_="text"
-                      placeholder={t("checklist_title.placeholder")}
-                      value={ReviewChecklistItem.title(reviewChecklistItem)}
-                      onChange={event =>
-                        updateChecklistItemTitle(
-                          itemIndex,
-                          ReactEvent.Form.target(event)["value"],
-                          reviewChecklistItem,
-                          send,
-                        )}
-                    />
-                    <School__InputGroupError
-                      message={t("checklist_title.error_message")}
-                      active={invalidTitle(ReviewChecklistItem.title(reviewChecklistItem))}
-                    />
+              <div className="flex items-start ">
+                <div
+                  className="p-5 mb-5 flex flex-col flex-1 bg-gray-200 border border-primary-300 rounded-lg"
+                  key={itemIndex->string_of_int}
+                  ariaLabel={"checklist-item-" ++ itemIndex->string_of_int}>
+                  <div className="flex">
+                    <div className="w-full">
+                      <input
+                        className="checklist-editor__checklist-item-title h-11 text-sm focus:outline-none focus:bg-white focus:border-primary-300"
+                        id={"checklist_" ++ string_of_int(itemIndex) ++ "_title"}
+                        type_="text"
+                        placeholder={t("checklist_title.placeholder")}
+                        value={ReviewChecklistItem.title(reviewChecklistItem)}
+                        onChange={event =>
+                          updateChecklistItemTitle(
+                            itemIndex,
+                            ReactEvent.Form.target(event)["value"],
+                            reviewChecklistItem,
+                            send,
+                          )}
+                      />
+                      <School__InputGroupError
+                        message={t("checklist_title.error_message")}
+                        active={invalidTitle(ReviewChecklistItem.title(reviewChecklistItem))}
+                      />
+                    </div>
                   </div>
-                  <div
-                    className="-mr-10 flex-shrink-0 border bg-gray-100 rounded-lg flex flex-col text-xs sticky top-0">
-                    {controlIcon(
-                      ~icon="fa-arrow-up",
-                      ~title={t("checklist_title.move_up_button_title")},
-                      ~hidden={itemIndex <= 0},
-                      {
-                        _ => send(SwapUpReviewChecklistItem(itemIndex))
-                      },
-                    )}
-                    {controlIcon(
-                      ~icon="fa-arrow-down",
-                      ~title={t("checklist_title.move_down_button_title")},
-                      ~hidden={itemIndex == Js.Array.length(state.reviewChecklist) - 1},
-                      {
-                        _ => send(SwapDownReviewChecklistItem(itemIndex))
-                      },
-                    )}
-                    {controlIcon(
-                      ~icon="fa-trash-alt",
-                      ~title={t("checklist_title.remove_button_title")},
-                      {_ => send(RemoveChecklistItem(itemIndex))},
-                    )}
-                  </div>
-                </div>
-                <div>
-                  {ReviewChecklistItem.result(reviewChecklistItem)
-                  ->Js.Array2.mapi((resultItem, resultIndex) => {
-                    let feedback = Belt.Option.getWithDefault(
-                      ReviewChecklistResult.feedback(resultItem),
-                      "",
-                    )
-                    <Spread
-                      props={"data-result-item": string_of_int(resultIndex)}
-                      key={string_of_int(itemIndex) ++ string_of_int(resultIndex)}>
-                      <div className="pl-2 md:pl-4 mt-2">
-                        <div className="flex">
-                          <label
-                            title={t("disabled")}
-                            className="flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
-                          />
-                          <div className="w-full bg-gray-100 relative">
-                            <div className="relative">
-                              <input
-                                className="checklist-editor__checklist-result-item-title h-10 pr-12 focus:outline-none focus:bg-white focus:border-primary-300"
+                  <div>
+                    {ReviewChecklistItem.result(reviewChecklistItem)
+                    ->Js.Array2.mapi((resultItem, resultIndex) => {
+                      let feedback = Belt.Option.getWithDefault(
+                        ReviewChecklistResult.feedback(resultItem),
+                        "",
+                      )
+                      <Spread
+                        props={"data-result-item": string_of_int(resultIndex)}
+                        key={string_of_int(itemIndex) ++ string_of_int(resultIndex)}>
+                        <div className="pl-2 md:pl-4 mt-2">
+                          <div className="flex">
+                            <label
+                              title={t("disabled")}
+                              className="flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
+                            />
+                            <div className="w-full bg-gray-100 relative">
+                              <div className="relative">
+                                <input
+                                  className="checklist-editor__checklist-result-item-title h-10 pr-12 focus:outline-none focus:bg-white focus:border-primary-300"
+                                  id={"result_" ++
+                                  string_of_int(itemIndex) ++
+                                  string_of_int(resultIndex) ++ "_title"}
+                                  type_="text"
+                                  placeholder={t("checklist_item_title.placeholder")}
+                                  value={ReviewChecklistResult.title(resultItem)}
+                                  onChange={event =>
+                                    updateChecklistResultTitle(
+                                      itemIndex,
+                                      resultIndex,
+                                      ReactEvent.Form.target(event)["value"],
+                                      reviewChecklistItem,
+                                      resultItem,
+                                      send,
+                                    )}
+                                />
+                                <div
+                                  className="flex h-10 absolute top-0 right-0 mr-1 items-center justify-center">
+                                  {controlIcon(
+                                    ~icon="fa-arrow-up",
+                                    ~title={t("checklist_item_title.move_up_button_title")},
+                                    ~hidden={resultIndex <= 0},
+                                    {
+                                      _ =>
+                                        send(
+                                          UpdateChecklistItem(
+                                            ReviewChecklistItem.moveResultItemUp(
+                                              resultIndex,
+                                              reviewChecklistItem,
+                                            ),
+                                            itemIndex,
+                                          ),
+                                        )
+                                    },
+                                  )}
+                                  {controlIcon(
+                                    ~icon="fa-arrow-down",
+                                    ~title={t("checklist_item_title.move_down_button_title")},
+                                    ~hidden={
+                                      resultIndex ==
+                                        Js.Array.length(
+                                          ReviewChecklistItem.result(reviewChecklistItem),
+                                        ) - 1
+                                    },
+                                    {
+                                      _ =>
+                                        send(
+                                          UpdateChecklistItem(
+                                            ReviewChecklistItem.moveResultItemDown(
+                                              resultIndex,
+                                              reviewChecklistItem,
+                                            ),
+                                            itemIndex,
+                                          ),
+                                        )
+                                    },
+                                  )}
+                                  {controlIcon(
+                                    ~icon="fa-trash-alt",
+                                    ~title={t("checklist_item_title.remove_button_title")},
+                                    {
+                                      _ =>
+                                        removeChecklistResult(
+                                          itemIndex,
+                                          resultIndex,
+                                          reviewChecklistItem,
+                                          send,
+                                        )
+                                    },
+                                  )}
+                                </div>
+                              </div>
+                              <textarea
+                                rows=2
+                                cols=33
+                                className="appearance-none border border-gray-400 bg-transparent rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
                                 id={"result_" ++
                                 string_of_int(itemIndex) ++
-                                string_of_int(resultIndex) ++ "_title"}
+                                string_of_int(resultIndex) ++ "_feedback"}
                                 type_="text"
-                                placeholder={t("checklist_item_title.placeholder")}
-                                value={ReviewChecklistResult.title(resultItem)}
+                                placeholder={t("checklist_item_description.placeholder")}
+                                value=feedback
                                 onChange={event =>
-                                  updateChecklistResultTitle(
+                                  updateChecklistResultFeedback(
                                     itemIndex,
                                     resultIndex,
                                     ReactEvent.Form.target(event)["value"],
@@ -277,112 +331,62 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                     send,
                                   )}
                               />
-                              <div
-                                className="flex h-10 absolute top-0 right-0 mr-1 items-center justify-center">
-                                {controlIcon(
-                                  ~icon="fa-arrow-up",
-                                  ~title={t("checklist_item_title.move_up_button_title")},
-                                  ~hidden={resultIndex <= 0},
-                                  {
-                                    _ =>
-                                      send(
-                                        UpdateChecklistItem(
-                                          ReviewChecklistItem.moveResultItemUp(
-                                            resultIndex,
-                                            reviewChecklistItem,
-                                          ),
-                                          itemIndex,
-                                        ),
-                                      )
-                                  },
-                                )}
-                                {controlIcon(
-                                  ~icon="fa-arrow-down",
-                                  ~title={t("checklist_item_title.move_down_button_title")},
-                                  ~hidden={
-                                    resultIndex ==
-                                      Js.Array.length(
-                                        ReviewChecklistItem.result(reviewChecklistItem),
-                                      ) - 1
-                                  },
-                                  {
-                                    _ =>
-                                      send(
-                                        UpdateChecklistItem(
-                                          ReviewChecklistItem.moveResultItemDown(
-                                            resultIndex,
-                                            reviewChecklistItem,
-                                          ),
-                                          itemIndex,
-                                        ),
-                                      )
-                                  },
-                                )}
-                                {controlIcon(
-                                  ~icon="fa-trash-alt",
-                                  ~title={t("checklist_item_title.remove_button_title")},
-                                  {
-                                    _ =>
-                                      removeChecklistResult(
-                                        itemIndex,
-                                        resultIndex,
-                                        reviewChecklistItem,
-                                        send,
-                                      )
-                                  },
-                                )}
-                              </div>
+                              <School__InputGroupError
+                                message={t("checklist_item_description.error_message")}
+                                active={invalidTitle(ReviewChecklistResult.title(resultItem))}
+                              />
                             </div>
-                            <textarea
-                              rows=2
-                              cols=33
-                              className="appearance-none border border-gray-400 bg-transparent rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
-                              id={"result_" ++
-                              string_of_int(itemIndex) ++
-                              string_of_int(resultIndex) ++ "_feedback"}
-                              type_="text"
-                              placeholder={t("checklist_item_description.placeholder")}
-                              value=feedback
-                              onChange={event =>
-                                updateChecklistResultFeedback(
-                                  itemIndex,
-                                  resultIndex,
-                                  ReactEvent.Form.target(event)["value"],
-                                  reviewChecklistItem,
-                                  resultItem,
-                                  send,
-                                )}
-                            />
-                            <School__InputGroupError
-                              message={t("checklist_item_description.error_message")}
-                              active={invalidTitle(ReviewChecklistResult.title(resultItem))}
-                            />
                           </div>
                         </div>
-                      </div>
-                    </Spread>
-                  })
-                  ->React.array}
-                  <button
-                    onClick={_ => addEmptyResultItem(send, reviewChecklistItem, itemIndex)}
-                    className="checklist-editor__add-result-btn ml-2 md:ml-4 mt-3 flex items-center focus:outline-none">
-                    <span
-                      title={t("add_result")}
-                      className="checklist-editor__add-result-btn-check flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2"
-                    />
-                    <span
-                      className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-200 px-3 py-1 rounded border border-dashed border-gray-600">
-                      <i className="fas fa-plus text-xs mr-2" /> {t("add_result")->str}
-                    </span>
-                  </button>
+                      </Spread>
+                    })
+                    ->React.array}
+                    <button
+                      onClick={_ => addEmptyResultItem(send, reviewChecklistItem, itemIndex)}
+                      className="checklist-editor__add-result-btn ml-2 md:ml-4 mt-3 flex items-center focus:outline-none">
+                      <span
+                        title={t("add_result")}
+                        className="checklist-editor__add-result-btn-check flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2"
+                      />
+                      <span
+                        className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-200 px-3 py-1 rounded border border-dashed border-gray-600">
+                        <i className="fas fa-plus text-xs mr-2" /> {t("add_result")->str}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+                <div
+                  className="border bg-gray-100 rounded flex flex-col text-xs sticky top-0 overflow-hidden">
+                  {controlIcon(
+                    ~icon="fa-arrow-up",
+                    ~title={t("checklist_title.move_up_button_title")},
+                    ~hidden={itemIndex <= 0},
+                    {
+                      _ => send(SwapUpReviewChecklistItem(itemIndex))
+                    },
+                  )}
+                  {controlIcon(
+                    ~icon="fa-arrow-down",
+                    ~title={t("checklist_title.move_down_button_title")},
+                    ~hidden={itemIndex == Js.Array.length(state.reviewChecklist) - 1},
+                    {
+                      _ => send(SwapDownReviewChecklistItem(itemIndex))
+                    },
+                  )}
+                  {controlIcon(
+                    ~icon="fa-trash-alt",
+                    ~title={t("checklist_title.remove_button_title")},
+                    {_ => send(RemoveChecklistItem(itemIndex))},
+                  )}
                 </div>
               </div>
             </Spread>
           )
           ->React.array}
-          <div className="pt-5">
+          <div>
             <button
-              className="flex items-center text-sm font-semibold bg-gray-200 rounded border border-dashed border-gray-600 w-full hover:text-primary-500 hover:bg-white hover:border-primary-500 hover:shadow-md focus:outline-none"
+              ariaLabel={t("add_checklist_item")}
+              className="flex items-center text-sm font-semibold bg-gray-200 rounded border border-dashed border-gray-600 w-full hover:text-primary-500 hover:bg-white hover:border-primary-500 hover:shadow-md focus:outline-none focus:text-primary-500 focus:bg-white focus:border-primary-500 focus:shadow-md"
               onClick={_ => send(AddEmptyChecklistItem)}>
               <span className="bg-gray-300 py-2 w-10"> <i className="fas fa-plus text-sm" /> </span>
               <span className="px-3 py-2"> {t("add_checklist_item")->str} </span>

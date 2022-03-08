@@ -308,6 +308,13 @@ ru:
       milestone_targets: Контрольные задачи
       nav_next_level: След. Уровень
       nav_previous_level: Пред. Уровень
+    CoursesCurriculum__AutoVerify:
+      visit_link: "Перейти по Ссылке "
+      saving: Сохраняем
+      visit_complete: Перейдите По Ссылке, Чтобы Завершить
+      mark_complete: Отметить Как Завершенный
+      before_visiting: Прежде чем перейти по ссылке...
+      before_marking: Перед пометкой как завершенный...
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: Записать Снова
       button_text_start_recording: Начать Запись
@@ -551,6 +558,34 @@ ru:
       submitted_by_team: "Отправлено от команды "
     CoursesReview__SubmissionInfoCard:
       submission_hash: "Работа #"
+    CoursesStudents__CoachNotes:
+      new_note: Добавить Новую Заметку
+      save_note: Сохранить Заметку
+      all_notes: Все Заметки
+      has_archived_notes: У этого студента есть несколько архивных заметок.
+      no_notes: Здесь нет заметок!
+    CoursesStudents__CoachNoteShow:
+      sure_delete: Вы уверены, что хотите удалить эту заметку?
+      delete_note: "Удалить заметку "
+      deleted_coach: Удаленный Ментор
+      unknown: Неизвестно
+      coach_on: "на"
+    CoursesStudents__Root:
+      filter_level: Фильтр по уровню, назначенному ментору или поиск по имени или почте и многое другое...
+      assigned_me: "Назначено: Мне"
+      showing_assigned: "Теперь показаны учащиеся, назначенные к "
+      not_found: "Не удалось найти уровень, выбранный из панели рассылки, с ID "
+    CoursesStudents__StudentDistribution:
+      students_level: Студенты на уровне
+      level_wise: Распределение учащихся по уровням
+    CoursesStudents__SubmissionsList:
+      submitted_on: "Отправленный в "
+      no_revied_submission: Нет Рассмотренного Работ
+    CoursesStudents__TeamsList:
+      unable_find_level: "Не удается найти уровень с ID: "
+      personal_coaches: Личные Менторы
+      team_coaches: Командные Менторы
+      no_teams: Нет поманд для показа
     CoursesStudents__StudentOverlay:
       access_ended_at: Доступ этого студента к курсу закончился %{date}.
       attempted: " Попыток"
@@ -1162,6 +1197,13 @@ ru:
     target: Задача
     login_token_expiration_warning_html: Срок действия этой ссылки истекает через %{timestamp}. Если срок действия ссылки истек, вы можете запросить еще один одноразовый токен на <a href="%{login_url}" %>странице входа</a>. Обратите внимание, что это личный URL-адрес, которым нельзя делиться.
     no_email_found: Не удалось найти пользователя с этим адресом электронной почты. Пожалуйста, проверьте адрес электронной почты, который вы ввели.
+    students: Студенты
+    teams: Команды
+    percentage: Процент
+    rejected: Отклонено
+    completed: Завершено
+    load_more: Загрузить Больше...
+    team: Команда
   users:
     oauth:
       invalid_request: Ваш браузер сделал неверный запрос.

@@ -442,7 +442,7 @@ let make = (
                   updateSubmissionsCB,
                 )
               }}>
-              {tc("load_more") |> str}
+              {ts("load_more") |> str}
             </button>
           | LoadingMore => SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
           | Reloading => React.null

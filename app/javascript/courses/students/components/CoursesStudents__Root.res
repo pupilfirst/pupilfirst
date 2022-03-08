@@ -4,6 +4,9 @@ open CoursesStudents__Types
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CoursesStudents__Root")
+let ts = I18n.t(~scope="shared")
+
 type coachNoteFilter = [#WithCoachNotes | #WithoutCoachNotes | #IgnoreCoachNotes]
 
 type filter = {
@@ -357,7 +360,7 @@ let filterPlaceholder = state =>
       None,
       None,
       None,
-    ) => "Filter by level, assigned coach, or search by name or email address, and more..."
+    ) => tr("filter_level")
   | _ => ""
   }
 
@@ -368,7 +371,7 @@ let restoreFilterNotice = (send, currentCoach, message) =>
     <button
       className="px-2 py-1 rounded text-xs overflow-hidden border border-gray-300 bg-gray-200 text-gray-800 hover:bg-gray-300 mt-1 md:mt-0"
       onClick={_ => send(SelectCoach(currentCoach))}>
-      {"Assigned to: Me" |> str} <i className="fas fa-level-up-alt ml-2" />
+      {tr("assigned_me") |> str} <i className="fas fa-level-up-alt ml-2" />
     </button>
   </div>
 
@@ -381,7 +384,7 @@ let restoreAssignedToMeFilter = (state, send, currentTeamCoach) =>
       restoreFilterNotice(
         send,
         currentCoach,
-        "Now showing students assigned to " ++ ((selectedCoach |> Coach.name) ++ "."),
+        tr("showing_assigned") ++ ((selectedCoach |> Coach.name) ++ "."),
       )
     }
   , React.null)
@@ -404,7 +407,7 @@ let selectLevel = (levels, send, levelId) => {
   let level =
     levels |> ArrayUtils.unsafeFind(
       level => Level.id(level) == levelId,
-      "Could not find level selected from distribution bar, with ID " ++ levelId,
+      tr("not_found") ++ levelId,
     )
 
   send(SelectLevel(level))
@@ -494,7 +497,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~teamTags, ~
                   send(BeginLoadingMore)
                   getTeams(send, courseId, Some(cursor), state.filter)
                 }}>
-                {"Load More..." |> str}
+                {ts("load_more") |> str}
               </button>
             | Reloading => React.null
             }}

@@ -308,6 +308,13 @@ en:
       milestone_targets: Milestone targets
       nav_next_level: Next Level
       nav_previous_level: Previous Level
+    CoursesCurriculum__AutoVerify:
+      visit_link: "Visit Link "
+      saving: Saving
+      visit_complete: Visit Link To Complete
+      mark_complete: Mark As Complete
+      before_visiting: Before visiting the link...
+      before_marking: Before marking as complete...
     CoursesCurriculum__AudioRecorder:
       button_text_record_again: Record Again
       button_text_start_recording: Start Recording
@@ -551,6 +558,34 @@ en:
       submitted_by_team: "Submitted by team "
     CoursesReview__SubmissionInfoCard:
       submission_hash: "Submission #"
+    CoursesStudents__CoachNotes:
+      new_note: Add a New Note
+      save_note: Save Note
+      all_notes: All Notes
+      has_archived_notes: This student has some archived notes.
+      no_notes: No notes here!
+    CoursesStudents__CoachNoteShow:
+      sure_delete: Are you sure you want to delete this note?
+      delete_note: "Delete note "
+      deleted_coach: Deleted Coach
+      unknown: Unknown
+      coach_on: "on"
+    CoursesStudents__Root:
+      filter_level: Filter by level, assigned coach, or search by name or email address, and more...
+      assigned_me: "Assigned to: Me"
+      showing_assigned: "Now showing students assigned to "
+      not_found: "Could not find level selected from distribution bar, with ID "
+    CoursesStudents__StudentDistribution:
+      students_level: Students in level
+      level_wise: Students level-wise distribution
+    CoursesStudents__SubmissionsList:
+      submitted_on: "Submitted on "
+      no_revied_submission: No Reviewed Submission
+    CoursesStudents__TeamsList:
+      unable_find_level: "Unable to find level with id: "
+      personal_coaches: Personal Coaches
+      team_coaches: Team Coaches
+      no_teams: No teams to show
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
       attempted: " Attempted"
@@ -1162,6 +1197,13 @@ en:
     target: Target
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
     no_email_found: Could not find user with this email. Please check the email that you entered.
+    students: Students
+    teams: Teams
+    percentage: Percentage
+    rejected: Rejected
+    completed: Completed
+    load_more: Load More...
+    team: Team
   users:
     oauth:
       invalid_request: Your browser made an invalid request.

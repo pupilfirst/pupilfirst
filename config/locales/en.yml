@@ -1161,6 +1161,7 @@ en:
     settings: Settings
     target: Target
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
+    no_email_found: Could not find user with this email. Please check the email that you entered.
   users:
     oauth:
       invalid_request: Your browser made an invalid request.
@@ -1176,4 +1177,3 @@ en:
       password_free: Password-free sign in
       magic_link: We can email you a magic link so you can sign in without having to type your password.
       oauth: Sign in with Google, Facebook, or Github
-    no_email_found: Could not find user with this email. Please check the email that you entered.

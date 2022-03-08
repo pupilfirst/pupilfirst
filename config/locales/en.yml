@@ -1168,6 +1168,8 @@ en:
     sessions:
       email: Continue with email
       email_address: Email Address
+      email_me: Email me a link to sign in
+      with_password: Sign in with password.
       password: Password
       password_new: Set a New Password
       shared: Are you using a shared device?

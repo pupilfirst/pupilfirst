@@ -62,7 +62,7 @@
         %>
       <% end %>
       <div class="mt-4">
-        <%= f.submit "Sign in with password", name: 'password_sign_in', data: { disable: true }, class: "btn btn-success btn-large text-center w-full", tabindex: 4 %>
+        <%= f.submit t("users.sessions.with_password"), name: 'password_sign_in', data: { disable: true }, class: "btn btn-success btn-large text-center w-full", tabindex: 4 %>
       </div>
       <div class="mt-6">
         <div class="relative">
@@ -78,7 +78,7 @@
       <p class="mt-4 font-semibold text-center"><%= t("users.sessions.password_free") %></p>
       <p class="mt-2 text-center text-sm text-gray-800"><%= t("users.sessions.magic_link") %></p>
       <div class="mt-4">
-        <%= f.submit "Email me a link to sign in", name: 'email_link', data: { disable: true }, class: "btn btn-primary-ghost btn-large text-center w-full", tabindex: 5 %>
+        <%= f.submit t("users.sessions.email_me"), name: 'email_link', data: { disable: true }, class: "btn btn-primary-ghost btn-large text-center w-full", tabindex: 5 %>
       </div>
     <% end %>
     <div class="max-w-sm mx-auto flex flex-col justify-items-center mt-6">

@@ -1314,3 +1314,7 @@ ru:
       add_github: Пожалуйста, <a href="https://github.com/settings/profile" target="_blank" rel="noopener">добавьте общедоступный адрес почты в свой профиль на Github</a> и попробуйте снова.
       add_facebook: Пожалуйста <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">уберите \'Pupilfirst\' из вашего списка авторизованных приложений</a> и попробуйте войти в систему еще раз.
       add_other: Пожалуйста, войдите другим методом.
+  quiz:
+    your_correct_answer: Ваш Правильный Ответ
+    correct_answer: Правильный Ответ
+    your_answer: Ваш Ответ

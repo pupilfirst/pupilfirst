@@ -1314,3 +1314,7 @@ en:
       add_github: Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.
       add_facebook: Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.
       add_other: Please sign in using another method.
+  quiz:
+    your_correct_answer: Your Correct Answer
+    correct_answer: Correct Answer
+    your_answer: Your Answer

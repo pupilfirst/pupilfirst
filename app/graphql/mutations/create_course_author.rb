@@ -12,7 +12,7 @@ module Mutations
       mutator = CreateCourseAuthorMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, 'Author Created', 'A new author has been added to this course.')
+        mutator.notify(:success, I18n.t("notes.author_created"), I18n.t("notes.new_author"))
         { course_author: mutator.create_course_author }
       else
         mutator.notify_errors

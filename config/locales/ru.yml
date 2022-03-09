@@ -1318,3 +1318,34 @@ ru:
     your_correct_answer: Ваш Правильный Ответ
     correct_answer: Правильный Ответ
     your_answer: Ваш Ответ
+  notes:
+    success: Успех
+    done: Сделано!
+    done_dot: Сделано
+    post_archived: Пост успешно архивирован
+    note_removed: Заметка успешно удалена
+    note_added: Заметка успешно добавлена
+    community_created: Сообщество успешно создано
+    author_created: Создан Автор
+    new_author: В этот курс был добавлен новый автор.
+    eval_crit: Критерии оценки созданы успешно!
+    reply_added: Ответ успешно добавлен
+    responses_saved: Ваши ответы были сохранены.
+    new_version: Создана новая версия.
+    author_deleted: Автор Удален
+    author_deleted_details: Автор был удален из этого курса.
+    student_updated: Студент успешно обновлен
+    reloading_list: Перезагружается список студентов
+    deletion_init: Инициировано Удаление Учетной Записи
+    check_inbox: Проверьте почту для дальнейших действий!
+    reply_marked: Отметьте ответ как успешное решение
+    merge_complete: слияние завершено!
+    reply_unmarked: Ответьте убрав пометку как решение!
+    author_updated: Автор Обновлен
+    author_name_updated: Имя автора было обновлено.
+    eval_crit_updated: Критерий оценки успешно обновлен!
+    updated_success: обновлено успешно
+    review_updated: Контрольный список проверки успешно обновлен
+    details_updated: Детали успешно обновлены!
+    topic_updated: Тема успешно обновлена!
+    profile_saved: Профиль успешно обновлен!

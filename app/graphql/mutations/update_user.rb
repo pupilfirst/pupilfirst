@@ -17,7 +17,7 @@ module Mutations
 
       success =
         if mutator.valid?
-          mutator.notify(:success, 'Done!', 'Profile updated successfully!')
+          mutator.notify(:success, I18n.t("notes.done"), I18n.t("notes.profile_saved"))
           mutator.update_user
           true
         else

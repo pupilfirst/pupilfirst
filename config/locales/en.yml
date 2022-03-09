@@ -1318,3 +1318,34 @@ en:
     your_correct_answer: Your Correct Answer
     correct_answer: Correct Answer
     your_answer: Your Answer
+  notes:
+    success: Success
+    done: Done!
+    done_dot: Done
+    post_archived: Post archived successfully
+    note_removed: "Note removed successfully"
+    note_added: Note added successfully
+    community_created: Community created successfully
+    author_created: Author Created
+    new_author: A new author has been added to this course.
+    eval_crit: Evaluation criterion created successfully!
+    reply_added: Reply added successfully
+    responses_saved: Your responses have been saved.
+    new_version: A new version has been created.
+    author_deleted: Author Deleted
+    author_deleted_details: The author has been removed from this course.
+    student_updated: Student updated successfully
+    reloading_list: Reloading students list
+    deletion_init: Account Deletion Initiated
+    check_inbox: Check your inbox for further steps!
+    reply_marked: Reply marked as solution successfully
+    merge_complete: Merge complete!
+    reply_unmarked: Reply unmarked as solution!
+    author_updated: Author Updated
+    author_name_updated: The author's name has been updated.
+    eval_crit_updated: Evaluation criterion updated successfully!
+    updated_success: updated successfully
+    review_updated: Review checklist updated successfully
+    details_updated: Details updated successfully!
+    topic_updated: Topic updated successfully!
+    profile_saved: Profile updated successfully!

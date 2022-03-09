@@ -2,6 +2,8 @@ module ChecklistItem = SubmissionChecklistItem
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.SubmissionChecklistItemShow")
+
 let kindIconClasses = result =>
   switch (result: ChecklistItem.result) {
   | ShortText(_text) => "if i-short-text-light text-base md:text-lg text-gray-800 mt-px"
@@ -52,12 +54,12 @@ let statusIcon = (updateChecklistCB, status) =>
   | (None, Passed) =>
     <div className="flex items-center space-x-2 text-xs bg-green-100 px-1 py-px mt-1">
       <PfIcon className="if i-check-square-solid text-green-500 text-base bg-white" />
-      <p> {"Correct"->str} </p>
+      <p> {tr("incorrect")->str} </p>
     </div>
   | (None, Failed) =>
     <div className="flex items-center space-x-2 text-xs bg-red-100 px-1 py-px mt-px">
       <PfIcon className="if i-times-square-solid text-red-500 text-base bg-white" />
-      <p> {"Incorrect"->str} </p>
+      <p> {tr("correct")->str} </p>
     </div>
   | (_, _) => React.null
   }
@@ -66,7 +68,7 @@ let showStatus = status =>
   switch (status: ChecklistItem.status) {
   | Passed =>
     <div className="bg-green-200 rounded px-1 py-px text-green-800 text-tiny">
-      {"Correct"->str}
+      {tr("correct")->str}
     </div>
   | Failed =>
     <div className="bg-red-200 rounded px-1 py-px text-red-800 text-tiny"> {"Incorrect"->str} </div>
@@ -107,7 +109,7 @@ let statusButton = (index, status, callback, checklist) =>
         <PfIcon className={statusButtonIcon(status == ChecklistItem.Failed)} />
       </span>
       <span className="p-2">
-        {(status == ChecklistItem.Failed ? "Mark as correct" : "Mark as incorrect")->str}
+        {(status == ChecklistItem.Failed ? tr("mark_correct") : tr("mark_incorrect"))->str}
       </span>
     </button>
   </div>

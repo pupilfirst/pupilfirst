@@ -399,6 +399,8 @@ en:
       preview_mode_text: You are currently looking at a preview of this course.
       previous_target_button: Previous Target
       scroll_to_top: Scroll to Top
+    CoursesCurriculum__Quiz:
+      submit_quiz: Submit Quiz
     CoursesCurriculum__SubmissionsAndFeedback:
       completed: Completed
       rejected: Rejected
@@ -880,6 +882,11 @@ en:
       students_partially_loaded_text: Showing %{loaded_students_count} of %{total_students} students
       team: Team
       try_removing_filter: Try removing the search filter options.
+    SubmissionChecklistItemShow:
+      correct: Correct
+      incorrect: Incorrect
+      mark_correct: Mark as correct
+      mark_incorrect: Mark as incorrect
     SubmissionChecklistShow:
       target_marked_as_complete: Target was marked as complete.
     TargetChecklistItem:
@@ -1281,6 +1288,7 @@ en:
     team: Team
     loading: Loading...
     replies: Replies
+    dashboard: Dashboard
   users:
     oauth:
       invalid_request: Your browser made an invalid request.

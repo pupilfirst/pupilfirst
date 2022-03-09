@@ -399,6 +399,8 @@ ru:
       preview_mode_text: Вы сейчас в режиме предварительного просмотра.
       previous_target_button: Пред. Задача
       scroll_to_top: Пролистать наверх
+    CoursesCurriculum__Quiz:
+      submit_quiz: Отправить Тест
     CoursesCurriculum__SubmissionsAndFeedback:
       completed: Завершено
       rejected: Отказано
@@ -880,6 +882,11 @@ ru:
       students_partially_loaded_text: Показаны %{loaded_students_count} из %{total_students} студентов
       team: Команда
       try_removing_filter: Попробуйте удалить параметры фильтра поиска.
+    SubmissionChecklistItemShow:
+      correct: Верно
+      incorrect: Неверно
+      mark_correct: Отметить как верно
+      mark_incorrect: Отметить как неверно
     SubmissionChecklistShow:
       target_marked_as_complete: Цель была отмечена как завершенная.
     TargetChecklistItem:
@@ -1281,6 +1288,7 @@ ru:
     team: Команда
     loading: Загрузка...
     replies: Ответов
+    dashboard: Обучение
   users:
     oauth:
       invalid_request: Ваш браузер сделал неверный запрос.

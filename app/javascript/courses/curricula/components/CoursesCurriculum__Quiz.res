@@ -4,6 +4,8 @@ open CoursesCurriculum__Types
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CoursesCurriculum__Quiz")
+
 module CreateQuizSubmissionQuery = %graphql(`
    mutation CreateQuizSubmissionMutation($targetId: ID!, $answerIds: [ID!]!) {
     createQuizSubmission(targetId: $targetId, answerIds: $answerIds){
@@ -125,7 +127,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
                 setSaving,
                 addSubmissionCB,
               )}>
-              {str("Submit Quiz")}
+              {str(tr.("submit_quiz"))}
             </button>
           : {
               let nextQuestion = currentQuestion |> QuizQuestion.nextQuestion(quizQuestions)

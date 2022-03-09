@@ -54,12 +54,12 @@ let statusIcon = (updateChecklistCB, status) =>
   | (None, Passed) =>
     <div className="flex items-center space-x-2 text-xs bg-green-100 px-1 py-px mt-1">
       <PfIcon className="if i-check-square-solid text-green-500 text-base bg-white" />
-      <p> {tr("incorrect")->str} </p>
+      <p> {tr("correct")->str} </p>
     </div>
   | (None, Failed) =>
     <div className="flex items-center space-x-2 text-xs bg-red-100 px-1 py-px mt-px">
       <PfIcon className="if i-times-square-solid text-red-500 text-base bg-white" />
-      <p> {tr("correct")->str} </p>
+      <p> {tr("incorrect")->str} </p>
     </div>
   | (_, _) => React.null
   }

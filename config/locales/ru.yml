@@ -1280,7 +1280,7 @@ ru:
     load_more: Загрузить Больше...
     team: Команда
     loading: Загрузка...
-    replies: Replies
+    replies: Ответов
   users:
     oauth:
       invalid_request: Ваш браузер сделал неверный запрос.

@@ -407,7 +407,7 @@ en:
       grading: Grading
       submission_details: "Details about your submission on "
       submission_number: "Submission #"
-      submitted_on: Submitted on
+      submitted_on: "Submitted on "
       pending_review: Pending Review
       unknown_coach: Unknown Coach
       your_submissions: Your Submissions

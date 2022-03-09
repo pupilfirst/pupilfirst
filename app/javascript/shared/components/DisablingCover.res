@@ -1,7 +1,9 @@
 %bs.raw(`require("./DisablingCover.css")`)
 
+let ts = I18n.t(~scope="shared")
+
 @react.component
-let make = (~disabled, ~message="Loading...", ~containerClasses="", ~children) =>
+let make = (~disabled, ~message=ts("loading"), ~containerClasses="", ~children) =>
   <div className={"relative " ++ containerClasses}>
     {if disabled {
       [

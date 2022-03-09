@@ -33,6 +33,32 @@ ru:
       filter_result_empty: Примененные вами фильтры не соответствуют ни одному ментору. Пожалуйста, измените фильтр и попробуйте еще раз.
       filter_search_string_course: обучает курс %{name}
       heading: Менторы
+    CommunitiesNewTopic__Root:
+      oops: Упс!
+      failed_fetch_similar: Нам не удалось получить похожие темы с сервера! Наша команда была уведомлена об этой ошибке.
+      done: Сделано!
+      redirecting: Перенаправляем на новую тему...
+      unexpected_error: Непредвиденная ошибка!
+      please_reload: Пожалуйста, перезагрузите страницу, прежде чем пытаться опубликовать ее снова.
+      missing_info: Недостаточно Информации!
+      topic_body_present: Заголовок и основная часть темы должны присутствовать.
+      similar_topics: Похожие Темы
+      no_replies: Нет ответов
+      one_reply: 1 ответ
+      manu_replies_post: " ответов"
+      asked_on: "Спрошен на "
+      no_category_found: "Не удалось найти категорию с ID:"
+      back: Назад
+      linked_target: "Связанные Задачи: "
+      clear: Очистить
+      create_topic_discussion: Создать новую тему для обсуждения
+      title: Заголовок
+      title_placeholder: Заголовок для новой темы
+      select_category: Выбрать Категорию
+      not_selected: Не Выбрано
+      body: Основная часть
+      create_topic: Создать Тему
+      be_descriptive: "Если вы задаете вопрос, постарайтесь быть как можно более описательным, чтобы другим было легче публиковать ответы. Вы можете использовать Markdown для форматирования этого текста."
     CommunitiesShow__Root:
       all_categories_button: Все Категории
       button_load_more: Загрузить Больше...
@@ -320,6 +346,13 @@ ru:
       button_text_start_recording: Начать Запись
       recording_size_limit_warning: Размер записи не должен превышать 5 МБ. Пожалуйста, перезапишите
       recording_string: Записываем...
+    CoursesCurriculum__Discuss:
+      topics_pre: "Темы в сообществе "
+      topics_post: ""
+      go_to: Перейти в сообщество
+      create: Создать тему
+      no_discussion: В последнее время не было обсуждения этой задачи.
+      use_community: Используйте сообщество, чтобы развеять сомнения и взаимно помогать друг-другу!
     CoursesCurriculum__Learn:
       edit_target_button: Редактировать Контент
     CoursesCurriculum__LevelUpButton:
@@ -366,6 +399,19 @@ ru:
       preview_mode_text: Вы сейчас в режиме предварительного просмотра.
       previous_target_button: Пред. Задача
       scroll_to_top: Пролистать наверх
+    CoursesCurriculum__SubmissionsAndFeedback:
+      completed: Завершено
+      rejected: Отказано
+      grading: Оценивается
+      submission_details: "Детали вашей работы в "
+      submission_number: "Работа #"
+      submitted_on: Отправлено в
+      pending_review: Ожидает Оценки
+      unknown_coach: Неизвестный Ментор
+      your_submissions: Ваши Работы
+      cancel: Отмена
+      add_another_submission: Добавить другую работу
+      add_another: Добавить другую
     CoursesCurriculum__TargetStatus:
       access_locked: Ваш доступ к этому курсу закончился.
       course_locked: Курс был окончен.
@@ -694,6 +740,16 @@ ru:
     CurriculumEditor__TargetGroupShow:
       create_target: Создать задачу
       milestone_targets: Контрольные Задачи
+    CurriculumEditor__TargetQuizQuestion:
+      remove_question: Удалить Вопрос Теста
+      add_another_answer: Добавить другой Вариант Ответа
+    MarkdownEditor:
+      failed_attach: "Не удалось прикрепить файл! "
+      unexpected_error: Произошла непредвиденная ошибка! Пожалуйста, перезагрузите страницу, прежде чем повторять попытку.
+      max_file_size: Максимальный размер файла составляет 5 МБ. Пожалуйста, выберите другой файл.
+      click_here: Нажмите здесь, чтобы прикрепить файл.
+      wait_upload: Пожалуйста, дождитесь загрузки файла...
+      need_help: Нужна Помощь?
     Notifications__List:
       button_load_more: Загрузить больше уведомлений...
       empty_notifications: У вас нет уведомлений!
@@ -735,6 +791,14 @@ ru:
       edit_profile: Редактировать Профиль
       sign_in: Войти
       sign_out: Выйти
+    StudentCourse__Header:
+      curriculum: Силлабус
+      calendar: Календарь
+      leaderboard: Рейтинг
+      review: Проверка
+      students: Студенты
+      report: Отчет
+      unknown: Неизвестно
     StudentsEditor__ActionsForm:
       active_label: Активен
       certificates_label: Сертификаты Курса
@@ -827,6 +891,15 @@ ru:
       action_string_write_short_text: Напишите Короткий Текст
     TopicsShow__LikeManager:
       like_button_tooltip: Лайкнуть Этот Пост
+    TopicsShow__PostEditor:
+      empty: Пусто
+      cant_blank: Ответы не могут быть пустыми
+      reply_to: Ответить на
+      your_reply: Ваш Ответ
+      type_reply: Введите свой ответ. Вы можете использовать Markdown для своего ответа.
+      reason_edit: Причина изменения поста (необязательно)
+      cancel: Отмена
+      post_reply: Опубликуйте Свой Ответ
     TopicsShow__PostShow:
       delete_post_confirm_dialog: Вы уверены, что хотите удалить пост? Это не может быть отменено.
       delete_reply_string: Удалить Ответ
@@ -873,6 +946,8 @@ ru:
       edit_profile: Редактировать Профиль
       empty_courses: В данный момент у вас нет активных курсов.
       my_courses: Мои Курсы
+      edit_curricullum: Редактировать Силлабус
+      issued_on: "Выдан в:"
     VerifyCertificate__Root:
       cancel: Отменить и Вернуться
       description: Данный сертификат был выдан <strong class="whitespace-no-wrap">%{name}</strong> в <strong class="whitespace-no-wrap">%{issue_date}</strong> по курсу <strong>%{course_name}</strong>.
@@ -1204,6 +1279,8 @@ ru:
     completed: Завершено
     load_more: Загрузить Больше...
     team: Команда
+    loading: Загрузка...
+    replies: Replies
   users:
     oauth:
       invalid_request: Ваш браузер сделал неверный запрос.
@@ -1219,3 +1296,13 @@ ru:
       password_free: Вход без пароля
       magic_link: Мы можем отправить вам по электронной почте ссылку, чтобы вы могли войти в систему без необходимости вводить свой пароль.
       oauth: Войдите в систему с помощью Google, Facebook или Github
+      question: Вопрос
+  omniauth:
+    callbacks:
+      denied_by: Аутентификация была отклонена от %{oauth_origin[:provider].capitalize}. Пожалуйста, повторите снова.
+      denied: В аутентификации было отказано. Пожалуйста, попробуйте снова.
+      email_unregistered: "Ваша электронная почта: %{@email} не зарегестрирована"
+      not_receive_email: "Извините, но мы не получили ваш адрес электронной почты от #{provider_name}. "
+      add_github: Пожалуйста, <a href="https://github.com/settings/profile" target="_blank" rel="noopener">добавьте общедоступный адрес почты в свой профиль на Github</a> и попробуйте снова.
+      add_facebook: Пожалуйста <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">уберите \'Pupilfirst\' из вашего списка авторизованных приложений</a> и попробуйте войти в систему еще раз.
+      add_other: Пожалуйста, войдите другим методом.

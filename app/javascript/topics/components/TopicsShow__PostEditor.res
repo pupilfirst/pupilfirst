@@ -3,6 +3,8 @@ open TopicsShow__Types
 let str = React.string
 %raw(`require("./TopicsShow__PostEditor.css")`)
 
+let tr = I18n.t(~scope="components.TopicsShow__PostEditor")
+
 type state = {
   body: string,
   saving: bool,
@@ -132,7 +134,7 @@ let savePost = (
       |> ignore
     }
   } else {
-    Notification.error("Empty", "Reply cant be blank")
+    Notification.error(tr("empty"), tr("cant_blank"))
   }
 }
 
@@ -196,8 +198,8 @@ let make = (
             className="inline-block tracking-wide text-gray-900 text-sm font-semibold mb-2"
             htmlFor="new-reply">
             {switch replyToPostId {
-            | Some(_id) => "Reply To"
-            | None => "Your Reply"
+            | Some(_id) => tr("reply_to")
+            | None => tr("your_reply")
             } |> str}
           </label>
           {replyToPostId
@@ -227,7 +229,7 @@ let make = (
           )}
           <div>
             <MarkdownEditor
-              placeholder="Type in your reply. You can use Markdown to format your response."
+              placeholder=tr("type_reply")
               textareaId="new-reply"
               onChange=updateMarkdownCB
               value=state.body
@@ -245,7 +247,7 @@ let make = (
                     | reason => setEditReason(Some(reason))
                     }
                   }}
-                  placeholder="Reason for this edit (optional)"
+                  placeholder=tr("reason_edit")
                   value={switch editReason {
                   | None => ""
                   | Some(editReason) => editReason
@@ -261,7 +263,7 @@ let make = (
                 disabled=state.saving
                 onClick={_ => handleCloseCB()}
                 className="btn btn-subtle mr-2">
-                {"Cancel" |> str}
+                {tr("cancel") |> str}
               </button>
             | None => React.null
             }}
@@ -285,7 +287,7 @@ let make = (
                 className="btn btn-primary">
                 {switch post {
                 | Some(post) => Post.postNumber(post) == 1 ? "Update Post" : "Update Reply"
-                | None => "Post Your Reply"
+                | None => tr("post_reply")
                 } |> str}
               </button>
             }

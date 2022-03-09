@@ -2,6 +2,8 @@ let str = React.string
 %bs.raw(`require("./StudentCourse__Header.css")`)
 %bs.raw(`require("courses/shared/background_patterns.css")`)
 
+let tr = I18n.t(~scope="components.StudentCourse__Header")
+
 let courseOptions = courses => Js.Array.map(course => {
     let courseId = CourseInfo.id(course)
     <a
@@ -97,13 +99,13 @@ let make = (~currentCourseId, ~courses, ~additionalLinks, ~coverImage) => {
           className="bg-white border-transparent flex justify-between overflow-x-auto md:overflow-hidden lg:max-w-3xl mx-auto shadow md:rounded-lg mt-0 md:-mt-7 z-10 relative">
           {Js.Array.map(l => {
             let (title, suffix) = switch l {
-            | "curriculum" => ("Curriculum", "curriculum")
-            | "calendar" => ("Calendar", "calendar")
-            | "leaderboard" => ("Leaderboard", "leaderboard")
-            | "review" => ("Review", "review")
-            | "students" => ("Students", "students")
-            | "report" => ("Report", "report")
-            | _unknown => ("Unknown", "")
+            | "curriculum" => (tr("curriculum"), "curriculum")
+            | "calendar" => (tr("calendar"), "calendar")
+            | "leaderboard" => (tr("leaderboard"), "leaderboard")
+            | "review" => (tr("review"), "review")
+            | "students" => (tr("students"), "students")
+            | "report" => (tr("report"), "report")
+            | _unknown => (tr("unknown"), "")
             }
 
             <a

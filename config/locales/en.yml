@@ -33,6 +33,32 @@ en:
       filter_result_empty: The filters you've applied does not match any coach. Please change the filter and try again.
       filter_search_string_course: teaches course %{name}
       heading: Coaches
+    CommunitiesNewTopic__Root:
+      oops: Oops!
+      failed_fetch_similar: We failed to fetch similar topics from the server! Our team has been notified about this error.
+      done: Done!
+      redirecting: Redirecting to new topic now...
+      unexpected_error: Unexpected Error!
+      please_reload: Please reload the page before trying to post again.
+      missing_info: Missing Info!
+      topic_body_present: Topic title and body must be present.
+      similar_topics: Similar Topics
+      no_replies: No replies
+      one_reply: 1 reply
+      manu_replies_post: " replies"
+      asked_on: "Asked on "
+      no_category_found: "Unable to find category with ID:"
+      back: Back
+      linked_target: "Linked Target: "
+      clear: Clear
+      create_topic_discussion: Create a new topic of discussion
+      title: Title
+      title_placeholder: Title for the new topic
+      select_category: Select Category
+      not_selected: Not Selected
+      body: Body
+      create_topic: Create Topic
+      be_descriptive: "If you're asking a question, try to be as descriptive as possible to make it easier for others to post answers. You can use Markdown to format this text."
     CommunitiesShow__Root:
       all_categories_button: All Categories
       button_load_more: Load More...
@@ -320,6 +346,13 @@ en:
       button_text_start_recording: Start Recording
       recording_size_limit_warning: The recording should not exceed 5mb in size. Please re-record
       recording_string: Recording...
+    CoursesCurriculum__Discuss:
+      topics_pre: "Topics From "
+      topics_post: " community"
+      go_to: Go to community
+      create: Create a topic
+      no_discussion: There's been no recent discussion about this target.
+      use_community: Use the community to clear your doubts, and to help your peers!
     CoursesCurriculum__Learn:
       edit_target_button: Edit Content
     CoursesCurriculum__LevelUpButton:
@@ -366,6 +399,19 @@ en:
       preview_mode_text: You are currently looking at a preview of this course.
       previous_target_button: Previous Target
       scroll_to_top: Scroll to Top
+    CoursesCurriculum__SubmissionsAndFeedback:
+      completed: Completed
+      rejected: Rejected
+      grading: Grading
+      submission_details: "Details about your submission on "
+      submission_number: "Submission #"
+      submitted_on: Submitted on
+      pending_review: Pending Review
+      unknown_coach: Unknown Coach
+      your_submissions: Your Submissions
+      cancel: Cancel
+      add_another_submission: Add another submission
+      add_another: Add another
     CoursesCurriculum__TargetStatus:
       access_locked: Your access to this course has ended.
       course_locked: This course has ended.
@@ -694,6 +740,16 @@ en:
     CurriculumEditor__TargetGroupShow:
       create_target: Create a target
       milestone_targets: Milestone Targets
+    CurriculumEditor__TargetQuizQuestion:
+      remove_question: Remove Quiz Question
+      add_another_answer: Add another Answer Option
+    MarkdownEditor:
+      failed_attach: "Failed to attach file! "
+      unexpected_error: An unexpected error occured! Please reload the page before trying again.
+      max_file_size: The maximum file size is 5 MB. Please select another file.
+      click_here: Click here to attach a file.
+      wait_upload: Please wait for the file to upload...
+      need_help: Need help?
     Notifications__List:
       button_load_more: Load More Notifications...
       empty_notifications: You don't have any notifications!
@@ -735,6 +791,14 @@ en:
       edit_profile: Edit Profile
       sign_in: Sign In
       sign_out: Sign Out
+    StudentCourse__Header:
+      curriculum: Curriculum
+      calendar: Calendar
+      leaderboard: Leaderboard
+      review: Review
+      students: Students
+      report: Report
+      unknown: Unknown
     StudentsEditor__ActionsForm:
       active_label: Active
       certificates_label: Course Certificates
@@ -827,6 +891,15 @@ en:
       action_string_write_short_text: Write Short Text
     TopicsShow__LikeManager:
       like_button_tooltip: Like this post
+    TopicsShow__PostEditor:
+      empty: Empty
+      cant_blank: "Reply can't be blank"
+      reply_to: Reply To
+      your_reply: Your Reply
+      type_reply: Type in your reply. You can use Markdown to format your response.
+      reason_edit: Reason for this edit (optional)
+      cancel: Cancel
+      post_reply: Post Your Reply
     TopicsShow__PostShow:
       delete_post_confirm_dialog: Are you sure you want to delete the post? This cannot be undone.
       delete_reply_string: Delete Reply
@@ -871,6 +944,8 @@ en:
         view_curriculum: View Curriculum
         visit_community: Visit Community
       edit_profile: Edit Profile
+      edit_curricullum: Edit Curriculum
+      issued_on: "Issued on:"
       empty_courses: You don't have any active courses right now.
       my_courses: My Courses
     VerifyCertificate__Root:
@@ -1204,6 +1279,8 @@ en:
     completed: Completed
     load_more: Load More...
     team: Team
+    loading: Loading...
+    replies: Replies
   users:
     oauth:
       invalid_request: Your browser made an invalid request.
@@ -1219,3 +1296,13 @@ en:
       password_free: Password-free sign in
       magic_link: We can email you a magic link so you can sign in without having to type your password.
       oauth: Sign in with Google, Facebook, or Github
+      question: Question
+  omniauth:
+    callbacks:
+      denied_by: Authentication was denied by %{oauth_origin[:provider].capitalize}. Please try again.
+      denied: Authentication was denied. Please try again.
+      email_unregistered: "Your email address: %{@email} is unregistered."
+      not_receive_email: "We're sorry, but we did not receive your email address from #{provider_name}. "
+      add_github: Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.
+      add_facebook: Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.
+      add_other: Please sign in using another method.

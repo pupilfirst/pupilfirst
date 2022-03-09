@@ -4,6 +4,8 @@ exception InvalidModeForPreview
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.MarkdownEditor")
+
 type fullscreenMode = [#Editor | #Preview | #Split]
 
 type windowedMode = [#Editor | #Preview]
@@ -402,7 +404,7 @@ let handleUploadFileResponse = (oldValue, state, send, onChange, json) => {
     )
     send(FinishUploading)
   } else {
-    send(SetUploadError(Some("Failed to attach file! " ++ (errors |> Js.Array.joinWith(", ")))))
+    send(SetUploadError(Some(tr("failed_attach") ++ (errors |> Js.Array.joinWith(", ")))))
   }
 }
 
@@ -418,7 +420,7 @@ let submitForm = (formId, oldValue, state, send, onChange) => {
       () =>
         send(
           SetUploadError(
-            Some("An unexpected error occured! Please reload the page before trying again."),
+            Some(tr("unexpected_error")),
           ),
         ),
     )
@@ -434,7 +436,7 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
 
     let error =
       file["size"] > maxFileSize
-        ? Some("The maximum file size is 5 MB. Please select another file.")
+        ? Some(tr("max_file_size"))
         : None
 
     switch error {
@@ -490,14 +492,14 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
               </span>
             | None =>
               <span>
-                <i className="far fa-file-image mr-2" /> {"Click here to attach a file." |> str}
+                <i className="far fa-file-image mr-2" /> {tr("click_here") |> str}
               </span>
             }}
           </label>
         | Uploading =>
           <span className="text-xs px-3 py-2 flex-grow cursor-wait">
             <i className="fas fa-spinner fa-pulse mr-2" />
-            {"Please wait for the file to upload..." |> str}
+            {tr("wait_upload") |> str}
           </span>
         }}
       </form>->ReactUtils.nullUnless(fileUpload)}
@@ -506,7 +508,7 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
         target="_blank"
         className="flex items-center px-3 py-2 hover:bg-gray-300 hover:text-secondary-500 cursor-pointer">
         <i className="fab fa-markdown text-sm" />
-        <span className="text-xs ml-1 font-semibold hidden sm:inline"> {"Need help?" |> str} </span>
+        <span className="text-xs ml-1 font-semibold hidden sm:inline"> {tr("need_help") |> str} </span>
       </a>
     </div>
   }

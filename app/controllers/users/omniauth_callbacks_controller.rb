@@ -26,10 +26,10 @@ module Users
 
     def failure
       if oauth_origin.present?
-        message = "Authentication was denied by #{oauth_origin[:provider].capitalize}. Please try again."
+        message = I18n.t("omniauth.callbacks.denied_by")
         redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: message)
       else
-        flash[:error] = 'Authentication was denied. Please try again.'
+        flash[:error] = I18n.t("omniauth.callbacks.denied")
         redirect_to new_user_session_path
       end
     end
@@ -61,7 +61,7 @@ module Users
         # Redirect user to sign in at the origin domain with newly generated token.
         redirect_to user_token_url(token_url_options)
       else
-        redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: "Your email address: #{@email} is unregistered.")
+        redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: I18n.t("omniauth.callbacks.email_unregistered"))
       end
     end
 
@@ -99,15 +99,15 @@ module Users
     end
 
     def email_blank_flash
-      message = "We're sorry, but we did not receive your email address from #{provider_name}. "
+      message = I18n.t("omniauth.callbacks.not_receive_email")
 
       message += case provider_name
         when 'Github'
-          'Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.'
+          I18n.t("omniauth.callbacks.add_github")
         when 'Facebook'
-          'Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.'
+          I18n.t("omniauth.callbacks.add_facebook")
         else
-          'Please sign in using another method.'
+          I18n.t("omniauth.callbacks.add_other")
       end
 
       message.html_safe

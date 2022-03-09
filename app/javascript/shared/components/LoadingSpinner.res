@@ -1,6 +1,7 @@
 %bs.raw(`require("./LoadingSpinner.css")`)
 
 let str = React.string
+let ts = I18n.t(~scope="shared")
 
 let onAnimationEnd = (loading, setRender) =>
   if !loading {
@@ -11,7 +12,7 @@ let animationClass = loading =>
   loading ? "loading-spinner__slide-up" : "loading-spinner__slide-down"
 
 @react.component
-let make = (~loading, ~message="Loading...") => {
+let make = (~loading, ~message=ts("loading")) => {
   let (shouldRender, setRender) = React.useState(() => loading)
   let initialRender = React.useRef(true)
   React.useEffect1(() => {

@@ -1,6 +1,7 @@
 %raw(`require("./TopicsShow__Root.css")`)
 
 let t = I18n.t(~scope="components.TopicsShow__Root")
+let ts = I18n.t(~scope="shared")
 
 open TopicsShow__Types
 
@@ -480,12 +481,7 @@ let make = (
           />}
         </div>
         <h5 className="pt-4 pb-2 lg:ml-14 border-b">
-          {Inflector.pluralize(
-            "Reply",
-            ~count=Array.length(state.replies),
-            ~inclusive=true,
-            (),
-          ) |> str}
+          { Belt.Int.toString(Array.length(state.replies)) ++ " " ++ ts("replies") |> str}
         </h5>
         {state.replies
         |> Post.sort

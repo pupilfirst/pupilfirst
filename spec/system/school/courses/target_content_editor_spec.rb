@@ -495,7 +495,7 @@ feature 'Target Content Editor', js: true do
         "div[aria-label='Editor for content block #{fourth_block.id}']"
       )
 
-      # Closing editor should be confirmed.
+      # Closing editor should not be confirmed.
       find('button[title="Close Editor"').click
 
       expect(page).not_to have_selector(

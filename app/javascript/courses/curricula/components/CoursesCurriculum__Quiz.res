@@ -127,7 +127,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
                 setSaving,
                 addSubmissionCB,
               )}>
-              {str(tr.("submit_quiz"))}
+              {str(tr("submit_quiz"))}
             </button>
           : {
               let nextQuestion = currentQuestion |> QuizQuestion.nextQuestion(quizQuestions)

@@ -2,25 +2,25 @@
 
 @layer components {
   .theme-pupilfirst {
-    --color-primary-100: #f0eafb;
-    --color-primary-200: #d3bff3;
-    --color-primary-300: #b08ee6;
-    --color-primary-400: #976ae2;
-    --color-primary-500: #6025c0;
-    --color-primary-600: #4d1e9a;
-    --color-primary-700: #380d80;
-    --color-primary-800: #35156b;
-    --color-primary-900: #1f0d40;
+    --color-primary-100: #eaebfb;
+    --color-primary-200: #bfc1f3;
+    --color-primary-300: #8e92e6;
+    --color-primary-400: #6a70e2;
+    --color-primary-500: #2b32c1;
+    --color-primary-600: #1e249a;
+    --color-primary-700: #0d1280;
+    --color-primary-800: #15196b;
+    --color-primary-900: #0d0f40;
 
-    --color-secondary-100: #fee6ef;
-    --color-secondary-200: #fcb5d0;
-    --color-secondary-300: #ff80b0;
-    --color-secondary-400: #f95392;
-    --color-secondary-500: #f61067;
-    --color-secondary-600: #ac0645;
-    --color-secondary-700: #a61149;
-    --color-secondary-800: #7b0531;
-    --color-secondary-900: #4a031e;
+    --color-secondary-100: #eaf9fb;
+    --color-secondary-200: #bfedf3;
+    --color-secondary-300: #8edce6;
+    --color-secondary-400: #6ad4e2;
+    --color-secondary-500: #25aec0;
+    --color-secondary-600: #1e8b9a;
+    --color-secondary-700: #0d7280;
+    --color-secondary-800: #15616b;
+    --color-secondary-900: #0d3a40;
 
     --color-gray-50: #fdfdfd;
     --color-gray-100: #fbfafc;

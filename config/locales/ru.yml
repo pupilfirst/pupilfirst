@@ -1307,9 +1307,9 @@ ru:
       question: Вопрос
   omniauth:
     callbacks:
-      denied_by: Аутентификация была отклонена от %{oauth_origin[:provider].capitalize}. Пожалуйста, повторите снова.
+      denied_by: Аутентификация была отклонена от %{provider}. Пожалуйста, повторите снова.
       denied: В аутентификации было отказано. Пожалуйста, попробуйте снова.
-      email_unregistered: "Ваша электронная почта: %{@email} не зарегестрирована"
+      email_unregistered: "Ваша электронная почта: %{email} не зарегестрирована"
       not_receive_email: "Извините, но мы не получили ваш адрес электронной почты от #{provider_name}. "
       add_github: Пожалуйста, <a href="https://github.com/settings/profile" target="_blank" rel="noopener">добавьте общедоступный адрес почты в свой профиль на Github</a> и попробуйте снова.
       add_facebook: Пожалуйста <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">уберите \'Pupilfirst\' из вашего списка авторизованных приложений</a> и попробуйте войти в систему еще раз.

@@ -26,7 +26,7 @@ module Users
 
     def failure
       if oauth_origin.present?
-        message = I18n.t("omniauth.callbacks.denied_by")
+        message = I18n.t("omniauth.callbacks.denied_by", provider: oauth_origin[:provider].capitalize)
         redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: message)
       else
         flash[:error] = I18n.t("omniauth.callbacks.denied")
@@ -61,7 +61,7 @@ module Users
         # Redirect user to sign in at the origin domain with newly generated token.
         redirect_to user_token_url(token_url_options)
       else
-        redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: I18n.t("omniauth.callbacks.email_unregistered"))
+        redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: I18n.t("omniauth.callbacks.email_unregistered", email: @email))
       end
     end
 

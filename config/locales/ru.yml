@@ -996,6 +996,17 @@ ru:
     show:
       continue_course: Продолжить Курс
       preview_course: Предварительный просмотр
+    leaderboard:
+      note: В этой таблице лидеров показаны студенты <strong>, которые улучшились больше всего </strong> по сравнению с предыдущей таблицей лидеров.
+      no_entries: В таблице лидеров нет никаких записей за этот период.
+      active_students: Активные Студенты
+      inactive_students: Неактивные Студенты
+      rank: Ранг
+      change: Изменить
+      student: Студент
+      level: Уровень
+      score: Баллы
+      new_new: Новый
   dashboard:
     dashboard:
       tour:

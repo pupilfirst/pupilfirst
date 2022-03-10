@@ -996,6 +996,17 @@ en:
     show:
       continue_course: Continue Course
       preview_course: Preview Course
+    leaderboard:
+      note: This leaderboard shows students <strong>who have improved the most</strong> compared to the previous leaderboard.
+      no_entries: The leaderboard doesn&rsquo;t have any entries for this period.
+      active_students: Active Students
+      inactive_students: Inactive Students
+      rank: Rank
+      change: Change
+      student: Student
+      level: Level
+      score: Score
+      new_new: New
   dashboard:
     dashboard:
       tour:

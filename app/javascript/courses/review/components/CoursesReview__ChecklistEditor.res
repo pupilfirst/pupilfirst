@@ -155,7 +155,7 @@ let controlIcon = (~icon, ~title, ~hidden=false, handler) =>
       ariaLabel=title
       title
       disabled={hidden}
-      className="px-2 py-1 text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden focus:outline-none focus:bg-gray-300 focus:text-gray-900"
+      className="px-2 py-1 rounded text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden focus:outline-none focus:bg-gray-300 focus:text-gray-900"
       onClick={handler}>
       <i className={"fas fa-fw " ++ icon} />
     </button>,
@@ -192,9 +192,9 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
             <Spread
               props={"data-checklist-item": string_of_int(itemIndex)}
               key={string_of_int(itemIndex)}>
-              <div className="flex items-start ">
+              <div className="flex items-start gap-1">
                 <div
-                  className="p-5 mb-5 flex flex-col flex-1 bg-gray-200 border border-primary-300 rounded-lg"
+                  className="p-3 md:p-5 mb-5 flex flex-col flex-1 bg-gray-200 rounded-lg"
                   key={itemIndex->string_of_int}
                   ariaLabel={"checklist-item-" ++ itemIndex->string_of_int}>
                   <div className="flex">
@@ -236,9 +236,9 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                               className="flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
                             />
                             <div className="w-full bg-gray-100 relative">
-                              <div className="relative">
+                              <div className="flex justify-between gap-2 bg-white border border-gray-400 border-b-transparent rounded-t focus-within:outline-none focus-within:bg-white focus-within:border-primary-300">
                                 <input
-                                  className="checklist-editor__checklist-result-item-title h-10 pr-12 focus:outline-none focus:bg-white focus:border-primary-300"
+                                  className="checklist-editor__checklist-result-item-title border-none h-10 pr-0 focus:outline-none"
                                   id={"result_" ++
                                   string_of_int(itemIndex) ++
                                   string_of_int(resultIndex) ++ "_title"}
@@ -256,7 +256,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                     )}
                                 />
                                 <div
-                                  className="flex h-10 absolute top-0 right-0 mr-1 items-center justify-center">
+                                  className="flex h-10 mr-1 items-center justify-center">
                                   {controlIcon(
                                     ~icon="fa-arrow-up",
                                     ~title={t("checklist_item_title.move_up_button_title")},
@@ -356,7 +356,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                   </div>
                 </div>
                 <div
-                  className="border bg-gray-100 rounded flex flex-col text-xs sticky top-0 overflow-hidden">
+                  className="border border-gray-300 bg-white divide-y divide-gray-300 rounded flex flex-col text-xs sticky top-0 overflow-hidden">
                   {controlIcon(
                     ~icon="fa-arrow-up",
                     ~title={t("checklist_title.move_up_button_title")},

@@ -155,7 +155,7 @@ module Schools
           end
 
         render json: {
-                 message: 'Teams marked active successfully!',
+                 message: I18n.t("controllers.Schools_CoursesController.teams_active"),
                  error: nil
                }
       end

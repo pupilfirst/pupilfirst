@@ -10,7 +10,7 @@ class ApplicantsController < ApplicationController
       redirect_to resolve_applicant_path
     else
       flash[:error] =
-        'That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in.'
+        I18n.t("controllers.ApplicantsController.link_expired")
       redirect_to new_user_session_path
     end
   end
@@ -24,7 +24,7 @@ class ApplicantsController < ApplicationController
           .new(@applicant)
           .create([session[:applicant_tag] || 'Public Signup'])
       sign_in student.user
-      flash[:success] = "Welcome to #{current_school.name}!"
+      flash[:success] = I18n.t("controllers.ApplicantsController.welcome", school_name: current_school.name)
       after_sign_in_path_for(student.user)
     else
       @applicant

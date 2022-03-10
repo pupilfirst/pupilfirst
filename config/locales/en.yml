@@ -1349,3 +1349,18 @@ en:
     details_updated: Details updated successfully!
     topic_updated: Topic updated successfully!
     profile_saved: Profile updated successfully!
+  controllers:
+    ApplicantsController:
+      link_expired: That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in.
+      welcome: Welcome to %{school_name}!
+    CoursesController:
+      sent_mail: We've sent you a verification mail. It should reach you in less than a minute. Click the link in the email to sign up, and get started.
+      errors: "There were errors with your submission: %{form_errors}"
+    Schools__CoursesController:
+      teams_active: Teams marked active successfully!
+    UsersController:
+      link_expired: That link has expired or is invalid. Please try again.
+    Users__SessionsController:
+      already_signed: You are already signed in.
+      link_expired: That one-time link has expired, or is invalid. Please try signing in again.
+      link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.

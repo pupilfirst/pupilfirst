@@ -988,7 +988,6 @@ ru:
       apply_now: Начать Курс
       apply_button: Применить
       email_label: Почта
-      email_placeholder: john@example.com
       heading: Зарегистрироваться на курс %{course_name}
       name_label: Имя
       name_placeholder: John Doe
@@ -1249,7 +1248,6 @@ ru:
     request_password_reset:
       cancel_link: Войдите в систему с Google, Facebook или Github
       email_label: Почта
-      email_placeholder: john@example.com
       heading: Сброс пароля
       image_alt: Студент держит гигантский ключ с символом сброса на нем
       page_title: Сброс пароля

@@ -1378,7 +1378,7 @@ en:
     Communities__NewTopic:
       new_topic: New Topic
       community: Community
-    Communities__show:
+    Communities__Show:
       community: Community
     Courses__Leaderboard:
       top_leaderboard_html: '<span class="font-bold">You</span> are at the top of the leaderboard. <span class="font-bold">Congratulations!</span>'

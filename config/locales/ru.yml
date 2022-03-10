@@ -1378,7 +1378,7 @@ ru:
     Communities__NewTopic:
       new_topic: Новая Тема
       community: Сообщество
-    Communities__show:
+    Communities__Show:
       community: Сообщество
     Courses__Leaderboard:
       top_leaderboard_html: '<span class="font-bold">Вы</span> находитесь на вершине таблицы лидеров. <span class="font-bold">Поздравляем!</span>'

@@ -1052,6 +1052,7 @@ en:
     terms_conditions: Terms & Conditions
     reach_us: Reach us at
     logo: Logo of
+    support: Contact Support
   graphql:
     concerns:
       validate_submission_gradable:
@@ -1312,6 +1313,7 @@ en:
     replies: Replies
     dashboard: Dashboard
     community: Community
+    communities: Communities
   users:
     oauth:
       invalid_request: Your browser made an invalid request.
@@ -1415,3 +1417,28 @@ en:
       coaches: Coaches
     Posts__Versions:
       title:  "Versions | Post"
+  views:
+    applicants:
+      title: Applicants
+    authors:
+      title: Authors
+    certificates:
+      title: Certificates
+    curriculum:
+      title: Curriculum
+    evaluation:
+      title: Evaluation Criteria
+    exports:
+      title: Exports
+    students:
+      title: Students
+    courses:
+      title: Courses
+    coaches:
+      title: Coaches
+    admins:
+      title: Admins
+    timeline_events:
+      submitted_on: Submitted on
+    sign_in_with_email:
+      type_password: Type your password

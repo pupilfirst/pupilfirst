@@ -104,14 +104,14 @@ ru:
         label: Заголовок
         placeholder: Студент, ментор, генеральный директор и т.д.
     CourseApplicants__Root:
-      applicants_fully_loaded_text: Показаны все  %{total_applicants} кандидатов
-      applicants_page_title: Кандидаты
-      applicants_partially_loaded_text: Показаны %{loaded_applicants_count} из %{total_applicants} кандидатов
-      button_load_more: Загрузить больше кандидатов...
-      empty_applicants: У вас нет кандидатов!
+      applicants_fully_loaded_text: Показаны все  %{total_applicants} абитурентов
+      applicants_page_title: Абитуренты
+      applicants_partially_loaded_text: Показаны %{loaded_applicants_count} из %{total_applicants} абитурентов
+      button_load_more: Загрузить больше абитурентов...
+      empty_applicants: У вас нет абитурентов!
       filter:
         input_label: Искать
-        input_placeholder: Фильтр и поиск кандидатов по имени
+        input_placeholder: Фильтр и поиск абитурентов по имени
         label:
           search: Поиск по имени или почте
           tag: Тег
@@ -250,8 +250,8 @@ ru:
       feature_course_in_homepage_label: Рекомендовать курс на домашней странице школы?
       processing_url:
         error: Недействительный URL обработки
-        help: Вы можете отправить URL курса кандидатам после того, как они подадут заявку на курс.
-        label: Хотите ли вы обработать информацию о кандидатах перед их зачислением?
+        help: Вы можете отправить URL курса абитурентам после того, как они подадут заявку на курс.
+        label: Хотите ли вы обработать информацию о абитурентах перед их зачислением?
       progression_behavior:
         help: Это применимо только в том случае, если ваш курс имеет контрольные задачи, требующие от студентов представления своей работы на рассмотрение менторам.
         label: Успешность
@@ -787,7 +787,7 @@ ru:
       notifications_partially_loaded_text: Показаны %{loaded_notifications_count} из %{total_notifications} уведомлении
     SchoolAdminNavbar__Root:
       course_nav:
-        applicants: Кандидаты
+        applicants: Абитуренты
         authors: Авторы
         certificates: Сертификаты
         coaches: Менторы
@@ -1053,6 +1053,7 @@ ru:
     sitemap: Карта Сайта
     contact: Контакты
     social: Соц. Сети
+    support: Contact Support
     privacy_policy: Политика Конфиденциальности
     terms_conditions: Правила и Условия
     reach_us: Свяжитесь с нами по
@@ -1312,6 +1313,7 @@ ru:
     replies: Ответов
     dashboard: Обучение
     community: Сообщество
+    communities: Communities
   users:
     oauth:
       invalid_request: Ваш браузер сделал неверный запрос.
@@ -1415,3 +1417,28 @@ ru:
       coaches: Менторы
     Posts__Versions:
       title:  "Версии | Пост"
+  views:
+    applicants:
+      title: Абитуренты
+    authors:
+      title: Авторы
+    certificates:
+      title: Сертификаты
+    curriculum:
+      title: Силлабус
+    evaluation:
+      title: Критерии Оценки
+    exports:
+      title: Экспорты
+    students:
+      title: Студенты
+    courses:
+      title: Курсы
+    coaches:
+      title: Менторы
+    admins:
+      title: Админы
+    timeline_events:
+      submitted_on: Отправлено в
+    sign_in_with_email:
+      type_password: Ваш Пароль

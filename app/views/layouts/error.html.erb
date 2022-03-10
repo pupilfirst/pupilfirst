@@ -6,7 +6,7 @@
   <footer>
     <% if presenter.contact_email.present? %>
       <div class="container mx-auto px-4 text-center">
-        <%= mail_to presenter.contact_email, 'Contact Support', class:'text-primary-500 hover:text-primary-600' %>
+        <%= mail_to presenter.contact_email, t("footer.support"), class:'text-primary-500 hover:text-primary-600' %>
       </div>
     <% end %>
 

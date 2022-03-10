@@ -1208,11 +1208,11 @@ ru:
     message: Похоже, возникла проблема с вашим подключением. <br/> Проверьте статус вашей сети.
     title: Вы не в сети
   posts:
-    back_to_post: Back to Post
-    edit_history: Post Edit History
-    current_version: Current Version
-    edited_by: Edited by
-    created_by: Created by
+    back_to_post: Обратно на Пост
+    edit_history: История Изменении Поста
+    current_version: Нынешняя Версяя
+    edited_by: Редактированный
+    created_by: Созданный
   queries:
     delete_certificate_mutator:
       issued_error: Этот сертификат выдан одному или нескольким студентам - его нельзя удалить.

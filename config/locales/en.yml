@@ -77,6 +77,7 @@ en:
       topic_stats_views: View
       topics_fully_loaded_text: Showing all %{total_topics} topics
       topics_partially_loaded_text: Showing %{loaded_topics_count} of %{total_topics} topics
+      unable_find_id: "Unable to find topic category with ID: "
     CourseApplicants__EditForm:
       access_ends_at:
         help: If set, students will not be able to complete targets after this date.

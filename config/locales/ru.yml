@@ -77,6 +77,7 @@ ru:
       topic_stats_views: Посмотреть
       topics_fully_loaded_text: Показать все %{total_topics} темы
       topics_partially_loaded_text: Показано %{loaded_topics_count} из %{total_topics} тем
+      unable_find_id: "Не удалось найти категорию темы с ID: "
     CourseApplicants__EditForm:
       access_ends_at:
         help: Если установлено, учащиеся не смогут выполнять задания после этой даты.
@@ -757,12 +758,26 @@ ru:
       remove_question: Удалить Вопрос Теста
       add_another_answer: Добавить другой Вариант Ответа
     MarkdownEditor:
-      failed_attach: "Не удалось прикрепить файл! "
-      unexpected_error: Произошла непредвиденная ошибка! Пожалуйста, перезагрузите страницу, прежде чем повторять попытку.
-      max_file_size: Максимальный размер файла составляет 5 МБ. Пожалуйста, выберите другой файл.
-      click_here: Нажмите здесь, чтобы прикрепить файл.
-      wait_upload: Пожалуйста, дождитесь загрузки файла...
-      need_help: Нужна Помощь?
+      attach_file_label: Нажмите здесь, чтобы прикрепить файл.
+      bold_insert: жирный
+      control_label_bold: Жирный
+      control_label_italic: Курсив
+      control_label_strikethrough: Зачеркнутый
+      error_maximum_file_size: Максимальный размер файла составляет 5 МБ. Пожалуйста, выберите другой файл.
+      error_prefix: Не удалось прикрепить файл!
+      error_unexpected: Произошла непредвиденная ошибка! Пожалуйста, перезагрузите страницу, прежде чем повторять попытку.
+      exit_full_screen_label: Выход из полноэкранного режима
+      file_upload_wait: Пожалуйста, дождитесь загрузки файла...
+      help_aria_label: Нужна помощь с Markdown?
+      help_label: Нужна помощь?
+      italic_insert: Курсив
+      mode_label_fullscreen: Полный экран
+      mode_label_fullscreen_exit: Выйти из полного экрана
+      mode_label_preview: Предварительный просмотр
+      mode_label_preview_exit: Редактировать
+      mode_label_split: Просмотр редактора и предварительный просмотр в режиме разделения
+      mode_label_split_exit: Закрыть разделенный вид
+      strikethrough_insert: зачеркнутый
     Notifications__List:
       button_load_more: Загрузить больше уведомлений...
       empty_notifications: У вас нет уведомлений!
@@ -1301,6 +1316,7 @@ ru:
     settings: Settings
     target: Задача
     login_token_expiration_warning_html: Срок действия этой ссылки истекает через %{timestamp}. Если срок действия ссылки истек, вы можете запросить еще один одноразовый токен на <a href="%{login_url}" %>странице входа</a>. Обратите внимание, что это личный URL-адрес, которым нельзя делиться.
+    terms_and_conditions: Условия и Положения
     no_email_found: Не удалось найти пользователя с этим адресом электронной почты. Пожалуйста, проверьте адрес электронной почты, который вы ввели.
     students: Студенты
     teams: Команды

@@ -1051,6 +1051,7 @@ en:
     privacy_policy: Privacy Policy
     terms_conditions: Terms & Conditions
     reach_us: Reach us at
+    logo: Logo of
   graphql:
     concerns:
       validate_submission_gradable:

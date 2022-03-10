@@ -1281,7 +1281,7 @@ en:
       short_with_name: "L%{number}: %{name}"
       short_without_name: L%{number}
     optional: optional
-    or: OR
+    or: or
     and: and
     save_changes: Save Changes
     processing: Processing

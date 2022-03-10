@@ -1281,7 +1281,7 @@ ru:
       short_with_name: "У%{number}: %{name}"
       short_without_name: У%{number}
     optional: необязательно
-    or: ИЛИ
+    or: или
     and: и
     save_changes: Сохранить изменения
     processing: Обрабатывается

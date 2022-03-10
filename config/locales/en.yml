@@ -1316,6 +1316,7 @@ en:
     settings: Settings
     target: Target
     terms_and_conditions: Terms & Conditions
+    login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
     no_email_found: Could not find user with this email. Please check the email that you entered.
     students: Students
     teams: Teams
@@ -1457,3 +1458,30 @@ en:
       submitted_on: Submitted on
     sign_in_with_email:
       type_password: Type your password
+  mailers:
+    applicant:
+      verify: Verify Your Email Address
+    coach:
+      added: You have been added as a coach in %{course_name}
+    course_author:
+      added: You have been added as an author in %{course_name}
+    course_export:
+      export: Export of %{course_export} course is ready for download
+    issued_certificate:
+      awarded: You have been awarded a certificate!
+    school_admin:
+      added: New School Admin Added
+      import: Import of Students Completed
+    startup:
+      new_feedback: New feedback from %{startup_feedback} on your submission
+    student:
+      added_as: You have been added as a student in %{school_name}
+    user:
+      new_reply: New reply for your post
+      daily_digest: Daily Digest
+      delete_account: Delete account from %{school_name}
+      deleted_success: Account deleted successfully from %{school_name}
+      deleted_in: Your account in %{school_name} will be deleted in 30 days
+    user_session:
+      log_in: Log in to
+      recovery: account recovery

@@ -1458,3 +1458,30 @@ ru:
       submitted_on: Отправлено в
     sign_in_with_email:
       type_password: Ваш Пароль
+  mailers:
+    applicant:
+      verify: Подтвердите Свой Адрес Почты
+    coach:
+      added: Вы были добавлены в качестве ментора в %{course_name}
+    course_author:
+      added: Вы были добавлены в качестве автора в %{course_name}
+    course_export:
+      export: Экспорт курса %{course_export} готов к загрузке
+    issued_certificate:
+      awarded: Вы получили сертификат!
+    school_admin:
+      added: Добавлен Новый Школьный Админ
+      import: Импорт студентов завершен
+    startup:
+      new_feedback: Новый отзыв от %{startup_feedback} о вашей заявке
+    student:
+      added_as: Вы были добавлены в качестве студента в %{school_name}
+    user:
+      new_reply: Новый ответ на ваш пост
+      daily_digest: Ежедневный дайджест
+      delete_account: Удаление учетной записи из %{school_name}
+      deleted_success: Учетная запись успешно удалена из %{school_name}
+      deleted_in: Ваша учетная запись в %{school_name} будет удалена через 30 дней
+    user_session:
+      log_in: Войти в
+      recovery: восставновление аккаунта

@@ -5,7 +5,7 @@ class StartupMailer < SchoolMailer
     send_to = startup_feedback.timeline_event.founders.map { |e| "#{e.fullname} <#{e.email}>" }
     @school = startup_feedback.startup.school
 
-    subject = "New feedback from #{startup_feedback.faculty.name} on your submission"
+    subject = I18n.t("mailers.startup.new_feedback", startup_feedback: startup_feedback.faculty.name)
     simple_mail(send_to, subject)
   end
 end

@@ -1,7 +1,7 @@
 <% presenter = Schools::Courses::CertificatesPresenter.new(self, @course) %>
 
 <% content_for(:head) do %>
-  <title><%= @course.name %> | Certificates</title>
+  <title><%= @course.name %> | <%= t("views.certificates.title") %> </title>
   <%= stylesheet_pack_tag 'SchoolsCoursesCertificatesPack' %>
 <% end %>
 

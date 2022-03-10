@@ -30,7 +30,7 @@
             <%= t("users.sessions.password_new") %>
           </a>
         </div>
-        <%= f.password_field :password, placeholder: 'Type your password', class: 'appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400', tabindex: 2 %>
+        <%= f.password_field :password, placeholder: t("views.sign_in_with_email.type_password"), class: 'appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400', tabindex: 2 %>
       </div>
       <div
         class="flex justify-between items-center leading-snug mt-4 flex-col sm:flex-row">
@@ -71,7 +71,7 @@
           </div>
           <div class="relative flex justify-center text-sm">
             <span class="px-2 bg-white">
-              <%= t("shared.or") %>
+              <%= t("shared.or").upcase %>
             </span>
           </div>
         </div>

@@ -13,7 +13,7 @@ module Communities
     end
 
     def page_title
-      "New Topic | #{@community.name} Community"
+      "#{I18n.t("presenters.Communities__NewTopic.new_topic")} | #{@community.name} #{I18n.t("presenters.Communities__NewTopic.community")}"
     end
 
     def topic_categories

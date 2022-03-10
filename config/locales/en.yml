@@ -342,6 +342,8 @@ en:
       before_visiting: Before visiting the link...
       before_marking: Before marking as complete...
     CoursesCurriculum__AudioRecorder:
+      preview_mode: Preview Mode
+      cannot_record: You cannot record audio.
       button_text_record_again: Record Again
       button_text_start_recording: Start Recording
       recording_size_limit_warning: The recording should not exceed 5mb in size. Please re-record
@@ -353,6 +355,15 @@ en:
       create: Create a topic
       no_discussion: There's been no recent discussion about this target.
       use_community: Use the community to clear your doubts, and to help your peers!
+    CoursesCurriculum__FileForm:
+      error: "Error "
+      smth_went_wrong: Something went wrong!
+      choose_upload: Choose file to upload
+      please_reload: Please reload the page and try again.
+      preview_mode: Preview Mode
+      cannot_attach: You cannot attach files.
+      max_file_size: The maximum file size is 5 MB.
+      another_file: Please choose another file for upload.
     CoursesCurriculum__Learn:
       edit_target_button: Edit Content
     CoursesCurriculum__LevelUpButton:

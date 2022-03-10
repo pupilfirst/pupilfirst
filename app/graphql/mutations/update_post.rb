@@ -13,7 +13,7 @@ module Mutations
       success = if mutator.valid?
         post = mutator.update_post
         post_type = post.post_number == 1 ? "Post" : "Reply"
-        mutator.notify(:success, "Done!", "#{post_type} updated successfully")
+        mutator.notify(:success, I18n.t("notes.done"), "#{post_type} #{I18n.t("notes.updated_success")}")
 
         true
       else

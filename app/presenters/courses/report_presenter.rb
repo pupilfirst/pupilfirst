@@ -6,7 +6,7 @@ module Courses
     end
 
     def page_title
-      "Student Report | #{@course.name} | #{current_school.name}"
+      "#{I18n.t("presenters.Courses__Report.student_report")} | #{@course.name} | #{current_school.name}"
     end
 
     def props

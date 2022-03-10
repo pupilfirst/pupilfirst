@@ -6,7 +6,7 @@ module Courses
     end
 
     def page_title
-      "Review Dashboard | #{@course.name} | #{current_school.name}"
+      "#{I18n.t("presenters.Courses__Review.review_dashboard")} | #{@course.name} | #{current_school.name}"
     end
 
     private

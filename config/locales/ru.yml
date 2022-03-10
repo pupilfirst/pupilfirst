@@ -104,14 +104,14 @@ ru:
         label: Заголовок
         placeholder: Студент, ментор, генеральный директор и т.д.
     CourseApplicants__Root:
-      applicants_fully_loaded_text: Показаны все  %{total_applicants} кандидатов
-      applicants_page_title: Кандидаты
-      applicants_partially_loaded_text: Показаны %{loaded_applicants_count} из %{total_applicants} кандидатов
-      button_load_more: Загрузить больше кандидатов...
-      empty_applicants: У вас нет кандидатов!
+      applicants_fully_loaded_text: Показаны все  %{total_applicants} абитурентов
+      applicants_page_title: Абитуренты
+      applicants_partially_loaded_text: Показаны %{loaded_applicants_count} из %{total_applicants} абитурентов
+      button_load_more: Загрузить больше абитурентов...
+      empty_applicants: У вас нет абитурентов!
       filter:
         input_label: Искать
-        input_placeholder: Фильтр и поиск кандидатов по имени
+        input_placeholder: Фильтр и поиск абитурентов по имени
         label:
           search: Поиск по имени или почте
           tag: Тег
@@ -250,8 +250,8 @@ ru:
       feature_course_in_homepage_label: Рекомендовать курс на домашней странице школы?
       processing_url:
         error: Недействительный URL обработки
-        help: Вы можете отправить URL курса кандидатам после того, как они подадут заявку на курс.
-        label: Хотите ли вы обработать информацию о кандидатах перед их зачислением?
+        help: Вы можете отправить URL курса абитурентам после того, как они подадут заявку на курс.
+        label: Хотите ли вы обработать информацию о абитурентах перед их зачислением?
       progression_behavior:
         help: Это применимо только в том случае, если ваш курс имеет контрольные задачи, требующие от студентов представления своей работы на рассмотрение менторам.
         label: Успешность
@@ -342,6 +342,8 @@ ru:
       before_visiting: Прежде чем перейти по ссылке...
       before_marking: Перед пометкой как завершенный...
     CoursesCurriculum__AudioRecorder:
+      preview_mode: Режим Предварительного Просмотра
+      cannot_record: Вы не можете записывать аудио.
       button_text_record_again: Записать Снова
       button_text_start_recording: Начать Запись
       recording_size_limit_warning: Размер записи не должен превышать 5 МБ. Пожалуйста, перезапишите
@@ -353,6 +355,15 @@ ru:
       create: Создать тему
       no_discussion: В последнее время не было обсуждения этой задачи.
       use_community: Используйте сообщество, чтобы развеять сомнения и взаимно помогать друг-другу!
+    CoursesCurriculum__FileForm:
+      error: "Ошибка "
+      smth_went_wrong: Что-то пошло не так!
+      choose_upload: Выберите файл для загрузки
+      please_reload: Пожалуйста, перезагрузите страницу и повторите попытку.
+      preview_mode: Режим Предварительного Просмотра
+      cannot_attach: Вы не можете прикреплять файлы.
+      max_file_size: Максимальный размер файла составляет 5 МБ.
+      another_file: Пожалуйста, выберите другой файл для загрузки.
     CoursesCurriculum__Learn:
       edit_target_button: Редактировать Контент
     CoursesCurriculum__LevelUpButton:
@@ -399,13 +410,15 @@ ru:
       preview_mode_text: Вы сейчас в режиме предварительного просмотра.
       previous_target_button: Пред. Задача
       scroll_to_top: Пролистать наверх
+    CoursesCurriculum__Quiz:
+      submit_quiz: Отправить Тест
     CoursesCurriculum__SubmissionsAndFeedback:
       completed: Завершено
       rejected: Отказано
       grading: Оценивается
       submission_details: "Детали вашей работы в "
       submission_number: "Работа #"
-      submitted_on: Отправлено в
+      submitted_on: "Отправлено в "
       pending_review: Ожидает Оценки
       unknown_coach: Неизвестный Ментор
       your_submissions: Ваши Работы
@@ -774,7 +787,7 @@ ru:
       notifications_partially_loaded_text: Показаны %{loaded_notifications_count} из %{total_notifications} уведомлении
     SchoolAdminNavbar__Root:
       course_nav:
-        applicants: Кандидаты
+        applicants: Абитуренты
         authors: Авторы
         certificates: Сертификаты
         coaches: Менторы
@@ -880,6 +893,11 @@ ru:
       students_partially_loaded_text: Показаны %{loaded_students_count} из %{total_students} студентов
       team: Команда
       try_removing_filter: Попробуйте удалить параметры фильтра поиска.
+    SubmissionChecklistItemShow:
+      correct: Верно
+      incorrect: Неверно
+      mark_correct: Отметить как верно
+      mark_incorrect: Отметить как неверно
     SubmissionChecklistShow:
       target_marked_as_complete: Цель была отмечена как завершенная.
     TargetChecklistItem:
@@ -970,7 +988,6 @@ ru:
       apply_now: Начать Курс
       apply_button: Применить
       email_label: Почта
-      email_placeholder: john@example.com
       heading: Зарегистрироваться на курс %{course_name}
       name_label: Имя
       name_placeholder: John Doe
@@ -979,6 +996,17 @@ ru:
     show:
       continue_course: Продолжить Курс
       preview_course: Предварительный просмотр
+    leaderboard:
+      note: В этой таблице лидеров показаны студенты <strong>, которые улучшились больше всего </strong> по сравнению с предыдущей таблицей лидеров.
+      no_entries: В таблице лидеров нет никаких записей за этот период.
+      active_students: Активные Студенты
+      inactive_students: Неактивные Студенты
+      rank: Ранг
+      change: Изменить
+      student: Студент
+      level: Уровень
+      score: Баллы
+      new_new: Новый
   dashboard:
     dashboard:
       tour:
@@ -1025,9 +1053,11 @@ ru:
     sitemap: Карта Сайта
     contact: Контакты
     social: Соц. Сети
+    support: Contact Support
     privacy_policy: Политика Конфиденциальности
     terms_conditions: Правила и Условия
     reach_us: Свяжитесь с нами по
+    logo: Логотип
   help:
     help: Помощь
   home:
@@ -1190,11 +1220,11 @@ ru:
     message: Похоже, возникла проблема с вашим подключением. <br/> Проверьте статус вашей сети.
     title: Вы не в сети
   posts:
-    back_to_post: Back to Post
-    edit_history: Post Edit History
-    current_version: Current Version
-    edited_by: Edited by
-    created_by: Created by
+    back_to_post: Обратно на Пост
+    edit_history: История Изменении Поста
+    current_version: Нынешняя Версяя
+    edited_by: Редактированный
+    created_by: Созданный
   queries:
     delete_certificate_mutator:
       issued_error: Этот сертификат выдан одному или нескольким студентам - его нельзя удалить.
@@ -1231,7 +1261,6 @@ ru:
     request_password_reset:
       cancel_link: Войдите в систему с Google, Facebook или Github
       email_label: Почта
-      email_placeholder: john@example.com
       heading: Сброс пароля
       image_alt: Студент держит гигантский ключ с символом сброса на нем
       page_title: Сброс пароля
@@ -1263,7 +1292,8 @@ ru:
       short_with_name: "У%{number}: %{name}"
       short_without_name: У%{number}
     optional: необязательно
-    or: ИЛИ
+    or: или
+    and: и
     save_changes: Сохранить изменения
     processing: Обрабатывается
     saving: Сохраняем...
@@ -1281,6 +1311,9 @@ ru:
     team: Команда
     loading: Загрузка...
     replies: Ответов
+    dashboard: Обучение
+    community: Сообщество
+    communities: Communities
   users:
     oauth:
       invalid_request: Ваш браузер сделал неверный запрос.
@@ -1299,10 +1332,113 @@ ru:
       question: Вопрос
   omniauth:
     callbacks:
-      denied_by: Аутентификация была отклонена от %{oauth_origin[:provider].capitalize}. Пожалуйста, повторите снова.
+      denied_by: Аутентификация была отклонена от %{provider}. Пожалуйста, повторите снова.
       denied: В аутентификации было отказано. Пожалуйста, попробуйте снова.
-      email_unregistered: "Ваша электронная почта: %{@email} не зарегестрирована"
+      email_unregistered: "Ваша электронная почта: %{email} не зарегестрирована"
       not_receive_email: "Извините, но мы не получили ваш адрес электронной почты от #{provider_name}. "
       add_github: Пожалуйста, <a href="https://github.com/settings/profile" target="_blank" rel="noopener">добавьте общедоступный адрес почты в свой профиль на Github</a> и попробуйте снова.
       add_facebook: Пожалуйста <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">уберите \'Pupilfirst\' из вашего списка авторизованных приложений</a> и попробуйте войти в систему еще раз.
       add_other: Пожалуйста, войдите другим методом.
+  quiz:
+    your_correct_answer: Ваш Правильный Ответ
+    correct_answer: Правильный Ответ
+    your_answer: Ваш Ответ
+  notes:
+    success: Успех
+    done: Сделано!
+    done_dot: Сделано
+    post_archived: Пост успешно архивирован
+    note_removed: Заметка успешно удалена
+    note_added: Заметка успешно добавлена
+    community_created: Сообщество успешно создано
+    author_created: Создан Автор
+    new_author: В этот курс был добавлен новый автор.
+    eval_crit: Критерии оценки созданы успешно!
+    reply_added: Ответ успешно добавлен
+    responses_saved: Ваши ответы были сохранены.
+    new_version: Создана новая версия.
+    author_deleted: Автор Удален
+    author_deleted_details: Автор был удален из этого курса.
+    student_updated: Студент успешно обновлен
+    reloading_list: Перезагружается список студентов
+    deletion_init: Инициировано Удаление Учетной Записи
+    check_inbox: Проверьте почту для дальнейших действий!
+    reply_marked: Отметьте ответ как успешное решение
+    merge_complete: слияние завершено!
+    reply_unmarked: Ответьте убрав пометку как решение!
+    author_updated: Автор Обновлен
+    author_name_updated: Имя автора было обновлено.
+    eval_crit_updated: Критерий оценки успешно обновлен!
+    updated_success: обновлено успешно
+    review_updated: Контрольный список проверки успешно обновлен
+    details_updated: Детали успешно обновлены!
+    topic_updated: Тема успешно обновлена!
+    profile_saved: Профиль успешно обновлен!
+  controllers:
+    ApplicantsController:
+      link_expired: Срок действия этой одноразовой ссылки истек или она недействительна. Если вы уже завершили регистрацию, пожалуйста, войдите в систему.
+      welcome: Добро пожаловать в %{school_name}!
+    CoursesController:
+      sent_mail: Мы отправили вам письмо с подтверждением. Он должен добраться до вас менее чем за минуту. Нажмите на ссылку в электронном письме, чтобы зарегистрироваться и приступить к обучению.
+      errors: "В вашей заявке были ошибки: %{form_errors}"
+    Schools__CoursesController:
+      teams_active: Команды, отмеченные как активные, успешно!
+    UsersController:
+      link_expired: Срок действия этой ссылки истек или она недействительна. Пожалуйста, попробуйте снова.
+    Users__SessionsController:
+      already_signed: Вы уже вошли в систему.
+      link_expired: Срок действия этой одноразовой ссылки истек или она недействительна. Пожалуйста, попробуйте войти в систему еще раз.
+      link_used: Эта одноразовая ссылка уже использовалась или является недействительной. Пожалуйста, попробуйте сбросить свой пароль еще раз.
+  presenters:
+    Communities__NewTopic:
+      new_topic: Новая Тема
+      community: Сообщество
+    Communities__Show:
+      community: Сообщество
+    Courses__Leaderboard:
+      top_leaderboard_html: '<span class="font-bold">Вы</span> находитесь на вершине таблицы лидеров. <span class="font-bold">Поздравляем!</span>'
+      multiple_mid_text: "находитесь на вершине таблицы лидеров на этой неделе, разделяя оценку "
+      top_week: находитесь на вершине таблицы лидеров на этой неделе с результатом
+      others: другие
+      rank_up_double_alt: Повышение ранга в два раза
+      rank_up_alt: Повышение ранга
+      rank_no_change_alt: Нет изменении ранга
+      rank_down_alt: Падение ранга
+      rank_down_double_alt: Падение ранга в два раза
+    Courses__Report:
+      student_report: Отчеты Студентов
+    Courses__Review:
+      review_dashboard: Панель Оценивания
+    Courses__Students:
+      students_in_course: Студентов в Курсе
+    Layouts__AppRouter:
+      admin: Администрация
+      dashboard: Обучение
+      coaches: Менторы
+    Posts__Versions:
+      title:  "Версии | Пост"
+  views:
+    applicants:
+      title: Абитуренты
+    authors:
+      title: Авторы
+    certificates:
+      title: Сертификаты
+    curriculum:
+      title: Силлабус
+    evaluation:
+      title: Критерии Оценки
+    exports:
+      title: Экспорты
+    students:
+      title: Студенты
+    courses:
+      title: Курсы
+    coaches:
+      title: Менторы
+    admins:
+      title: Админы
+    timeline_events:
+      submitted_on: Отправлено в
+    sign_in_with_email:
+      type_password: Ваш Пароль

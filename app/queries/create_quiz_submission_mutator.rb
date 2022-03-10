@@ -83,7 +83,7 @@ class CreateQuizSubmissionMutator < ApplicationQuery
         stripped_question = question.question.strip
         end_with_lb_or_space = stripped_question.ends_with?('```') ? "\n\n" : "  \n"
 
-        title = "Question #{index + 1}"
+        title = "Вопрос #{index + 1}"
         result = " #{stripped_question}#{end_with_lb_or_space}#{answer_text(correct_answer, u_answer)}"
         status = correct_answer == u_answer ? TimelineEvent::CHECKLIST_STATUS_PASSED : TimelineEvent::CHECKLIST_STATUS_FAILED
         checklist_item(title, result, status)
@@ -105,9 +105,9 @@ class CreateQuizSubmissionMutator < ApplicationQuery
 
   def answer_text(correct_answer, u_answer)
     if u_answer == correct_answer
-      "**Your Correct Answer:**#{pretty_answer(u_answer.value)}"
+      "**#{I18n.t("quiz.your_correct_answer")}:**#{pretty_answer(u_answer.value)}"
     else
-      "**Your Answer:**#{pretty_answer(u_answer.value)}**Correct Answer:**#{pretty_answer(correct_answer.value)}"
+      "**#{I18n.t("quiz.your_answer")}:**#{pretty_answer(u_answer.value)}**#{I18n.t("quiz.correct_answer")}:**#{pretty_answer(correct_answer.value)}"
     end
   end
 end

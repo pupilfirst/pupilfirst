@@ -11,7 +11,7 @@ module Users
       store_location_for(:user, params[:referrer]) if params[:referrer].present?
 
       if current_user.present?
-        flash[:notice] = 'You are already signed in.'
+        flash[:notice] = I18n.t("controllers.Users__SessionsController.already_signed")
         redirect_to after_sign_in_path_for(current_user)
       end
     end
@@ -55,7 +55,7 @@ module Users
         redirect_to after_sign_in_path_for(user)
       else
         flash[:error] =
-          'That one-time link has expired, or is invalid. Please try signing in again.'
+          I18n.t("controllers.Users__SessionsController.link_expired")
         redirect_to new_user_session_path
       end
     end
@@ -67,7 +67,7 @@ module Users
         @token = params[:token]
       else
         flash[:error] =
-          'That one-time link has already been used, or is invalid. Please try resetting your password again.'
+          I18n.t("controllers.Users__SessionsController.link_used")
         redirect_to new_user_session_path
       end
     end
@@ -125,7 +125,7 @@ module Users
     # GET /users/sign_in_with_email
     def sign_in_with_email
       if current_user.present?
-        flash[:notice] = 'You are already signed in.'
+        flash[:notice] = I18n.t("controllers.Users__SessionsController.already_signed")
         redirect_to after_sign_in_path_for(current_user)
         return
       end

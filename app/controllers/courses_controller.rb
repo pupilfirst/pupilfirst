@@ -47,12 +47,12 @@ class CoursesController < ApplicationController
       form.create_applicant(session)
 
       flash[:success] =
-        "We've sent you a verification mail. It should reach you in less than a minute. Click the link in the email to sign up, and get started."
+        I18n.t("controllers.CoursesController.sent_mail")
 
       redirect_to root_path
     else
       flash[:error] =
-        "There were errors with your submission: #{form.errors.full_messages.join(', ')}"
+        I18n.t("controllers.CoursesController.errors", form_errors: form.errors.full_messages.join(', '))
 
       redirect_to apply_course_path(params[:id], visible_recaptcha: 1)
     end

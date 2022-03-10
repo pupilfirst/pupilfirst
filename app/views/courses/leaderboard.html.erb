@@ -9,8 +9,7 @@
     <div class="max-w-3xl mx-auto">
       <div class="text-center mx-3">
         <p class="inline-block bg-primary-100 text-primary-900 border border-primary-500 text-xs mx-auto text-center px-4 py-2 rounded-lg">
-          This leaderboard shows students <strong>who have improved the most</strong> compared to the previous
-          leaderboard.
+          <%= t("courses.leaderboard.note") %>
         </p>
       </div>
       <div class="w-full md:px-4 text-center mt-4">
@@ -40,11 +39,11 @@
 
                 <div class="leaderboard__students-count-container bg-gray-100 flex mx-auto overflow-hidden border rounded-lg justify-center">
                   <div class="w-1/2 px-2 pt-2 pb-1" data-t='active students count'>
-                    <p class="text-xs">Active Students</p>
+                    <p class="text-xs">t("courses.leaderboard.active_students")</p>
                     <span class="text-xl font-semibold"><%= presenter.students.count %></span>
                   </div>
                   <div class="w-1/2 px-2 pt-2 pb-1" data-t='inactive students count'>
-                    <p class="text-xs">Inactive Students</p>
+                    <p class="text-xs">t("courses.leaderboard.inactive_students")</p>
                     <span class="text-xl font-semibold"><%= presenter.inactive_students_count %></span>
                   </div>
                 </div>
@@ -71,7 +70,7 @@
       <% if presenter.students.empty? %>
         <div class="leaderboard__inactive-startup-message text-center bg-white border shadow rounded-lg px-3 md:px-5 mx-3 py-8 my-4">
           <h4 class="font-semibold">
-            The leaderboard doesn&rsquo;t have any entries for this period.
+            <%= t("courses.leaderboard.no_entries") %>
           </h4>
         </div>
       <% else %>
@@ -79,11 +78,11 @@
           <table class="w-full mb-2 border-collapse relative">
             <thead class="bg-gray-200">
             <tr>
-              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b">Rank</th>
-              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b">Change</th>
-              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b text-left">Student</th>
-              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b">Level</th>
-              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b">Score</th>
+              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b">t("courses.leaderboard.rank")</th>
+              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b">t("courses.leaderboard.change")</th>
+              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b text-left">t("courses.leaderboard.student")</th>
+              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b">t("courses.leaderboard.level")</th>
+              <th class="py-3 px-3 bg-grey-100 font-bold uppercase text-sm border-b">t("courses.leaderboard.score")</th>
             </tr>
             </thead>
 
@@ -96,7 +95,7 @@
 
                 <td class="py-3 px-3 border-b font-semibold text-sm text-center">
                   <% if student.delta.blank? %>
-                    <span class="leaderboard__rank-change-new">New</span>
+                    <span class="leaderboard__rank-change-new"><%= t("courses.leaderboard.new_new") %></span>
                   <% else %>
                     <span class="leaderboard__rank-change-icon inline-block mr-1">
                       <%= presenter.rank_change_icon(student.delta) %>

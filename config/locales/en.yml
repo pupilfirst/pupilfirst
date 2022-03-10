@@ -342,6 +342,8 @@ en:
       before_visiting: Before visiting the link...
       before_marking: Before marking as complete...
     CoursesCurriculum__AudioRecorder:
+      preview_mode: Preview Mode
+      cannot_record: You cannot record audio.
       button_text_record_again: Record Again
       button_text_start_recording: Start Recording
       recording_size_limit_warning: The recording should not exceed 5mb in size. Please re-record
@@ -353,6 +355,15 @@ en:
       create: Create a topic
       no_discussion: There's been no recent discussion about this target.
       use_community: Use the community to clear your doubts, and to help your peers!
+    CoursesCurriculum__FileForm:
+      error: "Error "
+      smth_went_wrong: Something went wrong!
+      choose_upload: Choose file to upload
+      please_reload: Please reload the page and try again.
+      preview_mode: Preview Mode
+      cannot_attach: You cannot attach files.
+      max_file_size: The maximum file size is 5 MB.
+      another_file: Please choose another file for upload.
     CoursesCurriculum__Learn:
       edit_target_button: Edit Content
     CoursesCurriculum__LevelUpButton:
@@ -399,13 +410,15 @@ en:
       preview_mode_text: You are currently looking at a preview of this course.
       previous_target_button: Previous Target
       scroll_to_top: Scroll to Top
+    CoursesCurriculum__Quiz:
+      submit_quiz: Submit Quiz
     CoursesCurriculum__SubmissionsAndFeedback:
       completed: Completed
       rejected: Rejected
       grading: Grading
       submission_details: "Details about your submission on "
       submission_number: "Submission #"
-      submitted_on: Submitted on
+      submitted_on: "Submitted on "
       pending_review: Pending Review
       unknown_coach: Unknown Coach
       your_submissions: Your Submissions
@@ -880,6 +893,11 @@ en:
       students_partially_loaded_text: Showing %{loaded_students_count} of %{total_students} students
       team: Team
       try_removing_filter: Try removing the search filter options.
+    SubmissionChecklistItemShow:
+      correct: Correct
+      incorrect: Incorrect
+      mark_correct: Mark as correct
+      mark_incorrect: Mark as incorrect
     SubmissionChecklistShow:
       target_marked_as_complete: Target was marked as complete.
     TargetChecklistItem:
@@ -970,7 +988,6 @@ en:
       apply_now: Apply Now
       apply_button: Apply
       email_label: Email
-      email_placeholder: john@example.com
       heading: Enroll to %{course_name} course
       name_label: Name
       name_placeholder: John Doe
@@ -979,6 +996,17 @@ en:
     show:
       continue_course: Continue Course
       preview_course: Preview Course
+    leaderboard:
+      note: This leaderboard shows students <strong>who have improved the most</strong> compared to the previous leaderboard.
+      no_entries: The leaderboard doesn&rsquo;t have any entries for this period.
+      active_students: Active Students
+      inactive_students: Inactive Students
+      rank: Rank
+      change: Change
+      student: Student
+      level: Level
+      score: Score
+      new_new: New
   dashboard:
     dashboard:
       tour:
@@ -1023,6 +1051,8 @@ en:
     privacy_policy: Privacy Policy
     terms_conditions: Terms & Conditions
     reach_us: Reach us at
+    logo: Logo of
+    support: Contact Support
   graphql:
     concerns:
       validate_submission_gradable:
@@ -1231,7 +1261,6 @@ en:
     request_password_reset:
       cancel_link: Sign in with Google, Facebook, or Github
       email_label: Email
-      email_placeholder: john@example.com
       heading: Reset your password
       image_alt: A student holding a giant key with a reset symbol on it
       page_title: Reset password
@@ -1263,7 +1292,8 @@ en:
       short_with_name: "L%{number}: %{name}"
       short_without_name: L%{number}
     optional: optional
-    or: OR
+    or: or
+    and: and
     save_changes: Save Changes
     processing: Processing
     saving: Saving...
@@ -1281,6 +1311,9 @@ en:
     team: Team
     loading: Loading...
     replies: Replies
+    dashboard: Dashboard
+    community: Community
+    communities: Communities
   users:
     oauth:
       invalid_request: Your browser made an invalid request.
@@ -1299,10 +1332,113 @@ en:
       question: Question
   omniauth:
     callbacks:
-      denied_by: Authentication was denied by %{oauth_origin[:provider].capitalize}. Please try again.
+      denied_by: Authentication was denied by %{provider}. Please try again.
       denied: Authentication was denied. Please try again.
-      email_unregistered: "Your email address: %{@email} is unregistered."
+      email_unregistered: "Your email address: %{email} is unregistered."
       not_receive_email: "We're sorry, but we did not receive your email address from #{provider_name}. "
       add_github: Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.
       add_facebook: Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.
       add_other: Please sign in using another method.
+  quiz:
+    your_correct_answer: Your Correct Answer
+    correct_answer: Correct Answer
+    your_answer: Your Answer
+  notes:
+    success: Success
+    done: Done!
+    done_dot: Done
+    post_archived: Post archived successfully
+    note_removed: "Note removed successfully"
+    note_added: Note added successfully
+    community_created: Community created successfully
+    author_created: Author Created
+    new_author: A new author has been added to this course.
+    eval_crit: Evaluation criterion created successfully!
+    reply_added: Reply added successfully
+    responses_saved: Your responses have been saved.
+    new_version: A new version has been created.
+    author_deleted: Author Deleted
+    author_deleted_details: The author has been removed from this course.
+    student_updated: Student updated successfully
+    reloading_list: Reloading students list
+    deletion_init: Account Deletion Initiated
+    check_inbox: Check your inbox for further steps!
+    reply_marked: Reply marked as solution successfully
+    merge_complete: Merge complete!
+    reply_unmarked: Reply unmarked as solution!
+    author_updated: Author Updated
+    author_name_updated: The author's name has been updated.
+    eval_crit_updated: Evaluation criterion updated successfully!
+    updated_success: updated successfully
+    review_updated: Review checklist updated successfully
+    details_updated: Details updated successfully!
+    topic_updated: Topic updated successfully!
+    profile_saved: Profile updated successfully!
+  controllers:
+    ApplicantsController:
+      link_expired: That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in.
+      welcome: Welcome to %{school_name}!
+    CoursesController:
+      sent_mail: We've sent you a verification mail. It should reach you in less than a minute. Click the link in the email to sign up, and get started.
+      errors: "There were errors with your submission: %{form_errors}"
+    Schools__CoursesController:
+      teams_active: Teams marked active successfully!
+    UsersController:
+      link_expired: That link has expired or is invalid. Please try again.
+    Users__SessionsController:
+      already_signed: You are already signed in.
+      link_expired: That one-time link has expired, or is invalid. Please try signing in again.
+      link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
+  presenters:
+    Communities__NewTopic:
+      new_topic: New Topic
+      community: Community
+    Communities__Show:
+      community: Community
+    Courses__Leaderboard:
+      top_leaderboard_html: '<span class="font-bold">You</span> are at the top of the leaderboard. <span class="font-bold">Congratulations!</span>'
+      multiple_mid_text: "are at the top of the leaderboard this week, sharing a score of "
+      top_week: is at the top of the leaderboard this week with a score of
+      others: others
+      rank_up_double_alt: Rank change up double
+      rank_up_alt: Rank change up
+      rank_no_change_alt: Rank no change
+      rank_down_alt: Rank change down
+      rank_down_double_alt: Rank change down double
+    Courses__Report:
+      student_report: Student Report
+    Courses__Review:
+      review_dashboard: Review Dashboard
+    Courses__Students:
+      students_in_course: Students In Course
+    Layouts__AppRouter:
+      admin: Admin
+      dashboard: Dashboard
+      coaches: Coaches
+    Posts__Versions:
+      title:  "Versions | Post"
+  views:
+    applicants:
+      title: Applicants
+    authors:
+      title: Authors
+    certificates:
+      title: Certificates
+    curriculum:
+      title: Curriculum
+    evaluation:
+      title: Evaluation Criteria
+    exports:
+      title: Exports
+    students:
+      title: Students
+    courses:
+      title: Courses
+    coaches:
+      title: Coaches
+    admins:
+      title: Admins
+    timeline_events:
+      submitted_on: Submitted on
+    sign_in_with_email:
+      type_password: Type your password

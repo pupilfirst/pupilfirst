@@ -1299,6 +1299,7 @@ en:
     loading: Loading...
     replies: Replies
     dashboard: Dashboard
+    community: Community
   users:
     oauth:
       invalid_request: Your browser made an invalid request.

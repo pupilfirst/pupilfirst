@@ -1299,6 +1299,7 @@ ru:
     loading: Загрузка...
     replies: Ответов
     dashboard: Обучение
+    community: Сообщество
   users:
     oauth:
       invalid_request: Ваш браузер сделал неверный запрос.

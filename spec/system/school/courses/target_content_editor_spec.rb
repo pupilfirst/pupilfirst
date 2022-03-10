@@ -481,6 +481,27 @@ feature 'Target Content Editor', js: true do
       )
       expect(ContentBlock.count).to eq(3)
     end
+
+    scenario 'admin deletes a content block with unsaved changes' do
+      sign_in_user school_admin.user,
+                   referrer: content_school_course_target_path(course, target)
+
+      within("div[aria-label='Editor for content block #{fourth_block.id}']") do
+        fill_in 'Title', with: 'A new title'
+        accept_confirm { find('button[title="Delete"]').click }
+      end
+
+      expect(page).not_to have_selector(
+        "div[aria-label='Editor for content block #{fourth_block.id}']"
+      )
+
+      # Closing editor should not be confirmed.
+      find('button[title="Close Editor"').click
+
+      expect(page).not_to have_selector(
+        "div[aria-label='Editor for content block #{first_block.id}']"
+      )
+    end
   end
 
   scenario 'course author edits the content of a target' do

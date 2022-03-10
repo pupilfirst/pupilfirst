@@ -280,7 +280,7 @@ feature 'Target Overlay', js: true do
 
       # Since this is a team target, other students shouldn't be listed as pending.
       expect(page).not_to have_content(
-        'You have team members who are yet to complete this target'
+        'You have team members who have yet to complete this target'
       )
 
       # Target should have been marked as passed in the database.
@@ -626,7 +626,7 @@ feature 'Target Overlay', js: true do
       expect(other_students.count).to be > 0
 
       expect(page).to have_content(
-        'You have team members who are yet to complete this target:'
+        'You have team members who have yet to complete this target:'
       )
 
       # The other students should also be listed.

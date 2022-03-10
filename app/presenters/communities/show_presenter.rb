@@ -16,7 +16,7 @@ module Communities
     end
 
     def page_title
-      "#{@community.name} Community | #{current_school.name}"
+      "#{@community.name} #{I18n.t("presenters.Communities__Show.community")} | #{current_school.name}"
     end
 
     private

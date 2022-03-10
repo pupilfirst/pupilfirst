@@ -1282,6 +1282,7 @@ ru:
       short_without_name: У%{number}
     optional: необязательно
     or: ИЛИ
+    and: и
     save_changes: Сохранить изменения
     processing: Обрабатывается
     saving: Сохраняем...
@@ -1375,3 +1376,31 @@ ru:
       already_signed: Вы уже вошли в систему.
       link_expired: Срок действия этой одноразовой ссылки истек или она недействительна. Пожалуйста, попробуйте войти в систему еще раз.
       link_used: Эта одноразовая ссылка уже использовалась или является недействительной. Пожалуйста, попробуйте сбросить свой пароль еще раз.
+  presenters:
+    Communities__NewTopic:
+      new_topic: Новая Тема
+      community: Сообщество
+    Communities__show:
+      community: Сообщество
+    Courses__Leaderboard:
+      top_leaderboard_html: '<span class="font-bold">Вы</span> находитесь на вершине таблицы лидеров. <span class="font-bold">Поздравляем!</span>'
+      multiple_mid_text: "находитесь на вершине таблицы лидеров на этой неделе, разделяя оценку "
+      top_week: находитесь на вершине таблицы лидеров на этой неделе с результатом
+      others: другие
+      rank_up_double_alt: Повышение ранга в два раза
+      rank_up_alt: Повышение ранга
+      rank_no_change_alt: Нет изменении ранга
+      rank_down_alt: Падение ранга
+      rank_down_double_alt: Падение ранга в два раза
+    Courses__Report:
+      student_report: Отчеты Студентов
+    Courses__Review:
+      review_dashboard: Панель Оценивания
+    Courses__Students:
+      students_in_course: Студентов в Курсе
+    Layouts__AppRouter:
+      admin: Администрация
+      dashboard: Обучение
+      coaches: Менторы
+    Posts__Versions:
+      title:  "Версии | Пост"

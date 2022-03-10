@@ -1282,6 +1282,7 @@ en:
       short_without_name: L%{number}
     optional: optional
     or: OR
+    and: and
     save_changes: Save Changes
     processing: Processing
     saving: Saving...
@@ -1375,3 +1376,31 @@ en:
       already_signed: You are already signed in.
       link_expired: That one-time link has expired, or is invalid. Please try signing in again.
       link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
+  presenters:
+    Communities__NewTopic:
+      new_topic: New Topic
+      community: Community
+    Communities__show:
+      community: Community
+    Courses__Leaderboard:
+      top_leaderboard_html: '<span class="font-bold">You</span> are at the top of the leaderboard. <span class="font-bold">Congratulations!</span>'
+      multiple_mid_text: "are at the top of the leaderboard this week, sharing a score of "
+      top_week: is at the top of the leaderboard this week with a score of
+      others: others
+      rank_up_double_alt: Rank change up double
+      rank_up_alt: Rank change up
+      rank_no_change_alt: Rank no change
+      rank_down_alt: Rank change down
+      rank_down_double_alt: Rank change down double
+    Courses__Report:
+      student_report: Student Report
+    Courses__Review:
+      review_dashboard: Review Dashboard
+    Courses__Students:
+      students_in_course: Students In Course
+    Layouts__AppRouter:
+      admin: Admin
+      dashboard: Dashboard
+      coaches: Coaches
+    Posts__Versions:
+      title:  "Versions | Post"

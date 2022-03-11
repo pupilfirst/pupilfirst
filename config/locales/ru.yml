@@ -351,7 +351,7 @@ ru:
       recording_string: Записываем...
     CoursesCurriculum__Discuss:
       topics_pre: "Темы в сообществе "
-      topics_post: ""
+      topics_post: " сообщество"
       go_to: Перейти в сообщество
       create: Создать тему
       no_discussion: В последнее время не было обсуждения этой задачи.
@@ -718,7 +718,7 @@ ru:
       merge_levels_hint: Выберите другой уровень, с которым хотите объединить этот уровень. Это действие сдвинет все цели и учеников по уровню.
       merge_levels_label: Удалить и Объеденить с
       merge_levels_select: Выбрать другой уровень
-      optional: " (необязательно)"
+      optional: " (не обязательно)"
       success: Успех
       tabs:
         actions: Действия
@@ -1052,8 +1052,8 @@ ru:
       too_long: Эта страница загружалась слишком долго.
       try_reloading: Не могли бы вы попробовать перезагрузить страницу?
     unprocessable_entity:
-      invalid_request: Your browser made an invalid request.
-      wasnt_valid: <em>Something</em> about the request that your browser sent wasn&rsquo;t valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+      invalid_request: Ваш браузер отправил неверный запрос.
+      wasnt_valid: <em>Что-то </em> в запросе, отправленном вашим браузером, не было действительным. Мы автоматически отслеживаем эти ошибки, но если проблема не устранена, не стесняйтесь обращаться к нам. А пока попробуйте перезагрузить страницу.
     messages:
       content_type_invalid: имеет недопустимый тип содержимого
       limit_out_of_range: общее количество вне допустимого диапазона
@@ -1068,7 +1068,7 @@ ru:
     sitemap: Карта Сайта
     contact: Контакты
     social: Соц. Сети
-    support: Contact Support
+    support: Обратиться в Поддержку
     privacy_policy: Политика Конфиденциальности
     terms_conditions: Правила и Условия
     reach_us: Свяжитесь с нами по

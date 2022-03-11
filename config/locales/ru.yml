@@ -1499,7 +1499,7 @@ ru:
         body_not_recognized: Если вы не знаете этого пользователя, вы можете удалить его из интерфейса администрирования учебного заведения, используя эту %{link_to}.
         link_to: ссылку
       students_bulk_import_complete:
-        body_summary_import: "Ваш запрос на импорт учащихся в курс <strong>%{course_name}</strong>" успешно выполнен. Вот краткий обзор импорта:"
+        body_summary_import: "Ваш запрос на импорт учащихся в курс <strong>%{course_name}</strong> успешно выполнен. Вот краткий обзор импорта:"
         body_students_requested: <b>Учащихся запрошено:</b> %{report_params}
         body_students_added: <b>Учащихся добавлено:</b> %{report_params}
         body_view: Вы можете %{link_to}.

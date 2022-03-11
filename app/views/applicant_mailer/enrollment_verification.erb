@@ -5,28 +5,26 @@
 %>
 
 <% content_for :title do %>
-  Welcome to <%= course_name %>
+  <%= t("views.mailers.enrollment_verification.welcome", course_name: course_name) %>
 <% end %>
 
 <% content_for :subtitle do %>
-  Use this <strong>one-time link</strong> to verify your email address and sign into <%= school_name %>!
+  <%= t("views.mailers.enrollment_verification.link_verify", school_name: school_name).html_safe %>
 <% end %>
 
 <% content_for :title_button_text do %>
-  Activate your account and sign in
+  <%= t("views.mailers.enrollment_verification.activate_account") %>
 <% end %>
 
 <% content_for(:title_button_link, login_url) %>
 
 <% content_for :salutation do %>
-  Hello,
+  <%= t("shared.salutation", name: addressee_name) %>
 <% end %>
 
 <% content_for :body do %>
   <p>
-    To activate your <%= school_name %> account, and enroll to the <%= course_name %> course, please verify your email
-    address. Clicking on this <strong>one-time link</strong> will verify your email-address and confirm that you wish to
-    create an account at <%= school_name %>.
+  <%= t("views.mailers.enrollment_verification.to_activate", school_name: school_name, course_name: course_name).html_safe %>
   </p>
 
   <%= render 'mailers/link_fallback', url: login_url%>

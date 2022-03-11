@@ -1,30 +1,26 @@
 <% link = school_course_students_url(@course) %>
 
 <% content_for :salutation do %>
-  Hello <%= @school_admin.name %>,
+  <%= t("shared.salutation_name", name: @school_admin.name) %>
 <% end %>
 
 <% content_for :body do %>
   <p>
-    Your request to import students in
-    <strong><%= @course.name %></strong> course, was successfully completed.
-    Here's a small summary on the import:
+    <%= t("views.mailers.students_bulk_import_complete.body_summary_import", course_name: @course.name).html_safe %>
   </p>
 
   <div>
-    <p><b>Students requested:</b> <%= @report_params[:students_requested] %></p>
-    <p><b>Students added:</b> <%= @report_params[:students_added] %></p>
+    <p><%= t("views.mailers.students_bulk_import_complete.body_students_requested", report_params: @report_params[:students_requested]).html_safe %></p>
+    <p><%= t("views.mailers.students_bulk_import_complete.body_students_requested", report_params: @report_params[:students_added]).html_safe %></p>
   </div>
 
   <p>
-    You can <%= link_to 'view these newly added students in the school administration interface', link%>.
+    <%= t("views.mailers.students_bulk_import_complete.body_view", link_to: link_to(t("views.mailers.students_bulk_import_complete.link_to"), link)) %>
   </p>
 
   <% if @report_attachment %>
     <p>
-      Some of the students you tried to import were already enrolled in the course.
-      These students were ignored during the import. A list of email addresses of
-      such students has been included as an attachment with this email.
+      <%= t("views.mailers.students_bulk_import_complete.report_attachments") %>
     </p>
   <% end %>
 

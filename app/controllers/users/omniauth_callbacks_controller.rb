@@ -99,7 +99,7 @@ module Users
     end
 
     def email_blank_flash
-      message = I18n.t("omniauth.callbacks.not_receive_email")
+      message = I18n.t("omniauth.callbacks.not_receive_email", provider_name: provider_name)
 
       message += case provider_name
         when 'Github'

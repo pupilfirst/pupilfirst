@@ -1,22 +1,20 @@
 <% link = admins_school_url %>
 
 <% content_for :salutation do %>
-  Hello <%= @school_admin.name %>,
+  <%= t("shared.salutation_name", name: @school_admin.name) %>
 <% end %>
 
 <% content_for :body do %>
   <p>
-    A new administrator was added to your school <strong><%= @school.name %></strong>, on
-    <%= @new_school_admin.created_at.strftime('%B %-d, %Y at %l:%M %p') %> by <%= @adding_user.name %>.
+    <%= t("views.mailers.school_admin_added.body_new_admin", school_name: @school.name, new_school_admin: @new_school_admin.created_at.strftime('%B %-d, %Y at %l:%M %p'), adding_user_name: @adding_user.name).html_safe %>
   </p>
 
   <p>
-    The new admin's name is <strong><%= @new_school_admin.name %></strong>, and has the registered email address
-    <a href="mailto:<%= @new_school_admin.email %>"><%= @new_school_admin.email %></a>.
+    <%= t("views.mailers.school_admin_added.body_admin_name", new_school_admin_name: @new_school_admin.name, new_school_admin_email: @new_school_admin.email).html_safe %>
   </p>
 
   <p>
-    If you do not recognize this user, you can can remove them from the school administration interface using this <%= link_to 'link', link%>.
+    <%= t("views.mailers.school_admin_added.body_not_recognized", link_to: link_to(t("views.mailers.school_admin_added.link_to"), link)) %>
   </p>
 
   <%= render 'mailers/link_fallback', url: link %>

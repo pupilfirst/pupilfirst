@@ -7,13 +7,13 @@
 %>
 
 <% content_for :salutation do %>
-  Hello <%= @startup_feedback.startup.name  %>,
+  <%= t("shared.salutation_name", name: @startup_feedback.startup.name) %>
 <% end %>
 
 <% content_for :body do %>
   <% update_for = timeline_event.present? ? 'recent submission' : 'recent updates' %>
   <p>
-    Here is some feedback from <%= coach_name %> on your <%= update_for %>
+    <%= t("views.mailers.feedback_as_email.body", coach_name: coach_name, update_for: update_for) %>
   </p>
   <blockquote style="border-left: 6px solid #e6e6e6; background: #fafafa; padding: 8px 10px;">
     <%= sanitize(MarkdownIt::Parser.new(:commonmark).render(@startup_feedback.feedback)).html_safe %>
@@ -21,7 +21,7 @@
 
   <% if target.present? %>
     <p>
-      You can view <%= link_to 'the full feedback', target_url%>, including any files attached to the feedback.
+      <%= t("views.mailers.feedback_as_email.body_view", link_to: link_to(t("views.mailers.feedback_as_email.link_to"), target_url)) %>
     </p>
   <% end %>
 

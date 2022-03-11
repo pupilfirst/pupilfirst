@@ -3,23 +3,19 @@
   recipient_name = @user.name
 
   def article(count)
-    count > 1 ? 'are' : 'is'
+    count > 1 ? t("shared.are") : t("shared.is")
   end
 %>
 
 <% content_for :salutation do %>
-  Hello <%= recipient_name %>,
+  <%= t("shared.salutation_name", name: recipient_name) %>
 <% end %>
 
 <% content_for :body do %>
   <% if @updates[:coach].present? %>
     <% pending_submissions_count = @updates[:coach].map { |s| s[:pending_submissions] }.sum %>
     <p style="margin-top: 10px;">
-
-      There <%= article(pending_submissions_count) %> <strong><%= pending_submissions_count %></strong>
-      new <%= 'submission'.pluralize(pending_submissions_count) %> to review
-      in <%= pluralize(@updates[:coach].length, 'course') %>
-      that you are a coach in:
+      <%= t("views.mailers.daily_digest.body", article_pending_submissions_count: article(pending_submissions_count), pending_submissions_count: pending_submissions_count, courses_number: @updates[:coach].length.to_s) %>
     </p>
 
     <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">
@@ -28,7 +24,7 @@
           <%= link_to "#{stats[:course_name]}:", review_course_url(stats[:course_id]), style: 'color: #6025C0; border-radius: 8px; padding: 0px;' %>
           <span><strong><%= stats[:pending_submissions] %></strong>
             <% if stats[:is_team_coach] %>
-              <%= stats[:pending_submissions_for_coach] == 0 ? '(none of which are assigned to you)' : "(#{stats[:pending_submissions_for_coach]} assigned to you)" %>
+              <%= stats[:pending_submissions_for_coach] == 0 ? t("views.mailers.daily_digest.assigned_none") : t("views.mailers.daily_digest.assigned_none", stats: stats[:pending_submissions_for_coach]) %>
             <% end %>
           </span>
         </li>
@@ -38,7 +34,7 @@
 
   <% if @updates[:community_new].present? %>
     <p style="margin-top: 15px;">
-      Latest topics posted on your communities:
+      <%= t("views.mailers.daily_digest.latest_topics") %>
     </p>
 
     <% @updates[:community_new].each do |topic| %>
@@ -50,15 +46,15 @@
       </div>
       <div style="font-size: 75%; border-bottom: 1px solid lightgray; margin-bottom: 4px; padding-bottom: 4px;">
         <%= link_to topic[:community_name], community_url(topic[:community_id]) %>,
-        <%= pluralize(topic[:views], 'view') %>,
-        <%= pluralize(topic[:replies], 'reply') %>.
+        <%= topic[:views].length.to_s %> <%= t("views.mailers.daily_digest.views") %>
+        <%= topic[:replies].length.to_s %> <%= t("views.mailers.daily_digest.replies") %>
       </div>
     <% end %>
   <% end %>
 
   <% if @updates[:community_reactivated].present? %>
     <p style="margin-top: 15px;">
-      Older, popular topics that have seen new activity:
+      <%= t("views.mailers.daily_digest.older") %>
     </p>
 
     <% @updates[:community_reactivated].each do |topic| %>
@@ -70,15 +66,15 @@
       </div>
       <div style="font-size: 75%; border-bottom: 1px solid lightgray; margin-bottom: 4px; padding-bottom: 4px;">
         <%= link_to topic[:community_name], community_url(topic[:community_id]) %>,
-        <%= pluralize(topic[:views], 'view') %>,
-        <%= pluralize(topic[:replies], 'reply') %>,
-        asked <%= pluralize(topic[:days_ago], 'day') %> ago.
+        <%= topic[:views].length.to_s %> <%= t("views.mailers.daily_digest.views") %>
+        <%= topic[:replies].length.to_s %> <%= t("views.mailers.daily_digest.replies") %>
+        <%= t("views.mailers.daily_digest.asked", days_ago: topic[:days_ago].length.to_s) %>
       </div>
     <% end %>
   <% end %>
 
   <p style="font-size: 75%; margin-top: 15px;">
-    You can control these emails from <%= link_to "your profile edit page", edit_user_url %>.
+    <%= t("views.mailers.daily_digest.control_emails", link_to: link_to(t("views.mailers.daily_digest.link_to"), edit_user_url)) %>
   </p>
 <% end %>
 

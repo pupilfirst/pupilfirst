@@ -35,7 +35,7 @@
           </div>
           <% if @post.edit_reason? %>
             <div class="mt-1 text-xs">
-              <span class="font-semibold">Reason:</span>
+              <span class="font-semibold"><%= t("posts.reason") %>:</span>
               <span><%= @post.edit_reason %></span>
             </div>
           <% end %>
@@ -61,7 +61,7 @@
           </div>
           <% if version.reason? %>
             <div class="mt-1 text-xs">
-              <span class="font-semibold">Reason:</span>
+              <span class="font-semibold"><%= t("posts.reason") %>:</span>
               <span><%= version.reason %></span>
             </div>
           <% end %>

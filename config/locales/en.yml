@@ -1013,7 +1013,7 @@ en:
       preview_course: Preview Course
     leaderboard:
       note: This leaderboard shows students <strong>who have improved the most</strong> compared to the previous leaderboard.
-      no_entries: The leaderboard doesn&rsquo;t have any entries for this period.
+      no_entries: The leaderboard doesn't have any entries for this period.
       active_students: Active Students
       inactive_students: Inactive Students
       rank: Rank
@@ -1025,7 +1025,7 @@ en:
   dashboard:
     dashboard:
       tour:
-        final_message: That&rsquo;s it for now. If you have any doubts, don&rsquo;t hesitate to reach out to us for help.<br/><br/>Have fun!
+        final_message: That's it for now. If you have any doubts, don't hesitate to reach out to us for help.<br/><br/>Have fun!
         intro: Welcome to your personal dashboard! Your team's journey through this program will be showcased here.
         level_select: The program is split into multiple levels, containing targets. New levels are unlocked when you complete <em>milestone</em> targets in each level.<br/><br/>You can go back to complete optional targets in previous levels, and you can also check out targets in future levels, but you can't submit work for those until they are unlocked.
         target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, the status and the target submission button.
@@ -1053,7 +1053,7 @@ en:
       try_reloading: Could you please try reloading this page?
     unprocessable_entity:
       invalid_request: Your browser made an invalid request.
-      wasnt_valid: <em>Something</em> about the request that your browser sent wasn&rsquo;t valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+      wasnt_valid: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
     messages:
       content_type_invalid: has an invalid content type
       limit_out_of_range: total number is out of range
@@ -1129,7 +1129,7 @@ en:
           not_accepted: The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your team <%{startup_url}|%{startup_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback
           verified: "Your team <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
   link_fallback:
-    link_fallback: "If you&rsquo;re unable to click the link above, please copy and paste the following link into your browser&rsquo;s address bar:"
+    link_fallback: "If you're unable to click the link above, please copy and paste the following link into your browser's address bar:"
   models:
     faculty:
       commitment:
@@ -1340,7 +1340,7 @@ en:
       edit_user: Edit User
     oauth:
       invalid_request: Your browser made an invalid request.
-      details: <em>Something</em> about the request that your browser sent wasn&rsquo;t valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+      details: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
     sessions:
       email: Continue with email
       email_address: Email Address
@@ -1509,18 +1509,20 @@ en:
         body: Here is some feedback from %{coach_name} on your %{update_for}
         body_view: You can view %{link_to}, including any files attached to the feedback.
         link_to: the full feedback
+        recent_submission: recent submission
+        recent_updates: recent updates
       enrollment:
         body: You have been enrolled as a student in the course <strong>%{course_name}</strong>, on %{school_name}.
         body_sign: You can now %{link_to}.
         link_to: sign into %{school_name} and start working on this course
         body_team: You have also been teamed up with %{team_members}; this means that you will be expected to work together to progress in this course.
       account_deletion_notification:
-        body: <p> We noticed that you haven't used your account in %{school_name} for over %{inactivity_months} months.  </p> <p> We will automatically delete your account after one month. Once your account is deleted, all your personal information will be removed and you will no longer have access to the school.</p> <p> If you would like to keep your account, %{link_to} before %{1_month_from_now}.  </p>
+        body: <p> We noticed that you haven't used your account in %{school_name} for over %{inactivity_months} months.  </p> <p> We will automatically delete your account after one month. Once your account is deleted, all your personal information will be removed and you will no longer have access to the school.</p> <p> If you would like to keep your account, %{link_to} before %{one_month_from_now}.  </p>
         link_to: please sign into the school
       confirm_account_deletion:
         body: <p> Your account in %{school_name} has been successfully deleted. </p> <p> All your personal information has been removed and you will no longer have access to this school.</p>
       delete_account_token:
-        body: "<p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p> <p> If you&rsquo;re unable to click the link above, please copy and paste the following link into your browser&rsquo;s address bar: </p>"
+        body: "<p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p> <p> If you're unable to click the link above, please copy and paste the following link into your browser's address bar: </p>"
         link_to: link
         body_note: <p> This action is irreversible, and will permanently remove your access to the school.</p>
       new_post:

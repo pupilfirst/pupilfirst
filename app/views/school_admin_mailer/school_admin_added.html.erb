@@ -14,7 +14,7 @@
   </p>
 
   <p>
-    <%= t("views.mailers.school_admin_added.body_not_recognized", link_to: link_to(t("views.mailers.school_admin_added.link_to"), link)) %>
+    <%= t("views.mailers.school_admin_added.body_not_recognized", link_to: link_to(t("views.mailers.school_admin_added.link_to"), link)).html_safe %>
   </p>
 
   <%= render 'mailers/link_fallback', url: link %>

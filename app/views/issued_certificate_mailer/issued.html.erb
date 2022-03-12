@@ -20,7 +20,7 @@
   </p>
 
   <p>
-    <%= t("views.mailers.issued.issued_on", issued_certificate: @issued_certificate.created_at.strftime('%b %e, %l:%M %p'), link_to: link_to(t("views.mailers.issued.link_to"), link)) %>
+    <%= t("views.mailers.issued.issued_on", issued_certificate: @issued_certificate.created_at.strftime('%b %e, %l:%M %p'), link_to: link_to(t("views.mailers.issued.link_to"), link)).html_safe %>
   </p>
 
   <%= render 'mailers/link_fallback', url: link %>

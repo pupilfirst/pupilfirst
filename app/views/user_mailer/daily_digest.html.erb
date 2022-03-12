@@ -15,7 +15,7 @@
   <% if @updates[:coach].present? %>
     <% pending_submissions_count = @updates[:coach].map { |s| s[:pending_submissions] }.sum %>
     <p style="margin-top: 10px;">
-      <%= t("views.mailers.daily_digest.body", article_pending_submissions_count: article(pending_submissions_count), pending_submissions_count: pending_submissions_count, courses_number: @updates[:coach].length.to_s) %>
+      <%= t("views.mailers.daily_digest.body", article_pending_submissions_count: article(pending_submissions_count), pending_submissions_count: pending_submissions_count, courses_number: @updates[:coach].length.to_s).html_safe %>
     </p>
 
     <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">
@@ -46,8 +46,8 @@
       </div>
       <div style="font-size: 75%; border-bottom: 1px solid lightgray; margin-bottom: 4px; padding-bottom: 4px;">
         <%= link_to topic[:community_name], community_url(topic[:community_id]) %>,
-        <%= topic[:views].length.to_s %> <%= t("views.mailers.daily_digest.views") %>
-        <%= topic[:replies].length.to_s %> <%= t("views.mailers.daily_digest.replies") %>
+        <%= topic[:views].to_s %> <%= t("views.mailers.daily_digest.views") %>
+        <%= topic[:replies].to_s %> <%= t("views.mailers.daily_digest.replies") %>
       </div>
     <% end %>
   <% end %>
@@ -66,15 +66,15 @@
       </div>
       <div style="font-size: 75%; border-bottom: 1px solid lightgray; margin-bottom: 4px; padding-bottom: 4px;">
         <%= link_to topic[:community_name], community_url(topic[:community_id]) %>,
-        <%= topic[:views].length.to_s %> <%= t("views.mailers.daily_digest.views") %>
-        <%= topic[:replies].length.to_s %> <%= t("views.mailers.daily_digest.replies") %>
-        <%= t("views.mailers.daily_digest.asked", days_ago: topic[:days_ago].length.to_s) %>
+        <%= topic[:views].to_s %> <%= t("views.mailers.daily_digest.views") %>
+        <%= topic[:replies].to_s %> <%= t("views.mailers.daily_digest.replies") %>
+        <%= t("views.mailers.daily_digest.asked", days_ago: topic[:days_ago].to_s) %>
       </div>
     <% end %>
   <% end %>
 
   <p style="font-size: 75%; margin-top: 15px;">
-    <%= t("views.mailers.daily_digest.control_emails", link_to: link_to(t("views.mailers.daily_digest.link_to"), edit_user_url)) %>
+    <%= t("views.mailers.daily_digest.control_emails", link_to: link_to(t("views.mailers.daily_digest.link_to"), edit_user_url)).html_safe %>
   </p>
 <% end %>
 

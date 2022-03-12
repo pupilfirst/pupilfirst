@@ -11,7 +11,7 @@
 <% end %>
 
 <% content_for :body do %>
-  <% update_for = timeline_event.present? ? 'recent submission' : 'recent updates' %>
+  <% update_for = timeline_event.present? ? t("views.mailers.feedback_as_email.recent_submission")  : t("views.mailers.feedback_as_email.recent_updates") %>
   <p>
     <%= t("views.mailers.feedback_as_email.body", coach_name: coach_name, update_for: update_for) %>
   </p>
@@ -21,7 +21,7 @@
 
   <% if target.present? %>
     <p>
-      <%= t("views.mailers.feedback_as_email.body_view", link_to: link_to(t("views.mailers.feedback_as_email.link_to"), target_url)) %>
+      <%= t("views.mailers.feedback_as_email.body_view", link_to: link_to(t("views.mailers.feedback_as_email.link_to"), target_url)).html_safe %>
     </p>
   <% end %>
 

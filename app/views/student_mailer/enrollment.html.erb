@@ -13,7 +13,7 @@
   </p>
 
   <p>
-    <%= t("views.mailers.enrollment.body_sign", link_to: link_to(t("views.mailers.enrollment.link_to", school_name: @school.name), sign_in_link)) %>
+    <%= t("views.mailers.enrollment.body_sign", link_to: link_to(t("views.mailers.enrollment.link_to", school_name: @school.name), sign_in_link)).html_safe %>
   </p>
 
   <% if team_members.present? %>

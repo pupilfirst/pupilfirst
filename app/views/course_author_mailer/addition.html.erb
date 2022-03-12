@@ -12,7 +12,7 @@
   </p>
 
   <p>
-    <%= t("views.mailers.addition.use_link"), link_to: link_to(t("views.mailers.addition.link_to"), sign_in_link), school_name: @school.name%>
+    <%= t("views.mailers.addition.use_link", link_to: link_to(t("views.mailers.addition.link_to"), sign_in_link), school_name: @school.name).html_safe %>
   </p>
 
   <%= render 'mailers/link_fallback', url: sign_in_link %>

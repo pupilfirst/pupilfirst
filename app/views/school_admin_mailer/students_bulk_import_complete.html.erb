@@ -11,11 +11,11 @@
 
   <div>
     <p><%= t("views.mailers.students_bulk_import_complete.body_students_requested", report_params: @report_params[:students_requested]).html_safe %></p>
-    <p><%= t("views.mailers.students_bulk_import_complete.body_students_requested", report_params: @report_params[:students_added]).html_safe %></p>
+    <p><%= t("views.mailers.students_bulk_import_complete.body_students_added", report_params: @report_params[:students_added]).html_safe %></p>
   </div>
 
   <p>
-    <%= t("views.mailers.students_bulk_import_complete.body_view", link_to: link_to(t("views.mailers.students_bulk_import_complete.link_to"), link)) %>
+    <%= t("views.mailers.students_bulk_import_complete.body_view", link_to: link_to(t("views.mailers.students_bulk_import_complete.link_to"), link)).html_safe %>
   </p>
 
   <% if @report_attachment %>

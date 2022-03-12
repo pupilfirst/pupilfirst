@@ -3,7 +3,7 @@
 <% end %>
 
 <% content_for :body do %>
-  <%= t("views.mailers.account_deletion_notification.body", school_name: @school.name, inactivity_months: @inactivity_months, link_to: link_to(t("views.mailers.account_deletion_notification.link_to"), @sign_in_url), 1_month_from_now: 1.month.from_now.strftime("%b %d, %Y")).html_safe %>
+  <%= t("views.mailers.account_deletion_notification.body", school_name: @school.name, inactivity_months: @inactivity_months, link_to: link_to(t("views.mailers.account_deletion_notification.link_to"), @sign_in_url), one_month_from_now: 1.month.from_now.strftime("%b %d, %Y").to_s).html_safe %>
 
   <%= render 'mailers/link_fallback', url: @sign_in_url %>
 <% end %>

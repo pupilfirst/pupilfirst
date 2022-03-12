@@ -10,7 +10,7 @@ module Mutations
       mutator = ArchivePostMutator.new(context, params)
 
       success = if mutator.valid?
-        mutator.notify(:success, I18n.t("notes.done"), I18n.t("notes.post_archived"))
+        mutator.notify(:success, I18n.t("shared.notifications.done"), I18n.t("shared.notifications.post_archived"))
         mutator.archive_post
         true
       else

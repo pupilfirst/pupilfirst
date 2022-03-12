@@ -11,7 +11,7 @@ module Mutations
 
       success = if mutator.valid?
         mutator.mark_post_as_solution
-        mutator.notify(:success, I18n.t("notes.done"), I18n.t("notes.reply_marked"))
+        mutator.notify(:success, I18n.t("shared.notifications.done"), I18n.t("shared.notifications.reply_marked"))
         true
       else
         mutator.notify_errors

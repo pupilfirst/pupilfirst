@@ -1,5 +1,8 @@
 let str = React.string
 
+let tr = I18n.t(~scope="components.SchoolCommunities__Index")
+let ts = I18n.t(~scope="shared")
+
 open SchoolCommunities__IndexTypes
 
 type editorAction =
@@ -96,7 +99,7 @@ let handleCloseCategoryManager = (send, state) =>
   categoryEditorDirty(state)
     ? if {
         open Webapi.Dom
-        window |> Window.confirm("There are unsaved changes! Are you sure you want to close?")
+        window |> Window.confirm(tr("unsaved_window_confirm"))
       } {
         send(UpdateShowCategoryEditor(false))
       } else {
@@ -133,7 +136,7 @@ let make = (~communities, ~courses) => {
     | ShowEditor(community) =>
       let level = state.showCategoryEditor ? 1 : 0
       <SchoolAdmin__EditorDrawer2
-        closeButtonTitle="Close Community Editor"
+        closeButtonTitle=tr("close_community_editor")
         level
         closeDrawerCB={() => send(UpdateEditorAction(Hidden))}>
         <SchoolCommunities__Editor
@@ -151,7 +154,7 @@ let make = (~communities, ~courses) => {
         | Some(community) =>
           state.showCategoryEditor
             ? <SchoolAdmin__EditorDrawer2
-                closeButtonTitle="Close Category Editor"
+                closeButtonTitle=tr("close_category_editor")
                 closeIconClassName="fas fa-arrow-left"
                 closeDrawerCB={() => handleCloseCategoryManager(send, state)}>
                 <SchoolCommunities__CategoryManager
@@ -204,7 +207,7 @@ let make = (~communities, ~courses) => {
                 href={"/communities/" ++ (community |> Community.id)}
                 className="text-sm flex items-center border-l text-gray-700 hover:bg-gray-100 hover:text-primary-500 font-semibold px-5 py-5">
                 <i className="fas fa-external-link-alt text-normal" />
-                <span className="ml-1"> {"View" |> str} </span>
+                <span className="ml-1"> {ts("view") |> str} </span>
               </a>
             </div>
           </div>

@@ -2,6 +2,8 @@ type size =
   | Normal
   | Large
 
+let tr = I18n.t(~scope="components.SchoolAdmin__EditorDrawer")
+
 let drawerClasses = size => {
   let defaultClasses = "drawer-right"
 
@@ -13,7 +15,7 @@ let drawerClasses = size => {
 }
 
 @react.component
-let make = (~closeDrawerCB, ~closeButtonTitle="Close Editor", ~size=Normal, ~children) =>
+let make = (~closeDrawerCB, ~closeButtonTitle=tr("close_editor"), ~size=Normal, ~children) =>
   <div>
     <div className="blanket" />
     <div className={drawerClasses(size)}>

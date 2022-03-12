@@ -12,7 +12,7 @@ module Mutations
 
       if mutator.valid?
         mutator.update_review_checklist
-        mutator.notify(:success, I18n.t("notes.success"), I18n.t("notes.review_updated"))
+        mutator.notify(:success, I18n.t("shared.notifications.success"), I18n.t("shared.notifications.review_updated"))
         { success: true }
       else
         mutator.notify_errors

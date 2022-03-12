@@ -12,7 +12,7 @@ module Mutations
 
       success = if mutator.valid?
           mutator.merge_levels
-          mutator.notify(:success, I18n.t("notes.done_dot"), I18n.t("notes.merge_complete"))
+          mutator.notify(:success, I18n.t("shared.notifications.done_dot"), I18n.t("shared.notifications.merge_complete"))
           true
         else
           mutator.notify_errors

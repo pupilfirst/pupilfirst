@@ -1,6 +1,7 @@
 open CourseEditor__Types
 
 let t = I18n.t(~scope="components.CourseEditor__HighlightsEditor")
+let ts = I18n.ts
 
 let str = React.string
 
@@ -67,7 +68,7 @@ let contents = (replaceCB, highlight) => {
     icon =>
       <button
         key=icon
-        title={"Select " ++ icon}
+        title={t("select")++ " " ++ icon}
         className="flex items-center justify-center p-3 w-full h-full"
         onClick={_ => updateIcon(replaceCB, highlight, icon)}>
         <PfIcon className={" text-gray-900 text-lg if i-" ++ icon} />
@@ -116,7 +117,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
             className="flex-shrink-0 bg-gray-100 border rounded flex flex-col text-xs sticky top-0">
             {ReactUtils.nullIf(
               <button
-                title="Move up"
+                title=t("move_up")
                 onClick={_ => moveUp(index, highlights, updateHighlightsCB)}
                 className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
                 <FaIcon classes={"fas fa-arrow-up"} />
@@ -125,7 +126,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
             )}
             {ReactUtils.nullIf(
               <button
-                title="Move Down"
+                title=t("move_down")
                 onClick={_ => moveDown(index, highlights, updateHighlightsCB)}
                 className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
                 <FaIcon classes={"fas fa-arrow-down"} />
@@ -134,7 +135,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
             )}
             <button
               onClick={_ => removeHighlight(index, highlights, updateHighlightsCB)}
-              title="Delete highlight"
+              title=t("delete_highlight")
               className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
               <FaIcon classes={"fas fa-trash-alt"} />
             </button>

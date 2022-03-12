@@ -12,7 +12,7 @@ module Mutations
       mutator = UpdateTopicMutator.new(context, params)
 
       success = if mutator.valid?
-        mutator.notify(:success, I18n.t("notes.done"), I18n.t("notes.topic_updated"))
+        mutator.notify(:success, I18n.t("shared.notifications.done"), I18n.t("shared.notifications.topic_updated"))
         mutator.update_topic
         true
       else

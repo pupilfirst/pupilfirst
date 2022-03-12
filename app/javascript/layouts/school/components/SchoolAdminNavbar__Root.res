@@ -137,8 +137,8 @@ let secondaryNav = (courses, userRole, selectedOption) =>
       key="secondary-nav"
       className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
       <ul className="p-4">
-        {secondaryNavOption("/school/customize", settingsSelection, Customization, "Customization")}
-        {secondaryNavOption("/school/admins", settingsSelection, Admins, "Admins")}
+        {secondaryNavOption("/school/customize", settingsSelection, Customization, t("navbar.customization"))}
+        {secondaryNavOption("/school/admins", settingsSelection, Admins, t("navbar.admins"))}
       </ul>
     </div>
   | SelectedCourse(courseId, courseSelection) =>
@@ -256,7 +256,7 @@ let make = (
         | SchoolAdmin =>
           <ul>
             <li>
-              {topLink(selectedOption, Overview, "/school", shrunk, "fas fa-eye", "Overview")}
+              {topLink(selectedOption, Overview, "/school", shrunk, "fas fa-eye", t("navbar.overview"))}
             </li>
             <li>
               {topLink(
@@ -265,7 +265,7 @@ let make = (
                 "/school/coaches",
                 shrunk,
                 "fas fa-chalkboard-teacher",
-                "Coaches",
+                t("navbar.coaches"),
               )}
             </li>
             <li>
@@ -275,7 +275,7 @@ let make = (
                 "/school/customize",
                 shrunk,
                 "fas fa-cog",
-                "Settings",
+                t("navbar.settings"),
               )}
             </li>
             <li>
@@ -285,7 +285,7 @@ let make = (
                 "/school/courses",
                 shrunk,
                 "fas fa-book",
-                "Courses",
+                t("navbar.courses"),
               )}
               {ReactUtils.nullIf(
                 <ul className="pr-4 pb-4 ml-10 mt-1">
@@ -319,7 +319,7 @@ let make = (
                 "/school/communities",
                 shrunk,
                 "fas fa-users",
-                "Communities",
+                t("communities"),
               )}
             </li>
           </ul>
@@ -332,15 +332,15 @@ let make = (
             wrapperClasses="w-full"
             iconClasses="school-admin-navbar__notifications-unread-bullet"
             buttonClasses="flex relative text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center w-full"
-            title=?{shrunk ? None : Some("Notifications")}
+            title=?{shrunk ? None : Some(t("notifications"))}
             icon="fas fa-bell fa-fw text-lg mr-2"
             hasNotifications
           />
         </div>
-        {bottomLink("/dashboard", shrunk, "fas fa-home", "Dashboard")}
+        {bottomLink("/dashboard", shrunk, "fas fa-home", t("dashboard"))}
         <li>
           <a
-            title=?{shrunk ? Some("Sign Out") : None}
+            title=?{shrunk ? Some(t("sign_out")) : None}
             className={bottomLinkClasses(shrunk)}
             rel="nofollow"
             href="/users/sign_out">

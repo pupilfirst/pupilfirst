@@ -1,5 +1,7 @@
 %bs.raw(`require("./SchoolAdmin__EditorDrawer2.css")`)
 
+let tr = I18n.t(~scope="components.SchoolAdmin__EditorDrawer")
+
 open React
 
 let drawerClasses = (size, level, previousLevel) => {
@@ -28,7 +30,7 @@ let drawerClasses = (size, level, previousLevel) => {
 @react.component
 let make = (
   ~closeDrawerCB,
-  ~closeButtonTitle="Close Editor",
+  ~closeButtonTitle=tr("close_editor"),
   ~size=SchoolAdmin__EditorDrawer.Normal,
   ~closeIconClassName="fas fa-times",
   ~level=0,

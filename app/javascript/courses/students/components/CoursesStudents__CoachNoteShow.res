@@ -103,7 +103,7 @@ let make = (~note, ~userId, ~removeNoteCB) => {
     <div className="ml-10 md:ml-13 mt-2">
       <p
         className="inline-block text-xs font-semibold leading-tight bg-gray-300 text-gray-800 mt-px px-1 py-px rounded">
-        {tr("coach_on") ++ (note |> CoachNote.noteOn) |> str}
+        {tr("coach_on") ++ " " ++ (note |> CoachNote.noteOn) |> str}
       </p>
       <MarkdownBlock
         className="pt-1 text-sm" profile=Markdown.Permissive markdown={note |> CoachNote.note}

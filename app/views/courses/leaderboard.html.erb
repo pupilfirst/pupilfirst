@@ -55,7 +55,7 @@
                   </a>
                 <% end %>
                 <span class="bg-white px-6 py-2 text-sm flex items-center flex-shrink-0 h-full mx-1 md:mx-2 font-semibold border border-gray-400 rounded-lg">
-                  <%= presenter.start_date %> to <%= presenter.end_date %>
+                  <%= presenter.start_date %> - <%= presenter.end_date %>
                 </span>
                 <% if presenter.next_page? %>
                   <a class="text-primary bg-white hover:bg-primary-100 hover:text-primary-600 hover:border-primary-300 hover:shadow-md focus:bg-primary-600 focus:text-white focus:shadow-inner px-4 py-2 h-full flex items-center justify-center border border-gray-400 rounded-lg" href="<%= presenter.next_page_link %>">

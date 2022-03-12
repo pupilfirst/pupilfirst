@@ -530,7 +530,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
         onChange={date => send(UpdateEndsAt(date))} selected=?state.endsAt id="course-ends-at-input"
       />
     </div>
-    <School__InputGroupError message="Enter a valid date" active=state.hasDateError />
+    <School__InputGroupError message=t("enter_date") active=state.hasDateError />
     <div className="mt-5">
       <label className="tracking-wide text-xs font-semibold" htmlFor="course-about">
         {t("course_about.label")->str}

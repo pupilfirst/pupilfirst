@@ -23,6 +23,8 @@ type action =
 
 let str = React.string
 
+let ts = I18n.ts
+
 let updateName = (send, name) => {
   let hasError = Js.String2.length(name) < 2
   send(UpdateName(name, hasError))
@@ -144,7 +146,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
         htmlFor="title">
         {"Title" |> str}
       </label>
-      <span className="text-xs ml-1"> {"(optional)" |> str} </span>
+      <span className="text-xs ml-1"> {ts("optional_braces") |> str} </span>
       <input
         value=state.title
         onChange={event => send(UpdateTitle(ReactEvent.Form.target(event)["value"]))}
@@ -160,7 +162,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
         htmlFor="affiliation">
         {"Affiliation" |> str}
       </label>
-      <span className="text-xs ml-1"> {"(optional)" |> str} </span>
+      <span className="text-xs ml-1"> {ts("optional_braces") |> str} </span>
       <input
         value=state.affiliation
         onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
@@ -176,7 +178,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
         htmlFor="team_name">
         {"Team Name" |> str}
       </label>
-      <span className="text-xs ml-1"> {"(optional)" |> str} </span>
+      <span className="text-xs ml-1"> {ts("optional_braces") |> str} </span>
       <HelpIcon className="ml-1">
         {"Students with same team name will be grouped together; this will not affect existing teams in the course." |> str}
       </HelpIcon>
@@ -194,7 +196,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
       <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="tags">
         {"Tags" |> str}
       </label>
-      <span className="text-xs ml-1"> {"(optional)" |> str} </span>
+      <span className="text-xs ml-1"> {ts("optional_braces") |> str} </span>
     </div>
     <School__SearchableTagList
       unselectedTags={Js.Array2.filter(teamTags, tag =>

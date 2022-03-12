@@ -217,19 +217,19 @@ module Selectable = {
   let label = t =>
     switch t {
     | Level(level) => Some(LevelLabel.format(level |> Level.number |> string_of_int))
-    | AssignedToCoach(_) => Some("Assigned to")
-    | NameOrEmail(_) => Some("Name or Email")
-    | CoachNotes(_) => Some("Coach Notes")
-    | Tag(_) => Some("Tagged with")
+    | AssignedToCoach(_) => Some(tr("assigned_to"))
+    | NameOrEmail(_) => Some(tr("name_email"))
+    | CoachNotes(_) => Some(tr("coach_notes"))
+    | Tag(_) => Some(tr("tagged_with"))
     }
 
   let value = t =>
     switch t {
     | Level(level) => level |> Level.name
     | AssignedToCoach(coach, currentCoachId) =>
-      coach |> Coach.id == currentCoachId ? "Me" : coach |> Coach.name
+      coach |> Coach.id == currentCoachId ? tr("me") : coach |> Coach.name
     | NameOrEmail(search) => search
-    | CoachNotes(on) => on ? "Has notes" : "Does not have notes"
+    | CoachNotes(on) => on ? tr("has_notes") : tr("no_notes")
     | Tag(tag) => tag
     }
 
@@ -239,13 +239,13 @@ module Selectable = {
       LevelLabel.searchString(level |> Level.number |> string_of_int, level |> Level.name)
     | AssignedToCoach(coach, currentCoachId) =>
       if coach |> Coach.id == currentCoachId {
-        (coach |> Coach.name) ++ " assigned to me"
+        (coach |> Coach.name) ++ tr("search_assigned_me")
       } else {
-        "assigned to " ++ (coach |> Coach.name)
+        tr("search_assigned_to") ++ (coach |> Coach.name)
       }
     | NameOrEmail(search) => search
-    | CoachNotes(_) => "does not have notes has notes coach notes"
-    | Tag(tag) => "tag " ++ tag
+    | CoachNotes(_) => tr("search_no_notes")
+    | Tag(tag) => tr("search_tag") ++ tag
     }
 
   let color = _t => "gray"
@@ -378,7 +378,7 @@ let restoreFilterNotice = (send, currentCoach, message) =>
 let restoreAssignedToMeFilter = (state, send, currentTeamCoach) =>
   currentTeamCoach |> OptionUtils.mapWithDefault(currentCoach =>
     switch state.filter.coach {
-    | None => restoreFilterNotice(send, currentCoach, "Now showing all students in this course.")
+    | None => restoreFilterNotice(send, currentCoach, tr("restore_filer_none"))
     | Some(selectedCoach) if selectedCoach |> Coach.id == Coach.id(currentCoach) => React.null
     | Some(selectedCoach) =>
       restoreFilterNotice(

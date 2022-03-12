@@ -10,7 +10,7 @@ module Mutations
       mutator = CreateTargetVersionMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, I18n.t("notes.done"), I18n.t("notes.new_version"))
+        mutator.notify(:success, I18n.t("shared.notifications.done"), I18n.t("shared.notifications.new_version"))
         mutator.create_target_version
         { success: true }
       else

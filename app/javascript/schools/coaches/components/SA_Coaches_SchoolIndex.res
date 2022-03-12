@@ -2,6 +2,8 @@ open CoachesSchoolIndex__Types
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.SA_Coaches_SchoolIndex")
+
 type formVisible =
   | None
   | CoachEditor(option<Coach.t>)
@@ -66,7 +68,7 @@ let make = (~coaches, ~authenticityToken) => {
                     <img
                       className="w-10 h-10 rounded-full mr-4 object-cover"
                       src={coach |> Coach.imageUrl}
-                      alt={"Avatar of " ++ (coach |> Coach.name)}
+                      alt={tr("avatar_of") ++ (coach |> Coach.name)}
                     />
                     <div className="text-sm">
                       <p className="font-semibold"> {coach |> Coach.name |> str} </p>

@@ -1,5 +1,8 @@
 let str = React.string
 
+let ts = I18n.t(~scope="shared")
+let tr = I18n.t(~scope="components.SchoolCommunities__Editor")
+
 open SchoolCommunities__IndexTypes
 
 module CreateCommunityQuery = %graphql(`
@@ -112,7 +115,7 @@ let handleQuery = (community, state, send, addCommunityCB, updateCommunitiesCB, 
         | None => send(FinishSaving)
         }
 
-        Notification.success("Success", "Community updated successfully.")
+        Notification.success(ts("success"), ts("community_updated"))
         Js.Promise.resolve()
       })
       |> ignore
@@ -138,15 +141,15 @@ let handleQuery = (community, state, send, addCommunityCB, updateCommunitiesCB, 
       |> Js.Promise.catch(error => {
         Js.log(error)
         Notification.error(
-          "Unexpected Error!",
-          "Please reload the page before trying to post again.",
+          ts("unexpected_error"),
+          tr("notification_reload_post"),
         )
         Js.Promise.resolve()
       })
       |> ignore
     }
   } else {
-    Notification.error("Empty", "Answer cant be blank")
+    Notification.error(ts("empty"), tr("notification_answer_cant_blank"))
   }
 }
 
@@ -213,7 +216,7 @@ let make = (
 
   <div className="mx-8 pt-8">
     <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-      {"Community Editor" |> str}
+      {tr("community_editor") |> str}
     </h5>
     <DisablingCover disabled=state.saving>
       <div key="communities-editor" className="mt-3">
@@ -221,10 +224,10 @@ let make = (
           <label
             className="inline-block tracking-wide text-gray-700 text-xs font-semibold"
             htmlFor="communities-editor__name">
-            {"What do you want to call this community?" |> str}
+            {tr("community_editor_label") |> str}
           </label>
           <input
-            placeholder="This community needs a name!"
+            placeholder=tr("community_editor_placeholder")
             value=state.name
             onChange={event => {
               let name = ReactEvent.Form.target(event)["value"]
@@ -234,7 +237,7 @@ let make = (
             className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
           />
           <School__InputGroupError
-            message="is not a valid name"
+            message=tr("community_editor_error")
             active={state.dirty ? state.name |> String.trim == "" : false}
           />
         </div>
@@ -242,18 +245,18 @@ let make = (
           <label
             className="inline-block tracking-wide text-gray-700 text-xs font-semibold"
             htmlFor="communities-editor__course-list">
-            {"Should students be allowed to discuss targets in this community?" |> str}
+            {tr("allowed_targets_q") |> str}
           </label>
           <div className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden ml-2">
             <button
               onClick={_ => send(SetTargetLinkable(true))}
               className={booleanButtonClasses(state.targetLinkable)}>
-              {"Yes" |> str}
+              {ts("_yes") |> str}
             </button>
             <button
               onClick={_ => send(SetTargetLinkable(false))}
               className={booleanButtonClasses(!state.targetLinkable)}>
-              {"No" |> str}
+              {ts("_no") |> str}
             </button>
           </div>
         </div>
@@ -261,12 +264,12 @@ let make = (
           <label
             className="inline-block tracking-wide text-gray-700 text-xs font-semibold mb-2"
             htmlFor="communities-editor__course-targetLinkable">
-            {"Give access to students from:" |> str}
+            {tr("give_access") |> str}
           </label>
           <CourseSelector
-            placeholder="Search for a course"
-            emptySelectionMessage="No courses selected"
-            allItemsSelectedMessage="You have selected all available courses"
+            placeholder=tr("search_course")
+            emptySelectionMessage=tr("search_course_empty")
+            allItemsSelectedMessage=tr("search_course_all")
             selected={selectedCourses(courses, state.selectedCourseIds)}
             unselected={unselectedCourses(courses, state.selectedCourseIds)}
             onChange={onChangeCourseSearch(send)}
@@ -279,7 +282,7 @@ let make = (
           <div className="flex justify-between items-center mb-4">
             <label
               className="inline-block tracking-wide text-gray-700 text-xs font-semibold uppercase">
-              {"Topic Categories" |> str}
+              {tr("topic_categories") |> str}
             </label>
             {switch community {
             | Some(_community) =>
@@ -288,7 +291,7 @@ let make = (
                 className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
                 <i className="fas fa-pencil-alt" />
                 <span className="text-xs font-semibold ml-2">
-                  {(ArrayUtils.isEmpty(categories) ? "Add Categories" : "Edit Categories") |> str}
+                  {(ArrayUtils.isEmpty(categories) ? tr("add_categories") : tr("edit_categories")) |> str}
                 </span>
               </button>
             | None => React.null
@@ -298,12 +301,12 @@ let make = (
           | Some(_community) =>
             categories |> ArrayUtils.isEmpty
               ? <p className="text-xs text-gray-800">
-                  {"There are currently no topic categories in this community!" |> str}
+                  {tr("no_topic") |> str}
                 </p>
               : categoryList(categories)
           | None =>
             <p className="text-xs text-gray-800">
-              {"You can add topic categories after creating this community!" |> str}
+              {tr("can_add_topic") |> str}
             </p>
           }}
         </div>
@@ -314,8 +317,8 @@ let make = (
         key="communities-editor__update-button"
         className="w-full btn btn-large btn-primary mt-3">
         {switch community {
-        | Some(_) => "Update Community"
-        | None => "Create Community"
+        | Some(_) => tr("update_community")
+        | None => tr("create_community")
         } |> str}
       </button>
     </DisablingCover>

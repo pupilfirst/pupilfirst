@@ -1,5 +1,7 @@
 let str = React.string
 
+let tr = I18n.t(~scope="components.CourseAuthors__Form")
+
 open CourseAuthors__Types
 
 module CreateCourseAuthorQuery = %graphql(`
@@ -108,9 +110,9 @@ let saveDisabled = (email, name, saving, author) =>
 
 let buttonText = (saving, author) =>
   switch (saving, author) {
-  | (true, _) => "Saving"
-  | (false, Some(_)) => "Update Author"
-  | (false, None) => "Create Author"
+  | (true, _) => tr("saving")
+  | (false, Some(_)) => tr("update_author")
+  | (false, None) => tr("create_author")
   }
 
 let emailInputDisabled = author =>
@@ -144,14 +146,14 @@ let make = (~courseId, ~rootPath, ~author, ~addAuthorCB, ~updateAuthorCB) => {
           <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
             {switch author {
             | Some(author) => author |> Author.name
-            | None => "Add new author"
+            | None => tr("add_new_author")
             } |> str}
           </h5>
           <div>
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
               htmlFor="email">
-              {"Email" |> str}
+              {tr("email") |> str}
             </label>
             <input
               value=email
@@ -159,18 +161,18 @@ let make = (~courseId, ~rootPath, ~author, ~addAuthorCB, ~updateAuthorCB) => {
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
               id="email"
               type_="email"
-              placeholder="Add email here"
+              placeholder=tr("email_placeholder")
               disabled={emailInputDisabled(author)}
             />
             <School__InputGroupError
-              message="Enter a valid Email" active={showInvalidEmailError(email, author)}
+              message=tr("email_message") active={showInvalidEmailError(email, author)}
             />
           </div>
           <div className="mt-5">
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
               htmlFor="name">
-              {"Name" |> str}
+              {tr("name") |> str}
             </label>
             <input
               value=name
@@ -178,10 +180,10 @@ let make = (~courseId, ~rootPath, ~author, ~addAuthorCB, ~updateAuthorCB) => {
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
               id="name"
               type_="text"
-              placeholder="Add name here"
+              placeholder=tr("name_placeholder")
             />
             <School__InputGroupError
-              message="Enter a valid name" active={showInvalidNameError(name, author)}
+              message=tr("name_message") active={showInvalidNameError(name, author)}
             />
           </div>
           <div className="w-auto mt-8">

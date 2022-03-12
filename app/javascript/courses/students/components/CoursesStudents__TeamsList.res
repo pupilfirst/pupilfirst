@@ -10,12 +10,12 @@ let ts = I18n.t(~scope="shared")
 let levelInfo = (levelId, levels) =>
   <span
     className="inline-flex flex-col items-center rounded bg-orange-100 border border-orange-300 px-2 pt-2 pb-1">
-    <p className="text-xs font-semibold"> {"Level" |> str} </p>
+    <p className="text-xs font-semibold"> {ts("level") |> str} </p>
     <p className="font-bold">
       {levels
       |> ArrayUtils.unsafeFind(
         (l: Level.t) => l.id == levelId,
-        tr("unable_find_level") ++ (levelId ++ "in CoursesStudents__TeamsList"),
+        "Unable to find level with id: "  ++ (levelId ++ "in CoursesStudents__TeamsList"),
       )
       |> Level.number
       |> string_of_int

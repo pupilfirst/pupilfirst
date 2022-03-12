@@ -1,5 +1,7 @@
 open StudentsEditor__Types
 
+let ts = I18n.ts
+
 type rec teamCoachlist = (coachId, coachName, selected)
 and coachId = string
 and coachName = string
@@ -303,7 +305,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
           htmlFor="affiliation">
           {"Affiliation" |> str}
         </label>
-        <span className="text-xs ml-1"> {"(optional)" |> str} </span>
+        <span className="text-xs ml-1"> {ts("optional_braces") |> str} </span>
         <input
           value=state.affiliation
           onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
@@ -355,7 +357,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
         <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
           {(isSingleStudent ? "Student's" : "Team's") ++ " Access Ends On" |> str}
         </label>
-        <span className="ml-1 text-xs"> {"(optional)" |> str} </span>
+        <span className="ml-1 text-xs"> {ts("optional_braces") |> str} </span>
         <HelpIcon
           className="ml-2" link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
           {"If set, students will not be able to complete targets after this date." |> str}

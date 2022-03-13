@@ -1,5 +1,8 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.EvaluationCriteria__Index")
+let ts = I18n.ts
+
 type editorAction =
   | ShowEditor(option<EvaluationCriterion.t>)
   | Hidden
@@ -20,7 +23,7 @@ let showEvaluationCriterion = (evaluationCriterion, setState) =>
     className="flex items-center shadow bg-white rounded-lg mb-4">
     <div className="course-faculty__list-item flex w-full items-center">
       <a
-        title={"Edit " ++ (evaluationCriterion |> EvaluationCriterion.name)}
+        title={ ts("edit") ++ " " ++ (evaluationCriterion |> EvaluationCriterion.name)}
         onClick={event => openEditor(event, evaluationCriterion, setState)}
         className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-l-lg hover:bg-gray-100 hover:text-primary-500 hover:border-primary-400">
         <div className="flex w-full text-sm justify-between">
@@ -69,7 +72,7 @@ let make = (~courseId, ~evaluationCriteria) => {
         onClick={_ => setState(state => {...state, editorAction: ShowEditor(None)})}
         className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
         <i className="fas fa-plus-circle" />
-        <h5 className="font-semibold ml-2"> {"Add New Evaluation Criterion" |> str} </h5>
+        <h5 className="font-semibold ml-2"> {t("add_new_criterion") |> str} </h5>
       </button>
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">

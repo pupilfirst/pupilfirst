@@ -279,7 +279,7 @@ let make = (
         )}
         {controlIcon(
           ~icon="fa-trash-alt",
-          ~title=t("Delete"),
+          ~title=t("delete"),
           ~color=#Grey,
           ~handler=removeContentBlockCB |> OptionUtils.map(cb => onDelete(contentBlock, cb, send)),
         )}

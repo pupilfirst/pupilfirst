@@ -72,7 +72,7 @@ let make = (
     <div className="my-2 bg-white">
       <MarkdownEditor
         textareaId=questionId
-        placeholder="Type the question here (supports markdown)"
+        placeholder=tr("answer_placeholder")
         value={quizQuestion |> CurriculumEditor__QuizQuestion.question}
         onChange=updateQuestion
         profile=Markdown.Permissive

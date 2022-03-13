@@ -8,6 +8,8 @@ en:
     no_submissions: No student submissions yet!
     submissions_reviewed: submissions reviewed
   components:
+    Api:
+      error_notification_body: Our team has been notified of this error. Please reload the page and try again.
     AppRouter__Dropdown:
       more: More
       show_more_links: Show more links
@@ -116,6 +118,7 @@ en:
         label: Title
         placeholder: Student, Coach, CEO, etc.
     CourseApplicants__Root:
+      show_actions: Show Actions
       applicants_fully_loaded_text: Showing all %{total_applicants} applicants
       applicants_page_title: Applicants
       applicants_partially_loaded_text: Showing %{loaded_applicants_count} of %{total_applicants} applicants
@@ -135,6 +138,9 @@ en:
         updated_at: Updated At
       sorter:
         label: Sort by
+    CourseAuthors__Root:
+      window_confirm_pre: Are you sure you want to remove
+      window_confirm_post: from the list of authors?
     CourseCertificates__CreateDrawer:
       certificate_base_image_label: Certificate Base Image
       certificate_base_image_placeholder: Select a base image for certificate
@@ -167,6 +173,8 @@ en:
         one: This certificate has been issued once.<br/>These changes will also be applied to the issued certificate.
         other: This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates.
     CourseCertificates__Root:
+      deleting: Deleting...
+      delete_confirm: Are you sure you want to delete this certificate?
       auto_issue_tag: Auto-issue
       create_action: Create New Certificate
       delete_button_title: Delete Certificate %{name}
@@ -177,7 +185,14 @@ en:
         other: Issued %{count} times
         zero: Never issued
       no_certificates: You haven't created any certificates yet!
-    CoursesExport__Root:
+    CourseExport__Root:
+      requested: Requested
+      prepared: Prepared
+      close_export_form: Close Export Form
+      search_tag_placeholder: Search for a tag
+      search_tags_empty: No tags selected
+      export: Export
+      download_course_export: Download Course Export
       reviewed_only_tag: Reviewed Submissions Only
       include_inactive_students_tag: Included Inactive Students
       create_action: Create New Export
@@ -197,6 +212,8 @@ en:
       create_button_text: Create Export
       create_button_active_label: Setting up an export...
     CourseEditor:
+      notification_error_head: An unexpected error occurred
+      notification_error_body: Our team has been notified about this error. Please try reloading this page.
       add_new_course: Add New Course
       button_load_more: Load More Courses...
       course_links:
@@ -387,6 +404,14 @@ en:
     CourseCoaches__InfoFormTeam:
       remove_pre_confirm: "Are you sure you want to remove "
       remove_post_confirm: from the list of assigned teams?
+    CourseCoaches__Root:
+      enrollment_delete_error_notification_body: Please try again
+      enrollment_delete_error_head_notification: Coach enrollment could not be deleted
+      enrollment_delete_notificaion_success_body: Coach enrollment deleted successfully
+      remove_confirm_pre: Are you sure you want to remove
+      remove_confirm_post: from this course?
+      course_empty: The course has no coaches assigned!
+      coaches_list: List of course coaches
     CoursesCurriculum__FileForm:
       error: "Error "
       smth_went_wrong: Something went wrong!
@@ -895,12 +920,75 @@ en:
       target_visibility: Target Visibility
       update_target: Update Target
       visit_link: Visit a link to complete the target.
+    CurriculumEditor__TargetDrawer:
+      unsaved_confirm: There are unsaved changes. Are you sure you want to discard them?
+      content: Content
+      details: Details
+      versions: Versions
+      unexpected_error: Unexpected error. Please reload the page.
+    CurriculumEditor__TargetGroupEditor:
+      choose_level: Choose a level
+      target_group_updated_notificaion: Target Group updated successfully
+      target_group_created_notification: Target Group created successfully
+      group_details: Target Group Details
+      title: Title
+      title_placeholder: Type target group name here
+      title_name_error: not a valid Title
+      description: Description
+      description_placeholder: Type target group description
+      milestone_q: Is this a milestone target group?
+      group_archived_q: Is this target group archived?
+      update_group: Update Target Group
+      create_group: Create Target Group
     CurriculumEditor__TargetGroupShow:
-      create_target: Create a target
+      move_up: Move Up
+      move_down: Move Down
+      create_target: Create target
+      create_a_target: Create a target
+      create: Create
       milestone_targets: Milestone Targets
+    CurriculumEditor__TargetQuizAnswer:
+      answer_placeholder: Answer option (supports markdown)
+      correct_answer: Correct Answer
+      mark_correct: Mark as correct
+      remove_answer_option: Remove this answer option
     CurriculumEditor__TargetQuizQuestion:
+      answer_placeholder: Type the question here (supports markdown)
       remove_question: Remove Quiz Question
       add_another_answer: Add another Answer Option
+    CurriculumEditor__TargetShow:
+      edit: Edit
+      edit_content: Edit content of target
+      draft: Draft
+      of_target: of target
+    CurriculumEditor__TargetVersionSelector:
+      preview: Preview
+      edit: Edit
+      restore_version: Restore this version
+    CurriculumEditor__VersionsEditor:
+      select_version: Select version
+      version_feature_help: Use the versions feature to preserve the existing state of a target's content, to browse earlier stored versions, and to restore them, if required.
+      save_version: Save this version
+      restore_version: Restore this version
+    EditorDrawer:
+      close_editor: Close Editor
+    HelpIcon:
+      read_more: Read more
+    EvaluationCriteria__Index:
+      add_new_criterion: Add New Evaluation Criterion
+    EvaluationCriterionEditor__Form:
+      label_grade_placeholder: Label for grade
+      add_criterion: Add Evaluation Criterion
+      name_error: Enter a valid name
+      name_placeholder: Evaluation criterion name
+      max_grade: Maximum grade is
+      passing_grade: and the passing grade is
+      grade_labels: Grade and Labels
+      grade_lables_help: Assign labels for each grade, to reflect in grade cards for students and coaches
+      important: Important
+      important_details: The values for maximum and passing grades cannot be modified once a criterion is created. Labels given to each grade can be edited later on.
+      update_criterion: Update Criterion
+      create_criterion: Create Criterion
     MarkdownEditor:
       attach_file_label: Click here to attach a file.
       bold_insert: bold
@@ -971,7 +1059,14 @@ en:
       coach_update: Update Coach
       coach_add: Add Coach
     SA_Coaches_SchoolIndex:
+      add_new_coach: Add New Coach
       avatar_of: "Avatar of "
+    SA_InactiveStudentsPanel:
+      all_students: All Students
+      inactive_students: Inactive Students
+      search_placeholder: Search by student or team name...
+      reactivate_students: Reactivate Students
+      search_empty: No inactive student matches your search criteria.
     SchoolAdminNavbar__Root:
       navbar:
         customization: Customization
@@ -995,6 +1090,16 @@ en:
         students: Students
     SchoolAdmin__EditorDrawer:
       close_editor: Close Editor
+    SchoolAdmins__Editor:
+      remove_confirm_pre: Are you sure you want to remove
+      remove_confirm_post: from the list of admins?
+      add_new_admin: Add New School Admin
+    SchoolAdmins__Form:
+      admin_created_notification: School Admin created successfully.
+      admin_updated_notification: School Admin updated successfully.
+      update_admin: Update School Admin
+      create_admin: Create School Admin
+      add_new_admin: Add new school admin
     SchoolCommunities__CategoryEditor:
       topics_delete_confirm: There are topics assigned to this category! Are you sure you want to delete this category?
       editor_category_alt: "Editor for category "
@@ -1024,9 +1129,108 @@ en:
       update_community: Update Community
       create_community: Create Community
     SchoolCommunities__Index:
+      add_new_community: Add New Community
       unsaved_window_confirm: There are unsaved changes! Are you sure you want to close?
       close_community_editor: Close Community Editor
       close_category_editor: Close Category Editor
+    SchoolCustomize__AgreementsEditor:
+      updated_notification: has been updated.
+      manage: Manage
+      agreement_body: Body of Agreement
+      agreement_placeholder: Leave the agreement body empty to hide the footer link.
+    SchoolCustomize__ContactsEditor:
+      update_contact: Update Contact Details
+      contact_updated_notification: Contact details have been updated.
+      partial_success_notification: Partial success!
+      update_address_notification: We were only able to update the address.
+      update_email_notification: We were only able to update the email address.
+      manage_contact: Manage Contact Details
+      contact_address: Contact Address
+      address_placeholder: Leave the address empty to hide the footer section.
+      email_address: Email Address
+      email_address_placeholder: Leave the email address empty to hide the footer link.
+      email_address_error: is not a valid email address
+    SchoolCustomize__DetailsEditor:
+      update_details: Update Details
+      school_name: School Name
+      school_name_placeholder: Type school name here
+      school_name_error: name should be greater than 2 characters in length
+      max_characters: (Maximum 500 characters)
+      details_placeholder: Add more details about the school.
+    SchoolCustomize__ImageFileInput:
+      you_selected_pre: You have selected
+      you_selected_post: to replace the current image.
+      pick_replace_pre: Please pick a file to replace
+      choose_customize: Please choose an image file to customize
+      image_error_message: must be a JPEG / PNG under 2 MB in size
+    SchoolCustomize__ImagesEditor:
+      update_images: Update Images
+      updated_notification: Images have been updated successfully.
+      manage_images: Manage Images
+      logo_light_label: Logo on a light background
+      cover_image: Cover image
+    SchoolCustomize__LinkEditor:
+      no_custom_links: There are no custom links here. Add some?
+      adding_new_link: Adding new link...
+      add_new_link: Add a New Link
+      error_head: Invalid URL
+      error_body: It looks like the URL you've entered isn't valid. Please check, and try again.
+      done_notification_body: a custom link has been added.
+      header_links: Current Header Links
+      sitemap_links: Current Sitemap Links
+      social_links: Current Social Media Links
+      manage_links: Manage custom links
+      location_link: Location of Link
+      show_header_title: Show header links
+      header: Header
+      footer_link_title: Show footer links
+      footer_sitemap: Footer Sitemap
+      social_links_title: Show social media links
+      social: Social
+      title_placeholder: A short title for a new link
+      cant_empty_message: can't be empty
+      full_url: Full URL
+      full_url_placeholder: "Full URL, staring with https://"
+      full_url_error: is not a valid URL
+    SchoolCustomize__MoreLinks:
+      show_more_links: Show more links
+      more: More
+    SchoolCustomize__Root:
+      customize_link_header: You can customize links on the header.
+      customize_link_footer: You can customize links in the footer.
+      social_links_q: Add social media links?
+      add_address_q: Add an address?
+      add_contact_email_q: Add a contact email?
+      add_more_details: Add more details about the school.
+      edit_logo_light: Edit logo (on light backgrounds)
+      edit_header_links: Edit header links
+      change_cover: Change cover
+      hello_welcome: Hello, welcome to
+      edit_school_details: Edit school details
+      featured_courses: Featured Courses
+      edit_footer_links: Edit footer links
+      edit_social_links: Edit social media links
+      edit_contact_details: Edit contact details
+      edit_privacy: Edit privacy policy
+      edit_terms: Edit Terms & Conditions
+      edit_icon: Edit icon
+      edit_logo_dark: Edit logo (on dark backgrounds)
+    School__SearchableTagList:
+      add_new_tag: Add new tag
+      pick_tag: Pick tag
+      remove_tag: Remove tag
+      search_for_add: Search for, or add new tags
+      select_tags: Select tags
+    School__SelectBox:
+      none_selected: None Selected
+      select_from_list: Select from the following list.
+      no_items_select: There are no items to select.
+      remove: Remove
+      type_search: Type to Search
+      select: Select
+    Sorter:
+      order_by: Order by
+      toggle_sort: Toggle sort order
     StudentTopNav:
       sign_in: Sign In
       sign_out: Sign Out
@@ -1047,6 +1251,9 @@ en:
       report: Report
       unknown: Unknown
     StudentsEditor__ActionsForm:
+      details_certificate: Details of issued certificate
+      manage_certificates: Manage student certificates
+      mark_dropped_note: Marking a student as dropped out will remove all of their access to the course.
       active_label: Active
       certificates_label: Course Certificates
       dropout_button: Dropout Student
@@ -1065,6 +1272,7 @@ en:
       revoked_status_label: Revoked
       select_certificate_input_label: Select a certificate to issue
     StudentsEditor__BulkImportForm:
+      import_bulk_help: This file will be used to import students in bulk. Check the sample file for the required format.
       csv_data_errors:
         invalid_affiliation: Affiliation has to be less than 250 characters
         invalid_email: Email has to be valid and can't be blank
@@ -1090,6 +1298,7 @@ en:
       valid_data_message: Data validated successfully!
       valid_data_summary_text: "Here is a summary of student data in the uploaded sheet: "
     StudentsEditor__CreateForm:
+      reload_add_students: Our team has been notified of this failure. Please reload this page before trying to add students again.
       added_full_description: All students were created successfully.
       added_none_description: All the students you tried to add were already a part of this course.
       added_none_title: Nothing Changed
@@ -1103,6 +1312,9 @@ en:
       teams_to_add_empty: This list is empty! Add some students using the form above.
       teams_to_add_label: "These new students will be added to the course:"
     StudentsEditor__Root:
+      teams_updated_success: Teams updated successfully
+      group_as_team: Group as Team
+      move_out_team: Move out from Team
       button_add_new_students: Add New Students
       button_all_students: All Students
       button_bulk_import: Bulk Import
@@ -1114,6 +1326,16 @@ en:
     StudentsEditor__Search:
       filter_input_label: "Filter by:"
       filter_input_placeholder: Type name, tag or level
+    StudentsEditor__StudentInforForm:
+      name_placeholder: Student name here
+      email_placeholder: Student email here
+      invalid_email: invalid email
+      email_not_unique: email address not unique for student
+      title_placeholder: Student, Coach, CEO, etc.
+      team_name: Team Name
+      team_name_help: Students with same team name will be grouped together; this will not affect existing teams in the course.
+      team_name_placeholder: Avengers, Fantastic Four, etc.
+      add_list: Add to List
     StudentsEditor__TeamsList:
       check_spelling: Make sure the spelling is correct.
       clear_filter: Clear Filter
@@ -1127,6 +1349,26 @@ en:
       students_partially_loaded_text: Showing %{loaded_students_count} of %{total_students} students
       team: Team
       try_removing_filter: Try removing the search filter options.
+    StudentEditor__UpdateDetailsForm:
+      student_updated_moved: Student has been updated, and moved to list of inactive students
+      team_updated_moved: Team has been updated, and moved to list of inactive students
+      student_updated: Student updated successfully
+      search_coaches_placeholder: Search coaches
+      search_coaches_empty: No coaches selected
+      search_coaches_all: You have selected all available coaches!
+      student_name_placeholder: Student name here
+      team_name_placeholder: Team name here
+      team_name_error: Team Name must have at least two characters
+      personal_coaches: Personal Coaches
+      team_coaches: Team Coaches
+      tags_applied_user: Tags applied to user
+      tags_applied: Tags applied
+      tags_applied_team: Tags applied to team
+      student_s: Student's
+      team_s: Team's
+      access_ends: Access Ends On
+      students_not_able_complete_help: If set, students will not be able to complete targets after this date.
+      update_student: Update Student
     SubmissionChecklistItemShow:
       correct: Correct
       incorrect: Incorrect
@@ -1143,7 +1385,12 @@ en:
       action_string_write_short_text: Write Short Text
     TopicsShow__LikeManager:
       like_button_tooltip: Like this post
+      unlike: Unlike
+      like: Like
+      post: post
     TopicsShow__PostEditor:
+      update_post: Update Post
+      update_reply: Update Reply
       empty: Empty
       cant_blank: "Reply can't be blank"
       reply_to: Reply To
@@ -1152,7 +1399,21 @@ en:
       reason_edit: Reason for this edit (optional)
       cancel: Cancel
       post_reply: Post Your Reply
+    TopicsShow__PostReply:
+      jump_reply: Jump to reply
+      navigate_post: Navigate to post
     TopicsShow__PostShow:
+      mark_solution_confirm: Are you sure you want to mark this post as solution?
+      unmark_solution_confirm: Are you sure you want to unmark this post as solution?
+      unmark_solution: Unmark as solution
+      marked_solution_icon: Marked as solution icon
+      options_post: Options for post
+      mark_solution: Mark as solution
+      solution: Solution
+      show_replies: Show replies of post
+      add_reply_topic: Add reply to topic
+      add_reply_post: "Add reply to post "
+      replies_post: Replies to post
       delete_post_confirm_dialog: Are you sure you want to delete the post? This cannot be undone.
       delete_reply_string: Delete Reply
       delete_topic_confirm_dialog: Are you sure you want to delete the topic? This cannot be undone.
@@ -1167,6 +1428,13 @@ en:
       new_reply_button: Reply
       solution_icon_label: Solution
     TopicsShow__Root:
+      select_category: Select category
+      select_no_category: Select no category
+      topic_details: Topic Details
+      topic_title: Topic Title
+      lock_topic_confirm: Are you sure you want to lock this topic?
+      unlock_topic_confirm: Are you sure you want to unlock this topic?
+      selected_category: Selected category
       edit_topic_button: Edit Topic
       linked_target_label: "Linked Target: "
       lock_topic_button: Lock Topic
@@ -1200,6 +1468,73 @@ en:
       issued_on: "Issued on:"
       empty_courses: You don't have any active courses right now.
       my_courses: My Courses
+    UserEdit:
+      avatar_uploaded_notification: Avatar uploaded successfully.
+      upload_failed: Failed to upload
+      select_image_limit: Please select an image with a size less than 5 MB
+      account_delete_q: Are you sure you want to delete your account? This will initiate the process to permanently remove your data from our servers.
+      confirm_email: Confirm your email
+      confirm_dialog_aria: Confirm dialog for account deletion
+      email_placeholder: Type your email
+      delete_account: Delete account
+      initiate_deletion: Initiate Deletion
+      cancel: Cancel
+      edit_profile: Edit your profile
+      displayed_publicly: This information will be displayed publicly so be careful what you share.
+      name_placeholder: Type your name
+      name_error: Name can't be blank
+      about: About
+      about_placeholder: A brief introduction about yourself
+      photo: Photo
+      change_photo: Change photo
+      security: Security
+      update_credentials: Update your login credentials for the school.
+      change_password: Change your current password
+      set_password: Set password for your account
+      current_password: Current password
+      password_placeholder: Type current password
+      new_password: New password
+      new_password_placeholder: Type new password
+      confirm_password: Confirm password
+      confirm_password_placeholder: Confirm new password
+      confirm_password_error: New password and confirmation should match and must have atleast 8 characters
+      notifications: Notifications
+      update_email_notifications: Update settings for email notifications.
+      community_digest_emails: Community digest emails contain new questions from your communities, and a selection of unanswered questions from the past week.
+      send_email_radio: Send me a daily email
+      disable_email_radio: Disable
+      localization: Localization
+      update_locale: Update settings related to your locale.
+      language: Language
+      select_language: Select the language that you would prefer the user interface to dislpay.
+      save_changes: Save Changes
+      account: Account
+      manage_account: Manage your account in this school
+      deleting_account_warning: Deleting your user account removes all your data from this school. Replies to posts in communities and feedback to students (if user has a coach profile) will not be deleted. Admin rights need to be revoked if you are an admin in this school.
+      you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion .
+      already_iniated_deletion_warning: You have already initiated account deletion. Please check your inbox for further steps to delete your account.
+      delete_your_account: Delete your account
+    UsersDeleteAccount:
+      head: We're sorry to see you go.
+      click_button_below: Please click the button below to permanently delete your account in this school
+      cancel: Cancel
+      delete_account: Delete Account
+      please_wait: Please wait...
+      queuing_deletion: We're queuing your account for deletion.
+      deletion_progresss: Account deletion is in progress.
+      signed_out_notified: You will now be signed out, and you will be notified over email once deletion is complete.
+    UserSessionResetPassword:
+      updating_password: Updating password...
+      enter_new_password: Enter new password
+      password_short: Password is too short
+      confirm_your_password: Confirm your password
+      passwords_not_match: Passwords do not match
+      update_password: Update Password
+      new_password: New Password
+      new_password_placeholder: Enter a strong password
+      confirm_password: Confirm Password
+      confirm_password_placeholder: Please re-enter your password
+      set_new_password: Set new password
     VerifyCertificate__Root:
       cancel: Cancel and return
       description: This certificate was issued to <strong class="whitespace-no-wrap">%{name}</strong> on <strong class="whitespace-no-wrap">%{issue_date}</strong> for the course <strong>%{course_name}</strong>.
@@ -1502,15 +1837,43 @@ en:
       submit_button: Request password reset
       subtitle: Enter your email for password recovery.
   shared:
+    none: None
+    social: Social
+    contact: Contact
+    sitemap: Sitemap
+    icon: Icon
+    about: About
+    update: Update
+    next: Next
+    prev: Prev
+    details: Details
+    actions: Actions
+    title_placeholder: Student, Coach, CEO, etc.
+    title_error: Title must have at least two characters
+    team_name: Team Name
+    name_email: Name or Email
+    search: Search
+    tag: Tag
+    tags: Tags
+    fail: Fail
+    pass: Pass
+    versions: Versions
+    version: Version
+    move_up: Move Up
+    move_down: Move Down
+    live: Live
+    archived: Archived
+    draft: Draft
     optional_braces: (optional)
     caption_image: A caption for the image
     uploading: Uploading
     delete: Delete
+    deleting: Deleting
     view: View
     empty: Empty
     agreements:
       privacy_policy: Privacy Policy
-      terms_and_conditions: Terms and Conditions
+      terms_and_conditions: Terms & Conditions
     _no: "No"
     _yes: "Yes"
     avatar: Avatar
@@ -1537,6 +1900,9 @@ en:
     or: or
     name: Name
     email: Email
+    email_placeholder: Add email here
+    email_error: Enter a valid Email
+    name_placeholder: Add name here
     title: Title
     affiliation: Affiliation
     affiliation_placeholder: Acme Inc., Acme University, etc.
@@ -1544,6 +1910,7 @@ en:
     save_changes: Save Changes
     processing: Processing
     saving: Saving...
+    updating: Updating
     school: School
     settings: Settings
     target: Target

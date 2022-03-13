@@ -14,6 +14,7 @@ type action =
 
 let str = React.string
 let t = I18n.t(~scope="components.StudentsEditor__CreateForm")
+let ts = I18n.ts
 
 let formInvalid = state => ArrayUtils.isEmpty(state.teamsToAdd)
 
@@ -90,8 +91,8 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   |> Js.Promise.catch(error => {
     Js.log(error)
     Notification.error(
-      "Unexpected Error!",
-      "Our team has been notified of this failure. Please reload this page before trying to add students again.",
+      ts("notifications.unexpected_error"),
+      t("reload_add_students"),
     )
     send(SetSaving(false))
     Js.Promise.resolve()

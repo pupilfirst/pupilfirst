@@ -8,6 +8,8 @@ type view =
 
 let str = React.string
 
+let ts = I18n.ts
+
 let selectedTabClasses = selected =>
   "flex items-center focus:outline-none justify-center w-1/2 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer " ++ (
     selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-100"
@@ -48,12 +50,12 @@ let make = (
             <button
               className={selectedTabClasses(view == DetailsTab)}
               onClick={_ => setView(_ => DetailsTab)}>
-              <i className="fa fa-edit" /> <span className="ml-2"> {"Details" |> str} </span>
+              <i className="fa fa-edit" /> <span className="ml-2"> {ts("details") |> str} </span>
             </button>
             <button
               className={"-ml-px " ++ selectedTabClasses(view == ActionsTab)}
               onClick={_ => setView(_ => ActionsTab)}>
-              <i className="fa fa-cog" /> <span className="ml-2"> {"Actions" |> str} </span>
+              <i className="fa fa-cog" /> <span className="ml-2"> {ts("actions") |> str} </span>
             </button>
           </div>
         </div>

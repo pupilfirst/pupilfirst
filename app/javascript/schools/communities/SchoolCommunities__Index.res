@@ -175,7 +175,7 @@ let make = (~communities, ~courses) => {
         onClick={_ => send(UpdateEditorAction(ShowEditor(None)))}
         className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
         <i className="fas fa-plus-circle" />
-        <h5 className="font-semibold ml-2"> {"Add New Community" |> str} </h5>
+        <h5 className="font-semibold ml-2"> {tr("add_new_community") |> str} </h5>
       </button>
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">

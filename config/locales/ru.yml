@@ -1059,6 +1059,7 @@ ru:
       coach_update: Обновить Ментора
       coach_add: Добавить Ментора
     SA_Coaches_SchoolIndex:
+      add_new_coach: Добавить Нового Ментора
       avatar_of: "Аватар "
     SA_InactiveStudentsPanel:
       all_students: Все Студенты
@@ -1128,6 +1129,7 @@ ru:
       update_community: Обновить Сообщество
       create_community: Создать Сообщество
     SchoolCommunities__Index:
+      add_new_community: Добавить Новое Сообщество
       unsaved_window_confirm: Есть несохраненные изменения! Вы уверены, что хотите закрыть?
       close_community_editor: Закрыть Редактор Сообщества
       close_category_editor: Закрыть Редактор Категорий

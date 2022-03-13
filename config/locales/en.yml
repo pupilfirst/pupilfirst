@@ -1059,6 +1059,7 @@ en:
       coach_update: Update Coach
       coach_add: Add Coach
     SA_Coaches_SchoolIndex:
+      add_new_coach: Add New Coach
       avatar_of: "Avatar of "
     SA_InactiveStudentsPanel:
       all_students: All Students
@@ -1128,6 +1129,7 @@ en:
       update_community: Update Community
       create_community: Create Community
     SchoolCommunities__Index:
+      add_new_community: Add New Community
       unsaved_window_confirm: There are unsaved changes! Are you sure you want to close?
       close_community_editor: Close Community Editor
       close_category_editor: Close Category Editor

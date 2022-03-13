@@ -2,6 +2,9 @@ open SchoolCustomize__Types
 
 let str = React.string
 
+let t = I18n.t(~scope="components.SchoolCustomize__ImagesEditor")
+let ts = I18n.t(~scope="shared")
+
 type action =
   | SelectLogoOnLightBgFile(string, bool)
   | SelectCoverImageFile(string, bool)
@@ -21,7 +24,7 @@ type state = {
   formDirty: bool,
 }
 
-let updateButtonText = updating => updating ? "Updating..." : "Update Images"
+let updateButtonText = updating => updating ? {ts("updating") ++ "..."} : t("update_images")
 
 let formId = "sc-images-editor__form"
 
@@ -36,7 +39,7 @@ let handleUpdateImages = (send, updateImagesCB, event) => {
       "/school/images",
       DomUtils.FormData.create(element),
       json => {
-        Notification.success("Done!", "Images have been updated successfully.")
+        Notification.success(ts("done_exclamation"), t("updated_notification"))
         updateImagesCB(json)
         send(DoneUpdating)
       },
@@ -159,7 +162,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
     onSubmit={handleUpdateImages(send, updateImagesCB)}>
     <input name="authenticity_token" type_="hidden" value=authenticityToken />
     <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-      {"Manage Images" |> str}
+      {t("manage_images") |> str}
     </h5>
     <DisablingCover disabled=state.updating>
       <SchoolCustomize__ImageFileInput
@@ -167,7 +170,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
         disabled=state.updating
         name="logo_on_light_bg"
         onChange={updateLogoOnLightBg(send)}
-        labelText="Logo on a light background"
+        labelText=t("logo_light_label")
         imageName={logoOnLightBg |> OptionUtils.map(Customizations.filename)}
         selectedImageName=state.logoOnLightBgFilename
         errorState=state.logoOnLightBgInvalid
@@ -177,7 +180,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
         disabled=state.updating
         name="icon"
         onChange={updateIcon(send)}
-        labelText="Icon"
+        labelText=ts("icon")
         imageName=Some(icon |> Customizations.filename)
         selectedImageName=state.iconFilename
         errorState=state.iconInvalid
@@ -187,7 +190,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
         disabled=state.updating
         name="cover_image"
         onChange={updateCoverImage(send)}
-        labelText="Cover image"
+        labelText=t("cover_image")
         imageName={coverImage |> OptionUtils.map(Customizations.filename)}
         selectedImageName=state.coverImageFilename
         errorState=state.coverImageInvalid

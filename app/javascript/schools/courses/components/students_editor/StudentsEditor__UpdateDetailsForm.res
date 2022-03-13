@@ -1,5 +1,6 @@
 open StudentsEditor__Types
 
+let tr = I18n.t(~scope="components.StudentEditor__UpdateDetailsForm")
 let ts = I18n.ts
 
 type rec teamCoachlist = (coachId, coachName, selected)
@@ -53,12 +54,12 @@ let successMessage = (accessEndsAt, isSingleFounder) =>
   switch accessEndsAt {
   | Some(date) =>
     switch (date->DateFns.isPast, isSingleFounder) {
-    | (true, true) => "Student has been updated, and moved to list of inactive students"
-    | (true, false) => "Team has been updated, and moved to list of inactive students"
+    | (true, true) => tr("student_updated_moved")
+    | (true, false) => tr("team_updated_moved")
     | (false, true)
-    | (false, false) => "Student updated successfully"
+    | (false, false) => tr("student_updated")
     }
-  | None => "Student updated successfully"
+  | None => tr("student_updated")
   }
 
 let enrolledCoachIds = teamCoaches =>
@@ -86,7 +87,7 @@ let handleResponseCB = (updateFormCB, state, student, oldTeam, _json) => {
 
   updateFormCB(state.tagsToApply, team)
   Notification.success(
-    "Success",
+    ts("notifications.success"),
     successMessage(state.accessEndsAt, newTeam |> Team.isSingleStudent),
   )
 }
@@ -183,9 +184,9 @@ let teamCoachesEditor = (courseCoaches, state, send) => {
     |> Array.map(coach => SelectablePrerequisiteTargets.make(coach))
   <div className="mt-2">
     <MultiselectForTeamCoaches
-      placeholder="Search coaches"
-      emptySelectionMessage="No coaches selected"
-      allItemsSelectedMessage="You have selected all available coaches!"
+      placeholder=tr("search_coaches_placeholder")
+      emptySelectionMessage=tr("search_coaches_empty")
+      allItemsSelectedMessage=tr("search_coaches_all")
       selected
       unselected
       onChange={setTeamCoachSearch(send)}
@@ -244,7 +245,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
         <label
           className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
           htmlFor="name">
-          {"Name" |> str}
+          {ts("name") |> str}
         </label>
         <input
           value=state.name
@@ -252,7 +253,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
           id="name"
           type_="text"
-          placeholder="Student name here"
+          placeholder=tr("student_name_placeholder")
         />
         <School__InputGroupError
           message="Name must have at least two characters" active={state.name |> stringInputInvalid}
@@ -264,7 +265,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
               htmlFor="team_name">
-              {"Team Name" |> str}
+              {ts("team_name") |> str}
             </label>
             <input
               value=state.teamName
@@ -273,10 +274,10 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
               id="team_name"
               type_="text"
-              placeholder="Team name here"
+              placeholder=tr("team_name_placeholder")
             />
             <School__InputGroupError
-              message="Team Name must have at least two characters"
+              message=tr("team_name_error")
               active={state.teamName |> stringInputInvalid}
             />
           </div>}
@@ -284,7 +285,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
         <label
           className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
           htmlFor="title">
-          {"Title" |> str}
+          {ts("title") |> str}
         </label>
         <input
           value=state.title
@@ -292,10 +293,10 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
           id="title"
           type_="text"
-          placeholder="Student, Coach, CEO, etc."
+          placeholder=ts("title_placeholder")
         />
         <School__InputGroupError
-          message="Title must have at least two characters"
+          message=ts("title_error")
           active={state.title |> stringInputInvalid}
         />
       </div>
@@ -303,7 +304,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
         <label
           className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
           htmlFor="affiliation">
-          {"Affiliation" |> str}
+          {ts("affiliation") |> str}
         </label>
         <span className="text-xs ml-1"> {ts("optional_braces") |> str} </span>
         <input
@@ -312,20 +313,20 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
           id="affiliation"
           type_="text"
-          placeholder="Acme Inc., Acme University, etc."
+          placeholder=ts("affiliation_placeholder")
         />
       </div>
       <div className="mt-5">
         <div className="border-b pb-4 mb-2 mt-5 ">
           <span className="inline-block mr-1 text-xs font-semibold">
-            {(isSingleStudent ? "Personal Coaches" : "Team Coaches") |> str}
+            {(isSingleStudent ? tr("personal_coaches") : tr("team_coaches")) |> str}
           </span>
           {teamCoachesEditor(courseCoaches, state, send)}
         </div>
       </div>
       {state.userTags |> ArrayUtils.isNotEmpty
         ? <div className="mt-5">
-            <div className="mb-2 text-xs font-semibold"> {"Tags applied to user:" |> str} </div>
+            <div className="mb-2 text-xs font-semibold"> { tr("tags_applied_user") ++ ":" |> str} </div>
             <div className="flex flex-wrap">
               {state.userTags
               |> Js.Array.map(tag =>
@@ -341,7 +342,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
         : React.null}
       <div className="mt-5">
         <div className="mb-2 text-xs font-semibold">
-          {(isSingleStudent ? "Tags applied:" : "Tags applied to team:") |> str}
+          {(isSingleStudent ? tr("tags_applied") : tr("tags_applied_team") ++ ":") |> str}
         </div>
         <School__SearchableTagList
           unselectedTags={teamTags |> Js.Array.filter(tag =>
@@ -355,12 +356,12 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
       </div>
       <div className="mt-5">
         <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
-          {(isSingleStudent ? "Student's" : "Team's") ++ " Access Ends On" |> str}
+          {(isSingleStudent ? tr("student_s") : tr("team_s")) ++ " " ++ tr("access_ends") |> str}
         </label>
         <span className="ml-1 text-xs"> {ts("optional_braces") |> str} </span>
         <HelpIcon
           className="ml-2" link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
-          {"If set, students will not be able to complete targets after this date." |> str}
+          {tr("students_not_able_complete_help") |> str}
         </HelpIcon>
         <DatePicker
           onChange={date => send(UpdateAccessEndsAt(date))}
@@ -375,7 +376,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
         onClick={_e =>
           updateStudent(student, state, send, handleResponseCB(updateFormCB, state, student, team))}
         className="w-full btn btn-large btn-primary">
-        {"Update Student" |> str}
+        {tr("update_student") |> str}
       </button>
     </div>
   </DisablingCover>

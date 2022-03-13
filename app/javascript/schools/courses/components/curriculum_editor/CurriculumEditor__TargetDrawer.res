@@ -2,6 +2,9 @@
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CurriculumEditor__TargetDrawer")
+let ts = I18n.ts
+
 open CurriculumEditor__Types
 
 type page =
@@ -11,7 +14,7 @@ type page =
 
 let confirmDirtyAction = (dirty, action) =>
   if dirty {
-    WindowUtils.confirm("There are unsaved changes. Are you sure you want to discard them?", () =>
+    WindowUtils.confirm(tr("unsaved_confirm"), () =>
       action()
     )
   } else {
@@ -22,9 +25,9 @@ let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
   let defaultClasses = "curriculum-editor__target-drawer-tab cursor-pointer"
 
   let (title, pathSuffix, iconClass) = switch page {
-  | Content => ("Content", "content", "fa-pen-nib")
-  | Details => ("Details", "details", "fa-list-alt")
-  | Versions => ("Versions", "versions", "fa-code-branch")
+  | Content => (tr("content"), "content", "fa-pen-nib")
+  | Details => (tr("details"), "details", "fa-list-alt")
+  | Versions => (tr("versions"), "versions", "fa-code-branch")
   }
 
   let path = pathPrefix ++ pathSuffix
@@ -35,7 +38,7 @@ let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
     : defaultClasses
 
   let confirm = dirty
-    ? Some("There are unsaved changes. Are you sure you want to discard them?")
+    ? Some(tr("unsaved_confirm"))
     : None
 
   <Link href=path ?confirm onClick={_e => setDirty(_ => false)} className=classes>
@@ -111,7 +114,7 @@ let make = (
     | "versions" => (<CurriculumEditor__VersionsEditor targetId />, Versions)
     | otherPage =>
       Rollbar.warning("Unexpected page requested for target editor drawer: " ++ otherPage)
-      (<div> {"Unexpected error. Please reload the page." |> str} </div>, Content)
+      (<div> {tr("unexpected_error") |> str} </div>, Content)
     }
 
     <SchoolAdmin__EditorDrawer

@@ -4,6 +4,9 @@ open SchoolCustomize__Types
 
 let str = React.string
 
+let t = I18n.t(~scope="components.SchoolCustomize__AgreementsEditor")
+let ts = I18n.ts
+
 type kind =
   | PrivacyPolicy
   | TermsAndConditions
@@ -22,8 +25,8 @@ type state = {
 
 let kindToString = kind =>
   switch kind {
-  | PrivacyPolicy => "Privacy Policy"
-  | TermsAndConditions => "Terms & Conditions"
+  | PrivacyPolicy => ts("agreements.privacy_policy")
+  | TermsAndConditions => ts("agreements.terms_and_conditions")
   }
 
 let kindToKey = kind =>
@@ -68,7 +71,7 @@ let handleUpdateAgreement = (
   |> Js.Promise.then_(result =>
     switch result["updateSchoolString"]["errors"] {
     | [] =>
-      Notification.success("Done!", kindToString(kind) ++ " has been updated.")
+      Notification.success(ts("done_exclamation"), kindToString(kind) ++ " " ++ t("updated_notification") )
       switch kind {
       | PrivacyPolicy => updatePrivacyPolicyCB(state.agreement)
       | TermsAndConditions => updateTermsAndConditionsCB(state.agreement)
@@ -114,20 +117,20 @@ let make = (~kind, ~customizations, ~updatePrivacyPolicyCB, ~updateTermsAndCondi
   let (state, send) = React.useReducer(reducer, initialState(kind, customizations))
   <div className="mx-8 pt-8 flex flex-col agreements-editor__container">
     <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-      {"Manage " ++ (kind |> kindToString) |> str}
+      { t("manage") ++" " ++ (kind |> kindToString) |> str}
     </h5>
     <DisablingCover disabled=state.updating containerClasses="flex flex-col flex-1">
       <div key="agreements-editor__input-group" className="mt-3 flex flex-col flex-1">
         <label
           className="inline-block tracking-wide text-xs font-semibold"
           htmlFor="agreements-editor__value">
-          {"Body of Agreement " |> str} <i className="fab fa-markdown text-base" />
+          { t("agreement_body") ++ " " |> str} <i className="fab fa-markdown text-base" />
         </label>
         <textarea
           maxLength=20000
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 flex-1"
           id="agreements-editor__value"
-          placeholder="Leave the agreement body empty to hide the footer link."
+          placeholder=t("agreement_placeholder")
           onChange={handleAgreementChange(send)}
           value=state.agreement
         />

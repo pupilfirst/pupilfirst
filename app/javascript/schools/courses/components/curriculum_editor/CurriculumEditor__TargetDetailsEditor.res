@@ -1070,9 +1070,9 @@ let make = (
                           },
                         )}>
                         {switch visibility {
-                        | Live => "Live"
-                        | Archived => "Archived"
-                        | Draft => "Draft"
+                        | Live => ts("live")
+                        | Archived => ts("archived")
+                        | Draft => ts("draft")
                         } |> str}
                       </button>
                     )

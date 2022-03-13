@@ -286,7 +286,7 @@ let make = (
                 )}
                 className="btn btn-primary">
                 {switch post {
-                | Some(post) => Post.postNumber(post) == 1 ? "Update Post" : "Update Reply"
+                | Some(post) => Post.postNumber(post) == 1 ? tr("update_post") : tr("update_reply")
                 | None => tr("post_reply")
                 } |> str}
               </button>

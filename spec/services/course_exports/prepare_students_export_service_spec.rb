@@ -99,6 +99,16 @@ describe CourseExports::PrepareStudentsExportService do
     fail_target target_l1_evaluated, student_2
   end
 
+  let!(:student_1_archived_submission) do
+    create :timeline_event,
+           :with_owners,
+           latest: false,
+           target: target_l1_evaluated,
+           owners: [student_1],
+           created_at: 3.days.ago,
+           archived_at: 1.day.ago
+  end
+
   before do
     # First student has completed everything, but has a pending submission in L2.
     submit_target target_l1_mark_as_complete, student_1
@@ -281,8 +291,10 @@ describe CourseExports::PrepareStudentsExportService do
   describe '#execute' do
     it 'exports data to an ODS file' do
       expect { subject.execute }.to change {
-        course_export.reload.file.attached?
-      }.from(false).to(true)
+          course_export.reload.file.attached?
+        }
+        .from(false)
+        .to(true)
       expect(course_export.file.filename.to_s).to end_with('.ods')
     end
 

@@ -62,10 +62,19 @@ gem install pg -v 'X.Y.Z' -- --with-pg-config=/path/to/pg_config
 
 ## Set credentials for local database
 
+Let's make sure that PostgreSQL server is up and running using the following command:
+
+    # macOS
+    brew services start postgresql
+
+    # Ubuntu
+    sudo service postgresql start
+
+**Note for WSL users:** You'll need to run the above command each time you restart Windows, and open up Ubuntu for the first time.
+
 If you're setting up Postgres for the first time, we'll now set a password for the `postgres` database username.
 
-Make sure that the PostgreSQL server is running. Once that's done, we'll set a password for the
-default database user. Open the `psql` CLI:
+Once PostgreSQL server is running, we'll set a password for the default database user. Open the `psql` CLI:
 
     # macOS
     psql -U postgres
@@ -133,18 +142,16 @@ point. To compile ReScript code again (if you've made changes), you can either d
 
     # Recompile, and then watch for changes
     yarn run re:watch
-
-## Start the Rails server
-
-With `webpack-dev-server` running, start the Rails server:
-
-    bundle exec rails server
-
 ## Run Webpack Dev Server
 
 Start the Webpack Dev Server on another tab or window:
 
     yarn run wds
+## Start the Rails server
+
+With `webpack-dev-server` running, start the Rails server:
+
+    bundle exec rails server
 
 You'll want all three of these processes running for best performance when developing.
 

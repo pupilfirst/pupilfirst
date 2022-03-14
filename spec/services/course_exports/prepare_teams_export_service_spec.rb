@@ -80,12 +80,16 @@ describe CourseExports::PrepareTeamsExportService do
   let!(:team_1_reviewed_submission_1) do
     complete_target target_l1_evaluated, student_1
   end
+
   let!(:team_1_reviewed_submission_2) do
     complete_target target_l1_evaluated, student_1
   end
+
   let!(:team_2_reviewed_submission) do
     fail_target target_l1_evaluated, student_2
   end
+
+  # Archived submission should not be present in expected data.
   let!(:team_1_archived_submission) do
     create :timeline_event,
            :with_owners,

@@ -142,16 +142,16 @@ point. To compile ReScript code again (if you've made changes), you can either d
 
     # Recompile, and then watch for changes
     yarn run re:watch
+
+## Start the Rails server
+
+    bundle exec rails server
+
 ## Run Webpack Dev Server
 
 Start the Webpack Dev Server on another tab or window:
 
     yarn run wds
-## Start the Rails server
-
-With `webpack-dev-server` running, start the Rails server:
-
-    bundle exec rails server
 
 You'll want all three of these processes running for best performance when developing.
 

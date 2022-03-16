@@ -30,7 +30,7 @@ let placeholder = (id, checklistItem) => {
     <PfIcon className={kindIconClasses(checklistItem |> ChecklistItem.result)} />
     <label htmlFor=id className="font-semibold text-sm pl-2 tracking-wide">
       <MarkdownBlock
-        profile=Markdown.Permissive
+        profile=Markdown.AreaOfText
         className=""
         markdown={title ++ (optional ? " " ++ ts("optional_braces") : "")}
       />

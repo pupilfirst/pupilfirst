@@ -99,17 +99,6 @@ describe CourseExports::PrepareStudentsExportService do
     fail_target target_l1_evaluated, student_2
   end
 
-  # Archived submission should not be present in expected data.
-  let!(:student_1_archived_submission) do
-    create :timeline_event,
-           :with_owners,
-           latest: false,
-           target: target_l1_evaluated,
-           owners: [student_1],
-           created_at: 3.days.ago,
-           archived_at: 1.day.ago
-  end
-
   before do
     # First student has completed everything, but has a pending submission in L2.
     submit_target target_l1_mark_as_complete, student_1
@@ -120,6 +109,15 @@ describe CourseExports::PrepareStudentsExportService do
     # Second student is still on L1.
     submission = submit_target target_l1_quiz, student_2
     submission.update!(quiz_score: '1/2')
+
+    # Student has an archived submission - data should not be present in the export
+    create :timeline_event,
+           :with_owners,
+           latest: false,
+           target: target_l1_evaluated,
+           owners: [student_1],
+           created_at: 3.days.ago,
+           archived_at: 1.day.ago
   end
 
   def submission_grading(submission)

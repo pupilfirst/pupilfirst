@@ -89,17 +89,6 @@ describe CourseExports::PrepareTeamsExportService do
     fail_target target_l1_evaluated, student_2
   end
 
-  # Archived submission should not be present in expected data.
-  let!(:team_1_archived_submission) do
-    create :timeline_event,
-           :with_owners,
-           latest: false,
-           target: target_l1_evaluated,
-           owners: [student_1],
-           created_at: 3.days.ago,
-           archived_at: 1.day.ago
-  end
-
   before do
     # Assign all three coaches to the course, but only two of those coaches directly to the first student. These two
     # should be the only ones listed in the report.
@@ -112,6 +101,15 @@ describe CourseExports::PrepareTeamsExportService do
            faculty: coach_2,
            startup: team_1
     create :faculty_course_enrollment, faculty: coach_3, course: course
+
+    # Student has an archived submission - data should not be present in the export
+    create :timeline_event,
+           :with_owners,
+           latest: false,
+           target: target_l1_evaluated,
+           owners: [student_1],
+           created_at: 3.days.ago,
+           archived_at: 1.day.ago
 
     # First student has completed everything, but has a pending submission in L2.
     submit_target target_l1_individual_mark_as_complete, student_1

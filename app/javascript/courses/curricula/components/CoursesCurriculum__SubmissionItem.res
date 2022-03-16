@@ -26,7 +26,11 @@ let placeholder = (id, checklistItem) => {
   <div className="flex items-center">
     <PfIcon className={kindIconClasses(checklistItem |> ChecklistItem.result)} />
     <label htmlFor=id className="font-semibold text-sm pl-2 tracking-wide">
-      {title ++ (optional ? " (optional)" : "") |> str}
+      <MarkdownBlock
+        profile=Markdown.AreaOfText
+        className=""
+        markdown={title ++ (optional ? " " ++ ts("optional_braces") : "")}
+      />
     </label>
   </div>
 }

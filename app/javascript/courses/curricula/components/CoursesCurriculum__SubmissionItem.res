@@ -2,6 +2,8 @@ open CoursesCurriculum__Types
 
 let str = React.string
 
+let ts = I18n.ts
+
 let kindIconClasses = result =>
   switch (result: ChecklistItem.result) {
   | ShortText(_text) => "if i-short-text-regular md:text-base text-gray-800 if-fw"

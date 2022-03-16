@@ -55,7 +55,7 @@
     "markdown-it-sup": "^1.0.0",
     "node-sass": "^7.0.0",
     "pluralize": "^8.0.0",
-    "pnotify": "^4.0.0",
+    "pnotify": "^5.2.0",
     "postcss": "^8.3.6",
     "postcss-loader": "^4.3.0",
     "prettier": "^2.4.1",
@@ -64,11 +64,11 @@
     "prop-types": "^15.7.2",
     "qrcode.react": "^1.0.1",
     "react": "^16.8.6",
+    "react_ujs": "^2.6.1",
     "react-csv-reader": "^3.3.1",
     "react-datepicker": "^4.2.1",
     "react-dom": "^16.8.6",
     "react-helmet": "^6.1.0",
-    "react_ujs": "^2.6.1",
     "rescript": "9.1.4",
     "sass-loader": "^10.1.1",
     "stylelint": "^13.13.1",
@@ -79,7 +79,6 @@
     "webpack-dev-server": "^3",
     "webpack-merge": "^5.8.0"
   },
-  "devDependencies": {},
   "resolutions": {
     "fstream": "^1.0.12",
     "lodash.mergewith": "^4.6.2",
@@ -94,5 +93,8 @@
     "re:build": "rescript",
     "re:watch": "rescript clean && rescript build -w",
     "wds": "TAILWIND_MODE=watch bin/webpack-dev-server"
+  },
+  "devDependencies": {
+    "@pnotify/mobile": "^5.2.0"
   }
 }

@@ -100,7 +100,7 @@ en:
         label: Affiliation
         placeholder: Acme Inc., Acme University, etc.
       email:
-        label: Emai l
+        label: Email
         placeholder: Student email here
       name:
         error: is not valid

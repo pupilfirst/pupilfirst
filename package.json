@@ -23,6 +23,7 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@glennsl/bs-json": "^5.0.4",
     "@jeff-tian/markdown-it-katex": "^2.1.0",
+    "@pnotify/mobile": "^5.2.0",
     "@prettier/plugin-ruby": "^1.6.1",
     "@rails/ujs": "^6.1.4",
     "@rails/webpacker": "^5.4.0",
@@ -93,8 +94,5 @@
     "re:build": "rescript",
     "re:watch": "rescript clean && rescript build -w",
     "wds": "TAILWIND_MODE=watch bin/webpack-dev-server"
-  },
-  "devDependencies": {
-    "@pnotify/mobile": "^5.2.0"
   }
 }

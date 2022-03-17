@@ -2,6 +2,7 @@
   school_name = @school.name
   login_url = enroll_applicants_url(@applicant.original_login_token)
   course_name = @applicant.course.name
+  applicant_name = @applicant.name
 %>
 
 <% content_for :title do %>
@@ -19,7 +20,7 @@
 <% content_for(:title_button_link, login_url) %>
 
 <% content_for :salutation do %>
-  <%= t("shared.salutation", name: addressee_name) %>
+  <%= t("shared.salutation", name: applicant_name) %>
 <% end %>
 
 <% content_for :body do %>

@@ -14,7 +14,7 @@
     <div class="bg-white shadow p-4 rounded">
       <div class="bg-white mb-2 p-3 flex flex-col">
         <h2 class="font-semibold text-lg"> <%= @submission.title %></h2>
-        <p class="text-gray-600 text-xs"> <%= "<%= t("views.timeline_events.submitted_on") %>: #{@submission.created_at.strftime("%b %d, %Y")}" %></p>
+        <p class="text-gray-600 text-xs"> <%= t('views.timeline_events.submitted_on')%> :# <%= @submission.created_at.strftime('%b %d, %Y') %></p>
       </div>
       <% @submission.checklist.each do |item| %>
         <div class="mb-3 bg-gray-100 rounded">

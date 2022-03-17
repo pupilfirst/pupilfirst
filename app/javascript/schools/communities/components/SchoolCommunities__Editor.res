@@ -1,6 +1,6 @@
 let str = React.string
 
-let ts = I18n.t(~scope="shared")
+let ts = I18n.t(~scope="shared.notifications")
 let tr = I18n.t(~scope="components.SchoolCommunities__Editor")
 
 open SchoolCommunities__IndexTypes

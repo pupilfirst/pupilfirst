@@ -24,7 +24,7 @@
           <%= link_to "#{stats[:course_name]}:", review_course_url(stats[:course_id]), style: 'color: #6025C0; border-radius: 8px; padding: 0px;' %>
           <span><strong><%= stats[:pending_submissions] %></strong>
             <% if stats[:is_team_coach] %>
-              <%= stats[:pending_submissions_for_coach] == 0 ? t("views.mailers.daily_digest.assigned_none") : t("views.mailers.daily_digest.assigned_none", stats: stats[:pending_submissions_for_coach]) %>
+              <%= stats[:pending_submissions_for_coach] == 0 ? t("views.mailers.daily_digest.assigned_none") : t("views.mailers.daily_digest.assigned", stats: stats[:pending_submissions_for_coach]) %>
             <% end %>
           </span>
         </li>

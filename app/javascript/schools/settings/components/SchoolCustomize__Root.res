@@ -406,7 +406,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
               {editIcon(
                 "ml-3",
                 showEditor(AgreementsEditor(SchoolCustomize__AgreementsEditor.PrivacyPolicy), send),
-                ts("edit_privacy"),
+                t("edit_privacy"),
               )}
             </div>
             <div

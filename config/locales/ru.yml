@@ -2000,6 +2000,7 @@ ru:
     your_correct_answer: Ваш Правильный Ответ
     correct_answer: Правильный Ответ
     your_answer: Ваш Ответ
+    question: Вопрос
   controllers:
     ApplicantsController:
       link_expired: Срок действия этой одноразовой ссылки истек или она недействительна. Если вы уже завершили регистрацию, пожалуйста, войдите в систему.

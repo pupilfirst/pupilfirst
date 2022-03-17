@@ -2,7 +2,7 @@ open CoachesSchoolIndex__Types
 
 exception UnexpectedResponse(int)
 
-let tr = I18n.t(~scope="components.SA_Coaches_CoachEditor")
+let t = I18n.t(~scope="components.SA_Coaches_CoachEditor")
 let ts = I18n.t(~scope="shared")
 
 let apiErrorTitle = x =>
@@ -176,16 +176,16 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
       ~affiliation=Some(state.affiliation),
     )
     switch coach {
-    | Some(_) => Notification.success(ts("success"), tr("coach_updated"))
-    | None => Notification.success(ts("success"), tr("coach_created"))
+    | Some(_) => Notification.success(ts("success"), t("coach_updated"))
+    | None => Notification.success(ts("success"), t("coach_created"))
     }
     updateCoachCB(newCoach)
     closeFormCB()
   }
   let avatarUploaderText = () =>
     switch state.imageFileName {
-    | "" => tr("upload_avatar")
-    | _ => tr("replace_avatar") ++ ": " ++ state.imageFileName
+    | "" => t("upload_avatar")
+    | _ => t("replace_avatar") ++ ": " ++ state.imageFileName
     }
   let handleResponseJSON = json => {
     let error = json
@@ -262,7 +262,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
               <h5 className="uppercase text-center border-b border-gray-400 pb-2">
                 {switch coach {
                 | Some(coach) => coach |> Coach.name
-                | None => tr("add_coach")
+                | None => t("add_coach")
                 } |> str}
               </h5>
             </div>
@@ -281,12 +281,12 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     id="name"
                     type_="text"
                     name="faculty[name]"
-                    placeholder=tr("coach_name")
+                    placeholder=t("coach_name")
                     value=state.name
                     onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
                   />
                   <School__InputGroupError
-                    message=tr("input_group_error") active=state.hasNameError
+                    message=t("input_group_error") active=state.hasNameError
                   />
                 </div>
                 {switch coach {
@@ -303,12 +303,12 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                       id="email"
                       type_="email"
                       name="faculty[email]"
-                      placeholder=tr("coach_email")
+                      placeholder=t("coach_email")
                       value=state.email
                       onChange={event => updateEmail(send, ReactEvent.Form.target(event)["value"])}
                     />
                     <School__InputGroupError
-                      message=tr("email_input_error") active=state.hasEmailError
+                      message=t("email_input_error") active=state.hasEmailError
                     />
                   </div>
                 }}
@@ -323,12 +323,12 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     id="title"
                     type_="text"
                     name="faculty[title]"
-                    placeholder=tr("coach_title")
+                    placeholder=t("coach_title")
                     value=state.title
                     onChange={event => updateTitle(send, ReactEvent.Form.target(event)["value"])}
                   />
                   <School__InputGroupError
-                    message=tr("coach_title_error") active=state.hasTitleError
+                    message=t("coach_title_error") active=state.hasTitleError
                   />
                 </div>
                 <div className="mt-5">
@@ -352,24 +352,24 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   <label
                     className="inline-block tracking-wide text-xs font-semibold"
                     htmlFor="connectLink">
-                    {tr("connect_link") |> str}
+                    {t("connect_link") |> str}
                   </label>
                   <input
                     className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="connectLink"
                     type_="text"
                     name="faculty[connect_link]"
-                    placeholder=tr("connect_link_placeholder")
+                    placeholder=t("connect_link_placeholder")
                     value=state.connectLink
                     onChange={event =>
                       updateConnectLink(send, ReactEvent.Form.target(event)["value"])}
                   />
                   <School__InputGroupError
-                    message=tr("connect_link_error") active=state.hasConnectLinkError
+                    message=t("connect_link_error") active=state.hasConnectLinkError
                   />
                   <School__InputGroupError
                     warn=true
-                    message=tr("coach_profile_warn")
+                    message=t("coach_profile_warn")
                     active={StringUtils.isPresent(state.connectLink) &&
                     (!state.hasConnectLinkError &&
                     !state.public)}
@@ -380,7 +380,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     <label
                       className="block tracking-wide text-xs font-semibold mr-3"
                       htmlFor="evaluated">
-                      {tr("coach_public_q") |> str}
+                      {t("coach_public_q") |> str}
                     </label>
                     <div
                       id="notification"
@@ -441,7 +441,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                         <label
                           className="block tracking-wide  text-xs font-semibold mr-3"
                           htmlFor="evaluated">
-                          {tr("coach_left_q") |> str}
+                          {t("coach_left_q") |> str}
                         </label>
                         <div
                           id="exited"
@@ -475,8 +475,8 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     <button
                       disabled={saveDisabled(state)} className="w-auto btn btn-large btn-primary">
                       {switch coach {
-                      | Some(_coach) => ts("coach_update")
-                      | None => ts("coach_add")
+                      | Some(_coach) => t("coach_update")
+                      | None => t("coach_add")
                       } |> str}
                     </button>
                   </div>

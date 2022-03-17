@@ -2000,6 +2000,7 @@ en:
     your_correct_answer: Your Correct Answer
     correct_answer: Correct Answer
     your_answer: Your Answer
+    question: Question
   controllers:
     ApplicantsController:
       link_expired: That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in.

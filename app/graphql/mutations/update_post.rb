@@ -12,7 +12,7 @@ module Mutations
 
       success = if mutator.valid?
         post = mutator.update_post
-        post_type = post.post_number == 1 ? "Post" : "Reply"
+        post_type = post.post_number == 1 ? I18n.t("shared.post") : I18n.t("shared.reply")
         mutator.notify(:success, I18n.t("shared.notifications.done"), "#{post_type} #{I18n.t("shared.notifications.updated_success")}")
 
         true

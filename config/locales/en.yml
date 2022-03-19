@@ -1837,6 +1837,8 @@ en:
       submit_button: Request password reset
       subtitle: Enter your email for password recovery.
   shared:
+    post: Post
+    reply: Reply
     none: None
     social: Social
     contact: Contact

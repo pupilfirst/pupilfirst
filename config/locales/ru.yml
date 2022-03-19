@@ -1936,6 +1936,8 @@ ru:
     are: ""
     is: ""
     notifications:
+      notice: Уведомление
+      error: Ошибка
       unexpected_error: Непредвиденная Ошибка!
       please_reload: Пожалуйста, обновите страницу и попробуйте еще раз.
       something_wrong: Что-то пошло не так!

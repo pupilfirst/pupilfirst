@@ -1936,6 +1936,8 @@ en:
     are: are
     is: is
     notifications:
+      notice: Notice
+      error: Error
       unexpected_error: Unexpected Error!
       please_reload: Please reload the page and try again.
       success: Success

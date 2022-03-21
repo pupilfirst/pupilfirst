@@ -4,8 +4,8 @@ let str = React.string
 
 @react.component
 let make = (~id, ~label, ~onChange, ~checked=false) =>
-  <div>
-    <input className="hidden radio-input" id type_="radio" onChange checked />
+  <div className="relative">
+    <input className="w-0 h-0 absolute radio-input focus:outline-none" id type_="radio" onChange checked />
     <label className="radio-label flex items-center" htmlFor=id>
       <span>
         <svg width="14px" height="14px" viewBox="0 0 14 14">

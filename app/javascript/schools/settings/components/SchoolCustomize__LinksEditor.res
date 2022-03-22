@@ -305,7 +305,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
             <div className="flex-grow mr-4">
               <label
                 className="inline-block tracking-wide text-xs font-semibold" htmlFor="link-title">
-                {ts("title") |> str}
+                {t("title") |> str}
               </label>
               <input
                 className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"

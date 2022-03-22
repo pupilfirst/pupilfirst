@@ -198,7 +198,7 @@ let suggestions = state => {
           let (answersText, answersClasses) = switch suggestion |> TopicSuggestion.repliesCount {
           | 0 => (tr("no_replies"), "bg-gray-300 text-gray-700")
           | 1 => (tr("one_reply"), "bg-green-500 text-white")
-          | n => ((n |> string_of_int) ++ tr("manu_replies_post"), "bg-green-500 text-white")
+          | n => ((n |> string_of_int) ++ tr("count_replies_label"), "bg-green-500 text-white")
           }
 
           <a

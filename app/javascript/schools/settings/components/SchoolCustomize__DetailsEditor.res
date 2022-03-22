@@ -95,7 +95,7 @@ let make = (~name, ~about, ~updateDetailsCB) => {
         <label
           className="inline-block tracking-wide text-xs font-semibold"
           htmlFor="details-editor__about">
-          {ts("about") |> str}
+          {t("about_label") |> str}
           <span className="font-normal"> {" " ++ t("max_characters") |> str} </span>
         </label>
         <textarea

@@ -180,7 +180,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
         disabled=state.updating
         name="icon"
         onChange={updateIcon(send)}
-        labelText=ts("icon")
+        labelText=t("icon")
         imageName=Some(icon |> Customizations.filename)
         selectedImageName=state.iconFilename
         errorState=state.iconInvalid

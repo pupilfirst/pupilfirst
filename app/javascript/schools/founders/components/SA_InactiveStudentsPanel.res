@@ -188,7 +188,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
                 : <div className="flex w-2/5 items-center">
                     <div className="w-3/5 py-4 px-3">
                       <div className="students-team--name mb-5">
-                        <p className="mb-1 text-xs"> {ts("team") |> str} </p>
+                        <p className="mb-1 text-xs"> {t("team") |> str} </p>
                         <h4> {team |> Team.name |> str} </h4>
                       </div>
                     </div>
@@ -209,7 +209,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
                   (courseId ++
                   ("/inactive_students?page=" ++ (currentPage - 1 |> string_of_int)))}>
                   <i className="fas fa-arrow-left" />
-                  <span className="ml-2"> {ts("prev") |> str} </span>
+                  <span className="ml-2"> {t("prev") |> str} </span>
                 </a>
               : React.null}
             {isLastPage
@@ -219,7 +219,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
                   href={"/school/courses/" ++
                   (courseId ++
                   ("/inactive_students?page=" ++ (currentPage + 1 |> string_of_int)))}>
-                  <span className="mr-2"> {ts("next") |> str} </span>
+                  <span className="mr-2"> {t("next") |> str} </span>
                   <i className="fas fa-arrow-right" />
                 </a>}
           </div>

@@ -58,7 +58,7 @@ en:
       similar_topics: Similar Topics
       no_replies: No replies
       one_reply: 1 reply
-      manu_replies_post: " replies"
+      count_replies_label: " replies"
       asked_on: "Asked on "
       no_category_found: "Unable to find category with ID:"
       back: Back
@@ -920,6 +920,7 @@ en:
       target_visibility: Target Visibility
       update_target: Update Target
       visit_link: Visit a link to complete the target.
+      title: Title
     CurriculumEditor__TargetDrawer:
       unsaved_confirm: There are unsaved changes. Are you sure you want to discard them?
       content: Content
@@ -1058,6 +1059,11 @@ en:
       coach_left_q: Has the coach left the school?
       coach_update: Update Coach
       coach_add: Add Coach
+      affiliation_placeholder: Acme Inc., Acme University, etc.
+      name: Name
+      email: Email
+      title: Title
+      affiliation: Affiliation
     SA_Coaches_SchoolIndex:
       add_new_coach: Add New Coach
       avatar_of: "Avatar of "
@@ -1067,6 +1073,9 @@ en:
       search_placeholder: Search by student or team name...
       reactivate_students: Reactivate Students
       search_empty: No inactive student matches your search criteria.
+      next: Next
+      prev: Prev
+      team: Team
     SchoolAdminNavbar__Root:
       navbar:
         customization: Customization
@@ -1157,6 +1166,7 @@ en:
       school_name_error: name should be greater than 2 characters in length
       max_characters: (Maximum 500 characters)
       details_placeholder: Add more details about the school.
+      about_label: About
     SchoolCustomize__ImageFileInput:
       you_selected_pre: You have selected
       you_selected_post: to replace the current image.
@@ -1169,6 +1179,7 @@ en:
       manage_images: Manage Images
       logo_light_label: Logo on a light background
       cover_image: Cover image
+      icon: Icon
     SchoolCustomize__LinkEditor:
       no_custom_links: There are no custom links here. Add some?
       adding_new_link: Adding new link...
@@ -1192,6 +1203,7 @@ en:
       full_url: Full URL
       full_url_placeholder: "Full URL, staring with https://"
       full_url_error: is not a valid URL
+      title: Title
     SchoolCustomize__MoreLinks:
       show_more_links: Show more links
       more: More
@@ -1336,6 +1348,14 @@ en:
       team_name_help: Students with same team name will be grouped together; this will not affect existing teams in the course.
       team_name_placeholder: Avengers, Fantastic Four, etc.
       add_list: Add to List
+      name: Name
+      email: Email
+      tags: Tags
+      team_name: Team Name
+      title: Title
+      affiliation: Affiliation
+      affiliation_placeholder: Acme Inc., Acme University, etc.
+      optional_braces: (optional)
     StudentsEditor__TeamsList:
       check_spelling: Make sure the spelling is correct.
       clear_filter: Clear Filter
@@ -1349,7 +1369,10 @@ en:
       students_partially_loaded_text: Showing %{loaded_students_count} of %{total_students} students
       team: Team
       try_removing_filter: Try removing the search filter options.
-    StudentEditor__UpdateDetailsForm:
+    StudentsEditor__UpdateForm:
+      details: Details
+      actions: Actions
+    StudentsEditor__UpdateDetailsForm:
       student_updated_moved: Student has been updated, and moved to list of inactive students
       team_updated_moved: Team has been updated, and moved to list of inactive students
       student_updated: Student updated successfully
@@ -1369,6 +1392,14 @@ en:
       access_ends: Access Ends On
       students_not_able_complete_help: If set, students will not be able to complete targets after this date.
       update_student: Update Student
+      title_placeholder: Student, Coach, CEO, etc.
+      title_error: Title must have at least two characters
+      name: Name
+      team_name: Team Name
+      title: Title
+      affiliation: Affiliation
+      affiliation_placeholder: Acme Inc., Acme University, etc.
+      optional_braces: (optional)
     SubmissionChecklistItemShow:
       correct: Correct
       incorrect: Incorrect
@@ -1840,18 +1871,7 @@ en:
     post: Post
     reply: Reply
     none: None
-    social: Social
-    contact: Contact
-    sitemap: Sitemap
-    icon: Icon
-    about: About
     update: Update
-    next: Next
-    prev: Prev
-    details: Details
-    actions: Actions
-    title_placeholder: Student, Coach, CEO, etc.
-    title_error: Title must have at least two characters
     team_name: Team Name
     name_email: Name or Email
     search: Search
@@ -1905,9 +1925,6 @@ en:
     email_placeholder: Add email here
     email_error: Enter a valid Email
     name_placeholder: Add name here
-    title: Title
-    affiliation: Affiliation
-    affiliation_placeholder: Acme Inc., Acme University, etc.
     and: and
     save_changes: Save Changes
     processing: Processing

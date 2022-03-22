@@ -273,7 +273,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   <label
                     className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
                     htmlFor="name">
-                    {ts("name") |> str}
+                    {t("name") |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
@@ -295,7 +295,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   <div className="mt-5">
                     <label
                       className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
-                      {ts("email") |> str}
+                      {t("email") |> str}
                     </label>
                     <span> {"*" |> str} </span>
                     <input
@@ -315,7 +315,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                 <div className="mt-5">
                   <label
                     className="inline-block tracking-wide text-xs font-semibold" htmlFor="title">
-                    {ts("title") |> str}
+                    {t("title") |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
@@ -335,7 +335,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   <label
                     className="inline-block tracking-wide text-xs font-semibold"
                     htmlFor="affiliation">
-                    {ts("affiliation") |> str}
+                    {t("affiliation") |> str}
                   </label>
                   <input
                     value=state.affiliation
@@ -345,7 +345,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     id="affiliation"
                     name="faculty[affiliation]"
                     type_="text"
-                    placeholder=ts("affiliation_placeholder")
+                    placeholder=t("affiliation_placeholder")
                   />
                 </div>
                 <div className="mt-5">

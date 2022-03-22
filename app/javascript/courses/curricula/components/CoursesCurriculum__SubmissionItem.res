@@ -25,8 +25,10 @@ let notBlank = string => string |> String.trim != ""
 let placeholder = (id, checklistItem) => {
   let title = checklistItem |> ChecklistItem.title
   let optional = checklistItem |> ChecklistItem.optional
-  <div className="flex items-center">
-    <PfIcon className={kindIconClasses(checklistItem |> ChecklistItem.result)} />
+  <div className="flex items-start">
+    <div className="pt-2">
+      <PfIcon className={kindIconClasses(checklistItem |> ChecklistItem.result)} />
+    </div>
     <label htmlFor=id className="font-semibold text-sm pl-2 tracking-wide">
       <MarkdownBlock
         profile=Markdown.AreaOfText

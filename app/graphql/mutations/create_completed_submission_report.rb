@@ -7,7 +7,7 @@ module Mutations
     argument :description, String, required: true
     argument :conclusion, Types::SubmissionReportConclusionType, required: true
 
-    description 'Create completed report for a submissions'
+    description 'Create completed report for a submission'
 
     field :success, Boolean, null: false
 

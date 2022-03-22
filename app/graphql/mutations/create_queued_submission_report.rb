@@ -6,7 +6,7 @@ module Mutations
     argument :submission_id, ID, required: true
     argument :description, String, required: true
 
-    description 'Create queued report for a submissions'
+    description 'Create queued report for a submission'
 
     field :success, Boolean, null: false
 

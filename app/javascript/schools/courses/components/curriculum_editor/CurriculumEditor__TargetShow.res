@@ -4,7 +4,7 @@ open CurriculumEditor__Types
 
 let str = React.string
 
-let tr = I18n.t(~scope="components.CurriculumEditor__TargetShow")
+let t = I18n.t(~scope="components.CurriculumEditor__TargetShow")
 let ts = I18n.ts
 
 let targetClasses = (target, targets) =>
@@ -36,7 +36,7 @@ let editorLink = (linkPrefix, linkSuffix, target, iconClass) => {
   let link = linkPrefix ++ linkSuffix
 
   <Link
-    title={ tr("edit") ++ " " ++ (linkSuffix ++ (" " ++ tr("of_target") ++ " " ++ (target |> Target.title)))}
+    title={ t("edit") ++ " " ++ (linkSuffix ++ (" " ++ t("of_target") ++ " " ++ (target |> Target.title)))}
     href=link
     className="curriculum-editor__target-show-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:bg-gray-200">
     <i className={"fas fa-fw " ++ iconClass} />
@@ -54,7 +54,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
       ? <div
           className="target-group__target-reorder relative flex flex-col z-10 h-full border-r border-transparent text-gray-700 justify-between items-center">
           <div
-            title=ts("move_up")
+            title=t("move_up")
             id={"target-move-up-" ++ (target |> Target.id)}
             className={"target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200" ++
             sortIndexHiddenClass(index == 0)}
@@ -62,7 +62,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
             <i className="fas fa-arrow-up text-sm" />
           </div>
           <div
-            title=ts("move_down")
+            title=t("move_down")
             id={"target-move-down-" ++ (target |> Target.id)}
             className={"target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-200" ++
             sortIndexHiddenClass(index + 1 == Js.Array.length(targets))}
@@ -73,7 +73,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
       : React.null}
     <Link
       id={"target-show-" ++ (target |> Target.id)}
-      title={ tr("edit_content") ++ " " ++ (target |> Target.title)}
+      title={ t("edit_content") ++ " " ++ (target |> Target.title)}
       className={targetClasses(target, targets)}
       href={linkPrefix ++ "content"}>
       <p className="font-semibold text-sm"> {target |> Target.title |> str} </p>
@@ -83,7 +83,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
           <span
             className="target-group__target-draft-pill leading-tight text-xs py-1 px-2 font-semibold rounded-lg border bg-blue-100 text-blue-700 border-blue-400 mr-2 whitespace-nowrap">
             <i className="fas fa-file-signature text-sm" />
-            <span className="ml-1"> {tr("draft") |> str} </span>
+            <span className="ml-1"> {t("draft") |> str} </span>
           </span>
         | _ => React.null
         }}

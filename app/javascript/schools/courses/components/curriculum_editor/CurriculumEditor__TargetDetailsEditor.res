@@ -866,7 +866,7 @@ let make = (
                   className="flex items-center inline-block tracking-wide text-sm font-semibold mb-2"
                   htmlFor="title">
                   <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                  {ts("title") |> str}
+                  {t("title") |> str}
                 </label>
                 <div className="ml-6">
                   <input

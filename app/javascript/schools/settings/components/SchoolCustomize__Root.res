@@ -402,7 +402,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           <div className="flex items-center text-sm">
             <div
               className="flex items-center bg-gray-300 border border-dashed border-gray-500 rounded p-2 text-xs">
-              <div> {ts("agreements.privacy_policy") |> str} </div>
+              <div> {t("privacy_policy") |> str} </div>
               {editIcon(
                 "ml-3",
                 showEditor(AgreementsEditor(SchoolCustomize__AgreementsEditor.PrivacyPolicy), send),
@@ -411,7 +411,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             </div>
             <div
               className="flex items-center bg-gray-300 border border-dashed border-gray-500 rounded p-2 ml-6 text-xs">
-              <div> {ts("agreements.terms_and_conditions") |> str} </div>
+              <div> {t("terms_and_conditions") |> str} </div>
               {editIcon(
                 "ml-3",
                 showEditor(

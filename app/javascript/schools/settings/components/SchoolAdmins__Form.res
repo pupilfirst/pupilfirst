@@ -146,11 +146,11 @@ let make = (~admin, ~updateCB) => {
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
               id="email"
               type_="email"
-              placeholder=ts("email_placeholder")
+              placeholder=t("email_placeholder")
               disabled={emailInputDisabled(admin)}
             />
             <School__InputGroupError
-              message=ts("email_error") active={showInvalidEmailError(email, admin)}
+              message=t("email_error") active={showInvalidEmailError(email, admin)}
             />
           </div>
           <div className="mt-5">
@@ -165,7 +165,7 @@ let make = (~admin, ~updateCB) => {
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
               id="name"
               type_="text"
-              placeholder=ts("name_placeholder")
+              placeholder=t("name_placeholder")
             />
             <School__InputGroupError
               message="Enter a valid name" active={showInvalidNameError(name, admin)}

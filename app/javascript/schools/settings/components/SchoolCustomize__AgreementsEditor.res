@@ -25,8 +25,8 @@ type state = {
 
 let kindToString = kind =>
   switch kind {
-  | PrivacyPolicy => ts("agreements.privacy_policy")
-  | TermsAndConditions => ts("agreements.terms_and_conditions")
+  | PrivacyPolicy => t("privacy_policy")
+  | TermsAndConditions => t("terms_and_conditions")
   }
 
 let kindToKey = kind =>

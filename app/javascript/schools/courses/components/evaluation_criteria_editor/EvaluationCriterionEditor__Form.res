@@ -2,7 +2,7 @@
 
 let str = React.string
 
-let tr = I18n.t(~scope="components.EvaluationCriterionEditor__Form")
+let t = I18n.t(~scope="components.EvaluationCriterionEditor__Form")
 let ts = I18n.ts
 
 type state = {
@@ -179,7 +179,7 @@ let labels = (state, setState) =>
               state,
               setState,
             )}
-          placeholder={ tr("label_grade_placeholder") ++ " " ++ (gradeAndLabel |> GradeLabel.grade |> string_of_int)}
+          placeholder={ t("label_grade_placeholder") ++ " " ++ (gradeAndLabel |> GradeLabel.grade |> string_of_int)}
         />
       </div>
     </div>
@@ -211,7 +211,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
     <div className="max-w-2xl p-6 mx-auto">
       <h5 className="uppercase text-center border-b border-gray-400 pb-2">
         {switch evaluationCriterion {
-        | None => tr("add_criterion")
+        | None => t("add_criterion")
         | Some(ec) => ec |> EvaluationCriterion.name
         } |> str}
       </h5>
@@ -231,12 +231,12 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
               id="name"
               onChange={event => updateName(setState, ReactEvent.Form.target(event)["value"])}
               type_="text"
-              placeholder=tr("name_placeholder")
+              placeholder=t("name_placeholder")
               maxLength=50
               value=state.name
             />
             <School__InputGroupError
-              message=tr("name_error")
+              message=t("name_error")
               active={state.dirty && state.name |> String.trim |> String.length < 1}
             />
           </div>
@@ -247,7 +247,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
               <span
                 className="inline-block tracking-wide text-sm font-semibold mr-2"
                 htmlFor="max_grades">
-                {tr("max_grade") |> str}
+                {t("max_grade") |> str}
               </span>
               {switch evaluationCriterion {
               | Some(_) =>
@@ -282,7 +282,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
               <span
                 className="inline-block tracking-wide text-sm font-semibold mx-2"
                 htmlFor="pass_grades">
-                {tr("passing_grade") |> str}
+                {t("passing_grade") |> str}
               </span>
               {switch evaluationCriterion {
               | Some(_) =>
@@ -317,10 +317,10 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
             <div className="flex justify-between">
               <div className="flex items-center">
                 <label className="block tracking-wide text-xs font-semibold" htmlFor="grades">
-                  {tr("grade_labels") |> str}
+                  {t("grade_labels") |> str}
                 </label>
                 <HelpIcon className="ml-2" link="https://docs.pupilfirst.com/#/evaluation_criteria">
-                  {tr("grade_lables_help") |> str}
+                  {t("grade_lables_help") |> str}
                 </HelpIcon>
               </div>
               <div className="flex">
@@ -337,8 +337,8 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
             <div ariaLabel="label-editor"> {labels(state, setState) |> React.array} </div>
             <div className="mt-3 mb-3 text-xs">
               <span className="leading-normal">
-                <strong> { tr("important") ++ ":" |> str} </strong>
-                {" " ++ tr("important_details") |> str}
+                <strong> { t("important") ++ ":" |> str} </strong>
+                {" " ++ t("important_details") |> str}
               </span>
             </div>
             <div className="flex">
@@ -349,7 +349,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                   onClick={_ =>
                     updateEvaluationCriterion(state, setState, addOrUpdateCriterionCB, criterion)}
                   className="w-full btn btn-large btn-primary mt-3">
-                  {tr("update_criterion") |> str}
+                  {t("update_criterion") |> str}
                 </button>
 
               | None =>
@@ -358,7 +358,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                   onClick={_ =>
                     createEvaluationCriterion(state, setState, addOrUpdateCriterionCB, courseId)}
                   className="w-full btn btn-large btn-primary mt-3">
-                  {tr("create_criterion") |> str}
+                  {t("create_criterion") |> str}
                 </button>
               }}
             </div>

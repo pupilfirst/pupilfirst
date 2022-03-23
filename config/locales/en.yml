@@ -1142,6 +1142,7 @@ en:
       can_add_topic: You can add topic categories after creating this community!
       update_community: Update Community
       create_community: Create Community
+      community_updated_notification: Community updated successfully.
     SchoolCommunities__Index:
       add_new_community: Add New Community
       unsaved_window_confirm: There are unsaved changes! Are you sure you want to close?
@@ -1824,6 +1825,55 @@ en:
       correct_answer: Correct Answer
       your_answer: Your Answer
       question: Question
+    archive_post:
+      post_archived_notification: Post archived successfully
+    archive_coach_note:
+      note_removed_notification: Note removed successfully
+    create_coach_note:
+      note_added_notification: Note added successfully
+    create_community:
+      community_created_notification: Community created successfully
+    create_course_author:
+      author_created_notification: Author Created
+      new_author_added_notification: A new author has been added to this course.
+    create_evaluation_criterion:
+      eval_crit_notification: Evaluation criterion created successfully!
+    create_post:
+      reply_added_notification: Reply added successfully
+    create_quiz_submission:
+      responses_saved_notification: Your responses have been saved.
+    create_target_version:
+      new_version_notification: A new version has been created.
+    delete_course_author:
+      author_deleted_notification: Author Deleted
+      author_deleted_details_notification: The author has been removed from this course.
+    dropout_student:
+      student_updated_notification: Student updated successfully
+      reloading_list_notification: Reloading students list
+    initiate_account_deletion:
+      deletion_init_notification: Account Deletion Initiated
+      check_inbox_notification: Check your inbox for further steps!
+    mark_post_as_solution:
+      reply_marked_notification: Reply marked as solution successfully
+    merge_levels:
+      merge_complete_notification: Merge complete!
+    unmark_post_as_solution:
+      reply_unmarked_notification: Reply unmarked as solution!
+    update_course_author:
+      author_updated_notification: Author Updated
+      author_name_updated_notification: The author's name has been updated.
+    update_evaluation_criterion:
+      eval_crit_updated_notification: Evaluation criterion updated successfully!
+    update_post:
+      updated_success_notification: updated successfully
+    update_review_checklist:
+      review_updated_notification: Review checklist updated successfully
+    update_school:
+      details_updated_notification: Details updated successfully!
+    update_topic:
+      topic_updated_notification: Topic updated successfully!
+    update_user:
+      profile_saved_notification: Profile updated successfully!
   navbar:
     dashboard: Dashboard
     admin: Admin
@@ -1958,7 +2008,7 @@ en:
     salutation: Hello,
     are: are
     is: is
-    notifications:
+  notifications:
       notice: Notice
       error: Error
       unexpected_error: Unexpected Error!
@@ -1968,34 +2018,6 @@ en:
       try_again: Please try again
       done: Done!
       done_dot: Done
-      post_archived: Post archived successfully
-      note_removed: "Note removed successfully"
-      note_added: Note added successfully
-      community_created: Community created successfully
-      author_created: Author Created
-      community_updated: Community updated successfully.
-      new_author: A new author has been added to this course.
-      eval_crit: Evaluation criterion created successfully!
-      reply_added: Reply added successfully
-      responses_saved: Your responses have been saved.
-      new_version: A new version has been created.
-      author_deleted: Author Deleted
-      author_deleted_details: The author has been removed from this course.
-      student_updated: Student updated successfully
-      reloading_list: Reloading students list
-      deletion_init: Account Deletion Initiated
-      check_inbox: Check your inbox for further steps!
-      reply_marked: Reply marked as solution successfully
-      merge_complete: Merge complete!
-      reply_unmarked: Reply unmarked as solution!
-      author_updated: Author Updated
-      author_name_updated: The author's name has been updated.
-      eval_crit_updated: Evaluation criterion updated successfully!
-      updated_success: updated successfully
-      review_updated: Review checklist updated successfully
-      details_updated: Details updated successfully!
-      topic_updated: Topic updated successfully!
-      profile_saved: Profile updated successfully!
   users:
     delete_account:
       edit_user: Edit User

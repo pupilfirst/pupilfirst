@@ -1,7 +1,7 @@
 let str = React.string
 
 let ts = I18n.t(~scope="shared.notifications")
-let tr = I18n.t(~scope="components.SchoolCommunities__Editor")
+let t = I18n.t(~scope="components.SchoolCommunities__Editor")
 
 open SchoolCommunities__IndexTypes
 
@@ -115,7 +115,7 @@ let handleQuery = (community, state, send, addCommunityCB, updateCommunitiesCB, 
         | None => send(FinishSaving)
         }
 
-        Notification.success(ts("success"), ts("community_updated"))
+        Notification.success(ts("success"), t("community_updated_notification"))
         Js.Promise.resolve()
       })
       |> ignore
@@ -142,14 +142,14 @@ let handleQuery = (community, state, send, addCommunityCB, updateCommunitiesCB, 
         Js.log(error)
         Notification.error(
           ts("unexpected_error"),
-          tr("notification_reload_post"),
+          t("notification_reload_post"),
         )
         Js.Promise.resolve()
       })
       |> ignore
     }
   } else {
-    Notification.error(ts("empty"), tr("notification_answer_cant_blank"))
+    Notification.error(ts("empty"), t("notification_answer_cant_blank"))
   }
 }
 
@@ -216,7 +216,7 @@ let make = (
 
   <div className="mx-8 pt-8">
     <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-      {tr("community_editor") |> str}
+      {t("community_editor") |> str}
     </h5>
     <DisablingCover disabled=state.saving>
       <div key="communities-editor" className="mt-3">
@@ -224,10 +224,10 @@ let make = (
           <label
             className="inline-block tracking-wide text-gray-700 text-xs font-semibold"
             htmlFor="communities-editor__name">
-            {tr("community_editor_label") |> str}
+            {t("community_editor_label") |> str}
           </label>
           <input
-            placeholder=tr("community_editor_placeholder")
+            placeholder=t("community_editor_placeholder")
             value=state.name
             onChange={event => {
               let name = ReactEvent.Form.target(event)["value"]
@@ -237,7 +237,7 @@ let make = (
             className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
           />
           <School__InputGroupError
-            message=tr("community_editor_error")
+            message=t("community_editor_error")
             active={state.dirty ? state.name |> String.trim == "" : false}
           />
         </div>
@@ -245,7 +245,7 @@ let make = (
           <label
             className="inline-block tracking-wide text-gray-700 text-xs font-semibold"
             htmlFor="communities-editor__course-list">
-            {tr("allowed_targets_q") |> str}
+            {t("allowed_targets_q") |> str}
           </label>
           <div className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden ml-2">
             <button
@@ -264,12 +264,12 @@ let make = (
           <label
             className="inline-block tracking-wide text-gray-700 text-xs font-semibold mb-2"
             htmlFor="communities-editor__course-targetLinkable">
-            {tr("give_access") |> str}
+            {t("give_access") |> str}
           </label>
           <CourseSelector
-            placeholder=tr("search_course")
-            emptySelectionMessage=tr("search_course_empty")
-            allItemsSelectedMessage=tr("search_course_all")
+            placeholder=t("search_course")
+            emptySelectionMessage=t("search_course_empty")
+            allItemsSelectedMessage=t("search_course_all")
             selected={selectedCourses(courses, state.selectedCourseIds)}
             unselected={unselectedCourses(courses, state.selectedCourseIds)}
             onChange={onChangeCourseSearch(send)}
@@ -282,7 +282,7 @@ let make = (
           <div className="flex justify-between items-center mb-4">
             <label
               className="inline-block tracking-wide text-gray-700 text-xs font-semibold uppercase">
-              {tr("topic_categories") |> str}
+              {t("topic_categories") |> str}
             </label>
             {switch community {
             | Some(_community) =>
@@ -291,7 +291,7 @@ let make = (
                 className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
                 <i className="fas fa-pencil-alt" />
                 <span className="text-xs font-semibold ml-2">
-                  {(ArrayUtils.isEmpty(categories) ? tr("add_categories") : tr("edit_categories")) |> str}
+                  {(ArrayUtils.isEmpty(categories) ? t("add_categories") : t("edit_categories")) |> str}
                 </span>
               </button>
             | None => React.null
@@ -301,12 +301,12 @@ let make = (
           | Some(_community) =>
             categories |> ArrayUtils.isEmpty
               ? <p className="text-xs text-gray-800">
-                  {tr("no_topic") |> str}
+                  {t("no_topic") |> str}
                 </p>
               : categoryList(categories)
           | None =>
             <p className="text-xs text-gray-800">
-              {tr("can_add_topic") |> str}
+              {t("can_add_topic") |> str}
             </p>
           }}
         </div>
@@ -317,8 +317,8 @@ let make = (
         key="communities-editor__update-button"
         className="w-full btn btn-large btn-primary mt-3">
         {switch community {
-        | Some(_) => tr("update_community")
-        | None => tr("create_community")
+        | Some(_) => t("update_community")
+        | None => t("create_community")
         } |> str}
       </button>
     </DisablingCover>

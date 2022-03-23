@@ -11,7 +11,7 @@ module Mutations
 
       if mutator.valid?
         mutator.execute
-        mutator.notify(:success, I18n.t("shared.notifications.student_updated"), I18n.t("shared.notifications.reloading_list"))
+        mutator.notify(:success, I18n.t("mutations.dropout_student.student_updated_notification"), I18n.t("mutations.dropout_student.reloading_list_notification"))
         { success: true }
       else
         mutator.notify_errors

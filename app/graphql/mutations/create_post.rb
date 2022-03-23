@@ -12,7 +12,7 @@ module Mutations
       mutator = CreatePostMutator.new(context, params)
 
       post_id = if mutator.valid?
-        mutator.notify(:success, I18n.t("shared.notifications.done"), I18n.t("shared.notifications.reply_added"))
+        mutator.notify(:success, I18n.t("shared.notifications.done"), I18n.t("mutations.create_post.reply_added_notification"))
         mutator.create_post.id
       else
         mutator.notify_errors

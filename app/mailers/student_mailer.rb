@@ -8,7 +8,7 @@ class StudentMailer < SchoolMailer
 
     simple_mail(
       @student.email,
-      I18n.t("mailers.student.added_as", school_name: @school.name)
+      I18n.t("mailers.student.enrollment_subject", school_name: @school.name)
     )
   end
 end

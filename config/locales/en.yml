@@ -2173,28 +2173,28 @@ en:
         link_to: your profile edit page
   mailers:
     applicant:
-      verify: Verify Your Email Address
+      enrollment_verification_subject: Verify Your Email Address
     coach:
-      added: You have been added as a coach in %{course_name}
+      course_enrollment_subject: You have been added as a coach in %{course_name}
     course_author:
-      added: You have been added as an author in %{course_name}
+      addition_subject: You have been added as an author in %{course_name}
     course_export:
-      export: Export of %{course_export} course is ready for download
+      prepared_subject: Export of %{course_export} course is ready for download
     issued_certificate:
-      awarded: You have been awarded a certificate!
+      issued_subject: You have been awarded a certificate!
     school_admin:
-      added: New School Admin Added
-      import: Import of Students Completed
+      school_admin_added_subject: New School Admin Added
+      students_bulk_import_complete_subject: Import of Students Completed
     startup:
-      new_feedback: New feedback from %{startup_feedback} on your submission
+      feedback_as_email_subject: New feedback from %{startup_feedback} on your submission
     student:
-      added_as: You have been added as a student in %{school_name}
+      enrollment_subject: You have been added as a student in %{school_name}
     user:
-      new_reply: New reply for your post
-      daily_digest: Daily Digest
-      delete_account: Delete account from %{school_name}
-      deleted_success: Account deleted successfully from %{school_name}
-      deleted_in: Your account in %{school_name} will be deleted in 30 days
+      new_post_subject: New reply for your post
+      daily_digest_subject: Daily Digest
+      delete_account_token_subject: Delete account from %{school_name}
+      confirm_account_deletion_subject: Account deleted successfully from %{school_name}
+      account_deletion_notification_subject: Your account in %{school_name} will be deleted in 30 days
     user_session:
-      log_in: Log in to
-      recovery: account recovery
+      send_login_token_subject: Log in to
+      send_reset_password_token_subject: account recovery

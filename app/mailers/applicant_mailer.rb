@@ -3,6 +3,6 @@ class ApplicantMailer < SchoolMailer
     @applicant = applicant
     @school = applicant.course.school
 
-    simple_mail(@applicant.email, I18n.t("mailers.applicant.verify"), enable_reply: false)
+    simple_mail(@applicant.email, I18n.t("mailers.applicant.enrollment_verification_subject"), enable_reply: false)
   end
 end

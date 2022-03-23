@@ -1,13 +1,19 @@
 module Mutations
-  class CreateSubmissionReports < ApplicationQuery
+  class BeginProcessingSubmissionReport < ApplicationQuery
     include QueryAuthorizeCoach
     include ValidateSubmissionGradable
 
     argument :submission_id, ID, required: true
-    argument :description, String, required: true
-    argument :status, Types::SubmissionReportStatusType, required: true
+    argument :description,
+             String,
+             required: false,
+             validates: {
+               length: {
+                 maximum: 1000
+               }
+             }
 
-    description 'Create reports for submissions'
+    description 'Create in progress report for a submission'
 
     field :success, Boolean, null: false
 
@@ -20,20 +26,15 @@ module Mutations
 
     def save_report
       SubmissionReport.transaction do
-        report =
-          SubmissionReport.find_by(submission_id: @params[:submission_id])
-        if report.present?
-          report.update!(
+        SubmissionReport
+          .where(submission_id: @params[:submission_id])
+          .first_or_create!(
+            status: 'in_progress',
             description: @params[:description],
-            status: @params[:status]
+            started_at: Time.zone.now,
+            completed_at: nil,
+            conclusion: nil
           )
-        else
-          SubmissionReport.create!(
-            submission_id: @params[:submission_id],
-            description: @params[:description],
-            status: @params[:status]
-          )
-        end
       end
     end
 

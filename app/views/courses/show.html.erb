@@ -4,6 +4,10 @@
   <%= stylesheet_pack_tag 'courses/shared', 'data-turbolinks-track': 'reload' %>
   <%= stylesheet_pack_tag 'courses/show', 'data-turbolinks-track': 'reload' %>
   <%= stylesheet_pack_tag 'shared/markdownBlockCSS', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
+<% end %>
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
 <% end %>
 <div class="pb-8 bg-gray-100 ">
   <div class="relative bg-primary-900">
@@ -67,7 +71,9 @@
               <div
                 class="px-4 md:px-8 markdown-block markdown-block__permissive"
               >
-                <%= sanitize(presenter.about) %>
+              <div data-json-props="<%= presenter.markdown_prop(presenter.about) %>" class="convert-markdown">
+                <%= presenter.about %>
+              </div>
               </div>
             </div>
           <% end %>

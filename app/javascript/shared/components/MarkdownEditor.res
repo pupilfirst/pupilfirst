@@ -1,8 +1,9 @@
 exception InvalidModeForPreview
 
-%bs.raw(`require("./MarkdownEditor.css")`)
+%raw(`require("./MarkdownEditor.css")`)
 
 let str = React.string
+let t = I18n.t(~scope="components.MarkdownEditor")
 
 type fullscreenMode = [#Editor | #Preview | #Split]
 
@@ -121,6 +122,18 @@ let modeIcon = (desiredMode, currentMode) => {
   <FaIcon classes={"fa-fw " ++ icon} />
 }
 
+let modeLabel = (desiredMode, currentMode) => {
+  switch (desiredMode, currentMode) {
+  | (#Preview, Windowed(#Editor) | Fullscreen(#Editor) | Fullscreen(#Split)) =>
+    t("mode_label_preview")
+  | (#Preview, Windowed(#Preview) | Fullscreen(#Preview)) => t("mode_label_preview_exit")
+  | (#Split, Windowed(_) | Fullscreen(#Editor) | Fullscreen(#Preview)) => t("mode_label_split")
+  | (#Split, Fullscreen(#Split)) => t("mode_label_split_exit")
+  | (#Fullscreen, Windowed(_)) => t("mode_label_fullscreen")
+  | (#Fullscreen, Fullscreen(_)) => t("mode_label_fullscreen_exit")
+  }
+}
+
 let onClickFullscreen = (state, send, _event) => {
   switch state.mode {
   | Windowed(_) => TextareaAutosize.destroy(state.id)
@@ -164,8 +177,7 @@ let wrapWith = (wrapper, selectionStart, selectionEnd, sourceText) => {
   head ++ (wrapper ++ (selection ++ (wrapper ++ tail)))
 }
 
-@ocaml.doc(
-  "
+@ocaml.doc("
   * After changing the Markdown using any of the controls or key commands, the
   * textarea element will need to be manually \"synced\" in two ways:
   *
@@ -179,8 +191,7 @@ let wrapWith = (wrapper, selectionStart, selectionEnd, sourceText) => {
   * This function is making an assumption that re-render can happen in 25ms.
   * The need for these manual adjustments can be visibly seen by increasing the
   * renderDelay to something like 1000ms.
- *"
-)
+ *")
 let updateTextareaAfterDelay = (state, (startPosition, endPosition)) => {
   let renderDelay = 25 //ms
 
@@ -232,9 +243,9 @@ type phraseModifer =
 
 let insertAndWrapper = phraseModifer =>
   switch phraseModifer {
-  | Bold => ("**bold**", "**")
-  | Italic => ("*italics*", "*")
-  | Strikethrough => ("~~strikethrough~~", "~~")
+  | Bold => (`**${t("bold_insert")}**`, "**")
+  | Italic => (`*${t("italic_insert")}*`, "*")
+  | Strikethrough => (`~~${t("strikethrough_insert")}~~`, "~~")
   }
 
 let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
@@ -264,12 +275,12 @@ let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
 let controlsContainerClasses = mode =>
   "border bg-gray-100 text-sm px-2 flex justify-between items-end " ++
   switch mode {
-  | Windowed(_) => "rounded-t border-gray-400 sticky top-0 z-20"
+  | Windowed(_) => "rounded-t border-gray-400"
   | Fullscreen(_) => "border-gray-400 "
   }
 
 let controls = (disabled, value, state, send, onChange) => {
-  let buttonClasses = "px-2 py-1 hover:bg-gray-300 hover:text-primary-500 focus:outline-none "
+  let buttonClasses = "px-2 py-1 hover:bg-gray-300 hover:text-primary-500 focus:outline-none focus:bg-gray-300 focus:text-primary-500 "
   let {mode} = state
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange)
 
@@ -280,18 +291,27 @@ let controls = (disabled, value, state, send, onChange) => {
       <div />
     | Windowed(#Editor)
     | Fullscreen(#Editor | #Split) =>
-      <div className="bg-white border border-gray-400 rounded-t border-b-0">
-        <button disabled className=buttonClasses onClick={_ => curriedModifyPhrase(Bold)}>
+      <div role="toolbar" className="bg-white border border-gray-400 rounded-t border-b-0">
+        <button
+          disabled
+          ariaLabel={t("control_label_bold")}
+          title={t("control_label_bold")}
+          className=buttonClasses
+          onClick={_ => curriedModifyPhrase(Bold)}>
           <i className="fas fa-bold fa-fw" />
         </button>
         <button
           disabled
+          ariaLabel={t("control_label_italic")}
+          title={t("control_label_italic")}
           className={buttonClasses ++ "border-l border-gray-400"}
           onClick={_ => curriedModifyPhrase(Italic)}>
           <i className="fas fa-italic fa-fw" />
         </button>
         <button
           disabled
+          ariaLabel={t("control_label_strikethrough")}
+          title={t("control_label_strikethrough")}
           className={buttonClasses ++ "border-l border-gray-400"}
           onClick={_ => curriedModifyPhrase(Strikethrough)}>
           <i className="fas fa-strikethrough fa-fw" />
@@ -300,23 +320,33 @@ let controls = (disabled, value, state, send, onChange) => {
     }}
     <div className="py-1">
       <button
-        disabled className={"rounded " ++ buttonClasses} onClick={onClickPreview(state, send)}>
+        ariaLabel={modeLabel(#Preview, mode)}
+        title={modeLabel(#Preview, mode)}
+        disabled
+        className={"rounded " ++ buttonClasses}
+        onClick={onClickPreview(state, send)}>
         {modeIcon(#Preview, mode)}
       </button>
       <button
+        ariaLabel={modeLabel(#Split, mode)}
+        title={modeLabel(#Split, mode)}
         disabled
         className={buttonClasses ++ "rounded ml-1 hidden md:inline"}
         onClick={onClickSplit(state, send)}>
         {modeIcon(#Split, mode)}
       </button>
       <button
+        ariaLabel={modeLabel(#Fullscreen, mode)}
+        title={modeLabel(#Fullscreen, mode)}
         disabled
         className={buttonClasses ++ "rounded  ml-1 hidden md:inline"}
         onClick={onClickFullscreen(state, send)}>
         {modeIcon(#Fullscreen, mode)}
         {switch mode {
         | Fullscreen(_) =>
-          <span className="ml-2 text-xs font-semibold"> {"Exit full-screen" |> str} </span>
+          <span ariaHidden=true className="ml-2 text-xs font-semibold">
+            {t("exit_full_screen_label")->str}
+          </span>
         | Windowed(_) => React.null
         }}
       </button>
@@ -402,7 +432,7 @@ let handleUploadFileResponse = (oldValue, state, send, onChange, json) => {
     )
     send(FinishUploading)
   } else {
-    send(SetUploadError(Some("Failed to attach file! " ++ (errors |> Js.Array.joinWith(", ")))))
+    send(SetUploadError(Some(t("error_prefix") ++ " " ++ (errors |> Js.Array.joinWith(", ")))))
   }
 }
 
@@ -415,12 +445,7 @@ let submitForm = (formId, oldValue, state, send, onChange) => {
       "/markdown_attachments/",
       formData,
       handleUploadFileResponse(oldValue, state, send, onChange),
-      () =>
-        send(
-          SetUploadError(
-            Some("An unexpected error occured! Please reload the page before trying again."),
-          ),
-        ),
+      () => send(SetUploadError(Some(t("error_unexpected")))),
     )
   })
 }
@@ -432,10 +457,7 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
     let file = files[0]
     let maxFileSize = 5 * 1024 * 1024
 
-    let error =
-      file["size"] > maxFileSize
-        ? Some("The maximum file size is 5 MB. Please select another file.")
-        : None
+    let error = file["size"] > maxFileSize ? Some(t("error_maximum_file_size")) : None
 
     switch error {
     | Some(_) => send(SetUploadError(error))
@@ -464,13 +486,13 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
   | Fullscreen(#Editor | #Split) =>
     <div className={footerContainerClasses(state.mode)}>
       {<form
-        className={`flex items-center flex-wrap flex-1 text-sm font-semibold ${disabled
-          ? ""
-          : "hover:bg-gray-300 hover:text-primary-500"}`}
+        className={`relative flex items-center flex-wrap flex-1 text-sm font-semibold ${disabled
+            ? ""
+            : "hover:bg-gray-300 hover:text-primary-500 focus-within:outline-none focus-within:bg-gray-300 focus-within:text-primary-500"}`}
         id=fileFormId>
         <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
         <input
-          className="hidden"
+          className="absolute w-0 h-0 focus:outline-none"
           type_="file"
           name="markdown_attachment[file]"
           id=fileInputId
@@ -481,7 +503,9 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
         {switch state.uploadState {
         | ReadyToUpload(error) =>
           <label
-            className={`text-xs px-3 py-2 flex-grow ${disabled ? "cursor-not-allowed" : ""}`}
+            className={`text-xs px-3 py-2 flex flex-grow ${disabled
+                ? "cursor-not-allowed"
+                : "cursor-pointer"}`}
             htmlFor=fileInputId>
             {switch error {
             | Some(error) =>
@@ -489,35 +513,37 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
                 <i className="fas fa-exclamation-triangle mr-2" /> {error |> str}
               </span>
             | None =>
-              <span>
-                <i className="far fa-file-image mr-2" /> {"Click here to attach a file." |> str}
-              </span>
+              <span> <i className="far fa-file-image mr-2" /> {t("attach_file_label")->str} </span>
             }}
           </label>
         | Uploading =>
           <span className="text-xs px-3 py-2 flex-grow cursor-wait">
-            <i className="fas fa-spinner fa-pulse mr-2" />
-            {"Please wait for the file to upload..." |> str}
+            <i className="fas fa-spinner fa-pulse mr-2" /> {t("file_upload_wait")->str}
           </span>
         }}
       </form>->ReactUtils.nullUnless(fileUpload)}
       <a
+        ariaLabel={t("help_aria_label")}
         href="/help/markdown_editor"
         target="_blank"
-        className="flex items-center px-3 py-2 hover:bg-gray-300 hover:text-secondary-500 cursor-pointer">
+        className="flex items-center px-3 py-2 hover:bg-gray-300 hover:text-secondary-500 focus:outline-none focus:bg-gray-300 focus:text-secondary-500 cursor-pointer">
         <i className="fab fa-markdown text-sm" />
-        <span className="text-xs ml-1 font-semibold hidden sm:inline"> {"Need help?" |> str} </span>
+        <span className="text-xs ml-1 font-semibold hidden sm:inline">
+          {t("help_label")->str}
+        </span>
       </a>
     </div>
   }
 }
 
-let textareaClasses = mode =>
-  "w-full outline-none font-mono " ++
+let textareaClasses = (mode, dynamicHeight) => {
+  let editorClasses = dynamicHeight ? "w-full outline-none font-mono " : "markdown-editor__textarea w-full outline-none font-mono "
+  editorClasses ++ "align-top focus:ring-1 focus:ring-indigo-500 " ++
   switch mode {
   | Windowed(_) => "p-3"
-  | Fullscreen(_) => "px-3 pt-4 pb-8 h-full resize-none"
+  | Fullscreen(_) => "markdown-editor__textarea--full-screen px-3 pt-4 pb-8 h-full resize-none"
   }
+}
 
 let onChangeWrapper = (onChange, event) => {
   let value = ReactEvent.Form.target(event)["value"]
@@ -551,8 +577,8 @@ let handleKeyboardControls = (value, state, send, onChange, event) => {
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange)
 
   switch event |> Webapi.Dom.KeyboardEvent.key {
-  | "b" when event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Bold)
-  | "i" when event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Italic)
+  | "b" if event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Bold)
+  | "i" if event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Italic)
   | _anyOtherKey => ()
   }
 }
@@ -596,6 +622,7 @@ let make = (
   ~tabIndex=?,
   ~fileUpload=true,
   ~disabled=false,
+  ~dynamicHeight=false,
 ) => {
   let (state, send) = React.useReducerWithMapState(
     reducer,
@@ -696,7 +723,7 @@ let make = (
             onChange={onChangeWrapper(onChange)}
             id=state.id
             value
-            className={textareaClasses(state.mode)}
+            className={textareaClasses(state.mode, dynamicHeight)}
             disabled
           />
         </DisablingCover>

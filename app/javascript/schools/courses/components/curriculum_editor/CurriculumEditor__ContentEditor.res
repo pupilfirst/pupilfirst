@@ -58,6 +58,7 @@ let reducer = (state, action) =>
       contentBlocks: state.contentBlocks |> Js.Array.filter(contentBlock =>
         contentBlock |> ContentBlock.id != contentBlockId
       ),
+      dirtyContentBlockIds: state.dirtyContentBlockIds->Belt.Set.String.remove(contentBlockId),
     }
   | MoveContentBlockUp(contentBlock) => {
       ...state,

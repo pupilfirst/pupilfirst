@@ -15,7 +15,7 @@
   <p>
     Here is some feedback from <%= coach_name %> on your <%= update_for %>
   </p>
-  <blockquote>
+  <blockquote style="border-left: 6px solid #e6e6e6; background: #fafafa; padding: 8px 10px;">
     <%= sanitize(MarkdownIt::Parser.new(:commonmark).render(@startup_feedback.feedback)).html_safe %>
   </blockquote>
 

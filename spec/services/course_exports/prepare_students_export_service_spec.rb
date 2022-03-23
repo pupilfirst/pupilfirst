@@ -109,6 +109,15 @@ describe CourseExports::PrepareStudentsExportService do
     # Second student is still on L1.
     submission = submit_target target_l1_quiz, student_2
     submission.update!(quiz_score: '1/2')
+
+    # Student has an archived submission - data should not be present in the export
+    create :timeline_event,
+           :with_owners,
+           latest: false,
+           target: target_l1_evaluated,
+           owners: [student_1],
+           created_at: 3.days.ago,
+           archived_at: 1.day.ago
   end
 
   def submission_grading(submission)
@@ -281,8 +290,10 @@ describe CourseExports::PrepareStudentsExportService do
   describe '#execute' do
     it 'exports data to an ODS file' do
       expect { subject.execute }.to change {
-        course_export.reload.file.attached?
-      }.from(false).to(true)
+          course_export.reload.file.attached?
+        }
+        .from(false)
+        .to(true)
       expect(course_export.file.filename.to_s).to end_with('.ods')
     end
 

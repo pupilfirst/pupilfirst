@@ -347,7 +347,7 @@ en:
       learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
       next_target_button: Next Target
-      pending_team_members_notice: "You have team members who are yet to complete this target:"
+      pending_team_members_notice: "You have team members who have yet to complete this target:"
       preview_mode_text: You are currently looking at a preview of this course.
       previous_target_button: Previous Target
       scroll_to_top: Scroll to Top
@@ -655,6 +655,27 @@ en:
     CurriculumEditor__TargetGroupShow:
       create_target: Create a target
       milestone_targets: Milestone Targets
+    MarkdownEditor:
+      attach_file_label: Click here to attach a file.
+      bold_insert: bold
+      control_label_bold: Bold
+      control_label_italic: Italic
+      control_label_strikethrough: Strikethrough
+      error_maximum_file_size: The maximum file size is 5 MB. Please select another file.
+      error_prefix: Failed to attach file!
+      error_unexpected: An unexpected error occured! Please reload the page before trying again.
+      exit_full_screen_label: Exit full screen
+      file_upload_wait: Please wait for the file to upload...
+      help_aria_label: Need help with Markdown?
+      help_label: Need help?
+      italic_insert: italics
+      mode_label_fullscreen: Full screen
+      mode_label_fullscreen_exit: Exit full screen
+      mode_label_preview: Preview
+      mode_label_preview_exit: Edit
+      mode_label_split: View editor and preview in split view
+      mode_label_split_exit: Close split view
+      strikethrough_insert: strikethrough
     Notifications__List:
       button_load_more: Load More Notifications...
       empty_notifications: You don't have any notifications!
@@ -1087,6 +1108,7 @@ en:
       long_without_name: Level %{number}
       short_with_name: "L%{number}: %{name}"
       short_without_name: L%{number}
+    login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
     optional: optional
     privacy_policy: Privacy Policy
     save_changes: Save Changes
@@ -1094,4 +1116,3 @@ en:
     saving: Saving...
     target: Target
     terms_and_conditions: Terms & Conditions
-    login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.

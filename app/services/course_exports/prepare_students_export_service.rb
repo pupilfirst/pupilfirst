@@ -55,9 +55,10 @@ module CourseExports
 
     def evaluation_criteria_ids
       @evaluation_criteria_ids ||=
-        targets.map do |target|
-          target.evaluation_criteria.order(:name).pluck(:id)
-        end.flatten.uniq
+        targets
+          .map { |target| target.evaluation_criteria.order(:name).pluck(:id) }
+          .flatten
+          .uniq
     end
 
     def average_grades_for_target(target)
@@ -67,26 +68,26 @@ module CourseExports
         .evaluation_criteria
         .pluck(:id)
         .each_with_object(empty_grades) do |evaluation_criterion_id, grades|
-        average_grade =
-          TimelineEventGrade
-            .joins(timeline_event: :timeline_event_owners)
-            .where(
-              timeline_event_owners: {
-                latest: true,
-                founder_id: students.pluck(:id)
-              },
-              timeline_events: {
-                target_id: target.id
-              },
-              evaluation_criterion_id: evaluation_criterion_id
-            )
-            .distinct
-            .average(:grade)
-            &.round(2)
+          average_grade =
+            TimelineEventGrade
+              .joins(timeline_event: :timeline_event_owners)
+              .where(
+                timeline_event_owners: {
+                  latest: true,
+                  founder_id: students.pluck(:id)
+                },
+                timeline_events: {
+                  target_id: target.id
+                },
+                evaluation_criterion_id: evaluation_criterion_id
+              )
+              .distinct
+              .average(:grade)
+              &.round(2)
 
-        grades[evaluation_criteria_ids.index(evaluation_criterion_id)] =
-          average_grade
-      end
+          grades[evaluation_criteria_ids.index(evaluation_criterion_id)] =
+            average_grade
+        end
     end
 
     def average_grades_for_student(student)
@@ -109,6 +110,7 @@ module CourseExports
     def students_with_submissions(target)
       target
         .timeline_events
+        .live
         .joins(:founders)
         .where(founders: { id: students.pluck(:id) })
         .distinct('founders.id')
@@ -118,6 +120,7 @@ module CourseExports
     def submissions_pending_review(target)
       target
         .timeline_events
+        .live
         .pending_review
         .joins(:founders)
         .where(founders: { id: students.pluck(:id) })
@@ -173,34 +176,35 @@ module CourseExports
     def submission_rows
       # Lay out the top row of target IDs.
       header =
-        ['Student Email / Target ID'] + targets.map do |target|
-          target_id(target)
-        end
+        ['Student Email / Target ID'] +
+          targets.map { |target| target_id(target) }
 
       target_ids = targets.pluck(:id)
 
       # Now populate status for each student.
-      [header] + students.map do |student|
-        grading = compute_grading_for_submissions(student, target_ids)
-        [student.user.email] + grading
-      end
+      [header] +
+        students.map do |student|
+          grading = compute_grading_for_submissions(student, target_ids)
+          [student.user.email] + grading
+        end
     end
 
     def compute_grading_for_submissions(student, target_ids)
       TimelineEvent
+        .live
         .includes(:timeline_event_grades)
         .joins(:founders)
         .where(founders: { id: student.id })
         .order(:created_at)
         .distinct
         .each_with_object([]) do |submission, grading|
-        grade_index = target_ids.index(submission.target_id)
+          grade_index = target_ids.index(submission.target_id)
 
-        # We can't record grades for submissions where the target has been archived.
-        next if grade_index.nil?
+          # We can't record grades for submissions where the target has been archived.
+          next if grade_index.nil?
 
-        assign_styled_grade(grade_index, grading, submission)
-      end
+          assign_styled_grade(grade_index, grading, submission)
+        end
     end
 
     def students
@@ -214,8 +218,11 @@ module CourseExports
 
           # Filter by tag, if applicable.
           if tags.present?
-            applicable_startup_ids = Startup.tagged_with(tags, any: true).pluck(:id)
-            scope.joins(:startup).merge(Startup.where(id: applicable_startup_ids))
+            applicable_startup_ids =
+              Startup.tagged_with(tags, any: true).pluck(:id)
+            scope
+              .joins(:startup)
+              .merge(Startup.where(id: applicable_startup_ids))
           else
             scope
           end

@@ -34,6 +34,11 @@ let appendEmptyChecklistItem = t =>
     ~result=[CoursesReview__ReviewChecklistResult.empty()] |> Array.append(t.result),
   )
 
+let moveResultItemUp = (index, t) =>
+  make(~title=t.title, ~result=ArrayUtils.swapUp(index, t.result))
+let moveResultItemDown = (index, t) =>
+  make(~title=t.title, ~result=ArrayUtils.swapDown(index, t.result))
+
 let deleteResultItem = (index, t) =>
   make(~title=t.title, ~result=t.result |> Js.Array.filteri((_el, i) => i != index))
 

@@ -11,10 +11,13 @@
   border-bottom-color: theme(colors.primary.300);
 }
 
-.checklist-editor__add-result-btn:hover .checklist-editor__add-result-btn-check {
+.checklist-editor__add-result-btn:hover .checklist-editor__add-result-btn-check,
+.checklist-editor__add-result-btn:focus
+  .checklist-editor__add-result-btn-check {
   @apply border-gray-500 bg-white shadow;
 }
 
-.checklist-editor__add-result-btn:hover .checklist-editor__add-result-btn-text {
+.checklist-editor__add-result-btn:hover .checklist-editor__add-result-btn-text,
+.checklist-editor__add-result-btn:focus .checklist-editor__add-result-btn-text {
   @apply text-primary-500 bg-white border-primary-500 shadow-md;
 }

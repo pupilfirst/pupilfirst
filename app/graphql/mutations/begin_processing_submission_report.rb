@@ -1,10 +1,17 @@
 module Mutations
-  class CreateInProgressSubmissionReport < ApplicationQuery
+  class BeginProcessingSubmissionReport < ApplicationQuery
     include QueryAuthorizeCoach
     include ValidateSubmissionGradable
 
     argument :submission_id, ID, required: true
-    argument :description, String, required: true
+    argument :description,
+             String,
+             required: false,
+             validates: {
+               length: {
+                 maximum: 1000
+               }
+             }
 
     description 'Create in progress report for a submission'
 

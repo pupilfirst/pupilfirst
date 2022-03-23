@@ -1,10 +1,17 @@
 module Mutations
-  class CreateCompletedSubmissionReport < ApplicationQuery
+  class ConcludeSubmissionReport < ApplicationQuery
     include QueryAuthorizeCoach
     include ValidateSubmissionGradable
 
     argument :submission_id, ID, required: true
-    argument :description, String, required: true
+    argument :description,
+             String,
+             required: true,
+             validates: {
+               length: {
+                 maximum: 1000
+               }
+             }
     argument :conclusion, Types::SubmissionReportConclusionType, required: true
 
     description 'Create completed report for a submission'
@@ -27,16 +34,16 @@ module Mutations
             status: 'completed',
             description: @params[:description],
             conclusion: @params[:conclusion],
-            started_at: report.started_at || Time.zone.now,
-            completed_at: Time.zone.now
+            started_at: report.started_at || time_now,
+            completed_at: time_now
           )
         else
           SubmissionReport.create!(
             status: 'completed',
             description: @params[:description],
             conclusion: @params[:conclusion],
-            started_at: Time.zone.now,
-            completed_at: Time.zone.now
+            started_at: time_now,
+            completed_at: time_now
           )
         end
       end
@@ -52,6 +59,10 @@ module Mutations
 
     def submission
       @submission = TimelineEvent.find_by(id: @params[:submission_id])
+    end
+
+    def time_now
+      @time_now ||= Time.zone.now
     end
   end
 end

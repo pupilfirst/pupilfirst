@@ -1,10 +1,17 @@
 module Mutations
-  class CreateQueuedSubmissionReport < ApplicationQuery
+  class QueueSubmissionReport < ApplicationQuery
     include QueryAuthorizeCoach
     include ValidateSubmissionGradable
 
     argument :submission_id, ID, required: true
-    argument :description, String, required: true
+    argument :description,
+             String,
+             required: false,
+             validates: {
+               length: {
+                 maximum: 1000
+               }
+             }
 
     description 'Create queued report for a submission'
 

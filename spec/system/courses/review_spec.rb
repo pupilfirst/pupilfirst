@@ -690,7 +690,7 @@ feature "Coach's review interface" do
 
       click_button 'Load More Submissions...'
 
-      # Ensure new submissions loded below old subimission.
+      # Ensure new submissions loaded below old subimission.
       expect(find('#submissions a:nth-child(21)')).to have_content(
         target_l2.title
       )

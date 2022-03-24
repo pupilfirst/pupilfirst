@@ -627,8 +627,8 @@ let make = (
         </div>
         {switch state.tab {
         | Learn => quickNavigationLinks(targetDetails, send)
-        | Discuss
-        | Complete(_) => React.null
+        | Discuss => React.null
+        | Complete(_) => quickNavigationLinks(targetDetails, send)
         }}
       </div>
 

@@ -32,7 +32,7 @@ module Mutations
         if report.present?
           report.update!(
             status: 'completed',
-            description: @params[:description],
+            test_report: @params[:description],
             conclusion: @params[:conclusion],
             started_at: report.started_at || time_now,
             completed_at: time_now
@@ -40,7 +40,7 @@ module Mutations
         else
           SubmissionReport.create!(
             status: 'completed',
-            description: @params[:description],
+            test_report: @params[:description],
             conclusion: @params[:conclusion],
             started_at: time_now,
             completed_at: time_now

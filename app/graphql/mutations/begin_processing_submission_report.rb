@@ -30,7 +30,7 @@ module Mutations
           .where(submission_id: @params[:submission_id])
           .first_or_create!(
             status: 'in_progress',
-            description: @params[:description],
+            test_report: @params[:description],
             started_at: Time.zone.now,
             completed_at: nil,
             conclusion: nil

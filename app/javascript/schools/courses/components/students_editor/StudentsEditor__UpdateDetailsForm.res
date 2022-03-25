@@ -306,7 +306,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
           htmlFor="affiliation">
           {t("affiliation") |> str}
         </label>
-        <span className="text-xs ml-1"> {t("optional_braces") |> str} </span>
+        <span className="text-xs ml-1"> {ts("optional_braces") |> str} </span>
         <input
           value=state.affiliation
           onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
@@ -358,7 +358,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
         <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
           {(isSingleStudent ? t("student_s") : t("team_s")) ++ " " ++ t("access_ends") |> str}
         </label>
-        <span className="ml-1 text-xs"> {t("optional_braces") |> str} </span>
+        <span className="ml-1 text-xs"> {ts("optional_braces") |> str} </span>
         <HelpIcon
           className="ml-2" link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
           {t("students_not_able_complete_help") |> str}

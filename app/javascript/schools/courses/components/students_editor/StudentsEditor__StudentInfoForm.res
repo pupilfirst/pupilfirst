@@ -147,7 +147,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
         htmlFor="title">
         {t("title") |> str}
       </label>
-      <span className="text-xs ml-1"> {t("optional_braces") |> str} </span>
+      <span className="text-xs ml-1"> {ts("optional_braces") |> str} </span>
       <input
         value=state.title
         onChange={event => send(UpdateTitle(ReactEvent.Form.target(event)["value"]))}
@@ -163,7 +163,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
         htmlFor="affiliation">
         {t("affiliation") |> str}
       </label>
-      <span className="text-xs ml-1"> {t("optional_braces") |> str} </span>
+      <span className="text-xs ml-1"> {ts("optional_braces") |> str} </span>
       <input
         value=state.affiliation
         onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
@@ -179,7 +179,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
         htmlFor="team_name">
         {t("team_name") |> str}
       </label>
-      <span className="text-xs ml-1"> {t("optional_braces") |> str} </span>
+      <span className="text-xs ml-1"> {ts("optional_braces") |> str} </span>
       <HelpIcon className="ml-1">
         {t("team_name_help") |> str}
       </HelpIcon>
@@ -197,7 +197,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
       <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="tags">
         {t("tags") |> str}
       </label>
-      <span className="text-xs ml-1"> {t("optional_braces") |> str} </span>
+      <span className="text-xs ml-1"> {ts("optional_braces") |> str} </span>
     </div>
     <School__SearchableTagList
       unselectedTags={Js.Array2.filter(teamTags, tag =>

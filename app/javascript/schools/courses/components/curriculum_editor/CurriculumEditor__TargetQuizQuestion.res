@@ -1,6 +1,6 @@
 let str = React.string
 
-let tr = I18n.t(~scope="components.CurriculumEditor__TargetQuizQuestion")
+let t = I18n.t(~scope="components.CurriculumEditor__TargetQuizQuestion")
 let ts = I18n.t(~scope="shared")
 
 @react.component
@@ -52,14 +52,14 @@ let make = (
       <label
         className="block tracking-wide uppercase text-gray-800 text-sm font-bold"
         htmlFor=questionId>
-        {ts("question") ++ questionNumber |> str}
+        {t("question") ++ " " ++ questionNumber |> str}
       </label>
       <div className="quiz-maker__question-remove-button invisible">
         {questionCanBeRemoved
           ? <button
               className="flex items-center flex-shrink-0 bg-white p-2 rounded-lg text-gray-600 hover:text-gray-700 text-xs"
               type_="button"
-              title=tr("remove_question")
+              title=t("remove_question")
               onClick={event => {
                 ReactEvent.Mouse.preventDefault(event)
                 removeQuizQuestionCB(quizQuestion |> CurriculumEditor__QuizQuestion.id)
@@ -72,7 +72,7 @@ let make = (
     <div className="my-2 bg-white">
       <MarkdownEditor
         textareaId=questionId
-        placeholder=tr("answer_placeholder")
+        placeholder=t("answer_placeholder")
         value={quizQuestion |> CurriculumEditor__QuizQuestion.question}
         onChange=updateQuestion
         profile=Markdown.Permissive
@@ -105,7 +105,7 @@ let make = (
         </div>
         <a
           className="quiz-maker__add-answer-option-button flex items-center h-11 text-gray-900 bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg ml-12 py-3 px-4">
-          <p className="text-xs"> {tr("add_another_answer") |> str} </p>
+          <p className="text-xs"> {t("add_another_answer") |> str} </p>
         </a>
       </div>
     </div>

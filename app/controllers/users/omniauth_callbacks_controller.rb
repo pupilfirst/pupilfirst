@@ -26,10 +26,10 @@ module Users
 
     def failure
       if oauth_origin.present?
-        message = I18n.t("omniauth.callbacks.denied_by", provider: oauth_origin[:provider].capitalize)
+        message = I18n.t("controllers.Users__OmniauthCallbacksController.denied_by", provider: oauth_origin[:provider].capitalize)
         redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: message)
       else
-        flash[:error] = I18n.t("omniauth.callbacks.denied")
+        flash[:error] = I18n.t("controllers.Users__OmniauthCallbacksController.denied")
         redirect_to new_user_session_path
       end
     end
@@ -61,7 +61,7 @@ module Users
         # Redirect user to sign in at the origin domain with newly generated token.
         redirect_to user_token_url(token_url_options)
       else
-        redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: I18n.t("omniauth.callbacks.email_unregistered", email: @email))
+        redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: I18n.t("controllers.Users__OmniauthCallbacksController.email_unregistered", email: @email))
       end
     end
 
@@ -99,15 +99,15 @@ module Users
     end
 
     def email_blank_flash
-      message = I18n.t("omniauth.callbacks.not_receive_email", provider_name: provider_name)
+      message = I18n.t("controllers.Users__OmniauthCallbacksController.not_receive_email", provider_name: provider_name)
 
       message += case provider_name
         when 'Github'
-          I18n.t("omniauth.callbacks.add_github")
+          I18n.t("controllers.Users__OmniauthCallbacksController.add_github")
         when 'Facebook'
-          I18n.t("omniauth.callbacks.add_facebook")
+          I18n.t("controllers.Users__OmniauthCallbacksController.add_facebook")
         else
-          I18n.t("omniauth.callbacks.add_other")
+          I18n.t("controllers.Users__OmniauthCallbacksController.add_other")
       end
 
       message.html_safe

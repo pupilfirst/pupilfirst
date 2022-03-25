@@ -921,6 +921,7 @@ en:
       update_target: Update Target
       visit_link: Visit a link to complete the target.
       title: Title
+      optional_braces: (optional)
     CurriculumEditor__TargetDrawer:
       unsaved_confirm: There are unsaved changes. Are you sure you want to discard them?
       content: Content
@@ -957,6 +958,7 @@ en:
       answer_placeholder: Type the question here (supports markdown)
       remove_question: Remove Quiz Question
       add_another_answer: Add another Answer Option
+      question: Question
     CurriculumEditor__TargetShow:
       edit: Edit
       edit_content: Edit content of target
@@ -1365,7 +1367,6 @@ en:
       title: Title
       affiliation: Affiliation
       affiliation_placeholder: Acme Inc., Acme University, etc.
-      optional_braces: (optional)
     StudentsEditor__TeamsList:
       check_spelling: Make sure the spelling is correct.
       clear_filter: Clear Filter
@@ -1409,7 +1410,6 @@ en:
       title: Title
       affiliation: Affiliation
       affiliation_placeholder: Acme Inc., Acme University, etc.
-      optional_braces: (optional)
     SubmissionChecklistItemShow:
       correct: Correct
       incorrect: Incorrect
@@ -1926,11 +1926,29 @@ en:
     request_password_reset:
       cancel_link: Sign in with Google, Facebook, or Github
       email_label: Email
+      email_placeholder: john@example.com
       heading: Reset your password
       image_alt: A student holding a giant key with a reset symbol on it
       page_title: Reset password
       submit_button: Request password reset
       subtitle: Enter your email for password recovery.
+    sign_in_with_email:
+      email: Continue with email
+      email_address: Email Address
+      email_me: Email me a link to sign in
+      with_password: Sign in with password.
+      password: Password
+      password_new: Set a New Password
+      shared: Are you using a shared device?
+      password_free: Password-free sign in
+      magic_link: We can email you a magic link so you can sign in without having to type your password.
+      oauth: Sign in with Google, Facebook, or Github
+  users:
+    delete_account:
+      edit_user: Edit User
+    oauth:
+      invalid_request: Your browser made an invalid request.
+      details: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
   shared:
     post: Post
     reply: Reply
@@ -2018,33 +2036,6 @@ en:
       try_again: Please try again
       done: Done!
       done_dot: Done
-  users:
-    delete_account:
-      edit_user: Edit User
-    oauth:
-      invalid_request: Your browser made an invalid request.
-      details: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
-    sessions:
-      email: Continue with email
-      email_address: Email Address
-      email_me: Email me a link to sign in
-      with_password: Sign in with password.
-      password: Password
-      password_new: Set a New Password
-      shared: Are you using a shared device?
-      password_free: Password-free sign in
-      magic_link: We can email you a magic link so you can sign in without having to type your password.
-      oauth: Sign in with Google, Facebook, or Github
-      question: Question
-  omniauth:
-    callbacks:
-      denied_by: Authentication was denied by %{provider}. Please try again.
-      denied: Authentication was denied. Please try again.
-      email_unregistered: "Your email address: %{email} is unregistered."
-      not_receive_email: "We're sorry, but we did not receive your email address from %{provider_name}. "
-      add_github: Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.
-      add_facebook: Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.
-      add_other: Please sign in using another method.
   controllers:
     ApplicantsController:
       link_expired: That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in.
@@ -2060,6 +2051,14 @@ en:
       already_signed: You are already signed in.
       link_expired: That one-time link has expired, or is invalid. Please try signing in again.
       link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
+    Users__OmniauthCallbacksController:
+      denied_by: Authentication was denied by %{provider}. Please try again.
+      denied: Authentication was denied. Please try again.
+      email_unregistered: "Your email address: %{email} is unregistered."
+      not_receive_email: "We're sorry, but we did not receive your email address from %{provider_name}. "
+      add_github: Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.
+      add_facebook: Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.
+      add_other: Please sign in using another method.
   presenters:
     Communities__NewTopic:
       new_topic: New Topic

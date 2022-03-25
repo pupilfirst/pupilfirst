@@ -166,8 +166,14 @@ module Types
     field :assign_reviewer, mutation: Mutations::AssignReviewer, null: false
     field :reassign_reviewer, mutation: Mutations::ReassignReviewer, null: false
     field :unassign_reviewer, mutation: Mutations::UnassignReviewer, null: false
-    field :create_submission_reports,
-          mutation: Mutations::CreateSubmissionReports,
+    field :queue_submission_report,
+          mutation: Mutations::QueueSubmissionReport,
+          null: false
+    field :begin_processing_submission_report,
+          mutation: Mutations::BeginProcessingSubmissionReport,
+          null: false
+    field :conclude_submission_report,
+          mutation: Mutations::ConcludeSubmissionReport,
           null: false
   end
 end

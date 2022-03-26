@@ -44,7 +44,7 @@ feature 'User signing in by supplying email address', js: true do
         visit new_user_session_path
 
         click_link 'Continue with email'
-        click_link 'Set a New Password'
+        click_link 'Reset Your Password'
         fill_in 'Email', with: user.email
         click_button 'Request password reset'
 
@@ -54,7 +54,7 @@ feature 'User signing in by supplying email address', js: true do
 
         click_link 'Sign In'
         click_link 'Continue with email'
-        click_link 'Set a New Password'
+        click_link 'Reset Your Password'
         fill_in 'Email', with: user.email
         click_button 'Request password reset'
 
@@ -132,7 +132,7 @@ feature 'User signing in by supplying email address', js: true do
       visit new_user_session_path
 
       click_link 'Continue with email'
-      click_link 'Set a New Password'
+      click_link 'Reset Your Password'
       fill_in 'Email', with: 'unregistered@example.org'
       click_button 'Request password reset'
 

@@ -71,7 +71,7 @@ let reducer = (state, action) =>
   | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
   | LoadSubmissions(endCursor, hasNextPage, newTopics, totalEntriesCount, target, level, coaches) =>
     let updatedTopics = switch state.loading {
-    | LoadingMore => Js.Array.concat(PagedSubmission.toArray(state.submissions), newTopics)
+    | LoadingMore => Js.Array2.concat(PagedSubmission.toArray(state.submissions), newTopics)
     | Reloading(_) => newTopics
     }
 

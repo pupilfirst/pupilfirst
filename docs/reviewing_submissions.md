@@ -33,7 +33,7 @@ There's quite a bit to unpack here, so we'll go over each element one by one, st
 
 The minimum work that a coach must do is assign grades for all evaluation criteria on a target. In the example screenshot above, there are two criteria, but targets can have any number of these. Depending on how the grading for the course is set up, a coach can assign a failing or a passing grade to a submission.
 
-If a student fails a submission, they're _expected_ to re-submit the target to get a passing grade. If the target in question is a milestone target, or is a pre-requisite for another, this can cause other targets to [become locked](/targets?id=locked-targets) and block a student's progression in the course until they get a passing grade.
+If a student fails a submission, they're _expected_ to re-submit the target to get a passing grade. If the target in question is a milestone target, or is a prerequisite for another, this can cause other targets to [become locked](/targets?id=locked-targets) and block a student's progression in the course until they get a passing grade.
 
 ?> **How does passing or failing work with multiple evaluation criteria?** \
 When you have more than one evaluation criteria, as in the example above, if the grade for _any_ criterion falls below the passing grade, then the submission as a whole, will count as a failure.

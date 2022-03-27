@@ -355,7 +355,7 @@ en:
       access_locked: Your access to this course has ended.
       course_locked: This course has ended.
       level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
-      prerequisites_incomplete: This target has pre-requisites that are incomplete.
+      prerequisites_incomplete: This target has prerequisites that are incomplete.
       status:
         completed: Completed
         locked: Locked

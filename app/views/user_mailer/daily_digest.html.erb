@@ -15,7 +15,7 @@
   <% if @updates[:coach].present? %>
     <% pending_submissions_count = @updates[:coach].map { |s| s[:pending_submissions] }.sum %>
     <p style="margin-top: 10px;">
-      <%= t("views.mailers.daily_digest.body", article_pending_submissions_count: article(pending_submissions_count), pending_submissions_count: pending_submissions_count, courses_number: @updates[:coach].length.to_s).html_safe %>
+      <%= t("views.mailers.daily_digest.body.main_html", article_pending_submissions_count: article(pending_submissions_count), pending_submissions_count: pending_submissions_count, courses_number: @updates[:coach].length.to_s) %>
     </p>
 
     <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">
@@ -24,7 +24,7 @@
           <%= link_to "#{stats[:course_name]}:", review_course_url(stats[:course_id]), style: 'color: #6025C0; border-radius: 8px; padding: 0px;' %>
           <span><strong><%= stats[:pending_submissions] %></strong>
             <% if stats[:is_team_coach] %>
-              <%= stats[:pending_submissions_for_coach] == 0 ? t("views.mailers.daily_digest.assigned_none") : t("views.mailers.daily_digest.assigned", stats: stats[:pending_submissions_for_coach]) %>
+              <%= stats[:pending_submissions_for_coach] == 0 ? t("views.mailers.daily_digest.body.assigned_none") : t("views.mailers.daily_digest.body.assigned", stats: stats[:pending_submissions_for_coach]) %>
             <% end %>
           </span>
         </li>
@@ -34,7 +34,7 @@
 
   <% if @updates[:community_new].present? %>
     <p style="margin-top: 15px;">
-      <%= t("views.mailers.daily_digest.latest_topics") %>
+      <%= t("views.mailers.daily_digest.body.latest_topics") %>
     </p>
 
     <% @updates[:community_new].each do |topic| %>
@@ -46,15 +46,15 @@
       </div>
       <div style="font-size: 75%; border-bottom: 1px solid lightgray; margin-bottom: 4px; padding-bottom: 4px;">
         <%= link_to topic[:community_name], community_url(topic[:community_id]) %>,
-        <%= topic[:views].to_s %> <%= t("views.mailers.daily_digest.views") %>
-        <%= topic[:replies].to_s %> <%= t("views.mailers.daily_digest.replies") %>
+        <%= topic[:views].to_s %> <%= t("views.mailers.daily_digest.body.views") %>
+        <%= topic[:replies].to_s %> <%= t("views.mailers.daily_digest.body.replies") %>
       </div>
     <% end %>
   <% end %>
 
   <% if @updates[:community_reactivated].present? %>
     <p style="margin-top: 15px;">
-      <%= t("views.mailers.daily_digest.older") %>
+      <%= t("views.mailers.daily_digest.body.older") %>
     </p>
 
     <% @updates[:community_reactivated].each do |topic| %>
@@ -66,15 +66,15 @@
       </div>
       <div style="font-size: 75%; border-bottom: 1px solid lightgray; margin-bottom: 4px; padding-bottom: 4px;">
         <%= link_to topic[:community_name], community_url(topic[:community_id]) %>,
-        <%= topic[:views].to_s %> <%= t("views.mailers.daily_digest.views") %>
-        <%= topic[:replies].to_s %> <%= t("views.mailers.daily_digest.replies") %>
-        <%= t("views.mailers.daily_digest.asked", days_ago: topic[:days_ago].to_s) %>
+        <%= topic[:views].to_s %> <%= t("views.mailers.daily_digest.body.views") %>
+        <%= topic[:replies].to_s %> <%= t("views.mailers.daily_digest.body.replies") %>
+        <%= t("views.mailers.daily_digest.body.asked", days_ago: topic[:days_ago].to_s) %>
       </div>
     <% end %>
   <% end %>
 
   <p style="font-size: 75%; margin-top: 15px;">
-    <%= t("views.mailers.daily_digest.control_emails", link_to: link_to(t("views.mailers.daily_digest.link_to"), edit_user_url)).html_safe %>
+    <%= t("views.mailers.daily_digest.body.control_emails", link_to: link_to(t("views.mailers.daily_digest.body.link_to"), edit_user_url)) %>
   </p>
 <% end %>
 

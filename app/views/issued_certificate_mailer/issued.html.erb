@@ -16,11 +16,11 @@
   </p>
 
   <p>
-    <%= t("views.mailers.issued.awarded_certificate", course_name: course.name).html_safe %>
+    <%= t("views.mailers.issued.awarded_certificate_html", course_name: course.name) %>
   </p>
 
   <p>
-    <%= t("views.mailers.issued.issued_on", issued_certificate: @issued_certificate.created_at.strftime('%b %e, %l:%M %p'), link_to: link_to(t("views.mailers.issued.link_to"), link)).html_safe %>
+    <%= t("views.mailers.issued.issued_on_html", issued_certificate: @issued_certificate.created_at.strftime('%b %e, %l:%M %p'), link_to: link_to(t("views.mailers.issued.link_to"), link)) %>
   </p>
 
   <%= render 'mailers/link_fallback', url: link %>

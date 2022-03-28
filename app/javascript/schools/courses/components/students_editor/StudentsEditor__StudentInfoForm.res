@@ -23,7 +23,7 @@ type action =
 
 let str = React.string
 
-let t = I18n.t(~scope="components.StudentsEditor__StudentInforForm")
+let t = I18n.t(~scope="components.StudentsEditor__StudentInfoForm")
 let ts = I18n.ts
 
 let updateName = (send, name) => {

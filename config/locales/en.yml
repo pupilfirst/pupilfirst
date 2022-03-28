@@ -1342,7 +1342,7 @@ en:
     StudentsEditor__Search:
       filter_input_label: "Filter by:"
       filter_input_placeholder: Type name, tag or level
-    StudentsEditor__StudentInforForm:
+    StudentsEditor__StudentInfoForm:
       name_placeholder: Student name here
       email_placeholder: Student email here
       invalid_email: invalid email

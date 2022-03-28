@@ -1,12 +1,4 @@
 en:
-  admin:
-    overview: Overview
-    students: Students
-    coaches: Coaches
-    courses: Courses
-    levels: Levels
-    no_submissions: No student submissions yet!
-    submissions_reviewed: submissions reviewed
   components:
     Api:
       error_notification_body: Our team has been notified of this error. Please reload the page and try again.
@@ -2108,6 +2100,14 @@ en:
       title: Courses
     coaches:
       title: Coaches
+    admin:
+      overview: Overview
+      students: Students
+      coaches: Coaches
+      courses: Courses
+      levels: Levels
+      no_submissions: No student submissions yet!
+      submissions_reviewed: submissions reviewed
     admins:
       title: Admins
     timeline_events:

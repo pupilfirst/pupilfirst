@@ -472,6 +472,7 @@ let performQuickNavigation = (send, _event) => {
     | None => ()
     }
   }
+  send(Select(Learn))
 
   // Clear loaded target details.
   send(ClearTargetDetails)

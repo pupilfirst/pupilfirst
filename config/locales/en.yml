@@ -1355,7 +1355,6 @@ en:
       name: Name
       email: Email
       tags: Tags
-      team_name: Team Name
       title: Title
       affiliation: Affiliation
       affiliation_placeholder: Acme Inc., Acme University, etc.

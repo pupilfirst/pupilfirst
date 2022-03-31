@@ -140,32 +140,6 @@ ActiveRecord::Schema.define(version: 2022_03_31_123330) do
     t.index ["course_id", "community_id"], name: "index_community_course_connection_on_course_id_and_community_id", unique: true
   end
 
-  create_table "connect_requests", id: :serial, force: :cascade do |t|
-    t.integer "connect_slot_id"
-    t.integer "startup_id"
-    t.text "questions"
-    t.string "status"
-    t.string "meeting_link"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "confirmed_at"
-    t.datetime "feedback_mails_sent_at"
-    t.integer "rating_for_faculty"
-    t.integer "rating_for_team"
-    t.text "comment_for_faculty"
-    t.text "comment_for_team"
-    t.index ["connect_slot_id"], name: "index_connect_requests_on_connect_slot_id"
-    t.index ["startup_id"], name: "index_connect_requests_on_startup_id"
-  end
-
-  create_table "connect_slots", id: :serial, force: :cascade do |t|
-    t.integer "faculty_id"
-    t.datetime "slot_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["faculty_id"], name: "index_connect_slots_on_faculty_id"
-  end
-
   create_table "content_blocks", force: :cascade do |t|
     t.string "block_type"
     t.json "content"
@@ -805,7 +779,6 @@ ActiveRecord::Schema.define(version: 2022_03_31_123330) do
   add_foreign_key "communities", "schools"
   add_foreign_key "community_course_connections", "communities"
   add_foreign_key "community_course_connections", "courses"
-  add_foreign_key "connect_requests", "connect_slots"
   add_foreign_key "course_authors", "courses"
   add_foreign_key "course_authors", "users"
   add_foreign_key "course_exports", "courses"

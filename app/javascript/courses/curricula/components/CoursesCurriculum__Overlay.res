@@ -631,11 +631,7 @@ let make = (
             completionType,
           )}
         </div>
-        {switch state.tab {
-        | Learn => quickNavigationLinks(targetDetails, send)
-        | Discuss => React.null
-        | Complete(_) => quickNavigationLinks(targetDetails, send)
-        }}
+        {quickNavigationLinks(targetDetails, send)}
       </div>
 
     | None =>

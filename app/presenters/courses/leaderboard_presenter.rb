@@ -50,7 +50,7 @@ module Courses
 
     def heading
       if current_user_is_topper?
-        return I18n.t("presenters.Courses__Leaderboard.top_leaderboard_html").html_safe
+        return I18n.t("presenters.Courses__Leaderboard.top_leaderboard_html")
       end
 
       multiple_mid_text = I18n.t("presenters.Courses__Leaderboard.multiple_mid_text")

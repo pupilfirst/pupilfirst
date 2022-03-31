@@ -3,5 +3,5 @@
 <% end %>
 
 <% content_for :body do %>
-  <%= t("views.mailers.confirm_account_deletion.body", school_name: @school.name).html_safe %>
+  <%= t("views.mailers.confirm_account_deletion.body_html", school_name: @school.name) %>
 <% end %>

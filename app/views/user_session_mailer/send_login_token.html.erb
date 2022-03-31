@@ -7,7 +7,7 @@
 <% end %>
 
 <% content_for :body do %>
-  <%= t("views.mailers.send_login_token.body", link_to: link_to(t("views.mailers.send_login_token.link_to"), login_url), school_name: @school_name).html_safe %>
+  <%= t("views.mailers.send_login_token.body.main_html", link_to: link_to(t("views.mailers.send_login_token.body.link_to"), login_url), school_name: @school_name) %>
 
   <%= render 'mailers/link_fallback', url: login_url%>
 

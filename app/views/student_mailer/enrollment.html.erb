@@ -9,16 +9,16 @@
 
 <% content_for :body do %>
   <p>
-    <%= t("views.mailers.enrollment.body", course_name: @course.name, school_name: @school.name).html_safe %>
+    <%= t("views.mailers.enrollment.body.main_html", course_name: @course.name, school_name: @school.name) %>
   </p>
 
   <p>
-    <%= t("views.mailers.enrollment.body_sign", link_to: link_to(t("views.mailers.enrollment.link_to", school_name: @school.name), sign_in_link)).html_safe %>
+    <%= t("views.mailers.enrollment.body.sign_html", link_to: link_to(t("views.mailers.enrollment.body.link_to", school_name: @school.name), sign_in_link)) %>
   </p>
 
   <% if team_members.present? %>
     <p>
-      <%= t("views.mailers.enrollment.body_team", team_members: team_members) %>
+      <%= t("views.mailers.enrollment.body.team", team_members: team_members) %>
     </p>
   <% end %>
 

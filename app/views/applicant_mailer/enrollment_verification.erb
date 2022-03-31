@@ -10,7 +10,7 @@
 <% end %>
 
 <% content_for :subtitle do %>
-  <%= t("views.mailers.enrollment_verification.link_verify", school_name: school_name).html_safe %>
+  <%= t("views.mailers.enrollment_verification.link_verify_html", school_name: school_name) %>
 <% end %>
 
 <% content_for :title_button_text do %>
@@ -25,7 +25,7 @@
 
 <% content_for :body do %>
   <p>
-  <%= t("views.mailers.enrollment_verification.to_activate", school_name: school_name, course_name: course_name).html_safe %>
+  <%= t("views.mailers.enrollment_verification.to_activate_html", school_name: school_name, course_name: course_name) %>
   </p>
 
   <%= render 'mailers/link_fallback', url: login_url%>

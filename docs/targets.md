@@ -16,7 +16,7 @@ If a level doesn't contain at least one milestone target group, students will no
 
 **What if I want my students to complete every target? Do I have to mark all target as milestones?**
 
-Not necessarily. Remember that you can set targets as pre-requisites for others. Technically, you can set up a chain of targets, one depending on the completion of another to ensure that students complete all targets.
+Not necessarily. Remember that you can set targets as prerequisites for others. Technically, you can set up a chain of targets, one depending on the completion of another to ensure that students complete all targets.
 
 How you organize the content is ultimately up to you. We've deliberately made content organization flexible because the way you organize content will depend on the nature of the content, and in what order (if any) you want students to tackle your material.
 
@@ -25,6 +25,6 @@ How you organize the content is ultimately up to you. We've deliberately made co
 Students are unable to complete locked targets. There are four situations in which a target can be _locked_ for a student:
 
 1. The target is in a level that the student hasn't reached.
-2. The target has other targets as pre-requisites that the student hasn't completed.
+2. The target has other targets as prerequisites that the student hasn't completed.
 3. The student's [access to the course](/students?id=editing-student-details) has ended, because of which they have read-only access to the course content.
 4. The course's [end date](/courses?id=creating-courses) has passed, because of which students have read-only access to the course content.

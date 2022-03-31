@@ -1312,8 +1312,12 @@ feature 'Submission review overlay', js: true do
         passed_at: 1.day.ago
       )
     end
-    let(:feedback) do
-      create(:startup_feedback, startup_id: team.id, faculty_id: coach.id)
+    let!(:feedback) do
+      create(
+        :startup_feedback,
+        faculty_id: coach.id,
+        timeline_event: submission_reviewed
+      )
     end
     let!(:timeline_event_grade) do
       create(
@@ -1322,7 +1326,6 @@ feature 'Submission review overlay', js: true do
         evaluation_criterion: evaluation_criterion_1
       )
     end
-    before { submission_reviewed.startup_feedback << feedback }
 
     scenario 'team coach add his feedback' do
       sign_in_user team_coach.user,

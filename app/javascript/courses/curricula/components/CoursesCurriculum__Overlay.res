@@ -1,6 +1,6 @@
 exception UnexpectedSubmissionStatus(string)
 
-%bs.raw(`require("./CoursesCurriculum__Overlay.css")`)
+%raw(`require("./CoursesCurriculum__Overlay.css")`)
 
 open CoursesCurriculum__Types
 
@@ -25,7 +25,7 @@ type action =
   | ResetState
   | SetTargetDetails(TargetDetails.t)
   | AddSubmission(Target.role)
-  | ClearTargetDetails
+  | PerformQuickNavigation
 
 let initialState = {targetDetails: None, tab: Learn}
 
@@ -37,7 +37,7 @@ let reducer = (state, action) =>
       ...state,
       targetDetails: Some(targetDetails),
     }
-  | ClearTargetDetails => {...state, targetDetails: None}
+  | PerformQuickNavigation => {targetDetails: None, tab: Learn}
   | AddSubmission(role) =>
     switch role {
     | Target.Student => state
@@ -272,7 +272,8 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) =
     {renderLockReason(reason)}
     <div
       className="course-overlay__prerequisite-targets z-10 max-w-3xl mx-auto bg-white text-center rounded-lg overflow-hidden shadow mt-6">
-      {prerequisiteTargets |> Js.Array.map(target => {
+      {prerequisiteTargets
+      |> Js.Array.map(target => {
         let targetStatus =
           statusOfTargets |> ArrayUtils.unsafeFind(
             ts => ts |> TargetStatus.targetId == Target.id(target),
@@ -290,7 +291,8 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) =
           </span>
           {renderTargetStatus(targetStatus)}
         </Link>
-      }) |> React.array}
+      })
+      |> React.array}
     </div>
   </div>
 }
@@ -439,7 +441,9 @@ let completeSection = (
 let renderPendingStudents = (pendingUserIds, users) =>
   <div className="max-w-3xl mx-auto text-center mt-4">
     <div className="font-semibold text-md"> {t("pending_team_members_notice")->str} </div>
-    <div className="flex justify-center flex-wrap"> {pendingUserIds |> Js.Array.map(studentId => {
+    <div className="flex justify-center flex-wrap">
+      {pendingUserIds
+      |> Js.Array.map(studentId => {
         let user =
           users |> ArrayUtils.unsafeFind(
             u => u |> User.id == studentId,
@@ -452,7 +456,9 @@ let renderPendingStudents = (pendingUserIds, users) =>
           className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md flex-shrink-0 mt-2">
           {user |> User.avatar}
         </div>
-      }) |> React.array} </div>
+      })
+      |> React.array}
+    </div>
   </div>
 
 let handlePendingStudents = (targetStatus, targetDetails, users) =>
@@ -473,8 +479,8 @@ let performQuickNavigation = (send, _event) => {
     }
   }
 
-  // Clear loaded target details.
-  send(ClearTargetDetails)
+  // Clear loaded target details, and select the 'Learn' tab.
+  send(PerformQuickNavigation)
 }
 
 let navigationLink = (direction, url, send) => {
@@ -625,11 +631,7 @@ let make = (
             completionType,
           )}
         </div>
-        {switch state.tab {
-        | Learn => quickNavigationLinks(targetDetails, send)
-        | Discuss
-        | Complete(_) => React.null
-        }}
+        {quickNavigationLinks(targetDetails, send)}
       </div>
 
     | None =>

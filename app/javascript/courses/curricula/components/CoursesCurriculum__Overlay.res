@@ -37,7 +37,7 @@ let reducer = (state, action) =>
       ...state,
       targetDetails: Some(targetDetails),
     }
-  | PerformQuickNavigation => {...state, targetDetails: None, tab: Learn}
+  | PerformQuickNavigation => {targetDetails: None, tab: Learn}
   | AddSubmission(role) =>
     switch role {
     | Target.Student => state

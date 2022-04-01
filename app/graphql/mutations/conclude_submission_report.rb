@@ -4,9 +4,9 @@ module Mutations
     include ValidateSubmissionGradable
 
     argument :submission_id, ID, required: true
-    argument :description,
+    argument :test_report,
              String,
-             required: true,
+             required: false,
              validates: {
                length: {
                  maximum: 1000
@@ -32,7 +32,7 @@ module Mutations
         if report.present?
           report.update!(
             status: 'completed',
-            test_report: @params[:description],
+            test_report: @params[:test_report],
             conclusion: @params[:conclusion],
             started_at: report.started_at || time_now,
             completed_at: time_now
@@ -40,7 +40,7 @@ module Mutations
         else
           SubmissionReport.create!(
             status: 'completed',
-            test_report: @params[:description],
+            test_report: @params[:test_report],
             conclusion: @params[:conclusion],
             started_at: time_now,
             completed_at: time_now

@@ -6,10 +6,6 @@ every 1.day, at: ENV['SCHEDULE_CLEANUP'] do
   rake 'cleanup'
 end
 
-every 10.minutes do
-  rake 'periodic_tasks'
-end
-
 every 1.day, at: ENV['SCHEDULE_DAILY_DIGEST'] do
   rake 'daily_digest'
 end

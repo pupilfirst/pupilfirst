@@ -44,7 +44,7 @@ feature 'User signing in by supplying email address', js: true do
         visit new_user_session_path
 
         click_link 'Continue with email'
-        click_link 'Set a New Password'
+        click_link 'Reset Your Password'
         fill_in 'Email', with: user.email
         click_button 'Request password reset'
 
@@ -52,9 +52,14 @@ feature 'User signing in by supplying email address', js: true do
           "We've sent you a link to reset your password"
         )
 
+        open_email(user.email)
+        expect(current_email.body).to include(
+          'https://test.host/users/reset_password?token='
+        )
+
         click_link 'Sign In'
         click_link 'Continue with email'
-        click_link 'Set a New Password'
+        click_link 'Reset Your Password'
         fill_in 'Email', with: user.email
         click_button 'Request password reset'
 
@@ -132,7 +137,7 @@ feature 'User signing in by supplying email address', js: true do
       visit new_user_session_path
 
       click_link 'Continue with email'
-      click_link 'Set a New Password'
+      click_link 'Reset Your Password'
       fill_in 'Email', with: 'unregistered@example.org'
       click_button 'Request password reset'
 

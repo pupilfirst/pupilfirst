@@ -103,6 +103,10 @@ RSpec.configure do |config|
     Capybara.page.driver.browser.manage.window.maximize
   end
 
+  config.after(:each, js: true) do
+    expect(page).not_to have_missing_translations
+  end
+
   # Faker clear store for unique generator after run
   config.before(:each) do
     Faker::UniqueGenerator.clear

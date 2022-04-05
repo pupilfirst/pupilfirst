@@ -1,6 +1,6 @@
 let str = React.string
 
-let ts = I18n.t(~scope="shared.notifications")
+let ts = I18n.t(~scope="shared")
 let t = I18n.t(~scope="components.SchoolCommunities__Editor")
 
 open SchoolCommunities__IndexTypes
@@ -115,7 +115,7 @@ let handleQuery = (community, state, send, addCommunityCB, updateCommunitiesCB, 
         | None => send(FinishSaving)
         }
 
-        Notification.success(ts("success"), t("community_updated_notification"))
+        Notification.success(ts("notifications.success"), t("community_updated_notification"))
         Js.Promise.resolve()
       })
       |> ignore
@@ -141,7 +141,7 @@ let handleQuery = (community, state, send, addCommunityCB, updateCommunitiesCB, 
       |> Js.Promise.catch(error => {
         Js.log(error)
         Notification.error(
-          ts("unexpected_error"),
+          ts("notifications.unexpected_error"),
           t("notification_reload_post"),
         )
         Js.Promise.resolve()
@@ -149,7 +149,7 @@ let handleQuery = (community, state, send, addCommunityCB, updateCommunitiesCB, 
       |> ignore
     }
   } else {
-    Notification.error(ts("empty"), t("notification_answer_cant_blank"))
+    Notification.error(ts("notifications.empty"), t("notification_answer_cant_blank"))
   }
 }
 

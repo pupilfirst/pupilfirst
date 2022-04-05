@@ -316,7 +316,7 @@ let uploadFile = (
       "/school/targets/" ++ ((target |> Target.id) ++ "/content_block"),
       formData,
       json => {
-        Notification.success(ts("done_exclamation"), t("upload_success_notification"))
+        Notification.success(ts("notifications.done_exclamation"), t("upload_success_notification"))
         let contentBlock = json |> ContentBlock.decode
         addContentBlockCB(contentBlock)
         send(FinishSaving(isAboveContentBlock))

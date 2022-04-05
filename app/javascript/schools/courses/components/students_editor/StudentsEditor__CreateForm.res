@@ -47,7 +47,7 @@ let handleResponseCB = (submitCB, state, studentIds) => {
     )
 
     if studentsAdded == studentsRequested {
-      Notification.success(t("done_exclamation"), t("added_full_description"))
+      Notification.success(ts("notifications.done_exclamation"), t("added_full_description"))
     } else {
       let description = t(
         ~variables=[
@@ -264,7 +264,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
           className={"w-full btn btn-primary btn-large mt-3" ++ (
             formInvalid(state) ? " disabled" : ""
           )}>
-          {(state.saving ? t("saving") : t("save_list_button"))->str}
+          {(state.saving ? ts("saving") : t("save_list_button"))->str}
         </button>
       </div>
     </div>

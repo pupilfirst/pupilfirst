@@ -113,7 +113,7 @@ let uploadAvatar = (send, formData) => {
     "/user/upload_avatar",
     formData,
     json => {
-      Notification.success(ts("done_exclamation"), t("avatar_uploaded_notification"))
+      Notification.success(ts("notifications.done_exclamation"), t("avatar_uploaded_notification"))
       let avatarUrl = json |> field("avatarUrl", string)
       send(UpdateAvatarUrl(Some(avatarUrl)))
     },

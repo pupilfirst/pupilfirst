@@ -71,7 +71,7 @@ let handleUpdateAgreement = (
   |> Js.Promise.then_(result =>
     switch result["updateSchoolString"]["errors"] {
     | [] =>
-      Notification.success(ts("done_exclamation"), kindToString(kind) ++ " " ++ t("updated_notification") )
+      Notification.success(ts("notifications.done_exclamation"), kindToString(kind) ++ " " ++ t("updated_notification") )
       switch kind {
       | PrivacyPolicy => updatePrivacyPolicyCB(state.agreement)
       | TermsAndConditions => updateTermsAndConditionsCB(state.agreement)

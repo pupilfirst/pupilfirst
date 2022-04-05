@@ -37,7 +37,7 @@ let createSchoolAdminQuery = (email, name, setSaving, updateCB) => {
           ~avatarUrl=schoolAdmin["avatarUrl"],
         ),
       )
-      Notification.success(ts("success"), t("admin_created_notification"))
+      Notification.success(ts("notifications.success"), t("admin_created_notification"))
     | None => setSaving(_ => false)
     }
     Js.Promise.resolve()
@@ -55,7 +55,7 @@ let updateSchoolAdminQuery = (admin, name, setSaving, updateCB) => {
     response["updateSchoolAdmin"]["success"]
       ? {
           updateCB(admin |> SchoolAdmin.updateName(name))
-          Notification.success(ts("success"), t("admin_updated_notification"))
+          Notification.success(ts("notifications.success"), t("admin_updated_notification"))
         }
       : setSaving(_ => false)
     Js.Promise.resolve()

@@ -1,6 +1,7 @@
 let str = React.string
 
 let tr = I18n.t(~scope="components.CommunitiesNewTopic__Root")
+let ts = I18n.t(~scope="shared")
 
 open CommunitiesNewTopic__Types
 
@@ -171,7 +172,7 @@ let handleCreateTopic = (state, send, communityId, target, topicCategory, event)
     })
     |> Js.Promise.catch(error => {
       Js.log(error)
-      Notification.error(tr("unexpected_error"), tr("please_reload"))
+      Notification.error(ts("notifications.unexpected_error"), tr("please_reload"))
       Js.Promise.resolve()
     })
     |> ignore

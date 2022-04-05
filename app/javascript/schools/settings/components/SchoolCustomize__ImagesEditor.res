@@ -39,7 +39,7 @@ let handleUpdateImages = (send, updateImagesCB, event) => {
       "/school/images",
       DomUtils.FormData.create(element),
       json => {
-        Notification.success(ts("done_exclamation"), t("updated_notification"))
+        Notification.success(ts("notifications.done_exclamation"), t("updated_notification"))
         updateImagesCB(json)
         send(DoneUpdating)
       },

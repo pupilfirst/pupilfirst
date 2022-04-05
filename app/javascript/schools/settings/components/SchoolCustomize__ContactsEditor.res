@@ -52,7 +52,7 @@ let handleUpdateContactDetails = (state, send, updateAddressCB, updateEmailAddre
   |> Js.Promise.then_(result =>
     switch (result["updateAddress"]["errors"], result["updateEmailAddress"]["errors"]) {
     | ([], []) =>
-      Notification.success(ts("done_exclamation"), t("contact_updated_notification"))
+      Notification.success(ts("notifications.done_exclamation"), t("contact_updated_notification"))
       updateAddressCB(state.address)
       updateEmailAddressCB(state.emailAddress)
       send(DoneUpdating)

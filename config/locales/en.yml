@@ -56,7 +56,6 @@ en:
       title: Title
       title_placeholder: Title for the new topic
       topic_body_present: Topic title and body must be present.
-      unexpected_error: Unexpected Error!
     CommunitiesShow__Root:
       all_categories_button: All Categories
       button_load_more: Load More...
@@ -1921,16 +1920,6 @@ en:
     coaches: Coaches
     dashboard: Dashboard
     home: Home
-  notifications:
-    done: Done!
-    done_dot: Done
-    error: Error
-    notice: Notice
-    please_reload: Please reload the page and try again.
-    something_wrong: Something went wrong!
-    success: Success
-    try_again: Please try again
-    unexpected_error: Unexpected Error!
   offline:
     heading: You are offline!
     message_html: It seems there is a problem with your connection.<br/>Please check your network status.
@@ -2046,7 +2035,6 @@ en:
     dashboard: Dashboard
     delete: Delete
     deleting: Deleting
-    done_exclamation: Done!
     draft: Draft
     edit: Edit
     email: Email
@@ -2102,6 +2090,18 @@ en:
     version: Version
     versions: Versions
     view: View
+    notifications:
+      done: Done!
+      done_dot: Done
+      done_exclamation: Done!
+      error: Error
+      notice: Notice
+      empty: Empty
+      please_reload: Please reload the page and try again.
+      something_wrong: Something went wrong!
+      success: Success
+      try_again: Please try again
+      unexpected_error: Unexpected Error!
   users:
     delete_account:
       edit_user: Edit User

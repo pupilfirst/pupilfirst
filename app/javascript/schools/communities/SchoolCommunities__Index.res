@@ -198,7 +198,7 @@ let make = (~communities, ~courses) => {
                   <span
                     className="ml-2 py-5 px-5 font-semibold text-gray-700 hover:text-primary-500">
                     <i className="fas fa-edit text-normal" />
-                    <span className="ml-1"> {I18n.t("shared.edit") |> str} </span>
+                    <span className="ml-1"> {ts("edit") |> str} </span>
                   </span>
                 </div>
               </a>

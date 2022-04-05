@@ -201,7 +201,7 @@ let handleAddLink = (state, send, addLinkCB, event) => {
       | #SchoolLink(schoolLink) =>
         schoolLink["id"] |> displayNewLink(state, addLinkCB)
         send(ClearForm)
-        Notification.success( ts("done_exclamation"), t("done_notification_body"))
+        Notification.success( ts("notifications.done_exclamation"), t("done_notification_body"))
         Js.Promise.resolve()
       | #Errors(errors) => Js.Promise.reject(CreateLinkErrorHandler.Errors(errors))
       }

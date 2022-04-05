@@ -64,7 +64,7 @@ let makeDeleteCategoryQuery = (categoryId, deleteCategoryCB, send) => {
   |> Js.Promise.catch(error => {
     Js.log(error)
     send(FailDeleting)
-    Notification.error(ts("unexpected_error") , ts("please_reload"))
+    Notification.error(ts("notifications.unexpected_error") , ts("notifications.please_reload"))
     Js.Promise.resolve()
   })
   |> ignore
@@ -111,7 +111,7 @@ let updateCategory = (category, newName, updateCategoryCB, send, event) => {
   |> Js.Promise.catch(error => {
     send(FailSaving)
     Js.log(error)
-    Notification.error(ts("unexpected_error") , ts("please_reload"))
+    Notification.error(ts("notifications.unexpected_error") , ts("notifications.please_reload"))
     Js.Promise.resolve()
   })
   |> ignore
@@ -140,7 +140,7 @@ let createCategory = (communityId, name, createCategoryCB, send, event) => {
   |> Js.Promise.catch(error => {
     Js.log(error)
     send(FailSaving)
-    Notification.error(ts("unexpected_error") , ts("please_reload"))
+    Notification.error(ts("notifications.unexpected_error") , ts("notifications.please_reload"))
     Js.Promise.resolve()
   })
   |> ignore

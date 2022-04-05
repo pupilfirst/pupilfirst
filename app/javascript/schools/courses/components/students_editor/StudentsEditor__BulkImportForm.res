@@ -100,7 +100,7 @@ let submitForm = (courseId, send, closeDrawerCB, event) => {
     json => {
       Json.Decode.field("success", Json.Decode.bool, json)
         ? {
-            Notification.success(t("done_exclamation"), t("success_notification"))
+            Notification.success(ts("notifications.done_exclamation"), t("success_notification"))
             closeDrawerCB()
           }
         : ()

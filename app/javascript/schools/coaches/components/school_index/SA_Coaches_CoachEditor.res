@@ -176,8 +176,8 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
       ~affiliation=Some(state.affiliation),
     )
     switch coach {
-    | Some(_) => Notification.success(ts("success"), t("coach_updated"))
-    | None => Notification.success(ts("success"), t("coach_created"))
+    | Some(_) => Notification.success(ts("notifications.success"), t("coach_updated"))
+    | None => Notification.success(ts("notifications.success"), t("coach_created"))
     }
     updateCoachCB(newCoach)
     closeFormCB()
@@ -197,7 +197,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
     switch error {
     | Some(err) =>
       send(UpdateSaving)
-      Notification.error(ts("something_wrong"), err)
+      Notification.error(ts("notifications.something_wrong"), err)
     | None => addCoach(json)
     }
   }
@@ -231,7 +231,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
     |> catch(error => {
       let title = PromiseUtils.errorToExn(error)->apiErrorTitle
       send(UpdateSaving)
-      Notification.error(title, ts("try_again"))
+      Notification.error(title, ts("notifications.try_again"))
       Js.Promise.resolve()
     })
     |> ignore

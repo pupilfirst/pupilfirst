@@ -10,6 +10,11 @@ feature 'Certificate verification', js: true do
     Time.use_zone(user&.time_zone || 'UTC') { example.run }
   end
 
+  scenario 'page should not have missing translations' do
+    visit issued_certificate_path(serial_number: issued_certificate.serial_number)
+    expect(page).not_to have_missing_translations
+  end
+
   scenario 'user verifies certificate' do
     sign_in_user user, referrer: issued_certificate_path(serial_number: issued_certificate.serial_number)
 

@@ -14,6 +14,7 @@ require 'rspec/rails'
 
 require 'webmock/rspec'
 require 'support/flipper'
+require 'support/missing_translations'
 
 # Disable all net connections except ones to localhost, and to locations the webdrivers gem downloads its binaries from.
 WebMock.disable_net_connect!(

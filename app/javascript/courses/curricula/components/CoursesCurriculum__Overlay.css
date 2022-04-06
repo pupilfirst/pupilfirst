@@ -174,7 +174,7 @@
   footer,
   header,
   #course-header-root,
-  div[aria-label="Curriculum"] #target__navigation {
+  div[aria-label="Curriculum"] #target-navigation {
     display: none;
   }
 }

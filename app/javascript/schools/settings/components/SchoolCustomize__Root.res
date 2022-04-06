@@ -141,7 +141,7 @@ let editIcon = (additionalClasses, clickHandler, title) =>
     title
     onClick=clickHandler>
     <i className="fas fa-pencil-alt text-xs" />
-    <span className="text-xs font-semibold ml-2"> {I18n.t("shared.edit") |> str} </span>
+    <span className="text-xs font-semibold ml-2"> {ts("edit") |> str} </span>
   </div>
 
 let showEditor = (editor, send, event) => {
@@ -346,7 +346,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             <div
               className="p-3 bg-gray-300 border border-dashed border-gray-500 rounded h-full mr-2">
               <div className="flex items-center">
-                <span className="uppercase font-bold text-sm"> {ts("sitemap") |> str} </span>
+                <span className="uppercase font-bold text-sm"> {t("sitemap") |> str} </span>
                 {editIcon(
                   "ml-3",
                   showEditor(LinksEditor(SchoolCustomize__LinksEditor.FooterLink), send),
@@ -364,7 +364,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                 <div
                   className="p-3 bg-gray-300 border border-dashed border-gray-500 rounded h-full mr-2">
                   <div className="flex items-center">
-                    <span className="uppercase font-bold text-sm"> {ts("social") |> str} </span>
+                    <span className="uppercase font-bold text-sm"> {t("social") |> str} </span>
                     {editIcon(
                       "ml-3",
                       showEditor(LinksEditor(SchoolCustomize__LinksEditor.SocialLink), send),
@@ -382,7 +382,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                 <div
                   className="p-3 bg-gray-300 border border-dashed border-gray-500 rounded h-full">
                   <div className="flex items-center">
-                    <span className="uppercase font-bold text-sm"> {ts("contact") |> str} </span>
+                    <span className="uppercase font-bold text-sm"> {t("contact") |> str} </span>
                     {editIcon("ml-3", showEditor(ContactsEditor, send), t("edit_contact_details"))}
                   </div>
                   {address(state.customizations |> Customizations.address)}
@@ -432,7 +432,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           </div>
         </div>
       </div>
-      <div className="mt-6 font-bold"> {ts("icon") |> str} </div>
+      <div className="mt-6 font-bold"> {t("icon") |> str} </div>
       <div className="mt-3 w-2/4 max-w-sm">
         <div className="bg-gray-400 rounded-t-lg h-12 flex items-end">
           <div className="w-full flex items-center pr-3">

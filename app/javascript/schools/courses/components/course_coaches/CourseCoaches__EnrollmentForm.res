@@ -86,7 +86,7 @@ let handleResponseCB = (updateCoachesCB, json) => {
     field("course_coaches", array(CourseCoach.decode))
   }
   updateCoachesCB(courseCoaches)
-  Notification.success(ts("success"), tr("notification_coach_enrollment"))
+  Notification.success(ts("notifications.success"), tr("notification_coach_enrollment"))
 }
 
 let updateCourseCoaches = (state, send, courseId, updateCoachesCB) => {

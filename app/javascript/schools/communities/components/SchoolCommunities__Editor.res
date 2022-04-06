@@ -324,8 +324,8 @@ let make = (
     </DisablingCover>
     <div className="mt-3 mb-3 text-xs">
       <span className="leading-normal">
-        <strong> {I18n.t("shared.note") |> str} </strong>
-        {I18n.t("communities.note") |> str}
+        <strong> {ts("note") |> str} </strong>
+        {t("note") |> str}
       </span>
     </div>
   </div>

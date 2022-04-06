@@ -11,7 +11,7 @@ module Mutations
       mutator = CreateTargetMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, I18n.t('shared.done_exclamation'), I18n.t('mutations.create_target.success_notification'))
+        mutator.notify(:success, I18n.t('shared.notifications.done_exclamation'), I18n.t('mutations.create_target.success_notification'))
         { target: mutator.create_target, errors: nil }
       else
         mutator.notify_errors

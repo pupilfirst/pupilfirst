@@ -1140,6 +1140,7 @@ en:
       search_course_empty: No courses selected
       topic_categories: Topic Categories
       update_community: Update Community
+      note: " Coaches in your school have access to all communities."
     SchoolCommunities__Index:
       add_new_community: Add New Community
       close_category_editor: Close Category Editor
@@ -1234,6 +1235,10 @@ en:
       privacy_policy: Privacy Policy
       social_links_q: Add social media links?
       terms_and_conditions: Terms & Conditions
+      sitemap: Sitemap
+      social: Social
+      contact: Contact
+      icon: Icon
     School__SearchableTagList:
       add_new_tag: Add new tag
       pick_tag: Pick tag
@@ -2035,7 +2040,6 @@ en:
     dashboard: Dashboard
     delete: Delete
     deleting: Deleting
-    done_exclamation: Done!
     draft: Draft
     edit: Edit
     email: Email
@@ -2063,6 +2067,7 @@ en:
     notifications:
       done: Done!
       done_dot: Done
+      done_exclamation: Done!
       empty: Empty
       error: Error
       notice: Notice

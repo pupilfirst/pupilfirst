@@ -81,7 +81,7 @@ let make = (~coaches, ~authenticityToken) => {
                   <span
                     className="flex items-center flex-shrink-0 ml-2 py-4 px-4 font-semibold text-gray-700 hover:text-primary-500 text-sm">
                     <i className="fas fa-edit text-normal" />
-                    <span className="ml-1"> {ts("shared.edit") |> str} </span>
+                    <span className="ml-1"> {ts("edit") |> str} </span>
                   </span>
                 </div>
               </div>

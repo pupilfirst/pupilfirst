@@ -6,7 +6,7 @@ let ts = I18n.t(~scope="shared")
 let apiErrorTitle = x =>
   switch x {
   | UnexpectedResponse(code) => string_of_int(code)
-  | _ => ""
+  | _ => t("error_notification_title")
   }
 
 let acceptOrRejectResponse = response =>

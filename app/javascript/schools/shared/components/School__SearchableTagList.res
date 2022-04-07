@@ -1,6 +1,5 @@
 let str = React.string
 
-
 let t = I18n.t(~scope="components.School__SearchableTagList")
 
 type state = string
@@ -29,7 +28,7 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
     let initial = if allowNewTags && !Array.mem(searchString->String.lowercase_ascii, allTags) {
       [
         <span
-          title={ t("add_new_tag") ++ " " ++ searchString}
+          title={t("add_new_tag") ++ " " ++ searchString}
           key=searchString
           onMouseDown={_e => handleClick(searchString, send, addTagCB)}
           className="inline-flex cursor-pointer items-center bg-primary-100 border border-dashed border-primary-500 text-primary-700 hover:shadow-md hover:text-primary-800 rounded-lg px-2 py-px mt-1 mr-2 text-xs overflow-hidden">
@@ -48,7 +47,7 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
       |> ArrayUtils.copyAndSort(String.compare)
       |> Js.Array.map(tag =>
         <span
-          title={ t("pick_tag") ++ " " ++ tag}
+          title={t("pick_tag") ++ " " ++ tag}
           key=tag
           className="inline-flex cursor-pointer items-center bg-gray-200 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden"
           onMouseDown={_e => handleClick(tag, send, addTagCB)}>

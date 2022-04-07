@@ -5,6 +5,7 @@ en:
     welcome: Welcome to the
   components:
     Api:
+      error_notification_title: An unexpected error occurred
       error_notification_body: Our team has been notified of this error. Please reload the page and try again.
     AppRouter__Dropdown:
       more: More
@@ -1133,6 +1134,7 @@ en:
       edit_categories: Edit Categories
       give_access: "Give access to students from:"
       no_topic: There are currently no topic categories in this community!
+      note: " Coaches in your school have access to all communities."
       notification_answer_cant_blank: Answer cant be blank
       notification_reload_post: Please reload the page before trying to post again.
       search_course: Search for a course
@@ -1140,7 +1142,6 @@ en:
       search_course_empty: No courses selected
       topic_categories: Topic Categories
       update_community: Update Community
-      note: " Coaches in your school have access to all communities."
     SchoolCommunities__Index:
       add_new_community: Add New Community
       close_category_editor: Close Category Editor
@@ -1218,6 +1219,7 @@ en:
       add_contact_email_q: Add a contact email?
       add_more_details: Add more details about the school.
       change_cover: Change cover
+      contact: Contact
       customize_link_footer: You can customize links in the footer.
       customize_link_header: You can customize links on the header.
       edit_contact_details: Edit contact details
@@ -1232,13 +1234,12 @@ en:
       edit_terms: Edit Terms & Conditions
       featured_courses: Featured Courses
       hello_welcome: Hello, welcome to
+      icon: Icon
       privacy_policy: Privacy Policy
-      social_links_q: Add social media links?
-      terms_and_conditions: Terms & Conditions
       sitemap: Sitemap
       social: Social
-      contact: Contact
-      icon: Icon
+      social_links_q: Add social media links?
+      terms_and_conditions: Terms & Conditions
     School__SearchableTagList:
       add_new_tag: Add new tag
       pick_tag: Pick tag

@@ -27,11 +27,12 @@ class UserSessionMailerPreview < ActionMailer::Preview
     school = School.first
     user = school.users.first
     user.regenerate_reset_password_token
-    url_options = {
+    reset_password_url = Rails.application.routes.url_helpers.reset_password_url(
       token: user.original_reset_password_token,
       host: school.present? ? school.domains.primary.fqdn : 'www.pupilfirst.localhost',
       protocol: 'https'
-    }
-    UserSessionMailer.send_reset_password_token(user, school, url_options)
+    )
+
+    UserSessionMailer.send_reset_password_token(user, school, reset_password_url)
   end
 end

@@ -214,12 +214,13 @@ let make = (
       </div>
       <div
         className="flex items-center text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-2 focus:outline-none focus:bg-white focus:border-primary-300">
-        <input
+        <textarea
+          maxLength=500
+          rows=2
           name={"checklist-item-" ++ ((index + 1 |> string_of_int) ++ "-title")}
-          className="flex-grow appearance-none bg-transparent border-none leading-relaxed focus:outline-none"
           placeholder=t("describe_step")
+          className="flex-grow appearance-none bg-transparent border-none leading-relaxed focus:outline-none resize-y rounded-md"
           onChange={updateTitle(checklistItem, updateChecklistItemCB)}
-          type_="text"
           value={checklistItem |> ChecklistItem.title}
         />
       </div>

@@ -97,7 +97,7 @@ This tab contains other basic details and configuration for the target, such as 
 To decide how a student can complete a target, this interface asks you a few questions:
 
 **Are there any prerequisite targets?** \
-You can select other targets from the same level as pre-requisite targets. This will _lock_ the target until the student has completed the prerequisites.
+You can select other targets from the same level as prerequisite targets. This will _lock_ the target until the student has completed the prerequisites.
 
 **Will a coach review submissions on this target?** \
 If you would like a coach to review a submission from a student - pick _Yes_ here. If you'd like the student to complete the target on their own, pick _No_.

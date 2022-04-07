@@ -501,7 +501,7 @@ en:
       access_locked: Your access to this course has ended.
       course_locked: This course has ended.
       level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
-      prerequisites_incomplete: This target has pre-requisites that are incomplete.
+      prerequisites_incomplete: This target has prerequisites that are incomplete.
       status:
         completed: Completed
         locked: Locked
@@ -565,10 +565,14 @@ en:
       checklist_item_title:
         placeholder: Add a result for this check
         remove_button_title: Remove checklist result
+        move_up_button_title: Move Up checklist result
+        move_down_button_title: Move Down checklist result
       checklist_title:
         error_message: A checklist item cannot be blank
         placeholder: Add an item to the checklist
         remove_button_title: Remove checklist item
+        move_up_button_title: Move Up checklist item
+        move_down_button_title: Move Down checklist item
       create_review_checklist: Create Review Checklist
       disabled: Disabled
       edit_review_checklist: Edit Review Checklist
@@ -1618,11 +1622,11 @@ en:
       apply_now: Apply Now
       email_label: Email
       email_placeholder: john@example.com
-      heading: Enroll to %{course_name} course
+      heading: Enroll in %{course_name} course
       name_label: Name
       name_placeholder: John Doe
-      page_title: Enroll to %{course_name}
-    enroll: Enroll to
+      page_title: Enroll in %{course_name}
+    enroll: Enroll in
     leaderboard:
       active_students: Active Students
       change: Change
@@ -1634,6 +1638,7 @@ en:
       rank: Rank
       score: Score
       student: Student
+      page_title: Enroll in %{course_name}
     show:
       continue_course: Continue Course
       preview_course: Preview Course
@@ -2015,7 +2020,7 @@ en:
       oauth: Sign in with Google, Facebook, or Github
       password: Password
       password_free: Password-free sign in
-      password_new: Set a New Password
+      password_new: Reset Your Password
       shared: Are you using a shared device?
       with_password: Sign in with password.
   shared:

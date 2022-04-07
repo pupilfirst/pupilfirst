@@ -32,7 +32,6 @@ class UserSessionMailerPreview < ActionMailer::Preview
       host: school.present? ? school.domains.primary.fqdn : 'www.pupilfirst.localhost',
       protocol: 'https'
     )
-
     UserSessionMailer.send_reset_password_token(user, school, reset_password_url)
   end
 end

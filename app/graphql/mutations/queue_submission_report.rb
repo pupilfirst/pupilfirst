@@ -4,7 +4,7 @@ module Mutations
     include ValidateSubmissionGradable
 
     argument :submission_id, ID, required: true
-    argument :description,
+    argument :test_report,
              String,
              required: false,
              validates: {
@@ -30,7 +30,7 @@ module Mutations
           .where(submission_id: @params[:submission_id])
           .first_or_create!(
             status: 'queued',
-            test_report: @params[:description],
+            test_report: @params[:test_report],
             started_at: nil,
             completed_at: nil,
             conclusion: nil

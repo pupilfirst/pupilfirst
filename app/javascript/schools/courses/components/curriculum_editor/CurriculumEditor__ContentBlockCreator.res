@@ -325,7 +325,7 @@ let uploadFile = (
   | #VideoEmbed =>
     let size = file["size"]
 
-    let title = String.trim(state.videoTitle) == "" ? None : Some(state.videoTitle)
+    let title = String.trim(state.videoTitle) == "" ? Some(target.title) : Some(state.videoTitle)
 
     let description =
       String.trim(state.videoDescription) == "" ? None : Some(state.videoDescription)

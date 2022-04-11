@@ -63,5 +63,10 @@ feature 'Inactive students index', js: true do
     click_link 'Search'
     expect(page).to have_text(exited_team.founders.first.name)
     expect(page).to have_text(exited_team.name)
+
+    fill_in 'search', with: exited_team.founders.first.email
+    click_link 'Search'
+    expect(page).to have_text(exited_team.founders.first.name)
+    expect(page).to have_text(exited_team.name)
   end
 end

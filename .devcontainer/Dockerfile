@@ -29,4 +29,5 @@ RUN mkdir -p /tmp/rails
 COPY Gemfile Gemfile.lock .tool-versions package.json yarn.lock /tmp/rails/
 RUN cd /tmp/rails \
     && bundle install \
+    && yarn install \
     && rm -rf /tmp/rails

@@ -13,7 +13,7 @@ type status =
 type editor =
   | AssignReviewer
   | GradesEditor
-  | ChecklistEditor
+  | ChecklistEditor(SubmissionDetails.t)
   | ReviewedSubmissionEditor(array<Grade.t>)
 
 type nextSubmission = DataUnloaded | DataLoading | DataEmpty
@@ -47,7 +47,7 @@ type action =
   | UpdateChecklist(array<SubmissionChecklistItem.t>)
   | UpdateNote(string)
   | ShowGradesEditor
-  | ShowChecklistEditor
+  | ShowChecklistEditor(SubmissionDetails.t)
   | ShowAdditionalFeedbackEditor
   | FeedbackAfterSave
   | UpdateEditor(editor)
@@ -72,7 +72,10 @@ let reducer = (state, action) =>
   | UpdateChecklist(checklist) => {...state, checklist: checklist}
   | UpdateNote(note) => {...state, note: Some(note)}
   | ShowGradesEditor => {...state, editor: GradesEditor}
-  | ShowChecklistEditor => {...state, editor: ChecklistEditor}
+  | ShowChecklistEditor(submissionDetails) => {
+      ...state,
+      editor: ChecklistEditor(submissionDetails),
+    }
   | ChangeReportVisibility => {...state, showReport: !state.showReport}
   | ShowAdditionalFeedbackEditor => {...state, additonalFeedbackEditorVisible: true}
   | FinishGrading(grades) => {
@@ -896,7 +899,13 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
   | _someGrades => React.null
   }
 
-let feedbackGenerator = (submissionDetails, reviewChecklist, state, send) => {
+let feedbackGenerator = (
+  submissionDetails,
+  reviewChecklist,
+  state,
+  ~showAddFeedback=true,
+  send,
+) => {
   <div className="px-4 md:px-6 pt-4 space-y-8">
     <div>
       <div className="flex h-7 items-end">
@@ -911,7 +920,7 @@ let feedbackGenerator = (submissionDetails, reviewChecklist, state, send) => {
         <button
           disabled={SubmissionDetails.preview(submissionDetails)}
           className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
-          onClick={_ => send(ShowChecklistEditor)}>
+          onClick={_ => send(ShowChecklistEditor(submissionDetails))}>
           <span>
             {(
               ArrayUtils.isEmpty(reviewChecklist)
@@ -923,32 +932,36 @@ let feedbackGenerator = (submissionDetails, reviewChecklist, state, send) => {
         </button>
       </div>
     </div>
-    <div className="course-review__feedback-editor text-sm">
-      <h5 className="font-semibold text-sm flex items-center">
-        <PfIcon
-          className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
-        />
-        <span className="ml-2 md:ml-3 tracking-wide"> {t("add_your_feedback")->str} </span>
-      </h5>
-      {ReactUtils.nullUnless(
-        <div
-          className="inline-flex items-center bg-green-200 mt-2 md:ml-8 text-green-800 px-2 py-1 rounded-md">
-          <Icon className="if i-check-circle-solid text-green-700 text-base" />
-          <span className="pl-2 text-sm font-semibold"> {t("feedback_generated_text")->str} </span>
-        </div>,
-        state.feedbackGenerated,
-      )}
-      <div className="mt-2 md:ml-8" ariaLabel="feedback">
-        <MarkdownEditor
-          onChange={feedback => send(UpdateFeedback(feedback))}
-          value=state.newFeedback
-          profile=Markdown.Permissive
-          maxLength=10000
-          disabled={SubmissionDetails.preview(submissionDetails)}
-          placeholder={t("feedback_placeholder")}
-        />
-      </div>
-    </div>
+    {showAddFeedback
+      ? <div className="course-review__feedback-editor text-sm">
+          <h5 className="font-semibold text-sm flex items-center">
+            <PfIcon
+              className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
+            />
+            <span className="ml-2 md:ml-3 tracking-wide"> {t("add_your_feedback")->str} </span>
+          </h5>
+          {ReactUtils.nullUnless(
+            <div
+              className="inline-flex items-center bg-green-200 mt-2 md:ml-8 text-green-800 px-2 py-1 rounded-md">
+              <Icon className="if i-check-circle-solid text-green-700 text-base" />
+              <span className="pl-2 text-sm font-semibold">
+                {t("feedback_generated_text")->str}
+              </span>
+            </div>,
+            state.feedbackGenerated,
+          )}
+          <div className="mt-2 md:ml-8" ariaLabel="feedback">
+            <MarkdownEditor
+              onChange={feedback => send(UpdateFeedback(feedback))}
+              value=state.newFeedback
+              profile=Markdown.Permissive
+              maxLength=10000
+              disabled={SubmissionDetails.preview(submissionDetails)}
+              placeholder={t("feedback_placeholder")}
+            />
+          </div>
+        </div>
+      : React.null}
   </div>
 }
 
@@ -1077,7 +1090,6 @@ let reportConclusionTimeString = report => {
   }
 }
 
-
 let loadSubmissionReport = (report, updateSubmissionReportCB) => {
   let id = SubmissionReport.id(report)
   SubmissionReportQuery.make(~id, ())
@@ -1119,7 +1131,7 @@ let make = (
   ~updateReviewerCB,
   ~submissionReport,
   ~updateSubmissionReportCB,
-  ~submissionReportPollTime
+  ~submissionReportPollTime,
 ) => {
   let (state, send) = React.useReducer(
     reducer,
@@ -1160,7 +1172,14 @@ let make = (
   let pending = ArrayUtils.isEmpty(OverlaySubmission.grades(overlaySubmission))
 
   let findEditor = (pending, overlaySubmission) => {
-    pending ? GradesEditor : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
+    pending
+      ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
+          UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
+        ) ||
+        SubmissionDetails.preview(submissionDetails)
+          ? GradesEditor
+          : AssignReviewer
+      : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
   }
 
   React.useEffect0(() => {
@@ -1188,19 +1207,20 @@ let make = (
         {ReactUtils.nullIf(
           <div
             className="flex space-x-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-200">
-            {Js.Array2.mapi(SubmissionDetails.allSubmissions(submissionDetails),
-              (submission, index) =>
-                <CoursesReview__SubmissionInfoCard
-                  key={SubmissionMeta.id(submission)}
-                  selected={SubmissionMeta.id(submission) == submissionId}
-                  submission
-                  submissionNumber={Array.length(
-                    SubmissionDetails.allSubmissions(submissionDetails),
-                  ) -
-                  index}
-                  filterString={url.search}
-                />,
-
+            {Js.Array2.mapi(SubmissionDetails.allSubmissions(submissionDetails), (
+              submission,
+              index,
+            ) =>
+              <CoursesReview__SubmissionInfoCard
+                key={SubmissionMeta.id(submission)}
+                selected={SubmissionMeta.id(submission) == submissionId}
+                submission
+                submissionNumber={Array.length(
+                  SubmissionDetails.allSubmissions(submissionDetails),
+                ) -
+                index}
+                filterString={url.search}
+              />
             )->React.array}
           </div>,
           Js.Array.length(SubmissionDetails.allSubmissions(submissionDetails)) == 1,
@@ -1251,33 +1271,37 @@ let make = (
                       </p>
                     </div>
                   </div>
-                  { SubmissionReport.testReport(report) -> Belt.Option.isSome ?
-                  <button
-                    onClick={_ => send(ChangeReportVisibility)}
-                    className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
-                    <span className="hidden md:block pr-3">
-                      {str(
-                        state.showReport
-                          ? t("hide_test_report_button")
-                          : t("show_test_report_button"),
-                      )}
-                    </span>
-                    {
-                      let toggleTestReportIcon = state.showReport
-                        ? "i-arrows-collapse-light"
-                        : "i-arrows-expand-light"
-                      <span className="inline-block w-5 h-5">
-                        <Icon className={"if text-xl " ++ toggleTestReportIcon} />
-                      </span>
-                    }
-                  </button> : React.null}
+                  {SubmissionReport.testReport(report)->Belt.Option.isSome
+                    ? <button
+                        onClick={_ => send(ChangeReportVisibility)}
+                        className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+                        <span className="hidden md:block pr-3">
+                          {str(
+                            state.showReport
+                              ? t("hide_test_report_button")
+                              : t("show_test_report_button"),
+                          )}
+                        </span>
+                        {
+                          let toggleTestReportIcon = state.showReport
+                            ? "i-arrows-collapse-light"
+                            : "i-arrows-expand-light"
+                          <span className="inline-block w-5 h-5">
+                            <Icon className={"if text-xl " ++ toggleTestReportIcon} />
+                          </span>
+                        }
+                      </button>
+                    : React.null}
                 </div>
                 {state.showReport
                   ? <div>
                       <p className="text-sm font-semibold mt-4"> {str("Test Report")} </p>
                       <div className="bg-white p-3 rounded-md border mt-2">
                         <MarkdownBlock
-                          profile=Markdown.AreaOfText markdown={SubmissionReport.testReport(report) -> Belt.Option.mapWithDefault("", s => s)}
+                          profile=Markdown.AreaOfText
+                          markdown={SubmissionReport.testReport(
+                            report,
+                          )->Belt.Option.mapWithDefault("", s => s)}
                         />
                       </div>
                     </div>
@@ -1291,6 +1315,13 @@ let make = (
           {switch state.editor {
           | AssignReviewer =>
             <div>
+              {feedbackGenerator(
+                submissionDetails,
+                reviewChecklist,
+                state,
+                ~showAddFeedback=false,
+                send,
+              )}
               <div
                 className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
                 <p className="font-semibold"> {str("Review")} </p>
@@ -1392,7 +1423,7 @@ let make = (
               )}
             </div>
 
-          | ChecklistEditor =>
+          | ChecklistEditor(submissionDetails) =>
             <div>
               <CoursesReview__Checklist
                 reviewChecklist
@@ -1402,6 +1433,7 @@ let make = (
                 updateReviewChecklistCB={updateReviewChecklist(updateReviewChecklistCB, send)}
                 targetId
                 cancelCB={_ => send(UpdateEditor(findEditor(pending, overlaySubmission)))}
+                submissionDetails
               />
             </div>
 

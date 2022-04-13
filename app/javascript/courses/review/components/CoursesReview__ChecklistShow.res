@@ -31,21 +31,26 @@ let generateFeedback = (checklist, selection, feedback, setSelecton, updateFeedb
   let newFeedback =
     feedback ++
     ((String.trim(feedback) == "" ? "" : "\n\n") ++
-    checklist->Js.Array2.mapi((reviewChecklistItem, i) => {
+    checklist
+    ->Js.Array2.mapi((reviewChecklistItem, i) => {
       let resultIndexList =
         selection
         ->Js.Array2.filter(selectionItem => selectionItem.itemIndex == i)
         ->Js.Array2.map(item => item.resultIndex)
 
-      ReviewChecklistItem.result(reviewChecklistItem)->Js.Array2.mapi((resultItem, index) =>
+      ReviewChecklistItem.result(reviewChecklistItem)
+      ->Js.Array2.mapi((resultItem, index) =>
         resultIndexList->Js.Array2.some(i => i == index)
           ? switch ReviewChecklistResult.feedback(resultItem) {
             | Some(feedback) => [feedback]
             | None => []
             }
           : []
-      )->ArrayUtils.flattenV2
-    })->ArrayUtils.flattenV2->Js.Array2.joinWith("\n\n"))
+      )
+      ->ArrayUtils.flattenV2
+    })
+    ->ArrayUtils.flattenV2
+    ->Js.Array2.joinWith("\n\n"))
   setSelecton(_ => [])
   updateFeedbackCB(newFeedback)
 }
@@ -86,7 +91,14 @@ let updateChecklistResultFeedback = (
 }
 
 @react.component
-let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~cancelCB) => {
+let make = (
+  ~reviewChecklist,
+  ~feedback,
+  ~updateFeedbackCB,
+  ~showEditorCB,
+  ~cancelCB,
+  ~submissionDetails,
+) => {
   let (checklist, setChecklist) = React.useState(() => reviewChecklist)
   let (selection, setSelecton) = React.useState(() => [])
   let (id, _setId) = React.useState(() => DateTime.randomId() ++ "-review-checkbox-")
@@ -179,13 +191,17 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
     </div>
     <div
       className="flex justify-end bg-white md:bg-gray-100 border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
-      <button
-        className="btn btn-primary w-full md:w-auto"
-        disabled={selection->ArrayUtils.isEmpty}
-        onClick={_ =>
-          generateFeedback(checklist, selection, feedback, setSelecton, updateFeedbackCB)}>
-        {t("generate_feedback_button")->str}
-      </button>
+      {switch SubmissionDetails.reviewer(submissionDetails) {
+      | Some(_) =>
+        <button
+          className="btn btn-primary w-full md:w-auto"
+          disabled={selection->ArrayUtils.isEmpty}
+          onClick={_ =>
+            generateFeedback(checklist, selection, feedback, setSelecton, updateFeedbackCB)}>
+          {t("generate_feedback_button")->str}
+        </button>
+      | None => React.null
+      }}
     </div>
   </div>
 }

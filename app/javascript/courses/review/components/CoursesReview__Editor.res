@@ -1077,7 +1077,6 @@ let reportConclusionTimeString = report => {
   }
 }
 
-
 let loadSubmissionReport = (report, updateSubmissionReportCB) => {
   let id = SubmissionReport.id(report)
   SubmissionReportQuery.make(~id, ())
@@ -1119,7 +1118,7 @@ let make = (
   ~updateReviewerCB,
   ~submissionReport,
   ~updateSubmissionReportCB,
-  ~submissionReportPollTime
+  ~submissionReportPollTime,
 ) => {
   let (state, send) = React.useReducer(
     reducer,
@@ -1188,19 +1187,20 @@ let make = (
         {ReactUtils.nullIf(
           <div
             className="flex space-x-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-200">
-            {Js.Array2.mapi(SubmissionDetails.allSubmissions(submissionDetails),
-              (submission, index) =>
-                <CoursesReview__SubmissionInfoCard
-                  key={SubmissionMeta.id(submission)}
-                  selected={SubmissionMeta.id(submission) == submissionId}
-                  submission
-                  submissionNumber={Array.length(
-                    SubmissionDetails.allSubmissions(submissionDetails),
-                  ) -
-                  index}
-                  filterString={url.search}
-                />,
-
+            {Js.Array2.mapi(SubmissionDetails.allSubmissions(submissionDetails), (
+              submission,
+              index,
+            ) =>
+              <CoursesReview__SubmissionInfoCard
+                key={SubmissionMeta.id(submission)}
+                selected={SubmissionMeta.id(submission) == submissionId}
+                submission
+                submissionNumber={Array.length(
+                  SubmissionDetails.allSubmissions(submissionDetails),
+                ) -
+                index}
+                filterString={url.search}
+              />
             )->React.array}
           </div>,
           Js.Array.length(SubmissionDetails.allSubmissions(submissionDetails)) == 1,
@@ -1251,33 +1251,37 @@ let make = (
                       </p>
                     </div>
                   </div>
-                  { SubmissionReport.testReport(report) -> Belt.Option.isSome ?
-                  <button
-                    onClick={_ => send(ChangeReportVisibility)}
-                    className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
-                    <span className="hidden md:block pr-3">
-                      {str(
-                        state.showReport
-                          ? t("hide_test_report_button")
-                          : t("show_test_report_button"),
-                      )}
-                    </span>
-                    {
-                      let toggleTestReportIcon = state.showReport
-                        ? "i-arrows-collapse-light"
-                        : "i-arrows-expand-light"
-                      <span className="inline-block w-5 h-5">
-                        <Icon className={"if text-xl " ++ toggleTestReportIcon} />
-                      </span>
-                    }
-                  </button> : React.null}
+                  {SubmissionReport.testReport(report)->Belt.Option.isSome
+                    ? <button
+                        onClick={_ => send(ChangeReportVisibility)}
+                        className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+                        <span className="hidden md:block pr-3">
+                          {str(
+                            state.showReport
+                              ? t("hide_test_report_button")
+                              : t("show_test_report_button"),
+                          )}
+                        </span>
+                        {
+                          let toggleTestReportIcon = state.showReport
+                            ? "i-arrows-collapse-light"
+                            : "i-arrows-expand-light"
+                          <span className="inline-block w-5 h-5">
+                            <Icon className={"if text-xl " ++ toggleTestReportIcon} />
+                          </span>
+                        }
+                      </button>
+                    : React.null}
                 </div>
                 {state.showReport
                   ? <div>
                       <p className="text-sm font-semibold mt-4"> {str("Test Report")} </p>
                       <div className="bg-white p-3 rounded-md border mt-2">
                         <MarkdownBlock
-                          profile=Markdown.AreaOfText markdown={SubmissionReport.testReport(report) -> Belt.Option.mapWithDefault("", s => s)}
+                          profile=Markdown.Permissive
+                          markdown={SubmissionReport.testReport(
+                            report,
+                          )->Belt.Option.mapWithDefault("", s => s)}
                         />
                       </div>
                     </div>

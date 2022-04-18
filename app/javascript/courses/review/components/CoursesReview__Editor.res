@@ -1273,19 +1273,18 @@ let make = (
                       </button>
                     : React.null}
                 </div>
-                {state.showReport
-                  ? <div>
-                      <p className="text-sm font-semibold mt-4"> {str("Test Report")} </p>
-                      <div className="bg-white p-3 rounded-md border mt-2">
-                        <MarkdownBlock
-                          profile=Markdown.Permissive
-                          markdown={SubmissionReport.testReport(
-                            report,
-                          )->Belt.Option.mapWithDefault("", s => s)}
-                        />
+                {switch SubmissionReport.testReport(report) {
+                | Some(testReport) =>
+                  state.showReport
+                    ? <div>
+                        <p className="text-sm font-semibold mt-4"> {str(t("test_report"))} </p>
+                        <div className="bg-white p-3 rounded-md border mt-2">
+                          <MarkdownBlock profile=Markdown.Permissive markdown={testReport} />
+                        </div>
                       </div>
-                    </div>
-                  : React.null}
+                    : React.null
+                | None => React.null
+                }}
               </div>
             </div>
           | None => React.null

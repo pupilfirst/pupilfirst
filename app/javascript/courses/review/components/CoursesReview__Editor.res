@@ -1251,27 +1251,28 @@ let make = (
                       </p>
                     </div>
                   </div>
-                  {SubmissionReport.testReport(report)->Belt.Option.isSome
-                    ? <button
-                        onClick={_ => send(ChangeReportVisibility)}
-                        className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
-                        <span className="hidden md:block pr-3">
-                          {str(
-                            state.showReport
-                              ? t("hide_test_report_button")
-                              : t("show_test_report_button"),
-                          )}
+                  {ReactUtils.nullIf(
+                    <button
+                      onClick={_ => send(ChangeReportVisibility)}
+                      className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+                      <span className="hidden md:block pr-3">
+                        {str(
+                          state.showReport
+                            ? t("hide_test_report_button")
+                            : t("show_test_report_button"),
+                        )}
+                      </span>
+                      {
+                        let toggleTestReportIcon = state.showReport
+                          ? "i-arrows-collapse-light"
+                          : "i-arrows-expand-light"
+                        <span className="inline-block w-5 h-5">
+                          <Icon className={"if text-xl " ++ toggleTestReportIcon} />
                         </span>
-                        {
-                          let toggleTestReportIcon = state.showReport
-                            ? "i-arrows-collapse-light"
-                            : "i-arrows-expand-light"
-                          <span className="inline-block w-5 h-5">
-                            <Icon className={"if text-xl " ++ toggleTestReportIcon} />
-                          </span>
-                        }
-                      </button>
-                    : React.null}
+                      }
+                    </button>,
+                    SubmissionReport.testReport(report)->Belt.Option.isNone,
+                  )}
                 </div>
                 {switch SubmissionReport.testReport(report) {
                 | Some(testReport) =>

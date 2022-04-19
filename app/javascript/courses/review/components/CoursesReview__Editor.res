@@ -1274,8 +1274,8 @@ let make = (
                     SubmissionReport.testReport(report)->Belt.Option.isNone,
                   )}
                 </div>
-                {switch SubmissionReport.testReport(report) {
-                | Some(testReport) =>
+                {switch (state.showReport, SubmissionReport.testReport(report)) {
+                | (true, Some(testReport)) =>
                   state.showReport
                     ? <div>
                         <p className="text-sm font-semibold mt-4"> {str(t("test_report"))} </p>
@@ -1284,7 +1284,7 @@ let make = (
                         </div>
                       </div>
                     : React.null
-                | None => React.null
+                | (true, None) | (false, Some(_) | None) => React.null
                 }}
               </div>
             </div>

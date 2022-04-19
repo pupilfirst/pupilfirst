@@ -77,7 +77,7 @@ feature 'Target Content Editor', js: true do
 
     expect(page).not_to have_selector("button[title='Save Changes']")
     expect(cb.reload.content).to eq(
-      'markdown' => first_sentence + second_sentence,
+      'markdown' => first_sentence + second_sentence
     )
   end
 
@@ -220,8 +220,9 @@ feature 'Target Content Editor', js: true do
       :get,
       'https://www.youtube.com/oembed?format=json&url=https://www.youtube.com/watch?v=3QDYbQIS8cQ'
     ).to_return(
-      body: '{"version":"1.0","provider_name":"YouTube","html":"\u003ciframe width=\"480\" height=\"270\" src=\"https:\/\/www.youtube.com\/embed\/3QDYbQIS8cQ?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen\u003e\u003c\/iframe\u003e","thumbnail_url":"https:\/\/i.ytimg.com\/vi\/3QDYbQIS8cQ\/hqdefault.jpg","provider_url":"https:\/\/www.youtube.com\/","thumbnail_height":360,"type":"video","height":270,"thumbnail_width":480,"author_url":"https:\/\/www.youtube.com\/channel\/UCvsvW3QH1700y-j2VfEnq-A","author_name":"Just smile","title":"Funny And Cute Cats - Funniest Cats Compilation 2019","width":480}',
-      status: 200,
+      body:
+        '{"version":"1.0","provider_name":"YouTube","html":"\u003ciframe width=\"480\" height=\"270\" src=\"https:\/\/www.youtube.com\/embed\/3QDYbQIS8cQ?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen\u003e\u003c\/iframe\u003e","thumbnail_url":"https:\/\/i.ytimg.com\/vi\/3QDYbQIS8cQ\/hqdefault.jpg","provider_url":"https:\/\/www.youtube.com\/","thumbnail_height":360,"type":"video","height":270,"thumbnail_width":480,"author_url":"https:\/\/www.youtube.com\/channel\/UCvsvW3QH1700y-j2VfEnq-A","author_name":"Just smile","title":"Funny And Cute Cats - Funniest Cats Compilation 2019","width":480}',
+      status: 200
     )
 
     # Try adding a new file block.
@@ -280,7 +281,7 @@ feature 'Target Content Editor', js: true do
         'Authorization' => "Bearer #{vimeo_access_token}",
         'Content-Type' => 'application/json',
         'Host' => 'api.vimeo.com',
-        'User-Agent' => 'Ruby',
+        'User-Agent' => 'Ruby'
       }
     end
 
@@ -289,8 +290,8 @@ feature 'Target Content Editor', js: true do
         'uri' => '/videos/123456789',
         'link' => 'https://vimeo.com/123456789',
         'upload' => {
-          'upload_link' => 'https://vimeo.com/123456789/upload',
-        },
+          'upload_link' => 'https://vimeo.com/123456789/upload'
+        }
       }
     end
 
@@ -299,21 +300,22 @@ feature 'Target Content Editor', js: true do
     before do
       school.configuration['vimeo'] = {
         access_token: vimeo_access_token,
-        account_type: account_type,
+        account_type: account_type
       }
       school.save!
 
       stub_request(:post, 'https://api.vimeo.com/me/videos/')
         .with(
-          body: "{\"upload\":{\"approach\":\"tus\",\"size\":588563},\"privacy\":{\"embed\":\"whitelist\",\"view\":\"#{account_type == 'basic' ? 'anybody' : 'disable'}\"},\"embed\":{\"buttons\":{\"like\":false,\"watchlater\":false,\"share\":false},\"logos\":{\"vimeo\":false},\"title\":{\"name\":\"show\",\"owner\":\"hide\",\"portrait\":\"hide\"}},\"name\":\"#{title}\",\"description\":\"#{description}\"}",
-          headers: request_headers,
+          body:
+            "{\"upload\":{\"approach\":\"tus\",\"size\":588563},\"privacy\":{\"embed\":\"whitelist\",\"view\":\"#{account_type == 'basic' ? 'anybody' : 'disable'}\"},\"embed\":{\"buttons\":{\"like\":false,\"watchlater\":false,\"share\":false},\"logos\":{\"vimeo\":false},\"title\":{\"name\":\"show\",\"owner\":\"hide\",\"portrait\":\"hide\"}},\"name\":\"#{title}\",\"description\":\"#{description}\"}",
+          headers: request_headers
         )
         .to_return(status: 200, body: request_body.to_json, headers: {})
 
       stub_request(
-        :put,
-        'https://api.vimeo.com/videos/123456789/privacy/domains/test.host/'
-      )
+          :put,
+          'https://api.vimeo.com/videos/123456789/privacy/domains/test.host/'
+        )
         .with(body: '{}', headers: request_headers)
         .to_return(status: 200, body: '', headers: {})
       stub_request(
@@ -380,8 +382,9 @@ feature 'Target Content Editor', js: true do
       before do
         stub_request(:post, 'https://api.vimeo.com/me/videos/')
           .with(
-            body: "{\"upload\":{\"approach\":\"tus\",\"size\":588563},\"privacy\":{\"embed\":\"whitelist\",\"view\":\"#{account_type == 'basic' ? 'anybody' : 'disable'}\"},\"embed\":{\"buttons\":{\"like\":false,\"watchlater\":false,\"share\":false},\"logos\":{\"vimeo\":false},\"title\":{\"name\":\"show\",\"owner\":\"hide\",\"portrait\":\"hide\"}},\"name\":\"#{target.title}\",\"description\":\"#{description}\"}",
-            headers: request_headers,
+            body:
+              "{\"upload\":{\"approach\":\"tus\",\"size\":588563},\"privacy\":{\"embed\":\"whitelist\",\"view\":\"#{account_type == 'basic' ? 'anybody' : 'disable'}\"},\"embed\":{\"buttons\":{\"like\":false,\"watchlater\":false,\"share\":false},\"logos\":{\"vimeo\":false},\"title\":{\"name\":\"show\",\"owner\":\"hide\",\"portrait\":\"hide\"}},\"name\":\"#{target.title}\",\"description\":\"#{description}\"}",
+            headers: request_headers
           )
           .to_return(status: 200, body: request_body.to_json, headers: {})
       end
@@ -413,7 +416,7 @@ feature 'Target Content Editor', js: true do
         :content_block,
         :image,
         target_version: target_version,
-        sort_index: 0,
+        sort_index: 0
       )
     end
     let!(:second_block) do
@@ -421,7 +424,7 @@ feature 'Target Content Editor', js: true do
         :content_block,
         :markdown,
         target_version: target_version,
-        sort_index: 1,
+        sort_index: 1
       )
     end
     let!(:third_block) do
@@ -429,7 +432,7 @@ feature 'Target Content Editor', js: true do
         :content_block,
         :file,
         target_version: target_version,
-        sort_index: 2,
+        sort_index: 2
       )
     end
     let!(:fourth_block) do
@@ -437,7 +440,7 @@ feature 'Target Content Editor', js: true do
         :content_block,
         :file,
         target_version: target_version,
-        sort_index: 3,
+        sort_index: 3
       )
     end
 
@@ -553,7 +556,7 @@ feature 'Target Content Editor', js: true do
 
     expect(page).to have_selector('textarea[aria-label="Markdown editor"]')
     expect(ContentBlock.order(created_at: :desc).first.content).to eq(
-      'markdown' => '',
+      'markdown' => ''
     )
 
     window = window_opened_by { click_link 'View as Student' }

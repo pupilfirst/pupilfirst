@@ -378,7 +378,7 @@ feature 'Target Content Editor', js: true do
       expect(page).to have_text('https://vimeo.com/123456789')
     end
 
-    context 'when video uploaded without a title' do
+    context 'when uploaded video has no title' do
       before do
         stub_request(:post, 'https://api.vimeo.com/me/videos/')
           .with(

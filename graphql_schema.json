@@ -5014,7 +5014,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "description",
+                  "name": "testReport",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -5141,16 +5141,12 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "description",
+                  "name": "testReport",
                   "description": null,
                   "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
                   },
                   "defaultValue": null,
                   "isDeprecated": false,
@@ -7674,7 +7670,7 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "description",
+                  "name": "testReport",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",

@@ -616,7 +616,7 @@ let make = (
   ~onChange,
   ~profile,
   ~textareaId=?,
-  ~maxLength=1000,
+  ~maxLength=?,
   ~defaultMode=Windowed(#Editor),
   ~placeholder=?,
   ~tabIndex=?,
@@ -718,7 +718,7 @@ let make = (
             ?placeholder
             ariaLabel="Markdown editor"
             rows=4
-            maxLength
+            ?maxLength
             onSelect={onSelect(send)}
             onChange={onChangeWrapper(onChange)}
             id=state.id

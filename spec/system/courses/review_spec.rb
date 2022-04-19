@@ -151,15 +151,13 @@ feature "Coach's review interface" do
       )
     end
 
-    let(:feedback) do
+    let!(:feedback) do
       create(
         :startup_feedback,
-        startup_id: team_l2.id,
-        faculty_id: course_coach.id
+        faculty_id: course_coach.id,
+        timeline_event: submission_l2_t3
       )
     end
-
-    before { submission_l2_t3.startup_feedback << feedback }
 
     scenario 'course coach visits review dashboard', js: true do
       sign_in_user course_coach.user, referrer: review_course_path(course)
@@ -650,8 +648,22 @@ feature "Coach's review interface" do
           passed_at: n.days.ago,
           created_at: n.days.ago
         )
+      end
 
-        # Pending submissions
+      (1..10).each do |n|
+        # Pending submissions with level2 target
+        create(
+          :timeline_event,
+          :with_owners,
+          latest: true,
+          target: target_l2,
+          owners: [student_l1],
+          created_at: n.days.ago
+        )
+      end
+
+      (21..40).each do |n|
+        # Pending submissions with level1 target
         create(
           :timeline_event,
           :with_owners,
@@ -670,12 +682,15 @@ feature "Coach's review interface" do
       # Ensure coach is on the review dashboard.
       click_link 'Pending'
       expect(page).to have_content('30')
-
       expect(page).to have_text(target_l1.title, count: 20)
 
       click_button 'Load More Submissions...'
 
-      expect(page).to have_text(target_l1.title, count: 30)
+      # Ensure new submissions loaded below old subimission.
+      expect(find('#submissions a:nth-child(21)')).to have_content(
+        target_l2.title
+      )
+      expect(page).to have_text(target_l2.title, count: 10)
       expect(page).not_to have_button('Load More Submissions...')
 
       click_link 'Reviewed'

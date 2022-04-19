@@ -1,5 +1,4 @@
 <%
-  startup = @startup_feedback.startup
   timeline_event = @startup_feedback.timeline_event
   target = @startup_feedback.timeline_event&.target
   target_url = target_url(target) if target.present?
@@ -7,7 +6,7 @@
 %>
 
 <% content_for :salutation do %>
-  Hello <%= @startup_feedback.startup.name  %>,
+  Hello <%= @students %>,
 <% end %>
 
 <% content_for :body do %>

@@ -235,6 +235,39 @@ feature 'Submission review overlay', js: true do
       )
     end
 
+    scenario 'coaches can view and edit the review checklist without assigning themselves' do
+      sign_in_user coach.user,
+                   referrer: review_timeline_event_path(submission_pending)
+
+      expect(target.review_checklist).to eq([])
+
+      expect(page).to have_content('Create Review Checklist')
+      click_button 'Create Review Checklist'
+
+      expect(page).to have_content('Save Checklist')
+      click_button 'Save Checklist'
+
+      within("div[data-checklist-item='0']") do
+        expect(page).to have_content('Default checklist')
+
+        within("div[data-result-item='0']") do
+          expect(page).to have_content('Yes')
+        end
+
+        within("div[data-result-item='1']") do
+          expect(page).to have_content('No')
+          find('label', text: 'No').click
+        end
+      end
+
+      expect(page).not_to have_button('Generate Feedback')
+      expect(page).to have_content('Edit Checklist')
+      expect(page).to have_content('Back to Review')
+      click_button 'Back to Review'
+      expect(page).to have_content('Start Review')
+      expect(page).to have_content('Show Review Checklist')
+    end
+
     scenario 'coach generates feedback from review checklist' do
       sign_in_user coach.user,
                    referrer: review_timeline_event_path(submission_pending)

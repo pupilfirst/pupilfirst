@@ -1,4 +1,4 @@
-ruby '2.7.5'
+ruby '2.7.6'
 
 source 'https://rubygems.org'
 
@@ -19,7 +19,6 @@ gem 'jbuilder', '~> 2.11' # Standard part of Rails, but unused, since we don't h
 gem 'pg', '~> 1.2' # PostgreSQL support.
 gem 'pg_search', '~> 2.3' # builds ActiveRecord named scopes that take advantage of PostgreSQL's full text search.
 gem 'activerecord-precounter', '~> 0.4' # N+1 count query optimizer for ActiveRecord.
-gem 'slim', '~> 4.1' # Slim templating.
 gem 'turbolinks', '~> 5.2' # Quicker page navigation. https://github.com/turbolinks/turbolinks
 gem 'rest-client', '~> 2.1' # Used to contact Fast Alerts' API.
 gem 'valid_url', '= 0.0.4', github: 'ralovets/valid_url' # URL validation: https://github.com/ralovets/valid_url

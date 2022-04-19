@@ -20,7 +20,6 @@ class Startup < ApplicationRecord
   belongs_to :level
 
   has_many :founders, dependent: :restrict_with_error
-  has_many :startup_feedback, dependent: :destroy
   has_many :faculty_startup_enrollments, dependent: :destroy
   has_many :faculty, through: :faculty_startup_enrollments
   has_one :course, through: :level

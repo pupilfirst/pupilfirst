@@ -463,7 +463,7 @@ en:
           error: Automated tests could not complete due to errors
       show_test_report_button: Show Test Report
       hide_test_report_button: Hide Test Report
-      report_description: Test Report
+      test_report: Test Report
       status:
         completed: Completed
         pending_review: Pending Review

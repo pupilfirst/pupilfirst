@@ -1,5 +1,5 @@
 # This is a multi-stage build with two stages, where the first is used to precompile assets.
-FROM ruby:2.7.5
+FROM ruby:2.7.6
 WORKDIR /build
 
 # Begin by installing gems.
@@ -44,7 +44,7 @@ RUN rm bin/yarn
 RUN bundle exec rails assets:precompile
 
 # With precompilation done, we can move onto the final stage.
-FROM ruby:2.7.5-slim-bullseye
+FROM ruby:2.7.6-slim-bullseye
 
 # We'll need a few packages in this image.
 RUN apt-get update && apt-get install -y \

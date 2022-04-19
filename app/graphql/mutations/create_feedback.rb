@@ -25,7 +25,6 @@ module Mutations
         startup_feedback =
           StartupFeedback.create!(
             feedback: @params[:feedback],
-            startup: submission.startup,
             faculty: coach,
             timeline_event: submission
           )

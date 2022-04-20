@@ -1,4 +1,4 @@
-%bs.raw(`require("./DisablingCover.css")`)
+%raw(`require("./DisablingCover.css")`)
 
 @react.component
 let make = (~disabled, ~message="Loading...", ~containerClasses="", ~children) =>

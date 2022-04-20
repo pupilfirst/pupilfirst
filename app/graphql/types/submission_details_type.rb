@@ -19,5 +19,6 @@ module Types
     field :preview, Boolean, null: false
     field :reviewer_details, Types::ReviewerDetailType, null: true
     field :submission_report_poll_time, Integer, null: false
+    field :submission_review_allowed_time, Integer, null: false
   end
 end

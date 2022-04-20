@@ -12,7 +12,7 @@ feature 'Target Overlay', js: true do
       { 'grade' => 1, 'label' => 'Bad' },
       { 'grade' => 2, 'label' => 'Good' },
       { 'grade' => 3, 'label' => 'Great' },
-      { 'grade' => 4, 'label' => 'Wow' },
+      { 'grade' => 4, 'label' => 'Wow' }
     ]
   end
   let!(:criterion_1) do
@@ -100,7 +100,7 @@ feature 'Target Overlay', js: true do
     # Set a custom size for the embedded image.
     image_block =
       target_l1.current_content_blocks.find_by(
-        block_type: ContentBlock::BLOCK_TYPE_IMAGE,
+        block_type: ContentBlock::BLOCK_TYPE_IMAGE
       )
     image_block['content']['width'] = 'sm'
     image_block.save!
@@ -195,8 +195,8 @@ feature 'Target Overlay', js: true do
           'kind' => Target::CHECKLIST_KIND_LONG_TEXT,
           'title' => 'Write something about your submission',
           'result' => long_answer,
-          'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER,
-        },
+          'status' => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+        }
       ]
     )
 
@@ -226,7 +226,7 @@ feature 'Target Overlay', js: true do
     # ...and the complete section should be accessible again.
     expect(page).to have_selector(
       '.course-overlay__body-tab-item',
-      text: 'Complete',
+      text: 'Complete'
     )
   end
 
@@ -269,13 +269,13 @@ feature 'Target Overlay', js: true do
       # The button should be replaced with a 'completed' marker.
       expect(page).to have_selector(
         '.complete-button-selected',
-        text: 'Completed',
+        text: 'Completed'
       )
 
       # The target should be marked as passed.
       expect(page).to have_selector(
         '.course-overlay__header-title-card',
-        text: 'Completed',
+        text: 'Completed'
       )
 
       # Since this is a team target, other students shouldn't be listed as pending.
@@ -336,7 +336,7 @@ feature 'Target Overlay', js: true do
         # Target should now be complete for the user.
         expect(page).to have_selector(
           '.course-overlay__header-title-card',
-          text: 'Completed',
+          text: 'Completed'
         )
 
         # Target should have been marked as passed in the database.
@@ -381,7 +381,7 @@ feature 'Target Overlay', js: true do
       expect(page).to have_content('Your responses have been saved')
       expect(page).to have_selector(
         '.course-overlay__body-tab-item',
-        text: 'Quiz Result',
+        text: 'Quiz Result'
       )
 
       within('.course-overlay__header-title-card') do
@@ -456,22 +456,13 @@ feature 'Target Overlay', js: true do
       create :timeline_event_file, timeline_event: submission_2
     end
     let!(:feedback_1) do
-      create :startup_feedback,
-             timeline_event: submission_1,
-             startup: team,
-             faculty: coach_1
+      create :startup_feedback, timeline_event: submission_1, faculty: coach_1
     end
     let!(:feedback_2) do
-      create :startup_feedback,
-             timeline_event: submission_1,
-             startup: team,
-             faculty: coach_2
+      create :startup_feedback, timeline_event: submission_1, faculty: coach_2
     end
     let!(:feedback_3) do
-      create :startup_feedback,
-             timeline_event: submission_2,
-             startup: team,
-             faculty: coach_3
+      create :startup_feedback, timeline_event: submission_2, faculty: coach_3
     end
 
     before do
@@ -484,13 +475,13 @@ feature 'Target Overlay', js: true do
         :timeline_event_grade,
         timeline_event: submission_1,
         evaluation_criterion: criterion_1,
-        grade: 2,
+        grade: 2
       )
       create(
         :timeline_event_grade,
         timeline_event: submission_1,
         evaluation_criterion: criterion_2,
-        grade: 1,
+        grade: 1
       ) # Failed criterion
 
       # Second submissions should have passed on both criteria.
@@ -498,13 +489,13 @@ feature 'Target Overlay', js: true do
         :timeline_event_grade,
         timeline_event: submission_2,
         evaluation_criterion: criterion_1,
-        grade: 4,
+        grade: 4
       )
       create(
         :timeline_event_grade,
         timeline_event: submission_2,
         evaluation_criterion: criterion_2,
-        grade: 2,
+        grade: 2
       )
     end
 
@@ -518,7 +509,7 @@ feature 'Target Overlay', js: true do
 
       expect(page).to have_selector(
         '.curriculum__submission-feedback-container',
-        count: 2,
+        count: 2
       )
       within(
         "div[aria-label='Details about your submission on #{submission_1.created_at.strftime('%B %-d, %Y')}']"
@@ -581,7 +572,7 @@ feature 'Target Overlay', js: true do
 
         expect(page).not_to have_selector(
           'button',
-          text: 'Add another submission',
+          text: 'Add another submission'
         )
       end
 
@@ -679,7 +670,7 @@ feature 'Target Overlay', js: true do
       expect(page).to have_content('This course has ended')
       expect(page).not_to have_selector(
         '.course-overlay__body-tab-item',
-        text: 'Complete',
+        text: 'Complete'
       )
       expect(page).not_to have_selector('a', text: 'Submit work for review')
     end
@@ -725,7 +716,7 @@ feature 'Target Overlay', js: true do
       expect(page).to have_content('Your access to this course has ended.')
       expect(page).not_to have_selector(
         '.course-overlay__body-tab-item',
-        text: 'Complete',
+        text: 'Complete'
       )
       expect(page).not_to have_selector('a', text: 'Submit work for review')
     end
@@ -780,7 +771,7 @@ feature 'Target Overlay', js: true do
       expect(page).to have_link('Create a topic', count: 2)
       expect(page).to have_text(
         "There's been no recent discussion about this target.",
-        count: 1,
+        count: 1
       )
 
       # Check the presence of existing topics
@@ -862,18 +853,18 @@ feature 'Target Overlay', js: true do
           {
             title: 'Describe your submission',
             kind: Target::CHECKLIST_KIND_LONG_TEXT,
-            optional: false,
+            optional: false
           },
           {
             title: 'Attach link',
             kind: Target::CHECKLIST_KIND_LINK,
-            optional: true,
+            optional: true
           },
           {
             title: 'Attach files',
             kind: Target::CHECKLIST_KIND_FILES,
-            optional: true,
-          },
+            optional: true
+          }
         ]
       end
       let!(:target_l1) do
@@ -895,10 +886,11 @@ feature 'Target Overlay', js: true do
         )
         expect(page).to have_link(
           'Edit Content',
-          href: content_school_course_target_path(
-            course_id: target_l1.course.id,
-            id: target_l1.id,
-          ),
+          href:
+            content_school_course_target_path(
+              course_id: target_l1.course.id,
+              id: target_l1.id
+            )
         )
 
         # This target should have a 'Complete' section.

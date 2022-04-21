@@ -120,7 +120,7 @@ feature "Student's view of Course Curriculum", js: true do
       latest: true,
       owners: team.founders,
       target: completed_target_l1,
-      passed_at: 1.day.ago
+      passed_at: 1.day.ago,
     )
   end
   let!(:submission_completed_target_l2) do
@@ -130,7 +130,7 @@ feature "Student's view of Course Curriculum", js: true do
       latest: true,
       owners: team.founders,
       target: completed_target_l2,
-      passed_at: 1.day.ago
+      passed_at: 1.day.ago,
     )
   end
   let!(:submission_completed_target_l3) do
@@ -140,7 +140,7 @@ feature "Student's view of Course Curriculum", js: true do
       latest: true,
       owners: team.founders,
       target: completed_target_l3,
-      passed_at: 1.day.ago
+      passed_at: 1.day.ago,
     )
   end
   let!(:submission_completed_target_l4) do
@@ -152,7 +152,7 @@ feature "Student's view of Course Curriculum", js: true do
       target: completed_target_l4,
       passed_at: 1.day.ago,
       evaluator: faculty,
-      evaluated_at: 1.day.ago
+      evaluated_at: 1.day.ago,
     )
   end
   let!(:submission_submitted_target) do
@@ -161,7 +161,7 @@ feature "Student's view of Course Curriculum", js: true do
       :with_owners,
       latest: true,
       owners: team.founders,
-      target: submitted_target
+      target: submitted_target,
     )
   end
   let!(:submission_failed_target) do
@@ -172,7 +172,7 @@ feature "Student's view of Course Curriculum", js: true do
       owners: team.founders,
       target: failed_target,
       evaluator: faculty,
-      evaluated_at: Time.zone.now
+      evaluated_at: Time.zone.now,
     )
   end
 
@@ -182,13 +182,13 @@ feature "Student's view of Course Curriculum", js: true do
       :timeline_event_grade,
       timeline_event: submission_completed_target_l4,
       evaluation_criterion: evaluation_criterion,
-      grade: 2
+      grade: 2,
     )
     create(
       :timeline_event_grade,
       timeline_event: submission_failed_target,
       evaluation_criterion: evaluation_criterion,
-      grade: 1
+      grade: 1,
     )
   end
 
@@ -271,7 +271,7 @@ feature "Student's view of Course Curriculum", js: true do
     expect(page).to have_selector(
       '.curriculum__target-group',
       text: 'MILESTONE TARGETS',
-      count: 1
+      count: 1,
     )
 
     # Open the level selector dropdown.
@@ -307,14 +307,14 @@ feature "Student's view of Course Curriculum", js: true do
     # There should be two locked targets in L5 right now.
     expect(page).to have_selector(
       '.curriculum__target-status--locked',
-      count: 2
+      count: 2,
     )
 
     # Non-reviewed targets that have prerequisites must be locked.
     click_link l5_non_reviewed_target_with_prerequisite.title
 
     expect(page).to have_text(
-      'This target has pre-requisites that are incomplete.'
+      'This target has prerequisites that are incomplete.'
     )
     expect(page).to have_link(l5_non_reviewed_target.title)
 
@@ -332,13 +332,13 @@ feature "Student's view of Course Curriculum", js: true do
     # Completing the prerequisite should unlock the previously locked non-reviewed target.
     expect(page).to have_selector(
       '.curriculum__target-status--locked',
-      count: 1
+      count: 1,
     )
 
     click_link l5_non_reviewed_target_with_prerequisite.title
 
     expect(page).not_to have_text(
-      'This target has pre-requisites that are incomplete.'
+      'This target has prerequisites that are incomplete.'
     )
     expect(page).to have_button 'Mark As Complete'
 
@@ -505,7 +505,7 @@ feature "Student's view of Course Curriculum", js: true do
       # An admin should be shown links to edit the level and its targets.
       expect(page).to have_link(
         'Edit Level',
-        href: curriculum_school_course_path(id: course.id, level: 1)
+        href: curriculum_school_course_path(id: course.id, level: 1),
       )
       expect(page).to have_selector(
         "a[href='#{content_school_course_target_path(course_id: course.id, id: completed_target_l1.id)}']"

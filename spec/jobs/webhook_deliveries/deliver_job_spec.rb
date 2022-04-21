@@ -7,6 +7,7 @@ describe WebhookDeliveries::DeliverJob do
   let(:event_type) { WebhookDelivery.events[:submission_created] }
   let(:submission) { create :timeline_event }
   let!(:webhook_endpoint) { create :webhook_endpoint, course: course }
+  let(:actor) { create :user }
 
   let(:payload) do
     {
@@ -32,9 +33,9 @@ describe WebhookDeliveries::DeliverJob do
         )
         .to_return(headers: response_headers, body: response_body, status: :ok)
 
-      expect { subject.perform_now(event_type, course, submission) }.to change {
-        WebhookDelivery.count
-      }.by(1)
+      expect {
+        subject.perform_now(event_type, course, actor, submission)
+      }.to change { WebhookDelivery.count }.by(1)
 
       last_delivery = WebhookDelivery.last
       expect(last_delivery.webhook_url).to eq(webhook_endpoint.webhook_url)
@@ -50,9 +51,9 @@ describe WebhookDeliveries::DeliverJob do
         .with(body: payload)
         .to_timeout
 
-      expect { subject.perform_now(event_type, course, submission) }.to change {
-        WebhookDelivery.count
-      }.by(1)
+      expect {
+        subject.perform_now(event_type, course, actor, submission)
+      }.to change { WebhookDelivery.count }.by(1)
 
       last_delivery = WebhookDelivery.last
       expect(last_delivery.error_class).to eq('Net::OpenTimeout')
@@ -67,7 +68,7 @@ describe WebhookDeliveries::DeliverJob do
 
       it 'will not deliver the event' do
         expect {
-          subject.perform_now(event_type, course, submission)
+          subject.perform_now(event_type, course, actor, submission)
         }.to raise_exception(
           "#{event_type} was not one of the requested events in WebhookEndpoint##{webhook_endpoint.id}"
         )
@@ -79,7 +80,7 @@ describe WebhookDeliveries::DeliverJob do
 
       it 'will not attempt delivery' do
         expect {
-          subject.perform_now(event_type, course, submission)
+          subject.perform_now(event_type, course, actor, submission)
         }.not_to raise_exception
 
         expect(WebhookDelivery.count).to eq(0)

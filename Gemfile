@@ -1,9 +1,9 @@
-ruby '2.7.5'
+ruby '2.7.6'
 
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.1.4.1'
+gem 'rails', '~> 6.1.5'
 
 gem 'dotenv-rails', '~> 2.7.6', groups: %i[development test]
 
@@ -19,12 +19,9 @@ gem 'jbuilder', '~> 2.11' # Standard part of Rails, but unused, since we don't h
 gem 'pg', '~> 1.2' # PostgreSQL support.
 gem 'pg_search', '~> 2.3' # builds ActiveRecord named scopes that take advantage of PostgreSQL's full text search.
 gem 'activerecord-precounter', '~> 0.4' # N+1 count query optimizer for ActiveRecord.
-gem 'sass-rails', '>= 6'
-gem 'slim', '~> 4.1' # Slim templating.
 gem 'turbolinks', '~> 5.2' # Quicker page navigation. https://github.com/turbolinks/turbolinks
 gem 'rest-client', '~> 2.1' # Used to contact Fast Alerts' API.
 gem 'valid_url', '= 0.0.4', github: 'ralovets/valid_url' # URL validation: https://github.com/ralovets/valid_url
-gem 'roadie-rails', '~> 2.2' # CSS management for e-mails.
 gem 'puma', '< 6' # The Puma ruby web server.
 gem 'slowpoke', '~> 0.3' # Rack::Timeout enhancements for Rails. https://github.com/ankane/slowpoke
 gem 'delayed_job_active_record', '~> 4.1' # Delayed Job for deferring tasks.
@@ -84,7 +81,7 @@ group :test do
   gem 'factory_bot_rails', '~> 6.2' # A library for setting up Ruby objects as test data.
   gem 'capybara', '~> 3.35' # For RSpec feature tests.
   gem 'capybara-email', '~> 3.0' # Test ActionMailer and Mailer messages with Capybara
-  gem 'webdrivers', '~> 4.6' # Keep your Selenium WebDrivers updated automatically.
+  gem 'webdrivers', '~> 5.0' # Keep your Selenium WebDrivers updated automatically.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem 'rspec-eventually', '~> 0.2.2' # Rspec helper to match eventually
   gem 'diffy', '~> 3.4' # Easy Diffing in Ruby. https://github.com/samg/diffy

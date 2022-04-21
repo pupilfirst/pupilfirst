@@ -2,6 +2,8 @@ open CoursesCurriculum__Types
 
 let str = React.string
 
+let ts = I18n.ts
+
 let kindIconClasses = result =>
   switch (result: ChecklistItem.result) {
   | ShortText(_text) => "if i-short-text-regular md:text-base text-gray-800 if-fw"
@@ -23,10 +25,15 @@ let notBlank = string => string |> String.trim != ""
 let placeholder = (id, checklistItem) => {
   let title = checklistItem |> ChecklistItem.title
   let optional = checklistItem |> ChecklistItem.optional
-  <div className="flex items-center">
-    <PfIcon className={kindIconClasses(checklistItem |> ChecklistItem.result)} />
+  <div className="flex items-start">
+    <div className="pt-2">
+      <PfIcon className={kindIconClasses(checklistItem |> ChecklistItem.result)} />
+    </div>
     <label htmlFor=id className="font-semibold text-sm pl-2 tracking-wide">
-      {title ++ (optional ? " (optional)" : "") |> str}
+      <MarkdownBlock
+        profile=Markdown.AreaOfText
+        markdown={title ++ (optional ? " (" ++ ts("optional") ++ ")" : "")}
+      />
     </label>
   </div>
 }

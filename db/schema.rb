@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_28_050607) do
+ActiveRecord::Schema.define(version: 2022_03_31_123330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -490,7 +490,6 @@ ActiveRecord::Schema.define(version: 2022_01_28_050607) do
     t.string "reference_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "startup_id"
     t.datetime "sent_at"
     t.integer "faculty_id"
     t.string "activity_type"
@@ -508,6 +507,18 @@ ActiveRecord::Schema.define(version: 2022_01_28_050607) do
     t.datetime "access_ends_at"
     t.datetime "dropped_out_at"
     t.index ["level_id"], name: "index_startups_on_level_id"
+  end
+
+  create_table "submission_reports", force: :cascade do |t|
+    t.string "status"
+    t.string "conclusion"
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.bigint "submission_id"
+    t.text "test_report"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["submission_id"], name: "index_submission_reports_on_submission_id"
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
@@ -657,6 +668,7 @@ ActiveRecord::Schema.define(version: 2022_01_28_050607) do
     t.jsonb "checklist", default: []
     t.bigint "reviewer_id"
     t.datetime "reviewer_assigned_at"
+    t.datetime "archived_at"
     t.index ["reviewer_id"], name: "index_timeline_events_on_reviewer_id"
   end
 
@@ -797,6 +809,7 @@ ActiveRecord::Schema.define(version: 2022_01_28_050607) do
   add_foreign_key "startup_feedback", "faculty"
   add_foreign_key "startup_feedback", "timeline_events"
   add_foreign_key "startups", "levels"
+  add_foreign_key "submission_reports", "timeline_events", column: "submission_id"
   add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"

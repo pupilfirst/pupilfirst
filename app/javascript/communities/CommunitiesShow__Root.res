@@ -17,10 +17,21 @@ type loading =
   | Reloading
   | LoadingMore
 
+type search = SearchContent(string) | SearchTitle(string)
+let getSearch = search =>
+  switch search {
+  | SearchContent(search) => search
+  | SearchTitle(search) => search
+  }
+let searchBy = search =>
+  switch search {
+  | SearchContent(_) => "content"
+  | SearchTitle(_) => "title"
+  }
 type filter = {
   topicCategory: option<TopicCategory.t>,
   solution: solution,
-  search: option<string>,
+  search: option<search>,
   target: option<Target.t>,
   sortCriterion: sortCriterion,
   sortDirection: sortDirection,
@@ -65,8 +76,8 @@ let reducer = (state, action) =>
   }
 
 module TopicsQuery = %graphql(`
-    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $resolution: TopicResolutionFilter!, $search: String, $after: String, $sortCriterion: TopicSortCriterion!, $sortDirection: SortDirection!) {
-      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $search, resolution: $resolution, sortDirection: $sortDirection, sortCriterion: $sortCriterion, first: 10, after: $after) {
+    query TopicsFromCommunitiesShowRootQuery($communityId: ID!, $topicCategoryId: ID,$targetId: ID, $resolution: TopicResolutionFilter!, $searchFilter: CommunitySearchFilter, $after: String, $sortCriterion: TopicSortCriterion!, $sortDirection: SortDirection!) {
+      topics(communityId: $communityId, topicCategoryId: $topicCategoryId,targetId: $targetId, search: $searchFilter, resolution: $resolution, sortDirection: $sortDirection, sortCriterion: $sortCriterion, first: 10, after: $after) {
         nodes {
           id
           lastActivityAt
@@ -100,12 +111,19 @@ let getTopics = (send, communityId, cursor, filter) => {
 
   let targetId = filter.target |> OptionUtils.map(Target.id)
 
+  let searchFilter = Belt.Option.map(filter.search, search =>
+    switch search {
+    | SearchContent(searchString) => {"search": searchString, "searchBy": #content}
+    | SearchTitle(searchString) => {"search": searchString, "searchBy": #title}
+    }
+  )
+
   TopicsQuery.make(
     ~communityId,
     ~after=?cursor,
     ~topicCategoryId?,
     ~targetId?,
-    ~search=?filter.search,
+    ~searchFilter?,
     ~resolution=filter.solution,
     ~sortCriterion=filter.sortCriterion,
     ~sortDirection=filter.sortDirection,
@@ -159,7 +177,10 @@ let filterToQueryString = filter => {
     ("sortDirection", sortDirection),
   ])
 
-  Belt.Option.forEach(filter.search, search => Js.Dict.set(filterDict, "search", search))
+  Belt.Option.forEach(filter.search, search => {
+    Js.Dict.set(filterDict, "search", getSearch(search))
+    Js.Dict.set(filterDict, "searchBy", searchBy(search))
+  })
 
   Belt.Option.forEach(filter.topicCategory, tc =>
     Js.Dict.set(filterDict, "topicCategory", TopicCategory.id(tc))
@@ -339,26 +360,27 @@ module Selectable = {
   type t =
     | TopicCategory(TopicCategory.t)
     | Solution(bool)
-    | Search(string)
+    | Search(search)
 
   let label = t =>
     switch t {
     | TopicCategory(_category) => Some("Category")
-    | Search(_) => Some("Search")
+    | Search(SearchTitle(_)) => Some("Search by title")
+    | Search(SearchContent(_)) => Some("Search by content")
     | Solution(_) => Some("Solution")
     }
 
   let value = t =>
     switch t {
     | TopicCategory(category) => TopicCategory.name(category)
-    | Search(search) => search
+    | Search(search) => getSearch(search)
     | Solution(solution) => solution ? "Solved" : "Unsolved"
     }
 
   let searchString = t =>
     switch t {
     | TopicCategory(category) => "category " ++ TopicCategory.name(category)
-    | Search(search) => search
+    | Search(search) => getSearch(search)
     | Solution(_solution) => "solution solved unsolved"
     }
 
@@ -389,7 +411,13 @@ let unselected = (topicCategories, filter, state) => {
 
   let trimmedFilterString = state.filterString |> String.trim
 
-  let search = trimmedFilterString == "" ? [] : [Selectable.search(trimmedFilterString)]
+  let search =
+    trimmedFilterString == ""
+      ? []
+      : [
+          Selectable.search(SearchContent(trimmedFilterString)),
+          Selectable.search(SearchTitle(trimmedFilterString)),
+        ]
 
   let hasSolution = switch filter.solution {
   | #Solved => [Selectable.solution(false)]
@@ -527,7 +555,14 @@ let filterFromQueryParams = (search, target, topicCategories) => {
 
   open Webapi.Url.URLSearchParams
   {
-    search: get("search", params),
+    search: get("search", params)->Belt.Option.map(searchString =>
+      switch get("searchBy", params) {
+      | None => SearchTitle(searchString)
+      | Some("content") => SearchContent(searchString)
+      | Some("title") => SearchTitle(searchString)
+      | Some(_) => SearchTitle(searchString)
+      }
+    ),
     topicCategory: get("topicCategory", params)->Belt.Option.flatMap(cat =>
       Js.Array.find(c => TopicCategory.id(c) == cat, topicCategories)
     ),

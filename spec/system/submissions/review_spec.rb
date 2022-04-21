@@ -6,6 +6,7 @@ feature 'Submission review overlay', js: true do
   include NotificationHelper
   include SubmissionsHelper
   include DevelopersNotificationsHelper
+  include ConfigHelper
 
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school }
@@ -347,6 +348,216 @@ feature 'Submission review overlay', js: true do
 
       click_button 'Create Review Checklist'
       expect(target.reload.review_checklist).to eq([])
+    end
+
+    scenario 'coach changes the order of review checklist' do
+      sign_in_user coach.user,
+                   referrer: review_timeline_event_path(submission_pending)
+
+      # Checklist item 1
+      checklist_title_1 = 'Checklist item one'
+      c1_result_0_title = Faker::Lorem.sentence
+      c1_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
+      c1_result_1_title = Faker::Lorem.sentence
+      c1_result_1_feedback = Faker::Markdown.sandwich(sentences: 3)
+
+      # Checklist item 2
+      checklist_title_2 = 'Checklist item two'
+      c2_result_0_title = Faker::Lorem.sentence
+      c2_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
+      c2_result_1_title = Faker::Lorem.sentence
+      c2_result_1_feedback = Faker::Markdown.sandwich(sentences: 3)
+
+      # Checklist item 3
+      checklist_title_3 = 'Checklist item three'
+      c3_result_0_title = Faker::Lorem.sentence
+      c3_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
+      c3_result_1_title = Faker::Lorem.sentence
+      c3_result_1_feedback = Faker::Markdown.sandwich(sentences: 3)
+
+      expect(target.review_checklist).to eq([])
+      click_button 'Start Review'
+      dismiss_notification
+      click_button 'Create Review Checklist'
+
+      within("div[data-checklist-item='0']") do
+        fill_in 'checklist_0_title', with: checklist_title_1
+        fill_in 'result_00_title', with: c1_result_0_title
+        fill_in 'result_00_feedback', with: c1_result_0_feedback
+        fill_in 'result_01_title', with: c1_result_1_title
+        fill_in 'result_01_feedback', with: c1_result_1_feedback
+      end
+
+      click_button 'Add Checklist Item'
+
+      within("div[data-checklist-item='1']") do
+        fill_in 'checklist_1_title', with: checklist_title_2
+        fill_in 'result_10_title', with: c2_result_0_title
+        fill_in 'result_10_feedback', with: c2_result_0_feedback
+        click_button 'Add Result'
+        fill_in 'result_11_title', with: c2_result_1_title
+        fill_in 'result_11_feedback', with: c2_result_1_feedback
+      end
+
+      click_button 'Add Checklist Item'
+
+      within("div[data-checklist-item='2']") do
+        fill_in 'checklist_2_title', with: checklist_title_3
+        fill_in 'result_20_title', with: c3_result_0_title
+        fill_in 'result_20_feedback', with: c3_result_0_feedback
+        click_button 'Add Result'
+        fill_in 'result_21_title', with: c3_result_1_title
+        fill_in 'result_21_feedback', with: c3_result_1_feedback
+      end
+
+      click_button 'Save Checklist'
+
+      expect(page).to have_content('Edit Checklist')
+
+      expect(target.reload.review_checklist).not_to eq([])
+
+      # Reload Page
+      visit review_timeline_event_path(submission_pending)
+
+      click_button 'Show Review Checklist'
+      click_button 'Edit Checklist'
+
+      # The first checklist item should only have the "move down" button.
+      within("div[data-checklist-item='0']") do
+        expect(page).to_not have_button('Move Up checklist item')
+        find("button[title='Move Down checklist item']")
+      end
+
+      # Checklist item in the middle should have both buttons.
+      within("div[data-checklist-item='1']") do
+        find("button[title='Move Up checklist item']")
+        find("button[title='Move Down checklist item']")
+      end
+
+      #The last checklist item should only have the "move up" button.
+      within("div[data-checklist-item='2']") do
+        expect(page).to_not have_button('Move Down checklist item')
+        find("button[title='Move Up checklist item']")
+      end
+
+      # The second checklist item, moved up
+      within("div[data-checklist-item='1']") do
+        find("button[title='Move Up checklist item']").click
+      end
+
+      # The first checklist item, should have the content as checklist_item_2 and should loose the "move up button"
+      within("div[data-checklist-item='0']") do
+        expect(page).to_not have_button('Move Up checklist item')
+        find("button[title='Move Down checklist item']")
+        expect(
+          find('input', id: 'checklist_0_title').value
+        ).to eq checklist_title_2
+        within("div[data-result-item='0']") do
+          expect(
+            find('input', id: 'result_00_title').value
+          ).to eq c2_result_0_title
+        end
+        within("div[data-result-item='1']") do
+          expect(
+            find('input', id: 'result_01_title').value
+          ).to eq c2_result_1_title
+        end
+      end
+
+      # The second checklist item, moved down
+      within("div[data-checklist-item='1']") do
+        find("button[title='Move Down checklist item']").click
+      end
+
+      # The middle checklist item, should have the content as checklist_item_3 and should have the "move up & down button"
+      within("div[data-checklist-item='1']") do
+        find("button[title='Move Up checklist item']")
+        find("button[title='Move Down checklist item']")
+        expect(
+          find('input', id: 'checklist_1_title').value
+        ).to eq checklist_title_3
+        within("div[data-result-item='0']") do
+          expect(
+            find('input', id: 'result_10_title').value
+          ).to eq c3_result_0_title
+        end
+        within("div[data-result-item='1']") do
+          expect(
+            find('input', id: 'result_11_title').value
+          ).to eq c3_result_1_title
+        end
+      end
+
+      # Results iniside checklist item move up & move down
+      within("div[data-checklist-item='1']") do
+        within("div[data-result-item='0']") do
+          expect(page).to_not have_button('Move Up checklist result')
+          find("button[title='Move Down checklist result']").click
+          expect(
+            find('input', id: 'result_10_title').value
+          ).to eq c3_result_1_title
+        end
+        within("div[data-result-item='1']") do
+          expect(page).to_not have_button('Move Down checklist result')
+          find("button[title='Move Up checklist result']").click
+          expect(
+            find('input', id: 'result_11_title').value
+          ).to eq c3_result_1_title
+        end
+      end
+
+      click_button 'Save Checklist'
+
+      expect(page).to have_content('Edit Checklist')
+
+      expect(target.reload.review_checklist).not_to eq([])
+
+      # Reload Page
+      visit review_timeline_event_path(submission_pending)
+
+      click_button 'Show Review Checklist'
+
+      within("div[data-checklist-item='0']") do
+        expect(page).to have_content(checklist_title_2)
+
+        within("div[data-result-item='0']") do
+          expect(page).to have_content(c2_result_0_title)
+          find('label', text: c2_result_0_title).click
+        end
+
+        within("div[data-result-item='1']") do
+          expect(page).to have_content(c2_result_1_title)
+          find('label', text: c2_result_1_title).click
+        end
+      end
+
+      within("div[data-checklist-item='1']") do
+        expect(page).to have_content(checklist_title_3)
+
+        within("div[data-result-item='0']") do
+          expect(page).to have_content(c3_result_0_title)
+          find('label', text: c3_result_0_title).click
+        end
+
+        within("div[data-result-item='1']") do
+          expect(page).to have_content(c3_result_1_title)
+          find('label', text: c3_result_1_title).click
+        end
+      end
+
+      within("div[data-checklist-item='2']") do
+        expect(page).to have_content(checklist_title_1)
+
+        within("div[data-result-item='0']") do
+          expect(page).to have_content(c1_result_0_title)
+          find('label', text: c1_result_0_title).click
+        end
+
+        within("div[data-result-item='1']") do
+          expect(page).to have_content(c1_result_1_title)
+          find('label', text: c1_result_1_title).click
+        end
+      end
     end
 
     scenario 'coach evaluates a pending submission and mark a checklist as incorrect' do
@@ -1101,8 +1312,12 @@ feature 'Submission review overlay', js: true do
         passed_at: 1.day.ago
       )
     end
-    let(:feedback) do
-      create(:startup_feedback, startup_id: team.id, faculty_id: coach.id)
+    let!(:feedback) do
+      create(
+        :startup_feedback,
+        faculty_id: coach.id,
+        timeline_event: submission_reviewed
+      )
     end
     let!(:timeline_event_grade) do
       create(
@@ -1111,7 +1326,6 @@ feature 'Submission review overlay', js: true do
         evaluation_criterion: evaluation_criterion_1
       )
     end
-    before { submission_reviewed.startup_feedback << feedback }
 
     scenario 'team coach add his feedback' do
       sign_in_user team_coach.user,
@@ -1404,6 +1618,173 @@ feature 'Submission review overlay', js: true do
       expect(page).to have_text(team_2.founders.first.name)
       expect(page).to_not have_text(team_1.name)
       expect(page).to_not have_text(team_2.name)
+    end
+
+    scenario 'coaches are not shown report on automation tests in the absence of a submission report' do
+      sign_in_user team_coach.user,
+                   referrer: review_timeline_event_path(submission_team_target)
+
+      expect(page).to have_title("Submission 1 | L1 | #{team_2.name}")
+
+      expect(page).to_not have_text('Automated tests are queued')
+    end
+  end
+
+  context 'student has undone submissions for a target' do
+    let!(:submission_reviewed) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: false,
+        owners: [team.founders.first],
+        target: target,
+        evaluator_id: coach.id,
+        evaluated_at: 2.days.ago,
+        passed_at: 2.days.ago
+      )
+    end
+    let!(:timeline_event_grade_1) do
+      create(
+        :timeline_event_grade,
+        timeline_event: submission_reviewed,
+        evaluation_criterion: evaluation_criterion_1
+      )
+    end
+    let!(:timeline_event_grade_2) do
+      create(
+        :timeline_event_grade,
+        timeline_event: submission_reviewed,
+        evaluation_criterion: evaluation_criterion_2
+      )
+    end
+    let!(:submission_archived) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: false,
+        owners: [team.founders.first],
+        target: target,
+        archived_at: 1.day.ago
+      )
+    end
+    let!(:submission_pending) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [team.founders.first],
+        target: target
+      )
+    end
+
+    scenario 'coach attempts to access the review page for an archived submission' do
+      sign_in_user team_coach.user,
+                   referrer: review_timeline_event_path(submission_archived)
+
+      expect(page).to have_text("The page you were looking for doesn't exist")
+    end
+
+    scenario 'coach visits pending submission and finds archived submission in history' do
+      sign_in_user team_coach.user,
+                   referrer: review_timeline_event_path(submission_pending)
+
+      expect(page).to have_selector('.submission-info__tab', count: 3)
+
+      expect(page).not_to have_link(
+        href: "/submissions/#{submission_archived.id}/review"
+      )
+
+      within("a[title='Submission #1']") do
+        expect(page).to have_text('Submission #1')
+        expect(page).to have_text('Completed')
+      end
+
+      within("div[title='Submission #2']") do
+        expect(page).to have_text('Submission #2')
+        expect(page).to have_text('Deleted')
+      end
+
+      within("a[title='Submission #3']") do
+        expect(page).to have_text('Submission #3')
+        expect(page).to have_text('Pending Review')
+      end
+    end
+  end
+
+  context 'when a submission report exists for a submission' do
+    let(:student) { team.founders.first }
+    let!(:submission_with_report) do
+      create(
+        :timeline_event,
+        :with_owners,
+        owners: [student],
+        latest: true,
+        target: target
+      )
+    end
+    let!(:submission_report) do
+      create :submission_report, :queued, submission: submission_with_report
+    end
+
+    around do |example|
+      with_secret(submission_report_poll_time: 2) { example.run }
+    end
+
+    scenario 'indicates the status of the automated test in submission review page' do
+      sign_in_user team_coach.user,
+                   referrer: review_timeline_event_path(submission_with_report)
+      expect(page).to have_text('Automated tests are queued')
+      expect(page).to_not have_button('Show Test Report')
+
+      submission_report.update!(
+        status: 'in_progress',
+        started_at: 2.minutes.ago
+      )
+      refresh
+      expect(page).to have_text('Automated tests are in progress')
+      expect(page).to have_text('Started 2 minutes ago')
+
+      submission_report.update!(
+        status: 'completed',
+        conclusion: 'success',
+        started_at: 2.minutes.ago,
+        completed_at: Time.zone.now,
+        test_report: 'Foo'
+      )
+      refresh
+      expect(page).to have_text('All automated tests succeeded')
+      expect(page).to_not have_text('Foo')
+      click_button 'Show Test Report'
+      expect(page).to have_text('Foo')
+
+      submission_report.update!(
+        status: 'completed',
+        conclusion: 'failure',
+        started_at: 2.minutes.ago,
+        completed_at: Time.zone.now,
+        test_report: 'Bar'
+      )
+      refresh
+      expect(page).to have_text('Some automated tests failed')
+      click_button 'Show Test Report'
+      expect(page).to have_text('Bar')
+    end
+
+    scenario 'status of the report is checked every 30 seconds without page reload if current status is not completed' do
+      sign_in_user team_coach.user,
+                   referrer: review_timeline_event_path(submission_with_report)
+      expect(page).to have_text('Automated tests are queued')
+      submission_report.update!(
+        status: 'completed',
+        conclusion: 'success',
+        test_report: 'A new report description',
+        started_at: 2.minutes.ago,
+        completed_at: Time.zone.now
+      )
+      sleep 2
+      expect(page).to have_text('All automated tests succeeded')
+      click_button 'Show Test Report'
+      expect(page).to have_text('A new report description')
     end
   end
 end

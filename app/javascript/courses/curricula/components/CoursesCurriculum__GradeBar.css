@@ -1,0 +1,73 @@
+.grade-bar__track {
+	 display: flex;
+	 background-color: rgba(244, 244, 244, 0.5);
+	 border: 1px solid #d8d8d8;
+	 border-radius: 3rem;
+	 box-shadow: 0 2px 4px 0px rgba(0, 0, 0, 0.05);
+	 overflow: hidden;
+}
+ .grade-bar__track > .grade-bar__grade-pill:not(:last-child), .grade-bar__track > .grade-bar__track:not(:last-child) > .grade-bar__grade-pill {
+	 border-top-right-radius: 0;
+	 border-bottom-right-radius: 0;
+}
+ .grade-bar__track > .grade-bar__grade-pill:not(:first-child), .grade-bar__track > .grade-bar__track:not(:first-child) > .grade-bar__grade-pill {
+	 border-top-left-radius: 0;
+	 border-bottom-left-radius: 0;
+}
+ .grade-bar__grade-label {
+	 font-weight: bold;
+}
+ .grade-bar__grade-pill {
+	 position: relative;
+	 width: 100%;
+	 padding: 4px;
+	 overflow: hidden;
+	 color: #999;
+	 background-color: #fafafa;
+	 text-align: center;
+	 font-weight: bold;
+	 cursor: pointer;
+}
+ .grade-bar__grade-pill:before {
+	 position: absolute;
+	 content: "";
+	 right: 0;
+	 top: 0;
+	 z-index: 2;
+	 width: 1px;
+	 height: 100%;
+	 background-color: #d8d8d8;
+}
+ .grade-bar__grade-pill:last-child::before {
+	 width: 0;
+}
+ .grade-bar__grade-pill--completed {
+	 color: white;
+	 background-color: #0f9d58;
+}
+ .grade-bar__grade-pill--rejected {
+	 color: white;
+	 background-color: #f55151;
+}
+ .grade-bar__grade-pill--selectable-pass:hover, .grade-bar__grade-pill--selectable-pass:focus {
+	 color: white;
+	 background-color: #0f9d58;
+}
+ .grade-bar__grade-pill--selectable-fail:hover, .grade-bar__grade-pill--selectable-fail:focus {
+	 color: white;
+	 background-color: #f55151;
+}
+ .grade-bar__criterion-name {
+	 font-size: 0.75rem;
+}
+ .grade-bar__grade {
+	 font-size: 0.75rem;
+	 color: #999;
+}
+ .grade-bar__save-container {
+	 padding: 0 15px;
+}
+ .grade-bar__header {
+	 display: flex;
+	 justify-content: space-between;
+}

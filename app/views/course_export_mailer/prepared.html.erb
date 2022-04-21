@@ -26,7 +26,7 @@
   <p>
     The export that you requested for the course <%= course.name %> on
     <%= @course_export.created_at.strftime('%b %e, %l:%M %p') %> is now ready for download. Please visit the course
-    exports page using the link above to download the export.
+    exports page using the <%= link_to 'link', link %> to download the export.
   </p>
 
   <p>

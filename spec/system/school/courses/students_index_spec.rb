@@ -179,7 +179,10 @@ feature 'School students index', js: true do
       expect(current_email.subject).to include(
         "You have been added as a student in #{school.name}"
       )
-      expect(current_email.body).to have_link('Sign in to View Course')
+
+      expect(current_email.body).to have_link(
+        "sign into #{school.name} and start working on this course"
+      )
 
       open_email(student_2_user.email)
 
@@ -263,7 +266,10 @@ feature 'School students index', js: true do
         expect(current_email.subject).to include(
           "You have been added as a student in #{school.name}"
         )
-        expect(current_email.body).to have_link('Sign in to View Course')
+
+        expect(current_email.body).to have_link(
+          "sign into #{school.name} and start working on this course"
+        )
       end
     end
 
@@ -362,7 +368,6 @@ feature 'School students index', js: true do
         expect(user_1.affiliation).to eq(nil)
         expect(student_1.startup.reload.name).to eq(user_1.name)
 
-        binding.pry
 
         # Form a Team
         check "select-student-#{student_1.id}"

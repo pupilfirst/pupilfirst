@@ -11,6 +11,7 @@ class SubmissionDetailsResolver < ApplicationQuery
       level_number: level.number,
       level_id: level.id,
       team_name: team_name,
+      submission_report: submission.submission_report,
       target_evaluation_criteria_ids: target.evaluation_criteria.pluck(:id),
       evaluation_criteria: evaluation_criteria,
       review_checklist: review_checklist,
@@ -19,7 +20,9 @@ class SubmissionDetailsResolver < ApplicationQuery
       course_id: level.course_id,
       created_at: submission.created_at,
       preview: preview?,
-      reviewer_details: reviewer_details
+      reviewer_details: reviewer_details,
+      submission_report_poll_time:
+        Rails.application.secrets.submission_report_poll_time
     }
   end
 

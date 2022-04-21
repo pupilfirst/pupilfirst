@@ -37,7 +37,7 @@ feature 'User Delete Account' do
       expect(subject).to include("Delete account from #{user.school.name}")
 
       body = current_email.body
-      expect(body).to include("Please click the link above to confirm account deletion")
+      expect(body).to include("We received a request to delete your account")
       expect(body).to include("https://test.host/users/delete_account?token=#{user.delete_account_token_original}")
     end
 
@@ -69,7 +69,6 @@ feature 'User Delete Account' do
       expect(subject).to include("Account deleted successfully from #{user.school.name}")
 
       body = current_email.body
-      expect(body).to include("Account Deleted Successfully")
       expect(body).to include("Your account in #{user.school.name} has been successfully deleted.")
 
       # Check audit records

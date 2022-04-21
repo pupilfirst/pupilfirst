@@ -131,6 +131,25 @@ en:
         other: Issued %{count} times
         zero: Never issued
       no_certificates: You haven't created any certificates yet!
+    CoursesExport__Root:
+      reviewed_only_tag: Reviewed Submissions Only
+      include_inactive_students_tag: Included Inactive Students
+      create_action: Create New Export
+      heading: Exports
+      no_exports_notice: You haven't exported anything yet!
+      create_action_button: Export Course Data
+      export_type_label: Please select the kind of export you need
+      students_label: Students
+      teams_label: Teams
+      export_tags_label : Export only students with the following tags
+      export_targets_label: Which targets should the export include?
+      all_targets_label: All targets
+      reviewed_only_targets_label: Only targets with reviewed submissions
+      students_to_include_label: Select the students to include in course export
+      active_students_label: Active Students
+      all_students_label: All Students
+      create_button_text: Create Export
+      create_button_active_label: Setting up an export...
     CourseEditor:
       add_new_course: Add New Course
       button_load_more: Load More Courses...
@@ -328,7 +347,7 @@ en:
       learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
       next_target_button: Next Target
-      pending_team_members_notice: "You have team members who are yet to complete this target:"
+      pending_team_members_notice: "You have team members who have yet to complete this target:"
       preview_mode_text: You are currently looking at a preview of this course.
       previous_target_button: Previous Target
       scroll_to_top: Scroll to Top
@@ -336,7 +355,7 @@ en:
       access_locked: Your access to this course has ended.
       course_locked: This course has ended.
       level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
-      prerequisites_incomplete: This target has pre-requisites that are incomplete.
+      prerequisites_incomplete: This target has prerequisites that are incomplete.
       status:
         completed: Completed
         locked: Locked
@@ -386,10 +405,14 @@ en:
       checklist_item_title:
         placeholder: Add a result for this check
         remove_button_title: Remove checklist result
+        move_up_button_title: Move Up checklist result
+        move_down_button_title: Move Down checklist result
       checklist_title:
         error_message: A checklist item cannot be blank
         placeholder: Add an item to the checklist
         remove_button_title: Remove checklist item
+        move_up_button_title: Move Up checklist item
+        move_down_button_title: Move Down checklist item
       create_review_checklist: Create Review Checklist
       disabled: Disabled
       edit_review_checklist: Edit Review Checklist
@@ -431,6 +454,16 @@ en:
       save_grades_and_send_feedback: Save grades & send feedback
       share_feedback: Share Feedback
       show_review_checklist: Show Review Checklist
+      report_status_string:
+        queued: Automated tests are queued
+        in_progress: Automated tests are in progress
+        completed:
+          success: All automated tests succeeded
+          failure: Some automated tests failed
+          error: Automated tests could not complete due to errors
+      show_test_report_button: Show Test Report
+      hide_test_report_button: Hide Test Report
+      test_report: Test Report
       status:
         completed: Completed
         pending_review: Pending Review
@@ -622,6 +655,27 @@ en:
     CurriculumEditor__TargetGroupShow:
       create_target: Create a target
       milestone_targets: Milestone Targets
+    MarkdownEditor:
+      attach_file_label: Click here to attach a file.
+      bold_insert: bold
+      control_label_bold: Bold
+      control_label_italic: Italic
+      control_label_strikethrough: Strikethrough
+      error_maximum_file_size: The maximum file size is 5 MB. Please select another file.
+      error_prefix: Failed to attach file!
+      error_unexpected: An unexpected error occured! Please reload the page before trying again.
+      exit_full_screen_label: Exit full screen
+      file_upload_wait: Please wait for the file to upload...
+      help_aria_label: Need help with Markdown?
+      help_label: Need help?
+      italic_insert: italics
+      mode_label_fullscreen: Full screen
+      mode_label_fullscreen_exit: Exit full screen
+      mode_label_preview: Preview
+      mode_label_preview_exit: Edit
+      mode_label_split: View editor and preview in split view
+      mode_label_split_exit: Close split view
+      strikethrough_insert: strikethrough
     Notifications__List:
       button_load_more: Load More Notifications...
       empty_notifications: You don't have any notifications!
@@ -819,10 +873,10 @@ en:
       apply_button: Apply
       email_label: Email
       email_placeholder: john@example.com
-      heading: Enroll to %{course_name} course
+      heading: Enroll in %{course_name} course
       name_label: Name
       name_placeholder: John Doe
-      page_title: Enroll to %{course_name}
+      page_title: Enroll in %{course_name}
     show:
       continue_course: Continue Course
       preview_course: Preview Course
@@ -843,6 +897,7 @@ en:
     concerns:
       validate_submission_gradable:
         owners_should_be_active_error: Cannot update inactive student submissions.
+        submission_should_be_live: Such a submission does not exist, or it has been archived.
   home:
     index:
       course_status:
@@ -908,6 +963,10 @@ en:
   mutations:
     archive_course:
       success_notification: Course archived successfully.
+    export_course_report:
+      course_not_found_error: Could not find a course with the given ID
+      tag_not_found_error: Could not find tags with the given IDs
+      success_notification: Your export is being processed. We'll notify you as soon as it is ready.
     assign_reviewer:
       submission_already_assigned: This submission has been already assigned to a coach.
       submission_graded_error: You can only assign yourself to pending submissions.
@@ -1049,9 +1108,11 @@ en:
       long_without_name: Level %{number}
       short_with_name: "L%{number}: %{name}"
       short_without_name: L%{number}
+    login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
     optional: optional
     privacy_policy: Privacy Policy
     save_changes: Save Changes
+    processing: Processing
     saving: Saving...
     target: Target
     terms_and_conditions: Terms & Conditions

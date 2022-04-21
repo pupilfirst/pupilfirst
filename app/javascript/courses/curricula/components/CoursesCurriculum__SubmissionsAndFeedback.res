@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesCurriculum__SubmissionsAndFeedback.css")`)
+%raw(`require("./CoursesCurriculum__SubmissionsAndFeedback.css")`)
 
 let str = React.string
 
@@ -50,7 +50,8 @@ let submissionStatusIcon = (~passed) => {
   let color = passed ? "green" : "red"
 
   <div className="max-w-fc">
-    <div className={"flex justify-center border-2 rounded-lg border-" ++ (color ++ "-500 px-4 py-6")}>
+    <div
+      className={"flex justify-center border-2 rounded-lg border-" ++ (color ++ "-500 px-4 py-6")}>
       {passed
         ? <div className="fa-stack text-green-500 text-lg">
             <i className="fas fa-certificate fa-stack-2x" />
@@ -97,9 +98,9 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
   let curriedGradeBar = gradeBar(evaluationCriteria)
 
   let submissions = TargetDetails.submissions(targetDetails)
-  let totalSubmissions = Js.Array.length(submissions)
+  let totalSubmissions = Js.Array2.length(submissions)
 
-  Submission.sort(submissions) |> Js.Array.mapi((submission, index) => {
+  Js.Array2.mapi(Submission.sort(submissions), (submission, index) => {
     let grades = targetDetails |> TargetDetails.grades(submission |> Submission.id)
 
     <div
@@ -108,7 +109,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
       ariaLabel={"Details about your submission on " ++ (submission |> Submission.createdAtPretty)}>
       <div className="flex justify-between items-end">
         <h2 className="ml-2 mb-2 font-semibold text-sm lg:text-base leading-tight">
-          {"Submission #" ++ (totalSubmissions - index |> string_of_int) |> str}
+          {str("Submission #" ++ (totalSubmissions - index)->string_of_int)}
         </h2>
         <div
           className="text-xs font-semibold bg-gray-100 inline-block px-3 py-1 mr-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">

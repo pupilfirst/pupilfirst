@@ -1,3 +1,5 @@
+%raw(`require("../schools/shared/shared.css")`)
+
 let str = React.string
 
 type state = {
@@ -492,13 +494,12 @@ let make = (
                 id="language"
                 value={state.locale}
                 onChange={event => {
-                  Js.log(ReactEvent.Form.target(event)["value"])
                   send(UpdateLocale(ReactEvent.Form.target(event)["value"]))
                 }}
-                className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-gray-500">
+                className="select appearance-none block text-sm w-full bg-white shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-indigo-500">
                 {availableLocales
                 ->Js.Array2.map(availableLocale =>
-                  <option key=availableLocale value=availableLocale>
+                  <option key=availableLocale value=availableLocale ariaSelected={state.locale===availableLocale}>
                     {Locale.humanize(availableLocale)->str}
                   </option>
                 )

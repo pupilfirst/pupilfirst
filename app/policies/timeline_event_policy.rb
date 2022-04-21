@@ -1,6 +1,6 @@
 class TimelineEventPolicy < ApplicationPolicy
   def review?
-    return false if record.blank?
+    return false if record.blank? || record.archived?
 
     return false if record.evaluation_criteria.blank?
 
@@ -8,7 +8,7 @@ class TimelineEventPolicy < ApplicationPolicy
   end
 
   def show?
-    return false if record.blank?
+    return false if record.blank? || record.archived?
 
     return false if record.evaluation_criteria.blank?
 

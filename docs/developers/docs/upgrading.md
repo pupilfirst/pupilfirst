@@ -19,7 +19,8 @@ Your current version can be found in `Pupilfirst::Application::VERSION` or in th
 
 ### 2022.0
 
-This version does not have any breaking changes.
+This version adds the `PREPARE_FOR_PRECOMPILATION` environment variable. If you're building Pupilfirst in production,
+this environment variable will need to be set to `true` to allow the Rails asset precompilation step to work properly.
 
 ### 2021.5
 

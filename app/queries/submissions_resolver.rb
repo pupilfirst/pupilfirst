@@ -57,7 +57,7 @@ class SubmissionsResolver < ApplicationQuery
         course.levels.find_by(id: level_id).timeline_events.not_auto_verified
       else
         course.timeline_events.not_auto_verified
-      end
+      end.live
 
     # Filter by target
     stage_2 =
@@ -119,18 +119,17 @@ class SubmissionsResolver < ApplicationQuery
   end
 
   def teams
-    @teams ||=
-      (include_inactive ? course.startups : course.startups.active).joins(
-        founders: :user
-      )
+    @teams ||= include_inactive ? course.startups : course.startups.active
   end
 
   def course_teams
     if search.present?
-      teams
+      teams_with_users = teams.joins(founders: :user)
+
+      teams_with_users
         .where('users.name ILIKE ?', "%#{search}%")
-        .or(teams.where('startups.name ILIKE ?', "%#{search}%"))
-        .or(teams.where('users.email ILIKE ?', "%#{search}%"))
+        .or(teams_with_users.where('startups.name ILIKE ?', "%#{search}%"))
+        .or(teams_with_users.where('users.email ILIKE ?', "%#{search}%"))
     else
       teams
     end

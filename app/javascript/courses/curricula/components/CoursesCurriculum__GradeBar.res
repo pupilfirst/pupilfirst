@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesCurriculum__GradeBar.scss")`)
+%raw(`require("./CoursesCurriculum__GradeBar.css")`)
 
 let str = React.string
 
@@ -24,7 +24,7 @@ let gradePillClasses = (gradeReceived, passGrade, pillGrade, callBack) => {
   let defaultClasses = "grade-bar__grade-pill cursor-auto"
   let resultModifier = switch gradeReceived {
   | None => ""
-  | Some(grade) when pillGrade > grade => ""
+  | Some(grade) if pillGrade > grade => ""
   | Some(grade) =>
     grade < passGrade ? " grade-bar__grade-pill--rejected" : " grade-bar__grade-pill--completed"
   }

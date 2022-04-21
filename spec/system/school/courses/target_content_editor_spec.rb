@@ -377,6 +377,35 @@ feature 'Target Content Editor', js: true do
 
       expect(page).to have_text('https://vimeo.com/123456789')
     end
+
+    context 'when uploaded video has no title' do
+      before do
+        stub_request(:post, 'https://api.vimeo.com/me/videos/')
+          .with(
+            body:
+              "{\"upload\":{\"approach\":\"tus\",\"size\":588563},\"privacy\":{\"embed\":\"whitelist\",\"view\":\"#{account_type == 'basic' ? 'anybody' : 'disable'}\"},\"embed\":{\"buttons\":{\"like\":false,\"watchlater\":false,\"share\":false},\"logos\":{\"vimeo\":false},\"title\":{\"name\":\"show\",\"owner\":\"hide\",\"portrait\":\"hide\"}},\"name\":\"#{target.title}\",\"description\":\"#{description}\"}",
+            headers: request_headers
+          )
+          .to_return(status: 200, body: request_body.to_json, headers: {})
+      end
+
+      scenario 'course author uploads a video without a title' do
+        sign_in_user course_author.user,
+                     referrer: content_school_course_target_path(course, target)
+
+        within('.content-block-creator--open') do
+          find('p', text: 'Video').click
+          fill_in 'Title', with: ''
+          fill_in 'Description', with: description
+
+          page.attach_file(file_path('pupilfirst-logo.mp4')) do
+            find('label', text: 'Select File and Upload').click
+          end
+        end
+
+        expect(page).to have_text('https://vimeo.com/123456789')
+      end
+    end
   end
 
   context 'when a target has many content blocks' do
@@ -480,6 +509,27 @@ feature 'Target Content Editor', js: true do
         first_block.id
       )
       expect(ContentBlock.count).to eq(3)
+    end
+
+    scenario 'admin deletes a content block with unsaved changes' do
+      sign_in_user school_admin.user,
+                   referrer: content_school_course_target_path(course, target)
+
+      within("div[aria-label='Editor for content block #{fourth_block.id}']") do
+        fill_in 'Title', with: 'A new title'
+        accept_confirm { find('button[title="Delete"]').click }
+      end
+
+      expect(page).not_to have_selector(
+        "div[aria-label='Editor for content block #{fourth_block.id}']"
+      )
+
+      # Closing editor should not be confirmed.
+      find('button[title="Close Editor"').click
+
+      expect(page).not_to have_selector(
+        "div[aria-label='Editor for content block #{first_block.id}']"
+      )
     end
   end
 

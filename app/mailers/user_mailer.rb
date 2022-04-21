@@ -7,7 +7,7 @@ class UserMailer < SchoolMailer
     @post = post
     @addressee = addressee
     @school = addressee.school
-    simple_roadie_mail(addressee.email, 'New reply for your post')
+    simple_mail(addressee.email, 'New reply for your post')
   end
 
   # Mail sent daily to users when there are new questions posted in communities where they have access.
@@ -18,21 +18,23 @@ class UserMailer < SchoolMailer
     @user = user
     @updates = updates
     @school = user.school
-    subject = "#{user.school.name}: Daily Digest - #{Time.zone.now.strftime('%b %-d, %Y')}"
-    simple_roadie_mail(user.email, subject)
+    subject =
+      "#{user.school.name}: Daily Digest - #{Time.zone.now.strftime('%b %-d, %Y')}"
+    simple_mail(user.email, subject)
   end
 
   def delete_account_token(user, delete_account_url)
     @user = user
     @school = user.school
     @delete_account_url = delete_account_url
-    simple_roadie_mail(user.email, "Delete account from #{@school.name}")
+    simple_mail(user.email, "Delete account from #{@school.name}")
   end
 
-  def confirm_account_deletion(email, school)
+  def confirm_account_deletion(name, email, school)
+    @name = name
     @email = email
     @school = school
-    simple_roadie_mail(email, "Account deleted successfully from #{@school.name}")
+    simple_mail(email, "Account deleted successfully from #{@school.name}")
   end
 
   def account_deletion_notification(user, sign_in_url, inactivity_months)
@@ -40,6 +42,9 @@ class UserMailer < SchoolMailer
     @school = user.school
     @inactivity_months = inactivity_months
     @sign_in_url = sign_in_url
-    simple_roadie_mail(user.email, "Your account in #{@school.name} will be deleted in 30 days")
+    simple_mail(
+      user.email,
+      "Your account in #{@school.name} will be deleted in 30 days"
+    )
   end
 end

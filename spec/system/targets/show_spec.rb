@@ -220,10 +220,8 @@ feature 'Target Overlay', js: true do
     # This action should reload the page and return the user to the content of the target.
     expect(page).to have_selector('.learn-content-block__embed')
 
-    # The last submissions should have been deleted...
-    expect { last_submission.reload }.to raise_exception(
-      ActiveRecord::RecordNotFound
-    )
+    # The last submissions should have been archived...
+    expect(last_submission.reload.archived_at).to_not eq(nil)
 
     # ...and the complete section should be accessible again.
     expect(page).to have_selector(
@@ -282,7 +280,7 @@ feature 'Target Overlay', js: true do
 
       # Since this is a team target, other students shouldn't be listed as pending.
       expect(page).not_to have_content(
-        'You have team members who are yet to complete this target'
+        'You have team members who have yet to complete this target'
       )
 
       # Target should have been marked as passed in the database.
@@ -445,26 +443,26 @@ feature 'Target Overlay', js: true do
              created_at: 3.days.ago,
              evaluated_at: 1.day.ago
     end
+    let!(:archived_submission) do
+      create :timeline_event,
+             :with_owners,
+             latest: false,
+             target: target_l1,
+             owners: team.founders,
+             created_at: 3.days.ago,
+             archived_at: 1.day.ago
+    end
     let!(:attached_file) do
       create :timeline_event_file, timeline_event: submission_2
     end
     let!(:feedback_1) do
-      create :startup_feedback,
-             timeline_event: submission_1,
-             startup: team,
-             faculty: coach_1
+      create :startup_feedback, timeline_event: submission_1, faculty: coach_1
     end
     let!(:feedback_2) do
-      create :startup_feedback,
-             timeline_event: submission_1,
-             startup: team,
-             faculty: coach_2
+      create :startup_feedback, timeline_event: submission_1, faculty: coach_2
     end
     let!(:feedback_3) do
-      create :startup_feedback,
-             timeline_event: submission_2,
-             startup: team,
-             faculty: coach_3
+      create :startup_feedback, timeline_event: submission_2, faculty: coach_3
     end
 
     before do
@@ -507,7 +505,12 @@ feature 'Target Overlay', js: true do
       find('.course-overlay__body-tab-item', text: 'Submissions & Feedback')
         .click
 
-      # Both submissions should be visible, along with grading and all feedback from coaches.
+      # Both submissions should be visible, along with grading and all feedback from coaches. Archived submission should not be listed
+
+      expect(page).to have_selector(
+        '.curriculum__submission-feedback-container',
+        count: 2
+      )
       within(
         "div[aria-label='Details about your submission on #{submission_1.created_at.strftime('%B %-d, %Y')}']"
       ) do
@@ -614,7 +617,7 @@ feature 'Target Overlay', js: true do
       expect(other_students.count).to be > 0
 
       expect(page).to have_content(
-        'You have team members who are yet to complete this target:'
+        'You have team members who have yet to complete this target:'
       )
 
       # The other students should also be listed.
@@ -637,7 +640,7 @@ feature 'Target Overlay', js: true do
       end
 
       expect(page).to have_content(
-        'This target has pre-requisites that are incomplete.'
+        'This target has prerequisites that are incomplete.'
       )
 
       # It should be possible to navigate to the prerequisite target.
@@ -1068,9 +1071,7 @@ feature 'Target Overlay', js: true do
       # This action should delete `submission_new`, reload the page and return the user to the content of the target.
       expect(page).to have_selector('.learn-content-block__embed')
 
-      expect { submission_new.reload }.to raise_error(
-        ActiveRecord::RecordNotFound
-      )
+      expect(submission_new.reload.archived_at).to_not eq(nil)
       expect(target_l1.latest_submission(student_a)).to eq(submission_old_1)
       expect(target_l1.latest_submission(student_b)).to eq(submission_old_2)
       expect(target_l1.latest_submission(student_c)).to eq(submission_old_1)

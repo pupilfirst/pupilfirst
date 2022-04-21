@@ -17,6 +17,6 @@ module MarkdownEditorHelper
   private
 
   def delete_sequence(editor)
-      ([:backspace] * editor.text.length)
+    ([:backspace] * editor.text.length)
   end
 end

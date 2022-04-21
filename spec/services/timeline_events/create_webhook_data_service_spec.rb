@@ -10,6 +10,7 @@ describe TimelineEvents::CreateWebhookDataService do
     create :target, target_group: target_group, evaluation_criteria: [criterion]
   end
   let(:submission) { create :timeline_event, target: target }
+  let(:student) { create :founder }
   let!(:pdf_file) { create :timeline_event_file, timeline_event: submission }
   let!(:png_file) do
     create :timeline_event_file,
@@ -18,12 +19,14 @@ describe TimelineEvents::CreateWebhookDataService do
   end
 
   describe '#data' do
+    before { submission.timeline_event_owners.create!(founder: student) }
     it 'returns data appropriate for sending via webhook' do
       expected_target_data = {
         id: target.id,
         title: target.title,
         evaluation_criteria: [
           {
+            id: criterion.id,
             name: criterion.name,
             max_grade: criterion.max_grade,
             pass_grade: criterion.pass_grade,
@@ -57,6 +60,8 @@ describe TimelineEvents::CreateWebhookDataService do
       expect(data[:updated_at]).to eq(submission.updated_at)
       expect(data[:target_id]).to eq(submission.target_id)
       expect(data[:checklist]).to eq(submission.checklist)
+      expect(data[:level_number]).to eq(level.number)
+      expect(data[:students]).to eq(submission.founders.pluck(:id))
       expect(data[:target]).to eq(expected_target_data)
       expect(data[:files]).to include(pdf_file_data)
       expect(data[:files]).to include(image_file_data)

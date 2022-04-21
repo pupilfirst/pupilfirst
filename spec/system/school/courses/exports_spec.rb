@@ -134,4 +134,21 @@ feature 'Course Exports', js: true do
 
     expect(page).to have_text('Reviewed Submissions Only')
   end
+
+  scenario 'school admin creates a student export with including inactive students' do
+    sign_in_user school_admin.user, referrer: exports_school_course_path(course)
+
+    find('h5', text: 'Create New Export').click
+    click_button('All Students')
+
+    click_button('Create Export')
+
+    expect(page).to have_text('Your export is being processed')
+
+    # The Course report should be accurate.
+    export = CourseExport.last
+    expect(export.include_inactive_students).to eq(true)
+
+    expect(page).to have_text('Included Inactive Students')
+  end
 end

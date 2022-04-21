@@ -410,7 +410,7 @@ feature 'School students index', js: true do
         expect(page).not_to have_text(coach_in_different_course.name)
 
         # But it should be possible to assign a coach in 'this' course.
-        find("div[title='Select #{course_coach.name}']").click
+        find("button[title='Select #{course_coach.name}']").click
 
         click_button 'Update Student'
 

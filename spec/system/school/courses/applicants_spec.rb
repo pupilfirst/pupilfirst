@@ -115,9 +115,9 @@ feature 'Applicant Index', js: true do
     find('input[id="title"]').click
     fill_in 'Affiliation', with: affiliation_1
     fill_in 'Tags', with: 'Abc'
-    find('span[title="Add new tag Abc"]').click
+    find('button[title="Add new tag Abc"]').click
     fill_in 'Tags', with: 'Def'
-    find('span[title="Add new tag Def"]').click
+    find('button[title="Add new tag Def"]').click
     click_button 'Add as Student'
     expect(page).to have_text('Student created successfully.')
     dismiss_notification

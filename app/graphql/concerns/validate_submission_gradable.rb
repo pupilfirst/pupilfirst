@@ -5,9 +5,10 @@ module ValidateSubmissionGradable
     def validate(_object, _context, value)
       submission = TimelineEvent.find(value[:submission_id])
 
-      time_since_submission = Time.zone.now - submission.created_at
+      #time since submission in minutes
+      time_since_submission = (Time.zone.now - submission.created_at) / 60
       submission_review_allowed_time =
-        ENV.fetch('SUBMISSION_REVIEW_ALLOWED_TIME', '30').to_i
+        ENV.fetch('INACTIVE_SUBMISSION_REVIEW_ALLOWED_TIME', '30').to_i
 
       is_submission_review_allowed =
         (

@@ -1,24 +1,24 @@
 type locale
 
-@bs.deriving(abstract)
+@deriving(abstract)
 type formatDistanceOptions = {
-  @bs.optional
+  @optional
   includeSeconds: bool,
-  @bs.optional
+  @optional
   addSuffix: bool,
-  @bs.optional
+  @optional
   locale: locale,
 }
 
-@bs.deriving(abstract)
+@deriving(abstract)
 type formatDistanceStrictOptions = {
-  @bs.optional
+  @optional
   addSuffix: bool,
-  @bs.optional
+  @optional
   unit: string,
-  @bs.optional
+  @optional
   roundingMethod: string,
-  @bs.optional
+  @optional
   locale: locale,
 }
 
@@ -28,19 +28,19 @@ let currentTimeZone = () => "Asia/Kolkata"
 // TODO: This function should return either "HH:mm", or "h:mm a" depending on user's preferred time format.
 let selectedTimeFormat = () => "HH:mm"
 
-@bs.module("date-fns")
+@module("date-fns")
 external formatDistanceOpt: (Js.Date.t, Js.Date.t, formatDistanceOptions) => string =
   "formatDistance"
 
-@bs.module("date-fns")
+@module("date-fns")
 external formatDistanceStrictOpt: (Js.Date.t, Js.Date.t, formatDistanceStrictOptions) => string =
   "formatDistanceStrict"
 
-@bs.module("date-fns")
+@module("date-fns")
 external formatDistanceToNowOpt: (Js.Date.t, formatDistanceOptions) => string =
   "formatDistanceToNow"
 
-@bs.module("date-fns")
+@module("date-fns")
 external formatDistanceToNowStrictOpt: (Js.Date.t, formatDistanceStrictOptions) => string =
   "formatDistanceToNowStrict"
 
@@ -72,22 +72,22 @@ let formatDistanceToNowStrict = (date, ~addSuffix=false, ~unit=?, ~roundingMetho
   formatDistanceToNowStrictOpt(date, options)
 }
 
-@bs.deriving(abstract)
+@deriving(abstract)
 type formatOptions = {
   timeZone: string,
-  @bs.optional
+  @optional
   locale: locale,
-  @bs.optional
+  @optional
   weekStartsOn: int,
-  @bs.optional
+  @optional
   firstWeekContainsDate: int,
-  @bs.optional
+  @optional
   useAdditionalWeekYearTokens: bool,
-  @bs.optional
+  @optional
   useAdditionalDayOfYearTokens: bool,
 }
 
-@bs.module("date-fns-tz")
+@module("date-fns-tz")
 external formatTz: (Js.Date.t, string, formatOptions) => string = "format"
 
 let format = (date, fmt) => {
@@ -107,7 +107,7 @@ let formatPreset = (date, ~short=false, ~year=false, ~time=false, ()) => {
   format(date, leading ++ (middle ++ trailing))
 }
 
-@bs.module("date-fns")
+@module("date-fns")
 external decodeISOJs: Js.Json.t => Js.Date.t = "parseISO"
 
 let decodeISO = json =>
@@ -119,11 +119,14 @@ let decodeISO = json =>
 
 let encodeISO = date => Js.Date.toISOString(date)->Js.Json.string
 
-@bs.module("date-fns") external parseISO: string => Js.Date.t = "parseISO"
+@module("date-fns") external parseISO: string => Js.Date.t = "parseISO"
 
-@bs.module("date-fns") external isPast: Js.Date.t => bool = "isPast"
+@module("date-fns") external isPast: Js.Date.t => bool = "isPast"
 
-@bs.module("date-fns") external isFuture: Js.Date.t => bool = "isFuture"
+@module("date-fns") external isFuture: Js.Date.t => bool = "isFuture"
 
-@bs.module("date-fns")
+@module("date-fns")
 external differenceInSeconds: (Js.Date.t, Js.Date.t) => int = "differenceInSeconds"
+
+@module("date-fns")
+external differenceInMinutes: (Js.Date.t, Js.Date.t) => int = "differenceInMinutes"

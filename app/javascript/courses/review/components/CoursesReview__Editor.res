@@ -13,7 +13,7 @@ type status =
 type editor =
   | AssignReviewer
   | GradesEditor
-  | ChecklistEditor(SubmissionDetails.t)
+  | ChecklistEditor
   | ReviewedSubmissionEditor(array<Grade.t>)
 
 type nextSubmission = DataUnloaded | DataLoading | DataEmpty
@@ -47,7 +47,7 @@ type action =
   | UpdateChecklist(array<SubmissionChecklistItem.t>)
   | UpdateNote(string)
   | ShowGradesEditor
-  | ShowChecklistEditor(SubmissionDetails.t)
+  | ShowChecklistEditor
   | ShowAdditionalFeedbackEditor
   | FeedbackAfterSave
   | UpdateEditor(editor)
@@ -72,9 +72,9 @@ let reducer = (state, action) =>
   | UpdateChecklist(checklist) => {...state, checklist: checklist}
   | UpdateNote(note) => {...state, note: Some(note)}
   | ShowGradesEditor => {...state, editor: GradesEditor}
-  | ShowChecklistEditor(submissionDetails) => {
+  | ShowChecklistEditor => {
       ...state,
-      editor: ChecklistEditor(submissionDetails),
+      editor: ChecklistEditor,
     }
   | ChangeReportVisibility => {...state, showReport: !state.showReport}
   | ShowAdditionalFeedbackEditor => {...state, additonalFeedbackEditorVisible: true}
@@ -903,7 +903,7 @@ let feedbackGenerator = (
   submissionDetails,
   reviewChecklist,
   state,
-  ~showAddFeedback=true,
+  ~showAddFeedbackEditor=true,
   send,
 ) => {
   <div className="px-4 md:px-6 pt-4 space-y-8">
@@ -920,7 +920,7 @@ let feedbackGenerator = (
         <button
           disabled={SubmissionDetails.preview(submissionDetails)}
           className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
-          onClick={_ => send(ShowChecklistEditor(submissionDetails))}>
+          onClick={_ => send(ShowChecklistEditor)}>
           <span>
             {(
               ArrayUtils.isEmpty(reviewChecklist)
@@ -932,7 +932,7 @@ let feedbackGenerator = (
         </button>
       </div>
     </div>
-    {showAddFeedback
+    {showAddFeedbackEditor
       ? <div className="course-review__feedback-editor text-sm">
           <h5 className="font-semibold text-sm flex items-center">
             <PfIcon
@@ -1319,7 +1319,7 @@ let make = (
                 submissionDetails,
                 reviewChecklist,
                 state,
-                ~showAddFeedback=false,
+                ~showAddFeedbackEditor=false,
                 send,
               )}
               <div
@@ -1423,7 +1423,7 @@ let make = (
               )}
             </div>
 
-          | ChecklistEditor(submissionDetails) =>
+          | ChecklistEditor =>
             <div>
               <CoursesReview__Checklist
                 reviewChecklist
@@ -1433,7 +1433,7 @@ let make = (
                 updateReviewChecklistCB={updateReviewChecklist(updateReviewChecklistCB, send)}
                 targetId
                 cancelCB={_ => send(UpdateEditor(findEditor(pending, overlaySubmission)))}
-                submissionDetails
+                overlaySubmission
               />
             </div>
 

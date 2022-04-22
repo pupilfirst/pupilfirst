@@ -246,7 +246,7 @@ feature 'Submission review overlay', js: true do
 
       expect(page).to have_content('Save Checklist')
       click_button 'Save Checklist'
-
+      dismiss_notification
       within("div[data-checklist-item='0']") do
         expect(page).to have_content('Default checklist')
 

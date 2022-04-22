@@ -97,7 +97,7 @@ let make = (
   ~updateFeedbackCB,
   ~showEditorCB,
   ~cancelCB,
-  ~submissionDetails,
+  ~overlaySubmission,
 ) => {
   let (checklist, setChecklist) = React.useState(() => reviewChecklist)
   let (selection, setSelecton) = React.useState(() => [])
@@ -191,7 +191,7 @@ let make = (
     </div>
     <div
       className="flex justify-end bg-white md:bg-gray-100 border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
-      {switch SubmissionDetails.reviewer(submissionDetails) {
+      {switch OverlaySubmission.evaluatorName(overlaySubmission) {
       | Some(_) =>
         <button
           className="btn btn-primary w-full md:w-auto"

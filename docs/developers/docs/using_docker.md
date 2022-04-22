@@ -20,9 +20,9 @@ There are several environment variables you'll need to set up to get the applica
 #### Basic configuration
 
 ```
-ASSET_HOST=https://assets.mydomain.com
+ASSET_HOST=https://fully-qualified.domain-name.com
 DATABASE_URL=postgresql://username:password@host:port/database?sslmode=require
-DEFAULT_SENDER_EMAIL_ADDRESS=noreply@mydomain.com
+DEFAULT_SENDER_EMAIL_ADDRESS=noreply@domain-name.com
 GRAPH_API_RATE_LIMIT=10
 I18N_AVAILABLE_LOCALES=en,ru
 I18N_DEFAULT_LOCALE=en
@@ -50,6 +50,8 @@ AWS_SECRET_ACCESS_KEY=secret_access_key_from_aws
 AWS_REGION=bucket_region_name
 AWS_BUCKET=bucket_name_from_aws
 ```
+
+Generate these variables using [these instructions](/docs/heroku#file-storage-using-aws).
 
 #### Google Recaptcha
 

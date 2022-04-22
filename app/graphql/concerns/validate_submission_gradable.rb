@@ -8,7 +8,7 @@ module ValidateSubmissionGradable
       #time since submission in minutes
       time_since_submission = (Time.zone.now - submission.created_at) / 60
       submission_review_allowed_time =
-        ENV.fetch('INACTIVE_SUBMISSION_REVIEW_ALLOWED_TIME', '30').to_i
+        Rails.application.secrets.inactive_submission_review_allowed_time
 
       is_submission_review_allowed =
         (

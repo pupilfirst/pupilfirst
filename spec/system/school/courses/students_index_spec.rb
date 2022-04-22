@@ -368,7 +368,6 @@ feature 'School students index', js: true do
         expect(user_1.affiliation).to eq(nil)
         expect(student_1.startup.reload.name).to eq(user_1.name)
 
-
         # Form a Team
         check "select-student-#{student_1.id}"
         check "select-student-#{student_2.id}"
@@ -403,7 +402,7 @@ feature 'School students index', js: true do
 
         # Assign a coach to a team
         founder = startup_2.founders.last
-        find('a', text: founder.user.name).click
+        find('button', text: founder.user.name).click
 
         # Coach in a different course must not be listed.
         expect(page).to have_text('Team Coaches')

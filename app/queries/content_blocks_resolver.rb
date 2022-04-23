@@ -37,7 +37,7 @@ class ContentBlocksResolver < ApplicationQuery
     }
   end
 
-  def curriculum_editor_max_length(content_block)
+  def curriculum_editor_max_length
     { "curriculum_editor_max_length" => ContentBlock.markdown_curriculum_editor_max_length }
   end
 
@@ -54,7 +54,7 @@ class ContentBlocksResolver < ApplicationQuery
         content_block_data.merge!(file_details(content_block))
       end
       if content_block.markdown?
-        content_block_data["content"].merge!(curriculum_editor_max_length(content_block))
+        content_block_data["content"].merge!(curriculum_editor_max_length)
       end
       content_block_data.symbolize_keys
     end

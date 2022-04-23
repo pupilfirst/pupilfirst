@@ -266,6 +266,7 @@ module Fragments = %graphql(
       }
       ... on MarkdownBlock {
         markdown
+        curriculumEditorMaxLength
       }
       ... on EmbedBlock {
         url

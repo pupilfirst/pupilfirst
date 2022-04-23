@@ -3,7 +3,7 @@ class UpdateMarkdownContentBlockMutator < ApplicationQuery
   include ContentBlockEditable
 
   property :id, validates: { presence: true }
-  property :markdown, validates: { presence: true }
+  property :markdown, validates: { length: { maximum: Rails.application.secrets.markdown_content_block_maximum_length } }
 
   validate :must_be_a_markdown_block
   validate :must_be_latest_version

@@ -42,7 +42,7 @@ let make = (~contentBlocks) =>
   <div className="text-base" id="learn-component">
     {contentBlocks |> ContentBlock.sort |> Array.map(block => {
       let renderedBlock = switch block |> ContentBlock.blockType {
-      | Markdown(markdown, _courseAuthorMaxLength) => markdownContentBlock(markdown)
+      | Markdown(markdown, _curriculumEditorMaxLength) => markdownContentBlock(markdown)
       | File(url, title, filename) => fileContentBlock(url, title, filename)
       | Image(url, caption, width) => imageContentBlock(url, caption, width)
       | Embed(_url, embedCode, _requestType, _lastResolvedAt) =>

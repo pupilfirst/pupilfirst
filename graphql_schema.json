@@ -4713,7 +4713,7 @@
           "description": null,
           "fields": [
             {
-              "name": "courseAuthorMaxLength",
+              "name": "curriculumEditorMaxLength",
               "description": null,
               "args": [
 

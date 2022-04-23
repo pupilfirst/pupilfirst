@@ -2,7 +2,7 @@ exception UnexpectedBlockType(string)
 exception UnexpectedRequestSource(string)
 
 type markdown = string
-type courseAuthorMaxLength = int
+type curriculumEditorMaxLength = int
 type url = string
 type title = string
 type caption = string
@@ -19,7 +19,7 @@ type width =
   | TwoFifths
 
 type blockType =
-  | Markdown(markdown, courseAuthorMaxLength)
+  | Markdown(markdown, curriculumEditorMaxLength)
   | File(url, title, filename)
   | Image(url, caption, width)
   | Embed(url, embedCode, requestSource, lastResolvedAt)
@@ -45,7 +45,7 @@ let decodeMarkdownContent = json => {
   open Json.Decode
   (
     json |> field("markdown", string),
-    json |> field("courseAuthorMaxLength", int),
+    json |> field("curriculumEditorMaxLength", int),
   )
 }
 let decodeFileContent = json => {
@@ -107,8 +107,8 @@ let decode = json => {
 
   let blockType = switch json |> field("blockType", string) {
   | "markdown" =>
-    let (markdown, courseAuthorMaxLength) = json |> field("content", decodeMarkdownContent)
-    Markdown(markdown, courseAuthorMaxLength)
+    let (markdown, curriculumEditorMaxLength) = json |> field("content", decodeMarkdownContent)
+    Markdown(markdown, curriculumEditorMaxLength)
   | "file" =>
     let title = json |> field("content", decodeFileContent)
     let url = json |> field("fileUrl", string)
@@ -143,7 +143,7 @@ let id = t => t.id
 let blockType = t => t.blockType
 let sortIndex = t => t.sortIndex
 
-let makeMarkdownBlock = (markdown, courseAuthorMaxLength) => Markdown(markdown, courseAuthorMaxLength)
+let makeMarkdownBlock = (markdown, curriculumEditorMaxLength) => Markdown(markdown, curriculumEditorMaxLength)
 let makeImageBlock = (fileUrl, caption, width) => Image(fileUrl, caption, width)
 let makeFileBlock = (fileUrl, title, fileName) => File(fileUrl, title, fileName)
 let makeEmbedBlock = (url, embedCode, requestSource, lastResolvedAt) => Embed(
@@ -159,7 +159,7 @@ let makeFromJs = js => {
   let id = js["id"]
   let sortIndex = js["sortIndex"]
   let blockType = switch js["content"] {
-  | #MarkdownBlock(content) => Markdown(content["markdown"], content["courseAuthorMaxLength"])
+  | #MarkdownBlock(content) => Markdown(content["markdown"], content["curriculumEditorMaxLength"])
   | #FileBlock(content) => File(content["url"], content["title"], content["filename"])
   | #ImageBlock(content) =>
     Image(
@@ -234,7 +234,7 @@ let updateImageWidth = (t, width) =>
 
 let updateMarkdown = (markdown, t) =>
   switch t.blockType {
-  | Markdown(_, courseAuthorMaxLength) => {...t, blockType: Markdown(markdown, courseAuthorMaxLength)}
+  | Markdown(_, curriculumEditorMaxLength) => {...t, blockType: Markdown(markdown, curriculumEditorMaxLength)}
   | File(_)
   | Image(_)
   | Audio(_)
@@ -304,7 +304,7 @@ module Query = %graphql(
           }
           ... on MarkdownBlock {
             markdown
-            courseAuthorMaxLength
+            curriculumEditorMaxLength
           }
           ... on EmbedBlock {
             url

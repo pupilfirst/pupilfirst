@@ -234,7 +234,7 @@ let updateImageWidth = (t, width) =>
 
 let updateMarkdown = (markdown, t) =>
   switch t.blockType {
-  | Markdown(_) => {...t, blockType: Markdown(markdown)}
+  | Markdown(_, courseAuthorMaxLength) => {...t, blockType: Markdown(markdown, courseAuthorMaxLength)}
   | File(_)
   | Image(_)
   | Audio(_)

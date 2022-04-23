@@ -37,6 +37,10 @@ class ContentBlocksResolver < ApplicationQuery
     }
   end
 
+  def course_author_max_length(content_block)
+    { "course_author_max_length" => ContentBlock.markdown_course_author_max_length }
+  end
+
   def content_data(content_blocks)
     content_blocks.with_attached_file.map do |content_block|
       content_block_data =
@@ -50,7 +54,7 @@ class ContentBlocksResolver < ApplicationQuery
         content_block_data.merge!(file_details(content_block))
       end
       if content_block.markdown?
-        content_block_data["content"].merge!({"markdown_course_author_max_length" => Rails.application.secrets.markdown_course_author_max_length})
+        content_block_data["content"].merge!(course_author_max_length(content_block))
       end
       content_block_data.symbolize_keys
     end

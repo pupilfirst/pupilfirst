@@ -260,7 +260,7 @@ module Fragments = %graphql(
       }
       ... on MarkdownBlock {
         markdown
-        markdownCourseAuthorMaxLength
+        courseAuthorMaxLength
       }
       ... on EmbedBlock {
         url
@@ -299,7 +299,7 @@ module Query = %graphql(
           }
           ... on MarkdownBlock {
             markdown
-            markdownCourseAuthorMaxLength
+            courseAuthorMaxLength
           }
           ... on EmbedBlock {
             url

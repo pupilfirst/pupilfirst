@@ -269,4 +269,19 @@ class ApplicationController < ActionController::Base
   def redirect_to_primary_domain
     observable_redirect_to "#{request.ssl? ? 'https' : 'http'}://#{current_school.domains.primary.fqdn}#{request.path}"
   end
+
+  before_action :set_last_seen_at,
+                if:
+                  proc {
+                    user_signed_in? &&
+                      (
+                        session[:last_seen_at] == nil ||
+                          session[:last_seen_at] < 15.minutes.ago
+                      )
+                  }
+
+  def set_last_seen_at
+    current_user.update(last_seen_at: Time.current)
+    session[:last_seen_at] = Time.current
+  end
 end

@@ -155,7 +155,7 @@ let createCourseExport = (state, send, course, event) => {
 }
 
 let toggleChoiceClasses = value => {
-  let defaultClasses = "relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4 w-full"
+  let defaultClasses = "relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 rounded p-4 w-full"
   value
     ? defaultClasses ++ " bg-gray-200 text-primary-500 border-primary-500"
     : defaultClasses ++ " opacity-75 text-gray-900"
@@ -285,7 +285,7 @@ let make = (~course, ~exports, ~tags) => {
       <div className="flex px-6 py-2 items-center justify-between">
         <button
           onClick={_ => send(OpenDrawer)}
-          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-file-export text-lg" />
           <h5 className="font-semibold ml-2"> {t("create_action")->str} </h5>
         </button>
@@ -354,7 +354,7 @@ let make = (~course, ~exports, ~tags) => {
                           <a
                             ariaLabel={"Download Course Export " ++
                             (courseExport |> CourseExport.id)}
-                            className="w-10 text-xs text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
+                            className="w-10 text-xs course-faculty__list-item-remove text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-primary-500 focus:outline-none focus:bg-gray-200 focus:text-primary-500"
                             href={file |> CourseExport.filePath}>
                             <FaIcon classes="fas fa-file-download" />
                           </a>

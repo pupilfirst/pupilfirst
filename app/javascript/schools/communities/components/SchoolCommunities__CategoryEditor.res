@@ -217,7 +217,7 @@ let make = (
         <button
           title="Delete Category"
           onClick={deleteCategory(category, deleteCategoryCB, send)}
-          className="text-xs py-1 px-2 h-8 text-gray-700 hover:text-gray-900 hover:bg-gray-100 border-l border-gray-400">
+          className="text-xs py-1 px-2 h-8 text-gray-700 hover:text-red-500 hover:bg-gray-100 focus:text-red-500 focus:bg-gray-100 border-l border-gray-400">
           <FaIcon classes={state.deleting ? "fas fa-spinner fa-spin" : "fas fa-trash-alt"} />
         </button>
       </div>
@@ -225,6 +225,7 @@ let make = (
   | None =>
     <div className="flex mt-2">
       <input
+        autoFocus=true
         id="add-new-category"
         onChange={event => {
           let name = ReactEvent.Form.target(event)["value"]
@@ -232,7 +233,7 @@ let make = (
         }}
         value=state.categoryName
         placeholder="Add new category"
-        className="appearance-none h-10 block w-full text-gray-700 border rounded border-gray-400 py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
+        className="appearance-none h-10 block w-full text-gray-700 border rounded border-gray-400 py-2 px-4 text-sm hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
       />
       {
         let showButton = state.categoryName |> String.trim != ""

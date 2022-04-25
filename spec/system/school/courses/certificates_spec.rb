@@ -87,7 +87,7 @@ feature 'Certificates', js: true do
         expect(page).to have_text('Never issued')
       end
 
-      find("a[title='Edit Certificate #{certificate_unissued.name}'").click
+      find("button[title='Edit Certificate #{certificate_unissued.name}'").click
       fill_in 'Name', with: name
 
       within('div[aria-label="auto_issue"]') do
@@ -130,7 +130,7 @@ feature 'Certificates', js: true do
     scenario 'school admin edits an issued certificate' do
       sign_in_user school_admin.user, referrer: certificates_school_course_path(course)
 
-      find("a[title='Edit Certificate #{certificate_issued.name}'").click
+      find("button[title='Edit Certificate #{certificate_issued.name}'").click
       fill_in 'Name', with: name
 
       expect(page).to have_text('This certificate has been issued 2 times.')
@@ -142,7 +142,7 @@ feature 'Certificates', js: true do
       expect(page).not_to have_selector("a[title='Delete Certificate #{certificate_issued.name}']")
 
       accept_confirm do
-        find("a[title='Delete Certificate #{certificate_unissued.name}']").click
+        find("button[title='Delete Certificate #{certificate_unissued.name}']").click
       end
 
       expect(page).to have_text('Done!')
@@ -174,7 +174,7 @@ feature 'Certificates', js: true do
     scenario 'user visits certificate editor for course without milestone targets in highest level' do
       sign_in_user school_admin.user, referrer: certificates_school_course_path(course_without_targets)
 
-      find("a[title='Edit Certificate #{certificate_c1.name}'").click
+      find("button[title='Edit Certificate #{certificate_c1.name}'").click
 
       expect(page).to have_text('Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.')
     end
@@ -182,7 +182,7 @@ feature 'Certificates', js: true do
     scenario 'user visits certificate editor for course with milestone targets in highest level' do
       sign_in_user school_admin.user, referrer: certificates_school_course_path(course_with_milestone_target)
 
-      find("a[title='Edit Certificate #{certificate_c2.name}'").click
+      find("button[title='Edit Certificate #{certificate_c2.name}'").click
 
       expect(page).not_to have_text('Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.')
     end
@@ -190,7 +190,7 @@ feature 'Certificates', js: true do
     scenario 'user visits certificate editor for course with no live milestone target groups' do
       sign_in_user school_admin.user, referrer: certificates_school_course_path(course_with_archived_milestone)
 
-      find("a[title='Edit Certificate #{certificate_c3.name}'").click
+      find("button[title='Edit Certificate #{certificate_c3.name}'").click
 
       expect(page).to have_text('Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.')
     end

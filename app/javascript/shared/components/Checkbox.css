@@ -4,61 +4,51 @@
   @apply select-none cursor-pointer;
 }
 
-.checkbox__label div {
-  @apply inline-block;
-  transform: translate3d(0, 0, 0);
+.checkbox__input {
+  appearance: none;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--color-primary-200);
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+  cursor: pointer;
 }
 
-.checkbox__label div:first-child {
-  @apply relative rounded align-middle border border-gray-500 bg-white w-4 h-4 mr-3;
-  transform: scale(1);
-  transition: all 0.2s ease;
-}
-
-.checkbox__label div:first-child svg {
-  position: absolute;
-  top: 3px;
-  left: 2px;
-  fill: none;
-  stroke: #ffffff;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 16px;
-  stroke-dashoffset: 16px;
-  transition: all 0.3s ease;
-  transition-delay: 0.1s;
-  transform: translate3d(0, 0, 0);
-}
-
-.checkbox__label div:first-child:before {
+.checkbox__input::before {
   content: "";
-  @apply bg-primary-500 w-full h-full block opacity-100 rounded-full;
+  width: 10px;
+  height: 10px;
   transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 16px 16px white;
+  transform-origin: bottom left;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
 
-.checkbox__label:hover div:first-child,
-.checkbox__input:focus + label div:first-child {
-  @apply outline-none bg-primary-100 border-primary-500;
+.checkbox__input:checked::before {
+  transform: scale(1);
 }
 
-.checkbox__input:checked + .checkbox__label div:first-child {
-  @apply bg-primary-500 border-primary-500;
-  animation: wave 0.4s ease;
+.checkbox__input:checked {
+  background-color: var(--color-primary-500);
+  border: 1px solid var(--color-primary-500);
 }
 
-.checkbox__input:checked + .checkbox__label div:first-child svg {
-  stroke-dashoffset: 0;
+.checkbox__input:focus {
+  outline: none;
+  border: 1px solid var(--color-primary-500);
 }
 
-.checkbox__input:checked + .checkbox__label div:first-child:before {
-  transform: scale(3.5);
-  opacity: 0;
-  transition: all 0.6s ease;
+.checkbox__input:hover {
+  border: 2px solid var(--color-primary-500);
 }
 
-@keyframes wave {
-  50% {
-    transform: scale(0.9);
-  }
+.checkbox__input:disabled {
+  color: grey;
+  cursor: not-allowed;
 }

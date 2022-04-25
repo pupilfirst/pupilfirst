@@ -93,7 +93,7 @@ feature 'Target Details Editor', js: true do
     expect(page).to_not have_button('Visit a link to complete the target.')
     expect(page).to have_text('At least one has to be selected')
 
-    find("div[title='Select #{evaluation_criterion.display_name}']").click
+    find("button[title='Select #{evaluation_criterion.display_name}']").click
 
     within('div#visibility') { click_button 'Live' }
 
@@ -155,7 +155,7 @@ feature 'Target Details Editor', js: true do
             with: quiz_question_1_answer_option_1
     fill_in 'quiz-question-1-answer-option-2',
             with: quiz_question_1_answer_option_2
-    find('a', text: 'Add another Answer Option').click
+    find('button', text: 'Add another Answer Option').click
     fill_in 'quiz-question-1-answer-option-3',
             with: quiz_question_1_answer_option_3
 
@@ -164,7 +164,7 @@ feature 'Target Details Editor', js: true do
     end
 
     # Quiz Question 2
-    find('a', text: 'Add another Question').click
+    find('button', text: 'Add another Question').click
     replace_markdown(quiz_question_2, id: 'quiz-question-2')
     fill_in 'quiz-question-2-answer-option-1',
             with: quiz_question_2_answer_option_1
@@ -209,8 +209,8 @@ feature 'Target Details Editor', js: true do
       expect(page).not_to have_text(archived_target.title)
       expect(page).not_to have_text(target_1_l1.title)
 
-      find("div[title='Select #{target_2_l2.title}']").click
-      find("div[title='Select #{draft_target.title}']").click
+      find("button[title='Select #{target_2_l2.title}']").click
+      find("button[title='Select #{draft_target.title}']").click
     end
 
     click_button 'Only one student in a team needs to submit.'
@@ -237,7 +237,7 @@ feature 'Target Details Editor', js: true do
     within('div#prerequisite_targets') do
       expect(page).to have_text(target_2_l2.title)
 
-      find("div[title='Select #{target_2_l2.title}']").click
+      find("button[title='Select #{target_2_l2.title}']").click
     end
 
     click_button 'Update Target'
@@ -597,7 +597,7 @@ feature 'Target Details Editor', js: true do
         'This target has no steps. Students will be able to submit target without any action!'
       )
 
-      find("div[title='Select #{evaluation_criterion.display_name}']").click
+      find("button[title='Select #{evaluation_criterion.display_name}']").click
 
       click_button 'Update Target'
       expect(page).to have_text('Target updated successfully')
@@ -741,7 +741,7 @@ feature 'Target Details Editor', js: true do
 
         within('div#evaluated') { click_button 'Yes' }
 
-        find("div[title='Select #{evaluation_criterion.display_name}']").click
+        find("button[title='Select #{evaluation_criterion.display_name}']").click
 
         within('div#visibility') { click_button 'Live' }
 

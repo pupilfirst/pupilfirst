@@ -100,9 +100,10 @@ let showLinks = (state, send, removeLinkCB, kind, links) =>
           }}
         </div>
         <button
+          ariaLabel={"Delete " ++ title}
           title={"Delete " ++ url}
           onClick={handleDelete(state, send, removeLinkCB, id)}
-          className="p-3">
+          className="p-3 hover:text-red-500 focus:text-red-500">
           <FaIcon classes={deleteIconClasses(state.deleting |> List.mem(id))} />
         </button>
       </div>
@@ -119,7 +120,7 @@ let titleInputVisible = state =>
   }
 
 let kindClasses = selected => {
-  let classes = "nav-tab-item border-t cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-gray-800 bg-white hover:bg-gray-200 hover:text-gray-900 py-3 px-4 font-semibold leading-tight focus:outline-none"
+  let classes = "nav-tab-item border-t cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-gray-800 bg-white hover:bg-gray-200 hover:text-gray-900 py-3 px-4 font-semibold leading-tight focus:outline-none focus:bg-gray-200 focus:text-gray-900"
   classes ++ (
     selected
       ? " nav-tab-item--selected text-primary-500 bg-white hover:bg-white hover:text-primary-500"
@@ -270,25 +271,34 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
       <label className="inline-block tracking-wide text-xs font-semibold">
         {"Location of Link" |> str}
       </label>
-      <div className="flex bg-white border border-t-0 rounded-t mt-2">
-        <div
-          title="Show header links"
+      <div role="tablist" className="flex bg-white border border-t-0 rounded-t mt-2">
+        <button
+          role="tab"
+          ariaSelected={state.kind == HeaderLink}
+          ariaLabel="View and edit header links"
+          title="View and edit header links"
           className={kindClasses(state.kind == HeaderLink)}
           onClick={handleKindChange(send, HeaderLink)}>
           {"Header" |> str}
-        </div>
-        <div
-          title="Show footer links"
+        </button>
+        <button
+          role="tab"
+          ariaSelected={state.kind == FooterLink}
+          ariaLabel="View and edit footer links"
+          title="View and edit footer links"
           className={kindClasses(state.kind == FooterLink) ++ " border-l"}
           onClick={handleKindChange(send, FooterLink)}>
           {"Footer Sitemap" |> str}
-        </div>
-        <div
-          title="Show social media links"
+        </button>
+        <button
+          role="tab"
+          ariaSelected={state.kind == SocialLink}
+          ariaLabel="View and edit social media links"
+          title="View and edit social media links"
           className={kindClasses(state.kind == SocialLink) ++ " border-l"}
           onClick={handleKindChange(send, SocialLink)}>
           {"Social" |> str}
-        </div>
+        </button>
       </div>
     </div>
     <div className="p-5 border border-t-0 rounded-b">
@@ -305,7 +315,8 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
                 {"Title" |> str}
               </label>
               <input
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                autoFocus=true
+                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
                 id="link-title"
                 type_="text"
                 placeholder="A short title for a new link"
@@ -324,7 +335,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
               {"Full URL" |> str}
             </label>
             <input
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
               id="link-full-url"
               type_="text"
               placeholder="Full URL, staring with https://"

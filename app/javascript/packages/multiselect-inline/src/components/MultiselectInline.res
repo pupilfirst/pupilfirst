@@ -76,7 +76,7 @@ module Make = (Selectable: Selectable) => {
                   {selected |> Selectable.value |> str}
                 </span>
                 <button
-                  className={"inline-flex flex-shrink-0 px-2 py-1 text-sm border-l-0 rounded-r items-center text-gray-800 hover:bg-gray-200 hover:text-gray-900 focus:outline-none " ++
+                  className={"inline-flex flex-shrink-0 px-2 py-1 text-sm border-l-0 rounded-r items-center text-gray-800 hover:bg-gray-200 hover:text-red-500 focus:outline-none focus:bg-gray-200 focus:text-red-500 " ++
                   borderColor(colorForSelected)}
                   title="Remove"
                   onClick={event => {
@@ -117,14 +117,15 @@ module Make = (Selectable: Selectable) => {
                 : React.null}
               <div className={showSearchForm ? "multiselect-inline__list overflow-y-scroll" : ""}>
                 {searchResults |> Array.mapi((index, item) =>
-                  <div
+                  <button
                     key={index |> string_of_int}
                     onClick={_event => {
                       ReactEvent.Mouse.preventDefault(_event)
                       onSelect(item)
                     }}
+                    ariaLabel={"Select " ++ (item |> Selectable.value)}
                     title={"Select " ++ (item |> Selectable.value)}
-                    className="flex multiselect-inline__list-item  items-center px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500 cursor-pointer">
+                    className="flex w-full multiselect-inline__list-item  items-center px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 cursor-pointer">
                     <i
                       className="far fa-square multiselect-inline__list-item-select-icon-unselected text-gray-400 text-xl"
                     />
@@ -132,7 +133,7 @@ module Make = (Selectable: Selectable) => {
                       className="far fa-plus-square multiselect-inline__list-item-select-icon-selected text-xl"
                     />
                     <span className="ml-2"> {item |> Selectable.value |> str} </span>
-                  </div>
+                  </button>
                 ) |> React.array}
               </div>
             </div>

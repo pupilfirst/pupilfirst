@@ -244,7 +244,8 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                 </label>
                 <span> {"*" |> str} </span>
                 <input
-                  className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  autoFocus=true
+                  className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
                   id="name"
                   type_="text"
                   placeholder="Type target group name here"
@@ -280,7 +281,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                     {"Is this a milestone target group?" |> str}
                   </label>
                   <div
-                    className="milestone flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
+                    className="milestone flex-shrink-0 overflow-hidden">
                     <button
                       onClick={_event => {
                         ReactEvent.Mouse.preventDefault(_event)
@@ -310,7 +311,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                       {"Is this target group archived?" |> str}
                     </label>
                     <div
-                      className="toggle-button__group archived inline-flex flex-shrink-0 rounded-lg overflow-hidden">
+                      className="toggle-button__group archived inline-flex flex-shrink-0 overflow-hidden">
                       <button
                         onClick={_event => {
                           ReactEvent.Mouse.preventDefault(_event)

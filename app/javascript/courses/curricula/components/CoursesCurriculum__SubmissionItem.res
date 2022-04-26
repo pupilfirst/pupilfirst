@@ -159,9 +159,9 @@ let showFiles = (files, preview, id, attachingCB, updateResultCB, index) =>
           target="_blank"
           className="w-1/3 pr-2 pb-2">
           <div
-            className="flex justify-between border overflow-hidden rounded border-pink-400 bg-white text-pink-700 hover:text-pink-700">
+            className="flex justify-between border overflow-hidden rounded border-red-300 bg-white text-red-600 hover:text-red-600">
             <div className="flex">
-              <span className="flex w-10 justify-center items-center p-2 bg-pink-700 text-white">
+              <span className="flex w-10 justify-center items-center p-2 bg-red-600 text-white">
                 <i className="far fa-file" />
               </span>
               <span

@@ -526,7 +526,7 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
         ariaLabel={t("help_aria_label")}
         href="/help/markdown_editor"
         target="_blank"
-        className="flex items-center px-3 py-2 hover:bg-gray-300 hover:text-secondary-500 focus:outline-none focus:bg-gray-300 focus:text-secondary-500 cursor-pointer">
+        className="flex items-center px-3 py-2 hover:bg-gray-300 hover:text-red-500 focus:outline-none focus:bg-gray-300 focus:text-red-500 cursor-pointer">
         <i className="fab fa-markdown text-sm" />
         <span className="text-xs ml-1 font-semibold hidden sm:inline">
           {t("help_label")->str}
@@ -537,8 +537,11 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
 }
 
 let textareaClasses = (mode, dynamicHeight) => {
-  let editorClasses = dynamicHeight ? "w-full outline-none font-mono " : "markdown-editor__textarea w-full outline-none font-mono "
-  editorClasses ++ "align-top focus:ring-1 focus:ring-indigo-500 " ++
+  let editorClasses = dynamicHeight
+    ? "w-full outline-none font-mono "
+    : "markdown-editor__textarea w-full outline-none font-mono "
+  editorClasses ++
+  "align-top focus:ring-1 focus:ring-indigo-500 " ++
   switch mode {
   | Windowed(_) => "p-3"
   | Fullscreen(_) => "markdown-editor__textarea--full-screen px-3 pt-4 pb-8 h-full resize-none"

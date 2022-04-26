@@ -72,15 +72,13 @@ let updateCertificate = (state, send, certificate) => {
   send(UpdateCertificates(newCertificates))
 }
 
-module DeleteCertificateMutation = %graphql(
-  `
+module DeleteCertificateMutation = %graphql(`
   mutation DeleteCertificateMutation($id: ID!) {
     deleteCertificate(id: $id) {
       success
     }
   }
-`
-)
+`)
 
 let deleteCertificate = (certificate, send) => {
   send(BeginDeleting)
@@ -181,7 +179,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
                               ? <div
                                   className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
                                   <span
-                                    className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
+                                    className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 mr-1">
                                     {t("auto_issue_tag")->str}
                                   </span>
                                 </div>

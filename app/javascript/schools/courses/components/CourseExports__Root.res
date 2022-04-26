@@ -326,13 +326,13 @@ let make = (~course, ~exports, ~tags) => {
                           <div className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
                             {courseExport->CourseExport.reviewedOnly
                               ? <span
-                                  className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
+                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 mr-1">
                                   {t("reviewed_only_tag")->str}
                                 </span>
                               : React.null}
                             {courseExport->CourseExport.includeInactiveStudents
                               ? <span
-                                  className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
+                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 mr-1">
                                   {t("include_inactive_students_tag")->str}
                                 </span>
                               : React.null}

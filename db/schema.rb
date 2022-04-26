@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_31_123330) do
+ActiveRecord::Schema.define(version: 2022_04_25_082348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -124,6 +124,14 @@ ActiveRecord::Schema.define(version: 2022_03_31_123330) do
     t.index ["student_id"], name: "index_coach_notes_on_student_id"
   end
 
+  create_table "cohorts", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.datetime "ends_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "communities", force: :cascade do |t|
     t.string "name"
     t.boolean "target_linkable", default: false
@@ -192,6 +200,8 @@ ActiveRecord::Schema.define(version: 2022_03_31_123330) do
     t.boolean "public_preview", default: false
     t.string "processing_url"
     t.jsonb "highlights", default: []
+    t.bigint "default_cohort_id"
+    t.index ["default_cohort_id"], name: "index_courses_on_default_cohort_id"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end
 
@@ -256,6 +266,15 @@ ActiveRecord::Schema.define(version: 2022_03_31_123330) do
     t.index ["user_id"], name: "index_faculty_on_user_id"
   end
 
+  create_table "faculty_cohort_enrollments", force: :cascade do |t|
+    t.bigint "faculty_id"
+    t.bigint "cohort_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cohort_id", "faculty_id"], name: "index_faculty_cohort_enrollments_on_cohort_id_and_faculty_id", unique: true
+    t.index ["faculty_id"], name: "index_faculty_cohort_enrollments_on_faculty_id"
+  end
+
   create_table "faculty_course_enrollments", force: :cascade do |t|
     t.bigint "faculty_id"
     t.bigint "course_id"
@@ -263,6 +282,15 @@ ActiveRecord::Schema.define(version: 2022_03_31_123330) do
     t.datetime "updated_at", null: false
     t.index ["course_id", "faculty_id"], name: "index_faculty_course_enrollments_on_course_id_and_faculty_id", unique: true
     t.index ["faculty_id"], name: "index_faculty_course_enrollments_on_faculty_id"
+  end
+
+  create_table "faculty_founder_enrollments", force: :cascade do |t|
+    t.bigint "faculty_id"
+    t.bigint "founder_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["faculty_id"], name: "index_faculty_founder_enrollments_on_faculty_id"
+    t.index ["founder_id", "faculty_id"], name: "index_faculty_founder_enrollments_on_founder_id_and_faculty_id", unique: true
   end
 
   create_table "faculty_startup_enrollments", force: :cascade do |t|
@@ -309,6 +337,12 @@ ActiveRecord::Schema.define(version: 2022_03_31_123330) do
     t.boolean "dashboard_toured"
     t.integer "resume_file_id"
     t.boolean "excluded_from_leaderboard", default: false
+    t.datetime "access_ends_at"
+    t.datetime "dropped_out_at"
+    t.bigint "cohort_id"
+    t.bigint "level_id"
+    t.index ["cohort_id"], name: "index_founders_on_cohort_id"
+    t.index ["level_id"], name: "index_founders_on_level_id"
     t.index ["user_id"], name: "index_founders_on_user_id"
   end
 
@@ -783,12 +817,19 @@ ActiveRecord::Schema.define(version: 2022_03_31_123330) do
   add_foreign_key "course_authors", "users"
   add_foreign_key "course_exports", "courses"
   add_foreign_key "course_exports", "users"
+  add_foreign_key "courses", "cohorts", column: "default_cohort_id"
   add_foreign_key "courses", "schools"
   add_foreign_key "domains", "schools"
+  add_foreign_key "faculty_cohort_enrollments", "cohorts"
+  add_foreign_key "faculty_cohort_enrollments", "faculty"
   add_foreign_key "faculty_course_enrollments", "courses"
   add_foreign_key "faculty_course_enrollments", "faculty"
+  add_foreign_key "faculty_founder_enrollments", "faculty"
+  add_foreign_key "faculty_founder_enrollments", "founders"
   add_foreign_key "faculty_startup_enrollments", "faculty"
   add_foreign_key "faculty_startup_enrollments", "startups"
+  add_foreign_key "founders", "cohorts"
+  add_foreign_key "founders", "levels"
   add_foreign_key "founders", "users"
   add_foreign_key "issued_certificates", "certificates"
   add_foreign_key "issued_certificates", "users"

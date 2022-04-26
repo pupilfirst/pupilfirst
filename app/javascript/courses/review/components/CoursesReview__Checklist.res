@@ -45,6 +45,7 @@ let make = (
   ~targetId,
   ~cancelCB,
   ~overlaySubmission,
+  ~submissionDetails,
 ) => {
   let (state, setState) = React.useState(() => ArrayUtils.isEmpty(reviewChecklist) ? Edit : Show)
   <div>
@@ -64,6 +65,7 @@ let make = (
         updateFeedbackCB
         showEditorCB={showEditor(setState)}
         overlaySubmission
+        submissionDetails
       />
     }}
   </div>

@@ -90,6 +90,15 @@ let updateChecklistResultFeedback = (
   )
 }
 
+let generateFeedbackButton = (checklist, selection, feedback, setSelecton, updateFeedbackCB) => {
+  <button
+    className="btn btn-primary w-full md:w-auto"
+    disabled={selection->ArrayUtils.isEmpty}
+    onClick={_ => generateFeedback(checklist, selection, feedback, setSelecton, updateFeedbackCB)}>
+    {t("generate_feedback_button")->str}
+  </button>
+}
+
 @react.component
 let make = (
   ~reviewChecklist,
@@ -98,6 +107,7 @@ let make = (
   ~showEditorCB,
   ~cancelCB,
   ~overlaySubmission,
+  ~submissionDetails,
 ) => {
   let (checklist, setChecklist) = React.useState(() => reviewChecklist)
   let (selection, setSelecton) = React.useState(() => [])
@@ -191,16 +201,15 @@ let make = (
     </div>
     <div
       className="flex justify-end bg-white md:bg-gray-100 border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
-      {switch OverlaySubmission.evaluatorName(overlaySubmission) {
+      {switch SubmissionDetails.reviewer(submissionDetails) {
       | Some(_) =>
-        <button
-          className="btn btn-primary w-full md:w-auto"
-          disabled={selection->ArrayUtils.isEmpty}
-          onClick={_ =>
-            generateFeedback(checklist, selection, feedback, setSelecton, updateFeedbackCB)}>
-          {t("generate_feedback_button")->str}
-        </button>
-      | None => React.null
+        generateFeedbackButton(checklist, selection, feedback, setSelecton, updateFeedbackCB)
+      | None =>
+        switch OverlaySubmission.evaluatedAt(overlaySubmission) {
+        | Some(_) =>
+          generateFeedbackButton(checklist, selection, feedback, setSelecton, updateFeedbackCB)
+        | None => React.null
+        }
       }}
     </div>
   </div>

@@ -1434,6 +1434,7 @@ let make = (
                 targetId
                 cancelCB={_ => send(UpdateEditor(findEditor(pending, overlaySubmission)))}
                 overlaySubmission
+                submissionDetails
               />
             </div>
 

@@ -1,6 +1,6 @@
 exception UnknownPathEncountered(list<string>)
 
-%bs.raw(`require("./SchoolAdminNavbar__Root.css")`)
+%raw(`require("./SchoolAdminNavbar__Root.css")`)
 
 let t = I18n.t(~scope="components.SchoolAdminNavbar__Root")
 
@@ -166,25 +166,32 @@ let make = (
 
   let userRole = isCourseAuthor ? CourseAuthor : SchoolAdmin
 
-  let (selectedOption, shrunk) = switch url.path {
-  | list{"school"} => (Overview, false)
-  | list{"school", "coaches"} => (SchoolCoaches, false)
-  | list{"school", "customize"} => (Settings(Customization), true)
-  | list{"school", "courses"} => (Courses, false)
-  | list{"school", "courses", "new"} => (Courses, false)
-  | list{"school", "courses", _courseId, "details" | "images" | "actions"} => (Courses, false)
+  let (selectedOption, shrunk, component) = switch url.path {
+  | list{"school"} => (Overview, false, None)
+  | list{"school", "coaches"} => (SchoolCoaches, false, None)
+  | list{"school", "customize"} => (Settings(Customization), true, None)
+  | list{"school", "courses"}
+  | list{"school", "courses", "new"} => (Courses, false, Some(<CourseEditor />))
+  | list{"school", "courses", _courseId, "details" | "images" | "actions"} => (
+      Courses,
+      false,
+      Some(<CourseEditor />),
+    )
   | list{"school", "courses", courseId, "students"}
   | list{"school", "courses", courseId, "inactive_students"} => (
       SelectedCourse(courseId, Students),
       true,
+      None,
     )
   | list{"school", "courses", courseId, "coaches"} => (
       SelectedCourse(courseId, CourseCoaches),
       true,
+      None,
     )
   | list{"school", "courses", courseId, "curriculum"} => (
       SelectedCourse(courseId, Curriculum),
       true,
+      None,
     )
   | list{
       "school",
@@ -193,40 +200,60 @@ let make = (
       "targets",
       _targetId,
       "content" | "versions" | "details",
-    } => (SelectedCourse(courseId, Curriculum), true)
+    } => (SelectedCourse(courseId, Curriculum), true, None)
   | list{"school", "courses", courseId, "exports"} => (
       SelectedCourse(courseId, CourseExports),
       true,
+      None,
     )
   | list{"school", "courses", courseId, "applicants"} => (
       SelectedCourse(courseId, Applicants),
       true,
+      None,
     )
   | list{"school", "courses", courseId, "applicants", _applicantId, "details" | "actions"} => (
       SelectedCourse(courseId, Applicants),
       true,
+      None,
     )
-  | list{"school", "courses", courseId, "authors"} => (SelectedCourse(courseId, Authors), true)
+  | list{"school", "courses", courseId, "authors"} => (
+      SelectedCourse(courseId, Authors),
+      true,
+      None,
+    )
   | list{"school", "courses", courseId, "authors", _authorId} => (
       SelectedCourse(courseId, Authors),
       true,
+      None,
     )
   | list{"school", "courses", courseId, "certificates"} => (
       SelectedCourse(courseId, Certificates),
       true,
+      None,
     )
   | list{"school", "courses", courseId, "evaluation_criteria"} => (
       SelectedCourse(courseId, EvaluationCriteria),
       true,
+      None,
     )
-  | list{"school", "communities"} => (Communities, false)
-  | list{"school", "admins"} => (Settings(Admins), true)
+  | list{"school", "communities"} => (Communities, false, None)
+  | list{"school", "admins"} => (Settings(Admins), true, None)
   | _ =>
     Rollbar.critical(
       "Unknown path encountered by SA navbar: " ++
       (url.path |> Array.of_list |> Js.Array.joinWith("/")),
     )
     raise(UnknownPathEncountered(url.path))
+  }
+
+  switch ReactDOM.querySelector("#school-contents") {
+  | Some(element) =>
+    switch component {
+    | Some(contents) => ReactDOM.render(contents, element)
+    | None => element->Webapi.Dom.Element.setClassName("hidden")
+    }
+
+  | None => ()
   }
 
   [

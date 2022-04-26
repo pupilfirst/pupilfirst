@@ -8,12 +8,12 @@ module Schools
     # GET /school/courses
     def index
       authorize(current_school, policy_class: Schools::CoursePolicy)
+      render html: '', layout: 'school'
     end
 
     # GET /school/course/new
     def new
       index
-      render 'index'
     end
 
     # GET /school/course/id/
@@ -27,7 +27,7 @@ module Schools
     def details
       @course =
         authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
-      render 'index'
+      render html: '', layout: 'school'
     end
 
     # POST /courses/id/attach_images

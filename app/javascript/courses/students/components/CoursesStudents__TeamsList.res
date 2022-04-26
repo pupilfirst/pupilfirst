@@ -77,6 +77,16 @@ let showStudent = (team, levels, teamCoaches) => {
               {studentTags(student)} {teamTags(team)}
             </span>
           </div>
+          <div className="text-gray-700 font-semibold text-xs leading-snug flex items-start">
+            <span className="leading-normal pt-px">
+              {str("Last seen at: ")}
+              {switch student->TeamInfo.lastSeenAt {
+                | Some (date) => date -> DateFns.formatDistanceToNowStrict(~addSuffix=true, ())->str
+                | None => React.null
+                }
+                }
+            </span>
+          </div>
         </div>
       </div>
     </div>

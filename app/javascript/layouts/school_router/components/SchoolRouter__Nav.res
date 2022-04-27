@@ -84,11 +84,11 @@ let bottomLink = (path, shrunk, iconClasses, text) => {
 
 let topNavButtonContents = (selectedPage, page) => {
   [
-    <i className={Page.icon(page) ++ " fa-fw text-lg"} />,
+    <i key="icon" className={Page.icon(page) ++ " fa-fw text-lg"} />,
     {
       Page.shrunk(selectedPage)
         ? React.null
-        : <span className="ml-2"> {Page.name(page)->str} </span>
+        : <span key="content" className="ml-2"> {Page.name(page)->str} </span>
     },
   ]->React.array
 }
@@ -196,7 +196,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         {ReactUtils.nullIf(
           <ul>
             {[Page.Overview, SchoolCoaches, Settings(Customization)]
-            ->Js.Array2.map(page => <li> {topLink(selectedPage, page)} </li>)
+            ->Js.Array2.map(page => <li key={Page.name(page)}> {topLink(selectedPage, page)} </li>)
             ->React.array}
             <li>
               {topLink(selectedPage, Courses)}

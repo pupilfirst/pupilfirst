@@ -18,6 +18,7 @@ let make = (~school, ~courses, ~currentUser) => {
   | list{"school", "customize"} => (Settings(Customization), None)
   | list{"school", "courses"}
   | list{"school", "courses", "new"} => (Courses, Some(<CourseEditor />))
+  | list{"school", "courses", _courseId} => (Courses, Some(<CourseEditor />))
   | list{"school", "courses", _courseId, "details" | "images" | "actions"} => (
       Courses,
       Some(<CourseEditor />),

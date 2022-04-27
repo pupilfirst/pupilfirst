@@ -74,18 +74,15 @@ let showStudent = (team, levels, teamCoaches) => {
               {student |> TeamInfo.studentTitle |> str}
             </span>
             <span className="font-normal ml-2 flex flex-wrap">
-              {studentTags(student)} {teamTags(team)}
+              {switch student->TeamInfo.lastSeenAt {
+              | Some(date) =>
+                str("| Last seen: " ++ date->DateFns.formatDistanceToNowStrict(~addSuffix=true, ()))
+              | None => React.null
+              }}
             </span>
           </div>
           <div className="text-gray-700 font-semibold text-xs leading-snug flex items-start">
-            <span className="leading-normal pt-px">
-              {str("Last seen at: ")}
-              {switch student->TeamInfo.lastSeenAt {
-                | Some (date) => date -> DateFns.formatDistanceToNowStrict(~addSuffix=true, ())->str
-                | None => React.null
-                }
-                }
-            </span>
+            {studentTags(student)} {teamTags(team)}
           </div>
         </div>
       </div>

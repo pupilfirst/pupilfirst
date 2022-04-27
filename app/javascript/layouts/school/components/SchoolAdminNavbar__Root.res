@@ -331,7 +331,7 @@ let make = (
                 "/school/communities",
                 shrunk,
                 "fas fa-users",
-                t("communities"),
+                t("navbar.communities"),
               )}
             </li>
           </ul>

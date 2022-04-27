@@ -21,11 +21,13 @@ type t = {
   name: string,
   logoUrl: option<string>,
   links: array<link>,
+  iconUrl: string,
 }
 
 let name = t => t.name
 let logoUrl = t => t.logoUrl
 let links = t => t.links
+let iconUrl = t => t.iconUrl
 
 let decode = json => {
   open Json.Decode
@@ -33,5 +35,6 @@ let decode = json => {
     name: field("name", string, json),
     logoUrl: field("logoUrl", nullable(string), json)->Js.Null.toOption,
     links: field("links", array(decodeLink), json),
+    iconUrl: field("iconUrl", string, json),
   }
 }

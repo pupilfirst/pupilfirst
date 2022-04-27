@@ -61,6 +61,17 @@ Rails.application.routes.draw do
   end
 
   namespace :school, module: 'schools' do
+    [
+      'courses',
+      'courses/new',
+      'courses/:course_id',
+      'courses/:course_id/details',
+      'courses/:course_id/images',
+      'courses/:course_id/actions'
+    ].each do |path|
+      get path, action: 'school_router'
+    end
+
     resources :faculty, only: %i[create update destroy], as: 'coaches', path: 'coaches' do
       collection do
         get '/', action: 'school_index'
@@ -71,12 +82,9 @@ Rails.application.routes.draw do
       resource :content_block, only: %i[create]
     end
 
-    resources :courses, only: %i[index show new] do
+    resources :courses, only: %i[] do
       member do
         get 'applicants'
-        get 'details'
-        get 'images', action: :details
-        get 'actions', action: :details
         get 'curriculum'
         get 'exports'
         get 'authors'

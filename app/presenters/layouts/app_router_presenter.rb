@@ -18,7 +18,12 @@ module Layouts
     # private
 
     def school_details
-      { name: school_name, logo_url: logo_url, links: nav_links }
+      {
+        name: school_name,
+        logo_url: logo_url,
+        icon_url: icon_url,
+        links: nav_links
+      }
     end
 
     def user_details
@@ -28,7 +33,8 @@ module Layouts
         title: current_user.full_title,
         is_admin: current_school_admin.present?,
         can_edit_profile: show_user_edit?,
-        has_notifications: notifications?
+        has_notifications: notifications?,
+        is_author: is_author?
       }
       if current_user.avatar.attached?
         user[:avatar_url] =
@@ -88,6 +94,10 @@ module Layouts
       else
         Course.none
       end
+    end
+
+    def is_author?
+      current_user.course_authors.exists? && current_user.school_admin.blank?
     end
 
     def courses_with_author_access_ids
@@ -221,6 +231,14 @@ module Layouts
     def logo_url
       if current_school.logo_on_light_bg.attached?
         view.rails_public_blob_url(current_school.logo_variant(:high))
+      end
+    end
+
+    def icon_url
+      if current_school.icon.attached?
+        view.rails_public_blob_url(current_school.icon_variant('thumb'))
+      else
+        '/favicon.png'
       end
     end
   end

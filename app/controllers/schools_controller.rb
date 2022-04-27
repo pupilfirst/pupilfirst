@@ -24,17 +24,23 @@ class SchoolsController < ApplicationController
     if form.validate(params)
       form.save
 
-      image_details = Schools::CustomizePresenter.new(view_context).school_images
+      image_details =
+        Schools::CustomizePresenter.new(view_context).school_images
       image_details[:error] = nil
 
       render json: image_details
     else
-      render json: { error: form.errors.full_messages.join(", ") }
+      render json: { error: form.errors.full_messages.join(', ') }
     end
   end
 
   # GET /school/admins
   def admins
     authorize current_school
+  end
+
+  def school_router
+    authorize current_school
+    render html: '', layout: 'school_router'
   end
 end

@@ -5,31 +5,6 @@ module Schools
 
     layout 'school'
 
-    # GET /school/courses
-    def index
-      authorize(current_school, policy_class: Schools::CoursePolicy)
-      render html: '', layout: 'school'
-    end
-
-    # GET /school/course/new
-    def new
-      index
-    end
-
-    # GET /school/course/id/
-    def show
-      @course =
-        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
-      redirect_to details_school_course_path
-    end
-
-    # GET /school/course/id/details
-    def details
-      @course =
-        authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
-      render html: '', layout: 'school'
-    end
-
     # POST /courses/id/attach_images
     def attach_images
       course =

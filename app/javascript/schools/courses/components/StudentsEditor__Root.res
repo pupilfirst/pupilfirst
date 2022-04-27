@@ -252,9 +252,9 @@ let make = (
             <span> {t("button_all_students") |> str} </span>
           </li>
           <li
-            className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-200 hover:text-gray-900">
+            className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-200 hover:text-gray-900 focus-within:outline-none focus-within:bg-gray-200 focus-within:text-gray-900 focus-within:ring-2 focus-within:ring-indigo-500">
             <a
-              className="block px-3 py-3 md:py-2 text-gray-800"
+              className="block px-3 py-3 md:py-2 text-gray-800 focus:outline-none"
               href={"/school/courses/" ++ (courseId ++ "/inactive_students")}>
               {t("button_inactive_students") |> str}
             </a>
@@ -310,7 +310,8 @@ let make = (
                             {selectedStudent |> SelectedStudent.name |> str}
                           </span>
                           <button
-                            className="flex items-center h-full text-xs text-red-700 px-2 py-px border-l focus:outline-none bg-gray-100 hover:bg-red-700 hover:text-white "
+                            ariaLabel={"Remove " ++ (selectedStudent |> SelectedStudent.name)}
+                            className="flex items-center h-full text-xs text-red-700 px-2 py-px border-l focus:outline-none bg-gray-100 hover:bg-red-700 hover:text-white focus:bg-red-700 focus:text-white "
                             onClick={_ =>
                               deselectStudent(send, selectedStudent |> SelectedStudent.id)}>
                             <Icon className="if i-times-regular" />

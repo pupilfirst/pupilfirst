@@ -79,9 +79,11 @@ let renderAuthor = (rootPath, author, send) => {
   let authorPath = rootPath ++ ("/" ++ (author |> Author.id))
   <div key={author |> Author.id} className="flex w-1/2 flex-shrink-0 mb-5 px-3">
     <div
-      className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100">
+      className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
       <a
-        className="w-full cursor-pointer p-4 overflow-hidden"
+        tabIndex=0
+        ariaLabel={"View " ++ (author |> Author.name)}
+        className="w-full cursor-pointer p-4 overflow-hidden focus:outline-none focus:bg-gray-100 focus:text-primary-500"
         href=authorPath
         onClick={event => {
           ReactEvent.Mouse.preventDefault(event)
@@ -105,12 +107,13 @@ let renderAuthor = (rootPath, author, send) => {
           </div>
         </div>
       </a>
-      <div
-        className="w-10 text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-red-600"
-        title={ ts("delete") ++ " " ++ (author |> Author.name)}
+      <button
+        className="w-10 text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-red-500 focus:outline-none focus:text-red-500 focus:bg-gray-200"
+        title={ts("delete") ++ " " ++ (author |> Author.name)}
+        ariaLabel={ts("delete") ++ " " ++ (author |> Author.name)}
         onClick={removeCourseAuthor(send, author)}>
         <i className="fas fa-trash-alt" />
-      </div>
+      </button>
     </div>
   </div>
 }
@@ -156,7 +159,7 @@ let make = (~courseId, ~authors) => {
         <div className="flex px-6 py-2 items-center justify-between">
           <button
             onClick={_ => RescriptReactRouter.push(rootPath ++ "/new")}
-            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
             <i className="fas fa-plus-circle" />
             <h5 className="font-semibold ml-2"> {"Add New Author" |> str} </h5>
           </button>

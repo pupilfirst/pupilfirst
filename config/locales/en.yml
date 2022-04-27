@@ -624,6 +624,8 @@ en:
       share_feedback: Share Feedback
       show_review_checklist: Show Review Checklist
       show_test_report_button: Show Test Report
+      hide_test_report_button: Hide Test Report
+      test_report: Test Report
       status:
         completed: Completed
         pending_review: Pending Review
@@ -1198,7 +1200,7 @@ en:
       done_notification_body: a custom link has been added.
       error_body: It looks like the URL you've entered isn't valid. Please check, and try again.
       error_head: Invalid URL
-      footer_link_title: Show footer links
+      footer_link_title: View and edit footer links
       footer_sitemap: Footer Sitemap
       full_url: Full URL
       full_url_error: is not a valid URL
@@ -1208,11 +1210,11 @@ en:
       location_link: Location of Link
       manage_links: Manage custom links
       no_custom_links: There are no custom links here. Add some?
-      show_header_title: Show header links
+      show_header_title: View and edit header links
       sitemap_links: Current Sitemap Links
       social: Social
       social_links: Current Social Media Links
-      social_links_title: Show social media links
+      social_links_title: View and edit social media links
       title: Title
       title_placeholder: A short title for a new link
     SchoolCustomize__MoreLinks:

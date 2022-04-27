@@ -59,7 +59,7 @@ let make = (
           ? <button
               className="flex items-center flex-shrink-0 bg-white p-2 rounded-lg text-gray-600 hover:text-gray-700 text-xs"
               type_="button"
-              title=t("remove_question")
+              title={t("remove_question")}
               onClick={event => {
                 ReactEvent.Mouse.preventDefault(event)
                 removeQuizQuestionCB(quizQuestion |> CurriculumEditor__QuizQuestion.id)
@@ -72,7 +72,7 @@ let make = (
     <div className="my-2 bg-white">
       <MarkdownEditor
         textareaId=questionId
-        placeholder=t("answer_placeholder")
+        placeholder={t("answer_placeholder")}
         value={quizQuestion |> CurriculumEditor__QuizQuestion.question}
         onChange=updateQuestion
         profile=Markdown.Permissive
@@ -93,21 +93,21 @@ let make = (
         />
       )
       |> React.array}
-      <div
+      <button
         onClick={_event => {
           ReactEvent.Mouse.preventDefault(_event)
           addAnswerOption()
         }}
-        className="quiz-maker__add-answer-option cursor-pointer relative">
+        className="quiz-maker__add-answer-option cursor-pointer relative flex w-full">
         <div
           className="flex items-center border border-dashed border-primary-500 justify-center text-gray-600 quiz-maker__add-answer-option-pointer quiz-maker__add-answer-option-pointer">
           <i className="fas fa-plus" />
         </div>
-        <a
-          className="quiz-maker__add-answer-option-button flex items-center h-11 text-gray-900 bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg ml-12 py-3 px-4">
-          <p className="text-xs"> {t("add_another_answer") |> str} </p>
-        </a>
-      </div>
+        <p
+          className="quiz-maker__add-answer-option-button flex items-center flex-1 h-11 text-gray-900 bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg ml-12 py-3 px-4 text-xs">
+          {t("add_another_answer") |> str}
+        </p>
+      </button>
     </div>
   </div>
 }

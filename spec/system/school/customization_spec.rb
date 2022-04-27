@@ -15,7 +15,7 @@ feature 'School Customization', js: true do
   scenario 'school admin sets custom images' do
     sign_in_user school_admin.user, referrer: customize_school_path
 
-    find('div[title="Edit logo (on light backgrounds)"]').click
+    find('button[title="Edit logo (on light backgrounds)"]').click
 
     # Unhappy path.
     attach_file 'icon', image_path('high_resolution.png'), visible: false
@@ -44,7 +44,7 @@ feature 'School Customization', js: true do
     expect(page).to have_content("You can customize links on the header.")
 
     # Add four links and check that they're all displayed.
-    find('div[title="Edit header links"]').click
+    find('button[title="Edit header links"]').click
 
     (1..4).each do |link_number|
       fill_in "Title", with: "Test Link #{link_number}"
@@ -64,7 +64,7 @@ feature 'School Customization', js: true do
     expect(page).not_to have_content("More")
 
     # Add one more link to ensure that last two links are in the more dropdown.
-    find('div[title="Edit header links"]').click
+    find('button[title="Edit header links"]').click
 
     fill_in "Title", with: "Test Link 5"
     fill_in "Full URL", with: "http://example.com/5"
@@ -77,7 +77,7 @@ feature 'School Customization', js: true do
     expect(page).not_to have_content("Test Link 4")
     expect(page).not_to have_content("Test Link 5")
 
-    find('div[title="Show more links"]').click
+    find('button[title="Show more links"]').click
 
     expect(page).to have_content("Test Link 4")
     expect(page).to have_content("Test Link 5")
@@ -86,7 +86,7 @@ feature 'School Customization', js: true do
     expect(page).to have_content("You can customize links in the footer.")
     expect(page).to have_content("Add social media links?")
 
-    find('div[title="Edit header links"]').click
+    find('button[title="Edit header links"]').click
 
     (1..5).each do |link_number|
       find("button[title='Delete http://example.com/#{link_number}']").click
@@ -95,7 +95,7 @@ feature 'School Customization', js: true do
 
     expect(header_links.count).to eq(0)
 
-    find("div[title='Show footer links']").click
+    find("button[title='View and edit footer links']").click
 
     fill_in "Title", with: "Test Footer Link"
     fill_in "Full URL", with: "http://example.com/footer"
@@ -104,7 +104,7 @@ feature 'School Customization', js: true do
 
     expect(page).to have_selector("button[title='Delete http://example.com/footer']")
 
-    find("div[title='Show social media links']").click
+    find("button[title='View and edit social media links']").click
 
     fill_in "Full URL", with: "http://twitter.com"
     click_button "Add a New Link"
@@ -137,7 +137,7 @@ feature 'School Customization', js: true do
     expect(page).to have_content("Add a contact email?")
 
     # Edit basic contact details.
-    find('div[title="Edit contact details"]').click
+    find('button[title="Edit contact details"]').click
 
     address = Faker::Address.full_address
     email = Faker::Internet.email
@@ -159,7 +159,7 @@ feature 'School Customization', js: true do
     expect(SchoolString::EmailAddress.for(school)).to eq(email)
 
     # Edit privacy policy.
-    find('div[title="Edit privacy policy"]').click
+    find('button[title="Edit privacy policy"]').click
 
     privacy_policy = Faker::Lorem.paragraphs(number: 2).join("\n\n")
 
@@ -171,7 +171,7 @@ feature 'School Customization', js: true do
     find('button[title="Close Editor"]').click
 
     # Edit terms & conditions.
-    find('div[title="Edit Terms & Conditions"]').click
+    find('button[title="Edit Terms & Conditions"]').click
 
     terms_and_conditions = Faker::Lorem.paragraphs(number: 2).join("\n\n")
 
@@ -190,7 +190,7 @@ feature 'School Customization', js: true do
     expect(page).to have_content('Add more details about the school')
 
     # Edit basic contact details.
-    find('div[aria-label="Edit school details"]').click
+    find('button[aria-label="Edit school details"]').click
 
     about = Faker::Lorem.paragraphs(number: 2).join(" ")
     name = Faker::Name.name

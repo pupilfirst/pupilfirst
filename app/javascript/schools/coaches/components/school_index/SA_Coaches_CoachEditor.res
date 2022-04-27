@@ -188,12 +188,13 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
     | _ => t("replace_avatar") ++ ": " ++ state.imageFileName
     }
   let handleResponseJSON = json => {
-    let error = json
-    |> {
-      open Json.Decode
-      field("error", nullable(string))
-    }
-    |> Js.Null.toOption
+    let error =
+      json
+      |> {
+        open Json.Decode
+        field("error", nullable(string))
+      }
+      |> Js.Null.toOption
     switch error {
     | Some(err) =>
       send(UpdateSaving)
@@ -249,9 +250,10 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
     <div className="drawer-right">
       <div className="drawer-right__close absolute">
         <button
+          ariaLabel="close"
           title="close"
           onClick={_e => closeFormCB()}
-          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
+          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none focus:text-primary-500 mt-4">
           <i className="fas fa-times text-xl" />
         </button>
       </div>
@@ -277,16 +279,17 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    autoFocus=true
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
                     id="name"
                     type_="text"
                     name="faculty[name]"
-                    placeholder=t("coach_name")
+                    placeholder={t("coach_name")}
                     value=state.name
                     onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
                   />
                   <School__InputGroupError
-                    message=t("input_group_error") active=state.hasNameError
+                    message={t("input_group_error")} active=state.hasNameError
                   />
                 </div>
                 {switch coach {
@@ -299,16 +302,16 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     </label>
                     <span> {"*" |> str} </span>
                     <input
-                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
                       id="email"
                       type_="email"
                       name="faculty[email]"
-                      placeholder=t("coach_email")
+                      placeholder={t("coach_email")}
                       value=state.email
                       onChange={event => updateEmail(send, ReactEvent.Form.target(event)["value"])}
                     />
                     <School__InputGroupError
-                      message=t("email_input_error") active=state.hasEmailError
+                      message={t("email_input_error")} active=state.hasEmailError
                     />
                   </div>
                 }}
@@ -319,16 +322,16 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
                     id="title"
                     type_="text"
                     name="faculty[title]"
-                    placeholder=t("coach_title")
+                    placeholder={t("coach_title")}
                     value=state.title
                     onChange={event => updateTitle(send, ReactEvent.Form.target(event)["value"])}
                   />
                   <School__InputGroupError
-                    message=t("coach_title_error") active=state.hasTitleError
+                    message={t("coach_title_error")} active=state.hasTitleError
                   />
                 </div>
                 <div className="mt-5">
@@ -341,11 +344,11 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     value=state.affiliation
                     onChange={event =>
                       send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
                     id="affiliation"
                     name="faculty[affiliation]"
                     type_="text"
-                    placeholder=t("affiliation_placeholder")
+                    placeholder={t("affiliation_placeholder")}
                   />
                 </div>
                 <div className="mt-5">
@@ -355,21 +358,21 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     {t("connect_link") |> str}
                   </label>
                   <input
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
                     id="connectLink"
                     type_="text"
                     name="faculty[connect_link]"
-                    placeholder=t("connect_link_placeholder")
+                    placeholder={t("connect_link_placeholder")}
                     value=state.connectLink
                     onChange={event =>
                       updateConnectLink(send, ReactEvent.Form.target(event)["value"])}
                   />
                   <School__InputGroupError
-                    message=t("connect_link_error") active=state.hasConnectLinkError
+                    message={t("connect_link_error")} active=state.hasConnectLinkError
                   />
                   <School__InputGroupError
                     warn=true
-                    message=t("coach_profile_warn")
+                    message={t("coach_profile_warn")}
                     active={StringUtils.isPresent(state.connectLink) &&
                     (!state.hasConnectLinkError &&
                     !state.public)}
@@ -382,28 +385,28 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                       htmlFor="evaluated">
                       {t("coach_public_q") |> str}
                     </label>
-                    <div
-                      id="notification"
-                      className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
-                      <button
-                        type_="submit"
-                        onClick={_event => {
-                          ReactEvent.Mouse.preventDefault(_event)
-                          send(UpdatePublic(true))
-                        }}
-                        name="faculty[public]"
-                        value="true"
-                        className={booleanButtonClasses(state.public)}>
-                        {ts("_yes") |> str}
-                      </button>
-                      <button
-                        onClick={_event => {
-                          ReactEvent.Mouse.preventDefault(_event)
-                          send(UpdatePublic(false))
-                        }}
-                        className={booleanButtonClasses(!state.public)}>
-                        {ts("_no") |> str}
-                      </button>
+                    <div id="notification" className="flex flex-shrink-0 overflow-hidden ">
+                      <div>
+                        <button
+                          type_="submit"
+                          onClick={_event => {
+                            ReactEvent.Mouse.preventDefault(_event)
+                            send(UpdatePublic(true))
+                          }}
+                          name="faculty[public]"
+                          value="true"
+                          className={booleanButtonClasses(state.public)}>
+                          {ts("_yes") |> str}
+                        </button>
+                        <button
+                          onClick={_event => {
+                            ReactEvent.Mouse.preventDefault(_event)
+                            send(UpdatePublic(false))
+                          }}
+                          className={booleanButtonClasses(!state.public)}>
+                          {ts("_no") |> str}
+                        </button>
+                      </div>
                       <input
                         type_="hidden" name="faculty[public]" value={state.public |> string_of_bool}
                       />
@@ -415,21 +418,26 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     className="block tracking-wide text-xs font-semibold" htmlFor="avatarUploader">
                     {ts("avatar") |> str}
                   </label>
-                  <input
-                    disabled=state.saving
-                    className="hidden"
-                    name="faculty[image]"
-                    type_="file"
-                    id="sa-coach-editor__file-input"
-                    required=false
-                    multiple=false
-                    onChange={event =>
-                      send(UpdateImageFileName(ReactEvent.Form.target(event)["files"][0]["name"]))}
-                  />
-                  <label className="file-input-label mt-2" htmlFor="sa-coach-editor__file-input">
-                    <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
-                    <span className="truncate"> {avatarUploaderText() |> str} </span>
-                  </label>
+                  <div
+                    className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+                    <input
+                      disabled=state.saving
+                      className="absolute w-0 h-0"
+                      name="faculty[image]"
+                      type_="file"
+                      id="sa-coach-editor__file-input"
+                      required=false
+                      multiple=false
+                      onChange={event =>
+                        send(
+                          UpdateImageFileName(ReactEvent.Form.target(event)["files"][0]["name"]),
+                        )}
+                    />
+                    <label className="file-input-label mt-2" htmlFor="sa-coach-editor__file-input">
+                      <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+                      <span className="truncate"> {avatarUploaderText() |> str} </span>
+                    </label>
+                  </div>
                 </div>
               </div>
               <div className="p-6 bg-gray-200">
@@ -443,26 +451,26 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                           htmlFor="evaluated">
                           {t("coach_left_q") |> str}
                         </label>
-                        <div
-                          id="exited"
-                          className="flex flex-shrink-0 rounded-lg overflow-hidden border border-gray-400">
-                          <button
-                            onClick={_event => {
-                              ReactEvent.Mouse.preventDefault(_event)
-                              send(UpdateExited(true))
-                            }}
-                            name="faculty[exited]"
-                            className={booleanButtonClasses(state.exited)}>
-                            {ts("_yes") |> str}
-                          </button>
-                          <button
-                            onClick={_event => {
-                              ReactEvent.Mouse.preventDefault(_event)
-                              send(UpdateExited(false))
-                            }}
-                            className={booleanButtonClasses(!state.exited)}>
-                            {ts("_no") |> str}
-                          </button>
+                        <div id="exited" className="flex flex-shrink-0 overflow-hidden">
+                          <div>
+                            <button
+                              onClick={_event => {
+                                ReactEvent.Mouse.preventDefault(_event)
+                                send(UpdateExited(true))
+                              }}
+                              name="faculty[exited]"
+                              className={booleanButtonClasses(state.exited)}>
+                              {ts("_yes") |> str}
+                            </button>
+                            <button
+                              onClick={_event => {
+                                ReactEvent.Mouse.preventDefault(_event)
+                                send(UpdateExited(false))
+                              }}
+                              className={booleanButtonClasses(!state.exited)}>
+                              {ts("_no") |> str}
+                            </button>
+                          </div>
                           <input
                             type_="hidden"
                             name="faculty[exited]"

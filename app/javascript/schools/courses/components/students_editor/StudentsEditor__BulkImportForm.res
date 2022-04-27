@@ -350,29 +350,33 @@ let make = (~courseId, ~closeDrawerCB) => {
               <div
                 className="flex items-center text-primary-500 text-xs font-semibold hover:text-primary-700 hover:underline">
                 <PfIcon className="if i-download-regular if-fw mr-2" />
-                <a href="https://docs.pupilfirst.com/files/student_import_sample.csv">
+                <a
+                  className="focus:outline-none focus:underline focus:text-primary-700 "
+                  href="https://docs.pupilfirst.com/files/student_import_sample.csv">
                   {t("example_csv_link")->str}
                 </a>
               </div>
             </div>
-            <CSVReader
-              label=""
-              inputId="csv-file-input"
-              inputName="csv"
-              cssClass="hidden"
-              parserOptions={CSVReader.parserOptions(~header=true, ~skipEmptyLines="true", ())}
-              onFileLoaded={(x, y) => {
-                send(LoadCSVData(x, y))
-              }}
-              onError={_ => send(UpdateFileInvalid(Some(InvalidCSVFile)))}
-            />
-            <label
-              onClick={_event => clearFile(send)}
-              className="file-input-label mt-2"
-              htmlFor="csv-file-input">
-              <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
-              <span className="truncate"> {fileInputText(~fileInfo=state.fileInfo)->str} </span>
-            </label>
+            <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+              <CSVReader
+                label=""
+                inputId="csv-file-input"
+                inputName="csv"
+                cssClass="absolute w-0 h-0 overflow-hidden"
+                parserOptions={CSVReader.parserOptions(~header=true, ~skipEmptyLines="true", ())}
+                onFileLoaded={(x, y) => {
+                  send(LoadCSVData(x, y))
+                }}
+                onError={_ => send(UpdateFileInvalid(Some(InvalidCSVFile)))}
+              />
+              <label
+                onClick={_event => clearFile(send)}
+                className="file-input-label mt-2"
+                htmlFor="csv-file-input">
+                <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+                <span className="truncate"> {fileInputText(~fileInfo=state.fileInfo)->str} </span>
+              </label>
+            </div>
             {ReactUtils.nullIf(
               csvDataTable(state.csvData, state.fileInvalid),
               ArrayUtils.isEmpty(state.csvData),

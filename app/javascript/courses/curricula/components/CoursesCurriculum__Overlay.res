@@ -515,7 +515,7 @@ let quickNavigationLinks = (targetDetails, send) => {
 
   <div className="pb-6">
     <hr className="my-6" />
-    <div className="container mx-auto max-w-3xl flex px-3 lg:px-0">
+    <div className="container mx-auto max-w-3xl flex px-3 lg:px-0" id="target-navigation">
       <div className="w-1/3 mr-2">
         {previous->Belt.Option.mapWithDefault(React.null, previousUrl =>
           navigationLink(#Previous, previousUrl, send)

@@ -87,11 +87,11 @@ feature 'Course Exports', js: true do
     sign_in_user school_admin.user, referrer: exports_school_course_path(course)
 
     find('h5', text: 'Create New Export').click
-    find('div[title="Select tag 1"]').click
-    find('div[title="Select tag 2"]').click
+    find('button[title="Select tag 1"]').click
+    find('button[title="Select tag 2"]').click
 
     # Tag 3 should also be listed. Let's not pick it, though.
-    expect(page).to have_selector('div[title="Select tag 3"]')
+    expect(page).to have_selector('button[title="Select tag 3"]')
 
     click_button('Create Export')
 
@@ -110,7 +110,7 @@ feature 'Course Exports', js: true do
 
     find('h5', text: 'Create New Export').click
     click_button('Teams')
-    find('div[title="Select tag 1"]').click
+    find('button[title="Select tag 1"]').click
     click_button('Create Export')
 
     expect(page).to have_text('Your export is being processed')

@@ -14,7 +14,7 @@ type state = {
   saving: bool,
   formDirty: bool,
 }
-let updateButtonText = saving => saving ? { ts("updating") ++ "..."} : ts("update")
+let updateButtonText = saving => saving ? {ts("updating") ++ "..."} : ts("update")
 
 module UpdateSchoolQuery = %graphql(`
   mutation UpdateSchoolMutation($name: String!, $about: String!) {
@@ -78,17 +78,17 @@ let make = (~name, ~about, ~updateDetailsCB) => {
           {t("school_name") |> str}
         </label>
         <input
+          autoFocus=true
           type_="text"
           maxLength=50
-          placeholder=t("school_name_placeholder")
-          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          placeholder={t("school_name_placeholder")}
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
           id="details-editor__name"
           onChange={handleInputChange(name => send(UpdateName(name)))}
           value=state.name
         />
         <School__InputGroupError
-          message=t("school_name_error")
-          active={state.name |> String.length < 2}
+          message={t("school_name_error")} active={state.name |> String.length < 2}
         />
       </div>
       <div className="mt-3">
@@ -101,8 +101,8 @@ let make = (~name, ~about, ~updateDetailsCB) => {
         <textarea
           maxLength=500
           rows=7
-          placeholder=t("details_placeholder")
-          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          placeholder={t("details_placeholder")}
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
           id="details-editor__about"
           onChange={handleInputChange(about => send(UpdateAbout(about)))}
           value=state.about
@@ -112,7 +112,7 @@ let make = (~name, ~about, ~updateDetailsCB) => {
         key="details-editor__update-button"
         onClick={_ => updateSchoolQuery(state, send, updateDetailsCB)}
         disabled={updateButtonDisabled(state)}
-        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+        className="w-full btn btn-primary btn-large mt-3">
         {updateButtonText(state.saving) |> str}
       </button>
     </DisablingCover>

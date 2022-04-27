@@ -140,10 +140,7 @@ let handleQuery = (community, state, send, addCommunityCB, updateCommunitiesCB, 
       })
       |> Js.Promise.catch(error => {
         Js.log(error)
-        Notification.error(
-          ts("notifications.unexpected_error"),
-          t("notification_reload_post"),
-        )
+        Notification.error(ts("notifications.unexpected_error"), t("notification_reload_post"))
         Js.Promise.resolve()
       })
       |> ignore
@@ -227,17 +224,18 @@ let make = (
             {t("community_editor_label") |> str}
           </label>
           <input
-            placeholder=t("community_editor_placeholder")
+            autoFocus=true
+            placeholder={t("community_editor_placeholder")}
             value=state.name
             onChange={event => {
               let name = ReactEvent.Form.target(event)["value"]
               send(UpdateName(name))
             }}
             id="communities-editor__name"
-            className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
+            className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
           />
           <School__InputGroupError
-            message=t("community_editor_error")
+            message={t("community_editor_error")}
             active={state.dirty ? state.name |> String.trim == "" : false}
           />
         </div>
@@ -247,7 +245,7 @@ let make = (
             htmlFor="communities-editor__course-list">
             {t("allowed_targets_q") |> str}
           </label>
-          <div className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden ml-2">
+          <div className="flex toggle-button__group flex-no-shrink overflow-hidden ml-2">
             <button
               onClick={_ => send(SetTargetLinkable(true))}
               className={booleanButtonClasses(state.targetLinkable)}>
@@ -267,9 +265,9 @@ let make = (
             {t("give_access") |> str}
           </label>
           <CourseSelector
-            placeholder=t("search_course")
-            emptySelectionMessage=t("search_course_empty")
-            allItemsSelectedMessage=t("search_course_all")
+            placeholder={t("search_course")}
+            emptySelectionMessage={t("search_course_empty")}
+            allItemsSelectedMessage={t("search_course_all")}
             selected={selectedCourses(courses, state.selectedCourseIds)}
             unselected={unselectedCourses(courses, state.selectedCourseIds)}
             onChange={onChangeCourseSearch(send)}
@@ -288,10 +286,12 @@ let make = (
             | Some(_community) =>
               <button
                 onClick={_ => showCategoryEditorCB()}
-                className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
+                className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
                 <i className="fas fa-pencil-alt" />
                 <span className="text-xs font-semibold ml-2">
-                  {(ArrayUtils.isEmpty(categories) ? t("add_categories") : t("edit_categories")) |> str}
+                  {(
+                    ArrayUtils.isEmpty(categories) ? t("add_categories") : t("edit_categories")
+                  ) |> str}
                 </span>
               </button>
             | None => React.null
@@ -300,14 +300,9 @@ let make = (
           {switch community {
           | Some(_community) =>
             categories |> ArrayUtils.isEmpty
-              ? <p className="text-xs text-gray-800">
-                  {t("no_topic") |> str}
-                </p>
+              ? <p className="text-xs text-gray-800"> {t("no_topic") |> str} </p>
               : categoryList(categories)
-          | None =>
-            <p className="text-xs text-gray-800">
-              {t("can_add_topic") |> str}
-            </p>
+          | None => <p className="text-xs text-gray-800"> {t("can_add_topic") |> str} </p>
           }}
         </div>
       </div>
@@ -324,8 +319,7 @@ let make = (
     </DisablingCover>
     <div className="mt-3 mb-3 text-xs">
       <span className="leading-normal">
-        <strong> {ts("note") |> str} </strong>
-        {t("note") |> str}
+        <strong> {ts("note") |> str} </strong> {t("note") |> str}
       </span>
     </div>
   </div>

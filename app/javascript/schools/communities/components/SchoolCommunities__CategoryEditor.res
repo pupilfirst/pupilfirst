@@ -64,7 +64,7 @@ let makeDeleteCategoryQuery = (categoryId, deleteCategoryCB, send) => {
   |> Js.Promise.catch(error => {
     Js.log(error)
     send(FailDeleting)
-    Notification.error(ts("notifications.unexpected_error") , ts("notifications.please_reload"))
+    Notification.error(ts("notifications.unexpected_error"), ts("notifications.please_reload"))
     Js.Promise.resolve()
   })
   |> ignore
@@ -79,9 +79,7 @@ let deleteCategory = (category, deleteCategoryCB, send, event) => {
   topicsCount > 0
     ? if {
         open Webapi.Dom
-        window |> Window.confirm(
-          tr("topics_delete_confirm"),
-        )
+        window |> Window.confirm(tr("topics_delete_confirm"))
       } {
         makeDeleteCategoryQuery(categoryId, deleteCategoryCB, send)
       } else {
@@ -111,7 +109,7 @@ let updateCategory = (category, newName, updateCategoryCB, send, event) => {
   |> Js.Promise.catch(error => {
     send(FailSaving)
     Js.log(error)
-    Notification.error(ts("notifications.unexpected_error") , ts("notifications.please_reload"))
+    Notification.error(ts("notifications.unexpected_error"), ts("notifications.please_reload"))
     Js.Promise.resolve()
   })
   |> ignore
@@ -140,7 +138,7 @@ let createCategory = (communityId, name, createCategoryCB, send, event) => {
   |> Js.Promise.catch(error => {
     Js.log(error)
     send(FailSaving)
-    Notification.error(ts("notifications.unexpected_error") , ts("notifications.please_reload"))
+    Notification.error(ts("notifications.unexpected_error"), ts("notifications.please_reload"))
     Js.Promise.resolve()
   })
   |> ignore
@@ -211,16 +209,16 @@ let make = (
               ) |> str}
             </span>
           : <button
-              title=tr("update_category")
+              title={tr("update_category")}
               disabled={saveDisabled(state.categoryName, state.saving)}
               onClick={updateCategory(category, state.categoryName, updateCategoryCB, send)}
               className="btn btn-success mr-2 text-xs">
               {tr("update_category") |> str}
             </button>}
         <button
-          title=tr("delete_category")
+          title={tr("delete_category")}
           onClick={deleteCategory(category, deleteCategoryCB, send)}
-          className="text-xs py-1 px-2 h-8 text-gray-700 hover:text-gray-900 hover:bg-gray-100 border-l border-gray-400">
+          className="text-xs py-1 px-2 h-8 text-gray-700 hover:text-red-500 hover:bg-gray-100 focus:text-red-500 focus:bg-gray-100 border-l border-gray-400">
           <FaIcon classes={state.deleting ? "fas fa-spinner fa-spin" : "fas fa-trash-alt"} />
         </button>
       </div>
@@ -228,14 +226,15 @@ let make = (
   | None =>
     <div className="flex mt-2">
       <input
+        autoFocus=true
         id="add-new-category"
         onChange={event => {
           let name = ReactEvent.Form.target(event)["value"]
           send(UpdateCategoryName(name))
         }}
         value=state.categoryName
-        placeholder=tr("add_new_category")
-        className="appearance-none h-10 block w-full text-gray-700 border rounded border-gray-400 py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
+        placeholder={tr("add_new_category")}
+        className="appearance-none h-10 block w-full text-gray-700 border rounded border-gray-400 py-2 px-4 text-sm hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
       />
       {
         let showButton = state.categoryName |> String.trim != ""

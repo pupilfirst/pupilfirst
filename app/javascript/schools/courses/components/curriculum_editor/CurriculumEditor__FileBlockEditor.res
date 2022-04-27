@@ -19,8 +19,9 @@ let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
       className="content-block__content text-base bg-gray-200 flex justify-center items-center rounded-t-lg">
       <div className="w-full">
         <a
-          className="flex justify-between items-center bg-white rounded-t-lg px-6 py-4 hover:bg-gray-100 hover:text-primary-500"
+          className="flex justify-between items-center bg-white rounded-t-lg px-6 py-4 hover:bg-gray-100 hover:text-primary-500 focus:outline-none focus:bg-gray-100 focus:text-primary-500"
           target="_blank"
+          ariaLabel={"View " ++ title}
           href=url>
           <div className="flex items-center">
             <FaIcon classes="text-4xl text-gray-800 far fa-file-alt" />

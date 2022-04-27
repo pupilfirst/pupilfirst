@@ -1,6 +1,6 @@
 exception UnknownPathEncountered(list<string>)
 
-%bs.raw(`require("./SchoolAdminNavbar__Root.css")`)
+%raw(`require("./SchoolAdminNavbar__Root.css")`)
 
 let t = I18n.t(~scope="components.SchoolAdminNavbar__Root")
 
@@ -53,7 +53,7 @@ let imageContainerClasses = shrunk => {
 }
 
 let bottomLinkClasses = shrunk => {
-  let defaultClasses = "flex text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center "
+  let defaultClasses = "flex text-white text-sm py-4 px-5 font-semibold items-center hover:bg-primary-900 focus:outline-none focus:bg-primary-900 "
   defaultClasses ++ (shrunk ? "justify-center" : "")
 }
 
@@ -82,7 +82,7 @@ let topLink = (selectedOption, currentOption, path, shrunk, iconClasses, text) =
 }
 
 let secondaryNavOption = (path, currentSelection, inspectedSelection, text) => {
-  let defaultClasses = "flex text-indigo-800 text-sm py-3 px-4 hover:bg-gray-400 focus:bg-gray-400 font-semibold rounded items-center my-1"
+  let defaultClasses = "flex text-indigo-800 text-sm py-3 px-4 hover:bg-gray-400 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigio-500 font-semibold rounded items-center my-1"
   let classes = defaultClasses ++ (currentSelection == inspectedSelection ? " bg-gray-400" : "")
 
   <div key=text> <a href=path className=classes> {text |> str} </a> </div>
@@ -137,7 +137,12 @@ let secondaryNav = (courses, userRole, selectedOption) =>
       key="secondary-nav"
       className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
       <ul className="p-4">
-        {secondaryNavOption("/school/customize", settingsSelection, Customization, t("navbar.customization"))}
+        {secondaryNavOption(
+          "/school/customize",
+          settingsSelection,
+          Customization,
+          t("navbar.customization"),
+        )}
         {secondaryNavOption("/school/admins", settingsSelection, Admins, t("navbar.admins"))}
       </ul>
     </div>
@@ -256,7 +261,14 @@ let make = (
         | SchoolAdmin =>
           <ul>
             <li>
-              {topLink(selectedOption, Overview, "/school", shrunk, "fas fa-eye", t("navbar.overview"))}
+              {topLink(
+                selectedOption,
+                Overview,
+                "/school",
+                shrunk,
+                "fas fa-eye",
+                t("navbar.overview"),
+              )}
             </li>
             <li>
               {topLink(
@@ -294,7 +306,7 @@ let make = (
                       <li key={CourseInfo.id(course)}>
                         <a
                           href={"/school/courses/" ++ CourseInfo.id(course) ++ "/curriculum"}
-                          className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
+                          className="block text-white py-3 px-4 rounded font-semibold text-xs hover:bg-primary-800 focus:outline-none focus:bg-primary-800">
                           {str(CourseInfo.name(course))}
                         </a>
                       </li>,
@@ -327,17 +339,17 @@ let make = (
         }}
       </div>
       <ul>
-        <div className="relative">
+        <li className="relative">
           <Notifications__Root
             wrapperClasses="w-full"
             iconClasses="school-admin-navbar__notifications-unread-bullet"
-            buttonClasses="flex relative text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center w-full"
+            buttonClasses="flex relative text-white text-sm py-4 px-5 font-semibold items-center w-full focus:bg-primary-900"
             title=?{shrunk ? None : Some(t("notifications"))}
             icon="fas fa-bell fa-fw text-lg mr-2"
             hasNotifications
           />
-        </div>
-        {bottomLink("/dashboard", shrunk, "fas fa-home", t("dashboard"))}
+        </li>
+        {bottomLink("/dashboard", shrunk, "fas fa-home", "Dashboard")}
         <li>
           <a
             title=?{shrunk ? Some(t("sign_out")) : None}
@@ -345,7 +357,9 @@ let make = (
             rel="nofollow"
             href="/users/sign_out">
             <i className="fas fa-sign-out-alt fa-fw text-lg" />
-            {shrunk ? React.null : <span className="ml-2"> {I18n.t("shared.sign_out") |> str} </span>}
+            {shrunk
+              ? React.null
+              : <span className="ml-2"> {I18n.t("shared.sign_out") |> str} </span>}
           </a>
         </li>
       </ul>

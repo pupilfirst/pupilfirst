@@ -32,7 +32,7 @@ let make = (~coaches, ~authenticityToken) => {
 
   let closeFormCB = () => send(UpdateFormVisible(None))
   let updateCoachCB = coach => send(UpdateCoaches(coach))
-  <div className="flex flex-1 h-full overflow-y-scroll">
+  <div role="main" className="flex flex-1 h-full overflow-y-scroll">
     {switch state.formVisible {
     | None => React.null
     | CoachEditor(coach) =>
@@ -45,7 +45,7 @@ let make = (~coaches, ~authenticityToken) => {
             ReactEvent.Mouse.preventDefault(_event)
             send(UpdateFormVisible(CoachEditor(None)))
           }}
-          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hove:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:shadow-lg focus:border-primary-300 focus:text-primary-600 border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-plus-circle text-lg" />
           <h5 className="font-semibold ml-2"> {tr("add_new_coach") |> str} </h5>
         </button>
@@ -59,8 +59,9 @@ let make = (~coaches, ~authenticityToken) => {
               key={coach |> Coach.id |> string_of_int}
               className="flex items-center shadow bg-white rounded-lg mb-4 overflow-hidden">
               <div className="course-faculty__list-item flex w-full">
-                <div
-                  className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer hover:bg-gray-100 hover:text-primary-500"
+                <button
+                  ariaLabel={"Edit: " ++ (coach |> Coach.name)}
+                  className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer rounded-lg hover:bg-gray-100 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:bg-gray-100 focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                   onClick={_event => {
                     ReactEvent.Mouse.preventDefault(_event)
                     send(UpdateFormVisible(CoachEditor(Some(coach))))
@@ -71,7 +72,7 @@ let make = (~coaches, ~authenticityToken) => {
                       src={coach |> Coach.imageUrl}
                       alt={tr("avatar_of") ++ (coach |> Coach.name)}
                     />
-                    <div className="text-sm">
+                    <div className="text-sm text-left">
                       <p className="font-semibold"> {coach |> Coach.name |> str} </p>
                       <p className="text-gray-600 font-semibold text-xs mt-px">
                         {coach |> Coach.title |> str}
@@ -83,7 +84,7 @@ let make = (~coaches, ~authenticityToken) => {
                     <i className="fas fa-edit text-normal" />
                     <span className="ml-1"> {ts("edit") |> str} </span>
                   </span>
-                </div>
+                </button>
               </div>
             </div>
           )

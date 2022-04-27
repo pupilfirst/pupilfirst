@@ -166,6 +166,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
     </h5>
     <DisablingCover disabled=state.updating>
       <SchoolCustomize__ImageFileInput
+        autoFocus=true
         id="sc-images-editor__logo-on-400-bg-input"
         disabled=state.updating
         name="logo_on_light_bg"

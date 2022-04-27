@@ -17,7 +17,7 @@
                 link_to(
                   nav_link[:title],
                   nav_link[:url],
-                  { class: 'no-underline pt-2 pb-1 block hover:text-primary-500' }.merge(
+                  { class: 'no-underline pt-2 pb-1 block hover:text-primary-500 focus:outline-none focus:text-primary-500' }.merge(
                     nav_link[:custom] ? { target: '_blank', rel: 'noopener' } : {},
                   ),
                 )
@@ -37,7 +37,7 @@
         <div class="py-2 flex flex-wrap justify-center md:justify-start">
           <% presenter.social_links.each do |social_link| %>
             <a
-              class="h-8 w-8 mr-2 hover:text-primary-500 flex items-center justify-center no-underline pointer-cursor"
+              class="h-8 w-8 mr-2 hover:text-primary-500 flex items-center justify-center no-underline pointer-cursor focus:outline-none focus:text-primary-500"
               href="<%= social_link[:url] %>"
               target="_blank"
               rel="noopener"
@@ -64,7 +64,7 @@
             <p>
               <%= t('footer.reach_us') %>
               <strong>
-                <!--email_off--><%= mail_to presenter.email_address, presenter.email_address, class: "font-bold no-underline pointer-cursor" %><!--/email_off-->
+                <!--email_off--><%= mail_to presenter.email_address, presenter.email_address, class: "font-bold no-underline pointer-cursor focus:outline-none focus:text-primary-500" %><!--/email_off-->
               </strong>.
             </p>
           <% end %>
@@ -79,7 +79,7 @@
     >
       <div class="w-full flex flex-row justify-between items-center">
         <div class="w-1/4 my-4">
-          <a class="text-xs" href="/">
+          <a class="text-xs focus:outline-none" href="/">
             <% if presenter.logo? %>
               <img
                 class="w-27"
@@ -94,10 +94,10 @@
 
         <div class="w-3/4 md:w-2/5 text-right text-xs">
           <% if presenter.privacy_policy? %>
-            <%= link_to t("footer.privacy_policy"), agreement_path(agreement_type: 'privacy-policy'), class: "cursor-pointer mr-3 hover:text-primary-500" %>
+            <%= link_to t("footer.privacy_policy"), agreement_path(agreement_type: 'privacy-policy'), class: "cursor-pointer mr-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
           <% end %>
           <% if presenter.terms_and_conditions? %>
-            <%= link_to t("footer.terms_conditions"), agreement_path(agreement_type: 'terms-and-conditions'), class: "cursor-pointer md:mr-3 hover:text-primary-500" %>
+            <%= link_to t("footer.terms_conditions"), agreement_path(agreement_type: 'terms-and-conditions'), class: "cursor-pointer md:mr-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
           <% end %>
 
           <span class="text-gray-600 mt-1 md:mt-0 block md:inline-block">

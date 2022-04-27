@@ -34,28 +34,23 @@ let reducer = (state, action) =>
   | FailSaving => {...state, saving: None}
   }
 
-module DeleteContentBlockMutation = %graphql(
-  `
+module DeleteContentBlockMutation = %graphql(`
     mutation DeleteContentBlockMutation($id: ID!) {
       deleteContentBlock(id: $id) {
         success
       }
     }
-  `
-)
+  `)
 
-module MoveContentBlockMutation = %graphql(
-  `
+module MoveContentBlockMutation = %graphql(`
     mutation MoveContentBlockMutation($id: ID!, $direction: MoveDirection!) {
       moveContentBlock(id: $id, direction: $direction) {
         success
       }
     }
-  `
-)
+  `)
 
-module UpdateFileBlockMutation = %graphql(
-  `
+module UpdateFileBlockMutation = %graphql(`
     mutation UpdateFileBlockMutation($id: ID!, $title: String!) {
       updateFileBlock(id: $id, title: $title) {
         contentBlock {
@@ -63,11 +58,9 @@ module UpdateFileBlockMutation = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
-module UpdateMarkdownBlockMutation = %graphql(
-  `
+module UpdateMarkdownBlockMutation = %graphql(`
     mutation UpdateMarkdownBlockMutation($id: ID!, $markdown: String!) {
       updateMarkdownBlock(id: $id, markdown: $markdown) {
         contentBlock {
@@ -75,11 +68,9 @@ module UpdateMarkdownBlockMutation = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
-module UpdateImageBlockMutation = %graphql(
-  `
+module UpdateImageBlockMutation = %graphql(`
     mutation UpdateImageBlockMutation($id: ID!, $caption: String!, $width:ImageWidth! ) {
       updateImageBlock(id: $id, caption: $caption, width:$width) {
         contentBlock {
@@ -87,19 +78,20 @@ module UpdateImageBlockMutation = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
 let controlIcon = (~icon, ~title, ~color, ~handler) => {
   let buttonClasses = switch color {
-  | #Grey => "hover:bg-gray-200"
-  | #Green => "bg-green-600 hover:bg-green-700 text-white rounded-b"
+  | #Grey => "hover:bg-gray-200 hover:text-primary-500 focus:bg-gray-200 focus:text-primary-500"
+  | #Green => "bg-green-600 hover:bg-green-700 focus:bg-green-700 text-white rounded-b"
+  | #Red => "hover:text-red-500 focus:text-red-500"
   }
 
   handler == None
     ? React.null
     : <button
         title
+        ariaLabel={title}
         disabled={handler == None}
         className={"p-2 focus:outline-none " ++ buttonClasses}
         onClick=?handler>
@@ -239,7 +231,7 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, state, send) 
     <CurriculumEditor__MarkdownBlockEditor markdown contentBlock updateContentBlockCB />
   | File(url, title, filename) =>
     <CurriculumEditor__FileBlockEditor url title filename contentBlock updateContentBlockCB />
-  | Audio(url, _title, _filename) => <audio controls=true src=url />
+  | Audio(url, _title, _filename) => <audio className="mx-auto" controls=true src=url />
   | Image(url, caption, width) =>
     <CurriculumEditor__ImageBlockEditor width url caption contentBlock updateContentBlockCB />
   }
@@ -280,7 +272,7 @@ let make = (
         {controlIcon(
           ~icon="fa-trash-alt",
           ~title=t("delete"),
-          ~color=#Grey,
+          ~color=#Red,
           ~handler=removeContentBlockCB |> OptionUtils.map(cb => onDelete(contentBlock, cb, send)),
         )}
         {controlIcon(

@@ -545,13 +545,15 @@ let onEmbedFormSave = (target, aboveContentBlock, url, send, addContentBlockCB, 
 
 let topButton = (handler, id, title, icon) =>
   <div
-    className="content-block-creator__top-button-container relative cursor-pointer" onClick=handler>
-    <div
+    className="content-block-creator__top-button-container relative">
+    <button
+      onClick=handler
       id={"top-button-" ++ id}
       title
-      className="content-block-creator__top-button bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20">
+      ariaLabel={title}
+      className="content-block-creator__top-button bg-gray-200 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20 hover:bg-gray-300 hover:text-primary-300 focus:outline-none focus:bg-gray-300 focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-indigo-500">
       <FaIcon classes={"text-base fas " ++ icon} />
-    </div>
+    </button>
   </div>
 
 let closeEmbedFormButton = (send, aboveContentBlock) => {

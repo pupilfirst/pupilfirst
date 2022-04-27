@@ -69,9 +69,9 @@ let renderAdmin = (currentSchoolAdminId, admin, admins, setState) =>
     key={(admin |> SchoolAdmin.id) ++ (admin |> SchoolAdmin.name)}
     className="flex w-1/2 flex-shrink-0 mb-5 px-3">
     <div
-      className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100">
-      <a
-        className="w-full cursor-pointer p-4"
+      className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+      <button
+        className="w-full cursor-pointer p-4 text-left"
         onClick={_event => {
           ReactEvent.Mouse.preventDefault(_event)
           setState(state => {...state, editorAction: ShowEditor(Some(admin))})
@@ -93,7 +93,7 @@ let renderAdmin = (currentSchoolAdminId, admin, admins, setState) =>
             </span>
           </div>
         </div>
-      </a>
+      </button>
       {admins |> Array.length > 1
         ? <div
             className="w-10 text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-red-600"
@@ -134,7 +134,7 @@ let make = (~currentSchoolAdminId, ~admins) => {
         <div className="flex px-6 py-2 items-center justify-between">
           <button
             onClick={_ => setState(state => {...state, editorAction: ShowEditor(None)})}
-            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
             <i className="fas fa-plus-circle" />
             <h5 className="font-semibold ml-2"> {t("add_new_admin") |> str} </h5>
           </button>

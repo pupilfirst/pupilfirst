@@ -61,7 +61,7 @@ feature 'School admins Editor', js: true do
     sign_in_user school_admin_1.user, referrer: admins_school_path
 
     # Edit school admin
-    find("a", text: school_admin_2.name).click
+    find("button", text: school_admin_2.name).click
     expect(page).to have_text(school_admin_2.name)
     expect(page).to have_text(school_admin_2.email)
 

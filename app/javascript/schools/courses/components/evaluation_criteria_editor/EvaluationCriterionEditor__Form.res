@@ -227,7 +227,8 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
               {ts("name") |> str}
             </label>
             <input
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              autoFocus=true
+              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
               id="name"
               onChange={event => updateName(setState, ReactEvent.Form.target(event)["value"])}
               type_="text"
@@ -265,7 +266,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                     )}
                   id="max_grade"
                   value={state.maxGrade |> string_of_int}
-                  className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-gray-500 px-3 py-2 leading-tight rounded-none focus:outline-none">
+                  className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-indigo-500 px-3 py-2 leading-tight rounded-none focus:outline-none focus:border-indigo-500">
                   {possibleGradeValues
                   |> List.filter(g => g != 1)
                   |> List.map(possibleGradeValue =>
@@ -299,7 +300,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                     )}
                   id="pass_grade"
                   value={state.passGrade |> string_of_int}
-                  className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-gray-500 px-3 py-2 rounded-none leading-tight focus:outline-none">
+                  className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-indigo-500 px-3 py-2 rounded-none leading-tight focus:outline-none focus:border-indigo-500">
                   {possibleGradeValues
                   |> List.filter(g => g <= state.maxGrade)
                   |> List.map(possibleGradeValue =>

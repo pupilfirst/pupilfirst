@@ -132,7 +132,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
         <div className="flex px-6 py-2 items-center justify-between">
           <button
             onClick={_ => send(OpenNewCertificateDrawer)}
-            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:border-primary-300 focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
             <i className="fas fa-plus-circle" />
             <h5 className="font-semibold ml-2"> {t("create_action")->str} </h5>
           </button>
@@ -189,28 +189,29 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
                               : React.null}
                           </div>
                           <div className="flex">
-                            <a
+                            <button
                               title=editTitle
-                              className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
+                              ariaLabel={editTitle}
+                              className="w-10 text-sm text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-primary-500 focus:outline-none focus:bg-gray-200 focus:text-primary-500"
                               onClick={_ => send(OpenEditCertificateDrawer(certificate))}>
                               <i className="fas fa-edit" />
-                            </a>
+                            </button>
                             {if Certificate.issuedCertificates(certificate) == 0 {
                               let title = t(
                                 ~variables=[("name", Certificate.name(certificate))],
                                 "delete_button_title",
                               )
-
-                              <a
+                              <button
                                 title
-                                className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
+                                ariaLabel={title}
+                                className="w-10 text-sm text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-red-500 focus:outline-none focus:bg-gray-200 focus:text-red-500"
                                 onClick={_event =>
                                   WindowUtils.confirm(
                                     t("delete_confirm"),
                                     () => deleteCertificate(certificate, send),
                                   )}>
                                 <i className="fas fa-trash-alt" />
-                              </a>
+                              </button>
                             } else {
                               React.null
                             }}

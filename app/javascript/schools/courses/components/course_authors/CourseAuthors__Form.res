@@ -156,9 +156,10 @@ let make = (~courseId, ~rootPath, ~author, ~addAuthorCB, ~updateAuthorCB) => {
               {t("email") |> str}
             </label>
             <input
+              autoFocus=true
               value=email
               onChange={event => setEmail(ReactEvent.Form.target(event)["value"])}
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
+              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
               id="email"
               type_="email"
               placeholder=t("email_placeholder")
@@ -177,7 +178,7 @@ let make = (~courseId, ~rootPath, ~author, ~addAuthorCB, ~updateAuthorCB) => {
             <input
               value=name
               onChange={event => setName(ReactEvent.Form.target(event)["value"])}
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
+              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
               id="name"
               type_="text"
               placeholder=t("name_placeholder")

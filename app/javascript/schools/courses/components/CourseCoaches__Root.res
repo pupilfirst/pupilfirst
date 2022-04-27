@@ -40,7 +40,10 @@ let reducer = (state, action) =>
 
 let handleErrorCB = (send, ()) => {
   send(UpdateSaving)
-  Notification.error(t("enrollment_delete_error_head_notification"), t("enrollment_delete_error_notification_body"))
+  Notification.error(
+    t("enrollment_delete_error_head_notification"),
+    t("enrollment_delete_error_notification_body"),
+  )
 }
 
 let handleResponseCB = (send, json) => {
@@ -59,7 +62,11 @@ let removeCoach = (send, courseId, authenticityToken, coach, event) => {
   if {
     open Webapi.Dom
     window |> Window.confirm(
-      t("remove_confirm_pre") ++ " " ++ ((coach |> CourseCoach.name) ++ " " ++ t("remove_confirm_post")),
+      t("remove_confirm_pre") ++
+      " " ++
+      ((coach |> CourseCoach.name) ++
+      " " ++
+      t("remove_confirm_post")),
     )
   } {
     send(UpdateSaving)
@@ -114,7 +121,7 @@ let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
                   ReactEvent.Mouse.preventDefault(_event)
                   send(UpdateFormVisible(CoachEnrollmentForm))
                 }}
-                className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hove:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+                className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:border-primary-300 focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
                 <i className="fas fa-user-plus text-lg" />
                 <h5 className="font-semibold ml-2"> {"Assign Coaches to Course" |> str} </h5>
               </button>
@@ -127,7 +134,7 @@ let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
           : React.null}
         <div className="px-6 pb-4 mt-5 flex flex-1">
           <div className="max-w-2xl w-full mx-auto relative">
-            <div className="flex mt-4 -mx-3 flex-wrap" ariaLabel=t("coaches_list")>
+            <div className="flex mt-4 -mx-3 flex-wrap" ariaLabel={t("coaches_list")}>
               {state.courseCoaches->Belt.SortArray.stableSortBy((a, b) =>
                 String.compare(a |> CourseCoach.name, b |> CourseCoach.name)
               )
@@ -135,12 +142,12 @@ let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
                 <div key={coach |> CourseCoach.id} className="flex w-1/2 flex-shrink-0 mb-5 px-3">
                   <div
                     id={coach |> CourseCoach.name}
-                    className="shadow bg-whzite cursor-pointer rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100">
+                    className="shadow bg-white cursor-pointer rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
                     <div className="flex flex-1 justify-between">
-                      <div
-                        ariaLabel={"coach-card-" ++ CourseCoach.id(coach)}
+                      <button
+                        ariaLabel={"View " ++ CourseCoach.name(coach)}
                         onClick={_ => send(UpdateFormVisible(CoachInfoForm(coach)))}
-                        className="flex flex-1 py-4 px-4 items-center">
+                        className="flex flex-1 py-4 px-4 items-center text-left focus:outline-none focus:bg-gray-100 focus:text-primary-500">
                         <span className="mr-4 flex-shrink-0">
                           {switch coach |> CourseCoach.avatarUrl {
                           | Some(avatarUrl) =>
@@ -159,13 +166,13 @@ let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
                             {coach |> CourseCoach.title |> str}
                           </p>
                         </div>
-                      </div>
-                      <div
-                        className="w-10 text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
-                        ariaLabel={ ts("delete") ++ " " ++ (coach |> CourseCoach.name)}
+                      </button>
+                      <button
+                        className="w-10 text-sm course-faculty__list-item-remove text-gray-700 cursor-pointer flex items-center justify-center hover:text-red-500 hover:bg-gray-200 focus:outline-none focus:text-red-500 focus:bg-gray-200"
+                        ariaLabel={ts("delete") ++ " " ++ (coach |> CourseCoach.name)}
                         onClick={removeCoach(send, courseId, authenticityToken, coach)}>
                         <i className="fas fa-trash-alt" />
-                      </div>
+                      </button>
                     </div>
                   </div>
                 </div>

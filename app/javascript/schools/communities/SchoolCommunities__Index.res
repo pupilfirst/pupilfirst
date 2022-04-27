@@ -173,7 +173,7 @@ let make = (~communities, ~courses) => {
     <div className="flex px-6 py-2 items-center justify-between">
       <button
         onClick={_ => send(UpdateEditorAction(ShowEditor(None)))}
-        className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+        className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer focus:outline-none focus:border-primary-300 focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg">
         <i className="fas fa-plus-circle" />
         <h5 className="font-semibold ml-2"> {tr("add_new_community") |> str} </h5>
       </button>
@@ -183,14 +183,15 @@ let make = (~communities, ~courses) => {
         {state.communities |> List.map(community =>
           <div
             key={community |> Community.id}
-            className="flex items-center shadow bg-white rounded-lg mb-4">
+            className="flex items-center shadow overflow-hidden bg-white rounded-lg mb-4 focus-within:ring-2 focus-within:ring-indigo-500">
             <div className="course-faculty__list-item flex w-full items-center">
-              <a
+              <button
+                ariaLabel={"Edit " ++ (community |> Community.name)}
                 onClick={_event => {
                   ReactEvent.Mouse.preventDefault(_event)
                   send(UpdateEditorAction(ShowEditor(Some(community))))
                 }}
-                className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-l-lg hover:bg-gray-100 hover:text-primary-500 hover:border-primary-400">
+                className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-l-lg text-left hover:bg-gray-100 hover:text-primary-500 hover:border-primary-400 focus:bg-gray-100 focus:text-primary-500">
                 <div className="flex w-full text-sm justify-between">
                   <span className="flex-1 font-semibold py-5 px-5">
                     {community |> Community.name |> str}
@@ -201,11 +202,11 @@ let make = (~communities, ~courses) => {
                     <span className="ml-1"> {ts("edit") |> str} </span>
                   </span>
                 </div>
-              </a>
+              </button>
               <a
                 target="_blank"
                 href={"/communities/" ++ (community |> Community.id)}
-                className="text-sm flex items-center border-l text-gray-700 hover:bg-gray-100 hover:text-primary-500 font-semibold px-5 py-5">
+                className="text-sm flex items-center border-l text-gray-700 hover:bg-gray-100 hover:text-primary-500 focus:outline-none focus:bg-gray-100 focus:text-primary-500 font-semibold px-5 py-5">
                 <i className="fas fa-external-link-alt text-normal" />
                 <span className="ml-1"> {ts("view") |> str} </span>
               </a>

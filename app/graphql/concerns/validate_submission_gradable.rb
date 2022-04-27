@@ -10,13 +10,13 @@ module ValidateSubmissionGradable
       submission_review_allowed_time =
         Rails.application.secrets.inactive_submission_review_allowed_time
 
-      is_submission_review_allowed =
+      submission_review_allowed =
         (
           time_since_submission < submission_review_allowed_time ||
             submission_review_allowed_time == 0
         )
 
-      if (submission.founders.active.empty? && !is_submission_review_allowed)
+      if (submission.founders.active.empty? && !submission_review_allowed)
         return(
           I18n.t(
             'graphql.concerns.validate_submission_gradable.owners_should_be_active_error'

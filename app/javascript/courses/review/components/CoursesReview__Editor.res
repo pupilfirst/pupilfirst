@@ -207,19 +207,19 @@ let getNextSubmission = (send, courseId, filter, submissionId) => {
 }
 
 let isSubmissionReviewAllowed = submissionDetails => {
-  let time_since_submission = DateFns.differenceInMinutes(
+  let timeSinceSubmission = DateFns.differenceInMinutes(
     Js.Date.make(),
     SubmissionDetails.createdAt(submissionDetails),
   )
 
-  let submission_review_allowed_time = SubmissionDetails.inactiveSubmissionReviewAllowedTime(
+  let submissionReviewAllowedTime = SubmissionDetails.inactiveSubmissionReviewAllowedTime(
     submissionDetails,
   )
 
-  let is_submission_review_allowed =
-    time_since_submission < submission_review_allowed_time || submission_review_allowed_time == 0
+  let submissionReviewAllowed =
+    timeSinceSubmission < submissionReviewAllowedTime || submissionReviewAllowedTime == 0
 
-  SubmissionDetails.preview(submissionDetails) && !is_submission_review_allowed
+  SubmissionDetails.preview(submissionDetails) && !submissionReviewAllowed
 }
 
 let makeFeedback = (user, feedback) => {

@@ -105,6 +105,7 @@ end
 group :production do
   gem 'dalli', '~> 2.7.10' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
   gem 'skylight', '~> 5.1' # Skylight is a smart profiler for Rails, Sinatra, and other Ruby apps.
+  gem 'newrelic_rpm', '~> 8.6' # Performance monitoring
   gem 'aws-sdk-s3', '~> 1.103', require: false
   gem 'aws-sdk-cloudfront', '~> 1.56', require: false
   gem 'whenever', '~> 1.0', require: false

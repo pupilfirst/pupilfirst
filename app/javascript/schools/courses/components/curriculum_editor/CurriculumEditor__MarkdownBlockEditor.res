@@ -12,4 +12,5 @@ let make = (~markdown, ~contentBlock, ~updateContentBlockCB) =>
     profile=Markdown.Permissive
     maxLength=10000
     onChange={onChange(contentBlock, updateContentBlockCB)}
+    dynamicHeight=true
   />

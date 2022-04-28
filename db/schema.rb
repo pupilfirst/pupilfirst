@@ -341,8 +341,10 @@ ActiveRecord::Schema.define(version: 2022_04_25_082348) do
     t.datetime "dropped_out_at"
     t.bigint "cohort_id"
     t.bigint "level_id"
+    t.bigint "team_id"
     t.index ["cohort_id"], name: "index_founders_on_cohort_id"
     t.index ["level_id"], name: "index_founders_on_level_id"
+    t.index ["team_id"], name: "index_founders_on_team_id"
     t.index ["user_id"], name: "index_founders_on_user_id"
   end
 
@@ -649,6 +651,14 @@ ActiveRecord::Schema.define(version: 2022_04_25_082348) do
     t.index ["session_at"], name: "index_targets_on_session_at"
   end
 
+  create_table "teams", force: :cascade do |t|
+    t.string "name"
+    t.bigint "cohort_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cohort_id"], name: "index_teams_on_cohort_id"
+  end
+
   create_table "text_versions", force: :cascade do |t|
     t.text "value"
     t.string "versionable_type"
@@ -830,6 +840,7 @@ ActiveRecord::Schema.define(version: 2022_04_25_082348) do
   add_foreign_key "faculty_startup_enrollments", "startups"
   add_foreign_key "founders", "cohorts"
   add_foreign_key "founders", "levels"
+  add_foreign_key "founders", "teams"
   add_foreign_key "founders", "users"
   add_foreign_key "issued_certificates", "certificates"
   add_foreign_key "issued_certificates", "users"
@@ -855,6 +866,7 @@ ActiveRecord::Schema.define(version: 2022_04_25_082348) do
   add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_versions", "targets"
+  add_foreign_key "teams", "cohorts"
   add_foreign_key "timeline_event_files", "timeline_events"
   add_foreign_key "timeline_events", "faculty", column: "evaluator_id"
   add_foreign_key "timeline_events", "faculty", column: "reviewer_id"

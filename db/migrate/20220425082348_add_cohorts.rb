@@ -29,6 +29,9 @@ class AddCohorts < ActiveRecord::Migration[6.1]
   class Cohort < ApplicationRecord
   end
 
+  class Team < ApplicationRecord
+  end
+
   class FacultyCourseEnrollment < ApplicationRecord
     belongs_to :faculty
     belongs_to :course
@@ -65,11 +68,19 @@ class AddCohorts < ActiveRecord::Migration[6.1]
       t.timestamps
     end
 
+    create_table :teams do |t|
+      t.string :name
+      t.references :cohort, foreign_key: true, index: true
+
+      t.timestamps
+    end
+
     add_reference :courses, :default_cohort, foreign_key: { to_table: :cohorts }
     add_column :founders, :access_ends_at, :datetime
     add_column :founders, :dropped_out_at, :datetime
     add_reference :founders, :cohort, foreign_key: true, index: true
     add_reference :founders, :level, foreign_key: true, index: true
+    add_reference :founders, :team, foreign_key: true, index: true
 
     create_table :faculty_cohort_enrollments do |t|
       t.references :faculty, foreign_key: true
@@ -104,14 +115,24 @@ class AddCohorts < ActiveRecord::Migration[6.1]
           ends_at: course.ends_at
         )
 
-      course.founders.each do |student|
-        student.update!(
-          level_id: student.startup.level_id,
-          cohort_id: cohort.id,
-          access_ends_at: student.startup.access_ends_at,
-          dropped_out_at: student.startup.dropped_out_at
-        )
-      end
+      course
+        .startups
+        .includes(:founders)
+        .each do |startup|
+          if startup.founders.count > 1
+            team = Team.create!(name: startup.name, cohort_id: cohort.id)
+          end
+
+          startup.founders.each do |student|
+            student.update!(
+              level_id: student.startup.level_id,
+              cohort_id: cohort.id,
+              access_ends_at: student.startup.access_ends_at,
+              dropped_out_at: student.startup.dropped_out_at,
+              team_id: team&.id
+            )
+          end
+        end
 
       course.faculty_course_enrollments.each do |enrollment|
         FacultyCohortEnrollment.create!(

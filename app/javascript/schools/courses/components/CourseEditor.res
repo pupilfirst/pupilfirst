@@ -582,16 +582,7 @@ let make = () => {
         | FullyLoaded(courses) => <div> {showCourses(courses, state)} </div>
         }}
       </div>
-      {switch state.courses {
-      | Unloaded => React.null
-      | _ =>
-        let loading = switch state.loading {
-        | NotLoading => false
-        | Reloading => true
-        | LoadingMore => false
-        }
-        <LoadingSpinner loading />
-      }}
+      {Pagination.showLoading(state.courses, state.loading)}
     </div>
   </div>
 }

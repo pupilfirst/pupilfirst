@@ -24,7 +24,7 @@ let unsafeLevelNumber = (levels, componentName, levelId) =>
     levels
     |> ArrayUtils.unsafeFind(
       l => l.id == levelId,
-      "Unable to find level with id: " ++ (levelId ++ ("in CoursesRevew__" ++ componentName)),
+      "Unable to find level with id: " ++ (levelId ++ componentName),
     )
     |> number
     |> string_of_int,

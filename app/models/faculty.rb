@@ -69,39 +69,6 @@ class Faculty < ApplicationRecord
 
   normalize_attribute :connect_link
 
-  validate :slack_username_must_exist
-
-  def slack_username_must_exist
-    return if slack_username.blank?
-    return unless slack_username_changed?
-    return unless Rails.env.production?
-
-    begin
-      @new_slack_user_id =
-        FacultyModule::SlackConnectService.new(self).slack_user_id
-    rescue PublicSlack::OperationFailureException
-      errors.add(
-        :slack_username,
-        "could not be validated using Slack's API. Contact the engineering team."
-      )
-    end
-
-    return if @new_slack_user_id.present?
-
-    errors.add(
-      :slack_username,
-      'does not exist on SV.CO Public Slack. Confirm username and try again.'
-    )
-  end
-
-  before_save :fetch_slack_user_id
-
-  def fetch_slack_user_id
-    return unless slack_username_changed?
-
-    self.slack_user_id = slack_username.present? ? @new_slack_user_id : nil
-  end
-
   def reviewable_startups(course)
     course.startups.admitted
   end

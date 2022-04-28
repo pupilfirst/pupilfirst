@@ -30,4 +30,17 @@ module Make = (Item: Item) => {
     | (true, Some(cursor)) => PartiallyLoaded(items, cursor)
     }
   }
+
+  let showLoading = (t, loading) => {
+    switch t {
+    | Unloaded => React.null
+    | _ =>
+      let isLoading = switch loading {
+      | Loading.NotLoading => false
+      | Reloading => true
+      | LoadingMore => false
+      }
+      <LoadingSpinner loading=isLoading />
+    }
+  }
 }

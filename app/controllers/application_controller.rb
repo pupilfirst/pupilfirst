@@ -212,7 +212,7 @@ class ApplicationController < ActionController::Base
     # User must be logged in.
     authenticate_user!
 
-    return if current_founder.present? && !current_founder.dropped_out?
+    return if current_founder.present? && !current_founder.dropped_out_at?
 
     redirect_to root_path
   end

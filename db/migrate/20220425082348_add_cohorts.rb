@@ -64,6 +64,7 @@ class AddCohorts < ActiveRecord::Migration[6.1]
       t.string :name
       t.string :description
       t.datetime :ends_at
+      t.references :course, foreign_key: true, index: true
 
       t.timestamps
     end
@@ -112,7 +113,8 @@ class AddCohorts < ActiveRecord::Migration[6.1]
         Cohort.create!(
           name: 'Default cohort',
           description: "Default cohort for #{course.name}",
-          ends_at: course.ends_at
+          ends_at: course.ends_at,
+          course_id: course.id
         )
 
       course

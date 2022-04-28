@@ -128,8 +128,10 @@ ActiveRecord::Schema.define(version: 2022_04_25_082348) do
     t.string "name"
     t.string "description"
     t.datetime "ends_at"
+    t.bigint "course_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_cohorts_on_course_id"
   end
 
   create_table "communities", force: :cascade do |t|
@@ -820,6 +822,7 @@ ActiveRecord::Schema.define(version: 2022_04_25_082348) do
   add_foreign_key "answer_options", "quiz_questions"
   add_foreign_key "applicants", "courses"
   add_foreign_key "certificates", "courses"
+  add_foreign_key "cohorts", "courses"
   add_foreign_key "communities", "schools"
   add_foreign_key "community_course_connections", "communities"
   add_foreign_key "community_course_connections", "courses"

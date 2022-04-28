@@ -22,9 +22,15 @@ class TimelineEventFilePolicy < ApplicationPolicy
     return false if user.founders.empty?
 
     # At least one of the student profiles must be non-exited AND non-ended (course AND access).
-    user.founders.includes(:startup, :course).any? do |founder|
-      !(founder.dropped_out? || founder.access_ended? || founder.course.ended?)
-    end
+    user
+      .founders
+      .includes(:startup, :course)
+      .any? do |founder|
+        !(
+          founder.dropped_out_at? || founder.access_ended? ||
+            founder.course.ended?
+        )
+      end
   end
 
   private

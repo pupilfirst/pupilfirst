@@ -16,7 +16,7 @@ class DropoutStudentMutator < ApplicationQuery
   end
 
   def active_student_must_exist
-    return if student.present? && !student.dropped_out?
+    return if student.present? && !student.dropped_out_at?
 
     errors[:base] << "Unable to find an active student with id: #{id}"
   end

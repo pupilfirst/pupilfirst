@@ -104,10 +104,11 @@ module Types
       argument :id, ID, required: true
     end
 
-    resolved_field :course_teams,
-                   Types::CourseTeamType.connection_type,
+    resolved_field :course_students,
+                   Types::StudentType.connection_type,
                    null: false do
       argument :course_id, ID, required: true
+      argument :cohort_id, ID, required: false
       argument :level_id, ID, required: false
       argument :search, String, required: false
       argument :tags, [String], required: false

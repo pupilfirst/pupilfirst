@@ -339,22 +339,22 @@ let make = (
         </div>
       </div>
       <div>
-        <StudentsEditor__TeamsList
-          levels
-          courseId
-          filter=state.filter
-          pagedTeams=state.pagedTeams
-          totalTeamsCount=state.totalCount
-          selectedStudentIds={state.selectedStudents |> Array.map(s => s |> SelectedStudent.id)}
-          selectStudentCB={selectStudent(send)}
-          deselectStudentCB={deselectStudent(send)}
-          showEditFormCB={showEditForm(send)}
-          updateTeamsCB={updateTeams(send)}
-          loading=state.loading
-          setLoadingCB={setLoading(send)}
-          updateFilterCB={updateFilter(send)}
-          refreshTeams=state.refreshTeams
-        />
+        // <StudentsEditor__TeamsList
+        //   levels
+        //   courseId
+        //   filter=state.filter
+        //   pagedTeams=state.pagedTeams
+        //   totalTeamsCount=state.totalCount
+        //   selectedStudentIds={state.selectedStudents |> Array.map(s => s |> SelectedStudent.id)}
+        //   selectStudentCB={selectStudent(send)}
+        //   deselectStudentCB={deselectStudent(send)}
+        //   showEditFormCB={showEditForm(send)}
+        //   updateTeamsCB={updateTeams(send)}
+        //   loading=state.loading
+        //   setLoadingCB={setLoading(send)}
+        //   updateFilterCB={updateFilter(send)}
+        //   refreshTeams=state.refreshTeams
+        // />
       </div>
     </div>
     {

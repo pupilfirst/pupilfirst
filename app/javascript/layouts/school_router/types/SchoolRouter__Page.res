@@ -72,7 +72,7 @@ let path = t => {
     | Certificates => `/school/courses/${courseId}/certificates`
     | Applicants => `/school/courses/${courseId}/applicants`
     }
-  | Communities => "/school/school/communities"
+  | Communities => "/school/communities"
   }
 }
 

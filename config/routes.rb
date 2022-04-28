@@ -67,7 +67,11 @@ Rails.application.routes.draw do
       'courses/:course_id',
       'courses/:course_id/details',
       'courses/:course_id/images',
-      'courses/:course_id/actions'
+      'courses/:course_id/actions',
+      'courses/:course_id/students',
+      'courses/:course_id/students/new',
+      'courses/:course_id/students/:student_id/',
+      'courses/:course_id/students/:student_id/edit',
     ].each do |path|
       get path, action: 'school_router'
     end

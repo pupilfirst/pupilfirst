@@ -775,13 +775,9 @@
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -12108,7 +12104,7 @@
               "deprecationReason": null
             },
             {
-              "name": "levelId",
+              "name": "level",
               "description": null,
               "args": [
 
@@ -12117,8 +12113,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
+                  "kind": "OBJECT",
+                  "name": "Level",
                   "ofType": null
                 }
               },

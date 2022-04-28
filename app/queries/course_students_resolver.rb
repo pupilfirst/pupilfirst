@@ -84,8 +84,9 @@ class CourseStudentsResolver < ApplicationQuery
         students_by_tag
       end
 
-    (cohort_id.present? ? scope.where(cohort_id: cohort_id) : scope).distinct
-      .order("#{sort_by_string} #{sort_direction_string}")
+    (cohort_id.present? ? scope.where(cohort_id: cohort_id) : scope).order(
+      "#{sort_by_string} #{sort_direction_string}"
+    )
   end
 
   def sort_direction_string

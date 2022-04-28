@@ -23,7 +23,10 @@ let make = (~school, ~courses, ~currentUser) => {
       Courses,
       Some(<CourseEditor />),
     )
-  | list{"school", "courses", courseId, "students"}
+  | list{"school", "courses", courseId, "students"} => (
+      SelectedCourse(courseId, Students),
+      Some(<StudentsIndex__Root courseId url />),
+    )
   | list{"school", "courses", courseId, "inactive_students"} => (
       SelectedCourse(courseId, Students),
       None,

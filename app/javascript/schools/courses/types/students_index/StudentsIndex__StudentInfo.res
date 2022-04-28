@@ -6,7 +6,8 @@ type t = {
   avatarUrl: option<string>,
   taggings: array<string>,
   userTags: array<string>,
-  levelId: string,
+  level: Shared__Level.t,
+  cohort: Shared__Cohort.t,
 }
 
 let id = t => t.id
@@ -16,7 +17,8 @@ let affiliation = t => t.affiliation
 let avatarUrl = t => t.avatarUrl
 let taggings = t => t.taggings
 let userTags = t => t.userTags
-let levelId = t => t.levelId
+let level = t => t.level
+let cohort = t => t.cohort
 
 let make = (
   ~id,
@@ -26,7 +28,8 @@ let make = (
   ~avatarUrl,
   ~taggings,
   ~userTags,
-  ~levelId,
+  ~level,
+  ~cohort,
 ) => {
   id: id,
   name: name,
@@ -35,7 +38,8 @@ let make = (
   avatarUrl: avatarUrl,
   taggings: taggings,
   userTags: userTags,
-  levelId: levelId,
+  level: level,
+  cohort: cohort,
 }
 
 let makeFromJS = studentDetails =>
@@ -47,5 +51,6 @@ let makeFromJS = studentDetails =>
     ~avatarUrl=studentDetails["avatarUrl"],
     ~taggings=studentDetails["taggings"],
     ~userTags=studentDetails["userTags"],
-    ~levelId=studentDetails["levelId"],
+    ~level=Shared__Level.makeFromJs(studentDetails["level"]),
+    ~cohort=Shared__Cohort.makeFromJs(studentDetails["cohort"]),
   )

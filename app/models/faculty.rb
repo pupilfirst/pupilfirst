@@ -12,12 +12,12 @@ class Faculty < ApplicationRecord
            inverse_of: :evaluator,
            dependent: :nullify
   has_many :targets, dependent: :restrict_with_error
-  has_many :faculty_course_enrollments, dependent: :destroy
-  has_many :courses, through: :faculty_course_enrollments
+  has_many :faculty_cohort_enrollments, dependent: :destroy
+  has_many :cohorts, through: :faculty_cohort_enrollments
+  has_many :courses, through: :cohorts
 
   # Startups whose timeline events this faculty can review.
-  has_many :faculty_startup_enrollments, dependent: :destroy
-  has_many :startups, through: :faculty_startup_enrollments
+  has_many :faculty_founder_enrollments, dependent: :destroy
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_COACHES = 'visiting_coaches'

@@ -1,4 +1,4 @@
 class FacultyCohortEnrollment < ApplicationRecord
   belongs_to :faculty
-  belongs_to :course
+  belongs_to :cohort
 end

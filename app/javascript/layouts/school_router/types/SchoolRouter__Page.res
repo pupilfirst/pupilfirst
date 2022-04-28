@@ -42,7 +42,18 @@ let isSPA = t => {
   | SchoolCoaches
   | Communities => false
   | Settings(_settingsPages) => false
-  | SelectedCourse(_courseId, _coursePages) => false
+  | SelectedCourse(_courseId, coursePages) =>
+    switch coursePages {
+    | Students => true
+    | CourseCoaches
+    | Curriculum
+    | EvaluationCriteria
+    | CourseExports
+    | Authors
+    | Certificates
+    | Applicants => false
+    }
+
   | Courses => true
   }
 }

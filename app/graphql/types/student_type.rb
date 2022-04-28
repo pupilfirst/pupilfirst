@@ -8,7 +8,7 @@ module Types
     field :avatar_url, String, null: true
     field :taggings, [String], null: false
     field :issued_certificates, [Types::IssuedCertificateType], null: false
-    field :level_id, ID, null: false
+    field :level, Types::LevelType, null: false
     field :cohort, Types::CohortType, null: false
     field :user_tags, [String], null: false
     field :access_ends_at, GraphQL::Types::ISO8601DateTime, null: true
@@ -38,6 +38,16 @@ module Types
           Cohort
             .where(id: cohort_ids)
             .each { |cohort| loader.call(cohort.id, cohort) }
+        end
+    end
+
+    def level
+      BatchLoader::GraphQL
+        .for(object.level_id)
+        .batch(default_value: []) do |level_ids, loader|
+          Level
+            .where(id: level_ids)
+            .each { |level| loader.call(level.id, level) }
         end
     end
 

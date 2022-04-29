@@ -6,11 +6,17 @@ let onChange = (contentBlock, updateContentBlockCB, value) => {
 }
 
 @react.component
-let make = (~markdown, ~curriculumEditorMaxLength, ~contentBlock, ~updateContentBlockCB) =>
+let make = (
+  ~markdown,
+  ~markdownCurriculumEditorMaxLength,
+  ~contentBlock,
+  ~updateContentBlockCB,
+) => {
   <MarkdownEditor
     value=markdown
     profile=Markdown.Permissive
-    maxLength=curriculumEditorMaxLength
+    maxLength=markdownCurriculumEditorMaxLength
     onChange={onChange(contentBlock, updateContentBlockCB)}
     dynamicHeight=true
   />
+}

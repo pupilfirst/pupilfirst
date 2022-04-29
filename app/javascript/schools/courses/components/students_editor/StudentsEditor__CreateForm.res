@@ -240,21 +240,12 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
         </div>
       </div>
       <div className="mt-4">
-        <input
-          onChange={_event => send(ToggleNotifyStudents)}
-          checked=state.notifyStudents
-          className="hidden checkbox-input"
-          id="notify-new-students"
-          type_="checkbox"
+        <Checkbox
+            id="notify-new-students"
+            label={str(t("notify_students_label"))}
+            onChange={_event => send(ToggleNotifyStudents)}
+            checked={state.notifyStudents}
         />
-        <label className="checkbox-label" htmlFor="notify-new-students">
-          <span>
-            <svg width="12px" height="10px" viewBox="0 0 12 10">
-              <polyline points="1.5 6 4.5 9 10.5 1" />
-            </svg>
-          </span>
-          <span className="text-sm"> {t("notify_students_label")->str} </span>
-        </label>
       </div>
       <div className="flex mt-4">
         <button

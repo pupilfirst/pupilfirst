@@ -168,9 +168,6 @@ Rails.application.configure do
     end
   end
 
-  # Add the GraphQL probe for Skylight.
-  config.skylight.probes << 'graphql'
-
   # Add throttling to application
   require_relative '../../lib/rack_throttle/rules'
 

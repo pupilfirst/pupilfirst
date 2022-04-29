@@ -151,15 +151,13 @@ feature "Coach's review interface" do
       )
     end
 
-    let(:feedback) do
+    let!(:feedback) do
       create(
         :startup_feedback,
-        startup_id: team_l2.id,
-        faculty_id: course_coach.id
+        faculty_id: course_coach.id,
+        timeline_event: submission_l2_t3
       )
     end
-
-    before { submission_l2_t3.startup_feedback << feedback }
 
     scenario 'course coach visits review dashboard', js: true do
       sign_in_user course_coach.user, referrer: review_course_path(course)
@@ -653,7 +651,6 @@ feature "Coach's review interface" do
       end
 
       (1..10).each do |n|
-
         # Pending submissions with level2 target
         create(
           :timeline_event,
@@ -666,7 +663,6 @@ feature "Coach's review interface" do
       end
 
       (21..40).each do |n|
-
         # Pending submissions with level1 target
         create(
           :timeline_event,

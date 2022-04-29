@@ -115,8 +115,9 @@ let make = (~customizations, ~updateAddressCB, ~updateEmailAddressCB) => {
           {"Contact Address " |> str} <i className="fab fa-markdown text-base" />
         </label>
         <textarea
+          autoFocus=true
           maxLength=1000
-          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
           id="contacts-editor__address"
           placeholder="Leave the address empty to hide the footer section."
           onChange={handleInputChange(address => send(UpdateAddress(address)))}
@@ -132,7 +133,7 @@ let make = (~customizations, ~updateAddressCB, ~updateEmailAddressCB) => {
         <input
           type_="text"
           maxLength=250
-          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
           id="contacts-editor__email-address"
           placeholder="Leave the email address empty to hide the footer link."
           onChange={handleInputChange(emailAddress =>
@@ -148,7 +149,7 @@ let make = (~customizations, ~updateAddressCB, ~updateEmailAddressCB) => {
         key="contacts-editor__update-button"
         disabled={updateButtonDisabled(state)}
         onClick={handleUpdateContactDetails(state, send, updateAddressCB, updateEmailAddressCB)}
-        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+        className="w-full btn btn-primary btn-large mt-6">
         {updateContactDetailsButtonText(state.updating) |> str}
       </button>
     </DisablingCover>

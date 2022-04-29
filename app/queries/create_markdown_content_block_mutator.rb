@@ -10,17 +10,11 @@ class CreateMarkdownContentBlockMutator < ApplicationQuery
       markdown_block = create_markdown_block
       shift_content_blocks_below(markdown_block)
       target_version.touch # rubocop:disable Rails/SkipsModelValidations
-      json_attributes(markdown_block).tap do |results|
-        results["content"].merge!(curriculum_editor_max_length)
-      end
+      json_attributes(markdown_block)
     end
   end
 
   private
-
-  def curriculum_editor_max_length
-    { "curriculum_editor_max_length" => ContentBlock.markdown_curriculum_editor_max_length }
-  end
 
   def create_markdown_block
     target_version.content_blocks.create!(

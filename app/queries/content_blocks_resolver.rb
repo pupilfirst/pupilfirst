@@ -37,10 +37,6 @@ class ContentBlocksResolver < ApplicationQuery
     }
   end
 
-  def curriculum_editor_max_length
-    { "curriculum_editor_max_length" => ContentBlock.markdown_curriculum_editor_max_length }
-  end
-
   def content_data(content_blocks)
     content_blocks.with_attached_file.map do |content_block|
       content_block_data =
@@ -52,9 +48,6 @@ class ContentBlocksResolver < ApplicationQuery
         )
       if content_block.file.attached?
         content_block_data.merge!(file_details(content_block))
-      end
-      if content_block.markdown?
-        content_block_data["content"].merge!(curriculum_editor_max_length)
       end
       content_block_data.symbolize_keys
     end

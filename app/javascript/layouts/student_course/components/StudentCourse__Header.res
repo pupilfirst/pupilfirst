@@ -1,6 +1,6 @@
 let str = React.string
-%bs.raw(`require("./StudentCourse__Header.css")`)
-%bs.raw(`require("courses/shared/background_patterns.css")`)
+%raw(`require("./StudentCourse__Header.css")`)
+%raw(`require("courses/shared/background_patterns.css")`)
 
 let courseOptions = courses => Js.Array.map(course => {
     let courseId = CourseInfo.id(course)
@@ -58,8 +58,15 @@ let renderCourseSelector = (currentCourseId, courses, coverImage, additionalLink
     courses,
   )
   let otherCourses = Js.Array.filter(c => CourseInfo.id(c) != currentCourseId, courses)
+  let imageWrapperClasses =
+    "relative " ++
+    switch coverImage {
+    | Some(_) => "pb-1/2 md:pb-1/4 2xl:pb-1/5"
+    | None => "pb-1/4 sm:1/5 md:pb-1/6 xl:pb-1/12"
+    }
+
   <div className="relative bg-primary-900">
-    <div className="relative pb-1/2 md:pb-1/4 2xl:pb-1/5">
+    <div className={imageWrapperClasses}>
       {switch coverImage {
       | Some(src) => <img className="absolute h-full w-full object-cover" src />
       | None =>
@@ -77,7 +84,7 @@ let renderCourseSelector = (currentCourseId, courses, coverImage, additionalLink
 let tabClasses = (url: RescriptReactRouter.url, linkTitle) => {
   let defaultClasses = "student-course__nav-tab py-4 px-2 text-center flex-1 font-semibold text-sm "
   switch url.path {
-  | list{"courses", _targetId, pageTitle, ..._} when pageTitle == linkTitle =>
+  | list{"courses", _targetId, pageTitle, ..._} if pageTitle == linkTitle =>
     defaultClasses ++ "student-course__nav-tab--active"
   | _ => defaultClasses
   }

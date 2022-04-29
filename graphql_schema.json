@@ -13575,7 +13575,7 @@
               "deprecationReason": null
             },
             {
-              "name": "inactiveSubmissionReviewAllowedTime",
+              "name": "inactiveSubmissionReviewAllowedDays",
               "description": null,
               "args": [
 

@@ -1017,7 +1017,7 @@ feature 'Submission review overlay', js: true do
     end
 
     around do |example|
-      with_secret(inactive_submission_review_allowed_time: 80) { example.run }
+      with_secret(inactive_submission_review_allowed_days: 14) { example.run }
     end
 
     scenario 'coach visits pending submission page of inactive student with submission review allowed time over' do

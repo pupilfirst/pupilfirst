@@ -130,3 +130,9 @@ external differenceInSeconds: (Js.Date.t, Js.Date.t) => int = "differenceInSecon
 
 @module("date-fns")
 external differenceInMinutes: (Js.Date.t, Js.Date.t) => int = "differenceInMinutes"
+
+@module("date-fns")
+external differenceInDays: (Js.Date.t, Js.Date.t) => int = "differenceInDays"
+
+@module("date-fns")
+external addDays: (Js.Date.t, int) => Js.Date.t = "addDays"

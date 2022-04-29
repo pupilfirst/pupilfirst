@@ -207,17 +207,16 @@ let getNextSubmission = (send, courseId, filter, submissionId) => {
 }
 
 let isSubmissionReviewAllowed = submissionDetails => {
-  let timeSinceSubmission = DateFns.differenceInMinutes(
+  let daysSinceSubmission = DateFns.differenceInDays(
     Js.Date.make(),
     SubmissionDetails.createdAt(submissionDetails),
   )
 
-  let submissionReviewAllowedTime = SubmissionDetails.inactiveSubmissionReviewAllowedTime(
+  let submissionReviewAllowedTime = SubmissionDetails.inactiveSubmissionReviewAllowedDays(
     submissionDetails,
   )
 
-  let submissionReviewAllowed =
-    timeSinceSubmission < submissionReviewAllowedTime || submissionReviewAllowedTime == 0
+  let submissionReviewAllowed = daysSinceSubmission < submissionReviewAllowedTime
 
   SubmissionDetails.preview(submissionDetails) && !submissionReviewAllowed
 }
@@ -345,10 +344,25 @@ let gradeSubmissionQuery = (
 
 let inactiveWarning = submissionDetails =>
   if SubmissionDetails.inactiveStudents(submissionDetails) {
+    let submissionDeadlineDate = DateFns.addDays(
+      SubmissionDetails.createdAt(submissionDetails),
+      SubmissionDetails.inactiveSubmissionReviewAllowedDays(submissionDetails),
+    )
+
     let warning = if Array.length(SubmissionDetails.students(submissionDetails)) > 1 {
-      t("students_dropped_out_message")
+      isSubmissionReviewAllowed(submissionDetails)
+        ? t("students_dropped_out_message_without_timestamp")
+        : t(
+            ~variables=[("timestamp", DateFns.format(submissionDeadlineDate, "do MMMM, yyyy"))],
+            "students_dropped_out_message_with_timestamp",
+          )
+    } else if isSubmissionReviewAllowed(submissionDetails) {
+      t("student_dropped_out_message_without_timestamp")
     } else {
-      t("student_dropped_out_message")
+      t(
+        ~variables=[("timestamp", DateFns.format(submissionDeadlineDate, "do MMMM, yyyy"))],
+        "student_dropped_out_message_with_timestamp",
+      )
     }
 
     <div

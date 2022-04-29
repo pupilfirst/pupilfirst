@@ -9,7 +9,7 @@ type state =
 module SubmissionDetailsQuery = %graphql(`
     query SubmissionDetailsQuery($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {
-        targetId, targetTitle, levelNumber, levelId, inactiveStudents, createdAt, submissionReportPollTime,inactiveSubmissionReviewAllowedTime
+        targetId, targetTitle, levelNumber, levelId, inactiveStudents, createdAt, submissionReportPollTime, inactiveSubmissionReviewAllowedDays
         students {
           id
           name

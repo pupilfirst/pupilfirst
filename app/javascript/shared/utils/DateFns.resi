@@ -10,6 +10,10 @@ let differenceInSeconds: (Js.Date.t, Js.Date.t) => int
 
 let differenceInMinutes: (Js.Date.t, Js.Date.t) => int
 
+let differenceInDays: (Js.Date.t, Js.Date.t) => int
+
+let addDays: (Js.Date.t, int) => Js.Date.t
+
 let isPast: Js.Date.t => bool
 
 let isFuture: Js.Date.t => bool

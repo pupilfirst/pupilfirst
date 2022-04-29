@@ -12,8 +12,8 @@ Rack::Attack.safelist('mark get requests as safe') { |request| request.get? }
 # Throttle GraphQL API requests to a configurable value per second that defaults to 20 requests/second
 Rack::Attack.throttle(
   'limits GraphQL api requests using API token',
-  limit: ENV['GRAPH_API_RATE_LIMIT']&.to_i || 20,
-  period: 1
+  limit: ENV['GRAPH_API_RATE_LIMIT']&.to_i || 300,
+  period: ENV['GRAPH_API_RATE_PERIOD']&.to_i || 60
 ) do |request|
   header = request.env['HTTP_AUTHORIZATION']&.strip
   api_token = header.split(' ')[-1] if header.present?

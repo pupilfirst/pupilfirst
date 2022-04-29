@@ -168,11 +168,11 @@ Rails.application.configure do
     end
   end
 
-  Rack::Attack.enabled = ENV['REDIS_CACHE_URL'].present?
+  Rack::Attack.enabled = ENV['REDIS_URL'].present?
 
   Rack::Attack.cache.store =
     ActiveSupport::Cache::RedisCacheStore.new(
-      namespace: 'throttle',
-      url: ENV['REDIS_CACHE_URL']
+      namespace: 'lms-throttle',
+      url: ENV['REDIS_URL']
     )
 end

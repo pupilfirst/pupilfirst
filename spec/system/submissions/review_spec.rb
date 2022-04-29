@@ -977,7 +977,7 @@ feature 'Submission review overlay', js: true do
         :timeline_event,
         :with_owners,
         latest: true,
-        created_at: 1.day.ago,
+        created_at: 5.days.ago,
         owners: inactive_team.founders,
         target: target
       )
@@ -1002,7 +1002,7 @@ feature 'Submission review overlay', js: true do
         owners: inactive_team.founders,
         target: target,
         evaluator_id: coach.id,
-        created_at: 2.days.ago,
+        created_at: 5.days.ago,
         evaluated_at: 1.day.ago,
         passed_at: 1.day.ago
       )
@@ -1017,16 +1017,16 @@ feature 'Submission review overlay', js: true do
     end
 
     around do |example|
-      with_secret(inactive_submission_review_allowed_days: 14) { example.run }
+      with_secret(inactive_submission_review_allowed_days: 1) { example.run }
     end
 
-    scenario 'coach visits pending submission page of inactive student with submission review allowed time over' do
+    scenario 'coach visits pending submission page of inactive student with allowed submission review time has elapsed' do
       sign_in_user coach.user,
                    referrer:
                      review_timeline_event_path(
                        pending_submission_one_from_inactive_team
                      )
-
+      expect(page).not_to have_text('You can review the submission until')
       expect(page).to have_button('Create Review Checklist', disabled: true)
       expect(page).to have_button('Write a Note', disabled: true)
       expect(page).to have_button('Save grades', disabled: true)
@@ -1041,6 +1041,7 @@ feature 'Submission review overlay', js: true do
 
       click_button 'Start Review'
       dismiss_notification
+      expect(page).to have_content('You can review the submission until')
       expect(page).to have_content('Add Your Feedback')
       expect(page).to have_content('Grade Card')
       expect(page).to have_content(evaluation_criterion_1.name)

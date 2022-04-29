@@ -135,6 +135,7 @@ let make = (
   ~targets,
   ~hasVimeoAccessToken,
   ~vimeoPlan,
+  ~markdownCurriculumEditorMaxLength,
 ) => {
   let path = RescriptReactRouter.useUrl().path
   let (state, send) = React.useReducerWithMapState(
@@ -207,6 +208,7 @@ let make = (
     </div>
     <CurriculumEditor__TargetDrawer
       hasVimeoAccessToken
+      markdownCurriculumEditorMaxLength
       targets=state.targets
       levels=state.levels
       targetGroups=state.targetGroups

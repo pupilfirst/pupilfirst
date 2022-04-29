@@ -7,6 +7,7 @@ type props = {
   targetGroups: array<TargetGroup.t>,
   targets: array<Target.t>,
   hasVimeoAccessToken: bool,
+  markdownCurriculumEditorMaxLength: int,
   vimeoPlan: option<VimeoPlan.t>,
   enabledFeatures: array<string>,
 }
@@ -20,8 +21,9 @@ let decodeProps = json => {
     targetGroups: json |> field("targetGroups", array(TargetGroup.decode)),
     targets: json |> field("targets", array(Target.decode)),
     hasVimeoAccessToken: json |> field("hasVimeoAccessToken", bool),
+    markdownCurriculumEditorMaxLength: json |> field("markdownCurriculumEditorMaxLength", int),
     vimeoPlan: Belt.Option.map(json |> optional(field("vimeoPlan", string)), VimeoPlan.decode),
-    enabledFeatures: json |> field("enabledFeatures", array(string))
+    enabledFeatures: json |> field("enabledFeatures", array(string)),
   }
 }
 
@@ -40,6 +42,7 @@ switch ReactDOM.querySelector("#curriculum-editor") {
         targets=props.targets
         hasVimeoAccessToken=props.hasVimeoAccessToken
         vimeoPlan=props.vimeoPlan
+        markdownCurriculumEditorMaxLength=props.markdownCurriculumEditorMaxLength
       />
     </Toggle.Provider>,
     element,

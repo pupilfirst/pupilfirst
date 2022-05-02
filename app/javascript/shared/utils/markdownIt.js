@@ -31,6 +31,7 @@ const imageSizePlugin = require("@centerforopenscience/markdown-it-imsize");
 const linkAttributesPlugin = require("markdown-it-link-attributes");
 const katexPlugin = require("@jeff-tian/markdown-it-katex");
 const alignPlugin = require("markdown-it-align");
+const checkboxPlugin = require("markdown-it-task-checkbox");
 
 md.use(subscriptPlugin)
   .use(superscriptPlugin)
@@ -45,7 +46,12 @@ md.use(subscriptPlugin)
     target: "_blank",
   })
   .use(katexPlugin)
-  .use(alignPlugin);
+  .use(alignPlugin)
+  .use(checkboxPlugin, {
+    disabled: false,
+    liClass: 'flex items-center gap-2 pointer-events-none',
+    ulClass: "list-none"
+  });
 
 const parse = (markdown) => {
   return md.render(markdown);

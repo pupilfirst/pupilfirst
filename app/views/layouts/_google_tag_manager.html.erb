@@ -1,9 +1,18 @@
 <% if Rails.env.production? && Rails.application.secrets.google_tag_manager_container_id.present? %>
 <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','<%= Rails.application.secrets.google_tag_manager_container_id %>');</script>
+<%= javascript_tag(nonce: true) do %>
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','<%= Rails.application.secrets.google_tag_manager_container_id %>');
+<% end %>
 <!-- End Google Tag Manager -->
+  <% if current_user.present? %>
+    <%= javascript_tag(nonce: true) do %>
+      window.FULLSTORY_USER_ID=<%= current_user.id %>;
+      window.FULLSTORY_EMAIL='<%= current_user.email %>';
+      window.FULLSTORY_DISPLAY_NAME='<%= current_user.name %>';
+     <% end %>
+  <% end %>
 <% end %>

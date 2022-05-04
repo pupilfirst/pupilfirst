@@ -58,7 +58,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def doubleclick_csp
-    { connect: 'https://*.*.doubleclick.net'}
+    { connect: 'https://*.doubleclick.net'}
   end
 
   def jsdelivr_csp

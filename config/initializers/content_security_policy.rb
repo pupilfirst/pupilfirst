@@ -49,6 +49,18 @@ Rails.application.config.content_security_policy do |policy|
     { connect: 'https://api.rollbar.com' }
   end
 
+  def fullstory_csp
+    { connect: 'https://*.fullstory.com'}
+  end
+
+  def google_csp
+    { connect: 'https://*.google.com'}
+  end
+
+  def doubleclick_csp
+    { connect: 'https://*.*.doubleclick.net'}
+  end
+
   def jsdelivr_csp
     { style: 'cdn.jsdelivr.net', font: 'cdn.jsdelivr.net' }
   end
@@ -58,7 +70,7 @@ Rails.application.config.content_security_policy do |policy|
   end
 
   def connect_sources
-    sources = [rollbar_csp[:connect], *vimeo_csp[:connect]]
+    sources = [rollbar_csp[:connect], *vimeo_csp[:connect], fullstory_csp[:connect], google_csp[:connect], doubleclick_csp[:connect]]
     sources += %w[http://localhost:3035 ws://localhost:3035] if Rails.env.development?
     sources
   end

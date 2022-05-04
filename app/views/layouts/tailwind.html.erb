@@ -10,6 +10,7 @@
   data-subscription-endpoint="<%= presenter.webpush_subscription_endpoint %>"
 >
   <head>
+    <%= render 'layouts/google_tag_manager' %>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="manifest" href="/manifest.json" />
@@ -62,6 +63,7 @@
   </head>
 
   <body data-host="<%= current_host %>">
+    <%= render 'layouts/google_tag_manager_no_script' %>
     <section class="min-h-full flex flex-col items-stretch">
       <%= yield :nav %>
       <main class="flex-grow bg-gray-100">

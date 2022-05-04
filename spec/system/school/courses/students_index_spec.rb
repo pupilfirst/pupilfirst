@@ -68,9 +68,9 @@ feature 'School students index', js: true do
       fill_in 'Title', with: title_1
       fill_in 'Affiliation', with: affiliation_1
       fill_in 'Tags', with: 'Abc'
-      find('span[title="Add new tag Abc"]').click
+      find('button[title="Add new tag Abc"]').click
       fill_in 'Tags', with: 'Def'
-      find('span[title="Add new tag Def"]').click
+      find('button[title="Add new tag Def"]').click
       click_button 'Add to List'
 
       # Student, alone, but with a team name.
@@ -89,9 +89,10 @@ feature 'School students index', js: true do
       fill_in 'Affiliation', with: ''
 
       # Remove both tags, then add one back - the un-persisted tag should be suggested.
-      find('span[title="Remove tag Abc"]').click
-      find('span[title="Remove tag Def"]').click
+      find('button[title="Remove tag Abc"]').click
+      find('button[title="Remove tag Def"]').click
       fill_in 'Tags', with: 'ab' # Lowercase search should still list capitalized result.
+
       find('span[title="Pick tag Abc"]').click
       fill_in 'Tags', with: 'DE' # Uppercase search should still list capitalized result.
       find('span[title="Pick tag Def"]').click
@@ -99,7 +100,7 @@ feature 'School students index', js: true do
       # Uppercase search should still list capitalized result. Leading and trailing spaces should be removed, and extra
       # spaces should get 'squished'.
       fill_in 'Tags', with: '   GHI    JKL   '
-      find('span[title="Add new tag GHI JKL"]').click
+      find('button[title="Add new tag GHI JKL"]').click
 
       click_button 'Add to List'
 
@@ -347,7 +348,7 @@ feature 'School students index', js: true do
                      referrer: school_course_students_path(course)
 
         # Update a student
-        find('a', text: name_1).click
+        find('button', text: name_1).click
 
         expect(page).to have_text(user_1.name)
         expect(page.find_field('title').value).to eq(user_1.title)
@@ -378,7 +379,7 @@ feature 'School students index', js: true do
         expect(page).to have_text(student_1.startup.name)
 
         # Try editing the team name for the newly formed team.
-        find('a', text: user_1.name).click
+        find('button', text: user_1.name).click
 
         expect(page).to have_text(student_1.startup.name)
 
@@ -401,14 +402,14 @@ feature 'School students index', js: true do
 
         # Assign a coach to a team
         founder = startup_2.founders.last
-        find('a', text: founder.user.name).click
+        find('button', text: founder.user.name).click
 
         # Coach in a different course must not be listed.
         expect(page).to have_text('Team Coaches')
         expect(page).not_to have_text(coach_in_different_course.name)
 
         # But it should be possible to assign a coach in 'this' course.
-        find("div[title='Select #{course_coach.name}']").click
+        find("button[title='Select #{course_coach.name}']").click
 
         click_button 'Update Student'
 
@@ -438,7 +439,7 @@ feature 'School students index', js: true do
         founder = inactive_team_1.founders.first
         expect(page).to have_text(founder.name)
 
-        find('a', text: founder.name).click
+        find('button', text: founder.name).click
 
         expect(page).to have_text(founder.startup.name)
         fill_in "Team's Access Ends On", with: access_ends_at.to_date.iso8601
@@ -456,7 +457,7 @@ feature 'School students index', js: true do
             .to_date
         ).to eq(access_ends_at.to_date)
 
-        find('a', text: founder.name).click
+        find('button', text: founder.name).click
         fill_in "Team's Access Ends On", with: 1.day.ago.iso8601
         click_button 'Update Student'
 
@@ -494,7 +495,7 @@ feature 'School students index', js: true do
       founder = startup_2.founders.last
       founder_user = founder.user
 
-      find('a', text: founder_user.name).click
+      find('button', text: founder_user.name).click
 
       expect(page).to have_text(founder_user.name)
       expect(page).to have_text(founder.startup.name)
@@ -522,7 +523,7 @@ feature 'School students index', js: true do
       # Mark a student who is alone in a team as dropped out.
       expect(team_with_lone_student.faculty.count).to eq(1)
 
-      find('a', text: lone_student.name).click
+      find('button', text: lone_student.name).click
 
       click_button 'Actions'
       click_button 'Dropout Student'
@@ -557,9 +558,9 @@ feature 'School students index', js: true do
       fill_in 'Title', with: title_1
       fill_in 'Affiliation', with: affiliation_1
       fill_in 'Tags', with: 'Abc'
-      find('span[title="Add new tag Abc"]').click
+      find('button[title="Add new tag Abc"]').click
       fill_in 'Tags', with: 'Def'
-      find('span[title="Add new tag Def"]').click
+      find('button[title="Add new tag Def"]').click
       click_button 'Add to List'
 
       # Try adding another student with same email
@@ -594,7 +595,9 @@ feature 'School students index', js: true do
       # filter by name
       name = startup_1.founders.first.name
       fill_in 'search', with: name
-      click_button name
+
+      within('.multiselect-dropdown__search-dropdown') { click_button name }
+
       expect(page).to have_text(startup_1.name)
       click_button "Remove selection: #{name}"
 
@@ -745,7 +748,7 @@ feature 'School students index', js: true do
 
       student = team_1.founders.last
 
-      find('a', text: student.name).click
+      find('button', text: student.name).click
 
       click_button 'Actions'
 
@@ -774,7 +777,7 @@ feature 'School students index', js: true do
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
 
-      find('a', text: student_without_certificate.name).click
+      find('button', text: student_without_certificate.name).click
 
       click_button 'Actions'
 
@@ -813,7 +816,7 @@ feature 'School students index', js: true do
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
 
-      find('a', text: student_with_certificate.name).click
+      find('button', text: student_with_certificate.name).click
 
       click_button 'Actions'
 

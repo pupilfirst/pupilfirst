@@ -154,7 +154,8 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
         {t("level_name_label") |> str}
       </label>
       <input
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        autoFocus=true
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
         id="name"
         type_="text"
         placeholder={t("level_name_placeholder")}
@@ -287,7 +288,7 @@ let actionsForm = (level, levels, state, send) => {
       <select
         id="delete-and-merge-level"
         onChange={handleSelectLevelForDeletion(send)}
-        className="cursor-pointer appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        className="cursor-pointer appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
         value=state.mergeIntoLevelId>
         <option key="0" value="0"> {str(t("merge_levels_select"))} </option>
         {otherLevels
@@ -332,7 +333,7 @@ let actionsForm = (level, levels, state, send) => {
 }
 
 let tab = (tab, state, send) => {
-  let defaultClasses = "level-editor__tab cursor-pointer"
+  let defaultClasses = "level-editor__tab cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
 
   let (title, iconClass) = switch tab {
   | Actions => (t("tabs.actions"), "fa-cogs")

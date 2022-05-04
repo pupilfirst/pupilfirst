@@ -30,14 +30,14 @@ let make = (~links) => {
   switch links {
   | list{} => React.null
   | moreLinks =>
-    <div
+    <button
       title="Show more links"
-      className="ml-6 font-semibold text-sm cursor-pointer relative"
+      className="ml-6 font-semibold text-sm cursor-pointer relative z-40"
       onClick={toggleState(send)}
       key="more-links">
       <span> {"More" |> str} </span>
       <i className="fas fa-angle-down ml-1" />
       {additionalLinks(state, moreLinks)}
-    </div>
+    </button>
   }
 }

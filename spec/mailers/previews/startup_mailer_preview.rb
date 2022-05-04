@@ -10,8 +10,7 @@ class StartupMailerPreview < ActionMailer::Preview
             founders: [Founder.first],
             target: Target.new(id: 1, title: 'Super Cool Target')
           ),
-        faculty: Faculty.last,
-        startup: Startup.last
+        faculty: Faculty.last
       )
 
     StartupMailer.feedback_as_email(startup_feedback)

@@ -1315,6 +1315,10 @@ let make = (
           {switch state.editor {
           | AssignReviewer =>
             <div>
+              <div
+                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+                <p className="font-semibold"> {str("Review")} </p>
+              </div>
               {feedbackGenerator(
                 submissionDetails,
                 reviewChecklist,
@@ -1322,10 +1326,6 @@ let make = (
                 ~showAddFeedbackEditor=false,
                 send,
               )}
-              <div
-                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
-                <p className="font-semibold"> {str("Review")} </p>
-              </div>
               <CoursesReview__ReviewerManager
                 submissionDetails
                 updateReviewerCB={updateReviewer(updateReviewerCB, send)}

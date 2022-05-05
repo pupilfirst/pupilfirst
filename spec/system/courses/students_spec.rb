@@ -14,21 +14,35 @@ feature 'Course students list', js: true do
   let(:team_coach) { create :faculty, school: school }
 
   # Create few teams
-  let!(:team_1) { create :startup, level: level_1, name: 'Zucchini', tag_list: ['starts with z', 'vegetable'] } # This will always be around the bottom of the list.
-  let!(:team_2) { create :startup, level: level_2, name: 'Asparagus', tag_list: ['vegetable'] } # This will always be around the top.
+  let!(:team_1) do
+    create :startup,
+           level: level_1,
+           name: 'Zucchini',
+           tag_list: ['starts with z', 'vegetable']
+  end # This will always be around the bottom of the list.
+  let!(:team_2) do
+    create :startup, level: level_2, name: 'Asparagus', tag_list: ['vegetable']
+  end # This will always be around the top.
   let!(:team_3) { create :startup, level: level_2, name: 'Banana' }
   let!(:team_4) { create :startup, level: level_3, name: 'Blueberry' }
   let!(:team_5) { create :startup, level: level_3, name: 'Cherry' }
   let!(:team_6) { create :startup, level: level_3, name: 'Elderberry' }
+  let(:first_student) { Founder.where(startup: team_1).first.user }
 
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course
+    first_student.update!(last_seen_at: Date.today - 3)
 
     10.times do
-      create :startup, level: level_3, name: "C #{Faker::Lorem.word} #{rand(10)}" # These will be in the middle of the list.
+      create :startup,
+             level: level_3,
+             name: "C #{Faker::Lorem.word} #{rand(10)}" # These will be in the middle of the list.
     end
 
-    create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach, startup: team_6
+    create :faculty_startup_enrollment,
+           :with_course_enrollment,
+           faculty: team_coach,
+           startup: team_6
   end
 
   scenario 'coach checks the complete list of students' do
@@ -54,6 +68,10 @@ feature 'Course students list', js: true do
     course.startups.each do |startup|
       expect(page).to have_text(startup.founders.first.name)
     end
+
+    # Check the last seen for the first student
+    expect(page).to have_text(first_student.name)
+    expect(page).to have_text('Last seen: 3 days ago')
 
     # Check levels of few teams
     within("div[aria-label='team level info: #{team_1.id}']") do
@@ -181,7 +199,10 @@ feature 'Course students list', js: true do
     let(:another_team_coach) { create :faculty, school: school }
 
     before do
-      create :faculty_startup_enrollment, :with_course_enrollment, faculty: another_team_coach, startup: team_2
+      create :faculty_startup_enrollment,
+             :with_course_enrollment,
+             faculty: another_team_coach,
+             startup: team_2
     end
 
     scenario "one team coach can use the filter to see another coach's students" do
@@ -203,9 +224,11 @@ feature 'Course students list', js: true do
 
     click_button('Load More...')
 
-    expected_initials = team_coach.name.split(' ')[0..1]
-      .map { |name_fragment| name_fragment[0] }
-      .map(&:capitalize).join
+    expected_initials =
+      team_coach.name.split(' ')[0..1]
+        .map { |name_fragment| name_fragment[0] }
+        .map(&:capitalize)
+        .join
 
     within("div[data-team-id='#{team_6.id}']") do
       find('.tooltip__trigger', text: expected_initials).hover
@@ -221,14 +244,32 @@ feature 'Course students list', js: true do
     let(:team_coach_5) { create :faculty, school: school }
 
     before do
-      create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach_2, startup: team_6
-      create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach_3, startup: team_6
-      create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach_4, startup: team_6
-      create :faculty_startup_enrollment, :with_course_enrollment, faculty: team_coach_5, startup: team_6
+      create :faculty_startup_enrollment,
+             :with_course_enrollment,
+             faculty: team_coach_2,
+             startup: team_6
+      create :faculty_startup_enrollment,
+             :with_course_enrollment,
+             faculty: team_coach_3,
+             startup: team_6
+      create :faculty_startup_enrollment,
+             :with_course_enrollment,
+             faculty: team_coach_4,
+             startup: team_6
+      create :faculty_startup_enrollment,
+             :with_course_enrollment,
+             faculty: team_coach_5,
+             startup: team_6
     end
 
     scenario 'course coach checks names of coaches hidden from main list' do
-      possible_names = [team_coach.name, team_coach_2.name, team_coach_3.name, team_coach_4.name, team_coach_5.name]
+      possible_names = [
+        team_coach.name,
+        team_coach_2.name,
+        team_coach_3.name,
+        team_coach_4.name,
+        team_coach_5.name
+      ]
 
       sign_in_user course_coach.user, referrer: students_course_path(course)
 
@@ -238,9 +279,11 @@ feature 'Course students list', js: true do
         find('.tooltip__trigger', text: '+2').hover
       end
 
-      find('.tooltip__bubble').text.strip.split("\n").each do |name|
-        expect(name).to be_in(possible_names)
-      end
+      find('.tooltip__bubble')
+        .text
+        .strip
+        .split("\n")
+        .each { |name| expect(name).to be_in(possible_names) }
     end
   end
 
@@ -249,9 +292,7 @@ feature 'Course students list', js: true do
     let!(:level_4) { create :level, :four, course: course }
     let!(:level_5) { create :level, :five, course: course }
 
-    before do
-      level_1.startups.each { |s| s.update!(level_id: level_2.id) }
-    end
+    before { level_1.startups.each { |s| s.update!(level_id: level_2.id) } }
 
     scenario 'level shows completed icon instead of number of students' do
       sign_in_user course_coach.user, referrer: students_course_path(course)
@@ -268,8 +309,12 @@ feature 'Course students list', js: true do
   end
 
   context 'when there are locked levels in course' do
-    let!(:locked_level_4) { create :level, :four, course: course, unlock_at: 5.days.from_now }
-    let!(:locked_level_5) { create :level, :five, course: course, unlock_at: 5.days.from_now }
+    let!(:locked_level_4) do
+      create :level, :four, course: course, unlock_at: 5.days.from_now
+    end
+    let!(:locked_level_5) do
+      create :level, :five, course: course, unlock_at: 5.days.from_now
+    end
 
     scenario 'it is shown as locked in student level wise distribution' do
       sign_in_user course_coach.user, referrer: students_course_path(course)
@@ -415,7 +460,8 @@ feature 'Course students list', js: true do
   scenario 'coach filters students by tags applied to their team' do
     sign_in_user course_coach.user, referrer: students_course_path(course)
 
-    team_in_first_page = course.startups.where.not(id: team_2.id).order(:name).first
+    team_in_first_page =
+      course.startups.where.not(id: team_2.id).order(:name).first
 
     expect(page).to have_text(team_in_first_page.name)
 

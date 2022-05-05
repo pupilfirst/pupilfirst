@@ -336,7 +336,7 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
 
 let dropdownSelected =
   <button
-    className="dropdown__btn appearance-none flex bg-white border hover:bg-primary-100 hover:text-primary-500 items-center relative justify-between focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-indigo-500 font-semibold text-sm px-3 py-2 rounded w-full">
+    className="dropdown__btn appearance-none flex bg-white border hover:bg-primary-100 hover:text-primary-500 items-center relative justify-between focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500 font-semibold text-sm px-3 py-2 rounded w-full">
     <span> {str(t("quick_links"))} </span>
     <i className="fas fa-chevron-down text-xs ml-3 font-semibold" />
   </button>
@@ -375,7 +375,7 @@ let showCourse = course => {
                 ariaLabel={t("view_public_page") ++ " " ++ Course.name(course)}
                 href={"/courses/" ++ Course.id(course)}
                 target="_blank"
-                className="inline-flex items-center underline rounded p-1 text-sm font-semibold cursor-pointer text-gray-800 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                className="inline-flex items-center underline rounded p-1 text-sm font-semibold cursor-pointer text-gray-800 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 <Icon className="if i-external-link-solid mr-2" />
                 <span> {t("view_public_page")->str} </span>
               </a>

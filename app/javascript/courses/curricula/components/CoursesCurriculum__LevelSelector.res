@@ -58,7 +58,7 @@ let untabbedLevelSelector = (
   <Dropdown
     selected
     contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId, preview)}
-    className="flex-grow cursor-pointer rounded-lg bg-primary-100 hover:bg-gray-200 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-witin:ring-indigo-500 focus:text-primary-500 focus:bg-gray-200"
+    className="flex-grow cursor-pointer rounded-lg bg-primary-100 hover:bg-gray-200 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-witin:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-200"
   />
 }
 

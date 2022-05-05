@@ -58,7 +58,7 @@ let make = (~coaches, ~authenticityToken) => {
               <div className="course-faculty__list-item flex w-full">
                 <button
                   ariaLabel={"Edit: " ++ (coach |> Coach.name)}
-                  className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer rounded-lg hover:bg-gray-100 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:bg-gray-100 focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                  className="course-faculty__list-item-details flex flex-1 items-center justify-between cursor-pointer rounded-lg hover:bg-gray-100 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:bg-gray-100 focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
                   onClick={_event => {
                     ReactEvent.Mouse.preventDefault(_event)
                     send(UpdateFormVisible(CoachEditor(Some(coach))))

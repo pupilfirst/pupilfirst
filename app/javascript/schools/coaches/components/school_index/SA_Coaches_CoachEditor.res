@@ -276,7 +276,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   <span> {"*" |> str} </span>
                   <input
                     autoFocus=true
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                     id="name"
                     type_="text"
                     name="faculty[name]"
@@ -298,7 +298,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     </label>
                     <span> {"*" |> str} </span>
                     <input
-                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                       id="email"
                       type_="email"
                       name="faculty[email]"
@@ -318,7 +318,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                     id="title"
                     type_="text"
                     name="faculty[title]"
@@ -340,7 +340,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     value=state.affiliation
                     onChange={event =>
                       send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                     id="affiliation"
                     name="faculty[affiliation]"
                     type_="text"
@@ -354,7 +354,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     {"Connect Link" |> str}
                   </label>
                   <input
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                     id="connectLink"
                     type_="text"
                     name="faculty[connect_link]"
@@ -416,7 +416,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     className="block tracking-wide text-xs font-semibold" htmlFor="avatarUploader">
                     {"Avatar" |> str}
                   </label>
-                  <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+                  <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
                     <input
                       disabled=state.saving
                       className="absolute w-0 h-0"

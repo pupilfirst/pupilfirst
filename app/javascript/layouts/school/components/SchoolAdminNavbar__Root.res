@@ -1,6 +1,6 @@
 exception UnknownPathEncountered(list<string>)
 
-%bs.raw(`require("./SchoolAdminNavbar__Root.css")`)
+%raw(`require("./SchoolAdminNavbar__Root.css")`)
 
 let t = I18n.t(~scope="components.SchoolAdminNavbar__Root")
 
@@ -82,7 +82,7 @@ let topLink = (selectedOption, currentOption, path, shrunk, iconClasses, text) =
 }
 
 let secondaryNavOption = (path, currentSelection, inspectedSelection, text) => {
-  let defaultClasses = "flex text-indigo-800 text-sm py-3 px-4 hover:bg-gray-400 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigio-500 font-semibold rounded items-center my-1"
+  let defaultClasses = "flex text-blue-800 text-sm py-3 px-4 hover:bg-gray-400 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigio-500 font-semibold rounded items-center my-1"
   let classes = defaultClasses ++ (currentSelection == inspectedSelection ? " bg-gray-400" : "")
 
   <div key=text> <a href=path className=classes> {text |> str} </a> </div>

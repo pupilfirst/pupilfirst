@@ -384,7 +384,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
             ariaLabel="submissions-overlay-close"
             onClick={_ =>
               closeOverlay(state, SubmissionDetails.courseId(submissionDetails), filter)}
-            className="flex flex-col items-center justify-center leading-tight px-3 py-2 md:px-5 md:py-4 cursor-pointer border-r bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:ring-2 focus:ring-indigo-500 ring-inset ">
+            className="flex flex-col items-center justify-center leading-tight px-3 py-2 md:px-5 md:py-4 cursor-pointer border-r bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:ring-2 focus:ring-focusColor-500 ring-inset ">
             <div className="flex items-center justify-center bg-gray-300 rounded-full w-8 h-8">
               <Icon className="if i-times-regular text-lg lg:text-2xl" />
             </div>
@@ -417,7 +417,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
             <a
               href={"/targets/" ++ SubmissionDetails.targetId(submissionDetails)}
               target="_blank"
-              className="ml-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              className="ml-2 font-semibold underline text-gray-900 hover:bg-primary-100 hover:text-primary-600 text-base focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
               {SubmissionDetails.targetTitle(submissionDetails)->str}
             </a>
           </div>
@@ -438,7 +438,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
                 let commaRequired = index + 1 != studentCount
                 <span key={Student.id(student)}>
                   <a
-                    className="font-semibold underline focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="font-semibold underline focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500"
                     href={"/students/" ++ Student.id(student) ++ "/report"}
                     target="_blank">
                     {Student.name(student)->str}
@@ -465,7 +465,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
           SubmissionDetails.courseId(submissionDetails),
           filter,
           submissionId,
-          "flex items-center border-l text-sm font-semibold px-5 py-4 hover:bg-gray-200 hover:text-primary-500 focus:ring-2 focus:ring-indigo-500 ring-inset ",
+          "flex items-center border-l text-sm font-semibold px-5 py-4 hover:bg-gray-200 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
         )}
       </div>
     </div>
@@ -521,7 +521,7 @@ let gradePillClasses = (selectedGrade, currentGrade, passgrade, send) => {
     "course-review-editor__grade-pill border-gray-400 py-1 px-2 text-sm flex-1 font-semibold transition " ++
     switch send {
     | Some(_) =>
-      "cursor-pointer hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 " ++ (
+      "cursor-pointer hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
         currentGrade >= passgrade
           ? "hover:bg-green-500 hover:text-white "
           : "hover:bg-red-500 hover:text-white "
@@ -910,7 +910,7 @@ let feedbackGenerator = (submissionDetails, reviewChecklist, state, send) => {
       <div className="mt-2 md:ml-8">
         <button
           disabled={SubmissionDetails.preview(submissionDetails)}
-          className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
+          className="bg-primary-100 flex items-center justify-between px-4 py-3 border border-dashed border-gray-600 rounded-md w-full text-left font-semibold text-sm text-primary-500 hover:bg-gray-300 hover:text-primary-600 hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
           onClick={_ => send(ShowChecklistEditor)}>
           <span>
             {(
@@ -1254,7 +1254,7 @@ let make = (
                   {ReactUtils.nullIf(
                     <button
                       onClick={_ => send(ChangeReportVisibility)}
-                      className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
+                      className="inline-flex items-center text-primary-500 px-3 py-2 rounded font-semibold hover:text-primary-700 hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition">
                       <span className="hidden md:block pr-3">
                         {str(
                           state.showReport
@@ -1331,7 +1331,7 @@ let make = (
                     <div className="flex justify-center ml-2 md:ml-4">
                       <button
                         onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
-                        className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
                         <i className="fas fa-user-minus" />
                         <span className="ml-2"> {t("remove_assignment")->str} </span>
                       </button>
@@ -1442,7 +1442,7 @@ let make = (
                               OverlaySubmission.id(overlaySubmission)->undoGrading(send)
                             )}
                           disabled={SubmissionDetails.preview(submissionDetails)}
-                          className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                          className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
                           <i className="fas fa-undo" />
                           <span className="ml-2"> {t("undo_grading")->str} </span>
                         </button>
@@ -1496,7 +1496,7 @@ let make = (
                     <button
                       onClick={_ => send(ShowAdditionalFeedbackEditor)}
                       disabled={SubmissionDetails.preview(submissionDetails)}
-                      className="bg-primary-100 flex items-center justify-center px-4 py-3 border border-dashed border-primary-500 rounded-md w-full font-semibold text-sm text-primary-600 hover:bg-white hover:text-primary-500 hover:shadow-lg hover:border-primary-300 focus:outline-none transition cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                      className="bg-primary-100 flex items-center justify-center px-4 py-3 border border-dashed border-primary-500 rounded-md w-full font-semibold text-sm text-primary-600 hover:bg-white hover:text-primary-500 hover:shadow-lg hover:border-primary-300 focus:outline-none transition cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
                       <Icon className="if i-plus-regular" />
                       <p className="pl-2">
                         {switch OverlaySubmission.feedback(overlaySubmission) {

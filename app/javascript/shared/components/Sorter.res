@@ -11,7 +11,7 @@ module Make = (Sortable: Sortable) => {
       <button
         ariaLabel={"Order by " ++ (selectedCriterion |> Sortable.criterion)}
         title={"Order by " ++ (selectedCriterion |> Sortable.criterion)}
-        className="flex w-full items-center justify-between leading-relaxed font-semibold bg-white border border-gray-400 rounded focus:outline-none px-2 md:px-3 py-1 md:py-2 focus:ring-2 focus:ring-inset focus:ring-indigo-500 ">
+        className="flex w-full items-center justify-between leading-relaxed font-semibold bg-white border border-gray-400 rounded focus:outline-none px-2 md:px-3 py-1 md:py-2 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 ">
         <span> {selectedCriterion |> Sortable.criterion |> str} </span>
         <i className="fas fa-caret-down ml-3" />
       </button>
@@ -26,7 +26,7 @@ module Make = (Sortable: Sortable) => {
           ariaLabel={"Order by " ++ Sortable.criterion(criterion)}
           title={"Order by " ++ Sortable.criterion(criterion)}
           onClick={_ => onCriterionChange(criterion)}
-          className="inline-flex items-center w-full font-semibold whitespace-nowrap text-xs p-3 text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 ">
+          className="inline-flex items-center w-full font-semibold whitespace-nowrap text-xs p-3 text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 ">
           <Icon className="if i-clock-regular text-sm if-fw text-gray-700" />
           <span className="ml-2"> {Sortable.criterion(criterion) |> str} </span>
         </button>
@@ -56,7 +56,7 @@ module Make = (Sortable: Sortable) => {
         <button
           ariaLabel="Toggle sort order"
           title="toggle-sort-order"
-          className="bg-white w-10 px-2 py-1 rounded border border-gray-400 text-gray-800 hover:bg-gray-200 hover:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-indigo-500 "
+          className="bg-white w-10 px-2 py-1 rounded border border-gray-400 text-gray-800 hover:bg-gray-200 hover:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 "
           onClick={_ => {
             let swappedDirection = switch direction {
             | #Ascending => #Descending

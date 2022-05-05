@@ -73,7 +73,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
     <div className="max-w-3xl w-full mx-auto flex justify-between border-b mt-4">
       <ul className="flex font-semibold text-sm">
         <li
-          className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-200 hover:text-gray-900 focus-within:outline-none focus-within:bg-gray-200 focus-within:text-gray-900 focus-within:ring-2 focus-within:ring-indigo-500">
+          className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-200 hover:text-gray-900 focus-within:outline-none focus-within:bg-gray-200 focus-within:text-gray-900 focus-within:ring-2 focus-within:ring-focusColor-500">
           <a
             className="block px-3 py-3 md:py-2 text-gray-800 focus:outline-none"
             href={"/school/courses/" ++ (courseId ++ "/students")}>

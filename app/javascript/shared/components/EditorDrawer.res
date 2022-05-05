@@ -69,7 +69,7 @@ let make = (
               closeDrawerCB()
             }}
             title=closeButtonTitle
-            className="flex items-center justify-center w-10 h-10 bg-gray-300 text-gray-800 font-bold p-3 rounded-full hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-indigo-400">
+            className="flex items-center justify-center w-10 h-10 bg-gray-300 text-gray-800 font-bold p-3 rounded-full hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-focusColor-400">
             <Icon className={closeIconClassName ++ " text-xl"} />
           </button>
         </div>

@@ -356,7 +356,7 @@ let make = (~courseId, ~closeDrawerCB) => {
                 </a>
               </div>
             </div>
-            <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+            <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
               <CSVReader
                 label=""
                 inputId="csv-file-input"

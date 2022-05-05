@@ -232,7 +232,7 @@ let make = (
               send(UpdateName(name))
             }}
             id="communities-editor__name"
-            className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+            className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           />
           <School__InputGroupError
             message="is not a valid name"

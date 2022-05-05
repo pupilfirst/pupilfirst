@@ -126,7 +126,7 @@ let make = (~kind, ~customizations, ~updatePrivacyPolicyCB, ~updateTermsAndCondi
         <textarea
           autoFocus=true
           maxLength=20000
-          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500 flex-1"
+          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500 flex-1"
           id="agreements-editor__value"
           placeholder="Leave the agreement body empty to hide the footer link."
           onChange={handleAgreementChange(send)}

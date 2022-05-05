@@ -76,7 +76,7 @@ let renderAuthor = (rootPath, author, send) => {
   let authorPath = rootPath ++ ("/" ++ (author |> Author.id))
   <div key={author |> Author.id} className="flex w-1/2 flex-shrink-0 mb-5 px-3">
     <div
-      className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+      className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
       <a
         tabIndex=0
         ariaLabel={"View " ++ (author |> Author.name)}

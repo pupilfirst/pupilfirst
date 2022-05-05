@@ -20,18 +20,18 @@ let cardClasses = (submission, selected) =>
       None,
       None,
       None,
-    ) => "submission-info__tab-pending focus:ring focus:ring-indigo-400 shadow hover:shadow-lg"
+    ) => "submission-info__tab-pending focus:ring focus:ring-focusColor-400 shadow hover:shadow-lg"
   | (
       None,
       None,
       Some(_),
-    ) => "submission-info__tab-rejected focus:ring focus:ring-indigo-400 shadow hover:shadow-lg"
+    ) => "submission-info__tab-rejected focus:ring focus:ring-focusColor-400 shadow hover:shadow-lg"
   | (None, Some(_), None)
   | (
     None,
     Some(_),
     Some(_),
-  ) => "submission-info__tab-completed focus:ring focus:ring-indigo-400 shadow hover:shadow-lg"
+  ) => "submission-info__tab-completed focus:ring focus:ring-focusColor-400 shadow hover:shadow-lg"
   }
 
 let showSubmissionStatus = submission => {
@@ -65,9 +65,7 @@ let submissionInfoCardContent = (submission, submissionNumber) => {
         <p className="hidden md:block">
           {(t("submission_hash") ++ string_of_int(submissionNumber))->str}
         </p>
-        <p className="md:hidden">
-          {("#" ++ string_of_int(submissionNumber))->str}
-        </p>
+        <p className="md:hidden"> {("#" ++ string_of_int(submissionNumber))->str} </p>
       </h2>
       <span className="text-xs text-gray-800 pt-px whitespace-nowrap">
         {submission->SubmissionMeta.createdAt->DateFns.formatPreset(~year=true, ())->str}

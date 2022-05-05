@@ -132,7 +132,7 @@ let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
                 <div key={coach |> CourseCoach.id} className="flex w-1/2 flex-shrink-0 mb-5 px-3">
                   <div
                     id={coach |> CourseCoach.name}
-                    className="shadow bg-white cursor-pointer rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+                    className="shadow bg-white cursor-pointer rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
                     <div className="flex flex-1 justify-between">
                       <button
                         ariaLabel={"View " ++ CourseCoach.name(coach)}

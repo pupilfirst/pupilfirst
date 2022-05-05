@@ -22,7 +22,7 @@ let showEvaluationCriterion = (evaluationCriterion, setState) =>
       <button
         title={"Edit " ++ (evaluationCriterion |> EvaluationCriterion.name)}
         onClick={event => openEditor(event, evaluationCriterion, setState)}
-        className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-lg hover:bg-gray-100 hover:text-primary-500 hover:border-primary-400 focus:outline-none focus:bg-gray-100 focus:text-primary-500 focus:ring-2 focus:ring-indigo-500">
+        className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-lg hover:bg-gray-100 hover:text-primary-500 hover:border-primary-400 focus:outline-none focus:bg-gray-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
         <div className="flex w-full text-sm justify-between">
           <span className="flex-1 font-semibold py-5 px-5 text-left">
             {evaluationCriterion |> EvaluationCriterion.name |> str}

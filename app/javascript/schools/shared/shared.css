@@ -293,7 +293,7 @@
 }
 
 .toggle-button__button {
-  @apply w-1/2 text-sm font-semibold py-1 px-6 text-gray-700 border border-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-500;
+  @apply w-1/2 text-sm font-semibold py-1 px-6 text-gray-700 border border-gray-400 focus:ring-1 focus:ring-inset focus:ring-focusColor-500;
   transition: 0.3s cubic-bezier(0, 0, 0, 1);
 }
 

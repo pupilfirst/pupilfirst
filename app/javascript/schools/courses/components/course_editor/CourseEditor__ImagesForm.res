@@ -164,7 +164,7 @@ let make = (~course, ~updateCourseCB) => {
           link="https://docs.pupilfirst.com/#/courses?id=course-images">
           {t("thumbnail.help")->str}
         </HelpIcon>
-        <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+        <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
           <input
             disabled=state.updating
             className="absolute h-0 w-0 focus:outline-none"
@@ -197,7 +197,7 @@ let make = (~course, ~updateCourseCB) => {
           link="https://docs.pupilfirst.com/#/courses?id=course-images">
           {t("cover_image.help") |> str}
         </HelpIcon>
-        <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+        <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
           <input
             disabled=state.updating
             className="absolute h-0 w-0 focus:outline-none"

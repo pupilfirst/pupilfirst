@@ -79,7 +79,7 @@ let make = (~name, ~about, ~updateDetailsCB) => {
           type_="text"
           maxLength=50
           placeholder="Type school name here"
-          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="details-editor__name"
           onChange={handleInputChange(name => send(UpdateName(name)))}
           value=state.name
@@ -100,7 +100,7 @@ let make = (~name, ~about, ~updateDetailsCB) => {
           maxLength=500
           rows=7
           placeholder="Add more details about the school."
-          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="details-editor__about"
           onChange={handleInputChange(about => send(UpdateAbout(about)))}
           value=state.about

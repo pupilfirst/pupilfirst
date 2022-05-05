@@ -108,7 +108,7 @@ let detailsTab = (state, applicant) => {
         autoFocus=true
         value={Applicant.name(applicant)}
         disabled=true
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="name"
         type_="text"
         placeholder={t("name.placeholder")}
@@ -122,7 +122,7 @@ let detailsTab = (state, applicant) => {
       <input
         value={Applicant.email(applicant)}
         disabled=true
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="email"
         type_="email"
         placeholder={t("email.placeholder")}
@@ -147,7 +147,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
       <input
         value=state.title
         onChange={event => send(UpdateTitle(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="title"
         type_="text"
         placeholder={t("title.placeholder")}
@@ -163,7 +163,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
       <input
         value=state.affiliation
         onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="affiliation"
         type_="text"
         placeholder={t("affiliation.placeholder")}

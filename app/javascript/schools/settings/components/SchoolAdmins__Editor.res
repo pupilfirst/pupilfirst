@@ -66,7 +66,7 @@ let renderAdmin = (currentSchoolAdminId, admin, admins, setState) =>
     key={(admin |> SchoolAdmin.id) ++ (admin |> SchoolAdmin.name)}
     className="flex w-1/2 flex-shrink-0 mb-5 px-3">
     <div
-      className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+      className="shadow bg-white rounded-lg flex w-full border border-transparent overflow-hidden hover:border-primary-400 hover:bg-gray-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
       <button
         className="w-full cursor-pointer p-4 text-left"
         onClick={_event => {

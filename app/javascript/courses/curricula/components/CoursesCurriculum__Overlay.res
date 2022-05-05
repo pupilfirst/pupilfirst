@@ -101,7 +101,7 @@ let selectableTabs = targetDetails =>
   TargetDetails.communities(targetDetails) == [] ? [Learn] : [Learn, Discuss]
 
 let tabClasses = (selection, tab) =>
-  "course-overlay__body-tab-item p-2 md:px-3 md:py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" ++ (
+  "course-overlay__body-tab-item p-2 md:px-3 md:py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500" ++ (
     tab == selection
       ? " course-overlay__body-tab-item--selected"
       : " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 focus:text-primary-400 focus:bg-gray-200 cursor-pointer"
@@ -342,7 +342,7 @@ let learnSection = (
   )) => {
     <button
       onClick={_ => send(Select(tab))}
-      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
       <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {str(linkText)} </span>
     </button>
   })

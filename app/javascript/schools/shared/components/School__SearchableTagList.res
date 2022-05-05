@@ -88,7 +88,7 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTa
     <input
       value=state
       onChange={event => send(ReactEvent.Form.target(event)["value"])}
-      className="appearance-none block bg-white leading-snug border border-gray-400 rounded w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+      className="appearance-none block bg-white leading-snug border border-gray-400 rounded w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
       id="tags"
       type_="text"
       placeholder={allowNewTags ? "Search for, or add new tags" : "Select tags"}

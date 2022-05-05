@@ -11,7 +11,7 @@ type tabs =
   | ActionsTab
 
 let selectedTabClasses = selected =>
-  "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer hover:bg-gray-200 hover:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-indigo-500 " ++ (
+  "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer hover:bg-gray-200 hover:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
     selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-100"
   )
 
@@ -391,7 +391,7 @@ let processingUrlInput = (state, send) => {
     {ReactUtils.nullUnless(
       <div>
         <input
-          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="processing_url"
           type_="text"
           placeholder="https://example.com/"
@@ -480,7 +480,7 @@ let handleSelectProgressionLimit = (send, event) => {
 let progressionBehaviorButtonClasses = (state, progressionBehavior, additionalClasses) => {
   let selected = state.progressionBehavior == progressionBehavior
   let defaultClasses =
-    additionalClasses ++ " w-1/3 relative border font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-center bg-gray-200 hover:bg-gray-300 focus:bg-gray-300 focus:ring-2 focus:ring-indigo-500 "
+    additionalClasses ++ " w-1/3 relative border font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-center bg-gray-200 hover:bg-gray-300 focus:bg-gray-300 focus:ring-2 focus:ring-focusColor-500 "
   defaultClasses ++ (selected ? " text-primary-500 border-primary-500" : "")
 }
 
@@ -492,7 +492,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
       </label>
       <input
         autoFocus=true
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="name"
         type_="text"
         placeholder={t("course_name.placeholder")}
@@ -507,7 +507,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
         {t("course_description.label")->str}
       </label>
       <input
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="description"
         type_="text"
         placeholder={t("course_description.placeholder")}

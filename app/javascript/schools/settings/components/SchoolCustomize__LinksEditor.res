@@ -316,7 +316,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
               </label>
               <input
                 autoFocus=true
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                 id="link-title"
                 type_="text"
                 placeholder="A short title for a new link"
@@ -335,7 +335,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
               {"Full URL" |> str}
             </label>
             <input
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
               id="link-full-url"
               type_="text"
               placeholder="Full URL, staring with https://"

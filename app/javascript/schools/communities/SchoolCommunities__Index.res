@@ -180,7 +180,7 @@ let make = (~communities, ~courses) => {
         {state.communities |> List.map(community =>
           <div
             key={community |> Community.id}
-            className="flex items-center shadow overflow-hidden bg-white rounded-lg mb-4 focus-within:ring-2 focus-within:ring-indigo-500">
+            className="flex items-center shadow overflow-hidden bg-white rounded-lg mb-4 focus-within:ring-2 focus-within:ring-focusColor-500">
             <div className="course-faculty__list-item flex w-full items-center">
               <button
                 ariaLabel={"Edit " ++ (community |> Community.name)}

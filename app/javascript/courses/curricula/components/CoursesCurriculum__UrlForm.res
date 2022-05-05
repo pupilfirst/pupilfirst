@@ -62,7 +62,7 @@ let make = (~attachUrlCB, ~typingCB) => {
       <button
         onClick={attachUrl(state, send, attachUrlCB)}
         disabled={isDisabled(state)}
-        className="mt-2 bg-indigo-600 hover:bg-gray-500 text-white text-sm font-semibold py-2 px-6 focus:outline-none">
+        className="mt-2 bg-focusColor-600 hover:bg-gray-500 text-white text-sm font-semibold py-2 px-6 focus:outline-none">
         {"Attach link" |> str}
       </button>
     </div>

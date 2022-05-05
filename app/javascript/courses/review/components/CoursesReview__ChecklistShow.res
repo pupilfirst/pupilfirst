@@ -31,21 +31,26 @@ let generateFeedback = (checklist, selection, feedback, setSelecton, updateFeedb
   let newFeedback =
     feedback ++
     ((String.trim(feedback) == "" ? "" : "\n\n") ++
-    checklist->Js.Array2.mapi((reviewChecklistItem, i) => {
+    checklist
+    ->Js.Array2.mapi((reviewChecklistItem, i) => {
       let resultIndexList =
         selection
         ->Js.Array2.filter(selectionItem => selectionItem.itemIndex == i)
         ->Js.Array2.map(item => item.resultIndex)
 
-      ReviewChecklistItem.result(reviewChecklistItem)->Js.Array2.mapi((resultItem, index) =>
+      ReviewChecklistItem.result(reviewChecklistItem)
+      ->Js.Array2.mapi((resultItem, index) =>
         resultIndexList->Js.Array2.some(i => i == index)
           ? switch ReviewChecklistResult.feedback(resultItem) {
             | Some(feedback) => [feedback]
             | None => []
             }
           : []
-      )->ArrayUtils.flattenV2
-    })->ArrayUtils.flattenV2->Js.Array2.joinWith("\n\n"))
+      )
+      ->ArrayUtils.flattenV2
+    })
+    ->ArrayUtils.flattenV2
+    ->Js.Array2.joinWith("\n\n"))
   setSelecton(_ => [])
   updateFeedbackCB(newFeedback)
 }
@@ -95,7 +100,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
     <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
       <div className="flex flex-1 items-center justify-between">
         <button
-          className="btn btn-subtle focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
+          className="btn btn-subtle focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
           onClick=cancelCB>
           <FaIcon classes="fas fa-arrow-left" /> <p className="pl-2"> {str("Back to Review")} </p>
         </button>

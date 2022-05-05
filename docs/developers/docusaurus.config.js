@@ -52,16 +52,28 @@ module.exports = {
           title: "Community",
           items: [
             {
-              label: "GitHub",
-              href: "https://github.com/pupilfirst/pupilfirst",
-            },
-            {
               label: "Discord",
               href: "https://discord.gg/Sh67Tca",
             },
+            {
+              label: "Twitter",
+              href: "https://twitter.com/pupilfirstlms",
+            },
           ],
         },
-
+        {
+          title: "More",
+          items: [
+            {
+              label: "Blog",
+              to: "https://blog.pupilfirst.com/",
+            },
+            {
+              label: "GitHub",
+              href: "https://github.com/pupilfirst/pupilfirst",
+            },
+          ],
+        },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Pupilfirst Pvt. Ltd. Built with Docusaurus.`,
     },

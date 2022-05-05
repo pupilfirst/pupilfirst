@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Pundit
+  include Pundit::Authorization
 
   # Prevent CSRF attacks by raising an exception. Note that this is different from the default of :null_session.
   # Rails 5 introduced a boolean option called prepend for maintaining the order of execution

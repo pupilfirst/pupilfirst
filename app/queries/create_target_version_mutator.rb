@@ -17,33 +17,42 @@ class CreateTargetVersionMutator < ApplicationQuery
 
     return false if target&.course&.school != current_school
 
-    current_school_admin.present? || current_user.course_authors.exists?(course: target.course)
+    current_school_admin.present? ||
+      current_user.course_authors.exists?(course: target.course)
   end
 
   def target_version_must_be_valid
     return if target_version_id.nil? || target_version.present?
 
-    errors[:base] << 'Target version does not exist'
+    errors.add(:base, 'Target version does not exist')
   end
 
   def target_exists
-    errors[:base] << 'Target does not exist' if target.blank?
+    errors.add(:base, 'Target does not exist') if target.blank?
   end
 
   def less_than_three_versions_per_day
-    return if target.target_versions.where(created_at: Time.now.all_day).count < 3
+    if target.target_versions.where(created_at: Time.now.all_day).count < 3
+      return
+    end
 
-    errors[:base] << 'You cannot create more than 3 versions per day'
+    errors.add(:base, 'You cannot create more than 3 versions per day')
   end
 
   def content_should_change
     return if target_version.blank?
 
-    return if target.target_versions.count == 1 || target.current_target_version.id != target_version.id
+    if target.target_versions.count == 1 ||
+         target.current_target_version.id != target_version.id
+      return
+    end
 
     return if target_version.created_at.to_i != target_version.updated_at.to_i
 
-    errors[:base] << 'There are no changes from the previous version. Please make changes before trying to save this version.'
+    errors.add(
+      :base,
+      'There are no changes from the previous version. Please make changes before trying to save this version.'
+    )
   end
 
   def target

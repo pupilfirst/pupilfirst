@@ -14,6 +14,6 @@ class QuizQuestion < ApplicationRecord
     return if answer_options.blank?
     return if answer_options.where(id: correct_answer&.id).present?
 
-    errors[:correct_answer_id] << 'must be one of the possible answers'
+    errors.add(:correct_answer_id, 'must be one of the possible answers')
   end
 end

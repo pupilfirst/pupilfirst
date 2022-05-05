@@ -46,7 +46,6 @@ gem 'humanize', '~> 2.5' # Convert numbers to english words
 gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.
 gem 'kaminari', '~> 1.2' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
 gem 'redis', '~> 4.6' # Redis client for use as cache store for rack-attack
-gem 'hiredis', '~> 0.6.3' # Recommended for use with redis client when used as cache store for better performance.
 gem 'rack-attack', '~> 6.6' # A rack middleware for throttling and blocking abusive requests
 gem 'webpush', '~> 1.1.0' # Encryption Utilities for Web Push protocol
 gem 'activerecord-nulldb-adapter', '~> 0.8' # A database backend that translates database interactions into no-ops.

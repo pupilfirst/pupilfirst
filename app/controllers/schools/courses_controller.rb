@@ -93,49 +93,6 @@ module Schools
         authorize(scope.find(params[:id]), policy_class: Schools::CoursePolicy)
     end
 
-    def inactive_students
-      @course =
-        authorize(
-          scope.find(params[:course_id]),
-          policy_class: Schools::CoursePolicy
-        )
-
-      inactive_teams =
-        if params[:search].present?
-          ::Courses::InactiveTeamsSearchService
-            .new(@course)
-            .find_teams(params[:search].to_s)
-        else
-          Startup.joins(:course).inactive.where(courses: { id: @course }).to_a
-        end
-
-      @teams =
-        Kaminari.paginate_array(inactive_teams).page(params[:page]).per(20)
-    end
-
-    # POST /school/courses/:course_id/mark_teams_active?team_ids[]=
-    def mark_teams_active
-      course =
-        authorize(
-          scope.find(params[:course_id]),
-          policy_class: Schools::CoursePolicy
-        )
-
-      Startup.transaction do
-        course
-          .startups
-          .where(id: params[:team_ids])
-          .each do |startup|
-            startup.update!(access_ends_at: nil, dropped_out_at: nil)
-          end
-
-        render json: {
-                 message: 'Teams marked active successfully!',
-                 error: nil
-               }
-      end
-    end
-
     # GET /school/courses/:id/exports
     def exports
       @course =

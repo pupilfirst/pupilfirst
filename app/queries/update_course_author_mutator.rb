@@ -19,7 +19,7 @@ class UpdateCourseAuthorMutator < ApplicationQuery
   def author_must_exist
     return if course_author.present?
 
-    errors[:base] << 'Supplied ID is invalid'
+    errors.add(:base, 'Supplied ID is invalid')
   end
 
   def course_author

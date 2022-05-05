@@ -49,7 +49,7 @@ module Schools
 
         return if file.content_type.in?(%w[audio/mpeg audio/ogg audio/wav])
 
-        errors[:base] << 'not a valid audio file'
+        errors.add(:base, 'not a valid audio file')
       end
 
       def create_file_or_image_block
@@ -122,8 +122,7 @@ module Schools
 
       def shift_content_blocks_below(content_block)
         content_blocks
-          .where
-          .not(id: content_block.id)
+          .where.not(id: content_block.id)
           .where('sort_index >= ?', sort_index)
           .update_all('sort_index = sort_index + 1') # rubocop:disable Rails/SkipsModelValidations
       end

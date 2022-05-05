@@ -45,7 +45,8 @@ gem 'rollbar', '~> 3.2' # Exception tracking and logging from Ruby to Rollbar ht
 gem 'humanize', '~> 2.5' # Convert numbers to english words
 gem 'scarf', '~> 0.2' # A Ruby library for generating initial avatars and identicons.
 gem 'kaminari', '~> 1.2' # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
-gem 'rack-throttle', '~> 0.7' # API Rate limiting
+gem 'redis', '~> 4.6' # Redis client for use as cache store for rack-attack
+gem 'rack-attack', '~> 6.6' # A rack middleware for throttling and blocking abusive requests
 gem 'webpush', '~> 1.1.0' # Encryption Utilities for Web Push protocol
 gem 'activerecord-nulldb-adapter', '~> 0.8' # A database backend that translates database interactions into no-ops.
 
@@ -104,7 +105,7 @@ end
 
 group :production do
   gem 'dalli', '~> 2.7.10' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
-  gem 'skylight', '~> 5.1' # Skylight is a smart profiler for Rails, Sinatra, and other Ruby apps.
+  gem 'newrelic_rpm', '~> 8.6' # Performance monitoring
   gem 'aws-sdk-s3', '~> 1.103', require: false
   gem 'aws-sdk-cloudfront', '~> 1.56', require: false
   gem 'whenever', '~> 1.0', require: false

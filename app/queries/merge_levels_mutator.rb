@@ -19,7 +19,7 @@ class MergeLevelsMutator < ApplicationQuery
   def level_to_merge_into_must_exist
     return if level_to_merge_into.present?
 
-    errors[:base] << 'Level to merge into could not be found'
+    errors.add(:base, 'Level to merge into could not be found')
   end
 
   def course

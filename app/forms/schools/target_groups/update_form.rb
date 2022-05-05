@@ -14,7 +14,7 @@ module Schools
       def should_be_a_valid_level
         return if level.present?
 
-        errors[:base] << "Unable to find level with id: #{level_id}"
+        errors.add(:base, "Unable to find level with id: #{level_id}")
       end
 
       def at_least_one_milestone_tg_exists
@@ -22,7 +22,7 @@ module Schools
 
         return if level.target_groups.where(milestone: 'true').count >= 1
 
-        errors[:base] << 'At least one target group must be milestone'
+        errors.add(:base, 'At least one target group must be milestone')
       end
 
       def save
@@ -48,7 +48,11 @@ module Schools
       private
 
       def archive_target_group(target_group, archived)
-        archived ? ::TargetGroups::ArchivalService.new(target_group).archive : ::TargetGroups::ArchivalService.new(target_group).unarchive
+        if archived
+          ::TargetGroups::ArchivalService.new(target_group).archive
+        else
+          ::TargetGroups::ArchivalService.new(target_group).unarchive
+        end
       end
 
       def level

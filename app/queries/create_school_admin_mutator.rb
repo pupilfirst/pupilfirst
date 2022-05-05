@@ -45,7 +45,7 @@ class CreateSchoolAdminMutator < ApplicationQuery
 
     return if persisted_user.school_admin.blank?
 
-    errors[:base] << 'Already enrolled as admin'
+    errors.add(:base, 'Already enrolled as admin')
   end
 
   def persisted_user

@@ -13,8 +13,10 @@ module ValidateTokenGeneration
   def user_with_email_must_exist
     return if user.present? || email.blank?
 
-    errors[:base] <<
+    errors.add(
+      :base,
       'Could not find user with this email. Please check the email that you entered.'
+    )
   end
 
   def ensure_time_between_requests
@@ -26,8 +28,10 @@ module ValidateTokenGeneration
 
     return if time_since_last_mail > 2.minutes
 
-    errors[:base] <<
+    errors.add(
+      :base,
       'An email was sent less than two minutes ago. Please wait for a few minutes before trying again.'
+    )
   end
 
   def email_should_not_have_bounced
@@ -35,8 +39,10 @@ module ValidateTokenGeneration
 
     return unless user&.email_bounced?
 
-    errors[:email] <<
+    errors.add(
+      :email,
       'The email address you supplied cannot be used because an email we sent earlier bounced'
+    )
   end
 
   def user

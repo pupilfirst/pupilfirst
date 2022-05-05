@@ -110,9 +110,9 @@ class Target < ApplicationRecord
     return if days_to_complete.blank? && session_at.blank?
     return if [days_to_complete, session_at].one?
 
-    errors[:base] << 'One of days_to_complete, or session_at should be set.'
-    errors[:days_to_complete] << 'if blank, session_at should be set'
-    errors[:session_at] << 'if blank, days_to_complete should be set'
+    errors.add(:base, 'One of days_to_complete, or session_at should be set.')
+    errors.add(:days_to_complete, 'if blank, session_at should be set')
+    errors.add(:session_at, 'if blank, days_to_complete should be set')
   end
 
   validate :avoid_level_mismatch_with_group
@@ -121,7 +121,7 @@ class Target < ApplicationRecord
     return if target_group.blank? || level.blank?
     return if level == target_group.level
 
-    errors[:level] << 'should match level of target group'
+    errors.add(:level, 'should match level of target group')
   end
 
   validate :must_be_safe_to_change_visibility
@@ -133,7 +133,7 @@ class Target < ApplicationRecord
     end
     return if safe_to_change_visibility
 
-    errors[:visibility] << 'cannot be modified unsafely'
+    errors.add(:visibility, 'cannot be modified unsafely')
   end
 
   validate :same_course_for_target_and_evaluation_criteria
@@ -144,8 +144,10 @@ class Target < ApplicationRecord
     evaluation_criteria.each do |ec|
       next if ec.course_id == course.id
 
-      errors[:base] <<
+      errors.add(
+        :base,
         'Target and evaluation criterion must belong to same course'
+      )
     end
   end
 

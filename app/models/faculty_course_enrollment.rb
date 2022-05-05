@@ -10,6 +10,6 @@ class FacultyCourseEnrollment < ApplicationRecord
     return if persisted?
     return if safe_to_create
 
-    errors[:base] << 'is not safe to create'
+    errors.add(:base, 'is not safe to create')
   end
 end

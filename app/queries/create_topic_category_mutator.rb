@@ -22,6 +22,6 @@ class CreateTopicCategoryMutator < ApplicationQuery
   def name_is_unique
     return if community.topic_categories.where(name: name).blank?
 
-    errors[:base] << "Category already exists in community with name: #{name}"
+    errors.add(:base, "Category already exists in community with name: #{name}")
   end
 end

@@ -10,11 +10,11 @@ class ImageValidator < ActiveModel::EachValidator
 
     return if image_type_valid?(image) && pixel_dimensions_valid?(image)
 
-    record.errors[attribute] <<
-      (
-        options[:message] ||
-          'must be a JPEG, PNG, or GIF, less than 4096 pixels wide or high'
-      )
+    record.errors.add(
+      attribute,
+      options[:message] ||
+        'must be a JPEG, PNG, or GIF, less than 4096 pixels wide or high'
+    )
   end
 
   def image_type_valid?(image)

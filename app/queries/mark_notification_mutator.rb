@@ -12,7 +12,7 @@ class MarkNotificationMutator < ApplicationQuery
   def must_not_be_marked_as_read
     return unless notification&.read_at?
 
-    errors[:base] << 'Notification is already marked as read'
+    errors.add(:base, 'Notification is already marked as read')
   end
 
   def notification
@@ -23,4 +23,3 @@ class MarkNotificationMutator < ApplicationQuery
     notification.present?
   end
 end
-

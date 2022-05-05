@@ -38,13 +38,11 @@ class TimelineEventFilePolicy < ApplicationPolicy
   def current_user_coaches?(course, founders)
     return false if current_coach.blank?
 
-    # Current user is a coach if zhe has been linked as reviewer to entire course holding this TEF.
+    # Current user is a coach if he has been linked as reviewer to entire course holding this TEF.
     return true if current_coach.courses.exists?(id: course)
 
-    startups = Startup.joins(:founders).where(founders: { id: founders })
-
-    # Current user is a coach if zhe has been linked as reviewer directly to any startup that TE founders are currently
+    # Current user is a coach if he has been linked as reviewer directly to any startup that TE founders are currently
     # a part of.
-    current_coach.startups.exists?(id: startups)
+    current_coach.founders.exists?(id: founders)
   end
 end

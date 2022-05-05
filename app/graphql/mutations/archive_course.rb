@@ -39,10 +39,7 @@ module Mutations
           ends_at: course.ends_at.presence || Time.zone.now
         )
 
-        course
-          .startups
-          .where(access_ends_at: nil)
-          .update_all(access_ends_at: Time.zone.now) # rubocop:disable Rails/SkipsModelValidations
+        course.cohorts.active.update_all(ends_at: course.ends_at) # rubocop:disable Rails/SkipsModelValidations
       end
     end
 

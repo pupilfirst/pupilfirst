@@ -183,10 +183,10 @@ module Courses
     def faculty
       @faculty ||=
         begin
-          scope = Faculty.left_joins(:startups, :courses)
+          scope = Faculty.left_joins(:founders, :courses)
 
           scope
-            .where(startups: { id: current_student.startup })
+            .where(founders: { id: current_student })
             .or(scope.where(courses: { id: @course }))
             .distinct
             .select(:id, :user_id)

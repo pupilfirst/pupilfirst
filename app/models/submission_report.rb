@@ -22,7 +22,7 @@ class SubmissionReport < ApplicationRecord
 
     return if [started_at, completed_at, conclusion].all?(&:blank?)
 
-    errors[:status] << 'invalid queued report status'
+    errors.add(:status, 'invalid queued report status')
   end
 
   def in_progress_state_is_valid
@@ -30,7 +30,7 @@ class SubmissionReport < ApplicationRecord
 
     return if started_at.present? && [completed_at, conclusion].all?(&:blank?)
 
-    errors[:status] << 'invalid in-progress report status'
+    errors.add(:status, 'invalid in-progress report status')
   end
 
   def completed_state_is_valid
@@ -38,6 +38,6 @@ class SubmissionReport < ApplicationRecord
 
     return if [started_at, completed_at, conclusion].all?(&:present?)
 
-    errors[:status] << 'invalid completed report status'
+    errors.add(:status, 'invalid completed report status')
   end
 end

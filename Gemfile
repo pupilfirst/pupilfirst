@@ -70,7 +70,7 @@ gem 'flipper-ui', '~> 0.22'
 gem 'flipper-active_record', '~> 0.22'
 
 group :development do
-  gem 'letter_opener_web', '~> 1.4' # A web interface for browsing Ruby on Rails sent emails.
+  gem 'letter_opener_web', '~> 2.0' # A web interface for browsing Ruby on Rails sent emails.
   gem 'bullet', '~> 6.1' # Detect N+1 queries.
   gem 'web-console', '~> 4.1' # Rails Console on the Browser.
   gem 'listen', '~> 3.7' # The Listen gem listens to file modifications and notifies you about the changes.
@@ -82,7 +82,7 @@ group :test do
   gem 'factory_bot_rails', '~> 6.2' # A library for setting up Ruby objects as test data.
   gem 'capybara', '~> 3.35' # For RSpec feature tests.
   gem 'capybara-email', '~> 3.0' # Test ActionMailer and Mailer messages with Capybara
-  gem 'webdrivers', '~> 5.0' # Keep your Selenium WebDrivers updated automatically.
+gem 'webdrivers', '~> 5.0' # Keep your Selenium WebDrivers updated automatically.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem 'rspec-eventually', '~> 0.2.2' # Rspec helper to match eventually
   gem 'diffy', '~> 3.4' # Easy Diffing in Ruby. https://github.com/samg/diffy

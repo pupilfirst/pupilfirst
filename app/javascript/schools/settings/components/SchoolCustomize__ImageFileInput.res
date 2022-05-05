@@ -22,6 +22,7 @@ let make = (
   ~name,
   ~onChange,
   ~labelText,
+  ~autoFocus=false,
   ~imageName,
   ~selectedImageName,
   ~errorState,
@@ -31,20 +32,23 @@ let make = (
     <label className="block tracking-wide text-gray-800 text-xs font-semibold" htmlFor=id>
       {labelText |> str}
     </label>
-    <input
-      disabled
-      className="hidden"
-      name
-      type_="file"
-      accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
-      id
-      required=false
-      multiple=false
-      onChange
-    />
-    <label className="file-input-label mt-2" htmlFor=id>
-      <i className="fas fa-upload" />
-      <span className="ml-2 truncate"> {imageLabel(imageName, selectedImageName)} </span>
-    </label>
+    <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+      <input
+        autoFocus
+        disabled
+        className="absolute w-0 h-0"
+        name
+        type_="file"
+        accept=".jpg,.jpeg,.png,.gif,image/x-png,image/gif,image/jpeg"
+        id
+        required=false
+        multiple=false
+        onChange
+      />
+      <label className="file-input-label mt-2" htmlFor=id>
+        <i className="fas fa-upload" />
+        <span className="ml-2 truncate"> {imageLabel(imageName, selectedImageName)} </span>
+      </label>
+    </div>
     <School__InputGroupError message=errorMessage active=errorState />
   </div>

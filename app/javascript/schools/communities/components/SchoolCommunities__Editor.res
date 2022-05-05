@@ -224,6 +224,7 @@ let make = (
             {"What do you want to call this community?" |> str}
           </label>
           <input
+            autoFocus=true
             placeholder="This community needs a name!"
             value=state.name
             onChange={event => {
@@ -231,7 +232,7 @@ let make = (
               send(UpdateName(name))
             }}
             id="communities-editor__name"
-            className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
+            className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
           />
           <School__InputGroupError
             message="is not a valid name"
@@ -244,7 +245,7 @@ let make = (
             htmlFor="communities-editor__course-list">
             {"Should students be allowed to discuss targets in this community?" |> str}
           </label>
-          <div className="flex toggle-button__group flex-no-shrink rounded-lg overflow-hidden ml-2">
+          <div className="flex toggle-button__group flex-no-shrink overflow-hidden ml-2">
             <button
               onClick={_ => send(SetTargetLinkable(true))}
               className={booleanButtonClasses(state.targetLinkable)}>
@@ -285,7 +286,7 @@ let make = (
             | Some(_community) =>
               <button
                 onClick={_ => showCategoryEditorCB()}
-                className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
+                className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
                 <i className="fas fa-pencil-alt" />
                 <span className="text-xs font-semibold ml-2">
                   {(ArrayUtils.isEmpty(categories) ? "Add Categories" : "Edit Categories") |> str}

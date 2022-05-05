@@ -11,7 +11,7 @@ let headerLink = (key, link) =>
     key
     className="md:ml-2 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
     <a
-      className="no-underline bg-gray-100 md:bg-white hover:bg-gray-200 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2"
+      className="no-underline bg-gray-100 md:bg-white hover:bg-gray-200 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2 focus:outline-none focus:bg-gray-200 focus:text-primary-500"
       href={link |> NavLink.url}
       target=?{NavLink.local(link) ? None : Some("_blank")}
       rel=?{NavLink.local(link) ? None : Some("noopener")}>
@@ -51,7 +51,7 @@ let notificationButton = hasNotifications =>
     key="notifications-button"
     wrapperClasses="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg hover:bg-gray-200"
     iconClasses="student-navbar__notifications-unread-bullet"
-    buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center "
+    buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center focus:text-primary-500 "
     icon="if i-bell-regular text-xl"
     hasNotifications
   />
@@ -106,7 +106,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
     <div className="container mx-auto px-3 max-w-5xl">
       <nav className="flex justify-between items-center h-20">
         <div className="flex w-full items-center justify-between">
-          <a className="max-w-sm" href={isLoggedIn ? "/dashboard" : "/"}>
+          <a className="max-w-sm focus:outline-none" href={isLoggedIn ? "/dashboard" : "/"}>
             {switch logoUrl {
             | Some(url) =>
               <img

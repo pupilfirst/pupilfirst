@@ -85,7 +85,7 @@ feature 'Course authors editor', js: true do
     sign_in_user school_admin.user, referrer: authors_school_course_path(course)
 
     accept_confirm do
-      find("div[title='Delete #{course_author.user.name}'").click
+      find("button[title='Delete #{course_author.user.name}'").click
     end
 
     expect(page).not_to have_text(course_author.user.name)

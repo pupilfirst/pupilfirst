@@ -61,7 +61,7 @@ feature 'Course Coaches Index', js: true do
 
     expect(page).to have_text('No coaches selected')
 
-    find("div[title='Select #{coach_4.name}']").click
+    find("button[title='Select #{coach_4.name}']").click
 
     click_button 'Add Course Coaches'
 
@@ -89,7 +89,7 @@ feature 'Course Coaches Index', js: true do
     expect(page).to have_text(coach_1.name)
     expect(coach_2.startups.count).to eq(1)
 
-    accept_confirm { find("div[aria-label='Delete #{coach_2.name}']").click }
+    accept_confirm { find("button[aria-label='Delete #{coach_2.name}']").click }
 
     expect(page).to_not have_text(coach_2.name)
     expect(course_1.faculty.count).to eq(1)
@@ -104,7 +104,7 @@ feature 'Course Coaches Index', js: true do
                  referrer: school_course_coaches_path(course_2)
 
     expect(page).to have_text(coach_3.name)
-    find("div[aria-label='coach-card-#{coach_3.id}']").click
+    find("button[aria-label='View #{coach_3.name}']").click
     expect(page).to have_text('Students assigned to coach')
     expect(page).to have_text(coach_3.email)
 
@@ -151,7 +151,7 @@ feature 'Course Coaches Index', js: true do
                    referrer: school_course_coaches_path(course_2)
 
       # Check teams assigned to coach_3 in course 2
-      find("div[aria-label='coach-card-#{coach_3.id}']").click
+      find("button[aria-label='View #{coach_3.name}']").click
       expect(page).to have_text(startup_c2.name)
       expect(page).not_to have_text(startup_c1_2.name)
     end
@@ -231,7 +231,7 @@ feature 'Course Coaches Index', js: true do
                    referrer: school_course_coaches_path(course_1)
 
       # Check teams assigned to coach_3 in course 2
-      find("div[aria-label='coach-card-#{coach_1.id}']").click
+      find("button[aria-label='View #{coach_1.name}']").click
 
       within('div[aria-label="Reviewed Submissions"') do
         expect(page).to have_text('3')

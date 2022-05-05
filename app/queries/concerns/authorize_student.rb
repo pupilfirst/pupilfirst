@@ -18,11 +18,20 @@ module AuthorizeStudent
 
   # Students can complete a live target if they're non-reviewed, or if they've reached the target's level for reviewed targets.
   def target_can_be_completed?
-    target.live? && (target.evaluation_criteria.empty? || target.level.number <= team.level.number)
+    target.live? &&
+      (
+        target.evaluation_criteria.empty? ||
+          target.level.number <= team.level.number
+      )
   end
 
   def student
-    @student ||= current_user.founders.joins(:level).where(levels: { course_id: course }).first
+    @student ||=
+      current_user
+        .founders
+        .joins(:level)
+        .where(levels: { course_id: course })
+        .first
   end
 
   def team
@@ -38,17 +47,16 @@ module AuthorizeStudent
   end
 
   def students
-    if target.individual_target?
-      [student]
-    else
-      student.startup.founders
-    end
+    target.individual_target? ? [student] : student.startup.founders
   end
 
   def ensure_submittability
     return if target_status == Targets::StatusService::STATUS_PENDING
 
-    errors[:base] << "Target status #{target_status.to_s.humanize}, You cannot submit the target"
+    errors.add(
+      :base,
+      "Target status #{target_status.to_s.humanize}, You cannot submit the target"
+    )
   end
 
   def target_status

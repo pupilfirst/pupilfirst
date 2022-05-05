@@ -10,14 +10,14 @@ class CreateCommunityMutator < ApplicationQuery
   def course_must_exist_in_current_school
     return if courses.count == course_ids.count
 
-    errors.add(:base, 'invalid courses')
+    errors[:base] << 'invalid courses'
   end
 
   def create_community
     current_school.communities.create!(
       name: name,
       target_linkable: target_linkable,
-      courses: courses
+      courses: courses,
     )
   end
 

@@ -19,14 +19,10 @@ class DeleteCoachTeamEnrollmentMutator < ApplicationQuery
   def coach_team_enrollment_must_exist
     return if coach_team_enrollment.present?
 
-    errors.add(:base, 'Team assignment for the coach does not exist')
+    errors[:base] << 'Team assignment for the coach does not exist'
   end
 
   def coach_team_enrollment
-    @coach_team_enrollment ||=
-      FacultyStartupEnrollment.find_by(
-        startup_id: team_id,
-        faculty_id: coach_id
-      )
+    @coach_team_enrollment ||= FacultyStartupEnrollment.find_by(startup_id: team_id, faculty_id: coach_id)
   end
 end

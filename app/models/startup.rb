@@ -31,7 +31,7 @@ class Startup < ApplicationRecord
 
   def not_assigned_to_level_zero
     unless level.number.positive?
-      errors.add(:level, 'cannot be assigned to level zero')
+      errors[:level] << 'cannot be assigned to level zero'
     end
   end
 

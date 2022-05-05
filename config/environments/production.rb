@@ -168,11 +168,31 @@ Rails.application.configure do
     end
   end
 
-  Rack::Attack.enabled = ENV['REDIS_URL'].present?
+  # Add the GraphQL probe for Skylight.
+  config.skylight.probes << 'graphql'
 
-  Rack::Attack.cache.store =
-    ActiveSupport::Cache::RedisCacheStore.new(
-      namespace: 'lms-throttle',
-      url: ENV['REDIS_URL']
-    )
+  # Add throttling to application
+  require_relative '../../lib/rack_throttle/rules'
+
+  rules = [
+    { method: 'POST', limit: ENV['GRAPH_API_RATE_LIMIT'] },
+    { method: 'GET', whitelisted: true }
+  ]
+
+  cache =
+    if ENV['MEMCACHEDCLOUD_SERVERS'].present?
+      Dalli::Client.new(
+        (ENV['MEMCACHEDCLOUD_SERVERS']).split(','),
+        {
+          username: ENV['MEMCACHEDCLOUD_USERNAME'],
+          password: ENV['MEMCACHEDCLOUD_PASSWORD']
+        }
+      )
+    end
+
+  config.middleware.use RackThrottle::Rules,
+                        rules: rules,
+                        cache: cache,
+                        key_prefix: :throttle,
+                        default: 20
 end

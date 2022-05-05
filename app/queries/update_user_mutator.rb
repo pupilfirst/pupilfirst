@@ -65,13 +65,13 @@ class UpdateUserMutator < ApplicationQuery
       return
     end
 
-    errors.add(:base, 'Current password is incorrect')
+    errors[:base] << 'Current password is incorrect'
   end
 
   def new_passwords_should_match
     return if new_password == confirm_new_password
 
-    errors.add(:base, 'New password does not match')
+    errors[:base] << 'New password does not match'
   end
 
   def authorized?

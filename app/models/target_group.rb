@@ -15,7 +15,7 @@ class TargetGroup < ApplicationRecord
     return unless archived_changed? && archived?
     return if safe_to_archive
 
-    errors.add(:archived, 'cannot be set unsafely')
+    errors[:archived] << 'cannot be set unsafely'
   end
 
   def display_name

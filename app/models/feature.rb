@@ -9,7 +9,7 @@ class Feature < ApplicationRecord
   def value_must_be_json
     JSON.parse value
   rescue JSON::ParserError
-    errors.add(:value, 'must be valid JSON')
+    errors[:value] << 'must be valid JSON'
   end
 
   class << self

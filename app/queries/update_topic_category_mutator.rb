@@ -20,13 +20,8 @@ class UpdateTopicCategoryMutator < ApplicationQuery
   end
 
   def name_is_unique
-    if TopicCategory.where(
-         name: name,
-         community_id: topic_category.community_id
-       ).blank?
-      return
-    end
+    return if TopicCategory.where(name: name, community_id: topic_category.community_id).blank?
 
-    errors.add(:base, "Category already exists in community with name: #{name}")
+    errors[:base] << "Category already exists in community with name: #{name}"
   end
 end

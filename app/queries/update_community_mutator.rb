@@ -2,14 +2,7 @@ class UpdateCommunityMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
   property :id
-  property :name,
-           validates: {
-             length: {
-               minimum: 1,
-               maximum: 50,
-               message: 'InvalidLengthName'
-             }
-           }
+  property :name, validates: { length: { minimum: 1, maximum: 50, message: 'InvalidLengthName' } }
   property :target_linkable
   property :course_ids
 
@@ -18,20 +11,20 @@ class UpdateCommunityMutator < ApplicationQuery
   def course_must_exist_in_current_school
     return if courses.count == course_ids.count
 
-    errors.add(:base, 'IncorrectCourseIds')
+    errors[:base] << 'IncorrectCourseIds'
   end
 
   def community_must_exist
     return if community.blank?
 
-    errors.add(:base, 'IncorrectCommunityId')
+    errors[:base] << 'IncorrectCommunityId'
   end
 
   def update_community
     community.update!(
       name: name,
       target_linkable: target_linkable,
-      courses: courses
+      courses: courses,
     )
 
     community.id

@@ -1,11 +1,6 @@
 class SortCurriculumResourcesMutator < ApplicationQuery
   property :resource_ids, validates: { presence: true }
-  property :resource_type,
-           validates: {
-             inclusion: {
-               in: [TargetGroup.name, Target.name]
-             }
-           }
+  property :resource_type, validates: { inclusion: { in: [TargetGroup.name, Target.name] } }
 
   validate :must_belong_to_same_parent
 
@@ -22,25 +17,29 @@ class SortCurriculumResourcesMutator < ApplicationQuery
 
     return if resources.distinct.pluck(parent_resource_identifier).one?
 
-    errors.add(
-      :base,
-      "#{resource_type} must belong to the same parent resource"
-    )
+    errors[:base] << "#{resource_type} must belong to the same parent resource"
   end
 
   private
 
   def parent_resource_identifier
-    resource_type == TargetGroup.name ? :level_id : :target_group_id
+    if resource_type == TargetGroup.name
+      :level_id
+    else
+      :target_group_id
+    end
   end
 
   def resource_class
-    resource_type == TargetGroup.name ? TargetGroup : Target
+    if resource_type == TargetGroup.name
+      TargetGroup
+    else
+      Target
+    end
   end
 
   def resources
-    @resources ||=
-      if resource_type == TargetGroup.name
+    @resources ||= if resource_type == TargetGroup.name
         TargetGroup.where(id: resource_ids)
       else
         Target.where(id: resource_ids)
@@ -54,7 +53,6 @@ class SortCurriculumResourcesMutator < ApplicationQuery
   def authorized?
     return false if course&.school != current_school
 
-    current_school_admin.present? ||
-      current_user.course_authors.exists?(course: course)
+    current_school_admin.present? || current_user.course_authors.exists?(course: course)
   end
 end

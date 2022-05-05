@@ -13,30 +13,19 @@ class CreateQuizSubmissionMutator < ApplicationQuery
   def create_submission
     submission =
       TimelineEvent.transaction do
-        target
-          .timeline_events
-          .create!(
-            checklist: result[:checklist],
-            quiz_score: result[:score],
-            passed_at: Time.zone.now
-          )
-          .tap do |submission|
-            students.map do |student|
-              student.timeline_event_owners.create!(
-                timeline_event: submission,
-                latest: true
-              )
-            end
-          end
+      target.timeline_events.create!(
+        checklist: result[:checklist],
+        quiz_score: result[:score],
+        passed_at: Time.zone.now
+      ).tap do |submission|
+        students.map do |student|
+          student.timeline_event_owners.create!(timeline_event: submission, latest: true)
+        end
       end
+    end
 
     TimelineEvents::AfterMarkingAsCompleteJob.perform_later(submission)
-    publish(
-      course,
-      :submission_automatically_verified,
-      current_user,
-      submission
-    )
+    publish(course, :submission_automatically_verified, current_user, submission)
 
     submission
   end
@@ -46,13 +35,13 @@ class CreateQuizSubmissionMutator < ApplicationQuery
   def target_should_have_a_quiz
     return if quiz.present?
 
-    errors.add(:base, 'TargetDoesNotHaveQuiz')
+    errors[:base] << 'TargetDoesNotHaveQuiz'
   end
 
   def all_questions_answered
     return if number_of_questions == answers_from_user.count
 
-    errors.add(:base, 'The answers are incomplete. Please try again.')
+    errors[:base] << "The answers are incomplete. Please try again."
   end
 
   def number_of_questions
@@ -72,43 +61,44 @@ class CreateQuizSubmissionMutator < ApplicationQuery
   end
 
   def checklist_item(title, result, status)
-    { title: title, result: result, kind: 'longText', status: status }
+    {
+      title: title,
+      result: result,
+      kind: "longText",
+      status: status
+    }
   end
 
   def result
-    @result ||=
-      begin
-        score = 0
-        checklist =
-          questions.each_with_index.map do |question, index|
-            correct_answer = question.correct_answer
-            u_answer = answers_from_user.where(quiz_question: question).first
+    @result ||= begin
+      score = 0
+      checklist = questions.each_with_index.map do |question, index|
+        correct_answer = question.correct_answer
+        u_answer = answers_from_user.where(quiz_question: question).first
 
-            score += 1 if correct_answer == u_answer
+        if correct_answer == u_answer
+          score += 1
+        end
 
-            stripped_question = question.question.strip
-            end_with_lb_or_space =
-              stripped_question.ends_with?('```') ? "\n\n" : "  \n"
+        stripped_question = question.question.strip
+        end_with_lb_or_space = stripped_question.ends_with?('```') ? "\n\n" : "  \n"
 
-            title = "Question #{index + 1}"
-            result =
-              " #{stripped_question}#{end_with_lb_or_space}#{answer_text(correct_answer, u_answer)}"
-            status =
-              if correct_answer == u_answer
-                TimelineEvent::CHECKLIST_STATUS_PASSED
-              else
-                TimelineEvent::CHECKLIST_STATUS_FAILED
-              end
-            checklist_item(title, result, status)
-          end
-
-        { score: "#{score}/#{number_of_questions}", checklist: checklist }
+        title = "Question #{index + 1}"
+        result = " #{stripped_question}#{end_with_lb_or_space}#{answer_text(correct_answer, u_answer)}"
+        status = correct_answer == u_answer ? TimelineEvent::CHECKLIST_STATUS_PASSED : TimelineEvent::CHECKLIST_STATUS_FAILED
+        checklist_item(title, result, status)
       end
+
+      {
+        score: "#{score}/#{number_of_questions}",
+        checklist: checklist
+      }
+    end
   end
 
   def pretty_answer(answer)
     stripped_answer = answer.strip
-    start_with_lb_or_space = stripped_answer.starts_with?('```') ? "\n" : ' '
+    start_with_lb_or_space = stripped_answer.starts_with?('```') ? "\n" : " "
     end_with_lb_or_space = stripped_answer.ends_with?('```') ? "\n\n" : "  \n"
     "#{start_with_lb_or_space}#{stripped_answer}#{end_with_lb_or_space}"
   end

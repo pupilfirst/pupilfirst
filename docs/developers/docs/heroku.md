@@ -136,9 +136,9 @@ You can configure Pupilfirst to block sending of emails to user addresses that a
 3. The _Bounce_ and _Spam Complaint_ options should be the events that are selected - there is no need to include the message content.
 4. Add some _Basic auth credentials_, and use those values to configure the `POSTMARK_HOOK_ID` and `POSTMARK_HOOK_SECRET` environment variables on Heroku.
 
-## Performance and error monitoring with New Relic
+## Performance monitoring with Skylight
 
-To enable performance and error monitoring with [New Relic](https://newrelic.com/), sign up for a New Relic account and configure its credentials using the `NEW_RELIC_LICENSE_KEY` key.
+To enable performance monitoring with [Skylight](https://www.skylight.io/), sign up for a Skylight account and configure its credentials using the `SKYLIGHT_AUTHENTICATION` key.
 
 ## Adding Memcached Cloud as cache store for API rate limiting
 

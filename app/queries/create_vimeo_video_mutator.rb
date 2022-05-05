@@ -13,13 +13,13 @@ class CreateVimeoVideoMutator < ApplicationQuery
 
     if response[:error].present? || response[:error_code].present?
       if response[:developer_message].present?
-        errors.add(:base, response[:developer_message])
+        errors[:base] << response[:developer_message]
       else
-        errors.add(
-          :base,
-          response[:error] ||
-            "Encountered error with code #{response[:error_code]} when trying to create a Vimeo video."
-        )
+        errors[:base] <<
+          (
+            response[:error] ||
+              "Encountered error with code #{response[:error_code]} when trying to create a Vimeo video."
+          )
       end
 
       nil

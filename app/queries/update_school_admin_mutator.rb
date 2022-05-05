@@ -19,7 +19,7 @@ class UpdateSchoolAdminMutator < ApplicationQuery
   def record_must_exists
     return if school_admin.present?
 
-    errors.add(:base, 'IncorrectSchoolAdminId')
+    errors[:base] << 'IncorrectSchoolAdminId'
   end
 
   def school_admin

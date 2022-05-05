@@ -14,7 +14,7 @@ class DeleteCertificateMutator < ApplicationQuery
   def must_not_have_been_issued
     return if certificate.issued_certificates.empty?
 
-    errors.add(:base, I18n.t('queries.delete_certificate_mutator.issued_error'))
+    errors[:base] << I18n.t('queries.delete_certificate_mutator.issued_error')
   end
 
   def resource_school

@@ -16,19 +16,15 @@ class UpdateReviewChecklistMutator < ApplicationQuery
   private
 
   def review_checklist_shape
-    if review_checklist.respond_to?(:all?) &&
-         review_checklist.all? do |item|
-           valid_title?(item['title']) && item['result'].respond_to?(:all?) &&
-             item['result'].all? do |result|
-               valid_title?(result['title']) &&
-                 (result['feedback'].nil? || result['feedback'].is_a?(String))
-             end
-         end
-      return
+    return if review_checklist.respond_to?(:all?) && review_checklist.all? do |item|
+      valid_title?(item['title']) && item['result'].respond_to?(:all?) && item['result'].all? do |result|
+        valid_title?(result['title']) && (result['feedback'].nil? || result['feedback'].is_a?(String))
+      end
     end
 
-    errors.add(:base, 'Invalid review checklist')
+    errors[:base] << 'Invalid review checklist'
   end
+
 
   def valid_title?(title)
     title.is_a?(String) && title.present?

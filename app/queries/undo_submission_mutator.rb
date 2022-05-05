@@ -37,7 +37,7 @@ class UndoSubmissionMutator < ApplicationQuery
   def must_have_pending_submission
     return if timeline_event.pending_review?
 
-    errors.add(:base, 'NoPendingSubmission')
+    errors[:base] << 'NoPendingSubmission'
   end
 
   def timeline_event

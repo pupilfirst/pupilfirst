@@ -3,10 +3,7 @@ class EmailValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
     if value !~ REGULAR_EXPRESSION || value.length > 254
-      record.errors.add(
-        attribute,
-        options[:message] || 'must be in valid format'
-      )
+      record.errors[attribute] << (options[:message] || 'must be in valid format')
     end
   end
 end

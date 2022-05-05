@@ -93,7 +93,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
               id="search"
               type_="search"
               className="text-sm bg-white border border-gray-400 rounded leading-relaxed max-w-xs w-full py-2 px-3 mr-2 focus:outline-none focus:bg-white focus:border-primary-300"
-              placeholder="Search by student or team name or student email..."
+              placeholder="Search by student or team name..."
               value=state.searchString
               onChange={event => send(UpdateSearchString(ReactEvent.Form.target(event)["value"]))}
             />

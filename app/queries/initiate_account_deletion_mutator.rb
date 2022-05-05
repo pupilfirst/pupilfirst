@@ -17,10 +17,7 @@ class InitiateAccountDeletionMutator < ApplicationQuery
   def user_must_not_be_admin
     return if current_school_admin.blank?
 
-    errors.add(
-      :base,
-      'You are an admin; please delete your admin access before retrying'
-    )
+    errors[:base] << 'You are an admin; please delete your admin access before retrying'
   end
 
   def ensure_time_between_requests
@@ -30,9 +27,6 @@ class InitiateAccountDeletionMutator < ApplicationQuery
 
     return if time_since_last_mail > 30.minutes
 
-    errors.add(
-      :base,
-      'An email was sent already with a valid link to delete account. Please check your inbox'
-    )
+    errors[:base] << 'An email was sent already with a valid link to delete account. Please check your inbox'
   end
 end

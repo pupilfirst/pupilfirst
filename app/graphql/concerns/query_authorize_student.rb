@@ -53,10 +53,8 @@ module QueryAuthorizeStudent
   def ensure_submittability
     return if target_status == Targets::StatusService::STATUS_PENDING
 
-    errors.add(
-      :base,
+    errors[:base] <<
       "Target status #{target_status.to_s.humanize}, You cannot submit the target"
-    )
   end
 
   def target_status

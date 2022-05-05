@@ -16,8 +16,9 @@ class Faculty < ApplicationRecord
   has_many :cohorts, through: :faculty_cohort_enrollments
   has_many :courses, through: :cohorts
 
-  # Startups whose timeline events this faculty can review.
+  # Students whose submissions this faculty can review.
   has_many :faculty_founder_enrollments, dependent: :destroy
+  has_many :founders, through: :faculty_founder_enrollments
 
   CATEGORY_TEAM = 'team'
   CATEGORY_VISITING_COACHES = 'visiting_coaches'
@@ -63,15 +64,9 @@ class Faculty < ApplicationRecord
             },
             allow_blank: true
 
-  scope :team, -> { where(category: CATEGORY_TEAM).order('sort_index ASC') }
-
   delegate :email, :name, :title, :affiliation, :about, :avatar, to: :user
 
   normalize_attribute :connect_link
-
-  def reviewable_startups(course)
-    course.startups.admitted
-  end
 
   def connect_link?
     connect_link.present?

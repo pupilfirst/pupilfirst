@@ -8,7 +8,8 @@ class User < ApplicationRecord
 
   belongs_to :school
   has_many :founders, dependent: :restrict_with_error
-  has_many :startups, through: :founders
+  has_many :teams, through: :founders
+  has_many :cohorts, through: :founders
   has_many :course_authors, dependent: :restrict_with_error
   has_many :communities, through: :founders
   has_many :courses, through: :founders

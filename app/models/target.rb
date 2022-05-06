@@ -41,8 +41,8 @@ class Target < ApplicationRecord
 
   scope :live, -> { where(visibility: VISIBILITY_LIVE) }
   scope :draft, -> { where(visibility: VISIBILITY_DRAFT) }
-  scope :founder, -> { where(role: ROLE_STUDENT) }
-  scope :student, -> { where(role: ROLE_STUDENT) }
+  scope :founder, -> { where(role: ROLE_STUDENT) } # rubocop:disable Rails/DuplicateScope
+  scope :student, -> { where(role: ROLE_STUDENT) } # rubocop:disable Rails/DuplicateScope
   scope :not_founder, -> { where.not(role: ROLE_STUDENT) }
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }

@@ -48,9 +48,9 @@ md.use(subscriptPlugin)
   .use(katexPlugin)
   .use(alignPlugin)
   .use(checkboxPlugin, {
-    disabled: false,
-    liClass: 'flex items-center gap-2 pointer-events-none',
-    ulClass: "list-none"
+    disabled: true,
+    liClass: "flex items-center gap-2 pointer-events-none -ml-10",
+    ulClass: "list-none",
   });
 
 const parse = (markdown) => {

@@ -23,8 +23,6 @@ class EvaluationCriterion < ApplicationRecord
               scope: %i[course_id max_grade pass_grade]
             }
 
-  validates :course
-
   def display_name
     name + " (#{pass_grade},#{max_grade})"
   end

@@ -316,6 +316,9 @@ let controls = (disabled, value, state, send, onChange) => {
           onClick={_ => curriedModifyPhrase(Strikethrough)}>
           <i className="fas fa-strikethrough fa-fw" />
         </button>
+        <EmojiPicker
+          className={buttonClasses ++ "border-l border-gray-400"} title={t("emoji_picker")}
+        />
       </div>
     }}
     <div className="py-1">
@@ -537,8 +540,11 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
 }
 
 let textareaClasses = (mode, dynamicHeight) => {
-  let editorClasses = dynamicHeight ? "w-full outline-none font-mono " : "markdown-editor__textarea w-full outline-none font-mono "
-  editorClasses ++ "align-top focus:ring-1 focus:ring-indigo-500 " ++
+  let editorClasses = dynamicHeight
+    ? "w-full outline-none font-mono "
+    : "markdown-editor__textarea w-full outline-none font-mono "
+  editorClasses ++
+  "align-top focus:ring-1 focus:ring-indigo-500 " ++
   switch mode {
   | Windowed(_) => "p-3"
   | Fullscreen(_) => "markdown-editor__textarea--full-screen px-3 pt-4 pb-8 h-full resize-none"

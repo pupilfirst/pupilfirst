@@ -661,6 +661,7 @@ en:
       control_label_bold: Bold
       control_label_italic: Italic
       control_label_strikethrough: Strikethrough
+      emoji_picker: Emoji
       error_maximum_file_size: The maximum file size is 5 MB. Please select another file.
       error_prefix: Failed to attach file!
       error_unexpected: An unexpected error occured! Please reload the page before trying again.

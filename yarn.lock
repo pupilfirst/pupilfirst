@@ -3510,6 +3510,11 @@
     resolve-pathname "^3.0.0"
     tslib "^2.1.0"
 
+"@emoji-mart/data@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@emoji-mart/data/-/data-1.0.1.tgz#76ca80a7b6d02706ec329116d6e4518bb3453ad2"
+  integrity sha512-5X6DbIdyFvSFMfGdPkPd/yxQmtfMptZg5UUSL+afb39SdbPvobJY7VhzGM0IekxjszW3ygxZ2X5mVhy5AqF5vQ==
+
 "@endiliey/static-site-generator-webpack-plugin@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@endiliey/static-site-generator-webpack-plugin/-/static-site-generator-webpack-plugin-4.0.0.tgz#94bfe58fd83aeda355de797fcb5112adaca3a6b1"
@@ -8268,6 +8273,11 @@ elliptic@^6.0.0:
     inherits "^2.0.4"
     minimalistic-assert "^1.0.1"
     minimalistic-crypto-utils "^1.0.1"
+
+emoji-mart@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/emoji-mart/-/emoji-mart-5.0.0.tgz#1c16bf4e675c59c08a73b11e385cf1cc4d425b27"
+  integrity sha512-4O75LxV/RPOrtC9+0qhHhfPgJgW/Kwc4zv15h190liC3vJ/5RVibIrnPlDZ0xqYx0bPVOy3W/QcDTZY+jq1qOw==
 
 "emoji-regex@>=6.0.0 <=6.1.1":
   version "6.1.1"

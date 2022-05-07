@@ -317,7 +317,9 @@ let controls = (disabled, value, state, send, onChange) => {
           <i className="fas fa-strikethrough fa-fw" />
         </button>
         <EmojiPicker
-          className={buttonClasses ++ "border-l border-gray-400"} title={t("emoji_picker")}
+          onChange={(e: EmojiPicker.emojiEvent) => onChange(value ++ e.native)}
+          className={buttonClasses ++ "border-l border-gray-400"}
+          title={t("emoji_picker")}
         />
       </div>
     }}

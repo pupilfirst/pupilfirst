@@ -51,6 +51,13 @@ let courseNameContainerClasses = additionalLinks =>
     additionalLinks->ArrayUtils.isEmpty ? "pt-2 pb-3 md:pt-4 md:pb-6" : "pt-2 pb-3 md:pt-4 md:pb-12"
   )
 
+let imageWrapperClasses = coverImage =>
+  "relative " ++
+  switch coverImage {
+  | Some(_) => "pb-1/2 md:pb-1/4 2xl:pb-1/5"
+  | None => "pb-1/4 sm:1/5 md:pb-1/6 xl:pb-1/12"
+  }
+
 let renderCourseSelector = (currentCourseId, courses, coverImage, additionalLinks) => {
   let currentCourse = ArrayUtils.unsafeFind(
     c => CourseInfo.id(c) == currentCourseId,
@@ -58,15 +65,9 @@ let renderCourseSelector = (currentCourseId, courses, coverImage, additionalLink
     courses,
   )
   let otherCourses = Js.Array.filter(c => CourseInfo.id(c) != currentCourseId, courses)
-  let imageWrapperClasses =
-    "relative " ++
-    switch coverImage {
-    | Some(_) => "pb-1/2 md:pb-1/4 2xl:pb-1/5"
-    | None => "pb-1/4 sm:1/5 md:pb-1/6 xl:pb-1/12"
-    }
 
   <div className="relative bg-primary-900">
-    <div className={imageWrapperClasses}>
+    <div className={coverImage->imageWrapperClasses}>
       {switch coverImage {
       | Some(src) => <img className="absolute h-full w-full object-cover" src />
       | None =>

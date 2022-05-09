@@ -145,24 +145,26 @@ let make = (
       {targetGroups |> Js.Array.length > 1
         ? <div
             className="target-group__group-reorder flex flex-col shadow rounded-l-lg absolute h-full border border-r-0 overflow-hidden text-gray-700 justify-between items-center bg-white">
-            <div
+            <button
               title="Move Up"
+              ariaLabel="Move Up"
               id={"target-group-move-up-" ++ (targetGroup |> TargetGroup.id)}
-              className={"target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200" ++
+              className={"target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:text-primary-500" ++
               sortIndexHiddenClass(index == 0)}
               onClick={_ =>
                 updateSortIndex(targetGroups, targetGroup, true, updateTargetGroupSortIndexCB)}>
               <i className="fas fa-arrow-up text-sm" />
-            </div>
-            <div
+            </button>
+            <button
               title="Move Down"
+              ariaLabel="Move down"
               id={"target-group-move-down-" ++ (targetGroup |> TargetGroup.id)}
-              className={"target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200" ++
+              className={"target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:text-primary-500" ++
               sortIndexHiddenClass(index + 1 == Js.Array.length(targetGroups))}
               onClick={_ =>
                 updateSortIndex(targetGroups, targetGroup, false, updateTargetGroupSortIndexCB)}>
               <i className="fas fa-arrow-down text-sm" />
-            </div>
+            </button>
           </div>
         : React.null}
     </div>

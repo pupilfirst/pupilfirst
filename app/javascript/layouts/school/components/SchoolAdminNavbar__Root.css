@@ -15,12 +15,13 @@
   position: relative;
 }
 
-.school-admin-navbar__primary-nav-link:hover {
-  @apply bg-primary-800;
+.school-admin-navbar__primary-nav-link:hover,
+.school-admin-navbar__primary-nav-link:focus {
+  @apply bg-primary-800 outline-none;
 }
 
 .school-admin-navbar__primary-nav-link--active {
-  @apply bg-gray-200 text-primary-500;
+  @apply bg-gray-200 text-primary-500 focus:text-primary-700;
   box-shadow: inset 4px 0 0 0 theme("colors.yellow.500");
   background-image: linear-gradient(
     to right,

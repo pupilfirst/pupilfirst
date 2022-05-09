@@ -73,9 +73,9 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
     <div className="max-w-3xl w-full mx-auto flex justify-between border-b mt-4">
       <ul className="flex font-semibold text-sm">
         <li
-          className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-200 hover:text-gray-900">
+          className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-200 hover:text-gray-900 focus-within:outline-none focus-within:bg-gray-200 focus-within:text-gray-900 focus-within:ring-2 focus-within:ring-indigo-500">
           <a
-            className="block px-3 py-3 md:py-2 text-gray-800"
+            className="block px-3 py-3 md:py-2 text-gray-800 focus:outline-none"
             href={"/school/courses/" ++ (courseId ++ "/students")}>
             {"All Students" |> str}
           </a>
@@ -93,7 +93,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
               id="search"
               type_="search"
               className="text-sm bg-white border border-gray-400 rounded leading-relaxed max-w-xs w-full py-2 px-3 mr-2 focus:outline-none focus:bg-white focus:border-primary-300"
-              placeholder="Search by student or team name..."
+              placeholder="Search by student or team name or student email..."
               value=state.searchString
               onChange={event => send(UpdateSearchString(ReactEvent.Form.target(event)["value"]))}
             />

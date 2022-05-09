@@ -132,14 +132,15 @@ let footerLogo = (schoolName, logoOnDarkBg) =>
   }
 
 let editIcon = (additionalClasses, clickHandler, title) =>
-  <div
-    className={"cursor-pointer bg-primary-100 border border-primary-400 text-primary-500 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 px-2 py-1 rounded flex items-center " ++
+  <button
+    className={"cursor-pointer px-2 py-1 bg-primary-100 border border-primary-400 text-primary-500 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 focus:bg-primary-200 focus:border-primary-500 focus:text-primary-600px rounded flex items-center " ++
     additionalClasses}
     title
+    ariaLabel=title
     onClick=clickHandler>
     <i className="fas fa-pencil-alt text-xs" />
     <span className="text-xs font-semibold ml-2"> {"Edit" |> str} </span>
-  </div>
+  </button>
 
 let showEditor = (editor, send, event) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -278,7 +279,8 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
       <div className="relative bg-gray-300">
         <div className="absolute right-0 z-10 pt-3 pr-3">
           <button
-            className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 px-2 py-1 cursor-pointer rounded"
+            ariaLabel="Change cover"
+            className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 focus:bg-primary-200 focus:border-primary-500 focus:text-primary-600px px-2 py-1 cursor-pointer rounded"
             onClick={showEditor(ImagesEditor, send)}>
             <i className="fas fa-pencil-alt" />
             <span className="font-semibold ml-2"> {"Change cover" |> str} </span>
@@ -303,9 +305,10 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           <p> {"Hello, welcome to" |> str} </p>
           <div onClick={showEditor(DetailsEditor, send)}>
             <h1
-              className="flex items-center border border-dashed border-gray-800 hover:border-primary-300 hover:text-primary-200 cursor-text rounded px-2 py-1 text-3xl mt-1">
+              className="flex items-center border border-dashed border-gray-800 hover:border-primary-300 hover:text-primary-200 focus-within:border-primary-300 focus-within:text-primary-200 cursor-text rounded px-2 py-1 text-3xl mt-1">
               <span> {state.schoolName |> str} </span>
               <button
+                ariaLabel="Edit School name"
                 className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 ml-1 cursor-pointer rounded"
                 onClick={showEditor(DetailsEditor, send)}>
                 <i className="fas fa-pencil-alt" />
@@ -313,11 +316,11 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             </h1>
           </div>
           <div
-            ariaLabel="Edit school details"
             onClick={showEditor(DetailsEditor, send)}
-            className="w-full max-w-2xl mt-2 relative flex items-center justify-center border border-dashed border-gray-800 rounded px-8 py-5 hover:border-primary-300 hover:text-primary-200 cursor-text">
+            className="w-full max-w-2xl mt-2 relative flex items-center justify-center border border-dashed border-gray-800 rounded px-8 py-5 hover:border-primary-300 hover:text-primary-200 focus-within:border-primary-300 focus-within:text-primary-200 cursor-text">
             <div className="absolute right-0 top-0 z-10 pt-2 pr-2">
               <button
+                ariaLabel="Edit school details"
                 className="flex items-center text-xs bg-primary-100 text-primary-500 border border-primary-400 hover:bg-primary-200 hover:border-primary-500 hover:text-primary-600 p-1 cursor-pointer rounded">
                 <i className="fas fa-pencil-alt" />
               </button>

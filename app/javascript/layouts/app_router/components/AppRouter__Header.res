@@ -10,7 +10,7 @@ let showLink = (icon, text, href) => {
   <div key=href className="whitespace-nowrap">
     <a
       rel="nofollow"
-      className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200"
+      className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 focus:outline-none focus:text-primary-500 focus:bg-gray-200"
       href>
       <FaIcon classes={"fas fw fa-" ++ icon} /> <span className="pl-2"> {str(text)} </span>
     </a>
@@ -27,7 +27,7 @@ let links = () => {
 let selected = user => {
   <button
     title="Show user controls"
-    className="md:hidden md:ml-2 h-10 w-10 rounded-full border border-gray-300 hover:border-primary-500">
+    className="md:hidden md:ml-2 h-10 w-10 rounded-full border-2 border-gray-300 hover:border-primary-500 focus:border-primary-500">
     {User.avatarUrl(user)->Belt.Option.mapWithDefault(
       <Avatar
         name={User.name(user)} className="inline-block object-contain rounded-full text-tiny"
@@ -145,7 +145,7 @@ let make = (~school, ~currentUser) => {
     <div className="mx-auto">
       <nav className="flex justify-between items-center">
         <div className="flex w-full items-center justify-between">
-          <a className="max-w-sm" href={Belt.Option.isSome(currentUser) ? "/dashboard" : "/"}>
+          <a className="max-w-sm focus-within:outline-none" href={Belt.Option.isSome(currentUser) ? "/dashboard" : "/"}>
             {switch School.logoUrl(school) {
             | Some(url) =>
               <img

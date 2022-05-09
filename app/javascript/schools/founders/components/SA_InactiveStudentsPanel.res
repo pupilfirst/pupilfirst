@@ -95,7 +95,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
               id="search"
               type_="search"
               className="text-sm bg-white border border-gray-400 rounded leading-relaxed max-w-xs w-full py-2 px-3 mr-2 focus:outline-none focus:bg-white focus:border-primary-300"
-              placeholder=t("search_placeholder")
+              placeholder={t("search_placeholder")}
               value=state.searchString
               onChange={event => send(UpdateSearchString(ReactEvent.Form.target(event)["value"]))}
             />
@@ -197,9 +197,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
           })
           |> Array.of_list
           |> React.array
-        : <div className="shadow bg-white rounded-lg mb-4 p-4">
-            {t("search_empty") |> str}
-          </div>}
+        : <div className="shadow bg-white rounded-lg mb-4 p-4"> {t("search_empty") |> str} </div>}
       {teams |> ListUtils.isNotEmpty
         ? <div className="max-w-3xl w-full flex flex-row mx-auto justify-center pb-8">
             {currentPage > 1

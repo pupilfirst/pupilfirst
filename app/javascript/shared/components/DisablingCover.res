@@ -1,4 +1,4 @@
-%bs.raw(`require("./DisablingCover.css")`)
+%raw(`require("./DisablingCover.css")`)
 
 let ts = I18n.t(~scope="shared")
 

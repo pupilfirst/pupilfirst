@@ -19,6 +19,6 @@ class UpdateImageContentBlockMutator < ApplicationQuery
   def must_be_an_image_block
     return if content_block.image?
 
-    errors[:base] << 'This is not an image block'
+    errors.add(:base, 'This is not an image block')
   end
 end

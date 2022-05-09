@@ -17,6 +17,10 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
 
+### 2022.1
+
+This version replaces Skylight with New Relic for application performance monitoring and adds the `NEW_RELIC_LICENSE_KEY` environment variable to authenticate connection with New Relic. The version also replaces `rack-throttle` gem with `rack-attack` for throttling and blocking abusive requests. This change adds environment variables `GRAPH_API_RATE_LIMIT`, `GRAPH_API_RATE_PERIOD` and `REDIS_URL` to set the number of requests, the period of time in seconds and the URL to the Redis database store respectively.
+
 ### 2022.0
 
 This version adds the `PREPARE_FOR_PRECOMPILATION` environment variable. If you're building Pupilfirst in production,

@@ -1598,28 +1598,39 @@ en:
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe
   controllers:
-    ApplicantsController:
-      link_expired: That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in.
-      welcome: Welcome to %{school_name}!
-    CoursesController:
-      errors: "There were errors with your submission: %{form_errors}"
-      sent_mail: We've sent you a verification mail. It should reach you in less than a minute. Click the link in the email to sign up, and get started.
-    Schools__CoursesController:
-      teams_active: Teams marked active successfully!
-    UsersController:
-      link_expired: That link has expired or is invalid. Please try again.
-    Users__OmniauthCallbacksController:
-      add_facebook: Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.
-      add_github: Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.
-      add_other: Please sign in using another method.
-      denied: Authentication was denied. Please try again.
-      denied_by: Authentication was denied by %{provider}. Please try again.
-      email_unregistered: "Your email address: %{email} is unregistered."
-      not_receive_email: "We're sorry, but we did not receive your email address from %{provider_name}. "
-    Users__SessionsController:
-      already_signed: You are already signed in.
-      link_expired: That one-time link has expired, or is invalid. Please try signing in again.
-      link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
+    applicants:
+      enroll:
+        link_expired: That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in.
+      resolve_applicant_path:
+        welcome: Welcome to %{school_name}!
+    courses:
+      process_application:
+        errors: "There were errors with your submission: %{form_errors}"
+        sent_mail: We've sent you a verification mail. It should reach you in less than a minute. Click the link in the email to sign up, and get started.
+    schools__courses:
+      mark_teams_active:
+        teams_active: Teams marked active successfully!
+    users:
+      delete_account:
+        link_expired: That link has expired or is invalid. Please try again.
+    users__omniauthcallbacks:
+      failure:
+        denied: Authentication was denied. Please try again.
+        denied_by: Authentication was denied by %{provider}. Please try again.
+      sign_in_at_oauth_origin:
+        email_unregistered: "Your email address: %{email} is unregistered."
+      email_blank_flash:
+        add_facebook: Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.
+        add_github: Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.
+        add_other: Please sign in using another method.
+        not_receive_email: "We're sorry, but we did not receive your email address from %{provider_name}. "
+    users__sessions:
+      new:
+        already_signed: You are already signed in.
+      token:
+        link_expired: That one-time link has expired, or is invalid. Please try signing in again.
+      reset_password:
+        link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
   courses:
     apply:
       apply_button: Apply

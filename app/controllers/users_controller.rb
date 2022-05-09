@@ -20,7 +20,7 @@ class UsersController < ApplicationController
       sign_in user
       @token = params[:token]
     else
-      flash[:error] = I18n.t("controllers.UsersController.link_expired")
+      flash[:error] = I18n.t('controllers.users.delete_account.link_expired')
       redirect_to root_path
     end
   end

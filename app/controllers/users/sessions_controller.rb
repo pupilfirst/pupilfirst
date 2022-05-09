@@ -11,7 +11,8 @@ module Users
       store_location_for(:user, params[:referrer]) if params[:referrer].present?
 
       if current_user.present?
-        flash[:notice] = I18n.t("controllers.Users__SessionsController.already_signed")
+        flash[:notice] =
+          I18n.t('controllers.users__sessions.new.already_signed')
         redirect_to after_sign_in_path_for(current_user)
       end
     end
@@ -54,8 +55,7 @@ module Users
 
         redirect_to after_sign_in_path_for(user)
       else
-        flash[:error] =
-          I18n.t("controllers.Users__SessionsController.link_expired")
+        flash[:error] = I18n.t('controllers.users__sessions.token.link_expired')
         redirect_to new_user_session_path
       end
     end
@@ -67,7 +67,7 @@ module Users
         @token = params[:token]
       else
         flash[:error] =
-          I18n.t("controllers.Users__SessionsController.link_used")
+          I18n.t('controllers.users__sessions.reset_password.link_used')
         redirect_to new_user_session_path
       end
     end
@@ -106,7 +106,8 @@ module Users
 
       @form&.current_school = current_school
 
-      recaptcha_success = recaptcha_success?(@form, action: 'user_password_login')
+      recaptcha_success =
+        recaptcha_success?(@form, action: 'user_password_login')
 
       unless recaptcha_success
         redirect_to sign_in_with_email_path(visible_recaptcha: 1)
@@ -125,7 +126,8 @@ module Users
     # GET /users/sign_in_with_email
     def sign_in_with_email
       if current_user.present?
-        flash[:notice] = I18n.t("controllers.Users__SessionsController.already_signed")
+        flash[:notice] =
+          I18n.t('controllers.users__sessions.new.already_signed')
         redirect_to after_sign_in_path_for(current_user)
         return
       end

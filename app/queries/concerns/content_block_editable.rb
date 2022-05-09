@@ -48,6 +48,6 @@ module ContentBlockEditable
   def must_be_latest_version
     return if content_blocks.where(id: id).present?
 
-    errors[:base] << 'You can only edit blocks in the current version.'
+    errors.add(:base, 'You can only edit blocks in the current version.')
   end
 end

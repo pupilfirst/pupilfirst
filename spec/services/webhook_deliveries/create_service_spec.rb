@@ -21,7 +21,7 @@ describe WebhookDeliveries::CreateService do
       it 'raises exception' do
         expect {
           subject.execute(course, event_type, actor, submission)
-        }.to raise_exception
+        }.to raise_error('Invalid event_type invalid encountered')
       end
     end
 

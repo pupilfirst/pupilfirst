@@ -46,14 +46,15 @@ class UpdateUserMutator < ApplicationQuery
   validate :new_passwords_should_match
 
   def update_user
-    User.transaction do
+    if new_password.blank?
       current_user.update!(user_params)
-
-      return if new_password.blank?
-
-      current_user.password = new_password
-      current_user.password_confirmation = confirm_new_password
-      current_user.save!
+    else
+      current_user.update!(
+        user_params.merge(
+          password: new_password,
+          password_confirmation: confirm_new_password
+        )
+      )
     end
   end
 

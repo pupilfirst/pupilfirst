@@ -180,7 +180,7 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
     let extractor = result => result["updateFileBlock"]["contentBlock"]
 
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
-  | Markdown(markdown, _curriculumEditorMaxLength) =>
+  | Markdown(markdown) =>
     let mutation = UpdateMarkdownBlockMutation.make(~id, ~markdown, ())
     let extractor = result => result["updateMarkdownBlock"]["contentBlock"]
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
@@ -232,7 +232,7 @@ let innerEditor = (
       code => TargetContentView.embedContentBlock(code),
     )
 
-  | Markdown(markdown, markdownCurriculumEditorMaxLength) =>
+  | Markdown(markdown) =>
     <CurriculumEditor__MarkdownBlockEditor
       markdown markdownCurriculumEditorMaxLength contentBlock updateContentBlockCB
     />

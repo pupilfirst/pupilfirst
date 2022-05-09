@@ -1,4 +1,4 @@
-%bs.raw(`require("./TargetContentView.css")`)
+%raw(`require("./TargetContentView.css")`)
 
 let str = React.string
 
@@ -41,9 +41,11 @@ let audioContentBlock = url => <audio src=url controls=true />
 @react.component
 let make = (~contentBlocks) =>
   <div className="text-base" id="learn-component">
-    {contentBlocks |> ContentBlock.sort |> Array.map(block => {
+    {contentBlocks
+    |> ContentBlock.sort
+    |> Array.map(block => {
       let renderedBlock = switch block |> ContentBlock.blockType {
-      | Markdown(markdown, _curriculumEditorMaxLength) => markdownContentBlock(markdown)
+      | Markdown(markdown) => markdownContentBlock(markdown)
       | File(url, title, filename) => fileContentBlock(url, title, filename)
       | Image(url, caption, width) => imageContentBlock(url, caption, width)
       | Embed(_url, embedCode, _requestType, _lastResolvedAt) =>
@@ -54,5 +56,6 @@ let make = (~contentBlocks) =>
       <div className={renderBlockClasses(block)} key={block |> ContentBlock.id}>
         renderedBlock
       </div>
-    }) |> React.array}
+    })
+    |> React.array}
   </div>

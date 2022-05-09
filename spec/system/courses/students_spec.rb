@@ -27,11 +27,11 @@ feature 'Course students list', js: true do
   let!(:team_4) { create :startup, level: level_3, name: 'Blueberry' }
   let!(:team_5) { create :startup, level: level_3, name: 'Cherry' }
   let!(:team_6) { create :startup, level: level_3, name: 'Elderberry' }
-  let(:first_student) { Founder.where(startup: team_1).first.user }
+  let(:first_student) { team_1.founders.first.user }
 
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course
-    first_student.update!(last_seen_at: Date.today - 3)
+    first_student.update!(last_seen_at: 3.days.ago)
 
     10.times do
       create :startup,
@@ -70,8 +70,9 @@ feature 'Course students list', js: true do
     end
 
     # Check the last seen for the first student
-    expect(page).to have_text(first_student.name)
-    expect(page).to have_text('Last seen: 3 days ago')
+    within("div[aria-label='Info of team #{team_1.name}']") do
+      expect(page).to have_text('Last seen: 3 days ago')
+    end
 
     # Check levels of few teams
     within("div[aria-label='team level info: #{team_1.id}']") do

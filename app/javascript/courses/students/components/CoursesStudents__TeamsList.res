@@ -1,4 +1,5 @@
 %raw(`require("./CoursesStudents__Root.css")`)
+let t = I18n.t(~scope="components.CoursesStudents__TeamsList")
 
 open CoursesStudents__Types
 
@@ -76,7 +77,7 @@ let showStudent = (team, levels, teamCoaches) => {
             <span className="leading-normal pt-px">
               {switch student->TeamInfo.lastSeenAt {
               | Some(date) =>
-                str("| Last seen: " ++ date->DateFns.formatDistanceToNowStrict(~addSuffix=true, ()))
+                str(t("last_seen") ++ date->DateFns.formatDistanceToNowStrict(~addSuffix=true, ()))
               | None => React.null
               }}
             </span>
@@ -137,7 +138,7 @@ let showTeam = (team, levels, teamCoaches) =>
                     {switch student->TeamInfo.lastSeenAt {
                     | Some(date) =>
                       str(
-                        "| Last seen: " ++
+                        t("last_seen") ++
                         date->DateFns.formatDistanceToNowStrict(~addSuffix=true, ()),
                       )
                     | None => React.null

@@ -1082,7 +1082,7 @@ en:
       prev: Prev
       reactivate_students: Reactivate Students
       search_empty: No inactive student matches your search criteria.
-      search_placeholder: Search by student or team name...
+      search_placeholder: Search by student or team name or student email...
       team: Team
     SchoolAdminNavbar__Root:
       course_nav:

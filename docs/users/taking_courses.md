@@ -1,4 +1,8 @@
-# Taking Courses
+---
+id: taking_courses
+title: Taking Courses
+sidebar_label: Taking Courses
+---
 
 All students begin a course in its first level and progress through levels by completing targets. Specifically, they need to complete (or submit) all [milestone targets](/targets?id=milestone-targets) before they're allowed to _level up_.
 

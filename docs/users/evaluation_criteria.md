@@ -1,4 +1,8 @@
-# Evaluation Criteria
+---
+id: evaluation_criteria
+title: Evaluation Criteria
+sidebar_label: Evaluation Criteria
+---
 
 Evaluation criteria form the basis by which coaches evaluate a student submission for a target. An evaluation criterion has a maximum grade
 and a pass grade. Targets can be linked to multiple evaluation criteria, and coaches need to grade a student submission
@@ -28,7 +32,7 @@ The values for maximum and passing grades cannot be modified once a criterion is
 
 An example of grade labels in a student grade card is as shown below:
 
-![Student grade card for a reviewed submission](https://res.cloudinary.com/sv-co/image/upload/v1579069067/pupilfirst_documentation/evaluation_criteria/student_grade_card_wjiiej.png ":class=w-full-to-3xl")
+![Student grade card for a reviewed submission](https://res.cloudinary.com/sv-co/image/upload/v1579069067/pupilfirst_documentation/evaluation_criteria/student_grade_card_wjiiej.png)
 
 The student submission here received a grade of 5 for evaluation criterion with name _Quality of Submission_ and the label for grade 5 is _Wow_.
 

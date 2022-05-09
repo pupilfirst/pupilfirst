@@ -1,4 +1,8 @@
-# Student Reports
+---
+id: student_reports
+title: Student Reports
+sidebar_label: Student Reports
+---
 
 Coaches have access to a _Students_ tab that lists all active students in the course.
 

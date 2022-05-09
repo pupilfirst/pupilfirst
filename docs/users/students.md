@@ -1,4 +1,8 @@
-# Students
+---
+id: students
+title: Students
+sidebar_label: Students
+---
 
 Courses can contain any number of students. To see the students in a course, first select the course from the main admin navigation bar, or click the _View_ link if you're on the _Courses_ menu. Then pick the _Students_ option from the course's sub-menu.
 

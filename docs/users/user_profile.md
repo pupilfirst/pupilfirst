@@ -1,4 +1,8 @@
-# User Profile
+---
+id: user_profile
+title: User Profile
+sidebar_label: User Profile
+---
 
 All users, regardless of their _role_ can edit their personal details. There's a link to edit your own profile on the `/dashboard` page.
 

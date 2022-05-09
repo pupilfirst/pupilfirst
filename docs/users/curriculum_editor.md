@@ -1,4 +1,8 @@
-# Curriculum Editor
+---
+id: curriculum_editor
+title: Curriculum Editor
+sidebar_label: Curriculum Editor
+---
 
 At Pupilfirst, we believe that actions speak louder than words, and that (when possible) it's always better to give your students things to _do_, rather than information to simply _consume_.
 
@@ -50,7 +54,7 @@ Clicking on a target will open the _Content_ tab by default, which allows you to
 
 You'll notice that the content is made up of different types of _content blocks_. If you hover over the region between any of the existing blocks, you'll find an option to insert a new content block into that space. There will always be a content block picker visible at the bottom of the existing content.
 
-![Target editor content blocks](https://res.cloudinary.com/sv-co/image/upload/v1581450578/pupilfirst_documentation/curriculum_editor/target_editor_blocks_xnvkky.png ":class=w-full-to-3xl")
+![Target editor content blocks](https://res.cloudinary.com/sv-co/image/upload/v1581450578/pupilfirst_documentation/curriculum_editor/target_editor_blocks_xnvkky.png)
 
 ### Content block types
 
@@ -59,7 +63,7 @@ At the moment, we support four types of content blocks.
 **Markdown**\
 The Markdown block allows you to write formatted text in the Markdown format. You can also embed files and images directly into the text using the file upload feature here, but you'll have no control over how they're displayed. Images will be centered, and displayed at actual size, whereas files will be inserted as links. Use the _Image_ and _File_ block types for greater control over these kinds of content.
 
-![Markdown Editor](https://res.cloudinary.com/sv-co/image/upload/v1581450985/pupilfirst_documentation/curriculum_editor/markdown_editor_xecdd0.png ":class=w-full-to-3xl")
+![Markdown Editor](https://res.cloudinary.com/sv-co/image/upload/v1581450985/pupilfirst_documentation/curriculum_editor/markdown_editor_xecdd0.png)
 
 To see a live preview of the content you're creating in the editor, choose the split-screen option at the top-right of the editor, and it'll switch to a full-screen mode that shows the content you're writing on the left, with its preview on the right.
 
@@ -135,7 +139,7 @@ Each step needs to have a _title_ and an _action type_. Together, they define ho
 
 Here's an example target consisting, of four steps to complete the target:
 
-![Adding a target checklist](https://res.cloudinary.com/sv-co/image/upload/v1583171215/pupilfirst_documentation/curriculum_editor/target_checklist_editor_eguduz.png ":class=w-full-to-3xl")
+![Adding a target checklist](https://res.cloudinary.com/sv-co/image/upload/v1583171215/pupilfirst_documentation/curriculum_editor/target_checklist_editor_eguduz.png)
 
 Apart from _title_ and _action type_, you can make any step _optional_. Optional steps can be skipped by students when submitting a target. In the example above, step 2 of type _Attach a Link_ is optional.
 
@@ -176,7 +180,7 @@ The third tab of the target editor is called _Versions_. Just like the _Details_
 
 This tab shows you a preview of a target's content as it appears now to the student. But more importantly, it allows you to save the current state of the content as a version, browse previous versions to see how the target's content looked earlier, and restore an old version.
 
-![Browsing previous versions of a target's contents](https://res.cloudinary.com/sv-co/image/upload/v1581452180/pupilfirst_documentation/curriculum_editor/versions_qtt3j8.png ":class=w-full-to-3xl")
+![Browsing previous versions of a target's contents](https://res.cloudinary.com/sv-co/image/upload/v1581452180/pupilfirst_documentation/curriculum_editor/versions_qtt3j8.png)
 
 When a target is first created, you're assumed to be working on its first version. Once you've worked on the target's content for a while, and are happy with it's state, the _Versions_ tab will allow you to _save that version_. Saving a version will create a new version which will hold future changes.
 

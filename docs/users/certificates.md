@@ -1,4 +1,8 @@
-# Certificates
+---
+id: certificates
+title: Certificates
+sidebar_label: Certificates
+---
 
 You'll often want to issue certificates to students when they complete a course. Pupilfirst lets you upload your own certificate design and use that as a _base image_ with which to issue certificates to students.
 
@@ -21,7 +25,7 @@ When creating a new certificate, you can give it a name (option), and then uploa
 
 Here's an example base image:
 
-![An example base certificate image](https://raw.githubusercontent.com/pupilfirst/pupilfirst/master/spec/support/uploads/certificates/sample.png ":class=w-full-to-3xl")
+![An example base certificate image](https://raw.githubusercontent.com/pupilfirst/pupilfirst/master/spec/support/uploads/certificates/sample.png)
 
 Notice how this image leaves an empty space where a student's name will be placed, and clear areas in the corners where a QR code could be placed.
 

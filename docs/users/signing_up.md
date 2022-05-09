@@ -1,4 +1,8 @@
-# Signing Up
+---
+id: signing_up
+title: Signing Up
+sidebar_label: Signing Up
+---
 
 New students can enter a course in one of two ways:
 

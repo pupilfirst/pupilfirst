@@ -1,4 +1,8 @@
-# Coaches
+---
+id: coaches
+title: Coaches
+sidebar_label: Coaches
+---
 
 Pupilfirst enables quick and efficient review of task submissions by students, and to share feedback and create a conversation around what students have learned from a course. Coaches are users who make this possible.
 

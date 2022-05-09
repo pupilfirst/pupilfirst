@@ -1,4 +1,8 @@
-# Communities
+---
+id: communities
+title: Communities
+sidebar_label: Communities
+---
 
 The community feature offers a way for students, coaches, and school admins to interact in one place, and openly.
 

@@ -1,5 +1,5 @@
 module.exports = {
-  title: "Pupilfirst Developers",
+  title: "Pupilfirst LMS",
   tagline: "Focus on your students.",
   url: "https://developers.pupilfirst.com",
   baseUrl: "/",
@@ -8,16 +8,22 @@ module.exports = {
   projectName: "pupilfirst", // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: "Pupilfirst Developers",
+      title: "Pupilfirst LMS",
       logo: {
         alt: "Pupilfirst Logo",
         src: "https://school.sv.co/favicon.png",
       },
       items: [
         {
-          to: "docs/",
-          activeBasePath: "docs",
-          label: "Docs",
+          to: "users/",
+          activeBasePath: "users",
+          label: "Users",
+          position: "left",
+        },
+        {
+          to: "developers/",
+          activeBasePath: "developers",
+          label: "Developers",
           position: "left",
         },
         {
@@ -36,15 +42,24 @@ module.exports = {
       style: "dark",
       links: [
         {
-          title: "Docs",
+          title: "Developer Docs",
           items: [
             {
               label: "Introduction",
-              to: "docs/",
+              to: "developers/",
             },
             {
               label: "Development Setup",
-              to: "docs/development_setup/",
+              to: "developers/development_setup/",
+            },
+          ],
+        },
+        {
+          title: "User Docs",
+          items: [
+            {
+              label: "Introduction",
+              to: "users/",
             },
           ],
         },
@@ -86,10 +101,9 @@ module.exports = {
       "@docusaurus/preset-classic",
       {
         docs: {
-          sidebarPath: require.resolve("./sidebars.js"),
-          // Please change this to your repo.
-          editUrl:
-            "https://github.com/pupilfirst/pupilfirst/edit/master/docs/developers/",
+          path: 'users',
+          routeBasePath: 'users',
+          sidebarPath: require.resolve("./sidebarsUsers.js"),
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
@@ -97,4 +111,18 @@ module.exports = {
       },
     ],
   ],
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'developers',
+        path: 'developers',
+        routeBasePath: 'developers',
+        sidebarPath: require.resolve('./sidebarsDevelopers.js'),
+        editUrl:
+            "https://github.com/pupilfirst/pupilfirst/edit/master/docs/developers/",
+        // ... other options
+      },
+    ],
+  ]
 };

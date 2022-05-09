@@ -1,4 +1,8 @@
-# Course Authors
+---
+id: course_authors
+title: Course Authors
+sidebar_label: Course Authors
+---
 
 You can designate certain users as _authors_ of a course. The list of authors in a course can be edited from the _Authors_ sub-menu once a course is selected.
 

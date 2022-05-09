@@ -1,4 +1,8 @@
-# School Administrators
+---
+id: school_admins
+title: School Administrators
+sidebar_label: School Administrators
+---
 
 As an admin of a school, you can invite others to share the work in managing the school. You can edit the list of admins from the _Admins_ sub-menu in the school's _Settings_ section.
 

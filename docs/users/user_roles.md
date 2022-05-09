@@ -1,4 +1,8 @@
-# User Roles
+---
+id: user_roles
+title: User Roles
+sidebar_label: User Roles
+---
 
 There are four kinds of users within Pupilfirst:
 

@@ -1,4 +1,8 @@
-# Exporting Data
+---
+id: exporting_data
+title: Exporting Data
+sidebar_label: Exporting Data
+---
 
 Pupilfirst has a robust data export feature that'll let you pull data out of the Pupilfirst platform, and into a spreadsheet. This allows you to come up with your own analysis of the student data from a course.
 

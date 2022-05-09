@@ -1,5 +1,5 @@
 module.exports = {
-  someSidebar: {
+  sidebarsDevelopers: {
     Development: [
       "intro",
       "development_setup",

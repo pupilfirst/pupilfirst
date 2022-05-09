@@ -1,4 +1,8 @@
-# Courses
+---
+id: courses
+title: Courses
+sidebar_label: Courses
+---
 
 Courses hold your content and can have any number of students enrolled, with coaches to guide their path.
 

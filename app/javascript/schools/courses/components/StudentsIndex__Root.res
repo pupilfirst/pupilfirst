@@ -136,8 +136,57 @@ let reloadStudents = (courseId, filter, send) => {
 //   `${tc("review")} | ${AppRouter__Course.name(currentCourse)}`
 // }
 
-let studentsList = (submissions, state, filter) => {
-  <div> {str("students x")} </div>
+let showTag = (tag, color) => {
+  <div key={tag} className={"rounded-lg mt-1 mr-1 py-px px-2 text-xs " ++ color}> {tag->str} </div>
+}
+
+let showtags = (tags, color) => {
+  <div className="flex flex-wrap">
+    {tags->Js.Array2.map(tag => {showTag(tag, color)})->React.array}
+  </div>
+}
+
+let studentsList = (students, state, filter) => {
+  <div className="space-y-2">
+    {students
+    ->Js.Array2.map(student => {
+      <div className="h-full flex items-center bg-white">
+        <div className="flex flex-1 items-center text-left justify-between">
+          <div className="flex py-4 px-4">
+            <div className="text-sm flex flex-col">
+              <p className="font-semibold inline-block "> {StudentInfo.name(student)->str} </p>
+              <div className="flex flex-row">
+                {showtags(StudentInfo.taggings(student), "bg-gray-300 text-gray-900")}
+                <div className="flex flex-wrap">
+                  {showTag(Cohort.name(StudentInfo.cohort(student)), "bg-green-300 text-green-900")}
+                  {showTag(
+                    Level.shortName(StudentInfo.level(student)),
+                    "bg-yellow-300 text-yellow-900",
+                  )}
+                  {StudentInfo.taggings(student)
+                  ->Js.Array2.map(tag => {showTag(tag, "bg-gray-300 text-gray-900")})
+                  ->React.array}
+                  {StudentInfo.userTags(student)
+                  ->Js.Array2.map(tag => {showTag(tag, "bg-blue-300 text-blue-900")})
+                  ->React.array}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button
+              className="flex flex-1 items-center text-left py-4 px-4 hover:bg-gray-100 hover:text-primary-500 focus:bg-gray-100 focus:text-primary-500 justify-between">
+              <span className="inline-flex items-center p-2">
+                <i className="fas fa-edit text-gray-500" />
+                <span className="ml-2"> {"Edit Student"->str} </span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    })
+    ->React.array}
+  </div>
 }
 
 @react.component
@@ -154,8 +203,29 @@ let make = (~courseId, ~url) => {
     <Helmet> <title> {str("Students Index")} </title> </Helmet>
     <div role="main" ariaLabel="Review" className="flex-1 flex flex-col">
       <div>
-        {str("Students Index")}
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
+          <ul className="flex font-semibold text-sm">
+            <li className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
+              <span> {"Active Students"->str} </span>
+            </li>
+          </ul>
+          <div className="bg-gray-100 sticky top-0 py-3">
+            <div className="border rounded-lg mx-auto bg-white ">
+              <div>
+                <div className="flex w-full items-start p-4">
+                  <div
+                    className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-1 px-2 mt-1 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+                    <input
+                      className="flex-grow appearance-none bg-transparent border-none text-gray-700 p-1.5 leading-snug focus:outline-none placeholder-gray-500"
+                      placeholder="Type name, tag or level"
+                      value=""
+                    />
+                  </div>
+                  {"sorter"->str}
+                </div>
+              </div>
+            </div>
+          </div>
           <div>
             {switch state.students {
             | Unloaded =>

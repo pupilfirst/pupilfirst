@@ -12,6 +12,11 @@ let make = (~id, ~name, ~description, ~endsAt) => {
   endsAt: endsAt,
 }
 
+let id = t => t.id
+let name = t => t.name
+let description = t => t.description
+let endsAt = t => t.endsAt
+
 let makeFromJs = cohort => {
   make(
     ~id=cohort["id"],

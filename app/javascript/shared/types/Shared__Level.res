@@ -39,3 +39,5 @@ let make = (~id, ~name, ~number) => {
 let makeFromJs = level => {
   make(~id=level["id"], ~name=level["name"], ~number=level["number"])
 }
+
+let shortName = t => "Level " ++ (t.number |> string_of_int)

@@ -70,11 +70,9 @@ let showStudent = (team, levels, teamCoaches) => {
           <p className="font-semibold inline-block leading-snug">
             {student |> TeamInfo.studentName |> str}
           </p>
-          <div className="text-gray-700 font-semibold text-xs leading-snug flex items-start">
-            <span className="leading-normal pt-px">
-              {student |> TeamInfo.studentTitle |> str}
-            </span>
-            <span className="leading-normal pt-px">
+          <div className="py-px text-gray-700 text-xs leading-snug flex items-start">
+            <span className="font-semibold pr-2"> {student |> TeamInfo.studentTitle |> str} </span>
+            <span className="pl-2 border-l border-gray-400 italic">
               {switch student->TeamInfo.lastSeenAt {
               | Some(date) =>
                 str(t("last_seen") ++ date->DateFns.formatDistanceToNowStrict(~addSuffix=true, ()))
@@ -130,11 +128,11 @@ let showTeam = (team, levels, teamCoaches) =>
                 <p className="font-semibold inline-block leading-snug ">
                   {student |> TeamInfo.studentName |> str}
                 </p>
-                <div className="flex">
-                  <span className="text-gray-700 font-semibold text-xs mt-px leading-snug ">
+                <div className="py-px text-gray-700 text-xs leading-snug flex items-start">
+                  <span className="font-semibold pr-2">
                     {student |> TeamInfo.studentTitle |> str}
                   </span>
-                  <span className="text-gray-700 font-semibold text-xs mt-px leading-snug">
+                  <span className="pl-2 border-l border-gray-400 italic">
                     {switch student->TeamInfo.lastSeenAt {
                     | Some(date) =>
                       str(

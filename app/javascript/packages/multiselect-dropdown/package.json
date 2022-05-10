@@ -27,17 +27,17 @@
     "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/multiselect-dropdown"
   },
   "devDependencies": {
-    "rescript": "9.1.4",
     "parcel-bundler": "^1.12.4",
+    "rescript": "9.1.4",
     "tailwindcss": "^1.9.6"
   },
   "dependencies": {
     "@pupilfirst/pf-icon": "^1.1.0",
+    "@rescript/react": "^0.10.2",
     "bs-webapi": "^0.19.1",
     "fuse.js": "^6.4.6",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "@rescript/react": "^0.10.2"
+    "react-dom": "^16.8.6"
   },
   "scripts": {
     "dev": "parcel index.html",

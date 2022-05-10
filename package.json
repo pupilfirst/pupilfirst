@@ -7,9 +7,6 @@
   "workspaces": {
     "packages": [
       "app/javascript/packages/*"
-    ],
-    "nohoist": [
-      "**/html-minifier-terser"
     ]
   },
   "dependencies": {
@@ -56,13 +53,12 @@
     "markdown-it-multimd-table": "^4.0.0",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
-    "node-sass": "^7.0.0",
+    "node-gyp": "^9.0.0",
     "pluralize": "^8.0.0",
     "pnotify": "^5.2.0",
     "postcss": "^8.3.6",
     "postcss-loader": "^4.3.0",
     "prettier": "^2.4.1",
-    "prettier-plugin-erb": "^0.4.0",
     "prismjs": "^1.25.0",
     "prop-types": "^15.7.2",
     "qrcode.react": "^1.0.1",
@@ -73,7 +69,6 @@
     "react-helmet": "^6.1.0",
     "react_ujs": "^2.6.1",
     "rescript": "9.1.4",
-    "sass-loader": "^10.1.1",
     "stylelint": "^13.13.1",
     "stylelint-config-recommended": "^5.0.0",
     "tailwindcss": "^2.2.15",

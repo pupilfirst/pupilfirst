@@ -35,7 +35,7 @@ module Mutations
         )
 
         if @params[:access_ends_at].present?
-          student.startup.update!(access_ends_at: @params[:access_ends_at])
+          student.update!(access_ends_at: @params[:access_ends_at])
         end
 
         # rubocop:disable Lint/LiteralAsCondition

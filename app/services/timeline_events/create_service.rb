@@ -59,11 +59,11 @@ module TimelineEvents
     end
 
     def owners
-      @target.team_target? ? @founder.startup.founders : @founder
+      @target.team_target? ? @founder.team.founders : @founder
     end
 
     def team_members
-      @founder.startup.founders - [@founder]
+      @founder.team.founders - [@founder]
     end
 
     def old_events(timeline_event)

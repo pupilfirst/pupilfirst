@@ -72,13 +72,13 @@ module Types
     end
 
     def students_have_same_team(submission)
-      submission.founders.distinct(:startup_id).pluck(:startup_id).one?
+      submission.founders.distinct(:team_id).pluck(:team_id).one?
     end
 
     def resolve_team_name(submission)
       if submission.team_submission? && students_have_same_team(submission) &&
            submission.timeline_event_owners.count > 1
-        submission.founders.first.startup.name
+        submission.founders.first.team.name
       end
     end
 
@@ -87,7 +87,7 @@ module Types
         .for(object.id)
         .batch do |submission_ids, loader|
           TimelineEvent
-            .includes(:timeline_event_owners, :target, founders: %i[startup])
+            .includes(:timeline_event_owners, :target, founders: %i[team])
             .where(id: submission_ids)
             .each do |submission|
               loader.call(submission.id, resolve_team_name(submission))

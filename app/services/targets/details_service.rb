@@ -95,7 +95,7 @@ module Targets
 
     def pending_user_ids
       @founder
-        .startup
+        .team
         .founders
         .where.not(id: @founder)
         .select do |founder|

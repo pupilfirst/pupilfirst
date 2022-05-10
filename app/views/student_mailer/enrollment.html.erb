@@ -1,5 +1,5 @@
 <%
-  team_members = @student.startup.founders.where.not(id: @student.id).map(&:name).to_sentence
+  team_members = @student.team.founders.where.not(id: @student.id).map(&:name).to_sentence
   sign_in_link = user_token_url(token: @user.original_login_token)
 %>
 

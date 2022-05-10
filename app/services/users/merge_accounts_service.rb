@@ -95,7 +95,7 @@ module Users
       end
 
       # rubocop:disable Rails/SkipsModelValidations
-      old_user_coach.faculty_startup_enrollments.update_all(
+      old_user_coach.faculty_founder_enrollments.update_all(
         faculty_id: new_user_coach.id
       )
 

@@ -16,7 +16,6 @@ class ApplicationController < ActionController::Base
   helper_method :current_host
   helper_method :current_school
   helper_method :current_founder
-  helper_method :current_startup
   helper_method :current_coach
   helper_method :current_school_admin
 
@@ -111,10 +110,6 @@ class ApplicationController < ActionController::Base
           founder.presence || founders.not_dropped_out.first
         end
       end
-  end
-
-  def current_startup
-    @current_startup ||= current_founder&.startup
   end
 
   def current_school_admin

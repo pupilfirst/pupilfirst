@@ -19,11 +19,15 @@
     "@glennsl/bs-json",
     "bs-fetch",
     "bs-webapi",
-    "@rescript/react"
+    "@rescript/react",
+    "@reasonml-community/graphql-ppx"
   ],
-  "ppx-flags": ["@baransu/graphql_ppx_re/ppx6"],
+  "ppx-flags": ["@reasonml-community/graphql-ppx/ppx"],
   "warnings": {
     "number": "-48",
     "error": "+8"
+  },
+  "graphql": {
+    "extendQuery": "ExtendQuery.Extender"
   }
 }

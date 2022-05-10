@@ -15,7 +15,6 @@ module CourseTeamsQuery = %graphql(`
           teamTags,
           levelId,
           coachIds,
-          levelId,
           accessEndsAt
           students {
             id,

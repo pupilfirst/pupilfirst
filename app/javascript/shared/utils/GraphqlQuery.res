@@ -24,7 +24,10 @@ let decodeErrors = json => {
 
 let flashNotifications = obj =>
   switch Js.Dict.get(obj, "notifications") {
-  | Some(notifications) => notifications |> decodeNotifications |> List.iter(n => {
+  | Some(notifications) =>
+    notifications
+    |> decodeNotifications
+    |> List.iter(n => {
       let notify = switch n.kind {
       | "success" => Notification.success
       | "error" => Notification.error
@@ -83,7 +86,9 @@ let sendQuery = (~notify=true, q) => {
       switch Js.Dict.get(obj, "errors") {
       | Some(errors) => {
           Js.Console.log(json)
-          errors |> decodeErrors |> Js.Array.forEach(e => {
+          errors
+          |> decodeErrors
+          |> Js.Array.forEach(e => {
             Notification.error("Error", e)
           })
 

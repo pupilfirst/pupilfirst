@@ -3138,11 +3138,6 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@baransu/graphql_ppx_re@^0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@baransu/graphql_ppx_re/-/graphql_ppx_re-0.7.1.tgz#8146a36a94d56e65692d74488e2bd6cbd4eb8dc9"
-  integrity sha512-S9RYUWk8IkFxjE1Xl5eohRgbHJP5nCWOD6J1hMV3hY+D43igDrILq1doAXJatYB82BxcsrBC9V+VeU2LtCxIDw==
-
 "@centerforopenscience/markdown-it-imsize@https://github.com/cos-forks/markdown-it-imsize#cos":
   version "2.0.1"
   resolved "https://github.com/cos-forks/markdown-it-imsize#73d2853d6ffe2a368dc57f7968c455469bd82bfa"
@@ -4685,6 +4680,11 @@
     webpack-assets-manifest "^3.1.1"
     webpack-cli "^3.3.12"
     webpack-sources "^1.4.3"
+
+"@reasonml-community/graphql-ppx@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@reasonml-community/graphql-ppx/-/graphql-ppx-1.2.3.tgz#2a9df118560fdfc8121ed471a2ef8038a363bd60"
+  integrity sha512-4XQpzfeLAhaDFX4d/z9AQs9nV0f0y01TRAM/lqRtDcgu+0W9F64FmuWk/4kQ6G1Rvo75pYKrLPlOf53vfHb+Qw==
 
 "@rescript/react@^0.10.2", "@rescript/react@^0.10.3":
   version "0.10.3"

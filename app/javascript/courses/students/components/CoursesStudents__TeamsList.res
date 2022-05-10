@@ -75,8 +75,13 @@ let showStudent = (team, levels, teamCoaches) => {
             <span className="pl-2 border-l border-gray-400 italic">
               {switch student->TeamInfo.lastSeenAt {
               | Some(date) =>
-                str(t("last_seen") ++ date->DateFns.formatDistanceToNowStrict(~addSuffix=true, ()))
-              | None => React.null
+                t(
+                  ~variables=[
+                    ("time_string", date->DateFns.formatDistanceToNowStrict(~addSuffix=true, ())),
+                  ],
+                  "last_seen",
+                )->str
+              | None => t("no_last_seen")->str
               }}
             </span>
           </div>
@@ -135,11 +140,16 @@ let showTeam = (team, levels, teamCoaches) =>
                   <span className="pl-2 border-l border-gray-400 italic">
                     {switch student->TeamInfo.lastSeenAt {
                     | Some(date) =>
-                      str(
-                        t("last_seen") ++
-                        date->DateFns.formatDistanceToNowStrict(~addSuffix=true, ()),
-                      )
-                    | None => React.null
+                      t(
+                        ~variables=[
+                          (
+                            "time_string",
+                            date->DateFns.formatDistanceToNowStrict(~addSuffix=true, ()),
+                          ),
+                        ],
+                        "last_seen",
+                      )->str
+                    | None => t("no_last_seen")->str
                     }}
                   </span>
                 </div>

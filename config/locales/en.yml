@@ -548,7 +548,8 @@ en:
     CoursesReview__SubmissionInfoCard:
       submission_hash: "Submission #"
     CoursesStudents__TeamsList:
-      last_seen: "Last seen "
+      last_seen: "Last seen %{time_string}"
+      no_last_seen: "Last seen long time ago"
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
       attempted: " Attempted"

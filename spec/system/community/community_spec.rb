@@ -1035,4 +1035,14 @@ feature 'Community', js: true do
       end
     end
   end
+
+  context 'when a coach is marked inactive' do
+    before { coach.update!(exited: true) }
+
+    scenario 'coach loses access to all communities' do
+      sign_in_user(coach.user, referrer: community_path(community))
+
+      expect(page).to have_text("The page you were looking for doesn't exist")
+    end
+  end
 end

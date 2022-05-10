@@ -18,8 +18,6 @@ let makeFilter = (key, label, filterType: filterType, color) => {
   {key: key, label: label, filterType: filterType, color: color}
 }
 
-type loading = Unloaded | Loading | Loaded
-
 type filterItem = {
   resource: resource,
   values: array<string>,
@@ -29,14 +27,12 @@ type state = {
   filterInput: string,
   filterLoading: bool,
   filterData: array<filterItem>,
-  loaded: loading,
 }
 
 type action =
   | UnsetSearchString
   | UpdateFilterInput(string)
   | SetLoading
-  | SetLoaded
   | SetFilterData(array<filterItem>)
 
 let reducer = (state, action) =>
@@ -46,9 +42,8 @@ let reducer = (state, action) =>
       filterInput: "",
     }
   | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
-  | SetLoading => {...state, loaded: Loading}
-  | SetLoaded => {...state, loaded: Loaded}
-  | SetFilterData(filterData) => {...state, filterData: filterData}
+  | SetLoading => {...state, filterLoading: true}
+  | SetFilterData(filterData) => {...state, filterData: filterData, filterLoading: false}
   }
 
 module CourseResourceInfoInfoQuery = %graphql(`
@@ -61,34 +56,32 @@ module CourseResourceInfoInfoQuery = %graphql(`
   `)
 
 let getCourseResources = (send, courseId, filters: array<filter>, state) => {
-  if state.loaded == Unloaded {
-    let resources =
-      filters
-      ->Js.Array2.map(config =>
-        switch config.filterType {
-        | DataLoad(resource) => [resource]
-        | _ => []
-        }
-      )
-      ->ArrayUtils.flattenV2
+  let resources =
+    filters
+    ->Js.Array2.map(config =>
+      switch config.filterType {
+      | DataLoad(resource) => [resource]
+      | _ => []
+      }
+    )
+    ->ArrayUtils.flattenV2
 
-    send(SetLoading)
-    CourseResourceInfoInfoQuery.make(~courseId, ~resources, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      send(
-        SetFilterData(
-          response["courseResourceInfo"]->Js.Array2.map(obj => {
-            resource: obj["resource"],
-            values: obj["values"],
-          }),
-        ),
-      )
+  send(SetLoading)
+  CourseResourceInfoInfoQuery.make(~courseId, ~resources, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    send(
+      SetFilterData(
+        response["courseResourceInfo"]->Js.Array2.map(obj => {
+          resource: obj["resource"],
+          values: obj["values"],
+        }),
+      ),
+    )
 
-      Js.Promise.resolve()
-    })
-    |> ignore
-  }
+    Js.Promise.resolve()
+  })
+  |> ignore
 }
 
 module Selectable = {
@@ -139,7 +132,6 @@ let computeInitialState = () => {
   filterInput: "",
   filterLoading: false,
   filterData: [],
-  loaded: Unloaded,
 }
 
 let selectedFromQueryParams = (params, filters) => {
@@ -175,19 +167,17 @@ let make = (~courseId, ~filters: array<filter>) => {
     None
   }, [courseId])
 
-  <>
-    <Multiselect
-      id="filter"
-      unselected={unselected(state, filters)}
-      selected={selectedFromQueryParams(params, filters)}
-      onSelect={onSelect(params)}
-      onDeselect={onDeselect(params)}
-      value=state.filterInput
-      onChange={filterInput => send(UpdateFilterInput(filterInput))}
-      placeholder={"Filter by foo foo foo"}
-      loading={state.filterLoading}
-      defaultOptions={unselected(state, filters)}
-      hint={"...or start typing to filter by student using their name or email address"}
-    />
-  </>
+  <Multiselect
+    id="filter"
+    unselected={unselected(state, filters)}
+    selected={selectedFromQueryParams(params, filters)}
+    onSelect={onSelect(params)}
+    onDeselect={onDeselect(params)}
+    value=state.filterInput
+    onChange={filterInput => send(UpdateFilterInput(filterInput))}
+    placeholder={"Filter by foo foo foo"}
+    loading={state.filterLoading}
+    defaultOptions={unselected(state, filters)}
+    hint={"...or start typing to filter by student using their name or email address"}
+  />
 }

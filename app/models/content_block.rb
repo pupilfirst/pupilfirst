@@ -36,8 +36,4 @@ class ContentBlock < ApplicationRecord
   def markdown?
     BLOCK_TYPE_MARKDOWN == block_type
   end
-
-  def self.markdown_curriculum_editor_max_length
-    Rails.application.secrets.markdown_curriculum_editor_max_length
-  end
 end

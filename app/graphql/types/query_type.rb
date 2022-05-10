@@ -207,5 +207,12 @@ module Types
       argument :course_id, ID, required: true
       argument :target_id, ID, required: false
     end
+
+    resolved_field :course_resource_info,
+                   [Types::CourseResourceInfoType],
+                   null: false do
+      argument :course_id, ID, required: true
+      argument :resources, [Types::CourseResourceType], required: true
+    end
   end
 end

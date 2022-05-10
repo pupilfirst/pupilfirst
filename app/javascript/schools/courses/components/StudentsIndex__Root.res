@@ -189,6 +189,23 @@ let studentsList = (students, state, filter) => {
   </div>
 }
 
+let makeFilters = () => {
+  [
+    CourseResourcesFilter.makeFilter("level", "Level", DataLoad(#Level), "yellow"),
+    CourseResourcesFilter.makeFilter("cohort", "Cohort", DataLoad(#Cohort), "green"),
+    CourseResourcesFilter.makeFilter(
+      "student_tags",
+      "Student Tags",
+      DataLoad(#StudentTag),
+      "indigo",
+    ),
+    CourseResourcesFilter.makeFilter("user_tags", "User Tags", DataLoad(#UserTag), "blue"),
+    CourseResourcesFilter.makeFilter("email", "Search by Email", Search, "gray"),
+    CourseResourcesFilter.makeFilter("name", "Search by Name", Search, "gray"),
+    CourseResourcesFilter.makeFilter("include", "Include", Custom("Inactive Students"), "orange"),
+  ]
+}
+
 @react.component
 let make = (~courseId, ~url) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
@@ -213,15 +230,7 @@ let make = (~courseId, ~url) => {
             <div className="border rounded-lg mx-auto bg-white ">
               <div>
                 <div className="flex w-full items-start p-4">
-                  <div
-                    className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-1 px-2 mt-1 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
-                    <input
-                      className="flex-grow appearance-none bg-transparent border-none text-gray-700 p-1.5 leading-snug focus:outline-none placeholder-gray-500"
-                      placeholder="Type name, tag or level"
-                      value=""
-                    />
-                  </div>
-                  {"sorter"->str}
+                  <CourseResourcesFilter courseId filters={makeFilters()} /> {"sorter"->str}
                 </div>
               </div>
             </div>

@@ -30,14 +30,14 @@ class Founder < ApplicationRecord
   scope :access_active,
         -> {
           (
-            joins(:cohort)
+            left_joins(:cohort)
               .where('cohorts.ends_at > ?', Time.zone.now)
-              .or(joins(:cohort).where(cohorts: { ends_at: nil }))
+              .or(left_joins(:cohort).where(cohorts: { ends_at: nil }))
               .where('access_ends_at > ?', Time.zone.now)
               .or(where(access_ends_at: nil))
           )
         }
-  scope :active, -> { not_dropped_out.access_active }
+  scope :active, -> { access_active.not_dropped_out }
 
   delegate :email,
            :name,

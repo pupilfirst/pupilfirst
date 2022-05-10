@@ -92,6 +92,10 @@ class Course < ApplicationRecord
     teams.active.joins(:tags).distinct('tags.name').pluck('tags.name')
   end
 
+  def student_tags
+    founders.access_active.joins(:tags).distinct('tags.name').pluck('tags.name')
+  end
+
   def user_tags
     users.joins(:tags).distinct('tags.name').pluck('tags.name')
   end

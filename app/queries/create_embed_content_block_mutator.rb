@@ -10,9 +10,12 @@ class CreateEmbedContentBlockMutator < ApplicationQuery
   def create_embed_content_block
     ContentBlock.transaction do
       embed_block = create_embed_block
-
-      #To:Do check for embed_block.embed_code.nil? && request_source is VimeoSource and run job only if true
-      Vimeo::ResolveEmbedCode.set(wait: 1.minute).perform_later(embed_block)
+      if embed_block.content['embed_code'].nil? &&
+           request_source == ContentBlock::REQUEST_SOURCE
+        Vimeo::ResolveEmbedCode
+          .set(wait: 5.minutes)
+          .perform_later(embed_block, 1)
+      end
       shift_content_blocks_below(embed_block)
       target_version.touch # rubocop:disable Rails/SkipsModelValidations
       json_attributes(embed_block)

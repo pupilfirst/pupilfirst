@@ -71,7 +71,7 @@ feature 'Course students list', js: true do
 
     # Check the last seen for the first student
     within("div[aria-label='Info of team #{team_1.name}']") do
-      expect(page).to have_text('Last seen: 3 days ago')
+      expect(page).to have_text('Last seen 3 days ago')
     end
 
     # Check levels of few teams

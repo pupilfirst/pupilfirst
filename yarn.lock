@@ -5150,10 +5150,10 @@ __metadata:
   resolution: "@pupilfirst/multiselect-dropdown@workspace:app/javascript/packages/multiselect-dropdown"
   dependencies:
     "@pupilfirst/pf-icon": ^1.1.0
-    "@rescript/react": ^0.10.2
+    "@rescript/react": ^0.10.3
     bs-webapi: ^0.19.1
     fuse.js: ^6.4.6
-    parcel-bundler: ^1.12.4
+    parcel-bundler: ^1.12.5
     react: ^16.8.6
     react-dom: ^16.8.6
     rescript: 9.1.4
@@ -5168,7 +5168,7 @@ __metadata:
     "@pupilfirst/pf-icon": ^1.1.0
     "@rescript/react": ^0.10.3
     bs-webapi: ^0.19.1
-    parcel-bundler: ^1.12.4
+    parcel-bundler: ^1.12.5
     react: ^16.8.6
     react-dom: ^16.8.6
     rescript: 9.1.4
@@ -5181,7 +5181,7 @@ __metadata:
   resolution: "@pupilfirst/pf-icon@workspace:app/javascript/packages/pf-icon"
   dependencies:
     "@rescript/react": ^0.10.3
-    parcel-bundler: ^1.12.4
+    parcel-bundler: ^1.12.5
     react: ^16.8.6
     react-dom: ^16.8.6
     rescript: 9.1.4
@@ -5189,14 +5189,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rails/ujs@npm:^6.1.4":
-  version: 6.1.4
-  resolution: "@rails/ujs@npm:6.1.4"
-  checksum: e6e7fc15a0cc96ac8a134330eac15270956b8ed13c1b5048d0b17020f33af9de91b76fbaef5f90cb95af9c207fb27477a0c97bb8b691ac9a075ce93e43b404af
+"@rails/ujs@npm:^6.1.6":
+  version: 6.1.6
+  resolution: "@rails/ujs@npm:6.1.6"
+  checksum: 7b811ea6a08c77335dbee60279b84bd245093b282dba53fc646a06d0e7fe20ac38eb4d73feab5845d5a25c6d1e9cd408ad3245baa962e63eb66bc8ca1dc67d37
   languageName: node
   linkType: hard
 
-"@rails/webpacker@npm:^5.4.0":
+"@rails/webpacker@npm:^5.4.3":
   version: 5.4.3
   resolution: "@rails/webpacker@npm:5.4.3"
   dependencies:
@@ -5242,7 +5242,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rescript/react@npm:^0.10.2, @rescript/react@npm:^0.10.3":
+"@rescript/react@npm:^0.10.3":
   version: 0.10.3
   resolution: "@rescript/react@npm:0.10.3"
   peerDependencies:
@@ -6235,7 +6235,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autosize@npm:^4.0.2":
+"autosize@npm:^4.0.4":
   version: 4.0.4
   resolution: "autosize@npm:4.0.4"
   checksum: da3a53a699ef8a4cfea8f0eea2303459b3986754278d506f60c08084b3a0a34bd6fa525becaf1edcffe4eb9517b67a6442aacf6b02aee1d406e5a794ec47d4ce
@@ -6279,6 +6279,21 @@ __metadata:
     "@babel/core": ^7.0.0
     webpack: ">=2"
   checksum: df5092ef9886bb49aacb7c58ac40ed0681ced031c8d91e49d680cedace2aa1703390a31fbe7c0e409f739836e911c5c991119133d90d9289f681c0a8ff2447a1
+  languageName: node
+  linkType: hard
+
+"babel-loader@npm:^8.2.5":
+  version: 8.2.5
+  resolution: "babel-loader@npm:8.2.5"
+  dependencies:
+    find-cache-dir: ^3.3.1
+    loader-utils: ^2.0.0
+    make-dir: ^3.1.0
+    schema-utils: ^2.6.5
+  peerDependencies:
+    "@babel/core": ^7.0.0
+    webpack: ">=2"
+  checksum: a6605557885eabbc3250412405f2c63ca87287a95a439c643fdb47d5ea3d5326f72e43ab97be070316998cb685d5dfbc70927ce1abe8be7a6a4f5919287773fb
   languageName: node
   linkType: hard
 
@@ -8917,10 +8932,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:^2.3.3":
-  version: 2.3.3
-  resolution: "dompurify@npm:2.3.3"
-  checksum: 947e3661681bd183aae1cd08f991b14c6aa41fd188f6c801c5e916c2dc4575bbefbaa121ed06dbe0cb0f595545527d588a44b53bfc35d1cbb898c214dc0d7930
+"dompurify@npm:^2.3.6":
+  version: 2.3.6
+  resolution: "dompurify@npm:2.3.6"
+  checksum: 4b2bbf6bc68ebd776aec4a533cef74a5ae30391eed528f3df748af71da318afdc298b6f40449bef093b7454ffd2ae82656636560474de5a3b34316b762c85b12
   languageName: node
   linkType: hard
 
@@ -13677,13 +13692,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-forge@npm:^0.7.1":
-  version: 0.7.6
-  resolution: "node-forge@npm:0.7.6"
-  checksum: 661d420847da736d82f3aad0e8ad2b5fceddc4bd5f4065b923c566e9fd68e568509677374f101c1f4321c541dcbef0864516a2a55ff03a9236d0895195dfa7aa
-  languageName: node
-  linkType: hard
-
 "node-gyp@npm:^5.0.2":
   version: 5.1.1
   resolution: "node-gyp@npm:5.1.1"
@@ -14558,9 +14566,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"parcel-bundler@npm:^1.12.4":
-  version: 1.12.4
-  resolution: "parcel-bundler@npm:1.12.4"
+"parcel-bundler@npm:^1.12.5":
+  version: 1.12.5
+  resolution: "parcel-bundler@npm:1.12.5"
   dependencies:
     "@babel/code-frame": ^7.0.0
     "@babel/core": ^7.4.4
@@ -14605,7 +14613,7 @@ __metadata:
     json5: ^1.0.1
     micromatch: ^3.0.4
     mkdirp: ^0.5.1
-    node-forge: ^0.7.1
+    node-forge: ^0.10.0
     node-libs-browser: ^2.0.0
     opn: ^5.1.0
     postcss: ^7.0.11
@@ -14623,7 +14631,7 @@ __metadata:
     ws: ^5.1.1
   bin:
     parcel: bin/cli.js
-  checksum: cda50559b14a4c8ec236dcbf8e1ff4b16a57e9f7488fdebef842c425ba9307110d2c2d8069eae307f50c151de05134bf8dfddbeb9ed36e886e044e5d8aceb90d
+  checksum: 1abb3776b26ddd5e9e09026785e43600c0bf1c56fdde8d61a6bc93cb9a37d1327517b7a2db1533e9ef0282deb630087949e922b2d1a51146aa1fa8c11f44fbfe
   languageName: node
   linkType: hard
 
@@ -16376,13 +16384,13 @@ __metadata:
     "@jeff-tian/markdown-it-katex": ^2.1.0
     "@pnotify/mobile": ^5.2.0
     "@prettier/plugin-ruby": ^1.6.1
-    "@rails/ujs": ^6.1.4
-    "@rails/webpacker": ^5.4.0
+    "@rails/ujs": ^6.1.6
+    "@rails/webpacker": ^5.4.3
     "@rescript/react": ^0.10.3
     animate.css: 3.7.2
     autoprefixer: ^10.3.4
-    autosize: ^4.0.2
-    babel-loader: ^8.2.2
+    autosize: ^4.0.4
+    babel-loader: ^8.2.5
     babel-plugin-prismjs: ^2.1.0
     babel-plugin-react-css-modules: ^5.2.6
     babel-plugin-transform-react-remove-prop-types: ^0.4.24
@@ -16393,7 +16401,7 @@ __metadata:
     cloc: ^2.8.0
     date-fns: ^2.24.0
     date-fns-tz: ^1.1.6
-    dompurify: ^2.3.3
+    dompurify: ^2.3.6
     dotenv: ^10.0.0
     file-saver: ^2.0.5
     fuse.js: ^6.4.6
@@ -16420,15 +16428,15 @@ __metadata:
     react-datepicker: ^4.2.1
     react-dom: ^16.8.6
     react-helmet: ^6.1.0
-    react_ujs: ^2.6.1
+    react_ujs: ^2.6.2
     rescript: 9.1.4
     stylelint: ^13.13.1
     stylelint-config-recommended: ^5.0.0
-    tailwindcss: ^2.2.15
-    tus-js-client: ^2.3.0
+    tailwindcss: ^2.2.19
+    tus-js-client: ^2.3.1
     webpack: 4.46.0
-    webpack-cli: ^3
-    webpack-dev-server: ^3
+    webpack-cli: ^3.3.12
+    webpack-dev-server: ^3.11.3
     webpack-merge: ^5.8.0
   languageName: unknown
   linkType: soft
@@ -16755,6 +16763,15 @@ __metadata:
   dependencies:
     react_ujs: ^2.6.0
   checksum: a9416977fb443908aeb97618c4d8e916761b2623f4951ca684989b20e5083e0b4191902793feea35121a219e4327966f6e08667da6e7f8ea5096634481e72c46
+  languageName: node
+  linkType: hard
+
+"react_ujs@npm:^2.6.2":
+  version: 2.6.2
+  resolution: "react_ujs@npm:2.6.2"
+  dependencies:
+    react_ujs: ^2.6.1
+  checksum: 4c96cbbc4445174179dfbea89b29a9dc3f5915cb96afdec1ce1d1eb5a7f4b2eb2db6d39fa275658f8d2f598e00e3f8411614ac02250381a51e9b52b44bd464fe
   languageName: node
   linkType: hard
 
@@ -18914,9 +18931,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^2.2.15":
-  version: 2.2.15
-  resolution: "tailwindcss@npm:2.2.15"
+"tailwindcss@npm:^2.2.19":
+  version: 2.2.19
+  resolution: "tailwindcss@npm:2.2.19"
   dependencies:
     arg: ^5.0.1
     bytes: ^3.0.0
@@ -18956,7 +18973,7 @@ __metadata:
   bin:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
-  checksum: a4e477b0ece0af289be4cef6a682ee0f23eefe2be7a2a6ff0f4cce25665d3f79589ad4ec928b81f3066ae8a00881a6b4178af715946dced6d588bc4c845c6429
+  checksum: 660e8086fa2758f273b7ec87067c041185454374c5c916c236f9691b1c60c48166b2556b6327b3d912f018f48712105fa979b7f717b2db3111ea0850059a2b62
   languageName: node
   linkType: hard
 
@@ -19324,9 +19341,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tus-js-client@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "tus-js-client@npm:2.3.0"
+"tus-js-client@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "tus-js-client@npm:2.3.1"
   dependencies:
     buffer-from: ^0.1.1
     combine-errors: ^3.0.3
@@ -19334,8 +19351,8 @@ __metadata:
     js-base64: ^2.6.1
     lodash.throttle: ^4.1.1
     proper-lockfile: ^2.0.1
-    url-parse: ^1.4.3
-  checksum: 7ae23e92a771418a8117440f56c143d10bbfb5236ab1ab2c37ba65122375008e72f930cee7b685254ca81dbc470daa542635dd861b7105ca9997e8b37b3c02ad
+    url-parse: ^1.5.7
+  checksum: 684446bcc3c625e7aed5330f7b42de97ef515e07f7e7dcecd2eac056f9e93c6b0276ef02ac3662e439101f0ce0902ccb96a246262ee1d8e86f3d4027a7aed6dd
   languageName: node
   linkType: hard
 
@@ -19707,7 +19724,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url-parse@npm:^1.4.3, url-parse@npm:^1.5.1":
+"url-parse@npm:^1.4.3, url-parse@npm:^1.5.1, url-parse@npm:^1.5.7":
   version: 1.5.10
   resolution: "url-parse@npm:1.5.10"
   dependencies:
@@ -20009,7 +20026,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-cli@npm:^3, webpack-cli@npm:^3.3.12":
+"webpack-cli@npm:^3.3.12":
   version: 3.3.12
   resolution: "webpack-cli@npm:3.3.12"
   dependencies:
@@ -20047,7 +20064,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:^3":
+"webpack-dev-server@npm:^3.11.3":
   version: 3.11.3
   resolution: "webpack-dev-server@npm:3.11.3"
   dependencies:

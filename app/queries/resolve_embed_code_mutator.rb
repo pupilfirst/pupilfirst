@@ -5,21 +5,9 @@ class ResolveEmbedCodeMutator < ApplicationQuery
   validate :must_be_embed_type_block
 
   def resolve
-    if resolution_required?
-      new_content = content_block.content.dup
-      new_content['embed_code'] = embed_code
-      new_content['last_resolved_at'] = Time.zone.now
-
-      # Save the updated content.
-      content_block.update!(content: new_content)
-
-      embed_code
-    else
-      content_block.content['embed_code']
-    end
+    #To:Do Change the implementation to use new mutator schema and remove this file
+    ContentBlocks::ResolveEmbededCode.new(content_block).execute
   end
-
-  private
 
   def must_be_embed_type_block
     if content_block.present? &&
@@ -27,32 +15,7 @@ class ResolveEmbedCodeMutator < ApplicationQuery
       return
     end
 
-    errors.add(:base, 'Can only resolve embed-type content blocks')
-  end
-
-  def embed_code
-    @embed_code ||=
-      begin
-        ::Oembed::Resolver.new(origin_url).embed_code
-      rescue ::Oembed::Resolver::ProviderNotSupported
-        nil
-      end
-  end
-
-  def resolution_required?
-    last_resolved_at = content_block&.content['last_resolved_at'] # rubocop:disable Lint/SafeNavigationChain
-
-    return true if last_resolved_at.blank?
-
-    Time.zone.parse(last_resolved_at) < 1.minute.ago
-  end
-
-  def origin_url
-    url = content_block&.content['url'] # rubocop:disable Lint/SafeNavigationChain
-
-    return url if url.present?
-
-    raise "Unable to read URL for embed content block #{content_block_id}"
+    errors[:base] << 'Can only resolve embed-type content blocks'
   end
 
   def content_block

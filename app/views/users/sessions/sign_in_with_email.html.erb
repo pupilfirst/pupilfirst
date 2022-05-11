@@ -5,13 +5,13 @@
 <div class="bg-gray-100 sm:py-10">
   <div class="container mx-auto max-w-lg px-4 py-6 sm:py-8 bg-white rounded-lg shadow">
     <div class="max-w-sm mx-auto text-lg sm:text-2xl font-bold text-center">
-      <%= t("sessions.sign_in_with_email.email") %>
+      <%= t("views.users.sessions.sign_in_with_email.email") %>
     </div>
     <%= form_with(url: user_session_path, method: :post, class: 'pt-4 pb-5 md:px-9 items-center max-w-sm mx-auto', local: true) do |f| %>
       <div>
         <label
           class="inline-block tracking-wide text-gray-900 text-xs font-semibold" for="email">
-          <%= t("sessions.sign_in_with_email.email_address") %>
+          <%= t("views.users.sessions.sign_in_with_email.email_address") %>
         </label>
         <%= f.email_field :email, maxlength: 256, placeholder: 'john@example.com', required: true, class: 'appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400', tabindex: 1 %>
       </div>
@@ -20,14 +20,14 @@
           <label
             class="inline-block tracking-wide text-gray-900 text-xs font-semibold"
             for="password">
-            <%= t("sessions.sign_in_with_email.password") %>
+            <%= t("views.users.sessions.sign_in_with_email.password") %>
           </label>
           <a
             href="<%= request_password_reset_path %>"
             class="text-primary-400 text-center text-xs font-semibold hover:text-primary-600 cursor-pointer
           whitespace-nowrap hover:underline focus:underline inline"
             tabindex=6>
-            <%= t("sessions.sign_in_with_email.password_new") %>
+            <%= t("views.users.sessions.sign_in_with_email.password_new") %>
           </a>
         </div>
         <%= f.password_field :password, placeholder: t("views.sign_in_with_email.type_password"), class: 'appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400', tabindex: 2 %>
@@ -39,7 +39,7 @@
           <label
             class="block pl-2 font-semibold cursor-pointer text-xs select-none whitespace-nowrap"
             for="shared_device">
-            <%= t("sessions.sign_in_with_email.shared") %>
+            <%= t("views.users.sessions.sign_in_with_email.shared") %>
           </label>
         </div>
       </div>
@@ -62,7 +62,7 @@
         %>
       <% end %>
       <div class="mt-4">
-        <%= f.submit t("sessions.sign_in_with_email.with_password"), name: 'password_sign_in', data: { disable: true }, class: "btn btn-success btn-large text-center w-full", tabindex: 4 %>
+        <%= f.submit t("views.users.sessions.sign_in_with_email.with_password"), name: 'password_sign_in', data: { disable: true }, class: "btn btn-success btn-large text-center w-full", tabindex: 4 %>
       </div>
       <div class="mt-6">
         <div class="relative">
@@ -75,10 +75,10 @@
             </span>
           </div>
         </div>
-      <p class="mt-4 font-semibold text-center"><%= t("sessions.sign_in_with_email.password_free") %></p>
-      <p class="mt-2 text-center text-sm text-gray-800"><%= t("sessions.sign_in_with_email.magic_link") %></p>
+      <p class="mt-4 font-semibold text-center"><%= t("views.users.sessions.sign_in_with_email.password_free") %></p>
+      <p class="mt-2 text-center text-sm text-gray-800"><%= t("views.users.sessions.sign_in_with_email.magic_link") %></p>
       <div class="mt-4">
-        <%= f.submit t("sessions.sign_in_with_email.email_me"), name: 'email_link', data: { disable: true }, class: "btn btn-primary-ghost btn-large text-center w-full", tabindex: 5 %>
+        <%= f.submit t("views.users.sessions.sign_in_with_email.email_me"), name: 'email_link', data: { disable: true }, class: "btn btn-primary-ghost btn-large text-center w-full", tabindex: 5 %>
       </div>
     <% end %>
     <div class="max-w-sm mx-auto flex flex-col justify-items-center mt-6">
@@ -86,7 +86,7 @@
          class="w-full p-3 text-primary-500 leading-snug rounded-lg underline cursor-pointer text-sm text-center
       font-semibold hover:bg-gray-200 focus:bg-gray-200 focus:outline-none"
          tabindex=6>
-        <%= t("sessions.sign_in_with_email.oauth") %>
+        <%= t("views.users.sessions.sign_in_with_email.oauth") %>
       </a>
     </div>
   </div>

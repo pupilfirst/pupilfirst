@@ -13,7 +13,7 @@
     <div
       class="max-w-sm mx-auto text-lg sm:text-2xl font-bold text-center mt-4"
     >
-      <%= t('sessions.new.heading', school_name: presenter.school_name) %>
+      <%= t('views.users.sessions.new.heading', school_name: presenter.school_name) %>
     </div>
     <% if presenter.oauth_host.present? %>
       <div class="flex flex-col pb-5 md:px-9 items-center max-w-sm mx-auto">
@@ -39,7 +39,7 @@
           class="federated-signin-in__seperator block relative z-10 text-center text-xs text-gray-600 font-semibold"
         >
           <span class="bg-white px-2">
-            <%= t('sessions.new.sign_in_options_separator') %>
+            <%= t('views.users.sessions.new.sign_in_options_separator') %>
           </span>
         </span>
       <% end %>

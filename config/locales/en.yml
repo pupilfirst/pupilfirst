@@ -1891,6 +1891,13 @@ en:
       dashboard: Dashboard
     Posts__Versions:
       title: Versions | Post
+    User__SessionsNew:
+      continue_as_developer: Continue as Developer
+      continue_with_email_link: Continue with email
+      continue_with_facebook: Continue with Facebook
+      continue_with_github: Continue with Github
+      continue_with_google: Continue with Google
+      page_title: Sign In
   queries:
     delete_certificate_mutator:
       issued_error: This certificate has been issued to one or more students - it cannot be deleted.
@@ -1900,50 +1907,6 @@ en:
   services:
     team_up_service:
       must_be_on_the_same_level: Students must belong to the same level for teaming up
-  sessions:
-    create:
-      invalid_credentials: The supplied email address and password do not match. Please check your credentials and try again.
-    email_sent:
-      image_alt: An email flying into to your inbox
-      magic_link:
-        description: It should reach you in less than a minute. Click the link in the email, and you'll be signed in.
-        heading: We've sent you a magic link!
-        notice: This link will work only once.
-        page_title: Magic link is on its way!
-      reset_password_link:
-        description: It should reach you in less than a minute. Click the link in the email, and you'll be asked to set a new password.
-        heading: We've sent you a link to reset your password!
-        notice: This link will work only once.
-        page_title: Confirm your request
-    new:
-      continue_as_developer: Continue as Developer
-      continue_with_email_link: Continue with email
-      continue_with_facebook: Continue with Facebook
-      continue_with_github: Continue with Github
-      continue_with_google: Continue with Google
-      heading: Sign in to %{school_name}
-      page_title: Sign In
-      sign_in_options_separator: OR
-    request_password_reset:
-      cancel_link: Sign in with Google, Facebook, or Github
-      email_label: Email
-      email_placeholder: john@example.com
-      heading: Reset your password
-      image_alt: A student holding a giant key with a reset symbol on it
-      page_title: Reset password
-      submit_button: Request password reset
-      subtitle: Enter your email for password recovery.
-    sign_in_with_email:
-      email: Continue with email
-      email_address: Email Address
-      email_me: Email me a link to sign in
-      magic_link: We can email you a magic link so you can sign in without having to type your password.
-      oauth: Sign in with Google, Facebook, or Github
-      password: Password
-      password_free: Password-free sign in
-      password_new: Reset Your Password
-      shared: Are you using a shared device?
-      with_password: Sign in with password.
   shared:
     _no: "No"
     _yes: "Yes"
@@ -2246,3 +2209,39 @@ en:
       oauth:
         details: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
         invalid_request: Your browser made an invalid request.
+      sessions:
+        sign_in_with_email:
+          email: Continue with email
+          email_address: Email Address
+          email_me: Email me a link to sign in
+          magic_link: We can email you a magic link so you can sign in without having to type your password.
+          oauth: Sign in with Google, Facebook, or Github
+          password: Password
+          password_free: Password-free sign in
+          password_new: Reset Your Password
+          shared: Are you using a shared device?
+          with_password: Sign in with password.
+        request_password_reset:
+          cancel_link: Sign in with Google, Facebook, or Github
+          email_label: Email
+          email_placeholder: john@example.com
+          heading: Reset your password
+          image_alt: A student holding a giant key with a reset symbol on it
+          page_title: Reset password
+          submit_button: Request password reset
+          subtitle: Enter your email for password recovery.
+        new:
+          heading: Sign in to %{school_name}
+          sign_in_options_separator: OR
+        email_sent:
+          image_alt: An email flying into to your inbox
+          magic_link:
+            description: It should reach you in less than a minute. Click the link in the email, and you'll be signed in.
+            heading: We've sent you a magic link!
+            notice: This link will work only once.
+            page_title: Magic link is on its way!
+          reset_password_link:
+            description: It should reach you in less than a minute. Click the link in the email, and you'll be asked to set a new password.
+            heading: We've sent you a link to reset your password!
+            notice: This link will work only once.
+            page_title: Confirm your request

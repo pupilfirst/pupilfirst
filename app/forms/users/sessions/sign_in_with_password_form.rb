@@ -33,7 +33,10 @@ module Users
       def check_credentials
         return if user&.valid_password?(password)
 
-        errors.add(:base, I18n.t('sessions.create.invalid_credentials'))
+        errors.add(
+          :base,
+          'The supplied email address and password do not match. Please check your credentials and try again.'
+        )
       end
     end
   end

@@ -4,6 +4,7 @@ import data from "@emoji-mart/data";
 
 export default function EmojiPicker(props) {
   const ref = useRef();
+  const wrapperRef = useRef()
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     new Picker({
@@ -11,15 +12,33 @@ export default function EmojiPicker(props) {
       data,
       ref,
       theme: "light",
-      onSelect: console.log,
-      onClick: console.log,
-      onSkinChange: console.log,
       onEmojiSelect: props?.onChange,
     });
+
+    const handleClickOutside = (event) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    };
+
+    const handleEscKey = (e) => {
+      if (e.key == 'Escape' || e.key == 'Esc' || e?.keyCode == 27) {
+        setIsOpen(false)
+      }
+    };
+
+    document.addEventListener('keyup', handleEscKey)
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+      document.removeEventListener('keyup', handleEscKey, true);
+
+    };
+
   }, []);
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block" ref={wrapperRef}>
       <button
         aria-label={props?.title}
         title={props?.title}

@@ -15,7 +15,7 @@ class ResolveEmbedCodeMutator < ApplicationQuery
       return
     end
 
-    errors[:base] << 'Can only resolve embed-type content blocks'
+    errors.add(:base, 'Can only resolve embed-type content blocks')
   end
 
   def content_block

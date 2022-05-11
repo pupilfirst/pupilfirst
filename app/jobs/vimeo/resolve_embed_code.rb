@@ -3,9 +3,9 @@ module Vimeo
     queue_as :default
 
     def perform(embed_block, attempt)
-      #To:Do get the attempt count from env
       embed_code = ContentBlocks::ResolveEmbededCode.new(embed_block).execute
-      if embed_code.nil? && attempt <= 4
+      max_attempts = Rails.application.secrets.vimeo_embed_max_retry_attempts
+      if embed_code.nil? && attempt <= max_attempts
         Vimeo::ResolveEmbedCode
           .set(wait: (5 * attempt).minutes)
           .perform_later(embed_block, attempt + 1)

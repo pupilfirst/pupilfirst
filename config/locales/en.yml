@@ -1,8 +1,4 @@
 en:
-  communities:
-    new_topic: New Topic
-    note: " Coaches in your school have access to all communities."
-    welcome: Welcome to the
   components:
     Api:
       error_notification_title: An unexpected error occurred
@@ -1631,95 +1627,15 @@ en:
         link_expired: That one-time link has expired, or is invalid. Please try signing in again.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
-  courses:
-    apply:
-      apply_button: Apply
-      apply_now: Apply Now
-      email_label: Email
-      email_placeholder: john@example.com
-      heading: Enroll in %{course_name} course
-      name_label: Name
-      name_placeholder: John Doe
-      page_title: Enroll in %{course_name}
-    enroll: Enroll in
-    leaderboard:
-      active_students: Active Students
-      change: Change
-      inactive_students: Inactive Students
-      level: Level
-      new_new: New
-      no_entries: The leaderboard doesn't have any entries for this period.
-      note_html: This leaderboard shows students <strong>who have improved the most</strong> compared to the previous leaderboard.
-      rank: Rank
-      score: Score
-      student: Student
-      page_title: Enroll in %{course_name}
-    show:
-      continue_course: Continue Course
-      preview_course: Preview Course
-  dashboard:
-    dashboard:
-      tour:
-        final_message: That's it for now. If you have any doubts, don't hesitate to reach out to us for help.<br/><br/>Have fun!
-        intro: Welcome to your personal dashboard! Your team's journey through this program will be showcased here.
-        level_select: The program is split into multiple levels, containing targets. New levels are unlocked when you complete <em>milestone</em> targets in each level.<br/><br/>You can go back to complete optional targets in previous levels, and you can also check out targets in future levels, but you can't submit work for those until they are unlocked.
-        target: The target pane will have the name of the target and its completion status. On clicking the target, you will get detailed information on the target, the status and the target submission button.
-        target_group: Your target groups will have all the targets listed along with its completion status.
-        target_status: This indicates the present status of the target.
-  enrollment:
-    activate: Activate your account and sign in
-    hello: Hello
-    to_activate: To activate your %{school_name} account, and enroll to the %{course_name} course, please verify your email address. Clicking on this <strong>one-time link</strong> will verify your email-address and confirm that you wish to create an account at %{school_name}.
-    verify: Use this <strong>one-time link</strong> to verify your email address and sign into %{school_name}!
-    welcome_to: Welcome to
   errors:
-    internal:
-      details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
-      went_wrong: We're sorry, but something went wrong.
     messages:
-      content_type_invalid: has an invalid content type
-      limit_out_of_range: total number is out of range
-    not_acceptable:
-      details: It looks like your browser requested a response in a format that our server cannot fulfil. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
-      invalid_format: Your browser requested an invalid format.
-    not_found:
-      mistyped_moved: You may have mistyped the address, or the page may have moved.
-      not_exist: The page you were looking for doesn't exist!
-      try_homepage: Try heading back to our homepage?
-    service_unavailable:
-      too_long: This page took too long to load.
-      try_reloading: Could you please try reloading this page?
-    unprocessable_entity:
-      invalid_request: Your browser made an invalid request.
-      wasnt_valid: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
-  faculty:
-    coaches_at: Coaches at
-  footer:
-    contact: Contact
-    logo: Logo of
-    privacy_policy: Privacy Policy
-    reach_us: Reach us at
-    sitemap: Sitemap
-    social: Social
-    support: Contact Support
-    terms_conditions: Terms & Conditions
+        content_type_invalid: has an invalid content type
+        limit_out_of_range: total number is out of range
   graphql:
     concerns:
       validate_submission_gradable:
         owners_should_be_active_error: Cannot update inactive student submissions.
         submission_should_be_live: Such a submission does not exist, or it has been archived.
-  help:
-    help: Help
-  home:
-    index:
-      course_status:
-        access_ended: Review course content
-        active: Continue course
-        dropped_out: Dropped out
-      featured_courses_heading: Featured Courses
-      get_started: Get started
-      learn_more: Learn more
-      welcome_prefix: Hello, welcome to
   jobs:
     courses:
       clone_course:
@@ -1763,8 +1679,6 @@ en:
           needs_improvement: "Your team <%{startup_url}|%{startup_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
           not_accepted: The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your team <%{startup_url}|%{startup_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback
           verified: "Your team <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
-  link_fallback:
-    link_fallback: "If you're unable to click the link above, please copy and paste the following link into your browser's address bar:"
   mailers:
     applicant:
       enrollment_verification_subject: Verify Your Email Address
@@ -1941,22 +1855,6 @@ en:
       topic_updated_notification: Topic updated successfully!
     update_user:
       profile_saved_notification: Profile updated successfully!
-  navbar:
-    admin: Admin
-    coaches: Coaches
-    dashboard: Dashboard
-    home: Home
-  offline:
-    heading: You are offline!
-    message_html: It seems there is a problem with your connection.<br/>Please check your network status.
-    title: You are offline
-  posts:
-    back_to_post: Back to Post
-    created_by: Created by
-    current_version: Current Version
-    edit_history: Post Edit History
-    edited_by: Edited by
-    reason: Reason
   presenters:
     Communities__NewTopic:
       community: Community
@@ -1979,6 +1877,14 @@ en:
       review_dashboard: Review Dashboard
     Courses__Students:
       students_in_course: Students In Course
+    Layouts__StudentsTopNav:
+      admin: Admin
+      coaches: Coaches
+      dashboard: Dashboard
+      home: Home
+    Layouts__Footer:
+      dashboard: Dashboard
+      home: Home
     Layouts__AppRouter:
       admin: Admin
       coaches: Coaches
@@ -2128,12 +2034,6 @@ en:
     version: Version
     versions: Versions
     view: View
-  users:
-    delete_account:
-      edit_user: Edit User
-    oauth:
-      details: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
-      invalid_request: Your browser made an invalid request.
   views:
     admin:
       coaches: Coaches
@@ -2143,6 +2043,29 @@ en:
       overview: Overview
       students: Students
       submissions_reviewed: submissions reviewed
+    offline:
+      heading: You are offline!
+      message_html: It seems there is a problem with your connection.<br/>Please check your network status.
+      title: You are offline
+    footer:
+      contact: Contact
+      logo: Logo of
+      privacy_policy: Privacy Policy
+      reach_us: Reach us at
+      sitemap: Sitemap
+      social: Social
+      support: Contact Support
+      terms_conditions: Terms & Conditions
+    communities:
+      new_topic: New Topic
+      note: " Coaches in your school have access to all communities."
+      welcome: Welcome to the
+    link_fallback:
+      link_fallback: "If you're unable to click the link above, please copy and paste the following link into your browser's address bar:"
+    faculty:
+      coaches_at: Coaches at
+    help:
+      help: Help
     admins:
       title: Admins
     applicants:
@@ -2257,3 +2180,69 @@ en:
       title: Students
     timeline_events:
       submitted_on: Submitted on
+    courses:
+      apply:
+        apply_button: Apply
+        apply_now: Apply Now
+        email_label: Email
+        email_placeholder: john@example.com
+        heading: Enroll in %{course_name} course
+        name_label: Name
+        name_placeholder: John Doe
+        page_title: Enroll in %{course_name}
+      enroll: Enroll in
+      leaderboard:
+        active_students: Active Students
+        change: Change
+        inactive_students: Inactive Students
+        level: Level
+        new_new: New
+        no_entries: The leaderboard doesn't have any entries for this period.
+        note_html: This leaderboard shows students <strong>who have improved the most</strong> compared to the previous leaderboard.
+        rank: Rank
+        score: Score
+        student: Student
+        page_title: Enroll in %{course_name}
+      show:
+        continue_course: Continue Course
+        preview_course: Preview Course
+    home:
+      index:
+        course_status:
+          access_ended: Review course content
+          active: Continue course
+          dropped_out: Dropped out
+        featured_courses_heading: Featured Courses
+        get_started: Get started
+        learn_more: Learn more
+        welcome_prefix: Hello, welcome to
+    errors:
+      internal:
+        details: Our server seem to have hit a snag while trying to process your request. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+        went_wrong: We're sorry, but something went wrong.
+      not_acceptable:
+        details: It looks like your browser requested a response in a format that our server cannot fulfil. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+        invalid_format: Your browser requested an invalid format.
+      not_found:
+        mistyped_moved: You may have mistyped the address, or the page may have moved.
+        not_exist: The page you were looking for doesn't exist!
+        try_homepage: Try heading back to our homepage?
+      service_unavailable:
+        too_long: This page took too long to load.
+        try_reloading: Could you please try reloading this page?
+      unprocessable_entity:
+        invalid_request: Your browser made an invalid request.
+        wasnt_valid: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+    posts:
+      back_to_post: Back to Post
+      created_by: Created by
+      current_version: Current Version
+      edit_history: Post Edit History
+      edited_by: Edited by
+      reason: Reason
+    users:
+      delete_account:
+        edit_user: Edit User
+      oauth:
+        details: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+        invalid_request: Your browser made an invalid request.

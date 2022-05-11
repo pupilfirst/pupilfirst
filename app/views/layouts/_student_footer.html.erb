@@ -7,7 +7,7 @@
     <div class="pt-2 w-full md:w-2/5">
       <div class="flex flex-col items-left md:pr-5 text-center md:text-left">
         <span class="uppercase font-bold text-xs py-2 tracking-wide"
-          ><%= t('footer.sitemap') %></span
+          ><%= t('views.footer.sitemap') %></span
         >
 
         <div class="w-full flex flex-row flex-wrap text-xs font-semibold">
@@ -32,7 +32,7 @@
         <p
           class="uppercase font-bold text-xs py-2 tracking-wide text-center md:text-left"
         >
-          <%= t('footer.social') %>
+          <%= t('views.footer.social') %>
         </p>
         <div class="py-2 flex flex-wrap justify-center md:justify-start">
           <% presenter.social_links.each do |social_link| %>
@@ -53,7 +53,7 @@
     <div class="pt-5 md:pt-2 w-full md:w-1/5 text-center md:text-left">
       <div class="text-xs">
         <% if presenter.address.present? %>
-          <p class="uppercase font-bold text-xs py-2 tracking-wide"><%= t('footer.contact') %></p>
+          <p class="uppercase font-bold text-xs py-2 tracking-wide"><%= t('views.footer.contact') %></p>
 
           <address class="font-semibold leading-normal not-italic">
             <%= presenter.address.html_safe %>
@@ -62,7 +62,7 @@
         <div class="text-xs py-2">
           <% if presenter.email_address.present? %>
             <p>
-              <%= t('footer.reach_us') %>
+              <%= t('views.footer.reach_us') %>
               <strong>
                 <!--email_off--><%= mail_to presenter.email_address, presenter.email_address, class: "font-bold no-underline pointer-cursor focus:outline-none focus:text-primary-500" %><!--/email_off-->
               </strong>.
@@ -84,7 +84,7 @@
               <img
                 class="w-27"
                 src="<%= presenter.logo_url %>"
-                alt="t('footer.logo') <%= presenter.school_name %>"
+                alt="t('views.footer.logo') <%= presenter.school_name %>"
               />
             <% else %>
               <span><%= presenter.school_name %></span>
@@ -94,10 +94,10 @@
 
         <div class="w-3/4 md:w-2/5 text-right text-xs">
           <% if presenter.privacy_policy? %>
-            <%= link_to t("footer.privacy_policy"), agreement_path(agreement_type: 'privacy-policy'), class: "cursor-pointer mr-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
+            <%= link_to t("views.footer.privacy_policy"), agreement_path(agreement_type: 'privacy-policy'), class: "cursor-pointer mr-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
           <% end %>
           <% if presenter.terms_and_conditions? %>
-            <%= link_to t("footer.terms_conditions"), agreement_path(agreement_type: 'terms-and-conditions'), class: "cursor-pointer md:mr-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
+            <%= link_to t("views.footer.terms_conditions"), agreement_path(agreement_type: 'terms-and-conditions'), class: "cursor-pointer md:mr-3 hover:text-primary-500 focus:outline-none focus:text-primary-500" %>
           <% end %>
 
           <span class="text-gray-600 mt-1 md:mt-0 block md:inline-block">

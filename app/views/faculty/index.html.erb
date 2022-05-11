@@ -2,7 +2,7 @@
 
 <% content_for(:head) do %>
   <title><%= t('shared.coaches')%> | <%= current_school.name %></title>
-  <meta property="og:title" content="<%= t('faculty.coaches_at') %> <%= current_school.name %>"/>
+  <meta property="og:title" content="<%= t('views.faculty.coaches_at') %> <%= current_school.name %>"/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="<%= coaches_index_url %>"/>
   <%= stylesheet_pack_tag 'CoachesIndexPack', media: 'all' %>

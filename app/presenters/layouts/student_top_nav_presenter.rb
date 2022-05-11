@@ -52,11 +52,16 @@ module Layouts
 
     def admin_link
       if current_school.present? && view.policy(current_school).show?
-        [{ title: I18n.t("navbar.admin"), url: view.school_path }]
+        [
+          {
+            title: I18n.t('presenters.Layouts__StudentsTopNav.admin'),
+            url: view.school_path
+          }
+        ]
       elsif current_user.present? && course_authors.any?
         [
           {
-            title: I18n.t("navbar.admin"),
+            title: I18n.t('presenters.Layouts__StudentsTopNav.admin'),
             url: view.curriculum_school_course_path(course_authors.first.course)
           }
         ]
@@ -66,7 +71,16 @@ module Layouts
     end
 
     def dashboard_link
-      current_user.present? ? [{ title: I18n.t("navbar.dashboard"), url: '/dashboard' }] : []
+      if current_user.present?
+        [
+          {
+            title: I18n.t('presenters.Layouts__StudentsTopNav.dashboard'),
+            url: '/dashboard'
+          }
+        ]
+      else
+        []
+      end
     end
 
     def course_authors
@@ -86,7 +100,12 @@ module Layouts
 
     def coaches_link
       if current_school.users.joins(:faculty).exists?(faculty: { public: true })
-        [{ title: I18n.t("navbar.coaches"), url: '/coaches' }]
+        [
+          {
+            title: I18n.t('presenters.Layouts__StudentsTopNav.coaches'),
+            url: '/coaches'
+          }
+        ]
       else
         []
       end

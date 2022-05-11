@@ -319,7 +319,7 @@ let make = (
     </DisablingCover>
     <div className="mt-3 mb-3 text-xs">
       <span className="leading-normal">
-        <strong> {ts("note") |> str} </strong> {t("note") |> str}
+        <strong> {t("note") |> str} </strong> {t("note") |> str}
       </span>
     </div>
   </div>

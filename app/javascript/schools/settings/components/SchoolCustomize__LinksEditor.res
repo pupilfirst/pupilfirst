@@ -72,8 +72,109 @@ let handleDelete = (state, send, removeLinkCB, id, event) => {
   }
 }
 
-let deleteIconClasses = deleting => deleting ? "fas fa-spinner fa-pulse" : "far fa-trash-alt"
+module LinkComponent = {
+  let inputClasses = "bg-white border border-gray-400 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500"
+  let handleEdit = () => ()
 
+  let deleteIconClasses = deleting => deleting ? "fas fa-spinner fa-pulse" : "far fa-trash-alt"
+  let updateIconClasses = deleting => deleting ? "fas fa-spinner fa-pulse" : "fas fa-edit"
+
+  @react.component
+  let make = (~id, ~title, ~url, ~state, ~send, ~removeLinkCB, ~kind) => {
+    let (isEditingDisabled, setIsEditingDisabled) = React.useState(_ => true)
+    let (_title, setTitle) = React.useState(_ => title)
+    let (_url, setUrl) = React.useState(_ => url)
+
+    <div
+      className="flex items-center justify-between gap-8 bg-gray-100 text-xs text-gray-900 border rounded mt-2">
+      <div className="flex items-center flex-1">
+        {isEditingDisabled
+          ? <div className="pl-3">
+              {switch kind {
+              | HeaderLink
+              | FooterLink => <>
+                  <span> {title |> str} </span>
+                  <FaIcon classes="fas fa-link mx-2" />
+                  <code> {url |> str} </code>
+                </>
+              | SocialLink => <code> {url |> str} </code>
+              }}
+            </div>
+          : <>
+              {switch kind {
+              | HeaderLink
+              | FooterLink => <>
+                  <input
+                    value=_title
+                    required=true
+                    autoFocus=true
+                    className=inputClasses
+                    placeholder="A short title for a new link"
+                    onChange={event => {
+                      let value = ReactEvent.Form.target(event)["value"]
+                      setTitle(_ => value)
+                    }}
+                  />
+                  <FaIcon classes="fas fa-link mx-2" />
+                </>
+              | SocialLink => React.null
+              }}
+              <input
+                value=_url
+                type_="url"
+                required=true
+                placeholder="Full URL, staring with https://"
+                className={inputClasses ++ " flex-1 invalid:ring-red-500"}
+                autoFocus={kind == SocialLink}
+                onChange={event => {
+                  let value = ReactEvent.Form.target(event)["value"]
+                  setUrl(_ => value)
+                }}
+              />
+            </>}
+      </div>
+      <div>
+        {isEditingDisabled
+          ? <div>
+              <button
+                ariaLabel={"Edit " ++ title}
+                title={"Edit " ++ url}
+                onClick={e => setIsEditingDisabled(_ => false)}
+                className="p-3 hover:text-primary-500 focus:text-primary-500">
+                <FaIcon classes={updateIconClasses(state.deleting |> List.mem(id))} />
+              </button>
+              <button
+                ariaLabel={"Delete " ++ title}
+                title={"Delete " ++ url}
+                onClick={handleDelete(state, send, removeLinkCB, id)}
+                className="p-3 hover:text-red-500 focus:text-red-500">
+                <FaIcon classes={deleteIconClasses(state.deleting |> List.mem(id))} />
+              </button>
+            </div>
+          : <div>
+              <button
+                ariaLabel={"Cancel Editing " ++ title}
+                title={"Cancel Editing " ++ url}
+                onClick={e => {
+                  setIsEditingDisabled(_ => true)
+                  setTitle(_ => title)
+                  setUrl(_ => url)
+                }}
+                className="p-3 hover:text-primary-500 focus:text-primary-500">
+                <FaIcon classes={"fas fa-times"} />
+              </button>
+              <button
+                ariaLabel={"Update " ++ title}
+                title={"Update " ++ url}
+                // onClick={e => {setIsEditingDisabled()}}
+                className="p-3 hover:text-primary-500 focus:text-primary-500">
+                <FaIcon classes={"fas fa-check"} />
+              </button>
+            </div>}
+      </div>
+    </div>
+  }
+}
 let showLinks = (state, send, removeLinkCB, kind, links) =>
   switch links {
   | list{} =>
@@ -84,29 +185,7 @@ let showLinks = (state, send, removeLinkCB, kind, links) =>
   | links =>
     links
     |> List.map(((id, title, url)) =>
-      <div
-        className="flex items-center justify-between bg-gray-100 text-xs text-gray-900 border rounded pl-3 mt-2"
-        key=id>
-        <div className="flex items-center">
-          {switch kind {
-          | HeaderLink
-          | FooterLink =>
-            [
-              <span key="link-editor-entry__title"> {title |> str} </span>,
-              <i key="link-editor-entry__icon" className="fas fa-link mx-2" />,
-              <code key="link-editor-entry__url"> {url |> str} </code>,
-            ] |> React.array
-          | SocialLink => <code> {url |> str} </code>
-          }}
-        </div>
-        <button
-          ariaLabel={"Delete " ++ title}
-          title={"Delete " ++ url}
-          onClick={handleDelete(state, send, removeLinkCB, id)}
-          className="p-3 hover:text-red-500 focus:text-red-500">
-          <FaIcon classes={deleteIconClasses(state.deleting |> List.mem(id))} />
-        </button>
-      </div>
+      <LinkComponent key=id id title url kind removeLinkCB send state />
     )
     |> Array.of_list
     |> React.array

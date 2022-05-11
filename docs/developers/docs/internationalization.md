@@ -17,9 +17,12 @@ Pupilfirst LMS uses _Rails Internationalization_ (I18n) API for internationaliza
 | `mutations.MUTATION.*`            |            Strings used by mutations.             |
 | `queries.QUERY.*`                 |      Strings used by resolvers and mutators.      |
 | `shared.*`                        |                  Shared strings.                  |
-| `CONTROLLER.ACTION.*`             |        Strings used in traditional views.         |
+| `views.ACTION.*`                  |        Strings used in traditional views.         |
+| `mailers.METHOD.*`                |             Strings used in mailers.              |
+| `presenters.MODULE.*`             |            Presenter-specific strings.            |
+| `services.SERVICE.*`              |             Strings used by services.             |
 
-- `CONTROLLER` is always the plural version. For example: `FoundersController#edit` is keyed as `founders.edit.*`
+- `CONTROLLERS` is always the plural version. For example: `FoundersController#edit` is keyed as `founders.edit.*`
 - Always order keys alphabetically. If you use [the VSCode plugin](#visual-studio-code-plugin), this will be done automatically.
 - Third-party library translations follow their own format, and any customization of those should be [documented
   _here_ in this file](#third-party-library-translations).

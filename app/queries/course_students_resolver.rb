@@ -2,91 +2,58 @@ class CourseStudentsResolver < ApplicationQuery
   include AuthorizeSchoolAdmin
 
   property :course_id
-  property :cohort_id
-  property :level_id
-  property :search
-  property :tags
+  property :cohort_name
+  property :level_name
+  property :name
+  property :email
+  property :user_tags
+  property :student_tags
   property :sort_by
   property :sort_direction
 
   def course_students
-    if search.present?
-      students_by_level_and_tag
-        .where('users.name ILIKE ?', "%#{search}%")
-        .or(
-          students_by_level_and_tag.where('users.email ILIKE ?', "%#{search}%")
-        )
-    else
-      students_by_level_cohort_and_tag
-    end
+    students
   end
 
   private
+
+  def students
+    scope = course.founders
+    scope = scope.joins(:user) if name.present? || email.present? ||
+      user_tags.present?
+
+    scope = scope.where(level_id: level.id) if level.present?
+    scope = scope.where(cohort_id: cohort.id) if cohort.present?
+    scope = scope.where('users.name ILIKE ?', "%#{name}%") if name.present?
+    scope = scope.where('users.email ILIKE ?', "%#{email}%") if email.present?
+    scope = scope.tagged_with(student_tags) if student_tags.present?
+    scope =
+      scope.where(
+        users: {
+          id: resource_school.users.tagged_with(user_tags).select(:id)
+        }
+      ) if user_tags.present?
+    scope
+  end
 
   def resource_school
     course&.school
   end
 
+  def cohort
+    return if cohort_name.blank?
+
+    course.cohorts.find_by(name: cohort_name)
+  end
+
+  def level
+    return if level_name.blank?
+
+    course.levels.find_by(number: level_name.split(',').first)
+  end
+
   def course
     @course ||= Course.find(course_id)
-  end
-
-  def students_by_tag
-    students = course.founders.joins(:user)
-
-    return students if tags.blank?
-
-    user_tags =
-      tags.intersection(
-        course
-          .users
-          .joins(taggings: :tag)
-          .distinct('tags.name')
-          .pluck('tags.name')
-      )
-
-    student_tags =
-      tags.intersection(
-        course
-          .founders
-          .joins(taggings: :tag)
-          .distinct('tags.name')
-          .pluck('tags.name')
-      )
-
-    intersect_students = user_tags.present? && student_tags.present?
-
-    student_with_user_tags =
-      students
-        .where(
-          users: {
-            id: resource_school.users.tagged_with(user_tags).select(:id)
-          }
-        )
-        .pluck(:id)
-
-    students_with_tags = students.tagged_with(team_tags).pluck(:id)
-
-    if intersect_students
-      students.where(
-        id: students_with_user_tags.intersection(students_with_tags)
-      )
-    else
-      students.where(id: students_with_user_tags + students_with_tags)
-    end
-  end
-
-  def students_by_level_cohort_and_tag
-    scope =
-      if level_id.present?
-        students_by_tag.where(level_id: level_id)
-      else
-        students_by_tag
-      end
-
-    (cohort_id.present? ? scope.where(cohort_id: cohort_id) : scope).order(
-      "#{sort_by_string} #{sort_direction_string}"
-    )
   end
 
   def sort_direction_string

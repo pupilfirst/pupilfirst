@@ -8,7 +8,7 @@ class CourseResourceInfoResolver < ApplicationQuery
     resources.map do |resource|
       case resource
       when 'Level'
-        resource_shape(resource, course.levels.map(&:short_name))
+        resource_shape(resource, course.levels.map(&:filter_name))
       when 'Cohort'
         resource_shape(resource, course.cohorts.pluck(:name))
       when 'StudentTag'

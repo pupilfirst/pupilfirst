@@ -55,7 +55,7 @@ module CourseResourceInfoInfoQuery = %graphql(`
     }
   `)
 
-let getCourseResources = (send, courseId, filters: array<filter>, state) => {
+let getCourseResources = (send, courseId, filters: array<filter>) => {
   let resources =
     filters
     ->Js.Array2.map(config =>
@@ -146,9 +146,10 @@ let selectedFromQueryParams = (params, filters) => {
   ->ArrayUtils.flattenV2
 }
 
-let onSelect = (params, selectable) => {
+let onSelect = (params, send, selectable) => {
   Webapi.Url.URLSearchParams.set(Selectable.key(selectable), Selectable.value(selectable), params)
   RescriptReactRouter.push("?" ++ Webapi.Url.URLSearchParams.toString(params))
+  send(UnsetSearchString)
 }
 
 let onDeselect = (params, selectable) => {
@@ -157,13 +158,12 @@ let onDeselect = (params, selectable) => {
 }
 
 @react.component
-let make = (~courseId, ~filters: array<filter>) => {
+let make = (~courseId, ~filters: array<filter>, ~search) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
-  let url = RescriptReactRouter.useUrl()
-  let params = Webapi.Url.URLSearchParams.make(url.search)
+  let params = Webapi.Url.URLSearchParams.make(search)
 
   React.useEffect1(() => {
-    getCourseResources(send, courseId, filters, state)
+    getCourseResources(send, courseId, filters)
     None
   }, [courseId])
 
@@ -171,7 +171,7 @@ let make = (~courseId, ~filters: array<filter>) => {
     id="filter"
     unselected={unselected(state, filters)}
     selected={selectedFromQueryParams(params, filters)}
-    onSelect={onSelect(params)}
+    onSelect={onSelect(params, send)}
     onDeselect={onDeselect(params)}
     value=state.filterInput
     onChange={filterInput => send(UpdateFilterInput(filterInput))}

@@ -21,7 +21,7 @@ type state = {
 type action =
   | UnsetSearchString
   | UpdateFilterInput(string)
-  | LoadSubmissions(option<string>, bool, array<StudentInfo.t>, int, option<Level.t>)
+  | LoadSubmissions(option<string>, bool, array<StudentInfo.t>, int)
   | BeginLoadingMore
   | BeginReloading
 
@@ -32,7 +32,7 @@ let reducer = (state, action) =>
       filterInput: "",
     }
   | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
-  | LoadSubmissions(endCursor, hasNextPage, students, totalEntriesCount, level) =>
+  | LoadSubmissions(endCursor, hasNextPage, students, totalEntriesCount) =>
     let updatedStudent = switch state.loading {
     | LoadingMore => Js.Array2.concat(PagedStudents.toArray(state.students), students)
     | Reloading(_) => students
@@ -43,9 +43,6 @@ let reducer = (state, action) =>
       students: PagedStudents.make(updatedStudent, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
       totalEntriesCount: totalEntriesCount,
-      levels: ArrayUtils.isEmpty(state.levels)
-        ? Belt.Option.mapWithDefault(level, [], t => [t])
-        : state.levels,
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
@@ -54,8 +51,8 @@ let reducer = (state, action) =>
 // let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryString(filter))
 
 module CourseStudentsQuery = %graphql(`
-    query CourseStudentsQuery($courseId: ID!, $cohortId: ID, $levelId: ID, $search: String, $after: String, $tags: [String!], $sortBy: String!, $sortDirection: SortDirection!) {
-      courseStudents(courseId: $courseId, cohortId: $cohortId, levelId: $levelId, search: $search, first: 20, after: $after, tags: $tags, sortBy: $sortBy, sortDirection: $sortDirection) {
+    query CourseStudentsQuery($courseId: ID!, $cohortName: String, $levelName: String, $name: String, $email: String, $after: String, $studentTags: [String!], $userTags: [String!], $sortBy: String!, $sortDirection: SortDirection!) {
+      courseStudents(courseId: $courseId, cohortName: $cohortName, levelName: $levelName, name: $name, email: $email, first: 20, after: $after, studentTags: $studentTags, userTags: $userTags, sortBy: $sortBy, sortDirection: $sortDirection) {
         nodes {
           id
           name
@@ -82,28 +79,45 @@ module CourseStudentsQuery = %graphql(`
         }
         totalCount
       }
-      level(levelId: $levelId, courseId: $courseId) {
-        id
-        name
-        number
-      }
     }
   `)
 
-let getStudents = (send, courseId, cursor, filter) => {
+let getStudents = (send, courseId, cursor, filter, params) => {
   let sortBy = filter->Filter.sortByToString
   let sortDirection = filter->Filter.sortDirection
-  CourseStudentsQuery.make(~courseId, ~after=?cursor, ~sortBy, ~sortDirection, ())
+
+  open Webapi.Url.URLSearchParams
+
+  let name = get("name", params)
+  let email = get("email", params)
+  let levelName = get("level", params)
+  let cohortName = get("cohort", params)
+  let userTags =
+    get("user_tags", params)->Belt.Option.mapWithDefault([], u => Js.String.split(",", u))
+  let studentTags =
+    get("student_tags", params)->Belt.Option.mapWithDefault([], u => Js.String.split(",", u))
+
+  CourseStudentsQuery.make(
+    ~courseId,
+    ~after=?cursor,
+    ~sortBy,
+    ~sortDirection,
+    ~userTags,
+    ~studentTags,
+    ~name?,
+    ~email?,
+    ~levelName?,
+    ~cohortName?,
+    (),
+  )
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    let level = OptionUtils.map(Level.makeFromJs, response["level"])
     send(
       LoadSubmissions(
         response["courseStudents"]["pageInfo"]["endCursor"],
         response["courseStudents"]["pageInfo"]["hasNextPage"],
         Js.Array.map(StudentInfo.makeFromJS, response["courseStudents"]["nodes"]),
         response["courseStudents"]["totalCount"],
-        level,
       ),
     )
     Js.Promise.resolve()
@@ -121,9 +135,9 @@ let computeInitialState = () => {
   filter: Filter.empty(),
 }
 
-let reloadStudents = (courseId, filter, send) => {
+let reloadStudents = (courseId, filter, send, params) => {
   send(BeginReloading)
-  getStudents(send, courseId, None, filter)
+  getStudents(send, courseId, None, filter, params)
 }
 
 // let pageTitle = (courses, courseId) => {
@@ -191,8 +205,9 @@ let studentsList = (students, state, filter) => {
 
 let makeFilters = () => {
   [
-    CourseResourcesFilter.makeFilter("level", "Level", DataLoad(#Level), "yellow"),
     CourseResourcesFilter.makeFilter("cohort", "Cohort", DataLoad(#Cohort), "green"),
+    CourseResourcesFilter.makeFilter("include", "Include", Custom("Inactive Students"), "orange"),
+    CourseResourcesFilter.makeFilter("level", "Level", DataLoad(#Level), "yellow"),
     CourseResourcesFilter.makeFilter(
       "student_tags",
       "Student Tags",
@@ -202,18 +217,17 @@ let makeFilters = () => {
     CourseResourcesFilter.makeFilter("user_tags", "User Tags", DataLoad(#UserTag), "blue"),
     CourseResourcesFilter.makeFilter("email", "Search by Email", Search, "gray"),
     CourseResourcesFilter.makeFilter("name", "Search by Name", Search, "gray"),
-    CourseResourcesFilter.makeFilter("include", "Include", Custom("Inactive Students"), "orange"),
   ]
 }
 
 @react.component
-let make = (~courseId, ~url) => {
+let make = (~courseId, ~search) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
-
+  let params = Webapi.Url.URLSearchParams.make(search)
   React.useEffect1(() => {
-    reloadStudents(courseId, state.filter, send)
+    reloadStudents(courseId, state.filter, send, params)
     None
-  }, [url])
+  }, [search])
 
   //
   <>
@@ -230,7 +244,8 @@ let make = (~courseId, ~url) => {
             <div className="border rounded-lg mx-auto bg-white ">
               <div>
                 <div className="flex w-full items-start p-4">
-                  <CourseResourcesFilter courseId filters={makeFilters()} /> {"sorter"->str}
+                  <CourseResourcesFilter courseId filters={makeFilters()} search={search} />
+                  {"sorter"->str}
                 </div>
               </div>
             </div>
@@ -252,7 +267,7 @@ let make = (~courseId, ~url) => {
                         className="btn btn-primary-ghost cursor-pointer w-full"
                         onClick={_ => {
                           send(BeginLoadingMore)
-                          getStudents(send, courseId, Some(cursor), state.filter)
+                          getStudents(send, courseId, Some(cursor), state.filter, params)
                         }}>
                         {"Load More"->str}
                       </button>

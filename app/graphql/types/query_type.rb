@@ -108,10 +108,12 @@ module Types
                    Types::StudentType.connection_type,
                    null: false do
       argument :course_id, ID, required: true
-      argument :cohort_id, ID, required: false
-      argument :level_id, ID, required: false
-      argument :search, String, required: false
-      argument :tags, [String], required: false
+      argument :cohort_name, String, required: false
+      argument :level_name, String, required: false
+      argument :name, String, required: false
+      argument :email, String, required: false
+      argument :user_tags, [String], required: false
+      argument :student_tags, [String], required: false
       argument :sort_by, String, required: true
       argument :sort_direction, Types::SortDirectionType, required: true
     end

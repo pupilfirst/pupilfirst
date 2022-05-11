@@ -25,7 +25,7 @@ let make = (~school, ~courses, ~currentUser) => {
     )
   | list{"school", "courses", courseId, "students"} => (
       SelectedCourse(courseId, Students),
-      Some(<StudentsIndex__Root courseId url />),
+      Some(<StudentsIndex__Root courseId search={url.search} />),
     )
   | list{"school", "courses", courseId, "inactive_students"} => (
       SelectedCourse(courseId, Students),

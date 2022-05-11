@@ -1629,8 +1629,8 @@ en:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
   errors:
     messages:
-        content_type_invalid: has an invalid content type
-        limit_out_of_range: total number is out of range
+      content_type_invalid: has an invalid content type
+      limit_out_of_range: total number is out of range
   graphql:
     concerns:
       validate_submission_gradable:

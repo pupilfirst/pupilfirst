@@ -26,7 +26,9 @@ let optionAbout = about => about == "" ? None : Some(about)
 let updateSchoolQuery = (state, send, updateDetailsCB) => {
   send(UpdateSaving(true))
 
-  UpdateSchoolQuery.make(~name=state.name, ~about=state.about, ())
+  let variables = UpdateSchoolQuery.makeVariables(~name=state.name, ~about=state.about, ())
+
+  UpdateSchoolQuery.make(variables)
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     response["updateSchool"]["success"]

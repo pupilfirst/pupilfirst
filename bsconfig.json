@@ -28,6 +28,7 @@
     "error": "+8"
   },
   "graphql": {
-    "extendQuery": "ExtendQuery.Extender"
+    "extendQuery": "ExtendQuery.Extender",
+    "extendMutation": "ExtendQuery.Extender"
   }
 }

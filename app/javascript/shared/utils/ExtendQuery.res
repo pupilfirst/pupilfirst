@@ -11,26 +11,113 @@ module type X = {
   let serialize: t => Raw.t
   let serializeVariables: t_variables => Raw.t_variables
   let variablesToJson: Raw.t_variables => Js.Json.t
-  let makeVariables: Js.t<'a> = "%identity" => t_variables
+  external unsafe_fromJson: Js.Json.t => Raw.t = "%identity"
 }
 
-// module type GraphQLQuery = {
-//   module Raw: {
-//     type t
-//   }
-//   type t
-//   let query: string
-//   /* this just makes sure it's just a type conversion, and no function have
-//    to be called */
-//   external unsafe_fromJson: Js.Json.t => Raw.t = "%identity"
-//   let parse: Raw.t => t
-// }
 module Extender = (M: X) => {
-  let make = (~variables, ()) => {
+  exception Graphql_error(string)
+
+  type notification = {
+    kind: string,
+    title: string,
+    body: string,
+  }
+
+  let decodeNotification = json => {
+    open Json.Decode
     {
-      "query": M.query,
-      "parse": M.parse,
-      "variables": M.makeVariables(variables)->M.serializeVariables->M.variablesToJson,
+      kind: json |> field("kind", string),
+      title: json |> field("title", string),
+      body: json |> field("body", string),
     }
+  }
+
+  let decodeNotifications = json => json |> Json.Decode.list(decodeNotification)
+
+  let decodeErrors = json => {
+    open Json.Decode
+    json |> array(field("message", string))
+  }
+
+  let flashNotifications = obj =>
+    switch Js.Dict.get(obj, "notifications") {
+    | Some(notifications) =>
+      notifications
+      |> decodeNotifications
+      |> List.iter(n => {
+        let notify = switch n.kind {
+        | "success" => Notification.success
+        | "error" => Notification.error
+        | _ => Notification.notice
+        }
+
+        notify(n.title, n.body)
+      })
+    | None => ()
+    }
+
+  let sendQuery = (~notify=true, query, variables) => {
+    open Bs_fetch
+    fetchWithInit(
+      "/graphql",
+      RequestInit.make(
+        ~method_=Post,
+        ~body=Js.Dict.fromList(list{("query", Js.Json.string(query)), ("variables", variables)})
+        |> Js.Json.object_
+        |> Js.Json.stringify
+        |> BodyInit.make,
+        ~credentials=Include,
+        ~headers=HeadersInit.makeWithArray([
+          ("X-CSRF-Token", AuthenticityToken.fromHead()),
+          ("Content-Type", "application/json"),
+        ]),
+        (),
+      ),
+    )
+    |> Js.Promise.then_(resp =>
+      if Response.ok(resp) {
+        Response.json(resp)
+      } else {
+        if notify {
+          let statusCode = resp |> Fetch.Response.status |> string_of_int
+
+          Notification.error(
+            "Error " ++ statusCode,
+            "Our team has been notified of this error. Please reload the page and try again.",
+          )
+        }
+
+        Js.Promise.reject(Graphql_error("Request failed: " ++ Response.statusText(resp)))
+      }
+    )
+    |> Js.Promise.then_(json =>
+      switch Js.Json.decodeObject(json) {
+      | Some(obj) =>
+        if notify {
+          obj |> flashNotifications
+        }
+
+        switch Js.Dict.get(obj, "errors") {
+        | Some(errors) => {
+            Js.Console.log(json)
+            errors
+            |> decodeErrors
+            |> Js.Array.forEach(e => {
+              Notification.error("Error", e)
+            })
+
+            Js.Promise.reject(Graphql_error("Something went wrong!"))
+          }
+        | None =>
+          Js.Dict.unsafeGet(obj, "data") |> M.unsafe_fromJson |> M.parse |> Js.Promise.resolve
+        }
+
+      | None => Js.Promise.reject(Graphql_error("Response is not an object"))
+      }
+    )
+  }
+
+  let make = variables => {
+    sendQuery(M.query, variables->M.serializeVariables->M.variablesToJson)
   }
 }

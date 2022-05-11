@@ -29,10 +29,11 @@ let createLevelUpQuery = (course, setSaving, event) => {
   event |> ReactEvent.Mouse.preventDefault
   setSaving(_ => true)
 
-  LevelUpQuery.make(~courseId=course |> Course.id, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["levelUp"]["success"] ? refreshPage() : setSaving(_ => false)
+  let variables = LevelUpQuery.makeVariables(~courseId=course |> Course.id, ())
+
+  LevelUpQuery.make(variables)
+  |> Js.Promise.then_((response: LevelUpQuery.t) => {
+    response.levelUp.success ? refreshPage() : setSaving(_ => false)
     Js.Promise.resolve()
   })
   |> ignore

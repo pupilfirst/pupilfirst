@@ -39,6 +39,7 @@ type action =
   | SetUploadError(uploadError)
   | SetUploading
   | FinishUploading
+  // | AddEmoji(EmojiPicker.emojiEvent)
 
 let reducer = (state, action) =>
   switch action {
@@ -88,6 +89,7 @@ let reducer = (state, action) =>
   | SetUploadError(error) => {...state, uploadState: ReadyToUpload(error)}
   | SetUploading => {...state, uploadState: Uploading}
   | FinishUploading => {...state, uploadState: ReadyToUpload(None)}
+  // | AddEmoji(event) => {...state,value:value++event.native}
   }
 
 let computeInitialState = ((value, textareaId, mode)) => {
@@ -283,6 +285,8 @@ let controls = (disabled, value, state, send, onChange) => {
   let buttonClasses = "px-2 py-1 hover:bg-gray-300 hover:text-primary-500 focus:outline-none focus:bg-gray-300 focus:text-primary-500 "
   let {mode} = state
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange)
+  let val = React.useRef(value);
+  val.current = value
 
   <div className={controlsContainerClasses(state.mode)}>
     {switch mode {
@@ -317,7 +321,7 @@ let controls = (disabled, value, state, send, onChange) => {
           <i className="fas fa-strikethrough fa-fw" />
         </button>
         <EmojiPicker
-          onChange={(e: EmojiPicker.emojiEvent) => onChange(value ++ e.native)}
+          onChange={(e: EmojiPicker.emojiEvent) => onChange( val.current ++ e.native)}
           className={buttonClasses ++ "border-l border-gray-400"}
           title={t("emoji_picker")}
         />

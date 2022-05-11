@@ -2043,6 +2043,14 @@ ru:
       admin: Администрация
       dashboard: Обучение
       coaches: Менторы
+    Layouts__Footer:
+      dashboard: Dashboard
+      home: Home
+    Layouts__StudentsTopNav:
+      admin: Администрация
+      coaches: Coaches
+      dashboard: Обучение
+      home: Home
     Posts__Versions:
       title:  "Версии | Пост"
   views:
@@ -2062,6 +2070,8 @@ ru:
       title: Студенты
     courses:
       title: Курсы
+    footer:
+      sitemap: Sitemap
     coaches:
       title: Менторы
     admin:

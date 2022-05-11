@@ -2039,8 +2039,6 @@ en:
       title: Certificates
     coaches:
       title: Coaches
-    courses:
-      title: Courses
     curriculum:
       title: Curriculum
     evaluation:
@@ -2144,6 +2142,7 @@ en:
     timeline_events:
       submitted_on: Submitted on
     courses:
+      title: Courses
       apply:
         apply_button: Apply
         apply_now: Apply Now
@@ -2233,6 +2232,7 @@ en:
         new:
           heading: Sign in to %{school_name}
           sign_in_options_separator: OR
+          continue_with_email_link: Continue with email
         email_sent:
           image_alt: An email flying into to your inbox
           magic_link:

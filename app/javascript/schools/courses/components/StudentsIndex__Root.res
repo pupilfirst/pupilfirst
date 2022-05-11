@@ -150,17 +150,22 @@ let reloadStudents = (courseId, filter, send, params) => {
 //   `${tc("review")} | ${AppRouter__Course.name(currentCourse)}`
 // }
 
-let showTag = (tag, color) => {
-  <div key={tag} className={"rounded-lg mt-1 mr-1 py-px px-2 text-xs " ++ color}> {tag->str} </div>
+let onSelect = (key, value, params) => {
+  Webapi.Url.URLSearchParams.set(key, value, params)
+  RescriptReactRouter.push("?" ++ Webapi.Url.URLSearchParams.toString(params))
 }
 
-let showtags = (tags, color) => {
-  <div className="flex flex-wrap">
-    {tags->Js.Array2.map(tag => {showTag(tag, color)})->React.array}
-  </div>
+let showTag = (~value=?, key, text, color, params) => {
+  let paramsValue = Belt.Option.getWithDefault(value, text)
+  <button
+    key={text}
+    className={"rounded-lg mt-1 mr-1 py-px px-2 text-xs " ++ color}
+    onClick={_e => onSelect(key, paramsValue, params)}>
+    {text->str}
+  </button>
 }
 
-let studentsList = (students, state, filter) => {
+let studentsList = (students, state, params) => {
   <div className="space-y-2">
     {students
     ->Js.Array2.map(student => {
@@ -170,18 +175,29 @@ let studentsList = (students, state, filter) => {
             <div className="text-sm flex flex-col">
               <p className="font-semibold inline-block "> {StudentInfo.name(student)->str} </p>
               <div className="flex flex-row">
-                {showtags(StudentInfo.taggings(student), "bg-gray-300 text-gray-900")}
                 <div className="flex flex-wrap">
-                  {showTag(Cohort.name(StudentInfo.cohort(student)), "bg-green-300 text-green-900")}
                   {showTag(
+                    "cohort",
+                    Cohort.name(StudentInfo.cohort(student)),
+                    "bg-green-300 text-green-900",
+                    params,
+                  )}
+                  {showTag(
+                    "level",
                     Level.shortName(StudentInfo.level(student)),
                     "bg-yellow-300 text-yellow-900",
+                    params,
+                    ~value=Level.filterValue(StudentInfo.level(student)),
                   )}
                   {StudentInfo.taggings(student)
-                  ->Js.Array2.map(tag => {showTag(tag, "bg-gray-300 text-gray-900")})
+                  ->Js.Array2.map(tag => {
+                    showTag("student_tags", tag, "bg-gray-300 text-gray-900", params)
+                  })
                   ->React.array}
                   {StudentInfo.userTags(student)
-                  ->Js.Array2.map(tag => {showTag(tag, "bg-blue-300 text-blue-900")})
+                  ->Js.Array2.map(tag => {
+                    showTag("user_tags", tag, "bg-blue-300 text-blue-900", params)
+                  })
                   ->React.array}
                 </div>
               </div>
@@ -256,7 +272,7 @@ let make = (~courseId, ~search) => {
               <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
             | PartiallyLoaded(submissions, cursor) =>
               <div>
-                {studentsList(submissions, state, state.filter)}
+                {studentsList(submissions, state, params)}
                 {switch state.loading {
                 | LoadingMore =>
                   <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
@@ -276,8 +292,7 @@ let make = (~courseId, ~search) => {
                   )
                 }}
               </div>
-            | FullyLoaded(submissions) =>
-              <div> {studentsList(submissions, state, state.filter)} </div>
+            | FullyLoaded(submissions) => <div> {studentsList(submissions, state, params)} </div>
             }}
           </div>
           {switch state.students {

@@ -41,3 +41,5 @@ let makeFromJs = level => {
 }
 
 let shortName = t => "Level " ++ (t.number |> string_of_int)
+
+let filterValue = t => (t.number |> string_of_int) ++ ", " ++ t.name

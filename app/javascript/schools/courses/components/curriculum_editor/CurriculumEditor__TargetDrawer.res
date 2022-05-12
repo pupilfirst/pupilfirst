@@ -1,4 +1,4 @@
-%bs.raw(`require("./CurriculumEditor__TargetDrawer.css")`)
+%raw(`require("./CurriculumEditor__TargetDrawer.css")`)
 
 let str = React.string
 
@@ -61,6 +61,7 @@ let make = (
   ~course,
   ~updateTargetCB,
   ~vimeoPlan,
+  ~markdownCurriculumEditorMaxLength,
 ) => {
   let url = RescriptReactRouter.useUrl()
   let (dirty, setDirty) = React.useState(() => false)
@@ -92,7 +93,11 @@ let make = (
     let (innerComponent, selectedPage) = switch pageName {
     | "content" => (
         <CurriculumEditor__ContentEditor
-          target hasVimeoAccessToken vimeoPlan setDirtyCB={dirty => setDirty(_ => dirty)}
+          target
+          hasVimeoAccessToken
+          vimeoPlan
+          markdownCurriculumEditorMaxLength
+          setDirtyCB={dirty => setDirty(_ => dirty)}
         />,
         Content,
       )

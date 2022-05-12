@@ -213,11 +213,7 @@ let make = (
     {switch state.formVisible {
     | None => React.null
     | CreateForm =>
-      <SchoolAdmin__EditorDrawer closeDrawerCB={() => send(UpdateFormVisible(None))}>
-        <StudentsEditor__CreateForm
-          courseId submitFormCB={submitForm(send)} teamTags=state.editableTags
-        />
-      </SchoolAdmin__EditorDrawer>
+ React.null
 
     | UpdateForm(student, teamId) =>
       let team = teamId |> Team.unsafeFind(state.pagedTeams |> Page.teams, "Root")

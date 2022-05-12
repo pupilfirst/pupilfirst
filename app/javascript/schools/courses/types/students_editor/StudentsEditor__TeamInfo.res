@@ -107,7 +107,9 @@ let removeStudentFromArray = (ts, studentInfo) => {
     }
   )
 
-  \"!"(removedFromArray) ? teams : teams |> Js.Array.map(t =>
+  \"!"(removedFromArray)
+    ? teams
+    : teams |> Js.Array.map(t =>
         switch t.nature {
         | SingleMember(_) => t
         | MultiMember(name, students) =>
@@ -126,9 +128,12 @@ let tagsFromArray = ts =>
     Belt.Set.String.empty,
   ))->Belt.Set.String.toArray
 
-let studentEmailsFromArray = ts => ts |> Js.Array.map(t =>
+let studentEmailsFromArray = ts =>
+  ts
+  |> Js.Array.map(t =>
     switch t.nature {
     | SingleMember(studentInfo) => [StudentInfo.email(studentInfo)]
     | MultiMember(_, students) => Js.Array.map(StudentInfo.email, students)
     }
-  ) |> ArrayUtils.flattenV2
+  )
+  |> ArrayUtils.flattenV2

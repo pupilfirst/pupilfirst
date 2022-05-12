@@ -26,7 +26,7 @@ let make = (~courseId, ~search) => {
     />
     <div className="bg-white">
       <div className="max-w-5xl mx-auto">
-        <StudentCreator__CreateForm courseId submitFormCB={_ => ()} teamTags=[] />
+        <StudentCreator__CreateForm courseId />
       </div>
     </div>
   </div>

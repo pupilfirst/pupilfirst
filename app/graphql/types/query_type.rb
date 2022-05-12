@@ -189,7 +189,7 @@ module Types
       argument :course_id, ID, required: true
     end
 
-    resolved_field :course_cohorts, [Types::CohortType], null: false do
+    resolved_field :cohorts, [Types::CohortType], null: false do
       argument :course_id, ID, required: true
     end
 

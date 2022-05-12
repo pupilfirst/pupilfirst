@@ -3,12 +3,16 @@ open StudentsEditor__Types
 type state = {
   teamsToAdd: array<TeamInfo.t>,
   notifyStudents: bool,
+  tags: array<string>,
+  cohorts: array<Cohort.t>,
   saving: bool,
+  loading: bool,
 }
 
 type action =
   | AddStudentInfo(StudentInfo.t, option<string>, array<string>)
   | RemoveStudentInfo(StudentInfo.t)
+  | SetBaseData(array<Cohort.t>, array<string>)
   | ToggleNotifyStudents
   | SetSaving(bool)
 
@@ -70,7 +74,46 @@ module CreateStudentsQuery = %graphql(`
   }
   `)
 
-let createStudents = (state, send, courseId, submitFormCB, event) => {
+  module StudentsCreateDataQuery = %graphql(`
+  query StudentsCreateDataQuery($courseId: ID!) {
+    cohorts(courseId: $courseId) {
+      id
+      name
+      description
+      endsAt
+    }
+    courseResourceInfo(courseId: $courseId, resources: [StudentTag]) {
+      resource
+      values
+    }
+  }
+  `)
+
+let loadData = (courseId, send) => {
+   StudentsCreateDataQuery.make(~courseId, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    send(SetBaseData(
+      response["cohorts"]->Js.Array2.map(cohort => Cohort.makeFromJs(cohort)),
+      response["courseResourceInfo"][0]["values"],
+
+    ))
+    Js.Promise.resolve()
+  })
+  |> Js.Promise.catch(error => {
+    Js.log(error)
+    Notification.error(
+      "Unexpected Error!",
+      "Our team has been notified of this failure. Please reload this page before trying to add students again.",
+    )
+    send(SetSaving(false))
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
+
+let createStudents = (state, send, courseId, event) => {
   event |> ReactEvent.Mouse.preventDefault
   send(SetSaving(true))
 
@@ -81,7 +124,7 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     switch response["createStudents"]["studentIds"] {
-    | Some(studentIds) => handleResponseCB(submitFormCB, state, studentIds)
+    | Some(studentIds) => RescriptReactRouter.push({`/school/courses/${courseId}/students`})
     | None => send(SetSaving(false))
     }
 
@@ -131,6 +174,9 @@ let renderTitleAndAffiliation = (title, affiliation) => {
 
 let initialState = () => {
   teamsToAdd: [],
+  tags: [],
+  loading: false,
+  cohorts: [],
   notifyStudents: true,
   saving: false,
 }
@@ -147,6 +193,7 @@ let reducer = (state, action) =>
     }
   | SetSaving(saving) => {...state, saving: saving}
   | ToggleNotifyStudents => {...state, notifyStudents: !state.notifyStudents}
+  | SetBaseData(cohorts, tags) => {...state, cohorts: cohorts, tags: tags, loading: false}
   }
 
 let tagBoxes = tags =>
@@ -167,7 +214,7 @@ let studentCard = (studentInfo, send, team, tags) => {
 
   let containerClasses = team
     ? defaultClasses ++ " border-t"
-    : defaultClasses ++ " bg-white-100 border shadow rounded-lg mt-2 px-2"
+    : defaultClasses ++ " bg-white border shadow rounded-lg mt-2 px-2"
 
   <div key={studentInfo |> StudentInfo.email} className=containerClasses>
     <div className="flex flex-col flex-1 flex-wrap p-3">
@@ -192,8 +239,12 @@ let studentCard = (studentInfo, send, team, tags) => {
 }
 
 @react.component
-let make = (~courseId, ~submitFormCB, ~teamTags) => {
+let make = (~courseId) => {
   let (state, send) = React.useReducer(reducer, initialState())
+    React.useEffect1(() => {
+    loadData(courseId, send)
+    None
+  }, [courseId])
 
   <div className="mt-4">
     <div className="flex ">
@@ -201,7 +252,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
         <StudentCreator__StudentInfoForm
           addToListCB={(studentInfo, teamName, tags) =>
             send(AddStudentInfo(studentInfo, teamName, tags))}
-          teamTags={allKnownTags(teamTags, TeamInfo.tagsFromArray(state.teamsToAdd))}
+          teamTags={allKnownTags(state.tags, TeamInfo.tagsFromArray(state.teamsToAdd))}
           emailsToAdd={TeamInfo.studentEmailsFromArray(state.teamsToAdd)}
         />
       </div>
@@ -215,7 +266,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
               {switch state.teamsToAdd {
               | [] =>
                 <div
-                  className="flex items-center justify-between bg-gray-100 border rounded p-3 italic mt-2">
+                  className="flex items-center justify-between bg-white border rounded p-3 italic mt-2">
                   {t("teams_to_add_empty")->str}
                 </div>
               | teams =>
@@ -226,7 +277,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
                     <div className="mt-3" key=teamName>
                       {teamHeader(teamName, studentsInTeam |> Array.length)}
                       {TeamInfo.tags(team)->tagBoxes}
-                      <div className="bg-white-100 border shadow rounded-lg mt-2 px-2">
+                      <div className="bg-white border shadow rounded-lg mt-2 px-2">
                         {studentsInTeam
                         |> Array.map(studentInfo => studentCard(studentInfo, send, true, []))
                         |> React.array}
@@ -260,7 +311,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
           <div className="flex mt-4">
             <button
               disabled={state.saving || state.teamsToAdd |> ArrayUtils.isEmpty}
-              onClick={createStudents(state, send, courseId, submitFormCB)}
+              onClick={createStudents(state, send, courseId)}
               className={"w-full btn btn-primary btn-large mt-3" ++ (
                 formInvalid(state) ? " disabled" : ""
               )}>

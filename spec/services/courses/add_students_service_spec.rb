@@ -7,8 +7,8 @@ describe Courses::AddStudentsService do
   let!(:level_1) { create :level, :one, course: course }
   let!(:student_1_data) { OpenStruct.new(name: Faker::Name.name, email: Faker::Internet.email) }
   let!(:student_2_data) { OpenStruct.new(name: Faker::Name.name, email: Faker::Internet.email, title: Faker::Lorem.words(number: 2).join(' '), tags: ['Tag 1', 'Tag 2']) }
-  let!(:student_3_data) { OpenStruct.new(name: Faker::Name.name, email: Faker::Internet.email, team_name: 'new_team') }
-  let!(:student_4_data) { OpenStruct.new(name: Faker::Name.name, email: Faker::Internet.email, team_name: 'new_team') }
+  let!(:student_3_data) { OpenStruct.new(name: Faker::Name.name, email: Faker::Internet.email, team_name: 'new_team', tags: ["Tag 3"]) }
+  let!(:student_4_data) { OpenStruct.new(name: Faker::Name.name, email: Faker::Internet.email, team_name: 'new_team', tags: ["Tag 4"]) }
   let!(:notify) { true }
 
   describe '#add' do
@@ -23,7 +23,7 @@ describe Courses::AddStudentsService do
       expect(student_2_user.name).to eq(student_2_data.name)
       expect(student_2_user.title).to eq(student_2_data.title)
       expect(student_2_user.founders.first.startup.tag_list).to match_array(['Tag 1', 'Tag 2'])
-      expect(course.school.founder_tag_list).to match_array(['Tag 1', 'Tag 2'])
+      expect(course.school.founder_tag_list).to match_array(['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4'])
 
       # Email notifications
       open_email(student_1_data.email)
@@ -36,6 +36,7 @@ describe Courses::AddStudentsService do
       new_team = Startup.find_by(name: 'new_team')
 
       expect(new_team.founders.map { |f| f.email }).to match_array([student_3_data.email, student_4_data.email])
+      expect(new_team.tag_list).to match_array(["Tag 3", "Tag 4"])
     end
 
     it 'returns the IDs of newly added students' do

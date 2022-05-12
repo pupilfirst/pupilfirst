@@ -3,6 +3,7 @@ require 'rails_helper'
 feature 'Course students list', js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
+  include ActiveSupport::Testing::TimeHelpers
 
   # The basics
   let!(:school) { create :school, :current }
@@ -31,6 +32,7 @@ feature 'Course students list', js: true do
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course
     team_1.founders.first.user.update!(last_seen_at: 3.minutes.ago)
+    team_2.founders.first.user.update!(current_sign_in_at: 3.days.ago)
 
     10.times do
       create :startup,
@@ -73,9 +75,21 @@ feature 'Course students list', js: true do
       expect(page).to have_text('Last seen 3 minutes ago')
     end
 
-    # Check the last seen for the second student
+    # Check the last seen is not updated before 15 minutes
+    travel_to(10.minutes.from_now) do
+      within("div[aria-label='Info of team #{team_1.name}']") do
+        expect(page).to have_text('Last seen 13 minutes ago')
+      end
+    end
+
+    # Check the last seen as current sign in value
     within("div[aria-label='Info of team #{team_2.name}']") do
-      expect(page).to have_text('Last seen long time ago')
+      expect(page).to have_text('Last seen 3 days ago')
+    end
+
+    # Check the last seen for the second student
+    within("div[aria-label='Info of team #{team_3.name}']") do
+      expect(page).to have_text('This student has never signed in')
     end
 
     # Check levels of few teams

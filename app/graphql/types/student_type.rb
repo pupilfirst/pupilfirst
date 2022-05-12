@@ -32,7 +32,7 @@ module Types
         .batch do |user_ids, loader|
           User
             .where(id: user_ids)
-            .each { |user| loader.call(user.id, user.last_seen_at) }
+            .each { |user| loader.call(user.id, user.last_seen_at || user.current_sign_in_at) }
         end
     end
 

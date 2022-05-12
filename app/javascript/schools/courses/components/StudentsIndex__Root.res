@@ -249,7 +249,7 @@ let make = (~courseId, ~search) => {
   //
   <>
     <Helmet> <title> {str("Students Index")} </title> </Helmet>
-    <div role="main" ariaLabel="Review" className="flex-1 flex flex-col">
+    <div>
       <div>
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
           <div className="mt-2 text-right">

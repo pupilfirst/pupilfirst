@@ -17,7 +17,7 @@ let pageLinks = courseId => [
 
 @react.component
 let make = (~courseId, ~search) => {
-  <div role="main" className="flex-1 flex flex-col">
+  <div>
     <School__PageHeader
       exitUrl={`/school/courses/${courseId}/students`}
       title="Add new students"

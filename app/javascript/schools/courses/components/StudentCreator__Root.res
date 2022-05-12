@@ -24,6 +24,10 @@ let make = (~courseId, ~search) => {
       description={"You can add multiple students to a list and add them to course"}
       links={pageLinks(courseId)}
     />
-    <div className="max-w-5xl mx-auto"> {str("Add student create form here!!")} </div>
+    <div className="bg-white">
+      <div className="max-w-5xl mx-auto">
+        <StudentCreator__CreateForm courseId submitFormCB={_ => ()} teamTags=[] />
+      </div>
+    </div>
   </div>
 }

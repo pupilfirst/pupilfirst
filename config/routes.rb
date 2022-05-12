@@ -68,10 +68,17 @@ Rails.application.routes.draw do
       'courses/:course_id/details',
       'courses/:course_id/images',
       'courses/:course_id/actions',
+      'courses/:course_id/cohorts',
+      'courses/:course_id/cohorts/new',
+      'courses/:course_id/cohorts/:cohort_id/details',
       'courses/:course_id/students',
       'courses/:course_id/students/new',
-      'courses/:course_id/students/:student_id/',
-      'courses/:course_id/students/:student_id/edit',
+      'courses/:course_id/students/import',
+      'courses/:course_id/students/:student_id/details',
+      'courses/:course_id/teams',
+      'courses/:course_id/teams/new',
+      'courses/:course_id/teams/:team_id/details',
+      'courses/:course_id/teams/:team_id/actions',
     ].each do |path|
       get path, action: 'school_router'
     end

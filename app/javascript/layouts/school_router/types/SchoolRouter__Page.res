@@ -12,6 +12,8 @@ type coursePages =
   | Authors
   | Certificates
   | Applicants
+  | Teams
+  | Cohorts
 
 type settingsPages =
   | Customization
@@ -44,7 +46,9 @@ let isSPA = t => {
   | Settings(_settingsPages) => false
   | SelectedCourse(_courseId, coursePages) =>
     switch coursePages {
-    | Students => true
+    | Cohorts
+    | Students
+    | Teams => true
     | CourseCoaches
     | Curriculum
     | EvaluationCriteria
@@ -82,6 +86,8 @@ let path = t => {
     | Authors => `/school/courses/${courseId}/authors`
     | Certificates => `/school/courses/${courseId}/certificates`
     | Applicants => `/school/courses/${courseId}/applicants`
+    | Teams => `/school/courses/${courseId}/teams`
+    | Cohorts => `/school/courses/${courseId}/cohorts`
     }
   | Communities => "/school/communities"
   }
@@ -107,6 +113,8 @@ let name = t => {
     | Authors => "Authors"
     | Certificates => "Certificates"
     | Applicants => "Applicants"
+    | Teams => "Teams"
+    | Cohorts => "Cohorts"
     }
   | Communities => "Communities"
   }

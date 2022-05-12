@@ -2,7 +2,7 @@ let str = React.string
 
 @react.component
 let make = (~courseId, ~studentId, ~search) => {
-  <div role="main" className="flex-1 flex flex-col">
+  <div>
     <School__PageHeader
       exitUrl={`/school/courses/${courseId}/students`}
       title="Edit Student"

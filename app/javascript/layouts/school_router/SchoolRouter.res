@@ -23,6 +23,18 @@ let make = (~school, ~courses, ~currentUser) => {
       Courses,
       Some(<CourseEditor />),
     )
+  | list{"school", "courses", courseId, "cohorts"} => (
+      SelectedCourse(courseId, Cohorts),
+      Some(<CohortsIndex__Root courseId search={url.search} />),
+    )
+  | list{"school", "courses", courseId, "cohorts", "new"} => (
+      SelectedCourse(courseId, Cohorts),
+      Some(<CohortsCreator__Root courseId />),
+    )
+  | list{"school", "courses", courseId, "cohorts", cohortId, "details"} => (
+      SelectedCourse(courseId, Cohorts),
+      Some(<CohortsDetails__Root courseId cohortId />),
+    )
   | list{"school", "courses", courseId, "students"} => (
       SelectedCourse(courseId, Students),
       Some(<StudentsIndex__Root courseId search={url.search} />),
@@ -38,6 +50,22 @@ let make = (~school, ~courses, ~currentUser) => {
   | list{"school", "courses", courseId, "students", studentId, "edit"} => (
       SelectedCourse(courseId, Students),
       Some(<StudentEditor__Root courseId studentId search={url.search} />),
+    )
+  | list{"school", "courses", courseId, "teams"} => (
+      SelectedCourse(courseId, Teams),
+      Some(<TeamsIndex__Root courseId search={url.search} />),
+    )
+  | list{"school", "courses", courseId, "teams", "new"} => (
+      SelectedCourse(courseId, Teams),
+      Some(<TeamsCreator__Root courseId />),
+    )
+  | list{"school", "courses", courseId, "teams", studentId, "details"} => (
+      SelectedCourse(courseId, Teams),
+      Some(<TeamsDetails__Root courseId studentId />),
+    )
+  | list{"school", "courses", courseId, "teams", studentId, "actions"} => (
+      SelectedCourse(courseId, Teams),
+      Some(<TeamsActions__Root courseId studentId />),
     )
   | list{"school", "courses", courseId, "inactive_students"} => (
       SelectedCourse(courseId, Students),

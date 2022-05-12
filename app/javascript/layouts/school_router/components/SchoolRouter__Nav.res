@@ -120,8 +120,10 @@ let secondaryNavOption = (selectedPage, page) => {
 let secondaryNavLinks = (selectedPage, courseId, currentUser) => {
   let navOptionsAdmin = [
     Page.Curriculum,
+    Cohorts,
     Students,
     Applicants,
+    Teams,
     Authors,
     Certificates,
     CourseCoaches,

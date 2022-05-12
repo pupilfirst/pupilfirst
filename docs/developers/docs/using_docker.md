@@ -71,9 +71,42 @@ VAPID_PUBLIC_KEY
 VAPID_PRIVATE_KEY
 ```
 
-Generate these variables using [these instructions](/docs/heroku#webpush-notifications).
 
+
+Generate these variables using [these instructions](/docs/heroku#webpush-notifications).
+Set all essential environment variables before deploying
+
+### Database setup
+
+```
+bundle exec rails db:schema:load
+bundle exec rails db:seed
+```
+### Set Up Super Admin User
+
+```
+bundle exec rails c - e p 
+user = User.find_by(email: 'admin@example.com')
+user.update!(
+  password: 'a secure password',
+  password_confirmation: 'a secure password',
+)
+```
+### Set a primary domain, still on the rails console as in heroku deployment 
+
+```
+School.first.domains.create!(fqdn: 'my-app-name.herokuapp.com', primary: true)
+```
+
+### To allow background tasks set up service workers as [here](https://docs.digitalocean.com/products/app-platform/how-to/manage-workers/) then input the command shown below 
+### Remember to change from Web service
+```
+bin/worker
+```
+
+### For above if app environments were not set in app, set the same in this component 
 ### Optional
+
 
 #### Cloudfront
 
@@ -105,3 +138,5 @@ Generate these variables using [these instructions](/docs/heroku#signing-in-with
 ROLLBAR_CLIENT_TOKEN
 ROLLBAR_SERVER_TOKEN
 ```
+
+

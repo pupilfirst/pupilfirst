@@ -8,19 +8,19 @@ Pupilfirst LMS uses _Rails Internationalization_ (I18n) API for internationaliza
 
 ## Organization of en.yml
 
-| Key                               |                       Value                       |
-| --------------------------------- | :-----------------------------------------------: |
-| `components.COMPONENT.*`          |            Component-specific strings.            |
-| `controllers.CONTROLLER.ACTION.*` |           Controller-specific strings.            |
-| `jobs.[MODULE].JOB.*`             |               Strings used by jobs.               |
-| `models.MODEL.COLUMN.*`           | Translation of database values to display values. |
-| `mutations.MUTATION.*`            |            Strings used by mutations.             |
-| `queries.QUERY.*`                 |      Strings used by resolvers and mutators.      |
-| `shared.*`                        |                  Shared strings.                  |
-| `views.ACTION.*`                  |        Strings used in traditional views.         |
-| `mailers.METHOD.*`                |             Strings used in mailers.              |
-| `presenters.MODULE.*`             |            Presenter-specific strings.            |
-| `services.SERVICE.*`              |             Strings used by services.             |
+| Key                         |                       Value                       |
+| --------------------------- | :-----------------------------------------------: |
+| `components.COMPONENT.*`    |            Component-specific strings.            |
+| `jobs.MODULE.CLASS.*`       |               Strings used by jobs.               |
+| `models.MODEL.COLUMN.*`     | Translation of database values to display values. |
+| `mutations.MUTATION.*`      |            Strings used by mutations.             |
+| `queries.QUERY.*`           |      Strings used by resolvers and mutators.      |
+| `mailers.CLASS.ACTION.*`    |             Strings used in mailers.              |
+| `presenters.MODULE.CLASS.*` |            Presenter-specific strings.            |
+| `services.MODULE.CLASS.*`   |             Strings used by services.             |
+| `shared.*`                  |                  Shared strings.                  |
+| `CONTROLLER.ACTION.*`       |             Request-based responses.              |
+| `MODULE.CLASS.*`            |           Strings used by library code.           |
 
 - `CONTROLLERS` is always the plural version. For example: `FoundersController#edit` is keyed as `founders.edit.*`
 - Always order keys alphabetically. If you use [the VSCode plugin](#visual-studio-code-plugin), this will be done automatically.

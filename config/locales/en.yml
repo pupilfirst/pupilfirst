@@ -2028,7 +2028,8 @@ en:
     faculty:
       coaches_at: Coaches at
     help:
-      help: Help
+      show:
+        title: Help
     admins:
       title: Admins
     applicants:

@@ -276,12 +276,12 @@ class ApplicationController < ActionController::Base
                     user_signed_in? &&
                       (
                         session[:last_seen_at] == nil ||
-                          session[:last_seen_at] < 15.minutes.ago
+                          Time.zone.parse(session[:last_seen_at]) < 15.minutes.ago
                       )
                   }
 
   def set_last_seen_at
     current_user.update!(last_seen_at: Time.current)
-    session[:last_seen_at] = Time.current
+    session[:last_seen_at] = Time.current.iso8601
   end
 end

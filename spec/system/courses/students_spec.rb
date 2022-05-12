@@ -27,11 +27,10 @@ feature 'Course students list', js: true do
   let!(:team_4) { create :startup, level: level_3, name: 'Blueberry' }
   let!(:team_5) { create :startup, level: level_3, name: 'Cherry' }
   let!(:team_6) { create :startup, level: level_3, name: 'Elderberry' }
-  let(:first_student) { team_1.founders.first.user }
 
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course
-    first_student.update!(last_seen_at: 3.days.ago)
+    team_1.founders.first.user.update!(last_seen_at: 3.minutes.ago)
 
     10.times do
       create :startup,
@@ -71,7 +70,7 @@ feature 'Course students list', js: true do
 
     # Check the last seen for the first student
     within("div[aria-label='Info of team #{team_1.name}']") do
-      expect(page).to have_text('Last seen 3 days ago')
+      expect(page).to have_text('Last seen 3 minutes ago')
     end
 
     # Check the last seen for the second student

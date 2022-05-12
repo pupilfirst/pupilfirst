@@ -27,6 +27,18 @@ let make = (~school, ~courses, ~currentUser) => {
       SelectedCourse(courseId, Students),
       Some(<StudentsIndex__Root courseId search={url.search} />),
     )
+  | list{"school", "courses", courseId, "students", "new"} => (
+      SelectedCourse(courseId, Students),
+      Some(<StudentCreator__Root courseId search={url.search} />),
+    )
+  | list{"school", "courses", courseId, "students", "import"} => (
+      SelectedCourse(courseId, Students),
+      Some(<StudentBulkImport__Root courseId search={url.search} />),
+    )
+  | list{"school", "courses", courseId, "students", studentId, "edit"} => (
+      SelectedCourse(courseId, Students),
+      Some(<StudentEditor__Root courseId studentId search={url.search} />),
+    )
   | list{"school", "courses", courseId, "inactive_students"} => (
       SelectedCourse(courseId, Students),
       None,

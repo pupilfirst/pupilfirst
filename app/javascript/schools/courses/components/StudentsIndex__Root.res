@@ -165,7 +165,7 @@ let showTag = (~value=?, key, text, color, params) => {
   </button>
 }
 
-let studentsList = (students, state, params) => {
+let studentsList = (students, courseId, params) => {
   <div className="space-y-2">
     {students
     ->Js.Array2.map(student => {
@@ -204,13 +204,14 @@ let studentsList = (students, state, params) => {
             </div>
           </div>
           <div>
-            <button
+            <Link
+              href={`/school/courses/${courseId}/students/${StudentInfo.id(student)}/edit`}
               className="flex flex-1 items-center text-left py-4 px-4 hover:bg-gray-100 hover:text-primary-500 focus:bg-gray-100 focus:text-primary-500 justify-between">
               <span className="inline-flex items-center p-2">
                 <i className="fas fa-edit text-gray-500" />
                 <span className="ml-2"> {"Edit Student"->str} </span>
               </span>
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -251,6 +252,13 @@ let make = (~courseId, ~search) => {
     <div role="main" ariaLabel="Review" className="flex-1 flex flex-col">
       <div>
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
+          <div className="mt-2 text-right">
+            <Link
+              className="btn btn-primary btn-large"
+              href={`/school/courses/${courseId}/students/new`}>
+              <span> {str("Create Student")} </span>
+            </Link>
+          </div>
           <ul className="flex font-semibold text-sm">
             <li className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
               <span> {"Active Students"->str} </span>
@@ -272,7 +280,7 @@ let make = (~courseId, ~search) => {
               <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
             | PartiallyLoaded(submissions, cursor) =>
               <div>
-                {studentsList(submissions, state, params)}
+                {studentsList(submissions, courseId, params)}
                 {switch state.loading {
                 | LoadingMore =>
                   <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
@@ -292,7 +300,7 @@ let make = (~courseId, ~search) => {
                   )
                 }}
               </div>
-            | FullyLoaded(submissions) => <div> {studentsList(submissions, state, params)} </div>
+            | FullyLoaded(submissions) => <div> {studentsList(submissions, courseId, params)} </div>
             }}
           </div>
           {switch state.students {

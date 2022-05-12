@@ -3,7 +3,7 @@ ruby '2.7.6'
 source 'https://rubygems.org'
 
 # Ruby on Rails. http://rubyonrails.org
-gem 'rails', '~> 6.1.5'
+gem 'rails', '~> 6.1.5.1'
 
 gem 'dotenv-rails', '~> 2.7.6', groups: %i[development test]
 
@@ -32,7 +32,7 @@ gem 'kramdown', '~> 2.3' # kramdown is a fast, pure Ruby Markdown superset conve
 gem 'motion-markdown-it', '~> 8.4.1' # Ruby version of Markdown-it (a CommonMark compliant extensible parser).
 gem 'motion-markdown-it-plugins', '~> 8.4.2' # Plugins for motion-markdown-it.
 gem 'gaffe', '~> 1.2' # Custom error pages. https://github.com/mirego/gaffe
-gem 'acts-as-taggable-on', '~> 8.1' # Tag a single model on several contexts.
+gem 'acts-as-taggable-on', '~> 9.0' # Tag a single model on several contexts.
 gem 'email_inquire', '~> 0.11' # Validate email for format, common typos and one-time email providers
 gem 'titleize', '~> 1.4' # better titleizing, modifies Inflector.titleize from default rails
 gem 'reform', '~> 2.6' # Form objects decoupled from models. http://www.trailblazer.to/gems/reform
@@ -58,7 +58,7 @@ gem 'omniauth-github', '~> 1.2' # GitHub strategy for OmniAuth
 gem 'file_validators', '~> 3.0' # Adds file validators to ActiveModel.
 gem 'pundit', '~> 2.1' # Minimal authorization through OO design and pure Ruby classes.
 gem 'rack-cors', '~> 1.1', require: 'rack/cors' # Rack Middleware for handling CORS, required to serve static assets such as fonts
-gem 'graphql', '~> 1.12.16' # Ruby implementation of GraphQL http://graphql-ruby.org
+gem 'graphql', '~> 1.12.24' # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'rodf', '~> 1.1' # ODF generation library for Ruby. https://github.com/westonganger/rodf
 gem 'i18n-js', '~> 4.0.0.alpha1' # Provide Rails I18n translations on Javascript.
 gem 'batch-loader', '~> 2.0' # Generic lazy batching mechanism to avoid N+1 DB queries.
@@ -70,8 +70,8 @@ gem 'flipper-ui', '~> 0.22'
 gem 'flipper-active_record', '~> 0.22'
 
 group :development do
-  gem 'letter_opener_web', '~> 1.4' # A web interface for browsing Ruby on Rails sent emails.
-  gem 'bullet', '~> 6.1' # Detect N+1 queries.
+  gem 'letter_opener_web', '~> 2.0' # A web interface for browsing Ruby on Rails sent emails.
+  gem 'bullet', '~> 7.0' # Detect N+1 queries.
   gem 'web-console', '~> 4.1' # Rails Console on the Browser.
   gem 'listen', '~> 3.7' # The Listen gem listens to file modifications and notifies you about the changes.
   gem 'graphiql-rails', '~> 1.8'
@@ -82,7 +82,7 @@ group :test do
   gem 'factory_bot_rails', '~> 6.2' # A library for setting up Ruby objects as test data.
   gem 'capybara', '~> 3.35' # For RSpec feature tests.
   gem 'capybara-email', '~> 3.0' # Test ActionMailer and Mailer messages with Capybara
-  gem 'webdrivers', '~> 5.0' # Keep your Selenium WebDrivers updated automatically.
+gem 'webdrivers', '~> 5.0' # Keep your Selenium WebDrivers updated automatically.
   gem 'capybara-screenshot', '~> 1.0' # Save screenshots on failure!
   gem 'rspec-eventually', '~> 0.2.2' # Rspec helper to match eventually
   gem 'diffy', '~> 3.4' # Easy Diffing in Ruby. https://github.com/samg/diffy
@@ -98,13 +98,11 @@ group :development, :test do
   gem 'rubocop-rails', '~> 2.12', require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
   gem 'overcommit', '~> 0.58', require: false # A fully configurable and extendable Git hook manager
   gem 'fuubar', '~> 2.5' # The instafailing RSpec progress bar formatter.
-
-  # TODO: Simplecov has to be locked to < 0.18 until an issue with cc-test-reporter is fixed: https://github.com/codeclimate/test-reporter/issues/413
-  gem 'simplecov', '< 0.21', require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov
+  gem 'simplecov', '~> 0.21', require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov
 end
 
 group :production do
-  gem 'dalli', '~> 2.7.10' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
+  gem 'dalli', '~> 2.7' # High performance memcached client for Ruby. https://github.com/petergoldstein/dalli
   gem 'newrelic_rpm', '~> 8.6' # Performance monitoring
   gem 'aws-sdk-s3', '~> 1.103', require: false
   gem 'aws-sdk-cloudfront', '~> 1.56', require: false

@@ -22,7 +22,9 @@ class SubmissionDetailsResolver < ApplicationQuery
       preview: preview?,
       reviewer_details: reviewer_details,
       submission_report_poll_time:
-        Rails.application.secrets.submission_report_poll_time
+        Rails.application.secrets.submission_report_poll_time,
+      inactive_submission_review_allowed_days:
+        Rails.application.secrets.inactive_submission_review_allowed_days
     }
   end
 

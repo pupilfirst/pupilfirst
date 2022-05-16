@@ -10,19 +10,15 @@ class Founder < ApplicationRecord
   has_one :level, through: :startup
   has_one :course, through: :level
   has_many :communities, through: :course
-  has_many :coach_notes,
-           foreign_key: 'student_id',
-           class_name: 'CoachNote',
-           dependent: :destroy,
-           inverse_of: :student
   belongs_to :resume_file, class_name: 'TimelineEventFile', optional: true
   has_many :timeline_event_owners, dependent: :destroy
   has_many :timeline_events, through: :timeline_event_owners
   has_many :leaderboard_entries, dependent: :destroy
+
   has_many :coach_notes,
            foreign_key: 'student_id',
-           inverse_of: :student,
-           dependent: :destroy
+           dependent: :destroy,
+           inverse_of: :student
 
   scope :admitted, -> { joins(:startup).merge(Startup.admitted) }
   scope :startup_members, -> { where.not(startup_id: nil) }

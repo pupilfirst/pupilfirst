@@ -31,7 +31,7 @@ feature 'Course students list', js: true do
 
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course
-    team_2.founders.first.user.update!(last_seen_at: 3.minutes.ago)
+    team_1.founders.first.user.update!(last_seen_at: 3.minutes.ago)
 
     10.times do
       create :startup,

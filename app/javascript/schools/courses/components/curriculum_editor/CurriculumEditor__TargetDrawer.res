@@ -127,7 +127,7 @@ let make = (
           </div>
         </div>
         <div className="bg-white">
-          <div className="mx-auto border-t border-gray-400"> innerComponent </div>
+          <div className="mx-auto border-t border-gray-300"> innerComponent </div>
         </div>
       </div>
     </SchoolAdmin__EditorDrawer>

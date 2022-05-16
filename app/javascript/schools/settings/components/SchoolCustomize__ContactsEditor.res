@@ -104,7 +104,7 @@ let make = (~customizations, ~updateAddressCB, ~updateEmailAddressCB) => {
   let (state, send) = React.useReducer(reducer, initialState(customizations))
 
   <div className="mx-8 pt-8">
-    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+    <h5 className="uppercase text-center border-b border-gray-300 pb-2">
       {"Manage Contact Details" |> str}
     </h5>
     <DisablingCover disabled=state.updating>
@@ -117,7 +117,7 @@ let make = (~customizations, ~updateAddressCB, ~updateEmailAddressCB) => {
         <textarea
           autoFocus=true
           maxLength=1000
-          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="contacts-editor__address"
           placeholder="Leave the address empty to hide the footer section."
           onChange={handleInputChange(address => send(UpdateAddress(address)))}
@@ -133,7 +133,7 @@ let make = (~customizations, ~updateAddressCB, ~updateEmailAddressCB) => {
         <input
           type_="text"
           maxLength=250
-          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="contacts-editor__email-address"
           placeholder="Leave the email address empty to hide the footer link."
           onChange={handleInputChange(emailAddress =>

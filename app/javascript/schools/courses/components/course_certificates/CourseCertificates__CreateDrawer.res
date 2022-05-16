@@ -101,7 +101,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                   <span className="text-xs"> {" (" ++ (t("optional") ++ ")") |> str} </span>
                   <input
                     autoFocus=true
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                     id="name"
                     type_="text"
                     maxLength=30

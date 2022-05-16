@@ -51,15 +51,15 @@
               <% end %>
               <div class="flex items-center justify-center max-w-xs mx-auto h-10 mb-3 mt-5">
                 <% if presenter.previous_page? %>
-                  <a class="text-primary bg-white hover:bg-primary-100 hover:text-primary-600 hover:border-primary-300 hover:shadow-md focus:bg-primary-600 focus:text-white focus:shadow-inner px-4 py-2 h-full flex items-center justify-center border border-gray-400 rounded-lg" href="<%= presenter.previous_page_link %>">
+                  <a class="text-primary bg-white hover:bg-primary-100 hover:text-primary-600 hover:border-primary-300 hover:shadow-md focus:bg-primary-600 focus:text-white focus:shadow-inner px-4 py-2 h-full flex items-center justify-center border border-gray-300 rounded-lg" href="<%= presenter.previous_page_link %>">
                     <i class="fas fa-angle-left text-lg"></i>
                   </a>
                 <% end %>
-                <span class="bg-white px-6 py-2 text-sm flex items-center flex-shrink-0 h-full mx-1 md:mx-2 font-semibold border border-gray-400 rounded-lg">
+                <span class="bg-white px-6 py-2 text-sm flex items-center flex-shrink-0 h-full mx-1 md:mx-2 font-semibold border border-gray-300 rounded-lg">
                   <%= presenter.start_date %> to <%= presenter.end_date %>
                 </span>
                 <% if presenter.next_page? %>
-                  <a class="text-primary bg-white hover:bg-primary-100 hover:text-primary-600 hover:border-primary-300 hover:shadow-md focus:bg-primary-600 focus:text-white focus:shadow-inner px-4 py-2 h-full flex items-center justify-center border border-gray-400 rounded-lg" href="<%= presenter.next_page_link %>">
+                  <a class="text-primary bg-white hover:bg-primary-100 hover:text-primary-600 hover:border-primary-300 hover:shadow-md focus:bg-primary-600 focus:text-white focus:shadow-inner px-4 py-2 h-full flex items-center justify-center border border-gray-300 rounded-lg" href="<%= presenter.next_page_link %>">
                     <i class="fas fa-angle-right text-lg"></i>
                   </a>
                 <% end %>
@@ -75,7 +75,7 @@
           </h4>
         </div>
       <% else %>
-        <div class="leaderboard__table-container w-full bg-white border-t border-b md:border border-gray-400 scrolling-touch shadow-lg overflow-x-auto lg:overflow-hidden lg:rounded-lg">
+        <div class="leaderboard__table-container w-full bg-white border-t border-b md:border border-gray-300 scrolling-touch shadow-lg overflow-x-auto lg:overflow-hidden lg:rounded-lg">
           <table class="w-full mb-2 border-collapse relative">
             <thead class="bg-gray-50">
             <tr>

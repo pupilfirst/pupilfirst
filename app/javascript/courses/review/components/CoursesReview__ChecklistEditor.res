@@ -233,11 +233,11 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                           <div className="flex">
                             <label
                               title={t("disabled")}
-                              className="flex-shrink-0 rounded border border-gray-400 bg-gray-50 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
+                              className="flex-shrink-0 rounded border border-gray-300 bg-gray-50 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
                             />
                             <div className="w-full bg-gray-50 relative">
                               <div
-                                className="flex justify-between gap-2 bg-white border border-gray-400 border-b-transparent rounded-t focus-within:outline-none focus-within:bg-white focus-within:border-primary-300">
+                                className="flex justify-between gap-2 bg-white border border-gray-300 border-b-transparent rounded-t focus-within:outline-none focus-within:bg-white focus-within:border-primary-300">
                                 <input
                                   className="checklist-editor__checklist-result-item-title border-none h-10 pr-0 focus:outline-none"
                                   id={"result_" ++
@@ -314,7 +314,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                               <textarea
                                 rows=2
                                 cols=33
-                                className="appearance-none border border-gray-400 bg-transparent rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
+                                className="appearance-none border border-gray-300 bg-transparent rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
                                 id={"result_" ++
                                 string_of_int(itemIndex) ++
                                 string_of_int(resultIndex) ++ "_feedback"}
@@ -346,7 +346,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                       className="checklist-editor__add-result-btn ml-2 md:ml-4 mt-3 flex items-center focus:outline-none">
                       <span
                         title={t("add_result")}
-                        className="checklist-editor__add-result-btn-check flex-shrink-0 rounded border border-gray-400 bg-gray-50 w-4 h-4 mr-2"
+                        className="checklist-editor__add-result-btn-check flex-shrink-0 rounded border border-gray-300 bg-gray-50 w-4 h-4 mr-2"
                       />
                       <span
                         className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-50 px-3 py-1 rounded border border-dashed border-gray-600">

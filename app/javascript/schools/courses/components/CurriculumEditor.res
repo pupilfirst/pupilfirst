@@ -238,7 +238,7 @@ let make = (
                 }}
                 value={currentLevel |> Level.name}
                 ariaLabel="Select level"
-                className="block appearance-none w-full bg-white border text-sm border-gray-400 rounded-l hover:border-gray-500 px-4 py-3 pr-8 rounded-r-none leading-tight focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+                className="block appearance-none w-full bg-white border text-sm border-gray-300 rounded-l hover:border-gray-500 px-4 py-3 pr-8 rounded-r-none leading-tight focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 {state.levels
                 |> Level.sort
                 |> Array.map(level =>
@@ -259,7 +259,7 @@ let make = (
             <button
               title={t("edit_selected_level")}
               ariaLabel={t("edit_selected_level")}
-              className="flex items-center text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-400 border-l-0 py-1 px-2 rounded-r focus:outline-none focus:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
+              className="flex items-center text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-300 border-l-0 py-1 px-2 rounded-r focus:outline-none focus:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
               onClick={_ => send(UpdateEditorAction(ShowLevelEditor(Some(state.selectedLevel))))}>
               <i className="fas fa-pencil-alt" />
             </button>
@@ -298,7 +298,7 @@ let make = (
         <button
           ariaLabel={t("create_target_group")}
           onClick={_ => send(UpdateEditorAction(ShowTargetGroupEditor(None)))}
-          className="target-group__create w-full flex flex-col items-center justify-center relative bg-white border-2 border-dashed border-gray-400 p-6 z-10 hover:text-primary-500 hover:shadow-lg hover:border-primary-400 focus:outline-none focus:text-primary-500 focus:shadow-lg focus:border-primary-400 rounded-lg mt-12 cursor-pointer">
+          className="target-group__create w-full flex flex-col items-center justify-center relative bg-white border-2 border-dashed border-gray-300 p-6 z-10 hover:text-primary-500 hover:shadow-lg hover:border-primary-400 focus:outline-none focus:text-primary-500 focus:shadow-lg focus:border-primary-400 rounded-lg mt-12 cursor-pointer">
           <span className="flex bg-gray-50 p-2 rounded-full">
             <i className="fas fa-plus-circle text-2xl" />
           </span>

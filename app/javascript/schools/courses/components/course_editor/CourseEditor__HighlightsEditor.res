@@ -58,7 +58,7 @@ let selected = (highlight: Course.Highlight.t) => {
   <button
     title={t("selected_button.title")}
     ariaLabel={t("selected_button.title")}
-    className="flex items-center justify-center cursor-pointer bg-white border border-gray-400 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
+    className="flex items-center justify-center cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
     <PfIcon className={"text-lg if i-" ++ highlight.icon} />
   </button>
 }
@@ -93,7 +93,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
             />
             <div className="w-full">
               <input
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight font-semibold focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-tight font-semibold focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                 id={"highlight-" ++ string_of_int(index) ++ "-title"}
                 type_="text"
                 placeholder={t("title.placeholder")}
@@ -104,7 +104,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
                   updateTitle(replaceCB, highlight, ReactEvent.Form.target(event)["value"])}
               />
               <input
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-1 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-1 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                 id={"highlight-" ++ string_of_int(index) ++ "-description"}
                 type_="text"
                 placeholder={t("description.placeholder")}

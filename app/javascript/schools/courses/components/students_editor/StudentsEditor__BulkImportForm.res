@@ -112,23 +112,23 @@ let submitForm = (courseId, send, closeDrawerCB, event) => {
 let tableHeader = {
   <thead>
     <tr className="bg-gray-300">
-      <th className="w-12 border border-gray-400 text-left text-xs px-2 py-1 font-semibold" />
-      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+      <th className="w-12 border border-gray-300 text-left text-xs px-2 py-1 font-semibold" />
+      <th className="border border-gray-300 text-left text-xs px-2 py-1 font-semibold">
         {"name"->str}
       </th>
-      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+      <th className="border border-gray-300 text-left text-xs px-2 py-1 font-semibold">
         {"email"->str}
       </th>
-      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+      <th className="border border-gray-300 text-left text-xs px-2 py-1 font-semibold">
         {"title"->str}
       </th>
-      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+      <th className="border border-gray-300 text-left text-xs px-2 py-1 font-semibold">
         {"team_name"->str}
       </th>
-      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+      <th className="border border-gray-300 text-left text-xs px-2 py-1 font-semibold">
         {"tags"->str}
       </th>
-      <th className="border border-gray-400 text-left text-xs px-2 py-1 font-semibold">
+      <th className="border border-gray-300 text-left text-xs px-2 py-1 font-semibold">
         {"affiliation"->str}
       </th>
     </tr>
@@ -139,25 +139,25 @@ let tableRows = (csvData, ~startingRow=0, ()) => {
   Js.Array.mapi(
     (studentData, index) =>
       <tr key={string_of_int(index)}>
-        <td className="w-12 bg-gray-300 border border-gray-400 truncate text-xs px-2 py-1">
+        <td className="w-12 bg-gray-300 border border-gray-300 truncate text-xs px-2 py-1">
           {string_of_int(startingRow + index + 2)->str}
         </td>
-        <td className="border border-gray-400 truncate text-xs px-2 py-1">
+        <td className="border border-gray-300 truncate text-xs px-2 py-1">
           {StudentCSVData.name(studentData)->Belt.Option.getWithDefault("")->str}
         </td>
-        <td className="border border-gray-400 truncate text-xs px-2 py-1">
+        <td className="border border-gray-300 truncate text-xs px-2 py-1">
           {StudentCSVData.email(studentData)->Belt.Option.getWithDefault("")->str}
         </td>
-        <td className="border border-gray-400 truncate text-xs px-2 py-1">
+        <td className="border border-gray-300 truncate text-xs px-2 py-1">
           {StudentCSVData.title(studentData)->Belt.Option.getWithDefault("")->str}
         </td>
-        <td className="border border-gray-400 truncate text-xs px-2 py-1">
+        <td className="border border-gray-300 truncate text-xs px-2 py-1">
           {StudentCSVData.teamName(studentData)->Belt.Option.getWithDefault("")->str}
         </td>
-        <td className="border border-gray-400 truncate text-xs px-2 py-1">
+        <td className="border border-gray-300 truncate text-xs px-2 py-1">
           {StudentCSVData.tags(studentData)->Belt.Option.getWithDefault("")->str}
         </td>
-        <td className="border border-gray-400 truncate text-xs px-2 py-1">
+        <td className="border border-gray-300 truncate text-xs px-2 py-1">
           {StudentCSVData.affiliation(studentData)->Belt.Option.getWithDefault("")->str}
         </td>
       </tr>,
@@ -175,13 +175,13 @@ let truncatedTable = csvData => {
     <table className="table-fixed relative w-full overflow-x-scroll">
       <tbody>
         <tr
-          className="divide-x divide-dashed divide-gray-400 border-l border-r border-dashed border-gray-400">
+          className="divide-x divide-dashed divide-gray-400 border-l border-r border-dashed border-gray-300">
           <td className="w-12 px-2 py-3" />
           <td className="px-2 py-3" />
           <td colSpan=3 className="px-2 py-3">
             <div>
               <div className="absolute inset-0 flex items-center" ariaHidden=true>
-                <div className="w-full border-t border-b py-1 border-dashed border-gray-400" />
+                <div className="w-full border-t border-b py-1 border-dashed border-gray-300" />
               </div>
               <div className="relative flex justify-center">
                 <span className="px-2 bg-white text-xs italic text-center text-gray-700">
@@ -229,7 +229,7 @@ let clearFile = send => {
 }
 
 let rowClasses = hasError =>
-  "border border-gray-400 truncate text-xs px-2 py-1 " ++ (
+  "border border-gray-300 truncate text-xs px-2 py-1 " ++ (
     hasError ? "bg-red-200 text-red-800" : ""
   )
 
@@ -278,7 +278,7 @@ let errorTabulation = (csvData, fileInvalid) => {
                   {t("more_errors_text")->str}
                   <textArea
                     readOnly=true
-                    className="border border-gray-400 bg-gray-50 rounded p-1 mt-1 w-full focus:outline-none focus:ring focus:border-primary-400">
+                    className="border border-gray-300 bg-gray-50 rounded p-1 mt-1 w-full focus:outline-none focus:ring focus:border-primary-400">
                     {Js.Array.map(
                       error => CSVDataError.rowNumber(error),
                       Js.Array2.sliceFrom(errors, 10),
@@ -328,7 +328,7 @@ let make = (~courseId, ~closeDrawerCB) => {
     <input name="notify_students" type_="hidden" value={string_of_bool(state.notifyStudents)} />
     <div className="mx-auto bg-white">
       <div className="max-w-2xl p-6 mx-auto">
-        <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+        <h5 className="uppercase text-center border-b border-gray-300 pb-2 mb-4">
           {t("drawer_heading")->str}
         </h5>
         <DisablingCover disabled={state.saving} message="Processing...">

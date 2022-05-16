@@ -518,7 +518,7 @@ let gradePillHeader = (evaluationCriteriaName, selectedGrade, gradeLabels) =>
 
 let gradePillClasses = (selectedGrade, currentGrade, passgrade, send) => {
   let defaultClasses =
-    "course-review-editor__grade-pill border-gray-400 py-1 px-2 text-sm flex-1 font-semibold transition " ++
+    "course-review-editor__grade-pill border-gray-300 py-1 px-2 text-sm flex-1 font-semibold transition " ++
     switch send {
     | Some(_) =>
       "cursor-pointer hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
@@ -642,7 +642,7 @@ let badgeColorClasses = statusColor => {
   | Red => "bg-red-100 border-red-400"
   | Green => "bg-green-100 border-green-400"
   | Orange => "bg-orange-100 border-orange-400"
-  | Gray => "bg-gray-50 border-gray-400"
+  | Gray => "bg-gray-50 border-gray-300"
   }
 }
 

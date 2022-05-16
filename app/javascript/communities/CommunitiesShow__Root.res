@@ -234,7 +234,7 @@ let topicsList = (topicCategories, topics) =>
                     <span className="hidden md:inline-block md:mr-2">
                       {"on " ++ Topic.createdAt(topic)->DateFns.formatPreset(~year=true, ()) |> str}
                     </span>
-                    <span className="inline-block md:mt-0 md:px-2 md:border-l border-gray-400">
+                    <span className="inline-block md:mt-0 md:px-2 md:border-l border-gray-300">
                       {switch Topic.lastActivityAt(topic) {
                       | Some(date) =>
                         <span>
@@ -480,7 +480,7 @@ let filterPlaceholder = (filter, topicCategories) =>
 let categoryDropdownSelected = topicCategory =>
   <div
     ariaLabel="Selected category filter"
-    className="text-sm bg-white border border-gray-400 rounded py-1 md:py-2 px-3 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
+    className="text-sm bg-white border border-gray-300 rounded py-1 md:py-2 px-3 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
     {switch topicCategory {
     | Some(topicCategory) =>
       let (color, _) = TopicCategory.color(topicCategory)

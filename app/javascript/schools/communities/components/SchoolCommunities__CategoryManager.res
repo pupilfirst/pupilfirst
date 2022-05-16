@@ -6,7 +6,7 @@ open SchoolCommunities__IndexTypes
 let make = (~community, ~deleteCategoryCB, ~createCategoryCB, ~updateCategoryCB, ~setDirtyCB) => {
   let categories = Community.topicCategories(community)
   <div className="mx-8 pt-8">
-    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+    <h5 className="uppercase text-center border-b border-gray-300 pb-2">
       {"Categories in " ++ Community.name(community) |> str}
     </h5>
     {ReactUtils.nullIf(

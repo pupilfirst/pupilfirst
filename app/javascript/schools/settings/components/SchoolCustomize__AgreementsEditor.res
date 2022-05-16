@@ -113,7 +113,7 @@ let reducer = (state, action) =>
 let make = (~kind, ~customizations, ~updatePrivacyPolicyCB, ~updateTermsAndConditionsCB) => {
   let (state, send) = React.useReducer(reducer, initialState(kind, customizations))
   <div className="mx-8 pt-8 flex flex-col agreements-editor__container">
-    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+    <h5 className="uppercase text-center border-b border-gray-300 pb-2">
       {"Manage " ++ (kind |> kindToString) |> str}
     </h5>
     <DisablingCover disabled=state.updating containerClasses="flex flex-col flex-1">
@@ -126,7 +126,7 @@ let make = (~kind, ~customizations, ~updatePrivacyPolicyCB, ~updateTermsAndCondi
         <textarea
           autoFocus=true
           maxLength=20000
-          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500 flex-1"
+          className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500 flex-1"
           id="agreements-editor__value"
           placeholder="Leave the agreement body empty to hide the footer link."
           onChange={handleAgreementChange(send)}

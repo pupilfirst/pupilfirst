@@ -53,7 +53,7 @@ let headerLinks = links => {
   switch visibleLinks {
   | list{} =>
     <div
-      className="border border-gray-400 rounded-lg italic text-gray-600 cursor-default text-sm py-2 px-4">
+      className="border border-gray-300 rounded-lg italic text-gray-600 cursor-default text-sm py-2 px-4">
       {"You can customize links on the header." |> str}
     </div>
   | visibleLinks =>

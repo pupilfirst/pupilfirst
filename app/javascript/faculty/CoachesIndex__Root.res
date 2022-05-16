@@ -141,13 +141,13 @@ let overlay = (coach, about) =>
             | Some(src) =>
               <img
                 src
-                className="mx-auto w-40 h-40 -mb-18 border-4 border-gray-400 rounded-full object-cover"
+                className="mx-auto w-40 h-40 -mb-18 border-4 border-gray-300 rounded-full object-cover"
                 alt={"Avatar of " ++ Coach.name(coach)}
               />
             | None =>
               <Avatar
                 name={Coach.name(coach)}
-                className="mx-auto w-40 h-40 -mb-18 border-4 border-gray-400 rounded-full object-cover"
+                className="mx-auto w-40 h-40 -mb-18 border-4 border-gray-300 rounded-full object-cover"
               />
             }}
           </div>
@@ -198,7 +198,7 @@ let card = coach =>
       </div>
     </div>
     <div
-      className="flex justify-between divide-x border-t divide-gray-400 border-gray-400 rounded-b-lg overflow-hidden">
+      className="flex justify-between divide-x border-t divide-gray-400 border-gray-300 rounded-b-lg overflow-hidden">
       {switch Coach.about(coach) {
       | Some(_about) =>
         <div className="block flex-1">

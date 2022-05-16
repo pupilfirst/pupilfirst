@@ -11,7 +11,7 @@ let onChange = (contentBlock, updateContentBlockCB, event) => {
 let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
   let titleInputId = "title-" ++ (contentBlock |> ContentBlock.id)
 
-  <div className="relative border border-gray-400 rounded-lg">
+  <div className="relative border border-gray-300 rounded-lg">
     <div
       className="content-block__content text-base bg-gray-50 flex justify-center items-center rounded-t-lg">
       <div className="w-full">
@@ -36,7 +36,7 @@ let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
         <span className="text-sm ml-1"> {"(optional)" |> str} </span>
         <input
           id=titleInputId
-          className="mt-1 appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+          className="mt-1 appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-300 leading-tight focus:outline-none focus:bg-white focus:border-gray"
           onChange={onChange(contentBlock, updateContentBlockCB)}
           maxLength=60
           type_="text"

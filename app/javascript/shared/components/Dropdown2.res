@@ -45,7 +45,7 @@ let make = (
     selected
     {showDropdown
       ? <div
-          className={"dropdown__list-2 bg-white shadow-lg rounded mt-1 border border-gray-400 absolute overflow-x-hidden z-30
+          className={"dropdown__list-2 bg-white shadow-lg rounded mt-1 border border-gray-300 absolute overflow-x-hidden z-30
  " ++
           width ++
           ((right ? " right-0 " : " left-0 ") ++

@@ -346,7 +346,7 @@ let targetRoleClasses = selected =>
   "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-left focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
     selected
       ? "target-editor__completion-button--selected bg-gray-50 text-primary-500 border-primary-500"
-      : "border-gray-400 hover:bg-gray-50 bg-white"
+      : "border-gray-300 hover:bg-gray-50 bg-white"
   )
 
 let targetEvaluated = methodOfCompletion =>
@@ -462,7 +462,7 @@ let linkEditor = (state, send) =>
     </label>
     <div className="ml-6">
       <input
-        className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+        className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="link_to_complete"
         type_="text"
         placeholder="Paste link to complete"
@@ -575,7 +575,7 @@ let methodOfCompletionButtonClasses = value => {
   let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border hover:bg-gray-50 text-sm font-semibold focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 rounded p-4"
   value
     ? defaultClasses ++ " target-editor__completion-button--selected bg-gray-50 text-primary-500 border-primary-500"
-    : defaultClasses ++ " border-gray-400 opacity-75 text-gray-900"
+    : defaultClasses ++ " border-gray-300 opacity-75 text-gray-900"
 }
 
 let methodOfCompletionSelection = polyMethodOfCompletion =>
@@ -870,7 +870,7 @@ let make = (
                 <div className="ml-6">
                   <input
                     autoFocus=true
-                    className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                    className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                     id="title"
                     type_="text"
                     placeholder={t("target_title_placeholder")}
@@ -1036,7 +1036,7 @@ let make = (
                 </HelpIcon>
                 <div className="ml-6">
                   <input
-                    className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                    className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                     id="completion-instructions"
                     type_="text"
                     maxLength=255

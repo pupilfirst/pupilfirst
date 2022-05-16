@@ -57,13 +57,13 @@ let make = (~note, ~userId, ~removeNoteCB) => {
           switch user |> User.avatarUrl {
           | Some(avatarUrl) =>
             <img
-              className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+              className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
               src=avatarUrl
             />
           | None =>
             <Avatar
               name={user |> User.name}
-              className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+              className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
             />
           }
 

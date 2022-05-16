@@ -98,7 +98,7 @@ let make = (~entry, ~markNotificationCB) => {
                 ariaLabel="Mark as read"
                 title="Mark as Read"
                 onClick={markNotification(Entry.id(entry), setSaving, markNotificationCB)}
-                className="flex justify-center items-center w-8 h-8 font-semibold p-2 md:py-1 border border-gray-400 rounded text-sm bg-white text-gray-700 hover:text-primary-500 hover:border-primary-400 hover:bg-gray-50 hover:shadow-md focus:outline-none focus:text-primary-500 focus:border-primary-400 focus:bg-gray-50 focus:shadow-md transition ease-in-out duration-150">
+                className="flex justify-center items-center w-8 h-8 font-semibold p-2 md:py-1 border border-gray-300 rounded text-sm bg-white text-gray-700 hover:text-primary-500 hover:border-primary-400 hover:bg-gray-50 hover:shadow-md focus:outline-none focus:text-primary-500 focus:border-primary-400 focus:bg-gray-50 focus:shadow-md transition ease-in-out duration-150">
                 <Icon className="if i-check-solid" />
               </button>
             </Tooltip>,

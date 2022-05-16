@@ -1,5 +1,5 @@
 .level-editor__tab {
-  @apply flex items-center justify-center w-1/2 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 bg-gray-50 text-gray-600;
+  @apply flex items-center justify-center w-1/2 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-300 bg-gray-50 text-gray-600;
 }
 
 .level-editor__tab--selected {

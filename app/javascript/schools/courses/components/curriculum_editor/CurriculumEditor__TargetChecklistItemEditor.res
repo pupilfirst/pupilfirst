@@ -112,7 +112,7 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
           <div className="flex items-center text-sm rounded mt-2">
             <span className="text-gray-400"> <i className="far fa-circle text-base" /> </span>
             <div
-              className="flex flex-1 py-2 px-3 ml-3 justify-between items-center focus:outline-none bg-white focus-within:bg-white focus-within:border-transparent focus-within:ring-2 focus:ring-focusColor-500 border border-gray-400 rounded">
+              className="flex flex-1 py-2 px-3 ml-3 justify-between items-center focus:outline-none bg-white focus-within:bg-white focus-within:border-transparent focus-within:ring-2 focus:ring-focusColor-500 border border-gray-300 rounded">
               <input
                 name={"multichoice-input-" ++ (index + 1 |> string_of_int)}
                 className="flex-1 appearance-none bg-transparent border-none leading-snug focus:outline-none"
@@ -140,7 +140,7 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
     }
     <button
       onClick={_ => addMultichoiceOption(checklistItem, updateChecklistItemCB)}
-      className="flex mt-2 ml-7 p-2 text-sm appearance-none bg-white border rounded items-center justify-between outline-none border-gray-400 hover:border-gray-100 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-focusColor-500">
+      className="flex mt-2 ml-7 p-2 text-sm appearance-none bg-white border rounded items-center justify-between outline-none border-gray-300 hover:border-gray-100 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-focusColor-500">
       <PfIcon className="fas fa-plus-circle if-fw" />
       <span className="font-semibold ml-2"> {"Add a choice" |> str} </span>
     </button>
@@ -213,7 +213,7 @@ let make = (
         </div>
       </div>
       <div
-        className="flex items-center text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-2 focus:outline-none focus:bg-white focus:border-primary-300">
+        className="flex items-center text-sm bg-white border border-gray-300 rounded py-2 px-3 mt-2 focus:outline-none focus:bg-white focus:border-primary-300">
         <textarea
           maxLength=500
           rows=2

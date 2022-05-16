@@ -236,7 +236,7 @@ let confirmDeletionWindow = (state, send) =>
                   send(UpdateEmailForDeletion(ReactEvent.Form.target(event)["value"]))}
                 id="email"
                 autoComplete="off"
-                className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                 placeholder="Type your email"
               />
             </div>
@@ -311,7 +311,7 @@ let make = (
               name="name"
               value=state.name
               onChange={event => send(UpdateName(ReactEvent.Form.target(event)["value"]))}
-              className="appearance-none mb-2 block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+              className="appearance-none mb-2 block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               placeholder="Type your name"
             />
             <School__InputGroupError
@@ -327,7 +327,7 @@ let make = (
                   value=state.about
                   rows=3
                   onChange={event => send(UpdateAbout(ReactEvent.Form.target(event)["value"]))}
-                  className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                  className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                   placeholder="A brief introduction about yourself"
                 />
               </div>
@@ -360,7 +360,7 @@ let make = (
                     <label
                       htmlFor="user-edit__avatar-input"
                       ariaHidden=true
-                      className="form-input__file-label rounded-md shadow-sm py-2 px-3 border border-gray-400 rounded-md text-sm font-semibold hover:text-gray-800 active:bg-gray-50 active:text-gray-800">
+                      className="form-input__file-label rounded-md shadow-sm py-2 px-3 border border-gray-300 rounded-md text-sm font-semibold hover:text-gray-800 active:bg-gray-50 active:text-gray-800">
                       {"Change photo" |> str}
                     </label>
                   </span>
@@ -400,7 +400,7 @@ let make = (
                     onChange={event =>
                       send(UpdateCurrentPassword(ReactEvent.Form.target(event)["value"]))}
                     id="current_password"
-                    className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                    className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                     placeholder="Type current password"
                   />
                 </div>
@@ -415,7 +415,7 @@ let make = (
                 id="new_password"
                 value=state.newPassword
                 onChange={event => send(UpdateNewPassword(ReactEvent.Form.target(event)["value"]))}
-                className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                 placeholder="Type new password"
               />
             </div>
@@ -433,7 +433,7 @@ let make = (
                 value=state.confirmPassword
                 onChange={event =>
                   send(UpdateNewPassWordConfirm(ReactEvent.Form.target(event)["value"]))}
-                className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                 placeholder="Confirm new password"
               />
               <School__InputGroupError
@@ -496,7 +496,7 @@ let make = (
                 onChange={event => {
                   send(UpdateLocale(ReactEvent.Form.target(event)["value"]))
                 }}
-                className="select appearance-none block text-sm w-full bg-white shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500">
+                className="select appearance-none block text-sm w-full bg-white shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500">
                 {availableLocales
                 ->Js.Array2.map(availableLocale =>
                   <option

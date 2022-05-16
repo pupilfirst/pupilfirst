@@ -157,7 +157,7 @@ module Make = (Selectable: Selectable) => {
   let wrapper = children =>
     <div
       role="listbox"
-      className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg py-2 z-50">
+      className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-300 bg-white mt-1 rounded-lg shadow-lg py-2 z-50">
       <p className="text-gray-700 italic mx-4 text-xs border-b pb-1 mb-2">
         {str("Suggestions:")}
       </p>
@@ -217,7 +217,7 @@ module Make = (Selectable: Selectable) => {
     <div className="w-full relative">
       <div>
         <div
-          className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-1 px-2 mt-1 focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
+          className="flex flex-wrap items-center text-sm bg-white border border-gray-300 rounded w-full py-1 px-2 mt-1 focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
           {selected |> showSelected(onDeselect, labelSuffix) |> React.array}
           <input
             onClick={_ => setShowDropdown(s => !s)}

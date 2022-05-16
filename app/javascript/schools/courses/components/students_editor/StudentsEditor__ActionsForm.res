@@ -150,7 +150,7 @@ let showIssuedCertificates = (
           <div
             ariaLabel={"Details of issued certificate " ++ StudentsEditor__IssuedCertificate.id(ic)}
             key={StudentsEditor__IssuedCertificate.id(ic)}
-            className="flex flex-col mt-2 p-2 border rounded border-gray-400">
+            className="flex flex-col mt-2 p-2 border rounded border-gray-300">
             <div className="flex justify-between">
               <span className="text-sm font-semibold">
                 {StudentsEditor__IssuedCertificate.certificate(ic, certificates)
@@ -267,7 +267,7 @@ let make = (
                 </label>
                 <div className="flex items-end mt-2">
                   <select
-                    className="cursor-pointer appearance-none block w-full bg-white border border-gray-400 rounded h-10 py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="cursor-pointer appearance-none block w-full bg-white border border-gray-300 rounded h-10 py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="issue-certificate"
                     onChange={event => {
                       let selectedValue = ReactEvent.Form.target(event)["value"]

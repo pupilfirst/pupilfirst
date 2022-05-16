@@ -88,7 +88,7 @@ let make = (~url, ~caption, ~contentBlock, ~updateContentBlockCB, ~width) => {
         <span className="text-sm ml-1"> {"(optional)" |> str} </span>
         <input
           id=captionInputId
-          className="mt-1 appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+          className="mt-1 appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-300 leading-tight focus:outline-none focus:bg-white focus:border-gray"
           onChange={onChangeCaption(contentBlock, updateContentBlockCB)}
           maxLength=250
           type_="text"

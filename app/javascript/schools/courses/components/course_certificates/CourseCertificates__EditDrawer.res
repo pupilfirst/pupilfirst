@@ -60,7 +60,7 @@ let reducer = (state, action) =>
 let buttonTypeClass = (stateQrCorner, qrCorner) =>
   stateQrCorner == qrCorner
     ? "border-primary-500 bg-primary-100 text-primary-600"
-    : "border-gray-400 bg-gray-50 text-gray-800"
+    : "border-gray-300 bg-gray-50 text-gray-800"
 
 let activeButtonClasses = (stateActive, active) => {
   let baseClasses = "toggle-button__button"
@@ -197,7 +197,7 @@ let make = (
             <div>
               <input
                 autoFocus=true
-                className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                 maxLength=30
                 id="name"
                 type_="text"

@@ -275,8 +275,8 @@ let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
 let controlsContainerClasses = mode =>
   "border bg-gray-50 text-sm px-2 flex justify-between items-end " ++
   switch mode {
-  | Windowed(_) => "rounded-t border-gray-400"
-  | Fullscreen(_) => "border-gray-400 "
+  | Windowed(_) => "rounded-t border-gray-300"
+  | Fullscreen(_) => "border-gray-300 "
   }
 
 let controls = (disabled, value, state, send, onChange) => {
@@ -291,7 +291,7 @@ let controls = (disabled, value, state, send, onChange) => {
       <div />
     | Windowed(#Editor)
     | Fullscreen(#Editor | #Split) =>
-      <div role="toolbar" className="bg-white border border-gray-400 rounded-t border-b-0">
+      <div role="toolbar" className="bg-white border border-gray-300 rounded-t border-b-0">
         <button
           disabled
           ariaLabel={t("control_label_bold")}
@@ -304,7 +304,7 @@ let controls = (disabled, value, state, send, onChange) => {
           disabled
           ariaLabel={t("control_label_italic")}
           title={t("control_label_italic")}
-          className={buttonClasses ++ "border-l border-gray-400"}
+          className={buttonClasses ++ "border-l border-gray-300"}
           onClick={_ => curriedModifyPhrase(Italic)}>
           <i className="fas fa-italic fa-fw" />
         </button>
@@ -312,7 +312,7 @@ let controls = (disabled, value, state, send, onChange) => {
           disabled
           ariaLabel={t("control_label_strikethrough")}
           title={t("control_label_strikethrough")}
-          className={buttonClasses ++ "border-l border-gray-400"}
+          className={buttonClasses ++ "border-l border-gray-300"}
           onClick={_ => curriedModifyPhrase(Strikethrough)}>
           <i className="fas fa-strikethrough fa-fw" />
         </button>
@@ -361,7 +361,7 @@ let modeClasses = mode =>
   }
 
 let editorContainerClasses = mode =>
-  "border-r border-gray-400 " ++
+  "border-r border-gray-300 " ++
   switch mode {
   | Windowed(#Editor) => "border-l"
   | Windowed(#Preview) => "hidden"
@@ -381,7 +381,7 @@ let previewType = mode =>
   }
 
 let previewContainerClasses = mode =>
-  "border-gray-400 bg-gray-50 " ++
+  "border-gray-300 bg-gray-50 " ++
   switch mode |> previewType {
   | #WindowedPreview => "markdown-editor__windowed-preview-container border-l border-r border-b rounded-b px-2 md:px-3"
   | #FullscreenPreview => "w-screen mx-auto"
@@ -470,8 +470,8 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
 let footerContainerClasses = mode =>
   "markdown-editor__footer-container border bg-gray-50 flex justify-end items-center " ++
   switch mode {
-  | Windowed(_) => "rounded-b border-gray-400"
-  | Fullscreen(_) => "border-gray-400"
+  | Windowed(_) => "rounded-b border-gray-300"
+  | Fullscreen(_) => "border-gray-300"
   }
 
 let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {

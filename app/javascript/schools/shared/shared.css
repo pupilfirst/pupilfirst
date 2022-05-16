@@ -293,7 +293,7 @@
 }
 
 .toggle-button__button {
-  @apply w-1/2 text-sm font-semibold py-1 px-6 text-gray-700 border border-gray-400 focus:ring-1 focus:ring-inset focus:ring-focusColor-500;
+  @apply w-1/2 text-sm font-semibold py-1 px-6 text-gray-700 border border-gray-300 focus:ring-1 focus:ring-inset focus:ring-focusColor-500;
   transition: 0.3s cubic-bezier(0, 0, 0, 1);
 }
 
@@ -492,7 +492,7 @@
 .quiz-maker__answer-option-pointer {
   width: 1.375rem;
   height: 1.375rem;
-  @apply absolute rounded-full overflow-hidden text-center text-white bg-white border border-gray-400;
+  @apply absolute rounded-full overflow-hidden text-center text-white bg-white border border-gray-300;
   box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.1);
   left: 13px;
   top: 50%;
@@ -537,7 +537,7 @@
 }
 
 .select-list__item-selected-unremovable {
-  @apply border-gray-400 bg-gray-50;
+  @apply border-gray-300 bg-gray-50;
 }
 
 .form-input__range[type="range"] {
@@ -549,7 +549,7 @@
 }
 
 .form-input__range[type="range"]::-webkit-slider-runnable-track {
-  @apply w-full h-2 cursor-pointer border border-gray-400 rounded-lg bg-gray-300;
+  @apply w-full h-2 cursor-pointer border border-gray-300 rounded-lg bg-gray-300;
 }
 
 .form-input__range[type="range"]::-webkit-slider-thumb {
@@ -561,7 +561,7 @@
 }
 
 .form-input__range[type="range"]::-moz-range-track {
-  @apply w-full h-2 cursor-pointer border border-gray-400 rounded-lg bg-gray-300;
+  @apply w-full h-2 cursor-pointer border border-gray-300 rounded-lg bg-gray-300;
 }
 
 .form-input__range[type="range"]::-moz-range-thumb {

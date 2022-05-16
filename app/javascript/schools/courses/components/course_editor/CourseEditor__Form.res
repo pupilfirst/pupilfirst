@@ -11,7 +11,7 @@ type tabs =
   | ActionsTab
 
 let selectedTabClasses = selected =>
-  "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer hover:bg-gray-50 hover:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
+  "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-300 text-gray-600 cursor-pointer hover:bg-gray-50 hover:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
     selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-50"
   )
 
@@ -391,7 +391,7 @@ let processingUrlInput = (state, send) => {
     {ReactUtils.nullUnless(
       <div>
         <input
-          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+          className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="processing_url"
           type_="text"
           placeholder="https://example.com/"
@@ -492,7 +492,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
       </label>
       <input
         autoFocus=true
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="name"
         type_="text"
         placeholder={t("course_name.placeholder")}
@@ -507,7 +507,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
         {t("course_description.label")->str}
       </label>
       <input
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="description"
         type_="text"
         placeholder={t("course_description.placeholder")}
@@ -685,7 +685,7 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
   let (state, send) = React.useReducerWithMapState(reducer, course, computeInitialState)
   <DisablingCover disabled={state.saving}>
     <div className="mx-auto bg-white">
-      <div className="pt-6 border-b border-gray-400 bg-gray-50">
+      <div className="pt-6 border-b border-gray-300 bg-gray-50">
         <div className="max-w-2xl mx-auto">
           <h5 className="uppercase text-center">
             {(

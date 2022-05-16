@@ -155,7 +155,7 @@ let createCourseExport = (state, send, course, event) => {
 }
 
 let toggleChoiceClasses = value => {
-  let defaultClasses = "relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-50 text-sm font-semibold focus:outline-none focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 rounded p-4 w-full"
+  let defaultClasses = "relative flex flex-col items-center bg-white border border-gray-300 hover:bg-gray-50 text-sm font-semibold focus:outline-none focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 rounded p-4 w-full"
   value
     ? defaultClasses ++ " bg-gray-50 text-primary-500 border-primary-500"
     : defaultClasses ++ " opacity-75 text-gray-900"
@@ -171,7 +171,7 @@ let make = (~course, ~exports, ~tags) => {
           closeDrawerCB={() => send(CloseDrawer)} closeButtonTitle="Close Export Form">
           <div className="mx-auto bg-white">
             <div className="max-w-2xl pt-6 px-6 mx-auto">
-              <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+              <h5 className="uppercase text-center border-b border-gray-300 pb-2">
                 {t("create_action_button")->str}
               </h5>
               <div className="mt-4">
@@ -285,7 +285,7 @@ let make = (~course, ~exports, ~tags) => {
       <div className="flex px-6 py-2 items-center justify-between">
         <button
           onClick={_ => send(OpenDrawer)}
-          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-50 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
+          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-50 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-300 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-file-export text-lg" />
           <h5 className="font-semibold ml-2"> {t("create_action")->str} </h5>
         </button>

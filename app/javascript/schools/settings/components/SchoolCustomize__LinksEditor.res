@@ -78,7 +78,7 @@ let showLinks = (state, send, removeLinkCB, kind, links) =>
   switch links {
   | list{} =>
     <div
-      className="border border-gray-400 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
+      className="border border-gray-300 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
       {"There are no custom links here. Add some?" |> str}
     </div>
   | links =>
@@ -264,7 +264,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
   let (state, send) = React.useReducer(reducer, initialState(kind))
 
   <div className="mt-8 mx-8 pb-6">
-    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+    <h5 className="uppercase text-center border-b border-gray-300 pb-2">
       {"Manage custom links" |> str}
     </h5>
     <div className="mt-3">
@@ -316,7 +316,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
               </label>
               <input
                 autoFocus=true
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
+                className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                 id="link-title"
                 type_="text"
                 placeholder="A short title for a new link"
@@ -335,7 +335,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
               {"Full URL" |> str}
             </label>
             <input
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
               id="link-full-url"
               type_="text"
               placeholder="Full URL, staring with https://"

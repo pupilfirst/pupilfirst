@@ -176,7 +176,7 @@ let make = (
     {targetGroupArchived
       ? React.null
       : <div
-          className="target-group__target-create relative bg-gray-50 flex items-center border border-dashed border-gray-400 text-gray-700 hover:text-gray-900 active:text-gray-900 focus:text-gray-900 hover:shadow-lg hover:border-gray-500 rounded-lg rounded-t-none overflow-hidden">
+          className="target-group__target-create relative bg-gray-50 flex items-center border border-dashed border-gray-300 text-gray-700 hover:text-gray-900 active:text-gray-900 focus:text-gray-900 hover:shadow-lg hover:border-gray-500 rounded-lg rounded-t-none overflow-hidden">
           <label
             htmlFor={"create-target-input" ++ (targetGroup |> TargetGroup.id)}
             className="absolute flex items-center h-full cursor-pointer pl-4">

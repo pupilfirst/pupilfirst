@@ -197,7 +197,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
 
   <div className="mx-auto bg-white">
     <div className="max-w-2xl p-6 mx-auto">
-      <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+      <h5 className="uppercase text-center border-b border-gray-300 pb-2 mb-4">
         {t("drawer_heading")->str}
       </h5>
       <StudentsEditor__StudentInfoForm

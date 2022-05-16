@@ -75,7 +75,7 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTa
               <button
                 ariaLabel={"Remove tag " ++ tag}
                 title={"Remove tag " ++ tag}
-                className="flex items-center px-2 h-full cursor-pointer text-gray-700 hover:text-red-500 hover:bg-gray-300 focus:outline-none focus:text-red-500 focus:bg-gray-300 border-l border-gray-400"
+                className="flex items-center px-2 h-full cursor-pointer text-gray-700 hover:text-red-500 hover:bg-gray-300 focus:outline-none focus:text-red-500 focus:bg-gray-300 border-l border-gray-300"
                 onClick={_e => handleClick(tag, send, removeTagCB)}>
                 <i className="fas fa-times" />
               </button>
@@ -88,14 +88,14 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTa
     <input
       value=state
       onChange={event => send(ReactEvent.Form.target(event)["value"])}
-      className="appearance-none block bg-white leading-snug border border-gray-400 rounded w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+      className="appearance-none block bg-white leading-snug border border-gray-300 rounded w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
       id="tags"
       type_="text"
       placeholder={allowNewTags ? "Search for, or add new tags" : "Select tags"}
     />
     {ReactUtils.nullUnless(
       <div
-        className="flex flex-wrap border border-gray-400 bg-white mt-1 rounded-lg shadow-lg searchable-tag-list__dropdown relative px-4 pt-2 pb-3">
+        className="flex flex-wrap border border-gray-300 bg-white mt-1 rounded-lg shadow-lg searchable-tag-list__dropdown relative px-4 pt-2 pb-3">
         {results->React.array}
       </div>,
       ArrayUtils.isNotEmpty(results),

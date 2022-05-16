@@ -86,7 +86,7 @@
 }
 
 .course-overlay__body-tab-item {
-  @apply border border-gray-400 rounded-t-lg;
+  @apply border border-gray-300 rounded-t-lg;
 }
 
 .course-overlay__body-tab-item:not(:last-child) {

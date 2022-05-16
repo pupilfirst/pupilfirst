@@ -292,7 +292,7 @@ let make = (
                     {state.selectedStudents
                     |> Array.map(selectedStudent =>
                       <div
-                        className="flex items-center bg-white border border-gray-400 rounded-full mr-2 mt-2 overflow-hidden">
+                        className="flex items-center bg-white border border-gray-300 rounded-full mr-2 mt-2 overflow-hidden">
                         {switch selectedStudent |> SelectedStudent.avatarUrl {
                         | Some(avatarUrl) =>
                           <img

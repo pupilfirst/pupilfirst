@@ -244,7 +244,7 @@ let topicCategory = (topicCategories, topicCategoryId) =>
 let categoryDropdownSelected = topicCategory =>
   <div
     ariaLabel="Selected category"
-    className="flex justify-between text-sm bg-white border border-gray-400 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
+    className="flex justify-between text-sm bg-white border border-gray-300 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
     {switch topicCategory {
     | Some(topicCategory) =>
       let (color, _) = TopicCategory.color(topicCategory)
@@ -371,7 +371,7 @@ let make = (
                     onChange={event =>
                       send(UpdateTopicTitle(ReactEvent.Form.target(event)["value"]))}
                     value=state.topicTitle
-                    className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-300 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     type_="text"
                   />
                   <div className="flex flex-col md:flex-row md:justify-between md:items-end">

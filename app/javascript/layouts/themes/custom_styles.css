@@ -8,18 +8,19 @@
   }
 
   @screen md {
-    * {
+    body {
       scrollbar-width: thin;
-      scrollbar-color: theme("colors.gray.500") theme("colors.gray.100");
+      scrollbar-color: theme("colors.gray.400") theme("colors.gray.100");
     }
     ::-webkit-scrollbar {
       width: 12px;
     }
     ::-webkit-scrollbar-track {
       background: theme("colors.gray.100");
+      border-radius: 8px;
     }
     ::-webkit-scrollbar-thumb {
-      background-color: theme("colors.gray.500");
+      background-color: theme("colors.gray.400");
       border-radius: 6px;
       border: 3px solid theme("colors.gray.100");
     }
@@ -95,6 +96,10 @@
 
   .btn {
     @apply inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold py-2 px-4 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500;
+  }
+
+  .btn:disabled {
+    opacity: 0.5;
   }
 
   /* Button Styles */

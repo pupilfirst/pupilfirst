@@ -67,7 +67,7 @@ let make = (~courseId, ~evaluationCriteria) => {
     <div className="flex px-6 py-2 items-center justify-between">
       <button
         onClick={_ => setState(state => {...state, editorAction: ShowEditor(None)})}
-        className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-50 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-300 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
+        className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-primary-300 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
         <i className="fas fa-plus-circle" />
         <h5 className="font-semibold ml-2"> {"Add New Evaluation Criterion" |> str} </h5>
       </button>

@@ -82,8 +82,8 @@ let topLink = (selectedOption, currentOption, path, shrunk, iconClasses, text) =
 }
 
 let secondaryNavOption = (path, currentSelection, inspectedSelection, text) => {
-  let defaultClasses = "flex text-blue-800 text-sm py-3 px-4 hover:bg-gray-400 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigio-500 font-semibold rounded items-center my-1"
-  let classes = defaultClasses ++ (currentSelection == inspectedSelection ? " bg-gray-400" : "")
+  let defaultClasses = "flex text-sm font-semibold py-3 px-4 hover:bg-primary-50 hover:text-primary-500 focus:outline-none focus:bg-primary-50 focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-indigio-500 rounded items-center my-1"
+  let classes = defaultClasses ++ (currentSelection == inspectedSelection ? " bg-primary-50 text-primary-500" : " text-gray-500")
 
   <div key=text> <a href=path className=classes> {text |> str} </a> </div>
 }
@@ -135,7 +135,7 @@ let secondaryNav = (courses, userRole, selectedOption) =>
   | Settings(settingsSelection) =>
     <div
       key="secondary-nav"
-      className="bg-gray-50 school-admin-navbar__secondary-nav w-full border-r border-gray-300 pb-6 overflow-y-auto">
+      className="bg-white school-admin-navbar__secondary-nav w-full border-r border-gray-300 pb-6 overflow-y-auto">
       <ul className="p-4">
         {secondaryNavOption("/school/customize", settingsSelection, Customization, "Customization")}
         {secondaryNavOption("/school/admins", settingsSelection, Admins, "Admins")}
@@ -144,7 +144,7 @@ let secondaryNav = (courses, userRole, selectedOption) =>
   | SelectedCourse(courseId, courseSelection) =>
     <div
       key="secondary-nav"
-      className="bg-gray-50 school-admin-navbar__secondary-nav w-full border-r border-gray-300 pb-6 overflow-y-auto">
+      className="bg-white school-admin-navbar__secondary-nav w-full border-r border-gray-300 pb-6 overflow-y-auto">
       <div className="p-4">
         <SchoolAdminNavbar__CourseDropdown courses currentCourseId=courseId />
         {secondaryNavLinks(courseSelection, courseId, userRole)->React.array}

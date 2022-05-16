@@ -285,7 +285,7 @@
 
 .file-input-label:hover,
 .file-input-label:focus {
-  @apply bg-gray-400;
+  @apply bg-blue-100;
 }
 
 .toggle-button__group {

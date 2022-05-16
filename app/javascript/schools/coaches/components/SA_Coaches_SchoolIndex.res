@@ -42,7 +42,7 @@ let make = (~coaches, ~authenticityToken) => {
             ReactEvent.Mouse.preventDefault(_event)
             send(UpdateFormVisible(CoachEditor(None)))
           }}
-          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-50 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:shadow-lg focus:border-primary-300 focus:text-primary-600 border-2 border-gray-300 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:shadow-lg focus:border-primary-300 focus:text-primary-600 border-2 border-primary-300 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-plus-circle text-lg" />
           <h5 className="font-semibold ml-2"> {"Add New Coach" |> str} </h5>
         </button>

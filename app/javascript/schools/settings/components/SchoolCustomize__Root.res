@@ -276,7 +276,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           </div>
         </div>
       </div>
-      <div className="relative bg-gray-300">
+      <div className="relative bg-gray-200 rounded-lg">
         <div className="absolute right-0 z-10 pt-3 pr-3">
           <button
             ariaLabel="Change cover"
@@ -344,7 +344,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
         <div className="school-customize__footer-top-container rounded-t-lg p-6 flex">
           <div className="w-2/5">
             <div
-              className="p-3 bg-gray-300 border border-dashed border-gray-500 rounded h-full mr-2">
+              className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full mr-2">
               <div className="flex items-center">
                 <span className="uppercase font-bold text-sm"> {"Sitemap" |> str} </span>
                 {editIcon(
@@ -362,7 +362,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             <div className="flex">
               <div className="w-3/5">
                 <div
-                  className="p-3 bg-gray-300 border border-dashed border-gray-500 rounded h-full mr-2">
+                  className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full mr-2">
                   <div className="flex items-center">
                     <span className="uppercase font-bold text-sm"> {"Social" |> str} </span>
                     {editIcon(
@@ -380,7 +380,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
               </div>
               <div className="w-2/5">
                 <div
-                  className="p-3 bg-gray-300 border border-dashed border-gray-500 rounded h-full">
+                  className="p-3 bg-gray-100 border border-dashed border-gray-500 rounded h-full">
                   <div className="flex items-center">
                     <span className="uppercase font-bold text-sm"> {"Contact" |> str} </span>
                     {editIcon("ml-3", showEditor(ContactsEditor, send), "Edit contact details")}
@@ -395,13 +395,13 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
         <div
           className="school-customize__footer-bottom-container rounded-b-lg p-6 flex justify-between">
           <div
-            className="flex items-center bg-gray-300 border border-dashed border-gray-500 rounded p-2">
+            className="flex items-center border border-dashed border-gray-500 rounded p-2">
             {footerLogo(schoolName, state.customizations |> Customizations.logoOnLightBg)}
             {editIcon("ml-3", showEditor(ImagesEditor, send), "Edit logo (on dark backgrounds)")}
           </div>
           <div className="flex items-center text-sm">
             <div
-              className="flex items-center bg-gray-300 border border-dashed border-gray-500 rounded p-2 text-xs">
+              className="flex items-center border border-dashed border-gray-500 rounded p-2 text-xs">
               <div> {"Privacy Policy" |> str} </div>
               {editIcon(
                 "ml-3",
@@ -410,7 +410,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
               )}
             </div>
             <div
-              className="flex items-center bg-gray-300 border border-dashed border-gray-500 rounded p-2 ml-6 text-xs">
+              className="flex items-center border border-dashed border-gray-500 rounded p-2 ml-6 text-xs">
               <div> {"Terms & Conditions" |> str} </div>
               {editIcon(
                 "ml-3",
@@ -434,7 +434,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
       </div>
       <div className="mt-6 font-bold"> {"Icon" |> str} </div>
       <div className="mt-3 w-2/4 max-w-sm">
-        <div className="bg-gray-400 rounded-t-lg h-12 flex items-end">
+        <div className="bg-gray-300 rounded-t-lg h-12 flex items-end">
           <div className="w-full flex items-center pr-3">
             <div className="h-3 w-3 rounded-full bg-gray-500 ml-4" />
             <div className="h-3 w-3 rounded-full bg-gray-500 ml-2" />

@@ -226,8 +226,8 @@ let make = (
         levels=state.levels level course hideEditorActionCB updateLevelsCB
       />
     }}
-    <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
-      <div className="w-full py-4 relative md:sticky top-0 z-20 bg-gray-100 border-b">
+    <div className="px-6 pb-4 flex-1 bg-gray-50 relative overflow-y-scroll">
+      <div className="w-full py-4 relative md:sticky top-0 z-20 bg-gray-50 border-b">
         <div className="max-w-3xl flex items-center justify-between mx-auto">
           <div className="flex">
             <div className="inline-block relative w-auto md:w-64">

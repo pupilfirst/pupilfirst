@@ -227,7 +227,7 @@ let socialLinkIconClass = url =>
 
 let showSocialLinks = socialLinks =>
   <div
-    className="inline-flex flex-wrap justify-center text-lg text-gray-800 mt-3 bg-gray-100 px-2 rounded-lg">
+    className="inline-flex flex-wrap justify-center text-lg text-gray-800 mt-3 bg-gray-50 px-2 rounded-lg">
     {socialLinks
     |> Array.mapi((index, link) =>
       <a
@@ -498,9 +498,9 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
           {otherTeamMembers(setState, studentId, studentDetails)}
         </div>
         <div
-          className="w-full relative md:w-3/5 bg-gray-100 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">
+          className="w-full relative md:w-3/5 bg-gray-50 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">
           <div
-            className="sticky top-0 bg-gray-100 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
+            className="sticky top-0 bg-gray-50 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
             <ul
               role="tablist"
               className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent">
@@ -558,7 +558,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
           {SkeletonLoading.image()}
           {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.profileCard())}
         </div>
-        <div className="w-full relative md:w-3/5 bg-gray-100 md:border-l p-4 md:p-8 2xl:p-16">
+        <div className="w-full relative md:w-3/5 bg-gray-50 md:border-l p-4 md:p-8 2xl:p-16">
           {SkeletonLoading.contents()} {SkeletonLoading.profileCard()}
         </div>
       </div>

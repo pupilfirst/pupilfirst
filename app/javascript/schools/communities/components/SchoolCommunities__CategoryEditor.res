@@ -183,7 +183,7 @@ let make = (
     <div
       key=categoryId
       ariaLabel={"Editor for category " ++ categoryId}
-      className="flex justify-between items-center bg-gray-100 border-gray-400 shadow rounded mt-3 px-2 py-1 topic-category-editor">
+      className="flex justify-between items-center bg-gray-50 border-gray-400 shadow rounded mt-3 px-2 py-1 topic-category-editor">
       <div className="flex-1 items-center mr-2">
         <input
           id="category-name"
@@ -217,7 +217,7 @@ let make = (
         <button
           title="Delete Category"
           onClick={deleteCategory(category, deleteCategoryCB, send)}
-          className="text-xs py-1 px-2 h-8 text-gray-700 hover:text-red-500 hover:bg-gray-100 focus:text-red-500 focus:bg-gray-100 border-l border-gray-400">
+          className="text-xs py-1 px-2 h-8 text-gray-700 hover:text-red-500 hover:bg-gray-50 focus:text-red-500 focus:bg-gray-50 border-l border-gray-400">
           <FaIcon classes={state.deleting ? "fas fa-spinner fa-spin" : "fas fa-trash-alt"} />
         </button>
       </div>

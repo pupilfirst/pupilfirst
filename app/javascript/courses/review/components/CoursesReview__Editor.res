@@ -375,7 +375,7 @@ let reviewNextButton = (nextSubmission, send, courseId, filter, submissionId, cl
 let headerSection = (state, nextSubmission, send, submissionDetails, filter, submissionId) =>
   <div
     ariaLabel="submissions-overlay-header"
-    className="bg-gray-100 border-b border-gray-300 flex justify-center">
+    className="bg-gray-50 border-b border-gray-300 flex justify-center">
     <div className="bg-white flex justify-between w-full">
       <div className="flex flex-col md:flex-row w-full md:w-auto">
         <div className="flex flex-1 md:flex-none justify-between border-b md:border-0">
@@ -384,7 +384,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
             ariaLabel="submissions-overlay-close"
             onClick={_ =>
               closeOverlay(state, SubmissionDetails.courseId(submissionDetails), filter)}
-            className="flex flex-col items-center justify-center leading-tight px-3 py-2 md:px-5 md:py-4 cursor-pointer border-r bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:ring-2 focus:ring-focusColor-500 ring-inset ">
+            className="flex flex-col items-center justify-center leading-tight px-3 py-2 md:px-5 md:py-4 cursor-pointer border-r bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-50 focus:ring-2 focus:ring-focusColor-500 ring-inset ">
             <div className="flex items-center justify-center bg-gray-300 rounded-full w-8 h-8">
               <Icon className="if i-times-regular text-lg lg:text-2xl" />
             </div>
@@ -642,7 +642,7 @@ let badgeColorClasses = statusColor => {
   | Red => "bg-red-100 border-red-400"
   | Green => "bg-green-100 border-green-400"
   | Orange => "bg-orange-100 border-orange-400"
-  | Gray => "bg-gray-100 border-gray-400"
+  | Gray => "bg-gray-50 border-gray-400"
   }
 }
 
@@ -1365,7 +1365,7 @@ let make = (
                 </div>
               </div>
               <div
-                className="flex justify-end bg-white md:bg-gray-100 border-t px-4 md:px-6 py-2 md:py-4 mt-4 md:ml-8">
+                className="flex justify-end bg-white md:bg-gray-50 border-t px-4 md:px-6 py-2 md:py-4 mt-4 md:ml-8">
                 <button
                   disabled={reviewButtonDisabled(status)}
                   className="btn btn-success btn-large w-full border border-green-600"
@@ -1453,7 +1453,7 @@ let make = (
                     }}
                   </div>
                 </div>
-                <div className="flex md:flex-row flex-col md:ml-8 bg-gray-100 mt-2">
+                <div className="flex md:flex-row flex-col md:ml-8 bg-gray-50 mt-2">
                   <div className="w-full">
                     {showGrades(grades, evaluationCriteria, submissionDetails, state)}
                   </div>

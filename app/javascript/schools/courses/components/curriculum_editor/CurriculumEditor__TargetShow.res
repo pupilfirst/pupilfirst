@@ -47,7 +47,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
     "/school/courses/" ++ ((course |> Course.id) ++ ("/targets/" ++ ((target |> Target.id) ++ "/")))
 
   <div
-    className="flex target-group__target-container border-t bg-white overflow-hidden relative hover:bg-gray-100 hover:text-primary-500">
+    className="flex target-group__target-container border-t bg-white overflow-hidden relative hover:bg-gray-50 hover:text-primary-500">
     {Js.Array.length(targets) > 1
       ? <div
           className="target-group__target-reorder relative flex flex-col z-10 h-full border-r border-transparent text-gray-700 justify-between items-center">

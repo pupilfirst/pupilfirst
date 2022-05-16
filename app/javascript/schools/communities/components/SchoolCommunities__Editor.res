@@ -276,7 +276,7 @@ let make = (
             onDeselect={onDeselectCourse(send)}
           />
         </div>
-        <div className="mt-4 px-6 py-2 bg-gray-100 border rounded">
+        <div className="mt-4 px-6 py-2 bg-gray-50 border rounded">
           <div className="flex justify-between items-center mb-4">
             <label
               className="inline-block tracking-wide text-gray-700 text-xs font-semibold uppercase">
@@ -286,7 +286,7 @@ let make = (
             | Some(_community) =>
               <button
                 onClick={_ => showCategoryEditorCB()}
-                className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
+                className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-50 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
                 <i className="fas fa-pencil-alt" />
                 <span className="text-xs font-semibold ml-2">
                   {(ArrayUtils.isEmpty(categories) ? "Add Categories" : "Edit Categories") |> str}

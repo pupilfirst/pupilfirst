@@ -336,7 +336,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           {"Featured Courses" |> str}
         </h2>
         <div className="text-sm"> {"Featured courses will be listed here" |> str} </div>
-        <div className="max-w-2xl bg-gray-100 rounded-lg mx-auto p-3 mt-4">
+        <div className="max-w-2xl bg-gray-50 rounded-lg mx-auto p-3 mt-4">
           <div className="school-customize__featured-courses-empty-placeholder" />
         </div>
       </div>
@@ -439,7 +439,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             <div className="h-3 w-3 rounded-full bg-gray-500 ml-4" />
             <div className="h-3 w-3 rounded-full bg-gray-500 ml-2" />
             <div className="h-3 w-3 rounded-full bg-gray-500 ml-2" />
-            <div className="p-3 ml-4 bg-gray-100 rounded-t-lg flex items-center">
+            <div className="p-3 ml-4 bg-gray-50 rounded-t-lg flex items-center">
               <img
                 src={state.customizations |> Customizations.icon |> Customizations.url}
                 className="h-5 w-5"
@@ -451,7 +451,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             {editIcon("ml-2", showEditor(ImagesEditor, send), "Edit icon")}
           </div>
         </div>
-        <div className="bg-gray-100 border border-t-0 h-16 rounded-b-lg" />
+        <div className="bg-gray-50 border border-t-0 h-16 rounded-b-lg" />
       </div>
     </div>
     {editor(state, send, authenticityToken)}

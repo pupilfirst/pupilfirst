@@ -215,7 +215,7 @@ let topicsList = (topicCategories, topics) =>
           href={"/topics/" ++ Topic.id(topic)}
           ariaLabel={"Topic " ++ Topic.id(topic)}>
           <div
-            className="flex items-center border border-transparent hover:bg-gray-100 hover:text-primary-500  hover:border-primary-400">
+            className="flex items-center border border-transparent hover:bg-gray-50 hover:text-primary-500  hover:border-primary-400">
             <div className="flex-1">
               <div className="cursor-pointer no-underline flex flex-col p-4 md:px-6 md:py-5">
                 <span className="block">
@@ -251,7 +251,7 @@ let topicsList = (topicCategories, topics) =>
                 </span>
                 <span className="flex flex-row flex-wrap mt-2 items-center">
                   <span
-                    className="flex text-center items-center mr-2 py-1 px-2 rounded bg-gray-100"
+                    className="flex text-center items-center mr-2 py-1 px-2 rounded bg-gray-50"
                     ariaLabel="Likes">
                     <i className="far fa-thumbs-up text-sm text-gray-600 mr-1" />
                     <p className="text-xs font-semibold">
@@ -267,7 +267,7 @@ let topicsList = (topicCategories, topics) =>
                     </p>
                   </span>
                   <span
-                    className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-100"
+                    className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-50"
                     ariaLabel="Replies">
                     <i className="far fa-comment-dots text-sm text-gray-600 mr-1" />
                     <p className="text-xs font-semibold">
@@ -283,7 +283,7 @@ let topicsList = (topicCategories, topics) =>
                     </p>
                   </span>
                   <span
-                    className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-100"
+                    className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-50"
                     ariaLabel="Views">
                     <i className="far fa-eye text-sm text-gray-600 mr-1" />
                     <p className="text-xs font-semibold">
@@ -616,7 +616,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
     | None => React.null
     }}
     <div className="mt-5 flex flex-col flex-1 ">
-      <div className="w-full sticky top-0 z-30 bg-gray-100 py-2">
+      <div className="w-full sticky top-0 z-30 bg-gray-50 py-2">
         <div className="max-w-3xl w-full mx-auto relative px-3 md:px-6">
           <div className="pb-3 flex justify-between">
             {ReactUtils.nullIf(

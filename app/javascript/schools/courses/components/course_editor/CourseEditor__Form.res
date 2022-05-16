@@ -12,7 +12,7 @@ type tabs =
 
 let selectedTabClasses = selected =>
   "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer hover:bg-gray-50 hover:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
-    selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-100"
+    selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-50"
   )
 
 let tabItemsClasses = selected => selected ? "" : "hidden"
@@ -685,7 +685,7 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
   let (state, send) = React.useReducerWithMapState(reducer, course, computeInitialState)
   <DisablingCover disabled={state.saving}>
     <div className="mx-auto bg-white">
-      <div className="pt-6 border-b border-gray-400 bg-gray-100">
+      <div className="pt-6 border-b border-gray-400 bg-gray-50">
         <div className="max-w-2xl mx-auto">
           <h5 className="uppercase text-center">
             {(

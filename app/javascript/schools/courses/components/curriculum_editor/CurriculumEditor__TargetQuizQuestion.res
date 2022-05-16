@@ -44,7 +44,7 @@ let make = (
     quizQuestion |> CurriculumEditor__QuizQuestion.answerOptions |> Array.length > 2
   let questionId = "quiz-question-" ++ questionNumber
 
-  <div className="quiz-maker__question-container p-4 bg-gray-100 rounded-lg border mt-4">
+  <div className="quiz-maker__question-container p-4 bg-gray-50 rounded-lg border mt-4">
     <div className="flex items-center justify-between">
       <label
         className="block tracking-wide uppercase text-gray-800 text-sm font-bold"

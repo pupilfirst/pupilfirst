@@ -100,15 +100,15 @@
   /* Button Styles */
 
   .btn-default {
-    @apply bg-gray-300 text-primary-500;
+    @apply bg-primary-50 text-primary-500 border border-primary-500 rounded;
   }
 
   .btn-default:hover {
-    @apply bg-gray-400 text-primary-600;
+    @apply bg-primary-100 text-primary-600;
   }
 
   .btn-default:focus {
-    @apply bg-gray-400 text-primary-700;
+    @apply bg-primary-100 text-primary-700;
   }
 
   .btn-subtle {

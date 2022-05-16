@@ -521,7 +521,7 @@ let make = () => {
     <div className="flex-1 flex flex-col">
       <div className="items-center justify-between max-w-4xl mx-auto mt-8 w-full px-10">
         <button
-          className="w-full flex items-center justify-center relative bg-white border-dashed text-primary-500 border-2 border-gray-400 hover:bg-gray-100 hover:text-primary-600 hover:shadow-md hover:border-primary-300 focus:outline-none focus:bg-gray-100 focus:text-primary-600 focus:shadow-md focus:border-primary-300 p-6 rounded-lg cursor-pointer"
+          className="w-full flex items-center justify-center relative bg-white border-dashed text-primary-500 border-2 border-gray-400 hover:bg-gray-50 hover:text-primary-600 hover:shadow-md hover:border-primary-300 focus:outline-none focus:bg-gray-50 focus:text-primary-600 focus:shadow-md focus:border-primary-300 p-6 rounded-lg cursor-pointer"
           onClick={_ => RescriptReactRouter.push("/school/courses/new")}>
           <i className="fas fa-plus-circle text-lg" />
           <span className="font-semibold ml-2"> {str(t("add_new_course"))} </span>

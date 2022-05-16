@@ -18,7 +18,7 @@ let updateReviewChecklist = (setState, updateReviewChecklistCB, reviewChecklist)
 let handleEmpty = setState =>
   <div className="p-4 md:p-6">
     <button
-      className="bg-gray-100 border border-primary-500 border-dashed rounded-lg p-3 md:p-5 flex items-center w-full hover:bg-gray-50 hover:border-primary-600 hover:shadow-lg focus:outline-none"
+      className="bg-gray-50 border border-primary-500 border-dashed rounded-lg p-3 md:p-5 flex items-center w-full hover:bg-gray-50 hover:border-primary-600 hover:shadow-lg focus:outline-none"
       onClick={_ => setState(_ => Edit)}>
       <span
         className="inline-flex flex-shrink-0 bg-white w-14 h-14 border border-dashed border-primary-500 rounded-full items-center justify-center shadow-md">

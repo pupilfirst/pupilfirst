@@ -183,7 +183,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
       </div>
     </div>
     <div
-      className="flex justify-end bg-white md:bg-gray-100 border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
+      className="flex justify-end bg-white md:bg-gray-50 border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
       <button
         className="btn btn-primary w-full md:w-auto"
         disabled={selection->ArrayUtils.isEmpty}

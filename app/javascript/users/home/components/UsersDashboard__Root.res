@@ -85,7 +85,7 @@ let courseLink = (href, title, icon) =>
   <a
     key=href
     href
-    className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
+    className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-50 text-gray-800 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
     <i className=icon /> <span className="font-semibold ml-2"> {title->str} </span>
   </a>
 
@@ -143,7 +143,7 @@ let communityLinks = (communityIds, communities) => Js.Array.map(id => {
       <a
         key={Community.id(c)}
         href={Community.path(c)}
-        className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
+        className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-50 text-gray-800 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
         <i className="fas fa-users" />
         <span className="font-semibold ml-2"> {Community.name(c)->str} </span>
       </a>
@@ -327,7 +327,7 @@ let make = (
   ~issuedCertificates,
 ) => {
   let (view, setView) = React.useState(() => ShowCourses)
-  <div className="bg-gray-100">
+  <div className="bg-gray-50">
     <div className="bg-white">
       {headerSectiom(userName, userTitle, avatarUrl, showUserEdit)}
       {navSection(view, setView, communities, issuedCertificates)}

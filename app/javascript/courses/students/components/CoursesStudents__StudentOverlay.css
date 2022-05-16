@@ -73,7 +73,7 @@
 }
 
 .student-overlay__pie-chart-container {
-  @apply bg-gray-100 w-full rounded-lg overflow-hidden;
+  @apply bg-gray-50 w-full rounded-lg overflow-hidden;
 }
 
 .student-overlay__doughnut-chart {

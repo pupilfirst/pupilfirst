@@ -112,12 +112,12 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           {str("Submission #" ++ (totalSubmissions - index)->string_of_int)}
         </h2>
         <div
-          className="text-xs font-semibold bg-gray-100 inline-block px-3 py-1 mr-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
+          className="text-xs font-semibold bg-gray-50 inline-block px-3 py-1 mr-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
           <span className="hidden md:inline"> {str("Submitted on ")} </span>
           {submission |> Submission.createdAtPretty |> str}
         </div>
       </div>
-      <div className="rounded-lg bg-gray-100 border shadow-md overflow-hidden">
+      <div className="rounded-lg bg-gray-50 border shadow-md overflow-hidden">
         <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
           <SubmissionChecklistShow
             checklist={submission |> Submission.checklist}

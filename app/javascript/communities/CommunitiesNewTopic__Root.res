@@ -205,7 +205,7 @@ let suggestions = state => {
             ("/" ++ (suggestion |> TopicSuggestion.title |> StringUtils.parameterize)))}
             target="_blank"
             key={suggestion |> TopicSuggestion.id}
-            className="flex w-full items-center justify-between mt-1 p-3 rounded cursor-pointer border bg-gray-100 hover:text-primary-500 hover:bg-gray-50">
+            className="flex w-full items-center justify-between mt-1 p-3 rounded cursor-pointer border bg-gray-50 hover:text-primary-500 hover:bg-gray-50">
             <div className="flex flex-col min-w-0">
               <h5
                 title={suggestion |> TopicSuggestion.title}
@@ -257,7 +257,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
   let (state, send) = React.useReducer(reducer, initialState)
 
   <DisablingCover disabled=state.saving>
-    <div className="bg-gray-100">
+    <div className="bg-gray-50">
       <div className="flex-1 flex flex-col">
         <div className="px-3 lg:px-0">
           <div className="max-w-3xl w-full mx-auto mt-5 pb-2">

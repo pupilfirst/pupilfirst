@@ -72,7 +72,7 @@ let make = (~courseId, ~coach) => {
     None
   }, [courseId])
   <div className="mx-auto">
-    <div className="py-6 border-b border-gray-400 bg-gray-100">
+    <div className="py-6 border-b border-gray-400 bg-gray-50">
       <div className="max-w-2xl mx-auto">
         <div className="flex">
           {switch coach |> CourseCoach.avatarUrl {

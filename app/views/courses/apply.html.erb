@@ -5,7 +5,7 @@
   <%= stylesheet_pack_tag 'CoursesApplyPack', media: 'all' %>
 <% end %>
 
-<div class="flex min-h-screen bg-gray-100 items-center justify-center">
+<div class="flex min-h-screen bg-gray-50 items-center justify-center">
   <div class="py-8 w-full">
     <div class="container mx-auto px-3 max-w-lg">
       <div
@@ -39,7 +39,7 @@
                   >
                     <%= t('courses.apply.email_label') %>
                   </label>
-                  <%= f.email_field :email, value: params[:email], maxlength: 256, placeholder: t('courses.apply.email_placeholder'), required: true, class: 'appearance-none h-10 mt-1 block w-full border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400' %>
+                  <%= f.email_field :email, value: params[:email], maxlength: 256, placeholder: t('courses.apply.email_placeholder'), required: true, class: 'appearance-none h-10 mt-1 block w-full border border-gray-400 rounded py-2 px-4 text-sm bg-gray-50 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400' %>
                 </div>
                 <div class="mt-4">
                   <label
@@ -48,7 +48,7 @@
                   >
                     <%= t('courses.apply.name_label') %>
                   </label>
-                  <%= f.text_field :name, value: params[:name], maxlength: 128, placeholder: t('courses.apply.name_placeholder'), required: true, class: 'appearance-none h-10 mt-1 block w-full border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400' %>
+                  <%= f.text_field :name, value: params[:name], maxlength: 128, placeholder: t('courses.apply.name_placeholder'), required: true, class: 'appearance-none h-10 mt-1 block w-full border border-gray-400 rounded py-2 px-4 text-sm bg-gray-50 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400' %>
                 </div>
 
                 <% if @show_checkbox_recaptcha %>

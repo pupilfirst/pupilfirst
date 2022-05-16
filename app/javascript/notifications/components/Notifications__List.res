@@ -426,11 +426,11 @@ let make = () => {
 
   <div>
     <div
-      className="md:flex md:flex-row space-y-2 md:space-y-0 md:space-x-2 md:justify-between md:items-center pt-4 px-4 lg:px-8 bg-gray-100">
+      className="md:flex md:flex-row space-y-2 md:space-y-0 md:space-x-2 md:justify-between md:items-center pt-4 px-4 lg:px-8 bg-gray-50">
       <div className="font-bold text-sm md:text-xl"> {str("Notifications")} </div>
       <WebPushSubscriptionManager />
     </div>
-    <div className="w-full bg-gray-100 border-b sticky top-0 z-30 px-4 lg:px-8 py-3">
+    <div className="w-full bg-gray-50 border-b sticky top-0 z-30 px-4 lg:px-8 py-3">
       <label
         htmlFor="search_notifcations"
         className="block text-tiny font-semibold uppercase pl-px text-left">

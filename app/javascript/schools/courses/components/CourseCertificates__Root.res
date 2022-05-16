@@ -125,21 +125,21 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
         />
       | Closed => React.null
       }}
-      <div className="flex-1 flex flex-col bg-gray-100">
+      <div className="flex-1 flex flex-col bg-gray-50">
         <div className="flex px-6 py-2 items-center justify-between">
           <button
             onClick={_ => send(OpenNewCertificateDrawer)}
-            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:border-primary-300 focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-50 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
             <i className="fas fa-plus-circle" />
             <h5 className="font-semibold ml-2"> {t("create_action")->str} </h5>
           </button>
         </div>
         {state.certificates |> ArrayUtils.isEmpty
           ? <div
-              className="flex justify-center bg-gray-100 border rounded p-3 italic mx-auto max-w-2xl w-full">
+              className="flex justify-center bg-gray-50 border rounded p-3 italic mx-auto max-w-2xl w-full">
               {t("no_certificates")->str}
             </div>
-          : <div className="px-6 pb-4 mt-5 flex flex-1 bg-gray-100">
+          : <div className="px-6 pb-4 mt-5 flex flex-1 bg-gray-50">
               <div className="max-w-2xl w-full mx-auto relative">
                 <h4 className="mt-5 w-full"> {t("heading")->str} </h4>
                 <div className="flex mt-4 -mx-3 items-start flex-wrap">

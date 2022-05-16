@@ -233,9 +233,9 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                           <div className="flex">
                             <label
                               title={t("disabled")}
-                              className="flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
+                              className="flex-shrink-0 rounded border border-gray-400 bg-gray-50 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
                             />
-                            <div className="w-full bg-gray-100 relative">
+                            <div className="w-full bg-gray-50 relative">
                               <div
                                 className="flex justify-between gap-2 bg-white border border-gray-400 border-b-transparent rounded-t focus-within:outline-none focus-within:bg-white focus-within:border-primary-300">
                                 <input
@@ -346,7 +346,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                       className="checklist-editor__add-result-btn ml-2 md:ml-4 mt-3 flex items-center focus:outline-none">
                       <span
                         title={t("add_result")}
-                        className="checklist-editor__add-result-btn-check flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2"
+                        className="checklist-editor__add-result-btn-check flex-shrink-0 rounded border border-gray-400 bg-gray-50 w-4 h-4 mr-2"
                       />
                       <span
                         className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-50 px-3 py-1 rounded border border-dashed border-gray-600">
@@ -394,7 +394,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
           </div>
         </div>
       </div>
-      <div className="flex bg-gray-100 border-t flex-row-reverse sticky bottom-0 px-4 py-2 md:py-4">
+      <div className="flex bg-gray-50 border-t flex-row-reverse sticky bottom-0 px-4 py-2 md:py-4">
         <button
           disabled={state.saving || invalidChecklist(state.reviewChecklist)}
           onClick={_ =>

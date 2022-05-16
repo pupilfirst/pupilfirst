@@ -85,7 +85,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
       <DisablingCover containerClasses="w-full" disabled=state.saving message="Uploading...">
         <div className="flex flex-col min-h-screen">
           <div className="bg-white flex-grow-0">
-            <div className="bg-gray-100 pt-6 pb-4 border-b">
+            <div className="bg-gray-50 pt-6 pb-4 border-b">
               <div className="max-w-2xl px-4 mx-auto">
                 <h5 className="uppercase"> {t("create_action")->str} </h5>
               </div>
@@ -149,7 +149,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
               </div>
             </div>
           </div>
-          <div className="bg-gray-100 flex-grow">
+          <div className="bg-gray-50 flex-grow">
             <div className="max-w-2xl p-6 mx-auto">
               <button disabled={saveDisabled(state)} className="w-auto btn btn-large btn-primary">
                 {t("create_button_text")->str}

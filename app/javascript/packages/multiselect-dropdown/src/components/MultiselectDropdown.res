@@ -166,7 +166,7 @@ module Make = (Selectable: Selectable) => {
 
   let showHint = hint =>
     <p
-      className="font-normal text-xs px-4 py-2 -mb-2 rounded-b-lg bg-gray-100 mt-2 text-left border-t">
+      className="font-normal text-xs px-4 py-2 -mb-2 rounded-b-lg bg-gray-50 mt-2 text-left border-t">
       {str(hint)}
     </p>
 

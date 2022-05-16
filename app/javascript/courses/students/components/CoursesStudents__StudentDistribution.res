@@ -121,7 +121,7 @@ let make = (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes, ~filterT
         distribution |> Array.fold_left((x, y) => x + DistributionInLevel.studentsInLevel(y), 0)
       let completedLevels = DistributionInLevel.levelsCompletedByAllStudents(distribution)
       totalStudentsInCourse > 0
-        ? <div className="flex w-full border bg-gray-100 rounded font-semibold ">
+        ? <div className="flex w-full border bg-gray-50 rounded font-semibold ">
             {distribution
             |> Js.Array.filter(level => DistributionInLevel.number(level) != 0)
             |> DistributionInLevel.sort

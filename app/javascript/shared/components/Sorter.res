@@ -49,7 +49,7 @@ module Make = (Sortable: Sortable) => {
         ? dropdown(criteria, selectedCriterion, onCriterionChange)
         : <div
             title={"Order by " ++ (selectedCriterion |> Sortable.criterion)}
-            className="inline-flex flex-1 md:flex-auto items-center bg-gray-100 leading-relaxed font-semibold text-gray-700 border border-gray-400 rounded px-3 py-1 md:py-2 text-sm ">
+            className="inline-flex flex-1 md:flex-auto items-center bg-gray-50 leading-relaxed font-semibold text-gray-700 border border-gray-400 rounded px-3 py-1 md:py-2 text-sm ">
             <div> {selectedCriterion |> Sortable.criterion |> str} </div>
           </div>}
       <span className="flex ml-1">

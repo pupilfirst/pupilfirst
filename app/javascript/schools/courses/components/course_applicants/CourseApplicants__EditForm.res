@@ -93,7 +93,7 @@ let reducer = (state, action) =>
 
 let selectedTabClasses = selected =>
   "flex items-center focus:outline-none justify-center w-1/2 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer " ++ (
-    selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-100"
+    selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-50"
   )
 
 let tabItemsClasses = selected => selected ? "" : "hidden"

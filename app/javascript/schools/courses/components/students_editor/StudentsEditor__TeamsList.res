@@ -194,7 +194,7 @@ let teamCard = (
                 />
               </div>
               <button
-                className="flex flex-1 items-center text-left py-4 px-4 hover:bg-gray-100 hover:text-primary-500 focus:bg-gray-100 focus:text-primary-500 justify-between"
+                className="flex flex-1 items-center text-left py-4 px-4 hover:bg-gray-50 hover:text-primary-500 focus:bg-gray-50 focus:text-primary-500 justify-between"
                 id={(student |> Student.name) ++ "_edit"}
                 ariaLabel={"View and edit " ++ (student |> Student.name)}
                 onClick={_e => showEditFormCB(student, teamId)}>

@@ -69,7 +69,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
     {teams: teams, students: students, selectedTeams: list{}, searchString: ""},
   )
 
-  <div className="flex flex-1 px-6 pb-4 flex-col bg-gray-100 overflow-y-scroll">
+  <div className="flex flex-1 px-6 pb-4 flex-col bg-gray-50 overflow-y-scroll">
     <div className="max-w-3xl w-full mx-auto flex justify-between border-b mt-4">
       <ul className="flex font-semibold text-sm">
         <li
@@ -85,7 +85,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
         </li>
       </ul>
     </div>
-    <div className="bg-gray-100 sticky top-0 py-3">
+    <div className="bg-gray-50 sticky top-0 py-3">
       <div className="border rounded-lg mx-auto max-w-3xl bg-white ">
         <div className="flex w-full items-center justify-between p-4">
           <div className="flex flex-1">
@@ -138,7 +138,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
                 let isChecked = state.selectedTeams |> List.mem(team)
                 let checkboxId = "select-team-" ++ (team |> Team.id)
                 <label
-                  className="flex self-stretch items-center text-grey leading-tight font-bold px-4 py-5 hover:bg-gray-100"
+                  className="flex self-stretch items-center text-grey leading-tight font-bold px-4 py-5 hover:bg-gray-50"
                   htmlFor=checkboxId>
                   <input
                     className="leading-tight"

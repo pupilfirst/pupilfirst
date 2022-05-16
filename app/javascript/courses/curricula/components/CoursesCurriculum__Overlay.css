@@ -110,17 +110,17 @@
 /* Styling overlay content skeleton loading */
 
 .course-overlay__skeleton-line-placeholder-sm {
-  @apply rounded-full bg-gray-100;
+  @apply rounded-full bg-gray-50;
   height: 0.625rem;
 }
 
 .course-overlay__skeleton-line-placeholder-md {
-  @apply rounded-full bg-gray-100;
+  @apply rounded-full bg-gray-50;
   height: 1rem;
 }
 
 .course-overlay__skeleton-image-placeholder {
-  @apply mt-5 h-48 rounded-lg bg-gray-100;
+  @apply mt-5 h-48 rounded-lg bg-gray-50;
 }
 
 .skeleton-animate {

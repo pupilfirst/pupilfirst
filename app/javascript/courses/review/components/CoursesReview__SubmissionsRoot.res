@@ -142,7 +142,7 @@ let make = (~submissionId, ~currentUser) => {
 
     | Loading =>
       <div>
-        <div className="bg-gray-100 md:px-4">
+        <div className="bg-gray-50 md:px-4">
           <div className="mx-auto"> {SkeletonLoading.card()} </div>
         </div>
         <div className="grid md:grid-cols-2 mt-10 border-t h-full">
@@ -150,7 +150,7 @@ let make = (~submissionId, ~currentUser) => {
             {SkeletonLoading.heading()}
             {SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.paragraph())}
           </div>
-          <div className="md:px-4 bg-gray-100 border-l">
+          <div className="md:px-4 bg-gray-50 border-l">
             {SkeletonLoading.profileCard()}
             {SkeletonLoading.paragraph()}
             {SkeletonLoading.profileCard()}

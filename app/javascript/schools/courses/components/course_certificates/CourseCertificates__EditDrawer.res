@@ -183,7 +183,7 @@ let make = (
     <div className="flex flex-col min-h-screen">
       <DisablingCover
         disabled=state.saving message="Saving changes..." containerClasses="bg-white flex-grow-0">
-        <div className="bg-gray-100 pt-6 pb-4 border-b">
+        <div className="bg-gray-50 pt-6 pb-4 border-b">
           <div className="max-w-4xl px-4 mx-auto">
             <h5 className="uppercase"> {t("edit_action")->str} </h5>
           </div>
@@ -412,7 +412,7 @@ let make = (
           </div>
         </div>
       </DisablingCover>
-      <div className="bg-gray-100 flex-grow">
+      <div className="bg-gray-50 flex-grow">
         <div className="max-w-4xl px-4 py-6 mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex-1">

@@ -60,7 +60,7 @@ let communityTitle = community =>
 let make = (~targetId, ~communities) =>
   <div className=""> {communities |> Js.Array.map(community => {
       let communityId = community |> Community.id
-      <div key=communityId className="mt-12 bg-gray-100 px-6 py-4 rounded-lg">
+      <div key=communityId className="mt-12 bg-gray-50 px-6 py-4 rounded-lg">
         <div className="flex flex-col md:flex-row w-full justify-between pb-3 items-center">
           <div> {communityTitle(community)} </div> {actionButtons(community, targetId)}
         </div>

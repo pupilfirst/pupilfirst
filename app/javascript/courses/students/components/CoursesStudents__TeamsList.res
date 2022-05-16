@@ -112,7 +112,7 @@ let showTeam = (team, levels, teamCoaches) =>
             (student |> TeamInfo.studentName) ++
             " in team " ++
             (team |> TeamInfo.name)}
-            className="flex items-center rounded-l-lg bg-white cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+            className="flex items-center rounded-l-lg bg-white cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
             <div className="flex w-full md:flex-1 p-3 md:px-4 md:py-5">
               {CoursesStudents__TeamCoaches.avatar(
                 student |> TeamInfo.studentAvatarUrl,

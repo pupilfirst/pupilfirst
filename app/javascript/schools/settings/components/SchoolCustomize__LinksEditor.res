@@ -85,7 +85,7 @@ let showLinks = (state, send, removeLinkCB, kind, links) =>
     links
     |> List.map(((id, title, url)) =>
       <div
-        className="flex items-center justify-between bg-gray-100 text-xs text-gray-900 border rounded pl-3 mt-2"
+        className="flex items-center justify-between bg-gray-50 text-xs text-gray-900 border rounded pl-3 mt-2"
         key=id>
         <div className="flex items-center">
           {switch kind {

@@ -302,7 +302,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                 </div>
               </div>
             </div>
-            <div className="border-t bg-gray-100 mt-5">
+            <div className="border-t bg-gray-50 mt-5">
               <div className="max-w-2xl p-6 mx-auto flex w-full justify-between items-center">
                 {switch targetGroup {
                 | Some(_) =>

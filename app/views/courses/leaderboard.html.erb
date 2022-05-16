@@ -5,7 +5,7 @@
   <%= stylesheet_pack_tag 'courses/leaderboard', 'data-turbolinks-track': 'reload' %>
 <% end %>
 <% content_for(:inner_wrapper) do %>
-  <div class="bg-gray-100 pt-11 pb-8 -mt-7">
+  <div class="bg-gray-50 pt-11 pb-8 -mt-7">
     <div class="max-w-3xl mx-auto">
       <div class="text-center mx-3">
         <p class="inline-block bg-primary-100 text-primary-900 border border-primary-500 text-xs mx-auto text-center px-4 py-2 rounded-lg">
@@ -38,7 +38,7 @@
 
                 <h4 class="leaderboard__winner-title pb-3 mt-3 font-normal leading-snug text-primary-900"><%= presenter.heading %></h4>
 
-                <div class="leaderboard__students-count-container bg-gray-100 flex mx-auto overflow-hidden border rounded-lg justify-center">
+                <div class="leaderboard__students-count-container bg-gray-50 flex mx-auto overflow-hidden border rounded-lg justify-center">
                   <div class="w-1/2 px-2 pt-2 pb-1" data-t='active students count'>
                     <p class="text-xs">Active Students</p>
                     <span class="text-xl font-semibold"><%= presenter.students.count %></span>

@@ -133,8 +133,8 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
   <div
     role="main"
     ariaLabel="Report"
-    className="bg-gray-100 pt-9 pb-8 px-3 -mt-7 border border-transparent shadow rounded-lg">
-    <div className="bg-gray-100 static">
+    className="bg-gray-50 pt-9 pb-8 px-3 -mt-7 border border-transparent shadow rounded-lg">
+    <div className="bg-gray-50 static">
       <div className="max-w-3xl mx-auto">
         <div className="flex pt-3 mb-4 md:border-b border-gray-300">
           <div

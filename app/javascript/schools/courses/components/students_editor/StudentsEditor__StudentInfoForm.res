@@ -101,7 +101,7 @@ let reducer = (state, action) =>
 @react.component
 let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
   let (state, send) = React.useReducer(reducer, initialState())
-  <div className="bg-gray-100 p-4">
+  <div className="bg-gray-50 p-4">
     <div>
       <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="name">
         {"Name" |> str}

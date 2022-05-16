@@ -360,7 +360,7 @@ let make = (
                     <label
                       htmlFor="user-edit__avatar-input"
                       ariaHidden=true
-                      className="form-input__file-label rounded-md shadow-sm py-2 px-3 border border-gray-400 rounded-md text-sm font-semibold hover:text-gray-800 active:bg-gray-100 active:text-gray-800">
+                      className="form-input__file-label rounded-md shadow-sm py-2 px-3 border border-gray-400 rounded-md text-sm font-semibold hover:text-gray-800 active:bg-gray-50 active:text-gray-800">
                       {"Change photo" |> str}
                     </label>
                   </span>
@@ -512,7 +512,7 @@ let make = (
           </div>
         </div>
       </div>
-      <div className="bg-gray-100 px-4 py-5 sm:p-6 flex rounded-b-lg justify-end">
+      <div className="bg-gray-50 px-4 py-5 sm:p-6 flex rounded-b-lg justify-end">
         <button
           disabled={saveDisabled(state)}
           onClick={updateUser(state, send)}

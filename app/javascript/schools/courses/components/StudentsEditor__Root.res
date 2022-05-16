@@ -244,7 +244,7 @@ let make = (
         />
       </SchoolAdmin__EditorDrawer2>
     }}
-    <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
+    <div className="px-6 pb-4 flex-1 bg-gray-50 relative overflow-y-scroll">
       <div className="max-w-3xl w-full mx-auto flex justify-between items-center border-b mt-4">
         <ul className="flex font-semibold text-sm">
           <li className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
@@ -276,7 +276,7 @@ let make = (
               </button>
             </div>}
       </div>
-      <div className="bg-gray-100 sticky top-0 py-3">
+      <div className="bg-gray-50 sticky top-0 py-3">
         <div className="border rounded-lg mx-auto max-w-3xl bg-white ">
           <div>
             <div className="flex w-full items-start p-4">
@@ -287,7 +287,7 @@ let make = (
             </div>
             {state.selectedStudents |> ArrayUtils.isEmpty
               ? React.null
-              : <div className="flex justify-between bg-gray-100 px-4 pb-3 pt-1 rounded-b-lg">
+              : <div className="flex justify-between bg-gray-50 px-4 pb-3 pt-1 rounded-b-lg">
                   <div className="flex flex-wrap">
                     {state.selectedStudents
                     |> Array.map(selectedStudent =>
@@ -311,7 +311,7 @@ let make = (
                           </span>
                           <button
                             ariaLabel={"Remove " ++ (selectedStudent |> SelectedStudent.name)}
-                            className="flex items-center h-full text-xs text-red-700 px-2 py-px border-l focus:outline-none bg-gray-100 hover:bg-red-700 hover:text-white focus:bg-red-700 focus:text-white "
+                            className="flex items-center h-full text-xs text-red-700 px-2 py-px border-l focus:outline-none bg-gray-50 hover:bg-red-700 hover:text-white focus:bg-red-700 focus:text-white "
                             onClick={_ =>
                               deselectStudent(send, selectedStudent |> SelectedStudent.id)}>
                             <Icon className="if i-times-regular" />

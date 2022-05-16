@@ -278,7 +278,7 @@ let errorTabulation = (csvData, fileInvalid) => {
                   {t("more_errors_text")->str}
                   <textArea
                     readOnly=true
-                    className="border border-gray-400 bg-gray-100 rounded p-1 mt-1 w-full focus:outline-none focus:ring focus:border-primary-400">
+                    className="border border-gray-400 bg-gray-50 rounded p-1 mt-1 w-full focus:outline-none focus:ring focus:border-primary-400">
                     {Js.Array.map(
                       error => CSVDataError.rowNumber(error),
                       Js.Array2.sliceFrom(errors, 10),

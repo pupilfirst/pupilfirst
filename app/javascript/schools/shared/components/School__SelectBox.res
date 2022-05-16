@@ -29,7 +29,7 @@ let make = (
     )
   }
 
-  <div className="p-6 border rounded bg-gray-100">
+  <div className="p-6 border rounded bg-gray-50">
     {selectedList |> List.length > 0
       ? selectedList
         |> List.rev
@@ -53,7 +53,7 @@ let make = (
         |> Array.of_list
         |> React.array
       : <div
-          className="flex flex-col items-center justify-center bg-gray-100 text-gray-800 rounded px-3 pt-3 ">
+          className="flex flex-col items-center justify-center bg-gray-50 text-gray-800 rounded px-3 pt-3 ">
           <i className="fas fa-inbox text-3xl" />
           <h5 className="mt-1 font-semibold"> {noSelectionHeading |> str} </h5>
           <span className="text-xs">

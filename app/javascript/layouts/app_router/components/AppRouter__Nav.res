@@ -134,7 +134,7 @@ let showUser = user => {
   switch user {
   | Some(user) =>
     <div className="px-4 pt-6">
-      <div className="flex w-full items-center p-2 bg-gray-100 rounded-md">
+      <div className="flex w-full items-center p-2 bg-gray-50 rounded-md">
         <div className="flex items-center justify-center rounded-full text-center flex-shrink-0">
           {User.avatarUrl(user)->Belt.Option.mapWithDefault(
             <Avatar

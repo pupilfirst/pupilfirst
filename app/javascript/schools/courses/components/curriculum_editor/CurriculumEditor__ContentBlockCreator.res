@@ -549,7 +549,7 @@ let topButton = (handler, id, title, icon) =>
       id={"top-button-" ++ id}
       title
       ariaLabel={title}
-      className="content-block-creator__top-button bg-gray-50 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20 hover:bg-gray-300 hover:text-primary-300 focus:outline-none focus:bg-gray-300 focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+      className="content-block-creator__top-button bg-gray-50 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20 hover:bg-primary-50 hover:text-primary-500 focus:outline-none focus:bg-primary-50 focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
       <FaIcon classes={"text-base fas " ++ icon} />
     </button>
   </div>

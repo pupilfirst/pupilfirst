@@ -772,7 +772,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
     <div role="main" ariaLabel="Review" className="flex-1 flex flex-col">
       <div className="hidden md:block h-16" />
       <div className="course-review-root__submissions-list-container">
-        <div className="bg-gray-100">
+        <div className="bg-gray-50">
           <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
             <div
               className="flex items-center justify-between bg-white md:bg-transparent px-4 py-2 md:pt-4 border-b md:border-none">
@@ -830,7 +830,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
             </div>
           </div>
         </div>
-        <div className="md:sticky md:top-0 bg-gray-100">
+        <div className="md:sticky md:top-0 bg-gray-50">
           <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
             <div role="form" className="md:flex w-full items-start pt-4 pb-3 px-4 md:pt-6">
               <div className="flex-1">

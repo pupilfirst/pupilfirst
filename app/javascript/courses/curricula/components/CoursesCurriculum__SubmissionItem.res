@@ -171,7 +171,7 @@ let showFiles = (files, preview, id, attachingCB, updateResultCB, index) =>
             </div>
             <button
               title={"Remove " ++ (file |> ChecklistItem.filename)}
-              className="flex w-8 justify-center items-center p-2 cursor-pointer bg-gray-100 border-l text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+              className="flex w-8 justify-center items-center p-2 cursor-pointer bg-gray-50 border-l text-gray-700 hover:bg-gray-50 hover:text-gray-900"
               onClick={_ => removeFile(updateResultCB, files, file |> ChecklistItem.fileId)}>
               <PfIcon className="if i-times-regular text-sm" />
             </button>

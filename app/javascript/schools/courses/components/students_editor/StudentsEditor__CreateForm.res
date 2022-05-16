@@ -184,7 +184,7 @@ let studentCard = (studentInfo, send, team, tags) => {
       {tagBoxes(tags)}
     </div>
     <button
-      className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+      className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50"
       onClick={_event => send(RemoveStudentInfo(studentInfo))}>
       <i className="fas fa-trash-alt" />
     </button>
@@ -214,7 +214,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
           {switch state.teamsToAdd {
           | [] =>
             <div
-              className="flex items-center justify-between bg-gray-100 border rounded p-3 italic mt-2">
+              className="flex items-center justify-between bg-gray-50 border rounded p-3 italic mt-2">
               {t("teams_to_add_empty")->str}
             </div>
           | teams =>

@@ -273,7 +273,7 @@ let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
 }
 
 let controlsContainerClasses = mode =>
-  "border bg-gray-100 text-sm px-2 flex justify-between items-end " ++
+  "border bg-gray-50 text-sm px-2 flex justify-between items-end " ++
   switch mode {
   | Windowed(_) => "rounded-t border-gray-400"
   | Fullscreen(_) => "border-gray-400 "
@@ -381,7 +381,7 @@ let previewType = mode =>
   }
 
 let previewContainerClasses = mode =>
-  "border-gray-400 bg-gray-100 " ++
+  "border-gray-400 bg-gray-50 " ++
   switch mode |> previewType {
   | #WindowedPreview => "markdown-editor__windowed-preview-container border-l border-r border-b rounded-b px-2 md:px-3"
   | #FullscreenPreview => "w-screen mx-auto"
@@ -468,7 +468,7 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
   }
 
 let footerContainerClasses = mode =>
-  "markdown-editor__footer-container border bg-gray-100 flex justify-end items-center " ++
+  "markdown-editor__footer-container border bg-gray-50 flex justify-end items-center " ++
   switch mode {
   | Windowed(_) => "rounded-b border-gray-400"
   | Fullscreen(_) => "border-gray-400"

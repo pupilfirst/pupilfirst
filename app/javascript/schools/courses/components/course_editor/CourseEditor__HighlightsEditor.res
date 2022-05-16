@@ -70,7 +70,7 @@ let contents = (replaceCB, highlight) => {
         key=icon
         title={"Select " ++ icon}
         ariaLabel={"Select " ++ icon}
-        className="flex items-center justify-center p-3 w-full h-full text-gray-900 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:bg-gray-100"
+        className="flex items-center justify-center p-3 w-full h-full text-gray-900 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
         onClick={_ => updateIcon(replaceCB, highlight, icon)}>
         <PfIcon className={"text-lg if i-" ++ icon} />
       </button>,
@@ -84,7 +84,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
       let replaceCB = replace(index, highlights, updateHighlightsCB)
       <Spread props={"data-highlight-index": index} key={string_of_int(index)}>
         <div key={string_of_int(index)} className="flex items-start py-2 relative">
-          <div className="flex items-start w-full bg-gray-100 border rounded-lg p-4 mr-1">
+          <div className="flex items-start w-full bg-gray-50 border rounded-lg p-4 mr-1">
             <Dropdown2
               selected={selected(highlight)}
               contents={contents(replaceCB, highlight)}
@@ -117,7 +117,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
             </div>
           </div>
           <div
-            className="flex-shrink-0 bg-gray-100 border rounded flex flex-col text-xs sticky top-0">
+            className="flex-shrink-0 bg-gray-50 border rounded flex flex-col text-xs sticky top-0">
             {ReactUtils.nullIf(
               <button
                 title="Move up"

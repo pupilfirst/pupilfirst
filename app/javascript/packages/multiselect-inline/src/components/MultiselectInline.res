@@ -65,7 +65,7 @@ module Make = (Selectable: Selectable) => {
     let searchResults = searchUnselected(value, unselected)
     let showSearchForm = searchVisible(unselected, value)
 
-    <div className="p-6 border rounded bg-gray-100">
+    <div className="p-6 border rounded bg-gray-50">
       <div>
         {selected |> Array.length > 0
           ? selected
@@ -93,7 +93,7 @@ module Make = (Selectable: Selectable) => {
             )
             |> React.array
           : <div
-              className="flex flex-col items-center justify-center bg-gray-100 text-gray-800 rounded px-3 pt-3 ">
+              className="flex flex-col items-center justify-center bg-gray-50 text-gray-800 rounded px-3 pt-3 ">
               <i className="fas fa-inbox text-3xl" />
               <h5 className="mt-1 font-semibold"> {emptySelectionMessage |> str} </h5>
             </div>}

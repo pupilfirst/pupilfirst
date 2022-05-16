@@ -32,7 +32,6 @@ feature 'Course students list', js: true do
   before do
     create :faculty_course_enrollment, faculty: course_coach, course: course
     team_2.founders.first.user.update!(last_seen_at: 3.minutes.ago)
-    team_1.founders.first.user.update!(current_sign_in_at: 3.days.ago)
 
     10.times do
       create :startup,
@@ -73,11 +72,6 @@ feature 'Course students list', js: true do
     # Check the last seen for the first student
     within("div[aria-label='Info of team #{team_1.name}']") do
       expect(page).to have_text('Last seen 3 minutes ago')
-    end
-
-    # Check the last seen as current sign in value
-    within("div[aria-label='Info of team #{team_2.name}']") do
-      expect(page).to have_text('Last seen 3 days ago')
     end
 
     # Check the last seen for the second student
@@ -127,15 +121,6 @@ feature 'Course students list', js: true do
     expect(page).to have_text("Percentage: #{percentage_students_in_l2}")
     expect(page).to have_text('Teams: 2')
     expect(page).to have_text("Students: #{students_in_l2}")
-  end
-
-  scenario 'coach list students after 10 minutes' do
-    travel_to(10.minutes.from_now) do
-      sign_in_user course_coach.user, referrer: students_course_path(course)
-      expect(page).to have_text('Last seen 13 minutes ago')
-      # within("div[aria-label='Info of team #{team_1.name}']") do
-      # end
-    end
   end
 
   scenario 'coach searches for and filters students by level' do

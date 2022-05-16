@@ -9,6 +9,7 @@ type state = {
   hasEmailError: bool,
   tagsToApply: array<string>,
   teamName: string,
+  cohortId: option<string>,
 }
 
 type action =
@@ -17,6 +18,7 @@ type action =
   | UpdateTitle(string)
   | UpdateTeamName(string)
   | UpdateAffiliation(string)
+  | UpdateCohort(string)
   | ResetForm
   | AddTag(string)
   | RemoveTag(string)
@@ -40,26 +42,33 @@ let hasEmailDuplication = (email, emailsToAdd) => {
 }
 
 let formInvalid = (state, emailsToAdd) =>
+  Belt.Option.isNone(state.cohortId) ||
   state.name == "" ||
-    (state.email == "" ||
-    (state.hasNameError || (state.hasEmailError || hasEmailDuplication(state.email, emailsToAdd))))
+  (state.email == "" ||
+  (state.hasNameError || (state.hasEmailError || hasEmailDuplication(state.email, emailsToAdd))))
 
 let handleAdd = (state, send, emailsToAdd, addToListCB) => {
   let trimmedTeamName = Js.String2.trim(state.teamName)
   let teamName = trimmedTeamName == "" ? None : Some(trimmedTeamName)
 
   if !formInvalid(state, emailsToAdd) {
-    addToListCB(
-      StudentInfo.make(
-        ~name=state.name,
-        ~email=state.email,
-        ~title=state.title,
-        ~affiliation=state.affiliation,
-      ),
-      teamName,
-      state.tagsToApply,
-    )
-    send(ResetForm)
+    switch state.cohortId {
+    | Some(id) => {
+        addToListCB(
+          StudentInfo.make(
+            ~name=state.name,
+            ~email=state.email,
+            ~title=state.title,
+            ~affiliation=state.affiliation,
+            ~cohortId=id,
+          ),
+          teamName,
+          state.tagsToApply,
+        )
+        send(ResetForm)
+      }
+    | None => ()
+    }
   }
 }
 
@@ -71,6 +80,7 @@ let initialState = () => {
   hasNameError: false,
   hasEmailError: false,
   tagsToApply: [],
+  cohortId: None,
   teamName: "",
 }
 
@@ -81,6 +91,7 @@ let reducer = (state, action) =>
   | UpdateTitle(title) => {...state, title: title}
   | UpdateTeamName(teamName) => {...state, teamName: teamName}
   | UpdateAffiliation(affiliation) => {...state, affiliation: affiliation}
+  | UpdateCohort(cohortId) => {...state, cohortId: Some(cohortId)}
   | ResetForm => {
       ...state,
       name: "",
@@ -98,8 +109,39 @@ let reducer = (state, action) =>
     }
   }
 
+let showCohorts = (cohorts, send) => {
+  cohorts->Js.Array2.map(cohort =>
+    <div key={Cohort.id(cohort)} className="">
+      <button
+        onClick={_ => send(UpdateCohort(Cohort.id(cohort)))}
+        className="w-full text-left cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200">
+        {Cohort.name(cohort)->str}
+      </button>
+    </div>
+  )
+}
+
+let selected = (cohortId, cohorts) => {
+  <div
+    className="flex items-center justify-between appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+    key="cohorts">
+    <span>
+      {switch cohortId {
+      | Some(id) =>
+        Belt.Option.mapWithDefault(
+          Js.Array.find(c => Cohort.id(c) == id, cohorts),
+          "Pick a cohort",
+          Cohort.name,
+        )
+      | None => "Pick a cohort"
+      }->str}
+    </span>
+    <i className="fas fa-caret-down ml-2" />
+  </div>
+}
+
 @react.component
-let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
+let make = (~addToListCB, ~teamTags, ~emailsToAdd, ~cohorts) => {
   let (state, send) = React.useReducer(reducer, initialState())
   <div className="max-w-xl">
     <div>
@@ -136,6 +178,16 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
             | false => ""
             }}
         active={state.hasEmailError || hasEmailDuplication(state.email, emailsToAdd)}
+      />
+    </div>
+    <div className="mt-5 flex flex-col">
+      <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
+        {"Select a cohort" |> str}
+      </label>
+      <Dropdown2
+        selected={selected(state.cohortId, cohorts)}
+        contents={showCohorts(cohorts, send)}
+        key="links-dropdown"
       />
     </div>
     <div className="mt-5">

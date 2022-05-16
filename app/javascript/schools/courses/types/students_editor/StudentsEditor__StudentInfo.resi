@@ -8,6 +8,8 @@ let title: t => string
 
 let affiliation: t => string
 
+let cohortId: t => string
+
 let toJsObject: (
   ~teamName: string,
   ~tags: array<string>,
@@ -19,6 +21,13 @@ let toJsObject: (
   "teamName": option<string>,
   "title": option<string>,
   "affiliation": option<string>,
+  "cohortId": string,
 }
 
-let make: (~name: string, ~email: string, ~title: string, ~affiliation: string) => t
+let make: (
+  ~name: string,
+  ~email: string,
+  ~title: string,
+  ~affiliation: string,
+  ~cohortId: string,
+) => t

@@ -6,5 +6,6 @@ module Types
     argument :affiliation, String, required: false
     argument :team_name, String, required: false
     argument :tags, [String], required: true
+    argument :cohort_id, ID, required: true
   end
 end

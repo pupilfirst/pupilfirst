@@ -340,7 +340,7 @@ let make = (
                 <label className="block text-sm font-semibold"> {"Photo" |> str} </label>
                 <div className="mt-2 flex items-center">
                   <span
-                    className="inline-block h-14 w-14 rounded-full overflow-hidden bg-gray-200 border-2 boder-gray-400">
+                    className="inline-block h-14 w-14 rounded-full overflow-hidden bg-gray-50 border-2 boder-gray-400">
                     {switch state.avatarUrl {
                     | Some(url) => <img src=url />
                     | None => <Avatar name />
@@ -499,7 +499,10 @@ let make = (
                 className="select appearance-none block text-sm w-full bg-white shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500">
                 {availableLocales
                 ->Js.Array2.map(availableLocale =>
-                  <option key=availableLocale value=availableLocale ariaSelected={state.locale===availableLocale}>
+                  <option
+                    key=availableLocale
+                    value=availableLocale
+                    ariaSelected={state.locale === availableLocale}>
                     {Locale.humanize(availableLocale)->str}
                   </option>
                 )

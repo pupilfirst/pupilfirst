@@ -58,7 +58,7 @@ let untabbedLevelSelector = (
   <Dropdown
     selected
     contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId, preview)}
-    className="flex-grow cursor-pointer rounded-lg bg-primary-100 hover:bg-gray-200 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-witin:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-200"
+    className="flex-grow cursor-pointer rounded-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-witin:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50"
   />
 }
 
@@ -83,7 +83,7 @@ let tabbedLevelSelector = (
 
   let numberedLevelSelector = showLevelZero
     ? <div
-        className="cursor-pointer text-sm flex-grow rounded-l-lg hover:bg-gray-200 hover:text-primary-500"
+        className="cursor-pointer text-sm flex-grow rounded-l-lg hover:bg-gray-50 hover:text-primary-500"
         onClick={_ => setShowLevelZero(false)}>
         {selected(true)}
       </div>
@@ -91,7 +91,7 @@ let tabbedLevelSelector = (
         key="numbered-level-selector"
         selected={selected(false)}
         contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId, preview)}
-        className="cursor-pointer flex-grow rounded-l-lg bg-primary-100 hover:bg-gray-200 hover:text-primary-500"
+        className="cursor-pointer flex-grow rounded-l-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500"
       />
 
   [

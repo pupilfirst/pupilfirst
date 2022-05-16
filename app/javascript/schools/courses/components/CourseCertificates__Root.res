@@ -189,7 +189,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
                             <button
                               title=editTitle
                               ariaLabel={editTitle}
-                              className="w-10 text-sm text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-primary-500 focus:outline-none focus:bg-gray-200 focus:text-primary-500"
+                              className="w-10 text-sm text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
                               onClick={_ => send(OpenEditCertificateDrawer(certificate))}>
                               <i className="fas fa-edit" />
                             </button>
@@ -201,7 +201,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
                               <button
                                 title
                                 ariaLabel={title}
-                                className="w-10 text-sm text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-red-500 focus:outline-none focus:bg-gray-200 focus:text-red-500"
+                                className="w-10 text-sm text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500"
                                 onClick={_event =>
                                   WindowUtils.confirm(
                                     "Are you sure you want to delete this certificate?",

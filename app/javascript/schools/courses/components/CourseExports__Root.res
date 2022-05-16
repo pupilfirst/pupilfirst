@@ -155,9 +155,9 @@ let createCourseExport = (state, send, course, event) => {
 }
 
 let toggleChoiceClasses = value => {
-  let defaultClasses = "relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 rounded p-4 w-full"
+  let defaultClasses = "relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-50 text-sm font-semibold focus:outline-none focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 rounded p-4 w-full"
   value
-    ? defaultClasses ++ " bg-gray-200 text-primary-500 border-primary-500"
+    ? defaultClasses ++ " bg-gray-50 text-primary-500 border-primary-500"
     : defaultClasses ++ " opacity-75 text-gray-900"
 }
 
@@ -354,7 +354,7 @@ let make = (~course, ~exports, ~tags) => {
                           <a
                             ariaLabel={"Download Course Export " ++
                             (courseExport |> CourseExport.id)}
-                            className="w-10 text-xs course-faculty__list-item-remove text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-primary-500 focus:outline-none focus:bg-gray-200 focus:text-primary-500"
+                            className="w-10 text-xs course-faculty__list-item-remove text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
                             href={file |> CourseExport.filePath}>
                             <FaIcon classes="fas fa-file-download" />
                           </a>

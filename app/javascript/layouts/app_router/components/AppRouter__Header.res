@@ -1,4 +1,4 @@
-%bs.raw(`require("./AppRouter__Header.css")`)
+%raw(`require("./AppRouter__Header.css")`)
 
 open AppRouter__Types
 
@@ -10,7 +10,7 @@ let showLink = (icon, text, href) => {
   <div key=href className="whitespace-nowrap">
     <a
       rel="nofollow"
-      className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 focus:outline-none focus:text-primary-500 focus:bg-gray-200"
+      className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
       href>
       <FaIcon classes={"fas fw fa-" ++ icon} /> <span className="pl-2"> {str(text)} </span>
     </a>
@@ -49,7 +49,7 @@ let headerLink = (key, link) =>
     key
     className="md:ml-2 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center">
     <a
-      className="no-underline bg-gray-100 md:bg-white hover:bg-gray-200 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2"
+      className="no-underline bg-gray-100 md:bg-white hover:bg-gray-50 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2"
       href={link->School.linkUrl}
       target=?{School.localLinks(link) ? None : Some("_blank")}
       rel=?{School.localLinks(link) ? None : Some("noopener")}>
@@ -87,7 +87,7 @@ let signInLink = () =>
 let notificationButton = hasNotifications =>
   <Notifications__Root
     key="notifications-button"
-    wrapperClasses="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg hover:bg-gray-200"
+    wrapperClasses="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg hover:bg-gray-50"
     iconClasses="app-router-header__notifications-unread-bullet"
     buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center "
     icon="if i-bell-regular text-xl"
@@ -145,7 +145,9 @@ let make = (~school, ~currentUser) => {
     <div className="mx-auto">
       <nav className="flex justify-between items-center">
         <div className="flex w-full items-center justify-between">
-          <a className="max-w-sm focus-within:outline-none" href={Belt.Option.isSome(currentUser) ? "/dashboard" : "/"}>
+          <a
+            className="max-w-sm focus-within:outline-none"
+            href={Belt.Option.isSome(currentUser) ? "/dashboard" : "/"}>
             {switch School.logoUrl(school) {
             | Some(url) =>
               <img
@@ -167,7 +169,7 @@ let make = (~school, ~currentUser) => {
               {ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn)}
               <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
                 <div
-                  className={"app-router-header__menu-btn cursor-pointer hover:bg-gray-200 w-8 h-8 text-center relative focus:outline-none rounded-lg " ++ (
+                  className={"app-router-header__menu-btn cursor-pointer hover:bg-gray-50 w-8 h-8 text-center relative focus:outline-none rounded-lg " ++ (
                     menuHidden ? "" : "open"
                   )}>
                   <span className="app-router-header__menu-icon">

@@ -185,12 +185,13 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
     | _ => "Replace avatar: " ++ state.imageFileName
     }
   let handleResponseJSON = json => {
-    let error = json
-    |> {
-      open Json.Decode
-      field("error", nullable(string))
-    }
-    |> Js.Null.toOption
+    let error =
+      json
+      |> {
+        open Json.Decode
+        field("error", nullable(string))
+      }
+      |> Js.Null.toOption
     switch error {
     | Some(err) =>
       send(UpdateSaving)
@@ -381,9 +382,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                       htmlFor="evaluated">
                       {"Should the coach profile be public?" |> str}
                     </label>
-                    <div
-                      id="notification"
-                      className="flex flex-shrink-0 overflow-hidden ">
+                    <div id="notification" className="flex flex-shrink-0 overflow-hidden ">
                       <div>
                         <button
                           type_="submit"
@@ -416,7 +415,8 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     className="block tracking-wide text-xs font-semibold" htmlFor="avatarUploader">
                     {"Avatar" |> str}
                   </label>
-                  <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
+                  <div
+                    className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
                     <input
                       disabled=state.saving
                       className="absolute w-0 h-0"
@@ -426,7 +426,9 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                       required=false
                       multiple=false
                       onChange={event =>
-                        send(UpdateImageFileName(ReactEvent.Form.target(event)["files"][0]["name"]))}
+                        send(
+                          UpdateImageFileName(ReactEvent.Form.target(event)["files"][0]["name"]),
+                        )}
                     />
                     <label className="file-input-label mt-2" htmlFor="sa-coach-editor__file-input">
                       <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
@@ -435,7 +437,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   </div>
                 </div>
               </div>
-              <div className="p-6 bg-gray-200">
+              <div className="p-6 bg-gray-50">
                 <div className="max-w-2xl px-6 mx-auto">
                   <div className="flex max-w-2xl w-full justify-between items-center mx-auto">
                     {switch coach {
@@ -446,9 +448,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                           htmlFor="evaluated">
                           {"Has the coach left the school?" |> str}
                         </label>
-                        <div
-                          id="exited"
-                          className="flex flex-shrink-0 overflow-hidden">
+                        <div id="exited" className="flex flex-shrink-0 overflow-hidden">
                           <div>
                             <button
                               onClick={_event => {

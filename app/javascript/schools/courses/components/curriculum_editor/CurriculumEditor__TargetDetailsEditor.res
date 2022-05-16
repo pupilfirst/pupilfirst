@@ -343,10 +343,10 @@ let booleanButtonClasses = bool => {
 }
 
 let targetRoleClasses = selected =>
-  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-left focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
+  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-left focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
     selected
-      ? "target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500"
-      : "border-gray-400 hover:bg-gray-200 bg-white"
+      ? "target-editor__completion-button--selected bg-gray-50 text-primary-500 border-primary-500"
+      : "border-gray-400 hover:bg-gray-50 bg-white"
   )
 
 let targetEvaluated = methodOfCompletion =>
@@ -572,9 +572,9 @@ let targetGroupEditor = (state, targetGroups, levels, send) =>
   </div>
 
 let methodOfCompletionButtonClasses = value => {
-  let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border hover:bg-gray-200 text-sm font-semibold focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 rounded p-4"
+  let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border hover:bg-gray-50 text-sm font-semibold focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 rounded p-4"
   value
-    ? defaultClasses ++ " target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500"
+    ? defaultClasses ++ " target-editor__completion-button--selected bg-gray-50 text-primary-500 border-primary-500"
     : defaultClasses ++ " border-gray-400 opacity-75 text-gray-900"
 }
 
@@ -680,7 +680,7 @@ let quizEditor = (state, send) =>
       |> React.array}
       <button
         onClick={addQuizQuestion(send)}
-        className="flex w-full items-center bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md focus:bg-white focus:text-primary-500 focus:shadow-md rounded-lg p-3 cursor-pointer my-5">
+        className="flex w-full items-center bg-gray-50 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md focus:bg-white focus:text-primary-500 focus:shadow-md rounded-lg p-3 cursor-pointer my-5">
         <i className="fas fa-plus-circle text-lg" />
         <h5 className="font-semibold ml-2"> {"Add another Question" |> str} </h5>
       </button>

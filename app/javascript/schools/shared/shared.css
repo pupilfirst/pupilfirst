@@ -537,7 +537,7 @@
 }
 
 .select-list__item-selected-unremovable {
-  @apply border-gray-400 bg-gray-200;
+  @apply border-gray-400 bg-gray-50;
 }
 
 .form-input__range[type="range"] {

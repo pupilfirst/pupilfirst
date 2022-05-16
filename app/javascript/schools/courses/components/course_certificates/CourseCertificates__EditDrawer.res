@@ -60,7 +60,7 @@ let reducer = (state, action) =>
 let buttonTypeClass = (stateQrCorner, qrCorner) =>
   stateQrCorner == qrCorner
     ? "border-primary-500 bg-primary-100 text-primary-600"
-    : "border-gray-400 bg-gray-200 text-gray-800"
+    : "border-gray-400 bg-gray-50 text-gray-800"
 
 let activeButtonClasses = (stateActive, active) => {
   let baseClasses = "toggle-button__button"
@@ -87,15 +87,13 @@ let isValidName = name => {
   length >= 1 && length <= 30
 }
 
-module UpdateCertificateMutation = %graphql(
-  `
+module UpdateCertificateMutation = %graphql(`
   mutation UpdateCertificateMutation($id: ID!, $name: String!, $margin: Int!, $nameOffsetTop: Int!, $fontSize: Int!, $qrCorner: QrCorner!, $qrScale: Int!, $active: Boolean!) {
     updateCertificate(id: $id, name: $name, margin: $margin, nameOffsetTop: $nameOffsetTop, fontSize: $fontSize, qrCorner: $qrCorner, qrScale: $qrScale, active: $active) {
       success
     }
   }
-  `
-)
+  `)
 
 let saveChanges = (certificate, updateCertificateCB, state, send, _event) => {
   send(BeginSaving)

@@ -101,8 +101,8 @@ let make = (
           <i className="fas fa-plus" />
         </div>
         <p
-          className="quiz-maker__add-answer-option-button flex items-center flex-1 h-11 text-gray-900 bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg ml-12 py-3 px-4 text-xs" >
-           {"Add another Answer Option" |> str}
+          className="quiz-maker__add-answer-option-button flex items-center flex-1 h-11 text-gray-900 bg-gray-50 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg ml-12 py-3 px-4 text-xs">
+          {"Add another Answer Option" |> str}
         </p>
       </button>
     </div>

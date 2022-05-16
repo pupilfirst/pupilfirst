@@ -543,14 +543,13 @@ let onEmbedFormSave = (target, aboveContentBlock, url, send, addContentBlockCB, 
 }
 
 let topButton = (handler, id, title, icon) =>
-  <div
-    className="content-block-creator__top-button-container relative">
+  <div className="content-block-creator__top-button-container relative">
     <button
       onClick=handler
       id={"top-button-" ++ id}
       title
       ariaLabel={title}
-      className="content-block-creator__top-button bg-gray-200 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20 hover:bg-gray-300 hover:text-primary-300 focus:outline-none focus:bg-gray-300 focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+      className="content-block-creator__top-button bg-gray-50 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20 hover:bg-gray-300 hover:text-primary-300 focus:outline-none focus:bg-gray-300 focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
       <FaIcon classes={"text-base fas " ++ icon} />
     </button>
   </div>
@@ -679,7 +678,7 @@ let make = (
           </div>
         | UploadVideo =>
           <div
-            className="flow-root border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
+            className="flow-root border-2 border-gray-400 bg-gray-50 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
             {uploadFormCurried(#VideoEmbed)}
             {state.uploadProgress->Belt.Option.mapWithDefault(
               uploadVideoForm(videoInputId, state, send),
@@ -699,7 +698,7 @@ let make = (
           </div>
         | EmbedForm(url) =>
           <div
-            className="flow-root border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
+            className="flow-root border-2 border-gray-400 bg-gray-50 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
             <label htmlFor=embedInputId className="text-xs font-semibold">
               {t("embed.url_label")->str}
             </label>

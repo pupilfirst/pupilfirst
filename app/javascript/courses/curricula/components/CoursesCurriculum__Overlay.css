@@ -37,7 +37,7 @@
 }
 
 .course-overlay__header-title-card--locked {
-  @apply bg-gray-200 border-gray-600;
+  @apply bg-gray-50 border-gray-600;
 }
 
 /* Course overlay close button */
@@ -71,7 +71,7 @@
 }
 
 .course-overlay__close--locked {
-  @apply bg-gray-200 border-gray-600 text-gray-800;
+  @apply bg-gray-50 border-gray-600 text-gray-800;
 }
 
 @screen lg {

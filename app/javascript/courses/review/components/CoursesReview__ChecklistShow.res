@@ -116,7 +116,7 @@ let make = (~reviewChecklist, ~feedback, ~updateFeedbackCB, ~showEditorCB, ~canc
           <div className="ml-2"> {t("edit_checklist_button")->str} </div>
         </button>
       </div>
-      <div className="border bg-gray-200 rounded-lg py-2 md:py-4 mt-2 space-y-8">
+      <div className="border bg-gray-50 rounded-lg py-2 md:py-4 mt-2 space-y-8">
         {Js.Array.mapi(
           (reviewChecklistItem, itemIndex) =>
             <Spread

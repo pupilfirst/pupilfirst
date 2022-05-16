@@ -158,7 +158,7 @@ let courseLink = (href, title, icon) =>
   <a
     key=href
     href
-    className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 focus:outline-none focus:text-primary-500 focus:bg-gray-200 whitespace-nowrap">
+    className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
     <i className=icon /> <span className="font-semibold ml-2"> {title->str} </span>
   </a>
 
@@ -390,7 +390,7 @@ let showCourse = course => {
         <div className="grid grid-cols-5 gap-4 p-4">
           <button
             title={"Edit " ++ Course.name(course)}
-            className="col-span-3 btn btn-default px-4 py-2 bg-gray-200 text-primary-500 rounded-lg text-sm cursor-pointer"
+            className="col-span-3 btn btn-default px-4 py-2 bg-gray-50 text-primary-500 rounded-lg text-sm cursor-pointer"
             onClick={_ =>
               RescriptReactRouter.push("/school/courses/" ++ Course.id(course) ++ "/details")}>
             <div>
@@ -488,7 +488,7 @@ let make = () => {
     None
   }, (state.filter, state.reloadCourses))
 
-  <div className="flex flex-1 h-full bg-gray-200 overflow-y-scroll">
+  <div className="flex flex-1 h-full bg-gray-50 overflow-y-scroll">
     {switch (state.courses, editorAction) {
     | (Unloaded, _)
     | (_, Hidden) => React.null

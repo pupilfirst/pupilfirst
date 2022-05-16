@@ -151,7 +151,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
     }, highlights)->React.array} <div>
       {ReactUtils.nullIf(
         <button
-          className="w-full mt-2 btn border border-dashed text-sm border-primary-500 bg-gray-200"
+          className="w-full mt-2 btn border border-dashed text-sm border-primary-500 bg-gray-50"
           onClick={_ => addHighlight(highlights, updateHighlightsCB)}>
           {t("add_highlight")->str}
         </button>,

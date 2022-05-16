@@ -205,7 +205,7 @@ let suggestions = state => {
             ("/" ++ (suggestion |> TopicSuggestion.title |> StringUtils.parameterize)))}
             target="_blank"
             key={suggestion |> TopicSuggestion.id}
-            className="flex w-full items-center justify-between mt-1 p-3 rounded cursor-pointer border bg-gray-100 hover:text-primary-500 hover:bg-gray-200">
+            className="flex w-full items-center justify-between mt-1 p-3 rounded cursor-pointer border bg-gray-100 hover:text-primary-500 hover:bg-gray-50">
             <div className="flex flex-col min-w-0">
               <h5
                 title={suggestion |> TopicSuggestion.title}

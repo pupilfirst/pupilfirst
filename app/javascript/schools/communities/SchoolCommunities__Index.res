@@ -127,7 +127,7 @@ let make = (~communities, ~courses) => {
     let communities = state.communities |> List.append(list{community})
     send(SaveCommunityChanges(communities))
   }
-  <div className="flex-1 flex flex-col overflow-y-scroll bg-gray-200">
+  <div className="flex-1 flex flex-col overflow-y-scroll bg-gray-50">
     {switch state.editorAction {
     | Hidden => React.null
     | ShowEditor(community) =>
@@ -177,7 +177,8 @@ let make = (~communities, ~courses) => {
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">
       <div className="max-w-2xl w-full mx-auto relative">
-        {state.communities |> List.map(community =>
+        {state.communities
+        |> List.map(community =>
           <div
             key={community |> Community.id}
             className="flex items-center shadow overflow-hidden bg-white rounded-lg mb-4 focus-within:ring-2 focus-within:ring-focusColor-500">
@@ -209,7 +210,9 @@ let make = (~communities, ~courses) => {
               </a>
             </div>
           </div>
-        ) |> Array.of_list |> React.array}
+        )
+        |> Array.of_list
+        |> React.array}
       </div>
     </div>
   </div>

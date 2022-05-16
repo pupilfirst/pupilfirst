@@ -4,15 +4,13 @@ let str = React.string
 
 type state = {archiving: bool}
 
-module ArchiveCoachNoteMutation = %graphql(
-  `
+module ArchiveCoachNoteMutation = %graphql(`
    mutation ArchiveCoachNoteMutation($id: ID!) {
     archiveCoachNote(id: $id) {
        success
       }
     }
-   `
-)
+   `)
 
 let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -41,7 +39,7 @@ let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
 let deleteIcon = (note, removeNoteCB, setArchiving, archiving) =>
   <button
     ariaLabel={"Delete note " ++ (note |> CoachNote.id)}
-    className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded hover:bg-gray-200 hover:text-red-500 focus:outline-none focus:bg-gray-200 focus:text-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500 "
+    className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500 "
     disabled=archiving
     title={"Delete note " ++ (note |> CoachNote.id)}
     onClick={removeCoachNote(note |> CoachNote.id, removeNoteCB, setArchiving)}>

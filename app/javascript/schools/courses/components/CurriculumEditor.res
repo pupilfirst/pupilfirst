@@ -199,7 +199,7 @@ let make = (
   <div className="flex-1 flex flex-col">
     <div className="bg-white p-4 md:hidden shadow border-b">
       <button
-        className="sa-toggle__menu-btn sa-toggle__menu-btn--arrow hover:bg-gray-200 focus:outline-none">
+        className="sa-toggle__menu-btn sa-toggle__menu-btn--arrow hover:bg-gray-50 focus:outline-none">
         <span className="sa-toggle__menu-btn-box">
           <span className="sa-toggle__menu-btn-inner" />
         </span>
@@ -299,7 +299,7 @@ let make = (
           ariaLabel={t("create_target_group")}
           onClick={_ => send(UpdateEditorAction(ShowTargetGroupEditor(None)))}
           className="target-group__create w-full flex flex-col items-center justify-center relative bg-white border-2 border-dashed border-gray-400 p-6 z-10 hover:text-primary-500 hover:shadow-lg hover:border-primary-400 focus:outline-none focus:text-primary-500 focus:shadow-lg focus:border-primary-400 rounded-lg mt-12 cursor-pointer">
-          <span className="flex bg-gray-200 p-2 rounded-full">
+          <span className="flex bg-gray-50 p-2 rounded-full">
             <i className="fas fa-plus-circle text-2xl" />
           </span>
           <h4 className="font-semibold ml-2"> {t("create_target_group") |> str} </h4>

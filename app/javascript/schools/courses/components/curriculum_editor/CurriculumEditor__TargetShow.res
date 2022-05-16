@@ -1,11 +1,11 @@
-%bs.raw(`require("./CurriculumEditor__TargetShow.css")`)
+%raw(`require("./CurriculumEditor__TargetShow.css")`)
 
 open CurriculumEditor__Types
 
 let str = React.string
 
 let targetClasses = (target, targets) =>
-  "target-group__target flex justify-between items-center pl-2 pr-5 focus:outline-none focus:bg-gray-200 focus:text-primary-500 " ++
+  "target-group__target flex justify-between items-center pl-2 pr-5 focus:outline-none focus:bg-gray-50 focus:text-primary-500 " ++
   switch (Js.Array.length(targets) == 1, target |> Target.visibility) {
   | (true, Archived) => "target-group__target--archived py-4 pl-5"
   | (false, Archived) => "target-group__target--archived py-4"
@@ -36,7 +36,7 @@ let editorLink = (linkPrefix, linkSuffix, target, iconClass) => {
     title={"Edit " ++ (linkSuffix ++ (" of target " ++ (target |> Target.title)))}
     ariaLabel={"Edit " ++ (linkSuffix ++ (" of target " ++ (target |> Target.title)))}
     href=link
-    className="curriculum-editor__target-show-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:text-primary-500">
+    className="curriculum-editor__target-show-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
     <i className={"fas fa-fw " ++ iconClass} />
   </Link>
 }
@@ -53,9 +53,9 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
           className="target-group__target-reorder relative flex flex-col z-10 h-full border-r border-transparent text-gray-700 justify-between items-center">
           <button
             title="Move Up"
-            ariaLabel={"Move Up: "++ (target |> Target.title)}
+            ariaLabel={"Move Up: " ++ (target |> Target.title)}
             id={"target-move-up-" ++ (target |> Target.id)}
-            className={"target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200 focus:outline-none focus:text-primary-500" ++
+            className={"target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500" ++
             sortIndexHiddenClass(index == 0)}
             onClick={_ => updateSortIndex(targets, target, true, updateTargetSortIndexCB)}>
             <i className="fas fa-arrow-up text-sm" />
@@ -64,7 +64,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
             title="Move Down"
             ariaLabel={"Move down: " ++ (target |> Target.title)}
             id={"target-move-down-" ++ (target |> Target.id)}
-            className={"target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-200 focus:outline-none focus:text-primary-500" ++
+            className={"target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500" ++
             sortIndexHiddenClass(index + 1 == Js.Array.length(targets))}
             onClick={_ => updateSortIndex(targets, target, false, updateTargetSortIndexCB)}>
             <i className="fas fa-arrow-down text-sm" />

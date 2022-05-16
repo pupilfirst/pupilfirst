@@ -45,7 +45,7 @@ let make = (~selected, ~contents, ~right=false, ~className="w-full md:w-auto") =
           |> Array.mapi((index, content) =>
             <div
               key={"dropdown-" ++ (index |> string_of_int)}
-              className="cursor-pointer block text-sm font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 focus-within:outline-none focus-within:bg-gray-200 focus-within:text-primary-500">
+              className="cursor-pointer block text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus-within:outline-none focus-within:bg-gray-50 focus-within:text-primary-500">
               content
             </div>
           )

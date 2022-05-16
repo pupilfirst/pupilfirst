@@ -55,7 +55,7 @@ let rendertarget = (target, statusOfTargets, author, courseId) => {
         title={t("edit_target_button_title", ~variables=[("title", Target.title(target))])}
         ariaLabel={t("edit_target_button_title", ~variables=[("title", Target.title(target))])}
         href={"/school/courses/" ++ courseId ++ "/targets/" ++ targetId ++ "/content"}
-        className="hidden lg:block courses-curriculum__target-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:text-primary-500 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 focus:bg-gray-100 focus:text-primary-500 focus:rounded-lg">
+        className="hidden lg:block courses-curriculum__target-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 focus:bg-gray-100 focus:text-primary-500 focus:rounded-lg">
         <i className="fas fa-pencil-alt" />
       </a>,
       author,
@@ -249,7 +249,7 @@ let navigationLink = (direction, level, setState) => {
   <button
     ariaLabel={"Go to " ++ longText}
     onClick={_ => setState(state => {...state, selectedLevelId: level |> Level.id})}
-    className="block w-full focus:outline-none p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer hover:text-primary-500 focus:text-primary-500 focus:bg-gray-200 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+    className="block w-full focus:outline-none p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-50 cursor-pointer hover:text-primary-500 focus:text-primary-500 focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
     {arrow(leftIcon)}
     <span className="mx-2 hidden md:inline"> {longText |> str} </span>
     <span className="mx-2 inline md:hidden"> {shortText |> str} </span>

@@ -405,7 +405,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
               SubmissionDetails.courseId(submissionDetails),
               filter,
               submissionId,
-              "flex flex-shrink-0 items-center md:hidden border-l text-sm font-semibold px-3 py-2 md:px-5 md:py-4 hover:bg-gray-200 hover:text-primary-500",
+              "flex flex-shrink-0 items-center md:hidden border-l text-sm font-semibold px-3 py-2 md:px-5 md:py-4 hover:bg-gray-50 hover:text-primary-500",
             )}
           </div>
         </div>
@@ -465,7 +465,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
           SubmissionDetails.courseId(submissionDetails),
           filter,
           submissionId,
-          "flex items-center border-l text-sm font-semibold px-5 py-4 hover:bg-gray-200 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
+          "flex items-center border-l text-sm font-semibold px-5 py-4 hover:bg-gray-50 hover:text-primary-500 focus:ring-2 focus:ring-focusColor-500 ring-inset ",
         )}
       </div>
     </div>
@@ -724,7 +724,7 @@ let submissionStatusIcon = (status, overlaySubmission) => {
       {switch (OverlaySubmission.evaluatedAt(overlaySubmission), status) {
       | (Some(date), Graded(_)) =>
         <div
-          className="bg-gray-200 block md:flex flex-col w-full justify-between rounded-lg pt-3 mr-2 mt-4 md:mt-0">
+          className="bg-gray-50 block md:flex flex-col w-full justify-between rounded-lg pt-3 mr-2 mt-4 md:mt-0">
           <div>
             <p className="text-xs px-3"> {"Evaluated By"->str} </p>
             <p className="text-sm font-semibold px-3 pb-3">
@@ -1186,7 +1186,7 @@ let make = (
         {headerSection(state, state.nextSubmission, send, submissionDetails, filter, submissionId)}
         {ReactUtils.nullIf(
           <div
-            className="flex space-x-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-200">
+            className="flex space-x-4 overflow-x-auto px-4 md:px-6 py-2 md:py-3 border-b bg-gray-50">
             {Js.Array2.mapi(SubmissionDetails.allSubmissions(submissionDetails), (
               submission,
               index,
@@ -1315,7 +1315,7 @@ let make = (
               {ReactUtils.nullIf(
                 <div className="px-4 md:px-6 py-4 border-b border-gray-300" ariaLabel="Assigned to">
                   <div
-                    className="flex items-center justify-between px-3 py-2 rounded-md bg-gray-200">
+                    className="flex items-center justify-between px-3 py-2 rounded-md bg-gray-50">
                     {switch SubmissionDetails.reviewer(submissionDetails) {
                     | Some(reviewer) =>
                       <div>

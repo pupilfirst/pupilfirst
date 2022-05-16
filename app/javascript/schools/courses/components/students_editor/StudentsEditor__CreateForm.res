@@ -155,7 +155,7 @@ let tagBoxes = tags =>
     |> Array.map(tag =>
       <div
         key=tag
-        className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+        className="flex items-center bg-gray-50 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
         {str(tag)}
       </div>
     )
@@ -241,10 +241,10 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
       </div>
       <div className="mt-4">
         <Checkbox
-            id="notify-new-students"
-            label={str(t("notify_students_label"))}
-            onChange={_event => send(ToggleNotifyStudents)}
-            checked={state.notifyStudents}
+          id="notify-new-students"
+          label={str(t("notify_students_label"))}
+          onChange={_event => send(ToggleNotifyStudents)}
+          checked={state.notifyStudents}
         />
       </div>
       <div className="flex mt-4">

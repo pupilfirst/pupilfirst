@@ -3,7 +3,7 @@
 }
 
 .curriculum-editor__target-drawer-tab:not(.curriculum-editor__target-drawer-tab--selected):hover {
-  @apply bg-gray-200 text-primary-400 text-gray-900;
+  @apply bg-gray-50 text-primary-400 text-gray-900;
 }
 
 .curriculum-editor__target-drawer-tab--selected {

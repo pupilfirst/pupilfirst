@@ -21,7 +21,7 @@
 }
 
 .school-admin-navbar__primary-nav-link--active {
-  @apply bg-gray-200 text-primary-500 focus:text-primary-700;
+  @apply bg-gray-50 text-primary-500 focus:text-primary-700;
   box-shadow: inset 4px 0 0 0 theme("colors.yellow.500");
   background-image: linear-gradient(
     to right,
@@ -56,7 +56,7 @@
 }
 
 .school-admin-navbar__primary-nav-link--active:hover {
-  @apply bg-gray-200 text-primary-500;
+  @apply bg-gray-50 text-primary-500;
 }
 
 .school-admin-navbar__notifications-unread-bullet {

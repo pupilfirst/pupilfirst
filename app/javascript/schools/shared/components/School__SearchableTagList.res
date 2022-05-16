@@ -48,7 +48,7 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
         <span
           title={"Pick tag " ++ tag}
           key=tag
-          className="inline-flex cursor-pointer items-center bg-gray-200 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden"
+          className="inline-flex cursor-pointer items-center bg-gray-50 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden"
           onMouseDown={_e => handleClick(tag, send, addTagCB)}>
           {tag->str}
         </span>
@@ -70,7 +70,7 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTa
           tag =>
             <div
               key=tag
-              className="flex items-center bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+              className="flex items-center bg-gray-50 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
               <span className="px-2 py-px"> {tag |> str} </span>
               <button
                 ariaLabel={"Remove tag " ++ tag}

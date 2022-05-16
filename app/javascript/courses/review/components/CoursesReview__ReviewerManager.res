@@ -3,8 +3,7 @@ let str = React.string
 
 let t = I18n.t(~scope="components.CoursesReview__ReviewerManager")
 
-module AssignReviewerMutation = %graphql(
-  `
+module AssignReviewerMutation = %graphql(`
     mutation AssignReviewerMutation($submissionId: ID!) {
       assignReviewer(submissionId: $submissionId){
         reviewer{
@@ -12,11 +11,9 @@ module AssignReviewerMutation = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
-module ReassignReviewerMutation = %graphql(
-  `
+module ReassignReviewerMutation = %graphql(`
     mutation ReassignReviewerMutation($submissionId: ID!) {
       reassignReviewer(submissionId: $submissionId){
         reviewer{
@@ -24,8 +21,7 @@ module ReassignReviewerMutation = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
 let assignReviewer = (submissionId, setSaving, updateReviewerCB) => {
   setSaving(_ => true)
@@ -67,7 +63,7 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
     <div>
       {switch SubmissionDetails.reviewer(submissionDetails) {
       | Some(reviewer) => [
-          <div className="inline-flex bg-gray-200 px-3 py-2 mt-2 rounded-md">
+          <div className="inline-flex bg-gray-50 px-3 py-2 mt-2 rounded-md">
             {switch UserProxy.avatarUrl(Reviewer.user(reviewer)) {
             | Some(avatarUrl) =>
               <img

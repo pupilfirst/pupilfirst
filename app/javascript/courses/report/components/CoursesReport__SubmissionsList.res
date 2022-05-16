@@ -360,7 +360,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
 let showSubmissions = (submissions, levels, teamStudentIds) =>
   submissions |> ArrayUtils.isEmpty
     ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
-        <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
+        <h5 className="py-4 mt-4 bg-gray-50 text-gray-800 font-semibold">
           {tc("no_submissions_to_show") |> str}
         </h5>
       </div>

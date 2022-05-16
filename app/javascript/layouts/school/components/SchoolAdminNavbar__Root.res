@@ -135,7 +135,7 @@ let secondaryNav = (courses, userRole, selectedOption) =>
   | Settings(settingsSelection) =>
     <div
       key="secondary-nav"
-      className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
+      className="bg-gray-50 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
       <ul className="p-4">
         {secondaryNavOption("/school/customize", settingsSelection, Customization, "Customization")}
         {secondaryNavOption("/school/admins", settingsSelection, Admins, "Admins")}
@@ -144,7 +144,7 @@ let secondaryNav = (courses, userRole, selectedOption) =>
   | SelectedCourse(courseId, courseSelection) =>
     <div
       key="secondary-nav"
-      className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
+      className="bg-gray-50 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
       <div className="p-4">
         <SchoolAdminNavbar__CourseDropdown courses currentCourseId=courseId />
         {secondaryNavLinks(courseSelection, courseId, userRole)->React.array}

@@ -62,7 +62,7 @@
 
   input:disabled,
   .disabled {
-    @apply cursor-not-allowed bg-gray-200 text-gray-700;
+    @apply cursor-not-allowed bg-gray-50 text-gray-700;
   }
 
   /* Accessible File Input */
@@ -112,7 +112,7 @@
   }
 
   .btn-subtle {
-    @apply bg-gray-200 text-gray-800;
+    @apply bg-gray-50 text-gray-800;
   }
 
   .btn-subtle:hover {

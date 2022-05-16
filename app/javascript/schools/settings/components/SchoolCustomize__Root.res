@@ -258,13 +258,13 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
     <div className="px-6 py-6 w-full xl:max-w-6xl mx-auto">
       <div className="font-bold"> {"Home Page" |> str} </div>
       <div className="border rounded-t-lg px-5 py-4 flex justify-between mt-3">
-        <div className="flex items-center bg-gray-200 rounded p-2">
+        <div className="flex items-center bg-gray-50 rounded p-2">
           {headerLogo(schoolName, state.customizations |> Customizations.logoOnLightBg)}
           {editIcon("ml-6", showEditor(ImagesEditor, send), "Edit logo (on light backgrounds)")}
         </div>
         <div className="flex items-center">
           <div
-            className="school-customize__header-links flex items-center bg-gray-200 rounded px-3 py-2 h-full">
+            className="school-customize__header-links flex items-center bg-gray-50 rounded px-3 py-2 h-full">
             {headerLinks(
               state.customizations |> Customizations.headerLinks |> Customizations.unpackLinks,
             )}

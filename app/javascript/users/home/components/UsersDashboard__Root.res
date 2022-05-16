@@ -1,5 +1,5 @@
-%bs.raw(`require("courses/shared/background_patterns.css")`)
-%bs.raw(`require("./UserDashboard__Root.css")`)
+%raw(`require("courses/shared/background_patterns.css")`)
+%raw(`require("./UserDashboard__Root.css")`)
 
 let t = I18n.t(~scope="components.UsersDashboard__Root")
 
@@ -52,7 +52,8 @@ let navSection = (view, setView, communities, issuedCertificates) =>
       <button
         role="tab"
         ariaSelected={view == ShowCourses}
-        className={navButtonClasses(view == ShowCourses)} onClick={_ => setView(_ => ShowCourses)}>
+        className={navButtonClasses(view == ShowCourses)}
+        onClick={_ => setView(_ => ShowCourses)}>
         <i className="fas fa-book text-xs md:text-sm mr-2" /> <span> {t("my_courses")->str} </span>
       </button>
       {ReactUtils.nullUnless(
@@ -84,14 +85,14 @@ let courseLink = (href, title, icon) =>
   <a
     key=href
     href
-    className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 hover:text-primary-500 focus:outline-none focus:bg-gray-200 focus:text-primary-500">
+    className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
     <i className=icon /> <span className="font-semibold ml-2"> {title->str} </span>
   </a>
 
 let ctaButton = (title, href) =>
   <a
     href
-    className="w-full bg-gray-200 mt-4 px-6 py-4 flex text-sm font-semibold justify-between items-center cursor-pointer text-primary-500 hover:bg-gray-300 focus:outline-none focus:bg-gray-300">
+    className="w-full bg-gray-50 mt-4 px-6 py-4 flex text-sm font-semibold justify-between items-center cursor-pointer text-primary-500 hover:bg-gray-300 focus:outline-none focus:bg-gray-300">
     <span> <i className="fas fa-book" /> <span className="ml-2"> {title->str} </span> </span>
     <i className="fas fa-arrow-right" />
   </a>
@@ -142,7 +143,7 @@ let communityLinks = (communityIds, communities) => Js.Array.map(id => {
       <a
         key={Community.id(c)}
         href={Community.path(c)}
-        className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 hover:text-primary-500 focus:outline-none focus:bg-gray-200 focus:text-primary-500">
+        className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
         <i className="fas fa-users" />
         <span className="font-semibold ml-2"> {Community.name(c)->str} </span>
       </a>

@@ -10,8 +10,7 @@ type state = {
   validTargetTitle: bool,
 }
 
-module CreateTargetMutation = %graphql(
-  `
+module CreateTargetMutation = %graphql(`
    mutation CreateTargetMutation($title: String!, $targetGroupId: String!) {
      createTarget(title: $title, targetGroupId: $targetGroupId ) {
        target {
@@ -21,8 +20,7 @@ module CreateTargetMutation = %graphql(
        }
      }
    }
-   `
-)
+   `)
 
 type action =
   | UpdateTargetTitle(string)
@@ -149,7 +147,7 @@ let make = (
               title="Move Up"
               ariaLabel="Move Up"
               id={"target-group-move-up-" ++ (targetGroup |> TargetGroup.id)}
-              className={"target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:text-primary-500" ++
+              className={"target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 focus:text-primary-500" ++
               sortIndexHiddenClass(index == 0)}
               onClick={_ =>
                 updateSortIndex(targetGroups, targetGroup, true, updateTargetGroupSortIndexCB)}>
@@ -159,7 +157,7 @@ let make = (
               title="Move Down"
               ariaLabel="Move down"
               id={"target-group-move-down-" ++ (targetGroup |> TargetGroup.id)}
-              className={"target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:text-primary-500" ++
+              className={"target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 focus:text-primary-500" ++
               sortIndexHiddenClass(index + 1 == Js.Array.length(targetGroups))}
               onClick={_ =>
                 updateSortIndex(targetGroups, targetGroup, false, updateTargetGroupSortIndexCB)}>

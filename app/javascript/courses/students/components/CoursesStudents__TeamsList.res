@@ -133,7 +133,7 @@ let showTeam = (team, levels, teamCoaches) =>
         |> React.array}
       </div>
       <div
-        className="flex w-full md:w-2/5 items-center bg-gray-200 md:bg-white border-l py-2 md:py-0 px-3 md:px-4">
+        className="flex w-full md:w-2/5 items-center bg-gray-50 md:bg-white border-l py-2 md:py-0 px-3 md:px-4">
         <div className="flex-1 pb-3 md:py-3 pr-3">
           <div>
             <p
@@ -163,7 +163,7 @@ let make = (~levels, ~teams, ~teamCoaches) =>
   <div>
     {teams |> ArrayUtils.isEmpty
       ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
-          <h4 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
+          <h4 className="py-4 mt-4 bg-gray-50 text-gray-800 font-semibold">
             {"No teams to show" |> str}
           </h4>
         </div>

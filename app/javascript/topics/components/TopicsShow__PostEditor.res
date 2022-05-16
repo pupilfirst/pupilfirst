@@ -206,12 +206,12 @@ let make = (
           )
           ->Belt.Option.mapWithDefault(React.null, reply =>
             <div
-              className="topics-post-editor__reply-to-preview max-w-md rounded border border-primary-200 p-3 bg-gray-200 mb-3 overflow-hidden">
+              className="topics-post-editor__reply-to-preview max-w-md rounded border border-primary-200 p-3 bg-gray-50 mb-3 overflow-hidden">
               <div className="flex justify-between">
                 {replyToUserInfo(reply |> Post.user(users))}
                 <div
                   onClick={_ => removeReplyToPostCB |> OptionUtils.mapWithDefault(cb => cb(), ())}
-                  className="flex w-6 h-6 p-2 items-center justify-center cursor-pointer border border-gray-400 rounded bg-gray-200 hover:bg-gray-400">
+                  className="flex w-6 h-6 p-2 items-center justify-center cursor-pointer border border-gray-400 rounded bg-gray-50 hover:bg-gray-400">
                   <PfIcon className="if i-times-regular text-base" />
                 </div>
               </div>

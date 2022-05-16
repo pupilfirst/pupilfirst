@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesStudents__StudentOverlay.css")`)
+%raw(`require("./CoursesStudents__StudentOverlay.css")`)
 
 open CoursesStudents__Types
 
@@ -9,8 +9,7 @@ type state = {
 
 let str = React.string
 
-module CreateCoachNotesMutation = %graphql(
-  `
+module CreateCoachNotesMutation = %graphql(`
    mutation CreateCoachNoteMutation($studentId: ID!, $note: String!) {
     createCoachNote(studentId: $studentId, note: $note ) {
        coachNote {
@@ -26,8 +25,7 @@ module CreateCoachNotesMutation = %graphql(
        }
       }
     }
-  `
-)
+  `)
 
 let saveNote = (studentId, setState, state, addNoteCB) => {
   setState(state => {...state, saving: true})
@@ -84,7 +82,7 @@ let make = (~studentId, ~coachNotes, ~hasArchivedNotes, ~addNoteCB, ~removeNoteC
       <h6 className="font-semibold mt-6"> {"All Notes" |> str} </h6>
       {coachNotes |> ArrayUtils.isEmpty
         ? <div
-            className="bg-gray-200 rounded text-center p-4 md:p-6 items-center justify-center mt-2">
+            className="bg-gray-50 rounded text-center p-4 md:p-6 items-center justify-center mt-2">
             <Icon className="if i-long-text-light text-gray-800 text-base" />
             <p className="text-xs font-semibold text-gray-700 mt-2">
               {(

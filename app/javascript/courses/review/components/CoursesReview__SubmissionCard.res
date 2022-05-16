@@ -134,7 +134,7 @@ let make = (~submissions, ~selectedTab, ~filterString) => {
 
   ArrayUtils.isEmpty(submissions)
     ? <div className="course-review__submissions-empty text-lg font-semibold text-center py-4">
-        <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
+        <h5 className="py-4 mt-4 bg-gray-50 text-gray-800 font-semibold">
           {t("no_submissions_found")->str}
         </h5>
         <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=imageSrc />

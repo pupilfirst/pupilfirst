@@ -339,7 +339,7 @@ let topicsList = (topicCategories, topics) =>
 
 let topicsLoadedData = (totalTopicsCount, loadedTopicsCount) =>
   <div
-    className="inline-block mt-2 mx-auto bg-gray-200 text-gray-800 text-xs p-2 text-center rounded font-semibold">
+    className="inline-block mt-2 mx-auto bg-gray-50 text-gray-800 text-xs p-2 text-center rounded font-semibold">
     {(
       totalTopicsCount == loadedTopicsCount
         ? t(

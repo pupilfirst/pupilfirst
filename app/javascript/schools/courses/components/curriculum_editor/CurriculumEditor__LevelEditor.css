@@ -8,5 +8,5 @@
 }
 
 .level-editor__tab:not(.level-editor__tab--selected):hover {
-  @apply bg-gray-200 text-gray-900;
+  @apply bg-gray-50 text-gray-900;
 }

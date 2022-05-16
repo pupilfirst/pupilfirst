@@ -50,16 +50,14 @@ let make = (
           width ++
           ((right ? " right-0 " : " left-0 ") ++
           childClasses)}>
-          {Js.Array.mapi(
-            (content, index) =>
-              <div
-                key={"dropdown-" ++ index->string_of_int}
-                className="cursor-pointer block text-sm font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 md:whitespace-nowrap
+          {Js.Array.mapi((content, index) =>
+            <div
+              key={"dropdown-" ++ index->string_of_int}
+              className="cursor-pointer block text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 md:whitespace-nowrap
 ">
-                content
-              </div>,
-            contents,
-          )->React.array}
+              content
+            </div>
+          , contents)->React.array}
         </div>
       : React.null}
   </div>

@@ -1,4 +1,4 @@
-%bs.raw(`require("./CurriculumEditor__TargetDrawer.css")`)
+%raw(`require("./CurriculumEditor__TargetDrawer.css")`)
 
 let str = React.string
 
@@ -118,7 +118,7 @@ let make = (
       size=SchoolAdmin__EditorDrawer.Large
       closeDrawerCB={() => confirmDirtyAction(dirty, () => closeDrawer(course))}>
       <div>
-        <div className="bg-gray-200 pt-6">
+        <div className="bg-gray-50 pt-6">
           <div className="max-w-3xl px-3 mx-auto"> <h3> {target |> Target.title |> str} </h3> </div>
           <div className="flex w-full max-w-3xl mx-auto px-3 text-sm -mb-px mt-2">
             {tab(Content, selectedPage, pathPrefix, dirty, setDirty)}

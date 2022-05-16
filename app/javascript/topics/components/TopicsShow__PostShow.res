@@ -71,7 +71,7 @@ let solutionIcon = (userCanUnmarkSolution, unmarkPostAsSolutionCB, postId) => {
   let solutionIcon =
     <div
       className={"flex items-center justify-center pr-2 pl-0 py-2 md:p-3 bg-green-200 text-green-800 rounded-full " ++ (
-        userCanUnmarkSolution ? "hover:bg-gray-200 hover:text-gray-700" : ""
+        userCanUnmarkSolution ? "hover:bg-gray-50 hover:text-gray-700" : ""
       )}>
       <PfIcon className="if i-check-solid text-sm lg:text-base" />
     </div>
@@ -104,7 +104,7 @@ let optionsDropdown = (
   let selected =
     <div
       ariaLabel={"Options for post " ++ Post.id(post)}
-      className="flex items-center justify-center w-8 h-8 rounded leading-tight border bg-gray-100 text-gray-800 cursor-pointer hover:bg-gray-200">
+      className="flex items-center justify-center w-8 h-8 rounded leading-tight border bg-gray-100 text-gray-800 cursor-pointer hover:bg-gray-50">
       <PfIcon className="if i-ellipsis-h-regular text-base" />
     </div>
   let editPostButton =
@@ -215,7 +215,7 @@ let make = (
                 <button
                   ariaLabel="Mark as solution"
                   onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
-                  className="mark-as-solution__button bg-gray-100 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-200 text-gray-700">
+                  className="mark-as-solution__button bg-gray-100 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-50 text-gray-700">
                   <PfIcon className="if i-check-solid text-sm lg:text-base" />
                 </button>
               </Tooltip>
@@ -335,7 +335,7 @@ let make = (
                 {ReactUtils.nullUnless(
                   <button
                     onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
-                    className="bg-gray-100 flex md:hidden items-center text-center rounded-lg p-2 hover:bg-gray-200 text-gray-700">
+                    className="bg-gray-100 flex md:hidden items-center text-center rounded-lg p-2 hover:bg-gray-50 text-gray-700">
                     <PfIcon className="if i-check-solid text-sm lg:text-base" />
                     <span
                       className="ml-2 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
@@ -396,7 +396,7 @@ let make = (
                 ariaLabel={isFirstPost
                   ? "Add reply to topic"
                   : "Add reply to post " ++ Post.id(post)}
-                className="bg-gray-100 lg:border lg:bg-gray-200 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-300">
+                className="bg-gray-100 lg:border lg:bg-gray-50 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-300">
                 <FaIcon classes="fas fa-reply mr-2" /> {t("new_reply_button") |> str}
               </button>,
               Topic.lockedAt(topic)->Belt.Option.isSome,

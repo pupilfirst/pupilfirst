@@ -251,7 +251,7 @@ let make = (
             <span> {t("button_all_students") |> str} </span>
           </li>
           <li
-            className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-200 hover:text-gray-900 focus-within:outline-none focus-within:bg-gray-200 focus-within:text-gray-900 focus-within:ring-2 focus-within:ring-focusColor-500">
+            className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-50 hover:text-gray-900 focus-within:outline-none focus-within:bg-gray-50 focus-within:text-gray-900 focus-within:ring-2 focus-within:ring-focusColor-500">
             <a
               className="block px-3 py-3 md:py-2 text-gray-800 focus:outline-none"
               href={"/school/courses/" ++ (courseId ++ "/inactive_students")}>
@@ -289,7 +289,8 @@ let make = (
               ? React.null
               : <div className="flex justify-between bg-gray-100 px-4 pb-3 pt-1 rounded-b-lg">
                   <div className="flex flex-wrap">
-                    {state.selectedStudents |> Array.map(selectedStudent =>
+                    {state.selectedStudents
+                    |> Array.map(selectedStudent =>
                       <div
                         className="flex items-center bg-white border border-gray-400 rounded-full mr-2 mt-2 overflow-hidden">
                         {switch selectedStudent |> SelectedStudent.avatarUrl {
@@ -317,7 +318,8 @@ let make = (
                           </button>
                         </div>
                       </div>
-                    ) |> React.array}
+                    )
+                    |> React.array}
                   </div>
                   <div className="pt-1">
                     {state.selectedStudents |> SelectedStudent.isGroupable

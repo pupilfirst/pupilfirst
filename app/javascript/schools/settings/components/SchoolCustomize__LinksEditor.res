@@ -120,7 +120,7 @@ let titleInputVisible = state =>
   }
 
 let kindClasses = selected => {
-  let classes = "nav-tab-item border-t cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-gray-800 bg-white hover:bg-gray-200 hover:text-gray-900 py-3 px-4 font-semibold leading-tight focus:outline-none focus:bg-gray-200 focus:text-gray-900"
+  let classes = "nav-tab-item border-t cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-gray-800 bg-white hover:bg-gray-50 hover:text-gray-900 py-3 px-4 font-semibold leading-tight focus:outline-none focus:bg-gray-50 focus:text-gray-900"
   classes ++ (
     selected
       ? " nav-tab-item--selected text-primary-500 bg-white hover:bg-white hover:text-primary-500"

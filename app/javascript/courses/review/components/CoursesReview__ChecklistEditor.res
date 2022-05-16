@@ -194,7 +194,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
               key={string_of_int(itemIndex)}>
               <div className="flex items-start gap-1">
                 <div
-                  className="p-3 md:p-5 mb-5 flex flex-col flex-1 bg-gray-200 rounded-lg"
+                  className="p-3 md:p-5 mb-5 flex flex-col flex-1 bg-gray-50 rounded-lg"
                   key={itemIndex->string_of_int}
                   ariaLabel={"checklist-item-" ++ itemIndex->string_of_int}>
                   <div className="flex">
@@ -236,7 +236,8 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                               className="flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
                             />
                             <div className="w-full bg-gray-100 relative">
-                              <div className="flex justify-between gap-2 bg-white border border-gray-400 border-b-transparent rounded-t focus-within:outline-none focus-within:bg-white focus-within:border-primary-300">
+                              <div
+                                className="flex justify-between gap-2 bg-white border border-gray-400 border-b-transparent rounded-t focus-within:outline-none focus-within:bg-white focus-within:border-primary-300">
                                 <input
                                   className="checklist-editor__checklist-result-item-title border-none h-10 pr-0 focus:outline-none"
                                   id={"result_" ++
@@ -255,8 +256,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                       send,
                                     )}
                                 />
-                                <div
-                                  className="flex h-10 mr-1 items-center justify-center">
+                                <div className="flex h-10 mr-1 items-center justify-center">
                                   {controlIcon(
                                     ~icon="fa-arrow-up",
                                     ~title={t("checklist_item_title.move_up_button_title")},
@@ -349,7 +349,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                         className="checklist-editor__add-result-btn-check flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2"
                       />
                       <span
-                        className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-200 px-3 py-1 rounded border border-dashed border-gray-600">
+                        className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-50 px-3 py-1 rounded border border-dashed border-gray-600">
                         <i className="fas fa-plus text-xs mr-2" /> {t("add_result")->str}
                       </span>
                     </button>
@@ -386,7 +386,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
           <div>
             <button
               ariaLabel={t("add_checklist_item")}
-              className="flex items-center text-sm font-semibold bg-gray-200 rounded border border-dashed border-gray-600 w-full hover:text-primary-500 hover:bg-white hover:border-primary-500 hover:shadow-md focus:outline-none focus:text-primary-500 focus:bg-white focus:border-primary-500 focus:shadow-md"
+              className="flex items-center text-sm font-semibold bg-gray-50 rounded border border-dashed border-gray-600 w-full hover:text-primary-500 hover:bg-white hover:border-primary-500 hover:shadow-md focus:outline-none focus:text-primary-500 focus:bg-white focus:border-primary-500 focus:shadow-md"
               onClick={_ => send(AddEmptyChecklistItem)}>
               <span className="bg-gray-300 py-2 w-10"> <i className="fas fa-plus text-sm" /> </span>
               <span className="px-3 py-2"> {t("add_checklist_item")->str} </span>

@@ -11,7 +11,7 @@ type tabs =
   | ActionsTab
 
 let selectedTabClasses = selected =>
-  "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer hover:bg-gray-200 hover:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
+  "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer hover:bg-gray-50 hover:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
     selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-100"
   )
 
@@ -480,7 +480,7 @@ let handleSelectProgressionLimit = (send, event) => {
 let progressionBehaviorButtonClasses = (state, progressionBehavior, additionalClasses) => {
   let selected = state.progressionBehavior == progressionBehavior
   let defaultClasses =
-    additionalClasses ++ " w-1/3 relative border font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-center bg-gray-200 hover:bg-gray-300 focus:bg-gray-300 focus:ring-2 focus:ring-focusColor-500 "
+    additionalClasses ++ " w-1/3 relative border font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-center bg-gray-50 hover:bg-gray-300 focus:bg-gray-300 focus:ring-2 focus:ring-focusColor-500 "
   defaultClasses ++ (selected ? " text-primary-500 border-primary-500" : "")
 }
 
@@ -696,7 +696,9 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
           </h5>
           {ReactUtils.nullUnless(
             <div className="w-full pt-6">
-              <div role="tablist" className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
+              <div
+                role="tablist"
+                className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
                 <button
                   role="tab"
                   ariaSelected={selectedTab == DetailsTab}

@@ -117,7 +117,7 @@
 }
 
 .markdown-block__permissive table th {
-  @apply bg-gray-200 px-4 py-2 border border-gray-400 font-semibold;
+  @apply bg-gray-50 px-4 py-2 border border-gray-400 font-semibold;
 }
 
 .markdown-block__permissive table tr {

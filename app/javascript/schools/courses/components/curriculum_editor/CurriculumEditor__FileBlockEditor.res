@@ -13,7 +13,7 @@ let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
 
   <div className="relative border border-gray-400 rounded-lg">
     <div
-      className="content-block__content text-base bg-gray-200 flex justify-center items-center rounded-t-lg">
+      className="content-block__content text-base bg-gray-50 flex justify-center items-center rounded-t-lg">
       <div className="w-full">
         <a
           className="flex justify-between items-center bg-white rounded-t-lg px-6 py-4 hover:bg-gray-100 hover:text-primary-500 focus:outline-none focus:bg-gray-100 focus:text-primary-500"

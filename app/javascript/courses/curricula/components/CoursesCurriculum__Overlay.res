@@ -104,7 +104,7 @@ let tabClasses = (selection, tab) =>
   "course-overlay__body-tab-item p-2 md:px-3 md:py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500" ++ (
     tab == selection
       ? " course-overlay__body-tab-item--selected"
-      : " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 focus:text-primary-400 focus:bg-gray-200 cursor-pointer"
+      : " bg-gray-100 hover:text-primary-400 hover:bg-gray-50 focus:text-primary-400 focus:bg-gray-50 cursor-pointer"
   )
 
 let scrollCompleteButtonIntoViewEventually = () => Js.Global.setTimeout(() => {
@@ -285,7 +285,7 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) =
           href={"/targets/" ++ (target |> Target.id)}
           ariaLabel={"Select Target " ++ (target |> Target.id)}
           key={target |> Target.id}
-          className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer">
+          className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-50 hover:text-primary-500 cursor-pointer">
           <span className="font-semibold text-left leading-snug">
             {target |> Target.title |> str}
           </span>
@@ -495,7 +495,7 @@ let navigationLink = (direction, url, send) => {
   <Link
     href=url
     onClick={performQuickNavigation(send)}
-    className="block p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
+    className="block p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-50">
     {arrow(leftIcon)}
     <span className="mx-2 hidden md:inline"> {text |> str} </span>
     {arrow(rightIcon)}
@@ -524,7 +524,7 @@ let quickNavigationLinks = (targetDetails, send) => {
       <div className="w-1/3 mx-2">
         <button
           onClick=scrollOverlayToTop
-          className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
+          className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-50">
           <span className="mx-2 hidden md:inline"> {t("scroll_to_top")->str} </span>
           <span className="mx-2 md:hidden"> <i className="fas fa-arrow-up" /> </span>
         </button>

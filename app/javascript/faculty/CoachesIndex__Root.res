@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoachesIndex__Root.css")`)
+%raw(`require("./CoachesIndex__Root.css")`)
 
 let str = React.string
 
@@ -109,7 +109,7 @@ let connectLink = href =>
   <a
     href
     target="_blank"
-    className="block flex-1 px-3 py-2 text-center text-sm font-semibold hover:bg-gray-200 hover:text-primary-500">
+    className="block flex-1 px-3 py-2 text-center text-sm font-semibold hover:bg-gray-50 hover:text-primary-500">
     {tr("button_connect")->str}
   </a>
 
@@ -136,7 +136,7 @@ let overlay = (coach, about) =>
           </Link>
         </div>
         <div className="pb-5">
-          <div className="faculty-card__avatar-container bg-gray-200 px-2 py-10 rounded-t-lg">
+          <div className="faculty-card__avatar-container bg-gray-50 px-2 py-10 rounded-t-lg">
             {switch Coach.avatarUrl(coach) {
             | Some(src) =>
               <img
@@ -183,13 +183,13 @@ let card = coach =>
       | Some(src) =>
         <img
           src
-          className="mx-auto w-40 h-40 border-4 border-gray-200 rounded-full object-cover"
+          className="mx-auto w-40 h-40 border-4 border-gray-50 rounded-full object-cover"
           alt="Coach's Avatar"
         />
       | None =>
         <Avatar
           name={Coach.name(coach)}
-          className="mx-auto w-40 h-40 border-4 border-gray-200 rounded-full object-cover"
+          className="mx-auto w-40 h-40 border-4 border-gray-50 rounded-full object-cover"
         />
       }}
       <div className="py-3">
@@ -206,7 +206,7 @@ let card = coach =>
             href={"/coaches/" ++
             (Coach.id(coach) ++
             ("/" ++ Coach.name(coach)->StringUtils.parameterize))}
-            className="block w-full px-3 py-2 text-center text-sm font-semibold hover:bg-gray-200 hover:text-primary-500">
+            className="block w-full px-3 py-2 text-center text-sm font-semibold hover:bg-gray-50 hover:text-primary-500">
             {tr("button_about")->str}
           </Link>
         </div>

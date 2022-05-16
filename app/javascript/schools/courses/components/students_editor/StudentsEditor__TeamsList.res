@@ -219,7 +219,7 @@ let teamCard = (
     </div>
     {isSingleStudent
       ? React.null
-      : <div className="flex w-2/5 items-center border-l border-gray-200">
+      : <div className="flex w-2/5 items-center border-l border-gray-50">
           <div className="w-4/6 py-4 pl-5 pr-4">
             <div className="students-team--name mb-5">
               <p className="inline-block text-xs bg-green-200 leading-tight px-1 py-px rounded">

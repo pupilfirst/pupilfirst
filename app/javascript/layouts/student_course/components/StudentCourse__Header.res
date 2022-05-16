@@ -1,13 +1,13 @@
 let str = React.string
-%bs.raw(`require("./StudentCourse__Header.css")`)
-%bs.raw(`require("courses/shared/background_patterns.css")`)
+%raw(`require("./StudentCourse__Header.css")`)
+%raw(`require("courses/shared/background_patterns.css")`)
 
 let courseOptions = courses => Js.Array.map(course => {
     let courseId = CourseInfo.id(course)
     <a
       key={"course-" ++ courseId}
       href={"/courses/" ++ (courseId ++ "/curriculum")}
-      className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-nowrap">
+      className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 whitespace-nowrap">
       <span> {CourseInfo.name(course)->str} </span>
     </a>
   }, Js.Array.filter(
@@ -77,7 +77,7 @@ let renderCourseSelector = (currentCourseId, courses, coverImage, additionalLink
 let tabClasses = (url: RescriptReactRouter.url, linkTitle) => {
   let defaultClasses = "student-course__nav-tab py-4 px-2 text-center flex-1 font-semibold text-sm "
   switch url.path {
-  | list{"courses", _targetId, pageTitle, ..._} when pageTitle == linkTitle =>
+  | list{"courses", _targetId, pageTitle, ..._} if pageTitle == linkTitle =>
     defaultClasses ++ "student-course__nav-tab--active"
   | _ => defaultClasses
   }

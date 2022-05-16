@@ -355,7 +355,7 @@ let make = (~level, ~levels, ~course, ~hideEditorActionCB, ~updateLevelsCB) => {
 
   <SchoolAdmin__EditorDrawer closeDrawerCB=hideEditorActionCB>
     <DisablingCover disabled=state.saving>
-      <div className="bg-gray-200 pt-6">
+      <div className="bg-gray-50 pt-6">
         <div className="max-w-2xl px-6 mx-auto"> <h3> {drawerTitle(level)->str} </h3> </div>
         {switch level {
         | Some(_) =>

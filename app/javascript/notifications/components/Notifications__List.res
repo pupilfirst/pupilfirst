@@ -409,7 +409,7 @@ let markAllNotificationsButton = (state, send, entries) => {
     <button
       disabled={disabled || state.saving}
       onClick={markAllNotifications(send)}
-      className="font-semibold text-xs underline px-2 py-1 rounded text-gray-800 hover:text-primary-500 hover:bg-gray-200 focus:outline-none focus:text-primary-500 focus:bg-gray-200 transition ease-in-out duration-150">
+      className="font-semibold text-xs underline px-2 py-1 rounded text-gray-800 hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 transition ease-in-out duration-150">
       {str(t("mark_all_as_read_button"))}
     </button>
   </div>->ReactUtils.nullIf(ArrayUtils.isEmpty(entries))

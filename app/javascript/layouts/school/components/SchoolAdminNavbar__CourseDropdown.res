@@ -17,7 +17,7 @@ let contents = (courses, currentCourse) =>
   Js.Array.map(
     course =>
       <a
-        className="block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 focus:outline-none focus:text-primary-500 focus:bg-gray-200 w-40 truncate"
+        className="block px-4 py-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 w-40 truncate"
         key={course->CourseInfo.id}
         href={"/school/courses/" ++ (course->CourseInfo.id ++ "/curriculum")}>
         {CourseInfo.name(course)->str}

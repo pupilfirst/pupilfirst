@@ -52,11 +52,11 @@ module Make = (Sortable: Sortable) => {
             className="inline-flex flex-1 md:flex-auto items-center bg-gray-100 leading-relaxed font-semibold text-gray-700 border border-gray-400 rounded px-3 py-1 md:py-2 text-sm ">
             <div> {selectedCriterion |> Sortable.criterion |> str} </div>
           </div>}
-        <span className="flex ml-1">
+      <span className="flex ml-1">
         <button
           ariaLabel="Toggle sort order"
           title="toggle-sort-order"
-          className="bg-white w-10 px-2 py-1 rounded border border-gray-400 text-gray-800 hover:bg-gray-200 hover:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 "
+          className="bg-white w-10 px-2 py-1 rounded border border-gray-400 text-gray-800 hover:bg-gray-50 hover:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 "
           onClick={_ => {
             let swappedDirection = switch direction {
             | #Ascending => #Descending

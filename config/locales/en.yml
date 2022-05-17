@@ -1612,44 +1612,10 @@ en:
       clone_course:
         new_name: "%{name} - copy"
     notifications:
-      post_created_job:
-        post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
-      topic_created_job:
-        topic_created: "%{user_name} has created a new topic in %{community_name} community"
-    targets:
-      send_session_feedback_notification:
-        message: |
-          Hello there! Thank you to all who attended today's live session by %{faculty_name}.
-          We hope that you found the session informative and worthwhile.
-          If you missed watching it live, we will have it up on the dashboard in a couple of days.
-          Kindly help us improve our sessions with some quick feedback: https://svlabs.typeform.com/to/h7g9Om?faculty=%{faculty_name_escaped}&session=%{session_title}&date=%{session_date}
-      send_session_reminders:
-        message: "Reminder: \"%{title}\" will start in %{time_delta} (at %{time_exact}). Please check the Slack collective channel for the link to join session."
-    timeline_events:
-      verification_notification:
-        founder:
-          needs_improvement:
-            founder_event: Your new timeline entry (<%{event_url}|%{event_title}>) has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback
-            startup_event: Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_name}> has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback
-          not_accepted:
-            founder_event: Your new timeline entry (<%{event_url}|%{event_title}>) has not been accepted. Please edit and resubmit the modified timeline event based on the feedback
-            startup_event: The new timeline entry (<%{event_url}|%{event_title}>) submitted by you for <%{startup_url}|%{startup_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback
-          verified:
-            founder_event: Your new timeline entry (<%{event_url}|%{event_title}>) has been verified by SV.CO
-            startup_event: Your new timeline entry (<%{event_url}|%{event_title}>) for <%{startup_url}|%{startup_name}> has been verified by SV.CO
-        public:
-          needs_improvement: |
-            <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>
-            *Description:* %{event_description}
-            %{links_attached_notice}
-          verified: |
-            <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>
-            *Description:* %{event_description}
-            %{links_attached_notice}
-        team:
-          needs_improvement: "Your team <%{startup_url}|%{startup_name}> has a new timeline entry: (<%{event_url}|%{event_title}>) and has been marked as 'needs improvement'. Please submit a new and revised timeline event based on the feedback"
-          not_accepted: The new timeline entry (<%{event_url}|%{event_title}>) submitted by  your team <%{startup_url}|%{startup_name}> has not been accepted. Please edit and resubmit the modified timeline event based on the feedback
-          verified: "Your team <%{startup_url}|%{startup_name}> has a new verified timeline entry: <%{event_url}|%{event_title}>"
+      create:
+        message:
+         post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
+         topic_created: "%{user_name} has created a new topic in %{community_name} community"
   mailers:
     applicant:
       enrollment_verification_subject: Verify Your Email Address
@@ -2018,6 +1984,14 @@ en:
       school_index:
         title: Coaches
   home:
+    index:
+      access_ended: Review course content
+      active: Continue course
+      dropped_out: Dropped out
+      featured_courses_heading: Featured Courses
+      get_started: Get started
+      learn_more: Learn more
+      welcome_prefix: Hello, welcome to
     offline:
       heading: You are offline!
       message_html: It seems there is a problem with your connection.<br/>Please check your network status.
@@ -2073,15 +2047,6 @@ en:
     process_application:
       errors: "There were errors with your submission: %{form_errors}"
       sent_mail: We've sent you a verification mail. It should reach you in less than a minute. Click the link in the email to sign up, and get started.
-  home:
-    index:
-      access_ended: Review course content
-      active: Continue course
-      dropped_out: Dropped out
-      featured_courses_heading: Featured Courses
-      get_started: Get started
-      learn_more: Learn more
-      welcome_prefix: Hello, welcome to
   posts:
     versions:
       back_to_post: Back to Post

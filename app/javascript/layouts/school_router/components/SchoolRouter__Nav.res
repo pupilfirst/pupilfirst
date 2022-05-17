@@ -22,8 +22,8 @@ let showUserLink = () => {
 }
 
 let showUser = user => {
-  <div className="px-4 pt-6 pb-2">
-    <div className="flex w-full items-center p-2 bg-gray-100 rounded-md">
+  <div className="px-4 pt-6 pb-4">
+    <div className="flex w-full items-center rounded-md">
       <div className="flex items-center justify-center rounded-full text-center flex-shrink-0">
         {User.avatarUrl(user)->Belt.Option.mapWithDefault(
           <Avatar
@@ -47,18 +47,14 @@ let showUser = user => {
 }
 
 let containerClasses = shrunk => {
-  let defaultClasses = "bg-gradient-to-b from-primary-600 to-primary-800 school-admin-navbar__primary-nav flex flex-col justify-between "
+  let defaultClasses = "bg-white school-admin-navbar__primary-nav flex flex-col justify-between "
 
   defaultClasses ++ (shrunk ? "school-admin-navbar__primary-nav--shrunk" : "overflow-y-auto")
 }
 
 let headerclasses = shrunk => {
   let defaultClasses = "school-admin-navbar__header "
-  defaultClasses ++ (
-    shrunk
-      ? "mx-auto"
-      : "px-5 py-2 relative z-20 border-r border-b border-gray-400 bg-white flex h-16 items-center"
-  )
+  defaultClasses ++ (shrunk ? "mx-auto" : "px-5 py-2 relative z-20 bg-white flex h-16 items-center")
 }
 
 let imageContainerClasses = shrunk => {
@@ -67,7 +63,7 @@ let imageContainerClasses = shrunk => {
 }
 
 let bottomLinkClasses = shrunk => {
-  let defaultClasses = "flex text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center "
+  let defaultClasses = "flex text-gray-800 text-sm py-4 px-5 hover:text-primary-500 font-semibold items-center "
   defaultClasses ++ (shrunk ? "justify-center" : "")
 }
 
@@ -197,19 +193,20 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         </div>
         {ReactUtils.nullIf(
           <ul>
-            {[Page.Overview, SchoolCoaches, Settings(Customization)]
+            {[Page.Courses, Overview, SchoolCoaches, Communities, Settings(Customization)]
             ->Js.Array2.map(page => <li key={Page.name(page)}> {topLink(selectedPage, page)} </li>)
             ->React.array}
             <li>
-              {topLink(selectedPage, Courses)}
               {ReactUtils.nullIf(
-                <ul className="pr-4 pb-4 ml-10 mt-1">
+                <ul className="pr-4 pb-4 mt-1 ml-2">
+                  <div className="text-xs font-bold text-gray-800"> {"Courses"->str} </div>
                   {Js.Array.map(
                     course =>
                       <li key={Course.id(course)}>
                         <a
                           href={"/school/courses/" ++ Course.id(course) ++ "/curriculum"}
-                          className="block text-white py-3 px-4 hover:bg-primary-800 rounded font-semibold text-xs">
+                          className="text-gray-800 py-3 px-4 hover:text-primary-500 rounded font-semibold text-xs flex items-center">
+                          <Avatar name={Course.name(course)} className="w-4 h-4 mr-2" />
                           {str(Course.name(course))}
                         </a>
                       </li>,
@@ -219,7 +216,6 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
                 Page.shrunk(selectedPage),
               )}
             </li>
-            {topLink(selectedPage, Communities)}
           </ul>,
           User.isAuthor(currentUser),
         )}
@@ -229,7 +225,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
           <Notifications__Root
             wrapperClasses="w-full"
             iconClasses="school-admin-navbar__notifications-unread-bullet"
-            buttonClasses="flex relative text-white text-sm py-4 px-5 hover:bg-primary-900 font-semibold items-center w-full"
+            buttonClasses="flex relative text-gray-800 text-sm py-4 px-5 hover:text-primary-500 font-semibold items-center w-full"
             title=?{Page.shrunk(selectedPage) ? None : Some("Notifications")}
             icon="fas fa-bell fa-fw text-lg mr-2"
             hasNotifications={User.hasNotifications(currentUser)}

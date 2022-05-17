@@ -74,7 +74,7 @@ module CreateStudentsQuery = %graphql(`
   }
   `)
 
-  module StudentsCreateDataQuery = %graphql(`
+module StudentsCreateDataQuery = %graphql(`
   query StudentsCreateDataQuery($courseId: ID!) {
     cohorts(courseId: $courseId) {
       id
@@ -90,14 +90,15 @@ module CreateStudentsQuery = %graphql(`
   `)
 
 let loadData = (courseId, send) => {
-   StudentsCreateDataQuery.make(~courseId, ())
+  StudentsCreateDataQuery.make(~courseId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
-    send(SetBaseData(
-      response["cohorts"]->Js.Array2.map(cohort => Cohort.makeFromJs(cohort)),
-      response["courseResourceInfo"][0]["values"],
-
-    ))
+    send(
+      SetBaseData(
+        response["cohorts"]->Js.Array2.map(cohort => Cohort.makeFromJs(cohort)),
+        response["courseResourceInfo"][0]["values"],
+      ),
+    )
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(error => {
@@ -111,7 +112,6 @@ let loadData = (courseId, send) => {
   })
   |> ignore
 }
-
 
 let createStudents = (state, send, courseId, event) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -241,7 +241,7 @@ let studentCard = (studentInfo, send, team, tags) => {
 @react.component
 let make = (~courseId) => {
   let (state, send) = React.useReducer(reducer, initialState())
-    React.useEffect1(() => {
+  React.useEffect1(() => {
     loadData(courseId, send)
     None
   }, [courseId])
@@ -254,6 +254,7 @@ let make = (~courseId) => {
             send(AddStudentInfo(studentInfo, teamName, tags))}
           teamTags={allKnownTags(state.tags, TeamInfo.tagsFromArray(state.teamsToAdd))}
           emailsToAdd={TeamInfo.studentEmailsFromArray(state.teamsToAdd)}
+          cohorts={state.cohorts}
         />
       </div>
       <div className="w-1/2 px-4 mt-4">

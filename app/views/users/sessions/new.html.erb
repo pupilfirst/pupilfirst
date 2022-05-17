@@ -13,7 +13,7 @@
     <div
       class="max-w-sm mx-auto text-lg sm:text-2xl font-bold text-center mt-4"
     >
-      <%= t('views.users.sessions.new.heading', school_name: presenter.school_name) %>
+      <%= t('.heading', school_name: presenter.school_name) %>
     </div>
     <% if presenter.oauth_host.present? %>
       <div class="flex flex-col pb-5 md:px-9 items-center max-w-sm mx-auto">
@@ -39,7 +39,7 @@
           class="federated-signin-in__seperator block relative z-10 text-center text-xs text-gray-600 font-semibold"
         >
           <span class="bg-white px-2">
-            <%= t('views.users.sessions.new.sign_in_options_separator') %>
+            <%= t('.sign_in_options_separator') %>
           </span>
         </span>
       <% end %>
@@ -51,7 +51,7 @@
           <i class="fas fa-envelope"></i>
         </span>
         <span class="w-4/5 pl-3 text-left">
-          <%= t('views.users.sessions.new.continue_with_email_link') %>
+          <%= t('.continue_with_email_link') %>
         </span>
       </a>
     </div>

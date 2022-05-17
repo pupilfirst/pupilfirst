@@ -1,7 +1,7 @@
 <% presenter = Schools::Courses::IndexPresenter.new(self, @course) %>
 
 <% content_for(:head) do %>
-  <title><%= current_school.name %> | <%= t("views.courses.title") %></title>
+  <title><%= current_school.name %> | <%= t(".title") %></title>
   <%= stylesheet_pack_tag 'SchoolsCoursesIndexPack', media: 'all' %>
 <% end %>
 

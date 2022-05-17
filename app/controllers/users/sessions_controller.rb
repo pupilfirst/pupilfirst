@@ -11,8 +11,7 @@ module Users
       store_location_for(:user, params[:referrer]) if params[:referrer].present?
 
       if current_user.present?
-        flash[:notice] =
-          I18n.t('controllers.users__sessions.new.already_signed')
+        flash[:notice] = t('.already_signed')
         redirect_to after_sign_in_path_for(current_user)
       end
     end
@@ -55,7 +54,7 @@ module Users
 
         redirect_to after_sign_in_path_for(user)
       else
-        flash[:error] = I18n.t('controllers.users__sessions.token.link_expired')
+        flash[:error] = t('.link_expired')
         redirect_to new_user_session_path
       end
     end
@@ -66,8 +65,7 @@ module Users
       if user.present?
         @token = params[:token]
       else
-        flash[:error] =
-          I18n.t('controllers.users__sessions.reset_password.link_used')
+        flash[:error] = t('.link_used')
         redirect_to new_user_session_path
       end
     end
@@ -126,8 +124,7 @@ module Users
     # GET /users/sign_in_with_email
     def sign_in_with_email
       if current_user.present?
-        flash[:notice] =
-          I18n.t('controllers.users__sessions.new.already_signed')
+        flash[:notice] = t('.already_signed')
         redirect_to after_sign_in_path_for(current_user)
         return
       end

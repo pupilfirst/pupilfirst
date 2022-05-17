@@ -30,15 +30,10 @@ module Users
 
     def failure
       if oauth_origin.present?
-        message =
-          I18n.t(
-            'controllers.users__omniauthcallbacks.failure.denied_by',
-            provider: oauth_origin[:provider].capitalize
-          )
+        message = t('.denied_by', provider: oauth_origin[:provider].capitalize)
         redirect_to oauth_error_url(host: oauth_origin[:fqdn], error: message)
       else
-        flash[:error] =
-          I18n.t('controllers.users__omniauthcallbacks.failure.denied')
+        flash[:error] = t('.denied')
         redirect_to new_user_session_path
       end
     end
@@ -74,11 +69,7 @@ module Users
       else
         redirect_to oauth_error_url(
                       host: oauth_origin[:fqdn],
-                      error:
-                        I18n.t(
-                          'controllers.users__omniauthcallbacks.sign_in_at_oauth_origin.email_unregistered',
-                          email: @email
-                        )
+                      error: t('.email_unregistered', email: @email)
                     )
       end
     end
@@ -122,26 +113,16 @@ module Users
     end
 
     def email_blank_flash
-      message =
-        I18n.t(
-          'controllers.users__omniauthcallbacks.email_blank_flash.not_receive_email',
-          provider_name: provider_name
-        )
+      message = t('.not_receive_email', provider_name: provider_name)
 
       message +=
         case provider_name
         when 'Github'
-          I18n.t(
-            'controllers.users__omniauthcallbacks.email_blank_flash.add_github'
-          )
+          t('.add_github')
         when 'Facebook'
-          I18n.t(
-            'controllers.users__omniauthcallbacks.email_blank_flash.add_facebook'
-          )
+          t('.add_facebook')
         else
-          I18n.t(
-            'controllers.users__omniauthcallbacks.email_blank_flash.add_other'
-          )
+          t('.add_other')
         end
 
       message.html_safe

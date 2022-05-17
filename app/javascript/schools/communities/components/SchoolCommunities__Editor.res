@@ -318,9 +318,7 @@ let make = (
       </button>
     </DisablingCover>
     <div className="mt-3 mb-3 text-xs">
-      <span className="leading-normal">
-        <strong> {t("note") |> str} </strong> {t("note") |> str}
-      </span>
+      <span className="leading-normal"> <strong> {t("note") |> str} </strong> </span>
     </div>
   </div>
 }

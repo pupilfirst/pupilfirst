@@ -46,16 +46,12 @@ class CoursesController < ApplicationController
     if form.validate(params)
       form.create_applicant(session)
 
-      flash[:success] =
-        I18n.t('controllers.courses.process_application.sent_mail')
+      flash[:success] = t('.sent_mail')
 
       redirect_to root_path
     else
       flash[:error] =
-        I18n.t(
-          'controllers.courses.process_application.errors',
-          form_errors: form.errors.full_messages.join(', ')
-        )
+        t('.errors', form_errors: form.errors.full_messages.join(', '))
 
       redirect_to apply_course_path(params[:id], visible_recaptcha: 1)
     end

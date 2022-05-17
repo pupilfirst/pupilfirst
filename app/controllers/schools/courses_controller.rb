@@ -154,13 +154,7 @@ module Schools
             startup.update!(access_ends_at: nil, dropped_out_at: nil)
           end
 
-        render json: {
-                 message:
-                   I18n.t(
-                     'controllers.schools__courses.mark_teams_active.teams_active'
-                   ),
-                 error: nil
-               }
+        render json: { message: t('.teams_active'), error: nil }
       end
     end
 

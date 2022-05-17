@@ -1602,11 +1602,12 @@ en:
     messages:
       content_type_invalid: has an invalid content type
       limit_out_of_range: total number is out of range
-  graphql:
-    concerns:
-      validate_submission_gradable:
-        owners_should_be_active_error: Cannot update inactive student submissions.
-        submission_should_be_live: Such a submission does not exist, or it has been archived.
+  concerns:
+    validate_submission_gradable:
+      owners_should_be_active:
+        error: Cannot update inactive student submissions.
+      submission_should_be_live:
+        error: Such a submission does not exist, or it has been archived.
   jobs:
     courses:
       clone_course:
@@ -1795,48 +1796,67 @@ en:
   presenters:
     apply:
       page_title: Enroll in %{course_name}
-    Communities__NewTopic:
-      community: Community
-      new_topic: New Topic
-    Communities__Show:
-      community: Community
-    Courses__Leaderboard:
-      multiple_mid_text: "are at the top of the leaderboard this week, sharing a score of "
-      others: others
-      rank_down_alt: Rank change down
-      rank_down_double_alt: Rank change down double
-      rank_no_change_alt: Rank no change
-      rank_up_alt: Rank change up
-      rank_up_double_alt: Rank change up double
-      top_leaderboard_html: <span class="font-bold">You</span> are at the top of the leaderboard. <span class="font-bold">Congratulations!</span>
-      top_week: is at the top of the leaderboard this week with a score of
-    Courses__Report:
-      student_report: Student Report
-    Courses__Review:
-      review_dashboard: Review Dashboard
-    Courses__Students:
-      students_in_course: Students In Course
-    Layouts__StudentsTopNav:
-      admin: Admin
-      coaches: Coaches
-      dashboard: Dashboard
-      home: Home
-    Layouts__Footer:
-      dashboard: Dashboard
-      home: Home
-    Layouts__AppRouter:
-      admin: Admin
-      coaches: Coaches
-      dashboard: Dashboard
-    Posts__Versions:
-      title: Versions | Post
-    User__SessionsNew:
-      continue_as_developer: Continue as Developer
-      continue_with_email_link: Continue with email
-      continue_with_facebook: Continue with Facebook
-      continue_with_github: Continue with Github
-      continue_with_google: Continue with Google
-      page_title: Sign In
+    communities:
+      show:
+        page_title:
+          community: Community
+      new_topic:
+        page_title:
+          community: Community
+          new_topic: New Topic
+    courses:
+      leaderboard:
+        heading:
+          multiple_mid_text: "are at the top of the leaderboard this week, sharing a score of "
+          top_leaderboard_html: <span class="font-bold">You</span> are at the top of the leaderboard. <span class="font-bold">Congratulations!</span>
+          top_week: is at the top of the leaderboard this week with a score of
+          others: others
+        rank_change_icon:
+          rank_down_alt: Rank change down
+          rank_down_double_alt: Rank change down double
+          rank_no_change_alt: Rank no change
+          rank_up_alt: Rank change up
+          rank_up_double_alt: Rank change up double
+
+      report:
+        student_report: Student Report
+      review:
+        review_dashboard: Review Dashboard
+      students:
+        students_in_course: Students In Course
+    layouts:
+      students_top_nav:
+        admin_link:
+          title: Admin
+        coaches_link:
+          title: Coaches
+        dashboard_link:
+          title: Dashboard
+      footer:
+        nav_links:
+          dashboard: Dashboard
+          home: Home
+      app_router:
+        admin_link:
+         title: Admin
+        coaches_link:
+          title: Coaches
+        dashboard_link:
+          title: Dashboard
+    posts:
+      versions:
+        page_title:
+          title: Versions | Post
+    users:
+      sessions_new:
+        page_title:
+          title: Sign In
+        button_text:
+          continue_as_developer: Continue as Developer
+          continue_with_email_link: Continue with email
+          continue_with_facebook: Continue with Facebook
+          continue_with_github: Continue with Github
+          continue_with_google: Continue with Google
   queries:
     delete_certificate_mutator:
       issued_error: This certificate has been issued to one or more students - it cannot be deleted.
@@ -1844,7 +1864,7 @@ en:
       certificate_error: The specified certificate could not be found.
       issued_error: This student has already been issued a certificate for this course.
   services:
-    team_up_service:
+    team_up:
       must_be_on_the_same_level: Students must belong to the same level for teaming up
   shared:
     _no: "No"
@@ -1860,8 +1880,6 @@ en:
     cancel: Cancel
     caption_image: A caption for the image
     close: Close
-
-
     community: Community
     completed: Completed
     dashboard: Dashboard

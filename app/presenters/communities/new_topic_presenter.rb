@@ -13,11 +13,13 @@ module Communities
     end
 
     def page_title
-      "#{I18n.t("presenters.Communities__NewTopic.new_topic")} | #{@community.name} #{I18n.t("presenters.Communities__NewTopic.community")}"
+      "#{I18n.t('presenters.communities.new_topic.page_title.new_topic')} | #{@community.name} #{I18n.t('presenters.communities.new_topic.page_title.community')}"
     end
 
     def topic_categories
-      @community.topic_categories.map { |category| { id: category.id, name: category.name } }
+      @community.topic_categories.map do |category|
+        { id: category.id, name: category.name }
+      end
     end
   end
 end

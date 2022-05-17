@@ -7,7 +7,7 @@ module Posts
     end
 
     def page_title
-      I18n.t("presenters.Posts__Versions.title")
+      I18n.t('presenters.posts.versions.page_title.title')
     end
 
     def versions

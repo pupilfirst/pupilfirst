@@ -54,14 +54,16 @@ module Layouts
       if current_school.present? && view.policy(current_school).show?
         [
           {
-            title: I18n.t('presenters.Layouts__StudentsTopNav.admin'),
+            title:
+              I18n.t('presenters.layouts.students_top_nav.admin_link.title'),
             url: view.school_path
           }
         ]
       elsif current_user.present? && course_authors.any?
         [
           {
-            title: I18n.t('presenters.Layouts__StudentsTopNav.admin'),
+            title:
+              I18n.t('presenters.layouts.students_top_nav.admin_link.title'),
             url: view.curriculum_school_course_path(course_authors.first.course)
           }
         ]
@@ -74,7 +76,10 @@ module Layouts
       if current_user.present?
         [
           {
-            title: I18n.t('presenters.Layouts__StudentsTopNav.dashboard'),
+            title:
+              I18n.t(
+                'presenters.layouts.students_top_nav.dashboard_link.title'
+              ),
             url: '/dashboard'
           }
         ]
@@ -102,7 +107,8 @@ module Layouts
       if current_school.users.joins(:faculty).exists?(faculty: { public: true })
         [
           {
-            title: I18n.t('presenters.Layouts__StudentsTopNav.coaches'),
+            title:
+              I18n.t('presenters.layouts.students_top_nav.coaches_link.title'),
             url: '/coaches'
           }
         ]

@@ -8,9 +8,12 @@ module Layouts
       footer_links =
         if current_user.present?
           [
-            { title: I18n.t('presenters.Layouts__Footer.home'), url: '/' },
             {
-              title: I18n.t('presenters.Layouts__Footer.dashboard'),
+              title: I18n.t('presenters.layouts.footer.nav_links.home'),
+              url: '/'
+            },
+            {
+              title: I18n.t('presenters.layouts.footer.nav_links.dashboard'),
               url: '/dashboard'
             }
           ]

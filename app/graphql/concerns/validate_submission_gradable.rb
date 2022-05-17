@@ -17,7 +17,7 @@ module ValidateSubmissionGradable
       if (submission.founders.active.empty? && !submission_review_allowed)
         return(
           I18n.t(
-            'graphql.concerns.validate_submission_gradable.owners_should_be_active_error'
+            'concerns.validate_submission_gradable.owners_should_be_active.error'
           )
         )
       end
@@ -31,7 +31,7 @@ module ValidateSubmissionGradable
       if submission.archived?
         return(
           I18n.t(
-            'graphql.concerns.validate_submission_gradable.submission_should_be_live'
+            'concerns.validate_submission_gradable.submission_should_be_live.error'
           )
         )
       end

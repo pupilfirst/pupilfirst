@@ -54,7 +54,7 @@
     "markdown-it-multimd-table": "^4.0.0",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
-    "node-sass": "^7.0.0",
+    "sass": "^1.51.0",
     "pluralize": "^8.0.0",
     "pnotify": "^5.2.0",
     "postcss": "^8.3.6",

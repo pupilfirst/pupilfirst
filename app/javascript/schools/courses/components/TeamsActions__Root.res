@@ -20,10 +20,18 @@ let make = (~courseId, ~studentId) => {
   <div>
     <School__PageHeader
       exitUrl={`/school/courses/${courseId}/teams`}
-      title="Actions"
-      description={"Delete team"}
+      title="Edit Team"
+      description={"Edit team {team name}"}
       links={pageLinks(courseId, studentId)}
     />
-    <div className="max-w-5xl mx-auto"> {str("Add teams action form here!!")} </div>
+    <div className="max-w-5xl mx-auto px-2">
+      <h2 className="text-lg font-semibold mt-8">{"Delete team Avengers" -> str}</h2>
+      <p className="text-sm text-gray-500">{"Delete will remove all the students from the team and delete the team" -> str}</p>
+      <button
+        // onClick={}
+        className="btn btn-danger mt-4">
+          {"Delete team" -> str}
+      </button>
+    </div>
   </div>
 }

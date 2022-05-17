@@ -61,6 +61,17 @@ let checklistItemCheckedClasses = (itemIndex, selection) =>
       : "bg-gray-500"
   )
 
+let isReviewerAssigned = (submissionDetails, overlaySubmission) => {
+  switch SubmissionDetails.reviewer(submissionDetails) {
+  | Some(_) => true
+  | None =>
+    switch OverlaySubmission.evaluatedAt(overlaySubmission) {
+    | Some(_) => true
+    | None => false
+    }
+  }
+}
+
 let checklistItemChecked = (itemIndex, resultIndex, selection) =>
   Js.Array.filter(
     s => s.itemIndex == itemIndex && s.resultIndex == resultIndex,
@@ -155,6 +166,7 @@ let make = (
                           label={str(checklistItem->ReviewChecklistResult.title)}
                           onChange={checkboxOnChange(itemIndex, resultIndex, setSelecton)}
                           checked={checklistItemChecked(itemIndex, resultIndex, selection)}
+                          disabled={!isReviewerAssigned(submissionDetails, overlaySubmission)}
                         />
                         {
                           let isSelected =
@@ -172,6 +184,7 @@ let make = (
                                 id={"result_" ++ (resultIndex->string_of_int ++ "_feedback")}
                                 type_="text"
                                 placeholder={t("feedback_placeholder")}
+                                disabled={!isReviewerAssigned(submissionDetails, overlaySubmission)}
                                 value={Belt.Option.getWithDefault(
                                   ReviewChecklistResult.feedback(checklistItem),
                                   "",
@@ -187,7 +200,7 @@ let make = (
                                   )}
                               />
                             </div>,
-                            isSelected,
+                            isSelected || !isReviewerAssigned(submissionDetails, overlaySubmission),
                           )
                         }
                       </div>
@@ -201,16 +214,9 @@ let make = (
     </div>
     <div
       className="flex justify-end bg-white md:bg-gray-100 border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
-      {switch SubmissionDetails.reviewer(submissionDetails) {
-      | Some(_) =>
-        generateFeedbackButton(checklist, selection, feedback, setSelecton, updateFeedbackCB)
-      | None =>
-        switch OverlaySubmission.evaluatedAt(overlaySubmission) {
-        | Some(_) =>
-          generateFeedbackButton(checklist, selection, feedback, setSelecton, updateFeedbackCB)
-        | None => React.null
-        }
-      }}
+      {isReviewerAssigned(submissionDetails, overlaySubmission)
+        ? generateFeedbackButton(checklist, selection, feedback, setSelecton, updateFeedbackCB)
+        : React.null}
     </div>
   </div>
 }

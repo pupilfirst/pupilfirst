@@ -1,9 +1,11 @@
-%bs.raw(`require("./Checkbox.css")`)
+%raw(`require("./Checkbox.css")`)
 
 @react.component
-let make = (~id, ~label, ~onChange, ~checked=false) =>
+let make = (~id, ~label, ~onChange, ~checked=false, ~disabled=false) =>
   <div>
-    <input className="hidden checkbox__input" id type_="checkbox" onChange checked />
+    <input
+      className="hidden checkbox__input" id type_="checkbox" onChange checked disabled={disabled}
+    />
     <label className="checkbox__label flex items-center" htmlFor=id>
       <div>
         <svg width="11px" height="11px" viewBox="0 0 13 13">

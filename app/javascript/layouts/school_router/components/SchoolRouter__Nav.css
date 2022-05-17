@@ -1,13 +1,17 @@
 .school-admin-navbar {
-  width: 264px;
+  @apply w-auto;
 }
 
 .school-admin-navbar__primary-nav {
-  @apply w-full;
+  @apply w-64;
 }
 
 .school-admin-navbar__primary-nav--shrunk {
-  width: 64px;
+  @apply w-20;
+}
+
+.school-admin-navbar__secondary-nav {
+  @apply w-64;
 }
 
 .school-admin-navbar__primary-nav-link {
@@ -29,9 +33,9 @@
 }
 
 .school-admin-navbar__notifications-unread-bullet {
-  @apply absolute block h-3 w-3 rounded-full border-2 border-primary-800 bg-red-500;
-  top: 14px;
-  left: 30px;
+  @apply absolute block h-2 w-2 rounded-full border border-white bg-red-500;
+  top: 16px;
+  right: 30px;
 }
 
 .school-admin-navbar__notifications-unread-bullet::before {

@@ -139,7 +139,7 @@ let secondaryNav = (courses, currentUser, selectedPage) =>
   | Page.Settings(_settingsSelection) =>
     <div
       key="secondary-nav"
-      className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
+      className="bg-gray-200 school-admin-navbar__secondary-nav border-r border-gray-400 pb-6 overflow-y-auto">
       <ul className="p-4">
         {secondaryNavOption(selectedPage, Page.Settings(Customization))}
         {secondaryNavOption(selectedPage, Page.Settings(Admins))}
@@ -148,7 +148,7 @@ let secondaryNav = (courses, currentUser, selectedPage) =>
   | SelectedCourse(courseId, _courseSelection) =>
     <div
       key="secondary-nav"
-      className="bg-gray-200 school-admin-navbar__secondary-nav w-full border-r border-gray-400 pb-6 overflow-y-auto">
+      className="bg-gray-200 school-admin-navbar__secondary-nav border-r border-gray-400 pb-6 overflow-y-auto">
       <div className="p-4">
         <SchoolRouter__CoursesDropdown courses currentCourseId=courseId />
         {secondaryNavLinks(selectedPage, courseId, currentUser)->React.array}
@@ -225,9 +225,9 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
           <Notifications__Root
             wrapperClasses="w-full"
             iconClasses="school-admin-navbar__notifications-unread-bullet"
-            buttonClasses="flex relative text-gray-800 text-sm py-4 px-5 hover:text-primary-500 font-semibold items-center w-full"
+            buttonClasses="flex relative text-gray-800 text-sm py-4 px-5 hover:text-primary-500 font-semibold items-center justify-center w-full"
             title=?{Page.shrunk(selectedPage) ? None : Some("Notifications")}
-            icon="fas fa-bell fa-fw text-lg mr-2"
+            icon="fas fa-bell fa-fw text-lg"
             hasNotifications={User.hasNotifications(currentUser)}
           />
         </div>

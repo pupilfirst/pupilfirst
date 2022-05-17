@@ -159,46 +159,58 @@ let showTag = (~value=?, key, text, color, params) => {
   let paramsValue = Belt.Option.getWithDefault(value, text)
   <button
     key={text}
-    className={"rounded-lg mt-1 mr-1 py-px px-2 text-xs " ++ color}
+    className={"rounded-lg mt-1 mr-1 py-px px-2 text-xs font-semibold focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 " ++
+    color}
     onClick={_e => onSelect(key, paramsValue, params)}>
     {text->str}
   </button>
 }
 
 let studentsList = (students, courseId, params) => {
-  <div className="space-y-2">
+  <div className="space-y-4">
     {students
     ->Js.Array2.map(student => {
       <div className="h-full flex items-center bg-white">
-        <div className="flex flex-1 items-center text-left justify-between">
+        <div className="flex flex-1 items-center text-left justify-between rounded-md shadow">
           <div className="flex py-4 px-4">
-            <div className="text-sm flex flex-col">
-              <p className="font-semibold inline-block "> {StudentInfo.name(student)->str} </p>
-              <div className="flex flex-row">
-                <div className="flex flex-wrap">
-                  {showTag(
-                    "cohort",
-                    Cohort.name(StudentInfo.cohort(student)),
-                    "bg-green-300 text-green-900",
-                    params,
-                  )}
-                  {showTag(
-                    "level",
-                    Level.shortName(StudentInfo.level(student)),
-                    "bg-yellow-300 text-yellow-900",
-                    params,
-                    ~value=Level.filterValue(StudentInfo.level(student)),
-                  )}
-                  {StudentInfo.taggings(student)
-                  ->Js.Array2.map(tag => {
-                    showTag("student_tags", tag, "bg-gray-300 text-gray-900", params)
-                  })
-                  ->React.array}
-                  {StudentInfo.userTags(student)
-                  ->Js.Array2.map(tag => {
-                    showTag("user_tags", tag, "bg-blue-300 text-blue-900", params)
-                  })
-                  ->React.array}
+            <div className="text-sm flex items-center space-x-4">
+              <img
+                className="inline-block h-12 w-12 rounded-full"
+                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                alt=""
+              />
+              <div>
+                <Link
+                  href={`/school/courses/${courseId}/students/${StudentInfo.id(student)}/edit`}
+                  className="font-semibold inline-block hover:underline hover:text-primary-500 transition ">
+                  {StudentInfo.name(student)->str}
+                </Link>
+                <div className="flex flex-row mt-1">
+                  <div className="flex flex-wrap">
+                    {showTag(
+                      "cohort",
+                      Cohort.name(StudentInfo.cohort(student)),
+                      "bg-green-100 text-green-900",
+                      params,
+                    )}
+                    {showTag(
+                      "level",
+                      Level.shortName(StudentInfo.level(student)),
+                      "bg-yellow-100 text-yellow-900",
+                      params,
+                      ~value=Level.filterValue(StudentInfo.level(student)),
+                    )}
+                    {StudentInfo.taggings(student)
+                    ->Js.Array2.map(tag => {
+                      showTag("student_tags", tag, "bg-gray-200 text-gray-900", params)
+                    })
+                    ->React.array}
+                    {StudentInfo.userTags(student)
+                    ->Js.Array2.map(tag => {
+                      showTag("user_tags", tag, "bg-blue-100 text-blue-900", params)
+                    })
+                    ->React.array}
+                  </div>
                 </div>
               </div>
             </div>
@@ -209,7 +221,7 @@ let studentsList = (students, courseId, params) => {
               className="flex flex-1 items-center text-left py-4 px-4 hover:bg-gray-100 hover:text-primary-500 focus:bg-gray-100 focus:text-primary-500 justify-between">
               <span className="inline-flex items-center p-2">
                 <i className="fas fa-edit text-gray-500" />
-                <span className="ml-2"> {"Edit Student"->str} </span>
+                <span className="ml-2"> {"Edit"->str} </span>
               </span>
             </Link>
           </div>

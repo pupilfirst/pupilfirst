@@ -2018,6 +2018,25 @@ ru:
       link_expired: Срок действия этой одноразовой ссылки истек или она недействительна. Пожалуйста, попробуйте войти в систему еще раз.
       link_used: Эта одноразовая ссылка уже использовалась или является недействительной. Пожалуйста, попробуйте сбросить свой пароль еще раз.
   presenters:
+    layouts:
+      students_top_nav:
+        admin_link:
+          title: Admin
+        coaches_link:
+          title: Coaches
+        dashboard_link:
+          title: Dashboard
+      footer:
+        nav_links:
+          dashboard: Dashboard
+          home: Home
+      app_router:
+        admin_link:
+          title: Admin
+        coaches_link:
+          title: Coaches
+        dashboard_link:
+          title: Dashboard
     Communities__NewTopic:
       new_topic: Новая Тема
       community: Сообщество
@@ -2205,3 +2224,13 @@ ru:
     user_session:
       log_in: Войти в
       recovery: восставновление аккаунта
+  layouts:
+    student_footer:
+      contact: Contact
+      logo: Logo
+      privacy_policy: Privacy Policy
+      reach_us: Reach us at
+      sitemap: Sitemap
+      social: Social
+      support: Contact Support
+      terms_conditions: Terms & Conditions

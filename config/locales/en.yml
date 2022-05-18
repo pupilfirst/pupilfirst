@@ -1597,6 +1597,7 @@ en:
   applicants:
     enroll:
       link_expired: That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in.
+      welcome: Welcome to %{school_name}!
     resolve_applicant_path:
       welcome: Welcome to %{school_name}!
   concerns:

@@ -10,11 +10,11 @@
 
 <% content_for :body do %>
   <p>
-    <%= t("views.mailers.course_enrollement.added_coach_html", course_name: @course.name, school_name: @school.name) %>
+    <%= t("mailers.course_enrollement.added_coach_html", course_name: @course.name, school_name: @school.name) %>
   </p>
 
   <p>
-    <%= t("views.mailers.course_enrollement.can_sign_html", link_to: link_to(t("views.mailers.course_enrollement.link_to", school_name: @school.name), sign_in_link)) %>
+    <%= t("mailers.course_enrollement.can_sign_html", link_to: link_to(t("mailers.course_enrollement.link_to", school_name: @school.name), sign_in_link)) %>
   </p>
 
   <%= render 'mailers/link_fallback', url: sign_in_link %>

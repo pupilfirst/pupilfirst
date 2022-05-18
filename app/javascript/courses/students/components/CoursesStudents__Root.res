@@ -162,6 +162,7 @@ module TeamsQuery = %graphql(`
             title
             avatarUrl
             userTags
+            lastSeenAt
           }
           coachUserIds
           accessEndsAt

@@ -768,6 +768,8 @@ en:
       no_teams: No teams to show
       personal_coaches: Personal Coaches
       team_coaches: Team Coaches
+      last_seen: "Last seen %{time_string}"
+      no_last_seen: "This student has never signed in"
     CurriculumEditor:
       create_level: Create Level
       create_target_group: Create target group

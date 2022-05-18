@@ -5,22 +5,32 @@ module FacultyModule
     end
 
     def create
+      school = @faculty_params[:school]
+
+      user =
+        User
+          .where(email: @faculty_params[:email], school: school)
+          .first_or_create!(title: 'Coach')
+
+      return user.faculty if user.faculty.present?
+
       User.transaction do
-        school = @faculty_params[:school]
-        user = User.where(email: @faculty_params[:email], school: school).first_or_create!(title: 'Coach')
+        user.update!(
+          name: @faculty_params[:name],
+          title: @faculty_params[:title],
+          affiliation: @faculty_params[:affiliation]
+        )
 
-        return user.faculty if user.faculty.present?
+        if @faculty_params[:image].present?
+          user.avatar.attach(@faculty_params[:image])
+        end
 
-        user.update!(name: @faculty_params[:name], title: @faculty_params[:title], affiliation: @faculty_params[:affiliation])
-        user.avatar.attach(@faculty_params[:image]) if @faculty_params[:image].present?
-
-        faculty = Faculty.create!(
+        Faculty.create!(
           user: user,
           category: Faculty::CATEGORY_VISITING_COACHES,
           connect_link: @faculty_params[:connect_link],
           public: @faculty_params[:public]
         )
-        faculty
       end
     end
   end

@@ -215,7 +215,14 @@ let updateContentBlockCB = (originalContentBlock, setDirtyCB, state, send, newCo
   send(UpdateContentBlock(newContentBlock, dirty))
 }
 
-let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, state, send) => {
+let innerEditor = (
+  originalContentBlock,
+  contentBlock,
+  setDirtyCB,
+  state,
+  send,
+  markdownCurriculumEditorMaxLength,
+) => {
   let updateContentBlockCB = updateContentBlockCB(originalContentBlock, setDirtyCB, state, send)
 
   switch contentBlock |> ContentBlock.blockType {
@@ -228,7 +235,9 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, state, send) 
     )
 
   | Markdown(markdown) =>
-    <CurriculumEditor__MarkdownBlockEditor markdown contentBlock updateContentBlockCB />
+    <CurriculumEditor__MarkdownBlockEditor
+      markdown markdownCurriculumEditorMaxLength contentBlock updateContentBlockCB
+    />
   | File(url, title, filename) =>
     <CurriculumEditor__FileBlockEditor url title filename contentBlock updateContentBlockCB />
   | Audio(url, _title, _filename) => <audio className="mx-auto" controls=true src=url />
@@ -241,6 +250,7 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, state, send) 
 let make = (
   ~contentBlock,
   ~setDirtyCB,
+  ~markdownCurriculumEditorMaxLength,
   ~removeContentBlockCB=?,
   ~moveContentBlockUpCB=?,
   ~moveContentBlockDownCB=?,
@@ -253,7 +263,14 @@ let make = (
       className="flex items-start"
       ariaLabel={t("editor_content_block") ++ (contentBlock |> ContentBlock.id)}>
       <div className="flex-grow self-stretch min-w-0">
-        {innerEditor(contentBlock, state.contentBlock, setDirtyCB, state, send)}
+        {innerEditor(
+          contentBlock,
+          state.contentBlock,
+          setDirtyCB,
+          state,
+          send,
+          markdownCurriculumEditorMaxLength,
+        )}
       </div>
       <div
         className="pl-2 flex-shrink-0 border-transparent bg-gray-100 border rounded flex flex-col text-xs -mr-10 sticky top-0">

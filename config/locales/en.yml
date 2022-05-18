@@ -621,7 +621,6 @@ en:
       share_feedback: Share Feedback
       show_review_checklist: Show Review Checklist
       show_test_report_button: Show Test Report
-      hide_test_report_button: Hide Test Report
       test_report: Test Report
       status:
         completed: Completed

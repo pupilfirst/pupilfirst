@@ -42,6 +42,15 @@
     <%= stylesheet_pack_tag 'layouts/tailwind', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_pack_tag 'IconFirstPack', media: 'all' %>
 
+    <% if Rails.env.test? %>
+      <style>
+        * {
+          animation-duration: 0s !important;
+          transition-duration: 0s !important;
+        }
+      </style>
+    <% end %>
+
     <!-- Scripts -->
     <%= javascript_pack_tag 'layouts/tailwind', nonce: true %>
 

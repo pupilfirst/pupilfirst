@@ -37,8 +37,12 @@
   transform: scale(0);
 }
 
-.checkbox__label:hover div:first-child {
-  @apply bg-primary-100 border-primary-500;
+.checkbox__input:disabled + .checkbox__label {
+  @apply cursor-not-allowed pointer-events-none;
+}
+
+.checkbox__input:not([disabled]) + .checkbox__label:hover div:first-child {
+  @apply border-primary-500;
 }
 
 .checkbox__input:checked + .checkbox__label div:first-child {

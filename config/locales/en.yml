@@ -1842,9 +1842,6 @@ en:
   shared:
     _no: "No"
     _yes: "Yes"
-    agreements:
-      privacy_policy: Privacy Policy
-      terms_and_conditions: Terms & Conditions
     all: All
     and: and
     archived: Archived
@@ -1987,6 +1984,9 @@ en:
       heading: You are offline!
       message_html: It seems there is a problem with your connection.<br/>Please check your network status.
       title: You are offline
+    agreement:
+      privacy_policy: Privacy Policy
+      terms_and_conditions: Terms & Conditions
   layouts:
     _student_footer:
       contact: Contact

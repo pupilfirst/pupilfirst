@@ -55,12 +55,16 @@ module CourseStudentsQuery = %graphql(`
       courseStudents(courseId: $courseId, cohortName: $cohortName, levelName: $levelName, name: $name, email: $email, first: 20, after: $after, studentTags: $studentTags, userTags: $userTags, sortBy: $sortBy, sortDirection: $sortDirection) {
         nodes {
           id
-          name
-          title
-          affiliation
-          avatarUrl
           taggings
-          userTags
+          user {
+            id
+            name
+            email
+            avatarUrl
+            title
+            affiliation
+            taggings
+          }
           level {
             id
             name
@@ -183,7 +187,7 @@ let studentsList = (students, courseId, params) => {
                 <Link
                   href={`/school/courses/${courseId}/students/${StudentInfo.id(student)}/edit`}
                   className="font-semibold inline-block hover:underline hover:text-primary-500 transition ">
-                  {StudentInfo.name(student)->str}
+                  {User.name(StudentInfo.user(student))->str}
                 </Link>
                 <div className="flex flex-row mt-1">
                   <div className="flex flex-wrap">
@@ -205,7 +209,7 @@ let studentsList = (students, courseId, params) => {
                       showTag("student_tags", tag, "bg-gray-200 text-gray-900", params)
                     })
                     ->React.array}
-                    {StudentInfo.userTags(student)
+                    {User.taggings(StudentInfo.user(student))
                     ->Js.Array2.map(tag => {
                       showTag("user_tags", tag, "bg-blue-100 text-blue-900", params)
                     })

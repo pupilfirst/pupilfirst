@@ -1,43 +1,21 @@
 type t = {
   id: string,
-  name: string,
-  title: string,
-  affiliation: option<string>,
-  avatarUrl: option<string>,
   taggings: array<string>,
-  userTags: array<string>,
+  user: Admin__User.t,
   level: Shared__Level.t,
   cohort: Shared__Cohort.t,
 }
 
 let id = t => t.id
-let name = t => t.name
-let title = t => t.title
-let affiliation = t => t.affiliation
-let avatarUrl = t => t.avatarUrl
 let taggings = t => t.taggings
-let userTags = t => t.userTags
 let level = t => t.level
 let cohort = t => t.cohort
+let user = t => t.user
 
-let make = (
-  ~id,
-  ~name,
-  ~title,
-  ~affiliation,
-  ~avatarUrl,
-  ~taggings,
-  ~userTags,
-  ~level,
-  ~cohort,
-) => {
+let make = (~id, ~taggings, ~user, ~level, ~cohort) => {
   id: id,
-  name: name,
-  title: title,
-  affiliation: affiliation,
-  avatarUrl: avatarUrl,
   taggings: taggings,
-  userTags: userTags,
+  user: user,
   level: level,
   cohort: cohort,
 }
@@ -45,12 +23,8 @@ let make = (
 let makeFromJS = studentDetails =>
   make(
     ~id=studentDetails["id"],
-    ~name=studentDetails["name"],
-    ~title=studentDetails["title"],
-    ~affiliation=studentDetails["affiliation"],
-    ~avatarUrl=studentDetails["avatarUrl"],
     ~taggings=studentDetails["taggings"],
-    ~userTags=studentDetails["userTags"],
+    ~user=Admin__User.makeFromJs(studentDetails["user"]),
     ~level=Shared__Level.makeFromJs(studentDetails["level"]),
     ~cohort=Shared__Cohort.makeFromJs(studentDetails["cohort"]),
   )

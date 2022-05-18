@@ -35,7 +35,9 @@ module CoachInfoQuery = %graphql(`
           id,
           name,
           students {
-            name
+            user {
+              name
+            }
           }
         }
       }

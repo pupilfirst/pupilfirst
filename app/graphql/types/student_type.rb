@@ -1,18 +1,13 @@
 module Types
   class StudentType < Types::BaseObject
     field :id, ID, null: false
-    field :name, String, null: false
-    field :email, String, null: false
-    field :title, String, null: false
-    field :affiliation, String, null: true
-    field :avatar_url, String, null: true
     field :taggings, [String], null: false
     field :issued_certificates, [Types::IssuedCertificateType], null: false
     field :level, Types::LevelType, null: false
     field :cohort, Types::CohortType, null: false
-    field :user_tags, [String], null: false
     field :access_ends_at, GraphQL::Types::ISO8601DateTime, null: true
     field :dropped_out_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :user, Types::AdminUserType, null: false
 
     def issued_certificates
       # rubocop:disable Lint/UselessAssignment
@@ -51,37 +46,22 @@ module Types
         end
     end
 
-    def avatar_url
+    def user
       BatchLoader::GraphQL
         .for(object.user_id)
-        .batch do |user_ids, loader|
-          User
-            .includes(avatar_attachment: :blob)
-            .where(id: user_ids)
-            .each do |user|
-              if user.avatar.attached?
-                url =
-                  Rails.application.routes.url_helpers.rails_public_blob_url(
-                    user.avatar_variant(:thumb)
-                  )
-                loader.call(user.id, url)
-              end
-            end
+        .batch(default_value: []) do |user_ids, loader|
+          User.where(id: user_ids).each { |user| loader.call(user.id, user) }
         end
     end
 
     def taggings
-      object.taggings.map { |tagging| tagging.tag.name }
-    end
-
-    def user_tags
       BatchLoader::GraphQL
-        .for(object.user_id)
-        .batch do |user_ids, loader|
+        .for(object.id)
+        .batch do |student_ids, loader|
           tags =
-            User
+            Founder
               .joins(taggings: :tag)
-              .where(id: user_ids)
+              .where(id: student_ids)
               .distinct('tags.name')
               .select(:id, 'array_agg(tags.name)')
               .group(:id)
@@ -89,7 +69,7 @@ module Types
                 acc[user.id] = user.array_agg
                 acc
               end
-          user_ids.each { |id| loader.call(id, tags.fetch(id, [])) }
+          student_ids.each { |id| loader.call(id, tags.fetch(id, [])) }
         end
     end
   end

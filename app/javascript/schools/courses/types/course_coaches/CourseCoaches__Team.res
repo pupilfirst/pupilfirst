@@ -12,7 +12,7 @@ let students = t => t.students
 let makeFromJS = teamData => {
   id: teamData["id"],
   name: teamData["name"],
-  students: teamData["students"] |> Array.map(student => student["name"]),
+  students: teamData["students"] |> Array.map(student => student["user"]["name"]),
 }
 
 let makeArrayFromJs = detailsOfTeams => Js.Array.map(makeFromJS, detailsOfTeams)

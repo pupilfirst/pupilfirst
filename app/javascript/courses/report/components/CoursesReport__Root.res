@@ -68,18 +68,7 @@ module StudentReportOverviewQuery = %graphql(`
           id, name, maxGrade, passGrade
         },
         team {
-          id
-          name
           levelId
-          droppedOutAt
-          accessEndsAt
-          students {
-            id
-            name
-            title
-            avatarUrl
-          }
-          coachUserIds
         }
         totalTargets
         targetsCompleted
@@ -130,7 +119,10 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
 
   React.useEffect1(getOverviewData(studentId, send), [studentId])
 
-  <div role="main" ariaLabel="Report" className="bg-gray-100 pt-9 pb-8 px-3 -mt-7 border border-transparent shadow rounded-lg">
+  <div
+    role="main"
+    ariaLabel="Report"
+    className="bg-gray-100 pt-9 pb-8 px-3 -mt-7 border border-transparent shadow rounded-lg">
     <div className="bg-gray-100 static">
       <div className="max-w-3xl mx-auto">
         <div className="flex pt-3 mb-4 md:border-b border-gray-300">

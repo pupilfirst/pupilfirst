@@ -154,11 +154,13 @@ module TeamsQuery = %graphql(`
           teamTags,
           levelId,
           students {
-            id,
-            name
-            title
-            avatarUrl
-            userTags
+            id
+            user {
+              name
+              title
+              avatarUrl
+              taggings
+            }
           }
           coachUserIds
           accessEndsAt

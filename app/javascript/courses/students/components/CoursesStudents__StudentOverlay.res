@@ -42,10 +42,12 @@ module StudentDetailsQuery = %graphql(`
           accessEndsAt
           students {
             id
-            name
-            title
-            avatarUrl
-            userTags
+            user {
+              name
+              title
+              avatarUrl
+              taggings
+            }
           }
           coachUserIds
         }
@@ -501,7 +503,9 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
           className="w-full relative md:w-3/5 bg-gray-100 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">
           <div
             className="sticky top-0 bg-gray-100 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
-            <ul role="tablist" className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent">
+            <ul
+              role="tablist"
+              className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent">
               <li
                 tabIndex=0
                 role="tab"

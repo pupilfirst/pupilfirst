@@ -123,22 +123,24 @@ module Layouts
     end
 
     def course_details_array
-      courses.map do |course|
-        {
-          id: course.id,
-          name: course.name,
-          can_review: course.id.in?(courses_with_review_access_ids),
-          is_author: course.id.in?(courses_with_author_access_ids),
-          enable_leaderboard: course.enable_leaderboard?,
-          description: course.description,
-          exited: student_dropped_out(course.id),
-          thumbnail_url: course.thumbnail_url,
-          linked_communities: linked_communities(course),
-          access_ended: student_access_end(course.id),
-          ended: course.ended?,
-          is_student: student_profile?(course.id)
-        }
-      end
+      courses
+        .includes([:thumbnail_attachment])
+        .map do |course|
+          {
+            id: course.id,
+            name: course.name,
+            can_review: course.id.in?(courses_with_review_access_ids),
+            is_author: course.id.in?(courses_with_author_access_ids),
+            enable_leaderboard: course.enable_leaderboard?,
+            description: course.description,
+            exited: student_dropped_out(course.id),
+            thumbnail_url: course.thumbnail_url,
+            linked_communities: linked_communities(course),
+            access_ended: student_access_end(course.id),
+            ended: course.ended?,
+            is_student: student_profile?(course.id)
+          }
+        end
     end
 
     def student_profile?(course_id)

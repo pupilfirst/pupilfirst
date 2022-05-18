@@ -83,10 +83,10 @@ let makeFromJS = teamDetails => {
     student =>
       makeStudent(
         ~id=student["id"],
-        ~name=student["name"],
-        ~title=student["title"],
-        ~avatarUrl=student["avatarUrl"],
-        ~userTags=student["userTags"],
+        ~name=student["user"]["name"],
+        ~title=student["user"]["title"],
+        ~avatarUrl=student["user"]["avatarUrl"],
+        ~userTags=student["user"]["taggings"],
       ),
     teamDetails["students"],
   )

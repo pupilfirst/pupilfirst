@@ -8,7 +8,10 @@ class CoachMailer < SchoolMailer
 
     simple_mail(
       coach.email,
-      I18n.t("mailers.coach.course_enrollment_subject", course_name: @course.name)
+      I18n.t(
+        'mailers.coach.course_enrollment.subject',
+        course_name: @course.name
+      )
     )
   end
 end

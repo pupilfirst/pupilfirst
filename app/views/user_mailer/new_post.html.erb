@@ -10,7 +10,7 @@
 <% end %>
 
 <% content_for :body do %>
-  <%= t("views.mailers.new_post.body.main_html", author_name: author_name, community_name: community_name, link_to: link_to(t("views.mailers.new_post.body.link_to", community_name: community_name), topic_url(topic))) %>
+  <%= t("mailers.user.new_post.body.main_html", author_name: author_name, community_name: community_name, link_to: link_to(t("mailers.user.new_post.body.link_to", community_name: community_name), topic_url(topic))) %>
 
   <%= render 'mailers/link_fallback', url: topic_url(topic) %>
 <% end %>

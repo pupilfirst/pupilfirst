@@ -7,7 +7,10 @@ class CourseAuthorMailer < SchoolMailer
 
     simple_mail(
       @user.email,
-      I18n.t("mailers.course_author.addition_subject", course_name: @course.name)
+      I18n.t(
+        'mailers.course_author.addition.subject',
+        course_name: @course.name
+      )
     )
   end
 end

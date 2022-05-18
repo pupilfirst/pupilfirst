@@ -8,11 +8,11 @@
 
 <% content_for :body do %>
   <p>
-    <%= t("views.mailers.addition.added_author_html", course_name: @course.name, school_name: @school.name) %>
+    <%= t("mailers.course_author.addition.body.added_author_html", course_name: @course.name, school_name: @school.name) %>
   </p>
 
   <p>
-    <%= t("views.mailers.addition.use_link_html", link_to: link_to(t("views.mailers.addition.link_to"), sign_in_link), school_name: @school.name) %>
+    <%= t("mailers.course_author.addition.body.use_link_html", link_to: link_to(t("mailers.course_author.addition.body.link_to"), sign_in_link), school_name: @school.name) %>
   </p>
 
   <%= render 'mailers/link_fallback', url: sign_in_link %>

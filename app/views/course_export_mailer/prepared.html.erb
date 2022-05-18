@@ -5,15 +5,15 @@
 %>
 
 <% content_for :title do %>
-  <%= t("views.mailers.prepared.export_ready") %>
+  <%= t("mailers.course_export.prepared.title") %>
 <% end %>
 
 <% content_for :subtitle do %>
-  <%= t("views.mailers.prepared.export_data_ready", course_name: course.name) %>
+  <%= t("mailers.course_export.prepared.subtitle", course_name: course.name) %>
 <% end %>
 
 <% content_for :title_button_text do %>
-  <%= t("views.mailers.prepared.visit_page") %>
+  <%= t("mailers.course_export.prepared.title_button_text") %>
 <% end %>
 
 <% content_for(:title_button_link, link) %>
@@ -24,11 +24,11 @@
 
 <% content_for :body do %>
   <p>
-    <%= t("views.mailers.prepared.body", course_name: course.name, course_export_created_at: @course_export.created_at.strftime('%b %e, %l:%M %p'), link_to: link_to(t("views.mailers.prepared.link_to"), link)) %>
+    <%= t("mailers.course_export.prepared.body.body", course_name: course.name, course_export_created_at: @course_export.created_at.strftime('%b %e, %l:%M %p'), link_to: link_to(t("mailers.course_export.prepared.body.link_to"), link)) %>
   </p>
 
   <p>
-    <%= t("views.mailers.prepared.export_ods") %>
+    <%= t("mailers.course_export.prepared.body.export_ods") %>
   </p>
 
   <%= render 'mailers/link_fallback', url: link %>

@@ -6,7 +6,10 @@ class SchoolAdminMailer < SchoolMailer
     @new_school_admin = new_school_admin
     @adding_user = adding_user
     @school = school_admin.user.school
-    simple_mail(school_admin.email, I18n.t("mailers.school_admin.school_admin_added_subject"))
+    simple_mail(
+      school_admin.email,
+      I18n.t('mailers.school_admin.school_admin_added.subject')
+    )
   end
 
   # @param school_admin [SchoolAdmin] Who initiated the import
@@ -28,6 +31,9 @@ class SchoolAdminMailer < SchoolMailer
       attachments['students_not_added.csv'] = report_attachment
     end
 
-    simple_mail(school_admin.email, I18n.t("mailers.school_admin.students_bulk_import_complete_subject"))
+    simple_mail(
+      school_admin.email,
+      I18n.t('mailers.school_admin.students_bulk_import_complete.subject')
+    )
   end
 end

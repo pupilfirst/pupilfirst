@@ -6,15 +6,15 @@
 %>
 
 <% content_for :title do %>
-  <%= t("views.mailers.enrollment_verification.welcome", course_name: course_name) %>
+  <%= t("mailers.applicant.enrollment_verification.title", course_name: course_name) %>
 <% end %>
 
 <% content_for :subtitle do %>
-  <%= t("views.mailers.enrollment_verification.link_verify_html", school_name: school_name) %>
+  <%= t("mailers.applicant.enrollment_verification.subtitle", school_name: school_name) %>
 <% end %>
 
 <% content_for :title_button_text do %>
-  <%= t("views.mailers.enrollment_verification.activate_account") %>
+  <%= t("mailers.applicant.enrollment_verification.title_button_text") %>
 <% end %>
 
 <% content_for(:title_button_link, login_url) %>
@@ -25,7 +25,7 @@
 
 <% content_for :body do %>
   <p>
-  <%= t("views.mailers.enrollment_verification.to_activate_html", school_name: school_name, course_name: course_name) %>
+  <%= t("mailers.applicant.enrollment_verification.body", school_name: school_name, course_name: course_name) %>
   </p>
 
   <%= render 'mailers/link_fallback', url: login_url%>

@@ -3,9 +3,9 @@
 <% end %>
 
 <% content_for :body do %>
-  <%= t("views.mailers.delete_account_token.body.main_html", school_name: @school.name, link_to: link_to(t("views.mailers.delete_account_token.body.link_to"), @delete_account_url)) %>
+  <%= t("mailers.user.delete_account_token.body.main_html", school_name: @school.name, link_to: link_to(t("mailers.user.delete_account_token.body.link_to"), @delete_account_url)) %>
 
   <%= render 'mailers/link_fallback', url: @delete_account_url %>
 
-  <%= t("views.mailers.delete_account_token.body.note_html") %>
+  <%= t("mailers.user.delete_account_token.body.note_html") %>
 <% end %>

@@ -14,7 +14,7 @@ class StartupMailer < SchoolMailer
 
     subject =
       I18n.t(
-        'mailers.startup.feedback_as_email_subject',
+        'mailers.startup.feedback_as_email.subject',
         startup_feedback: startup_feedback.faculty.name
       )
     simple_mail(send_to, subject)

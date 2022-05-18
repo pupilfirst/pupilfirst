@@ -172,6 +172,7 @@ en:
       deleting: Deleting...
       edit_button_title: Edit Certificate %{name}
       heading: Certificates
+      certificate: Certificate
       issued_count:
         one: Issued only once
         other: Issued %{count} times
@@ -1598,10 +1599,6 @@ en:
       link_expired: That one-time link has expired, or is invalid. If you have already completed enrollment, please sign in.
     resolve_applicant_path:
       welcome: Welcome to %{school_name}!
-  errors:
-    messages:
-      content_type_invalid: has an invalid content type
-      limit_out_of_range: total number is out of range
   concerns:
     validate_submission_gradable:
       owners_should_be_active:
@@ -1790,7 +1787,6 @@ en:
           rank_no_change_alt: Rank no change
           rank_up_alt: Rank change up
           rank_up_double_alt: Rank change up double
-
       report:
         student_report: Student Report
       review:
@@ -1956,7 +1952,7 @@ en:
         title: Certificates
       curriculum:
         title: Curriculum
-      evaluation:
+      evaluation_criteria:
         title: Evaluation Criteria
       exports:
         title: Exports
@@ -1988,7 +1984,7 @@ en:
       privacy_policy: Privacy Policy
       terms_and_conditions: Terms & Conditions
   layouts:
-    _student_footer:
+    student_footer:
       contact: Contact
       logo: Logo
       privacy_policy: Privacy Policy
@@ -2066,6 +2062,9 @@ en:
     unprocessable_entity:
       invalid_request: Your browser made an invalid request.
       wasnt_valid: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+    messages:
+      content_type_invalid: has an invalid content type
+      limit_out_of_range: total number is out of range
   users:
     delete_account:
       title: Edit User

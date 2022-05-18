@@ -1,6 +1,6 @@
 <% content_for(:head) do %>
   <title>
-    <%= "#{t("views.users.sessions.email_sent.#{kind}.page_title")} |
+    <%= "#{t("users.sessions.email_sent.#{kind}.page_title")} |
     #{current_school.name}" %>
   </title>
 <% end %>
@@ -13,14 +13,14 @@
     <div
       class="max-w-sm mx-auto text-lg sm:text-2xl font-bold text-center mt-4"
     >
-      <%= t("views.users.sessions.email_sent.#{kind}.heading") %>
+      <%= t("users.sessions.email_sent.#{kind}.heading") %>
     </div>
     <div class="max-w-sm mx-auto">
       <p class="mt-4 text-center">
-        <%= t("views.users.sessions.email_sent.#{kind}.description") %>
+        <%= t("users.sessions.email_sent.#{kind}.description") %>
       </p>
       <p class="text-sm text-gray-600 italic mt-2 text-center">
-        <%= t("views.users.sessions.email_sent.#{kind}.notice") %>
+        <%= t("users.sessions.email_sent.#{kind}.notice") %>
       </p>
     </div>
   </div>

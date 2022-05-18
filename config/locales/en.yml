@@ -131,25 +131,6 @@ en:
         other: Issued %{count} times
         zero: Never issued
       no_certificates: You haven't created any certificates yet!
-    CoursesExport__Root:
-      reviewed_only_tag: Reviewed Submissions Only
-      include_inactive_students_tag: Included Inactive Students
-      create_action: Create New Export
-      heading: Exports
-      no_exports_notice: You haven't exported anything yet!
-      create_action_button: Export Course Data
-      export_type_label: Please select the kind of export you need
-      students_label: Students
-      teams_label: Teams
-      export_tags_label : Export only students with the following tags
-      export_targets_label: Which targets should the export include?
-      all_targets_label: All targets
-      reviewed_only_targets_label: Only targets with reviewed submissions
-      students_to_include_label: Select the students to include in course export
-      active_students_label: Active Students
-      all_students_label: All Students
-      create_button_text: Create Export
-      create_button_active_label: Setting up an export...
     CourseEditor:
       add_new_course: Add New Course
       button_load_more: Load More Courses...
@@ -362,6 +343,25 @@ en:
         pending: Pending
         pending_review: Pending Review
         rejected: Rejected
+    CoursesExport__Root:
+      active_students_label: Active Students
+      all_students_label: All Students
+      all_targets_label: All targets
+      create_action: Create New Export
+      create_action_button: Export Course Data
+      create_button_active_label: Setting up an export...
+      create_button_text: Create Export
+      export_tags_label: Export only students with the following tags
+      export_targets_label: Which targets should the export include?
+      export_type_label: Please select the kind of export you need
+      heading: Exports
+      include_inactive_students_tag: Included Inactive Students
+      no_exports_notice: You haven't exported anything yet!
+      reviewed_only_tag: Reviewed Submissions Only
+      reviewed_only_targets_label: Only targets with reviewed submissions
+      students_label: Students
+      students_to_include_label: Select the students to include in course export
+      teams_label: Teams
     CoursesReport__Overview:
       attempted: " Attempted"
       average_grades: Average Grades
@@ -403,16 +403,16 @@ en:
         error_message: A check's result cannot be blank
         placeholder: Add feedback (optional)
       checklist_item_title:
+        move_down_button_title: Move Down checklist result
+        move_up_button_title: Move Up checklist result
         placeholder: Add a result for this check
         remove_button_title: Remove checklist result
-        move_up_button_title: Move Up checklist result
-        move_down_button_title: Move Down checklist result
       checklist_title:
         error_message: A checklist item cannot be blank
+        move_down_button_title: Move Down checklist item
+        move_up_button_title: Move Up checklist item
         placeholder: Add an item to the checklist
         remove_button_title: Remove checklist item
-        move_up_button_title: Move Up checklist item
-        move_down_button_title: Move Down checklist item
       create_review_checklist: Create Review Checklist
       disabled: Disabled
       edit_review_checklist: Edit Review Checklist
@@ -443,10 +443,18 @@ en:
           done_description: There are no other similar submissions.
       grade_card: Grade Card
       help_text: Notes can be used to keep track of a %{note_about}'s progress. These notes are shown only to coaches in a student's report. %{additional_help}
+      hide_test_report_button: Hide Test Report
       level_acronym: L
       note_help: "Would you like to write a note about this "
       note_placeholder: Did you notice something while reviewing this submission?
       remove_assignment: Remove assignment
+      report_status_string:
+        completed:
+          error: Automated tests could not complete due to errors
+          failure: Some automated tests failed
+          success: All automated tests succeeded
+        in_progress: Automated tests are in progress
+        queued: Automated tests are queued
       review: Review
       review_checklist: Review Checklist
       review_next: Next
@@ -454,16 +462,7 @@ en:
       save_grades_and_send_feedback: Save grades & send feedback
       share_feedback: Share Feedback
       show_review_checklist: Show Review Checklist
-      report_status_string:
-        queued: Automated tests are queued
-        in_progress: Automated tests are in progress
-        completed:
-          success: All automated tests succeeded
-          failure: Some automated tests failed
-          error: Automated tests could not complete due to errors
       show_test_report_button: Show Test Report
-      hide_test_report_button: Hide Test Report
-      test_report: Test Report
       status:
         completed: Completed
         pending_review: Pending Review
@@ -479,6 +478,7 @@ en:
       submitted_by_team: "Submitted by team: "
       team: team
       team_notice: " This submission is from a team, so a note added here will be posted to the report of all students in the team."
+      test_report: Test Report
       undo_grade_warning: Are you sure you want to remove these grades? This will return the submission to a 'Pending Review' state.
       undo_grading: Undo Grading
       write_a_note: Write a Note
@@ -965,10 +965,6 @@ en:
   mutations:
     archive_course:
       success_notification: Course archived successfully.
-    export_course_report:
-      course_not_found_error: Could not find a course with the given ID
-      tag_not_found_error: Could not find tags with the given IDs
-      success_notification: Your export is being processed. We'll notify you as soon as it is ready.
     assign_reviewer:
       submission_already_assigned: This submission has been already assigned to a coach.
       submission_graded_error: You can only assign yourself to pending submissions.
@@ -1010,6 +1006,10 @@ en:
       success_notification: You will be notified about all the updates.
     delete_certificate:
       success_notification: Certificate has been deleted.
+    export_course_report:
+      course_not_found_error: Could not find a course with the given ID
+      success_notification: Your export is being processed. We'll notify you as soon as it is ready.
+      tag_not_found_error: Could not find tags with the given IDs
     issue_certificate:
       success_notification: Certificate issued successfully!
     lock_topic:
@@ -1113,8 +1113,8 @@ en:
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
     optional: optional
     privacy_policy: Privacy Policy
-    save_changes: Save Changes
     processing: Processing
+    save_changes: Save Changes
     saving: Saving...
     target: Target
     terms_and_conditions: Terms & Conditions

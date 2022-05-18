@@ -17,6 +17,8 @@ type rec selection = (selectionStart, selectionEnd)
 and selectionStart = int
 and selectionEnd = int
 
+type currentFile = string
+
 type rec uploadState =
   | Uploading
   | ReadyToUpload(uploadError)
@@ -27,6 +29,7 @@ type state = {
   mode: mode,
   selection: selection,
   uploadState: uploadState,
+  currentFile: currentFile,
 }
 
 type action =
@@ -39,6 +42,8 @@ type action =
   | SetUploadError(uploadError)
   | SetUploading
   | FinishUploading
+  | ClearFile
+  | SelectFile(currentFile)
 
 let reducer = (state, action) =>
   switch action {
@@ -88,6 +93,8 @@ let reducer = (state, action) =>
   | SetUploadError(error) => {...state, uploadState: ReadyToUpload(error)}
   | SetUploading => {...state, uploadState: Uploading}
   | FinishUploading => {...state, uploadState: ReadyToUpload(None)}
+  | SelectFile(currentFile) => {...state, currentFile: currentFile}
+  | ClearFile => {...state, currentFile: ""}
   }
 
 let computeInitialState = ((value, textareaId, mode)) => {
@@ -98,7 +105,7 @@ let computeInitialState = ((value, textareaId, mode)) => {
 
   let length = value |> String.length
 
-  {id: id, mode: mode, selection: (length, length), uploadState: ReadyToUpload(None)}
+  {id: id, mode: mode, selection: (length, length), uploadState: ReadyToUpload(None), currentFile: ""}
 }
 
 let containerClasses = mode =>
@@ -456,6 +463,7 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
   | files =>
     let file = files[0]
     let maxFileSize = 5 * 1024 * 1024
+    send(SelectFile(ReactEvent.Form.target(event)["value"]))
 
     let error = file["size"] > maxFileSize ? Some(t("error_maximum_file_size")) : None
 
@@ -464,6 +472,7 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
     | None =>
       send(SetUploading)
       submitForm(fileFormId, oldValue, state, send, onChange)
+      send(ClearFile)
     }
   }
 
@@ -498,6 +507,7 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
           id=fileInputId
           multiple=false
           disabled
+          value={state.currentFile}
           onChange={attachFile(fileFormId, oldValue, state, send, onChange)}
         />
         {switch state.uploadState {

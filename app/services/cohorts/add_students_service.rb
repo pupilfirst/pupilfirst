@@ -1,18 +1,18 @@
-module Courses
-  # Adds a list of new students to a course.
+module Cohorts
+  # Adds a list of new students to a cohort.
   class AddStudentsService
     def initialize(
-      course,
+      cohort,
       notify: false,
       notification_service: Developers::NotificationService.new
     )
-      @course = course
+      @cohort = cohort
       @notify = notify
       @team_name_translation = {}
       @notification_service = notification_service
     end
 
-    # Accepts a list of students to add to a course. Ignores students who are already present.
+    # Accepts a list of students to add to a cohort. Ignores students who are already present.
     #
     # @param student_list [Array] list of students to be added. Each entry should contain email, name, and tags.
     # @return [Array] the number of students who were just added to the database, and the number that was supplied for addition.
@@ -21,14 +21,14 @@ module Courses
 
       students =
         Course.transaction do
-          students = new_students.map do |student_data|
-            create_new_student(student_data)
-          end
+          students =
+            new_students.map { |student_data| create_new_student(student_data) }
 
           notify_students(students)
 
           # Add the tags to the school's list of founder tags. This is useful for retrieval in the school admin interface.
-          new_student_tags = new_students.map { |student| student.tags || [] }.flatten.uniq
+          new_student_tags =
+            new_students.map { |student| student.tags || [] }.flatten.uniq
           school.founder_tag_list << new_student_tags
           school.save!
 
@@ -37,10 +37,10 @@ module Courses
 
       students.each do |student|
         @notification_service.execute(
-          @course,
+          course,
           :student_added,
           student.user,
-          @course
+          course
         )
       end
 
@@ -95,19 +95,30 @@ module Courses
       # If a user was already present, don't override values of name, title or affiliation.
       user.update!(
         name: user.name.presence || student.name,
-        title: user.title.presence || student.title.presence || "Student",
+        title: user.title.presence || student.title.presence || 'Student',
         affiliation: user.affiliation.presence || student.affiliation.presence
       )
 
       team = find_or_create_team(student)
 
       # Finally, create a student profile for the user.
-      Founder.create!(user: user, startup: team)
+      Founder.create!(
+        user: user,
+        team: team,
+        tag_list: student.tags,
+        level: first_level,
+        cohort: @cohort
+      )
     end
 
     def unpersisted_students(students)
       requested_emails = students.map(&:email).map(&:downcase)
-      enrolled_student_emails = @course.founders.joins(:user).where(users: { email: requested_emails }).pluck(:email)
+      enrolled_student_emails =
+        course
+          .founders
+          .joins(:user)
+          .where(users: { email: requested_emails })
+          .pluck(:email)
 
       students.reject do |student|
         student.email.downcase.in?(enrolled_student_emails)
@@ -115,26 +126,28 @@ module Courses
     end
 
     def find_or_create_team(student)
+      return if student.team_name.blank?
+
       team = @team_name_translation[student.team_name]
 
       return team if team.present?
 
-      team = Startup.create!(
-        name: student.team_name.presence || student.name,
-        level_id: first_level.id,
-        tag_list: student.tags
-      )
+      team = Team.create!(name: student.team_name, cohort: @cohort)
 
       @team_name_translation[team.name] = team
       team
     end
 
     def school
-      @school ||= @course.school
+      @school ||= course.school
+    end
+
+    def course
+      @course ||= @cohort.course
     end
 
     def first_level
-      @first_level ||= @course.levels.find_by(number: 1)
+      @first_level ||= course.levels.find_by(number: 1)
     end
   end
 end

@@ -5,6 +5,7 @@ type state = {
   notifyStudents: bool,
   tags: array<string>,
   cohorts: array<Cohort.t>,
+  selectedCohort: option<Cohort.t>,
   saving: bool,
   loading: bool,
 }
@@ -14,7 +15,10 @@ type action =
   | RemoveStudentInfo(StudentInfo.t)
   | SetBaseData(array<Cohort.t>, array<string>)
   | ToggleNotifyStudents
-  | SetSaving(bool)
+  | SetSaving
+  | SetSelectedCohort(Cohort.t)
+  | SetLoading
+  | ClearSaving
 
 let str = React.string
 let t = I18n.t(~scope="components.StudentsEditor__CreateForm")
@@ -67,8 +71,8 @@ let handleResponseCB = (submitCB, state, studentIds) => {
 }
 
 module CreateStudentsQuery = %graphql(`
-  mutation CreateStudentsMutation($courseId: ID!, $notifyStudents: Boolean!, $students: [StudentEnrollmentInput!]!) {
-    createStudents(courseId: $courseId, notifyStudents: $notifyStudents, students: $students) {
+  mutation CreateStudentsMutation($cohortId: ID!, $notifyStudents: Boolean!, $students: [StudentEnrollmentInput!]!) {
+    createStudents(cohortId: $cohortId, notifyStudents: $notifyStudents, students: $students) {
       studentIds
     }
   }
@@ -90,6 +94,7 @@ module StudentsCreateDataQuery = %graphql(`
   `)
 
 let loadData = (courseId, send) => {
+  send(SetLoading)
   StudentsCreateDataQuery.make(~courseId, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
@@ -101,31 +106,22 @@ let loadData = (courseId, send) => {
     )
     Js.Promise.resolve()
   })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    Notification.error(
-      "Unexpected Error!",
-      "Our team has been notified of this failure. Please reload this page before trying to add students again.",
-    )
-    send(SetSaving(false))
-    Js.Promise.resolve()
-  })
   |> ignore
 }
 
-let createStudents = (state, send, courseId, event) => {
-  event |> ReactEvent.Mouse.preventDefault
-  send(SetSaving(true))
+let createStudents = (state, send, courseId, cohort, event) => {
+  ReactEvent.Mouse.preventDefault(event)
+  send(SetSaving)
 
-  let students = Js.Array.map(TeamInfo.toJsArray, state.teamsToAdd) |> ArrayUtils.flattenV2
+  let students = ArrayUtils.flattenV2(Js.Array2.map(state.teamsToAdd, TeamInfo.toJsArray))
   let {notifyStudents} = state
 
-  CreateStudentsQuery.make(~courseId, ~notifyStudents, ~students, ())
+  CreateStudentsQuery.make(~cohortId=Cohort.id(cohort), ~notifyStudents, ~students, ())
   |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     switch response["createStudents"]["studentIds"] {
-    | Some(studentIds) => RescriptReactRouter.push({`/school/courses/${courseId}/students`})
-    | None => send(SetSaving(false))
+    | Some(_studentIds) => RescriptReactRouter.push({`/school/courses/${courseId}/students`})
+    | None => send(ClearSaving)
     }
 
     Js.Promise.resolve()
@@ -136,7 +132,7 @@ let createStudents = (state, send, courseId, event) => {
       "Unexpected Error!",
       "Our team has been notified of this failure. Please reload this page before trying to add students again.",
     )
-    send(SetSaving(false))
+    send(ClearSaving)
     Js.Promise.resolve()
   })
   |> ignore
@@ -179,6 +175,7 @@ let initialState = () => {
   cohorts: [],
   notifyStudents: true,
   saving: false,
+  selectedCohort: None,
 }
 
 let reducer = (state, action) =>
@@ -191,9 +188,12 @@ let reducer = (state, action) =>
       ...state,
       teamsToAdd: state.teamsToAdd->TeamInfo.removeStudentFromArray(studentInfo),
     }
-  | SetSaving(saving) => {...state, saving: saving}
+  | SetSaving => {...state, saving: true}
   | ToggleNotifyStudents => {...state, notifyStudents: !state.notifyStudents}
   | SetBaseData(cohorts, tags) => {...state, cohorts: cohorts, tags: tags, loading: false}
+  | SetSelectedCohort(cohort) => {...state, selectedCohort: Some(cohort)}
+  | ClearSaving => {...state, saving: false}
+  | SetLoading => {...state, loading: true}
   }
 
 let tagBoxes = tags =>
@@ -238,6 +238,20 @@ let studentCard = (studentInfo, send, team, tags) => {
   </div>
 }
 
+module Selectable = {
+  type t = Cohort.t
+  let id = t => Cohort.id(t)
+  let name = t => Cohort.name(t)
+}
+
+module Dropdown = Select.Make(Selectable)
+
+let findSelectedCohort = (cohorts, selectedCohort) => {
+  Belt.Option.flatMap(selectedCohort, c =>
+    Js.Array2.find(cohorts, u => Cohort.id(c) == Cohort.id(u))
+  )
+}
+
 @react.component
 let make = (~courseId) => {
   let (state, send) = React.useReducer(reducer, initialState())
@@ -249,12 +263,25 @@ let make = (~courseId) => {
   <div className="mt-4">
     <div className="flex ">
       <div className="w-1/2 mt-4">
+        <div className="mt-5 flex flex-col">
+          <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
+            {"Select a cohort" |> str}
+          </label>
+          <Dropdown
+            placeholder={"Pick a Cohort"}
+            selectables={state.cohorts}
+            selected={findSelectedCohort(state.cohorts, state.selectedCohort)}
+            onSelect={u => send(SetSelectedCohort(u))}
+            disabled={state.teamsToAdd->ArrayUtils.isNotEmpty}
+            loading={state.loading}
+          />
+        </div>
         <StudentCreator__StudentInfoForm
           addToListCB={(studentInfo, teamName, tags) =>
             send(AddStudentInfo(studentInfo, teamName, tags))}
           teamTags={allKnownTags(state.tags, TeamInfo.tagsFromArray(state.teamsToAdd))}
           emailsToAdd={TeamInfo.studentEmailsFromArray(state.teamsToAdd)}
-          cohorts={state.cohorts}
+          disabled={state.loading}
         />
       </div>
       <div className="w-1/2 px-4 mt-4">
@@ -310,14 +337,21 @@ let make = (~courseId) => {
             </label>
           </div>
           <div className="flex mt-4">
-            <button
-              disabled={state.saving || state.teamsToAdd |> ArrayUtils.isEmpty}
-              onClick={createStudents(state, send, courseId)}
-              className={"w-full btn btn-primary btn-large mt-3" ++ (
-                formInvalid(state) ? " disabled" : ""
-              )}>
-              {(state.saving ? t("saving") : t("save_list_button"))->str}
-            </button>
+            {switch state.selectedCohort {
+            | Some(c) =>
+              <button
+                disabled={state.saving || state.teamsToAdd |> ArrayUtils.isEmpty}
+                onClick={createStudents(state, send, courseId, c)}
+                className={"w-full btn btn-primary btn-large mt-3" ++ (
+                  formInvalid(state) ? " disabled" : ""
+                )}>
+                {(state.saving ? t("saving") : t("save_list_button"))->str}
+              </button>
+            | None =>
+              <button disabled=true className={"w-full btn btn-primary btn-large mt-3 disabled"}>
+                {"Select Cohort"->str}
+              </button>
+            }}
           </div>
         </div>
       </div>

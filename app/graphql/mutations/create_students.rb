@@ -1,6 +1,6 @@
 module Mutations
   class CreateStudents < GraphQL::Schema::Mutation
-    argument :course_id, ID, required: true
+    argument :cohort_id, ID, required: true
     argument :students, [Types::StudentEnrollmentInputType], required: true
     argument :notify_students, Boolean, required: true
 
@@ -11,7 +11,8 @@ module Mutations
     def resolve(params)
       mutator = CreateStudentsMutator.new(context, params)
 
-      student_ids = if mutator.valid?
+      student_ids =
+        if mutator.valid?
           mutator.create_students
         else
           mutator.notify_errors

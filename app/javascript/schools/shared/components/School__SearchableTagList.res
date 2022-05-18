@@ -59,7 +59,14 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
 let reducer = (_state, searchString) => searchString
 
 @react.component
-let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTags) => {
+let make = (
+  ~unselectedTags,
+  ~selectedTags,
+  ~addTagCB,
+  ~removeTagCB,
+  ~allowNewTags,
+  ~disabled=true,
+) => {
   let (state, send) = React.useReducer(reducer, "")
   let results = search(state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
   <div className="mt-2">
@@ -89,6 +96,7 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTa
       className="appearance-none block bg-white leading-snug border border-gray-400 rounded w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-gray-500"
       id="tags"
       type_="text"
+      disabled
       placeholder={allowNewTags ? "Search for, or add new tags" : "Select tags"}
     />
     {ReactUtils.nullUnless(

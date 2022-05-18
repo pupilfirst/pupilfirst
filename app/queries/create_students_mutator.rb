@@ -1,7 +1,7 @@
 class CreateStudentsMutator < ApplicationQuery
   include AuthorizeSchoolAdmin
 
-  property :course_id
+  property :cohort_id
   property :students
   property :notify_students
 
@@ -11,7 +11,9 @@ class CreateStudentsMutator < ApplicationQuery
   validate :soft_limit_student_count
 
   def create_students
-    ::Courses::AddStudentsService.new(course, notify: notify_students).add(students)
+    ::Cohorts::AddStudentsService
+      .new(cohort, notify: notify_students)
+      .add(students)
   end
 
   private
@@ -22,20 +24,27 @@ class CreateStudentsMutator < ApplicationQuery
   end
 
   def strings_must_not_be_too_long
-    return if students.all? do |s|
-      valid_string?(string: s.name, max_length: 250) &&
-        valid_string?(string: s.title, max_length: 250, optional: true) &&
-        valid_string?(string: s.affiliation, max_length: 250, optional: true) &&
-        valid_string?(string: s.team_name, max_length: 50, optional: true)
+    if students.all? do |s|
+         valid_string?(string: s.name, max_length: 250) &&
+           valid_string?(string: s.title, max_length: 250, optional: true) &&
+           valid_string?(
+             string: s.affiliation,
+             max_length: 250,
+             optional: true
+           ) &&
+           valid_string?(string: s.team_name, max_length: 50, optional: true)
+       end
+      return
     end
 
     errors[:base] << 'One or more of the entries have invalid strings'
   end
 
   def emails_must_be_valid
-    invalid = students.any? do |s|
-      s.email !~ EmailValidator::REGULAR_EXPRESSION || s.email.length > 254
-    end
+    invalid =
+      students.any? do |s|
+        s.email !~ EmailValidator::REGULAR_EXPRESSION || s.email.length > 254
+      end
 
     return unless invalid
 
@@ -45,11 +54,15 @@ class CreateStudentsMutator < ApplicationQuery
   def soft_limit_student_count
     return if course.blank? || course.founders.count < 100_000
 
-    errors[:base] << "You've hit the soft-limit for number of students in this course"
+    errors[:base] <<
+      "You've hit the soft-limit for number of students in this course"
   end
 
   def students_must_have_unique_email
-    return if students.map {|student| student.email.downcase }.uniq.count == students.count
+    if students.map { |student| student.email.downcase }.uniq.count ==
+         students.count
+      return
+    end
 
     errors[:base] << 'Email addresses must be unique'
   end
@@ -59,7 +72,11 @@ class CreateStudentsMutator < ApplicationQuery
   end
 
   def course
-    @course ||= Course.find_by(id: course_id)
+    @course ||= cohort&.course
+  end
+
+  def cohort
+    @cohort ||= Cohort.find_by(id: cohort_id)
   end
 
   def allow_token_auth?

@@ -6097,7 +6097,7 @@
               "description": "Add one or more students to a course",
               "args": [
                 {
-                  "name": "courseId",
+                  "name": "cohortId",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",

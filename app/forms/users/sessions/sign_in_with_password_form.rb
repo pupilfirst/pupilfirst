@@ -35,7 +35,9 @@ module Users
 
         errors.add(
           :base,
-          'The supplied email address and password do not match. Please check your credentials and try again.'
+          I18n.t(
+            'users.sessions.sign_in_with_password_form.check_credentials.error'
+          )
         )
       end
     end

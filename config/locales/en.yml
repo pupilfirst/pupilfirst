@@ -2084,6 +2084,9 @@ en:
         add_other: Please sign in using another method.
         not_receive_email: "We're sorry, but we did not receive your email address from %{provider_name}. "
     sessions:
+      sign_in_with_password_form:
+        check_credentials:
+          error: The supplied email address and password do not match. Please check your credentials and try again.
       sign_in_with_email:
         email: Continue with email
         email_address: Email Address

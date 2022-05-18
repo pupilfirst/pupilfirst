@@ -3,7 +3,6 @@ require 'rails_helper'
 feature 'Course students list', js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
-  include ActiveSupport::Testing::TimeHelpers
 
   # The basics
   let!(:school) { create :school, :current }

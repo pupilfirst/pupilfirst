@@ -23,6 +23,9 @@ type state = {
   csvData: array<StudentCSVData.t>,
   fileInvalid: option<fileInvalid>,
   notifyStudents: bool,
+  loading: bool,
+  cohorts: array<Cohort.t>,
+  selectedCohort: option<Cohort.t>,
 }
 
 let initialState = {
@@ -31,6 +34,9 @@ let initialState = {
   csvData: [],
   fileInvalid: None,
   notifyStudents: true,
+  loading: false,
+  cohorts: [],
+  selectedCohort: None,
 }
 
 let validTemplate = csvData => {
@@ -61,6 +67,10 @@ type action =
   | BeginSaving
   | EndSaving
   | FailSaving
+  | SetBaseData(array<Cohort.t>)
+  | SetSelectedCohort(Cohort.t)
+  | SetLoading
+  | ClearLoading
 
 let fileInputText = (~fileInfo: option<CSVReader.fileInfo>) =>
   fileInfo->Belt.Option.mapWithDefault(t("csv_file_input_placeholder"), info => info.name)
@@ -79,34 +89,67 @@ let reducer = (state, action) =>
       fileInfo: Some(fileInfo),
       fileInvalid: validateFile(csvData, fileInfo),
     }
+  | SetBaseData(cohorts) => {...state, cohorts: cohorts, loading: false}
+  | SetSelectedCohort(cohort) => {...state, selectedCohort: Some(cohort)}
+  | SetLoading => {...state, loading: true}
+  | ClearLoading => {...state, loading: false}
   }
-
 let saveDisabled = state =>
-  state.fileInfo->Belt.Option.isNone || state.fileInvalid->Belt.Option.isSome || state.saving
+  state.fileInfo->Belt.Option.isNone ||
+  state.fileInvalid->Belt.Option.isSome ||
+  state.saving ||
+  Belt.Option.isNone(state.selectedCohort)
 
-let submitForm = (courseId, send, event) => {
+let submitForm = (cohort, exitUrl, send, event) => {
   ReactEvent.Form.preventDefault(event)
   send(BeginSaving)
 
   let formData =
     ReactEvent.Form.target(event)->DomUtils.EventTarget.unsafeToElement->DomUtils.FormData.create
 
-  let url = "/school/courses/" ++ courseId ++ "/bulk_import_students"
+  switch cohort {
+  | Some(c) => {
+      let url = "/school/cohorts/" ++ Cohort.id(c) ++ "/bulk_import_students"
 
-  Api.sendFormData(
-    url,
-    formData,
-    json => {
-      Json.Decode.field("success", Json.Decode.bool, json)
-        ? {
-            Notification.success(t("done_exclamation"), t("success_notification"))
-            RescriptReactRouter.push("/school/courses/" ++ courseId ++ "/students")
-          }
-        : ()
-      send(EndSaving)
-    },
-    () => send(FailSaving),
-  )
+      Api.sendFormData(
+        url,
+        formData,
+        json => {
+          Json.Decode.field("success", Json.Decode.bool, json)
+            ? {
+                Notification.success(t("done_exclamation"), t("success_notification"))
+                RescriptReactRouter.push(exitUrl)
+              }
+            : ()
+          send(EndSaving)
+        },
+        () => send(FailSaving),
+      )
+    }
+  | None => ()
+  }
+}
+
+module StudentBulkImportDataQuery = %graphql(`
+  query StudentBulkImportDataQuery($courseId: ID!) {
+    cohorts(courseId: $courseId) {
+      id
+      name
+      description
+      endsAt
+    }
+  }
+  `)
+
+let loadData = (courseId, send) => {
+  send(SetLoading)
+  StudentBulkImportDataQuery.make(~courseId, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(response => {
+    send(SetBaseData(response["cohorts"]->Js.Array2.map(cohort => Cohort.makeFromJs(cohort))))
+    Js.Promise.resolve()
+  })
+  |> ignore
 }
 
 let tableHeader = {
@@ -337,19 +380,50 @@ let pageLinks = courseId => [
   ),
 ]
 
+module Selectable = {
+  type t = Cohort.t
+  let id = t => Cohort.id(t)
+  let name = t => Cohort.name(t)
+}
+
+module Dropdown = Select.Make(Selectable)
+
+let findSelectedCohort = (cohorts, selectedCohort) => {
+  Belt.Option.flatMap(selectedCohort, c =>
+    Js.Array2.find(cohorts, u => Cohort.id(c) == Cohort.id(u))
+  )
+}
+
 @react.component
 let make = (~courseId, ~search) => {
   let (state, send) = React.useReducer(reducer, initialState)
+  React.useEffect1(() => {
+    loadData(courseId, send)
+    None
+  }, [courseId])
+
   let exitUrl = `/school/courses/${courseId}/students`
   <div>
     <School__PageHeader
-      exitUrl={`/school/courses/${courseId}/students`}
+      exitUrl
       title="Import students"
       description={"Upload the CSV file containing the students you want to add to the course."}
       links={pageLinks(courseId)}
     />
     <div className="max-w-5xl mx-auto">
-      <form onSubmit={submitForm(courseId, send)}>
+      <div className="mt-5 flex flex-col">
+        <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
+          {"Select a cohort" |> str}
+        </label>
+        <Dropdown
+          placeholder={"Pick a Cohort"}
+          selectables={state.cohorts}
+          selected={findSelectedCohort(state.cohorts, state.selectedCohort)}
+          onSelect={u => send(SetSelectedCohort(u))}
+          loading={state.loading}
+        />
+      </div>
+      <form onSubmit={submitForm(state.selectedCohort, exitUrl, send)}>
         <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
         <input name="notify_students" type_="hidden" value={string_of_bool(state.notifyStudents)} />
         <div className="mx-auto">

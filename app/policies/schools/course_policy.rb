@@ -25,7 +25,6 @@ module Schools
     alias exports? authors?
     alias certificates? authors?
     alias create_certificate? authors?
-    alias bulk_import_students? authors?
 
     def curriculum?
       return false if user.blank?

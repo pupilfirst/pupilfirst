@@ -16,10 +16,6 @@ module Make = (Selectable: Selectable) => {
     )
   }
 
-  let handleOnClickForSelected = event => {
-    ReactEvent.Mouse.stopPropagation(event)
-  }
-
   let showSelected = (placeholder, selected, loading, disabled) => {
     <button
       disabled={loading || disabled}

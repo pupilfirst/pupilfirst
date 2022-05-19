@@ -124,11 +124,7 @@ let showContentBlocks = (
       <label className="text-xs inline-block text-gray-600 mb-1">
         {(versions |> Array.length > 1 ? ts("versions") : ts("version")) |> str}
       </label>
-      <HelpIcon
-        className="ml-1"
-        link="https://docs.pupilfirst.com/#/curriculum_editor?id=target-content-versions">
-        {tr("version_feature_help") |> str}
-      </HelpIcon>
+      <HelpIcon className="ml-1" link={tr("help_url")}> {tr("help") |> str} </HelpIcon>
     </div>
     <div className="flex">
       <div className="border rounded border-gray-400 flex items-center">

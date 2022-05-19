@@ -8,14 +8,13 @@ let str = React.string
 
 type status = [#Active | #Ended | #Archived]
 
-module Graph = {
-  module Course = CourseEditor__Course.Fragment
+module CourseFragement = CourseEditor__Course.Fragments
 
-  module CoursesQuery = %graphql(`
+module CoursesQuery = %graphql(`
   query CoursesQuery($search: String, $after: String, $status: CourseStatus) {
     courses(status: $status, search: $search, first: 10, after: $after){
       nodes {
-        ...Course
+        ...CourseFragement
       }
       pageInfo{
         endCursor,hasNextPage
@@ -24,7 +23,7 @@ module Graph = {
     }
   }
   `)
-}
+
 module Item = {
   type t = Course.t
 }
@@ -136,13 +135,13 @@ let reducer = (state, action) =>
   }
 
 let loadCourses = (state, cursor, send) => {
-  let variables = Graph.CoursesQuery.makeVariables(
+  let variables = CoursesQuery.makeVariables(
     ~status=?state.filter.status,
     ~after=?cursor,
     ~search=?state.filter.name,
     (),
   )
-  Graph.CoursesQuery.make(variables)
+  CoursesQuery.make(variables)
   |> Js.Promise.then_(response => {
     let courses = Js.Array.map(
       rawCourse => Course.makeFromJs(rawCourse),

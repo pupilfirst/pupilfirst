@@ -1,7 +1,6 @@
 exception InvalidBlockTypeForUpdate
 
-module Graph = {
-  module DeleteContentBlockMutation = %graphql(`
+module DeleteContentBlockMutation = %graphql(`
     mutation DeleteContentBlockMutation($id: ID!) {
       deleteContentBlock(id: $id) {
         success
@@ -9,9 +8,9 @@ module Graph = {
     }
   `)
 
-  module ContentBlock = ContentBlock.Fragment
+module ContentBlockFragment = ContentBlock.Fragments
 
-  module MoveContentBlockMutation = %graphql(`
+module MoveContentBlockMutation = %graphql(`
     mutation MoveContentBlockMutation($id: ID!, $direction: MoveDirection!) {
       moveContentBlock(id: $id, direction: $direction) {
         success
@@ -19,36 +18,35 @@ module Graph = {
     }
   `)
 
-  module UpdateFileBlockMutation = %graphql(`
+module UpdateFileBlockMutation = %graphql(`
     mutation UpdateFileBlockMutation($id: ID!, $title: String!) {
       updateFileBlock(id: $id, title: $title) {
         contentBlock {
-          ...ContentBlock
+          ...ContentBlockFragment
         }
       }
     }
   `)
 
-  module UpdateMarkdownBlockMutation = %graphql(`
+module UpdateMarkdownBlockMutation = %graphql(`
     mutation UpdateMarkdownBlockMutation($id: ID!, $markdown: String!) {
       updateMarkdownBlock(id: $id, markdown: $markdown) {
         contentBlock {
-          ...ContentBlock
+          ...ContentBlockFragment
         }
       }
     }
   `)
 
-  module UpdateImageBlockMutation = %graphql(`
+module UpdateImageBlockMutation = %graphql(`
     mutation UpdateImageBlockMutation($id: ID!, $caption: String!, $width:ImageWidth! ) {
       updateImageBlock(id: $id, caption: $caption, width:$width) {
         contentBlock {
-          ...ContentBlock
+          ...ContentBlockFragment
         }
       }
     }
   `)
-}
 
 let str = React.string
 
@@ -103,12 +101,12 @@ let controlIcon = (~icon, ~title, ~color, ~handler) => {
 
 let onMove = (contentBlock, cb, direction, _event) => {
   // We don't actually handle the response for this query.
-  let variables = Graph.MoveContentBlockMutation.makeVariables(
+  let variables = MoveContentBlockMutation.makeVariables(
     ~id=ContentBlock.id(contentBlock),
     ~direction,
     (),
   )
-  Graph.MoveContentBlockMutation.make(variables) |> ignore
+  MoveContentBlockMutation.make(variables) |> ignore
 
   cb(contentBlock)
 }
@@ -118,7 +116,7 @@ let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
     send(StartSaving("Deleting..."))
     let id = ContentBlock.id(contentBlock)
 
-    Graph.DeleteContentBlockMutation.make(Graph.DeleteContentBlockMutation.makeVariables(~id, ()))
+    DeleteContentBlockMutation.make(DeleteContentBlockMutation.makeVariables(~id, ()))
     |> Js.Promise.then_(result => {
       if result["deleteContentBlock"]["success"] {
         removeContentBlockCB(id)
@@ -181,15 +179,15 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
 
   switch contentBlock |> ContentBlock.blockType {
   | ContentBlock.File(_url, title, _filename) =>
-    let mutation = Graph.UpdateFileBlockMutation.make(
-      Graph.UpdateFileBlockMutation.makeVariables(~id, ~title, ()),
+    let mutation = UpdateFileBlockMutation.make(
+      UpdateFileBlockMutation.makeVariables(~id, ~title, ()),
     )
     let extractor = result => result["updateFileBlock"]["contentBlock"]
 
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
   | Markdown(markdown) =>
-    let mutation = Graph.UpdateMarkdownBlockMutation.make(
-      Graph.UpdateMarkdownBlockMutation.makeVariables(~id, ~markdown, ()),
+    let mutation = UpdateMarkdownBlockMutation.make(
+      UpdateMarkdownBlockMutation.makeVariables(~id, ~markdown, ()),
     )
     let extractor = result => result["updateMarkdownBlock"]["contentBlock"]
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
@@ -202,8 +200,8 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
     | TwoFifths => #TwoFifths
     }
 
-    let mutation = Graph.UpdateImageBlockMutation.make(
-      Graph.UpdateImageBlockMutation.makeVariables(~id, ~caption, ~width, ()),
+    let mutation = UpdateImageBlockMutation.make(
+      UpdateImageBlockMutation.makeVariables(~id, ~caption, ~width, ()),
     )
     let extractor = result => result["updateImageBlock"]["contentBlock"]
 

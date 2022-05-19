@@ -7,30 +7,29 @@ open CurriculumEditor__Types
 let str = React.string
 let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockCreator")
 
-module Graph = {
-  module ContentBlock = ContentBlock.Fragment
+module ContentBlockFragment = ContentBlock.Fragments
 
-  module CreateMarkdownContentBlock = %graphql(`
+module CreateMarkdownContentBlock = %graphql(`
     mutation CreateMarkdownContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID) {
       createMarkdownContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId) {
         contentBlock {
-          ...ContentBlock
+          ...ContentBlockFragment
         }
       }
     }
   `)
 
-  module CreateEmbedContentBlock = %graphql(`
+module CreateEmbedContentBlock = %graphql(`
     mutation CreateEmbedContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $url: String!, $requestSource: EmbedRequestSource!) {
       createEmbedContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId, url: $url, requestSource: $requestSource) {
         contentBlock {
-          ...ContentBlock
+          ...ContentBlockFragment
         }
       }
     }
   `)
 
-  module CreateVimeoVideo = %graphql(`
+module CreateVimeoVideo = %graphql(`
     mutation CreateVimeoVideo($targetId: ID!, $size: Int!, $title: String, $description: String) {
       createVimeoVideo(targetId: $targetId, size: $size, title: $title, description: $description) {
         vimeoVideo {
@@ -40,7 +39,6 @@ module Graph = {
       }
     }
   `)
-}
 
 type ui =
   | Hidden
@@ -140,13 +138,9 @@ let createMarkdownContentBlock = (target, aboveContentBlock, send, addContentBlo
   send(ToggleSaving)
   let aboveContentBlockId = aboveContentBlock |> OptionUtils.map(ContentBlock.id)
   let targetId = target |> Target.id
-  let variables = Graph.CreateMarkdownContentBlock.makeVariables(
-    ~targetId,
-    ~aboveContentBlockId?,
-    (),
-  )
+  let variables = CreateMarkdownContentBlock.makeVariables(~targetId, ~aboveContentBlockId?, ())
 
-  Graph.CreateMarkdownContentBlock.make(variables)
+  CreateMarkdownContentBlock.make(variables)
   |> Js.Promise.then_(result =>
     handleGraphqlCreateResponse(
       aboveContentBlock,
@@ -240,14 +234,14 @@ let handleCreateEmbedContentBlock = (
 
     let targetId = target |> Target.id
 
-    let variables = Graph.CreateEmbedContentBlock.makeVariables(
+    let variables = CreateEmbedContentBlock.makeVariables(
       ~targetId,
       ~aboveContentBlockId?,
       ~url,
       ~requestSource,
       (),
     )
-    Graph.CreateEmbedContentBlock.make(variables)
+    CreateEmbedContentBlock.make(variables)
     |> Js.Promise.then_(result =>
       handleGraphqlCreateResponse(
         aboveContentBlock,
@@ -345,7 +339,7 @@ let uploadFile = (
     let description =
       String.trim(state.videoDescription) == "" ? None : Some(state.videoDescription)
 
-    let variables = Graph.CreateVimeoVideo.makeVariables(
+    let variables = CreateVimeoVideo.makeVariables(
       ~targetId=Target.id(target),
       ~size,
       ~title?,
@@ -353,7 +347,7 @@ let uploadFile = (
       (),
     )
 
-    Graph.CreateVimeoVideo.make(variables)
+    CreateVimeoVideo.make(variables)
     |> Js.Promise.then_(result => {
       switch result["createVimeoVideo"]["vimeoVideo"] {
       | Some(vimeoVideo) =>

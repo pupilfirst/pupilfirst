@@ -227,8 +227,8 @@ let decode = json => {
   }
 }
 
-module Fragment = %graphql(`
-  fragment Course on Course {
+module Fragments = %graphql(`
+  fragment CourseFragement on Course {
     id
     name
     description

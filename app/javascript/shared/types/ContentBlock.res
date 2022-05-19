@@ -277,8 +277,8 @@ module Query = %graphql(`
   }
 `)
 
-module Fragment = %graphql(`
-  fragment ContentBlock on ContentBlock {
+module Fragments = %graphql(`
+  fragment ContentBlockFragment on ContentBlock {
     id
     blockType
     sortIndex

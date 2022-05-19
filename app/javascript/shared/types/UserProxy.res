@@ -46,8 +46,8 @@ let makeFromJs = jsObject =>
     ~title=jsObject["title"],
   )
 
-module Fragment = %graphql(`
-  fragment UserProxy on UserProxy {
+module Fragments = %graphql(`
+  fragment UserProxyFragment on UserProxy {
     id
     name
     userId

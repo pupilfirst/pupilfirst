@@ -1,26 +1,24 @@
-module Graph = {
-  module Course = CourseEditor__Course.Fragment
+module CourseFragement = CourseEditor__Course.Fragments
 
-  module CreateCourseQuery = %graphql(`
+module CreateCourseQuery = %graphql(`
     mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
       createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
         course {
-          ...Course
+          ...CourseFragement
         }
       }
     }
   `)
 
-  module UpdateCourseQuery = %graphql(`
+module UpdateCourseQuery = %graphql(`
     mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
       updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
         course {
-          ...Course
+          ...CourseFragement
         }
       }
     }
   `)
-}
 
 module ArciveCourseQuery = %graphql(`
   mutation ArchiveCourseMutation($id: ID!) {
@@ -188,7 +186,7 @@ let highlightsToOption = highlights => {
 let createCourse = (state, send, reloadCoursesCB) => {
   send(StartSaving)
 
-  let variables = Graph.CreateCourseQuery.makeVariables(
+  let variables = CreateCourseQuery.makeVariables(
     ~name=state.name,
     ~description=state.description,
     ~endsAt=?state.endsAt->Belt.Option.map(DateFns.encodeISO),
@@ -203,7 +201,7 @@ let createCourse = (state, send, reloadCoursesCB) => {
     (),
   )
 
-  Graph.CreateCourseQuery.make(variables)
+  CreateCourseQuery.make(variables)
   |> Js.Promise.then_(result => {
     switch result["createCourse"]["course"] {
     | Some(_course) => reloadCoursesCB()
@@ -223,7 +221,7 @@ let createCourse = (state, send, reloadCoursesCB) => {
 let updateCourse = (state, send, updateCourseCB, course) => {
   send(StartSaving)
 
-  let variables = Graph.UpdateCourseQuery.makeVariables(
+  let variables = UpdateCourseQuery.makeVariables(
     ~id=Course.id(course),
     ~name=state.name,
     ~description=state.description,
@@ -239,7 +237,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
     (),
   )
 
-  Graph.UpdateCourseQuery.make(variables)
+  UpdateCourseQuery.make(variables)
   |> Js.Promise.then_(result => {
     switch result["updateCourse"]["course"] {
     | Some(course) => updateCourseCB(Course.makeFromJs(course))

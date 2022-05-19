@@ -2,6 +2,7 @@ open CourseCertificates__Types
 
 let str = React.string
 let t = I18n.t(~scope="components.CourseCertificates__EditDrawer")
+let ts = I18n.t(~scope="shared")
 
 type state = {
   name: string,
@@ -223,12 +224,12 @@ let make = (
               <button
                 className={activeButtonClasses(state.active, true)}
                 onClick={_ => send(UpdateActive(true))}>
-                {str("Yes")}
+                {str(ts("_yes"))}
               </button>
               <button
                 className={activeButtonClasses(state.active, false)}
                 onClick={_ => send(UpdateActive(false))}>
-                {str("No")}
+                {str(ts("_no"))}
               </button>
             </div>
             {!canBeAutoIssued
@@ -328,12 +329,12 @@ let make = (
                   <button
                     className={qrVisiblityClasses(state.qrCorner, true)}
                     onClick={activateQrCode(state, send)}>
-                    {str("Yes")}
+                    {str(ts("_yes"))}
                   </button>
                   <button
                     className={qrVisiblityClasses(state.qrCorner, false)}
                     onClick={_ => send(UpdateQrCorner(#Hidden))}>
-                    {str("No")}
+                    {str(ts("_no"))}
                   </button>
                 </div>
               </div>

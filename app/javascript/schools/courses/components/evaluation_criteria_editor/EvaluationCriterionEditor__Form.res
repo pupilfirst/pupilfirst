@@ -2,6 +2,9 @@
 
 let str = React.string
 
+let t = I18n.t(~scope="components.EvaluationCriterionEditor__Form")
+let ts = I18n.ts
+
 type state = {
   name: string,
   maxGrade: int,
@@ -176,7 +179,7 @@ let labels = (state, setState) =>
               state,
               setState,
             )}
-          placeholder={"Label for grade " ++ (gradeAndLabel |> GradeLabel.grade |> string_of_int)}
+          placeholder={ t("label_grade_placeholder") ++ " " ++ (gradeAndLabel |> GradeLabel.grade |> string_of_int)}
         />
       </div>
     </div>
@@ -208,20 +211,20 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
     <div className="max-w-2xl p-6 mx-auto">
       <h5 className="uppercase text-center border-b border-gray-400 pb-2">
         {switch evaluationCriterion {
-        | None => "Add Evaluation Criterion"
+        | None => t("add_criterion")
         | Some(ec) => ec |> EvaluationCriterion.name
         } |> str}
       </h5>
       <DisablingCover
         disabled=state.saving
         message={switch evaluationCriterion {
-        | Some(_ec) => "Updating..."
-        | None => "Saving..."
+        | Some(_ec) => ts("updating") ++ "..."
+        | None => ts("saving")
         }}>
         <div key="evaluation-criterion-editor" className="mt-3">
           <div className="mt-5">
             <label className="inline-block tracking-wide text-xs font-semibold " htmlFor="name">
-              {"Name" |> str}
+              {ts("name") |> str}
             </label>
             <input
               autoFocus=true
@@ -229,12 +232,12 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
               id="name"
               onChange={event => updateName(setState, ReactEvent.Form.target(event)["value"])}
               type_="text"
-              placeholder="Evaluation criterion name"
+              placeholder=t("name_placeholder")
               maxLength=50
               value=state.name
             />
             <School__InputGroupError
-              message="Enter a valid name"
+              message=t("name_error")
               active={state.dirty && state.name |> String.trim |> String.length < 1}
             />
           </div>
@@ -245,7 +248,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
               <span
                 className="inline-block tracking-wide text-sm font-semibold mr-2"
                 htmlFor="max_grades">
-                {"Maximum grade is" |> str}
+                {t("max_grade") |> str}
               </span>
               {switch evaluationCriterion {
               | Some(_) =>
@@ -280,7 +283,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
               <span
                 className="inline-block tracking-wide text-sm font-semibold mx-2"
                 htmlFor="pass_grades">
-                {"and the passing grade is" |> str}
+                {t("passing_grade") |> str}
               </span>
               {switch evaluationCriterion {
               | Some(_) =>
@@ -315,28 +318,28 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
             <div className="flex justify-between">
               <div className="flex items-center">
                 <label className="block tracking-wide text-xs font-semibold" htmlFor="grades">
-                  {"Grade and Labels" |> str}
+                  {t("grade_labels") |> str}
                 </label>
                 <HelpIcon className="ml-2" link="https://docs.pupilfirst.com/#/evaluation_criteria">
-                  {"Assign labels for each grade, to reflect in grade cards for students and coaches" |> str}
+                  {t("grade_lables_help") |> str}
                 </HelpIcon>
               </div>
               <div className="flex">
                 <div className="flex justify-center items-center ml-4">
                   <span className="grade-bar__pointer-legend grade-bar__pointer-legend-failed" />
-                  <span className="ml-2 text-xs"> {"Fail" |> str} </span>
+                  <span className="ml-2 text-xs"> {ts("fail") |> str} </span>
                 </div>
                 <div className="flex justify-center items-center ml-4">
                   <span className="grade-bar__pointer-legend grade-bar__pointer-legend-passed" />
-                  <span className="ml-2 text-xs"> {"Pass" |> str} </span>
+                  <span className="ml-2 text-xs"> {ts("pass") |> str} </span>
                 </div>
               </div>
             </div>
             <div ariaLabel="label-editor"> {labels(state, setState) |> React.array} </div>
             <div className="mt-3 mb-3 text-xs">
               <span className="leading-normal">
-                <strong> {"Important:" |> str} </strong>
-                {" The values for maximum and passing grades cannot be modified once a criterion is created. Labels given to each grade can be edited later on." |> str}
+                <strong> { t("important") ++ ":" |> str} </strong>
+                {" " ++ t("important_details") |> str}
               </span>
             </div>
             <div className="flex">
@@ -347,7 +350,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                   onClick={_ =>
                     updateEvaluationCriterion(state, setState, addOrUpdateCriterionCB, criterion)}
                   className="w-full btn btn-large btn-primary mt-3">
-                  {"Update Criterion" |> str}
+                  {t("update_criterion") |> str}
                 </button>
 
               | None =>
@@ -356,7 +359,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                   onClick={_ =>
                     createEvaluationCriterion(state, setState, addOrUpdateCriterionCB, courseId)}
                   className="w-full btn btn-large btn-primary mt-3">
-                  {"Create Criterion" |> str}
+                  {t("create_criterion") |> str}
                 </button>
               }}
             </div>

@@ -1,6 +1,7 @@
 open StudentsEditor__Types
 
 let t = I18n.t(~scope="components.StudentsEditor__Root")
+let ts = I18n.ts
 
 let str = React.string
 
@@ -39,7 +40,7 @@ type action =
 
 let handleTeamUpResponse = (send, _json) => {
   send(RefreshData([]))
-  Notification.success("Success!", "Teams updated successfully")
+  Notification.success(ts("notifications.success"), t("teams_updated_success"))
 }
 
 let handleErrorCB = () => ()
@@ -324,14 +325,14 @@ let make = (
                       ? <button
                           onClick={_e => teamUp(state.selectedStudents, handleTeamUpResponse(send))}
                           className="btn btn-small btn-primary">
-                          {"Group as Team" |> str}
+                          {t("group_as_team") |> str}
                         </button>
                       : React.null}
                     {state.selectedStudents |> SelectedStudent.isMoveOutable
                       ? <button
                           onClick={_e => teamUp(state.selectedStudents, handleTeamUpResponse(send))}
                           className="btn btn-small btn-danger">
-                          {"Move out from Team" |> str}
+                          {t("move_out_team") |> str}
                         </button>
                       : React.null}
                   </div>

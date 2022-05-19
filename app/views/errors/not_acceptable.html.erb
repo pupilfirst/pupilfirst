@@ -3,10 +3,9 @@
     <%= image_tag 'layouts/errors/error-500.svg', class: 'md:w-3/5', alt: 'Internal server error' %>
   </picture>
   <div class="max-w-3xl mx-auto text-center px-4 pb-4">
-    <h1>Your browser requested an invalid format.</h1>
+    <h1><%= t(".invalid_format") %></h1>
     <p class="mt-3 text-sm leading-normal">
-      It looks like your browser requested a response in a format that our server cannot fulfil. We track these errors
-      automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+      <%= t(".details") %>
     </p>
   </div>
 </div>

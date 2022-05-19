@@ -11,7 +11,7 @@ module Mutations
 
       if mutator.valid?
         mutator.archive
-        mutator.notify(:success, "Success", "Note removed successfully")
+        mutator.notify(:success, I18n.t("shared.notifications.success"), I18n.t("mutations.archive_coach_note.note_removed_notification"))
         { success: true }
       else
         mutator.notify_errors

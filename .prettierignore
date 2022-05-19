@@ -2,5 +2,5 @@ tailwind.js
 db/schema.rb
 config/routes.rb
 config/initializers/content_security_policy.rb
-config/locales/en.yml
+config/locales/*.yml
 *.erb

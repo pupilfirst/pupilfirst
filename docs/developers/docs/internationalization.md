@@ -22,7 +22,7 @@ Pupilfirst LMS uses _Rails Internationalization_ (I18n) API for internationaliza
 | `CONTROLLER.ACTION.*`       |             Request-based responses.              |
 | `MODULE.CLASS.*`            |           Strings used by library code.           |
 
-- `CONTROLLERS` is always the plural version. For example: `FoundersController#edit` is keyed as `founders.edit.*`
+- `CONTROLLER` is always the plural version. For example: `FoundersController#edit` is keyed as `founders.edit.*`
 - Always order keys alphabetically. If you use [the VSCode plugin](#visual-studio-code-plugin), this will be done automatically.
 - Third-party library translations follow their own format, and any customization of those should be [documented
   _here_ in this file](#third-party-library-translations).

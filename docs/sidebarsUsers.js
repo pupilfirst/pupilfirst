@@ -1,6 +1,6 @@
 module.exports = {
   sidebarsUsers: {
-    "Getting Started": ["intro", "user_roles"],
+    "Getting Started": ["intro", "roles"],
     Administration: [
       "courses",
       "students",

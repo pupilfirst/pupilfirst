@@ -6,8 +6,8 @@ sidebar_label: Signing Up
 
 New students can enter a course in one of two ways:
 
-1. A school admin [adds them via the students list](/students?id=adding-new-students).
-2. [Public sign up is enabled](/courses?id=creating-courses) for a course.
+1. A school admin [adds them via the students list](/users/students#adding-new-students).
+2. [Public sign up is enabled](/users/courses#creating-courses) for a course.
 
 ## Signing Up For A Course
 
@@ -17,7 +17,7 @@ When the public signup option is enabled on a course, the course's public page g
 
 Students can read about the course before enrolling to it by supplying their name and email address. Their email address
 will be confirmed before they're added to the course, and they'll
-[begin the course in the first level](/curriculum_editor?id=what-are-levels).
+[begin the course in the first level](/users/curriculum_editor#what-are-levels).
 
 ## Tagging Public Signups
 

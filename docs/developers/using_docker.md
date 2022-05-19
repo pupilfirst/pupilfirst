@@ -40,7 +40,7 @@ POSTMARK_HOOK_ID
 POSTMARK_HOOK_SECRET
 ```
 
-Generate these variables using [these instructions](/docs/heroku#sending-emails-with-postmark).
+Generate these variables using [these instructions](/developers/heroku#sending-emails-with-postmark).
 
 #### AWS
 
@@ -51,7 +51,7 @@ AWS_REGION=bucket_region_name
 AWS_BUCKET=bucket_name_from_aws
 ```
 
-Generate these variables using [these instructions](/docs/heroku#file-storage-using-aws).
+Generate these variables using [these instructions](/developers/heroku#file-storage-using-aws).
 
 #### Google Recaptcha
 
@@ -62,7 +62,7 @@ RECAPTCHA_V2_SITE_KEY
 RECAPTCHA_V2_SECRET_KEY
 ```
 
-Generate these variables using [these instructions](/docs/heroku#sending-emails-with-postmark).
+Generate these variables using [these instructions](/developers/heroku#sending-emails-with-postmark).
 
 #### Webpush Notifications
 
@@ -71,7 +71,7 @@ VAPID_PUBLIC_KEY
 VAPID_PRIVATE_KEY
 ```
 
-Generate these variables using [these instructions](/docs/heroku#webpush-notifications).
+Generate these variables using [these instructions](/developers/heroku#webpush-notifications).
 
 ### Optional
 
@@ -84,7 +84,7 @@ CLOUDFRONT_KEY_PAIR_ID=cloudfront_key_pair_id_from_aws
 CLOUDFRONT_EXPIRY=expiry_in_seconds
 ```
 
-Generate these variables using [these instructions](/docs/heroku#content-delivery-network).
+Generate these variables using [these instructions](/developers/heroku#content-delivery-network).
 
 #### Sign in with OAuth
 
@@ -97,7 +97,7 @@ GITHUB_KEY
 GITHUB_SECRET
 ```
 
-Generate these variables using [these instructions](/docs/heroku#signing-in-with-oauth).
+Generate these variables using [these instructions](/developers/heroku#signing-in-with-oauth).
 
 #### Rollbar
 

@@ -18,7 +18,7 @@ Levels are the top organizational unit within a course, and act as an indicator 
 
 1. Levels can hold many _groups_ of targets.
 2. All students begin in the first level - **Level 1**.
-3. Students can move up through levels, after they've submitted work on [milestone targets](/targets?id=milestone-targets). We call this [leveling up](/taking_courses?id=leveling-up), or to _level up_.
+3. Students can move up through levels, after they've submitted work on [milestone targets](/users/targets#milestone-targets). We call this [leveling up](/users/taking_courses#leveling-up), or to _level up_.
 4. Courses can have any number of levels, but you probably don't want to go overboard.
 
 ?> **For all the non-gamers out there:** The phrase _level up_, is borrowed from the world of gaming. Roughly, it means _to progress to the next level_ - an activity that is common in modern role-playing games where one's character advances to the next level of development.
@@ -36,7 +36,7 @@ In addition to editing the name of the level and its unlock date, you can switch
 
 Similar targets can be grouped together into target groups. This allow you to organize content into discrete chunks in a way that makes sense for what you're trying to teach. To create a target group, just click the _Create a target group_ button within a level.
 
-When creating and editing a target group, you can decide whether it's a _milestone_ target group or not. Milestone targets control a student's progression in the course. To learn more, [check out the documentation for milestone targets](/targets?id=milestone-targets).
+When creating and editing a target group, you can decide whether it's a _milestone_ target group or not. Milestone targets control a student's progression in the course. To learn more, [check out the documentation for milestone targets](/users/targets#milestone-targets).
 
 The editor for a target group also allows you to change the level it belongs to and to archive it. Archiving will have a target group along with its targets removed from the student curriculum.
 
@@ -117,7 +117,7 @@ If you answered _No_ to whether a coach will review submissions for the target, 
 3. Take a quiz to complete that target: You'll need to prepare a quiz - the process for this is detailed below.
 
 **How should teams tackle this target?** \
-If you have students grouped into teams, then you'll probably have some targets that you'd like them to tackle together. When creating a new target, this setting will default to _All students must submit individually_, which means that each student will need to submit on their own. If it's a reviewed milestone target, then all students in the team will need to pass for the team to [be eligible to level up](/taking_courses?id=leveling-up).
+If you have students grouped into teams, then you'll probably have some targets that you'd like them to tackle together. When creating a new target, this setting will default to _All students must submit individually_, which means that each student will need to submit on their own. If it's a reviewed milestone target, then all students in the team will need to pass for the team to [be eligible to level up](/users/taking_courses#leveling-up).
 
 For those targets where you expect students to work together and submit as a _unit_, you can choose the _Only one student in a team needs to submit_ option. Now, if any student in a team submits work on the target, the submission will be credited to all students in the team. If work on the target is reviewed by a coach, then the name of all students in the team will be listed next to the submission, and any feedback on the submission will be sent to all linked students.
 

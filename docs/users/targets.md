@@ -4,7 +4,7 @@ title: Targets
 sidebar_label: Targets
 ---
 
-Targets hold the content for a course's curriculum, and is the main objects that students interact with as a part of your courses. The creation and editing of targets is done within [the curriculum editor](/curriculum_editor). This document has additional information about targets and their behavior.
+Targets hold the content for a course's curriculum, and is the main objects that students interact with as a part of your courses. The creation and editing of targets is done within [the curriculum editor](/users/curriculum_editor). This document has additional information about targets and their behavior.
 
 ## Milestone targets
 
@@ -30,5 +30,5 @@ Students are unable to complete locked targets. There are four situations in whi
 
 1. The target is in a level that the student hasn't reached.
 2. The target has other targets as prerequisites that the student hasn't completed.
-3. The student's [access to the course](/students?id=editing-student-details) has ended, because of which they have read-only access to the course content.
-4. The course's [end date](/courses?id=creating-courses) has passed, because of which students have read-only access to the course content.
+3. The student's [access to the course](/users/students#editing-student-details) has ended, because of which they have read-only access to the course content.
+4. The course's [end date](/users/courses#creating-courses) has passed, because of which students have read-only access to the course content.

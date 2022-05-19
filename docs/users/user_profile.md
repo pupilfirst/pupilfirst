@@ -14,4 +14,4 @@ All fields except _Name_, are optional in the user profile edit form. These deta
 
 ### Communication preferences
 
-Users can control whether they'd like to receive a daily community digest email from the user profile edit page. The purpose of this email is [explained in the communities page](/communities?id=daily-community-digest).
+Users can control whether they'd like to receive a daily community digest email from the user profile edit page. The purpose of this email is [explained in the communities page](/users/communities#daily-community-digest).

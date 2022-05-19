@@ -3,6 +3,7 @@ let str = React.string
 open StudentsEditor__Types
 
 let t = I18n.t(~scope="components.StudentsEditor__BulkImportForm")
+let ts = I18n.ts
 
 module CSVData = {
   type t = StudentCSVData.t
@@ -63,7 +64,7 @@ type action =
   | FailSaving
 
 let fileInputText = (~fileInfo: option<CSVReader.fileInfo>) =>
-  fileInfo->Belt.Option.mapWithDefault(t("csv_file_input_placeholder"), info => info.name)
+  fileInfo->Belt.Option.mapWithDefault(t("csv_file_input.placeholder"), info => info.name)
 
 let reducer = (state, action) =>
   switch action {
@@ -99,7 +100,7 @@ let submitForm = (courseId, send, closeDrawerCB, event) => {
     json => {
       Json.Decode.field("success", Json.Decode.bool, json)
         ? {
-            Notification.success(t("done_exclamation"), t("success_notification"))
+            Notification.success(ts("notifications.done_exclamation"), t("success_notification"))
             closeDrawerCB()
           }
         : ()
@@ -331,19 +332,15 @@ let make = (~courseId, ~closeDrawerCB) => {
         <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
           {t("drawer_heading")->str}
         </h5>
-        <DisablingCover disabled={state.saving} message="Processing...">
+        <DisablingCover disabled={state.saving} message={ts("processing") ++ "..."}>
           <div className="mt-5">
             <div className="flex justify-between items-center text-center">
               <div>
                 <label className="tracking-wide text-xs font-semibold" htmlFor="csv-file-input">
-                  {t("csv_file_input_label")->str}
+                  {t("csv_file_input.label")->str}
                 </label>
-                <HelpIcon
-                  className="ml-2"
-                  link="https://docs.pupilfirst.com/#/students?id=importing-students-in-bulk">
-                  {str(
-                    "This file will be used to import students in bulk. Check the sample file for the required format.",
-                  )}
+                <HelpIcon className="ml-2" link={t("csv_file_input.help_url")}>
+                  {str(t("csv_file_input.help"))}
                 </HelpIcon>
               </div>
               <div
@@ -351,12 +348,13 @@ let make = (~courseId, ~closeDrawerCB) => {
                 <PfIcon className="if i-download-regular if-fw mr-2" />
                 <a
                   className="focus:outline-none focus:underline focus:text-primary-700 "
-                  href="https://docs.pupilfirst.com/files/student_import_sample.csv">
-                  {t("example_csv_link")->str}
+                  href={t("example_csv_link.url")}>
+                  {t("example_csv_link.text")->str}
                 </a>
               </div>
             </div>
-            <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+            <div
+              className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
               <CSVReader
                 label=""
                 inputId="csv-file-input"

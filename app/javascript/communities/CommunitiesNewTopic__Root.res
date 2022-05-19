@@ -1,5 +1,8 @@
 let str = React.string
 
+let tr = I18n.t(~scope="components.CommunitiesNewTopic__Root")
+let ts = I18n.t(~scope="shared")
+
 open CommunitiesNewTopic__Types
 
 type similar = {
@@ -94,8 +97,8 @@ let searchForSimilarTopics = (send, title, communityId, ()) => {
   |> Js.Promise.catch(e => {
     Js.log(e)
     Notification.warn(
-      "Oops!",
-      "We failed to fetch similar topics from the server! Our team has been notified about this error.",
+      tr("oops"),
+      tr("failed_fetch_similar"),
     )
     send(FailSaving)
     Js.Promise.resolve()
@@ -159,7 +162,7 @@ let handleCreateTopic = (state, send, communityId, target, topicCategory, event)
     |> Js.Promise.then_(response => {
       switch response["createTopic"]["topicId"] {
       | Some(topicId) =>
-        Notification.success("Done!", "Redirecting to new topic now...")
+        Notification.success(tr("done"), tr("redirecting"))
         redirectToNewTopic(topicId, state.title)
 
       | None => send(FailSaving)
@@ -169,12 +172,12 @@ let handleCreateTopic = (state, send, communityId, target, topicCategory, event)
     })
     |> Js.Promise.catch(error => {
       Js.log(error)
-      Notification.error("Unexpected Error!", "Please reload the page before trying to post again.")
+      Notification.error(ts("notifications.unexpected_error"), tr("please_reload"))
       Js.Promise.resolve()
     })
     |> ignore
   } else {
-    Notification.error("Missing Info!", "Topic title and body must be present.")
+    Notification.error(tr("missing_info"), tr("topic_body_present"))
   }
 }
 
@@ -184,7 +187,7 @@ let suggestions = state => {
   suggestions |> ArrayUtils.isNotEmpty
     ? <div className="pt-3">
         <span className="tracking-wide text-gray-900 text-xs font-semibold">
-          {"Similar Topics" |> str}
+          {tr("similar_topics") |> str}
         </span>
         {state.searching
           ? <span className="ml-2"> <FaIcon classes="fa fa-spinner fa-pulse" /> </span>
@@ -194,9 +197,9 @@ let suggestions = state => {
           let askedOn =
             suggestion->TopicSuggestion.createdAt->DateFns.formatPreset(~short=true, ~year=true, ())
           let (answersText, answersClasses) = switch suggestion |> TopicSuggestion.repliesCount {
-          | 0 => ("No replies", "bg-gray-300 text-gray-700")
-          | 1 => ("1 reply", "bg-green-500 text-white")
-          | n => ((n |> string_of_int) ++ " replies", "bg-green-500 text-white")
+          | 0 => (tr("no_replies"), "bg-gray-300 text-gray-700")
+          | 1 => (tr("one_reply"), "bg-green-500 text-white")
+          | n => ((n |> string_of_int) ++ tr("count_replies_label"), "bg-green-500 text-white")
           }
 
           <a
@@ -213,7 +216,7 @@ let suggestions = state => {
                 {suggestion |> TopicSuggestion.title |> str}
               </h5>
               <p className="text-xs mt-1 leading-tight text-gray-800">
-                {"Asked on " ++ askedOn |> str}
+                {tr("asked_on") ++ askedOn |> str}
               </p>
             </div>
             <div
@@ -244,7 +247,7 @@ let handleSelectTopicCategory = (send, topicCategories, event) => {
     Some(
       topicCategories |> ArrayUtils.unsafeFind(
         category => TopicCategory.id(category) == selectedCategoryId,
-        "Unable to find category with ID: " ++ selectedCategoryId,
+        tr("no_category_found") ++ selectedCategoryId,
       ),
     )
   }
@@ -262,7 +265,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
         <div className="px-3 lg:px-0">
           <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
             <a className="btn btn-subtle" onClick={_ => DomUtils.goBack()}>
-              <i className="fas fa-arrow-left" /> <span className="ml-2"> {"Back" |> str} </span>
+              <i className="fas fa-arrow-left" /> <span className="ml-2"> {tr("back") |> str} </span>
             </a>
           </div>
         </div>
@@ -272,16 +275,16 @@ let make = (~communityId, ~target, ~topicCategories) => {
             <div
               className="flex py-4 px-4 md:px-5 w-full bg-white border border-primary-500  shadow-md rounded-lg justify-between items-center mb-2">
               <p className="w-3/5 md:w-4/5 text-sm">
-                <span className="font-semibold block text-xs"> {"Linked Target: " |> str} </span>
+                <span className="font-semibold block text-xs"> {tr("linked_target") |> str} </span>
                 <span> {target |> TopicsShow__LinkedTarget.title |> str} </span>
               </p>
-              <a href="./new_topic" className="btn btn-default"> {"Clear" |> str} </a>
+              <a href="./new_topic" className="btn btn-default"> {tr("clear") |> str} </a>
             </div>
           </div>
         | None => React.null
         }}
         <h4 className="max-w-3xl w-full mx-auto pb-2 mt-2 px-3 lg:px-0">
-          {"Create a new topic of discussion" |> str}
+          {tr("create_topic_discussion") |> str}
         </h4>
         <div className="md:px-3">
           <div
@@ -292,7 +295,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                   <label
                     className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
                     htmlFor="title">
-                    {"Title" |> str}
+                    {tr("title") |> str}
                   </label>
                   <input
                     id="title"
@@ -303,7 +306,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                       let newTitle = ReactEvent.Form.target(event)["value"]
                       updateTitleAndSearch(state, send, communityId, newTitle)
                     }}
-                    placeholder="Title for the new topic"
+                    placeholder=tr("title_placeholder")
                   />
                 </div>
                 {ReactUtils.nullIf(
@@ -311,7 +314,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                     <label
                       className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
                       htmlFor="topic_category">
-                      {"Select Category" |> str}
+                      {tr("select_category") |> str}
                     </label>
                     <select
                       id="topic_category"
@@ -328,7 +331,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                         </option>
                       )
                       |> Array.append([
-                        <option value="not_selected"> {"Not Selected" |> str} </option>,
+                        <option value="not_selected"> {tr("not_selected") |> str} </option>,
                       ])
                       |> React.array}
                     </select>
@@ -340,7 +343,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
               <label
                 className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
                 htmlFor="body">
-                {"Body" |> str}
+                {tr("body") |> str}
               </label>
               <div className="w-full flex flex-col">
                 <MarkdownEditor
@@ -348,7 +351,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                   textareaId="body"
                   onChange={markdown => send(UpdateBody(markdown))}
                   value=state.body
-                  placeholder="If you're asking a question, try to be as descriptive as possible to make it easier for others to post answers. You can use Markdown to format this text."
+                  placeholder=tr("be_descriptive")
                   profile=Markdown.Permissive
                   maxLength=10000
                 />
@@ -368,7 +371,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                         state.selectedCategory,
                       )}
                       className="btn btn-primary border border-transparent w-full md:w-auto">
-                      {"Create Topic" |> str}
+                      {tr("create_topic") |> str}
                     </button>
                   </div>
                 </div>

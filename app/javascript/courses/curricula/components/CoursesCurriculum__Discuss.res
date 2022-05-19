@@ -2,6 +2,8 @@ let str = React.string
 
 open CoursesCurriculum__Types
 
+let tr = I18n.t(~scope="components.CoursesCurriculum__Discuss")
+
 let linkToCommunity = (communityId, targetId) =>
   "/communities/" ++ (communityId ++ ("?target_id=" ++ targetId))
 
@@ -25,9 +27,9 @@ let handleEmpty = () =>
     <i className="fa fa-comments text-5xl text-gray-600 mb-2 " />
     <div className="text-center">
       <h4 className="font-bold">
-        {"There's been no recent discussion about this target." |> str}
+        {tr("no_discussion") |> str}
       </h4>
-      <p> {"Use the community to clear your doubts, and to help your peers!" |> str} </p>
+      <p> {tr("use_community") |> str} </p>
     </div>
   </div>
 
@@ -40,20 +42,20 @@ let actionButtons = (community, targetId) => {
       title={"Browse all topics about this target in the " ++ (communityName ++ " community")}
       href={linkToCommunity(communityId, targetId)}
       className="btn btn-default mr-3">
-      {"Go to community" |> str}
+      {tr("go_to") |> str}
     </a>
     <a
       title={"Create a topic in the " ++ (communityName ++ " community")}
       href={linkToNewPost(communityId, targetId)}
       className="btn btn-primary">
-      {"Create a topic" |> str}
+      {tr("create") |> str}
     </a>
   </div>
 }
 
 let communityTitle = community =>
   <h5 className="font-bold">
-    {"Topics from " ++ ((community |> Community.name) ++ " community") |> str}
+    {tr("topics_pre") ++ ((community |> Community.name) ++ tr("topics_post")) |> str}
   </h5>
 
 @react.component

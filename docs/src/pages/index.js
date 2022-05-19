@@ -14,7 +14,7 @@ const features = [
         Build a community of students and teachers based around your area of
         expertise. Build a school, not just a course.
       </>
-    )
+    ),
   },
   {
     title: <>Outcome-driven Teaching</>,
@@ -23,7 +23,7 @@ const features = [
         Coach your students through an intensive learn-by-doing process, and
         give targeted feedback for improvement.
       </>
-    )
+    ),
   },
   {
     title: <>Powered by Rails & ReasonML</>,
@@ -32,8 +32,8 @@ const features = [
         Pupilfirst LMS is a monorepo with Ruby on Rails serving a mix of
         server-rendered markup and client-side JS generated using ReasonML.
       </>
-    )
-  }
+    ),
+  },
 ];
 
 function Feature({ imageUrl, title, description }) {
@@ -66,7 +66,7 @@ function Home() {
                 "button button--outline button--secondary button--lg",
                 styles.getStarted
               )}
-              to={useBaseUrl("docs/")}
+              to={useBaseUrl("users/")}
             >
               Get Started
             </Link>

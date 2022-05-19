@@ -46,7 +46,7 @@ To edit a student's details, click on the student's name. You'll see all of the 
 If the student is in a team (details below), then you'll be able to edit the team's name here.
 
 **Personal Coaches**\
-This list allows you to [directly assign coaches](/coaches?id=student-team-coaches) to a student (or team), which will allow those coaches to review submission from that student (or team).
+This list allows you to [directly assign coaches](/users/coaches#student-team-coaches) to a student (or team), which will allow those coaches to review submission from that student (or team).
 
 **Access Ends On**\
 If set, the course will be marked as _ended_ for the student (or team) on this date. Students will retain access to the course, and their own submissions, but they will not be able to complete new targets.
@@ -76,7 +76,7 @@ When you first team up a group of students, the platform will give them a random
 
 ?> **How do I set it up so that students in a team submit work on a target together?** \
  When editing the details of a target, you are asked the question
-_[How should teams tackle this target?](/curriculum_editor?id=setting-the-method-of-completion)_.
+_[How should teams tackle this target?](/users/curriculum_editor#setting-the-method-of-completion)_.
 
 ### Removing a student from a team
 
@@ -84,13 +84,13 @@ You can move individual students _out_ of a team by selecting just one and using
 
 ## Importing students in bulk
 
-To add new students in bulk to a course, click the _Bulk Import_ button at the top right of the list. The form that opens up allows you to a select a CSV file with list of students to be onboarded to the course. You can use the [template file](/files/student_import_sample.csv ":ignore") available in the form to list the students with required details. Refer to [add new students form](/students?id=adding-new-students) for details on each field. Here are a few ground rules for the data that you populate in the import sheet:
+To add new students in bulk to a course, click the _Bulk Import_ button at the top right of the list. The form that opens up allows you to a select a CSV file with list of students to be onboarded to the course. You can use the [template file](/files/student_import_sample.csv ":ignore") available in the form to list the students with required details. Refer to [add new students form](/users/students#adding-new-students) for details on each field. Here are a few ground rules for the data that you populate in the import sheet:
 
 1. Name and email are mandatory columns and should have valid data. Name can have a maximum of 250 characters.
-2. Title, affiliation and tags are optional similar to the the [add new students form](/students?id=adding-new-students). A maximum of five tags are allowed per student and should have a character limit of 50. Title and affiliation, each has a character limit of 250.
+2. Title, affiliation and tags are optional similar to the the [add new students form](/users/students#adding-new-students). A maximum of five tags are allowed per student and should have a character limit of 50. Title and affiliation, each has a character limit of 250.
 3. Team name is optional and should be only used if you need to club students as a team. If more that one students are assigned the same team name in the sheet, they will be teamed up together. Team name has a character limit of 50.
 4. A maximum of 1000 students are allowed to be imported at once using the bulk uploader.
 
 The errors in the sheet will appear in the form once you upload a CSV file, which will guide you to easily fix them. Once you have a totally error free sheet, use the _Import Students_ button to initiate the bulk onboarding process. On successful completion, you will receive an email confirming the same.
 
-Similar to [add new students form](/students?id=adding-new-students), use the notification checkbox above the _Import Students_ button to enable/disable onboarding email notification for newly added students.
+Similar to [add new students form](#adding-new-students), use the notification checkbox above the _Import Students_ button to enable/disable onboarding email notification for newly added students.

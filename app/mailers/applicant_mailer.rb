@@ -3,6 +3,10 @@ class ApplicantMailer < SchoolMailer
     @applicant = applicant
     @school = applicant.course.school
 
-    simple_mail(@applicant.email, "Verify Your Email Address", enable_reply: false)
+    simple_mail(
+      @applicant.email,
+      I18n.t('mailers.applicant.enrollment_verification.subject'),
+      enable_reply: false
+    )
   end
 end

@@ -1,9 +1,9 @@
 module.exports = {
   title: "Pupilfirst LMS",
   tagline: "Focus on your students.",
-  url: "https://developers.pupilfirst.com",
+  url: "https://docs.pupilfirst.com",
   baseUrl: "/",
-  favicon: "https://school.sv.co/favicon.png",
+  favicon: "https://www.pupilfirst.school/favicon.png",
   organizationName: "pupilfirst", // Usually your GitHub org/user name.
   projectName: "pupilfirst", // Usually your repo name.
   themeConfig: {
@@ -11,7 +11,7 @@ module.exports = {
       title: "Pupilfirst LMS",
       logo: {
         alt: "Pupilfirst Logo",
-        src: "https://school.sv.co/favicon.png",
+        src: "https://www.pupilfirst.school/favicon.png",
       },
       items: [
         {

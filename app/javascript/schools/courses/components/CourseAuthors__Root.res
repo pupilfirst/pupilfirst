@@ -2,6 +2,9 @@ exception UnexpectedPathOnAuthorsInterface(list<string>)
 
 let str = React.string
 
+let t = I18n.t(~scope="components.CourseAuthors__Root")
+let ts = I18n.ts
+
 open CourseAuthors__Types
 
 type state = {
@@ -48,7 +51,7 @@ let removeCourseAuthor = (send, author, event) => {
   event |> ReactEvent.Mouse.preventDefault
 
   WindowUtils.confirm(
-    "Are you sure you want to remove " ++ ((author |> Author.name) ++ " from the list of authors?"),
+    t("window_confirm_pre") ++ " " ++ ((author |> Author.name) ++ " " ++ t("window_confirm_post")),
     () => {
       send(BeginDeleting)
 
@@ -106,8 +109,8 @@ let renderAuthor = (rootPath, author, send) => {
       </a>
       <button
         className="w-10 text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-red-500 focus:outline-none focus:text-red-500 focus:bg-gray-200"
-        title={"Delete " ++ (author |> Author.name)}
-        ariaLabel={"Delete " ++ (author |> Author.name)}
+        title={ts("delete") ++ " " ++ (author |> Author.name)}
+        ariaLabel={ts("delete") ++ " " ++ (author |> Author.name)}
         onClick={removeCourseAuthor(send, author)}>
         <i className="fas fa-trash-alt" />
       </button>

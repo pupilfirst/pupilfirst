@@ -37,7 +37,7 @@ There's quite a bit to unpack here, so we'll go over each element one by one, st
 
 The minimum work that a coach must do is assign grades for all evaluation criteria on a target. In the example screenshot above, there are two criteria, but targets can have any number of these. Depending on how the grading for the course is set up, a coach can assign a failing or a passing grade to a submission.
 
-If a student fails a submission, they're _expected_ to re-submit the target to get a passing grade. If the target in question is a milestone target, or is a prerequisite for another, this can cause other targets to [become locked](/targets?id=locked-targets) and block a student's progression in the course until they get a passing grade.
+If a student fails a submission, they're _expected_ to re-submit the target to get a passing grade. If the target in question is a milestone target, or is a prerequisite for another, this can cause other targets to [become locked](/users/targets#locked-targets) and block a student's progression in the course until they get a passing grade.
 
 ?> **How does passing or failing work with multiple evaluation criteria?** \
 When you have more than one evaluation criteria, as in the example above, if the grade for _any_ criterion falls below the passing grade, then the submission as a whole, will count as a failure.
@@ -48,7 +48,7 @@ However, there is more that a coach can do besides assigning grades.
 
 ### Marking Submission Items as Incorrect
 
-This is an optional step, where a coach can mark any particular submission items from a student as incorrect. A student submits a target by executing a series of [steps defined for the particular target](/curriculum_editor?id=defining-steps-to-complete-a-target). A coach can mark a particular item as incorrect using the _Mark as incorrect_ checkbox beside each item. Along with the feedback, this gives an opportunity for the coach to clearly indicate where the student needs to improve upon.
+This is an optional step, where a coach can mark any particular submission items from a student as incorrect. A student submits a target by executing a series of [steps defined for the particular target](/users/curriculum_editor#defining-steps-to-complete-a-target). A coach can mark a particular item as incorrect using the _Mark as incorrect_ checkbox beside each item. Along with the feedback, this gives an opportunity for the coach to clearly indicate where the student needs to improve upon.
 
 ### Adding Feedback
 
@@ -70,7 +70,7 @@ You can also revise the template over time, as your understanding of student's i
 
 ## Leaving Notes
 
-You can write down notes about a student while you're reviewing a submission. These [notes will be stored in a student's report](/student_reports?id=keep-notes-on-students), and can be viewed only by you and other coaches.
+You can write down notes about a student while you're reviewing a submission. These [notes will be stored in a student's report](/users/student_reports#keep-notes-on-students), and can be viewed only by you and other coaches.
 
 If the submission you're leaving a note on is from a _team_, then the note will be posted to the report of all students in that team.
 

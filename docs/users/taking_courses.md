@@ -4,7 +4,7 @@ title: Taking Courses
 sidebar_label: Taking Courses
 ---
 
-All students begin a course in its first level and progress through levels by completing targets. Specifically, they need to complete (or submit) all [milestone targets](/targets?id=milestone-targets) before they're allowed to _level up_.
+All students begin a course in its first level and progress through levels by completing targets. Specifically, they need to complete (or submit) all [milestone targets](/users/targets#milestone-targets) before they're allowed to _level up_.
 
 ![A student in level 1](https://res.cloudinary.com/sv-co/image/upload/v1574413997/pupilfirst_documentation/taking_courses/student_curriculum_l1_vsiipg.png)
 
@@ -16,7 +16,7 @@ Levels can contain targets that are optional, and targets can depend upon each-o
 
 ### Completing targets
 
-Students progress in a course by completing targets, and leveling up. [As discussed in the curriculum editor](/curriculum_editor?id=setting-the-method-of-completion), where you'll be authoring courses, there are four methods of completion, of which targets that are configured to have submissions reviewed by coaches is the most interactive option. Here a student executes a series of steps, [as defined using the target editor](/curriculum_editor?id=defining-steps-to-complete-a-target), to submit a target for review.
+Students progress in a course by completing targets, and leveling up. [As discussed in the curriculum editor](/users/curriculum_editor#setting-the-method-of-completion), where you'll be authoring courses, there are four methods of completion, of which targets that are configured to have submissions reviewed by coaches is the most interactive option. Here a student executes a series of steps, [as defined using the target editor](/users/curriculum_editor#defining-steps-to-complete-a-target), to submit a target for review.
 
 ![Student preparing a submission](https://res.cloudinary.com/sv-co/image/upload/v1583214044/pupilfirst_documentation/taking_courses/create_submission_bz7wly.png)
 
@@ -24,7 +24,7 @@ Reviewed targets are very likely to be the most valuable target completion metho
 
 This is a part of what _teachers_ do - get to know your student, what they need, and how best to help them progress from wherever they are in their learning process. No automated system can replace this. Yes, it can be difficult at times, and it can be time-consuming, but given that the goal of teaching is to provide the best possible outcome for our students, we should use the best methods available.
 
-We can, and will continue to [build features to make the review process easier](/reviewing_submissions?id=review-checklist). If you have ideas about how we can make improvements, [please talk to us](mailto:support@pupilfirst.com).
+We can, and will continue to [build features to make the review process easier](/users/reviewing_submissions#review-checklist). If you have ideas about how we can make improvements, [please talk to us](mailto:support@pupilfirst.com).
 
 ## Leveling Up
 

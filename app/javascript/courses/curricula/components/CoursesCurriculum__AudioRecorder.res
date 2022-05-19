@@ -45,7 +45,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
             className="flex items-center bg-red-100 border rounded-full hover:bg-red-200"
             onClick={_e =>
               preview
-                ? Notification.notice("Preview Mode", "You cannot record audio.")
+                ? Notification.notice(t("preview_mode"), t("cannot_record"))
                 : audioRecorder.startRecording()}>
             <div
               className="flex flex-shrink-0 items-center justify-center bg-white shadow-md rounded-full h-10 w-10">

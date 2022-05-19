@@ -4,6 +4,7 @@ feature 'Target Content Editor', js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
   include NotificationHelper
+  include ConfigHelper
 
   # Setup a course with a single founder target, ...
   let!(:school) { create :school, :current }
@@ -612,5 +613,33 @@ feature 'Target Content Editor', js: true do
     expect(page).not_to have_selector(
       "div[aria-label='Editor for content block #{first_block.id}']"
     )
+  end
+
+  context 'when markdown block character limit is set' do
+    around do |example|
+      with_secret(markdown_curriculum_editor_max_length: 10) { example.run }
+    end
+
+    scenario 'course author attempts to add more content than the limit' do
+      sign_in_user school_admin.user,
+                   referrer: content_school_course_target_path(course, target)
+
+      # Try adding a new markdown block.
+      within('.content-block-creator--open') do
+        find('p', text: 'Markdown').click
+      end
+
+      expect(page).to have_selector('textarea[aria-label="Markdown editor"]')
+
+      # Let's try setting some text in the markdown block.
+      content = Faker::Lorem.characters(number: 12)
+      add_markdown(content)
+
+      find("button[title='Save Changes']").click
+
+      expect(page).not_to have_selector("button[title='Save Changes']")
+
+      expect(ContentBlock.last.reload.content['markdown'].length).to eq(10)
+    end
   end
 end

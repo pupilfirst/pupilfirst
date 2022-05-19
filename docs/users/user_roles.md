@@ -1,5 +1,5 @@
 ---
-id: user_roles
+id: roles
 title: User Roles
 sidebar_label: User Roles
 ---

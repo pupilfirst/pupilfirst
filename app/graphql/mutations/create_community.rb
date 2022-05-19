@@ -12,7 +12,7 @@ module Mutations
       mutator = CreateCommunityMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, "Success", "Community created successfully.")
+        mutator.notify(:success, I18n.t("shared.notifications.success"), I18n.t("mutations.create_community.community_created_notification"))
         { id: mutator.create_community.id }
       else
         mutator.notify_errors

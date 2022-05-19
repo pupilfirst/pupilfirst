@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.School__SearchableTagList")
+
 type state = string
 
 let handleClick = (tag, send, clickCB) => {
@@ -26,8 +28,8 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
     let initial = if allowNewTags && !Array.mem(searchString->String.lowercase_ascii, allTags) {
       [
         <button
-          title={"Add new tag " ++ searchString}
-          ariaLabel={"Add new tag " ++ searchString}
+          title={t("add_new_tag") ++ " " ++ searchString}
+          ariaLabel={t("add_new_tag") ++ " " ++ searchString}
           key=searchString
           onClick={_e => handleClick(searchString, send, addTagCB)}
           className="inline-flex cursor-pointer items-center bg-primary-100 border border-dashed border-primary-500 text-primary-700 hover:shadow-md hover:text-primary-800 focus:outline-none focus:shadow-md focus:text-primary-800 rounded-lg px-2 py-px mt-1 mr-2 text-xs overflow-hidden">
@@ -46,7 +48,7 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
       |> ArrayUtils.copyAndSort(String.compare)
       |> Js.Array.map(tag =>
         <span
-          title={"Pick tag " ++ tag}
+          title={t("pick_tag") ++ " " ++ tag}
           key=tag
           className="inline-flex cursor-pointer items-center bg-gray-200 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden"
           onMouseDown={_e => handleClick(tag, send, addTagCB)}>
@@ -73,8 +75,8 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTa
               className="flex items-center bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
               <span className="px-2 py-px"> {tag |> str} </span>
               <button
-                ariaLabel={"Remove tag " ++ tag}
-                title={"Remove tag " ++ tag}
+                ariaLabel={t("remove_tag") ++ " " ++ tag}
+                title={t("remove_tag") ++ " " ++ tag}
                 className="flex items-center px-2 h-full cursor-pointer text-gray-700 hover:text-red-500 hover:bg-gray-300 focus:outline-none focus:text-red-500 focus:bg-gray-300 border-l border-gray-400"
                 onClick={_e => handleClick(tag, send, removeTagCB)}>
                 <i className="fas fa-times" />
@@ -91,7 +93,7 @@ let make = (~unselectedTags, ~selectedTags, ~addTagCB, ~removeTagCB, ~allowNewTa
       className="appearance-none block bg-white leading-snug border border-gray-400 rounded w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
       id="tags"
       type_="text"
-      placeholder={allowNewTags ? "Search for, or add new tags" : "Select tags"}
+      placeholder={allowNewTags ? t("search_for_add") : t("select_tags")}
     />
     {ReactUtils.nullUnless(
       <div

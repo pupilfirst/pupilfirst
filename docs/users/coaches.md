@@ -45,9 +45,9 @@ This editable list of coaches allows you to directly assign coaches to a student
 
 The makes a few changes across Pupilfirst:
 
-1. The list of [submissions to review](/reviewing_submissions) can now be filtered by selecting an _assigned coach_.
+1. The list of [submissions to review](/users/reviewing_submissions) can now be filtered by selecting an _assigned coach_.
 2. When a coach with directly assigned students loads the page for the first time, the filter defaults to show them only submissions from their own students.
 3. When viewing the details of a submission, the directly assigned coaches are listed at the top.
-4. When browsing the coach's [students list](/student_reports), similar filters are available, and the assigned coaches are listed on both the _index_ page, and within the student report itself.
+4. When browsing the coach's [students list](/users/student_reports), similar filters are available, and the assigned coaches are listed on both the _index_ page, and within the student report itself.
 
 ?> Having multiple coaches to handle reviewing of submissions can come in really handy at times. This allows coaches to do something as simple as take a few days off, asking a peer to take care of their students. If students are directly assigned, then the filtering functions that are available in the coach's review interface and students list makes finding applicable submissions and students simple.

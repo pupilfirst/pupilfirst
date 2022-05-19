@@ -14,7 +14,7 @@ At the top of the page is the student distribution bar, which shows a split of h
 
 Below that is the filter input, followed by the students list. Coaches can search for a student by their name, or their team's name, and filter by the course level.
 
-In addition to this, if [coaches are directly assigned to students](/coaches?id=assigning-coaches-to-students-and-teams), then additional filters are available on the page to display students assigned to specific coaches. Choosing to filter by a coach will also update the student distribution bar, showing counts that apply to the selected coach.
+In addition to this, if [coaches are directly assigned to students](/users/coaches#assigning-coaches-to-students-and-teams), then additional filters are available on the page to display students assigned to specific coaches. Choosing to filter by a coach will also update the student distribution bar, showing counts that apply to the selected coach.
 
 ### Use levels as a rough indicator of progress
 

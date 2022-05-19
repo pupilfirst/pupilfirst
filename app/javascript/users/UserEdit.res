@@ -161,7 +161,7 @@ let updateUser = (state, send, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(StartSaving)
 
-  UpdateUserQuery.make(
+  let variables = UpdateUserQuery.makeVariables(
     ~name=state.name,
     ~about=state.about,
     ~locale=state.locale,
@@ -171,9 +171,10 @@ let updateUser = (state, send, event) => {
     ~dailyDigest=state.dailyDigest,
     (),
   )
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    result["updateUser"]["success"]
+
+  UpdateUserQuery.fetch(variables)
+  |> Js.Promise.then_((result: UpdateUserQuery.t) => {
+    result.updateUser.success
       ? {
           let hasCurrentPassword = state.newPassword |> String.length > 0
           send(FinishSaving(hasCurrentPassword))
@@ -192,10 +193,9 @@ let updateUser = (state, send, event) => {
 let initiateAccountDeletion = (state, send) => {
   send(StartDeletingAccount)
 
-  InitiateAccountDeletionQuery.make(~email=state.emailForAccountDeletion, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    result["initiateAccountDeletion"]["success"]
+  InitiateAccountDeletionQuery.fetch({email: state.emailForAccountDeletion})
+  |> Js.Promise.then_((result: InitiateAccountDeletionQuery.t) => {
+    result.initiateAccountDeletion.success
       ? send(FinishAccountDeletion)
       : send(FinishAccountDeletion)
     Js.Promise.resolve()
@@ -360,7 +360,7 @@ let make = (
                     <label
                       htmlFor="user-edit__avatar-input"
                       ariaHidden=true
-                      className="form-input__file-label rounded-md shadow-sm py-2 px-3 border border-gray-400 rounded-md text-sm font-semibold hover:text-gray-800 active:bg-gray-100 active:text-gray-800">
+                      className="form-input__file-label shadow-sm py-2 px-3 border border-gray-400 rounded-md text-sm font-semibold hover:text-gray-800 active:bg-gray-100 active:text-gray-800">
                       {"Change photo" |> str}
                     </label>
                   </span>
@@ -499,7 +499,10 @@ let make = (
                 className="select appearance-none block text-sm w-full bg-white shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-indigo-500">
                 {availableLocales
                 ->Js.Array2.map(availableLocale =>
-                  <option key=availableLocale value=availableLocale ariaSelected={state.locale===availableLocale}>
+                  <option
+                    key=availableLocale
+                    value=availableLocale
+                    ariaSelected={state.locale === availableLocale}>
                     {Locale.humanize(availableLocale)->str}
                   </option>
                 )

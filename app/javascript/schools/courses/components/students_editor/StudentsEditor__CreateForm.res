@@ -77,8 +77,7 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   let students = Js.Array.map(TeamInfo.toJsArray, state.teamsToAdd) |> ArrayUtils.flattenV2
   let {notifyStudents} = state
 
-  CreateStudentsQuery.make(~courseId, ~notifyStudents, ~students, ())
-  |> GraphqlQuery.sendQuery
+  CreateStudentsQuery.make({courseId: courseId, notifyStudents: notifyStudents, students: students})
   |> Js.Promise.then_(response => {
     switch response["createStudents"]["studentIds"] {
     | Some(studentIds) => handleResponseCB(submitFormCB, state, studentIds)
@@ -241,10 +240,10 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
       </div>
       <div className="mt-4">
         <Checkbox
-            id="notify-new-students"
-            label={str(t("notify_students_label"))}
-            onChange={_event => send(ToggleNotifyStudents)}
-            checked={state.notifyStudents}
+          id="notify-new-students"
+          label={str(t("notify_students_label"))}
+          onChange={_event => send(ToggleNotifyStudents)}
+          checked={state.notifyStudents}
         />
       </div>
       <div className="flex mt-4">

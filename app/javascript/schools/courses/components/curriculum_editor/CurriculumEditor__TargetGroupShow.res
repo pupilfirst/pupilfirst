@@ -10,8 +10,7 @@ type state = {
   validTargetTitle: bool,
 }
 
-module CreateTargetMutation = %graphql(
-  `
+module CreateTargetMutation = %graphql(`
    mutation CreateTargetMutation($title: String!, $targetGroupId: String!) {
      createTarget(title: $title, targetGroupId: $targetGroupId ) {
        target {
@@ -21,8 +20,7 @@ module CreateTargetMutation = %graphql(
        }
      }
    }
-   `
-)
+   `)
 
 type action =
   | UpdateTargetTitle(string)
@@ -103,8 +101,7 @@ let make = (
   let handleCreateTarget = (title, targetGroupId) => {
     send(UpdateTargetSaving)
 
-    CreateTargetMutation.make(~title, ~targetGroupId, ())
-    |> GraphqlQuery.sendQuery
+    CreateTargetMutation.make({title: title, targetGroupId: targetGroupId})
     |> Js.Promise.then_(response => {
       switch response["createTarget"]["target"] {
       | Some(target) => handleResponseCB(target)

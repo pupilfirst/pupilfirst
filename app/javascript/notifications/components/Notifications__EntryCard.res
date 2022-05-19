@@ -16,10 +16,9 @@ module MarkNotificationQuery = %graphql(`
 let markNotification = (notificationId, setSaving, markNotificationCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
   setSaving(_ => true)
-  MarkNotificationQuery.make(~notificationId, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["markNotification"]["success"]
+  MarkNotificationQuery.fetch({notificationId: notificationId})
+  |> Js.Promise.then_((response: MarkNotificationQuery.t) => {
+    response.markNotification.success
       ? {
           setSaving(_ => false)
           markNotificationCB(notificationId)

@@ -72,23 +72,20 @@ let updateCertificate = (state, send, certificate) => {
   send(UpdateCertificates(newCertificates))
 }
 
-module DeleteCertificateMutation = %graphql(
-  `
+module DeleteCertificateMutation = %graphql(`
   mutation DeleteCertificateMutation($id: ID!) {
     deleteCertificate(id: $id) {
       success
     }
   }
-`
-)
+`)
 
 let deleteCertificate = (certificate, send) => {
   send(BeginDeleting)
 
-  DeleteCertificateMutation.make(~id=Certificate.id(certificate), ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    if result["deleteCertificate"]["success"] {
+  DeleteCertificateMutation.fetch({id: Certificate.id(certificate)})
+  |> Js.Promise.then_((result: DeleteCertificateMutation.t) => {
+    if result.deleteCertificate.success {
       send(FinishDeleting(certificate))
     } else {
       send(FailDeleting)

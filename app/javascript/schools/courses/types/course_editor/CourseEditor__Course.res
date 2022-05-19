@@ -257,4 +257,5 @@ module Fragments = %graphql(
     processingUrl
   }
   `
+  {inline: true}
 )

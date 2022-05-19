@@ -84,8 +84,10 @@ let searchForSimilarTopics = (send, title, communityId, ()) => {
 
   let trimmedTitle = title |> String.trim
 
-  SimilarTopicsQuery.make(~communityId, ~title=trimmedTitle, ())
-  |> GraphqlQuery.sendQuery
+  SimilarTopicsQuery.make({
+    communityId: communityId,
+    title: trimmedTitle,
+  })
   |> Js.Promise.then_(result => {
     let suggestions = result["similarTopics"] |> Array.map(TopicSuggestion.makeFromJs)
     send(FinishSearching(trimmedTitle, suggestions))
@@ -147,17 +149,15 @@ let handleCreateTopic = (state, send, communityId, target, topicCategory, event)
 
     let topicCategoryId = topicCategory |> OptionUtils.flatMap(tc => Some(TopicCategory.id(tc)))
 
-    CreateTopicQuery.make(
-      ~body=state.body,
-      ~title=state.title,
-      ~communityId,
-      ~targetId?,
-      ~topicCategoryId?,
-      (),
-    )
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      switch response["createTopic"]["topicId"] {
+    CreateTopicQuery.fetch({
+      body: state.body,
+      title: state.title,
+      communityId: communityId,
+      targetId: targetId,
+      topicCategoryId: topicCategoryId,
+    })
+    |> Js.Promise.then_((response: CreateTopicQuery.t) => {
+      switch response.createTopic.topicId {
       | Some(topicId) =>
         Notification.success("Done!", "Redirecting to new topic now...")
         redirectToNewTopic(topicId, state.title)

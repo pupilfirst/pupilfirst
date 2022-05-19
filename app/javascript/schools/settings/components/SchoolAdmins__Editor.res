@@ -31,8 +31,7 @@ let removeSchoolAdmin = (setState, admin, currentSchoolAdminId, event) => {
   } {
     setState(state => {...state, deleting: true})
 
-    DeleteSchoolAdminQuery.make(~id=admin |> SchoolAdmin.id, ())
-    |> GraphqlQuery.sendQuery
+    DeleteSchoolAdminQuery.make({id: admin |> SchoolAdmin.id})
     |> Js.Promise.then_(response => {
       if response["deleteSchoolAdmin"]["success"] {
         if (

@@ -28,10 +28,9 @@ let updateSchoolQuery = (state, send, updateDetailsCB) => {
 
   let variables = UpdateSchoolQuery.makeVariables(~name=state.name, ~about=state.about, ())
 
-  UpdateSchoolQuery.make(variables)
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["updateSchool"]["success"]
+  UpdateSchoolQuery.fetch(variables)
+  |> Js.Promise.then_((response: UpdateSchoolQuery.t) => {
+    response.updateSchool.success
       ? updateDetailsCB(state.name, optionAbout(state.about))
       : send(UpdateSaving(false))
     Js.Promise.resolve()

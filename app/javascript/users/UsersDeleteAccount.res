@@ -20,10 +20,9 @@ let deleteAccount = (token, setState, event) => {
   ReactEvent.Mouse.preventDefault(event)
   setState(_ => Deleting)
 
-  DeleteAccountQuery.make(~token, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    result["deleteAccount"]["success"]
+  DeleteAccountQuery.fetch({token: token})
+  |> Js.Promise.then_((result: DeleteAccountQuery.t) => {
+    result.deleteAccount.success
       ? {
           setState(_ => Deleted)
           Js.Global.setTimeout(() => DomUtils.redirect("/users/sign_out"), 5000) |> ignore

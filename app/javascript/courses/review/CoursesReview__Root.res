@@ -154,7 +154,7 @@ module SubmissionsQuery = %graphql(`
         number
       }
       coaches(coachIds: $coachIds, courseId: $courseId) {
-        ...UserProxy.Fragments.AllFields
+        ...UserProxy.UserProxy.AllFields
       }
       targetInfo(targetId: $targetId, courseId: $courseId) {
         id
@@ -176,7 +176,7 @@ module LevelsQuery = %graphql(`
 module CoachesQuery = %graphql(`
     query CoachesQuery($courseId: ID!) {
       coaches(courseId: $courseId) {
-        ...UserProxy.Fragments.AllFields
+        ...UserProxyFragment.UserProxy
       }
     }
   `)
@@ -200,7 +200,7 @@ let getSubmissions = (send, courseId, cursor, filter) => {
     ->Js.Array2.map(Belt.Option.mapWithDefault(_, [], t => [t]))
     ->ArrayUtils.flattenV2
 
-  SubmissionsQuery.make(
+  let variables = SubmissionsQuery.makeVariables(
     ~courseId,
     ~status=?Filter.tab(filter),
     ~sortDirection=Filter.sortDirection(filter),
@@ -216,17 +216,18 @@ let getSubmissions = (send, courseId, cursor, filter) => {
     ~after=?cursor,
     (),
   )
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    let target = OptionUtils.map(TargetInfo.makeFromJs, response["targetInfo"])
-    let coaches = Js.Array2.map(response["coaches"], Coach.makeFromJs)
-    let level = OptionUtils.map(Level.makeFromJs, response["level"])
+
+  SubmissionsQuery.make(variables)
+  |> Js.Promise.then_((response: SubmissionsQuery.t) => {
+    let target = OptionUtils.map(TargetInfo.makeFromJs, response.targetInfo)
+    let coaches = Js.Array2.map(response.coaches, Coach.makeFromJs)
+    let level = OptionUtils.map(Level.makeFromJs, response.level)
     send(
       LoadSubmissions(
-        response["submissions"]["pageInfo"]["endCursor"],
-        response["submissions"]["pageInfo"]["hasNextPage"],
-        Js.Array.map(IndexSubmission.makeFromJS, response["submissions"]["nodes"]),
-        response["submissions"]["totalCount"],
+        response.submissions.pageInfo.endCursor,
+        response.submissions.pageInfo.hasNextPage,
+        Js.Array.map(IndexSubmission.makeFromJS, response.submissions.nodes),
+        response.submissions.totalCount,
         target,
         level,
         coaches,
@@ -241,10 +242,9 @@ let getLevels = (send, courseId, state) => {
   if state.levelsLoaded == Unloaded {
     send(SetLevelLoading)
 
-    LevelsQuery.make(~courseId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      send(LoadLevels(Js.Array.map(Level.makeFromJs, response["levels"])))
+    LevelsQuery.make({courseId: courseId})
+    |> Js.Promise.then_((response: LevelsQuery.t) => {
+      send(LoadLevels(Js.Array.map(Level.makeFromJs, response.levels)))
       Js.Promise.resolve()
     })
     |> ignore
@@ -255,10 +255,9 @@ let getCoaches = (send, courseId, state) => {
   if state.coachesLoaded == Unloaded {
     send(SetCoachLoading)
 
-    CoachesQuery.make(~courseId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      send(LoadCoaches(Js.Array.map(Coach.makeFromJs, response["coaches"])))
+    CoachesQuery.make({courseId: courseId})
+    |> Js.Promise.then_((response: CoachesQuery.t) => {
+      send(LoadCoaches(Js.Array.map(Coach.makeFromJs, response.coaches)))
       Js.Promise.resolve()
     })
     |> ignore
@@ -269,10 +268,9 @@ let getTargets = (send, courseId, state) => {
   if state.targetsLoaded == Unloaded {
     send(SetTargetLoading)
 
-    ReviewedTargetsInfoQuery.make(~courseId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      send(LoadTargets(Js.Array.map(TargetInfo.makeFromJs, response["reviewedTargetsInfo"])))
+    ReviewedTargetsInfoQuery.make({courseId: courseId})
+    |> Js.Promise.then_((response: ReviewedTargetsInfoQuery.t) => {
+      send(LoadTargets(Js.Array.map(TargetInfo.makeFromJs, response.reviewedTargetsInfo)))
       Js.Promise.resolve()
     })
     |> ignore
@@ -662,7 +660,9 @@ let reloadSubmissions = (courseId, filter, send) => {
 }
 
 let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
-  <p tabIndex=0 className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
+  <p
+    tabIndex=0
+    className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
     {str(
       totalSubmissionsCount == loadedSubmissionsCount
         ? tc(~count=loadedSubmissionsCount, "submissions_fully_loaded_text")
@@ -808,7 +808,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                       <p> {str(tc("pending"))} </p>
                     </Link>
                   </div>
-                  <div role="tab"  ariaSelected={filter.tab === Some(#Reviewed)} className="flex-1">
+                  <div role="tab" ariaSelected={filter.tab === Some(#Reviewed)} className="flex-1">
                     <Link
                       href={"/courses/" ++
                       courseId ++

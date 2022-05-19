@@ -46,8 +46,15 @@ let refreshStudentDistribution = (
   let coachId = filterCoach->Belt.Option.map(coach => Coach.id(coach))
   let tags = filterTags->Belt.Set.String.toArray
 
-  StudentDistributionQuery.make(~courseId, ~coachNotes=filterCoachNotes, ~tags, ~coachId?, ())
-  |> GraphqlQuery.sendQuery
+  let variables = StudentDistributionQuery.makeVariables(
+    ~courseId,
+    ~coachNotes=filterCoachNotes,
+    ~tags,
+    ~coachId?,
+    (),
+  )
+
+  StudentDistributionQuery.make(variables)
   |> Js.Promise.then_(response => {
     let distribution =
       response["studentDistribution"] |> Array.map(DistributionInLevel.fromJsObject)
@@ -155,16 +162,19 @@ let make = (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes, ~filterT
                 key={DistributionInLevel.id(level)}
                 ariaLabel={"Students in level " ++
                 (DistributionInLevel.number(level) |> string_of_int)}
-                className={"student-distribution__container text-center relative focus-within:outline-none focus-within:opacity-75 " ++ pillClass}
+                className={"student-distribution__container text-center relative focus-within:outline-none focus-within:opacity-75 " ++
+                pillClass}
                 style>
                 <label
-                  htmlFor={"Students in level " ++ (DistributionInLevel.number(level) |> string_of_int)}
+                  htmlFor={"Students in level " ++
+                  (DistributionInLevel.number(level) |> string_of_int)}
                   className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-700 text-center">
                   {level |> DistributionInLevel.shortName |> str}
                 </label>
                 <Tooltip className="w-full" tip position=#Bottom>
                   <button
-                    id={"Students in level " ++ (DistributionInLevel.number(level) |> string_of_int)}
+                    id={"Students in level " ++
+                    (DistributionInLevel.number(level) |> string_of_int)}
                     onClick={_ => DistributionInLevel.id(level)->selectLevelCB}
                     className={"student-distribution__pill w-full hover:shadow-inner focus:shadow-inner relative cursor-pointer border-white text-xs leading-none text-center " ++ (
                       completedLevels |> Array.mem(level)

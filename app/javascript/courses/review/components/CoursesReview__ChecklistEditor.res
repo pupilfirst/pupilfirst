@@ -32,14 +32,12 @@ let updateReviewChecklist = (targetId, reviewChecklist, send, updateReviewCheckl
 
   let trimmedChecklist = reviewChecklist->Js.Array2.map(ReviewChecklistItem.trim)
 
-  UpdateReviewChecklistMutation.make(
-    ~targetId,
-    ~reviewChecklist=ReviewChecklistItem.encodeArray(trimmedChecklist),
-    (),
-  )
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    if response["updateReviewChecklist"]["success"] {
+  UpdateReviewChecklistMutation.fetch({
+    targetId: targetId,
+    reviewChecklist: ReviewChecklistItem.encodeArray(trimmedChecklist),
+  })
+  |> Js.Promise.then_((response: UpdateReviewChecklistMutation.t) => {
+    if response.updateReviewChecklist.success {
       updateReviewChecklistCB(trimmedChecklist)
     }
 
@@ -236,7 +234,8 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                               className="flex-shrink-0 rounded border border-gray-400 bg-gray-100 w-4 h-4 mr-2 mt-3 cursor-not-allowed"
                             />
                             <div className="w-full bg-gray-100 relative">
-                              <div className="flex justify-between gap-2 bg-white border border-gray-400 border-b-transparent rounded-t focus-within:outline-none focus-within:bg-white focus-within:border-primary-300">
+                              <div
+                                className="flex justify-between gap-2 bg-white border border-gray-400 border-b-transparent rounded-t focus-within:outline-none focus-within:bg-white focus-within:border-primary-300">
                                 <input
                                   className="checklist-editor__checklist-result-item-title border-none h-10 pr-0 focus:outline-none"
                                   id={"result_" ++
@@ -255,8 +254,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                       send,
                                     )}
                                 />
-                                <div
-                                  className="flex h-10 mr-1 items-center justify-center">
+                                <div className="flex h-10 mr-1 items-center justify-center">
                                   {controlIcon(
                                     ~icon="fa-arrow-up",
                                     ~title={t("checklist_item_title.move_up_button_title")},

@@ -1,12 +1,10 @@
-module ResolveEmbedCodeMutator = %graphql(
-  `
+module ResolveEmbedCodeMutator = %graphql(`
   mutation ResolveEmbedCodeMutation($contentBlockId: ID!) {
     resolveEmbedCode(contentBlockId: $contentBlockId) {
       embedCode
     }
   }
-  `
-)
+  `)
 
 type state = {
   loading: bool,
@@ -33,10 +31,9 @@ let reducer = (state, action) =>
 let resolveEmbedCode = (contentBlockId, send) => {
   send(SetLoading)
 
-  ResolveEmbedCodeMutator.make(~contentBlockId, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["resolveEmbedCode"]["embedCode"]->Belt.Option.mapWithDefault(send(Reset), embedCode =>
+  ResolveEmbedCodeMutator.fetch({contentBlockId})
+  |> Js.Promise.then_((response: ResolveEmbedCodeMutator.t) => {
+    response.resolveEmbedCode.embedCode->Belt.Option.mapWithDefault(send(Reset), embedCode =>
       send(SetEmbedCode(embedCode))
     )
 

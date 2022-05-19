@@ -22,10 +22,9 @@ let handleClick = (targetId, setStatus, undoSubmissionCB, event) => {
   } {
     setStatus(_ => Undoing)
 
-    DeleteSubmissionQuery.makeVariables(~targetId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      if response["undoSubmission"]["success"] {
+    DeleteSubmissionQuery.fetch({targetId: targetId})
+    |> Js.Promise.then_((response: DeleteSubmissionQuery.t) => {
+      if response.undoSubmission.success {
         undoSubmissionCB()
       } else {
         Notification.notice(

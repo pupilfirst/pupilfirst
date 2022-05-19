@@ -87,15 +87,13 @@ let isValidName = name => {
   length >= 1 && length <= 30
 }
 
-module UpdateCertificateMutation = %graphql(
-  `
+module UpdateCertificateMutation = %graphql(`
   mutation UpdateCertificateMutation($id: ID!, $name: String!, $margin: Int!, $nameOffsetTop: Int!, $fontSize: Int!, $qrCorner: QrCorner!, $qrScale: Int!, $active: Boolean!) {
     updateCertificate(id: $id, name: $name, margin: $margin, nameOffsetTop: $nameOffsetTop, fontSize: $fontSize, qrCorner: $qrCorner, qrScale: $qrScale, active: $active) {
       success
     }
   }
-  `
-)
+  `)
 
 let saveChanges = (certificate, updateCertificateCB, state, send, _event) => {
   send(BeginSaving)
@@ -103,20 +101,18 @@ let saveChanges = (certificate, updateCertificateCB, state, send, _event) => {
   let name = Js.String.trim(state.name)
   let {margin, nameOffsetTop, fontSize, qrCorner, qrScale, active} = state
 
-  UpdateCertificateMutation.make(
-    ~id=Certificate.id(certificate),
-    ~name,
-    ~margin,
-    ~nameOffsetTop,
-    ~fontSize,
-    ~qrCorner,
-    ~qrScale,
-    ~active,
-    (),
-  )
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    if result["updateCertificate"]["success"] {
+  UpdateCertificateMutation.fetch({
+    id: Certificate.id(certificate),
+    name: name,
+    margin: margin,
+    nameOffsetTop: nameOffsetTop,
+    fontSize: fontSize,
+    qrCorner: qrCorner,
+    qrScale: qrScale,
+    active: active,
+  })
+  |> Js.Promise.then_((result: UpdateCertificateMutation.t) => {
+    if result.updateCertificate.success {
       Certificate.update(
         certificate,
         ~name,

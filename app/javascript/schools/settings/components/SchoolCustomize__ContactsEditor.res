@@ -44,8 +44,7 @@ let handleUpdateContactDetails = (state, send, updateAddressCB, updateEmailAddre
   event |> ReactEvent.Mouse.preventDefault
   send(BeginUpdate)
 
-  UpdateContactDetailsQuery.make(~address=state.address, ~emailAddress=state.emailAddress, ())
-  |> GraphqlQuery.sendQuery
+  UpdateContactDetailsQuery.make({address: state.address, emailAddress: state.emailAddress})
   |> Js.Promise.then_(result =>
     switch (result["updateAddress"]["errors"], result["updateEmailAddress"]["errors"]) {
     | ([], []) =>

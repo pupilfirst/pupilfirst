@@ -3,8 +3,7 @@ let str = React.string
 
 let t = I18n.t(~scope="components.CoursesReview__ReviewerManager")
 
-module AssignReviewerMutation = %graphql(
-  `
+module AssignReviewerMutation = %graphql(`
     mutation AssignReviewerMutation($submissionId: ID!) {
       assignReviewer(submissionId: $submissionId){
         reviewer{
@@ -12,11 +11,9 @@ module AssignReviewerMutation = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
-module ReassignReviewerMutation = %graphql(
-  `
+module ReassignReviewerMutation = %graphql(`
     mutation ReassignReviewerMutation($submissionId: ID!) {
       reassignReviewer(submissionId: $submissionId){
         reviewer{
@@ -24,13 +21,11 @@ module ReassignReviewerMutation = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
 let assignReviewer = (submissionId, setSaving, updateReviewerCB) => {
   setSaving(_ => true)
-  AssignReviewerMutation.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery
+  AssignReviewerMutation.make({submissionId: submissionId})
   |> Js.Promise.then_(response => {
     updateReviewerCB(Some(UserProxy.makeFromJs(response["assignReviewer"]["reviewer"])))
     setSaving(_ => false)
@@ -45,8 +40,7 @@ let assignReviewer = (submissionId, setSaving, updateReviewerCB) => {
 
 let reassignReviewer = (submissionId, setSaving, updateReviewerCB) => {
   setSaving(_ => true)
-  ReassignReviewerMutation.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery
+  ReassignReviewerMutation.make({submissionId: submissionId})
   |> Js.Promise.then_(response => {
     updateReviewerCB(Some(UserProxy.makeFromJs(response["reassignReviewer"]["reviewer"])))
     setSaving(_ => false)

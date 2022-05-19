@@ -53,10 +53,14 @@ let getStudentSubmissions = (studentId, cursor, setState, submissions, updateSub
   setState(_ => {loading: true})
   switch cursor {
   | Some(cursor) =>
-    StudentSubmissionsQuery.make(~studentId, ~after=cursor, ~sortDirection=#Descending, ())
-  | None => StudentSubmissionsQuery.make(~studentId, ~sortDirection=#Descending, ())
+    StudentSubmissionsQuery.make({
+      studentId: studentId,
+      after: Some(cursor),
+      sortDirection: #Descending,
+    })
+  | None =>
+    StudentSubmissionsQuery.make({studentId: studentId, after: None, sortDirection: #Descending})
   }
-  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     updateStudentSubmissions(
       setState,

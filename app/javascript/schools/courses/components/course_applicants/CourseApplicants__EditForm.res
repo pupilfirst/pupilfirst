@@ -27,20 +27,18 @@ type action =
   | FailSaving
   | ToggleNotifyStudent
 
-module CreateStudentFromApplicant = %graphql(
-  `
+module CreateStudentFromApplicant = %graphql(`
   mutation CreateStudentFromApplicant($applicantId: ID!, $notifyStudent: Boolean!, $accessEndsAt: ISO8601DateTime, $title: String, $affiliation: String, $tags: [String!]!) {
     createStudentFromApplicant(applicantId: $applicantId, notifyStudent: $notifyStudent, accessEndsAt: $accessEndsAt, title: $title, affiliation: $affiliation, tags: $tags) {
       success
     }
   }
-  `
-)
+  `)
 
 let updateCourse = (state, send, updateApplicantCB, applicant) => {
   send(StartSaving)
 
-  let updateCourseQuery = CreateStudentFromApplicant.make(
+  let variables = CreateStudentFromApplicant.makeVariables(
     ~applicantId=Applicant.id(applicant),
     ~accessEndsAt=?state.accessEndsAt->Belt.Option.map(DateFns.encodeISO),
     ~title=state.title,
@@ -50,14 +48,17 @@ let updateCourse = (state, send, updateApplicantCB, applicant) => {
     (),
   )
 
-  updateCourseQuery |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
-    result["createStudentFromApplicant"]["success"] ? updateApplicantCB() : send(FailSaving)
+  CreateStudentFromApplicant.fetch(variables)
+  |> Js.Promise.then_((result: CreateStudentFromApplicant.t) => {
+    result.createStudentFromApplicant.success ? updateApplicantCB() : send(FailSaving)
     Js.Promise.resolve()
-  }) |> Js.Promise.catch(error => {
+  })
+  |> Js.Promise.catch(error => {
     Js.log(error)
     send(FailSaving)
     Js.Promise.resolve()
-  }) |> ignore
+  })
+  |> ignore
 }
 
 let str = React.string

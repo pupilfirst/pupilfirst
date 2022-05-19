@@ -89,13 +89,11 @@ let updateEvaluationCriterion = (state, setState, addOrUpdateCriterionCB, criter
     |> Js.Array.filter(gradesAndLabel => gradesAndLabel |> GradeLabel.grade <= state.maxGrade)
     |> Array.map(gl => gl |> GradeLabel.asJsObject)
 
-  UpdateEvaluationCriterionQuery.make(
-    ~id=criterion |> EvaluationCriterion.id,
-    ~name=state.name,
-    ~gradesAndLabels=jsGradeAndLabelArray,
-    (),
-  )
-  |> GraphqlQuery.sendQuery
+  UpdateEvaluationCriterionQuery.make({
+    id: criterion |> EvaluationCriterion.id,
+    name: state.name,
+    gradesAndLabels: jsGradeAndLabelArray,
+  })
   |> Js.Promise.then_(result => {
     switch result["updateEvaluationCriterion"]["evaluationCriterion"] {
     | Some(criterion) =>

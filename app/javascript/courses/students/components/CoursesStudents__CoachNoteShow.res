@@ -4,15 +4,13 @@ let str = React.string
 
 type state = {archiving: bool}
 
-module ArchiveCoachNoteMutation = %graphql(
-  `
+module ArchiveCoachNoteMutation = %graphql(`
    mutation ArchiveCoachNoteMutation($id: ID!) {
     archiveCoachNote(id: $id) {
        success
       }
     }
-   `
-)
+   `)
 
 let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -22,10 +20,9 @@ let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
     window |> Window.confirm("Are you sure you want to delete this note?")
   } {
     setArchiving(_ => true)
-    ArchiveCoachNoteMutation.make(~id, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      if response["archiveCoachNote"]["success"] {
+    ArchiveCoachNoteMutation.fetch({id: id})
+    |> Js.Promise.then_((response: ArchiveCoachNoteMutation.t) => {
+      if response.archiveCoachNote.success {
         removeNoteCB(id)
       } else {
         setArchiving(_ => false)

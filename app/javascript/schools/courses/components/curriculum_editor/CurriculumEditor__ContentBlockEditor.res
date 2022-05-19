@@ -32,28 +32,23 @@ let reducer = (state, action) =>
   | FailSaving => {...state, saving: None}
   }
 
-module DeleteContentBlockMutation = %graphql(
-  `
+module DeleteContentBlockMutation = %graphql(`
     mutation DeleteContentBlockMutation($id: ID!) {
       deleteContentBlock(id: $id) {
         success
       }
     }
-  `
-)
+  `)
 
-module MoveContentBlockMutation = %graphql(
-  `
+module MoveContentBlockMutation = %graphql(`
     mutation MoveContentBlockMutation($id: ID!, $direction: MoveDirection!) {
       moveContentBlock(id: $id, direction: $direction) {
         success
       }
     }
-  `
-)
+  `)
 
-module UpdateFileBlockMutation = %graphql(
-  `
+module UpdateFileBlockMutation = %graphql(`
     mutation UpdateFileBlockMutation($id: ID!, $title: String!) {
       updateFileBlock(id: $id, title: $title) {
         contentBlock {
@@ -61,23 +56,19 @@ module UpdateFileBlockMutation = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
-module UpdateMarkdownBlockMutation = %graphql(
-  `
+module UpdateMarkdownBlockMutation = %graphql(`
     mutation UpdateMarkdownBlockMutation($id: ID!, $markdown: String!) {
       updateMarkdownBlock(id: $id, markdown: $markdown) {
         contentBlock {
-          ...ContentBlock.Fragments.AllFields
+          ...ContentBlockFragment.AllFields
         }
       }
     }
-  `
-)
+  `)
 
-module UpdateImageBlockMutation = %graphql(
-  `
+module UpdateImageBlockMutation = %graphql(`
     mutation UpdateImageBlockMutation($id: ID!, $caption: String!, $width:ImageWidth! ) {
       updateImageBlock(id: $id, caption: $caption, width:$width) {
         contentBlock {
@@ -85,8 +76,7 @@ module UpdateImageBlockMutation = %graphql(
         }
       }
     }
-  `
-)
+  `)
 
 let controlIcon = (~icon, ~title, ~color, ~handler) => {
   let buttonClasses = switch color {

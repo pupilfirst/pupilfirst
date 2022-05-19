@@ -237,10 +237,22 @@ let getStudentSubmissions = (
   let status = status->Belt.Option.flatMap(status => Some(status))
   switch cursor {
   | Some(cursor) =>
-    StudentSubmissionsQuery.make(~studentId, ~after=cursor, ~sortDirection, ~levelId?, ~status?, ())
-  | None => StudentSubmissionsQuery.make(~studentId, ~sortDirection, ~levelId?, ~status?, ())
+    StudentSubmissionsQuery.make({
+      studentId: studentId,
+      after: Some(cursor),
+      sortDirection: sortDirection,
+      levelId: levelId,
+      status: status,
+    })
+  | None =>
+    StudentSubmissionsQuery.make({
+      studentId: studentId,
+      sortDirection: sortDirection,
+      levelId: levelId,
+      status: status,
+      after: None,
+    })
   }
-  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     response["studentSubmissions"]["nodes"] |> updateStudentSubmissions(
       send,
@@ -299,15 +311,12 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
         ? "/submissions/" ++ Submission.id(submission)
         : "/targets/" ++ Submission.targetId(submission)
 
-      <div
-        className=""
-        key={submission |> Submission.id}>
-        <a className="block relative z-10 rounded-lg focus:outline-none focus:ring focus-ring-inset focus:ring-indigo-500"
+      <div className="" key={submission |> Submission.id}>
+        <a
+          className="block relative z-10 rounded-lg focus:outline-none focus:ring focus-ring-inset focus:ring-indigo-500"
           ariaLabel={"Student submission " ++ (submission |> Submission.id)}
           href=submissionHref>
-          <div
-            key={submission |> Submission.id}
-            className={submissionCardClasses(submission)}>
+          <div key={submission |> Submission.id} className={submissionCardClasses(submission)}>
             <div className="w-full md:w-3/4">
               <div className="block text-sm md:pr-2">
                 <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
@@ -405,7 +414,9 @@ let make = (
   <div className="max-w-3xl mx-auto">
     <div role="form" className="md:flex items-end w-full pb-4">
       <div className="flex-1">
-        <label htmlFor="filter" className="block text-tiny font-semibold uppercase"> {"Filter by:" |> str} </label>
+        <label htmlFor="filter" className="block text-tiny font-semibold uppercase">
+          {"Filter by:" |> str}
+        </label>
         <Multiselect
           id="filter"
           unselected={unselected(levels, selectedLevel, selectedStatus)}

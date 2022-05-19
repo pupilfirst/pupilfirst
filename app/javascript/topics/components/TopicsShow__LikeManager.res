@@ -47,10 +47,9 @@ let handlePostLike = (
     : {
         setSaving(_ => true)
         if liked {
-          DeletePostLikeQuery.make(~postId, ())
-          |> GraphqlQuery.sendQuery
-          |> Js.Promise.then_(response => {
-            response["deletePostLike"]["success"]
+          DeletePostLikeQuery.fetch({postId: postId})
+          |> Js.Promise.then_((response: DeletePostLikeQuery.t) => {
+            response.deletePostLike.success
               ? {
                   removeLikeCB()
                   setSaving(_ => false)
@@ -64,10 +63,9 @@ let handlePostLike = (
           })
           |> ignore
         } else {
-          CreatePostLikeQuery.make(~postId, ())
-          |> GraphqlQuery.sendQuery
-          |> Js.Promise.then_(response => {
-            response["createPostLike"]["success"]
+          CreatePostLikeQuery.fetch({postId: postId})
+          |> Js.Promise.then_((response: CreatePostLikeQuery.t) => {
+            response.createPostLike.success
               ? handleCreateResponse(setSaving, addLikeCB)
               : setSaving(_ => false)
             Js.Promise.resolve()

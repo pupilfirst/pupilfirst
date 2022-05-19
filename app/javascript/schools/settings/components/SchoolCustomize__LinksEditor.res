@@ -62,8 +62,7 @@ let handleDelete = (state, send, removeLinkCB, id, event) => {
   } else {
     send(DisableDelete(id))
 
-    DestroySchoolLinkQuery.make(~id, ())
-    |> GraphqlQuery.sendQuery
+    DestroySchoolLinkQuery.make({id: id})
     |> Js.Promise.then_(_response => {
       removeLinkCB(id)
       Js.Promise.resolve()
@@ -188,12 +187,11 @@ let handleAddLink = (state, send, addLinkCB, event) => {
     send(DisableForm)
     switch state.kind {
     | HeaderLink =>
-      CreateSchoolLinkQuery.make(~kind="header", ~title=state.title, ~url=state.url, ())
+      CreateSchoolLinkQuery.make({kind: "header", title: Some(state.title), url: state.url})
     | FooterLink =>
-      CreateSchoolLinkQuery.make(~kind="footer", ~title=state.title, ~url=state.url, ())
-    | SocialLink => CreateSchoolLinkQuery.make(~kind="social", ~url=state.url, ())
+      CreateSchoolLinkQuery.make({kind: "footer", title: Some(state.title), url: state.url})
+    | SocialLink => CreateSchoolLinkQuery.make({kind: "social", title: None, url: state.url})
     }
-    |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(response =>
       switch response["createSchoolLink"] {
       | #SchoolLink(schoolLink) =>

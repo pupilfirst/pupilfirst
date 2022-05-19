@@ -1,5 +1,5 @@
-exception UnexpectedBlockType(string)
 exception UnexpectedRequestSource(string)
+exception UnexpectedBlockType(string)
 
 type markdown = string
 type url = string
@@ -235,45 +235,7 @@ let updateMarkdown = (markdown, t) =>
   | Embed(_) => t
   }
 
-module Fragments = %graphql(
-  `
-  fragment allFields on ContentBlock {
-    id
-    blockType
-    sortIndex
-    content {
-      ... on ImageBlock {
-        caption
-        url
-        filename
-        width
-      }
-      ... on FileBlock {
-        title
-        url
-        filename
-      }
-      ... on AudioBlock {
-        title
-        url
-        filename
-      }
-      ... on MarkdownBlock {
-        markdown
-      }
-      ... on EmbedBlock {
-        url
-        embedCode
-        requestSource
-        lastResolvedAt
-      }
-    }
-  }
-`
-)
-
-module Query = %graphql(
-  `
+module Query = %graphql(`
     query ContentBlocksWithVersionsQuery($targetId: ID!, $targetVersionId: ID) {
       contentBlocks(targetId: $targetId, targetVersionId: $targetVersionId) {
         id
@@ -313,5 +275,4 @@ module Query = %graphql(
         updatedAt
       }
   }
-`
-)
+`)

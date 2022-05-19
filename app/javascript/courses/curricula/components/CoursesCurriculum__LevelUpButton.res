@@ -29,9 +29,7 @@ let createLevelUpQuery = (course, setSaving, event) => {
   event |> ReactEvent.Mouse.preventDefault
   setSaving(_ => true)
 
-  let variables = LevelUpQuery.makeVariables(~courseId=course |> Course.id, ())
-
-  LevelUpQuery.make(variables)
+  LevelUpQuery.fetch({courseId: Course.id(course)})
   |> Js.Promise.then_((response: LevelUpQuery.t) => {
     response.levelUp.success ? refreshPage() : setSaving(_ => false)
     Js.Promise.resolve()

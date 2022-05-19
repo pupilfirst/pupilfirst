@@ -118,7 +118,7 @@ let createCourseExport = (state, send, course, event) => {
   | Teams => #Teams
   }
 
-  CreateCourseExportQuery.make(
+  let variables = CreateCourseExportQuery.makeVariables(
     ~courseId=course |> Course.id,
     ~tagIds,
     ~reviewedOnly=state.reviewedOnly,
@@ -126,7 +126,8 @@ let createCourseExport = (state, send, course, event) => {
     ~exportType,
     (),
   )
-  |> GraphqlQuery.sendQuery
+
+  CreateCourseExportQuery.make(variables)
   |> Js.Promise.then_(response => {
     switch response["createCourseExport"]["courseExport"] {
     | Some(\"export") =>

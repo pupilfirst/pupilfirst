@@ -11,7 +11,7 @@ module CreateMarkdownContentBlock = %graphql(`
     mutation CreateMarkdownContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID) {
       createMarkdownContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId) {
         contentBlock {
-          ...ContentBlock.Fragments.AllFields
+          ...ContentBlockFragment.AllFields
         }
       }
     }
@@ -543,8 +543,7 @@ let onEmbedFormSave = (target, aboveContentBlock, url, send, addContentBlockCB, 
 }
 
 let topButton = (handler, id, title, icon) =>
-  <div
-    className="content-block-creator__top-button-container relative">
+  <div className="content-block-creator__top-button-container relative">
     <button
       onClick=handler
       id={"top-button-" ++ id}

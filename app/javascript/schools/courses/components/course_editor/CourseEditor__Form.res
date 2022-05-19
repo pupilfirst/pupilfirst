@@ -696,7 +696,9 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
           </h5>
           {ReactUtils.nullUnless(
             <div className="w-full pt-6">
-              <div role="tablist" className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
+              <div
+                role="tablist"
+                className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
                 <button
                   role="tab"
                   ariaSelected={selectedTab == DetailsTab}

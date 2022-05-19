@@ -11,6 +11,7 @@ module type X = {
   let serialize: t => Raw.t
   let serializeVariables: t_variables => Raw.t_variables
   let variablesToJson: Raw.t_variables => Js.Json.t
+  let toJson: Raw.t => Js.Json.t
   external unsafe_fromJson: Js.Json.t => Raw.t = "%identity"
 }
 
@@ -30,6 +31,16 @@ module Extender = (M: X) => {
       title: json |> field("title", string),
       body: json |> field("body", string),
     }
+  }
+
+  let decodeObject = json => {
+    let x = Js.Json.object_(json)
+
+    // switch x {
+    // | Some(x) => x |> Js.Promise.resolve
+    // | None => Js.Promise.reject(Graphql_error("Request failed"))
+    // }
+    x |> Js.Promise.resolve
   }
 
   let decodeNotifications = json => json |> Json.Decode.list(decodeNotification)
@@ -108,8 +119,7 @@ module Extender = (M: X) => {
 
             Js.Promise.reject(Graphql_error("Something went wrong!"))
           }
-        | None =>
-          Js.Dict.unsafeGet(obj, "data") |> M.unsafe_fromJson |> M.parse |> Js.Promise.resolve
+        | None => Js.Dict.unsafeGet(obj, "data") |> Js.Promise.resolve
         }
 
       | None => Js.Promise.reject(Graphql_error("Response is not an object"))
@@ -117,7 +127,19 @@ module Extender = (M: X) => {
     )
   }
 
-  let make = variables => {
-    sendQuery(M.query, variables->M.serializeVariables->M.variablesToJson)
+  external jsontoJsObject: Js.Json.t => Js.t<'a> = "%identity"
+
+  let query = (notify, variables) => {
+    sendQuery(~notify, M.query, variables->M.serializeVariables->M.variablesToJson)
+  }
+
+  let fetch = (~notify=true, variables) => {
+    query(notify, variables) |> Js.Promise.then_(data =>
+      M.unsafe_fromJson(data) |> M.parse |> Js.Promise.resolve
+    )
+  }
+
+  let make = (~notify=true, variables) => {
+    query(notify, variables) |> Js.Promise.then_(data => jsontoJsObject(data) |> Js.Promise.resolve)
   }
 }

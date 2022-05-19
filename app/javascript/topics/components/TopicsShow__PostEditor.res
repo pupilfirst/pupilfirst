@@ -93,10 +93,11 @@ let savePost = (
     | Some(post) =>
       let postId = post |> Post.id
 
-      UpdatePostQuery.make(~id=postId, ~body, ~editReason?, ())
-      |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response => {
-        response["updatePost"]["success"]
+      let variables = UpdatePostQuery.makeVariables(~id=postId, ~body, ~editReason?, ())
+
+      UpdatePostQuery.fetch(variables)
+      |> Js.Promise.then_((response: UpdatePostQuery.t) => {
+        response.updatePost.success
           ? handlePostUpdateResponse(
               postId,
               body,
@@ -115,10 +116,9 @@ let savePost = (
       })
       |> ignore
     | None =>
-      CreatePostQuery.make(~body, ~topicId=topic |> Topic.id, ~replyToPostId?, ())
-      |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response => {
-        switch response["createPost"]["postId"] {
+      CreatePostQuery.fetch({body: body, topicId: Topic.id(topic), replyToPostId: replyToPostId})
+      |> Js.Promise.then_((response: CreatePostQuery.t) => {
+        switch response.createPost.postId {
         | Some(postId) =>
           handlePostCreateResponse(postId, body, postNumber, currentUserId, setState, handlePostCB)
         | None => setState(state => {...state, saving: false})

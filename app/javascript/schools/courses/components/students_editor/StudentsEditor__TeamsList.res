@@ -63,33 +63,15 @@ let getTeams = (courseId, cursor, updateTeamsCB, teams, filter, setLoadingCB, lo
   let sortBy = filter->Filter.sortByToString
   let sortDirection = filter->Filter.sortDirection
   setLoadingCB(loading)
-  switch (selectedLevelId, search, cursor) {
-  | (Some(levelId), Some(search), Some(cursor)) =>
-    CourseTeamsQuery.make(
-      ~courseId,
-      ~levelId,
-      ~search,
-      ~after=cursor,
-      ~tags,
-      ~sortBy,
-      ~sortDirection,
-      (),
-    )
-  | (Some(levelId), Some(search), None) =>
-    CourseTeamsQuery.make(~courseId, ~levelId, ~search, ~tags, ~sortBy, ~sortDirection, ())
-  | (None, Some(search), Some(cursor)) =>
-    CourseTeamsQuery.make(~courseId, ~search, ~after=cursor, ~tags, ~sortBy, ~sortDirection, ())
-  | (Some(levelId), None, Some(cursor)) =>
-    CourseTeamsQuery.make(~courseId, ~levelId, ~after=cursor, ~tags, ~sortBy, ~sortDirection, ())
-  | (Some(levelId), None, None) =>
-    CourseTeamsQuery.make(~courseId, ~levelId, ~tags, ~sortBy, ~sortDirection, ())
-  | (None, Some(search), None) =>
-    CourseTeamsQuery.make(~courseId, ~search, ~tags, ~sortBy, ~sortDirection, ())
-  | (None, None, Some(cursor)) =>
-    CourseTeamsQuery.make(~courseId, ~after=cursor, ~tags, ~sortBy, ~sortDirection, ())
-  | (None, None, None) => CourseTeamsQuery.make(~courseId, ~tags, ~sortBy, ~sortDirection, ())
-  }
-  |> GraphqlQuery.sendQuery
+  CourseTeamsQuery.make({
+    courseId: courseId,
+    levelId: selectedLevelId,
+    search: search,
+    after: cursor,
+    tags: Some(tags),
+    sortBy: sortBy,
+    sortDirection: sortDirection,
+  })
   |> Js.Promise.then_(response => {
     response["courseTeams"]["nodes"] |> updateTeams(
       updateTeamsCB,

@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesStudents__StudentOverlay.css")`)
+%raw(`require("./CoursesStudents__StudentOverlay.css")`)
 
 open CoursesStudents__Types
 
@@ -9,8 +9,7 @@ type state = {
 
 let str = React.string
 
-module CreateCoachNotesMutation = %graphql(
-  `
+module CreateCoachNotesMutation = %graphql(`
    mutation CreateCoachNoteMutation($studentId: ID!, $note: String!) {
     createCoachNote(studentId: $studentId, note: $note ) {
        coachNote {
@@ -26,13 +25,11 @@ module CreateCoachNotesMutation = %graphql(
        }
       }
     }
-  `
-)
+  `)
 
 let saveNote = (studentId, setState, state, addNoteCB) => {
   setState(state => {...state, saving: true})
-  CreateCoachNotesMutation.make(~studentId, ~note=state.newNote, ())
-  |> GraphqlQuery.sendQuery
+  CreateCoachNotesMutation.make({studentId: studentId, note: state.newNote})
   |> Js.Promise.then_(response => {
     switch response["createCoachNote"]["coachNote"] {
     | Some(note) =>

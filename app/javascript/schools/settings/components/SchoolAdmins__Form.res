@@ -21,8 +21,7 @@ module UpdateSchoolAdminQuery = %graphql(`
 
 let createSchoolAdminQuery = (email, name, setSaving, updateCB) => {
   setSaving(_ => true)
-  CreateSchoolAdminQuery.make(~email, ~name, ())
-  |> GraphqlQuery.sendQuery
+  CreateSchoolAdminQuery.make({email: email, name: name})
   |> Js.Promise.then_(response => {
     switch response["createSchoolAdmin"]["schoolAdmin"] {
     | Some(schoolAdmin) =>
@@ -46,8 +45,7 @@ let createSchoolAdminQuery = (email, name, setSaving, updateCB) => {
 let updateSchoolAdminQuery = (admin, name, setSaving, updateCB) => {
   setSaving(_ => true)
   let id = admin |> SchoolAdmin.id
-  UpdateSchoolAdminQuery.make(~id, ~name, ())
-  |> GraphqlQuery.sendQuery
+  UpdateSchoolAdminQuery.make({id: id, name: name})
   |> Js.Promise.then_(response => {
     response["updateSchoolAdmin"]["success"]
       ? {

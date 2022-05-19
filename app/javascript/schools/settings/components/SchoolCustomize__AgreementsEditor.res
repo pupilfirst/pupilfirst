@@ -63,8 +63,7 @@ let handleUpdateAgreement = (
   event |> ReactEvent.Mouse.preventDefault
   send(BeginUpdate)
 
-  UpdateSchoolStringQuery.make(~key=kind |> kindToKey, ~value=state.agreement, ())
-  |> GraphqlQuery.sendQuery
+  UpdateSchoolStringQuery.make({key: kind |> kindToKey, value: state.agreement})
   |> Js.Promise.then_(result =>
     switch result["updateSchoolString"]["errors"] {
     | [] =>

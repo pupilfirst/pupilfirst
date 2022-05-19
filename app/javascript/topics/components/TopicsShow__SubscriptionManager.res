@@ -42,10 +42,9 @@ let handleSubscription = (
     : {
         setSaving(_ => true)
         if subscribed {
-          DeleteTopicSubscriptionQuery.make(~topicId, ())
-          |> GraphqlQuery.sendQuery
-          |> Js.Promise.then_(response => {
-            response["deleteTopicSubscription"]["success"]
+          DeleteTopicSubscriptionQuery.fetch({topicId: topicId})
+          |> Js.Promise.then_((response: DeleteTopicSubscriptionQuery.t) => {
+            response.deleteTopicSubscription.success
               ? {
                   unsubscribeCB()
                   setSaving(_ => false)
@@ -59,10 +58,9 @@ let handleSubscription = (
           })
           |> ignore
         } else {
-          CreateTopicSubscriptionQuery.make(~topicId, ())
-          |> GraphqlQuery.sendQuery
-          |> Js.Promise.then_(response => {
-            response["createTopicSubscription"]["success"]
+          CreateTopicSubscriptionQuery.fetch({topicId: topicId})
+          |> Js.Promise.then_((response: CreateTopicSubscriptionQuery.t) => {
+            response.createTopicSubscription.success
               ? {
                   subscribeCB()
                   setSaving(_ => false)

@@ -26,11 +26,11 @@ const features = [
     ),
   },
   {
-    title: <>Powered by Rails & ReasonML</>,
+    title: <>Powered by Rails &amp; ReScript</>,
     description: (
       <>
         Pupilfirst LMS is a monorepo with Ruby on Rails serving a mix of
-        server-rendered markup and client-side JS generated using ReasonML.
+        server-rendered markup and client-side JS generated using ReScript.
       </>
     ),
   },

@@ -21,7 +21,7 @@ module Mutations
     def resolve(_params)
       notify(
         :success,
-        I18n.t('shared.done_exclamation'),
+        I18n.t('shared.notifications.done_exclamation'),
         I18n.t('mutations.update_course.success_notification')
       )
 

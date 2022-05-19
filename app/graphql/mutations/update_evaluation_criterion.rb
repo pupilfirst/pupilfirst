@@ -12,7 +12,7 @@ module Mutations
       mutator = UpdateEvaluationCriterionMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, 'Done!', 'Evaluation criterion updated successfully!')
+        mutator.notify(:success, I18n.t("shared.notifications.done"), I18n.t("mutations.update_evaluation_criterion.eval_crit_updated_notification"))
         { evaluation_criterion: mutator.update_evaluation_criterion }
       else
         mutator.notify_errors

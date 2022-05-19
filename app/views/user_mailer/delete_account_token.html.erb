@@ -1,19 +1,11 @@
 <% content_for :salutation do %>
-  Hello <%= @user.name %>,
+  <%= t("shared.salutation_name", name: @user.name) %>
 <% end %>
 
 <% content_for :body do %>
-  <p>We received a request to delete your account in
-    <%= @school.name %>.</p>
-  <p> Please click this <%= link_to 'link', @delete_account_url%> to confirm account deletion. The link is valid for 30 minutes only.</p>
+  <%= t("mailers.user.delete_account_token.body.main_html", school_name: @school.name, link_to: link_to(t("mailers.user.delete_account_token.body.link_to"), @delete_account_url)) %>
 
-  <p>
-    If you&rsquo;re unable to click the link above, please copy and paste the following link into your browser&rsquo;s
-    address bar:
-  </p>
+  <%= render 'mailers/link_fallback', url: @delete_account_url %>
 
-  <p>
-    <%= render 'mailers/link_fallback', url: @delete_account_url %>
-
-  <p> This action is irreversible, and will permanently remove your access to the school.</p>
+  <%= t("mailers.user.delete_account_token.body.note_html") %>
 <% end %>

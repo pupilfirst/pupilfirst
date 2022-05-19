@@ -14,28 +14,28 @@
     <div class="border-b pb-3">
       <%= link_to topic_path(@post.topic, anchor: "post-show-#{@post.id}"), class: "btn btn-default" do %>
         <i class="fas fa-arrow-left"></i>
-        <span class="ml-2">Back to Post</span>
+        <span class="ml-2"><%= t(".back_to_post") %></span>
       <% end %>
     </div>
     <div class="mt-5 inline-block bg-gray-200 border rounded px-2 pb-1 ml-8 md:ml-19">
-      <span class="text-xs font-semibold text-gray-900">Post Edit History</span>
+      <span class="text-xs font-semibold text-gray-900"><%= t(".edit_history") %></span>
     </div>
     <div class="flex items-start mt-4">
       <div class="w-1/12 font-bold text-lg md:text-4xl mr-2 md:mr-3 text-center text-gray-500"><%= presenter.version_number_for_post %></div>
       <div class="flex-1 overflow-hidden">
         <div class="relative bg-white border rounded p-5 pt-8 overflow-hidden">
-          <span class="inline-block text-xs bg-green-500 text-white font-semibold rounded-b py-1 px-2 absolute top-0">Current Version</span>
+          <span class="inline-block text-xs bg-green-500 text-white font-semibold rounded-b py-1 px-2 absolute top-0"><%= t(".current_version") %></span>
           <div class="convert-markdown mt-1" data-json-props="<%= presenter.markdown_prop(@post.body) %>">
             <%= @post.body %>
           </div>
           <div class="mt-4 text-xs">
-            <span>Edited by</span>
+            <span><%= t(".edited_by") %></span>
             <span class="font-semibold"><%= presenter.editor_name_for_answer %></span>
             <span><%= presenter.updated_at(@post) %></span>
           </div>
           <% if @post.edit_reason? %>
             <div class="mt-1 text-xs">
-              <span class="font-semibold">Reason:</span>
+              <span class="font-semibold"><%= t(".reason") %>:</span>
               <span><%= @post.edit_reason %></span>
             </div>
           <% end %>
@@ -52,16 +52,16 @@
           </div>
           <div class="mt-4 text-xs">
             <% if index == (presenter.versions_count - 1) %>
-            <span>Created by</span>
+            <span><%= t(".created_by") %></span>
             <% else %>
-            <span>Edited by</span>
+            <span><%= t(".edited_by") %></span>
             <% end %>
             <span class="font-semibold"><%= version.user&.name|| 'Unknown' %></span>
             <span><%= presenter.updated_at(version) %></span>
           </div>
           <% if version.reason? %>
             <div class="mt-1 text-xs">
-              <span class="font-semibold">Reason:</span>
+              <span class="font-semibold"><%= t(".reason") %>:</span>
               <span><%= version.reason %></span>
             </div>
           <% end %>

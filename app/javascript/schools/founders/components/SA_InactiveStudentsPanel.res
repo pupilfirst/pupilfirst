@@ -1,6 +1,8 @@
 open InactiveStudentsPanel__Types
 
 let str = React.string
+let t = I18n.t(~scope="components.SA_InactiveStudentsPanel")
+let ts = I18n.ts
 
 type state = {
   teams: list<Team.t>,
@@ -59,7 +61,7 @@ let handleActiveTeamResponse = (send, state, json) => {
       !(state.selectedTeams |> List.exists(removedTeam => Team.id(team) === Team.id(removedTeam)))
     )
   send(RefreshData(updatedTeams))
-  Notification.success("Success!", message)
+  Notification.success(ts("notifications.success"), message)
 }
 
 @react.component
@@ -77,11 +79,11 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
           <a
             className="block px-3 py-3 md:py-2 text-gray-800 focus:outline-none"
             href={"/school/courses/" ++ (courseId ++ "/students")}>
-            {"All Students" |> str}
+            {t("all_students") |> str}
           </a>
         </li>
         <li className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
-          <span> {"Inactive Students" |> str} </span>
+          <span> {t("inactive_students") |> str} </span>
         </li>
       </ul>
     </div>
@@ -93,7 +95,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
               id="search"
               type_="search"
               className="text-sm bg-white border border-gray-400 rounded leading-relaxed max-w-xs w-full py-2 px-3 mr-2 focus:outline-none focus:bg-white focus:border-primary-300"
-              placeholder="Search by student or team name or student email..."
+              placeholder={t("search_placeholder")}
               value=state.searchString
               onChange={event => send(UpdateSearchString(ReactEvent.Form.target(event)["value"]))}
             />
@@ -116,7 +118,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
                     authenticityToken,
                   )}
                 className="btn btn-success ml-3 mr-3 focus:outline-none">
-                {"Reactivate Students" |> str}
+                {t("reactivate_students") |> str}
               </button>}
         </div>
       </div>
@@ -186,7 +188,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
                 : <div className="flex w-2/5 items-center">
                     <div className="w-3/5 py-4 px-3">
                       <div className="students-team--name mb-5">
-                        <p className="mb-1 text-xs"> {"Team" |> str} </p>
+                        <p className="mb-1 text-xs"> {t("team") |> str} </p>
                         <h4> {team |> Team.name |> str} </h4>
                       </div>
                     </div>
@@ -195,9 +197,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
           })
           |> Array.of_list
           |> React.array
-        : <div className="shadow bg-white rounded-lg mb-4 p-4">
-            {"No inactive student matches your search criteria." |> str}
-          </div>}
+        : <div className="shadow bg-white rounded-lg mb-4 p-4"> {t("search_empty") |> str} </div>}
       {teams |> ListUtils.isNotEmpty
         ? <div className="max-w-3xl w-full flex flex-row mx-auto justify-center pb-8">
             {currentPage > 1
@@ -207,7 +207,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
                   (courseId ++
                   ("/inactive_students?page=" ++ (currentPage - 1 |> string_of_int)))}>
                   <i className="fas fa-arrow-left" />
-                  <span className="ml-2"> {"Prev" |> str} </span>
+                  <span className="ml-2"> {t("prev") |> str} </span>
                 </a>
               : React.null}
             {isLastPage
@@ -217,7 +217,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
                   href={"/school/courses/" ++
                   (courseId ++
                   ("/inactive_students?page=" ++ (currentPage + 1 |> string_of_int)))}>
-                  <span className="mr-2"> {"Next" |> str} </span>
+                  <span className="mr-2"> {t("next") |> str} </span>
                   <i className="fas fa-arrow-right" />
                 </a>}
           </div>

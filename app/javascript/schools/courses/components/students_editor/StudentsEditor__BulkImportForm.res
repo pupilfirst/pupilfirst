@@ -3,6 +3,7 @@ let str = React.string
 open StudentsEditor__Types
 
 let t = I18n.t(~scope="components.StudentsEditor__BulkImportForm")
+let ts = I18n.ts
 
 module CSVData = {
   type t = StudentCSVData.t
@@ -99,7 +100,7 @@ let submitForm = (courseId, send, closeDrawerCB, event) => {
     json => {
       Json.Decode.field("success", Json.Decode.bool, json)
         ? {
-            Notification.success(t("done_exclamation"), t("success_notification"))
+            Notification.success(ts("notifications.done_exclamation"), t("success_notification"))
             closeDrawerCB()
           }
         : ()
@@ -331,7 +332,7 @@ let make = (~courseId, ~closeDrawerCB) => {
         <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
           {t("drawer_heading")->str}
         </h5>
-        <DisablingCover disabled={state.saving} message="Processing...">
+        <DisablingCover disabled={state.saving} message= { ts("processing") ++ "..."}>
           <div className="mt-5">
             <div className="flex justify-between items-center text-center">
               <div>
@@ -342,7 +343,7 @@ let make = (~courseId, ~closeDrawerCB) => {
                   className="ml-2"
                   link="https://docs.pupilfirst.com/#/students?id=importing-students-in-bulk">
                   {str(
-                    "This file will be used to import students in bulk. Check the sample file for the required format.",
+                    t("import_bulk_help"),
                   )}
                 </HelpIcon>
               </div>

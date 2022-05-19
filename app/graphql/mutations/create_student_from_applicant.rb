@@ -17,7 +17,7 @@ module Mutations
       convert_applicant
       notify(
         :success,
-        I18n.t('shared.done_exclamation'),
+        I18n.t('shared.notifications.done_exclamation'),
         I18n.t('mutations.create_student_from_applicant.success_notification')
       )
       { success: true }

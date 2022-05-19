@@ -2,6 +2,8 @@
 
 open React
 
+let t = I18n.t(~scope="components.EditorDrawer")
+
 type size =
   | Small
   | Normal
@@ -34,7 +36,7 @@ let drawerClasses = (size, level, previousLevel) => {
 @react.component
 let make = (
   ~closeDrawerCB,
-  ~closeButtonTitle="Close Editor",
+  ~closeButtonTitle=t("close_editor"),
   ~size=Normal,
   ~closeIconClassName="if i-times-regular",
   ~level=0,

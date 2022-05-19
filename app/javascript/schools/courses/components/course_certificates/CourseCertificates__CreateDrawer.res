@@ -2,6 +2,7 @@ open CourseCertificates__Types
 
 let str = React.string
 let t = I18n.t(~scope="components.CourseCertificates__CreateDrawer")
+let ts = I18n.t(~scope="shared")
 
 type state = {
   name: string,
@@ -52,7 +53,7 @@ let submitForm = (course, addCertificateCB, send, event) => {
     url,
     formData,
     json => {
-      Notification.success(t("done_exclamation"), t("success_notification"))
+      Notification.success(ts("notifications.done_exclamation"), t("success_notification"))
       Json.Decode.field("certificate", Certificate.decode, json) |> addCertificateCB
     },
     () => send(FailSaving),
@@ -82,7 +83,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
   <SchoolAdmin__EditorDrawer closeDrawerCB closeButtonTitle={t("cancel")}>
     <form onSubmit={submitForm(course, addCertificateCB, send)}>
       <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
-      <DisablingCover containerClasses="w-full" disabled=state.saving message="Uploading...">
+      <DisablingCover containerClasses="w-full" disabled=state.saving message= { ts("uploading") ++ "..." }>
         <div className="flex flex-col min-h-screen">
           <div className="bg-white flex-grow-0">
             <div className="bg-gray-100 pt-6 pb-4 border-b">

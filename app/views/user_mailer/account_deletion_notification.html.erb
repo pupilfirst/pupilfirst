@@ -1,15 +1,9 @@
 <% content_for :salutation do %>
-  Hello <%= @user.name %>,
+  <%= t("shared.salutation_name", name: @user.name) %>
 <% end %>
 
 <% content_for :body do %>
-  <p>We noticed that you haven't used your account in
-    <%= @school.name %> for over <%= @inactivity_months %> months.</p>
-  <p> We will automatically delete your account after one month. Once your account is deleted, all your personal
-    information will be removed and you will no longer have access to the school.</p>
-
-  <p> If you would like to keep your account, <%= link_to 'please sign into the school', @sign_in_url %>
-    before <%= 1.month.from_now.strftime("%b %d, %Y") %>. </p>
+  <%= t("mailers.user.account_deletion_notification.body.main_html", school_name: @school.name, inactivity_months: @inactivity_months, link_to: link_to(t("mailers.user.account_deletion_notification.body.link_to"), @sign_in_url), one_month_from_now: 1.month.from_now.strftime("%b %d, %Y").to_s) %>
 
   <%= render 'mailers/link_fallback', url: @sign_in_url %>
 <% end %>

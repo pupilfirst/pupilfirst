@@ -113,8 +113,10 @@ let getTopics = (send, communityId, cursor, filter) => {
 
   let searchFilter = Belt.Option.map(filter.search, search =>
     switch search {
-    | SearchContent(searchString) => {search: searchString, searchBy: #content}
-    | SearchTitle(searchString) => {search: searchString, searchBy: #title}
+    | SearchContent(searchString) =>
+      TopicsQuery.makeInputObjectCommunitySearchFilter(~search=searchString, ~searchBy=#content, ())
+    | SearchTitle(searchString) =>
+      TopicsQuery.makeInputObjectCommunitySearchFilter(~search=searchString, ~searchBy=#title, ())
     }
   )
 
@@ -130,15 +132,16 @@ let getTopics = (send, communityId, cursor, filter) => {
     (),
   )
   TopicsQuery.make(variables)
-  |> Js.Promise.then_((response: TopicsQuery.t) => {
-    let newTopics = response.topics.nodes |> Js.Array.map(topicData => Topic.makeFromJS(topicData))
+  |> Js.Promise.then_(response => {
+    let newTopics =
+      response["topics"]["nodes"] |> Js.Array.map(topicData => Topic.makeFromJS(topicData))
 
     send(
       LoadTopics(
-        response.topics.pageInfo.endCursor,
-        response.topics.pageInfo.hasNextPage,
+        response["topics"]["pageInfo"]["endCursor"],
+        response["topics"]["pageInfo"]["hasNextPage"],
         newTopics,
-        response.topics.totalCount,
+        response["topics"]["totalCount"],
       ),
     )
 

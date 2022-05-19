@@ -302,7 +302,17 @@ let gradeSubmissionQuery = (
 ) => {
   send(BeginSaving)
   let feedback = trimToOption(state.newFeedback)
-  let grades = Js.Array.map(g => Grade.asJsType(g), state.grades)
+  // let grades = Js.Array.map(g => Grade.asJsType(g), state.grades)
+
+  let grades = Js.Array.map(
+    g =>
+      CreateGradingMutation.makeInputObjectGradeInput(
+        ~evaluationCriterionId=Grade.evaluationCriterionId(g),
+        ~grade=Grade.value(g),
+        (),
+      ),
+    state.grades,
+  )
 
   let variables = CreateGradingMutation.makeVariables(
     ~submissionId,
@@ -1108,8 +1118,8 @@ let reportConclusionTimeString = report => {
 let loadSubmissionReport = (report, updateSubmissionReportCB) => {
   let id = SubmissionReport.id(report)
   SubmissionReportQuery.make({id: id})
-  |> Js.Promise.then_((response: SubmissionReportQuery.t) => {
-    let reportData = response.submissionReport
+  |> Js.Promise.then_(response => {
+    let reportData = response["submissionReport"]
     let updatedReport = SubmissionReport.makeFromJS(reportData)
 
     updateSubmissionReportCB(Some(updatedReport))

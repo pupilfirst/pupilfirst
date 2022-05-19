@@ -84,15 +84,21 @@ let updateGradeLabel = (value, gradeAndLabel, state, setState) => {
 let updateEvaluationCriterion = (state, setState, addOrUpdateCriterionCB, criterion) => {
   setState(state => {...state, saving: true})
 
-  let jsGradeAndLabelArray =
+  let gradesAndLabels =
     state.gradesAndLabels
-    |> Js.Array.filter(gradesAndLabel => gradesAndLabel |> GradeLabel.grade <= state.maxGrade)
-    |> Array.map(gl => gl |> GradeLabel.asJsObject)
+    ->Js.Array2.filter(gradesAndLabel => gradesAndLabel |> GradeLabel.grade <= state.maxGrade)
+    ->Js.Array2.map(gradesAndLabel =>
+      UpdateEvaluationCriterionQuery.makeInputObjectGradeAndLabelInput(
+        ~grade=GradeLabel.grade(gradesAndLabel),
+        ~label=GradeLabel.label(gradesAndLabel),
+        (),
+      )
+    )
 
   UpdateEvaluationCriterionQuery.make({
     id: criterion |> EvaluationCriterion.id,
     name: state.name,
-    gradesAndLabels: jsGradeAndLabelArray,
+    gradesAndLabels: gradesAndLabels,
   })
   |> Js.Promise.then_(result => {
     switch result["updateEvaluationCriterion"]["evaluationCriterion"] {
@@ -110,20 +116,27 @@ let updateEvaluationCriterion = (state, setState, addOrUpdateCriterionCB, criter
 let createEvaluationCriterion = (state, setState, addOrUpdateCriterionCB, courseId) => {
   setState(state => {...state, saving: true})
 
-  let jsGradeAndLabelArray =
+  let gradesAndLabels =
     state.gradesAndLabels
-    |> Js.Array.filter(gradesAndLabel => gradesAndLabel |> GradeLabel.grade <= state.maxGrade)
-    |> Array.map(gl => gl |> GradeLabel.asJsObject)
+    ->Js.Array2.filter(gradesAndLabel => gradesAndLabel |> GradeLabel.grade <= state.maxGrade)
+    ->Js.Array2.map(gradesAndLabel =>
+      CreateEvaluationCriterionQuery.makeInputObjectGradeAndLabelInput(
+        ~grade=GradeLabel.grade(gradesAndLabel),
+        ~label=GradeLabel.label(gradesAndLabel),
+        (),
+      )
+    )
 
-  CreateEvaluationCriterionQuery.make(
+  let variables = CreateEvaluationCriterionQuery.makeVariables(
     ~name=state.name,
     ~maxGrade=state.maxGrade,
     ~passGrade=state.passGrade,
     ~courseId,
-    ~gradesAndLabels=jsGradeAndLabelArray,
+    ~gradesAndLabels,
     (),
   )
-  |> GraphqlQuery.sendQuery
+
+  CreateEvaluationCriterionQuery.make(variables)
   |> Js.Promise.then_(result => {
     switch result["createEvaluationCriterion"]["evaluationCriterion"] {
     | Some(criterion) =>

@@ -8,13 +8,13 @@ let str = React.string
 
 type status = [#Active | #Ended | #Archived]
 
-module CourseFragement = CourseEditor__Course.Fragments
+module CourseFragment = CourseEditor__Course.Fragments
 
 module CoursesQuery = %graphql(`
   query CoursesQuery($search: String, $after: String, $status: CourseStatus) {
     courses(status: $status, search: $search, first: 10, after: $after){
       nodes {
-        ...CourseFragement
+        ...CourseFragment
       }
       pageInfo{
         endCursor,hasNextPage

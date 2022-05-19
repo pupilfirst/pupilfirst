@@ -52,14 +52,6 @@ module Highlight = {
     description: "",
   }
 
-  let toJSArray = Js.Array.map(t =>
-    {
-      "icon": t.icon,
-      "title": t.title,
-      "description": t.description,
-    }
-  )
-
   let isInvalid = t =>
     t.icon == "" || Js.String.trim(t.description) == "" || Js.String.trim(t.title) == ""
 
@@ -228,7 +220,7 @@ let decode = json => {
 }
 
 module Fragments = %graphql(`
-  fragment CourseFragement on Course {
+  fragment CourseFragment on Course {
     id
     name
     description

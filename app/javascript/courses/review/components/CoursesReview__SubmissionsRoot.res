@@ -68,8 +68,7 @@ module SubmissionDetailsQuery = %graphql(`
 
 let getSubmissionDetails = (submissionId, setState, ()) => {
   setState(_ => Loading)
-  SubmissionDetailsQuery.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery
+  SubmissionDetailsQuery.make({submissionId: submissionId})
   |> Js.Promise.then_(response => {
     setState(_ => Loaded(SubmissionDetails.decodeJs(response["submissionDetails"])))
     Js.Promise.resolve()

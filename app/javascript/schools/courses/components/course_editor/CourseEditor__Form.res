@@ -1,10 +1,10 @@
-module CourseFragement = CourseEditor__Course.Fragments
+module CourseFragment = CourseEditor__Course.Fragments
 
 module CreateCourseQuery = %graphql(`
     mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
       createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
         course {
-          ...CourseFragement
+          ...CourseFragment
         }
       }
     }
@@ -14,7 +14,7 @@ module UpdateCourseQuery = %graphql(`
     mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
       updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
         course {
-          ...CourseFragement
+          ...CourseFragment
         }
       }
     }
@@ -178,13 +178,19 @@ let processingUrl = state => {
   }
 }
 
-let highlightsToOption = highlights => {
-  let highlights = Course.Highlight.toJSArray(highlights)
-  ArrayUtils.isEmpty(highlights) ? None : Some(highlights)
-}
-
 let createCourse = (state, send, reloadCoursesCB) => {
   send(StartSaving)
+
+  let highlights = Js.Array.map(
+    h =>
+      CreateCourseQuery.makeInputObjectCourseHighlightInput(
+        ~title=Course.Highlight.title(h),
+        ~icon=Course.Highlight.icon(h),
+        ~description=Course.Highlight.description(h),
+        (),
+      ),
+    state.highlights,
+  )
 
   let variables = CreateCourseQuery.makeVariables(
     ~name=state.name,
@@ -196,7 +202,7 @@ let createCourse = (state, send, reloadCoursesCB) => {
     ~featured=state.featured,
     ~progressionBehavior=state.progressionBehavior,
     ~progressionLimit=?progressionLimitForQuery(state),
-    ~highlights=?highlightsToOption(state.highlights),
+    ~highlights,
     ~processingUrl=?processingUrl(state),
     (),
   )
@@ -221,6 +227,17 @@ let createCourse = (state, send, reloadCoursesCB) => {
 let updateCourse = (state, send, updateCourseCB, course) => {
   send(StartSaving)
 
+  let highlights = Js.Array.map(
+    h =>
+      UpdateCourseQuery.makeInputObjectCourseHighlightInput(
+        ~title=Course.Highlight.title(h),
+        ~icon=Course.Highlight.icon(h),
+        ~description=Course.Highlight.description(h),
+        (),
+      ),
+    state.highlights,
+  )
+
   let variables = UpdateCourseQuery.makeVariables(
     ~id=Course.id(course),
     ~name=state.name,
@@ -232,7 +249,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
     ~featured=state.featured,
     ~progressionBehavior=state.progressionBehavior,
     ~progressionLimit=?progressionLimitForQuery(state),
-    ~highlights=?highlightsToOption(state.highlights),
+    ~highlights,
     ~processingUrl=?processingUrl(state),
     (),
   )
@@ -257,8 +274,7 @@ let updateCourse = (state, send, updateCourseCB, course) => {
 let archiveCourse = (send, reloadCoursesCB, course) => {
   send(StartSaving)
 
-  ArciveCourseQuery.make(~id=course |> Course.id, ())
-  |> GraphqlQuery.sendQuery
+  ArciveCourseQuery.make({id: course |> Course.id})
   |> Js.Promise.then_(result => {
     result["archiveCourse"]["success"] ? reloadCoursesCB() : send(FailSaving)
     Js.Promise.resolve()
@@ -274,8 +290,7 @@ let archiveCourse = (send, reloadCoursesCB, course) => {
 let unarchiveCourse = (send, reloadCoursesCB, course) => {
   send(StartSaving)
 
-  UnarchiveCourseQuery.make(~id=course |> Course.id, ())
-  |> GraphqlQuery.sendQuery
+  UnarchiveCourseQuery.make({id: course |> Course.id})
   |> Js.Promise.then_(result => {
     result["unarchiveCourse"]["success"] ? reloadCoursesCB() : send(FailSaving)
     Js.Promise.resolve()
@@ -291,8 +306,7 @@ let unarchiveCourse = (send, reloadCoursesCB, course) => {
 let cloneCourse = (send, reloadCoursesCB, course) => {
   send(StartSaving)
 
-  CloneCourseQuery.make(~id=course |> Course.id, ())
-  |> GraphqlQuery.sendQuery
+  CloneCourseQuery.make({id: course |> Course.id})
   |> Js.Promise.then_(result => {
     result["cloneCourse"]["success"] ? reloadCoursesCB() : send(FailSaving)
     Js.Promise.resolve()

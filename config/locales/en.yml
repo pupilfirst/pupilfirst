@@ -549,6 +549,9 @@ en:
       submitted_by_team: "Submitted by team "
     CoursesReview__SubmissionInfoCard:
       submission_hash: "Submission #"
+    CoursesStudents__TeamsList:
+      last_seen: "Last seen %{time_string}"
+      no_last_seen: "This student has never signed in"
     CoursesStudents__StudentOverlay:
       access_ended_at: This student's access to the course ended on %{date}.
       attempted: " Attempted"

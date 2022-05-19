@@ -12,36 +12,35 @@ Pupilfirst LMS uses _Rails Internationalization_ (I18n) API for internationaliza
 | --------------------------- | :-----------------------------------------------: |
 | `components.COMPONENT.*`    |            Component-specific strings.            |
 | `jobs.MODULE.CLASS.*`       |               Strings used by jobs.               |
+| `layouts.PATH`              |             Strings used in layouts.              |
+| `mailers.CLASS.ACTION.*`    |             Strings used in mailers.              |
 | `models.MODEL.COLUMN.*`     | Translation of database values to display values. |
 | `mutations.MUTATION.*`      |            Strings used by mutations.             |
-| `queries.QUERY.*`           |      Strings used by resolvers and mutators.      |
-| `mailers.CLASS.ACTION.*`    |             Strings used in mailers.              |
 | `presenters.MODULE.CLASS.*` |            Presenter-specific strings.            |
+| `queries.QUERY.*`           |      Strings used by resolvers and mutators.      |
 | `services.MODULE.CLASS.*`   |             Strings used by services.             |
 | `shared.*`                  |                  Shared strings.                  |
 | `CONTROLLER.ACTION.*`       |             Request-based responses.              |
 | `MODULE.CLASS.*`            |           Strings used by library code.           |
 
 - `CONTROLLER` is always the plural version. For example: `FoundersController#edit` is keyed as `founders.edit.*`
-- Always order keys alphabetically. If you use [the VSCode plugin](#visual-studio-code-plugin), this will be done automatically.
+- Always order keys alphabetically. Use [the YAML Sort Visual Studio Code extension](#yaml-sort), to manage this.
 - Third-party library translations follow their own format, and any customization of those should be [documented
   _here_ in this file](#third-party-library-translations).
 
-## Visual Studio Code plugin
+## YAML Sort
 
-**Important Note:** This plugin only works within ReScript (`.res`) files at the moment.
+You can use the [YAML Sort Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=PascalReitermann93.vscode-yaml-sort)
+to validate and sort the contents of `LANG.yml` files.
 
-You can use the [pupilfirst-translator VSCode plugin](https://marketplace.visualstudio.com/items?itemName=bodhi.pupilfirst-translator)
-to quickly move strings from UI components to the I18n YAML file.
+Use the following configuration when using this extension:
 
-### Usage
-
-1. Select a string that needs to be moved to `en.yml`.
-2. Right click and select _Pupilfirst Translate_ button. You can also use the `Ctrl+Shift+i` keyboard shortcut.
-3. Enter the key. For example: `video.description_label`.
-4. Press `Enter` to confirm.
-
-This will create an entry for the `key` you have added in `en.yml` file and replaces the selection.
+```json
+{
+  "vscode-yaml-sort.quotingType": "\"",
+  "vscode-yaml-sort.useLeadingDashes": false
+}
+```
 
 ## Third-party library translations
 

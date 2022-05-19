@@ -179,6 +179,9 @@ module Example = {
     "question-square-light",
     "question-square-regular",
     "question-square-solid",
+    "redo-light",
+    "redo-regular",
+    "redo-solid",
     "school-light",
     "school-regular",
     "school-solid",
@@ -223,6 +226,9 @@ module Example = {
     "times-square-light",
     "times-square-regular",
     "times-square-solid",
+    "undo-light",
+    "undo-regular",
+    "undo-solid",
     "upload-light",
     "upload-regular",
     "upload-solid",
@@ -245,18 +251,13 @@ module Example = {
     let normalizedString =
       searchString
       |> Js.String.trim
-      |> Js.String.replaceByRe(
-        Js.Re.fromStringWithFlags("\\s+", ~flags="g"),
-        " ",
-      )
+      |> Js.String.replaceByRe(Js.Re.fromStringWithFlags("\\s+", ~flags="g"), " ")
 
     switch normalizedString {
     | "" => icons
     | searchString =>
       icons
-      |> Js.Array.filter(icon =>
-        icon |> String.lowercase_ascii |> Js.String.includes(searchString)
-      )
+      |> Js.Array.filter(icon => icon |> String.lowercase_ascii |> Js.String.includes(searchString))
       |> copyAndSort(String.compare)
     }
   }
@@ -270,24 +271,19 @@ module Example = {
   let make = () => {
     let (searchString, setSearchString) = React.useState(() => "")
     <div className="max-w-5xl mx-auto">
-    <div className="flex items-center justify-between py-6">
-      <h1 className="text-center text-2xl font-bold text-purple-700">
-        {"pf-icon" |> str}
-      </h1>
-      <a
-      className="flex items-center cursor-pointer hover:text-purple-600"
-      href="https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/pf-icon"
-      target="_blank"
-    >
-      <img
-        className="w-8 h-8"
-        src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-      />
-      <span className="pl-2">
-        {"Docs" -> str}
-      </span>
-    </a>
-    </div>
+      <div className="flex items-center justify-between py-6">
+        <h1 className="text-center text-2xl font-bold text-purple-700"> {"pf-icon" |> str} </h1>
+        <a
+          className="flex items-center cursor-pointer hover:text-purple-600"
+          href="https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/pf-icon"
+          target="_blank">
+          <img
+            className="w-8 h-8"
+            src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+          />
+          <span className="pl-2"> {"Docs"->str} </span>
+        </a>
+      </div>
       <div>
         <div className="py-8 bg-gray-100 sticky top-0">
           <input
@@ -299,26 +295,21 @@ module Example = {
             className=" w-full text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 appearance-none text-gray-700"
           />
         </div>
-        <div
-          className="mt-4 p-6 flex md:flex-row flex-col flex-wrap bg-white border rounded">
+        <div className="mt-4 p-6 flex md:flex-row flex-col flex-wrap bg-white border rounded">
           {switch search(searchString) {
-          | [] =>
-            <div className="p-4 text-sm text-center w-full">
-              {"Icon not found" |> str}
-            </div>
+          | [] => <div className="p-4 text-sm text-center w-full"> {"Icon not found" |> str} </div>
           | resultIcons =>
             resultIcons
             |> Array.map(icon => {
               let iconClasses = "if i-" ++ icon
-              <div
-                key=icon
-                className="flex items-center mt-4 md:w-1/2 w-full px-2 my-2">
+              <div key=icon className="flex items-center mt-4 md:w-1/2 w-full px-2 my-2">
                 <PfIcon className={iconClasses ++ " if-fw text-2xl"} />
                 <div className="ml-4 overflow-x-auto">
                   <div className="flex gap-4 items-center">
                     <p className="font-semibold text-xl"> {icon |> str} </p>
                     <button
-                      onClick={_ => writeText("<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />"))}
+                      onClick={_ =>
+                        writeText("<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />"))}
                       className="text-xs text-gray-400 hover:text-blue-500 focus:outline-none focus:text-blue-500">
                       {"Copy"->str}
                     </button>
@@ -326,8 +317,7 @@ module Example = {
                   <div className="overflow-x-auto">
                     <code
                       className="inline-block text-gray-900 text-xs bg-red-100 p-1 mt-px whitespace-nowrap">
-                      {"<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />")
-                        |> str}
+                      {"<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />") |> str}
                     </code>
                   </div>
                 </div>

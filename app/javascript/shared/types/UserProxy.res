@@ -1,13 +1,10 @@
-module UserProxy = UserProxyFragment
-
-type rec t = {
-  id: id,
+type t = {
+  id: string,
   userId: string,
   name: string,
   avatarUrl: option<string>,
   title: string,
 }
-and id = string
 
 let id = t => t.id
 let userId = t => t.userId
@@ -48,3 +45,13 @@ let makeFromJs = jsObject =>
     ~avatarUrl=jsObject["avatarUrl"],
     ~title=jsObject["title"],
   )
+
+module Fragment = %graphql(`
+  fragment UserProxy on UserProxy {
+    id
+    name
+    userId
+    title
+    avatarUrl
+  }
+`)

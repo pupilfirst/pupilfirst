@@ -1,5 +1,55 @@
 exception InvalidBlockTypeForUpdate
 
+module Graph = {
+  module DeleteContentBlockMutation = %graphql(`
+    mutation DeleteContentBlockMutation($id: ID!) {
+      deleteContentBlock(id: $id) {
+        success
+      }
+    }
+  `)
+
+  module ContentBlock = ContentBlock.Fragment
+
+  module MoveContentBlockMutation = %graphql(`
+    mutation MoveContentBlockMutation($id: ID!, $direction: MoveDirection!) {
+      moveContentBlock(id: $id, direction: $direction) {
+        success
+      }
+    }
+  `)
+
+  module UpdateFileBlockMutation = %graphql(`
+    mutation UpdateFileBlockMutation($id: ID!, $title: String!) {
+      updateFileBlock(id: $id, title: $title) {
+        contentBlock {
+          ...ContentBlock
+        }
+      }
+    }
+  `)
+
+  module UpdateMarkdownBlockMutation = %graphql(`
+    mutation UpdateMarkdownBlockMutation($id: ID!, $markdown: String!) {
+      updateMarkdownBlock(id: $id, markdown: $markdown) {
+        contentBlock {
+          ...ContentBlock
+        }
+      }
+    }
+  `)
+
+  module UpdateImageBlockMutation = %graphql(`
+    mutation UpdateImageBlockMutation($id: ID!, $caption: String!, $width:ImageWidth! ) {
+      updateImageBlock(id: $id, caption: $caption, width:$width) {
+        contentBlock {
+          ...ContentBlock
+        }
+      }
+    }
+  `)
+}
+
 let str = React.string
 
 type state = {
@@ -32,52 +82,6 @@ let reducer = (state, action) =>
   | FailSaving => {...state, saving: None}
   }
 
-module DeleteContentBlockMutation = %graphql(`
-    mutation DeleteContentBlockMutation($id: ID!) {
-      deleteContentBlock(id: $id) {
-        success
-      }
-    }
-  `)
-
-module MoveContentBlockMutation = %graphql(`
-    mutation MoveContentBlockMutation($id: ID!, $direction: MoveDirection!) {
-      moveContentBlock(id: $id, direction: $direction) {
-        success
-      }
-    }
-  `)
-
-module UpdateFileBlockMutation = %graphql(`
-    mutation UpdateFileBlockMutation($id: ID!, $title: String!) {
-      updateFileBlock(id: $id, title: $title) {
-        contentBlock {
-          ...ContentBlock.Fragments.AllFields
-        }
-      }
-    }
-  `)
-
-module UpdateMarkdownBlockMutation = %graphql(`
-    mutation UpdateMarkdownBlockMutation($id: ID!, $markdown: String!) {
-      updateMarkdownBlock(id: $id, markdown: $markdown) {
-        contentBlock {
-          ...ContentBlockFragment.AllFields
-        }
-      }
-    }
-  `)
-
-module UpdateImageBlockMutation = %graphql(`
-    mutation UpdateImageBlockMutation($id: ID!, $caption: String!, $width:ImageWidth! ) {
-      updateImageBlock(id: $id, caption: $caption, width:$width) {
-        contentBlock {
-          ...ContentBlock.Fragments.AllFields
-        }
-      }
-    }
-  `)
-
 let controlIcon = (~icon, ~title, ~color, ~handler) => {
   let buttonClasses = switch color {
   | #Grey => "hover:bg-gray-200 hover:text-primary-500 focus:bg-gray-200 focus:text-primary-500"
@@ -99,9 +103,12 @@ let controlIcon = (~icon, ~title, ~color, ~handler) => {
 
 let onMove = (contentBlock, cb, direction, _event) => {
   // We don't actually handle the response for this query.
-  MoveContentBlockMutation.make(~id=contentBlock |> ContentBlock.id, ~direction, ())
-  |> GraphqlQuery.sendQuery
-  |> ignore
+  let variables = Graph.MoveContentBlockMutation.makeVariables(
+    ~id=ContentBlock.id(contentBlock),
+    ~direction,
+    (),
+  )
+  Graph.MoveContentBlockMutation.make(variables) |> ignore
 
   cb(contentBlock)
 }
@@ -109,10 +116,9 @@ let onMove = (contentBlock, cb, direction, _event) => {
 let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
   WindowUtils.confirm("Are you sure you want to delete this block?", () => {
     send(StartSaving("Deleting..."))
-    let id = contentBlock |> ContentBlock.id
+    let id = ContentBlock.id(contentBlock)
 
-    DeleteContentBlockMutation.make(~id, ())
-    |> GraphqlQuery.sendQuery
+    Graph.DeleteContentBlockMutation.make(Graph.DeleteContentBlockMutation.makeVariables(~id, ()))
     |> Js.Promise.then_(result => {
       if result["deleteContentBlock"]["success"] {
         removeContentBlockCB(id)
@@ -159,7 +165,6 @@ let updateContentBlockBlock = (
   send(StartSaving("Updating..."))
 
   mutation
-  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result =>
     result |> contentBlockExtractor |> handleUpdateResult(updateContentBlockCB, setDirtyCB, send)
   )
@@ -172,16 +177,20 @@ let updateContentBlockBlock = (
 
 let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
   event |> ReactEvent.Mouse.preventDefault
-  let id = contentBlock |> ContentBlock.id
+  let id = ContentBlock.id(contentBlock)
 
   switch contentBlock |> ContentBlock.blockType {
   | ContentBlock.File(_url, title, _filename) =>
-    let mutation = UpdateFileBlockMutation.make(~id, ~title, ())
+    let mutation = Graph.UpdateFileBlockMutation.make(
+      Graph.UpdateFileBlockMutation.makeVariables(~id, ~title, ()),
+    )
     let extractor = result => result["updateFileBlock"]["contentBlock"]
 
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
   | Markdown(markdown) =>
-    let mutation = UpdateMarkdownBlockMutation.make(~id, ~markdown, ())
+    let mutation = Graph.UpdateMarkdownBlockMutation.make(
+      Graph.UpdateMarkdownBlockMutation.makeVariables(~id, ~markdown, ()),
+    )
     let extractor = result => result["updateMarkdownBlock"]["contentBlock"]
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
   | Image(_url, caption, imageWidth) =>
@@ -193,7 +202,9 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
     | TwoFifths => #TwoFifths
     }
 
-    let mutation = UpdateImageBlockMutation.make(~id, ~caption, ~width, ())
+    let mutation = Graph.UpdateImageBlockMutation.make(
+      Graph.UpdateImageBlockMutation.makeVariables(~id, ~caption, ~width, ()),
+    )
     let extractor = result => result["updateImageBlock"]["contentBlock"]
 
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)

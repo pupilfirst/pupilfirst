@@ -9,13 +9,13 @@ type state = {
   name: string,
   teamName: string,
   userTags: array<string>,
-  tagsToApply: array<string>,
-  teamCoaches: array<string>,
-  teamCoachSearchInput: string,
   title: string,
   affiliation: string,
-  saving: bool,
+  tagsToApply: array<string>,
   accessEndsAt: option<Js.Date.t>,
+  teamCoaches: array<string>,
+  teamCoachSearchInput: string,
+  saving: bool,
 }
 
 type action =

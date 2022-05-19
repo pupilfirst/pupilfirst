@@ -45,9 +45,5 @@ module Types
           user_ids.each { |id| loader.call(id, tags.fetch(id, [])) }
         end
     end
-
-    def title
-      object.full_title
-    end
   end
 end

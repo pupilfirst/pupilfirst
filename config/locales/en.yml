@@ -1814,7 +1814,7 @@ en:
       delete_account_token:
         body:
           link_to: link
-          main_html: "<p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p> <p> If you're unable to click the link above, please copy and paste the following link into your browser's address bar: </p>"
+          main_html: "<p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>"
           note_html: <p> This action is irreversible, and will permanently remove your access to the school.</p>
         subject: Delete account from %{school_name}
       new_post:

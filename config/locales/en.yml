@@ -1606,12 +1606,6 @@ en:
       subscribe: Subscribe
       subscribed_on_another_device: Subscribe on this Device
       unsubscribe: Unsubscribe
-  concerns:
-    validate_submission_gradable:
-      owners_should_be_active:
-        error: Cannot update inactive student submissions.
-      submission_should_be_live:
-        error: Such a submission does not exist, or it has been archived.
   courses:
     apply:
       apply_button: Apply
@@ -1814,8 +1808,8 @@ en:
       delete_account_token:
         body:
           link_to: link
-          main_html: "<p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>"
-          note_html: <p> This action is irreversible, and will permanently remove your access to the school.</p>
+          main_html: <p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>
+          note_html: <p>This action is irreversible, and will permanently remove your access to the school.</p>
         subject: Delete account from %{school_name}
       new_post:
         body:
@@ -2256,3 +2250,8 @@ en:
           error: The supplied email address and password do not match. Please check your credentials and try again.
       token:
         link_expired: That one-time link has expired, or is invalid. Please try signing in again.
+  validate_submission_gradable:
+    owners_should_be_active:
+      error: Cannot update inactive student submissions.
+    submission_should_be_live:
+      error: Such a submission does not exist, or it has been archived.

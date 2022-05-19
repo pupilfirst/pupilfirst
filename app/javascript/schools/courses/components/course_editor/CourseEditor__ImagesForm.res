@@ -161,10 +161,11 @@ let make = (~course, ~updateCourseCB) => {
         <HelpIcon
           className="text-xs ml-1"
           responsiveAlignment=HelpIcon.NonResponsive(AlignLeft)
-          link="https://docs.pupilfirst.com/#/courses?id=course-images">
+          link={t("thumbnail.help_url")}>
           {t("thumbnail.help")->str}
         </HelpIcon>
-        <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+        <div
+          className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
           <input
             disabled=state.updating
             className="absolute h-0 w-0 focus:outline-none"
@@ -194,10 +195,11 @@ let make = (~course, ~updateCourseCB) => {
         <HelpIcon
           className="text-xs ml-1"
           responsiveAlignment=HelpIcon.NonResponsive(AlignLeft)
-          link="https://docs.pupilfirst.com/#/courses?id=course-images">
+          link={t("cover_image.help_url")}>
           {t("cover_image.help") |> str}
         </HelpIcon>
-        <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+        <div
+          className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
           <input
             disabled=state.updating
             className="absolute h-0 w-0 focus:outline-none"

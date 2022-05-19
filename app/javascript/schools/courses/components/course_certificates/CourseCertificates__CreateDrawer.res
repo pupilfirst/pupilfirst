@@ -61,7 +61,7 @@ let submitForm = (course, addCertificateCB, send, event) => {
 }
 
 let imageInputText = imageFilename =>
-  imageFilename->Belt.Option.getWithDefault(t("certificate_base_image_placeholder"))
+  imageFilename->Belt.Option.getWithDefault(t("certificate_base_image.placeholder"))
 
 let selectFile = (send, event) => {
   let files = ReactEvent.Form.target(event)["files"]
@@ -83,7 +83,8 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
   <SchoolAdmin__EditorDrawer closeDrawerCB closeButtonTitle={t("cancel")}>
     <form onSubmit={submitForm(course, addCertificateCB, send)}>
       <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
-      <DisablingCover containerClasses="w-full" disabled=state.saving message= { ts("uploading") ++ "..." }>
+      <DisablingCover
+        containerClasses="w-full" disabled=state.saving message={ts("uploading") ++ "..."}>
         <div className="flex flex-col min-h-screen">
           <div className="bg-white flex-grow-0">
             <div className="bg-gray-100 pt-6 pb-4 border-b">
@@ -117,17 +118,14 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                     <label
                       className="tracking-wide text-xs font-semibold"
                       htmlFor="certificate-file-input">
-                      {t("certificate_base_image_label")->str}
+                      {t("certificate_base_image.label")->str}
                     </label>
-                    <HelpIcon
-                      className="ml-2"
-                      link="https://docs.pupilfirst.com/#/certificates?id=uploading-a-new-certificate">
-                      {str(
-                        "This base image must include a full line's space to insert a student's name.",
-                      )}
+                    <HelpIcon className="ml-2" link={t("certificate_base_image.help_url")}>
+                      {t("certificate_base_image.help")->str}
                     </HelpIcon>
                   </div>
-                  <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+                  <div
+                    className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
                     <input
                       disabled=state.saving
                       className="absolute w-0 h-0 focus:outline-none"

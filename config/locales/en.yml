@@ -86,6 +86,7 @@ en:
     CourseApplicants__EditForm:
       access_ends_at:
         help: If set, students will not be able to complete targets after this date.
+        help_url: https://docs.pupilfirst.com/users/students#editing-student-details
         label: Student's Access Ends On
       add_as_student_button: Add as Student
       affiliation:
@@ -145,16 +146,21 @@ en:
       window_confirm_post: from the list of authors?
       window_confirm_pre: Are you sure you want to remove
     CourseCertificates__CreateDrawer:
-      certificate_base_image_label: Certificate Base Image
-      certificate_base_image_placeholder: Select a base image for certificate
+      certificate_base_image:
+        help: This base image must include a full line's space to insert a student's name.
+        help_url: https://docs.pupilfirst.com/users/certificates#uploading-a-new-certificate
+        label: Certificate Base Image
+        placeholder: Select a base image for certificate
       create_action: Create New Certificate
       create_button_text: Create Certificate
       name_label: Name
       name_placeholder: A name to identify this certificate
       success_notification: You can now edit this certificate.
     CourseCertificates__EditDrawer:
-      active_help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
-      active_label: Should students be automatically issued this certificate?
+      active:
+        help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
+        help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
+        label: Should students be automatically issued this certificate?
       cannot_be_auto_issued_warning: Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.
       edit_action: Edit Certificate
       font_size_label: Font Size
@@ -170,8 +176,10 @@ en:
       qr_scale_label: QR Code Scale
       qr_top_left_label: Top Left
       qr_top_right_label: Top Right
-      qr_visibility_help: It will contain a link to a page on your school that anyone can visit to verify an issued certificate.
-      qr_visibility_label: Add QR Code?
+      qr_visibility:
+        help: It will contain a link to a page on your school that anyone can visit to verify an issued certificate.
+        help_url: https://docs.pupilfirst.com/users/certificates
+        label: Add QR Code?
       update_issued_certificates_warning:
         one: This certificate has been issued once.<br/>These changes will also be applied to the issued certificate.
         other: This certificate has been issued %{count} times.<br/>These changes will also be applied to these %{count} issued certificates.
@@ -268,6 +276,7 @@ en:
         placeholder: Short description for this course
       course_end_date:
         help: If specified, course will appear as closed to students on this date. Students will not be able to make any more submissions.
+        help_url: https://docs.pupilfirst.com/users/courses
         label: Course end date
       course_highlights:
         label: Course Highlights
@@ -282,9 +291,11 @@ en:
       processing_url:
         error: Invalid processing url
         help: You can send the applicants to a processing url once they apply for the course
+        help_url: https://docs.pupilfirst.com/users/courses#processing-url
         label: Do you want to process applicant information before enrolling them?
       progression_behavior:
         help: This only applies if your course has milestone targets that requires students to submit their work for review by coaches.
+        help_url: https://docs.pupilfirst.com/users/courses#progression-behaviour
         label: Progression Behavior
         limited:
           description_end: " without getting submissions reviewed."
@@ -323,6 +334,7 @@ en:
       cover_image:
         error_message: must be a JPEG / PNG under 2 MB in size
         help: The cover will be displayed at the top of all student pages within the course, and as the header of some course emails.
+        help_url: https://docs.pupilfirst.com/users/courses#course-images
         label: Cover Image
       empty_image_label: Please choose an image file.
       image_label:
@@ -335,6 +347,7 @@ en:
       thumbnail:
         error_message: must be a JPEG / PNG under 2 MB in size
         help: The thumbnail will be displayed on the homepage, and here in the admin courses list.
+        help_url: https://docs.pupilfirst.com/users/courses#course-images
         label: Thumbnail
     CourseExport__Root:
       active_students_label: Active Students
@@ -796,10 +809,11 @@ en:
       close_embed: Close Embed Form
       creating: Creating...
       description_video_placeholder: Description for your video
-      embed:
+      embed_url:
         save_button: Save
-        url_help: We support a number of third-party services (check link below). Just copy & paste the full URL to the page that contains the resource that you'd like to embed.
-        url_label: URL to Embed
+        help: We support a number of third-party services (check link below). Just copy & paste the full URL to the page that contains the resource that you'd like to embed.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#content-block-types
+        label: URL to Embed
       failed_create_error: An unexpected error occured. Please reload the page and try again.
       failed_upload_error: Failed to upload file. Please check message in notification, and try again.
       failed_url_error: The URL doesn't look valid. Please make sure that it starts with 'https://' and that it's one of the accepted websites.
@@ -896,8 +910,10 @@ en:
       add_another_question: Add another Question
       add_step: Add a Step
       choose_target_group: Choose a target group
-      completion_instructions_help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
-      completion_instructions_label: Do you have any completion instructions for the student?
+      completion_instructions:
+        help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
+        label: Do you have any completion instructions for the student?
       could_not_find: Could not find selected evaluation criterion with ID
       describe_submission: Describe your submission
       empty_checklist_warning: This target has no steps. Students will be able to submit target without any action!
@@ -922,14 +938,18 @@ en:
       selected_all_targets: You have selected all targets
       submit_individually: All students must submit individually.
       take_quiz: Take a quiz to complete the target.
-      target_checklist_help_text: These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.
-      target_checklist_label: What steps should the student take to complete this target?
-      target_checklist_limit_warning: Maximum allowed checklist items is 15!
+      target_checklist:
+        help: These are the steps that a student must complete to submit work on a target. This information will be shown to the coach for review.
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target
+        label: What steps should the student take to complete this target?
+        limit_warning: Maximum allowed checklist items is 15!
       target_group: Target Group
       target_method_of_completion_label: How do you want the student to complete the target?
       target_reviewed_by_coach: Will a coach review submissions on this target?
-      target_role_help: Should students in a team submit work on a target individually, or together?
-      target_role_label: How should teams tackle this target?
+      target_role:
+        help: Should students in a team submit work on a target individually, or together?
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
+        label: How should teams tackle this target?
       target_title_placeholder: Type target title here
       target_visibility: Target Visibility
       title: Title
@@ -987,7 +1007,8 @@ en:
       restore_version: Restore this version
       save_version: Save this version
       select_version: Select version
-      version_feature_help: Use the versions feature to preserve the existing state of a target's content, to browse earlier stored versions, and to restore them, if required.
+      help: Use the versions feature to preserve the existing state of a target's content, to browse earlier stored versions, and to restore them, if required.
+      help_url: https://docs.pupilfirst.com/users/curriculum_editor#target-content-versions
     EditorDrawer:
       close_editor: Close Editor
     EvaluationCriteria__Index:
@@ -995,8 +1016,10 @@ en:
     EvaluationCriterionEditor__Form:
       add_criterion: Add Evaluation Criterion
       create_criterion: Create Criterion
-      grade_labels: Grade and Labels
-      grade_lables_help: Assign labels for each grade, to reflect in grade cards for students and coaches
+      grade_labels:
+        label: Grade and Labels
+        help: Assign labels for each grade, to reflect in grade cards for students and coaches
+        help_url: https://docs.pupilfirst.com/users/evaluation_criteria
       important: Important
       important_details: The values for maximum and passing grades cannot be modified once a criterion is created. Labels given to each grade can be edited later on.
       label_grade_placeholder: Label for grade
@@ -1296,8 +1319,11 @@ en:
       active_label: Active
       certificates_label: Course Certificates
       details_certificate: Details of issued certificate
-      dropout_button: Dropout Student
-      dropout_student_label: Has this student dropped out?
+      dropout_student:
+        button: Dropout Student
+        label: Has this student dropped out?
+        help: Marking a student as dropped out will remove all of their access to the course.
+        help_url: https://docs.pupilfirst.com/users/students#student-actions
       empty_course_certificates_text: This course does not have any certificates to issue.
       empty_issued_certificates_text: This student has not been issued any certificates.
       issue_certificate_button: Issue Certificate
@@ -1305,7 +1331,6 @@ en:
       issued_certificates_label: "Issued certificates:"
       issued_date_label: "Issued on:"
       manage_certificates: Manage student certificates
-      mark_dropped_note: Marking a student as dropped out will remove all of their access to the course.
       new_certificate_label: "Issue new certificate:"
       revoke_certificate_button: Revoke Certificate
       revoke_certificate_confirmation: Are you sure? This action cannot be undone.
@@ -1327,12 +1352,16 @@ en:
         invalid: Please select a valid CSV file with size less than 5 MB
         invalid_data: The CSV file has invalid data in few cells. Please fix the errors listed below and try again.
         invalid_template: The selected CSV file does not have a valid template
-      csv_file_input_label: CSV Import file
-      csv_file_input_placeholder: Select CSV file to import
+      csv_file_input:
+        label: CSV Import file
+        placeholder: Select CSV file to import
+        help: This file will be used to import students in bulk. Check the sample file for the required format.
+        help_url: https://docs.pupilfirst.com/users/students#importing-students-in-bulk
       drawer_heading: Bulk Import Students
       error_summary_title: "Here is a summary of the errors in the sheet: "
-      example_csv_link: Download an example .csv file
-      import_bulk_help: This file will be used to import students in bulk. Check the sample file for the required format.
+      example_csv_link:
+        text: Download an example .csv file
+        url: https://docs.pupilfirst.com/files/student_import_sample.csv
       import_button_text: Import Students
       more_errors_text: "There are even more errors. Fix the errors in the following rows and upload again: "
       notify_students_label: Notify students, and send them a link to sign into this school.
@@ -1398,7 +1427,11 @@ en:
       team: Team
       try_removing_filter: Try removing the search filter options.
     StudentsEditor__UpdateDetailsForm:
-      access_ends: Access Ends On
+      access_ends_at:
+        label_student: Student's Access Ends On
+        label_team: Team's Access Ends On
+        help: If set, students will not be able to complete targets after this date.
+        help_url: https://docs.pupilfirst.com/users/students#editing-student-details
       affiliation: Affiliation
       affiliation_placeholder: Acme Inc., Acme University, etc.
       name: Name
@@ -1407,10 +1440,9 @@ en:
       search_coaches_empty: No coaches selected
       search_coaches_placeholder: Search coaches
       student_name_placeholder: Student name here
-      student_s: Student's
+      student_s:
       student_updated: Student updated successfully
       student_updated_moved: Student has been updated, and moved to list of inactive students
-      students_not_able_complete_help: If set, students will not be able to complete targets after this date.
       tags_applied: Tags applied
       tags_applied_team: Tags applied to team
       tags_applied_user: Tags applied to user
@@ -1418,7 +1450,6 @@ en:
       team_name: Team Name
       team_name_error: Team Name must have at least two characters
       team_name_placeholder: Team name here
-      team_s: Team's
       team_updated_moved: Team has been updated, and moved to list of inactive students
       title: Title
       title_error: Title must have at least two characters

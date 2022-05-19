@@ -179,7 +179,9 @@ let labels = (state, setState) =>
               state,
               setState,
             )}
-          placeholder={ t("label_grade_placeholder") ++ " " ++ (gradeAndLabel |> GradeLabel.grade |> string_of_int)}
+          placeholder={t("label_grade_placeholder") ++
+          " " ++
+          (gradeAndLabel |> GradeLabel.grade |> string_of_int)}
         />
       </div>
     </div>
@@ -232,12 +234,12 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
               id="name"
               onChange={event => updateName(setState, ReactEvent.Form.target(event)["value"])}
               type_="text"
-              placeholder=t("name_placeholder")
+              placeholder={t("name_placeholder")}
               maxLength=50
               value=state.name
             />
             <School__InputGroupError
-              message=t("name_error")
+              message={t("name_error")}
               active={state.dirty && state.name |> String.trim |> String.length < 1}
             />
           </div>
@@ -318,10 +320,10 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
             <div className="flex justify-between">
               <div className="flex items-center">
                 <label className="block tracking-wide text-xs font-semibold" htmlFor="grades">
-                  {t("grade_labels") |> str}
+                  {t("grade_labels.label") |> str}
                 </label>
-                <HelpIcon className="ml-2" link="https://docs.pupilfirst.com/#/evaluation_criteria">
-                  {t("grade_lables_help") |> str}
+                <HelpIcon className="ml-2" link={t("grade_labels.help_url")}>
+                  {t("grade_labels.help") |> str}
                 </HelpIcon>
               </div>
               <div className="flex">
@@ -338,7 +340,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
             <div ariaLabel="label-editor"> {labels(state, setState) |> React.array} </div>
             <div className="mt-3 mb-3 text-xs">
               <span className="leading-normal">
-                <strong> { t("important") ++ ":" |> str} </strong>
+                <strong> {t("important") ++ ":" |> str} </strong>
                 {" " ++ t("important_details") |> str}
               </span>
             </div>

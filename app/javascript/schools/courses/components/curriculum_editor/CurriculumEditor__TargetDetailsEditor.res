@@ -910,12 +910,10 @@ let make = (
                 <div className="mb-6">
                   <label className="tracking-wide text-sm font-semibold" htmlFor="target_checklist">
                     <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                    {t("target_checklist_label") |> str}
+                    {t("target_checklist.label") |> str}
                   </label>
-                  <HelpIcon
-                    className="ml-1"
-                    link="https://docs.pupilfirst.com/#/curriculum_editor?id=defining-steps-to-complete-a-target">
-                    {t("target_checklist_help_text") |> str}
+                  <HelpIcon className="ml-1" link={t("target_checklist.help_url")}>
+                    {t("target_checklist.help") |> str}
                   </HelpIcon>
                   <div className="ml-6 mb-6">
                     {state.checklist
@@ -953,7 +951,7 @@ let make = (
                       ? <div
                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
                           <i className="fas fa-info-circle mr-2" />
-                          {t("target_checklist_limit_warning") |> str}
+                          {t("target_checklist.limit_warning") |> str}
                         </div>
                       : React.null}
                     <button
@@ -981,12 +979,10 @@ let make = (
               <div className="mb-6">
                 <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="role">
                   <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                  {t("target_role_label") |> str}
+                  {t("target_role.label") |> str}
                 </label>
-                <HelpIcon
-                  className="ml-1"
-                  link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion">
-                  {t("target_role_help") |> str}
+                <HelpIcon className="ml-1" link={t("target_role.help_url")}>
+                  {t("target_role.help") |> str}
                 </HelpIcon>
                 <div id="role" className="flex mt-4 ml-6">
                   <button
@@ -1024,13 +1020,11 @@ let make = (
                 <label
                   className="tracking-wide text-sm font-semibold" htmlFor="completion-instructions">
                   <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                  {t("completion_instructions_label") |> str}
+                  {t("completion_instructions.label") |> str}
                   <span className="ml-1 text-xs font-normal"> {ts("optional_braces") |> str} </span>
                 </label>
-                <HelpIcon
-                  link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion"
-                  className="ml-1">
-                  {t("completion_instructions_help") |> str}
+                <HelpIcon link={t("completion_instructions.help_url")} className="ml-1">
+                  {t("completion_instructions.help") |> str}
                 </HelpIcon>
                 <div className="ml-6">
                   <input

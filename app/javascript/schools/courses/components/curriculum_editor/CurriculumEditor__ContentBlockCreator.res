@@ -249,11 +249,7 @@ let handleCreateEmbedContentBlock = (
     |> ignore
   } else {
     Js.log(url ++ " File get error")
-    send(
-      SetError(
-        t("failed_url_error"),
-      ),
-    )
+    send(SetError(t("failed_url_error")))
   }
 
 let uploadOnProgress = (send, current, total) => {
@@ -544,8 +540,7 @@ let onEmbedFormSave = (target, aboveContentBlock, url, send, addContentBlockCB, 
 }
 
 let topButton = (handler, id, title, icon) =>
-  <div
-    className="content-block-creator__top-button-container relative">
+  <div className="content-block-creator__top-button-container relative">
     <button
       onClick=handler
       id={"top-button-" ++ id}
@@ -594,7 +589,7 @@ let uploadVideoForm = (videoInputId, state, send) =>
       </label>
       <input
         id={videoInputId ++ "-title"}
-        placeholder=t("title_video_placeholder")
+        placeholder={t("title_video_placeholder")}
         className="w-full py-1 px-2 border rounded"
         type_="text"
         value=state.videoTitle
@@ -608,7 +603,7 @@ let uploadVideoForm = (videoInputId, state, send) =>
       </label>
       <textarea
         id={videoInputId ++ "-description"}
-        placeholder=t("description_video_placeholder")
+        placeholder={t("description_video_placeholder")}
         className="w-full py-1 px-2 border rounded"
         type_="text"
         value=state.videoDescription
@@ -657,7 +652,8 @@ let make = (
     | UploadVideo => t("preparing_upload")
     | BlockSelector
     | EmbedForm(_)
-    | Hidden => t("creating")
+    | Hidden =>
+      t("creating")
     }}>
     {uploadFormCurried(#File)}
     {uploadFormCurried(#Image)}
@@ -702,12 +698,10 @@ let make = (
           <div
             className="flow-root border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
             <label htmlFor=embedInputId className="text-xs font-semibold">
-              {t("embed.url_label")->str}
+              {t("embed_url.label")->str}
             </label>
-            <HelpIcon
-              className="ml-2 text-xs"
-              link="https://docs.pupilfirst.com/#/curriculum_editor?id=content-block-types">
-              {t("embed.url_help")->str}
+            <HelpIcon className="ml-2 text-xs" link={t("embed_url.help_url")}>
+              {t("embed_url.help")->str}
             </HelpIcon>
             <div className="flex mt-1">
               <input
@@ -721,7 +715,7 @@ let make = (
               <button
                 className="ml-2 btn btn-success"
                 onClick={onEmbedFormSave(target, aboveContentBlock, url, send, addContentBlockCB)}>
-                {t("embed.save_button")->str}
+                {t("embed_url.save_button")->str}
               </button>
             </div>
           </div>

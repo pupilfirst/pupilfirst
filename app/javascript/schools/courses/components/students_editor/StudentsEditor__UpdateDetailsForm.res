@@ -57,7 +57,8 @@ let successMessage = (accessEndsAt, isSingleFounder) =>
     | (true, true) => t("student_updated_moved")
     | (true, false) => t("team_updated_moved")
     | (false, true)
-    | (false, false) => t("student_updated")
+    | (false, false) =>
+      t("student_updated")
     }
   | None => t("student_updated")
   }
@@ -184,9 +185,9 @@ let teamCoachesEditor = (courseCoaches, state, send) => {
     |> Array.map(coach => SelectablePrerequisiteTargets.make(coach))
   <div className="mt-2">
     <MultiselectForTeamCoaches
-      placeholder=t("search_coaches_placeholder")
-      emptySelectionMessage=t("search_coaches_empty")
-      allItemsSelectedMessage=t("search_coaches_all")
+      placeholder={t("search_coaches_placeholder")}
+      emptySelectionMessage={t("search_coaches_empty")}
+      allItemsSelectedMessage={t("search_coaches_all")}
       selected
       unselected
       onChange={setTeamCoachSearch(send)}
@@ -254,7 +255,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
           id="name"
           type_="text"
-          placeholder=t("student_name_placeholder")
+          placeholder={t("student_name_placeholder")}
         />
         <School__InputGroupError
           message="Name must have at least two characters" active={state.name |> stringInputInvalid}
@@ -275,11 +276,10 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
               id="team_name"
               type_="text"
-              placeholder=t("team_name_placeholder")
+              placeholder={t("team_name_placeholder")}
             />
             <School__InputGroupError
-              message=t("team_name_error")
-              active={state.teamName |> stringInputInvalid}
+              message={t("team_name_error")} active={state.teamName |> stringInputInvalid}
             />
           </div>}
       <div className="mt-5">
@@ -294,11 +294,10 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
           id="title"
           type_="text"
-          placeholder=t("title_placeholder")
+          placeholder={t("title_placeholder")}
         />
         <School__InputGroupError
-          message=t("title_error")
-          active={state.title |> stringInputInvalid}
+          message={t("title_error")} active={state.title |> stringInputInvalid}
         />
       </div>
       <div className="mt-5">
@@ -314,7 +313,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
           className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
           id="affiliation"
           type_="text"
-          placeholder=t("affiliation_placeholder")
+          placeholder={t("affiliation_placeholder")}
         />
       </div>
       <div className="mt-5">
@@ -327,7 +326,9 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
       </div>
       {state.userTags |> ArrayUtils.isNotEmpty
         ? <div className="mt-5">
-            <div className="mb-2 text-xs font-semibold"> { t("tags_applied_user") ++ ":" |> str} </div>
+            <div className="mb-2 text-xs font-semibold">
+              {t("tags_applied_user") ++ ":" |> str}
+            </div>
             <div className="flex flex-wrap">
               {state.userTags
               |> Js.Array.map(tag =>
@@ -357,12 +358,13 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
       </div>
       <div className="mt-5">
         <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
-          {(isSingleStudent ? t("student_s") : t("team_s")) ++ " " ++ t("access_ends") |> str}
+          {(
+            isSingleStudent ? t("access_ends_at.label_student") : t("access_ends_at.label_team")
+          )->str}
         </label>
         <span className="ml-1 text-xs"> {ts("optional_braces") |> str} </span>
-        <HelpIcon
-          className="ml-2" link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
-          {t("students_not_able_complete_help") |> str}
+        <HelpIcon className="ml-2" link={t("access_ends_at.help_url")}>
+          {t("access_ends_at.help") |> str}
         </HelpIcon>
         <DatePicker
           onChange={date => send(UpdateAccessEndsAt(date))}

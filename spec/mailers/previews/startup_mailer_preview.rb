@@ -3,7 +3,7 @@ class StartupMailerPreview < ActionMailer::Preview
     startup_feedback =
       StartupFeedback.new(
         id: 1,
-        feedback: "This is the feedback text.\nIt is multi-line.",
+        feedback: "This is the feedback text.\n\nIt is multi-line.",
         timeline_event:
           TimelineEvent.new(
             id: 2,

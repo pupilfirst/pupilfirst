@@ -1,18 +1,22 @@
 %raw(`require("./CoursesStudents__Root.css")`)
+let t = I18n.t(~scope="components.CoursesStudents__TeamsList")
 
 open CoursesStudents__Types
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CoursesStudents__TeamsList")
+let ts = I18n.t(~scope="shared")
+
 let levelInfo = (levelId, levels) =>
   <span
     className="inline-flex flex-col items-center rounded bg-orange-100 border border-orange-300 px-2 pt-2 pb-1">
-    <p className="text-xs font-semibold"> {"Level" |> str} </p>
+    <p className="text-xs font-semibold"> {ts("level") |> str} </p>
     <p className="font-bold">
       {levels
       |> ArrayUtils.unsafeFind(
         (l: Level.t) => l.id == levelId,
-        "Unable to find level with id: " ++ (levelId ++ "in CoursesStudents__TeamsList"),
+        "Unable to find level with id: "  ++ (levelId ++ "in CoursesStudents__TeamsList"),
       )
       |> Level.number
       |> string_of_int
@@ -69,13 +73,23 @@ let showStudent = (team, levels, teamCoaches) => {
           <p className="font-semibold inline-block leading-snug">
             {student |> TeamInfo.studentName |> str}
           </p>
+          <div className="py-px text-gray-700 text-xs leading-snug flex items-start">
+            <span className="font-semibold pr-2"> {student |> TeamInfo.studentTitle |> str} </span>
+            <span className="pl-2 border-l border-gray-400 italic">
+              {switch student->TeamInfo.lastSeenAt {
+              | Some(date) =>
+                t(
+                  ~variables=[
+                    ("time_string", date->DateFns.formatDistanceToNowStrict(~addSuffix=true, ())),
+                  ],
+                  "last_seen",
+                )->str
+              | None => t("no_last_seen")->str
+              }}
+            </span>
+          </div>
           <div className="text-gray-700 font-semibold text-xs leading-snug flex items-start">
-            <span className="leading-normal pt-px">
-              {student |> TeamInfo.studentTitle |> str}
-            </span>
-            <span className="font-normal ml-2 flex flex-wrap">
-              {studentTags(student)} {teamTags(team)}
-            </span>
+            {studentTags(student)} {teamTags(team)}
           </div>
         </div>
       </div>
@@ -85,7 +99,7 @@ let showStudent = (team, levels, teamCoaches) => {
       className="w-2/5 flex items-center justify-end md:justify-between p-3 md:p-4">
       <CoursesStudents__TeamCoaches
         title={<div className="mb-1 font-semibold text-gray-800 text-tiny uppercase">
-          {"Personal Coaches" |> str}
+          {tr("personal_coaches") |> str}
         </div>}
         className="hidden md:inline-block"
         coaches=teamCoaches
@@ -122,9 +136,26 @@ let showTeam = (team, levels, teamCoaches) =>
                 <p className="font-semibold inline-block leading-snug ">
                   {student |> TeamInfo.studentName |> str}
                 </p>
-                <p className="text-gray-700 font-semibold text-xs mt-px leading-snug ">
-                  {student |> TeamInfo.studentTitle |> str}
-                </p>
+                <div className="py-px text-gray-700 text-xs leading-snug flex items-start">
+                  <span className="font-semibold pr-2">
+                    {student |> TeamInfo.studentTitle |> str}
+                  </span>
+                  <span className="pl-2 border-l border-gray-400 italic">
+                    {switch student->TeamInfo.lastSeenAt {
+                    | Some(date) =>
+                      t(
+                        ~variables=[
+                          (
+                            "time_string",
+                            date->DateFns.formatDistanceToNowStrict(~addSuffix=true, ()),
+                          ),
+                        ],
+                        "last_seen",
+                      )->str
+                    | None => t("no_last_seen")->str
+                    }}
+                  </span>
+                </div>
                 {studentTags(student)}
               </div>
             </div>
@@ -138,13 +169,13 @@ let showTeam = (team, levels, teamCoaches) =>
           <div>
             <p
               className="inline-block leading-tight font-semibold text-gray-800 text-tiny uppercase">
-              {"Team" |> str}
+              {ts("team") |> str}
             </p>
             <h3 className="text-sm font-semibold leading-snug"> {team |> TeamInfo.name |> str} </h3>
             {teamTags(team)}
             <CoursesStudents__TeamCoaches
               title={<div className="font-semibold text-gray-800 text-tiny uppercase pb-1 ">
-                {"Team Coaches" |> str}
+                {tr("team_coaches") |> str}
               </div>}
               className="hidden md:inline-block mt-6"
               coaches=teamCoaches
@@ -164,7 +195,7 @@ let make = (~levels, ~teams, ~teamCoaches) =>
     {teams |> ArrayUtils.isEmpty
       ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
           <h4 className="py-4 mt-4 bg-gray-50 text-gray-800 font-semibold">
-            {"No teams to show" |> str}
+            {tr("no_teams") |> str}
           </h4>
         </div>
       : teams

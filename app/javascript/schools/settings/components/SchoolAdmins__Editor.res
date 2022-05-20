@@ -1,5 +1,8 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.SchoolAdmins__Editor")
+let ts = I18n.ts
+
 type editorAction =
   | ShowEditor(option<SchoolAdmin.t>)
   | Hidden
@@ -24,9 +27,9 @@ let removeSchoolAdmin = (setState, admin, currentSchoolAdminId, event) => {
   if {
     open Webapi.Dom
     window |> Window.confirm(
-      "Are you sure you want to remove " ++
+      t("remove_confirm_pre") ++ " " ++
       ((admin |> SchoolAdmin.name) ++
-      " from the list of admins?"),
+      " " ++ t("remove_confirm_post")),
     )
   } {
     setState(state => {...state, deleting: true})
@@ -94,7 +97,7 @@ let renderAdmin = (currentSchoolAdminId, admin, admins, setState) =>
       {admins |> Array.length > 1
         ? <div
             className="w-10 text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-red-600"
-            title={"Delete " ++ (admin |> SchoolAdmin.name)}
+            title={ ts("delete") ++ " " ++ (admin |> SchoolAdmin.name)}
             onClick={removeSchoolAdmin(setState, admin, currentSchoolAdminId)}>
             <i className="fas fa-trash-alt" />
           </div>
@@ -127,13 +130,13 @@ let make = (~currentSchoolAdminId, ~admins) => {
           <SchoolAdmins__Form admin updateCB={handleUpdate(setState)} />
         </SchoolAdmin__EditorDrawer>
       }}
-      <DisablingCover disabled=state.deleting message="Deleting...">
+      <DisablingCover disabled=state.deleting message={ts("deleting") ++ "..."}>
         <div className="flex px-6 py-2 items-center justify-between">
           <button
             onClick={_ => setState(state => {...state, editorAction: ShowEditor(None)})}
             className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-primary-300 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
             <i className="fas fa-plus-circle" />
-            <h5 className="font-semibold ml-2"> {"Add New School Admin" |> str} </h5>
+            <h5 className="font-semibold ml-2"> {t("add_new_admin") |> str} </h5>
           </button>
         </div>
         <div className="px-6 pb-4 mt-5 flex">

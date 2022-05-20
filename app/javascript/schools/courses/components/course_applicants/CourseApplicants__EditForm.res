@@ -27,15 +27,13 @@ type action =
   | FailSaving
   | ToggleNotifyStudent
 
-module CreateStudentFromApplicant = %graphql(
-  `
+module CreateStudentFromApplicant = %graphql(`
   mutation CreateStudentFromApplicant($applicantId: ID!, $notifyStudent: Boolean!, $accessEndsAt: ISO8601DateTime, $title: String, $affiliation: String, $tags: [String!]!) {
     createStudentFromApplicant(applicantId: $applicantId, notifyStudent: $notifyStudent, accessEndsAt: $accessEndsAt, title: $title, affiliation: $affiliation, tags: $tags) {
       success
     }
   }
-  `
-)
+  `)
 
 let updateCourse = (state, send, updateApplicantCB, applicant) => {
   send(StartSaving)
@@ -50,14 +48,18 @@ let updateCourse = (state, send, updateApplicantCB, applicant) => {
     (),
   )
 
-  updateCourseQuery |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
+  updateCourseQuery
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(result => {
     result["createStudentFromApplicant"]["success"] ? updateApplicantCB() : send(FailSaving)
     Js.Promise.resolve()
-  }) |> Js.Promise.catch(error => {
+  })
+  |> Js.Promise.catch(error => {
     Js.log(error)
     send(FailSaving)
     Js.Promise.resolve()
-  }) |> ignore
+  })
+  |> ignore
 }
 
 let str = React.string
@@ -174,8 +176,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
         {t("access_ends_at.label")->str}
       </label>
       {optionalText()}
-      <HelpIcon
-        className="ml-2" link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
+      <HelpIcon className="ml-2" link={t("access_ends_at.help_url")}>
         {t("access_ends_at.help")->str}
       </HelpIcon>
       <DatePicker

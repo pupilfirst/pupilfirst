@@ -33,7 +33,7 @@ let make = (~links) => {
   | [] => React.null
   | moreLinks =>
     <button
-      title="Show more links"
+      title={t("show_links")}
       className="ml-2 font-semibold text-sm p-4 md:px-3 md:py-2 cursor-pointer relative rounded-lg text-gray-900 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
       onClick={handleToggle(setLinksVisible)}
       key="more-links">

@@ -2,6 +2,9 @@ open CourseCoaches__Types
 
 let str = React.string
 
+let t = I18n.t(~scope="components.CourseCoaches__Root")
+let ts = I18n.ts
+
 type formVisible =
   | None
   | CoachEnrollmentForm
@@ -37,7 +40,10 @@ let reducer = (state, action) =>
 
 let handleErrorCB = (send, ()) => {
   send(UpdateSaving)
-  Notification.error("Coach enrollment could not be deleted", "Please try again")
+  Notification.error(
+    t("enrollment_delete_error_head_notification"),
+    t("enrollment_delete_error_notification_body"),
+  )
 }
 
 let handleResponseCB = (send, json) => {
@@ -47,7 +53,7 @@ let handleResponseCB = (send, json) => {
     field("coach_id", string)
   }
   send(RemoveCoach(coachId))
-  Notification.success("Success", "Coach enrollment deleted successfully")
+  Notification.success(ts("notifications.success"), t("enrollment_delete_notificaion_success_body"))
 }
 
 let removeCoach = (send, courseId, authenticityToken, coach, event) => {
@@ -56,7 +62,11 @@ let removeCoach = (send, courseId, authenticityToken, coach, event) => {
   if {
     open Webapi.Dom
     window |> Window.confirm(
-      "Are you sure you want to remove " ++ ((coach |> CourseCoach.name) ++ " from this course?"),
+      t("remove_confirm_pre") ++
+      " " ++
+      ((coach |> CourseCoach.name) ++
+      " " ++
+      t("remove_confirm_post")),
     )
   } {
     send(UpdateSaving)
@@ -119,12 +129,12 @@ let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
         {state.courseCoaches |> ArrayUtils.isEmpty
           ? <div
               className="flex justify-center bg-gray-50 border rounded p-3 italic mx-auto max-w-2xl w-full mt-8">
-              {"The course has no coaches assigned!" |> str}
+              {t("course_empty") |> str}
             </div>
           : React.null}
         <div className="px-6 pb-4 mt-5 flex flex-1">
           <div className="max-w-2xl w-full mx-auto relative">
-            <div className="flex mt-4 -mx-3 flex-wrap" ariaLabel="List of course coaches">
+            <div className="flex mt-4 -mx-3 flex-wrap" ariaLabel={t("coaches_list")}>
               {state.courseCoaches->Belt.SortArray.stableSortBy((a, b) =>
                 String.compare(a |> CourseCoach.name, b |> CourseCoach.name)
               )
@@ -159,7 +169,7 @@ let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
                       </button>
                       <button
                         className="w-10 text-sm course-faculty__list-item-remove text-gray-700 cursor-pointer flex items-center justify-center hover:text-red-500 hover:bg-gray-50 focus:outline-none focus:text-red-500 focus:bg-gray-50"
-                        ariaLabel={"Delete " ++ (coach |> CourseCoach.name)}
+                        ariaLabel={ts("delete") ++ " " ++ (coach |> CourseCoach.name)}
                         onClick={removeCoach(send, courseId, authenticityToken, coach)}>
                         <i className="fas fa-trash-alt" />
                       </button>

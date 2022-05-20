@@ -303,7 +303,7 @@ let topicsList = (topicCategories, topics) =>
                     let topicCategory =
                       topicCategories |> ArrayUtils.unsafeFind(
                         c => TopicCategory.id(c) == id,
-                        "Unable to find topic category with ID: " ++ id,
+                        t("unable_find_id") ++ id,
                       )
                     let (color, _) = StringUtils.toColor(TopicCategory.name(topicCategory))
                     let style = ReactDOM.Style.make(~backgroundColor=color, ())

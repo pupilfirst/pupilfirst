@@ -13,6 +13,7 @@ type state = {
   saving: bool,
 }
 
+let tr = I18n.t(~scope="components.CurriculumEditor__TargetGroupEditor")
 let ts = I18n.t(~scope="shared")
 
 type action =
@@ -112,7 +113,7 @@ let levelEditor = (state, levels, send) =>
       onChange={searchString => send(UpdateLevelSearchInput(searchString))}
     />
     {state.levelId->Belt.Option.mapWithDefault(
-      <School__InputGroupError message="Choose a level" active=true />,
+      <School__InputGroupError message=tr("choose_level") active=true />,
       _ => React.null,
     )}
   </div>
@@ -145,8 +146,8 @@ let handleResponseCB = (state, levelId, targetGroup, updateTargetGroupsCB, json)
     state.isArchived,
   )
   switch targetGroup {
-  | Some(_) => Notification.success("Success", "Target Group updated successfully")
-  | None => Notification.success("Success", "Target Group created successfully")
+  | Some(_) => Notification.success(ts("notifications.success"), tr("target_group_updated_notificaion"))
+  | None => Notification.success(ts("notifications.success"), tr("target_group_created_notification"))
   }
   updateTargetGroupsCB(newTargetGroup)
 }
@@ -236,11 +237,11 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
           <div className="mx-auto bg-white">
             <div className="max-w-2xl pt-6 px-6 mx-auto">
               <h5 className="uppercase text-center border-b border-gray-300 pb-2">
-                {"Target Group Details" |> str}
+                {tr("group_details") |> str}
               </h5>
               <div className="mt-5">
                 <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="name">
-                  {"Title" |> str}
+                  {tr("title") |> str}
                 </label>
                 <span> {"*" |> str} </span>
                 <input
@@ -248,27 +249,27 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                   className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                   id="name"
                   type_="text"
-                  placeholder="Type target group name here"
+                  placeholder=tr("title_placeholder")
                   value=state.name
                   onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
                 />
                 {state.hasNameError
                   ? <div className="drawer-right-form__error-msg">
                       <span className="mr-2"> <i className="fas fa-exclamation-triangle" /> </span>
-                      <span> {"not a valid Title" |> str} </span>
+                      <span> {tr("title_name_error") |> str} </span>
                     </div>
                   : React.null}
               </div>
               <div className="mt-5">
                 <label className="block tracking-wide text-xs font-semibold" htmlFor="description">
-                  {" Description" |> str}
+                  {" " ++ tr("description") |> str}
                 </label>
                 <MarkdownEditor
                   tabIndex=2
                   textareaId="description"
                   onChange={markdown => send(UpdateDescription(markdown))}
                   value=state.description
-                  placeholder="Type target group description"
+                  placeholder=tr("description_placeholder")
                   profile=Markdown.AreaOfText
                   maxLength=10000
                   fileUpload=false
@@ -278,7 +279,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
               <div className="mt-5">
                 <div className="flex items-center flex-shrink-0">
                   <label className="block tracking-wide text-xs font-semibold mr-3">
-                    {"Is this a milestone target group?" |> str}
+                    {tr("milestone_q") |> str}
                   </label>
                   <div
                     className="milestone flex-shrink-0 overflow-hidden">
@@ -288,7 +289,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                         send(UpdateMilestone(true))
                       }}
                       className={booleanButtonClasses(state.milestone == true)}>
-                      {"Yes" |> str}
+                      {ts("_yes") |> str}
                     </button>
                     <button
                       onClick={_event => {
@@ -296,7 +297,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                         send(UpdateMilestone(false))
                       }}
                       className={booleanButtonClasses(state.milestone == false)}>
-                      {"No" |> str}
+                      {ts("_no") |> str}
                     </button>
                   </div>
                 </div>
@@ -308,7 +309,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                 | Some(_) =>
                   <div className="flex items-center mr-2">
                     <label className="block tracking-wide text-xs font-semibold mr-6">
-                      {"Is this target group archived?" |> str}
+                      {tr("group_archived_q") |> str}
                     </label>
                     <div
                       className="toggle-button__group archived inline-flex flex-shrink-0 overflow-hidden">
@@ -318,7 +319,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                           send(UpdateIsArchived(true))
                         }}
                         className={booleanButtonClasses(state.isArchived == true)}>
-                        {"Yes" |> str}
+                        {ts("_yes") |> str}
                       </button>
                       <button
                         onClick={_event => {
@@ -326,7 +327,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                           send(UpdateIsArchived(false))
                         }}
                         className={booleanButtonClasses(state.isArchived == false)}>
-                        {"No" |> str}
+                        {ts("_no") |> str}
                       </button>
                     </div>
                   </div>
@@ -348,7 +349,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                           id,
                         )}
                       className="btn btn-primary btn-large">
-                      {"Update Target Group" |> str}
+                      {tr("update_group") |> str}
                     </button>
                   </div>
 
@@ -365,7 +366,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                           currentLevelId,
                         )}
                       className="w-full btn btn-primary btn-large">
-                      {"Create Target Group" |> str}
+                      {tr("create_group") |> str}
                     </button>
                   </div>
                 }}

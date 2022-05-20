@@ -3,6 +3,9 @@ open CoursesReport__Types
 
 let str = React.string
 
+
+let tr = I18n.t(~scope="components.CoursesReport")
+
 type selectedTab = [#Overview | #Submissions]
 
 type targetStatus = [#PendingReview | #Rejected | #Completed]
@@ -146,14 +149,14 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
               ariaSelected={state.selectedTab == #Overview}
               className={buttonClasses(state.selectedTab == #Overview)}
               onClick={_ => send(SelectOverviewTab)}>
-              {"Overview" |> str}
+              {tr("button_overview_text") |> str}
             </button>
             <button
               role="tab"
               ariaSelected={state.selectedTab == #Submissions}
               className={buttonClasses(state.selectedTab == #Submissions)}
               onClick={_ => send(SelectSubmissionsTab)}>
-              {"Submissions" |> str}
+              {tr("button_submissions_text") |> str}
             </button>
           </div>
         </div>

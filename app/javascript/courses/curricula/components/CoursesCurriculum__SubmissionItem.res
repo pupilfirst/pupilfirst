@@ -2,6 +2,7 @@ open CoursesCurriculum__Types
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CoursesCurriculum__SubmissionItem")
 let ts = I18n.ts
 
 let kindIconClasses = result =>
@@ -56,10 +57,10 @@ let showLink = (value, id, updateResultCB) =>
       type_="text"
       value
       onChange={e => updateResultCB(ChecklistItem.Link(ReactEvent.Form.target(e)["value"]))}
-      placeholder="Type full URL starting with https://..."
+      placeholder=tr("link_placeholder")
       className="cursor-pointer truncate h-10 border border-gray-300 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
     />
-    {showError("This doesn't look like a valid URL.", UrlUtils.isInvalid(true, value))}
+    {showError(tr("link_error"), UrlUtils.isInvalid(true, value))}
   </div>
 
 let showShortText = (value, id, updateResultCB) =>
@@ -70,11 +71,11 @@ let showShortText = (value, id, updateResultCB) =>
       value
       maxLength=250
       onChange={e => updateResultCB(ChecklistItem.ShortText(ReactEvent.Form.target(e)["value"]))}
-      placeholder="Add a short text"
+      placeholder=tr("short_text_placeholder")
       className="cursor-pointer truncate h-10 border border-gray-300 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
     />
     {showError(
-      "Answer should be less than 250 characters",
+      tr("short_text_error"),
       !ChecklistItem.validShortText(value) && notBlank(value),
     )}
   </div>
@@ -91,7 +92,7 @@ let longTextWarning = value => {
           className={"hidden md:inline px-2 py-px rounded text-xs font-semibold inline-flex items-center " ++
           colors}>
           <span className="mr-2"> <i className="fas fa-exclamation-triangle" /> </span>
-          <span> {"Please keep your answer to less than 5000 characters in length." |> str} </span>
+          <span> {tr("warning_length_limit") |> str} </span>
         </div>
         <div
           className={"flex-shrink-1 text-tiny font-semibold px-1 py-px border border-transparent rounded " ++
@@ -170,7 +171,7 @@ let showFiles = (files, preview, id, attachingCB, updateResultCB, index) =>
               </span>
             </div>
             <button
-              title={"Remove " ++ (file |> ChecklistItem.filename)}
+              title={tr("remove") ++ (file |> ChecklistItem.filename)}
               className="flex w-8 justify-center items-center p-2 cursor-pointer bg-gray-50 border-l text-gray-700 hover:bg-gray-50 hover:text-gray-900"
               onClick={_ => removeFile(updateResultCB, files, file |> ChecklistItem.fileId)}>
               <PfIcon className="if i-times-regular text-sm" />

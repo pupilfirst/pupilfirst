@@ -1,5 +1,8 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.School__SelectBox")
+let ts = I18n.ts
+
 type key = string
 type value = string
 type selected = bool
@@ -14,9 +17,9 @@ let convertOldCallback = (cb, key, value, selected) => cb(key |> int_of_string, 
 let make = (
   ~items: list<item>,
   ~selectCB: (key, value, selected) => unit,
-  ~noSelectionHeading="None Selected",
-  ~noSelectionDescription="Select from the following list.",
-  ~emptyListDescription="There are no items to select.",
+  ~noSelectionHeading=t("none_selected"),
+  ~noSelectionDescription=t("select_from_list"),
+  ~emptyListDescription=t("no_items_select"),
 ) => {
   let (searchString, setSearchString) = React.useState(() => "")
   let selectedList = items |> List.filter(((_, _, selected)) => selected == true)
@@ -40,7 +43,7 @@ let make = (
             <div className="p-3 flex-1"> {value |> str} </div>
             <button
               className="flex p-3 text-gray-800 hover:bg-gray-50 hover:text-gray-900 focus:outline-none"
-              title="Remove"
+              title=t("remove")
               onClick={_event => {
                 ReactEvent.Mouse.preventDefault(_event)
                 setSearchString(_ => "")
@@ -68,7 +71,7 @@ let make = (
                   <input
                     className="appearance-none bg-transparent border-b w-full text-gray-700 pb-3 px-2 pl-0 leading-normal focus:outline-none"
                     type_="text"
-                    placeholder="Type to Search"
+                    placeholder=t("type_search")
                     onChange={event => setSearchString(ReactEvent.Form.target(event)["value"])}
                   />
                 </div>
@@ -83,7 +86,7 @@ let make = (
                     setSearchString(_ => "")
                     selectCB(key, value, true)
                   }}
-                  title={"Select " ++ value}
+                  title={ t("select") ++ " " ++ value}
                   className="px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500 cursor-pointer">
                   {value |> str}
                 </div>

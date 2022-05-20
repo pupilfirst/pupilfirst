@@ -1,5 +1,8 @@
 let str = React.string
 
+let tr = I18n.t(~scope="components.CurriculumEditor__VersionsEditor")
+let ts = I18n.ts
+
 open CurriculumEditor__Types
 
 type rec state =
@@ -83,7 +86,7 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
       <button
         id
         key=id
-        title={"Select version " ++ id}
+        title={tr("select_version") ++ " " ++ id}
         onClick={_ => loadContentBlocksCB(Some(version))}
         className="whitespace-nowrap px-3 py-2 cursor-pointer hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500 w-full text-left">
         {versionText(version)}
@@ -92,7 +95,7 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
 
   let selected =
     <button
-      title={"Select version " ++ (selectedVersion |> Version.id)}
+      title={tr("select_version") ++ " " ++ (selectedVersion |> Version.id)}
       className="text-sm appearance-none bg-white inline-flex items-center justify-between rounded focus:outline-none focus:ring-2 focus:ring-focusColor-500 hover:bg-gray-50 hover:shadow-lg px-3 h-full">
       <span> {versionText(selectedVersion)} </span>
       <span className="border-l border-gray-300 ml-2 pl-2">
@@ -119,13 +122,9 @@ let showContentBlocks = (
   <div>
     <div>
       <label className="text-xs inline-block text-gray-600 mb-1">
-        {(versions |> Array.length > 1 ? "Versions" : "Version") |> str}
+        {(versions |> Array.length > 1 ? ts("versions") : ts("version")) |> str}
       </label>
-      <HelpIcon
-        className="ml-1"
-        link="https://docs.pupilfirst.com/#/curriculum_editor?id=target-content-versions">
-        {"Use the versions feature to preserve the existing state of a target's content, to browse earlier stored versions, and to restore them, if required." |> str}
-      </HelpIcon>
+      <HelpIcon className="ml-1" link={tr("help_url")}> {tr("help") |> str} </HelpIcon>
     </div>
     <div className="flex">
       <div className="border rounded border-gray-300 flex items-center">
@@ -137,8 +136,8 @@ let showContentBlocks = (
           onClick={_ => createTargetVersion(targetId, selectedVersion, send)}>
           {(
             selectedVersion |> Version.isLatestTargetVersion(versions)
-              ? "Save this version"
-              : "Restore this version"
+              ? tr("save_version")
+              : tr("restore_version")
           ) |> str}
         </button>
       </div>

@@ -3,7 +3,7 @@ let str = React.string
 
 open Notifications__Types
 
-let t = I18n.t(~scope="components.Notifications__List")
+let t = I18n.t(~scope="components.Notifications__EntryCard")
 
 module MarkNotificationQuery = %graphql(`
   mutation MarkNotificationMutation($notificationId: ID!) {
@@ -92,11 +92,11 @@ let make = (~entry, ~markNotificationCB) => {
         <div
           className="opacity-0 notifications__entry-card-buttons absolute top-0 bottom-0 right-0 flex items-center pl-4 pr-4 md:pr-8 transition ease-in-out duration-150">
           {ReactUtils.nullIf(
-            <Tooltip tip={str("Mark as Read")} position=#Left>
+            <Tooltip tip={str(t("mark_read"))} position=#Left>
               <button
                 disabled=saving
-                ariaLabel="Mark as read"
-                title="Mark as Read"
+                ariaLabel={t("mark_read")}
+                title={t("mark_read")}
                 onClick={markNotification(Entry.id(entry), setSaving, markNotificationCB)}
                 className="flex justify-center items-center w-8 h-8 font-semibold p-2 md:py-1 border border-gray-300 rounded text-sm bg-white text-gray-700 hover:text-primary-500 hover:border-primary-400 hover:bg-gray-50 hover:shadow-md focus:outline-none focus:text-primary-500 focus:border-primary-400 focus:bg-gray-50 focus:shadow-md transition ease-in-out duration-150">
                 <Icon className="if i-check-solid" />

@@ -137,8 +137,13 @@ let secondaryNav = (courses, userRole, selectedOption) =>
       key="secondary-nav"
       className="bg-white school-admin-navbar__secondary-nav w-full border-r border-gray-300 pb-6 overflow-y-auto">
       <ul className="p-4">
-        {secondaryNavOption("/school/customize", settingsSelection, Customization, "Customization")}
-        {secondaryNavOption("/school/admins", settingsSelection, Admins, "Admins")}
+        {secondaryNavOption(
+          "/school/customize",
+          settingsSelection,
+          Customization,
+          t("navbar.customization"),
+        )}
+        {secondaryNavOption("/school/admins", settingsSelection, Admins, t("navbar.admins"))}
       </ul>
     </div>
   | SelectedCourse(courseId, courseSelection) =>
@@ -256,7 +261,14 @@ let make = (
         | SchoolAdmin =>
           <ul>
             <li>
-              {topLink(selectedOption, Overview, "/school", shrunk, "fas fa-eye", "Overview")}
+              {topLink(
+                selectedOption,
+                Overview,
+                "/school",
+                shrunk,
+                "fas fa-eye",
+                t("navbar.overview"),
+              )}
             </li>
             <li>
               {topLink(
@@ -265,7 +277,7 @@ let make = (
                 "/school/coaches",
                 shrunk,
                 "fas fa-chalkboard-teacher",
-                "Coaches",
+                t("navbar.coaches"),
               )}
             </li>
             <li>
@@ -275,7 +287,7 @@ let make = (
                 "/school/customize",
                 shrunk,
                 "fas fa-cog",
-                "Settings",
+                t("navbar.settings"),
               )}
             </li>
             <li>
@@ -285,7 +297,7 @@ let make = (
                 "/school/courses",
                 shrunk,
                 "fas fa-book",
-                "Courses",
+                t("navbar.courses"),
               )}
               {ReactUtils.nullIf(
                 <ul className="pr-4 pb-4 ml-10 mt-1">
@@ -319,7 +331,7 @@ let make = (
                 "/school/communities",
                 shrunk,
                 "fas fa-users",
-                "Communities",
+                t("navbar.communities"),
               )}
             </li>
           </ul>
@@ -332,7 +344,7 @@ let make = (
             wrapperClasses="w-full"
             iconClasses="school-admin-navbar__notifications-unread-bullet"
             buttonClasses="flex relative text-white text-sm py-4 px-5 font-semibold items-center w-full focus:bg-primary-900"
-            title=?{shrunk ? None : Some("Notifications")}
+            title=?{shrunk ? None : Some(t("notifications"))}
             icon="fas fa-bell fa-fw text-lg mr-2"
             hasNotifications
           />
@@ -340,12 +352,14 @@ let make = (
         {bottomLink("/dashboard", shrunk, "fas fa-home", "Dashboard")}
         <li>
           <a
-            title=?{shrunk ? Some("Sign Out") : None}
+            title=?{shrunk ? Some(t("sign_out")) : None}
             className={bottomLinkClasses(shrunk)}
             rel="nofollow"
             href="/users/sign_out">
             <i className="fas fa-sign-out-alt fa-fw text-lg" />
-            {shrunk ? React.null : <span className="ml-2"> {"Sign Out" |> str} </span>}
+            {shrunk
+              ? React.null
+              : <span className="ml-2"> {I18n.t("shared.sign_out") |> str} </span>}
           </a>
         </li>
       </ul>

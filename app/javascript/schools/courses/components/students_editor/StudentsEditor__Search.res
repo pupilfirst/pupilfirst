@@ -1,6 +1,7 @@
 open StudentsEditor__Types
 
 let t = I18n.t(~scope="components.StudentsEditor__Search")
+let ts = I18n.ts
 
 let str = React.string
 
@@ -13,8 +14,8 @@ module Selectable = {
   let label = t => {
     let labelString = switch t {
     | Level(level) => LevelLabel.format(level |> Level.number |> string_of_int)
-    | Tag(_) => "Tag"
-    | NameOrEmail(_) => "Name or Email"
+    | Tag(_) => ts("tag")
+    | NameOrEmail(_) => ts("name_email")
     }
     Some(labelString)
   }
@@ -54,7 +55,7 @@ let updateFilter = (setSearchInput, updateFilterCB, filter) => {
 
 let selected = (filter, levels) => {
   let level = switch filter |> Filter.levelId {
-  | Some(id) => [Selectable.makeLevel(id |> Level.unsafeFind(levels, "Search"))]
+  | Some(id) => [Selectable.makeLevel(id |> Level.unsafeFind(levels, ts("search")))]
   | None => []
   }
   let searchString = switch filter |> Filter.searchString {

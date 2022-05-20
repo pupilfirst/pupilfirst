@@ -2,6 +2,9 @@ open CoachesSchoolIndex__Types
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.SA_Coaches_SchoolIndex")
+let ts = I18n.t(~scope="shared")
+
 type formVisible =
   | None
   | CoachEditor(option<Coach.t>)
@@ -44,7 +47,7 @@ let make = (~coaches, ~authenticityToken) => {
           }}
           className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:shadow-lg focus:border-primary-300 focus:text-primary-600 border-2 border-primary-300 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-plus-circle text-lg" />
-          <h5 className="font-semibold ml-2"> {"Add New Coach" |> str} </h5>
+          <h5 className="font-semibold ml-2"> {tr("add_new_coach") |> str} </h5>
         </button>
       </div>
       <div className="px-6 pb-4 mt-5 flex flex-1">
@@ -67,7 +70,7 @@ let make = (~coaches, ~authenticityToken) => {
                     <img
                       className="w-10 h-10 rounded-full mr-4 object-cover"
                       src={coach |> Coach.imageUrl}
-                      alt={"Avatar of " ++ (coach |> Coach.name)}
+                      alt={tr("avatar_of") ++ (coach |> Coach.name)}
                     />
                     <div className="text-sm text-left">
                       <p className="font-semibold"> {coach |> Coach.name |> str} </p>
@@ -79,7 +82,7 @@ let make = (~coaches, ~authenticityToken) => {
                   <span
                     className="flex items-center flex-shrink-0 ml-2 py-4 px-4 font-semibold text-gray-700 hover:text-primary-500 text-sm">
                     <i className="fas fa-edit text-normal" />
-                    <span className="ml-1"> {"Edit" |> str} </span>
+                    <span className="ml-1"> {ts("edit") |> str} </span>
                   </span>
                 </button>
               </div>

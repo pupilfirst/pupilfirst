@@ -2,6 +2,7 @@ open CourseCertificates__Types
 
 let str = React.string
 let t = I18n.t(~scope="components.CourseCertificates__EditDrawer")
+let ts = I18n.t(~scope="shared")
 
 type state = {
   name: string,
@@ -210,23 +211,21 @@ let make = (
           </div>
           <div className="mt-6" ariaLabel="auto_issue">
             <label className="tracking-wide text-sm font-semibold">
-              {t("active_label")->str}
+              {t("active.label")->str}
             </label>
-            <HelpIcon
-              className="ml-1"
-              link="https://docs.pupilfirst.com/#/certificates?id=automatically-issuing-certificates">
-              <span dangerouslySetInnerHTML={"__html": t("active_help")} />
+            <HelpIcon className="ml-1" link={t("active.help_url")}>
+              <span dangerouslySetInnerHTML={"__html": t("active.help")} />
             </HelpIcon>
             <div className="ml-4 inline-flex toggle-button__group flex-shrink-0">
               <button
                 className={activeButtonClasses(state.active, true)}
                 onClick={_ => send(UpdateActive(true))}>
-                {str("Yes")}
+                {str(ts("_yes"))}
               </button>
               <button
                 className={activeButtonClasses(state.active, false)}
                 onClick={_ => send(UpdateActive(false))}>
-                {str("No")}
+                {str(ts("_no"))}
               </button>
             </div>
             {!canBeAutoIssued
@@ -311,14 +310,12 @@ let make = (
               </div>
               <div className="mt-4" ariaLabel="add_qr_code">
                 <label className="tracking-wide text-gray-900 text-xs font-semibold">
-                  {t("qr_visibility_label")->str}
+                  {t("qr_visibility.label")->str}
                 </label>
-                <HelpIcon
-                  className="ml-1"
-                  link="https://docs.pupilfirst.com/#/certificates?id=automatically-issuing-certificates">
+                <HelpIcon className="ml-1" link={t("qr_visibility.help_url")}>
                   <span
                     dangerouslySetInnerHTML={
-                      "__html": t("qr_visibility_help"),
+                      "__html": t("qr_visibility.help"),
                     }
                   />
                 </HelpIcon>
@@ -326,12 +323,12 @@ let make = (
                   <button
                     className={qrVisiblityClasses(state.qrCorner, true)}
                     onClick={activateQrCode(state, send)}>
-                    {str("Yes")}
+                    {str(ts("_yes"))}
                   </button>
                   <button
                     className={qrVisiblityClasses(state.qrCorner, false)}
                     onClick={_ => send(UpdateQrCorner(#Hidden))}>
-                    {str("No")}
+                    {str(ts("_no"))}
                   </button>
                 </div>
               </div>

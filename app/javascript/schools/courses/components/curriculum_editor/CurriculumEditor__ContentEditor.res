@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.CurriculumEditor__ContentEditor")
+
 open CurriculumEditor__Types
 
 type state = {
@@ -111,7 +113,7 @@ let editor = (
   send,
 ) => {
   let currentVersion = switch state.versions {
-  | [] => <span className="italic"> {"Not Versioned" |> str} </span>
+  | [] => <span className="italic"> {t("not_versioned") |> str} </span>
   | versions =>
     let latestVersion =
       versions->Array.unsafe_get(0)->Version.updatedAt->DateFns.format("MMM d, yyyy HH:mm")
@@ -133,13 +135,13 @@ let editor = (
           target="_blank"
           className="py-2 px-3 font-semibold rounded-lg text-sm bg-primary-100 text-primary-500 hhover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
           <FaIcon classes="fas fa-external-link-alt" />
-          <span className="ml-2"> {"View as Student" |> str} </span>
+          <span className="ml-2"> {t("view_as_student") |> str} </span>
         </a>
       | Draft
       | Archived => React.null
       }}
       <div className="w-2/6 text-right">
-        <label className="text-xs block text-gray-600"> {"Last Updated" |> str} </label>
+        <label className="text-xs block text-gray-600"> {t("last_updated") |> str} </label>
         <span className="text-sm font-semibold"> currentVersion </span>
       </div>
     </div>

@@ -1,5 +1,8 @@
 let str = React.string
 
+let tr = I18n.t(~scope="components.SchoolCommunities__Index")
+let ts = I18n.t(~scope="shared")
+
 open SchoolCommunities__IndexTypes
 
 type editorAction =
@@ -96,7 +99,7 @@ let handleCloseCategoryManager = (send, state) =>
   categoryEditorDirty(state)
     ? if {
         open Webapi.Dom
-        window |> Window.confirm("There are unsaved changes! Are you sure you want to close?")
+        window |> Window.confirm(tr("unsaved_window_confirm"))
       } {
         send(UpdateShowCategoryEditor(false))
       } else {
@@ -133,7 +136,7 @@ let make = (~communities, ~courses) => {
     | ShowEditor(community) =>
       let level = state.showCategoryEditor ? 1 : 0
       <SchoolAdmin__EditorDrawer2
-        closeButtonTitle="Close Community Editor"
+        closeButtonTitle=tr("close_community_editor")
         level
         closeDrawerCB={() => send(UpdateEditorAction(Hidden))}>
         <SchoolCommunities__Editor
@@ -151,7 +154,7 @@ let make = (~communities, ~courses) => {
         | Some(community) =>
           state.showCategoryEditor
             ? <SchoolAdmin__EditorDrawer2
-                closeButtonTitle="Close Category Editor"
+                closeButtonTitle=tr("close_category_editor")
                 closeIconClassName="fas fa-arrow-left"
                 closeDrawerCB={() => handleCloseCategoryManager(send, state)}>
                 <SchoolCommunities__CategoryManager
@@ -172,7 +175,7 @@ let make = (~communities, ~courses) => {
         onClick={_ => send(UpdateEditorAction(ShowEditor(None)))}
         className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg border-2 border-primary-300 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer focus:outline-none focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg">
         <i className="fas fa-plus-circle" />
-        <h5 className="font-semibold ml-2"> {"Add New Community" |> str} </h5>
+        <h5 className="font-semibold ml-2"> {tr("add_new_community") |> str} </h5>
       </button>
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">
@@ -197,7 +200,7 @@ let make = (~communities, ~courses) => {
                   <span
                     className="ml-2 py-5 px-5 font-semibold text-gray-700 hover:text-primary-500">
                     <i className="fas fa-edit text-normal" />
-                    <span className="ml-1"> {"Edit" |> str} </span>
+                    <span className="ml-1"> {ts("edit") |> str} </span>
                   </span>
                 </div>
               </button>
@@ -206,7 +209,7 @@ let make = (~communities, ~courses) => {
                 href={"/communities/" ++ (community |> Community.id)}
                 className="text-sm flex items-center border-l text-gray-700 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500 font-semibold px-5 py-5">
                 <i className="fas fa-external-link-alt text-normal" />
-                <span className="ml-1"> {"View" |> str} </span>
+                <span className="ml-1"> {ts("view") |> str} </span>
               </a>
             </div>
           </div>

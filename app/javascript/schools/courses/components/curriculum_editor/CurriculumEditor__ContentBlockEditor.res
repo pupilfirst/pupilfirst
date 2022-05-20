@@ -2,6 +2,8 @@ exception InvalidBlockTypeForUpdate
 
 let str = React.string
 
+let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockEditor")
+
 type state = {
   dirty: bool,
   saving: option<string>,
@@ -107,8 +109,8 @@ let onMove = (contentBlock, cb, direction, _event) => {
 }
 
 let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
-  WindowUtils.confirm("Are you sure you want to delete this block?", () => {
-    send(StartSaving("Deleting..."))
+  WindowUtils.confirm(t("delete_block_confirm"), () => {
+    send(StartSaving(t("deleting")))
     let id = contentBlock |> ContentBlock.id
 
     DeleteContentBlockMutation.make(~id, ())
@@ -132,7 +134,7 @@ let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
 let onUndo = (originalContentBlock, setDirtyCB, send, event) => {
   event |> ReactEvent.Mouse.preventDefault
 
-  WindowUtils.confirm("Are you sure you want to undo your changes to this block?", () => {
+  WindowUtils.confirm(t("undo_block_confirm"), () => {
     setDirtyCB(false)
     send(UpdateContentBlock(originalContentBlock, false))
   })
@@ -156,7 +158,7 @@ let updateContentBlockBlock = (
   setDirtyCB,
   send,
 ) => {
-  send(StartSaving("Updating..."))
+  send(StartSaving(t("uploading")))
 
   mutation
   |> GraphqlQuery.sendQuery
@@ -259,7 +261,7 @@ let make = (
   <DisablingCover disabled={state.saving != None} message=?state.saving>
     <div
       className="flex items-start"
-      ariaLabel={"Editor for content block " ++ (contentBlock |> ContentBlock.id)}>
+      ariaLabel={t("editor_content_block") ++ (contentBlock |> ContentBlock.id)}>
       <div className="flex-grow self-stretch min-w-0">
         {innerEditor(
           contentBlock,
@@ -274,25 +276,25 @@ let make = (
         className="pl-2 flex-shrink-0 border-transparent bg-gray-50 border rounded flex flex-col text-xs -mr-10 sticky top-0">
         {controlIcon(
           ~icon="fa-arrow-up",
-          ~title="Move Up",
+          ~title=t("move_up"),
           ~color=#Grey,
           ~handler=moveContentBlockUpCB |> OptionUtils.map(cb => onMove(contentBlock, cb, #Up)),
         )}
         {controlIcon(
           ~icon="fa-arrow-down",
-          ~title="Move Down",
+          ~title=t("move_down"),
           ~color=#Grey,
           ~handler=moveContentBlockDownCB |> OptionUtils.map(cb => onMove(contentBlock, cb, #Down)),
         )}
         {controlIcon(
           ~icon="fa-trash-alt",
-          ~title="Delete",
+          ~title=t("delete"),
           ~color=#Red,
           ~handler=removeContentBlockCB |> OptionUtils.map(cb => onDelete(contentBlock, cb, send)),
         )}
         {controlIcon(
           ~icon="fa-undo-alt",
-          ~title="Undo Changes",
+          ~title=t("undo_changes"),
           ~color=#Grey,
           ~handler=updateContentBlockCB |> OptionUtils.map(_cb =>
             onUndo(contentBlock, setDirtyCB, send)
@@ -300,7 +302,7 @@ let make = (
         )}
         {controlIcon(
           ~icon="fa-check",
-          ~title="Save Changes",
+          ~title=t("save_changes"),
           ~color=#Green,
           ~handler=updateContentBlockCB |> OptionUtils.map(cb =>
             onSave(state.contentBlock, cb, setDirtyCB, send)

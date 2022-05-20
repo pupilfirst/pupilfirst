@@ -144,8 +144,8 @@ let make = (
         ? <div
             className="target-group__group-reorder flex flex-col shadow rounded-l-lg absolute h-full border border-r-0 overflow-hidden text-gray-700 justify-between items-center bg-white">
             <button
-              title="Move Up"
-              ariaLabel="Move Up"
+              title={t("move_up")}
+              ariaLabel={t("move_up")}
               id={"target-group-move-up-" ++ (targetGroup |> TargetGroup.id)}
               className={"target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 focus:text-primary-500" ++
               sortIndexHiddenClass(index == 0)}
@@ -154,8 +154,8 @@ let make = (
               <i className="fas fa-arrow-up text-sm" />
             </button>
             <button
-              title="Move Down"
-              ariaLabel="Move down"
+              title={t("move_down")}
+              ariaLabel={t("move_down")}
               id={"target-group-move-down-" ++ (targetGroup |> TargetGroup.id)}
               className={"target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 focus:text-primary-500" ++
               sortIndexHiddenClass(index + 1 == Js.Array.length(targetGroups))}
@@ -184,7 +184,7 @@ let make = (
           </label>
           <input
             id={"create-target-input" ++ (targetGroup |> TargetGroup.id)}
-            title="Create target"
+            title={t("create_a_target")}
             value=state.targetTitle
             onChange={event => send(UpdateTargetTitle(ReactEvent.Form.target(event)["value"]))}
             placeholder={t("create_target")}
@@ -195,7 +195,7 @@ let make = (
                 onClick={_e => handleCreateTarget(state.targetTitle, targetGroup |> TargetGroup.id)}
                 disabled=state.savingNewTarget
                 className="flex items-center whitespace-nowrap text-sm font-semibold py-2 px-4 mr-4 rounded btn-primary appearance-none focus:outline-none text-center">
-                {"Create" |> str}
+                {t("create") |> str}
               </button>
             : React.null}
         </div>}

@@ -45,9 +45,9 @@ module Example = {
     "attachment-light",
     "attachment-regular",
     "attachment-solid",
-    "audio-light",
-    "audio-regular",
-    "audio-solid",
+    "play-circle-light",
+    "play-circle-regular",
+    "play-circle-solid",
     "award-light",
     "award-regular",
     "award-solid",
@@ -127,6 +127,8 @@ module Example = {
     "external-link-light",
     "external-link-regular",
     "external-link-solid",
+    "eye-light",
+    "eye-regular",
     "eye-solid",
     "file-light",
     "file-regular",
@@ -241,10 +243,22 @@ module Example = {
     "users-light",
     "users-regular",
     "users-solid",
-    "video-light",
-    "video-regular",
-    "video-solid",
+    "play-rectangle-light",
+    "play-rectangle-regular",
+    "play-rectangle-solid",
     "writing-pad-solid",
+    "markdown-light",
+    "markdown-regular",
+    "markdown-solid",
+    "clipboard-people-light",
+    "clipboard-people-regular",
+    "clipboard-people-solid",
+    "edit-light",
+    "edit-regular",
+    "edit-solid",
+    "calendar-light",
+    "calendar-regular",
+    "calendar-solid",
   ]
 
   let search = searchString => {
@@ -270,8 +284,8 @@ module Example = {
   @react.component
   let make = () => {
     let (searchString, setSearchString) = React.useState(() => "")
-    <div className="max-w-5xl mx-auto">
-      <div className="flex items-center justify-between py-6">
+    <div className="max-w-6xl mx-auto p-4">
+      <div className="flex items-center justify-between">
         <h1 className="text-center text-2xl font-bold text-purple-700"> {"pf-icon" |> str} </h1>
         <a
           className="flex items-center cursor-pointer hover:text-purple-600"
@@ -295,22 +309,22 @@ module Example = {
             className=" w-full text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 appearance-none text-gray-700"
           />
         </div>
-        <div className="mt-4 p-6 flex md:flex-row flex-col flex-wrap bg-white border rounded">
+        <div className="grid md:grid-cols-3 gap-2 md:gap-4 flex-wrap">
           {switch search(searchString) {
           | [] => <div className="p-4 text-sm text-center w-full"> {"Icon not found" |> str} </div>
           | resultIcons =>
             resultIcons
             |> Array.map(icon => {
               let iconClasses = "if i-" ++ icon
-              <div key=icon className="flex items-center mt-4 md:w-1/2 w-full px-2 my-2">
+              <div key=icon className="flex items-center p-4 shadow bg-white rounded-md">
                 <PfIcon className={iconClasses ++ " if-fw text-2xl"} />
                 <div className="ml-4 overflow-x-auto">
                   <div className="flex gap-4 items-center">
-                    <p className="font-semibold text-xl"> {icon |> str} </p>
+                    <p className="font-semibold text-base"> {icon |> str} </p>
                     <button
                       onClick={_ =>
                         writeText("<PfIcon className=\"" ++ (iconClasses ++ " if-fw\" />"))}
-                      className="text-xs text-gray-400 hover:text-blue-500 focus:outline-none focus:text-blue-500">
+                      className="text-xs text-gray-700 hover:text-blue-500 focus:outline-none focus:text-blue-500">
                       {"Copy"->str}
                     </button>
                   </div>

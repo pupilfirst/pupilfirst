@@ -101,8 +101,8 @@ module.exports = {
       "@docusaurus/preset-classic",
       {
         docs: {
-          path: 'users',
-          routeBasePath: 'users',
+          path: "users",
+          routeBasePath: "users",
           sidebarPath: require.resolve("./sidebarsUsers.js"),
         },
         theme: {
@@ -113,16 +113,16 @@ module.exports = {
   ],
   plugins: [
     [
-      '@docusaurus/plugin-content-docs',
+      "@docusaurus/plugin-content-docs",
       {
-        id: 'developers',
-        path: 'developers',
-        routeBasePath: 'developers',
-        sidebarPath: require.resolve('./sidebarsDevelopers.js'),
+        id: "developers",
+        path: "developers",
+        routeBasePath: "developers",
+        sidebarPath: require.resolve("./sidebarsDevelopers.js"),
         editUrl:
-            "https://github.com/pupilfirst/pupilfirst/edit/master/docs/developers/",
+          "https://github.com/pupilfirst/pupilfirst/edit/master/docs/developers/",
         // ... other options
       },
     ],
-  ]
+  ],
 };

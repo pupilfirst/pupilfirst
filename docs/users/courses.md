@@ -14,38 +14,32 @@ To create a new course, head to the Courses menu from the school administration 
 
 The form that pops up will ask you for a few details:
 
-**Course name**\
-The name of the course, that will publicly displayed.
+**Course name**: The name of the course, that will publicly displayed.
 
-**Course description**\
-This short description will be displayed on the course's public page.
+**Course description**: This short description will be displayed on the course's public page.
 
-**Course end date**\
-If set, your course will go into a _read-only_ mode after this date, and students will be shown a message that the course has ended. This effectively _closes_ the course, preventing students from making further submissions, but does not remove student's access to the content, or to the work that they submitted as a part of the course.
+**Course end date**: If set, your course will go into a _read-only_ mode after this date, and students will be shown a message that the course has ended. This effectively _closes_ the course, preventing students from making further submissions, but does not remove student's access to the content, or to the work that they submitted as a part of the course.
 
-**About**\
-This is a markdown field - you can use this to add descriptive text about your course. This will be displayed on the on the course's public page.
+**About**: This is a markdown field - you can use this to add descriptive text about your course. This will be displayed on the on the course's public page.
 
-**Progression Behavior**\
-This setting controls how students are allowed to level up in your course. This setting only applies if your course contains [milestone targets](/users/targets#milestone-targets) that require your students to submit work for review. There are three possible options, which are described in detail below.
+**Progression Behavior**: This setting controls how students are allowed to level up in your course. This setting only applies if your course contains [milestone targets](/users/targets#milestone-targets) that require your students to submit work for review. There are three possible options, which are described in detail below.
 
-**Feature course in school homepage?** \
-If enabled, the course will be displayed on the list of featured courses on your school's homepage, along with a link to the course's details page (which includes the content of the _about_ field).
+**Feature course in school homepage?**: If enabled, the course will be displayed on the list of featured courses on your school's homepage, along with a link to the course's details page (which includes the content of the _about_ field).
 
-**Enable public signup for this course?** \
-If enabled, members of the public will be able to sign up for your course.
+**Enable public signup for this course?**: If enabled, members of the public will be able to sign up for your course.
 
-**Do you want to process applicant information before enrolling them?** \
-If enabled, applicants will be redirected to a URL of your choice for further processing, after verifying their email address. [This URL can be customized](#customizing-the-processing-url) to include information about the applicant.
+**Do you want to process applicant information before enrolling them?**: If enabled, applicants will be redirected to a URL of your choice for further processing, after verifying their email address. [This URL can be customized](#customizing-the-processing-url) to include information about the applicant.
 
-> [!ATTENTION]
-> Applicants will not be added as a students until you manually approve them from the _Applicants_ page. This feature could be used for setting up a payments flow for the course.
+<details>
+   <summary>You can use this processing feature to onboard students after approval!</summary>
+   <div>
+      Applicants will not be added as a students until you manually approve them from the <em>Applicants</em> page. This feature could be used for setting up a payments flow for the course.
+   </div>
+</details>
 
-**Course Highlights** \
-If set, a highlights section will be shown on the course's public page. You can use this session to highlight the core features of the course.
+**Course Highlights**: If set, a highlights section will be shown on the course's public page. You can use this session to highlight the core features of the course.
 
-**Allow public to view course curriculum?** \
-If enabled, members of the public will be able to view the course curriculum without signing in. This will not let them _interact_ with the course in any way.
+**Allow public to view course curriculum?**: If enabled, members of the public will be able to view the course curriculum without signing in. This will not let them _interact_ with the course in any way.
 
 ### Customizing the processing URL
 
@@ -116,26 +110,20 @@ Archiving a course will hide the course from the platform. All the students will
 
 Unarchiving a course will bring back the course to an _ended_ state. You can move it to _live_ state by clearing the _Course end date_.
 
-> Note: The course will not have any active students.
+When unarchiving a course, all students attached to the course will continue to be in the _access ended_ state.
 
 ## States for a course
 
-A course will always be in one of the 3 states mentioned below.
-
-> You can see the courses in each state changing the filter.
+A course will always be in one of the 3 states mentioned below. You can see the courses in each state changing the filter.
 
 ### Active
 
-A course that is not ended or archived
+A course that is not ended or archived.
 
 ### Ended
 
-Courses that have passed the _course end date_
-
-> Note: Course will be hidden form all the _nav bars_ in school admin interface. The links to school admin pages for the course can only be accessed from the courses page.
+Courses that have passed the _course end date_. Such courses will be hidden form all the navigation menus in school administration interface. The links to school administration pages for the course can only be accessed from the courses page.
 
 ### Archived
 
-Courses that are archived.
-
-> Course will be hidden from the platform
+In addition to being hidden, such courses cannot be accessed or modified.

@@ -21,12 +21,21 @@ Levels are the top organizational unit within a course, and act as an indicator 
 3. Students can move up through levels, after they've submitted work on [milestone targets](/users/targets#milestone-targets). We call this [leveling up](/users/taking_courses#leveling-up), or to _level up_.
 4. Courses can have any number of levels, but you probably don't want to go overboard.
 
-?> **For all the non-gamers out there:** The phrase _level up_, is borrowed from the world of gaming. Roughly, it means _to progress to the next level_ - an activity that is common in modern role-playing games where one's character advances to the next level of development.
+<details>
+  <summary>The phrase <em>level up</em>, is borrowed from the world of gaming.</summary>
+  <div>
+  Roughly, it means <em>to progress to the next level</em> - an activity that is common in modern role-playing games where one's character advances to the next level of development.
+  </div>
+</details>
 
 To create a new level, click the _Create Level_ button next to the level selector, and to edit a level's name, click the _edit icon_ next to the selected level. Levels have one additional property: a date to _Unlock level on_. If set, the _content_ of the level is hidden from students until that date. Coaches in a course, and all school admins will still have access to the content of locked levels.
 
-?> **What purpose does a level's _unlock date_ serve?** \
-Locked levels are still _visible_ to a student, but it's content (targets) are not. This can be used to communicate to the student about the _path_ they're expected to follow, but to deliberately hide the exact content they'll get access to. For example, this can be useful if the content for a level is still a work-in-progress, but the overall organization of the course is fixed.
+<details>
+  <summary>What purpose does a level's <em>unlock date</em> serve?</summary>
+  <div>
+    Locked levels are still visible to a student, but its content (targets) are not. This can be used to communicate to the student about the <em>path</em> they're expected to follow, but to deliberately hide the exact content they'll get access to. For example, this can be useful if the content for a level is still a work-in-progress, but the overall organization of the course is fixed.
+  </div>
+</details>
 
 ### Level actions
 
@@ -60,7 +69,7 @@ You'll notice that the content is made up of different types of _content blocks_
 
 At the moment, we support four types of content blocks.
 
-**Markdown**\
+**Markdown**<br/>
 The Markdown block allows you to write formatted text in the Markdown format. You can also embed files and images directly into the text using the file upload feature here, but you'll have no control over how they're displayed. Images will be centered, and displayed at actual size, whereas files will be inserted as links. Use the _Image_ and _File_ block types for greater control over these kinds of content.
 
 ![Markdown Editor](https://res.cloudinary.com/sv-co/image/upload/v1581450985/pupilfirst_documentation/curriculum_editor/markdown_editor_xecdd0.png)
@@ -69,10 +78,10 @@ To see a live preview of the content you're creating in the editor, choose the s
 
 If you're unfamiliar with the Markdown format, or to brush up on how to use Markdown to quickly and effectively format text, click on the _Need help?_ link at the bottom right of the editor. It'll take you to documentation served within the platform which details everything you can do with Markdown.
 
-**Image**\
+**Image**<br/>
 The image block accepts an image file and a caption and displays it, centered with the other content. You can also customize the width of the displayed image by hovering over the image and choosing one of the available options.
 
-**Embed**\
+**Embed**<br/>
 The embed function allows you to embed content from third-party websites - all you need to do is supply the full link of the resource that you're trying to embed, and it'll get converted into its embedded format automatically.
 
 Currently supported web services:
@@ -84,10 +93,10 @@ Currently supported web services:
 
 If there's a specific website you'd like us to include, [please let us know](mailto:support@pupilfirst.com). We can include any well-known service that supports the Open Embed (oEmbed) standard, or if it supports being embedded using an `iframe` tag.
 
-**File**\
+**File**<br/>
 The file block accepts the file and a caption and displays it as a distinctly styled block in the content of the target.
 
-**Audio**\
+**Audio**<br/>
 The audio block accepts an audio file and uses the default browser player to play the uploaded audio in the content of the target.
 
 ## Editing a target's other details
@@ -100,28 +109,28 @@ This tab contains other basic details and configuration for the target, such as 
 
 To decide how a student can complete a target, this interface asks you a few questions:
 
-**Are there any prerequisite targets?** \
+**Are there any prerequisite targets?**<br/>
 You can select other targets from the same level as prerequisite targets. This will _lock_ the target until the student has completed the prerequisites.
 
-**Will a coach review submissions on this target?** \
+**Will a coach review submissions on this target?**<br/>
 If you would like a coach to review a submission from a student - pick _Yes_ here. If you'd like the student to complete the target on their own, pick _No_.
 
-**Choose evaluation criteria from your list**\
+**Choose evaluation criteria from your list**<br/>
 This list will appear only if you've chosen to have the target's submission reviewed by a coach. Pick at least one evaluation criteria that the coach should use when reviewing submissions from students for this target.
 
-**How do you want the student to complete the target?** \
+**How do you want the student to complete the target?**<br/>
 If you answered _No_ to whether a coach will review submissions for the target, then you'll need to pick one of three ways by which a student can complete the target on their own:
 
 1. Simply mark the target as completed: No additional steps.
 2. Visit a link to complete the target: You'll be asked for the link.
 3. Take a quiz to complete that target: You'll need to prepare a quiz - the process for this is detailed below.
 
-**How should teams tackle this target?** \
+**How should teams tackle this target?**<br/>
 If you have students grouped into teams, then you'll probably have some targets that you'd like them to tackle together. When creating a new target, this setting will default to _All students must submit individually_, which means that each student will need to submit on their own. If it's a reviewed milestone target, then all students in the team will need to pass for the team to [be eligible to level up](/users/taking_courses#leveling-up).
 
 For those targets where you expect students to work together and submit as a _unit_, you can choose the _Only one student in a team needs to submit_ option. Now, if any student in a team submits work on the target, the submission will be credited to all students in the team. If work on the target is reviewed by a coach, then the name of all students in the team will be listed next to the submission, and any feedback on the submission will be sent to all linked students.
 
-**Do you have any completion instructions for the student?** \
+**Do you have any completion instructions for the student?**<br/>
 Text entered here will be displayed right next to where the students take action on a target. For targets that are simply marked as complete or completed by visiting a link, this will be at the end of the main content, next to the button that completes the target. For quizzes and reviewed submissions, this will be at the top of the page that displays the quiz, or the submission form.
 
 ### Defining steps to complete a target
@@ -184,7 +193,14 @@ This tab shows you a preview of a target's content as it appears now to the stud
 
 When a target is first created, you're assumed to be working on its first version. Once you've worked on the target's content for a while, and are happy with it's state, the _Versions_ tab will allow you to _save that version_. Saving a version will create a new version which will hold future changes.
 
-?> **What exactly is a _version_?** \
-A version can be thought of as a _snapshot_ of a target's content as it looked at the time it was taken. However, you're always working on the _current_ version of the target, so that can always be changed an author. You'll need to take a _snapshot_ manually on the versions tab for a new version to be created. As the author of a target, you're the best person to decide when it's appropriate to preserve a version.
-
-This feature allows you to preserve a _known good state_ for a target's content, and since you can browse previous versions of a target, it can help track changes to the content, or even act as a safeguard, by allowing you to _restore a previous version_ if something goes awry during the editing process.
+<details>
+  <summary>What exactly is a <em>version</em>?</summary>
+  <div>
+    <p>
+      A version can be thought of as a <em>snapshot</em> of a target's content as it looked at the time it was taken. However, you're always working on the <em>current</em> version of the target, so that can always be changed an author. You'll need to take a <em>snapshot</em> manually on the versions tab for a new version to be created. As the author of a target, you're the best person to decide when it's appropriate to preserve a version.
+    </p>
+    <p>
+      This feature allows you to preserve a <em>known good state</em> for a target's content, and since you can browse previous versions of a target, it can help track changes to the content, or even act as a safeguard, by allowing you to <em>restore a previous version</em> if something goes awry during the editing process.
+    </p>
+  </div>
+</details>

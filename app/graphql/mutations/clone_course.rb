@@ -11,7 +11,7 @@ module Mutations
     def resolve(_params)
       ::Courses::CloneCourseJob.perform_later(course.id)
       notify(:success,
-        I18n.t('shared.done_exclamation'),
+        I18n.t('shared.notifications.done_exclamation'),
         I18n.t('mutations.clone_course.success_notification')
       )
       { success: true }

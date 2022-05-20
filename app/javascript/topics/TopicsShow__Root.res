@@ -1,6 +1,7 @@
 %raw(`require("./TopicsShow__Root.css")`)
 
 let t = I18n.t(~scope="components.TopicsShow__Root")
+let ts = I18n.t(~scope="shared")
 
 open TopicsShow__Types
 
@@ -164,10 +165,15 @@ let updateTopic = (state, send, event) => {
   let topicCategoryId = Belt.Option.flatMap(state.topicCategory, category => Some(
     TopicCategory.id(category),
   ))
-  UpdateTopicQuery.make(~id=state.topic |> Topic.id, ~title=state.topicTitle, ~topicCategoryId?, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["updateTopic"]["success"]
+  let variables = UpdateTopicQuery.makeVariables(
+    ~id=state.topic |> Topic.id,
+    ~title=state.topicTitle,
+    ~topicCategoryId?,
+    (),
+  )
+  UpdateTopicQuery.fetch(variables)
+  |> Js.Promise.then_((response: UpdateTopicQuery.t) => {
+    response.updateTopic.success
       ? {
           let topic = state.topic |> Topic.updateTitle(state.topicTitle)
           send(SaveTopic(topic))
@@ -199,24 +205,22 @@ module UnlockTopicQuery = %graphql(`
 `)
 
 let lockTopic = (topicId, currentUserId, send) =>
-  WindowUtils.confirm("Are you sure you want to lock this topic?", () => {
+  WindowUtils.confirm(t("lock_topic_confirm"), () => {
     send(StartChangingLockStatus)
-    LockTopicQuery.make(~id=topicId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      response["lockTopic"]["success"] ? send(FinishLockingTopic(currentUserId)) : ()
+    LockTopicQuery.fetch({id: topicId})
+    |> Js.Promise.then_((response: LockTopicQuery.t) => {
+      response.lockTopic.success ? send(FinishLockingTopic(currentUserId)) : ()
       Js.Promise.resolve()
     })
     |> ignore
   })
 
 let unlockTopic = (topicId, send) =>
-  WindowUtils.confirm("Are you sure you want to unlock this topic?", () => {
+  WindowUtils.confirm(t("unlock_topic_confirm"), () => {
     send(StartChangingLockStatus)
-    UnlockTopicQuery.make(~id=topicId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      response["unlockTopic"]["success"] ? send(FinishUnlockingTopic) : ()
+    UnlockTopicQuery.fetch({id: topicId})
+    |> Js.Promise.then_((response: UnlockTopicQuery.t) => {
+      response.unlockTopic.success ? send(FinishUnlockingTopic) : ()
       Js.Promise.resolve()
     })
     |> ignore
@@ -243,7 +247,7 @@ let topicCategory = (topicCategories, topicCategoryId) =>
 
 let categoryDropdownSelected = topicCategory =>
   <div
-    ariaLabel="Selected category"
+    ariaLabel=t("selected_category")
     className="flex justify-between text-sm bg-white border border-gray-400 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
     {switch topicCategory {
     | Some(topicCategory) =>
@@ -254,7 +258,7 @@ let categoryDropdownSelected = topicCategory =>
         <div className="h-3 w-3 rounded mt-px" style />
         <span className="ml-2"> {TopicCategory.name(topicCategory)->str} </span>
       </div>
-    | None => str("None")
+    | None => str(ts("none"))
     }}
     <FaIcon classes="ml-4 fas fa-caret-down" />
   </div>
@@ -277,7 +281,7 @@ let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategori
     let categoryName = TopicCategory.name(topicCategory)
 
     <div
-      ariaLabel={"Select category " ++ categoryName}
+      ariaLabel={ t("select_category") ++ " " ++ categoryName}
       className="px-3 py-2 font-normal flex items-center"
       onClick={_ => send(UpdateTopicCategory(Some(topicCategory)))}>
       <div className="w-3 h-3 rounded mt-px" style />
@@ -292,11 +296,11 @@ let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategori
       topicCategoryList,
       [
         <div
-          ariaLabel="Select no category"
+          ariaLabel=t("select_no_category")
           className="px-3 py-2 font-normal flex items-center"
           onClick={_ => send(UpdateTopicCategory(None))}>
           <div className="w-3 h-3 rounded bg-gray-300 mt-px" />
-          <span className="ml-2"> {"None"->str} </span>
+          <span className="ml-2"> {ts("none")->str} </span>
         </div>,
       ],
     )
@@ -362,7 +366,7 @@ let make = (
       }}
       <div
         className="max-w-4xl w-full mx-auto bg-white p-4 lg:p-8 my-4 border-t border-b md:border-0 lg:rounded-lg lg:shadow">
-        <div ariaLabel="Topic Details">
+        <div ariaLabel=t("topic_details")>
           {state.showTopicEditor
             ? <DisablingCover disabled=state.savingTopic>
                 <div
@@ -404,7 +408,7 @@ let make = (
                 <div
                   className="topics-show__title-container flex items-center md:items-start justify-between mb-2">
                   <h3
-                    ariaLabel="Topic Title"
+                    ariaLabel=t("topic_title")
                     className="leading-snug lg:pl-14 text-base lg:text-2xl w-9/12">
                     {state.topic |> Topic.title |> str}
                   </h3>
@@ -480,12 +484,7 @@ let make = (
           />}
         </div>
         <h5 className="pt-4 pb-2 lg:ml-14 border-b">
-          {Inflector.pluralize(
-            "Reply",
-            ~count=Array.length(state.replies),
-            ~inclusive=true,
-            (),
-          ) |> str}
+          { Belt.Int.toString(Array.length(state.replies)) ++ " " ++ ts("replies") |> str}
         </h5>
         {state.replies
         |> Post.sort

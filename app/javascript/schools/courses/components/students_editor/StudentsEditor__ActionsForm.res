@@ -33,10 +33,9 @@ let dropoutStudent = (id, setSaving, reloadTeamsCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
   setSaving(_ => true)
 
-  DropoutStudentQuery.make(~id, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["dropoutStudent"]["success"] ? reloadTeamsCB() : setSaving(_ => false)
+  DropoutStudentQuery.fetch({id: id})
+  |> Js.Promise.then_((response: DropoutStudentQuery.t) => {
+    response.dropoutStudent.success ? reloadTeamsCB() : setSaving(_ => false)
     Js.Promise.resolve()
   })
   |> ignore
@@ -55,10 +54,9 @@ let revokeIssuedCertificate = (
 
     let issuedCertificateId = StudentsEditor__IssuedCertificate.id(issuedCertificate)
 
-    RevokeCertificateQuery.make(~issuedCertificateId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      response["revokeIssuedCertificate"]["success"]
+    RevokeCertificateQuery.fetch({issuedCertificateId: issuedCertificateId})
+    |> Js.Promise.then_((response: RevokeCertificateQuery.t) => {
+      response.revokeIssuedCertificate.success
         ? {
             let updatedCertificate =
               issuedCertificate->StudentsEditor__IssuedCertificate.revoke(
@@ -93,8 +91,7 @@ let issueNewCertificate = (
 
   let studentId = Student.id(student)
 
-  IssueCertificateQuery.make(~certificateId, ~studentId, ())
-  |> GraphqlQuery.sendQuery
+  IssueCertificateQuery.make({certificateId: certificateId, studentId: studentId})
   |> Js.Promise.then_(response => {
     let data = response["issueCertificate"]["issuedCertificate"]
     switch data {
@@ -148,7 +145,7 @@ let showIssuedCertificates = (
         {issuedCertificates
         |> Js.Array.map(ic =>
           <div
-            ariaLabel={"Details of issued certificate " ++ StudentsEditor__IssuedCertificate.id(ic)}
+            ariaLabel={t("details_certificate") ++ " " ++ StudentsEditor__IssuedCertificate.id(ic)}
             key={StudentsEditor__IssuedCertificate.id(ic)}
             className="flex flex-col mt-2 p-2 border rounded border-gray-400">
             <div className="flex justify-between">
@@ -247,7 +244,7 @@ let make = (
   let (selectedCertificateId, setSelectedCertificateId) = React.useState(() => "0")
 
   <div className="mt-5">
-    <div className="mb-4" ariaLabel="Manage student certificates">
+    <div className="mb-4" ariaLabel={t("manage_certificates")}>
       <h5 className="mb-2"> {t("certificates_label")->str} </h5>
       {certificates |> ArrayUtils.isEmpty
         ? <p className="text-xs text-gray-800"> {t("empty_course_certificates_text")->str} </p>
@@ -311,10 +308,10 @@ let make = (
           </div>}
     </div>
     <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
-      {t("dropout_student_label")->str}
+      {t("dropout_student.label")->str}
     </label>
-    <HelpIcon className="ml-2" link="https://docs.pupilfirst.com/#/students?id=student-actions">
-      {"Marking a student as dropped out will remove all of their access to the course." |> str}
+    <HelpIcon className="ml-2" link={t("dropout_student.help_url")}>
+      {t("dropout_student.help") |> str}
     </HelpIcon>
     <div className="mt-2">
       <button
@@ -322,7 +319,7 @@ let make = (
         className="btn btn-danger btn-large"
         onClick={dropoutStudent(student |> Student.id, setSaving, reloadTeamsCB)}>
         <FaIcon classes={submitButtonIcons(saving)} />
-        <span className="ml-2"> {t("dropout_button")->str} </span>
+        <span className="ml-2"> {t("dropout_student.button")->str} </span>
       </button>
     </div>
   </div>

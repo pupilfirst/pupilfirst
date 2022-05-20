@@ -95,8 +95,7 @@ module StudentsCreateDataQuery = %graphql(`
 
 let loadData = (courseId, send) => {
   send(SetLoading)
-  StudentsCreateDataQuery.make(~courseId, ())
-  |> GraphqlQuery.sendQuery
+  StudentsCreateDataQuery.make(StudentsCreateDataQuery.makeVariables(~courseId, ()))
   |> Js.Promise.then_(response => {
     send(
       SetBaseData(
@@ -113,11 +112,34 @@ let createStudents = (state, send, courseId, cohort, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(SetSaving)
 
-  let students = ArrayUtils.flattenV2(Js.Array2.map(state.teamsToAdd, TeamInfo.toJsArray))
+  let students =
+    Js.Array.map(
+      t =>
+        Js.Array.map(
+          s =>
+            CreateStudentsQuery.makeInputObjectStudentEnrollmentInput(
+              ~name=StudentInfo.name(s),
+              ~email=StudentInfo.email(s),
+              ~title=StudentInfo.title(s),
+              ~affiliation=StudentInfo.affiliation(s),
+              ~teamName=TeamInfo.name(t),
+              ~tags=TeamInfo.tags(t),
+              (),
+            ),
+          TeamInfo.students(t),
+        ),
+      state.teamsToAdd,
+    ) |> ArrayUtils.flattenV2
+
   let {notifyStudents} = state
 
-  CreateStudentsQuery.make(~cohortId=Cohort.id(cohort), ~notifyStudents, ~students, ())
-  |> GraphqlQuery.sendQuery
+  let variables = CreateStudentsQuery.makeVariables(
+    ~cohortId=Cohort.id(cohort),
+    ~notifyStudents,
+    ~students,
+    (),
+  )
+  CreateStudentsQuery.make(variables)
   |> Js.Promise.then_(response => {
     switch response["createStudents"]["studentIds"] {
     | Some(_studentIds) => RescriptReactRouter.push({`/school/courses/${courseId}/students`})

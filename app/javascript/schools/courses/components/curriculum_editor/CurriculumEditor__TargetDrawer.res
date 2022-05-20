@@ -1,6 +1,8 @@
-%bs.raw(`require("./CurriculumEditor__TargetDrawer.css")`)
+%raw(`require("./CurriculumEditor__TargetDrawer.css")`)
 
 let str = React.string
+
+let t = I18n.t(~scope="components.CurriculumEditor__TargetDrawer")
 
 open CurriculumEditor__Types
 
@@ -11,7 +13,7 @@ type page =
 
 let confirmDirtyAction = (dirty, action) =>
   if dirty {
-    WindowUtils.confirm("There are unsaved changes. Are you sure you want to discard them?", () =>
+    WindowUtils.confirm(t("unsaved_confirm"), () =>
       action()
     )
   } else {
@@ -19,12 +21,12 @@ let confirmDirtyAction = (dirty, action) =>
   }
 
 let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
-  let defaultClasses = "curriculum-editor__target-drawer-tab cursor-pointer"
+  let defaultClasses = "curriculum-editor__target-drawer-tab cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
 
   let (title, pathSuffix, iconClass) = switch page {
-  | Content => ("Content", "content", "fa-pen-nib")
-  | Details => ("Details", "details", "fa-list-alt")
-  | Versions => ("Versions", "versions", "fa-code-branch")
+  | Content => (t("content"), "content", "fa-pen-nib")
+  | Details => (t("details"), "details", "fa-list-alt")
+  | Versions => (t("versions"), "versions", "fa-code-branch")
   }
 
   let path = pathPrefix ++ pathSuffix
@@ -35,7 +37,7 @@ let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
     : defaultClasses
 
   let confirm = dirty
-    ? Some("There are unsaved changes. Are you sure you want to discard them?")
+    ? Some(t("unsaved_confirm"))
     : None
 
   <Link href=path ?confirm onClick={_e => setDirty(_ => false)} className=classes>
@@ -61,6 +63,7 @@ let make = (
   ~course,
   ~updateTargetCB,
   ~vimeoPlan,
+  ~markdownCurriculumEditorMaxLength,
 ) => {
   let url = RescriptReactRouter.useUrl()
   let (dirty, setDirty) = React.useState(() => false)
@@ -92,7 +95,11 @@ let make = (
     let (innerComponent, selectedPage) = switch pageName {
     | "content" => (
         <CurriculumEditor__ContentEditor
-          target hasVimeoAccessToken vimeoPlan setDirtyCB={dirty => setDirty(_ => dirty)}
+          target
+          hasVimeoAccessToken
+          vimeoPlan
+          markdownCurriculumEditorMaxLength
+          setDirtyCB={dirty => setDirty(_ => dirty)}
         />,
         Content,
       )
@@ -111,7 +118,7 @@ let make = (
     | "versions" => (<CurriculumEditor__VersionsEditor targetId />, Versions)
     | otherPage =>
       Rollbar.warning("Unexpected page requested for target editor drawer: " ++ otherPage)
-      (<div> {"Unexpected error. Please reload the page." |> str} </div>, Content)
+      (<div> {t("unexpected_error") |> str} </div>, Content)
     }
 
     <SchoolAdmin__EditorDrawer

@@ -154,7 +154,8 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
         {t("level_name_label") |> str}
       </label>
       <input
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        autoFocus=true
+        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
         id="name"
         type_="text"
         placeholder={t("level_name_placeholder")}
@@ -214,11 +215,12 @@ let deleteSelectedLevel = (state, send, level, _event) =>
     send(BeginSaving)
 
     MergeLevelsQuery.make(
-      ~deleteLevelId=Level.id(level),
-      ~mergeIntoLevelId=state.mergeIntoLevelId,
-      (),
+      MergeLevelsQuery.makeVariables(
+        ~deleteLevelId=Level.id(level),
+        ~mergeIntoLevelId=state.mergeIntoLevelId,
+        (),
+      ),
     )
-    |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(result => {
       if result["mergeLevels"]["success"] {
         DomUtils.reload()
@@ -252,8 +254,13 @@ let cloneSelectedLevel = (state, send, level, _event) =>
   WindowUtils.confirm(t("clone_level_confirm"), () => {
     send(BeginSaving)
 
-    CloneLevelQuery.make(~levelId=Level.id(level), ~cloneIntoCourseId=state.cloneIntoCourseId, ())
-    |> GraphqlQuery.sendQuery
+    CloneLevelQuery.make(
+      CloneLevelQuery.makeVariables(
+        ~levelId=Level.id(level),
+        ~cloneIntoCourseId=state.cloneIntoCourseId,
+        (),
+      ),
+    )
     |> Js.Promise.then_(_result => {
       send(FinishSaving)
       Js.Promise.resolve()
@@ -287,7 +294,7 @@ let actionsForm = (level, levels, state, send) => {
       <select
         id="delete-and-merge-level"
         onChange={handleSelectLevelForDeletion(send)}
-        className="cursor-pointer appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        className="cursor-pointer appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
         value=state.mergeIntoLevelId>
         <option key="0" value="0"> {str(t("merge_levels_select"))} </option>
         {otherLevels
@@ -332,7 +339,7 @@ let actionsForm = (level, levels, state, send) => {
 }
 
 let tab = (tab, state, send) => {
-  let defaultClasses = "level-editor__tab cursor-pointer"
+  let defaultClasses = "level-editor__tab cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
 
   let (title, iconClass) = switch tab {
   | Actions => (t("tabs.actions"), "fa-cogs")

@@ -47,10 +47,9 @@ let handlePostLike = (
     : {
         setSaving(_ => true)
         if liked {
-          DeletePostLikeQuery.make(~postId, ())
-          |> GraphqlQuery.sendQuery
-          |> Js.Promise.then_(response => {
-            response["deletePostLike"]["success"]
+          DeletePostLikeQuery.fetch({postId: postId})
+          |> Js.Promise.then_((response: DeletePostLikeQuery.t) => {
+            response.deletePostLike.success
               ? {
                   removeLikeCB()
                   setSaving(_ => false)
@@ -64,10 +63,9 @@ let handlePostLike = (
           })
           |> ignore
         } else {
-          CreatePostLikeQuery.make(~postId, ())
-          |> GraphqlQuery.sendQuery
-          |> Js.Promise.then_(response => {
-            response["createPostLike"]["success"]
+          CreatePostLikeQuery.fetch({postId: postId})
+          |> Js.Promise.then_((response: CreatePostLikeQuery.t) => {
+            response.createPostLike.success
               ? handleCreateResponse(setSaving, addLikeCB)
               : setSaving(_ => false)
             Js.Promise.resolve()
@@ -96,7 +94,7 @@ let make = (~post, ~addPostLikeCB, ~removePostLikeCB) => {
     <div className="text-center pr-4 md:pt-4">
       <Tooltip tip position=#Top>
         <button
-          ariaLabel={(liked ? "Unlike" : "Like") ++ (" post " ++ Post.id(post))}
+          ariaLabel={(liked ? t("unlike") : t("like")) ++ (" " ++ t("post") ++ " " ++ Post.id(post))}
           className="cursor-pointer flex md:flex-col items-center"
           onClick={handlePostLike(
             saving,

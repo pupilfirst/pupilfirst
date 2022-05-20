@@ -1,6 +1,7 @@
 open CourseEditor__Types
 
 let t = I18n.t(~scope="components.CourseEditor__HighlightsEditor")
+let ts = I18n.ts
 
 let str = React.string
 
@@ -57,7 +58,8 @@ let moveDown = (index, highlights, updateHighlightsCB) => {
 let selected = (highlight: Course.Highlight.t) => {
   <button
     title={t("selected_button.title")}
-    className="flex items-center justify-center cursor-pointer bg-white border border-gray-400 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400">
+    ariaLabel={t("selected_button.title")}
+    className="flex items-center justify-center cursor-pointer bg-white border border-gray-400 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
     <PfIcon className={"text-lg if i-" ++ highlight.icon} />
   </button>
 }
@@ -67,10 +69,11 @@ let contents = (replaceCB, highlight) => {
     icon =>
       <button
         key=icon
-        title={"Select " ++ icon}
-        className="flex items-center justify-center p-3 w-full h-full"
+        title={t("select") ++ " " ++ icon}
+        ariaLabel={t("select") ++ " " ++ icon}
+        className="flex items-center justify-center p-3 w-full h-full text-gray-900 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:bg-gray-100"
         onClick={_ => updateIcon(replaceCB, highlight, icon)}>
-        <PfIcon className={" text-gray-900 text-lg if i-" ++ icon} />
+        <PfIcon className={"text-lg if i-" ++ icon} />
       </button>,
     icons,
   )
@@ -91,20 +94,22 @@ let make = (~highlights, ~updateHighlightsCB) => {
             />
             <div className="w-full">
               <input
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight font-semibold focus:outline-none focus:bg-white focus:border-gray-500"
+                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight font-semibold focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
                 id={"highlight-" ++ string_of_int(index) ++ "-title"}
                 type_="text"
                 placeholder={t("title.placeholder")}
+                ariaLabel={t("title.placeholder")}
                 maxLength=150
                 value={highlight.title}
                 onChange={event =>
                   updateTitle(replaceCB, highlight, ReactEvent.Form.target(event)["value"])}
               />
               <input
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-1 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
                 id={"highlight-" ++ string_of_int(index) ++ "-description"}
                 type_="text"
                 placeholder={t("description.placeholder")}
+                ariaLabel={t("description.placeholder")}
                 maxLength=250
                 value={highlight.description}
                 onChange={event =>
@@ -116,26 +121,29 @@ let make = (~highlights, ~updateHighlightsCB) => {
             className="flex-shrink-0 bg-gray-100 border rounded flex flex-col text-xs sticky top-0">
             {ReactUtils.nullIf(
               <button
-                title="Move up"
+                title={t("move_up")}
+                ariaLabel={t("move_up")}
                 onClick={_ => moveUp(index, highlights, updateHighlightsCB)}
-                className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
+                className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden cursor-pointer">
                 <FaIcon classes={"fas fa-arrow-up"} />
               </button>,
               index == 0,
             )}
             {ReactUtils.nullIf(
               <button
-                title="Move Down"
+                title={t("move_down")}
+                ariaLabel={t("move_down")}
                 onClick={_ => moveDown(index, highlights, updateHighlightsCB)}
-                className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
+                className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden cursor-pointer">
                 <FaIcon classes={"fas fa-arrow-down"} />
               </button>,
               index == Js.Array.length(highlights) - 1,
             )}
             <button
               onClick={_ => removeHighlight(index, highlights, updateHighlightsCB)}
-              title="Delete highlight"
-              className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden cursor-pointer">
+              title={t("delete_highlight")}
+              ariaLabel={t("delete_highlight")}
+              className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-red-500 focus:bg-gray-300 focus:text-red-500 overflow-hidden cursor-pointer">
               <FaIcon classes={"fas fa-trash-alt"} />
             </button>
           </div>

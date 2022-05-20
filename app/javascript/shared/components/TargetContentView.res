@@ -1,4 +1,4 @@
-%bs.raw(`require("./TargetContentView.css")`)
+%raw(`require("./TargetContentView.css")`)
 
 let str = React.string
 
@@ -15,8 +15,9 @@ let markdownContentBlock = markdown => <MarkdownBlock markdown profile=Markdown.
 
 let fileContentBlock = (url, title, filename) =>
   <a
-    className="flex justify-between bg-white border rounded-lg px-6 py-4 items-center shadow hover:border-gray-500 hover:bg-gray-100 hover:text-primary-500 hover:shadow-md"
+    className="flex justify-between bg-white border rounded-lg px-6 py-4 items-center shadow hover:border-gray-500 hover:bg-gray-100 hover:text-primary-500 hover:shadow-md focus:outline-none focus:text-primary-500 focus:ring-2 focus:ring-indigo-500"
     target="_blank"
+    ariaLabel={"Download " ++ title}
     href=url>
     <div className="flex items-center">
       <FaIcon classes="text-4xl text-gray-800 far fa-file-alt" />
@@ -40,7 +41,9 @@ let audioContentBlock = url => <audio src=url controls=true />
 @react.component
 let make = (~contentBlocks) =>
   <div className="text-base" id="learn-component">
-    {contentBlocks |> ContentBlock.sort |> Array.map(block => {
+    {contentBlocks
+    |> ContentBlock.sort
+    |> Array.map(block => {
       let renderedBlock = switch block |> ContentBlock.blockType {
       | Markdown(markdown) => markdownContentBlock(markdown)
       | File(url, title, filename) => fileContentBlock(url, title, filename)
@@ -53,5 +56,6 @@ let make = (~contentBlocks) =>
       <div className={renderBlockClasses(block)} key={block |> ContentBlock.id}>
         renderedBlock
       </div>
-    }) |> React.array}
+    })
+    |> React.array}
   </div>

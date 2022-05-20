@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.SchoolCustomize__MoreLinks")
+
 type state = bool
 
 let toggleState = (send, event) => {
@@ -30,14 +32,14 @@ let make = (~links) => {
   switch links {
   | list{} => React.null
   | moreLinks =>
-    <div
-      title="Show more links"
-      className="ml-6 font-semibold text-sm cursor-pointer relative"
+    <button
+      title={t("show_more_links")}
+      className="ml-6 font-semibold text-sm cursor-pointer relative z-40"
       onClick={toggleState(send)}
       key="more-links">
-      <span> {"More" |> str} </span>
+      <span> {t("more") |> str} </span>
       <i className="fas fa-angle-down ml-1" />
       {additionalLinks(state, moreLinks)}
-    </div>
+    </button>
   }
 }

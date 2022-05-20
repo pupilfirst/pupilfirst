@@ -143,8 +143,7 @@ module StudentBulkImportDataQuery = %graphql(`
 
 let loadData = (courseId, send) => {
   send(SetLoading)
-  StudentBulkImportDataQuery.make(~courseId, ())
-  |> GraphqlQuery.sendQuery
+  StudentBulkImportDataQuery.make(StudentBulkImportDataQuery.makeVariables(~courseId, ()))
   |> Js.Promise.then_(response => {
     send(SetBaseData(response["cohorts"]->Js.Array2.map(cohort => Cohort.makeFromJs(cohort))))
     Js.Promise.resolve()

@@ -3,6 +3,8 @@ open TopicsShow__Types
 let str = React.string
 %raw(`require("./TopicsShow__PostEditor.css")`)
 
+let tr = I18n.t(~scope="components.TopicsShow__PostEditor")
+
 type state = {
   body: string,
   saving: bool,
@@ -93,10 +95,11 @@ let savePost = (
     | Some(post) =>
       let postId = post |> Post.id
 
-      UpdatePostQuery.make(~id=postId, ~body, ~editReason?, ())
-      |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response => {
-        response["updatePost"]["success"]
+      let variables = UpdatePostQuery.makeVariables(~id=postId, ~body, ~editReason?, ())
+
+      UpdatePostQuery.fetch(variables)
+      |> Js.Promise.then_((response: UpdatePostQuery.t) => {
+        response.updatePost.success
           ? handlePostUpdateResponse(
               postId,
               body,
@@ -115,10 +118,9 @@ let savePost = (
       })
       |> ignore
     | None =>
-      CreatePostQuery.make(~body, ~topicId=topic |> Topic.id, ~replyToPostId?, ())
-      |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response => {
-        switch response["createPost"]["postId"] {
+      CreatePostQuery.fetch({body: body, topicId: Topic.id(topic), replyToPostId: replyToPostId})
+      |> Js.Promise.then_((response: CreatePostQuery.t) => {
+        switch response.createPost.postId {
         | Some(postId) =>
           handlePostCreateResponse(postId, body, postNumber, currentUserId, setState, handlePostCB)
         | None => setState(state => {...state, saving: false})
@@ -132,7 +134,7 @@ let savePost = (
       |> ignore
     }
   } else {
-    Notification.error("Empty", "Reply cant be blank")
+    Notification.error(tr("empty"), tr("cant_blank"))
   }
 }
 
@@ -196,8 +198,8 @@ let make = (
             className="inline-block tracking-wide text-gray-900 text-sm font-semibold mb-2"
             htmlFor="new-reply">
             {switch replyToPostId {
-            | Some(_id) => "Reply To"
-            | None => "Your Reply"
+            | Some(_id) => tr("reply_to")
+            | None => tr("your_reply")
             } |> str}
           </label>
           {replyToPostId
@@ -227,7 +229,7 @@ let make = (
           )}
           <div>
             <MarkdownEditor
-              placeholder="Type in your reply. You can use Markdown to format your response."
+              placeholder=tr("type_reply")
               textareaId="new-reply"
               onChange=updateMarkdownCB
               value=state.body
@@ -245,7 +247,7 @@ let make = (
                     | reason => setEditReason(Some(reason))
                     }
                   }}
-                  placeholder="Reason for this edit (optional)"
+                  placeholder=tr("reason_edit")
                   value={switch editReason {
                   | None => ""
                   | Some(editReason) => editReason
@@ -261,7 +263,7 @@ let make = (
                 disabled=state.saving
                 onClick={_ => handleCloseCB()}
                 className="btn btn-subtle mr-2">
-                {"Cancel" |> str}
+                {tr("cancel") |> str}
               </button>
             | None => React.null
             }}
@@ -284,8 +286,8 @@ let make = (
                 )}
                 className="btn btn-primary">
                 {switch post {
-                | Some(post) => Post.postNumber(post) == 1 ? "Update Post" : "Update Reply"
-                | None => "Post Your Reply"
+                | Some(post) => Post.postNumber(post) == 1 ? tr("update_post") : tr("update_reply")
+                | None => tr("post_reply")
                 } |> str}
               </button>
             }

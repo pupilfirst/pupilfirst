@@ -4,6 +4,9 @@ open SchoolCustomize__Types
 
 let str = React.string
 
+let t = I18n.t(~scope="components.SchoolCustomize__LinkEditor")
+let ts = I18n.t(~scope="shared")
+
 type kind =
   | HeaderLink
   | FooterLink
@@ -62,8 +65,7 @@ let handleDelete = (state, send, removeLinkCB, id, event) => {
   } else {
     send(DisableDelete(id))
 
-    DestroySchoolLinkQuery.make(~id, ())
-    |> GraphqlQuery.sendQuery
+    DestroySchoolLinkQuery.make({id: id})
     |> Js.Promise.then_(_response => {
       removeLinkCB(id)
       Js.Promise.resolve()
@@ -79,7 +81,7 @@ let showLinks = (state, send, removeLinkCB, kind, links) =>
   | list{} =>
     <div
       className="border border-gray-400 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
-      {"There are no custom links here. Add some?" |> str}
+      {t("no_custom_links") |> str}
     </div>
   | links =>
     links
@@ -100,9 +102,10 @@ let showLinks = (state, send, removeLinkCB, kind, links) =>
           }}
         </div>
         <button
-          title={"Delete " ++ url}
+          ariaLabel={ts("delete") ++ " " ++ url}
+          title={ts("delete") ++ " " ++ url}
           onClick={handleDelete(state, send, removeLinkCB, id)}
-          className="p-3">
+          className="p-3 hover:text-red-500 focus:text-red-500">
           <FaIcon classes={deleteIconClasses(state.deleting |> List.mem(id))} />
         </button>
       </div>
@@ -119,7 +122,7 @@ let titleInputVisible = state =>
   }
 
 let kindClasses = selected => {
-  let classes = "nav-tab-item border-t cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-gray-800 bg-white hover:bg-gray-200 hover:text-gray-900 py-3 px-4 font-semibold leading-tight focus:outline-none"
+  let classes = "nav-tab-item border-t cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-gray-800 bg-white hover:bg-gray-200 hover:text-gray-900 py-3 px-4 font-semibold leading-tight focus:outline-none focus:bg-gray-200 focus:text-gray-900"
   classes ++ (
     selected
       ? " nav-tab-item--selected text-primary-500 bg-white hover:bg-white hover:text-primary-500"
@@ -127,7 +130,7 @@ let kindClasses = selected => {
   )
 }
 
-let addLinkText = adding => adding ? "Adding new link..." : "Add a New Link"
+let addLinkText = adding => adding ? t("adding_new_link") : t("add_new_link")
 
 let addLinkDisabled = state =>
   if state.adding {
@@ -166,10 +169,7 @@ module CreateLinkError = {
 
   let notification = error =>
     switch error {
-    | #InvalidUrl => (
-        "Invalid URL",
-        "It looks like the URL you've entered isn't valid. Please check, and try again.",
-      )
+    | #InvalidUrl => (t("error_head"), t("error_body"))
     | #InvalidKind => ("InvalidKind", "")
     | #InvalidLengthTitle => ("InvalidLengthTitle", "")
     | #BlankTitle => ("BlankTitle", "")
@@ -187,18 +187,17 @@ let handleAddLink = (state, send, addLinkCB, event) => {
     send(DisableForm)
     switch state.kind {
     | HeaderLink =>
-      CreateSchoolLinkQuery.make(~kind="header", ~title=state.title, ~url=state.url, ())
+      CreateSchoolLinkQuery.make({kind: "header", title: Some(state.title), url: state.url})
     | FooterLink =>
-      CreateSchoolLinkQuery.make(~kind="footer", ~title=state.title, ~url=state.url, ())
-    | SocialLink => CreateSchoolLinkQuery.make(~kind="social", ~url=state.url, ())
+      CreateSchoolLinkQuery.make({kind: "footer", title: Some(state.title), url: state.url})
+    | SocialLink => CreateSchoolLinkQuery.make({kind: "social", title: None, url: state.url})
     }
-    |> GraphqlQuery.sendQuery
     |> Js.Promise.then_(response =>
       switch response["createSchoolLink"] {
       | #SchoolLink(schoolLink) =>
         schoolLink["id"] |> displayNewLink(state, addLinkCB)
         send(ClearForm)
-        Notification.success("Done!", "A custom link has been added.")
+        Notification.success(ts("notifications.done_exclamation"), t("done_notification_body"))
         Js.Promise.resolve()
       | #Errors(errors) => Js.Promise.reject(CreateLinkErrorHandler.Errors(errors))
       }
@@ -210,9 +209,9 @@ let handleAddLink = (state, send, addLinkCB, event) => {
 
 let linksTitle = kind =>
   switch kind {
-  | HeaderLink => "Current Header Links"
-  | FooterLink => "Current Sitemap Links"
-  | SocialLink => "Current Social Media Links"
+  | HeaderLink => t("header_links")
+  | FooterLink => t("sitemap_links")
+  | SocialLink => t("social_links")
   } |> str
 
 let unpackLinks = (kind, customizations) =>
@@ -264,31 +263,40 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
 
   <div className="mt-8 mx-8 pb-6">
     <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-      {"Manage custom links" |> str}
+      {t("manage_links") |> str}
     </h5>
     <div className="mt-3">
       <label className="inline-block tracking-wide text-xs font-semibold">
-        {"Location of Link" |> str}
+        {t("location_link") |> str}
       </label>
-      <div className="flex bg-white border border-t-0 rounded-t mt-2">
-        <div
-          title="Show header links"
+      <div role="tablist" className="flex bg-white border border-t-0 rounded-t mt-2">
+        <button
+          role="tab"
+          ariaSelected={state.kind == HeaderLink}
+          ariaLabel={t("show_header_title")}
+          title={t("show_header_title")}
           className={kindClasses(state.kind == HeaderLink)}
           onClick={handleKindChange(send, HeaderLink)}>
           {"Header" |> str}
-        </div>
-        <div
-          title="Show footer links"
+        </button>
+        <button
+          role="tab"
+          ariaSelected={state.kind == FooterLink}
+          ariaLabel={t("footer_link_title")}
+          title={t("footer_link_title")}
           className={kindClasses(state.kind == FooterLink) ++ " border-l"}
           onClick={handleKindChange(send, FooterLink)}>
           {"Footer Sitemap" |> str}
-        </div>
-        <div
-          title="Show social media links"
+        </button>
+        <button
+          role="tab"
+          ariaSelected={state.kind == SocialLink}
+          ariaLabel={t("social_links_title")}
+          title={t("social_links_title")}
           className={kindClasses(state.kind == SocialLink) ++ " border-l"}
           onClick={handleKindChange(send, SocialLink)}>
           {"Social" |> str}
-        </div>
+        </button>
       </div>
     </div>
     <div className="p-5 border border-t-0 rounded-b">
@@ -302,18 +310,21 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
             <div className="flex-grow mr-4">
               <label
                 className="inline-block tracking-wide text-xs font-semibold" htmlFor="link-title">
-                {"Title" |> str}
+                {t("title") |> str}
               </label>
               <input
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                autoFocus=true
+                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
                 id="link-title"
                 type_="text"
-                placeholder="A short title for a new link"
+                placeholder={t("title_placeholder")}
                 onChange={handleTitleChange(send)}
                 value=state.title
                 maxLength=24
               />
-              <School__InputGroupError message="can't be empty" active=state.titleInvalid />
+              <School__InputGroupError
+                message={t("cant_empty_message")} active=state.titleInvalid
+              />
             </div>
           } else {
             React.null
@@ -321,17 +332,17 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
           <div className="flex-grow">
             <label
               className="inline-block tracking-wide text-xs font-semibold" htmlFor="link-full-url">
-              {"Full URL" |> str}
+              {t("full_url") |> str}
             </label>
             <input
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
               id="link-full-url"
               type_="text"
-              placeholder="Full URL, staring with https://"
+              placeholder={t("full_url_placeholder")}
               onChange={handleUrlChange(send)}
               value=state.url
             />
-            <School__InputGroupError message="is not a valid URL" active=state.urlInvalid />
+            <School__InputGroupError message={t("full_url_error")} active=state.urlInvalid />
           </div>
         </div>
         <div className="flex justify-end">

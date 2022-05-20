@@ -67,8 +67,9 @@ let getCourseResources = (send, courseId, filters: array<filter>) => {
     ->ArrayUtils.flattenV2
 
   send(SetLoading)
-  CourseResourceInfoInfoQuery.make(~courseId, ~resources, ())
-  |> GraphqlQuery.sendQuery
+  CourseResourceInfoInfoQuery.make(
+    CourseResourceInfoInfoQuery.makeVariables(~courseId, ~resources, ()),
+  )
   |> Js.Promise.then_(response => {
     send(
       SetFilterData(

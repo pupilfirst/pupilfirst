@@ -14,7 +14,7 @@ module Mutations
       mutator = CreateEvaluationCriterionMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, 'Done!', 'Evaluation criterion created successfully!')
+        mutator.notify(:success, I18n.t("shared.notifications.success"), I18n.t("mutations.create_evaluation_criterion.eval_crit_notification"))
         { evaluation_criterion: mutator.create_evaluation_criterion }
       else
         mutator.notify_errors

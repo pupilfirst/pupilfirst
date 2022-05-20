@@ -61,7 +61,7 @@ feature 'Course students bulk importer', js: true do
     expect(email_subject).to eq('Import of Students Completed')
 
     expect(email_body).to have_content(
-      "Your request to import students in\n    #{course.name} course, was successfully completed."
+      "Your request to import students in #{course.name} course, was successfully completed."
     )
     expect(email_body).to have_content('Students requested: 2')
     expect(email_body).to have_content('Students added: 2')

@@ -87,8 +87,7 @@ let updateStudentDetails = (setState, studentId, details, coachNotes, hasArchive
 
 let getStudentDetails = (studentId, setState, ()) => {
   setState(state => {...state, studentData: Loading})
-  StudentDetailsQuery.make(~studentId, ())
-  |> GraphqlQuery.sendQuery
+  StudentDetailsQuery.make({studentId: studentId})
   |> Js.Promise.then_(response => {
     updateStudentDetails(
       setState,

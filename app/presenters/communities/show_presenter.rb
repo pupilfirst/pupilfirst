@@ -9,20 +9,23 @@ module Communities
 
     def props
       {
-        target: @target.present? ? @target.attributes.slice('id', 'title') : nil,
+        target:
+          @target.present? ? @target.attributes.slice('id', 'title') : nil,
         community_id: @community.id,
         topic_categories: topic_categories
       }
     end
 
     def page_title
-      "#{@community.name} Community | #{current_school.name}"
+      "#{@community.name} #{I18n.t('presenters.communities.show.page_title.community')} | #{current_school.name}"
     end
 
     private
 
     def topic_categories
-      @community.topic_categories.map { |category| { id: category.id, name: category.name } }
+      @community.topic_categories.map do |category|
+        { id: category.id, name: category.name }
+      end
     end
   end
 end

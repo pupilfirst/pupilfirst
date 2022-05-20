@@ -101,7 +101,7 @@ let getStudents = (send, courseId, cursor, filter, params) => {
   let studentTags =
     get("student_tags", params)->Belt.Option.mapWithDefault([], u => Js.String.split(",", u))
 
-  CourseStudentsQuery.make(
+  CourseStudentsQuery.makeVariables(
     ~courseId,
     ~after=?cursor,
     ~sortBy,
@@ -114,7 +114,7 @@ let getStudents = (send, courseId, cursor, filter, params) => {
     ~cohortName?,
     (),
   )
-  |> GraphqlQuery.sendQuery
+  |> CourseStudentsQuery.make
   |> Js.Promise.then_(response => {
     send(
       LoadSubmissions(

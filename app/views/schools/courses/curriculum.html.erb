@@ -1,5 +1,5 @@
 <% content_for(:head) do %>
-  <title><%= current_school.name %> | Curriculum</title>
+  <title><%= @course.name %> | <%= t(".title") %> </title>
   <%= stylesheet_pack_tag 'SchoolsCoursesCurriculumPack', media: 'all' %>
 <% end %>
 

@@ -13,10 +13,6 @@ Rails.application.config.content_security_policy do |policy|
     { frame: 'https://www.facebook.com' }
   end
 
-  def typeform_csp
-    { frame: 'https://svlabs.typeform.com' }
-  end
-
   def slideshare_csp
     { frame: %w[slideshare.net *.slideshare.net] }
   end
@@ -73,7 +69,7 @@ Rails.application.config.content_security_policy do |policy|
 
   def frame_sources
     [
-      'https://www.google.com', typeform_csp[:frame], youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame], *google_form_csp[:frame], facebook_csp[:frame], recaptcha_csp[:frame]
+      'https://www.google.com', youtube_csp[:frame], vimeo_csp[:frame], *slideshare_csp[:frame], *speakerdeck_csp[:frame], *google_form_csp[:frame], facebook_csp[:frame], recaptcha_csp[:frame]
     ]
   end
 
@@ -88,7 +84,7 @@ Rails.application.config.content_security_policy do |policy|
   policy.connect_src :self, *connect_sources
   policy.font_src :self, *font_sources
   policy.child_src(*child_sources)
-  policy.frame_src :data, *frame_sources
+  policy.frame_src :self, :data, *frame_sources
   policy.media_src :self, *media_sources, '* blob:'
   policy.object_src :self
   policy.worker_src :self

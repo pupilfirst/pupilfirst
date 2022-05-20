@@ -2,6 +2,9 @@ open CurriculumEditor__Types
 
 let str = React.string
 
+let t = I18n.t(~scope="components.CurriculumEditor__TargetChecklistItemEditor")
+let ts = I18n.ts
+
 let updateTitle = (checklistItem, updateChecklistItemCB, event) => {
   let title = ReactEvent.Form.target(event)["value"]
   let newChecklistItem = checklistItem |> ChecklistItem.updateTitle(title)
@@ -45,7 +48,7 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   }
   let selected =
     <button
-      className={"border focus:outline-none appearance-none flex items-center rounded " ++
+      className={"border focus:outline-none appearance-none flex items-center rounded focus:ring focus:ring-indigo-500 " ++
       buttonColorClasses(selectedButtonColor)}>
       <div className="flex">
         <span
@@ -66,7 +69,7 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
     ChecklistItem.LongText,
     ShortText,
     Link,
-    MultiChoice(["Yes", "No"]),
+    MultiChoice([ts("_yes"), ts("_no")]),
     AudioRecord,
     Files,
   ]
@@ -103,7 +106,7 @@ let updateChoiceText = (choiceIndex, checklistItem, updateChecklistItemCB, event
 
 let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, updateChecklistItemCB) =>
   <div className="ml-3 mt-3">
-    <div className="text-xs font-semibold mb-2"> {"Choices:" |> str} </div>
+    <div className="text-xs font-semibold mb-2"> {t("choices") ++ ":" |> str} </div>
     {
       let showRemoveIcon = Js.Array.length(choices) > 2
       choices
@@ -112,7 +115,7 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
           <div className="flex items-center text-sm rounded mt-2">
             <span className="text-gray-400"> <i className="far fa-circle text-base" /> </span>
             <div
-              className="flex flex-1 py-2 px-3 ml-3 justify-between items-center focus:outline-none bg-white focus:bg-white focus:border-primary-300 border border-gray-400 rounded">
+              className="flex flex-1 py-2 px-3 ml-3 justify-between items-center focus:outline-none bg-white focus-within:bg-white focus-within:border-transparent focus-within:ring-2 focus:ring-indigo-500 border border-gray-400 rounded">
               <input
                 name={"multichoice-input-" ++ (index + 1 |> string_of_int)}
                 className="flex-1 appearance-none bg-transparent border-none leading-snug focus:outline-none"
@@ -121,7 +124,9 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
                 value=choice
               />
               <button
-                title={"Remove Choice " ++ (index + 1 |> string_of_int)}
+                className="flex items-center hover:text-red-500 focus:text-red-500"
+                title={t("remove_choice") ++ " " ++ (index + 1 |> string_of_int)}
+                ariaLabel={t("remove_choice") ++ " " ++ (index + 1 |> string_of_int)}
                 onClick={_ => removeMultichoiceOption(index, checklistItem, updateChecklistItemCB)}>
                 {showRemoveIcon ? <PfIcon className="if i-times-regular if-fw" /> : React.null}
               </button>
@@ -129,7 +134,7 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
           </div>
           <div className="ml-6">
             <School__InputGroupError
-              message="Not a valid choice" active={choice |> String.trim == ""}
+              message={t("not_valid_choice")} active={choice |> String.trim == ""}
             />
           </div>
         </div>
@@ -138,9 +143,9 @@ let multiChoiceEditor = (choices, checklistItem, removeMultichoiceOption, update
     }
     <button
       onClick={_ => addMultichoiceOption(checklistItem, updateChecklistItemCB)}
-      className="flex mt-2 ml-7 p-2 text-sm appearance-none bg-white border rounded items-center justify-between outline-none border-gray-400 hover:border-gray-100 hover:shadow-lg focus:outline-none">
+      className="flex mt-2 ml-7 p-2 text-sm appearance-none bg-white border rounded items-center justify-between outline-none border-gray-400 hover:border-gray-100 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
       <PfIcon className="fas fa-plus-circle if-fw" />
-      <span className="font-semibold ml-2"> {"Add a choice" |> str} </span>
+      <span className="font-semibold ml-2"> {t("add_choice") |> str} </span>
     </button>
   </div>
 
@@ -149,18 +154,17 @@ let controlIcon = (~icon, ~title, ~handler) =>
     ? React.null
     : <button
         title
+        ariaLabel={title}
         disabled={handler == None}
-        className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden"
+        className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden"
         onClick=?handler>
         <i className={"fas fa-fw " ++ icon} />
       </button>
 
 let filesNotice =
   <div className="mt-2 text-sm">
-    <strong> {"Note:" |> str} </strong>
-    <span className="ml-1">
-      {"Students can submit up to 3 files, limited to 5 MB each." |> str}
-    </span>
+    <strong> {I18n.t("shared.note") |> str} </strong>
+    <span className="ml-1"> {t("limits_notice") |> str} </span>
   </div>
 
 let isRequiredStepTitleDuplicated = (checklist, item) => {
@@ -191,7 +195,7 @@ let make = (
 ) =>
   <div
     key={index |> string_of_int}
-    ariaLabel={"Editor for checklist item " ++ (index + 1 |> string_of_int)}
+    ariaLabel={t("editor_checklist") ++ " " ++ (index + 1 |> string_of_int)}
     className="flex items-start py-2 relative">
     <div className="w-full bg-gray-100 border rounded-lg p-5 mr-1">
       <div className="flex justify-between items-center">
@@ -205,7 +209,7 @@ let make = (
             checked={checklistItem |> ChecklistItem.optional}
           />
           <label className="text-xs text-gray-600 ml-2" htmlFor={index |> string_of_int}>
-            {"Optional" |> str}
+            {t("optional") |> str}
           </label>
         </div>
       </div>
@@ -215,7 +219,7 @@ let make = (
           maxLength=500
           rows=2
           name={"checklist-item-" ++ ((index + 1 |> string_of_int) ++ "-title")}
-          placeholder="Describe this step"
+          placeholder={t("describe_step")}
           className="flex-grow appearance-none bg-transparent border-none leading-relaxed focus:outline-none resize-y rounded-md"
           onChange={updateTitle(checklistItem, updateChecklistItemCB)}
           value={checklistItem |> ChecklistItem.title}
@@ -223,11 +227,11 @@ let make = (
       </div>
       <div>
         <School__InputGroupError
-          message="Step cannot be empty"
+          message={t("step_cannot_empty")}
           active={checklistItem |> ChecklistItem.title |> String.trim == ""}
         />
         <School__InputGroupError
-          message="Not a unique step; required steps must be unique"
+          message={t("not_unique_step")}
           active={isRequiredStepTitleDuplicated(checklist, checklistItem)}
         />
       </div>
@@ -242,22 +246,22 @@ let make = (
       }}
     </div>
     <div
-      ariaLabel={"Controls for checklist item " ++ (index + 1 |> string_of_int)}
+      ariaLabel={t("controls_checklist") ++ " " ++ (index + 1 |> string_of_int)}
       className="-mr-10 flex-shrink-0 border bg-gray-100 rounded-lg flex flex-col text-xs sticky top-0">
       {controlIcon(
         ~icon="fa-arrow-up",
-        ~title="Move Up",
+        ~title=t("move_up"),
         ~handler=moveChecklistItemUpCB |> OptionUtils.map((cb, _) => cb()),
       )}
       {controlIcon(
         ~icon="fa-arrow-down",
-        ~title="Move Down",
+        ~title=t("move_down"),
         ~handler=moveChecklistItemDownCB |> OptionUtils.map((cb, _) => cb()),
       )}
-      {controlIcon(~icon="fa-copy", ~title="Copy", ~handler=Some(_ => copyChecklistItemCB()))}
+      {controlIcon(~icon="fa-copy", ~title=t("Copy"), ~handler=Some(_ => copyChecklistItemCB()))}
       {controlIcon(
         ~icon="fa-trash-alt",
-        ~title="Delete",
+        ~title=t("delete"),
         ~handler=Some(_ => removeChecklistItemCB()),
       )}
     </div>

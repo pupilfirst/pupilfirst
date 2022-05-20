@@ -784,6 +784,7 @@ ActiveRecord::Schema.define(version: 2022_04_25_082348) do
     t.string "locale", default: "en"
     t.jsonb "webpush_subscription", default: {}
     t.string "login_token_digest"
+    t.datetime "last_seen_at"
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
     t.index ["delete_account_token_digest"], name: "index_users_on_delete_account_token_digest", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true

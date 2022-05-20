@@ -37,13 +37,13 @@ feature 'SA Communities Editor', js: true do
     expect(community.courses).to eq([])
 
     # Edit Community
-    find("a", text: new_community_name).click
+    find("button", text: new_community_name).click
     expect(page).to have_text(course_1.name)
     expect(page).to have_text(course_2.name)
 
     fill_in 'What do you want to call this community?', with: new_community_name_for_edit
     click_button 'Yes'
-    find("div[title=\"Select #{course_1.name}\"]").click
+    find("button[title=\"Select #{course_1.name}\"]").click
     click_button 'Update Community'
 
     expect(page).to have_text("Community updated successfully")
@@ -66,7 +66,7 @@ feature 'SA Communities Editor', js: true do
     scenario 'user adds new categories to a community without categories' do
       sign_in_user school_admin.user, referrer: school_communities_path
 
-      find("a", text: community_1.name).click
+      find("button", text: community_1.name).click
 
       expect(page).to have_text('There are currently no topic categories in this community!')
 
@@ -88,7 +88,7 @@ feature 'SA Communities Editor', js: true do
     scenario 'user modifies existing categories in community' do
       sign_in_user school_admin.user, referrer: school_communities_path
 
-      find("a", text: community_2.name).click
+      find("button", text: community_2.name).click
 
       expect(page).to have_text(category_1.name)
 
@@ -141,7 +141,7 @@ feature 'SA Communities Editor', js: true do
     scenario 'user closes category editor with unsaved changes' do
       sign_in_user school_admin.user, referrer: school_communities_path
 
-      find("a", text: community_2.name).click
+      find("button", text: community_2.name).click
 
       expect(page).to have_text(category_1.name)
 

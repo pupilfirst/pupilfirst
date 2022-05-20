@@ -7,6 +7,7 @@ module Types
     field :affiliation, String, null: true
     field :avatar_url, String, null: true
     field :taggings, [String], null: false
+    field :last_seen_at, GraphQL::Types::ISO8601DateTime, null: true
 
     def avatar_url
       BatchLoader::GraphQL
@@ -25,6 +26,10 @@ module Types
               end
             end
         end
+    end
+
+    def last_seen_at
+      object.current_sign_in_at
     end
 
     def taggings

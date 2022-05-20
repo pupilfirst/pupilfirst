@@ -37,7 +37,8 @@ let isEligible = t =>
   | DateLocked => false
   }
 
-let makeOptionFromJs = js => Belt.Option.map(js, eligibility =>
+let makeOptionFromJs = js =>
+  Belt.Option.map(js, eligibility =>
     switch eligibility {
     | #Eligible => Eligible
     | #AtMaxLevel => AtMaxLevel
@@ -46,5 +47,8 @@ let makeOptionFromJs = js => Belt.Option.map(js, eligibility =>
     | #PreviousLevelIncomplete => PreviousLevelIncomplete
     | #TeamMembersPending => TeamMembersPending
     | #DateLocked => DateLocked
+    | #FutureAddedValue(string) =>
+      Rollbar.error("Unexpected eligibility encountered: " ++ string)
+      raise(UnexpectedEligibilityString(string))
     }
   )

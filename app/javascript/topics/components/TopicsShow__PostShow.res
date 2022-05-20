@@ -32,22 +32,20 @@ module ArchivePostQuery = %graphql(`
 `)
 
 let markPostAsSolution = (postId, markPostAsSolutionCB) =>
-  WindowUtils.confirm("Are you sure you want to mark this post as solution?", () =>
-    MarkPostAsSolutionQuery.make(~id=postId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      response["markPostAsSolution"]["success"] ? markPostAsSolutionCB() : ()
+  WindowUtils.confirm(t("mark_solution_confirm"), () =>
+    MarkPostAsSolutionQuery.fetch({id: postId})
+    |> Js.Promise.then_((response: MarkPostAsSolutionQuery.t) => {
+      response.markPostAsSolution.success ? markPostAsSolutionCB() : ()
       Js.Promise.resolve()
     })
     |> ignore
   )
 
 let unmarkPostAsSolution = (postId, unmarkPostAsSolutionCB) =>
-  WindowUtils.confirm("Are you sure you want to unmark this post as solution?", () =>
-    UnmarkPostAsSolutionQuery.make(~id=postId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      response["unmarkPostAsSolution"]["success"] ? unmarkPostAsSolutionCB() : ()
+  WindowUtils.confirm(t("unmark_solution_confirm"), () =>
+    UnmarkPostAsSolutionQuery.fetch({id: postId})
+    |> Js.Promise.then_((response: UnmarkPostAsSolutionQuery.t) => {
+      response.unmarkPostAsSolution.success ? unmarkPostAsSolutionCB() : ()
       Js.Promise.resolve()
     })
     |> ignore
@@ -57,17 +55,16 @@ let archivePost = (isFirstPost, postId, archivePostCB) =>
   Webapi.Dom.window |> Webapi.Dom.Window.confirm(
     isFirstPost ? t("delete_topic_confirm_dialog") : t("delete_post_confirm_dialog"),
   )
-    ? ArchivePostQuery.make(~id=postId, ())
-      |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response => {
-        response["archivePost"]["success"] ? archivePostCB() : ()
+    ? ArchivePostQuery.fetch({id: postId})
+      |> Js.Promise.then_((response: ArchivePostQuery.t) => {
+        response.archivePost.success ? archivePostCB() : ()
         Js.Promise.resolve()
       })
       |> ignore
     : ()
 
 let solutionIcon = (userCanUnmarkSolution, unmarkPostAsSolutionCB, postId) => {
-  let tip = <div className="text-center"> {"Unmark as solution" |> str} </div>
+  let tip = <div className="text-center"> {t("unmark_solution") |> str} </div>
   let solutionIcon =
     <div
       className={"flex items-center justify-center pr-2 pl-0 py-2 md:p-3 bg-green-200 text-green-800 rounded-full " ++ (
@@ -79,7 +76,7 @@ let solutionIcon = (userCanUnmarkSolution, unmarkPostAsSolutionCB, postId) => {
     ? <Tooltip tip position=#Top> solutionIcon </Tooltip>
     : solutionIcon
   <div
-    ariaLabel="Marked as solution icon"
+    ariaLabel={t("marked_solution_icon")}
     onClick={_ => userCanUnmarkSolution ? unmarkPostAsSolution(postId, unmarkPostAsSolutionCB) : ()}
     className={"flex lg:flex-col items-center px-2 lg:pl-0 lg:pr-4 bg-green-200 lg:bg-transparent rounded md:mt-4 " ++ (
       userCanUnmarkSolution ? "cursor-pointer" : ""
@@ -103,7 +100,7 @@ let optionsDropdown = (
 ) => {
   let selected =
     <div
-      ariaLabel={"Options for post " ++ Post.id(post)}
+      ariaLabel={t("options_post") ++ " " ++ Post.id(post)}
       className="flex items-center justify-center w-8 h-8 rounded leading-tight border bg-gray-100 text-gray-800 cursor-pointer hover:bg-gray-200">
       <PfIcon className="if i-ellipsis-h-regular text-base" />
     </div>
@@ -208,12 +205,12 @@ let make = (
           : React.null}
         {ReactUtils.nullUnless(
           {
-            let tip = <div className="text-center"> {"Mark as solution" |> str} </div>
+            let tip = <div className="text-center"> {t("mark_solution") |> str} </div>
             <div
               className="hidden md:flex md:flex-col items-center text-center md:w-14 pr-3 md:pr-4 md:mt-4">
               <Tooltip tip position=#Top>
                 <button
-                  ariaLabel="Mark as solution"
+                  ariaLabel={t("mark_solution")}
                   onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
                   className="mark-as-solution__button bg-gray-100 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-200 text-gray-700">
                   <PfIcon className="if i-check-solid text-sm lg:text-base" />
@@ -339,7 +336,7 @@ let make = (
                     <PfIcon className="if i-check-solid text-sm lg:text-base" />
                     <span
                       className="ml-2 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
-                      {"Solution" |> str}
+                      {t("solution") |> str}
                     </span>
                   </button>,
                   {
@@ -373,7 +370,7 @@ let make = (
               {repliesToPost |> ArrayUtils.isNotEmpty
                 ? <button
                     id={"show-replies-" ++ Post.id(post)}
-                    ariaLabel={"Show replies of post " ++ Post.id(post)}
+                    ariaLabel={t("show_replies") ++ " " ++ Post.id(post)}
                     onClick={_ => toggleShowReplies(showReplies => !showReplies)}
                     className="border bg-white mr-3 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-100">
                     {Inflector.pluralize(
@@ -394,8 +391,8 @@ let make = (
                 }}
                 id={"reply-button-" ++ Post.id(post)}
                 ariaLabel={isFirstPost
-                  ? "Add reply to topic"
-                  : "Add reply to post " ++ Post.id(post)}
+                  ? t("add_reply_topic")
+                  : t("add_reply_post") ++ Post.id(post)}
                 className="bg-gray-100 lg:border lg:bg-gray-200 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-300">
                 <FaIcon classes="fas fa-reply mr-2" /> {t("new_reply_button") |> str}
               </button>,
@@ -405,7 +402,7 @@ let make = (
         </div>
         {showReplies
           ? <div
-              ariaLabel={"Replies to post " ++ Post.id(post)}
+              ariaLabel={t("replies_post") ++ " " ++ Post.id(post)}
               className="lg:pl-10 pt-2 topics-post-show__replies-container">
               {repliesToPost
               |> Array.map(post => <TopicsShow__PostReply key={post |> Post.id} post users />)

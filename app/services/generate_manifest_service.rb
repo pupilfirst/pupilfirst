@@ -53,19 +53,19 @@ class GenerateManifestService
   def icon_variant(variant)
     case variant
     when :sm
-      icon.variant(variant_options('100x100>')).processed
+      icon.variant(variant_options([100, 100])).processed
     when :md
-      icon.variant(variant_options('144x144>')).processed
+      icon.variant(variant_options([144, 144])).processed
     when :lg
-      icon.variant(variant_options('192x192>')).processed
+      icon.variant(variant_options([192, 192])).processed
     when :xl3
-      icon.variant(variant_options('512x512>')).processed
+      icon.variant(variant_options([512, 512])).processed
     else
       icon
     end
   end
 
   def variant_options(resize)
-    { auto_orient: true, gravity: 'center', resize: resize }
+    { auto_orient: true, gravity: 'center', resize_to_fill: resize }
   end
 end

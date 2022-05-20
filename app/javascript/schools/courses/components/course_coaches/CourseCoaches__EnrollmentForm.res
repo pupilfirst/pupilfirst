@@ -2,6 +2,9 @@ open CourseCoaches__Types
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CourseCoaches__EnrollmentForm")
+let ts = I18n.t(~scope="shared")
+
 type action =
   | UpdateCoachesList(array<string>)
   | UpdateCoachSearchInput(string)
@@ -65,9 +68,9 @@ let courseCoachEditor = (coaches, state, send) => {
   let unselected =
     coaches |> Js.Array.filter(coach => !(state.courseCoaches |> Array.mem(SchoolCoach.id(coach))))
   <MultiselectForCourseCoaches
-    placeholder="Search coaches"
-    emptySelectionMessage="No coaches selected"
-    allItemsSelectedMessage="You have selected all coaches!"
+    placeholder=tr("search_coaches_placeholder")
+    emptySelectionMessage=tr("search_coaches_empty")
+    allItemsSelectedMessage=tr("search_coaches_all")
     selected
     unselected
     onChange={setCoachSearchInput(send)}
@@ -83,7 +86,7 @@ let handleResponseCB = (updateCoachesCB, json) => {
     field("course_coaches", array(CourseCoach.decode))
   }
   updateCoachesCB(courseCoaches)
-  Notification.success("Success", "Coach enrollments updated successfully")
+  Notification.success(ts("notifications.success"), tr("notification_coach_enrollment"))
 }
 
 let updateCourseCoaches = (state, send, courseId, updateCoachesCB) => {
@@ -116,13 +119,13 @@ let make = (~schoolCoaches, ~courseCoaches, ~courseId, ~updateCoachesCB) => {
       <div className="mx-auto bg-white">
         <div className="max-w-2xl pt-6 px-6 mx-auto">
           <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
-            {"ASSIGN COACHES TO THE COURSE" |> str}
+            {tr("assign_coaches") |> str}
           </h5>
           {coaches |> Array.length > 0
             ? <div>
                 <div id="course_coaches">
                   <span className="inline-block mr-1 mb-2 text-xs font-semibold">
-                    {"Select coaches:" |> str}
+                    { tr("select_coaches") ++ ":" |> str}
                   </span>
                   {courseCoachEditor(coaches, state, send)}
                 </div>
@@ -134,7 +137,7 @@ let make = (~schoolCoaches, ~courseCoaches, ~courseId, ~updateCoachesCB) => {
             disabled=saveDisabled
             onClick={_e => updateCourseCoaches(state, send, courseId, updateCoachesCB)}
             className="w-full btn btn-primary btn-large">
-            {"Add Course Coaches" |> str}
+            {tr("add_course") |> str}
           </button>
         </div>
       </div>

@@ -252,7 +252,7 @@ let onDeselectFilter = (send, selectable) =>
   }
 
 let loadApplicants = (courseId, state, cursor, send) => {
-  ApplicantsQuery.make(
+  let variables = ApplicantsQuery.makeVariables(
     ~tags=?Some(state.filter.tags),
     ~sortDirection=state.filter.sortDirection,
     ~sortCriterion=state.filter.sortCriterion,
@@ -261,7 +261,7 @@ let loadApplicants = (courseId, state, cursor, send) => {
     ~courseId,
     (),
   )
-  |> GraphqlQuery.sendQuery
+  ApplicantsQuery.make(variables)
   |> Js.Promise.then_(response => {
     let applicants = Js.Array.map(
       rawCourse => Applicant.makeFromJS(rawCourse),
@@ -319,7 +319,7 @@ let showApplicant = (baseUrl, applicant) => {
       </div>
     </button>
     <button
-      title={"Show Actions: " ++ Applicant.name(applicant)}
+      title={ t("show_actions") ++ ": " ++ Applicant.name(applicant)}
       className="btn btn-small btn-primary-ghost"
       onClick={_ => RescriptReactRouter.push(baseUrl ++ Applicant.id(applicant) ++ "/actions")}>
       {str(t("onboard_as_student"))}

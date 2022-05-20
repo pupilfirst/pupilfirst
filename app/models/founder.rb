@@ -20,10 +20,6 @@ class Founder < ApplicationRecord
   has_many :leaderboard_entries, dependent: :destroy
   has_many :faculty_founder_enrollments, dependent: :destroy
   has_many :faculty, through: :faculty_founder_enrollments
-  has_many :coach_notes,
-           foreign_key: 'student_id',
-           inverse_of: :student,
-           dependent: :destroy
   belongs_to :team, optional: true
 
   scope :not_dropped_out, -> { where(dropped_out_at: nil) }

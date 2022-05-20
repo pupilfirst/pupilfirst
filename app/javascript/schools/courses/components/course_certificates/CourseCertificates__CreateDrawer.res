@@ -2,6 +2,7 @@ open CourseCertificates__Types
 
 let str = React.string
 let t = I18n.t(~scope="components.CourseCertificates__CreateDrawer")
+let ts = I18n.t(~scope="shared")
 
 type state = {
   name: string,
@@ -52,7 +53,7 @@ let submitForm = (course, addCertificateCB, send, event) => {
     url,
     formData,
     json => {
-      Notification.success(t("done_exclamation"), t("success_notification"))
+      Notification.success(ts("notifications.done_exclamation"), t("success_notification"))
       Json.Decode.field("certificate", Certificate.decode, json) |> addCertificateCB
     },
     () => send(FailSaving),
@@ -60,7 +61,7 @@ let submitForm = (course, addCertificateCB, send, event) => {
 }
 
 let imageInputText = imageFilename =>
-  imageFilename->Belt.Option.getWithDefault(t("certificate_base_image_placeholder"))
+  imageFilename->Belt.Option.getWithDefault(t("certificate_base_image.placeholder"))
 
 let selectFile = (send, event) => {
   let files = ReactEvent.Form.target(event)["files"]
@@ -82,7 +83,8 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
   <SchoolAdmin__EditorDrawer closeDrawerCB closeButtonTitle={t("cancel")}>
     <form onSubmit={submitForm(course, addCertificateCB, send)}>
       <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
-      <DisablingCover containerClasses="w-full" disabled=state.saving message="Uploading...">
+      <DisablingCover
+        containerClasses="w-full" disabled=state.saving message={ts("uploading") ++ "..."}>
         <div className="flex flex-col min-h-screen">
           <div className="bg-white flex-grow-0">
             <div className="bg-gray-100 pt-6 pb-4 border-b">
@@ -100,7 +102,8 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                   </label>
                   <span className="text-xs"> {" (" ++ (t("optional") ++ ")") |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    autoFocus=true
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
                     id="name"
                     type_="text"
                     maxLength=30
@@ -115,30 +118,29 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                     <label
                       className="tracking-wide text-xs font-semibold"
                       htmlFor="certificate-file-input">
-                      {t("certificate_base_image_label")->str}
+                      {t("certificate_base_image.label")->str}
                     </label>
-                    <HelpIcon
-                      className="ml-2"
-                      link="https://docs.pupilfirst.com/#/certificates?id=uploading-a-new-certificate">
-                      {str(
-                        "This base image must include a full line's space to insert a student's name.",
-                      )}
+                    <HelpIcon className="ml-2" link={t("certificate_base_image.help_url")}>
+                      {t("certificate_base_image.help")->str}
                     </HelpIcon>
                   </div>
-                  <input
-                    disabled=state.saving
-                    className="hidden"
-                    name="image"
-                    type_="file"
-                    id="certificate-file-input"
-                    required=false
-                    multiple=false
-                    onChange={selectFile(send)}
-                  />
-                  <label className="file-input-label mt-2" htmlFor="certificate-file-input">
-                    <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
-                    <span className="truncate"> {imageInputText(state.imageFilename)->str} </span>
-                  </label>
+                  <div
+                    className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+                    <input
+                      disabled=state.saving
+                      className="absolute w-0 h-0 focus:outline-none"
+                      name="image"
+                      type_="file"
+                      id="certificate-file-input"
+                      required=false
+                      multiple=false
+                      onChange={selectFile(send)}
+                    />
+                    <label className="file-input-label mt-2" htmlFor="certificate-file-input">
+                      <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
+                      <span className="truncate"> {imageInputText(state.imageFilename)->str} </span>
+                    </label>
+                  </div>
                   <School__InputGroupError
                     message={t("image_file_invalid")} active=state.fileInvalid
                   />

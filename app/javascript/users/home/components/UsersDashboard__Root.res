@@ -92,7 +92,7 @@ let courseLink = (href, title, icon) =>
 let ctaButton = (title, href) =>
   <a
     href
-    className="w-full bg-gray-50 mt-4 px-6 py-4 flex text-sm font-semibold justify-between items-center cursor-pointer text-primary-500 hover:bg-gray-300 focus:outline-none focus:bg-gray-300">
+    className="w-full bg-primary-50 mt-4 px-6 py-4 flex text-sm font-semibold justify-between items-center cursor-pointer text-primary-500 hover:bg-primary-100 focus:outline-none focus:bg-primary-100">
     <span> <i className="fas fa-book" /> <span className="ml-2"> {title->str} </span> </span>
     <i className="fas fa-arrow-right" />
   </a>

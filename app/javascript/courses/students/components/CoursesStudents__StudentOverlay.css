@@ -110,7 +110,7 @@
 
 .student-overlay__doughnut-chart.purple
   .student-overlay__doughnut-chart-stroke {
-  stroke: #6025c0;
+  stroke: var(--color-primary-500);
 }
 
 .student-overlay__doughnut-chart.pink .student-overlay__doughnut-chart-stroke {
@@ -123,7 +123,7 @@
 }
 
 .student-overlay__doughnut-chart.purple .student-overlay__doughnut-chart-text {
-  fill: #6025c0;
+  fill: var(--color-primary-500);
 }
 
 .student-overlay__doughnut-chart.pink .student-overlay__doughnut-chart-text {

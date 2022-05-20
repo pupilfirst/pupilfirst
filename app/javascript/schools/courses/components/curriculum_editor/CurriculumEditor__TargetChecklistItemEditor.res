@@ -41,10 +41,10 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
   let selectedButtonColor = switch selectedKind {
   | LongText => "blue"
   | ShortText => "orange"
-  | Files => "pink"
+  | Files => "yellow"
   | Link => "focusColor"
   | AudioRecord => "red"
-  | MultiChoice(_choices) => "teal"
+  | MultiChoice(_choices) => "green"
   }
   let selected =
     <button

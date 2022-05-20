@@ -108,10 +108,12 @@
     @apply bg-primary-50 text-primary-500 border border-primary-500 rounded;
   }
 
+  .btn:hover,
   .btn-default:hover {
     @apply bg-primary-100 text-primary-600;
   }
 
+  .btn:focus,
   .btn-default:focus {
     @apply bg-primary-100 text-primary-700;
   }
@@ -238,11 +240,11 @@
   /* Footer Style */
 
   .footer__container {
-    background-color: theme("colors.gray.200");
+    background-color: theme("colors.gray.100");
   }
 
   .footer__bottom {
-    background-color: theme("colors.gray.300");
+    background-color: theme("colors.gray.200");
   }
 
   .dropdown__list {

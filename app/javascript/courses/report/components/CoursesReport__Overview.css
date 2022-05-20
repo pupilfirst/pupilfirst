@@ -112,7 +112,7 @@
 
 .courses-report-overview__doughnut-chart.purple
   .courses-report-overview__doughnut-chart-stroke {
-  stroke: #6025c0;
+  stroke: var(--color-primary-500);
 }
 
 .courses-report-overview__doughnut-chart.pink
@@ -127,7 +127,7 @@
 
 .courses-report-overview__doughnut-chart.purple
   .courses-report-overview__doughnut-chart-text {
-  fill: #6025c0;
+  fill: var(--color-primary-500);
 }
 
 .courses-report-overview__doughnut-chart.pink

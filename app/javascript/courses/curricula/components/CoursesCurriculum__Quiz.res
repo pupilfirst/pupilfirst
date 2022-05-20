@@ -4,6 +4,8 @@ open CoursesCurriculum__Types
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CoursesCurriculum__Quiz")
+
 module CreateQuizSubmissionQuery = %graphql(`
    mutation CreateQuizSubmissionMutation($targetId: ID!, $answerIds: [ID!]!) {
     createQuizSubmission(targetId: $targetId, answerIds: $answerIds){
@@ -82,7 +84,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
   <div className="bg-gray-100 rounded overflow-hidden relative mb-18 mt-4">
     <div className="p-2 md:p-5">
       <span className="font-semibold text-xs block uppercase text-gray-600">
-        {"Question #" |> str} {string_of_int((currentQuestion |> QuizQuestion.index) + 1) |> str}
+        {tr("question") ++ " #" |> str} {string_of_int((currentQuestion |> QuizQuestion.index) + 1) |> str}
       </span>
       <MarkdownBlock
         markdown={currentQuestion |> QuizQuestion.question}
@@ -124,7 +126,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
                 setSaving,
                 addSubmissionCB,
               )}>
-              {str("Submit Quiz")}
+              {str(tr("submit_quiz"))}
             </button>
           : {
               let nextQuestion = currentQuestion |> QuizQuestion.nextQuestion(quizQuestions)
@@ -137,7 +139,7 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
                   )
                   setSelectedAnswer(_ => None)
                 }}>
-                {str("Next Question")}
+                {str(tr("next_question"))}
               </button>
             }}
       </div>

@@ -154,10 +154,7 @@ module Schools
             startup.update!(access_ends_at: nil, dropped_out_at: nil)
           end
 
-        render json: {
-                 message: 'Teams marked active successfully!',
-                 error: nil
-               }
+        render json: { message: t('.teams_active'), error: nil }
       end
     end
 

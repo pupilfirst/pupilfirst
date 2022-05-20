@@ -1,5 +1,7 @@
 let str = React.string
 
+let tr = I18n.t(~scope = "components.Notifications__Root")
+
 @react.component
 let make = (
   ~wrapperClasses,
@@ -13,12 +15,12 @@ let make = (
   <div className=wrapperClasses>
     {<EditorDrawer
       size=EditorDrawer.Small
-      closeButtonTitle={"Close " ++ title->Belt.Option.getWithDefault("")}
+      closeButtonTitle={tr("close") ++ title->Belt.Option.getWithDefault("")}
       closeDrawerCB={() => setShowNotifications(_ => false)}>
       <Notifications__List />
     </EditorDrawer>->ReactUtils.nullUnless(showNotifications)}
     <button
-      title="Show Notifications"
+      title=tr("show_notifications")
       className=buttonClasses
       onClick={_ => setShowNotifications(_ => true)}>
       <FaIcon classes={icon->Belt.Option.getWithDefault("")} />

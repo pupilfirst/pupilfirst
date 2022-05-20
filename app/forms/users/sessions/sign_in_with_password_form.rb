@@ -33,7 +33,12 @@ module Users
       def check_credentials
         return if user&.valid_password?(password)
 
-        errors.add(:base, I18n.t('sessions.create.invalid_credentials'))
+        errors.add(
+          :base,
+          I18n.t(
+            'users.sessions.sign_in_with_password_form.check_credentials.error'
+          )
+        )
       end
     end
   end

@@ -17,6 +17,9 @@ type action =
   | Reset
   | SetEmbedCode(string)
 
+let t = I18n.t(~scope="components.CurriculumEditor__EmbedBlockResolver")
+let ts = I18n.ts
+
 let reducer = (state, action) =>
   switch action {
   | SetLoading => {...state, loading: true}
@@ -41,8 +44,8 @@ let resolveEmbedCode = (contentBlockId, send) => {
   })
   |> Js.Promise.catch(_ => {
     Notification.error(
-      "Unexpected Error",
-      "An unexpected error occured, and our team has been notified about this. Please reload the page before trying again.",
+      ts("notifications.unexpected_error"),
+      t("error_notification"),
     )
     Js.Promise.resolve()
   })
@@ -51,9 +54,9 @@ let resolveEmbedCode = (contentBlockId, send) => {
 
 let embedCodeErrorText = (loading, requestSource) =>
   switch (loading, requestSource) {
-  | (true, _) => "Trying to embed URL..."
-  | (false, #VimeoUpload) => "Video is being processed, retrying in 1 minute..."
-  | (false, #User) => "Unable to embed, retrying in 1 minute..."
+  | (true, _) => t("trying_embed")
+  | (false, #VimeoUpload) => t("video_processed")
+  | (false, #User) => t("unable_embed")
   }
 
 let onTimeout = (contentBlockId, send, ()) => resolveEmbedCode(contentBlockId, send)

@@ -1,5 +1,8 @@
 let str = React.string
 
+let tr = I18n.t(~scope="components.CurriculumEditor__TargetVersionSelector")
+let ts = I18n.ts
+
 let handleClick = (setShowDropdown, versions, event) => {
   event |> ReactEvent.Mouse.preventDefault
   if versions |> Array.length > 1 {
@@ -46,7 +49,7 @@ let make = (
                   ? previewModeButtonEnableClass
                   : "bg-white shadow-md hover:shadow hover:text-primary-500 hover:bg-gray-100"
               )}>
-              {"Preview" |> str}
+              {tr("preview") |> str}
             </button>
             <button
               onClick={handleViewMode(switchViewModeCB, false)}
@@ -55,7 +58,7 @@ let make = (
                   ? "bg-white shadow-md hover:shadow hover:text-primary-500 hover:bg-gray-100"
                   : previewModeButtonEnableClass
               )}>
-              {"Edit" |> str}
+              {tr("edit") |> str}
             </button>
           </div>
         : React.null}
@@ -69,12 +72,12 @@ let make = (
               selectedVersion |> Js.Json.string,
             )}
             className="btn btn-warning border border-orange-500 mr-4">
-            {"Restore this version" |> str}
+            {tr("restore_version") |> str}
           </button>}
       <div className="relative">
         <div className="inline-block">
           <label className="text-xs block text-gray-600 mb-1">
-            {(versions |> Array.length > 1 ? "Versions" : "Version") |> str}
+            {(versions |> Array.length > 1 ? ts("versions") : ts("version")) |> str}
           </label>
           <button
             onClick={handleClick(setShowDropdown, versions)}

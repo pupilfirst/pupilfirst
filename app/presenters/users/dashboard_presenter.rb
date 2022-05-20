@@ -1,7 +1,7 @@
 module Users
   class DashboardPresenter < ApplicationPresenter
     def page_title
-      "Dashboard | #{current_school.name}"
+      I18n.t("shared.dashboard") ++ " | #{current_school.name}"
     end
 
     def props

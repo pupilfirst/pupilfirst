@@ -2,6 +2,9 @@ open SchoolCommunities__IndexTypes
 
 let str = React.string
 
+let ts = I18n.t(~scope="shared")
+let tr = I18n.t(~scope="components.SchoolCommunities__CategoryEditor")
+
 type state = {
   categoryName: string,
   saving: bool,
@@ -60,7 +63,7 @@ let makeDeleteCategoryQuery = (categoryId, deleteCategoryCB, send) => {
   |> Js.Promise.catch(error => {
     Js.log(error)
     send(FailDeleting)
-    Notification.error("Unexpected Error!", "Please reload the page and try again.")
+    Notification.error(ts("notifications.unexpected_error"), ts("notifications.please_reload"))
     Js.Promise.resolve()
   })
   |> ignore
@@ -75,9 +78,7 @@ let deleteCategory = (category, deleteCategoryCB, send, event) => {
   topicsCount > 0
     ? if {
         open Webapi.Dom
-        window |> Window.confirm(
-          "There are topics assigned to this category! Are you sure you want to delete this category?",
-        )
+        window |> Window.confirm(tr("topics_delete_confirm"))
       } {
         makeDeleteCategoryQuery(categoryId, deleteCategoryCB, send)
       } else {
@@ -112,7 +113,7 @@ let updateCategory = (category, newName, updateCategoryCB, send, event) => {
   |> Js.Promise.catch(error => {
     send(FailSaving)
     Js.log(error)
-    Notification.error("Unexpected Error!", "Please reload the page and try again.")
+    Notification.error(ts("notifications.unexpected_error"), ts("notifications.please_reload"))
     Js.Promise.resolve()
   })
   |> ignore
@@ -140,7 +141,7 @@ let createCategory = (communityId, name, createCategoryCB, send, event) => {
   |> Js.Promise.catch(error => {
     Js.log(error)
     send(FailSaving)
-    Notification.error("Unexpected Error!", "Please reload the page and try again.")
+    Notification.error(ts("notifications.unexpected_error"), ts("notifications.please_reload"))
     Js.Promise.resolve()
   })
   |> ignore
@@ -185,7 +186,7 @@ let make = (
     let (backgroundColor, color) = Category.color(category)
     <div
       key=categoryId
-      ariaLabel={"Editor for category " ++ categoryId}
+      ariaLabel={tr("editor_category_alt") ++ categoryId}
       className="flex justify-between items-center bg-gray-100 border-gray-400 shadow rounded mt-3 px-2 py-1 topic-category-editor">
       <div className="flex-1 items-center mr-2">
         <input
@@ -211,14 +212,14 @@ let make = (
               ) |> str}
             </span>
           : <button
-              title="Update Category"
+              title={tr("update_category")}
               disabled={saveDisabled(state.categoryName, state.saving)}
               onClick={updateCategory(category, state.categoryName, updateCategoryCB, send)}
               className="btn btn-success mr-2 text-xs">
-              {"Update Category" |> str}
+              {tr("update_category") |> str}
             </button>}
         <button
-          title="Delete Category"
+          title={tr("delete_category")}
           onClick={deleteCategory(category, deleteCategoryCB, send)}
           className="text-xs py-1 px-2 h-8 text-gray-700 hover:text-red-500 hover:bg-gray-100 focus:text-red-500 focus:bg-gray-100 border-l border-gray-400">
           <FaIcon classes={state.deleting ? "fas fa-spinner fa-spin" : "fas fa-trash-alt"} />
@@ -235,7 +236,7 @@ let make = (
           send(UpdateCategoryName(name))
         }}
         value=state.categoryName
-        placeholder="Add new category"
+        placeholder={tr("add_new_category")}
         className="appearance-none h-10 block w-full text-gray-700 border rounded border-gray-400 py-2 px-4 text-sm hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
       />
       {
@@ -245,7 +246,7 @@ let make = (
               disabled={saveDisabled(state.categoryName, state.saving)}
               onClick={createCategory(communityId, state.categoryName, createCategoryCB, send)}
               className="btn btn-success ml-2 text-sm">
-              {"Save Category" |> str}
+              {tr("save_category") |> str}
             </button>
           : React.null
       }

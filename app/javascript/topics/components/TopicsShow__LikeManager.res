@@ -94,7 +94,7 @@ let make = (~post, ~addPostLikeCB, ~removePostLikeCB) => {
     <div className="text-center pr-4 md:pt-4">
       <Tooltip tip position=#Top>
         <button
-          ariaLabel={(liked ? "Unlike" : "Like") ++ (" post " ++ Post.id(post))}
+          ariaLabel={(liked ? t("unlike") : t("like")) ++ (" " ++ t("post") ++ " " ++ Post.id(post))}
           className="cursor-pointer flex md:flex-col items-center"
           onClick={handlePostLike(
             saving,

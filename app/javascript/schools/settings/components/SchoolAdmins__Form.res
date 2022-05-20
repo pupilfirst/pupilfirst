@@ -1,5 +1,8 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.SchoolAdmins__Form")
+let ts = I18n.ts
+
 module CreateSchoolAdminQuery = %graphql(`
   mutation CreateSchoolAdminMutation($name: String!, $email: String!) {
     createSchoolAdmin(name: $name, email: $email){
@@ -33,7 +36,7 @@ let createSchoolAdminQuery = (email, name, setSaving, updateCB) => {
           ~avatarUrl=schoolAdmin["avatarUrl"],
         ),
       )
-      Notification.success("Success", "School Admin created successfully.")
+      Notification.success(ts("notifications.success"), t("admin_created_notification"))
     | None => setSaving(_ => false)
     }
     Js.Promise.resolve()
@@ -50,7 +53,7 @@ let updateSchoolAdminQuery = (admin, name, setSaving, updateCB) => {
     response["updateSchoolAdmin"]["success"]
       ? {
           updateCB(admin |> SchoolAdmin.updateName(name))
-          Notification.success("Success", "School Admin updated successfully.")
+          Notification.success(ts("notifications.success"), t("admin_updated_notification"))
         }
       : setSaving(_ => false)
     Js.Promise.resolve()
@@ -91,8 +94,8 @@ let saveDisabled = (email, name, saving, admin) =>
 let buttonText = (saving, admin) =>
   switch (saving, admin) {
   | (true, _) => "Saving"
-  | (false, Some(_)) => "Update School Admin"
-  | (false, None) => "Create School Admin"
+  | (false, Some(_)) => t("update_admin")
+  | (false, None) => t("create_admin")
   }
 
 let emailInputDisabled = admin =>
@@ -126,14 +129,14 @@ let make = (~admin, ~updateCB) => {
           <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
             {switch admin {
             | Some(admin) => admin |> SchoolAdmin.name
-            | None => "Add new school admin"
+            | None => t("add_new_admin")
             } |> str}
           </h5>
           <div>
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
               htmlFor="email">
-              {"Email" |> str}
+              {ts("email") |> str}
             </label>
             <input
               autoFocus=true
@@ -142,18 +145,18 @@ let make = (~admin, ~updateCB) => {
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
               id="email"
               type_="email"
-              placeholder="Add email here"
+              placeholder=t("email_placeholder")
               disabled={emailInputDisabled(admin)}
             />
             <School__InputGroupError
-              message="Enter a valid Email" active={showInvalidEmailError(email, admin)}
+              message=t("email_error") active={showInvalidEmailError(email, admin)}
             />
           </div>
           <div className="mt-5">
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
               htmlFor="name">
-              {"Name" |> str}
+              {ts("name") |> str}
             </label>
             <input
               value=name
@@ -161,7 +164,7 @@ let make = (~admin, ~updateCB) => {
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
               id="name"
               type_="text"
-              placeholder="Add name here"
+              placeholder=t("name_placeholder")
             />
             <School__InputGroupError
               message="Enter a valid name" active={showInvalidNameError(name, admin)}

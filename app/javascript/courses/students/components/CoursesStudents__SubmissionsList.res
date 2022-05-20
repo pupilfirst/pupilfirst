@@ -9,6 +9,9 @@ type state = {loading: bool}
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CoursesStudents__SubmissionsList")
+let ts = I18n.t(~scope="shared")
+
 module StudentSubmissionsQuery = %graphql(`
    query StudentSubmissionsQuery($studentId: ID!, $after: String, $sortDirection: SortDirection!) {
     studentSubmissions(studentId: $studentId, after: $after, first: 20 , sortDirection: $sortDirection) {
@@ -81,11 +84,11 @@ let showSubmissionStatus = submission =>
     submission |> Submission.failed
       ? <div
           className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
-          {"Rejected" |> str}
+          {ts("rejected") |> str}
         </div>
       : <div
           className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
-          {"Completed" |> str}
+          {ts("completed") |> str}
         </div>
 
   | None =>
@@ -129,7 +132,7 @@ let showSubmission = (submissions, levels) =>
             </div>
             <div className="mt-1 ml-px text-xs text-gray-900">
               <span className="ml-1">
-                {"Submitted on " ++ (submission |> Submission.createdAtPretty) |> str}
+                {tr("submitted_on") ++ (submission |> Submission.createdAtPretty) |> str}
               </span>
             </div>
           </div>
@@ -146,7 +149,7 @@ let showSubmissions = (submissions, levels) =>
   submissions |> ArrayUtils.isEmpty
     ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
         <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
-          {"No Reviewed Submission" |> str}
+          {tr("no_revied_submission") |> str}
         </h5>
         <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=reviewedEmptyImage />
       </div>
@@ -182,7 +185,7 @@ let make = (~studentId, ~levels, ~submissions, ~updateSubmissionsCB) => {
                   submissions,
                   updateSubmissionsCB,
                 )}>
-              {"Load More..." |> str}
+              {ts("load_more") |> str}
             </button>}
       </div>
     | FullyLoaded(submissions) => showSubmissions(submissions, levels)

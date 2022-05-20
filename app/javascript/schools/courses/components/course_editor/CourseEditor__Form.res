@@ -384,8 +384,7 @@ let processingUrlInput = (state, send) => {
       <label className="block tracking-wide text-xs font-semibold " htmlFor="featured">
         {t("processing_url.label")->str}
       </label>
-      <HelpIcon
-        className="ml-2 mr-6" link="https://docs.pupilfirst.com/#/courses?id=processing-url">
+      <HelpIcon className="ml-2 mr-6" link={t("processing_url.help_url")}>
         {t("processing_url.help")->str}
       </HelpIcon>
       <div id="processing-url" className="flex toggle-button__group flex-shrink-0 rounded-lg">
@@ -537,14 +536,14 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
         {t("course_end_date.label")->str}
       </label>
       <span className="ml-1 text-xs"> {("(" ++ ts("optional") ++ ")")->str} </span>
-      <HelpIcon className="ml-2" link="https://docs.pupilfirst.com/#/courses">
+      <HelpIcon className="ml-2" link={t("course_end_date.help_url")}>
         {t("course_end_date.help")->str}
       </HelpIcon>
       <DatePicker
         onChange={date => send(UpdateEndsAt(date))} selected=?state.endsAt id="course-ends-at-input"
       />
     </div>
-    <School__InputGroupError message="Enter a valid date" active=state.hasDateError />
+    <School__InputGroupError message={t("enter_date")} active=state.hasDateError />
     <div className="mt-5">
       <label className="tracking-wide text-xs font-semibold" htmlFor="course-about">
         {t("course_about.label")->str}
@@ -564,8 +563,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
       <label className="tracking-wide text-xs font-semibold">
         {t("progression_behavior.label")->str}
       </label>
-      <HelpIcon
-        className="ml-2" link="https://docs.pupilfirst.com/#/courses?id=progression-behaviour">
+      <HelpIcon className="ml-2" link={t("progression_behavior.help_url")}>
         {t("progression_behavior.help")->str}
       </HelpIcon>
       <div className="flex mt-2">

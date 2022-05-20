@@ -2,6 +2,7 @@ open CourseCertificates__Types
 
 let str = React.string
 let t = I18n.t(~scope="components.CourseCertificates__Root")
+let ts = I18n.ts
 
 type drawer =
   | NewCertificate
@@ -105,7 +106,7 @@ let deleteCertificate = (certificate, send) => {
 let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
   let (state, send) = React.useReducerWithMapState(reducer, certificates, computeInitialState)
 
-  <DisablingCover containerClasses="w-full" disabled=state.deleting message="Deleting...">
+  <DisablingCover containerClasses="w-full" disabled=state.deleting message={t("deleting")}>
     <div className="flex flex-1 h-screen overflow-y-scroll">
       {switch state.drawer {
       | NewCertificate =>
@@ -157,7 +158,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
 
                     <div
                       key={Certificate.id(certificate)}
-                      ariaLabel={"Certificate " ++ Certificate.id(certificate)}
+                      ariaLabel={t("certificate") ++ " " ++ Certificate.id(certificate)}
                       className="flex w-1/2 items-center mb-4 px-3">
                       <div
                         className="shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">
@@ -202,9 +203,8 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
                                 ariaLabel={title}
                                 className="w-10 text-sm text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-red-500 focus:outline-none focus:bg-gray-200 focus:text-red-500"
                                 onClick={_event =>
-                                  WindowUtils.confirm(
-                                    "Are you sure you want to delete this certificate?",
-                                    () => deleteCertificate(certificate, send),
+                                  WindowUtils.confirm(t("delete_confirm"), () =>
+                                    deleteCertificate(certificate, send)
                                   )}>
                                 <i className="fas fa-trash-alt" />
                               </button>

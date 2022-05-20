@@ -175,8 +175,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
         {t("access_ends_at.label")->str}
       </label>
       {optionalText()}
-      <HelpIcon
-        className="ml-2" link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
+      <HelpIcon className="ml-2" link={t("access_ends_at.help_url")}>
         {t("access_ends_at.help")->str}
       </HelpIcon>
       <DatePicker

@@ -20,7 +20,7 @@ class UsersController < ApplicationController
       sign_in user
       @token = params[:token]
     else
-      flash[:error] = 'That link has expired or is invalid. Please try again.'
+      flash[:error] = t('.link_expired')
       redirect_to root_path
     end
   end

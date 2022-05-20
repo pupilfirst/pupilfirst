@@ -2,6 +2,9 @@ open CoachesSchoolIndex__Types
 
 exception UnexpectedResponse(int)
 
+let t = I18n.t(~scope="components.SA_Coaches_CoachEditor")
+let ts = I18n.t(~scope="shared")
+
 let apiErrorTitle = x =>
   switch x {
   | UnexpectedResponse(code) => code |> string_of_int
@@ -173,28 +176,29 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
       ~affiliation=Some(state.affiliation),
     )
     switch coach {
-    | Some(_) => Notification.success("Success", "Coach updated successfully")
-    | None => Notification.success("Success", "Coach created successfully")
+    | Some(_) => Notification.success(ts("notifications.success"), t("coach_updated"))
+    | None => Notification.success(ts("notifications.success"), t("coach_created"))
     }
     updateCoachCB(newCoach)
     closeFormCB()
   }
   let avatarUploaderText = () =>
     switch state.imageFileName {
-    | "" => "Upload an avatar"
-    | _ => "Replace avatar: " ++ state.imageFileName
+    | "" => t("upload_avatar")
+    | _ => t("replace_avatar") ++ ": " ++ state.imageFileName
     }
   let handleResponseJSON = json => {
-    let error = json
-    |> {
-      open Json.Decode
-      field("error", nullable(string))
-    }
-    |> Js.Null.toOption
+    let error =
+      json
+      |> {
+        open Json.Decode
+        field("error", nullable(string))
+      }
+      |> Js.Null.toOption
     switch error {
     | Some(err) =>
       send(UpdateSaving)
-      Notification.error("Something went wrong!", err)
+      Notification.error(ts("notifications.something_wrong"), err)
     | None => addCoach(json)
     }
   }
@@ -228,7 +232,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
     |> catch(error => {
       let title = PromiseUtils.errorToExn(error)->apiErrorTitle
       send(UpdateSaving)
-      Notification.error(title, "Please try again")
+      Notification.error(title, ts("notifications.try_again"))
       Js.Promise.resolve()
     })
     |> ignore
@@ -260,7 +264,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
               <h5 className="uppercase text-center border-b border-gray-400 pb-2">
                 {switch coach {
                 | Some(coach) => coach |> Coach.name
-                | None => "Add New Coach"
+                | None => t("add_coach")
                 } |> str}
               </h5>
             </div>
@@ -271,7 +275,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   <label
                     className="inline-block tracking-wide text-gray-900 text-xs font-semibold"
                     htmlFor="name">
-                    {"Name" |> str}
+                    {t("name") |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
@@ -280,12 +284,12 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     id="name"
                     type_="text"
                     name="faculty[name]"
-                    placeholder="Coach Name"
+                    placeholder={t("coach_name")}
                     value=state.name
                     onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
                   />
                   <School__InputGroupError
-                    message="Must have at least two characters" active=state.hasNameError
+                    message={t("input_group_error")} active=state.hasNameError
                   />
                 </div>
                 {switch coach {
@@ -294,7 +298,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   <div className="mt-5">
                     <label
                       className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
-                      {"Email" |> str}
+                      {t("email") |> str}
                     </label>
                     <span> {"*" |> str} </span>
                     <input
@@ -302,19 +306,19 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                       id="email"
                       type_="email"
                       name="faculty[email]"
-                      placeholder="Coach email address"
+                      placeholder={t("coach_email")}
                       value=state.email
                       onChange={event => updateEmail(send, ReactEvent.Form.target(event)["value"])}
                     />
                     <School__InputGroupError
-                      message="Please enter a valid email address" active=state.hasEmailError
+                      message={t("email_input_error")} active=state.hasEmailError
                     />
                   </div>
                 }}
                 <div className="mt-5">
                   <label
                     className="inline-block tracking-wide text-xs font-semibold" htmlFor="title">
-                    {"Title" |> str}
+                    {t("title") |> str}
                   </label>
                   <span> {"*" |> str} </span>
                   <input
@@ -322,19 +326,19 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     id="title"
                     type_="text"
                     name="faculty[title]"
-                    placeholder="Coach Title/Expertise"
+                    placeholder={t("coach_title")}
                     value=state.title
                     onChange={event => updateTitle(send, ReactEvent.Form.target(event)["value"])}
                   />
                   <School__InputGroupError
-                    message="Must have at least two characters" active=state.hasTitleError
+                    message={t("coach_title_error")} active=state.hasTitleError
                   />
                 </div>
                 <div className="mt-5">
                   <label
                     className="inline-block tracking-wide text-xs font-semibold"
                     htmlFor="affiliation">
-                    {"Affiliation" |> str}
+                    {t("affiliation") |> str}
                   </label>
                   <input
                     value=state.affiliation
@@ -344,31 +348,31 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     id="affiliation"
                     name="faculty[affiliation]"
                     type_="text"
-                    placeholder="Acme Inc., Acme University, etc."
+                    placeholder={t("affiliation_placeholder")}
                   />
                 </div>
                 <div className="mt-5">
                   <label
                     className="inline-block tracking-wide text-xs font-semibold"
                     htmlFor="connectLink">
-                    {"Connect Link" |> str}
+                    {t("connect_link") |> str}
                   </label>
                   <input
                     className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
                     id="connectLink"
                     type_="text"
                     name="faculty[connect_link]"
-                    placeholder="Student connect request link for the coach"
+                    placeholder={t("connect_link_placeholder")}
                     value=state.connectLink
                     onChange={event =>
                       updateConnectLink(send, ReactEvent.Form.target(event)["value"])}
                   />
                   <School__InputGroupError
-                    message="This doesn't look like a valid URL" active=state.hasConnectLinkError
+                    message={t("connect_link_error")} active=state.hasConnectLinkError
                   />
                   <School__InputGroupError
                     warn=true
-                    message="Since the coach profile isn't public, this won't be shown anywhere"
+                    message={t("coach_profile_warn")}
                     active={StringUtils.isPresent(state.connectLink) &&
                     (!state.hasConnectLinkError &&
                     !state.public)}
@@ -379,11 +383,9 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     <label
                       className="block tracking-wide text-xs font-semibold mr-3"
                       htmlFor="evaluated">
-                      {"Should the coach profile be public?" |> str}
+                      {t("coach_public_q") |> str}
                     </label>
-                    <div
-                      id="notification"
-                      className="flex flex-shrink-0 overflow-hidden ">
+                    <div id="notification" className="flex flex-shrink-0 overflow-hidden ">
                       <div>
                         <button
                           type_="submit"
@@ -394,7 +396,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                           name="faculty[public]"
                           value="true"
                           className={booleanButtonClasses(state.public)}>
-                          {"Yes" |> str}
+                          {ts("_yes") |> str}
                         </button>
                         <button
                           onClick={_event => {
@@ -402,7 +404,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                             send(UpdatePublic(false))
                           }}
                           className={booleanButtonClasses(!state.public)}>
-                          {"No" |> str}
+                          {ts("_no") |> str}
                         </button>
                       </div>
                       <input
@@ -414,9 +416,10 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                 <div className="mt-5">
                   <label
                     className="block tracking-wide text-xs font-semibold" htmlFor="avatarUploader">
-                    {"Avatar" |> str}
+                    {ts("avatar") |> str}
                   </label>
-                  <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+                  <div
+                    className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
                     <input
                       disabled=state.saving
                       className="absolute w-0 h-0"
@@ -426,7 +429,9 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                       required=false
                       multiple=false
                       onChange={event =>
-                        send(UpdateImageFileName(ReactEvent.Form.target(event)["files"][0]["name"]))}
+                        send(
+                          UpdateImageFileName(ReactEvent.Form.target(event)["files"][0]["name"]),
+                        )}
                     />
                     <label className="file-input-label mt-2" htmlFor="sa-coach-editor__file-input">
                       <i className="fas fa-upload mr-2 text-gray-600 text-lg" />
@@ -444,11 +449,9 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                         <label
                           className="block tracking-wide  text-xs font-semibold mr-3"
                           htmlFor="evaluated">
-                          {"Has the coach left the school?" |> str}
+                          {t("coach_left_q") |> str}
                         </label>
-                        <div
-                          id="exited"
-                          className="flex flex-shrink-0 overflow-hidden">
+                        <div id="exited" className="flex flex-shrink-0 overflow-hidden">
                           <div>
                             <button
                               onClick={_event => {
@@ -457,7 +460,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                               }}
                               name="faculty[exited]"
                               className={booleanButtonClasses(state.exited)}>
-                              {"Yes" |> str}
+                              {ts("_yes") |> str}
                             </button>
                             <button
                               onClick={_event => {
@@ -465,7 +468,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                                 send(UpdateExited(false))
                               }}
                               className={booleanButtonClasses(!state.exited)}>
-                              {"No" |> str}
+                              {ts("_no") |> str}
                             </button>
                           </div>
                           <input
@@ -480,8 +483,8 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     <button
                       disabled={saveDisabled(state)} className="w-auto btn btn-large btn-primary">
                       {switch coach {
-                      | Some(_coach) => "Update Coach"
-                      | None => "Add Coach"
+                      | Some(_coach) => t("coach_update")
+                      | None => t("coach_add")
                       } |> str}
                     </button>
                   </div>

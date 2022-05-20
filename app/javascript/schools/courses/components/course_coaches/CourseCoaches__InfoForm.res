@@ -2,6 +2,8 @@ open CourseCoaches__Types
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CourseCoaches__InfoForm")
+
 type rec state = {
   teams: array<Team.t>,
   loading: bool,
@@ -95,18 +97,18 @@ let make = (~courseId, ~coach) => {
           </div>
         : <div className="py-3 flex mt-4">
             <div
-              className="w-full mr-2 rounded-lg shadow px-5 py-6" ariaLabel="Reviewed Submissions">
+              className="w-full mr-2 rounded-lg shadow px-5 py-6" ariaLabel=tr("revied_submissions")>
               <div className="flex justify-between items-center">
-                <span> {"Reviewed submissions" |> str} </span>
+                <span> {tr("revied_submissions") |> str} </span>
                 <span className="text-2xl font-semibold">
                   {state.stats.reviewedSubmissions |> string_of_int |> str}
                 </span>
               </div>
             </div>
             <div
-              className="w-full ml-2 rounded-lg shadow px-5 py-6" ariaLabel="Pending Submissions">
+              className="w-full ml-2 rounded-lg shadow px-5 py-6" ariaLabel=tr("pending_submissions")>
               <div className="flex justify-between items-center">
-                <span> {"Pending submissions" |> str} </span>
+                <span> {tr("pending_submissions") |> str} </span>
                 <span className="text-2xl font-semibold">
                   {state.stats.pendingSubmissions |> string_of_int |> str}
                 </span>
@@ -114,7 +116,7 @@ let make = (~courseId, ~coach) => {
             </div>
           </div>}
       <span className="inline-block mr-1 my-2 text-sm font-semibold pt-5">
-        {"Students assigned to coach:" |> str}
+        { tr("students_assigned") |> str}
       </span>
       {state.loading
         ? <div className="max-w-2xl mx-auto p-3">
@@ -124,7 +126,7 @@ let make = (~courseId, ~coach) => {
             {state.teams |> ArrayUtils.isEmpty
               ? <div
                   className="border border-gray-400 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
-                  {"There are no students assigned to this coach. You can assign coaches directly while editing the student details." |> str}
+                  {tr("no_students_assigned") |> str}
                 </div>
               : state.teams
                 |> Array.map(team =>

@@ -14,6 +14,7 @@ type action =
 
 let str = React.string
 let t = I18n.t(~scope="components.StudentsEditor__CreateForm")
+let ts = I18n.ts
 
 let formInvalid = state => ArrayUtils.isEmpty(state.teamsToAdd)
 
@@ -46,7 +47,7 @@ let handleResponseCB = (submitCB, state, studentIds) => {
     )
 
     if studentsAdded == studentsRequested {
-      Notification.success(t("done_exclamation"), t("added_full_description"))
+      Notification.success(ts("notifications.done_exclamation"), t("added_full_description"))
     } else {
       let description = t(
         ~variables=[
@@ -108,8 +109,8 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   |> Js.Promise.catch(error => {
     Js.log(error)
     Notification.error(
-      "Unexpected Error!",
-      "Our team has been notified of this failure. Please reload this page before trying to add students again.",
+      ts("notifications.unexpected_error"),
+      t("reload_add_students"),
     )
     send(SetSaving(false))
     Js.Promise.resolve()
@@ -272,7 +273,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
           className={"w-full btn btn-primary btn-large mt-3" ++ (
             formInvalid(state) ? " disabled" : ""
           )}>
-          {(state.saving ? t("saving") : t("save_list_button"))->str}
+          {(state.saving ? ts("saving") : t("save_list_button"))->str}
         </button>
       </div>
     </div>

@@ -5,6 +5,7 @@ exception UnsafeFindFailed(string)
 open CourseEditor__Types
 
 let t = I18n.t(~scope="components.CourseEditor")
+let ts = I18n.ts
 
 %raw(`require("courses/shared/background_patterns.css")`)
 
@@ -391,7 +392,7 @@ let showCourse = course => {
         </div>
         <div className="grid grid-cols-5 gap-4 p-4">
           <button
-            title={"Edit " ++ Course.name(course)}
+            title={ts("edit") ++ " " ++ Course.name(course)}
             className="col-span-3 btn btn-default px-4 py-2 bg-gray-200 text-primary-500 rounded-lg text-sm cursor-pointer"
             onClick={_ =>
               RescriptReactRouter.push("/school/courses/" ++ Course.id(course) ++ "/details")}>
@@ -446,10 +447,7 @@ let decodeTabString = tab => {
 let raiseUnsafeFindError = id => {
   let message = "Unable to be find course with id: " ++ id ++ " in CourseEditor"
   Rollbar.error(message)
-  Notification.error(
-    "An unexpected error occurred",
-    "Our team has been notified about this error. Please try reloading this page.",
-  )
+  Notification.error(t("notification_error_head"), t("notification_error_body"))
   raise(UnsafeFindFailed(message))
 }
 

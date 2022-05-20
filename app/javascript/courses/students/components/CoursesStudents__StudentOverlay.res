@@ -46,6 +46,7 @@ module StudentDetailsQuery = %graphql(`
             title
             avatarUrl
             userTags
+            lastSeenAt
           }
           coachUserIds
         }

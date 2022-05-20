@@ -3,18 +3,16 @@
 %>
 
 <% content_for :salutation do %>
-  Hello <%= @user.name %>,
+  <%= t("shared.salutation_name", name: @user.name) %>
 <% end %>
 
 <% content_for :body do %>
   <p>
-    You have been added as an author in the course <strong><%= @course.name %></strong>, on <%= @school.name %>. This
-    gives you the ability to use the school administration interface to edit the contents of the course, and to
-    <em>preview</em> the course as a student.
+    <%= t("mailers.course_author.addition.body.added_author_html", course_name: @course.name, school_name: @school.name) %>
   </p>
 
   <p>
-    Use <%= link_to 'this link', sign_in_link%> to sign into <%= @school.name %> and view the course.
+    <%= t("mailers.course_author.addition.body.use_link_html", link_to: link_to(t("mailers.course_author.addition.body.link_to"), sign_in_link), school_name: @school.name) %>
   </p>
 
   <%= render 'mailers/link_fallback', url: sign_in_link %>

@@ -2,6 +2,8 @@
 
 open CoursesStudents__Types
 let str = React.string
+let tr = I18n.t(~scope="components.CoursesStudents__StudentDistribution")
+let ts = I18n.t(~scope="shared")
 
 module StudentDistributionQuery = %graphql(`
     query StudentDistribution($courseId: ID!, $coachNotes: CoachNoteFilter!, $coachId: ID, $tags: [String!]!) {
@@ -144,18 +146,22 @@ let make = (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes, ~filterT
                     {LevelLabel.format(DistributionInLevel.number(level) |> string_of_int) |> str}
                   </p>
                   <p>
-                    {"Students: " ++ string_of_int(DistributionInLevel.studentsInLevel(level))
-                      |> str}
+                    {ts("students") ++
+                    ": " ++
+                    string_of_int(DistributionInLevel.studentsInLevel(level)) |> str}
                   </p>
                   {DistributionInLevel.studentsInLevel(level) !=
                     DistributionInLevel.teamsInLevel(level)
                     ? <p>
-                        {"Teams: " ++ string_of_int(DistributionInLevel.teamsInLevel(level)) |> str}
+                        {ts("teams") ++
+                        ": " ++
+                        string_of_int(DistributionInLevel.teamsInLevel(level)) |> str}
                       </p>
                     : React.null}
                   <p>
-                    {"Percentage: " ++ Js.Float.toFixedWithPrecision(percentageStudents, ~digits=1)
-                      |> str}
+                    {ts("percentage") ++
+                    ": " ++
+                    Js.Float.toFixedWithPrecision(percentageStudents, ~digits=1) |> str}
                   </p>
                 </div>
               <div
@@ -166,14 +172,14 @@ let make = (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes, ~filterT
                 pillClass}
                 style>
                 <label
-                  htmlFor={"Students in level " ++
+                  htmlFor={tr("students_level") ++
                   (DistributionInLevel.number(level) |> string_of_int)}
                   className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-700 text-center">
                   {level |> DistributionInLevel.shortName |> str}
                 </label>
                 <Tooltip className="w-full" tip position=#Bottom>
                   <button
-                    id={"Students in level " ++
+                    id={tr("students_level") ++
                     (DistributionInLevel.number(level) |> string_of_int)}
                     onClick={_ => DistributionInLevel.id(level)->selectLevelCB}
                     className={"student-distribution__pill w-full hover:shadow-inner focus:shadow-inner relative cursor-pointer border-white text-xs leading-none text-center " ++ (

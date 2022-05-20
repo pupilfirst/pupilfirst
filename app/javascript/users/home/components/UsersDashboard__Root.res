@@ -158,7 +158,7 @@ let courseLinks = (course, currentSchoolAdmin, communities) => {
     {ReactUtils.nullUnless(
       courseLink(
         "/school/courses/" ++ (courseId ++ "/curriculum"),
-        "Edit Curriculum",
+        t("edit_curriculum"),
         "fas fa-check-square",
       ),
       Course.author(course) && cta != #EditCourse,
@@ -294,7 +294,7 @@ let certificatesSection = issuedCertificates =>
                     {IssuedCertificate.courseName(issuedCertificate)->str}
                   </h4>
                   <div className="text-xs">
-                    <span> {"Issued on:"->str} </span>
+                    <span> {t("issued_on")->str} </span>
                     <span className="ml-1">
                       {issuedCertificate
                       ->IssuedCertificate.createdAt

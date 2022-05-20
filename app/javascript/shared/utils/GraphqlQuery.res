@@ -36,10 +36,6 @@ module Extender = (M: X) => {
   let decodeObject = json => {
     let x = Js.Json.object_(json)
 
-    // switch x {
-    // | Some(x) => x |> Js.Promise.resolve
-    // | None => Js.Promise.reject(Graphql_error("Request failed"))
-    // }
     x |> Js.Promise.resolve
   }
 

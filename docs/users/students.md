@@ -12,25 +12,19 @@ Courses can contain any number of students. To see the students in a course, fir
 
 To add new students to a course, click the _Add New Students_ button at the top-right of the list. The form that opens up will allow you to add many students at once. It asks for the following details:
 
-**Name**\
-The name of the student.
+**Name**: The name of the student.
 
-**Email**\
-The email address that the student will use to log into your school.
+**Email**: The email address that the student will use to log into your school.
 
-**Title**\
-The title of the student. Feel free to leave this blank - it'll default to _Student_.
+**Title**: The title of the student. Feel free to leave this blank - it'll default to _Student_.
 
-**Affiliation**\
-The organization to which the student belongs. This field is also optional.
+**Affiliation**: The organization to which the student belongs. This field is also optional.
 
 The _title_ and _affiliation_ fields are used across the platform to better identify students.
 
-**Tags**\
-Tags are keywords or strings to associate with the list of students that you're adding, and can be used to quickly filter the list of students in a course. You can start typing and pick from the suggested list of tags or create new ones.
+**Tags**: Tags are keywords or strings to associate with the list of students that you're adding, and can be used to quickly filter the list of students in a course. You can start typing and pick from the suggested list of tags or create new ones.
 
-**Notify students, and send them a link to sign into this school.**\
-Use this checkbox to enable or disable onboarding email notification for the newly added students.
+**Notify students**: Use this checkbox to enable or disable onboarding email notification for the newly added students.
 
 ### Add multiple students at once
 
@@ -42,20 +36,17 @@ Use this checkbox to enable or disable onboarding email notification for the new
 
 To edit a student's details, click on the student's name. You'll see all of the fields you entered in the creation form, and a few others:
 
-**Team Name**\
-If the student is in a team (details below), then you'll be able to edit the team's name here.
+**Team Name**: If the student is in a team (details below), then you'll be able to edit the team's name here.
 
-**Personal Coaches**\
-This list allows you to [directly assign coaches](/users/coaches#student-team-coaches) to a student (or team), which will allow those coaches to review submission from that student (or team).
+**Personal Coaches**: This list allows you to [directly assign coaches](/users/coaches#student-team-coaches) to a student (or team), which will allow those coaches to review submission from that student (or team).
 
-**Access Ends On**\
-If set, the course will be marked as _ended_ for the student (or team) on this date. Students will retain access to the course, and their own submissions, but they will not be able to complete new targets.
+**Access Ends On**: If set, the course will be marked as _ended_ for the student (or team) on this date. Students will retain access to the course, and their own submissions, but they will not be able to complete new targets.
 
 ## Student actions
 
 In addition to editing a student's details, you can switch to the _Actions_ tab which lists the actions that you can take on a student:
 
-**Has this student dropped out?** \
+**Has this student dropped out?**<br/>
 If you click the _Dropout Student_ button, the student will lose _all_ access to the course. Unlike students whose access to a course ended on a certain date, students who are marked as dropped out will not be able to access course content, or their own work within a course. The course will still be displayed on their dashboard page (marked as _Dropped Out_), but they will not be able to access its curriculum.
 
 ## Inactive students
@@ -74,9 +65,12 @@ To group two or more students as a team, select them using the checkboxes next t
 
 When you first team up a group of students, the platform will give them a randomly generated name. To edit the team's name, you can click on any of the students to edit their details. There'll be a new _field_ in the form called _Team Name_, which you can edit to change their team's name. When students are displayed anywhere in the interface, they'll always be grouped together with their team.
 
-?> **How do I set it up so that students in a team submit work on a target together?** \
- When editing the details of a target, you are asked the question
-_[How should teams tackle this target?](/users/curriculum_editor#setting-the-method-of-completion)_.
+<details>
+  <summary>How do I set it up so that students in a team submit work on a target together?</summary>
+  <div>
+    When editing the details of a target, you are asked the question <em><a href="/users/curriculum_editor#setting-the-method-of-completion">How should teams tackle this target?</a></em>
+  </div>
+</details>
 
 ### Removing a student from a team
 

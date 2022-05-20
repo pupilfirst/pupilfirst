@@ -32,19 +32,17 @@ Students level up by completing milestone targets. There are two conditions that
 
 1. Students are allowed to level up as soon as they've submitted work on all their milestone targets.
 
-   ?> This means that students don't (always) need to wait for grading on reviewed targets. This is allowed so that students aren't held up by delays that can occur in reviewing student submissions.
+   This means that students don't (always) need to wait for grading on reviewed targets. This is allowed so that students aren't held up by delays that can occur in reviewing student submissions.
 
 2. If on Level 2 or higher, students must not have any failed submissions, or those pending review by a coach in the _previous_ level.
 
-   ?> This blocks students from leveling up continuously simply by submitting work, and that students must re-submit work on a previous level's failed milestone target, or wait for a coach to review work on the previous level. Note that the block on leveling up can only appear if your course contains targets where submissions are reviewed by coaches.
+   This blocks students from leveling up continuously simply by submitting work, and that students must re-submit work on a previous level's failed milestone target, or wait for a coach to review work on the previous level. Note that the block on leveling up can only appear if your course contains targets where submissions are reviewed by coaches.
 
 ## Participating in the Community
 
 When a community is linked to one or more courses, students in those courses can post questions in the community. In addition to this, if a community has the _Discuss Targets_ option is enabled, then students will see the _Discuss_ tab when they open targets. The tab shows questions other students have asked about the target in the past.
 
-Because the issues that students face are often similar, having a history of doubts raised by previous students increases the likelihood that a student can immediately get answers for their doubts.
-
-?> For the author of a course, these questions can also be an indicator that there are aspects of the target's content that could be improved.
+Because the issues that students face are often similar, having a history of doubts raised by previous students increases the likelihood that a student can immediately get answers for their doubts. For the author of a course, these questions can also be an indicator that there are aspects of the target's content that could be improved.
 
 ## Finishing a course
 

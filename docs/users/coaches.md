@@ -17,11 +17,9 @@ Coaches can be added from the coaches page which is linked on the main navigatio
 
 You can add new coaches using the _Add New Coach_ option, and edit them by clicking on the name on this list. Coaches have a few additional properties unique to them:
 
-**Should the coach profile be public?** \
-If this option is turned on for at least one coach, it will enable the public coaches index page at the `/coaches` path on your school. This page will list coaches that have been marked public using this setting.
+**Should the coach profile be public?**: If this option is turned on for at least one coach, it will enable the public coaches index page at the `/coaches` path on your school. This page will list coaches that have been marked public using this setting.
 
-**Connect Link**\
-When a coach is publicly listed, this link will also be displayed on the `/coaches` page. This link can be used to allow students to connect with a coach outside of the platform, via tools such as _Calendly_.
+**Connect Link**: When a coach is publicly listed, this link will also be displayed on the `/coaches` page. This link can be used to allow students to connect with a coach outside of the platform, via tools such as _Calendly_.
 
 ## Assigning coaches to students
 
@@ -50,4 +48,10 @@ The makes a few changes across Pupilfirst:
 3. When viewing the details of a submission, the directly assigned coaches are listed at the top.
 4. When browsing the coach's [students list](/users/student_reports), similar filters are available, and the assigned coaches are listed on both the _index_ page, and within the student report itself.
 
-?> Having multiple coaches to handle reviewing of submissions can come in really handy at times. This allows coaches to do something as simple as take a few days off, asking a peer to take care of their students. If students are directly assigned, then the filtering functions that are available in the coach's review interface and students list makes finding applicable submissions and students simple.
+<details>
+  <summary>Having multiple coaches to handle reviewing of submissions can come in really handy at times.</summary>
+  <div>
+  This allows coaches to do something as simple as take a few days off, asking a peer to take care of their students. If students are directly assigned, then the filtering functions that are available in the coach's review interface and students
+  list makes finding applicable submissions and students simple.
+  </div>
+</details>

@@ -12,17 +12,24 @@ To qualify for leveling up, students must complete what are known as milestone t
 
 In the curriculum editor, you can mark your choice of target _groups_ as milestone. If a group is thus marked, all targets within the group will count as milestone targets. It's possible to have multiple milestone groups within a level.
 
-### Possible questions
+<details>
+  <summary>What happens if I don't mark any target group as milestone?</summary>
+  <div>
+    If a level doesn't contain at least one milestone target group, students will not be shown the option to level up. Pupilfirst checks for the submission of milestone targets to determine whether a student can level up.
+  </div>
+</details>
 
-**What happens if I don't mark any target group as milestone?**
-
-If a level doesn't contain at least one milestone target group, students will not be shown the option to level up. Pupilfirst checks for the submission of milestone targets to determine whether a student can level up.
-
-**What if I want my students to complete every target? Do I have to mark all target as milestones?**
-
-Not necessarily. Remember that you can set targets as prerequisites for others. Technically, you can set up a chain of targets, one depending on the completion of another to ensure that students complete all targets.
-
-How you organize the content is ultimately up to you. We've deliberately made content organization flexible because the way you organize content will depend on the nature of the content, and in what order (if any) you want students to tackle your material.
+<details>
+  <summary>What if I want my students to complete every target? Do I have to mark all target as milestones?</summary>
+  <div>
+    <p>
+      Not necessarily. Remember that you can set targets as prerequisites for others. Technically, you can set up a chain of targets, one depending on the completion of another to ensure that students complete all targets.
+    </p>
+    <p>
+      How you organize the content is ultimately up to you. We've deliberately made content organization flexible because the way you organize content will depend on the nature of the content, and in what order (if any) you want students to tackle your material.
+    </p>
+  </div>
+</details>
 
 ## Locked targets
 

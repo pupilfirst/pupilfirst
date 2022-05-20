@@ -22,8 +22,12 @@ Clicking on a submission opens up the submission for review.
 
 When a submission is clicked, it opens up to display everything that the student included as a part of the submission along with an option to review it. This page also includes every other submission from the student for the _same_ target.
 
-?> **Why are other submissions for the target listed here?** \
-Because students can make multiple submissions to improve their grade on a target, it makes sense to see previous submissions for the target in the same place. This allows coach to easily and quickly check for improvement from their prior work.
+<details>
+  <summary>Why are other submissions for the target listed here?</summary>
+  <div>
+    Because students can make multiple submissions to improve their grade on a target, it makes sense to see previous submissions for the target in the same place. This allows coach to easily and quickly check for improvement from their prior work.
+  </div>
+</details>
 
 ## Reviewing Submissions
 
@@ -39,8 +43,14 @@ The minimum work that a coach must do is assign grades for all evaluation criter
 
 If a student fails a submission, they're _expected_ to re-submit the target to get a passing grade. If the target in question is a milestone target, or is a prerequisite for another, this can cause other targets to [become locked](/users/targets#locked-targets) and block a student's progression in the course until they get a passing grade.
 
-?> **How does passing or failing work with multiple evaluation criteria?** \
-When you have more than one evaluation criteria, as in the example above, if the grade for _any_ criterion falls below the passing grade, then the submission as a whole, will count as a failure.
+<details>
+  <summary>How does passing or failing work with multiple evaluation criteria?</summary>
+  <div>
+    <p>
+      When you have more than one evaluation criteria, as in the example above, if the grade for <em>any</em> criterion falls below the passing grade, then the submission as a whole, will count as a failure.
+    </p>
+  </div>
+</details>
 
 Once a grade has been assigned for all evaluation criteria, a coach can save the grading. The submission will then be removed from the _Pending_ list in the previous page.
 
@@ -74,5 +84,9 @@ You can write down notes about a student while you're reviewing a submission. Th
 
 If the submission you're leaving a note on is from a _team_, then the note will be posted to the report of all students in that team.
 
-?> **We'd appreciate any feedback you have about this process!** \
-The greater the difficultly of a course, the greater the importance of a good review process and targeted feedback. As always, if your experience as a teacher has shown you new approaches or techniques, our team at Pupilfirst would be more than happy to [have a conversation about it](mailto:support@pupilfirst.com).
+<details>
+  <summary>Do you have any feedback about this process? We'd love to know!</summary>
+  <div>
+    The greater the difficultly of a course, the greater the importance of a good review process and targeted feedback. As always, if your experience as a teacher has shown you new approaches or techniques, our team at Pupilfirst would be more than happy to <a href="mailto:support@pupilfirst.com">have a conversation about it</a>.
+  </div>
+</details>

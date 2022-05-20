@@ -34,7 +34,7 @@ let reducer = (state, action) =>
 let resolveEmbedCode = (contentBlockId, send) => {
   send(SetLoading)
 
-  ResolveEmbedCodeMutator.make(ResolveEmbedCodeMutator.makeVariables(~contentBlockId, ()))
+  ResolveEmbedCodeMutator.make({contentBlockId: contentBlockId})
   |> Js.Promise.then_(response => {
     response["resolveEmbedCode"]["embedCode"]->Belt.Option.mapWithDefault(send(Reset), embedCode =>
       send(SetEmbedCode(embedCode))
@@ -43,10 +43,7 @@ let resolveEmbedCode = (contentBlockId, send) => {
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(_ => {
-    Notification.error(
-      ts("notifications.unexpected_error"),
-      t("error_notification"),
-    )
+    Notification.error(ts("notifications.unexpected_error"), t("error_notification"))
     Js.Promise.resolve()
   })
   |> ignore

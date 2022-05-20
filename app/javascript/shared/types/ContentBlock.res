@@ -1,5 +1,5 @@
-exception UnexpectedRequestSource(string)
 exception UnexpectedBlockType(string)
+exception UnexpectedRequestSource(string)
 
 type markdown = string
 type url = string

@@ -1,48 +1,3 @@
-module CourseFragment = CourseEditor__Course.Fragments
-
-module CreateCourseQuery = %graphql(`
-    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
-      createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
-        course {
-          ...CourseFragment
-        }
-      }
-    }
-  `)
-
-module UpdateCourseQuery = %graphql(`
-    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
-      updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
-        course {
-          ...CourseFragment
-        }
-      }
-    }
-  `)
-
-module ArciveCourseQuery = %graphql(`
-  mutation ArchiveCourseMutation($id: ID!) {
-    archiveCourse(id: $id)  {
-      success
-    }
-  }
-`)
-
-module UnarchiveCourseQuery = %graphql(`
-  mutation UnarchiveCourseMutation($id: ID!) {
-    unarchiveCourse(id: $id)  {
-      success
-    }
-  }
-`)
-
-module CloneCourseQuery = %graphql(`
-  mutation CloneCourseMutation($id: ID!) {
-    cloneCourse(id: $id)  {
-      success
-    }
-  }
-`)
 open CourseEditor__Types
 
 let t = I18n.t(~scope="components.CourseEditor__Form")
@@ -142,6 +97,52 @@ let reducer = (state, action) =>
       dirty: true,
     }
   }
+
+module CourseFragment = CourseEditor__Course.Fragments
+
+module CreateCourseQuery = %graphql(`
+    mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
+      createCourse(name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
+        course {
+          ...CourseFragment
+        }
+      }
+    }
+  `)
+
+module UpdateCourseQuery = %graphql(`
+    mutation UpdateCourseMutation($id: ID!, $name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {
+      updateCourse(id: $id, name: $name, description: $description, endsAt: $endsAt, about: $about, publicSignup: $publicSignup, publicPreview: $publicPreview, featured: $featured, progressionBehavior: $progressionBehavior, progressionLimit: $progressionLimit, highlights: $highlights, processingUrl: $processingUrl) {
+        course {
+          ...CourseFragment
+        }
+      }
+    }
+  `)
+
+module ArciveCourseQuery = %graphql(`
+  mutation ArchiveCourseMutation($id: ID!) {
+    archiveCourse(id: $id)  {
+      success
+    }
+  }
+`)
+
+module UnarchiveCourseQuery = %graphql(`
+  mutation UnarchiveCourseMutation($id: ID!) {
+    unarchiveCourse(id: $id)  {
+      success
+    }
+  }
+`)
+
+module CloneCourseQuery = %graphql(`
+  mutation CloneCourseMutation($id: ID!) {
+    cloneCourse(id: $id)  {
+      success
+    }
+  }
+`)
 
 let updateName = (send, name) => {
   let hasError = name->String.trim->String.length < 2

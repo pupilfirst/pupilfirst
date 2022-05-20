@@ -54,16 +54,12 @@ let updateStudentSubmissions = (
 
 let getStudentSubmissions = (studentId, cursor, setState, submissions, updateSubmissionsCB) => {
   setState(_ => {loading: true})
-  switch cursor {
-  | Some(cursor) =>
-    StudentSubmissionsQuery.make({
-      studentId: studentId,
-      after: Some(cursor),
-      sortDirection: #Descending,
-    })
-  | None =>
-    StudentSubmissionsQuery.make({studentId: studentId, after: None, sortDirection: #Descending})
-  }
+
+  StudentSubmissionsQuery.make({
+    studentId: studentId,
+    after: cursor,
+    sortDirection: #Descending,
+  })
   |> Js.Promise.then_(response => {
     updateStudentSubmissions(
       setState,

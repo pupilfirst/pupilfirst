@@ -27,14 +27,16 @@ let removeSchoolAdmin = (setState, admin, currentSchoolAdminId, event) => {
   if {
     open Webapi.Dom
     window |> Window.confirm(
-      t("remove_confirm_pre") ++ " " ++
+      t("remove_confirm_pre") ++
+      " " ++
       ((admin |> SchoolAdmin.name) ++
-      " " ++ t("remove_confirm_post")),
+      " " ++
+      t("remove_confirm_post")),
     )
   } {
     setState(state => {...state, deleting: true})
 
-    DeleteSchoolAdminQuery.make({id: admin |> SchoolAdmin.id})
+    DeleteSchoolAdminQuery.make({id: SchoolAdmin.id(admin)})
     |> Js.Promise.then_(response => {
       if response["deleteSchoolAdmin"]["success"] {
         if (
@@ -96,7 +98,7 @@ let renderAdmin = (currentSchoolAdminId, admin, admins, setState) =>
       {admins |> Array.length > 1
         ? <div
             className="w-10 text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-red-600"
-            title={ ts("delete") ++ " " ++ (admin |> SchoolAdmin.name)}
+            title={ts("delete") ++ " " ++ (admin |> SchoolAdmin.name)}
             onClick={removeSchoolAdmin(setState, admin, currentSchoolAdminId)}>
             <i className="fas fa-trash-alt" />
           </div>

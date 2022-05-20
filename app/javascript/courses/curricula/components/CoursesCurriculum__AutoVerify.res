@@ -45,9 +45,7 @@ let createAutoVerifySubmission = (target, linkToComplete, setSaving, addSubmissi
   event |> ReactEvent.Mouse.preventDefault
   setSaving(_ => true)
 
-  let variables = AutoVerifySubmissionQuery.makeVariables(~targetId=target |> Target.id, ())
-
-  AutoVerifySubmissionQuery.make(variables)
+  AutoVerifySubmissionQuery.make({targetId: Target.id(target)})
   |> Js.Promise.then_(response => {
     switch response["autoVerifySubmission"]["submission"] {
     | Some(details) =>

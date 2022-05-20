@@ -75,7 +75,6 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
   send(SetSaving(true))
 
-  // let students = Js.Array.map(TeamInfo.toJsArray, state.teamsToAdd) |> ArrayUtils.flattenV2
   let {notifyStudents} = state
 
   let students =
@@ -108,10 +107,7 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   })
   |> Js.Promise.catch(error => {
     Js.log(error)
-    Notification.error(
-      ts("notifications.unexpected_error"),
-      t("reload_add_students"),
-    )
+    Notification.error(ts("notifications.unexpected_error"), t("reload_add_students"))
     send(SetSaving(false))
     Js.Promise.resolve()
   })

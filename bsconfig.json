@@ -28,7 +28,7 @@
     "error": "+8"
   },
   "graphql": {
-    "extendQuery": "ExtendQuery.Extender",
-    "extendMutation": "ExtendQuery.Extender"
+    "extendQuery": "GraphQlPpxExtender.Extender",
+    "extendMutation": "GraphQlPpxExtender.Extender"
   }
 }

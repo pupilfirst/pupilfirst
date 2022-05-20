@@ -1,53 +1,5 @@
 exception InvalidBlockTypeForUpdate
 
-module DeleteContentBlockMutation = %graphql(`
-    mutation DeleteContentBlockMutation($id: ID!) {
-      deleteContentBlock(id: $id) {
-        success
-      }
-    }
-  `)
-
-module ContentBlockFragment = ContentBlock.Fragments
-
-module MoveContentBlockMutation = %graphql(`
-    mutation MoveContentBlockMutation($id: ID!, $direction: MoveDirection!) {
-      moveContentBlock(id: $id, direction: $direction) {
-        success
-      }
-    }
-  `)
-
-module UpdateFileBlockMutation = %graphql(`
-    mutation UpdateFileBlockMutation($id: ID!, $title: String!) {
-      updateFileBlock(id: $id, title: $title) {
-        contentBlock {
-          ...ContentBlockFragment
-        }
-      }
-    }
-  `)
-
-module UpdateMarkdownBlockMutation = %graphql(`
-    mutation UpdateMarkdownBlockMutation($id: ID!, $markdown: String!) {
-      updateMarkdownBlock(id: $id, markdown: $markdown) {
-        contentBlock {
-          ...ContentBlockFragment
-        }
-      }
-    }
-  `)
-
-module UpdateImageBlockMutation = %graphql(`
-    mutation UpdateImageBlockMutation($id: ID!, $caption: String!, $width:ImageWidth! ) {
-      updateImageBlock(id: $id, caption: $caption, width:$width) {
-        contentBlock {
-          ...ContentBlockFragment
-        }
-      }
-    }
-  `)
-
 let str = React.string
 
 let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockEditor")
@@ -100,6 +52,54 @@ let controlIcon = (~icon, ~title, ~color, ~handler) => {
         <i className={"fas fa-fw " ++ icon} />
       </button>
 }
+
+module DeleteContentBlockMutation = %graphql(`
+    mutation DeleteContentBlockMutation($id: ID!) {
+      deleteContentBlock(id: $id) {
+        success
+      }
+    }
+  `)
+
+module ContentBlockFragment = ContentBlock.Fragments
+
+module MoveContentBlockMutation = %graphql(`
+    mutation MoveContentBlockMutation($id: ID!, $direction: MoveDirection!) {
+      moveContentBlock(id: $id, direction: $direction) {
+        success
+      }
+    }
+  `)
+
+module UpdateFileBlockMutation = %graphql(`
+    mutation UpdateFileBlockMutation($id: ID!, $title: String!) {
+      updateFileBlock(id: $id, title: $title) {
+        contentBlock {
+          ...ContentBlockFragment
+        }
+      }
+    }
+  `)
+
+module UpdateMarkdownBlockMutation = %graphql(`
+    mutation UpdateMarkdownBlockMutation($id: ID!, $markdown: String!) {
+      updateMarkdownBlock(id: $id, markdown: $markdown) {
+        contentBlock {
+          ...ContentBlockFragment
+        }
+      }
+    }
+  `)
+
+module UpdateImageBlockMutation = %graphql(`
+    mutation UpdateImageBlockMutation($id: ID!, $caption: String!, $width:ImageWidth! ) {
+      updateImageBlock(id: $id, caption: $caption, width:$width) {
+        contentBlock {
+          ...ContentBlockFragment
+        }
+      }
+    }
+  `)
 
 let onMove = (contentBlock, cb, direction, _event) => {
   // We don't actually handle the response for this query.

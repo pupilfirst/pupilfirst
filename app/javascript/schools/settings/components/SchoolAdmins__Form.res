@@ -48,9 +48,9 @@ let createSchoolAdminQuery = (email, name, setSaving, updateCB) => {
 let updateSchoolAdminQuery = (admin, name, setSaving, updateCB) => {
   setSaving(_ => true)
   let id = admin |> SchoolAdmin.id
-  UpdateSchoolAdminQuery.make({id: id, name: name})
-  |> Js.Promise.then_(response => {
-    response["updateSchoolAdmin"]["success"]
+  UpdateSchoolAdminQuery.fetch({id: id, name: name})
+  |> Js.Promise.then_((response: UpdateSchoolAdminQuery.t) => {
+    response.updateSchoolAdmin.success
       ? {
           updateCB(admin |> SchoolAdmin.updateName(name))
           Notification.success(ts("notifications.success"), t("admin_updated_notification"))
@@ -145,11 +145,11 @@ let make = (~admin, ~updateCB) => {
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
               id="email"
               type_="email"
-              placeholder=t("email_placeholder")
+              placeholder={t("email_placeholder")}
               disabled={emailInputDisabled(admin)}
             />
             <School__InputGroupError
-              message=t("email_error") active={showInvalidEmailError(email, admin)}
+              message={t("email_error")} active={showInvalidEmailError(email, admin)}
             />
           </div>
           <div className="mt-5">
@@ -164,7 +164,7 @@ let make = (~admin, ~updateCB) => {
               className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
               id="name"
               type_="text"
-              placeholder=t("name_placeholder")
+              placeholder={t("name_placeholder")}
             />
             <School__InputGroupError
               message="Enter a valid name" active={showInvalidNameError(name, admin)}

@@ -235,24 +235,14 @@ let getStudentSubmissions = (
 ) => {
   let levelId = level->Belt.Option.flatMap(level => Some(Level.id(level)))
   let status = status->Belt.Option.flatMap(status => Some(status))
-  switch cursor {
-  | Some(cursor) =>
-    StudentSubmissionsQuery.make({
-      studentId: studentId,
-      after: Some(cursor),
-      sortDirection: sortDirection,
-      levelId: levelId,
-      status: status,
-    })
-  | None =>
-    StudentSubmissionsQuery.make({
-      studentId: studentId,
-      sortDirection: sortDirection,
-      levelId: levelId,
-      status: status,
-      after: None,
-    })
-  }
+
+  StudentSubmissionsQuery.make({
+    studentId: studentId,
+    after: cursor,
+    sortDirection: sortDirection,
+    levelId: levelId,
+    status: status,
+  })
   |> Js.Promise.then_(response => {
     response["studentSubmissions"]["nodes"] |> updateStudentSubmissions(
       send,

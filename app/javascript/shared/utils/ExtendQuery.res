@@ -127,7 +127,7 @@ module Extender = (M: X) => {
     )
   }
 
-  external jsontoJsObject: Js.Json.t => Js.t<'a> = "%identity"
+  external tToJsObject: M.t => Js.t<'a> = "%identity"
 
   let query = (notify, variables) => {
     sendQuery(~notify, M.query, variables->M.serializeVariables->M.variablesToJson)
@@ -140,6 +140,8 @@ module Extender = (M: X) => {
   }
 
   let make = (~notify=true, variables) => {
-    query(notify, variables) |> Js.Promise.then_(data => jsontoJsObject(data) |> Js.Promise.resolve)
+    query(notify, variables) |> Js.Promise.then_(data => {
+      tToJsObject(M.unsafe_fromJson(data) |> M.parse) |> Js.Promise.resolve
+    })
   }
 }

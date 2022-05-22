@@ -10,7 +10,7 @@
 <% end %>
 
 <% content_for :body do %>
-  <% update_for = timeline_event.present? ? t("mailers.startup.feedback_as_email.recent_submission")  : t("mailers.startup.feedback_as_email.recent_updates") %>
+  <% update_for = timeline_event.present? ? t("mailers.startup.feedback_as_email.body.recent_submission") : t("mailers.startup.feedback_as_email.body.recent_updates") %>
   <p>
     <%= t("mailers.startup.feedback_as_email.body.main_html", coach_name: coach_name, update_for: update_for) %>
   </p>

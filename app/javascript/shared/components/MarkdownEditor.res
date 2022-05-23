@@ -17,7 +17,7 @@ type rec selection = (selectionStart, selectionEnd)
 and selectionStart = int
 and selectionEnd = int
 
-type currentFile = string
+type currentFileName = option<string>
 
 type rec uploadState =
   | Uploading
@@ -29,7 +29,7 @@ type state = {
   mode: mode,
   selection: selection,
   uploadState: uploadState,
-  currentFile: currentFile,
+  currentFileName: currentFileName,
 }
 
 type action =
@@ -43,7 +43,7 @@ type action =
   | SetUploading
   | FinishUploading
   | ClearFile
-  | SelectFile(currentFile)
+  | SelectFile(currentFileName)
 
 let reducer = (state, action) =>
   switch action {
@@ -93,8 +93,8 @@ let reducer = (state, action) =>
   | SetUploadError(error) => {...state, uploadState: ReadyToUpload(error)}
   | SetUploading => {...state, uploadState: Uploading}
   | FinishUploading => {...state, uploadState: ReadyToUpload(None)}
-  | SelectFile(currentFile) => {...state, currentFile: currentFile}
-  | ClearFile => {...state, currentFile: ""}
+  | SelectFile(currentFileName) => {...state, currentFileName: currentFileName}
+  | ClearFile => {...state, currentFileName: None}
   }
 
 let computeInitialState = ((value, textareaId, mode)) => {
@@ -105,7 +105,13 @@ let computeInitialState = ((value, textareaId, mode)) => {
 
   let length = value |> String.length
 
-  {id: id, mode: mode, selection: (length, length), uploadState: ReadyToUpload(None), currentFile: ""}
+  {
+    id: id,
+    mode: mode,
+    selection: (length, length),
+    uploadState: ReadyToUpload(None),
+    currentFileName: None,
+  }
 }
 
 let containerClasses = mode =>
@@ -507,7 +513,10 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
           id=fileInputId
           multiple=false
           disabled
-          value={state.currentFile}
+          value={switch state.currentFileName {
+          | None => ""
+          | Some(file) => file
+          }}
           onChange={attachFile(fileFormId, oldValue, state, send, onChange)}
         />
         {switch state.uploadState {
@@ -547,8 +556,11 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
 }
 
 let textareaClasses = (mode, dynamicHeight) => {
-  let editorClasses = dynamicHeight ? "w-full outline-none font-mono " : "markdown-editor__textarea w-full outline-none font-mono "
-  editorClasses ++ "align-top focus:ring-1 focus:ring-indigo-500 " ++
+  let editorClasses = dynamicHeight
+    ? "w-full outline-none font-mono "
+    : "markdown-editor__textarea w-full outline-none font-mono "
+  editorClasses ++
+  "align-top focus:ring-1 focus:ring-indigo-500 " ++
   switch mode {
   | Windowed(_) => "p-3"
   | Fullscreen(_) => "markdown-editor__textarea--full-screen px-3 pt-4 pb-8 h-full resize-none"

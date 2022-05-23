@@ -47,8 +47,5 @@ let makeOptionFromJs = js =>
     | #PreviousLevelIncomplete => PreviousLevelIncomplete
     | #TeamMembersPending => TeamMembersPending
     | #DateLocked => DateLocked
-    | #FutureAddedValue(string) =>
-      Rollbar.error("Unexpected eligibility encountered: " ++ string)
-      raise(UnexpectedEligibilityString(string))
     }
   )

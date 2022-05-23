@@ -135,6 +135,7 @@ module Extender = (M: X) => {
     )
   }
 
+  @deprecated("Use fetch instead")
   let make = (~notify=true, variables) => {
     query(notify, variables) |> Js.Promise.then_(data => {
       tToJsObject(M.unsafe_fromJson(data) |> M.parse) |> Js.Promise.resolve

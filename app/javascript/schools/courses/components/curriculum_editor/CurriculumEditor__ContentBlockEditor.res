@@ -115,10 +115,10 @@ let onMove = (contentBlock, cb, direction, _event) => {
 
 let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
   WindowUtils.confirm(t("delete_block_confirm"), () => {
-    send(StartSaving("Deleting..."))
+    send(StartSaving(t("deleting")))
     let id = ContentBlock.id(contentBlock)
 
-    DeleteContentBlockMutation.make(DeleteContentBlockMutation.makeVariables(~id, ()))
+    DeleteContentBlockMutation.make({id: id})
     |> Js.Promise.then_(result => {
       if result["deleteContentBlock"]["success"] {
         removeContentBlockCB(id)

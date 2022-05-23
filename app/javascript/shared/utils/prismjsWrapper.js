@@ -1,4 +1,5 @@
 import Prism from "prismjs";
+import("prismjs/plugins/custom-class/prism-custom-class");
 
 /*
  * Prevent Prism from highlighting all eligible code blocks in the DOM upon
@@ -9,13 +10,19 @@ import Prism from "prismjs";
 document.removeEventListener("DOMContentLoaded", Prism.highlightAll);
 
 // Use the custom-class plugin to instruct Prism to prefix all generated classes with 'prism-'.
-Prism.plugins.customClass.prefix("prism-");
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    Prism.plugins.customClass.prefix("prism-");
+  },
+  false
+);
 
 // Include a clone of the 'Okaidia' theme CSS with prefixed classes.
-require("./prism-okaidia.css");
+import("./prism-okaidia.css");
 
 // Inlude a clone of the 'diff-highlight' plugin CSS with prefixed classes.
-require("./prism-diff-highlight.css");
+import("./prism-diff-highlight.css");
 
 const highlightAllUnder = (element) => Prism.highlightAllUnder(element);
 

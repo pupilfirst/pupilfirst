@@ -1,5 +1,5 @@
 let str = React.string
-%raw(`require("./Notifications__EntryCard.css")`)
+%raw(`import("./Notifications__EntryCard.css")`)
 
 open Notifications__Types
 
@@ -10,7 +10,7 @@ module MarkNotificationQuery = %graphql(`
     markNotification(notificationId: $notificationId)  {
       success
     }
-  }
+}
 `)
 
 let markNotification = (notificationId, setSaving, markNotificationCB, event) => {

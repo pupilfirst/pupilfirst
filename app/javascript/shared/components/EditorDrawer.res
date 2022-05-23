@@ -1,4 +1,4 @@
-%bs.raw(`require("./EditorDrawer.css")`)
+%raw(`import("./EditorDrawer.css")`)
 
 open React
 

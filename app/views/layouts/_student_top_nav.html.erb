@@ -1,9 +1,9 @@
 <% presenter = ::Layouts::StudentTopNavPresenter.new(self) %>
 <% content_for(:head) do %>
-  <%= vite_stylesheet_tag 'StudentTopNavPack', media: 'all' %>
+  <%= vite_stylesheet_tag 'packs/StudentTopNavPack.bs.js', media: 'all' %>
 <% end %>
 <% content_for(:tail) do %>
-  <%= vite_javascript_tag 'StudentTopNavPack', nonce: true %>
+  <%= vite_javascript_tag 'packs/StudentTopNavPack.bs.js', nonce: true %>
 <% end %>
 <script id="student-top-nav-props" type="application/json">
   <%= presenter.props_to_json.html_safe %>

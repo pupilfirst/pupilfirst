@@ -1,4 +1,4 @@
-%bs.raw(`require("./StudentTopNav.css")`)
+%bs.raw(`import("./StudentTopNav.css")`)
 
 let t = I18n.t(~scope="components.StudentTopNav")
 

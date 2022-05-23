@@ -39,7 +39,7 @@
     />
 
     <%= vite_stylesheet_tag 'layouts/tailwind', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= vite_stylesheet_tag 'IconFirstPack', media: 'all' %>
+    <%= vite_stylesheet_tag 'packs/IconFirstPack', media: 'all' %>
 
     <% if Rails.env.test? %>
       <style>
@@ -51,7 +51,7 @@
     <% end %>
 
     <!-- Scripts -->
-    <%= vite_javascript_tag 'layouts/tailwind', nonce: true %>
+    <%= vite_javascript_tag 'packs/layouts/tailwind', nonce: true %>
 
     <%= javascript_tag(nonce: true) do %>
       i18n.defaultLocale = "<%= I18n.default_locale %>"; i18n.locale = "<%= I18n.locale %>";
@@ -85,6 +85,6 @@
       <%= yield :footer %>
     </section>
     <!-- Scripts -->
-    <%= vite_javascript_tag 'IconFirstPack', nonce: true %>
+    <%= vite_javascript_tag 'packs/IconFirstPack', nonce: true %>
   </body>
 </html>

@@ -1,6 +1,6 @@
 let str = React.string
 
-%bs.raw(`require("./Tooltip.css")`)
+%bs.raw(`import("./Tooltip.css")`)
 
 let bubbleClasses = position => {
   let positionClass = switch position {

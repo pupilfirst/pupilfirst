@@ -10,7 +10,7 @@
   <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
 <% end %>
 
-<div class="pb-10 bg-gray-100">
+<div class="pb-10 bg-gray-50">
   <div class="relative bg-gray-300 border-b">
     <div class="relative pb-1/2 md:pb-1/4">
       <% if presenter.cover_image.present? %>
@@ -30,7 +30,7 @@
       class="school-index__about flex relative bg-primary-900 shadow-xl rounded-lg mx-3 lg:mx-0 -mt-7"
     >
       <div class=" <%= presenter.school_name_classes %>">
-        <p class="md:text-xl"><%= t('home.index.welcome_prefix') %></p>
+        <p class="md:text-xl"><%= t('.welcome_prefix') %></p>
         <h1 class="leading-tight text-3xl md:text-5xl">
           <span> <%= current_school.name %> </span>
         </h1>
@@ -52,7 +52,7 @@
           <h2
             class="school-index-featured-courses__header relative text-2xl font-bold"
           >
-            <%= t('home.index.featured_courses_heading') %>
+            <%= t('.featured_courses_heading') %>
           </h2>
         </div>
         <div class="mx-auto">
@@ -66,7 +66,7 @@
                   aria-label="<%= course.name %>"
                 >
                   <div class="relative">
-                    <div class="relative pb-1/2 bg-gray-200">
+                    <div class="relative pb-1/2 bg-gray-50">
                       <% if presenter.course_thumbnail(course).present? %>
                         <img
                           alt="Thumbnail for course <%= course.name %>"
@@ -104,10 +104,10 @@
                         >
                           <% if course.public_signup? %>
                             <i class="fas fa-feather-alt mr-2"></i>
-                            <%= t('home.index.get_started') %>
+                            <%= t('.get_started') %>
                           <% else %>
                             <i class="fas fa-info-circle mr-2"></i>
-                            <%= t('home.index.learn_more') %>
+                            <%= t('.learn_more') %>
                           <% end %>
                         </a>
                       <% when :dropped_out %>
@@ -115,7 +115,7 @@
                           class="w-full bg-red-100 text-red-600 py-2 px-4 rounded flex text-sm font-semibold justify-center items-center"
                         >
                           <i class="fas fa-user-slash mr-2"></i>
-                          <%= t('home.index.course_status.dropped_out') %>
+                          <%= t('.dropped_out') %>
                         </div>
                       <% when :access_ended %>
                         <a
@@ -123,7 +123,7 @@
                           href="/courses/<%= course.id %>/curriculum"
                         >
                           <i class="fas fa-eye mr-2"></i>
-                          <%= t('home.index.course_status.access_ended') %>
+                          <%= t('.access_ended') %>
                         </a>
                       <% when :active %>
                         <a
@@ -131,7 +131,7 @@
                           href="/courses/<%= course.id %>/curriculum"
                         >
                           <i class="fas fa-book mr-2"></i>
-                          <%= t('home.index.course_status.active') %>
+                          <%= t('.active') %>
                         </a>
                       <% else %>
                         <% raise "Encountered unexpected course status #{presenter.courses_as_student[course.id]}" %>

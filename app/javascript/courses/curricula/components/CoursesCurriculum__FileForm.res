@@ -3,6 +3,8 @@ exception UnexpectedResponse(int)
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CoursesCurriculum__FileForm")
+
 type state = {
   formId: string,
   filename: string,
@@ -14,7 +16,7 @@ type action =
   | SelectFile(string, list<string>)
   | ResetForm
 
-let defaultTitle = "Choose file to upload"
+let defaultTitle = tr("choose_upload")
 
 let reducer = (state, action) =>
   switch action {
@@ -34,8 +36,8 @@ let handleResponseJSON = (filename, send, attachFileCB, json) => {
 
 let apiErrorTitle = x =>
   switch x {
-  | UnexpectedResponse(code) => "Error " ++ (code |> string_of_int)
-  | _ => "Something went wrong!"
+  | UnexpectedResponse(code) => tr("error") ++ (code |> string_of_int)
+  | _ => tr("smth_went_wrong")
   }
 
 let uploadFile = (filename, send, attachFileCB, formData) => {
@@ -59,7 +61,7 @@ let uploadFile = (filename, send, attachFileCB, formData) => {
   |> then_(json => handleResponseJSON(filename, send, attachFileCB, json) |> resolve)
   |> catch(error => {
     let title = PromiseUtils.errorToExn(error)->apiErrorTitle
-    Notification.error(title, "Please reload the page and try again.")
+    Notification.error(title, tr("please_reload"))
     Js.Promise.resolve()
   })
   |> ignore
@@ -76,14 +78,14 @@ let submitForm = (filename, formId, send, addFileAttachmentCB) => {
 
 let attachFile = (state, send, attachingCB, attachFileCB, preview, event) =>
   preview
-    ? Notification.notice("Preview Mode", "You cannot attach files.")
+    ? Notification.notice(tr("preview_mode"), tr("cannot_attach"))
     : switch ReactEvent.Form.target(event)["files"] {
       | [] => ()
       | files =>
         let file = files[0]
         let maxFileSize = 5 * 1024 * 1024
 
-        let errors = file["size"] > maxFileSize ? list{"The maximum file size is 5 MB."} : list{}
+        let errors = file["size"] > maxFileSize ? list{tr("max_file_size")} : list{}
 
         if errors |> ListUtils.isEmpty {
           let filename = file["name"]
@@ -119,7 +121,7 @@ let make = (~attachFileCB, ~attachingCB, ~preview, ~index) => {
         onChange={attachFile(state, send, attachingCB, attachFileCB, preview)}
       />
       <label
-        className="text-center cursor-pointer truncate bg-gray-200 border border-dashed border-gray-600 flex px-4 py-5 items-center font-semibold rounded text-sm hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 flex-grow"
+        className="text-center cursor-pointer truncate bg-gray-50 border border-dashed border-gray-600 flex px-4 py-5 items-center font-semibold rounded text-sm hover:text-primary-600 hover:bg-primary-100 hover:border-primary-500 flex-grow"
         htmlFor={"attachment_file_" ++ string_of_int(index)}>
         <span className="w-full">
           <i className="fas fa-upload mr-2 text-lg" />
@@ -138,7 +140,7 @@ let make = (~attachFileCB, ~attachingCB, ~preview, ~index) => {
     {state.errors |> ListUtils.isEmpty
       ? React.null
       : <div className="px-4 mt-2 text-sm">
-          {"Please choose another file for upload." |> str}
+          {tr("another_file") |> str}
         </div>}
   </div>
 }

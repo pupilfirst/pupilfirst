@@ -82,7 +82,7 @@
 }
 
 .markdown-block__permissive blockquote {
-  @apply border-l-4 border-gray-800 bg-gray-100 px-4 py-2 my-4 text-lg rounded-r font-semibold text-gray-800;
+  @apply border-l-4 border-gray-800 bg-gray-50 px-4 py-2 my-4 text-lg rounded-r font-semibold text-gray-800;
 }
 
 .markdown-block__permissive blockquote code,
@@ -91,7 +91,7 @@
 }
 
 .markdown-block__permissive hr {
-  @apply border-t border-gray-400 mt-6 pb-2;
+  @apply border-t border-gray-300 mt-6 pb-2;
 }
 
 .markdown-block__permissive sup {
@@ -117,15 +117,15 @@
 }
 
 .markdown-block__permissive table th {
-  @apply bg-gray-200 px-4 py-2 border border-gray-400 font-semibold;
+  @apply bg-gray-50 px-4 py-2 border border-gray-300 font-semibold;
 }
 
 .markdown-block__permissive table tr {
-  @apply bg-white border-t border-gray-400;
+  @apply bg-white border-t border-gray-300;
 }
 
 .markdown-block__permissive table td {
-  @apply px-4 py-2 border border-gray-400;
+  @apply px-4 py-2 border border-gray-300;
 }
 
 .markdown-block__permissive .align-left {

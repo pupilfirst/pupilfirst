@@ -96,7 +96,7 @@ let make = (~post, ~addPostLikeCB, ~removePostLikeCB) => {
     <div className="text-center pr-4 md:pt-4">
       <Tooltip tip position=#Top>
         <button
-          ariaLabel={(liked ? "Unlike" : "Like") ++ (" post " ++ Post.id(post))}
+          ariaLabel={(liked ? t("unlike") : t("like")) ++ (" " ++ t("post") ++ " " ++ Post.id(post))}
           className="cursor-pointer flex md:flex-col items-center"
           onClick={handlePostLike(
             saving,
@@ -108,7 +108,7 @@ let make = (~post, ~addPostLikeCB, ~removePostLikeCB) => {
             addPostLikeCB,
           )}>
           <div
-            className="flex items-center justify-center rounded-lg lg:rounded-full lg:bg-gray-100 hover:bg-gray-300 text-gray-700 hover:text-gray-900 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2 mx-auto"
+            className="flex items-center justify-center rounded-lg lg:rounded-full lg:bg-gray-50 hover:bg-gray-300 text-gray-700 hover:text-gray-900 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2 mx-auto"
             key={iconClasses(liked, saving)}>
             <i className={iconClasses(liked, saving)} />
           </div>

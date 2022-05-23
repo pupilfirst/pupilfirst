@@ -58,7 +58,7 @@ let untabbedLevelSelector = (
   <Dropdown
     selected
     contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId, preview)}
-    className="flex-grow cursor-pointer rounded-lg bg-primary-100 hover:bg-gray-200 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-witin:ring-indigo-500 focus:text-primary-500 focus:bg-gray-200"
+    className="flex-grow cursor-pointer rounded-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-witin:ring-focusColor-500 focus:text-primary-500 focus:bg-gray-50"
   />
 }
 
@@ -83,7 +83,7 @@ let tabbedLevelSelector = (
 
   let numberedLevelSelector = showLevelZero
     ? <div
-        className="cursor-pointer text-sm flex-grow rounded-l-lg hover:bg-gray-200 hover:text-primary-500"
+        className="cursor-pointer text-sm flex-grow rounded-l-lg hover:bg-gray-50 hover:text-primary-500"
         onClick={_ => setShowLevelZero(false)}>
         {selected(true)}
       </div>
@@ -91,14 +91,14 @@ let tabbedLevelSelector = (
         key="numbered-level-selector"
         selected={selected(false)}
         contents={selectableLevels(orderedLevels, teamLevel, setSelectedLevelId, preview)}
-        className="cursor-pointer flex-grow rounded-l-lg bg-primary-100 hover:bg-gray-200 hover:text-primary-500"
+        className="cursor-pointer flex-grow rounded-l-lg bg-primary-100 hover:bg-gray-50 hover:text-primary-500"
       />
 
   [
     numberedLevelSelector,
     <button
       key="level-zero-selector"
-      className={"border-l rounded-r-lg bg-white border-gray-400 font-semibold truncate hover:bg-gray-100 hover:text-primary-500 " ++
+      className={"border-l rounded-r-lg bg-white border-gray-300 font-semibold truncate hover:bg-gray-50 hover:text-primary-500 " ++
       levelZeroSelectorClasses(showLevelZero)}
       onClick={_e => setShowLevelZero(true)}>
       {levelZero |> Level.name |> str}
@@ -119,9 +119,9 @@ let make = (
 ) => {
   let orderedLevels = levels |> Js.Array.filter(l => l |> Level.number != 0) |> Level.sort
 
-  <div className="bg-gray-100 px-3 py-2 mt-3 md:px-0 sticky top-0 z-20">
+  <div className="bg-gray-50 px-3 py-2 mt-3 md:px-0 sticky top-0 z-20">
     <div
-      className="flex justify-center max-w-sm md:max-w-xl mx-auto rounded-lg border border-gray-400 h-11">
+      className="flex justify-center max-w-sm md:max-w-xl mx-auto rounded-lg border border-gray-300 h-11">
       {switch levelZero {
       | Some(levelZero) =>
         tabbedLevelSelector(

@@ -5,15 +5,18 @@ open CoursesStudents__Types
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CoursesStudents__TeamsList")
+let ts = I18n.t(~scope="shared")
+
 let levelInfo = (levelId, levels) =>
   <span
     className="inline-flex flex-col items-center rounded bg-orange-100 border border-orange-300 px-2 pt-2 pb-1">
-    <p className="text-xs font-semibold"> {"Level" |> str} </p>
+    <p className="text-xs font-semibold"> {ts("level") |> str} </p>
     <p className="font-bold">
       {levels
       |> ArrayUtils.unsafeFind(
         (l: Level.t) => l.id == levelId,
-        "Unable to find level with id: " ++ (levelId ++ "in CoursesStudents__TeamsList"),
+        "Unable to find level with id: "  ++ (levelId ++ "in CoursesStudents__TeamsList"),
       )
       |> Level.number
       |> string_of_int
@@ -59,7 +62,7 @@ let showStudent = (team, levels, teamCoaches) => {
     href={"/students/" ++ ((student |> TeamInfo.studentId) ++ "/report")}
     key={student |> TeamInfo.studentId}
     ariaLabel={"student: " ++ (student |> TeamInfo.studentName)}
-    className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+    className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
     <div className="flex flex-1 flex-col justify-center md:flex-row md:w-3/5">
       <div className="flex w-full items-start md:items-center p-3 md:px-4 md:py-5">
         {CoursesStudents__TeamCoaches.avatar(
@@ -96,7 +99,7 @@ let showStudent = (team, levels, teamCoaches) => {
       className="w-2/5 flex items-center justify-end md:justify-between p-3 md:p-4">
       <CoursesStudents__TeamCoaches
         title={<div className="mb-1 font-semibold text-gray-800 text-tiny uppercase">
-          {"Personal Coaches" |> str}
+          {tr("personal_coaches") |> str}
         </div>}
         className="hidden md:inline-block"
         coaches=teamCoaches
@@ -123,7 +126,7 @@ let showTeam = (team, levels, teamCoaches) =>
             (student |> TeamInfo.studentName) ++
             " in team " ++
             (team |> TeamInfo.name)}
-            className="flex items-center rounded-l-lg bg-white cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+            className="flex items-center rounded-l-lg bg-white cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
             <div className="flex w-full md:flex-1 p-3 md:px-4 md:py-5">
               {CoursesStudents__TeamCoaches.avatar(
                 student |> TeamInfo.studentAvatarUrl,
@@ -161,18 +164,18 @@ let showTeam = (team, levels, teamCoaches) =>
         |> React.array}
       </div>
       <div
-        className="flex w-full md:w-2/5 items-center bg-gray-200 md:bg-white border-l py-2 md:py-0 px-3 md:px-4">
+        className="flex w-full md:w-2/5 items-center bg-gray-50 md:bg-white border-l py-2 md:py-0 px-3 md:px-4">
         <div className="flex-1 pb-3 md:py-3 pr-3">
           <div>
             <p
               className="inline-block leading-tight font-semibold text-gray-800 text-tiny uppercase">
-              {"Team" |> str}
+              {ts("team") |> str}
             </p>
             <h3 className="text-sm font-semibold leading-snug"> {team |> TeamInfo.name |> str} </h3>
             {teamTags(team)}
             <CoursesStudents__TeamCoaches
               title={<div className="font-semibold text-gray-800 text-tiny uppercase pb-1 ">
-                {"Team Coaches" |> str}
+                {tr("team_coaches") |> str}
               </div>}
               className="hidden md:inline-block mt-6"
               coaches=teamCoaches
@@ -191,8 +194,8 @@ let make = (~levels, ~teams, ~teamCoaches) =>
   <div>
     {teams |> ArrayUtils.isEmpty
       ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
-          <h4 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
-            {"No teams to show" |> str}
+          <h4 className="py-4 mt-4 bg-gray-50 text-gray-800 font-semibold">
+            {tr("no_teams") |> str}
           </h4>
         </div>
       : teams

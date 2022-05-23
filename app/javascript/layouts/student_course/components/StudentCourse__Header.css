@@ -18,7 +18,7 @@
 
 .student-course__name-container {
   background: rgba(0, 0, 0, 0.3);
-  background: linear-gradient( to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
 }
 
 .student-course__name .dropdown__btn {
@@ -30,7 +30,7 @@
 }
 
 .student-course__nav-tab:not(.student-course__nav-tab--active):hover {
-  @apply bg-gray-200 text-primary-500;
+  @apply bg-gray-50 text-primary-500;
 }
 
 .student-course__nav-tab--active {

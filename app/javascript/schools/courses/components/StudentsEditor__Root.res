@@ -1,6 +1,7 @@
 open StudentsEditor__Types
 
 let t = I18n.t(~scope="components.StudentsEditor__Root")
+let ts = I18n.ts
 
 let str = React.string
 
@@ -39,7 +40,7 @@ type action =
 
 let handleTeamUpResponse = (send, _json) => {
   send(RefreshData([]))
-  Notification.success("Success!", "Teams updated successfully")
+  Notification.success(ts("notifications.success"), t("teams_updated_success"))
 }
 
 let handleErrorCB = () => ()
@@ -244,14 +245,14 @@ let make = (
         />
       </SchoolAdmin__EditorDrawer2>
     }}
-    <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
+    <div className="px-6 pb-4 flex-1 bg-gray-50 relative overflow-y-scroll">
       <div className="max-w-3xl w-full mx-auto flex justify-between items-center border-b mt-4">
         <ul className="flex font-semibold text-sm">
           <li className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
             <span> {t("button_all_students") |> str} </span>
           </li>
           <li
-            className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-200 hover:text-gray-900 focus-within:outline-none focus-within:bg-gray-200 focus-within:text-gray-900 focus-within:ring-2 focus-within:ring-indigo-500">
+            className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-50 hover:text-gray-900 focus-within:outline-none focus-within:bg-gray-50 focus-within:text-gray-900 focus-within:ring-2 focus-within:ring-focusColor-500">
             <a
               className="block px-3 py-3 md:py-2 text-gray-800 focus:outline-none"
               href={"/school/courses/" ++ (courseId ++ "/inactive_students")}>
@@ -276,7 +277,7 @@ let make = (
               </button>
             </div>}
       </div>
-      <div className="bg-gray-100 sticky top-0 py-3">
+      <div className="bg-gray-50 sticky top-0 py-3">
         <div className="border rounded-lg mx-auto max-w-3xl bg-white ">
           <div>
             <div className="flex w-full items-start p-4">
@@ -287,11 +288,12 @@ let make = (
             </div>
             {state.selectedStudents |> ArrayUtils.isEmpty
               ? React.null
-              : <div className="flex justify-between bg-gray-100 px-4 pb-3 pt-1 rounded-b-lg">
+              : <div className="flex justify-between bg-gray-50 px-4 pb-3 pt-1 rounded-b-lg">
                   <div className="flex flex-wrap">
-                    {state.selectedStudents |> Array.map(selectedStudent =>
+                    {state.selectedStudents
+                    |> Array.map(selectedStudent =>
                       <div
-                        className="flex items-center bg-white border border-gray-400 rounded-full mr-2 mt-2 overflow-hidden">
+                        className="flex items-center bg-white border border-gray-300 rounded-full mr-2 mt-2 overflow-hidden">
                         {switch selectedStudent |> SelectedStudent.avatarUrl {
                         | Some(avatarUrl) =>
                           <img
@@ -310,28 +312,29 @@ let make = (
                           </span>
                           <button
                             ariaLabel={"Remove " ++ (selectedStudent |> SelectedStudent.name)}
-                            className="flex items-center h-full text-xs text-red-700 px-2 py-px border-l focus:outline-none bg-gray-100 hover:bg-red-700 hover:text-white focus:bg-red-700 focus:text-white "
+                            className="flex items-center h-full text-xs text-red-700 px-2 py-px border-l focus:outline-none bg-gray-50 hover:bg-red-700 hover:text-white focus:bg-red-700 focus:text-white "
                             onClick={_ =>
                               deselectStudent(send, selectedStudent |> SelectedStudent.id)}>
                             <Icon className="if i-times-regular" />
                           </button>
                         </div>
                       </div>
-                    ) |> React.array}
+                    )
+                    |> React.array}
                   </div>
                   <div className="pt-1">
                     {state.selectedStudents |> SelectedStudent.isGroupable
                       ? <button
                           onClick={_e => teamUp(state.selectedStudents, handleTeamUpResponse(send))}
                           className="btn btn-small btn-primary">
-                          {"Group as Team" |> str}
+                          {t("group_as_team") |> str}
                         </button>
                       : React.null}
                     {state.selectedStudents |> SelectedStudent.isMoveOutable
                       ? <button
                           onClick={_e => teamUp(state.selectedStudents, handleTeamUpResponse(send))}
                           className="btn btn-small btn-danger">
-                          {"Move out from Team" |> str}
+                          {t("move_out_team") |> str}
                         </button>
                       : React.null}
                   </div>

@@ -1,5 +1,5 @@
 <% content_for(:head) do %>
-  <title><%= current_school.name %> | Coaches</title>
+  <title><%= current_school.name %> | <%= t(".title") %></title>
   <%= stylesheet_pack_tag 'SchoolsCoachesSchoolIndexPack', media: 'all' %>
 <% end %>
 
@@ -9,4 +9,4 @@
 
 <% @presenter = Schools::FacultyModule::SchoolIndexPresenter.new(self, @school) %>
 
-<div id="sa-coaches-panel" class=" flex flex-1 h-full bg-gray-200" data-props="<%= @presenter.react_props.to_json %>"></div>
+<div id="sa-coaches-panel" class=" flex flex-1 h-full bg-gray-50" data-props="<%= @presenter.react_props.to_json %>"></div>

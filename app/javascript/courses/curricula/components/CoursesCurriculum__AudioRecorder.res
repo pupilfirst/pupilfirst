@@ -8,7 +8,7 @@ type audioRecorderControls = {
   id: option<string>,
 }
 let str = React.string
-@bs.module("./CoursesCurriculum__AudioNavigator")
+@module("./CoursesCurriculum__AudioNavigator")
 external audioRecorder: (string, bool => unit) => audioRecorderControls = "audioRecorder"
 let t = I18n.t(~scope="components.CoursesCurriculum__AudioRecorder")
 
@@ -26,7 +26,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
     {audioRecorder.recording
       ? <div className="flex flex-col md:flex-row pointer-cursor pt-2 md:items-center">
           <button
-            className="flex items-center bg-gray-200 border rounded-full hover:bg-gray-300"
+            className="flex items-center bg-gray-50 border rounded-full hover:bg-gray-300"
             onClick={_e => audioRecorder.stopRecording()}>
             <div
               className="flex flex-shrink-0 items-center justify-center bg-red-600 shadow-md rounded-full h-10 w-10">
@@ -45,7 +45,7 @@ let make = (~attachingCB, ~attachFileCB, ~preview) => {
             className="flex items-center bg-red-100 border rounded-full hover:bg-red-200"
             onClick={_e =>
               preview
-                ? Notification.notice("Preview Mode", "You cannot record audio.")
+                ? Notification.notice(t("preview_mode"), t("cannot_record"))
                 : audioRecorder.startRecording()}>
             <div
               className="flex flex-shrink-0 items-center justify-center bg-white shadow-md rounded-full h-10 w-10">

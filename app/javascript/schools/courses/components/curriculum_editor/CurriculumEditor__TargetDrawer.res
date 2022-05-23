@@ -2,6 +2,8 @@
 
 let str = React.string
 
+let t = I18n.t(~scope="components.CurriculumEditor__TargetDrawer")
+
 open CurriculumEditor__Types
 
 type page =
@@ -11,7 +13,7 @@ type page =
 
 let confirmDirtyAction = (dirty, action) =>
   if dirty {
-    WindowUtils.confirm("There are unsaved changes. Are you sure you want to discard them?", () =>
+    WindowUtils.confirm(t("unsaved_confirm"), () =>
       action()
     )
   } else {
@@ -19,12 +21,12 @@ let confirmDirtyAction = (dirty, action) =>
   }
 
 let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
-  let defaultClasses = "curriculum-editor__target-drawer-tab cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+  let defaultClasses = "curriculum-editor__target-drawer-tab cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
 
   let (title, pathSuffix, iconClass) = switch page {
-  | Content => ("Content", "content", "fa-pen-nib")
-  | Details => ("Details", "details", "fa-list-alt")
-  | Versions => ("Versions", "versions", "fa-code-branch")
+  | Content => (t("content"), "content", "fa-pen-nib")
+  | Details => (t("details"), "details", "fa-list-alt")
+  | Versions => (t("versions"), "versions", "fa-code-branch")
   }
 
   let path = pathPrefix ++ pathSuffix
@@ -35,7 +37,7 @@ let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
     : defaultClasses
 
   let confirm = dirty
-    ? Some("There are unsaved changes. Are you sure you want to discard them?")
+    ? Some(t("unsaved_confirm"))
     : None
 
   <Link href=path ?confirm onClick={_e => setDirty(_ => false)} className=classes>
@@ -116,14 +118,14 @@ let make = (
     | "versions" => (<CurriculumEditor__VersionsEditor targetId />, Versions)
     | otherPage =>
       Rollbar.warning("Unexpected page requested for target editor drawer: " ++ otherPage)
-      (<div> {"Unexpected error. Please reload the page." |> str} </div>, Content)
+      (<div> {t("unexpected_error") |> str} </div>, Content)
     }
 
     <SchoolAdmin__EditorDrawer
       size=SchoolAdmin__EditorDrawer.Large
       closeDrawerCB={() => confirmDirtyAction(dirty, () => closeDrawer(course))}>
       <div>
-        <div className="bg-gray-200 pt-6">
+        <div className="bg-gray-50 pt-6">
           <div className="max-w-3xl px-3 mx-auto"> <h3> {target |> Target.title |> str} </h3> </div>
           <div className="flex w-full max-w-3xl mx-auto px-3 text-sm -mb-px mt-2">
             {tab(Content, selectedPage, pathPrefix, dirty, setDirty)}
@@ -132,7 +134,7 @@ let make = (
           </div>
         </div>
         <div className="bg-white">
-          <div className="mx-auto border-t border-gray-400"> innerComponent </div>
+          <div className="mx-auto border-t border-gray-300"> innerComponent </div>
         </div>
       </div>
     </SchoolAdmin__EditorDrawer>

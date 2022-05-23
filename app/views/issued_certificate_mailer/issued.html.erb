@@ -7,21 +7,20 @@
 <% content_for(:title_button_link, link) %>
 
 <% content_for :salutation do %>
-  Hello <%= user.name %>,
+  <%= t("shared.salutation_name", name: user.name) %>
 <% end %>
 
 <% content_for :body do %>
   <p>
-    <b>Congratulations!</b>
+    <b><%= t("mailers.issued_certificate.issued.body.congratulations") %></b>
   </p>
 
   <p>
-    You've been awarded a certificate for completing the <strong><%= course.name %></strong> course.
+    <%= t("mailers.issued_certificate.issued.body.awarded_certificate_html", course_name: course.name) %>
   </p>
 
   <p>
-    The certificate was issued on <%= @issued_certificate.created_at.strftime('%b %e, %l:%M %p') %> and can be viewed
-    or printed by <%= link_to "visiting the certificate's public link", link %>.
+    <%= t("mailers.issued_certificate.issued.body.issued_on_html", issued_certificate: @issued_certificate.created_at.strftime('%b %e, %l:%M %p'), link_to: link_to(t("mailers.issued_certificate.issued.body.link_to"), link)) %>
   </p>
 
   <%= render 'mailers/link_fallback', url: link %>

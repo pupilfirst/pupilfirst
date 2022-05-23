@@ -5,6 +5,12 @@ class CourseExportMailer < SchoolMailer
   def prepared(course_export)
     @school = course_export.course.school
     @course_export = course_export
-    simple_mail(course_export.user.email, "Export of #{course_export.course.name} course is ready for download")
+    simple_mail(
+      course_export.user.email,
+      I18n.t(
+        'mailers.course_export.prepared.subject',
+        course_export: course_export.course.name
+      )
+    )
   end
 end

@@ -11,7 +11,7 @@ module Mutations
 
       success = if mutator.valid?
         mutator.delete_certificate
-        mutator.notify(:success, I18n.t('shared.done_exclamation'), I18n.t('mutations.delete_certificate.success_notification'))
+        mutator.notify(:success, I18n.t('shared.notifications.done_exclamation'), I18n.t('mutations.delete_certificate.success_notification'))
         true
       else
         mutator.notify_errors

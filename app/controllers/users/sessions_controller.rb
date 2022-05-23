@@ -11,7 +11,7 @@ module Users
       store_location_for(:user, params[:referrer]) if params[:referrer].present?
 
       if current_user.present?
-        flash[:notice] = 'You are already signed in.'
+        flash[:notice] = t('.already_signed')
         redirect_to after_sign_in_path_for(current_user)
       end
     end
@@ -54,8 +54,7 @@ module Users
 
         redirect_to after_sign_in_path_for(user)
       else
-        flash[:error] =
-          'That one-time link has expired, or is invalid. Please try signing in again.'
+        flash[:error] = t('.link_expired')
         redirect_to new_user_session_path
       end
     end
@@ -66,8 +65,7 @@ module Users
       if user.present?
         @token = params[:token]
       else
-        flash[:error] =
-          'That one-time link has already been used, or is invalid. Please try resetting your password again.'
+        flash[:error] = t('.link_used')
         redirect_to new_user_session_path
       end
     end
@@ -106,7 +104,8 @@ module Users
 
       @form&.current_school = current_school
 
-      recaptcha_success = recaptcha_success?(@form, action: 'user_password_login')
+      recaptcha_success =
+        recaptcha_success?(@form, action: 'user_password_login')
 
       unless recaptcha_success
         redirect_to sign_in_with_email_path(visible_recaptcha: 1)
@@ -125,7 +124,7 @@ module Users
     # GET /users/sign_in_with_email
     def sign_in_with_email
       if current_user.present?
-        flash[:notice] = 'You are already signed in.'
+        flash[:notice] = t('.already_signed')
         redirect_to after_sign_in_path_for(current_user)
         return
       end

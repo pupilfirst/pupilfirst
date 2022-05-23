@@ -34,7 +34,7 @@ let make = (
     <label className="block tracking-wide text-gray-800 text-xs font-semibold" htmlFor=id>
       {labelText |> str}
     </label>
-    <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+    <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
       <input
         autoFocus
         disabled

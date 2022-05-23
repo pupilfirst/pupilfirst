@@ -11,8 +11,8 @@ let str = React.string
 let t = I18n.t(~scope="components.StudentsEditor__UpdateForm")
 
 let selectedTabClasses = selected =>
-  "flex items-center justify-center w-1/2 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 " ++ (
-    selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-100"
+  "flex items-center justify-center w-1/2 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-300 text-gray-600 cursor-pointer hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
+    selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-50"
   )
 
 let tabItemsClasses = selected => selected ? "" : "hidden"
@@ -31,7 +31,7 @@ let make = (
 ) => {
   let (view, setView) = React.useState(() => DetailsTab)
   <div className="mx-auto bg-white">
-    <div className="pt-6 border-b border-gray-400 bg-gray-100">
+    <div className="pt-6 border-b border-gray-300 bg-gray-50">
       <div className="max-w-2xl mx-auto">
         <div className="flex">
           {switch student |> Student.avatarUrl {

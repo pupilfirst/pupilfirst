@@ -34,25 +34,6 @@ let reducer = (state, action) =>
   | FailSaving => {...state, saving: None}
   }
 
-let controlIcon = (~icon, ~title, ~color, ~handler) => {
-  let buttonClasses = switch color {
-  | #Grey => "hover:bg-gray-200 hover:text-primary-500 focus:bg-gray-200 focus:text-primary-500"
-  | #Green => "bg-green-600 hover:bg-green-700 focus:bg-green-700 text-white rounded-b"
-  | #Red => "hover:text-red-500 focus:text-red-500"
-  }
-
-  handler == None
-    ? React.null
-    : <button
-        title
-        ariaLabel={title}
-        disabled={handler == None}
-        className={"p-2 focus:outline-none " ++ buttonClasses}
-        onClick=?handler>
-        <i className={"fas fa-fw " ++ icon} />
-      </button>
-}
-
 module DeleteContentBlockMutation = %graphql(`
     mutation DeleteContentBlockMutation($id: ID!) {
       deleteContentBlock(id: $id) {
@@ -100,6 +81,25 @@ module UpdateImageBlockMutation = %graphql(`
       }
     }
   `)
+
+let controlIcon = (~icon, ~title, ~color, ~handler) => {
+  let buttonClasses = switch color {
+  | #Grey => "hover:bg-gray-50 hover:text-primary-500 focus:bg-gray-50 focus:text-primary-500"
+  | #Green => "bg-green-600 hover:bg-green-700 focus:bg-green-700 text-white rounded-b"
+  | #Red => "hover:text-red-500 focus:text-red-500"
+  }
+
+  handler == None
+    ? React.null
+    : <button
+        title
+        ariaLabel={title}
+        disabled={handler == None}
+        className={"p-2 focus:outline-none " ++ buttonClasses}
+        onClick=?handler>
+        <i className={"fas fa-fw " ++ icon} />
+      </button>
+}
 
 let onMove = (contentBlock, cb, direction, _event) => {
   // We don't actually handle the response for this query.
@@ -282,7 +282,7 @@ let make = (
         )}
       </div>
       <div
-        className="pl-2 flex-shrink-0 border-transparent bg-gray-100 border rounded flex flex-col text-xs -mr-10 sticky top-0">
+        className="pl-2 flex-shrink-0 border-transparent bg-gray-50 border rounded flex flex-col text-xs -mr-10 sticky top-0">
         {controlIcon(
           ~icon="fa-arrow-up",
           ~title=t("move_up"),

@@ -213,7 +213,7 @@ let make = (
   let saveDisabled = state.name |> String.trim == "" || !state.dirty
 
   <div className="mx-8 pt-8">
-    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+    <h5 className="uppercase text-center border-b border-gray-300 pb-2">
       {t("community_editor") |> str}
     </h5>
     <DisablingCover disabled=state.saving>
@@ -233,7 +233,7 @@ let make = (
               send(UpdateName(name))
             }}
             id="communities-editor__name"
-            className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-400 rounded py-2 px-4 text-sm hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+            className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-300 rounded py-2 px-4 text-sm hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           />
           <School__InputGroupError
             message={t("community_editor_error")}
@@ -277,7 +277,7 @@ let make = (
             onDeselect={onDeselectCourse(send)}
           />
         </div>
-        <div className="mt-4 px-6 py-2 bg-gray-100 border rounded">
+        <div className="mt-4 px-6 py-2 bg-gray-50 border rounded">
           <div className="flex justify-between items-center mb-4">
             <label
               className="inline-block tracking-wide text-gray-700 text-xs font-semibold uppercase">
@@ -287,7 +287,7 @@ let make = (
             | Some(_community) =>
               <button
                 onClick={_ => showCategoryEditorCB()}
-                className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg border border-gray-400 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
+                className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-50 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg border border-gray-300 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
                 <i className="fas fa-pencil-alt" />
                 <span className="text-xs font-semibold ml-2">
                   {(

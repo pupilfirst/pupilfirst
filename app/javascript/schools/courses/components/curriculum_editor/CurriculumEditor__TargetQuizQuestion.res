@@ -47,7 +47,7 @@ let make = (
     quizQuestion |> CurriculumEditor__QuizQuestion.answerOptions |> Array.length > 2
   let questionId = "quiz-question-" ++ questionNumber
 
-  <div className="quiz-maker__question-container p-4 bg-gray-100 rounded-lg border mt-4">
+  <div className="quiz-maker__question-container p-4 bg-gray-50 rounded-lg border mt-4">
     <div className="flex items-center justify-between">
       <label
         className="block tracking-wide uppercase text-gray-800 text-sm font-bold"
@@ -104,7 +104,7 @@ let make = (
           <i className="fas fa-plus" />
         </div>
         <p
-          className="quiz-maker__add-answer-option-button flex items-center flex-1 h-11 text-gray-900 bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg ml-12 py-3 px-4 text-xs">
+          className="quiz-maker__add-answer-option-button flex items-center flex-1 h-11 text-gray-900 bg-gray-50 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md rounded-lg ml-12 py-3 px-4 text-xs">
           {t("add_another_answer") |> str}
         </p>
       </button>

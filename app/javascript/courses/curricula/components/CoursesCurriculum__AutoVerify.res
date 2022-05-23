@@ -68,7 +68,7 @@ let previewLinkToComplete = link =>
   <a
     href=link
     target="_blank"
-    className="block text-primary-500 w-full text-center bg-gray-200 hover:bg-gray-300 hover:text-primary-600 p-4 rounded text-lg font-bold">
+    className="block text-primary-500 w-full text-center bg-gray-50 hover:bg-gray-300 hover:text-primary-600 p-4 rounded text-lg font-bold">
     <span> <FaIcon classes="fas fa-external-link-alt mr-2" /> {tr("visit_link") |> str} </span>
   </a>
 

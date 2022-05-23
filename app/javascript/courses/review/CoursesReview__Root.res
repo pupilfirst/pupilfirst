@@ -720,7 +720,7 @@ let loadFilters = (send, courseId, state) => {
 }
 
 let shortCutClasses = selected =>
-  "cursor-pointer flex justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-200 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-200 focus:ring-indigo-500 md:focus:border-b-none md:focus:rounded-t-md " ++ (
+  "cursor-pointer flex justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++ (
     selected
       ? "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500"
       : ""
@@ -772,7 +772,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
     <div role="main" ariaLabel="Review" className="flex-1 flex flex-col">
       <div className="hidden md:block h-16" />
       <div className="course-review-root__submissions-list-container">
-        <div className="bg-gray-100">
+        <div className="bg-gray-50">
           <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
             <div
               className="flex items-center justify-between bg-white md:bg-transparent px-4 py-2 md:pt-4 border-b md:border-none">
@@ -830,7 +830,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
             </div>
           </div>
         </div>
-        <div className="md:sticky md:top-0 bg-gray-100">
+        <div className="md:sticky md:top-0 bg-gray-50">
           <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
             <div role="form" className="md:flex w-full items-start pt-4 pb-3 px-4 md:pt-6">
               <div className="flex-1">

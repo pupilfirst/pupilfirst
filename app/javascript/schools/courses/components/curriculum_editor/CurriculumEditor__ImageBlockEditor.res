@@ -1,4 +1,4 @@
-%bs.raw(`require("./CurriculumEditor__ImageBlockEditor.css")`)
+%raw(`require("./CurriculumEditor__ImageBlockEditor.css")`)
 
 let str = React.string
 let t = I18n.t(~scope="components.CurriculumEditor__ImageBlockEditor")
@@ -70,7 +70,7 @@ let make = (~url, ~caption, ~contentBlock, ~updateContentBlockCB, ~width) => {
 
   <div className="image-block-editor__container">
     <div
-      className="content-block__content text-base bg-gray-200 flex justify-center items-center rounded-t-lg">
+      className="content-block__content text-base bg-gray-50 flex justify-center items-center rounded-t-lg">
       <div className="w-full">
         <div className="rounded-t-lg bg-white relative">
           {imageResizePanel(width, contentBlock, updateContentBlockCB)}
@@ -89,7 +89,7 @@ let make = (~url, ~caption, ~contentBlock, ~updateContentBlockCB, ~width) => {
         <span className="text-sm ml-1"> {ts("optional_braces") |> str} </span>
         <input
           id=captionInputId
-          className="mt-1 appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+          className="mt-1 appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-300 leading-tight focus:outline-none focus:bg-white focus:border-gray"
           onChange={onChangeCaption(contentBlock, updateContentBlockCB)}
           maxLength=250
           type_="text"

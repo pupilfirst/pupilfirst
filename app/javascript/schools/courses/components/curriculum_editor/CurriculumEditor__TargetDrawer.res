@@ -21,7 +21,7 @@ let confirmDirtyAction = (dirty, action) =>
   }
 
 let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
-  let defaultClasses = "curriculum-editor__target-drawer-tab cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+  let defaultClasses = "curriculum-editor__target-drawer-tab cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
 
   let (title, pathSuffix, iconClass) = switch page {
   | Content => (t("content"), "content", "fa-pen-nib")
@@ -125,7 +125,7 @@ let make = (
       size=SchoolAdmin__EditorDrawer.Large
       closeDrawerCB={() => confirmDirtyAction(dirty, () => closeDrawer(course))}>
       <div>
-        <div className="bg-gray-200 pt-6">
+        <div className="bg-gray-50 pt-6">
           <div className="max-w-3xl px-3 mx-auto"> <h3> {target |> Target.title |> str} </h3> </div>
           <div className="flex w-full max-w-3xl mx-auto px-3 text-sm -mb-px mt-2">
             {tab(Content, selectedPage, pathPrefix, dirty, setDirty)}
@@ -134,7 +134,7 @@ let make = (
           </div>
         </div>
         <div className="bg-white">
-          <div className="mx-auto border-t border-gray-400"> innerComponent </div>
+          <div className="mx-auto border-t border-gray-300"> innerComponent </div>
         </div>
       </div>
     </SchoolAdmin__EditorDrawer>

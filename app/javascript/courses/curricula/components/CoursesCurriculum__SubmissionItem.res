@@ -58,7 +58,7 @@ let showLink = (value, id, updateResultCB) =>
       value
       onChange={e => updateResultCB(ChecklistItem.Link(ReactEvent.Form.target(e)["value"]))}
       placeholder=tr("link_placeholder")
-      className="cursor-pointer truncate h-10 border border-gray-400 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
+      className="cursor-pointer truncate h-10 border border-gray-300 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
     />
     {showError(tr("link_error"), UrlUtils.isInvalid(true, value))}
   </div>
@@ -72,7 +72,7 @@ let showShortText = (value, id, updateResultCB) =>
       maxLength=250
       onChange={e => updateResultCB(ChecklistItem.ShortText(ReactEvent.Form.target(e)["value"]))}
       placeholder=tr("short_text_placeholder")
-      className="cursor-pointer truncate h-10 border border-gray-400 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
+      className="cursor-pointer truncate h-10 border border-gray-300 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
     />
     {showError(
       tr("short_text_error"),
@@ -160,9 +160,9 @@ let showFiles = (files, preview, id, attachingCB, updateResultCB, index) =>
           target="_blank"
           className="w-1/3 pr-2 pb-2">
           <div
-            className="flex justify-between border overflow-hidden rounded border-pink-400 bg-white text-pink-700 hover:text-pink-700">
+            className="flex justify-between border overflow-hidden rounded border-red-300 bg-white text-red-600 hover:text-red-600">
             <div className="flex">
-              <span className="flex w-10 justify-center items-center p-2 bg-pink-700 text-white">
+              <span className="flex w-10 justify-center items-center p-2 bg-red-600 text-white">
                 <i className="far fa-file" />
               </span>
               <span
@@ -172,7 +172,7 @@ let showFiles = (files, preview, id, attachingCB, updateResultCB, index) =>
             </div>
             <button
               title={tr("remove") ++ (file |> ChecklistItem.filename)}
-              className="flex w-8 justify-center items-center p-2 cursor-pointer bg-gray-100 border-l text-gray-700 hover:bg-gray-200 hover:text-gray-900"
+              className="flex w-8 justify-center items-center p-2 cursor-pointer bg-gray-50 border-l text-gray-700 hover:bg-gray-50 hover:text-gray-900"
               onClick={_ => removeFile(updateResultCB, files, file |> ChecklistItem.fileId)}>
               <PfIcon className="if i-times-regular text-sm" />
             </button>

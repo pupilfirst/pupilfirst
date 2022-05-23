@@ -248,7 +248,7 @@ let topicCategory = (topicCategories, topicCategoryId) =>
 let categoryDropdownSelected = topicCategory =>
   <div
     ariaLabel=t("selected_category")
-    className="flex justify-between text-sm bg-white border border-gray-400 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
+    className="flex justify-between text-sm bg-white border border-gray-300 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
     {switch topicCategory {
     | Some(topicCategory) =>
       let (color, _) = TopicCategory.color(topicCategory)
@@ -337,7 +337,7 @@ let make = (
     topicCategory: topicCategory(topicCategories, Topic.topicCategoryId(topic)),
   })
 
-  <div className="bg-gray-100">
+  <div className="bg-gray-50">
     <div className="max-w-4xl w-full mt-5 pl-4 lg:pl-0 lg:mx-auto">
       {communityLink(community)}
     </div>
@@ -370,12 +370,12 @@ let make = (
           {state.showTopicEditor
             ? <DisablingCover disabled=state.savingTopic>
                 <div
-                  className="flex flex-col lg:ml-14 bg-gray-100 p-2 rounded border border-primary-200">
+                  className="flex flex-col lg:ml-14 bg-gray-50 p-2 rounded border border-primary-200">
                   <input
                     onChange={event =>
                       send(UpdateTopicTitle(ReactEvent.Form.target(event)["value"]))}
                     value=state.topicTitle
-                    className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-300 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     type_="text"
                   />
                   <div className="flex flex-col md:flex-row md:justify-between md:items-end">
@@ -416,7 +416,7 @@ let make = (
                     {moderator || isTopicCreator(firstPost, currentUserId)
                       ? <button
                           onClick={_ => send(ShowTopicEditor(true))}
-                          className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3">
+                          className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3">
                           <i className="far fa-edit" />
                           <span className="hidden md:inline-block ml-1">
                             {t("edit_topic_button") |> str}
@@ -433,7 +433,7 @@ let make = (
                               isLocked
                                 ? unlockTopic(topicId, send)
                                 : lockTopic(topicId, currentUserId, send)}
-                            className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-2">
+                            className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-2">
                             <PfIcon className={"fa fa-" ++ (isLocked ? "unlock" : "lock")} />
                             <span className="hidden md:inline-block ml-1">
                               {(

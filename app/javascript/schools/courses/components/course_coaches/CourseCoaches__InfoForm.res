@@ -73,7 +73,7 @@ let make = (~courseId, ~coach) => {
     None
   }, [courseId])
   <div className="mx-auto">
-    <div className="py-6 border-b border-gray-400 bg-gray-100">
+    <div className="py-6 border-b border-gray-300 bg-gray-50">
       <div className="max-w-2xl mx-auto">
         <div className="flex">
           {switch coach |> CourseCoach.avatarUrl {
@@ -125,7 +125,7 @@ let make = (~courseId, ~coach) => {
         : <div>
             {state.teams |> ArrayUtils.isEmpty
               ? <div
-                  className="border border-gray-400 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
+                  className="border border-gray-300 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
                   {tr("no_students_assigned") |> str}
                 </div>
               : state.teams

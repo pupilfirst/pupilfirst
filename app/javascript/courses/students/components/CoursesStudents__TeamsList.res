@@ -62,7 +62,7 @@ let showStudent = (team, levels, teamCoaches) => {
     href={"/students/" ++ ((student |> TeamInfo.studentId) ++ "/report")}
     key={student |> TeamInfo.studentId}
     ariaLabel={"student: " ++ (student |> TeamInfo.studentName)}
-    className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+    className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
     <div className="flex flex-1 flex-col justify-center md:flex-row md:w-3/5">
       <div className="flex w-full items-start md:items-center p-3 md:px-4 md:py-5">
         {CoursesStudents__TeamCoaches.avatar(
@@ -126,7 +126,7 @@ let showTeam = (team, levels, teamCoaches) =>
             (student |> TeamInfo.studentName) ++
             " in team " ++
             (team |> TeamInfo.name)}
-            className="flex items-center rounded-l-lg bg-white cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+            className="flex items-center rounded-l-lg bg-white cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
             <div className="flex w-full md:flex-1 p-3 md:px-4 md:py-5">
               {CoursesStudents__TeamCoaches.avatar(
                 student |> TeamInfo.studentAvatarUrl,
@@ -164,7 +164,7 @@ let showTeam = (team, levels, teamCoaches) =>
         |> React.array}
       </div>
       <div
-        className="flex w-full md:w-2/5 items-center bg-gray-200 md:bg-white border-l py-2 md:py-0 px-3 md:px-4">
+        className="flex w-full md:w-2/5 items-center bg-gray-50 md:bg-white border-l py-2 md:py-0 px-3 md:px-4">
         <div className="flex-1 pb-3 md:py-3 pr-3">
           <div>
             <p
@@ -194,7 +194,7 @@ let make = (~levels, ~teams, ~teamCoaches) =>
   <div>
     {teams |> ArrayUtils.isEmpty
       ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
-          <h4 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
+          <h4 className="py-4 mt-4 bg-gray-50 text-gray-800 font-semibold">
             {tr("no_teams") |> str}
           </h4>
         </div>

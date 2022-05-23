@@ -208,7 +208,7 @@ let suggestions = state => {
             ("/" ++ (suggestion |> TopicSuggestion.title |> StringUtils.parameterize)))}
             target="_blank"
             key={suggestion |> TopicSuggestion.id}
-            className="flex w-full items-center justify-between mt-1 p-3 rounded cursor-pointer border bg-gray-100 hover:text-primary-500 hover:bg-gray-200">
+            className="flex w-full items-center justify-between mt-1 p-3 rounded cursor-pointer border bg-gray-50 hover:text-primary-500 hover:bg-gray-50">
             <div className="flex flex-col min-w-0">
               <h5
                 title={suggestion |> TopicSuggestion.title}
@@ -260,7 +260,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
   let (state, send) = React.useReducer(reducer, initialState)
 
   <DisablingCover disabled=state.saving>
-    <div className="bg-gray-100">
+    <div className="bg-gray-50">
       <div className="flex-1 flex flex-col">
         <div className="px-3 lg:px-0">
           <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
@@ -301,7 +301,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                     id="title"
                     tabIndex=1
                     value=state.title
-                    className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-300 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     onChange={event => {
                       let newTitle = ReactEvent.Form.target(event)["value"]
                       updateTitleAndSearch(state, send, communityId, newTitle)
@@ -322,7 +322,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                       | Some(category) => TopicCategory.id(category)
                       | None => ""
                       }}
-                      className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-300 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       onChange={handleSelectTopicCategory(send, topicCategories)}>
                       {topicCategories
                       |> Array.map(category =>

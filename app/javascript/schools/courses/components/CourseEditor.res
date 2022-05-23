@@ -161,7 +161,7 @@ let courseLink = (href, title, icon) =>
   <a
     key=href
     href
-    className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 focus:outline-none focus:text-primary-500 focus:bg-gray-200 whitespace-nowrap">
+    className="cursor-pointer block p-3 text-sm font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 whitespace-nowrap">
     <i className=icon /> <span className="font-semibold ml-2"> {title->str} </span>
   </a>
 
@@ -339,7 +339,7 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
 
 let dropdownSelected =
   <button
-    className="dropdown__btn appearance-none flex bg-white border hover:bg-primary-100 hover:text-primary-500 items-center relative justify-between focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-indigo-500 font-semibold text-sm px-3 py-2 rounded w-full">
+    className="dropdown__btn appearance-none flex bg-white border hover:bg-primary-100 hover:text-primary-500 items-center relative justify-between focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500 font-semibold text-sm px-3 py-2 rounded w-full">
     <span> {str(t("quick_links"))} </span>
     <i className="fas fa-chevron-down text-xs ml-3 font-semibold" />
   </button>
@@ -378,7 +378,7 @@ let showCourse = course => {
                 ariaLabel={t("view_public_page") ++ " " ++ Course.name(course)}
                 href={"/courses/" ++ Course.id(course)}
                 target="_blank"
-                className="inline-flex items-center underline rounded p-1 text-sm font-semibold cursor-pointer text-gray-800 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                className="inline-flex items-center underline rounded p-1 text-sm font-semibold cursor-pointer text-gray-800 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 <Icon className="if i-external-link-solid mr-2" />
                 <span> {t("view_public_page")->str} </span>
               </a>
@@ -393,12 +393,12 @@ let showCourse = course => {
         <div className="grid grid-cols-5 gap-4 p-4">
           <button
             title={ts("edit") ++ " " ++ Course.name(course)}
-            className="col-span-3 btn btn-default px-4 py-2 bg-gray-200 text-primary-500 rounded-lg text-sm cursor-pointer"
+            className="col-span-3 btn btn-default px-4 py-2 bg-primary-50 text-primary-500 rounded text-sm cursor-pointer"
             onClick={_ =>
               RescriptReactRouter.push("/school/courses/" ++ Course.id(course) ++ "/details")}>
             <div>
               <FaIcon classes="far fa-edit mr-3" />
-              <span className="text-black font-semibold"> {str(t("edit_course_details"))} </span>
+              <span className="font-semibold"> {str(t("edit_course_details"))} </span>
             </div>
           </button>
           {ReactUtils.nullIf(
@@ -488,7 +488,7 @@ let make = () => {
     None
   }, (state.filter, state.reloadCourses))
 
-  <div className="flex flex-1 h-full bg-gray-200 overflow-y-scroll">
+  <div className="flex flex-1 h-full bg-gray-50 overflow-y-scroll">
     {switch (state.courses, editorAction) {
     | (Unloaded, _)
     | (_, Hidden) => React.null
@@ -521,7 +521,7 @@ let make = () => {
     <div className="flex-1 flex flex-col">
       <div className="items-center justify-between max-w-4xl mx-auto mt-8 w-full px-10">
         <button
-          className="w-full flex items-center justify-center relative bg-white border-dashed text-primary-500 border-2 border-gray-400 hover:bg-gray-100 hover:text-primary-600 hover:shadow-md hover:border-primary-300 focus:outline-none focus:bg-gray-100 focus:text-primary-600 focus:shadow-md focus:border-primary-300 p-6 rounded-lg cursor-pointer"
+          className="w-full flex items-center justify-center relative bg-white border-dashed text-primary-500 border-2 border-primary-300  hover:text-primary-600 hover:shadow-md hover:border-primary-300 focus:outline-none focus:bg-gray-50 focus:text-primary-600 focus:shadow-md focus:border-primary-300 p-6 rounded-lg cursor-pointer"
           onClick={_ => RescriptReactRouter.push("/school/courses/new")}>
           <i className="fas fa-plus-circle text-lg" />
           <span className="font-semibold ml-2"> {str(t("add_new_course"))} </span>

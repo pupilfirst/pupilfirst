@@ -150,13 +150,13 @@ let replyToUserInfo = user => {
     {switch avatarUrl {
     | Some(avatarUrl) =>
       <img
-        className="w-6 h-6 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
+        className="w-6 h-6 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
         src=avatarUrl
       />
     | None =>
       <Avatar
         name
-        className="w-6 h-6 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 object-cover"
+        className="w-6 h-6 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
       />
     }}
     <span className="text-xs font-semibold ml-2"> {name |> str} </span>
@@ -208,12 +208,12 @@ let make = (
           )
           ->Belt.Option.mapWithDefault(React.null, reply =>
             <div
-              className="topics-post-editor__reply-to-preview max-w-md rounded border border-primary-200 p-3 bg-gray-200 mb-3 overflow-hidden">
+              className="topics-post-editor__reply-to-preview max-w-md rounded border border-primary-200 p-3 bg-gray-50 mb-3 overflow-hidden">
               <div className="flex justify-between">
                 {replyToUserInfo(reply |> Post.user(users))}
                 <div
                   onClick={_ => removeReplyToPostCB |> OptionUtils.mapWithDefault(cb => cb(), ())}
-                  className="flex w-6 h-6 p-2 items-center justify-center cursor-pointer border border-gray-400 rounded bg-gray-200 hover:bg-gray-400">
+                  className="flex w-6 h-6 p-2 items-center justify-center cursor-pointer border border-gray-300 rounded bg-gray-50 hover:bg-gray-400">
                   <PfIcon className="if i-times-regular text-base" />
                 </div>
               </div>
@@ -239,7 +239,7 @@ let make = (
             {editing
               ? <input
                   id="edit-reason"
-                  className="mt-2 appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="mt-2 appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-300 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   onChange={event => {
                     let reason = ReactEvent.Form.target(event)["value"]
                     switch reason {

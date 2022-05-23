@@ -161,7 +161,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
     key="sc-images-editor__form"
     onSubmit={handleUpdateImages(send, updateImagesCB)}>
     <input name="authenticity_token" type_="hidden" value=authenticityToken />
-    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+    <h5 className="uppercase text-center border-b border-gray-300 pb-2">
       {t("manage_images") |> str}
     </h5>
     <DisablingCover disabled=state.updating>

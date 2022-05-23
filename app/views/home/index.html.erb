@@ -1,15 +1,12 @@
 <% presenter = ::Home::IndexPresenter.new(self, current_school) %>
-
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
-  <%= stylesheet_pack_tag 'home/index', media: 'all' %>
-  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
+  <%= vite_stylesheet_tag 'home/index', media: 'all' %>
+  <%= vite_stylesheet_tag 'ConvertMarkdownPack', media: 'all' %>
 <% end %>
-
 <% content_for(:tail) do %>
-  <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
+  <%= vite_javascript_tag 'ConvertMarkdownPack', nonce: true %>
 <% end %>
-
 <div class="pb-10 bg-gray-100">
   <div class="relative bg-gray-300 border-b">
     <div class="relative pb-1/2 md:pb-1/4">
@@ -98,52 +95,52 @@
                     <div class="flex w-full p-6 justify-center">
                       <% case presenter.courses_as_student[course.id] %>
                       <% when nil %>
-                        <a
+                      <a
                           class="w-full btn <%= course.public_signup? ? 'btn-primary' : 'btn-default' %>"
                           href="/courses/<%= course.id %>"
                         >
-                          <% if course.public_signup? %>
-                            <i class="fas fa-feather-alt mr-2"></i>
-                            <%= t('.get_started') %>
-                          <% else %>
-                            <i class="fas fa-info-circle mr-2"></i>
-                            <%= t('.learn_more') %>
-                          <% end %>
-                        </a>
+                        <% if course.public_signup? %>
+                          <i class="fas fa-feather-alt mr-2"></i>
+                          <%= t('.get_started') %>
+                        <% else %>
+                          <i class="fas fa-info-circle mr-2"></i>
+                          <%= t('.learn_more') %>
+                        <% end %>
+                      </a>
                       <% when :dropped_out %>
-                        <div
+                      <div
                           class="w-full bg-red-100 text-red-600 py-2 px-4 rounded flex text-sm font-semibold justify-center items-center"
                         >
-                          <i class="fas fa-user-slash mr-2"></i>
-                          <%= t('.dropped_out') %>
-                        </div>
+                        <i class="fas fa-user-slash mr-2"></i>
+                        <%= t('.dropped_out') %>
+                      </div>
                       <% when :access_ended %>
-                        <a
+                      <a
                           class="w-full btn btn-secondary"
                           href="/courses/<%= course.id %>/curriculum"
                         >
-                          <i class="fas fa-eye mr-2"></i>
-                          <%= t('.access_ended') %>
-                        </a>
+                        <i class="fas fa-eye mr-2"></i>
+                        <%= t('.access_ended') %>
+                      </a>
                       <% when :active %>
-                        <a
+                      <a
                           class="w-full btn btn-secondary"
                           href="/courses/<%= course.id %>/curriculum"
                         >
-                          <i class="fas fa-book mr-2"></i>
-                          <%= t('.active') %>
-                        </a>
-                      <% else %>
-                        <% raise "Encountered unexpected course status #{presenter.courses_as_student[course.id]}" %>
-                      <% end %>
-                    </div>
+                        <i class="fas fa-book mr-2"></i>
+                        <%= t('.active') %>
+                      </a>
+                    <% else %>
+                      <% raise "Encountered unexpected course status #{presenter.courses_as_student[course.id]}" %>
+                    <% end %>
                   </div>
                 </div>
               </div>
-            <% end %>
-          </div>
+            </div>
+          <% end %>
         </div>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
+</div>
 </div>

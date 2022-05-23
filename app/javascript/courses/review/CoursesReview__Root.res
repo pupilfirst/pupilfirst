@@ -29,6 +29,7 @@ type state = {
   targetsLoaded: loading,
   levelsLoaded: loading,
   coachesLoaded: loading,
+  defaultSortDirection: Filter.sortDirection,
 }
 
 type action =
@@ -53,6 +54,7 @@ type action =
   | SetCoachLoading
   | SetLoader(filterLoader)
   | ClearLoader
+  | SetDefaultSort(Filter.sortDirection)
 
 let coachFilterTranslationKey = coachFilter => {
   switch coachFilter {
@@ -120,6 +122,7 @@ let reducer = (state, action) =>
       },
     }
   | ClearLoader => {...state, filterLoader: None}
+  | SetDefaultSort(sortDirection) => {...state, defaultSortDirection: sortDirection}
   }
 
 let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryString(filter))
@@ -292,7 +295,7 @@ module Sortable = {
 
 module SubmissionsSorter = Sorter.Make(Sortable)
 
-let submissionsSorter = filter => {
+let submissionsSorter = (filter, send) => {
   let criteria = switch Filter.tab(filter) {
   | Some(c) =>
     switch c {
@@ -310,7 +313,10 @@ let submissionsSorter = filter => {
       criteria
       selectedCriterion={filter.sortCriterion}
       direction={filter.sortDirection}
-      onDirectionChange={sortDirection => updateParams({...filter, sortDirection: sortDirection})}
+      onDirectionChange={sortDirection => {
+        updateParams({...filter, sortDirection: sortDirection})
+        send(SetDefaultSort(sortDirection))
+      }}
       onCriterionChange={sortCriterion => updateParams({...filter, sortCriterion: sortCriterion})}
     />
   </div>
@@ -739,6 +745,7 @@ let computeInitialState = () => {
   levelsLoaded: Unloaded,
   coachesLoaded: Unloaded,
   totalEntriesCount: 0,
+  defaultSortDirection: #Descending,
 }
 
 let pageTitle = (courses, courseId) => {
@@ -777,7 +784,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
             <div
               className="flex items-center justify-between bg-white md:bg-transparent px-4 py-2 md:pt-4 border-b md:border-none">
               <h4 className="font-semibold"> {str(tc("review"))} </h4>
-              <div className="block md:hidden"> {submissionsSorter(filter)} </div>
+              <div className="block md:hidden"> {submissionsSorter(filter, send)} </div>
             </div>
             <div className="px-4">
               <div className="flex pt-3 md:border-b border-gray-300">
@@ -790,7 +797,12 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                       href={"/courses/" ++
                       courseId ++
                       "/review?" ++
-                      Filter.toQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
+                      Filter.toQueryString({
+                        ...filter,
+                        tab: None,
+                        sortCriterion: #SubmittedAt,
+                        sortDirection: state.defaultSortDirection,
+                      })}
                       className={shortCutClasses(filter.tab === None)}>
                       <p> {I18n.ts("all")->str} </p>
                     </Link>
@@ -851,7 +863,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                   hint={tc("filter_hint")}
                 />
               </div>
-              <div className="hidden md:block"> {submissionsSorter(filter)} </div>
+              <div className="hidden md:block"> {submissionsSorter(filter, send)} </div>
             </div>
           </div>
         </div>

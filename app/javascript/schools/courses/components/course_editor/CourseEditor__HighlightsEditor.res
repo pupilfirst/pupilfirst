@@ -1,6 +1,7 @@
 open CourseEditor__Types
 
 let t = I18n.t(~scope="components.CourseEditor__HighlightsEditor")
+let ts = I18n.ts
 
 let str = React.string
 
@@ -58,7 +59,7 @@ let selected = (highlight: Course.Highlight.t) => {
   <button
     title={t("selected_button.title")}
     ariaLabel={t("selected_button.title")}
-    className="flex items-center justify-center cursor-pointer bg-white border border-gray-400 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
+    className="flex items-center justify-center cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-lg p-3 w-12 h-12 mr-1 hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">
     <PfIcon className={"text-lg if i-" ++ highlight.icon} />
   </button>
 }
@@ -68,9 +69,9 @@ let contents = (replaceCB, highlight) => {
     icon =>
       <button
         key=icon
-        title={"Select " ++ icon}
-        ariaLabel={"Select " ++ icon}
-        className="flex items-center justify-center p-3 w-full h-full text-gray-900 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:bg-gray-100"
+        title={t("select") ++ " " ++ icon}
+        ariaLabel={t("select") ++ " " ++ icon}
+        className="flex items-center justify-center p-3 w-full h-full text-gray-900 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
         onClick={_ => updateIcon(replaceCB, highlight, icon)}>
         <PfIcon className={"text-lg if i-" ++ icon} />
       </button>,
@@ -84,7 +85,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
       let replaceCB = replace(index, highlights, updateHighlightsCB)
       <Spread props={"data-highlight-index": index} key={string_of_int(index)}>
         <div key={string_of_int(index)} className="flex items-start py-2 relative">
-          <div className="flex items-start w-full bg-gray-100 border rounded-lg p-4 mr-1">
+          <div className="flex items-start w-full bg-gray-50 border rounded-lg p-4 mr-1">
             <Dropdown2
               selected={selected(highlight)}
               contents={contents(replaceCB, highlight)}
@@ -93,7 +94,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
             />
             <div className="w-full">
               <input
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-tight font-semibold focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+                className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-tight font-semibold focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                 id={"highlight-" ++ string_of_int(index) ++ "-title"}
                 type_="text"
                 placeholder={t("title.placeholder")}
@@ -104,7 +105,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
                   updateTitle(replaceCB, highlight, ReactEvent.Form.target(event)["value"])}
               />
               <input
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-1 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+                className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-1 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                 id={"highlight-" ++ string_of_int(index) ++ "-description"}
                 type_="text"
                 placeholder={t("description.placeholder")}
@@ -117,11 +118,11 @@ let make = (~highlights, ~updateHighlightsCB) => {
             </div>
           </div>
           <div
-            className="flex-shrink-0 bg-gray-100 border rounded flex flex-col text-xs sticky top-0">
+            className="flex-shrink-0 bg-gray-50 border rounded flex flex-col text-xs sticky top-0">
             {ReactUtils.nullIf(
               <button
-                title="Move up"
-                ariaLabel="Move up"
+                title={t("move_up")}
+                ariaLabel={t("move_up")}
                 onClick={_ => moveUp(index, highlights, updateHighlightsCB)}
                 className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden cursor-pointer">
                 <FaIcon classes={"fas fa-arrow-up"} />
@@ -130,8 +131,8 @@ let make = (~highlights, ~updateHighlightsCB) => {
             )}
             {ReactUtils.nullIf(
               <button
-                title="Move Down"
-                ariaLabel="Move Down"
+                title={t("move_down")}
+                ariaLabel={t("move_down")}
                 onClick={_ => moveDown(index, highlights, updateHighlightsCB)}
                 className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden cursor-pointer">
                 <FaIcon classes={"fas fa-arrow-down"} />
@@ -140,8 +141,8 @@ let make = (~highlights, ~updateHighlightsCB) => {
             )}
             <button
               onClick={_ => removeHighlight(index, highlights, updateHighlightsCB)}
-              title="Delete highlight"
-              ariaLabel="Delete highlight"
+              title={t("delete_highlight")}
+              ariaLabel={t("delete_highlight")}
               className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-red-500 focus:bg-gray-300 focus:text-red-500 overflow-hidden cursor-pointer">
               <FaIcon classes={"fas fa-trash-alt"} />
             </button>
@@ -151,7 +152,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
     }, highlights)->React.array} <div>
       {ReactUtils.nullIf(
         <button
-          className="w-full mt-2 btn border border-dashed text-sm border-primary-500 bg-gray-200"
+          className="w-full mt-2 btn border border-dashed text-sm border-primary-500 bg-gray-50"
           onClick={_ => addHighlight(highlights, updateHighlightsCB)}>
           {t("add_highlight")->str}
         </button>,

@@ -12,7 +12,7 @@ module Mutations
       clone_level
       notify(
         :success,
-        I18n.t('shared.done_exclamation'),
+        I18n.t('shared.notifications.done_exclamation'),
         I18n.t('mutations.clone_level.success_notification')
       )
       { success: true }

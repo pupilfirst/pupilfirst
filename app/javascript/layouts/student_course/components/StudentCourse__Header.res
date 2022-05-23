@@ -2,12 +2,14 @@ let str = React.string
 %raw(`require("./StudentCourse__Header.css")`)
 %raw(`require("courses/shared/background_patterns.css")`)
 
+let tr = I18n.t(~scope="components.StudentCourse__Header")
+
 let courseOptions = courses => Js.Array.map(course => {
     let courseId = CourseInfo.id(course)
     <a
       key={"course-" ++ courseId}
       href={"/courses/" ++ (courseId ++ "/curriculum")}
-      className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200 whitespace-nowrap">
+      className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50 whitespace-nowrap">
       <span> {CourseInfo.name(course)->str} </span>
     </a>
   }, Js.Array.filter(
@@ -105,13 +107,13 @@ let make = (~currentCourseId, ~courses, ~additionalLinks, ~coverImage) => {
           className="bg-white border-transparent flex justify-between overflow-x-auto md:overflow-hidden lg:max-w-3xl mx-auto shadow md:rounded-lg mt-0 md:-mt-7 z-10 relative">
           {Js.Array.map(l => {
             let (title, suffix) = switch l {
-            | "curriculum" => ("Curriculum", "curriculum")
-            | "calendar" => ("Calendar", "calendar")
-            | "leaderboard" => ("Leaderboard", "leaderboard")
-            | "review" => ("Review", "review")
-            | "students" => ("Students", "students")
-            | "report" => ("Report", "report")
-            | _unknown => ("Unknown", "")
+            | "curriculum" => (tr("curriculum"), "curriculum")
+            | "calendar" => (tr("calendar"), "calendar")
+            | "leaderboard" => (tr("leaderboard"), "leaderboard")
+            | "review" => (tr("review"), "review")
+            | "students" => (tr("students"), "students")
+            | "report" => (tr("report"), "report")
+            | _unknown => (tr("unknown"), "")
             }
 
             <a

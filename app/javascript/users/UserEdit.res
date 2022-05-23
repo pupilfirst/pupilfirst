@@ -1,6 +1,7 @@
-%raw(`require("../schools/shared/shared.css")`)
-
 let str = React.string
+
+let t = I18n.t(~scope="components.UserEdit")
+let ts = I18n.ts
 
 type state = {
   name: string,
@@ -112,11 +113,11 @@ let uploadAvatar = (send, formData) => {
     "/user/upload_avatar",
     formData,
     json => {
-      Notification.success("Done!", "Avatar uploaded successfully.")
+      Notification.success(ts("notifications.done_exclamation"), t("avatar_uploaded_notification"))
       let avatarUrl = json |> field("avatarUrl", string)
       send(UpdateAvatarUrl(Some(avatarUrl)))
     },
-    () => send(SetAvatarUploadError(Some("Failed to upload"))),
+    () => send(SetAvatarUploadError(Some(t("upload_failed")))),
   )
 }
 let submitAvatarForm = (send, formId) => {
@@ -146,9 +147,7 @@ let handleAvatarInputChange = (send, formId, event) => {
         | _ => true
         }
 
-    let error = isInvalidImageFile
-      ? Some("Please select an image with a size less than 5 MB")
-      : None
+    let error = isInvalidImageFile ? Some(t("select_image_limit")) : None
 
     switch error {
     | Some(error) => send(SetAvatarUploadError(Some(error)))
@@ -221,13 +220,13 @@ let confirmDeletionWindow = (state, send) =>
   state.showDeleteAccountForm
     ? {
         let body =
-          <div ariaLabel="Confirm dialog for account deletion">
+          <div ariaLabel={t("confirm_dialog_aria")}>
             <p className="text-sm text-center sm:text-left text-gray-700">
-              {"Are you sure you want to delete your account? This will initiate the process to permanently remove your data from our servers." |> str}
+              {t("account_delete_q") |> str}
             </p>
             <div className="mt-3">
               <label htmlFor="email" className="block text-sm font-semibold">
-                {"Confirm your email" |> str}
+                {t("confirm_email") |> str}
               </label>
               <input
                 type_="email"
@@ -236,17 +235,17 @@ let confirmDeletionWindow = (state, send) =>
                   send(UpdateEmailForDeletion(ReactEvent.Form.target(event)["value"]))}
                 id="email"
                 autoComplete="off"
-                className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-indigo-500"
-                placeholder="Type your email"
+                className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                placeholder={t("email_placeholder")}
               />
             </div>
           </div>
 
         <ConfirmWindow
-          title="Delete account"
+          title={t("delete_account")}
           body
-          confirmButtonText="Initiate Deletion"
-          cancelButtonText="Cancel"
+          confirmButtonText={t("initiate_deletion")}
+          cancelButtonText={t("cancel")}
           onConfirm={() => initiateAccountDeletion(state, send)}
           onCancel={() => send(ChangeDeleteAccountFormVisibility(false))}
           disableConfirm=state.deletingAccount
@@ -292,16 +291,14 @@ let make = (
       <div className="px-4 py-5 sm:p-6">
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/3 pr-4">
-            <h3 className="text-lg font-semibold"> {"Edit your profile" |> str} </h3>
-            <p className="mt-1 text-sm text-gray-700">
-              {"This information will be displayed publicly so be careful what you share." |> str}
-            </p>
+            <h3 className="text-lg font-semibold"> {t("edit_profile") |> str} </h3>
+            <p className="mt-1 text-sm text-gray-700"> {t("displayed_publicly") |> str} </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
             <div className="">
               <div className="">
                 <label htmlFor="user_name" className="block text-sm font-semibold">
-                  {"Name" |> str}
+                  {ts("name") |> str}
                 </label>
               </div>
             </div>
@@ -311,15 +308,15 @@ let make = (
               name="name"
               value=state.name
               onChange={event => send(UpdateName(ReactEvent.Form.target(event)["value"]))}
-              className="appearance-none mb-2 block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-indigo-500"
-              placeholder="Type your name"
+              className="appearance-none mb-2 block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+              placeholder={t("name_placeholder")}
             />
             <School__InputGroupError
-              message="Name can't be blank" active={state.name |> String.trim |> String.length < 2}
+              message={t("name_error")} active={state.name |> String.trim |> String.length < 2}
             />
             <div className="mt-6">
               <label htmlFor="about" className="block text-sm font-semibold">
-                {"About" |> str}
+                {t("about") |> str}
               </label>
               <div>
                 <textarea
@@ -327,8 +324,8 @@ let make = (
                   value=state.about
                   rows=3
                   onChange={event => send(UpdateAbout(ReactEvent.Form.target(event)["value"]))}
-                  className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-indigo-500"
-                  placeholder="A brief introduction about yourself"
+                  className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                  placeholder={t("about_placeholder")}
                 />
               </div>
             </div>
@@ -337,10 +334,10 @@ let make = (
                 <input
                   name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()}
                 />
-                <label className="block text-sm font-semibold"> {"Photo" |> str} </label>
+                <label className="block text-sm font-semibold"> {t("photo") |> str} </label>
                 <div className="mt-2 flex items-center">
                   <span
-                    className="inline-block h-14 w-14 rounded-full overflow-hidden bg-gray-200 border-2 boder-gray-400">
+                    className="inline-block h-14 w-14 rounded-full overflow-hidden bg-gray-50 border-2 boder-gray-400">
                     {switch state.avatarUrl {
                     | Some(url) => <img src=url />
                     | None => <Avatar name />
@@ -360,8 +357,8 @@ let make = (
                     <label
                       htmlFor="user-edit__avatar-input"
                       ariaHidden=true
-                      className="form-input__file-label rounded-md shadow-sm py-2 px-3 border border-gray-400 rounded-md text-sm font-semibold hover:text-gray-800 active:bg-gray-100 active:text-gray-800">
-                      {"Change photo" |> str}
+                      className="form-input__file-label rounded-md shadow-sm py-2 px-3 border border-gray-300 rounded-md text-sm font-semibold hover:text-gray-800 active:bg-gray-50 active:text-gray-800">
+                      {t("change_photo") |> str}
                     </label>
                   </span>
                   {switch state.avatarUploadError {
@@ -375,23 +372,17 @@ let make = (
         </div>
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">
           <div className="w-full md:w-1/3 pr-4">
-            <h3 className="text-lg font-semibold"> {"Security" |> str} </h3>
-            <p className="mt-1 text-sm text-gray-700">
-              {"Update your login credentials for the school." |> str}
-            </p>
+            <h3 className="text-lg font-semibold"> {t("security") |> str} </h3>
+            <p className="mt-1 text-sm text-gray-700"> {t("update_credentials") |> str} </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
             <p className="font-semibold">
-              {(
-                state.hasCurrentPassword
-                  ? "Change your current password"
-                  : "Set password for your account"
-              ) |> str}
+              {(state.hasCurrentPassword ? t("change_password") : t("set_password")) |> str}
             </p>
             {state.hasCurrentPassword
               ? <div className="mt-6">
                   <label htmlFor="current_password" className="block text-sm font-semibold">
-                    {"Current password" |> str}
+                    {t("current_password") |> str}
                   </label>
                   <input
                     value=state.currentPassword
@@ -400,14 +391,14 @@ let make = (
                     onChange={event =>
                       send(UpdateCurrentPassword(ReactEvent.Form.target(event)["value"]))}
                     id="current_password"
-                    className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-indigo-500"
-                    placeholder="Type current password"
+                    className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                    placeholder={t("password_placeholder")}
                   />
                 </div>
               : React.null}
             <div className="mt-6">
               <label htmlFor="new_password" className="block text-sm font-semibold">
-                {"New password" |> str}
+                {t("new_password") |> str}
               </label>
               <input
                 autoComplete="off"
@@ -415,8 +406,8 @@ let make = (
                 id="new_password"
                 value=state.newPassword
                 onChange={event => send(UpdateNewPassword(ReactEvent.Form.target(event)["value"]))}
-                className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-indigo-500"
-                placeholder="Type new password"
+                className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                placeholder={t("new_password_placeholder")}
               />
             </div>
             <div className="mt-6">
@@ -424,7 +415,7 @@ let make = (
                 autoComplete="off"
                 htmlFor="confirm_password"
                 className="block text-sm font-semibold">
-                {"Confirm password" |> str}
+                {t("confirm_password") |> str}
               </label>
               <input
                 autoComplete="off"
@@ -433,33 +424,28 @@ let make = (
                 value=state.confirmPassword
                 onChange={event =>
                   send(UpdateNewPassWordConfirm(ReactEvent.Form.target(event)["value"]))}
-                className="appearance-none block text-sm w-full shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-indigo-500"
-                placeholder="Confirm new password"
+                className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                placeholder={t("confirm_password_placeholder")}
               />
               <School__InputGroupError
-                message="New password and confirmation should match and must have atleast 8 characters"
-                active={hasInvalidPassword(state)}
+                message={t("confirm_password_error")} active={hasInvalidPassword(state)}
               />
             </div>
           </div>
         </div>
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">
           <div className="w-full md:w-1/3 pr-4">
-            <h3 className="text-lg font-semibold"> {"Notifications" |> str} </h3>
-            <p className="mt-1 text-sm text-gray-700">
-              {"Update settings for email notifications." |> str}
-            </p>
+            <h3 className="text-lg font-semibold"> {t("notifications") |> str} </h3>
+            <p className="mt-1 text-sm text-gray-700"> {t("update_email_notifications") |> str} </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
             <p className="font-semibold"> {"Community Digest" |> str} </p>
-            <p className="text-sm text-gray-700">
-              {"Community digest emails contain new questions from your communities, and a selection of unanswered questions from the past week." |> str}
-            </p>
+            <p className="text-sm text-gray-700"> {t("community_digest_emails") |> str} </p>
             <div className="mt-6">
               <div className="flex items-center">
                 <Radio
                   id="daily_mail_enable"
-                  label="Send me a daily email"
+                  label={t("send_email_radio")}
                   onChange={event =>
                     send(UpdateDailyDigest(ReactEvent.Form.target(event)["checked"]))}
                   checked=state.dailyDigest
@@ -468,7 +454,7 @@ let make = (
               <div className="mt-4 flex items-center">
                 <Radio
                   id="daily_mail_disable"
-                  label="Disable"
+                  label={t("disable_email_radio")}
                   onChange={event =>
                     send(UpdateDailyDigest(!ReactEvent.Form.target(event)["checked"]))}
                   checked={!state.dailyDigest}
@@ -479,16 +465,12 @@ let make = (
         </div>
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">
           <div className="w-full md:w-1/3 pr-4">
-            <h3 className="text-lg font-semibold"> {"Localization" |> str} </h3>
-            <p className="mt-1 text-sm text-gray-700">
-              {"Update settings related to your locale." |> str}
-            </p>
+            <h3 className="text-lg font-semibold"> {t("localization") |> str} </h3>
+            <p className="mt-1 text-sm text-gray-700"> {t("update_locale") |> str} </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
-            <label htmlFor="language" className="font-semibold"> {"Language" |> str} </label>
-            <p className="text-sm text-gray-700">
-              {"Select the language that you would prefer the user interface to dislpay." |> str}
-            </p>
+            <label htmlFor="language" className="font-semibold"> {t("language") |> str} </label>
+            <p className="text-sm text-gray-700"> {t("select_language") |> str} </p>
             <div className="mt-6">
               <select
                 id="language"
@@ -496,10 +478,13 @@ let make = (
                 onChange={event => {
                   send(UpdateLocale(ReactEvent.Form.target(event)["value"]))
                 }}
-                className="select appearance-none block text-sm w-full bg-white shadow-sm border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-indigo-500">
+                className="select appearance-none block text-sm w-full bg-white shadow-sm border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500">
                 {availableLocales
                 ->Js.Array2.map(availableLocale =>
-                  <option key=availableLocale value=availableLocale ariaSelected={state.locale===availableLocale}>
+                  <option
+                    key=availableLocale
+                    value=availableLocale
+                    ariaSelected={state.locale === availableLocale}>
                     {Locale.humanize(availableLocale)->str}
                   </option>
                 )
@@ -509,12 +494,12 @@ let make = (
           </div>
         </div>
       </div>
-      <div className="bg-gray-100 px-4 py-5 sm:p-6 flex rounded-b-lg justify-end">
+      <div className="bg-gray-50 px-4 py-5 sm:p-6 flex rounded-b-lg justify-end">
         <button
           disabled={saveDisabled(state)}
           onClick={updateUser(state, send)}
           className="btn btn-primary">
-          {"Save Changes" |> str}
+          {t("save_changes") |> str}
         </button>
       </div>
     </div>
@@ -522,15 +507,13 @@ let make = (
       <div className="px-4 py-5 sm:p-6">
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/3 pr-4">
-            <h3 className="text-lg font-semibold"> {"Account" |> str} </h3>
-            <p className="mt-1 text-sm text-gray-700">
-              {"Manage your account in this school" |> str}
-            </p>
+            <h3 className="text-lg font-semibold"> {t("account") |> str} </h3>
+            <p className="mt-1 text-sm text-gray-700"> {t("manage_account") |> str} </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
-            <p className="font-semibold text-red-700"> {"Delete account" |> str} </p>
+            <p className="font-semibold text-red-700"> {t("delete_account") |> str} </p>
             <p className="text-sm text-gray-700 mt-1">
-              {"Deleting your user account removes all your data from this school. Replies to posts in communities and feedback to students (if user has a coach profile) will not be deleted. Admin rights need to be revoked if you are an admin in this school.  " |> str}
+              {t("deleting_account_warning") ++ "  " |> str}
             </p>
             <div className="mt-4">
               {isSchoolAdmin || hasValidDeleteAccountToken
@@ -541,8 +524,8 @@ let make = (
                         <p className="text-sm text-orange-900">
                           {(
                             isSchoolAdmin
-                              ? "You are currently an admin of this school. Please delete your admin access to enable account deletion."
-                              : "You have already initiated account deletion. Please check your inbox for further steps to delete your account."
+                              ? t("you_admin_warning")
+                              : t("already_iniated_deletion_warning")
                           ) |> str}
                         </p>
                       </div>
@@ -551,7 +534,7 @@ let make = (
                 : <button
                     onClick={_ => send(ChangeDeleteAccountFormVisibility(true))}
                     className="py-2 px-3 border border-red-500 text-red-600 rounded text-xs font-semibold hover:bg-red-600 hover:text-white focus:outline-none active:bg-red-700 active:text-white">
-                    {"Delete your account" |> str}
+                    {t("delete_your_account") |> str}
                   </button>}
             </div>
           </div>

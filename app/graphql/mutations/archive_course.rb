@@ -25,7 +25,7 @@ module Mutations
       archive_course
       notify(
         :success,
-        I18n.t('shared.done_exclamation'),
+        I18n.t('shared.notifications.done_exclamation'),
         I18n.t('mutations.archive_course.success_notification')
       )
       publish(course, :course_archived, current_user, course)

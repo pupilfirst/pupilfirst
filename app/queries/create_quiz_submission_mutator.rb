@@ -90,7 +90,7 @@ class CreateQuizSubmissionMutator < ApplicationQuery
             end_with_lb_or_space =
               stripped_question.ends_with?('```') ? "\n\n" : "  \n"
 
-            title = "Question #{index + 1}"
+            title = "#{I18n.t('mutations.quiz.question')} #{index + 1}"
             result =
               " #{stripped_question}#{end_with_lb_or_space}#{answer_text(correct_answer, u_answer)}"
             status =
@@ -115,9 +115,9 @@ class CreateQuizSubmissionMutator < ApplicationQuery
 
   def answer_text(correct_answer, u_answer)
     if u_answer == correct_answer
-      "**Your Correct Answer:**#{pretty_answer(u_answer.value)}"
+      "**#{I18n.t('mutations.quiz.your_correct_answer')}:**#{pretty_answer(u_answer.value)}"
     else
-      "**Your Answer:**#{pretty_answer(u_answer.value)}**Correct Answer:**#{pretty_answer(correct_answer.value)}"
+      "**#{I18n.t('mutations.quiz.your_answer')}:**#{pretty_answer(u_answer.value)}**#{I18n.t('mutations.quiz.correct_answer')}:**#{pretty_answer(correct_answer.value)}"
     end
   end
 end

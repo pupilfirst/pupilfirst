@@ -11,7 +11,7 @@ module Mutations
 
       if mutator.valid?
         mutator.subscribe
-        mutator.notify(:success, I18n.t('shared.done_exclamation'), I18n.t('mutations.create_topic_subscription.success_notification'))
+        mutator.notify(:success, I18n.t('shared.notifications.done_exclamation'), I18n.t('mutations.create_topic_subscription.success_notification'))
         { success: true }
       else
         mutator.notify_errors

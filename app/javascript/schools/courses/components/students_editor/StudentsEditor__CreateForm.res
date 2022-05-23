@@ -156,7 +156,7 @@ let tagBoxes = tags =>
     |> Array.map(tag =>
       <div
         key=tag
-        className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+        className="flex items-center bg-gray-50 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
         {str(tag)}
       </div>
     )
@@ -185,7 +185,7 @@ let studentCard = (studentInfo, send, team, tags) => {
       {tagBoxes(tags)}
     </div>
     <button
-      className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+      className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50"
       onClick={_event => send(RemoveStudentInfo(studentInfo))}>
       <i className="fas fa-trash-alt" />
     </button>
@@ -198,7 +198,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
 
   <div className="mx-auto bg-white">
     <div className="max-w-2xl p-6 mx-auto">
-      <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+      <h5 className="uppercase text-center border-b border-gray-300 pb-2 mb-4">
         {t("drawer_heading")->str}
       </h5>
       <StudentsEditor__StudentInfoForm
@@ -215,7 +215,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
           {switch state.teamsToAdd {
           | [] =>
             <div
-              className="flex items-center justify-between bg-gray-100 border rounded p-3 italic mt-2">
+              className="flex items-center justify-between bg-gray-50 border rounded p-3 italic mt-2">
               {t("teams_to_add_empty")->str}
             </div>
           | teams =>
@@ -242,10 +242,10 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
       </div>
       <div className="mt-4">
         <Checkbox
-            id="notify-new-students"
-            label={str(t("notify_students_label"))}
-            onChange={_event => send(ToggleNotifyStudents)}
-            checked={state.notifyStudents}
+          id="notify-new-students"
+          label={str(t("notify_students_label"))}
+          onChange={_event => send(ToggleNotifyStudents)}
+          checked={state.notifyStudents}
         />
       </div>
       <div className="flex mt-4">

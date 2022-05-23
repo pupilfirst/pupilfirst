@@ -1,4 +1,4 @@
-@bs.module
+@module
 external resetPasswordIcon: string = "./images/set-new-password-icon.svg"
 
 let str = React.string
@@ -8,12 +8,13 @@ let t = I18n.t(~scope="components.UserSessionResetPassword")
 let handleErrorCB = (setSaving, ()) => setSaving(_ => false)
 
 let handleUpdatePasswordCB = response => {
-  let path = response
-  |> {
-    open Json.Decode
-    field("path", nullable(string))
-  }
-  |> Js.Null.toOption
+  let path =
+    response
+    |> {
+      open Json.Decode
+      field("path", nullable(string))
+    }
+    |> Js.Null.toOption
   switch path {
   | Some(path) => DomUtils.redirect(path)
   | None => ()
@@ -63,7 +64,7 @@ let renderUpdatePassword = (
   saving,
   setSaving,
 ) => {
-  let inputClasses = "appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-400 rounded py-2 px-4 text-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-primary-400"
+  let inputClasses = "appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-300 rounded py-2 px-4 text-sm bg-gray-50 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400"
   let labelClasses = "inline-block tracking-wide text-gray-900 text-xs font-semibold"
   <div className="pt-4 pb-5 md:px-9 items-center max-w-sm mx-auto">
     <div>
@@ -110,7 +111,7 @@ let make = (~token, ~authenticityToken) => {
   let (newPassword, setNewPassword) = React.useState(() => "")
   let (confirmPassword, setConfirmPassword) = React.useState(() => "")
   let (saving, setSaving) = React.useState(() => false)
-  <div className="bg-gray-100 sm:py-10">
+  <div className="bg-gray-50 sm:py-10">
     <div className="container mx-auto max-w-lg px-4 py-6 sm:py-8 bg-white rounded-lg shadow">
       <img className="mx-auto h-20 sm:h-32" src=resetPasswordIcon />
       <div className="text-lg sm:text-2xl font-bold text-center mt-4">

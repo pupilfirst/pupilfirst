@@ -370,7 +370,7 @@ let restoreFilterNotice = (send, currentCoach, message) =>
     className="mt-2 text-sm italic flex flex-col md:flex-row items-center justify-between p-3 border border-gray-300 bg-white rounded-lg">
     <span> {message |> str} </span>
     <button
-      className="px-2 py-1 rounded text-xs overflow-hidden border border-gray-300 bg-gray-200 text-gray-800 hover:bg-gray-300 mt-1 md:mt-0"
+      className="px-2 py-1 rounded text-xs overflow-hidden border border-gray-300 bg-gray-50 text-gray-800 hover:bg-gray-300 mt-1 md:mt-0"
       onClick={_ => send(SelectCoach(currentCoach))}>
       {tr("assigned_me") |> str} <i className="fas fa-level-up-alt ml-2" />
     </button>
@@ -459,7 +459,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~teamTags, ~
       />
     | _ => React.null
     }}
-    <div className="bg-gray-100 pt-8 pb-8 px-3 -mt-7">
+    <div className="bg-gray-50 pt-8 pb-8 px-3 -mt-7">
       <CoursesStudents__StudentDistribution
         selectLevelCB={selectLevel(levels, send)}
         courseId
@@ -468,8 +468,8 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~teamTags, ~
         filterTags=state.filter.tags
         reloadAt=state.reloadDistributionAt
       />
-      <div className="w-full py-4 bg-gray-100 relative md:sticky md:top-0 z-10">
-        <div className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
+      <div className="w-full py-4 bg-gray-50 relative md:sticky md:top-0 z-10">
+        <div className="max-w-3xl mx-auto bg-gray-50 sticky md:static md:top-0">
           <Multiselect
             id="filter"
             unselected={unselected(levels, teamCoaches, allTags, currentCoach |> Coach.id, state)}

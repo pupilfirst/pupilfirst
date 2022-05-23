@@ -8,18 +8,19 @@
   }
 
   @screen md {
-    * {
+    body {
       scrollbar-width: thin;
-      scrollbar-color: theme("colors.gray.500") theme("colors.gray.100");
+      scrollbar-color: theme("colors.gray.400") theme("colors.gray.100");
     }
     ::-webkit-scrollbar {
       width: 12px;
     }
     ::-webkit-scrollbar-track {
       background: theme("colors.gray.100");
+      border-radius: 8px;
     }
     ::-webkit-scrollbar-thumb {
-      background-color: theme("colors.gray.500");
+      background-color: theme("colors.gray.400");
       border-radius: 6px;
       border: 3px solid theme("colors.gray.100");
     }
@@ -62,7 +63,7 @@
 
   input:disabled,
   .disabled {
-    @apply cursor-not-allowed bg-gray-200 text-gray-700;
+    @apply cursor-not-allowed bg-gray-50 text-gray-700;
   }
 
   /* Accessible File Input */
@@ -94,25 +95,31 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold py-2 px-4 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+    @apply inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold py-2 px-4 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500;
+  }
+
+  .btn:disabled {
+    opacity: 0.5;
   }
 
   /* Button Styles */
 
   .btn-default {
-    @apply bg-gray-300 text-primary-500;
+    @apply bg-primary-50 text-primary-500 border border-primary-500 rounded;
   }
 
+  .btn:hover,
   .btn-default:hover {
-    @apply bg-gray-400 text-primary-600;
+    @apply bg-primary-100 text-primary-600;
   }
 
+  .btn:focus,
   .btn-default:focus {
-    @apply bg-gray-400 text-primary-700;
+    @apply bg-primary-100 text-primary-700;
   }
 
   .btn-subtle {
-    @apply bg-gray-200 text-gray-800;
+    @apply bg-gray-50 text-gray-800;
   }
 
   .btn-subtle:hover {
@@ -149,15 +156,15 @@
   }
 
   .btn-secondary {
-    @apply bg-gradient-to-br from-secondary-500 to-secondary-600 text-white;
+    @apply bg-gradient-to-br from-red-500 to-red-700 text-white;
   }
 
   .btn-secondary:hover {
-    @apply bg-gradient-to-br from-secondary-600 to-secondary-700;
+    @apply bg-gradient-to-br from-red-600 to-red-800;
   }
 
   .btn-secondary:focus {
-    @apply bg-secondary-800;
+    @apply bg-red-800;
     background-image: none;
   }
 
@@ -233,11 +240,11 @@
   /* Footer Style */
 
   .footer__container {
-    background-color: theme("colors.gray.200");
+    background-color: theme("colors.gray.100");
   }
 
   .footer__bottom {
-    background-color: theme("colors.gray.300");
+    background-color: theme("colors.gray.200");
   }
 
   .dropdown__list {

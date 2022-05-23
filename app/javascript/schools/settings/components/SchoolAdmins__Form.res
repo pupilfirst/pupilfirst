@@ -128,7 +128,7 @@ let make = (~admin, ~updateCB) => {
     <DisablingCover disabled=saving>
       <div className="mx-auto bg-white">
         <div className="max-w-2xl p-6 mx-auto">
-          <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+          <h5 className="uppercase text-center border-b border-gray-300 pb-2 mb-4">
             {switch admin {
             | Some(admin) => admin |> SchoolAdmin.name
             | None => t("add_new_admin")
@@ -144,7 +144,7 @@ let make = (~admin, ~updateCB) => {
               autoFocus=true
               value=email
               onChange={event => setEmail(ReactEvent.Form.target(event)["value"])}
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               id="email"
               type_="email"
               placeholder=t("email_placeholder")
@@ -163,7 +163,7 @@ let make = (~admin, ~updateCB) => {
             <input
               value=name
               onChange={event => setName(ReactEvent.Form.target(event)["value"])}
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               id="name"
               type_="text"
               placeholder=t("name_placeholder")

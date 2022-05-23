@@ -8,7 +8,7 @@ let t = I18n.t(~scope="components.CurriculumEditor__TargetShow")
 let ts = I18n.ts
 
 let targetClasses = (target, targets) =>
-  "target-group__target flex justify-between items-center pl-2 pr-5 focus:outline-none focus:bg-gray-200 focus:text-primary-500 " ++
+  "target-group__target flex justify-between items-center pl-2 pr-5 focus:outline-none focus:bg-gray-50 focus:text-primary-500 " ++
   switch (Js.Array.length(targets) == 1, target |> Target.visibility) {
   | (true, Archived) => "target-group__target--archived py-4 pl-5"
   | (false, Archived) => "target-group__target--archived py-4"
@@ -45,7 +45,7 @@ let editorLink = (linkPrefix, linkSuffix, target, iconClass) => {
     (linkSuffix ++
     (" " ++ t("of_target") ++ " " ++ (target |> Target.title)))}
     href=link
-    className="curriculum-editor__target-show-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:text-primary-500">
+    className="curriculum-editor__target-show-quick-link text-gray-400 border-l border-transparent py-6 px-3 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
     <i className={"fas fa-fw " ++ iconClass} />
   </Link>
 }
@@ -56,7 +56,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
     "/school/courses/" ++ ((course |> Course.id) ++ ("/targets/" ++ ((target |> Target.id) ++ "/")))
 
   <div
-    className="flex target-group__target-container border-t bg-white overflow-hidden relative hover:bg-gray-100 hover:text-primary-500">
+    className="flex target-group__target-container border-t bg-white overflow-hidden relative hover:bg-gray-50 hover:text-primary-500">
     {Js.Array.length(targets) > 1
       ? <div
           className="target-group__target-reorder relative flex flex-col z-10 h-full border-r border-transparent text-gray-700 justify-between items-center">
@@ -64,7 +64,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
             title={t("move_up")}
             ariaLabel={t("move_up") ++ (target |> Target.title)}
             id={"target-move-up-" ++ (target |> Target.id)}
-            className={"target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200 focus:outline-none focus:text-primary-500" ++
+            className={"target-group__target-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500" ++
             sortIndexHiddenClass(index == 0)}
             onClick={_ => updateSortIndex(targets, target, true, updateTargetSortIndexCB)}>
             <i className="fas fa-arrow-up text-sm" />
@@ -73,7 +73,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
             title={t("move_down")}
             ariaLabel={t("move_down") ++ (target |> Target.title)}
             id={"target-move-down-" ++ (target |> Target.id)}
-            className={"target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-200 focus:outline-none focus:text-primary-500" ++
+            className={"target-group__target-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 border-t border-transparent text-gray-400 hover:bg-gray-50 focus:outline-none focus:text-primary-500" ++
             sortIndexHiddenClass(index + 1 == Js.Array.length(targets))}
             onClick={_ => updateSortIndex(targets, target, false, updateTargetSortIndexCB)}>
             <i className="fas fa-arrow-down text-sm" />

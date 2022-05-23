@@ -88,7 +88,7 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
         key=id
         title={tr("select_version") ++ " " ++ id}
         onClick={_ => loadContentBlocksCB(Some(version))}
-        className="whitespace-nowrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500 focus:outline-none focus:bg-gray-100 focus:text-primary-500 w-full text-left">
+        className="whitespace-nowrap px-3 py-2 cursor-pointer hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500 w-full text-left">
         {versionText(version)}
       </button>
     })
@@ -96,9 +96,9 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
   let selected =
     <button
       title={tr("select_version") ++ " " ++ (selectedVersion |> Version.id)}
-      className="text-sm appearance-none bg-white inline-flex items-center justify-between rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 hover:bg-gray-100 hover:shadow-lg px-3 h-full">
+      className="text-sm appearance-none bg-white inline-flex items-center justify-between rounded focus:outline-none focus:ring-2 focus:ring-focusColor-500 hover:bg-gray-50 hover:shadow-lg px-3 h-full">
       <span> {versionText(selectedVersion)} </span>
-      <span className="border-l border-gray-400 ml-2 pl-2">
+      <span className="border-l border-gray-300 ml-2 pl-2">
         <i className="fas fa-chevron-down text-sm" />
       </span>
     </button>
@@ -127,7 +127,7 @@ let showContentBlocks = (
       <HelpIcon className="ml-1" link={tr("help_url")}> {tr("help") |> str} </HelpIcon>
     </div>
     <div className="flex">
-      <div className="border rounded border-gray-400 flex items-center">
+      <div className="border rounded border-gray-300 flex items-center">
         {showDropdown(versions, selectedVersion, loadContentBlocksCB)}
       </div>
       <div className="ml-2">

@@ -10,7 +10,7 @@
   <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
 <% end %>
 
-<div class="pb-10 bg-gray-100">
+<div class="pb-10 bg-gray-50">
   <div class="relative bg-gray-300 border-b">
     <div class="relative pb-1/2 md:pb-1/4">
       <% if presenter.cover_image.present? %>
@@ -66,7 +66,7 @@
                   aria-label="<%= course.name %>"
                 >
                   <div class="relative">
-                    <div class="relative pb-1/2 bg-gray-200">
+                    <div class="relative pb-1/2 bg-gray-50">
                       <% if presenter.course_thumbnail(course).present? %>
                         <img
                           alt="Thumbnail for course <%= course.name %>"

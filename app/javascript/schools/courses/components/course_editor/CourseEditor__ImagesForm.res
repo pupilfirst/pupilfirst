@@ -164,8 +164,7 @@ let make = (~course, ~updateCourseCB) => {
           link={t("thumbnail.help_url")}>
           {t("thumbnail.help")->str}
         </HelpIcon>
-        <div
-          className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+        <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
           <input
             disabled=state.updating
             className="absolute h-0 w-0 focus:outline-none"
@@ -198,8 +197,7 @@ let make = (~course, ~updateCourseCB) => {
           link={t("cover_image.help_url")}>
           {t("cover_image.help") |> str}
         </HelpIcon>
-        <div
-          className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+        <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
           <input
             disabled=state.updating
             className="absolute h-0 w-0 focus:outline-none"

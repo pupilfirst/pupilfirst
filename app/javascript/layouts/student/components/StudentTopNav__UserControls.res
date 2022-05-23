@@ -6,7 +6,7 @@ let showLink = (icon, text, href) => {
   <div key=href className="whitespace-nowrap">
     <a
       rel="nofollow"
-      className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200"
+      className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50"
       href>
       <FaIcon classes={"fas fw fa-" ++ icon} /> <span className="pl-2"> {str(text)} </span>
     </a>

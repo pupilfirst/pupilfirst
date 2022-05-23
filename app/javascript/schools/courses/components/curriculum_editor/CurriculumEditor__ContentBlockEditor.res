@@ -82,7 +82,7 @@ module UpdateImageBlockMutation = %graphql(`
 
 let controlIcon = (~icon, ~title, ~color, ~handler) => {
   let buttonClasses = switch color {
-  | #Grey => "hover:bg-gray-200 hover:text-primary-500 focus:bg-gray-200 focus:text-primary-500"
+  | #Grey => "hover:bg-gray-50 hover:text-primary-500 focus:bg-gray-50 focus:text-primary-500"
   | #Green => "bg-green-600 hover:bg-green-700 focus:bg-green-700 text-white rounded-b"
   | #Red => "hover:text-red-500 focus:text-red-500"
   }
@@ -273,7 +273,7 @@ let make = (
         )}
       </div>
       <div
-        className="pl-2 flex-shrink-0 border-transparent bg-gray-100 border rounded flex flex-col text-xs -mr-10 sticky top-0">
+        className="pl-2 flex-shrink-0 border-transparent bg-gray-50 border rounded flex flex-col text-xs -mr-10 sticky top-0">
         {controlIcon(
           ~icon="fa-arrow-up",
           ~title=t("move_up"),

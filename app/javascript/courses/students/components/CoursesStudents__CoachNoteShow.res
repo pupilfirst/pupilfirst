@@ -6,15 +6,13 @@ let tr = I18n.t(~scope="components.CoursesStudents__CoachNoteShow")
 
 type state = {archiving: bool}
 
-module ArchiveCoachNoteMutation = %graphql(
-  `
+module ArchiveCoachNoteMutation = %graphql(`
    mutation ArchiveCoachNoteMutation($id: ID!) {
     archiveCoachNote(id: $id) {
        success
       }
     }
-   `
-)
+   `)
 
 let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -43,7 +41,7 @@ let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
 let deleteIcon = (note, removeNoteCB, setArchiving, archiving) =>
   <button
     ariaLabel={tr("delete_note") ++ (note |> CoachNote.id)}
-    className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded hover:bg-gray-200 hover:text-red-500 focus:outline-none focus:bg-gray-200 focus:text-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500 "
+    className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500 "
     disabled=archiving
     title={tr("delete_note") ++ (note |> CoachNote.id)}
     onClick={removeCoachNote(note |> CoachNote.id, removeNoteCB, setArchiving)}>
@@ -61,13 +59,13 @@ let make = (~note, ~userId, ~removeNoteCB) => {
           switch user |> User.avatarUrl {
           | Some(avatarUrl) =>
             <img
-              className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+              className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
               src=avatarUrl
             />
           | None =>
             <Avatar
               name={user |> User.name}
-              className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-400 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
+              className="w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 mt-1 md:mt-0 mr-2 md:mr-3 object-cover"
             />
           }
 

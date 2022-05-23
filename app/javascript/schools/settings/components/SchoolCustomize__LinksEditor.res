@@ -81,14 +81,14 @@ let showLinks = (state, send, removeLinkCB, kind, links) =>
   switch links {
   | list{} =>
     <div
-      className="border border-gray-400 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
+      className="border border-gray-300 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
       {t("no_custom_links") |> str}
     </div>
   | links =>
     links
     |> List.map(((id, title, url)) =>
       <div
-        className="flex items-center justify-between bg-gray-100 text-xs text-gray-900 border rounded pl-3 mt-2"
+        className="flex items-center justify-between bg-gray-50 text-xs text-gray-900 border rounded pl-3 mt-2"
         key=id>
         <div className="flex items-center">
           {switch kind {
@@ -123,7 +123,7 @@ let titleInputVisible = state =>
   }
 
 let kindClasses = selected => {
-  let classes = "nav-tab-item border-t cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-gray-800 bg-white hover:bg-gray-200 hover:text-gray-900 py-3 px-4 font-semibold leading-tight focus:outline-none focus:bg-gray-200 focus:text-gray-900"
+  let classes = "nav-tab-item border-t cursor-pointer w-1/3 appearance-none flex justify-center items-center w-full text-sm text-center text-gray-800 bg-white hover:bg-gray-50 hover:text-gray-900 py-3 px-4 font-semibold leading-tight focus:outline-none focus:bg-gray-50 focus:text-gray-900"
   classes ++ (
     selected
       ? " nav-tab-item--selected text-primary-500 bg-white hover:bg-white hover:text-primary-500"
@@ -264,7 +264,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
   let (state, send) = React.useReducer(reducer, initialState(kind))
 
   <div className="mt-8 mx-8 pb-6">
-    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+    <h5 className="uppercase text-center border-b border-gray-300 pb-2">
       {t("manage_links") |> str}
     </h5>
     <div className="mt-3">
@@ -316,7 +316,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
               </label>
               <input
                 autoFocus=true
-                className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                 id="link-title"
                 type_="text"
                 placeholder={t("title_placeholder")}
@@ -337,7 +337,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
               {t("full_url") |> str}
             </label>
             <input
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
               id="link-full-url"
               type_="text"
               placeholder={t("full_url_placeholder")}

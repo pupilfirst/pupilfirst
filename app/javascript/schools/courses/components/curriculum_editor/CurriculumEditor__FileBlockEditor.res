@@ -14,12 +14,12 @@ let onChange = (contentBlock, updateContentBlockCB, event) => {
 let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
   let titleInputId = "title-" ++ (contentBlock |> ContentBlock.id)
 
-  <div className="relative border border-gray-400 rounded-lg">
+  <div className="relative border border-gray-300 rounded-lg">
     <div
-      className="content-block__content text-base bg-gray-200 flex justify-center items-center rounded-t-lg">
+      className="content-block__content text-base bg-gray-50 flex justify-center items-center rounded-t-lg">
       <div className="w-full">
         <a
-          className="flex justify-between items-center bg-white rounded-t-lg px-6 py-4 hover:bg-gray-100 hover:text-primary-500 focus:outline-none focus:bg-gray-100 focus:text-primary-500"
+          className="flex justify-between items-center bg-white rounded-t-lg px-6 py-4 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
           target="_blank"
           ariaLabel={"View " ++ title}
           href=url>
@@ -39,7 +39,7 @@ let make = (~url, ~title, ~filename, ~contentBlock, ~updateContentBlockCB) => {
         <span className="text-sm ml-1"> {ts("optional_braces") |> str} </span>
         <input
           id=titleInputId
-          className="mt-1 appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-400 leading-tight focus:outline-none focus:bg-white focus:border-gray"
+          className="mt-1 appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-300 leading-tight focus:outline-none focus:bg-white focus:border-gray"
           onChange={onChange(contentBlock, updateContentBlockCB)}
           maxLength=60
           type_="text"

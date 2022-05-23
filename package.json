@@ -94,5 +94,5 @@
     "re:watch": "rescript clean && rescript build -w",
     "wds": "TAILWIND_MODE=watch bin/webpack-dev-server"
   },
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.1"
 }

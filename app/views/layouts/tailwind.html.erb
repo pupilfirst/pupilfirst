@@ -50,12 +50,15 @@
       </style>
     <% end %>
 
+    <%= javascript_tag(nonce: true) do %>
+      window.pupilfirst = {
+        defaultLocale: '<%= I18n.default_locale %>',
+        locale: '<%= I18n.locale %>'
+      }
+    <% end %>
+
     <!-- Scripts -->
     <%= vite_javascript_tag 'packs/layouts/tailwind', nonce: true %>
-
-    <%= javascript_tag(nonce: true) do %>
-      i18n.defaultLocale = "<%= I18n.default_locale %>"; i18n.locale = "<%= I18n.locale %>";
-    <% end %>
 
     <%= csrf_meta_tags %>
 

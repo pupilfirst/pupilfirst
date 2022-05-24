@@ -1354,10 +1354,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@centerforopenscience/markdown-it-imsize@https://github.com/cos-forks/markdown-it-imsize#cos":
+"@centerforopenscience/markdown-it-imsize@https://github.com/harigopal/markdown-it-imsize.git#esm":
   version: 2.0.1+cos2
-  resolution: "@centerforopenscience/markdown-it-imsize@https://github.com/cos-forks/markdown-it-imsize.git#commit=73d2853d6ffe2a368dc57f7968c455469bd82bfa"
-  checksum: cb928620e78c923c91a74c32a773e018721088e57a883bc3f5cff096f5825056075091d7d625d147e77836dd240552b3c13adb1ac250c87589a0e930d4228172
+  resolution: "@centerforopenscience/markdown-it-imsize@https://github.com/harigopal/markdown-it-imsize.git#commit=b72228e3ae9d3edc8d4171d9ef8b4328f174ca9d"
+  checksum: d3650125e46923af466dc63ee34797b34dad544f2f042c3e7d34c45224f2b36db0e6521f8cdd8b5dc504c190d679d7b74cbeae04b549f0094529030ae2be05a4
   languageName: node
   linkType: hard
 
@@ -13424,7 +13424,7 @@ __metadata:
     "@babel/preset-react": ^7.14.5
     "@babel/runtime": ^7.15.4
     "@baransu/graphql_ppx_re": ^0.7.1
-    "@centerforopenscience/markdown-it-imsize": "https://github.com/cos-forks/markdown-it-imsize#cos"
+    "@centerforopenscience/markdown-it-imsize": "https://github.com/harigopal/markdown-it-imsize.git#esm"
     "@fortawesome/fontawesome-free": ^5.15.4
     "@glennsl/bs-json": ^5.0.4
     "@jeff-tian/markdown-it-katex": ^2.1.0

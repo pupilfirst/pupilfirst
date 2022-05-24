@@ -1,9 +1,11 @@
 import { I18n } from "i18n-js";
 import translations from "../locales.json";
 
-export const i18n = new I18n(translations);
+const i18n = new I18n(translations);
 
 i18n.enableFallback = true;
 i18n.missingTranslationPrefix = "Missing translation: ";
+i18n.defaultLocale = window.pupilfirst.defaultLocale;
+i18n.locale = window.pupilfirst.locale;
 
-global.i18n = i18n;
+export default i18n;

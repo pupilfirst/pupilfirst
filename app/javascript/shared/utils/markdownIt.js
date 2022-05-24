@@ -1,6 +1,17 @@
 import commonmarkPreset from "markdown-it/lib/presets/commonmark";
 
-const md = require("markdown-it")({
+import markdownIt from "markdown-it";
+import subscriptPlugin from "markdown-it-sub";
+import superscriptPlugin from "markdown-it-sup";
+import tablePlugin from "markdown-it-multimd-table";
+import linkifyImagesPlugin from "markdown-it-linkify-images";
+import imageSizePlugin from "@centerforopenscience/markdown-it-imsize/lib/index";
+import linkAttributesPlugin from "markdown-it-link-attributes";
+import katexPlugin from "@jeff-tian/markdown-it-katex";
+import alignPlugin from "markdown-it-align";
+import checkboxPlugin from "markdown-it-task-checkbox";
+
+const md = markdownIt({
   ...commonmarkPreset.options,
   html: false,
   linkify: true,
@@ -22,16 +33,6 @@ const md = require("markdown-it")({
     );
   },
 });
-
-const subscriptPlugin = require("markdown-it-sub");
-const superscriptPlugin = require("markdown-it-sup");
-const tablePlugin = require("markdown-it-multimd-table");
-const linkifyImagesPlugin = require("markdown-it-linkify-images");
-const imageSizePlugin = require("@centerforopenscience/markdown-it-imsize");
-const linkAttributesPlugin = require("markdown-it-link-attributes");
-const katexPlugin = require("@jeff-tian/markdown-it-katex");
-const alignPlugin = require("markdown-it-align");
-const checkboxPlugin = require("markdown-it-task-checkbox");
 
 md.use(subscriptPlugin)
   .use(superscriptPlugin)

@@ -8,7 +8,7 @@ function t(param, param$1, param$2) {
   return I18n.t(partial_arg, param, param$1, param$2);
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   const message = JSON.parse(
     document.documentElement.getAttribute("data-flash")
   );

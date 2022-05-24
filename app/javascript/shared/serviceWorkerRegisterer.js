@@ -1,3 +1,3 @@
-window.addEventListener('load', () => {
-  navigator.serviceWorker.register('/service-worker.js');
+window.addEventListener("load", () => {
+  navigator.serviceWorker.register("/service-worker.js");
 });

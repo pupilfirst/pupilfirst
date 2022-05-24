@@ -1,17 +1,20 @@
-@module("dompurify") external sanitize: string => string = "sanitize"
+type dompurify;
+
+@module("dompurify") external dompurify: dompurify = "default";
+@send external sanitize: (dompurify, string) => string = "sanitize"
 
 type options = {"ALLOWED_TAGS": array<string>}
 
-@module("dompurify") external sanitizeOpt: (string, options) => string = "sanitize"
+@send external sanitizeOpt: (dompurify, string, options) => string = "sanitize"
 
-let sanitizedHTML = html => {"__html": sanitize(html)}
+let sanitizedHTML = html => {"__html": sanitize(dompurify, html)}
 
-let sanitizedHTMLOpt = (html, options) => {"__html": sanitizeOpt(html, options)}
+let sanitizedHTMLOpt = (html, options) => {"__html": sanitizeOpt(dompurify, html, options)}
 
-@module("dompurify") external addHook: (string, Dom.node => unit) => int = "addHook"
+@send external addHook: (dompurify, string, Dom.node => unit) => int = "addHook"
 
 let sanitizedHTMLHook = (entryPoint, hookFunction) => {
-  addHook(entryPoint, hookFunction)
+  addHook(dompurify, entryPoint, hookFunction)
 }
 
 %%raw(`

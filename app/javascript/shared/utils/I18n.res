@@ -13,8 +13,13 @@ type options = {
   defaults: array<Js.Dict.t<string>>,
 }
 
-@bs.scope("i18n") @bs.val
-external translate: (string, Js.t<'a>) => string = "t"
+// type i18n = {
+//   t:  => string
+// }
+type i18n;
+
+@module("~/shared/i18n") external i18n: i18n = "default"
+@send external translate: (i18n, string, Js.t<'a>) => string = "t";
 
 external optionsToJsObject: options => Js.t<'a> = "%identity"
 external variablesToJsObject: Js.Dict.t<string> => Js.t<'a> = "%identity"
@@ -42,7 +47,7 @@ let t = (~scope=?, ~variables: array<(key, value)>=[], ~count=?, identifier) => 
   | None => identifier
   }
 
-  translate(fullIdentifier, fullOptions)
+  translate(i18n, fullIdentifier, fullOptions)
 }
 
 let ts = (~variables: array<(key, value)>=[], ~count=?, identifier) =>

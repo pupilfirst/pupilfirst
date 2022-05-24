@@ -1,33 +1,9 @@
+open SchoolCustomize__Types.SchoolLinks
 open SchoolCustomize__Types
 
 %raw(`require("./SchoolCustomize__LinksEditor.css")`)
 
 let str = React.string
-
-type kind =
-  | HeaderLink
-  | FooterLink
-  | SocialLink
-
-type state = {
-  kind: kind,
-  title: string,
-  url: string,
-  titleInvalid: bool,
-  urlInvalid: bool,
-  formDirty: bool,
-  adding: bool,
-  deleting: list<Customizations.linkId>,
-}
-
-type action =
-  | UpdateKind(kind)
-  | UpdateTitle(string, bool)
-  | UpdateUrl(string, bool)
-  | DisableForm
-  | EnableForm
-  | ClearForm
-  | DisableDelete(Customizations.linkId)
 
 let handleKindChange = (send, kind, event) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -46,33 +22,7 @@ let handleUrlChange = (send, event) => {
   send(UpdateUrl(url, url |> UrlUtils.isInvalid(false)))
 }
 
-module DestroySchoolLinkQuery = %graphql(`
-  mutation DestroySchoolLinkMutation($id: ID!) {
-    destroySchoolLink(id: $id) {
-      success
-    }
-  }
-  `)
-
-let handleDelete = (state, send, removeLinkCB, id, event) => {
-  event |> ReactEvent.Mouse.preventDefault
-
-  if state.deleting |> List.mem(id) {
-    ()
-  } else {
-    send(DisableDelete(id))
-
-    DestroySchoolLinkQuery.make(~id, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(_response => {
-      removeLinkCB(id)
-      Js.Promise.resolve()
-    })
-    |> ignore
-  }
-}
-
-let titleInputVisible = state =>
+let titleInputVisible = (state: state) =>
   switch state.kind {
   | HeaderLink
   | FooterLink => true
@@ -90,7 +40,7 @@ let kindClasses = selected => {
 
 let addLinkText = adding => adding ? "Adding new link..." : "Add a New Link"
 
-let addLinkDisabled = state =>
+let addLinkDisabled = (state: state) =>
   if state.adding {
     true
   } else if state.formDirty {
@@ -115,15 +65,7 @@ module CreateSchoolLinkQuery = %graphql(`
   }
 `)
 
-module UpdateSchoolLinkQuery = %graphql(`
-  mutation UpdateSchoolLinkMutation($id: ID!, $title: String, $url: String!) {
-    updateSchoolLink(id: $id, title: $title, url: $url) {
-     success
-    }
-  }
-`)
-
-let displayNewLink = (state, addLinkCB, id) =>
+let displayNewLink = (state: state, addLinkCB, id) =>
   switch state.kind {
   | HeaderLink => Customizations.HeaderLink(id, state.title, state.url)
   | FooterLink => Customizations.FooterLink(id, state.title, state.url)
@@ -177,20 +119,6 @@ let handleAddLink = (state, send, addLinkCB, event) => {
   }
 }
 
-let handleLinkEdit = (~setUpdating, ~setIsEditingDisabled, ~id, ~title, ~url) => {
-  setUpdating(_ => true)
-  UpdateSchoolLinkQuery.make(~id, ~title, ~url, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(_ => {
-    setUpdating(_ => false)
-    setIsEditingDisabled(_ => true)
-    Notification.success("Done!", "A link has been updated.")
-    Js.Promise.resolve()
-  })
-  |> ignore
-  ()
-}
-
 let linksTitle = kind =>
   switch kind {
   | HeaderLink => "Current Header Links"
@@ -241,127 +169,7 @@ let reducer = (state, action) =>
     }
   }
 
-module LinkComponent = {
-  let inputClasses = "bg-white border border-gray-400 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500"
-
-  let deleteIconClasses = deleting => deleting ? "fas fa-spinner fa-pulse" : "far fa-trash-alt"
-
-  @react.component
-  let make = (~id, ~title, ~url, ~state, ~send, ~removeLinkCB, ~kind) => {
-    let (isEditingDisabled, setIsEditingDisabled) = React.useState(_ => true)
-    let (_title, setTitle) = React.useState(_ => title)
-    let (_url, setUrl) = React.useState(_ => url)
-    let (updating, setUpdating) = React.useState(_ => false)
-    let (error, setError) = React.useState(_ => false)
-    <DisablingCover disabled=updating message="Updating...">
-      <div
-        className={"flex justify-between items-center gap-8 bg-gray-100 text-xs text-gray-900 border rounded mt-2"}>
-        <div className="flex items-center flex-1">
-          {isEditingDisabled
-            ? <div className="pl-3">
-                {switch kind {
-                | HeaderLink
-                | FooterLink => <>
-                    <span> {title |> str} </span>
-                    <FaIcon classes="fas fa-link mx-2" />
-                    <code> {url |> str} </code>
-                  </>
-                | SocialLink => <code> {url |> str} </code>
-                }}
-              </div>
-            : <>
-                {switch kind {
-                | HeaderLink
-                | FooterLink => <>
-                    <input
-                      value=_title
-                      required=true
-                      autoFocus=true
-                      className=inputClasses
-                      placeholder="A short title for a new link"
-                      onChange={event => {
-                        let value = ReactEvent.Form.target(event)["value"]
-                        setTitle(_ => value)
-                      }}
-                    />
-                    <FaIcon classes="fas fa-link mx-2" />
-                  </>
-                | SocialLink => React.null
-                }}
-                <div className="flex flex-col gap-1 flex-1">
-                  <input
-                    value=_url
-                    type_="url"
-                    required=true
-                    placeholder="Full URL, staring with https://"
-                    className={inputClasses ++ " flex-1 invalid:ring-red-500"}
-                    autoFocus={kind == SocialLink}
-                    onChange={event => {
-                      let value = ReactEvent.Form.target(event)["value"]
-                      setError(_ => value |> UrlUtils.isInvalid(false))
-                      setUrl(_ => value)
-                    }}
-                  />
-                  <School__InputGroupError active={error} message="Invalid Url" />
-                </div>
-              </>}
-        </div>
-        <div>
-          {isEditingDisabled
-            ? <div>
-                <button
-                  ariaLabel={"Edit " ++ title}
-                  title={"Edit " ++ url}
-                  onClick={e => setIsEditingDisabled(_ => false)}
-                  className="p-3 hover:text-primary-500 focus:text-primary-500">
-                  <FaIcon classes="fas fa-edit" />
-                </button>
-                <button
-                  ariaLabel={"Delete " ++ title}
-                  title={"Delete " ++ url}
-                  onClick={handleDelete(state, send, removeLinkCB, id)}
-                  className="p-3 hover:text-red-500 focus:text-red-500">
-                  <FaIcon classes={deleteIconClasses(state.deleting |> List.mem(id))} />
-                </button>
-              </div>
-            : <div>
-                <button
-                  ariaLabel={"Cancel Editing " ++ title}
-                  title={"Cancel Editing " ++ url}
-                  onClick={e => {
-                    setIsEditingDisabled(_ => true)
-                    setTitle(_ => title)
-                    setError(_ => url |> UrlUtils.isInvalid(false))
-                    setUrl(_ => url)
-                  }}
-                  className="p-3 hover:text-primary-500 focus:text-primary-500">
-                  <FaIcon classes={"fas fa-times"} />
-                </button>
-                <button
-                  ariaLabel={"Update " ++ title}
-                  title={"Update " ++ url}
-                  disabled={error}
-                  onClick={e =>
-                    if !error {
-                      handleLinkEdit(
-                        ~setUpdating,
-                        ~setIsEditingDisabled,
-                        ~id,
-                        ~title=_title,
-                        ~url=_url,
-                      )
-                    }}
-                  className="p-3 hover:text-primary-500 focus:text-primary-500">
-                  <FaIcon classes={"fas fa-check"} />
-                </button>
-              </div>}
-        </div>
-      </div>
-    </DisablingCover>
-  }
-}
-
-let showLinks = (state, send, removeLinkCB, kind, links) =>
+let showLinks = (state, send, removeLinkCB, updateLinkCB, kind, links) =>
   switch links {
   | list{} =>
     <div
@@ -371,14 +179,16 @@ let showLinks = (state, send, removeLinkCB, kind, links) =>
   | links =>
     links
     |> List.map(((id, title, url)) =>
-      <LinkComponent key=id id title url kind removeLinkCB send state />
+      <SchoolCustomize__LinkComponent
+        key=id id title url kind removeLinkCB updateLinkCB send state
+      />
     )
     |> Array.of_list
     |> React.array
   }
 
 @react.component
-let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
+let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB, ~updateLinkCB) => {
   let (state, send) = React.useReducer(reducer, initialState(kind))
 
   <div className="mt-8 mx-8 pb-6">
@@ -423,7 +233,14 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB) => {
       <label className="inline-block tracking-wide text-xs font-semibold mt-4">
         {linksTitle(state.kind)}
       </label>
-      {showLinks(state, send, removeLinkCB, state.kind, unpackLinks(state.kind, customizations))}
+      {showLinks(
+        state,
+        send,
+        removeLinkCB,
+        updateLinkCB,
+        state.kind,
+        unpackLinks(state.kind, customizations),
+      )}
       <DisablingCover disabled=state.adding>
         <div className="flex mt-3" key="sc-links-editor__form-body">
           {if state |> titleInputVisible {

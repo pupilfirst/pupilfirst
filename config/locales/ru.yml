@@ -980,6 +980,8 @@ ru:
       success_notification: Данные сертификата обновлены.
     update_course:
       success_notification: Курс успешно обновлен!
+    update_school_link:
+      success_notification: Ссылка успешно обновлена!
     update_target:
       checklist_items_exceeded_error: Список должен содержать менее 15 пунктов.
       evaluation_criteria_course_error: Критерии оценки должны быть из того же курса, что и задача

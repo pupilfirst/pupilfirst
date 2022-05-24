@@ -45,7 +45,8 @@ let emailAddress = t => t.schoolStrings.emailAddress
 let privacyPolicy = t => t.schoolStrings.privacyPolicy
 let termsAndConditions = t => t.schoolStrings.termsAndConditions
 
-let headerLinks = t => t.links |> List.filter(l =>
+let headerLinks = t =>
+  t.links |> List.filter(l =>
     switch l {
     | HeaderLink(_, _, _) => true
     | FooterLink(_, _, _) => false
@@ -53,7 +54,8 @@ let headerLinks = t => t.links |> List.filter(l =>
     }
   )
 
-let footerLinks = t => t.links |> List.filter(l =>
+let footerLinks = t =>
+  t.links |> List.filter(l =>
     switch l {
     | HeaderLink(_, _, _) => false
     | FooterLink(_, _, _) => true
@@ -61,7 +63,8 @@ let footerLinks = t => t.links |> List.filter(l =>
     }
   )
 
-let socialLinks = t => t.links |> List.filter(l =>
+let socialLinks = t =>
+  t.links |> List.filter(l =>
     switch l {
     | HeaderLink(_, _, _) => false
     | FooterLink(_, _, _) => false
@@ -69,7 +72,8 @@ let socialLinks = t => t.links |> List.filter(l =>
     }
   )
 
-let unpackLinks = links => links |> List.map(l =>
+let unpackLinks = links =>
+  links |> List.map(l =>
     switch l {
     | HeaderLink(id, title, url)
     | FooterLink(id, title, url) => (id, title, url)
@@ -87,6 +91,19 @@ let removeLink = (linkId, t) => {
     | FooterLink(id, _, _) =>
       id != linkId
     | SocialLink(id, _) => id != linkId
+    }
+  ),
+}
+
+let updateLink = (linkId, newTitle, newUrl, t) => {
+  ...t,
+  links: t.links |> List.map(l =>
+    switch l {
+    | HeaderLink(id, title, url) =>
+      id == linkId ? HeaderLink(id, newTitle, newUrl) : HeaderLink(id, title, url)
+    | FooterLink(id, title, url) =>
+      id == linkId ? FooterLink(id, newTitle, newUrl) : FooterLink(id, title, url)
+    | SocialLink(id, url) => id == linkId ? SocialLink(id, newUrl) : SocialLink(id, url)
     }
   ),
 }

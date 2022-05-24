@@ -1038,6 +1038,8 @@ en:
       success_notification: Certificate details have been updated.
     update_course:
       success_notification: Course updated successfully!
+    update_school_link:
+      success_notification: Link updated successfully!
     update_target:
       checklist_items_exceeded_error: Checklist should have less than 15 items
       evaluation_criteria_course_error: Evaluation criteria must be from the same course as the target

@@ -5,7 +5,7 @@ open SchoolCustomize__Types
 let str = React.string
 
 type editor =
-  | LinksEditor(SchoolCustomize__LinksEditor.kind)
+  | LinksEditor(SchoolLinks.kind)
   | DetailsEditor
   | ImagesEditor
   | ContactsEditor
@@ -23,12 +23,14 @@ type rec action =
   | CloseEditor
   | AddLink(Customizations.link)
   | RemoveLink(Customizations.linkId)
+  | UpdateLink(Customizations.linkId, string, string)
   | UpdateTermsAndConditions(string)
   | UpdatePrivacyPolicy(string)
   | UpdateAddress(string)
   | UpdateEmailAddress(string)
   | UpdateSchoolDetails(name, about)
   | UpdateImages(Js.Json.t)
+
 and name = string
 and about = option<string>
 
@@ -159,6 +161,7 @@ let editor = (state, send, authenticityToken) =>
           customizations=state.customizations
           addLinkCB={link => send(AddLink(link))}
           removeLinkCB={linkId => send(RemoveLink(linkId))}
+          updateLinkCB={(linkId, title, url) => send(UpdateLink(linkId, title, url))}
         />
       | AgreementsEditor(kind) =>
         <SchoolCustomize__AgreementsEditor
@@ -208,6 +211,10 @@ let reducer = (state, action) =>
   | AddLink(link) => {
       ...state,
       customizations: state.customizations |> Customizations.addLink(link),
+    }
+  | UpdateLink(linkId, title, url) => {
+      ...state,
+      customizations: state.customizations |> Customizations.updateLink(linkId, title, url),
     }
   | RemoveLink(linkId) => {
       ...state,
@@ -270,7 +277,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             )}
             {editIcon(
               "ml-3",
-              showEditor(LinksEditor(SchoolCustomize__LinksEditor.HeaderLink), send),
+              showEditor(LinksEditor(SchoolLinks.HeaderLink), send),
               "Edit header links",
             )}
           </div>
@@ -349,7 +356,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                 <span className="uppercase font-bold text-sm"> {"Sitemap" |> str} </span>
                 {editIcon(
                   "ml-3",
-                  showEditor(LinksEditor(SchoolCustomize__LinksEditor.FooterLink), send),
+                  showEditor(LinksEditor(SchoolLinks.FooterLink), send),
                   "Edit footer links",
                 )}
               </div>
@@ -367,7 +374,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                     <span className="uppercase font-bold text-sm"> {"Social" |> str} </span>
                     {editIcon(
                       "ml-3",
-                      showEditor(LinksEditor(SchoolCustomize__LinksEditor.SocialLink), send),
+                      showEditor(LinksEditor(SchoolLinks.SocialLink), send),
                       "Edit social media links",
                     )}
                   </div>

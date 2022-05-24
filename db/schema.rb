@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_25_072002) do
+ActiveRecord::Schema.define(version: 2022_05_24_034333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 2022_04_25_072002) do
     t.string "username"
     t.string "fullname"
     t.integer "user_id"
-    t.string "email"
+    t.citext "email"
     t.index ["user_id"], name: "index_admin_users_on_user_id"
   end
 
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 2022_04_25_072002) do
   end
 
   create_table "applicants", force: :cascade do |t|
-    t.string "email"
+    t.citext "email"
     t.string "name"
     t.string "login_token"
     t.datetime "login_mail_sent_at"
@@ -707,7 +707,7 @@ ActiveRecord::Schema.define(version: 2022_04_25_072002) do
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
-    t.string "email"
+    t.citext "email"
     t.string "login_token"
     t.datetime "remember_created_at"
     t.integer "sign_in_count", default: 0

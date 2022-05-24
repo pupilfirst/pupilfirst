@@ -1357,7 +1357,7 @@ __metadata:
 "@centerforopenscience/markdown-it-imsize@https://github.com/cos-forks/markdown-it-imsize#cos":
   version: 2.0.1+cos2
   resolution: "@centerforopenscience/markdown-it-imsize@https://github.com/cos-forks/markdown-it-imsize.git#commit=73d2853d6ffe2a368dc57f7968c455469bd82bfa"
-  checksum: 57bf95a390e8ca1ae9704828ab27cdfebb18a9dff9aeb2ec225f2c02a38baaad5532b531244c3b44687f405d5a8bef2df4a4ba1d7ca2e16e654962942723ed29
+  checksum: cb928620e78c923c91a74c32a773e018721088e57a883bc3f5cff096f5825056075091d7d625d147e77836dd240552b3c13adb1ac250c87589a0e930d4228172
   languageName: node
   linkType: hard
 

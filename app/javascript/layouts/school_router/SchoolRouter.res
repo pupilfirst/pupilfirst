@@ -35,6 +35,10 @@ let make = (~school, ~courses, ~currentUser) => {
       SelectedCourse(courseId, Cohorts),
       Some(<CohortsDetails__Root courseId cohortId />),
     )
+  | list{"school", "courses", courseId, "cohorts", cohortId, "actions"} => (
+      SelectedCourse(courseId, Cohorts),
+      Some(<CohortsActions__Root courseId cohortId />),
+    )
   | list{"school", "courses", courseId, "students"} => (
       SelectedCourse(courseId, Students),
       Some(<StudentsIndex__Root courseId search={url.search} />),

@@ -10,7 +10,7 @@ module Mutations
       mutator = RevokeIssuedCertificateMutator.new(context, params)
 
       success = if mutator.valid?
-        mutator.notify(:success, I18n.t('shared.done_exclamation'), I18n.t('mutations.revoke_issued_certificate.success_notification'))
+        mutator.notify(:success, I18n.t('shared.notifications.done_exclamation'), I18n.t('mutations.revoke_issued_certificate.success_notification'))
         mutator.execute
         true
       else

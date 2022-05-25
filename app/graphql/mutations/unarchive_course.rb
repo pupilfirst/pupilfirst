@@ -13,7 +13,7 @@ module Mutations
       unarchive_course
       notify(
         :success,
-        I18n.t('shared.done_exclamation'),
+        I18n.t('shared.notifications.done_exclamation'),
         I18n.t('mutations.unarchive_course.success_notification')
       )
       publish(course, :course_unarchived, current_user, course)

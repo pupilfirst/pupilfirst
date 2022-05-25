@@ -11,8 +11,8 @@ type tabs =
   | ActionsTab
 
 let selectedTabClasses = selected =>
-  "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer hover:bg-gray-200 hover:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-indigo-500 " ++ (
-    selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-100"
+  "flex items-center focus:outline-none justify-center w-1/3 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-300 text-gray-600 cursor-pointer hover:bg-gray-50 hover:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
+    selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-50"
   )
 
 let tabItemsClasses = selected => selected ? "" : "hidden"
@@ -371,8 +371,7 @@ let processingUrlInput = (state, send) => {
       <label className="block tracking-wide text-xs font-semibold " htmlFor="featured">
         {t("processing_url.label")->str}
       </label>
-      <HelpIcon
-        className="ml-2 mr-6" link="https://docs.pupilfirst.com/#/courses?id=processing-url">
+      <HelpIcon className="ml-2 mr-6" link={t("processing_url.help_url")}>
         {t("processing_url.help")->str}
       </HelpIcon>
       <div id="processing-url" className="flex toggle-button__group flex-shrink-0 rounded-lg">
@@ -391,7 +390,7 @@ let processingUrlInput = (state, send) => {
     {ReactUtils.nullUnless(
       <div>
         <input
-          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+          className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="processing_url"
           type_="text"
           placeholder="https://example.com/"
@@ -480,7 +479,7 @@ let handleSelectProgressionLimit = (send, event) => {
 let progressionBehaviorButtonClasses = (state, progressionBehavior, additionalClasses) => {
   let selected = state.progressionBehavior == progressionBehavior
   let defaultClasses =
-    additionalClasses ++ " w-1/3 relative border font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-center bg-gray-200 hover:bg-gray-300 focus:bg-gray-300 focus:ring-2 focus:ring-indigo-500 "
+    additionalClasses ++ " w-1/3 relative border font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-center bg-gray-50 hover:bg-gray-300 focus:bg-gray-300 focus:ring-2 focus:ring-focusColor-500 "
   defaultClasses ++ (selected ? " text-primary-500 border-primary-500" : "")
 }
 
@@ -492,7 +491,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
       </label>
       <input
         autoFocus=true
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="name"
         type_="text"
         placeholder={t("course_name.placeholder")}
@@ -507,7 +506,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
         {t("course_description.label")->str}
       </label>
       <input
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="description"
         type_="text"
         placeholder={t("course_description.placeholder")}
@@ -524,14 +523,14 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
         {t("course_end_date.label")->str}
       </label>
       <span className="ml-1 text-xs"> {("(" ++ ts("optional") ++ ")")->str} </span>
-      <HelpIcon className="ml-2" link="https://docs.pupilfirst.com/#/courses">
+      <HelpIcon className="ml-2" link={t("course_end_date.help_url")}>
         {t("course_end_date.help")->str}
       </HelpIcon>
       <DatePicker
         onChange={date => send(UpdateEndsAt(date))} selected=?state.endsAt id="course-ends-at-input"
       />
     </div>
-    <School__InputGroupError message="Enter a valid date" active=state.hasDateError />
+    <School__InputGroupError message={t("enter_date")} active=state.hasDateError />
     <div className="mt-5">
       <label className="tracking-wide text-xs font-semibold" htmlFor="course-about">
         {t("course_about.label")->str}
@@ -551,8 +550,7 @@ let detailsTab = (state, send, course, updateCourseCB, reloadCoursesCB) => {
       <label className="tracking-wide text-xs font-semibold">
         {t("progression_behavior.label")->str}
       </label>
-      <HelpIcon
-        className="ml-2" link="https://docs.pupilfirst.com/#/courses?id=progression-behaviour">
+      <HelpIcon className="ml-2" link={t("progression_behavior.help_url")}>
         {t("progression_behavior.help")->str}
       </HelpIcon>
       <div className="flex mt-2">
@@ -685,7 +683,7 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
   let (state, send) = React.useReducerWithMapState(reducer, course, computeInitialState)
   <DisablingCover disabled={state.saving}>
     <div className="mx-auto bg-white">
-      <div className="pt-6 border-b border-gray-400 bg-gray-100">
+      <div className="pt-6 border-b border-gray-300 bg-gray-50">
         <div className="max-w-2xl mx-auto">
           <h5 className="uppercase text-center">
             {(
@@ -696,7 +694,9 @@ let make = (~course, ~updateCourseCB, ~reloadCoursesCB, ~selectedTab) => {
           </h5>
           {ReactUtils.nullUnless(
             <div className="w-full pt-6">
-              <div role="tablist" className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
+              <div
+                role="tablist"
+                className="flex flex-wrap w-full max-w-3xl mx-auto text-sm px-3 -mb-px">
                 <button
                   role="tab"
                   ariaSelected={selectedTab == DetailsTab}

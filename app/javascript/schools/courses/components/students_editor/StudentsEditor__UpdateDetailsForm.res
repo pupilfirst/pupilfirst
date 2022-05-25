@@ -1,5 +1,8 @@
 open StudentsEditor__Types
 
+let t = I18n.t(~scope="components.StudentsEditor__UpdateDetailsForm")
+let ts = I18n.ts
+
 type rec teamCoachlist = (coachId, coachName, selected)
 and coachId = string
 and coachName = string
@@ -51,12 +54,13 @@ let successMessage = (accessEndsAt, isSingleFounder) =>
   switch accessEndsAt {
   | Some(date) =>
     switch (date->DateFns.isPast, isSingleFounder) {
-    | (true, true) => "Student has been updated, and moved to list of inactive students"
-    | (true, false) => "Team has been updated, and moved to list of inactive students"
+    | (true, true) => t("student_updated_moved")
+    | (true, false) => t("team_updated_moved")
     | (false, true)
-    | (false, false) => "Student updated successfully"
+    | (false, false) =>
+      t("student_updated")
     }
-  | None => "Student updated successfully"
+  | None => t("student_updated")
   }
 
 let enrolledCoachIds = teamCoaches =>
@@ -84,7 +88,7 @@ let handleResponseCB = (updateFormCB, state, student, oldTeam, _json) => {
 
   updateFormCB(state.tagsToApply, team)
   Notification.success(
-    "Success",
+    ts("notifications.success"),
     successMessage(state.accessEndsAt, newTeam |> Team.isSingleStudent),
   )
 }
@@ -181,9 +185,9 @@ let teamCoachesEditor = (courseCoaches, state, send) => {
     |> Array.map(coach => SelectablePrerequisiteTargets.make(coach))
   <div className="mt-2">
     <MultiselectForTeamCoaches
-      placeholder="Search coaches"
-      emptySelectionMessage="No coaches selected"
-      allItemsSelectedMessage="You have selected all available coaches!"
+      placeholder={t("search_coaches_placeholder")}
+      emptySelectionMessage={t("search_coaches_empty")}
+      allItemsSelectedMessage={t("search_coaches_all")}
       selected
       unselected
       onChange={setTeamCoachSearch(send)}
@@ -242,16 +246,16 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
         <label
           className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
           htmlFor="name">
-          {"Name" |> str}
+          {t("name") |> str}
         </label>
         <input
           autoFocus=true
           value=state.name
           onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
-          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+          className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="name"
           type_="text"
-          placeholder="Student name here"
+          placeholder={t("student_name_placeholder")}
         />
         <School__InputGroupError
           message="Name must have at least two characters" active={state.name |> stringInputInvalid}
@@ -263,68 +267,68 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
               htmlFor="team_name">
-              {"Team Name" |> str}
+              {t("team_name") |> str}
             </label>
             <input
               value=state.teamName
               onChange={event => updateTeamName(send, ReactEvent.Form.target(event)["value"])}
               maxLength=50
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               id="team_name"
               type_="text"
-              placeholder="Team name here"
+              placeholder={t("team_name_placeholder")}
             />
             <School__InputGroupError
-              message="Team Name must have at least two characters"
-              active={state.teamName |> stringInputInvalid}
+              message={t("team_name_error")} active={state.teamName |> stringInputInvalid}
             />
           </div>}
       <div className="mt-5">
         <label
           className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
           htmlFor="title">
-          {"Title" |> str}
+          {t("title") |> str}
         </label>
         <input
           value=state.title
           onChange={event => updateTitle(send, ReactEvent.Form.target(event)["value"])}
-          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+          className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="title"
           type_="text"
-          placeholder="Student, Coach, CEO, etc."
+          placeholder={t("title_placeholder")}
         />
         <School__InputGroupError
-          message="Title must have at least two characters"
-          active={state.title |> stringInputInvalid}
+          message={t("title_error")} active={state.title |> stringInputInvalid}
         />
       </div>
       <div className="mt-5">
         <label
           className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
           htmlFor="affiliation">
-          {"Affiliation" |> str}
+          {t("affiliation") |> str}
         </label>
-        <span className="text-xs ml-1"> {"(optional)" |> str} </span>
+        <span className="text-xs ml-1"> {ts("optional_braces") |> str} </span>
         <input
           value=state.affiliation
           onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
-          className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+          className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="affiliation"
           type_="text"
-          placeholder="Acme Inc., Acme University, etc."
+          placeholder={t("affiliation_placeholder")}
         />
       </div>
       <div className="mt-5">
         <div className="border-b pb-4 mb-2 mt-5 ">
           <span className="inline-block mr-1 text-xs font-semibold">
-            {(isSingleStudent ? "Personal Coaches" : "Team Coaches") |> str}
+            {(isSingleStudent ? t("personal_coaches") : t("team_coaches")) |> str}
           </span>
           {teamCoachesEditor(courseCoaches, state, send)}
         </div>
       </div>
       {state.userTags |> ArrayUtils.isNotEmpty
         ? <div className="mt-5">
-            <div className="mb-2 text-xs font-semibold"> {"Tags applied to user:" |> str} </div>
+            <div className="mb-2 text-xs font-semibold">
+              {t("tags_applied_user") ++ ":" |> str}
+            </div>
             <div className="flex flex-wrap">
               {state.userTags
               |> Js.Array.map(tag =>
@@ -340,7 +344,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
         : React.null}
       <div className="mt-5">
         <div className="mb-2 text-xs font-semibold">
-          {(isSingleStudent ? "Tags applied:" : "Tags applied to team:") |> str}
+          {(isSingleStudent ? t("tags_applied") : t("tags_applied_team") ++ ":") |> str}
         </div>
         <School__SearchableTagList
           unselectedTags={teamTags |> Js.Array.filter(tag =>
@@ -354,12 +358,13 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
       </div>
       <div className="mt-5">
         <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
-          {(isSingleStudent ? "Student's" : "Team's") ++ " Access Ends On" |> str}
+          {(
+            isSingleStudent ? t("access_ends_at.label_student") : t("access_ends_at.label_team")
+          )->str}
         </label>
-        <span className="ml-1 text-xs"> {"(optional)" |> str} </span>
-        <HelpIcon
-          className="ml-2" link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
-          {"If set, students will not be able to complete targets after this date." |> str}
+        <span className="ml-1 text-xs"> {ts("optional_braces") |> str} </span>
+        <HelpIcon className="ml-2" link={t("access_ends_at.help_url")}>
+          {t("access_ends_at.help") |> str}
         </HelpIcon>
         <DatePicker
           onChange={date => send(UpdateAccessEndsAt(date))}
@@ -374,7 +379,7 @@ let make = (~student, ~team, ~teamTags, ~courseCoaches, ~updateFormCB) => {
         onClick={_e =>
           updateStudent(student, state, send, handleResponseCB(updateFormCB, state, student, team))}
         className="w-full btn btn-large btn-primary">
-        {"Update Student" |> str}
+        {t("update_student") |> str}
       </button>
     </div>
   </DisablingCover>

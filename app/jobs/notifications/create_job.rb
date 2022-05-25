@@ -16,8 +16,7 @@ module Notifications
       return if skip?
 
       users
-        .where
-        .not(id: actor.id)
+        .where.not(id: actor.id)
         .each do |recipient|
           I18n.with_locale(recipient.locale) do
             notification =
@@ -58,13 +57,13 @@ module Notifications
       case @event
       when :post_created
         I18n.t(
-          'jobs.notifications.post_created_job.post_created',
+          'jobs.notifications.create.message.post_created',
           user_name: @actor.name,
           community_name: @resource.community.name
         )
       when :topic_created
         I18n.t(
-          'jobs.notifications.topic_created_job.topic_created',
+          'jobs.notifications.create.message.topic_created',
           user_name: @actor.name,
           community_name: @resource.community.name
         )

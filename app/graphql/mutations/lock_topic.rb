@@ -11,7 +11,7 @@ module Mutations
 
       if mutator.valid?
         mutator.lock_topic
-        mutator.notify(:success, I18n.t('shared.done_exclamation'), I18n.t('mutations.lock_topic.success_notification'))
+        mutator.notify(:success, I18n.t('shared.notifications.done_exclamation'), I18n.t('mutations.lock_topic.success_notification'))
         { success: true }
       else
         mutator.notify_errors

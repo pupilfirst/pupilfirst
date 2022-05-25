@@ -12,7 +12,7 @@ module Mutations
       mutator = CreateQuizSubmissionMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, "Done!", "Your responses have been saved.")
+        mutator.notify(:success, I18n.t("shared.notifications.done"), I18n.t("mutations.create_quiz_submission.responses_saved_notification"))
         { submission: mutator.create_submission, level_up_eligibility: mutator.level_up_eligibility }
       else
         mutator.notify_errors

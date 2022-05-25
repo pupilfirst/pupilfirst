@@ -6,7 +6,7 @@ module Courses
     end
 
     def page_title
-      "Students In Course | #{@course.name} | #{current_school.name}"
+      "#{I18n.t('presenters.courses.students.students_in_course')} | #{@course.name} | #{current_school.name}"
     end
 
     def team_coaches

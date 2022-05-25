@@ -1,6 +1,7 @@
 %raw(`require("./CoursesCurriculum__SubmissionsAndFeedback.css")`)
 
 let str = React.string
+let tr = I18n.t(~scope="components.CoursesCurriculum__SubmissionsAndFeedback")
 
 open CoursesCurriculum__Types
 
@@ -46,7 +47,7 @@ let statusBar = (~color, ~text) => {
 }
 
 let submissionStatusIcon = (~passed) => {
-  let text = passed ? "Completed" : "Rejected"
+  let text = passed ? tr("completed") : tr("rejected")
   let color = passed ? "green" : "red"
 
   <div className="max-w-fc">
@@ -71,14 +72,14 @@ let undoSubmissionCB = () => {
 let gradingSection = (~grades, ~evaluationCriteria, ~gradeBar, ~passed) =>
   <div>
     <div className="w-full md:hidden">
-      {statusBar(~color=passed ? "green" : "red", ~text=passed ? "Completed" : "Rejected")}
+      {statusBar(~color=passed ? "green" : "red", ~text=passed ? tr("completed") : tr("rejected"))}
     </div>
     <div className="bg-white flex border-t flex-wrap items-center py-4">
       <div className="w-full md:w-1/2 flex-shrink-0 justify-center hidden md:flex border-l px-6">
         {submissionStatusIcon(~passed)}
       </div>
       <div className="w-full md:w-1/2 flex-shrink-0 md:order-first px-4 md:px-6">
-        <h5 className="pb-1 border-b"> {"Grading" |> str} </h5>
+        <h5 className="pb-1 border-b"> {tr("grading") |> str} </h5>
         <div className="mt-3">
           {grades
           |> Grade.sort(evaluationCriteria)
@@ -106,18 +107,18 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
     <div
       key={submission |> Submission.id}
       className="mt-4 pb-4 relative curriculum__submission-feedback-container"
-      ariaLabel={"Details about your submission on " ++ (submission |> Submission.createdAtPretty)}>
+      ariaLabel={tr("submission_details") ++ (submission |> Submission.createdAtPretty)}>
       <div className="flex justify-between items-end">
         <h2 className="ml-2 mb-2 font-semibold text-sm lg:text-base leading-tight">
-          {str("Submission #" ++ (totalSubmissions - index)->string_of_int)}
+          {str(tr("submission_number") ++ (totalSubmissions - index)->string_of_int)}
         </h2>
         <div
-          className="text-xs font-semibold bg-gray-100 inline-block px-3 py-1 mr-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
-          <span className="hidden md:inline"> {str("Submitted on ")} </span>
+          className="text-xs font-semibold bg-gray-50 inline-block px-3 py-1 mr-2 rounded-t-lg border-t border-r border-l text-gray-800 leading-tight">
+          <span className="hidden md:inline"> {str(tr("submitted_on"))} </span>
           {submission |> Submission.createdAtPretty |> str}
         </div>
       </div>
-      <div className="rounded-lg bg-gray-100 border shadow-md overflow-hidden">
+      <div className="rounded-lg bg-gray-50 border shadow-md overflow-hidden">
         <div className="px-4 py-4 md:px-6 md:pt-6 md:pb-5">
           <SubmissionChecklistShow
             checklist={submission |> Submission.checklist}
@@ -126,7 +127,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           />
         </div>
         {switch submission |> Submission.status {
-        | MarkedAsComplete => statusBar(~color="green", ~text="Completed")
+        | MarkedAsComplete => statusBar(~color="green", ~text=tr("completed"))
         | Pending =>
           <div
             className="bg-white p-3 md:px-6 md:py-4 flex border-t justify-between items-center w-full">
@@ -136,7 +137,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
                 <i className="fas fa-circle fa-stack-2x" />
                 <i className="fas fa-hourglass-half fa-stack-1x fa-inverse" />
               </span>
-              {"Pending Review" |> str}
+              {tr("pending_review") |> str}
             </div>
             {switch targetStatus |> TargetStatus.status {
             | PendingReview =>
@@ -172,7 +173,7 @@ let submissions = (target, targetStatus, targetDetails, evaluationCriteria, coac
           let (coachName, coachTitle, coachAvatar) = switch user {
           | Some(user) => (User.name(user), User.title(user), User.avatar(user))
           | None => (
-              "Unknown Coach",
+              tr("unknown_coach"),
               None,
               <div
                 className="w-10 h-10 rounded-full bg-gray-400 inline-block flex items-center justify-center">
@@ -239,7 +240,7 @@ let make = (
 
   <div>
     <div className="flex justify-between items-end border-b pb-2">
-      <h4 className="text-base md:text-xl"> {"Your Submissions" |> str} </h4>
+      <h4 className="text-base md:text-xl"> {tr("your_submissions") |> str} </h4>
       {targetStatus |> TargetStatus.canSubmit(~resubmittable=target |> Target.resubmittable)
         ? switch showSubmissionForm {
           | true =>
@@ -247,16 +248,16 @@ let make = (
               className="btn btn-subtle"
               onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
               <PfIcon className="if i-times-regular text-lg mr-2" />
-              <span className="hidden md:inline"> {"Cancel" |> str} </span>
-              <span className="md:hidden"> {"Cancel" |> str} </span>
+              <span className="hidden md:inline"> {tr("cancel") |> str} </span>
+              <span className="md:hidden"> {tr("cancel") |> str} </span>
             </button>
           | false =>
             <button
               className="btn btn-primary"
               onClick={handleAddAnotherSubmission(setShowSubmissionForm)}>
               <PfIcon className="if i-plus-regular text-lg mr-2" />
-              <span className="hidden md:inline"> {"Add another submission" |> str} </span>
-              <span className="md:hidden"> {"Add another" |> str} </span>
+              <span className="hidden md:inline"> {tr("add_another_submission") |> str} </span>
+              <span className="md:hidden"> {tr("add_another") |> str} </span>
             </button>
           }
         : React.null}

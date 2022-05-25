@@ -422,7 +422,7 @@ let make = (
                     {
                       let isLocked = Topic.lockedAt(state.topic)->Belt.Option.isSome
                       let topicId = state.topic->Topic.id
-                      moderator
+                      {moderator || isTopicCreator(firstPost, currentUserId)
                         ? <button
                             disabled=state.changingLockedStatus
                             onClick={_ =>
@@ -437,7 +437,7 @@ let make = (
                               ) |> str}
                             </span>
                           </button>
-                        : React.null
+                        : React.null}
                     }
                   </span>
                 </div>

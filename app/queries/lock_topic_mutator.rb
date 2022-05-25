@@ -8,7 +8,7 @@ class LockTopicMutator < ApplicationQuery
 
   private
 
-  alias authorized? authorized_moderate?
+  alias authorized? authorized_update?
 
   def community
     topic&.community

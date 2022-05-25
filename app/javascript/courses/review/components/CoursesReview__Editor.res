@@ -1389,7 +1389,7 @@ let make = (
                       <button
                         onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
                         className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <Icon className="fas fa-user-minus" />
+                        <Icon className="if i-times-regular"/>
                         <span className="ml-2"> {t("remove_assignment")->str} </span>
                       </button>
                     </div>

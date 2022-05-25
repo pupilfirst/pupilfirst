@@ -10,7 +10,7 @@ module Make = (Selectable: Selectable) => {
       <button
         key={string_of_int(index)}
         onClick={_ => onSelect(selectable)}
-        className="w-full text-left cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-gray-200">
+        className="w-full text-left cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-200 bg-white hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50">
         {Selectable.name(selectable)->React.string}
       </button>
     )
@@ -19,7 +19,7 @@ module Make = (Selectable: Selectable) => {
   let showSelected = (placeholder, selected, loading, disabled) => {
     <button
       disabled={loading || disabled}
-      className="flex items-center justify-between appearance-none w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+      className="flex items-center justify-between appearance-none w-full bg-white border border-gray-200 rounded py-3 px-4 mt-2 leading-tight hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-focusColor-500"
       key="selected">
       <span>
         {switch selected {

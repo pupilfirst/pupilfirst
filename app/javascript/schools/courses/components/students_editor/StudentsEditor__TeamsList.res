@@ -191,6 +191,7 @@ let teamCard = (
                     ? _e => deselectStudentCB(studentId)
                     : _e => selectStudentCB(student, team)}
                   checked={isChecked}
+                  disabled={false}
                 />
               </div>
               <button

@@ -2,7 +2,14 @@ class UpdateEvaluationCriterionMutator < ApplicationQuery
   include AuthorizeAuthor
 
   property :id
-  property :name, validates: { presence: true, length: { minimum: 1, maximum: 50 } }
+  property :name,
+           validates: {
+             presence: true,
+             length: {
+               minimum: 1,
+               maximum: 50
+             }
+           }
   property :grades_and_labels, validates: { presence: true }
 
   validate :evaluation_criterion_must_be_present
@@ -10,14 +17,11 @@ class UpdateEvaluationCriterionMutator < ApplicationQuery
   def evaluation_criterion_must_be_present
     return if evaluation_criterion.present?
 
-    errors[:base] << "Could not find evaluation criterion with ID #{id}"
+    errors.add(:base, "Could not find evaluation criterion with ID #{id}")
   end
 
   def update_evaluation_criterion
-    evaluation_criterion.update!(
-      name: name,
-      grade_labels: grade_labels,
-    )
+    evaluation_criterion.update!(name: name, grade_labels: grade_labels)
 
     evaluation_criterion
   end

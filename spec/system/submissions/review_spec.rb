@@ -1005,15 +1005,28 @@ feature 'Submission review overlay', js: true do
       create :startup, level: level, access_ends_at: 1.day.ago
     end
 
-    let!(:pending_submission_from_inactive_team) do
+    let!(:pending_submission_one_from_inactive_team) do
       create(
         :timeline_event,
         :with_owners,
         latest: true,
+        created_at: 5.days.ago,
         owners: inactive_team.founders,
         target: target
       )
     end
+
+    let!(:pending_submission_two_from_inactive_team) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        created_at: 1.hour.ago,
+        owners: inactive_team.founders,
+        target: target
+      )
+    end
+
     let!(:reviewed_submission_from_inactive_team) do
       create(
         :timeline_event,
@@ -1022,6 +1035,7 @@ feature 'Submission review overlay', js: true do
         owners: inactive_team.founders,
         target: target,
         evaluator_id: coach.id,
+        created_at: 5.days.ago,
         evaluated_at: 1.day.ago,
         passed_at: 1.day.ago
       )
@@ -1035,16 +1049,40 @@ feature 'Submission review overlay', js: true do
       )
     end
 
-    scenario 'coach visits pending submission page' do
+    around do |example|
+      with_secret(inactive_submission_review_allowed_days: 1) { example.run }
+    end
+
+    scenario 'coach visits pending submission page of inactive student with allowed submission review time has elapsed' do
       sign_in_user coach.user,
                    referrer:
                      review_timeline_event_path(
-                       pending_submission_from_inactive_team
+                       pending_submission_one_from_inactive_team
                      )
-
+      expect(page).not_to have_text('You can review the submission until')
       expect(page).to have_button('Create Review Checklist', disabled: true)
       expect(page).to have_button('Write a Note', disabled: true)
       expect(page).to have_button('Save grades', disabled: true)
+    end
+
+    scenario 'coach visits pending submission page of inactive student within submission review allowed time' do
+      sign_in_user coach.user,
+                   referrer:
+                     review_timeline_event_path(
+                       pending_submission_two_from_inactive_team
+                     )
+
+      click_button 'Start Review'
+      dismiss_notification
+      expect(page).to have_content('You can review the submission until')
+      expect(page).to have_content('Add Your Feedback')
+      expect(page).to have_content('Grade Card')
+      expect(page).to have_content(evaluation_criterion_1.name)
+      expect(page).to have_content(evaluation_criterion_2.name)
+      expect(page).to have_button('Save grades', disabled: true)
+      click_button 'Remove assignment'
+      dismiss_notification
+      expect(page).to have_button('Start Review')
     end
 
     scenario 'coach visits reviewed submission page' do

@@ -122,7 +122,7 @@ module Example = {
             onChange={onChange(setSearchString)}
             type_="text"
             placeholder="Search"
-            className="mx-2 text-sm bg-white border border-gray-400 rounded py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 appearance-none text-gray-700 focus:outline-none md:w-2/5"
+            className="mx-2 text-sm bg-white border border-gray-300 rounded py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 appearance-none text-gray-700 focus:outline-none md:w-2/5"
           />
         </div>
         <div className="mx-2 mt-4 flex md:flex-row flex-col flex-wrap bg-white border rounded p-2">

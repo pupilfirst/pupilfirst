@@ -128,7 +128,7 @@ let make = (
     <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
       <div className="flex flex-1 items-center justify-between">
         <button
-          className="btn btn-subtle focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
+          className="btn btn-subtle focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
           onClick=cancelCB>
           <FaIcon classes="fas fa-arrow-left" /> <p className="pl-2"> {str("Back to Review")} </p>
         </button>
@@ -144,7 +144,7 @@ let make = (
           <div className="ml-2"> {t("edit_checklist_button")->str} </div>
         </button>
       </div>
-      <div className="border bg-gray-200 rounded-lg py-2 md:py-4 mt-2 space-y-8">
+      <div className="border bg-gray-50 rounded-lg py-2 md:py-4 mt-2 space-y-8">
         {Js.Array.mapi(
           (reviewChecklistItem, itemIndex) =>
             <Spread
@@ -180,7 +180,7 @@ let make = (
                               <textarea
                                 rows=4
                                 cols=33
-                                className="appearance-none border border-gray-400 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
+                                className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
                                 id={"result_" ++ (resultIndex->string_of_int ++ "_feedback")}
                                 type_="text"
                                 placeholder={t("feedback_placeholder")}

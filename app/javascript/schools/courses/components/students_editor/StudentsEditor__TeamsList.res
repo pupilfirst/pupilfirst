@@ -184,27 +184,24 @@ let teamCard = (
           className="student-team__card h-full cursor-pointer flex items-center bg-white">
           <div className="flex flex-1 w-3/5 h-full">
             <div className="flex items-center w-full">
-              <label
-                className="flex items-center h-full text-gray-500 leading-tight font-bold px-4 py-5 hover:bg-gray-100"
-                htmlFor=checkboxId>
-                <input
-                  className="leading-tight"
-                  type_="checkbox"
-                  id=checkboxId
-                  checked=isChecked
+              <div className="relative pl-4">
+                <Checkbox
+                  id={checkboxId}
                   onChange={isChecked
                     ? _e => deselectStudentCB(studentId)
                     : _e => selectStudentCB(student, team)}
+                  checked={isChecked}
                 />
-              </label>
-              <a
-                className="flex flex-1 items-center py-4 px-4 hover:bg-gray-100 justify-between"
+              </div>
+              <button
+                className="flex flex-1 items-center text-left py-4 px-4 hover:bg-gray-50 hover:text-primary-500 focus:bg-gray-50 focus:text-primary-500 justify-between"
                 id={(student |> Student.name) ++ "_edit"}
+                ariaLabel={"View and edit " ++ (student |> Student.name)}
                 onClick={_e => showEditFormCB(student, teamId)}>
                 <div className="flex">
                   {studentAvatar(student)}
                   <div className="text-sm flex flex-col">
-                    <p className="text-black font-semibold inline-block ">
+                    <p className="font-semibold inline-block ">
                       {student |> Student.name |> str}
                     </p>
                     <span className="flex flex-row">
@@ -213,7 +210,7 @@ let teamCard = (
                   </div>
                 </div>
                 {isSingleStudent ? team |> levelInfo(levels) : React.null}
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -222,7 +219,7 @@ let teamCard = (
     </div>
     {isSingleStudent
       ? React.null
-      : <div className="flex w-2/5 items-center border-l border-gray-200">
+      : <div className="flex w-2/5 items-center border-l border-gray-50">
           <div className="w-4/6 py-4 pl-5 pr-4">
             <div className="students-team--name mb-5">
               <p className="inline-block text-xs bg-green-200 leading-tight px-1 py-px rounded">

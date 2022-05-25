@@ -1,5 +1,7 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.CourseAuthors__Form")
+
 open CourseAuthors__Types
 
 module CreateCourseAuthorQuery = %graphql(`
@@ -108,9 +110,9 @@ let saveDisabled = (email, name, saving, author) =>
 
 let buttonText = (saving, author) =>
   switch (saving, author) {
-  | (true, _) => "Saving"
-  | (false, Some(_)) => "Update Author"
-  | (false, None) => "Create Author"
+  | (true, _) => t("saving")
+  | (false, Some(_)) => t("update_author")
+  | (false, None) => t("create_author")
   }
 
 let emailInputDisabled = author =>
@@ -141,47 +143,48 @@ let make = (~courseId, ~rootPath, ~author, ~addAuthorCB, ~updateAuthorCB) => {
     <DisablingCover disabled=saving>
       <div className="mx-auto bg-white">
         <div className="max-w-2xl p-6 mx-auto">
-          <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+          <h5 className="uppercase text-center border-b border-gray-300 pb-2 mb-4">
             {switch author {
             | Some(author) => author |> Author.name
-            | None => "Add new author"
+            | None => t("add_new_author")
             } |> str}
           </h5>
           <div>
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
               htmlFor="email">
-              {"Email" |> str}
+              {t("email") |> str}
             </label>
             <input
+              autoFocus=true
               value=email
               onChange={event => setEmail(ReactEvent.Form.target(event)["value"])}
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               id="email"
               type_="email"
-              placeholder="Add email here"
+              placeholder=t("email_placeholder")
               disabled={emailInputDisabled(author)}
             />
             <School__InputGroupError
-              message="Enter a valid Email" active={showInvalidEmailError(email, author)}
+              message=t("email_message") active={showInvalidEmailError(email, author)}
             />
           </div>
           <div className="mt-5">
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
               htmlFor="name">
-              {"Name" |> str}
+              {t("name") |> str}
             </label>
             <input
               value=name
               onChange={event => setName(ReactEvent.Form.target(event)["value"])}
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               id="name"
               type_="text"
-              placeholder="Add name here"
+              placeholder=t("name_placeholder")
             />
             <School__InputGroupError
-              message="Enter a valid name" active={showInvalidNameError(name, author)}
+              message=t("name_message") active={showInvalidNameError(name, author)}
             />
           </div>
           <div className="w-auto mt-8">

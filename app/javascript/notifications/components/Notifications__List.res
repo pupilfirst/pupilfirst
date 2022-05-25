@@ -409,7 +409,7 @@ let markAllNotificationsButton = (state, send, entries) => {
     <button
       disabled={disabled || state.saving}
       onClick={markAllNotifications(send)}
-      className="font-semibold text-xs underline px-2 py-1 rounded text-gray-800 hover:text-primary-500 hover:bg-gray-200 transition ease-in-out duration-150">
+      className="font-semibold text-xs underline px-2 py-1 rounded text-gray-800 hover:text-primary-500 hover:bg-gray-50 focus:outline-none focus:text-primary-500 focus:bg-gray-50 transition ease-in-out duration-150">
       {str(t("mark_all_as_read_button"))}
     </button>
   </div>->ReactUtils.nullIf(ArrayUtils.isEmpty(entries))
@@ -426,11 +426,11 @@ let make = () => {
 
   <div>
     <div
-      className="md:flex md:flex-row space-y-2 md:space-y-0 md:space-x-2 md:justify-between md:items-center pt-4 px-4 lg:px-8 bg-gray-100">
-      <div className="font-bold text-sm md:text-xl"> {str("Notifications")} </div>
+      className="md:flex md:flex-row space-y-2 md:space-y-0 md:space-x-2 md:justify-between md:items-center pt-4 px-4 lg:px-8 bg-gray-50">
+      <div className="font-bold text-sm md:text-xl"> {str(t("notifications"))} </div>
       <WebPushSubscriptionManager />
     </div>
-    <div className="w-full bg-gray-100 border-b sticky top-0 z-30 px-4 lg:px-8 py-3">
+    <div className="w-full bg-gray-50 border-b sticky top-0 z-30 px-4 lg:px-8 py-3">
       <label
         htmlFor="search_notifcations"
         className="block text-tiny font-semibold uppercase pl-px text-left">

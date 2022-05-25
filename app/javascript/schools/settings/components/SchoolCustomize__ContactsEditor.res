@@ -2,6 +2,9 @@ open SchoolCustomize__Types
 
 let str = React.string
 
+let t = I18n.t(~scope="components.SchoolCustomize__ContactsEditor")
+let ts = I18n.ts
+
 type action =
   | UpdateAddress(string)
   | UpdateEmailAddress(string, bool)
@@ -22,7 +25,7 @@ let handleInputChange = (callback, event) => {
   callback(value)
 }
 
-let updateContactDetailsButtonText = updating => updating ? "Updating..." : "Update Contact Details"
+let updateContactDetailsButtonText = updating => updating ? { ts("updating") ++ "..."} : t("update_contact")
 
 module UpdateContactDetailsQuery = %graphql(`
    mutation UpdateAddressAndEmailMutation($address: String!, $emailAddress: String!) {
@@ -49,16 +52,16 @@ let handleUpdateContactDetails = (state, send, updateAddressCB, updateEmailAddre
   |> Js.Promise.then_(result =>
     switch (result["updateAddress"]["errors"], result["updateEmailAddress"]["errors"]) {
     | ([], []) =>
-      Notification.success("Done!", "Contact details have been updated.")
+      Notification.success(ts("notifications.done_exclamation"), t("contact_updated_notification"))
       updateAddressCB(state.address)
       updateEmailAddressCB(state.emailAddress)
       send(DoneUpdating)
       Js.Promise.resolve()
     | ([], errors) =>
-      Notification.notice("Partial success!", "We were only able to update the address.")
+      Notification.notice(t("partial_success_notification"), t("update_address_notification"))
       Js.Promise.reject(UpdateSchoolStringErrorHandler.Errors(errors))
     | (errors, []) =>
-      Notification.notice("Partial success!", "We were only able to update the email address.")
+      Notification.notice(t("partial_success_notification"), t("update_email_notification"))
       Js.Promise.reject(UpdateSchoolStringErrorHandler.Errors(errors))
     | (addressErrors, emailAddressErrors) =>
       let errors = addressErrors |> Array.append(emailAddressErrors)
@@ -104,21 +107,22 @@ let make = (~customizations, ~updateAddressCB, ~updateEmailAddressCB) => {
   let (state, send) = React.useReducer(reducer, initialState(customizations))
 
   <div className="mx-8 pt-8">
-    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
-      {"Manage Contact Details" |> str}
+    <h5 className="uppercase text-center border-b border-gray-300 pb-2">
+      {t("manage_contact") |> str}
     </h5>
     <DisablingCover disabled=state.updating>
       <div key="contacts-editor__address-input-group" className="mt-3">
         <label
           className="inline-block tracking-wide text-xs font-semibold"
           htmlFor="contacts-editor__address">
-          {"Contact Address " |> str} <i className="fab fa-markdown text-base" />
+          { t("contact_address") ++ " " |> str} <i className="fab fa-markdown text-base" />
         </label>
         <textarea
+          autoFocus=true
           maxLength=1000
-          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="contacts-editor__address"
-          placeholder="Leave the address empty to hide the footer section."
+          placeholder=t("address_placeholder")
           onChange={handleInputChange(address => send(UpdateAddress(address)))}
           value=state.address
         />
@@ -127,28 +131,28 @@ let make = (~customizations, ~updateAddressCB, ~updateEmailAddressCB) => {
         <label
           className="inline-block tracking-wide text-xs font-semibold"
           htmlFor="contacts-editor__email-address">
-          {"Email Address" |> str}
+          {t("email_address") |> str}
         </label>
         <input
           type_="text"
           maxLength=250
-          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="contacts-editor__email-address"
-          placeholder="Leave the email address empty to hide the footer link."
+          placeholder=t("email_address_placeholder")
           onChange={handleInputChange(emailAddress =>
             send(UpdateEmailAddress(emailAddress, emailAddress |> EmailUtils.isInvalid(true)))
           )}
           value=state.emailAddress
         />
         <School__InputGroupError
-          message="is not a valid email address" active=state.emailAddressInvalid
+          message=t("email_address_error") active=state.emailAddressInvalid
         />
       </div>
       <button
         key="contacts-editor__update-button"
         disabled={updateButtonDisabled(state)}
         onClick={handleUpdateContactDetails(state, send, updateAddressCB, updateEmailAddressCB)}
-        className="w-full bg-indigo-600 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded focus:outline-none mt-3">
+        className="w-full btn btn-primary btn-large mt-6">
         {updateContactDetailsButtonText(state.updating) |> str}
       </button>
     </DisablingCover>

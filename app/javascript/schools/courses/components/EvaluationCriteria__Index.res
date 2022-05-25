@@ -1,5 +1,8 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.EvaluationCriteria__Index")
+let ts = I18n.ts
+
 type editorAction =
   | ShowEditor(option<EvaluationCriterion.t>)
   | Hidden
@@ -19,20 +22,20 @@ let showEvaluationCriterion = (evaluationCriterion, setState) =>
     key={evaluationCriterion |> EvaluationCriterion.id}
     className="flex items-center shadow bg-white rounded-lg mb-4">
     <div className="course-faculty__list-item flex w-full items-center">
-      <a
-        title={"Edit " ++ (evaluationCriterion |> EvaluationCriterion.name)}
+      <button
+        title={ts("edit") ++ " " ++ (evaluationCriterion |> EvaluationCriterion.name)}
         onClick={event => openEditor(event, evaluationCriterion, setState)}
-        className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-l-lg hover:bg-gray-100 hover:text-primary-500 hover:border-primary-400">
+        className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-lg hover:bg-gray-50 hover:text-primary-500 hover:border-primary-400 focus:outline-none focus:bg-gray-50 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
         <div className="flex w-full text-sm justify-between">
-          <span className="flex-1 font-semibold py-5 px-5">
+          <span className="flex-1 font-semibold py-5 px-5 text-left">
             {evaluationCriterion |> EvaluationCriterion.name |> str}
           </span>
           <span className="ml-2 py-5 px-5 font-semibold text-gray-700 hover:text-primary-500">
             <i className="fas fa-edit text-normal" />
-            <span className="ml-1"> {"Edit" |> str} </span>
+            <span className="ml-1"> {ts("edit") |> str} </span>
           </span>
         </div>
-      </a>
+      </button>
     </div>
   </div>
 
@@ -51,7 +54,7 @@ let make = (~courseId, ~evaluationCriteria) => {
     evaluationCriteria: evaluationCriteria,
   })
 
-  <div className="flex-1 flex flex-col overflow-y-scroll bg-gray-200">
+  <div className="flex-1 flex flex-col overflow-y-scroll bg-gray-50">
     {switch state.editorAction {
     | Hidden => React.null
     | ShowEditor(evaluationCriterion) =>
@@ -67,9 +70,9 @@ let make = (~courseId, ~evaluationCriteria) => {
     <div className="flex px-6 py-2 items-center justify-between">
       <button
         onClick={_ => setState(state => {...state, editorAction: ShowEditor(None)})}
-        className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+        className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-primary-300 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
         <i className="fas fa-plus-circle" />
-        <h5 className="font-semibold ml-2"> {"Add New Evaluation Criterion" |> str} </h5>
+        <h5 className="font-semibold ml-2"> {t("add_new_criterion") |> str} </h5>
       </button>
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">

@@ -11,7 +11,7 @@ module Mutations
       mutator = UpdateCourseAuthorMutator.new(context, params)
 
       success = if mutator.valid?
-        mutator.notify(:success, 'Author Updated', "The author's name has been updated.")
+        mutator.notify(:success, I18n.t("mutations.update_course_author.author_updated_notification"), I18n.t("mutations.update_course_author.author_name_updated_notification"))
         mutator.update_course_author
         true
       else

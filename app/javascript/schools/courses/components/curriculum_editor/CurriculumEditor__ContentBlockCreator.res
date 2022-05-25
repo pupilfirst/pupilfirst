@@ -6,6 +6,7 @@ open CurriculumEditor__Types
 
 let str = React.string
 let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockCreator")
+let ts = I18n.ts
 
 module CreateMarkdownContentBlock = %graphql(`
     mutation CreateMarkdownContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID) {
@@ -96,12 +97,12 @@ let reducer = (state, action) =>
   | FailedToCreate => {
       ...state,
       saving: false,
-      error: Some("An unexpected error occured. Please reload the page and try again."),
+      error: Some(t("failed_create_error")),
     }
   | FailToUpload => {
       ...state,
       saving: false,
-      error: Some("Failed to upload file. Please check message in notification, and try again."),
+      error: Some(t("failed_upload_error")),
     }
   | ShowEmbedForm => {...state, ui: EmbedForm("")}
   | HideEmbedForm => {...state, ui: BlockSelector}
@@ -248,11 +249,7 @@ let handleCreateEmbedContentBlock = (
     |> ignore
   } else {
     Js.log(url ++ " File get error")
-    send(
-      SetError(
-        "The URL doesn't look valid. Please make sure that it starts with 'https://' and that it's one of the accepted websites.",
-      ),
-    )
+    send(SetError(t("failed_url_error")))
   }
 
 let uploadOnProgress = (send, current, total) => {
@@ -315,7 +312,7 @@ let uploadFile = (
       "/school/targets/" ++ ((target |> Target.id) ++ "/content_block"),
       formData,
       json => {
-        Notification.success("Done!", "File uploaded successfully.")
+        Notification.success(ts("notifications.done_exclamation"), t("upload_success_notification"))
         let contentBlock = json |> ContentBlock.decode
         addContentBlockCB(contentBlock)
         send(FinishSaving(isAboveContentBlock))
@@ -543,33 +540,34 @@ let onEmbedFormSave = (target, aboveContentBlock, url, send, addContentBlockCB, 
 }
 
 let topButton = (handler, id, title, icon) =>
-  <div
-    className="content-block-creator__top-button-container relative cursor-pointer" onClick=handler>
-    <div
+  <div className="content-block-creator__top-button-container relative">
+    <button
+      onClick=handler
       id={"top-button-" ++ id}
       title
-      className="content-block-creator__top-button bg-gray-200 hover:bg-gray-300 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20">
+      ariaLabel={title}
+      className="content-block-creator__top-button bg-gray-50 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20 hover:bg-primary-50 hover:text-primary-500 focus:outline-none focus:bg-primary-50 focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
       <FaIcon classes={"text-base fas " ++ icon} />
-    </div>
+    </button>
   </div>
 
 let closeEmbedFormButton = (send, aboveContentBlock) => {
   let id = aboveContentBlock |> OptionUtils.map(ContentBlock.id) |> OptionUtils.default("bottom")
 
-  topButton(_e => send(HideEmbedForm), id, "Close Embed Form", "fa-level-up-alt")
+  topButton(_e => send(HideEmbedForm), id, t("close_embed"), "fa-level-up-alt")
 }
 
 let closeUploadFormButton = (send, aboveContentBlock) => {
   let id = aboveContentBlock->Belt.Option.mapWithDefault("button", ContentBlock.id)
 
-  topButton(_e => send(HideUploadVideoForm), id, "Close Embed Form", "fa-level-up-alt")
+  topButton(_e => send(HideUploadVideoForm), id, t("close_embed"), "fa-level-up-alt")
 }
 
 let toggleVisibilityButton = (send, contentBlock) =>
   topButton(
     _e => send(ToggleVisibility),
     contentBlock |> ContentBlock.id,
-    "Toggle Content Block Form",
+    t("toggle_content_block"),
     "fa-plus content-block-creator__plus-button-icon",
   )
 
@@ -591,7 +589,7 @@ let uploadVideoForm = (videoInputId, state, send) =>
       </label>
       <input
         id={videoInputId ++ "-title"}
-        placeholder="Title of your video"
+        placeholder={t("title_video_placeholder")}
         className="w-full py-1 px-2 border rounded"
         type_="text"
         value=state.videoTitle
@@ -605,7 +603,7 @@ let uploadVideoForm = (videoInputId, state, send) =>
       </label>
       <textarea
         id={videoInputId ++ "-description"}
-        placeholder="Description for your video"
+        placeholder={t("description_video_placeholder")}
         className="w-full py-1 px-2 border rounded"
         type_="text"
         value=state.videoDescription
@@ -651,10 +649,11 @@ let make = (
   <DisablingCover
     disabled={disablingCoverDisabled(state.saving, state.uploadProgress)}
     message={switch state.ui {
-    | UploadVideo => "Preparing to Upload..."
+    | UploadVideo => t("preparing_upload")
     | BlockSelector
     | EmbedForm(_)
-    | Hidden => "Creating..."
+    | Hidden =>
+      t("creating")
     }}>
     {uploadFormCurried(#File)}
     {uploadFormCurried(#Image)}
@@ -677,7 +676,7 @@ let make = (
           </div>
         | UploadVideo =>
           <div
-            className="flow-root border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
+            className="flow-root border-2 border-gray-300 bg-gray-50 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
             {uploadFormCurried(#VideoEmbed)}
             {state.uploadProgress->Belt.Option.mapWithDefault(
               uploadVideoForm(videoInputId, state, send),
@@ -697,14 +696,12 @@ let make = (
           </div>
         | EmbedForm(url) =>
           <div
-            className="flow-root border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
+            className="flow-root border-2 border-gray-300 bg-gray-50 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
             <label htmlFor=embedInputId className="text-xs font-semibold">
-              {t("embed.url_label")->str}
+              {t("embed_url.label")->str}
             </label>
-            <HelpIcon
-              className="ml-2 text-xs"
-              link="https://docs.pupilfirst.com/#/curriculum_editor?id=content-block-types">
-              {t("embed.url_help")->str}
+            <HelpIcon className="ml-2 text-xs" link={t("embed_url.help_url")}>
+              {t("embed_url.help")->str}
             </HelpIcon>
             <div className="flex mt-1">
               <input
@@ -718,7 +715,7 @@ let make = (
               <button
                 className="ml-2 btn btn-success"
                 onClick={onEmbedFormSave(target, aboveContentBlock, url, send, addContentBlockCB)}>
-                {t("embed.save_button")->str}
+                {t("embed_url.save_button")->str}
               </button>
             </div>
           </div>

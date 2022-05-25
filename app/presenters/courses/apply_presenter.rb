@@ -7,7 +7,7 @@ module Courses
     end
 
     def page_title
-      "#{I18n.t('courses.apply.page_title', course_name: @course.name)} | #{current_school.name}"
+      "#{I18n.t('presenters.apply.page_title', course_name: @course.name)} | #{current_school.name}"
     end
 
     def thumbnail_url

@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Pundit
+  include Pundit::Authorization
 
   # Prevent CSRF attacks by raising an exception. Note that this is different from the default of :null_session.
   # Rails 5 introduced a boolean option called prepend for maintaining the order of execution
@@ -268,5 +268,20 @@ class ApplicationController < ActionController::Base
 
   def redirect_to_primary_domain
     observable_redirect_to "#{request.ssl? ? 'https' : 'http'}://#{current_school.domains.primary.fqdn}#{request.path}"
+  end
+
+  before_action :set_last_seen_at,
+                if:
+                  proc {
+                    user_signed_in? &&
+                      (
+                        session[:last_seen_at] == nil ||
+                          Time.zone.parse(session[:last_seen_at]) < 15.minutes.ago
+                      )
+                  }
+
+  def set_last_seen_at
+    current_user.update!(last_seen_at: Time.current)
+    session[:last_seen_at] = Time.current.iso8601
   end
 end

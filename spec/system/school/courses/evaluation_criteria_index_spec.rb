@@ -96,7 +96,7 @@ feature 'Evaluation criteria index spec', js: true do
   scenario 'school admin updates an evaluation criterion' do
     sign_in_user school_admin.user, referrer: evaluation_criteria_school_course_path(course)
 
-    find("a[title='Edit #{evaluation_criterion_1.name}']").click
+    find("button[title='Edit #{evaluation_criterion_1.name}']").click
 
     fill_in 'Name', with: new_ec_name
     fill_in 'grade-label-for-3', with: 'New Label'
@@ -139,7 +139,7 @@ feature 'Evaluation criteria index spec', js: true do
 
     expect(evaluation_criterion.name).to eq(new_ec_name)
 
-    find("a[title='Edit #{evaluation_criterion.name}']").click
+    find("button[title='Edit #{evaluation_criterion.name}']").click
     another_name = Faker::Lorem.words(number: 2).join(" ")
     fill_in 'Name', with: another_name
     click_button 'Update Criterion'

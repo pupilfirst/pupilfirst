@@ -3,7 +3,7 @@ let str = React.string
 
 open Notifications__Types
 
-let t = I18n.t(~scope="components.Notifications__List")
+let t = I18n.t(~scope="components.Notifications__EntryCard")
 
 module MarkNotificationQuery = %graphql(`
   mutation MarkNotificationMutation($notificationId: ID!) {
@@ -58,7 +58,7 @@ let make = (~entry, ~markNotificationCB) => {
   let (saving, setSaving) = React.useState(() => false)
 
   <div
-    className={"notifications__entry-card block relative py-5 px-4 lg:px-8 text-sm font-semibold hover:bg-gray-200 focus:bg-gray-200 transition ease-in-out duration-150 " ++
+    className={"notifications__entry-card block relative py-5 px-4 lg:px-8 text-sm font-semibold hover:bg-gray-50 focus-within:bg-gray-50 transition ease-in-out duration-150 " ++
     switch Entry.readAt(entry) {
     | Some(_readAt) => "notifications__entry-card--read text-gray-700"
     | None => "notifications__entry-card--unread"
@@ -78,7 +78,7 @@ let make = (~entry, ~markNotificationCB) => {
           </span>->ReactUtils.nullUnless(Entry.readAt(entry)->Belt.Option.isNone)}
         </div>
         {Entry.notifiableId(entry)->Belt.Option.isSome
-          ? <a className="ml-4" href={"/notifications/" ++ Entry.id(entry)}>
+          ? <a className="ml-4 outline-none" href={"/notifications/" ++ Entry.id(entry)}>
               {str(Entry.message(entry))}
             </a>
           : <div className="ml-4"> {str(Entry.message(entry))} </div>}
@@ -92,12 +92,13 @@ let make = (~entry, ~markNotificationCB) => {
         <div
           className="opacity-0 notifications__entry-card-buttons absolute top-0 bottom-0 right-0 flex items-center pl-4 pr-4 md:pr-8 transition ease-in-out duration-150">
           {ReactUtils.nullIf(
-            <Tooltip tip={str("Mark as Read")} position=#Left>
+            <Tooltip tip={str(t("mark_read"))} position=#Left>
               <button
                 disabled=saving
-                title="Mark as Read"
+                ariaLabel={t("mark_read")}
+                title={t("mark_read")}
                 onClick={markNotification(Entry.id(entry), setSaving, markNotificationCB)}
-                className="flex justify-center items-center w-8 h-8 font-semibold p-2 md:py-1 border border-gray-400 rounded text-sm bg-white text-gray-700 hover:text-primary-500 hover:border-primary-400 hover:bg-gray-200 hover:shadow-md transition ease-in-out duration-150">
+                className="flex justify-center items-center w-8 h-8 font-semibold p-2 md:py-1 border border-gray-300 rounded text-sm bg-white text-gray-700 hover:text-primary-500 hover:border-primary-400 hover:bg-gray-50 hover:shadow-md focus:outline-none focus:text-primary-500 focus:border-primary-400 focus:bg-gray-50 focus:shadow-md transition ease-in-out duration-150">
                 <Icon className="if i-check-solid" />
               </button>
             </Tooltip>,

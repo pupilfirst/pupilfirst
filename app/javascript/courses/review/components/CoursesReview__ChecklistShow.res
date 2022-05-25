@@ -130,13 +130,14 @@ let make = (
         <button
           className="btn btn-subtle focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500 transition"
           onClick=cancelCB>
-          <FaIcon classes="fas fa-arrow-left" /> <p className="pl-2"> {str("Back to Review")} </p>
+          <FaIcon classes="fas fa-arrow-left text-gray-500" />
+          <p className="pl-2"> {str("Back to Review")} </p>
         </button>
       </div>
     </div>
     <div className="p-4 md:px-6 pb-0">
       <div className="flex items-end justify-between">
-        <h5 className="font-semibold flex items-center tracking-wide">
+        <h5 className="font-semibold flex items-center tracking-wide text-sm">
           {t("review_checklist")->str}
         </h5>
         <button className="btn btn-small btn-default" onClick={_ => showEditorCB()}>
@@ -144,23 +145,22 @@ let make = (
           <div className="ml-2"> {t("edit_checklist_button")->str} </div>
         </button>
       </div>
-      <div className="border bg-gray-50 rounded-lg py-2 md:py-4 mt-2 space-y-8">
+      <div className="border bg-white rounded-lg py-2 md:py-4 mt-2 space-y-8">
         {Js.Array.mapi(
           (reviewChecklistItem, itemIndex) =>
             <Spread
               props={"data-checklist-item": string_of_int(itemIndex)}
               key={string_of_int(itemIndex)}>
               <div>
-                <h4
-                  className="relative text-sm md:text-base font-semibold mt-2 md:mt-0 px-4 w-full md:w-4/5">
+                <h4 className="relative text-sm font-semibold mt-2 md:mt-0 px-6 w-full md:w-4/5">
                   <div className={checklistItemCheckedClasses(itemIndex, selection)} />
                   {ReviewChecklistItem.title(reviewChecklistItem)->str}
                 </h4>
-                <div className="space-y-3 pt-2"> {Js.Array.mapi((checklistItem, resultIndex) =>
+                <div className="space-y-3 pt-3"> {Js.Array.mapi((checklistItem, resultIndex) =>
                     <Spread
                       props={"data-result-item": string_of_int(resultIndex)}
                       key={string_of_int(itemIndex) ++ string_of_int(resultIndex)}>
-                      <div className="px-4">
+                      <div className="px-6">
                         <Checkbox
                           id={id ++ (itemIndex->string_of_int ++ resultIndex->string_of_int)}
                           label={str(checklistItem->ReviewChecklistResult.title)}
@@ -212,8 +212,7 @@ let make = (
         )->React.array}
       </div>
     </div>
-    <div
-      className="flex justify-end bg-white md:bg-gray-100 border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
+    <div className="flex justify-end border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
       {isReviewerAssigned(submissionDetails, overlaySubmission)
         ? generateFeedbackButton(checklist, selection, feedback, setSelecton, updateFeedbackCB)
         : React.null}

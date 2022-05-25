@@ -892,7 +892,7 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
     let textareaId = "note-for-submission-" ++ OverlaySubmission.id(overlaySubmission)
 
     <div className="text-sm">
-      <div className="font-semibold text-sm flex">
+      <div className="font-medium text-sm flex">
         <Icon className="if i-long-text-light text-gray-800 text-base" />
         {switch note {
         | Some(_) =>
@@ -939,7 +939,7 @@ let feedbackGenerator = (
   <div className="px-4 md:px-6 pt-4 space-y-8">
     <div>
       <div className="flex h-7 items-end">
-        <h5 className="font-semibold text-sm flex items-center">
+        <h5 className="font-medium text-sm flex items-center">
           <PfIcon
             className="if i-check-square-alt-light text-gray-800 text-base md:text-lg inline-block"
           />
@@ -964,7 +964,7 @@ let feedbackGenerator = (
     </div>
     {showAddFeedbackEditor
       ? <div className="course-review__feedback-editor text-sm">
-          <h5 className="font-semibold text-sm flex items-center">
+          <h5 className="font-medium text-sm flex items-center">
             <PfIcon
               className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
             />
@@ -1370,7 +1370,7 @@ let make = (
                 <p className="font-semibold"> {str("Review")} </p>
               </div>
               {ReactUtils.nullIf(
-                <div className="px-4 md:px-6 py-4 border-b border-gray-300" ariaLabel="Assigned to">
+                <div className="px-4 py-4 border-b border-gray-300" ariaLabel="Assigned to">
                   <div
                     className="flex items-center justify-between px-3 py-2 rounded-md bg-gray-50">
                     {switch SubmissionDetails.reviewer(submissionDetails) {
@@ -1389,7 +1389,7 @@ let make = (
                       <button
                         onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
                         className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <Icon className="if i-times-regular"/>
+                        <Icon className="if i-times-regular" />
                         <span className="ml-2"> {t("remove_assignment")->str} </span>
                       </button>
                     </div>
@@ -1401,7 +1401,7 @@ let make = (
               <div className="w-full px-4 md:px-6 pt-8 space-y-8">
                 {noteForm(submissionDetails, overlaySubmission, teamSubmission, state.note, send)}
                 <div>
-                  <h5 className="font-semibold text-sm flex items-center">
+                  <h5 className="font-medium text-sm flex items-center">
                     <Icon className="if i-tachometer-light text-gray-800 text-base" />
                     <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
                   </h5>
@@ -1441,7 +1441,7 @@ let make = (
               </div>
               {ReactUtils.nullIf(
                 <div className="p-4 md:p-6">
-                  <h5 className="font-semibold text-sm flex items-center">
+                  <h5 className="font-medium text-sm flex items-center">
                     <PfIcon
                       className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
                     />
@@ -1487,7 +1487,7 @@ let make = (
               </div>
               <div className="w-full p-4 md:p-6">
                 <div className="flex items-center justify-between">
-                  <h5 className="font-semibold text-sm flex items-center">
+                  <h5 className="font-medium text-sm flex items-center">
                     <Icon className="if i-tachometer-light text-gray-800 text-base" />
                     <span className="ml-2 md:ml-3 tracking-wide"> {t("grade_card")->str} </span>
                   </h5>
@@ -1544,7 +1544,7 @@ let make = (
                 state.additonalFeedbackEditorVisible,
               )}
               <div className="p-4 md:p-6">
-                <h5 className="font-semibold text-sm flex items-center">
+                <h5 className="font-medium text-sm flex items-center">
                   <PfIcon
                     className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
                   />

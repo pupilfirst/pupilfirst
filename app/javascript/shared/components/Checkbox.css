@@ -30,10 +30,6 @@
   clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
 
-.checkbox__input:checked::before {
-  transform: scale(1);
-}
-
 .checkbox__input:disabled + .checkbox__label {
   @apply cursor-not-allowed pointer-events-none;
 }

@@ -11,7 +11,7 @@ module Mutations
       mutator = CreateCoachNoteMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, "Success", "Note added successfully")
+        mutator.notify(:success, I18n.t("shared.notifications.success"), I18n.t("mutations.create_coach_note.note_added_notification"))
         { coach_note: mutator.create_note }
       else
         mutator.notify_errors

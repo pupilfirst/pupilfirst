@@ -8,7 +8,10 @@ class CoachMailer < SchoolMailer
 
     simple_mail(
       coach.email,
-      "You have been added as a coach in #{@course.name}"
+      I18n.t(
+        'mailers.coach.course_enrollment.subject',
+        course_name: @course.name
+      )
     )
   end
 end

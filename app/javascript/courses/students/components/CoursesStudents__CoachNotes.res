@@ -1,4 +1,4 @@
-%bs.raw(`require("./CoursesStudents__StudentOverlay.css")`)
+%raw(`require("./CoursesStudents__StudentOverlay.css")`)
 
 open CoursesStudents__Types
 
@@ -8,6 +8,8 @@ type state = {
 }
 
 let str = React.string
+
+let tr = I18n.t(~scope="components.CoursesStudents__CoachNotes")
 
 module CreateCoachNotesMutation = %graphql(
   `
@@ -26,8 +28,7 @@ module CreateCoachNotesMutation = %graphql(
        }
       }
     }
-  `
-)
+  `)
 
 let saveNote = (studentId, setState, state, addNoteCB) => {
   setState(state => {...state, saving: true})
@@ -61,7 +62,7 @@ let make = (~studentId, ~coachNotes, ~hasArchivedNotes, ~addNoteCB, ~removeNoteC
   <div className="mt-3 text-sm">
     <label
       htmlFor="course-students__coach-notes-new-note" className="font-semibold text-sm block mb-1">
-      {"Add a New Note" |> str}
+      {tr("new_note") |> str}
     </label>
     <DisablingCover disabled=state.saving message="Saving...">
       <MarkdownEditor
@@ -77,18 +78,18 @@ let make = (~studentId, ~coachNotes, ~hasArchivedNotes, ~addNoteCB, ~removeNoteC
       onClick={_ => saveNote(studentId, setState, state, addNoteCB)}
       className="btn btn-primary mt-2">
       {state.saving
-        ? saveNoteButtonText("Saving", "fas fa-spinner")
-        : saveNoteButtonText("Save Note", "")}
+        ? saveNoteButtonText(tr("saving"), "fas fa-spinner")
+        : saveNoteButtonText(tr("save_note"), "")}
     </button>
     <div>
-      <h6 className="font-semibold mt-6"> {"All Notes" |> str} </h6>
+      <h6 className="font-semibold mt-6"> {tr("all_notes") |> str} </h6>
       {coachNotes |> ArrayUtils.isEmpty
         ? <div
-            className="bg-gray-200 rounded text-center p-4 md:p-6 items-center justify-center mt-2">
+            className="bg-gray-50 rounded text-center p-4 md:p-6 items-center justify-center mt-2">
             <Icon className="if i-long-text-light text-gray-800 text-base" />
             <p className="text-xs font-semibold text-gray-700 mt-2">
               {(
-                hasArchivedNotes ? "This student has some archived notes." : "No notes here!"
+                hasArchivedNotes ? tr("has_archived_notes") : tr("no_notes")
               ) |> str}
             </p>
           </div>

@@ -3,7 +3,7 @@
 }
 
 .course-report__category-tab > :first-child {
-  @apply border-r border-gray-400 rounded-l-lg;
+  @apply border-r border-gray-300 rounded-l-lg;
 }
 
 .course-report__category-tab > :last-child {

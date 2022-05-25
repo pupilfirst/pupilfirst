@@ -100,6 +100,9 @@ module Courses
       )
 
       team = find_or_create_team(student)
+      if student.tags.present?
+        team.update!(tag_list: (team.tags + student.tags).uniq)
+      end
 
       # Finally, create a student profile for the user.
       Founder.create!(user: user, startup: team)

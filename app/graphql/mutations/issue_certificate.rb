@@ -11,7 +11,7 @@ module Mutations
       mutator = IssueCertificateMutator.new(context, params)
 
       issued_certificate = if mutator.valid?
-        mutator.notify(:success, I18n.t('shared.done_exclamation'), I18n.t('mutations.issue_certificate.success_notification'))
+        mutator.notify(:success, I18n.t('shared.notifications.done_exclamation'), I18n.t('mutations.issue_certificate.success_notification'))
         mutator.execute
       else
         mutator.notify_errors

@@ -25,7 +25,8 @@
                 <%= yield :signature %>
               <% else %>
                 <p>
-                  Thanks, <br>
+                  <%= t("mailers.layouts.mail.thanks") %>
+                  <br>
                   <%= link_to presenter.school_name, presenter.school_url %>
                 </p>
               <% end %>

@@ -6,16 +6,17 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "app/javascript/packages/*",
-      "docs/developers"
+      "app/javascript/packages/*"
     ],
     "nohoist": [
       "**/html-minifier-terser"
     ]
   },
   "dependencies": {
+    "@babel/core": "^7.17.10",
     "@babel/plugin-proposal-class-properties": "^7.14.5",
     "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.17.10",
     "@babel/preset-react": "^7.14.5",
     "@babel/runtime": "^7.15.4",
     "@baransu/graphql_ppx_re": "^0.7.1",
@@ -29,6 +30,7 @@
     "@rails/ujs": "^6.1.4",
     "@rails/webpacker": "^5.4.0",
     "@rescript/react": "^0.10.3",
+    "animate.css": "3.7.2",
     "autoprefixer": "^10.3.4",
     "autosize": "^4.0.2",
     "babel-loader": "^8.2.2",
@@ -56,6 +58,7 @@
     "markdown-it-multimd-table": "^4.0.0",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
+    "markdown-it-task-checkbox": "^1.0.6",
     "node-sass": "^7.0.0",
     "pluralize": "^8.0.0",
     "pnotify": "^5.2.0",
@@ -78,6 +81,7 @@
     "stylelint-config-recommended": "^5.0.0",
     "tailwindcss": "^2.2.15",
     "tus-js-client": "^2.3.0",
+    "webpack": "4.46.0",
     "webpack-cli": "^3",
     "webpack-dev-server": "^3",
     "webpack-merge": "^5.8.0"

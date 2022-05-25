@@ -2,6 +2,7 @@ open CourseCertificates__Types
 
 let str = React.string
 let t = I18n.t(~scope="components.CourseCertificates__CreateDrawer")
+let ts = I18n.t(~scope="shared")
 
 type state = {
   name: string,
@@ -52,7 +53,7 @@ let submitForm = (course, addCertificateCB, send, event) => {
     url,
     formData,
     json => {
-      Notification.success(t("done_exclamation"), t("success_notification"))
+      Notification.success(ts("notifications.done_exclamation"), t("success_notification"))
       Json.Decode.field("certificate", Certificate.decode, json) |> addCertificateCB
     },
     () => send(FailSaving),
@@ -60,7 +61,7 @@ let submitForm = (course, addCertificateCB, send, event) => {
 }
 
 let imageInputText = imageFilename =>
-  imageFilename->Belt.Option.getWithDefault(t("certificate_base_image_placeholder"))
+  imageFilename->Belt.Option.getWithDefault(t("certificate_base_image.placeholder"))
 
 let selectFile = (send, event) => {
   let files = ReactEvent.Form.target(event)["files"]
@@ -82,10 +83,11 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
   <SchoolAdmin__EditorDrawer closeDrawerCB closeButtonTitle={t("cancel")}>
     <form onSubmit={submitForm(course, addCertificateCB, send)}>
       <input name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()} />
-      <DisablingCover containerClasses="w-full" disabled=state.saving message="Uploading...">
+      <DisablingCover
+        containerClasses="w-full" disabled=state.saving message={ts("uploading") ++ "..."}>
         <div className="flex flex-col min-h-screen">
           <div className="bg-white flex-grow-0">
-            <div className="bg-gray-100 pt-6 pb-4 border-b">
+            <div className="bg-gray-50 pt-6 pb-4 border-b">
               <div className="max-w-2xl px-4 mx-auto">
                 <h5 className="uppercase"> {t("create_action")->str} </h5>
               </div>
@@ -101,7 +103,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                   <span className="text-xs"> {" (" ++ (t("optional") ++ ")") |> str} </span>
                   <input
                     autoFocus=true
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                     id="name"
                     type_="text"
                     maxLength=30
@@ -116,17 +118,13 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                     <label
                       className="tracking-wide text-xs font-semibold"
                       htmlFor="certificate-file-input">
-                      {t("certificate_base_image_label")->str}
+                      {t("certificate_base_image.label")->str}
                     </label>
-                    <HelpIcon
-                      className="ml-2"
-                      link="https://docs.pupilfirst.com/#/certificates?id=uploading-a-new-certificate">
-                      {str(
-                        "This base image must include a full line's space to insert a student's name.",
-                      )}
+                    <HelpIcon className="ml-2" link={t("certificate_base_image.help_url")}>
+                      {t("certificate_base_image.help")->str}
                     </HelpIcon>
                   </div>
-                  <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+                  <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
                     <input
                       disabled=state.saving
                       className="absolute w-0 h-0 focus:outline-none"
@@ -149,7 +147,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
               </div>
             </div>
           </div>
-          <div className="bg-gray-100 flex-grow">
+          <div className="bg-gray-50 flex-grow">
             <div className="max-w-2xl p-6 mx-auto">
               <button disabled={saveDisabled(state)} className="w-auto btn btn-large btn-primary">
                 {t("create_button_text")->str}

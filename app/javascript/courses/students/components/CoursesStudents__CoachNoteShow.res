@@ -83,7 +83,7 @@ let make = (~note, ~userId, ~removeNoteCB) => {
           </p>
           <p className="text-gray-600 font-semibold text-xs mt-px leading-snug">
             {switch note |> CoachNote.author {
-            | Some(user) => user |> User.title
+            | Some(user) => user |> User.fullTitle
             | None => tr("unknown")
             } |> str}
           </p>

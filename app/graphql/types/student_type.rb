@@ -7,7 +7,7 @@ module Types
     field :cohort, Types::CohortType, null: false
     field :access_ends_at, GraphQL::Types::ISO8601DateTime, null: true
     field :dropped_out_at, GraphQL::Types::ISO8601DateTime, null: true
-    field :user, Types::AdminUserType, null: false
+    field :user, Types::UserType, null: false
 
     def issued_certificates
       # rubocop:disable Lint/UselessAssignment

@@ -22,7 +22,7 @@ module CreateCoachNotesMutation = %graphql(`
             id
             avatarUrl
             name
-            title
+            fullTitle
          }
        }
       }

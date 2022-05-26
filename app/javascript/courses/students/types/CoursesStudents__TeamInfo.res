@@ -1,7 +1,7 @@
 type student = {
   id: string,
   name: string,
-  title: string,
+  fulltitle: string,
   avatarUrl: option<string>,
   userTags: array<string>,
   lastSeenAt: option<Js.Date.t>,
@@ -25,7 +25,7 @@ let name = t => t.name
 
 let tags = t => t.teamTags
 
-let title = t => t.title
+let fulltitle = t => t.fulltitle
 
 let students = t => t.students
 
@@ -35,7 +35,7 @@ let studentId = (student: student) => student.id
 
 let studentName = (student: student) => student.name
 
-let studentTitle = (student: student) => student.title
+let studentFullTitle = (student: student) => student.fulltitle
 
 let studentAvatarUrl = student => student.avatarUrl
 
@@ -53,10 +53,10 @@ let studentWithId = (studentId, t) =>
     "Could not find student with ID " ++ (studentId ++ (" in team with ID " ++ t.id)),
   )
 
-let makeStudent = (~id, ~name, ~title, ~avatarUrl, ~userTags, ~lastSeenAt) => {
+let makeStudent = (~id, ~name, ~fulltitle, ~avatarUrl, ~userTags, ~lastSeenAt) => {
   id: id,
   name: name,
-  title: title,
+  fulltitle: fulltitle,
   avatarUrl: avatarUrl,
   userTags: userTags,
   lastSeenAt: lastSeenAt,
@@ -88,7 +88,7 @@ let makeFromJS = teamDetails => {
       makeStudent(
         ~id=student["id"],
         ~name=student["user"]["name"],
-        ~title=student["user"]["title"],
+        ~fulltitle=student["user"]["fullTitle"],
         ~avatarUrl=student["user"]["avatarUrl"],
         ~userTags=student["user"]["taggings"],
         ~lastSeenAt=student["user"]["lastSeenAt"]->Belt.Option.map(DateFns.decodeISO),

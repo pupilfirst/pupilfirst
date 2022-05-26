@@ -44,7 +44,7 @@ module StudentDetailsQuery = %graphql(`
             id
             user {
               name
-              title
+              fullTitle
               avatarUrl
               taggings
             }
@@ -67,7 +67,7 @@ module StudentDetailsQuery = %graphql(`
           author {
             id
             name
-            title
+            fullTitle
             avatarUrl
         }
       }
@@ -329,31 +329,31 @@ let removeNote = (setState, studentDetails, noteId) =>
     studentData: Loaded(StudentDetails.removeNote(noteId, studentDetails)),
   })
 
-let userInfo = (~key, ~avatarUrl, ~name, ~title) =>
+let userInfo = (~key, ~avatarUrl, ~name, ~fulltitle) =>
   <div key className="shadow rounded-lg p-4 flex items-center mt-2">
     {CoursesStudents__TeamCoaches.avatar(avatarUrl, name)}
     <div className="ml-2 md:ml-3">
       <div className="text-sm font-semibold"> {name |> str} </div>
-      <div className="text-xs"> {title |> str} </div>
+      <div className="text-xs"> {fulltitle |> str} </div>
     </div>
   </div>
 
 let coachInfo = (teamCoaches, studentDetails) => {
   let coaches = studentDetails |> StudentDetails.team |> TeamInfo.coaches(teamCoaches)
 
-  let title =
+  let fulltitle =
     studentDetails |> StudentDetails.teamHasManyStudents ? t("team_coaches") : t("personal_coaches")
 
   coaches |> ArrayUtils.isNotEmpty
     ? <div className="mb-8">
-        <h6 className="font-semibold"> {title |> str} </h6>
+        <h6 className="font-semibold"> {fulltitle |> str} </h6>
         {coaches
         |> Array.map(coach =>
           userInfo(
             ~key=coach |> Coach.userId,
             ~avatarUrl=coach |> Coach.avatarUrl,
             ~name=coach |> Coach.name,
-            ~title=coach |> Coach.title,
+            ~fulltitle=coach |> Coach.fullTitle,
           )
         )
         |> React.array}
@@ -382,7 +382,7 @@ let otherTeamMembers = (setState, studentId, studentDetails) =>
             ~key=student |> TeamInfo.studentId,
             ~avatarUrl=student |> TeamInfo.studentAvatarUrl,
             ~name=student |> TeamInfo.studentName,
-            ~title=student |> TeamInfo.studentTitle,
+            ~fulltitle=student |> TeamInfo.studentFullTitle,
           )}
         </Link>
       })
@@ -461,7 +461,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
               {studentDetails |> StudentDetails.name |> str}
             </h2>
             <p className="text-sm font-semibold text-center mt-1">
-              {studentDetails |> StudentDetails.title |> str}
+              {studentDetails |> StudentDetails.fullTitle |> str}
             </p>
             {personalInfo(studentDetails)}
             {inactiveWarning(studentDetails |> StudentDetails.team)}

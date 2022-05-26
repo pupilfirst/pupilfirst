@@ -12,11 +12,20 @@
 
 .school-admin-navbar__primary-nav--shrunk
   .school-admin-navbar__primary-nav-link {
-  @apply flex text-gray-800 text-sm font-medium items-center justify-center;
+  @apply flex flex-col text-gray-800 font-medium items-center justify-center;
   position: relative;
+  font-size: 8px;
+  padding: 8px;
 }
+
+.school-admin-navbar__primary-nav--shrunk
+  .school-admin-navbar__primary-nav-link
+  span {
+  margin: 0px;
+}
+
 .school-admin-navbar__secondary-nav {
-  @apply w-64;
+  @apply w-56;
 }
 
 .school-admin-navbar__primary-nav-link {
@@ -30,6 +39,26 @@
 
 .school-admin-navbar__primary-nav-link--active {
   @apply bg-primary-100 text-primary-500 rounded font-semibold;
+}
+
+.school-admin-navbar__primary-nav--shrunk
+  .school-admin-navbar__primary-nav-link--active::after {
+  content: "";
+  width: 32px;
+  height: 3px;
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-primary-500);
+  border-radius: 2px;
+  animation: slideIn--bottom 0.3s ease-out;
+}
+
+.school-admin-navbar__primary-nav--shrunk
+  .school-admin-navbar__primary-nav-link--active::before {
+  content: "";
+  width: 0px;
 }
 
 .school-admin-navbar__primary-nav-link--active::before {
@@ -68,5 +97,16 @@
   to {
     transform: scale(1);
     top: 30%;
+  }
+}
+
+@keyframes slideIn--bottom {
+  from {
+    transform: scale(0.5);
+    left: 70%;
+  }
+  to {
+    transform: scale(1);
+    left: 50%;
   }
 }

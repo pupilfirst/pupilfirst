@@ -23,7 +23,7 @@ let make = (
       title=tr("show_notifications")
       className=buttonClasses
       onClick={_ => setShowNotifications(_ => true)}>
-      <PfIcon className={"if i-bell" ++ "-regular if-fw"} />
+      <PfIcon className={"if i-bell" ++ "-light if-fw text-lg"} />
       {str(title->Belt.Option.getWithDefault(""))}
       {ReactUtils.nullUnless(<span className=iconClasses />, hasNotifications)}
     </button>

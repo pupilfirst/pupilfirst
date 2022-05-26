@@ -24,7 +24,7 @@ let showUserLink = () => {
 }
 
 let showUser = user => {
-  <div className="my-4">
+  <div className="mt-3">
     <div className="p-3 flex w-full items-center bg-gray-50 rounded-md ">
       <div className="flex items-center justify-center rounded-full text-center flex-shrink-0">
         {User.avatarUrl(user)->Belt.Option.mapWithDefault(
@@ -49,18 +49,18 @@ let showUser = user => {
 }
 
 let containerClasses = shrunk => {
-  let defaultClasses = "bg-white school-admin-navbar__primary-nav flex flex-col justify-between "
+  let defaultClasses = "bg-white school-admin-navbar__primary-nav border-r border-gray-200 flex flex-col justify-between py-3 "
 
-  defaultClasses ++ (shrunk ? "school-admin-navbar__primary-nav--shrunk" : "overflow-y-auto")
+  defaultClasses ++ (shrunk ? "school-admin-navbar__primary-nav--shrunk px-1" : "overflow-y-auto px-3 ")
 }
 
 let headerclasses = shrunk => {
   let defaultClasses = "school-admin-navbar__header "
-  defaultClasses ++ (shrunk ? "mx-auto" : "px-5 py-4 relative z-20 bg-white")
+  defaultClasses ++ (shrunk ? "mx-auto" : "px-3 pt-2 pb-4 relative z-20 bg-white")
 }
 
 let imageContainerClasses = shrunk => {
-  let defaultClasses = "school-admin-navbar__school-logo-container object-contain "
+  let defaultClasses = "school-admin-navbar__school-logo-container object-contain mx-auto  "
   defaultClasses ++ (shrunk ? "justify-center w-16 h-16" : "bg-white rounded")
 }
 
@@ -85,7 +85,7 @@ let topNavButtonContents = (selectedPage, page) => {
     <PfIcon className={"if i-" ++ Page.icon(page) ++ "-light if-fw text-lg"} />,
     {
       Page.shrunk(selectedPage)
-        ? React.null
+        ? <span key="content" className="ml-2"> {Page.name(page)->str} </span>
         : <span key="content" className="ml-2"> {Page.name(page)->str} </span>
     },
   ]->React.array
@@ -107,8 +107,8 @@ let topLink = (selectedPage, page) => {
 }
 
 let secondaryNavOption = (selectedPage, page) => {
-  let defaultClasses = "flex text-indigo-800 text-sm py-3 px-4 hover:bg-gray-400 focus:bg-gray-400 font-semibold rounded items-center my-1"
-  let classes = defaultClasses ++ (selectedPage == page ? " bg-gray-400" : "")
+  let defaultClasses = "flex text-sm py-3 px-4 hover:bg-gray-50 hover:text-primary-500 focus:bg-gray-50 focus:text-primary-500 rounded items-center my-1"
+  let classes = defaultClasses ++ (selectedPage == page ? " bg-primary-50 text-primary-500 font-semibold" : " font-medium text-gray-500")
 
   <div key={Page.name(page)}>
     {showLink(selectedPage, page, classes, None, Page.name(page)->str)}
@@ -141,7 +141,7 @@ let secondaryNav = (courses, currentUser, selectedPage) =>
   | Page.Settings(_settingsSelection) =>
     <div
       key="secondary-nav"
-      className="bg-gray-200 school-admin-navbar__secondary-nav border-r border-gray-400 pb-6 overflow-y-auto">
+      className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
       <ul className="p-4">
         {secondaryNavOption(selectedPage, Page.Settings(Customization))}
         {secondaryNavOption(selectedPage, Page.Settings(Admins))}
@@ -150,7 +150,7 @@ let secondaryNav = (courses, currentUser, selectedPage) =>
   | SelectedCourse(courseId, _courseSelection) =>
     <div
       key="secondary-nav"
-      className="bg-gray-200 school-admin-navbar__secondary-nav border-r border-gray-400 pb-6 overflow-y-auto">
+      className="bg-white school-admin-navbar__secondary-nav border-r border-gray-200 pb-6 overflow-y-auto">
       <div className="p-4">
         <SchoolRouter__CoursesDropdown courses currentCourseId=courseId />
         {secondaryNavLinks(selectedPage, courseId, currentUser)->React.array}
@@ -167,7 +167,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         <div className={headerclasses(Page.shrunk(selectedPage))}>
           <div className={imageContainerClasses(Page.shrunk(selectedPage))}>
             {Page.shrunk(selectedPage)
-              ? <div className="bg-white flex items-center justify-center p-3 rounded">
+              ? <div className="bg-white flex items-center justify-center px-3 py-1 rounded">
                   {User.isAuthor(currentUser)
                     ? <img src={School.iconUrl(school)} alt={School.name(school)} />
                     : <a className="text-xs" href="/school">
@@ -178,7 +178,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
                   switch School.logoUrl(school) {
                   | Some(url) =>
                     <img
-                      className="h-9 md:h-12 object-contain text-sm"
+                      className="h-10 object-contain text-sm"
                       src=url
                       alt={"Logo of " ++ School.name(school)}
                     />
@@ -194,7 +194,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
           </div>
         </div>
         {ReactUtils.nullIf(
-          <ul className="px-3">
+          <ul>
             {[Page.Courses, Overview, SchoolCoaches, Communities, Settings(Customization)]
             ->Js.Array2.map(page => <li key={Page.name(page)}> {topLink(selectedPage, page)} </li>)
             ->React.array}
@@ -223,14 +223,14 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
           User.isAuthor(currentUser),
         )}
       </div>
-      <ul className="px-3">
+      <ul>
         <div className="relative">
           <Notifications__Root
             wrapperClasses=""
             iconClasses="school-admin-navbar__notifications-unread-bullet"
             buttonClasses="w-full flex gap-2 relative text-gray-800 text-sm py-3 px-2 hover:text-primary-500 hover:bg-gray-50 font-medium items-center"
             title=?{Page.shrunk(selectedPage) ? None : Some("Notifications")}
-            icon="bell text-lg"
+            icon="bell"
             hasNotifications={User.hasNotifications(currentUser)}
           />
         </div>

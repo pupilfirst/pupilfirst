@@ -122,11 +122,11 @@ let name = t => {
 
 let icon = t => {
   switch t {
-  | Overview => "fas fa-eye"
-  | SchoolCoaches => "fas fa-chalkboard-teacher"
-  | Settings(_settingsPages) => "fas fa-cog"
-  | Courses => "fas fa-book"
+  | Overview => "school"
+  | SchoolCoaches => "users"
+  | Settings(_settingsPages) => "cog"
+  | Courses => "journal-text"
   | SelectedCourse(_courseId, _coursePages) => "fas fa-book"
-  | Communities => "fas fa-users"
+  | Communities => "comment-alt"
   }
 }

@@ -3,29 +3,46 @@
 }
 
 .school-admin-navbar__primary-nav {
-  @apply w-64;
+  @apply w-56;
 }
 
 .school-admin-navbar__primary-nav--shrunk {
-  @apply w-20;
+  @apply w-max items-center;
 }
 
+.school-admin-navbar__primary-nav--shrunk
+  .school-admin-navbar__primary-nav-link {
+  @apply flex text-gray-800 text-sm font-medium items-center justify-center;
+  position: relative;
+}
 .school-admin-navbar__secondary-nav {
   @apply w-64;
 }
 
 .school-admin-navbar__primary-nav-link {
-  @apply flex text-gray-800 h-13 text-sm font-semibold items-center;
+  @apply flex text-gray-800 text-sm font-medium items-center;
   position: relative;
 }
 
 .school-admin-navbar__primary-nav-link:hover {
-  @apply text-primary-500;
+  @apply text-primary-500 bg-gray-50;
 }
 
 .school-admin-navbar__primary-nav-link--active {
-  @apply bg-primary-100 text-primary-500;
+  @apply bg-primary-100 text-primary-500 rounded font-semibold;
+}
 
+.school-admin-navbar__primary-nav-link--active::before {
+  content: "";
+  width: 3px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  left: 0px;
+  transform: translateY(-50%);
+  background-color: var(--color-primary-500);
+  border-radius: 2px;
+  animation: slideIn 0.3s ease-out;
 }
 
 .school-admin-navbar__primary-nav-link--active:hover {
@@ -41,4 +58,15 @@
 .school-admin-navbar__notifications-unread-bullet::before {
   content: "";
   @apply animate-ping absolute inline-flex h-full w-full inset-0 rounded-full bg-red-300 opacity-75;
+}
+
+@keyframes slideIn {
+  from {
+    transform: scale(0.5);
+    top: 60%;
+  }
+  to {
+    transform: scale(1);
+    top: 30%;
+  }
 }

@@ -9,10 +9,12 @@ let str = React.string
 let showUserLink = (icon, href) => {
   <div key=href className="whitespace-nowrap">
     <a
+      ariaLabel="Sign out"
+      title="Sign out"
       rel="nofollow"
-      className="flex justify-center items-center text-xs text-gray-800 bg-gray-300 px-2 py-1 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
+      className="flex justify-center items-center text-xs text-gray-500 bg-gray-50 px-2 py-2 rounded cursor-pointer font-semibold hover:text-red-800 focus:ring ring-gray-300 ring-offset-2 hover:bg-red-100 focus:bg-red-200 transition"
       href>
-      <FaIcon classes={"fas fw fa-" ++ icon} /> <p className="ml-2"> {"Sign Out"->str} </p>
+      <FaIcon classes={"fas fw fa-" ++ icon} />
     </a>
   </div>
 }
@@ -22,25 +24,25 @@ let showUserLink = () => {
 }
 
 let showUser = user => {
-  <div className="px-4 pt-6 pb-4">
-    <div className="flex w-full items-center rounded-md">
+  <div className="my-4">
+    <div className="p-3 flex w-full items-center bg-gray-50 rounded-md ">
       <div className="flex items-center justify-center rounded-full text-center flex-shrink-0">
         {User.avatarUrl(user)->Belt.Option.mapWithDefault(
           <Avatar
             name={User.name(user)}
-            className="flex w-10 h-10 border border-gray-300 object-contain object-center rounded-full text-tiny flex-shrink-0"
+            className="w-8 h-8 border border-gray-300 object-contain object-center rounded-full"
           />,
           src =>
             <img
-              className="flex w-10 h-10 border border-gray-300 object-cover object-center rounded-full text-tiny"
+              className="w-9 h-9 border border-gray-300 object-cover object-center rounded-full"
               src
               alt={User.name(user)}
             />,
         )}
       </div>
       <div className="pl-2 flex justify-between w-full items-center">
-        <p className="text-sm font-semibold text-left"> {str(User.name(user))} </p>
-        <div className="text-xs text-gray-700 flex space-x-2"> {showUserLink()->React.array} </div>
+        <p className="text-sm font-medium"> {str(User.name(user))} </p>
+        <div> {showUserLink()->React.array} </div>
       </div>
     </div>
   </div>
@@ -54,17 +56,17 @@ let containerClasses = shrunk => {
 
 let headerclasses = shrunk => {
   let defaultClasses = "school-admin-navbar__header "
-  defaultClasses ++ (shrunk ? "mx-auto" : "px-5 py-2 relative z-20 bg-white flex h-16 items-center")
+  defaultClasses ++ (shrunk ? "mx-auto" : "px-5 py-4 relative z-20 bg-white")
 }
 
 let imageContainerClasses = shrunk => {
-  let defaultClasses = "school-admin-navbar__school-logo-container flex items-center "
-  defaultClasses ++ (shrunk ? "justify-center w-16 h-16" : "bg-white h-8 w-3/5 rounded")
+  let defaultClasses = "school-admin-navbar__school-logo-container object-contain "
+  defaultClasses ++ (shrunk ? "justify-center w-16 h-16" : "bg-white rounded")
 }
 
 let bottomLinkClasses = shrunk => {
-  let defaultClasses = "flex text-gray-800 text-sm py-4 px-5 hover:text-primary-500 font-semibold items-center "
-  defaultClasses ++ (shrunk ? "justify-center" : "")
+  let defaultClasses = "py-3 px-2 flex text-gray-800 rounded text-sm font-medium hover:text-primary-500 hover:bg-gray-50 "
+  defaultClasses ++ (shrunk ? "justify-center" : "items-center")
 }
 
 let bottomLink = (path, shrunk, iconClasses, text) => {
@@ -80,7 +82,7 @@ let bottomLink = (path, shrunk, iconClasses, text) => {
 
 let topNavButtonContents = (selectedPage, page) => {
   [
-    <i key="icon" className={Page.icon(page) ++ " fa-fw text-lg"} />,
+    <PfIcon className={"if i-" ++ Page.icon(page) ++ "-light if-fw text-lg"} />,
     {
       Page.shrunk(selectedPage)
         ? React.null
@@ -96,7 +98,7 @@ let showLink = (selectedPage, page, classes, title, contents) => {
 }
 
 let topLink = (selectedPage, page) => {
-  let defaultClasses = "school-admin-navbar__primary-nav-link py-4 px-5"
+  let defaultClasses = "school-admin-navbar__primary-nav-link py-3 px-2 mb-1"
   let classes =
     defaultClasses ++ (selectedPage == page ? " school-admin-navbar__primary-nav-link--active" : "")
   let title = Page.shrunk(selectedPage) ? Some(Page.name(page)) : None
@@ -165,7 +167,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
         <div className={headerclasses(Page.shrunk(selectedPage))}>
           <div className={imageContainerClasses(Page.shrunk(selectedPage))}>
             {Page.shrunk(selectedPage)
-              ? <div className="bg-white flex items-center justify-center p-2 m-2 rounded">
+              ? <div className="bg-white flex items-center justify-center p-3 rounded">
                   {User.isAuthor(currentUser)
                     ? <img src={School.iconUrl(school)} alt={School.name(school)} />
                     : <a className="text-xs" href="/school">
@@ -176,7 +178,7 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
                   switch School.logoUrl(school) {
                   | Some(url) =>
                     <img
-                      className="h-9 md:h-12 object-contain flex text-sm items-center"
+                      className="h-9 md:h-12 object-contain text-sm"
                       src=url
                       alt={"Logo of " ++ School.name(school)}
                     />
@@ -192,21 +194,22 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
           </div>
         </div>
         {ReactUtils.nullIf(
-          <ul>
+          <ul className="px-3">
             {[Page.Courses, Overview, SchoolCoaches, Communities, Settings(Customization)]
             ->Js.Array2.map(page => <li key={Page.name(page)}> {topLink(selectedPage, page)} </li>)
             ->React.array}
             <li>
               {ReactUtils.nullIf(
-                <ul className="pr-4 pb-4 mt-1 ml-2">
-                  <div className="text-xs font-bold text-gray-800"> {"Courses"->str} </div>
+                <ul>
+                  <div className="px-2 pt-3 pb-1 text-xs font-semibold text-gray-400 border-t-2 border-gray-100"> {"Courses"->str} </div>
                   {Js.Array.map(
                     course =>
                       <li key={Course.id(course)}>
                         <a
+                          ariaLabel={Course.name(course)}
                           href={"/school/courses/" ++ Course.id(course) ++ "/curriculum"}
-                          className="text-gray-800 py-3 px-4 hover:text-primary-500 rounded font-semibold text-xs flex items-center">
-                          <Avatar name={Course.name(course)} className="w-4 h-4 mr-2" />
+                          className="text-gray-800 py-3 px-2 rounded font-medium text-xs flex items-center hover:bg-gray-50 hover:text-primary-500">
+                          <Avatar name={Course.name(course)} className="w-5 h-5 mr-2" />
                           {str(Course.name(course))}
                         </a>
                       </li>,
@@ -220,14 +223,14 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
           User.isAuthor(currentUser),
         )}
       </div>
-      <ul>
+      <ul className="px-3">
         <div className="relative">
           <Notifications__Root
-            wrapperClasses="w-full"
+            wrapperClasses=""
             iconClasses="school-admin-navbar__notifications-unread-bullet"
-            buttonClasses="flex relative text-gray-800 text-sm py-4 px-5 hover:text-primary-500 font-semibold items-center justify-center w-full"
+            buttonClasses="w-full flex gap-2 relative text-gray-800 text-sm py-3 px-2 hover:text-primary-500 hover:bg-gray-50 font-medium items-center"
             title=?{Page.shrunk(selectedPage) ? None : Some("Notifications")}
-            icon="fas fa-bell fa-fw text-lg"
+            icon="bell text-lg"
             hasNotifications={User.hasNotifications(currentUser)}
           />
         </div>

@@ -8,6 +8,7 @@ module Types
     field :access_ends_at, GraphQL::Types::ISO8601DateTime, null: true
     field :dropped_out_at, GraphQL::Types::ISO8601DateTime, null: true
     field :user, Types::UserType, null: false
+    field :personal_coaches, [Types::CoachType], null: false
 
     def issued_certificates
       # rubocop:disable Lint/UselessAssignment
@@ -71,6 +72,17 @@ module Types
               end
           student_ids.each { |id| loader.call(id, tags.fetch(id, [])) }
         end
+    end
+
+
+
+    def personal_coaches
+      BatchLoader::GraphQL.for(object.id).batch(default_value: []) do |student_ids, loader|
+        FacultyFounderEnrollment.joins(:faculty).where(founder_id: student_ids).each do |enrollment|
+
+          loader.call(enrollment.founder_id) { |memo| memo |= [enrollment.faculty].compact } # rubocop:disable Lint/UselessAssignment
+        end
+      end
     end
   end
 end

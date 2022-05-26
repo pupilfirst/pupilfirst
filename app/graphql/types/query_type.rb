@@ -118,6 +118,10 @@ module Types
       argument :sort_direction, Types::SortDirectionType, required: true
     end
 
+    resolved_field :student, Types::StudentType, null: false do
+      argument :student_id, ID, required: true
+    end
+
     resolved_field :evaluation_criteria,
                    [Types::EvaluationCriterionType],
                    null: false do

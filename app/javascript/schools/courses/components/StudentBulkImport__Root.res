@@ -3,6 +3,7 @@ let str = React.string
 open StudentsEditor__Types
 
 let t = I18n.t(~scope="components.StudentsEditor__BulkImportForm")
+let ts = I18n.ts
 
 module CSVData = {
   type t = StudentCSVData.t
@@ -73,7 +74,7 @@ type action =
   | ClearLoading
 
 let fileInputText = (~fileInfo: option<CSVReader.fileInfo>) =>
-  fileInfo->Belt.Option.mapWithDefault(t("csv_file_input_placeholder"), info => info.name)
+  fileInfo->Belt.Option.mapWithDefault(t("csv_file_input.placeholder"), info => info.name)
 
 let reducer = (state, action) =>
   switch action {
@@ -117,7 +118,10 @@ let submitForm = (cohort, exitUrl, send, event) => {
         json => {
           Json.Decode.field("success", Json.Decode.bool, json)
             ? {
-                Notification.success(t("done_exclamation"), t("success_notification"))
+                Notification.success(
+                  ts("notifications.done_exclamation"),
+                  t("success_notification"),
+                )
                 RescriptReactRouter.push(exitUrl)
               }
             : ()

@@ -61,15 +61,9 @@ let checklistItemCheckedClasses = (itemIndex, selection) =>
       : "bg-gray-500"
   )
 
-let isReviewerAssigned = (submissionDetails, overlaySubmission) => {
-  switch SubmissionDetails.reviewer(submissionDetails) {
-  | Some(_) => true
-  | None =>
-    switch OverlaySubmission.evaluatedAt(overlaySubmission) {
-    | Some(_) => true
-    | None => false
-    }
-  }
+let feedbackGeneratable = (submissionDetails, overlaySubmission) => {
+  SubmissionDetails.reviewer(submissionDetails)->Belt.Option.isSome ||
+    OverlaySubmission.evaluatedAt(overlaySubmission)->Belt.Option.isSome
 }
 
 let checklistItemChecked = (itemIndex, resultIndex, selection) =>
@@ -166,7 +160,7 @@ let make = (
                           label={str(checklistItem->ReviewChecklistResult.title)}
                           onChange={checkboxOnChange(itemIndex, resultIndex, setSelecton)}
                           checked={checklistItemChecked(itemIndex, resultIndex, selection)}
-                          disabled={!isReviewerAssigned(submissionDetails, overlaySubmission)}
+                          disabled={!feedbackGeneratable(submissionDetails, overlaySubmission)}
                         />
                         {
                           let isSelected =
@@ -184,7 +178,10 @@ let make = (
                                 id={"result_" ++ (resultIndex->string_of_int ++ "_feedback")}
                                 type_="text"
                                 placeholder={t("feedback_placeholder")}
-                                disabled={!isReviewerAssigned(submissionDetails, overlaySubmission)}
+                                disabled={!feedbackGeneratable(
+                                  submissionDetails,
+                                  overlaySubmission,
+                                )}
                                 value={Belt.Option.getWithDefault(
                                   ReviewChecklistResult.feedback(checklistItem),
                                   "",
@@ -200,7 +197,8 @@ let make = (
                                   )}
                               />
                             </div>,
-                            isSelected || !isReviewerAssigned(submissionDetails, overlaySubmission),
+                            isSelected ||
+                            !feedbackGeneratable(submissionDetails, overlaySubmission),
                           )
                         }
                       </div>
@@ -213,7 +211,7 @@ let make = (
       </div>
     </div>
     <div className="flex justify-end border-t sticky bottom-0 px-4 md:px-6 py-2 md:py-4 mt-4">
-      {isReviewerAssigned(submissionDetails, overlaySubmission)
+      {feedbackGeneratable(submissionDetails, overlaySubmission)
         ? generateFeedbackButton(checklist, selection, feedback, setSelecton, updateFeedbackCB)
         : React.null}
     </div>

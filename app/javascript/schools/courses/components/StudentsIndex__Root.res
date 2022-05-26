@@ -174,7 +174,7 @@ let studentsList = (students, courseId, params) => {
   <div className="space-y-4">
     {students
     ->Js.Array2.map(student => {
-      <div className="h-full flex items-center bg-white">
+      <div key={StudentInfo.id(student)} className="h-full flex items-center bg-white">
         <div className="flex flex-1 items-center text-left justify-between rounded-md shadow">
           <div className="flex py-4 px-4">
             <div className="text-sm flex items-center space-x-4">

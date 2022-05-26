@@ -398,7 +398,7 @@ let findSelectedCohort = (cohorts, selectedCohort) => {
 }
 
 @react.component
-let make = (~courseId, ~search) => {
+let make = (~courseId) => {
   let (state, send) = React.useReducer(reducer, initialState)
   React.useEffect1(() => {
     loadData(courseId, send)

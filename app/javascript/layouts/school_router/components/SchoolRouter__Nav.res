@@ -240,7 +240,6 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
             iconClasses="school-admin-navbar__notifications-unread-bullet"
             buttonClasses="w-full flex gap-2 relative text-gray-800 text-sm py-3 px-2 hover:text-primary-500 hover:bg-gray-50 font-medium items-center"
             title=?{Page.shrunk(selectedPage) ? None : Some("Notifications")}
-            icon="bell"
             hasNotifications={User.hasNotifications(currentUser)}
           />
         </div>

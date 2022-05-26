@@ -16,7 +16,7 @@ let pageLinks = courseId => [
 ]
 
 @react.component
-let make = (~courseId, ~search) => {
+let make = (~courseId) => {
   <div>
     <School__PageHeader
       exitUrl={`/school/courses/${courseId}/students`}
@@ -25,9 +25,7 @@ let make = (~courseId, ~search) => {
       links={pageLinks(courseId)}
     />
     <div className="bg-white">
-      <div className="max-w-5xl mx-auto">
-        <StudentCreator__CreateForm courseId />
-      </div>
+      <div className="max-w-5xl mx-auto"> <StudentCreator__CreateForm courseId /> </div>
     </div>
   </div>
 }

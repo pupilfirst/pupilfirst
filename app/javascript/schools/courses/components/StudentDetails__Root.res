@@ -1,7 +1,8 @@
 let str = React.string
 
 @react.component
-let make = (~courseId, ~studentId, ~search) => {
+let make = (~courseId, ~studentId) => {
+  Js.log(studentId)
   <div>
     <School__PageHeader
       exitUrl={`/school/courses/${courseId}/students`}

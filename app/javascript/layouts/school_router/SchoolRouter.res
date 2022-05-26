@@ -36,17 +36,11 @@ let make = (~school, ~courses, ~currentUser) => {
           Some(<CohortsActions__Root courseId cohortId />),
         )
       | list{"students"} => (Students, Some(<StudentsIndex__Root courseId search={url.search} />))
-      | list{"students", "new"} => (
-          Students,
-          Some(<StudentCreator__Root courseId search={url.search} />),
-        )
-      | list{"students", "import"} => (
-          Students,
-          Some(<StudentBulkImport__Root courseId search={url.search} />),
-        )
+      | list{"students", "new"} => (Students, Some(<StudentCreator__Root courseId />))
+      | list{"students", "import"} => (Students, Some(<StudentBulkImport__Root courseId />))
       | list{"students", studentId, "edit"} => (
           Students,
-          Some(<StudentEditor__Root courseId studentId search={url.search} />),
+          Some(<StudentDetails__Root courseId studentId />),
         )
       | list{"teams"} => (Teams, Some(<TeamsIndex__Root courseId search={url.search} />))
       | list{"teams", "new"} => (Teams, Some(<TeamsCreator__Root courseId />))

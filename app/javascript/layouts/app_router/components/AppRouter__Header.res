@@ -1,4 +1,4 @@
-%bs.raw(`require("./AppRouter__Header.css")`)
+%raw(`require("./AppRouter__Header.css")`)
 
 open AppRouter__Types
 
@@ -90,7 +90,6 @@ let notificationButton = hasNotifications =>
     wrapperClasses="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg hover:bg-gray-200"
     iconClasses="app-router-header__notifications-unread-bullet"
     buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center "
-    icon="if i-bell-regular text-xl"
     hasNotifications
   />
 
@@ -145,7 +144,9 @@ let make = (~school, ~currentUser) => {
     <div className="mx-auto">
       <nav className="flex justify-between items-center">
         <div className="flex w-full items-center justify-between">
-          <a className="max-w-sm focus-within:outline-none" href={Belt.Option.isSome(currentUser) ? "/dashboard" : "/"}>
+          <a
+            className="max-w-sm focus-within:outline-none"
+            href={Belt.Option.isSome(currentUser) ? "/dashboard" : "/"}>
             {switch School.logoUrl(school) {
             | Some(url) =>
               <img

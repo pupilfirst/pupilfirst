@@ -219,7 +219,7 @@ let make = (
       <div key="communities-editor" className="mt-3">
         <div className="mt-2">
           <label
-            className="inline-block tracking-wide text-gray-700 text-xs font-semibold"
+            className="inline-block tracking-wide text-gray-600 text-xs font-semibold"
             htmlFor="communities-editor__name">
             {t("community_editor_label") |> str}
           </label>
@@ -232,7 +232,7 @@ let make = (
               send(UpdateName(name))
             }}
             id="communities-editor__name"
-            className="appearance-none h-10 mt-2 block w-full text-gray-700 border border-gray-300 rounded py-2 px-4 text-sm hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+            className="appearance-none h-10 mt-2 block w-full text-gray-600 border border-gray-300 rounded py-2 px-4 text-sm hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           />
           <School__InputGroupError
             message={t("community_editor_error")}
@@ -241,7 +241,7 @@ let make = (
         </div>
         <div className="flex items-center mt-6">
           <label
-            className="inline-block tracking-wide text-gray-700 text-xs font-semibold"
+            className="inline-block tracking-wide text-gray-600 text-xs font-semibold"
             htmlFor="communities-editor__course-list">
             {t("allowed_targets_q") |> str}
           </label>
@@ -260,7 +260,7 @@ let make = (
         </div>
         <div className="mt-4">
           <label
-            className="inline-block tracking-wide text-gray-700 text-xs font-semibold mb-2"
+            className="inline-block tracking-wide text-gray-600 text-xs font-semibold mb-2"
             htmlFor="communities-editor__course-targetLinkable">
             {t("give_access") |> str}
           </label>
@@ -279,7 +279,7 @@ let make = (
         <div className="mt-4 px-6 py-2 bg-gray-50 border rounded">
           <div className="flex justify-between items-center mb-4">
             <label
-              className="inline-block tracking-wide text-gray-700 text-xs font-semibold uppercase">
+              className="inline-block tracking-wide text-gray-600 text-xs font-semibold uppercase">
               {t("topic_categories") |> str}
             </label>
             {switch community {

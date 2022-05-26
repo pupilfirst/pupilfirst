@@ -206,7 +206,7 @@
 }
 
 .drawer-right-form__error-msg {
-  @apply mt-1 px-1 py-px rounded text-xs font-semibold text-red-600 bg-red-100 inline-flex items-center;
+  @apply mt-1 px-1 py-px rounded text-xs font-medium text-red-600 bg-red-100 inline-flex items-center;
 }
 
 .sa-toggle__menu-btn {
@@ -278,7 +278,7 @@
 }
 
 .file-input-label {
-  @apply truncate py-2 cursor-pointer flex px-4 items-center font-semibold rounded text-sm;
+  @apply truncate py-2 cursor-pointer flex px-4 items-center font-medium rounded text-sm;
   border: 1px dashed #d3d8e1;
   background-color: #e6f1ff;
 }
@@ -293,7 +293,7 @@
 }
 
 .toggle-button__button {
-  @apply w-1/2 text-sm font-semibold py-1 px-6 text-gray-700 border border-gray-300 focus:ring-1 focus:ring-inset focus:ring-focusColor-500;
+  @apply w-1/2 text-sm font-medium py-1 px-6 text-gray-600 border border-gray-300 focus:ring-1 focus:ring-inset focus:ring-focusColor-500;
   transition: 0.3s cubic-bezier(0, 0, 0, 1);
 }
 
@@ -418,12 +418,12 @@
 
 .target-group__header-container:hover .target-group__group-reorder-up {
   transform: translateY(0px);
-  @apply text-gray-700;
+  @apply text-gray-600;
 }
 
 .target-group__header-container:hover .target-group__group-reorder-down {
   transform: translateY(0px);
-  @apply text-gray-700;
+  @apply text-gray-600;
 }
 
 .target-group__target-container:hover .target-group__target-reorder {
@@ -443,12 +443,12 @@
 
 .target-group__target-container:hover .target-group__target-reorder-up {
   transform: translateY(0px);
-  @apply text-gray-700;
+  @apply text-gray-600;
 }
 
 .target-group__target-container:hover .target-group__target-reorder-down {
   transform: translateY(0px);
-  @apply text-gray-700;
+  @apply text-gray-600;
 }
 
 .target-group__target-container:hover .target-group__target-reorder-up:hover,

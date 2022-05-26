@@ -90,10 +90,7 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   })
   |> Js.Promise.catch(error => {
     Js.log(error)
-    Notification.error(
-      ts("notifications.unexpected_error"),
-      t("reload_add_students"),
-    )
+    Notification.error(ts("notifications.unexpected_error"), t("reload_add_students"))
     send(SetSaving(false))
     Js.Promise.resolve()
   })
@@ -185,7 +182,7 @@ let studentCard = (studentInfo, send, team, tags) => {
       {tagBoxes(tags)}
     </div>
     <button
-      className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+      className="p-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50"
       onClick={_event => send(RemoveStudentInfo(studentInfo))}>
       <i className="fas fa-trash-alt" />
     </button>

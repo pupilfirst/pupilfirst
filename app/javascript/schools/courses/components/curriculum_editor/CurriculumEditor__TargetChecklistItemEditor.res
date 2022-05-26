@@ -156,7 +156,7 @@ let controlIcon = (~icon, ~title, ~handler) =>
         title
         ariaLabel={title}
         disabled={handler == None}
-        className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden"
+        className="px-2 py-1 focus:outline-none text-sm text-gray-600 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden"
         onClick=?handler>
         <i className={"fas fa-fw " ++ icon} />
       </button>

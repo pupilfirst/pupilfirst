@@ -155,7 +155,7 @@ let controlIcon = (~icon, ~title, ~hidden=false, handler) =>
       ariaLabel=title
       title
       disabled={hidden}
-      className="px-2 py-1 rounded text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden focus:outline-none focus:bg-gray-300 focus:text-gray-900"
+      className="px-2 py-1 rounded text-sm text-gray-600 hover:bg-gray-300 hover:text-gray-900 overflow-hidden focus:outline-none focus:bg-gray-300 focus:text-gray-900"
       onClick={handler}>
       <i className={"fas fa-fw " ++ icon} />
     </button>,

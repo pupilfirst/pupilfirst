@@ -73,7 +73,7 @@ let readinessString = courseExport =>
     let timeDistance =
       courseExport->CourseExport.createdAt->DateFns.formatDistanceToNow(~addSuffix=true, ())
 
-     t("requested") ++ " " ++ timeDistance
+    t("requested") ++ " " ++ timeDistance
   | Some(file) =>
     let timeDistance =
       file->CourseExport.fileCreatedAt->DateFns.formatDistanceToNow(~addSuffix=true, ())
@@ -168,7 +168,7 @@ let make = (~course, ~exports, ~tags) => {
   <div key="School admin coaches course index" className="flex flex-1 h-screen overflow-y-scroll">
     {state.drawerOpen
       ? <SchoolAdmin__EditorDrawer
-          closeDrawerCB={() => send(CloseDrawer)} closeButtonTitle=t("close_export_form")>
+          closeDrawerCB={() => send(CloseDrawer)} closeButtonTitle={t("close_export_form")}>
           <div className="mx-auto bg-white">
             <div className="max-w-2xl pt-6 px-6 mx-auto">
               <h5 className="uppercase text-center border-b border-gray-300 pb-2">
@@ -202,8 +202,8 @@ let make = (~course, ~exports, ~tags) => {
                   {t("export_tags_label")->str}
                 </label>
                 <TagsSelector
-                  placeholder=t("search_tag_placeholder")
-                  emptySelectionMessage=t("search_tags_empty")
+                  placeholder={t("search_tag_placeholder")}
+                  emptySelectionMessage={t("search_tags_empty")}
                   selected=state.selectedTags
                   unselected={unselected(tags, state.selectedTags)}
                   onChange={tagSearch => send(UpdateTagSearch(tagSearch))}
@@ -309,7 +309,7 @@ let make = (~course, ~exports, ~tags) => {
                 |> Array.map(courseExport =>
                   <div
                     key={courseExport |> CourseExport.id}
-                    ariaLabel={ t("export") ++ " " ++ (courseExport |> CourseExport.id)}
+                    ariaLabel={t("export") ++ " " ++ (courseExport |> CourseExport.id)}
                     className="flex w-1/2 items-center mb-4 px-3">
                     <div
                       className="course-faculty__list-item shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">
@@ -319,7 +319,7 @@ let make = (~course, ~exports, ~tags) => {
                             <p className="text-black font-semibold">
                               {courseExport |> CourseExport.exportTypeToString |> str}
                             </p>
-                            <p className="text-gray-600 font-semibold text-xs mt-px">
+                            <p className="text-gray-600 text-xs mt-px">
                               {courseExport |> readinessString |> str}
                             </p>
                           </div>
@@ -352,9 +352,10 @@ let make = (~course, ~exports, ~tags) => {
                         | None => React.null
                         | Some(file) =>
                           <a
-                            ariaLabel={ t("download_course_export") ++ " " ++
+                            ariaLabel={t("download_course_export") ++
+                            " " ++
                             (courseExport |> CourseExport.id)}
-                            className="w-10 text-xs course-faculty__list-item-remove text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
+                            className="w-10 text-xs course-faculty__list-item-remove text-gray-600 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
                             href={file |> CourseExport.filePath}>
                             <FaIcon classes="fas fa-file-download" />
                           </a>

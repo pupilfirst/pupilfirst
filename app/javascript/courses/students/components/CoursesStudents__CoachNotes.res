@@ -11,8 +11,7 @@ let str = React.string
 
 let tr = I18n.t(~scope="components.CoursesStudents__CoachNotes")
 
-module CreateCoachNotesMutation = %graphql(
-  `
+module CreateCoachNotesMutation = %graphql(`
    mutation CreateCoachNoteMutation($studentId: ID!, $note: String!) {
     createCoachNote(studentId: $studentId, note: $note ) {
        coachNote {
@@ -87,10 +86,8 @@ let make = (~studentId, ~coachNotes, ~hasArchivedNotes, ~addNoteCB, ~removeNoteC
         ? <div
             className="bg-gray-50 rounded text-center p-4 md:p-6 items-center justify-center mt-2">
             <Icon className="if i-long-text-light text-gray-800 text-base" />
-            <p className="text-xs font-semibold text-gray-700 mt-2">
-              {(
-                hasArchivedNotes ? tr("has_archived_notes") : tr("no_notes")
-              ) |> str}
+            <p className="text-xs font-semibold text-gray-600 mt-2">
+              {(hasArchivedNotes ? tr("has_archived_notes") : tr("no_notes")) |> str}
             </p>
           </div>
         : React.null}

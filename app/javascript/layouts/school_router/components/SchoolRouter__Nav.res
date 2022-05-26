@@ -51,7 +51,9 @@ let showUser = user => {
 let containerClasses = shrunk => {
   let defaultClasses = "bg-white school-admin-navbar__primary-nav border-r border-gray-200 flex flex-col justify-between py-3 "
 
-  defaultClasses ++ (shrunk ? "school-admin-navbar__primary-nav--shrunk px-1" : "overflow-y-auto px-3 ")
+  defaultClasses ++ (
+    shrunk ? "school-admin-navbar__primary-nav--shrunk px-1" : "overflow-y-auto px-3 "
+  )
 }
 
 let headerclasses = shrunk => {
@@ -82,7 +84,7 @@ let bottomLink = (path, shrunk, iconClasses, text) => {
 
 let topNavButtonContents = (selectedPage, page) => {
   [
-    <PfIcon className={"if i-" ++ Page.icon(page) ++ "-light if-fw text-lg"} />,
+    <PfIcon key="icon" className={"if i-" ++ Page.icon(page) ++ "-light if-fw text-lg"} />,
     {
       Page.shrunk(selectedPage)
         ? <span key="content" className="ml-2"> {Page.name(page)->str} </span>
@@ -108,7 +110,12 @@ let topLink = (selectedPage, page) => {
 
 let secondaryNavOption = (selectedPage, page) => {
   let defaultClasses = "flex text-sm py-3 px-4 hover:bg-gray-50 hover:text-primary-500 focus:bg-gray-50 focus:text-primary-500 rounded items-center my-1"
-  let classes = defaultClasses ++ (selectedPage == page ? " bg-primary-50 text-primary-500 font-semibold" : " font-medium text-gray-500")
+  let classes =
+    defaultClasses ++ (
+      selectedPage == page
+        ? " bg-primary-50 text-primary-500 font-semibold"
+        : " font-medium text-gray-500"
+    )
 
   <div key={Page.name(page)}>
     {showLink(selectedPage, page, classes, None, Page.name(page)->str)}
@@ -201,7 +208,10 @@ let make = (~school, ~courses, ~selectedPage, ~currentUser) => {
             <li>
               {ReactUtils.nullIf(
                 <ul>
-                  <div className="px-2 pt-3 pb-1 text-xs font-semibold text-gray-400 border-t-2 border-gray-100"> {"Courses"->str} </div>
+                  <div
+                    className="px-2 pt-3 pb-1 text-xs font-semibold text-gray-400 border-t-2 border-gray-100">
+                    {"Courses"->str}
+                  </div>
                   {Js.Array.map(
                     course =>
                       <li key={Course.id(course)}>

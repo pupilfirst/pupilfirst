@@ -23,99 +23,62 @@ let make = (~school, ~courses, ~currentUser) => {
       Courses,
       Some(<CourseEditor />),
     )
-  | list{"school", "courses", courseId, "cohorts"} => (
-      SelectedCourse(courseId, Cohorts),
-      Some(<CohortsIndex__Root courseId search={url.search} />),
-    )
-  | list{"school", "courses", courseId, "cohorts", "new"} => (
-      SelectedCourse(courseId, Cohorts),
-      Some(<CohortsCreator__Root courseId />),
-    )
-  | list{"school", "courses", courseId, "cohorts", cohortId, "details"} => (
-      SelectedCourse(courseId, Cohorts),
-      Some(<CohortsDetails__Root courseId cohortId />),
-    )
-  | list{"school", "courses", courseId, "cohorts", cohortId, "actions"} => (
-      SelectedCourse(courseId, Cohorts),
-      Some(<CohortsActions__Root courseId cohortId />),
-    )
-  | list{"school", "courses", courseId, "students"} => (
-      SelectedCourse(courseId, Students),
-      Some(<StudentsIndex__Root courseId search={url.search} />),
-    )
-  | list{"school", "courses", courseId, "students", "new"} => (
-      SelectedCourse(courseId, Students),
-      Some(<StudentCreator__Root courseId search={url.search} />),
-    )
-  | list{"school", "courses", courseId, "students", "import"} => (
-      SelectedCourse(courseId, Students),
-      Some(<StudentBulkImport__Root courseId search={url.search} />),
-    )
-  | list{"school", "courses", courseId, "students", studentId, "edit"} => (
-      SelectedCourse(courseId, Students),
-      Some(<StudentEditor__Root courseId studentId search={url.search} />),
-    )
-  | list{"school", "courses", courseId, "teams"} => (
-      SelectedCourse(courseId, Teams),
-      Some(<TeamsIndex__Root courseId search={url.search} />),
-    )
-  | list{"school", "courses", courseId, "teams", "new"} => (
-      SelectedCourse(courseId, Teams),
-      Some(<TeamsCreator__Root courseId />),
-    )
-  | list{"school", "courses", courseId, "teams", studentId, "details"} => (
-      SelectedCourse(courseId, Teams),
-      Some(<TeamsDetails__Root courseId studentId />),
-    )
-  | list{"school", "courses", courseId, "teams", studentId, "actions"} => (
-      SelectedCourse(courseId, Teams),
-      Some(<TeamsActions__Root courseId studentId />),
-    )
-  | list{"school", "courses", courseId, "inactive_students"} => (
-      SelectedCourse(courseId, Students),
-      None,
-    )
-  | list{"school", "courses", courseId, "coaches"} => (
-      SelectedCourse(courseId, CourseCoaches),
-      None,
-    )
-  | list{"school", "courses", courseId, "curriculum"} => (
-      SelectedCourse(courseId, Curriculum),
-      None,
-    )
-  | list{
-      "school",
-      "courses",
-      courseId,
-      "targets",
-      _targetId,
-      "content" | "versions" | "details",
-    } => (SelectedCourse(courseId, Curriculum), None)
-  | list{"school", "courses", courseId, "exports"} => (
-      SelectedCourse(courseId, CourseExports),
-      None,
-    )
-  | list{"school", "courses", courseId, "applicants"} => (
-      SelectedCourse(courseId, Applicants),
-      None,
-    )
-  | list{"school", "courses", courseId, "applicants", _applicantId, "details" | "actions"} => (
-      SelectedCourse(courseId, Applicants),
-      None,
-    )
-  | list{"school", "courses", courseId, "authors"} => (SelectedCourse(courseId, Authors), None)
-  | list{"school", "courses", courseId, "authors", _authorId} => (
-      SelectedCourse(courseId, Authors),
-      None,
-    )
-  | list{"school", "courses", courseId, "certificates"} => (
-      SelectedCourse(courseId, Certificates),
-      None,
-    )
-  | list{"school", "courses", courseId, "evaluation_criteria"} => (
-      SelectedCourse(courseId, EvaluationCriteria),
-      None,
-    )
+  | list{"school", "courses", courseId, ...tail} => {
+      let (coursePage: Page.coursePages, courseComponent) = switch tail {
+      | list{"cohorts"} => (Cohorts, Some(<CohortsIndex__Root courseId search={url.search} />))
+      | list{"cohorts", "new"} => (Cohorts, Some(<CohortsCreator__Root courseId />))
+      | list{"cohorts", cohortId, "details"} => (
+          Cohorts,
+          Some(<CohortsDetails__Root courseId cohortId />),
+        )
+      | list{"cohorts", cohortId, "actions"} => (
+          Cohorts,
+          Some(<CohortsActions__Root courseId cohortId />),
+        )
+      | list{"students"} => (Students, Some(<StudentsIndex__Root courseId search={url.search} />))
+      | list{"students", "new"} => (
+          Students,
+          Some(<StudentCreator__Root courseId search={url.search} />),
+        )
+      | list{"students", "import"} => (
+          Students,
+          Some(<StudentBulkImport__Root courseId search={url.search} />),
+        )
+      | list{"students", studentId, "edit"} => (
+          Students,
+          Some(<StudentEditor__Root courseId studentId search={url.search} />),
+        )
+      | list{"teams"} => (Teams, Some(<TeamsIndex__Root courseId search={url.search} />))
+      | list{"teams", "new"} => (Teams, Some(<TeamsCreator__Root courseId />))
+      | list{"teams", studentId, "details"} => (
+          Teams,
+          Some(<TeamsDetails__Root courseId studentId />),
+        )
+      | list{"teams", studentId, "actions"} => (
+          Teams,
+          Some(<TeamsActions__Root courseId studentId />),
+        )
+      | list{"inactive_students"} => (Students, None)
+      | list{"coaches"} => (CourseCoaches, None)
+      | list{"curriculum"} => (Curriculum, None)
+      | list{"targets", _targetId, "content" | "versions" | "details"} => (Curriculum, None)
+      | list{"exports"} => (CourseExports, None)
+      | list{"applicants"} => (Applicants, None)
+      | list{"applicants", _applicantId, "details" | "actions"} => (Applicants, None)
+      | list{"authors"} => (Authors, None)
+      | list{"authors", _authorId} => (Authors, None)
+      | list{"certificates"} => (Certificates, None)
+      | list{"evaluation_criteria"} => (EvaluationCriteria, None)
+      | _ =>
+        Rollbar.critical(
+          "Unknown path encountered by school router: " ++
+          Js.Array.joinWith("/", Array.of_list(url.path)),
+        )
+        raise(UnknownPathEncountered(url.path))
+      }
+      (SelectedCourse(courseId, coursePage), courseComponent)
+    }
+
   | list{"school", "communities"} => (Communities, None)
   | list{"school", "admins"} => (Settings(Admins), None)
   | _ =>

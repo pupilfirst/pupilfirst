@@ -160,7 +160,7 @@ module TeamsQuery = %graphql(`
             id
             user {
               name
-              title
+              fullTitle
               avatarUrl
               taggings
             }

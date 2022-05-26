@@ -23,7 +23,7 @@ let student = t => t.team |> CoursesStudents__TeamInfo.studentWithId(t.id)
 
 let name = t => t |> student |> CoursesStudents__TeamInfo.studentName
 
-let title = t => t |> student |> CoursesStudents__TeamInfo.studentTitle
+let fullTitle = t => t |> student |> CoursesStudents__TeamInfo.studentFullTitle
 
 let email = t => t.email
 
@@ -37,7 +37,8 @@ let hasArchivedNotes = t => t.hasArchivedNotes
 
 let teamCoachUserIds = t => t.team |> CoursesStudents__TeamInfo.coachUserIds
 
-let makeAverageGrade = gradesData => gradesData |> Js.Array.map(gradeData => {
+let makeAverageGrade = gradesData =>
+  gradesData |> Js.Array.map(gradeData => {
     evaluationCriterionId: gradeData["evaluationCriterionId"],
     grade: gradeData["averageGrade"],
   })
@@ -83,14 +84,17 @@ let removeNote = (noteId, t) => {
 }
 
 let computeAverageQuizScore = quizScores => {
-  let sumOfPercentageScores = quizScores |> Array.map(quizScore => {
-    let fractionArray = quizScore |> String.split_on_char('/') |> Array.of_list
-    let (numerator, denominator) = (
-      fractionArray[0] |> float_of_string,
-      fractionArray[1] |> float_of_string,
-    )
-    numerator /. denominator *. 100.0
-  }) |> Js.Array.reduce((a, b) => a +. b, 0.0)
+  let sumOfPercentageScores =
+    quizScores
+    |> Array.map(quizScore => {
+      let fractionArray = quizScore |> String.split_on_char('/') |> Array.of_list
+      let (numerator, denominator) = (
+        fractionArray[0] |> float_of_string,
+        fractionArray[1] |> float_of_string,
+      )
+      numerator /. denominator *. 100.0
+    })
+    |> Js.Array.reduce((a, b) => a +. b, 0.0)
   sumOfPercentageScores /. (quizScores |> Array.length |> float_of_int)
 }
 

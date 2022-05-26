@@ -162,7 +162,7 @@ module NotificationsQuery = %graphql(`
           actor {
             id
             name
-            title
+            fullTitle
             avatarUrl
           }
           createdAt

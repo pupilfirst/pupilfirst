@@ -16,7 +16,7 @@ let levelInfo = (levelId, levels) =>
       {levels
       |> ArrayUtils.unsafeFind(
         (l: Level.t) => l.id == levelId,
-        "Unable to find level with id: "  ++ (levelId ++ "in CoursesStudents__TeamsList"),
+        "Unable to find level with id: " ++ (levelId ++ "in CoursesStudents__TeamsList"),
       )
       |> Level.number
       |> string_of_int
@@ -74,7 +74,9 @@ let showStudent = (team, levels, teamCoaches) => {
             {student |> TeamInfo.studentName |> str}
           </p>
           <div className="py-px text-gray-700 text-xs leading-snug flex items-start">
-            <span className="font-semibold pr-2"> {student |> TeamInfo.studentTitle |> str} </span>
+            <span className="font-semibold pr-2">
+              {student |> TeamInfo.studentFullTitle |> str}
+            </span>
             <span className="pl-2 border-l border-gray-400 italic">
               {switch student->TeamInfo.lastSeenAt {
               | Some(date) =>
@@ -138,7 +140,7 @@ let showTeam = (team, levels, teamCoaches) =>
                 </p>
                 <div className="py-px text-gray-700 text-xs leading-snug flex items-start">
                   <span className="font-semibold pr-2">
-                    {student |> TeamInfo.studentTitle |> str}
+                    {student |> TeamInfo.studentFullTitle |> str}
                   </span>
                   <span className="pl-2 border-l border-gray-400 italic">
                     {switch student->TeamInfo.lastSeenAt {

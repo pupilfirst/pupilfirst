@@ -38,7 +38,7 @@ let make = (~school, ~courses, ~currentUser) => {
       | list{"students"} => (Students, Some(<StudentsIndex__Root courseId search={url.search} />))
       | list{"students", "new"} => (Students, Some(<StudentCreator__Root courseId />))
       | list{"students", "import"} => (Students, Some(<StudentBulkImport__Root courseId />))
-      | list{"students", studentId, "edit"} => (
+      | list{"students", studentId, "details"} => (
           Students,
           Some(<StudentDetails__Root courseId studentId />),
         )

@@ -68,7 +68,7 @@ let make = (
   ~addTagCB,
   ~removeTagCB,
   ~allowNewTags,
-  ~disabled=true,
+  ~disabled=false,
 ) => {
   let (state, send) = React.useReducer(reducer, "")
   let results = search(state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)

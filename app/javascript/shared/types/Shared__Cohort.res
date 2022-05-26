@@ -25,3 +25,12 @@ let makeFromJs = cohort => {
     ~endsAt=cohort["endsAt"]->Belt.Option.map(DateFns.decodeISO),
   )
 }
+
+module Fragments = %graphql(`
+  fragment CohortFragment on Cohort {
+    id
+    name
+    description
+    endsAt
+  }
+`)

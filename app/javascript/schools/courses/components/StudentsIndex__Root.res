@@ -221,7 +221,7 @@ let studentsList = (students, courseId, params) => {
           </div>
           <div>
             <Link
-              href={`/school/courses/${courseId}/students/${StudentInfo.id(student)}/edit`}
+              href={`/school/courses/${courseId}/students/${StudentInfo.id(student)}/details`}
               className="flex flex-1 items-center text-left py-4 px-4 hover:bg-gray-100 hover:text-primary-500 focus:bg-gray-100 focus:text-primary-500 justify-between">
               <span className="inline-flex items-center p-2">
                 <i className="fas fa-edit text-gray-500" />

@@ -78,13 +78,11 @@ module CreateStudentsQuery = %graphql(`
   }
   `)
 
+module CohortFragment = Cohort.Fragments
 module StudentsCreateDataQuery = %graphql(`
   query StudentsCreateDataQuery($courseId: ID!) {
     cohorts(courseId: $courseId) {
-      id
-      name
-      description
-      endsAt
+      ...CohortFragment
     }
     courseResourceInfo(courseId: $courseId, resources: [StudentTag]) {
       resource

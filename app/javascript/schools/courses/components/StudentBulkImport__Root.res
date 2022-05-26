@@ -134,13 +134,11 @@ let submitForm = (cohort, exitUrl, send, event) => {
   }
 }
 
+module CohortFragment = Cohort.Fragments
 module StudentBulkImportDataQuery = %graphql(`
   query StudentBulkImportDataQuery($courseId: ID!) {
     cohorts(courseId: $courseId) {
-      id
-      name
-      description
-      endsAt
+      ...CohortFragment
     }
   }
   `)

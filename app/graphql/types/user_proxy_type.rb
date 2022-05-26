@@ -13,5 +13,9 @@ module Types
     def avatar_url
       object.user.avatar_url(variant: :thumb)
     end
+
+    def full_title
+      object.user.full_title
+    end
   end
 end

@@ -14,6 +14,7 @@ and selected = bool
 type student = {
   name: string,
   taggings: array<string>,
+  usetTaggings: array<string>,
   title: string,
   affiliation: string,
   accessEndsAt: option<Js.Date.t>,
@@ -26,7 +27,6 @@ module Editor = {
     student: student,
     coachSearchInput: string,
     saving: bool,
-    tagsToApply: array<string>,
   }
 
   type action =
@@ -67,69 +67,44 @@ module Editor = {
 
   let enrolledCoachIds = coaches =>
     coaches
-    |> Js.Array.filter(((_, _, selected)) => selected == true)
-    |> Array.map(((key, _, _)) => key)
+    ->Js.Array2.filter(((_, _, selected)) => selected == true)
+    ->Js.Array2.map(((key, _, _)) => key)
 
-  let handleResponseCB = (updateFormCB, state, student, oldTeam, _json) => {
-    // let affiliation = switch state.affiliation |> String.trim {
-    // | "" => None
-    // | text => Some(text)
-    // }
-    // let newStudent = Student.update(~name=state.name, ~title=state.title, ~affiliation, ~student)
-    // let newTeam = Team.update(
-    //   ~name=state.teamName,
-    //   ~avilableTags=state.tagsToApply,
-    //   ~student=newStudent,
-    //   ~coachIds=state.teamCoaches,
-    //   ~accessEndsAt=state.accessEndsAt,
-    //   ~team=oldTeam,
-    // )
+  module UpdateStudentDetailsQuery = %graphql(`
+    mutation UpdateStudentDetailsQuery($id: ID!, $cohortId: ID!, $coachIds: [ID!]!, $name: String!, $title: String!, $affiliation: String, $taggings: [String!]!, $accessEndsAt: ISO8601DateTime, ) {
+      updateStudentDetails(id: $id, cohortId: $cohortId, coachIds: $coachIds, name: $name, title: $title, affiliation: $affiliation, taggings: $taggings, accessEndsAt: $accessEndsAt) {
+        success
+      }
+    }
+  `)
 
-    // // Remove inactive teams from the list
-    // let team = newTeam |> Team.active ? Some(newTeam) : None
-
-    // updateFormCB(state.tagsToApply, team)
-    Notification.success(ts("notifications.success"), "FOO")
-  }
-
-  let updateStudent = (student, state, send, responseCB) => {
+  let updateStudent = (studentId, courseId, state, send) => {
     send(UpdateSaving(true))
-    // let payload = Js.Dict.empty()
+    let variables = UpdateStudentDetailsQuery.makeVariables(
+      ~id=studentId,
+      ~accessEndsAt=?state.student.accessEndsAt->Belt.Option.map(DateFns.encodeISO),
+      ~cohortId=Cohort.id(state.student.cohort),
+      ~name=state.student.name,
+      ~title=state.student.title,
+      ~affiliation=state.student.affiliation,
+      ~taggings=state.student.taggings,
+      ~coachIds=state.student.coachIds,
+      (),
+    )
 
-    // Js.Dict.set(payload, "authenticity_token", AuthenticityToken.fromHead() |> Js.Json.string)
-
-    // let updatedStudent = Student.updateInfo(
-    //   ~name=state.name,
-    //   ~title=state.title,
-    //   ~affiliation=Some(state.affiliation),
-    //   ~student,
-    // )
-    // Js.Dict.set(payload, "founder", Student.encode(state.teamName, updatedStudent))
-    // Js.Dict.set(
-    //   payload,
-    //   "tags",
-    //   state.tagsToApply |> {
-    //     open Json.Encode
-    //     array(string)
-    //   },
-    // )
-    // Js.Dict.set(
-    //   payload,
-    //   "coach_ids",
-    //   state.teamCoaches |> {
-    //     open Json.Encode
-    //     array(string)
-    //   },
-    // )
-
-    // Js.Dict.set(
-    //   payload,
-    //   "access_ends_at",
-    //   state.accessEndsAt->Belt.Option.mapWithDefault(Json.Encode.string(""), DateFns.encodeISO),
-    // )
-
-    // let url = "/school/students/" ++ (student |> Student.id)
-    // Api.update(url, payload, responseCB, handleErrorCB(send))
+    UpdateStudentDetailsQuery.fetch(variables)
+    |> Js.Promise.then_((result: UpdateStudentDetailsQuery.t) => {
+      result.updateStudentDetails.success
+        ? RescriptReactRouter.push(`/school/courses/${courseId}/students`)
+        : send(UpdateSaving(false))
+      Js.Promise.resolve()
+    })
+    |> Js.Promise.catch(error => {
+      Js.log(error)
+      send(UpdateSaving(false))
+      Js.Promise.resolve()
+    })
+    |> ignore
   }
 
   let boolBtnClasses = selected => {
@@ -153,7 +128,7 @@ module Editor = {
   module SelectablePrerequisiteTargets = {
     type t = Coach.t
 
-    let value = t => t |> Coach.name
+    let value = t => Coach.name(t)
     let searchString = value
 
     let make = (coach): t => coach
@@ -176,12 +151,12 @@ module Editor = {
   let teamCoachesEditor = (courseCoaches, state: state, send) => {
     let selected =
       courseCoaches
-      ->Js.Array2.filter(coach => state.student.coachIds |> Array.mem(Coach.id(coach)))
+      ->Js.Array2.filter(coach => Array.mem(Coach.id(coach), state.student.coachIds))
       ->Js.Array2.map(coach => SelectablePrerequisiteTargets.make(coach))
 
     let unselected =
       courseCoaches
-      ->Js.Array2.filter(coach => !(state.student.coachIds |> Array.mem(Coach.id(coach))))
+      ->Js.Array2.filter(coach => !Array.mem(Coach.id(coach), state.student.coachIds))
       ->Js.Array2.map(coach => SelectablePrerequisiteTargets.make(coach))
     <div className="mt-2">
       <MultiselectForTeamCoaches
@@ -202,7 +177,6 @@ module Editor = {
     student: student,
     coachSearchInput: "",
     saving: false,
-    tagsToApply: [],
   }
 
   let reducer = (state: state, action) =>
@@ -210,11 +184,14 @@ module Editor = {
     | UpdateName(name) => {...state, student: {...state.student, name: name}}
     | AddTag(tag) => {
         ...state,
-        tagsToApply: state.tagsToApply->Js.Array2.concat([tag]),
+        student: {...state.student, taggings: state.student.taggings->Js.Array2.concat([tag])},
       }
     | RemoveTag(tag) => {
         ...state,
-        tagsToApply: state.tagsToApply->Js.Array2.filter(t => t !== tag),
+        student: {
+          ...state.student,
+          taggings: state.student.taggings->Js.Array2.filter(t => t != tag),
+        },
       }
     | UpdateCoachesList(coachIds) => {
         ...state,
@@ -267,7 +244,7 @@ module Editor = {
   module Dropdown = Select.Make(Selectable)
 
   @react.component
-  let make = (~student, ~avilableTags, ~courseCoaches, ~cohorts) => {
+  let make = (~studentId, ~courseId, ~student, ~avilableTags, ~courseCoaches, ~cohorts) => {
     let (state, send) = React.useReducer(reducer, initialState(student))
 
     <DisablingCover disabled=state.saving>
@@ -276,7 +253,7 @@ module Editor = {
           <label
             className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
             htmlFor="name">
-            {t("name") |> str}
+            {t("name")->str}
           </label>
           <input
             autoFocus=true
@@ -289,14 +266,14 @@ module Editor = {
           />
           <School__InputGroupError
             message="Name must have at least two characters"
-            active={state.student.name |> stringInputInvalid}
+            active={state.student.name->stringInputInvalid}
           />
         </div>
         <div className="mt-5">
           <label
             className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
             htmlFor="title">
-            {t("title") |> str}
+            {t("title")->str}
           </label>
           <input
             value=state.student.title
@@ -307,16 +284,16 @@ module Editor = {
             placeholder={t("title_placeholder")}
           />
           <School__InputGroupError
-            message={t("title_error")} active={state.student.title |> stringInputInvalid}
+            message={t("title_error")} active={state.student.title->stringInputInvalid}
           />
         </div>
         <div className="mt-5">
           <label
             className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
             htmlFor="affiliation">
-            {t("affiliation") |> str}
+            {t("affiliation")->str}
           </label>
-          <span className="text-xs ml-1"> {ts("optional_braces") |> str} </span>
+          <span className="text-xs ml-1"> {ts("optional_braces")->str} </span>
           <input
             value=state.student.affiliation
             onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
@@ -328,7 +305,7 @@ module Editor = {
         </div>
         <div className="mt-5 flex flex-col">
           <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="email">
-            {"Select a cohort" |> str}
+            {"Select a cohort"->str}
           </label>
           <Dropdown
             placeholder={"Pick a Cohort"}
@@ -340,36 +317,36 @@ module Editor = {
         <div className="mt-5">
           <div className="border-b pb-4 mb-2 mt-5 ">
             <span className="inline-block mr-1 text-xs font-semibold">
-              {t("personal_coaches") |> str}
+              {t("personal_coaches")->str}
             </span>
             {teamCoachesEditor(courseCoaches, state, send)}
           </div>
         </div>
-        {state.student.taggings |> ArrayUtils.isNotEmpty
+        {state.student.taggings->ArrayUtils.isNotEmpty
           ? <div className="mt-5">
               <div className="mb-2 text-xs font-semibold">
-                {t("tags_applied_user") ++ ":" |> str}
+                {str(t("tags_applied_user") ++ ":")}
               </div>
               <div className="flex flex-wrap">
-                {state.student.taggings
-                |> Js.Array.map(tag =>
+                {state.student.usetTaggings
+                ->Js.Array2.map(tag =>
                   <div
                     className="bg-blue-100 border border-blue-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900"
                     key={tag}>
                     {str(tag)}
                   </div>
                 )
-                |> React.array}
+                ->React.array}
               </div>
             </div>
           : React.null}
         <div className="mt-5">
-          <div className="mb-2 text-xs font-semibold"> {t("tags_applied") ++ ":" |> str} </div>
+          <div className="mb-2 text-xs font-semibold"> {str(t("tags_applied") ++ ":")} </div>
           <School__SearchableTagList
-            unselectedTags={avilableTags |> Js.Array.filter(tag =>
-              !(state.tagsToApply |> Array.mem(tag))
+            unselectedTags={avilableTags->Js.Array2.filter(tag =>
+              !Array.mem(tag, state.student.taggings)
             )}
-            selectedTags=state.tagsToApply
+            selectedTags=state.student.taggings
             addTagCB={tag => send(AddTag(tag))}
             removeTagCB={tag => send(RemoveTag(tag))}
             allowNewTags=true
@@ -379,9 +356,9 @@ module Editor = {
           <label className="tracking-wide text-xs font-semibold" htmlFor="access-ends-at-input">
             {t("access_ends_at.label_student")->str}
           </label>
-          <span className="ml-1 text-xs"> {ts("optional_braces") |> str} </span>
+          <span className="ml-1 text-xs"> {ts("optional_braces")->str} </span>
           <HelpIcon className="ml-2" link={t("access_ends_at.help_url")}>
-            {t("access_ends_at.help") |> str}
+            {t("access_ends_at.help")->str}
           </HelpIcon>
           <DatePicker
             onChange={date => send(UpdateAccessEndsAt(date))}
@@ -393,9 +370,9 @@ module Editor = {
       <div className="my-5 w-auto">
         <button
           disabled={formInvalid(state)}
-          onClick={_e => ()}
+          onClick={_e => updateStudent(studentId, courseId, state, send)}
           className="w-full btn btn-large btn-primary">
-          {t("update_student") |> str}
+          {t("update_student")->str}
         </button>
       </div>
     </DisablingCover>
@@ -426,6 +403,7 @@ module StudentDetailsDataQuery = %graphql(`
         name
         title
         affiliation
+        taggings
 
       }
       personalCoaches{
@@ -458,6 +436,7 @@ let loadData = (courseId, studentId, setState) => {
         accessEndsAt: response.student.accessEndsAt->Belt.Option.map(DateFns.decodeISO),
         coachIds: response.student.personalCoaches->Js.Array2.map(c => c.id),
         cohort: response.student.cohort->Cohort.makeFromFragment,
+        usetTaggings: response.student.user.taggings,
       },
       cohorts: response.cohorts->Js.Array2.map(Cohort.makeFromFragment),
       tags: response.courseResourceInfo[0].values,
@@ -493,6 +472,8 @@ let make = (~courseId, ~studentId) => {
           avilableTags={baseData.tags}
           student={baseData.student}
           cohorts={baseData.cohorts}
+          studentId={studentId}
+          courseId={courseId}
         />
       }}
     </div>

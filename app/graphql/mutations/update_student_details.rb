@@ -16,6 +16,11 @@ module Mutations
 
     def resolve(_params)
       update_student_details
+      notify(
+        :success,
+        I18n.t('shared.notifications.success'),
+        I18n.t('mutations.update_student_details.success_notification')
+      )
       { success: true }
     end
 

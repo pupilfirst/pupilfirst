@@ -1982,6 +1982,8 @@ en:
       success_notification: Certificate details have been updated.
     update_course:
       success_notification: Course updated successfully!
+    update_student_details:
+      success_notification: Student updated successfully
     update_course_author:
       author_name_updated_notification: The author's name has been updated.
       author_updated_notification: Author Updated

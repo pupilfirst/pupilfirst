@@ -55,6 +55,9 @@ module Types
           null: false
     field :create_coach_note, mutation: Mutations::CreateCoachNote, null: false
     field :create_students, mutation: Mutations::CreateStudents, null: false
+    field :update_student_details,
+          mutation: Mutations::UpdateStudentDetails,
+          null: false
     field :dropout_student, mutation: Mutations::DropoutStudent, null: false
     field :create_evaluation_criterion,
           mutation: Mutations::CreateEvaluationCriterion,

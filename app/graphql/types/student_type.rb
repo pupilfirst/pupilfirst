@@ -74,15 +74,19 @@ module Types
         end
     end
 
-
-
     def personal_coaches
-      BatchLoader::GraphQL.for(object.id).batch(default_value: []) do |student_ids, loader|
-        FacultyFounderEnrollment.joins(:faculty).where(founder_id: student_ids).each do |enrollment|
-
-          loader.call(enrollment.founder_id) { |memo| memo |= [enrollment.faculty].compact } # rubocop:disable Lint/UselessAssignment
+      BatchLoader::GraphQL
+        .for(object.id)
+        .batch(default_value: []) do |student_ids, loader|
+          FacultyFounderEnrollment
+            .joins(:faculty)
+            .where(founder_id: student_ids)
+            .each do |enrollment|
+              loader.call(enrollment.founder_id) do |memo|
+                memo |= [enrollment.faculty].compact
+              end # rubocop:disable Lint/UselessAssignment
+            end
         end
-      end
     end
   end
 end

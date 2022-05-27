@@ -1,4 +1,4 @@
-%raw(`require("./CourseEditor.css")`)
+%raw(`require("./CourseEditor__Root.css")`)
 
 exception UnsafeFindFailed(string)
 

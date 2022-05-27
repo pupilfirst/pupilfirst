@@ -115,7 +115,7 @@ let statusButton = (index, status, callback, checklist) =>
   </div>
 
 let cardHeaderClasses = pending =>
-  "text-sm font-semibold flex items-center justify-between " ++ (pending ? "" : "bg-white rounded")
+  "text-sm font-medium flex items-center justify-between " ++ (pending ? "" : "bg-white rounded")
 
 let cardBodyClasses = pending => "pl-7 md:pl-8 " ++ (pending ? "" : "rounded-b")
 

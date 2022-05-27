@@ -447,21 +447,21 @@ module StudentDetailsDataQuery = %graphql(`
 
 let loadData = (courseId, studentId, setState) => {
   setState(_ => Loading)
-  StudentDetailsDataQuery.make(StudentDetailsDataQuery.makeVariables(~courseId, ~studentId, ()))
-  |> Js.Promise.then_(response => {
+  StudentDetailsDataQuery.fetch({courseId: courseId, studentId: studentId})
+  |> Js.Promise.then_((response: StudentDetailsDataQuery.t) => {
     setState(_ => Loaded({
       student: {
-        name: response["student"]["user"]["name"],
-        taggings: response["student"]["taggings"],
-        title: response["student"]["user"]["title"],
-        affiliation: response["student"]["user"]["affiliation"],
-        accessEndsAt: response["student"]["accessEndsAt"],
-        coachIds: response["student"]["personalCoaches"]->Js.Array2.map(c => c["id"]),
-        cohort: response["student"]["cohort"]->Cohort.makeFromJs,
+        name: response.student.user.name,
+        taggings: response.student.taggings,
+        title: response.student.user.title,
+        affiliation: Belt.Option.getWithDefault(response.student.user.affiliation, ""),
+        accessEndsAt: response.student.accessEndsAt->Belt.Option.map(DateFns.decodeISO),
+        coachIds: response.student.personalCoaches->Js.Array2.map(c => c.id),
+        cohort: response.student.cohort->Cohort.makeFromFagment,
       },
-      cohorts: response["cohorts"]->Js.Array2.map(Cohort.makeFromJs),
-      tags: response["courseResourceInfo"][0]["values"],
-      courseCoaches: response["coaches"]->Js.Array2.map(UserProxy.makeFromJs),
+      cohorts: response.cohorts->Js.Array2.map(Cohort.makeFromFagment),
+      tags: response.courseResourceInfo[0].values,
+      courseCoaches: response.coaches->Js.Array2.map(Coach.makeFromFagment),
     }))
     Js.Promise.resolve()
   })

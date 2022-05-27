@@ -55,3 +55,12 @@ module Fragments = %graphql(`
     avatarUrl
   }
 `)
+
+let makeFromFagment = (user: Fragments.t) =>
+  make(
+    ~id=user.id,
+    ~userId=user.userId,
+    ~name=user.name,
+    ~avatarUrl=user.avatarUrl,
+    ~fullTitle=user.fullTitle,
+  )

@@ -5,11 +5,7 @@ class CoachesResolver < ApplicationQuery
   property :course_id
 
   def coaches
-    if coach_ids.nil?
-      course.faculty.distinct
-    else
-      course.faculty.distinct.where(id: coach_ids)
-    end
+    coach_ids.nil? ? course.faculty : course.faculty.where(id: coach_ids)
   end
 
   private

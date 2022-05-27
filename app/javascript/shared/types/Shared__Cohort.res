@@ -34,3 +34,12 @@ module Fragments = %graphql(`
     endsAt
   }
 `)
+
+let makeFromFagment = (cohort: Fragments.t) => {
+  make(
+    ~id=cohort.id,
+    ~name=cohort.name,
+    ~description=cohort.description,
+    ~endsAt=cohort.endsAt->Belt.Option.map(DateFns.decodeISO),
+  )
+}

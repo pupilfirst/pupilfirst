@@ -35,7 +35,7 @@ module Fragments = %graphql(`
   }
 `)
 
-let makeFromFagment = (cohort: Fragments.t) => {
+let makeFromFragment = (cohort: Fragments.t) => {
   make(
     ~id=cohort.id,
     ~name=cohort.name,

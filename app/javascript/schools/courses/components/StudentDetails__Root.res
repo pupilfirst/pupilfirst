@@ -457,11 +457,11 @@ let loadData = (courseId, studentId, setState) => {
         affiliation: Belt.Option.getWithDefault(response.student.user.affiliation, ""),
         accessEndsAt: response.student.accessEndsAt->Belt.Option.map(DateFns.decodeISO),
         coachIds: response.student.personalCoaches->Js.Array2.map(c => c.id),
-        cohort: response.student.cohort->Cohort.makeFromFagment,
+        cohort: response.student.cohort->Cohort.makeFromFragment,
       },
-      cohorts: response.cohorts->Js.Array2.map(Cohort.makeFromFagment),
+      cohorts: response.cohorts->Js.Array2.map(Cohort.makeFromFragment),
       tags: response.courseResourceInfo[0].values,
-      courseCoaches: response.coaches->Js.Array2.map(Coach.makeFromFagment),
+      courseCoaches: response.coaches->Js.Array2.map(Coach.makeFromFragment),
     }))
     Js.Promise.resolve()
   })

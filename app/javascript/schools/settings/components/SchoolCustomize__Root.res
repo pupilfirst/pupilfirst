@@ -24,6 +24,7 @@ type rec action =
   | AddLink(Customizations.link)
   | RemoveLink(Customizations.linkId)
   | UpdateLink(Customizations.linkId, string, string)
+  | MoveLink(Customizations.linkId, Customizations.direction)
   | UpdateTermsAndConditions(string)
   | UpdatePrivacyPolicy(string)
   | UpdateAddress(string)
@@ -41,7 +42,7 @@ let headerLogo = (schoolName, logoOnLightBg) =>
   | None => <span className="text-2xl font-bold"> {schoolName |> str} </span>
   }
 
-let headerLink = ((id, title, _)) =>
+let headerLink = ((id, title, _, sortIndex)) =>
   <div className="ml-6 text-sm font-semibold cursor-default" key=id>
     <span> {title |> str} </span>
   </div>
@@ -76,7 +77,7 @@ let sitemap = links =>
   | links =>
     <div className="flex flex-wrap">
       {links
-      |> List.map(((id, title, _)) =>
+      |> List.map(((id, title, _, sortIndex)) =>
         <div className="w-1/3 pr-4 mt-3 text-xs font-semibold" key=id> {title |> str} </div>
       )
       |> Array.of_list
@@ -94,7 +95,7 @@ let socialLinks = links =>
   | links =>
     <div className="flex flex-wrap">
       {links
-      |> List.map(((id, _title, url)) => <SchoolCustomize__SocialLink url key=id />)
+      |> List.map(((id, _title, url, sortIndex)) => <SchoolCustomize__SocialLink url key=id />)
       |> Array.of_list
       |> React.array}
     </div>
@@ -160,6 +161,7 @@ let editor = (state, send, authenticityToken) =>
           kind
           customizations=state.customizations
           addLinkCB={link => send(AddLink(link))}
+          moveLinkCB={(linkId, direction) => send(MoveLink(linkId, direction))}
           removeLinkCB={linkId => send(RemoveLink(linkId))}
           updateLinkCB={(linkId, title, url) => send(UpdateLink(linkId, title, url))}
         />
@@ -219,6 +221,10 @@ let reducer = (state, action) =>
   | RemoveLink(linkId) => {
       ...state,
       customizations: state.customizations |> Customizations.removeLink(linkId),
+    }
+  | MoveLink(linkId, direction) => {
+      ...state,
+      customizations: state.customizations |> Customizations.moveLink(linkId, direction),
     }
   | UpdatePrivacyPolicy(agreement) => {
       ...state,

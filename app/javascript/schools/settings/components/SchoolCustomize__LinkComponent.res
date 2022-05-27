@@ -14,6 +14,44 @@ module DestroySchoolLinkQuery = %graphql(`
   }
   `)
 
+module SortSchoolLinkQuery = %graphql(`
+  mutation SortSchoolLinksMutation($linkIds: [ID!]!,$kind:String!) {
+    sortSchoolLinks(linkIds:$linkIds,kind:$kind) {
+      success
+    }
+  }
+  `)
+
+let handleMoveLink = (
+  ~id,
+  ~direction,
+  ~setUpdating,
+  ~setIsEditingDisabled,
+  ~kind: SchoolLinks.kind,
+  ~links,
+  ~moveLinkCB,
+) => {
+  let linkIds = links |> List.map(((id, _, _, _)) => id) |> Array.of_list
+
+  let linkKind = switch kind {
+  | SchoolLinks.HeaderLink => "header"
+  | SchoolLinks.FooterLink => "footer"
+  | SchoolLinks.SocialLink => "social"
+  }
+
+  setUpdating(_ => true)
+  SortSchoolLinkQuery.make(~linkIds, ~kind=linkKind, ())
+  |> GraphqlQuery.sendQuery
+  |> Js.Promise.then_(_ => {
+    setUpdating(_ => false)
+    setIsEditingDisabled(_ => true)
+    moveLinkCB(id, direction)
+    Js.Promise.resolve()
+  })
+  |> ignore
+  ()
+}
+
 let handleDelete = (state: SchoolLinks.state, send, removeLinkCB, id, event) => {
   event |> ReactEvent.Mouse.preventDefault
 
@@ -64,12 +102,17 @@ let make = (
   ~removeLinkCB,
   ~updateLinkCB,
   ~kind: SchoolLinks.kind,
+  ~index,
+  ~total,
+  ~links,
+  ~moveLinkCB,
 ) => {
   let (isEditingDisabled, setIsEditingDisabled) = React.useState(_ => true)
   let (_title, setTitle) = React.useState(_ => title)
   let (_url, setUrl) = React.useState(_ => url)
   let (updating, setUpdating) = React.useState(_ => false)
   let (error, setError) = React.useState(_ => false)
+
   <DisablingCover disabled=updating message="Updating...">
     <div
       className={"flex justify-between items-center gap-8 bg-gray-100 text-xs text-gray-900 border rounded mt-2"}>
@@ -126,6 +169,40 @@ let make = (
       <div>
         {isEditingDisabled
           ? <div>
+              <button
+                ariaLabel={"Edit " ++ title}
+                title={"Edit " ++ url}
+                onClick={e =>
+                  handleMoveLink(
+                    ~id,
+                    ~direction=Customizations.Down,
+                    ~kind,
+                    ~moveLinkCB,
+                    ~links,
+                    ~setIsEditingDisabled,
+                    ~setUpdating,
+                  )}
+                disabled={index == total - 1}
+                className="p-3 hover:text-primary-500 focus:text-primary-500">
+                <FaIcon classes="fas fa-arrow-down" />
+              </button>
+              <button
+                ariaLabel={"Edit " ++ title}
+                title={"Edit " ++ url}
+                disabled={index == 0}
+                onClick={e =>
+                  handleMoveLink(
+                    ~id,
+                    ~direction=Customizations.Up,
+                    ~kind,
+                    ~moveLinkCB,
+                    ~links,
+                    ~setIsEditingDisabled,
+                    ~setUpdating,
+                  )}
+                className={"p-3 hover:text-primary-500 focus:text-primary-500"}>
+                <FaIcon classes="fas fa-arrow-up" />
+              </button>
               <button
                 ariaLabel={"Edit " ++ title}
                 title={"Edit " ++ url}

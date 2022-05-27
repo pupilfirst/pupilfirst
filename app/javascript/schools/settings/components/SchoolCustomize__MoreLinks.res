@@ -11,7 +11,7 @@ let additionalLinks = (linksVisible, links) =>
   if linksVisible {
     <div className="border-2 border-gray-200 rounded-lg absolute w-48 bg-white mt-2">
       {links
-      |> List.map(((id, title, _)) =>
+      |> List.map(((id, title, _, sortIndex)) =>
         <div key=id className="p-2 cursor-default"> <span> {title |> str} </span> </div>
       )
       |> Array.of_list

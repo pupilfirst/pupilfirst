@@ -21,11 +21,12 @@ type schoolImages = {
 type linkId = string
 type title = string
 type url = string
+type sortIndex = int
 
 type link =
-  | HeaderLink(linkId, title, url)
-  | FooterLink(linkId, title, url)
-  | SocialLink(linkId, url)
+  | HeaderLink(linkId, title, url, sortIndex)
+  | FooterLink(linkId, title, url, sortIndex)
+  | SocialLink(linkId, url, sortIndex)
 
 type t = {
   schoolStrings: schoolStrings,
@@ -48,36 +49,36 @@ let termsAndConditions = t => t.schoolStrings.termsAndConditions
 let headerLinks = t =>
   t.links |> List.filter(l =>
     switch l {
-    | HeaderLink(_, _, _) => true
-    | FooterLink(_, _, _) => false
-    | SocialLink(_, _) => false
+    | HeaderLink(_, _, _, _) => true
+    | FooterLink(_, _, _, _) => false
+    | SocialLink(_, _, _) => false
     }
   )
 
 let footerLinks = t =>
   t.links |> List.filter(l =>
     switch l {
-    | HeaderLink(_, _, _) => false
-    | FooterLink(_, _, _) => true
-    | SocialLink(_, _) => false
+    | HeaderLink(_, _, _, _) => false
+    | FooterLink(_, _, _, _) => true
+    | SocialLink(_, _, _) => false
     }
   )
 
 let socialLinks = t =>
   t.links |> List.filter(l =>
     switch l {
-    | HeaderLink(_, _, _) => false
-    | FooterLink(_, _, _) => false
-    | SocialLink(_, _) => true
+    | HeaderLink(_, _, _, _) => false
+    | FooterLink(_, _, _, _) => false
+    | SocialLink(_, _, _) => true
     }
   )
 
 let unpackLinks = links =>
   links |> List.map(l =>
     switch l {
-    | HeaderLink(id, title, url)
-    | FooterLink(id, title, url) => (id, title, url)
-    | SocialLink(id, url) => (id, "", url)
+    | HeaderLink(id, title, url, sortIndex)
+    | FooterLink(id, title, url, sortIndex) => (id, title, url, sortIndex)
+    | SocialLink(id, url, sortIndex) => (id, "", url, sortIndex)
     }
   )
 
@@ -87,10 +88,10 @@ let removeLink = (linkId, t) => {
   ...t,
   links: t.links |> List.filter(l =>
     switch l {
-    | HeaderLink(id, _, _)
-    | FooterLink(id, _, _) =>
+    | HeaderLink(id, _, _, _)
+    | FooterLink(id, _, _, _) =>
       id != linkId
-    | SocialLink(id, _) => id != linkId
+    | SocialLink(id, _, _) => id != linkId
     }
   ),
 }
@@ -99,13 +100,54 @@ let updateLink = (linkId, newTitle, newUrl, t) => {
   ...t,
   links: t.links |> List.map(l =>
     switch l {
-    | HeaderLink(id, title, url) =>
-      id == linkId ? HeaderLink(id, newTitle, newUrl) : HeaderLink(id, title, url)
-    | FooterLink(id, title, url) =>
-      id == linkId ? FooterLink(id, newTitle, newUrl) : FooterLink(id, title, url)
-    | SocialLink(id, url) => id == linkId ? SocialLink(id, newUrl) : SocialLink(id, url)
+    | HeaderLink(id, title, url, sortIndex) =>
+      id == linkId
+        ? HeaderLink(id, newTitle, newUrl, sortIndex)
+        : HeaderLink(id, title, url, sortIndex)
+    | FooterLink(id, title, url, sortIndex) =>
+      id == linkId
+        ? FooterLink(id, newTitle, newUrl, sortIndex)
+        : FooterLink(id, title, url, sortIndex)
+    | SocialLink(id, url, sortIndex) =>
+      id == linkId ? SocialLink(id, newUrl, sortIndex) : SocialLink(id, url, sortIndex)
     }
   ),
+}
+
+type direction = Up | Down
+
+let sortFunc = link =>
+  switch link {
+  | HeaderLink(_, _, _, sortIndex)
+  | FooterLink(_, _, _, sortIndex)
+  | SocialLink(_, _, sortIndex) => sortIndex
+  }
+
+let moveLink = (linkId, direction, t) => {
+  let link = t.links |> List.find(link =>
+    switch link {
+    | HeaderLink(id, _, _, _)
+    | FooterLink(id, _, _, _)
+    | SocialLink(id, _, _) =>
+      id == linkId
+    }
+  )
+  {
+    ...t,
+    links: t.links
+    |> List.sort((a, b) => sortFunc(a) - sortFunc(b))
+    |> switch direction {
+    | Down => ListUtils.swapDown(link)
+    | Up => ListUtils.swapUp(link)
+    }
+    |> List.mapi((sortIndex, link) =>
+      switch link {
+      | HeaderLink(id, title, url, _) => HeaderLink(id, title, url, sortIndex)
+      | FooterLink(id, title, url, _) => FooterLink(id, title, url, sortIndex)
+      | SocialLink(id, url, _) => SocialLink(id, url, sortIndex)
+      }
+    ),
+  }
 }
 
 let optionalString = s =>
@@ -176,9 +218,14 @@ let decodeStrings = json => {
 }
 
 let decodeLink = json => {
-  let (kind, id, url) = {
+  let (kind, id, url, sortIndex) = {
     open Json.Decode
-    (field("kind", string, json), field("id", string, json), field("url", string, json))
+    (
+      field("kind", string, json),
+      field("id", string, json),
+      field("url", string, json),
+      field("sort_index", int, json),
+    )
   }
 
   let title = switch kind {
@@ -190,9 +237,9 @@ let decodeLink = json => {
   }
 
   switch kind {
-  | "header" => HeaderLink(id, title, url)
-  | "footer" => FooterLink(id, title, url)
-  | "social" => SocialLink(id, url)
+  | "header" => HeaderLink(id, title, url, sortIndex)
+  | "footer" => FooterLink(id, title, url, sortIndex)
+  | "social" => SocialLink(id, url, sortIndex)
   | unknownKind => raise(UnknownKindOfLink(unknownKind))
   }
 }

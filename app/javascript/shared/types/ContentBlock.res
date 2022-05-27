@@ -235,8 +235,7 @@ let updateMarkdown = (markdown, t) =>
   | Embed(_) => t
   }
 
-module Fragments = %graphql(
-  `
+module Fragments = %graphql(`
   fragment allFields on ContentBlock {
     id
     blockType
@@ -269,11 +268,9 @@ module Fragments = %graphql(
       }
     }
   }
-`
-)
+`)
 
-module Query = %graphql(
-  `
+module Query = %graphql(`
     query ContentBlocksWithVersionsQuery($targetId: ID!, $targetVersionId: ID) {
       contentBlocks(targetId: $targetId, targetVersionId: $targetVersionId) {
         id
@@ -313,5 +310,4 @@ module Query = %graphql(
         updatedAt
       }
   }
-`
-)
+`)

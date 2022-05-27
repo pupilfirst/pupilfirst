@@ -67,9 +67,9 @@ module CreateSchoolLinkQuery = %graphql(`
 
 let displayNewLink = (state: state, addLinkCB, id) =>
   switch state.kind {
-  | HeaderLink => Customizations.HeaderLink(id, state.title, state.url)
-  | FooterLink => Customizations.FooterLink(id, state.title, state.url)
-  | SocialLink => Customizations.SocialLink(id, state.url)
+  | HeaderLink => Customizations.HeaderLink(id, state.title, state.url, 0)
+  | FooterLink => Customizations.FooterLink(id, state.title, state.url, 0)
+  | SocialLink => Customizations.SocialLink(id, state.url, 0)
   } |> addLinkCB
 
 module CreateLinkError = {
@@ -145,6 +145,7 @@ let initialState = kind => {
   adding: false,
   deleting: list{},
 }
+
 let reducer = (state, action) =>
   switch action {
   | UpdateKind(kind) => {...state, kind: kind, formDirty: true}
@@ -169,7 +170,7 @@ let reducer = (state, action) =>
     }
   }
 
-let showLinks = (state, send, removeLinkCB, updateLinkCB, kind, links) =>
+let showLinks = (state, send, removeLinkCB, updateLinkCB, moveLinkCB, kind, links) =>
   switch links {
   | list{} =>
     <div
@@ -178,9 +179,21 @@ let showLinks = (state, send, removeLinkCB, updateLinkCB, kind, links) =>
     </div>
   | links =>
     links
-    |> List.map(((id, title, url)) =>
+    |> List.mapi((index, (id, title, url, sortIndex)) =>
       <SchoolCustomize__LinkComponent
-        key=id id title url kind removeLinkCB updateLinkCB send state
+        key=id
+        id
+        title
+        url
+        kind
+        removeLinkCB
+        updateLinkCB
+        moveLinkCB
+        links
+        send
+        state
+        index
+        total={List.length(links)}
       />
     )
     |> Array.of_list
@@ -188,7 +201,7 @@ let showLinks = (state, send, removeLinkCB, updateLinkCB, kind, links) =>
   }
 
 @react.component
-let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB, ~updateLinkCB) => {
+let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~updateLinkCB) => {
   let (state, send) = React.useReducer(reducer, initialState(kind))
 
   <div className="mt-8 mx-8 pb-6">
@@ -238,6 +251,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~removeLinkCB, ~updateLinkCB) =>
         send,
         removeLinkCB,
         updateLinkCB,
+        moveLinkCB,
         state.kind,
         unpackLinks(state.kind, customizations),
       )}

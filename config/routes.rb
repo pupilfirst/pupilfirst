@@ -75,6 +75,7 @@ Rails.application.routes.draw do
       'courses/:course_id/students/new',
       'courses/:course_id/students/import',
       'courses/:course_id/students/:student_id/details',
+      'courses/:course_id/students/:student_id/actions',
       'courses/:course_id/teams',
       'courses/:course_id/teams/new',
       'courses/:course_id/teams/:team_id/details',

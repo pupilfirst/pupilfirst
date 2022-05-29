@@ -4,7 +4,6 @@ let t = I18n.t(~scope="components.StudentsEditor__UpdateDetailsForm")
 let ts = I18n.ts
 
 module Coach = UserProxy
-module Cohort = Shared__Cohort
 
 type rec teamCoachlist = (coachId, coachName, selected)
 and coachId = string
@@ -447,6 +446,21 @@ let loadData = (courseId, studentId, setState) => {
   |> ignore
 }
 
+let pageLinks = (courseId, studentId) => [
+  School__PageHeader.makeLink(
+    ~href={`/school/courses/${courseId}/students/${studentId}/details`},
+    ~title="Details",
+    ~icon="fas fa-edit",
+    ~selected=true,
+  ),
+  School__PageHeader.makeLink(
+    ~href=`/school/courses/${courseId}/students/${studentId}/actions`,
+    ~title="Actions",
+    ~icon="fas fa-cog",
+    ~selected=false,
+  ),
+]
+
 @react.component
 let make = (~courseId, ~studentId) => {
   let (state, setState) = React.useState(() => Unloaded)
@@ -461,6 +475,7 @@ let make = (~courseId, ~studentId) => {
       exitUrl={`/school/courses/${courseId}/students`}
       title="Edit Student"
       description={"Update student details"}
+      links={pageLinks(courseId, studentId)}
     />
     <div className="max-w-5xl mx-auto">
       {switch state {

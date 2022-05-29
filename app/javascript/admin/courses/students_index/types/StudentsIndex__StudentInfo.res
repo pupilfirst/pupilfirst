@@ -3,7 +3,7 @@ type t = {
   taggings: array<string>,
   user: Admin__User.t,
   level: Shared__Level.t,
-  cohort: Shared__Cohort.t,
+  cohort: Cohort.t,
 }
 
 let id = t => t.id
@@ -26,5 +26,5 @@ let makeFromJS = studentDetails =>
     ~taggings=studentDetails["taggings"],
     ~user=Admin__User.makeFromJs(studentDetails["user"]),
     ~level=Shared__Level.makeFromJs(studentDetails["level"]),
-    ~cohort=Shared__Cohort.makeFromJs(studentDetails["cohort"]),
+    ~cohort=Cohort.makeFromJs(studentDetails["cohort"]),
   )

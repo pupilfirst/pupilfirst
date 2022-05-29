@@ -42,6 +42,10 @@ let make = (~school, ~courses, ~currentUser) => {
           Students,
           Some(<StudentDetails__Root courseId studentId />),
         )
+      | list{"students", studentId, "actions"} => (
+          Students,
+          Some(<StudentActions__Root courseId studentId />),
+        )
       | list{"teams"} => (Teams, Some(<TeamsIndex__Root courseId search={url.search} />))
       | list{"teams", "new"} => (Teams, Some(<TeamsCreator__Root courseId />))
       | list{"teams", studentId, "details"} => (

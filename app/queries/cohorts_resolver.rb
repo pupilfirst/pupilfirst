@@ -3,9 +3,7 @@ class CohortsResolver < ApplicationQuery
 
   property :course_id
 
-  def cohorts
-    course.cohorts
-  end
+  delegate :cohorts, to: :course
 
   private
 

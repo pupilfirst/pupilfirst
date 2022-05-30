@@ -14,12 +14,7 @@ module Students
 
       user = @student.user
       course = @student.course
-      @notification_service.execute(
-        course,
-        :course_completed,
-        user,
-        course
-      )
+      @notification_service.execute(course, :course_completed, user, course)
     end
   end
 end

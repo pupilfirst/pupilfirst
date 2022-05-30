@@ -34,7 +34,7 @@ module Layouts
         is_admin: current_school_admin.present?,
         can_edit_profile: show_user_edit?,
         has_notifications: notifications?,
-        is_author: is_author?
+        is_author: author?
       }
       if current_user.avatar.attached?
         user[:avatar_url] =
@@ -96,7 +96,7 @@ module Layouts
       end
     end
 
-    def is_author?
+    def author?
       current_user.course_authors.exists? && current_user.school_admin.blank?
     end
 

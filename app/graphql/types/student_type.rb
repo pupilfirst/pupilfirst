@@ -83,8 +83,8 @@ module Types
             .where(founder_id: student_ids)
             .each do |enrollment|
               loader.call(enrollment.founder_id) do |memo|
-                memo |= [enrollment.faculty].compact
-              end # rubocop:disable Lint/UselessAssignment
+                memo |= [enrollment.faculty].compact # rubocop:disable Lint/UselessAssignment
+              end
             end
         end
     end

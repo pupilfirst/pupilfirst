@@ -65,11 +65,7 @@ let make = (
       <div className={tabItemsClasses(view == DetailsTab)}>
         <StudentsEditor__UpdateDetailsForm student team teamTags courseCoaches updateFormCB />
       </div>
-      <div className={tabItemsClasses(view == ActionsTab)}>
-        <StudentsEditor__ActionsForm
-          student reloadTeamsCB certificates updateStudentCertificationCB currentUserName
-        />
-      </div>
+      <div className={tabItemsClasses(view == ActionsTab)} />
     </div>
   </div>
 }

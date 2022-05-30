@@ -9,16 +9,11 @@ type t = {
 }
 
 let id = t => t.id
-
 let certificateId = t => t.certificateId
-
 let serialNumber = t => t.serialNumber
 let revokedAt = t => t.revokedAt
-
 let issuedBy = t => t.issuedBy
-
 let createdAt = t => t.createdAt
-
 let revokedBy = t => t.revokedBy
 
 let make = (~id, ~certificateId, ~revokedAt, ~revokedBy, ~serialNumber, ~createdAt, ~issuedBy) => {
@@ -31,16 +26,29 @@ let make = (~id, ~certificateId, ~revokedAt, ~revokedBy, ~serialNumber, ~created
   issuedBy: issuedBy,
 }
 
-let makeFromJS = data =>
-  make(
-    ~id=data["id"],
-    ~certificateId=data["certificateId"],
-    ~revokedAt=data["revokedAt"]->Belt.Option.map(DateFns.decodeISO),
-    ~revokedBy=data["revokedBy"],
-    ~serialNumber=data["serialNumber"],
-    ~createdAt=data["createdAt"]->DateFns.decodeISO,
-    ~issuedBy=data["issuedBy"],
-  )
+module Fragments = %graphql(`
+  fragment IssuedCertificateFragment on IssuedCertificate {
+    id
+    certificate{
+      id
+    }
+    createdAt
+    issuedBy
+    revokedAt
+    revokedBy
+    serialNumber
+  }
+`)
+
+let makeFromFragment = (issuedCertificate: Fragments.t) => {
+  id: issuedCertificate.id,
+  certificateId: issuedCertificate.certificate.id,
+  revokedAt: issuedCertificate.revokedAt->Belt.Option.map(DateFns.decodeISO),
+  revokedBy: issuedCertificate.revokedBy,
+  serialNumber: issuedCertificate.serialNumber,
+  createdAt: issuedCertificate.createdAt->DateFns.decodeISO,
+  issuedBy: issuedCertificate.issuedBy,
+}
 
 let certificate = (t, certificates) =>
   ArrayUtils.unsafeFind(

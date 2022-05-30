@@ -1,6 +1,11 @@
-open StudentsEditor__Types
+open StudentActions__Type
 
 let t = I18n.t(~scope="components.StudentsEditor__ActionsForm")
+
+type student = {
+  issuedCertificates: array<IssuedCertificate.t>,
+  droppedOutAt: option<Js.Date.t>,
+}
 
 module Editor = {
   module DropoutStudentQuery = %graphql(`
@@ -53,14 +58,14 @@ module Editor = {
     WindowUtils.confirm(t("revoke_certificate_confirmation"), () => {
       setRevoking(_ => true)
 
-      let issuedCertificateId = StudentsEditor__IssuedCertificate.id(issuedCertificate)
+      let issuedCertificateId = IssuedCertificate.id(issuedCertificate)
 
       RevokeCertificateQuery.fetch({issuedCertificateId: issuedCertificateId})
       |> Js.Promise.then_((response: RevokeCertificateQuery.t) => {
         response.revokeIssuedCertificate.success
           ? {
               let updatedCertificate =
-                issuedCertificate->StudentsEditor__IssuedCertificate.revoke(
+                issuedCertificate->IssuedCertificate.revoke(
                   Some(currentUserName),
                   Some(Js.Date.make()),
                 )
@@ -97,7 +102,7 @@ module Editor = {
       let data = response["issueCertificate"]["issuedCertificate"]
       switch data {
       | Some(data) =>
-        let newCertifcate = StudentsEditor__IssuedCertificate.make(
+        let newCertifcate = IssuedCertificate.make(
           ~id=data["id"],
           ~certificateId,
           ~serialNumber=data["serialNumber"],
@@ -146,18 +151,14 @@ module Editor = {
           {issuedCertificates
           |> Js.Array.map(ic =>
             <div
-              ariaLabel={t("details_certificate") ++
-              " " ++
-              StudentsEditor__IssuedCertificate.id(ic)}
-              key={StudentsEditor__IssuedCertificate.id(ic)}
+              ariaLabel={t("details_certificate") ++ " " ++ IssuedCertificate.id(ic)}
+              key={IssuedCertificate.id(ic)}
               className="flex flex-col mt-2 p-2 border rounded border-gray-400">
               <div className="flex justify-between">
                 <span className="text-sm font-semibold">
-                  {StudentsEditor__IssuedCertificate.certificate(ic, certificates)
-                  ->Certificate.name
-                  ->str}
+                  {IssuedCertificate.certificate(ic, certificates)->Certificate.name->str}
                 </span>
-                {StudentsEditor__IssuedCertificate.revokedAt(ic)->Belt.Option.isSome
+                {IssuedCertificate.revokedAt(ic)->Belt.Option.isSome
                   |> ReactUtils.nullUnless(
                     <div
                       className="w-16 p-1 text-xs leading-tight rounded text-center bg-red-200 border-red-800">
@@ -166,7 +167,7 @@ module Editor = {
                   )}
               </div>
               <div className="text-xs text-gray-700">
-                {StudentsEditor__IssuedCertificate.serialNumber(ic)->str}
+                {IssuedCertificate.serialNumber(ic)->str}
               </div>
               <div className="flex justify-between mt-2 items-end">
                 <div className="flex flex-col">
@@ -175,21 +176,17 @@ module Editor = {
                       {t("issued_date_label")->str}
                     </span>
                     <span className="text-xs ml-2">
-                      {StudentsEditor__IssuedCertificate.createdAt(ic)
-                      ->DateFns.format("MMMM d, yyyy")
-                      ->str}
+                      {IssuedCertificate.createdAt(ic)->DateFns.format("MMMM d, yyyy")->str}
                     </span>
                   </div>
                   <div>
                     <span className="font font-semibold text-xs">
                       {t("issued_by_label")->str}
                     </span>
-                    <span className="text-xs ml-2">
-                      {StudentsEditor__IssuedCertificate.issuedBy(ic)->str}
-                    </span>
+                    <span className="text-xs ml-2"> {IssuedCertificate.issuedBy(ic)->str} </span>
                   </div>
                 </div>
-                {switch StudentsEditor__IssuedCertificate.revokedAt(ic) {
+                {switch IssuedCertificate.revokedAt(ic) {
                 | Some(revokedAt) =>
                   <div className="flex flex-col">
                     <div>
@@ -205,7 +202,7 @@ module Editor = {
                         {t("revoked_by_label")->str}
                       </span>
                       <span className="text-xs ml-2">
-                        {StudentsEditor__IssuedCertificate.revokedBy(ic)
+                        {IssuedCertificate.revokedBy(ic)
                         ->Belt.Option.mapWithDefault("Unknown", r => r)
                         ->str}
                       </span>
@@ -335,6 +332,50 @@ module Editor = {
 }
 
 let str = React.string
+
+// type baseData = {
+//   student: student,
+//   cohorts: array<Cohort.t>,
+//   tags: array<String.t>,
+//   courseCoaches: array<Coach.t>,
+// }
+
+// type state = Unloaded | Loading | Loaded(baseData)
+module Coach = UserProxy
+module UserProxyFragment = Coach.Fragments
+module CohortFragment = Cohort.Fragments
+
+module StudentDetailsDataQuery = %graphql(`
+  query StudentDetailsDataQuery($courseId: ID!, $studentId: ID!) {
+    student(studentId: $studentId) {
+      taggings
+      accessEndsAt
+      cohort {
+        ...CohortFragment
+      }
+      user {
+        name
+        title
+        affiliation
+        taggings
+
+      }
+      personalCoaches{
+        id
+      }
+    }
+    cohorts(courseId: $courseId) {
+      ...CohortFragment
+    }
+    coaches(courseId: $courseId) {
+      ...UserProxyFragment
+    }
+    courseResourceInfo(courseId: $courseId, resources: [StudentTag]) {
+      resource
+      values
+    }
+  }
+  `)
 
 let pageLinks = (courseId, studentId) => [
   School__PageHeader.makeLink(

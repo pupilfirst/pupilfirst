@@ -17,6 +17,11 @@ module Types
     field :archived_at, GraphQL::Types::ISO8601DateTime, null: true
     field :highlights, [Types::CourseHighlightType], null: false
     field :processing_url, String, null: true
+    field :certificates, [Types::CertificateType], null: false do
+      def authorized?(_object, _args, context)
+        context[:current_school_admin].present?
+      end
+    end
 
     def cover
       image_details(object.cover)
@@ -36,6 +41,20 @@ module Types
           filename: image.filename
         }
       end
+    end
+
+    def certificates
+      BatchLoader::GraphQL
+        .for(object.id)
+        .batch(default_value: []) do |course_ids, loader|
+          Certificate
+            .where(course_id: course_ids)
+            .each do |certificate|
+              loader.call(certificate.course_id) do |memo|
+                memo |= [certificate].compact # rubocop:disable Lint/UselessAssignment
+              end
+            end
+        end
     end
   end
 end

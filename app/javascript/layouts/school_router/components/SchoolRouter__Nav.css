@@ -52,7 +52,7 @@
   transform: translateX(-50%);
   background-color: var(--color-primary-500);
   border-radius: 2px;
-  animation: slideIn--bottom 0.3s ease-out;
+  animation: scale--bottom 0.3s ease-out;
 }
 
 .school-admin-navbar__primary-nav--shrunk
@@ -71,7 +71,7 @@
   transform: translateY(-50%);
   background-color: var(--color-primary-500);
   border-radius: 2px;
-  animation: slideIn 0.3s ease-out;
+  animation: scale 0.3s ease-out;
 }
 
 .school-admin-navbar__primary-nav-link--active:hover {
@@ -89,7 +89,7 @@
   @apply animate-ping absolute inline-flex h-full w-full inset-0 rounded-full bg-red-300 opacity-75;
 }
 
-@keyframes slideIn {
+@keyframes scale {
   from {
     transform: scale(0.5);
     top: 60%;
@@ -100,7 +100,7 @@
   }
 }
 
-@keyframes slideIn--bottom {
+@keyframes scale--bottom {
   from {
     transform: scale(0.5);
     left: 70%;

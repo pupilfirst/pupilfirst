@@ -5,36 +5,38 @@
 
 <% @presenter = Schools::ShowPresenter.new(self) %>
 <div class="flex-1 flex flex-col bg-gray-200 overflow-y-auto">
-  <div class="w-full p-6">
+  <div class="w-full">
     <div
-      class="max-w-3xl 2xl:max-w-5xl mx-auto relative border overflow-hidden rounded-lg shadow-lg"
+      class="max-w-full mx-auto relative overflow-hidden"
     >
       <div
-        class="bg-gradient-to-r from-secondary-500 to-secondary-600 bg-cover h-24 p-5"
+        class="bg-gradient-to-r from-secondary-500 to-secondary-600 bg-cover h-40 p-5"
       ></div>
-      <div class="flex px-5 pb-5 bg-white justify-between">
-        <div class="flex">
-          <div
-            class="school-overview__logo-container flex items-center bg-white p-3 border rounded-lg -mt-16 overflow-hidden"
-          >
-            <%= image_tag(@presenter.school_logo_path, alt: current_school.name) %>
-          </div>
-          <div class="school-overview__school-name pl-3 p-3">
-            <span class="uppercase text-sm"><%= t("shared.school") %></span>
-            <h2 class=""><%= @presenter.school_details[:name] %></h2>
-          </div>
-        </div>
-        <div class="flex rounded-lg border mt-2">
-          <div class="w-1/2 border-r">
-            <div data-t="school students" class="p-3">
-              <p><%= t('.students') %></p>
-              <p><%= @presenter.school_details[:students_count] %></p>
+      <div class="w-full bg-white p-6">
+        <div class="flex items-center max-w-4xl 2xl:max-w-5xl mx-auto justify-between">
+          <div class="flex gap-6">
+            <div
+              class="school-overview__logo-container flex items-center bg-white p-3 border-2 border-white ring-1 ring-gray-100 rounded-full -mt-16 overflow-hidden"
+            >
+              <%= image_tag(@presenter.school_logo_path, alt: current_school.name) %>
+            </div>
+            <div class="school-overview__school-name">
+              <p class="text-sm text-gray-500"><%= t("shared.school") %></p>
+              <h2  class="text-xl font-bold"><%= @presenter.school_details[:name] %></h2>
             </div>
           </div>
-          <div class="w-1/2">
-            <div data-t="school coaches" class="p-3">
-              <p><%= t('.coaches') %></p>
-              <p><%= @presenter.school_details[:coaches_count] %></p>
+          <div class="flex gap-6">
+            <div class="border-r pr-6">
+              <div data-t="school students">
+                <p class="text-sm text-gray-500"><%= t('.students') %></p>
+                <p class="text-xl font-bold"><%= @presenter.school_details[:students_count] %></p>
+              </div>
+            </div>
+            <div class="">
+              <div data-t="school coaches">
+                <p class="text-sm text-gray-500"><%= t('.coaches') %></p>
+                <p class="text-xl font-bold"><%= @presenter.school_details[:coaches_count] %></p>
+              </div>
             </div>
           </div>
         </div>

@@ -30,5 +30,5 @@
 
 .courses-curriculum__target-container:hover
   .courses-curriculum__target-quick-link {
-  @apply border-gray-300 text-gray-700 hover:text-primary-500;
+  @apply border-gray-300 text-gray-600 hover:text-primary-500;
 }

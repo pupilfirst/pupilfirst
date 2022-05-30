@@ -76,7 +76,7 @@ let showStatus = status =>
   }
 
 let statusButtonSelectedClasses = (status, currentStatus) =>
-  "inline-flex items-center cursor-pointer leading-tight font-semibold inline-block text-xs relative hover:bg-gray-50 hover:text-gray-700 " ++
+  "inline-flex items-center cursor-pointer leading-tight font-semibold inline-block text-xs relative hover:bg-gray-50 hover:text-gray-600 " ++
   switch ((currentStatus: ChecklistItem.status), (status: ChecklistItem.status)) {
   | (
       Passed,

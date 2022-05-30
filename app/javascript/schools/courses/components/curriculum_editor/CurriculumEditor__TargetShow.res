@@ -59,7 +59,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
     className="flex target-group__target-container border-t bg-white overflow-hidden relative hover:bg-gray-50 hover:text-primary-500">
     {Js.Array.length(targets) > 1
       ? <div
-          className="target-group__target-reorder relative flex flex-col z-10 h-full border-r border-transparent text-gray-700 justify-between items-center">
+          className="target-group__target-reorder relative flex flex-col z-10 h-full border-r border-transparent text-gray-600 justify-between items-center">
           <button
             title={t("move_up")}
             ariaLabel={t("move_up") ++ (target |> Target.title)}
@@ -86,7 +86,7 @@ let make = (~target, ~targets, ~updateTargetSortIndexCB, ~index, ~course) => {
       ariaLabel={t("edit_content") ++ " " ++ (target |> Target.title)}
       className={targetClasses(target, targets)}
       href={linkPrefix ++ "content"}>
-      <p className="font-semibold text-sm"> {target |> Target.title |> str} </p>
+      <p className="font-medium text-sm"> {target |> Target.title |> str} </p>
       <div className="items-center">
         {switch target |> Target.visibility {
         | Draft =>

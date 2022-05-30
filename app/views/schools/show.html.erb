@@ -21,7 +21,7 @@
           </div>
           <div class="school-overview__school-name pl-3 p-3">
             <span class="uppercase text-sm"><%= t("shared.school") %></span>
-            <h2 class=""><%= @presenter.school_details[:name] %></h2>
+            <h2 class="font-semibold"><%= @presenter.school_details[:name] %></h2>
           </div>
         </div>
         <div class="flex rounded-lg border mt-2">
@@ -54,7 +54,7 @@
               href="<%= school_course_students_path(course[:id]) %>"
             >
               <div class="flex items-end justify-between border-b p-4 pt-6">
-                <h3 class="font-bold text-xl"><%= course[:name] %></h3>
+                <h3 class="font-semibold text-xl"><%= course[:name] %></h3>
                 <p class="text-sm">
                   <%= course[:levels_count] %>
                   <%= t('.levels') %>

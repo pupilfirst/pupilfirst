@@ -58,9 +58,9 @@ let make = (~entry, ~markNotificationCB) => {
   let (saving, setSaving) = React.useState(() => false)
 
   <div
-    className={"notifications__entry-card block relative py-5 px-4 lg:px-8 text-sm font-semibold hover:bg-gray-50 focus-within:bg-gray-50 transition ease-in-out duration-150 " ++
+    className={"notifications__entry-card block relative py-5 px-4 lg:px-8 text-sm font-medium hover:bg-gray-50 focus-within:bg-gray-50 transition ease-in-out duration-150 " ++
     switch Entry.readAt(entry) {
-    | Some(_readAt) => "notifications__entry-card--read text-gray-700"
+    | Some(_readAt) => "notifications__entry-card--read text-gray-600"
     | None => "notifications__entry-card--unread"
     }}
     key={Entry.id(entry)}
@@ -84,7 +84,7 @@ let make = (~entry, ~markNotificationCB) => {
           : <div className="ml-4"> {str(Entry.message(entry))} </div>}
       </div>
       <div className="flex-shrink-0">
-        <span className="notifications__entry-card-time block text-xs text-gray-800">
+        <span className="notifications__entry-card-time block text-xs text-gray-400">
           <span className="hidden md:inline-block md:pl-4">
             {Entry.createdAt(entry)->DateFns.format("HH:mm") |> str}
           </span>
@@ -98,7 +98,7 @@ let make = (~entry, ~markNotificationCB) => {
                 ariaLabel={t("mark_read")}
                 title={t("mark_read")}
                 onClick={markNotification(Entry.id(entry), setSaving, markNotificationCB)}
-                className="flex justify-center items-center w-8 h-8 font-semibold p-2 md:py-1 border border-gray-300 rounded text-sm bg-white text-gray-700 hover:text-primary-500 hover:border-primary-400 hover:bg-gray-50 hover:shadow-md focus:outline-none focus:text-primary-500 focus:border-primary-400 focus:bg-gray-50 focus:shadow-md transition ease-in-out duration-150">
+                className="flex justify-center items-center w-8 h-8 font-semibold p-2 md:py-1 border border-gray-300 rounded text-sm bg-white text-gray-600 hover:text-primary-500 hover:border-primary-400 hover:bg-gray-50 hover:shadow-md focus:outline-none focus:text-primary-500 focus:border-primary-400 focus:bg-gray-50 focus:shadow-md transition ease-in-out duration-150">
                 <Icon className="if i-check-solid" />
               </button>
             </Tooltip>,

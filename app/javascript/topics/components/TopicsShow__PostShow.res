@@ -71,7 +71,7 @@ let solutionIcon = (userCanUnmarkSolution, unmarkPostAsSolutionCB, postId) => {
   let solutionIcon =
     <div
       className={"flex items-center justify-center pr-2 pl-0 py-2 md:p-3 bg-green-200 text-green-800 rounded-full " ++ (
-        userCanUnmarkSolution ? "hover:bg-gray-50 hover:text-gray-700" : ""
+        userCanUnmarkSolution ? "hover:bg-gray-50 hover:text-gray-600" : ""
       )}>
       <PfIcon className="if i-check-solid text-sm lg:text-base" />
     </div>
@@ -79,7 +79,7 @@ let solutionIcon = (userCanUnmarkSolution, unmarkPostAsSolutionCB, postId) => {
     ? <Tooltip tip position=#Top> solutionIcon </Tooltip>
     : solutionIcon
   <div
-    ariaLabel=t("marked_solution_icon")
+    ariaLabel={t("marked_solution_icon")}
     onClick={_ => userCanUnmarkSolution ? unmarkPostAsSolution(postId, unmarkPostAsSolutionCB) : ()}
     className={"flex lg:flex-col items-center px-2 lg:pl-0 lg:pr-4 bg-green-200 lg:bg-transparent rounded md:mt-4 " ++ (
       userCanUnmarkSolution ? "cursor-pointer" : ""
@@ -103,14 +103,14 @@ let optionsDropdown = (
 ) => {
   let selected =
     <div
-      ariaLabel={ t("options_post") ++ " " ++ Post.id(post)}
+      ariaLabel={t("options_post") ++ " " ++ Post.id(post)}
       className="flex items-center justify-center w-8 h-8 rounded leading-tight border bg-gray-50 text-gray-800 cursor-pointer hover:bg-gray-50">
       <PfIcon className="if i-ellipsis-h-regular text-base" />
     </div>
   let editPostButton =
     <button
       onClick={_ => toggleShowPostEdit(_ => true)}
-      className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-nowrap">
+      className="flex w-full px-3 py-2 font-semibold items-center text-gray-600 whitespace-nowrap">
       <FaIcon classes="fas fa-edit fa-fw text-base" />
       <span className="ml-2">
         {(isFirstPost ? t("edit_post_string") : t("edit_reply_string")) |> str}
@@ -122,7 +122,7 @@ let optionsDropdown = (
   let deletePostButton = showDelete
     ? <button
         onClick={_ => archivePost(isFirstPost, post |> Post.id, archivePostCB)}
-        className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-nowrap">
+        className="flex w-full px-3 py-2 font-semibold items-center text-gray-600 whitespace-nowrap">
         <FaIcon classes="fas fa-trash-alt fa-fw text-base" />
         <span className="ml-2">
           {(isFirstPost ? t("delete_topic_string") : t("delete_reply_string")) |> str}
@@ -133,7 +133,7 @@ let optionsDropdown = (
   | Some(_id) =>
     <a
       href={"/posts/" ++ (Post.id(post) ++ "/versions")}
-      className="flex w-full px-3 py-2 font-semibold items-center text-gray-700 whitespace-nowrap">
+      className="flex w-full px-3 py-2 font-semibold items-center text-gray-600 whitespace-nowrap">
       <FaIcon classes="fas fa-history fa-fw text-base" />
       <span className="ml-2"> {t("history_button_text") |> str} </span>
     </a>
@@ -213,9 +213,9 @@ let make = (
               className="hidden md:flex md:flex-col items-center text-center md:w-14 pr-3 md:pr-4 md:mt-4">
               <Tooltip tip position=#Top>
                 <button
-                  ariaLabel=t("mark_solution")
+                  ariaLabel={t("mark_solution")}
                   onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
-                  className="mark-as-solution__button bg-gray-50 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-50 text-gray-700">
+                  className="mark-as-solution__button bg-gray-50 flex items-center text-center rounded-full p-2 md:p-3 hover:bg-gray-50 text-gray-600">
                   <PfIcon className="if i-check-solid text-sm lg:text-base" />
                 </button>
               </Tooltip>
@@ -320,7 +320,7 @@ let make = (
                           onClick={_ => toggleShowReplies(showReplies => !showReplies)}
                           className="cursor-pointer flex items-center justify-center">
                           <span
-                            className="flex items-center justify-center rounded-lg lg:bg-gray-50 hover:bg-gray-300 text-gray-700 hover:text-gray-900 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2 mx-auto">
+                            className="flex items-center justify-center rounded-lg lg:bg-gray-50 hover:bg-gray-300 text-gray-600 hover:text-gray-900 h-8 w-8 md:h-10 md:w-10 p-1 md:p-2 mx-auto">
                             <FaIcon classes="far fa-comment-alt" />
                           </span>
                           <span className="text-tiny lg:text-xs font-semibold">
@@ -335,7 +335,7 @@ let make = (
                 {ReactUtils.nullUnless(
                   <button
                     onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
-                    className="bg-gray-50 flex md:hidden items-center text-center rounded-lg p-2 hover:bg-gray-50 text-gray-700">
+                    className="bg-gray-50 flex md:hidden items-center text-center rounded-lg p-2 hover:bg-gray-50 text-gray-600">
                     <PfIcon className="if i-check-solid text-sm lg:text-base" />
                     <span
                       className="ml-2 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
@@ -373,7 +373,7 @@ let make = (
               {repliesToPost |> ArrayUtils.isNotEmpty
                 ? <button
                     id={"show-replies-" ++ Post.id(post)}
-                    ariaLabel={ t("show_replies") ++ " " ++ Post.id(post)}
+                    ariaLabel={t("show_replies") ++ " " ++ Post.id(post)}
                     onClick={_ => toggleShowReplies(showReplies => !showReplies)}
                     className="border bg-white mr-3 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-50">
                     {Inflector.pluralize(
@@ -405,7 +405,7 @@ let make = (
         </div>
         {showReplies
           ? <div
-              ariaLabel={ t("replies_post") ++ " " ++ Post.id(post)}
+              ariaLabel={t("replies_post") ++ " " ++ Post.id(post)}
               className="lg:pl-10 pt-2 topics-post-show__replies-container">
               {repliesToPost
               |> Array.map(post => <TopicsShow__PostReply key={post |> Post.id} post users />)

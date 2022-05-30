@@ -43,7 +43,7 @@ let make = (
             <div className="p-3 flex-1"> {value |> str} </div>
             <button
               className="flex p-3 text-gray-800 hover:bg-gray-50 hover:text-gray-900 focus:outline-none"
-              title=t("remove")
+              title={t("remove")}
               onClick={_event => {
                 ReactEvent.Mouse.preventDefault(_event)
                 setSearchString(_ => "")
@@ -69,9 +69,9 @@ let make = (
             {nonSelectedList |> List.length > 3
               ? <div className="px-3 pt-3 pb-2">
                   <input
-                    className="appearance-none bg-transparent border-b w-full text-gray-700 pb-3 px-2 pl-0 leading-normal focus:outline-none"
+                    className="appearance-none bg-transparent border-b w-full text-gray-600 pb-3 px-2 pl-0 leading-normal focus:outline-none"
                     type_="text"
-                    placeholder=t("type_search")
+                    placeholder={t("type_search")}
                     onChange={event => setSearchString(ReactEvent.Form.target(event)["value"])}
                   />
                 </div>
@@ -86,7 +86,7 @@ let make = (
                     setSearchString(_ => "")
                     selectCB(key, value, true)
                   }}
-                  title={ t("select") ++ " " ++ value}
+                  title={t("select") ++ " " ++ value}
                   className="px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500 cursor-pointer">
                   {value |> str}
                 </div>

@@ -11,21 +11,22 @@
 }
 
 .school-admin-navbar__primary-nav-link {
-  @apply flex text-white h-13 text-sm font-semibold items-center;
+  @apply flex text-white h-13 text-sm font-medium items-center;
   position: relative;
 }
 
-.school-admin-navbar__primary-nav-link:hover {
-  @apply bg-primary-800;
+.school-admin-navbar__primary-nav-link:hover,
+.school-admin-navbar__primary-nav-link:focus {
+  @apply bg-primary-800 outline-none;
 }
 
 .school-admin-navbar__primary-nav-link--active {
-  @apply bg-gray-200 text-primary-500;
+  @apply bg-gray-50 text-primary-500 focus:text-primary-700;
   box-shadow: inset 4px 0 0 0 theme("colors.yellow.500");
   background-image: linear-gradient(
     to right,
     theme("colors.white"),
-    theme("colors.gray.200")
+    theme("colors.gray.50")
   );
 }
 
@@ -42,7 +43,7 @@
   top: -16px;
   border-radius: 0 0 50%;
   border-width: 0px 20px 0 0;
-  box-shadow: 0px 8px theme(colors.gray.200);
+  box-shadow: 0px 8px theme(colors.gray.50);
   border-color: transparent;
 }
 
@@ -50,12 +51,12 @@
   bottom: -16px;
   border-radius: 0 50% 0;
   border-width: 0 20px 0 0;
-  box-shadow: 0 -8px theme(colors.gray.200);
+  box-shadow: 0 -8px theme(colors.gray.50);
   border-color: transparent;
 }
 
 .school-admin-navbar__primary-nav-link--active:hover {
-  @apply bg-gray-200 text-primary-500;
+  @apply bg-gray-50 text-primary-500;
 }
 
 .school-admin-navbar__notifications-unread-bullet {

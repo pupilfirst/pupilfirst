@@ -2,6 +2,8 @@ exception InvalidBlockTypeForUpdate
 
 let str = React.string
 
+let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockEditor")
+
 type state = {
   dirty: bool,
   saving: option<string>,
@@ -32,72 +34,66 @@ let reducer = (state, action) =>
   | FailSaving => {...state, saving: None}
   }
 
-module DeleteContentBlockMutation = %graphql(
-  `
+module DeleteContentBlockMutation = %graphql(`
     mutation DeleteContentBlockMutation($id: ID!) {
       deleteContentBlock(id: $id) {
         success
       }
     }
-  `
-)
+  `)
 
-module MoveContentBlockMutation = %graphql(
-  `
+module ContentBlockFragment = ContentBlock.Fragments
+
+module MoveContentBlockMutation = %graphql(`
     mutation MoveContentBlockMutation($id: ID!, $direction: MoveDirection!) {
       moveContentBlock(id: $id, direction: $direction) {
         success
       }
     }
-  `
-)
+  `)
 
-module UpdateFileBlockMutation = %graphql(
-  `
+module UpdateFileBlockMutation = %graphql(`
     mutation UpdateFileBlockMutation($id: ID!, $title: String!) {
       updateFileBlock(id: $id, title: $title) {
         contentBlock {
-          ...ContentBlock.Fragments.AllFields
+          ...ContentBlockFragment
         }
       }
     }
-  `
-)
+  `)
 
-module UpdateMarkdownBlockMutation = %graphql(
-  `
+module UpdateMarkdownBlockMutation = %graphql(`
     mutation UpdateMarkdownBlockMutation($id: ID!, $markdown: String!) {
       updateMarkdownBlock(id: $id, markdown: $markdown) {
         contentBlock {
-          ...ContentBlock.Fragments.AllFields
+          ...ContentBlockFragment
         }
       }
     }
-  `
-)
+  `)
 
-module UpdateImageBlockMutation = %graphql(
-  `
+module UpdateImageBlockMutation = %graphql(`
     mutation UpdateImageBlockMutation($id: ID!, $caption: String!, $width:ImageWidth! ) {
       updateImageBlock(id: $id, caption: $caption, width:$width) {
         contentBlock {
-          ...ContentBlock.Fragments.AllFields
+          ...ContentBlockFragment
         }
       }
     }
-  `
-)
+  `)
 
 let controlIcon = (~icon, ~title, ~color, ~handler) => {
   let buttonClasses = switch color {
-  | #Grey => "hover:bg-gray-200"
-  | #Green => "bg-green-600 hover:bg-green-700 text-white rounded-b"
+  | #Grey => "hover:bg-gray-50 hover:text-primary-500 focus:bg-gray-50 focus:text-primary-500"
+  | #Green => "bg-green-600 hover:bg-green-700 focus:bg-green-700 text-white rounded-b"
+  | #Red => "hover:text-red-500 focus:text-red-500"
   }
 
   handler == None
     ? React.null
     : <button
         title
+        ariaLabel={title}
         disabled={handler == None}
         className={"p-2 focus:outline-none " ++ buttonClasses}
         onClick=?handler>
@@ -107,20 +103,22 @@ let controlIcon = (~icon, ~title, ~color, ~handler) => {
 
 let onMove = (contentBlock, cb, direction, _event) => {
   // We don't actually handle the response for this query.
-  MoveContentBlockMutation.make(~id=contentBlock |> ContentBlock.id, ~direction, ())
-  |> GraphqlQuery.sendQuery
-  |> ignore
+  let variables = MoveContentBlockMutation.makeVariables(
+    ~id=ContentBlock.id(contentBlock),
+    ~direction,
+    (),
+  )
+  MoveContentBlockMutation.make(variables) |> ignore
 
   cb(contentBlock)
 }
 
 let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
-  WindowUtils.confirm("Are you sure you want to delete this block?", () => {
-    send(StartSaving("Deleting..."))
-    let id = contentBlock |> ContentBlock.id
+  WindowUtils.confirm(t("delete_block_confirm"), () => {
+    send(StartSaving(t("deleting")))
+    let id = ContentBlock.id(contentBlock)
 
-    DeleteContentBlockMutation.make(~id, ())
-    |> GraphqlQuery.sendQuery
+    DeleteContentBlockMutation.make({id: id})
     |> Js.Promise.then_(result => {
       if result["deleteContentBlock"]["success"] {
         removeContentBlockCB(id)
@@ -140,7 +138,7 @@ let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
 let onUndo = (originalContentBlock, setDirtyCB, send, event) => {
   event |> ReactEvent.Mouse.preventDefault
 
-  WindowUtils.confirm("Are you sure you want to undo your changes to this block?", () => {
+  WindowUtils.confirm(t("undo_block_confirm"), () => {
     setDirtyCB(false)
     send(UpdateContentBlock(originalContentBlock, false))
   })
@@ -164,10 +162,9 @@ let updateContentBlockBlock = (
   setDirtyCB,
   send,
 ) => {
-  send(StartSaving("Updating..."))
+  send(StartSaving(t("uploading")))
 
   mutation
-  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(result =>
     result |> contentBlockExtractor |> handleUpdateResult(updateContentBlockCB, setDirtyCB, send)
   )
@@ -180,16 +177,17 @@ let updateContentBlockBlock = (
 
 let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
   event |> ReactEvent.Mouse.preventDefault
-  let id = contentBlock |> ContentBlock.id
+  let id = ContentBlock.id(contentBlock)
 
   switch contentBlock |> ContentBlock.blockType {
   | ContentBlock.File(_url, title, _filename) =>
-    let mutation = UpdateFileBlockMutation.make(~id, ~title, ())
+    let mutation = UpdateFileBlockMutation.make({id: id, title: title})
+
     let extractor = result => result["updateFileBlock"]["contentBlock"]
 
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
   | Markdown(markdown) =>
-    let mutation = UpdateMarkdownBlockMutation.make(~id, ~markdown, ())
+    let mutation = UpdateMarkdownBlockMutation.make({id: id, markdown: markdown})
     let extractor = result => result["updateMarkdownBlock"]["contentBlock"]
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
   | Image(_url, caption, imageWidth) =>
@@ -201,7 +199,7 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
     | TwoFifths => #TwoFifths
     }
 
-    let mutation = UpdateImageBlockMutation.make(~id, ~caption, ~width, ())
+    let mutation = UpdateImageBlockMutation.make({id: id, caption: caption, width: width})
     let extractor = result => result["updateImageBlock"]["contentBlock"]
 
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
@@ -221,7 +219,14 @@ let updateContentBlockCB = (originalContentBlock, setDirtyCB, state, send, newCo
   send(UpdateContentBlock(newContentBlock, dirty))
 }
 
-let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, state, send) => {
+let innerEditor = (
+  originalContentBlock,
+  contentBlock,
+  setDirtyCB,
+  state,
+  send,
+  markdownCurriculumEditorMaxLength,
+) => {
   let updateContentBlockCB = updateContentBlockCB(originalContentBlock, setDirtyCB, state, send)
 
   switch contentBlock |> ContentBlock.blockType {
@@ -234,10 +239,12 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, state, send) 
     )
 
   | Markdown(markdown) =>
-    <CurriculumEditor__MarkdownBlockEditor markdown contentBlock updateContentBlockCB />
+    <CurriculumEditor__MarkdownBlockEditor
+      markdown markdownCurriculumEditorMaxLength contentBlock updateContentBlockCB
+    />
   | File(url, title, filename) =>
     <CurriculumEditor__FileBlockEditor url title filename contentBlock updateContentBlockCB />
-  | Audio(url, _title, _filename) => <audio controls=true src=url />
+  | Audio(url, _title, _filename) => <audio className="mx-auto" controls=true src=url />
   | Image(url, caption, width) =>
     <CurriculumEditor__ImageBlockEditor width url caption contentBlock updateContentBlockCB />
   }
@@ -247,6 +254,7 @@ let innerEditor = (originalContentBlock, contentBlock, setDirtyCB, state, send) 
 let make = (
   ~contentBlock,
   ~setDirtyCB,
+  ~markdownCurriculumEditorMaxLength,
   ~removeContentBlockCB=?,
   ~moveContentBlockUpCB=?,
   ~moveContentBlockDownCB=?,
@@ -257,33 +265,40 @@ let make = (
   <DisablingCover disabled={state.saving != None} message=?state.saving>
     <div
       className="flex items-start"
-      ariaLabel={"Editor for content block " ++ (contentBlock |> ContentBlock.id)}>
+      ariaLabel={t("editor_content_block") ++ (contentBlock |> ContentBlock.id)}>
       <div className="flex-grow self-stretch min-w-0">
-        {innerEditor(contentBlock, state.contentBlock, setDirtyCB, state, send)}
+        {innerEditor(
+          contentBlock,
+          state.contentBlock,
+          setDirtyCB,
+          state,
+          send,
+          markdownCurriculumEditorMaxLength,
+        )}
       </div>
       <div
-        className="pl-2 flex-shrink-0 border-transparent bg-gray-100 border rounded flex flex-col text-xs -mr-10 sticky top-0">
+        className="pl-2 flex-shrink-0 border-transparent bg-gray-50 border rounded flex flex-col text-xs -mr-10 sticky top-0">
         {controlIcon(
           ~icon="fa-arrow-up",
-          ~title="Move Up",
+          ~title=t("move_up"),
           ~color=#Grey,
           ~handler=moveContentBlockUpCB |> OptionUtils.map(cb => onMove(contentBlock, cb, #Up)),
         )}
         {controlIcon(
           ~icon="fa-arrow-down",
-          ~title="Move Down",
+          ~title=t("move_down"),
           ~color=#Grey,
           ~handler=moveContentBlockDownCB |> OptionUtils.map(cb => onMove(contentBlock, cb, #Down)),
         )}
         {controlIcon(
           ~icon="fa-trash-alt",
-          ~title="Delete",
-          ~color=#Grey,
+          ~title=t("delete"),
+          ~color=#Red,
           ~handler=removeContentBlockCB |> OptionUtils.map(cb => onDelete(contentBlock, cb, send)),
         )}
         {controlIcon(
           ~icon="fa-undo-alt",
-          ~title="Undo Changes",
+          ~title=t("undo_changes"),
           ~color=#Grey,
           ~handler=updateContentBlockCB |> OptionUtils.map(_cb =>
             onUndo(contentBlock, setDirtyCB, send)
@@ -291,7 +306,7 @@ let make = (
         )}
         {controlIcon(
           ~icon="fa-check",
-          ~title="Save Changes",
+          ~title=t("save_changes"),
           ~color=#Green,
           ~handler=updateContentBlockCB |> OptionUtils.map(cb =>
             onSave(state.contentBlock, cb, setDirtyCB, send)

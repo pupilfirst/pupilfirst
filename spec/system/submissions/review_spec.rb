@@ -235,6 +235,39 @@ feature 'Submission review overlay', js: true do
       )
     end
 
+    scenario 'coaches can view and edit the review checklist without assigning themselves' do
+      sign_in_user coach.user,
+                   referrer: review_timeline_event_path(submission_pending)
+
+      expect(target.review_checklist).to eq([])
+
+      expect(page).to have_content('Create Review Checklist')
+      click_button 'Create Review Checklist'
+
+      expect(page).to have_content('Save Checklist')
+      click_button 'Save Checklist'
+      dismiss_notification
+      within("div[data-checklist-item='0']") do
+        expect(page).to have_content('Default checklist')
+
+        within("div[data-result-item='0']") do
+          expect(page).to have_content('Yes')
+        end
+
+        within("div[data-result-item='1']") do
+          expect(page).to have_content('No')
+          find('label', text: 'No').click
+        end
+      end
+
+      expect(page).not_to have_button('Generate Feedback')
+      expect(page).to have_content('Edit Checklist')
+      expect(page).to have_content('Back to Review')
+      click_button 'Back to Review'
+      expect(page).to have_content('Start Review')
+      expect(page).to have_content('Show Review Checklist')
+    end
+
     scenario 'coach generates feedback from review checklist' do
       sign_in_user coach.user,
                    referrer: review_timeline_event_path(submission_pending)
@@ -348,6 +381,216 @@ feature 'Submission review overlay', js: true do
 
       click_button 'Create Review Checklist'
       expect(target.reload.review_checklist).to eq([])
+    end
+
+    scenario 'coach changes the order of review checklist' do
+      sign_in_user coach.user,
+                   referrer: review_timeline_event_path(submission_pending)
+
+      # Checklist item 1
+      checklist_title_1 = 'Checklist item one'
+      c1_result_0_title = Faker::Lorem.sentence
+      c1_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
+      c1_result_1_title = Faker::Lorem.sentence
+      c1_result_1_feedback = Faker::Markdown.sandwich(sentences: 3)
+
+      # Checklist item 2
+      checklist_title_2 = 'Checklist item two'
+      c2_result_0_title = Faker::Lorem.sentence
+      c2_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
+      c2_result_1_title = Faker::Lorem.sentence
+      c2_result_1_feedback = Faker::Markdown.sandwich(sentences: 3)
+
+      # Checklist item 3
+      checklist_title_3 = 'Checklist item three'
+      c3_result_0_title = Faker::Lorem.sentence
+      c3_result_0_feedback = Faker::Markdown.sandwich(sentences: 3)
+      c3_result_1_title = Faker::Lorem.sentence
+      c3_result_1_feedback = Faker::Markdown.sandwich(sentences: 3)
+
+      expect(target.review_checklist).to eq([])
+      click_button 'Start Review'
+      dismiss_notification
+      click_button 'Create Review Checklist'
+
+      within("div[data-checklist-item='0']") do
+        fill_in 'checklist_0_title', with: checklist_title_1
+        fill_in 'result_00_title', with: c1_result_0_title
+        fill_in 'result_00_feedback', with: c1_result_0_feedback
+        fill_in 'result_01_title', with: c1_result_1_title
+        fill_in 'result_01_feedback', with: c1_result_1_feedback
+      end
+
+      click_button 'Add Checklist Item'
+
+      within("div[data-checklist-item='1']") do
+        fill_in 'checklist_1_title', with: checklist_title_2
+        fill_in 'result_10_title', with: c2_result_0_title
+        fill_in 'result_10_feedback', with: c2_result_0_feedback
+        click_button 'Add Result'
+        fill_in 'result_11_title', with: c2_result_1_title
+        fill_in 'result_11_feedback', with: c2_result_1_feedback
+      end
+
+      click_button 'Add Checklist Item'
+
+      within("div[data-checklist-item='2']") do
+        fill_in 'checklist_2_title', with: checklist_title_3
+        fill_in 'result_20_title', with: c3_result_0_title
+        fill_in 'result_20_feedback', with: c3_result_0_feedback
+        click_button 'Add Result'
+        fill_in 'result_21_title', with: c3_result_1_title
+        fill_in 'result_21_feedback', with: c3_result_1_feedback
+      end
+
+      click_button 'Save Checklist'
+
+      expect(page).to have_content('Edit Checklist')
+
+      expect(target.reload.review_checklist).not_to eq([])
+
+      # Reload Page
+      visit review_timeline_event_path(submission_pending)
+
+      click_button 'Show Review Checklist'
+      click_button 'Edit Checklist'
+
+      # The first checklist item should only have the "move down" button.
+      within("div[data-checklist-item='0']") do
+        expect(page).to_not have_button('Move Up checklist item')
+        find("button[title='Move Down checklist item']")
+      end
+
+      # Checklist item in the middle should have both buttons.
+      within("div[data-checklist-item='1']") do
+        find("button[title='Move Up checklist item']")
+        find("button[title='Move Down checklist item']")
+      end
+
+      #The last checklist item should only have the "move up" button.
+      within("div[data-checklist-item='2']") do
+        expect(page).to_not have_button('Move Down checklist item')
+        find("button[title='Move Up checklist item']")
+      end
+
+      # The second checklist item, moved up
+      within("div[data-checklist-item='1']") do
+        find("button[title='Move Up checklist item']").click
+      end
+
+      # The first checklist item, should have the content as checklist_item_2 and should loose the "move up button"
+      within("div[data-checklist-item='0']") do
+        expect(page).to_not have_button('Move Up checklist item')
+        find("button[title='Move Down checklist item']")
+        expect(
+          find('input', id: 'checklist_0_title').value
+        ).to eq checklist_title_2
+        within("div[data-result-item='0']") do
+          expect(
+            find('input', id: 'result_00_title').value
+          ).to eq c2_result_0_title
+        end
+        within("div[data-result-item='1']") do
+          expect(
+            find('input', id: 'result_01_title').value
+          ).to eq c2_result_1_title
+        end
+      end
+
+      # The second checklist item, moved down
+      within("div[data-checklist-item='1']") do
+        find("button[title='Move Down checklist item']").click
+      end
+
+      # The middle checklist item, should have the content as checklist_item_3 and should have the "move up & down button"
+      within("div[data-checklist-item='1']") do
+        find("button[title='Move Up checklist item']")
+        find("button[title='Move Down checklist item']")
+        expect(
+          find('input', id: 'checklist_1_title').value
+        ).to eq checklist_title_3
+        within("div[data-result-item='0']") do
+          expect(
+            find('input', id: 'result_10_title').value
+          ).to eq c3_result_0_title
+        end
+        within("div[data-result-item='1']") do
+          expect(
+            find('input', id: 'result_11_title').value
+          ).to eq c3_result_1_title
+        end
+      end
+
+      # Results iniside checklist item move up & move down
+      within("div[data-checklist-item='1']") do
+        within("div[data-result-item='0']") do
+          expect(page).to_not have_button('Move Up checklist result')
+          find("button[title='Move Down checklist result']").click
+          expect(
+            find('input', id: 'result_10_title').value
+          ).to eq c3_result_1_title
+        end
+        within("div[data-result-item='1']") do
+          expect(page).to_not have_button('Move Down checklist result')
+          find("button[title='Move Up checklist result']").click
+          expect(
+            find('input', id: 'result_11_title').value
+          ).to eq c3_result_1_title
+        end
+      end
+
+      click_button 'Save Checklist'
+
+      expect(page).to have_content('Edit Checklist')
+
+      expect(target.reload.review_checklist).not_to eq([])
+
+      # Reload Page
+      visit review_timeline_event_path(submission_pending)
+
+      click_button 'Show Review Checklist'
+
+      within("div[data-checklist-item='0']") do
+        expect(page).to have_content(checklist_title_2)
+
+        within("div[data-result-item='0']") do
+          expect(page).to have_content(c2_result_0_title)
+          find('label', text: c2_result_0_title).click
+        end
+
+        within("div[data-result-item='1']") do
+          expect(page).to have_content(c2_result_1_title)
+          find('label', text: c2_result_1_title).click
+        end
+      end
+
+      within("div[data-checklist-item='1']") do
+        expect(page).to have_content(checklist_title_3)
+
+        within("div[data-result-item='0']") do
+          expect(page).to have_content(c3_result_0_title)
+          find('label', text: c3_result_0_title).click
+        end
+
+        within("div[data-result-item='1']") do
+          expect(page).to have_content(c3_result_1_title)
+          find('label', text: c3_result_1_title).click
+        end
+      end
+
+      within("div[data-checklist-item='2']") do
+        expect(page).to have_content(checklist_title_1)
+
+        within("div[data-result-item='0']") do
+          expect(page).to have_content(c1_result_0_title)
+          find('label', text: c1_result_0_title).click
+        end
+
+        within("div[data-result-item='1']") do
+          expect(page).to have_content(c1_result_1_title)
+          find('label', text: c1_result_1_title).click
+        end
+      end
     end
 
     scenario 'coach evaluates a pending submission and mark a checklist as incorrect' do
@@ -762,15 +1005,28 @@ feature 'Submission review overlay', js: true do
       create :startup, level: level, access_ends_at: 1.day.ago
     end
 
-    let!(:pending_submission_from_inactive_team) do
+    let!(:pending_submission_one_from_inactive_team) do
       create(
         :timeline_event,
         :with_owners,
         latest: true,
+        created_at: 5.days.ago,
         owners: inactive_team.founders,
         target: target
       )
     end
+
+    let!(:pending_submission_two_from_inactive_team) do
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        created_at: 1.hour.ago,
+        owners: inactive_team.founders,
+        target: target
+      )
+    end
+
     let!(:reviewed_submission_from_inactive_team) do
       create(
         :timeline_event,
@@ -779,6 +1035,7 @@ feature 'Submission review overlay', js: true do
         owners: inactive_team.founders,
         target: target,
         evaluator_id: coach.id,
+        created_at: 5.days.ago,
         evaluated_at: 1.day.ago,
         passed_at: 1.day.ago
       )
@@ -792,16 +1049,40 @@ feature 'Submission review overlay', js: true do
       )
     end
 
-    scenario 'coach visits pending submission page' do
+    around do |example|
+      with_secret(inactive_submission_review_allowed_days: 1) { example.run }
+    end
+
+    scenario 'coach visits pending submission page of inactive student with allowed submission review time has elapsed' do
       sign_in_user coach.user,
                    referrer:
                      review_timeline_event_path(
-                       pending_submission_from_inactive_team
+                       pending_submission_one_from_inactive_team
                      )
-
+      expect(page).not_to have_text('You can review the submission until')
       expect(page).to have_button('Create Review Checklist', disabled: true)
       expect(page).to have_button('Write a Note', disabled: true)
       expect(page).to have_button('Save grades', disabled: true)
+    end
+
+    scenario 'coach visits pending submission page of inactive student within submission review allowed time' do
+      sign_in_user coach.user,
+                   referrer:
+                     review_timeline_event_path(
+                       pending_submission_two_from_inactive_team
+                     )
+
+      click_button 'Start Review'
+      dismiss_notification
+      expect(page).to have_content('You can review the submission until')
+      expect(page).to have_content('Add Your Feedback')
+      expect(page).to have_content('Grade Card')
+      expect(page).to have_content(evaluation_criterion_1.name)
+      expect(page).to have_content(evaluation_criterion_2.name)
+      expect(page).to have_button('Save grades', disabled: true)
+      click_button 'Remove assignment'
+      dismiss_notification
+      expect(page).to have_button('Start Review')
     end
 
     scenario 'coach visits reviewed submission page' do
@@ -1102,8 +1383,12 @@ feature 'Submission review overlay', js: true do
         passed_at: 1.day.ago
       )
     end
-    let(:feedback) do
-      create(:startup_feedback, startup_id: team.id, faculty_id: coach.id)
+    let!(:feedback) do
+      create(
+        :startup_feedback,
+        faculty_id: coach.id,
+        timeline_event: submission_reviewed
+      )
     end
     let!(:timeline_event_grade) do
       create(
@@ -1112,7 +1397,6 @@ feature 'Submission review overlay', js: true do
         evaluation_criterion: evaluation_criterion_1
       )
     end
-    before { submission_reviewed.startup_feedback << feedback }
 
     scenario 'team coach add his feedback' do
       sign_in_user team_coach.user,

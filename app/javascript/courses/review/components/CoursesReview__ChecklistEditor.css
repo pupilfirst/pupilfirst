@@ -1,9 +1,9 @@
 .checklist-editor__checklist-item-title {
-  @apply appearance-none py-3 px-4 text-base font-semibold leading-tight rounded overflow-hidden w-full border border-gray-400;
+  @apply appearance-none py-3 px-4 text-base font-semibold leading-tight rounded overflow-hidden w-full border border-gray-300;
 }
 
 .checklist-editor__checklist-result-item-title {
-  @apply appearance-none py-3 pl-4 pr-10 text-sm font-semibold leading-tight rounded-t w-full border border-gray-400;
+  @apply appearance-none py-3 pl-4 pr-10 text-sm font-semibold leading-tight rounded-t w-full border border-gray-300;
   border-bottom-color: transparent;
 }
 
@@ -11,10 +11,13 @@
   border-bottom-color: theme(colors.primary.300);
 }
 
-.checklist-editor__add-result-btn:hover .checklist-editor__add-result-btn-check {
+.checklist-editor__add-result-btn:hover .checklist-editor__add-result-btn-check,
+.checklist-editor__add-result-btn:focus
+  .checklist-editor__add-result-btn-check {
   @apply border-gray-500 bg-white shadow;
 }
 
-.checklist-editor__add-result-btn:hover .checklist-editor__add-result-btn-text {
+.checklist-editor__add-result-btn:hover .checklist-editor__add-result-btn-text,
+.checklist-editor__add-result-btn:focus .checklist-editor__add-result-btn-text {
   @apply text-primary-500 bg-white border-primary-500 shadow-md;
 }

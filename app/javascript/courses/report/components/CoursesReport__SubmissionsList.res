@@ -1,6 +1,6 @@
 open CoursesReport__Types
 let str = React.string
-let tc = I18n.t(~scope="components.CoursesReport__SubmissionsList")
+let tr = I18n.t(~scope="components.CoursesReport__SubmissionsList")
 let ts = I18n.t(~scope="shared")
 
 type targetStatus = [#PendingReview | #Rejected | #Completed]
@@ -12,7 +12,7 @@ type sortBy = {
   criterionType: [#String | #Number],
 }
 
-let sortBy = {criterion: tc("submitted_at"), criterionType: #Number}
+let sortBy = {criterion: tr("submitted_at"), criterionType: #Number}
 
 type loading =
   | Loaded
@@ -37,9 +37,9 @@ type action =
 
 let statusString = targetStatus =>
   switch targetStatus {
-  | #PendingReview => tc("pending_review")
-  | #Rejected => tc("rejected")
-  | #Completed => tc("completed")
+  | #PendingReview => tr("pending_review")
+  | #Rejected => tr("rejected")
+  | #Completed => tr("completed")
   }
 
 module StudentSubmissionsQuery = %graphql(`
@@ -72,7 +72,7 @@ module Selectable = {
   let label = t =>
     switch t {
     | Level(level) => Some(LevelLabel.format(level |> Level.number |> string_of_int))
-    | TargetStatus(_targetStatus) => Some(tc("status"))
+    | TargetStatus(_targetStatus) => Some(tr("status"))
     }
 
   let value = t =>
@@ -168,7 +168,7 @@ module SubmissionsSorter = Sorter.Make(Sortable)
 let submissionsSorter = (sortDirection, updateSortDirectionCB) => {
   let criteria = [sortBy]
   <div ariaLabel="Change submissions sorting" className="flex-shrink-0 mt-3 md:mt-0 md:ml-2">
-    <label className="block text-tiny font-semibold uppercase"> {tc("sort_by") |> str} </label>
+    <label className="block text-tiny font-semibold uppercase"> {tr("sort_by") |> str} </label>
     <SubmissionsSorter
       criteria
       selectedCriterion=sortBy
@@ -181,10 +181,10 @@ let submissionsSorter = (sortDirection, updateSortDirectionCB) => {
 
 let filterPlaceholder = (selectedLevel, selectedStatus) =>
   switch (selectedLevel, selectedStatus) {
-  | (None, Some(_)) => tc("filter_by_level")
-  | (None, None) => tc("filter_by_level_or_status")
-  | (Some(_), Some(_)) => tc("filter_by_another_level")
-  | (Some(_), None) => tc("filter_by_another_level_or_status")
+  | (None, Some(_)) => tr("filter_by_level")
+  | (None, None) => tr("filter_by_level_or_status")
+  | (Some(_), Some(_)) => tr("filter_by_another_level")
+  | (Some(_), None) => tr("filter_by_another_level_or_status")
   }
 
 let reducer = (state, action) =>
@@ -235,12 +235,14 @@ let getStudentSubmissions = (
 ) => {
   let levelId = level->Belt.Option.flatMap(level => Some(Level.id(level)))
   let status = status->Belt.Option.flatMap(status => Some(status))
-  switch cursor {
-  | Some(cursor) =>
-    StudentSubmissionsQuery.make(~studentId, ~after=cursor, ~sortDirection, ~levelId?, ~status?, ())
-  | None => StudentSubmissionsQuery.make(~studentId, ~sortDirection, ~levelId?, ~status?, ())
-  }
-  |> GraphqlQuery.sendQuery
+
+  StudentSubmissionsQuery.make({
+    studentId: studentId,
+    after: cursor,
+    sortDirection: sortDirection,
+    levelId: levelId,
+    status: status,
+  })
   |> Js.Promise.then_(response => {
     response["studentSubmissions"]["nodes"] |> updateStudentSubmissions(
       send,
@@ -262,24 +264,24 @@ let showSubmissionStatus = submission =>
   | #Rejected =>
     <div
       className="bg-red-100 border border-red-500 flex-shrink-0 leading-normal text-red-800 font-semibold px-3 py-px rounded">
-      {tc("rejected") |> str}
+      {tr("rejected") |> str}
     </div>
 
   | #Completed =>
     <div
       className="bg-green-100 border border-green-500 flex-shrink-0 leading-normal text-green-800 font-semibold px-3 py-px rounded">
-      {tc("completed") |> str}
+      {tr("completed") |> str}
     </div>
 
   | #PendingReview =>
     <div
       className="bg-blue-100 border border-blue-500 flex-shrink-0 leading-normal text-blue-800 font-semibold px-3 py-px rounded">
-      {tc("pending_review") |> str}
+      {tr("pending_review") |> str}
     </div>
   }
 
 let submissionCardClasses = submission =>
-  "flex flex-col md:flex-row items-start md:items-center justify-between rounded-lg bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:outline-none focus:border-2 focus:border-indigo-500 " ++
+  "flex flex-col md:flex-row items-start md:items-center justify-between rounded-lg bg-white border-l-3 p-3 md:py-6 md:px-5 mt-4 cursor-pointer shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:outline-none focus:border-2 focus:border-focusColor-500 " ++
   switch submission |> Submission.status {
   | #Rejected => "border-red-500"
   | #Completed => "border-green-500"
@@ -299,15 +301,12 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
         ? "/submissions/" ++ Submission.id(submission)
         : "/targets/" ++ Submission.targetId(submission)
 
-      <div
-        className=""
-        key={submission |> Submission.id}>
-        <a className="block relative z-10 rounded-lg focus:outline-none focus:ring focus-ring-inset focus:ring-indigo-500"
+      <div className="" key={submission |> Submission.id}>
+        <a
+          className="block relative z-10 rounded-lg focus:outline-none focus:ring focus-ring-inset focus:ring-focusColor-500"
           ariaLabel={"Student submission " ++ (submission |> Submission.id)}
           href=submissionHref>
-          <div
-            key={submission |> Submission.id}
-            className={submissionCardClasses(submission)}>
+          <div key={submission |> Submission.id} className={submissionCardClasses(submission)}>
             <div className="w-full md:w-3/4">
               <div className="block text-sm md:pr-2">
                 <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
@@ -319,7 +318,7 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
               </div>
               <div className="mt-1 ml-px text-xs text-gray-900">
                 <span className="ml-1">
-                  {tc(
+                  {tr(
                     ~variables=[("date", submission |> Submission.createdAtPretty)],
                     "submitted_on",
                   ) |> str}
@@ -334,22 +333,22 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
         {teamMismatch
           ? <div
               ariaLabel={"Team change notice for submission " ++ Submission.id(submission)}
-              className="w-full text-xs rounded-b bg-indigo-100 text-indigo-700 px-4 pt-3 pb-2 -mt-1 flex flex-1 justify-between items-center">
+              className="w-full text-xs rounded-b bg-blue-100 text-blue-700 px-4 pt-3 pb-2 -mt-1 flex flex-1 justify-between items-center">
               <div className="flex flex-1 justify-start items-center pr-8">
                 <FaIcon classes="fas fa-exclamation-triangle text-sm md:text-base mt-1" />
                 <div className="inline-block pl-3">
-                  {tc("submission_not_considered") |> str}
+                  {tr("submission_not_considered") |> str}
                   <HelpIcon className="ml-1">
                     <span
-                      dangerouslySetInnerHTML={"__html": tc("submission_not_considered_help")}
+                      dangerouslySetInnerHTML={"__html": tr("submission_not_considered_help")}
                     />
                   </HelpIcon>
                 </div>
               </div>
               <a
                 href={"/targets/" ++ Submission.targetId(submission)}
-                className="flex-shrink-0 px-2 py-1 text-xs font-semibold text-indigo-700 hover:bg-indigo-200 hover:text-indigo-800 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                <span className="hidden md:inline"> {tc("view") |> str} </span>
+                className="flex-shrink-0 px-2 py-1 text-xs font-semibold text-blue-700 hover:bg-blue-200 hover:text-blue-800 rounded focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+                <span className="hidden md:inline"> {tr("view") |> str} </span>
                 {ts("target") |> str}
                 <FaIcon classes="fas fa-arrow-right ml-2" />
               </a>
@@ -363,8 +362,8 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
 let showSubmissions = (submissions, levels, teamStudentIds) =>
   submissions |> ArrayUtils.isEmpty
     ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
-        <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
-          {tc("no_submissions_to_show") |> str}
+        <h5 className="py-4 mt-4 bg-gray-50 text-gray-800 font-semibold">
+          {tr("no_submissions_to_show") |> str}
         </h5>
       </div>
     : showSubmission(submissions, levels, teamStudentIds)
@@ -405,7 +404,9 @@ let make = (
   <div className="max-w-3xl mx-auto">
     <div role="form" className="md:flex items-end w-full pb-4">
       <div className="flex-1">
-        <label htmlFor="filter" className="block text-tiny font-semibold uppercase"> {"Filter by:" |> str} </label>
+        <label htmlFor="filter" className="block text-tiny font-semibold uppercase">
+          {"Filter by:" |> str}
+        </label>
         <Multiselect
           id="filter"
           unselected={unselected(levels, selectedLevel, selectedStatus)}
@@ -428,7 +429,7 @@ let make = (
           {switch state.loading {
           | Loaded =>
             <button
-              className="btn btn-primary-ghost cursor-pointer w-full mt-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+              className="btn btn-primary-ghost cursor-pointer w-full mt-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
               onClick={_ => {
                 send(BeginLoadingMore)
                 getStudentSubmissions(
@@ -442,7 +443,7 @@ let make = (
                   updateSubmissionsCB,
                 )
               }}>
-              {tc("load_more") |> str}
+              {ts("load_more") |> str}
             </button>
           | LoadingMore => SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
           | Reloading => React.null

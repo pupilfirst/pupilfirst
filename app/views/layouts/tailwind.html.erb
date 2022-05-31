@@ -32,11 +32,6 @@
     />
 
     <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-
-    <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css"
       integrity="sha256-M6KFoDq9eUpmogkDgw6+3R3ZgUPSuFXnQyr8tskSfQs="
@@ -45,6 +40,15 @@
 
     <%= stylesheet_pack_tag 'layouts/tailwind', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_pack_tag 'IconFirstPack', media: 'all' %>
+
+    <% if Rails.env.test? %>
+      <style>
+        * {
+          animation-duration: 0s !important;
+          transition-duration: 0s !important;
+        }
+      </style>
+    <% end %>
 
     <!-- Scripts -->
     <%= javascript_pack_tag 'layouts/tailwind', nonce: true %>
@@ -69,7 +73,7 @@
   <body data-host="<%= current_host %>">
     <section class="min-h-full flex flex-col items-stretch">
       <%= yield :nav %>
-      <main class="flex-grow bg-gray-100">
+      <main class="flex-grow bg-gray-50">
         <% if content_for?(:wrapper) %>
           <%= yield :wrapper %>
         <% else %>

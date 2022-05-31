@@ -6,11 +6,11 @@ type subscription = {
 
 let t = I18n.t(~scope="components.WebPushSubscriptionManager")
 
-@bs.module("./webPushSubscription")
+@module("./webPushSubscription")
 external createSubscription: unit => Js.Promise.t<Js.Nullable.t<subscription>> =
   "createSubscription"
 
-@bs.module("./webPushSubscription")
+@module("./webPushSubscription")
 external getWebPushData: unit => Js.Promise.t<Js.Nullable.t<subscription>> = "getWebPushData"
 
 let str = React.string
@@ -44,31 +44,26 @@ let reducer = (state, action) =>
   | ClearSaving => {...state, saving: false}
   }
 
-module CreateWebPushSubscriptionMutation = %graphql(
-  `
+module CreateWebPushSubscriptionMutation = %graphql(`
   mutation CreateWebPushSubscriptionMutation($endpoint: String!, $p256dh: String!, $auth: String!) {
     createWebPushSubscription(endpoint: $endpoint, p256dh: $p256dh, auth: $auth)  {
       success
     }
   }
-`
-)
+`)
 
-module DeleteWebPushSubscriptionMutation = %graphql(
-  `
+module DeleteWebPushSubscriptionMutation = %graphql(`
   mutation DeleteWebPushSubscriptionMutation {
     deleteWebPushSubscription {
       success
     }
   }
-`
-)
+`)
 
 let deleteSubscription = (send, event) => {
   event |> ReactEvent.Mouse.preventDefault
   send(SetSaving)
   DeleteWebPushSubscriptionMutation.make()
-  |> GraphqlQuery.sendQuery
   |> Js.Promise.then_(response => {
     response["deleteWebPushSubscription"]["success"]
       ? send(SetStatusUnSubscribed)
@@ -84,13 +79,11 @@ let deleteSubscription = (send, event) => {
 
 let saveSubscription = (subscription, send) => {
   send(SetSaving)
-  CreateWebPushSubscriptionMutation.make(
-    ~endpoint=subscription.endpoint,
-    ~p256dh=subscription.p256dh,
-    ~auth=subscription.auth,
-    (),
-  )
-  |> GraphqlQuery.sendQuery
+  CreateWebPushSubscriptionMutation.make({
+    endpoint: subscription.endpoint,
+    p256dh: subscription.p256dh,
+    auth: subscription.auth,
+  })
   |> Js.Promise.then_(response => {
     response["createWebPushSubscription"]["success"] ? send(SetStatusSubscribed) : send(ClearSaving)
     Js.Promise.resolve()
@@ -108,17 +101,20 @@ let handleNotificationBlock = () =>
 
 let createSubscription = (send, event) => {
   event |> ReactEvent.Mouse.preventDefault
-  createSubscription() |> Js.Promise.then_(r => {
+  createSubscription()
+  |> Js.Promise.then_(r => {
     switch Js.Nullable.toOption(r) {
     | Some(response) => saveSubscription(response, send)
     | None => handleNotificationBlock()
     }
     Js.Promise.resolve()
-  }) |> Js.Promise.catch(_ => {
+  })
+  |> Js.Promise.catch(_ => {
     send(ClearSaving)
     handleNotificationBlock()
     Js.Promise.resolve()
-  }) |> ignore
+  })
+  |> ignore
 }
 
 let webPushEndpoint =
@@ -131,7 +127,8 @@ let loadStatus = (status, send, ()) => {
   | UnSubscribed => ()
   | Subscribed
   | SubscribedOnAnotherDevice =>
-    getWebPushData() |> Js.Promise.then_(r => {
+    getWebPushData()
+    |> Js.Promise.then_(r => {
       let response = Js.Nullable.toOption(r)
       switch (webPushEndpoint, response) {
       | (None, _) => send(SetStatusUnSubscribed)
@@ -146,7 +143,9 @@ let loadStatus = (status, send, ()) => {
       }
 
       Js.Promise.resolve()
-    }) |> Js.Promise.catch(_ => Js.Promise.resolve()) |> ignore
+    })
+    |> Js.Promise.catch(_ => Js.Promise.resolve())
+    |> ignore
   }
   None
 }
@@ -160,7 +159,7 @@ let button = (saving, onClick, icon, text) =>
   <button
     onClick
     disabled=saving
-    className="inline-flex items-center font-semibold px-2 py-1 md:py-1 bg-gray-200 hover:bg-gray-300 border rounded text-xs flex-shrink-0">
+    className="inline-flex items-center font-semibold px-2 py-1 md:py-1 bg-gray-50 hover:bg-gray-300 focus:bg-gray-300 border rounded text-xs flex-shrink-0">
     <FaIcon classes={"mr-2 fa-fw fas fa-" ++ (saving ? "spinner fa-spin" : icon)} /> {str(text)}
   </button>
 

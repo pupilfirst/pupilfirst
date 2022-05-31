@@ -4,8 +4,12 @@
   <%= stylesheet_pack_tag 'courses/shared', 'data-turbolinks-track': 'reload' %>
   <%= stylesheet_pack_tag 'courses/show', 'data-turbolinks-track': 'reload' %>
   <%= stylesheet_pack_tag 'shared/markdownBlockCSS', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
 <% end %>
-<div class="pb-8 bg-gray-100 ">
+<% content_for(:tail) do %>
+  <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
+<% end %>
+<div class="pb-8 bg-gray-50 ">
   <div class="relative bg-primary-900">
     <div class="relative pb-1/2 md:pb-1/4 2xl:pb-1/5">
       <% if presenter.cover_image.present? %>
@@ -43,7 +47,7 @@
                   href="<%= curriculum_course_path(@course) %>"
                   class="btn btn-primary btn-large w-full"
                 >
-                  <%= presenter.user_is_student? ? t('courses.show.continue_course') : t('courses.show.preview_course') %>
+                  <%= presenter.user_is_student? ? t('.continue_course') : t('.preview_course') %>
                 </a>
               </div>
             <% end %>
@@ -55,7 +59,7 @@
                   href="<%= apply_course_path(@course) %>"
                   class="btn btn-success btn-large w-full"
                 >
-                  Apply Now
+                  <%= t('.apply_now') %>
                 </a>
               </div>
             <% end %>
@@ -67,7 +71,9 @@
               <div
                 class="px-4 md:px-8 markdown-block markdown-block__permissive"
               >
-                <%= sanitize(presenter.about) %>
+              <div data-json-props="<%= presenter.markdown_prop(presenter.about) %>" class="convert-markdown">
+                <%= presenter.about %>
+              </div>
               </div>
             </div>
           <% end %>
@@ -106,7 +112,7 @@
                   href="<%= curriculum_course_path(@course) %>"
                   class="btn btn-primary btn-large w-full"
                 >
-                  <%= presenter.user_is_student? ? t('courses.show.continue_course') : t('courses.show.preview_course') %>
+                  <%= presenter.user_is_student? ? t('.continue_course') : t('.preview_course') %>
                 </a>
               </div>
             <% end %>
@@ -116,7 +122,7 @@
                   href="<%= apply_course_path(@course) %>"
                   class="btn btn-success btn-large w-full"
                 >
-                  Apply Now
+                  <%= t('.apply_now') %>
                 </a>
               </div>
             <% end %>
@@ -130,7 +136,7 @@
           class="course-show__footer-cta-container bg-white py-12 px-4 text-center mt-8 border-transparent shadow rounded-lg"
         >
           <h2 class="text-3xl leading-tight">
-            <span class="font-normal"> Enroll to </span>
+            <span class="font-normal"> <%= t(".enroll") %> </span>
             <span class="block font-bold">
               <%= @course.name %>
             </span>
@@ -138,7 +144,7 @@
           <a
             href="<%= apply_course_path(@course) %>"
             class="btn btn-large btn-success w-full sm:w-auto course-show__footer-cta-button shadow mt-3"
-            >Apply Now</a
+            ><%= t('.apply_now') %></a
           >
         </div>
       <% end %>

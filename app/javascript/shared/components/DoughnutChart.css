@@ -31,7 +31,7 @@
 }
 
 .doughnut-chart.purple .doughnut-chart__stroke {
-  stroke: #6025c0;
+  stroke: var(--color-primary-500);
 }
 
 .doughnut-chart__text {
@@ -40,5 +40,5 @@
 }
 
 .doughnut-chart.purple .doughnut-chart__text {
-  fill: #6025c0;
+  fill: var(--color-primary-500);
 }

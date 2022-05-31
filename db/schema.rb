@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_28_050607) do
+ActiveRecord::Schema.define(version: 2022_04_25_072002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -490,7 +490,6 @@ ActiveRecord::Schema.define(version: 2022_01_28_050607) do
     t.string "reference_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "startup_id"
     t.datetime "sent_at"
     t.integer "faculty_id"
     t.string "activity_type"
@@ -739,6 +738,7 @@ ActiveRecord::Schema.define(version: 2022_01_28_050607) do
     t.string "locale", default: "en"
     t.jsonb "webpush_subscription", default: {}
     t.string "login_token_digest"
+    t.datetime "last_seen_at"
     t.index ["api_token_digest"], name: "index_users_on_api_token_digest", unique: true
     t.index ["delete_account_token_digest"], name: "index_users_on_delete_account_token_digest", unique: true
     t.index ["email", "school_id"], name: "index_users_on_email_and_school_id", unique: true

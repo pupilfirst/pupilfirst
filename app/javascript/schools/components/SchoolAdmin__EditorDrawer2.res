@@ -1,5 +1,7 @@
 %bs.raw(`require("./SchoolAdmin__EditorDrawer2.css")`)
 
+let tr = I18n.t(~scope="components.SchoolAdmin__EditorDrawer")
+
 open React
 
 let drawerClasses = (size, level, previousLevel) => {
@@ -28,7 +30,7 @@ let drawerClasses = (size, level, previousLevel) => {
 @react.component
 let make = (
   ~closeDrawerCB,
-  ~closeButtonTitle="Close Editor",
+  ~closeButtonTitle=tr("close_editor"),
   ~size=SchoolAdmin__EditorDrawer.Normal,
   ~closeIconClassName="fas fa-times",
   ~level=0,
@@ -47,7 +49,8 @@ let make = (
             closeDrawerCB()
           }}
           title=closeButtonTitle
-          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none mt-4">
+          ariaLabel=closeButtonTitle
+          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-primary-700 focus:outline-none focus:text-primary-700 mt-4">
           <i className={closeIconClassName ++ " text-xl"} />
         </button>
       </div>

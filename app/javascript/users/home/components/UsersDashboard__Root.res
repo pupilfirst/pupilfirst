@@ -1,5 +1,5 @@
-%bs.raw(`require("courses/shared/background_patterns.css")`)
-%bs.raw(`require("./UserDashboard__Root.css")`)
+%raw(`require("courses/shared/background_patterns.css")`)
+%raw(`require("./UserDashboard__Root.css")`)
 
 let t = I18n.t(~scope="components.UsersDashboard__Root")
 
@@ -18,13 +18,13 @@ let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) =>
       {switch avatarUrl {
       | Some(src) =>
         <img
-          className="w-16 h-16 rounded-full border object-cover border-gray-400 rounded-full overflow-hidden flex-shrink-0 mr-4"
+          className="w-16 h-16 rounded-full border object-cover border-gray-300 overflow-hidden flex-shrink-0 mr-4"
           src
         />
       | None =>
         <Avatar
           name=userName
-          className="w-16 h-16 mr-4 border border-gray-400 rounded-full overflow-hidden flex-shrink-0"
+          className="w-16 h-16 mr-4 border border-gray-300 rounded-full overflow-hidden flex-shrink-0"
         />
       }}
       <div className="text-sm flex flex-col justify-center">
@@ -42,19 +42,24 @@ let headerSectiom = (userName, userTitle, avatarUrl, showUserEdit) =>
   </div>
 
 let navButtonClasses = selected =>
-  "font-semibold border-b-2 text-sm py-4 mr-6 focus:outline-none " ++ (
+  "font-semibold border-b-2 text-sm py-4 mr-6 hover:text-primary-500 hover:border-gray-300 focus:border-gray-300 focus:text-primary-500 focus:outline-none " ++ (
     selected ? "text-primary-500 border-primary-500" : "border-transparent"
   )
 
 let navSection = (view, setView, communities, issuedCertificates) =>
   <div className="border-b mt-6">
-    <div className="flex max-w-4xl mx-auto px-3 lg:px-0">
+    <div role="tablist" className="flex max-w-4xl mx-auto px-3 lg:px-0">
       <button
-        className={navButtonClasses(view == ShowCourses)} onClick={_ => setView(_ => ShowCourses)}>
+        role="tab"
+        ariaSelected={view == ShowCourses}
+        className={navButtonClasses(view == ShowCourses)}
+        onClick={_ => setView(_ => ShowCourses)}>
         <i className="fas fa-book text-xs md:text-sm mr-2" /> <span> {t("my_courses")->str} </span>
       </button>
       {ReactUtils.nullUnless(
         <button
+          role="tab"
+          ariaSelected={view == ShowCommunities}
           className={navButtonClasses(view == ShowCommunities)}
           onClick={_ => setView(_ => ShowCommunities)}>
           <i className="fas fa-users text-xs md:text-sm mr-2" />
@@ -64,6 +69,8 @@ let navSection = (view, setView, communities, issuedCertificates) =>
       )}
       {ReactUtils.nullUnless(
         <button
+          role="tab"
+          ariaSelected={view == ShowCertificates}
           className={navButtonClasses(view == ShowCertificates)}
           onClick={_ => setView(_ => ShowCertificates)}>
           <i className="fas fa-certificate text-xs md:text-sm mr-2" />
@@ -78,14 +85,14 @@ let courseLink = (href, title, icon) =>
   <a
     key=href
     href
-    className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 hover:text-primary-500">
-    <i className=icon /> <span className="font-semibold ml-2"> {title->str} </span>
+    className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-50 text-gray-500 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
+    <i className=icon /> <span className="font-medium ml-2"> {title->str} </span>
   </a>
 
 let ctaButton = (title, href) =>
   <a
     href
-    className="w-full bg-gray-200 mt-4 px-6 py-4 flex text-sm font-semibold justify-between items-center cursor-pointer text-primary-500 hover:bg-gray-300">
+    className="w-full bg-primary-50 mt-4 px-6 py-4 flex text-sm font-semibold justify-between items-center cursor-pointer text-primary-500 hover:bg-primary-100 focus:outline-none focus:bg-primary-100">
     <span> <i className="fas fa-book" /> <span className="ml-2"> {title->str} </span> </span>
     <i className="fas fa-arrow-right" />
   </a>
@@ -136,9 +143,9 @@ let communityLinks = (communityIds, communities) => Js.Array.map(id => {
       <a
         key={Community.id(c)}
         href={Community.path(c)}
-        className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-100 text-gray-800 hover:bg-gray-200 hover:text-primary-500">
+        className="px-2 py-1 mr-2 mt-2 rounded text-sm bg-gray-50 text-gray-500 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
         <i className="fas fa-users" />
-        <span className="font-semibold ml-2"> {Community.name(c)->str} </span>
+        <span className="font-medium ml-2"> {Community.name(c)->str} </span>
       </a>
     | None => React.null
     }
@@ -152,7 +159,7 @@ let courseLinks = (course, currentSchoolAdmin, communities) => {
     {ReactUtils.nullUnless(
       courseLink(
         "/school/courses/" ++ (courseId ++ "/curriculum"),
-        "Edit Curriculum",
+        t("edit_curriculum"),
         "fas fa-check-square",
       ),
       Course.author(course) && cta != #EditCourse,
@@ -288,7 +295,7 @@ let certificatesSection = issuedCertificates =>
                     {IssuedCertificate.courseName(issuedCertificate)->str}
                   </h4>
                   <div className="text-xs">
-                    <span> {"Issued on:"->str} </span>
+                    <span> {t("issued_on")->str} </span>
                     <span className="ml-1">
                       {issuedCertificate
                       ->IssuedCertificate.createdAt
@@ -320,7 +327,7 @@ let make = (
   ~issuedCertificates,
 ) => {
   let (view, setView) = React.useState(() => ShowCourses)
-  <div className="bg-gray-100">
+  <div className="bg-gray-50">
     <div className="bg-white">
       {headerSectiom(userName, userTitle, avatarUrl, showUserEdit)}
       {navSection(view, setView, communities, issuedCertificates)}

@@ -2,6 +2,9 @@ open CourseCoaches__Types
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CourseCoaches__InfoFormTeam")
+let ts = I18n.t(~scope="shared")
+
 let deleteIconClasses = deleting => deleting ? "fas fa-spinner fa-pulse" : "far fa-trash-alt"
 
 module DeleteCoachTeamEnrollmentQuery = %graphql(`
@@ -16,15 +19,19 @@ let deleteTeamEnrollment = (team, coach, setDeleting, removeTeamEnrollmentCB, ev
   event |> ReactEvent.Mouse.preventDefault
 
   WindowUtils.confirm(
-    "Are you sure you want to remove " ++
+    tr("remove_pre_confirm") ++
     ((team |> Team.name) ++
-    " from the list of assigned teams?"),
+    tr("remove_post_confirm")),
     () => {
       setDeleting(_ => true)
-      DeleteCoachTeamEnrollmentQuery.make(~teamId=Team.id(team), ~coachId=CourseCoach.id(coach), ())
-      |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response => {
-        if response["deleteCoachTeamEnrollment"]["success"] {
+      let variables = DeleteCoachTeamEnrollmentQuery.makeVariables(
+        ~teamId=Team.id(team),
+        ~coachId=CourseCoach.id(coach),
+        (),
+      )
+      DeleteCoachTeamEnrollmentQuery.fetch(variables)
+      |> Js.Promise.then_((response: DeleteCoachTeamEnrollmentQuery.t) => {
+        if response.deleteCoachTeamEnrollment.success {
           removeTeamEnrollmentCB(Team.id(team))
         } else {
           setDeleting(_ => false)
@@ -40,8 +47,8 @@ let deleteTeamEnrollment = (team, coach, setDeleting, removeTeamEnrollmentCB, ev
 let make = (~team, ~coach, ~removeTeamEnrollmentCB) => {
   let (deleting, setDeleting) = React.useState(() => false)
   <div
-    ariaLabel={"Team " ++ (team |> Team.name)}
-    className="flex items-center justify-between bg-gray-100 text-xs text-gray-900 border rounded pl-3 mt-2"
+    ariaLabel={ ts("team") ++ " " ++ (team |> Team.name)}
+    className="flex items-center justify-between bg-gray-50 text-xs text-gray-900 border rounded pl-3 mt-2"
     key={team |> Team.id}>
     <div className="flex flex-1 justify-between items-center">
       <div className="font-semibold w-1/2">
@@ -59,9 +66,9 @@ let make = (~team, ~coach, ~removeTeamEnrollmentCB) => {
           </div>
         : React.null}
     </div>
-    <div className="w-10 text-center flex-shrink-0 hover:text-gray-900 hover:bg-gray-200">
+    <div className="w-10 text-center flex-shrink-0 hover:text-gray-900 hover:bg-gray-50">
       <button
-        title={"Delete " ++ Team.name(team)}
+        title={ts("delete") ++ " " ++ Team.name(team)}
         onClick={deleteTeamEnrollment(team, coach, setDeleting, removeTeamEnrollmentCB)}
         className="p-3">
         <FaIcon classes={deleteIconClasses(deleting)} />

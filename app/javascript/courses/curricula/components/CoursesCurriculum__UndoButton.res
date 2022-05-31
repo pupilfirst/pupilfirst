@@ -1,5 +1,7 @@
 let str = React.string
 
+let tr = I18n.t(~scope="components.CoursesCurriculum__UndoButton")
+
 module DeleteSubmissionQuery = %graphql(`
   mutation UndoSubmissionMutation($targetId: ID!) {
     undoSubmission(targetId: $targetId) {
@@ -18,19 +20,18 @@ let handleClick = (targetId, setStatus, undoSubmissionCB, event) => {
 
   if {
     open Webapi.Dom
-    window |> Window.confirm("Are you sure you want to delete this submission?")
+    window |> Window.confirm(tr("window_confirm"))
   } {
     setStatus(_ => Undoing)
 
-    DeleteSubmissionQuery.make(~targetId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      if response["undoSubmission"]["success"] {
+    DeleteSubmissionQuery.fetch({targetId: targetId})
+    |> Js.Promise.then_((response: DeleteSubmissionQuery.t) => {
+      if response.undoSubmission.success {
         undoSubmissionCB()
       } else {
         Notification.notice(
-          "Could not undo submission",
-          "Please reload the page and check the status of the submission before trying again.",
+          tr("notification_notice_head"),
+          tr("notification_notice_body"),
         )
         setStatus(_ => Errored)
       }
@@ -38,8 +39,8 @@ let handleClick = (targetId, setStatus, undoSubmissionCB, event) => {
     })
     |> Js.Promise.catch(_ => {
       Notification.error(
-        "Unexpected Error",
-        "An unexpected error occured, and our team has been notified about this. Please reload the page before trying again.",
+        tr("notification_error_head"),
+        tr("notification_error_body"),
       )
       setStatus(_ => Errored)
       Js.Promise.resolve()
@@ -85,7 +86,7 @@ let buttonClasses = status => {
 let make = (~undoSubmissionCB, ~targetId) => {
   let (status, setStatus) = React.useState(() => Pending)
   <button
-    title="Delete this submission"
+    title=tr("undo_submission_title")
     disabled={status |> isDisabled}
     className={buttonClasses(status)}
     onClick={handleClick(targetId, setStatus, undoSubmissionCB)}>

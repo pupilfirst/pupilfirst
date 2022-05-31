@@ -36,8 +36,14 @@
   transform: scale(0);
 }
 
-.radio-label:hover span:first-child {
+.radio-label:hover span:first-child,
+.radio-input:focus + label span:first-child {
   @apply bg-primary-100 border-primary-500;
+}
+
+.radio-input {
+  top: 6px;
+  left: 6px;
 }
 
 .radio-input:checked + .radio-label span:first-child {

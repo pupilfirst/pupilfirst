@@ -11,7 +11,7 @@ module Mutations
       mutator = UpdateSchoolMutator.new(context, params)
 
       if mutator.valid?
-        mutator.notify(:success, 'Done!', 'Details updated successfully!')
+        mutator.notify(:success, I18n.t("shared.notifications.done"), I18n.t("mutations.update_school.details_updated_notification"))
         mutator.update_school
         { success: true }
       else

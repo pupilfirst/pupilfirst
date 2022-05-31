@@ -8,17 +8,18 @@ class CreateVimeoVideoMutator < ApplicationQuery
 
   def create_vimeo_video
     vimeo_api = Vimeo::ApiService.new(current_school)
-    response = vimeo_api.create_video(size, title, description)
+    video_title = title.presence || target.title
+    response = vimeo_api.create_video(size, video_title, description)
 
     if response[:error].present? || response[:error_code].present?
       if response[:developer_message].present?
-        errors[:base] << response[:developer_message]
+        errors.add(:base, response[:developer_message])
       else
-        errors[:base] <<
-          (
-            response[:error] ||
-              "Encountered error with code #{response[:error_code]} when trying to create a Vimeo video."
-          )
+        errors.add(
+          :base,
+          response[:error] ||
+            "Encountered error with code #{response[:error_code]} when trying to create a Vimeo video."
+        )
       end
 
       nil

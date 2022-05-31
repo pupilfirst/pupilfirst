@@ -18,7 +18,7 @@ class DeleteCourseAuthorMutator < ApplicationQuery
   def must_be_author_in_this_school
     return if course_author.present?
 
-    errors[:base] << 'The ID that was supplied is invalid'
+    errors.add(:base, 'The ID that was supplied is invalid')
   end
 
   def course_author

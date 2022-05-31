@@ -11,38 +11,29 @@
     <meta name="color-scheme" content="light">
     <meta name="supported-color-schemes" content="light">
   </head>
-  <body width="100%" style="margin: 0; padding: 8px;">
-    <center role="article" aria-roledescription="email" lang="en" style="width: 100%;">
-      <table style="font-family: Arial, sans-serif; width: 100%; text-align: left; max-width:768px; margin:auto; background: #fafafa; padding:0px 16px;">
+  <body width="100%" style="margin: 0px; padding: 0px;">
+    <div role="article" aria-roledescription="email" lang="en" style="width: 100%;">
+      <table style="font-family: Arial, sans-serif; width: 100%; text-align: left; border-collapse: collapse;">
         <tbody>
           <tr>
             <td>
-              <table>
-                <tbody>
-                  <tr>
-                    <td>
-                      <p>
-                        <%= yield :salutation %>
-                      </p>
-
-                      <%= yield :body %>
-
-                      <% if content_for?(:signature) %>
-                        <%= yield :signature %>
-                      <% else %>
-                        <p>
-                          Thanks, <br>
-                          <%= link_to presenter.school_name, presenter.school_url %>
-                        </p>
-                      <% end %>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <p>
+                <%= yield :salutation %>
+              </p>
+              <%= yield :body %>
+              <% if content_for?(:signature) %>
+                <%= yield :signature %>
+              <% else %>
+                <p>
+                  <%= t("mailers.layouts.mail.thanks") %>
+                  <br>
+                  <%= link_to presenter.school_name, presenter.school_url %>
+                </p>
+              <% end %>
             </td>
           </tr>
         </tbody>
       </table>
-    </center>
+    </div>
   </body>
 </html>

@@ -34,14 +34,22 @@ module PublicSlack
       founders = target[:founders]
 
       # ensure one and only one target is specified
-      raise ArgumentError, 'specify one of channel, founder or founders' unless [channel, founder, founders].reject(&:blank?).one?
+      unless [channel, founder, founders].compact_blank.one?
+        raise ArgumentError, 'specify one of channel, founder or founders'
+      end
 
       if channel.present?
-        raise 'could not validate channel specified' unless channel_valid?(channel)
+        unless channel_valid?(channel)
+          raise 'could not validate channel specified'
+        end
 
         post_to_channel(channel, message)
       else
-        founders.present? ? post_to_founders(founders, message) : post_to_founder(founder, message)
+        if founders.present?
+          post_to_founders(founders, message)
+        else
+          post_to_founder(founder, message)
+        end
       end
 
       OpenStruct.new(errors: @errors)
@@ -82,7 +90,8 @@ module PublicSlack
       begin
         api.get('chat.postMessage', params: params)
       rescue PublicSlack::TransportFailureException
-        @errors['HTTP Error'] = 'There seems to be a network issue. Please try after sometime'
+        @errors['HTTP Error'] =
+          'There seems to be a network issue. Please try after sometime'
       end
     end
 
@@ -111,9 +120,11 @@ module PublicSlack
 
       # Fetch or create im_id for the founder.
       begin
-        im_id_response = api.get('im.open', params: { user: founder.slack_user_id })
+        im_id_response =
+          api.get('im.open', params: { user: founder.slack_user_id })
       rescue PublicSlack::TransportFailureException
-        @errors['HTTP Error'] = 'There seems to be a network issue. Please try after sometime'
+        @errors['HTTP Error'] =
+          'There seems to be a network issue. Please try after sometime'
         return false
       rescue PublicSlack::OperationFailureException => e
         @errors[founder.id] = e.message

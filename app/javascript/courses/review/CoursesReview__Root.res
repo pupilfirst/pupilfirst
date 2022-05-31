@@ -71,7 +71,7 @@ let reducer = (state, action) =>
   | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
   | LoadSubmissions(endCursor, hasNextPage, newTopics, totalEntriesCount, target, level, coaches) =>
     let updatedTopics = switch state.loading {
-    | LoadingMore => Js.Array.concat(PagedSubmission.toArray(state.submissions), newTopics)
+    | LoadingMore => Js.Array2.concat(PagedSubmission.toArray(state.submissions), newTopics)
     | Reloading(_) => newTopics
     }
 
@@ -124,6 +124,8 @@ let reducer = (state, action) =>
 
 let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryString(filter))
 
+module UserProxyFragment = UserProxy.Fragments
+
 module SubmissionsQuery = %graphql(`
     query SubmissionsQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $personalCoachId: ID, $assignedCoachId: ID, $reviewingCoachId: ID, $includeInactive: Boolean, $coachIds: [ID!] $after: String) {
       submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, levelId: $levelId, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId, reviewingCoachId: $reviewingCoachId,  includeInactive: $includeInactive, first: 20, after: $after) {
@@ -154,7 +156,7 @@ module SubmissionsQuery = %graphql(`
         number
       }
       coaches(coachIds: $coachIds, courseId: $courseId) {
-        ...UserProxy.Fragments.AllFields
+        ...UserProxyFragment
       }
       targetInfo(targetId: $targetId, courseId: $courseId) {
         id
@@ -176,7 +178,7 @@ module LevelsQuery = %graphql(`
 module CoachesQuery = %graphql(`
     query CoachesQuery($courseId: ID!) {
       coaches(courseId: $courseId) {
-        ...UserProxy.Fragments.AllFields
+        ...UserProxyFragment
       }
     }
   `)
@@ -200,7 +202,7 @@ let getSubmissions = (send, courseId, cursor, filter) => {
     ->Js.Array2.map(Belt.Option.mapWithDefault(_, [], t => [t]))
     ->ArrayUtils.flattenV2
 
-  SubmissionsQuery.make(
+  let variables = SubmissionsQuery.makeVariables(
     ~courseId,
     ~status=?Filter.tab(filter),
     ~sortDirection=Filter.sortDirection(filter),
@@ -216,7 +218,8 @@ let getSubmissions = (send, courseId, cursor, filter) => {
     ~after=?cursor,
     (),
   )
-  |> GraphqlQuery.sendQuery
+
+  SubmissionsQuery.make(variables)
   |> Js.Promise.then_(response => {
     let target = OptionUtils.map(TargetInfo.makeFromJs, response["targetInfo"])
     let coaches = Js.Array2.map(response["coaches"], Coach.makeFromJs)
@@ -241,8 +244,7 @@ let getLevels = (send, courseId, state) => {
   if state.levelsLoaded == Unloaded {
     send(SetLevelLoading)
 
-    LevelsQuery.make(~courseId, ())
-    |> GraphqlQuery.sendQuery
+    LevelsQuery.make({courseId: courseId})
     |> Js.Promise.then_(response => {
       send(LoadLevels(Js.Array.map(Level.makeFromJs, response["levels"])))
       Js.Promise.resolve()
@@ -255,8 +257,7 @@ let getCoaches = (send, courseId, state) => {
   if state.coachesLoaded == Unloaded {
     send(SetCoachLoading)
 
-    CoachesQuery.make(~courseId, ())
-    |> GraphqlQuery.sendQuery
+    CoachesQuery.make({courseId: courseId})
     |> Js.Promise.then_(response => {
       send(LoadCoaches(Js.Array.map(Coach.makeFromJs, response["coaches"])))
       Js.Promise.resolve()
@@ -269,8 +270,7 @@ let getTargets = (send, courseId, state) => {
   if state.targetsLoaded == Unloaded {
     send(SetTargetLoading)
 
-    ReviewedTargetsInfoQuery.make(~courseId, ())
-    |> GraphqlQuery.sendQuery
+    ReviewedTargetsInfoQuery.make({courseId: courseId})
     |> Js.Promise.then_(response => {
       send(LoadTargets(Js.Array.map(TargetInfo.makeFromJs, response["reviewedTargetsInfo"])))
       Js.Promise.resolve()
@@ -662,7 +662,9 @@ let reloadSubmissions = (courseId, filter, send) => {
 }
 
 let submissionsLoadedData = (totalSubmissionsCount, loadedSubmissionsCount) =>
-  <p tabIndex=0 className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
+  <p
+    tabIndex=0
+    className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
     {str(
       totalSubmissionsCount == loadedSubmissionsCount
         ? tc(~count=loadedSubmissionsCount, "submissions_fully_loaded_text")
@@ -718,7 +720,7 @@ let loadFilters = (send, courseId, state) => {
 }
 
 let shortCutClasses = selected =>
-  "cursor-pointer flex justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-200 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-200 focus:ring-indigo-500 md:focus:border-b-none md:focus:rounded-t-md " ++ (
+  "cursor-pointer flex justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++ (
     selected
       ? "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500"
       : ""
@@ -770,7 +772,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
     <div role="main" ariaLabel="Review" className="flex-1 flex flex-col">
       <div className="hidden md:block h-16" />
       <div className="course-review-root__submissions-list-container">
-        <div className="bg-gray-100">
+        <div className="bg-gray-50">
           <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
             <div
               className="flex items-center justify-between bg-white md:bg-transparent px-4 py-2 md:pt-4 border-b md:border-none">
@@ -808,7 +810,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                       <p> {str(tc("pending"))} </p>
                     </Link>
                   </div>
-                  <div role="tab"  ariaSelected={filter.tab === Some(#Reviewed)} className="flex-1">
+                  <div role="tab" ariaSelected={filter.tab === Some(#Reviewed)} className="flex-1">
                     <Link
                       href={"/courses/" ++
                       courseId ++
@@ -828,7 +830,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
             </div>
           </div>
         </div>
-        <div className="md:sticky md:top-0 bg-gray-100">
+        <div className="md:sticky md:top-0 bg-gray-50">
           <div className="max-w-4xl 2xl:max-w-5xl mx-auto">
             <div role="form" className="md:flex w-full items-start pt-4 pb-3 px-4 md:pt-6">
               <div className="flex-1">

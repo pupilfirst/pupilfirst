@@ -14,6 +14,10 @@ class LockTopicMutator < ApplicationQuery
     topic&.community
   end
 
+  def creator
+    topic&.creator
+  end
+
   def topic
     @topic ||= Topic.find_by(id: id)
   end

@@ -630,7 +630,7 @@ feature 'Community', js: true do
     end
   end
 
-  context 'when a user is a school admin' do
+  context 'when current user is a school admin' do
     let(:school_admin) { create :school_admin }
 
     scenario 'school admin interacts with the community' do
@@ -697,12 +697,16 @@ feature 'Community', js: true do
     end
   end
 
-  include_examples 'lock and unlock a topic' do
+  context 'when current user is a student who created a topic' do
     let(:user) { student_1.user }
+
+    include_examples 'lock and unlock a topic'
   end
 
-  include_examples 'lock and unlock a topic' do
+  context 'when current user is a coach' do
     let(:user) { coach.user }
+
+    include_examples 'lock and unlock a topic'
   end
 
   scenario 'a student other than the topic creator attempts to lock a topic' do

@@ -11,7 +11,7 @@
 }
 
 .school-admin-navbar__primary-nav-link {
-  @apply flex text-white h-13 text-sm font-semibold items-center;
+  @apply flex text-white h-13 text-sm font-medium items-center;
   position: relative;
 }
 

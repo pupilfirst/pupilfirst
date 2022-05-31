@@ -76,7 +76,7 @@
 
 @screen lg {
   [class*="course-overlay__close--"] {
-    @apply bg-white border-gray-300 text-gray-700;
+    @apply bg-white border-gray-300 text-gray-600;
   }
 }
 

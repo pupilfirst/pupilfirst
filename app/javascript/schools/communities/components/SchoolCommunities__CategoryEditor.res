@@ -221,7 +221,7 @@ let make = (
         <button
           title={tr("delete_category")}
           onClick={deleteCategory(category, deleteCategoryCB, send)}
-          className="text-xs py-1 px-2 h-8 text-gray-700 hover:text-red-500 hover:bg-gray-50 focus:text-red-500 focus:bg-gray-50 border-l border-gray-300">
+          className="text-xs py-1 px-2 h-8 text-gray-600 hover:text-red-500 hover:bg-gray-50 focus:text-red-500 focus:bg-gray-50 border-l border-gray-300">
           <FaIcon classes={state.deleting ? "fas fa-spinner fa-spin" : "fas fa-trash-alt"} />
         </button>
       </div>
@@ -237,7 +237,7 @@ let make = (
         }}
         value=state.categoryName
         placeholder={tr("add_new_category")}
-        className="appearance-none h-10 block w-full text-gray-700 border rounded border-gray-300 py-2 px-4 text-sm hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+        className="appearance-none h-10 block w-full text-gray-600 border rounded border-gray-300 py-2 px-4 text-sm hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
       />
       {
         let showButton = state.categoryName |> String.trim != ""

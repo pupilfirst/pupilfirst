@@ -185,7 +185,7 @@ let truncatedTable = csvData => {
                 <div className="w-full border-t border-b py-1 border-dashed border-gray-300" />
               </div>
               <div className="relative flex justify-center">
-                <span className="px-2 bg-white text-xs italic text-center text-gray-700">
+                <span className="px-2 bg-white text-xs italic text-center text-gray-600">
                   {("- - - " ++ string_of_int(Array.length(csvData) - 4) ++ " Rows - - -")->str}
                 </span>
               </div>
@@ -353,7 +353,8 @@ let make = (~courseId, ~closeDrawerCB) => {
                 </a>
               </div>
             </div>
-            <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
+            <div
+              className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
               <CSVReader
                 label=""
                 inputId="csv-file-input"

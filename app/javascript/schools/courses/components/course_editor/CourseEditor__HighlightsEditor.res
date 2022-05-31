@@ -124,7 +124,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
                 title={t("move_up")}
                 ariaLabel={t("move_up")}
                 onClick={_ => moveUp(index, highlights, updateHighlightsCB)}
-                className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden cursor-pointer">
+                className="px-2 py-1 focus:outline-none text-sm text-gray-600 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden cursor-pointer">
                 <FaIcon classes={"fas fa-arrow-up"} />
               </button>,
               index == 0,
@@ -134,7 +134,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
                 title={t("move_down")}
                 ariaLabel={t("move_down")}
                 onClick={_ => moveDown(index, highlights, updateHighlightsCB)}
-                className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden cursor-pointer">
+                className="px-2 py-1 focus:outline-none text-sm text-gray-600 hover:bg-gray-300 hover:text-gray-900 focus:bg-gray-300 focus:text-gray-900 overflow-hidden cursor-pointer">
                 <FaIcon classes={"fas fa-arrow-down"} />
               </button>,
               index == Js.Array.length(highlights) - 1,
@@ -143,7 +143,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
               onClick={_ => removeHighlight(index, highlights, updateHighlightsCB)}
               title={t("delete_highlight")}
               ariaLabel={t("delete_highlight")}
-              className="px-2 py-1 focus:outline-none text-sm text-gray-700 hover:bg-gray-300 hover:text-red-500 focus:bg-gray-300 focus:text-red-500 overflow-hidden cursor-pointer">
+              className="px-2 py-1 focus:outline-none text-sm text-gray-600 hover:bg-gray-300 hover:text-red-500 focus:bg-gray-300 focus:text-red-500 overflow-hidden cursor-pointer">
               <FaIcon classes={"fas fa-trash-alt"} />
             </button>
           </div>

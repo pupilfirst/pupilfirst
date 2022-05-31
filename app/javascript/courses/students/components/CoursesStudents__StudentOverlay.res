@@ -130,7 +130,7 @@ let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
       <p className="text-sm font-semibold text-center mt-3">
         {t("total_targets_completed") |> str}
       </p>
-      <p className="text-sm text-gray-700 font-semibold text-center mt-1">
+      <p className="text-sm text-gray-600 font-semibold text-center mt-1">
         {(targetsCompleted |> int_of_float |> string_of_int) ++
           ("/" ++
           ((totalTargets |> int_of_float |> string_of_int) ++ t("targets"))) |> str}
@@ -146,7 +146,7 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
       <div className="student-overlay__doughnut-chart-container">
         {doughnutChart("pink", score |> int_of_float |> string_of_int)}
         <p className="text-sm font-semibold text-center mt-3"> {t("average_quiz_score") |> str} </p>
-        <p className="text-sm text-gray-700 font-semibold text-center leading-tight mt-1">
+        <p className="text-sm text-gray-600 font-semibold text-center leading-tight mt-1">
           {Inflector.pluralize(t("quiz"), ~count=quizzesAttempted, ~inclusive=true, ()) ++
           t("attempted") |> str}
         </p>
@@ -445,7 +445,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
               ariaLabel={t("close_student_report")}
               title={t("close_student_report")}
               onClick={_ => closeOverlay(courseId)}
-              className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-10 w-10 justify-center items-center text-gray-700 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+              className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-10 w-10 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
               <Icon className="if i-times-regular text-xl lg:text-2xl" />
             </button>
             <div

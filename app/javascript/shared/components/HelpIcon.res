@@ -2,7 +2,7 @@ let str = React.string
 
 let t = I18n.t(~scope="components.HelpIcon")
 
-%bs.raw(`require("./HelpIcon.css")`)
+%raw(`require("./HelpIcon.css")`)
 
 let onWindowClick = (helpVisible, setHelpVisible, _event) =>
   if helpVisible {
@@ -64,7 +64,7 @@ let make = (~className="", ~link=?, ~responsiveAlignment=NonResponsive(AlignCent
   }, [helpVisible])
 
   <div className={"inline-block relative " ++ className} onClick={toggleHelp(setHelpVisible)}>
-    <FaIcon classes="fas fa-question-circle hover:text-gray-700 cursor-pointer" />
+    <FaIcon classes="fas fa-question-circle hover:text-gray-600 cursor-pointer" />
     {helpVisible
       ? <div
           onClick={event => event |> ReactEvent.Mouse.stopPropagation}

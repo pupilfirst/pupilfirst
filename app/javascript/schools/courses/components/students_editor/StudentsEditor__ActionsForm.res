@@ -162,7 +162,7 @@ let showIssuedCertificates = (
                   </div>,
                 )}
             </div>
-            <div className="text-xs text-gray-700">
+            <div className="text-xs text-gray-600">
               {StudentsEditor__IssuedCertificate.serialNumber(ic)->str}
             </div>
             <div className="flex justify-between mt-2 items-end">

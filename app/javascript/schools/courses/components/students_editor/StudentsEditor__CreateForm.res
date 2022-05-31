@@ -199,7 +199,7 @@ let studentCard = (studentInfo, send, team, tags) => {
       {tagBoxes(tags)}
     </div>
     <button
-      className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+      className="p-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50"
       onClick={_event => send(RemoveStudentInfo(studentInfo))}>
       <i className="fas fa-trash-alt" />
     </button>

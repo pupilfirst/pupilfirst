@@ -107,7 +107,7 @@ let renderAuthor = (rootPath, author, send) => {
         </div>
       </a>
       <button
-        className="w-10 text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:text-red-500 focus:bg-gray-50"
+        className="w-10 text-sm course-faculty__list-item-remove text-gray-600 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:text-red-500 focus:bg-gray-50"
         title={ts("delete") ++ " " ++ (author |> Author.name)}
         ariaLabel={ts("delete") ++ " " ++ (author |> Author.name)}
         onClick={removeCourseAuthor(send, author)}>

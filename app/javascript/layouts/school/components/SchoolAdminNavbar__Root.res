@@ -53,7 +53,7 @@ let imageContainerClasses = shrunk => {
 }
 
 let bottomLinkClasses = shrunk => {
-  let defaultClasses = "flex text-white text-sm py-4 px-5 font-semibold items-center hover:bg-primary-900 focus:outline-none focus:bg-primary-900 "
+  let defaultClasses = "flex text-white text-sm py-4 px-5 font-medium items-center hover:bg-primary-900 focus:outline-none focus:bg-primary-900 "
   defaultClasses ++ (shrunk ? "justify-center" : "")
 }
 
@@ -82,8 +82,8 @@ let topLink = (selectedOption, currentOption, path, shrunk, iconClasses, text) =
 }
 
 let secondaryNavOption = (path, currentSelection, inspectedSelection, text) => {
-  let defaultClasses = "flex text-sm font-semibold py-3 px-4 hover:bg-primary-50 hover:text-primary-500 focus:outline-none focus:bg-primary-50 focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-indigio-500 rounded items-center my-1"
-  let classes = defaultClasses ++ (currentSelection == inspectedSelection ? " bg-primary-50 text-primary-500" : " text-gray-500")
+  let defaultClasses = "flex text-sm py-3 px-4 hover:bg-primary-50 hover:text-primary-500 focus:outline-none focus:bg-primary-50 focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-indigio-500 rounded items-center my-1"
+  let classes = defaultClasses ++ (currentSelection == inspectedSelection ? " bg-primary-50 text-primary-500 font-medium" : " text-gray-500 font-medium")
 
   <div key=text> <a href=path className=classes> {text |> str} </a> </div>
 }
@@ -306,7 +306,7 @@ let make = (
                       <li key={CourseInfo.id(course)}>
                         <a
                           href={"/school/courses/" ++ CourseInfo.id(course) ++ "/curriculum"}
-                          className="block text-white py-3 px-4 rounded font-semibold text-xs hover:bg-primary-800 focus:outline-none focus:bg-primary-800">
+                          className="block text-white py-3 px-4 rounded font-medium text-xs hover:bg-primary-800 focus:outline-none focus:bg-primary-800">
                           {str(CourseInfo.name(course))}
                         </a>
                       </li>,
@@ -343,7 +343,7 @@ let make = (
           <Notifications__Root
             wrapperClasses="w-full"
             iconClasses="school-admin-navbar__notifications-unread-bullet"
-            buttonClasses="flex relative text-white text-sm py-4 px-5 font-semibold items-center w-full focus:bg-primary-900"
+            buttonClasses="flex relative text-white text-sm py-4 px-5 font-medium items-center w-full focus:bg-primary-900"
             title=?{shrunk ? None : Some(t("notifications"))}
             icon="fas fa-bell fa-fw text-lg mr-2"
             hasNotifications

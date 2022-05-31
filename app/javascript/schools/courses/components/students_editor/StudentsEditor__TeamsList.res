@@ -210,7 +210,7 @@ let teamCard = (
               {teamTags(team)}
             </div>
           </div>
-          <div className="w-2/6 text-right pr-4"> {team |> levelInfo(levels)} </div>
+          <div className="w-1/3 text-right pr-4"> {team |> levelInfo(levels)} </div>
         </div>}
   </div>
 }

@@ -87,7 +87,7 @@ module Make = (Selectable: Selectable) => {
             onClick={applyFilter(selection, onSelect, id)}>
             {switch selection |> Selectable.label {
             | Some(label) =>
-              <span className="mr-2 flex-shrink-0 w-2/6 sm:w-auto md:w-2/6 text-right">
+              <span className="mr-2 flex-shrink-0 w-1/3 sm:w-auto md:w-1/3 text-right">
                 {label ++ labelSuffix |> str}
               </span>
             | None => React.null

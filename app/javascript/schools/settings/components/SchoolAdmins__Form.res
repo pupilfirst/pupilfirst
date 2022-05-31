@@ -24,8 +24,7 @@ module UpdateSchoolAdminQuery = %graphql(`
 
 let createSchoolAdminQuery = (email, name, setSaving, updateCB) => {
   setSaving(_ => true)
-  CreateSchoolAdminQuery.make(~email, ~name, ())
-  |> GraphqlQuery.sendQuery
+  CreateSchoolAdminQuery.make({email: email, name: name})
   |> Js.Promise.then_(response => {
     switch response["createSchoolAdmin"]["schoolAdmin"] {
     | Some(schoolAdmin) =>
@@ -49,10 +48,9 @@ let createSchoolAdminQuery = (email, name, setSaving, updateCB) => {
 let updateSchoolAdminQuery = (admin, name, setSaving, updateCB) => {
   setSaving(_ => true)
   let id = admin |> SchoolAdmin.id
-  UpdateSchoolAdminQuery.make(~id, ~name, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["updateSchoolAdmin"]["success"]
+  UpdateSchoolAdminQuery.fetch({id: id, name: name})
+  |> Js.Promise.then_((response: UpdateSchoolAdminQuery.t) => {
+    response.updateSchoolAdmin.success
       ? {
           updateCB(admin |> SchoolAdmin.updateName(name))
           Notification.success(ts("notifications.success"), t("admin_updated_notification"))
@@ -128,7 +126,7 @@ let make = (~admin, ~updateCB) => {
     <DisablingCover disabled=saving>
       <div className="mx-auto bg-white">
         <div className="max-w-2xl p-6 mx-auto">
-          <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+          <h5 className="uppercase text-center border-b border-gray-300 pb-2 mb-4">
             {switch admin {
             | Some(admin) => admin |> SchoolAdmin.name
             | None => t("add_new_admin")
@@ -144,14 +142,14 @@ let make = (~admin, ~updateCB) => {
               autoFocus=true
               value=email
               onChange={event => setEmail(ReactEvent.Form.target(event)["value"])}
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               id="email"
               type_="email"
-              placeholder=t("email_placeholder")
+              placeholder={t("email_placeholder")}
               disabled={emailInputDisabled(admin)}
             />
             <School__InputGroupError
-              message=t("email_error") active={showInvalidEmailError(email, admin)}
+              message={t("email_error")} active={showInvalidEmailError(email, admin)}
             />
           </div>
           <div className="mt-5">
@@ -163,10 +161,10 @@ let make = (~admin, ~updateCB) => {
             <input
               value=name
               onChange={event => setName(ReactEvent.Form.target(event)["value"])}
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               id="name"
               type_="text"
-              placeholder=t("name_placeholder")
+              placeholder={t("name_placeholder")}
             />
             <School__InputGroupError
               message="Enter a valid name" active={showInvalidNameError(name, admin)}

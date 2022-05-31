@@ -79,8 +79,7 @@ let reducer = (state, action) =>
   }
 
 let loadContentBlocks = (targetId, send) =>
-  ContentBlock.Query.make(~targetId, ())
-  |> GraphqlQuery.sendQuery(~notify=true)
+  ContentBlock.Query.make({targetId: targetId, targetVersionId: None})
   |> Js.Promise.then_(result => {
     let contentBlocks = result["contentBlocks"] |> Js.Array.map(ContentBlock.makeFromJs)
 
@@ -133,7 +132,7 @@ let editor = (
         <a
           href={"/targets/" ++ (target |> Target.id)}
           target="_blank"
-          className="py-2 px-3 font-semibold rounded-lg text-sm bg-primary-100 text-primary-500 hhover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+          className="py-2 px-3 font-semibold rounded-lg text-sm bg-primary-100 text-primary-500 hhover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
           <FaIcon classes="fas fa-external-link-alt" />
           <span className="ml-2"> {t("view_as_student") |> str} </span>
         </a>

@@ -33,10 +33,9 @@ let dropoutStudent = (id, setSaving, reloadTeamsCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
   setSaving(_ => true)
 
-  DropoutStudentQuery.make(~id, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["dropoutStudent"]["success"] ? reloadTeamsCB() : setSaving(_ => false)
+  DropoutStudentQuery.fetch({id: id})
+  |> Js.Promise.then_((response: DropoutStudentQuery.t) => {
+    response.dropoutStudent.success ? reloadTeamsCB() : setSaving(_ => false)
     Js.Promise.resolve()
   })
   |> ignore
@@ -55,10 +54,9 @@ let revokeIssuedCertificate = (
 
     let issuedCertificateId = StudentsEditor__IssuedCertificate.id(issuedCertificate)
 
-    RevokeCertificateQuery.make(~issuedCertificateId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      response["revokeIssuedCertificate"]["success"]
+    RevokeCertificateQuery.fetch({issuedCertificateId: issuedCertificateId})
+    |> Js.Promise.then_((response: RevokeCertificateQuery.t) => {
+      response.revokeIssuedCertificate.success
         ? {
             let updatedCertificate =
               issuedCertificate->StudentsEditor__IssuedCertificate.revoke(
@@ -93,8 +91,7 @@ let issueNewCertificate = (
 
   let studentId = Student.id(student)
 
-  IssueCertificateQuery.make(~certificateId, ~studentId, ())
-  |> GraphqlQuery.sendQuery
+  IssueCertificateQuery.make({certificateId: certificateId, studentId: studentId})
   |> Js.Promise.then_(response => {
     let data = response["issueCertificate"]["issuedCertificate"]
     switch data {
@@ -150,7 +147,7 @@ let showIssuedCertificates = (
           <div
             ariaLabel={t("details_certificate") ++ " " ++ StudentsEditor__IssuedCertificate.id(ic)}
             key={StudentsEditor__IssuedCertificate.id(ic)}
-            className="flex flex-col mt-2 p-2 border rounded border-gray-400">
+            className="flex flex-col mt-2 p-2 border rounded border-gray-300">
             <div className="flex justify-between">
               <span className="text-sm font-semibold">
                 {StudentsEditor__IssuedCertificate.certificate(ic, certificates)
@@ -165,7 +162,7 @@ let showIssuedCertificates = (
                   </div>,
                 )}
             </div>
-            <div className="text-xs text-gray-700">
+            <div className="text-xs text-gray-600">
               {StudentsEditor__IssuedCertificate.serialNumber(ic)->str}
             </div>
             <div className="flex justify-between mt-2 items-end">
@@ -267,7 +264,7 @@ let make = (
                 </label>
                 <div className="flex items-end mt-2">
                   <select
-                    className="cursor-pointer appearance-none block w-full bg-white border border-gray-400 rounded h-10 py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="cursor-pointer appearance-none block w-full bg-white border border-gray-300 rounded h-10 py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="issue-certificate"
                     onChange={event => {
                       let selectedValue = ReactEvent.Form.target(event)["value"]

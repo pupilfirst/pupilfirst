@@ -3,7 +3,6 @@ open CoursesReport__Types
 
 let str = React.string
 
-
 let tr = I18n.t(~scope="components.CoursesReport")
 
 type selectedTab = [#Overview | #Submissions]
@@ -35,7 +34,7 @@ type action =
   | UpdateSortDirection(sortDirection)
 
 let buttonClasses = selected =>
-  "cursor-pointer flex flex-1 justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-200 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-200 focus:ring-indigo-500 md:focus:border-b-none md:focus:rounded-t-md " ++ (
+  "cursor-pointer flex flex-1 justify-center md:flex-auto rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++ (
     selected
       ? "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500"
       : ""
@@ -101,8 +100,7 @@ let saveOverviewData = (studentId, send, data) =>
   send(SaveOverviewData(Loaded(data |> StudentOverview.makeFromJs(studentId))))
 
 let getOverviewData = (studentId, send, ()) => {
-  StudentReportOverviewQuery.make(~studentId, ())
-  |> GraphqlQuery.sendQuery
+  StudentReportOverviewQuery.make({studentId: studentId})
   |> Js.Promise.then_(response => {
     response["studentDetails"] |> saveOverviewData(studentId, send)
     Js.Promise.resolve()
@@ -133,8 +131,11 @@ let make = (~studentId, ~levels, ~coaches, ~teamStudentIds) => {
 
   React.useEffect1(getOverviewData(studentId, send), [studentId])
 
-  <div role="main" ariaLabel="Report" className="bg-gray-100 pt-9 pb-8 px-3 -mt-7 border border-transparent shadow rounded-lg">
-    <div className="bg-gray-100 static">
+  <div
+    role="main"
+    ariaLabel="Report"
+    className="bg-gray-50 pt-9 pb-8 px-3 -mt-7 border border-transparent shadow rounded-lg">
+    <div className="bg-gray-50 static">
       <div className="max-w-3xl mx-auto">
         <div className="flex pt-3 mb-4 md:border-b border-gray-300">
           <div

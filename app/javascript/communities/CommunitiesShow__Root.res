@@ -113,12 +113,14 @@ let getTopics = (send, communityId, cursor, filter) => {
 
   let searchFilter = Belt.Option.map(filter.search, search =>
     switch search {
-    | SearchContent(searchString) => {"search": searchString, "searchBy": #content}
-    | SearchTitle(searchString) => {"search": searchString, "searchBy": #title}
+    | SearchContent(searchString) =>
+      TopicsQuery.makeInputObjectCommunitySearchFilter(~search=searchString, ~searchBy=#content, ())
+    | SearchTitle(searchString) =>
+      TopicsQuery.makeInputObjectCommunitySearchFilter(~search=searchString, ~searchBy=#title, ())
     }
   )
 
-  TopicsQuery.make(
+  let variables = TopicsQuery.makeVariables(
     ~communityId,
     ~after=?cursor,
     ~topicCategoryId?,
@@ -129,7 +131,7 @@ let getTopics = (send, communityId, cursor, filter) => {
     ~sortDirection=filter.sortDirection,
     (),
   )
-  |> GraphqlQuery.sendQuery
+  TopicsQuery.make(variables)
   |> Js.Promise.then_(response => {
     let newTopics =
       response["topics"]["nodes"] |> Js.Array.map(topicData => Topic.makeFromJS(topicData))
@@ -215,7 +217,7 @@ let topicsList = (topicCategories, topics) =>
           href={"/topics/" ++ Topic.id(topic)}
           ariaLabel={"Topic " ++ Topic.id(topic)}>
           <div
-            className="flex items-center border border-transparent hover:bg-gray-100 hover:text-primary-500  hover:border-primary-400">
+            className="flex items-center border border-transparent hover:bg-gray-50 hover:text-primary-500  hover:border-primary-400">
             <div className="flex-1">
               <div className="cursor-pointer no-underline flex flex-col p-4 md:px-6 md:py-5">
                 <span className="block">
@@ -234,7 +236,7 @@ let topicsList = (topicCategories, topics) =>
                     <span className="hidden md:inline-block md:mr-2">
                       {"on " ++ Topic.createdAt(topic)->DateFns.formatPreset(~year=true, ()) |> str}
                     </span>
-                    <span className="inline-block md:mt-0 md:px-2 md:border-l border-gray-400">
+                    <span className="inline-block md:mt-0 md:px-2 md:border-l border-gray-300">
                       {switch Topic.lastActivityAt(topic) {
                       | Some(date) =>
                         <span>
@@ -251,7 +253,7 @@ let topicsList = (topicCategories, topics) =>
                 </span>
                 <span className="flex flex-row flex-wrap mt-2 items-center">
                   <span
-                    className="flex text-center items-center mr-2 py-1 px-2 rounded bg-gray-100"
+                    className="flex text-center items-center mr-2 py-1 px-2 rounded bg-gray-50"
                     ariaLabel="Likes">
                     <i className="far fa-thumbs-up text-sm text-gray-600 mr-1" />
                     <p className="text-xs font-semibold">
@@ -267,7 +269,7 @@ let topicsList = (topicCategories, topics) =>
                     </p>
                   </span>
                   <span
-                    className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-100"
+                    className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-50"
                     ariaLabel="Replies">
                     <i className="far fa-comment-dots text-sm text-gray-600 mr-1" />
                     <p className="text-xs font-semibold">
@@ -283,7 +285,7 @@ let topicsList = (topicCategories, topics) =>
                     </p>
                   </span>
                   <span
-                    className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-100"
+                    className="flex justify-between text-center items-center mr-2 py-1 px-2 rounded bg-gray-50"
                     ariaLabel="Views">
                     <i className="far fa-eye text-sm text-gray-600 mr-1" />
                     <p className="text-xs font-semibold">
@@ -339,7 +341,7 @@ let topicsList = (topicCategories, topics) =>
 
 let topicsLoadedData = (totalTopicsCount, loadedTopicsCount) =>
   <div
-    className="inline-block mt-2 mx-auto bg-gray-200 text-gray-800 text-xs p-2 text-center rounded font-semibold">
+    className="inline-block mt-2 mx-auto bg-gray-50 text-gray-800 text-xs p-2 text-center rounded font-semibold">
     {(
       totalTopicsCount == loadedTopicsCount
         ? t(
@@ -480,7 +482,7 @@ let filterPlaceholder = (filter, topicCategories) =>
 let categoryDropdownSelected = topicCategory =>
   <div
     ariaLabel="Selected category filter"
-    className="text-sm bg-white border border-gray-400 rounded py-1 md:py-2 px-3 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
+    className="text-sm bg-white border border-gray-300 rounded py-1 md:py-2 px-3 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
     {switch topicCategory {
     | Some(topicCategory) =>
       let (color, _) = TopicCategory.color(topicCategory)
@@ -616,7 +618,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
     | None => React.null
     }}
     <div className="mt-5 flex flex-col flex-1 ">
-      <div className="w-full sticky top-0 z-30 bg-gray-100 py-2">
+      <div className="w-full sticky top-0 z-30 bg-gray-50 py-2">
         <div className="max-w-3xl w-full mx-auto relative px-3 md:px-6">
           <div className="pb-3 flex justify-between">
             {ReactUtils.nullIf(

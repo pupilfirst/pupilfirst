@@ -8,11 +8,13 @@ let str = React.string
 let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockCreator")
 let ts = I18n.ts
 
+module ContentBlockFragment = ContentBlock.Fragments
+
 module CreateMarkdownContentBlock = %graphql(`
     mutation CreateMarkdownContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID) {
       createMarkdownContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId) {
         contentBlock {
-          ...ContentBlock.Fragments.AllFields
+          ...ContentBlockFragment
         }
       }
     }
@@ -22,7 +24,7 @@ module CreateEmbedContentBlock = %graphql(`
     mutation CreateEmbedContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $url: String!, $requestSource: EmbedRequestSource!) {
       createEmbedContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId, url: $url, requestSource: $requestSource) {
         contentBlock {
-          ...ContentBlock.Fragments.AllFields
+          ...ContentBlockFragment
         }
       }
     }
@@ -137,8 +139,9 @@ let createMarkdownContentBlock = (target, aboveContentBlock, send, addContentBlo
   send(ToggleSaving)
   let aboveContentBlockId = aboveContentBlock |> OptionUtils.map(ContentBlock.id)
   let targetId = target |> Target.id
-  CreateMarkdownContentBlock.make(~targetId, ~aboveContentBlockId?, ())
-  |> GraphqlQuery.sendQuery
+  let variables = CreateMarkdownContentBlock.makeVariables(~targetId, ~aboveContentBlockId?, ())
+
+  CreateMarkdownContentBlock.make(variables)
   |> Js.Promise.then_(result =>
     handleGraphqlCreateResponse(
       aboveContentBlock,
@@ -232,8 +235,14 @@ let handleCreateEmbedContentBlock = (
 
     let targetId = target |> Target.id
 
-    CreateEmbedContentBlock.make(~targetId, ~aboveContentBlockId?, ~url, ~requestSource, ())
-    |> GraphqlQuery.sendQuery
+    let variables = CreateEmbedContentBlock.makeVariables(
+      ~targetId,
+      ~aboveContentBlockId?,
+      ~url,
+      ~requestSource,
+      (),
+    )
+    CreateEmbedContentBlock.make(variables)
     |> Js.Promise.then_(result =>
       handleGraphqlCreateResponse(
         aboveContentBlock,
@@ -327,8 +336,15 @@ let uploadFile = (
     let description =
       String.trim(state.videoDescription) == "" ? None : Some(state.videoDescription)
 
-    CreateVimeoVideo.make(~targetId=Target.id(target), ~size, ~title?, ~description?, ())
-    |> GraphqlQuery.sendQuery
+    let variables = CreateVimeoVideo.makeVariables(
+      ~targetId=Target.id(target),
+      ~size,
+      ~title?,
+      ~description?,
+      (),
+    )
+
+    CreateVimeoVideo.make(variables)
     |> Js.Promise.then_(result => {
       switch result["createVimeoVideo"]["vimeoVideo"] {
       | Some(vimeoVideo) =>
@@ -546,7 +562,7 @@ let topButton = (handler, id, title, icon) =>
       id={"top-button-" ++ id}
       title
       ariaLabel={title}
-      className="content-block-creator__top-button bg-gray-200 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20 hover:bg-gray-300 hover:text-primary-300 focus:outline-none focus:bg-gray-300 focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+      className="content-block-creator__top-button bg-gray-50 relative rounded-lg border border-gray-500 w-10 h-10 flex justify-center items-center mx-auto z-20 hover:bg-primary-50 hover:text-primary-500 focus:outline-none focus:bg-primary-50 focus:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
       <FaIcon classes={"text-base fas " ++ icon} />
     </button>
   </div>
@@ -676,7 +692,7 @@ let make = (
           </div>
         | UploadVideo =>
           <div
-            className="flow-root border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
+            className="flow-root border-2 border-gray-300 bg-gray-50 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
             {uploadFormCurried(#VideoEmbed)}
             {state.uploadProgress->Belt.Option.mapWithDefault(
               uploadVideoForm(videoInputId, state, send),
@@ -696,7 +712,7 @@ let make = (
           </div>
         | EmbedForm(url) =>
           <div
-            className="flow-root border-2 border-gray-400 bg-gray-200 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
+            className="flow-root border-2 border-gray-300 bg-gray-50 border-dashed rounded-lg px-3 pb-3 pt-2 -mt-4 z-10">
             <label htmlFor=embedInputId className="text-xs font-semibold">
               {t("embed_url.label")->str}
             </label>

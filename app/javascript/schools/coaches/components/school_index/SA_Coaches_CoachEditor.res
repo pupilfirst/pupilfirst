@@ -253,7 +253,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
           ariaLabel="close"
           title="close"
           onClick={_e => closeFormCB()}
-          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none focus:text-primary-500 mt-4">
+          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-600 focus:outline-none focus:text-primary-500 mt-4">
           <i className="fas fa-times text-xl" />
         </button>
       </div>
@@ -261,7 +261,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
         <div className="w-full">
           <div className="mx-auto bg-white">
             <div className="max-w-2xl px-6 pt-5 mx-auto">
-              <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+              <h5 className="uppercase text-center border-b border-gray-300 pb-2">
                 {switch coach {
                 | Some(coach) => coach |> Coach.name
                 | None => t("add_coach")
@@ -280,7 +280,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   <span> {"*" |> str} </span>
                   <input
                     autoFocus=true
-                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                    className="appearance-none block w-full bg-white text-gray-800 border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                     id="name"
                     type_="text"
                     name="faculty[name]"
@@ -302,7 +302,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     </label>
                     <span> {"*" |> str} </span>
                     <input
-                      className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                      className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                       id="email"
                       type_="email"
                       name="faculty[email]"
@@ -322,7 +322,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   </label>
                   <span> {"*" |> str} </span>
                   <input
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                    className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                     id="title"
                     type_="text"
                     name="faculty[title]"
@@ -344,7 +344,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     value=state.affiliation
                     onChange={event =>
                       send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                    className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                     id="affiliation"
                     name="faculty[affiliation]"
                     type_="text"
@@ -358,7 +358,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     {t("connect_link") |> str}
                   </label>
                   <input
-                    className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-indigo-500"
+                    className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
                     id="connectLink"
                     type_="text"
                     name="faculty[connect_link]"
@@ -419,7 +419,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                     {ts("avatar") |> str}
                   </label>
                   <div
-                    className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+                    className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
                     <input
                       disabled=state.saving
                       className="absolute w-0 h-0"
@@ -440,7 +440,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
                   </div>
                 </div>
               </div>
-              <div className="p-6 bg-gray-200">
+              <div className="p-6 bg-gray-50">
                 <div className="max-w-2xl px-6 mx-auto">
                   <div className="flex max-w-2xl w-full justify-between items-center mx-auto">
                     {switch coach {

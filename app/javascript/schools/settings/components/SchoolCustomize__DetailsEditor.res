@@ -29,10 +29,11 @@ let optionAbout = about => about == "" ? None : Some(about)
 let updateSchoolQuery = (state, send, updateDetailsCB) => {
   send(UpdateSaving(true))
 
-  UpdateSchoolQuery.make(~name=state.name, ~about=state.about, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["updateSchool"]["success"]
+  let variables = UpdateSchoolQuery.makeVariables(~name=state.name, ~about=state.about, ())
+
+  UpdateSchoolQuery.fetch(variables)
+  |> Js.Promise.then_((response: UpdateSchoolQuery.t) => {
+    response.updateSchool.success
       ? updateDetailsCB(state.name, optionAbout(state.about))
       : send(UpdateSaving(false))
     Js.Promise.resolve()
@@ -67,7 +68,7 @@ let make = (~name, ~about, ~updateDetailsCB) => {
   let (state, send) = React.useReducer(reducer, initialState(name, about))
 
   <div className="mx-8 pt-8">
-    <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+    <h5 className="uppercase text-center border-b border-gray-300 pb-2">
       {t("update_details") |> str}
     </h5>
     <DisablingCover disabled=state.saving>
@@ -82,7 +83,7 @@ let make = (~name, ~about, ~updateDetailsCB) => {
           type_="text"
           maxLength=50
           placeholder={t("school_name_placeholder")}
-          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="details-editor__name"
           onChange={handleInputChange(name => send(UpdateName(name)))}
           value=state.name
@@ -102,7 +103,7 @@ let make = (~name, ~about, ~updateDetailsCB) => {
           maxLength=500
           rows=7
           placeholder={t("details_placeholder")}
-          className="appearance-none block w-full bg-white text-gray-800 border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+          className="appearance-none block w-full bg-white text-gray-800 border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="details-editor__about"
           onChange={handleInputChange(about => send(UpdateAbout(about)))}
           value=state.about

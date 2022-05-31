@@ -1,9 +1,9 @@
 .checklist-editor__checklist-item-title {
-  @apply appearance-none py-3 px-4 text-base font-semibold leading-tight rounded overflow-hidden w-full border border-gray-400;
+  @apply appearance-none py-3 px-4 text-base font-semibold leading-tight rounded overflow-hidden w-full border border-gray-300;
 }
 
 .checklist-editor__checklist-result-item-title {
-  @apply appearance-none py-3 pl-4 pr-10 text-sm font-semibold leading-tight rounded-t w-full border border-gray-400;
+  @apply appearance-none py-3 pl-4 pr-10 text-sm font-semibold leading-tight rounded-t w-full border border-gray-300;
   border-bottom-color: transparent;
 }
 

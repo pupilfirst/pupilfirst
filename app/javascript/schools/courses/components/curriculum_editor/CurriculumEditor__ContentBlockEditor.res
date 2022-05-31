@@ -181,16 +181,13 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
 
   switch contentBlock |> ContentBlock.blockType {
   | ContentBlock.File(_url, title, _filename) =>
-    let mutation = UpdateFileBlockMutation.make(
-      UpdateFileBlockMutation.makeVariables(~id, ~title, ()),
-    )
+    let mutation = UpdateFileBlockMutation.make({id: id, title: title})
+
     let extractor = result => result["updateFileBlock"]["contentBlock"]
 
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
   | Markdown(markdown) =>
-    let mutation = UpdateMarkdownBlockMutation.make(
-      UpdateMarkdownBlockMutation.makeVariables(~id, ~markdown, ()),
-    )
+    let mutation = UpdateMarkdownBlockMutation.make({id: id, markdown: markdown})
     let extractor = result => result["updateMarkdownBlock"]["contentBlock"]
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
   | Image(_url, caption, imageWidth) =>
@@ -202,9 +199,7 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
     | TwoFifths => #TwoFifths
     }
 
-    let mutation = UpdateImageBlockMutation.make(
-      UpdateImageBlockMutation.makeVariables(~id, ~caption, ~width, ()),
-    )
+    let mutation = UpdateImageBlockMutation.make({id: id, caption: caption, width: width})
     let extractor = result => result["updateImageBlock"]["contentBlock"]
 
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)

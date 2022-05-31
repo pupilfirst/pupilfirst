@@ -79,7 +79,7 @@ let reducer = (state, action) =>
   }
 
 let loadContentBlocks = (targetId, send) =>
-  ContentBlock.Query.make(ContentBlock.Query.makeVariables(~targetId, ()), ~notify=true)
+  ContentBlock.Query.make({targetId: targetId, targetVersionId: None})
   |> Js.Promise.then_(result => {
     let contentBlocks = result["contentBlocks"] |> Js.Array.map(ContentBlock.makeFromJs)
 

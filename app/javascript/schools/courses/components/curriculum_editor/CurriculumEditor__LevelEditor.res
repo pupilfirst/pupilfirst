@@ -214,13 +214,10 @@ let deleteSelectedLevel = (state, send, level, _event) =>
   WindowUtils.confirm(t("merge_levels_confirm"), () => {
     send(BeginSaving)
 
-    MergeLevelsQuery.make(
-      MergeLevelsQuery.makeVariables(
-        ~deleteLevelId=Level.id(level),
-        ~mergeIntoLevelId=state.mergeIntoLevelId,
-        (),
-      ),
-    )
+    MergeLevelsQuery.make({
+      deleteLevelId: Level.id(level),
+      mergeIntoLevelId: state.mergeIntoLevelId,
+    })
     |> Js.Promise.then_(result => {
       if result["mergeLevels"]["success"] {
         DomUtils.reload()
@@ -254,13 +251,10 @@ let cloneSelectedLevel = (state, send, level, _event) =>
   WindowUtils.confirm(t("clone_level_confirm"), () => {
     send(BeginSaving)
 
-    CloneLevelQuery.make(
-      CloneLevelQuery.makeVariables(
-        ~levelId=Level.id(level),
-        ~cloneIntoCourseId=state.cloneIntoCourseId,
-        (),
-      ),
-    )
+    CloneLevelQuery.make({
+      levelId: Level.id(level),
+      cloneIntoCourseId: state.cloneIntoCourseId,
+    })
     |> Js.Promise.then_(_result => {
       send(FinishSaving)
       Js.Promise.resolve()

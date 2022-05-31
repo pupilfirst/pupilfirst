@@ -62,6 +62,46 @@ feature 'Community', js: true do
     create :student, startup: archived_course_team
   end
 
+  shared_examples 'lock and unlock a topic' do
+    scenario 'user can lock and unlock a topic' do
+      sign_in_user(user, referrer: topic_path(topic_1))
+
+      expect(page).to have_text(topic_1.title)
+      expect(page).to_not have_text('This topic thread has been locked')
+
+      accept_confirm { click_button('Lock Topic') }
+
+      expect(page).to have_text('This topic has been locked')
+
+      dismiss_notification
+
+      expect(page).to have_text('This topic thread has been locked')
+      expect(page).to_not have_selector(
+                            "button[aria-label='Add reply to topic']"
+                          )
+      expect(page).to_not have_selector(
+                            "button[aria-label='Add reply to post #{reply_1.id}']"
+                          )
+
+      expect(topic_1.reload.locked_at).to_not eq(nil)
+      expect(topic_1.locked_by).to eq(user)
+
+      accept_confirm { click_button('Unlock Topic') }
+
+      expect(page).to have_text('This topic has been unlocked')
+
+      dismiss_notification
+
+      expect(page).to_not have_text('This topic thread has been locked')
+      expect(page).to have_selector("button[aria-label='Add reply to topic']")
+      expect(page).to have_selector(
+        "button[aria-label='Add reply to post #{reply_1.id}']"
+      )
+      expect(topic_1.reload.locked_at).to eq(nil)
+      expect(topic_1.locked_by).to eq(nil)
+    end
+  end
+
   before do
     create :faculty_course_enrollment, faculty: coach, course: course
     create :community_course_connection, course: course, community: community
@@ -652,65 +692,24 @@ feature 'Community', js: true do
       ).to eq(topic_body)
     end
 
-    scenario 'admin locks/unlocks a topic in community' do
-      sign_in_user(school_admin.user, referrer: topic_path(topic_1))
-
-      expect(page).to have_text(topic_1.title)
-      expect(page).to_not have_text('This topic thread has been locked')
-
-      accept_confirm { click_button('Lock Topic') }
-
-      expect(page).to have_text('This topic has been locked')
-      dismiss_notification
-
-      expect(page).to have_text('This topic thread has been locked')
-
-      expect(page).to_not have_selector(
-                            "button[aria-label='Add reply to topic']"
-                          )
-      expect(page).to_not have_selector(
-                            "button[aria-label='Add reply to post #{reply_1.id}']"
-                          )
-
-      expect(topic_1.reload.locked_at).to_not eq(nil)
-      expect(topic_1.locked_by).to eq(school_admin.user)
-
-      accept_confirm { click_button('Unlock Topic') }
-
-      expect(page).to have_text('This topic has been unlocked')
-      dismiss_notification
-
-      expect(page).to_not have_text('This topic thread has been locked')
-
-      expect(page).to have_selector("button[aria-label='Add reply to topic']")
-      expect(page).to have_selector(
-        "button[aria-label='Add reply to post #{reply_1.id}']"
-      )
-
-      expect(topic_1.reload.locked_at).to eq(nil)
-      expect(topic_1.locked_by).to eq(nil)
+    include_examples 'lock and unlock a topic' do
+      let(:user) { school_admin.user }
     end
   end
 
-  scenario 'student attempts to lock a topic' do
-    sign_in_user(student_1.user, referrer: topic_path(topic_1))
+  include_examples 'lock and unlock a topic' do
+    let(:user) { student_1.user }
+  end
+
+  include_examples 'lock and unlock a topic' do
+    let(:user) { coach.user }
+  end
+
+  scenario 'a student other than the topic creator attempts to lock a topic' do
+    sign_in_user(student_2.user, referrer: topic_path(topic_1))
 
     expect(page).to have_text(topic_1.title)
     expect(page).to_not have_button('Lock Topic')
-  end
-
-  scenario 'coach attempts to lock/unlock a topic' do
-    sign_in_user(coach.user, referrer: topic_path(topic_1))
-
-    accept_confirm { click_button('Lock Topic') }
-
-    expect(page).to have_text('This topic has been locked')
-    dismiss_notification
-
-    accept_confirm { click_button('Unlock Topic') }
-
-    expect(page).to have_text('This topic has been unlocked')
-    dismiss_notification
   end
 
   scenario 'student attempts to post reply to a locked topic' do

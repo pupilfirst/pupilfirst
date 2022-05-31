@@ -48,8 +48,15 @@ let refreshStudentDistribution = (
   let coachId = filterCoach->Belt.Option.map(coach => Coach.id(coach))
   let tags = filterTags->Belt.Set.String.toArray
 
-  StudentDistributionQuery.make(~courseId, ~coachNotes=filterCoachNotes, ~tags, ~coachId?, ())
-  |> GraphqlQuery.sendQuery
+  let variables = StudentDistributionQuery.makeVariables(
+    ~courseId,
+    ~coachNotes=filterCoachNotes,
+    ~tags,
+    ~coachId?,
+    (),
+  )
+
+  StudentDistributionQuery.make(variables)
   |> Js.Promise.then_(response => {
     let distribution =
       response["studentDistribution"] |> Array.map(DistributionInLevel.fromJsObject)

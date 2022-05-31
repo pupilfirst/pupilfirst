@@ -180,7 +180,7 @@ let getTeams = (send, courseId, cursor, filter) => {
   let coachId = filter.coach |> OptionUtils.map(Coach.id)
   let tags = filter.tags |> Belt.Set.String.toArray
 
-  TeamsQuery.make(
+  let variables = TeamsQuery.makeVariables(
     ~courseId,
     ~coachNotes=filter.coachNotes,
     ~after=?cursor,
@@ -190,7 +190,8 @@ let getTeams = (send, courseId, cursor, filter) => {
     ~tags,
     (),
   )
-  |> GraphqlQuery.sendQuery
+
+  TeamsQuery.make(variables)
   |> Js.Promise.then_(response => {
     send(
       LoadTeams(

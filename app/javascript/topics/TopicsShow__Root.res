@@ -165,10 +165,15 @@ let updateTopic = (state, send, event) => {
   let topicCategoryId = Belt.Option.flatMap(state.topicCategory, category => Some(
     TopicCategory.id(category),
   ))
-  UpdateTopicQuery.make(~id=state.topic |> Topic.id, ~title=state.topicTitle, ~topicCategoryId?, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["updateTopic"]["success"]
+  let variables = UpdateTopicQuery.makeVariables(
+    ~id=state.topic |> Topic.id,
+    ~title=state.topicTitle,
+    ~topicCategoryId?,
+    (),
+  )
+  UpdateTopicQuery.fetch(variables)
+  |> Js.Promise.then_((response: UpdateTopicQuery.t) => {
+    response.updateTopic.success
       ? {
           let topic = state.topic |> Topic.updateTitle(state.topicTitle)
           send(SaveTopic(topic))
@@ -202,10 +207,9 @@ module UnlockTopicQuery = %graphql(`
 let lockTopic = (topicId, currentUserId, send) =>
   WindowUtils.confirm(t("lock_topic_confirm"), () => {
     send(StartChangingLockStatus)
-    LockTopicQuery.make(~id=topicId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      response["lockTopic"]["success"] ? send(FinishLockingTopic(currentUserId)) : ()
+    LockTopicQuery.fetch({id: topicId})
+    |> Js.Promise.then_((response: LockTopicQuery.t) => {
+      response.lockTopic.success ? send(FinishLockingTopic(currentUserId)) : ()
       Js.Promise.resolve()
     })
     |> ignore
@@ -214,10 +218,9 @@ let lockTopic = (topicId, currentUserId, send) =>
 let unlockTopic = (topicId, send) =>
   WindowUtils.confirm(t("unlock_topic_confirm"), () => {
     send(StartChangingLockStatus)
-    UnlockTopicQuery.make(~id=topicId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      response["unlockTopic"]["success"] ? send(FinishUnlockingTopic) : ()
+    UnlockTopicQuery.fetch({id: topicId})
+    |> Js.Promise.then_((response: UnlockTopicQuery.t) => {
+      response.unlockTopic.success ? send(FinishUnlockingTopic) : ()
       Js.Promise.resolve()
     })
     |> ignore

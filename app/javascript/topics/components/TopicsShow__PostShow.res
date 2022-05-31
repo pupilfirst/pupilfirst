@@ -33,10 +33,9 @@ module ArchivePostQuery = %graphql(`
 
 let markPostAsSolution = (postId, markPostAsSolutionCB) =>
   WindowUtils.confirm(t("mark_solution_confirm"), () =>
-    MarkPostAsSolutionQuery.make(~id=postId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      response["markPostAsSolution"]["success"] ? markPostAsSolutionCB() : ()
+    MarkPostAsSolutionQuery.fetch({id: postId})
+    |> Js.Promise.then_((response: MarkPostAsSolutionQuery.t) => {
+      response.markPostAsSolution.success ? markPostAsSolutionCB() : ()
       Js.Promise.resolve()
     })
     |> ignore
@@ -44,10 +43,9 @@ let markPostAsSolution = (postId, markPostAsSolutionCB) =>
 
 let unmarkPostAsSolution = (postId, unmarkPostAsSolutionCB) =>
   WindowUtils.confirm(t("unmark_solution_confirm"), () =>
-    UnmarkPostAsSolutionQuery.make(~id=postId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      response["unmarkPostAsSolution"]["success"] ? unmarkPostAsSolutionCB() : ()
+    UnmarkPostAsSolutionQuery.fetch({id: postId})
+    |> Js.Promise.then_((response: UnmarkPostAsSolutionQuery.t) => {
+      response.unmarkPostAsSolution.success ? unmarkPostAsSolutionCB() : ()
       Js.Promise.resolve()
     })
     |> ignore
@@ -57,10 +55,9 @@ let archivePost = (isFirstPost, postId, archivePostCB) =>
   Webapi.Dom.window |> Webapi.Dom.Window.confirm(
     isFirstPost ? t("delete_topic_confirm_dialog") : t("delete_post_confirm_dialog"),
   )
-    ? ArchivePostQuery.make(~id=postId, ())
-      |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response => {
-        response["archivePost"]["success"] ? archivePostCB() : ()
+    ? ArchivePostQuery.fetch({id: postId})
+      |> Js.Promise.then_((response: ArchivePostQuery.t) => {
+        response.archivePost.success ? archivePostCB() : ()
         Js.Promise.resolve()
       })
       |> ignore

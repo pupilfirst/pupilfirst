@@ -36,8 +36,7 @@ let loadContentBlocks = (targetId, send, version) => {
 
   send(SetLoading)
 
-  ContentBlock.Query.make(~targetId, ~targetVersionId?, ())
-  |> GraphqlQuery.sendQuery
+  ContentBlock.Query.make({targetId: targetId, targetVersionId: targetVersionId})
   |> Js.Promise.then_(result => {
     let contentBlocks = result["contentBlocks"] |> Js.Array.map(ContentBlock.makeFromJs)
 
@@ -59,8 +58,7 @@ let createTargetVersion = (targetId, targetVersion, send) => {
 
   send(SetLoading)
 
-  CreateTargetVersionMutation.make(~targetVersionId, ())
-  |> GraphqlQuery.sendQuery
+  CreateTargetVersionMutation.make({targetVersionId: targetVersionId})
   |> Js.Promise.then_(_result => {
     loadContentBlocks(targetId, send, None)
     Js.Promise.resolve()

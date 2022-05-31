@@ -33,10 +33,9 @@ let dropoutStudent = (id, setSaving, reloadTeamsCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
   setSaving(_ => true)
 
-  DropoutStudentQuery.make(~id, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["dropoutStudent"]["success"] ? reloadTeamsCB() : setSaving(_ => false)
+  DropoutStudentQuery.fetch({id: id})
+  |> Js.Promise.then_((response: DropoutStudentQuery.t) => {
+    response.dropoutStudent.success ? reloadTeamsCB() : setSaving(_ => false)
     Js.Promise.resolve()
   })
   |> ignore
@@ -55,10 +54,9 @@ let revokeIssuedCertificate = (
 
     let issuedCertificateId = StudentsEditor__IssuedCertificate.id(issuedCertificate)
 
-    RevokeCertificateQuery.make(~issuedCertificateId, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      response["revokeIssuedCertificate"]["success"]
+    RevokeCertificateQuery.fetch({issuedCertificateId: issuedCertificateId})
+    |> Js.Promise.then_((response: RevokeCertificateQuery.t) => {
+      response.revokeIssuedCertificate.success
         ? {
             let updatedCertificate =
               issuedCertificate->StudentsEditor__IssuedCertificate.revoke(
@@ -93,8 +91,7 @@ let issueNewCertificate = (
 
   let studentId = Student.id(student)
 
-  IssueCertificateQuery.make(~certificateId, ~studentId, ())
-  |> GraphqlQuery.sendQuery
+  IssueCertificateQuery.make({certificateId: certificateId, studentId: studentId})
   |> Js.Promise.then_(response => {
     let data = response["issueCertificate"]["issuedCertificate"]
     switch data {

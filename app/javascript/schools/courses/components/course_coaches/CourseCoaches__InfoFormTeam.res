@@ -24,10 +24,14 @@ let deleteTeamEnrollment = (team, coach, setDeleting, removeTeamEnrollmentCB, ev
     tr("remove_post_confirm")),
     () => {
       setDeleting(_ => true)
-      DeleteCoachTeamEnrollmentQuery.make(~teamId=Team.id(team), ~coachId=CourseCoach.id(coach), ())
-      |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response => {
-        if response["deleteCoachTeamEnrollment"]["success"] {
+      let variables = DeleteCoachTeamEnrollmentQuery.makeVariables(
+        ~teamId=Team.id(team),
+        ~coachId=CourseCoach.id(coach),
+        (),
+      )
+      DeleteCoachTeamEnrollmentQuery.fetch(variables)
+      |> Js.Promise.then_((response: DeleteCoachTeamEnrollmentQuery.t) => {
+        if response.deleteCoachTeamEnrollment.success {
           removeTeamEnrollmentCB(Team.id(team))
         } else {
           setDeleting(_ => false)

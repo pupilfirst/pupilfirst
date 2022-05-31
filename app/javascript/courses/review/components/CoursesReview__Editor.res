@@ -156,10 +156,9 @@ module SubmissionReportQuery = %graphql(`
 let unassignReviewer = (submissionId, send, updateReviewerCB) => {
   send(BeginSaving)
 
-  UnassignReviewerMutation.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    if response["unassignReviewer"]["success"] {
+  UnassignReviewerMutation.fetch({submissionId: submissionId})
+  |> Js.Promise.then_((response: UnassignReviewerMutation.t) => {
+    if response.unassignReviewer.success {
       updateReviewerCB(None)
       send(UnassignReviewer)
     }
@@ -175,7 +174,7 @@ let unassignReviewer = (submissionId, send, updateReviewerCB) => {
 
 let getNextSubmission = (send, courseId, filter, submissionId) => {
   send(SetNextSubmissionDataLoading)
-  NextSubmissionQuery.make(
+  let variables = NextSubmissionQuery.makeVariables(
     ~courseId,
     ~status=?Filter.tab(filter),
     ~sortDirection=Filter.sortDirection(filter),
@@ -188,7 +187,7 @@ let getNextSubmission = (send, courseId, filter, submissionId) => {
     ~excludeSubmissionId=?Some(submissionId),
     (),
   )
-  |> GraphqlQuery.sendQuery
+  NextSubmissionQuery.make(variables)
   |> Js.Promise.then_(response => {
     if ArrayUtils.isEmpty(response["submissions"]["nodes"]) {
       send(SetNextSubmissionDataEmpty)
@@ -243,8 +242,7 @@ let createFeedback = (
 ) => {
   send(BeginSaving)
 
-  CreateFeedbackMutation.make(~submissionId, ~feedback, ())
-  |> GraphqlQuery.sendQuery
+  CreateFeedbackMutation.make({submissionId: submissionId, feedback: feedback})
   |> Js.Promise.then_(response => {
     response["createFeedback"]["success"]
       ? {
@@ -269,10 +267,9 @@ let createFeedback = (
 let undoGrading = (submissionId, send) => {
   send(BeginSaving)
 
-  UndoGradingMutation.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["undoGrading"]["success"] ? DomUtils.reload()->ignore : send(FinishSaving)
+  UndoGradingMutation.fetch({submissionId: submissionId})
+  |> Js.Promise.then_((response: UndoGradingMutation.t) => {
+    response.undoGrading.success ? DomUtils.reload()->ignore : send(FinishSaving)
     Js.Promise.resolve()
   })
   |> ignore
@@ -308,9 +305,19 @@ let gradeSubmissionQuery = (
 ) => {
   send(BeginSaving)
   let feedback = trimToOption(state.newFeedback)
-  let grades = Js.Array.map(g => Grade.asJsType(g), state.grades)
+  // let grades = Js.Array.map(g => Grade.asJsType(g), state.grades)
 
-  CreateGradingMutation.make(
+  let grades = Js.Array.map(
+    g =>
+      CreateGradingMutation.makeInputObjectGradeInput(
+        ~evaluationCriterionId=Grade.evaluationCriterionId(g),
+        ~grade=Grade.value(g),
+        (),
+      ),
+    state.grades,
+  )
+
+  let variables = CreateGradingMutation.makeVariables(
     ~submissionId,
     ~feedback?,
     ~note=?Belt.Option.flatMap(state.note, trimToOption),
@@ -318,9 +325,10 @@ let gradeSubmissionQuery = (
     ~checklist=SubmissionChecklistItem.encodeArray(state.checklist),
     (),
   )
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["createGrading"]["success"]
+
+  CreateGradingMutation.fetch(variables)
+  |> Js.Promise.then_((response: CreateGradingMutation.t) => {
+    response.createGrading.success
       ? {
           updateSubmissionCB(
             OverlaySubmission.update(
@@ -1122,8 +1130,7 @@ let reportConclusionTimeString = report => {
 
 let loadSubmissionReport = (report, updateSubmissionReportCB) => {
   let id = SubmissionReport.id(report)
-  SubmissionReportQuery.make(~id, ())
-  |> GraphqlQuery.sendQuery
+  SubmissionReportQuery.make({id: id})
   |> Js.Promise.then_(response => {
     let reportData = response["submissionReport"]
     let updatedReport = SubmissionReport.makeFromJS(reportData)

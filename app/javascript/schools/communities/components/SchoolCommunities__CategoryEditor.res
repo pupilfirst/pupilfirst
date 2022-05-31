@@ -55,10 +55,9 @@ module UpdateCategoryQuery = %graphql(`
 
 let makeDeleteCategoryQuery = (categoryId, deleteCategoryCB, send) => {
   send(StartDeleting)
-  DeleteCategoryQuery.make(~id=categoryId, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["deleteTopicCategory"]["success"] ? deleteCategoryCB(categoryId) : send(FailDeleting)
+  DeleteCategoryQuery.fetch({id: categoryId})
+  |> Js.Promise.then_((response: DeleteCategoryQuery.t) => {
+    response.deleteTopicCategory.success ? deleteCategoryCB(categoryId) : send(FailDeleting)
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(error => {
@@ -95,10 +94,15 @@ let updateCategory = (category, newName, updateCategoryCB, send, event) => {
 
   send(StartSaving)
 
-  UpdateCategoryQuery.make(~id=Category.id(category), ~name=trimmedName, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["updateTopicCategory"]["success"]
+  let variables = UpdateCategoryQuery.makeVariables(
+    ~id=Category.id(category),
+    ~name=trimmedName,
+    (),
+  )
+
+  UpdateCategoryQuery.fetch(variables)
+  |> Js.Promise.then_((response: UpdateCategoryQuery.t) => {
+    response.updateTopicCategory.success
       ? {
           updateCategoryCB(Category.updateName(newName, category))
           send(FinishSaving(newName))
@@ -122,10 +126,9 @@ let createCategory = (communityId, name, createCategoryCB, send, event) => {
 
   send(StartSaving)
 
-  CreateCategoryQuery.make(~communityId, ~name=trimmedName, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    switch response["createTopicCategory"]["id"] {
+  CreateCategoryQuery.fetch({communityId: communityId, name: trimmedName})
+  |> Js.Promise.then_((response: CreateCategoryQuery.t) => {
+    switch response.createTopicCategory.id {
     | Some(id) =>
       let newCategory = Category.make(~id, ~name, ~topicsCount=0)
       createCategoryCB(newCategory)

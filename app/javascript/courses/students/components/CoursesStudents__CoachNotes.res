@@ -31,8 +31,7 @@ module CreateCoachNotesMutation = %graphql(`
 
 let saveNote = (studentId, setState, state, addNoteCB) => {
   setState(state => {...state, saving: true})
-  CreateCoachNotesMutation.make(~studentId, ~note=state.newNote, ())
-  |> GraphqlQuery.sendQuery
+  CreateCoachNotesMutation.make({studentId: studentId, note: state.newNote})
   |> Js.Promise.then_(response => {
     switch response["createCoachNote"]["coachNote"] {
     | Some(note) =>

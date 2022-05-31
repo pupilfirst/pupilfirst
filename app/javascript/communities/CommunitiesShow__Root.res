@@ -113,12 +113,14 @@ let getTopics = (send, communityId, cursor, filter) => {
 
   let searchFilter = Belt.Option.map(filter.search, search =>
     switch search {
-    | SearchContent(searchString) => {"search": searchString, "searchBy": #content}
-    | SearchTitle(searchString) => {"search": searchString, "searchBy": #title}
+    | SearchContent(searchString) =>
+      TopicsQuery.makeInputObjectCommunitySearchFilter(~search=searchString, ~searchBy=#content, ())
+    | SearchTitle(searchString) =>
+      TopicsQuery.makeInputObjectCommunitySearchFilter(~search=searchString, ~searchBy=#title, ())
     }
   )
 
-  TopicsQuery.make(
+  let variables = TopicsQuery.makeVariables(
     ~communityId,
     ~after=?cursor,
     ~topicCategoryId?,
@@ -129,7 +131,7 @@ let getTopics = (send, communityId, cursor, filter) => {
     ~sortDirection=filter.sortDirection,
     (),
   )
-  |> GraphqlQuery.sendQuery
+  TopicsQuery.make(variables)
   |> Js.Promise.then_(response => {
     let newTopics =
       response["topics"]["nodes"] |> Js.Array.map(topicData => Topic.makeFromJS(topicData))

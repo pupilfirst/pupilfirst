@@ -37,7 +37,8 @@ let isEligible = t =>
   | DateLocked => false
   }
 
-let makeOptionFromJs = js => Belt.Option.map(js, eligibility =>
+let makeOptionFromJs = js =>
+  Belt.Option.map(js, eligibility =>
     switch eligibility {
     | #Eligible => Eligible
     | #AtMaxLevel => AtMaxLevel

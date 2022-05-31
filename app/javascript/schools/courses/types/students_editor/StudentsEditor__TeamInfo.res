@@ -24,11 +24,6 @@ let students = t =>
   | MultiMember(_, students) => students
   }
 
-let toJsArray = t =>
-  students(t) |> Js.Array.map(
-    StudentInfo.toJsObject(~teamName=name(t), ~tags=Belt.Set.String.toArray(t.tags)),
-  )
-
 let make = (~name, ~tags, ~students) =>
   if Js.Array.length(students) > 1 {
     {
@@ -107,7 +102,9 @@ let removeStudentFromArray = (ts, studentInfo) => {
     }
   )
 
-  \"!"(removedFromArray) ? teams : teams |> Js.Array.map(t =>
+  \"!"(removedFromArray)
+    ? teams
+    : teams |> Js.Array.map(t =>
         switch t.nature {
         | SingleMember(_) => t
         | MultiMember(name, students) =>
@@ -126,9 +123,12 @@ let tagsFromArray = ts =>
     Belt.Set.String.empty,
   ))->Belt.Set.String.toArray
 
-let studentEmailsFromArray = ts => ts |> Js.Array.map(t =>
+let studentEmailsFromArray = ts =>
+  ts
+  |> Js.Array.map(t =>
     switch t.nature {
     | SingleMember(studentInfo) => [StudentInfo.email(studentInfo)]
     | MultiMember(_, students) => Js.Array.map(StudentInfo.email, students)
     }
-  ) |> ArrayUtils.flattenV2
+  )
+  |> ArrayUtils.flattenV2

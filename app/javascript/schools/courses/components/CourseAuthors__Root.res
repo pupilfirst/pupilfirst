@@ -55,10 +55,9 @@ let removeCourseAuthor = (send, author, event) => {
     () => {
       send(BeginDeleting)
 
-      DeleteCourseAuthorQuery.make(~id=author |> Author.id, ())
-      |> GraphqlQuery.sendQuery
-      |> Js.Promise.then_(response => {
-        if response["deleteCourseAuthor"]["success"] {
+      DeleteCourseAuthorQuery.fetch({id: Author.id(author)})
+      |> Js.Promise.then_((response: DeleteCourseAuthorQuery.t) => {
+        if response.deleteCourseAuthor.success {
           send(FinishDeleting(author))
         } else {
           send(FailToDelete)

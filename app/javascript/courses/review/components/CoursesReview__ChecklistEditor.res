@@ -32,14 +32,12 @@ let updateReviewChecklist = (targetId, reviewChecklist, send, updateReviewCheckl
 
   let trimmedChecklist = reviewChecklist->Js.Array2.map(ReviewChecklistItem.trim)
 
-  UpdateReviewChecklistMutation.make(
-    ~targetId,
-    ~reviewChecklist=ReviewChecklistItem.encodeArray(trimmedChecklist),
-    (),
-  )
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    if response["updateReviewChecklist"]["success"] {
+  UpdateReviewChecklistMutation.fetch({
+    targetId: targetId,
+    reviewChecklist: ReviewChecklistItem.encodeArray(trimmedChecklist),
+  })
+  |> Js.Promise.then_((response: UpdateReviewChecklistMutation.t) => {
+    if response.updateReviewChecklist.success {
       updateReviewChecklistCB(trimmedChecklist)
     }
 

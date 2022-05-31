@@ -3,7 +3,6 @@ open CoursesReport__Types
 
 let str = React.string
 
-
 let tr = I18n.t(~scope="components.CoursesReport")
 
 type selectedTab = [#Overview | #Submissions]
@@ -101,8 +100,7 @@ let saveOverviewData = (studentId, send, data) =>
   send(SaveOverviewData(Loaded(data |> StudentOverview.makeFromJs(studentId))))
 
 let getOverviewData = (studentId, send, ()) => {
-  StudentReportOverviewQuery.make(~studentId, ())
-  |> GraphqlQuery.sendQuery
+  StudentReportOverviewQuery.make({studentId: studentId})
   |> Js.Promise.then_(response => {
     response["studentDetails"] |> saveOverviewData(studentId, send)
     Js.Promise.resolve()

@@ -8,11 +8,13 @@ let str = React.string
 let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockCreator")
 let ts = I18n.ts
 
+module ContentBlockFragment = ContentBlock.Fragments
+
 module CreateMarkdownContentBlock = %graphql(`
     mutation CreateMarkdownContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID) {
       createMarkdownContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId) {
         contentBlock {
-          ...ContentBlock.Fragments.AllFields
+          ...ContentBlockFragment
         }
       }
     }
@@ -22,7 +24,7 @@ module CreateEmbedContentBlock = %graphql(`
     mutation CreateEmbedContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID, $url: String!, $requestSource: EmbedRequestSource!) {
       createEmbedContentBlock(targetId: $targetId, aboveContentBlockId: $aboveContentBlockId, url: $url, requestSource: $requestSource) {
         contentBlock {
-          ...ContentBlock.Fragments.AllFields
+          ...ContentBlockFragment
         }
       }
     }
@@ -137,8 +139,9 @@ let createMarkdownContentBlock = (target, aboveContentBlock, send, addContentBlo
   send(ToggleSaving)
   let aboveContentBlockId = aboveContentBlock |> OptionUtils.map(ContentBlock.id)
   let targetId = target |> Target.id
-  CreateMarkdownContentBlock.make(~targetId, ~aboveContentBlockId?, ())
-  |> GraphqlQuery.sendQuery
+  let variables = CreateMarkdownContentBlock.makeVariables(~targetId, ~aboveContentBlockId?, ())
+
+  CreateMarkdownContentBlock.make(variables)
   |> Js.Promise.then_(result =>
     handleGraphqlCreateResponse(
       aboveContentBlock,
@@ -232,8 +235,14 @@ let handleCreateEmbedContentBlock = (
 
     let targetId = target |> Target.id
 
-    CreateEmbedContentBlock.make(~targetId, ~aboveContentBlockId?, ~url, ~requestSource, ())
-    |> GraphqlQuery.sendQuery
+    let variables = CreateEmbedContentBlock.makeVariables(
+      ~targetId,
+      ~aboveContentBlockId?,
+      ~url,
+      ~requestSource,
+      (),
+    )
+    CreateEmbedContentBlock.make(variables)
     |> Js.Promise.then_(result =>
       handleGraphqlCreateResponse(
         aboveContentBlock,
@@ -327,8 +336,15 @@ let uploadFile = (
     let description =
       String.trim(state.videoDescription) == "" ? None : Some(state.videoDescription)
 
-    CreateVimeoVideo.make(~targetId=Target.id(target), ~size, ~title?, ~description?, ())
-    |> GraphqlQuery.sendQuery
+    let variables = CreateVimeoVideo.makeVariables(
+      ~targetId=Target.id(target),
+      ~size,
+      ~title?,
+      ~description?,
+      (),
+    )
+
+    CreateVimeoVideo.make(variables)
     |> Js.Promise.then_(result => {
       switch result["createVimeoVideo"]["vimeoVideo"] {
       | Some(vimeoVideo) =>

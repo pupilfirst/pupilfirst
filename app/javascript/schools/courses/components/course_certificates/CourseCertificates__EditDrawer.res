@@ -102,20 +102,18 @@ let saveChanges = (certificate, updateCertificateCB, state, send, _event) => {
   let name = Js.String.trim(state.name)
   let {margin, nameOffsetTop, fontSize, qrCorner, qrScale, active} = state
 
-  UpdateCertificateMutation.make(
-    ~id=Certificate.id(certificate),
-    ~name,
-    ~margin,
-    ~nameOffsetTop,
-    ~fontSize,
-    ~qrCorner,
-    ~qrScale,
-    ~active,
-    (),
-  )
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    if result["updateCertificate"]["success"] {
+  UpdateCertificateMutation.fetch({
+    id: Certificate.id(certificate),
+    name: name,
+    margin: margin,
+    nameOffsetTop: nameOffsetTop,
+    fontSize: fontSize,
+    qrCorner: qrCorner,
+    qrScale: qrScale,
+    active: active,
+  })
+  |> Js.Promise.then_((result: UpdateCertificateMutation.t) => {
+    if result.updateCertificate.success {
       Certificate.update(
         certificate,
         ~name,

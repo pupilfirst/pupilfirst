@@ -26,7 +26,7 @@
     "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/multiselect-inline"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.12.4",
+    "parcel-bundler": "^1.12.5",
     "rescript": "9.1.4",
     "tailwindcss": "^1.1.4"
   },

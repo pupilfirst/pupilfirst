@@ -19,6 +19,8 @@ class LockTopicMutator < ApplicationQuery
   end
 
   def topic
-    @topic ||= Topic.find_by(id: id)
+    return @topic if defined?(@topic)
+
+    @topic = Topic.find_by(id: id)
   end
 end

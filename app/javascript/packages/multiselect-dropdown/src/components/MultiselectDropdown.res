@@ -71,7 +71,7 @@ module Make = (Selectable: Selectable) => {
             <div className="px-4">
               <div className="skeleton-body-container w-full pb-4 mx-auto">
                 <div className="skeleton-body-wrapper px-3 lg:px-0">
-                  <div className="skeleton-placeholder__line-sm mt-4 w-2/4 skeleton-animate" />
+                  <div className="skeleton-placeholder__line-sm mt-4 w-1/2 skeleton-animate" />
                   <div className="skeleton-placeholder__line-sm mt-4 w-3/4 skeleton-animate" />
                 </div>
               </div>

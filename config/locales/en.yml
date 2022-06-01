@@ -1934,7 +1934,6 @@ en:
       author_deleted_details_notification: The author has been removed from this course.
       author_deleted_notification: Author Deleted
     dropout_student:
-      reloading_list_notification: Reloading students list
       student_updated_notification: Student updated successfully
     export_course_report:
       course_not_found_error: Could not find a course with the given ID
@@ -1945,6 +1944,8 @@ en:
       deletion_init_notification: Account Deletion Initiated
     issue_certificate:
       success_notification: Certificate issued successfully!
+    re_activate_student:
+      success_notification: Student re-activated successfully!
     lock_topic:
       success_notification: This topic has been locked. No new replies will be accepted.
     mark_post_as_solution:

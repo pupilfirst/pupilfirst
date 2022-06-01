@@ -59,6 +59,9 @@ module Types
           mutation: Mutations::UpdateStudentDetails,
           null: false
     field :dropout_student, mutation: Mutations::DropoutStudent, null: false
+    field :re_activate_student,
+          mutation: Mutations::ReActivateStudent,
+          null: false
     field :create_evaluation_criterion,
           mutation: Mutations::CreateEvaluationCriterion,
           null: false

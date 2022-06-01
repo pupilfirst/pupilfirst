@@ -38,7 +38,7 @@ module Types
       argument :id, ID, required: false
     end
 
-    resolved_field :course, Types::CourseType, null: true do
+    resolved_field :course, Types::CourseType, null: false do
       argument :id, ID, required: false
     end
 

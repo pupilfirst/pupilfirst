@@ -2,7 +2,7 @@ module Types
   class CertificateType < Types::BaseObject
     field :id, ID, null: false
     field :name, String, null: false
-    field :course, CourseType, null: false
+    field :course, Types::CourseType, null: false
     field :qr_corner, String, null: false
     field :qr_scale, Integer, null: false
     field :name_offset_top, Integer, null: false

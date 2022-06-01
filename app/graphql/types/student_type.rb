@@ -4,11 +4,12 @@ module Types
     field :taggings, [String], null: false
     field :issued_certificates, [Types::IssuedCertificateType], null: false
     field :level, Types::LevelType, null: false
-    field :cohort, Types::CohortType, null: false
     field :access_ends_at, GraphQL::Types::ISO8601DateTime, null: true
     field :dropped_out_at, GraphQL::Types::ISO8601DateTime, null: true
     field :user, Types::UserType, null: false
     field :personal_coaches, [Types::CoachType], null: false
+    field :cohort, Types::CohortType, null: false
+    field :course, Types::CourseType, null: false
 
     def issued_certificates
       # rubocop:disable Lint/UselessAssignment
@@ -34,6 +35,17 @@ module Types
           Cohort
             .where(id: cohort_ids)
             .each { |cohort| loader.call(cohort.id, cohort) }
+        end
+    end
+
+    def course
+      BatchLoader::GraphQL
+        .for(object.cohort_id)
+        .batch(default_value: []) do |cohort_ids, loader|
+          Cohort
+            .joins(:course)
+            .where(id: cohort_ids)
+            .each { |cohort| loader.call(cohort.id, cohort.course) }
         end
     end
 

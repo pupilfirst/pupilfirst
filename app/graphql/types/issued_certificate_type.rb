@@ -25,7 +25,7 @@ module Types
       BatchLoader::GraphQL
         .for(object.certificate_id)
         .batch do |certificate_ids, loader|
-          User
+          Certificate
             .where(id: certificate_ids)
             .each { |certificate| loader.call(certificate.id, certificate) }
         end

@@ -63,7 +63,7 @@ let make = (
           </div>
         : React.null}
     </div>
-    <div className="w-4/6 flex justify-end items-end">
+    <div className="w-2/3 flex justify-end items-end">
       {selectedVersion == versions[0]
         ? React.null
         : <button

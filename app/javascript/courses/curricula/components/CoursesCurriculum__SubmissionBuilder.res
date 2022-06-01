@@ -2,6 +2,8 @@ open CoursesCurriculum__Types
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CoursesCurriculum__SubmissionBuilder")
+
 type formState =
   | Attaching
   | Saving
@@ -16,9 +18,9 @@ let buttonContents = (formState, checklist) => {
   }
 
   let text = switch formState {
-  | Attaching => "Attaching..."
-  | Saving => "Submitting..."
-  | Ready => checklist |> ArrayUtils.isEmpty ? "Complete" : "Submit"
+  | Attaching => tr("attaching") ++ "..."
+  | Saving => tr("submitting") ++ "..."
+  | Ready => checklist |> ArrayUtils.isEmpty ? tr("complete") : tr("submit")
   } |> str
 
   <span> icon text </span>
@@ -82,9 +84,9 @@ let submit = (state, send, target, addSubmissionCB, event) => {
 
   let fileIds = state.checklist |> ChecklistItem.fileIds
   let checklist = state.checklist |> ChecklistItem.encodeArray
+  let targetId = Target.id(target)
 
-  CreateSubmissionQuery.make(~targetId=target |> Target.id, ~fileIds, ~checklist, ())
-  |> GraphqlQuery.sendQuery
+  CreateSubmissionQuery.make({targetId: targetId, fileIds: fileIds, checklist: checklist})
   |> Js.Promise.then_(response => {
     switch response["createSubmission"]["submission"] {
     | Some(submission) =>
@@ -126,28 +128,28 @@ let setAttaching = (send, bool) => send(bool ? SetAttaching : SetReady)
 
 let statusText = formState =>
   switch formState {
-  | Attaching => "Attaching..."
-  | Saving => "Submitting..."
-  | Ready => "Submit"
+  | Attaching => tr("attaching") ++ "..."
+  | Saving => tr("submitting") ++ "..."
+  | Ready => tr("submit")
   }
 
 let tooltipText = preview =>
   if preview {
-    <span> {"You are accessing the preview mode" |> str} <br /> {"for this course" |> str} </span>
+    <span> {tr("accessing_preview") |> str} <br /> {tr("for_course") |> str} </span>
   } else {
     <span>
-      {"Please complete all the required" |> str} <br /> {"steps to submit this target" |> str}
+      {tr("compete_all") |> str} <br /> {tr("steps_submit") |> str}
     </span>
   }
 
 @react.component
 let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
   let (state, send) = React.useReducer(reducer, initialState(checklist))
-  <div className="bg-gray-100 p-4 my-4 border rounded-lg" id="submission-builder">
+  <div className="bg-gray-50 p-4 my-4 border rounded-lg" id="submission-builder">
     <DisablingCover disabled={isBusy(state.formState)} message={statusText(state.formState)}>
       {state.checklist |> ArrayUtils.isEmpty
         ? <div className="text-center">
-            {"This target has no actions. Click submit to complete the target" |> str}
+            {tr("no_actions") |> str}
           </div>
         : state.checklist
           |> Array.mapi((index, checklistItem) =>

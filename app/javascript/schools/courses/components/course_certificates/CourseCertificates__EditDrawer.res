@@ -2,6 +2,7 @@ open CourseCertificates__Types
 
 let str = React.string
 let t = I18n.t(~scope="components.CourseCertificates__EditDrawer")
+let ts = I18n.t(~scope="shared")
 
 type state = {
   name: string,
@@ -60,7 +61,7 @@ let reducer = (state, action) =>
 let buttonTypeClass = (stateQrCorner, qrCorner) =>
   stateQrCorner == qrCorner
     ? "border-primary-500 bg-primary-100 text-primary-600"
-    : "border-gray-400 bg-gray-200 text-gray-800"
+    : "border-gray-300 bg-gray-50 text-gray-800"
 
 let activeButtonClasses = (stateActive, active) => {
   let baseClasses = "toggle-button__button"
@@ -87,15 +88,13 @@ let isValidName = name => {
   length >= 1 && length <= 30
 }
 
-module UpdateCertificateMutation = %graphql(
-  `
+module UpdateCertificateMutation = %graphql(`
   mutation UpdateCertificateMutation($id: ID!, $name: String!, $margin: Int!, $nameOffsetTop: Int!, $fontSize: Int!, $qrCorner: QrCorner!, $qrScale: Int!, $active: Boolean!) {
     updateCertificate(id: $id, name: $name, margin: $margin, nameOffsetTop: $nameOffsetTop, fontSize: $fontSize, qrCorner: $qrCorner, qrScale: $qrScale, active: $active) {
       success
     }
   }
-  `
-)
+  `)
 
 let saveChanges = (certificate, updateCertificateCB, state, send, _event) => {
   send(BeginSaving)
@@ -103,20 +102,18 @@ let saveChanges = (certificate, updateCertificateCB, state, send, _event) => {
   let name = Js.String.trim(state.name)
   let {margin, nameOffsetTop, fontSize, qrCorner, qrScale, active} = state
 
-  UpdateCertificateMutation.make(
-    ~id=Certificate.id(certificate),
-    ~name,
-    ~margin,
-    ~nameOffsetTop,
-    ~fontSize,
-    ~qrCorner,
-    ~qrScale,
-    ~active,
-    (),
-  )
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    if result["updateCertificate"]["success"] {
+  UpdateCertificateMutation.fetch({
+    id: Certificate.id(certificate),
+    name: name,
+    margin: margin,
+    nameOffsetTop: nameOffsetTop,
+    fontSize: fontSize,
+    qrCorner: qrCorner,
+    qrScale: qrScale,
+    active: active,
+  })
+  |> Js.Promise.then_((result: UpdateCertificateMutation.t) => {
+    if result.updateCertificate.success {
       Certificate.update(
         certificate,
         ~name,
@@ -185,7 +182,7 @@ let make = (
     <div className="flex flex-col min-h-screen">
       <DisablingCover
         disabled=state.saving message="Saving changes..." containerClasses="bg-white flex-grow-0">
-        <div className="bg-gray-100 pt-6 pb-4 border-b">
+        <div className="bg-gray-50 pt-6 pb-4 border-b">
           <div className="max-w-4xl px-4 mx-auto">
             <h5 className="uppercase"> {t("edit_action")->str} </h5>
           </div>
@@ -199,7 +196,7 @@ let make = (
             <div>
               <input
                 autoFocus=true
-                className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+                className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                 maxLength=30
                 id="name"
                 type_="text"
@@ -212,23 +209,21 @@ let make = (
           </div>
           <div className="mt-6" ariaLabel="auto_issue">
             <label className="tracking-wide text-sm font-semibold">
-              {t("active_label")->str}
+              {t("active.label")->str}
             </label>
-            <HelpIcon
-              className="ml-1"
-              link="https://docs.pupilfirst.com/#/certificates?id=automatically-issuing-certificates">
-              <span dangerouslySetInnerHTML={"__html": t("active_help")} />
+            <HelpIcon className="ml-1" link={t("active.help_url")}>
+              <span dangerouslySetInnerHTML={"__html": t("active.help")} />
             </HelpIcon>
             <div className="ml-4 inline-flex toggle-button__group flex-shrink-0">
               <button
                 className={activeButtonClasses(state.active, true)}
                 onClick={_ => send(UpdateActive(true))}>
-                {str("Yes")}
+                {str(ts("_yes"))}
               </button>
               <button
                 className={activeButtonClasses(state.active, false)}
                 onClick={_ => send(UpdateActive(false))}>
-                {str("No")}
+                {str(ts("_no"))}
               </button>
             </div>
             {!canBeAutoIssued
@@ -313,14 +308,12 @@ let make = (
               </div>
               <div className="mt-4" ariaLabel="add_qr_code">
                 <label className="tracking-wide text-gray-900 text-xs font-semibold">
-                  {t("qr_visibility_label")->str}
+                  {t("qr_visibility.label")->str}
                 </label>
-                <HelpIcon
-                  className="ml-1"
-                  link="https://docs.pupilfirst.com/#/certificates?id=automatically-issuing-certificates">
+                <HelpIcon className="ml-1" link={t("qr_visibility.help_url")}>
                   <span
                     dangerouslySetInnerHTML={
-                      "__html": t("qr_visibility_help"),
+                      "__html": t("qr_visibility.help"),
                     }
                   />
                 </HelpIcon>
@@ -328,12 +321,12 @@ let make = (
                   <button
                     className={qrVisiblityClasses(state.qrCorner, true)}
                     onClick={activateQrCode(state, send)}>
-                    {str("Yes")}
+                    {str(ts("_yes"))}
                   </button>
                   <button
                     className={qrVisiblityClasses(state.qrCorner, false)}
                     onClick={_ => send(UpdateQrCorner(#Hidden))}>
-                    {str("No")}
+                    {str(ts("_no"))}
                   </button>
                 </div>
               </div>
@@ -353,14 +346,14 @@ let make = (
                     </div>
                     <div className="flex mt-2">
                       <button
-                        className={"w-1/2 mr-2 rounded border pt-3 px-3 pb-5 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-indigo-500 " ++
+                        className={"w-1/2 mr-2 rounded border pt-3 px-3 pb-5 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-focusColor-500 " ++
                         buttonTypeClass(state.qrCorner, #TopLeft)}
                         onClick={_ => send(UpdateQrCorner(#TopLeft))}>
                         <div className="flex"> <Icon className="if i-qr-code-regular" /> </div>
                         {t("qr_top_left_label")->str}
                       </button>
                       <button
-                        className={"w-1/2 rounded border pt-3 px-3 pb-5 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-indigo-500 " ++
+                        className={"w-1/2 rounded border pt-3 px-3 pb-5 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-focusColor-500 " ++
                         buttonTypeClass(state.qrCorner, #TopRight)}
                         onClick={_ => send(UpdateQrCorner(#TopRight))}>
                         <div className="flex justify-end">
@@ -371,14 +364,14 @@ let make = (
                     </div>
                     <div className="flex mt-2">
                       <button
-                        className={"w-1/2 mr-2 rounded border pt-5 px-3 pb-3 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-indigo-500 " ++
+                        className={"w-1/2 mr-2 rounded border pt-5 px-3 pb-3 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-focusColor-500 " ++
                         buttonTypeClass(state.qrCorner, #BottomLeft)}
                         onClick={_ => send(UpdateQrCorner(#BottomLeft))}>
                         {t("qr_bottom_left_label")->str}
                         <div className="flex"> <Icon className="if i-qr-code-regular" /> </div>
                       </button>
                       <button
-                        className={"w-1/2 rounded border pt-5 px-3 pb-3 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-indigo-500 " ++
+                        className={"w-1/2 rounded border pt-5 px-3 pb-3 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-focusColor-500 " ++
                         buttonTypeClass(state.qrCorner, #BottomRight)}
                         onClick={_ => send(UpdateQrCorner(#BottomRight))}>
                         {t("qr_bottom_right_label")->str}
@@ -414,7 +407,7 @@ let make = (
           </div>
         </div>
       </DisablingCover>
-      <div className="bg-gray-100 flex-grow">
+      <div className="bg-gray-50 flex-grow">
         <div className="max-w-4xl px-4 py-6 mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex-1">

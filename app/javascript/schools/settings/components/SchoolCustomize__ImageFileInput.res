@@ -1,17 +1,19 @@
 let str = React.string
 
+let t = I18n.t(~scope="components.SchoolCustomize__ImageFileInput")
+
 let imageLabel = (imageName, selectedImageName) =>
   switch selectedImageName {
   | Some(name) =>
     <span>
-      {"You have selected " |> str}
+      { t("you_selected_pre") ++ " " |> str}
       <code className="mr-1"> {name |> str} </code>
-      {" to replace the current image." |> str}
+      {" " ++ t("you_selected_post") |> str}
     </span>
   | None =>
     switch imageName {
-    | Some(existingName) => <span> {"Please pick a file to replace " ++ existingName |> str} </span>
-    | None => "Please choose an image file to customize" |> str
+    | Some(existingName) => <span> { t("pick_replace_pre") ++ " " ++ existingName |> str} </span>
+    | None => t("choose_customize") |> str
     }
   }
 
@@ -26,13 +28,13 @@ let make = (
   ~imageName,
   ~selectedImageName,
   ~errorState,
-  ~errorMessage="must be a JPEG / PNG under 2 MB in size",
+  ~errorMessage=t("image_error_message"),
 ) =>
   <div key=id className="mt-4">
     <label className="block tracking-wide text-gray-800 text-xs font-semibold" htmlFor=id>
       {labelText |> str}
     </label>
-    <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500">
+    <div className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
       <input
         autoFocus
         disabled

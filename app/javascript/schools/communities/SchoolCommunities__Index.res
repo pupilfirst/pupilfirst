@@ -1,5 +1,8 @@
 let str = React.string
 
+let tr = I18n.t(~scope="components.SchoolCommunities__Index")
+let ts = I18n.t(~scope="shared")
+
 open SchoolCommunities__IndexTypes
 
 type editorAction =
@@ -96,7 +99,7 @@ let handleCloseCategoryManager = (send, state) =>
   categoryEditorDirty(state)
     ? if {
         open Webapi.Dom
-        window |> Window.confirm("There are unsaved changes! Are you sure you want to close?")
+        window |> Window.confirm(tr("unsaved_window_confirm"))
       } {
         send(UpdateShowCategoryEditor(false))
       } else {
@@ -127,13 +130,13 @@ let make = (~communities, ~courses) => {
     let communities = state.communities |> List.append(list{community})
     send(SaveCommunityChanges(communities))
   }
-  <div className="flex-1 flex flex-col overflow-y-scroll bg-gray-200">
+  <div className="flex-1 flex flex-col overflow-y-scroll bg-gray-50">
     {switch state.editorAction {
     | Hidden => React.null
     | ShowEditor(community) =>
       let level = state.showCategoryEditor ? 1 : 0
       <SchoolAdmin__EditorDrawer2
-        closeButtonTitle="Close Community Editor"
+        closeButtonTitle={tr("close_community_editor")}
         level
         closeDrawerCB={() => send(UpdateEditorAction(Hidden))}>
         <SchoolCommunities__Editor
@@ -151,7 +154,7 @@ let make = (~communities, ~courses) => {
         | Some(community) =>
           state.showCategoryEditor
             ? <SchoolAdmin__EditorDrawer2
-                closeButtonTitle="Close Category Editor"
+                closeButtonTitle={tr("close_category_editor")}
                 closeIconClassName="fas fa-arrow-left"
                 closeDrawerCB={() => handleCloseCategoryManager(send, state)}>
                 <SchoolCommunities__CategoryManager
@@ -170,17 +173,18 @@ let make = (~communities, ~courses) => {
     <div className="flex px-6 py-2 items-center justify-between">
       <button
         onClick={_ => send(UpdateEditorAction(ShowEditor(None)))}
-        className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer focus:outline-none focus:border-primary-300 focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg">
+        className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg border-2 border-primary-300 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer focus:outline-none focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg">
         <i className="fas fa-plus-circle" />
-        <h5 className="font-semibold ml-2"> {"Add New Community" |> str} </h5>
+        <h5 className="font-semibold ml-2"> {tr("add_new_community") |> str} </h5>
       </button>
     </div>
     <div className="px-6 pb-4 mt-5 flex flex-1">
       <div className="max-w-2xl w-full mx-auto relative">
-        {state.communities |> List.map(community =>
+        {state.communities
+        |> List.map(community =>
           <div
             key={community |> Community.id}
-            className="flex items-center shadow overflow-hidden bg-white rounded-lg mb-4 focus-within:ring-2 focus-within:ring-indigo-500">
+            className="flex items-center shadow overflow-hidden bg-white rounded-lg mb-4 focus-within:ring-2 focus-within:ring-focusColor-500">
             <div className="course-faculty__list-item flex w-full items-center">
               <button
                 ariaLabel={"Edit " ++ (community |> Community.name)}
@@ -188,28 +192,30 @@ let make = (~communities, ~courses) => {
                   ReactEvent.Mouse.preventDefault(_event)
                   send(UpdateEditorAction(ShowEditor(Some(community))))
                 }}
-                className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-l-lg text-left hover:bg-gray-100 hover:text-primary-500 hover:border-primary-400 focus:bg-gray-100 focus:text-primary-500">
+                className="course-faculty__list-item-details flex flex-1 items-center justify-between border border-transparent cursor-pointer rounded-l-lg text-left hover:bg-gray-50 hover:text-primary-500 hover:border-primary-400 focus:bg-gray-50 focus:text-primary-500">
                 <div className="flex w-full text-sm justify-between">
                   <span className="flex-1 font-semibold py-5 px-5">
                     {community |> Community.name |> str}
                   </span>
                   <span
-                    className="ml-2 py-5 px-5 font-semibold text-gray-700 hover:text-primary-500">
+                    className="ml-2 py-5 px-5 font-semibold text-gray-600 hover:text-primary-500">
                     <i className="fas fa-edit text-normal" />
-                    <span className="ml-1"> {"Edit" |> str} </span>
+                    <span className="ml-1"> {ts("edit") |> str} </span>
                   </span>
                 </div>
               </button>
               <a
                 target="_blank"
                 href={"/communities/" ++ (community |> Community.id)}
-                className="text-sm flex items-center border-l text-gray-700 hover:bg-gray-100 hover:text-primary-500 focus:outline-none focus:bg-gray-100 focus:text-primary-500 font-semibold px-5 py-5">
+                className="text-sm flex items-center border-l text-gray-600 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500 font-semibold px-5 py-5">
                 <i className="fas fa-external-link-alt text-normal" />
-                <span className="ml-1"> {"View" |> str} </span>
+                <span className="ml-1"> {ts("view") |> str} </span>
               </a>
             </div>
           </div>
-        ) |> Array.of_list |> React.array}
+        )
+        |> Array.of_list
+        |> React.array}
       </div>
     </div>
   </div>

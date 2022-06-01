@@ -20,18 +20,18 @@ let cardClasses = (submission, selected) =>
       None,
       None,
       None,
-    ) => "submission-info__tab-pending focus:ring focus:ring-indigo-400 shadow hover:shadow-lg"
+    ) => "submission-info__tab-pending focus:ring focus:ring-focusColor-400 shadow hover:shadow-lg"
   | (
       None,
       None,
       Some(_),
-    ) => "submission-info__tab-rejected focus:ring focus:ring-indigo-400 shadow hover:shadow-lg"
+    ) => "submission-info__tab-rejected focus:ring focus:ring-focusColor-400 shadow hover:shadow-lg"
   | (None, Some(_), None)
   | (
     None,
     Some(_),
     Some(_),
-  ) => "submission-info__tab-completed focus:ring focus:ring-indigo-400 shadow hover:shadow-lg"
+  ) => "submission-info__tab-completed focus:ring focus:ring-focusColor-400 shadow hover:shadow-lg"
   }
 
 let showSubmissionStatus = submission => {
@@ -40,11 +40,11 @@ let showSubmissionStatus = submission => {
     SubmissionMeta.passedAt(submission),
     SubmissionMeta.evaluatedAt(submission),
   ) {
-  | (Some(_), _, _) => ("Deleted", "bg-gray-300 text-gray-800 ")
-  | (None, None, None) => ("Pending Review", "bg-orange-100 text-orange-800 ")
-  | (None, None, Some(_)) => ("Rejected", "bg-red-100 text-red-700")
+  | (Some(_), _, _) => (t("deleted"), "bg-gray-300 text-gray-800 ")
+  | (None, None, None) => (t("pending_review"), "bg-orange-100 text-orange-800 ")
+  | (None, None, Some(_)) => (t("rejected"), "bg-red-100 text-red-700")
   | (None, Some(_), None)
-  | (None, Some(_), Some(_)) => ("Completed", "bg-green-100 text-green-800")
+  | (None, Some(_), Some(_)) => (t("completed"), "bg-green-100 text-green-800")
   }
   <div className={"font-semibold px-3 py-px rounded " ++ classes}>
     <span className="hidden md:block"> {text->str} </span>
@@ -63,11 +63,9 @@ let submissionInfoCardContent = (submission, submissionNumber) => {
     <div className="flex flex-col md:pr-6">
       <h2 className="font-semibold text-sm leading-tight">
         <p className="hidden md:block">
-          {(t("submission_hash") ++ string_of_int(submissionNumber))->str}
+          {(t("submission_hash") ++ " #" ++ string_of_int(submissionNumber))->str}
         </p>
-        <p className="md:hidden">
-          {("#" ++ string_of_int(submissionNumber))->str}
-        </p>
+        <p className="md:hidden"> {("#" ++ string_of_int(submissionNumber))->str} </p>
       </h2>
       <span className="text-xs text-gray-800 pt-px whitespace-nowrap">
         {submission->SubmissionMeta.createdAt->DateFns.formatPreset(~year=true, ())->str}
@@ -91,14 +89,14 @@ let make = (~submission, ~submissionNumber, ~selected, ~filterString) => {
   switch SubmissionMeta.archivedAt(submission) {
   | Some(_archivedAt) =>
     <div
-      title={t("submission_hash") ++ string_of_int(submissionNumber)}
+      title={t("submission_hash") ++ " #" ++ string_of_int(submissionNumber)}
       key={SubmissionMeta.id(submission)}
       className={cardClasses(submission, selected)}>
       {submissionInfoCardContent(submission, submissionNumber)}
     </div>
   | None =>
     <Link
-      title={t("submission_hash") ++ string_of_int(submissionNumber)}
+      title={t("submission_hash") ++ " #" ++ string_of_int(submissionNumber)}
       href={linkUrl(SubmissionMeta.id(submission), filterString)}
       key={SubmissionMeta.id(submission)}
       className={cardClasses(submission, selected)}>

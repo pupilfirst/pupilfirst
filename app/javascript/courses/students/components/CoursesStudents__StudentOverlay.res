@@ -46,6 +46,7 @@ module StudentDetailsQuery = %graphql(`
             title
             avatarUrl
             userTags
+            lastSeenAt
           }
           coachUserIds
         }
@@ -85,8 +86,7 @@ let updateStudentDetails = (setState, studentId, details, coachNotes, hasArchive
 
 let getStudentDetails = (studentId, setState, ()) => {
   setState(state => {...state, studentData: Loading})
-  StudentDetailsQuery.make(~studentId, ())
-  |> GraphqlQuery.sendQuery
+  StudentDetailsQuery.make({studentId: studentId})
   |> Js.Promise.then_(response => {
     updateStudentDetails(
       setState,
@@ -130,7 +130,7 @@ let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
       <p className="text-sm font-semibold text-center mt-3">
         {t("total_targets_completed") |> str}
       </p>
-      <p className="text-sm text-gray-700 font-semibold text-center mt-1">
+      <p className="text-sm text-gray-600 font-semibold text-center mt-1">
         {(targetsCompleted |> int_of_float |> string_of_int) ++
           ("/" ++
           ((totalTargets |> int_of_float |> string_of_int) ++ t("targets"))) |> str}
@@ -146,7 +146,7 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
       <div className="student-overlay__doughnut-chart-container">
         {doughnutChart("pink", score |> int_of_float |> string_of_int)}
         <p className="text-sm font-semibold text-center mt-3"> {t("average_quiz_score") |> str} </p>
-        <p className="text-sm text-gray-700 font-semibold text-center leading-tight mt-1">
+        <p className="text-sm text-gray-600 font-semibold text-center leading-tight mt-1">
           {Inflector.pluralize(t("quiz"), ~count=quizzesAttempted, ~inclusive=true, ()) ++
           t("attempted") |> str}
         </p>
@@ -227,7 +227,7 @@ let socialLinkIconClass = url =>
 
 let showSocialLinks = socialLinks =>
   <div
-    className="inline-flex flex-wrap justify-center text-lg text-gray-800 mt-3 bg-gray-100 px-2 rounded-lg">
+    className="inline-flex flex-wrap justify-center text-lg text-gray-800 mt-3 bg-gray-50 px-2 rounded-lg">
     {socialLinks
     |> Array.mapi((index, link) =>
       <a
@@ -373,7 +373,7 @@ let otherTeamMembers = (setState, studentId, studentDetails) =>
         let path = "/students/" ++ ((student |> TeamInfo.studentId) ++ "/report")
 
         <Link
-          className="block rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+          className="block rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
           href=path
           onClick={navigateToStudent(setState)}
           key={student |> TeamInfo.studentId}>
@@ -445,7 +445,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
               ariaLabel={t("close_student_report")}
               title={t("close_student_report")}
               onClick={_ => closeOverlay(courseId)}
-              className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-200 h-10 w-10 justify-center items-center text-gray-700 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+              className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-10 w-10 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
               <Icon className="if i-times-regular text-xl lg:text-2xl" />
             </button>
             <div
@@ -498,16 +498,18 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
           {otherTeamMembers(setState, studentId, studentDetails)}
         </div>
         <div
-          className="w-full relative md:w-3/5 bg-gray-100 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">
+          className="w-full relative md:w-3/5 bg-gray-50 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">
           <div
-            className="sticky top-0 bg-gray-100 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
-            <ul role="tablist" className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent">
+            className="sticky top-0 bg-gray-50 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
+            <ul
+              role="tablist"
+              className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent">
               <li
                 tabIndex=0
                 role="tab"
                 ariaSelected={state.selectedTab === Notes}
                 onClick={_event => setSelectedTab(Notes, setState)}
-                className={"cursor-pointer flex  flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-200 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-200 focus:ring-indigo-500 md:focus:border-b-none md:focus:rounded-t-md " ++
+                className={"cursor-pointer flex  flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++
                 switch state.selectedTab {
                 | Notes => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
                 | Submissions => " "
@@ -519,7 +521,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
                 role="tab"
                 ariaSelected={state.selectedTab === Submissions}
                 onClick={_event => setSelectedTab(Submissions, setState)}
-                className={"cursor-pointer flex flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-200 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-200 focus:ring-indigo-500 md:focus:border-b-none md:focus:rounded-t-md  " ++
+                className={"cursor-pointer flex flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md  " ++
                 switch state.selectedTab {
                 | Submissions => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
                 | Notes => " "
@@ -556,7 +558,7 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
           {SkeletonLoading.image()}
           {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.profileCard())}
         </div>
-        <div className="w-full relative md:w-3/5 bg-gray-100 md:border-l p-4 md:p-8 2xl:p-16">
+        <div className="w-full relative md:w-3/5 bg-gray-50 md:border-l p-4 md:p-8 2xl:p-16">
           {SkeletonLoading.contents()} {SkeletonLoading.profileCard()}
         </div>
       </div>

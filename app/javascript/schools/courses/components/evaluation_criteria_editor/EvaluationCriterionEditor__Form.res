@@ -2,6 +2,9 @@
 
 let str = React.string
 
+let t = I18n.t(~scope="components.EvaluationCriterionEditor__Form")
+let ts = I18n.ts
+
 type state = {
   name: string,
   maxGrade: int,
@@ -84,18 +87,22 @@ let updateGradeLabel = (value, gradeAndLabel, state, setState) => {
 let updateEvaluationCriterion = (state, setState, addOrUpdateCriterionCB, criterion) => {
   setState(state => {...state, saving: true})
 
-  let jsGradeAndLabelArray =
+  let gradesAndLabels =
     state.gradesAndLabels
-    |> Js.Array.filter(gradesAndLabel => gradesAndLabel |> GradeLabel.grade <= state.maxGrade)
-    |> Array.map(gl => gl |> GradeLabel.asJsObject)
+    ->Js.Array2.filter(gradesAndLabel => gradesAndLabel |> GradeLabel.grade <= state.maxGrade)
+    ->Js.Array2.map(gradesAndLabel =>
+      UpdateEvaluationCriterionQuery.makeInputObjectGradeAndLabelInput(
+        ~grade=GradeLabel.grade(gradesAndLabel),
+        ~label=GradeLabel.label(gradesAndLabel),
+        (),
+      )
+    )
 
-  UpdateEvaluationCriterionQuery.make(
-    ~id=criterion |> EvaluationCriterion.id,
-    ~name=state.name,
-    ~gradesAndLabels=jsGradeAndLabelArray,
-    (),
-  )
-  |> GraphqlQuery.sendQuery
+  UpdateEvaluationCriterionQuery.make({
+    id: criterion |> EvaluationCriterion.id,
+    name: state.name,
+    gradesAndLabels: gradesAndLabels,
+  })
   |> Js.Promise.then_(result => {
     switch result["updateEvaluationCriterion"]["evaluationCriterion"] {
     | Some(criterion) =>
@@ -112,20 +119,27 @@ let updateEvaluationCriterion = (state, setState, addOrUpdateCriterionCB, criter
 let createEvaluationCriterion = (state, setState, addOrUpdateCriterionCB, courseId) => {
   setState(state => {...state, saving: true})
 
-  let jsGradeAndLabelArray =
+  let gradesAndLabels =
     state.gradesAndLabels
-    |> Js.Array.filter(gradesAndLabel => gradesAndLabel |> GradeLabel.grade <= state.maxGrade)
-    |> Array.map(gl => gl |> GradeLabel.asJsObject)
+    ->Js.Array2.filter(gradesAndLabel => gradesAndLabel |> GradeLabel.grade <= state.maxGrade)
+    ->Js.Array2.map(gradesAndLabel =>
+      CreateEvaluationCriterionQuery.makeInputObjectGradeAndLabelInput(
+        ~grade=GradeLabel.grade(gradesAndLabel),
+        ~label=GradeLabel.label(gradesAndLabel),
+        (),
+      )
+    )
 
-  CreateEvaluationCriterionQuery.make(
+  let variables = CreateEvaluationCriterionQuery.makeVariables(
     ~name=state.name,
     ~maxGrade=state.maxGrade,
     ~passGrade=state.passGrade,
     ~courseId,
-    ~gradesAndLabels=jsGradeAndLabelArray,
+    ~gradesAndLabels,
     (),
   )
-  |> GraphqlQuery.sendQuery
+
+  CreateEvaluationCriterionQuery.make(variables)
   |> Js.Promise.then_(result => {
     switch result["createEvaluationCriterion"]["evaluationCriterion"] {
     | Some(criterion) =>
@@ -165,7 +179,7 @@ let labels = (state, setState) =>
       <div className="flex-1">
         <input
           id={"grade-label-for-" ++ (grade |> string_of_int)}
-          className=" appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:ring"
+          className=" appearance-none border rounded w-full p-3 text-gray-600 leading-tight focus:outline-none focus:ring"
           type_="text"
           maxLength=40
           value={gradeAndLabel |> GradeLabel.label}
@@ -176,7 +190,9 @@ let labels = (state, setState) =>
               state,
               setState,
             )}
-          placeholder={"Label for grade " ++ (gradeAndLabel |> GradeLabel.grade |> string_of_int)}
+          placeholder={t("label_grade_placeholder") ++
+          " " ++
+          (gradeAndLabel |> GradeLabel.grade |> string_of_int)}
         />
       </div>
     </div>
@@ -206,35 +222,35 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
   )
   <div className="mx-auto bg-white">
     <div className="max-w-2xl p-6 mx-auto">
-      <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+      <h5 className="uppercase text-center border-b border-gray-300 pb-2">
         {switch evaluationCriterion {
-        | None => "Add Evaluation Criterion"
+        | None => t("add_criterion")
         | Some(ec) => ec |> EvaluationCriterion.name
         } |> str}
       </h5>
       <DisablingCover
         disabled=state.saving
         message={switch evaluationCriterion {
-        | Some(_ec) => "Updating..."
-        | None => "Saving..."
+        | Some(_ec) => ts("updating") ++ "..."
+        | None => ts("saving")
         }}>
         <div key="evaluation-criterion-editor" className="mt-3">
           <div className="mt-5">
             <label className="inline-block tracking-wide text-xs font-semibold " htmlFor="name">
-              {"Name" |> str}
+              {ts("name") |> str}
             </label>
             <input
               autoFocus=true
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               id="name"
               onChange={event => updateName(setState, ReactEvent.Form.target(event)["value"])}
               type_="text"
-              placeholder="Evaluation criterion name"
+              placeholder={t("name_placeholder")}
               maxLength=50
               value=state.name
             />
             <School__InputGroupError
-              message="Enter a valid name"
+              message={t("name_error")}
               active={state.dirty && state.name |> String.trim |> String.length < 1}
             />
           </div>
@@ -245,7 +261,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
               <span
                 className="inline-block tracking-wide text-sm font-semibold mr-2"
                 htmlFor="max_grades">
-                {"Maximum grade is" |> str}
+                {t("max_grade") |> str}
               </span>
               {switch evaluationCriterion {
               | Some(_) =>
@@ -263,7 +279,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                     )}
                   id="max_grade"
                   value={state.maxGrade |> string_of_int}
-                  className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-indigo-500 px-3 py-2 leading-tight rounded-none focus:outline-none focus:border-indigo-500">
+                  className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-blue-500 px-3 py-2 leading-tight rounded-none focus:outline-none focus:border-focusColor-500">
                   {possibleGradeValues
                   |> List.filter(g => g != 1)
                   |> List.map(possibleGradeValue =>
@@ -280,7 +296,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
               <span
                 className="inline-block tracking-wide text-sm font-semibold mx-2"
                 htmlFor="pass_grades">
-                {"and the passing grade is" |> str}
+                {t("passing_grade") |> str}
               </span>
               {switch evaluationCriterion {
               | Some(_) =>
@@ -297,7 +313,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                     )}
                   id="pass_grade"
                   value={state.passGrade |> string_of_int}
-                  className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-indigo-500 px-3 py-2 rounded-none leading-tight focus:outline-none focus:border-indigo-500">
+                  className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-blue-500 px-3 py-2 rounded-none leading-tight focus:outline-none focus:border-focusColor-500">
                   {possibleGradeValues
                   |> List.filter(g => g <= state.maxGrade)
                   |> List.map(possibleGradeValue =>
@@ -315,28 +331,28 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
             <div className="flex justify-between">
               <div className="flex items-center">
                 <label className="block tracking-wide text-xs font-semibold" htmlFor="grades">
-                  {"Grade and Labels" |> str}
+                  {t("grade_labels.label") |> str}
                 </label>
-                <HelpIcon className="ml-2" link="https://docs.pupilfirst.com/#/evaluation_criteria">
-                  {"Assign labels for each grade, to reflect in grade cards for students and coaches" |> str}
+                <HelpIcon className="ml-2" link={t("grade_labels.help_url")}>
+                  {t("grade_labels.help") |> str}
                 </HelpIcon>
               </div>
               <div className="flex">
                 <div className="flex justify-center items-center ml-4">
                   <span className="grade-bar__pointer-legend grade-bar__pointer-legend-failed" />
-                  <span className="ml-2 text-xs"> {"Fail" |> str} </span>
+                  <span className="ml-2 text-xs"> {ts("fail") |> str} </span>
                 </div>
                 <div className="flex justify-center items-center ml-4">
                   <span className="grade-bar__pointer-legend grade-bar__pointer-legend-passed" />
-                  <span className="ml-2 text-xs"> {"Pass" |> str} </span>
+                  <span className="ml-2 text-xs"> {ts("pass") |> str} </span>
                 </div>
               </div>
             </div>
             <div ariaLabel="label-editor"> {labels(state, setState) |> React.array} </div>
             <div className="mt-3 mb-3 text-xs">
               <span className="leading-normal">
-                <strong> {"Important:" |> str} </strong>
-                {" The values for maximum and passing grades cannot be modified once a criterion is created. Labels given to each grade can be edited later on." |> str}
+                <strong> {t("important") ++ ":" |> str} </strong>
+                {" " ++ t("important_details") |> str}
               </span>
             </div>
             <div className="flex">
@@ -347,7 +363,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                   onClick={_ =>
                     updateEvaluationCriterion(state, setState, addOrUpdateCriterionCB, criterion)}
                   className="w-full btn btn-large btn-primary mt-3">
-                  {"Update Criterion" |> str}
+                  {t("update_criterion") |> str}
                 </button>
 
               | None =>
@@ -356,7 +372,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                   onClick={_ =>
                     createEvaluationCriterion(state, setState, addOrUpdateCriterionCB, courseId)}
                   className="w-full btn btn-large btn-primary mt-3">
-                  {"Create Criterion" |> str}
+                  {t("create_criterion") |> str}
                 </button>
               }}
             </div>

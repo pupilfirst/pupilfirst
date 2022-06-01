@@ -1,0 +1,28 @@
+<% title "#{t('delayed/web.views.job')} ##{job.id}" %>
+<div class="page-header">
+  <h1>
+    <%= link_to t('delayed/web.views.jobs'), jobs_path %> / <%= title %>
+  </h1>
+  <div class="btn-group">
+    <% if job.can_queue? %>
+      <%= button_to t('delayed/web.views.buttons.run_next'), queue_job_path(job), method: :put, class: 'btn', form_class: 'btn-rails pull-left' %>
+    <% end %>
+    <% if job.can_destroy? %>
+      <%= button_to t('delayed/web.views.buttons.delete'), job_path(job), method: :delete, class: 'btn btn-danger', form_class: 'btn-rails pull-right', onclick: "return confirm('#{t('delayed/web.views.confirm.delete')}')" %>
+    <% end %>
+  </div>
+</div>
+<h2><%= t('delayed/web.views.status') %></h2>
+<p class="<%= status_dom_class(job.status) %>">
+  <%= t(job.status, scope: 'delayed/web.views.statuses').capitalize %>
+</p>
+<h2><%= t('delayed/web.views.last_error') %></h2>
+<!--email_off-->
+<% if job.last_error.present? %>
+  <pre><%= job.last_error %></pre>
+<% else %>
+  <p class="label label-success"><%= t('delayed/web.views.errors.empty') %></p>
+<% end %>
+<!--/email_off-->
+<h2><%= t('delayed/web.views.handler') %></h2>
+<pre><%= job.handler %></pre>

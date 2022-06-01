@@ -5,17 +5,16 @@
 <% content_for(:title_button_link, sign_in_link) %>
 
 <% content_for :salutation do %>
-  Hello <%= @coach.name %>,
+  <%= t("shared.salutation_name", name: @coach.name) %>
 <% end %>
 
 <% content_for :body do %>
   <p>
-    You have been added as a coach in the course <strong><%= @course.name %></strong>, on <%= @school.name %>. This
-    gives you the ability to review submissions from students, assign grades, and give them feedback on their work.
+    <%= t("mailers.course_enrollement.added_coach_html", course_name: @course.name, school_name: @school.name) %>
   </p>
 
   <p>
-    You can now <%= link_to "sign into #{@school.name} and view your students' submissions", sign_in_link%>.
+    <%= t("mailers.course_enrollement.can_sign_html", link_to: link_to(t("mailers.course_enrollement.link_to", school_name: @school.name), sign_in_link)) %>
   </p>
 
   <%= render 'mailers/link_fallback', url: sign_in_link %>

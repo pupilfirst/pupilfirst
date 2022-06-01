@@ -10,7 +10,7 @@ module Mutations
       mutator = InitiateAccountDeletionMutator.new(context, params)
 
       success = if mutator.valid?
-        mutator.notify(:success, 'Account Deletion Initiated', 'Check your inbox for further steps!')
+        mutator.notify(:success, I18n.t("mutations.initiate_account_deletion.deletion_init_notification"), I18n.t("mutations.initiate_account_deletion.check_inbox_notification"))
         mutator.execute
         true
       else

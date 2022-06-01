@@ -1,9 +1,12 @@
 exception UnexpectedResponse(int)
 
+let t = I18n.t(~scope="components.Api")
+let ts = I18n.t(~scope="shared")
+
 let apiErrorTitle = x =>
   switch x {
   | UnexpectedResponse(code) => string_of_int(code)
-  | _ => "An unexpected error occurred"
+  | _ => t("error_notification_title")
   }
 
 let acceptOrRejectResponse = response =>
@@ -18,7 +21,7 @@ let handleResponseError = error => {
 
   Notification.error(
     title,
-    "Our team has been notified of this error. Please reload the page and try again.",
+    t("error_notification_body"),
   )
 }
 
@@ -30,7 +33,7 @@ let handleResponseJSON = (json, responseCB, errorCB, notify) => {
 
   switch error {
   | Some(error) =>
-    notify ? Notification.error("Something went wrong!", error) : ()
+    notify ? Notification.error(ts("notifications.something_wrong"), error) : ()
     errorCB()
   | None => responseCB(json)
   }

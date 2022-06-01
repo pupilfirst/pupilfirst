@@ -1,5 +1,7 @@
 let str = React.string
 
+let tr = I18n.t(~scope="components.CoursesCurriculum__UrlForm")
+
 type state = {
   url: string,
   errors: list<string>,
@@ -15,7 +17,7 @@ let validate = url => {
   let urlLength = url |> String.length
 
   if url |> UrlUtils.isInvalid(false) && urlLength > 0 {
-    list{"does not look like a valid URL"}
+    list{tr("url_validate_error")}
   } else {
     list{}
   }
@@ -55,15 +57,15 @@ let make = (~attachUrlCB, ~typingCB) => {
         id="attachment_url"
         value=state.url
         type_="text"
-        placeholder="Type full URL starting with https://..."
+        placeholder=tr("button_placeholder")
         className="mt-2 cursor-pointer truncate h-10 border border-grey-400 flex px-4 items-center font-semibold rounded text-sm flex-grow mr-2"
         onChange={updateUrl(send, typingCB)}
       />
       <button
         onClick={attachUrl(state, send, attachUrlCB)}
         disabled={isDisabled(state)}
-        className="mt-2 bg-indigo-600 hover:bg-gray-500 text-white text-sm font-semibold py-2 px-6 focus:outline-none">
-        {"Attach link" |> str}
+        className="mt-2 bg-focusColor-600 hover:bg-gray-500 text-white text-sm font-semibold py-2 px-6 focus:outline-none">
+        {tr("button_text") |> str}
       </button>
     </div>
     {state.errors

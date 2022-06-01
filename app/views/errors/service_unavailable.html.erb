@@ -3,7 +3,7 @@
     <%= image_tag 'layouts/errors/error-500.svg', class: 'md:w-3/5', alt: 'Server Timeout' %>
   </picture>
   <div class="max-w-3xl mx-auto text-center px-4 pb-4">
-    <h1>This page took too long to load.</h1>
-    <p class="my-3 text-sm leading-normal">Could you please try reloading this page?</p>
+    <h1><%= t(".too_long") %></h1>
+    <p class="my-3 text-sm leading-normal"><%= t(".try_reloading") %></p>
   </div>
 </div>

@@ -63,7 +63,7 @@
 
   input:disabled,
   .disabled {
-    @apply cursor-not-allowed bg-gray-50 text-gray-700;
+    @apply cursor-not-allowed bg-gray-50 text-gray-600;
   }
 
   /* Accessible File Input */
@@ -135,7 +135,7 @@
   }
 
   .btn-primary:hover {
-    @apply bg-gradient-to-br from-primary-600 to-primary-700;
+    @apply bg-gradient-to-br from-primary-600 to-primary-700 text-white;
   }
 
   .btn-primary:focus {

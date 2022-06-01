@@ -5,7 +5,7 @@ let isPast = date => date->Belt.Option.mapWithDefault(false, DateFns.isPast)
 let selected = currentCourse =>
   <button
     title={CourseInfo.name(currentCourse)}
-    className="border-b border-gray-300 rounded w-full appearance-none flex items-center justify-between hover:bg-primary-100 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-semibold relative px-2 py-2">
+    className="border-b border-gray-300 rounded w-full appearance-none flex items-center justify-between hover:bg-primary-100 hover:text-primary-500 focus:outline-none focus:bg-white focus:text-primary-500 font-medium relative px-2 py-2">
     <span className="w-5/6 flex items-center">
       <i className="fas fa-book" />
       <span className="truncate ml-2 text-left"> {CourseInfo.name(currentCourse)->str} </span>

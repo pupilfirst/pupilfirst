@@ -1,4 +1,4 @@
-%bs.raw(`require("./PfIcon__Example.css")`)
+%raw(`require("./PfIcon__Example.css")`)
 
 let str = React.string
 
@@ -122,13 +122,15 @@ module Example = {
             onChange={onChange(setSearchString)}
             type_="text"
             placeholder="Search"
-            className="mx-2 text-sm bg-white border border-gray-300 rounded py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 appearance-none text-gray-700 focus:outline-none md:w-2/5"
+            className="mx-2 text-sm bg-white border border-gray-300 rounded py-2 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 appearance-none text-gray-600 focus:outline-none md:w-2/5"
           />
         </div>
         <div className="mx-2 mt-4 flex md:flex-row flex-col flex-wrap bg-white border rounded p-2">
           {switch search(searchString) {
           | [] => <div className="p-4 text-sm text-center w-full"> {"Icon not found" |> str} </div>
-          | resultIcons => resultIcons |> Array.map(icon => {
+          | resultIcons =>
+            resultIcons
+            |> Array.map(icon => {
               let iconClasses = "if i-" ++ icon
               <div key=icon className="flex items-center mt-4 md:w-1/2 w-full px-2 my-2">
                 <PfIcon className={iconClasses ++ " if-fw text-2xl"} />
@@ -142,7 +144,8 @@ module Example = {
                   </div>
                 </div>
               </div>
-            }) |> React.array
+            })
+            |> React.array
           }}
         </div>
       </div>

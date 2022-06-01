@@ -21,8 +21,7 @@ module CreateQuizSubmissionQuery = %graphql(`
 
 let createQuizSubmission = (target, selectedAnswersIds, setSaving, addSubmissionCB) => {
   setSaving(_ => true)
-  CreateQuizSubmissionQuery.make(~targetId=target |> Target.id, ~answerIds=selectedAnswersIds, ())
-  |> GraphqlQuery.sendQuery
+  CreateQuizSubmissionQuery.make({targetId: target |> Target.id, answerIds: selectedAnswersIds})
   |> Js.Promise.then_(response => {
     switch response["createQuizSubmission"]["submission"] {
     | Some(submission) =>

@@ -151,7 +151,7 @@ let showUser = user => {
         </div>
         <div className="pl-2 flex justify-between w-full items-center">
           <p className="text-sm font-semibold text-left"> {str(User.name(user))} </p>
-          <div className="text-xs text-gray-700 flex space-x-2"> {links()->React.array} </div>
+          <div className="text-xs text-gray-600 flex space-x-2"> {links()->React.array} </div>
         </div>
       </div>
     </div>

@@ -115,7 +115,7 @@ module Make = (Selectable: Selectable) => {
                 ? <div className="px-3 pt-3 pb-2">
                     <input
                       id=inputId
-                      className="appearance-none bg-transparent border-b w-full text-gray-700 pb-3 px-2 pl-0 leading-normal focus:outline-none"
+                      className="appearance-none bg-transparent border-b w-full text-gray-600 pb-3 px-2 pl-0 leading-normal focus:outline-none"
                       type_="text"
                       value
                       placeholder
@@ -134,7 +134,7 @@ module Make = (Selectable: Selectable) => {
                     }}
                     ariaLabel={"Select " ++ (item |> Selectable.value)}
                     title={"Select " ++ (item |> Selectable.value)}
-                    className="flex w-full multiselect-inline__list-item  items-center px-3 py-2 font-semibold hover:bg-primary-100 hover:text-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 cursor-pointer">
+                    className="flex w-full multiselect-inline__list-item  items-center px-3 py-2 font-medium hover:bg-primary-100 hover:text-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 cursor-pointer">
                     <i
                       className="far fa-square multiselect-inline__list-item-select-icon-unselected text-gray-400 text-xl"
                     />

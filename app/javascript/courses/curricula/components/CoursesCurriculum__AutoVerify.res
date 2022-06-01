@@ -45,8 +45,7 @@ let createAutoVerifySubmission = (target, linkToComplete, setSaving, addSubmissi
   event |> ReactEvent.Mouse.preventDefault
   setSaving(_ => true)
 
-  AutoVerifySubmissionQuery.make(~targetId=target |> Target.id, ())
-  |> GraphqlQuery.sendQuery
+  AutoVerifySubmissionQuery.make({targetId: Target.id(target)})
   |> Js.Promise.then_(response => {
     switch response["autoVerifySubmission"]["submission"] {
     | Some(details) =>

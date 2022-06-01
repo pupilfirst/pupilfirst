@@ -235,12 +235,14 @@ let getStudentSubmissions = (
 ) => {
   let levelId = level->Belt.Option.flatMap(level => Some(Level.id(level)))
   let status = status->Belt.Option.flatMap(status => Some(status))
-  switch cursor {
-  | Some(cursor) =>
-    StudentSubmissionsQuery.make(~studentId, ~after=cursor, ~sortDirection, ~levelId?, ~status?, ())
-  | None => StudentSubmissionsQuery.make(~studentId, ~sortDirection, ~levelId?, ~status?, ())
-  }
-  |> GraphqlQuery.sendQuery
+
+  StudentSubmissionsQuery.make({
+    studentId: studentId,
+    after: cursor,
+    sortDirection: sortDirection,
+    levelId: levelId,
+    status: status,
+  })
   |> Js.Promise.then_(response => {
     response["studentSubmissions"]["nodes"] |> updateStudentSubmissions(
       send,

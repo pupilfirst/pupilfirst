@@ -810,10 +810,10 @@ en:
       creating: Creating...
       description_video_placeholder: Description for your video
       embed_url:
-        save_button: Save
         help: We support a number of third-party services (check link below). Just copy & paste the full URL to the page that contains the resource that you'd like to embed.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#content-block-types
         label: URL to Embed
+        save_button: Save
       failed_create_error: An unexpected error occured. Please reload the page and try again.
       failed_upload_error: Failed to upload file. Please check message in notification, and try again.
       failed_url_error: The URL doesn't look valid. Please make sure that it starts with 'https://' and that it's one of the accepted websites.
@@ -1004,11 +1004,11 @@ en:
       preview: Preview
       restore_version: Restore this version
     CurriculumEditor__VersionsEditor:
+      help: Use the versions feature to preserve the existing state of a target's content, to browse earlier stored versions, and to restore them, if required.
+      help_url: https://docs.pupilfirst.com/users/curriculum_editor#target-content-versions
       restore_version: Restore this version
       save_version: Save this version
       select_version: Select version
-      help: Use the versions feature to preserve the existing state of a target's content, to browse earlier stored versions, and to restore them, if required.
-      help_url: https://docs.pupilfirst.com/users/curriculum_editor#target-content-versions
     EditorDrawer:
       close_editor: Close Editor
     EvaluationCriteria__Index:
@@ -1017,9 +1017,9 @@ en:
       add_criterion: Add Evaluation Criterion
       create_criterion: Create Criterion
       grade_labels:
-        label: Grade and Labels
         help: Assign labels for each grade, to reflect in grade cards for students and coaches
         help_url: https://docs.pupilfirst.com/users/evaluation_criteria
+        label: Grade and Labels
       important: Important
       important_details: The values for maximum and passing grades cannot be modified once a criterion is created. Labels given to each grade can be edited later on.
       label_grade_placeholder: Label for grade
@@ -1322,9 +1322,9 @@ en:
       details_certificate: Details of issued certificate
       dropout_student:
         button: Dropout Student
-        label: Has this student dropped out?
         help: Marking a student as dropped out will remove all of their access to the course.
         help_url: https://docs.pupilfirst.com/users/students#student-actions
+        label: Has this student dropped out?
       empty_course_certificates_text: This course does not have any certificates to issue.
       empty_issued_certificates_text: This student has not been issued any certificates.
       issue_certificate_button: Issue Certificate
@@ -1354,10 +1354,10 @@ en:
         invalid_data: The CSV file has invalid data in few cells. Please fix the errors listed below and try again.
         invalid_template: The selected CSV file does not have a valid template
       csv_file_input:
-        label: CSV Import file
-        placeholder: Select CSV file to import
         help: This file will be used to import students in bulk. Check the sample file for the required format.
         help_url: https://docs.pupilfirst.com/users/students#importing-students-in-bulk
+        label: CSV Import file
+        placeholder: Select CSV file to import
       drawer_heading: Bulk Import Students
       error_summary_title: "Here is a summary of the errors in the sheet: "
       example_csv_link:
@@ -1429,10 +1429,10 @@ en:
       try_removing_filter: Try removing the search filter options.
     StudentsEditor__UpdateDetailsForm:
       access_ends_at:
-        label_student: Student's Access Ends On
-        label_team: Team's Access Ends On
         help: If set, students will not be able to complete targets after this date.
         help_url: https://docs.pupilfirst.com/users/students#editing-student-details
+        label_student: Student's Access Ends On
+        label_team: Team's Access Ends On
       affiliation: Affiliation
       affiliation_placeholder: Acme Inc., Acme University, etc.
       name: Name
@@ -1441,7 +1441,6 @@ en:
       search_coaches_empty: No coaches selected
       search_coaches_placeholder: Search coaches
       student_name_placeholder: Student name here
-      student_s:
       student_updated: Student updated successfully
       student_updated_moved: Student has been updated, and moved to list of inactive students
       tags_applied: Tags applied
@@ -2222,19 +2221,18 @@ en:
       link_expired: That link has expired or is invalid. Please try again.
       title: Edit User
     omniauth_callbacks:
-      email_blank_flash:
-        add_facebook: Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.
-        add_github: Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.
-        add_other: Please sign in using another method.
-        not_receive_email: "We're sorry, but we did not receive your email address from %{provider_name}. "
       failure:
         denied: Authentication was denied. Please try again.
         denied_by: Authentication was denied by %{provider}. Please try again.
-      oauth_origin_missing:
-        details: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
-        invalid_request: Your browser made an invalid request.
-      sign_in_at_oauth_origin:
+      oauth_callback:
+        add_facebook: Please <a href="https://www.facebook.com/settings?tab=applications" target="_blank" rel="noopener">remove \'Pupilfirst\' from your authorized apps list</a> and try signing in again.
+        add_github: Please <a href="https://github.com/settings/profile" target="_blank" rel="noopener">add a public email address to your Github profile</a> and try again.
+        add_other: Please sign in using another method.
         email_unregistered: "Your email address: %{email} is unregistered."
+        not_receive_email: "We're sorry, but we did not receive your email address from %{provider_name}. "
+        oauth_origin_missing:
+          details: <em>Something</em> about the request that your browser sent wasn't valid. We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try reloading the page.
+          invalid_request: Your browser made an invalid request.
     sessions:
       email_sent:
         image_alt: An email flying into to your inbox

@@ -74,13 +74,11 @@ let make = (~coaches, ~authenticityToken) => {
                     />
                     <div className="text-sm text-left">
                       <p className="font-semibold"> {coach |> Coach.name |> str} </p>
-                      <p className="text-gray-600 font-semibold text-xs mt-px">
-                        {coach |> Coach.title |> str}
-                      </p>
+                      <p className="text-gray-600 text-xs mt-px"> {coach |> Coach.title |> str} </p>
                     </div>
                   </div>
                   <span
-                    className="flex items-center flex-shrink-0 ml-2 py-4 px-4 font-semibold text-gray-700 hover:text-primary-500 text-sm">
+                    className="flex items-center flex-shrink-0 ml-2 py-4 px-4 text-gray-600 hover:text-primary-500 text-sm">
                     <i className="fas fa-edit text-normal" />
                     <span className="ml-1"> {ts("edit") |> str} </span>
                   </span>

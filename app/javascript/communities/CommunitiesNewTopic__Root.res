@@ -87,8 +87,10 @@ let searchForSimilarTopics = (send, title, communityId, ()) => {
 
   let trimmedTitle = title |> String.trim
 
-  SimilarTopicsQuery.make(~communityId, ~title=trimmedTitle, ())
-  |> GraphqlQuery.sendQuery
+  SimilarTopicsQuery.make({
+    communityId: communityId,
+    title: trimmedTitle,
+  })
   |> Js.Promise.then_(result => {
     let suggestions = result["similarTopics"] |> Array.map(TopicSuggestion.makeFromJs)
     send(FinishSearching(trimmedTitle, suggestions))
@@ -96,10 +98,7 @@ let searchForSimilarTopics = (send, title, communityId, ()) => {
   })
   |> Js.Promise.catch(e => {
     Js.log(e)
-    Notification.warn(
-      tr("oops"),
-      tr("failed_fetch_similar"),
-    )
+    Notification.warn(tr("oops"), tr("failed_fetch_similar"))
     send(FailSaving)
     Js.Promise.resolve()
   })
@@ -150,17 +149,15 @@ let handleCreateTopic = (state, send, communityId, target, topicCategory, event)
 
     let topicCategoryId = topicCategory |> OptionUtils.flatMap(tc => Some(TopicCategory.id(tc)))
 
-    CreateTopicQuery.make(
-      ~body=state.body,
-      ~title=state.title,
-      ~communityId,
-      ~targetId?,
-      ~topicCategoryId?,
-      (),
-    )
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      switch response["createTopic"]["topicId"] {
+    CreateTopicQuery.fetch({
+      body: state.body,
+      title: state.title,
+      communityId: communityId,
+      targetId: targetId,
+      topicCategoryId: topicCategoryId,
+    })
+    |> Js.Promise.then_((response: CreateTopicQuery.t) => {
+      switch response.createTopic.topicId {
       | Some(topicId) =>
         Notification.success(tr("done"), tr("redirecting"))
         redirectToNewTopic(topicId, state.title)
@@ -197,7 +194,7 @@ let suggestions = state => {
           let askedOn =
             suggestion->TopicSuggestion.createdAt->DateFns.formatPreset(~short=true, ~year=true, ())
           let (answersText, answersClasses) = switch suggestion |> TopicSuggestion.repliesCount {
-          | 0 => (tr("no_replies"), "bg-gray-300 text-gray-700")
+          | 0 => (tr("no_replies"), "bg-gray-300 text-gray-600")
           | 1 => (tr("one_reply"), "bg-green-500 text-white")
           | n => ((n |> string_of_int) ++ tr("count_replies_label"), "bg-green-500 text-white")
           }
@@ -265,7 +262,8 @@ let make = (~communityId, ~target, ~topicCategories) => {
         <div className="px-3 lg:px-0">
           <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
             <a className="btn btn-subtle" onClick={_ => DomUtils.goBack()}>
-              <i className="fas fa-arrow-left" /> <span className="ml-2"> {tr("back") |> str} </span>
+              <i className="fas fa-arrow-left" />
+              <span className="ml-2"> {tr("back") |> str} </span>
             </a>
           </div>
         </div>
@@ -306,7 +304,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                       let newTitle = ReactEvent.Form.target(event)["value"]
                       updateTitleAndSearch(state, send, communityId, newTitle)
                     }}
-                    placeholder=tr("title_placeholder")
+                    placeholder={tr("title_placeholder")}
                   />
                 </div>
                 {ReactUtils.nullIf(
@@ -351,7 +349,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                   textareaId="body"
                   onChange={markdown => send(UpdateBody(markdown))}
                   value=state.body
-                  placeholder=tr("be_descriptive")
+                  placeholder={tr("be_descriptive")}
                   profile=Markdown.Permissive
                   maxLength=10000
                 />

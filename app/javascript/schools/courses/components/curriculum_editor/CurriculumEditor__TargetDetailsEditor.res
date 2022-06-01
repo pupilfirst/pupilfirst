@@ -96,8 +96,7 @@ module TargetDetailsQuery = %graphql(`
 `)
 
 let loadTargetDetails = (targetId, send) =>
-  TargetDetailsQuery.make(~targetId, ())
-  |> GraphqlQuery.sendQuery
+  TargetDetailsQuery.make({targetId: targetId})
   |> Js.Promise.then_(result => {
     let targetDetails = TargetDetails.makeFromJs(result["targetDetails"])
     send(SaveTargetDetails(targetDetails))
@@ -747,6 +746,24 @@ let updateTargetButton = (
   </button>
 }
 
+let quizAnswersAsJsObject = quizAnswers =>
+  quizAnswers |> Array.map(qa =>
+    UpdateTargetQuery.makeInputObjectTargetQuizAnswerInput(
+      ~answer=AnswerOption.answer(qa),
+      ~correctAnswer=AnswerOption.correctAnswer(qa),
+      (),
+    )
+  )
+
+let quizAsJsObject = quiz =>
+  quiz |> Array.map(q =>
+    UpdateTargetQuery.makeInputObjectTargetQuizInput(
+      ~question=QuizQuestion.question(q),
+      ~answerOptions=quizAnswersAsJsObject(QuizQuestion.answerOptions(q)),
+      (),
+    )
+  )
+
 let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(UpdateSaving)
@@ -756,7 +773,7 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
   let quizAsJs =
     state.quiz
     |> Js.Array.filter(question => QuizQuestion.isValidQuizQuestion(question))
-    |> QuizQuestion.quizAsJsObject
+    |> quizAsJsObject
 
   let (quiz, evaluationCriteria, linkToComplete, checklist) = switch state.methodOfCompletion {
   | Evaluated => ([], state.evaluationCriteria, "", state.checklist)
@@ -771,7 +788,7 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
   | Draft => Draft
   }
 
-  UpdateTargetQuery.make(
+  let variables = UpdateTargetQuery.makeVariables(
     ~id,
     ~targetGroupId,
     ~title=state.title,
@@ -785,7 +802,8 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
     ~checklist=checklist |> ChecklistItem.encodeChecklist,
     (),
   )
-  |> GraphqlQuery.sendQuery
+
+  UpdateTargetQuery.make(variables)
   |> Js.Promise.then_(result => {
     switch result["updateTarget"]["sortIndex"] {
     | Some(sortIndex) =>
@@ -860,7 +878,7 @@ let make = (
             <div className="max-w-3xl mx-auto px-3">
               <div className="mb-6">
                 <label
-                  className="flex items-center inline-block tracking-wide text-sm font-semibold mb-2"
+                  className="items-center inline-block tracking-wide text-sm font-semibold mb-2"
                   htmlFor="title">
                   <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
                   {t("title") |> str}

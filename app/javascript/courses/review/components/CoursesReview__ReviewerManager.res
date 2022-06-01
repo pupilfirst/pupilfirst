@@ -25,8 +25,7 @@ module ReassignReviewerMutation = %graphql(`
 
 let assignReviewer = (submissionId, setSaving, updateReviewerCB) => {
   setSaving(_ => true)
-  AssignReviewerMutation.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery
+  AssignReviewerMutation.make({submissionId: submissionId})
   |> Js.Promise.then_(response => {
     updateReviewerCB(Some(UserProxy.makeFromJs(response["assignReviewer"]["reviewer"])))
     setSaving(_ => false)
@@ -41,8 +40,7 @@ let assignReviewer = (submissionId, setSaving, updateReviewerCB) => {
 
 let reassignReviewer = (submissionId, setSaving, updateReviewerCB) => {
   setSaving(_ => true)
-  ReassignReviewerMutation.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery
+  ReassignReviewerMutation.make({submissionId: submissionId})
   |> Js.Promise.then_(response => {
     updateReviewerCB(Some(UserProxy.makeFromJs(response["reassignReviewer"]["reviewer"])))
     setSaving(_ => false)
@@ -115,8 +113,8 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
       | None => [
           <div className="flex items-center justify-center">
             <div
-              className="h-24 w-24 md:h-30 md:w-30 rounded-full bg-gray-300 flex items-center justify-center">
-              <Icon className="if i-eye-solid text-gray-800 text-4xl" />
+              className="h-24 w-24 md:h-30 md:w-30 rounded-xl bg-gray-100 flex items-center justify-center">
+              <Icon className="if i-eye-solid text-gray-400 text-4xl" />
             </div>
           </div>,
           <div className="flex items-center justify-center mt-4">

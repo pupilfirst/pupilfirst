@@ -8,13 +8,19 @@ class LockTopicMutator < ApplicationQuery
 
   private
 
-  alias authorized? authorized_moderate?
+  alias authorized? authorized_update?
 
   def community
     topic&.community
   end
 
+  def creator
+    topic&.creator
+  end
+
   def topic
-    @topic ||= Topic.find_by(id: id)
+    return @topic if defined?(@topic)
+
+    @topic = Topic.find_by(id: id)
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_25_101004) do
+ActiveRecord::Schema.define(version: 2022_04_25_072002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -465,7 +465,6 @@ ActiveRecord::Schema.define(version: 2022_05_25_101004) do
     t.string "kind"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "sort_index", default: 0, null: false
     t.index ["school_id", "kind"], name: "index_school_links_on_school_id_and_kind"
   end
 

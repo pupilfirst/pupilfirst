@@ -47,7 +47,7 @@ class CreateSchoolLinkMutator < ApplicationQuery
       end
 
     params[:kind] = kind
-
+    params[:sort_index] = SchoolLink.where(kind: kind).count
     current_school.school_links.create!(params)
   end
 

@@ -17,7 +17,13 @@ module DestroySchoolLinkQuery = %graphql(`
 module SortSchoolLinkQuery = %graphql(`
   mutation SortSchoolLinksMutation($linkIds: [ID!]!,$kind:String!) {
     sortSchoolLinks(linkIds:$linkIds,kind:$kind) {
-      success
+      links {
+        id
+        title
+        url
+        kind
+        sortIndex
+     }
     }
   }
   `)
@@ -31,7 +37,17 @@ let handleMoveLink = (
   ~links,
   ~moveLinkCB,
 ) => {
-  let linkIds = links |> List.map(((id, _, _, _)) => id) |> Array.of_list
+  let link = links |> List.find(((linkId, _, _, _)) => id == linkId)
+
+  let linkIds =
+    links
+    |> List.sort(((_, _, _, sortIndex1), (_, _, _, sortIndex2)) => sortIndex1 - sortIndex2)
+    |> switch direction {
+    | Customizations.Down => ListUtils.swapDown(link)
+    | Customizations.Up => ListUtils.swapUp(link)
+    }
+    |> List.map(((linkId, _, _, _)) => linkId)
+    |> Array.of_list
 
   let linkKind = switch kind {
   | SchoolLinks.HeaderLink => "header"
@@ -40,12 +56,13 @@ let handleMoveLink = (
   }
 
   setUpdating(_ => true)
-  SortSchoolLinkQuery.make(~linkIds, ~kind=linkKind, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(_ => {
+  SortSchoolLinkQuery.make({linkIds: linkIds, kind: linkKind})
+  |> Js.Promise.then_(response => {
     setUpdating(_ => false)
+    open Json.Decode
+    let x = field("links", list(Customizations.decodeLink), response["sortSchoolLinks"])
+    moveLinkCB(x)
     setIsEditingDisabled(_ => true)
-    moveLinkCB(id, direction)
     Js.Promise.resolve()
   })
   |> ignore
@@ -60,8 +77,7 @@ let handleDelete = (state: SchoolLinks.state, send, removeLinkCB, id, event) => 
   } else {
     send(SchoolLinks.DisableDelete(id))
 
-    DestroySchoolLinkQuery.make(~id, ())
-    |> GraphqlQuery.sendQuery
+    DestroySchoolLinkQuery.make({id: id})
     |> Js.Promise.then_(_response => {
       removeLinkCB(id)
       Js.Promise.resolve()
@@ -78,10 +94,16 @@ module UpdateSchoolLinkQuery = %graphql(`
   }
 `)
 
-let handleLinkEdit = (~setUpdating, ~setIsEditingDisabled, ~updateLinkCB, ~id, ~title, ~url) => {
+let handleLinkEdit = (
+  ~setUpdating,
+  ~setIsEditingDisabled,
+  ~updateLinkCB,
+  ~id,
+  ~title: string,
+  ~url,
+) => {
   setUpdating(_ => true)
-  UpdateSchoolLinkQuery.make(~id, ~title, ~url, ())
-  |> GraphqlQuery.sendQuery
+  UpdateSchoolLinkQuery.make({id: id, title: Some(title), url: url})
   |> Js.Promise.then_(_ => {
     setUpdating(_ => false)
     setIsEditingDisabled(_ => true)

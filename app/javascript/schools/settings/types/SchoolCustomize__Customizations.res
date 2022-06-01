@@ -123,33 +123,6 @@ let sortFunc = link =>
   | SocialLink(_, _, sortIndex) => sortIndex
   }
 
-let moveLink = (linkId, direction, t) => {
-  let link = t.links |> List.find(link =>
-    switch link {
-    | HeaderLink(id, _, _, _)
-    | FooterLink(id, _, _, _)
-    | SocialLink(id, _, _) =>
-      id == linkId
-    }
-  )
-  {
-    ...t,
-    links: t.links
-    |> List.sort((a, b) => sortFunc(a) - sortFunc(b))
-    |> switch direction {
-    | Down => ListUtils.swapDown(link)
-    | Up => ListUtils.swapUp(link)
-    }
-    |> List.mapi((sortIndex, link) =>
-      switch link {
-      | HeaderLink(id, title, url, _) => HeaderLink(id, title, url, sortIndex)
-      | FooterLink(id, title, url, _) => FooterLink(id, title, url, sortIndex)
-      | SocialLink(id, url, _) => SocialLink(id, url, sortIndex)
-      }
-    ),
-  }
-}
-
 let optionalString = s =>
   switch s |> String.trim {
   | "" => None
@@ -224,7 +197,7 @@ let decodeLink = json => {
       field("kind", string, json),
       field("id", string, json),
       field("url", string, json),
-      field("sort_index", int, json),
+      field("sortIndex", int, json),
     )
   }
 
@@ -249,6 +222,15 @@ let decode = json => {
   {
     schoolStrings: json |> field("strings", decodeStrings),
     schoolImages: json |> field("images", decodeImages),
-    links: json |> field("links", list(decodeLink)),
+    links: json
+    |> field("links", list(decodeLink))
+    |> List.sort((l1, l2) => sortFunc(l1) - sortFunc(l2)),
+  }
+}
+
+let moveLink = (links, t) => {
+  {
+    ...t,
+    links: links,
   }
 }

@@ -26,8 +26,8 @@ type rec action =
   | CloseEditor
   | AddLink(Customizations.link)
   | RemoveLink(Customizations.linkId)
-  | UpdateLink(Customizations.linkId, string, string)
-  | MoveLink(Customizations.linkId, Customizations.direction)
+  | UpdateLink(Customizations.linkId, string, Customizations.url)
+  | MoveLink(list<Customizations.link>)
   | UpdateTermsAndConditions(string)
   | UpdatePrivacyPolicy(string)
   | UpdateAddress(string)
@@ -45,7 +45,7 @@ let headerLogo = (schoolName, logoOnLightBg) =>
   | None => <span className="text-2xl font-bold"> {schoolName |> str} </span>
   }
 
-let headerLink = ((id, title, _, sortIndex)) =>
+let headerLink = ((id, title, _, _)) =>
   <div className="ml-6 text-sm font-semibold cursor-default" key=id>
     <span> {title |> str} </span>
   </div>
@@ -80,7 +80,7 @@ let sitemap = links =>
   | links =>
     <div className="flex flex-wrap">
       {links
-      |> List.map(((id, title, _, sortIndex)) =>
+      |> List.map(((id, title, _, _)) =>
         <div className="w-1/3 pr-4 mt-3 text-xs font-semibold" key=id> {title |> str} </div>
       )
       |> Array.of_list
@@ -98,7 +98,7 @@ let socialLinks = links =>
   | links =>
     <div className="flex flex-wrap">
       {links
-      |> List.map(((id, _title, url, sortIndex)) => <SchoolCustomize__SocialLink url key=id />)
+      |> List.map(((id, _title, url, _)) => <SchoolCustomize__SocialLink url key=id />)
       |> Array.of_list
       |> React.array}
     </div>
@@ -164,7 +164,7 @@ let editor = (state, send, authenticityToken) =>
           kind
           customizations=state.customizations
           addLinkCB={link => send(AddLink(link))}
-          moveLinkCB={(linkId, direction) => send(MoveLink(linkId, direction))}
+          moveLinkCB={data => send(MoveLink(data))}
           removeLinkCB={linkId => send(RemoveLink(linkId))}
           updateLinkCB={(linkId, title, url) => send(UpdateLink(linkId, title, url))}
         />
@@ -225,9 +225,9 @@ let reducer = (state, action) =>
       ...state,
       customizations: state.customizations |> Customizations.removeLink(linkId),
     }
-  | MoveLink(linkId, direction) => {
+  | MoveLink(links) => {
       ...state,
-      customizations: state.customizations |> Customizations.moveLink(linkId, direction),
+      customizations: state.customizations |> Customizations.moveLink(links),
     }
   | UpdatePrivacyPolicy(agreement) => {
       ...state,
@@ -284,11 +284,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
             {headerLinks(
               state.customizations |> Customizations.headerLinks |> Customizations.unpackLinks,
             )}
-            {editIcon(
-              "ml-3",
-              showEditor(LinksEditor(SchoolCustomize__LinksEditor.HeaderLink), send),
-              t("edit_header_links"),
-            )}
+            {editIcon("ml-3", showEditor(LinksEditor(HeaderLink), send), t("edit_header_links"))}
           </div>
         </div>
       </div>
@@ -365,7 +361,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                 <span className="uppercase font-bold text-sm"> {t("sitemap") |> str} </span>
                 {editIcon(
                   "ml-3",
-                  showEditor(LinksEditor(SchoolCustomize__LinksEditor.FooterLink), send),
+                  showEditor(LinksEditor(FooterLink), send),
                   t("edit_footer_links"),
                 )}
               </div>
@@ -383,7 +379,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                     <span className="uppercase font-bold text-sm"> {t("social") |> str} </span>
                     {editIcon(
                       "ml-3",
-                      showEditor(LinksEditor(SchoolCustomize__LinksEditor.SocialLink), send),
+                      showEditor(LinksEditor(SocialLink), send),
                       t("edit_social_links"),
                     )}
                   </div>

@@ -8,30 +8,9 @@ let str = React.string
 let t = I18n.t(~scope="components.SchoolCustomize__LinkEditor")
 let ts = I18n.t(~scope="shared")
 
-type kind =
-  | HeaderLink
-  | FooterLink
-  | SocialLink
-
-type state = {
-  kind: kind,
-  title: string,
-  url: string,
-  titleInvalid: bool,
-  urlInvalid: bool,
-  formDirty: bool,
-  adding: bool,
-  deleting: list<Customizations.linkId>,
-}
-
-type action =
-  | UpdateKind(kind)
-  | UpdateTitle(string, bool)
-  | UpdateUrl(string, bool)
-  | DisableForm
-  | EnableForm
-  | ClearForm
-  | DisableDelete(Customizations.linkId)
+type kind = SchoolLinks.kind
+type state = SchoolLinks.state
+type action = SchoolLinks.action
 
 let handleKindChange = (send, kind, event) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -42,7 +21,10 @@ let isTitleInvalid = title => title |> String.trim |> String.length == 0
 
 let handleTitleChange = (send, event) => {
   let title = ReactEvent.Form.target(event)["value"]
-  send(UpdateTitle(title, isTitleInvalid(title)))
+  switch title {
+  | Some(val) => send(UpdateTitle(title, isTitleInvalid(val)))
+  | None => ()
+  }
 }
 
 let handleUrlChange = (send, event) => {
@@ -224,7 +206,7 @@ let unpackLinks = (kind, customizations) =>
   }
   |> Customizations.unpackLinks
 
-let initialState = kind => {
+let initialState: kind => SchoolLinks.state = kind => {
   kind: kind,
   title: "",
   url: "",
@@ -235,7 +217,7 @@ let initialState = kind => {
   deleting: list{},
 }
 
-let reducer = (state, action) =>
+let reducer = (state: SchoolLinks.state, action) =>
   switch action {
   | UpdateKind(kind) => {...state, kind: kind, formDirty: true}
   | UpdateTitle(title, invalid) => {
@@ -259,7 +241,7 @@ let reducer = (state, action) =>
     }
   }
 
-let showLinks = (state, send, removeLinkCB, updateLinkCB, moveLinkCB, kind, links) =>
+let showLinks = (state, send, removeLinkCB, updateLinkCB, moveLinkCB, kind, links) => {
   switch links {
   | list{} =>
     <div
@@ -268,7 +250,7 @@ let showLinks = (state, send, removeLinkCB, updateLinkCB, moveLinkCB, kind, link
     </div>
   | links =>
     links
-    |> List.mapi((index, (id, title, url, sortIndex)) =>
+    |> List.mapi((index, (id, title, url, _)) =>
       <SchoolCustomize__LinkComponent
         key=id
         id
@@ -288,6 +270,7 @@ let showLinks = (state, send, removeLinkCB, updateLinkCB, moveLinkCB, kind, link
     |> Array.of_list
     |> React.array
   }
+}
 
 @react.component
 let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~updateLinkCB) => {

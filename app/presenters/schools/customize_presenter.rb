@@ -51,6 +51,7 @@ module Schools
         .as_json(only: %i[kind id title url sort_index])
         .map do |link|
           link['id'] = link['id'].to_s
+          link['sortIndex'] = link['sort_index']
           link
         end
     end

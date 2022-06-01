@@ -17,6 +17,8 @@ RUN apt-get install -y nodejs
 # Install JS dependencies using Yarn.
 COPY package.json .
 COPY yarn.lock .
+COPY .yarnrc.docker.yml .yarnrc.yml
+COPY .yarn/releases .yarn/releases
 RUN corepack enable
 RUN yarn install
 

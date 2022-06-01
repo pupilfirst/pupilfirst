@@ -66,23 +66,25 @@ let getCourseResources = (send, courseId, filters: array<filter>) => {
     )
     ->ArrayUtils.flattenV2
 
-  send(SetLoading)
-  CourseResourceInfoInfoQuery.make(
-    CourseResourceInfoInfoQuery.makeVariables(~courseId, ~resources, ()),
-  )
-  |> Js.Promise.then_(response => {
-    send(
-      SetFilterData(
-        response["courseResourceInfo"]->Js.Array2.map(obj => {
-          resource: obj["resource"],
-          values: obj["values"],
-        }),
-      ),
+  if Js.Array2.length(resources) > 0 {
+    send(SetLoading)
+    CourseResourceInfoInfoQuery.make(
+      CourseResourceInfoInfoQuery.makeVariables(~courseId, ~resources, ()),
     )
+    |> Js.Promise.then_(response => {
+      send(
+        SetFilterData(
+          response["courseResourceInfo"]->Js.Array2.map(obj => {
+            resource: obj["resource"],
+            values: obj["values"],
+          }),
+        ),
+      )
 
-    Js.Promise.resolve()
-  })
-  |> ignore
+      Js.Promise.resolve()
+    })
+    |> ignore
+  }
 }
 
 module Selectable = {

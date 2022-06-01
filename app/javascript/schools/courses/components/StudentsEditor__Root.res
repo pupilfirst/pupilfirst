@@ -213,26 +213,14 @@ let make = (
   <div className="flex flex-1 flex-col">
     {switch state.formVisible {
     | None => React.null
-    | CreateForm =>
- React.null
+    | CreateForm => React.null
 
     | UpdateForm(student, teamId) =>
       let team = teamId |> Team.unsafeFind(state.pagedTeams |> Page.teams, "Root")
       let courseCoaches =
         schoolCoaches |> Js.Array.filter(coach => courseCoachIds |> Array.mem(Coach.id(coach)))
       <SchoolAdmin__EditorDrawer closeDrawerCB={() => send(UpdateFormVisible(None))}>
-        <StudentsEditor__UpdateForm
-          student
-          team
-          teamTags=state.editableTags
-          currentUserName
-          courseCoaches
-          certificates
-          updateFormCB={updateForm(send)}
-          reloadTeamsCB={reloadTeams(send)}
-          updateStudentCertificationCB={updatedStudent =>
-            send(UpdateStudentCertification(updatedStudent, team))}
-        />
+        React.null
       </SchoolAdmin__EditorDrawer>
     | BulkImportForm =>
       <SchoolAdmin__EditorDrawer2 closeDrawerCB={() => send(UpdateFormVisible(None))}>
@@ -286,7 +274,8 @@ let make = (
               ? React.null
               : <div className="flex justify-between bg-gray-100 px-4 pb-3 pt-1 rounded-b-lg">
                   <div className="flex flex-wrap">
-                    {state.selectedStudents |> Array.map(selectedStudent =>
+                    {state.selectedStudents
+                    |> Array.map(selectedStudent =>
                       <div
                         className="flex items-center bg-white border border-gray-400 rounded-full mr-2 mt-2 overflow-hidden">
                         {switch selectedStudent |> SelectedStudent.avatarUrl {
@@ -314,7 +303,8 @@ let make = (
                           </button>
                         </div>
                       </div>
-                    ) |> React.array}
+                    )
+                    |> React.array}
                   </div>
                   <div className="pt-1">
                     {state.selectedStudents |> SelectedStudent.isGroupable
@@ -336,24 +326,7 @@ let make = (
           </div>
         </div>
       </div>
-      <div>
-        // <StudentsEditor__TeamsList
-        //   levels
-        //   courseId
-        //   filter=state.filter
-        //   pagedTeams=state.pagedTeams
-        //   totalTeamsCount=state.totalCount
-        //   selectedStudentIds={state.selectedStudents |> Array.map(s => s |> SelectedStudent.id)}
-        //   selectStudentCB={selectStudent(send)}
-        //   deselectStudentCB={deselectStudent(send)}
-        //   showEditFormCB={showEditForm(send)}
-        //   updateTeamsCB={updateTeams(send)}
-        //   loading=state.loading
-        //   setLoadingCB={setLoading(send)}
-        //   updateFilterCB={updateFilter(send)}
-        //   refreshTeams=state.refreshTeams
-        // />
-      </div>
+      <div />
     </div>
     {
       let loading = switch state.pagedTeams {

@@ -429,7 +429,7 @@ let pageLinks = (courseId, studentId) => [
   ),
 ]
 
-let loadData = (courseId, studentId, setState) => {
+let loadData = (studentId, setState) => {
   setState(_ => Loading)
   StudentActionsDataQuery.fetch({
     studentId: studentId,
@@ -456,7 +456,7 @@ let make = (~courseId, ~studentId) => {
   let (state, setState) = React.useState(() => Unloaded)
 
   React.useEffect1(() => {
-    loadData(courseId, studentId, setState)
+    loadData(studentId, setState)
     None
   }, [studentId])
 

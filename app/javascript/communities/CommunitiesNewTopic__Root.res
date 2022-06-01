@@ -98,10 +98,7 @@ let searchForSimilarTopics = (send, title, communityId, ()) => {
   })
   |> Js.Promise.catch(e => {
     Js.log(e)
-    Notification.warn(
-      tr("oops"),
-      tr("failed_fetch_similar"),
-    )
+    Notification.warn(tr("oops"), tr("failed_fetch_similar"))
     send(FailSaving)
     Js.Promise.resolve()
   })
@@ -197,7 +194,7 @@ let suggestions = state => {
           let askedOn =
             suggestion->TopicSuggestion.createdAt->DateFns.formatPreset(~short=true, ~year=true, ())
           let (answersText, answersClasses) = switch suggestion |> TopicSuggestion.repliesCount {
-          | 0 => (tr("no_replies"), "bg-gray-300 text-gray-700")
+          | 0 => (tr("no_replies"), "bg-gray-300 text-gray-600")
           | 1 => (tr("one_reply"), "bg-green-500 text-white")
           | n => ((n |> string_of_int) ++ tr("count_replies_label"), "bg-green-500 text-white")
           }
@@ -208,7 +205,7 @@ let suggestions = state => {
             ("/" ++ (suggestion |> TopicSuggestion.title |> StringUtils.parameterize)))}
             target="_blank"
             key={suggestion |> TopicSuggestion.id}
-            className="flex w-full items-center justify-between mt-1 p-3 rounded cursor-pointer border bg-gray-100 hover:text-primary-500 hover:bg-gray-200">
+            className="flex w-full items-center justify-between mt-1 p-3 rounded cursor-pointer border bg-gray-50 hover:text-primary-500 hover:bg-gray-50">
             <div className="flex flex-col min-w-0">
               <h5
                 title={suggestion |> TopicSuggestion.title}
@@ -260,12 +257,13 @@ let make = (~communityId, ~target, ~topicCategories) => {
   let (state, send) = React.useReducer(reducer, initialState)
 
   <DisablingCover disabled=state.saving>
-    <div className="bg-gray-100">
+    <div className="bg-gray-50">
       <div className="flex-1 flex flex-col">
         <div className="px-3 lg:px-0">
           <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
             <a className="btn btn-subtle" onClick={_ => DomUtils.goBack()}>
-              <i className="fas fa-arrow-left" /> <span className="ml-2"> {tr("back") |> str} </span>
+              <i className="fas fa-arrow-left" />
+              <span className="ml-2"> {tr("back") |> str} </span>
             </a>
           </div>
         </div>
@@ -301,12 +299,12 @@ let make = (~communityId, ~target, ~topicCategories) => {
                     id="title"
                     tabIndex=1
                     value=state.title
-                    className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-300 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     onChange={event => {
                       let newTitle = ReactEvent.Form.target(event)["value"]
                       updateTitleAndSearch(state, send, communityId, newTitle)
                     }}
-                    placeholder=tr("title_placeholder")
+                    placeholder={tr("title_placeholder")}
                   />
                 </div>
                 {ReactUtils.nullIf(
@@ -322,7 +320,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                       | Some(category) => TopicCategory.id(category)
                       | None => ""
                       }}
-                      className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-300 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       onChange={handleSelectTopicCategory(send, topicCategories)}>
                       {topicCategories
                       |> Array.map(category =>
@@ -351,7 +349,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                   textareaId="body"
                   onChange={markdown => send(UpdateBody(markdown))}
                   value=state.body
-                  placeholder=tr("be_descriptive")
+                  placeholder={tr("be_descriptive")}
                   profile=Markdown.Permissive
                   maxLength=10000
                 />

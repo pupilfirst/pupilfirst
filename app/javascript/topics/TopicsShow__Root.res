@@ -247,8 +247,8 @@ let topicCategory = (topicCategories, topicCategoryId) =>
 
 let categoryDropdownSelected = topicCategory =>
   <div
-    ariaLabel=t("selected_category")
-    className="flex justify-between text-sm bg-white border border-gray-400 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
+    ariaLabel={t("selected_category")}
+    className="flex justify-between text-sm bg-white border border-gray-300 rounded py-1 px-3 mt-1 focus:outline-none focus:bg-white focus:border-primary-300 cursor-pointer">
     {switch topicCategory {
     | Some(topicCategory) =>
       let (color, _) = TopicCategory.color(topicCategory)
@@ -281,7 +281,7 @@ let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategori
     let categoryName = TopicCategory.name(topicCategory)
 
     <div
-      ariaLabel={ t("select_category") ++ " " ++ categoryName}
+      ariaLabel={t("select_category") ++ " " ++ categoryName}
       className="px-3 py-2 font-normal flex items-center"
       onClick={_ => send(UpdateTopicCategory(Some(topicCategory)))}>
       <div className="w-3 h-3 rounded mt-px" style />
@@ -296,7 +296,7 @@ let topicCategorySelector = (send, selectedTopicCategory, availableTopicCategori
       topicCategoryList,
       [
         <div
-          ariaLabel=t("select_no_category")
+          ariaLabel={t("select_no_category")}
           className="px-3 py-2 font-normal flex items-center"
           onClick={_ => send(UpdateTopicCategory(None))}>
           <div className="w-3 h-3 rounded bg-gray-300 mt-px" />
@@ -337,7 +337,7 @@ let make = (
     topicCategory: topicCategory(topicCategories, Topic.topicCategoryId(topic)),
   })
 
-  <div className="bg-gray-100">
+  <div className="bg-gray-50">
     <div className="max-w-4xl w-full mt-5 pl-4 lg:pl-0 lg:mx-auto">
       {communityLink(community)}
     </div>
@@ -366,21 +366,21 @@ let make = (
       }}
       <div
         className="max-w-4xl w-full mx-auto bg-white p-4 lg:p-8 my-4 border-t border-b md:border-0 lg:rounded-lg lg:shadow">
-        <div ariaLabel=t("topic_details")>
+        <div ariaLabel={t("topic_details")}>
           {state.showTopicEditor
             ? <DisablingCover disabled=state.savingTopic>
                 <div
-                  className="flex flex-col lg:ml-14 bg-gray-100 p-2 rounded border border-primary-200">
+                  className="flex flex-col lg:ml-14 bg-gray-50 p-2 rounded border border-primary-200">
                   <input
                     onChange={event =>
                       send(UpdateTopicTitle(ReactEvent.Form.target(event)["value"]))}
                     value=state.topicTitle
-                    className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-400 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    className="appearance-none block w-full bg-white text-gray-900 font-semibold border border-gray-300 rounded py-3 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     type_="text"
                   />
                   <div className="flex flex-col md:flex-row md:justify-between md:items-end">
                     <div className="flex flex-col items-left flex-shrink-0">
-                      <span className="inline-block text-gray-700 text-tiny font-semibold mr-2">
+                      <span className="inline-block text-gray-600 text-tiny font-semibold mr-2">
                         {t("topic_category_label") |> str}
                       </span>
                       <Dropdown
@@ -408,7 +408,7 @@ let make = (
                 <div
                   className="topics-show__title-container flex items-center md:items-start justify-between mb-2">
                   <h3
-                    ariaLabel=t("topic_title")
+                    ariaLabel={t("topic_title")}
                     className="leading-snug lg:pl-14 text-base lg:text-2xl w-9/12">
                     {state.topic |> Topic.title |> str}
                   </h3>
@@ -416,7 +416,7 @@ let make = (
                     {moderator || isTopicCreator(firstPost, currentUserId)
                       ? <button
                           onClick={_ => send(ShowTopicEditor(true))}
-                          className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3">
+                          className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-3">
                           <i className="far fa-edit" />
                           <span className="hidden md:inline-block ml-1">
                             {t("edit_topic_button") |> str}
@@ -426,14 +426,14 @@ let make = (
                     {
                       let isLocked = Topic.lockedAt(state.topic)->Belt.Option.isSome
                       let topicId = state.topic->Topic.id
-                      moderator
+                      {moderator || isTopicCreator(firstPost, currentUserId)
                         ? <button
                             disabled=state.changingLockedStatus
                             onClick={_ =>
                               isLocked
                                 ? unlockTopic(topicId, send)
                                 : lockTopic(topicId, currentUserId, send)}
-                            className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-100 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-2">
+                            className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-2">
                             <PfIcon className={"fa fa-" ++ (isLocked ? "unlock" : "lock")} />
                             <span className="hidden md:inline-block ml-1">
                               {(
@@ -441,7 +441,7 @@ let make = (
                               ) |> str}
                             </span>
                           </button>
-                        : React.null
+                        : React.null}
                     }
                   </span>
                 </div>
@@ -484,7 +484,7 @@ let make = (
           />}
         </div>
         <h5 className="pt-4 pb-2 lg:ml-14 border-b">
-          { Belt.Int.toString(Array.length(state.replies)) ++ " " ++ ts("replies") |> str}
+          {Belt.Int.toString(Array.length(state.replies)) ++ " " ++ ts("replies") |> str}
         </h5>
         {state.replies
         |> Post.sort

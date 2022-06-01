@@ -18,7 +18,7 @@
 
 /public/assets
 /public/uploads
-/node_modules
+**/node_modules
 coverage
 tags
 .tags*

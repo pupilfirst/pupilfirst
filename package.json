@@ -16,7 +16,7 @@
     "@babel/preset-env": "^7.17.10",
     "@babel/preset-react": "^7.14.5",
     "@babel/runtime": "^7.15.4",
-    "@centerforopenscience/markdown-it-imsize": "https://github.com/cos-forks/markdown-it-imsize#cos",
+    "@centerforopenscience/markdown-it-imsize": "https://github.com/harigopal/markdown-it-imsize#esm",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@glennsl/bs-json": "^5.0.4",
     "@jeff-tian/markdown-it-katex": "^2.1.0",
@@ -94,5 +94,5 @@
     "re:watch": "rescript clean && rescript build -w",
     "wds": "TAILWIND_MODE=watch bin/webpack-dev-server"
   },
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.1"
 }

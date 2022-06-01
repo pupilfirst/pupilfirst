@@ -36,10 +36,6 @@ module Extender = (M: X) => {
   let decodeObject = json => {
     let x = Js.Json.object_(json)
 
-    // switch x {
-    // | Some(x) => x |> Js.Promise.resolve
-    // | None => Js.Promise.reject(Graphql_error("Request failed"))
-    // }
     x |> Js.Promise.resolve
   }
 
@@ -139,6 +135,7 @@ module Extender = (M: X) => {
     )
   }
 
+  @deprecated("Use fetch instead")
   let make = (~notify=true, variables) => {
     query(notify, variables) |> Js.Promise.then_(data => {
       tToJsObject(M.unsafe_fromJson(data) |> M.parse) |> Js.Promise.resolve

@@ -62,7 +62,7 @@ let showStudent = (team, levels, teamCoaches) => {
     href={"/students/" ++ ((student |> TeamInfo.studentId) ++ "/report")}
     key={student |> TeamInfo.studentId}
     ariaLabel={"student: " ++ (student |> TeamInfo.studentName)}
-    className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+    className="flex md:flex-row justify-between bg-white mt-4 rounded-lg shadow cursor-pointer hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus-within:outline-none focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
     <div className="flex flex-1 flex-col justify-center md:flex-row md:w-3/5">
       <div className="flex w-full items-start md:items-center p-3 md:px-4 md:py-5">
         {CoursesStudents__TeamCoaches.avatar(
@@ -73,7 +73,7 @@ let showStudent = (team, levels, teamCoaches) => {
           <p className="font-semibold inline-block leading-snug">
             {student |> TeamInfo.studentName |> str}
           </p>
-          <div className="py-px text-gray-700 text-xs leading-snug flex items-start">
+          <div className="py-px text-gray-600 text-xs leading-snug flex items-start">
             <span className="font-semibold pr-2">
               {student |> TeamInfo.studentFullTitle |> str}
             </span>
@@ -90,7 +90,7 @@ let showStudent = (team, levels, teamCoaches) => {
               }}
             </span>
           </div>
-          <div className="text-gray-700 font-semibold text-xs leading-snug flex items-start">
+          <div className="text-gray-600 font-semibold text-xs leading-snug flex items-start">
             {studentTags(student)} {teamTags(team)}
           </div>
         </div>

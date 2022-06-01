@@ -179,7 +179,7 @@ let labels = (state, setState) =>
       <div className="flex-1">
         <input
           id={"grade-label-for-" ++ (grade |> string_of_int)}
-          className=" appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:ring"
+          className=" appearance-none border rounded w-full p-3 text-gray-600 leading-tight focus:outline-none focus:ring"
           type_="text"
           maxLength=40
           value={gradeAndLabel |> GradeLabel.label}
@@ -222,7 +222,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
   )
   <div className="mx-auto bg-white">
     <div className="max-w-2xl p-6 mx-auto">
-      <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+      <h5 className="uppercase text-center border-b border-gray-300 pb-2">
         {switch evaluationCriterion {
         | None => t("add_criterion")
         | Some(ec) => ec |> EvaluationCriterion.name
@@ -241,7 +241,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
             </label>
             <input
               autoFocus=true
-              className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
               id="name"
               onChange={event => updateName(setState, ReactEvent.Form.target(event)["value"])}
               type_="text"
@@ -279,7 +279,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                     )}
                   id="max_grade"
                   value={state.maxGrade |> string_of_int}
-                  className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-indigo-500 px-3 py-2 leading-tight rounded-none focus:outline-none focus:border-indigo-500">
+                  className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-blue-500 px-3 py-2 leading-tight rounded-none focus:outline-none focus:border-focusColor-500">
                   {possibleGradeValues
                   |> List.filter(g => g != 1)
                   |> List.map(possibleGradeValue =>
@@ -313,7 +313,7 @@ let make = (~evaluationCriterion, ~courseId, ~addOrUpdateCriterionCB) => {
                     )}
                   id="pass_grade"
                   value={state.passGrade |> string_of_int}
-                  className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-indigo-500 px-3 py-2 rounded-none leading-tight focus:outline-none focus:border-indigo-500">
+                  className="cursor-pointer inline-block appearance-none bg-white border-b-2 text-2xl font-semibold text-center border-blue hover:border-blue-500 px-3 py-2 rounded-none leading-tight focus:outline-none focus:border-focusColor-500">
                   {possibleGradeValues
                   |> List.filter(g => g <= state.maxGrade)
                   |> List.map(possibleGradeValue =>

@@ -130,7 +130,7 @@ let make = (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes, ~filterT
         distribution |> Array.fold_left((x, y) => x + DistributionInLevel.studentsInLevel(y), 0)
       let completedLevels = DistributionInLevel.levelsCompletedByAllStudents(distribution)
       totalStudentsInCourse > 0
-        ? <div className="flex w-full border bg-gray-100 rounded font-semibold ">
+        ? <div className="flex w-full border bg-gray-50 rounded font-semibold ">
             {distribution
             |> Js.Array.filter(level => DistributionInLevel.number(level) != 0)
             |> DistributionInLevel.sort
@@ -174,7 +174,7 @@ let make = (~selectLevelCB, ~courseId, ~filterCoach, ~filterCoachNotes, ~filterT
                 <label
                   htmlFor={tr("students_level") ++
                   (DistributionInLevel.number(level) |> string_of_int)}
-                  className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-700 text-center">
+                  className="absolute -mt-5 left-0 right-0 inline-block text-xs text-gray-600 text-center">
                   {level |> DistributionInLevel.shortName |> str}
                 </label>
                 <Tooltip className="w-full" tip position=#Bottom>

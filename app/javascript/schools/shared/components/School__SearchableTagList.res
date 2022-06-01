@@ -50,7 +50,7 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
         <span
           title={t("pick_tag") ++ " " ++ tag}
           key=tag
-          className="inline-flex cursor-pointer items-center bg-gray-200 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden"
+          className="inline-flex cursor-pointer items-center bg-gray-50 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 mr-1 text-xs overflow-hidden"
           onMouseDown={_e => handleClick(tag, send, addTagCB)}>
           {tag->str}
         </span>
@@ -79,12 +79,12 @@ let make = (
           tag =>
             <div
               key=tag
-              className="flex items-center bg-gray-200 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+              className="flex items-center bg-gray-50 border border-gray-500 rounded-lg mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
               <span className="px-2 py-px"> {tag |> str} </span>
               <button
                 ariaLabel={t("remove_tag") ++ " " ++ tag}
                 title={t("remove_tag") ++ " " ++ tag}
-                className="flex items-center px-2 h-full cursor-pointer text-gray-700 hover:text-red-500 hover:bg-gray-300 focus:outline-none focus:text-red-500 focus:bg-gray-300 border-l border-gray-400"
+                className="flex items-center px-2 h-full cursor-pointer text-gray-600 hover:text-red-500 hover:bg-gray-300 focus:outline-none focus:text-red-500 focus:bg-gray-300 border-l border-gray-300"
                 onClick={_e => handleClick(tag, send, removeTagCB)}>
                 <i className="fas fa-times" />
               </button>
@@ -97,7 +97,7 @@ let make = (
     <input
       value=state
       onChange={event => send(ReactEvent.Form.target(event)["value"])}
-      className="appearance-none block bg-white leading-snug border border-gray-400 rounded w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+      className="appearance-none block bg-white leading-snug border border-gray-300 rounded w-full py-3 px-4 mt-2 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
       id="tags"
       type_="text"
       placeholder={allowNewTags ? t("search_for_add") : t("select_tags")}
@@ -105,7 +105,7 @@ let make = (
     />
     {ReactUtils.nullUnless(
       <div
-        className="flex flex-wrap border border-gray-400 bg-white mt-1 rounded-lg shadow-lg searchable-tag-list__dropdown relative px-4 pt-2 pb-3">
+        className="flex flex-wrap border border-gray-300 bg-white mt-1 rounded-lg shadow-lg searchable-tag-list__dropdown relative px-4 pt-2 pb-3">
         {results->React.array}
       </div>,
       ArrayUtils.isNotEmpty(results),

@@ -115,7 +115,7 @@ let make = (
   <div
     className="target-group__box relative mt-12 rounded-lg border border-b-0 border-gray-300 shadow-md">
     <div
-      className="w-full target-group__header-container rounded-lg rounded-b-none relative bg-white hover:bg-gray-100 hover:text-primary-500">
+      className="w-full target-group__header-container rounded-lg rounded-b-none relative bg-white hover:bg-gray-50 hover:text-primary-500">
       <div
         id="target_group"
         className={archivedClasses(targetGroup |> TargetGroup.archived)}
@@ -141,12 +141,12 @@ let make = (
       </div>
       {targetGroups |> Js.Array.length > 1
         ? <div
-            className="target-group__group-reorder flex flex-col shadow rounded-l-lg absolute h-full border border-r-0 overflow-hidden text-gray-700 justify-between items-center bg-white">
+            className="target-group__group-reorder flex flex-col shadow rounded-l-lg absolute h-full border border-r-0 overflow-hidden text-gray-600 justify-between items-center bg-white">
             <button
               title={t("move_up")}
               ariaLabel={t("move_up")}
               id={"target-group-move-up-" ++ (targetGroup |> TargetGroup.id)}
-              className={"target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:text-primary-500" ++
+              className={"target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 focus:text-primary-500" ++
               sortIndexHiddenClass(index == 0)}
               onClick={_ =>
                 updateSortIndex(targetGroups, targetGroup, true, updateTargetGroupSortIndexCB)}>
@@ -156,7 +156,7 @@ let make = (
               title={t("move_down")}
               ariaLabel={t("move_down")}
               id={"target-group-move-down-" ++ (targetGroup |> TargetGroup.id)}
-              className={"target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 focus:text-primary-500" ++
+              className={"target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 focus:text-primary-500" ++
               sortIndexHiddenClass(index + 1 == Js.Array.length(targetGroups))}
               onClick={_ =>
                 updateSortIndex(targetGroups, targetGroup, false, updateTargetGroupSortIndexCB)}>
@@ -175,7 +175,7 @@ let make = (
     {targetGroupArchived
       ? React.null
       : <div
-          className="target-group__target-create relative bg-gray-100 flex items-center border border-dashed border-gray-400 text-gray-700 hover:text-gray-900 active:text-gray-900 focus:text-gray-900 hover:shadow-lg hover:border-gray-500 rounded-lg rounded-t-none overflow-hidden">
+          className="target-group__target-create relative bg-gray-50 flex items-center border border-dashed border-gray-300 text-gray-600 hover:text-gray-900 active:text-gray-900 focus:text-gray-900 hover:shadow-lg hover:border-gray-500 rounded-lg rounded-t-none overflow-hidden">
           <label
             htmlFor={"create-target-input" ++ (targetGroup |> TargetGroup.id)}
             className="absolute flex items-center h-full cursor-pointer pl-4">
@@ -187,13 +187,13 @@ let make = (
             value=state.targetTitle
             onChange={event => send(UpdateTargetTitle(ReactEvent.Form.target(event)["value"]))}
             placeholder={t("create_target")}
-            className="target-create__input text-left bg-gray-100 pr-5 pl-12 py-6 rounded-b appearance-none block w-full text-sm text-gray-900 font-semibold leading-tight hover:bg-gray-100 focus:outline-none focus:bg-white focus:border-gray-500"
+            className="target-create__input text-left bg-gray-50 pr-5 pl-12 py-6 rounded-b appearance-none block w-full text-sm text-gray-900 font-medium leading-tight hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-gray-500"
           />
           {state.validTargetTitle
             ? <button
                 onClick={_e => handleCreateTarget(state.targetTitle, targetGroup |> TargetGroup.id)}
                 disabled=state.savingNewTarget
-                className="flex items-center whitespace-nowrap text-sm font-semibold py-2 px-4 mr-4 rounded btn-primary appearance-none focus:outline-none text-center">
+                className="flex items-center whitespace-nowrap text-sm font-medium py-2 px-4 mr-4 rounded btn-primary appearance-none focus:outline-none text-center">
                 {t("create") |> str}
               </button>
             : React.null}

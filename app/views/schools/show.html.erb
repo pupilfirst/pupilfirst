@@ -56,14 +56,14 @@
               href="<%= school_course_students_path(course[:id]) %>"
             >
               <div class="flex items-end justify-between border-b p-4 pt-6">
-                <h3 class="font-bold text-xl"><%= course[:name] %></h3>
+                <h3 class="font-semibold text-xl"><%= course[:name] %></h3>
                 <p class="text-sm">
                   <%= course[:levels_count] %>
                   <%= t('.levels') %>
                 </p>
               </div>
               <div
-                class="school-overview__course-list-card-count relative flex items-end bg-gray-200 justify-between border-b"
+                class="school-overview__course-list-card-count relative flex items-end bg-gray-50 justify-between border-b"
               >
                 <div data-t="<%= course[:name] %> students" class="w-1/2">
                   <div class="p-4">
@@ -81,7 +81,7 @@
               <div class="flex items-end p-4 text-xs items-center">
                 <% if course[:submissions_count] == 0 %>
                   <i
-                    class="fas fa-inbox mr-2 text-2xl text-gray-600 bg-gray-200 p-1 rounded"
+                    class="fas fa-inbox mr-2 text-2xl text-gray-600 bg-gray-50 p-1 rounded"
                   ></i>
                   <div class="text-gray-600"> <%= t(".no_submissions") %></div>
                 <% elsif course[:submissions_count] == course[:evaluated_submissions_count] %>

@@ -19,7 +19,7 @@ module Mutations
     end
 
     class ValidateStudentStatus < GraphQL::Schema::Validator
-      def validate(_object, context, value)
+      def validate(_object, _context, value)
         @student = Founder.find_by(id: value[:id])
 
         return if @student.dropped_out_at?

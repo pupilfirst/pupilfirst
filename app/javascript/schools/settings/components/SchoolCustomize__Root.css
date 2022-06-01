@@ -1,4 +1,4 @@
-.school-customize__header-links>:first-child {
+.school-customize__header-links > :first-child {
   @apply ml-0;
 }
 
@@ -9,11 +9,11 @@
 }
 
 .school-customize__footer-top-container {
-  background-color: theme(colors.gray.200);
+  background-color: theme(colors.gray.100);
 }
 
 .school-customize__footer-bottom-container {
-  background-color: theme(colors.gray.300);
+  background-color: theme(colors.gray.200);
 }
 
 .school-customize__featured-courses-header:before {
@@ -30,7 +30,7 @@
 
 .school-customize__featured-courses-empty-placeholder {
   min-height: 18rem;
-  background-image: url('images/no-courses-icon.svg');
+  background-image: url("images/no-courses-icon.svg");
   background-repeat: no-repeat;
   background-position: center;
 }

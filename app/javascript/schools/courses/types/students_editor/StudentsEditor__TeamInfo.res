@@ -24,11 +24,6 @@ let students = t =>
   | MultiMember(_, students) => students
   }
 
-let toJsArray = t =>
-  students(t) |> Js.Array.map(
-    StudentInfo.toJsObject(~teamName=name(t), ~tags=Belt.Set.String.toArray(t.tags)),
-  )
-
 let make = (~name, ~tags, ~students) =>
   if Js.Array.length(students) > 1 {
     {

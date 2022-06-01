@@ -236,7 +236,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
         <div className="w-full">
           <div className="mx-auto bg-white">
             <div className="max-w-2xl pt-6 px-6 mx-auto">
-              <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+              <h5 className="uppercase text-center border-b border-gray-300 pb-2">
                 {tr("group_details") |> str}
               </h5>
               <div className="mt-5">
@@ -246,7 +246,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                 <span> {"*" |> str} </span>
                 <input
                   autoFocus=true
-                  className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+                  className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                   id="name"
                   type_="text"
                   placeholder=tr("title_placeholder")
@@ -303,7 +303,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                 </div>
               </div>
             </div>
-            <div className="border-t bg-gray-100 mt-5">
+            <div className="border-t bg-gray-50 mt-5">
               <div className="max-w-2xl p-6 mx-auto flex w-full justify-between items-center">
                 {switch targetGroup {
                 | Some(_) =>

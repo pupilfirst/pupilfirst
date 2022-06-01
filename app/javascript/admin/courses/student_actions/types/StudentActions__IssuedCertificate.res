@@ -1,6 +1,6 @@
 type t = {
   id: string,
-  certificateId: string,
+  certificate: StudentActions__Certificate.t,
   createdAt: Js.Date.t,
   issuedBy: string,
   revokedAt: option<Js.Date.t>,
@@ -9,16 +9,16 @@ type t = {
 }
 
 let id = t => t.id
-let certificateId = t => t.certificateId
+let certificate = t => t.certificate
 let serialNumber = t => t.serialNumber
 let revokedAt = t => t.revokedAt
 let issuedBy = t => t.issuedBy
 let createdAt = t => t.createdAt
 let revokedBy = t => t.revokedBy
 
-let make = (~id, ~certificateId, ~revokedAt, ~revokedBy, ~serialNumber, ~createdAt, ~issuedBy) => {
+let make = (~id, ~certificate, ~revokedAt, ~revokedBy, ~serialNumber, ~createdAt, ~issuedBy) => {
   id: id,
-  certificateId: certificateId,
+  certificate: certificate,
   revokedAt: revokedAt,
   revokedBy: revokedBy,
   serialNumber: serialNumber,
@@ -26,11 +26,14 @@ let make = (~id, ~certificateId, ~revokedAt, ~revokedBy, ~serialNumber, ~created
   issuedBy: issuedBy,
 }
 
+module CertificateFragment = StudentActions__Certificate.Fragments
 module Fragments = %graphql(`
   fragment IssuedCertificateFragment on IssuedCertificate {
     id
     certificate{
       id
+      name
+      active
     }
     createdAt
     issuedBy
@@ -42,20 +45,17 @@ module Fragments = %graphql(`
 
 let makeFromFragment = (issuedCertificate: Fragments.t) => {
   id: issuedCertificate.id,
-  certificateId: issuedCertificate.certificate.id,
+  certificate: StudentActions__Certificate.make(
+    issuedCertificate.certificate.id,
+    issuedCertificate.certificate.name,
+    issuedCertificate.certificate.active,
+  ),
   revokedAt: issuedCertificate.revokedAt->Belt.Option.map(DateFns.decodeISO),
   revokedBy: issuedCertificate.revokedBy,
   serialNumber: issuedCertificate.serialNumber,
   createdAt: issuedCertificate.createdAt->DateFns.decodeISO,
   issuedBy: issuedCertificate.issuedBy,
 }
-
-let certificate = (t, certificates) =>
-  ArrayUtils.unsafeFind(
-    c => StudentActions__Certificate.id(c) == t.certificateId,
-    " Unable to find certificate with ID: " ++ t.certificateId,
-    certificates,
-  )
 
 let revoke = (issuedCertificate, revokedBy, revokedAt) => {
   ...issuedCertificate,

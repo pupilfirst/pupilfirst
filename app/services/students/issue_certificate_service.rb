@@ -52,7 +52,7 @@ module Students
     end
 
     def course
-      @student.team.course
+      @student.course
     end
   end
 end

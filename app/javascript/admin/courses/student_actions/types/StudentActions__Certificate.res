@@ -23,3 +23,9 @@ let makeFromFragment = (certificate: Fragments.t) => {
   name: certificate.name,
   active: certificate.active,
 }
+
+let make = (id: string, name: string, active: bool) => {
+  id: id,
+  name: name,
+  active: active,
+}

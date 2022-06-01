@@ -1,11 +1,13 @@
 open StudentActions__Type
 
 let t = I18n.t(~scope="components.StudentsEditor__ActionsForm")
+let str = React.string
 
 type student = {
   issuedCertificates: array<IssuedCertificate.t>,
   droppedOutAt: option<Js.Date.t>,
 }
+module IssuedCertificateFragment = IssuedCertificate.Fragments
 
 module Editor = {
   module DropoutStudentQuery = %graphql(`
@@ -16,10 +18,20 @@ module Editor = {
    }
  `)
 
+  module ReActivateStudentQuery = %graphql(`
+   mutation ReActivateStudentMutation($id: ID!) {
+    reActivateStudent(id: $id){
+      success
+     }
+   }
+ `)
+
   module RevokeCertificateQuery = %graphql(`
    mutation RevokeCertificateMutation($issuedCertificateId: ID!) {
     revokeIssuedCertificate(issuedCertificateId: $issuedCertificateId){
-      success
+      revokedCertificate {
+        ...IssuedCertificateFragment
+      }
      }
    }
  `)
@@ -28,100 +40,162 @@ module Editor = {
    mutation IssueCertificateQueryMutation($certificateId: ID!, $studentId: ID!) {
     issueCertificate(certificateId: $certificateId, studentId: $studentId){
       issuedCertificate {
-        id
-        serialNumber
+        ...IssuedCertificateFragment
       }
      }
    }
  `)
 
-  let dropoutStudent = (id, setSaving, reloadTeamsCB, event) => {
-    event |> ReactEvent.Mouse.preventDefault
-    setSaving(_ => true)
+  type state = {
+    student: student,
+    saving: bool,
+    issuing: bool,
+    revoking: bool,
+    selectedCertificateId: string,
+  }
+
+  type actions =
+    | UpdateRevokedCertificate(IssuedCertificate.t)
+    | AddNewCertificate(IssuedCertificate.t)
+    | DropOutStudent
+    | ReActivateStudent
+    | SetSaving
+    | ClearSaving
+    | SetIssuing
+    | ClearIssuing
+    | SetRevoking
+    | ClearRevoking
+    | UpdateSelectedCertificateId(string)
+
+  let reducer = (state: state, action) =>
+    switch action {
+    | UpdateRevokedCertificate(certificate) => {
+        ...state,
+        revoking: false,
+        student: {
+          ...state.student,
+          issuedCertificates: state.student.issuedCertificates->Js.Array2.map(ic =>
+            IssuedCertificate.id(certificate) == IssuedCertificate.id(ic) ? certificate : ic
+          ),
+        },
+      }
+    | AddNewCertificate(certificate) => {
+        ...state,
+        issuing: false,
+        student: {
+          ...state.student,
+          issuedCertificates: Js.Array.concat(state.student.issuedCertificates, [certificate]),
+        },
+      }
+    | DropOutStudent => {
+        ...state,
+        saving: false,
+        student: {
+          ...state.student,
+          droppedOutAt: Some(Js.Date.make()),
+        },
+      }
+    | ReActivateStudent => {
+        ...state,
+        saving: false,
+        student: {
+          ...state.student,
+          droppedOutAt: None,
+        },
+      }
+    | SetSaving => {
+        ...state,
+        saving: true,
+      }
+    | ClearSaving => {
+        ...state,
+        saving: false,
+      }
+    | SetIssuing => {
+        ...state,
+        issuing: true,
+      }
+    | ClearIssuing => {
+        ...state,
+        issuing: false,
+      }
+    | SetRevoking => {
+        ...state,
+        revoking: true,
+      }
+    | ClearRevoking => {
+        ...state,
+        revoking: false,
+      }
+    | UpdateSelectedCertificateId(certificateId) => {
+        ...state,
+        selectedCertificateId: certificateId,
+      }
+    }
+
+  let dropoutStudent = (id, send, event) => {
+    ReactEvent.Mouse.preventDefault(event)
+    send(SetSaving)
 
     DropoutStudentQuery.fetch({id: id})
     |> Js.Promise.then_((response: DropoutStudentQuery.t) => {
-      response.dropoutStudent.success ? reloadTeamsCB() : setSaving(_ => false)
+      response.dropoutStudent.success ? send(DropOutStudent) : send(ClearSaving)
       Js.Promise.resolve()
     })
     |> ignore
   }
 
-  let revokeIssuedCertificate = (
-    issuedCertificate,
-    setRevoking,
-    updateStudentCertificationCB,
-    student,
-    currentUserName,
-    _event,
-  ) =>
+  let reActivateStudent = (id, send, event) => {
+    ReactEvent.Mouse.preventDefault(event)
+    send(SetSaving)
+
+    ReActivateStudentQuery.fetch({id: id})
+    |> Js.Promise.then_((response: ReActivateStudentQuery.t) => {
+      response.reActivateStudent.success ? send(ReActivateStudent) : send(ClearSaving)
+      Js.Promise.resolve()
+    })
+    |> ignore
+  }
+
+  let revokeIssuedCertificate = (issuedCertificate, send, _event) =>
     WindowUtils.confirm(t("revoke_certificate_confirmation"), () => {
-      setRevoking(_ => true)
+      send(SetRevoking)
 
       let issuedCertificateId = IssuedCertificate.id(issuedCertificate)
 
       RevokeCertificateQuery.fetch({issuedCertificateId: issuedCertificateId})
       |> Js.Promise.then_((response: RevokeCertificateQuery.t) => {
-        response.revokeIssuedCertificate.success
-          ? {
-              let updatedCertificate =
-                issuedCertificate->IssuedCertificate.revoke(
-                  Some(currentUserName),
-                  Some(Js.Date.make()),
-                )
-              let updatedStudent = student->Student.updateCertificate(updatedCertificate)
-              updateStudentCertificationCB(updatedStudent)
-              setRevoking(_ => false)
-            }
-          : setRevoking(_ => false)
+        let data = response.revokeIssuedCertificate.revokedCertificate
+        switch data {
+        | Some(data) => send(UpdateRevokedCertificate(IssuedCertificate.makeFromFragment(data)))
+        | None => send(ClearRevoking)
+        }
         Js.Promise.resolve()
       })
       |> Js.Promise.catch(error => {
         Js.log(error)
-        setRevoking(_ => false)
+        send(ClearRevoking)
         Js.Promise.resolve()
       })
       |> ignore
     })
 
-  let issueNewCertificate = (
-    setIssuing,
-    certificateId,
-    student,
-    updateStudentCertificationCB,
-    currentUserName,
-    event,
-  ) => {
-    event |> ReactEvent.Mouse.preventDefault
-    setIssuing(_ => true)
+  let issueNewCertificate = (studentId, state, send, event) => {
+    ReactEvent.Mouse.preventDefault(event)
+    send(SetIssuing)
 
-    let studentId = Student.id(student)
-
-    IssueCertificateQuery.make({certificateId: certificateId, studentId: studentId})
-    |> Js.Promise.then_(response => {
-      let data = response["issueCertificate"]["issuedCertificate"]
+    IssueCertificateQuery.fetch({certificateId: state.selectedCertificateId, studentId: studentId})
+    |> Js.Promise.then_((response: IssueCertificateQuery.t) => {
+      let data = response.issueCertificate.issuedCertificate
       switch data {
-      | Some(data) =>
-        let newCertifcate = IssuedCertificate.make(
-          ~id=data["id"],
-          ~certificateId,
-          ~serialNumber=data["serialNumber"],
-          ~revokedAt=None,
-          ~revokedBy=None,
-          ~issuedBy=currentUserName,
-          ~createdAt=Js.Date.make(),
-        )
-        let updatedStudent = student->Student.addNewCertificate(newCertifcate)
-        updateStudentCertificationCB(updatedStudent)
-        setIssuing(_ => false)
-
-      | None => setIssuing(_ => false)
+      | Some(data) => send(AddNewCertificate(IssuedCertificate.makeFromFragment(data)))
+      | None => send(ClearIssuing)
       }
       Js.Promise.resolve()
     })
     |> Js.Promise.catch(error => {
       Js.log(error)
-      setIssuing(_ => false)
+      send(ClearIssuing)
       Js.Promise.resolve()
     })
     |> ignore
@@ -133,15 +207,8 @@ module Editor = {
 
   let issueButtonIcons = issuing => issuing ? "fas fa-spinner fa-spin" : "fas fa-certificate"
 
-  let showIssuedCertificates = (
-    student,
-    certificates,
-    revoking,
-    setRevoking,
-    updateStudentCB,
-    currentUserName,
-  ) => {
-    let issuedCertificates = StudentsEditor__Student.issuedCertificates(student)
+  let showIssuedCertificates = (student, state, send) => {
+    let issuedCertificates = student.issuedCertificates
     issuedCertificates->ArrayUtils.isEmpty
       ? <p className="text-xs text-gray-800"> {t("empty_issued_certificates_text")->str} </p>
       : <div className="flex flex-col">
@@ -149,22 +216,22 @@ module Editor = {
             {t("issued_certificates_label")->str}
           </label>
           {issuedCertificates
-          |> Js.Array.map(ic =>
+          ->Js.Array2.map(ic =>
             <div
               ariaLabel={t("details_certificate") ++ " " ++ IssuedCertificate.id(ic)}
               key={IssuedCertificate.id(ic)}
               className="flex flex-col mt-2 p-2 border rounded border-gray-400">
               <div className="flex justify-between">
                 <span className="text-sm font-semibold">
-                  {IssuedCertificate.certificate(ic, certificates)->Certificate.name->str}
+                  {IssuedCertificate.certificate(ic)->Certificate.name->str}
                 </span>
-                {IssuedCertificate.revokedAt(ic)->Belt.Option.isSome
-                  |> ReactUtils.nullUnless(
-                    <div
-                      className="w-16 p-1 text-xs leading-tight rounded text-center bg-red-200 border-red-800">
-                      {t("revoked_status_label")->str}
-                    </div>,
-                  )}
+                {ReactUtils.nullUnless(
+                  <div
+                    className="w-16 p-1 text-xs leading-tight rounded text-center bg-red-200 border-red-800">
+                    {t("revoked_status_label")->str}
+                  </div>,
+                  IssuedCertificate.revokedAt(ic)->Belt.Option.isSome,
+                )}
               </div>
               <div className="text-xs text-gray-700">
                 {IssuedCertificate.serialNumber(ic)->str}
@@ -210,14 +277,8 @@ module Editor = {
                   </div>
                 | None =>
                   <button
-                    disabled=revoking
-                    onClick={revokeIssuedCertificate(
-                      ic,
-                      setRevoking,
-                      updateStudentCB,
-                      student,
-                      currentUserName,
-                    )}
+                    disabled=state.revoking
+                    onClick={revokeIssuedCertificate(ic, send)}
                     className="btn btn-danger btn-small">
                     {t("revoke_certificate_button")->str}
                   </button>
@@ -225,25 +286,26 @@ module Editor = {
               </div>
             </div>
           )
-          |> React.array}
+          ->React.array}
         </div>
   }
 
+  let initialState = student => {
+    student: student,
+    saving: false,
+    revoking: false,
+    issuing: false,
+    selectedCertificateId: "0",
+  }
+
+  let hasLiveCertificate = student =>
+    student.issuedCertificates
+    ->Js.Array2.find(ic => IssuedCertificate.revokedAt(ic)->Belt.Option.isNone)
+    ->Belt.Option.isSome
+
   @react.component
-  let make = (
-    ~student,
-    ~reloadTeamsCB,
-    ~certificates,
-    ~updateStudentCertificationCB,
-    ~currentUserName,
-  ) => {
-    let (saving, setSaving) = React.useState(() => false)
-
-    let (issuing, setIssuing) = React.useState(() => false)
-
-    let (revoking, setRevoking) = React.useState(() => false)
-
-    let (selectedCertificateId, setSelectedCertificateId) = React.useState(() => "0")
+  let make = (~studentData, ~studentId, ~certificates) => {
+    let (state, send) = React.useReducer(reducer, initialState(studentData))
 
     <div className="mt-5">
       <div className="mb-4" ariaLabel={t("manage_certificates")}>
@@ -251,14 +313,7 @@ module Editor = {
         {certificates |> ArrayUtils.isEmpty
           ? <p className="text-xs text-gray-800"> {t("empty_course_certificates_text")->str} </p>
           : <div>
-              {showIssuedCertificates(
-                student,
-                certificates,
-                revoking,
-                setRevoking,
-                updateStudentCertificationCB,
-                currentUserName,
-              )}
+              {showIssuedCertificates(state.student, state, send)}
               {ReactUtils.nullIf(
                 <div className="flex flex-col mt-2">
                   <label className="tracking-wide text-sm font-semibold mb-2">
@@ -270,14 +325,14 @@ module Editor = {
                       id="issue-certificate"
                       onChange={event => {
                         let selectedValue = ReactEvent.Form.target(event)["value"]
-                        setSelectedCertificateId(_ => selectedValue)
+                        send(UpdateSelectedCertificateId(selectedValue))
                       }}
-                      value=selectedCertificateId>
+                      value=state.selectedCertificateId>
                       <option key="0" value="0">
                         {t("select_certificate_input_label")->str}
                       </option>
                       {certificates
-                      |> Array.map(certificate =>
+                      ->Js.Array2.map(certificate =>
                         <option
                           key={Certificate.id(certificate)} value={Certificate.id(certificate)}>
                           {
@@ -291,24 +346,18 @@ module Editor = {
                           }
                         </option>
                       )
-                      |> React.array}
+                      ->React.array}
                     </select>
                     <button
-                      onClick={issueNewCertificate(
-                        setIssuing,
-                        selectedCertificateId,
-                        student,
-                        updateStudentCertificationCB,
-                        currentUserName,
-                      )}
-                      disabled={issuing || selectedCertificateId == "0"}
+                      onClick={issueNewCertificate(studentId, state, send)}
+                      disabled={state.issuing || state.selectedCertificateId == "0"}
                       className="btn btn-success ml-2 text-sm h-10">
-                      <FaIcon classes={issueButtonIcons(issuing)} />
+                      <FaIcon classes={issueButtonIcons(state.issuing)} />
                       <span className="ml-2"> {t("issue_certificate_button")->str} </span>
                     </button>
                   </div>
                 </div>,
-                Student.hasLiveCertificate(student),
+                hasLiveCertificate(state.student),
               )}
             </div>}
       </div>
@@ -316,64 +365,52 @@ module Editor = {
         {t("dropout_student.label")->str}
       </label>
       <HelpIcon className="ml-2" link={t("dropout_student.help_url")}>
-        {t("dropout_student.help") |> str}
+        {t("dropout_student.help")->str}
       </HelpIcon>
       <div className="mt-2">
-        <button
-          disabled=saving
-          className="btn btn-danger btn-large"
-          onClick={dropoutStudent(student |> Student.id, setSaving, reloadTeamsCB)}>
-          <FaIcon classes={submitButtonIcons(saving)} />
-          <span className="ml-2"> {t("dropout_student.button")->str} </span>
-        </button>
+        {Belt.Option.isNone(state.student.droppedOutAt)
+          ? <button
+              disabled=state.saving
+              className="btn btn-danger btn-large"
+              onClick={dropoutStudent(studentId, send)}>
+              <FaIcon classes={submitButtonIcons(state.saving)} />
+              <span className="ml-2"> {t("dropout_student.button")->str} </span>
+            </button>
+          : <button
+              disabled=state.saving
+              className="btn btn-success btn-large"
+              onClick={reActivateStudent(studentId, send)}>
+              <FaIcon classes={submitButtonIcons(state.saving)} />
+              <span className="ml-2"> {"Re-Activate Student"->str} </span>
+            </button>}
       </div>
     </div>
   }
 }
 
-let str = React.string
+type baseData = {
+  student: student,
+  certificates: array<Certificate.t>,
+}
 
-// type baseData = {
-//   student: student,
-//   cohorts: array<Cohort.t>,
-//   tags: array<String.t>,
-//   courseCoaches: array<Coach.t>,
-// }
+type state = Unloaded | Loading | Loaded(baseData)
 
-// type state = Unloaded | Loading | Loaded(baseData)
-module Coach = UserProxy
-module UserProxyFragment = Coach.Fragments
-module CohortFragment = Cohort.Fragments
+module CertificateFragment = Certificate.Fragments
 
-module StudentDetailsDataQuery = %graphql(`
-  query StudentDetailsDataQuery($courseId: ID!, $studentId: ID!) {
+module StudentActionsDataQuery = %graphql(`
+  query StudentActionsDataQuery($studentId: ID!) {
     student(studentId: $studentId) {
-      taggings
-      accessEndsAt
-      cohort {
-        ...CohortFragment
+      droppedOutAt
+      issuedCertificates{
+        ...IssuedCertificateFragment
       }
-      user {
-        name
-        title
-        affiliation
-        taggings
+      course {
+        certificates{
+          ...CertificateFragment
+        }
+      }
+    }
 
-      }
-      personalCoaches{
-        id
-      }
-    }
-    cohorts(courseId: $courseId) {
-      ...CohortFragment
-    }
-    coaches(courseId: $courseId) {
-      ...UserProxyFragment
-    }
-    courseResourceInfo(courseId: $courseId, resources: [StudentTag]) {
-      resource
-      values
-    }
   }
   `)
 
@@ -392,8 +429,37 @@ let pageLinks = (courseId, studentId) => [
   ),
 ]
 
+let loadData = (courseId, studentId, setState) => {
+  setState(_ => Loading)
+  StudentActionsDataQuery.fetch({
+    studentId: studentId,
+  })
+  |> Js.Promise.then_((response: StudentActionsDataQuery.t) => {
+    setState(_ => Loaded({
+      student: {
+        droppedOutAt: response.student.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
+        issuedCertificates: response.student.issuedCertificates->Js.Array2.map(
+          IssuedCertificate.makeFromFragment,
+        ),
+      },
+      certificates: response.student.course.certificates->Js.Array2.map(
+        Certificate.makeFromFragment,
+      ),
+    }))
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
 @react.component
 let make = (~courseId, ~studentId) => {
+  let (state, setState) = React.useState(() => Unloaded)
+
+  React.useEffect1(() => {
+    loadData(courseId, studentId, setState)
+    None
+  }, [studentId])
+
   <div>
     <School__PageHeader
       exitUrl={`/school/courses/${courseId}/students`}
@@ -402,15 +468,14 @@ let make = (~courseId, ~studentId) => {
       links={pageLinks(courseId, studentId)}
     />
     <div className="max-w-5xl mx-auto px-2">
-      <h2 className="text-lg font-semibold mt-8"> {"Delete team Avengers"->str} </h2>
-      <p className="text-sm text-gray-500">
-        {"Delete will remove all the students from the team and delete the team"->str}
-      </p>
-      <button
-      // onClick={}
-        className="btn btn-danger mt-4">
-        {"Delete team"->str}
-      </button>
+      {switch state {
+      | Unloaded => str("Should Load data")
+      | Loading => str("Loading data")
+      | Loaded(baseData) =>
+        <Editor
+          studentData={baseData.student} certificates={baseData.certificates} studentId={studentId}
+        />
+      }}
     </div>
   </div>
 }

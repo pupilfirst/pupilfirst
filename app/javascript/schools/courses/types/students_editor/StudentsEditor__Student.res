@@ -6,7 +6,7 @@ type t = {
   email: string,
   title: string,
   affiliation: option<string>,
-  issuedCertificates: array<StudentsEditor__IssuedCertificate.t>,
+  issuedCertificates: array<StudentActions__IssuedCertificate.t>,
 }
 
 let name = t => t.name
@@ -34,7 +34,7 @@ let updateCertificate = (t, certificate) => {
   ...t,
   issuedCertificates: Js.Array.map(
     ic =>
-      StudentsEditor__IssuedCertificate.id(certificate) == StudentsEditor__IssuedCertificate.id(ic)
+      StudentActions__IssuedCertificate.id(certificate) == StudentActions__IssuedCertificate.id(ic)
         ? certificate
         : ic,
     t.issuedCertificates,
@@ -43,7 +43,7 @@ let updateCertificate = (t, certificate) => {
 
 let hasLiveCertificate = t =>
   Js.Array.find(
-    ic => StudentsEditor__IssuedCertificate.revokedAt(ic)->Belt.Option.isNone,
+    ic => StudentActions__IssuedCertificate.revokedAt(ic)->Belt.Option.isNone,
     t.issuedCertificates,
   )->Belt.Option.isSome
 
@@ -83,9 +83,7 @@ let makeFromJS = studentDetails =>
     ~email=studentDetails["email"],
     ~title=studentDetails["title"],
     ~affiliation=studentDetails["affiliation"],
-    ~issuedCertificates=studentDetails["issuedCertificates"] |> Js.Array.map(ic =>
-      StudentsEditor__IssuedCertificate.makeFromJS(ic)
-    ),
+    ~issuedCertificates=[],
   )
 
 let update = (~name, ~title, ~affiliation, ~student) => {

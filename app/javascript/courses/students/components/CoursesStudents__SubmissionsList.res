@@ -54,12 +54,12 @@ let updateStudentSubmissions = (
 
 let getStudentSubmissions = (studentId, cursor, setState, submissions, updateSubmissionsCB) => {
   setState(_ => {loading: true})
-  switch cursor {
-  | Some(cursor) =>
-    StudentSubmissionsQuery.make(~studentId, ~after=cursor, ~sortDirection=#Descending, ())
-  | None => StudentSubmissionsQuery.make(~studentId, ~sortDirection=#Descending, ())
-  }
-  |> GraphqlQuery.sendQuery
+
+  StudentSubmissionsQuery.make({
+    studentId: studentId,
+    after: cursor,
+    sortDirection: #Descending,
+  })
   |> Js.Promise.then_(response => {
     updateStudentSubmissions(
       setState,
@@ -144,7 +144,7 @@ let showSubmission = (submissions, levels) =>
 let showSubmissions = (submissions, levels) =>
   submissions |> ArrayUtils.isEmpty
     ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
-        <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
+        <h5 className="py-4 mt-4 bg-gray-50 text-gray-800 font-semibold">
           {tr("no_revied_submission") |> str}
         </h5>
         <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=reviewedEmptyImage />

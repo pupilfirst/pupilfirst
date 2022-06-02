@@ -71,11 +71,11 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
     {teams: teams, students: students, selectedTeams: list{}, searchString: ""},
   )
 
-  <div className="flex flex-1 px-6 pb-4 flex-col bg-gray-100 overflow-y-scroll">
+  <div className="flex flex-1 px-6 pb-4 flex-col bg-gray-50 overflow-y-scroll">
     <div className="max-w-3xl w-full mx-auto flex justify-between border-b mt-4">
       <ul className="flex font-semibold text-sm">
         <li
-          className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-200 hover:text-gray-900 focus-within:outline-none focus-within:bg-gray-200 focus-within:text-gray-900 focus-within:ring-2 focus-within:ring-indigo-500">
+          className="rounded-t-lg cursor-pointer border-b-3 border-transparent hover:bg-gray-50 hover:text-gray-900 focus-within:outline-none focus-within:bg-gray-50 focus-within:text-gray-900 focus-within:ring-2 focus-within:ring-focusColor-500">
           <a
             className="block px-3 py-3 md:py-2 text-gray-800 focus:outline-none"
             href={"/school/courses/" ++ (courseId ++ "/students")}>
@@ -87,14 +87,14 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
         </li>
       </ul>
     </div>
-    <div className="bg-gray-100 sticky top-0 py-3">
+    <div className="bg-gray-50 sticky top-0 py-3">
       <div className="border rounded-lg mx-auto max-w-3xl bg-white ">
         <div className="flex w-full items-center justify-between p-4">
           <div className="flex flex-1">
             <input
               id="search"
               type_="search"
-              className="text-sm bg-white border border-gray-400 rounded leading-relaxed max-w-xs w-full py-2 px-3 mr-2 focus:outline-none focus:bg-white focus:border-primary-300"
+              className="text-sm bg-white border border-gray-300 rounded leading-relaxed max-w-xs w-full py-2 px-3 mr-2 focus:outline-none focus:bg-white focus:border-primary-300"
               placeholder={t("search_placeholder")}
               value=state.searchString
               onChange={event => send(UpdateSearchString(ReactEvent.Form.target(event)["value"]))}
@@ -140,7 +140,7 @@ let make = (~teams, ~courseId, ~students, ~authenticityToken, ~isLastPage, ~curr
                 let isChecked = state.selectedTeams |> List.mem(team)
                 let checkboxId = "select-team-" ++ (team |> Team.id)
                 <label
-                  className="flex self-stretch items-center text-grey leading-tight font-bold px-4 py-5 hover:bg-gray-100"
+                  className="flex self-stretch items-center text-grey leading-tight font-bold px-4 py-5 hover:bg-gray-50"
                   htmlFor=checkboxId>
                   <input
                     className="leading-tight"

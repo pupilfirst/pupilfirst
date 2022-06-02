@@ -84,9 +84,9 @@ let submit = (state, send, target, addSubmissionCB, event) => {
 
   let fileIds = state.checklist |> ChecklistItem.fileIds
   let checklist = state.checklist |> ChecklistItem.encodeArray
+  let targetId = Target.id(target)
 
-  CreateSubmissionQuery.make(~targetId=target |> Target.id, ~fileIds, ~checklist, ())
-  |> GraphqlQuery.sendQuery
+  CreateSubmissionQuery.make({targetId: targetId, fileIds: fileIds, checklist: checklist})
   |> Js.Promise.then_(response => {
     switch response["createSubmission"]["submission"] {
     | Some(submission) =>
@@ -145,7 +145,7 @@ let tooltipText = preview =>
 @react.component
 let make = (~target, ~addSubmissionCB, ~preview, ~checklist) => {
   let (state, send) = React.useReducer(reducer, initialState(checklist))
-  <div className="bg-gray-100 p-4 my-4 border rounded-lg" id="submission-builder">
+  <div className="bg-gray-50 p-4 my-4 border rounded-lg" id="submission-builder">
     <DisablingCover disabled={isBusy(state.formState)} message={statusText(state.formState)}>
       {state.checklist |> ArrayUtils.isEmpty
         ? <div className="text-center">

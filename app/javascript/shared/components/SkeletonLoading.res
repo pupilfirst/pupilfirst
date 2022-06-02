@@ -20,7 +20,7 @@ let userCard = () =>
     <div className="skeleton-body-wrapper px-2 lg:px-0">
       <div className="skeleton-placeholder__card px-5 py-6 bg-white rounded-lg shadow">
         <div className="flex items-center">
-          <div className="w-14 h-14 bg-gray-100 rounded-full mr-4 skeleton-animate" />
+          <div className="w-14 h-14 bg-gray-50 rounded-full mr-4 skeleton-animate" />
           <div className="flex-1">
             <div className="skeleton-placeholder__line-sm w-2/6 skeleton-animate" />
             <div className="skeleton-placeholder__line-sm mt-4 w-3/6 skeleton-animate" />
@@ -69,7 +69,7 @@ let profileCard = () =>
   <div className="skeleton-body-container w-full pb-4 mx-auto">
     <div className="skeleton-body-wrapper max-w-sm mt-8 px-3 lg:px-0">
       <div className="flex items-center">
-        <div className="w-14 h-14 bg-gray-100 rounded-full mr-4 skeleton-animate" />
+        <div className="w-14 h-14 bg-gray-50 rounded-full mr-4 skeleton-animate" />
         <div className="flex-1">
           <div className="skeleton-placeholder__line-sm w-3/6 skeleton-animate" />
           <div className="skeleton-placeholder__line-sm mt-4 skeleton-animate" />

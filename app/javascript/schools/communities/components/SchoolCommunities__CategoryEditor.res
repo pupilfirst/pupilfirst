@@ -55,10 +55,9 @@ module UpdateCategoryQuery = %graphql(`
 
 let makeDeleteCategoryQuery = (categoryId, deleteCategoryCB, send) => {
   send(StartDeleting)
-  DeleteCategoryQuery.make(~id=categoryId, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["deleteTopicCategory"]["success"] ? deleteCategoryCB(categoryId) : send(FailDeleting)
+  DeleteCategoryQuery.fetch({id: categoryId})
+  |> Js.Promise.then_((response: DeleteCategoryQuery.t) => {
+    response.deleteTopicCategory.success ? deleteCategoryCB(categoryId) : send(FailDeleting)
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(error => {
@@ -95,10 +94,15 @@ let updateCategory = (category, newName, updateCategoryCB, send, event) => {
 
   send(StartSaving)
 
-  UpdateCategoryQuery.make(~id=Category.id(category), ~name=trimmedName, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["updateTopicCategory"]["success"]
+  let variables = UpdateCategoryQuery.makeVariables(
+    ~id=Category.id(category),
+    ~name=trimmedName,
+    (),
+  )
+
+  UpdateCategoryQuery.fetch(variables)
+  |> Js.Promise.then_((response: UpdateCategoryQuery.t) => {
+    response.updateTopicCategory.success
       ? {
           updateCategoryCB(Category.updateName(newName, category))
           send(FinishSaving(newName))
@@ -122,10 +126,9 @@ let createCategory = (communityId, name, createCategoryCB, send, event) => {
 
   send(StartSaving)
 
-  CreateCategoryQuery.make(~communityId, ~name=trimmedName, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    switch response["createTopicCategory"]["id"] {
+  CreateCategoryQuery.fetch({communityId: communityId, name: trimmedName})
+  |> Js.Promise.then_((response: CreateCategoryQuery.t) => {
+    switch response.createTopicCategory.id {
     | Some(id) =>
       let newCategory = Category.make(~id, ~name, ~topicsCount=0)
       createCategoryCB(newCategory)
@@ -184,7 +187,7 @@ let make = (
     <div
       key=categoryId
       ariaLabel={tr("editor_category_alt") ++ categoryId}
-      className="flex justify-between items-center bg-gray-100 border-gray-400 shadow rounded mt-3 px-2 py-1 topic-category-editor">
+      className="flex justify-between items-center bg-gray-50 border-gray-300 shadow rounded mt-3 px-2 py-1 topic-category-editor">
       <div className="flex-1 items-center mr-2">
         <input
           id="category-name"
@@ -218,7 +221,7 @@ let make = (
         <button
           title={tr("delete_category")}
           onClick={deleteCategory(category, deleteCategoryCB, send)}
-          className="text-xs py-1 px-2 h-8 text-gray-700 hover:text-red-500 hover:bg-gray-100 focus:text-red-500 focus:bg-gray-100 border-l border-gray-400">
+          className="text-xs py-1 px-2 h-8 text-gray-600 hover:text-red-500 hover:bg-gray-50 focus:text-red-500 focus:bg-gray-50 border-l border-gray-300">
           <FaIcon classes={state.deleting ? "fas fa-spinner fa-spin" : "fas fa-trash-alt"} />
         </button>
       </div>
@@ -234,7 +237,7 @@ let make = (
         }}
         value=state.categoryName
         placeholder={tr("add_new_category")}
-        className="appearance-none h-10 block w-full text-gray-700 border rounded border-gray-400 py-2 px-4 text-sm hover:bg-gray-200 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none h-10 block w-full text-gray-600 border rounded border-gray-300 py-2 px-4 text-sm hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
       />
       {
         let showButton = state.categoryName |> String.trim != ""

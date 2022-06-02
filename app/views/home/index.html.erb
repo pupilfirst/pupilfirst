@@ -7,7 +7,7 @@
 <% content_for(:tail) do %>
   <%= vite_javascript_tag 'packs/ConvertMarkdownPack.bs.js', nonce: true %>
 <% end %>
-<div class="pb-10 bg-gray-100">
+<div class="pb-10 bg-gray-50">
   <div class="relative bg-gray-300 border-b">
     <div class="relative pb-1/2 md:pb-1/4">
       <% if presenter.cover_image.present? %>
@@ -63,7 +63,7 @@
                   aria-label="<%= course.name %>"
                 >
                   <div class="relative">
-                    <div class="relative pb-1/2 bg-gray-200">
+                    <div class="relative pb-1/2 bg-gray-50">
                       <% if presenter.course_thumbnail(course).present? %>
                         <img
                           alt="Thumbnail for course <%= course.name %>"
@@ -80,7 +80,7 @@
                       class="school-index-course__title-container absolute w-full flex items-center h-16 bottom-0 z-50"
                     >
                       <h4
-                        class="school-index-course__title text-white font-semibold leading-tight pl-6 pr-4 text-lg md:text-xl"
+                        class="school-index-course__title text-white font-medium leading-tight pl-6 pr-4 text-lg md:text-xl"
                       >
                         <%= course.name %>
                       </h4>

@@ -75,11 +75,28 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
   send(SetSaving(true))
 
-  let students = Js.Array.map(TeamInfo.toJsArray, state.teamsToAdd) |> ArrayUtils.flattenV2
   let {notifyStudents} = state
 
-  CreateStudentsQuery.make(~courseId, ~notifyStudents, ~students, ())
-  |> GraphqlQuery.sendQuery
+  let students =
+    Js.Array.map(
+      t =>
+        Js.Array.map(
+          s =>
+            CreateStudentsQuery.makeInputObjectStudentEnrollmentInput(
+              ~name=StudentInfo.name(s),
+              ~email=StudentInfo.email(s),
+              ~title=StudentInfo.title(s),
+              ~affiliation=StudentInfo.affiliation(s),
+              ~teamName=TeamInfo.name(t),
+              ~tags=TeamInfo.tags(t),
+              (),
+            ),
+          TeamInfo.students(t),
+        ),
+      state.teamsToAdd,
+    ) |> ArrayUtils.flattenV2
+
+  CreateStudentsQuery.make({courseId: courseId, notifyStudents: notifyStudents, students: students})
   |> Js.Promise.then_(response => {
     switch response["createStudents"]["studentIds"] {
     | Some(studentIds) => handleResponseCB(submitFormCB, state, studentIds)
@@ -90,10 +107,7 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   })
   |> Js.Promise.catch(error => {
     Js.log(error)
-    Notification.error(
-      ts("notifications.unexpected_error"),
-      t("reload_add_students"),
-    )
+    Notification.error(ts("notifications.unexpected_error"), t("reload_add_students"))
     send(SetSaving(false))
     Js.Promise.resolve()
   })
@@ -156,7 +170,7 @@ let tagBoxes = tags =>
     |> Array.map(tag =>
       <div
         key=tag
-        className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+        className="flex items-center bg-gray-50 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
         {str(tag)}
       </div>
     )
@@ -185,7 +199,7 @@ let studentCard = (studentInfo, send, team, tags) => {
       {tagBoxes(tags)}
     </div>
     <button
-      className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+      className="p-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50"
       onClick={_event => send(RemoveStudentInfo(studentInfo))}>
       <i className="fas fa-trash-alt" />
     </button>
@@ -198,7 +212,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
 
   <div className="mx-auto bg-white">
     <div className="max-w-2xl p-6 mx-auto">
-      <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+      <h5 className="uppercase text-center border-b border-gray-300 pb-2 mb-4">
         {t("drawer_heading")->str}
       </h5>
       <StudentsEditor__StudentInfoForm
@@ -215,7 +229,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
           {switch state.teamsToAdd {
           | [] =>
             <div
-              className="flex items-center justify-between bg-gray-100 border rounded p-3 italic mt-2">
+              className="flex items-center justify-between bg-gray-50 border rounded p-3 italic mt-2">
               {t("teams_to_add_empty")->str}
             </div>
           | teams =>
@@ -242,10 +256,10 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
       </div>
       <div className="mt-4">
         <Checkbox
-            id="notify-new-students"
-            label={str(t("notify_students_label"))}
-            onChange={_event => send(ToggleNotifyStudents)}
-            checked={state.notifyStudents}
+          id="notify-new-students"
+          label={str(t("notify_students_label"))}
+          onChange={_event => send(ToggleNotifyStudents)}
+          checked={state.notifyStudents}
         />
       </div>
       <div className="flex mt-4">

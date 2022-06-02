@@ -84,10 +84,9 @@ module DeleteCertificateMutation = %graphql(`
 let deleteCertificate = (certificate, send) => {
   send(BeginDeleting)
 
-  DeleteCertificateMutation.make(~id=Certificate.id(certificate), ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    if result["deleteCertificate"]["success"] {
+  DeleteCertificateMutation.fetch({id: Certificate.id(certificate)})
+  |> Js.Promise.then_((result: DeleteCertificateMutation.t) => {
+    if result.deleteCertificate.success {
       send(FinishDeleting(certificate))
     } else {
       send(FailDeleting)
@@ -126,21 +125,21 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
         />
       | Closed => React.null
       }}
-      <div className="flex-1 flex flex-col bg-gray-100">
+      <div className="flex-1 flex flex-col bg-gray-50">
         <div className="flex px-6 py-2 items-center justify-between">
           <button
             onClick={_ => send(OpenNewCertificateDrawer)}
-            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:border-primary-300 focus:bg-gray-100 focus:text-primary-600 focus:shadow-lg border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+            className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg border-2 border-primary-300 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
             <i className="fas fa-plus-circle" />
             <h5 className="font-semibold ml-2"> {t("create_action")->str} </h5>
           </button>
         </div>
         {state.certificates |> ArrayUtils.isEmpty
           ? <div
-              className="flex justify-center bg-gray-100 border rounded p-3 italic mx-auto max-w-2xl w-full">
+              className="flex justify-center bg-gray-50 border rounded p-3 italic mx-auto max-w-2xl w-full">
               {t("no_certificates")->str}
             </div>
-          : <div className="px-6 pb-4 mt-5 flex flex-1 bg-gray-100">
+          : <div className="px-6 pb-4 mt-5 flex flex-1 bg-gray-50">
               <div className="max-w-2xl w-full mx-auto relative">
                 <h4 className="mt-5 w-full"> {t("heading")->str} </h4>
                 <div className="flex mt-4 -mx-3 items-start flex-wrap">
@@ -169,7 +168,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
                               <p className="text-black font-semibold">
                                 {Certificate.name(certificate)->str}
                               </p>
-                              <p className="text-gray-600 font-semibold text-xs mt-px">
+                              <p className="text-gray-600 text-xs mt-px">
                                 {t(
                                   ~count=Certificate.issuedCertificates(certificate),
                                   "issued_count",
@@ -180,7 +179,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
                               ? <div
                                   className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
                                   <span
-                                    className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
+                                    className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 mr-1">
                                     {t("auto_issue_tag")->str}
                                   </span>
                                 </div>
@@ -190,7 +189,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
                             <button
                               title=editTitle
                               ariaLabel={editTitle}
-                              className="w-10 text-sm text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-primary-500 focus:outline-none focus:bg-gray-200 focus:text-primary-500"
+                              className="w-10 text-sm text-gray-600 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
                               onClick={_ => send(OpenEditCertificateDrawer(certificate))}>
                               <i className="fas fa-edit" />
                             </button>
@@ -202,7 +201,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
                               <button
                                 title
                                 ariaLabel={title}
-                                className="w-10 text-sm text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-200 hover:text-red-500 focus:outline-none focus:bg-gray-200 focus:text-red-500"
+                                className="w-10 text-sm text-gray-600 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500"
                                 onClick={_event =>
                                   WindowUtils.confirm(t("delete_confirm"), () =>
                                     deleteCertificate(certificate, send)

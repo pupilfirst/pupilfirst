@@ -104,7 +104,7 @@ let reducer = (state, action) =>
 @react.component
 let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
   let (state, send) = React.useReducer(reducer, initialState())
-  <div className="bg-gray-100 p-4">
+  <div className="bg-gray-50 p-4">
     <div>
       <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="name">
         {t("name") |> str}
@@ -113,7 +113,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
         autoFocus=true
         value=state.name
         onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="name"
         type_="text"
         placeholder=t("name_placeholder")
@@ -127,7 +127,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
       <input
         value=state.email
         onChange={event => updateEmail(send, ReactEvent.Form.target(event)["value"])}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="email"
         type_="email"
         placeholder=t("email_placeholder")
@@ -152,7 +152,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
       <input
         value=state.title
         onChange={event => send(UpdateTitle(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="title"
         type_="text"
         placeholder=t("title_placeholder")
@@ -168,7 +168,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
       <input
         value=state.affiliation
         onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="affiliation"
         type_="text"
         placeholder=t("affiliation_placeholder")
@@ -187,7 +187,7 @@ let make = (~addToListCB, ~teamTags, ~emailsToAdd) => {
       <input
         value=state.teamName
         onChange={event => send(UpdateTeamName(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="team_name"
         maxLength=50
         type_="text"

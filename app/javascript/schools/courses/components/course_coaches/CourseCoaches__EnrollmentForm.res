@@ -118,7 +118,7 @@ let make = (~schoolCoaches, ~courseCoaches, ~courseId, ~updateCoachesCB) => {
     <div className="w-full">
       <div className="mx-auto bg-white">
         <div className="max-w-2xl pt-6 px-6 mx-auto">
-          <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+          <h5 className="uppercase text-center border-b border-gray-300 pb-2 mb-4">
             {tr("assign_coaches") |> str}
           </h5>
           {coaches |> Array.length > 0

@@ -1,4 +1,4 @@
-%bs.raw(`import("./StudentTopNav.css")`)
+%raw(`import("./StudentTopNav.css")`)
 
 let t = I18n.t(~scope="components.StudentTopNav")
 
@@ -9,9 +9,9 @@ open StudentTopNav__Types
 let headerLink = (key, link) =>
   <div
     key
-    className="md:ml-2 text-sm font-semibold text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
+    className="md:ml-2 text-sm font-medium text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-r border-b md:border-0">
     <a
-      className="no-underline bg-gray-100 md:bg-white hover:bg-gray-200 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2 focus:outline-none focus:bg-gray-200 focus:text-primary-500"
+      className="no-underline bg-gray-50 md:bg-white hover:bg-gray-50 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
       href={link |> NavLink.url}
       target=?{NavLink.local(link) ? None : Some("_blank")}
       rel=?{NavLink.local(link) ? None : Some("noopener")}>
@@ -49,7 +49,7 @@ let signInLink = () =>
 let notificationButton = hasNotifications =>
   <Notifications__Root
     key="notifications-button"
-    wrapperClasses="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg hover:bg-gray-200"
+    wrapperClasses="relative md:ml-1 pt-1 md:pt-0 text-sm font-semibold cursor-default flex w-8 h-8 md:w-9 md:h-9 justify-center items-center rounded-lg hover:bg-gray-50"
     iconClasses="student-navbar__notifications-unread-bullet"
     buttonClasses="font-semibold text-gray-900 hover:text-primary-500 w-full flex items-center justify-center focus:text-primary-500 "
     icon="if i-bell-regular text-xl"
@@ -116,7 +116,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
               />
             | None =>
               <div
-                className="p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-100 hover:text-primary-600">
+                className="p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-50 hover:text-primary-600">
                 <span className="text-xl font-bold leading-tight"> {schoolName |> str} </span>
               </div>
             }}
@@ -126,7 +126,7 @@ let make = (~schoolName, ~logoUrl, ~links, ~isLoggedIn, ~currentUser, ~hasNotifi
               {ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn)}
               <div onClick={_ => toggleMenuHidden(menuHidden => !menuHidden)}>
                 <div
-                  className={"student-navbar__menu-btn cursor-pointer hover:bg-gray-200 w-8 h-8 text-center relative focus:outline-none rounded-lg " ++ (
+                  className={"student-navbar__menu-btn cursor-pointer hover:bg-gray-50 w-8 h-8 text-center relative focus:outline-none rounded-lg " ++ (
                     menuHidden ? "" : "open"
                   )}>
                   <span className="student-navbar__menu-icon">

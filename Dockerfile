@@ -5,7 +5,7 @@ WORKDIR /build
 # Begin by installing gems.
 COPY Gemfile .
 COPY Gemfile.lock .
-RUN gem install bundler -v '2.2.33'
+RUN gem install bundler -v '2.3.11'
 RUN bundle config set --local deployment true
 RUN bundle config set --local without development test
 RUN bundle install -j4
@@ -17,6 +17,8 @@ RUN apt-get install -y nodejs
 # Install JS dependencies using Yarn.
 COPY package.json .
 COPY yarn.lock .
+COPY .yarnrc.docker.yml .yarnrc.yml
+COPY .yarn/releases .yarn/releases
 RUN corepack enable
 RUN yarn install
 

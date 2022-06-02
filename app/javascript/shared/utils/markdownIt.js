@@ -5,7 +5,7 @@ import subscriptPlugin from "markdown-it-sub";
 import superscriptPlugin from "markdown-it-sup";
 import tablePlugin from "markdown-it-multimd-table";
 import linkifyImagesPlugin from "markdown-it-linkify-images";
-import imageSizePlugin from "@centerforopenscience/markdown-it-imsize/lib/index";
+import imageSizePlugin from "@centerforopenscience/markdown-it-imsize";
 import linkAttributesPlugin from "markdown-it-link-attributes";
 import katexPlugin from "@jeff-tian/markdown-it-katex";
 import alignPlugin from "markdown-it-align";

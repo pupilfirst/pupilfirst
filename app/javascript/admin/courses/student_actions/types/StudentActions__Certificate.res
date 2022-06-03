@@ -10,7 +10,7 @@ let name = t => t.name
 
 let active = t => t.active
 
-module Fragments = %graphql(`
+module Fragment = %graphql(`
   fragment CertificateFragment on Certificate {
     id
     name
@@ -18,7 +18,7 @@ module Fragments = %graphql(`
   }
 `)
 
-let makeFromFragment = (certificate: Fragments.t) => {
+let makeFromFragment = (certificate: Fragment.t) => {
   id: certificate.id,
   name: certificate.name,
   active: certificate.active,

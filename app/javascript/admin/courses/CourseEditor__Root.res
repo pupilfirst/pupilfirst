@@ -13,7 +13,7 @@ let str = React.string
 
 type status = [#Active | #Ended | #Archived]
 
-module CourseFragment = Course.Fragments
+module CourseFragment = Course.Fragment
 
 module CoursesQuery = %graphql(`
   query CoursesQuery($search: String, $after: String,$courseId: ID, $status: CourseStatus) {

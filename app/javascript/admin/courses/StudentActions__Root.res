@@ -7,7 +7,7 @@ type student = {
   issuedCertificates: array<IssuedCertificate.t>,
   droppedOutAt: option<Js.Date.t>,
 }
-module IssuedCertificateFragment = IssuedCertificate.Fragments
+module IssuedCertificateFragment = IssuedCertificate.Fragment
 
 module Editor = {
   module DropoutStudentQuery = %graphql(`
@@ -395,7 +395,7 @@ type baseData = {
 
 type state = Unloaded | Loading | Loaded(baseData)
 
-module CertificateFragment = Certificate.Fragments
+module CertificateFragment = Certificate.Fragment
 
 module StudentActionsDataQuery = %graphql(`
   query StudentActionsDataQuery($studentId: ID!) {

@@ -78,7 +78,7 @@ module CreateStudentsQuery = %graphql(`
   }
   `)
 
-module CohortFragment = Cohort.Fragments
+module CohortFragment = Cohort.Fragment
 module StudentsCreateDataQuery = %graphql(`
   query StudentsCreateDataQuery($courseId: ID!) {
     course(id: $courseId) {

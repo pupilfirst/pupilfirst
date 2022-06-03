@@ -8,7 +8,7 @@ let str = React.string
 let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockCreator")
 let ts = I18n.ts
 
-module ContentBlockFragment = ContentBlock.Fragments
+module ContentBlockFragment = ContentBlock.Fragment
 
 module CreateMarkdownContentBlock = %graphql(`
     mutation CreateMarkdownContentBlockMutation($targetId: ID!, $aboveContentBlockId: ID) {

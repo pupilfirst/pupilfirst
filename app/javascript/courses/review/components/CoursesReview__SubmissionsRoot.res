@@ -6,7 +6,7 @@ type state =
   | Loading
   | Loaded(SubmissionDetails.t)
 
-module UserProxyFragment = UserProxy.Fragments
+module UserProxyFragment = UserProxy.Fragment
 module SubmissionDetailsQuery = %graphql(`
     query SubmissionDetailsQuery($submissionId: ID!) {
       submissionDetails(submissionId: $submissionId) {

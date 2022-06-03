@@ -8,7 +8,7 @@ let str = React.string
 
 type status = [#Active | #Ended | #Archived]
 
-module CourseFragment = CourseEditor__Course.Fragments
+module CourseFragment = CourseEditor__Course.Fragment
 
 module CoursesQuery = %graphql(`
   query CoursesQuery($search: String, $after: String, $status: CourseStatus) {

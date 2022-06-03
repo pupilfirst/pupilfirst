@@ -387,8 +387,8 @@ type baseData = {
 
 type state = Unloaded | Loading | Loaded(baseData)
 
-module UserProxyFragment = Coach.Fragments
-module CohortFragment = Cohort.Fragments
+module UserProxyFragment = Coach.Fragment
+module CohortFragment = Cohort.Fragment
 
 module StudentDetailsDataQuery = %graphql(`
   query StudentDetailsDataQuery($studentId: ID!) {

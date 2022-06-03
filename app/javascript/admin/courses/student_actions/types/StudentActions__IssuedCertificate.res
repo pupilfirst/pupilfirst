@@ -26,8 +26,8 @@ let make = (~id, ~certificate, ~revokedAt, ~revokedBy, ~serialNumber, ~createdAt
   issuedBy: issuedBy,
 }
 
-module CertificateFragment = StudentActions__Certificate.Fragments
-module Fragments = %graphql(`
+module CertificateFragment = StudentActions__Certificate.Fragment
+module Fragment = %graphql(`
   fragment IssuedCertificateFragment on IssuedCertificate {
     id
     certificate{
@@ -43,7 +43,7 @@ module Fragments = %graphql(`
   }
 `)
 
-let makeFromFragment = (issuedCertificate: Fragments.t) => {
+let makeFromFragment = (issuedCertificate: Fragment.t) => {
   id: issuedCertificate.id,
   certificate: StudentActions__Certificate.make(
     issuedCertificate.certificate.id,

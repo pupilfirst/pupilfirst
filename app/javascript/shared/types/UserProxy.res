@@ -46,7 +46,7 @@ let makeFromJs = jsObject =>
     ~fullTitle=jsObject["fullTitle"],
   )
 
-module Fragments = %graphql(`
+module Fragment = %graphql(`
   fragment UserProxyFragment on UserProxy {
     id
     name
@@ -56,7 +56,7 @@ module Fragments = %graphql(`
   }
 `)
 
-let makeFromFragment = (user: Fragments.t) =>
+let makeFromFragment = (user: Fragment.t) =>
   make(
     ~id=user.id,
     ~userId=user.userId,

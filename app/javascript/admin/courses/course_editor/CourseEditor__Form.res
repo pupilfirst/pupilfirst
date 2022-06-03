@@ -98,7 +98,7 @@ let reducer = (state, action) =>
     }
   }
 
-module CourseFragment = CourseEditor__Course.Fragments
+module CourseFragment = CourseEditor__Course.Fragment
 
 module CreateCourseQuery = %graphql(`
     mutation CreateCourseMutation($name: String!, $description: String!, $endsAt: ISO8601DateTime, $about: String, $publicSignup: Boolean!, $publicPreview: Boolean!, $featured: Boolean!, $progressionBehavior: ProgressionBehavior!, $progressionLimit: Int, $highlights: [CourseHighlightInput!], $processingUrl: String) {

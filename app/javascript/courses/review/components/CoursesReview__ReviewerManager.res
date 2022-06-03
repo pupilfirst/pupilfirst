@@ -3,7 +3,7 @@ let str = React.string
 
 let t = I18n.t(~scope="components.CoursesReview__ReviewerManager")
 
-module UserProxyFragment = UserProxy.Fragments
+module UserProxyFragment = UserProxy.Fragment
 module AssignReviewerMutation = %graphql(`
     mutation AssignReviewerMutation($submissionId: ID!) {
       assignReviewer(submissionId: $submissionId){

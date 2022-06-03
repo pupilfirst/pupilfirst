@@ -7,7 +7,7 @@ class CoursesResolver < ApplicationQuery
       applicable_courses.where('name ILIKE ?', "%#{search}%")
     else
       applicable_courses
-    end.includes(%i[cover_attachment thumbnail_attachment])
+    end
   end
 
   def allow_token_auth?

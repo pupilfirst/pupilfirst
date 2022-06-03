@@ -391,7 +391,7 @@ module UserProxyFragment = Coach.Fragments
 module CohortFragment = Cohort.Fragments
 
 module StudentDetailsDataQuery = %graphql(`
-  query StudentDetailsDataQuery($courseId: ID!, $studentId: ID!) {
+  query StudentDetailsDataQuery($studentId: ID!) {
     student(studentId: $studentId) {
       taggings
       accessEndsAt
@@ -415,19 +415,16 @@ module StudentDetailsDataQuery = %graphql(`
         coaches {
           ...UserProxyFragment
         }
+        studentTags
       }
-    }
 
-    courseResourceInfo(courseId: $courseId, resources: [StudentTag]) {
-      resource
-      values
     }
   }
   `)
 
-let loadData = (courseId, studentId, setState) => {
+let loadData = (studentId, setState) => {
   setState(_ => Loading)
-  StudentDetailsDataQuery.fetch({courseId: courseId, studentId: studentId})
+  StudentDetailsDataQuery.fetch({studentId: studentId})
   |> Js.Promise.then_((response: StudentDetailsDataQuery.t) => {
     setState(_ => Loaded({
       student: {
@@ -441,7 +438,7 @@ let loadData = (courseId, studentId, setState) => {
         usetTaggings: response.student.user.taggings,
       },
       cohorts: response.student.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
-      tags: response.courseResourceInfo[0].values,
+      tags: response.student.course.studentTags,
       courseCoaches: response.student.course.coaches->Js.Array2.map(Coach.makeFromFragment),
     }))
     Js.Promise.resolve()
@@ -469,7 +466,7 @@ let make = (~courseId, ~studentId) => {
   let (state, setState) = React.useState(() => Unloaded)
 
   React.useEffect1(() => {
-    loadData(courseId, studentId, setState)
+    loadData(studentId, setState)
     None
   }, [studentId])
 

@@ -85,11 +85,7 @@ module StudentsCreateDataQuery = %graphql(`
       cohorts {
         ...CohortFragment
       }
-    }
-
-    courseResourceInfo(courseId: $courseId, resources: [StudentTag]) {
-      resource
-      values
+      studentTags
     }
   }
   `)
@@ -101,9 +97,7 @@ let loadData = (courseId, send) => {
     send(
       SetBaseData(
         response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
-        response.courseResourceInfo
-        ->Js.Array2.map(resource => resource.values)
-        ->ArrayUtils.flattenV2,
+        response.course.studentTags,
       ),
     )
     Js.Promise.resolve()

@@ -42,6 +42,11 @@ module Types
       argument :id, ID, required: false
     end
 
+    resolved_field :cohorts, Types::CohortType.connection_type, null: false do
+      argument :course_id, ID, required: true
+      argument :search, String, required: false
+    end
+
     resolved_field :content_blocks, [Types::ContentBlockType], null: false do
       argument :target_id, ID, required: true
       argument :target_version_id, ID, required: false
@@ -190,10 +195,6 @@ module Types
     end
 
     resolved_field :levels, [Types::LevelType], null: false do
-      argument :course_id, ID, required: true
-    end
-
-    resolved_field :cohorts, [Types::CohortType], null: false do
       argument :course_id, ID, required: true
     end
 

@@ -84,10 +84,9 @@ module DeleteCertificateMutation = %graphql(`
 let deleteCertificate = (certificate, send) => {
   send(BeginDeleting)
 
-  DeleteCertificateMutation.make(~id=Certificate.id(certificate), ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    if result["deleteCertificate"]["success"] {
+  DeleteCertificateMutation.fetch({id: Certificate.id(certificate)})
+  |> Js.Promise.then_((result: DeleteCertificateMutation.t) => {
+    if result.deleteCertificate.success {
       send(FinishDeleting(certificate))
     } else {
       send(FailDeleting)
@@ -169,7 +168,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
                               <p className="text-black font-semibold">
                                 {Certificate.name(certificate)->str}
                               </p>
-                              <p className="text-gray-600 font-semibold text-xs mt-px">
+                              <p className="text-gray-600 text-xs mt-px">
                                 {t(
                                   ~count=Certificate.issuedCertificates(certificate),
                                   "issued_count",
@@ -190,7 +189,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
                             <button
                               title=editTitle
                               ariaLabel={editTitle}
-                              className="w-10 text-sm text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
+                              className="w-10 text-sm text-gray-600 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
                               onClick={_ => send(OpenEditCertificateDrawer(certificate))}>
                               <i className="fas fa-edit" />
                             </button>
@@ -202,7 +201,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
                               <button
                                 title
                                 ariaLabel={title}
-                                className="w-10 text-sm text-gray-700 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500"
+                                className="w-10 text-sm text-gray-600 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500"
                                 onClick={_event =>
                                   WindowUtils.confirm(t("delete_confirm"), () =>
                                     deleteCertificate(certificate, send)

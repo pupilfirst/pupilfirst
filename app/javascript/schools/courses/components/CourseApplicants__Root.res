@@ -252,7 +252,7 @@ let onDeselectFilter = (send, selectable) =>
   }
 
 let loadApplicants = (courseId, state, cursor, send) => {
-  ApplicantsQuery.make(
+  let variables = ApplicantsQuery.makeVariables(
     ~tags=?Some(state.filter.tags),
     ~sortDirection=state.filter.sortDirection,
     ~sortCriterion=state.filter.sortCriterion,
@@ -261,7 +261,7 @@ let loadApplicants = (courseId, state, cursor, send) => {
     ~courseId,
     (),
   )
-  |> GraphqlQuery.sendQuery
+  ApplicantsQuery.make(variables)
   |> Js.Promise.then_(response => {
     let applicants = Js.Array.map(
       rawCourse => Applicant.makeFromJS(rawCourse),

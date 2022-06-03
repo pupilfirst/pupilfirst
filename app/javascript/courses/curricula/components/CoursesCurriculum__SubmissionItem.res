@@ -57,7 +57,7 @@ let showLink = (value, id, updateResultCB) =>
       type_="text"
       value
       onChange={e => updateResultCB(ChecklistItem.Link(ReactEvent.Form.target(e)["value"]))}
-      placeholder=tr("link_placeholder")
+      placeholder={tr("link_placeholder")}
       className="cursor-pointer truncate h-10 border border-gray-300 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
     />
     {showError(tr("link_error"), UrlUtils.isInvalid(true, value))}
@@ -71,13 +71,10 @@ let showShortText = (value, id, updateResultCB) =>
       value
       maxLength=250
       onChange={e => updateResultCB(ChecklistItem.ShortText(ReactEvent.Form.target(e)["value"]))}
-      placeholder=tr("short_text_placeholder")
+      placeholder={tr("short_text_placeholder")}
       className="cursor-pointer truncate h-10 border border-gray-300 focus:outline-none focus:border-primary-400 focus:shadow-inner px-4 items-center font-semibold rounded text-sm mr-2 block w-full"
     />
-    {showError(
-      tr("short_text_error"),
-      !ChecklistItem.validShortText(value) && notBlank(value),
-    )}
+    {showError(tr("short_text_error"), !ChecklistItem.validShortText(value) && notBlank(value))}
   </div>
 
 let longTextWarning = value => {
@@ -172,7 +169,7 @@ let showFiles = (files, preview, id, attachingCB, updateResultCB, index) =>
             </div>
             <button
               title={tr("remove") ++ (file |> ChecklistItem.filename)}
-              className="flex w-8 justify-center items-center p-2 cursor-pointer bg-gray-50 border-l text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+              className="flex w-8 justify-center items-center p-2 cursor-pointer bg-gray-50 border-l text-gray-600 hover:bg-gray-50 hover:text-gray-900"
               onClick={_ => removeFile(updateResultCB, files, file |> ChecklistItem.fileId)}>
               <PfIcon className="if i-times-regular text-sm" />
             </button>

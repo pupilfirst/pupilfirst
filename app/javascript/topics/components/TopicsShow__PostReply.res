@@ -43,9 +43,9 @@ let make = (~post, ~users) => {
       </div>
       <Tooltip tip position=#Left>
         <div
-          ariaLabel={ t("navigate_post") ++ " " ++ Post.id(post)}
+          ariaLabel={t("navigate_post") ++ " " ++ Post.id(post)}
           onClick={_ => navigateToPost(post |> Post.id)}
-          className="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded leading-tight border bg-gray-50 text-gray-700 cursor-pointer hover:bg-gray-300">
+          className="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded leading-tight border bg-gray-50 text-gray-600 cursor-pointer hover:bg-gray-300">
           <i className="fas fa-angle-double-down" />
         </div>
       </Tooltip>

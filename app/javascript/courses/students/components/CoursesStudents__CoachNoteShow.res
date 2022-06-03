@@ -22,10 +22,9 @@ let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
     window |> Window.confirm(tr("sure_delete"))
   } {
     setArchiving(_ => true)
-    ArchiveCoachNoteMutation.make(~id, ())
-    |> GraphqlQuery.sendQuery
-    |> Js.Promise.then_(response => {
-      if response["archiveCoachNote"]["success"] {
+    ArchiveCoachNoteMutation.fetch({id: id})
+    |> Js.Promise.then_((response: ArchiveCoachNoteMutation.t) => {
+      if response.archiveCoachNote.success {
         removeNoteCB(id)
       } else {
         setArchiving(_ => false)
@@ -41,7 +40,7 @@ let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
 let deleteIcon = (note, removeNoteCB, setArchiving, archiving) =>
   <button
     ariaLabel={tr("delete_note") ++ (note |> CoachNote.id)}
-    className="w-10 text-sm text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500 "
+    className="w-10 text-sm text-gray-600 hover:text-gray-900 cursor-pointer flex items-center justify-center rounded hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 focus:ring-2 focus:ring-inset focus:ring-red-500 "
     disabled=archiving
     title={tr("delete_note") ++ (note |> CoachNote.id)}
     onClick={removeCoachNote(note |> CoachNote.id, removeNoteCB, setArchiving)}>
@@ -82,7 +81,7 @@ let make = (~note, ~userId, ~removeNoteCB) => {
             | None => tr("deleted_coach")
             } |> str}
           </p>
-          <p className="text-gray-600 font-semibold text-xs mt-px leading-snug">
+          <p className="text-gray-600 text-xs mt-px leading-snug">
             {switch note |> CoachNote.author {
             | Some(user) => user |> User.title
             | None => tr("unknown")

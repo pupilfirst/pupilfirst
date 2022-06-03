@@ -408,13 +408,16 @@ module StudentDetailsDataQuery = %graphql(`
       personalCoaches{
         id
       }
+      course {
+        cohorts {
+          ...CohortFragment
+        }
+        coaches {
+          ...UserProxyFragment
+        }
+      }
     }
-    cohorts(courseId: $courseId) {
-      ...CohortFragment
-    }
-    coaches(courseId: $courseId) {
-      ...UserProxyFragment
-    }
+
     courseResourceInfo(courseId: $courseId, resources: [StudentTag]) {
       resource
       values
@@ -437,9 +440,9 @@ let loadData = (courseId, studentId, setState) => {
         cohort: response.student.cohort->Cohort.makeFromFragment,
         usetTaggings: response.student.user.taggings,
       },
-      cohorts: response.cohorts->Js.Array2.map(Cohort.makeFromFragment),
+      cohorts: response.student.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
       tags: response.courseResourceInfo[0].values,
-      courseCoaches: response.coaches->Js.Array2.map(Coach.makeFromFragment),
+      courseCoaches: response.student.course.coaches->Js.Array2.map(Coach.makeFromFragment),
     }))
     Js.Promise.resolve()
   })

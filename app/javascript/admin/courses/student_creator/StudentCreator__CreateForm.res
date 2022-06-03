@@ -81,9 +81,12 @@ module CreateStudentsQuery = %graphql(`
 module CohortFragment = Cohort.Fragments
 module StudentsCreateDataQuery = %graphql(`
   query StudentsCreateDataQuery($courseId: ID!) {
-    cohorts(courseId: $courseId) {
-      ...CohortFragment
+    course(id: $courseId) {
+      cohorts {
+        ...CohortFragment
+      }
     }
+
     courseResourceInfo(courseId: $courseId, resources: [StudentTag]) {
       resource
       values
@@ -93,12 +96,14 @@ module StudentsCreateDataQuery = %graphql(`
 
 let loadData = (courseId, send) => {
   send(SetLoading)
-  StudentsCreateDataQuery.make(StudentsCreateDataQuery.makeVariables(~courseId, ()))
-  |> Js.Promise.then_(response => {
+  StudentsCreateDataQuery.fetch(StudentsCreateDataQuery.makeVariables(~courseId, ()))
+  |> Js.Promise.then_((response: StudentsCreateDataQuery.t) => {
     send(
       SetBaseData(
-        response["cohorts"]->Js.Array2.map(cohort => Cohort.makeFromJs(cohort)),
-        response["courseResourceInfo"][0]["values"],
+        response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
+        response.courseResourceInfo
+        ->Js.Array2.map(resource => resource.values)
+        ->ArrayUtils.flattenV2,
       ),
     )
     Js.Promise.resolve()

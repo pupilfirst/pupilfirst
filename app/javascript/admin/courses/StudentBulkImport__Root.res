@@ -137,17 +137,20 @@ let submitForm = (cohort, exitUrl, send, event) => {
 module CohortFragment = Cohort.Fragments
 module StudentBulkImportDataQuery = %graphql(`
   query StudentBulkImportDataQuery($courseId: ID!) {
-    cohorts(courseId: $courseId) {
-      ...CohortFragment
+    course(id: $courseId) {
+      cohorts {
+        ...CohortFragment
+      }
+
     }
   }
   `)
 
 let loadData = (courseId, send) => {
   send(SetLoading)
-  StudentBulkImportDataQuery.make(StudentBulkImportDataQuery.makeVariables(~courseId, ()))
-  |> Js.Promise.then_(response => {
-    send(SetBaseData(response["cohorts"]->Js.Array2.map(cohort => Cohort.makeFromJs(cohort))))
+  StudentBulkImportDataQuery.fetch({courseId: courseId})
+  |> Js.Promise.then_((response: StudentBulkImportDataQuery.t) => {
+    send(SetBaseData(response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment)))
     Js.Promise.resolve()
   })
   |> ignore

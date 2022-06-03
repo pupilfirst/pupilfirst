@@ -410,7 +410,6 @@ module StudentActionsDataQuery = %graphql(`
         }
       }
     }
-
   }
   `)
 

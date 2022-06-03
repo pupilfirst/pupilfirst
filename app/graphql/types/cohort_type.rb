@@ -12,7 +12,7 @@ module Types
       BatchLoader::GraphQL
         .for(object.id)
         .batch do |cohort_ids, loader|
-          Founders
+          Founder
             .not_dropped_out
             .where(cohort_id: cohort_ids)
             .group(:cohort_id)

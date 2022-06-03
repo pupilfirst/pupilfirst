@@ -2,8 +2,15 @@ class CohortsResolver < ApplicationQuery
   include AuthorizeSchoolAdmin
 
   property :course_id
+  property :search
 
-  delegate :cohorts, to: :course
+  def cohorts
+    if search.present?
+      course.cohorts.where('name ILIKE ?', "%#{search}%")
+    else
+      course.cohorts
+    end
+  end
 
   private
 

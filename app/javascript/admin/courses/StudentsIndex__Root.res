@@ -21,7 +21,7 @@ type state = {
 type action =
   | UnsetSearchString
   | UpdateFilterInput(string)
-  | LoadSubmissions(option<string>, bool, array<StudentInfo.t>, int)
+  | LoadStudents(option<string>, bool, array<StudentInfo.t>, int)
   | BeginLoadingMore
   | BeginReloading
 
@@ -32,7 +32,7 @@ let reducer = (state, action) =>
       filterInput: "",
     }
   | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
-  | LoadSubmissions(endCursor, hasNextPage, students, totalEntriesCount) =>
+  | LoadStudents(endCursor, hasNextPage, students, totalEntriesCount) =>
     let updatedStudent = switch state.loading {
     | LoadingMore => Js.Array2.concat(PagedStudents.toArray(state.students), students)
     | Reloading(_) => students
@@ -117,7 +117,7 @@ let getStudents = (send, courseId, cursor, filter, params) => {
   |> CourseStudentsQuery.make
   |> Js.Promise.then_(response => {
     send(
-      LoadSubmissions(
+      LoadStudents(
         response["courseStudents"]["pageInfo"]["endCursor"],
         response["courseStudents"]["pageInfo"]["hasNextPage"],
         Js.Array.map(StudentInfo.makeFromJS, response["courseStudents"]["nodes"]),
@@ -294,9 +294,9 @@ let make = (~courseId, ~search) => {
             {switch state.students {
             | Unloaded =>
               <div> {SkeletonLoading.multiple(~count=6, ~element=SkeletonLoading.card())} </div>
-            | PartiallyLoaded(submissions, cursor) =>
+            | PartiallyLoaded(students, cursor) =>
               <div>
-                {studentsList(submissions, courseId, params)}
+                {studentsList(students, courseId, params)}
                 {switch state.loading {
                 | LoadingMore =>
                   <div> {SkeletonLoading.multiple(~count=1, ~element=SkeletonLoading.card())} </div>
@@ -316,7 +316,7 @@ let make = (~courseId, ~search) => {
                   )
                 }}
               </div>
-            | FullyLoaded(submissions) => <div> {studentsList(submissions, courseId, params)} </div>
+            | FullyLoaded(students) => <div> {studentsList(students, courseId, params)} </div>
             }}
           </div>
           {switch state.students {

@@ -158,7 +158,7 @@ module Make = (Selectable: Selectable) => {
     <div
       role="listbox"
       className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-300 bg-white mt-1 rounded-lg shadow-lg py-2 z-50">
-      <p className="text-gray-700 italic mx-4 text-xs border-b pb-1 mb-2">
+      <p className="text-gray-600 italic mx-4 text-xs border-b pb-1 mb-2">
         {str("Suggestions:")}
       </p>
       children
@@ -224,7 +224,7 @@ module Make = (Selectable: Selectable) => {
             autoComplete="off"
             value
             onChange={e => onChange(ReactEvent.Form.target(e)["value"])}
-            className="flex-grow appearance-none bg-transparent border-none text-gray-700 p-1.5 leading-snug focus:outline-none placeholder-gray-500"
+            className="flex-grow appearance-none bg-transparent border-none text-gray-600 p-1.5 leading-snug focus:outline-none placeholder-gray-500"
             id=inputId
             type_="search"
             role="combobox"

@@ -69,7 +69,11 @@ module Users
       else
         redirect_to oauth_error_url(
                       host: oauth_origin[:fqdn],
-                      error: t('.email_unregistered', email: @email)
+                      error:
+                        t(
+                          'users.omniauth_callbacks.oauth_callback.email_unregistered',
+                          email: @email
+                        )
                     )
       end
     end
@@ -113,16 +117,20 @@ module Users
     end
 
     def email_blank_flash
-      message = t('.not_receive_email', provider_name: provider_name)
+      message =
+        t(
+          'users.omniauth_callbacks.oauth_callback.not_receive_email',
+          provider_name: provider_name
+        )
 
       message +=
         case provider_name
         when 'Github'
-          t('.add_github')
+          t('users.omniauth_callbacks.oauth_callback.add_github')
         when 'Facebook'
-          t('.add_facebook')
+          t('users.omniauth_callbacks.oauth_callback.add_facebook')
         else
-          t('.add_other')
+          t('users.omniauth_callbacks.oauth_callback.add_other')
         end
 
       message.html_safe

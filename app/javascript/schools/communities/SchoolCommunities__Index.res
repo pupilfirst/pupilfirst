@@ -136,7 +136,7 @@ let make = (~communities, ~courses) => {
     | ShowEditor(community) =>
       let level = state.showCategoryEditor ? 1 : 0
       <SchoolAdmin__EditorDrawer2
-        closeButtonTitle=tr("close_community_editor")
+        closeButtonTitle={tr("close_community_editor")}
         level
         closeDrawerCB={() => send(UpdateEditorAction(Hidden))}>
         <SchoolCommunities__Editor
@@ -154,7 +154,7 @@ let make = (~communities, ~courses) => {
         | Some(community) =>
           state.showCategoryEditor
             ? <SchoolAdmin__EditorDrawer2
-                closeButtonTitle=tr("close_category_editor")
+                closeButtonTitle={tr("close_category_editor")}
                 closeIconClassName="fas fa-arrow-left"
                 closeDrawerCB={() => handleCloseCategoryManager(send, state)}>
                 <SchoolCommunities__CategoryManager
@@ -198,7 +198,7 @@ let make = (~communities, ~courses) => {
                     {community |> Community.name |> str}
                   </span>
                   <span
-                    className="ml-2 py-5 px-5 font-semibold text-gray-700 hover:text-primary-500">
+                    className="ml-2 py-5 px-5 font-semibold text-gray-600 hover:text-primary-500">
                     <i className="fas fa-edit text-normal" />
                     <span className="ml-1"> {ts("edit") |> str} </span>
                   </span>
@@ -207,7 +207,7 @@ let make = (~communities, ~courses) => {
               <a
                 target="_blank"
                 href={"/communities/" ++ (community |> Community.id)}
-                className="text-sm flex items-center border-l text-gray-700 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500 font-semibold px-5 py-5">
+                className="text-sm flex items-center border-l text-gray-600 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500 font-semibold px-5 py-5">
                 <i className="fas fa-external-link-alt text-normal" />
                 <span className="ml-1"> {ts("view") |> str} </span>
               </a>

@@ -13,11 +13,13 @@ let str = React.string
 
 type status = [#Active | #Ended | #Archived]
 
+module CourseFragment = Course.Fragments
+
 module CoursesQuery = %graphql(`
   query CoursesQuery($search: String, $after: String,$courseId: ID, $status: CourseStatus) {
     courses(status: $status, search: $search, first: 10, after: $after){
       nodes {
-        ...Course.Fragments.AllFields
+        ...CourseFragment
       }
       pageInfo{
         endCursor,hasNextPage
@@ -25,7 +27,7 @@ module CoursesQuery = %graphql(`
       totalCount
     }
     course(id: $courseId){
-        ...Course.Fragments.AllFields
+        ...CourseFragment
     }
   }
   `)
@@ -191,14 +193,14 @@ let courseLinks = course => {
 }
 
 let loadCourses = (courseId, state, cursor, send) => {
-  CoursesQuery.make(
+  let variables = CoursesQuery.makeVariables(
     ~status=?state.filter.status,
     ~after=?cursor,
     ~search=?state.filter.name,
     ~courseId?,
     (),
   )
-  |> GraphqlQuery.sendQuery
+  CoursesQuery.make(variables)
   |> Js.Promise.then_(response => {
     let courses = Js.Array.map(
       rawCourse => Course.makeFromJs(rawCourse),

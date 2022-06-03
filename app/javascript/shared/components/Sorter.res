@@ -29,7 +29,7 @@ module Make = (Sortable: Sortable) => {
           title={t("order_by") ++ " " ++ Sortable.criterion(criterion)}
           onClick={_ => onCriterionChange(criterion)}
           className="inline-flex items-center w-full font-semibold whitespace-nowrap text-xs p-3 text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 ">
-          <Icon className="if i-clock-regular text-sm if-fw text-gray-700" />
+          <Icon className="if i-clock-regular text-sm if-fw text-gray-600" />
           <span className="ml-2"> {Sortable.criterion(criterion) |> str} </span>
         </button>
       )
@@ -51,12 +51,12 @@ module Make = (Sortable: Sortable) => {
         ? dropdown(criteria, selectedCriterion, onCriterionChange)
         : <div
             title={t("order_by") ++ " " ++ (selectedCriterion |> Sortable.criterion)}
-            className="inline-flex flex-1 md:flex-auto items-center bg-gray-50 leading-relaxed font-semibold text-gray-700 border border-gray-300 rounded px-3 py-1 md:py-2 text-sm ">
+            className="inline-flex flex-1 md:flex-auto items-center bg-gray-50 leading-relaxed font-semibold text-gray-600 border border-gray-300 rounded px-3 py-1 md:py-2 text-sm ">
             <div> {selectedCriterion |> Sortable.criterion |> str} </div>
           </div>}
       <span className="flex ml-1">
         <button
-          ariaLabel=t("toggle_sort")
+          ariaLabel={t("toggle_sort")}
           title="toggle-sort-order"
           className="bg-white w-10 px-2 py-1 rounded border border-gray-300 text-gray-800 hover:bg-gray-50 hover:text-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 "
           onClick={_ => {

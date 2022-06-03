@@ -27,7 +27,7 @@ const subscriptPlugin = require("markdown-it-sub");
 const superscriptPlugin = require("markdown-it-sup");
 const tablePlugin = require("markdown-it-multimd-table");
 const linkifyImagesPlugin = require("markdown-it-linkify-images");
-const imageSizePlugin = require("@centerforopenscience/markdown-it-imsize");
+import imageSizePlugin from "@centerforopenscience/markdown-it-imsize";
 const linkAttributesPlugin = require("markdown-it-link-attributes");
 const katexPlugin = require("@jeff-tian/markdown-it-katex");
 const alignPlugin = require("markdown-it-align");

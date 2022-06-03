@@ -32,14 +32,12 @@ let updateReviewChecklist = (targetId, reviewChecklist, send, updateReviewCheckl
 
   let trimmedChecklist = reviewChecklist->Js.Array2.map(ReviewChecklistItem.trim)
 
-  UpdateReviewChecklistMutation.make(
-    ~targetId,
-    ~reviewChecklist=ReviewChecklistItem.encodeArray(trimmedChecklist),
-    (),
-  )
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    if response["updateReviewChecklist"]["success"] {
+  UpdateReviewChecklistMutation.fetch({
+    targetId: targetId,
+    reviewChecklist: ReviewChecklistItem.encodeArray(trimmedChecklist),
+  })
+  |> Js.Promise.then_((response: UpdateReviewChecklistMutation.t) => {
+    if response.updateReviewChecklist.success {
       updateReviewChecklistCB(trimmedChecklist)
     }
 
@@ -155,7 +153,7 @@ let controlIcon = (~icon, ~title, ~hidden=false, handler) =>
       ariaLabel=title
       title
       disabled={hidden}
-      className="px-2 py-1 rounded text-sm text-gray-700 hover:bg-gray-300 hover:text-gray-900 overflow-hidden focus:outline-none focus:bg-gray-300 focus:text-gray-900"
+      className="px-2 py-1 rounded text-sm bg-gray-100 text-gray-500 hover:bg-gray-300 hover:text-gray-900 overflow-hidden focus:outline-none focus:bg-gray-300 focus:text-gray-900"
       onClick={handler}>
       <i className={"fas fa-fw " ++ icon} />
     </button>,
@@ -175,7 +173,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
   <div>
     <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
       <div className="flex flex-1 items-center justify-between">
-        <h5 className="font-semibold flex items-center tracking-wide">
+        <h5 className="font-medium flex items-center tracking-wide">
           {(
             ArrayUtils.isEmpty(reviewChecklist)
               ? t("create_review_checklist")
@@ -194,7 +192,7 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
               key={string_of_int(itemIndex)}>
               <div className="flex items-start gap-1">
                 <div
-                  className="p-3 md:p-5 mb-5 flex flex-col flex-1 bg-gray-50 rounded-lg"
+                  className="p-3 md:p-5 mb-5 flex flex-col flex-1 bg-gray-100 rounded-lg"
                   key={itemIndex->string_of_int}
                   ariaLabel={"checklist-item-" ++ itemIndex->string_of_int}>
                   <div className="flex">
@@ -256,7 +254,8 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                                       send,
                                     )}
                                 />
-                                <div className="flex h-10 mr-1 items-center justify-center">
+                                <div
+                                  className="flex h-10 mr-1 space-x-1 items-center justify-center">
                                   {controlIcon(
                                     ~icon="fa-arrow-up",
                                     ~title={t("checklist_item_title.move_up_button_title")},
@@ -386,9 +385,9 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
           <div>
             <button
               ariaLabel={t("add_checklist_item")}
-              className="flex items-center text-sm font-semibold bg-gray-50 rounded border border-dashed border-gray-600 w-full hover:text-primary-500 hover:bg-white hover:border-primary-500 hover:shadow-md focus:outline-none focus:text-primary-500 focus:bg-white focus:border-primary-500 focus:shadow-md"
+              className="flex items-center text-sm font-semibold bg-white rounded-md border border-dashed border-gray-600 w-full hover:text-primary-500 hover:bg-white hover:border-primary-500 hover:shadow-md focus:outline-none focus:text-primary-500 focus:bg-white focus:border-primary-500 focus:shadow-md"
               onClick={_ => send(AddEmptyChecklistItem)}>
-              <span className="bg-gray-300 py-2 w-10"> <i className="fas fa-plus text-sm" /> </span>
+              <span className="bg-gray-100 py-2 w-10"> <i className="fas fa-plus text-sm" /> </span>
               <span className="px-3 py-2"> {t("add_checklist_item")->str} </span>
             </button>
           </div>

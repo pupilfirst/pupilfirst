@@ -1247,7 +1247,6 @@ ru:
       search_coaches_empty: Менторы не выбраны
       search_coaches_placeholder: Поиск менторов
       student_name_placeholder: Имя ученика здесь
-      student_s: Студента
       student_updated: Учащийся успешно обновлен
       student_updated_moved: Учащийся обновлен и перемещен в список неактивных учащихся
       students_not_able_complete_help: Если установлено, учащиеся не смогут выполнять задачи после этой даты.

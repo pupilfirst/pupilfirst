@@ -75,11 +75,28 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
   send(SetSaving(true))
 
-  let students = Js.Array.map(TeamInfo.toJsArray, state.teamsToAdd) |> ArrayUtils.flattenV2
   let {notifyStudents} = state
 
-  CreateStudentsQuery.make(~courseId, ~notifyStudents, ~students, ())
-  |> GraphqlQuery.sendQuery
+  let students =
+    Js.Array.map(
+      t =>
+        Js.Array.map(
+          s =>
+            CreateStudentsQuery.makeInputObjectStudentEnrollmentInput(
+              ~name=StudentInfo.name(s),
+              ~email=StudentInfo.email(s),
+              ~title=StudentInfo.title(s),
+              ~affiliation=StudentInfo.affiliation(s),
+              ~teamName=TeamInfo.name(t),
+              ~tags=TeamInfo.tags(t),
+              (),
+            ),
+          TeamInfo.students(t),
+        ),
+      state.teamsToAdd,
+    ) |> ArrayUtils.flattenV2
+
+  CreateStudentsQuery.make({courseId: courseId, notifyStudents: notifyStudents, students: students})
   |> Js.Promise.then_(response => {
     switch response["createStudents"]["studentIds"] {
     | Some(studentIds) => handleResponseCB(submitFormCB, state, studentIds)
@@ -90,10 +107,7 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   })
   |> Js.Promise.catch(error => {
     Js.log(error)
-    Notification.error(
-      ts("notifications.unexpected_error"),
-      t("reload_add_students"),
-    )
+    Notification.error(ts("notifications.unexpected_error"), t("reload_add_students"))
     send(SetSaving(false))
     Js.Promise.resolve()
   })
@@ -185,7 +199,7 @@ let studentCard = (studentInfo, send, team, tags) => {
       {tagBoxes(tags)}
     </div>
     <button
-      className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+      className="p-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50"
       onClick={_event => send(RemoveStudentInfo(studentInfo))}>
       <i className="fas fa-trash-alt" />
     </button>

@@ -1,5 +1,20 @@
 open SchoolCustomize__Types
 
+type action =
+  | SetEditing(bool)
+  | UpdateTitle(string)
+  | UpdateUrl(string)
+  | SetError(bool)
+  | SetUpdating(bool)
+
+type state = {
+  title: string,
+  url: string,
+  editing: bool,
+  error: bool,
+  updating: bool,
+}
+
 let str = React.string
 
 let inputClasses = "bg-white border border-gray-400 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500"
@@ -28,15 +43,7 @@ module SortSchoolLinkQuery = %graphql(`
   }
   `)
 
-let handleMoveLink = (
-  ~id,
-  ~direction,
-  ~setUpdating,
-  ~setIsEditingDisabled,
-  ~kind: SchoolLinks.kind,
-  ~links,
-  ~moveLinkCB,
-) => {
+let handleMoveLink = (~id, ~direction, ~dispatch, ~kind: SchoolLinks.kind, ~links, ~moveLinkCB) => {
   let link = links |> List.find(((linkId, _, _, _)) => id == linkId)
 
   let linkIds =
@@ -55,14 +62,14 @@ let handleMoveLink = (
   | SchoolLinks.SocialLink => "social"
   }
 
-  setUpdating(_ => true)
+  dispatch(SetUpdating(true))
   SortSchoolLinkQuery.make({linkIds: linkIds, kind: linkKind})
   |> Js.Promise.then_(response => {
-    setUpdating(_ => false)
+    dispatch(SetUpdating(false))
     open Json.Decode
     let x = field("links", list(Customizations.decodeLink), response["sortSchoolLinks"])
     moveLinkCB(x)
-    setIsEditingDisabled(_ => true)
+    dispatch(SetEditing(false))
     Js.Promise.resolve()
   })
   |> ignore
@@ -94,24 +101,37 @@ module UpdateSchoolLinkQuery = %graphql(`
   }
 `)
 
-let handleLinkEdit = (
-  ~setUpdating,
-  ~setIsEditingDisabled,
-  ~updateLinkCB,
-  ~id,
-  ~title: string,
-  ~url,
-) => {
-  setUpdating(_ => true)
+let handleLinkEdit = (~dispatch, ~updateLinkCB, ~id, ~title: string, ~url) => {
+  dispatch(SetUpdating(true))
   UpdateSchoolLinkQuery.make({id: id, title: Some(title), url: url})
   |> Js.Promise.then_(_ => {
-    setUpdating(_ => false)
-    setIsEditingDisabled(_ => true)
+    dispatch(SetUpdating(false))
+    dispatch(SetEditing(false))
     updateLinkCB(id, title, url)
     Js.Promise.resolve()
   })
   |> ignore
   ()
+}
+
+let initialState = (title: string, url: string) => {
+  {
+    title: title,
+    url: url,
+    editing: false,
+    error: false,
+    updating: false,
+  }
+}
+
+let reducer = (state, action) => {
+  switch action {
+  | SetEditing(editing) => {...state, editing: editing}
+  | UpdateTitle(title) => {...state, title: title}
+  | UpdateUrl(url) => {...state, url: url}
+  | SetError(error) => {...state, error: error}
+  | SetUpdating(updating) => {...state, updating: updating}
+  }
 }
 
 @react.component
@@ -129,18 +149,50 @@ let make = (
   ~links,
   ~moveLinkCB,
 ) => {
-  let (isEditingDisabled, setIsEditingDisabled) = React.useState(_ => true)
-  let (_title, setTitle) = React.useState(_ => title)
-  let (_url, setUrl) = React.useState(_ => url)
-  let (updating, setUpdating) = React.useState(_ => false)
-  let (error, setError) = React.useState(_ => false)
+  let (localState, dispatch) = React.useReducer(reducer, initialState(title, url))
 
-  <DisablingCover disabled=updating message="Updating...">
+  <DisablingCover disabled=localState.updating message="Updating...">
     <div
       className={"flex justify-between items-center gap-8 bg-gray-100 text-xs text-gray-900 border rounded mt-2"}>
       <div className="flex items-center flex-1">
-        {isEditingDisabled
-          ? <div className="pl-3">
+        {localState.editing
+          ? <>
+              {switch kind {
+              | HeaderLink
+              | FooterLink => <>
+                  <input
+                    value=localState.title
+                    required=true
+                    autoFocus=true
+                    className=inputClasses
+                    placeholder="A short title for a new link"
+                    onChange={event => {
+                      let value = ReactEvent.Form.target(event)["value"]
+                      dispatch(UpdateTitle(value))
+                    }}
+                  />
+                  <FaIcon classes="fas fa-link mx-2" />
+                </>
+              | SocialLink => React.null
+              }}
+              <div className="flex flex-col gap-1 flex-1">
+                <input
+                  value=localState.url
+                  type_="url"
+                  required=true
+                  placeholder="Full URL, staring with https://"
+                  className={inputClasses ++ " flex-1 invalid:ring-red-500"}
+                  autoFocus={kind == SocialLink}
+                  onChange={event => {
+                    let value = ReactEvent.Form.target(event)["value"]
+                    dispatch(SetError(value |> UrlUtils.isInvalid(false)))
+                    dispatch(UpdateUrl(value))
+                  }}
+                />
+                <School__InputGroupError active={localState.error} message="Invalid Url" />
+              </div>
+            </>
+          : <div className="pl-3">
               {switch kind {
               | HeaderLink
               | FooterLink => <>
@@ -150,47 +202,42 @@ let make = (
                 </>
               | SocialLink => <code> {url |> str} </code>
               }}
-            </div>
-          : <>
-              {switch kind {
-              | HeaderLink
-              | FooterLink => <>
-                  <input
-                    value=_title
-                    required=true
-                    autoFocus=true
-                    className=inputClasses
-                    placeholder="A short title for a new link"
-                    onChange={event => {
-                      let value = ReactEvent.Form.target(event)["value"]
-                      setTitle(_ => value)
-                    }}
-                  />
-                  <FaIcon classes="fas fa-link mx-2" />
-                </>
-              | SocialLink => React.null
-              }}
-              <div className="flex flex-col gap-1 flex-1">
-                <input
-                  value=_url
-                  type_="url"
-                  required=true
-                  placeholder="Full URL, staring with https://"
-                  className={inputClasses ++ " flex-1 invalid:ring-red-500"}
-                  autoFocus={kind == SocialLink}
-                  onChange={event => {
-                    let value = ReactEvent.Form.target(event)["value"]
-                    setError(_ => value |> UrlUtils.isInvalid(false))
-                    setUrl(_ => value)
-                  }}
-                />
-                <School__InputGroupError active={error} message="Invalid Url" />
-              </div>
-            </>}
+            </div>}
       </div>
       <div>
-        {isEditingDisabled
+        {localState.editing
           ? <div>
+              <button
+                ariaLabel={"Cancel Editing " ++ title}
+                title={"Cancel Editing " ++ url}
+                onClick={e => {
+                  dispatch(SetEditing(false))
+                  dispatch(UpdateTitle(title))
+                  dispatch(UpdateUrl(url))
+                  dispatch(SetError(url |> UrlUtils.isInvalid(false)))
+                }}
+                className="p-3 hover:text-primary-500 focus:text-primary-500">
+                <FaIcon classes={"fas fa-times"} />
+              </button>
+              <button
+                ariaLabel={"Update " ++ title}
+                title={"Update " ++ url}
+                disabled={localState.error}
+                onClick={e =>
+                  if !localState.error {
+                    handleLinkEdit(
+                      ~dispatch,
+                      ~id,
+                      ~updateLinkCB,
+                      ~title=localState.title,
+                      ~url=localState.url,
+                    )
+                  }}
+                className="p-3 hover:text-primary-500 focus:text-primary-500">
+                <FaIcon classes={"fas fa-check"} />
+              </button>
+            </div>
+          : <div>
               <button
                 ariaLabel={"Edit " ++ title}
                 title={"Edit " ++ url}
@@ -201,8 +248,7 @@ let make = (
                     ~kind,
                     ~moveLinkCB,
                     ~links,
-                    ~setIsEditingDisabled,
-                    ~setUpdating,
+                    ~dispatch,
                   )}
                 disabled={index == total - 1}
                 className="p-3 hover:text-primary-500 focus:text-primary-500">
@@ -219,8 +265,7 @@ let make = (
                     ~kind,
                     ~moveLinkCB,
                     ~links,
-                    ~setIsEditingDisabled,
-                    ~setUpdating,
+                    ~dispatch,
                   )}
                 className={"p-3 hover:text-primary-500 focus:text-primary-500"}>
                 <FaIcon classes="fas fa-arrow-up" />
@@ -228,7 +273,7 @@ let make = (
               <button
                 ariaLabel={"Edit " ++ title}
                 title={"Edit " ++ url}
-                onClick={e => setIsEditingDisabled(_ => false)}
+                onClick={e => dispatch(SetEditing(true))}
                 className="p-3 hover:text-primary-500 focus:text-primary-500">
                 <FaIcon classes="fas fa-edit" />
               </button>
@@ -238,38 +283,6 @@ let make = (
                 onClick={handleDelete(state, send, removeLinkCB, id)}
                 className="p-3 hover:text-red-500 focus:text-red-500">
                 <FaIcon classes={deleteIconClasses(state.deleting |> List.mem(id))} />
-              </button>
-            </div>
-          : <div>
-              <button
-                ariaLabel={"Cancel Editing " ++ title}
-                title={"Cancel Editing " ++ url}
-                onClick={e => {
-                  setIsEditingDisabled(_ => true)
-                  setTitle(_ => title)
-                  setError(_ => url |> UrlUtils.isInvalid(false))
-                  setUrl(_ => url)
-                }}
-                className="p-3 hover:text-primary-500 focus:text-primary-500">
-                <FaIcon classes={"fas fa-times"} />
-              </button>
-              <button
-                ariaLabel={"Update " ++ title}
-                title={"Update " ++ url}
-                disabled={error}
-                onClick={e =>
-                  if !error {
-                    handleLinkEdit(
-                      ~setUpdating,
-                      ~setIsEditingDisabled,
-                      ~id,
-                      ~updateLinkCB,
-                      ~title=_title,
-                      ~url=_url,
-                    )
-                  }}
-                className="p-3 hover:text-primary-500 focus:text-primary-500">
-                <FaIcon classes={"fas fa-check"} />
               </button>
             </div>}
       </div>

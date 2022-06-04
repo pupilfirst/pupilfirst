@@ -59,44 +59,6 @@ let handleDelete = (state, send, removeLinkCB, id, event) => {
 
 let deleteIconClasses = deleting => deleting ? "fas fa-spinner fa-pulse" : "far fa-trash-alt"
 
-let showLinks = (state, send, removeLinkCB, kind, links) =>
-  switch links {
-  | list{} =>
-    <div
-      className="border border-gray-300 rounded italic text-gray-600 text-xs cursor-default mt-2 p-3">
-      {t("no_custom_links") |> str}
-    </div>
-  | links =>
-    links
-    |> List.map(((id, title, url)) =>
-      <div
-        className="flex items-center justify-between bg-gray-50 text-xs text-gray-900 border rounded pl-3 mt-2"
-        key=id>
-        <div className="flex items-center">
-          {switch kind {
-          | HeaderLink
-          | FooterLink =>
-            [
-              <span key="link-editor-entry__title"> {title |> str} </span>,
-              <i key="link-editor-entry__icon" className="fas fa-link mx-2" />,
-              <code key="link-editor-entry__url"> {url |> str} </code>,
-            ] |> React.array
-          | SocialLink => <code> {url |> str} </code>
-          }}
-        </div>
-        <button
-          ariaLabel={ts("delete") ++ " " ++ url}
-          title={ts("delete") ++ " " ++ url}
-          onClick={handleDelete(state, send, removeLinkCB, id)}
-          className="p-3 hover:text-red-500 focus:text-red-500">
-          <FaIcon classes={deleteIconClasses(state.deleting |> List.mem(id))} />
-        </button>
-      </div>
-    )
-    |> Array.of_list
-    |> React.array
-  }
-
 let titleInputVisible = state =>
   switch state.kind {
   | HeaderLink

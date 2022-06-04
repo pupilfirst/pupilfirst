@@ -5,13 +5,13 @@ module Mutations
         link_ids = value[:link_ids]
         link = SchoolLink.where(id: link_ids, kind: value[:kind])
 
-        return 'Unable to find all links!' if link.count != link_ids.count
+        if link.count != link_ids.count
+          return I18n.t('mutations.update_school_link.all_link_not_found_error')
+        end
       end
     end
 
     include QueryAuthorizeSchoolAdmin
-
-    # include ValidateSchoolLinkEditable
 
     argument :link_ids, [ID], required: true
     argument :kind, String, required: false
@@ -25,8 +25,7 @@ module Mutations
       notify(
         :success,
         I18n.t('shared.notifications.done_exclamation'),
-        'School link sorted'
-        # I18n.t('mutations.update_school_link.success_notification')
+        I18n.t('mutations.update_school_link.success_notification')
       )
 
       { links: sort_school_links }
@@ -36,7 +35,7 @@ module Mutations
       school_link.each do |link|
         link.update!(sort_index: @params[:link_ids].index(link.id.to_s))
       end
-      SchoolLink.all.order('kind ASC, sort_index ASC')
+      current_school.school_links.all.order('kind ASC, sort_index ASC')
     end
 
     private
@@ -46,7 +45,7 @@ module Mutations
     end
 
     def resource_school
-      current_school
+      school_link&.first&.school
     end
   end
 end

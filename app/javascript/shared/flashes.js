@@ -1,11 +1,11 @@
 import Notify from "./notifier";
 
-var I18n = require("./utils/I18n.bs.js");
+import { t as I18n_t } from "./utils/I18n.bs.js";
 
 var partial_arg = "shared";
 
 function t(param, param$1, param$2) {
-  return I18n.t(partial_arg, param, param$1, param$2);
+  return I18n_t(partial_arg, param, param$1, param$2);
 }
 
 document.addEventListener("DOMContentLoaded", function () {

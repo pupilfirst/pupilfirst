@@ -1,5 +1,6 @@
 import "./iconFirst.css";
-let iconData = import("./data/paths.json");
+
+let iconData = await import("./data/paths.json");
 
 const xmlns = "http://www.w3.org/2000/svg";
 
@@ -59,5 +60,10 @@ export const transformIcons = () => {
   });
 };
 
-export const addListener = () =>
-  document.addEventListener("DOMContentLoaded", transformIcons);
+export const addListener = () => {
+  if (document.readyState !== "loading") {
+    transformIcons();
+  } else {
+    document.addEventListener("DOMContentLoaded", transformIcons);
+  }
+};

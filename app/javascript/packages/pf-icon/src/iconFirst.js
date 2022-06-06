@@ -1,6 +1,6 @@
 import "./iconFirst.css";
 
-let iconData = await import("./data/paths.json");
+import iconData from "./data/paths.json";
 
 const xmlns = "http://www.w3.org/2000/svg";
 
@@ -11,7 +11,7 @@ const findIconName = (className) => {
 
 const getIconData = (className) => {
   const data = iconData[findIconName(className)];
-  return data ? data : iconData["default"];
+  return typeof data === "undefined" ? iconData["default"] : data;
 };
 
 const viewboxClass = (width) => {

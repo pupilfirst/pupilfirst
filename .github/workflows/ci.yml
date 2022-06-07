@@ -102,7 +102,7 @@ jobs:
         with:
           path: |
             node_modules
-            app/javascript/packages/*/node_modules
+            app/frontend/packages/*/node_modules
           key: ${{ runner.os }}-lerna-${{ hashFiles('**/yarn.lock') }}
       - name: Yarn Install
         run: yarn install

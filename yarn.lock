@@ -2904,9 +2904,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pupilfirst/multiselect-dropdown@workspace:app/javascript/packages/multiselect-dropdown":
+"@pupilfirst/multiselect-dropdown@workspace:app/frontend/packages/multiselect-dropdown":
   version: 0.0.0-use.local
-  resolution: "@pupilfirst/multiselect-dropdown@workspace:app/javascript/packages/multiselect-dropdown"
+  resolution: "@pupilfirst/multiselect-dropdown@workspace:app/frontend/packages/multiselect-dropdown"
   dependencies:
     "@pupilfirst/pf-icon": ^1.2.0
     "@rescript/react": ^0.10.3
@@ -2920,9 +2920,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@pupilfirst/multiselect-inline@workspace:app/javascript/packages/multiselect-inline":
+"@pupilfirst/multiselect-inline@workspace:app/frontend/packages/multiselect-inline":
   version: 0.0.0-use.local
-  resolution: "@pupilfirst/multiselect-inline@workspace:app/javascript/packages/multiselect-inline"
+  resolution: "@pupilfirst/multiselect-inline@workspace:app/frontend/packages/multiselect-inline"
   dependencies:
     "@pupilfirst/pf-icon": ^1.2.0
     "@rescript/react": ^0.10.3
@@ -2935,9 +2935,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@pupilfirst/pf-icon@^1.2.0, @pupilfirst/pf-icon@workspace:app/javascript/packages/pf-icon":
+"@pupilfirst/pf-icon@^1.2.0, @pupilfirst/pf-icon@workspace:app/frontend/packages/pf-icon":
   version: 0.0.0-use.local
-  resolution: "@pupilfirst/pf-icon@workspace:app/javascript/packages/pf-icon"
+  resolution: "@pupilfirst/pf-icon@workspace:app/frontend/packages/pf-icon"
   dependencies:
     "@rescript/react": ^0.10.3
     parcel-bundler: ^1.12.5

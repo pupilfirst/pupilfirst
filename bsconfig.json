@@ -4,7 +4,7 @@
     "react-jsx": 3
   },
   "sources": {
-    "dir": "app/javascript",
+    "dir": "app/frontend",
     "subdirs": true
   },
   "package-specs": [

@@ -39,7 +39,7 @@ let make = (
 ) => {
   let (showDropdown, setShowDropdown) = React.useState(() => false)
   <div className="flex justify-between items-end">
-    <div className="w-2/6">
+    <div className="w-1/3">
       {selectedVersion == versions[0]
         ? <div className="flex rounded-lg border border-gray-300">
             <button
@@ -63,7 +63,7 @@ let make = (
           </div>
         : React.null}
     </div>
-    <div className="w-4/6 flex justify-end items-end">
+    <div className="w-2/3 flex justify-end items-end">
       {selectedVersion == versions[0]
         ? React.null
         : <button

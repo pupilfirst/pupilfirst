@@ -1,5 +1,5 @@
 import Prism from "prismjs";
-import("prismjs/plugins/custom-class/prism-custom-class");
+import "prismjs/plugins/custom-class/prism-custom-class";
 
 /*
  * Prevent Prism from highlighting all eligible code blocks in the DOM upon

@@ -6,7 +6,7 @@
 
 .school-index__about {
   min-height: 12.5rem;
-  background-image: url('./images/school-index-about-bg.svg');
+  background-image: url('~/images/school-index-about-bg.svg');
   background-blend-mode: soft-light;
 }
 

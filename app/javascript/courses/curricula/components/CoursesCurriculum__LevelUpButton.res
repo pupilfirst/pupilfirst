@@ -43,7 +43,7 @@ let make = (~course) => {
   <button
     disabled=saving
     onClick={createLevelUpQuery(course, setSaving)}
-    className="btn btn-success btn-large w-full md:w-4/6 mt-4">
+    className="btn btn-success btn-large w-full md:w-2/3 mt-4">
     {handleSubmitButton(saving)}
   </button>
 }

@@ -159,7 +159,7 @@ let courseLinks = (course, currentSchoolAdmin, communities) => {
     {ReactUtils.nullUnless(
       courseLink(
         "/school/courses/" ++ (courseId ++ "/curriculum"),
-        t("edit_curriculum"),
+        t("cta.edit_curriculum"),
         "fas fa-check-square",
       ),
       Course.author(course) && cta != #EditCourse,

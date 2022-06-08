@@ -1885,6 +1885,12 @@ en:
       success_notification: Level copy requested. It will apppear in target course soon!
     create_coach_note:
       note_added_notification: Note added successfully
+    create_cohort:
+     success_notification: Cohort created successfully.
+    update_cohort:
+      success_notification: Cohort updated successfully.
+    merge_cohorts:
+      success_notification: Cohorts merged successfully.
     create_community:
       community_created_notification: Community created successfully
     create_course:

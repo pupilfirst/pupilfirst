@@ -181,5 +181,8 @@ module Types
     field :conclude_submission_report,
           mutation: Mutations::ConcludeSubmissionReport,
           null: false
+    field :create_cohort, mutation: Mutations::CreateCohort, null: false
+    field :update_cohort, mutation: Mutations::UpdateCohort, null: false
+    #     field :merge_cohorts, mutation: Mutations::MergeCohorts, null: false
   end
 end

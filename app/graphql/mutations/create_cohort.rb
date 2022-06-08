@@ -1,5 +1,6 @@
 module Mutations
   class CreateCohort < ApplicationQuery
+    include QueryAuthorizeSchoolAdmin
     argument :course_id, ID, required: false
     argument :name,
              String,
@@ -15,8 +16,10 @@ module Mutations
              required: false,
              validates: {
                length: {
+                 minimum: 1,
                  maximum: 250
-               }
+               },
+               allow_blank: true
              }
     argument :ends_at, GraphQL::Types::ISO8601DateTime, required: false
 

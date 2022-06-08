@@ -15,10 +15,38 @@ let pageLinks = (courseId, cohortId) => [
   ),
 ]
 
+type state = Unloaded | Loading | Loaded(Cohort.t)
+
+module CohortFragment = Cohort.Fragment
+
+module CohortDetailsDataQuery = %graphql(`
+  query CohortDetailsDataQuery($id: ID!) {
+    cohort(id: $id) {
+      ...CohortFragment
+    }
+  }
+`)
+
+let loadData = (id, setState) => {
+  setState(_ => Loading)
+  CohortDetailsDataQuery.fetch({
+    id: id,
+  })
+  |> Js.Promise.then_((response: CohortDetailsDataQuery.t) => {
+    setState(_ => Loaded(response.cohort->Cohort.makeFromFragment))
+    Js.Promise.resolve()
+  })
+  |> ignore
+}
+
 @react.component
 let make = (~courseId, ~cohortId) => {
-  let (cohortName, setCohortName) = React.useState(_ => "Cohort name")
-  let (cohortDescription, setCohortDescription) = React.useState(_ => "Batch of 2022")
+  let (state, setState) = React.useState(() => Unloaded)
+
+  React.useEffect1(() => {
+    loadData(cohortId, setState)
+    None
+  }, [cohortId])
 
   <div>
     <School__PageHeader
@@ -27,65 +55,10 @@ let make = (~courseId, ~cohortId) => {
       description={"{Cohort name}"}
       links={pageLinks(courseId, cohortId)}
     />
-    <div className="max-w-5xl mx-auto" />
-    <form className="max-w-5xl mx-auto px-2">
-      <div className="mt-8">
-        <label className="block text-sm font-semibold mb-2" htmlFor="cohortName">
-          {"Cohort name" |> str}
-        </label>
-        <input
-          value={cohortName}
-          onChange={event => setCohortName(ReactEvent.Form.target(event)["value"])}
-          className="appearance-none block w-full text-sm bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
-          id="cohortName"
-          type_="text"
-          placeholder="eg, Batch 1"
-        />
-        // <School__InputGroupError
-        //   message="Enter a valid team name"
-        //   active={}
-        // />
-      </div>
-      <div className="mt-6">
-        <label className="block text-sm font-semibold mb-2" htmlFor="cohortDescription">
-          {"Cohort description" |> str}
-        </label>
-        <input
-          value={cohortDescription}
-          onChange={event => setCohortDescription(ReactEvent.Form.target(event)["value"])}
-          className="appearance-none block w-full text-sm bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:ring-2 focus:ring-focusColor-500"
-          id="cohortDescription"
-          type_="text"
-          placeholder="eg, Batch 1 of some year"
-        />
-        // <School__InputGroupError
-        //   message="Enter a valid team name"
-        //   active={}
-        // />
-      </div>
-      <div className="mt-6">
-        <div className="flex">
-          <label className="block text-sm font-semibold mb-2" htmlFor="cohortName">
-            {"Cohort end date" |> str}
-            <span className="text-xs ml-1 font-light"> {"(optional)"->str} </span>
-          </label>
-          <HelpIcon className="ml-1 text-sm">
-            {"The cohort will be archived on this date"->str}
-          </HelpIcon>
-        </div>
-        // <DatePicker
-        //   id="cohort-end-date"
-        //   onChange={}
-        //   selected={}
-        // />
-        // <School__InputGroupError
-        //   message="Enter a valid team name"
-        //   active={}
-        // />
-      </div>
-      <button className="btn btn-primary btn-large w-full mt-6" type_="submit">
-        {"Add new cohort"->str}
-      </button>
-    </form>
+    {switch state {
+    | Unloaded => str("Should Load data")
+    | Loading => str("Loading data")
+    | Loaded(cohort) => <Shared__CohortsEditor courseId cohort />
+    }}
   </div>
 }

@@ -1,5 +1,6 @@
 module Mutations
   class MergeCohort < ApplicationQuery
+    include QueryAuthorizeSchoolAdmin
     argument :delete_cohort_id, ID, required: true
     argument :merge_into_cohort_id, ID, required: true, validates: {inclusion: {in: }}
 

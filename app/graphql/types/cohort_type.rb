@@ -11,7 +11,7 @@ module Types
     def students_count
       BatchLoader::GraphQL
         .for(object.id)
-        .batch do |cohort_ids, loader|
+        .batch(default_value: 0) do |cohort_ids, loader|
           Founder
             .not_dropped_out
             .where(cohort_id: cohort_ids)
@@ -26,7 +26,7 @@ module Types
     def coaches_count
       BatchLoader::GraphQL
         .for(object.id)
-        .batch do |cohort_ids, loader|
+        .batch(default_value: 0) do |cohort_ids, loader|
           FacultyCohortEnrollment
             .where(cohort_id: cohort_ids)
             .group(:cohort_id)

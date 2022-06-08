@@ -39,7 +39,11 @@ module Types
     end
 
     resolved_field :course, Types::CourseType, null: false do
-      argument :id, ID, required: false
+      argument :id, ID, required: true
+    end
+
+    resolved_field :cohort, Types::CohortType, null: false do
+      argument :id, ID, required: true
     end
 
     resolved_field :cohorts, Types::CohortType.connection_type, null: false do

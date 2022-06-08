@@ -16,7 +16,7 @@ type status = [#Active | #Ended | #Archived]
 module CourseFragment = Course.Fragment
 
 module CoursesQuery = %graphql(`
-  query CoursesQuery($search: String, $after: String,$courseId: ID, $status: CourseStatus) {
+  query CoursesQuery($search: String, $after: String, $courseId: ID!, $status: CourseStatus, $skipCourseLoad: Boolean!) {
     courses(status: $status, search: $search, first: 10, after: $after){
       nodes {
         ...CourseFragment
@@ -26,7 +26,7 @@ module CoursesQuery = %graphql(`
       }
       totalCount
     }
-    course(id: $courseId){
+    course(id: $courseId) @skip(if: $skipCourseLoad) {
         ...CourseFragment
     }
   }
@@ -197,7 +197,8 @@ let loadCourses = (courseId, state, cursor, send) => {
     ~status=?state.filter.status,
     ~after=?cursor,
     ~search=?state.filter.name,
-    ~courseId?,
+    ~courseId=Belt.Option.getWithDefault(courseId, ""),
+    ~skipCourseLoad=Belt.Option.isNone(courseId),
     (),
   )
   CoursesQuery.make(variables)

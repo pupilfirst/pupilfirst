@@ -4,7 +4,10 @@ class Cohort < ApplicationRecord
   has_many :founders, dependent: :destroy
   has_many :faculty_cohort_enrollments, dependent: :destroy
   has_many :faculty, through: :faculty_cohort_enrollments
+  has_one :school, through: :course
 
   scope :active,
         -> { where('ends_at > ?', Time.zone.now).or(where(ends_at: nil)) }
+
+  normalize_attribute :description
 end

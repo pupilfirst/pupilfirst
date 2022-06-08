@@ -90,3 +90,12 @@ let toColor = t => {
   let (backgroundColor, blackText) = colors[index]
   (backgroundColor, blackText ? "#000000" : "#FFFFFF")
 }
+
+let lengthBetween = (~allowBlank=true, t, min, max) => {
+  let tLen = t->String.trim->String.length
+  if tLen > 0 {
+    min <= tLen || tLen >= max
+  } else {
+    allowBlank
+  }
+}

@@ -1,6 +1,12 @@
 import Prism from "prismjs";
 import "prismjs/plugins/custom-class/prism-custom-class";
 
+// Include a clone of the 'Okaidia' theme CSS with prefixed classes.
+import "./prism-okaidia.css";
+
+// Inlude a clone of the 'diff-highlight' plugin CSS with prefixed classes.
+import "./prism-diff-highlight.css";
+
 /*
  * Prevent Prism from highlighting all eligible code blocks in the DOM upon
  * page load - its default behavior. It sets up an event listener as soon as
@@ -17,12 +23,6 @@ document.addEventListener(
   },
   false
 );
-
-// Include a clone of the 'Okaidia' theme CSS with prefixed classes.
-import("./prism-okaidia.css");
-
-// Inlude a clone of the 'diff-highlight' plugin CSS with prefixed classes.
-import("./prism-diff-highlight.css");
 
 const highlightAllUnder = (element) => Prism.highlightAllUnder(element);
 

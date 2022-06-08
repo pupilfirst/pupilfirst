@@ -1,4 +1,4 @@
-%raw(`import("./EditorDrawer.css")`)
+%%raw(`import "./EditorDrawer.css"`)
 
 open React
 

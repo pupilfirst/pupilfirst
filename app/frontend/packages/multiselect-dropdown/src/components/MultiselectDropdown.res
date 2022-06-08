@@ -1,4 +1,4 @@
-%raw(`import("./MultiselectDropdown.css")`)
+%%raw(`import "./MultiselectDropdown.css"`)
 
 module type Selectable = {
   type t

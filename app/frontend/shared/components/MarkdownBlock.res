@@ -1,4 +1,4 @@
-%raw(`import("./MarkdownBlock.css")`)
+%%raw(`import "./MarkdownBlock.css"`)
 
 let randomId = () => {
   let randomComponent = Js.Math.random() |> Js.Float.toString |> Js.String.substr(~from=2)

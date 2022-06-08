@@ -1,6 +1,6 @@
-let str = React.string
+%%raw(`import "./Tooltip.css"`)
 
-%bs.raw(`import("./Tooltip.css")`)
+let str = React.string
 
 let bubbleClasses = position => {
   let positionClass = switch position {

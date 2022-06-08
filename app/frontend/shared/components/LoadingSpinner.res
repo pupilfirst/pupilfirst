@@ -1,4 +1,4 @@
-%raw(`import("./LoadingSpinner.css")`)
+%%raw(`import "./LoadingSpinner.css"`)
 
 let str = React.string
 let ts = I18n.t(~scope="shared")

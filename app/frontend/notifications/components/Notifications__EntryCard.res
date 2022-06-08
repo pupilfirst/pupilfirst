@@ -1,5 +1,6 @@
+%%raw(`import "./Notifications__EntryCard.css"`)
+
 let str = React.string
-%raw(`import("./Notifications__EntryCard.css")`)
 
 open Notifications__Types
 

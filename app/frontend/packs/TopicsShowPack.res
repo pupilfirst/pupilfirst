@@ -16,36 +16,38 @@ let decodeProps = json => {
   )
 }
 
-let (
-  topic,
-  firstPost,
-  replies,
-  users,
-  currentUserId,
-  moderator,
-  community,
-  target,
-  topicCategories,
-  subscribed,
-) =
-  DomUtils.parseJSONTag() |> decodeProps
+Psj.match("topics#show", () => {
+  let (
+    topic,
+    firstPost,
+    replies,
+    users,
+    currentUserId,
+    moderator,
+    community,
+    target,
+    topicCategories,
+    subscribed,
+  ) =
+    DomUtils.parseJSONTag() |> decodeProps
 
-switch ReactDOM.querySelector("#react-root") {
-| Some(root) =>
-  ReactDOM.render(
-    <TopicsShow__Root
-      topic
-      firstPost
-      replies
-      users
-      currentUserId
-      moderator
-      community
-      target
-      topicCategories
-      subscribed
-    />,
-    root,
-  )
-| None => ()
-}
+  switch ReactDOM.querySelector("#react-root") {
+  | Some(root) =>
+    ReactDOM.render(
+      <TopicsShow__Root
+        topic
+        firstPost
+        replies
+        users
+        currentUserId
+        moderator
+        community
+        target
+        topicCategories
+        subscribed
+      />,
+      root,
+    )
+  | None => ()
+  }
+})

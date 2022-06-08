@@ -21,10 +21,18 @@
     <meta name="theme-color" content="#4D1E9A" />
     <%= tag :meta, name: :psj, action: action_name, controller: controller_path %>
     <%= yield :head %>
-    <!-- Styles -->
+    <!-- Load styles -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha256-M6KFoDq9eUpmogkDgw6+3R3ZgUPSuFXnQyr8tskSfQs=" crossorigin="anonymous">
-    <%= vite_stylesheet_tag 'layouts/tailwind', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <!-- Prep for JS -->
+    <%= javascript_tag(nonce: true) do %>
+      window.pupilfirst = {
+      defaultLocale: '<%= I18n.default_locale %>',
+      locale: '<%= I18n.locale %>'
+      }
+    <% end %>
+    <!-- Load scripts -->
+    <%= vite_javascript_tag 'tailwind', nonce: true %>
     <% if Rails.env.test? %>
       <style>
         * {
@@ -32,12 +40,6 @@
           transition-duration: 0s !important;
         }
       </style>
-    <% end %>
-    <%= javascript_tag(nonce: true) do %>
-      window.pupilfirst = {
-      defaultLocale: '<%= I18n.default_locale %>',
-      locale: '<%= I18n.locale %>'
-      }
     <% end %>
     <%= csrf_meta_tags %>
     <% if presenter.meta_description.present? %>
@@ -64,9 +66,6 @@
           <%= yield :tail %>
           <%= yield :footer %>
         </section>
-        <!-- Scripts -->
-        <%= vite_javascript_tag 'packs/IconFirstPack', nonce: true %>
-        <%= vite_javascript_tag 'packs/layouts/tailwind', nonce: true %>
         <!-- Initialize Rollbar only at the very end. -->
         <%= vite_javascript_tag '~/shared/utils/rollbar.js', nonce: true %>
       </body>

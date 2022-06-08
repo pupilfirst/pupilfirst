@@ -9,9 +9,12 @@ let decodeProps = json => {
   )
 }
 
-let (communityId, target, topicCategories) = DomUtils.parseJSONTag() |> decodeProps
+Psj.match("communities#show", () => {
+  let (communityId, target, topicCategories) = DomUtils.parseJSONTag() |> decodeProps
 
-switch ReactDOM.querySelector("#react-root") {
-| Some(root) => ReactDOM.render(<CommunitiesShow__Root communityId target topicCategories />, root)
-| None => ()
-}
+  switch ReactDOM.querySelector("#react-root") {
+  | Some(root) =>
+    ReactDOM.render(<CommunitiesShow__Root communityId target topicCategories />, root)
+  | None => ()
+  }
+})

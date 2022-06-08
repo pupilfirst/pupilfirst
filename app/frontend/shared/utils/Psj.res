@@ -1,11 +1,21 @@
 open Webapi.Dom
 
-let match = (path, f) => {
+@scope("Document") @val external readyState: string = "readyState"
+
+let ready = f => {
+  if readyState != "loading" {
+    f()
+  } else {
+    Document.addEventListener("DOMContentLoaded", _event => f(), document)
+  }
+}
+
+let match = (~onReady=true, path, f) => {
   let pathFragments = Js.String2.split(path, "#")
 
   if pathFragments->Js.Array2.length != 2 {
     Js.Console.error(
-      "Path must be of the format `controller#action` or `module/controller#action`. Received: " ++
+      "[PSJ] Path must be of the format `controller#action` or `module/controller#action`. Received: " ++
       path,
     )
   } else {
@@ -20,12 +30,13 @@ let match = (path, f) => {
       switch (controller, action) {
       | (Some(controller), Some(action)) =>
         if controller == pathFragments[0] && action == pathFragments[1] {
-          f()
+          Js.log("[PSJ] Matched " ++ path)
+          onReady ? ready(f) : f()
         }
-      | (None, Some(_)) => Js.Console.error("The psj meta tag is missing the controller prop.")
-      | (Some(_), None) => Js.Console.error("The psj meta tag is missing the action prop.")
+      | (None, Some(_)) => Js.Console.error("[PSJ] Meta tag is missing the controller prop.")
+      | (Some(_), None) => Js.Console.error("[PSJ] Meta tag is missing the action prop.")
       | (None, None) =>
-        Js.Console.error("The psj meta tag is missing both the controller or action prop.")
+        Js.Console.error("[PSJ] Meta tag is missing both the controller or action prop.")
       }
     }
   }

@@ -1,7 +1,7 @@
-import "~/home/index.css";
+import "~/home/assets/index.css";
 import { parseMarkdown } from "~/packs/ConvertMarkdownPack.bs.js";
 import { match } from "~/shared/utils/Psj.bs.js";
 
-match("home#index", () => {
+match(true, "home#index", () => {
   parseMarkdown();
 });

@@ -14,19 +14,19 @@ let decodeProps = json => {
   )
 }
 
-let (
-  currentSchoolAdmin,
-  courses,
-  communities,
-  showUserEdit,
-  userName,
-  userTitle,
-  avatarUrl,
-  issuedCertificates,
-) =
-  DomUtils.parseJSONTag(~id="users-dashboard-data", ()) |> decodeProps
-
 Psj.match("users#dashboard", () => {
+  let (
+    currentSchoolAdmin,
+    courses,
+    communities,
+    showUserEdit,
+    userName,
+    userTitle,
+    avatarUrl,
+    issuedCertificates,
+  ) =
+    DomUtils.parseJSONTag(~id="users-dashboard-data", ()) |> decodeProps
+
   switch ReactDOM.querySelector("#users-dashboard") {
   | Some(element) =>
     ReactDOM.render(

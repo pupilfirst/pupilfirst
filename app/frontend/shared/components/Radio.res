@@ -1,4 +1,4 @@
-%raw(`require("./Radio.css")`)
+%%raw(`import "./Radio.css"`)
 
 let str = React.string
 

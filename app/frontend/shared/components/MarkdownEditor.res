@@ -1,6 +1,6 @@
 exception InvalidModeForPreview
 
-%raw(`require("./MarkdownEditor.css")`)
+%%raw(`import "./MarkdownEditor.css"`)
 
 let str = React.string
 let t = I18n.t(~scope="components.MarkdownEditor")

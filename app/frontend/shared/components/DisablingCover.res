@@ -1,4 +1,4 @@
-%raw(`require("./DisablingCover.css")`)
+%%raw(`import "./DisablingCover.css"`)
 
 let ts = I18n.t(~scope="shared")
 

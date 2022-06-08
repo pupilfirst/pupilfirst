@@ -1,4 +1,4 @@
-%raw(`require("./MultiselectInline.css")`)
+%%raw(`import "./MultiselectInline.css"`)
 
 let str = React.string
 

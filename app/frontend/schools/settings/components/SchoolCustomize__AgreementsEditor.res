@@ -1,6 +1,6 @@
 open SchoolCustomize__Types
 
-%raw(`require("./SchoolCustomize__AgreementsEditor.css")`)
+%%raw(`import "./SchoolCustomize__AgreementsEditor.css"`)
 
 let str = React.string
 

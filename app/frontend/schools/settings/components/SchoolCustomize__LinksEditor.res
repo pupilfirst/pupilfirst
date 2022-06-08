@@ -1,6 +1,6 @@
 open SchoolCustomize__Types
 
-%raw(`require("./SchoolCustomize__LinksEditor.css")`)
+%%raw(`import "./SchoolCustomize__LinksEditor.css"`)
 
 let str = React.string
 

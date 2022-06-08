@@ -1,5 +1,5 @@
 let str = React.string
-%raw(`require("./CoursesReview__Root.css")`)
+%%raw(`import "./CoursesReview__Root.css"`)
 
 open CoursesReview__Types
 

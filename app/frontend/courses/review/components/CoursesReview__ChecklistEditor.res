@@ -1,4 +1,4 @@
-%raw(`require("./CoursesReview__ChecklistEditor.css")`)
+%%raw(`import "./CoursesReview__ChecklistEditor.css"`)
 
 let t = I18n.t(~scope="components.CoursesReview__ChecklistEditor")
 

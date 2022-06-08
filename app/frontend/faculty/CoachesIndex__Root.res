@@ -1,4 +1,4 @@
-%raw(`require("./CoachesIndex__Root.css")`)
+%%raw(`import "./CoachesIndex__Root.css"`)
 
 let str = React.string
 

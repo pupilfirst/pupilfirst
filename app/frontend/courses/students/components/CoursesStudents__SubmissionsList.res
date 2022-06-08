@@ -1,4 +1,4 @@
-%raw(`require("./CoursesStudents__StudentOverlay.css")`)
+%%raw(`import "./CoursesStudents__StudentOverlay.css"`)
 
 @module
 external reviewedEmptyImage: string = "../../shared/images/reviewed-empty.svg"

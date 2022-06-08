@@ -1,6 +1,6 @@
 exception UnexpectedSubmissionStatus(string)
 
-%raw(`require("./CoursesCurriculum__Overlay.css")`)
+%%raw(`import "./CoursesCurriculum__Overlay.css"`)
 
 open CoursesCurriculum__Types
 

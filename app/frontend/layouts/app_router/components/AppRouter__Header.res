@@ -1,4 +1,4 @@
-%raw(`require("./AppRouter__Header.css")`)
+%%raw(`import "./AppRouter__Header.css"`)
 
 open AppRouter__Types
 

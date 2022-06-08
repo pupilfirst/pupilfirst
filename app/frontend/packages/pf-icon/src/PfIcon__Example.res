@@ -1,4 +1,4 @@
-%raw(`require("./PfIcon__Example.css")`)
+%%raw(`import "./PfIcon__Example.css"`)
 
 @val @scope(("window", "navigator", "clipboard"))
 external writeText: string => unit = "writeText"

@@ -1,4 +1,4 @@
-%raw(`require("./CoursesReport__Overview.css")`)
+%%raw(`import "./CoursesReport__Overview.css"`)
 
 open CoursesReport__Types
 let str = React.string

@@ -1,4 +1,4 @@
-%raw(`require("./CoursesReview__Editor.css")`)
+%%raw(`import "./CoursesReview__Editor.css"`)
 
 let t = I18n.t(~scope="components.CoursesReview__Editor")
 

@@ -1,4 +1,4 @@
-%raw(`require("./CommunitiesShow__Root.css")`)
+%%raw(`import "./CommunitiesShow__Root.css"`)
 
 open CommunitiesShow__Types
 

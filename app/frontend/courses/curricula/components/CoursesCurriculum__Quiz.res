@@ -1,4 +1,4 @@
-%raw(`require("./CoursesCurriculum__Quiz.css")`)
+%%raw(`import "./CoursesCurriculum__Quiz.css"`)
 
 open CoursesCurriculum__Types
 
@@ -84,7 +84,8 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview) => {
   <div className="bg-gray-50 rounded overflow-hidden relative mb-18 mt-4">
     <div className="p-2 md:p-5">
       <span className="font-semibold text-xs block uppercase text-gray-600">
-        {tr("question") ++ " #" |> str} {string_of_int((currentQuestion |> QuizQuestion.index) + 1) |> str}
+        {tr("question") ++ " #" |> str}
+        {string_of_int((currentQuestion |> QuizQuestion.index) + 1) |> str}
       </span>
       <MarkdownBlock
         markdown={currentQuestion |> QuizQuestion.question}

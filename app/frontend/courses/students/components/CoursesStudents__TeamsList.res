@@ -1,4 +1,4 @@
-%raw(`require("./CoursesStudents__Root.css")`)
+%%raw(`import "./CoursesStudents__Root.css"`)
 let t = I18n.t(~scope="components.CoursesStudents__TeamsList")
 
 open CoursesStudents__Types

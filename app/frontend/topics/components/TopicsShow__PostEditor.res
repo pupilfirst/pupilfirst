@@ -1,7 +1,7 @@
 open TopicsShow__Types
 
 let str = React.string
-%raw(`require("./TopicsShow__PostEditor.css")`)
+%%raw(`import "./TopicsShow__PostEditor.css"`)
 
 let tr = I18n.t(~scope="components.TopicsShow__PostEditor")
 
@@ -229,7 +229,7 @@ let make = (
           )}
           <div>
             <MarkdownEditor
-              placeholder=tr("type_reply")
+              placeholder={tr("type_reply")}
               textareaId="new-reply"
               onChange=updateMarkdownCB
               value=state.body
@@ -247,7 +247,7 @@ let make = (
                     | reason => setEditReason(Some(reason))
                     }
                   }}
-                  placeholder=tr("reason_edit")
+                  placeholder={tr("reason_edit")}
                   value={switch editReason {
                   | None => ""
                   | Some(editReason) => editReason

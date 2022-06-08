@@ -1,4 +1,4 @@
-%raw(`require("./CoursesStudents__Root.css")`)
+%%raw(`import "./CoursesStudents__Root.css"`)
 
 open CoursesStudents__Types
 
@@ -358,11 +358,7 @@ let onDeselectFilter = (send, selectable) =>
 
 let filterPlaceholder = state =>
   switch (state.filter.level, state.filter.coach, state.filter.nameOrEmail) {
-  | (
-      None,
-      None,
-      None,
-    ) => tr("filter_level")
+  | (None, None, None) => tr("filter_level")
   | _ => ""
   }
 
@@ -407,10 +403,7 @@ let computeInitialState = currentTeamCoach => {
 
 let selectLevel = (levels, send, levelId) => {
   let level =
-    levels |> ArrayUtils.unsafeFind(
-      level => Level.id(level) == levelId,
-      tr("not_found") ++ levelId,
-    )
+    levels |> ArrayUtils.unsafeFind(level => Level.id(level) == levelId, tr("not_found") ++ levelId)
 
   send(SelectLevel(level))
 }

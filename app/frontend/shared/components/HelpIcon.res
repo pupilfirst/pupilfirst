@@ -2,7 +2,7 @@ let str = React.string
 
 let t = I18n.t(~scope="components.HelpIcon")
 
-%raw(`require("./HelpIcon.css")`)
+%%raw(`import "./HelpIcon.css"`)
 
 let onWindowClick = (helpVisible, setHelpVisible, _event) =>
   if helpVisible {

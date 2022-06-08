@@ -1,4 +1,4 @@
-%raw(`require("./TargetContentView.css")`)
+%%raw(`import "./TargetContentView.css"`)
 
 let str = React.string
 

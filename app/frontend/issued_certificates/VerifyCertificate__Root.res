@@ -1,4 +1,4 @@
-%raw(`require("./VerifyCertificate__Root.css")`)
+%%raw(`import "./VerifyCertificate__Root.css"`)
 
 @module external graduateIcon: string = "./images/graduate-icon.svg"
 

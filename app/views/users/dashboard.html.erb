@@ -2,9 +2,6 @@
 <% content_for(:head) do %>
   <title><%= presenter.page_title %> | Admins</title>
 <% end %>
-<% content_for(:tail) do %>
-  <%= vite_javascript_tag '~/packs/UsersDashboardPack.bs.js', nonce: true %>
-<% end %>
 <script type="application/json" id="users-dashboard-data">
   <%= presenter.props_to_json.html_safe %>
 </script>

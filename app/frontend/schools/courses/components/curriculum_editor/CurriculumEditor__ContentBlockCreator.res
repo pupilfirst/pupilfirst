@@ -1,6 +1,6 @@
 exception FormNotFound(string)
 
-%raw(`require("./CurriculumEditor__ContentBlockCreator.css")`)
+%%raw(`import "./CurriculumEditor__ContentBlockCreator.css"`)
 
 open CurriculumEditor__Types
 

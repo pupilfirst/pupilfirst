@@ -1,6 +1,6 @@
 open SchoolCustomize__Types
 
-%raw(`require("./SchoolCustomize__Root.css")`)
+%%raw(`import "./SchoolCustomize__Root.css"`)
 
 let str = React.string
 
@@ -397,8 +397,7 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
         </div>
         <div
           className="school-customize__footer-bottom-container rounded-b-lg p-6 flex justify-between">
-          <div
-            className="flex items-center border border-dashed border-gray-500 rounded p-2">
+          <div className="flex items-center border border-dashed border-gray-500 rounded p-2">
             {footerLogo(schoolName, state.customizations |> Customizations.logoOnLightBg)}
             {editIcon("ml-3", showEditor(ImagesEditor, send), t("edit_logo_dark"))}
           </div>

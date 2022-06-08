@@ -1,4 +1,4 @@
-%raw(`require("./CurriculumEditor__TargetDrawer.css")`)
+%%raw(`import "./CurriculumEditor__TargetDrawer.css"`)
 
 let str = React.string
 
@@ -13,9 +13,7 @@ type page =
 
 let confirmDirtyAction = (dirty, action) =>
   if dirty {
-    WindowUtils.confirm(t("unsaved_confirm"), () =>
-      action()
-    )
+    WindowUtils.confirm(t("unsaved_confirm"), () => action())
   } else {
     action()
   }
@@ -36,9 +34,7 @@ let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
     ? defaultClasses ++ " curriculum-editor__target-drawer-tab--selected"
     : defaultClasses
 
-  let confirm = dirty
-    ? Some(t("unsaved_confirm"))
-    : None
+  let confirm = dirty ? Some(t("unsaved_confirm")) : None
 
   <Link href=path ?confirm onClick={_e => setDirty(_ => false)} className=classes>
     <i className={"fas " ++ iconClass} /> <span className="ml-2"> {title |> str} </span>

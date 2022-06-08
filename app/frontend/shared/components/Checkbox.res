@@ -1,4 +1,4 @@
-%raw(`require("./Checkbox.css")`)
+%%raw(`import "./Checkbox.css"`)
 
 let input = (id, onChange, checked, disabled) => {
   <input className="checkbox__input" id type_="checkbox" onChange checked disabled={disabled} />

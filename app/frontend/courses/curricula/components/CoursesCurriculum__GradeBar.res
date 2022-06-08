@@ -1,4 +1,4 @@
-%raw(`require("./CoursesCurriculum__GradeBar.css")`)
+%%raw(`import "./CoursesCurriculum__GradeBar.css"`)
 
 let str = React.string
 

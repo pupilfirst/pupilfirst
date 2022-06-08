@@ -1,4 +1,4 @@
-%raw(`require("./CoursesCurriculum.css")`)
+%%raw(`import "./CoursesCurriculum.css"`)
 
 @module external levelLockedImage: string = "../images/level-lock.svg"
 @module external levelEmptyImage: string = "../images/level-empty.svg"

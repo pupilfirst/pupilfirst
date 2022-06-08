@@ -2,7 +2,7 @@ open TopicsShow__Types
 
 let str = React.string
 let t = I18n.t(~scope="components.TopicsShow__PostReply")
-%raw(`require("./TopicsShow__PostReply.css")`)
+%%raw(`import "./TopicsShow__PostReply.css"`)
 
 let avatarClasses = "w-6 h-6 md:w-8 md:h-8 text-xs border border-gray-300 rounded-full overflow-hidden flex-shrink-0 object-cover"
 

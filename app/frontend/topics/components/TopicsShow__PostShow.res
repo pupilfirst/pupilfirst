@@ -1,7 +1,7 @@
 open TopicsShow__Types
 
 let str = React.string
-%raw(`require("./TopicsShow__PostShow.css")`)
+%%raw(`import "./TopicsShow__PostShow.css"`)
 
 let t = I18n.t(~scope="components.TopicsShow__PostShow")
 

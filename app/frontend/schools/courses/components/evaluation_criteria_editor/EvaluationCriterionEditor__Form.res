@@ -1,4 +1,4 @@
-%raw(`require("./EvaluationCriterionEditor__Form.css")`)
+%%raw(`import "./EvaluationCriterionEditor__Form.css"`)
 
 let str = React.string
 

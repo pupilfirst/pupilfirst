@@ -1,4 +1,4 @@
-%raw(`require("./CourseEditor.css")`)
+%%raw(`import "./CourseEditor.css"`)
 
 exception UnsafeFindFailed(string)
 
@@ -7,7 +7,7 @@ open CourseEditor__Types
 let t = I18n.t(~scope="components.CourseEditor")
 let ts = I18n.ts
 
-%raw(`require("courses/shared/background_patterns.css")`)
+%%raw(`import "courses/shared/background_patterns.css"`)
 
 let str = React.string
 

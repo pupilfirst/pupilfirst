@@ -1,5 +1,4 @@
-%raw(`import("~/courses/shared/background_patterns.css")`)
-%raw(`import("./UserDashboard__Root.css")`)
+%%raw(`import "./UserDashboard__Root.css"`)
 
 let t = I18n.t(~scope="components.UsersDashboard__Root")
 

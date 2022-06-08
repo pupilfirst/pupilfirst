@@ -1,4 +1,4 @@
-%raw(`require("./CoursesCurriculum__SubmissionsAndFeedback.css")`)
+%%raw(`import "./CoursesCurriculum__SubmissionsAndFeedback.css"`)
 
 let str = React.string
 let tr = I18n.t(~scope="components.CoursesCurriculum__SubmissionsAndFeedback")

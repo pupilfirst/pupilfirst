@@ -1,4 +1,4 @@
-%raw(`require("./TopicsShow__Root.css")`)
+%%raw(`import "./TopicsShow__Root.css"`)
 
 let t = I18n.t(~scope="components.TopicsShow__Root")
 let ts = I18n.t(~scope="shared")
@@ -426,22 +426,24 @@ let make = (
                     {
                       let isLocked = Topic.lockedAt(state.topic)->Belt.Option.isSome
                       let topicId = state.topic->Topic.id
-                      {moderator || isTopicCreator(firstPost, currentUserId)
-                        ? <button
-                            disabled=state.changingLockedStatus
-                            onClick={_ =>
-                              isLocked
-                                ? unlockTopic(topicId, send)
-                                : lockTopic(topicId, currentUserId, send)}
-                            className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-2">
-                            <PfIcon className={"fa fa-" ++ (isLocked ? "unlock" : "lock")} />
-                            <span className="hidden md:inline-block ml-1">
-                              {(
-                                isLocked ? t("unlock_topic_button") : t("lock_topic_button")
-                              ) |> str}
-                            </span>
-                          </button>
-                        : React.null}
+                      {
+                        moderator || isTopicCreator(firstPost, currentUserId)
+                          ? <button
+                              disabled=state.changingLockedStatus
+                              onClick={_ =>
+                                isLocked
+                                  ? unlockTopic(topicId, send)
+                                  : lockTopic(topicId, currentUserId, send)}
+                              className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs flex-shrink-0 mt-2 ml-2">
+                              <PfIcon className={"fa fa-" ++ (isLocked ? "unlock" : "lock")} />
+                              <span className="hidden md:inline-block ml-1">
+                                {(
+                                  isLocked ? t("unlock_topic_button") : t("lock_topic_button")
+                                ) |> str}
+                              </span>
+                            </button>
+                          : React.null
+                      }
                     }
                   </span>
                 </div>

@@ -1,4 +1,4 @@
-%raw(`require("./CoursesStudents__StudentOverlay.css")`)
+%%raw(`import "./CoursesStudents__StudentOverlay.css"`)
 
 open CoursesStudents__Types
 

@@ -1,4 +1,4 @@
-%raw(`require("./CurriculumEditor__TargetShow.css")`)
+%%raw(`import "./CurriculumEditor__TargetShow.css"`)
 
 open CurriculumEditor__Types
 

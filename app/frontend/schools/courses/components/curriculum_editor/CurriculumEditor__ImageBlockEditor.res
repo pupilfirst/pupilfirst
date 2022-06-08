@@ -1,4 +1,4 @@
-%raw(`require("./CurriculumEditor__ImageBlockEditor.css")`)
+%%raw(`import "./CurriculumEditor__ImageBlockEditor.css"`)
 
 let str = React.string
 let t = I18n.t(~scope="components.CurriculumEditor__ImageBlockEditor")
@@ -94,7 +94,7 @@ let make = (~url, ~caption, ~contentBlock, ~updateContentBlockCB, ~width) => {
           maxLength=250
           type_="text"
           value=caption
-          placeholder=ts("caption_image")
+          placeholder={ts("caption_image")}
         />
       </div>
     </div>

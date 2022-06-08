@@ -1,4 +1,4 @@
-%raw(`require("./CoursesReview__SubmissionInfoCard.css")`)
+%%raw(`import "./CoursesReview__SubmissionInfoCard.css"`)
 
 let t = I18n.t(~scope="components.CoursesReview__SubmissionInfoCard")
 

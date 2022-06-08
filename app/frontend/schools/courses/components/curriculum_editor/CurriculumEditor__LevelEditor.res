@@ -1,4 +1,4 @@
-%raw(`require("./CurriculumEditor__LevelEditor.css")`)
+%%raw(`import "./CurriculumEditor__LevelEditor.css"`)
 
 let t = I18n.t(~scope="components.CurriculumEditor__LevelEditor")
 

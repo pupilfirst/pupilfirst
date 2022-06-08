@@ -13,7 +13,7 @@ module Mutations
       submission = create_submission
       notify(
         :success,
-        I18n.t('shared.done_exclamation'),
+        I18n.t('shared.notifications.done_exclamation'),
         I18n.t('mutations.create_submission.success_notification')
       )
       { submission: submission, level_up_eligibility: level_up_eligibility }

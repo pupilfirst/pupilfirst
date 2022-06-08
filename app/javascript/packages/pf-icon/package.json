@@ -1,6 +1,6 @@
 {
   "name": "@pupilfirst/pf-icon",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Pupilfirst Icons",
   "keywords": [
     "Icons",
@@ -25,14 +25,14 @@
     "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/pf-icon"
   },
   "devDependencies": {
+    "parcel-bundler": "^1.12.5",
     "rescript": "9.1.4",
-    "parcel-bundler": "^1.12.4",
     "tailwindcss": "^1.1.4"
   },
   "dependencies": {
+    "@rescript/react": "^0.10.3",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "@rescript/react": "^0.10.3"
+    "react-dom": "^16.8.6"
   },
   "scripts": {
     "dev": "parcel index.html",

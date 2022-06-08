@@ -10,6 +10,7 @@ external quizIcon: string = "./images/target-complete-quiz-icon.svg"
 let str = React.string
 
 let t = I18n.t(~scope="components.CurriculumEditor__TargetDetailsEditor")
+let ts = I18n.ts
 
 type methodOfCompletion =
   | Evaluated
@@ -95,8 +96,7 @@ module TargetDetailsQuery = %graphql(`
 `)
 
 let loadTargetDetails = (targetId, send) =>
-  TargetDetailsQuery.make(~targetId, ())
-  |> GraphqlQuery.sendQuery
+  TargetDetailsQuery.make({targetId: targetId})
   |> Js.Promise.then_(result => {
     let targetDetails = TargetDetails.makeFromJs(result["targetDetails"])
     send(SaveTargetDetails(targetDetails))
@@ -105,7 +105,7 @@ let loadTargetDetails = (targetId, send) =>
   |> ignore
 
 let defaultChecklist = [
-  ChecklistItem.make(~title="Describe your submission", ~kind=LongText, ~optional=false),
+  ChecklistItem.make(~title=t("describe_submission"), ~kind=LongText, ~optional=false),
 ]
 
 let computeMethodOfCompletion = targetDetails => {
@@ -343,10 +343,10 @@ let booleanButtonClasses = bool => {
 }
 
 let targetRoleClasses = selected =>
-  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-left focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 " ++ (
+  "w-1/2 target-editor__completion-button relative flex border text-sm font-semibold focus:outline-none rounded px-5 py-4 md:px-8 md:py-5 items-center cursor-pointer text-left focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ (
     selected
-      ? "target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500"
-      : "border-gray-400 hover:bg-gray-200 bg-white"
+      ? "target-editor__completion-button--selected bg-gray-50 text-primary-500 border-primary-500"
+      : "border-gray-300 hover:bg-gray-50 bg-white"
   )
 
 let targetEvaluated = methodOfCompletion =>
@@ -395,7 +395,7 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
     |> Js.Array.map(ecId =>
       evaluationCriteria |> ArrayUtils.unsafeFind(
         ec => EvaluationCriterion.id(ec) == ecId,
-        "Could not find selected evaluation criterion with ID " ++ ecId,
+        t("could_not_find") ++ " " ++ ecId,
       )
     )
     |> Js.Array.map(SelectableEvaluationCriterion.make)
@@ -419,9 +419,9 @@ let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
             {t("select_criterion_warning") |> str}
           </div>}
       <MultiSelectForEvaluationCriteria
-        placeholder="Search evaluation criteria"
-        emptySelectionMessage="No criteria selected"
-        allItemsSelectedMessage="You have selected all evaluation criteria!"
+        placeholder={t("search_criteria_placeholder")}
+        emptySelectionMessage={t("search_criteria_empty")}
+        allItemsSelectedMessage={t("search_criteria_all")}
         selected
         unselected
         onChange={setEvaluationCriteriaSearch(send)}
@@ -458,19 +458,19 @@ let linkEditor = (state, send) =>
   <div className="mb-6">
     <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="link_to_complete">
       <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-      {"Link to complete" |> str}
+      {t("link_complete") |> str}
     </label>
     <div className="ml-6">
       <input
-        className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+        className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="link_to_complete"
         type_="text"
-        placeholder="Paste link to complete"
+        placeholder={t("paste_link_complete")}
         value=state.linkToComplete
         onChange={updateLinkToComplete(send)}
       />
       {state.linkToComplete |> UrlUtils.isInvalid(false)
-        ? <School__InputGroupError message="Enter a valid link" active=true />
+        ? <School__InputGroupError message={t("enter_valid_link")} active=true />
         : React.null}
     </div>
   </div>
@@ -572,10 +572,10 @@ let targetGroupEditor = (state, targetGroups, levels, send) =>
   </div>
 
 let methodOfCompletionButtonClasses = value => {
-  let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border hover:bg-gray-200 text-sm font-semibold focus:outline-none focus:bg-gray-200 focus:ring-2 focus:ring-inset focus:ring-indigo-500 rounded p-4"
+  let defaultClasses = "target-editor__completion-button relative flex flex-col items-center bg-white border hover:bg-gray-50 text-sm font-semibold focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 rounded p-4"
   value
-    ? defaultClasses ++ " target-editor__completion-button--selected bg-gray-200 text-primary-500 border-primary-500"
-    : defaultClasses ++ " border-gray-400 opacity-75 text-gray-900"
+    ? defaultClasses ++ " target-editor__completion-button--selected bg-gray-50 text-primary-500 border-primary-500"
+    : defaultClasses ++ " border-gray-300 opacity-75 text-gray-900"
 }
 
 let methodOfCompletionSelection = polyMethodOfCompletion =>
@@ -657,15 +657,12 @@ let quizEditor = (state, send) =>
     <label
       className="block tracking-wide text-sm font-semibold mr-6 mb-3" htmlFor="Quiz question 1">
       <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-      {"Prepare the quiz now." |> str}
+      {t("prepare_quiz") |> str}
     </label>
     <div className="ml-6">
       {isValidQuiz(state.quiz)
         ? React.null
-        : <School__InputGroupError
-            message="All questions must be filled in, and all questions should have at least two answers."
-            active=true
-          />}
+        : <School__InputGroupError message={t("prepare_quiz_error")} active=true />}
       {state.quiz
       |> Js.Array.mapi((quizQuestion, index) =>
         <CurriculumEditor__TargetQuizQuestion
@@ -680,9 +677,9 @@ let quizEditor = (state, send) =>
       |> React.array}
       <button
         onClick={addQuizQuestion(send)}
-        className="flex w-full items-center bg-gray-200 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md focus:bg-white focus:text-primary-500 focus:shadow-md rounded-lg p-3 cursor-pointer my-5">
+        className="flex w-full items-center bg-gray-50 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md focus:bg-white focus:text-primary-500 focus:shadow-md rounded-lg p-3 cursor-pointer my-5">
         <i className="fas fa-plus-circle text-lg" />
-        <h5 className="font-semibold ml-2"> {"Add another Question" |> str} </h5>
+        <h5 className="font-semibold ml-2"> {t("add_another_question") |> str} </h5>
       </button>
     </div>
   </div>
@@ -749,6 +746,24 @@ let updateTargetButton = (
   </button>
 }
 
+let quizAnswersAsJsObject = quizAnswers =>
+  quizAnswers |> Array.map(qa =>
+    UpdateTargetQuery.makeInputObjectTargetQuizAnswerInput(
+      ~answer=AnswerOption.answer(qa),
+      ~correctAnswer=AnswerOption.correctAnswer(qa),
+      (),
+    )
+  )
+
+let quizAsJsObject = quiz =>
+  quiz |> Array.map(q =>
+    UpdateTargetQuery.makeInputObjectTargetQuizInput(
+      ~question=QuizQuestion.question(q),
+      ~answerOptions=quizAnswersAsJsObject(QuizQuestion.answerOptions(q)),
+      (),
+    )
+  )
+
 let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(UpdateSaving)
@@ -758,7 +773,7 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
   let quizAsJs =
     state.quiz
     |> Js.Array.filter(question => QuizQuestion.isValidQuizQuestion(question))
-    |> QuizQuestion.quizAsJsObject
+    |> quizAsJsObject
 
   let (quiz, evaluationCriteria, linkToComplete, checklist) = switch state.methodOfCompletion {
   | Evaluated => ([], state.evaluationCriteria, "", state.checklist)
@@ -773,7 +788,7 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
   | Draft => Draft
   }
 
-  UpdateTargetQuery.make(
+  let variables = UpdateTargetQuery.makeVariables(
     ~id,
     ~targetGroupId,
     ~title=state.title,
@@ -787,7 +802,8 @@ let updateTarget = (target, state, send, updateTargetCB, targetGroupId, event) =
     ~checklist=checklist |> ChecklistItem.encodeChecklist,
     (),
   )
-  |> GraphqlQuery.sendQuery
+
+  UpdateTargetQuery.make(variables)
   |> Js.Promise.then_(result => {
     switch result["updateTarget"]["sortIndex"] {
     | Some(sortIndex) =>
@@ -857,27 +873,29 @@ let make = (
       ? <div className="max-w-3xl mx-auto px-3">
           {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.contents())}
         </div>
-      : <DisablingCover message="Saving..." disabled=state.saving>
+      : <DisablingCover message={ts("saving")} disabled=state.saving>
           <div className="mt-2">
             <div className="max-w-3xl mx-auto px-3">
               <div className="mb-6">
                 <label
-                  className="flex items-center inline-block tracking-wide text-sm font-semibold mb-2"
+                  className="items-center inline-block tracking-wide text-sm font-semibold mb-2"
                   htmlFor="title">
                   <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                  {"Title" |> str}
+                  {t("title") |> str}
                 </label>
                 <div className="ml-6">
                   <input
                     autoFocus=true
-                    className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+                    className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                     id="title"
                     type_="text"
                     placeholder={t("target_title_placeholder")}
                     onChange={updateTitle(send)}
                     value=state.title
                   />
-                  <School__InputGroupError message="Enter a valid title" active={!hasValidTitle} />
+                  <School__InputGroupError
+                    message={ts("enter_valid_title")} active={!hasValidTitle}
+                  />
                 </div>
               </div>
               {targetGroupEditor(state, targetGroups, levels, send)}
@@ -896,12 +914,12 @@ let make = (
                   <button
                     onClick={updateMethodOfCompletion(Evaluated, send)}
                     className={booleanButtonClasses(targetEvaluated(state.methodOfCompletion))}>
-                    {"Yes" |> str}
+                    {ts("_yes") |> str}
                   </button>
                   <button
                     onClick={updateMethodOfCompletion(MarkAsComplete, send)}
                     className={booleanButtonClasses(!targetEvaluated(state.methodOfCompletion))}>
-                    {"No" |> str}
+                    {ts("_no") |> str}
                   </button>
                 </div>
               </div>
@@ -910,12 +928,10 @@ let make = (
                 <div className="mb-6">
                   <label className="tracking-wide text-sm font-semibold" htmlFor="target_checklist">
                     <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                    {t("target_checklist_label") |> str}
+                    {t("target_checklist.label") |> str}
                   </label>
-                  <HelpIcon
-                    className="ml-1"
-                    link="https://docs.pupilfirst.com/#/curriculum_editor?id=defining-steps-to-complete-a-target">
-                    {t("target_checklist_help_text") |> str}
+                  <HelpIcon className="ml-1" link={t("target_checklist.help_url")}>
+                    {t("target_checklist.help") |> str}
                   </HelpIcon>
                   <div className="ml-6 mb-6">
                     {state.checklist
@@ -953,15 +969,15 @@ let make = (
                       ? <div
                           className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
                           <i className="fas fa-info-circle mr-2" />
-                          {t("target_checklist_limit_warning") |> str}
+                          {t("target_checklist.limit_warning") |> str}
                         </div>
                       : React.null}
                     <button
-                      className="flex justify-center items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="flex justify-center items-center w-full rounded-lg border border-dashed border-primary-500 mt-2 p-2 text-sm text-primary-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-focusColor-500"
                       disabled={state.checklist |> Js.Array.length >= 15}
                       onClick={_ => send(AddNewChecklistItem)}>
                       <PfIcon className="fas fa-plus-circle text-lg" />
-                      <span className="font-semibold ml-2"> {"Add a Step" |> str} </span>
+                      <span className="font-semibold ml-2"> {t("add_step") |> str} </span>
                     </button>
                   </div>
                 </div>
@@ -981,12 +997,10 @@ let make = (
               <div className="mb-6">
                 <label className="inline-block tracking-wide text-sm font-semibold" htmlFor="role">
                   <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                  {t("target_role_label") |> str}
+                  {t("target_role.label") |> str}
                 </label>
-                <HelpIcon
-                  className="ml-1"
-                  link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion">
-                  {t("target_role_help") |> str}
+                <HelpIcon className="ml-1" link={t("target_role.help_url")}>
+                  {t("target_role.help") |> str}
                 </HelpIcon>
                 <div id="role" className="flex mt-4 ml-6">
                   <button
@@ -1001,9 +1015,7 @@ let make = (
                     <span className="mr-4">
                       <Icon className="if i-users-check-light text-3xl" />
                     </span>
-                    <span className="text-sm">
-                      {"All students must submit individually." |> str}
-                    </span>
+                    <span className="text-sm"> {t("submit_individually") |> str} </span>
                   </button>
                   <button
                     onClick={updateTargetRole(TargetDetails.Team, send)}
@@ -1017,7 +1029,7 @@ let make = (
                       <Icon className="if i-user-check-light text-2xl" />
                     </span>
                     <span className="text-sm">
-                      {"Only one student in a team" |> str} <br /> {" needs to submit." |> str}
+                      {t("one_student_team") |> str} <br /> {t("need_submit") |> str}
                     </span>
                   </button>
                 </div>
@@ -1026,17 +1038,15 @@ let make = (
                 <label
                   className="tracking-wide text-sm font-semibold" htmlFor="completion-instructions">
                   <span className="mr-2"> <i className="fas fa-list text-base" /> </span>
-                  {t("completion_instructions_label") |> str}
-                  <span className="ml-1 text-xs font-normal"> {"(optional)" |> str} </span>
+                  {t("completion_instructions.label") |> str}
+                  <span className="ml-1 text-xs font-normal"> {ts("optional_braces") |> str} </span>
                 </label>
-                <HelpIcon
-                  link="https://docs.pupilfirst.com/#/curriculum_editor?id=setting-the-method-of-completion"
-                  className="ml-1">
-                  {t("completion_instructions_help") |> str}
+                <HelpIcon link={t("completion_instructions.help_url")} className="ml-1">
+                  {t("completion_instructions.help") |> str}
                 </HelpIcon>
                 <div className="ml-6">
                   <input
-                    className="appearance-none block text-sm w-full bg-white border border-gray-400 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-indigo-500"
+                    className="appearance-none block text-sm w-full bg-white border border-gray-300 rounded px-4 py-2 my-2 leading-relaxed focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
                     id="completion-instructions"
                     type_="text"
                     maxLength=255
@@ -1070,9 +1080,9 @@ let make = (
                           },
                         )}>
                         {switch visibility {
-                        | Live => "Live"
-                        | Archived => "Archived"
-                        | Draft => "Draft"
+                        | Live => ts("live")
+                        | Archived => ts("archived")
+                        | Draft => ts("draft")
                         } |> str}
                       </button>
                     )

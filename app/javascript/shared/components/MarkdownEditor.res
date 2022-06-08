@@ -17,6 +17,8 @@ type rec selection = (selectionStart, selectionEnd)
 and selectionStart = int
 and selectionEnd = int
 
+type currentFileName = option<string>
+
 type rec uploadState =
   | Uploading
   | ReadyToUpload(uploadError)
@@ -27,6 +29,7 @@ type state = {
   mode: mode,
   selection: selection,
   uploadState: uploadState,
+  currentFileName: currentFileName,
 }
 
 type action =
@@ -39,6 +42,8 @@ type action =
   | SetUploadError(uploadError)
   | SetUploading
   | FinishUploading
+  | ClearFile
+  | SelectFile(currentFileName)
 
 let reducer = (state, action) =>
   switch action {
@@ -88,6 +93,8 @@ let reducer = (state, action) =>
   | SetUploadError(error) => {...state, uploadState: ReadyToUpload(error)}
   | SetUploading => {...state, uploadState: Uploading}
   | FinishUploading => {...state, uploadState: ReadyToUpload(None)}
+  | SelectFile(currentFileName) => {...state, currentFileName: currentFileName}
+  | ClearFile => {...state, currentFileName: None}
   }
 
 let computeInitialState = ((value, textareaId, mode)) => {
@@ -98,7 +105,13 @@ let computeInitialState = ((value, textareaId, mode)) => {
 
   let length = value |> String.length
 
-  {id: id, mode: mode, selection: (length, length), uploadState: ReadyToUpload(None)}
+  {
+    id: id,
+    mode: mode,
+    selection: (length, length),
+    uploadState: ReadyToUpload(None),
+    currentFileName: None,
+  }
 }
 
 let containerClasses = mode =>
@@ -273,10 +286,10 @@ let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
 }
 
 let controlsContainerClasses = mode =>
-  "border bg-gray-100 text-sm px-2 flex justify-between items-end " ++
+  "border bg-gray-50 text-sm px-2 flex justify-between items-end " ++
   switch mode {
-  | Windowed(_) => "rounded-t border-gray-400"
-  | Fullscreen(_) => "border-gray-400 "
+  | Windowed(_) => "rounded-t border-gray-300"
+  | Fullscreen(_) => "border-gray-300 "
   }
 
 let controls = (disabled, value, state, send, onChange) => {
@@ -291,7 +304,7 @@ let controls = (disabled, value, state, send, onChange) => {
       <div />
     | Windowed(#Editor)
     | Fullscreen(#Editor | #Split) =>
-      <div role="toolbar" className="bg-white border border-gray-400 rounded-t border-b-0">
+      <div role="toolbar" className="bg-white border border-gray-300 rounded-t border-b-0">
         <button
           disabled
           ariaLabel={t("control_label_bold")}
@@ -304,7 +317,7 @@ let controls = (disabled, value, state, send, onChange) => {
           disabled
           ariaLabel={t("control_label_italic")}
           title={t("control_label_italic")}
-          className={buttonClasses ++ "border-l border-gray-400"}
+          className={buttonClasses ++ "border-l border-gray-300"}
           onClick={_ => curriedModifyPhrase(Italic)}>
           <i className="fas fa-italic fa-fw" />
         </button>
@@ -312,7 +325,7 @@ let controls = (disabled, value, state, send, onChange) => {
           disabled
           ariaLabel={t("control_label_strikethrough")}
           title={t("control_label_strikethrough")}
-          className={buttonClasses ++ "border-l border-gray-400"}
+          className={buttonClasses ++ "border-l border-gray-300"}
           onClick={_ => curriedModifyPhrase(Strikethrough)}>
           <i className="fas fa-strikethrough fa-fw" />
         </button>
@@ -361,7 +374,7 @@ let modeClasses = mode =>
   }
 
 let editorContainerClasses = mode =>
-  "border-r border-gray-400 " ++
+  "border-r border-gray-300 " ++
   switch mode {
   | Windowed(#Editor) => "border-l"
   | Windowed(#Preview) => "hidden"
@@ -381,7 +394,7 @@ let previewType = mode =>
   }
 
 let previewContainerClasses = mode =>
-  "border-gray-400 bg-gray-100 " ++
+  "border-gray-300 bg-gray-50 " ++
   switch mode |> previewType {
   | #WindowedPreview => "markdown-editor__windowed-preview-container border-l border-r border-b rounded-b px-2 md:px-3"
   | #FullscreenPreview => "w-screen mx-auto"
@@ -456,6 +469,7 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
   | files =>
     let file = files[0]
     let maxFileSize = 5 * 1024 * 1024
+    send(SelectFile(ReactEvent.Form.target(event)["value"]))
 
     let error = file["size"] > maxFileSize ? Some(t("error_maximum_file_size")) : None
 
@@ -464,14 +478,15 @@ let attachFile = (fileFormId, oldValue, state, send, onChange, event) =>
     | None =>
       send(SetUploading)
       submitForm(fileFormId, oldValue, state, send, onChange)
+      send(ClearFile)
     }
   }
 
 let footerContainerClasses = mode =>
-  "markdown-editor__footer-container border bg-gray-100 flex justify-end items-center " ++
+  "markdown-editor__footer-container border bg-gray-50 flex justify-end items-center " ++
   switch mode {
-  | Windowed(_) => "rounded-b border-gray-400"
-  | Fullscreen(_) => "border-gray-400"
+  | Windowed(_) => "rounded-b border-gray-300"
+  | Fullscreen(_) => "border-gray-300"
   }
 
 let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
@@ -498,6 +513,10 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
           id=fileInputId
           multiple=false
           disabled
+          value={switch state.currentFileName {
+          | None => ""
+          | Some(file) => file
+          }}
           onChange={attachFile(fileFormId, oldValue, state, send, onChange)}
         />
         {switch state.uploadState {
@@ -526,7 +545,7 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
         ariaLabel={t("help_aria_label")}
         href="/help/markdown_editor"
         target="_blank"
-        className="flex items-center px-3 py-2 hover:bg-gray-300 hover:text-secondary-500 focus:outline-none focus:bg-gray-300 focus:text-secondary-500 cursor-pointer">
+        className="flex items-center px-3 py-2 hover:bg-gray-300 hover:text-red-500 focus:outline-none focus:bg-gray-300 focus:text-red-500 cursor-pointer">
         <i className="fab fa-markdown text-sm" />
         <span className="text-xs ml-1 font-semibold hidden sm:inline">
           {t("help_label")->str}
@@ -537,8 +556,11 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
 }
 
 let textareaClasses = (mode, dynamicHeight) => {
-  let editorClasses = dynamicHeight ? "w-full outline-none font-mono " : "markdown-editor__textarea w-full outline-none font-mono "
-  editorClasses ++ "align-top focus:ring-1 focus:ring-indigo-500 " ++
+  let editorClasses = dynamicHeight
+    ? "w-full outline-none font-mono "
+    : "markdown-editor__textarea w-full outline-none font-mono "
+  editorClasses ++
+  "align-top focus:ring-1 focus:ring-focusColor-500 " ++
   switch mode {
   | Windowed(_) => "p-3"
   | Fullscreen(_) => "markdown-editor__textarea--full-screen px-3 pt-4 pb-8 h-full resize-none"

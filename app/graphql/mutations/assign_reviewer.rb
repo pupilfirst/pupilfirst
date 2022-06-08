@@ -13,7 +13,7 @@ module Mutations
       assign_reviewer
       notify(
         :success,
-        I18n.t('shared.done_exclamation'),
+        I18n.t('shared.notifications.done_exclamation'),
         I18n.t('mutations.assign_reviewer.success_notification')
       )
       { reviewer: coach }

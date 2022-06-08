@@ -13,8 +13,7 @@ storage
 
 public/assets
 public/uploads
-node_modules
-app/javascript/packages/*/node_modules
+**/node_modules
 coverage
 tags
 .tags*
@@ -32,8 +31,6 @@ tags
 # Ignore public packs.
 public/packs
 public/packs-test
-yarn-*.log*
-.yarn-integrity
 
 # Ignore these associated with reason-react and bsb
 .merlin
@@ -60,3 +57,21 @@ app/javascript/locales.json
 
 # Ignore git's files.
 .git
+
+# Ignore Yarn's artifacts
+yarn-*.log*
+.yarn-integrity
+.yarnrc.yml
+**/.yarn
+!.yarn/releases
+
+# Example files
+example.env
+
+# Docs
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+README.md
+SECURITY.md
+docs
+!docs/served/markdown_editor.md

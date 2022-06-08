@@ -135,6 +135,7 @@ let make = (
   ~targets,
   ~hasVimeoAccessToken,
   ~vimeoPlan,
+  ~markdownCurriculumEditorMaxLength,
 ) => {
   let path = RescriptReactRouter.useUrl().path
   let (state, send) = React.useReducerWithMapState(
@@ -199,7 +200,7 @@ let make = (
   <div className="flex-1 flex flex-col">
     <div className="bg-white p-4 md:hidden shadow border-b">
       <button
-        className="sa-toggle__menu-btn sa-toggle__menu-btn--arrow hover:bg-gray-200 focus:outline-none">
+        className="sa-toggle__menu-btn sa-toggle__menu-btn--arrow hover:bg-gray-50 focus:outline-none">
         <span className="sa-toggle__menu-btn-box">
           <span className="sa-toggle__menu-btn-inner" />
         </span>
@@ -207,6 +208,7 @@ let make = (
     </div>
     <CurriculumEditor__TargetDrawer
       hasVimeoAccessToken
+      markdownCurriculumEditorMaxLength
       targets=state.targets
       levels=state.levels
       targetGroups=state.targetGroups
@@ -226,8 +228,8 @@ let make = (
         levels=state.levels level course hideEditorActionCB updateLevelsCB
       />
     }}
-    <div className="px-6 pb-4 flex-1 bg-gray-100 relative overflow-y-scroll">
-      <div className="w-full py-4 relative md:sticky top-0 z-20 bg-gray-100 border-b">
+    <div className="px-6 pb-4 flex-1 bg-gray-50 relative overflow-y-scroll">
+      <div className="w-full py-4 relative md:sticky top-0 z-20 bg-gray-50 border-b">
         <div className="max-w-3xl flex items-center justify-between mx-auto">
           <div className="flex">
             <div className="inline-block relative w-auto md:w-64">
@@ -238,7 +240,7 @@ let make = (
                 }}
                 value={currentLevel |> Level.name}
                 ariaLabel="Select level"
-                className="block appearance-none w-full bg-white border text-sm border-gray-400 rounded-l hover:border-gray-500 px-4 py-3 pr-8 rounded-r-none leading-tight focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                className="block appearance-none w-full bg-white border text-sm border-gray-300 rounded-l hover:border-gray-500 px-4 py-3 pr-8 rounded-r-none leading-tight focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
                 {state.levels
                 |> Level.sort
                 |> Array.map(level =>
@@ -259,7 +261,7 @@ let make = (
             <button
               title={t("edit_selected_level")}
               ariaLabel={t("edit_selected_level")}
-              className="flex items-center text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-400 border-l-0 py-1 px-2 rounded-r focus:outline-none focus:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+              className="flex items-center text-gray-600 hover:text-gray-900 text-sm font-bold border border-gray-300 border-l-0 py-1 px-2 rounded-r focus:outline-none focus:text-gray-900 focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
               onClick={_ => send(UpdateEditorAction(ShowLevelEditor(Some(state.selectedLevel))))}>
               <i className="fas fa-pencil-alt" />
             </button>
@@ -298,8 +300,8 @@ let make = (
         <button
           ariaLabel={t("create_target_group")}
           onClick={_ => send(UpdateEditorAction(ShowTargetGroupEditor(None)))}
-          className="target-group__create w-full flex flex-col items-center justify-center relative bg-white border-2 border-dashed border-gray-400 p-6 z-10 hover:text-primary-500 hover:shadow-lg hover:border-primary-400 focus:outline-none focus:text-primary-500 focus:shadow-lg focus:border-primary-400 rounded-lg mt-12 cursor-pointer">
-          <span className="flex bg-gray-200 p-2 rounded-full">
+          className="target-group__create w-full flex flex-col items-center justify-center relative bg-white border-2 border-dashed border-gray-300 p-6 z-10 hover:text-primary-500 hover:shadow-lg hover:border-primary-400 focus:outline-none focus:text-primary-500 focus:shadow-lg focus:border-primary-400 rounded-lg mt-12 cursor-pointer">
+          <span className="flex bg-gray-50 p-2 rounded-full">
             <i className="fas fa-plus-circle text-2xl" />
           </span>
           <h4 className="font-semibold ml-2"> {t("create_target_group") |> str} </h4>

@@ -31,7 +31,7 @@ let make = (~school, ~courses, ~currentUser) => {
     )
     raise(UnknownPathEncountered(url.path))
   }
-  <div className="md:h-screen md:flex bg-gray-100">
+  <div className="md:h-screen md:flex bg-gray-50">
     {ReactUtils.nullUnless(
       <AppRouter__Nav school courses selectedPage currentUser />,
       Page.showSideNav(selectedPage),

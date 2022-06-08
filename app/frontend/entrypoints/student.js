@@ -10,3 +10,4 @@ import "~/psj/home/index";
 import "~/psj/users/sessions/new";
 import "~/psj/users/dashboard";
 import "~/psj/communities/show";
+import "~/psj/users/edit";

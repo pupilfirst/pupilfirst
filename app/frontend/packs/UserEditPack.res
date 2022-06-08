@@ -13,34 +13,35 @@ let decodeProps = json => {
   )
 }
 
-let (
-  name,
-  about,
-  locale,
-  availableLocales,
-  avatarUrl,
-  dailyDigest,
-  hasCurrentPassword,
-  isSchoolAdmin,
-  hasValidDeleteAccountToken,
-) =
-  DomUtils.parseJSONTag(~id="user-edit__props", ()) |> decodeProps
-
-switch ReactDOM.querySelector("#react-root") {
-| Some(root) =>
-  ReactDOM.render(
-    <UserEdit
-      name
-      about
-      locale
-      availableLocales
-      avatarUrl
-      dailyDigest
-      hasCurrentPassword
-      isSchoolAdmin
-      hasValidDeleteAccountToken
-    />,
-    root,
-  )
-| None => ()
-}
+Psj.match("users#edit", () => {
+  let (
+    name,
+    about,
+    locale,
+    availableLocales,
+    avatarUrl,
+    dailyDigest,
+    hasCurrentPassword,
+    isSchoolAdmin,
+    hasValidDeleteAccountToken,
+  ) =
+    DomUtils.parseJSONTag(~id="user-edit__props", ()) |> decodeProps
+  switch ReactDOM.querySelector("#react-root") {
+  | Some(root) =>
+    ReactDOM.render(
+      <UserEdit
+        name
+        about
+        locale
+        availableLocales
+        avatarUrl
+        dailyDigest
+        hasCurrentPassword
+        isSchoolAdmin
+        hasValidDeleteAccountToken
+      />,
+      root,
+    )
+  | None => ()
+  }
+})

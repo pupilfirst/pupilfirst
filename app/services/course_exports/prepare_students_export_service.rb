@@ -155,7 +155,8 @@ module CourseExports
             user.title,
             user.affiliation,
             student.startup.tags.order(:name).pluck(:name).join(', '),
-            last_sign_in_at(user)
+            last_sign_in_at(user),
+            last_seen_at(user)
           ] + average_grades_for_student(student)
         end
 
@@ -168,7 +169,8 @@ module CourseExports
           'Title',
           'Affiliation',
           'Tags',
-          'Last Sign In At'
+          'Last Sign In At',
+          'Last Seen At'
         ] + evaluation_criteria_names
       ] + rows
     end
@@ -231,6 +233,10 @@ module CourseExports
 
     def last_sign_in_at(user)
       user.last_sign_in_at&.iso8601 || ''
+    end
+
+    def last_seen_at(user)
+      user.last_seen_at&.iso8601 || ''
     end
   end
 end

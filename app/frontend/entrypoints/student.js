@@ -1,3 +1,4 @@
+import "./tailwind";
 import "~/packs/StudentTopNavPack.bs.js";
 
 // Assets

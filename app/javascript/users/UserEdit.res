@@ -160,7 +160,7 @@ let updateUser = (state, send, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(StartSaving)
 
-  UpdateUserQuery.make(
+  let variables = UpdateUserQuery.makeVariables(
     ~name=state.name,
     ~about=state.about,
     ~locale=state.locale,
@@ -170,9 +170,10 @@ let updateUser = (state, send, event) => {
     ~dailyDigest=state.dailyDigest,
     (),
   )
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    result["updateUser"]["success"]
+
+  UpdateUserQuery.fetch(variables)
+  |> Js.Promise.then_((result: UpdateUserQuery.t) => {
+    result.updateUser.success
       ? {
           let hasCurrentPassword = state.newPassword |> String.length > 0
           send(FinishSaving(hasCurrentPassword))
@@ -191,10 +192,9 @@ let updateUser = (state, send, event) => {
 let initiateAccountDeletion = (state, send) => {
   send(StartDeletingAccount)
 
-  InitiateAccountDeletionQuery.make(~email=state.emailForAccountDeletion, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    result["initiateAccountDeletion"]["success"]
+  InitiateAccountDeletionQuery.fetch({email: state.emailForAccountDeletion})
+  |> Js.Promise.then_((result: InitiateAccountDeletionQuery.t) => {
+    result.initiateAccountDeletion.success
       ? send(FinishAccountDeletion)
       : send(FinishAccountDeletion)
     Js.Promise.resolve()
@@ -221,7 +221,7 @@ let confirmDeletionWindow = (state, send) =>
     ? {
         let body =
           <div ariaLabel={t("confirm_dialog_aria")}>
-            <p className="text-sm text-center sm:text-left text-gray-700">
+            <p className="text-sm text-center sm:text-left text-gray-600">
               {t("account_delete_q") |> str}
             </p>
             <div className="mt-3">
@@ -292,7 +292,7 @@ let make = (
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/3 pr-4">
             <h3 className="text-lg font-semibold"> {t("edit_profile") |> str} </h3>
-            <p className="mt-1 text-sm text-gray-700"> {t("displayed_publicly") |> str} </p>
+            <p className="mt-1 text-sm text-gray-600"> {t("displayed_publicly") |> str} </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
             <div className="">
@@ -373,7 +373,7 @@ let make = (
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">
           <div className="w-full md:w-1/3 pr-4">
             <h3 className="text-lg font-semibold"> {t("security") |> str} </h3>
-            <p className="mt-1 text-sm text-gray-700"> {t("update_credentials") |> str} </p>
+            <p className="mt-1 text-sm text-gray-600"> {t("update_credentials") |> str} </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
             <p className="font-semibold">
@@ -436,11 +436,11 @@ let make = (
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">
           <div className="w-full md:w-1/3 pr-4">
             <h3 className="text-lg font-semibold"> {t("notifications") |> str} </h3>
-            <p className="mt-1 text-sm text-gray-700"> {t("update_email_notifications") |> str} </p>
+            <p className="mt-1 text-sm text-gray-600"> {t("update_email_notifications") |> str} </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
             <p className="font-semibold"> {"Community Digest" |> str} </p>
-            <p className="text-sm text-gray-700"> {t("community_digest_emails") |> str} </p>
+            <p className="text-sm text-gray-600"> {t("community_digest_emails") |> str} </p>
             <div className="mt-6">
               <div className="flex items-center">
                 <Radio
@@ -466,11 +466,11 @@ let make = (
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">
           <div className="w-full md:w-1/3 pr-4">
             <h3 className="text-lg font-semibold"> {t("localization") |> str} </h3>
-            <p className="mt-1 text-sm text-gray-700"> {t("update_locale") |> str} </p>
+            <p className="mt-1 text-sm text-gray-600"> {t("update_locale") |> str} </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
             <label htmlFor="language" className="font-semibold"> {t("language") |> str} </label>
-            <p className="text-sm text-gray-700"> {t("select_language") |> str} </p>
+            <p className="text-sm text-gray-600"> {t("select_language") |> str} </p>
             <div className="mt-6">
               <select
                 id="language"
@@ -508,11 +508,11 @@ let make = (
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-1/3 pr-4">
             <h3 className="text-lg font-semibold"> {t("account") |> str} </h3>
-            <p className="mt-1 text-sm text-gray-700"> {t("manage_account") |> str} </p>
+            <p className="mt-1 text-sm text-gray-600"> {t("manage_account") |> str} </p>
           </div>
           <div className="mt-5 md:mt-0 w-full md:w-2/3">
             <p className="font-semibold text-red-700"> {t("delete_account") |> str} </p>
-            <p className="text-sm text-gray-700 mt-1">
+            <p className="text-sm text-gray-600 mt-1">
               {t("deleting_account_warning") ++ "  " |> str}
             </p>
             <div className="mt-4">

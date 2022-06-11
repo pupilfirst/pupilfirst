@@ -79,8 +79,7 @@ let reducer = (state, action) =>
   }
 
 let loadContentBlocks = (targetId, send) =>
-  ContentBlock.Query.make(~targetId, ())
-  |> GraphqlQuery.sendQuery(~notify=true)
+  ContentBlock.Query.make({targetId: targetId, targetVersionId: None})
   |> Js.Promise.then_(result => {
     let contentBlocks = result["contentBlocks"] |> Js.Array.map(ContentBlock.makeFromJs)
 
@@ -140,7 +139,7 @@ let editor = (
       | Draft
       | Archived => React.null
       }}
-      <div className="w-2/6 text-right">
+      <div className="w-1/3 text-right">
         <label className="text-xs block text-gray-600"> {t("last_updated") |> str} </label>
         <span className="text-sm font-semibold"> currentVersion </span>
       </div>

@@ -162,13 +162,13 @@ let make = (~courseCoaches, ~schoolCoaches, ~courseId, ~authenticityToken) => {
                           <p className="text-black font-semibold mt-1">
                             {coach |> CourseCoach.name |> str}
                           </p>
-                          <p className="text-gray-600 font-semibold text-xs mt-px">
+                          <p className="text-gray-600 text-xs mt-px">
                             {coach |> CourseCoach.title |> str}
                           </p>
                         </div>
                       </button>
                       <button
-                        className="w-10 text-sm course-faculty__list-item-remove text-gray-700 cursor-pointer flex items-center justify-center hover:text-red-500 hover:bg-gray-50 focus:outline-none focus:text-red-500 focus:bg-gray-50"
+                        className="w-10 text-sm course-faculty__list-item-remove text-gray-600 cursor-pointer flex items-center justify-center hover:text-red-500 hover:bg-gray-50 focus:outline-none focus:text-red-500 focus:bg-gray-50"
                         ariaLabel={ts("delete") ++ " " ++ (coach |> CourseCoach.name)}
                         onClick={removeCoach(send, courseId, authenticityToken, coach)}>
                         <i className="fas fa-trash-alt" />

@@ -127,6 +127,8 @@ let reducer = (state, action) =>
 
 let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryString(filter))
 
+module UserProxyFragment = UserProxy.Fragments
+
 module SubmissionsQuery = %graphql(`
     query SubmissionsQuery($courseId: ID!, $search: String, $targetId: ID, $status: SubmissionStatus, $sortDirection: SortDirection!,$sortCriterion: SubmissionSortCriterion!, $levelId: ID, $personalCoachId: ID, $assignedCoachId: ID, $reviewingCoachId: ID, $includeInactive: Boolean, $coachIds: [ID!] $after: String) {
       submissions(courseId: $courseId, search: $search, targetId: $targetId, status: $status, sortDirection: $sortDirection, sortCriterion: $sortCriterion, levelId: $levelId, personalCoachId: $personalCoachId, assignedCoachId: $assignedCoachId, reviewingCoachId: $reviewingCoachId,  includeInactive: $includeInactive, first: 20, after: $after) {
@@ -157,7 +159,7 @@ module SubmissionsQuery = %graphql(`
         number
       }
       coaches(coachIds: $coachIds, courseId: $courseId) {
-        ...UserProxy.Fragments.AllFields
+        ...UserProxyFragment
       }
       targetInfo(targetId: $targetId, courseId: $courseId) {
         id
@@ -179,7 +181,7 @@ module LevelsQuery = %graphql(`
 module CoachesQuery = %graphql(`
     query CoachesQuery($courseId: ID!) {
       coaches(courseId: $courseId) {
-        ...UserProxy.Fragments.AllFields
+        ...UserProxyFragment
       }
     }
   `)
@@ -203,7 +205,7 @@ let getSubmissions = (send, courseId, cursor, filter) => {
     ->Js.Array2.map(Belt.Option.mapWithDefault(_, [], t => [t]))
     ->ArrayUtils.flattenV2
 
-  SubmissionsQuery.make(
+  let variables = SubmissionsQuery.makeVariables(
     ~courseId,
     ~status=?Filter.tab(filter),
     ~sortDirection=Filter.sortDirection(filter),
@@ -219,7 +221,8 @@ let getSubmissions = (send, courseId, cursor, filter) => {
     ~after=?cursor,
     (),
   )
-  |> GraphqlQuery.sendQuery
+
+  SubmissionsQuery.make(variables)
   |> Js.Promise.then_(response => {
     let target = OptionUtils.map(TargetInfo.makeFromJs, response["targetInfo"])
     let coaches = Js.Array2.map(response["coaches"], Coach.makeFromJs)
@@ -244,8 +247,7 @@ let getLevels = (send, courseId, state) => {
   if state.levelsLoaded == Unloaded {
     send(SetLevelLoading)
 
-    LevelsQuery.make(~courseId, ())
-    |> GraphqlQuery.sendQuery
+    LevelsQuery.make({courseId: courseId})
     |> Js.Promise.then_(response => {
       send(LoadLevels(Js.Array.map(Level.makeFromJs, response["levels"])))
       Js.Promise.resolve()
@@ -258,8 +260,7 @@ let getCoaches = (send, courseId, state) => {
   if state.coachesLoaded == Unloaded {
     send(SetCoachLoading)
 
-    CoachesQuery.make(~courseId, ())
-    |> GraphqlQuery.sendQuery
+    CoachesQuery.make({courseId: courseId})
     |> Js.Promise.then_(response => {
       send(LoadCoaches(Js.Array.map(Coach.makeFromJs, response["coaches"])))
       Js.Promise.resolve()
@@ -272,8 +273,7 @@ let getTargets = (send, courseId, state) => {
   if state.targetsLoaded == Unloaded {
     send(SetTargetLoading)
 
-    ReviewedTargetsInfoQuery.make(~courseId, ())
-    |> GraphqlQuery.sendQuery
+    ReviewedTargetsInfoQuery.make({courseId: courseId})
     |> Js.Promise.then_(response => {
       send(LoadTargets(Js.Array.map(TargetInfo.makeFromJs, response["reviewedTargetsInfo"])))
       Js.Promise.resolve()

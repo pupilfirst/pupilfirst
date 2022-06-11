@@ -29,10 +29,11 @@ let optionAbout = about => about == "" ? None : Some(about)
 let updateSchoolQuery = (state, send, updateDetailsCB) => {
   send(UpdateSaving(true))
 
-  UpdateSchoolQuery.make(~name=state.name, ~about=state.about, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["updateSchool"]["success"]
+  let variables = UpdateSchoolQuery.makeVariables(~name=state.name, ~about=state.about, ())
+
+  UpdateSchoolQuery.fetch(variables)
+  |> Js.Promise.then_((response: UpdateSchoolQuery.t) => {
+    response.updateSchool.success
       ? updateDetailsCB(state.name, optionAbout(state.about))
       : send(UpdateSaving(false))
     Js.Promise.resolve()

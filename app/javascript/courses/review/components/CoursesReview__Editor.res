@@ -72,7 +72,10 @@ let reducer = (state, action) =>
   | UpdateChecklist(checklist) => {...state, checklist: checklist}
   | UpdateNote(note) => {...state, note: Some(note)}
   | ShowGradesEditor => {...state, editor: GradesEditor}
-  | ShowChecklistEditor => {...state, editor: ChecklistEditor}
+  | ShowChecklistEditor => {
+      ...state,
+      editor: ChecklistEditor,
+    }
   | ChangeReportVisibility => {...state, showReport: !state.showReport}
   | ShowAdditionalFeedbackEditor => {...state, additonalFeedbackEditorVisible: true}
   | FinishGrading(grades) => {
@@ -153,10 +156,9 @@ module SubmissionReportQuery = %graphql(`
 let unassignReviewer = (submissionId, send, updateReviewerCB) => {
   send(BeginSaving)
 
-  UnassignReviewerMutation.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    if response["unassignReviewer"]["success"] {
+  UnassignReviewerMutation.fetch({submissionId: submissionId})
+  |> Js.Promise.then_((response: UnassignReviewerMutation.t) => {
+    if response.unassignReviewer.success {
       updateReviewerCB(None)
       send(UnassignReviewer)
     }
@@ -172,7 +174,7 @@ let unassignReviewer = (submissionId, send, updateReviewerCB) => {
 
 let getNextSubmission = (send, courseId, filter, submissionId) => {
   send(SetNextSubmissionDataLoading)
-  NextSubmissionQuery.make(
+  let variables = NextSubmissionQuery.makeVariables(
     ~courseId,
     ~status=?Filter.tab(filter),
     ~sortDirection=Filter.sortDirection(filter),
@@ -185,7 +187,7 @@ let getNextSubmission = (send, courseId, filter, submissionId) => {
     ~excludeSubmissionId=?Some(submissionId),
     (),
   )
-  |> GraphqlQuery.sendQuery
+  NextSubmissionQuery.make(variables)
   |> Js.Promise.then_(response => {
     if ArrayUtils.isEmpty(response["submissions"]["nodes"]) {
       send(SetNextSubmissionDataEmpty)
@@ -240,8 +242,7 @@ let createFeedback = (
 ) => {
   send(BeginSaving)
 
-  CreateFeedbackMutation.make(~submissionId, ~feedback, ())
-  |> GraphqlQuery.sendQuery
+  CreateFeedbackMutation.make({submissionId: submissionId, feedback: feedback})
   |> Js.Promise.then_(response => {
     response["createFeedback"]["success"]
       ? {
@@ -266,10 +267,9 @@ let createFeedback = (
 let undoGrading = (submissionId, send) => {
   send(BeginSaving)
 
-  UndoGradingMutation.make(~submissionId, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["undoGrading"]["success"] ? DomUtils.reload()->ignore : send(FinishSaving)
+  UndoGradingMutation.fetch({submissionId: submissionId})
+  |> Js.Promise.then_((response: UndoGradingMutation.t) => {
+    response.undoGrading.success ? DomUtils.reload()->ignore : send(FinishSaving)
     Js.Promise.resolve()
   })
   |> ignore
@@ -305,9 +305,19 @@ let gradeSubmissionQuery = (
 ) => {
   send(BeginSaving)
   let feedback = trimToOption(state.newFeedback)
-  let grades = Js.Array.map(g => Grade.asJsType(g), state.grades)
+  // let grades = Js.Array.map(g => Grade.asJsType(g), state.grades)
 
-  CreateGradingMutation.make(
+  let grades = Js.Array.map(
+    g =>
+      CreateGradingMutation.makeInputObjectGradeInput(
+        ~evaluationCriterionId=Grade.evaluationCriterionId(g),
+        ~grade=Grade.value(g),
+        (),
+      ),
+    state.grades,
+  )
+
+  let variables = CreateGradingMutation.makeVariables(
     ~submissionId,
     ~feedback?,
     ~note=?Belt.Option.flatMap(state.note, trimToOption),
@@ -315,9 +325,10 @@ let gradeSubmissionQuery = (
     ~checklist=SubmissionChecklistItem.encodeArray(state.checklist),
     (),
   )
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["createGrading"]["success"]
+
+  CreateGradingMutation.fetch(variables)
+  |> Js.Promise.then_((response: CreateGradingMutation.t) => {
+    response.createGrading.success
       ? {
           updateSubmissionCB(
             OverlaySubmission.update(
@@ -889,7 +900,7 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
     let textareaId = "note-for-submission-" ++ OverlaySubmission.id(overlaySubmission)
 
     <div className="text-sm">
-      <div className="font-semibold text-sm flex">
+      <div className="font-medium text-sm flex">
         <Icon className="if i-long-text-light text-gray-800 text-base" />
         {switch note {
         | Some(_) =>
@@ -926,11 +937,17 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
   | _someGrades => React.null
   }
 
-let feedbackGenerator = (submissionDetails, reviewChecklist, state, send) => {
+let feedbackGenerator = (
+  submissionDetails,
+  reviewChecklist,
+  state,
+  ~showAddFeedbackEditor=true,
+  send,
+) => {
   <div className="px-4 md:px-6 pt-4 space-y-8">
     <div>
       <div className="flex h-7 items-end">
-        <h5 className="font-semibold text-sm flex items-center">
+        <h5 className="font-medium text-sm flex items-center">
           <PfIcon
             className="if i-check-square-alt-light text-gray-800 text-base md:text-lg inline-block"
           />
@@ -953,32 +970,36 @@ let feedbackGenerator = (submissionDetails, reviewChecklist, state, send) => {
         </button>
       </div>
     </div>
-    <div className="course-review__feedback-editor text-sm">
-      <h5 className="font-semibold text-sm flex items-center">
-        <PfIcon
-          className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
-        />
-        <span className="ml-2 md:ml-3 tracking-wide"> {t("add_your_feedback")->str} </span>
-      </h5>
-      {ReactUtils.nullUnless(
-        <div
-          className="inline-flex items-center bg-green-200 mt-2 md:ml-8 text-green-800 px-2 py-1 rounded-md">
-          <Icon className="if i-check-circle-solid text-green-700 text-base" />
-          <span className="pl-2 text-sm font-semibold"> {t("feedback_generated_text")->str} </span>
-        </div>,
-        state.feedbackGenerated,
-      )}
-      <div className="mt-2 md:ml-8" ariaLabel="feedback">
-        <MarkdownEditor
-          onChange={feedback => send(UpdateFeedback(feedback))}
-          value=state.newFeedback
-          profile=Markdown.Permissive
-          maxLength=10000
-          disabled={isSubmissionReviewAllowed(submissionDetails)}
-          placeholder={t("feedback_placeholder")}
-        />
-      </div>
-    </div>
+    {showAddFeedbackEditor
+      ? <div className="course-review__feedback-editor text-sm">
+          <h5 className="font-medium text-sm flex items-center">
+            <PfIcon
+              className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
+            />
+            <span className="ml-2 md:ml-3 tracking-wide"> {t("add_your_feedback")->str} </span>
+          </h5>
+          {ReactUtils.nullUnless(
+            <div
+              className="inline-flex items-center bg-green-200 mt-2 md:ml-8 text-green-800 px-2 py-1 rounded-md">
+              <Icon className="if i-check-circle-solid text-green-700 text-base" />
+              <span className="pl-2 text-sm font-semibold">
+                {t("feedback_generated_text")->str}
+              </span>
+            </div>,
+            state.feedbackGenerated,
+          )}
+          <div className="mt-2 md:ml-8" ariaLabel="feedback">
+            <MarkdownEditor
+              onChange={feedback => send(UpdateFeedback(feedback))}
+              value=state.newFeedback
+              profile=Markdown.Permissive
+              maxLength=10000
+              disabled={SubmissionDetails.preview(submissionDetails)}
+              placeholder={t("feedback_placeholder")}
+            />
+          </div>
+        </div>
+      : React.null}
   </div>
 }
 
@@ -1109,8 +1130,7 @@ let reportConclusionTimeString = report => {
 
 let loadSubmissionReport = (report, updateSubmissionReportCB) => {
   let id = SubmissionReport.id(report)
-  SubmissionReportQuery.make(~id, ())
-  |> GraphqlQuery.sendQuery
+  SubmissionReportQuery.make({id: id})
   |> Js.Promise.then_(response => {
     let reportData = response["submissionReport"]
     let updatedReport = SubmissionReport.makeFromJS(reportData)
@@ -1193,7 +1213,7 @@ let make = (
       ? Belt.Option.mapWithDefault(SubmissionDetails.reviewer(submissionDetails), false, r =>
           UserProxy.userId(Reviewer.user(r)) == User.id(currentUser)
         ) ||
-        isSubmissionReviewAllowed(submissionDetails)
+        SubmissionDetails.preview(submissionDetails)
           ? GradesEditor
           : AssignReviewer
       : ReviewedSubmissionEditor(OverlaySubmission.grades(overlaySubmission))
@@ -1336,6 +1356,13 @@ let make = (
                 className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
                 <p className="font-semibold"> {str("Review")} </p>
               </div>
+              {feedbackGenerator(
+                submissionDetails,
+                reviewChecklist,
+                state,
+                ~showAddFeedbackEditor=false,
+                send,
+              )}
               <CoursesReview__ReviewerManager
                 submissionDetails
                 updateReviewerCB={updateReviewer(updateReviewerCB, send)}
@@ -1350,7 +1377,7 @@ let make = (
                 <p className="font-semibold"> {str("Review")} </p>
               </div>
               {ReactUtils.nullIf(
-                <div className="px-4 md:px-6 py-4 border-b border-gray-300" ariaLabel="Assigned to">
+                <div className="px-4 py-4 border-b border-gray-300" ariaLabel="Assigned to">
                   <div
                     className="flex items-center justify-between px-3 py-2 rounded-md bg-gray-50">
                     {switch SubmissionDetails.reviewer(submissionDetails) {
@@ -1368,8 +1395,8 @@ let make = (
                     <div className="flex justify-center ml-2 md:ml-4">
                       <button
                         onClick={_ => unassignReviewer(submissionId, send, updateReviewerCB)}
-                        className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
-                        <i className="fas fa-user-minus" />
+                        className="btn btn-small bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <Icon className="if i-times-regular" />
                         <span className="ml-2"> {t("remove_assignment")->str} </span>
                       </button>
                     </div>
@@ -1381,7 +1408,7 @@ let make = (
               <div className="w-full px-4 md:px-6 pt-8 space-y-8">
                 {noteForm(submissionDetails, overlaySubmission, teamSubmission, state.note, send)}
                 <div>
-                  <h5 className="font-semibold text-sm flex items-center">
+                  <h5 className="font-medium text-sm flex items-center">
                     <Icon className="if i-tachometer-light text-gray-800 text-base" />
                     <span className="ml-2 md:ml-3 tracking-wide"> {"Grade Card"->str} </span>
                   </h5>
@@ -1421,7 +1448,7 @@ let make = (
               </div>
               {ReactUtils.nullIf(
                 <div className="p-4 md:p-6">
-                  <h5 className="font-semibold text-sm flex items-center">
+                  <h5 className="font-medium text-sm flex items-center">
                     <PfIcon
                       className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
                     />
@@ -1443,6 +1470,8 @@ let make = (
                 updateReviewChecklistCB={updateReviewChecklist(updateReviewChecklistCB, send)}
                 targetId
                 cancelCB={_ => send(UpdateEditor(findEditor(pending, overlaySubmission)))}
+                overlaySubmission
+                submissionDetails
               />
             </div>
 
@@ -1465,7 +1494,7 @@ let make = (
               </div>
               <div className="w-full p-4 md:p-6">
                 <div className="flex items-center justify-between">
-                  <h5 className="font-semibold text-sm flex items-center">
+                  <h5 className="font-medium text-sm flex items-center">
                     <Icon className="if i-tachometer-light text-gray-800 text-base" />
                     <span className="ml-2 md:ml-3 tracking-wide"> {t("grade_card")->str} </span>
                   </h5>
@@ -1522,7 +1551,7 @@ let make = (
                 state.additonalFeedbackEditorVisible,
               )}
               <div className="p-4 md:p-6">
-                <h5 className="font-semibold text-sm flex items-center">
+                <h5 className="font-medium text-sm flex items-center">
                   <PfIcon
                     className="if i-comment-alt-light text-gray-800 text-base md:text-lg inline-block"
                   />

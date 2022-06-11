@@ -66,12 +66,14 @@ let handleUpdateAgreement = (
   event |> ReactEvent.Mouse.preventDefault
   send(BeginUpdate)
 
-  UpdateSchoolStringQuery.make(~key=kind |> kindToKey, ~value=state.agreement, ())
-  |> GraphqlQuery.sendQuery
+  UpdateSchoolStringQuery.make({key: kindToKey(kind), value: state.agreement})
   |> Js.Promise.then_(result =>
     switch result["updateSchoolString"]["errors"] {
     | [] =>
-      Notification.success(ts("notifications.done_exclamation"), kindToString(kind) ++ " " ++ t("updated_notification") )
+      Notification.success(
+        ts("notifications.done_exclamation"),
+        kindToString(kind) ++ " " ++ t("updated_notification"),
+      )
       switch kind {
       | PrivacyPolicy => updatePrivacyPolicyCB(state.agreement)
       | TermsAndConditions => updateTermsAndConditionsCB(state.agreement)
@@ -117,21 +119,21 @@ let make = (~kind, ~customizations, ~updatePrivacyPolicyCB, ~updateTermsAndCondi
   let (state, send) = React.useReducer(reducer, initialState(kind, customizations))
   <div className="mx-8 pt-8 flex flex-col agreements-editor__container">
     <h5 className="uppercase text-center border-b border-gray-300 pb-2">
-      {t("manage") ++" " ++ (kind |> kindToString) |> str}
+      {t("manage") ++ " " ++ (kind |> kindToString) |> str}
     </h5>
     <DisablingCover disabled=state.updating containerClasses="flex flex-col flex-1">
       <div key="agreements-editor__input-group" className="mt-3 flex flex-col flex-1">
         <label
           className="inline-block tracking-wide text-xs font-semibold"
           htmlFor="agreements-editor__value">
-          { t("agreement_body") ++ " " |> str} <i className="fab fa-markdown text-base" />
+          {t("agreement_body") ++ " " |> str} <i className="fab fa-markdown text-base" />
         </label>
         <textarea
           autoFocus=true
           maxLength=20000
           className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500 flex-1"
           id="agreements-editor__value"
-          placeholder=t("agreement_placeholder")
+          placeholder={t("agreement_placeholder")}
           onChange={handleAgreementChange(send)}
           value=state.agreement
         />

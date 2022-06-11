@@ -14,7 +14,7 @@
       </div>
       <div class="w-full md:px-4 text-center mt-4">
         <div class="leaderboard__header-container">
-          <div class="w-5/6 lg:w-4/6 mx-auto">
+          <div class="w-5/6 lg:w-2/3 mx-auto">
             <div>
               <% if presenter.students.any? %>
                 <div class="flex justify-center">
@@ -107,7 +107,7 @@
 
                 <td class="py-3 px-3 border-b text-left text-sm">
                   <span class="font-semibold inline-block leading-tight"><%= student.name %></span>
-                  <span class="leaderboard__student-affiliation block text-xs text-gray-700 leading-tight"> <%= student.user.affiliation %></span>
+                  <span class="leaderboard__student-affiliation block text-xs text-gray-600 leading-tight"> <%= student.user.affiliation %></span>
                 </td>
                 <td class="py-3 px-3 border-b text-center font-semibold text-sm"><%= student.level_number %></td>
                 <td class="py-3 px-3 border-b text-center font-semibold text-sm"><%= student.score %></td>

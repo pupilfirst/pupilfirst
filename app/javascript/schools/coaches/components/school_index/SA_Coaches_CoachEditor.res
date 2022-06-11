@@ -253,7 +253,7 @@ let make = (~coach, ~closeFormCB, ~updateCoachCB, ~authenticityToken) => {
           ariaLabel="close"
           title="close"
           onClick={_e => closeFormCB()}
-          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-700 focus:outline-none focus:text-primary-500 mt-4">
+          className="flex items-center justify-center bg-white text-gray-600 font-bold py-3 px-5 rounded-l-full rounded-r-none hover:text-gray-600 focus:outline-none focus:text-primary-500 mt-4">
           <i className="fas fa-times text-xl" />
         </button>
       </div>

@@ -10,7 +10,7 @@ type t = {
   reviewingCoachId: option<string>,
   targetId: option<string>,
   sortCriterion: sortCriterion,
-  sortDirection: sortDirection,
+  sortDirection: option<sortDirection>,
   tab: option<selectedTab>,
   includeInactive: bool,
 }
@@ -48,13 +48,9 @@ let makeFromQueryParams = search => {
     | _ => #SubmittedAt
     },
     sortDirection: switch get("sortDirection", params) {
-    | Some(direction) when direction == "Descending" => #Descending
-    | Some(direction) when direction == "Ascending" => #Ascending
-    | _ =>
-      switch get("tab", params) {
-      | Some(t) when t == "Pending" => #Ascending
-      | _ => #Descending
-      }
+    | Some(direction) when direction == "Descending" => Some(#Descending)
+    | Some(direction) when direction == "Ascending" => Some(#Ascending)
+    | _ => None
     },
     includeInactive: switch get("includeInactive", params) {
     | Some(t) when t == "true" => true
@@ -69,16 +65,15 @@ let toQueryString = filter => {
   | #SubmittedAt => "SubmittedAt"
   }
 
-  let sortDirection = switch filter.sortDirection {
-  | #Descending => "Descending"
-  | #Ascending => "Ascending"
-  }
-
   let filterDict = Js.Dict.fromArray([
     ("sortCriterion", sortCriterion),
-    ("sortDirection", sortDirection),
   ])
 
+  switch filter.sortDirection {
+  | Some(direction) when direction == #Descending => Js.Dict.set(filterDict, "sortDirection", "Descending")
+  | Some(direction) when direction == #Ascending => Js.Dict.set(filterDict, "sortDirection", "Ascending")
+  | _ => ()
+  }
   Belt.Option.forEach(filter.nameOrEmail, search => Js.Dict.set(filterDict, "search", search))
   Belt.Option.forEach(filter.targetId, targetId => Js.Dict.set(filterDict, "targetId", targetId))
   Belt.Option.forEach(filter.levelId, levelId => Js.Dict.set(filterDict, "levelId", levelId))

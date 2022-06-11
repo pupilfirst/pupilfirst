@@ -177,7 +177,13 @@ let getNextSubmission = (send, courseId, filter, submissionId) => {
   let variables = NextSubmissionQuery.makeVariables(
     ~courseId,
     ~status=?Filter.tab(filter),
-    ~sortDirection=Filter.sortDirection(filter),
+    ~sortDirection=switch Filter.sortDirection(filter) {
+      | Some(direction) => direction
+      | None => switch Filter.tab(filter) {
+          | Some(t) when t == #Pending => #Ascending
+          | _ => #Descending
+      }
+    },
     ~sortCriterion=Filter.sortCriterion(filter),
     ~levelId=?Filter.levelId(filter),
     ~personalCoachId=?Filter.personalCoachId(filter),

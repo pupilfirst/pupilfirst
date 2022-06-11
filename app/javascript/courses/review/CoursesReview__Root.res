@@ -29,7 +29,6 @@ type state = {
   targetsLoaded: loading,
   levelsLoaded: loading,
   coachesLoaded: loading,
-  defaultSortDirection: Filter.sortDirection,
 }
 
 type action =
@@ -54,7 +53,6 @@ type action =
   | SetCoachLoading
   | SetLoader(filterLoader)
   | ClearLoader
-  | SetDefaultSort(Filter.sortDirection)
 
 let coachFilterTranslationKey = coachFilter => {
   switch coachFilter {
@@ -122,7 +120,6 @@ let reducer = (state, action) =>
       },
     }
   | ClearLoader => {...state, filterLoader: None}
-  | SetDefaultSort(sortDirection) => {...state, defaultSortDirection: sortDirection}
   }
 
 let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryString(filter))
@@ -208,7 +205,13 @@ let getSubmissions = (send, courseId, cursor, filter) => {
   let variables = SubmissionsQuery.makeVariables(
     ~courseId,
     ~status=?Filter.tab(filter),
-    ~sortDirection=Filter.sortDirection(filter),
+    ~sortDirection=switch Filter.sortDirection(filter) {
+      | Some(direction) => direction
+      | None => switch Filter.tab(filter) {
+          | Some(t) when t == #Pending => #Ascending
+          | _ => #Descending
+      }
+    },
     ~sortCriterion=Filter.sortCriterion(filter),
     ~levelId=?Filter.levelId(filter),
     ~personalCoachId=?Filter.personalCoachId(filter),
@@ -312,10 +315,19 @@ let submissionsSorter = (filter, send) => {
     <SubmissionsSorter
       criteria
       selectedCriterion={filter.sortCriterion}
-      direction={filter.sortDirection}
-      onDirectionChange={sortDirection => {
-        updateParams({...filter, sortDirection: sortDirection})
-        send(SetDefaultSort(sortDirection))
+      direction={switch Filter.sortDirection(filter) {
+      | Some(direction) => direction
+      | None => switch Filter.tab(filter) {
+          | Some(t) when t == #Pending => #Ascending
+          | _ => #Descending
+      }
+    }}
+      onDirectionChange={direction => {
+        switch direction {
+        | #Descending => updateParams({...filter, sortDirection: Some(#Descending)})
+        | #Ascending => updateParams({...filter, sortDirection: Some(#Ascending)})
+        }
+
       }}
       onCriterionChange={sortCriterion => updateParams({...filter, sortCriterion: sortCriterion})}
     />
@@ -745,7 +757,6 @@ let computeInitialState = () => {
   levelsLoaded: Unloaded,
   coachesLoaded: Unloaded,
   totalEntriesCount: 0,
-  defaultSortDirection: #Descending,
 }
 
 let pageTitle = (courses, courseId) => {
@@ -801,7 +812,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                         ...filter,
                         tab: None,
                         sortCriterion: #SubmittedAt,
-                        sortDirection: state.defaultSortDirection,
+                        sortDirection: Filter.sortDirection(filter),
                       })}
                       className={shortCutClasses(filter.tab === None)}>
                       <p> {I18n.ts("all")->str} </p>
@@ -816,7 +827,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                         ...filter,
                         tab: Some(#Pending),
                         sortCriterion: #SubmittedAt,
-                        sortDirection: #Ascending,
+                        sortDirection: Filter.sortDirection(filter),
                       })}
                       className={shortCutClasses(filter.tab === Some(#Pending))}>
                       <p> {str(tc("pending"))} </p>
@@ -831,7 +842,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                         ...filter,
                         tab: Some(#Reviewed),
                         sortCriterion: #EvaluatedAt,
-                        sortDirection: #Descending,
+                        sortDirection: Filter.sortDirection(filter),
                       })}
                       className={shortCutClasses(filter.tab === Some(#Reviewed))}>
                       <p> {str(tc("reviewed"))} </p>

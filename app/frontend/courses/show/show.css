@@ -1,6 +1,6 @@
 .course-show__header-cta-container, .course-show__footer-cta-container {
   position: relative;
-  background-image: url('images/course-show-footer-cta-bg.svg');
+  background-image: url('~/courses/show/images/course-show-footer-cta-bg.svg');
   background-size: cover;
   background-repeat: no-repeat;
 }

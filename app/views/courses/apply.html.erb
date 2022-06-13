@@ -1,10 +1,7 @@
 <% presenter = Courses::ApplyPresenter.new(self, @course, @show_checkbox_recaptcha) %>
-
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
-  <%= stylesheet_pack_tag 'CoursesApplyPack', media: 'all' %>
 <% end %>
-
 <div class="flex min-h-screen bg-gray-50 items-center justify-center">
   <div class="py-8 w-full">
     <div class="container mx-auto px-3 max-w-lg">
@@ -50,7 +47,6 @@
                   </label>
                   <%= f.text_field :name, value: params[:name], maxlength: 128, placeholder: t('.name_placeholder'), required: true, class: 'appearance-none h-10 mt-1 block w-full border border-gray-300 rounded py-2 px-4 text-sm bg-gray-50 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400' %>
                 </div>
-
                 <% if @show_checkbox_recaptcha %>
                   <div class="mt-4">
                     <%=

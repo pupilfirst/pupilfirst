@@ -368,6 +368,60 @@ let make = (
                 </div>
               </form>
             </div>
+            <div className="mt-12">
+              <p className="font-semibold"> {"Emails" |> str} </p>
+              <div className="mt-2">
+                <div
+                  className="p-3 text-gray-700  bg-gray-50 border mt-2 flex items-center gap-2 justify-between rounded-md">
+                  <div className="flex items-center gap-2">
+                    {"developedbysj@gmail.com" |> str}
+                    <div className="px-1 rounded font-medium bg-green-200 text-green-800">
+                      {"Primary" |> str}
+                    </div>
+                  </div>
+                  <FaIcon classes="far fa-trash-alt" />
+                </div>
+                <div
+                  className="p-3 text-gray-700  bg-gray-50 border mt-2 flex items-center gap-2 justify-between rounded-md">
+                  <div className="flex items-center gap-2"> {"example@gmail.com" |> str} </div>
+                  <FaIcon classes="far fa-trash-alt" />
+                </div>
+              </div>
+              <div className="mt-4">
+                <label htmlFor="about" className="block text-sm font-semibold">
+                  {"Add Email Address" |> str}
+                </label>
+                <div className="flex gap-2 items-stretch my-2">
+                  <input
+                    type_="email"
+                    autoComplete="off"
+                    onChange={event =>
+                      send(UpdateCurrentPassword(ReactEvent.Form.target(event)["value"]))}
+                    id="email_password"
+                    className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                    placeholder="Email Address"
+                  />
+                  <button className="btn btn-primary"> {"Add" |> str} </button>
+                </div>
+              </div>
+              <div className="mt-6">
+                <label htmlFor="about" className="block text-sm font-semibold">
+                  {"Primary Email Address" |> str}
+                </label>
+                <div className="flex gap-2 items-stretch my-2">
+                  <select
+                    value="developedbysj@gmail.com"
+                    className="select appearance-none block text-sm w-full bg-white shadow-sm border border-gray-300 rounded px-4 py-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                    placeholder="Primary Email Address">
+                    <option value="developedbysj@gmail.com">
+                      {"developedbysj@gmail.com" |> str}
+                    </option>
+                    <option value="example@gmail.com"> {"example@gmail.com" |> str} </option>
+                  </select>
+                  <button className="btn btn-primary"> {"Add" |> str} </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">

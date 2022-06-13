@@ -64,7 +64,7 @@
     "prettier": "^2.4.1",
     "prismjs": "^1.25.0",
     "prop-types": "^15.7.2",
-    "qrcode.react": "^1.0.1",
+    "qrcode.react": "^3.0.2",
     "react": "^16.8.6",
     "react-csv-reader": "^3.3.1",
     "react-datepicker": "^4.2.1",

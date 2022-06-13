@@ -13326,7 +13326,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
+"prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -13509,7 +13509,7 @@ __metadata:
     prettier: ^2.4.1
     prismjs: ^1.25.0
     prop-types: ^15.7.2
-    qrcode.react: ^1.0.1
+    qrcode.react: ^3.0.2
     react: ^16.8.6
     react-csv-reader: ^3.3.1
     react-datepicker: ^4.2.1
@@ -13565,23 +13565,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qr.js@npm:0.0.0":
-  version: 0.0.0
-  resolution: "qr.js@npm:0.0.0"
-  checksum: 5ac6c393967bdeaa660e7fd3a501a25eb538c1f6008a4d30ab2b97bbe520e5c236530090773f1578aa0a523cdaa6923c866615e21143f9e7cd22abd41c789b69
-  languageName: node
-  linkType: hard
-
-"qrcode.react@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "qrcode.react@npm:1.0.1"
-  dependencies:
-    loose-envify: ^1.4.0
-    prop-types: ^15.6.0
-    qr.js: 0.0.0
+"qrcode.react@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "qrcode.react@npm:3.0.2"
   peerDependencies:
-    react: ^15.5.3 || ^16.0.0 || ^17.0.0
-  checksum: 154a9557d103fa776cd99bc0d2600b862be74872ff965052533bc38ea0606c4d0965b4dd6df93e53f1db86699517a25db2718bbbc08c5d535a90c0d335552e9a
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 4102e9f416d86808728b93dca4e90cab0b2d3eca2bfe501a26ca62237062ded2121711cfc4edf64832c63e04d34956e26c2e7088023949f9328bbaa56004777d
   languageName: node
   linkType: hard
 

@@ -1,6 +1,6 @@
 %%raw(`import "./VerifyCertificate__Root.css"`)
 
-@module external graduateIcon: string = "./images/graduate-icon.svg"
+@module("./images/graduate-icon.svg") external graduateIcon: string = "default"
 
 let str = React.string
 let t = I18n.t(~scope="components.VerifyCertificate__Root")

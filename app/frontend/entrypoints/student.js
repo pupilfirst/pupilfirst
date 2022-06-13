@@ -16,3 +16,4 @@ import "~/psj/courses/curriculum";
 import "~/psj/courses/students";
 import "~/psj/courses/report";
 import "~/psj/courses/student_course";
+import "~/psj/issued_certificates/verify";

@@ -1,6 +1,6 @@
 let str = React.string
 %%raw(`import "./StudentCourse__Header.css"`)
-%%raw(`import "courses/shared/background_patterns.css"`)
+%%raw(`import "~/shared/styles/background_patterns.css"`)
 
 let tr = I18n.t(~scope="components.StudentCourse__Header")
 

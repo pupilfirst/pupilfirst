@@ -15,15 +15,17 @@ let decodeProps = json => {
   }
 }
 
-let props = DomUtils.parseJSONTag() |> decodeProps
+Psj.match("communities#new_topic", () => {
+  let props = DomUtils.parseJSONTag() |> decodeProps
 
-switch ReactDOM.querySelector("#react-root") {
-| Some(root) =>
-  ReactDOM.render(
-    <CommunitiesNewTopic__Root
-      communityId=props.communityId target=props.target topicCategories=props.topicCategories
-    />,
-    root,
-  )
-| None => ()
-}
+  switch ReactDOM.querySelector("#react-root") {
+  | Some(root) =>
+    ReactDOM.render(
+      <CommunitiesNewTopic__Root
+        communityId=props.communityId target=props.target topicCategories=props.topicCategories
+      />,
+      root,
+    )
+  | None => ()
+  }
+})

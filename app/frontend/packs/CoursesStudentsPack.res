@@ -13,14 +13,16 @@ let decodeProps = json => {
   )
 }
 
-let (levels, course, userId, teamCoaches, currentCoach, teamTags, userTags) =
-  DomUtils.parseJSONTag(~id="school-course-students__props", ()) |> decodeProps
+Psj.match("courses#students", () => {
+  let (levels, course, userId, teamCoaches, currentCoach, teamTags, userTags) =
+    DomUtils.parseJSONTag(~id="school-course-students__props", ()) |> decodeProps
 
-switch ReactDOM.querySelector("#react-root") {
-| Some(root) =>
-  ReactDOM.render(
-    <CoursesStudents__Root levels course userId teamCoaches currentCoach teamTags userTags />,
-    root,
-  )
-| None => ()
-}
+  switch ReactDOM.querySelector("#react-root") {
+  | Some(root) =>
+    ReactDOM.render(
+      <CoursesStudents__Root levels course userId teamCoaches currentCoach teamTags userTags />,
+      root,
+    )
+  | None => ()
+  }
+})

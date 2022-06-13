@@ -19,42 +19,44 @@ let decodeProps = json => {
   )
 }
 
-let (
-  author,
-  course,
-  levels,
-  targetGroups,
-  targets,
-  submissions,
-  team,
-  coaches,
-  users,
-  evaluationCriteria,
-  preview,
-  accessLockedLevels,
-  levelUpEligibility,
-) =
-  DomUtils.parseJSONTag() |> decodeProps
+Psj.match("courses#curriculum", () => {
+  let (
+    author,
+    course,
+    levels,
+    targetGroups,
+    targets,
+    submissions,
+    team,
+    coaches,
+    users,
+    evaluationCriteria,
+    preview,
+    accessLockedLevels,
+    levelUpEligibility,
+  ) =
+    DomUtils.parseJSONTag() |> decodeProps
 
-switch ReactDOM.querySelector("#react-root") {
-| Some(root) =>
-  ReactDOM.render(
-    <CoursesCurriculum
-      author
-      course
-      levels
-      targetGroups
-      targets
-      submissions
-      team
-      coaches
-      users
-      evaluationCriteria
-      preview
-      accessLockedLevels
-      levelUpEligibility
-    />,
-    root,
-  )
-| None => ()
-}
+  switch ReactDOM.querySelector("#react-root") {
+  | Some(root) =>
+    ReactDOM.render(
+      <CoursesCurriculum
+        author
+        course
+        levels
+        targetGroups
+        targets
+        submissions
+        team
+        coaches
+        users
+        evaluationCriteria
+        preview
+        accessLockedLevels
+        levelUpEligibility
+      />,
+      root,
+    )
+  | None => ()
+  }
+})

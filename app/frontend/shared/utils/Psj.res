@@ -41,3 +41,31 @@ let match = (~onReady=true, path, f) => {
     }
   }
 }
+
+let matchPaths = (~onReady=true, paths, f) => {
+  let _ = Js.Array2.some(paths, path => {
+    let pathFragments = Js.String2.split(path, "/")
+    let currentPathFragments = Location.pathname(location)->Js.String2.split("/")
+
+    if Js.Array2.length(pathFragments) == Js.Array2.length(currentPathFragments) {
+      let matched = Js.Array2.everyi(pathFragments, (fragment, index) => {
+        if fragment == "*" || Js.String2.charAt(fragment, 0) == ":" {
+          true
+        } else if fragment == currentPathFragments[index] {
+          true
+        } else {
+          false
+        }
+      })
+
+      if matched {
+        Js.log("[PSJ] Matched " ++ path)
+        onReady ? ready(f) : f()
+      }
+
+      matched
+    } else {
+      false
+    }
+  })
+}

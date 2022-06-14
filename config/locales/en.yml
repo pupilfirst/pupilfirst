@@ -603,6 +603,8 @@ en:
       feedback_placeholder: Add feedback (optional)
       generate_feedback_button: Generate Feedback
       review_checklist: Review Checklist
+      add_additional_feedback: Add Additional Feedback
+      remove_additional_feedback: Remove Additional Feedback
     CoursesReview__Editor:
       add_another_feedback: Add another feedback
       add_feedback: Add feedback

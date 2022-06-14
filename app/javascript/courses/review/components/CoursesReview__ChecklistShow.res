@@ -117,6 +117,7 @@ let make = (
   let (checklist, setChecklist) = React.useState(() => reviewChecklist)
   let (selection, setSelecton) = React.useState(() => [])
   let (id, _setId) = React.useState(() => DateTime.randomId() ++ "-review-checkbox-")
+  let (addAdditionalFeedback, setAddAdditionalFeedback) = React.useState(() => false)
 
   <div>
     <div className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
@@ -168,9 +169,11 @@ let make = (
                               s => s.itemIndex == itemIndex && s.resultIndex == resultIndex,
                               selection,
                             )->Belt.Option.isSome
-
                           ReactUtils.nullUnless(
+                            switch addAdditionalFeedback {
+                              | true =>
                             <div className="pl-7 pt-2">
+                            <button onClick={(_) => setAddAdditionalFeedback((_) => false)}>{str(t("remove_additional_feedback"))}</button>
                               <textarea
                                 rows=4
                                 cols=33
@@ -182,10 +185,7 @@ let make = (
                                   submissionDetails,
                                   overlaySubmission,
                                 )}
-                                value={Belt.Option.getWithDefault(
-                                  ReviewChecklistResult.feedback(checklistItem),
-                                  "",
-                                )}
+                                value={Belt.Option.getWithDefault(ReviewChecklistResult.feedback(checklistItem), "")}
                                 onChange={event =>
                                   updateChecklistResultFeedback(
                                     itemIndex,
@@ -196,7 +196,35 @@ let make = (
                                     setChecklist,
                                   )}
                               />
-                            </div>,
+                            </div>
+                            | false => switch ReviewChecklistResult.feedback(checklistItem) {
+                              | Some(feedback) => <div className="pl-7 pt-2">
+                              <textarea
+                                rows=4
+                                cols=33
+                                className="appearance-none border border-gray-300 bg-white rounded-b text-sm align-top py-2 px-4 leading-relaxed w-full focus:outline-none focus:bg-white focus:border-primary-300"
+                                id={"result_" ++ (resultIndex->string_of_int ++ "_feedback")}
+                                type_="text"
+                                placeholder={t("feedback_placeholder")}
+                                disabled={!feedbackGeneratable(
+                                  submissionDetails,
+                                  overlaySubmission,
+                                )}
+                                value={feedback}
+                                onChange={event =>
+                                  updateChecklistResultFeedback(
+                                    itemIndex,
+                                    resultIndex,
+                                    ReactEvent.Form.target(event)["value"],
+                                    reviewChecklistItem,
+                                    checklistItem,
+                                    setChecklist,
+                                  )}
+                              />
+                            </div>
+                            | None => <div onClick={(_) => setAddAdditionalFeedback((_) => true)}>{str(t("add_additional_feedback"))}</div>
+                            }
+                             },
                             isSelected ||
                             !feedbackGeneratable(submissionDetails, overlaySubmission),
                           )

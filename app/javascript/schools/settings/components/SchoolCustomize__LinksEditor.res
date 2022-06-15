@@ -9,8 +9,26 @@ let t = I18n.t(~scope="components.SchoolCustomize__LinkEditor")
 let ts = I18n.t(~scope="shared")
 
 type kind = SchoolLinks.kind
-type state = SchoolLinks.state
-type action = SchoolLinks.action
+
+type state = {
+  kind: kind,
+  title: string,
+  url: string,
+  titleInvalid: bool,
+  urlInvalid: bool,
+  formDirty: bool,
+  adding: bool,
+  deleting: list<SchoolCustomize__Customizations.linkId>,
+}
+
+type action =
+  | UpdateKind(kind)
+  | UpdateTitle(string, bool)
+  | UpdateUrl(string, bool)
+  | DisableForm
+  | EnableForm
+  | ClearForm
+  | DisableDelete(SchoolCustomize__Customizations.linkId)
 
 let handleKindChange = (send, kind, event) => {
   event |> ReactEvent.Mouse.preventDefault
@@ -168,7 +186,7 @@ let unpackLinks = (kind, customizations) =>
   }
   |> Customizations.unpackLinks
 
-let initialState: kind => SchoolLinks.state = kind => {
+let initialState = kind => {
   kind: kind,
   title: "",
   url: "",
@@ -179,7 +197,7 @@ let initialState: kind => SchoolLinks.state = kind => {
   deleting: list{},
 }
 
-let reducer = (state: SchoolLinks.state, action) =>
+let reducer = (state, action) =>
   switch action {
   | UpdateKind(kind) => {...state, kind: kind, formDirty: true}
   | UpdateTitle(title, invalid) => {
@@ -203,7 +221,15 @@ let reducer = (state: SchoolLinks.state, action) =>
     }
   }
 
-let showLinks = (state, send, removeLinkCB, updateLinkCB, moveLinkCB, kind, links) => {
+let showLinks = (
+  deleting,
+  disableDeleteCB,
+  removeLinkCB,
+  updateLinkCB,
+  moveLinkCB,
+  kind,
+  links,
+) => {
   switch links {
   | list{} =>
     <div
@@ -222,9 +248,8 @@ let showLinks = (state, send, removeLinkCB, updateLinkCB, moveLinkCB, kind, link
         removeLinkCB
         updateLinkCB
         moveLinkCB
-        links
-        send
-        state
+        disableDeleteCB
+        deleting
         index
         total={List.length(links)}
       />
@@ -237,6 +262,10 @@ let showLinks = (state, send, removeLinkCB, updateLinkCB, moveLinkCB, kind, link
 @react.component
 let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~updateLinkCB) => {
   let (state, send) = React.useReducer(reducer, initialState(kind))
+
+  let disableDeleteCB = id => {
+    send(DisableDelete(id))
+  }
 
   <div className="mt-8 mx-8 pb-6">
     <h5 className="uppercase text-center border-b border-gray-300 pb-2">
@@ -281,8 +310,8 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
         {linksTitle(state.kind)}
       </label>
       {showLinks(
-        state,
-        send,
+        state.deleting,
+        disableDeleteCB,
         removeLinkCB,
         updateLinkCB,
         moveLinkCB,

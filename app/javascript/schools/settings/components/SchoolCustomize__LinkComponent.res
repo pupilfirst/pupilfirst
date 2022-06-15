@@ -30,8 +30,8 @@ module DestroySchoolLinkQuery = %graphql(`
   `)
 
 module SortSchoolLinkQuery = %graphql(`
-  mutation SortSchoolLinksMutation($linkIds: [ID!]!,$kind:String!) {
-    sortSchoolLinks(linkIds:$linkIds,kind:$kind) {
+  mutation SortSchoolLinksMutation($id: ID!,$direction:MoveDirection!) {
+    sortSchoolLinks(id:$id,direction:$direction) {
       links {
         id
         title
@@ -43,27 +43,9 @@ module SortSchoolLinkQuery = %graphql(`
   }
   `)
 
-let handleMoveLink = (~id, ~direction, ~dispatch, ~kind: SchoolLinks.kind, ~links, ~moveLinkCB) => {
-  let link = links |> List.find(((linkId, _, _, _)) => id == linkId)
-
-  let linkIds =
-    links
-    |> List.sort(((_, _, _, sortIndex1), (_, _, _, sortIndex2)) => sortIndex1 - sortIndex2)
-    |> switch direction {
-    | Customizations.Down => ListUtils.swapDown(link)
-    | Customizations.Up => ListUtils.swapUp(link)
-    }
-    |> List.map(((linkId, _, _, _)) => linkId)
-    |> Array.of_list
-
-  let linkKind = switch kind {
-  | SchoolLinks.HeaderLink => "header"
-  | SchoolLinks.FooterLink => "footer"
-  | SchoolLinks.SocialLink => "social"
-  }
-
+let handleMoveLink = (~id, ~direction, ~dispatch, ~moveLinkCB) => {
   dispatch(SetUpdating(true))
-  SortSchoolLinkQuery.make({linkIds: linkIds, kind: linkKind})
+  SortSchoolLinkQuery.make({id: id, direction: direction})
   |> Js.Promise.then_(response => {
     dispatch(SetUpdating(false))
     open Json.Decode
@@ -76,13 +58,15 @@ let handleMoveLink = (~id, ~direction, ~dispatch, ~kind: SchoolLinks.kind, ~link
   ()
 }
 
-let handleDelete = (state: SchoolLinks.state, send, removeLinkCB, id, event) => {
+let handleDelete = (deleting, disableDeleteCB, removeLinkCB, id, event) => {
   event |> ReactEvent.Mouse.preventDefault
 
-  if state.deleting |> List.mem(id) {
+  if deleting |> List.mem(id) {
     ()
   } else {
-    send(SchoolLinks.DisableDelete(id))
+    disableDeleteCB(id)
+
+    // send(SchoolLinks.DisableDelete(id))
 
     DestroySchoolLinkQuery.make({id: id})
     |> Js.Promise.then_(_response => {
@@ -139,14 +123,13 @@ let make = (
   ~id,
   ~title,
   ~url,
-  ~state,
-  ~send,
+  ~deleting,
+  ~disableDeleteCB,
   ~removeLinkCB,
   ~updateLinkCB,
-  ~kind: SchoolLinks.kind,
+  ~kind,
   ~index,
   ~total,
-  ~links,
   ~moveLinkCB,
 ) => {
   let (localState, dispatch) = React.useReducer(reducer, initialState(title, url))
@@ -158,7 +141,7 @@ let make = (
         {localState.editing
           ? <>
               {switch kind {
-              | HeaderLink
+              | SchoolLinks.HeaderLink
               | FooterLink => <>
                   <input
                     value=localState.title
@@ -241,15 +224,7 @@ let make = (
               <button
                 ariaLabel={"Edit " ++ title}
                 title={"Edit " ++ url}
-                onClick={e =>
-                  handleMoveLink(
-                    ~id,
-                    ~direction=Customizations.Down,
-                    ~kind,
-                    ~moveLinkCB,
-                    ~links,
-                    ~dispatch,
-                  )}
+                onClick={e => handleMoveLink(~id, ~direction=#Down, ~moveLinkCB, ~dispatch)}
                 disabled={index == total - 1}
                 className="p-3 hover:text-primary-500 focus:text-primary-500">
                 <FaIcon classes="fas fa-arrow-down" />
@@ -258,15 +233,7 @@ let make = (
                 ariaLabel={"Edit " ++ title}
                 title={"Edit " ++ url}
                 disabled={index == 0}
-                onClick={e =>
-                  handleMoveLink(
-                    ~id,
-                    ~direction=Customizations.Up,
-                    ~kind,
-                    ~moveLinkCB,
-                    ~links,
-                    ~dispatch,
-                  )}
+                onClick={e => handleMoveLink(~id, ~direction=#Up, ~moveLinkCB, ~dispatch)}
                 className={"p-3 hover:text-primary-500 focus:text-primary-500"}>
                 <FaIcon classes="fas fa-arrow-up" />
               </button>
@@ -280,9 +247,9 @@ let make = (
               <button
                 ariaLabel={"Delete " ++ title}
                 title={"Delete " ++ url}
-                onClick={handleDelete(state, send, removeLinkCB, id)}
+                onClick={handleDelete(deleting, disableDeleteCB, removeLinkCB, id)}
                 className="p-3 hover:text-red-500 focus:text-red-500">
-                <FaIcon classes={deleteIconClasses(state.deleting |> List.mem(id))} />
+                <FaIcon classes={deleteIconClasses(deleting |> List.mem(id))} />
               </button>
             </div>}
       </div>

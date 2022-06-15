@@ -1983,7 +1983,7 @@ en:
       success_notification: Course updated successfully!
     update_school_link:
       success_notification: Link updated successfully!
-      all_link_not_found_error: Unable to find all links!
+      link_not_found_error: Unable to find link!
     update_course_author:
       author_name_updated_notification: The author's name has been updated.
       author_updated_notification: Author Updated

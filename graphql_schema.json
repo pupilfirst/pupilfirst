@@ -7855,23 +7855,15 @@
               "description": "Rearrange school links",
               "args": [
                 {
-                  "name": "linkIds",
+                  "name": "id",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "LIST",
-                      "name": null,
-                      "ofType": {
-                        "kind": "NON_NULL",
-                        "name": null,
-                        "ofType": {
-                          "kind": "SCALAR",
-                          "name": "ID",
-                          "ofType": null
-                        }
-                      }
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
                     }
                   },
                   "defaultValue": null,
@@ -7879,12 +7871,16 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "kind",
+                  "name": "direction",
                   "description": null,
                   "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "MoveDirection",
+                      "ofType": null
+                    }
                   },
                   "defaultValue": null,
                   "isDeprecated": false,

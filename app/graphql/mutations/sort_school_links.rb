@@ -2,24 +2,25 @@ module Mutations
   class SortSchoolLinks < ApplicationQuery
     class SchoolLinkMustBePresent < GraphQL::Schema::Validator
       def validate(_object, _context, value)
-        link_ids = value[:link_ids]
-        link = SchoolLink.where(id: link_ids, kind: value[:kind])
+        id = value[:id]
+        link = SchoolLink.find_by(id: id)
 
-        if link.count != link_ids.count
-          return I18n.t('mutations.update_school_link.all_link_not_found_error')
+        if link.blank?
+          return I18n.t('mutations.update_school_link.link_not_found_error')
         end
       end
     end
 
     include QueryAuthorizeSchoolAdmin
 
-    argument :link_ids, [ID], required: true
-    argument :kind, String, required: false
+    argument :id, ID, required: true
+    argument :direction, Types::MoveDirectionType, required: true
 
     description 'Rearrange school links'
 
-    field :links, [Types::SchoolLink], null: true
     validates SchoolLinkMustBePresent => {}
+
+    field :links, [Types::SchoolLink], null: true
 
     def resolve(_params)
       notify(
@@ -32,20 +33,47 @@ module Mutations
     end
 
     def sort_school_links
-      school_link.each do |link|
-        link.update!(sort_index: @params[:link_ids].index(link.id.to_s))
+      direction = @params[:direction]
+      ordered_school_links =
+        SchoolLink.where(kind: school_link.kind).order(sort_index: :ASC).to_a
+
+      if direction == 'Up'
+        swap_up(ordered_school_links, school_link)
+      else
+        swap_down(ordered_school_links, school_link)
       end
-      current_school.school_links.all.order('kind ASC, sort_index ASC')
+
+      ordered_school_links.each_with_index do |cb, index|
+        cb.update!(sort_index: index)
+      end
+
+      current_school.school_links.all.order(kind: :ASC, sort_index: :ASC)
     end
 
     private
 
     def school_link
-      SchoolLink.where(id: @params[:link_ids], kind: @params[:kind])
+      SchoolLink.find_by(id: @params[:id])
     end
 
     def resource_school
-      school_link&.first&.school
+      school_link&.school
+    end
+
+    def swap_up(array, element)
+      index = array.index(element)
+
+      return array if index.zero? || index.blank?
+
+      element_above = array[index - 1]
+      array[index - 1] = element
+      array[index] = element_above
+      array
+    end
+
+    def swap_down(array, element)
+      index = array.index(element)
+      swap_up(array, array[index + 1])
     end
   end
 end

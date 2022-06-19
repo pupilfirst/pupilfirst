@@ -1,5 +1,8 @@
 let str = React.string
 
+let tr = I18n.t(~scope="components.CurriculumEditor__VersionsEditor")
+let ts = I18n.ts
+
 open CurriculumEditor__Types
 
 type rec state =
@@ -33,8 +36,7 @@ let loadContentBlocks = (targetId, send, version) => {
 
   send(SetLoading)
 
-  ContentBlock.Query.make(~targetId, ~targetVersionId?, ())
-  |> GraphqlQuery.sendQuery
+  ContentBlock.Query.make({targetId: targetId, targetVersionId: targetVersionId})
   |> Js.Promise.then_(result => {
     let contentBlocks = result["contentBlocks"] |> Js.Array.map(ContentBlock.makeFromJs)
 
@@ -56,8 +58,7 @@ let createTargetVersion = (targetId, targetVersion, send) => {
 
   send(SetLoading)
 
-  CreateTargetVersionMutation.make(~targetVersionId, ())
-  |> GraphqlQuery.sendQuery
+  CreateTargetVersionMutation.make({targetVersionId: targetVersionId})
   |> Js.Promise.then_(_result => {
     loadContentBlocks(targetId, send, None)
     Js.Promise.resolve()
@@ -83,19 +84,19 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
       <button
         id
         key=id
-        title={"Select version " ++ id}
+        title={tr("select_version") ++ " " ++ id}
         onClick={_ => loadContentBlocksCB(Some(version))}
-        className="whitespace-nowrap px-3 py-2 cursor-pointer hover:bg-gray-100 hover:text-primary-500 w-full text-left">
+        className="whitespace-nowrap px-3 py-2 cursor-pointer hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500 w-full text-left">
         {versionText(version)}
       </button>
     })
 
   let selected =
     <button
-      title={"Select version " ++ (selectedVersion |> Version.id)}
-      className="text-sm appearance-none bg-white inline-flex items-center justify-between focus:outline-none hover:bg-gray-100 hover:shadow-lg px-3 h-full">
+      title={tr("select_version") ++ " " ++ (selectedVersion |> Version.id)}
+      className="text-sm appearance-none bg-white inline-flex items-center justify-between rounded focus:outline-none focus:ring-2 focus:ring-focusColor-500 hover:bg-gray-50 hover:shadow-lg px-3 h-full">
       <span> {versionText(selectedVersion)} </span>
-      <span className="border-l border-gray-400 ml-2 pl-2">
+      <span className="border-l border-gray-300 ml-2 pl-2">
         <i className="fas fa-chevron-down text-sm" />
       </span>
     </button>
@@ -119,16 +120,12 @@ let showContentBlocks = (
   <div>
     <div>
       <label className="text-xs inline-block text-gray-600 mb-1">
-        {(versions |> Array.length > 1 ? "Versions" : "Version") |> str}
+        {(versions |> Array.length > 1 ? ts("versions") : ts("version")) |> str}
       </label>
-      <HelpIcon
-        className="ml-1"
-        link="https://docs.pupilfirst.com/#/curriculum_editor?id=target-content-versions">
-        {"Use the versions feature to preserve the existing state of a target's content, to browse earlier stored versions, and to restore them, if required." |> str}
-      </HelpIcon>
+      <HelpIcon className="ml-1" link={tr("help_url")}> {tr("help") |> str} </HelpIcon>
     </div>
     <div className="flex">
-      <div className="border border-gray-400 flex items-center">
+      <div className="border rounded border-gray-300 flex items-center">
         {showDropdown(versions, selectedVersion, loadContentBlocksCB)}
       </div>
       <div className="ml-2">
@@ -137,8 +134,8 @@ let showContentBlocks = (
           onClick={_ => createTargetVersion(targetId, selectedVersion, send)}>
           {(
             selectedVersion |> Version.isLatestTargetVersion(versions)
-              ? "Save this version"
-              : "Restore this version"
+              ? tr("save_version")
+              : tr("restore_version")
           ) |> str}
         </button>
       </div>

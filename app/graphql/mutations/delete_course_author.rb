@@ -10,7 +10,7 @@ module Mutations
       mutator = DeleteCourseAuthorMutator.new(context, params)
 
       success = if mutator.valid?
-        mutator.notify(:success, 'Author Deleted', 'The author has been removed from this course.')
+        mutator.notify(:success, I18n.t("mutations.delete_course_author.author_deleted_notification"), I18n.t("mutations.delete_course_author.author_deleted_details_notification"))
         mutator.delete_course_author
         true
       else

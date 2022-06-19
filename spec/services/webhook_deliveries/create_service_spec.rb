@@ -5,6 +5,7 @@ describe WebhookDeliveries::CreateService do
   let(:course) { create :course }
   let(:event_type) { :submission_created }
   let(:submission) { create :timeline_event }
+  let(:actor) { create :user }
 
   around do |example|
     original_adapter = ActiveJob::Base.queue_adapter
@@ -19,14 +20,14 @@ describe WebhookDeliveries::CreateService do
 
       it 'raises exception' do
         expect {
-          subject.execute(course, event_type, submission)
-        }.to raise_exception
+          subject.execute(course, event_type, actor, submission)
+        }.to raise_error('Invalid event_type invalid encountered')
       end
     end
 
     context 'when the course does not have a webhook endpoint' do
       it 'does nothing' do
-        subject.execute(course, event_type, submission)
+        subject.execute(course, event_type, actor, submission)
         expect(WebhookDeliveries::DeliverJob).not_to have_been_enqueued
       end
     end
@@ -37,7 +38,7 @@ describe WebhookDeliveries::CreateService do
       end
 
       it 'does nothing' do
-        subject.execute(course, event_type, submission)
+        subject.execute(course, event_type, actor, submission)
         expect(WebhookDeliveries::DeliverJob).not_to have_been_enqueued
       end
     end
@@ -48,7 +49,7 @@ describe WebhookDeliveries::CreateService do
       end
 
       it 'does nothing' do
-        subject.execute(course, event_type, submission)
+        subject.execute(course, event_type, actor, submission)
         expect(WebhookDeliveries::DeliverJob).not_to have_been_enqueued
       end
     end
@@ -57,7 +58,7 @@ describe WebhookDeliveries::CreateService do
       let!(:webhook_endpoint) { create :webhook_endpoint, course: course }
 
       it 'enqueues a job to deliver the webhook request' do
-        subject.execute(course, event_type, submission)
+        subject.execute(course, event_type, actor, submission)
         expect(WebhookDeliveries::DeliverJob).to have_been_enqueued
       end
     end

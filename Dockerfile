@@ -1,11 +1,11 @@
 # This is a multi-stage build with two stages, where the first is used to precompile assets.
-FROM ruby:2.7.5
+FROM ruby:2.7.6
 WORKDIR /build
 
 # Begin by installing gems.
 COPY Gemfile .
 COPY Gemfile.lock .
-RUN gem install bundler -v '2.2.33'
+RUN gem install bundler -v '2.3.11'
 RUN bundle config set --local deployment true
 RUN bundle config set --local without development test
 RUN bundle install -j4
@@ -17,6 +17,8 @@ RUN apt-get install -y nodejs
 # Install JS dependencies using Yarn.
 COPY package.json .
 COPY yarn.lock .
+COPY .yarnrc.docker.yml .yarnrc.yml
+COPY .yarn/releases .yarn/releases
 RUN corepack enable
 RUN yarn install
 
@@ -44,7 +46,7 @@ RUN rm bin/yarn
 RUN bundle exec rails assets:precompile
 
 # With precompilation done, we can move onto the final stage.
-FROM ruby:2.7.5-slim-bullseye
+FROM ruby:2.7.6-slim-bullseye
 
 # We'll need a few packages in this image.
 RUN apt-get update && apt-get install -y \

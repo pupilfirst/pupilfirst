@@ -1,11 +1,10 @@
-type rec t = {
-  id: id,
+type t = {
+  id: string,
   userId: string,
   name: string,
   avatarUrl: option<string>,
   title: string,
 }
-and id = string
 
 let id = t => t.id
 let userId = t => t.userId
@@ -47,14 +46,12 @@ let makeFromJs = jsObject =>
     ~title=jsObject["title"],
   )
 
-module Fragments = %graphql(
-  `
-  fragment allFields on UserProxy {
+module Fragments = %graphql(`
+  fragment UserProxyFragment on UserProxy {
     id
     name
     userId
     title
     avatarUrl
   }
-`
-)
+`)

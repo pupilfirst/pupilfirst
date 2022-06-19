@@ -14,6 +14,7 @@ type action =
 
 let str = React.string
 let t = I18n.t(~scope="components.StudentsEditor__CreateForm")
+let ts = I18n.ts
 
 let formInvalid = state => ArrayUtils.isEmpty(state.teamsToAdd)
 
@@ -46,7 +47,7 @@ let handleResponseCB = (submitCB, state, studentIds) => {
     )
 
     if studentsAdded == studentsRequested {
-      Notification.success(t("done_exclamation"), t("added_full_description"))
+      Notification.success(ts("notifications.done_exclamation"), t("added_full_description"))
     } else {
       let description = t(
         ~variables=[
@@ -74,11 +75,28 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   event |> ReactEvent.Mouse.preventDefault
   send(SetSaving(true))
 
-  let students = Js.Array.map(TeamInfo.toJsArray, state.teamsToAdd) |> ArrayUtils.flattenV2
   let {notifyStudents} = state
 
-  CreateStudentsQuery.make(~courseId, ~notifyStudents, ~students, ())
-  |> GraphqlQuery.sendQuery
+  let students =
+    Js.Array.map(
+      t =>
+        Js.Array.map(
+          s =>
+            CreateStudentsQuery.makeInputObjectStudentEnrollmentInput(
+              ~name=StudentInfo.name(s),
+              ~email=StudentInfo.email(s),
+              ~title=StudentInfo.title(s),
+              ~affiliation=StudentInfo.affiliation(s),
+              ~teamName=TeamInfo.name(t),
+              ~tags=TeamInfo.tags(t),
+              (),
+            ),
+          TeamInfo.students(t),
+        ),
+      state.teamsToAdd,
+    ) |> ArrayUtils.flattenV2
+
+  CreateStudentsQuery.make({courseId: courseId, notifyStudents: notifyStudents, students: students})
   |> Js.Promise.then_(response => {
     switch response["createStudents"]["studentIds"] {
     | Some(studentIds) => handleResponseCB(submitFormCB, state, studentIds)
@@ -89,10 +107,7 @@ let createStudents = (state, send, courseId, submitFormCB, event) => {
   })
   |> Js.Promise.catch(error => {
     Js.log(error)
-    Notification.error(
-      "Unexpected Error!",
-      "Our team has been notified of this failure. Please reload this page before trying to add students again.",
-    )
+    Notification.error(ts("notifications.unexpected_error"), t("reload_add_students"))
     send(SetSaving(false))
     Js.Promise.resolve()
   })
@@ -155,7 +170,7 @@ let tagBoxes = tags =>
     |> Array.map(tag =>
       <div
         key=tag
-        className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
+        className="flex items-center bg-gray-50 border border-gray-500 rounded-lg px-2 py-px mt-1 mr-1 text-xs text-gray-900 overflow-hidden">
         {str(tag)}
       </div>
     )
@@ -184,7 +199,7 @@ let studentCard = (studentInfo, send, team, tags) => {
       {tagBoxes(tags)}
     </div>
     <button
-      className="p-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+      className="p-3 text-gray-600 hover:text-gray-900 hover:bg-gray-50"
       onClick={_event => send(RemoveStudentInfo(studentInfo))}>
       <i className="fas fa-trash-alt" />
     </button>
@@ -197,7 +212,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
 
   <div className="mx-auto bg-white">
     <div className="max-w-2xl p-6 mx-auto">
-      <h5 className="uppercase text-center border-b border-gray-400 pb-2 mb-4">
+      <h5 className="uppercase text-center border-b border-gray-300 pb-2 mb-4">
         {t("drawer_heading")->str}
       </h5>
       <StudentsEditor__StudentInfoForm
@@ -214,7 +229,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
           {switch state.teamsToAdd {
           | [] =>
             <div
-              className="flex items-center justify-between bg-gray-100 border rounded p-3 italic mt-2">
+              className="flex items-center justify-between bg-gray-50 border rounded p-3 italic mt-2">
               {t("teams_to_add_empty")->str}
             </div>
           | teams =>
@@ -240,21 +255,12 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
         </div>
       </div>
       <div className="mt-4">
-        <input
-          onChange={_event => send(ToggleNotifyStudents)}
-          checked=state.notifyStudents
-          className="hidden checkbox-input"
+        <Checkbox
           id="notify-new-students"
-          type_="checkbox"
+          label={str(t("notify_students_label"))}
+          onChange={_event => send(ToggleNotifyStudents)}
+          checked={state.notifyStudents}
         />
-        <label className="checkbox-label" htmlFor="notify-new-students">
-          <span>
-            <svg width="12px" height="10px" viewBox="0 0 12 10">
-              <polyline points="1.5 6 4.5 9 10.5 1" />
-            </svg>
-          </span>
-          <span className="text-sm"> {t("notify_students_label")->str} </span>
-        </label>
       </div>
       <div className="flex mt-4">
         <button
@@ -263,7 +269,7 @@ let make = (~courseId, ~submitFormCB, ~teamTags) => {
           className={"w-full btn btn-primary btn-large mt-3" ++ (
             formInvalid(state) ? " disabled" : ""
           )}>
-          {(state.saving ? t("saving") : t("save_list_button"))->str}
+          {(state.saving ? ts("saving") : t("save_list_button"))->str}
         </button>
       </div>
     </div>

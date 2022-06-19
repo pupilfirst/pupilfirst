@@ -32,7 +32,7 @@ let feedbackSentNotice = feedbackSent =>
   )
 
 let submissionCardClasses = submission =>
-  "flex flex-col lg:flex-row items-start lg:items-center justify-between bg-white border-l-3 p-3 lg:py-6 lg:px-5 mb-4 cursor-pointer rounded-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-inset focus:ring-indigo-500 " ++ if (
+  "flex flex-col lg:flex-row items-start lg:items-center justify-between bg-white border-l-3 p-3 lg:py-6 lg:px-5 mb-4 cursor-pointer rounded-lg shadow hover:border-primary-500 hover:text-primary-500 hover:shadow-md focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 " ++ if (
     IndexSubmission.pendingReview(submission)
   ) {
     "border-orange-400"
@@ -134,7 +134,7 @@ let make = (~submissions, ~selectedTab, ~filterString) => {
 
   ArrayUtils.isEmpty(submissions)
     ? <div className="course-review__submissions-empty text-lg font-semibold text-center py-4">
-        <h5 className="py-4 mt-4 bg-gray-200 text-gray-800 font-semibold">
+        <h5 className="py-4 mt-4 bg-gray-50 text-gray-800 font-semibold">
           {t("no_submissions_found")->str}
         </h5>
         <img className="w-3/4 md:w-1/2 mx-auto mt-2" src=imageSrc />

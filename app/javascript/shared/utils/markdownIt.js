@@ -27,10 +27,11 @@ const subscriptPlugin = require("markdown-it-sub");
 const superscriptPlugin = require("markdown-it-sup");
 const tablePlugin = require("markdown-it-multimd-table");
 const linkifyImagesPlugin = require("markdown-it-linkify-images");
-const imageSizePlugin = require("@centerforopenscience/markdown-it-imsize");
+import imageSizePlugin from "@centerforopenscience/markdown-it-imsize";
 const linkAttributesPlugin = require("markdown-it-link-attributes");
 const katexPlugin = require("@jeff-tian/markdown-it-katex");
 const alignPlugin = require("markdown-it-align");
+const checkboxPlugin = require("markdown-it-task-checkbox");
 
 md.use(subscriptPlugin)
   .use(superscriptPlugin)
@@ -45,7 +46,12 @@ md.use(subscriptPlugin)
     target: "_blank",
   })
   .use(katexPlugin)
-  .use(alignPlugin);
+  .use(alignPlugin)
+  .use(checkboxPlugin, {
+    disabled: true,
+    liClass: "flex items-center gap-2 pointer-events-none -ml-10",
+    ulClass: "list-none",
+  });
 
 const parse = (markdown) => {
   return md.render(markdown);

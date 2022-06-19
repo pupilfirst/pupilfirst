@@ -71,7 +71,7 @@ module Make = (Selectable: Selectable) => {
             <div className="px-4">
               <div className="skeleton-body-container w-full pb-4 mx-auto">
                 <div className="skeleton-body-wrapper px-3 lg:px-0">
-                  <div className="skeleton-placeholder__line-sm mt-4 w-2/4 skeleton-animate" />
+                  <div className="skeleton-placeholder__line-sm mt-4 w-1/2 skeleton-animate" />
                   <div className="skeleton-placeholder__line-sm mt-4 w-3/4 skeleton-animate" />
                 </div>
               </div>
@@ -83,11 +83,11 @@ module Make = (Selectable: Selectable) => {
             key={index |> string_of_int}
             title={selectionTitle(selection)}
             ariaLabel={Selectable.searchString(selection)}
-            className="flex text-sm px-4 py-1 items-center w-full hover:bg-gray-200 focus:outline-none focus:bg-gray-200"
+            className="flex text-sm px-4 py-1 items-center w-full hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
             onClick={applyFilter(selection, onSelect, id)}>
             {switch selection |> Selectable.label {
             | Some(label) =>
-              <span className="mr-2 flex-shrink-0 w-2/6 sm:w-auto md:w-2/6 text-right">
+              <span className="mr-2 flex-shrink-0 w-1/3 sm:w-auto md:w-1/3 text-right">
                 {label ++ labelSuffix |> str}
               </span>
             | None => React.null
@@ -157,8 +157,8 @@ module Make = (Selectable: Selectable) => {
   let wrapper = children =>
     <div
       role="listbox"
-      className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-400 bg-white mt-1 rounded-lg shadow-lg py-2 z-50">
-      <p className="text-gray-700 italic mx-4 text-xs border-b pb-1 mb-2">
+      className="multiselect-dropdown__search-dropdown w-full absolute border border-gray-300 bg-white mt-1 rounded-lg shadow-lg py-2 z-50">
+      <p className="text-gray-600 italic mx-4 text-xs border-b pb-1 mb-2">
         {str("Suggestions:")}
       </p>
       children
@@ -166,7 +166,7 @@ module Make = (Selectable: Selectable) => {
 
   let showHint = hint =>
     <p
-      className="font-normal text-xs px-4 py-2 -mb-2 rounded-b-lg bg-gray-100 mt-2 text-left border-t">
+      className="font-normal text-xs px-4 py-2 -mb-2 rounded-b-lg bg-gray-50 mt-2 text-left border-t">
       {str(hint)}
     </p>
 
@@ -217,14 +217,14 @@ module Make = (Selectable: Selectable) => {
     <div className="w-full relative">
       <div>
         <div
-          className="flex flex-wrap items-center text-sm bg-white border border-gray-400 rounded w-full py-1 px-2 mt-1 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+          className="flex flex-wrap items-center text-sm bg-white border border-gray-300 rounded w-full py-1 px-2 mt-1 focus-within:ring-2 focus-within:ring-inset focus-within:ring-focusColor-500">
           {selected |> showSelected(onDeselect, labelSuffix) |> React.array}
           <input
             onClick={_ => setShowDropdown(s => !s)}
             autoComplete="off"
             value
             onChange={e => onChange(ReactEvent.Form.target(e)["value"])}
-            className="flex-grow appearance-none bg-transparent border-none text-gray-700 p-1.5 leading-snug focus:outline-none placeholder-gray-500"
+            className="flex-grow appearance-none bg-transparent border-none text-gray-600 p-1.5 leading-snug focus:outline-none placeholder-gray-500"
             id=inputId
             type_="search"
             role="combobox"

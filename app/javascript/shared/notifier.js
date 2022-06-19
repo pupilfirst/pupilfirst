@@ -1,5 +1,8 @@
-import PNotify from "pnotify/dist/es/PNotify";
-import "pnotify/dist/PNotifyBrightTheme.css";
+import { alert, defaultModules } from "@pnotify/core";
+import "@pnotify/core/dist/PNotify.css";
+import "@pnotify/core/dist/BrightTheme.css";
+import * as PNotifyMobile from "@pnotify/mobile";
+import "@pnotify/mobile/dist/PNotifyMobile.css";
 
 const notify = (title, text, type) => {
   let notificationText = text;
@@ -16,16 +19,18 @@ const notify = (title, text, type) => {
     reloadRequired = true;
   }
 
-  const notification = PNotify.alert({
+  const notification = alert({
     type: type,
     title: title,
     text: notificationText,
     textTrusted: textTrusted,
     styling: "brighttheme",
-    buttons: {
-      closer: false,
-      sticker: false,
-    },
+    mode: "light",
+    maxTextHeight: null,
+    closer: true,
+    sticker: false,
+    delay: 6000,
+    modules: new Map([...defaultModules, [PNotifyMobile, {}]]),
   });
 
   notification.refs.elem.addEventListener("click", () => {

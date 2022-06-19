@@ -4,6 +4,9 @@ open CoursesStudents__Types
 
 let str = React.string
 
+let tr = I18n.t(~scope="components.CoursesStudents__Root")
+let ts = I18n.t(~scope="shared")
+
 type coachNoteFilter = [#WithCoachNotes | #WithoutCoachNotes | #IgnoreCoachNotes]
 
 type filter = {
@@ -159,6 +162,7 @@ module TeamsQuery = %graphql(`
             title
             avatarUrl
             userTags
+            lastSeenAt
           }
           coachUserIds
           accessEndsAt
@@ -176,7 +180,7 @@ let getTeams = (send, courseId, cursor, filter) => {
   let coachId = filter.coach |> OptionUtils.map(Coach.id)
   let tags = filter.tags |> Belt.Set.String.toArray
 
-  TeamsQuery.make(
+  let variables = TeamsQuery.makeVariables(
     ~courseId,
     ~coachNotes=filter.coachNotes,
     ~after=?cursor,
@@ -186,7 +190,8 @@ let getTeams = (send, courseId, cursor, filter) => {
     ~tags,
     (),
   )
-  |> GraphqlQuery.sendQuery
+
+  TeamsQuery.make(variables)
   |> Js.Promise.then_(response => {
     send(
       LoadTeams(
@@ -214,19 +219,19 @@ module Selectable = {
   let label = t =>
     switch t {
     | Level(level) => Some(LevelLabel.format(level |> Level.number |> string_of_int))
-    | AssignedToCoach(_) => Some("Assigned to")
-    | NameOrEmail(_) => Some("Name or Email")
-    | CoachNotes(_) => Some("Coach Notes")
-    | Tag(_) => Some("Tagged with")
+    | AssignedToCoach(_) => Some(tr("assigned_to"))
+    | NameOrEmail(_) => Some(tr("name_email"))
+    | CoachNotes(_) => Some(tr("coach_notes"))
+    | Tag(_) => Some(tr("tagged_with"))
     }
 
   let value = t =>
     switch t {
     | Level(level) => level |> Level.name
     | AssignedToCoach(coach, currentCoachId) =>
-      coach |> Coach.id == currentCoachId ? "Me" : coach |> Coach.name
+      coach |> Coach.id == currentCoachId ? tr("me") : coach |> Coach.name
     | NameOrEmail(search) => search
-    | CoachNotes(on) => on ? "Has notes" : "Does not have notes"
+    | CoachNotes(on) => on ? tr("has_notes") : tr("no_notes")
     | Tag(tag) => tag
     }
 
@@ -236,13 +241,13 @@ module Selectable = {
       LevelLabel.searchString(level |> Level.number |> string_of_int, level |> Level.name)
     | AssignedToCoach(coach, currentCoachId) =>
       if coach |> Coach.id == currentCoachId {
-        (coach |> Coach.name) ++ " assigned to me"
+        (coach |> Coach.name) ++ tr("search_assigned_me")
       } else {
-        "assigned to " ++ (coach |> Coach.name)
+        tr("search_assigned_to") ++ (coach |> Coach.name)
       }
     | NameOrEmail(search) => search
-    | CoachNotes(_) => "does not have notes has notes coach notes"
-    | Tag(tag) => "tag " ++ tag
+    | CoachNotes(_) => tr("search_no_notes")
+    | Tag(tag) => tr("search_tag") ++ tag
     }
 
   let color = _t => "gray"
@@ -357,7 +362,7 @@ let filterPlaceholder = state =>
       None,
       None,
       None,
-    ) => "Filter by level, assigned coach, or search by name or email address, and more..."
+    ) => tr("filter_level")
   | _ => ""
   }
 
@@ -366,22 +371,22 @@ let restoreFilterNotice = (send, currentCoach, message) =>
     className="mt-2 text-sm italic flex flex-col md:flex-row items-center justify-between p-3 border border-gray-300 bg-white rounded-lg">
     <span> {message |> str} </span>
     <button
-      className="px-2 py-1 rounded text-xs overflow-hidden border border-gray-300 bg-gray-200 text-gray-800 hover:bg-gray-300 mt-1 md:mt-0"
+      className="px-2 py-1 rounded text-xs overflow-hidden border border-gray-300 bg-gray-50 text-gray-800 hover:bg-gray-300 mt-1 md:mt-0"
       onClick={_ => send(SelectCoach(currentCoach))}>
-      {"Assigned to: Me" |> str} <i className="fas fa-level-up-alt ml-2" />
+      {tr("assigned_me") |> str} <i className="fas fa-level-up-alt ml-2" />
     </button>
   </div>
 
 let restoreAssignedToMeFilter = (state, send, currentTeamCoach) =>
   currentTeamCoach |> OptionUtils.mapWithDefault(currentCoach =>
     switch state.filter.coach {
-    | None => restoreFilterNotice(send, currentCoach, "Now showing all students in this course.")
+    | None => restoreFilterNotice(send, currentCoach, tr("restore_filer_none"))
     | Some(selectedCoach) if selectedCoach |> Coach.id == Coach.id(currentCoach) => React.null
     | Some(selectedCoach) =>
       restoreFilterNotice(
         send,
         currentCoach,
-        "Now showing students assigned to " ++ ((selectedCoach |> Coach.name) ++ "."),
+        tr("showing_assigned") ++ ((selectedCoach |> Coach.name) ++ "."),
       )
     }
   , React.null)
@@ -404,7 +409,7 @@ let selectLevel = (levels, send, levelId) => {
   let level =
     levels |> ArrayUtils.unsafeFind(
       level => Level.id(level) == levelId,
-      "Could not find level selected from distribution bar, with ID " ++ levelId,
+      tr("not_found") ++ levelId,
     )
 
   send(SelectLevel(level))
@@ -455,7 +460,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~teamTags, ~
       />
     | _ => React.null
     }}
-    <div className="bg-gray-100 pt-8 pb-8 px-3 -mt-7">
+    <div className="bg-gray-50 pt-8 pb-8 px-3 -mt-7">
       <CoursesStudents__StudentDistribution
         selectLevelCB={selectLevel(levels, send)}
         courseId
@@ -464,8 +469,8 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~teamTags, ~
         filterTags=state.filter.tags
         reloadAt=state.reloadDistributionAt
       />
-      <div className="w-full py-4 bg-gray-100 relative md:sticky md:top-0 z-10">
-        <div className="max-w-3xl mx-auto bg-gray-100 sticky md:static md:top-0">
+      <div className="w-full py-4 bg-gray-50 relative md:sticky md:top-0 z-10">
+        <div className="max-w-3xl mx-auto bg-gray-50 sticky md:static md:top-0">
           <Multiselect
             id="filter"
             unselected={unselected(levels, teamCoaches, allTags, currentCoach |> Coach.id, state)}
@@ -494,7 +499,7 @@ let make = (~levels, ~course, ~userId, ~teamCoaches, ~currentCoach, ~teamTags, ~
                   send(BeginLoadingMore)
                   getTeams(send, courseId, Some(cursor), state.filter)
                 }}>
-                {"Load More..." |> str}
+                {ts("load_more") |> str}
               </button>
             | Reloading => React.null
             }}

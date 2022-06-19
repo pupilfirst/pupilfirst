@@ -1,7 +1,6 @@
 class StartupFeedback < ApplicationRecord
-  belongs_to :startup
   belongs_to :faculty, optional: true
-  belongs_to :timeline_event, optional: true
+  belongs_to :timeline_event
   attr_accessor :send_email, :event_id, :event_status
 
   validates :feedback, presence: true

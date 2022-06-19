@@ -10,7 +10,7 @@ module Developers
 
     def execute(course, event_type, actor, resource)
       @event_publisher.execute(event_type, actor, resource)
-      @webhook_service.execute(course, event_type, resource)
+      @webhook_service.execute(course, event_type, actor, resource)
     end
   end
 end

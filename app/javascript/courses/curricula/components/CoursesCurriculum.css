@@ -25,10 +25,10 @@
 }
 
 .curriculum__target-status--locked {
-  @apply bg-gray-100 text-gray-800 border-gray-600;
+  @apply bg-gray-50 text-gray-800 border-gray-600;
 }
 
 .courses-curriculum__target-container:hover
   .courses-curriculum__target-quick-link {
-  @apply border-gray-300 text-gray-700 hover:text-primary-500;
+  @apply border-gray-300 text-gray-600 hover:text-primary-500;
 }

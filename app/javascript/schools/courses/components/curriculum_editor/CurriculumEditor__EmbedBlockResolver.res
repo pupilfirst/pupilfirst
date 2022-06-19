@@ -1,12 +1,10 @@
-module ResolveEmbedCodeMutator = %graphql(
-  `
+module ResolveEmbedCodeMutator = %graphql(`
   mutation ResolveEmbedCodeMutation($contentBlockId: ID!) {
     resolveEmbedCode(contentBlockId: $contentBlockId) {
       embedCode
     }
   }
-  `
-)
+  `)
 
 type state = {
   loading: bool,
@@ -18,6 +16,9 @@ type action =
   | SetLoading
   | Reset
   | SetEmbedCode(string)
+
+let t = I18n.t(~scope="components.CurriculumEditor__EmbedBlockResolver")
+let ts = I18n.ts
 
 let reducer = (state, action) =>
   switch action {
@@ -33,8 +34,7 @@ let reducer = (state, action) =>
 let resolveEmbedCode = (contentBlockId, send) => {
   send(SetLoading)
 
-  ResolveEmbedCodeMutator.make(~contentBlockId, ())
-  |> GraphqlQuery.sendQuery
+  ResolveEmbedCodeMutator.make({contentBlockId: contentBlockId})
   |> Js.Promise.then_(response => {
     response["resolveEmbedCode"]["embedCode"]->Belt.Option.mapWithDefault(send(Reset), embedCode =>
       send(SetEmbedCode(embedCode))
@@ -43,10 +43,7 @@ let resolveEmbedCode = (contentBlockId, send) => {
     Js.Promise.resolve()
   })
   |> Js.Promise.catch(_ => {
-    Notification.error(
-      "Unexpected Error",
-      "An unexpected error occured, and our team has been notified about this. Please reload the page before trying again.",
-    )
+    Notification.error(ts("notifications.unexpected_error"), t("error_notification"))
     Js.Promise.resolve()
   })
   |> ignore
@@ -54,9 +51,9 @@ let resolveEmbedCode = (contentBlockId, send) => {
 
 let embedCodeErrorText = (loading, requestSource) =>
   switch (loading, requestSource) {
-  | (true, _) => "Trying to embed URL..."
-  | (false, #VimeoUpload) => "Video is being processed, retrying in 1 minute..."
-  | (false, #User) => "Unable to embed, retrying in 1 minute..."
+  | (true, _) => t("trying_embed")
+  | (false, #VimeoUpload) => t("video_processed")
+  | (false, #User) => t("unable_embed")
   }
 
 let onTimeout = (contentBlockId, send, ()) => resolveEmbedCode(contentBlockId, send)

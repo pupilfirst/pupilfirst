@@ -3,6 +3,9 @@ external permanentDeleteIcon: string = "./images/permanent-delete.svg"
 
 let str = React.string
 
+let t = I18n.t(~scope="components.UsersDeleteAccount")
+let ts = I18n.t(~scope="shared")
+
 type state =
   | Waiting
   | Deleting
@@ -20,10 +23,9 @@ let deleteAccount = (token, setState, event) => {
   ReactEvent.Mouse.preventDefault(event)
   setState(_ => Deleting)
 
-  DeleteAccountQuery.make(~token, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(result => {
-    result["deleteAccount"]["success"]
+  DeleteAccountQuery.fetch({token: token})
+  |> Js.Promise.then_((result: DeleteAccountQuery.t) => {
+    result.deleteAccount.success
       ? {
           setState(_ => Deleted)
           Js.Global.setTimeout(() => DomUtils.redirect("/users/sign_out"), 5000) |> ignore
@@ -47,30 +49,30 @@ let make = (~token) => {
     {switch state {
     | Waiting =>
       <div className="flex flex-col items-center justify-center text-center max-w-sm mx-auto">
-        <h3> {"We're sorry to see you go." |> str} </h3>
+        <h3> {t("head") |> str} </h3>
         <p className="mt-1">
-          {"Please click the button below to permanently delete your account in this school" |> str}
+          {t("click_button_below") |> str}
         </p>
         <div className="flex mt-4 justify-center">
-          <a href="/dashboard" className="btn btn-default mr-2"> {"Cancel" |> str} </a>
+          <a href="/dashboard" className="btn btn-default mr-2"> {t("cancel") |> str} </a>
           <button onClick={deleteAccount(token, setState)} className="btn btn-danger">
-            {"Delete Account" |> str}
+            {t("delete_account") |> str}
           </button>
         </div>
       </div>
     | Deleting =>
       <div className="text-center max-w-sm mx-auto font-semibold text-red-600">
-        <p> {str("Please wait...")} </p>
+        <p> {str(t("please_wait"))} </p>
         <i className="my-3 text-3xl fa fa-spinner fa-pulse" />
-        <p> {str("We're queuing your account for deletion.'")} </p>
+        <p> {str(t("queuing_deletion"))} </p>
       </div>
     | Deleted =>
       <div className="text-center max-w-sm mx-auto font-semibold text-red-600">
-        <p> {str("Account deletion is in progress.")} </p>
+        <p> {str(t("deletion_progresss"))} </p>
         <i className="my-3 text-3xl fa fa-spinner fa-pulse" />
         <p>
           {str(
-            "You will now be signed out, and you will be notified over email once deletion is complete.",
+            t("signed_out_notified"),
           )}
         </p>
       </div>

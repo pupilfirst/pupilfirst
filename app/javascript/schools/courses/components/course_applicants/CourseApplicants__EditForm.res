@@ -27,20 +27,18 @@ type action =
   | FailSaving
   | ToggleNotifyStudent
 
-module CreateStudentFromApplicant = %graphql(
-  `
+module CreateStudentFromApplicant = %graphql(`
   mutation CreateStudentFromApplicant($applicantId: ID!, $notifyStudent: Boolean!, $accessEndsAt: ISO8601DateTime, $title: String, $affiliation: String, $tags: [String!]!) {
     createStudentFromApplicant(applicantId: $applicantId, notifyStudent: $notifyStudent, accessEndsAt: $accessEndsAt, title: $title, affiliation: $affiliation, tags: $tags) {
       success
     }
   }
-  `
-)
+  `)
 
 let updateCourse = (state, send, updateApplicantCB, applicant) => {
   send(StartSaving)
 
-  let updateCourseQuery = CreateStudentFromApplicant.make(
+  let variables = CreateStudentFromApplicant.makeVariables(
     ~applicantId=Applicant.id(applicant),
     ~accessEndsAt=?state.accessEndsAt->Belt.Option.map(DateFns.encodeISO),
     ~title=state.title,
@@ -50,14 +48,17 @@ let updateCourse = (state, send, updateApplicantCB, applicant) => {
     (),
   )
 
-  updateCourseQuery |> GraphqlQuery.sendQuery |> Js.Promise.then_(result => {
-    result["createStudentFromApplicant"]["success"] ? updateApplicantCB() : send(FailSaving)
+  CreateStudentFromApplicant.fetch(variables)
+  |> Js.Promise.then_((result: CreateStudentFromApplicant.t) => {
+    result.createStudentFromApplicant.success ? updateApplicantCB() : send(FailSaving)
     Js.Promise.resolve()
-  }) |> Js.Promise.catch(error => {
+  })
+  |> Js.Promise.catch(error => {
     Js.log(error)
     send(FailSaving)
     Js.Promise.resolve()
-  }) |> ignore
+  })
+  |> ignore
 }
 
 let str = React.string
@@ -92,8 +93,8 @@ let reducer = (state, action) =>
   }
 
 let selectedTabClasses = selected =>
-  "flex items-center focus:outline-none justify-center w-1/2 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-400 text-gray-600 cursor-pointer " ++ (
-    selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-100"
+  "flex items-center focus:outline-none justify-center w-1/2 p-3 font-semibold rounded-t-lg leading-relaxed border border-gray-300 text-gray-600 cursor-pointer " ++ (
+    selected ? "text-primary-500 bg-white border-b-0" : "bg-gray-50"
   )
 
 let tabItemsClasses = selected => selected ? "" : "hidden"
@@ -105,9 +106,10 @@ let detailsTab = (state, applicant) => {
         {t("name.label")->str}
       </label>
       <input
+        autoFocus=true
         value={Applicant.name(applicant)}
         disabled=true
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="name"
         type_="text"
         placeholder={t("name.placeholder")}
@@ -121,7 +123,7 @@ let detailsTab = (state, applicant) => {
       <input
         value={Applicant.email(applicant)}
         disabled=true
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="email"
         type_="email"
         placeholder={t("email.placeholder")}
@@ -146,7 +148,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
       <input
         value=state.title
         onChange={event => send(UpdateTitle(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="title"
         type_="text"
         placeholder={t("title.placeholder")}
@@ -162,7 +164,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
       <input
         value=state.affiliation
         onChange={event => send(UpdateAffiliation(ReactEvent.Form.target(event)["value"]))}
-        className="appearance-none block w-full bg-white border border-gray-400 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-gray-500"
+        className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 leading-snug focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         id="affiliation"
         type_="text"
         placeholder={t("affiliation.placeholder")}
@@ -173,8 +175,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
         {t("access_ends_at.label")->str}
       </label>
       {optionalText()}
-      <HelpIcon
-        className="ml-2" link="https://docs.pupilfirst.com/#/students?id=editing-student-details">
+      <HelpIcon className="ml-2" link={t("access_ends_at.help_url")}>
         {t("access_ends_at.help")->str}
       </HelpIcon>
       <DatePicker

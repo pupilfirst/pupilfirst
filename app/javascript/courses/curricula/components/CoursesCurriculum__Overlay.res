@@ -1,6 +1,6 @@
 exception UnexpectedSubmissionStatus(string)
 
-%bs.raw(`require("./CoursesCurriculum__Overlay.css")`)
+%raw(`require("./CoursesCurriculum__Overlay.css")`)
 
 open CoursesCurriculum__Types
 
@@ -25,7 +25,7 @@ type action =
   | ResetState
   | SetTargetDetails(TargetDetails.t)
   | AddSubmission(Target.role)
-  | ClearTargetDetails
+  | PerformQuickNavigation
 
 let initialState = {targetDetails: None, tab: Learn}
 
@@ -37,7 +37,7 @@ let reducer = (state, action) =>
       ...state,
       targetDetails: Some(targetDetails),
     }
-  | ClearTargetDetails => {...state, targetDetails: None}
+  | PerformQuickNavigation => {targetDetails: None, tab: Learn}
   | AddSubmission(role) =>
     switch role {
     | Target.Student => state
@@ -101,10 +101,10 @@ let selectableTabs = targetDetails =>
   TargetDetails.communities(targetDetails) == [] ? [Learn] : [Learn, Discuss]
 
 let tabClasses = (selection, tab) =>
-  "course-overlay__body-tab-item p-2 md:px-3 md:py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" ++ (
+  "course-overlay__body-tab-item p-2 md:px-3 md:py-4 flex w-full items-center justify-center text-sm -mx-px font-semibold focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500" ++ (
     tab == selection
       ? " course-overlay__body-tab-item--selected"
-      : " bg-gray-100 hover:text-primary-400 hover:bg-gray-200 focus:text-primary-400 focus:bg-gray-200 cursor-pointer"
+      : " bg-gray-50 hover:text-primary-400 hover:bg-gray-50 focus:text-primary-400 focus:bg-gray-50 cursor-pointer"
   )
 
 let scrollCompleteButtonIntoViewEventually = () => Js.Global.setTimeout(() => {
@@ -272,7 +272,8 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) =
     {renderLockReason(reason)}
     <div
       className="course-overlay__prerequisite-targets z-10 max-w-3xl mx-auto bg-white text-center rounded-lg overflow-hidden shadow mt-6">
-      {prerequisiteTargets |> Js.Array.map(target => {
+      {prerequisiteTargets
+      |> Js.Array.map(target => {
         let targetStatus =
           statusOfTargets |> ArrayUtils.unsafeFind(
             ts => ts |> TargetStatus.targetId == Target.id(target),
@@ -284,13 +285,14 @@ let prerequisitesIncomplete = (reason, target, targets, statusOfTargets, send) =
           href={"/targets/" ++ (target |> Target.id)}
           ariaLabel={"Select Target " ++ (target |> Target.id)}
           key={target |> Target.id}
-          className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-200 hover:text-primary-500 cursor-pointer">
+          className="bg-white border-t px-6 py-4 relative z-10 flex items-center justify-between hover:bg-gray-50 hover:text-primary-500 cursor-pointer">
           <span className="font-semibold text-left leading-snug">
             {target |> Target.title |> str}
           </span>
           {renderTargetStatus(targetStatus)}
         </Link>
-      }) |> React.array}
+      })
+      |> React.array}
     </div>
   </div>
 }
@@ -340,7 +342,7 @@ let learnSection = (
   )) => {
     <button
       onClick={_ => send(Select(tab))}
-      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+      className="cursor-pointer mt-5 flex rounded btn-success text-lg justify-center w-full font-bold p-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-focusColor-500">
       <span> <FaIcon classes={iconClasses ++ " mr-2"} /> {str(linkText)} </span>
     </button>
   })
@@ -439,7 +441,9 @@ let completeSection = (
 let renderPendingStudents = (pendingUserIds, users) =>
   <div className="max-w-3xl mx-auto text-center mt-4">
     <div className="font-semibold text-md"> {t("pending_team_members_notice")->str} </div>
-    <div className="flex justify-center flex-wrap"> {pendingUserIds |> Js.Array.map(studentId => {
+    <div className="flex justify-center flex-wrap">
+      {pendingUserIds
+      |> Js.Array.map(studentId => {
         let user =
           users |> ArrayUtils.unsafeFind(
             u => u |> User.id == studentId,
@@ -452,7 +456,9 @@ let renderPendingStudents = (pendingUserIds, users) =>
           className="w-10 h-10 rounded-full border border-yellow-400 flex items-center justify-center overflow-hidden mx-1 shadow-md flex-shrink-0 mt-2">
           {user |> User.avatar}
         </div>
-      }) |> React.array} </div>
+      })
+      |> React.array}
+    </div>
   </div>
 
 let handlePendingStudents = (targetStatus, targetDetails, users) =>
@@ -473,8 +479,8 @@ let performQuickNavigation = (send, _event) => {
     }
   }
 
-  // Clear loaded target details.
-  send(ClearTargetDetails)
+  // Clear loaded target details, and select the 'Learn' tab.
+  send(PerformQuickNavigation)
 }
 
 let navigationLink = (direction, url, send) => {
@@ -489,7 +495,7 @@ let navigationLink = (direction, url, send) => {
   <Link
     href=url
     onClick={performQuickNavigation(send)}
-    className="block p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
+    className="block p-2 md:p-4 text-center border rounded-lg bg-gray-50 hover:bg-gray-50">
     {arrow(leftIcon)}
     <span className="mx-2 hidden md:inline"> {text |> str} </span>
     {arrow(rightIcon)}
@@ -509,7 +515,7 @@ let quickNavigationLinks = (targetDetails, send) => {
 
   <div className="pb-6">
     <hr className="my-6" />
-    <div className="container mx-auto max-w-3xl flex px-3 lg:px-0">
+    <div className="container mx-auto max-w-3xl flex px-3 lg:px-0" id="target-navigation">
       <div className="w-1/3 mr-2">
         {previous->Belt.Option.mapWithDefault(React.null, previousUrl =>
           navigationLink(#Previous, previousUrl, send)
@@ -518,7 +524,7 @@ let quickNavigationLinks = (targetDetails, send) => {
       <div className="w-1/3 mx-2">
         <button
           onClick=scrollOverlayToTop
-          className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-100 hover:bg-gray-200">
+          className="block w-full focus:outline-none p-2 md:p-4 text-center border rounded-lg bg-gray-50 hover:bg-gray-50">
           <span className="mx-2 hidden md:inline"> {t("scroll_to_top")->str} </span>
           <span className="mx-2 md:hidden"> <i className="fas fa-arrow-up" /> </span>
         </button>
@@ -569,7 +575,7 @@ let make = (
   <div
     id="target-overlay"
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll bg-white">
-    <div className="bg-gray-100 border-b border-gray-400 px-3">
+    <div className="bg-gray-50 border-b border-gray-300 px-3">
       <div className="course-overlay__header-container pt-12 lg:pt-0 mx-auto">
         {overlayStatus(course, target, targetStatus, preview)}
         {handleLocked(target, targets, targetStatus, statusOfTargets, send)}
@@ -625,18 +631,14 @@ let make = (
             completionType,
           )}
         </div>
-        {switch state.tab {
-        | Learn => quickNavigationLinks(targetDetails, send)
-        | Discuss
-        | Complete(_) => React.null
-        }}
+        {quickNavigationLinks(targetDetails, send)}
       </div>
 
     | None =>
       <div className="course-overlay__skeleton-body-container max-w-3xl w-full pb-4 mx-auto">
         <div className="course-overlay__skeleton-body-wrapper mt-8 px-3 lg:px-0">
           <div
-            className="course-overlay__skeleton-line-placeholder-md mt-4 w-2/4 skeleton-animate"
+            className="course-overlay__skeleton-line-placeholder-md mt-4 w-1/2 skeleton-animate"
           />
           <div className="course-overlay__skeleton-line-placeholder-sm mt-4 skeleton-animate" />
           <div className="course-overlay__skeleton-line-placeholder-sm mt-4 skeleton-animate" />

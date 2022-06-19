@@ -182,7 +182,7 @@ feature 'Courses Index', js: true do
     scenario 'School admin sets other progression behaviors on existing course' do
       sign_in_user school_admin.user, referrer: school_courses_path
 
-      find("a[title='Edit #{course_1.name}']").click
+      find("button[title='Edit #{course_1.name}']").click
 
       click_button 'Unlimited'
       click_button 'Update Course'
@@ -193,7 +193,7 @@ feature 'Courses Index', js: true do
       )
       expect(course_1.progression_limit).to eq(nil)
 
-      find("a[title='Edit #{course_1.name}']").click
+      find("button[title='Edit #{course_1.name}']").click
 
       click_button 'Strict'
       click_button 'Update Course'
@@ -223,7 +223,7 @@ feature 'Courses Index', js: true do
 
       expect(page).to have_text('Images have been updated successfully')
 
-      find("a[title='Edit #{course_1.name}']").click
+      find("button[title='Edit #{course_1.name}']").click
       click_button 'Images'
 
       expect(page).to have_text(
@@ -257,7 +257,7 @@ feature 'Courses Index', js: true do
       fill_in('Search', with: 'archived')
       click_button 'Pick Status: Archived'
 
-      find("a[title='Edit #{course_archived.name}']").click
+      find("button[title='Edit #{course_archived.name}']").click
       click_button 'Images'
 
       expect(page).to have_text(
@@ -393,7 +393,8 @@ feature 'Courses Index', js: true do
       notification_service = prepare_developers_notification
       sign_in_user school_admin.user,
                    referrer: actions_school_course_path(course_1)
-      expect(startup.access_ends_at).to eq(nil)
+
+      expect(page).to have_text('Do you want to archive the course?')
 
       accept_confirm { click_button('Archive Course') }
 
@@ -417,10 +418,13 @@ feature 'Courses Index', js: true do
   scenario 'school admin un-archives a course' do
     notification_service = prepare_developers_notification
     sign_in_user school_admin.user, referrer: school_courses_path
+
     fill_in('Search', with: 'archived')
     click_button 'Pick Status: Archived'
-    find("a[title='Edit #{course_archived.name}']").click
+    find("button[title='Edit #{course_archived.name}']").click
     click_button 'Actions'
+
+    expect(page).to have_text('Do you want to unarchive the course?')
 
     accept_confirm { click_button('Unarchive Course') }
 
@@ -440,8 +444,10 @@ feature 'Courses Index', js: true do
 
   scenario 'school admin makes a copy of a course' do
     sign_in_user school_admin.user, referrer: school_courses_path
-    find("a[title='Edit #{course_1.name}']").click
+    find("button[title='Edit #{course_1.name}']").click
     click_button 'Actions'
+
+    expect(page).to have_text('Do you want to create a copy of the course?')
 
     accept_confirm { click_button('Clone Course') }
 

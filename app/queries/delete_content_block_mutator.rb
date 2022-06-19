@@ -17,12 +17,16 @@ class DeleteContentBlockMutator < ApplicationQuery
   private
 
   def current_version
-    @current_version ||= ContentVersion.where(content_block: content_block, version_on: latest_version_date).first
+    @current_version ||=
+      ContentVersion.where(
+        content_block: content_block,
+        version_on: latest_version_date
+      ).first
   end
 
   def not_the_only_content_block
     return unless content_blocks.one?
 
-    errors[:base] << 'Target must have at least one content block'
+    errors.add(:base, 'Target must have at least one content block')
   end
 end

@@ -102,7 +102,9 @@ let decode = json => {
   open Json.Decode
 
   let blockType = switch json |> field("blockType", string) {
-  | "markdown" => Markdown(json |> field("content", decodeMarkdownContent))
+  | "markdown" =>
+    let markdown = json |> field("content", decodeMarkdownContent)
+    Markdown(markdown)
   | "file" =>
     let title = json |> field("content", decodeFileContent)
     let url = json |> field("fileUrl", string)
@@ -228,52 +230,17 @@ let updateImageWidth = (t, width) =>
 
 let updateMarkdown = (markdown, t) =>
   switch t.blockType {
-  | Markdown(_) => {...t, blockType: Markdown(markdown)}
+  | Markdown(_) => {
+      ...t,
+      blockType: Markdown(markdown),
+    }
   | File(_)
   | Image(_)
   | Audio(_)
   | Embed(_) => t
   }
 
-module Fragments = %graphql(
-  `
-  fragment allFields on ContentBlock {
-    id
-    blockType
-    sortIndex
-    content {
-      ... on ImageBlock {
-        caption
-        url
-        filename
-        width
-      }
-      ... on FileBlock {
-        title
-        url
-        filename
-      }
-      ... on AudioBlock {
-        title
-        url
-        filename
-      }
-      ... on MarkdownBlock {
-        markdown
-      }
-      ... on EmbedBlock {
-        url
-        embedCode
-        requestSource
-        lastResolvedAt
-      }
-    }
-  }
-`
-)
-
-module Query = %graphql(
-  `
+module Query = %graphql(`
     query ContentBlocksWithVersionsQuery($targetId: ID!, $targetVersionId: ID) {
       contentBlocks(targetId: $targetId, targetVersionId: $targetVersionId) {
         id
@@ -313,5 +280,39 @@ module Query = %graphql(
         updatedAt
       }
   }
-`
-)
+`)
+
+module Fragments = %graphql(`
+  fragment ContentBlockFragment on ContentBlock {
+    id
+    blockType
+    sortIndex
+    content {
+      ... on ImageBlock {
+        caption
+        url
+        filename
+        width
+      }
+      ... on FileBlock {
+        title
+        url
+        filename
+      }
+      ... on AudioBlock {
+        title
+        url
+        filename
+      }
+      ... on MarkdownBlock {
+        markdown
+      }
+      ... on EmbedBlock {
+        url
+        embedCode
+        requestSource
+        lastResolvedAt
+      }
+    }
+  }
+`)

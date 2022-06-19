@@ -1,7 +1,7 @@
 open CourseExports__Types
 
 let str = React.string
-let t = I18n.t(~scope="components.CoursesExport__Root")
+let t = I18n.t(~scope="components.CourseExport__Root")
 
 type state = {
   drawerOpen: bool,
@@ -73,11 +73,11 @@ let readinessString = courseExport =>
     let timeDistance =
       courseExport->CourseExport.createdAt->DateFns.formatDistanceToNow(~addSuffix=true, ())
 
-    "Requested " ++ timeDistance
+    t("requested") ++ " " ++ timeDistance
   | Some(file) =>
     let timeDistance =
       file->CourseExport.fileCreatedAt->DateFns.formatDistanceToNow(~addSuffix=true, ())
-    "Prepared " ++ timeDistance
+    t("prepared") ++ " " ++ timeDistance
   }
 
 module Selectable = {
@@ -118,7 +118,7 @@ let createCourseExport = (state, send, course, event) => {
   | Teams => #Teams
   }
 
-  CreateCourseExportQuery.make(
+  let variables = CreateCourseExportQuery.makeVariables(
     ~courseId=course |> Course.id,
     ~tagIds,
     ~reviewedOnly=state.reviewedOnly,
@@ -126,7 +126,8 @@ let createCourseExport = (state, send, course, event) => {
     ~exportType,
     (),
   )
-  |> GraphqlQuery.sendQuery
+
+  CreateCourseExportQuery.make(variables)
   |> Js.Promise.then_(response => {
     switch response["createCourseExport"]["courseExport"] {
     | Some(\"export") =>
@@ -155,9 +156,9 @@ let createCourseExport = (state, send, course, event) => {
 }
 
 let toggleChoiceClasses = value => {
-  let defaultClasses = "relative flex flex-col items-center bg-white border border-gray-400 hover:bg-gray-200 text-sm font-semibold focus:outline-none rounded p-4 w-full"
+  let defaultClasses = "relative flex flex-col items-center bg-white border border-gray-300 hover:bg-gray-50 text-sm font-semibold focus:outline-none focus:outline-none focus:bg-gray-50 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 rounded p-4 w-full"
   value
-    ? defaultClasses ++ " bg-gray-200 text-primary-500 border-primary-500"
+    ? defaultClasses ++ " bg-gray-50 text-primary-500 border-primary-500"
     : defaultClasses ++ " opacity-75 text-gray-900"
 }
 
@@ -168,10 +169,10 @@ let make = (~course, ~exports, ~tags) => {
   <div key="School admin coaches course index" className="flex flex-1 h-screen overflow-y-scroll">
     {state.drawerOpen
       ? <SchoolAdmin__EditorDrawer
-          closeDrawerCB={() => send(CloseDrawer)} closeButtonTitle="Close Export Form">
+          closeDrawerCB={() => send(CloseDrawer)} closeButtonTitle={t("close_export_form")}>
           <div className="mx-auto bg-white">
             <div className="max-w-2xl pt-6 px-6 mx-auto">
-              <h5 className="uppercase text-center border-b border-gray-400 pb-2">
+              <h5 className="uppercase text-center border-b border-gray-300 pb-2">
                 {t("create_action_button")->str}
               </h5>
               <div className="mt-4">
@@ -202,8 +203,8 @@ let make = (~course, ~exports, ~tags) => {
                   {t("export_tags_label")->str}
                 </label>
                 <TagsSelector
-                  placeholder="Search for a tag"
-                  emptySelectionMessage="No tags selected"
+                  placeholder={t("search_tag_placeholder")}
+                  emptySelectionMessage={t("search_tags_empty")}
                   selected=state.selectedTags
                   unselected={unselected(tags, state.selectedTags)}
                   onChange={tagSearch => send(UpdateTagSearch(tagSearch))}
@@ -281,21 +282,21 @@ let make = (~course, ~exports, ~tags) => {
           </div>
         </SchoolAdmin__EditorDrawer>
       : React.null}
-    <div className="flex-1 flex flex-col bg-gray-100">
+    <div className="flex-1 flex flex-col bg-gray-50">
       <div className="flex px-6 py-2 items-center justify-between">
         <button
           onClick={_ => send(OpenDrawer)}
-          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:bg-gray-100 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-gray-400 border-dashed hover:border-primary-300 p-6 rounded-lg mt-8 cursor-pointer">
+          className="max-w-2xl w-full flex mx-auto items-center justify-center relative bg-white text-primary-500 hover:text-primary-600 hover:shadow-lg focus:outline-none border-2 border-primary-300 border-dashed hover:border-primary-300 focus:border-primary-300 focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg p-6 rounded-lg mt-8 cursor-pointer">
           <i className="fas fa-file-export text-lg" />
           <h5 className="font-semibold ml-2"> {t("create_action")->str} </h5>
         </button>
       </div>
       {state.courseExports |> ArrayUtils.isEmpty
         ? <div
-            className="flex justify-center bg-gray-100 border rounded p-3 italic mx-auto max-w-2xl w-full">
+            className="flex justify-center bg-gray-50 border rounded p-3 italic mx-auto max-w-2xl w-full">
             {t("no_exports_notice")->str}
           </div>
-        : <div className="px-6 pb-4 mt-5 flex flex-1 bg-gray-100">
+        : <div className="px-6 pb-4 mt-5 flex flex-1 bg-gray-50">
             <div className="max-w-2xl w-full mx-auto relative">
               <h4 className="mt-5 w-full"> {t("heading")->str} </h4>
               <div className="flex mt-4 -mx-3 items-start flex-wrap">
@@ -309,7 +310,7 @@ let make = (~course, ~exports, ~tags) => {
                 |> Array.map(courseExport =>
                   <div
                     key={courseExport |> CourseExport.id}
-                    ariaLabel={"Export " ++ (courseExport |> CourseExport.id)}
+                    ariaLabel={t("export") ++ " " ++ (courseExport |> CourseExport.id)}
                     className="flex w-1/2 items-center mb-4 px-3">
                     <div
                       className="course-faculty__list-item shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">
@@ -319,20 +320,20 @@ let make = (~course, ~exports, ~tags) => {
                             <p className="text-black font-semibold">
                               {courseExport |> CourseExport.exportTypeToString |> str}
                             </p>
-                            <p className="text-gray-600 font-semibold text-xs mt-px">
+                            <p className="text-gray-600 text-xs mt-px">
                               {courseExport |> readinessString |> str}
                             </p>
                           </div>
                           <div className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
                             {courseExport->CourseExport.reviewedOnly
                               ? <span
-                                  className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
+                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 mr-1">
                                   {t("reviewed_only_tag")->str}
                                 </span>
                               : React.null}
                             {courseExport->CourseExport.includeInactiveStudents
                               ? <span
-                                  className="px-2 py-1 border rounded bg-secondary-100 text-primary-600 mt-1 mr-1">
+                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 mr-1">
                                   {t("include_inactive_students_tag")->str}
                                 </span>
                               : React.null}
@@ -352,9 +353,10 @@ let make = (~course, ~exports, ~tags) => {
                         | None => React.null
                         | Some(file) =>
                           <a
-                            ariaLabel={"Download Course Export " ++
+                            ariaLabel={t("download_course_export") ++
+                            " " ++
                             (courseExport |> CourseExport.id)}
-                            className="w-10 text-xs text-sm course-faculty__list-item-remove text-gray-700 hover:text-gray-900 cursor-pointer flex items-center justify-center hover:bg-gray-200"
+                            className="w-10 text-xs course-faculty__list-item-remove text-gray-600 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
                             href={file |> CourseExport.filePath}>
                             <FaIcon classes="fas fa-file-download" />
                           </a>

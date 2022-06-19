@@ -2,14 +2,14 @@ module WebhookDeliveries
   class DeliverJob < ApplicationJob
     queue_as :default
 
-    def perform(event_type, course, resource)
+    def perform(event_type, course, actor, resource)
       webhook_endpoint = course.webhook_endpoint
 
       unless event_type.in?(webhook_endpoint.events)
         raise "#{event_type} was not one of the requested events in WebhookEndpoint##{webhook_endpoint.id}"
       end
 
-      payload_data = data(event_type, resource)
+      payload_data = data(event_type, actor, resource)
 
       return if payload_data.blank?
 
@@ -25,7 +25,7 @@ module WebhookDeliveries
 
       http = Net::HTTP.new(uri.host, uri.port)
       http.read_timeout = Rails.application.secrets.webhook_read_timeout
-      http.use_ssl = (uri.scheme == 'https' && !Rails.env.development?)
+      http.use_ssl = uri.scheme == 'https'
 
       response = http.request(request)
 
@@ -50,11 +50,13 @@ module WebhookDeliveries
       )
     end
 
-    def data(event_type, resource)
+    def data(event_type, actor, resource)
       case event_type
       when WebhookDelivery.events[:submission_created],
            WebhookDelivery.events[:submission_graded]
         TimelineEvents::CreateWebhookDataService.new(resource).data
+      when WebhookDelivery.events[:course_completed]
+        Courses::CompletionWebhookDataService.new(resource, actor).data
       else
         Rails.logger.error(
           "Could not find a data service for event #{event_type}"

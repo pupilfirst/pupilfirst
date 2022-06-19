@@ -9,8 +9,12 @@ module Courses
       "#{@course.name} | #{current_school.name}"
     end
 
+    def markdown_prop(markdown)
+      { markdown: markdown, profile: 'permissive' }.to_json
+    end
+
     def about
-      MarkdownIt::Parser.new(:commonmark).render(@course.about) if show_about?
+      @course.about if show_about?
     end
 
     def cover_image

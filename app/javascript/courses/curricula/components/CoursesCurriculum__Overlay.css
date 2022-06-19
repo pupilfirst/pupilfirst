@@ -37,7 +37,7 @@
 }
 
 .course-overlay__header-title-card--locked {
-  @apply bg-gray-200 border-gray-600;
+  @apply bg-gray-50 border-gray-600;
 }
 
 /* Course overlay close button */
@@ -71,22 +71,22 @@
 }
 
 .course-overlay__close--locked {
-  @apply bg-gray-200 border-gray-600 text-gray-800;
+  @apply bg-gray-50 border-gray-600 text-gray-800;
 }
 
 @screen lg {
   [class*="course-overlay__close--"] {
-    @apply bg-white border-gray-300 text-gray-700;
+    @apply bg-white border-gray-300 text-gray-600;
   }
 }
 
 .complete-button-selected {
   animation: completeButtonGlowing 500ms ease-in;
-  @apply border-indigo-400;
+  @apply border-focusColor-400;
 }
 
 .course-overlay__body-tab-item {
-  @apply border border-gray-400 rounded-t-lg;
+  @apply border border-gray-300 rounded-t-lg;
 }
 
 .course-overlay__body-tab-item:not(:last-child) {
@@ -110,17 +110,17 @@
 /* Styling overlay content skeleton loading */
 
 .course-overlay__skeleton-line-placeholder-sm {
-  @apply rounded-full bg-gray-100;
+  @apply rounded-full bg-gray-50;
   height: 0.625rem;
 }
 
 .course-overlay__skeleton-line-placeholder-md {
-  @apply rounded-full bg-gray-100;
+  @apply rounded-full bg-gray-50;
   height: 1rem;
 }
 
 .course-overlay__skeleton-image-placeholder {
-  @apply mt-5 h-48 rounded-lg bg-gray-100;
+  @apply mt-5 h-48 rounded-lg bg-gray-50;
 }
 
 .skeleton-animate {
@@ -149,5 +149,32 @@
   }
   100% {
     box-shadow: 0 0 0 #7886d7;
+  }
+}
+
+@media print {
+  body {
+    overflow: auto !important;
+  }
+
+  body.overflow-hidden div[aria-label="Curriculum"] {
+    visibility: hidden;
+  }
+
+  #target-overlay {
+    visibility: visible;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    overflow: visible !important;
+    height: auto !important;
+    z-index: 100;
+  }
+
+  footer,
+  header,
+  #course-header-root,
+  div[aria-label="Curriculum"] #target-navigation {
+    display: none;
   }
 }

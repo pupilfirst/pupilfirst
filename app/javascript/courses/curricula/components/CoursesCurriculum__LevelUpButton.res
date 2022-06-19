@@ -29,10 +29,9 @@ let createLevelUpQuery = (course, setSaving, event) => {
   event |> ReactEvent.Mouse.preventDefault
   setSaving(_ => true)
 
-  LevelUpQuery.make(~courseId=course |> Course.id, ())
-  |> GraphqlQuery.sendQuery
-  |> Js.Promise.then_(response => {
-    response["levelUp"]["success"] ? refreshPage() : setSaving(_ => false)
+  LevelUpQuery.fetch({courseId: Course.id(course)})
+  |> Js.Promise.then_((response: LevelUpQuery.t) => {
+    response.levelUp.success ? refreshPage() : setSaving(_ => false)
     Js.Promise.resolve()
   })
   |> ignore
@@ -44,7 +43,7 @@ let make = (~course) => {
   <button
     disabled=saving
     onClick={createLevelUpQuery(course, setSaving)}
-    className="btn btn-success btn-large w-full md:w-4/6 mt-4">
+    className="btn btn-success btn-large w-full md:w-2/3 mt-4">
     {handleSubmitButton(saving)}
   </button>
 }

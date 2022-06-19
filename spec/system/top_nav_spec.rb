@@ -45,7 +45,7 @@ feature 'Top navigation bar' do
       expect(page).not_to have_link(custom_link_2.title, href: custom_link_2.url)
       expect(page).not_to have_link(custom_link_1.title, href: custom_link_1.url)
 
-      within('div[title="Show more links"]') do
+      within('button[title="Show more links"]') do
         find('span', text: 'More').click
       end
 
@@ -81,7 +81,7 @@ feature 'Top navigation bar' do
       expect(page).not_to have_link(custom_link_1.title, href: custom_link_1.url)
 
       # They should be in the 'More' dropdown.
-      within('div[title="Show more links"]') do
+      within('button[title="Show more links"]') do
         find('span', text: 'More').click
       end
 

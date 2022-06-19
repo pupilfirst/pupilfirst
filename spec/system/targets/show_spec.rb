@@ -280,7 +280,7 @@ feature 'Target Overlay', js: true do
 
       # Since this is a team target, other students shouldn't be listed as pending.
       expect(page).not_to have_content(
-        'You have team members who are yet to complete this target'
+        'You have team members who have yet to complete this target'
       )
 
       # Target should have been marked as passed in the database.
@@ -456,22 +456,13 @@ feature 'Target Overlay', js: true do
       create :timeline_event_file, timeline_event: submission_2
     end
     let!(:feedback_1) do
-      create :startup_feedback,
-             timeline_event: submission_1,
-             startup: team,
-             faculty: coach_1
+      create :startup_feedback, timeline_event: submission_1, faculty: coach_1
     end
     let!(:feedback_2) do
-      create :startup_feedback,
-             timeline_event: submission_1,
-             startup: team,
-             faculty: coach_2
+      create :startup_feedback, timeline_event: submission_1, faculty: coach_2
     end
     let!(:feedback_3) do
-      create :startup_feedback,
-             timeline_event: submission_2,
-             startup: team,
-             faculty: coach_3
+      create :startup_feedback, timeline_event: submission_2, faculty: coach_3
     end
 
     before do
@@ -626,7 +617,7 @@ feature 'Target Overlay', js: true do
       expect(other_students.count).to be > 0
 
       expect(page).to have_content(
-        'You have team members who are yet to complete this target:'
+        'You have team members who have yet to complete this target:'
       )
 
       # The other students should also be listed.
@@ -649,7 +640,7 @@ feature 'Target Overlay', js: true do
       end
 
       expect(page).to have_content(
-        'This target has pre-requisites that are incomplete.'
+        'This target has prerequisites that are incomplete.'
       )
 
       # It should be possible to navigate to the prerequisite target.

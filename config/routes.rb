@@ -41,6 +41,9 @@ Rails.application.routes.draw do
 
   post 'users/email_bounce', controller: 'users/postmark_webhook', action: 'email_bounce'
 
+  get 'users/update_email',controller: 'users', action:'update_email'
+  post 'users/update_email',controller: 'users', action:'send_update_email_token_email',as: 'update_email'
+
   authenticate :user, ->(u) { AdminUser.where(email: u.email).present? } do
     mount Delayed::Web::Engine, at: '/jobs'
     mount OverrideCsp.new(Flipper::UI.app(Flipper)), at: '/toggle'

@@ -1558,6 +1558,8 @@ en:
       disable_email_radio: Disable
       displayed_publicly: This information will be displayed publicly so be careful what you share.
       edit_profile: Edit your profile
+      email_label: Email
+      email_sent_notification: Please check your new email. We've sent instructions to update your email address.
       email_placeholder: Type your email
       initiate_deletion: Initiate Deletion
       language: Language
@@ -1578,6 +1580,7 @@ en:
       set_password: Set password for your account
       update_credentials: Update your login credentials for the school.
       update_email_notifications: Update settings for email notifications.
+      update_email_token_sent_notification: We've sent you a link to verify your new email!
       update_locale: Update settings related to your locale.
       upload_failed: Failed to upload
       you_admin_warning: You are currently an admin of this school. Please delete your admin access to enable account deletion .
@@ -1841,6 +1844,16 @@ en:
           main_html: <p>We received a request to delete your account in %{school_name}.</p> <p> Please click this %{link_to} to confirm account deletion. The link is valid for 30 minutes only.</p>
           note_html: <p>This action is irreversible, and will permanently remove your access to the school.</p>
         subject: Delete account from %{school_name}
+      update_email_token:
+        body:
+          link_to: link
+          main_html: <p>We received a request to update your email in %{school_name}.</p> <p> Please click this %{link_to} to update email. The link is valid for 30 minutes only.</p>
+          note_html: <p>This action is irreversible.</p>
+        subject: Update your email
+      confirm_email_update:
+        body:
+          html: <p> Your email in %{school_name} has been successfully updated. </p>
+        subject: Email Updated successfully
       new_post:
         body:
           link_to: view the reply on the %{community_name} community
@@ -2279,6 +2292,8 @@ en:
           error: The supplied email address and password do not match. Please check your credentials and try again.
       token:
         link_expired: That one-time link has expired, or is invalid. Please try signing in again.
+    update_email:
+      link_expired: That link has expired or is invalid. Please try again.
   validate_submission_gradable:
     owners_should_be_active:
       error: Cannot update inactive student submissions.

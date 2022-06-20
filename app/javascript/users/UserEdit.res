@@ -7,6 +7,8 @@ type state = {
   name: string,
   about: string,
   locale: string,
+  email: string,
+  disable_update_email: bool,
   avatarUrl: option<string>,
   currentPassword: string,
   newPassword: string,
@@ -24,6 +26,8 @@ type state = {
 type action =
   | UpdateName(string)
   | UpdateAbout(string)
+  | UpdateEmail(string)
+  | SetDisableUpdateEmail(bool)
   | UpdateLocale(string)
   | UpdateCurrentPassword(string)
   | UpdateNewPassword(string)
@@ -43,6 +47,11 @@ let reducer = (state, action) =>
   switch action {
   | UpdateName(name) => {...state, name: name, dirty: true}
   | UpdateAbout(about) => {...state, about: about, dirty: true}
+  | UpdateEmail(email) => {...state, email: email, dirty: true}
+  | SetDisableUpdateEmail(disable_update_email) => {
+      ...state,
+      disable_update_email: disable_update_email,
+    }
   | UpdateLocale(locale) => {...state, locale: locale, dirty: true}
   | UpdateCurrentPassword(currentPassword) => {
       ...state,
@@ -120,6 +129,26 @@ let uploadAvatar = (send, formData) => {
     () => send(SetAvatarUploadError(Some(t("upload_failed")))),
   )
 }
+
+let updateEmail = (send, email, payload) => {
+  Api.sendPayload(
+    "/users/update_email",
+    payload,
+    _ => {
+      Notification.success(
+        ts("notifications.done_exclamation"),
+        t("update_email_token_sent_notification"),
+      )
+      send(SetDisableUpdateEmail(true))
+    },
+    () => {
+      send(SetDisableUpdateEmail(true))
+      send(UpdateEmail(email))
+    },
+    Fetch.Post,
+  )
+}
+
 let submitAvatarForm = (send, formId) => {
   let element = ReactDOM.querySelector("#" ++ formId)
 
@@ -265,11 +294,14 @@ let make = (
   ~dailyDigest,
   ~isSchoolAdmin,
   ~hasValidDeleteAccountToken,
+  ~email,
 ) => {
   let initialState = {
     name: name,
     about: about,
     locale: locale,
+    email: email,
+    disable_update_email: true,
     avatarUrl: avatarUrl,
     dailyDigest: dailyDigest |> OptionUtils.mapWithDefault(d => d, false),
     saving: false,
@@ -285,6 +317,16 @@ let make = (
   }
 
   let (state, send) = React.useReducer(reducer, initialState)
+  let handleUpdateEmailFormSubmit = evt => {
+    evt |> ReactEvent.Form.preventDefault
+    send(SetDisableUpdateEmail(false))
+
+    let payload = Js.Dict.empty()
+    Js.Dict.set(payload, "new_email", state.email |> Js.Json.string)
+    Js.Dict.set(payload, "authenticity_token", AuthenticityToken.fromHead() |> Js.Json.string)
+    updateEmail(send, email, payload)
+  }
+
   <div className="container mx-auto px-3 py-8 max-w-5xl">
     {confirmDeletionWindow(state, send)}
     <div className="bg-white shadow sm:rounded-lg">
@@ -357,7 +399,7 @@ let make = (
                     <label
                       htmlFor="user-edit__avatar-input"
                       ariaHidden=true
-                      className="form-input__file-label rounded-md shadow-sm py-2 px-3 border border-gray-300 rounded-md text-sm font-semibold hover:text-gray-800 active:bg-gray-50 active:text-gray-800">
+                      className="form-input__file-label shadow-sm py-2 px-3 border border-gray-300 rounded-md text-sm font-semibold hover:text-gray-800 active:bg-gray-50 active:text-gray-800">
                       {t("change_photo") |> str}
                     </label>
                   </span>
@@ -368,6 +410,50 @@ let make = (
                 </div>
               </form>
             </div>
+            <form className="mt-6" onSubmit={handleUpdateEmailFormSubmit}>
+              <input
+                name="authenticity_token" type_="hidden" value={AuthenticityToken.fromHead()}
+              />
+              <label name="user_email" className="block text-sm font-semibold">
+                {t("email_label") |> str}
+              </label>
+              <div className="mt-2 flex items-stretch gap-2">
+                <input
+                  value=state.email
+                  disabled={state.disable_update_email}
+                  onChange={event => send(UpdateEmail(ReactEvent.Form.target(event)["value"]))}
+                  className="appearance-none block text-sm w-full shadow-sm border border-gray-300 rounded px-4 py-2 leading-relaxed focus:outline-none focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
+                  name="user_email"
+                  type_="email"
+                  ariaLabel="user-update__email-input"
+                  id="user-update__email-input"
+                  required=true
+                />
+                {state.disable_update_email
+                  ? <button
+                      className="btn btn-primary"
+                      onClick={evt => send(SetDisableUpdateEmail(false))}>
+                      {"Edit" |> str}
+                    </button>
+                  : <div className="flex gap-2">
+                      <button
+                        className="btn btn-subtle"
+                        onClick={evt => {
+                          send(SetDisableUpdateEmail(true))
+
+                          send(UpdateEmail(email))
+                        }}>
+                        {"Cancel" |> str}
+                      </button>
+                      <button
+                        className="btn btn-primary"
+                        disabled={state.email |> EmailUtils.isInvalid(false) ||
+                          state.email == email}>
+                        {"Update" |> str}
+                      </button>
+                    </div>}
+              </div>
+            </form>
           </div>
         </div>
         <div className="flex flex-col md:flex-row mt-10 md:mt-12">

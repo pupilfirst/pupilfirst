@@ -3,6 +3,7 @@ let decodeProps = json => {
   (
     field("name", string, json),
     field("about", string, json),
+    field("email", string, json),
     field("locale", string, json),
     field("availableLocales", array(string), json),
     field("avatarUrl", optional(string), json),
@@ -16,6 +17,7 @@ let decodeProps = json => {
 let (
   name,
   about,
+  email,
   locale,
   availableLocales,
   avatarUrl,
@@ -32,6 +34,7 @@ switch ReactDOM.querySelector("#react-root") {
     <UserEdit
       name
       about
+      email
       locale
       availableLocales
       avatarUrl

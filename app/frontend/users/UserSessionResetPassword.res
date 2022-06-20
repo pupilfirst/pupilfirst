@@ -1,5 +1,5 @@
-@module
-external resetPasswordIcon: string = "./images/set-new-password-icon.svg"
+@module("./images/set-new-password-icon.svg")
+external resetPasswordIcon: string = "default"
 
 let str = React.string
 
@@ -75,7 +75,7 @@ let renderUpdatePassword = (
         value=newPassword
         type_="password"
         maxLength=128
-        placeholder=t("new_password_placeholder")
+        placeholder={t("new_password_placeholder")}
         onChange={event => setNewPassword(ReactEvent.Form.target(event)["value"])}
       />
     </div>
@@ -89,7 +89,7 @@ let renderUpdatePassword = (
         value=confirmPassword
         type_="password"
         maxLength=128
-        placeholder=t("confirm_password_placeholder")
+        placeholder={t("confirm_password_placeholder")}
         onChange={event => setConfirmPassword(ReactEvent.Form.target(event)["value"])}
       />
     </div>

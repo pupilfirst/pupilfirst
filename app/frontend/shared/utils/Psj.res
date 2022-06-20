@@ -2,6 +2,8 @@ open Webapi.Dom
 
 @scope("Document") @val external readyState: string = "readyState"
 
+let log = Debug.log("PSJ")
+
 let ready = f => {
   if readyState != "loading" {
     f()
@@ -11,11 +13,14 @@ let ready = f => {
 }
 
 let match = (~onReady=true, path, f) => {
+  log("Try to match " ++ path)
+
   let pathFragments = Js.String2.split(path, "#")
 
   if pathFragments->Js.Array2.length != 2 {
-    Js.Console.error(
-      "[PSJ] Path must be of the format `controller#action` or `module/controller#action`. Received: " ++
+    Debug.error(
+      "PSJ",
+      "Path must be of the format `controller#action` or `module/controller#action`. Received: " ++
       path,
     )
   } else {
@@ -30,19 +35,21 @@ let match = (~onReady=true, path, f) => {
       switch (controller, action) {
       | (Some(controller), Some(action)) =>
         if controller == pathFragments[0] && action == pathFragments[1] {
-          Js.log("[PSJ] Matched " ++ path)
+          log("Matched " ++ path)
           onReady ? ready(f) : f()
         }
-      | (None, Some(_)) => Js.Console.error("[PSJ] Meta tag is missing the controller prop.")
-      | (Some(_), None) => Js.Console.error("[PSJ] Meta tag is missing the action prop.")
+      | (None, Some(_)) => Debug.error("PSJ", "Meta tag is missing the controller prop.")
+      | (Some(_), None) => Debug.error("PSJ", "Meta tag is missing the action prop.")
       | (None, None) =>
-        Js.Console.error("[PSJ] Meta tag is missing both the controller or action prop.")
+        Debug.error("PSJ", "Meta tag is missing both the controller or action prop.")
       }
     }
   }
 }
 
 let matchPaths = (~onReady=true, paths, f) => {
+  log("Try to match paths " ++ Js.Array2.joinWith(paths, ", "))
+
   let _ = Js.Array2.some(paths, path => {
     let pathFragments = Js.String2.split(path, "/")
     let currentPathFragments = Location.pathname(location)->Js.String2.split("/")
@@ -59,7 +66,7 @@ let matchPaths = (~onReady=true, paths, f) => {
       })
 
       if matched {
-        Js.log("[PSJ] Matched " ++ path)
+        log("Matched " ++ path)
         onReady ? ready(f) : f()
       }
 

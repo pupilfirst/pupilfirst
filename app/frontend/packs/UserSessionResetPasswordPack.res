@@ -11,18 +11,20 @@ let decodeProps = json => {
   }
 }
 
-let props =
-  DomUtils.parseJSONAttribute(
-    ~id="user-session-reset-password",
-    ~attribute="data-json-props",
-    (),
-  ) |> decodeProps
+Psj.match("users/sessions#reset_password", () => {
+  let props =
+    DomUtils.parseJSONAttribute(
+      ~id="user-session-reset-password",
+      ~attribute="data-json-props",
+      (),
+    ) |> decodeProps
 
-switch ReactDOM.querySelector("#user-session-reset-password") {
-| Some(element) =>
-  ReactDOM.render(
-    <UserSessionResetPassword token=props.token authenticityToken=props.authenticityToken />,
-    element,
-  )
-| None => ()
-}
+  switch ReactDOM.querySelector("#user-session-reset-password") {
+  | Some(element) =>
+    ReactDOM.render(
+      <UserSessionResetPassword token=props.token authenticityToken=props.authenticityToken />,
+      element,
+    )
+  | None => ()
+  }
+})

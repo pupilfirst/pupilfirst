@@ -1,5 +1,5 @@
-@module
-external permanentDeleteIcon: string = "./images/permanent-delete.svg"
+@module("./images/permanent-delete.svg")
+external permanentDeleteIcon: string = "default"
 
 let str = React.string
 
@@ -50,9 +50,7 @@ let make = (~token) => {
     | Waiting =>
       <div className="flex flex-col items-center justify-center text-center max-w-sm mx-auto">
         <h3> {t("head") |> str} </h3>
-        <p className="mt-1">
-          {t("click_button_below") |> str}
-        </p>
+        <p className="mt-1"> {t("click_button_below") |> str} </p>
         <div className="flex mt-4 justify-center">
           <a href="/dashboard" className="btn btn-default mr-2"> {t("cancel") |> str} </a>
           <button onClick={deleteAccount(token, setState)} className="btn btn-danger">
@@ -70,11 +68,7 @@ let make = (~token) => {
       <div className="text-center max-w-sm mx-auto font-semibold text-red-600">
         <p> {str(t("deletion_progresss"))} </p>
         <i className="my-3 text-3xl fa fa-spinner fa-pulse" />
-        <p>
-          {str(
-            t("signed_out_notified"),
-          )}
-        </p>
+        <p> {str(t("signed_out_notified"))} </p>
       </div>
     }}
   </div>

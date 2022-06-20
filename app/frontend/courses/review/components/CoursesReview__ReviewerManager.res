@@ -61,7 +61,7 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
     <div>
       {switch SubmissionDetails.reviewer(submissionDetails) {
       | Some(reviewer) => [
-          <div className="inline-flex bg-gray-50 px-3 py-2 mt-2 rounded-md">
+          <div className="inline-flex bg-gray-50 px-3 py-2 mt-2 rounded-md" key="reviewer-details">
             {switch UserProxy.avatarUrl(Reviewer.user(reviewer)) {
             | Some(avatarUrl) =>
               <img
@@ -95,7 +95,7 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
               </p>
             </div>
           </div>,
-          <div className="flex flex-col md:flex-row items-center mt-4">
+          <div className="flex flex-col md:flex-row items-center mt-4" key="change-reviewer-button">
             <p className="text-sm pr-4">
               {t(
                 ~variables=[("current_coach_name", UserProxy.name(Reviewer.user(reviewer)))],
@@ -111,13 +111,13 @@ let make = (~submissionId, ~submissionDetails, ~updateReviewerCB) => {
           </div>,
         ]
       | None => [
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center" key="no-reviewer">
             <div
               className="h-24 w-24 md:h-30 md:w-30 rounded-xl bg-gray-100 flex items-center justify-center">
               <Icon className="if i-eye-solid text-gray-400 text-4xl" />
             </div>
           </div>,
-          <div className="flex items-center justify-center mt-4">
+          <div className="flex items-center justify-center mt-4" key="start-review">
             <button
               disabled=saving
               onClick={_ => assignReviewer(submissionId, setSaving, updateReviewerCB)}

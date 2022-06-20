@@ -1,7 +1,7 @@
-@module
-external reviewedEmptyImage: string = "../../shared/images/reviewed-empty.svg"
-@module
-external pendingEmptyImage: string = "../images/pending-empty.svg"
+@module("../../shared/images/reviewed-empty.svg")
+external reviewedEmptyImage: string = "default"
+@module("../images/pending-empty.svg")
+external pendingEmptyImage: string = "default"
 
 let t = I18n.t(~scope="components.CoursesReview__SubmissionCard")
 

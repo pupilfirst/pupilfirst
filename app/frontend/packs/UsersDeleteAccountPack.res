@@ -3,9 +3,11 @@ let decodeProps = json => {
   json |> field("token", string)
 }
 
-let token = DomUtils.parseJSONTag(~id="user-delete-account__props", ()) |> decodeProps
+Psj.match("users#delete_account", () => {
+  let token = DomUtils.parseJSONTag(~id="user-delete-account__props", ()) |> decodeProps
 
-switch ReactDOM.querySelector("#react-root") {
-| Some(root) => ReactDOM.render(<UsersDeleteAccount token />, root)
-| None => ()
-}
+  switch ReactDOM.querySelector("#react-root") {
+  | Some(root) => ReactDOM.render(<UsersDeleteAccount token />, root)
+  | None => ()
+  }
+})

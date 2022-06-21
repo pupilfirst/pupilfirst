@@ -66,6 +66,6 @@
           <%= yield :footer %>
         </section>
         <!-- Initialize Rollbar only at the very end. -->
-        <%= vite_javascript_tag '~/shared/utils/rollbar.js', nonce: true %>
+        <%= vite_javascript_tag 'rollbar', nonce: true %>
       </body>
     </html>

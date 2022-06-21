@@ -17,18 +17,20 @@ let decodeProps = json => {
   }
 }
 
-let props = DomUtils.parseJSONTag(~id="course-coaches__props", ()) |> decodeProps
+Psj.match("schools/faculty#course_index", () => {
+  switch ReactDOM.querySelector("#sa-coaches-enrollment-panel") {
+  | Some(element) =>
+    let props = DomUtils.parseJSONTag(~id="course-coaches__props", ()) |> decodeProps
 
-switch ReactDOM.querySelector("#sa-coaches-enrollment-panel") {
-| Some(element) =>
-  ReactDOM.render(
-    <CourseCoaches__Root
-      courseCoaches=props.courseCoaches
-      schoolCoaches=props.schoolCoaches
-      courseId=props.courseId
-      authenticityToken=props.authenticityToken
-    />,
-    element,
-  )
-| None => ()
-}
+    ReactDOM.render(
+      <CourseCoaches__Root
+        courseCoaches=props.courseCoaches
+        schoolCoaches=props.schoolCoaches
+        courseId=props.courseId
+        authenticityToken=props.authenticityToken
+      />,
+      element,
+    )
+  | None => ()
+  }
+})

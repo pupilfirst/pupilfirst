@@ -1,4 +1,4 @@
-%bs.raw(`require("./SchoolAdmin__EditorDrawer2.css")`)
+%%raw(`import "./SchoolAdmin__EditorDrawer2.css"`)
 
 let tr = I18n.t(~scope="components.SchoolAdmin__EditorDrawer")
 

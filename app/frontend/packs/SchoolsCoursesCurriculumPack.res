@@ -27,25 +27,39 @@ let decodeProps = json => {
   }
 }
 
-let props =
-  DomUtils.parseJSONAttribute(~id="curriculum-editor", ~attribute="data-props", ()) |> decodeProps
+Psj.matchPaths(
+  [
+    "school/courses/:id/curriculum",
+    "school/courses/:course_id/targets/:target_id/content",
+    "school/courses/:course_id/targets/:target_id/details",
+    "school/courses/:course_id/targets/:target_id/versions",
+  ],
+  () => {
+    switch ReactDOM.querySelector("#curriculum-editor") {
+    | Some(element) =>
+      let props =
+        DomUtils.parseJSONAttribute(
+          ~id="curriculum-editor",
+          ~attribute="data-props",
+          (),
+        ) |> decodeProps
 
-switch ReactDOM.querySelector("#curriculum-editor") {
-| Some(element) =>
-  ReactDOM.render(
-    <Toggle.Provider value=props.enabledFeatures>
-      <CurriculumEditor
-        course=props.course
-        evaluationCriteria=props.evaluationCriteria
-        levels=props.levels
-        targetGroups=props.targetGroups
-        targets=props.targets
-        hasVimeoAccessToken=props.hasVimeoAccessToken
-        vimeoPlan=props.vimeoPlan
-        markdownCurriculumEditorMaxLength=props.markdownCurriculumEditorMaxLength
-      />
-    </Toggle.Provider>,
-    element,
-  )
-| None => ()
-}
+      ReactDOM.render(
+        <Toggle.Provider value=props.enabledFeatures>
+          <CurriculumEditor
+            course=props.course
+            evaluationCriteria=props.evaluationCriteria
+            levels=props.levels
+            targetGroups=props.targetGroups
+            targets=props.targets
+            hasVimeoAccessToken=props.hasVimeoAccessToken
+            vimeoPlan=props.vimeoPlan
+            markdownCurriculumEditorMaxLength=props.markdownCurriculumEditorMaxLength
+          />
+        </Toggle.Provider>,
+        element,
+      )
+    | None => ()
+    }
+  },
+)

@@ -7,11 +7,13 @@ let decodeProps = json => {
   )
 }
 
-let (courseId, tags, selectedApplicant) =
-  DomUtils.parseJSONTag(~id="schools-courses-applicants__props", ())->decodeProps
+Psj.match("schools/courses#applicants", () => {
+  switch ReactDOM.querySelector("#schools-courses-applicants__root") {
+  | Some(root) =>
+    let (courseId, tags, selectedApplicant) =
+      DomUtils.parseJSONTag(~id="schools-courses-applicants__props", ())->decodeProps
 
-switch ReactDOM.querySelector("#schools-courses-applicants__root") {
-| Some(root) =>
-  ReactDOM.render(  <CourseApplicants__Root courseId tags selectedApplicant />, root)
-| None => ()
-}
+    ReactDOM.render(<CourseApplicants__Root courseId tags selectedApplicant />, root)
+  | None => ()
+  }
+})

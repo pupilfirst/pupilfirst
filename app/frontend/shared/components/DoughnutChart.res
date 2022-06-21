@@ -1,4 +1,4 @@
-%bs.raw(`require("./DoughnutChart.css")`)
+%%raw(`import "./DoughnutChart.css"`)
 
 let str = React.string
 

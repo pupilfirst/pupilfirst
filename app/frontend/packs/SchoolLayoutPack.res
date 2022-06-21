@@ -10,11 +10,11 @@ let decodeProps = json => {
   )
 }
 
-let (schoolName, schoolLogoPath, schoolIconPath, courses, isCourseAuthor, hasNotifications) =
-  DomUtils.parseJSONAttribute(~id="school-admin-navbar__root", ()) |> decodeProps
-
 switch ReactDOM.querySelector("#school-admin-navbar__root") {
 | Some(root) =>
+  let (schoolName, schoolLogoPath, schoolIconPath, courses, isCourseAuthor, hasNotifications) =
+    DomUtils.parseJSONAttribute(~id="school-admin-navbar__root", ()) |> decodeProps
+
   ReactDOM.render(
     <SchoolAdminNavbar__Root
       schoolName schoolLogoPath schoolIconPath courses isCourseAuthor hasNotifications

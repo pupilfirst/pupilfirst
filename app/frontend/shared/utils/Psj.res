@@ -47,12 +47,16 @@ let match = (~onReady=true, path, f) => {
   }
 }
 
+let sanitizePath = path => {
+  path->Js.String2.replaceByRe(%re("/^\//"), "")->Js.String2.replaceByRe(%re("/\/$/"), "")
+}
+
 let matchPaths = (~onReady=true, paths, f) => {
   log("Try to match paths " ++ Js.Array2.joinWith(paths, ", "))
 
   let _ = Js.Array2.some(paths, path => {
     let pathFragments = Js.String2.split(path, "/")
-    let currentPathFragments = Location.pathname(location)->Js.String2.split("/")
+    let currentPathFragments = Location.pathname(location)->sanitizePath->Js.String2.split("/")
 
     if Js.Array2.length(pathFragments) == Js.Array2.length(currentPathFragments) {
       let matched = Js.Array2.everyi(pathFragments, (fragment, index) => {

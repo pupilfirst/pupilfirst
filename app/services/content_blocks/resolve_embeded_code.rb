@@ -32,7 +32,11 @@ module ContentBlocks
     end
 
     def resolution_required?
-      last_resolved_at = content_block&.content['last_resolved_at'] # rubocop:disable Lint/SafeNavigationChain
+      content = content_block.content
+
+      last_resolved_at = if content.present?
+        content['last_resolved_at'].presence
+      end
 
       return true if last_resolved_at.blank?
 
@@ -40,7 +44,11 @@ module ContentBlocks
     end
 
     def origin_url
-      url = content_block&.content['url'] # rubocop:disable Lint/SafeNavigationChain
+      content = content_block.content
+
+      url = if content.present?
+        content['url'].presence
+      end
 
       return url if url.present?
 

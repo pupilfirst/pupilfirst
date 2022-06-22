@@ -13,14 +13,20 @@ let decodeProps = json => {
   }
 }
 
-let props =
-  DomUtils.parseJSONAttribute(~id="sa-coaches-panel", ~attribute="data-props", ()) |> decodeProps
+Psj.match("schools/faculty#school_index", () => {
+  switch ReactDOM.querySelector("#sa-coaches-panel") {
+  | Some(element) =>
+    let props =
+      DomUtils.parseJSONAttribute(
+        ~id="sa-coaches-panel",
+        ~attribute="data-props",
+        (),
+      ) |> decodeProps
 
-switch ReactDOM.querySelector("#sa-coaches-panel") {
-| Some(element) =>
-  ReactDOM.render(
-    <SA_Coaches_SchoolIndex coaches=props.coaches authenticityToken=props.authenticityToken />,
-    element,
-  )
-| None => ()
-}
+    ReactDOM.render(
+      <SA_Coaches_SchoolIndex coaches=props.coaches authenticityToken=props.authenticityToken />,
+      element,
+    )
+  | None => ()
+  }
+})

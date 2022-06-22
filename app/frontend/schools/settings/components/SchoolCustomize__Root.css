@@ -8,6 +8,11 @@
   background-size: cover;
 }
 
+.school-customize__about {
+  background-image: url("~/home/assets/about-background.svg");
+  background-blend-mode: soft-light;
+}
+
 .school-customize__footer-top-container {
   background-color: theme(colors.gray.100);
 }
@@ -30,7 +35,7 @@
 
 .school-customize__featured-courses-empty-placeholder {
   min-height: 18rem;
-  background-image: url("images/no-courses-icon.svg");
+  background-image: url("~/schools/settings/components/images/no-courses-icon.svg");
   background-repeat: no-repeat;
   background-position: center;
 }

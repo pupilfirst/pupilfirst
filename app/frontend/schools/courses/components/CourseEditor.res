@@ -7,8 +7,6 @@ open CourseEditor__Types
 let t = I18n.t(~scope="components.CourseEditor")
 let ts = I18n.ts
 
-%%raw(`import "courses/shared/background_patterns.css"`)
-
 let str = React.string
 
 type status = [#Active | #Ended | #Archived]

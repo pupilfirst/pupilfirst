@@ -15,18 +15,20 @@ let decodeProps = json => {
   }
 }
 
-let props = DomUtils.parseJSONTag(~id="school-customize-data", ()) |> decodeProps
+Psj.match("schools#customize", () => {
+  switch ReactDOM.querySelector("#school-customize") {
+  | Some(element) =>
+    let props = DomUtils.parseJSONTag(~id="school-customize-data", ()) |> decodeProps
 
-switch ReactDOM.querySelector("#school-customize") {
-| Some(element) =>
-  ReactDOM.render(
-    <SchoolCustomize__Root
-      authenticityToken=props.authenticityToken
-      customizations=props.customizations
-      schoolName=props.schoolName
-      schoolAbout=props.schoolAbout
-    />,
-    element,
-  )
-| None => ()
-}
+    ReactDOM.render(
+      <SchoolCustomize__Root
+        authenticityToken=props.authenticityToken
+        customizations=props.customizations
+        schoolName=props.schoolName
+        schoolAbout=props.schoolAbout
+      />,
+      element,
+    )
+  | None => ()
+  }
+})

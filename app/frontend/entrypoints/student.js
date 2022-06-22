@@ -1,8 +1,7 @@
 import "./tailwind";
-import "~/packs/StudentTopNavPack.bs.js";
 
-// Assets
-import "~/shared/styles/background_patterns.css";
+// Layout-specific JavaScript
+import "~/packs/StudentTopNavPack.bs.js";
 
 // Page-specific Styling
 import "~/courses/show/show.css";

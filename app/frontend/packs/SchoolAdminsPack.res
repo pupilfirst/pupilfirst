@@ -11,13 +11,15 @@ let decodeProps = json => {
   }
 }
 
-let props = DomUtils.parseJSONTag(~id="school-admins-data", ()) |> decodeProps
+Psj.match("schools#admins", () => {
+  switch ReactDOM.querySelector("#school-admins") {
+  | Some(element) =>
+    let props = DomUtils.parseJSONTag(~id="school-admins-data", ()) |> decodeProps
 
-switch ReactDOM.querySelector("#school-admins") {
-| Some(element) =>
-  ReactDOM.render(
-    <SchoolAdmins__Editor currentSchoolAdminId=props.currentSchoolAdminId admins=props.admins />,
-    element,
-  )
-| None => ()
-}
+    ReactDOM.render(
+      <SchoolAdmins__Editor currentSchoolAdminId=props.currentSchoolAdminId admins=props.admins />,
+      element,
+    )
+  | None => ()
+  }
+})

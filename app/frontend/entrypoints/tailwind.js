@@ -1,4 +1,8 @@
+// Common styles
 import "~/layouts/tailwind.css";
+import "~/shared/styles/background_patterns.css";
+
+// Common JavaScript
 import "@fortawesome/fontawesome-free/js/all.js";
 import "~/shared/flashes.js";
 import "~/shared/serviceWorkerRegisterer.js";

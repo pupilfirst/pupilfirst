@@ -302,7 +302,8 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           }}
         </div>
       </div>
-      <div className="max-w-3xl relative mx-auto bg-primary-900 shadow-xl rounded-lg -mt-7">
+      <div
+        className="school-customize__about max-w-3xl relative mx-auto bg-primary-900 shadow-xl rounded-lg -mt-7">
         <div
           className="relative mx-auto flex flex-col justify-center items-center text-white p-10 text-center">
           <p> {t("hello_welcome") |> str} </p>

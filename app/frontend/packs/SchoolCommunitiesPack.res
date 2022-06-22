@@ -11,13 +11,15 @@ let decodeProps = json => {
   }
 }
 
-let props = DomUtils.parseJSONTag() |> decodeProps
+Psj.match("schools/communities#index", () => {
+  switch ReactDOM.querySelector("#school-communities") {
+  | Some(element) =>
+    let props = DomUtils.parseJSONTag() |> decodeProps
 
-switch ReactDOM.querySelector("#school-communities") {
-| Some(element) =>
-  ReactDOM.render(
-    <SchoolCommunities__Index communities=props.communities courses=props.courses />,
-    element,
-  )
-| None => ()
-}
+    ReactDOM.render(
+      <SchoolCommunities__Index communities=props.communities courses=props.courses />,
+      element,
+    )
+  | None => ()
+  }
+})

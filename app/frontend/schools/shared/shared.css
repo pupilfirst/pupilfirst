@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-/* Tiggle switch */
+/* Toggle switch */
 
 .toggle-label {
   @apply relative block w-10 h-5 cursor-pointer;

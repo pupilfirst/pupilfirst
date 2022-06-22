@@ -31,6 +31,19 @@ let userCard = () =>
     </div>
   </div>
 
+let userDetails = () =>
+  <div className="skeleton-body-container w-full pb-4 mx-auto">
+    <div className="skeleton-body-wrapper max-w-sm mt-8 px-3 lg:px-0">
+      <div className="flex items-center">
+        <div className="w-14 h-14 bg-gray-50 rounded-full mr-4 skeleton-animate" />
+        <div className="flex-1">
+          <div className="skeleton-placeholder__line-sm w-1/2 skeleton-animate" />
+          <div className="skeleton-placeholder__line-sm mt-4 skeleton-animate" />
+        </div>
+      </div>
+    </div>
+  </div>
+
 let heading = () =>
   <div className="skeleton-body-container w-full pb-4 mx-auto">
     <div className="skeleton-body-wrapper mt-8 px-3 lg:px-0">
@@ -65,19 +78,6 @@ let codeBlock = () =>
     </div>
   </div>
 
-let profileCard = () =>
-  <div className="skeleton-body-container w-full pb-4 mx-auto">
-    <div className="skeleton-body-wrapper max-w-sm mt-8 px-3 lg:px-0">
-      <div className="flex items-center">
-        <div className="w-14 h-14 bg-gray-50 rounded-full mr-4 skeleton-animate" />
-        <div className="flex-1">
-          <div className="skeleton-placeholder__line-sm w-1/2 skeleton-animate" />
-          <div className="skeleton-placeholder__line-sm mt-4 skeleton-animate" />
-        </div>
-      </div>
-    </div>
-  </div>
-
 let image = () =>
   <div className="skeleton-body-container w-full pb-4 mx-auto">
     <div className="skeleton-body-wrapper mt-8 px-3 lg:px-0">
@@ -86,8 +86,8 @@ let image = () =>
     </div>
   </div>
 
-let courseCard = () =>
-  <div className="skeleton-body-container w-full mx-auto">
+let imageCard = () =>
+  <div className="skeleton-body-container pt-4 w-full mx-auto">
     <div className="skeleton-body-wrapper px-3 lg:px-0">
       <div className="skeleton-placeholder__card bg-white rounded-lg shadow">
         <div className="px-4 pt-1">

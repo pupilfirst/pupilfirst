@@ -150,9 +150,9 @@ let make = (~submissionId, ~currentUser) => {
             {SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.paragraph())}
           </div>
           <div className="md:px-4 bg-gray-50 border-l">
-            {SkeletonLoading.profileCard()}
+            {SkeletonLoading.userDetails()}
             {SkeletonLoading.paragraph()}
-            {SkeletonLoading.profileCard()}
+            {SkeletonLoading.userDetails()}
             {SkeletonLoading.paragraph()}
           </div>
         </div>

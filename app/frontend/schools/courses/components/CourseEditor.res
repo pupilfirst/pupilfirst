@@ -551,7 +551,7 @@ let make = () => {
         | Unloaded =>
           <div className="px-2 lg:px-5 mt-8">
             <div className="grid grid-cols-2 gap-x-10 gap-y-8">
-              {SkeletonLoading.multiple(~count=4, ~element=SkeletonLoading.courseCard())}
+              {SkeletonLoading.multiple(~count=4, ~element=SkeletonLoading.imageCard())}
             </div>
           </div>
         | PartiallyLoaded(courses, cursor) =>
@@ -561,7 +561,7 @@ let make = () => {
             | LoadingMore =>
               <div className="px-2 lg:px-5">
                 <div className="grid grid-cols-2 gap-x-10">
-                  {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.courseCard())}
+                  {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.imageCard())}
                 </div>
               </div>
             | NotLoading =>

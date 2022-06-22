@@ -556,10 +556,10 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
       <div className="flex flex-col md:flex-row md:h-screen">
         <div className="w-full md:w-2/5 bg-white p-4 md:p-8 2xl:p-16">
           {SkeletonLoading.image()}
-          {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.profileCard())}
+          {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.userDetails())}
         </div>
         <div className="w-full relative md:w-3/5 bg-gray-50 md:border-l p-4 md:p-8 2xl:p-16">
-          {SkeletonLoading.contents()} {SkeletonLoading.profileCard()}
+          {SkeletonLoading.contents()} {SkeletonLoading.userDetails()}
         </div>
       </div>
     }}

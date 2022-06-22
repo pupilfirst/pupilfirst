@@ -254,7 +254,7 @@ let make = (~overviewData, ~levels, ~coaches) =>
         <div className="w-full bg-white p-8">
           {SkeletonLoading.heading()}
           {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.paragraph())}
-          {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.profileCard())}
+          {SkeletonLoading.multiple(~count=2, ~element=SkeletonLoading.userDetails())}
         </div>
       </div>
     }}

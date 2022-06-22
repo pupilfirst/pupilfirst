@@ -1789,6 +1789,11 @@ en:
           new_admin_html: A new administrator was added to your school <strong>%{school_name}</strong>, on %{new_school_admin} by %{adding_user_name}.
           not_recognized_html: If you do not recognize this user, you can can remove them from the school administration interface using this %{link_to}.
         subject: New School Admin Added
+      email_updated_notification:
+        body:
+          user_html:  <strong>%{name}</strong> from your school has updated the email address.
+          previous_email_html: The previous email address was <strong>%{old_email}</strong> and the new email address is <strong>%{new_email}</strong>.
+        subject: "%{name} has changed email address."
       students_bulk_import_complete:
         body:
           link_to: view these newly added students in the school administration interface
@@ -1852,7 +1857,7 @@ en:
         subject: Update your email
       confirm_email_update:
         body:
-          html: <p> Your email in %{school_name} has been successfully updated. </p>
+          html: <p> Your email in <strong>%{school_name}</strong> has been successfully updated. </p>
         subject: Email Updated successfully
       new_post:
         body:

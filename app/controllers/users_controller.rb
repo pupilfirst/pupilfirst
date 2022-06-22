@@ -60,13 +60,31 @@ class UsersController < ApplicationController
     user =
       Users::ValidateUpdateEmailTokenService.new(params[:token], current_school)
         .authenticate
+
     if user.present?
+      old_email = user.email
       new_email = user.temp_new_email
+
+      # Update user email
       user.update!(
         email: new_email,
         update_email_token: nil,
         temp_new_email: nil
       )
+
+      # Send success email to user
+      UserMailer.confirm_email_update(user.name, user.email, current_school)
+        .deliver_now
+
+      # Send notification email to admins
+      current_school
+        .school_admins
+        .where.not(user_id: user.id)
+        .each do |admin|
+          SchoolAdminMailer.email_updated_notification(admin, user, old_email)
+            .deliver_now
+        end
+
       redirect_to edit_user_path
     else
       flash[:error] = t('.link_expired')

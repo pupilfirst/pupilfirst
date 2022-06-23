@@ -22,7 +22,9 @@ let id = t => t.id
 let maxGrade = t => t.maxGrade
 
 let sort = evaluationCriteria =>
-  evaluationCriteria |> ArrayUtils.copyAndSort((x, y) => String.compare(x.name, y.name))
+  evaluationCriteria |> ArrayUtils.copyAndSort((x, y) =>
+    Js.String2.localeCompare(x.name, y.name)->int_of_float
+  )
 
 let name = t => t.name
 

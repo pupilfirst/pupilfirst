@@ -1889,7 +1889,7 @@ en:
      success_notification: Cohort created successfully.
     update_cohort:
       success_notification: Cohort updated successfully.
-    merge_cohorts:
+    merge_cohort:
       success_notification: Cohorts merged successfully.
     create_community:
       community_created_notification: Community created successfully

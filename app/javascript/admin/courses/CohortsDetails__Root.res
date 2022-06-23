@@ -52,13 +52,13 @@ let make = (~courseId, ~cohortId) => {
     <School__PageHeader
       exitUrl={`/school/courses/${courseId}/cohorts`}
       title="Edit Cohort"
-      description={"{Cohort name}"}
+      description={"...foo..."}
       links={pageLinks(courseId, cohortId)}
     />
     {switch state {
     | Unloaded => str("Should Load data")
     | Loading => str("Loading data")
-    | Loaded(cohort) => <Shared__CohortsEditor courseId cohort />
+    | Loaded(cohort) => <AdminCoursesShared__CohortsEditor courseId cohort />
     }}
   </div>
 }

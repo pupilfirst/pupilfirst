@@ -8,6 +8,6 @@ let make = (~courseId) => {
       title="Add new cohort"
       description={"Create a new cohort for the course."}
     />
-    <Shared__CohortsEditor courseId />
+    <AdminCoursesShared__CohortsEditor courseId />
   </div>
 }

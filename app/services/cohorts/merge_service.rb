@@ -22,7 +22,7 @@ module Cohorts
             )
           end
         end
-        @cohort.faculty_cohort_enrollments.destroy_all!
+        @cohort.faculty_cohort_enrollments.destroy_all
         @cohort.reload.destroy!
       end
 

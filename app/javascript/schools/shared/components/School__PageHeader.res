@@ -7,7 +7,7 @@ type link = {
   selected: bool,
 }
 
-let makeLink = (~title, ~href, ~selected=false, ~icon) => {
+let makeLink = (~selected=false, ~title, ~href, ~icon) => {
   title: title,
   href: href,
   selected: selected,

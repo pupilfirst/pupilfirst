@@ -183,6 +183,6 @@ module Types
           null: false
     field :create_cohort, mutation: Mutations::CreateCohort, null: false
     field :update_cohort, mutation: Mutations::UpdateCohort, null: false
-    #     field :merge_cohorts, mutation: Mutations::MergeCohorts, null: false
+    field :merge_cohort, mutation: Mutations::MergeCohort, null: false
   end
 end

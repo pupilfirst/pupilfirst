@@ -11,8 +11,8 @@ class CreateEmbedContentBlockMutator < ApplicationQuery
     ContentBlock.transaction do
       embed_block = create_embed_block
       if embed_block.content['embed_code'].nil? &&
-           request_source == ContentBlock::REQUEST_SOURCE
-        Vimeo::ResolveEmbedCode
+           request_source == ContentBlock::REQUEST_SOURCE_VIMEO
+        Vimeo::ResolveEmbedCodeJob
           .set(wait: 5.minutes)
           .perform_later(embed_block, 1)
       end

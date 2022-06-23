@@ -1,5 +1,5 @@
 module Vimeo
-  class ResolveEmbedCode < ApplicationJob
+  class ResolveEmbedCodeJob < ApplicationJob
     queue_as :default
 
     def perform(embed_block, attempt)

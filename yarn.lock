@@ -12146,13 +12146,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pluralize@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "pluralize@npm:8.0.0"
-  checksum: 08931d4a6a4a5561a7f94f67a31c17e6632cb21e459ab3ff4f6f629d9a822984cf8afef2311d2005fbea5d7ef26016ebb090db008e2d8bce39d0a9a9d218736e
-  languageName: node
-  linkType: hard
-
 "pn@npm:^1.1.0":
   version: 1.1.0
   resolution: "pn@npm:1.1.0"
@@ -13499,7 +13492,6 @@ __metadata:
     markdown-it-sup: ^1.0.0
     markdown-it-task-checkbox: ^1.0.6
     node-gyp: ^9.0.0
-    pluralize: ^8.0.0
     pnotify: ^5.2.0
     postcss: ^8.3.6
     postcss-flexbugs-fixes: ^5.0.2

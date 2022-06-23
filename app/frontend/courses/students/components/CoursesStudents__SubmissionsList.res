@@ -1,7 +1,7 @@
 %%raw(`import "./CoursesStudents__StudentOverlay.css"`)
 
-@module
-external reviewedEmptyImage: string = "../../shared/images/reviewed-empty.svg"
+@module("../../shared/images/reviewed-empty.svg")
+external reviewedEmptyImage: string = "default"
 
 open CoursesStudents__Types
 

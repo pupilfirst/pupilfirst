@@ -147,8 +147,7 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
         {doughnutChart("pink", score |> int_of_float |> string_of_int)}
         <p className="text-sm font-semibold text-center mt-3"> {t("average_quiz_score") |> str} </p>
         <p className="text-sm text-gray-600 font-semibold text-center leading-tight mt-1">
-          {Inflector.pluralize(t("quiz"), ~count=quizzesAttempted, ~inclusive=true, ()) ++
-          t("attempted") |> str}
+          {t(~count=quizzesAttempted, "quizzes_attempted")->str}
         </p>
       </div>
     </div>

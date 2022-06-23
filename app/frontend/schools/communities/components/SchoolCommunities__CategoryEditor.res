@@ -204,12 +204,7 @@ let make = (
           ? <span
               className="text-xs py-1 px-2 mr-2"
               style={ReactDOM.Style.make(~backgroundColor, ~color, ())}>
-              {Inflector.pluralize(
-                "topic",
-                ~count=Category.topicsCount(category),
-                ~inclusive=true,
-                (),
-              ) |> str}
+              {tr(~count=Category.topicsCount(category), "topics")->str}
             </span>
           : <button
               title={tr("update_category")}

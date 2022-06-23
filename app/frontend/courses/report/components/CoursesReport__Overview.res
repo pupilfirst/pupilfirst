@@ -96,8 +96,7 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
         <div className="ml-4">
           <p className="text-sm font-semibold mt-3"> {t("average_quiz_score") |> str} </p>
           <p className="text-sm text-gray-600 font-semibold leading-tight mt-1">
-            {Inflector.pluralize(t("quiz"), ~count=quizzesAttempted, ~inclusive=true, ()) ++
-            t("attempted") |> str}
+            {t(~count=quizzesAttempted, "quizzes_attempted")->str}
           </p>
         </div>
       </div>

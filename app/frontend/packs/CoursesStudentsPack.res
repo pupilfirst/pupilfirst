@@ -13,7 +13,7 @@ let decodeProps = json => {
   )
 }
 
-Psj.match("courses#students", () => {
+Psj.matchPaths(["courses/:id/students", "students/:id/report"], () => {
   let (levels, course, userId, teamCoaches, currentCoach, teamTags, userTags) =
     DomUtils.parseJSONTag(~id="school-course-students__props", ()) |> decodeProps
 

@@ -373,12 +373,7 @@ let make = (
                     ariaLabel={t("show_replies") ++ " " ++ Post.id(post)}
                     onClick={_ => toggleShowReplies(showReplies => !showReplies)}
                     className="border bg-white mr-3 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-50">
-                    {Inflector.pluralize(
-                      t("new_reply_button"),
-                      ~count=post |> Post.replies |> Array.length,
-                      ~inclusive=true,
-                      (),
-                    ) |> str}
+                    {t(~count=Post.replies(post)->Js.Array2.length, "show_replies_button")->str}
                     <FaIcon classes={"ml-2 fas fa-chevron-" ++ (showReplies ? "up" : "down")} />
                   </button>
                 : React.null}
@@ -394,7 +389,7 @@ let make = (
                   ? t("add_reply_topic")
                   : t("add_reply_post") ++ Post.id(post)}
                 className="bg-gray-50 lg:border lg:bg-gray-50 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-300">
-                <FaIcon classes="fas fa-reply mr-2" /> {t("new_reply_button") |> str}
+                <FaIcon classes="fas fa-reply mr-2" /> {t("new_reply_button")->str}
               </button>,
               Topic.lockedAt(topic)->Belt.Option.isSome,
             )}

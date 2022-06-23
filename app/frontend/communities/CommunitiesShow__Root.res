@@ -257,14 +257,8 @@ let topicsList = (topicCategories, topics) =>
                     ariaLabel="Likes">
                     <i className="far fa-thumbs-up text-sm text-gray-600 mr-1" />
                     <p className="text-xs font-semibold">
-                      {Topic.likesCount(topic) |> string_of_int |> str}
                       <span className="ml-1 hidden md:inline">
-                        {Inflector.pluralize(
-                          t("topic_stats_likes"),
-                          ~count=Topic.likesCount(topic),
-                          ~inclusive=false,
-                          (),
-                        ) |> str}
+                        {t(~count=Topic.likesCount(topic), "topic_stats_likes")->str}
                       </span>
                     </p>
                   </span>
@@ -273,14 +267,8 @@ let topicsList = (topicCategories, topics) =>
                     ariaLabel="Replies">
                     <i className="far fa-comment-dots text-sm text-gray-600 mr-1" />
                     <p className="text-xs font-semibold">
-                      {Topic.liveRepliesCount(topic) |> string_of_int |> str}
                       <span className="ml-1 hidden md:inline">
-                        {Inflector.pluralize(
-                          t("topic_stats_replies"),
-                          ~count=Topic.liveRepliesCount(topic),
-                          ~inclusive=false,
-                          (),
-                        ) |> str}
+                        {t(~count=Topic.liveRepliesCount(topic), "topic_stats_replies")->str}
                       </span>
                     </p>
                   </span>
@@ -289,14 +277,8 @@ let topicsList = (topicCategories, topics) =>
                     ariaLabel="Views">
                     <i className="far fa-eye text-sm text-gray-600 mr-1" />
                     <p className="text-xs font-semibold">
-                      {Topic.views(topic) |> string_of_int |> str}
                       <span className="ml-1 hidden md:inline">
-                        {Inflector.pluralize(
-                          t("topic_stats_views"),
-                          ~count=Topic.views(topic),
-                          ~inclusive=false,
-                          (),
-                        ) |> str}
+                        {t(~count=Topic.views(topic), "topic_stats_views")->str}
                       </span>
                     </p>
                   </span>

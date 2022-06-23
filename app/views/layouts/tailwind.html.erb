@@ -27,8 +27,7 @@
     <%= javascript_tag(nonce: true) do %>
       window.pupilfirst = {
       defaultLocale: '<%= I18n.default_locale %>',
-      locale: '<%= I18n.locale %>',
-      debug: true
+      locale: '<%= I18n.locale %>'
       }
     <% end %>
     <%= yield :head %>

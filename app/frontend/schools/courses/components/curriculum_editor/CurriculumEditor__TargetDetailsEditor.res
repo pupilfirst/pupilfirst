@@ -1,11 +1,11 @@
 open CurriculumEditor__Types
 
-@module
-external markIcon: string = "./images/target-complete-mark-icon.svg"
-@module
-external linkIcon: string = "./images/target-complete-link-icon.svg"
-@module
-external quizIcon: string = "./images/target-complete-quiz-icon.svg"
+@module("./images/target-complete-mark-icon.svg")
+external markIcon: string = "default"
+@module("./images/target-complete-link-icon.svg")
+external linkIcon: string = "default"
+@module("./images/target-complete-quiz-icon.svg")
+external quizIcon: string = "default"
 
 let str = React.string
 

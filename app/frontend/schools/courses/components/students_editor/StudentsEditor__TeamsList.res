@@ -1,4 +1,4 @@
-@module external notFoundIcon: string = "./images/no-students-found.svg"
+@module("./images/no-students-found.svg") external notFoundIcon: string = "default"
 
 let str = React.string
 

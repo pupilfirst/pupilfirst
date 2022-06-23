@@ -3893,10 +3893,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autosize@npm:^4.0.4":
-  version: 4.0.4
-  resolution: "autosize@npm:4.0.4"
-  checksum: da3a53a699ef8a4cfea8f0eea2303459b3986754278d506f60c08084b3a0a34bd6fa525becaf1edcffe4eb9517b67a6442aacf6b02aee1d406e5a794ec47d4ce
+"autosize@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "autosize@npm:5.0.1"
+  checksum: 18e8aec2ab5f628c70a38019512357004c59dd03f7dd86616d628326f5ef7aab532dce13939d5b6640e5793db3b27c9630d1d07c8ca4a545d189ab23f1b5b8f0
   languageName: node
   linkType: hard
 
@@ -13465,7 +13465,7 @@ __metadata:
     "@rescript/react": ^0.10.3
     animate.css: 3.7.2
     autoprefixer: ^10.3.4
-    autosize: ^4.0.4
+    autosize: ^5.0.1
     babel-loader: ^8.2.5
     babel-plugin-prismjs: ^2.1.0
     babel-plugin-react-css-modules: ^5.2.6

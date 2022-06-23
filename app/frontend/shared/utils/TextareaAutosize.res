@@ -1,14 +1,17 @@
 open Webapi.Dom
 
-@bs.module external autosize: Dom.element => unit = "autosize"
-@bs.module("autosize")
-external autosizeDestroy: Dom.element => unit = "destroy"
-@bs.module("autosize")
-external autosizeUpdate: Dom.element => unit = "update"
+@module("autosize") external autosizeFunction: Dom.element => unit = "default"
+
+type autosize
+
+@module("autosize") external autosizeModule: autosize = "default"
+
+@send external autosizeDestroy: (autosize, Dom.element) => unit = "destroy"
+@send external autosizeUpdate: (autosize, Dom.element) => unit = "update"
 
 let perform = (f, id) =>
   document |> Document.getElementById(id) |> OptionUtils.mapWithDefault(element => element |> f, ())
 
-let create = id => id |> perform(autosize)
-let update = id => id |> perform(autosizeUpdate)
-let destroy = id => id |> perform(autosizeDestroy)
+let create = id => id |> perform(autosizeFunction)
+let update = id => id |> perform(autosizeUpdate(autosizeModule))
+let destroy = id => id |> perform(autosizeDestroy(autosizeModule))

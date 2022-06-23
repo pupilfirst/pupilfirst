@@ -27,7 +27,7 @@
     "@rescript/react": "^0.10.3",
     "animate.css": "3.7.2",
     "autoprefixer": "^10.3.4",
-    "autosize": "^4.0.4",
+    "autosize": "^5.0.1",
     "babel-loader": "^8.2.5",
     "babel-plugin-prismjs": "^2.1.0",
     "babel-plugin-react-css-modules": "^5.2.6",

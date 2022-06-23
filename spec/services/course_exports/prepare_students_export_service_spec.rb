@@ -196,7 +196,8 @@ describe CourseExports::PrepareStudentsExportService do
         title: 'Students',
         rows: [
           [
-            'ID',
+            'User ID',
+            'Student ID',
             'Email Address',
             'Name',
             'Level',
@@ -208,6 +209,7 @@ describe CourseExports::PrepareStudentsExportService do
             'Criterion B (2,3) - Average'
           ],
           [
+            student_1.user_id,
             report_link_formula(student_1),
             student_1.email,
             student_1.name,
@@ -230,6 +232,7 @@ describe CourseExports::PrepareStudentsExportService do
               .to_s
           ],
           [
+            student_2.user_id,
             report_link_formula(student_2),
             student_2.email,
             student_2.name,
@@ -362,7 +365,8 @@ describe CourseExports::PrepareStudentsExportService do
             title: 'Students',
             rows: [
               [
-                'ID',
+                'User ID',
+                'Student ID',
                 'Email Address',
                 'Name',
                 'Level',
@@ -374,6 +378,7 @@ describe CourseExports::PrepareStudentsExportService do
                 'Criterion B (2,3) - Average'
               ],
               [
+                student_1.user_id,
                 report_link_formula(student_1),
                 student_1.email,
                 student_1.name,
@@ -396,6 +401,7 @@ describe CourseExports::PrepareStudentsExportService do
                   .to_s
               ],
               [
+                student_3_access_ended.user_id,
                 report_link_formula(student_3_access_ended),
                 student_3_access_ended.email,
                 student_3_access_ended.name,
@@ -408,6 +414,7 @@ describe CourseExports::PrepareStudentsExportService do
                 nil
               ],
               [
+                student_4_dropped_out.user_id,
                 report_link_formula(student_4_dropped_out),
                 student_4_dropped_out.email,
                 student_4_dropped_out.name,

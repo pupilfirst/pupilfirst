@@ -1,4 +1,4 @@
-@bs.module("./iconFirst")
+@module("./iconFirst")
 external transformIcons: unit => unit = "transformIcons"
 
 @react.component

@@ -1,6 +1,6 @@
 open Webapi.Dom
 
-@bs.module("./prismjsWrapper")
+@module("./prismjsWrapper")
 external highlightAllUnderJs: Dom.element => unit = "default"
 
 let highlightAllUnder = elementId => {

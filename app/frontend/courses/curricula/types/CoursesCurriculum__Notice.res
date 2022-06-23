@@ -12,14 +12,12 @@ and currentLevelNumber = int
 and minimumRequiredLevelNumber = int
 and someSubmissionsRejected = bool
 
-@bs.module external courseEndedImage: string = "../images/course-ended.svg"
-@bs.module
-external courseCompleteImage: string = "../images/course-complete.svg"
-@bs.module external accessEndedImage: string = "../images/access-ended.svg"
-@bs.module external levelUpImage: string = "../images/level-up.svg"
-@bs.module external previewModeImage: string = "../images/preview-mode.svg"
-@bs.module
-external levelUpBlockedImage: string = "../images/level-up-blocked.svg"
+@module("../images/course-ended.svg") external courseEndedImage: string = "default"
+@module("../images/course-complete.svg") external courseCompleteImage: string = "default"
+@module("../images/access-ended.svg") external accessEndedImage: string = "default"
+@module("../images/level-up.svg") external levelUpImage: string = "default"
+@module("../images/preview-mode.svg") external previewModeImage: string = "default"
+@module("../images/level-up-blocked.svg") external levelUpBlockedImage: string = "default"
 
 let icon = t =>
   switch t {

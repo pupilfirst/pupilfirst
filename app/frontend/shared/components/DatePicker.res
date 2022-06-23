@@ -1,5 +1,5 @@
 module JsComponent = {
-  @bs.module("./DatePicker") @react.component
+  @module("./DatePicker") @react.component
   external make: (
     ~id: string=?,
     ~onChange: Js.Nullable.t<Js.Date.t> => unit,

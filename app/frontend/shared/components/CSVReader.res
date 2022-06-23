@@ -3,11 +3,11 @@ module type CSVData = {
 }
 
 module Make = (CSVData: CSVData) => {
-  @bs.deriving(abstract)
+  @deriving(abstract)
   type parserOptions = {
-    @bs.optional
+    @optional
     header: bool,
-    @bs.optional
+    @optional
     skipEmptyLines: string,
   }
 
@@ -24,7 +24,7 @@ module Make = (CSVData: CSVData) => {
   let fileSize = fileInfo => fileInfo.size
 
   module JsComponent = {
-    @bs.module("./CSVReader") @react.component
+    @module("./CSVReader") @react.component
     external make: (
       ~onFileLoaded: (Js.Array.t<CSVData.t>, fileInfo) => unit,
       ~label: string=?,

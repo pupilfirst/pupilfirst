@@ -71,7 +71,7 @@ module Make = (Selectable: Selectable) => {
             <div className="px-4">
               <div className="skeleton-body-container w-full pb-4 mx-auto">
                 <div className="skeleton-body-wrapper px-3 lg:px-0">
-                  <div className="skeleton-placeholder__line-sm mt-4 w-2/4 skeleton-animate" />
+                  <div className="skeleton-placeholder__line-sm mt-4 w-1/2 skeleton-animate" />
                   <div className="skeleton-placeholder__line-sm mt-4 w-3/4 skeleton-animate" />
                 </div>
               </div>
@@ -87,7 +87,7 @@ module Make = (Selectable: Selectable) => {
             onClick={applyFilter(selection, onSelect, id)}>
             {switch selection |> Selectable.label {
             | Some(label) =>
-              <span className="mr-2 flex-shrink-0 w-2/6 sm:w-auto md:w-2/6 text-right">
+              <span className="mr-2 flex-shrink-0 w-1/3 sm:w-auto md:w-1/3 text-right">
                 {label ++ labelSuffix |> str}
               </span>
             | None => React.null

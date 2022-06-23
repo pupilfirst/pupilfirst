@@ -148,6 +148,7 @@ module CourseExports
           user = student.user
 
           [
+            user.id,
             { formula: student_report_link(student) },
             user.email,
             user.name,
@@ -161,7 +162,8 @@ module CourseExports
 
       [
         [
-          'ID',
+          'User ID',
+          'Student ID',
           'Email Address',
           'Name',
           'Level',

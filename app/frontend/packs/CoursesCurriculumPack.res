@@ -19,7 +19,7 @@ let decodeProps = json => {
   )
 }
 
-Psj.match("courses#curriculum", () => {
+Psj.matchPaths(["courses/:id/curriculum", "targets/:id", "targets/:id/:slug"], () => {
   let (
     author,
     course,

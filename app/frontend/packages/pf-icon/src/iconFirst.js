@@ -61,9 +61,5 @@ export const transformIcons = () => {
 };
 
 export const addListener = () => {
-  if (document.readyState !== "loading") {
-    transformIcons();
-  } else {
-    document.addEventListener("DOMContentLoaded", transformIcons);
-  }
+  window.addEventListener("load", transformIcons);
 };

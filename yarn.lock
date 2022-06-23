@@ -13503,7 +13503,7 @@ __metadata:
     prop-types: ^15.7.2
     qrcode.react: ^3.0.2
     react: ^16.8.6
-    react-csv-reader: ^3.3.1
+    react-csv-reader: "https://github.com/pupilfirst/react-csv-reader#esm"
     react-datepicker: ^4.2.1
     react-dom: ^16.8.6
     react-helmet: ^6.1.0
@@ -13687,16 +13687,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-csv-reader@npm:^3.3.1":
+"react-csv-reader@https://github.com/pupilfirst/react-csv-reader#esm":
   version: 3.5.0
-  resolution: "react-csv-reader@npm:3.5.0"
+  resolution: "react-csv-reader@https://github.com/pupilfirst/react-csv-reader.git#commit=01de75eb447b7c7ebf1e01384bfded32138c6c5a"
   dependencies:
     papaparse: ^5.3.0
   peerDependencies:
     prop-types: ^15.7.2
     react: ^16.0.0
     react-dom: ^16.0.0
-  checksum: fce46852820bab3f58d5aabea16c64f222fa5a48befbb7e698ab3a3b7e395f493331c30ee71b7ecab6b46f4dfb3c2337a4e77ca47748ff0ee30763eeef084289
+  checksum: 83bc7758ab676cbb6cf1d12e23cb8125cb0c5c07c62d4e6fcaf6f9194cfafca675c4309e66a39594c60e176d3114bd45b09c9218721d42650554d17c84579d33
   languageName: node
   linkType: hard
 

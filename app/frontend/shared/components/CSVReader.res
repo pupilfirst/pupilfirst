@@ -24,7 +24,7 @@ module Make = (CSVData: CSVData) => {
   let fileSize = fileInfo => fileInfo.size
 
   module JsComponent = {
-    @module("./CSVReader") @react.component
+    @module("react-csv-reader") @react.component
     external make: (
       ~onFileLoaded: (Js.Array.t<CSVData.t>, fileInfo) => unit,
       ~label: string=?,

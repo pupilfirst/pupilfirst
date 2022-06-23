@@ -9,7 +9,7 @@ module CSVData = {
   type t = StudentCSVData.t
 }
 
-module CSVReader = CSVReader.Make(CSVData)
+module Reader = CSVReader.Make(CSVData)
 
 type fileInvalid =
   | InvalidCSVFile
@@ -19,7 +19,7 @@ type fileInvalid =
   | InvalidData(array<CSVDataError.t>)
 
 type state = {
-  fileInfo: option<CSVReader.fileInfo>,
+  fileInfo: option<Reader.fileInfo>,
   saving: bool,
   csvData: array<StudentCSVData.t>,
   fileInvalid: option<fileInvalid>,
@@ -40,7 +40,7 @@ let validTemplate = csvData => {
 }
 
 let validateFile = (csvData, fileInfo) => {
-  CSVReader.fileSize(fileInfo) > FileUtils.defaultMaxSize
+  Reader.fileSize(fileInfo) > FileUtils.defaultMaxSize
     ? Some(InvalidCSVFile)
     : ArrayUtils.isEmpty(csvData)
     ? Some(EmptyFile)
@@ -56,14 +56,14 @@ let validateFile = (csvData, fileInfo) => {
 
 type action =
   | UpdateFileInvalid(option<fileInvalid>)
-  | LoadCSVData(array<StudentCSVData.t>, CSVReader.fileInfo)
+  | LoadCSVData(array<StudentCSVData.t>, Reader.fileInfo)
   | ClearCSVData
   | ToggleNotifyStudents
   | BeginSaving
   | EndSaving
   | FailSaving
 
-let fileInputText = (~fileInfo: option<CSVReader.fileInfo>) =>
+let fileInputText = (~fileInfo: option<Reader.fileInfo>) =>
   fileInfo->Belt.Option.mapWithDefault(t("csv_file_input.placeholder"), info => info.name)
 
 let reducer = (state, action) =>
@@ -355,12 +355,12 @@ let make = (~courseId, ~closeDrawerCB) => {
             </div>
             <div
               className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
-              <CSVReader
+              <Reader
                 label=""
                 inputId="csv-file-input"
                 inputName="csv"
                 cssClass="absolute w-0 h-0 overflow-hidden"
-                parserOptions={CSVReader.parserOptions(~header=true, ~skipEmptyLines="true", ())}
+                parserOptions={Reader.parserOptions(~header=true, ~skipEmptyLines="true", ())}
                 onFileLoaded={(x, y) => {
                   send(LoadCSVData(x, y))
                 }}

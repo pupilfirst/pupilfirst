@@ -71,7 +71,7 @@ module Editor = {
         <div className="mt-4">
           <Dropdown
             placeholder={"Pick a Cohort"}
-            selectables={cohorts}
+            selectables={cohorts->Js.Array2.filter(c => c != cohort)}
             selected={state.mergeIntoCohort}
             onSelect={u => send(UpdateMergeIntoCohort(u))}
           />
@@ -158,7 +158,7 @@ let make = (~courseId, ~cohortId) => {
     <School__PageHeader
       exitUrl={`/school/courses/${courseId}/cohorts`}
       title="Edit Cohort"
-      description={"...foo..."}
+      description={"Actions for the cohort."}
       links={pageLinks(courseId, cohortId)}
     />
     {switch state {

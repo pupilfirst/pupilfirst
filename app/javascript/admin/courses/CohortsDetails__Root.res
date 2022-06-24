@@ -52,7 +52,7 @@ let make = (~courseId, ~cohortId) => {
     <School__PageHeader
       exitUrl={`/school/courses/${courseId}/cohorts`}
       title="Edit Cohort"
-      description={"...foo..."}
+      description={"Update cohort details"}
       links={pageLinks(courseId, cohortId)}
     />
     {switch state {

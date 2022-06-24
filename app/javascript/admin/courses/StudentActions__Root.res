@@ -462,7 +462,7 @@ let make = (~courseId, ~studentId) => {
   <div>
     <School__PageHeader
       exitUrl={`/school/courses/${courseId}/students`}
-      title="Student Actions"
+      title="Edit Student"
       description={"Actions for the student"}
       links={pageLinks(courseId, studentId)}
     />

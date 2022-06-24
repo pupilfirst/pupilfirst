@@ -5,8 +5,7 @@ class ResolveEmbedCodeMutator < ApplicationQuery
   validate :must_be_embed_type_block
 
   def resolve
-    #To:Do Change the implementation to use new mutator schema and remove this file
-    ContentBlocks::ResolveEmbededCodeService.new(content_block).execute
+    ContentBlocks::ResolveEmbedCodeService.new(content_block).execute
   end
 
   def must_be_embed_type_block

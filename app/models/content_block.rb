@@ -4,7 +4,8 @@ class ContentBlock < ApplicationRecord
   BLOCK_TYPE_EMBED = -'embed'
   BLOCK_TYPE_FILE = -'file'
   BLOCK_TYPE_AUDIO = -'audio'
-  REQUEST_SOURCE_VIMEO = 'VimeoUpload'
+  EMBED_REQUEST_SOURCE_VIMEO = -'VimeoUpload'
+
   has_one_attached :file
   belongs_to :target_version
 

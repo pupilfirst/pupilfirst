@@ -1,5 +1,5 @@
 module ContentBlocks
-  class ResolveEmbededCodeService
+  class ResolveEmbedCodeService
     def initialize(embed_block)
       @content_block = embed_block
     end

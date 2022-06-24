@@ -25,7 +25,7 @@ class CreateSchoolAdminMutator < ApplicationQuery
         .school_admins
         .where.not(user_id: user.id)
         .each do |admin|
-          SchoolAdminMailer.school_admin_added(admin, new_school_admin, user)
+          SchoolAdminMailer.school_admin_added(admin, new_school_admin, current_user)
             .deliver_later
         end
 

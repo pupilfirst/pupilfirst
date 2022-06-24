@@ -4,9 +4,9 @@ title: Development Setup
 sidebar_label: Setup
 ---
 
-These instructions covers three platforms: **macOS** (11.0), **Ubuntu** (20.04), and **Windows 10**
-([WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10#update-to-wsl-2), with Ubuntu 20.04). Instructions
-for Ubuntu also apply to Windows, except where special instructions are noted.
+These instructions covers three platforms: **macOS 12**, **Ubuntu (22.04)**, and **Windows 11**
+([WSL](https://docs.microsoft.com/en-us/windows/wsl/install), with Ubuntu 22.04). Instructions
+for Ubuntu also apply to Windows (WSL), except where special instructions are noted.
 
 ## Install and configure dependencies
 
@@ -105,10 +105,10 @@ Then, in the PostgreSQL CLI, set a new password and quit.
 3. Set up push notifications by generating and setting VAPID keys to enable push notifications:
 
    ```ruby
-   # In the Rails console
+   # In the Rails console...
    vapid_key = Webpush.generate_key
 
-   # Save these in your .env file.
+   # Save the printed string in your .env file.
    puts "VAPID_PUBLIC_KEY=#{vapid_key.public_key}\nVAPID_PRIVATE_KEY=#{vapid_key.private_key}"
    ```
 
@@ -135,32 +135,30 @@ This will also _seed_ data into the database that will be useful for testing dur
 ## Compile ReScript code
 
 If you've used the `yarn` command to install JS dependencies, then ReScript code should already be compiled at this
-point. To compile ReScript code again (if you've made changes), you can either do a one-time build, or set up a watcher.
+point. To compile ReScript code again (if you've made changes), you can either do a one-time build, or set up a watcher:
 
-    # One-time recompilation
+    # One-time compilation.
     yarn run re:build
 
-    # Recompile, and then watch for changes
+    # Compile, and then watch for changes.
     yarn run re:watch
 
 ## Start the Rails server
 
     bundle exec rails server
 
-## Run Webpack Dev Server
+## Run Vite Dev Server
 
-Start the Webpack Dev Server on another tab or window:
+**Optional:** Start the Vite development server with:
 
-    yarn run wds
+    bin/vite dev
 
-You'll want all three of these processes running for best performance when developing.
+Keeping the Vite development server running makes working on the frontend much faster since it serves native JavaScript modules, avoiding a lengthy rebuild process.
 
-Visit the school using your browser at `http://localhost:3000`.
+With the Rails server running, visit the school using your browser at `http://localhost:3000`.
 
 You should be able to sign in as `admin@example.com` (use the _Continue as Developer_ option on the sign-in page), to
 test access to all interfaces. Test data has been seeded to the development database to make this process easier.
-
-> If you see an error related to the absence of a `locales.json` file, please make sure that your Rails server is running.
 
 ## Enabling multitenancy
 

@@ -13,6 +13,8 @@ storage
 
 public/assets
 public/uploads
+public/vite-dev
+public/vite-test
 **/node_modules
 coverage
 tags

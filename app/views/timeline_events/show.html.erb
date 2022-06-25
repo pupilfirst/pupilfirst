@@ -1,14 +1,7 @@
 <% presenter = TimelineEvents::ShowPresenter.new(self, @submission) %>
-
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
-  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
 <% end %>
-
-<% content_for(:tail) do %>
-  <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
-<% end %>
-
 <div class="bg-gray-50 px-3 py-4">
   <div class="mb-2 container max-w-3xl mx-auto">
     <div class="bg-white shadow p-4 rounded">

@@ -5,8 +5,7 @@
 <% end %>
 
 <% content_for(:head) do %>
-  <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all' %>
-  <%= stylesheet_pack_tag 'SchoolRouterPack', media: 'all' %>
+  <%= vite_javascript_tag 'adminRouter', nonce: true %>
 <% end %>
 
 <% content_for(:wrapper) do %>
@@ -16,8 +15,5 @@
   <div id="school-router"></div>
 <% end %>
 
-<% content_for(:tail) do %>
-  <%= javascript_pack_tag 'SchoolRouterPack', nonce: true %>
-<% end %>
 
 <%= render template: 'layouts/tailwind' %>

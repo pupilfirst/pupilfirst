@@ -44,6 +44,7 @@ feature 'School admins Editor', js: true do
 
     open_email(school_admin_2.email)
     expect(current_email.body).to include(email)
+    expect(current_email.body).to include(school_admin_1.user.name)
 
     # New admin shouldn't receive that notification.
     open_email(email)

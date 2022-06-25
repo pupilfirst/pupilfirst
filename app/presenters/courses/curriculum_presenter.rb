@@ -32,14 +32,14 @@ module Courses
           evaluation_criteria: [],
           preview: true,
           level_up_eligibility:
-            Students::LevelUpEligibilityService::ELIGIBILITY_CURRENT_LEVEL_INCOMPLETE,
+            ::Students::LevelUpEligibilityService::ELIGIBILITY_CURRENT_LEVEL_INCOMPLETE,
           **default_props
         }
       end
     end
 
     def level_up_eligibility
-      Students::LevelUpEligibilityService.new(current_student).eligibility
+      ::Students::LevelUpEligibilityService.new(current_student).eligibility
     end
 
     def default_props

@@ -12,8 +12,7 @@ gem 'active_storage_validations', '~> 0.9' # Better validations for active_stora
 gem 'fastimage', '~> 2.2'
 gem 'image_processing', '~> 1.12' # Gem to support variants in ActiveStorage
 
-# Use Webpack to manage app-like JavaScript modules in Rails.
-gem 'webpacker', '~> 5.4'
+gem 'vite_rails', '~> 3.0' # Use Vite in Rails and bring joy to your JavaScript experience.
 gem 'devise', '~> 4.7', '>= 4.7.1' # User auth library.
 gem 'jbuilder', '~> 2.11' # Standard part of Rails, but unused, since we don't have an API.
 gem 'pg', '~> 1.2' # PostgreSQL support.

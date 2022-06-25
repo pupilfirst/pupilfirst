@@ -3,12 +3,9 @@
 <% content_for(:viewport) do %>
   <meta name="viewport"/>
 <% end %>
-
 <% content_for(:head) do %>
-  <%= stylesheet_pack_tag 'schools/shared/shared', media: 'all' %>
-  <%= stylesheet_pack_tag 'SchoolRouterPack', media: 'all' %>
+  <%= vite_javascript_tag 'admin', nonce: true %>
 <% end %>
-
 <% content_for(:wrapper) do %>
   <script id="school-router-data" type="application/json">
     <%= presenter.props_to_json.html_safe %>
@@ -18,9 +15,4 @@
     <%= yield %>
   </div>
 <% end %>
-
-<%=content_for(:tail) do %>
-  <%= javascript_pack_tag 'SchoolRouterPack', nonce: true %>
-<% end %>
-
 <%= render template: 'layouts/tailwind' %>

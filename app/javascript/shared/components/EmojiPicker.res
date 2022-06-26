@@ -1,3 +1,5 @@
+open Webapi.Dom
+
 type emojiEvent = {
   id: string,
   native: string,
@@ -13,8 +15,7 @@ type args = {
   data: Js.Json.t,
 }
 
-type t
-@module("emoji-mart") @new external picker: args => t = "Picker"
+@module("emoji-mart") @new external picker: args => unit = "Picker"
 
 type data
 @module external data: Js.Json.t = "@emoji-mart/data"
@@ -33,8 +34,8 @@ let make = (~className, ~title, ~onChange) => {
   let (isOpen, setIsOpen) = React.useState(_ => false)
 
   React.useEffect0(() => {
-    let _ = picker({
-      title: "",
+    picker({
+      title: title,
       ref: ref,
       theme: "light",
       data: data,
@@ -48,11 +49,7 @@ let make = (~className, ~title, ~onChange) => {
       switch wrapperRef.current->Js.Nullable.toOption {
       | Some(wrapper) =>
         if (
-          !(
-            wrapper |> Webapi.Dom.Element.contains(
-              event |> Webapi.Dom.MouseEvent.target |> Webapi.Dom.EventTarget.unsafeAsElement,
-            )
-          )
+          !(wrapper |> Element.contains(event |> MouseEvent.target |> EventTarget.unsafeAsElement))
         ) {
           setIsOpen(_ => false)
         }
@@ -63,20 +60,20 @@ let make = (~className, ~title, ~onChange) => {
     }
 
     let handleEscKey: Dom.keyboardEvent => unit = e => {
-      let key = e |> Webapi.Dom.KeyboardEvent.key
+      let key = e |> KeyboardEvent.key
       if key == "Escape" || key == "Esc" {
         setIsOpen(_ => false)
       }
       ()
     }
 
-    Webapi.Dom.document |> Webapi.Dom.Document.addKeyUpEventListener(handleEscKey)
-    Webapi.Dom.document |> Webapi.Dom.Document.addClickEventListener(handleClickOutside)
+    document |> Document.addKeyUpEventListener(handleEscKey)
+    document |> Document.addClickEventListener(handleClickOutside)
 
     Some(
       () => {
-        Webapi.Dom.document |> Webapi.Dom.Document.removeKeyUpEventListener(handleEscKey)
-        Webapi.Dom.document |> Webapi.Dom.Document.removeClickEventListener(handleClickOutside)
+        document |> Document.removeKeyUpEventListener(handleEscKey)
+        document |> Document.removeClickEventListener(handleClickOutside)
       },
     )
   })

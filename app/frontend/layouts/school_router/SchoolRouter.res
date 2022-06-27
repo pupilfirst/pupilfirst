@@ -88,7 +88,7 @@ let make = (~school, ~courses, ~currentUser) => {
   }
   switch component {
   | Some(page) =>
-    <div className="antialiased flex h-screen overflow-hidden bg-gray-100 ">
+    <div className="antialiased flex h-screen overflow-hidden bg-gray-50 ">
       <div className="flex school-admin-navbar flex-shrink-0">
         {<SchoolRouter__Nav school courses selectedPage currentUser />}
       </div>

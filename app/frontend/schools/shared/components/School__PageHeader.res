@@ -24,7 +24,7 @@ let selectedClasses = bool => {
 let make = (~exitUrl, ~title, ~description, ~links=[]) => {
   <>
     <Helmet> <title> {str(title)} </title> </Helmet>
-    <div className="bg-gray-50">
+    <div className="bg-white">
       <div className="max-w-5xl mx-auto pt-10 px-2">
         <div>
           <Link

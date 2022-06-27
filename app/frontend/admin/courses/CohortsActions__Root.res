@@ -92,6 +92,13 @@ module Editor = {
   }
 }
 
+let cohortActionSkeleton = () => {
+  <div className="max-w-5xl mx-auto px-2 mt-8">
+    {SkeletonLoading.heading()}
+    <div className="w-1/4"> {SkeletonLoading.input()} {SkeletonLoading.button()} </div>
+  </div>
+}
+
 let pageLinks = (courseId, cohortId) => [
   School__PageHeader.makeLink(
     ~href={`/school/courses/${courseId}/cohorts/${cohortId}/details`},
@@ -163,7 +170,7 @@ let make = (~courseId, ~cohortId) => {
     />
     {switch state {
     | Unloaded => str("Should Load data")
-    | Loading => str("Loading data")
+    | Loading => cohortActionSkeleton()
     | Loaded(data) => <Editor cohorts=data.cohorts cohort=data.cohort courseId />
     }}
   </div>

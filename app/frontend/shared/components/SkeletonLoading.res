@@ -113,6 +113,21 @@ let paragraph = () =>
     </div>
   </div>
 
+let input = () =>
+  <div className="skeleton-body-container w-full pb-4 mx-auto">
+    <div className="skeleton-placeholder__line-sm mt-4 w-1/4 skeleton-animate" />
+    <div className="p-4 mt-2 bg-white border border-gray-300 rounded-md">
+      <div className="skeleton-placeholder__line-sm skeleton-animate" />
+    </div>
+  </div>
+
+let button = () =>
+  <div className="skeleton-body-container w-full pb-4 mx-auto">
+    <div className="p-4 mt-2 bg-gray-200 border border-gray-300 rounded-md flex justify-center">
+      <div className="skeleton-placeholder__line-sm w-1/4 skeleton-animate" />
+    </div>
+  </div>
+
 let contents = () =>
   <div className="skeleton-body-container w-full pb-4 mx-auto">
     <div className="skeleton-body-wrapper mt-8 px-3 lg:px-0">

@@ -34,9 +34,8 @@ module ContentBlocks
     def resolution_required?
       content = content_block.content
 
-      last_resolved_at = if content.present?
-        content['last_resolved_at'].presence
-      end
+      last_resolved_at =
+        (content['last_resolved_at'].presence if content.present?)
 
       return true if last_resolved_at.blank?
 
@@ -46,9 +45,7 @@ module ContentBlocks
     def origin_url
       content = content_block.content
 
-      url = if content.present?
-        content['url'].presence
-      end
+      url = (content['url'].presence if content.present?)
 
       return url if url.present?
 

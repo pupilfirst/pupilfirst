@@ -224,7 +224,7 @@ let studentsList = (students, courseId, params) => {
               href={`/school/courses/${courseId}/students/${StudentInfo.id(student)}/details`}
               className="flex flex-1 items-center text-left py-4 px-4 hover:bg-gray-100 hover:text-primary-500 focus:bg-gray-100 focus:text-primary-500 justify-between">
               <span className="inline-flex items-center p-2">
-                <i className="fas fa-edit text-gray-500" />
+                <PfIcon className="if i-edit-regular if-fw" />
                 <span className="ml-2"> {"Edit"->str} </span>
               </span>
             </Link>
@@ -267,20 +267,23 @@ let make = (~courseId, ~search) => {
     <Helmet> <title> {str("Students Index")} </title> </Helmet>
     <div>
       <div>
-        <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
-          <div className="mt-2 text-right">
-            <Link
-              className="btn btn-primary btn-large"
-              href={`/school/courses/${courseId}/students/new`}>
-              <span> {str("Create Student")} </span>
-            </Link>
+        <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 mt-8">
+          <div className="flex justify-between items-center gap-2">
+            <ul className="flex font-semibold text-sm">
+              <li
+                className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
+                <span> {"Active Students"->str} </span>
+              </li>
+            </ul>
+            <div>
+              <Link
+                className="btn btn-primary btn-large"
+                href={`/school/courses/${courseId}/students/new`}>
+                <span> {str("Create Student")} </span>
+              </Link>
+            </div>
           </div>
-          <ul className="flex font-semibold text-sm">
-            <li className="px-3 py-3 md:py-2 text-primary-500 border-b-3 border-primary-500 -mb-px">
-              <span> {"Active Students"->str} </span>
-            </li>
-          </ul>
-          <div className="bg-gray-100 sticky top-0 py-3">
+          <div className="sticky top-0 my-6">
             <div className="border rounded-lg mx-auto bg-white ">
               <div>
                 <div className="flex w-full items-start p-4">

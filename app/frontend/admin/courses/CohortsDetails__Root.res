@@ -1,5 +1,14 @@
 let str = React.string
 
+let cohortDetailsSkeleton = () => {
+  <div className="max-w-5xl mx-auto px-2 mt-8">
+    {SkeletonLoading.input()}
+    {SkeletonLoading.input()}
+    {SkeletonLoading.input()}
+    {SkeletonLoading.button()}
+  </div>
+}
+
 let pageLinks = (courseId, cohortId) => [
   School__PageHeader.makeLink(
     ~href={`/school/courses/${courseId}/cohorts/${cohortId}/details`},
@@ -57,7 +66,7 @@ let make = (~courseId, ~cohortId) => {
     />
     {switch state {
     | Unloaded => str("Should Load data")
-    | Loading => str("Loading data")
+    | Loading => cohortDetailsSkeleton()
     | Loaded(cohort) => <AdminCoursesShared__CohortsEditor courseId cohort />
     }}
   </div>

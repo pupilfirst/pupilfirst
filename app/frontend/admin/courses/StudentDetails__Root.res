@@ -446,6 +446,17 @@ let loadData = (studentId, setState) => {
   |> ignore
 }
 
+let studentDetailsSkeleton = () => {
+  <div className="max-w-5xl mx-auto px-2 mt-8">
+    {SkeletonLoading.input()}
+    {SkeletonLoading.input()}
+    {SkeletonLoading.input()}
+    {SkeletonLoading.input()}
+    {SkeletonLoading.input()}
+    {SkeletonLoading.button()}
+  </div>
+}
+
 let pageLinks = (courseId, studentId) => [
   School__PageHeader.makeLink(
     ~href={`/school/courses/${courseId}/students/${studentId}/details`},
@@ -480,7 +491,7 @@ let make = (~courseId, ~studentId) => {
     <div className="max-w-5xl mx-auto">
       {switch state {
       | Unloaded => str("Should Load data")
-      | Loading => str("Loading data")
+      | Loading => studentDetailsSkeleton()
       | Loaded(baseData) =>
         <Editor
           courseCoaches=baseData.courseCoaches

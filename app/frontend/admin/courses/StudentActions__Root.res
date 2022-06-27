@@ -413,6 +413,17 @@ module StudentActionsDataQuery = %graphql(`
   }
   `)
 
+let studentActionSkeleton = () => {
+  <div className="max-w-5xl mx-auto px-2 mt-8">
+    {SkeletonLoading.heading()}
+    <div className="flex items-end gap-4">
+      <div className="w-3/4"> {SkeletonLoading.input()} </div>
+      <div className="w-1/4"> {SkeletonLoading.button()} </div>
+    </div>
+    <div className="w-1/4"> {SkeletonLoading.button()} </div>
+  </div>
+}
+
 let pageLinks = (courseId, studentId) => [
   School__PageHeader.makeLink(
     ~href={`/school/courses/${courseId}/students/${studentId}/details`},
@@ -469,7 +480,7 @@ let make = (~courseId, ~studentId) => {
     <div className="max-w-5xl mx-auto px-2">
       {switch state {
       | Unloaded => str("Should Load data")
-      | Loading => str("Loading data")
+      | Loading => studentActionSkeleton()
       | Loaded(baseData) =>
         <Editor
           studentData={baseData.student} certificates={baseData.certificates} studentId={studentId}

@@ -14,19 +14,16 @@ describe Vimeo::ResolveEmbedCodeJob do
   let(:resolve_embed_code_service) {instance_double(ContentBlocks::ResolveEmbedCodeService, execute: "some code")}
 
   describe '#perform' do
-    it 'returns the embed code of the content block on successful resolution' do
+    it 'does not schedule another job on successful resolution' do
       expect(ContentBlocks::ResolveEmbedCodeService).to receive(:new)
         .with(vimeo_embed_block)
         .and_return(resolve_embed_code_service)
 
       expect(resolve_embed_code_service).to receive(:execute)
 
-      embed_code = subject.perform_now(vimeo_embed_block, 1)
-
-      expect(embed_code).to eq("some code")
-
-      # Check another job is not scheduled on successful resolution
-      expect(Vimeo::ResolveEmbedCodeJob).to_not have_been_enqueued
+      expect do
+          subject.perform_now(vimeo_embed_block, 1)
+      end.to_not(change { ActiveJob::Base.queue_adapter.enqueued_jobs.size })
     end
 
     context 'resolution is unsuccessful in first attempt' do

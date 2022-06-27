@@ -7,7 +7,7 @@ module Types
     field :access_ends_at, GraphQL::Types::ISO8601DateTime, null: true
     field :dropped_out_at, GraphQL::Types::ISO8601DateTime, null: true
     field :user, Types::UserType, null: false
-    field :personal_coaches, [Types::CoachType], null: false
+    field :personal_coaches, [Types::UserProxyType], null: false
     field :cohort, Types::CohortType, null: false
     field :course, Types::CourseType, null: false
 

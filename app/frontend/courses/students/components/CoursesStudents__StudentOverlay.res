@@ -26,6 +26,11 @@ let initialState = {
 
 let closeOverlay = courseId => RescriptReactRouter.push("/courses/" ++ (courseId ++ "/students"))
 
+module UserDetailsFragment = UserDetails.Fragment
+module LevelFragment = Shared__Level.Fragment
+module CohortFragment = Cohort.Fragment
+module UserProxyFragment = UserProxy.Fragment
+
 module StudentDetailsQuery = %graphql(`
     query StudentDetailsQuery($studentId: ID!) {
       studentDetails(studentId: $studentId) {
@@ -33,23 +38,23 @@ module StudentDetailsQuery = %graphql(`
         evaluationCriteria {
           id, name, maxGrade, passGrade
         },
-        team {
-          id
-          name
-          teamTags
-          levelId
-          droppedOutAt
-          accessEndsAt
-          students {
-            id
-            user {
-              name
-              fullTitle
-              avatarUrl
-              taggings
-            }
+        student {
+          id,
+          taggings
+          user {
+            ...UserDetailsFragment
           }
-          coachUserIds
+          level {
+            ...LevelFragment
+          }
+          cohort {
+            ...CohortFragment
+          }
+          personalCoaches {
+            ...UserProxyFragment
+          }
+          accessEndsAt
+          droppedOutAt
         }
         totalTargets
         targetsCompleted
@@ -58,6 +63,28 @@ module StudentDetailsQuery = %graphql(`
         averageGrades {
           evaluationCriterionId
           averageGrade
+        }
+        team {
+          id
+          name
+          students {
+            id,
+            taggings
+            user {
+              ...UserDetailsFragment
+            }
+            level {
+              ...LevelFragment
+            }
+            cohort {
+              ...CohortFragment
+            }
+            personalCoaches {
+              ...UserProxyFragment
+            }
+            accessEndsAt
+            droppedOutAt
+          }
         }
       }
       coachNotes(studentId: $studentId) {
@@ -241,16 +268,6 @@ let showSocialLinks = socialLinks =>
     |> React.array}
   </div>
 
-let personalInfo = studentDetails =>
-  <div className="mt-2 text-center">
-    <div className="flex flex-wrap justify-center text-xs font-semibold text-gray-800">
-      <div className="flex items-center px-2">
-        <i className="fas fa-envelope" />
-        <p className="ml-2 tracking-wide"> {studentDetails |> StudentDetails.email |> str} </p>
-      </div>
-    </div>
-  </div>
-
 let setSelectedTab = (selectedTab, setState) =>
   setState(state => {...state, selectedTab: selectedTab})
 
@@ -330,22 +347,18 @@ let removeNote = (setState, studentDetails, noteId) =>
 
 let userInfo = (~key, ~avatarUrl, ~name, ~fulltitle) =>
   <div key className="shadow rounded-lg p-4 flex items-center mt-2">
-    {CoursesStudents__TeamCoaches.avatar(avatarUrl, name)}
+    {CoursesStudents__PersonalCoaches.avatar(avatarUrl, name)}
     <div className="ml-2 md:ml-3">
       <div className="text-sm font-semibold"> {name |> str} </div>
       <div className="text-xs"> {fulltitle |> str} </div>
     </div>
   </div>
 
-let coachInfo = (teamCoaches, studentDetails) => {
-  let coaches = studentDetails |> StudentDetails.team |> TeamInfo.coaches(teamCoaches)
-
-  let fulltitle =
-    studentDetails |> StudentDetails.teamHasManyStudents ? t("team_coaches") : t("personal_coaches")
-
+let coachInfo = studentDetails => {
+  let coaches = studentDetails->StudentDetails.student->StudentInfo.personalCoaches
   coaches |> ArrayUtils.isNotEmpty
     ? <div className="mb-8">
-        <h6 className="font-semibold"> {fulltitle |> str} </h6>
+        <h6 className="font-semibold"> {t("personal_coaches") |> str} </h6>
         {coaches
         |> Array.map(coach =>
           userInfo(
@@ -363,36 +376,34 @@ let coachInfo = (teamCoaches, studentDetails) => {
 let navigateToStudent = (setState, _event) => setState(_ => initialState)
 
 let otherTeamMembers = (setState, studentId, studentDetails) =>
-  if studentDetails |> StudentDetails.teamHasManyStudents {
+  switch studentDetails->StudentDetails.team {
+  | Some(team) =>
     <div className="block mb-8">
       <h6 className="font-semibold"> {t("other_team_members") |> str} </h6>
-      {studentDetails
-      |> StudentDetails.team
-      |> TeamInfo.otherStudents(studentId)
-      |> Array.map(student => {
-        let path = "/students/" ++ ((student |> TeamInfo.studentId) ++ "/report")
+      {team
+      ->StudentDetails.students
+      ->Js.Array2.map(student => {
+        let path = "/students/" ++ (student->StudentInfo.id ++ "/report")
 
         <Link
           className="block rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500"
           href=path
           onClick={navigateToStudent(setState)}
-          key={student |> TeamInfo.studentId}>
+          key={student->StudentInfo.id}>
           {userInfo(
-            ~key=student |> TeamInfo.studentId,
-            ~avatarUrl=student |> TeamInfo.studentAvatarUrl,
-            ~name=student |> TeamInfo.studentName,
-            ~fulltitle=student |> TeamInfo.studentFullTitle,
+            ~key=student->StudentInfo.id,
+            ~avatarUrl=student->StudentInfo.user->UserDetails.avatarUrl,
+            ~name=student->StudentInfo.user->UserDetails.name,
+            ~fulltitle=student->StudentInfo.user->UserDetails.fullTitle,
           )}
         </Link>
-      })
-      |> React.array}
+      }) |> React.array}
     </div>
-  } else {
-    React.null
+  | None => React.null
   }
 
-let inactiveWarning = teamInfo => {
-  let warning = switch (teamInfo |> TeamInfo.droppedOutAt, teamInfo |> TeamInfo.accessEndsAt) {
+let inactiveWarning = student => {
+  let warning = switch (student->StudentInfo.droppedOutAt, student->StudentInfo.accessEndsAt) {
   | (Some(droppedOutAt), _) =>
     Some(
       t(
@@ -401,7 +412,7 @@ let inactiveWarning = teamInfo => {
       ),
     )
   | (None, Some(accessEndsAt)) =>
-    accessEndsAt |> DateFns.isPast
+    accessEndsAt->DateFns.isPast
       ? Some(
           t(
             ~variables=[("date", accessEndsAt->DateFns.formatPreset(~short=true, ~year=true, ()))],
@@ -423,7 +434,7 @@ let inactiveWarning = teamInfo => {
 }
 
 @react.component
-let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNotesCB) => {
+let make = (~courseId, ~studentId, ~levels, ~userId, ~personalCoaches, ~onAddCoachNotesCB) => {
   let (state, setState) = React.useState(() => initialState)
 
   React.useEffect0(() => {
@@ -436,122 +447,125 @@ let make = (~courseId, ~studentId, ~levels, ~userId, ~teamCoaches, ~onAddCoachNo
   <div
     className="fixed z-30 top-0 left-0 w-full h-full overflow-y-scroll md:overflow-hidden bg-white">
     {switch state.studentData {
-    | Loaded(studentDetails) =>
-      <div className="flex flex-col md:flex-row md:h-screen">
-        <div
-          className="w-full md:w-2/5 bg-white p-4 md:p-8 md:py-6 2xl:px-16 2xl:py-12 md:overflow-y-auto">
-          <div className="student-overlay__student-details relative pb-8">
-            <button
-              ariaLabel={t("close_student_report")}
-              title={t("close_student_report")}
-              onClick={_ => closeOverlay(courseId)}
-              className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-10 w-10 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
-              <Icon className="if i-times-regular text-xl lg:text-2xl" />
-            </button>
+    | Loaded(studentDetails) => {
+        let student = studentDetails->StudentDetails.student
+        <div className="flex flex-col md:flex-row md:h-screen">
+          <div
+            className="w-full md:w-2/5 bg-white p-4 md:p-8 md:py-6 2xl:px-16 2xl:py-12 md:overflow-y-auto">
+            <div className="student-overlay__student-details relative pb-8">
+              <button
+                ariaLabel={t("close_student_report")}
+                title={t("close_student_report")}
+                onClick={_ => closeOverlay(courseId)}
+                className="absolute z-50 left-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-10 w-10 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+                <Icon className="if i-times-regular text-xl lg:text-2xl" />
+              </button>
+              <div
+                className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
+                {switch student->StudentInfo.user->UserDetails.avatarUrl {
+                | Some(avatarUrl) => <img className="w-full object-cover" src=avatarUrl />
+                | None =>
+                  <Avatar
+                    name={student->StudentInfo.user->UserDetails.name} className="object-cover"
+                  />
+                }}
+              </div>
+              <h2 className="text-lg text-center mt-3">
+                {student->StudentInfo.user->UserDetails.name |> str}
+              </h2>
+              <p className="text-sm font-semibold text-center mt-1">
+                {student->StudentInfo.user->UserDetails.fullTitle |> str}
+              </p>
+              {inactiveWarning(student)}
+            </div>
+            {levelProgressBar(
+              student->StudentInfo.level->Shared__Level.id,
+              levels,
+              studentDetails->StudentDetails.completedLevelIds,
+            )}
+            <div className="mb-8">
+              <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
+              <div className="flex -mx-2 flex-wrap mt-2">
+                {targetsCompletionStatus(
+                  studentDetails |> StudentDetails.targetsCompleted,
+                  studentDetails |> StudentDetails.totalTargets,
+                )}
+                {quizPerformanceChart(
+                  studentDetails |> StudentDetails.averageQuizScore,
+                  studentDetails |> StudentDetails.quizzesAttempted,
+                )}
+              </div>
+            </div>
+            {studentDetails |> StudentDetails.averageGrades |> ArrayUtils.isNotEmpty
+              ? <div className="mb-8">
+                  <h6 className="font-semibold"> {t("average_grades") |> str} </h6>
+                  <div className="flex -mx-2 flex-wrap">
+                    {averageGradeCharts(
+                      studentDetails |> StudentDetails.evaluationCriteria,
+                      studentDetails |> StudentDetails.averageGrades,
+                    )}
+                  </div>
+                </div>
+              : React.null}
+            {coachInfo(studentDetails)}
+            {otherTeamMembers(setState, studentId, studentDetails)}
+          </div>
+          <div
+            className="w-full relative md:w-3/5 bg-gray-50 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">
             <div
-              className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden flex-shrink-0">
-              {switch studentDetails |> StudentDetails.avatarUrl {
-              | Some(avatarUrl) => <img className="w-full object-cover" src=avatarUrl />
-              | None =>
-                <Avatar name={studentDetails |> StudentDetails.name} className="object-cover" />
+              className="sticky top-0 bg-gray-50 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
+              <ul
+                role="tablist"
+                className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent">
+                <li
+                  tabIndex=0
+                  role="tab"
+                  ariaSelected={state.selectedTab === Notes}
+                  onClick={_event => setSelectedTab(Notes, setState)}
+                  className={"cursor-pointer flex  flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++
+                  switch state.selectedTab {
+                  | Notes => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
+                  | Submissions => " "
+                  }}>
+                  {t("notes") |> str}
+                </li>
+                <li
+                  tabIndex=0
+                  role="tab"
+                  ariaSelected={state.selectedTab === Submissions}
+                  onClick={_event => setSelectedTab(Submissions, setState)}
+                  className={"cursor-pointer flex flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md  " ++
+                  switch state.selectedTab {
+                  | Submissions => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
+                  | Notes => " "
+                  }}>
+                  {t("submissions") |> str}
+                </li>
+              </ul>
+            </div>
+            <div className="pt-2 px-4 md:px-8 2xl:px-16">
+              {switch state.selectedTab {
+              | Notes =>
+                <CoursesStudents__CoachNotes
+                  studentId
+                  hasArchivedNotes={studentDetails |> StudentDetails.hasArchivedNotes}
+                  coachNotes={studentDetails |> StudentDetails.coachNotes}
+                  addNoteCB={addNote(setState, studentDetails, onAddCoachNotesCB)}
+                  userId
+                  removeNoteCB={removeNote(setState, studentDetails)}
+                />
+              | Submissions =>
+                <CoursesStudents__SubmissionsList
+                  studentId
+                  levels
+                  submissions=state.submissions
+                  updateSubmissionsCB={updateSubmissions(setState)}
+                />
               }}
             </div>
-            <h2 className="text-lg text-center mt-3">
-              {studentDetails |> StudentDetails.name |> str}
-            </h2>
-            <p className="text-sm font-semibold text-center mt-1">
-              {studentDetails |> StudentDetails.fullTitle |> str}
-            </p>
-            {personalInfo(studentDetails)}
-            {inactiveWarning(studentDetails |> StudentDetails.team)}
-          </div>
-          {levelProgressBar(
-            studentDetails |> StudentDetails.levelId,
-            levels,
-            studentDetails |> StudentDetails.completedLevelIds,
-          )}
-          <div className="mb-8">
-            <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
-            <div className="flex -mx-2 flex-wrap mt-2">
-              {targetsCompletionStatus(
-                studentDetails |> StudentDetails.targetsCompleted,
-                studentDetails |> StudentDetails.totalTargets,
-              )}
-              {quizPerformanceChart(
-                studentDetails |> StudentDetails.averageQuizScore,
-                studentDetails |> StudentDetails.quizzesAttempted,
-              )}
-            </div>
-          </div>
-          {studentDetails |> StudentDetails.averageGrades |> ArrayUtils.isNotEmpty
-            ? <div className="mb-8">
-                <h6 className="font-semibold"> {t("average_grades") |> str} </h6>
-                <div className="flex -mx-2 flex-wrap">
-                  {averageGradeCharts(
-                    studentDetails |> StudentDetails.evaluationCriteria,
-                    studentDetails |> StudentDetails.averageGrades,
-                  )}
-                </div>
-              </div>
-            : React.null}
-          {coachInfo(teamCoaches, studentDetails)}
-          {otherTeamMembers(setState, studentId, studentDetails)}
-        </div>
-        <div
-          className="w-full relative md:w-3/5 bg-gray-50 md:border-l pb-6 2xl:pb-12 md:overflow-y-auto">
-          <div
-            className="sticky top-0 bg-gray-50 pt-2 md:pt-4 px-4 md:px-8 2xl:px-16 2xl:pt-10 z-30">
-            <ul
-              role="tablist"
-              className="flex flex-1 md:flex-none p-1 md:p-0 space-x-1 md:space-x-0 text-center rounded-lg justify-between md:justify-start bg-gray-300 md:bg-transparent">
-              <li
-                tabIndex=0
-                role="tab"
-                ariaSelected={state.selectedTab === Notes}
-                onClick={_event => setSelectedTab(Notes, setState)}
-                className={"cursor-pointer flex  flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md " ++
-                switch state.selectedTab {
-                | Notes => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
-                | Submissions => " "
-                }}>
-                {t("notes") |> str}
-              </li>
-              <li
-                tabIndex=0
-                role="tab"
-                ariaSelected={state.selectedTab === Submissions}
-                onClick={_event => setSelectedTab(Submissions, setState)}
-                className={"cursor-pointer flex flex-1 justify-center md:flex-none rounded-md p-1.5 md:border-b-3 md:rounded-b-none md:border-transparent md:px-4 md:hover:bg-gray-50 md:py-2 text-sm font-semibold text-gray-800 hover:text-primary-600 hover:bg-gray-50 focus:outline-none focus:ring-inset focus:ring-2 focus:bg-gray-50 focus:ring-focusColor-500 md:focus:border-b-none md:focus:rounded-t-md  " ++
-                switch state.selectedTab {
-                | Submissions => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
-                | Notes => " "
-                }}>
-                {t("submissions") |> str}
-              </li>
-            </ul>
-          </div>
-          <div className="pt-2 px-4 md:px-8 2xl:px-16">
-            {switch state.selectedTab {
-            | Notes =>
-              <CoursesStudents__CoachNotes
-                studentId
-                hasArchivedNotes={studentDetails |> StudentDetails.hasArchivedNotes}
-                coachNotes={studentDetails |> StudentDetails.coachNotes}
-                addNoteCB={addNote(setState, studentDetails, onAddCoachNotesCB)}
-                userId
-                removeNoteCB={removeNote(setState, studentDetails)}
-              />
-            | Submissions =>
-              <CoursesStudents__SubmissionsList
-                studentId
-                levels
-                submissions=state.submissions
-                updateSubmissionsCB={updateSubmissions(setState)}
-              />
-            }}
           </div>
         </div>
-      </div>
+      }
     | Loading =>
       <div className="flex flex-col md:flex-row md:h-screen">
         <div className="w-full md:w-2/5 bg-white p-4 md:p-8 2xl:p-16">

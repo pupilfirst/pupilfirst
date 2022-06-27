@@ -37,3 +37,15 @@ let makeFromJs = jsObject =>
     ~avatarUrl=jsObject["avatarUrl"],
     ~fullTitle=jsObject["fullTitle"],
   )
+
+module Fragment = %graphql(`
+  fragment UserFragment on User {
+    id
+    name
+    fullTitle
+    avatarUrl
+  }
+`)
+
+let makeFromFragment = (user: Fragment.t) =>
+  make(~id=user.id, ~name=user.name, ~avatarUrl=user.avatarUrl, ~fullTitle=user.fullTitle)

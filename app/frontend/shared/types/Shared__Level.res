@@ -43,3 +43,14 @@ let makeFromJs = level => {
 let shortName = t => "Level " ++ (t.number |> string_of_int)
 
 let filterValue = t => (t.number |> string_of_int) ++ ", " ++ t.name
+
+module Fragment = %graphql(`
+  fragment LevelFragment on Level {
+    id
+    name
+    number
+  }
+`)
+
+let makeFromFragment = (level: Fragment.t) =>
+  make(~id=level.id, ~name=level.name, ~number=level.number)

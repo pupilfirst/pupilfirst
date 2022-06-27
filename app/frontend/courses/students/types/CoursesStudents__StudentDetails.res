@@ -3,9 +3,14 @@ type averageGrade = {
   grade: float,
 }
 
+type team = {
+  id: string,
+  name: string,
+  students: array<CoursesStudents__StudentInfo.t>,
+}
+
 type t = {
   id: string,
-  email: string,
   coachNotes: array<CoursesStudents__CoachNote.t>,
   hasArchivedNotes: bool,
   evaluationCriteria: array<CoursesStudents__EvaluationCriterion.t>,
@@ -14,28 +19,19 @@ type t = {
   quizScores: array<string>,
   averageGrades: array<averageGrade>,
   completedLevelIds: array<string>,
-  team: CoursesStudents__TeamInfo.t,
+  student: CoursesStudents__StudentInfo.t,
+  team: option<team>,
 }
+
+let student = t => t.student
 
 let team = t => t.team
 
-let student = t => t.team |> CoursesStudents__TeamInfo.studentWithId(t.id)
-
-let name = t => t |> student |> CoursesStudents__TeamInfo.studentName
-
-let fullTitle = t => t |> student |> CoursesStudents__TeamInfo.studentFullTitle
-
-let email = t => t.email
-
-let levelId = t => t.team |> CoursesStudents__TeamInfo.levelId
-
-let avatarUrl = t => t |> student |> CoursesStudents__TeamInfo.studentAvatarUrl
+let students = team => team.students
 
 let coachNotes = t => t.coachNotes
 
 let hasArchivedNotes = t => t.hasArchivedNotes
-
-let teamCoachUserIds = t => t.team |> CoursesStudents__TeamInfo.coachUserIds
 
 let makeAverageGrade = gradesData =>
   gradesData |> Js.Array.map(gradeData => {
@@ -101,9 +97,18 @@ let computeAverageQuizScore = quizScores => {
 let averageQuizScore = t =>
   t.quizScores |> ArrayUtils.isEmpty ? None : Some(computeAverageQuizScore(t.quizScores))
 
+let makeTeam = (teamId, teamName, students) => {id: teamId, name: teamName, students: students}
+
+let makeTeamFromJs = teamData => {
+  makeTeam(
+    teamData["id"],
+    teamData["name"],
+    teamData["students"]->Js.Array2.map(CoursesStudents__StudentInfo.makeFromJs),
+  )
+}
+
 let makeFromJs = (id, studentDetails, coachNotes, hasArchivedNotes) => {
   id: id,
-  email: studentDetails["email"],
   coachNotes: coachNotes |> Js.Array.map(note => note |> CoursesStudents__CoachNote.makeFromJs),
   hasArchivedNotes: hasArchivedNotes,
   evaluationCriteria: studentDetails["evaluationCriteria"] |> CoursesStudents__EvaluationCriterion.makeFromJs,
@@ -112,7 +117,6 @@ let makeFromJs = (id, studentDetails, coachNotes, hasArchivedNotes) => {
   quizScores: studentDetails["quizScores"],
   averageGrades: studentDetails["averageGrades"] |> makeAverageGrade,
   completedLevelIds: studentDetails["completedLevelIds"],
-  team: studentDetails["team"] |> CoursesStudents__TeamInfo.makeFromJS,
+  student: studentDetails["student"] |> CoursesStudents__StudentInfo.makeFromJs,
+  team: studentDetails["team"]->Belt.Option.map(makeTeamFromJs),
 }
-
-let teamHasManyStudents = t => t.team |> CoursesStudents__TeamInfo.students |> Array.length > 1

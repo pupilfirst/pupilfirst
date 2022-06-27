@@ -9,13 +9,13 @@ module Courses
       "#{I18n.t('presenters.courses.students.students_in_course')} | #{@course.name} | #{current_school.name}"
     end
 
-    def team_coaches
+    def personal_coaches
       school = @course.school
 
       school
         .faculty
-        .joins(startups: :course)
-        .where(startups: { courses: { id: @course.id } })
+        .joins(founders: :course)
+        .where(founders: { courses: { id: @course.id } })
         .includes(user: { avatar_attachment: :blob })
         .distinct
         .map do |coach|
@@ -25,7 +25,7 @@ module Courses
             id: coach.id,
             user_id: user.id,
             name: user.name,
-            title: user.full_title
+            full_title: user.full_title
           }
 
           coach_details[:avatar_url] =
@@ -42,7 +42,7 @@ module Courses
         id: coach.id,
         user_id: current_user.id,
         name: current_user.name,
-        title: current_user.full_title
+        full_title: current_user.full_title
       }
 
       details[:avatar_url] =
@@ -59,9 +59,9 @@ module Courses
         levels: level_details,
         course: course_details,
         user_id: current_user.id,
-        team_coaches: team_coaches,
+        personal_coaches: personal_coaches,
         current_coach: current_coach_details,
-        team_tags: @course.team_tags,
+        team_tags: @course.student_tags,
         user_tags: @course.user_tags
       }
     end

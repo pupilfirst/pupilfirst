@@ -432,7 +432,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
             <span className="text-xs mt-0.5"> {str(t("close"))} </span>
           </button>
           <div className="flex space-x-4">
-            <CoursesStudents__TeamCoaches
+            <CoursesStudents__PersonalCoaches
               tooltipPosition=#Bottom
               defaultAvatarSize="8"
               mdAvatarSize="8"
@@ -492,7 +492,7 @@ let headerSection = (state, nextSubmission, send, submissionDetails, filter, sub
         </div>
       </div>
       <div className="hidden md:flex flex-shrink-0 space-x-6">
-        <CoursesStudents__TeamCoaches
+        <CoursesStudents__PersonalCoaches
           tooltipPosition=#Bottom
           defaultAvatarSize="8"
           mdAvatarSize="8"

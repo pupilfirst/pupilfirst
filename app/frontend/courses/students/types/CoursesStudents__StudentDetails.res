@@ -33,11 +33,10 @@ let coachNotes = t => t.coachNotes
 
 let hasArchivedNotes = t => t.hasArchivedNotes
 
-let makeAverageGrade = gradesData =>
-  gradesData |> Js.Array.map(gradeData => {
-    evaluationCriterionId: gradeData["evaluationCriterionId"],
-    grade: gradeData["averageGrade"],
-  })
+let makeAverageGrade = (~evaluationCriterionId, ~grade) => {
+  evaluationCriterionId: evaluationCriterionId,
+  grade: grade,
+}
 
 let totalTargets = t => t.totalTargets |> float_of_int
 
@@ -97,26 +96,30 @@ let computeAverageQuizScore = quizScores => {
 let averageQuizScore = t =>
   t.quizScores |> ArrayUtils.isEmpty ? None : Some(computeAverageQuizScore(t.quizScores))
 
-let makeTeam = (teamId, teamName, students) => {id: teamId, name: teamName, students: students}
+let makeTeam = (~id, ~name, ~students) => {id: id, name: name, students: students}
 
-let makeTeamFromJs = teamData => {
-  makeTeam(
-    teamData["id"],
-    teamData["name"],
-    teamData["students"]->Js.Array2.map(CoursesStudents__StudentInfo.makeFromJs),
-  )
-}
-
-let makeFromJs = (id, studentDetails, coachNotes, hasArchivedNotes) => {
+let make = (
+  ~id,
+  ~coachNotes,
+  ~hasArchivedNotes,
+  ~evaluationCriteria,
+  ~totalTargets,
+  ~targetsCompleted,
+  ~quizScores,
+  ~averageGrades,
+  ~completedLevelIds,
+  ~student,
+  ~team,
+) => {
   id: id,
-  coachNotes: coachNotes |> Js.Array.map(note => note |> CoursesStudents__CoachNote.makeFromJs),
+  coachNotes: coachNotes,
   hasArchivedNotes: hasArchivedNotes,
-  evaluationCriteria: studentDetails["evaluationCriteria"] |> CoursesStudents__EvaluationCriterion.makeFromJs,
-  totalTargets: studentDetails["totalTargets"],
-  targetsCompleted: studentDetails["targetsCompleted"],
-  quizScores: studentDetails["quizScores"],
-  averageGrades: studentDetails["averageGrades"] |> makeAverageGrade,
-  completedLevelIds: studentDetails["completedLevelIds"],
-  student: studentDetails["student"] |> CoursesStudents__StudentInfo.makeFromJs,
-  team: studentDetails["team"]->Belt.Option.map(makeTeamFromJs),
+  evaluationCriteria: evaluationCriteria,
+  totalTargets: totalTargets,
+  targetsCompleted: targetsCompleted,
+  quizScores: quizScores,
+  averageGrades: averageGrades,
+  completedLevelIds: completedLevelIds,
+  student: student,
+  team: team,
 }

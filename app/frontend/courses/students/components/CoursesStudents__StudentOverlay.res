@@ -30,6 +30,7 @@ module UserDetailsFragment = UserDetails.Fragment
 module LevelFragment = Shared__Level.Fragment
 module CohortFragment = Cohort.Fragment
 module UserProxyFragment = UserProxy.Fragment
+module UserFragment = User.Fragment
 
 module StudentDetailsQuery = %graphql(`
     query StudentDetailsQuery($studentId: ID!) {
@@ -92,37 +93,87 @@ module StudentDetailsQuery = %graphql(`
           note
           createdAt
           author {
-            id
-            name
-            fullTitle
-            avatarUrl
+          ...UserFragment
         }
       }
       hasArchivedCoachNotes(studentId: $studentId)
     }
   `)
 
-let updateStudentDetails = (setState, studentId, details, coachNotes, hasArchivedCoachNotes) => {
-  let studentDetails = StudentDetails.makeFromJs(
-    studentId,
-    details,
-    coachNotes,
-    hasArchivedCoachNotes,
-  )
-  setState(state => {...state, studentData: Loaded(studentDetails)})
-}
-
 let getStudentDetails = (studentId, setState, ()) => {
   setState(state => {...state, studentData: Loading})
-  StudentDetailsQuery.make({studentId: studentId})
-  |> Js.Promise.then_(response => {
-    updateStudentDetails(
-      setState,
-      studentId,
-      response["studentDetails"],
-      response["coachNotes"],
-      response["hasArchivedCoachNotes"],
+  StudentDetailsQuery.fetch({studentId: studentId})
+  |> Js.Promise.then_((response: StudentDetailsQuery.t) => {
+    let s = response.studentDetails.student
+    let coachNotes =
+      response.coachNotes->Js.Array2.map(coachNote =>
+        CoachNote.make(
+          ~id=coachNote.id,
+          ~note=coachNote.note,
+          ~createdAt=coachNote.createdAt->DateFns.decodeISO,
+          ~author=coachNote.author->Belt.Option.map(User.makeFromFragment),
+        )
+      )
+
+    let evaluationCriteria =
+      response.studentDetails.evaluationCriteria->Js.Array2.map(evaluationCriterion =>
+        CoursesStudents__EvaluationCriterion.make(
+          ~id=evaluationCriterion.id,
+          ~name=evaluationCriterion.name,
+          ~maxGrade=evaluationCriterion.maxGrade,
+          ~passGrade=evaluationCriterion.passGrade,
+        )
+      )
+
+    let averageGrades =
+      response.studentDetails.averageGrades->Js.Array2.map(gradeData =>
+        StudentDetails.makeAverageGrade(
+          ~evaluationCriterionId=gradeData.evaluationCriterionId,
+          ~grade=gradeData.averageGrade,
+        )
+      )
+
+    let studentDetails = StudentDetails.make(
+      ~id=studentId,
+      ~hasArchivedNotes=response.hasArchivedCoachNotes,
+      ~coachNotes,
+      ~evaluationCriteria,
+      ~totalTargets=response.studentDetails.totalTargets,
+      ~targetsCompleted=response.studentDetails.targetsCompleted,
+      ~quizScores=response.studentDetails.quizScores,
+      ~averageGrades,
+      ~completedLevelIds=response.studentDetails.completedLevelIds,
+      ~student=StudentInfo.make(
+        ~id=s.id,
+        ~taggings=s.taggings,
+        ~user=UserDetails.makeFromFragment(s.user),
+        ~level=Shared__Level.makeFromFragment(s.level),
+        ~cohort=Cohort.makeFromFragment(s.cohort),
+        ~accessEndsAt=s.accessEndsAt->Belt.Option.map(DateFns.decodeISO),
+        ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
+        ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
+      ),
+      ~team=response.studentDetails.team->Belt.Option.map(team =>
+        StudentDetails.makeTeam(
+          ~id=team.id,
+          ~name=team.name,
+          ~students=team.students->Js.Array2.map(s =>
+            StudentInfo.make(
+              ~id=s.id,
+              ~taggings=s.taggings,
+              ~user=UserDetails.makeFromFragment(s.user),
+              ~level=Shared__Level.makeFromFragment(s.level),
+              ~cohort=Cohort.makeFromFragment(s.cohort),
+              ~accessEndsAt=s.accessEndsAt->Belt.Option.map(DateFns.decodeISO),
+              ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
+              ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
+            )
+          ),
+        )
+      ),
     )
+
+    setState(state => {...state, studentData: Loaded(studentDetails)})
     Js.Promise.resolve()
   })
   |> ignore

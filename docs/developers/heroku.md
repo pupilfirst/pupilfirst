@@ -211,6 +211,62 @@ To enable delivery of user-uploaded files through a CDN, you will have to set Cl
    CLOUDFRONT_EXPIRY=expiry_in_seconds
    ```
 
+## Deployment using docker
+
+> Note: To follow this, you should have created a heroku app and assed all the required environment variables.
+
+Heroku Container Registry allows us to deploy our docker images to Heroku. To be able to access Heroku Container Registry, we first need to log into it
+
+```bash
+heroku container:login
+```
+
+Once we are logged in we can push our image to the registry and deploy our app. Pupilfirst has a pre-built image on [docker hub](https://hub.docker.com/r/pupilfirst/pupilfirst). So we can simply pull the image and push it to the Heroku Container Registry.
+
+```bash
+docker pull pupilfirst/pupilfirst
+```
+This command will pull the image from the docker hub to our local system and if we now run `docker images` we should see something like this:
+```bash
+REPOSITORY              TAG       IMAGE ID       CREATED      SIZE
+pupilfirst/pupilfirst   latest    015f2c20137c   5 days ago   704MB
+```
+
+Now that we have the docker image all we need to do is to push the image to Heroku.
+First we will tag the image as per heroku's specification: `registry.heroku.com/<app>/<process-type>`, here `<app>` is the name of our heroku app and `<process-type>` is the type of process we want to run using this image. In Heroku there are three primary process types:
+- Web dynos: receive HTTP traffic from routers and typically run web servers.
+- Worker dynos: execute anything else, such as background jobs, queuing systems, and timed jobs.
+- One-off dynos: are temporary and not part of an ongoing dyno formation.
+
+In our case we want to run both `web` and `worker` using the same image.
+
+Let's push `web` first. To start with we will tag the image:
+```bash
+docker tag pupilfirst/pupilfirst registry.heroku.com/<app>/web
+```
+
+Then we will push the image to Heroku Container Registry, the `url` here will be the same as we used for the tag of the image.
+```bash
+docker push registry.heroku.com/<app>/web
+```
+
+Now we have our image in the Heroku Container Registry, now all we need to do it to release the image to our app
+```bash
+heroku container:release web --app <app>
+```
+
+The very same way we can tag, push and release the same image for worker just by changing the `<process-type>`.
+```
+docker tag pupilfirst/pupilfirst registry.heroku.com/<app>/worker
+docker push registry.heroku.com/<app>/worker
+heroku container:release worker --app <app>
+```
+
+We can also release both the images for both the processes at once:
+```bash
+heroku container:release web worker --app <app>
+```
+
 ## Troubleshooting
 
 If you're encountering crashes or errors, the first thing you should do is check the server logs. You can watch the Rails `production.log` file on Heroku by using the `logs` command:

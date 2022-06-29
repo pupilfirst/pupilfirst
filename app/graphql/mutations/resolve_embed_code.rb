@@ -1,22 +1,45 @@
 module Mutations
-  class ResolveEmbedCode < GraphQL::Schema::Mutation
-    argument :content_block_id, ID, required: true
+  class ResolveEmbedCode < ApplicationQuery
+    include QueryAuthorizeAuthor
 
-    description "Resolve Embed Code for a given content block"
+    description 'Resolve embed code for a given content block'
 
     field :embed_code, String, null: true
 
-    def resolve(params)
-      mutator = ResolveEmbedCodeMutator.new(context, params)
+    argument :content_block_id, ID, required: true
 
-      embed_code = if mutator.valid?
-        mutator.resolve
-      else
-        mutator.notify_errors
-        nil
+    class MustBeEmbedBlockType < GraphQL::Schema::Validator
+      def validate(_object, _context, value)
+        content_block = ContentBlock.find_by(id: value[:content_block_id])
+
+        return if content_block.block_type == ContentBlock::BLOCK_TYPE_EMBED
+
+        'Can only resolve embed-type content blocks'
       end
+    end
 
-      { embed_code: embed_code }
+    validates MustBeEmbedBlockType => {}
+
+    def resolve(_params)
+      { embed_code: resolve_embed_code }
+    end
+
+    def resolve_embed_code
+      ContentBlock.transaction do
+        ContentBlocks::ResolveEmbedCodeService.new(content_block).execute
+      end
+    end
+
+    def content_block
+      @content_block ||= ContentBlock.find_by(id: @params[:content_block_id])
+    end
+
+    def resource_school
+      course&.school
+    end
+
+    def course
+      content_block&.target_version&.target&.course
     end
   end
 end

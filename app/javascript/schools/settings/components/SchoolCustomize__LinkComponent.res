@@ -136,7 +136,7 @@ let make = (
 
   <DisablingCover disabled=localState.updating message="Updating...">
     <div
-      className={"flex justify-between items-center gap-8 bg-gray-100 text-xs text-gray-900 border rounded mt-2"}>
+      className={"flex justify-between items-center gap-8 bg-gray-50 text-xs text-gray-900 border rounded mt-2"}>
       <div className="flex items-center flex-1">
         {localState.editing
           ? <>
@@ -179,8 +179,8 @@ let make = (
               {switch kind {
               | HeaderLink
               | FooterLink => <>
-                  <span> {title |> str} </span>
-                  <FaIcon classes="fas fa-link mx-2" />
+                  <span className="inline-block mr-2 font-semibold"> {title |> str} </span>
+                  <PfIcon className="if i-link-regular if-fw mr-1" />
                   <code> {url |> str} </code>
                 </>
               | SocialLink => <code> {url |> str} </code>
@@ -192,19 +192,19 @@ let make = (
           ? <div>
               <button
                 ariaLabel={"Cancel Editing " ++ title}
-                title={"Cancel Editing " ++ url}
+                title={"Cancel Editing " ++ title}
                 onClick={e => {
                   dispatch(SetEditing(false))
                   dispatch(UpdateTitle(title))
                   dispatch(UpdateUrl(url))
                   dispatch(SetError(url |> UrlUtils.isInvalid(false)))
                 }}
-                className="p-3 hover:text-primary-500 focus:text-primary-500">
-                <FaIcon classes={"fas fa-times"} />
+                className="p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500 ">
+                <PfIcon className="if i-times-solid if-fw text-base" />
               </button>
               <button
                 ariaLabel={"Update " ++ title}
-                title={"Update " ++ url}
+                title={"Update " ++ title}
                 disabled={localState.error}
                 onClick={e =>
                   if !localState.error {
@@ -216,39 +216,39 @@ let make = (
                       ~url=localState.url,
                     )
                   }}
-                className="p-3 hover:text-primary-500 focus:text-primary-500">
+                className="p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500">
                 <FaIcon classes={"fas fa-check"} />
               </button>
             </div>
           : <div>
               <button
-                ariaLabel={"Edit " ++ title}
-                title={"Edit " ++ url}
+                ariaLabel={"Move Down " ++ title}
+                title={"Move Down " ++ title}
                 onClick={e => handleMoveLink(~id, ~direction=#Down, ~moveLinkCB, ~dispatch)}
                 disabled={index == total - 1}
-                className="p-3 hover:text-primary-500 focus:text-primary-500">
+                className="p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500">
                 <FaIcon classes="fas fa-arrow-down" />
               </button>
               <button
-                ariaLabel={"Edit " ++ title}
-                title={"Edit " ++ url}
+                ariaLabel={"Move up " ++ title}
+                title={"Move up " ++ title}
                 disabled={index == 0}
                 onClick={e => handleMoveLink(~id, ~direction=#Up, ~moveLinkCB, ~dispatch)}
-                className={"p-3 hover:text-primary-500 focus:text-primary-500"}>
+                className={"p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500"}>
                 <FaIcon classes="fas fa-arrow-up" />
               </button>
               <button
                 ariaLabel={"Edit " ++ title}
-                title={"Edit " ++ url}
+                title={"Edit " ++ title}
                 onClick={e => dispatch(SetEditing(true))}
-                className="p-3 hover:text-primary-500 focus:text-primary-500">
+                className="p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500">
                 <FaIcon classes="fas fa-edit" />
               </button>
               <button
                 ariaLabel={"Delete " ++ title}
-                title={"Delete " ++ url}
+                title={"Delete " ++ title}
                 onClick={handleDelete(deleting, disableDeleteCB, removeLinkCB, id)}
-                className="p-3 hover:text-red-500 focus:text-red-500">
+                className="p-3 hover:text-red-500 hover:bg-red-50 focus:bg-red-50 focus:text-red-500">
                 <FaIcon classes={deleteIconClasses(deleting |> List.mem(id))} />
               </button>
             </div>}

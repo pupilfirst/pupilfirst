@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  filter: grayscale(10%);
+}
+
 /* Tiggle switch */
 
 .toggle-label {

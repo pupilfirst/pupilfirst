@@ -30,11 +30,11 @@ tags
 # Ignore dotenv files.
 .env*
 
-# Ignore public packs.
-public/packs
-public/packs-test
+# Ignore Vite artifacts in public folder.
+public/vite-dev
+public/vite-test
 
-# Ignore these associated with reason-react and bsb
+# Ignore these associated with ReScript
 .merlin
 lib/bs
 npm-debug.log
@@ -64,7 +64,9 @@ app/frontend/locales.json
 yarn-*.log*
 .yarn-integrity
 .yarnrc.yml
-**/.yarn
+.yarn/*
+
+# We still need the releases folder to let yarn work properly.
 !.yarn/releases
 
 # Example files

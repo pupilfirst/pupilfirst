@@ -64,7 +64,7 @@ let computeReloadsIn = lastResolvedAt => {
       DateFns.differenceInSeconds(Js.Date.make(), l)
     )
 
-  difference < 60 ? 60 - difference : 60
+  difference < 60 ? 60 - difference : 0
 }
 
 @react.component

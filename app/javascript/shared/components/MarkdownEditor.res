@@ -45,7 +45,6 @@ type action =
   | ClearFile
   | SelectFile(currentFileName)
 
-
 let reducer = (state, action) =>
   switch action {
   | ClickPreview =>
@@ -96,7 +95,6 @@ let reducer = (state, action) =>
   | FinishUploading => {...state, uploadState: ReadyToUpload(None)}
   | SelectFile(currentFileName) => {...state, currentFileName: currentFileName}
   | ClearFile => {...state, currentFileName: None}
-
   }
 
 let computeInitialState = ((value, textareaId, mode)) => {
@@ -297,9 +295,17 @@ let controlsContainerClasses = mode =>
 let controls = (disabled, value, state, send, onChange) => {
   let buttonClasses = "px-2 py-1 hover:bg-gray-300 hover:text-primary-500 focus:outline-none focus:bg-gray-300 focus:text-primary-500 "
   let {mode} = state
+  let (stateSelectionStart, _) = state.selection
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange)
-  let val = React.useRef(value);
+  let val = React.useRef(value)
   val.current = value
+
+  let selectionStart = React.useRef(stateSelectionStart)
+  selectionStart.current = stateSelectionStart
+
+  let handleEmojiChange = (e: EmojiPicker.emojiEvent) => {
+    onChange(val.current |> insertAt(e.native, selectionStart.current))
+  }
 
   <div className={controlsContainerClasses(state.mode)}>
     {switch mode {
@@ -334,8 +340,8 @@ let controls = (disabled, value, state, send, onChange) => {
           <i className="fas fa-strikethrough fa-fw" />
         </button>
         <EmojiPicker
-          onChange={(e: EmojiPicker.emojiEvent) => onChange( val.current ++ e.native)}
-          className={buttonClasses ++ "border-l border-gray-400"}
+          onChange={handleEmojiChange}
+          className={buttonClasses ++ "border-l border-gray-400 hidden md:block"}
           title={t("emoji_picker")}
         />
       </div>

@@ -22,7 +22,7 @@ type data
 
 let emojiDivClassName = isOpen => {
   switch isOpen {
-  | true => "absolute top-11 sm:top-full sm:left-full z-10 shadow left-1/2 -translate-x-1/2 sm:translate-x-0"
+  | true => "absolute top-full -left-32 md:-translate-x-0 z-10 shadow "
   | false => "hidden"
   }
 }

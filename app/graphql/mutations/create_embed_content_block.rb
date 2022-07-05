@@ -24,7 +24,7 @@ module Mutations
                ContentBlock::EMBED_REQUEST_SOURCE_VIMEO
           Vimeo::ResolveEmbedCodeJob
             .set(wait: 5.minutes)
-            .perform_later(embed_block, 1)
+            .perform_later(embed_block.id, 1)
         end
         shift_content_blocks_below(embed_block)
         target_version.touch # rubocop:disable Rails/SkipsModelValidations

@@ -32,7 +32,7 @@ describe Vimeo::ResolveEmbedCodeJob do
 
       expect(resolve_embed_code_service).to receive(:execute)
 
-      expect { subject.perform_now(vimeo_embed_block, 1) }.to_not(
+      expect { subject.perform_now(vimeo_embed_block.id, 1) }.to_not(
         change { ActiveJob::Base.queue_adapter.enqueued_jobs.size }
       )
     end
@@ -48,9 +48,9 @@ describe Vimeo::ResolveEmbedCodeJob do
           .and_return(resolve_embed_code_service)
 
         expect do
-          subject.perform_now(vimeo_embed_block, 1)
+          subject.perform_now(vimeo_embed_block.id, 1)
         end.to have_enqueued_job(Vimeo::ResolveEmbedCodeJob).with(
-          vimeo_embed_block,
+          vimeo_embed_block.id,
           2
         )
       end
@@ -61,7 +61,7 @@ describe Vimeo::ResolveEmbedCodeJob do
           .and_return(resolve_embed_code_service)
 
         expect do
-          subject.perform_now(vimeo_embed_block, 5)
+          subject.perform_now(vimeo_embed_block.id, 5)
         end.to_not have_enqueued_job(Vimeo::ResolveEmbedCodeJob)
       end
     end

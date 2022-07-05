@@ -65,6 +65,7 @@ let make = (~school, ~courses, ~currentUser) => {
       | list{"applicants", _applicantId, "details" | "actions"} => (Applicants, None)
       | list{"authors"} => (Authors, None)
       | list{"authors", _authorId} => (Authors, None)
+      | list{"calendar"} => (Calendar, Some(<CalendarIndex__Root />))
       | list{"certificates"} => (Certificates, None)
       | list{"evaluation_criteria"} => (EvaluationCriteria, None)
       | _ =>

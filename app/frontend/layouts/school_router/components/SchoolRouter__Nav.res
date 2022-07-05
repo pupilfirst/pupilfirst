@@ -130,6 +130,7 @@ let secondaryNavLinks = (selectedPage, courseId, currentUser) => {
     Applicants,
     Teams,
     Authors,
+    Calendar,
     Certificates,
     CourseCoaches,
     EvaluationCriteria,

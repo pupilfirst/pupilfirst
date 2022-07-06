@@ -1,0 +1,7 @@
+beginswith() { case $2 in "$1"*) true;; *) false;; esac; }
+
+if ( [ "$PROCESS_TYPE" = "worker" ] || beginswith worker "$DYNO" ); then
+  bin/worker
+else
+  bundle exec puma -C config/puma.rb
+fi

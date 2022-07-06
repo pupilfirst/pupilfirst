@@ -101,4 +101,4 @@ RUN chmod +x /tini
 ENTRYPOINT ["/tini", "--"]
 
 # Run under tini to ensure proper signal handling.
-CMD [ "bundle", "exec", "puma", "-C", "config/puma.rb" ]
+CMD bin/start

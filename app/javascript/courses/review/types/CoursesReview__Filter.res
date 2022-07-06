@@ -79,10 +79,14 @@ let toQueryString = filter => {
   let filterDict = Js.Dict.fromArray([("sortCriterion", sortCriterion)])
 
   switch filter.sortDirection {
-  | Some(direction) if direction == #Descending =>
-    Js.Dict.set(filterDict, "sortDirection", "Descending")
-  | Some(direction) if direction == #Ascending =>
-    Js.Dict.set(filterDict, "sortDirection", "Ascending")
+  | Some(direction) => Js.Dict.set(
+      filterDict,
+      "sortDirection",
+      switch direction {
+      | #Descending => "Descending"
+      | #Ascending => "Ascending"
+      },
+    )
   | _ => ()
   }
   Belt.Option.forEach(filter.nameOrEmail, search => Js.Dict.set(filterDict, "search", search))

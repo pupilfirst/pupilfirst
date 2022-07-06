@@ -26,6 +26,17 @@ let assignedCoachId = t => t.assignedCoachId
 let personalCoachId = t => t.personalCoachId
 let reviewingCoachId = t => t.reviewingCoachId
 
+let defaultDirection = t => {
+  switch t.sortDirection {
+  | Some(direction) => direction
+  | None =>
+    switch t.tab {
+    | Some(tab) if tab == #Pending => #Ascending
+    | _ => #Descending
+    }
+  }
+}
+
 let makeFromQueryParams = search => {
   let params = Webapi.Url.URLSearchParams.make(search)
 
@@ -38,22 +49,22 @@ let makeFromQueryParams = search => {
     reviewingCoachId: get("reviewingCoachId", params),
     targetId: get("targetId", params),
     tab: switch get("tab", params) {
-    | Some(t) when t == "Pending" => Some(#Pending)
-    | Some(t) when t == "Reviewed" => Some(#Reviewed)
+    | Some(t) if t == "Pending" => Some(#Pending)
+    | Some(t) if t == "Reviewed" => Some(#Reviewed)
     | _ => None
     },
     sortCriterion: switch get("sortCriterion", params) {
-    | Some(criterion) when criterion == "EvaluatedAt" => #EvaluatedAt
-    | Some(criterion) when criterion == "SubmittedAt" => #SubmittedAt
+    | Some(criterion) if criterion == "EvaluatedAt" => #EvaluatedAt
+    | Some(criterion) if criterion == "SubmittedAt" => #SubmittedAt
     | _ => #SubmittedAt
     },
     sortDirection: switch get("sortDirection", params) {
-    | Some(direction) when direction == "Descending" => Some(#Descending)
-    | Some(direction) when direction == "Ascending" => Some(#Ascending)
+    | Some(direction) if direction == "Descending" => Some(#Descending)
+    | Some(direction) if direction == "Ascending" => Some(#Ascending)
     | _ => None
     },
     includeInactive: switch get("includeInactive", params) {
-    | Some(t) when t == "true" => true
+    | Some(t) if t == "true" => true
     | _ => false
     },
   }
@@ -65,13 +76,13 @@ let toQueryString = filter => {
   | #SubmittedAt => "SubmittedAt"
   }
 
-  let filterDict = Js.Dict.fromArray([
-    ("sortCriterion", sortCriterion),
-  ])
+  let filterDict = Js.Dict.fromArray([("sortCriterion", sortCriterion)])
 
   switch filter.sortDirection {
-  | Some(direction) when direction == #Descending => Js.Dict.set(filterDict, "sortDirection", "Descending")
-  | Some(direction) when direction == #Ascending => Js.Dict.set(filterDict, "sortDirection", "Ascending")
+  | Some(direction) if direction == #Descending =>
+    Js.Dict.set(filterDict, "sortDirection", "Descending")
+  | Some(direction) if direction == #Ascending =>
+    Js.Dict.set(filterDict, "sortDirection", "Ascending")
   | _ => ()
   }
   Belt.Option.forEach(filter.nameOrEmail, search => Js.Dict.set(filterDict, "search", search))

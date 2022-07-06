@@ -205,14 +205,7 @@ let getSubmissions = (send, courseId, cursor, filter) => {
   let variables = SubmissionsQuery.makeVariables(
     ~courseId,
     ~status=?Filter.tab(filter),
-    ~sortDirection=switch Filter.sortDirection(filter) {
-    | Some(direction) => direction
-    | None =>
-      switch Filter.tab(filter) {
-      | Some(t) if t == #Pending => #Ascending
-      | _ => #Descending
-      }
-    },
+    ~sortDirection=Filter.defaultDirection(filter),
     ~sortCriterion=Filter.sortCriterion(filter),
     ~levelId=?Filter.levelId(filter),
     ~personalCoachId=?Filter.personalCoachId(filter),
@@ -316,19 +309,9 @@ let submissionsSorter = filter => {
     <SubmissionsSorter
       criteria
       selectedCriterion={filter.sortCriterion}
-      direction={switch Filter.sortDirection(filter) {
-      | Some(direction) => direction
-      | None =>
-        switch Filter.tab(filter) {
-        | Some(t) if t == #Pending => #Ascending
-        | _ => #Descending
-        }
-      }}
+      direction={Filter.defaultDirection(filter)}
       onDirectionChange={direction => {
-        switch direction {
-        | #Descending => updateParams({...filter, sortDirection: Some(#Descending)})
-        | #Ascending => updateParams({...filter, sortDirection: Some(#Ascending)})
-        }
+        updateParams({...filter, sortDirection: Some(direction)})
       }}
       onCriterionChange={sortCriterion => updateParams({...filter, sortCriterion: sortCriterion})}
     />

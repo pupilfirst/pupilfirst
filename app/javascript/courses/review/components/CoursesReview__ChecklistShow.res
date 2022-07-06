@@ -224,8 +224,13 @@ let make = (
                           ReactUtils.nullUnless(
                             switch additionalFeedback[itemIndex][resultIndex] {
                             | true =>
-                              <div className="pl-7 pt-2">
+                              <div
+                                id={"result_item_" ++ (resultIndex->string_of_int ++ "_feedback")}
+                                className="pl-7 pt-2">
                                 <button
+                                  id={"remove_result_" ++
+                                  (resultIndex->string_of_int ++
+                                  "_feedback")}
                                   className="flex gap-x-2 items-center text-red-500 px-2 py-1 mx-4"
                                   onClick={_ =>
                                     removeAdditionalFeedback(
@@ -295,6 +300,7 @@ let make = (
                                 </div>
                               | None =>
                                 <button
+                                  id={"add_result_" ++ (resultIndex->string_of_int ++ "_feedback")}
                                   className="flex gap-x-2 items-center text-primary-500 px-2 py-1 my-2 mx-4"
                                   onClick={_ =>
                                     addAdditionalFeedback(

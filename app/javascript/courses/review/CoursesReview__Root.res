@@ -205,7 +205,7 @@ let getSubmissions = (send, courseId, cursor, filter) => {
   let variables = SubmissionsQuery.makeVariables(
     ~courseId,
     ~status=?Filter.tab(filter),
-    ~sortDirection=Filter.sortDirection(filter),
+    ~sortDirection=Filter.defaultDirection(filter),
     ~sortCriterion=Filter.sortCriterion(filter),
     ~levelId=?Filter.levelId(filter),
     ~personalCoachId=?Filter.personalCoachId(filter),
@@ -309,8 +309,10 @@ let submissionsSorter = filter => {
     <SubmissionsSorter
       criteria
       selectedCriterion={filter.sortCriterion}
-      direction={filter.sortDirection}
-      onDirectionChange={sortDirection => updateParams({...filter, sortDirection: sortDirection})}
+      direction={Filter.defaultDirection(filter)}
+      onDirectionChange={direction => {
+        updateParams({...filter, sortDirection: Some(direction)})
+      }}
       onCriterionChange={sortCriterion => updateParams({...filter, sortCriterion: sortCriterion})}
     />
   </div>
@@ -790,7 +792,12 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                       href={"/courses/" ++
                       courseId ++
                       "/review?" ++
-                      Filter.toQueryString({...filter, tab: None, sortCriterion: #SubmittedAt})}
+                      Filter.toQueryString({
+                        ...filter,
+                        tab: None,
+                        sortCriterion: #SubmittedAt,
+                        sortDirection: Filter.sortDirection(filter),
+                      })}
                       className={shortCutClasses(filter.tab === None)}>
                       <p> {I18n.ts("all")->str} </p>
                     </Link>
@@ -804,7 +811,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                         ...filter,
                         tab: Some(#Pending),
                         sortCriterion: #SubmittedAt,
-                        sortDirection: #Ascending,
+                        sortDirection: Filter.sortDirection(filter),
                       })}
                       className={shortCutClasses(filter.tab === Some(#Pending))}>
                       <p> {str(tc("pending"))} </p>
@@ -819,7 +826,7 @@ let make = (~courseId, ~currentCoachId, ~courses) => {
                         ...filter,
                         tab: Some(#Reviewed),
                         sortCriterion: #EvaluatedAt,
-                        sortDirection: #Descending,
+                        sortDirection: Filter.sortDirection(filter),
                       })}
                       className={shortCutClasses(filter.tab === Some(#Reviewed))}>
                       <p> {str(tc("reviewed"))} </p>

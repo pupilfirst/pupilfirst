@@ -153,7 +153,7 @@ ROLLBAR_CLIENT_TOKEN
 ROLLBAR_SERVER_TOKEN
 ```
 
-The Rollbar service can be used to monitor both server-side and client-side errors. Because of this, two separate tokens are required:
+[Rollbar](https://rollbar.com) can be used to monitor both server-side and client-side errors. Because of this, two separate tokens are required:
 
 1. Set `ROLLBAR_SERVER_TOKEN` with your project's `post_server_item` access token.
 2. Set `ROLLBAR_CLIENT_TOKEN` with your project's `post_client_item` access token.

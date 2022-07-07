@@ -1,5 +1,4 @@
 <% presenter = ::Layouts::TailwindPresenter.new(self) %>
-
 <!DOCTYPE html>
 <html
   lang="<%= I18n.locale %>"
@@ -13,34 +12,28 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="manifest" href="/manifest.json" />
-
     <% if content_for?(:viewport) %>
       <%= yield :viewport %>
     <% else %>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
     <% end %>
-
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags. -->
     <meta name="theme-color" content="#4D1E9A" />
-
+    <%= tag :meta, name: :psj, action: action_name, controller: controller_path %>
+    <!-- Load styles -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha256-M6KFoDq9eUpmogkDgw6+3R3ZgUPSuFXnQyr8tskSfQs=" crossorigin="anonymous">
+    <!-- Prep for JS -->
+    <%= javascript_tag(nonce: true) do %>
+      window.pupilfirst = {
+      defaultLocale: '<%= I18n.default_locale %>',
+      locale: '<%= I18n.locale %>'
+      }
+      // Prevent Prism from automatically highlighting all code elements on the page.
+      window.Prism = window.Prism || {};
+      Prism.manual = true;
+    <% end %>
     <%= yield :head %>
-
-    <!-- Styles -->
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800"
-      rel="stylesheet"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css"
-      integrity="sha256-M6KFoDq9eUpmogkDgw6+3R3ZgUPSuFXnQyr8tskSfQs="
-      crossorigin="anonymous"
-    />
-
-    <%= stylesheet_pack_tag 'layouts/tailwind', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= stylesheet_pack_tag 'IconFirstPack', media: 'all' %>
-
     <% if Rails.env.test? %>
       <style>
         * {
@@ -49,16 +42,7 @@
         }
       </style>
     <% end %>
-
-    <!-- Scripts -->
-    <%= javascript_pack_tag 'layouts/tailwind', nonce: true %>
-
-    <%= javascript_tag(nonce: true) do %>
-      i18n.defaultLocale = "<%= I18n.default_locale %>"; i18n.locale = "<%= I18n.locale %>";
-    <% end %>
-
     <%= csrf_meta_tags %>
-
     <% if presenter.meta_description.present? %>
       <meta name="description" content="<%= presenter.meta_description %>" />
       <meta
@@ -71,20 +55,19 @@
   </head>
 
   <body data-host="<%= current_host %>">
-    <section class="min-h-full flex flex-col items-stretch">
-      <%= yield :nav %>
-      <main class="flex-grow bg-gray-50">
-        <% if content_for?(:wrapper) %>
-          <%= yield :wrapper %>
-        <% else %>
-          <%= yield %>
-        <% end %>
-      </main>
-
-      <%= yield :tail %>
-      <%= yield :footer %>
-    </section>
-    <!-- Scripts -->
-    <%= javascript_pack_tag 'IconFirstPack', nonce: true %>
-  </body>
-</html>
+        <section class="min-h-full flex flex-col items-stretch">
+          <%= yield :nav %>
+          <main class="flex-grow bg-gray-50">
+            <% if content_for?(:wrapper) %>
+              <%= yield :wrapper %>
+            <% else %>
+              <%= yield %>
+            <% end %>
+          </main>
+          <%= yield :tail %>
+          <%= yield :footer %>
+        </section>
+        <!-- Initialize Rollbar only at the very end. -->
+        <%= vite_javascript_tag 'rollbar', nonce: true %>
+      </body>
+    </html>

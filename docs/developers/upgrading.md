@@ -17,6 +17,10 @@ on our Github repo.
 
 Your current version can be found in `Pupilfirst::Application::VERSION` or in the Docker image tag.
 
+### 2022.2
+
+This version adds a new start script for the application that responds to new environment variables `PROCESS_TYPE`, `WORKER_MIGRATE` and `WORKER_SETUP_CRON`. These variables must be set when deploying to DigitalOcean App Platform. When deploying to Heroku, a new environment variable `TINI_SUBREAPER` must also be set. Please go through updated deployment documentation for both these platforms for more information.
+
 ### 2022.1
 
 This version replaces Skylight with New Relic for application performance monitoring and adds the `NEW_RELIC_LICENSE_KEY` environment variable to authenticate connection with New Relic. The version also replaces `rack-throttle` gem with `rack-attack` for throttling and blocking abusive requests. This change adds environment variables `GRAPH_API_RATE_LIMIT`, `GRAPH_API_RATE_PERIOD` and `REDIS_URL` to set the number of requests, the period of time in seconds and the URL to the Redis database store respectively.

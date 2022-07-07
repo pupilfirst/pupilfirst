@@ -16,7 +16,7 @@
     "Mahesh Krishna Kumar <maheshcet@gmail.com>",
     "Vinu T. V. <vinutv91@gmail.com>"
   ],
-  "homepage": "https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/multiselect-dropdown",
+  "homepage": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/multiselect-dropdown",
   "license": "MIT",
   "main": "components/MultiselectDropdown.re",
   "publishConfig": {
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/multiselect-dropdown"
+    "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/multiselect-dropdown"
   },
   "devDependencies": {
     "parcel-bundler": "^1.12.5",

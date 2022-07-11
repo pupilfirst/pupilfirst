@@ -7,5 +7,5 @@ let make = (~className) => {
     transformIcons()
     None
   }, [className])
-  <span className="inline-flex" key=className> <i className /> </span>
+  <span key=className> <i className /> </span>
 }

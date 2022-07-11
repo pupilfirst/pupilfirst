@@ -55,7 +55,7 @@ Rails.application.config.content_security_policy do |policy|
 
   def connect_sources
     sources = [rollbar_csp[:connect], *vimeo_csp[:connect]]
-    sources += %w[http://localhost:3035 ws://localhost:3035] if Rails.env.development?
+    sources += %w[ws://localhost:3036 ws://school.localhost:3036 ws://www.school.localhost:3036] if Rails.env.development?
     sources
   end
 

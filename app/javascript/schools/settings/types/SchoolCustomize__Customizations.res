@@ -228,9 +228,49 @@ let decode = json => {
   }
 }
 
-let moveLink = (links, t) => {
+let reindex = links =>
+  links |> List.mapi((sortIndex, link) =>
+    switch link {
+    | HeaderLink(id, title, url, _) => HeaderLink(id, title, url, sortIndex)
+    | FooterLink(id, title, url, _) => FooterLink(id, title, url, sortIndex)
+    | SocialLink(id, url, _) => SocialLink(id, url, sortIndex)
+    }
+  )
+
+let moveLink = (linkId, kind: SchoolCustomize__Links.kind, direction, t) => {
+  // find link
+  let link = t.links |> List.find(l =>
+    switch l {
+    | HeaderLink(id, _, _, _)
+    | FooterLink(id, _, _, _)
+    | SocialLink(id, _, _) =>
+      id == linkId
+    }
+  )
+  // find links of similar kind
+  let similarKindLinks = t |> switch kind {
+  | HeaderLink => headerLinks
+  | SocialLink => socialLinks
+  | FooterLink => footerLinks
+  }
+
+  // swap links
+  let swapedLinks = similarKindLinks |> switch direction {
+  | Up => ListUtils.swapUp(link)
+  | Down => ListUtils.swapDown(link)
+  }
+
+  // find links of different kind
+  let differentKindLinks = switch kind {
+  | HeaderLink => List.concat(list{socialLinks(t), footerLinks(t)})
+  | SocialLink => List.concat(list{headerLinks(t), footerLinks(t)})
+  | FooterLink => List.concat(list{socialLinks(t), headerLinks(t)})
+  }
+
+  // combile links
+  let updatedLinks = List.concat(list{differentKindLinks, swapedLinks})
   {
     ...t,
-    links: links,
+    links: updatedLinks,
   }
 }

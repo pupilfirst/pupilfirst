@@ -27,7 +27,7 @@ type rec action =
   | AddLink(Customizations.link)
   | RemoveLink(Customizations.linkId)
   | UpdateLink(Customizations.linkId, string, Customizations.url)
-  | MoveLink(list<Customizations.link>)
+  | MoveLink(Customizations.linkId, SchoolCustomize__Links.kind, Customizations.direction)
   | UpdateTermsAndConditions(string)
   | UpdatePrivacyPolicy(string)
   | UpdateAddress(string)
@@ -164,7 +164,7 @@ let editor = (state, send, authenticityToken) =>
           kind
           customizations=state.customizations
           addLinkCB={link => send(AddLink(link))}
-          moveLinkCB={data => send(MoveLink(data))}
+          moveLinkCB={(id, kind, direction) => send(MoveLink(id, kind, direction))}
           removeLinkCB={linkId => send(RemoveLink(linkId))}
           updateLinkCB={(linkId, title, url) => send(UpdateLink(linkId, title, url))}
         />
@@ -225,9 +225,9 @@ let reducer = (state, action) =>
       ...state,
       customizations: state.customizations |> Customizations.removeLink(linkId),
     }
-  | MoveLink(links) => {
+  | MoveLink(id, kind, direction) => {
       ...state,
-      customizations: state.customizations |> Customizations.moveLink(links),
+      customizations: state.customizations |> Customizations.moveLink(id, kind, direction),
     }
   | UpdatePrivacyPolicy(agreement) => {
       ...state,

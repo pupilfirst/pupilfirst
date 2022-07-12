@@ -20,7 +20,7 @@ module Mutations
 
     validates SchoolLinkMustBePresent => {}
 
-    field :links, [Types::SchoolLink], null: true
+    field :success, Boolean, null: false
 
     def resolve(_params)
       notify(
@@ -29,7 +29,7 @@ module Mutations
         I18n.t('mutations.update_school_link.success_notification')
       )
 
-      { links: sort_school_links }
+      { success: sort_school_links }
     end
 
     def sort_school_links
@@ -47,7 +47,7 @@ module Mutations
         cb.update!(sort_index: index)
       end
 
-      current_school.school_links.all.order(kind: :ASC, sort_index: :ASC)
+      true
     end
 
     private

@@ -9,7 +9,6 @@ module Mutations
     end
 
     include QueryAuthorizeSchoolAdmin
-    include ValidateSchoolLinkEditable
 
     argument :id, ID, required: true
     argument :title, String, required: false
@@ -42,7 +41,11 @@ module Mutations
     end
 
     def resource_school
-      current_school
+      school_link&.school
+    end
+
+    def school_link_data
+      { title: @params[:title], url: @params[:url] }
     end
   end
 end

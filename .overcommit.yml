@@ -12,10 +12,10 @@ PreCommit:
   TrailingWhitespace:
     enabled: true
     exclude:
-      - '**/*.svg'
-      - 'app/javascript/**/*.bs.js'
+      - "**/*.svg"
+      - "app/frontend/**/*.bs.js"
 
   Stylelint:
     enabled: true
-    command: [ 'yarn', 'run', '--silent', 'stylelint' ]
-    required_executable: './node_modules/stylelint/bin/stylelint.js'
+    command: ["yarn", "run", "--silent", "stylelint"]
+    required_executable: "./node_modules/stylelint/bin/stylelint.js"

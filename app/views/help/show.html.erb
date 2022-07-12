@@ -1,12 +1,6 @@
 <% content_for(:head) do %>
   <title><%= t('.title') %></title>
-  <%= stylesheet_pack_tag 'ConvertMarkdownPack', media: 'all' %>
 <% end %>
-
-<% content_for(:tail) do %>
-  <%= javascript_pack_tag 'ConvertMarkdownPack', nonce: true %>
-<% end %>
-
 <div class="bg-gray-50 py-8">
   <div class="container mx-auto px-3 max-w-6xl">
     <div class="max-w-3xl mx-auto">

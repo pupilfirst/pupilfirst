@@ -4,12 +4,12 @@
     "react-jsx": 3
   },
   "sources": {
-    "dir": "app/javascript",
+    "dir": "app/frontend",
     "subdirs": true
   },
   "package-specs": [
     {
-      "module": "commonjs",
+      "module": "es6-global",
       "in-source": true
     }
   ],

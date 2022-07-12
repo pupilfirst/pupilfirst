@@ -88,21 +88,12 @@ jobs:
       - name: Setup Database
         run: |
           bundle exec rake db:schema:load
-      - name: Restore Assets
-        uses: actions/cache@master
-        with:
-          path: |
-            public/assets
-            public/packs-test
-          key: ${{ runner.os }}-assets-${{ env.GIT_BRANCH }}
-          restore-keys: |
-            ${{ runner.os }}-assets-
       - name: Restore Lerna
         uses: actions/cache@master
         with:
           path: |
             node_modules
-            app/javascript/packages/*/node_modules
+            app/frontend/packages/*/node_modules
           key: ${{ runner.os }}-lerna-${{ hashFiles('**/yarn.lock') }}
       - name: Yarn Install
         run: yarn install
@@ -110,12 +101,6 @@ jobs:
         run: bundle exec i18n export
       - name: Compile ReScript files
         run: yarn run re:build
-      - name: Precompile Assets
-        run: |
-          bundle exec rails assets:precompile
-          echo Precompilation complete. Cleaning assets...
-          bundle exec rails assets:clean
-          echo Cleaning complete! All done.
       - name: Specs (On master branch)
         if: env.GIT_BRANCH == 'master'
         run: |

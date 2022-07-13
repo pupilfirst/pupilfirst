@@ -227,8 +227,8 @@ let make = (
                 <FaIcon classes="fas fa-arrow-down" />
               </button>
               <button
-                ariaLabel={"Move up " ++ url}
-                title={"Move up " ++ url}
+                ariaLabel={"Move Up " ++ url}
+                title={"Move Up " ++ url}
                 disabled={index == 0}
                 onClick={e => handleMoveLink(~id, ~kind, ~direction=Up, ~moveLinkCB, ~send)}
                 className={"p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500"}>

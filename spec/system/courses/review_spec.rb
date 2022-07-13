@@ -499,6 +499,24 @@ feature "Coach's review interface" do
     scenario 'coach changes the sort order of submissions', js: true do
       sign_in_user course_coach.user, referrer: review_course_path(course)
 
+      # Verify initial sort order
+      expect(find('#submissions a:nth-child(1)')).to have_content(
+        submission_l1_t1.title
+      )
+      expect(find('#submissions a:nth-child(2)')).to have_content(
+        submission_l1_t3.title
+      )
+      expect(find('#submissions a:nth-child(3)')).to have_content(
+        submission_l2_t3.title
+      )
+      expect(find('#submissions a:nth-child(4)')).to have_content(
+        submission_l2_t2.title
+      )
+      expect(find('#submissions a:nth-child(5)')).to have_content(
+        submission_l3_t3.title
+      )
+
+      # Switch to pending tab
       click_link 'Pending'
 
       within("div[aria-label='Change submissions sorting']") do
@@ -515,6 +533,28 @@ feature "Coach's review interface" do
       expect(find('#submissions a:nth-child(1)')).to have_content(
         submission_l3_t3.title
       )
+
+      # Switch to all tabs to verify default ordering
+      click_link 'All'
+
+      expect(find('#submissions a:nth-child(1)')).to have_content(
+        submission_l1_t1.title
+      )
+      expect(find('#submissions a:nth-child(2)')).to have_content(
+        submission_l1_t3.title
+      )
+      expect(find('#submissions a:nth-child(3)')).to have_content(
+        submission_l2_t3.title
+      )
+      expect(find('#submissions a:nth-child(4)')).to have_content(
+        submission_l2_t2.title
+      )
+      expect(find('#submissions a:nth-child(5)')).to have_content(
+        submission_l3_t3.title
+      )
+
+      # Switch back to Pending tab
+      click_link 'Pending'
 
       # Swap the ordering of pending items
       click_button('toggle-sort-order')

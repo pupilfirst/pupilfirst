@@ -117,7 +117,7 @@ See this code in action here: https://multiselect-inline.pupilfirst.com
 
 ### Other examples
 
-- [Real world Usage in Pupilfirst](https://github.com/SVdotCO/pupilfirst/blob/master/app/javascript/schools/courses/components/curriculum_editor/CurriculumEditor__TargetDetailsEditor.re)
+- [Real world Usage in Pupilfirst](https://github.com/SVdotCO/pupilfirst/blob/master/app/frontend/schools/courses/components/curriculum_editor/CurriculumEditor__TargetDetailsEditor.re)
 
 ## Usage
 

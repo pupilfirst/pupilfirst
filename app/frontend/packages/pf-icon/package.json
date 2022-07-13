@@ -14,7 +14,7 @@
     "Mahesh Krishna Kumar <maheshcet@gmail.com>",
     "Vinu T. V. <vinutv91@gmail.com>"
   ],
-  "homepage": "https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/pf-icon",
+  "homepage": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/pf-icon",
   "license": "MIT",
   "main": "/src/iconFirst.js",
   "publishConfig": {
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/javascript/packages/pf-icon"
+    "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/pf-icon"
   },
   "devDependencies": {
     "parcel-bundler": "^1.12.5",

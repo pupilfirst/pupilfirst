@@ -7,7 +7,7 @@ sidebar_label: Start Here
 Here are some important points to keep in mind before you deploy Pupilfirst:
 
 1. These deployment instructions are meant to be used by experienced Ruby on Rails developers who are also familiar with
-   the Javascript ecosystem. Please go through the entire documentation for a target platform before beginning.
+   the JavaScript ecosystem. Please go through the entire documentation for a target platform before beginning.
 2. Pupilfirst is continuously updated (sometimes with multiple daily releases), and while we'll do everything we can to
    keep the upgrade process as simple as possible, it is inevitable that you'll encounter complex upgrade requirements.
    We recommend proceeding with a production deployment only if you are a developer, or have access to a dedicated

@@ -6,8 +6,7 @@ sidebar_label: Upgrading
 
 ## Run Migrations
 
-When deploying an updated version of the LMS, please check for any pending [migrations](https://edgeguides.rubyonrails.org/active_record_migrations.html)
-and run them after deployment.
+When deploying an updated version of the LMS, please check for any pending [migrations](https://edgeguides.rubyonrails.org/active_record_migrations.html) and run them after deployment. If your deployment target is DigitalOcean, and if you've follwed our guide, then the worker process should run migrations automatically when it starts up.
 
 ## Breaking changes
 
@@ -19,7 +18,7 @@ Your current version can be found in `Pupilfirst::Application::VERSION` or in th
 
 ### 2022.2
 
-This version adds a new start script for the application that responds to new environment variables `PROCESS_TYPE`, `WORKER_MIGRATE` and `WORKER_SETUP_CRON`. These variables must be set when deploying to DigitalOcean App Platform. When deploying to Heroku, a new environment variable `TINI_SUBREAPER` must also be set. Please go through updated deployment documentation for both these platforms for more information.
+This version adds a new start script (`bin/start`) for the LMS that responds to new environment variables `PROCESS_TYPE`, `WORKER_MIGRATE` and `WORKER_SETUP_CRON`. These variables must be set when deploying to DigitalOcean App Platform. When deploying to Heroku, the recommended approach has changed to pushing official Docker images to Heroku's Container Registry, and then releasing these images to dynos. This replaces the older time-consuming, failure-prone build process on Heroku. On Heroku, you'll also need to set a new environment variable - `TINI_SUBREAPER`. Please go through updated deployment documentation for both these platforms for more information.
 
 ### 2022.1
 

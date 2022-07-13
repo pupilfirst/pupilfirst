@@ -24,7 +24,7 @@ Begin by [signing up on Heroku](https://signup.heroku.com), and familiarizing yo
 2. Attach a PostgreSQL database as an add-on to your Heroku application. You can do this from the _Resources_ tab on Heroku.
 3. [Configure your new Heroku app](https://devcenter.heroku.com/articles/config-vars) using environment variables.
 
-   Make sure that you set up all required environment variables - we've documented these separately since they're common to different deployment targets.
+   Make sure that you set up [all required environment variables](./configuration) - we've documented these separately since they're common to different deployment targets.
 
    Additionally, make sure that set the following variable is also set:
 
@@ -48,7 +48,7 @@ docker pull pupilfirst/pupilfirst
 
 The above command will pull the image from the Docker Hub to our local system. If we run `docker images` we should see something like this:
 
-```bash
+```
 REPOSITORY              TAG       IMAGE ID       CREATED      SIZE
 pupilfirst/pupilfirst   latest    3040b3b09992   5 days ago   572MB
 ```
@@ -90,13 +90,13 @@ At this point, your web and worker processes should be up and running. However, 
 Before proceeding, make sure that you've provisioned a PostgreSQL add-on to your application. Once provisioned, Heroku would already have _created_ the database for us inside PostgreSQL, so we can go ahead and load the structure of the database from the application's _schema_.
 
 ```bash
-heroku run "bundle exec rails db:schema:load" --app pupilfirst-lms-test-220706
+heroku run "bundle exec rails db:schema:load" --app <app>
 ```
 
 Once the DB structure is in place, we can seed some values into the database to make setup easier:
 
 ```bash
-heroku run "bundle exec rails db:seed" --app pupilfirst-lms-test-220706
+heroku run "bundle exec rails db:seed" --app <app>
 ```
 
 ### Set up a user to sign in with
@@ -107,7 +107,7 @@ user and use it to gain access to the platform.
 We'll start a Rails console on Heroku to do so:
 
 ```bash
-heroku run "bundle exec rails console" --app pupilfirst-lms-test-220706
+heroku run "bundle exec rails console" --app <app>
 ```
 
 Once the console is ready, find and update the user entry.
@@ -128,7 +128,7 @@ admin.
 
 Now, if you visit the web address for your Heroku app, you should see the homepage for your school. You should also be able to sign in as `admin@example.com` to start working on your school.
 
-### Scheduling periodic tasks
+## Scheduling periodic tasks
 
 There are a few tasks that must be run scheduled to run periodically; this can be done using Heroku's [Scheduler](https://devcenter.heroku.com/articles/scheduler) add-on.
 

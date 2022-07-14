@@ -11,6 +11,7 @@ on:
       - "docs/**"
 env:
   IMAGE_NAME: pupilfirst
+  VERSION: "2022.2"
 jobs:
   tests:
     runs-on: ubuntu-18.04
@@ -144,7 +145,6 @@ jobs:
         run: |
           IMAGE_ID=${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          VERSION=2022.0
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:latest

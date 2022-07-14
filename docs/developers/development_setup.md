@@ -213,6 +213,13 @@ We recommend using Visual Studio Code with the following extensions...
 
 When editing YAML files (especially translations) please use the [YAML Sort extension](https://marketplace.visualstudio.com/items?itemName=PascalReitermann93.vscode-yaml-sort) to sort keys.
 
+## Versioning
+
+The version number for the LMS is stored in _two_ locations. Both must be updated when bumping the version:
+
+- `Pupilfirst::Application::VERSION` in `config/application.rb`
+- `env.VERSION` in `.github/workflows/ci.yml`
+
 ## Enabling multitenancy
 
 **Optional:** If you'd like to enable multitenancy in your development environment, a few additional steps are required.

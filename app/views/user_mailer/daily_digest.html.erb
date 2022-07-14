@@ -13,7 +13,7 @@
   <% if @updates[:coach].present? %>
     <% pending_submissions_count = @updates[:coach].map { |s| s[:pending_submissions] }.sum %>
     <p style="margin-top: 10px;">
-      <%= t("mailers.user.daily_digest.body.main_html", article_pending_submissions_count: article(pending_submissions_count), pending_submissions_count: pending_submissions_count, courses_number: @updates[:coach].length.to_s) %>
+      <%= t("mailers.user.daily_digest.body.main_html", article_pending_submissions_count: article(pending_submissions_count), pending_submissions_count: pending_submissions_count) %>
     </p>
 
     <ul style="padding: 0; margin-top: 0; margin-left: 30px; list-style-type: circle;">

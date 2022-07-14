@@ -17,14 +17,10 @@ true learning cannot happen by just consuming information; it happens when:
 - Reflect on their work and make improvements.
 - And finally, get involved in the learning process by answering questions from their peers.
 
-## Features
+## Documentation
 
-Visit [docs.pupilfirst.com](https://docs.pupilfirst.com) for a detailed explanation of Pupilfirst's features.
+Visit [docs.pupilfirst.com](https://docs.pupilfirst.com) for a detailed explanation of Pupilfirst's features, and to learn how to set up this repository for development and deployment.
 
 ## Changelog
 
 Visit [pupilfirst.com/changelog](https://www.pupilfirst.com/changelog) to view the full changelog.
-
-## Development
-
-Developer documentation for Pupilfirst LMS can be found at [developers.pupilfirst.com](https://developers.pupilfirst.com).

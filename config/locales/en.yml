@@ -1843,7 +1843,7 @@ en:
           asked: asked %{days_ago} days ago.
           assigned: (%{stats} assigned to you)
           assigned_none: (none of which are assigned to you)
-          control_emails: You can control these emails from %{link_to}.
+          control_emails_html: You can control these emails from %{link_to}.
           latest_topics: "Latest topics posted on your communities:"
           link_to: your profile edit page
           main_html: "There %{article_pending_submissions_count} <strong>%{pending_submissions_count}</strong> new submissions to review in %{courses_number} courses that you are a coach in:"

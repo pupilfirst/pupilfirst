@@ -26,6 +26,8 @@ let makeFromJs = cohort => {
   )
 }
 
+let filterValue = t => t.id ++ ";" ++ t.name
+
 module Fragment = %graphql(`
   fragment CohortFragment on Cohort {
     id

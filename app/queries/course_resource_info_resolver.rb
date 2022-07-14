@@ -1,5 +1,5 @@
 class CourseResourceInfoResolver < ApplicationQuery
-  include AuthorizeSchoolAdmin
+  include AuthorizeReviewer
 
   property :course_id
   property :resources
@@ -8,9 +8,12 @@ class CourseResourceInfoResolver < ApplicationQuery
     resources.map do |resource|
       case resource
       when 'Level'
-        resource_shape(resource, course.levels.map(&:filter_name))
+        resource_shape(
+          resource,
+          course.levels.map { |l| "#{l.id};#{l.number},#{l.name}" }
+        )
       when 'Cohort'
-        resource_shape(resource, course.cohorts.pluck(:name))
+        resource_shape(resource, course.cohorts.map { |l| "#{l.id};#{l.name}" })
       when 'StudentTag'
         resource_shape(resource, course.student_tags)
       when 'UserTag'

@@ -22,10 +22,6 @@ class Level < ApplicationRecord
     I18n.t('shared.level_label.long_without_name', number: number.to_s)
   end
 
-  def filter_name
-    "#{number}, #{name}"
-  end
-
   def unlocked
     ActiveSupport::Deprecation.warn('Use `unlocked?` instead.')
     unlocked?

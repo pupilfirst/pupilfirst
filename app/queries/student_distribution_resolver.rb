@@ -2,8 +2,6 @@ class StudentDistributionResolver < ApplicationQuery
   include AuthorizeReviewer
 
   property :course_id
-  property :coach_id
-  property :coach_notes
   property :tags
 
   def student_distribution

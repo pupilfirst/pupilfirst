@@ -1,15 +1,8 @@
 class CourseStudentsResolver < ApplicationQuery
-  include AuthorizeSchoolAdmin
+  include AuthorizeReviewer
 
   property :course_id
-  property :cohort_name
-  property :level_name
-  property :name
-  property :email
-  property :user_tags
-  property :student_tags
-  property :sort_by
-  property :sort_direction
+  property :filter_string
 
   def course_students
     students
@@ -19,20 +12,31 @@ class CourseStudentsResolver < ApplicationQuery
 
   def students
     scope = course.founders
-    scope = scope.joins(:user) if name.present? || email.present? ||
-      user_tags.present?
+    scope = scope.joins(:user) if filter[:name].present? ||
+      filter[:email].present? || filter[:user_tags].present?
 
     scope = scope.where(level_id: level.id) if level.present?
     scope = scope.where(cohort_id: cohort.id) if cohort.present?
-    scope = scope.where('users.name ILIKE ?', "%#{name}%") if name.present?
-    scope = scope.where('users.email ILIKE ?', "%#{email}%") if email.present?
-    scope = scope.tagged_with(student_tags) if student_tags.present?
+    scope = scope.where('users.name ILIKE ?', "%#{filter[:name]}%") if filter[
+      :name
+    ].present?
+    scope = scope.where('users.email ILIKE ?', "%#{filter[:email]}%") if filter[
+      :email
+    ].present?
+    scope = scope.tagged_with(filter[:student_tags].split(',')) if filter[
+      :student_tags
+    ].present?
+
     scope =
       scope.where(
         users: {
-          id: resource_school.users.tagged_with(user_tags).select(:id)
+          id:
+            resource_school
+              .users
+              .tagged_with(filter[:user_tags].split(','))
+              .select(:id)
         }
-      ) if user_tags.present?
+      ) if filter[:user_tags].present?
     scope
   end
 
@@ -41,15 +45,19 @@ class CourseStudentsResolver < ApplicationQuery
   end
 
   def cohort
-    return if cohort_name.blank?
+    if filter[:cohort].blank? || id_from_filter_value(filter[:cohort]).blank?
+      return
+    end
 
-    course.cohorts.find_by(name: cohort_name)
+    course.cohorts.find_by(id: id_from_filter_value(filter[:cohort]))
   end
 
   def level
-    return if level_name.blank?
+    if filter[:level].blank? || id_from_filter_value(filter[:level]).blank?
+      return
+    end
 
-    course.levels.find_by(number: level_name.split(',').first)
+    course.levels.find_by(id: id_from_filter_value(filter[:level]))
   end
 
   def course
@@ -57,18 +65,18 @@ class CourseStudentsResolver < ApplicationQuery
   end
 
   def sort_direction_string
-    case sort_direction
+    case filter[:sort_direction]
     when 'Ascending'
       'ASC'
     when 'Descending'
       'DESC'
     else
-      raise "#{sort_direction} is not a valid sort direction"
+      raise "#{filter[:sort_direction]} is not a valid sort direction"
     end
   end
 
   def sort_by_string
-    case sort_by
+    case filter[:sort_by]
     when 'name'
       'users.name'
     when 'created_at'
@@ -76,7 +84,21 @@ class CourseStudentsResolver < ApplicationQuery
     when 'updated_at'
       'updated_at'
     else
-      raise "#{sort_by} is not a valid sort criterion"
+      raise "#{filter[:sort_by]} is not a valid sort criterion"
     end
+  end
+
+  def filter
+    @filter ||=
+      URI.decode_www_form(filter_string.presence || '').to_h.symbolize_keys
+  end
+
+  # Todo: Should get this reviewed
+  def id_from_filter_value(string)
+    return unless string
+
+    # Extract the ID from the filter value string, which is in the form of 'id;name_of_the_object
+    # e.g. '123;1, Getting Started with Regular Expressions'
+    string[/(?<id>(.+?);)/, 'id']&.gsub(';', '')
   end
 end

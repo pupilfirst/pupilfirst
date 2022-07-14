@@ -31,7 +31,7 @@ let reducer = (state, action) =>
       ...state,
       filterInput: "",
     }
-  | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
+  | UpdateFilterInput(filterInput) => {...state, filterInput}
   | LoadStudents(endCursor, hasNextPage, students, totalEntriesCount) =>
     let updatedStudent = switch state.loading {
     | LoadingMore => Js.Array2.concat(PagedStudents.toArray(state.students), students)
@@ -42,7 +42,7 @@ let reducer = (state, action) =>
       ...state,
       students: PagedStudents.make(updatedStudent, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
-      totalEntriesCount: totalEntriesCount,
+      totalEntriesCount,
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
@@ -51,8 +51,8 @@ let reducer = (state, action) =>
 // let updateParams = filter => RescriptReactRouter.push("?" ++ Filter.toQueryString(filter))
 
 module CourseStudentsQuery = %graphql(`
-    query CourseStudentsQuery($courseId: ID!, $cohortName: String, $levelName: String, $name: String, $email: String, $after: String, $studentTags: [String!], $userTags: [String!], $sortBy: String!, $sortDirection: SortDirection!) {
-      courseStudents(courseId: $courseId, cohortName: $cohortName, levelName: $levelName, name: $name, email: $email, first: 20, after: $after, studentTags: $studentTags, userTags: $userTags, sortBy: $sortBy, sortDirection: $sortDirection) {
+    query CourseStudentsQuery($courseId: ID!, $after: String, $filterString: String) {
+      courseStudents(courseId: $courseId, filterString: $filterString,first: 20, after: $after) {
         nodes {
           id
           taggings
@@ -87,31 +87,12 @@ module CourseStudentsQuery = %graphql(`
   `)
 
 let getStudents = (send, courseId, cursor, filter, params) => {
-  let sortBy = filter->Filter.sortByToString
-  let sortDirection = filter->Filter.sortDirection
-
-  open Webapi.Url.URLSearchParams
-
-  let name = get("name", params)
-  let email = get("email", params)
-  let levelName = get("level", params)
-  let cohortName = get("cohort", params)
-  let userTags =
-    get("user_tags", params)->Belt.Option.mapWithDefault([], u => Js.String.split(",", u))
-  let studentTags =
-    get("student_tags", params)->Belt.Option.mapWithDefault([], u => Js.String.split(",", u))
+  let filterString = Webapi.Url.URLSearchParams.toString(params)
 
   CourseStudentsQuery.makeVariables(
     ~courseId,
     ~after=?cursor,
-    ~sortBy,
-    ~sortDirection,
-    ~userTags,
-    ~studentTags,
-    ~name?,
-    ~email?,
-    ~levelName?,
-    ~cohortName?,
+    ~filterString=?Some(filterString),
     (),
   )
   |> CourseStudentsQuery.make
@@ -196,6 +177,7 @@ let studentsList = (students, courseId, params) => {
                       Cohort.name(StudentInfo.cohort(student)),
                       "bg-green-100 text-green-900",
                       params,
+                      ~value=Cohort.filterValue(StudentInfo.cohort(student)),
                     )}
                     {showTag(
                       "level",
@@ -262,9 +244,10 @@ let make = (~courseId, ~search) => {
     None
   }, [search])
 
-  //
   <>
-    <Helmet> <title> {str("Students Index")} </title> </Helmet>
+    <Helmet>
+      <title> {str("Students Index")} </title>
+    </Helmet>
     <div>
       <div>
         <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 mt-8">

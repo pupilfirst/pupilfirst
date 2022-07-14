@@ -8,12 +8,6 @@ sidebar_label: Heroku
 
 Start by making sure that you've gone through [our notes of some things to consider before deploying](before_deploying).
 
-## Why Heroku?
-
-Heroku is a [PaaS](https://en.wikipedia.org/wiki/Platform_as_a_service) provider that takes care of all network and hardware maintenance requirements for running web applications.
-
-It also makes the deployment and update process extremely simple when compared to the use of traditional [IaaS](https://en.wikipedia.org/wiki/Infrastructure_as_a_service) providers.
-
 ## Steps on Heroku
 
 Begin by [signing up on Heroku](https://signup.heroku.com), and familiarizing yourself with [how containerized apps run on Heroku](https://devcenter.heroku.com/articles/container-registry-and-runtime).

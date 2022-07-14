@@ -49,7 +49,6 @@
     "postcss": "^8.3.6",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^14.1.0",
-    "postcss-loader": "^4.3.0",
     "postcss-preset-env": "^7.6.0",
     "prettier": "^2.4.1",
     "prismjs": "^1.25.0",
@@ -68,11 +67,7 @@
     "tus-js-client": "^2.3.1",
     "vite": "^2.9.1",
     "vite-plugin-babel": "^1.1.0",
-    "vite-plugin-ruby": "^3.0.9",
-    "webpack": "4.46.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.3",
-    "webpack-merge": "^5.8.0"
+    "vite-plugin-ruby": "^3.0.9"
   },
   "resolutions": {
     "fstream": "^1.0.12",
@@ -86,8 +81,7 @@
   },
   "scripts": {
     "re:build": "rescript",
-    "re:watch": "rescript clean && rescript build -w",
-    "wds": "TAILWIND_MODE=watch bin/webpack-dev-server"
+    "re:watch": "rescript clean && rescript build -w"
   },
   "packageManager": "yarn@3.2.1"
 }

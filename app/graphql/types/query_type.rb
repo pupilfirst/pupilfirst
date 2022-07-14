@@ -156,9 +156,7 @@ module Types
                    [Types::DistributionInLevelType],
                    null: false do
       argument :course_id, ID, required: true
-      argument :coach_notes, Types::CoachNoteFilterType, required: true
-      argument :tags, [String], required: true
-      argument :coach_id, ID, required: false
+      argument :filter_string, String, required: false
     end
 
     resolved_field :topics, Types::TopicType.connection_type, null: false do

@@ -1,6 +1,6 @@
 let str = React.string
 
-type resource = [#Level | #Cohort | #Coach | #StudentTag | #UserTag]
+type resource = [#Level | #Cohort | #StudentTag | #UserTag]
 
 type filterType =
   | DataLoad(resource)
@@ -87,6 +87,10 @@ let getCourseResources = (send, courseId, filters: array<filter>) => {
   }
 }
 
+let formatStringWithID = string => {
+  string->Js.String2.replaceByRe(%re("/^\d+;/"), "")
+}
+
 module Selectable = {
   type t = {
     key: string,
@@ -107,7 +111,7 @@ module Selectable = {
   let make = (key, value, label, color) => {
     key,
     orginalValue: value,
-    displayValue: value->Js.String2.replaceByRe(%re("/^\d+;/"), ""),
+    displayValue: value->formatStringWithID,
     label,
     color,
   }

@@ -21,12 +21,19 @@ type state = {
   filterInput: string,
   totalEntriesCount: int,
   reloadDistributionAt: option<Js.Date.t>,
+  studentDistribution: array<DistributionInLevel.t>,
 }
 
 type action =
   | UnsetSearchString
   | UpdateFilterInput(string)
-  | LoadStudents(option<string>, bool, array<StudentInfo.t>, int)
+  | LoadStudents(
+      option<string>,
+      bool,
+      array<StudentInfo.t>,
+      int,
+      option<array<DistributionInLevel.t>>,
+    )
   | BeginLoadingMore
   | BeginReloading
 
@@ -37,7 +44,7 @@ let reducer = (state, action) =>
       filterInput: "",
     }
   | UpdateFilterInput(filterInput) => {...state, filterInput}
-  | LoadStudents(endCursor, hasNextPage, students, totalEntriesCount) =>
+  | LoadStudents(endCursor, hasNextPage, students, totalEntriesCount, studentDistribution) =>
     let updatedStudent = switch state.loading {
     | LoadingMore => Js.Array2.concat(PagedStudents.toArray(state.students), students)
     | Reloading(_) => students
@@ -48,6 +55,8 @@ let reducer = (state, action) =>
       students: PagedStudents.make(updatedStudent, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
       totalEntriesCount,
+      reloadDistributionAt: None,
+      studentDistribution: Belt.Option.getWithDefault(studentDistribution, []),
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {
@@ -63,7 +72,7 @@ module CohortFragment = Cohort.Fragment
 module UserProxyFragment = UserProxy.Fragment
 
 module StudentsQuery = %graphql(`
-    query StudentsFromCoursesStudentsRootQuery($courseId: ID!, $after: String, $filterString: String) {
+    query StudentsFromCoursesStudentsRootQuery($courseId: ID!, $after: String, $filterString: String, $skipIfLoadingMore: Boolean!) {
       courseStudents(courseId: $courseId, filterString: $filterString, first: 20, after: $after, ) {
         nodes {
           id,
@@ -88,13 +97,26 @@ module StudentsQuery = %graphql(`
         }
         totalCount
       }
+      studentDistribution(courseId: $courseId, filterString: $filterString) @skip(if: $skipIfLoadingMore) {
+        id
+        number
+        filterName
+        studentsInLevel
+        unlocked
+      }
     }
   `)
 
-let getStudents = (send, courseId, cursor, params) => {
+let getStudents = (send, courseId, cursor, ~loadingMore=false, params) => {
   let filterString = Webapi.Url.URLSearchParams.toString(params)
 
-  StudentsQuery.makeVariables(~courseId, ~after=?cursor, ~filterString=?Some(filterString), ())
+  StudentsQuery.makeVariables(
+    ~courseId,
+    ~after=?cursor,
+    ~filterString=?Some(filterString),
+    ~skipIfLoadingMore={loadingMore},
+    (),
+  )
   |> StudentsQuery.fetch
   |> Js.Promise.then_((response: StudentsQuery.t) => {
     let nodes = response.courseStudents.nodes
@@ -111,12 +133,27 @@ let getStudents = (send, courseId, cursor, params) => {
           ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
         )
       )
+
+    let studentDistribution =
+      response.studentDistribution->Belt.Option.map(p =>
+        p->Js.Array2.map(
+          d =>
+            DistributionInLevel.make(
+              ~id=d.id,
+              ~number=d.number,
+              ~studentsInLevel=d.studentsInLevel,
+              ~unlocked=d.unlocked,
+              ~filterName=d.filterName,
+            ),
+        )
+      )
     send(
       LoadStudents(
         response.courseStudents.pageInfo.endCursor,
         response.courseStudents.pageInfo.hasNextPage,
         students,
         response.courseStudents.totalCount,
+        studentDistribution,
       ),
     )
     Js.Promise.resolve()
@@ -149,6 +186,7 @@ let computeInitialState = () => {
   filterInput: "",
   totalEntriesCount: 0,
   reloadDistributionAt: None,
+  studentDistribution: [],
 }
 
 let reloadStudents = (courseId, params, send) => {
@@ -173,7 +211,7 @@ let selectLevel = (levels, params, levelId) => {
 }
 
 @react.component
-let make = (~levels, ~course, ~userId, ~personalCoaches, ~currentCoach, ~teamTags, ~userTags) => {
+let make = (~levels, ~course, ~userId) => {
   let (state, send) = React.useReducer(reducer, computeInitialState())
 
   let courseId = course |> Course.id
@@ -190,24 +228,14 @@ let make = (~levels, ~course, ~userId, ~personalCoaches, ~currentCoach, ~teamTag
     {switch url.path {
     | list{"students", studentId, "report"} =>
       <CoursesStudents__StudentOverlay
-        courseId
-        studentId
-        levels
-        userId
-        personalCoaches
-        onAddCoachNotesCB={onAddCoachNote(courseId, params, send)}
+        courseId studentId levels userId onAddCoachNotesCB={onAddCoachNote(courseId, params, send)}
       />
     | _ => React.null
     }}
     <div className="bg-gray-50 pt-8 pb-8 px-3 -mt-7">
-      // <CoursesStudents__StudentDistribution
-      //   selectLevelCB={selectLevel(levels, params)}
-      //   courseId
-      //   filterCoach=state.filter.coach
-      //   filterCoachNotes=state.filter.coachNotes
-      //   filterTags=state.filter.tags
-      //   reloadAt=state.reloadDistributionAt
-      // />
+      <CoursesStudents__StudentDistribution
+        params={params} studentDistribution={state.studentDistribution}
+      />
       <div className="w-full py-4 bg-gray-50 relative md:sticky md:top-0 z-10">
         <div className="max-w-3xl mx-auto bg-gray-50 sticky md:static md:top-0">
           <CourseResourcesFilter courseId filters={makeFilters()} search={url.search} />
@@ -227,7 +255,7 @@ let make = (~levels, ~course, ~userId, ~personalCoaches, ~currentCoach, ~teamTag
                   className="btn btn-primary-ghost cursor-pointer w-full mt-4"
                   onClick={_ => {
                     send(BeginLoadingMore)
-                    getStudents(send, courseId, Some(cursor), params)
+                    getStudents(send, courseId, Some(cursor), params, ~loadingMore=true)
                   }}>
                   {ts("load_more")->str}
                 </button>,

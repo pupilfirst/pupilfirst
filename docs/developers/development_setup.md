@@ -185,7 +185,7 @@ Use Nginx to set up a reverse proxy on a `.localhost` domain to point it to your
 
 1. Create a new Nginx server configuration file...
 
-   - `/usr/local/etc/nginx/servers/pupilfirst` (macOS)
+   - `/opt/homebrew/etc/nginx/servers/pupilfirst` (macOS)
    - `/etc/nginx/sites-enabled/pupilfirst` (Linux)
 
    ...and save the following configuration inside it:

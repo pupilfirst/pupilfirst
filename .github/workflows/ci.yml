@@ -10,8 +10,8 @@ on:
     paths-ignore:
       - "docs/**"
 env:
-  IMAGE_NAME: pupilfirst
-  VERSION: "2022.2"
+  PF_IMAGE_NAME: pupilfirst
+  PF_VERSION: "2022.2"
 jobs:
   tests:
     runs-on: ubuntu-18.04
@@ -139,18 +139,18 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
       - name: Build image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+        run: docker build . --file Dockerfile --tag $PF_IMAGE_NAME
 
       - name: Push image
         run: |
-          IMAGE_ID=${{ secrets.DOCKER_HUB_USERNAME }}/$IMAGE_NAME
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          docker tag $IMAGE_NAME $IMAGE_ID:latest
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION.$SHORT_SHA
-          docker push $IMAGE_ID --all-tags
+          PF_IMAGE_ID=${{ secrets.DOCKER_HUB_USERNAME }}/$PF_IMAGE_NAME
+          PF_IMAGE_ID=$(echo $PF_IMAGE_ID | tr '[A-Z]' '[a-z]')
+          echo PF_IMAGE_ID=$PF_IMAGE_ID
+          echo PF_VERSION=$PF_VERSION
+          docker tag $PF_IMAGE_NAME $PF_IMAGE_ID:latest
+          docker tag $PF_IMAGE_NAME $PF_IMAGE_ID:$PF_VERSION
+          docker tag $PF_IMAGE_NAME $PF_IMAGE_ID:$PF_VERSION.$SHORT_SHA
+          docker push $PF_IMAGE_ID --all-tags
   deploy_to_digital_ocean:
     needs: dockerhub-master
     name: DigitalOcean App Platform deployment

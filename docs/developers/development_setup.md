@@ -218,7 +218,7 @@ When editing YAML files (especially translations) please use the [YAML Sort exte
 The version number for the LMS is stored in _two_ locations. Both must be updated when bumping the version:
 
 - `Pupilfirst::Application::VERSION` in `config/application.rb`
-- `env.VERSION` in `.github/workflows/ci.yml`
+- `env.PF_VERSION` in `.github/workflows/ci.yml`
 
 The version number **must** be bumped when a breaking change is introduced that maintainers should be made aware before updating their deployment of the LMS. Such changes should be documented in the [Upgrading Guide](./upgrading).
 

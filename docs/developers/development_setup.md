@@ -220,7 +220,7 @@ The version number for the LMS is stored in _two_ locations. Both must be update
 - `Pupilfirst::Application::VERSION` in `config/application.rb`
 - `env.PF_VERSION` in `.github/workflows/ci.yml`
 
-The version number **must** be bumped when a breaking change is introduced that maintainers should be made aware before updating their deployment of the LMS. Such changes should be documented in the [Upgrading Guide](./upgrading).
+The version number **must** be bumped when a breaking change is introduced. A breaking change is classified as any change that a LMS instance maintainer should be aware of when upgrading. Such changes should also be documented in the [Upgrading Guide](./upgrading).
 
 ## Enabling multitenancy
 
